@@ -19,14 +19,17 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
                         default=[name for name in CHECKS if not name.startswith("peer") and name != "resident-sharded-training"],
-                        help="Single-device checks by default; peer explicitly requires two visible NPUs")
+                        help="Single-device checks by default; peer requires visible devices with the declared backend capabilities")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
-    if args.device != "npu" and not args.device.startswith("npu:"):
-        parser.error("component qualification requires explicit NPU")
+    backend = args.device.split(":")[0]
+    if backend not in {"npu", "cuda"}:
+        parser.error("component qualification requires explicit NPU/CUDA")
     root = Path(__file__).resolve().parents[1]
     build = args.build_dir.resolve()
     manifest = json.loads((build / "control-build.json").read_text())
+    if manifest.get("backend", "npu") != backend:
+        parser.error("requested device differs from the compiled resident backend")
     if manifest["component_sha256"] != component_hash(root) or manifest["core"]["cpp_source_sha256"] != source_hash(root):
         parser.error("component/core source differs from recorded build")
     for check in args.checks:

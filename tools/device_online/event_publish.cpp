@@ -1,12 +1,12 @@
 #include "event_reverse.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_event_publish.h"
+#include "device_backend.h"
+#include "device_launch_tide_event_publish.h"
 #include <map>
 #include <stdexcept>
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-void append_event_publish(CannProgram& p,const std::vector<EventAttentionTape>& groups,const ParameterVjp& registry,
+void append_event_publish(DeviceProgram& p,const std::vector<EventAttentionTape>& groups,const ParameterVjp& registry,
     const at::Tensor& values,const at::Tensor& error,int64_t budget) {
   std::map<std::string,std::pair<int64_t,at::Tensor>> owners;
   for(size_t i=0;i<registry.owners.size();++i)if(registry.offsets[i]>=0)
@@ -31,7 +31,7 @@ void append_event_publish(CannProgram& p,const std::vector<EventAttentionTape>& 
     used=static_cast<int64_t>(next);
     auto table=at::tensor(plan,at::kLong).reshape({-1,6}).to(values.device()),offsets=at::tensor(tiles,at::kLong).to(values.device());
     const int64_t count=plan.size()/6,tasks=tiles.back();
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_publish)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_publish)(32,stream,
       ptr(table),ptr(offsets),ptr(values),ptr(a.qkv),ptr(a.projection),ptr(error),count,tasks,fp16),"publish attention parameter aliases");},
       {table,offsets,values,a.qkv,a.projection,error});
   }

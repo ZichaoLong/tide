@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "parameter_vjp.h"
 #include "graph_vjp_fixture.h"
 #include "full_vjp_fixture.h"
@@ -32,7 +33,7 @@ void actual(at::Device device,int shape,Index width,bool prefill) {
   ContentFlow flow(f.graph,f.model,f.initial,device,limits);flow.advance_device(f.input,11);auto t=flow.reverse_tape();auto opts=t.fiber_values.options();
   GraphCotangents roots{at::full_like(t.outputs.values,.0625f),at::zeros_like(t.outputs.valid),at::full_like(t.pending.values,.015625f),
     at::zeros_like(t.pending.valid),at::full({2,4,width},.03125f,opts),at::zeros({2,4},opts.dtype(at::kBool))};
-  auto error=at::zeros({1},opts.dtype(at::kInt));CannProgram reverse(device);reverse.limit_workspace(64*1024*1024);
+  auto error=at::zeros({1},opts.dtype(at::kInt));DeviceProgram reverse(device);reverse.limit_workspace(64*1024*1024);
   auto graph=append_graph_vjp(reverse,t,roots,error,3,128*1024*1024);reverse.finish();
   for(int mode=0;mode<3;++mode) {
     if(mode){roots.outputs_connected.copy_(t.outputs.valid);roots.pending_connected.copy_(t.pending.valid);roots.final_connected.fill_(true);}
@@ -44,7 +45,7 @@ void actual(at::Device device,int shape,Index width,bool prefill) {
       graph.biases.masked_fill_(graph.full_connected.logical_not().view({4,1}),poison);}
     graph.decay.masked_fill_(graph.decay_connected.logical_not().view({4,1}),poison);
     graph.retention.masked_fill_(graph.retention_connected.logical_not(),poison);graph.scales.masked_fill_(graph.scale_connected.logical_not(),poison);
-    CannProgram p(device);auto out=append_parameter_vjp(p,f.graph,registry,graph,error,16*1024*1024);p.finish();
+    DeviceProgram p(device);auto out=append_parameter_vjp(p,f.graph,registry,graph,error,16*1024*1024);p.finish();
     portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"valid parameter owner reduction refused");
     std::vector<Tensor> expected(owners.size());
     {
@@ -65,21 +66,21 @@ void actual(at::Device device,int shape,Index width,bool prefill) {
     }
     portable_torch::synchronize(device);p.run();require(at::equal(out.values.cpu(),values)&&at::equal(out.connected.cpu(),flags),"alias reduction replay accumulated stale gradients");
     if(shape==0&&width==3&&!prefill&&mode==0) {
-      bool bounded=false;try{CannProgram small(device);append_parameter_vjp(small,f.graph,registry,graph,error,1);}catch(const std::invalid_argument&){bounded=true;}
+      bool bounded=false;try{DeviceProgram small(device);append_parameter_vjp(small,f.graph,registry,graph,error,1);}catch(const std::invalid_argument&){bounded=true;}
       require(bounded,"parameter reduction budget refusal missing");
       ParameterRegistry wrong;wrong.add("nodes.0.weight",at::zeros({1},at::kFloat));bool rejected=false;
-      try{CannProgram bad(device);append_parameter_vjp(bad,f.graph,wrong,graph,error,16*1024*1024);}catch(const std::invalid_argument&){rejected=true;}
+      try{DeviceProgram bad(device);append_parameter_vjp(bad,f.graph,wrong,graph,error,16*1024*1024);}catch(const std::invalid_argument&){rejected=true;}
       require(rejected,"wrong parameter alias shape accepted");
       ParameterRegistry empty;bool empty_bounded=false;
-      try{CannProgram small(device);append_parameter_vjp(small,f.graph,empty,graph,error,1);}catch(const std::invalid_argument&){empty_bounded=true;}
+      try{DeviceProgram small(device);append_parameter_vjp(small,f.graph,empty,graph,error,1);}catch(const std::invalid_argument&){empty_bounded=true;}
       require(empty_bounded,"empty parameter registry bypassed minimum budget");
-      CannProgram empty_program(device);auto none=append_parameter_vjp(empty_program,f.graph,empty,graph,error,1024);
+      DeviceProgram empty_program(device);auto none=append_parameter_vjp(empty_program,f.graph,empty,graph,error,1024);
       empty_program.finish();portable_torch::synchronize(device);empty_program.run();
       require(none.owners.empty()&&none.offsets.empty()&&!none.connected.cpu().any().item<bool>()&&
               !none.values.cpu().any().item<bool>(),"empty parameter registry fabricated an owner");
       ParameterRegistry subset;subset.add("nodes.0.weight",f.model.nodes[0].weight);
       subset.add("nodes.2.weight",f.model.nodes[2].weight);
-      CannProgram selected(device);auto single=append_parameter_vjp(selected,f.graph,subset,graph,error,16*1024*1024);
+      DeviceProgram selected(device);auto single=append_parameter_vjp(selected,f.graph,subset,graph,error,16*1024*1024);
       selected.finish();portable_torch::synchronize(device);selected.run();
       require(single.owners.size()==1&&!single.connected.cpu()[0].item<bool>(),"trainable subset lost alias or None identity");
     }
@@ -91,7 +92,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("parameter VJP gate requires explicit NPU FP32");
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("parameter VJP gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("parameter VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int shape:{0,3})for(Index width:{1,3,257})for(bool prefill:{false,true}) {
       try{actual(device,shape,width,prefill);cases+=3;}

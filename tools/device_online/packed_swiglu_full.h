@@ -12,7 +12,7 @@ class PackedSwiGluFull {
   PackedSwiGluFull(const ContentProfile&,at::Device,int64_t capacity,int64_t max_rows,int64_t budget);
   PackedSwiGluFull(const std::vector<Node>&,const std::vector<NodeWeights>&,int64_t width,at::ScalarType,
                   at::Device,int64_t capacity,int64_t max_rows,int64_t budget);
-  ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
+  ActionBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& content,
       const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);
   int64_t chunk_rows() const {return chunk_;}
   int64_t reserved_bytes() const {return reserved_;}

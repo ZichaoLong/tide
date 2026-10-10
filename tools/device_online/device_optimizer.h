@@ -11,14 +11,14 @@ enum class DeviceOptimizerKind {sgd,adamw};
 class DeviceOptimizer {
  public:
   DeviceOptimizer(const ParameterVjp&,DeviceOptimizerKind,std::vector<OptimizerGroup>,int64_t tensor_budget_bytes);
-  void append_step(CannProgram&,const ParameterVjp&,const at::Tensor& error);
+  void append_step(DeviceProgram&,const ParameterVjp&,const at::Tensor& error);
   // Distributed composition: evaluate proposals on all owners, reach a common
   // device error decision, then append every commit. No master/slot changes
   // occur in propose. Gradients/connection bits/old masters remain frozen until
   // commit recomputes the same elementwise update. Caller owns this ordering
   // and failure lifecycle; no full parameter-sized proposal bank is retained.
-  void append_propose(CannProgram&,const ParameterVjp&,const at::Tensor& error);
-  void append_commit(CannProgram&,const ParameterVjp&,const at::Tensor& error);
+  void append_propose(DeviceProgram&,const ParameterVjp&,const at::Tensor& error);
+  void append_commit(DeviceProgram&,const ParameterVjp&,const at::Tensor& error);
   const at::Tensor& values() const {return values_;}
   const at::Tensor& first() const {return first_;}
   const at::Tensor& second() const {return second_;}
@@ -29,7 +29,7 @@ class DeviceOptimizer {
   ResidentOptimizerState snapshot() const;
   void restore(const ResidentOptimizerState&); // Validate all CPU fields before device writes.
  private:
-  void append_phase(CannProgram&,const ParameterVjp&,const at::Tensor&,bool commit);
+  void append_phase(DeviceProgram&,const ParameterVjp&,const at::Tensor&,bool commit);
   ParameterVjp identity_;
   std::vector<OptimizerGroup> groups_;
   DeviceOptimizerKind kind_;

@@ -1,4 +1,4 @@
-"""Whole-model consumer of the public C++/CANN device-window interfaces."""
+"""Whole-model consumer of the public C++ resident device-window interfaces."""
 import time
 from .phase_timing import PhaseTiming
 from dataclasses import replace
@@ -52,8 +52,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes, device_memory_bytes=0,
         sample_chunk_rows=0, context_memory_bytes=0, auto_sample_chunks=False, phase_timing=False):
     phases = PhaseTiming(phase_timing)
-    if implementation != "native" or torch.device(device).type != "npu":
-        raise ValueError("resident consumer requires explicit native NPU execution")
+    if implementation != "native" or torch.device(device).type not in {"cuda", "npu"}:
+        raise ValueError("resident consumer requires explicit native CUDA/NPU execution")
     if dtype not in {"float32", "float16"}:
         raise ValueError("resident consumer requires FP32/FP16 payload")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in {"sgd", "adamw"}:

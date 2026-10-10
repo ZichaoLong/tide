@@ -13,7 +13,7 @@ class PackedAggregate {
  public:
   static long double minimum_bytes(const ContentProfile&,int64_t rows);
   PackedAggregate(const ContentProfile&,at::Device,int64_t rows,int64_t chunk,int64_t budget);
-  void append(CannProgram&,const ReadyBatch&,const PackedSum&,const at::Tensor& error,bool vectorized) const;
+  void append(DeviceProgram&,const ReadyBatch&,const PackedSum&,const at::Tensor& error,bool vectorized) const;
   int64_t reserved_bytes() const {return reserved_;}
   int64_t chunk_rows() const {return chunk_;}
   at::Tensor chunks() const {return chunks_;}

@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "owner_stream.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_owner_stream.h"
+#include "device_launch_tide_owner_stream.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cstring>
@@ -17,7 +17,7 @@ void buffer(const at::Tensor& x,at::Device d,at::ScalarType dtype,int64_t elemen
   if(!x.defined()||x.device()!=d||x.scalar_type()!=dtype||x.numel()!=elements||!x.is_contiguous()||x.requires_grad())
     throw std::invalid_argument("invalid streamed owner buffer");
 }
-void sticky(CannProgram& p,const at::Tensor& from,const at::Tensor& to) {
+void sticky(DeviceProgram& p,const at::Tensor& from,const at::Tensor& to) {
   auto zero=at::zeros_like(from),same=at::empty({1},from.options().dtype(at::kBool)),index=at::empty_like(from);
   p.equal(from,zero,same);p.cast_index(same,index);auto bad=p.label(),done=p.label();
   p.branch(index,{bad,done});p.mark(bad);p.copy(to,from);p.mark(done);
@@ -34,13 +34,13 @@ int64_t owner_stream_capacity(int64_t total,int64_t fields,int64_t writes,bool p
   if(total<1||budget<1||metadata>budget-(peer?8:4))throw std::invalid_argument("owner stream metadata/one element exceeds budget");
   return std::min<int64_t>({total,16LL*1024*1024,(budget-metadata)/(peer?8:4)});
 }
-OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
+OwnerStream append_owner_stream(DeviceProgram& source,DeviceProgram& destination,
     const std::vector<OwnerStreamField>& fields,const at::Tensor& source_error,const at::Tensor& destination_error,
     int64_t budget,bool accumulate,const OwnerStreamPackets& shared) {
   if(at::GradMode::is_enabled()||fields.empty()||!source_error.defined()||!destination_error.defined()||budget<1)
     throw std::invalid_argument("owner stream requires bounded no-grad fields");
   const auto from=source_error.device(),to=destination_error.device();const bool peer=from!=to;
-  if(from.type()!=c10::DeviceType::PrivateUse1||to.type()!=from.type()||from.index()<0||to.index()<0)
+  if(from.type()!=tide::device_online::resident_device_type||to.type()!=from.type()||from.index()<0||to.index()<0)
     throw std::invalid_argument("owner stream requires explicit NPUs");
   buffer(source_error,from,at::kInt,1);buffer(destination_error,to,at::kInt,1);
   if(!peer && &source!=&destination)throw std::invalid_argument("local owner stream requires one program");
@@ -102,13 +102,13 @@ OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
   if(peer)out.peer=std::make_unique<PeerExchange>(PeerExchange::Fields{{packet,received},{on,flags},
     {cursor,position},{branch,more},{source_error,status}},budget);
   source.zero(cursor);auto increment=at::full({1},cap,longs);
-  auto emit=[&](CannProgram& p,int64_t mode) {
+  auto emit=[&](DeviceProgram& p,int64_t mode) {
     const bool pack=mode==0;auto desc=pack?sd:td,values=pack?packet:received,live=pack?on:flags,at=pack?cursor:position;
     auto next=pack?branch:more,error=pack?source_error:destination_error;
     const auto count=int64_t(fields.size());
     auto keep=pack?keep_source:keep_target;keep.insert(keep.end(),{desc,values,live,at,next,error});
     if(!pack)keep.insert(keep.end(),{group,write});
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_owner_stream)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_owner_stream)(32,stream,
       ptr(desc),pack?ptr(desc):ptr(group),pack?ptr(desc):ptr(write),ptr(values),ptr(live),ptr(at),ptr(next),ptr(error),
       count,total,cap,mode),"stream packed canonical owner values");},keep);
   };

@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "full_vjp_fixture.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -23,7 +24,7 @@ void synthetic(at::Device device,Index width,int mode,bool tanh,Index chunk,at::
   }
   auto tape=upload(f.tape,device);
   auto gradient=f.gradient.to(device),connected=f.connected.to(device),error=at::zeros({1},gradient.options().dtype(at::kInt));
-  CannProgram program(device);program.limit_workspace(32*1024*1024);
+  DeviceProgram program(device);program.limit_workspace(32*1024*1024);
   auto out=append_full_vjp(program,tape,gradient,connected,error,chunk,32*1024*1024);program.finish();
   for(Index count:{19,7,0}) {
     f.tape.count.fill_(count);tape.count.copy_(f.tape.count);
@@ -36,7 +37,7 @@ void synthetic(at::Device device,Index width,int mode,bool tanh,Index chunk,at::
 void refusals(at::Device device) {
   at::NoGradGuard guard;auto f=test::full_fixture(7,1,true);auto tape=upload(f.tape,device);
   auto gradient=f.gradient.to(device),connected=f.connected.to(device),error=at::zeros({1},gradient.options().dtype(at::kInt));
-  auto bad=[&](int code){CannProgram p(device);auto out=append_full_vjp(p,tape,gradient,connected,error,3,1024*1024);p.finish();
+  auto bad=[&](int code){DeviceProgram p(device);auto out=append_full_vjp(p,tape,gradient,connected,error,3,1024*1024);p.finish();
     portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()==code,"Full VJP missing device refusal");
     require(!out.content.cpu().any().item<bool>()&&!out.content_connected.cpu().any().item<bool>()
       &&!out.comparison.cpu().any().item<bool>()&&!out.parameter_connected.cpu().any().item<bool>(),"invalid Full tape exposed partial gradient");
@@ -44,9 +45,9 @@ void refusals(at::Device device) {
   tape.count.fill_(24);bad(2);tape.metadata[1][0].fill_(2);bad(2);tape.metadata[1][1].fill_(-1);bad(2);
   tape.metadata[1][2].fill_(-1);bad(2);tape.metadata[1][3].fill_(2);bad(2);connected[0].fill_(true);bad(2);
   tape.kinds[1].fill_(2);bad(12);
-  bool refused=false;try{CannProgram p(device);append_full_vjp(p,tape,gradient,connected,error,3,1);}catch(const std::invalid_argument&){refused=true;}
+  bool refused=false;try{DeviceProgram p(device);append_full_vjp(p,tape,gradient,connected,error,3,1);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"Full VJP budget refusal missing");
-  refused=false;try{CannProgram p(device);append_full_vjp(p,tape,gradient.to(at::kHalf),connected,error,3,1024*1024);}catch(const std::invalid_argument&){refused=true;}
+  refused=false;try{DeviceProgram p(device);append_full_vjp(p,tape,gradient.to(at::kHalf),connected,error,3,1024*1024);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"Full VJP silently changed requested dtype");
 }
 void actual_tape(at::Device device,bool prefill,at::ScalarType payload) {
@@ -63,7 +64,7 @@ void actual_tape(at::Device device,bool prefill,at::ScalarType payload) {
     tape.weights.cpu(),tape.biases.cpu(),tape.samples,tape.width,tape.has_tanh},
     at::ones({tape.values.size(0),tape.width},at::kFloat),tape.metadata.select(1,3).cpu().eq(1)};
   auto gradient=local.gradient.to(device),connected=local.connected.to(device),error=at::zeros({1},gradient.options().dtype(at::kInt));
-  CannProgram p(device);auto out=append_full_vjp(p,tape,gradient,connected,error,3,32*1024*1024);p.finish();
+  DeviceProgram p(device);auto out=append_full_vjp(p,tape,gradient,connected,error,3,32*1024*1024);p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"actual Full forward tape rejected");
   if(payload==at::kHalf)test::full_compare(local,out,at::kHalf);
   else {test::full_compare(local,out,at::kFloat);test::full_compare(local,out,at::kDouble);}
@@ -90,7 +91,7 @@ void rounding_sensitive(at::Device device) {
   require((expected[2*capacity]-wrong[2*capacity]).abs().max().item<float>()>1e-4f,
     "Full rounding anchor no longer distinguishes whole-forward FP32 recomputation");
   auto tape=upload(f.tape,device);
-  auto error=at::zeros({1},values.options().device(device).dtype(at::kInt));CannProgram p(device);
+  auto error=at::zeros({1},values.options().device(device).dtype(at::kInt));DeviceProgram p(device);
   const auto out=append_full_vjp(p,tape,f.gradient.to(device),f.connected.to(device),error,1,1024*1024);p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"Full rounding anchor refused");
   test::full_same(out.weights.cpu()[0],out.parameter_connected.cpu()[0],expected[2*capacity],"rounded Full weight");
@@ -106,7 +107,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("Full VJP gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("Full VJP gate requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("Full VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     const std::vector<at::ScalarType> references=args.dtype==at::kHalf?std::vector<at::ScalarType>{at::kHalf}:
       std::vector<at::ScalarType>{at::kFloat,at::kDouble};

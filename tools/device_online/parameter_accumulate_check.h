@@ -36,7 +36,7 @@ inline void private_accumulation_check(at::Device device) {
       auto a_flags=at::tensor(ac,at::kByte).to(at::kBool),b_flags=at::tensor(bc,at::kByte).to(at::kBool);
       ParameterVjp a{owners,offsets,av.to(device),a_flags.to(device)},b{owners,offsets,bv.to(device),b_flags.to(device)};
       auto error=at::zeros({1},a.values.options().dtype(at::kInt));
-      CannProgram program(device);auto out=append_private_parameter_accumulate(program,a,b,error,128*1024*1024);
+      DeviceProgram program(device);auto out=append_private_parameter_accumulate(program,a,b,error,128*1024*1024);
       require(out.values.is_alias_of(a.values)&&!out.connected.is_alias_of(a.connected)
         &&!out.connected.is_alias_of(b.connected),"private accumulation storage roles changed");
       program.finish();portable_torch::synchronize(device);program.run();
@@ -49,15 +49,15 @@ inline void private_accumulation_check(at::Device device) {
       program.close();++cases;
       if(round==0) {
         bool refused=false;
-        try{CannProgram small(device);append_private_parameter_accumulate(small,a,b,error,1);}
+        try{DeviceProgram small(device);append_private_parameter_accumulate(small,a,b,error,1);}
         catch(const std::invalid_argument&){refused=true;}
         require(refused,"private accumulation bypassed admission");
         refused=false;
-        try{CannProgram alias(device);append_private_parameter_accumulate(alias,a,a,error,128*1024*1024);}
+        try{DeviceProgram alias(device);append_private_parameter_accumulate(alias,a,a,error,128*1024*1024);}
         catch(const std::invalid_argument&){refused=true;}
         require(refused,"private accumulation accepted overlapping sources");
         auto before=a.values.clone();error.fill_(7);
-        CannProgram failed(device);append_private_parameter_accumulate(failed,a,b,error,128*1024*1024);failed.finish();
+        DeviceProgram failed(device);append_private_parameter_accumulate(failed,a,b,error,128*1024*1024);failed.finish();
         portable_torch::synchronize(device);failed.run();exact(a.values,before,"upstream refusal changed private values");failed.close();
       }
     }
@@ -65,7 +65,7 @@ inline void private_accumulation_check(at::Device device) {
   auto f=at::TensorOptions().device(device).dtype(at::kFloat);
   ParameterVjp empty{{},{},at::ones({1},f),at::zeros({1},f.dtype(at::kBool))};
   auto other=empty;other.values=at::zeros_like(empty.values);other.connected=empty.connected.clone();
-  auto error=at::zeros({1},f.dtype(at::kInt));CannProgram program(device);
+  auto error=at::zeros({1},f.dtype(at::kInt));DeviceProgram program(device);
   auto out=append_private_parameter_accumulate(program,empty,other,error,1024);program.finish();
   portable_torch::synchronize(device);program.run();
   require(!error.cpu().item<int>()&&!out.values.cpu().item<float>()&&!out.connected.cpu().item<bool>(),

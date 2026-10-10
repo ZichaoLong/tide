@@ -2,6 +2,7 @@
 import json
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement, ResidentTrainingLimits
 from tidegraph.compare import equivalent
 from test_resident_training import target, training_case
@@ -12,7 +13,7 @@ from resident_training_cases import runtime, inputs
     ("pdg", 1, "streaming"), ("timed-dag", 2, "greedy"), ("settle", 2, "streaming")])
 def test_projection_snapshot_budget_and_update_lifetime(target, family, cards, schedule, tmp_path):
     start = torch.device(target).index
-    placement = (ResidentPlacement(devices=tuple(f"npu:{start+i}" for i in range(cards))) if cards>1 else None)
+    placement = (ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None)
     options = dict(full="lh-silu-rms-v1", aggregation="all_softmax", emission="slot_affine",
                    placement=placement, model_device="cpu", root_modes=("all", "all", "all"))
     broad, bounded = tmp_path/"broad", tmp_path/"bounded"

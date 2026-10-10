@@ -1,4 +1,4 @@
-#include "cann_sequence.h"
+#include "device_sequence.h"
 #include "cann_api.h"
 #include "peer_api.h"
 #include "portable_torch/runtime.hpp"
@@ -26,14 +26,14 @@ struct Signal {
   }
 };
 }
-struct CannSequence::Impl {
+struct DeviceSequence::Impl {
   at::Device device;
   int64_t capacity,workspace;
   const std::thread::id thread=std::this_thread::get_id();
   // Programs release their callbacks before the final signal owner. A failed
   // program drain quarantines its callbacks, which keep its signal alive.
   std::vector<std::shared_ptr<Signal>> signals;
-  std::vector<std::unique_ptr<CannProgram>> programs;
+  std::vector<std::unique_ptr<DeviceProgram>> programs;
   bool finished=false,closed=false,failed=false,in_flight=false;
   Impl(at::Device d,int64_t n,int64_t w):device(d),capacity(n),workspace(w){}
   void check() const {
@@ -41,17 +41,17 @@ struct CannSequence::Impl {
     if(closed||failed)throw std::logic_error("program sequence is closed or failed");
   }
 };
-CannSequence::CannSequence(at::Device d,int64_t capacity,int64_t workspace) {
+DeviceSequence::DeviceSequence(at::Device d,int64_t capacity,int64_t workspace) {
   if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0||capacity<1||workspace<1)
     throw std::invalid_argument("program sequence requires explicit NPU and positive finite limits");
   impl_=std::make_unique<Impl>(d,capacity,workspace);
 }
-CannSequence::~CannSequence()=default;
-CannProgram& CannSequence::append() {
+DeviceSequence::~DeviceSequence()=default;
+DeviceProgram& DeviceSequence::append() {
   auto& s=*impl_;s.check();if(s.finished)throw std::logic_error("program sequence is already finished");
   if(s.programs.size()>=size_t(s.capacity))throw std::invalid_argument("program sequence capacity exceeded");
   try {
-    auto p=std::make_unique<CannProgram>(s.device);p->limit_workspace(s.workspace);
+    auto p=std::make_unique<DeviceProgram>(s.device);p->limit_workspace(s.workspace);
     if(!s.programs.empty()) {
       auto signal=std::make_shared<Signal>(s.device);s.signals.push_back(signal);
       s.programs.back()->kernel([signal](void* stream){signal->resource.check();
@@ -62,24 +62,24 @@ CannProgram& CannSequence::append() {
     s.programs.push_back(std::move(p));return *s.programs.back();
   }catch(...){s.failed=true;throw;}
 }
-void CannSequence::finish() {
+void DeviceSequence::finish() {
   auto& s=*impl_;s.check();if(s.finished||s.programs.empty())throw std::logic_error("invalid program sequence finish");
   try{for(auto& p:s.programs)p->finish();s.finished=true;}catch(...){s.failed=true;throw;}
 }
-void CannSequence::submit() {
+void DeviceSequence::submit() {
   auto& s=*impl_;s.check();if(!s.finished||s.in_flight)throw std::logic_error("program sequence is not executable");
   try{s.in_flight=true;for(auto& p:s.programs)p->submit();}catch(...){s.failed=true;throw;}
 }
-void CannSequence::wait(int32_t timeout) {
+void DeviceSequence::wait(int32_t timeout) {
   auto& s=*impl_;s.check();if(!s.in_flight||timeout<=0)throw std::logic_error("program sequence has no waitable submission");
   std::exception_ptr failure;
   for(auto& p:s.programs)try{p->wait(timeout);}catch(...){if(!failure)failure=std::current_exception();}
   if(failure){s.failed=true;std::rethrow_exception(failure);}s.in_flight=false;
 }
-void CannSequence::run(int32_t timeout) {
+void DeviceSequence::run(int32_t timeout) {
   if(timeout<=0)throw std::invalid_argument("program sequence wait must be positive");submit();wait(timeout);
 }
-void CannSequence::close() {
+void DeviceSequence::close() {
   auto& s=*impl_;
   if(s.thread!=std::this_thread::get_id())throw std::logic_error("program sequence requires its constructing thread");
   if(s.closed)return;
@@ -88,5 +88,5 @@ void CannSequence::close() {
     for(auto& signal:s.signals)signal->close();s.signals.clear();s.closed=true;s.in_flight=false;
   }catch(...){s.failed=true;throw;}
 }
-size_t CannSequence::size() const {return impl_->programs.size();}
+size_t DeviceSequence::size() const {return impl_->programs.size();}
 } // namespace tide::device_online

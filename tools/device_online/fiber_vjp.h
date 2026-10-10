@@ -26,6 +26,6 @@ struct FiberVjp {
   at::Tensor parameter_connected; // [B,6], in the parameter order above
   at::Tensor chunks;
 };
-FiberVjp append_fiber_vjp(CannProgram&,const FiberVjpInput&,const at::Tensor& error,
+FiberVjp append_fiber_vjp(DeviceProgram&,const FiberVjpInput&,const at::Tensor& error,
     int64_t query_chunk_rows,int64_t key_tile_rows,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -37,11 +37,11 @@ struct TiledAttentionSpec {
 // Payload Q/K/V and QK matmul use FP32/FP16. Bias, normalization, weighted
 // accumulation and cross-tile merge use FP32; only the final result rounds to
 // payload dtype. QK overflow retains the selected dtype's numerical boundary.
-at::Tensor append_tiled_attention(CannProgram&,const at::Tensor& events,const at::Tensor& tokens,
+at::Tensor append_tiled_attention(DeviceProgram&,const at::Tensor& events,const at::Tensor& tokens,
     const at::Tensor& ids,const at::Tensor& query,const at::Tensor& key,const at::Tensor& value,
     const at::Tensor& bias,const at::Tensor& error,const at::Tensor& work,TiledAttentionSpec);
 // Dense physical key block with the same precision policy. Shapes are
 // query[C,H,D], key[C,H,D,K], value[C,H,K,D], FP32 additive[C,1,1,K].
-at::Tensor append_dense_attention(CannProgram&,const at::Tensor& query,const at::Tensor& key,
+at::Tensor append_dense_attention(DeviceProgram&,const at::Tensor& query,const at::Tensor& key,
     const at::Tensor& value,const at::Tensor& additive,double scale);
 } // namespace tide::device_online

@@ -117,9 +117,9 @@ void check(at::Device device,Index width,int pool,int variant,int mode,at::Scala
     (which==0?roots.key_connected:which==1?roots.value_connected:roots.bias_connected)=at::ones({samples},booleans);
   }
   auto error=at::zeros({1},floats.dtype(at::kInt)),stage=at::tensor({Index(0),count},at::kLong).to(device);
-  if(half){bool refused=false;try{CannProgram bad(device);append_graph_vjp(bad,t,{},error,2,budget);}catch(const std::invalid_argument&){refused=true;}
+  if(half){bool refused=false;try{DeviceProgram bad(device);append_graph_vjp(bad,t,{},error,2,budget);}catch(const std::invalid_argument&){refused=true;}
     if(!refused)throw std::runtime_error("graph VJP accepted missing mandatory cotangents");}
-  CannProgram p(device);p.limit_workspace(budget);auto links=append_reverse_links(p,t,error,budget/4);
+  DeviceProgram p(device);p.limit_workspace(budget);auto links=append_reverse_links(p,t,error,budget/4);
   auto reverse=prepare_fiber_reverse(p,t,links,g,roots,error,budget);
   auto messages=at::empty({links.messages.size(0),width},floats),on=at::empty({links.messages.size(0)},booleans);
   auto partials=at::empty(t.fiber_values.sizes(),floats),parameters=at::empty({fiber_parameter_offsets(f.graph,width).back()},floats),pc=at::empty({1,6},booleans);
@@ -170,7 +170,7 @@ void bias_bridge(at::Device device,at::ScalarType dtype) {
   local.bias_connected=at::tensor({1,1,0},at::kLong).to(at::kBool).to(device);
   carry.bias_connected=at::tensor({1,0,1},at::kLong).to(at::kBool).to(device);
   for(int mode=0;mode<3;++mode) {
-    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));CannProgram p(device);
+    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));DeviceProgram p(device);
     auto out=append_fiber_cache_seed(p,g,mode?local:CacheCotangents{},mode==2?&carry:nullptr,error,1024*1024);p.finish();
     for(int replay=0;replay<2;++replay) {
       p.run();if(error.cpu().item<int>())throw std::runtime_error("fiber cache boundary refused matching lengths");
@@ -186,13 +186,13 @@ void bias_bridge(at::Device device,at::ScalarType dtype) {
     auto wrong=g;auto extra=carry;
     if(invalid<2)wrong.cache.lengths=at::tensor({invalid==0?Index(-1):k+1,Index(0),k},at::kLong).to(device);
     else extra.lengths=at::tensor({Index(1),Index(0),k},at::kLong).to(device);
-    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));CannProgram p(device);
+    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));DeviceProgram p(device);
     append_fiber_cache_seed(p,wrong,local,&extra,error,1024*1024);p.finish();p.run();
     if(error.cpu().item<int>()!=2)throw std::runtime_error("fiber bias bridge accepted invalid lengths");p.close();
   }
   for(int invalid=0;invalid<3;++invalid) {
     auto wrong=local;if(invalid==0)wrong.bias=wrong.bias.to(at::kHalf);if(invalid==1)wrong.bias_connected=Tensor{};
-    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));CannProgram p(device);bool refused=false;
+    auto error=at::zeros({1},a.lengths.options().dtype(at::kInt));DeviceProgram p(device);bool refused=false;
     try{append_fiber_cache_seed(p,g,wrong,nullptr,error,invalid==2?1:1024*1024);}catch(const std::invalid_argument&){refused=true;}
     if(!refused)throw std::runtime_error("fiber bias bridge accepted invalid root/budget");
   }

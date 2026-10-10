@@ -1,9 +1,9 @@
+#include "device_backend.h"
 #include "emission_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_emission_reverse_links.h"
-#include "aclrtlaunch_tide_emission_vjp_plan.h"
-#include "aclrtlaunch_tide_emission_vjp_payload.h"
-#include "aclrtlaunch_tide_full_vjp_reduce.h"
+#include "device_launch_tide_emission_reverse_links.h"
+#include "device_launch_tide_emission_vjp_plan.h"
+#include "device_launch_tide_emission_vjp_payload.h"
+#include "device_launch_tide_full_vjp_reduce.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
@@ -15,11 +15,11 @@ void tensor(const at::Tensor& x,at::Device d,at::ScalarType type,at::IntArrayRef
     throw std::invalid_argument("invalid emission reverse tape/buffer");
 }
 }
-EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,
+EmissionReverse prepare_emission_reverse(DeviceProgram& p,const ReverseTape& t,const ReverseLinks& links,
     const at::Tensor& error,int64_t budget,int64_t max_rows,int64_t workspace) {
   return prepare_emission_reverse(p,t,links,error,budget,max_rows,workspace,{});
 }
-EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,
+EmissionReverse prepare_emission_reverse(DeviceProgram& p,const ReverseTape& t,const ReverseLinks& links,
     const at::Tensor& error,int64_t budget,int64_t max_rows,int64_t workspace,const std::vector<ProjectionGradient>& reuse) {
   const bool sharded=!t.emission.shards.empty();
   if(!reuse.empty()&&!sharded)throw std::invalid_argument("reusable projection gradients require compact owners");
@@ -34,7 +34,7 @@ EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,con
   int64_t buckets=1;while(buckets<2*emissions)buckets*=2;
   const long double bytes=4.L*parameters*(width*static_cast<long double>(width)+width)+parameters
     +16.L*total+8.L*(buckets+nodes+mapping.size()+1)+256;
-  if(d.type()!=c10::DeviceType::PrivateUse1||parameters<1||capacity<1||emissions<1||width<1||budget<1||bytes>budget
+  if(d.type()!=tide::device_online::resident_device_type||parameters<1||capacity<1||emissions<1||width<1||budget<1||bytes>budget
       ||(dtype!=at::kFloat&&dtype!=at::kHalf))throw std::invalid_argument("emission reverse tensor budget exceeded");
   tensor(t.emission.metadata,d,at::kLong,{emissions,6});tensor(t.emission.values,d,at::kFloat,{emissions,width});
   tensor(t.emission.count,d,at::kLong,{1});tensor(error,d,at::kInt,{1});
@@ -59,14 +59,14 @@ EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,con
     out.gradient.program->append_reset(p,d);out.gradient.shards=out.gradient.program->gradients();
   }
   const int64_t scale_offset=t.graph->inputs.size()+t.graph->edges.size();
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emission_reverse_links)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_emission_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(t.emission.metadata),ptr(t.emission.count),ptr(links.messages),ptr(links.valid),
     ptr(offsets),ptr(map),ptr(hash),ptr(out.rows),ptr(out.parameters),ptr(error),capacity,emissions,total,nodes,t.state.samples,
     scale_offset,buckets,parameters),"associate physical messages with actual unscaled emission slots");},
     {t.state.metadata,t.state.count,t.emission.metadata,t.emission.count,links.messages,links.valid,offsets,map,hash,out.rows,out.parameters,error});
   return out;
 }
-void append_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,const EmissionReverse& r,
+void append_emission_reverse(DeviceProgram& p,const ReverseTape& t,const ReverseLinks& links,const EmissionReverse& r,
     const at::Tensor& messages,const at::Tensor& on,const at::Tensor& range,const at::Tensor& full_gradient,
     const at::Tensor& error,int64_t max_rows,int64_t budget) {
   const int64_t capacity=t.state.metadata.size(0),total=links.messages.size(0),width=t.full.width,parameters=r.gradient.connected.numel();
@@ -82,14 +82,14 @@ void append_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLi
   auto owner_count=at::empty({1},l),cursor=at::empty({2},l),reset=at::full({2},-1,l),branch=at::empty_like(error);
   auto x=at::empty({chunk,width},f),dy=at::empty_like(x),dx=at::empty_like(x);
   auto payload=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emission_vjp_payload)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_emission_vjp_payload)(32,stream,
       ptr(links.messages),ptr(links.producer_head),ptr(links.producer_next),ptr(r.parameters),ptr(links.scales),ptr(on),ptr(messages),
       ptr(range),ptr(upstream),ptr(projected),ptr(full_gradient),ptr(error),width,mode),"packed emission input adjoints");},
       {links.messages,links.producer_head,links.producer_next,r.parameters,links.scales,on,messages,range,upstream,projected,full_gradient,error});
   };
   payload(0);p.copy(cursor,reset);
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emission_vjp_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_emission_vjp_plan)(1,stream,
     ptr(links.messages),ptr(links.producer_head),ptr(links.producer_next),ptr(r.parameters),ptr(on),ptr(range),ptr(cursor),ptr(source),ptr(events),
     ptr(param),ptr(dest),ptr(owners),ptr(owner_count),ptr(r.gradient.connected),ptr(branch),ptr(r.gradient.chunks),ptr(error),
     capacity,total,parameters,chunk),"pack connected physical projection adjoints");},
@@ -103,7 +103,7 @@ void append_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLi
     p.index_select(t.emission.weights,0,param,payload_weights);if(half)p.cast(payload_weights,weights);
     p.permute(weights,{0,2,1},transposed);p.batch_matmul(dy.reshape({chunk,1,width}),transposed,dx.reshape({chunk,1,width}));
     p.batch_matmul(x.reshape({chunk,width,1}),dy.reshape({chunk,1,width}),dw);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_full_vjp_reduce)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_full_vjp_reduce)(32,stream,
       ptr(owners),ptr(owner_count),ptr(param),ptr(dw),ptr(dy),ptr(r.gradient.weights),ptr(r.gradient.biases),ptr(error),width,chunk),
       "ordered per-slot projection parameter reduction");},{owners,owner_count,param,dw,dy,r.gradient.weights,r.gradient.biases,error});
   }

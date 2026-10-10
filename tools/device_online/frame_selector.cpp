@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "frame_selector.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_frame_select.h"
+#include "device_launch_tide_frame_select.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <stdexcept>
@@ -17,14 +17,13 @@ FrameSelector::FrameSelector(std::vector<int64_t> owners,std::vector<SelectionPo
                              int64_t samples,at::Device device,int64_t budget)
     :nodes_(owners.size()),regions_(policies.size()),samples_(samples),budget_(budget),device_(device) {
   if(nodes_<1||regions_<1||samples<1||budget<1||at::GradMode::is_enabled()
-      ||device.type()!=c10::DeviceType::PrivateUse1||nodes_>std::numeric_limits<int64_t>::max()/32/samples
+      ||device.type()!=tide::device_online::resident_device_type||nodes_>std::numeric_limits<int64_t>::max()/32/samples
       ||regions_>std::numeric_limits<int64_t>::max()/32/samples)
     throw std::invalid_argument("frame selector requires bounded dimensions, NPU and no-grad");
   for(auto r:owners)if(r<0||r>=regions_)throw std::invalid_argument("invalid selector region owner");
   std::vector<int64_t> rows;
   for(auto p:policies) {if(p.budget<0)throw std::invalid_argument("negative selection budget");rows.insert(rows.end(),{p.budget,p.count_priority,p.positive_only});}
-  CannApi api;auto soc=CannApi::symbol<const char*(*)()>(api.runtime,"aclrtGetSocName")();
-  if(!soc||std::string(soc)!=TIDE_ASCENDC_SOC)throw std::runtime_error("selector binary differs from actual SoC");
+  validate_kernel_device(device);
   owner_=at::tensor(owners,at::kLong).to(device);policies_=at::tensor(rows,at::kLong).reshape({regions_,3}).to(device);
 }
 SelectionHistory FrameSelector::initial() const {
@@ -32,7 +31,7 @@ SelectionHistory FrameSelector::initial() const {
   return {at::zeros({samples_,nodes_},opts),at::zeros({samples_,nodes_},opts.dtype(at::kBool)),
           at::full({samples_,regions_},-1,opts),at::zeros({samples_,regions_},opts.dtype(at::kBool))};
 }
-SelectionProposal FrameSelector::append_stage(CannProgram& p,const ReadyBatch& ready,const at::Tensor& scores,
+SelectionProposal FrameSelector::append_stage(DeviceProgram& p,const ReadyBatch& ready,const at::Tensor& scores,
                                              const SelectionHistory& old,const at::Tensor& error) const {
   if(!ready.fibers.defined()||ready.fibers.dim()!=2||ready.fibers.size(0)<1)
     throw std::invalid_argument("selector requires nonempty physical frame slots");
@@ -56,7 +55,7 @@ SelectionProposal FrameSelector::append_stage(CannProgram& p,const ReadyBatch& r
   auto joined=at::zeros({capacity*nodes_+1},scores.options()),order=at::empty({capacity},ready.fibers.options());
   const auto owner=owner_,policies=policies_;const auto nodes=nodes_,regions=regions_,samples=samples_;
   p.kernel([=](void* stream) {
-    CannApi::check(ACLRT_LAUNCH_KERNEL(tide_frame_select)(1,stream,address(ready.fibers),address(ready.frames),
+    check_device_launch(TIDE_LAUNCH_KERNEL(tide_frame_select)(1,stream,address(ready.fibers),address(ready.frames),
       address(ready.frame_offsets),address(ready.frame_fibers),address(ready.counts),address(owner),address(policies),
       address(scores),address(out.history.counts),address(out.history.seen),address(out.history.last_time),
       address(out.history.present),address(padded),address(order),address(out.active),address(out.branch),address(error),
@@ -67,7 +66,7 @@ SelectionProposal FrameSelector::append_stage(CannProgram& p,const ReadyBatch& r
   p.softmax(padded,1,probabilities);p.copy(joined.narrow(0,0,capacity*nodes_),probabilities.reshape({-1}));
   p.index_select(joined,0,order,out.controls);p.mark(done);return out;
 }
-void FrameSelector::append_commit(CannProgram& p,const SelectionHistory& history,const SelectionProposal& out,
+void FrameSelector::append_commit(DeviceProgram& p,const SelectionHistory& history,const SelectionProposal& out,
                                   const at::Tensor& error) const {
   auto zero=at::zeros_like(error),ok=at::zeros({1},history.seen.options()),index=at::zeros_like(error);
   auto check=p.label(),commit=p.label(),done=p.label();p.branch(out.branch,{done,check});p.mark(check);

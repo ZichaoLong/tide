@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_parameter_reduce.h"
 #include "owner_stream.h"
 #include "peer_exchange.h"
@@ -12,7 +13,7 @@
 
 namespace tide::device_online {
 namespace {
-void sticky(CannProgram& p,const at::Tensor& source,const at::Tensor& target) {
+void sticky(DeviceProgram& p,const at::Tensor& source,const at::Tensor& target) {
   auto zero=at::zeros_like(source),equal=at::empty({1},source.options().dtype(at::kBool)),branch=at::empty_like(source);
   p.equal(source,zero,equal);p.cast_index(equal,branch);auto bad=p.label(),done=p.label();
   p.branch(branch,{bad,done});p.mark(bad);p.copy(target,source);p.mark(done);
@@ -48,8 +49,8 @@ struct ShardedParameterReduce::Impl {
   std::vector<ParameterVjp> outputs;
   std::vector<at::Tensor> errors;
   std::vector<std::unique_ptr<PeerExchange>> packets;
-  std::vector<std::unique_ptr<CannProgram>> owned; // Destroy before packets.
-  std::vector<CannProgram*> programs;
+  std::vector<std::unique_ptr<DeviceProgram>> owned; // Destroy before packets.
+  std::vector<DeviceProgram*> programs;
   std::shared_ptr<StreamPackets> stream_buffers;
   bool embedded=false;
   int64_t budget,stream_bytes=0,stream_chunks=0;
@@ -82,17 +83,17 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
     const at::Tensor& upstream,int64_t budget,int64_t workspace)
     :ShardedParameterReduce(std::move(source),std::move(devices),upstream,budget,workspace,nullptr,nullptr) {}
 ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,std::vector<at::Device> devices,
-    const at::Tensor& upstream,int64_t budget,int64_t workspace,CannProgram& coordinator,const ShardedParameterReduce* preceding)
+    const at::Tensor& upstream,int64_t budget,int64_t workspace,DeviceProgram& coordinator,const ShardedParameterReduce* preceding)
     :ShardedParameterReduce(std::move(source),std::move(devices),upstream,budget,workspace,&coordinator,preceding) {}
 ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,std::vector<at::Device> devices,
-    const at::Tensor& upstream,int64_t budget,int64_t workspace,CannProgram* coordinator,const ShardedParameterReduce* preceding)
+    const at::Tensor& upstream,int64_t budget,int64_t workspace,DeviceProgram* coordinator,const ShardedParameterReduce* preceding)
     :impl_(std::make_unique<Impl>()) {
   if(at::GradMode::is_enabled()||devices.empty()||devices.size()>16||budget<1||workspace<1||!upstream.defined()
       ||upstream.device()!=devices[0]||upstream.scalar_type()!=at::kInt||upstream.sizes()!=at::IntArrayRef({1})
       ||!upstream.is_contiguous()||upstream.requires_grad())
     throw std::invalid_argument("canonical owner reduction requires bounded no-grad NPU buffers");
   std::map<c10::DeviceIndex,size_t> index;
-  for(size_t d=0;d<devices.size();++d)if(devices[d].type()!=c10::DeviceType::PrivateUse1||devices[d].index()<0
+  for(size_t d=0;d<devices.size();++d)if(devices[d].type()!=tide::device_online::resident_device_type||devices[d].index()<0
       ||!index.emplace(devices[d].index(),d).second)throw std::invalid_argument("invalid canonical owner device list");
   const auto placement=place_parameter_owners(source,devices.size());const auto n=devices.size();
   // All owners consume ordinal k before k+1, irrespective of source device.
@@ -110,7 +111,7 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
     }
     for(size_t k=0;k<source.contributions[i].size();++k) {
       const auto& c=source.contributions[i][k];
-      if(!c.values.defined()||!c.connected.defined()||c.values.device().type()!=c10::DeviceType::PrivateUse1
+      if(!c.values.defined()||!c.connected.defined()||c.values.device().type()!=tide::device_online::resident_device_type
           ||!index.count(c.values.device().index())||c.values.numel()!=size||c.values.device()!=c.connected.device()
           ||c.values.scalar_type()!=at::kFloat||c.connected.scalar_type()!=at::kBool||c.connected.numel()!=1
           ||!c.values.is_contiguous()||!c.connected.is_contiguous()||c.values.requires_grad()||c.connected.requires_grad())
@@ -143,7 +144,7 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
   for(size_t d=0;d<n;++d) {
     auto f=at::TensorOptions().device(s.devices[d]).dtype(at::kFloat);
     if(!d&&coordinator)s.programs.push_back(coordinator);
-    else {s.owned.push_back(std::make_unique<CannProgram>(s.devices[d]));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);}
+    else {s.owned.push_back(std::make_unique<DeviceProgram>(s.devices[d]));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);}
     s.errors.push_back(at::zeros({1},f.dtype(at::kInt)));
     auto& out=s.outputs[d];
     if(preceding) {
@@ -186,7 +187,7 @@ ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradien
   validate_sharded_optimizer_owners(gradient);std::set<int> indices;auto& s=*impl_;s.budget=budget;
   if(4096.L*gradient.size()>budget)throw std::invalid_argument("canonical update metadata exceeds tensor budget");
   for(const auto& g:gradient) {
-    if(!g.values.defined()||g.values.device().type()!=c10::DeviceType::PrivateUse1||g.values.device().index()<0
+    if(!g.values.defined()||g.values.device().type()!=tide::device_online::resident_device_type||g.values.device().index()<0
         ||!indices.insert(g.values.device().index()).second||g.values.scalar_type()!=at::kFloat||g.values.dim()!=1
         ||!g.connected.defined()||g.connected.device()!=g.values.device()||g.connected.scalar_type()!=at::kBool
         ||g.connected.sizes()!=at::IntArrayRef({std::max<int64_t>(1,g.owners.size())})
@@ -199,7 +200,7 @@ ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradien
     throw std::invalid_argument("invalid canonical update upstream status");
   s.outputs=std::move(gradient);
   for(auto d:s.devices) {
-    s.owned.push_back(std::make_unique<CannProgram>(d));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);
+    s.owned.push_back(std::make_unique<DeviceProgram>(d));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);
     s.errors.push_back(at::zeros({1},upstream.options().device(d)));
   }
   s.programs[0]->copy(s.errors[0],upstream);

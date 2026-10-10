@@ -11,7 +11,7 @@ def external_window(runtime, batch_size, cut, inputs, stop, sealed_until):
         if (not isinstance(inputs, torch.Tensor) or inputs.ndim != 3 or inputs.shape[0] != batch_size
                 or inputs.shape[2] != r.config.width or inputs.dtype != getattr(torch, r.config.dtype)
                 or inputs.device not in (torch.device("cpu"), r.device)):
-            raise ValueError("Settle resident inputs require matching CPU/NPU payload dtype [batch,positions,width]")
+            raise ValueError("Settle resident inputs require matching CPU/accelerator payload dtype [batch,positions,width]")
         position = cut // r.spec.stride
         external = r.spec.external(inputs, position, encoded=True)
         stop = sealed_until = (position + inputs.shape[1]) * r.spec.stride

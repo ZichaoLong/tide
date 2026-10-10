@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "state_owner_tape.h"
 #include "retained_attention.h"
 #include <ATen/core/grad_mode.h>
@@ -25,7 +26,7 @@ void structure(const StateOwnerTape& t) {
   if(t.global_nodes.size()!=size_t(t.layout.nodes)||t.state.metadata.defined()||t.state.values.defined()||t.state.count.defined())
     throw std::invalid_argument("state owner fragment must have compact metadata and no coordinator journals");
   int64_t previous=-1;for(const auto n:t.global_nodes){if(n<=previous)throw std::invalid_argument("invalid reverse owner node map");previous=n;}
-  if(!t.state.decay.defined()||t.state.decay.device().type()!=c10::DeviceType::PrivateUse1)
+  if(!t.state.decay.defined()||t.state.decay.device().type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("state owner tape requires NPU parameter storage");
 }
 }

@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 import pytest
 import torch
+from resident_test_target import owner_devices, device_api
 from test_online_consumer import packet
 from test_online_consumer_npu import target
 from flow_protocol import native_text
@@ -70,7 +71,7 @@ def test_npu_consumer_memory(implementation, preset, devices, payload_dtype, tra
     device = target();p = packet("attention")
     reference = run(p, family="timed-dag", implementation="python", device="cpu", schedule="streaming",
                     steps=1, warmup=1, windows_per_step=2, training=training, optimizer="adamw")
-    logical = [f"npu:{device.index+i}" for i in range(devices)]
+    logical = list(owner_devices(device, devices))
     if implementation == "libtorch":
         candidate = standalone(p, device, preset, payload_dtype, training, devices, tmp_path)
     else:
@@ -91,7 +92,7 @@ def test_npu_peak_survives_free_then_resets():
     device = target();memory = MemoryRecord([device]);size = 4*1024*1024
     temporary = torch.empty(size, dtype=torch.float32, device=device)
     del temporary
-    torch.npu.synchronize(device);memory.capture("construction")
+    device_api(device).synchronize(device);memory.capture("construction")
     memory.capture("warmup");memory.capture("measured", reset_peak=False)
     phases = memory.record()["phases"]
     peak = phases[1]["devices"][0]

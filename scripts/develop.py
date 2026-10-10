@@ -42,7 +42,11 @@ def identity():
 
 before = identity()
 archive = out/"source.tar.gz"
-subprocess.run(["tar", "--null", "-T", "-", "-czf", str(archive)], input=files(), cwd=root, check=True)
+names = sorted(set(files().split(b"\0")) - {b""})
+deleted = [name for name in names if not (root/os.fsdecode(name)).exists()
+           and not (root/os.fsdecode(name)).is_symlink()]
+present = b"\0".join(name for name in names if name not in deleted) + b"\0"
+subprocess.run(["tar", "--null", "-T", "-", "-czf", str(archive)], input=present, cwd=root, check=True)
 (out/"source.sha256").write_text(hashlib.sha256(archive.read_bytes()).hexdigest()+"  source.tar.gz\n")
 env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD="0", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
            PYTHONPATH=os.pathsep.join((str(root/"python"), str(build))), TIDE_BUILD_DIR=str(build))
@@ -58,7 +62,8 @@ else:
     commands.append([sys.executable, "scripts/build.py", "--jobs", str(args.jobs), "--build-dir", str(build)])
 commands.append([sys.executable, "-m", "pytest", *args.tests, "-q", "--dtype", "both",
                  "--basetemp", str(out/"test-tmp")])
-record = {"tree_sha256": before, "commands": commands, "stages": [], "state": "running"}
+record = {"tree_sha256": before, "deleted_files": [os.fsdecode(n) for n in deleted],
+          "commands": commands, "stages": [], "state": "running"}
 code = 1
 try:
     for command in commands:

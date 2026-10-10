@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "retained_tape.h"
 #include "retained_journals.h"
 #include <ATen/core/grad_mode.h>
@@ -54,7 +55,7 @@ RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,Retaine
   auto source=input;if(compact_journals)compact_retained_journals(source);
   if(!source.emission.shards.empty())throw std::invalid_argument("compact projection retention requires the sharded tape owner");
   if(at::GradMode::is_enabled()||!source.graph||!source.fiber_values.defined()||budget<1
-      ||source.fiber_values.device().type()!=c10::DeviceType::PrivateUse1)
+      ||source.fiber_values.device().type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("retained tape requires bounded no-grad NPU forward records");
   RetainedTape out;out.graph=std::make_shared<const Graph>(*source.graph);out.tape=source;out.tape.graph=out.graph.get();
   auto& t=out.tape;

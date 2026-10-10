@@ -1,12 +1,12 @@
+#include "device_backend.h"
 #include "state_reverse_pack.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_state_reverse_pack.h"
+#include "device_launch_tide_state_reverse_pack.h"
 #include <stdexcept>
 #include <ATen/core/grad_mode.h>
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-StateReversePacket append_state_reverse_pack(CannProgram& p,const ReverseTape& tape,const ReverseLinks& links,
+StateReversePacket append_state_reverse_pack(DeviceProgram& p,const ReverseTape& tape,const ReverseLinks& links,
     const at::Tensor& mapping,int64_t nodes,int64_t events,int64_t fibers,const at::Tensor& error,int64_t budget,
     const ReverseGatherInput& event_input,const ReverseGatherInput& fiber_input,const ReverseGatherInput& scale_input) {
   if(at::GradMode::is_enabled()||!tape.graph||!tape.state.metadata.defined()||tape.state.metadata.dim()!=2
@@ -23,7 +23,7 @@ StateReversePacket append_state_reverse_pack(CannProgram& p,const ReverseTape& t
     if(!x.defined()||x.device()!=device||x.scalar_type()!=type||x.sizes()!=shape||!x.is_contiguous()||x.requires_grad())
       throw std::invalid_argument("invalid compact reverse pack buffer");
   };
-  if(device.type()!=c10::DeviceType::PrivateUse1||global_nodes!=int64_t(tape.graph->nodes.size())||width<1||nodes>global_nodes||links.scales.numel()<1)
+  if(device.type()!=tide::device_online::resident_device_type||global_nodes!=int64_t(tape.graph->nodes.size())||width<1||nodes>global_nodes||links.scales.numel()<1)
     throw std::invalid_argument("invalid compact reverse pack geometry");
   tensor(mapping,at::kLong,{global_nodes});tensor(error,at::kInt,{1});tensor(tape.state.metadata,at::kLong,{rows,13});
   tensor(tape.state.count,at::kLong,{1});tensor(tape.state.values,at::kFloat,{rows,5*width+2});
@@ -40,7 +40,7 @@ StateReversePacket append_state_reverse_pack(CannProgram& p,const ReverseTape& t
   out.links.scales=at::empty({fibers},floats);out.links.fibers=fibers;out.links.pending=out.links.outputs=0;out.links.parameters=fibers;
   auto inverse=at::empty({rows},longs),tail=at::empty({events},longs),scale_rows=at::empty({fibers},longs);
   const auto scales=links.scales.numel();
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_reverse_pack)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_reverse_pack)(1,stream,
     ptr(tape.state.metadata),ptr(tape.state.count),ptr(tape.fiber_meta),ptr(tape.fiber_count),ptr(links.messages),ptr(mapping),
     ptr(out.event_meta),ptr(out.event_count),ptr(out.fiber_meta),ptr(out.fiber_count),ptr(out.event_rows),ptr(out.fiber_rows),ptr(inverse),
     ptr(out.links.messages),ptr(out.links.valid),ptr(out.links.consumer_head),ptr(out.links.consumer_next),ptr(tail),ptr(scale_rows),ptr(error),

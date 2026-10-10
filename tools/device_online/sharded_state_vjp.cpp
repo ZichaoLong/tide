@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_state_vjp.h"
 #include "state_reverse_merge.h"
 #include "peer_exchange.h"
@@ -18,7 +19,7 @@ struct ShardedStateVjp::Impl {
     std::vector<CacheGradient> next;
     std::optional<StateShardGradient> reuse;
     std::unique_ptr<StateOwnerReverse> reverse;
-    std::unique_ptr<CannProgram> program;
+    std::unique_ptr<DeviceProgram> program;
     std::unique_ptr<PeerExchange> init,request,response,finish;
   };
   ReverseTape global;at::Tensor error;at::Device coordinator;
@@ -38,7 +39,7 @@ ShardedStateVjp::ShardedStateVjp(const ShardedReverseTape& t,const at::Tensor& e
   std::set<int64_t> seen;std::set<c10::DeviceIndex> devices;
   for(size_t i=0;i<t.states.size();++i) {
     const auto& owner=t.states[i];const auto d=owner.state.decay.device();
-    if(d.type()!=c10::DeviceType::PrivateUse1||!devices.insert(d.index()).second||owner.layout.width!=s.global.full.width
+    if(d.type()!=tide::device_online::resident_device_type||!devices.insert(d.index()).second||owner.layout.width!=s.global.full.width
         ||owner.state.samples!=s.global.state.samples||owner.global_nodes.size()!=size_t(owner.layout.nodes))
       throw std::invalid_argument("incompatible compact reverse owner");
     Impl::Shard shard(owner);if(!roots.empty())shard.roots=roots[i];std::vector<int64_t> mapping(nodes,-1);
@@ -55,7 +56,7 @@ ShardedStateVjp::ShardedStateVjp(const ShardedReverseTape& t,const at::Tensor& e
     }
     shard.mapping=at::tensor(mapping,at::kLong).to(s.coordinator);shard.ids=at::tensor(owner.global_nodes,at::kLong).to(s.coordinator);
     shard.error=at::zeros_like(error);
-    if(d!=s.coordinator){shard.program=std::make_unique<CannProgram>(d);shard.program->limit_workspace(workspace);}
+    if(d!=s.coordinator){shard.program=std::make_unique<DeviceProgram>(d);shard.program->limit_workspace(workspace);}
     s.shards.push_back(std::move(shard));
   }
   if(seen.size()!=size_t(nodes))throw std::invalid_argument("incomplete compact state reverse ownership");
@@ -73,7 +74,7 @@ void ShardedStateVjp::reuse_attention_parameters(const ShardedStateVjp& next) {
     owner.reuse=gradients[i];
   }
 }
-void ShardedStateVjp::prepare(CannProgram& p,const ReverseLinks& links) {
+void ShardedStateVjp::prepare(DeviceProgram& p,const ReverseLinks& links) {
   auto& s=*impl_;if(s.prepared)throw std::logic_error("compact reverse preparation repeated");s.prepared=true;
   ReverseGatherInput events(p,s.global.state.values),fibers(p,s.global.fiber_values),scales(p,links.scales);
   for(auto& owner:s.shards) {
@@ -94,7 +95,7 @@ void ShardedStateVjp::prepare(CannProgram& p,const ReverseLinks& links) {
     owner.remote_error=local_error;
   }
 }
-StateVjp ShardedStateVjp::append_stage(CannProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores) {
+StateVjp ShardedStateVjp::append_stage(DeviceProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores) {
   auto& s=*impl_;if(!s.prepared||s.built)throw std::logic_error("compact reverse stage order invalid");s.built=true;
   const auto capacity=cot.events.size(0),width=cot.events.size(2);auto f=cot.events.options(),b=cot.connected.options();
   auto zero=[&](at::IntArrayRef shape,bool flag=false){auto x=at::empty(shape,flag?b:f);p.zero(x);return x;};
@@ -131,10 +132,10 @@ StateVjp ShardedStateVjp::append_stage(CannProgram& p,const at::Tensor& range,co
   }
   return out;
 }
-void ShardedStateVjp::append_sources(CannProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials) {
+void ShardedStateVjp::append_sources(DeviceProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials) {
   for(auto& owner:impl_->shards)append_state_reverse_sources(p,owner.packed,owner.result,messages,on,partials,impl_->error);
 }
-void ShardedStateVjp::append_stop(CannProgram& p) {
+void ShardedStateVjp::append_stop(DeviceProgram& p) {
   auto& s=*impl_;
   for(auto& owner:s.shards)if(owner.request){p.copy(owner.command,owner.stop);owner.request->append_send(p);}
   for(auto& owner:s.shards)if(owner.finish){owner.finish->append_receive(p);append_state_reverse_error(p,owner.error,s.error);}

@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 
 namespace tide::device_online {
 // Bounded packed local attention adjoint. Each query has its own complete
@@ -21,6 +21,6 @@ struct AttentionVjp {
 // and parameter-chain accumulation are deliberately separate integrations.
 // Half Q/K/V retain payload QK rounding; normalization and adjoints use FP32.
 // output is the actual (payload-rounded) forward result, widened to FP32.
-AttentionVjp append_attention_vjp(CannProgram&,const AttentionVjpInput&,
+AttentionVjp append_attention_vjp(DeviceProgram&,const AttentionVjpInput&,
     const at::Tensor& error,double scale,int64_t key_tile,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

@@ -10,12 +10,12 @@ struct RemoteStateResult {at::Tensor scores,comparison,event_meta,event_values,e
 class RemoteState {
  public:
   explicit RemoteState(StateOwner&,int64_t operator_budget);
-  RemoteStateResult append_read_send(CannProgram&,const StateShardBatch&,const at::Tensor& stage,const at::Tensor& error);
-  void append_read_receive(CannProgram&);
-  void append_update_send(CannProgram&,const SelectionProposal&,const at::Tensor& common_error);
-  void append_update_receive(CannProgram&);
-  void append_commit(CannProgram&,const at::Tensor& common_error);
-  void append_stop(CannProgram&);
+  RemoteStateResult append_read_send(DeviceProgram&,const StateShardBatch&,const at::Tensor& stage,const at::Tensor& error);
+  void append_read_receive(DeviceProgram&);
+  void append_update_send(DeviceProgram&,const SelectionProposal&,const at::Tensor& common_error);
+  void append_update_receive(DeviceProgram&);
+  void append_commit(DeviceProgram&,const at::Tensor& common_error);
+  void append_stop(DeviceProgram&);
   void submit();void wait();void close();
   int64_t workspace_bytes() const;
   int64_t packet_bytes() const;
@@ -24,7 +24,7 @@ class RemoteState {
   StateOwner& owner_;
   int64_t budget_;
   at::Tensor command_,stop_,active_,controls_,stage_error_,commit_error_;
-  std::unique_ptr<CannProgram> program_;
+  std::unique_ptr<DeviceProgram> program_;
   std::unique_ptr<PeerExchange> request_,read_result_,selection_,update_result_,decision_,completion_;
 };
 } // namespace tide::device_online

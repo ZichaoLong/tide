@@ -1,7 +1,7 @@
+#include "device_backend.h"
 #include "state_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_state_vjp_plan.h"
-#include "aclrtlaunch_tide_state_vjp.h"
+#include "device_launch_tide_state_vjp_plan.h"
+#include "device_launch_tide_state_vjp.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
@@ -14,7 +14,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType dtype,at::IntAr
       ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("invalid state VJP buffer");
 }
 }
-StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotangents& cot,
+StateVjp append_state_vjp(DeviceProgram& p,const StateTape& tape,const StateCotangents& cot,
                          const at::Tensor& error,int64_t budget,int64_t repeat_chunk_ticks) {
   if(at::GradMode::is_enabled()||!tape.values.defined()||tape.values.dim()!=2
       ||!tape.config.defined()||tape.config.dim()!=2||!tape.decay.defined()||tape.decay.dim()!=2)
@@ -26,7 +26,7 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
   const auto capacity=tape.values.size(0),nodes=tape.config.size(0),width=tape.decay.size(1),samples=tape.samples;
   // Includes persistent partials, reverse indices and sigmoid coefficients.
   const long double estimate=16.L*capacity*(width+8.L)+32.L*samples*nodes*(width+4.L)+8.L*nodes*width;
-  if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||nodes<1||width<1||samples<1
+  if(device.type()!=tide::device_online::resident_device_type||capacity<1||nodes<1||width<1||samples<1
       ||budget<1||estimate>=budget||repeat_chunk_ticks<1||tape.max_repeat_ticks<1)
     throw std::invalid_argument("state VJP workspace budget exceeded");
   const int64_t repeat_rows=tape.has_repeat?std::min(repeat_chunk_ticks,tape.max_repeat_ticks):1;
@@ -57,14 +57,14 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
   for(const auto& value:{out.content,out.content_connected,out.initial,out.initial_connected,
                         out.decay,out.decay_connected,out.retention_components,out.retention_connected,out.proposal,out.proposal_connected})
     p.copy(value,at::zeros_like(value));
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_vjp_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_vjp_plan)(1,stream,
     ptr(tape.metadata),ptr(tape.count),ptr(tape.config),ptr(previous),ptr(tail),ptr(cot.connected),ptr(cot.final_connected),
     ptr(out.content_connected),ptr(out.initial_connected),ptr(out.decay_connected),ptr(out.retention_connected),
     ptr(tape.clock_policy),ptr(ticks),ptr(out.proposal_connected),ptr(error),capacity,nodes,samples,int64_t(tape.has_repeat),tape.max_repeat_ticks,int64_t(tape.has_attention)),
     "validate and link reverse state chains");},{tape.metadata,tape.count,tape.config,previous,tail,cot.connected,cot.final_connected,
       out.content_connected,out.initial_connected,out.decay_connected,out.retention_connected,tape.clock_policy,ticks,out.proposal_connected,error});
   p.sigmoid(tape.decay,coefficients);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_vjp)(blocks,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_vjp)(blocks,stream,
     ptr(tape.metadata),ptr(tape.values),ptr(tape.config),ptr(coefficients),ptr(previous),ptr(tail),
     ptr(cot.events),ptr(cot.connected),ptr(cot.final),ptr(cot.final_connected),ptr(out.content),ptr(out.content_connected),
     ptr(out.initial),ptr(out.initial_connected),ptr(out.decay),ptr(out.decay_connected),ptr(tape.retention),ptr(ticks),ptr(replay),

@@ -25,11 +25,11 @@ tide::ResidentTrainingLimits resident_limits(const Config& c,at::Device device) 
   out.placement.policy=c.owner_policy;return out;
 }
 std::string run_resident(const Packet& p,const Config& c,at::Device device,std::ostream* diagnostics) {
-  if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0||(c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf))
-    throw std::invalid_argument("resident consumer requires explicit logical NPU FP32/FP16");
+  if((!device.is_cuda()&&device.type()!=c10::DeviceType::PrivateUse1)||device.index()<0||(c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf))
+    throw std::invalid_argument("resident consumer requires explicit logical CUDA/NPU FP32/FP16");
   auto placement=tide::resolve_placement(c.placement,device);
   if(placement.read!=device||placement.control!=device||placement.selection!=device||placement.events!=device
-      ||placement.scoring_dtype=="float64")throw std::invalid_argument("resident consumer requires all phases on NPU with FP32 scoring");
+      ||placement.scoring_dtype=="float64")throw std::invalid_argument("resident consumer requires all phases on the resident device with FP32 scoring");
   at::NoGradGuard no_grad;auto begin=Clock::now();
   std::vector<at::Device> memory_devices;
   for(Index i=0;i<c.devices;++i)memory_devices.emplace_back(device.type(),device.index()+i);

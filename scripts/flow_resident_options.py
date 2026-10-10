@@ -79,7 +79,7 @@ def python_arguments(args, device):
             value=getattr(args,"resident_"+field)
             if value is not None:
                 values[field]=value
-    devices = tuple(f"npu:{device.index+i}" for i in range(args.devices)) if args.devices>1 or args.owner_map else ()
+    devices = tuple(f"{device.type}:{device.index+i}" for i in range(args.devices)) if args.devices>1 or args.owner_map else ()
     return dict(resident_library=args.resident_library, resident_limits=ResidentLimits(**forward),
                 auto_sample_chunks=args.auto_sample_chunks,
                 head_workspace_bytes=args.head_workspace_bytes,

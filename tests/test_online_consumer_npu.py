@@ -6,6 +6,7 @@ import subprocess
 import sys
 import pytest
 import torch
+from resident_test_target import target_device
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/"scripts"))
@@ -25,12 +26,7 @@ CASES=[("pdg","add","streaming","mixed-a"),
 
 
 def target():
-    spec=os.environ.get("TIDE_ONLINE_DEVICE")
-    if not spec:pytest.skip("NPU consumer target not explicitly selected")
-    from tidegraph.runtime import resolve_device
-    device,_=resolve_device(spec)
-    assert device.type=="npu","explicit NPU target required"
-    return device
+    return torch.device(target_device("TIDE_ONLINE_DEVICE", resident=False))
 
 
 @pytest.mark.parametrize("case",CASES)

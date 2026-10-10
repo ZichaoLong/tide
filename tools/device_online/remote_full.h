@@ -11,14 +11,14 @@ namespace tide::device_online {
 class RemoteFull {
  public:
   RemoteFull(PackedFull&,PackedLhFull*,PackedSwiGluFull*,int64_t workspace_budget);
-  ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
+  ActionBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& content,
                            const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);
   // Construct/send every independent shard before receiving any result. The
   // returned values may be consumed only after append_receive_stage.
-  ActionBatch append_send_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
+  ActionBatch append_send_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& content,
                                const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);
-  void append_receive_stage(CannProgram&);
-  void append_stop(CannProgram&);
+  void append_receive_stage(DeviceProgram&);
+  void append_stop(DeviceProgram&);
   void submit();
   void wait();
   void synchronize_inputs() const;
@@ -33,6 +33,6 @@ class RemoteFull {
   int64_t workspace_budget_;
   at::Tensor command_,stop_;
   std::unique_ptr<PeerExchange> request_,response_;
-  std::unique_ptr<CannProgram> program_;
+  std::unique_ptr<DeviceProgram> program_;
 };
 } // namespace tide::device_online

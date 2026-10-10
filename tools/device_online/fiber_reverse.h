@@ -9,17 +9,17 @@ struct FiberReverse {
   at::Tensor ranges,previous,tails,tokens,ticks,node_offsets;
   CacheGradient cache;
 };
-CacheCotangents append_fiber_cache_seed(CannProgram&,const FiberAttentionTape&,const CacheCotangents&,
+CacheCotangents append_fiber_cache_seed(DeviceProgram&,const FiberAttentionTape&,const CacheCotangents&,
     const CacheGradient* later,const at::Tensor& error,int64_t tensor_budget_bytes);
-FiberReverse prepare_fiber_reverse(CannProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,
+FiberReverse prepare_fiber_reverse(DeviceProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,
     const CacheCotangents&,const at::Tensor& error,int64_t tensor_budget_bytes);
-FiberReverse prepare_fiber_reverse(CannProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,
+FiberReverse prepare_fiber_reverse(DeviceProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,
     const CacheCotangents&,const at::Tensor& error,int64_t tensor_budget_bytes);
-ReverseBatchPlan append_fiber_reverse(CannProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
+ReverseBatchPlan append_fiber_reverse(DeviceProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
     const at::Tensor& stage,const StateVjp&,const at::Tensor& messages,const at::Tensor& message_connected,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_connected,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);
-ReverseBatchPlan append_fiber_reverse(CannProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
+ReverseBatchPlan append_fiber_reverse(DeviceProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
     const at::Tensor& stage,const StateVjp&,const at::Tensor& messages,const at::Tensor& message_connected,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_connected,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);

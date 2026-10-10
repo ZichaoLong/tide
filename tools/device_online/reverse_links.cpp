@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "reverse_links.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_reverse_links.h"
+#include "device_launch_tide_reverse_links.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
@@ -13,7 +13,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid reverse-link buffer");
 }
 }
-ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::Tensor& error,int64_t budget) {
+ReverseLinks append_reverse_links(DeviceProgram& p,const ReverseTape& t,const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!t.graph||!t.state.metadata.defined()||t.state.metadata.dim()!=2
       ||!t.fiber_meta.defined()||t.fiber_meta.dim()!=2||!t.pending.valid.defined()||!t.outputs.valid.defined())
     throw std::invalid_argument("reverse links require actual no-grad device journals");
@@ -25,7 +25,7 @@ ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::
   const int64_t parameters=inputs+2*edges+ports;
   const long double total=fibers+static_cast<long double>(pending)+outputs;
   const long double bytes=96.L*capacity+80.L*total+16.L*(parameters+1)+8.L*samples*nodes+64.L*(edges+ports+1);
-  if(device.type()!=c10::DeviceType::PrivateUse1||budget<1||bytes>budget||capacity<1||fibers<1||pending<1||outputs<1
+  if(device.type()!=tide::device_online::resident_device_type||budget<1||bytes>budget||capacity<1||fibers<1||pending<1||outputs<1
       ||nodes<1||samples<1||t.cut<0||t.stop<t.cut)
     throw std::invalid_argument("reverse-link tensor budget exceeded or invalid dimensions");
   const int64_t messages=fibers+pending+outputs,width=t.full.width;
@@ -56,7 +56,7 @@ ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::
   auto copy_scale=[&](const at::Tensor& dst,const at::Tensor& src){if(payload==at::kHalf)p.cast(src,dst);else p.copy(dst,src);};
   if(inputs+edges)copy_scale(out.scales.narrow(0,0,inputs+edges),t.source_scales);
   if(edges+ports)copy_scale(out.scales.narrow(0,inputs+edges,edges+ports),t.delivery_scales.narrow(0,0,edges+ports).view({-1}));
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_reverse_links)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(t.fiber_meta),ptr(t.fiber_count),ptr(t.pending.coordinates),ptr(t.pending.valid),ptr(t.pending_count),
     ptr(t.outputs.coordinates),ptr(t.outputs.valid),ptr(t.output_count),ptr(t.sources),ptr(edge_data),ptr(port_data),ptr(hash),
     ptr(out.messages),ptr(out.valid),ptr(out.producer_head),ptr(out.producer_next),ptr(out.consumer_head),ptr(out.consumer_next),

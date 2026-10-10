@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "retained_fixture.h"
 #include "full_vjp_fixture.h"
 #include "precision_graph_fixture.h"
@@ -42,7 +43,7 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
   live.state.values.fill_(std::numeric_limits<float>::quiet_NaN());live.state.count.fill_(-1);
   if(live.full.has_tanh)live.full.weights.fill_(std::numeric_limits<float>::quiet_NaN());
   test::poison_live_cache(live);
-  auto error=at::zeros({1},saved[0].tape.state.count.options().dtype(at::kInt));CannProgram p(device);p.limit_workspace(128*1024*1024);
+  auto error=at::zeros({1},saved[0].tape.state.count.options().dtype(at::kInt));DeviceProgram p(device);p.limit_workspace(128*1024*1024);
   // Wide SwiGLU needs at least one matrix row plus its parameter accumulators
   // within the nested Full reserve. This is an explicit admission budget.
   const Index reverse_bytes=cache>=0?Index(width>64?8:1)*1024*1024*1024:(width>3?256:128)*1024*1024;
@@ -93,15 +94,15 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
   if(cache<0&&!profile&&shape==0&&variant==0&&width==3&&!prefill&&mode==4) {
     auto reject=[&](auto fn){bool failed=false;try{fn();}catch(const std::invalid_argument&){failed=true;}require(failed,"retained preflight refusal missing");};
     reject([&]{retain_reverse_tape(saved[0].tape,1);});
-    reject([&]{CannProgram small(device);append_window_bridge(small,saved[0].tape,roots[0],saved[1].tape,gradients[1],error,1);});
+    reject([&]{DeviceProgram small(device);append_window_bridge(small,saved[0].tape,roots[0],saved[1].tape,gradients[1],error,1);});
     auto wrong=saved[1].tape;++wrong.cut;
-    reject([&]{CannProgram bad(device);append_window_bridge(bad,saved[0].tape,roots[0],wrong,gradients[1],error,16*1024*1024);});
-    reject([&]{CannProgram small(device);append_parameter_accumulate(small,total,total,error,1);});
+    reject([&]{DeviceProgram bad(device);append_window_bridge(bad,saved[0].tape,roots[0],wrong,gradients[1],error,16*1024*1024);});
+    reject([&]{DeviceProgram small(device);append_parameter_accumulate(small,total,total,error,1);});
     const auto flags=saved[0].tape.pending.valid.cpu();Index changed=-1;
     for(Index i=0;i<flags.numel();++i)if(flags[i].item<bool>()){changed=i;break;}
     require(changed>=0,"fixture has no cross-window pending message");
     auto old=saved[0].tape.pending.coordinates[changed].clone();saved[0].tape.pending.coordinates[changed][2].add_(12345);
-    CannProgram missing(device);append_window_bridge(missing,saved[0].tape,roots[0],saved[1].tape,gradients[1],error,16*1024*1024);missing.finish();
+    DeviceProgram missing(device);append_window_bridge(missing,saved[0].tape,roots[0],saved[1].tape,gradients[1],error,16*1024*1024);missing.finish();
     portable_torch::synchronize(device);missing.run();require(error.cpu().item<int>()==22,"missing boundary message was silently dropped");
     saved[0].tape.pending.coordinates[changed].copy_(old);
   }
@@ -120,7 +121,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("retained gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("retained gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("retained gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     if(event||fiber) {
       auto run=[&](int shape,int variant,Index width,bool prefill,int mode,int cache,const std::string& emit="hard",bool clock=false) {

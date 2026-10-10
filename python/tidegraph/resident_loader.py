@@ -1,4 +1,4 @@
-"""Explicit optional CANN plugin loading, separate from standalone NPU SDKs."""
+"""Explicit optional resident plugin loading with one matching runtime owner."""
 import hashlib
 import importlib.util
 import json
@@ -11,7 +11,7 @@ def load_resident(location, core):
         raise ValueError("resident placement requires resident_library=DEVICE_BUILD_DIR")
     build = Path(location).expanduser().resolve()
     record = json.loads((build / "control-build.json").read_text())
-    if record.get("npu_runtime") != "python":
+    if record.get("runtime", record.get("npu_runtime")) != "python":
         raise ValueError("Python resident execution requires a Python-owned backend build")
     core_path = Path(core.__file__).resolve()
     expected = record["core"]["binary_sha256"].get(core_path.name)

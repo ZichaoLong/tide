@@ -1,8 +1,8 @@
+#include "device_backend.h"
 #include "owner_gradient_packet.h"
 #include "parameter_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_owner_gradient_pack.h"
-#include "aclrtlaunch_tide_owner_gradient_reduce.h"
+#include "device_launch_tide_owner_gradient_pack.h"
+#include "device_launch_tide_owner_gradient_reduce.h"
 #include <cstring>
 #include <stdexcept>
 #include <ATen/core/grad_mode.h>
@@ -18,10 +18,10 @@ void buffer(const at::Tensor& x,at::Device d,at::ScalarType dtype,int64_t size) 
     throw std::invalid_argument("invalid owner gradient buffer");
 }
 }
-void append_owner_gradient_pack(CannProgram& p,const std::vector<ParameterContribution>& input,
+void append_owner_gradient_pack(DeviceProgram& p,const std::vector<ParameterContribution>& input,
     const at::Tensor& values,const at::Tensor& connected,const at::Tensor& error,int64_t budget) {
   std::vector<int64_t> descriptors,tiles{0};std::vector<at::Tensor> keep{values,connected,error};int64_t used=0;
-  if(at::GradMode::is_enabled()||!values.defined()||values.device().type()!=c10::DeviceType::PrivateUse1)
+  if(at::GradMode::is_enabled()||!values.defined()||values.device().type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("owner gather requires explicit no-grad NPU buffers");
   buffer(error,values.device(),at::kInt,1);
   if(budget<1||48.L*(input.size()+1)>budget)throw std::invalid_argument("owner gather metadata budget exceeded");
@@ -39,13 +39,13 @@ void append_owner_gradient_pack(CannProgram& p,const std::vector<ParameterContri
   const auto desc=table(descriptors,values.device()),offsets=table(tiles,values.device());
   keep.push_back(desc);keep.push_back(offsets);p.zero(values);p.zero(connected);
   const int64_t count=input.size(),tasks=tiles.back();
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_owner_gradient_pack)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_owner_gradient_pack)(32,stream,
     ptr(desc),ptr(offsets),ptr(values),ptr(connected),ptr(error),count,tasks),"pack canonical owner contributions");},keep);
 }
-void append_owner_gradient_reduce(CannProgram& p,const std::vector<int64_t>& owners,const std::vector<int64_t>& refs,
+void append_owner_gradient_reduce(DeviceProgram& p,const std::vector<int64_t>& owners,const std::vector<int64_t>& refs,
     const std::vector<int64_t>& tiles,const at::Tensor& partials,const at::Tensor& partial_on,const ParameterVjp& output,
     const at::Tensor& error,int64_t budget) {
-  if(at::GradMode::is_enabled()||!output.values.defined()||output.values.device().type()!=c10::DeviceType::PrivateUse1
+  if(at::GradMode::is_enabled()||!output.values.defined()||output.values.device().type()!=tide::device_online::resident_device_type
       ||budget<1||8.L*(owners.size()+refs.size()+tiles.size()+3)>budget||owners.size()!=output.owners.size()*4
       ||output.offsets.size()!=output.owners.size()||refs.size()%2||tiles.size()!=output.owners.size()+1||tiles.front()!=0)
     throw std::invalid_argument("invalid owner reduction metadata/budget");
@@ -63,7 +63,7 @@ void append_owner_gradient_reduce(CannProgram& p,const std::vector<int64_t>& own
   }
   auto desc=table(owners,output.values.device()),references=table(refs,output.values.device()),offsets=table(tiles,output.values.device());
   p.zero(output.values);p.zero(output.connected);const int64_t count=output.owners.size(),tasks=tiles.back();
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_owner_gradient_reduce)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_owner_gradient_reduce)(32,stream,
     ptr(desc),ptr(references),ptr(offsets),ptr(partials),ptr(partial_on),ptr(output.values),ptr(output.connected),ptr(error),count,tasks),
     "reduce canonical parameter owners in declared order");},
     {desc,references,offsets,partials,partial_on,output.values,output.connected,error});

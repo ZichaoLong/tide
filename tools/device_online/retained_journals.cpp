@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "retained_journals.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -11,7 +12,7 @@ class Prefixes {
  public:
   int64_t rows(const at::Tensor& count,int64_t capacity) {
     if(at::GradMode::is_enabled()||capacity<1||count.sizes()!=at::IntArrayRef{1}||count.scalar_type()!=at::kLong
-        ||count.device().type()!=c10::DeviceType::PrivateUse1)
+        ||count.device().type()!=tide::device_online::resident_device_type)
       throw std::invalid_argument("invalid retained journal count/capacity");
     const auto key=std::make_pair(reinterpret_cast<std::uintptr_t>(count.unsafeGetTensorImpl()),capacity);
     auto found=extents_.find(key);if(found!=extents_.end())return found->second;

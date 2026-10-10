@@ -10,7 +10,7 @@ inline void reverse_gather_check(at::Device device,at::ScalarType dtype) {
     auto input=at::zeros({3,7},at::TensorOptions().device(device).dtype(type));
     auto left=at::tensor({2,0,3,2},at::kLong).to(device),right=at::tensor({1,3,0,1},at::kLong).to(device);
     auto a=at::empty({4,7},input.options()),b=at::empty_like(a);
-    CannProgram p(device),foreign(device);
+    DeviceProgram p(device),foreign(device);
     {
       ReverseGatherInput source(p,input);
       if(p.retained_tensor_bytes())throw std::runtime_error("unused reverse gather allocated storage");

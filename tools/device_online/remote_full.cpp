@@ -4,12 +4,12 @@
 namespace tide::device_online {
 RemoteFull::RemoteFull(PackedFull& full,PackedLhFull* lh,PackedSwiGluFull* swiglu,int64_t budget)
   :full_(full),lh_(lh),swiglu_(swiglu),workspace_budget_(budget){}
-ActionBatch RemoteFull::append_stage(CannProgram& coordinator,const ActionBatch& actions,
+ActionBatch RemoteFull::append_stage(DeviceProgram& coordinator,const ActionBatch& actions,
     const at::Tensor& content,const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
   auto result=append_send_stage(coordinator,actions,content,comparison,error,chunks);
   append_receive_stage(coordinator);return result;
 }
-ActionBatch RemoteFull::append_send_stage(CannProgram& coordinator,const ActionBatch& actions,
+ActionBatch RemoteFull::append_send_stage(DeviceProgram& coordinator,const ActionBatch& actions,
     const at::Tensor& content,const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
   if(program_)throw std::logic_error("remote Full stage already constructed");
   const auto remote=full_.kinds().device();
@@ -22,7 +22,7 @@ ActionBatch RemoteFull::append_send_stage(CannProgram& coordinator,const ActionB
   request_=std::make_unique<PeerExchange>(PeerExchange::Fields{{command_,remote_command},
     {actions.coordinates,input.coordinates},{actions.values,input.values},{actions.valid,input.valid},
     {content,remote_content},{comparison,remote_comparison},{error,remote_error}},workspace_budget_);
-  program_=std::make_unique<CannProgram>(remote);auto& p=*program_;p.limit_workspace(workspace_budget_);
+  program_=std::make_unique<DeviceProgram>(remote);auto& p=*program_;p.limit_workspace(workspace_budget_);
   auto head=p.label(),body=p.label(),end=p.label();auto again=at::zeros_like(remote_command);
   p.mark(head);request_->append_receive(p);p.branch(remote_command,{end,body});p.mark(body);
   auto result=full_.append_stage(p,input,remote_comparison,remote_error);
@@ -35,8 +35,8 @@ ActionBatch RemoteFull::append_send_stage(CannProgram& coordinator,const ActionB
   coordinator.copy(command_,work);request_->append_send(coordinator);
   return {actions.coordinates,output,actions.valid};
 }
-void RemoteFull::append_receive_stage(CannProgram& p){response_->append_receive(p);}
-void RemoteFull::append_stop(CannProgram& p) {
+void RemoteFull::append_receive_stage(DeviceProgram& p){response_->append_receive(p);}
+void RemoteFull::append_stop(DeviceProgram& p) {
   if(!program_)throw std::logic_error("remote Full has no stage");
   p.copy(command_,stop_);request_->append_send(p);
 }

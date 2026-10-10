@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include <memory>
 #include <utility>
 
@@ -16,8 +16,8 @@ class PeerExchange {
   ~PeerExchange();
   PeerExchange(const PeerExchange&)=delete;
   PeerExchange& operator=(const PeerExchange&)=delete;
-  void append_send(CannProgram&);
-  void append_receive(CannProgram&);
+  void append_send(DeviceProgram&);
+  void append_receive(DeviceProgram&);
   int64_t packet_bytes() const;
   // Refuses while any program still retains its commands. A program timeout
   // quarantines those commands, notifications and both endpoints until exit.

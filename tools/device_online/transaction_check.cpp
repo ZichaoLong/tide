@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "queue_transaction.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -24,7 +25,7 @@ void check(at::Device device,at::ScalarType dtype) {
   AtomBatch incoming{at::zeros({arrivals,6},opts.dtype(at::kLong)),at::zeros({arrivals,width},opts),
                      at::zeros({arrivals},opts.dtype(at::kBool))};
   auto consumed=at::zeros({capacity},opts.dtype(at::kInt));
-  CannProgram program(device);queue.append_stage(program,consumed,incoming);program.finish();
+  DeviceProgram program(device);queue.append_stage(program,consumed,incoming);program.finish();
   I cases=0,emitted=0;
   // Reuse a single program with different exact times, masks and payloads.
   // The CPU oracle uses stable tensor sorting; it does not call the AIV planner.
@@ -93,7 +94,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))
       throw std::invalid_argument("device queue check requires explicit NPU and FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("device queue check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("device queue check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);
     check_transaction_group(device,args.dtype);return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}

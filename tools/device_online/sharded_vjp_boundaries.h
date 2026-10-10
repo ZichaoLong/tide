@@ -13,14 +13,14 @@ inline void sharded_vjp_boundaries(at::Device device,int devices,at::ScalarType 
   auto require=[](bool ok){if(!ok)throw std::runtime_error("sharded reverse boundary check failed");};
   auto reject=[&](auto fn){bool refused=false;try{fn();}catch(const std::invalid_argument&){refused=true;}require(refused);};
   reject([&]{retain_sharded_reverse_tape(t.tape,1);});
-  reject([&]{CannProgram p(device);append_graph_vjp(p,t.tape.coordinator,roots,error,3,128*1024*1024);});
-  reject([&]{CannProgram p(device);append_sharded_graph_vjp(p,t.tape,roots,error,3,1,64*1024*1024);});
+  reject([&]{DeviceProgram p(device);append_graph_vjp(p,t.tape.coordinator,roots,error,3,128*1024*1024);});
+  reject([&]{DeviceProgram p(device);append_sharded_graph_vjp(p,t.tape,roots,error,3,1,64*1024*1024);});
   auto duplicate=t.tape;duplicate.shards[0].nodes[0]=duplicate.shards.back().nodes.back();
-  reject([&]{CannProgram p(device);append_sharded_graph_vjp(p,duplicate,roots,error,3,1024*1024*1024,64*1024*1024);});
+  reject([&]{DeviceProgram p(device);append_sharded_graph_vjp(p,duplicate,roots,error,3,1024*1024*1024,64*1024*1024);});
   auto wrong=roots;wrong.final=roots.final.to(at::kHalf);
-  reject([&]{CannProgram p(device);append_sharded_graph_vjp(p,t.tape,wrong,error,3,1024*1024*1024,64*1024*1024);});
+  reject([&]{DeviceProgram p(device);append_sharded_graph_vjp(p,t.tape,wrong,error,3,1024*1024*1024,64*1024*1024);});
   auto execute=[&](const ShardedReverseTape& tape,bool malformed) {
-    CannProgram p(device);p.limit_workspace(64*1024*1024);
+    DeviceProgram p(device);p.limit_workspace(64*1024*1024);
     auto g=append_sharded_graph_vjp(p,tape,roots,error,3,1024*1024*1024,64*1024*1024);p.finish();run_sharded_graph_vjp(p,{g});
     require(error.cpu().item<int>()==(malformed?2:0));require(!g.coordinator.initial.cpu().any().item<bool>());
     require(!g.coordinator.full_connected.cpu().any().item<bool>()&&!g.coordinator.scale_connected.cpu().any().item<bool>());

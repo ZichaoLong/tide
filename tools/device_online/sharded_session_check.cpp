@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "training_test.h"
 #include "emission_training_fixture.h"
 #include "precision_graph_fixture.h"
@@ -202,7 +203,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4||resume<0||resume>4)throw std::invalid_argument("explicit NPU FP32/FP16 and 1..4 owners required; resume=0 tests legacy single owner");
-    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
+    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     test::retained_attention_check(d,args.dtype);
     test::retained_projection_check(d,args.dtype);

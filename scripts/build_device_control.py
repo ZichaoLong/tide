@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the optional device backend against a matching NPU core/runtime owner."""
+"""Build the optional resident backend against a matching core/runtime owner."""
 import argparse
 import hashlib
 import json
@@ -29,20 +29,27 @@ def main():
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--jobs", type=int, choices=(1, 2, 4), default=2)
     parser.add_argument("--ascendc-soc", help="Explicit target SoC; enable Ascend C closure")
+    parser.add_argument("--runtime", choices=("standalone", "python"), help="CUDA runtime owner; NPU must match its core")
+    parser.add_argument("--cuda-architectures", help="Explicit CMake CUDA architecture list, CC80 or newer")
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
                         help="Build only named standalone components; omitted builds the complete backend")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     core, build = args.core_build.resolve(), args.build_dir.resolve()
     manifest = json.loads((core / "build-manifest.json").read_text())
-    runtime = manifest.get("npu_runtime")
-    if manifest.get("backend") != "npu" or runtime not in {"standalone", "python"}:
-        parser.error("control component requires a matching NPU core")
-    if runtime == "python" and not args.ascendc_soc:
+    backend = manifest.get("backend")
+    runtime = args.runtime or (manifest.get("npu_runtime") if backend == "npu" else "standalone")
+    if backend not in {"cuda", "npu"} or runtime not in {"standalone", "python"}:
+        parser.error("resident component requires a matching CUDA/NPU core")
+    if backend == "npu" and (runtime != manifest.get("npu_runtime") or args.cuda_architectures):
+        parser.error("NPU runtime must match its core and cannot request CUDA architectures")
+    if backend == "cuda" and (args.ascendc_soc or not args.cuda_architectures):
+        parser.error("CUDA requires --cuda-architectures and no Ascend SoC")
+    if backend == "npu" and runtime == "python" and not args.ascendc_soc:
         parser.error("Python resident backend requires --ascendc-soc")
     if args.checks and runtime != "standalone":
         parser.error("component subsets require a standalone runtime owner")
-    if args.checks and not args.ascendc_soc and any(check not in {"peer", "control", "failure", "numerical", "queue"} for check in args.checks):
+    if backend == "npu" and args.checks and not args.ascendc_soc and any(check not in {"peer", "control", "failure", "numerical", "queue"} for check in args.checks):
         parser.error("selected component requires --ascendc-soc")
     if manifest["cpp_source_sha256"] != source_hash(root):
         parser.error("core source differs; rebuild the native core")
@@ -63,6 +70,8 @@ def main():
                     "-DCMAKE_BUILD_TYPE=Release", "-DTideGraph_DIR="+str(package),
                     "-DTorch_DIR="+cache_values(core)["Torch_DIR"],
                     "-DTIDE_DEVICE_RUNTIME="+runtime,
+                    "-DTIDE_DEVICE_BACKEND="+backend.upper(),
+                    *(["-DCMAKE_CUDA_ARCHITECTURES="+args.cuda_architectures] if backend == "cuda" else []),
                     *(["-DTIDE_DEVICE_CHECK_TARGETS="+";".join(targets)] if targets else []),
                     *(["-DPython3_EXECUTABLE="+sys.executable] if runtime == "python" else []),
                     "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
@@ -80,27 +89,9 @@ def main():
                             *(["-R", "^(" + "|".join(tests) + ")$"] if targets else [])],
                            check=True, timeout=120)
     binaries, loaders = {}, {}
-    names = ["tide-device-peer-check", "tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
-    if args.ascendc_soc:
-        names.extend(("tide-device-closure-check", "tide-device-queue-check",
-                      "tide-device-broadcast-check", "tide-device-ready-check", "tide-device-selector-check",
-                      "tide-content-flow-check", "tide-content-window-check", "tide-packed-full-check", "tide-packed-sum-check",
-                      "tide-device-add-check", "tide-device-state-vjp-check", "tide-device-full-vjp-check", "tide-device-extra-full-vjp-check", "tide-device-reverse-links-check", "tide-device-graph-vjp-check", "tide-device-parameter-vjp-check", "tide-device-optimizer-check", "tide-device-training-step-check", "tide-device-retained-check", "tide-device-clock-check", "tide-device-norm-check", "tide-device-lh-full-check",
-                      "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
-                      "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
-        names.append("libtide-resident.so")
-        names.extend(("tide-packed-lh-check", "tide-state-read-check", "tide-aggregate-payload-check", "tide-attention-payload-check", "tide-precision-flow-check"))
-        names.append("tide-master-publication-check")
-        names.append("tide-sharded-vjp-check")
-        names.append("tide-state-shard-check")
-        names.extend(("tide-sharded-optimizer-check", "tide-sharded-training-check", "tide-owner-stream-check"))
-        names.append("tide-resident-check")
-        names.append("tide-resident-training-check")
-        names.extend(("tide-resident-half-training-check", "tide-resident-sharded-session-check"))
-        names.append("tide-resident-full-training-check")
-        names.extend(("tide-device-aggregate-vjp-check", "tide-resident-aggregate-training-check"))
-        names.extend(("tide-device-control-vjp-check", "tide-resident-control-training-check"))
-        names.extend(("tide-device-attention-vjp-check", "tide-resident-event-training-check", "tide-device-fiber-vjp-check", "tide-resident-fiber-training-check"))
+    names = [CHECKS[c][0] for c in ("peer", "sequence", "control", "failure", "numerical", "queue")]
+    if args.ascendc_soc or backend == "cuda":
+        names = list(dict.fromkeys(name for name, _ in CHECKS.values())) + ["libtide-resident.so"]
     if runtime == "python":
         names = ["_tide_resident.so", "libtide-resident.so"]
     if targets:
@@ -124,7 +115,8 @@ def main():
         raise RuntimeError("control source changed during build")
     write_json(build / "control-build.json", dict(schema="tide-device-control-build-v1",
         source=before[0], dirty=before[1], component_sha256=identity, core=manifest,
-        npu_runtime=runtime,
+        backend=backend, runtime=runtime, npu_runtime=runtime if backend == "npu" else None,
+        cuda_architectures=args.cuda_architectures,
         ascendc_soc=args.ascendc_soc,
         binary_sha256=binaries, loader_sha256=loaders,
         requested_checks=args.checks,

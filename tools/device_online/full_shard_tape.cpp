@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "full_shard_tape.h"
 #include "retained_journals.h"
 #include <map>
@@ -55,7 +56,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
   const auto& emissions=source.coordinator.emission.shards;
   for(size_t i=0;i<emissions.size();++i) {
     const auto& s=emissions[i];
-    if(!s.weights.defined()||!s.biases.defined()||s.weights.device().type()!=c10::DeviceType::PrivateUse1
+    if(!s.weights.defined()||!s.biases.defined()||s.weights.device().type()!=tide::device_online::resident_device_type
         ||s.weights.device()!=s.biases.device()||s.weights.requires_grad()||s.biases.requires_grad())
       throw std::invalid_argument("invalid compact retained projection ownership");
     if(projection)bytes-=projection->shard(i,emissions.size()).reusable_bytes(s.weights,s.biases);
@@ -64,7 +65,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
   // Validate every owner before copying any numerical bank.
   auto shards=source.shards;
   for(auto& s:shards) {
-    if(!s.full.kinds.defined()||s.full.kinds.device().type()!=c10::DeviceType::PrivateUse1)
+    if(!s.full.kinds.defined()||s.full.kinds.device().type()!=tide::device_online::resident_device_type)
       throw std::invalid_argument("invalid Full shard tape owner");
     for(auto* x:banks(s.full))if(x->defined()&&(x->device()!=s.full.kinds.device()||x->requires_grad()))
       throw std::invalid_argument("invalid Full shard retained ownership");

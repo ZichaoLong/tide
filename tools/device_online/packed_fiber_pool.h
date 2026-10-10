@@ -11,7 +11,7 @@ class PackedFiberPool {
   static long double reserved_bytes(const StateKernelProfile&,int64_t rows,int64_t chunk);
   PackedFiberPool(const ContentProfile&,at::Device,int64_t rows,int64_t chunk);
   PackedFiberPool(const StateKernelProfile&,at::Device,int64_t rows,int64_t chunk);
-  at::Tensor append(CannProgram&,const at::Tensor& events,const at::Tensor& tokens,
+  at::Tensor append(DeviceProgram&,const at::Tensor& events,const at::Tensor& tokens,
                     const at::Tensor& counts,const ReadyBatch&,const at::Tensor& error,
                     const at::Tensor& chunks) const;
   const at::Tensor& kinds() const {return kinds_;}

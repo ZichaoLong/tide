@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "device_optimizer.h"
 #include "graph_vjp_fixture.h"
 #include "full_vjp_fixture.h"
@@ -63,7 +64,7 @@ void trajectory(at::Device device,int shape,int64_t width,bool prefill,DeviceOpt
     GraphCotangents roots{at::full_like(t.outputs.values,factor*.0625f),at::zeros_like(t.outputs.valid),at::full_like(t.pending.values,factor*.015625f),
       at::zeros_like(t.pending.valid),at::full({2,4,width},factor*.03125f,opts),at::zeros({2,4},opts.dtype(at::kBool))};
     if(step!=2){roots.outputs_connected.copy_(t.outputs.valid);roots.pending_connected.copy_(t.pending.valid);roots.final_connected.fill_(true);}
-    auto error=at::zeros({1},opts.dtype(at::kInt));CannProgram p(device);p.limit_workspace(64*1024*1024);
+    auto error=at::zeros({1},opts.dtype(at::kInt));DeviceProgram p(device);p.limit_workspace(64*1024*1024);
     auto graph=append_graph_vjp(p,t,roots,error,3,128*1024*1024);
     auto grad=append_parameter_vjp(p,f.graph,registry,graph,error,16*1024*1024);
     if(!optimizer)optimizer=std::make_unique<DeviceOptimizer>(grad,kind,std::vector<OptimizerGroup>{group},64*1024*1024);
@@ -103,7 +104,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("training step gate requires explicit NPU FP32");
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("training step gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("training step gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int shape:{0,3})for(bool prefill:{false,true})for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})
       for(auto dtype:{at::kFloat,at::kDouble}) {

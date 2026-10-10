@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "packed_lh_full.h"
 #include "content_fixture.h"
 #include "lh_component_check.h"
@@ -49,7 +50,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("LH Full gate requires explicit NPU FP32");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("LH Full gate requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("LH Full gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     test::LhPrecision precision;const auto cells=test::lh_component(device,precision),count=windows(device);
     std::cout<<"device-lh-full: passed components="<<cells<<" windows="<<count<<" profiles=9 scope=FP32_broadcast_inference"

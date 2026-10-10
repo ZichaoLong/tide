@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "content_profile.h"
 #include "packed_emission.h"
@@ -57,7 +58,7 @@ Index components(at::Device device,at::ScalarType dtype) {
     auto valid=at::ones({5},at::kBool);valid[4].fill_(false);
     ActionBatch action{coordinates.to(device),x.to(device),valid.to(device)};
     auto error=at::zeros({1},action.coordinates.options().dtype(at::kInt));
-    CannProgram program(device);auto output=emission.append_stage(program,action,error);program.finish();
+    DeviceProgram program(device);auto output=emission.append_stage(program,action,error);program.finish();
     for(Index replay=0;replay<2;++replay) {
       if(replay){coordinates[0][2].fill_(base+2);coordinates[0][3].fill_(base+2);valid[2].fill_(false);}
       action.coordinates.copy_(coordinates);action.valid.copy_(valid);program.run();
@@ -142,7 +143,7 @@ Index refusals(at::Device device,at::ScalarType dtype) {
     const Index time=kind>=3?std::numeric_limits<Index>::max()-1:0;
     auto coords=at::tensor(std::vector<Index>{0,kind==2?99:0,time,time,0,0,time,time},at::kLong).reshape({2,4}).to(device);
     ActionBatch action{coords,at::ones({2,3},coords.options().dtype(dtype)),at::ones({2},coords.options().dtype(at::kBool))};
-    auto error=at::zeros({1},coords.options().dtype(at::kInt));CannProgram program(device);
+    auto error=at::zeros({1},coords.options().dtype(at::kInt));DeviceProgram program(device);
     auto out=emission.append_stage(program,action,error);program.finish();program.run();
     const auto expected=kind<2?1:kind==2?2:kind==3?3:0;
     require(error.cpu().item<int>()==expected,"wrong emission refusal/absent overflow behavior");
@@ -159,7 +160,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("emission gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("emission gate requires NPU");
+    auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("emission gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     const auto a=components(device,args.dtype),b=args.dtype==at::kFloat?windows(device):0,c=refusals(device,args.dtype);
     std::cout<<"device-emission: passed components="<<a<<" windows="<<b<<" refusals="<<c<<" scope="<<(args.dtype==at::kFloat?"FP32_HARD_inference":"FP16_component_only")<<" keep_dtype=true\n";

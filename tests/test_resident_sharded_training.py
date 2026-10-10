@@ -6,6 +6,7 @@ import subprocess
 import sys
 import pytest
 import torch
+from resident_test_target import target_device, device_api, owner_devices
 from dataclasses import replace
 from tidegraph import GraphRuntime, ResidentPlacement, ResidentTrainingLimits
 from resident_training_cases import configuration, tree_equal
@@ -16,27 +17,24 @@ from test_resident_library import inputs
 
 @pytest.fixture
 def target():
-    device = os.environ.get("TIDE_RESIDENT_DEVICE")
-    if device is None:
-        pytest.skip("optional public sharded NPU target not requested")
-    import torch_npu
-    assert device.startswith("npu:") and os.environ.get("TIDE_RESIDENT_LIBRARY")
-    assert torch.npu.device_count() >= 2
-    return device
+    return target_device(cards=2)
 
 
 def placement(target, count=2, policy="locality"):
     start = torch.device(target).index
-    return ResidentPlacement(devices=tuple(f"npu:{start+i}" for i in range(count)), policy=policy)
+    return ResidentPlacement(devices=owner_devices(target, count), policy=policy)
 
 
-def test_cpu_safe_sharded_options():
-    for fields in (dict(devices="npu:0"), dict(devices=["npu"]), dict(devices=["npu:0", "npu:0"]),
-                   dict(devices=["cpu"]), dict(devices=["npu:128"]), dict(policy="guess"),
-                   dict(full_owners=[0]), dict(devices=["npu:0"], state_owners=[True])):
+@pytest.mark.parametrize("backend", ["cuda", "npu"])
+def test_cpu_safe_sharded_options(backend):
+    for fields in (dict(devices=f"{backend}:0"), dict(devices=[backend]),
+                   dict(devices=[f"{backend}:0", f"{backend}:0"]),
+                   dict(devices=["cpu"]), dict(devices=[f"{backend}:128"]), dict(policy="guess"),
+                   dict(devices=["cuda:0", "npu:1"]),
+                   dict(full_owners=[0]), dict(devices=[f"{backend}:0"], state_owners=[True])):
         with pytest.raises(ValueError):
             ResidentPlacement(**fields)
-    valid = ResidentPlacement(devices=["npu:0", "npu:1"], full_owners=[0, 1])
+    valid = ResidentPlacement(devices=[f"{backend}:0", f"{backend}:1"], full_owners=[0, 1])
     assert ResidentPlacement(**valid.to_dict()) == valid
     r = GraphRuntime(configuration("pdg"), device="cpu", model_device="cpu")
     assert r.manifest()["model_storage"] == dict(requested="cpu", resolved="cpu",
@@ -119,7 +117,7 @@ def test_sharded_invalid_roots_and_atomic_step(target):
 
 @pytest.mark.parametrize("initial_cards,resume_cards", [(0, 2), (2, 3)])
 def test_sharded_checkpoint_new_process(target, tmp_path, initial_cards, resume_cards):
-    assert torch.npu.device_count() >= resume_cards
+    assert device_api(target).device_count() >= resume_cards
     r = runtime("pdg", target, memory="attention", mode="softp", model_device="cpu")
     values = (torch.arange(16).reshape(1, 4, 4)*.005).half()
     path, output = tmp_path / "prefix.pt", tmp_path / "suffix.pt"

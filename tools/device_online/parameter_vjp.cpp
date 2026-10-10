@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "parameter_plan.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_parameter_vjp.h"
+#include "device_launch_tide_parameter_vjp.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <map>
@@ -14,13 +14,13 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid parameter VJP buffer");
 }
 }
-ParameterVjp append_parameter_vjp(CannProgram& p,const Graph& g,const ParameterRegistry& registry,
+ParameterVjp append_parameter_vjp(DeviceProgram& p,const Graph& g,const ParameterRegistry& registry,
                                  const GraphVjp& gradient,const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!gradient.decay.defined()||gradient.decay.dim()!=2||g.nodes.empty())
     throw std::invalid_argument("parameter VJP requires explicit no-grad graph adjoints");
   const auto device=gradient.decay.device();const int64_t nodes=g.nodes.size(),width=gradient.decay.size(1);
   const int64_t inputs=g.inputs.size(),edges=g.edges.size(),ports=g.outputs.size(),scales=inputs+2*edges+ports;
-  if(device.type()!=c10::DeviceType::PrivateUse1||width<1||budget<1)throw std::invalid_argument("parameter VJP requires bounded NPU FP32");
+  if(device.type()!=tide::device_online::resident_device_type||width<1||budget<1)throw std::invalid_argument("parameter VJP requires bounded NPU FP32");
   tensor(gradient.decay,device,at::kFloat,{nodes,width});tensor(gradient.retention,device,at::kFloat,{nodes});
   tensor(gradient.scales,device,at::kFloat,{std::max<int64_t>(1,scales)});
   for(const auto& flag:{gradient.full_connected,gradient.decay_connected,gradient.retention_connected})tensor(flag,device,at::kBool,{nodes});
@@ -74,7 +74,7 @@ ParameterVjp append_parameter_vjp(CannProgram& p,const Graph& g,const ParameterR
   const auto fiber_on=plan.fiber_elements?gradient.fiber_connected:gradient.full_connected;
   const auto ew=plan.emission_rows?gradient.emission.weights:dummy,eb=plan.emission_rows?gradient.emission.biases:dummy;
   const auto eon=plan.emission_rows?gradient.emission.connected:gradient.full_connected;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_vjp)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_parameter_vjp)(32,stream,
     ptr(owner_table),ptr(references),ptr(tile_offsets),ptr(weights),ptr(bias),ptr(gradient.decay),ptr(gradient.retention),ptr(gradient.scales),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),
     ptr(aggregate),ptr(aggregate_connected),ptr(gradient.full_connected),ptr(gradient.decay_connected),ptr(gradient.retention_connected),ptr(gradient.scale_connected),
     ptr(read),ptr(read_connected),ptr(attention),ptr(attention_on),ptr(fiber),ptr(fiber_on),ptr(ew),ptr(eb),ptr(eon),ptr(out.values),ptr(out.connected),ptr(error),count,tasks),"reduce declared parameter aliases on device");},

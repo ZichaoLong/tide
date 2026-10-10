@@ -1,15 +1,15 @@
+#include "device_backend.h"
 #include "sharded_parameter_banks.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_owner_parameter_publish.h"
+#include "device_launch_tide_owner_parameter_publish.h"
 #include <ATen/core/grad_mode.h>
 #include <cstring>
 #include <stdexcept>
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& t){return static_cast<uint8_t*>(t.data_ptr());}}
-void append_owner_parameter_publish(CannProgram& p,const std::vector<ParameterWrite>& writes,
+void append_owner_parameter_publish(DeviceProgram& p,const std::vector<ParameterWrite>& writes,
     const at::Tensor& values,const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!values.defined()||values.dim()!=1||!values.is_contiguous()
-      ||values.device().type()!=c10::DeviceType::PrivateUse1||values.scalar_type()!=at::kFloat||values.requires_grad()
+      ||values.device().type()!=tide::device_online::resident_device_type||values.scalar_type()!=at::kFloat||values.requires_grad()
       ||!error.defined()||error.device()!=values.device()||error.scalar_type()!=at::kInt||error.sizes()!=at::IntArrayRef({1})
       ||!error.is_contiguous()||error.requires_grad()||budget<1||64.L*(writes.size()+1)>budget)
     throw std::invalid_argument("invalid sharded publication buffers/budget");
@@ -29,7 +29,7 @@ void append_owner_parameter_publish(CannProgram& p,const std::vector<ParameterWr
   auto table=at::tensor(descriptors.empty()?std::vector<int64_t>(7,0):descriptors,at::kLong).to(values.device());
   auto offsets=at::tensor(tiles,at::kLong).to(values.device());keep.push_back(table);keep.push_back(offsets);
   const int64_t count=writes.size(),tasks=tiles.back();
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_owner_parameter_publish)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_owner_parameter_publish)(32,stream,
     ptr(table),ptr(offsets),ptr(values),ptr(error),count,tasks),"publish canonical owners to local parameter aliases");},keep);
 }
 } // namespace tide::device_online

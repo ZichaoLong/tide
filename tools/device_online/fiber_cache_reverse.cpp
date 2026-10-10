@@ -1,7 +1,7 @@
 #include "fiber_reverse.h"
 #include "event_reverse.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_cache_bias_merge.h"
+#include "device_backend.h"
+#include "device_launch_tide_cache_bias_merge.h"
 #include <stdexcept>
 
 namespace tide::device_online {
@@ -17,7 +17,7 @@ std::pair<at::Tensor,at::Tensor> bias_pair(const FiberAttentionTape& t,const Cac
   return {c.bias,c.bias_connected};
 }
 }
-CacheCotangents append_fiber_cache_seed(CannProgram& p,const FiberAttentionTape& t,const CacheCotangents& roots,
+CacheCotangents append_fiber_cache_seed(DeviceProgram& p,const FiberAttentionTape& t,const CacheCotangents& roots,
     const CacheGradient* later,const at::Tensor& error,int64_t budget) {
   const auto& a=t.cache;const int64_t owners=a.samples*a.nodes.size();
   if(budget<2||t.bias.device()!=a.key.device()||t.bias.scalar_type()!=a.key.scalar_type()||!t.bias.is_contiguous()
@@ -27,7 +27,7 @@ CacheCotangents append_fiber_cache_seed(CannProgram& p,const FiberAttentionTape&
   auto left=bias_pair(t,roots),right=later?bias_pair(t,*later):left;
   out.bias=at::empty(t.bias.sizes(),t.bias.options().dtype(at::kFloat));out.bias_connected=at::empty_like(left.second);
   p.zero(out.bias);p.zero(out.bias_connected);
-  for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_cache_bias_merge)(phase?32:1,stream,
+  for(int64_t phase:{0,1})p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_cache_bias_merge)(phase?32:1,stream,
     ptr(a.lengths),ptr(left.first),ptr(left.second),ptr(right.first),ptr(right.second),ptr(out.bias),ptr(out.bias_connected),ptr(error),
     owners,a.capacity,int64_t(later!=nullptr),phase),"merge same-fiber log-bias boundary adjoints");},
     {a.lengths,left.first,left.second,right.first,right.second,out.bias,out.bias_connected,error});

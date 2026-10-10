@@ -1,13 +1,13 @@
+#include "device_backend.h"
 #include "tiled_attention.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_attention_tile.h"
-#include "aclrtlaunch_tide_attention_softmax.h"
-#include "aclrtlaunch_tide_attention_merge.h"
+#include "device_launch_tide_attention_tile.h"
+#include "device_launch_tide_attention_softmax.h"
+#include "device_launch_tide_attention_merge.h"
 #include <ATen/core/grad_mode.h>
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-at::Tensor append_dense_attention(CannProgram& p,const at::Tensor& query,const at::Tensor& key,
+at::Tensor append_dense_attention(DeviceProgram& p,const at::Tensor& query,const at::Tensor& key,
     const at::Tensor& value,const at::Tensor& additive,double scale) {
   const auto c=query.size(0),h=query.size(1),d=query.size(2),k=key.size(3);
   const auto opts=query.options(),floats=opts.dtype(at::kFloat);const bool half=query.scalar_type()==at::kHalf;
@@ -22,7 +22,7 @@ at::Tensor append_dense_attention(CannProgram& p,const at::Tensor& query,const a
   if(!half)return total;
   auto result=at::empty({c,h,1,d},opts);p.cast(total,result);return result;
 }
-at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const at::Tensor& tokens,
+at::Tensor append_tiled_attention(DeviceProgram& p,const at::Tensor& events,const at::Tensor& tokens,
     const at::Tensor& ids,const at::Tensor& query,const at::Tensor& key,const at::Tensor& value,
     const at::Tensor& bias,const at::Tensor& error,const at::Tensor& work,TiledAttentionSpec s) {
   const auto h=s.heads,k=s.keys;
@@ -31,7 +31,7 @@ at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const 
     throw std::invalid_argument("invalid tiled attention geometry");
   const auto c=query.size(0),d=query.size(1)/h;const auto dtype=query.scalar_type();
   if(at::GradMode::is_enabled()||(dtype!=at::kFloat&&dtype!=at::kHalf)
-      ||query.device().type()!=c10::DeviceType::PrivateUse1)
+      ||query.device().type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("tiled attention requires no-grad NPU FP32/FP16 payloads");
   for(const auto& x:{query,key,value})if(x.scalar_type()!=dtype||x.device()!=query.device()
       ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("mismatched tiled attention payload");
@@ -53,7 +53,7 @@ at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const 
   const auto index_key=key.reshape({-1,d}),index_value=value.reshape({-1,d});
   auto begin=p.label(),body=p.label(),done=p.label();
   p.copy(cursor,zero);p.copy(sum,empty);p.copy(normalization,empty_norm);p.mark(begin);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_tile)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_attention_tile)(1,stream,
     ptr(events),ptr(tokens),ptr(ids),ptr(bias),ptr(cursor),ptr(indices),ptr(valid),ptr(additive),ptr(go),ptr(work),ptr(error),
     c,h,s.kv_heads,s.capacity,s.owners,k,int64_t(s.fiber),s.event_rows,int64_t(s.fiber_bias_rows)),"plan actual attention key tile");},
     {events,tokens,ids,bias,cursor,indices,valid,additive,go,work,error});
@@ -66,12 +66,12 @@ at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const 
   // because one physical tile sums unnormalized half values before division.
   if(dtype==at::kHalf){p.cast(scores,score32);p.cast(values,value32);}
   p.multiply(score32,factor,scaled);p.add(scaled,additive);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_softmax)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_attention_softmax)(32,stream,
     ptr(scaled),ptr(valid),ptr(normalization),ptr(weights),ptr(error),c,h,k),"update global attention denominator");},
     {scaled,valid,normalization,weights,error});
   p.batch_matmul(weights.reshape({c*h,1,k}),value32.reshape({c*h,k,d}),partial.reshape({c*h,1,d}));
   auto merge=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_merge)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_attention_merge)(32,stream,
       ptr(partial),ptr(normalization),ptr(sum),ptr(error),c*h,d,mode),"merge globally normalized attention tiles");},
       {partial,normalization,sum,error});
   };

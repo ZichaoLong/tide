@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "packed_aggregate.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -53,7 +54,7 @@ void check(at::Device device,at::ScalarType dtype,Index width,int kind,bool vect
   ReadyBatch ready;ready.atoms.coordinates=data.ready.atoms.coordinates.to(device);ready.atoms.values=data.ready.atoms.values.to(device);
   ready.fibers=data.ready.fibers.to(device);ready.fiber_offsets=data.ready.fiber_offsets.to(device);ready.counts=data.ready.counts.to(device);
   auto error=at::zeros({1},ready.counts.options().dtype(at::kInt));
-  PackedAggregate aggregate(profile,device,capacity,chunk,16*1024*1024);CannProgram program(device);
+  PackedAggregate aggregate(profile,device,capacity,chunk,16*1024*1024);DeviceProgram program(device);
   auto out=append_content(program,profile,ready,error,vectorized,&aggregate);program.finish();
   auto kernel=make_aggregate_kernel(f.graph.nodes[0]);
   for(int variant:{0,1}) {
@@ -102,7 +103,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("Aggregate payload gate requires NPU FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("Aggregate payload gate requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("Aggregate payload gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     Index cases=0,replays=0;
     for(Index width:{1,33,257,2048})for(int kind:{1,2,3,4})for(bool vectorized:{false,true})for(Index chunk:{1,4}) {

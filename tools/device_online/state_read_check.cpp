@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_profile.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -57,7 +58,7 @@ Snapshot run(at::Device device,at::ScalarType dtype,Index width,const std::strin
   auto coefficients=at::empty_like(profile.decay),error=at::zeros({1},longs.dtype(at::kInt));
   auto stages=at::full({1},7,longs),total=at::zeros({1},longs);
   ContentLimits limits;limits.diagnostics=trace;limits.vectorized_state=vectorized;limits.max_repeat_ticks=16;
-  CannProgram program(device);program.sigmoid(profile.decay,coefficients);
+  DeviceProgram program(device);program.sigmoid(profile.decay,coefficients);
   append_read(program,profile,ready,content,state,coefficients,error,16,vectorized);
   auto output=append_content_state(program,profile,ready,content,selection,state,coefficients,stages,total,error,limits);
   commit_content_state(program,state,output,error);program.finish();
@@ -132,7 +133,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("state/Read requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("state/Read requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("state/Read requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     Index cases=0,windows=0,refusals=0;
     for(Index width:smoke?std::vector<Index>{257}:std::vector<Index>{1,7,257,2048})

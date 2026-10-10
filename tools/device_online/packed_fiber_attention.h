@@ -23,11 +23,11 @@ class PackedFiberAttention {
                        const ContentLimits&,int64_t byte_budget);
   PackedFiberAttention(const StateKernelProfile&,const Continuation&,at::Device,
                        const ContentLimits&,int64_t byte_budget);
-  FiberStage propose(CannProgram&,const ContentProfile&,const ReadyBatch&,
+  FiberStage propose(DeviceProgram&,const ContentProfile&,const ReadyBatch&,
                      const ContentBatch&,const ContentState&,const at::Tensor& error);
-  FiberStage propose(CannProgram&,const StateKernelProfile&,const ReadyBatch&,
+  FiberStage propose(DeviceProgram&,const StateKernelProfile&,const ReadyBatch&,
                      const ContentBatch&,const ContentState&,const at::Tensor& error);
-  void commit(CannProgram&,const FiberStage&,const SelectionProposal&,const at::Tensor& error);
+  void commit(DeviceProgram&,const FiberStage&,const SelectionProposal&,const at::Tensor& error);
   void reset_window();
   void export_states(Continuation&) const;
   void export_trace(std::vector<Event>&) const;

@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "peer_flow_candidate.h"
 #include "full_placement_check.h"
@@ -198,7 +199,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argsv.size(),argsv.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("precision flow requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);
-    if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("precision flow requires NPU");
+    if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("precision flow requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     if(state_shards&&!shards)throw std::invalid_argument("state shard fixture requires explicit --full-shards");
     check(d,args.dtype,smoke,controlled,peer,shards,policy,state_shards);if(peer&&!smoke&&!controlled)peer_refusals(d,args.dtype,shards,policy,state_shards);

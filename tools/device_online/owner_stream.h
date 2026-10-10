@@ -24,7 +24,7 @@ int64_t owner_stream_capacity(int64_t elements,int64_t fields,int64_t writes,boo
 // buffers are reused by a CANN loop, including the final incomplete chunk.
 // Optional packets are owned/charged by the caller. Reuse only in the same
 // ordered device programs; keep send and receive storage distinct on each card.
-OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
+OwnerStream append_owner_stream(DeviceProgram& source,DeviceProgram& destination,
     const std::vector<OwnerStreamField>&,const at::Tensor& source_error,const at::Tensor& destination_error,
     int64_t tensor_budget,bool accumulate,const OwnerStreamPackets& shared={});
 } // namespace tide::device_online

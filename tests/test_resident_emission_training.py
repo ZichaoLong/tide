@@ -1,6 +1,7 @@
 """Actual public slot-affine gradients/updates against independent Python autograd."""
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement, ResidentTrainingLimits
 from test_resident_training import target, training_case
 from resident_training_cases import runtime, inputs, roots
@@ -12,7 +13,7 @@ def test_projection_public_training(target, family, schedule, tmp_path):
     placement = None
     if schedule == "greedy":
         start = torch.device(target).index
-        placement = ResidentPlacement(devices=(f"npu:{start}", f"npu:{start+1}"))
+        placement = ResidentPlacement(devices=owner_devices(target, 2))
     training_case(target, family, schedule, "adamw" if schedule == "greedy" else "sgd", tmp_path,
                   full="lh-silu-rms-v1", aggregation="all_softmax", emission="slot_affine",
                   placement=placement, model_device="cpu")

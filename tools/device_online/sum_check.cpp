@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "packed_sum.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -69,7 +70,7 @@ void check(at::Device d,at::ScalarType dtype) {
   for(const auto& sizes:std::vector<std::vector<I>>{{},{1},{1,7,2,17,3},{64,3,5}}) {
     Case c(d,width,sizes,dtype);
     for(bool vectorized:{false,true}) {
-      auto error=at::zeros({1},c.device.counts.options().dtype(at::kInt));CannProgram program(d);
+      auto error=at::zeros({1},c.device.counts.options().dtype(at::kInt));DeviceProgram program(d);
       auto out=append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,vectorized);
       program.finish();
       for(I replay=0;replay<2;++replay) {
@@ -95,14 +96,14 @@ void check(at::Device d,at::ScalarType dtype) {
     if(failure==6)c.device.atoms.coordinates[4][3].fill_(2);
     if(failure==7)c.device.atoms.coordinates[4][2].fill_(999);
     if(failure==8)error.fill_(9);
-    CannProgram program(d);auto out=append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,vectorized);
+    DeviceProgram program(d);auto out=append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,vectorized);
     program.finish();out.content.fill_(poison);out.weighted.fill_(poison);portable_torch::synchronize(d);program.run();
     require(error.cpu().item<int>()==(failure==8?9:2),"sum metadata refusal lost");
     require(out.content.cpu().isnan().all().item<bool>()&&out.weighted.cpu().isnan().all().item<bool>(),"refused sum executed payload arithmetic");
     ++refusals;
   }
   {
-    Case c(d,7,{1},dtype);auto error=at::zeros({1},c.device.counts.options().dtype(at::kInt));CannProgram program(d);
+    Case c(d,7,{1},dtype);auto error=at::zeros({1},c.device.counts.options().dtype(at::kInt));DeviceProgram program(d);
     at::AutoGradMode enabled(true);bool refused=false;
     try{append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,true);}
     catch(const std::invalid_argument&){refused=true;}
@@ -120,7 +121,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("sum check requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
     auto d=portable_torch::resolve_device(args);
-    if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("sum check requires NPU");
+    if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("sum check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(d,args.dtype);runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

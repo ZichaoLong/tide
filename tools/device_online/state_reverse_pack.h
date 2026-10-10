@@ -10,7 +10,7 @@ struct StateReversePacket {
   ReverseLinks links;
   at::Tensor event_rows,fiber_rows; // local row -> original coordinator row
 };
-StateReversePacket append_state_reverse_pack(CannProgram&,const ReverseTape&,const ReverseLinks&,
+StateReversePacket append_state_reverse_pack(DeviceProgram&,const ReverseTape&,const ReverseLinks&,
     const at::Tensor& node_mapping,int64_t local_nodes,int64_t event_capacity,int64_t fiber_capacity,
     const at::Tensor& error,int64_t tensor_budget,
     const ReverseGatherInput& events,const ReverseGatherInput& fibers,const ReverseGatherInput& scales);

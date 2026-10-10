@@ -129,7 +129,7 @@ void compare(const Fixture& f,const FiberVjp& out,at::ScalarType dtype) {
 }
 void check(at::Device device,I width,I heads,int pool,int mode,at::ScalarType dtype) {
   at::NoGradGuard guard;auto f=fixture(width,heads,pool,mode,0,dtype);auto device_f=device_input(f,device);
-  auto error=at::zeros({1},device_f.rows.options().dtype(at::kInt));CannProgram p(device);p.limit_workspace(128*1024*1024);
+  auto error=at::zeros({1},device_f.rows.options().dtype(at::kInt));DeviceProgram p(device);p.limit_workspace(128*1024*1024);
   auto out=append_fiber_vjp(p,device_f,error,3,3,256*1024*1024);p.finish();
   for(int replay=0;replay<2;++replay) {
     if(replay) {
@@ -143,7 +143,7 @@ void check(at::Device device,I width,I heads,int pool,int mode,at::ScalarType dt
   device_f.ticks[0].fill_(device_f.max_repeat_ticks+1);portable_torch::synchronize(device);p.run();
   if(error.cpu().item<int>()!=2)throw std::runtime_error("unbounded fiber tick replay accepted");
   p.close();bool refused=false;
-  try{CannProgram bad(device);append_fiber_vjp(bad,device_f,error,3,3,1);}catch(const std::invalid_argument&){refused=true;}
+  try{DeviceProgram bad(device);append_fiber_vjp(bad,device_f,error,3,3,1);}catch(const std::invalid_argument&){refused=true;}
   if(!refused)throw std::runtime_error("fiber reverse memory budget ignored");
 }
 }

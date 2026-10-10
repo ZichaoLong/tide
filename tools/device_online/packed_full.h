@@ -9,7 +9,7 @@ class PackedFull {
  public:
   PackedFull(std::vector<int64_t> kinds,const at::Tensor& cpu_weight,const at::Tensor& cpu_bias,at::Device,
              int64_t max_chunk_rows,int64_t workspace_budget_bytes);
-  ActionBatch append_stage(CannProgram&,const ActionBatch& content,const at::Tensor& comparison,
+  ActionBatch append_stage(DeviceProgram&,const ActionBatch& content,const at::Tensor& comparison,
                            const at::Tensor& error);
   const at::Tensor& chunks() const {return chunks_;}
   int64_t chunk_rows() const {return chunk_;}

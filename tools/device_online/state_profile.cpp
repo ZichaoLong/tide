@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "state_profile.h"
 #include "content_profile.h"
 #include <stdexcept>
@@ -10,7 +11,7 @@ StateKernelProfile::StateKernelProfile(const ContentProfile& p)
      decay(p.decay),retention(p.retention),clock_policy(p.clock_policy),config(p.config) {}
 StateKernelProfile::StateKernelProfile(const ContentProfile& p,const std::vector<int64_t>& owned,at::Device d)
     :regions(p.graph.regions),width(p.width),input_count(p.graph.inputs.size()),dtype(p.dtype),all_content(true) {
-  if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0||!p.sources.device().is_cpu())
+  if(d.type()!=tide::device_online::resident_device_type||d.index()<0||!p.sources.device().is_cpu())
     throw std::invalid_argument("state shard requires deferred CPU profile and explicit NPU");
   int64_t previous=-1;
   for(const auto n:owned) {

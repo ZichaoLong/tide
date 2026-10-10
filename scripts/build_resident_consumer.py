@@ -20,7 +20,7 @@ def main():
     core, backend, out = (p.resolve() for p in (args.core_build, args.resident_build, args.output_dir))
     core_record = json.loads((core / "build-manifest.json").read_text())
     record = json.loads((backend / "control-build.json").read_text())
-    if record.get("npu_runtime") != "standalone" or record["core"] != core_record:
+    if record.get("runtime", record.get("npu_runtime")) != "standalone" or record["core"] != core_record:
         parser.error("installed client requires a matching standalone core and backend")
     for build, identity in ((core, core_record), (backend, record)):
         for name, expected in identity["binary_sha256"].items():

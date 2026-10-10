@@ -1,9 +1,9 @@
+#include "device_backend.h"
 #include "aggregate_vjp.h"
 #include "packed_aggregate.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_aggregate_vjp_plan.h"
-#include "aclrtlaunch_tide_aggregate_vjp_payload.h"
-#include "aclrtlaunch_tide_aggregate_vjp_reduce.h"
+#include "device_launch_tide_aggregate_vjp_plan.h"
+#include "device_launch_tide_aggregate_vjp_payload.h"
+#include "device_launch_tide_aggregate_vjp_reduce.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -17,7 +17,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid Aggregate VJP buffer");
 }
 }
-void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,
+void append_aggregate_vjp(DeviceProgram& p,const ReverseTape& t,const ReverseLinks& links,
     const at::Tensor& stage_count,const at::Tensor& stage_range,const at::Tensor& gradient,const at::Tensor& connected,
     const at::Tensor& messages,const at::Tensor& scale_partials,AggregateVjp& out,const at::Tensor& error,int64_t rows,int64_t budget) {
   const auto& a=t.aggregate;if(!a.kinds.defined())return;
@@ -30,7 +30,7 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
   if(payload_dtype!=at::kFloat&&payload_dtype!=at::kHalf)
     throw std::invalid_argument("Aggregate VJP requires FP32/FP16 forward scales");
   const long double row_bytes=32.L*slots*d+96.L*slots+16.L*d+256.L;
-  if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||nodes<1||d<1||slots<1||rows<1||budget<row_bytes+256)
+  if(device.type()!=tide::device_online::resident_device_type||capacity<1||nodes<1||d<1||slots<1||rows<1||budget<row_bytes+256)
     throw std::invalid_argument("one Aggregate VJP row exceeds tensor budget");
   const int64_t chunk=std::min<int64_t>({capacity,rows,int64_t((budget-256)/row_bytes)});
   tensor(a.kinds,device,at::kLong,{nodes});tensor(a.lengths,device,at::kLong,{nodes});tensor(a.weights,device,at::kFloat,{nodes,slots});
@@ -55,14 +55,14 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
   std::set<int64_t> groups;for(const auto& node:t.graph->nodes)if(auto kind=aggregate_kind(node.aggregation))groups.insert(kind);
   const auto values=out.values,flags=out.connected,chunks=out.chunks;
   auto payload=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_vjp_payload)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_aggregate_vjp_payload)(32,stream,
       ptr(ids),ptr(message_ids),ptr(links.messages),ptr(t.source_scales),ptr(t.fiber_values),ptr(gradient),ptr(packed),ptr(weighted),
       ptr(prob),ptr(messages),ptr(scale_partials),ptr(error),chunk,slots,d,mode,fp16),"packed Aggregate VJP payload");},
       {ids,message_ids,links.messages,t.source_scales,t.fiber_values,gradient,packed,weighted,prob,messages,scale_partials,error});
   };
   for(auto kind:groups) {
     p.zero(cursor);auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_vjp_plan)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_aggregate_vjp_plan)(1,stream,
       ptr(t.state.metadata),ptr(stage_count),ptr(stage_range),ptr(connected),ptr(links.consumer_head),ptr(links.consumer_next),ptr(links.messages),
       ptr(t.sources),ptr(a.kinds),ptr(a.lengths),ptr(a.weights),ptr(cursor),ptr(ids),ptr(row_nodes),ptr(message_ids),ptr(owners),ptr(owner_count),
       ptr(logits),ptr(prob),ptr(flags),ptr(branch),ptr(chunks),ptr(error),capacity,t.fiber_values.size(0),t.sources.size(0),nodes,slots,chunk,kind),
@@ -78,7 +78,7 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
       p.multiply(dot,prob,product);p.sum(product,1,true,center);p.multiply(center,minus,negative);p.add(dot,negative);
       if(kind==2){p.divide(dot,total,product);p.sigmoid(logits,slope);p.multiply(product,slope,dc);}
       else p.multiply(dot,prob,dc);
-      p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_vjp_reduce)(32,stream,
+      p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_aggregate_vjp_reduce)(32,stream,
         ptr(row_nodes),ptr(owners),ptr(owner_count),ptr(dc),ptr(values),ptr(error),chunk,slots),"ordered Aggregate coefficient partials");},
         {row_nodes,owners,owner_count,dc,values,error});
     }

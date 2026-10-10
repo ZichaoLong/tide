@@ -1,4 +1,5 @@
-#include "cann_program.h"
+#include "device_backend.h"
+#include "device_program.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <filesystem>
@@ -7,7 +8,7 @@
 #include <tuple>
 
 namespace {
-using tide::device_online::CannProgram;
+using tide::device_online::DeviceProgram;
 using at::Tensor;
 void require(bool condition, const char* reason) {
   if (!condition) throw std::runtime_error(reason);
@@ -26,7 +27,7 @@ int64_t check(at::Device device) {
   auto unfinished=at::zeros({1},bools), room=at::zeros({1},bools), ready=at::zeros({1},bools);
   auto index=at::zeros({1},ints), again=at::zeros({1},ints), exhausted=at::zeros({1},ints);
   portable_torch::synchronize(device);
-  CannProgram program(device);
+  DeviceProgram program(device);
   rejects([&] { program.run(); });
   const auto head=program.label(), body=program.label(), end=program.label();
   program.mark(head);
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
     if (!args.output_dir.empty() && std::filesystem::exists(args.output_dir))
       throw std::invalid_argument("output directory already exists");
     const auto device = portable_torch::resolve_device(args);
-    if (device.type() != c10::DeviceType::PrivateUse1) throw std::invalid_argument("control check requires NPU");
+    if (device.type() != tide::device_online::resident_device_type) throw std::invalid_argument("control check requires NPU");
     at::set_num_threads(1); at::set_num_interop_threads(1);
     const auto cases = check(device);
     runtime.close();

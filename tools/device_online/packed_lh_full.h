@@ -11,7 +11,7 @@ class PackedLhFull {
   static long double minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,int64_t capacity,at::ScalarType dtype=at::kFloat);
   PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& cpu_weight,const at::Tensor& cpu_bias,
                at::Device,int64_t capacity,int64_t max_chunk_rows,int64_t workspace_budget_bytes);
-  ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& comparison,
+  ActionBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& comparison,
                            const at::Tensor& error,const at::Tensor& chunks);
   int64_t chunk_rows() const {return chunk_;}
   int64_t reserved_bytes() const {return reserved_;}

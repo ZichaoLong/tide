@@ -87,7 +87,7 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     }
   }
   auto error=at::zeros({1},at::TensorOptions().device(s.device).dtype(at::kInt));
-  CannSequence sequence(s.device,s.saved.size(),s.limits.program_workspace_bytes);
+  DeviceSequence sequence(s.device,s.saved.size(),s.limits.program_workspace_bytes);
   std::vector<ShardedGraphVjp> gradients(s.saved.size());
   const bool streamed=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
   std::vector<std::unique_ptr<ShardedParameterReduce>> reductions(streamed?s.saved.size():1);

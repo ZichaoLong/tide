@@ -17,10 +17,10 @@ class StateOwner {
                                    const Continuation&,const ContentLimits&);
   StateOwner(const ContentProfile&,std::vector<int64_t>,const Continuation&,at::Device,
              ContentLimits,int64_t tensor_budget);
-  StateReadProposal append_read(CannProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& error);
-  ContentUpdate append_update(CannProgram&,const ReadyBatch&,const ContentBatch&,const SelectionProposal&,
+  StateReadProposal append_read(DeviceProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& error);
+  ContentUpdate append_update(DeviceProgram&,const ReadyBatch&,const ContentBatch&,const SelectionProposal&,
       const StateReadProposal&,const at::Tensor& stage,const at::Tensor& error);
-  void append_commit(CannProgram&,const ContentUpdate&,const StateReadProposal&,const SelectionProposal&,
+  void append_commit(DeviceProgram&,const ContentUpdate&,const StateReadProposal&,const SelectionProposal&,
                      const at::Tensor& error);
   void reset_window();
   void export_states(Continuation&) const;

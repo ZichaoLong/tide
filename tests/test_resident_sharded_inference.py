@@ -2,6 +2,7 @@
 from dataclasses import replace
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import GraphRuntime, ExecutionOptions, ResidentPlacement
 from tidegraph.compare import equivalent
 from test_resident_library import target, config, runtime, inputs
@@ -16,7 +17,7 @@ def test_sharded_inference_windows_and_repartition(target, family, memory, mode,
     cfg = replace(config(family, memory), dtype=dtype_name)
     r = runtime(cfg, target, schedule, mode)
     nodes = len(r.execution_graph.nodes)
-    owners = ResidentPlacement(devices=(target, "npu:1"),
+    owners = ResidentPlacement(devices=owner_devices(target, 2),
         full_owners=tuple(i % 2 for i in range(nodes)),
         state_owners=tuple((i+1) % 2 for i in range(nodes)))
     oracle = GraphRuntime(cfg, device="cpu",
@@ -49,7 +50,7 @@ def test_sharded_inference_windows_and_repartition(target, family, memory, mode,
             equivalent(complete, session.snapshot(), atol=0, rtol=0)
             assert session.placement == owners.to_dict()
         # Checkpoints contain global state/KV, so the next session may repartition.
-        next_owners = (ResidentPlacement(devices=(target, "npu:1", "npu:2"), policy="memory")
+        next_owners = (ResidentPlacement(devices=owner_devices(target, 3), policy="memory")
                        if schedule=="greedy" else ResidentPlacement())
         other = runtime(cfg, target, "streaming" if schedule=="greedy" else "greedy", mode)
         with other.session(2, placement=next_owners) as restored:
@@ -72,7 +73,7 @@ def test_sharded_lean_inference_never_creates_training_owner(target, dtype_name,
     reference = GraphRuntime(cfg, device="cpu",
         options=ExecutionOptions(schedule="reference", packed=False, trace=False))
     values = torch.full((1, 4, 4), .125, dtype=getattr(torch, dtype_name))
-    owners = ResidentPlacement(devices=(target, "npu:1"))
+    owners = ResidentPlacement(devices=owner_devices(target, 2))
     def forbidden(*args, **kwargs):
         raise AssertionError("inference must not create training owners or implicitly export continuation")
     monkeypatch.setattr(r.engine.module, "TrainingSession", forbidden)
@@ -86,16 +87,18 @@ def test_sharded_lean_inference_never_creates_training_owner(target, dtype_name,
                 expected = oracle.advance(*args, **kw)
                 args, kw = inputs(session, values.to(target), start, stop)
                 view = session.advance_device(*args, **kw)
-                assert view.values.device.type == "npu"
+                assert view.values.device.type == torch.device(target).type
         equivalent(expected, session.result(), atol=2e-3 if dtype_name=="float16" else 1e-6,
                    rtol=2e-2 if dtype_name=="float16" else 1e-5)
 
 
 @pytest.mark.parametrize("placement,match", [
-    (dict(devices=("npu:1", "npu:0")), "coordinator"),
-    (dict(devices=("npu:0", "npu:1"), full_owners=(0,)), "every execution node"),
-    (dict(devices=("npu:0", "npu:1"), state_owners=(0,0,0,0)), "empty Full shard")])
+    (dict(devices=(1, 0)), "coordinator"),
+    (dict(devices=(0, 1), full_owners=(0,)), "every execution node"),
+    (dict(devices=(0, 1), state_owners=(0,0,0,0)), "empty Full shard")])
 def test_inference_placement_refusals(target, placement, match):
+    devices = owner_devices(target, 2)
+    placement = dict(placement, devices=tuple(devices[i] for i in placement["devices"]))
     r = runtime(config("pdg"), target)
     with torch.no_grad(), pytest.raises(ValueError, match=match):
         r.session(1, placement=placement)

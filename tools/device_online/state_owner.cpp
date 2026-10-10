@@ -49,18 +49,18 @@ StateOwner::StateOwner(const ContentProfile& p,std::vector<int64_t> owned,const 
   if(event>0){event_=std::make_unique<PackedEventAttention>(profile_,initial,d,l,int64_t(event+extra));reserved_+=event_->reserved_bytes();}
   if(reserved_>budget)throw std::logic_error("state owner allocation exceeded admission");
 }
-StateReadProposal StateOwner::append_read(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,const at::Tensor& error) {
+StateReadProposal StateOwner::append_read(DeviceProgram& p,const ReadyBatch& ready,const ContentBatch& content,const at::Tensor& error) {
   StateReadProposal out;p.sigmoid(profile_.decay,coefficients_);
   if(fiber_){out.fiber=fiber_->propose(p,profile_,ready,content,state_,error);out.values=out.fiber.values;}
   if(event_){out.event=event_->propose(p,ready,content,error,out.values);out.values=out.event.values;}
   device_online::append_read(p,profile_,ready,content,state_,coefficients_,error,limits_.max_repeat_ticks,limits_.vectorized_read,out.values);
   return out;
 }
-ContentUpdate StateOwner::append_update(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,
+ContentUpdate StateOwner::append_update(DeviceProgram& p,const ReadyBatch& ready,const ContentBatch& content,
     const SelectionProposal& selection,const StateReadProposal& read,const at::Tensor& stage,const at::Tensor& error) {
   return append_content_state(p,profile_,ready,content,selection,state_,coefficients_,stage,event_count_,error,limits_,read.values);
 }
-void StateOwner::append_commit(CannProgram& p,const ContentUpdate& update,const StateReadProposal& read,
+void StateOwner::append_commit(DeviceProgram& p,const ContentUpdate& update,const StateReadProposal& read,
     const SelectionProposal& selection,const at::Tensor& error) {
   commit_content_state(p,state_,update,error);
   if(fiber_)fiber_->commit(p,read.fiber,selection,error);

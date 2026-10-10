@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "state_vjp.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -99,7 +100,7 @@ void synthetic(at::Device device,Index width,int mode,at::ScalarType dtype,bool 
     clocks.to(device),samples,repeat,16};
   StateCotangents seed{cot.to(device),connected.to(device),final.to(device),fc.to(device)};
   auto error=at::zeros({1},at::TensorOptions().device(device).dtype(at::kInt));
-  CannProgram program(device);auto out=append_state_vjp(program,tape,seed,error,32*1024*1024,chunk);program.finish();
+  DeviceProgram program(device);auto out=append_state_vjp(program,tape,seed,error,32*1024*1024,chunk);program.finish();
   portable_torch::synchronize(device);program.run();require(error.cpu().item<int>()==0,"valid state VJP refused");
   auto h=out.content.cpu(),hc=out.content_connected.cpu(),init=out.initial.cpu().reshape({samples*nodes,width});
   auto ic=out.initial_connected.cpu().reshape({-1}),dec=out.decay.cpu().sum(0),dc=out.decay_connected.cpu().any(0);
@@ -122,14 +123,14 @@ void synthetic(at::Device device,Index width,int mode,at::ScalarType dtype,bool 
   // without running a numerical prefix or touching independent forward state.
   if(!repeat&&width==1&&mode==2&&dtype==at::kFloat) {
     tape.metadata[1][0].fill_(samples);error.zero_();
-    CannProgram bad(device);auto refused=append_state_vjp(bad,tape,seed,error,32*1024*1024);bad.finish();
+    DeviceProgram bad(device);auto refused=append_state_vjp(bad,tape,seed,error,32*1024*1024);bad.finish();
     portable_torch::synchronize(device);bad.run();require(error.cpu().item<int>()==2,"malformed tape accepted");
     require(at::equal(refused.initial.cpu(),at::zeros_like(init).reshape({samples,nodes,width})),"failed VJP wrote output");
-    bool bounded=false;try{CannProgram small(device);append_state_vjp(small,tape,seed,error,1);}catch(const std::invalid_argument&){bounded=true;}
+    bool bounded=false;try{DeviceProgram small(device);append_state_vjp(small,tape,seed,error,1);}catch(const std::invalid_argument&){bounded=true;}
     require(bounded,"VJP budget refusal missing");
   }
   if(repeat&&width==1&&mode==2&&dtype==at::kFloat&&rho==0&&chunk==2&&period==1) {
-    tape.max_repeat_ticks=1;CannProgram bounded(device);error.zero_();
+    tape.max_repeat_ticks=1;DeviceProgram bounded(device);error.zero_();
     auto refused=append_state_vjp(bounded,tape,seed,error,32*1024*1024,chunk);bounded.finish();
     portable_torch::synchronize(device);bounded.run();require(error.cpu().item<int>()==8,"repeat work bound missing");
     require(!refused.content_connected.cpu().any().item<bool>(),"bounded refusal exposed partial adjoints");
@@ -148,7 +149,7 @@ void actual_tape(at::Device device,bool prefill,bool repeat,at::ScalarType paylo
   auto opts=tape.values.options();
   StateCotangents seed{at::zeros({capacity,5,width},opts),at::zeros({capacity,5},opts.dtype(at::kBool)),
     at::ones({tape.samples,nodes,width},opts),at::ones({tape.samples,nodes},opts.dtype(at::kBool))};
-  auto error=at::zeros({1},opts.dtype(at::kInt));CannProgram reverse(device);
+  auto error=at::zeros({1},opts.dtype(at::kInt));DeviceProgram reverse(device);
   auto out=append_state_vjp(reverse,tape,seed,error,32*1024*1024);reverse.finish();
   portable_torch::synchronize(device);reverse.run();require(error.cpu().item<int>()==0,"actual forward journal rejected");
   require(at::isfinite(out.initial.cpu()).all().item<bool>(),"actual tape produced nonfinite VJP");
@@ -183,7 +184,7 @@ void rounding_sensitive(at::Device device,Index chunk) {
   auto floats=values.options().device(device),bits=floats.dtype(at::kBool);
   StateCotangents cot{at::full({capacity,5,width},std::numeric_limits<float>::quiet_NaN(),floats),
     at::zeros({capacity,5},bits),at::ones({1,1,width},floats),at::ones({1,1},bits)};
-  auto error=at::zeros({1},floats.dtype(at::kInt));CannProgram p(device);
+  auto error=at::zeros({1},floats.dtype(at::kInt));DeviceProgram p(device);
   const auto out=append_state_vjp(p,tape,cot,error,1024*1024,chunk);p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"quantized Add anchor refused");
   same(out.initial.cpu()[0][0],out.initial_connected.cpu()[0][0],expected[0],"quantized Add initial adjoint");
@@ -198,7 +199,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("state VJP gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("state VJP gate requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("state VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);
     int cases=0;
     const std::vector<at::ScalarType> references=args.dtype==at::kHalf?std::vector<at::ScalarType>{at::kHalf}:

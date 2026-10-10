@@ -4,7 +4,7 @@
 
 namespace tide {
 namespace device_online {class ContentFlow;struct SavedContent;}
-// Opaque, detached numerical continuation on its original NPU owners. Only the
+// Opaque, detached numerical continuation on its original device owners. Only the
 // originating live session can restore it; parameters/optimizer are not copied.
 // Copies of this handle share immutable saved buffers. Not a disk checkpoint.
 class ResidentContinuation {
@@ -13,7 +13,7 @@ class ResidentContinuation {
   Index cut() const;
   Index batch_size() const;
   Index tensor_bytes() const;
-  std::map<Index,Index> device_bytes() const; // Logical NPU index -> saved bytes.
+  std::map<Index,Index> device_bytes() const; // Logical device index -> saved bytes.
  private:
   std::shared_ptr<const device_online::SavedContent> data_;
   friend class device_online::ContentFlow;
@@ -46,8 +46,8 @@ struct ResidentWindow {
   Tensor coordinates, values, valid;
   Tensor output_stats, pending_stats, stages, events, full_chunks, emission_chunks;
 };
-// Optional CANN backend, built separately from the portable core. Single/sharded
-// NPU FP32/FP16 inference; construction and execution require explicit no-grad.
+// Optional device backend, built separately from the portable core. Single/sharded
+// CUDA/NPU FP32/FP16 inference; construction and execution require explicit no-grad.
 // Accepts the documented built-in module profiles and arbitrary legal topology.
 // Construction freezes parameter values; normal in-place updates are refused
 // until a new session is constructed. No training/autograd is implied.
@@ -58,7 +58,7 @@ class ResidentSession {
   ~ResidentSession();
   ResidentSession(const ResidentSession&)=delete;
   ResidentSession& operator=(const ResidentSession&)=delete;
-  // Input values may be CPU or on this NPU, all on one device per call. Only
+  // Input values may be CPU or on this resident device, all on one device per call. Only
   // input coordinates/seals live on the host; payloads are transferred in bulk.
   ResidentWindow advance(const std::vector<External>&, Index stop, Index sealed_until);
   Continuation snapshot() const; // Explicit CPU checkpoint materialization.

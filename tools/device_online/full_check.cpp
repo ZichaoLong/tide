@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "packed_full.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -25,7 +26,7 @@ void check(at::Device device,at::ScalarType dtype) {
     require(smaller<PackedFull::minimum_bytes({1,0,1},width,at::kFloat),"Full budget ignored actual element size");
     ActionBatch input{at::zeros({rows,4},opts.dtype(at::kLong)),at::zeros({rows,width},opts),at::zeros({rows},opts.dtype(at::kBool))};
     auto comparison=at::zeros_like(input.values),error=at::zeros({1},opts.dtype(at::kInt));
-    CannProgram program(device);auto result=full.append_stage(program,input,comparison,error);program.finish();
+    DeviceProgram program(device);auto result=full.append_stage(program,input,comparison,error);program.finish();
     auto coords=at::zeros({rows,4},at::kLong);for(I i=0;i<rows;++i){coords[i][1].fill_(i%nodes);coords[i][2].fill_((I(1)<<55)+i);}
     for(I round=0;round<4;++round) {
       auto mask=at::zeros({rows},at::kBool),h=(at::arange(rows*width,at::kFloat).reshape({rows,width})/128).to(dtype);
@@ -63,7 +64,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("packed Full check requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("packed Full requires NPU");
+    auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("packed Full requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);runtime.close();return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}
 }

@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/stream.h"
@@ -86,7 +87,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("window check requires explicit NPU FP32");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("window check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("window check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,lean);runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

@@ -1,7 +1,7 @@
+#include "device_backend.h"
 #include "control_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_control_plan.h"
-#include "aclrtlaunch_tide_control_payload.h"
+#include "device_launch_tide_control_plan.h"
+#include "device_launch_tide_control_payload.h"
 #include <ATen/core/grad_mode.h>
 #include <cmath>
 #include <stdexcept>
@@ -14,13 +14,13 @@ void tensor(const at::Tensor& x,at::Device d,at::ScalarType type,at::IntArrayRef
     throw std::invalid_argument("invalid control VJP buffer");
 }
 }
-ControlScores append_control_scores(CannProgram& p,const Graph& g,const StateTape& t,const ControlTape& c,
+ControlScores append_control_scores(DeviceProgram& p,const Graph& g,const StateTape& t,const ControlTape& c,
     at::ScalarType dtype,const at::Tensor& count,const at::Tensor& range,const at::Tensor& gradient,const at::Tensor& on,
     const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!gradient.defined()||gradient.dim()!=2||!t.metadata.defined()||t.metadata.dim()!=2)
     throw std::invalid_argument("control VJP requires no-grad actual device tape");
   const auto d=gradient.device();const int64_t capacity=t.metadata.size(0),width=gradient.size(1),nodes=g.nodes.size();
-  if(d.type()!=c10::DeviceType::PrivateUse1||capacity<1||width<1||nodes<1||t.samples<1||budget<1
+  if(d.type()!=tide::device_online::resident_device_type||capacity<1||width<1||nodes<1||t.samples<1||budget<1
       ||(c.mode!=1&&c.mode!=2)||!std::isfinite(c.zeta)
       ||32.L*capacity*width+96.L*capacity+4.L*nodes*width+64.L*nodes+512>budget)
     throw std::invalid_argument("control VJP tensor budget or mode unavailable");
@@ -48,14 +48,14 @@ ControlScores append_control_scores(CannProgram& p,const Graph& g,const StateTap
   auto products=at::empty_like(gradient),dp=at::empty({capacity},f),ds=at::empty_like(dp),partials=at::empty_like(gradient);
   for(const auto& x:{out.fresh,out.events,out.connected,out.read_connected,products,dp,ds,partials,read_on})p.zero(x);
   auto plan=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_control_plan)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_control_plan)(1,stream,
       ptr(t.metadata),ptr(t.values),ptr(count),ptr(range),ptr(config),ptr(on),ptr(hash),ptr(frame),ptr(next),ptr(owner_head),ptr(owner_next),
       ptr(dp),ptr(ds),ptr(read_on),ptr(out.connected),ptr(out.read_connected),ptr(error),capacity,width,nodes,t.samples,buckets,mode,c.mode,float(c.zeta)),
       "link complete control frames and declared Read connections");},
       {t.metadata,t.values,count,range,config,on,hash,frame,next,owner_head,owner_next,dp,ds,read_on,out.connected,out.read_connected,error});
   };
   auto payload=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_control_payload)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_control_payload)(32,stream,
       ptr(t.metadata),ptr(t.values),ptr(c.raw_full),ptr(gradient),ptr(count),ptr(range),ptr(config),ptr(gradient),ptr(on),ptr(read_on),ptr(ds),
       ptr(out.fresh),ptr(out.events),ptr(products),ptr(partials),ptr(error),capacity,width,mode,c.mode,fp16),"packed Emit and Read adjoints");},
       {t.metadata,t.values,c.raw_full,gradient,count,range,config,gradient,on,read_on,ds,out.fresh,out.events,products,partials,error});

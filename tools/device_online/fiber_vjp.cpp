@@ -1,12 +1,12 @@
+#include "device_backend.h"
 #include "fiber_vjp.h"
 #include "reverse_budget.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_fiber_vjp_plan.h"
-#include "aclrtlaunch_tide_fiber_vjp_pool.h"
-#include "aclrtlaunch_tide_fiber_vjp_pack.h"
-#include "aclrtlaunch_tide_fiber_vjp_state.h"
-#include "aclrtlaunch_tide_fiber_vjp_queries.h"
-#include "aclrtlaunch_tide_fiber_vjp_sources.h"
+#include "device_launch_tide_fiber_vjp_plan.h"
+#include "device_launch_tide_fiber_vjp_pool.h"
+#include "device_launch_tide_fiber_vjp_pack.h"
+#include "device_launch_tide_fiber_vjp_state.h"
+#include "device_launch_tide_fiber_vjp_queries.h"
+#include "device_launch_tide_fiber_vjp_sources.h"
 #include <ATen/core/grad_mode.h>
 #include <cmath>
 #include <stdexcept>
@@ -19,14 +19,14 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid same-fiber adjoint buffer");
 }
 }
-FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tensor& error,
+FiberVjp append_fiber_vjp(DeviceProgram& p,const FiberVjpInput& in,const at::Tensor& error,
     int64_t chunk,int64_t tile,int64_t budget) {
   if(at::GradMode::is_enabled()||in.rows.dim()!=3||in.key.dim()!=4||in.pool_weights.dim()!=2)
     throw std::invalid_argument("fiber VJP requires explicit no-grad packed sources/KV");
   const auto device=in.rows.device();const int64_t b=in.rows.size(0),s=in.rows.size(1),w=in.rows.size(2);
   const int64_t h=in.key.size(1),k=in.key.size(2),domain=in.pool_weights.size(1);
   const auto payload=in.rows.scalar_type();const bool half=payload==at::kHalf;
-  if(device.type()!=c10::DeviceType::PrivateUse1||b<1||s<1||w<1||h<1||w%h||k<1||s>k
+  if(device.type()!=tide::device_online::resident_device_type||b<1||s<1||w<1||h<1||w%h||k<1||s>k
       ||domain<1||chunk<1||tile<1||tile>256||in.max_repeat_ticks<1||budget<1||(!half&&payload!=at::kFloat))
     throw std::invalid_argument("invalid fiber VJP geometry/limits");
   const auto d=w/h;
@@ -50,7 +50,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
       out.projection,out.projection_bias,out.decay,out.pool,out.parameter_connected,out.chunks})p.zero(x);
   auto cursor=at::empty({1},l),plan=at::empty({c,3},l),branch=at::empty_like(error);
   auto schedule=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_plan)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_plan)(1,stream,
       ptr(in.counts),ptr(in.slots),ptr(in.lengths),ptr(in.old_lengths),ptr(in.ticks),ptr(in.pool_kinds),ptr(in.pool_lengths),
       ptr(in.connected),ptr(in.key_on),ptr(in.value_on),ptr(in.bias_on),ptr(out.rows_connected),ptr(out.cache_connected),ptr(out.parameter_connected),
       ptr(cursor),ptr(plan),ptr(branch),ptr(out.chunks),ptr(error),b,s,k,domain,c,in.max_repeat_ticks,mode),"pack connected fiber VJP source/query rows");},
@@ -59,7 +59,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   };
   auto safe_projection=adjoint(in.projection),wt=adjoint(in.projection),pooled_root=at::empty_like(in.cotangent);
   auto state=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_state)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_state)(32,stream,
       ptr(in.cotangent),ptr(in.connected),ptr(in.projection),ptr(in.key_root),ptr(in.value_root),ptr(in.bias_root),
       ptr(in.key_on),ptr(in.value_on),ptr(in.bias_on),ptr(in.lengths),ptr(in.old_lengths),ptr(in.ticks),ptr(out.parameter_connected),
       ptr(out.projection_bias),ptr(safe_projection),ptr(out.key),ptr(out.value),ptr(out.bias),ptr(out.decay),ptr(error),b,w,h,k,mode,int64_t(half)),
@@ -74,7 +74,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   auto pool_scale=at::empty({b,1},f);
   for(auto x:{pool_partial,pooled,source_gradient})p.zero(x);
   auto pool=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_pool)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_pool)(1,stream,
       ptr(in.counts),ptr(in.slots),ptr(in.pool_kinds),ptr(in.pool_lengths),ptr(in.pool_weights),ptr(in.connected),
       ptr(logits),ptr(prob),ptr(coeff),ptr(pool_partial),ptr(out.pool),ptr(pool_scale),ptr(error),b,s,domain,mode),"fiber pooling coefficients/Jacobian");},
       {in.counts,in.slots,in.pool_kinds,in.pool_lengths,in.pool_weights,in.connected,logits,prob,coeff,pool_partial,out.pool,pool_scale,error});
@@ -89,7 +89,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   const float scale=1.f/std::sqrt(double(d));
   auto pack=[&](int64_t mode) {
     const auto weight=mode==2?qkv:qw;
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_pack)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_pack)(32,stream,
       ptr(plan),ptr(in.rows),ptr(in.qkv),ptr(in.qkv_bias),ptr(in.projection),ptr(in.cotangent),ptr(in.connected),ptr(in.key_on),ptr(in.value_on),
       ptr(in.key),ptr(in.value),ptr(in.bias),ptr(in.lengths),ptr(in.old_lengths),ptr(coeff),ptr(pooled_root),ptr(source_gradient),ptr(out.key),ptr(out.value),
       ptr(x),ptr(weight),ptr(qb),ptr(projected),ptr(projected),ptr(keys),ptr(values),ptr(biases),ptr(lens),ptr(cot),ptr(query_root),ptr(on),ptr(bar),ptr(error),
@@ -104,7 +104,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   if(half){p.cast(projected,fp);p.cast(keys,fk);p.cast(values,fv);}
   auto a=append_attention_vjp(p,{fp.reshape({c,h,d}),fk,fv,biases,lens,cot,on},error,half?1.:1./std::sqrt(double(d)),tile,budget/2);
   p.multiply(a.output.reshape({c,w}),query_root,product);p.sum(product,1,false,dp);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_queries)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_queries)(32,stream,
     ptr(plan),ptr(coeff),ptr(a.output),ptr(a.query),ptr(a.key),ptr(a.value),ptr(a.bias),ptr(dp),ptr(pooled),ptr(source_gradient),
     ptr(out.key),ptr(out.value),ptr(out.bias),ptr(pool_partial),ptr(in.pool_kinds),ptr(error),b,s,w,h,k,domain,c,int64_t(half),scale),"reduce all query contributions to complete-fiber KV and pooling");},
     {plan,coeff,a.output,a.query,a.key,a.value,a.bias,dp,pooled,source_gradient,out.key,out.value,out.bias,pool_partial,in.pool_kinds,error});
@@ -115,7 +115,7 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   p.batch_matmul(pooled.reshape({b,w,1}),out.projection_bias.reshape({b,1,w}),out.projection);
   schedule(3);const auto next=p.label(),work=p.label(),end=p.label();p.mark(next);schedule(2);p.branch(branch,{end,work});p.mark(work);
   pack(2);p.permute(qkv,{0,2,1},qkvt);p.batch_matmul(bar,qkvt,dx);p.batch_matmul(x.reshape({c,w,1}),bar,dw);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_vjp_sources)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_vjp_sources)(32,stream,
     ptr(plan),ptr(dx),ptr(dw),ptr(bar),ptr(out.rows),ptr(out.qkv),ptr(out.qkv_bias),ptr(error),b,s,w,c),"reduce stable source/projection adjoints");},
     {plan,dx,dw,bar,out.rows,out.qkv,out.qkv_bias,error});
   p.branch(branch,{next});p.mark(end);state(1);return out;

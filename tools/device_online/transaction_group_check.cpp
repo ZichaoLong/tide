@@ -25,7 +25,7 @@ void check_transaction_group(at::Device device,at::ScalarType dtype) {
   auto error=at::zeros({1},opts.dtype(at::kInt));
   QueueTransaction a(5,3,2,1,opts,error),b(4,3,2,1,opts,error);
   auto ca=at::ones({5},error.options()),cb=at::ones({4},error.options());
-  CannProgram program(device);
+  DeviceProgram program(device);
   auto first=a.propose_stage(program,ca,b.atoms()),second=b.propose_stage(program,cb,a.atoms());
   a.commit_stage(program,first);b.commit_stage(program,second);program.finish();
   auto seed=[](QueueTransaction& q,I count,I base) {

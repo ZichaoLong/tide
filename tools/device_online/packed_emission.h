@@ -18,7 +18,7 @@ class PackedEmission {
   static long double minimum_bytes(const ContentProfile&,int64_t arrivals,int64_t outputs,const FullPlacement& placement={});
   PackedEmission(const ContentProfile&,at::Device,int64_t samples,int64_t arrivals,
                  int64_t outputs,int64_t max_chunk_rows,int64_t budget,const FullPlacement& placement={});
-  EmissionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& error,int64_t operator_budget=0);
+  EmissionBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& error,int64_t operator_budget=0);
   int64_t reserved_bytes() const {return reserved_;}
   int64_t chunk_rows() const {return chunk_;}
   const at::Tensor& chunks() const {return chunks_;}

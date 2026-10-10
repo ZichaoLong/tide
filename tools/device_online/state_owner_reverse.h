@@ -18,16 +18,16 @@ struct StateOwnerVjp {StateVjp state;at::Tensor messages,connected,scale_partial
 // on this owner. A stage contains only current event cotangents and carry.
 class StateOwnerReverse {
  public:
-  StateOwnerReverse(CannProgram&,const StateOwnerTape&,const StateReversePacket&,
+  StateOwnerReverse(DeviceProgram&,const StateOwnerTape&,const StateReversePacket&,
       const std::vector<CacheCotangents>&,const std::vector<CacheGradient>& next_cache,
       const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget);
   // Parameter-only reuse after a completed canonical reduction. Cache, state
   // and message cotangents remain window-owned for continuation bridges.
-  StateOwnerReverse(CannProgram&,const StateOwnerTape&,const StateReversePacket&,
+  StateOwnerReverse(DeviceProgram&,const StateOwnerTape&,const StateReversePacket&,
       const std::vector<CacheCotangents>&,const std::vector<CacheGradient>& next_cache,
       const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget,const StateShardGradient* reuse);
-  StateOwnerVjp append_stage(CannProgram&,const StateReverseStage&,const at::Tensor& error);
-  void append_finish(CannProgram&,const at::Tensor& error);
+  StateOwnerVjp append_stage(DeviceProgram&,const StateReverseStage&,const at::Tensor& error);
+  void append_finish(DeviceProgram&,const at::Tensor& error);
   StateShardGradient gradient() const {return total_;}
  private:
   StateOwnerTape owner_;

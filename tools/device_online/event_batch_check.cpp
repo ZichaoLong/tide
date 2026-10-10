@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/stream.h"
@@ -98,7 +99,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("event batch gate requires explicit NPU FP32");
-    auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("event batch gate requires NPU");
+    auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("event batch gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     const auto a=anchors(device);std::cout<<"event batch anchors/restores="<<a<<" passed\n"<<std::flush;
     const auto b=windows(device);

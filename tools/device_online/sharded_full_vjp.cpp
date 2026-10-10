@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_full_vjp.h"
 #include "sharded_state_vjp.h"
 #include "sharded_parameter_reduce.h"
@@ -14,7 +15,7 @@ namespace {
 std::vector<at::Tensor*> parameters(FullVjp& g) {
   return {&g.weights,&g.biases,&g.extra.lh_weights,&g.extra.lh_biases,&g.extra.gate,&g.extra.up,&g.extra.down};
 }
-FullVjp accumulator(CannProgram& p,const FullTape& t) {
+FullVjp accumulator(DeviceProgram& p,const FullTape& t) {
   FullVjp g{};auto floats=t.kinds.options().dtype(at::kFloat);
   auto make=[&](const at::Tensor& bank) {
     if(!bank.defined())return at::Tensor();auto shape=bank.sizes().vec();--shape[0];
@@ -25,7 +26,7 @@ FullVjp accumulator(CannProgram& p,const FullTape& t) {
   g.parameter_connected=at::empty({t.kinds.numel()},floats.dtype(at::kBool));g.chunks=at::empty({1},t.kinds.options());
   p.zero(g.parameter_connected);p.zero(g.chunks);return g;
 }
-void accumulate(CannProgram& p,FullVjp& total,FullVjp& partial,const at::Tensor& error) {
+void accumulate(DeviceProgram& p,FullVjp& total,FullVjp& partial,const at::Tensor& error) {
   auto a=parameters(total),b=parameters(partial);
   for(size_t i=0;i<a.size();++i)if(a[i]->defined())p.add(*a[i],*b[i]);
   append_connection_union(p,partial.parameter_connected,total.parameter_connected,error);p.add(total.chunks,partial.chunks);
@@ -36,7 +37,7 @@ struct ShardedFullVjp::Impl {
     FullShardTape tape;
     at::Tensor mapping,ids,work,command,stop;
     FullVjp total;
-    std::unique_ptr<CannProgram> program;
+    std::unique_ptr<DeviceProgram> program;
     std::unique_ptr<PeerExchange> request,response;
   };
   at::Device coordinator;
@@ -45,7 +46,7 @@ struct ShardedFullVjp::Impl {
   std::vector<Shard> shards;
   Impl(at::Device d):coordinator(d){}
 };
-ShardedFullVjp::ShardedFullVjp(CannProgram& p,const ShardedReverseTape& t,int64_t chunk,int64_t budget,int64_t workspace)
+ShardedFullVjp::ShardedFullVjp(DeviceProgram& p,const ShardedReverseTape& t,int64_t chunk,int64_t budget,int64_t workspace)
   :impl_(std::make_unique<Impl>(t.coordinator.state.metadata.device())) {
   if(at::GradMode::is_enabled()||!t.coordinator.graph||t.coordinator.state.metadata.dim()!=2)
     throw std::invalid_argument("sharded reverse requires actual no-grad graph records");
@@ -55,7 +56,7 @@ ShardedFullVjp::ShardedFullVjp(CannProgram& p,const ShardedReverseTape& t,int64_
   std::set<int64_t> nodes;std::set<c10::DeviceIndex> devices;
   for(const auto& shard:t.shards) {
     const auto& f=shard.full;
-    if(!f.kinds.defined()||f.kinds.device().type()!=c10::DeviceType::PrivateUse1||f.kinds.dim()!=1||f.kinds.scalar_type()!=at::kLong
+    if(!f.kinds.defined()||f.kinds.device().type()!=tide::device_online::resident_device_type||f.kinds.dim()!=1||f.kinds.scalar_type()!=at::kLong
         ||!f.kinds.is_contiguous()||shard.nodes.empty()
         ||int64_t(shard.nodes.size())!=f.kinds.numel()||f.width!=s.width||f.samples!=t.coordinator.state.samples
         ||!devices.insert(f.kinds.device().index()).second)throw std::invalid_argument("invalid Full reverse shard layout");
@@ -72,7 +73,7 @@ ShardedFullVjp::ShardedFullVjp(CannProgram& p,const ShardedReverseTape& t,int64_
   if(int64_t(nodes.size())!=s.nodes)throw std::invalid_argument("incomplete Full reverse ownership");
   for(const auto& shard:t.shards) {
     Impl::Shard owner;owner.tape=shard;const auto device=shard.full.kinds.device();
-    if(device!=s.coordinator){owner.program=std::make_unique<CannProgram>(device);owner.program->limit_workspace(workspace);}
+    if(device!=s.coordinator){owner.program=std::make_unique<DeviceProgram>(device);owner.program->limit_workspace(workspace);}
     owner.total=accumulator(owner.program?*owner.program:p,shard.full);
     std::vector<int64_t> mapping(s.nodes,-1);for(size_t i=0;i<shard.nodes.size();++i)mapping[shard.nodes[i]]=i;
     owner.mapping=at::tensor(mapping,at::kLong).to(s.coordinator);owner.ids=at::tensor(shard.nodes,at::kLong).to(s.coordinator);
@@ -80,7 +81,7 @@ ShardedFullVjp::ShardedFullVjp(CannProgram& p,const ShardedReverseTape& t,int64_
   }
 }
 ShardedFullVjp::~ShardedFullVjp()=default;
-FullVjp ShardedFullVjp::append_stage(CannProgram& p,const FullTape& stage,const at::Tensor& gradient,
+FullVjp ShardedFullVjp::append_stage(DeviceProgram& p,const FullTape& stage,const at::Tensor& gradient,
     const at::Tensor& connected,const at::Tensor& error) {
   auto& s=*impl_;if(s.constructed)throw std::logic_error("sharded Full reverse stage already built");s.constructed=true;
   const auto capacity=s.capacity;auto floats=gradient.options();
@@ -136,7 +137,7 @@ FullVjp ShardedFullVjp::append_stage(CannProgram& p,const FullTape& stage,const 
   }
   return out;
 }
-void ShardedFullVjp::append_stop(CannProgram& p) {for(auto& s:impl_->shards)if(s.request){p.copy(s.command,s.stop);s.request->append_send(p);}}
+void ShardedFullVjp::append_stop(DeviceProgram& p) {for(auto& s:impl_->shards)if(s.request){p.copy(s.command,s.stop);s.request->append_send(p);}}
 void ShardedFullVjp::synchronize_inputs() const {
   c10::impl::VirtualGuardImpl(impl_->coordinator.type()).synchronizeDevice(impl_->coordinator.index());
   for(const auto& s:impl_->shards)if(s.program)c10::impl::VirtualGuardImpl(s.tape.full.kinds.device().type()).synchronizeDevice(s.tape.full.kinds.device().index());
@@ -147,22 +148,22 @@ void ShardedFullVjp::close(){for(auto& s:impl_->shards){if(s.program)s.program->
 std::vector<FullShardGradient> ShardedFullVjp::gradients() const {std::vector<FullShardGradient> out;for(const auto& s:impl_->shards)out.push_back({s.tape.nodes,s.total});return out;}
 std::vector<at::Tensor> ShardedFullVjp::work() const {std::vector<at::Tensor> out;for(const auto& s:impl_->shards)out.push_back(s.work);return out;}
 int64_t ShardedFullVjp::packet_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.request)n+=s.request->packet_bytes()+s.response->packet_bytes();return n;}
-ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+ShardedGraphVjp append_sharded_graph_vjp(DeviceProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace) {
   return append_sharded_graph_vjp(p,t,roots,error,chunk,budget,workspace,{},{});
 }
-ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+ShardedGraphVjp append_sharded_graph_vjp(DeviceProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
     const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots) {
   return append_sharded_graph_vjp(p,t,roots,error,chunk,budget,workspace,next,state_roots,{});
 }
-ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+ShardedGraphVjp append_sharded_graph_vjp(DeviceProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
     const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots,
     const std::vector<ProjectionGradient>& reuse) {
   return append_sharded_graph_vjp(p,t,roots,error,chunk,budget,workspace,next,state_roots,reuse,false);
 }
-ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+ShardedGraphVjp append_sharded_graph_vjp(DeviceProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
     const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots,
     const std::vector<ProjectionGradient>& reuse,bool reuse_attention) {
@@ -172,12 +173,12 @@ ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape
   if(!t.states.empty()) {
     state=std::make_shared<ShardedStateVjp>(t,error,chunk,budget/3,workspace,next,state_roots);
     if(reuse_attention&&next)state->reuse_attention_parameters(*next);
-    hooks.prepare=[state](CannProgram& p,const ReverseLinks& links){state->prepare(p,links);};
-    hooks.stage=[state](CannProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores){return state->append_stage(p,range,cot,scores);};
-    hooks.sources=[state](CannProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials){state->append_sources(p,messages,on,partials);};
+    hooks.prepare=[state](DeviceProgram& p,const ReverseLinks& links){state->prepare(p,links);};
+    hooks.stage=[state](DeviceProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores){return state->append_stage(p,range,cot,scores);};
+    hooks.sources=[state](DeviceProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials){state->append_sources(p,messages,on,partials);};
   } else if(next||!state_roots.empty())throw std::invalid_argument("state roots require compact state ownership");
   auto g=append_graph_vjp(p,t.coordinator,roots,error,chunk,budget/split,
-    [full](CannProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);},hooks,workspace,reuse);
+    [full](DeviceProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);},hooks,workspace,reuse);
   full->append_stop(p);if(state)state->append_stop(p);return {std::move(g),std::move(full),std::move(state)};
 }
 void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>& gradients) {
@@ -197,7 +198,7 @@ template<class Program>void run_sharded(Program& p,const std::vector<ShardedGrap
   for(auto* r:reductions)try{r->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
-void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
-void run_sharded_graph_vjp(CannSequence& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
-void run_sharded_graph_vjp(CannSequence& p,const std::vector<ShardedGraphVjp>& g,const std::vector<ShardedParameterReduce*>& r){run_sharded(p,g,r);}
+void run_sharded_graph_vjp(DeviceProgram& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
+void run_sharded_graph_vjp(DeviceSequence& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
+void run_sharded_graph_vjp(DeviceSequence& p,const std::vector<ShardedGraphVjp>& g,const std::vector<ShardedParameterReduce*>& r){run_sharded(p,g,r);}
 } // namespace tide::device_online

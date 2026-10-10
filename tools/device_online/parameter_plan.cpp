@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "parameter_plan.h"
 #include "tide/fiber_attention.h"
 #include "packed_lh_full.h"
@@ -98,7 +99,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   out.owner_table=std::move(owners);out.references=std::move(refs);out.tiles=std::move(tiles);out.elements=std::max<int64_t>(1,total);return out;
 }
 ParameterVjp parameter_layout(const Graph& graph,const ParameterRegistry& registry,int64_t width,at::Device device,int64_t budget,bool controls) {
-  if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0)throw std::invalid_argument("parameter layout requires an explicit NPU");
+  if(device.type()!=tide::device_online::resident_device_type||device.index()<0)throw std::invalid_argument("parameter layout requires an explicit NPU");
   auto p=plan_parameters(graph,registry,width,budget,controls);auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   return {p.owners,p.offsets,at::zeros({p.elements},opts),at::zeros({std::max<int64_t>(1,p.owners.size())},opts.dtype(at::kBool))};
 }

@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/greedy.h"
@@ -97,7 +98,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("Add check requires explicit NPU FP32");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("Add check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("Add check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;Index cases=0;
     for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})
     for(bool vectorized:{false,true})for(const std::string mode:{"content","old","proposal"})

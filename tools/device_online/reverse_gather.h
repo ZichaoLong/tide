@@ -1,5 +1,6 @@
+#include "device_backend.h"
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <stdexcept>
@@ -12,13 +13,13 @@ namespace tide::device_online {
 // across windows/programs or a host-generated numerical batch.
 class ReverseGatherInput {
  public:
-  ReverseGatherInput(CannProgram& p,const at::Tensor& input):program_(&p),input_(input) {
+  ReverseGatherInput(DeviceProgram& p,const at::Tensor& input):program_(&p),input_(input) {
     if(at::GradMode::is_enabled()||!input.defined()||input.dim()<1||input.size(0)<1
         ||input.size(0)==std::numeric_limits<int64_t>::max()||!input.numel()
-        ||input.device().type()!=c10::DeviceType::PrivateUse1||!input.is_contiguous()||input.requires_grad())
+        ||input.device().type()!=tide::device_online::resident_device_type||!input.is_contiguous()||input.requires_grad())
       throw std::invalid_argument("reverse gather requires a no-grad contiguous device source");
   }
-  void select(CannProgram& p,const at::Tensor& indices,const at::Tensor& output) const {
+  void select(DeviceProgram& p,const at::Tensor& indices,const at::Tensor& output) const {
     if(&p!=program_)throw std::invalid_argument("reverse gather belongs to another program phase");
     // Allocate on the first select, after that owner's original budget checks.
     if(!padded_.defined()) {
@@ -28,7 +29,7 @@ class ReverseGatherInput {
     p.index_select(padded_,0,indices,output);
   }
  private:
-  CannProgram* program_;
+  DeviceProgram* program_;
   at::Tensor input_;
   mutable at::Tensor padded_;
 };

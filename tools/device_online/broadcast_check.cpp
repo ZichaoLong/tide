@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "broadcast_router.h"
 #include "queue_transaction.h"
 #include "portable_torch/runtime.hpp"
@@ -23,7 +24,7 @@ void check(at::Device device,at::ScalarType dtype) {
     QueueTransaction queue(capacity,width,nodes,samples,opts);
     ActionBatch action{at::zeros({rows,4},longs),at::zeros({rows,width},opts),at::zeros({rows},opts.dtype(at::kBool))};
     auto scales=at::zeros({std::max<I>(1,graph.size()),1},opts),consumed=at::ones({capacity},opts.dtype(at::kInt));
-    CannProgram program(device);auto incoming=router.append_stage(program,action,scales,queue.error());
+    DeviceProgram program(device);auto incoming=router.append_stage(program,action,scales,queue.error());
     queue.append_stage(program,consumed,incoming);program.finish();
     for(I round=0;round<8;++round) {
       std::vector<I> coordinates;std::vector<uint8_t> selected;
@@ -84,7 +85,7 @@ void check(at::Device device,at::ScalarType dtype) {
     ActionBatch action{at::zeros({1,4},longs),at::ones({1,width},opts),at::ones({1},opts.dtype(at::kBool))};
     if(invalid)action.coordinates[0][1].fill_(nodes);
     auto scales=at::ones({2,1},opts),consumed=at::zeros({capacity},opts.dtype(at::kInt));
-    CannProgram program(device);auto incoming=router.append_stage(program,action,scales,queue.error());
+    DeviceProgram program(device);auto incoming=router.append_stage(program,action,scales,queue.error());
     queue.append_stage(program,consumed,incoming);program.finish();portable_torch::synchronize(device);program.run();
     require(queue.error().cpu().item<int>()==(invalid?2:1),"routing preflight failure classification differs");
     require(queue.stats().cpu()[0].item<I>()==0&&!queue.atoms().valid.cpu().any().item<bool>(),"failed routing created messages");
@@ -101,7 +102,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("broadcast check requires explicit NPU and FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("broadcast check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("broadcast check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}
 }

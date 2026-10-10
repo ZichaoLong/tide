@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include "queue_closure.h"
 
 namespace tide::device_online {
@@ -18,7 +18,7 @@ class DeviceReady {
               int64_t samples,at::Device,bool prefill,const std::vector<int64_t>& causal_regions={});
   // Complete sealed input through stop. Produces whole fibers AND complete
   // region-time candidate sets. Numerical state/Full contracts remain separate.
-  ReadyBatch append_stage(CannProgram&,const AtomBatch&,const at::Tensor& stop,
+  ReadyBatch append_stage(DeviceProgram&,const AtomBatch&,const at::Tensor& stop,
                           const at::Tensor& sticky_error) const;
  private:
   int64_t nodes_,regions_,samples_;

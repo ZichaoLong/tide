@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "ready_batch.h"
 #include "queue_transaction.h"
 #include "portable_torch/runtime.hpp"
@@ -76,7 +77,7 @@ void check(at::Device device,at::ScalarType dtype) {
     QueueClosure reference(owners,regions,graph,samples,at::Device(at::kCPU));
     AtomBatch queue{at::zeros({capacity,6},longs),at::zeros({capacity,width},opts),at::zeros({capacity},opts.dtype(at::kBool))};
     auto stop=at::zeros({1},longs),error=at::zeros({1},opts.dtype(at::kInt));
-    CannProgram program(device);auto packed=planner.append_stage(program,queue,stop,error);program.finish();
+    DeviceProgram program(device);auto packed=planner.append_stage(program,queue,stop,error);program.finish();
     for(I round=0;round<6;++round) {
       I base=round==3?(I(1)<<55)+19:round==4?std::numeric_limits<I>::max()-32:0;
       std::vector<I> c;
@@ -112,7 +113,7 @@ void check(at::Device device,at::ScalarType dtype) {
     auto stop=at::full({1},4,longs),count=at::zeros({1},longs),one=at::ones({1},longs);
     auto budget=at::full({1},capacity,longs),budget_error=at::full({1},4,opts.dtype(at::kInt));
     auto predicate=at::zeros({1},opts.dtype(at::kBool)),index=at::zeros({1},opts.dtype(at::kInt));
-    CannProgram program(device);auto head=program.label(),test=program.label(),body=program.label(),exhausted=program.label(),end=program.label();
+    DeviceProgram program(device);auto head=program.label(),test=program.label(),body=program.label(),exhausted=program.label(),end=program.label();
     program.mark(head);auto packed=planner.append_stage(program,queue.atoms(),stop,queue.error());
     program.branch(packed.branch,{end,test});program.mark(test);program.less(count,budget,predicate);program.cast_index(predicate,index);
     program.branch(index,{exhausted,body});program.mark(body);queue.append_stage(program,packed.consumed,empty);
@@ -150,7 +151,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("ready check requires explicit NPU and FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("ready check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("ready check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);runtime.close();return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}
 }

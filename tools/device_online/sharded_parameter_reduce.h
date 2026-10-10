@@ -15,7 +15,7 @@ class ShardedParameterReduce {
   // continues. A preceding embedded reduction lends canonical/packet storage;
   // append on the same ordered coordinator sequence, never concurrently.
   ShardedParameterReduce(ShardedParameterSources,std::vector<at::Device>,const at::Tensor& upstream_error,
-                        int64_t tensor_budget,int64_t per_program_workspace,CannProgram&,
+                        int64_t tensor_budget,int64_t per_program_workspace,DeviceProgram&,
                         const ShardedParameterReduce* preceding=nullptr);
   // Completed canonical gradients: build an update/publication program without
   // repeating alias reduction or copying masters back to the coordinator.
@@ -39,7 +39,7 @@ class ShardedParameterReduce {
   int64_t stream_chunks() const; // Planned packet iterations, not numerical activity.
  private:
   ShardedParameterReduce(ShardedParameterSources,std::vector<at::Device>,const at::Tensor&,
-                        int64_t,int64_t,CannProgram*,const ShardedParameterReduce*);
+                        int64_t,int64_t,DeviceProgram*,const ShardedParameterReduce*);
   struct Impl;std::unique_ptr<Impl> impl_;
 };
 } // namespace tide::device_online

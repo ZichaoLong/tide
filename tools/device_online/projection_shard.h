@@ -19,10 +19,10 @@ class ProjectionStage {
                   bool reverse,int64_t tensor_budget,int64_t operator_budget,
                   const std::vector<ProjectionGradient>& reuse);
   ~ProjectionStage();
-  at::Tensor append(CannProgram&,const at::Tensor& parameter_rows,
+  at::Tensor append(DeviceProgram&,const at::Tensor& parameter_rows,
       const at::Tensor& values,const at::Tensor& cotangents,const at::Tensor& error);
-  void append_reset(CannProgram&,at::Device coordinator);
-  void append_stop(CannProgram&);
+  void append_reset(DeviceProgram&,at::Device coordinator);
+  void append_stop(DeviceProgram&);
   void synchronize_inputs() const;
   void submit();
   void wait();

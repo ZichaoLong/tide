@@ -32,7 +32,7 @@ long double common_bytes(const ContentProfile& p,const FullPlacement& placement,
   // Packing/gather/scratch, both packet endpoints, descriptors and owner maps.
   return placement.devices.size()*(64.L*capacity*(5.L*p.width+32)+32.L*p.graph.nodes.size()+4096);
 }
-void merge_error(CannProgram& p,const at::Tensor& source,const at::Tensor& destination) {
+void merge_error(DeviceProgram& p,const at::Tensor& source,const at::Tensor& destination) {
   auto zero=at::zeros_like(source),equal=at::empty({1},source.options().dtype(at::kBool)),branch=at::empty_like(source);
   p.equal(source,zero,equal);p.cast_index(equal,branch);auto failed=p.label(),done=p.label();
   p.branch(branch,{failed,done});p.mark(failed);p.copy(destination,source);p.mark(done);
@@ -100,7 +100,7 @@ ShardedFull::ShardedFull(const ContentProfile& p,FullPlacement placement,at::Dev
   if(impl_->reserved>budget)throw std::logic_error("Full shard allocations exceeded admission");
 }
 ShardedFull::~ShardedFull()=default;
-ActionBatch ShardedFull::append_stage(CannProgram& p,const ActionBatch& actions,const at::Tensor& content,
+ActionBatch ShardedFull::append_stage(DeviceProgram& p,const ActionBatch& actions,const at::Tensor& content,
     const at::Tensor& comparison,const at::Tensor& error,int64_t operator_budget) {
   struct Stage {FullShardBatch packed;at::Tensor error;ActionBatch result;};
   std::vector<Stage> stages;
@@ -134,7 +134,7 @@ ActionBatch ShardedFull::append_stage(CannProgram& p,const ActionBatch& actions,
   }
   return {actions.coordinates,output.narrow(0,0,actions.values.size(0)),actions.valid};
 }
-void ShardedFull::append_stop(CannProgram& p){for(auto& s:impl_->shards)if(s.remote)s.remote->append_stop(p);}
+void ShardedFull::append_stop(DeviceProgram& p){for(auto& s:impl_->shards)if(s.remote)s.remote->append_stop(p);}
 void ShardedFull::reset_window(){impl_->chunks.zero_();for(auto& s:impl_->shards){s.work.zero_();s.chunks.zero_();s.full->chunks().zero_();}}
 void ShardedFull::synchronize_inputs() const {
   for(const auto& s:impl_->shards)c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());

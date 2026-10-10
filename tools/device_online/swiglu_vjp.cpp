@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-void append_swiglu_vjp(CannProgram& p,const FullTape& t,const at::Tensor& gradient,const at::Tensor& connected,
+void append_swiglu_vjp(DeviceProgram& p,const FullTape& t,const at::Tensor& gradient,const at::Tensor& connected,
     FullVjp& out,const at::Tensor& error,int64_t max_rows,int64_t budget) {
   const auto& e=t.extra;if(!e.swiglu_kinds.defined())return;
   const auto device=t.values.device();const int64_t capacity=t.values.size(0),nodes=t.kinds.size(0),d=t.width;

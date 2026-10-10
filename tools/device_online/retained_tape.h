@@ -24,7 +24,7 @@ RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,
 int64_t reverse_tape_bytes(const ReverseTape&); // Shape-only admission before advance/copy.
 // Add a later window's boundary adjoints to the earlier window's own roots.
 // The actual pending-message match and every connection decision are device work.
-GraphCotangents append_window_bridge(CannProgram&,const ReverseTape& earlier,
+GraphCotangents append_window_bridge(DeviceProgram&,const ReverseTape& earlier,
     const GraphCotangents& local,const ReverseTape& later,const GraphVjp& later_gradient,
     const at::Tensor& error,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

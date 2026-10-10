@@ -111,7 +111,7 @@ struct ResidentStep { bool applied=false; int refusal_code=0; Index generation=0
 
 // Explicit first-order VJP API, separate from eager/autograd and inference.
 // All methods require no-grad; a consumer computes loss/head cotangents outside
-// this owner. Explicit single/sharded NPU FP32/FP16 HARD/HST/SOFTP, FP32 adjoints/masters,
+// this owner. Explicit single/sharded CUDA/NPU FP32/FP16 HARD/HST/SOFTP, FP32 adjoints/masters,
 // built-in Aggregate/broadcast, identity/EMA/Add/event/fiber-attention state and
 // identity/tanh/LH/SwiGLU Full. Other adjoints are rejected before the first advance.
 class ResidentTrainingSession {

@@ -40,6 +40,6 @@ struct ReverseLinks {
 };
 // Static topology preparation is allowed; message/event association and stage
 // boundaries are computed on device from this candidate's actual forward tape.
-ReverseLinks append_reverse_links(CannProgram&,const ReverseTape&,const at::Tensor& error,
+ReverseLinks append_reverse_links(DeviceProgram&,const ReverseTape&,const at::Tensor& error,
                                   int64_t tensor_budget_bytes);
 } // namespace tide::device_online

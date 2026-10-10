@@ -11,9 +11,9 @@ class ShardedFull {
   ShardedFull(const ContentProfile&,FullPlacement,at::Device coordinator,int64_t capacity,
               int64_t max_rows,int64_t tensor_budget);
   ~ShardedFull();
-  ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
+  ActionBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& content,
                           const at::Tensor& comparison,const at::Tensor& error,int64_t operator_budget);
-  void append_stop(CannProgram&);
+  void append_stop(DeviceProgram&);
   void reset_window();
   void synchronize_inputs() const;
   void submit();

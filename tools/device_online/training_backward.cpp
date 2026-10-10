@@ -64,7 +64,7 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
     }
   }
   auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));
-  CannProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
+  DeviceProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
   std::vector<GraphVjp> gradients(s.saved.size());ParameterVjp total;
   for(size_t i=s.saved.size();i>0;) {--i;const auto& w=s.saved[i];auto cot=roots(input[i],w.tape.tape,w.final,w.present);
     if(i+1<s.saved.size())cot=append_window_bridge(p,w.tape.tape,cot,s.saved[i+1].tape.tape,gradients[i+1],error,per/8);

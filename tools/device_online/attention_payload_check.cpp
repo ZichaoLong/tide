@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "tiled_attention.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -77,7 +78,7 @@ void check(at::Device device,at::ScalarType dtype) {
     auto events=c.events.to(device),tokens=c.tokens.to(device),ids=c.ids.to(device),q=c.q.to(device);
     auto key=c.key.to(device),value=c.value.to(device),bias=c.bias.to(device);
     auto error=at::zeros({1},ids.options().dtype(at::kInt)),work=at::zeros({3},ids.options());
-    CannProgram p(device);auto result=append_tiled_attention(p,events,tokens,ids,q,key,value,bias,error,work,c.spec);p.finish();
+    DeviceProgram p(device);auto result=append_tiled_attention(p,events,tokens,ids,q,key,value,bias,error,work,c.spec);p.finish();
     for(I replay=0;replay<3;++replay) {
       if(replay==1){c.q.mul_(-1);c.value.mul_(-.5);c.bias.mul_(2);}
       if(replay==2){c.q.zero_();c.bias.zero_();c.value.fill_(40000);c.value[-1].zero_();}
@@ -113,7 +114,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("attention payload requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("attention payload requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("attention payload requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     check(device,args.dtype);runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}

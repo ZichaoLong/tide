@@ -1,3 +1,4 @@
+#include "device_allocator.h"
 #pragma once
 // Included by owner_stream_check.cpp after its comparison helpers.
 namespace {
@@ -18,13 +19,13 @@ void shared_sequence(const std::vector<at::Device>& devices) {
   std::vector<int64_t> baseline;
   for(auto d:devices) {
     portable_torch::synchronize(d);
-    baseline.push_back(c10_npu::NPUCachingAllocator::getDeviceStats(d.index()).allocated_bytes[0].current);
-    c10_npu::NPUCachingAllocator::resetPeakStats(d.index());
+    baseline.push_back(tide::device_online::allocator::getDeviceStats(d.index()).allocated_bytes[0].current);
+    tide::device_online::allocator::resetPeakStats(d.index());
   }
-  std::vector<std::unique_ptr<CannProgram>> programs;
+  std::vector<std::unique_ptr<DeviceProgram>> programs;
   for(size_t d=0;d<2;++d) {
     send.push_back(at::zeros({capacity},outputs[d].options()));receive.push_back(at::zeros_like(send.back()));
-    programs.push_back(std::make_unique<CannProgram>(devices[d]));programs.back()->limit_workspace(1024*1024);
+    programs.push_back(std::make_unique<DeviceProgram>(devices[d]));programs.back()->limit_workspace(1024*1024);
   }
   const std::vector<std::pair<size_t,size_t>> pairs{{0,1},{1,0},{0,0},{1,1}};
   std::vector<OwnerStream> streams;int64_t metadata=0;
@@ -65,7 +66,7 @@ void shared_sequence(const std::vector<at::Device>& devices) {
     }
   }
   int64_t peak=0;for(size_t d=0;d<2;++d)
-    peak+=c10_npu::NPUCachingAllocator::getDeviceStats(devices[d].index()).allocated_bytes[0].peak-baseline[d];
+    peak+=tide::device_online::allocator::getDeviceStats(devices[d].index()).allocated_bytes[0].peak-baseline[d];
   const int64_t reserved=4*4*capacity+metadata;
   require(peak<reserved+12*1024*1024,"shared packets allocated per group instead of per device");
   std::cout<<"owner-stream-shared {\"groups\":36,\"replays\":5,\"reserved_bytes\":"<<reserved

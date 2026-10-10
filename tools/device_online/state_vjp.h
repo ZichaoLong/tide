@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 
 namespace tide::device_online {
 // Borrowed actual forward records. No CPU event trace is accepted by the
@@ -33,7 +33,7 @@ struct StateVjp {
 // FP16 forward parameters retain their dtype; journal values are exact FP32
 // widenings. Add replay rounds each forward tick, while all cotangents and
 // returned adjoints accumulate in FP32. No whole-forward FP32 substitution.
-StateVjp append_state_vjp(CannProgram&, const StateTape&, const StateCotangents&,
+StateVjp append_state_vjp(DeviceProgram&, const StateTape&, const StateCotangents&,
                          const at::Tensor& error, int64_t workspace_bytes,
                          int64_t repeat_chunk_ticks=256);
 } // namespace tide::device_online

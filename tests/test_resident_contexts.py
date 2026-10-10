@@ -3,6 +3,7 @@ from dataclasses import replace
 import os
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import (GraphRuntime, ExecutionOptions, ExecutionPlacement, ResidentLimits,
                        ResidentTrainingLimits, ResidentPlacement)
 from tidegraph.compare import equivalent
@@ -29,7 +30,7 @@ def runtime(family, device, schedule, memory):
 
 def placement(target, cards):
     first = torch.device(target).index
-    return ResidentPlacement(devices=tuple(f"npu:{first+i}" for i in range(cards))) if cards>1 else None
+    return ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None
 
 
 @pytest.mark.parametrize("family,schedule,memory,cards", [

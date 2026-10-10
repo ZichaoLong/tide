@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include "packed_queue.h"
 
 namespace tide::device_online {
@@ -22,12 +22,12 @@ class QueueTransaction {
   const at::Tensor& stats() const {return stats_;} // [current live count, peak]
   // consumed: int32[capacity], exactly 0/1. Complete-fiber selection is the
   // scheduler's obligation. This primitive preserves survivor/arrival order.
-  void append_stage(CannProgram&,const at::Tensor& consumed,const AtomBatch& incoming);
+  void append_stage(DeviceProgram&,const at::Tensor& consumed,const AtomBatch& incoming);
   // For several queues/state owners: share one sticky error, append ALL
   // proposals before ANY commit. Proposals snapshot payloads, including aliases
   // of another queue that will be overwritten in the same transaction group.
-  QueueProposal propose_stage(CannProgram&,const at::Tensor& consumed,const AtomBatch& incoming);
-  void commit_stage(CannProgram&,const QueueProposal&);
+  QueueProposal propose_stage(DeviceProgram&,const at::Tensor& consumed,const AtomBatch& incoming);
+  void commit_stage(DeviceProgram&,const QueueProposal&);
  private:
   int64_t capacity_,width_,nodes_,samples_;
   AtomBatch atoms_;

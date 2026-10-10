@@ -19,7 +19,7 @@ inline void optimizer_finite_check(at::Device device) {
     ParameterVjp gradient{registry.owners(),{0},at::zeros({width},f),at::ones({1},f.dtype(at::kBool))};
     OptimizerGroup group;group.parameters={"weight"};group.lr=.125;
     DeviceOptimizer optimizer(gradient,DeviceOptimizerKind::sgd,{group},1024*1024);
-    auto error=at::zeros({1},f.dtype(at::kInt));CannProgram program(device);
+    auto error=at::zeros({1},f.dtype(at::kInt));DeviceProgram program(device);
     optimizer.append_step(program,gradient,error);program.finish();
     auto snapshot=[&] {std::vector<Tensor> out;for(const auto& x:{optimizer.values(),optimizer.first(),optimizer.second(),
       optimizer.maximum(),optimizer.steps(),optimizer.corrections()})out.push_back(x.cpu().view(at::kByte).clone());return out;};

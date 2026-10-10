@@ -113,12 +113,12 @@ void run(at::Device device,Index d,Index slots,int kind,int mode,at::ScalarType 
   auto messages=at::zeros_like(t.fiber_values),partials=at::zeros_like(messages),error=at::zeros({1},messages.options().dtype(at::kInt));
   AggregateVjp out{at::zeros_like(t.aggregate.weights),at::zeros({3,slots},connected.options()),at::zeros({1},count.options())};
   if(d==1&&kind==1&&mode==0) {
-    bool refused=false;try {CannProgram small(device);
+    bool refused=false;try {DeviceProgram small(device);
       append_aggregate_vjp(small,t,links,count,range,gradient,connected,messages,partials,out,error,1,1);
     }catch(const std::invalid_argument&){refused=true;}
     if(!refused)throw std::runtime_error("Aggregate VJP ignored tensor budget");
   }
-  CannProgram p(device);p.limit_workspace(32*1024*1024);
+  DeviceProgram p(device);p.limit_workspace(32*1024*1024);
   for(const auto& x:{messages,partials,out.values,out.connected,out.chunks})p.zero(x);
   append_aggregate_vjp(p,t,links,count,range,gradient,connected,messages,partials,out,error,mode==1?4:1,32*1024*1024);p.finish();
   for(Index rows:{6,2,0}) {

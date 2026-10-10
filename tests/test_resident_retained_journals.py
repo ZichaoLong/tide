@@ -2,6 +2,7 @@
 import json
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement
 from resident_training_cases import runtime
 from test_resident_training import target, training_case
@@ -17,7 +18,7 @@ from test_resident_training import target, training_case
 ])
 def test_compact_journal_training(target,family,cards,schedule,full,aggregation,mode,tmp_path):
     start=torch.device(target).index
-    placement=ResidentPlacement(devices=tuple(f"npu:{start+i}" for i in range(cards))) if cards>1 else None
+    placement=ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None
     # Includes CPU autograd, aliases, None/zero roots, SGD/AdamW state and a
     # checkpoint suffix. Different windows have different actual tape extents.
     records=training_case(target,family,schedule,"adamw" if cards>1 else "sgd",tmp_path,

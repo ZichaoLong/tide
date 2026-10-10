@@ -1,8 +1,8 @@
-#include "cann_program.h"
-#include "cann_api.h"
+#include "device_backend.h"
+#include "device_program.h"
 #include "queue_closure.h"
 #include "portable_torch/runtime.hpp"
-#include "aclrtlaunch_tide_closure.h"
+#include "device_launch_tide_closure.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
 #include <iostream>
@@ -13,10 +13,7 @@ using namespace tide::device_online;
 using I=int64_t;
 uint8_t* address(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
 void check(at::Device device) {
-  CannApi api;
-  auto soc=CannApi::symbol<const char*(*)()>(api.runtime,"aclrtGetSocName")();
-  if(!soc||std::string(soc)!=TIDE_ASCENDC_SOC)
-    throw std::runtime_error("Ascend C closure binary does not match actual SoC");
+  validate_kernel_device(device);
   at::NoGradGuard guard;
   auto longs=at::TensorOptions().device(device).dtype(at::kLong),ints=longs.dtype(at::kInt);
   const I capacity=16,nodes=4,regions=3,samples=2;
@@ -35,10 +32,10 @@ void check(at::Device device) {
     auto calls=at::zeros({1},longs),one=at::ones({1},longs),again=at::zeros({1},ints);
     auto ownership=metadata.owners(),distances=metadata.distances();
     portable_torch::synchronize(device);
-    CannProgram program(device);
+    DeviceProgram program(device);
     auto active=program.label(),end=program.label();
     program.kernel([=](void* stream) {
-      CannApi::check(ACLRT_LAUNCH_KERNEL(tide_closure)(1,stream,address(coords),address(valid),
+      check_device_launch(TIDE_LAUNCH_KERNEL(tide_closure)(1,stream,address(coords),address(valid),
         address(ownership),address(distances),address(workspace),address(stop),address(ready),
         address(go),address(error),capacity,nodes,regions,samples,I(prefill)),"launch Ascend C closure");
     },{coords,valid,ownership,distances,workspace,stop,ready,go,error});
@@ -87,7 +84,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("closure check requires explicit NPU and float32");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("closure check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("closure check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device);return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

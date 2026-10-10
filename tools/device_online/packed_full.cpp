@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "packed_full.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_full_plan.h"
+#include "device_launch_tide_full_plan.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <limits>
@@ -23,7 +23,7 @@ namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data
 PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const at::Tensor& bias,at::Device device,int64_t max_rows,int64_t budget)
     :nodes_(kinds.size()),width_(bias.defined()&&bias.dim()==2?bias.size(1):0),chunk_(max_rows),any_tanh_(false),
      dtype_(bias.defined()?bias.scalar_type():at::kFloat) {
-  if(at::GradMode::is_enabled()||nodes_<1||width_<1||max_rows<1||budget<1||device.type()!=c10::DeviceType::PrivateUse1||!bias.device().is_cpu()
+  if(at::GradMode::is_enabled()||nodes_<1||width_<1||max_rows<1||budget<1||device.type()!=tide::device_online::resident_device_type||!bias.device().is_cpu()
       ||(dtype_!=at::kFloat&&dtype_!=at::kHalf)||bias.sizes()!=at::IntArrayRef{nodes_,width_}
       ||weight.sizes()!=at::IntArrayRef{nodes_,width_,width_}||weight.device()!=bias.device()||weight.scalar_type()!=dtype_
       ||bias.requires_grad()||weight.requires_grad())throw std::invalid_argument("packed Full requires matching CPU FP32/FP16 parameters, NPU and no-grad");
@@ -40,7 +40,7 @@ PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const
     biases_=at::cat({bias,at::zeros({1,width_},bias.options())},0).to(device).contiguous();
   }
 }
-ActionBatch PackedFull::append_stage(CannProgram& p,const ActionBatch& content,const at::Tensor& comparison,const at::Tensor& error) {
+ActionBatch PackedFull::append_stage(DeviceProgram& p,const ActionBatch& content,const at::Tensor& comparison,const at::Tensor& error) {
   if(!content.values.defined()||content.values.dim()!=2)throw std::invalid_argument("invalid packed Full value buffer");
   const auto rows=content.values.size(0),width=width_,chunk=chunk_,nodes=nodes_;
   if(rows<1||rows>std::numeric_limits<int64_t>::max()/4/width-chunk||content.values.size(1)!=width||comparison.sizes()!=content.values.sizes()
@@ -62,7 +62,7 @@ ActionBatch PackedFull::append_stage(CannProgram& p,const ActionBatch& content,c
   p.copy(output.narrow(0,0,rows),content.values); // Identity Full is exactly content.
   const auto kinds=kinds_,chunks=chunks_;
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_full_plan)(1,stream,ptr(content.coordinates),ptr(content.valid),
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_full_plan)(1,stream,ptr(content.coordinates),ptr(content.valid),
     ptr(kinds),ptr(cursor),ptr(source),ptr(parameters),ptr(destination),ptr(branch),ptr(chunks),ptr(error),rows,nodes,chunk,int64_t(1)),
     "pack selected Full actions");},{content.coordinates,content.valid,kinds,cursor,source,parameters,destination,branch,chunks,error});
   p.branch(branch,{done,body});p.mark(body);

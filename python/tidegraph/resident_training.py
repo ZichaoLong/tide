@@ -1,4 +1,4 @@
-"""Python client of the explicit C++/CANN training owner, never a CPU routing pass."""
+"""Python client of the explicit C++ resident training owner, never a CPU routing pass."""
 from dataclasses import replace
 from pathlib import Path
 import torch
@@ -147,7 +147,7 @@ class ResidentTrainingSession:
         return export(self.runtime, self.owner.checkpoint())
 
     def snapshot_device(self, *, max_bytes, compact=False, device_budgets=None):
-        """Save detached state on NPU; does not copy parameters or optimizer."""
+        """Save detached state on the resident device; does not copy parameters or optimizer."""
         from .coordinates import integers
         self._check()
         integers("device continuation budget", max_bytes)

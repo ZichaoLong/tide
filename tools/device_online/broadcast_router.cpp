@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "broadcast_router.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_broadcast_route.h"
+#include "device_launch_tide_broadcast_route.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <stdexcept>
@@ -18,10 +18,9 @@ BroadcastRouter::BroadcastRouter(int64_t nodes,int64_t samples,const std::vector
     :nodes_(nodes),samples_(samples),edges_(edges.size()),capacity_(capacity),device_(device) {
   if(nodes<1||samples<1||capacity<1||nodes>=std::numeric_limits<int64_t>::max()/8
       ||capacity>std::numeric_limits<int64_t>::max()/48||at::GradMode::is_enabled()
-      ||device.type()!=c10::DeviceType::PrivateUse1)
+      ||device.type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("broadcast router requires bounded dimensions, NPU and no-grad");
-  CannApi api;auto soc=CannApi::symbol<const char*(*)()>(api.runtime,"aclrtGetSocName")();
-  if(!soc||std::string(soc)!=TIDE_ASCENDC_SOC)throw std::runtime_error("router binary differs from actual SoC");
+  validate_kernel_device(device);
   std::vector<std::vector<int64_t>> outgoing(nodes);
   std::vector<int64_t> offsets{0},order,targets,delays;
   for(int64_t e=0;e<edges_;++e) {
@@ -35,7 +34,7 @@ BroadcastRouter::BroadcastRouter(int64_t nodes,int64_t samples,const std::vector
   offsets_=at::tensor(offsets,at::kLong).to(device);edges_by_source_=at::tensor(order,at::kLong).to(device);
   targets_=at::tensor(targets,at::kLong).to(device);delays_=at::tensor(delays,at::kLong).to(device);
 }
-AtomBatch BroadcastRouter::append_stage(CannProgram& p,const ActionBatch& action,
+AtomBatch BroadcastRouter::append_stage(DeviceProgram& p,const ActionBatch& action,
                                        const at::Tensor& scales,const at::Tensor& error) const {
   if(!action.coordinates.defined()||action.coordinates.dim()!=2||action.coordinates.size(0)<1
       ||!action.values.defined()||action.values.dim()!=2||action.values.size(1)<1)
@@ -60,7 +59,7 @@ AtomBatch BroadcastRouter::append_stage(CannProgram& p,const ActionBatch& action
   const auto offsets=offsets_,edge_ids=edges_by_source_,targets=targets_,delays=delays_;
   const auto capacity=capacity_,nodes=nodes_,samples=samples_,edge_count=edges_;
   p.kernel([=](void* stream) {
-    CannApi::check(ACLRT_LAUNCH_KERNEL(tide_broadcast_route)(1,stream,address(action.coordinates),
+    check_device_launch(TIDE_LAUNCH_KERNEL(tide_broadcast_route)(1,stream,address(action.coordinates),
       address(action.valid),address(offsets),address(edge_ids),address(targets),address(delays),
       address(out.coordinates),address(out.valid),address(value_order),address(scale_order),
       address(branch),address(error),rows,capacity,nodes,samples,edge_count),"device broadcast route");

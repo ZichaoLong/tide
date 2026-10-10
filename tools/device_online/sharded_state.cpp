@@ -1,6 +1,6 @@
 #include "sharded_state.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_state_shard_merge.h"
+#include "device_backend.h"
+#include "device_launch_tide_state_shard_merge.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <algorithm>
 
@@ -14,7 +14,7 @@ std::vector<std::vector<int64_t>> owned_nodes(const FullPlacement& p,int64_t nod
 long double common_bytes(const ContentProfile& p,const FullPlacement& placement,const ContentLimits& l) {
   return placement.devices.size()*(96.L*l.queue*(8.L*p.width+64)+16.L*p.graph.nodes.size()+4096);
 }
-void merge_error(CannProgram& p,const at::Tensor& from,const at::Tensor& to) {
+void merge_error(DeviceProgram& p,const at::Tensor& from,const at::Tensor& to) {
   auto zero=at::zeros_like(from),ok=at::zeros({1},from.options().dtype(at::kBool)),branch=at::zeros_like(from);
   auto copy=p.label(),done=p.label();p.equal(from,zero,ok);p.cast_index(ok,branch);
   p.branch(branch,{copy,done});p.mark(copy);p.copy(to,from);p.mark(done);
@@ -70,7 +70,7 @@ std::vector<Tensor> ShardedState::continuation_tensors() const {
   for(const auto& s:impl_->shards){auto xs=s.owner->continuation_tensors();out.insert(out.end(),xs.begin(),xs.end());}
   return out;
 }
-void ShardedState::append_read(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,const at::Tensor& stage,
+void ShardedState::append_read(DeviceProgram& p,const ReadyBatch& ready,const ContentBatch& content,const at::Tensor& stage,
     const at::Tensor& error,int64_t operator_budget) {
   const auto rows=ready.fibers.size(0);auto scores=at::zeros({rows*2},content.scores.options());p.zero(scores);
   for(auto& s:impl_->shards) {
@@ -91,7 +91,7 @@ void ShardedState::append_read(CannProgram& p,const ReadyBatch& ready,const Cont
   }
   p.copy(content.scores,scores.narrow(0,0,rows));
 }
-ContentUpdate ShardedState::append_update(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,
+ContentUpdate ShardedState::append_update(DeviceProgram& p,const ReadyBatch& ready,const ContentBatch& content,
     const SelectionProposal& selection,const at::Tensor& stage,const at::Tensor& event_count,const at::Tensor& error) {
   const auto rows=ready.fibers.size(0),width=content.content.size(1);const int64_t diagnostics=impl_->limits.diagnostics;
   auto comparison=at::zeros({rows*2,width},content.content.options());
@@ -111,22 +111,22 @@ ContentUpdate ShardedState::append_update(CannProgram& p,const ReadyBatch& ready
     append_state_shard_scatter(p,s.packed,s.result.comparison,comparison);
     if(diagnostics)append_state_shard_scatter(p,s.packed,s.result.event_values,values);
     const auto packed=s.packed;const auto result=s.result;
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_shard_merge)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_shard_merge)(1,stream,
       ptr(ready.fibers),ptr(ready.counts),ptr(packed.fiber_rows),ptr(packed.ready.counts),ptr(result.event_meta),
       ptr(out.event_meta),ptr(out.actions.coordinates),ptr(event_count),ptr(error),rows,diagnostics,int64_t(0)),"restore global state event identities");},
       {ready.fibers,ready.counts,packed.fiber_rows,packed.ready.counts,result.event_meta,out.event_meta,out.actions.coordinates,event_count,error});
   }
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_shard_merge)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_shard_merge)(1,stream,
     ptr(ready.fibers),ptr(ready.counts),ptr(ready.counts),ptr(ready.counts),ptr(out.event_meta),ptr(out.event_meta),
     ptr(out.actions.coordinates),ptr(event_count),ptr(error),rows,diagnostics,int64_t(1)),"count complete global state stage");},
     {ready.fibers,ready.counts,out.event_meta,out.actions.coordinates,event_count,error});
   return out;
 }
-void ShardedState::append_commit(CannProgram& p,const at::Tensor& error) {
+void ShardedState::append_commit(DeviceProgram& p,const at::Tensor& error) {
   for(auto& s:impl_->shards)if(s.remote)s.remote->append_commit(p,error);
     else s.owner->append_commit(p,s.update,s.read,s.selection,error);
 }
-void ShardedState::append_stop(CannProgram& p){for(auto& s:impl_->shards)if(s.remote)s.remote->append_stop(p);}
+void ShardedState::append_stop(DeviceProgram& p){for(auto& s:impl_->shards)if(s.remote)s.remote->append_stop(p);}
 void ShardedState::reset_window(){for(auto& s:impl_->shards)s.owner->reset_window();}
 void ShardedState::synchronize_inputs() const {for(const auto& s:impl_->shards){auto d=s.owner->state().values.device();c10::impl::VirtualGuardImpl(d.type()).synchronizeDevice(d.index());}}
 void ShardedState::submit(){for(auto& s:impl_->shards)if(s.remote)s.remote->submit();}

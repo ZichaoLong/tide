@@ -1,10 +1,10 @@
+#include "device_backend.h"
 #include "parameter_publish.h"
 #include "tide/fiber_attention.h"
 #include "packed_lh_full.h"
 #include "event_reverse.h"
 #include "packed_aggregate.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_parameter_publish.h"
+#include "device_launch_tide_parameter_publish.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <map>
@@ -19,14 +19,14 @@ void buffer(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid device parameter publication buffer");
 }
 }
-void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const ParameterVjp& registry,
+void append_parameter_publish(DeviceProgram& p,const ParameterBanks& b,const ParameterVjp& registry,
     const at::Tensor& values,const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!b.graph||!b.decay.defined()||b.decay.dim()!=2||budget<1
       ||registry.owners.size()!=registry.offsets.size()||!registry.values.defined())
     throw std::invalid_argument("parameter publication requires explicit no-grad owner/banks");
   const auto& g=*b.graph;const int64_t nodes=g.nodes.size(),width=b.decay.size(1),inputs=g.inputs.size(),edges=g.edges.size(),ports=g.outputs.size();
   const auto device=b.decay.device();const auto dtype=b.decay.scalar_type();
-  if(device.type()!=c10::DeviceType::PrivateUse1||width<1||nodes<1||(dtype!=at::kFloat&&dtype!=at::kHalf))
+  if(device.type()!=tide::device_online::resident_device_type||width<1||nodes<1||(dtype!=at::kFloat&&dtype!=at::kHalf))
     throw std::invalid_argument("parameter publication requires NPU FP32/FP16 payload banks");
   const int64_t fp16=dtype==at::kHalf;
   buffer(values,device,at::kFloat,registry.values.sizes());buffer(error,device,at::kInt,{1});
@@ -120,7 +120,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   const auto fo=fibers?b.fiber.projection:dummy,fob=fibers?b.fiber.projection_bias:dummy;
   const auto fd=fibers?b.fiber.decay:dummy,fp=learned_pool?b.fiber.pool:dummy;
   const auto ew=emission?b.projections.weights:dummy,eb=emission?b.projections.biases:dummy;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
     ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),
     ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(ew),ptr(eb),ptr(error),count,tasks,fp16),
     "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,fq,fqb,fo,fob,fd,fp,ew,eb,error});

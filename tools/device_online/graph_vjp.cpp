@@ -1,12 +1,12 @@
+#include "device_backend.h"
 #include "graph_vjp.h"
 #include "emission_vjp.h"
 #include "aggregate_vjp.h"
 #include "event_reverse.h"
 #include "fiber_reverse.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_graph_reverse_meta.h"
-#include "aclrtlaunch_tide_graph_reverse_payload.h"
-#include "aclrtlaunch_tide_graph_reverse_scales.h"
+#include "device_launch_tide_graph_reverse_meta.h"
+#include "device_launch_tide_graph_reverse_payload.h"
+#include "device_launch_tide_graph_reverse_scales.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 #include <algorithm>
@@ -19,19 +19,19 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid graph cotangent buffer");
 }
 }
-GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+GraphVjp append_graph_vjp(DeviceProgram& p,const ReverseTape& t,const GraphCotangents& roots,
                          const at::Tensor& error,int64_t chunk,int64_t budget) {
   return append_graph_vjp(p,t,roots,error,chunk,budget,{});
 }
-GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+GraphVjp append_graph_vjp(DeviceProgram& p,const ReverseTape& t,const GraphCotangents& roots,
                          const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage) {
   return append_graph_vjp(p,t,roots,error,chunk,budget,full_stage,{});
 }
-GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+GraphVjp append_graph_vjp(DeviceProgram& p,const ReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner,int64_t projection_workspace) {
   return append_graph_vjp(p,t,roots,error,chunk,budget,full_stage,state_owner,projection_workspace,{});
 }
-GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+GraphVjp append_graph_vjp(DeviceProgram& p,const ReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner,
     int64_t projection_workspace,const std::vector<ProjectionGradient>& reuse) {
   const bool sharded=bool(state_owner.stage);
@@ -71,7 +71,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   const long double own=extra_bytes+4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
     +16.L*samples*nodes*width+16.L*nodes*width+(t.full.has_tanh?4.L*nodes*(width*static_cast<long double>(width)+width):0.L)
     +8.L*total+16.L*capacity+32.L*samples*nodes+32.L*nodes+physical+1024;
-  if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||width<1||nodes<1||samples<1||chunk<1||budget<1||own>budget/2.L)
+  if(device.type()!=tide::device_online::resident_device_type||capacity<1||width<1||nodes<1||samples<1||chunk<1||budget<1||own>budget/2.L)
     throw std::invalid_argument("graph VJP tensor budget exceeded");
   tensor(roots.outputs,device,at::kFloat,{outputs,width});tensor(roots.outputs_connected,device,at::kBool,{outputs});
   tensor(roots.pending,device,at::kFloat,{pending,width});tensor(roots.pending_connected,device,at::kBool,{pending});
@@ -138,7 +138,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto meta=[&](int64_t mode,const at::Tensor& fh,const at::Tensor& fc,const at::Tensor& fp,const StateVjp& s) {
     // Unused arguments point at owned buffers of the right scalar type; mode
     // dispatch occurs on device before they are read.
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_meta)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_graph_reverse_meta)(1,stream,
       ptr(t.state.metadata),ptr(links.stage_offsets),ptr(links.stages),ptr(links.messages),ptr(links.valid),
       ptr(links.producer_head),ptr(links.producer_next),ptr(links.consumer_head),ptr(links.consumer_next),
       ptr(links.scale_head),ptr(links.scale_next),ptr(roots.pending_connected),ptr(roots.outputs_connected),ptr(roots.final_connected),
@@ -155,7 +155,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   StateVjp dummy;dummy.content_connected=full_on;dummy.decay_connected=dcon;dummy.retention_connected=rcon;
   auto payload=[&](int64_t mode,const at::Tensor& fh,const at::Tensor& fc,const at::Tensor& sh,const at::Tensor& shc) {
     const auto aggregate_kinds=normalized?t.aggregate.kinds:t.state.count;
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_payload)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_graph_reverse_payload)(32,stream,
       ptr(t.state.values),ptr(t.fiber_values),ptr(links.messages),ptr(links.scales),ptr(links.producer_head),ptr(links.producer_next),
       ptr(links.consumer_head),ptr(links.consumer_next),ptr(roots.pending),ptr(roots.outputs),ptr(roots.final),
       ptr(messages),ptr(connected),ptr(carry),ptr(carry_on),ptr(stage_values),ptr(full_grad),ptr(range),ptr(stage_count),
@@ -205,7 +205,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   if(emission.gradient.program)emission.gradient.program->append_stop(p);
   meta(4,full_on,full_on,out.full_connected,dummy);
   const auto emission_rows=affine?emission.rows:links.messages,emission_values=affine?t.emission.values:t.full_values;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_scales)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_graph_reverse_scales)(32,stream,
     ptr(links.messages),ptr(links.scale_head),ptr(links.scale_next),ptr(messages),ptr(connected),ptr(aggregate_partials),
     ptr(t.full_values),ptr(scalar_partials),ptr(error),ptr(emission_rows),ptr(emission_values),physical,width,int64_t(affine)),"ordered physical scale adjoints");},
     {links.messages,links.scale_head,links.scale_next,messages,connected,aggregate_partials,t.full_values,scalar_partials,error,emission_rows,emission_values});

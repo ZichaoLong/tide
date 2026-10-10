@@ -124,7 +124,7 @@ void run(at::Device device,I width,int kind,int mode,at::ScalarType payload,bool
     if(!different)throw std::runtime_error("extended Full half anchor does not distinguish unrounded recomputation");
   }
   auto g=f.base.gradient.to(device),on=f.base.connected.to(device),error=at::zeros({1},g.options().dtype(at::kInt));
-  CannProgram p(device);p.limit_workspace(64*1024*1024);auto result=append_full_vjp(p,t,g,on,error,mode==1?4:1,64*1024*1024);p.finish();
+  DeviceProgram p(device);p.limit_workspace(64*1024*1024);auto result=append_full_vjp(p,t,g,on,error,mode==1?4:1,64*1024*1024);p.finish();
   for(I count:{19,7,0}) {
     f.base.tape.count.fill_(count);t.count.copy_(f.base.tape.count);portable_torch::synchronize(device);p.run();
     if(error.cpu().item<int>())throw std::runtime_error("extended Full refused valid tape");

@@ -1,10 +1,10 @@
 #include "fiber_reverse.h"
 #include "fiber_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_fiber_reverse_links.h"
-#include "aclrtlaunch_tide_fiber_reverse_plan.h"
-#include "aclrtlaunch_tide_fiber_reverse_pack.h"
-#include "aclrtlaunch_tide_fiber_reverse_fold.h"
+#include "device_backend.h"
+#include "device_launch_tide_fiber_reverse_links.h"
+#include "device_launch_tide_fiber_reverse_plan.h"
+#include "device_launch_tide_fiber_reverse_pack.h"
+#include "device_launch_tide_fiber_reverse_fold.h"
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
@@ -17,7 +17,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid fiber reverse tape");
 }
 }
-FiberReverse prepare_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,
+FiberReverse prepare_fiber_reverse(DeviceProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
   const auto& a=g.cache;const auto device=a.key.device();
   const auto payload=a.key.scalar_type();
@@ -40,7 +40,7 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const StateReverseView& t,cons
   out.node_offsets=at::tensor(t.layout.fiber_offsets,at::kLong).to(device);
   auto hash=at::empty({buckets},a.lengths.options()),scratch=at::empty_like(out.tokens);
   const int64_t inputs=t.layout.inputs,sources=t.layout.sources;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_links)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(a.mapping),ptr(a.config),ptr(a.metadata),ptr(a.count),ptr(a.lengths),ptr(t.state.clock_policy),
     ptr(links.consumer_head),ptr(links.consumer_next),ptr(t.fiber_meta),ptr(t.sources),ptr(hash),ptr(out.ranges),ptr(out.previous),ptr(out.tails),
     ptr(out.cache.lengths),ptr(out.tokens),ptr(scratch),ptr(out.ticks),ptr(error),events,rows,k,nodes,ps,a.samples,buckets,fibers,inputs,sources,t.state.max_repeat_ticks),
@@ -49,7 +49,7 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const StateReverseView& t,cons
      t.fiber_meta,t.sources,hash,out.ranges,out.previous,out.tails,out.cache.lengths,out.tokens,scratch,out.ticks,error});
   return out;
 }
-ReverseBatchPlan append_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
+ReverseBatchPlan append_fiber_reverse(DeviceProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
     const at::Tensor& stage,const StateVjp& state,const at::Tensor& messages,const at::Tensor& message_on,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
@@ -72,14 +72,14 @@ ReverseBatchPlan append_fiber_reverse(CannProgram& p,const StateReverseView& t,c
   auto source_counts=at::tensor(t.layout.source_counts,at::kLong).to(a.key.device());
   auto table=at::empty({c*6,5},l),tiles=at::empty({c*6+1},l),table_count=at::empty({2},l);
   const auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_reverse_plan)(1,stream,
     ptr(t.state.metadata),ptr(a.config),ptr(reverse.ranges),ptr(reverse.previous),ptr(reverse.tails),ptr(stage),ptr(state.proposal_connected),
     ptr(reverse.cache.key_connected),ptr(reverse.cache.value_connected),ptr(reverse.cache.bias_connected),ptr(plan),ptr(flags),ptr(branch),ptr(error),owners,ps,c),
     "pack independent fiber cache owners for reverse progression");},
     {t.state.metadata,a.config,reverse.ranges,reverse.previous,reverse.tails,stage,state.proposal_connected,reverse.cache.key_connected,
      reverse.cache.value_connected,reverse.cache.bias_connected,plan,flags,branch,error});
   p.branch(branch,{done,body});p.mark(body);
-  for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_pack)(phase?32:1,stream,
+  for(int64_t phase:{0,1})p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_reverse_pack)(phase?32:1,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(reverse.tokens),ptr(t.fiber_meta),ptr(t.sources),ptr(links.messages),ptr(links.scales),ptr(t.fiber_values),
     ptr(a.values),ptr(reverse.ticks),ptr(a.qkv),ptr(g.qkv_bias),ptr(a.projection),ptr(g.pool_kinds),ptr(g.pool_lengths),ptr(g.pool_weights),
     ptr(state.proposal),ptr(reverse.cache.key),ptr(reverse.cache.value),ptr(reverse.cache.bias),ptr(in.rows),ptr(in.slots),ptr(in.counts),
@@ -91,7 +91,7 @@ ReverseBatchPlan append_fiber_reverse(CannProgram& p,const StateReverseView& t,c
      in.rows,in.slots,in.counts,in.key,in.value,in.bias,in.lengths,in.old_lengths,in.ticks,in.qkv,in.qkv_bias,in.projection,in.pool_kinds,in.pool_lengths,
      in.pool_weights,in.cotangent,in.connected,in.key_root,in.value_root,in.bias_root,in.key_on,in.value_on,in.bias_on,error});
   auto local=append_fiber_vjp(p,in,error,reservation.query_rows,reservation.key_rows,budget/2);
-  for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_fold)(phase?32:1,stream,
+  for(int64_t phase:{0,1})p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_reverse_fold)(phase?32:1,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(reverse.tokens),ptr(links.messages),ptr(links.scales),ptr(t.fiber_values),ptr(reverse.node_offsets),ptr(source_counts),
     ptr(local.rows),ptr(local.rows_connected),ptr(local.key),ptr(local.value),ptr(local.bias),ptr(local.cache_connected),ptr(local.qkv),ptr(local.qkv_bias),
     ptr(local.projection),ptr(local.projection_bias),ptr(local.decay),ptr(local.pool),ptr(local.parameter_connected),ptr(messages),ptr(message_on),ptr(scale_partials),

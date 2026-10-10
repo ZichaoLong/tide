@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_parameter_sources.h"
 #include "sharded_state_vjp.h"
 #include "parameter_plan.h"
@@ -11,7 +12,7 @@ namespace tide::device_online {
 namespace {
 ParameterContribution slice(const at::Tensor& values,const at::Tensor& connected,
                             int64_t offset,int64_t size,int64_t connection) {
-  if(!values.defined()||!connected.defined()||values.device().type()!=c10::DeviceType::PrivateUse1
+  if(!values.defined()||!connected.defined()||values.device().type()!=tide::device_online::resident_device_type
       ||values.device()!=connected.device()||values.scalar_type()!=at::kFloat||connected.scalar_type()!=at::kBool
       ||!values.is_contiguous()||!connected.is_contiguous()||values.requires_grad()||connected.requires_grad()
       ||offset<0||size<1||size>values.numel()||offset>values.numel()-size||connection<0||connection>=connected.numel())

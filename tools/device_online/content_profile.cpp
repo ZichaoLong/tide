@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_profile.h"
 #include "tide/kernel.h"
 #include "tide/lh_full.h"
@@ -9,8 +10,8 @@
 
 namespace tide::device_online {
 ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_upload):graph(std::move(g)),model(std::move(m)) {
-  if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1)
-    throw std::invalid_argument("content flow requires explicit no-grad NPU");
+  if(at::GradMode::is_enabled()||device.type()!=tide::device_online::resident_device_type)
+    throw std::invalid_argument("content flow requires explicit no-grad device");
   const auto destination=defer_upload?at::Device(at::kCPU):device;
   graph.compile();
   for(const auto& n:graph.nodes) {
@@ -91,14 +92,14 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_uplo
   config=at::tensor(settings,at::kLong).reshape({-1,3}).to(destination);
 }
 void ContentProfile::upload(at::Device device) {
-  if(!sources.device().is_cpu()||device.type()!=c10::DeviceType::PrivateUse1)
-    throw std::invalid_argument("profile upload requires deferred CPU tables and explicit NPU");
+  if(!sources.device().is_cpu()||device.type()!=tide::device_online::resident_device_type)
+    throw std::invalid_argument("profile upload requires deferred CPU tables and explicit resident device");
   for(auto tensor:{&sources,&origins,&scales,&read,&read_modes,&read_kinds,&decay,&retention,&clock_policy,&config})
     if(tensor->defined())*tensor=tensor->to(device);
 }
 void ContentProfile::upload_routing(at::Device device) {
-  if(!sources.device().is_cpu()||device.type()!=c10::DeviceType::PrivateUse1)
-    throw std::invalid_argument("routing upload requires deferred CPU profile and explicit NPU");
+  if(!sources.device().is_cpu()||device.type()!=tide::device_online::resident_device_type)
+    throw std::invalid_argument("routing upload requires deferred CPU profile and explicit resident device");
   for(auto tensor:{&sources,&origins,&scales,&read_modes})if(tensor->defined())*tensor=tensor->to(device);
 }
 } // namespace tide::device_online

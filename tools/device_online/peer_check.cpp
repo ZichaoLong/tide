@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "peer_exchange.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -13,7 +14,7 @@ template<class F> void rejects(F f) {
   bool refused=false;try{f();}catch(const std::logic_error&){refused=true;}
   require(refused,"invalid peer layout/capacity/lifecycle accepted");
 }
-void run_pair(CannProgram& a,CannProgram& b) {
+void run_pair(DeviceProgram& a,DeviceProgram& b) {
   // Preserve the constructing thread's contexts. Submit both before waiting;
   // no host observes intermediate scalars or controls an iteration decision.
   a.submit();b.submit();
@@ -53,7 +54,7 @@ int check(at::Device device,at::ScalarType dtype) {
   rejects([&]{PeerExchange bad(outgoing,bytes,0);});
   PeerExchange send(outgoing,bytes),receive(incoming,bytes);
   require(send.packet_bytes()==bytes,"peer packet byte accounting differs");
-  CannProgram source(device),destination(other);
+  DeviceProgram source(device),destination(other);
   rejects([&]{send.append_send(destination);});
   rejects([&]{send.append_receive(source);});
   const auto head=source.label(),body=source.label(),end=source.label();
@@ -109,7 +110,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))
       throw std::invalid_argument("peer check requires explicit NPU FP32/FP16 and two visible devices");
     args.allow_npu_float16=true;const auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1||device.index()!=0)
+    if(device.type()!=tide::device_online::resident_device_type||device.index()!=0)
       throw std::invalid_argument("peer gate expects remapped logical npu:0 and npu:1");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);runtime.close();return 0;
   } catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}

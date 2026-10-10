@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "content_profile.h"
 #include "content_budget.h"
@@ -6,7 +7,7 @@
 #include "../../cpp/bench/streaming.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
-#include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
+#include "device_allocator.h"
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -77,8 +78,8 @@ Index windows(at::Device device) {
   for(auto policy:{ChunkPolicy::conservative,ChunkPolicy::aggressive})for(bool prefill:{false,true}) {
     auto f=fixture(width);auto l=limits(budget,policy);l.prefill=prefill;
     portable_torch::synchronize(device);
-    const auto baseline=c10_npu::NPUCachingAllocator::getDeviceStats(device.index());
-    c10_npu::NPUCachingAllocator::resetPeakStats(device.index());
+    const auto baseline=tide::device_online::allocator::getDeviceStats(device.index());
+    tide::device_online::allocator::resetPeakStats(device.index());
     ContentFlow flow(f.graph,f.model,f.initial,device,l);Streaming cpu(f.graph,f.model,{});
     auto q=f.initial;Index previous=0;std::map<std::string,Index> observed;
     for(Index stop:{3,7,11}) {
@@ -109,7 +110,7 @@ Index windows(at::Device device) {
       observed=s;q=expected.continuation;previous=stop;++cases;
     }
     portable_torch::synchronize(device);
-    const auto measured=c10_npu::NPUCachingAllocator::getDeviceStats(device.index());
+    const auto measured=tide::device_online::allocator::getDeviceStats(device.index());
     const auto peak=measured.allocated_bytes[0].peak-baseline.allocated_bytes[0].current;
     // Isolated fixture calibration, including construction transients. This is
     // TorchNPU allocator accounting, not all vendor/driver HBM or a free-HBM guarantee.
@@ -131,13 +132,13 @@ Index workspace(at::Device device) {
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   auto value=at::zeros({8},opts),one=at::ones_like(value);Index needed=0;
   {
-    CannProgram p(device);p.limit_workspace(0);
+    DeviceProgram p(device);p.limit_workspace(0);
     refuses([&]{p.add(value,one);},"workspace budget exceeded before allocation");
     require(p.workspace_bytes()==0,"refused workspace was allocated");
     refuses([&]{p.finish();},"not open");p.close();
   }
   {
-    CannProgram p(device);p.add(value,one);needed=p.workspace_bytes();
+    DeviceProgram p(device);p.add(value,one);needed=p.workspace_bytes();
     // Two descriptors may view one storage. Count the actual allocation once.
     require(p.retained_tensor_bytes()==value.nbytes()+one.nbytes(),"tensor storage accounting duplicated aliases");
     p.add(value.narrow(0,0,4),one.narrow(0,0,4));
@@ -149,7 +150,7 @@ Index workspace(at::Device device) {
   }
   value.zero_();portable_torch::synchronize(device);
   {
-    CannProgram p(device);p.limit_workspace(needed);p.add(value,one);
+    DeviceProgram p(device);p.limit_workspace(needed);p.add(value,one);
     p.add(value,one);require(p.workspace_bytes()==needed,"serial workspace reserved a sum instead of a maximum");
     refuses([&]{p.limit_workspace(needed);},"before numerical operations");p.finish();p.run();
     require(at::equal(value.cpu(),at::full({8},2.f,at::kFloat)),"exact workspace limit changed computation");p.close();
@@ -168,7 +169,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("memory gate requires explicit NPU FP32");
-    auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("memory gate requires NPU");
+    auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("memory gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     const auto a=workspace(device);std::cout<<"memory workspace/refusals="<<a<<" passed\n"<<std::flush;
     const auto b=windows(device);

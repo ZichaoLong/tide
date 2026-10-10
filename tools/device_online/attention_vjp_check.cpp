@@ -94,7 +94,7 @@ void check(at::Device device,Geometry g,at::ScalarType payload,bool anchor=false
   }
   AttentionVjpInput input{x.query.to(device),x.key.to(device),x.value.to(device),x.bias.to(device),x.lengths.to(device),x.cotangent.to(device),x.connected.to(device)};
   auto error=at::zeros({1},input.query.options().dtype(at::kInt));
-  CannProgram program(device);program.limit_workspace(64*1024*1024);
+  DeviceProgram program(device);program.limit_workspace(64*1024*1024);
   auto out=append_attention_vjp(program,input,error,1./std::sqrt(double(g.width)),g.tile,64*1024*1024);program.finish();
   for(int replay=0;replay<3;++replay) {
     x=fixture(g,replay,payload,anchor);
@@ -108,7 +108,7 @@ void check(at::Device device,Geometry g,at::ScalarType payload,bool anchor=false
   input.lengths[0].fill_(g.keys+1);portable_torch::synchronize(device);program.run();
   if(error.cpu().item<int>()!=2)throw std::runtime_error("invalid attention length accepted");
   program.close();bool refused=false;
-  try{CannProgram bad(device);append_attention_vjp(bad,input,error,1.,g.tile,1);}
+  try{DeviceProgram bad(device);append_attention_vjp(bad,input,error,1.,g.tile,1);}
   catch(const std::invalid_argument&){refused=true;}
   if(!refused)throw std::runtime_error("attention reverse memory budget ignored");
 }

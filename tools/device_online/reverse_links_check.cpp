@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "reverse_links.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -69,7 +70,7 @@ int windows(at::Device device,int shape,int variant,bool prefill,at::ScalarType 
   for(Index delta:{2,6,11,11}) {
     const auto stop=f.initial.cut+delta;std::vector<External> input;for(const auto& x:f.input)if(x.time>=previous&&x.time<stop)input.push_back(x);
     flow.advance_device(input,stop);auto tape=flow.reverse_tape();require(tape.cut==previous&&tape.stop==stop,"wrong reverse continuation boundary");
-    auto error=at::zeros({1},tape.state.count.options().dtype(at::kInt));CannProgram p(device);
+    auto error=at::zeros({1},tape.state.count.options().dtype(at::kInt));DeviceProgram p(device);
     auto links=append_reverse_links(p,tape,error,16*1024*1024);p.finish();portable_torch::synchronize(device);p.run();
     require(error.cpu().item<int>()==0,"valid actual forward dependencies refused");compare(tape,links);previous=stop;++cases;
   }
@@ -80,9 +81,9 @@ void refusals(at::Device device,at::ScalarType dtype) {
   auto tape=flow.reverse_tape();auto error=at::zeros({1},tape.state.count.options().dtype(at::kInt));
   // Clone metadata before corrupting it: these probes must not alter the live owner.
   auto malformed=tape;malformed.state.metadata=tape.state.metadata.clone();malformed.state.count=tape.state.count.clone();
-  malformed.state.metadata[0][12].fill_(1);CannProgram p(device);auto out=append_reverse_links(p,malformed,error,16*1024*1024);p.finish();
+  malformed.state.metadata[0][12].fill_(1);DeviceProgram p(device);auto out=append_reverse_links(p,malformed,error,16*1024*1024);p.finish();
   portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()==2&&!out.valid.cpu().any().item<bool>(),"malformed reverse stage accepted");
-  bool refused=false;try{CannProgram small(device);append_reverse_links(small,tape,error,1);}catch(const std::invalid_argument&){refused=true;}
+  bool refused=false;try{DeviceProgram small(device);append_reverse_links(small,tape,error,1);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"reverse-link budget refusal missing");
 }
 }
@@ -92,7 +93,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("reverse-link gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("reverse-link gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("reverse-link gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})cases+=windows(device,shape,variant,prefill,args.dtype);
     refusals(device,args.dtype);std::cout<<"device-reverse-links: passed windows="<<cases<<" scope=device_message_stage_links_not_graph_training\n";

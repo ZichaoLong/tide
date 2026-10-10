@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.20)
+project(tide_cuda_source_contracts LANGUAGES CXX)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+find_package(Torch REQUIRED)
+include_directories(${TORCH_INCLUDE_DIRS})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-ffp-contract=off)
+execute_process(COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/../generate_kernels.py"
+  --source "${CMAKE_CURRENT_SOURCE_DIR}/../../ascendc" --output "${CMAKE_CURRENT_BINARY_DIR}/generated"
+  --backend cpu COMMAND_ERROR_IS_FATAL ANY)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.." "${CMAKE_CURRENT_SOURCE_DIR}/../../ascendc" "${CMAKE_CURRENT_BINARY_DIR}/generated")
+include("${CMAKE_CURRENT_BINARY_DIR}/generated/targets.cmake")
+add_executable(tide-cuda-source-contract-check main.cpp ../../control_flow.cpp)
+target_link_libraries(tide-cuda-source-contract-check PRIVATE tide_closure_kernel)
+enable_testing()
+add_test(NAME cuda-source-contracts COMMAND tide-cuda-source-contract-check)

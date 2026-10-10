@@ -1,4 +1,5 @@
-#include "cann_sequence.h"
+#include "device_backend.h"
+#include "device_sequence.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
@@ -11,7 +12,7 @@ void check(at::Device device) {
   at::NoGradGuard guard;
   const auto options=at::TensorOptions().device(device).dtype(at::kLong);
   auto value=at::zeros({1},options),one=at::ones_like(value),iteration=at::zeros_like(value),limit=at::zeros_like(value);
-  CannSequence sequence(device,8,4*1024*1024);reject([&]{sequence.finish();});reject([&]{sequence.submit();});
+  DeviceSequence sequence(device,8,4*1024*1024);reject([&]{sequence.finish();});reject([&]{sequence.submit();});
   constexpr int64_t block=512,initial=(int64_t(1)<<55)+17;
   for(int i=0;i<8;++i) {
     auto& p=sequence.append();auto predicate=at::zeros({1},options.dtype(at::kBool)),index=at::zeros({1},options.dtype(at::kInt));
@@ -25,7 +26,7 @@ void check(at::Device device) {
   }
   sequence.close();sequence.close();reject([&]{sequence.submit();});
   // A one-program chain needs no notification and remains replayable.
-  CannSequence single(device,1,4*1024*1024);single.append().add(value,one);single.finish();
+  DeviceSequence single(device,1,4*1024*1024);single.append().add(value,one);single.finish();
   portable_torch::synchronize(device);single.run();require(value.cpu().item<int64_t>()==initial+2*block+1);single.close();
   std::cout<<"device-sequence: passed programs=8 static_add_tasks=4096 replays=4 exact_int64=true device_completion=true capacity_refused=true single_program=true\n";
 }
@@ -35,7 +36,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("sequence check requires explicit NPU FP32 runtime");
-    const auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
+    const auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(d);runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

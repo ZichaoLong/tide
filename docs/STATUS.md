@@ -12,15 +12,17 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
 `graph-execution-foundation`. Initial clean HEAD was c0ce4ee5. Stage contract
 05af8f8 and State/Read implementation132cada7b21081d7f611326e1e0971e057201b4c
-and correction8a4d60f are committed/pushed. Current uncommitted work: G1 metric/test/qualification
-entry corrections, G2 component profiler, and G3 CUDA resident backend.
+and correction8a4d60f plus Norm VJP rounding fixa02c18c are committed/pushed. Current uncommitted work: G2 component profiler and G3 CUDA resident backend.
+G1 metric/gate fixes and exact Norm VJP rounding are committed.
 Keep coherent commits and use clean immutable qualification after implementation.
 Do not edit a snapshot while its job runs. `TASK=/mi/data2T/zlong/tide-execution-flows`.
 
-1. Inspect the full G1 CPU gate and directed correction gate below. Close all
-   failures; commit G1 correction separately from unfinished CUDA code.
-2. Finish CUDA standalone/Python/consumer compile and backend-neutral public
-   target tests. Rebuild NPU shared backend after abstraction changes.
+1. Inspect clean a02c18c full G1 CPU qualification03. Corrections passed directed
+   gates and are committed. Preserve failed01 and cancelled02 records.
+2. Commit the reviewed G3 source/backend-neutral target entry after completed
+   standalone CUDA/CPU development gates. Then compile Python CUDA and installed
+   consumers plus both NPU runtimes from that clean fixed source. Complete the
+   source-related CPU host gate and retain actual GPU execution as target-pending.
 3. Profile NPU mixed/resident only with a current safe device allocation and
    fresh bounded budget; do not automatically retry the timed-out lease. Finish
    related CPU/NPU qualification and only justified selection measurements.
@@ -48,8 +50,13 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
 - `g1-norm-dev06`: terminal exit0,378 tests passed. Read VJP order fix in Python/C++, exact FP32-to-FP64
   regression witness, full norm/read/isolated-gradient/State directed tests.
   Frozen source/build/run of same name, plan `plans/g1-norm-dev06.sh`.
-  45min,8 build workers,CPUQuota1000%,16GiB,192 tasks. After passing, commit the
-  numerical fix before a new clean qualification; retain both prior gate records.
+  45min,8 build workers,CPUQuota1000%,16GiB,192 tasks. The numerical fix is
+  committed/pushed as a02c18c; both prior full gate records remain unchanged.
+- `g1-cpu-qualification03`: running clean committed a02c18c source, full CPU
+  FP64/FP32 plus complex and installed-consumer gates. Dedicated source/run;
+  exact matching immutable `builds/g1-norm-dev06` is reused by digest through
+  `qualify_library.py --reuse-build`. Plan `plans/g1-cpu-qualification03.sh`,
+  results `runs/g1-cpu-qualification03/gate`,90min,8 CPUs,16GiB,192 tasks.
 - `g1-regression-dev04`: terminal exit0/MainPID0,173 tests passed. Matching core
   build and online consumer (`builds/g1-online-dev04`) validated metric/clock and
   qualification plumbing. Earlier State/Read development passed193,1538 and324

@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "full_placement.h"
 #include "packed_lh_full.h"
 #include <algorithm>
@@ -11,8 +12,8 @@ void validate_full_placement(const FullPlacement& p,int64_t nodes,at::Device coo
     throw std::invalid_argument("Full placement requires one owner per node and nonempty shards");
   std::set<int> indices;std::vector<int64_t> members(p.devices.size());
   for(const auto d:p.devices)
-    if(d.type()!=c10::DeviceType::PrivateUse1||d.type()!=coordinator.type()||d.index()<0||!indices.insert(d.index()).second)
-      throw std::invalid_argument("Full placement requires distinct explicit logical NPUs");
+    if(d.type()!=tide::device_online::resident_device_type||d.type()!=coordinator.type()||d.index()<0||!indices.insert(d.index()).second)
+      throw std::invalid_argument("Full placement requires distinct explicit logical resident devices");
   for(const auto owner:p.owners) {
     if(owner<0||owner>=int64_t(members.size()))throw std::invalid_argument("invalid Full shard owner");
     ++members[owner];

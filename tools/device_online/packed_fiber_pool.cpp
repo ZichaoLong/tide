@@ -1,7 +1,7 @@
 #include "packed_fiber_pool.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_fiber_chunk.h"
-#include "aclrtlaunch_tide_fiber_pool.h"
+#include "device_backend.h"
+#include "device_launch_tide_fiber_chunk.h"
+#include "device_launch_tide_fiber_pool.h"
 #include <algorithm>
 
 namespace tide::device_online {
@@ -40,7 +40,7 @@ PackedFiberPool::PackedFiberPool(const StateKernelProfile& profile,at::Device de
   }
   kinds_=at::tensor(kinds,at::kLong).to(device);lengths_=at::tensor(lengths,at::kLong).to(device);weights_=weights.to(device);
 }
-at::Tensor PackedFiberPool::append(CannProgram& p,const at::Tensor& events,const at::Tensor& tokens,
+at::Tensor PackedFiberPool::append(DeviceProgram& p,const at::Tensor& events,const at::Tensor& tokens,
     const at::Tensor& counts,const ReadyBatch& ready,const at::Tensor& error,const at::Tensor& chunks) const {
   const auto rows=rows_,chunk=chunk_,parameters=parameters_,slots=slots_,inputs=inputs_;
   const auto kinds=kinds_,lengths=lengths_,weights=weights_,sources=sources_;
@@ -49,7 +49,7 @@ at::Tensor PackedFiberPool::append(CannProgram& p,const at::Tensor& events,const
   auto cursor=at::zeros({1},kinds.options()),zero=at::zeros_like(cursor),branch=at::zeros_like(error);
   auto logits=at::empty({chunk,slots},weights.options()),prob=at::empty_like(logits);
   auto task=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_pool)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_pool)(1,stream,
       ptr(events),ptr(tokens),ptr(counts),ptr(ready.atoms.coordinates),ptr(sources),ptr(kinds),ptr(lengths),ptr(weights),
       ptr(ids),ptr(logits),ptr(prob),ptr(coefficient),ptr(error),rows,slots,chunk,inputs,mode),"post-attention pooling coefficients");},
       {events,tokens,counts,ready.atoms.coordinates,sources,kinds,lengths,weights,ids,logits,prob,coefficient,error});
@@ -57,7 +57,7 @@ at::Tensor PackedFiberPool::append(CannProgram& p,const at::Tensor& events,const
   task(0); // Linear coefficients only; sum/mean do not evaluate a softmax.
   for(int64_t target:{3,4}) {
     auto head=p.label(),body=p.label(),done=p.label();p.copy(cursor,zero);p.mark(head);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_chunk)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_fiber_chunk)(1,stream,
       ptr(events),ptr(tokens),ptr(counts),ptr(kinds),ptr(cursor),ptr(source),ptr(parameter),ptr(destination),ptr(ids),
       ptr(branch),ptr(chunks),ptr(error),rows,parameters,chunk,int64_t(3),target),"pack actual softmax pooling events");},
       {events,tokens,counts,kinds,cursor,source,parameter,destination,ids,branch,chunks,error});

@@ -21,7 +21,7 @@ int main(int argc,char** argv) {
     }
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("resident consumer requires explicit NPU FP32");
+    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("resident consumer requires explicit accelerator FP32");
     auto device=portable_torch::resolve_device(args);
     at::set_num_threads(1);at::set_num_interop_threads(1);
     {

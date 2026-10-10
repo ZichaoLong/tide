@@ -1,8 +1,8 @@
+#include "device_backend.h"
 #include "packed_emission.h"
 #include "content_profile.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_emission_plan.h"
-#include "aclrtlaunch_tide_emission_chunk.h"
+#include "device_launch_tide_emission_plan.h"
+#include "device_launch_tide_emission_chunk.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <limits>
@@ -38,7 +38,7 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
     :nodes_(profile.graph.nodes.size()),samples_(samples),width_(profile.width),arrivals_(arrivals),outputs_(outputs),
      slots_(profile.graph.outgoing_ports.bindings.size()),parameters_(0),chunk_(0),reserved_(0) {
   const auto maximum=std::numeric_limits<int64_t>::max();
-  if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1||samples<1||arrivals<1||outputs<1||max_rows<1
+  if(at::GradMode::is_enabled()||device.type()!=tide::device_online::resident_device_type||samples<1||arrivals<1||outputs<1||max_rows<1
       ||budget<1||arrivals>maximum-outputs||width_<1||nodes_<1)
     throw std::invalid_argument("packed emission requires bounded dimensions, no-grad NPU FP32/FP16");
   capacity_=arrivals+outputs;
@@ -95,7 +95,7 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
 int64_t PackedEmission::program_count() const {
   int64_t n=1;for(const auto& s:shards_)n+=s.weights.device()!=offsets_.device();return n;
 }
-EmissionBatch PackedEmission::append_stage(CannProgram& p,const ActionBatch& actions,const at::Tensor& error,int64_t workspace) {
+EmissionBatch PackedEmission::append_stage(DeviceProgram& p,const ActionBatch& actions,const at::Tensor& error,int64_t workspace) {
   const auto rows=actions.valid.numel(),width=width_,capacity=capacity_,chunk=chunk_,parameters=parameters_;
   if(rows<1||actions.coordinates.sizes()!=at::IntArrayRef{rows,4}||actions.values.sizes()!=at::IntArrayRef{rows,width}
       ||actions.coordinates.scalar_type()!=at::kLong||actions.values.scalar_type()!=scales_.scalar_type()||actions.valid.scalar_type()!=at::kBool
@@ -112,7 +112,7 @@ EmissionBatch PackedEmission::append_stage(CannProgram& p,const ActionBatch& act
   auto values=at::zeros({rows+1,width},floats);
   const auto offsets=offsets_,periods=periods_,table=slots_table_;
   const auto nodes=nodes_,samples=samples_,slots=slots_,arrivals=arrivals_,outputs=outputs_;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emission_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_emission_plan)(1,stream,
     ptr(actions.coordinates),ptr(actions.valid),ptr(offsets),ptr(periods),ptr(table),ptr(out.meta),ptr(out.count),ptr(source),
     ptr(out.arrivals.coordinates),ptr(out.arrivals.valid),ptr(edge_source),ptr(edge_scale),ptr(out.outputs.coordinates),
     ptr(out.outputs.valid),ptr(output_source),ptr(output_scale),ptr(branch),ptr(error),rows,nodes,samples,slots,capacity,arrivals,outputs),
@@ -125,7 +125,7 @@ EmissionBatch PackedEmission::append_stage(CannProgram& p,const ActionBatch& act
     auto source_rows=at::empty({chunk},longs),parameter_rows=at::empty_like(source_rows),destinations=at::empty_like(source_rows);
     auto x=at::empty({chunk,width},floats);const auto batches=chunks_;
     p.copy(cursor,zero);auto head=p.label(),body=p.label(),end=p.label();p.mark(head);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emission_chunk)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_emission_chunk)(1,stream,
       ptr(out.meta),ptr(out.count),ptr(cursor),ptr(source_rows),ptr(parameter_rows),ptr(destinations),ptr(go),ptr(batches),ptr(error),
       capacity,parameters,chunk),"pack selected emission projections");},
       {out.meta,out.count,cursor,source_rows,parameter_rows,destinations,go,batches,error});

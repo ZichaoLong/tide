@@ -27,7 +27,7 @@ inline Index lh_component(at::Device device,LhPrecision& precision,at::ScalarTyp
     PackedLhFull full(kinds,weight,bias,device,rows,chunk,16*1024*1024);
     ActionBatch input{at::zeros({rows,4},opts.dtype(at::kLong)),at::zeros({rows,width},opts),at::zeros({rows},opts.dtype(at::kBool))};
     auto comparison=at::zeros_like(input.values),error=at::zeros({1},opts.dtype(at::kInt)),chunks=at::zeros({1},opts.dtype(at::kLong));
-    CannProgram program(device);auto result=full.append_stage(program,input,comparison,error,chunks);program.finish();
+    DeviceProgram program(device);auto result=full.append_stage(program,input,comparison,error,chunks);program.finish();
     for(Index round=0;round<5;++round) {
       auto coords=at::zeros({rows,4},at::kLong),mask=at::zeros({rows},at::kBool);
       auto h=at::arange(rows*width,at::kFloat).reshape({rows,width})/128,state=at::sin(h)*.5;

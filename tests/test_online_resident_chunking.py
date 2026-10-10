@@ -5,6 +5,7 @@ import subprocess
 
 import pytest
 import torch
+from resident_test_target import owner_devices, device_api
 from test_online_consumer_npu import target
 from online_consumer_support import same, observer
 from flow_topology import ranked_graph
@@ -28,7 +29,7 @@ def test_d32_automatic_reverse_split(implementation, tmp_path):
         actual = []
         if implementation == "native":
             candidate = run(p, implementation="native", device=device, schedule="prefill", preset="resident",
-                resident_placement=ResidentPlacement(devices=(str(device), f"npu:{device.index+1}")),
+                resident_placement=ResidentPlacement(devices=owner_devices(device, 2)),
                 resident_limits=ResidentLimits(queue=128, arrivals=128, outputs=128, trace=512,
                     kv_trace_rows=1024, workspace_bytes=512*1024**2, chunk_policy="aggressive"),
                 training_limits=ResidentTrainingLimits(windows=2, backward_bytes=2*1024**3,

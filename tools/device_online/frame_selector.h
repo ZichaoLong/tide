@@ -15,11 +15,11 @@ class FrameSelector {
   FrameSelector(std::vector<int64_t> owners,std::vector<SelectionPolicy>,int64_t samples,
                 at::Device,int64_t workspace_budget_bytes=64*1024*1024);
   SelectionHistory initial() const;
-  SelectionProposal append_stage(CannProgram&,const ReadyBatch&,const at::Tensor& descriptors,
+  SelectionProposal append_stage(DeviceProgram&,const ReadyBatch&,const at::Tensor& descriptors,
                                  const SelectionHistory&,const at::Tensor& error) const;
   // Place after every action that can refuse a proposal, including routing and
   // queue replacement. An error then preserves the entire original history.
-  void append_commit(CannProgram&,const SelectionHistory&,const SelectionProposal&,
+  void append_commit(DeviceProgram&,const SelectionHistory&,const SelectionProposal&,
                      const at::Tensor& error) const;
  private:
   int64_t nodes_,regions_,samples_,budget_;

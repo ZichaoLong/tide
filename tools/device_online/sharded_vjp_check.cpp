@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "state_reverse_test.h"
 #include "state_reverse_boundaries.h"
 #include "sharded_vjp_compare.h"
@@ -40,7 +41,7 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
     if(x.defined())x.fill_(std::numeric_limits<float>::quiet_NaN());
   test::poison_live_cache(live.coordinator);test::poison_owner_cache(live);
   auto error=at::zeros({1},saved[0].tape.coordinator.state.count.options().dtype(at::kInt));
-  CannSequence programs(device,saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradients(saved.size());
+  DeviceSequence programs(device,saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradients(saved.size());
   for(size_t i=saved.size();i>0;) {--i;auto& p=programs.append();const auto& t=saved[i].tape.coordinator;
     auto roots=test::retained_roots(t,i,mode);test::retained_cache_roots(roots,t,i,mode);
     if(i+1<saved.size())roots=append_window_bridge(p,t,roots,saved[i+1].tape.coordinator,gradients[i+1].coordinator,error,32*1024*1024);
@@ -92,7 +93,7 @@ int main(int argc,char** argv) {
       else if(arg=="--state-shards")state_shards=true;else if(arg=="--profile-smoke")smoke=true;else if(arg.rfind("--full-placement=",0)==0)policy=arg.substr(17);else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||devices<1||devices>4)throw std::invalid_argument("sharded VJP gate requires explicit NPU FP32/FP16 and 1..4 Full owners");
-    args.allow_npu_float16=true;const auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("sharded VJP gate requires NPU");
+    args.allow_npu_float16=true;const auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("sharded VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     auto run=[&](int shape,int variant,int profile,int cache,bool prefill,int mode,const std::string& emit,Index width=4) {
       try{check(d,devices,args.dtype,shape,variant,profile,cache,prefill,mode,emit,policy,width,state_shards);++cases;std::cout<<"completed trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" width="<<width<<std::endl;}

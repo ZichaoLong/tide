@@ -1,9 +1,9 @@
 # Optional resident inference backend
 
-The CANN backend is an optional library alongside the portable Tide core. It
+The CANN and CUDA implementations use an optional library alongside the portable Tide core. It
 owns the actual online queue, readiness, node-time batches, selection and
-recursive advancement on a coordinator NPU with optional Full/state/KV owners
-on additional NPUs. It accepts legal positive-delay feedback
+recursive advancement on a coordinator device with optional Full/state/KV owners
+on additional devices. It accepts legal positive-delay feedback
 as well as DAG/Settle encodings. Host code submits a sealed window; it does
 not consume per-event scalars or decide the next event.
 
@@ -19,6 +19,10 @@ The separate [explicit C++ training owner](resident-training.md) composes the
 restricted graph VJP, optimizer and retained-window lifecycle; it does not change
 this inference session's ownership or autograd contract.
 The broader delivery contract remains [execution-flows.md](execution-flows.md).
+
+CUDA source/build and target-validation requirements are described in
+[device-control](device-control.md). Existing NPU evidence below remains tied to
+its original source; it is not real GPU verification.
 
 ## Python client
 

@@ -6,6 +6,7 @@ import subprocess
 import sys
 import pytest
 import torch
+from resident_test_target import target_device, device_api, owner_devices
 from tidegraph import ResidentTrainingLimits
 from tidegraph.compare import equivalent
 from resident_training_cases import (runtime, inputs, roots, terms, compare_parameters,
@@ -14,12 +15,7 @@ from resident_training_cases import (runtime, inputs, roots, terms, compare_para
 
 @pytest.fixture
 def target():
-    device = os.environ.get("TIDE_RESIDENT_DEVICE")
-    if device is None:
-        pytest.skip("optional resident NPU target not requested")
-    import torch_npu
-    assert device.startswith("npu") and os.environ.get("TIDE_RESIDENT_LIBRARY")
-    return device
+    return target_device()
 
 
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
@@ -59,8 +55,8 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
                     objectives.extend(terms(reference, oracle.continuation, mode))
                 source = values.to(target) if step == 1 else values
                 args, kw = inputs(session, source, start, stop)
-                stream = torch.npu.Stream(device=target)
-                with torch.npu.stream(stream):
+                stream = device_api(target).Stream(device=target)
+                with device_api(target).stream(stream):
                     window = session.advance_device(args, **kw)
                     cotangents.append(roots(session, window, mode))
                 observed = session.result()

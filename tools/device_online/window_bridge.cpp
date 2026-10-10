@@ -1,9 +1,9 @@
+#include "device_backend.h"
 #include "retained_tape.h"
 #include "event_reverse.h"
 #include "fiber_reverse.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_window_bridge_meta.h"
-#include "aclrtlaunch_tide_window_bridge_values.h"
+#include "device_launch_tide_window_bridge_meta.h"
+#include "device_launch_tide_window_bridge_values.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <stdexcept>
@@ -16,14 +16,14 @@ void buffer(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid retained-window bridge buffer");
 }
 }
-GraphCotangents append_window_bridge(CannProgram& p,const ReverseTape& a,const GraphCotangents& local,
+GraphCotangents append_window_bridge(DeviceProgram& p,const ReverseTape& a,const GraphCotangents& local,
     const ReverseTape& b,const GraphVjp& grad,const at::Tensor& error,int64_t budget) {
   if(at::GradMode::is_enabled()||!a.graph||!b.graph||a.graph->identity!=b.graph->identity||a.stop!=b.cut
       ||a.full.width!=b.full.width||a.state.samples!=b.state.samples||!a.pending.valid.defined()||!b.fiber_values.defined()||budget<1)
     throw std::invalid_argument("retained-window bridge requires consecutive matching no-grad tapes");
   const auto device=b.fiber_values.device();const auto rows=a.pending.valid.numel(),fibers=b.fiber_values.size(0),pending=b.pending.valid.numel(),outputs=b.outputs.valid.numel();
   const int64_t width=b.full.width,nodes=b.graph->nodes.size(),samples=b.state.samples,total=fibers+pending+outputs;
-  if(device.type()!=c10::DeviceType::PrivateUse1||rows<1||fibers<1||pending<1||width<1||nodes<1||samples<1)
+  if(device.type()!=tide::device_online::resident_device_type||rows<1||fibers<1||pending<1||width<1||nodes<1||samples<1)
     throw std::invalid_argument("retained-window bridge requires bounded NPU capacities");
   int64_t buckets=1;while(buckets<2.L*(fibers+static_cast<long double>(pending))) {
     if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("window bridge hash capacity overflow");buckets*=2;
@@ -40,13 +40,13 @@ GraphCotangents append_window_bridge(CannProgram& p,const ReverseTape& a,const G
   buffer(local.final,device,at::kFloat,{samples,nodes,width});buffer(local.final_connected,device,at::kBool,{samples,nodes});
   GraphCotangents out{local.outputs,local.outputs_connected,at::empty_like(local.pending),at::empty_like(local.pending_connected),at::empty_like(local.final),at::empty_like(local.final_connected)};
   auto hash=at::empty({buckets},a.pending.coordinates.options()),map=at::empty({rows},a.pending.coordinates.options());
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_window_bridge_meta)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_window_bridge_meta)(1,stream,
     ptr(a.pending.coordinates),ptr(a.pending.valid),ptr(b.fiber_meta),ptr(b.pending.coordinates),ptr(grad.links.messages),ptr(grad.links.valid),
     ptr(grad.message_connected),ptr(grad.initial_connected),ptr(local.pending_connected),ptr(local.final_connected),
     ptr(hash),ptr(map),ptr(out.pending_connected),ptr(out.final_connected),ptr(error),rows,fibers,pending,samples*nodes,buckets),
     "match actual retained-window boundary messages");},{a.pending.coordinates,a.pending.valid,b.fiber_meta,b.pending.coordinates,grad.links.messages,grad.links.valid,
       grad.message_connected,grad.initial_connected,local.pending_connected,local.final_connected,hash,map,out.pending_connected,out.final_connected,error});
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_window_bridge_values)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_window_bridge_values)(32,stream,
     ptr(map),ptr(a.pending.valid),ptr(grad.messages),ptr(grad.message_connected),ptr(grad.initial),ptr(grad.initial_connected),
     ptr(local.pending),ptr(local.pending_connected),ptr(local.final),ptr(local.final_connected),ptr(out.pending),ptr(out.final),ptr(error),rows,samples*nodes,width),
     "pack retained-window state and pending adjoints");},{map,a.pending.valid,grad.messages,grad.message_connected,grad.initial,grad.initial_connected,

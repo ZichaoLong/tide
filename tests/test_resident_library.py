@@ -3,6 +3,7 @@ from dataclasses import replace
 import os
 import pytest
 import torch
+from resident_test_target import target_device, device_api, owner_devices
 from tidegraph import (Edge, Graph, Node, Region, GraphConfig, GraphRuntime,
                        ExecutionOptions, ExecutionPlacement, ResidentLimits, External)
 from tidegraph.compare import equivalent
@@ -10,13 +11,7 @@ from tidegraph.compare import equivalent
 
 @pytest.fixture
 def target():
-    device = os.environ.get("TIDE_RESIDENT_DEVICE")
-    if device is None:
-        pytest.skip("optional NPU resident target not requested")
-    import torch_npu
-    assert device.startswith("npu"), "resident target must explicitly select NPU"
-    assert os.environ.get("TIDE_RESIDENT_LIBRARY"), "explicit target requires its backend build"
-    return device
+    return target_device()
 
 
 def config(family, memory="ema"):
@@ -74,8 +69,8 @@ def online_windows(target, family, schedule, memory, tmp_path, mode="hard"):
                 args,kw = inputs(baseline,x,start,stop)
                 expected = baseline.advance(*args,**kw)
                 # Alternate boundary locations, including non-default streams.
-                stream = torch.npu.Stream(device=target)
-                with torch.npu.stream(stream):
+                stream = device_api(target).Stream(device=target)
+                with device_api(target).stream(stream):
                     y = x.to(target) if start != 2 else x
                     args,kw = inputs(session,y,start,stop)
                     view = session.advance_device(*args,**kw)
@@ -199,7 +194,7 @@ def test_resident_lean_windows_do_not_export_continuation(target, monkeypatch):
                 args,kw = inputs(oracle,x,start,stop);expected=oracle.advance(*args,**kw)
                 args,kw = inputs(session,x.to(target),start,stop)
                 view=session.advance_device(*args,**kw)
-                assert view.values.device.type=="npu"
+                assert view.values.device.type==torch.device(target).type
         equivalent(expected,session.result())
 
 

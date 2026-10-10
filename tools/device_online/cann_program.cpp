@@ -1,4 +1,4 @@
-#include "cann_program.h"
+#include "device_program.h"
 #include "cann_api.h"
 #include "portable_torch/runtime.hpp"
 #include <c10/core/DeviceGuard.h>
@@ -19,7 +19,7 @@ void check_process() {
   if(quarantined.load())throw std::logic_error("CANN backend has quarantined resources; terminate worker");
 }
 }
-struct CannProgram::Impl {
+struct DeviceProgram::Impl {
   at::Device device;
   const std::thread::id owner_thread=std::this_thread::get_id();
   portable_torch::RuntimeResource resource;
@@ -119,8 +119,8 @@ struct CannProgram::Impl {
     resource.close();
   }
 };
-CannProgram::CannProgram(at::Device device) : CannProgram(device,{}) {}
-CannProgram::CannProgram(at::Device device,const std::function<void(CannApi&)>& configure_api) {
+DeviceProgram::DeviceProgram(at::Device device) : DeviceProgram(device,{}) {}
+DeviceProgram::DeviceProgram(at::Device device,const std::function<void(CannApi&)>& configure_api) {
   check_process();
   if (device.type() != c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("CANN device control requires an explicit NPU");
@@ -132,7 +132,7 @@ CannProgram::CannProgram(at::Device device,const std::function<void(CannApi&)>& 
     throw;
   }
 }
-CannProgram::~CannProgram() {
+DeviceProgram::~DeviceProgram() {
   try { impl_->release(); }
   catch (const std::exception& error) {
     // Keep runtime handles AND tensor owners alive, even beyond static teardown.
@@ -143,13 +143,13 @@ CannProgram::~CannProgram() {
     (void)impl_.release();
   }
 }
-size_t CannProgram::label() {
+size_t DeviceProgram::label() {
   auto& p = *impl_; p.building(); c10::DeviceGuard guard(p.device);
   if(p.labels.size()>=size_t(std::numeric_limits<int32_t>::max()))throw std::overflow_error("too many control labels");
   void* handle = nullptr; CannApi::check(p.api.create_label(&handle), "create control label");
   p.labels.push_back(handle); p.marked.push_back(false); return p.labels.size()-1;
 }
-void CannProgram::mark(size_t index) {
+void DeviceProgram::mark(size_t index) {
   auto& p = *impl_; p.building(); c10::DeviceGuard guard(p.device);
   if (index >= p.labels.size() || p.marked[index]) throw std::invalid_argument("invalid or repeated control label");
   p.commands.push_back([&p, index] {
@@ -157,7 +157,7 @@ void CannProgram::mark(size_t index) {
   });
   p.marked[index] = true;
 }
-void CannProgram::branch(const at::Tensor& index, const std::vector<size_t>& targets) {
+void DeviceProgram::branch(const at::Tensor& index, const std::vector<size_t>& targets) {
   auto& p = *impl_; p.building(); p.validate(index, at::kInt); c10::DeviceGuard guard(p.device);
   if (targets.empty() || targets.size() > std::numeric_limits<uint32_t>::max())
     throw std::invalid_argument("invalid control target count");
@@ -178,20 +178,20 @@ void CannProgram::branch(const at::Tensor& index, const std::vector<size_t>& tar
     CannApi::check(p.api.jump(selected.data_ptr(), p.labels.size(), p.target_list, p.stream), "device control branch");
   });
 }
-void CannProgram::add(const at::Tensor& target, const at::Tensor& increment) {
+void DeviceProgram::add(const at::Tensor& target, const at::Tensor& increment) {
   auto& p = *impl_; p.building(); int64_t one = 1;
   auto scalar = p.api.create_scalar(&one, 9);
   if (!scalar) throw std::runtime_error("create control scalar failed");
   p.scalars.push_back(scalar);
   p.op("aclnnInplaceAdd", p.tensor(target, target.scalar_type()), p.tensor(increment, target.scalar_type()), scalar);
 }
-void CannProgram::copy(const at::Tensor& target, const at::Tensor& source) {
+void DeviceProgram::copy(const at::Tensor& target, const at::Tensor& source) {
   auto& p=*impl_;p.building();
   if(target.sizes()!=source.sizes()||target.scalar_type()!=source.scalar_type())
     throw std::invalid_argument("CANN copy requires identical shapes and dtypes");
   p.op("aclnnInplaceCopy",p.tensor(target,target.scalar_type()),p.tensor(source,source.scalar_type()));
 }
-void CannProgram::cast(const at::Tensor& input,const at::Tensor& output) {
+void DeviceProgram::cast(const at::Tensor& input,const at::Tensor& output) {
   auto& p=*impl_;p.building();
   auto floating=[](const at::Tensor& value){return value.defined()&&(value.scalar_type()==at::kFloat||value.scalar_type()==at::kHalf);};
   if(!floating(input)||!floating(output)||input.sizes()!=output.sizes())
@@ -199,18 +199,18 @@ void CannProgram::cast(const at::Tensor& input,const at::Tensor& output) {
   p.op("aclnnCast",p.tensor(input,input.scalar_type()),int(output.scalar_type()==at::kFloat?0:1),
        p.tensor(output,output.scalar_type()));
 }
-void CannProgram::zero(const at::Tensor& target) {
+void DeviceProgram::zero(const at::Tensor& target) {
   auto& p=*impl_;p.op("aclnnInplaceZero",p.tensor(target,target.scalar_type()));
 }
-void CannProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+void DeviceProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;const auto dtype=a.scalar_type();
   p.op("aclnnMul",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
 }
-void CannProgram::divide(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+void DeviceProgram::divide(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;const auto dtype=a.scalar_type();
   p.op("aclnnDiv",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
 }
-void CannProgram::softplus(const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::softplus(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.building();float one=1.f,threshold=20.f;
   auto beta=p.api.create_scalar(&one,0);
   if(!beta)throw std::runtime_error("create softplus beta failed");p.scalars.push_back(beta);
@@ -218,7 +218,7 @@ void CannProgram::softplus(const at::Tensor& input,const at::Tensor& out) {
   if(!limit)throw std::runtime_error("create softplus threshold failed");p.scalars.push_back(limit);
   p.op("aclnnSoftplus",p.tensor(input,input.scalar_type()),beta,limit,p.tensor(out,input.scalar_type()));
 }
-void CannProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::Tensor& out) {
+void DeviceProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::Tensor& out) {
   auto& p=*impl_;p.building();const auto dtype=input.scalar_type();
   if((dtype!=at::kFloat&&dtype!=at::kHalf)||axis<0||axis>=input.dim())
     throw std::invalid_argument("CANN sum requires a floating tensor and valid axis");
@@ -226,46 +226,46 @@ void CannProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::T
   if(!dims)throw std::runtime_error("create reduction axes failed");p.arrays.push_back(dims);
   p.op("aclnnReduceSum",p.tensor(input,dtype),dims,keep,int(dtype==at::kFloat?0:1),p.tensor(out,dtype));
 }
-void CannProgram::softmax(const at::Tensor& input,int64_t axis,const at::Tensor& out) {
+void DeviceProgram::softmax(const at::Tensor& input,int64_t axis,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnSoftmax",p.tensor(input,input.scalar_type()),axis,p.tensor(out,input.scalar_type()));
 }
-void CannProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnSigmoid",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
-void CannProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnTanh",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
-void CannProgram::tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& out) {
+void DeviceProgram::tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& out) {
   auto& p=*impl_;const auto dtype=gradient.scalar_type();
   p.op("aclnnTanhBackward",p.tensor(gradient,dtype),p.tensor(activation,dtype),p.tensor(out,dtype));
 }
-void CannProgram::relu(const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::relu(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.op("aclnnRelu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
-void CannProgram::silu(const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::silu(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.op("aclnnSilu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
-void CannProgram::silu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::silu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;const auto type=input.scalar_type();
   p.op("aclnnSiluBackward",p.tensor(gradient,type),p.tensor(input,type),p.tensor(out,type));
 }
-void CannProgram::relu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
+void DeviceProgram::relu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.building();float zero=0;auto scalar=p.api.create_scalar(&zero,0);
   if(!scalar)throw std::runtime_error("create ReLU threshold failed");p.scalars.push_back(scalar);
   const auto type=input.scalar_type();
   p.op("aclnnThresholdBackward",p.tensor(gradient,type),p.tensor(input,type),scalar,p.tensor(out,type));
 }
-void CannProgram::rms_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
+void DeviceProgram::rms_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
   auto& p=*impl_;p.building();
   if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN RMS norm requires nonempty rows and positive epsilon");
   auto weight=at::ones({input.size(1)},input.options()),rstd=saved_rstd.defined()?saved_rstd:at::empty({input.size(0),1},input.options().dtype(at::kFloat));
   p.op("aclnnRmsNorm",p.tensor(input,input.scalar_type()),p.tensor(weight,weight.scalar_type()),epsilon,
        p.tensor(out,input.scalar_type()),p.tensor(rstd,at::kFloat));
 }
-void CannProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
+void DeviceProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
   auto& p=*impl_;p.building();
   if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN layer norm requires nonempty rows and positive epsilon");
   const int64_t width=input.size(1);auto shape=p.api.create_int_array(&width,1);
@@ -274,31 +274,31 @@ void CannProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Te
   p.op("aclnnLayerNorm",p.tensor(input,input.scalar_type()),shape,static_cast<void*>(nullptr),static_cast<void*>(nullptr),epsilon,
        p.tensor(out,input.scalar_type()),p.tensor(mean,at::kFloat),p.tensor(rstd,at::kFloat));
 }
-void CannProgram::batch_matmul(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+void DeviceProgram::batch_matmul(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;
   // CANN cubeMathType=0 is KEEP_DTYPE. Never silently enable HF32/FP16.
   p.op("aclnnBatchMatMul",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),
        p.tensor(out,a.scalar_type()),int8_t(0));
 }
-void CannProgram::index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source) {
+void DeviceProgram::index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source) {
   auto& p=*impl_;
   p.op("aclnnInplaceIndexCopy",p.tensor(target,target.scalar_type()),axis,p.tensor(indices,at::kLong),p.tensor(source,target.scalar_type()));
 }
-void CannProgram::permute(const at::Tensor& input,const std::vector<int64_t>& axes,const at::Tensor& output) {
+void DeviceProgram::permute(const at::Tensor& input,const std::vector<int64_t>& axes,const at::Tensor& output) {
   auto& p=*impl_;p.building();
   auto order=p.api.create_int_array(axes.data(),axes.size());
   if(!order)throw std::runtime_error("create permutation axes failed");p.arrays.push_back(order);
   p.op("aclnnPermute",p.tensor(input,input.scalar_type()),order,p.tensor(output,input.scalar_type()));
 }
-void CannProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+void DeviceProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnEqTensor",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),p.tensor(out,at::kBool));
 }
-void CannProgram::index_select(const at::Tensor& a,int64_t axis,const at::Tensor& index,const at::Tensor& out) {
+void DeviceProgram::index_select(const at::Tensor& a,int64_t axis,const at::Tensor& index,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnIndexSelect",p.tensor(a,a.scalar_type()),axis,p.tensor(index,at::kLong),p.tensor(out,a.scalar_type()));
 }
-void CannProgram::kernel(std::function<void(void*)> submit,const std::vector<at::Tensor>& buffers) {
+void DeviceProgram::kernel(std::function<void(void*)> submit,const std::vector<at::Tensor>& buffers) {
   auto& p=*impl_;p.building();
   if(!submit)throw std::invalid_argument("empty CANN kernel submission");
   for(const auto& buffer:buffers) {
@@ -308,16 +308,16 @@ void CannProgram::kernel(std::function<void(void*)> submit,const std::vector<at:
   }
   p.commands.push_back([&p,submit]{submit(p.stream);});
 }
-void CannProgram::less(const at::Tensor& a, const at::Tensor& b, const at::Tensor& out) {
+void DeviceProgram::less(const at::Tensor& a, const at::Tensor& b, const at::Tensor& out) {
   auto& p = *impl_; p.op("aclnnLtTensor", p.tensor(a, at::kLong), p.tensor(b, at::kLong), p.tensor(out, at::kBool));
 }
-void CannProgram::logical_and(const at::Tensor& a, const at::Tensor& b, const at::Tensor& out) {
+void DeviceProgram::logical_and(const at::Tensor& a, const at::Tensor& b, const at::Tensor& out) {
   auto& p = *impl_; p.op("aclnnLogicalAnd", p.tensor(a, at::kBool), p.tensor(b, at::kBool), p.tensor(out, at::kBool));
 }
-void CannProgram::cast_index(const at::Tensor& in, const at::Tensor& out) {
+void DeviceProgram::cast_index(const at::Tensor& in, const at::Tensor& out) {
   auto& p = *impl_; p.op("aclnnCast", p.tensor(in, at::kBool), int(3), p.tensor(out, at::kInt));
 }
-void CannProgram::finish() {
+void DeviceProgram::finish() {
   auto& p = *impl_; p.building(); c10::DeviceGuard guard(p.device);
   for (auto marked : p.marked) if (!marked) throw std::logic_error("control label has no target position");
   // CANN requires target-list creation BEFORE the first label is marked.
@@ -333,11 +333,11 @@ void CannProgram::finish() {
     CannApi::check(p.api.end_model(p.model, nullptr), "finish control model"); p.finished = true;
   } catch (...) { p.failed = true; throw; }
 }
-void CannProgram::run(int32_t timeout_ms) {
+void DeviceProgram::run(int32_t timeout_ms) {
   if(timeout_ms<=0)throw std::logic_error("control wait requires a positive timeout");
   submit();wait(timeout_ms);
 }
-void CannProgram::submit() {
+void DeviceProgram::submit() {
   check_process();
   auto& p = *impl_;
   p.check_thread();
@@ -349,7 +349,7 @@ void CannProgram::submit() {
     CannApi::check(p.api.execute(p.model, p.launch), "execute control model");
   } catch (...) { p.failed = true; throw; }
 }
-void CannProgram::wait(int32_t timeout_ms) {
+void DeviceProgram::wait(int32_t timeout_ms) {
   check_process();auto& p=*impl_;p.check_thread();p.resource.check();
   if(p.closed||p.failed||!p.in_flight||timeout_ms<=0)throw std::logic_error("control program has no waitable submission");
   c10::DeviceGuard guard(p.device);
@@ -358,19 +358,19 @@ void CannProgram::wait(int32_t timeout_ms) {
     p.in_flight = false;
   } catch (...) { p.failed = true; throw; }
 }
-void CannProgram::close() {
+void DeviceProgram::close() {
   try {impl_->release();}
   catch (...) {impl_->failed=true;throw;}
 }
-int64_t CannProgram::workspace_bytes() const {
+int64_t DeviceProgram::workspace_bytes() const {
   return impl_->workspace_used;
 }
-void CannProgram::limit_workspace(int64_t bytes) {
+void DeviceProgram::limit_workspace(int64_t bytes) {
   auto& p=*impl_;p.building();
   if(bytes<0||p.workspace_used)throw std::invalid_argument("set workspace budget before numerical operations");
   p.workspace_limit=bytes;
 }
-int64_t CannProgram::retained_tensor_bytes() const {
+int64_t DeviceProgram::retained_tensor_bytes() const {
   std::unordered_set<const c10::StorageImpl*> seen;int64_t total=0;
   for(const auto& tensor:impl_->owners) {
     const auto storage=tensor.storage();if(!seen.insert(storage.unsafeGetStorageImpl()).second)continue;

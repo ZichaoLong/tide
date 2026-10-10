@@ -301,3 +301,26 @@ CUDA 控制与通信独立实现。单卡 Add 推理只是开发顺序。本机�
 native fiber policy 保留标明的语义 replay；结构不同的行和同一状态的因果
 深度仍限制批宽。容器、视图／小 Tensor 和按输出槽连接模式的反向工作仍存在。
 Full/Aggregate 已有批量反向继续由实际消费者启用。
+
+### 11.2 CUDA 常驻后端与资格边界
+
+公共 DeviceProgram/DeviceSequence 接口由 CANN 和 CUDA 独立实现。CUDA 将静态
+控制流图降为 CUDA Graph 的 WHILE/SWITCH；分支值来自候选自身的设备缓冲区。
+静态目标表不包含真实输入轨迹，窗口内不以主机回调决定下一事件。CUDA 12.8
+及对应驱动能力、CC8.0+ 是当前源码配置；显式不满足时失败。跨卡当前要求双向
+P2P 和原生 system-scope 原子，固定字段传输以设备 ready/consumed 代次握手。
+窗口提交、完成等待、错误排空、所有者存活和隔离释放由 CUDA 后端实现。
+
+102 个共享调度／payload／VJP 内核语义通过编译适配复用。初版 CUDA 每个逻辑
+worker 使用一个执行线程和32KiB 有界 scratch；矩阵计算用显式4MiB workspace
+的 cuBLAS，禁用 TF32。此实现优先覆盖完整语义；串行 reduction、scatter 扫描
+和单线程语义适配均是已知性能缺口，不能从源码封装或编译成功推断高效融合。
+已有窗口、journal、chunk、None/零连接、FP16 payload/FP32 adjoint/master、
+SGD/AdamW、续接和重分区契约保持。工作区估算不等于已校准的 GPU 驱动峰值。
+
+完整目标机入口 `scripts/verify_resident_target.py` 要求干净固定源码、匹配的
+Python/独立 runtime 构建、安装消费者和至少3个连续逻辑设备。它运行全部已注册
+组件与公共 resident/完整模型消费者用例，拒绝空结果和跳过；真实设备不存在
+必须失败。编译、CPU 语义适配检查、真实设备正确性、动态常驻性、多卡通信和
+性能分别记录。当前本机无 GPU，后四项均不能由前两项替代。构建与真机命令见
+[device-control](device-control.md)。

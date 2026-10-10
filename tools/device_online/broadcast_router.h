@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include "queue_closure.h"
 
 namespace tide::device_online {
@@ -15,7 +15,7 @@ class BroadcastRouter {
                   int64_t capacity,at::Device);
   // sticky_error is shared with the transaction: 1 capacity, 2 bad metadata,
   // 3 actual message-time overflow. Outputs commit only after validation.
-  AtomBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& edge_scales,
+  AtomBatch append_stage(DeviceProgram&,const ActionBatch&,const at::Tensor& edge_scales,
                          const at::Tensor& sticky_error) const;
  private:
   int64_t nodes_,samples_,edges_,capacity_;

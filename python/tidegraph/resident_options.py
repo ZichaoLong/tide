@@ -33,12 +33,12 @@ class ResidentLimits:
 
 
 def validate_resident(config, options, device, placement):
-    if device.type != "npu" or config.dtype not in {"float32", "float16"}:
-        raise ValueError("resident backend requires NPU FP32/FP16")
+    if device.type not in {"npu", "cuda"} or config.dtype not in {"float32", "float16"}:
+        raise ValueError("resident backend requires CUDA/NPU FP32/FP16")
     if config.dtype == "float16" and placement["scoring_dtype"] == "payload":
         raise ValueError("resident FP16 payload requires explicit FP32 or profile scoring")
     if any(placement[key] != device for key in ("read", "control", "selection", "events")):
-        raise ValueError("resident backend requires Read/control/selection/events on the payload NPU")
+        raise ValueError("resident backend requires Read/control/selection/events on the payload device")
     if placement["scoring_dtype"] not in {"profile", "payload", "float32"}:
         raise ValueError("resident backend requires FP32 scoring")
     if options.implementation != "native":

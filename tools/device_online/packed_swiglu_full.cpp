@@ -1,7 +1,7 @@
+#include "device_backend.h"
 #include "packed_swiglu_full.h"
 #include "content_profile.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_full_plan.h"
+#include "device_launch_tide_full_plan.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
@@ -28,7 +28,7 @@ PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device devi
 PackedSwiGluFull::PackedSwiGluFull(const std::vector<Node>& nodes,const std::vector<NodeWeights>& weights,
     int64_t width,at::ScalarType dtype,at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
     :nodes_(nodes.size()),width_(width),rows_(capacity),parameters_(0),chunk_(0),reserved_(0) {
-  if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1||capacity<1||max_rows<1||budget<1)
+  if(at::GradMode::is_enabled()||device.type()!=tide::device_online::resident_device_type||capacity<1||max_rows<1||budget<1)
     throw std::invalid_argument("packed SwiGLU requires bounded dimensions and no-grad NPU");
   if(nodes.empty()||weights.size()!=nodes.size()||width<1||(dtype!=at::kFloat&&dtype!=at::kHalf))
     throw std::invalid_argument("invalid compact SwiGLU bank");
@@ -54,7 +54,7 @@ PackedSwiGluFull::PackedSwiGluFull(const std::vector<Node>& nodes,const std::vec
   down.push_back(at::zeros({2*width_,width_},options));
   gate_=at::stack(gate).to(device);up_=at::stack(up).to(device);down_=at::stack(down).to(device);
 }
-ActionBatch PackedSwiGluFull::append_stage(CannProgram& p,const ActionBatch& input,const at::Tensor& content,
+ActionBatch PackedSwiGluFull::append_stage(DeviceProgram& p,const ActionBatch& input,const at::Tensor& content,
     const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
   const auto rows=rows_,width=width_,chunk=chunk_,nodes=nodes_;
   if(input.values.sizes()!=at::IntArrayRef{rows,width}||content.sizes()!=input.values.sizes()||comparison.sizes()!=input.values.sizes()
@@ -76,7 +76,7 @@ ActionBatch PackedSwiGluFull::append_stage(CannProgram& p,const ActionBatch& inp
   p.copy(cursor,zero);p.copy(comparisons.narrow(0,0,rows),comparison);p.copy(contents.narrow(0,0,rows),content);
   p.copy(output.narrow(0,0,rows),input.values);
   const auto kinds=kinds_;auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_full_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_full_plan)(1,stream,
     ptr(input.coordinates),ptr(input.valid),ptr(kinds),ptr(cursor),ptr(source),ptr(owners),ptr(destination),
     ptr(branch),ptr(chunks),ptr(error),rows,nodes,chunk,int64_t(1)),"pack selected SwiGLU Full actions");},
     {input.coordinates,input.valid,kinds,cursor,source,owners,destination,branch,chunks,error});

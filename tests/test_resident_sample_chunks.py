@@ -3,6 +3,7 @@ import json
 import os
 import pytest
 import torch
+from resident_test_target import owner_devices
 from test_consumer_sample_chunks import CASES, compare_records
 from test_online_consumer import make_continuous_packet, ranked_graph
 from test_online_consumer_npu import target
@@ -31,7 +32,7 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
         got, actual = standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=cards,
                                 dtype_name=dtype_name,extra=("--sample-chunk-rows=2", "--resident-context-bytes="+str(pool), "--chunk-policy="+policy))
     else:
-        owners = ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")) if cards==2 else None
+        owners = ResidentPlacement(devices=owner_devices(device, 2)) if cards==2 else None
         got = run(p,implementation="native",device=device,dtype=dtype_name,schedule=schedule,preset="resident",
             sample_chunk_rows=2,context_memory_bytes=pool,observer=observer(actual),native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_limits=forward,resident_placement=owners,**kw)
@@ -41,7 +42,7 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
         # Independently execute the whole batch at the same payload precision:
         # cross-dtype rounding and physical sample slicing are separate checks.
         whole=[]
-        owners = ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")) if cards==2 else None
+        owners = ResidentPlacement(devices=owner_devices(device, 2)) if cards==2 else None
         run(p,implementation="native",device=device,dtype=dtype_name,schedule=schedule,preset="resident",
             observer=observer(whole),native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_limits=forward,resident_placement=owners,**kw)

@@ -2,6 +2,7 @@
 import json
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement
 from tidegraph.compare import equivalent
 from test_resident_training import target, training_case
@@ -14,7 +15,7 @@ def test_projection_owner_banks_and_complete_training(target, family, schedule, 
                 emission="slot_affine", model_device="cpu", resident_workspace_bytes=1024**3)
     cpu = runtime(family, "cpu", full="lh-silu-rms-v1", aggregation="all_softmax", emission="slot_affine")
     count = len(r.execution_graph.nodes)
-    owners = ResidentPlacement(devices=(target, f"npu:{torch.device(target).index+1}"), full_owners=tuple(n % 2 for n in range(count)),
+    owners = ResidentPlacement(devices=owner_devices(target, 2), full_owners=tuple(n % 2 for n in range(count)),
                                state_owners=tuple((n+1) % 2 for n in range(count)))
     x = torch.sin(torch.arange(32, dtype=torch.float32).reshape(2, 4, 4)*.19)*.1
     with torch.no_grad(), r.session(2, placement=owners) as s:
@@ -49,7 +50,7 @@ def test_projection_bank_only_on_remote_owner(target, dtype_name):
         options=ExecutionOptions(implementation="native", schedule="greedy", trace=False,
             placement=ExecutionPlacement(preset="resident"), resident_limits=ResidentLimits(workspace_bytes=1024**3)))
     cpu = GraphRuntime(cfg, device="cpu", options=ExecutionOptions(schedule="reference", packed=False, trace=False))
-    placement = ResidentPlacement(devices=(target, f"npu:{torch.device(target).index+1}"), full_owners=(0, 1), state_owners=(1, 0))
+    placement = ResidentPlacement(devices=owner_devices(target, 2), full_owners=(0, 1), state_owners=(1, 0))
     x = torch.full((1, 3, 4), .125, dtype=getattr(torch, dtype_name))
     with torch.no_grad(), candidate.session(1, placement=placement) as s:
         oracle = cpu.session(1)

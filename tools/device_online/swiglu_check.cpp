@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "content_profile.h"
 #include "packed_swiglu_full.h"
@@ -48,7 +49,7 @@ Index components(at::Device device,at::ScalarType dtype) {
     c[7][1].fill_(-9);comparison[3].fill_(std::numeric_limits<float>::quiet_NaN());comparison[6].fill_(std::numeric_limits<float>::quiet_NaN());
     ActionBatch input{c.to(device),base.to(device),valid.to(device)};
     auto error=at::zeros({1},c.options().device(device).dtype(at::kInt)),chunks=at::zeros({1},c.options().device(device));
-    CannProgram p(device);auto result=full.append_stage(p,input,content.to(device),comparison.to(device),error,chunks);p.finish();
+    DeviceProgram p(device);auto result=full.append_stage(p,input,content.to(device),comparison.to(device),error,chunks);p.finish();
     p.run();require(error.cpu().item<int>()==0,"SwiGLU component refused valid actions");
     auto expected=base.clone();const auto& w=f.model.nodes[0];
     for(Index i:{0,2,5})expected[i].copy_(content[i]+at::matmul(at::silu(at::matmul(comparison[i],w.extra.at("ffn_gate")))
@@ -113,7 +114,7 @@ Index refusals(at::Device device,at::ScalarType dtype) {
   PackedSwiGluFull full(profile,device,1,1,1024*1024);auto longs=at::TensorOptions().device(device).dtype(at::kLong);
   ActionBatch input{at::zeros({1,4},longs),at::zeros({1,3},longs.dtype(dtype)),at::ones({1},longs.dtype(at::kBool))};
   input.coordinates[0][1].fill_(99);auto error=at::zeros({1},longs.dtype(at::kInt)),chunks=at::zeros({1},longs);
-  CannProgram p(device);full.append_stage(p,input,input.values,input.values,error,chunks);p.finish();p.run();
+  DeviceProgram p(device);full.append_stage(p,input,input.values,input.values,error,chunks);p.finish();p.run();
   require(error.cpu().item<int>()==2,"SwiGLU invalid selected owner did not refuse");return cases+1;
 }
 }
@@ -124,7 +125,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("SwiGLU gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("SwiGLU gate requires NPU");
+    auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("SwiGLU gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     const auto a=components(device,args.dtype),b=args.dtype==at::kFloat?windows(device):0,c=refusals(device,args.dtype);
     std::cout<<"device-swiglu: passed components="<<a<<" windows="<<b<<" refusals="<<c<<" scope="<<(args.dtype==at::kFloat?"FP32_HARD_inference":"FP16_component_only")<<" CPU=storage_dtype_FP64 keep_dtype=true\n";

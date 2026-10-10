@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_flow.h"
 #include "content_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -85,7 +86,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("content-flow check requires explicit NPU FP32");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("content-flow check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("content-flow check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     parity(device);refusal(device);runtime.close();return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}

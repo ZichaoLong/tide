@@ -6,7 +6,7 @@ struct FullReverseBatch {
   FullTape tape;
   at::Tensor gradient,connected,destinations,branch;
 };
-FullReverseBatch append_full_reverse_pack(CannProgram&,const FullTape& stage,const at::Tensor& gradient,
+FullReverseBatch append_full_reverse_pack(DeviceProgram&,const FullTape& stage,const at::Tensor& gradient,
     const at::Tensor& connected,const at::Tensor& mapping,int64_t local_nodes,
     const at::Tensor& work,const at::Tensor& error,
     const ReverseGatherInput& values,const ReverseGatherInput& gradients);

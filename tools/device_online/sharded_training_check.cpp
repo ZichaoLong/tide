@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "state_reverse_test.h"
 #include "sharded_parameter_compare.h"
 #include "sharded_optimizer.h"
@@ -89,7 +90,7 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
       tide_bench::compare(flow.result(),expected.windows[window++],true,dtype,std::nullopt,half?2e-2:1e-5,half?2e-3:1e-6);start=stop;
     }
     auto error=at::zeros({1},at::TensorOptions().device(devices[0]).dtype(at::kInt));
-    CannSequence programs(devices[0],saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradient(saved.size());
+    DeviceSequence programs(devices[0],saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradient(saved.size());
     for(size_t w=saved.size();w>0;) {--w;auto& p=programs.append();const auto& t=saved[w].tape.coordinator;
       auto roots=test::retained_roots(t,w,mode);test::retained_cache_roots(roots,t,w,mode);
       if(w+1<saved.size())roots=append_window_bridge(p,t,roots,saved[w+1].tape.coordinator,gradient[w+1].coordinator,error,32*1024*1024);
@@ -133,7 +134,7 @@ int main(int argc,char** argv) {
       else if(a.rfind("--full-placement=",0)==0)policy=a.substr(17);else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4)throw std::invalid_argument("explicit 1..4 NPU FP32/FP16 required");
-    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
+    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);std::vector<at::Device> devices;for(int i=0;i<count;++i)devices.emplace_back(d.type(),d.index()+i);int cases=0;
     auto run=[&](int profile,int cache,bool prefill,DeviceOptimizerKind kind,const std::string& emit,Index width=4) {
       try{trajectory(devices,args.dtype,profile,cache,prefill,kind,emit,policy,width,state_shards);++cases;std::cout<<"completed trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" width="<<width<<std::endl;}

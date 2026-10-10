@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "queue_closure.h"
 #include <algorithm>
 #include <limits>
@@ -52,7 +53,7 @@ at::Tensor QueueClosure::valid_coordinates(const AtomBatch& q) const {
           &(c.select(1,3)<=1))|~q.valid;
 }
 at::Tensor QueueClosure::ready(const AtomBatch& q,const at::Tensor& stop,bool prefill) const {
-  if(owner_.device().type()==c10::DeviceType::PrivateUse1)
+  if(owner_.device().type()==tide::device_online::resident_device_type)
     throw std::invalid_argument("tensor closure uses unsupported NPU scatter_reduce; use explicit Ascend C closure");
   if(stop.sizes()!=at::IntArrayRef{1} || stop.scalar_type()!=at::kLong || stop.device()!=owner_.device())
     throw std::invalid_argument("closure stop must be device int64 [1]");

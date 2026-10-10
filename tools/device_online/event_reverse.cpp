@@ -1,12 +1,12 @@
 #include "event_reverse.h"
 #include "attention_vjp.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_event_reverse_links.h"
-#include "aclrtlaunch_tide_event_reverse_plan.h"
-#include "aclrtlaunch_tide_event_reverse_pack.h"
-#include "aclrtlaunch_tide_event_reverse_fold.h"
-#include "aclrtlaunch_tide_event_reverse_reduce.h"
-#include "aclrtlaunch_tide_cache_merge.h"
+#include "device_backend.h"
+#include "device_launch_tide_event_reverse_links.h"
+#include "device_launch_tide_event_reverse_plan.h"
+#include "device_launch_tide_event_reverse_pack.h"
+#include "device_launch_tide_event_reverse_fold.h"
+#include "device_launch_tide_event_reverse_reduce.h"
+#include "device_launch_tide_cache_merge.h"
 #include <cmath>
 #include <limits>
 #include <stdexcept>
@@ -30,7 +30,7 @@ CacheCotangents complete(const EventAttentionTape& t,CacheCotangents x) {
   }
   return x;
 }
-CacheCotangents merge(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
+CacheCotangents merge(DeviceProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
     const CacheGradient* extra,const at::Tensor& error,int64_t budget) {
   const auto device=t.key.device();const int64_t owners=t.samples*t.nodes.size(),kv=t.width/t.heads*t.kv_heads;
   const auto payload=t.key.scalar_type();
@@ -43,7 +43,7 @@ CacheCotangents merge(CannProgram& p,const EventAttentionTape& t,const CacheCota
   CacheCotangents out{at::empty(t.key.sizes(),t.key.options().dtype(at::kFloat)),
     at::empty(t.value.sizes(),t.value.options().dtype(at::kFloat)),at::empty_like(a.key_connected),at::empty_like(a.value_connected)};
   for(auto x:{out.key,out.value,out.key_connected,out.value_connected})p.zero(x);
-  for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_cache_merge)(phase?32:1,stream,
+  for(int64_t phase:{0,1})p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_cache_merge)(phase?32:1,stream,
     ptr(t.lengths),ptr(lengths),ptr(a.key),ptr(a.value),ptr(a.key_connected),ptr(a.value_connected),
     ptr(b.key),ptr(b.value),ptr(b.key_connected),ptr(b.value_connected),ptr(out.key),ptr(out.value),ptr(out.key_connected),ptr(out.value_connected),ptr(error),
     owners,t.capacity,kv,int64_t(extra!=nullptr),phase),"merge connected cache boundary adjoints");},
@@ -52,13 +52,13 @@ CacheCotangents merge(CannProgram& p,const EventAttentionTape& t,const CacheCota
   return out;
 }
 }
-CacheCotangents append_cache_seed(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
+CacheCotangents append_cache_seed(DeviceProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
     const at::Tensor& error,int64_t budget) {return merge(p,t,local,nullptr,error,budget);}
-CacheCotangents append_cache_bridge(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
+CacheCotangents append_cache_bridge(DeviceProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
     const CacheGradient& extra,const at::Tensor& error,int64_t budget) {
   return merge(p,t,local,&extra,error,budget);
 }
-EventReverse prepare_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,
+EventReverse prepare_event_reverse(DeviceProgram& p,const StateReverseView& t,const EventAttentionTape& a,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
   if(roots.bias.defined()||roots.bias_connected.defined())throw std::invalid_argument("event attention has no log-bias cache roots");
   const auto device=t.state.metadata.device();const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.layout.nodes;
@@ -76,14 +76,14 @@ EventReverse prepare_event_reverse(CannProgram& p,const StateReverseView& t,cons
   out.cache.lengths=at::empty_like(a.lengths);out.previous=at::empty({events},a.lengths.options());
   out.tails=at::empty({owners},a.lengths.options());out.ranges=at::empty({events,4},a.lengths.options());
   out.node_offsets=at::tensor(t.layout.event_offsets,at::kLong).to(device);auto hash=at::empty({buckets},a.lengths.options());
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_links)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(a.mapping),ptr(a.config),ptr(a.windows),ptr(a.metadata),ptr(a.count),ptr(a.lengths),
     ptr(hash),ptr(out.ranges),ptr(out.previous),ptr(out.tails),ptr(out.cache.lengths),ptr(error),events,rows,a.capacity,nodes,ps,a.samples,buckets),
     "associate actual attention cache/event journals");},{t.state.metadata,t.state.count,a.mapping,a.config,a.windows,a.metadata,a.count,a.lengths,
       hash,out.ranges,out.previous,out.tails,out.cache.lengths,error});
   return out;
 }
-ReverseBatchPlan append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,const EventReverse& reverse,
+ReverseBatchPlan append_event_reverse(DeviceProgram& p,const StateReverseView& t,const EventAttentionTape& a,const EventReverse& reverse,
     const at::Tensor& range,StateVjp& state,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
   const int64_t w=a.width,h=a.heads,kh=a.kv_heads,d=w/h,kv=kh*d,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps,nodes=t.layout.nodes;
@@ -105,14 +105,14 @@ ReverseBatchPlan append_event_reverse(CannProgram& p,const StateReverseView& t,c
   auto fq=half?at::empty(query.sizes(),forward):query;
   auto fk=half?at::empty(key.sizes(),forward):key,fv=half?at::empty(value.sizes(),forward):value;
   const auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_plan)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_reverse_plan)(1,stream,
     ptr(t.state.metadata),ptr(a.config),ptr(reverse.ranges),ptr(reverse.previous),ptr(reverse.tails),ptr(range),ptr(state.proposal_connected),
     ptr(reverse.cache.key_connected),ptr(reverse.cache.value_connected),ptr(plan),ptr(flags),ptr(lengths),ptr(branch),ptr(error),owners,ps,c),
     "pack independent attention reverse owners");},{t.state.metadata,a.config,reverse.ranges,reverse.previous,reverse.tails,range,state.proposal_connected,
       reverse.cache.key_connected,reverse.cache.value_connected,plan,flags,lengths,branch,error});
   p.branch(branch,{done,body});p.mark(body);
   auto pack=[&](int64_t mode) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_pack)(32,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_reverse_pack)(32,stream,
       ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(t.state.values),ptr(state.proposal),ptr(a.qkv),ptr(a.projection),ptr(a.values),
       ptr(x),ptr(weights),ptr(wo),ptr(u),ptr(projected),ptr(query),ptr(key),ptr(value),ptr(on),ptr(error),c,w,h,kh,k,mode,int64_t(half)),
       "pack event attention adjoint operands");},{plan,flags,t.state.metadata,t.state.values,state.proposal,a.qkv,a.projection,a.values,
@@ -123,14 +123,14 @@ ReverseBatchPlan append_event_reverse(CannProgram& p,const StateReverseView& t,c
   if(half){p.cast(query,fq);p.cast(key,fk);p.cast(value,fv);}
   p.permute(wo,{0,2,1},wot);p.batch_matmul(u,wot,cot.reshape({c,1,w}));
   auto local=append_attention_vjp(p,{fq,fk,fv,bias,lengths,cot,on},error,1./std::sqrt(double(d)),reservation.key_rows,budget/2);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_fold)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_reverse_fold)(32,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(local.query),ptr(local.key),ptr(local.value),
     ptr(reverse.cache.key),ptr(reverse.cache.value),ptr(dprojected),ptr(error),c,w,h,kh,k),"reverse cache adoption window and clear");},
     {plan,flags,t.state.metadata,a.config,local.query,local.key,local.value,reverse.cache.key,reverse.cache.value,dprojected,error});
   p.permute(weights,{0,2,1},wt);p.batch_matmul(dprojected,wt,dx);
   p.permute(x,{0,2,1},xt);p.batch_matmul(xt,dprojected,dw);
   p.permute(local.output.reshape({c,1,w}),{0,2,1},ot);p.batch_matmul(ot,u,dwo);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_reduce)(32,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_event_reverse_reduce)(32,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(reverse.node_offsets),ptr(dx),ptr(dw),ptr(dwo),ptr(state.content),ptr(state.content_connected),
     ptr(parameters),ptr(parameter_on),ptr(error),c,w,kv,nodes),"reduce event projection and content adjoints");},
     {plan,flags,t.state.metadata,reverse.node_offsets,dx,dw,dwo,state.content,state.content_connected,parameters,parameter_on,error});

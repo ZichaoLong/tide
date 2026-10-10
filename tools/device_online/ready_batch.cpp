@@ -1,7 +1,7 @@
+#include "device_backend.h"
 #include "ready_batch.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_closure.h"
-#include "aclrtlaunch_tide_ready_pack.h"
+#include "device_launch_tide_closure.h"
+#include "device_launch_tide_ready_pack.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <stdexcept>
@@ -18,16 +18,15 @@ DeviceReady::DeviceReady(const std::vector<int64_t>& owners,int64_t regions,cons
                          int64_t samples,at::Device device,bool prefill,const std::vector<int64_t>& causal_regions)
     :nodes_(owners.size()),regions_(regions),samples_(samples),device_(device),prefill_(prefill),
      topology_(owners,regions,wires,samples,device) {
-  if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1)
+  if(at::GradMode::is_enabled()||device.type()!=tide::device_online::resident_device_type)
     throw std::invalid_argument("device ready stage requires NPU and explicit no-grad");
-  CannApi api;auto soc=CannApi::symbol<const char*(*)()>(api.runtime,"aclrtGetSocName")();
-  if(!soc||std::string(soc)!=TIDE_ASCENDC_SOC)throw std::runtime_error("ready kernel differs from actual SoC");
+  validate_kernel_device(device);
   auto policy=causal_regions.empty()?std::vector<int64_t>(regions,0):causal_regions;
   if(policy.size()!=size_t(regions))throw std::invalid_argument("ready region contract shape differs");
   for(auto value:policy)if(value!=0&&value!=1)throw std::invalid_argument("invalid ready region contract");
   causal_regions_=at::tensor(policy,at::kLong).to(device);
 }
-ReadyBatch DeviceReady::append_stage(CannProgram& p,const AtomBatch& q,const at::Tensor& stop,
+ReadyBatch DeviceReady::append_stage(DeviceProgram& p,const AtomBatch& q,const at::Tensor& stop,
                                     const at::Tensor& error) const {
   if(!q.coordinates.defined()||q.coordinates.dim()!=2||q.coordinates.size(0)<1
       ||!q.values.defined()||q.values.dim()!=2||q.values.size(1)<1)
@@ -50,12 +49,12 @@ ReadyBatch DeviceReady::append_stage(CannProgram& p,const AtomBatch& q,const at:
   const auto owners=topology_.owners(),distances=topology_.distances();
   const auto nodes=nodes_,regions=regions_,samples=samples_;const int64_t prefill=prefill_;
   p.kernel([=](void* stream) {
-    CannApi::check(ACLRT_LAUNCH_KERNEL(tide_closure)(1,stream,address(q.coordinates),address(q.valid),
+    check_device_launch(TIDE_LAUNCH_KERNEL(tide_closure)(1,stream,address(q.coordinates),address(q.valid),
       address(owners),address(distances),address(work),address(stop),address(out.consumed),
       address(out.branch),address(error),capacity,nodes,regions,samples,prefill),"device batch closure");
   },{q.coordinates,q.valid,owners,distances,work,stop,out.consumed,out.branch,error});
   p.kernel([=](void* stream) {
-    CannApi::check(ACLRT_LAUNCH_KERNEL(tide_ready_pack)(1,stream,address(q.coordinates),address(q.valid),
+    check_device_launch(TIDE_LAUNCH_KERNEL(tide_ready_pack)(1,stream,address(q.coordinates),address(q.valid),
       address(out.consumed),address(owners),address(order),address(out.atoms.coordinates),address(out.atoms.valid),
       address(out.fiber_offsets),address(out.fibers),address(out.frame_offsets),address(out.frame_fibers),
       address(out.frames),address(out.counts),address(out.branch),address(error),address(causal),address(first),

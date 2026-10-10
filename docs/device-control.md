@@ -1,4 +1,4 @@
-# Experimental device queue and CANN control
+# Device-resident queue and backend control
 
 `tools/device_online` contains separately tested building blocks and an
 experimental [content-driven forward loop](content-flow.md) for an explicit
@@ -8,9 +8,69 @@ certify that complete path. This backend isolates CANN runtime
 models, raw ACLNN numerical stages and optional Ascend C kernels from the portable
 core. The independent CPU scheduler and scalar qualification remain unchanged.
 
+## CUDA source profile and target gate
+
+The independent CUDA implementation shares the semantic kernel inventory, graph
+representation, layouts and VJPs with CANN. Its static control blocks become a
+CUDA12.8 conditional WHILE/SWITCH graph; dynamic branch indices are read by
+CUDA kernels. It does not import the CPU oracle's event trajectory. Supported
+source scope is the same declared resident module/profile set, including
+positive-delay PDG feedback, TimedDAG, Settle, streaming/online greedy prefill,
+FP32/FP16, inference and complete first-order training, continuation, checkpoint,
+capacity handling, multi-owner/locality placement, SGD/AdamW and accumulation.
+GPU execution is **target-pending**; local compilation/CPU contracts certify no
+CUDA correctness, residency, multi-card behavior, memory calibration or speed.
+
+Requirements: CUDA toolkit and driver support for12.8 conditional SWITCH graphs,
+CC8.0+, matching CUDA LibTorch/Torch build and explicit architectures. Peer
+owners require bidirectional P2P and native system-scope atomics; unsupported
+requests fail. The initial shared-kernel adapter uses one execution thread per
+logical worker and32KiB bounded scratch. cuBLAS owns an explicit4MiB workspace,
+FP32 pedantic accumulation and disabled TF32. Scalar reductions and duplicate
+scatter scans remain optimization work, without a claimed speed advantage.
+
+On a fixed clean checkout, after activating the target's own CUDA toolchain,
+choose new output directories outside the source and an explicit architecture
+list (`80-real;90-real;100` is the local compile profile):
+
+```bash
+python scripts/build.py --backend cuda --build-dir "$CORE" --jobs 4
+python scripts/build_device_control.py --core-build "$CORE" --build-dir "$STANDALONE" --runtime standalone --cuda-architectures "$ARCHS" --jobs 4
+python scripts/build_device_control.py --core-build "$CORE" --build-dir "$PYTHON_RESIDENT" --runtime python --cuda-architectures "$ARCHS" --jobs 4
+python scripts/build_resident_consumer.py --core-build "$CORE" --resident-build "$STANDALONE" --output-dir "$INSTALLED"
+python scripts/build_online_consumer.py --core-build "$CORE" --resident-build "$STANDALONE" --output-dir "$ONLINE" --jobs 4
+python scripts/verify_resident_target.py --device cuda:0 --python-core-build "$CORE" --python-resident-build "$PYTHON_RESIDENT" --standalone-resident-build "$STANDALONE" --online-build "$ONLINE" --installed-consumer-build "$INSTALLED" --output-dir "$GATE"
+```
+
+The complete gate requires at least3 visible consecutive logical devices for
+1/2/3-owner continuation/repartition. It fails rather than skipping unavailable
+hardware or missing binaries, checks exact build/source digests, runs the entire
+registered standalone component inventory and all public resident consumers,
+and rejects any skipped public test. Single-card component invocations through
+`verify_device_control.py` are useful development steps, with explicitly partial
+scope. The full gate preserves strict discrete checks and default strict control
+comparison; it cannot convert a numerical near-tie witness into equivalence.
+
+Actual residency requires a separate target trace. For a finite initial trace,
+use Nsight Systems node-level CUDA Graph tracing on the warmed control/peer
+checks, retain the `.nsys-rep` and export its CUDA API/kernel timeline:
+
+```bash
+nsys profile --trace=cuda,nvtx --cuda-graph-trace=node --output="$TRACE/control" "$STANDALONE/tide-device-control-check" --device=cuda:0 --dtype=float32
+nsys profile --trace=cuda,nvtx --cuda-graph-trace=node --output="$TRACE/peer" "$STANDALONE/tide-device-peer-check" --device=cuda:0 --dtype=float32
+nsys stats --report cuda_api_sum,cuda_gpu_kern_sum "$TRACE/control.nsys-rep"
+```
+
+Review device branch kernels and loop execution between boundary graph launch
+and completion, and peer packet ordering on both devices. Component traces
+include construction and assertions; they establish neither whole-model
+throughput nor absence of all boundary copies. Before GPU selection experiments,
+profile a representative complete consumer, calibrate memory and declare a fresh
+finite serial measurement budget. No GPU timing is accepted on this CPU/NPU host.
+
 ## Runtime control
 
-`CannProgram` binds a persistent stream to an explicit runtime model. Device
+`DeviceProgram` binds a persistent stream to an explicit runtime model. Device
 int32 indices choose labels; raw ACLNN tasks can perform packed FP32/FP16
 arithmetic inside bounded device loops. One global target list is created before task emission, as CANN requires.
 Local branch indices map onto that list on-device, allowing repeated targets
@@ -56,7 +116,7 @@ bridge is retained in the development artifacts, not exposed as a supported API.
 
 ### Precision and directed builds
 
-Floating conversion is explicit: `CannProgram::cast` accepts matching shapes
+Floating conversion is explicit: `DeviceProgram::cast` accepts matching shapes
 with FP32/FP16 input and output, and refuses integer coercion. Queue metadata,
 timestamps and counters never pass through this conversion. Copies continue
 to require identical dtypes. Conversion checks include half rounding boundaries,

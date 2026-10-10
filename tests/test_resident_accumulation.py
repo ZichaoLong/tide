@@ -1,6 +1,7 @@
 """Independent CPU autograd with explicit truncated groups and one update."""
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement, ResidentTrainingLimits
 from tidegraph.compare import equivalent
 from test_resident_training import target
@@ -20,7 +21,7 @@ def test_accumulated_updates(target, family, schedule, kind, cards, mode, tmp_pa
     r = runtime(family, target, schedule, mode=mode, model_device="cpu", resident_workspace_bytes=1024**3)
     cpu = runtime(family, "cpu", mode=mode)
     first = torch.device(target).index
-    placement = ResidentPlacement(devices=tuple(f"npu:{first+i}" for i in range(cards))) if cards>1 else None
+    placement = ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None
     names, parameters = zip(*((n,p) for n,p in cpu.execution_model.named_parameters() if p.requires_grad))
     settings = dict(lr=.001, weight_decay=.01)
     settings.update(momentum=.5) if kind == "sgd" else settings.update(eps=.0001, amsgrad=True)
@@ -102,7 +103,7 @@ def test_accumulated_updates(target, family, schedule, kind, cards, mode, tmp_pa
 def test_accumulation_failure_and_discard(target, cards):
     r = runtime("pdg", target, model_device="cpu", resident_workspace_bytes=1024**3)
     first = torch.device(target).index
-    placement = ResidentPlacement(devices=tuple(f"npu:{first+i}" for i in range(cards))) if cards>1 else None
+    placement = ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None
     with torch.no_grad(), r.training_session(1, optimizer="adamw", placement=placement,
             limits=ResidentTrainingLimits(backward_bytes=8*1024**3)) as session:
         before = session.checkpoint()

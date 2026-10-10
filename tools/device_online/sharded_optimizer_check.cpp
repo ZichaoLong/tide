@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_parameter_compare.h"
 #include "sharded_optimizer.h"
 #include "optimizer_layout.h"
@@ -110,9 +111,9 @@ void boundaries(std::vector<at::Device> devices,at::ScalarType dtype) {
   wrong=valid;wrong.owners[0].canonical="wrong";
   reject([&]{ShardedParameterReduce bad(wrong,devices,error,65536,1024*1024);});
   auto master=at::zeros({3},opt),bank=at::zeros({3},opt);
-  reject([&]{CannProgram p(devices[0]);append_owner_parameter_publish(p,{{0,{bank,at::kFloat}}},master,error,1);});
-  reject([&]{CannProgram p(devices[0]);append_owner_parameter_publish(p,{{1,{bank,at::kFloat}}},master,error,65536);});
-  reject([&]{CannProgram p(devices[0]);append_owner_parameter_publish(p,{{0,{bank.to(at::kHalf),at::kFloat}}},master,error,65536);});
+  reject([&]{DeviceProgram p(devices[0]);append_owner_parameter_publish(p,{{0,{bank,at::kFloat}}},master,error,1);});
+  reject([&]{DeviceProgram p(devices[0]);append_owner_parameter_publish(p,{{1,{bank,at::kFloat}}},master,error,65536);});
+  reject([&]{DeviceProgram p(devices[0]);append_owner_parameter_publish(p,{{0,{bank.to(at::kHalf),at::kFloat}}},master,error,65536);});
   if(dtype==at::kHalf) {
     // Finite FP32 proposal that cannot be published to half is also global.
     x.fill_(65504.f);ShardedParameterSources source;source.owners={a.owners[0]};
@@ -131,7 +132,7 @@ int main(int argc,char** argv) {
     for(int i=1;i<argc;++i){std::string arg=argv[i];if(arg.rfind("--full-shards=",0)==0)count=std::stoi(arg.substr(14));else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4)throw std::invalid_argument("explicit 1..4 NPU FP32/FP16 required");
-    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
+    args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);std::vector<at::Device> devices;for(int i=0;i<count;++i)devices.emplace_back(d.type(),d.index()+i);
     for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})for(int64_t width:{1,257})trajectory(devices,kind,args.dtype,width);
     boundaries(devices,args.dtype);

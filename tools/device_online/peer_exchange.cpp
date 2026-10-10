@@ -105,7 +105,7 @@ PeerExchange::PeerExchange(Fields fields,int64_t budget,uint32_t timeout) {
   impl_=std::make_shared<Impl>(std::move(fields),bytes,timeout);
 }
 PeerExchange::~PeerExchange()=default;
-void PeerExchange::append_send(CannProgram& p) {
+void PeerExchange::append_send(DeviceProgram& p) {
   live();if(!impl_)throw std::logic_error("peer packet is closed");
   auto owner=impl_;auto& s=*owner->state;s.resource.check();std::vector<at::Tensor> tensors;
   for(const auto& f:s.fields)tensors.push_back(f.first);
@@ -114,7 +114,7 @@ void PeerExchange::append_send(CannProgram& p) {
     CannApi::check(s.api.wait_reset(s.consumed_local,stream,s.timeout),"wait peer consumption");
   },tensors);
 }
-void PeerExchange::append_receive(CannProgram& p) {
+void PeerExchange::append_receive(DeviceProgram& p) {
   live();if(!impl_)throw std::logic_error("peer packet is closed");
   auto owner=impl_;auto& s=*owner->state;s.resource.check();std::vector<at::Tensor> tensors;
   for(const auto& f:s.fields)tensors.push_back(f.second);

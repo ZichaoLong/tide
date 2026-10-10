@@ -38,7 +38,7 @@ void forward(at::Device device,Index width,at::ScalarType dtype) {
   coords[rows-1].fill_(std::numeric_limits<Index>::max());valid[rows-1].fill_(false);h[rows-1].fill_(NAN);fresh[rows-1].fill_(NAN);
   ActionBatch actions{coords.to(device),fresh.to(device),valid.to(device)};
   auto content=h.to(device),p=controls.to(device),error=at::zeros({1},f.device(device).dtype(at::kInt));
-  CannProgram program(device);auto result=append_control_forward(program,profile,actions,content,p,error);program.finish();
+  DeviceProgram program(device);auto result=append_control_forward(program,profile,actions,content,p,error);program.finish();
   for(int replay=0;replay<3;++replay) {
     if(replay==1){controls[0].fill_(.891234f);p.copy_(controls);valid[3].fill_(false);actions.valid.copy_(valid);}
     if(replay==2)error.fill_(3);
@@ -155,7 +155,7 @@ void check(at::Device device,Index width,int mode,int roots,double zeta,at::Scal
   ControlTape c{f.read.to(device),f.raw.to(device),mode,zeta};
   auto count=at::zeros({1},t.metadata.options()),range=at::tensor({first,first},at::kLong).to(device);
   auto gradient=f.gradient.to(device),on=f.on.to(device),error=at::zeros({1},gradient.options().dtype(at::kInt));
-  CannProgram p(device);auto out=append_control_vjp(p,f.graph,t,c,count,range,gradient,on,error,32*1024*1024);p.finish();
+  DeviceProgram p(device);auto out=append_control_vjp(p,f.graph,t,c,count,range,gradient,on,error,32*1024*1024);p.finish();
   for(Index size:{48,17,0}) {
     probabilities(f,size);t.values.copy_(f.values);count.fill_(size);range[1].fill_(first+size);
     portable_torch::synchronize(device);p.run();
@@ -164,7 +164,7 @@ void check(at::Device device,Index width,int mode,int roots,double zeta,at::Scal
   }
   count.fill_(capacity);portable_torch::synchronize(device);p.run();
   if(error.cpu().item<int>()!=2||out.connected.cpu().any().item<bool>())throw std::runtime_error("invalid control tape exposed adjoints");
-  bool refused=false;try{CannProgram bad(device);append_control_vjp(bad,f.graph,t,c,count,range,gradient,on,error,1);}
+  bool refused=false;try{DeviceProgram bad(device);append_control_vjp(bad,f.graph,t,c,count,range,gradient,on,error,1);}
   catch(const std::invalid_argument&){refused=true;}if(!refused)throw std::runtime_error("control budget ignored");
 }
 }

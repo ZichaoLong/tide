@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_state.h"
 #include "content_fixture.h"
 #include "content_flow_internal.h"
@@ -53,7 +54,7 @@ void transaction(at::Device d,at::ScalarType dtype,bool selective) {
   auto stop=at::zeros({1},longs),stage=at::zeros_like(stop),count=at::zeros_like(stop);
   DeviceReady planner(profile.owners,f.graph.regions.size(),profile.wires,1,d,true,profile.causal_regions);
   FrameSelector selector(profile.owners,profile.policies,1,d);auto history=selector.initial();
-  CannProgram p(d);p.limit_workspace(8*1024*1024);
+  DeviceProgram p(d);p.limit_workspace(8*1024*1024);
   auto ready=planner.append_stage(p,input,stop,error);auto content=append_content(p,profile,ready,error,true);
   shards.append_read(p,ready,content,stage,error,8*1024*1024);
   auto selection=selector.append_stage(p,ready,content.scores,history,error);
@@ -94,14 +95,14 @@ void packing(at::Device d,at::ScalarType dtype) {
   ready.atoms={coordinates.to(d),values.to(d),at::zeros({8},opts.dtype(at::kBool))};
   ContentBatch content{values.to(d),at::zeros({8},opts.dtype(at::kFloat)),values.to(d)};
   auto map=at::tensor({-1,-1,0},at::kLong).to(d),error=at::zeros({1},opts.dtype(at::kInt));
-  CannProgram p(d);p.limit_workspace(1024*1024);auto packed=append_state_shard_pack(p,ready,content,map,1,4,error);p.finish();
+  DeviceProgram p(d);p.limit_workspace(1024*1024);auto packed=append_state_shard_pack(p,ready,content,map,1,4,error);p.finish();
   p.run();require(!error.cpu().item<int>(),"valid whole-fiber packing refused");
   require(at::equal(packed.ready.counts.cpu(),at::tensor({3,2,0},at::kLong)),"packing lost complete fibers");
   require(at::equal(packed.atom_rows.cpu(),at::tensor({1,2,3,8},at::kLong)),"physical parallel-edge order changed");
   auto actual=packed.ready.atoms.coordinates.cpu();require(actual[0][4].item<int64_t>()==17&&actual[1][4].item<int64_t>()==18,"physical edge identity changed");
   require(actual[0][2].item<int64_t>()==time,"packing rounded int64 time");
   require(at::equal(packed.ready.atoms.values.cpu()[3],at::zeros({3},dtype)),"inactive gather read NaN padding");p.close();
-  error.zero_();CannProgram refused(d);refused.limit_workspace(1024*1024);
+  error.zero_();DeviceProgram refused(d);refused.limit_workspace(1024*1024);
   auto small=append_state_shard_pack(refused,ready,content,map,1,1,error);refused.finish();refused.run();
   require(error.cpu().item<int>()==1&&!small.ready.branch.cpu().item<int>()&&!small.ready.counts.cpu().any().item<bool>(),"capacity silently split a fiber");
   require(!small.ready.atoms.valid.cpu().any().item<bool>(),"failed pack exposed partial messages");refused.close();
@@ -113,7 +114,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);
-    if(d.type()!=c10::DeviceType::PrivateUse1||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("state shard checks require explicit NPU FP32/FP16");
+    if(d.type()!=tide::device_online::resident_device_type||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("state shard checks require explicit NPU FP32/FP16");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     packing(d,args.dtype);for(bool selective:{false,true})transaction(d,args.dtype,selective);
     std::cout<<"state-shard: passed; two independent owners; no partial state/KV commit\n";runtime.close();return 0;

@@ -95,7 +95,7 @@ void check(at::Device device,Index width,int variant,int mode,at::ScalarType dty
   }
   auto parameters=at::empty({event_parameter_offsets(f.graph,width).back()},floats),on=at::empty({1,4},bools);
   auto error=at::zeros({1},floats.dtype(at::kInt)),range=at::tensor(std::vector<Index>{0,count},at::kLong).to(device);
-  CannProgram p(device);p.limit_workspace(64*1024*1024);
+  DeviceProgram p(device);p.limit_workspace(64*1024*1024);
   for(auto x:{state.content,state.content_connected,parameters,on})p.zero(x);
   auto reverse=prepare_event_reverse(p,t,a,roots,error,64*1024*1024);
   append_event_reverse(p,t,a,reverse,range,state,parameters,on,error,prefill?2:1,64*1024*1024);p.finish();
@@ -149,7 +149,7 @@ void cache_bridge(at::Device device,Index width,at::ScalarType dtype) {
     (side%2?root.value_connected:root.key_connected)=at::tensor(flags[side],at::kLong).to(at::kBool).to(device);
   }
   for(int mode=0;mode<3;++mode) {
-    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);CannProgram p(device);
+    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);DeviceProgram p(device);
     auto result=mode==2?append_cache_bridge(p,a,local,carry,error,1024*1024):
       append_cache_seed(p,a,mode==1?local:CacheCotangents{},error,1024*1024);
     p.finish();
@@ -174,12 +174,12 @@ void cache_bridge(at::Device device,Index width,at::ScalarType dtype) {
     auto wrong=a;auto extra=carry;
     if(invalid<2)wrong.lengths=at::tensor({invalid==0?-1:4,0,1},at::kLong).to(device);
     else extra.lengths=at::tensor({1,0,1},at::kLong).to(device);
-    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);CannProgram p(device);
+    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);DeviceProgram p(device);
     append_cache_bridge(p,wrong,local,extra,error,1024*1024);p.finish();p.run();
     if(error.cpu().item<int>()!=2)throw std::runtime_error("cache bridge accepted incompatible lengths");p.close();
   }
   auto reject=[&](const CacheCotangents& root,int64_t budget) {
-    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);CannProgram p(device);bool refused=false;
+    auto error=at::zeros({1},floats.dtype(at::kInt)).to(device);DeviceProgram p(device);bool refused=false;
     try{append_cache_seed(p,a,root,error,budget);}catch(const std::invalid_argument&){refused=true;}
     if(!refused)throw std::runtime_error("cache bridge accepted invalid root or budget");
   };

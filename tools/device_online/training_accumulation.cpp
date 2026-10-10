@@ -22,7 +22,7 @@ std::vector<ParameterVjp> accumulate_banks(const std::vector<ParameterVjp>& prev
   }
   if(bytes>max_bytes)throw std::invalid_argument("gradient accumulation tensor budget exceeded");
   std::vector<ParameterVjp> result;
-  std::vector<std::unique_ptr<CannProgram>> programs;
+  std::vector<std::unique_ptr<DeviceProgram>> programs;
   std::vector<Tensor> errors;
   // Preflight/build every owner before any execution. The first copy isolates
   // public backward views; later updates consume that private numeric bank.
@@ -31,7 +31,7 @@ std::vector<ParameterVjp> accumulate_banks(const std::vector<ParameterVjp>& prev
   for(size_t i=0;i<current.size();++i) {
     const auto& g=current[i];const auto device=g.values.device();
     auto error=at::zeros({1},g.values.options().dtype(at::kInt));
-    auto p=std::make_unique<CannProgram>(device);p->limit_workspace(program_bytes);
+    auto p=std::make_unique<DeviceProgram>(device);p->limit_workspace(program_bytes);
     if(previous.empty()) {
       auto out=g;out.values=at::empty_like(g.values);out.connected=at::empty_like(g.connected);
       p->copy(out.values,g.values);p->copy(out.connected,g.connected);result.push_back(std::move(out));

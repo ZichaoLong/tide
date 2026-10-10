@@ -1,6 +1,7 @@
 """Optional diagnostic exports must not control VJP/optimizer correctness."""
 import pytest
 import torch
+from resident_test_target import owner_devices
 from tidegraph import ResidentPlacement
 from test_resident_training import target, training_case
 
@@ -28,7 +29,7 @@ def test_consumer_training_record_modes(implementation, dtype_name, memory, tmp_
                 schedule="prefill", preset="resident", training=True, optimizer="adamw",
                 steps=2, warmup=0, windows_per_step=2, diagnostics=diagnostics,
                 native_library=os.environ["TIDE_BUILD_DIR"], resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
-                resident_placement=ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")))
+                resident_placement=ResidentPlacement(devices=owner_devices(device, 2)))
         assert result["diagnostics"] == diagnostics
         assert result["memory_admission"]["allocator_within_estimate"]
         results.append(result)
@@ -45,8 +46,7 @@ def test_consumer_training_record_modes(implementation, dtype_name, memory, tmp_
     ("settle", "greedy", "softp", 2),
 ])
 def test_training_without_diagnostic_exports(target, family, schedule, mode, cards, tmp_path):
-    first = torch.device(target).index
-    owners = ResidentPlacement(devices=tuple(f"npu:{first+i}" for i in range(cards))) if cards>1 else None
+    owners = ResidentPlacement(devices=owner_devices(target, cards)) if cards>1 else None
     # Existing independent CPU autograd checks compare full continuation, roots,
     # None/connected-zero flags, three updates and the saved/restored suffix.
     training_case(target, family, schedule, "adamw", tmp_path,
@@ -70,7 +70,7 @@ def test_consumer_observer_requests_records(training):
     candidate = run(p, implementation="native", device=device, schedule="prefill", preset="resident",
                     diagnostics=False, observer=observer(actual), native_library=os.environ["TIDE_BUILD_DIR"],
                     resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
-                    resident_placement=ResidentPlacement(devices=(str(device), f"npu:{device.index+1}")),
+                    resident_placement=ResidentPlacement(devices=owner_devices(device, 2)),
                     **kwargs)
     same(actual, expected)
     assert candidate["outputs"] == reference["outputs"]

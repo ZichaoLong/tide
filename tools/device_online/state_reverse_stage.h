@@ -9,7 +9,7 @@ struct StateReverseStage {
   at::Tensor range,destinations,score_gradient,read_connected;
   StateCotangents cot;
 };
-StateReverseStage append_state_reverse_stage(CannProgram&,const StateReversePacket&,
+StateReverseStage append_state_reverse_stage(DeviceProgram&,const StateReversePacket&,
     const StateTape& parameters,const at::Tensor& global_range,const StateCotangents&,
     const at::Tensor& node_ids,const at::Tensor& score_gradient,const at::Tensor& read_connected,
     const at::Tensor& error,int64_t tensor_budget,

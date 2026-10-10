@@ -3,7 +3,7 @@
 
 namespace tide::device_online {
 RemoteState::RemoteState(StateOwner& owner,int64_t budget):owner_(owner),budget_(budget) {}
-RemoteStateResult RemoteState::append_read_send(CannProgram& coordinator,const StateShardBatch& input,
+RemoteStateResult RemoteState::append_read_send(DeviceProgram& coordinator,const StateShardBatch& input,
     const at::Tensor& stage,const at::Tensor& error) {
   if(program_)throw std::logic_error("remote state service already constructed");
   const auto remote=owner_.state().values.device();
@@ -18,7 +18,7 @@ RemoteStateResult RemoteState::append_read_send(CannProgram& coordinator,const S
     {input.ready.atoms.coordinates,ready.atoms.coordinates},{input.ready.atoms.values,ready.atoms.values},{input.ready.atoms.valid,ready.atoms.valid},
     {input.ready.fibers,ready.fibers},{input.ready.fiber_offsets,ready.fiber_offsets},{input.ready.counts,ready.counts},
     {input.content.content,content.content},{input.content.weighted,content.weighted}},budget_);
-  program_=std::make_unique<CannProgram>(remote);auto& p=*program_;p.limit_workspace(budget_);
+  program_=std::make_unique<DeviceProgram>(remote);auto& p=*program_;p.limit_workspace(budget_);
   auto head=p.label(),body=p.label(),end=p.label();auto again=at::zeros_like(remote_command);
   p.mark(head);request_->append_receive(p);p.branch(remote_command,{end,body});p.mark(body);
   const auto read=owner_.append_read(p,ready,content,remote_error);
@@ -41,15 +41,15 @@ RemoteStateResult RemoteState::append_read_send(CannProgram& coordinator,const S
   completion_->append_send(p);p.branch(again,{head});p.mark(end);p.finish();
   coordinator.copy(command_,work);request_->append_send(coordinator);return out;
 }
-void RemoteState::append_read_receive(CannProgram& p){read_result_->append_receive(p);}
-void RemoteState::append_update_send(CannProgram& p,const SelectionProposal& selected,const at::Tensor& error) {
+void RemoteState::append_read_receive(DeviceProgram& p){read_result_->append_receive(p);}
+void RemoteState::append_update_send(DeviceProgram& p,const SelectionProposal& selected,const at::Tensor& error) {
   p.copy(active_,selected.active);p.copy(controls_,selected.controls);p.copy(stage_error_,error);selection_->append_send(p);
 }
-void RemoteState::append_update_receive(CannProgram& p){update_result_->append_receive(p);}
-void RemoteState::append_commit(CannProgram& p,const at::Tensor& error) {
+void RemoteState::append_update_receive(DeviceProgram& p){update_result_->append_receive(p);}
+void RemoteState::append_commit(DeviceProgram& p,const at::Tensor& error) {
   p.copy(commit_error_,error);decision_->append_send(p);completion_->append_receive(p);
 }
-void RemoteState::append_stop(CannProgram& p){p.copy(command_,stop_);request_->append_send(p);}
+void RemoteState::append_stop(DeviceProgram& p){p.copy(command_,stop_);request_->append_send(p);}
 void RemoteState::submit(){program_->submit();}
 void RemoteState::wait(){program_->wait();}
 void RemoteState::close() {

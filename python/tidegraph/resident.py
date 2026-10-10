@@ -1,4 +1,4 @@
-"""Public Python client for the optional C++/CANN resident inference backend."""
+"""Public Python client for the optional C++ resident resident inference backend."""
 import torch
 from .native_model import encode_model
 from .native_records import from_continuation, to_continuation, window_records
@@ -16,7 +16,7 @@ class ResidentBackend:
     def __init__(self, runtime, native_library, resident_library):
         from .native_loader import load_native
         from .resident_loader import load_resident
-        self.core = load_native(native_library, backend="npu")
+        self.core = load_native(native_library, backend=runtime.device.type)
         self.module, self.record = load_resident(resident_library, self.core)
         self.runtime = runtime
 
@@ -77,9 +77,9 @@ class ResidentSession:
         return self.snapshot()
 
     def advance_device(self, inputs, *, stop=None, sealed_until=None):
-        """Borrow packed NPU outputs until next advance/close; no state export.
+        """Borrow packed device outputs until next advance/close; no state export.
 
-        CPU and NPU input payloads are accepted at this boundary. Returned
+        CPU and resident-device input payloads are accepted at this boundary. Returned
         coordinates retain the physical encoded graph, including Settle's times.
         """
         r = self.runtime
@@ -98,7 +98,7 @@ class ResidentSession:
         return from_continuation(self.runtime.execution_graph, self.owner.snapshot())
 
     def snapshot_device(self, *, max_bytes, compact=False, device_budgets=None):
-        """Save numerical continuation on its original NPU owners, within budget."""
+        """Save numerical continuation on its original device owners, within budget."""
         from .coordinates import integers
         if parameter_identity(self.runtime.execution_model) != self.parameters:
             raise RuntimeError("resident parameters changed")

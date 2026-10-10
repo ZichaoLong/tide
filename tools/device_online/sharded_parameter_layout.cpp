@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_parameter_sources.h"
 #include "parameter_plan.h"
 #include <limits>
@@ -8,7 +9,7 @@ std::vector<ParameterVjp> sharded_parameter_layout(const Graph& graph,const Para
     const std::vector<at::Device>& devices,int64_t budget,bool controls) {
   if(devices.empty()||budget<1)throw std::invalid_argument("canonical parameter layout needs bounded devices");
   std::set<c10::DeviceIndex> seen;
-  for(auto d:devices)if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0||!seen.insert(d.index()).second)
+  for(auto d:devices)if(d.type()!=tide::device_online::resident_device_type||d.index()<0||!seen.insert(d.index()).second)
     throw std::invalid_argument("canonical parameter layout needs distinct explicit NPUs");
   const auto plan=plan_parameters(graph,registry,width,std::numeric_limits<int64_t>::max(),controls);
   std::vector<bool> active;for(auto offset:plan.offsets)active.push_back(offset>=0);

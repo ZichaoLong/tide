@@ -1,4 +1,4 @@
-"""NPU runtime boundary for the complete consumer's static capacity plan."""
+"""Accelerator runtime boundary for the complete consumer's static capacity plan."""
 from dataclasses import replace
 import torch
 from .capacity import Capacities, Chunks, packet_geometry, plan_samples
@@ -12,12 +12,13 @@ def prepare(packet, device, forward, limits, owners, head, training, optimizer, 
     samples = []
     for value in devices:
         d = torch.device(value)
-        if d.type != 'npu' or d.index is None:
-            raise ValueError('consumer memory admission needs explicit logical NPUs')
-        with torch.npu.device(d):
-            free,total = torch.npu.mem_get_info(d)
+        if d.type not in {'cuda', 'npu'} or d.type != torch.device(device).type or d.index is None:
+            raise ValueError('consumer memory admission needs explicit logical devices from one CUDA/NPU backend')
+        api = getattr(torch, d.type)
+        with api.device(d):
+            free,total = api.mem_get_info(d)
             samples.append(dict(device=str(d),free_bytes=free,total_bytes=total,
-                                allocated_bytes=torch.npu.memory_allocated(d)))
+                                allocated_bytes=api.memory_allocated(d)))
     g = packet_geometry(packet,windows=windows,payload=payload,
         training=training,adamw=optimizer=='adamw',diagnostics=diagnostics,
         devices=len(devices),locality=owners.policy=='locality')

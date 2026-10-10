@@ -10,12 +10,12 @@ struct StateShardBatch {
   ContentBatch content;
   at::Tensor fiber_rows,atom_rows,destinations;
 };
-StateShardBatch append_state_shard_pack(CannProgram&,const ReadyBatch&,const ContentBatch&,
+StateShardBatch append_state_shard_pack(DeviceProgram&,const ReadyBatch&,const ContentBatch&,
     const at::Tensor& mapping,int64_t local_nodes,int64_t capacity,const at::Tensor& error);
-SelectionProposal append_state_shard_selection(CannProgram&,const StateShardBatch&,
+SelectionProposal append_state_shard_selection(DeviceProgram&,const StateShardBatch&,
     const SelectionProposal& global,const at::Tensor& error);
 // source has capacity rows; destination has global rows + capacity distinct
 // discard rows. No duplicate-index scatter, including inactive padding.
-void append_state_shard_scatter(CannProgram&,const StateShardBatch&,const at::Tensor& source,
+void append_state_shard_scatter(DeviceProgram&,const StateShardBatch&,const at::Tensor& source,
                                const at::Tensor& destination);
 } // namespace tide::device_online

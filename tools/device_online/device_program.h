@@ -1,20 +1,21 @@
 #pragma once
 #include <ATen/ATen.h>
+#include "device_backend.h"
 #include <functional>
 #include <memory>
 #include <vector>
 
 namespace tide::device_online {
 struct CannApi;
-// Experimental single-device control component, not a graph executor. It owns
-// model/stream/label/descriptor/workspace lifetimes. Operations below affect
-// fixed-size control buffers only; no autograd or hidden CPU fallback.
-class CannProgram {
+// Device control component, shared by independent CUDA and CANN backends.
+// Owns graph/stream/label/workspace lifetimes. Operations use bounded buffers;
+// no per-event host decisions, autograd or hidden CPU execution.
+class DeviceProgram {
  public:
-  explicit CannProgram(at::Device);
-  ~CannProgram();
-  CannProgram(const CannProgram&) = delete;
-  CannProgram& operator=(const CannProgram&) = delete;
+  explicit DeviceProgram(at::Device);
+  ~DeviceProgram();
+  DeviceProgram(const DeviceProgram&) = delete;
+  DeviceProgram& operator=(const DeviceProgram&) = delete;
   size_t label();
   void mark(size_t);
   void branch(const at::Tensor& int32_index, const std::vector<size_t>& labels);
@@ -69,8 +70,10 @@ class CannProgram {
  private:
   // Deterministic API-failure injection belongs to the standalone test adapter;
   // no environment switches or runtime mutation of a live program are exposed.
-  friend struct CannProgramTestAccess;
-  CannProgram(at::Device, const std::function<void(CannApi&)>& configure_api);
+  friend struct DeviceProgramTestAccess;
+  friend class DeviceSequence;
+  void order_after(const DeviceProgram&); // CUDA top-level sequence completion.
+  DeviceProgram(at::Device, const std::function<void(CannApi&)>& configure_api);
   struct Impl;
   std::unique_ptr<Impl> impl_;
 };

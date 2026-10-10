@@ -1,4 +1,4 @@
-#include "cann_program.h"
+#include "device_program.h"
 #include "cann_api.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
@@ -8,9 +8,9 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-struct CannProgramTestAccess {
-  static std::unique_ptr<CannProgram> make(at::Device device,const std::function<void(CannApi&)>& inject) {
-    return std::unique_ptr<CannProgram>(new CannProgram(device,inject));
+struct DeviceProgramTestAccess {
+  static std::unique_ptr<DeviceProgram> make(at::Device device,const std::function<void(CannApi&)>& inject) {
+    return std::unique_ptr<DeviceProgram>(new DeviceProgram(device,inject));
   }
 };
 }
@@ -63,7 +63,7 @@ Injection* Injection::current=nullptr;
 void run_case(at::Device device,Fault fault,portable_torch::RuntimeSession& runtime,
               const portable_torch::RuntimeOptions& options) {
   at::NoGradGuard guard;Injection injection(fault);
-  auto make=[&]{return CannProgramTestAccess::make(device,[&](CannApi& api){injection.install(api);});};
+  auto make=[&]{return DeviceProgramTestAccess::make(device,[&](CannApi& api){injection.install(api);});};
   if(fault==Fault::construction) {
     rejects([&]{auto program=make();},"injected construction failure was swallowed");
     require(injection.destroyed==1,"partial construction leaked its first stream");

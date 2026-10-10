@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "content_fixture.h"
 #include "device_optimizer.h"
 #include "tide/stream.h"
@@ -96,7 +97,7 @@ void trajectory(at::Device device,at::ScalarType dtype,int kind,Index width,bool
   ContentFlow flow(f.graph,f.model,f.initial,device,l);const auto banks=flow.parameter_banks();
   std::map<std::pair<Index,Index>,Index> positions;
   for(const auto& x:f.input)++positions[{x.batch,x.port}];
-  auto error=at::zeros({1},layout.values.options().dtype(at::kInt));CannProgram update(device);
+  auto error=at::zeros({1},layout.values.options().dtype(at::kInt));DeviceProgram update(device);
   optimizer.append_step(update,layout,error);append_parameter_publish(update,banks,layout,optimizer.values(),error,1024*1024);update.finish();
   auto q=f.initial;
   for(int step=0;step<4;++step) {
@@ -143,7 +144,7 @@ void trajectory(at::Device device,at::ScalarType dtype,int kind,Index width,bool
   std::vector<External> suffix;for(auto x:f.input){x.time+=32;x.position+=4*positions.at({x.batch,x.port});suffix.push_back(x);}
   tide_bench::compare(flow.advance(suffix,40),Streaming(f.graph,cpu_model,{}).run(q,suffix,40,40),true,dtype,
     std::nullopt,dtype==at::kHalf?2e-2:1e-5,dtype==at::kHalf?2e-3:1e-6);
-  const auto before=bank_snapshot(banks);error.fill_(7);CannProgram refused(device);
+  const auto before=bank_snapshot(banks);error.fill_(7);DeviceProgram refused(device);
   append_parameter_publish(refused,banks,layout,at::full_like(optimizer.values(),.75f),error,1024*1024);refused.finish();
   portable_torch::synchronize(device);refused.run();const auto after=bank_snapshot(banks);
   require(error.cpu().item<int>()==7&&before.size()==after.size(),"publication overwrote prior error");
@@ -158,7 +159,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argsv.size(),argsv.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("master publication requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("master publication requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("master publication requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;Index cases=0;
     for(int kind=0;kind<6;++kind)for(Index width:{3,33})for(bool prefill:{false,true})
       for(auto algorithm:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw}) {

@@ -1,7 +1,7 @@
 #include "packed_aggregate.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_aggregate_plan.h"
-#include "aclrtlaunch_tide_aggregate_apply.h"
+#include "device_backend.h"
+#include "device_launch_tide_aggregate_plan.h"
+#include "device_launch_tide_aggregate_apply.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -54,7 +54,7 @@ PackedAggregate::PackedAggregate(const ContentProfile& p,at::Device device,int64
   kinds_=at::tensor(kinds,at::kLong).to(device);lengths_=at::tensor(lengths,at::kLong).to(device);
   weights_=weights.to(device);chunks_=at::zeros({1},kinds_.options());
 }
-void PackedAggregate::append(CannProgram& p,const ReadyBatch& ready,const PackedSum& sum,const at::Tensor& error,bool vectorized) const {
+void PackedAggregate::append(DeviceProgram& p,const ReadyBatch& ready,const PackedSum& sum,const at::Tensor& error,bool vectorized) const {
   for(const auto& x:{sum.content,sum.weighted})if(x.scalar_type()!=dtype_||x.device()!=weights_.device()
       ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("Aggregate requires matching payload buffers");
   // Normalization coefficients retain FP32 range even with half payloads.
@@ -66,7 +66,7 @@ void PackedAggregate::append(CannProgram& p,const ReadyBatch& ready,const Packed
   auto logits=at::empty({chunk,slots},weights.options()),prob=at::empty_like(logits);
   auto masses=at::empty_like(logits),total=at::empty({chunk,1},weights.options());
   auto plan=[&](int64_t mode,int64_t target) {
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_plan)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_aggregate_plan)(1,stream,
       ptr(ready.fibers),ptr(ready.fiber_offsets),ptr(ready.counts),ptr(sum.keys),ptr(sources),ptr(kinds),ptr(lengths),ptr(weights),
       ptr(ids),ptr(cursor),ptr(branch),ptr(chunks),ptr(logits),ptr(prob),ptr(total),ptr(coefficient),ptr(error),slots,chunk,mode,target),
       "plan normalized Aggregate domains");},
@@ -81,7 +81,7 @@ void PackedAggregate::append(CannProgram& p,const ReadyBatch& ready,const Packed
     plan(2,target);p.branch(branch,{begin});p.mark(done);
   }
   const auto width=sum.content.size(1);const auto blocks=uint32_t(vectorized?std::min<int64_t>(32,rows_):1);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_apply)(blocks,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_aggregate_apply)(blocks,stream,
     ptr(ready.fibers),ptr(ready.fiber_offsets),ptr(ready.counts),ptr(sum.order),ptr(kinds),ptr(coefficient),
     ptr(sum.weighted),ptr(sum.content),ptr(error),width,int64_t(vectorized),fp16),"apply normalized Aggregate contributions");},
     {ready.fibers,ready.fiber_offsets,ready.counts,sum.order,kinds,coefficient,sum.weighted,sum.content,error});

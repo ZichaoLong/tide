@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "lh_component_check.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
@@ -12,7 +13,7 @@ int main(int argc,char** argv) {
       throw std::invalid_argument("packed LH component requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("packed LH component requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("packed LH component requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
     tide::device_online::test::LhPrecision precision;
     const auto cases=tide::device_online::test::lh_component(device,precision,args.dtype);

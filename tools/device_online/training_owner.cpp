@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "training_internal.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <limits>
@@ -9,8 +10,8 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
     std::vector<OptimizerGroup> groups,ResidentTrainingLimits l,const ResidentTrainingCheckpoint* checkpoint)
     :graph(std::move(g)),device(d),limits(l),kind(k),session(training_detail::session_id()),cut(q.cut) {
   training_detail::no_grad();
-  if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0)
-    throw std::invalid_argument("resident training requires an explicit logical NPU");
+  if(d.type()!=tide::device_online::resident_device_type||d.index()<0)
+    throw std::invalid_argument("resident training requires an explicit logical resident device");
   if(l.forward.trace<1||l.windows<1||l.retained_bytes<1||l.backward_bytes<1||l.optimizer_bytes<1
       ||l.program_workspace_bytes<1||l.reverse_chunk_rows<1)
     throw std::invalid_argument("resident training requires recorded journals and positive memory/window limits");
@@ -122,7 +123,7 @@ ResidentStep ResidentTrainingSession::step() {
   if(s.generation==std::numeric_limits<Index>::max())throw std::overflow_error("resident parameter generation exhausted");
   try {
     auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));
-    CannProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
+    DeviceProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
     s.optimizer->append_step(p,s.accumulated_batches?s.accumulated:s.gradient,error);
     append_parameter_publish(p,s.flow->parameter_banks(),s.layout,s.optimizer->values(),error,s.limits.optimizer_bytes/4);
     p.finish();

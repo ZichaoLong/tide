@@ -28,26 +28,26 @@ struct GraphVjp {
 // rows require the public registry's alias accumulation before optimizer use.
 // FP16/FP32 forward tapes retain actual payload precision; roots, journals and
 // returned adjoints are FP32. Public training has separate capability gates.
-GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+GraphVjp append_graph_vjp(DeviceProgram&,const ReverseTape&,const GraphCotangents&,
                          const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);
 // Internal composition seam: invoked once while constructing the device stage
 // loop. The returned Full tensors participate in that loop, not host dispatch.
-using FullStageVjp=std::function<FullVjp(CannProgram&,const FullTape&,const at::Tensor&,
+using FullStageVjp=std::function<FullVjp(DeviceProgram&,const FullTape&,const at::Tensor&,
                                        const at::Tensor&,const at::Tensor&)>;
-GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+GraphVjp append_graph_vjp(DeviceProgram&,const ReverseTape&,const GraphCotangents&,
                          const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,
                          const FullStageVjp&);
 // State/cache owners prepare once, consume each actual reverse stage, and
 // publish fiber adjoints after coordinator Aggregate processing. Callbacks only
 // construct device programs; they never dispatch individual events on the host.
 struct GraphStateVjp {
-  std::function<void(CannProgram&,const ReverseLinks&)> prepare;
-  std::function<StateVjp(CannProgram&,const at::Tensor&,const StateCotangents&,const ControlScores&)> stage;
-  std::function<void(CannProgram&,const at::Tensor&,const at::Tensor&,const at::Tensor&)> sources;
+  std::function<void(DeviceProgram&,const ReverseLinks&)> prepare;
+  std::function<StateVjp(DeviceProgram&,const at::Tensor&,const StateCotangents&,const ControlScores&)> stage;
+  std::function<void(DeviceProgram&,const at::Tensor&,const at::Tensor&,const at::Tensor&)> sources;
 };
-GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+GraphVjp append_graph_vjp(DeviceProgram&,const ReverseTape&,const GraphCotangents&,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,const FullStageVjp&,const GraphStateVjp&,int64_t projection_workspace=0);
-GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+GraphVjp append_graph_vjp(DeviceProgram&,const ReverseTape&,const GraphCotangents&,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,const FullStageVjp&,const GraphStateVjp&,
     int64_t projection_workspace,const std::vector<ProjectionGradient>& reuse);
 

@@ -151,7 +151,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
 void ContentFlow::Impl::construct() {
   const auto& g=profile.graph;const auto opts=error.options().dtype(profile.dtype);
   DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
-  program=std::make_unique<CannProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
+  program=std::make_unique<DeviceProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
   if(export_diagnostics) {
     // Preserve the parameters that generated this window's recorded sources;

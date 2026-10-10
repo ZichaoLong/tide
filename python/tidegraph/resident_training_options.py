@@ -53,7 +53,7 @@ def optimizer_groups(core, groups):
 
 @dataclass(frozen=True)
 class ResidentPlacement:
-    """Logical NPU owners; empty devices keeps the single-device implementation."""
+    """Logical owners of one accelerator family; empty means one device."""
     devices: tuple[str, ...] = ()
     policy: str = "locality"
     full_owners: tuple[int, ...] = ()
@@ -67,10 +67,11 @@ class ResidentPlacement:
             object.__setattr__(self, name, tuple(value))
         if self.policy not in {"memory", "locality"}:
             raise ValueError("resident placement policy must be memory or locality")
-        if (len(self.devices) > 16 or any(not isinstance(d, str) or not re.fullmatch(r"npu:(0|[1-9][0-9]*)", d)
+        if (len(self.devices) > 16 or any(not isinstance(d, str) or not re.fullmatch(r"(?:npu|cuda):(0|[1-9][0-9]*)", d)
                                          or int(d.split(":")[1]) > 127 for d in self.devices)
-                or len(set(self.devices)) != len(self.devices)):
-            raise ValueError("resident placement requires distinct explicit logical NPUs")
+                or len(set(self.devices)) != len(self.devices)
+                or len({d.split(":")[0] for d in self.devices}) > 1):
+            raise ValueError("resident placement requires distinct explicit logical devices of one backend")
         for name in ("full_owners", "state_owners"):
             if any(type(x) is not int or not 0 <= x < len(self.devices) for x in getattr(self, name)):
                 raise ValueError(f"invalid resident {name} indices")

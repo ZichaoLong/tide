@@ -38,7 +38,7 @@ struct ContentFlow::Impl {
   std::unique_ptr<RemoteFull> remote_full;
   std::unique_ptr<ShardedFull> sharded_full;
   std::unique_ptr<ShardedState> sharded_state;
-  std::unique_ptr<CannProgram> program;
+  std::unique_ptr<DeviceProgram> program;
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false,export_diagnostics=true;
   int64_t window_start=0;

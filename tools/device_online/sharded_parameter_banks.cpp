@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "sharded_parameter_banks.h"
 #include "tide/fiber_attention.h"
 #include "packed_lh_full.h"
@@ -11,7 +12,7 @@ std::map<std::string,ParameterDestination> sharded_parameter_destinations(const 
   if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("sharded publication requires FP32/FP16 payloads");
   std::map<std::string,ParameterDestination> out;
   auto add=[&](const std::string& name,at::Tensor value) {
-    if(!value.defined()||value.device().type()!=c10::DeviceType::PrivateUse1||value.requires_grad()
+    if(!value.defined()||value.device().type()!=tide::device_online::resident_device_type||value.requires_grad()
         ||(value.scalar_type()!=dtype&&value.scalar_type()!=at::kFloat)||value.numel()<1
         ||!out.emplace(name,ParameterDestination{value,dtype}).second)
       throw std::invalid_argument("invalid sharded parameter destination");

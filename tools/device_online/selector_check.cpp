@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "frame_selector.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/region.h"
@@ -31,7 +32,7 @@ void check(at::Device device) {
     ReadyBatch ready;ready.fibers=at::zeros({capacity,4},opts);ready.frames=at::zeros({capacity,3},opts);
     ready.frame_offsets=at::zeros({capacity+1},opts);ready.frame_fibers=at::zeros({capacity},opts);ready.counts=at::zeros({3},opts);
     auto scores=at::zeros({capacity},opts.dtype(at::kFloat)),error=at::zeros({1},opts.dtype(at::kInt)),refusal=at::zeros_like(error);
-    CannProgram program(device);auto out=selector.append_stage(program,ready,scores,history,error);
+    DeviceProgram program(device);auto out=selector.append_stage(program,ready,scores,history,error);
     program.add(error,refusal);selector.append_commit(program,history,out,error);program.finish();
     auto fibers=at::zeros({capacity,4},at::kLong),frames=at::zeros({capacity,3},at::kLong);
     auto offsets=at::zeros({capacity+1},at::kLong),members=at::zeros({capacity},at::kLong);
@@ -101,7 +102,7 @@ int main(int argc,char** argv) {
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("selector check requires explicit NPU and FP32 scoring");
     auto device=portable_torch::resolve_device(args);
-    if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("selector check requires NPU");
+    if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("selector check requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);check(device);runtime.close();return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}
 }

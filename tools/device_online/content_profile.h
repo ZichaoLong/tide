@@ -33,21 +33,21 @@ struct ContentUpdate {
   at::Tensor event_meta,event_values;
 };
 class PackedAggregate;
-ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error,bool vectorized,
+ContentBatch append_content(DeviceProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error,bool vectorized,
                             const PackedAggregate* aggregate=nullptr);
-void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const ContentBatch&,
+void append_read(DeviceProgram&,const ContentProfile&,const ReadyBatch&,const ContentBatch&,
                  const ContentState&,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized,
                  const at::Tensor& attention_proposals={});
-ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,
+ContentUpdate append_content_state(DeviceProgram&,const ContentProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
     const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits&,
     const at::Tensor& attention_proposals={});
-void append_read(CannProgram&,const StateKernelProfile&,const ReadyBatch&,const ContentBatch&,
+void append_read(DeviceProgram&,const StateKernelProfile&,const ReadyBatch&,const ContentBatch&,
                  const ContentState&,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized,
                  const at::Tensor& attention_proposals={});
-ContentUpdate append_content_state(CannProgram&,const StateKernelProfile&,const ReadyBatch&,
+ContentUpdate append_content_state(DeviceProgram&,const StateKernelProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
     const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits&,
     const at::Tensor& attention_proposals={});
-void commit_content_state(CannProgram&,const ContentState&,const ContentUpdate&,const at::Tensor& error);
+void commit_content_state(DeviceProgram&,const ContentState&,const ContentUpdate&,const at::Tensor& error);
 } // namespace tide::device_online

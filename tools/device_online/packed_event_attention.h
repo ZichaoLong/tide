@@ -22,8 +22,8 @@ struct EventAttentionGroup {
                       int64_t query_heads,int64_t kv_heads,int64_t chunk,int64_t key_rows);
   EventAttentionGroup(const StateKernelProfile&,const Continuation&,at::Device,const ContentLimits&,
                       int64_t query_heads,int64_t kv_heads,int64_t chunk,int64_t key_rows);
-  EventGroupStage propose(CannProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& values,const at::Tensor& error);
-  void commit(CannProgram&,const EventGroupStage&,const SelectionProposal&,const at::Tensor& error);
+  EventGroupStage propose(DeviceProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& values,const at::Tensor& error);
+  void commit(DeviceProgram&,const EventGroupStage&,const SelectionProposal&,const at::Tensor& error);
   void export_states(Continuation&) const;
   void export_trace(std::vector<Event>&) const;
 };
@@ -33,9 +33,9 @@ class PackedEventAttention {
   static long double minimum_bytes(const StateKernelProfile&,const Continuation&,const ContentLimits&);
   PackedEventAttention(const ContentProfile&,const Continuation&,at::Device,const ContentLimits&,int64_t budget);
   PackedEventAttention(const StateKernelProfile&,const Continuation&,at::Device,const ContentLimits&,int64_t budget);
-  EventAttentionStage propose(CannProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& error,
+  EventAttentionStage propose(DeviceProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& error,
                               const at::Tensor& initial_values={});
-  void commit(CannProgram&,const EventAttentionStage&,const SelectionProposal&,const at::Tensor& error);
+  void commit(DeviceProgram&,const EventAttentionStage&,const SelectionProposal&,const at::Tensor& error);
   void reset_window();
   std::vector<EventAttentionTape> tape() const;
   void export_states(Continuation&) const;

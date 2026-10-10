@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "graph_vjp_fixture.h"
 #include "precision_graph_fixture.h"
 #include "portable_torch/runtime.hpp"
@@ -37,7 +38,7 @@ void check(at::Device device,int shape,int variant,bool prefill,int mode,at::Sca
   roots.outputs.masked_fill_(roots.outputs_connected.logical_not().unsqueeze(1),poison);
   roots.pending.masked_fill_(roots.pending_connected.logical_not().unsqueeze(1),poison);
   roots.final.masked_fill_(roots.final_connected.logical_not().unsqueeze(2),poison);
-  auto error=at::zeros({1},opts.dtype(at::kInt));CannProgram p(device);p.limit_workspace(64*1024*1024);
+  auto error=at::zeros({1},opts.dtype(at::kInt));DeviceProgram p(device);p.limit_workspace(64*1024*1024);
   auto out=append_graph_vjp(p,t,roots,error,prefill?5:1,128*1024*1024);p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"valid graph backward refused");
   require(out.reverse_stages.cpu().item<Index>()==out.links.stages.cpu().item<Index>(),"graph reverse stage progression incomplete");
@@ -58,19 +59,19 @@ void boundaries(at::Device device,at::ScalarType payload) {
   GraphCotangents roots{at::zeros(t.outputs.values.sizes(),opts),at::zeros_like(t.outputs.valid),at::zeros(t.pending.values.sizes(),opts),at::zeros_like(t.pending.valid),
     at::ones({2,4,3},opts),at::zeros({2,4},opts.dtype(at::kBool))};
   roots.final_connected[0][0].fill_(true);roots.final[0][0].zero_(); // connected zero, other rows are None
-  auto error=at::zeros({1},opts.dtype(at::kInt));CannProgram p(device);
+  auto error=at::zeros({1},opts.dtype(at::kInt));DeviceProgram p(device);
   auto out=append_graph_vjp(p,t,roots,error,3,128*1024*1024);p.finish();portable_torch::synchronize(device);p.run();
   require(!error.cpu().item<int>()&&out.reverse_stages.cpu().item<Index>()==0,"empty graph backward did work");
   require(at::equal(out.initial_connected.cpu(),roots.final_connected.cpu())&&!out.initial.cpu().any().item<bool>(),"empty graph changed None/zero roots");
   require(!out.scale_connected.cpu().any().item<bool>()&&!out.full_connected.cpu().any().item<bool>()
     &&!out.decay_connected.cpu().any().item<bool>()&&!out.retention_connected.cpu().any().item<bool>(),"empty graph fabricated parameter gradients");
-  bool refused=false;try{CannProgram small(device);append_graph_vjp(small,t,roots,error,3,1);}catch(const std::invalid_argument&){refused=true;}
+  bool refused=false;try{DeviceProgram small(device);append_graph_vjp(small,t,roots,error,3,1);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"graph gradient budget refusal missing");
   refused=false;auto wrong=roots;wrong.outputs=roots.outputs.to(at::kHalf);
-  try{CannProgram typed(device);append_graph_vjp(typed,t,wrong,error,3,128*1024*1024);}catch(const std::invalid_argument&){refused=true;}
+  try{DeviceProgram typed(device);append_graph_vjp(typed,t,wrong,error,3,128*1024*1024);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"graph backward silently changed cotangent dtype");
   flow.advance_device(f.input,11);t=flow.reverse_tape();auto malformed=t;malformed.state.metadata=t.state.metadata.clone();
-  malformed.state.metadata[0][12].fill_(1);CannProgram bad(device);auto rejected=append_graph_vjp(bad,malformed,roots,error,3,128*1024*1024);bad.finish();
+  malformed.state.metadata[0][12].fill_(1);DeviceProgram bad(device);auto rejected=append_graph_vjp(bad,malformed,roots,error,3,128*1024*1024);bad.finish();
   portable_torch::synchronize(device);bad.run();require(error.cpu().item<int>()==2,"malformed graph tape accepted");
   require(!rejected.initial_connected.cpu().any().item<bool>()&&!rejected.message_connected.cpu().any().item<bool>()
     &&!rejected.initial.cpu().any().item<bool>()&&!rejected.scales.cpu().any().item<bool>(),"failed graph preflight exposed gradients");
@@ -82,7 +83,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("graph VJP gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("graph VJP gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("graph VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})for(int mode=0;mode<6;++mode) {
       try{check(device,shape,variant,prefill,mode,args.dtype);++cases;}

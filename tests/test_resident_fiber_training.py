@@ -6,6 +6,7 @@ import subprocess
 import sys
 import pytest
 import torch
+from resident_test_target import target_device, device_api, owner_devices
 from resident_training_cases import inputs, tree_equal
 from resident_fiber_cases import runtime, roots, terms
 from resident_cache_training import training_case
@@ -13,12 +14,7 @@ from resident_cache_training import training_case
 
 @pytest.fixture
 def target():
-    device = os.environ.get("TIDE_RESIDENT_DEVICE")
-    if device is None:
-        pytest.skip("optional resident NPU target not requested")
-    import torch_npu
-    assert device.startswith("npu") and os.environ.get("TIDE_RESIDENT_LIBRARY")
-    return device
+    return target_device()
 
 
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])

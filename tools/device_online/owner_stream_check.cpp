@@ -1,9 +1,10 @@
+#include "device_backend.h"
 #include "owner_stream.h"
 #include "sharded_parameter_reduce.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
-#include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
+#include "device_allocator.h"
 #include <iostream>
 #include <limits>
 namespace {
@@ -18,8 +19,8 @@ void reject(const std::function<void()>& f) {
 void stream_case(at::Device from,at::Device to,int64_t capacity,bool accumulate) {
   const bool peer=from!=to;auto f=at::TensorOptions().device(from).dtype(at::kFloat);
   auto error=at::zeros({1},f.dtype(at::kInt)),remote=at::zeros({1},error.options().device(to));
-  CannProgram send(from);std::unique_ptr<CannProgram> receive;
-  if(peer)receive=std::make_unique<CannProgram>(to);auto& dest=peer?*receive:send;
+  DeviceProgram send(from);std::unique_ptr<DeviceProgram> receive;
+  if(peer)receive=std::make_unique<DeviceProgram>(to);auto& dest=peer?*receive:send;
   std::vector<OwnerStreamField> fields;std::vector<Tensor> storage,expected;
   const std::vector<int64_t> sizes{771,17,33};int64_t writes=0,total=0;
   for(size_t i=0;i<sizes.size();++i) {
@@ -105,15 +106,15 @@ void calibration(at::Device from,at::Device to) {
   std::vector<int64_t> baseline;
   for(auto d:{from,to}) {
     portable_torch::synchronize(d);
-    baseline.push_back(c10_npu::NPUCachingAllocator::getDeviceStats(d.index()).allocated_bytes[0].current);
-    c10_npu::NPUCachingAllocator::resetPeakStats(d.index());
+    baseline.push_back(tide::device_online::allocator::getDeviceStats(d.index()).allocated_bytes[0].current);
+    tide::device_online::allocator::resetPeakStats(d.index());
   }
-  CannProgram send(from),receive(to);send.limit_workspace(1024*1024);receive.limit_workspace(1024*1024);
+  DeviceProgram send(from),receive(to);send.limit_workspace(1024*1024);receive.limit_workspace(1024*1024);
   const auto budget=owner_stream_metadata_bytes(1,1,true)+8*capacity;
   auto plan=append_owner_stream(send,receive,{{{x,on},{{y,at::kFloat}},{}}},error,remote,budget,false);
   send.finish();receive.finish();send.submit();receive.submit();send.wait();receive.wait();
   std::vector<int64_t> peak;size_t i=0;
-  for(auto d:{from,to})peak.push_back(c10_npu::NPUCachingAllocator::getDeviceStats(d.index()).allocated_bytes[0].peak-baseline[i++]);
+  for(auto d:{from,to})peak.push_back(tide::device_online::allocator::getDeviceStats(d.index()).allocated_bytes[0].peak-baseline[i++]);
   require(plan.iterations==65,"large stream did not reuse packet");
   require(peak[0]+peak[1]<budget+8*1024*1024,"stream allocator introduced full-sized staging");
   require(at::equal(y.cpu(),x.cpu()),"large streamed publication differs");
@@ -130,7 +131,7 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("explicit NPU float32 control test required");
-    auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
+    auto d=portable_torch::resolve_device(args);if(d.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);
     {at::NoGradGuard guard;const at::Device remote(d.type(),d.index()+1);int cases=0;
       for(auto to:{d,remote})for(int64_t capacity:{7,255,256,257,513})for(bool reduce:{false,true}) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "cann_program.h"
+#include "device_program.h"
 #include "full_extra.h"
 
 namespace tide::device_online {
@@ -21,7 +21,7 @@ struct FullVjp {
 // First-order built-in Full adjoints. Parameters are physical partials, before
 // parameter alias reduction. A false connection bit represents None, not zero.
 // Chunk choice/progression and parameter reduction stay on device.
-FullVjp append_full_vjp(CannProgram&,const FullTape&,const at::Tensor& gradient,
+FullVjp append_full_vjp(DeviceProgram&,const FullTape&,const at::Tensor& gradient,
                        const at::Tensor& connected,const at::Tensor& error,
                        int64_t max_chunk_rows,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

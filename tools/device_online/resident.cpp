@@ -1,3 +1,4 @@
+#include "device_backend.h"
 #include "tide/resident.h"
 #include "tide/parameters.h"
 #include "content_flow.h"
@@ -42,12 +43,12 @@ struct ResidentSession::Impl {
   Impl(Graph graph,Model model,const Continuation& q,at::Device device,ResidentLimits limits,ResidentPlacement p)
       :placement(std::move(p)),cut(q.cut) {
     if(at::GradMode::is_enabled())throw std::invalid_argument("resident inference requires explicit no-grad");
-    if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0)
-      throw std::invalid_argument("resident inference requires an explicit logical NPU index");
+    if(device.type()!=tide::device_online::resident_device_type||device.index()<0)
+      throw std::invalid_argument("resident inference requires an explicit logical resident device index");
     for(const auto& owner:model.parameters(false).owners()) {
       const auto& v=owner.value;
       if((v.scalar_type()!=at::kFloat&&v.scalar_type()!=at::kHalf)||(!v.device().is_cpu()&&v.device()!=device))
-        throw std::invalid_argument("resident parameters require FP32/FP16 on CPU or the session NPU");
+        throw std::invalid_argument("resident parameters require FP32/FP16 on CPU or the session device");
       parameters.push_back({v,v._version(),v.const_data_ptr()});
     }
     if(placement.policy!="memory"&&placement.policy!="locality")

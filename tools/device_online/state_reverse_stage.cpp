@@ -1,11 +1,11 @@
 #include "state_reverse_stage.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_state_reverse_stage.h"
+#include "device_backend.h"
+#include "device_launch_tide_state_reverse_stage.h"
 #include <stdexcept>
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-StateReverseStage append_state_reverse_stage(CannProgram& p,const StateReversePacket& packet,
+StateReverseStage append_state_reverse_stage(DeviceProgram& p,const StateReversePacket& packet,
     const StateTape& parameters,const at::Tensor& global_range,const StateCotangents& roots,
     const at::Tensor& ids,const at::Tensor& scores,const at::Tensor& read_on,const at::Tensor& error,int64_t budget,
     const ReverseGatherInput& events,const ReverseGatherInput& connections) {
@@ -21,7 +21,7 @@ StateReverseStage append_state_reverse_stage(CannProgram& p,const StateReversePa
   out.cot={at::empty({capacity,5,width},floats),at::empty({capacity,5},bits),
     at::empty({samples,nodes,width},floats),at::empty({samples,nodes},bits)};
   auto rows=at::empty({capacity},longs),source=at::empty_like(rows);
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_reverse_stage)(1,stream,
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_state_reverse_stage)(1,stream,
     ptr(packet.event_meta),ptr(packet.event_count),ptr(packet.event_rows),ptr(global_range),ptr(out.tape.metadata),ptr(out.tape.count),
     ptr(out.range),ptr(rows),ptr(source),ptr(out.destinations),ptr(error),capacity,global),"pack current compact state reverse stage");},
     {packet.event_meta,packet.event_count,packet.event_rows,global_range,out.tape.metadata,out.tape.count,out.range,rows,source,out.destinations,error});

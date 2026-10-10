@@ -1,6 +1,6 @@
+#include "device_backend.h"
 #include "packed_lh_full.h"
-#include "cann_api.h"
-#include "aclrtlaunch_tide_full_plan.h"
+#include "device_launch_tide_full_plan.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <set>
@@ -31,7 +31,7 @@ PackedLhFull::PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& weight,c
     at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
     :nodes_(kinds.size()),width_(weight.defined()&&weight.dim()==2?weight.size(1):0),rows_(capacity),chunk_(max_rows),reserved_(0) {
   if(at::GradMode::is_enabled()||nodes_<1||width_<1||capacity<1||max_rows<1||budget<1
-      ||device.type()!=c10::DeviceType::PrivateUse1||!weight.device().is_cpu()||(weight.scalar_type()!=at::kFloat&&weight.scalar_type()!=at::kHalf)
+      ||device.type()!=tide::device_online::resident_device_type||!weight.device().is_cpu()||(weight.scalar_type()!=at::kFloat&&weight.scalar_type()!=at::kHalf)
       ||weight.sizes()!=at::IntArrayRef{nodes_,width_}||bias.sizes()!=weight.sizes()||bias.device()!=weight.device()
       ||bias.scalar_type()!=weight.scalar_type()||weight.requires_grad()||bias.requires_grad())
     throw std::invalid_argument("packed LH Full requires matching CPU FP32/FP16 affine values and no-grad NPU");
@@ -47,7 +47,7 @@ PackedLhFull::PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& weight,c
   weights_=at::cat({weight,at::zeros({1,width_},weight.options())},0).to(device);
   biases_=at::cat({bias,at::zeros({1,width_},bias.options())},0).to(device);
 }
-ActionBatch PackedLhFull::append_stage(CannProgram& p,const ActionBatch& input,const at::Tensor& comparison,
+ActionBatch PackedLhFull::append_stage(DeviceProgram& p,const ActionBatch& input,const at::Tensor& comparison,
     const at::Tensor& error,const at::Tensor& chunks) {
   const auto rows=rows_,width=width_,chunk=chunk_,nodes=nodes_;
   if(input.values.sizes()!=at::IntArrayRef{rows,width}||comparison.sizes()!=input.values.sizes()
@@ -71,7 +71,7 @@ ActionBatch PackedLhFull::append_stage(CannProgram& p,const ActionBatch& input,c
   for(const auto kind:groups_) {
     const auto act=(kind-1)/3,norm=(kind-1)%3;
     p.copy(cursor,zero);auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_full_plan)(1,stream,
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_full_plan)(1,stream,
       ptr(input.coordinates),ptr(input.valid),ptr(kinds),ptr(cursor),ptr(source),ptr(parameters),ptr(destination),
       ptr(branch),ptr(chunks),ptr(error),rows,nodes,chunk,kind),"pack selected LH Full actions");},
       {input.coordinates,input.valid,kinds,cursor,source,parameters,destination,branch,chunks,error});

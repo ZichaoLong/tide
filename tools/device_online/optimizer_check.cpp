@@ -1,10 +1,11 @@
+#include "device_backend.h"
 #include "device_optimizer.h"
 #include "optimizer_layout.h"
 #include "optimizer_finite_check.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
-#include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
+#include "device_allocator.h"
 #include <iostream>
 #include <limits>
 
@@ -50,7 +51,7 @@ int trajectory(at::Device device,DeviceOptimizerKind kind,int variant,int64_t wi
   std::unique_ptr<NamedOptimizer> reference;
   if(kind==DeviceOptimizerKind::sgd)reference=std::make_unique<SGD>(cpu,gs);else reference=std::make_unique<AdamW>(cpu,gs);
   DeviceOptimizer optimizer(f.gradient,kind,gs,16*1024*1024);auto error=at::zeros({1},f.gradient.values.options().dtype(at::kInt));
-  CannProgram p(device);optimizer.append_step(p,f.gradient,error);p.finish();std::vector<int64_t> counts(f.gradient.owners.size(),0);
+  DeviceProgram p(device);optimizer.append_step(p,f.gradient,error);p.finish();std::vector<int64_t> counts(f.gradient.owners.size(),0);
   for(int step=0;step<8;++step) {
     auto gradient=at::full({f.gradient.values.numel()},std::numeric_limits<float>::quiet_NaN(),at::kFloat);
     auto flags=at::zeros({int64_t(counts.size())},at::kBool);
@@ -124,7 +125,7 @@ void master_boundaries(at::Device device) {
   OptimizerGroup group;group.parameters={"a","b"};group.lr=1.;group.momentum=.5;
   DeviceOptimizer optimizer(f.gradient,DeviceOptimizerKind::sgd,{group},1024*1024);
   auto error=at::zeros({1},f.gradient.values.options().dtype(at::kInt));
-  CannProgram program(device);optimizer.append_step(program,f.gradient,error);program.finish();
+  DeviceProgram program(device);optimizer.append_step(program,f.gradient,error);program.finish();
   auto snapshot=[](const DeviceOptimizer& owner){const auto s=owner.snapshot();return
     std::vector<Tensor>{s.values,s.first,s.second,s.maximum,s.steps,s.corrections};};
   auto unchanged=[&](const auto& before,const DeviceOptimizer& owner){const auto after=snapshot(owner);
@@ -170,10 +171,10 @@ void memory_calibration(at::Device device,DeviceOptimizerKind kind,bool extra) {
   // set would exceed this envelope, even for SGD without momentum.
   const int64_t budget=4*banks*n+2*1024*1024;
   portable_torch::synchronize(device);
-  auto baseline=c10_npu::NPUCachingAllocator::getDeviceStats(device.index()).allocated_bytes[0].current;
-  c10_npu::NPUCachingAllocator::resetPeakStats(device.index());
+  auto baseline=tide::device_online::allocator::getDeviceStats(device.index()).allocated_bytes[0].current;
+  tide::device_online::allocator::resetPeakStats(device.index());
   DeviceOptimizer optimizer(gradient,kind,{group},budget);
-  auto error=at::zeros({1},f.dtype(at::kInt));CannProgram p(device);
+  auto error=at::zeros({1},f.dtype(at::kInt));DeviceProgram p(device);
   p.limit_workspace(1024*1024);optimizer.append_step(p,gradient,error);p.finish();
   std::unique_ptr<NamedOptimizer> reference;
   if(kind==DeviceOptimizerKind::sgd)reference=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group});
@@ -199,7 +200,7 @@ void memory_calibration(at::Device device,DeviceOptimizerKind kind,bool extra) {
       std::make_pair(before.maximum,after.maximum),std::make_pair(before.steps,after.steps),std::make_pair(before.corrections,after.corrections)})
     require(at::equal(pair.first.view(at::kByte),pair.second.view(at::kByte)),"last tile partially committed another tile");
   portable_torch::synchronize(device);
-  const auto peak=c10_npu::NPUCachingAllocator::getDeviceStats(device.index()).allocated_bytes[0].peak-baseline;
+  const auto peak=tide::device_online::allocator::getDeviceStats(device.index()).allocated_bytes[0].peak-baseline;
   require(peak<=budget,"optimizer retained parameter-sized proposals");
   std::cout<<"optimizer-memory: {\"elements\":"<<n<<",\"kind\":"<<int(kind)<<",\"extra_slot\":"<<extra
     <<",\"budget\":"<<budget<<",\"peak_allocated_delta\":"<<peak<<",\"program_workspace_bytes\":"<<p.workspace_bytes()<<"}\n";
@@ -219,9 +220,9 @@ void refusals(at::Device device) {
   reject([&]{DeviceOptimizer bad(malformed,DeviceOptimizerKind::sgd,{},1024*1024);});
   DeviceOptimizer optimizer(f.gradient,DeviceOptimizerKind::sgd,{},1024*1024);auto error=at::zeros({1},f.gradient.values.options().dtype(at::kInt));
   malformed=f.gradient;malformed.owners[0].value=malformed.owners[0].value.detach();
-  reject([&]{CannProgram p(device);optimizer.append_step(p,malformed,error);});
+  reject([&]{DeviceProgram p(device);optimizer.append_step(p,malformed,error);});
   ParameterVjp empty;empty.values=at::zeros({1},f.gradient.values.options());empty.connected=at::zeros({1},f.gradient.connected.options());
-  DeviceOptimizer none(empty,DeviceOptimizerKind::adamw,{},4096);CannProgram p(device);none.append_step(p,empty,error);p.finish();
+  DeviceOptimizer none(empty,DeviceOptimizerKind::adamw,{},4096);DeviceProgram p(device);none.append_step(p,empty,error);p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>()&&!none.steps().cpu().any().item<bool>(),"empty optimizer fabricated an update");
 }
 }
@@ -231,7 +232,7 @@ int main(int argc,char** argv) {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("device optimizer gate requires explicit NPU FP32/FP16 payload owners");
     args.allow_npu_float16=true;
-    const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("optimizer gate requires NPU");
+    const auto device=portable_torch::resolve_device(args);if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("optimizer gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0,updates=0,refusals_count=0;
     for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})for(int variant=0;variant<4;++variant)
       for(int64_t width:{1,257})for(auto dtype:{at::kFloat,at::kDouble}) {

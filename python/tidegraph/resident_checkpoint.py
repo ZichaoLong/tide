@@ -7,7 +7,7 @@ from .checkpoint_ownership import parameter_aliases
 
 def cpu_model(model):
     # Substitute CPU tensors during the structural copy, not after copying a
-    # second full model on NPU. Memoization preserves repeated parameter owners.
+    # second full model on the resident device. Memoization preserves repeated parameter owners.
     memo = {}
     for value in model.state_dict(keep_vars=True).values():
         if id(value) not in memo:

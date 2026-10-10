@@ -1,4 +1,4 @@
-#include "cann_program.h"
+#include "device_program.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
@@ -6,20 +6,20 @@
 
 namespace {
 void casts(at::Device device) {
-  using tide::device_online::CannProgram;
+  using tide::device_online::DeviceProgram;
   at::NoGradGuard guard;
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   // Tail lengths, signed zeros, half rounding boundaries, subnormals and overflow.
   auto values=at::tensor({0.f,-0.f,1.f,1.0006f,-2.0006f,0.00000006f,65504.f,65520.f,-65520.f},at::kFloat);
   auto input=at::zeros({9},opts),packed=at::zeros({9},opts.dtype(at::kHalf)),output=at::zeros_like(input);
-  CannProgram program(device);program.cast(input,packed);program.cast(packed,output);program.finish();
+  DeviceProgram program(device);program.cast(input,packed);program.cast(packed,output);program.finish();
   for(float scale:{1.f,-.5f,0.f}) {
     auto host=values*scale;input.copy_(host);portable_torch::synchronize(device);program.run();
     if(!at::equal(packed.cpu(),host.to(at::kHalf))||!at::equal(output.cpu(),host.to(at::kHalf).to(at::kFloat)))
       throw std::runtime_error("device floating cast disagrees with CPU conversion");
   }
   program.close();
-  CannProgram refusal(device);int refused=0;
+  DeviceProgram refusal(device);int refused=0;
   for(const auto& target:{at::zeros({8},opts.dtype(at::kHalf)),at::zeros({9},opts.dtype(at::kLong))}) {
     try {refusal.cast(input,target);}catch(const std::invalid_argument&){++refused;}
   }
@@ -27,7 +27,7 @@ void casts(at::Device device) {
   refusal.close();
 }
 void check(at::Device device,at::ScalarType dtype) {
-  using tide::device_online::CannProgram;
+  using tide::device_online::DeviceProgram;
   at::NoGradGuard no_grad;
   auto longs=at::TensorOptions().device(device).dtype(at::kLong), floats=longs.dtype(dtype);
   auto count=at::zeros({1},longs), limit=at::ones({1},longs), step=at::ones({1},longs);
@@ -36,7 +36,7 @@ void check(at::Device device,at::ScalarType dtype) {
   auto scale=at::full({1},0.5,floats), bias=at::ones({1},floats);
   auto order_cpu=at::tensor({2,0,3,1},at::kLong), order=order_cpu.to(device);
   portable_torch::synchronize(device);
-  CannProgram program(device);
+  DeviceProgram program(device);
   auto head=program.label(), body=program.label(), end=program.label();
   program.mark(head);program.less(count,limit,predicate);program.cast_index(predicate,index);
   program.branch(index,{end,body});
