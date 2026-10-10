@@ -42,6 +42,10 @@ with their original commits/scopes and contents. CPU qualified; CUDA implemented
 ## Terminal jobs and retained artifacts
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`. Paths below use this root.
+Ignored `artifacts/execution-flows-g*` links expose these same receipts to
+`scripts/status.py`;30 submitted stage jobs are terminal. Four prepared-plan
+links are intentionally dormant until their run directories are created; they
+are not submissions. Historical records and the known malformed record are unchanged.
 Every named service is `tide-NAME.service`, background.slice, terminal MainPID0
 and empty cgroup; inspect with `systemctl --user show UNIT -p ActiveState
 -p Result -p MainPID -p ControlGroup` and `runs/NAME/{status.json,task.log}`.
