@@ -12,7 +12,9 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
 `graph-execution-foundation`. Initial clean HEAD was c0ce4ee5. Stage contract
 05af8f8 and State/Read implementation132cada7b21081d7f611326e1e0971e057201b4c
-and correction8a4d60f plus Norm VJP rounding fixa02c18c are committed/pushed. Current uncommitted work: G2 component profiler and G3 CUDA resident backend.
+and correction8a4d60f plus Norm VJP rounding fixa02c18c are committed/pushed. G3 CUDA resident implementation committed/pushed as bda25de.
+G2 component profiler and accurate State/Read policy metadata are ready for
+commit after6 passed CPU entry smokes; no actual selection timing yet.
 G1 metric/gate fixes and exact Norm VJP rounding are committed.
 Keep coherent commits and use clean immutable qualification after implementation.
 Do not edit a snapshot while its job runs. `TASK=/mi/data2T/zlong/tide-execution-flows`.
@@ -57,6 +59,13 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
   exact matching immutable `builds/g1-norm-dev06` is reused by digest through
   `qualify_library.py --reuse-build`. Plan `plans/g1-cpu-qualification03.sh`,
   results `runs/g1-cpu-qualification03/gate`,90min,8 CPUs,16GiB,192 tasks.
+- `g3-cuda-clean01` / `g3-npu-clean01`: prepared clean bda25de qualification
+  builds from `sources/g3-backends-clean01`, plans of matching names. Each
+  builds fresh core, standalone/Python resident and installed combined consumers;
+  CUDA adds all102 CPU source contracts and directed host regressions.
+  Builds have `g3-{cuda,npu}-*-clean01` names.90min each,4 workers,8 CPUs,16GiB,
+  256 tasks. Build/CPU evidence only; no GPU operation and no NPU qualification
+  workload is launched here. Inspect every terminal stage before claiming pass.
 - `g1-regression-dev04`: terminal exit0/MainPID0,173 tests passed. Matching core
   build and online consumer (`builds/g1-online-dev04`) validated metric/clock and
   qualification plumbing. Earlier State/Read development passed193,1538 and324
@@ -97,9 +106,13 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
   No device execution; receipt preserved. Further unchanged queue retries are
   not planned. A subsequent read-only inventory again showed13 free, so brief
   external availability does not establish a stable qualification window.
+- `g2-component-smoke03`: terminal exit0;6 independent tiny CPU entry smokes passed from
+  a new frozen source, now using norm32 Read and mandatory trace validation.
+  5min,2 CPUs,4GiB,128 tasks; these timings are not selection evidence.
 - `g2-component-smoke02`:6 small CPU processes (Read/Add/Attention × replay/batch),
   rows2,width8,parity+trace passed. Smoke timings are not selection evidence.
-  New profiling script still needs device-kernel trace acceptance. G2/G5 actual
+  Latest script requires actual accelerator kernel trace events, records stage
+  and kernel durations/counts/digests, and rejects fallback. G2/G5 actual
   medium/resident/selection experiments remain unexecuted.
 
 ## Environment and evidence limits

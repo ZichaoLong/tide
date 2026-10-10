@@ -108,7 +108,7 @@ def resolve(config, variant, workers, overrides=None):
                 scope=dict(node_parallel="not implemented in Python" if python else "independent node work only",
                            batch_counters="maximum submitted owners/rows; state kernels may regroup; inspect calls/scalar steps/operator work",
                            prefill="causal guards checked per node; actual sequence counters required",
-                           training="first-order; state/Read retain semantic replay"))
+                           training="first-order; packed builtin State/Read use batched VJPs; custom and nondefault State policies retain semantic replay"))
 
 
 def actual_paths(policy, stats, training):
