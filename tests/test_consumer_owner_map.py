@@ -58,7 +58,8 @@ def test_owner_map_csv_rejects_invalid_indices(value):
     with pytest.raises(argparse.ArgumentTypeError):owner_map(value)
 
 
-def test_offline_and_cli_adapters_replay_joint_map(tmp_path):
+@pytest.mark.parametrize('backend', ['npu', 'cuda'])
+def test_offline_and_cli_adapters_replay_joint_map(tmp_path, backend):
     packet,g=geometry(devices=2)
     owners=[(i+1)%2 for i in range(len(g.sources)+2)]
     spelling=','.join(map(str,owners))
@@ -71,11 +72,11 @@ def test_offline_and_cli_adapters_replay_joint_map(tmp_path):
     parser=argparse.ArgumentParser();add_arguments(parser)
     args=parser.parse_args(['--devices','2','--owner-map',spelling]);args.preset='resident';args.windows_per_step=2
     assert '--owner-map='+spelling in native_arguments(args)
-    # Only the already-resolved logical index is consumed here. Keep this
+    # Only the already-resolved backend and logical index are consumed here. Keep this
     # metadata test independent of importing a vendor backend on CPU.
-    requested=python_arguments(args,argparse.Namespace(index=0))['resident_placement']
+    requested=python_arguments(args,argparse.Namespace(type=backend,index=0))['resident_placement']
     assert list(requested.full_owners)==list(requested.state_owners)==owners
-    assert requested.devices==('npu:0','npu:1')
+    assert requested.devices==(backend+':0',backend+':1')
 
 
 def test_standalone_owner_csv_parser_is_available_without_device_work():
