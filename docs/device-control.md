@@ -175,7 +175,9 @@ retain the complete graph-window regressions. `precision-flow` integrates these
 modules with FP16 HARD resident inference, dense/tiled event and fiber attention,
 scalar/vector stages, both schedules and candidate-owned checkpoint continuation.
 Its `--profile-smoke` selects two attention fixtures for bounded placement traces,
-not throughput. FP16 backward and FP32-master publication remain pending.
+not throughput. These forward checks do not qualify backward. The separate
+[resident training owner](resident-training.md) implements FP16 payload with
+FP32 adjoints/master publication; device evidence remains backend/source scoped.
 
 Normalized Aggregate widens the stored model's mass/logit parameters into FP32
 normalization banks. Softplus/softmax, denominators, coefficients and ordered
@@ -184,8 +186,9 @@ contribution buffer; normalization multiplies those stored values in FP32,
 then rounds contribution and summary stores independently. `aggregate-payload`
 compares canonical CPU FP32 Aggregate on those stored products and a separate
 FP64 formula. Logical-slot contributions are matched to physical rows by identity;
-the two orderings are not interchangeable. These banks still need explicit
-low-precision optimizer publication before complete FP16 training can be enabled.
+the two orderings are not interchangeable. Complete FP16 training uses the
+separate owner's explicit FP32-master publication barrier; this payload
+component alone does not qualify optimizer publication or complete training.
 
 `build_device_control.py --checks numerical full` builds only those standalone
 components and their dependencies; the manifest records the requested subset.

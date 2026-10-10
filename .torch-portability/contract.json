@@ -26,6 +26,16 @@
         "requires_explicit_device": true,
         "supports_init_from": false,
         "supports_resume": false
+      },
+      "resident_target_qualify": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
+      },
+      "component_profile": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
       }
     },
     "cpu_reference": {
@@ -318,6 +328,22 @@
           "test_command": "scripts/verify.py --device cpu --dtype both with complete core;all12 registered CTests;exact commands in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/integrated-cpu-20261004.md"
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "a02c18c1bf274a8542461efe486bd43e02aac8b1",
+          "scope": "G1 batched State/Read and exact Norm VJP rounding:9595 CPU FP64/FP32 tests,22 complete topology cells including positive-delay feedback,10 installed consumers;12 exact-core standalone CTests run separately. Clean source and byte-matched reused core; G3 host checks have their own source scope in the report.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_CPU_BUILD --output-dir NEW; ctest --test-dir MATCHING_CPU_BUILD --output-on-failure --timeout 60",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
       ]
     },
@@ -331,7 +357,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending."
+      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail. This x86_64 target also still requires its own build/host gate."
     },
     {
       "id": "python-npu-aarch64",
@@ -339,11 +365,12 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "verified",
+      "status": "implemented",
       "required_tiers": [
         "backend-smoke"
       ],
-      "evidence": [
+      "reason": "Current G1 State/Read and G3 shared resident boundary are implemented and build-tested, with Python dynamic import/host checks. Current-source real NPU module/full-training/resident/multi-card qualification and profiling await a safe allocation; all16 local chips were occupied. Historical verified results below remain valid only at their listed commits and scopes.",
+      "attempts": [
         {
           "date": "2026-09-25",
           "commit": "781141882259ad66269dc87533bd82a893fb69a5",
@@ -449,9 +476,20 @@
           "test_command": "ACLNN_CACHE_LIMIT=0 TIDE_RESIDENT_DEVICE=npu:0 TIDE_ONLINE_DEVICE=npu:0 python -m pytest -q -x tests/test_resident_sharded_training.py tests/test_online_resident_consumer.py --dtype float32; exact build/environment handles in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-cann-cache-policy-20261004.md"
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "bda25de29465140dc47df8f488514447cbcb64b3",
+          "scope": "Clean public Torch/TorchNPU2.10/CANN9.0 dual-runtime cores/resident plugins, installed/combined/scale clients,7 resident and5 scale host CTests. Follow-up afbc075 imports matching Python extensions without device initialization. No current-source NPU operator, parity or workload execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "scripts/build.py, build_device_control.py, build_resident_consumer.py, build_online_consumer.py and build_accelerator_scale.py; exact bounded plans and manifests in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
-      ],
-      "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
+      ]
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -715,6 +753,22 @@
           "test_command": "scripts/verify.py --device cpu --dtype both with complete core;all12 registered CTests;exact commands in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/integrated-cpu-20261004.md"
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "a02c18c1bf274a8542461efe486bd43e02aac8b1",
+          "scope": "G1 batched State/Read and exact Norm VJP rounding:9595 CPU FP64/FP32 tests,22 complete topology cells including positive-delay feedback,10 installed consumers;12 exact-core standalone CTests run separately. Clean source and byte-matched reused core; G3 host checks have their own source scope in the report.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_CPU_BUILD --output-dir NEW; ctest --test-dir MATCHING_CPU_BUILD --output-on-failure --timeout 60",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
       ],
       "attempts": [
@@ -743,7 +797,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending."
+      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail. This x86_64 target also still requires its own build/host gate."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -751,12 +805,12 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "verified",
+      "status": "implemented",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0 and one2.9 SDK across CANN8.5.0/8.5.1/8.5.2; finite scopes in evidence. Broad native-adapter cases are separately qualified across the same four runtimes. NPU FP64 and CSR pooling unsupported. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections.",
+      "reason": "Current G1 State/Read and G3 shared resident boundary are implemented and build-tested, with Python dynamic import/host checks. Current-source real NPU module/full-training/resident/multi-card qualification and profiling await a safe allocation; all16 local chips were occupied. Historical verified results below remain valid only at their listed commits and scopes.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -795,9 +849,7 @@
           "result": "failed",
           "reason": "One-ULP CPU score gap becomes a valid FP32 tie on resident proposals;stable tie selects another node. Exact route comparison remains failed;no tolerance/model/packet change converts it to a pass.",
           "environment_manifest": "docs/evidence/original-add-route-witness-20261004.md"
-        }
-      ],
-      "evidence": [
+        },
         {
           "date": "2026-09-28",
           "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
@@ -1063,6 +1115,18 @@
           "test_command": "Audited formal-resident-fp16-add-inference03 and formal-resident-fp16-attention-inference02 exact commands/source/binary/runtime identities in linked reports; unchanged900s step/2200s child bounds.",
           "result": "passed",
           "environment_manifest": "docs/evidence/formal-b512-resident-fp16-add-20261004.md"
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "bda25de29465140dc47df8f488514447cbcb64b3",
+          "scope": "Clean public Torch/TorchNPU2.10/CANN9.0 dual-runtime cores/resident plugins, installed/combined/scale clients,7 resident and5 scale host CTests. Follow-up afbc075 imports matching Python extensions without device initialization. No current-source NPU operator, parity or workload execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "scripts/build.py, build_device_control.py, build_resident_consumer.py, build_online_consumer.py and build_accelerator_scale.py; exact bounded plans and manifests in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
       ]
     },
@@ -1076,7 +1140,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Eager source paths include single/multi-device owners, packed copies and consumer capacity admission. CUDA-linked aarch64 builds and CPU gates passed; NVIDIA hardware unavailable locally. Real GPU operation/parity, GPU dtype, driver/architecture combinations and scale calibration remain unverified.",
+      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -1131,6 +1195,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-cuda-host-20261004.md",
           "reason": "aarch64 host-only update;NVIDIA and x86_64 target gates pending."
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "bda25de29465140dc47df8f488514447cbcb64b3",
+          "scope": "Clean CUDA12.8.1/Torch2.10+cu128 core, standalone/Python resident and installed/combined consumers;7 host CTests,102 compiled CPU semantic sources/1CTest,229 directed CPU tests/84 optional device skips. Follow-up afbc075 has6 entry identity tests, explicit absent-CUDA refusal and matching dynamic imports. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "CUDA build and CPU-contract commands in docs/device-control.md and cited frozen job plans; real target gate remains pending",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
       ]
     },
@@ -1145,7 +1222,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Eager source paths include single/multi-device owners, packed copies and consumer capacity admission. CUDA-linked aarch64 builds and CPU gates passed; NVIDIA hardware unavailable locally. Real GPU operation/parity, GPU dtype, driver/architecture combinations and scale calibration remain unverified.",
+      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -1201,6 +1278,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-cuda-host-20261004.md",
           "reason": "aarch64 host-only update;NVIDIA and x86_64 target gates pending."
+        },
+        {
+          "date": "2026-10-10",
+          "commit": "bda25de29465140dc47df8f488514447cbcb64b3",
+          "scope": "Clean CUDA12.8.1/Torch2.10+cu128 core, standalone/Python resident and installed/combined consumers;7 host CTests,102 compiled CPU semantic sources/1CTest,229 directed CPU tests/84 optional device skips. Follow-up afbc075 has6 entry identity tests, explicit absent-CUDA refusal and matching dynamic imports. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "CUDA build and CPU-contract commands in docs/device-control.md and cited frozen job plans; real target gate remains pending",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
         }
       ]
     }

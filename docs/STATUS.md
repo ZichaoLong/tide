@@ -1,134 +1,150 @@
 # Current handoff
 
-Updated 2026-10-10 (Asia/Shanghai). G1–G5 is active. Continue all locally achievable
-implementation, correctness, finite selection evidence and CUDA target handoff.
-Commits do not pause work; no subagents. Execution contract: [execution-flows §11](execution-flows.md).
-Sole backlog: [ROADMAP G1–G5](ROADMAP.md). Selector/new upstream semantics stay deferred.
+Updated 2026-10-10 (Asia/Shanghai). The G1–G5 stage is active and **not globally
+closed**: CPU correctness, local CUDA/NPU builds, CPU selection evidence and GPU
+handoff are ready; new NPU device qualification/profiling is resource-blocked.
+All current-stage submitted jobs are terminal; nothing is queued or automatically
+scheduled. This is not a user pause. Continue authorized work when resources
+permit; commits never impose a pause. No subagents. Selector/new upstream
+semantics remain deferred. Contracts: [execution-flows §11](execution-flows.md).
+Sole backlog: [ROADMAP G1–G5](ROADMAP.md).
 
-## Source and next actions
+## Source and reviewed delivery
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Initial clean HEAD c0ce4ee5. Committed/pushed G1
-State/Read implementation132cada, accounting/gate fixes8a4d60f, exact Norm VJP
-rounding fixa02c18c; G3 CUDA/shared boundary bda25de; component profiler d1df03c;
-target capacity/control-policy follow-up ecafdf4 and logical0 peer gate5018133.
-Current pending entry hardening checks the compiled consumer source inventory,
-not only matching core/resident libraries;6 directed CPU tests and all four
-existing CUDA/NPU installed/online source audits pass. Runtime sources unchanged.
+`graph-execution-foundation`. Initial clean HEAD matched c0ce4ee5. Latest
+implementation is afbc07556c693e9809bb005154a4b9b806d16c51, committed/pushed;
+this boundary adds reviewed evidence, support scope and handoff only.
 
-`TASK=/mi/data2T/zlong/tide-execution-flows`; paths below use this root.
-Sources are frozen while jobs read them. Core source digest remains
-`dbc370539ed261846524c427b7b9a37a38f6857ba6a6ccb78ad365168140a150`.
+G1 State/Read132cada, accounting fixes8a4d60f and exact Norm VJP fixa02c18c;
+G3 CUDA/shared boundary bda25de; component profiler d1df03c; target capacity/
+control-policy ecafdf4, logical0 peer entry5018133, compiled-consumer identity
+afbc075. Core digest
+`dbc370539ed261846524c427b7b9a37a38f6857ba6a6ccb78ad365168140a150` is unchanged
+through the latest entry/doc follow-ups. Frozen qualification sources remain intact.
 
-1. Finish inspecting CPU qualification03 and NPU clean build01 below.
-2. Once those terminate and CPU qualification passes, launch the declared
-   `plans/g2-cpu-assessment01.{sh,py}` serial tranche. No old matrix resumes.
-3. Run `python $TASK/plans/audit-g1-g3-clean01.py` only after the three named
-   jobs pass. Review its output and commit evidence separately from source.
-4. With a genuinely available allocation, run prepared current-source NPU
-   modules, related resident/complete-training regression and finite profiling.
-   Last inventory: all16 devices have external processes; no unchanged lease retry.
-5. Review performance and limits, reconcile support/selection, retain CUDA
-   correctness/residency/multicard/performance as real-target pending.
+| Area | Delivered / exact evidence boundary |
+| --- | --- |
+| State/Read | Built-in batch first-order VJPs and grouped finite checks; exact Norm FP32 operation order restored. Full/Aggregate batching already existed. Custom/nondefault replay, causal/structural limits and small tensors remain |
+| CPU correctness | Clean a02c18c:9595 FP64/FP32 tests,654 optional skips,22 full topology cells including positive-delay feedback,10 installed checks;12 matching-core standalone CTests also passed |
+| CUDA local | Clean bda25de: standalone/Python/core/installed/combined builds;102 semantic sources,7 host CTests plus1 semantic CTest,229 CPU tests/84 hardware skips. Clean afbc075:6 entry identity tests and absent-CUDA refusal. Dynamic imports passed without device initialization |
+| NPU local | Clean bda25de public-stack dual-runtime/core/resident/installed/combined/scale builds;7 resident host and5 scale CTests. Python imports passed without device initialization. No current-source device correctness or performance claim |
+| Limited CPU selection | Six PyTorch component measurements and two standalone Add measurements accepted; Attention baseline refused before allocation, candidate never started. Batch terminal failed as declared; no retries/full-size expansion |
+| GPU target | Complete3-device zero-skip gate and tracing commands ready. Real correctness, residency, multicard, memory calibration and performance all pending |
 
-## Live jobs
+[Qualification/build report](evidence/batched-vjp-cuda-local-20261010.md) and
+[finite CPU selection review](evidence/batched-selection-cpu-20261010.md) have
+reviewed JSON companions with source/record hashes. Support matrix NPU status
+is now implemented for current source; historical verified entries are retained as passed source-scoped attempts,
+with their original commits/scopes and contents. CPU qualified; CUDA implemented/build-tested only.
 
-Inspect `systemctl --user show tide-NAME.service -p ActiveState -p Result
--p MainPID -p ControlGroup`, then `runs/NAME/status.json` and `task.log`.
-All current jobs use background.slice, KillMode=control-group, Nice10, immutable
-sources, bounded resources and OMP/BLAS1. Never call a live job passed.
+## Terminal jobs and retained artifacts
 
-- `g1-cpu-qualification03`: live clean a02c18c,
-  `sources/g1-cpu-qualification03`, matching reused `builds/g1-norm-dev06`.
-  Full CPU FP64/FP32 main suite **9595 passed/654 optional skips,2109.16s**;
-  complex topology and installed consumer stages are still running. Results
-  `runs/g1-cpu-qualification03/gate`; plan of same name.90min,8CPUs,16GiB,192tasks.
-- `g3-npu-clean01`: live clean bda25de from `sources/g3-backends-clean01`.
-  Python/standalone cores, resident libraries and installed/online consumers
-  built; scale consumer is still building. Plan of same name, builds
-  `g3-npu-*-clean01`.90min,4workers,8CPUs,16GiB,256tasks. Build-only; no current
-  candidate NPU workload has executed.
+`TASK=/mi/data2T/zlong/tide-execution-flows`. Paths below use this root.
+Every named service is `tide-NAME.service`, background.slice, terminal MainPID0
+and empty cgroup; inspect with `systemctl --user show UNIT -p ActiveState
+-p Result -p MainPID -p ControlGroup` and `runs/NAME/{status.json,task.log}`.
 
-## Terminal evidence awaiting reviewed report
+- `g1-cpu-qualification03`: passed clean a02c18c; gate in `runs/NAME/gate`,
+  source `sources/NAME`, byte-matched reused core `builds/g1-norm-dev06`.
+- `g4-cpu-standalone01`: passed12 CTests; clean afbc075 launch source
+  `sources/g3-target-identity-clean01`, same core. `runs/NAME/ctest.xml`.
+- `g3-cuda-clean01`, `g3-npu-clean01`: passed clean bda25de from
+  `sources/g3-backends-clean01`; builds `g3-{cuda,npu}-*-clean01`.
+- `g3-target-identity-clean01`: passed6 tests and correct absent-CUDA refusal
+  on clean afbc075. `g3-plugin-import01`: both CUDA/NPU imports passed on the
+  same source and matching bda25de binaries; no device initialized.
+- `g2-cpu-assessment01`: failed/exit1 at case9 as its stop policy required.
+  Component source clean ecafdf4 (`sources/g2-components-ecafdf4`), complete
+  baseline c0ce4ee (`sources/g2-baseline-c0ce4ee`) and candidate a02c18c.
+  Eight valid measurements retained. Explicit physicalB32 Attention estimated
+  25,662,653,552B against6GiB admission; no allocation, OOM or timing result.
 
-- `g3-cuda-clean01`: exit0/MainPID0/empty cgroup. Clean bda25de, private CUDA
-  toolkit12.8.1, architectures80/90/100. Core, standalone/Python resident and
-  installed/online consumers built;66 standalone manifest binaries,2 Python
-  libraries;7 host CTests,102 CPU semantic sources/1CTest and229 CPU pytest
-  passed/84 optional hardware skips. `runs/g3-cuda-clean01/host.xml` and
-  `builds/g3-cuda-*-clean01`. No GPU executed.
-- `g3-cuda-unavailable01`: original wrapper remains **failed exit1**, terminal
-  empty cgroup. Clean5018133 full target entry correctly refused missing CUDA
-  at its only stage, preflight. Wrapper expected an obsolete error substring.
-  No rerun: read-only `runs/g3-cuda-refusal-audit01.json` accepts the retained
-  refusal and hashes the failure artifacts. No device correctness claim.
-- G1 development gates passed193/1538/324/173/36/378 cases at their scoped
-  sources; latest `g1-norm-dev06` covers exact corrected FP32 norm VJP order
-  `dy*(x/norm)` before FP64 conversion. No tolerances relaxed.
-- Full `g1-cpu-qualification01` failed73/passed9451/skipped723 on132cada:
-  69 plumbing/accounting/RSS issues fixed8a4d60f;4 real norm rounding failures
-  fixeda02c18c. Qualification02 was cancelled after diagnosis (exit143,empty
-  cgroup). Preserve both. Prior NPU builds01/02 passed but predate the norm fix.
-- `g1-npu-qualification01/02` ended without allocation after120.53s/35.50s;
-  no candidate device code ran. Preserve queue receipts, no automatic retries.
-- CUDA development builds/CPU host checks and tiny component smokes are scoped
-  development evidence. Earlier failed builds/launch wrappers remain retained;
-  no development smoke is full device qualification or selection evidence.
+Reviewed audits: `runs/g1-g3-reviewed-audit01.json` and
+`runs/g2-cpu-assessment-reviewed01.json`; auditor scripts of corresponding
+names in `plans/`. They refuse overwrite and never rerun workloads. Original
+CPU gate01 remains73 failed/9451 passed/723 skipped, gate02 cancelled after
+Norm diagnosis. NPU qualification01/02 remain allocation timeouts with no code
+execution. CUDA unavailable01 wrapper remains failed on an obsolete expected
+error substring; `runs/g3-cuda-refusal-audit01.json` separately accepts the
+retained preflight refusal. Earlier failed development attempts remain retained.
 
-## Prepared NPU correctness; not launched
+## Resource blocker and exact next commands
 
-`plans/g4-npu-modules01.{sh,py}`: clean ecafdf4 source
-`sources/g2-components-ecafdf4`, byte-verified current bda25de Python/standalone
-cores. Complete named Python/native eager module suite FP32/FP16, independent
-CPU references, all State/fiber/Read profiles, observables/VJP/None, updates and
-checkpoints, explicit unsupported CSR rejection, operator doctor and standalone
-FP32 checker. No resident/multicard/performance claim. OneNPU; allocation60s,
-execution2700s,50min service,6CPUs,12GiB,192tasks. Launch only with a fresh
-allocation opportunity. Resource-information question pending; independent work
-continues. Related resident/complete-training gates remain separate.
+Last retained read-only inventory: 2026-10-10T10:54:31.504388+00:00, all16 chips had external
+processes. `runs/g4-npu-resource-inspection02.{json,txt}` retains the observation.
+No process was touched. Recheck healthy/no-process/HBM/utilization before a
+new allocation; use the helper's two-snapshot and advisory-lock checks. Do not
+mechanically retry an unchanged timed-out lease. The resource-information
+question has no answer yet; authorization to execute is already present.
 
-## Declared fresh CPU performance tranche; not launched
+Prepared new-source plans are **not submitted**. Run them serially; the six
+component timing cases start after module correctness and after other current
+heavy jobs terminate. This is a new declared scope, not the old experiment queue.
 
-`plans/g2-cpu-assessment01.{sh,py}` declares10 serial fresh processes:
-Read norm32/Add/Attention replay/batched PyTorch components, rows32,width128;
-then standalone CPU LibTorch Add/Attention continued training before/after G1.
-Components clean ecafdf4; complete baseline clean c0ce4ee and candidate a02c18c,
-with byte-checked core/consumer/binary/loader. Packets
-`packets/g2-medium-{add,attention}01`: D128,B32,T4,V257,128body nodes/544edges,
-8,995,632 /17,384,240 parameters. TimedDAG prefill, SGD/Add or AdamW/Attention,
-two connected windows,1warmup+1measured step,ATen1/native workers4. PhysicalB32,
-explicit aggressive chunking,6GiB admission. No timed oracle; separate profiling.
+| Plan in `plans/` | Fixed source / acceptance | Service resources |
+| --- | --- | --- |
+| `g4-npu-modules01.{sh,py}` | `sources/g2-components-ecafdf4`;1NPU, all named Python/native FP32/FP16 State/fiber/Read gates, independent CPU references, standalone FP32 checker;2700s workload | 50min,6CPUs,12GiB,192tasks |
+| `g4-npu-training01.{sh,py}` | `sources/g3-target-identity-clean01`; modules01 must pass;1NPU,8 standalone positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 complete training cells;2500s total | 45min,6CPUs,12GiB,192tasks |
+| `g4-npu-resident01.sh` | same afbc075 source;3NPUs, complete target entry/default strict comparisons,5400s workload; explicit resident cache configuration retained | 100min,8CPUs,24GiB,256tasks |
+| `g2-npu-components01.{sh,py}` | same afbc075 source; modules01 and six CPU component cases must pass;1NPU,6 independent FP32 Read/Add/Attention replay/batch cases at rows32,width128;180s/case,1200s total | 25min,8CPUs,12GiB,192tasks |
 
-Budget120s/case,8GiB process group,2GiB outputs;30min service,8CPU affinity/quota,
-12GiB,192tasks. First failure/bound stops; no repeat or timeout increase.
-Wrapper requires all three current clean jobs terminal and CPU qualification
-passed. Existing records,Trackio off. Single observations under external load,
-medium scope only. NPU profiling gets a separate fresh budget after correctness.
+All four have unique run directories and60s maximum allocation wait. Components
+cap each process group at8GiB and total outputs at2GiB; stop on the first failure
+with no repeat or budget increase. The whole CPU tranche remains failed, while
+its six passed components satisfy this independent NPU component prerequisite.
+No complete/resident NPU timing or new full-size case is declared yet: first
+inspect actual profiles and memory, then choose only a decision-changing case.
 
-## Environment, limits and protected history
+After a safe allocation opportunity, the first launch is exactly:
 
-NPU module `libtorch-npu/2.10.0-cann9.0.0` supplies the SDK/CANN stack; Python
-is explicitly `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-Python wheel and standalone runtime owners remain separate. CUDA private module
+```bash
+TASK=/mi/data2T/zlong/tide-execution-flows
+systemd-run --user --unit=tide-g4-npu-modules01 --service-type=exec --slice=background.slice \
+  --working-directory="$TASK/sources/g2-components-ecafdf4" \
+  --property=KillMode=control-group --property=Nice=10 --property=CPUQuota=600% \
+  --property=MemoryMax=12G --property=TasksMax=192 --property=RuntimeMaxSec=3000 \
+  --setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin --setenv=PYTHONDONTWRITEBYTECODE=1 \
+  /usr/bin/python3 scripts/job.py --output-dir "$TASK/runs/g4-npu-modules01" \
+  -- /bin/bash "$TASK/plans/g4-npu-modules01.sh"
+```
+
+Use the same wrapper with the exact plan/source/resource row for later gates.
+Verify the unit, queue receipt, physical-to-logical mapping, logs and terminal
+acceptance before reporting a pass. Never edit a snapshot used by a live job.
+GPU build/gate/trace commands and required3-device/P2P capabilities are in
+[device-control](device-control.md); the current local source/build/import
+results do not replace any target-machine gate.
+
+## Performance interpretation and remaining implementation costs
+
+Single CPU component ratios: Read3.16×, Add1.28×, Attention2.96×. Complete
+standalone Add3.810711s→4.090873s with equal loss/output/event counts and
+peak RSS701,222,912B→814,317,568B. No whole-graph gain or stable regression size
+is established under external load. Attention has no complete measurement.
+Keep CPU/mixed-a/b/c/resident and fine controls; no new universal route winner.
+Read/State composition is not kernel fusion. Add's clone/view/structural work,
+custom replay, causal depth and per-slot connectivity groups remain costs.
+Resident already has explicit device VJPs; CUDA's initial one-thread semantic
+adapter, serial reductions/scatter and uncalibrated memory remain target limits.
+
+Public NPU module `libtorch-npu/2.10.0-cann9.0.0`; Python explicitly under
+`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311`. Standalone SDK
+and wheel owners stay separate. Resident launch sets `ACLNN_CACHE_LIMIT=0` and
+`ACL_OP_INIT_MODE=0` as previously evidenced. Private CUDA module
 `~/privatemodules/torch-cuda/2.10.0-cu128`, tools under
-`/mi/data2T/zlong/gpu-toolchains`. No GPU; no public drivers changed. Last storage
-check root64GiB/data101GiB free; recheck before large writes. All16 NPUs currently
-have external processes; none touched. For resident NPU retain the recorded
-explicit `ACLNN_CACHE_LIMIT=0`/`ACL_OP_INIT_MODE=0` configuration.
+`/mi/data2T/zlong/gpu-toolchains`. No GPU here; no shared drivers changed.
+Last disk check root64GiB/data101GiB free; recheck before large writes.
 
-State/Read batching is composed VJP work, not proven fused kernels. Custom State/
-Read and nondefault native fiber policies retain replay. Structural groups,
-causal depth, containers and per-row views/clones remain batching costs. Resident
-already uses device VJPs; CUDA's initial one-thread semantic adapter, serial
-reductions/scatter and uncalibrated GPU memory are known limitations.
+## Protected history
 
-Old F1–F7 qualification and performance remain tied to their cited sources;
-61/120 old timings and missing cells are not a new queue. [Terminal record](evidence/selection-terminal-20261010.md).
-Preserve the [original strict near-tie failure](evidence/original-add-route-witness-20261004.md):
+Old F1–F7 qualification and61/120 selection timings retain only their original
+sources/configurations; missing cells are not a queue. [Old terminal report](evidence/selection-terminal-20261010.md).
+Preserve the [original strict near-tie witness](evidence/original-add-route-witness-20261004.md):
 CPU246 oneFP32ULP ahead; resident245/246 tie selects245; proposal error7.7039e-6,
-events2325/2327. No relaxed discrete comparison or universal strict-equivalence claim.
+events2325/2327. No relaxed discrete comparison or universal equivalence claim.
 
 **Never resume, stop, signal or clean historical-cpu-attention-01 / worker2686919.**
 Malformed historical build-reverse-gather-python-dev01 can make status.py exit1;
-preserve it. No project writes in ObsidianVault; all reference repositories read-only.
+preserve it. No project writes in ObsidianVault; all reference repositories stay read-only.

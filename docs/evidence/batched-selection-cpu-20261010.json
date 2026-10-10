@@ -1,0 +1,769 @@
+{
+  "schema": "tide-cpu-batched-assessment-review-v1",
+  "review_state": "passed",
+  "experiment_state": "failed",
+  "accepted_measurements": 8,
+  "failed_cases": 1,
+  "unstarted_cases": [
+    "complete-attention-batched"
+  ],
+  "policy": {
+    "repetitions": 1,
+    "warmup": 1,
+    "seconds_per_case": 120,
+    "memory_bytes": 8589934592,
+    "storage_bytes": 2147483648,
+    "stop": "first failure/bound; no repeats or extensions",
+    "tracking": "off",
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "sources": [
+    "a02c18c1bf274a8542461efe486bd43e02aac8b1",
+    "c0ce4ee5d1ac92465e57734de533c33dba7a9445",
+    "ecafdf409d934fee563983cd3178993a5185abbb"
+  ],
+  "unit": {
+    "MainPID": "0",
+    "Result": "exit-code",
+    "ExecMainStatus": "1",
+    "ControlGroup": ""
+  },
+  "components": [
+    {
+      "kind": "read",
+      "rows": 32,
+      "width": 128,
+      "dtype": "float32",
+      "read_profile": "norm-fp32-v1",
+      "scope": "pure PyTorch composition; host trace, no accelerator kernels",
+      "observations": [
+        {
+          "variant": "replay",
+          "seconds": 0.003350045531988144,
+          "host_stage_us": {
+            "scalar_read_replay": 4204.62,
+            "component_backward": 2569.514
+          },
+          "trace_event_counts": {
+            "scalar_read_replay": 1,
+            "aten::stack": 2,
+            "aten::cat": 2,
+            "aten::view": 1,
+            "aten::to": 134,
+            "aten::linalg_vector_norm": 33,
+            "aten::as_strided": 195,
+            "aten::unbind": 1,
+            "aten::select": 64,
+            "aten::isfinite": 64,
+            "aten::eq": 96,
+            "aten::abs": 128,
+            "aten::empty": 64,
+            "aten::ne": 64,
+            "aten::_to_copy": 99,
+            "aten::empty_strided": 132,
+            "aten::copy_": 132,
+            "aten::mul": 99,
+            "aten::is_nonzero": 64,
+            "aten::item": 64,
+            "aten::_local_scalar_dense": 64,
+            "aten::detach": 32,
+            "detach": 32,
+            "_SemanticValue": 32,
+            "aten::clone": 32,
+            "component_backward": 1,
+            "aten::unsqueeze": 96,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::mean": 2,
+            "aten::sum": 1,
+            "aten::fill_": 2,
+            "aten::div_": 2,
+            "aten::ones_like": 1,
+            "aten::empty_like": 1,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "aten::expand": 1,
+            "aten::div": 34,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "autograd::engine::evaluate_function: StackBackward0": 1,
+            "StackBackward0": 1,
+            "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+            "_SemanticValueBackward": 32,
+            "autograd::engine::evaluate_function: LinalgVectorNormBackward0": 32,
+            "LinalgVectorNormBackward0": 32,
+            "aten::masked_fill_": 32,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 32,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/read-replay/trace.json",
+            "sha256": "3e301c04e3d3e928e14fec593375ea36fd2e67dfd495c37ef4b189c42b78dae3"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/read-replay/result.json",
+            "sha256": "3359dcc59b1b5a157430ac2b8ac9717fea570cffbabe9fc65de7c1754f0459d0"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/read-replay/measurement.json",
+            "sha256": "4eb099da17723cc1c223dc0986d47d672bd3ecaf107237a6e42e0c7d8d4d3728"
+          }
+        },
+        {
+          "variant": "batched",
+          "seconds": 0.0010606609284877777,
+          "host_stage_us": {
+            "batched_read": 923.498,
+            "component_backward": 1427.843
+          },
+          "trace_event_counts": {
+            "batched_read": 1,
+            "_Read": 1,
+            "aten::stack": 4,
+            "aten::cat": 4,
+            "aten::view": 1,
+            "aten::to": 10,
+            "aten::linalg_vector_norm": 1,
+            "aten::as_strided": 202,
+            "aten::unbind": 2,
+            "aten::select": 98,
+            "aten::unsqueeze": 98,
+            "aten::isfinite": 1,
+            "aten::eq": 2,
+            "aten::abs": 2,
+            "aten::empty": 5,
+            "aten::ne": 1,
+            "aten::_to_copy": 5,
+            "aten::empty_strided": 6,
+            "aten::copy_": 7,
+            "aten::mul": 5,
+            "aten::all": 1,
+            "aten::fill_": 3,
+            "aten::is_nonzero": 1,
+            "aten::item": 1,
+            "aten::_local_scalar_dense": 1,
+            "component_backward": 1,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::mean": 2,
+            "aten::sum": 1,
+            "aten::div_": 2,
+            "aten::ones_like": 1,
+            "aten::empty_like": 2,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "aten::expand": 3,
+            "aten::div": 3,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "autograd::engine::evaluate_function: StackBackward0": 1,
+            "StackBackward0": 1,
+            "autograd::engine::evaluate_function: _ReadBackward": 1,
+            "_ReadBackward": 1,
+            "aten::lift_fresh": 1,
+            "aten::detach_": 1,
+            "detach_": 1,
+            "aten::index_select": 2,
+            "aten::masked_fill": 1,
+            "aten::clone": 1,
+            "aten::masked_fill_": 1,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 33,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/read-batched/trace.json",
+            "sha256": "cf22459e048bb0bae3c1c0d7f4c50e4d707857aaf32906bd001048fc45817c0e"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/read-batched/result.json",
+            "sha256": "a3545a4775ad8b104800d6b8d07a9cb0fb987c91793f82cceb970d0bfa65230e"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/read-batched/measurement.json",
+            "sha256": "984795aab659feef708fbe0a6c1afd912a736e17e6db9e8c2dce4aaa25290739"
+          }
+        }
+      ],
+      "observed_ratio": 3.15845096393286
+    },
+    {
+      "kind": "state-add",
+      "rows": 32,
+      "width": 128,
+      "dtype": "float32",
+      "read_profile": "norm-fp32-v1",
+      "scope": "pure PyTorch composition; host trace, no accelerator kernels",
+      "observations": [
+        {
+          "variant": "replay",
+          "seconds": 0.004955306649208069,
+          "host_stage_us": {
+            "packed_numeric": 1094.38,
+            "scalar_state_replay": 2071.56,
+            "component_backward": 4157.129
+          },
+          "trace_event_counts": {
+            "packed_numeric": 1,
+            "aten::stack": 4,
+            "aten::cat": 4,
+            "aten::view": 4,
+            "aten::select": 96,
+            "aten::as_strided": 194,
+            "aten::mul": 294,
+            "aten::add": 33,
+            "aten::unbind": 1,
+            "aten::clone": 64,
+            "aten::empty_strided": 68,
+            "aten::copy_": 68,
+            "scalar_state_replay": 1,
+            "aten::detach": 32,
+            "detach": 32,
+            "_SemanticValue": 32,
+            "component_backward": 1,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::to": 5,
+            "aten::mean": 2,
+            "aten::sum": 193,
+            "aten::fill_": 98,
+            "aten::div_": 2,
+            "aten::_to_copy": 3,
+            "aten::ones_like": 1,
+            "aten::empty_like": 1,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "aten::expand": 1,
+            "aten::div": 2,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "autograd::engine::evaluate_function: StackBackward0": 1,
+            "StackBackward0": 1,
+            "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+            "_SemanticValueBackward": 32,
+            "autograd::engine::evaluate_function: AddBackward0": 32,
+            "AddBackward0": 32,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 65,
+            "autograd::engine::evaluate_function: MulBackward0": 96,
+            "MulBackward0": 96,
+            "aten::add_": 95,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/state-add-replay/trace.json",
+            "sha256": "3c260301840aa497a83c024ecd207f655f38fc7bca2ad34d105595f1a233d3bf"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/state-add-replay/result.json",
+            "sha256": "be4ee40dccf8bf4b09b1fd4fdcd08a7cb7db06219211569045427d8292b9616f"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/state-add-replay/measurement.json",
+            "sha256": "c2f77c24465b6b5dd00cf0a350449402e5bd2110df56de84da06aa75fbf39802"
+          }
+        },
+        {
+          "variant": "batched",
+          "seconds": 0.0038671381771564484,
+          "host_stage_us": {
+            "packed_numeric": 1055.559,
+            "batch_graph": 2196.16,
+            "component_backward": 3180.29
+          },
+          "trace_event_counts": {
+            "packed_numeric": 1,
+            "aten::stack": 8,
+            "aten::cat": 8,
+            "aten::view": 8,
+            "aten::select": 288,
+            "aten::as_strided": 293,
+            "aten::mul": 15,
+            "aten::add": 2,
+            "aten::unbind": 2,
+            "aten::clone": 96,
+            "aten::empty_strided": 100,
+            "aten::copy_": 132,
+            "batch_graph": 1,
+            "_State": 1,
+            "aten::detach": 101,
+            "detach": 101,
+            "component_backward": 1,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::to": 5,
+            "aten::mean": 2,
+            "aten::sum": 7,
+            "aten::fill_": 5,
+            "aten::div_": 2,
+            "aten::_to_copy": 3,
+            "aten::ones_like": 1,
+            "aten::empty_like": 1,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "aten::expand": 1,
+            "aten::div": 2,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "autograd::engine::evaluate_function: StackBackward0": 4,
+            "StackBackward0": 4,
+            "autograd::engine::evaluate_function: _StateBackward": 1,
+            "_StateBackward": 1,
+            "autograd::engine::evaluate_function: torch::autograd::GraphRoot": 1,
+            "torch::autograd::GraphRoot": 1,
+            "autograd::engine::evaluate_function: CloneBackward0": 32,
+            "CloneBackward0": 32,
+            "autograd::engine::evaluate_function: UnbindBackward0": 1,
+            "UnbindBackward0": 1,
+            "autograd::engine::evaluate_function: AddBackward0": 1,
+            "AddBackward0": 1,
+            "autograd::engine::evaluate_function: MulBackward0": 3,
+            "MulBackward0": 3,
+            "aten::add_": 33,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 134,
+            "autograd::engine::evaluate_function: SelectBackward0": 32,
+            "SelectBackward0": 32,
+            "aten::select_backward": 32,
+            "aten::zeros": 32,
+            "aten::empty": 32,
+            "aten::zero_": 32,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/state-add-batched/trace.json",
+            "sha256": "30d1d5faaeb6b8505f715918878cc10bef6eed7634134134def36eadfc3145e9"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/state-add-batched/result.json",
+            "sha256": "75117c02a30a62060c58249b755c1d9d8e21ea72a879a8ca65588be8b6309637"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/state-add-batched/measurement.json",
+            "sha256": "93d1b51380336de301129ae3504a770fe76448f78a049683e1869892179ae532"
+          }
+        }
+      ],
+      "observed_ratio": 1.2813885675147412
+    },
+    {
+      "kind": "state-attention",
+      "rows": 32,
+      "width": 128,
+      "dtype": "float32",
+      "read_profile": "norm-fp32-v1",
+      "scope": "pure PyTorch composition; host trace, no accelerator kernels",
+      "observations": [
+        {
+          "variant": "replay",
+          "seconds": 0.04031587019562721,
+          "host_stage_us": {
+            "packed_numeric": 4502.302,
+            "scalar_state_replay": 17011.669,
+            "component_backward": 45606.439
+          },
+          "trace_event_counts": {
+            "packed_numeric": 1,
+            "aten::stack": 5,
+            "aten::cat": 165,
+            "aten::view": 270,
+            "aten::matmul": 262,
+            "aten::mm": 580,
+            "aten::resolve_conj": 1360,
+            "aten::reshape": 265,
+            "aten::slice": 288,
+            "aten::as_strided": 1874,
+            "aten::transpose": 451,
+            "aten::repeat_interleave": 2,
+            "aten::unsqueeze": 388,
+            "aten::expand": 9,
+            "aten::clone": 325,
+            "aten::empty_like": 70,
+            "aten::empty": 391,
+            "aten::copy_": 650,
+            "aten::flatten": 2,
+            "aten::permute": 1,
+            "aten::_unsafe_view": 5,
+            "aten::bmm": 2,
+            "aten::div": 131,
+            "aten::to": 134,
+            "aten::_to_copy": 132,
+            "aten::empty_strided": 389,
+            "aten::arange": 4,
+            "aten::resize_": 2,
+            "aten::add": 33,
+            "aten::le": 1,
+            "aten::bitwise_not": 1,
+            "aten::masked_fill": 1,
+            "aten::masked_fill_": 1,
+            "aten::softmax": 65,
+            "aten::_softmax": 65,
+            "aten::select": 544,
+            "scalar_state_replay": 1,
+            "aten::squeeze_": 192,
+            "aten::as_strided_": 192,
+            "aten::mv": 128,
+            "aten::addmv_": 128,
+            "aten::detach": 96,
+            "detach": 96,
+            "_SemanticValue": 96,
+            "component_backward": 1,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::mean": 2,
+            "aten::sum": 1,
+            "aten::fill_": 2,
+            "aten::div_": 2,
+            "aten::ones_like": 1,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "aten::mul": 67,
+            "autograd::engine::evaluate_function: StackBackward0": 1,
+            "StackBackward0": 1,
+            "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+            "_SemanticValueBackward": 32,
+            "autograd::engine::evaluate_function: SqueezeBackward4": 192,
+            "SqueezeBackward4": 192,
+            "autograd::engine::evaluate_function: MmBackward0": 192,
+            "MmBackward0": 192,
+            "aten::t": 448,
+            "autograd::engine::evaluate_function: UnsqueezeBackward0": 192,
+            "UnsqueezeBackward0": 192,
+            "aten::squeeze": 192,
+            "autograd::engine::evaluate_function: CatBackward0": 96,
+            "CatBackward0": 96,
+            "aten::narrow": 192,
+            "aten::contiguous": 64,
+            "autograd::engine::evaluate_function: SelectBackward0": 192,
+            "SelectBackward0": 192,
+            "aten::select_backward": 192,
+            "aten::zeros": 192,
+            "aten::zero_": 192,
+            "autograd::engine::evaluate_function: SoftmaxBackward0": 64,
+            "SoftmaxBackward0": 64,
+            "aten::_softmax_backward_data": 64,
+            "autograd::engine::evaluate_function: DivBackward0": 64,
+            "DivBackward0": 64,
+            "autograd::engine::evaluate_function: MvBackward0": 64,
+            "MvBackward0": 64,
+            "aten::ger": 64,
+            "aten::outer": 64,
+            "aten::add_": 252,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 100,
+            "autograd::engine::evaluate_function: ViewBackward0": 96,
+            "ViewBackward0": 96,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/state-attention-replay/trace.json",
+            "sha256": "4655f98b8745ff8e10d58c8bb2918aad0f80a664c914de5475b6b4abfbd28115"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/state-attention-replay/result.json",
+            "sha256": "5863cc12ba3085bf439559b01c5f8ed471ea2562cb641b700f916ce289c98e17"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/state-attention-replay/measurement.json",
+            "sha256": "d8c2b259fb0e4a0ade8f59b5ed80796db552dee0845927b955fac67d2137cb3f"
+          }
+        },
+        {
+          "variant": "batched",
+          "seconds": 0.013599097728729248,
+          "host_stage_us": {
+            "packed_numeric": 4113.589,
+            "batch_graph": 6755.733,
+            "component_backward": 10228.987
+          },
+          "trace_event_counts": {
+            "packed_numeric": 1,
+            "aten::stack": 9,
+            "aten::cat": 137,
+            "aten::view": 39,
+            "aten::matmul": 12,
+            "aten::mm": 16,
+            "aten::resolve_conj": 56,
+            "aten::reshape": 32,
+            "aten::slice": 416,
+            "aten::as_strided": 952,
+            "aten::transpose": 21,
+            "aten::repeat_interleave": 4,
+            "aten::unsqueeze": 8,
+            "aten::expand": 19,
+            "aten::clone": 299,
+            "aten::empty_like": 12,
+            "aten::empty": 175,
+            "aten::copy_": 466,
+            "aten::flatten": 4,
+            "aten::permute": 3,
+            "aten::_unsafe_view": 10,
+            "aten::bmm": 8,
+            "aten::div": 5,
+            "aten::to": 8,
+            "aten::_to_copy": 6,
+            "aten::empty_strided": 295,
+            "aten::arange": 8,
+            "aten::resize_": 4,
+            "aten::add": 2,
+            "aten::le": 2,
+            "aten::bitwise_not": 2,
+            "aten::masked_fill": 3,
+            "aten::masked_fill_": 3,
+            "aten::softmax": 2,
+            "aten::_softmax": 2,
+            "aten::select": 480,
+            "batch_graph": 1,
+            "_State": 1,
+            "aten::detach": 232,
+            "detach": 232,
+            "component_backward": 1,
+            "aten::square": 1,
+            "aten::pow": 2,
+            "aten::result_type": 2,
+            "aten::mean": 2,
+            "aten::sum": 1,
+            "aten::fill_": 2,
+            "aten::div_": 2,
+            "aten::ones_like": 1,
+            "autograd::engine::evaluate_function: MeanBackward0": 1,
+            "MeanBackward0": 1,
+            "autograd::engine::evaluate_function: PowBackward0": 1,
+            "PowBackward0": 1,
+            "aten::mul": 3,
+            "autograd::engine::evaluate_function: StackBackward0": 5,
+            "StackBackward0": 5,
+            "autograd::engine::evaluate_function: _StateBackward": 1,
+            "_StateBackward": 1,
+            "autograd::engine::evaluate_function: torch::autograd::GraphRoot": 1,
+            "torch::autograd::GraphRoot": 1,
+            "autograd::engine::evaluate_function: CloneBackward0": 36,
+            "CloneBackward0": 36,
+            "autograd::engine::evaluate_function: SelectBackward0": 64,
+            "SelectBackward0": 64,
+            "aten::select_backward": 64,
+            "aten::zeros": 160,
+            "aten::zero_": 160,
+            "aten::add_": 126,
+            "autograd::engine::evaluate_function: UnsafeViewBackward0": 5,
+            "UnsafeViewBackward0": 5,
+            "autograd::engine::evaluate_function: MmBackward0": 4,
+            "MmBackward0": 4,
+            "aten::t": 8,
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 236,
+            "autograd::engine::evaluate_function: ViewBackward0": 9,
+            "ViewBackward0": 9,
+            "autograd::engine::evaluate_function: TransposeBackward0": 3,
+            "TransposeBackward0": 3,
+            "autograd::engine::evaluate_function: BmmBackward0": 2,
+            "BmmBackward0": 2,
+            "autograd::engine::evaluate_function: ExpandBackward0": 6,
+            "ExpandBackward0": 6,
+            "aten::_reshape_alias": 2,
+            "autograd::engine::evaluate_function: UnsqueezeBackward0": 2,
+            "UnsqueezeBackward0": 2,
+            "aten::squeeze": 2,
+            "autograd::engine::evaluate_function: SoftmaxBackward0": 1,
+            "SoftmaxBackward0": 1,
+            "aten::_softmax_backward_data": 1,
+            "autograd::engine::evaluate_function: MaskedFillBackward0": 1,
+            "MaskedFillBackward0": 1,
+            "autograd::engine::evaluate_function: DivBackward0": 1,
+            "DivBackward0": 1,
+            "autograd::engine::evaluate_function: PermuteBackward0": 1,
+            "PermuteBackward0": 1,
+            "autograd::engine::evaluate_function: CatBackward0": 64,
+            "CatBackward0": 64,
+            "aten::narrow": 128,
+            "autograd::engine::evaluate_function: SliceBackward0": 96,
+            "SliceBackward0": 96,
+            "aten::slice_backward": 96,
+            "PyTorch Profiler (0)": 1
+          },
+          "trace": {
+            "path": "runs/g2-cpu-assessment01/state-attention-batched/trace.json",
+            "sha256": "79d554b6f8da24823f29fa32c69a8c4c2e9e03f94f765549500e1471d5b56650"
+          },
+          "result": {
+            "path": "runs/g2-cpu-assessment01/state-attention-batched/result.json",
+            "sha256": "a85c10dfc64d1a5ffb56db8d164102d313f42939848bbb06dd0ebac8c2ef3265"
+          },
+          "measurement": {
+            "path": "runs/g2-cpu-assessment01/state-attention-batched/measurement.json",
+            "sha256": "6485269a65d37fbc00e1948e8e90badc86baceb9f7f20f6b320736ab878f94a6"
+          }
+        }
+      ],
+      "observed_ratio": 2.9645989020621943
+    }
+  ],
+  "complete_add": {
+    "scope": "standalone CPU LibTorch, TimedDAG prefill, D128/B32/T4/V257, two connected windows, SGD",
+    "packet_sha256": "8f8194e8854becbbd800cc10baea523c47656063f65aca39dec96f8b23001336",
+    "native_input_sha256": "f2e1d08d48daae6fd26bc58fa26cd54b26e52bc6bc82433eb6ab0fbda8cab101",
+    "baseline_seconds": 3.81071064,
+    "batched_seconds": 4.090873484,
+    "observed_time_change_percent": 7.351984195787709,
+    "baseline_peak_rss_bytes": 701222912,
+    "batched_peak_rss_bytes": 814317568,
+    "exact_shared_observables": {
+      "losses": [
+        16.050273895263672
+      ],
+      "outputs": [
+        682
+      ],
+      "final_cut": 272,
+      "input_tokens_per_step": 256
+    },
+    "exact_work_counters": {
+      "aggregate_calls": 195,
+      "attention_score_elements": 0,
+      "batched_aggregate_events": 17202,
+      "batched_full_events": 4972,
+      "body_candidate_events": 16264,
+      "body_selected_events": 4034,
+      "candidate_events": 17202,
+      "full_blocks": 155,
+      "full_calls": 155,
+      "greedy_relaxed_edges": 4608,
+      "greedy_stages": 20,
+      "max_full_batch": 345,
+      "max_greedy_frames": 345,
+      "max_live_fibers": 2048,
+      "max_next_batch": 32,
+      "max_state_batch": 32,
+      "max_state_sequence": 14,
+      "next_batches": 1355,
+      "next_reset_scalar_steps": 4034,
+      "next_steps": 17202,
+      "packed_source_batches": 195,
+      "read_calls": 1314,
+      "region_blocks": 20,
+      "region_steps": 4972,
+      "selected_events": 4972,
+      "semantic_next_replays": 17202,
+      "source_rows": 21148,
+      "state_blocks": 128,
+      "state_prefill_fallback_events": 16264,
+      "state_prefill_selected_clear": 16264,
+      "state_scalar_sequence_steps": 0,
+      "state_sequence_calls": 128,
+      "state_step_batch_calls": 1310,
+      "state_step_calls": 1310,
+      "state_steps": 16264,
+      "visited_edges": 20892
+    },
+    "before_attachment": {
+      "semantic_read_replays": 17202,
+      "semantic_state_replays": 17202
+    },
+    "after_attachment": {
+      "batched_read_events": 17202,
+      "batched_state_events": 17202
+    },
+    "results": [
+      {
+        "path": "runs/g2-cpu-assessment01/complete-add-baseline/result.json",
+        "sha256": "75f5f6c259dabfe42b4b42e38510f31e5b633474f926eb6cf0e4c195e4715c04"
+      },
+      {
+        "path": "runs/g2-cpu-assessment01/complete-add-batched/result.json",
+        "sha256": "cb5b8b71b5712fc22f05f343c009ade0909bdfb422b14f10cdc7d1bea7385d61"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "runs/g2-cpu-assessment01/status.json",
+      "sha256": "8e0a251dc48a09ee53a9f5300167e559c865a9442e9730cd9cd06a41bd7f2b90"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/assessment.json",
+      "sha256": "f7ffc1feb7de6afaa8cb24410cd1fcb0f66cd28965f198d76d287c2f3c2bee8e"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/task.log",
+      "sha256": "682ec9abdb96cd5045c66eb967a3e7817b0328a89160dc3ec8060aede62d98ec"
+    },
+    {
+      "path": "plans/g2-cpu-assessment01.py",
+      "sha256": "70f4f33876681c6e0c81b79f15f73a02731f1de5d3fa720a1c4e5fb787a598dd"
+    },
+    {
+      "path": "plans/g2-cpu-assessment01.sh",
+      "sha256": "1188b28fcef1b4aaed785ea456d1969a7e0cd2b9d8c8f4ec9ec8faf1db6f03b5"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/read-replay.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/read-batched.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/state-add-replay.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/state-add-batched.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/state-attention-replay.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/state-attention-batched.log",
+      "sha256": "d904a0ddc9b8ac7ef17f7b6bf08ebc743e0a45b5fa497a6427d2c10875b5e6d4"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/complete-add-baseline.log",
+      "sha256": "30b25babdaf966be930eee9ef9ee8862c036b8b67f09e42ef78f2181e281619a"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/complete-add-batched.log",
+      "sha256": "6515ec2bb35e289be50f8d67217baa9e6d6fa702dca73baf7ecdc592e8c34486"
+    },
+    {
+      "path": "runs/g2-cpu-assessment01/complete-attention-baseline.log",
+      "sha256": "95e6d56dfa43dae8056201df2565c80c7b5b0b016c2cb43d7385c07134ec5142"
+    }
+  ],
+  "attention_refusal": {
+    "error": "eager physical sample/head memory envelope exceeds budget before model allocation",
+    "failure_phase": "preallocation_memory_admission",
+    "estimated_peak_bytes": 25662653552,
+    "budget_bytes": 6442450944,
+    "requested_sample_rows": 32,
+    "logical_batch": 32,
+    "chunk_policy": "aggressive",
+    "result": {
+      "path": "runs/g2-cpu-assessment01/complete-attention-baseline/result.json",
+      "sha256": "a2bbb3a1740c221433093391a312d8a1856127f401fa6b88d26b11369f6531cb"
+    },
+    "interpretation": "No model allocated or timing sample produced; candidate did not start. No speed, correctness failure, OOM, retry or enlarged-budget claim."
+  },
+  "load_range_before_cases": [
+    64.02,
+    70.62
+  ],
+  "limitations": "Single independent observation per case under uncontrolled external load. Profile passes are separate and perturb timings. Component ratios are not native or NPU speedups. Add shows no end-to-end speed gain; Attention has no timing. No full-size experiment is justified by these observations alone.",
+  "auditor": {
+    "path": "plans/audit-g2-cpu-assessment01.py",
+    "sha256": "825d2ddd6e09878ce2ce8c1e8a197ae304e0354b7ca1ca58c83c9106d6b16edd"
+  }
+}

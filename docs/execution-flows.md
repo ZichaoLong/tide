@@ -326,3 +326,8 @@ Python/独立 runtime 构建、安装消费者、逻辑0协调卡和至少3个�
 必须失败。编译、CPU 语义适配检查、真实设备正确性、动态常驻性、多卡通信和
 性能分别记录。当前本机无 GPU，后四项均不能由前两项替代。构建与真机命令见
 [device-control](device-control.md)。
+
+本阶段资格／构建证据见 [G1/G3 本机资格](evidence/batched-vjp-cuda-local-20261010.md)，
+有限选择证据见 [CPU 批量化复验](evidence/batched-selection-cpu-20261010.md)。
+组件加速不自动外推到完整消费者；显式物理切分被准入拒绝时保留失败与未运行格，
+不得扩大预算或补写不存在的性能结果。当前资源状态与后续命令仍只由 STATUS 交接。
