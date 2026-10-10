@@ -110,3 +110,48 @@ def test_profile_cli_keeps_standalone_identity_and_explicit_device():
     assert p.parse_args(base+['--device','npu:0']).implementation == 'libtorch'
     with pytest.raises(SystemExit):
         p.parse_args(base+['--device','npu:0','--implementation','native'])
+
+
+@pytest.mark.parametrize('mode', ['prepare', 'collected', 'missing-trace'])
+def test_complete_entry_lifecycle_with_synthetic_collector(tmp_path, monkeypatch, mode):
+    # This tests orchestration/record acceptance only, never vendor execution.
+    import profile_execution_flow as entry
+    from flow_topology import ranked_graph
+    from flow_protocol import make_continuous_packet
+    packet = make_continuous_packet(graph=ranked_graph(layers=2, region_width=2, fanout=2, local_span=2),
+                                    width=4, batch=2, tokens=2, vocab=7)
+    source = tmp_path/'packet.json';source.write_text(json.dumps(packet))
+    binary = tmp_path/'native';binary.write_bytes(b'synthetic collector fixture')
+    out = tmp_path/'profile'
+    monkeypatch.setattr(entry, 'source_state', lambda _: ('fixed', ''))
+    monkeypatch.setattr(entry, 'check_build', lambda *args: ({'fixture': 'synthetic'}, binary))
+    monkeypatch.setattr(entry.shutil, 'which', lambda _: '/synthetic/msprof')
+    monkeypatch.setattr(entry.subprocess, 'check_output', lambda *args, **kwargs: 'libtorch.so => /runtime/libtorch.so')
+    calls = []
+    def collect(command, **kwargs):
+        calls.append(command)
+        assert mode != 'prepare', 'prepare-only executed a workload'
+        result, _, _ = fixture()
+        result.update(workload_sha256=packet['sha256'], batch_execution=dict(logical_batch=2))
+        (out/'consumer').mkdir();(out/'consumer/result.json').write_text(json.dumps(result))
+        if mode == 'collected':
+            raw = out/'raw/PROF_test/device_0';raw.mkdir(parents=True)
+            (raw/'api_statistic_1.csv').write_text('Level,API Name,Time(us),Count\nruntime,Launch,2,1\n')
+            (raw/'op_summary_1.csv').write_text('Task Type,OP Type,Task Duration(us),Input Data Types\nAI_CORE,MatMul,3,FLOAT\n')
+        return 0
+    monkeypatch.setattr(entry, 'run_child', collect)
+    argv = ['profile_execution_flow', '--packet', str(source), '--output-dir', str(out),
+            '--build-dir', str(tmp_path/'build'), '--device', 'npu:0', '--family', 'pdg',
+            '--preset', 'mixed-c', '--schedule', 'prefill', '--training', '--optimizer', 'adamw',
+            '--device-memory-bytes', '1073741824']
+    if mode == 'prepare':argv.append('--prepare-only')
+    monkeypatch.setattr(sys, 'argv', argv)
+    if mode == 'missing-trace':
+        with pytest.raises(ValueError, match='no real device'):
+            entry.main()
+    else:
+        entry.main()
+    report = json.loads((out/'result.json').read_text())
+    assert report['state'] == {'prepare':'prepared', 'collected':'passed', 'missing-trace':'failed'}[mode]
+    assert len(calls) == (0 if mode == 'prepare' else 1)
+    assert (out/'topology.txt').is_file() and report['native_input_sha256'] == digest(out/'topology.txt')
