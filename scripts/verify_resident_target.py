@@ -35,7 +35,7 @@ def check_build(root, build, *, backend, owner):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--device', required=True, help='explicit indexed cuda:N or npu:N')
+    p.add_argument('--device', required=True, help='remapped coordinator cuda:0 or npu:0; expose at least three devices')
     p.add_argument('--python-core-build', type=Path, required=True)
     p.add_argument('--python-resident-build', type=Path, required=True)
     p.add_argument('--standalone-resident-build', type=Path, required=True)
@@ -47,8 +47,8 @@ def main():
                    default='strict', help='explicit existing softmax comparison policy; discrete checks remain exact')
     p.add_argument('--output-dir', type=Path, required=True)
     a = p.parse_args()
-    if not re.fullmatch(r'(?:cuda|npu):(0|[1-9][0-9]*)', a.device):
-        p.error('an explicit indexed CUDA/NPU target is required')
+    if not re.fullmatch(r'(?:cuda|npu):0', a.device):
+        p.error('the complete peer suite requires remapped cuda:0 or npu:0; select physical devices in the launcher')
     root = Path(__file__).resolve().parents[1]
     source, dirty = source_state(root)
     if dirty:

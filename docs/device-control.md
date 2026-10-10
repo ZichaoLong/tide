@@ -42,8 +42,10 @@ python scripts/build_online_consumer.py --core-build "$CORE" --resident-build "$
 python scripts/verify_resident_target.py --device cuda:0 --python-core-build "$CORE" --python-resident-build "$PYTHON_RESIDENT" --standalone-resident-build "$STANDALONE" --online-build "$ONLINE" --installed-consumer-build "$INSTALLED" --output-dir "$GATE"
 ```
 
-The complete gate requires at least3 visible consecutive logical devices for
-1/2/3-owner continuation/repartition. It fails rather than skipping unavailable
+The complete gate requires coordinator `cuda:0` or `npu:0` and at least3
+visible logical devices for 1/2/3-owner continuation/repartition. Its existing
+peer checker assumes logical0/1; select physical devices in the launcher.
+The public runtime itself accepts other explicit logical coordinator indices. It fails rather than skipping unavailable
 hardware or missing binaries, checks exact build/source digests, runs the entire
 registered standalone component inventory and all public resident consumers,
 and rejects any skipped public test. Single-card component invocations through

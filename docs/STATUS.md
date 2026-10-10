@@ -15,8 +15,12 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 and correction8a4d60f plus Norm VJP rounding fixa02c18c are committed/pushed. G3 CUDA resident implementation committed/pushed as bda25de.
 G2 component profiler and accurate State/Read policy metadata are committed/pushed
 as d1df03c after6 passed CPU entry smokes; no actual selection timing yet.
-Uncommitted follow-up: target gate includes automatic capacity tests, backend-neutral
-owner devices, and an explicit existing strict/conditioned full-training option.
+Target-gate follow-up ecafdf4 is committed/pushed: automatic capacity tests,
+backend-neutral owner devices, and an explicit existing strict/conditioned
+full-training option. Host placement/CLI/syntax checks passed; no new device claim.
+Pending entry-only correction: complete peer qualification explicitly requires
+remapped logical0 (the existing peer checker uses0/1); public runtime indices
+remain general. No component/runtime source changes.
 G1 metric/gate fixes and exact Norm VJP rounding are committed.
 Keep coherent commits and use clean immutable qualification after implementation.
 Do not edit a snapshot while its job runs. `TASK=/mi/data2T/zlong/tide-execution-flows`.
@@ -115,6 +119,40 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
   Latest script requires actual accelerator kernel trace events, records stage
   and kernel durations/counts/digests, and rejects fallback. G2/G5 actual
   medium/resident/selection experiments remain unexecuted.
+
+## Prepared current-source NPU correctness (not launched)
+
+`plans/g4-npu-modules01.{sh,py}` runs the complete named eager module suite,
+Python/native × FP32/FP16, from clean ecafdf4 with byte-verified bda25de cores
+(`g3-npu-core-{python,standalone}-clean01`; identical current core hash).
+It covers all built-in State/fiber profiles and Read modes, retains explicit
+unsupported CSR rejection, and adds the standalone FP32 module checker.
+Current-source resident/multi-card and complete standalone training remain
+separate gates. One NPU; fresh60s maximum allocation wait/2700s execution,
+50min service,CPUQuota600%,MemoryMax12GiB,TasksMax192. Launch after a fresh
+inventory supports an allocation opportunity; no unchanged queue retry.
+
+## Fresh finite performance tranche (prepared, not launched)
+
+`plans/g2-cpu-assessment01.{sh,py}` declares10 serial fresh-process cases:
+Read norm32/Add/Attention replay versus batched components (rows32,width128),
+then standalone CPU LibTorch Add/Attention continued training before/after G1.
+Components: clean ecafdf4. Complete consumers: clean c0ce4ee baseline and a02c18c
+candidate; exact matching old/new core and installed client hashes are checked.
+Medium packets in `TASK/packets/g2-medium-{add,attention}01`: D128,B32,T4,V257,
+128 body nodes/544 edges;8,995,632 /17,384,240 parameters. TimedDAG prefill,
+SGD/Add or AdamW/Attention, two connected windows, one warmup plus one measured
+step; four native workers/one ATen thread; physicalB32, explicit aggressive
+operator chunk policy and6GiB static memory admission. No timed CPU oracle.
+
+Fresh budget:120s/case,8GiB per supervised process group,2GiB output cap,
+30min service,8-CPU affinity,CPUQuota800%,MemoryMax12GiB,TasksMax192. Stop on
+first failure/bound; no repeats or timeout increases. Use existing durable
+records/Trackio off. Launch only after the three current build/qualification
+jobs terminate and CPU qualification03 passes, avoiding internal timing
+contention. Single observations with external load, not stable distribution or
+full-size selection. An NPU tranche will be declared separately after allocation
+and correctness; no old queue or full matrix is reopened.
 
 ## Environment and evidence limits
 
