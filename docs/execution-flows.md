@@ -334,8 +334,11 @@ Python/独立 runtime 构建、安装消费者、逻辑0协调卡和至少3个�
 性能分别记录。当前本机无 GPU，后四项均不能由前两项替代。构建与真机命令见
 [device-control](device-control.md)。
 
-本阶段资格／构建证据见 [G1/G3 本机资格](evidence/batched-vjp-cuda-local-20261010.md)，
-有限选择证据见 [CPU 批量化复验](evidence/batched-selection-cpu-20261010.md)。
+本阶段初始资格／构建证据见 [G1/G3 本机资格](evidence/batched-vjp-cuda-local-20261010.md)，
+Add 组织优化、新二进制和完整 profiling 准备见
+[后续资格证据](evidence/add-batch-followup-20261010.md)；其中 CPU 验收由完整清单和
+同源码的两项资源准入修复复验组成，保留原失败记录。有限选择证据见
+[CPU 批量化复验](evidence/batched-selection-cpu-20261010.md)。
 组件加速不自动外推到完整消费者；显式物理切分被准入拒绝时保留失败与未运行格，
 不得扩大预算或补写不存在的性能结果。当前资源状态与后续命令仍只由 STATUS 交接。
 

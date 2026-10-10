@@ -344,6 +344,21 @@
           "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_CPU_BUILD --output-dir NEW; ctest --test-dir MATCHING_CPU_BUILD --output-on-failure --timeout 60",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Add assembly follow-up: clean e565f96 composite CPU qualification accepts 9650 unique cases (9648 full-inventory passes plus exactly 2 same-source resource-admission repairs),654 optional skips;22 complete topology cells,10 installed consumers,12 matching-core CTests. The original full run remains failed; byte-identical development CPU build provenance is retained.",
+          "tiers": [
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Full qualify_library.py --reuse-build inventory plus exact 2-test resource repair and library_complex.py/library_consumer.py/CTest completion; exact frozen plans and audit in report"
         }
       ]
     },
@@ -369,7 +384,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Current G1 State/Read and G3 shared resident boundary are implemented and build-tested, with Python dynamic import/host checks. Current-source real NPU module/full-training/resident/multi-card qualification and profiling await a safe allocation; all16 local chips were occupied. Historical verified results below remain valid only at their listed commits and scopes.",
+      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling remain unsubmitted pending a safe allocation; the 2026-10-10T13:39:53Z inspection found all16 chips unavailable. Historical verified results retain only their listed commits and scopes.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -488,6 +503,29 @@
           "test_command": "scripts/build.py, build_device_control.py, build_resident_consumer.py, build_online_consumer.py and build_accelerator_scale.py; exact bounded plans and manifests in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+          "scope": "Add ABI follow-up: fresh public Torch/TorchNPU2.10/CANN9.0 Python and standalone core/resident owners,installed/online/scale clients;7 resident and5 scale host CTests. No NPU operator or workload execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-npu-clean02 plan: build.py,build_device_control.py,build_resident_consumer.py,build_online_consumer.py,build_accelerator_scale.py; exact manifests in report"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Exact matching a926703 binaries imported without NPU initialization; four actual complete-profile --prepare-only commands passed as prepared with no workload execution. Source delta checked; new NPU correctness/profiling batch remains unsubmitted.",
+          "tiers": [
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-followup-host01 plan and g-stage-device-batch02.py --check-only; exact identities in report"
         }
       ]
     },
@@ -769,6 +807,22 @@
           "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_CPU_BUILD --output-dir NEW; ctest --test-dir MATCHING_CPU_BUILD --output-on-failure --timeout 60",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Add assembly follow-up: clean e565f96 composite CPU qualification accepts 9650 unique cases (9648 full-inventory passes plus exactly 2 same-source resource-admission repairs),654 optional skips;22 complete topology cells,10 installed consumers,12 matching-core CTests. The original full run remains failed; byte-identical development CPU build provenance is retained. Build tier audits reused byte-identical CPU artifacts and fresh installed-consumer compilation; no clean-origin core construction claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Full qualify_library.py --reuse-build inventory plus exact 2-test resource repair and library_complex.py/library_consumer.py/CTest completion; exact frozen plans and audit in report"
         }
       ],
       "attempts": [
@@ -810,7 +864,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Current G1 State/Read and G3 shared resident boundary are implemented and build-tested, with Python dynamic import/host checks. Current-source real NPU module/full-training/resident/multi-card qualification and profiling await a safe allocation; all16 local chips were occupied. Historical verified results below remain valid only at their listed commits and scopes.",
+      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling remain unsubmitted pending a safe allocation; the 2026-10-10T13:39:53Z inspection found all16 chips unavailable. Historical verified results retain only their listed commits and scopes.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -1127,6 +1181,29 @@
           "test_command": "scripts/build.py, build_device_control.py, build_resident_consumer.py, build_online_consumer.py and build_accelerator_scale.py; exact bounded plans and manifests in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+          "scope": "Add ABI follow-up: fresh public Torch/TorchNPU2.10/CANN9.0 Python and standalone core/resident owners,installed/online/scale clients;7 resident and5 scale host CTests. No NPU operator or workload execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-npu-clean02 plan: build.py,build_device_control.py,build_resident_consumer.py,build_online_consumer.py,build_accelerator_scale.py; exact manifests in report"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Exact matching a926703 binaries imported without NPU initialization; four actual complete-profile --prepare-only commands passed as prepared with no workload execution. Source delta checked; new NPU correctness/profiling batch remains unsubmitted.",
+          "tiers": [
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-followup-host01 plan and g-stage-device-batch02.py --check-only; exact identities in report"
         }
       ]
     },
@@ -1208,6 +1285,30 @@
           "test_command": "CUDA build and CPU-contract commands in docs/device-control.md and cited frozen job plans; real target gate remains pending",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+          "scope": "Add ABI follow-up: fresh CUDA12.8.1/Torch2.10+cu128 core,standalone/Python resident and installed/online consumers;7 host CTests,102 CPU semantic sources/1CTest,271 CPU tests passed/84 optional device skips. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "Frozen g3-cuda-clean02 plan: fresh CUDA builds and CPU semantic/host checks; target-device gate remains pending"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Exact matching a926703 native/resident binaries imported without CUDA initialization; complete explicit target entry correctly refuses absent CUDA at preflight. No GPU correctness,residency,multicard,memory or performance claim.",
+          "tiers": [
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-followup-host01 plan: dynamic import/metadata and expected verify_resident_target.py absent-CUDA refusal"
         }
       ]
     },
@@ -1291,6 +1392,30 @@
           "test_command": "CUDA build and CPU-contract commands in docs/device-control.md and cited frozen job plans; real target gate remains pending",
           "result": "passed",
           "environment_manifest": "docs/evidence/batched-vjp-cuda-local-20261010.md"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+          "scope": "Add ABI follow-up: fresh CUDA12.8.1/Torch2.10+cu128 core,standalone/Python resident and installed/online consumers;7 host CTests,102 CPU semantic sources/1CTest,271 CPU tests passed/84 optional device skips. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "Frozen g3-cuda-clean02 plan: fresh CUDA builds and CPU semantic/host checks; target-device gate remains pending"
+        },
+        {
+          "date": "2026-10-10",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/add-batch-followup-20261010.md",
+          "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+          "scope": "Exact matching a926703 native/resident binaries imported without CUDA initialization; complete explicit target entry correctly refuses absent CUDA at preflight. No GPU correctness,residency,multicard,memory or performance claim.",
+          "tiers": [
+            "static-cli"
+          ],
+          "test_command": "Frozen g3-followup-host01 plan: dynamic import/metadata and expected verify_resident_target.py absent-CUDA refusal"
         }
       ]
     }

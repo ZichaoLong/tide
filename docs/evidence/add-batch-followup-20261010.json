@@ -1,0 +1,744 @@
+{
+  "schema": "tide-add-batch-followup-review-v1",
+  "date": "2026-10-10",
+  "scope": "New Add assembly and complete native profile entry: composite clean-source CPU qualification, fresh dual-runtime backend builds, host preparation, finite unsubmitted device batch. No new device execution or performance claim.",
+  "sources": [
+    {
+      "path": "sources/g-stage-followup-clean03",
+      "commit": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "dirty": ""
+    },
+    {
+      "path": "sources/g-stage-followup-clean01",
+      "commit": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+      "dirty": ""
+    }
+  ],
+  "core_cpp_sha256": "0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0",
+  "resident_component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b",
+  "uncompiled_source_delta": [
+    "docs/execution-flows.md",
+    "scripts/profile_execution_flow.py",
+    "tests/test_complete_flow_profile.py",
+    "tests/test_consumer_owner_map.py",
+    "tests/test_consumer_sample_chunks.py"
+  ],
+  "environment": {
+    "host_arch": "aarch64",
+    "compiler": "GCC 10.3.1",
+    "cpp_standard": 17,
+    "python": "3.11.15",
+    "cpu_torch": "2.10.0+cpu",
+    "cuda_torch": "2.10.0+cu128",
+    "cuda_toolkit": "12.8.1",
+    "torch_npu": "2.10.0",
+    "cann": "9.0.0",
+    "shared_driver_changes": false
+  },
+  "cpu": {
+    "state": "passed",
+    "acceptance": "composite, not a single full passing invocation",
+    "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+    "counts": {
+      "full_run_passed": 9648,
+      "full_run_failed": 2,
+      "optional_skips": 654,
+      "scoped_repair_passed": 2,
+      "accepted_unique_cases": 9650
+    },
+    "repaired_cases": [
+      "tests/test_foundation_cli.py::test_three_family_smoke_has_real_modes_and_terminal_records",
+      "tests/test_foundation_v2_cli.py::test_v2_smoke_records_actual_schedules_and_modes"
+    ],
+    "original_full_run_state": "failed",
+    "full_run_summary": "2 failed, 9648 passed, 654 skipped in 2039.05s (0:33:59)",
+    "complex_topology_cells": 22,
+    "installed_consumer_checks": 10,
+    "standalone_ctests": {
+      "passed": 12,
+      "log": {
+        "path": "builds/g1-add-assembly-dev01/Testing/Temporary/LastTest.log",
+        "sha256": "9e571001a90de26abfa0183c9ce5437fe89a56b5b302692728f7284589d361ba"
+      }
+    },
+    "artifacts": [
+      {
+        "path": "runs/g1-cpu-completion01/gate/result.json",
+        "sha256": "582a7a3ec48df27b84cbe3cd3bfae63013929b41fcac3188cb403c37476e26bf"
+      },
+      {
+        "path": "runs/g1-cpu-qualification06/gate/cpu/result.json",
+        "sha256": "7ea90093423970124ea2cbaba7326e5429676ce589c607b328c751c401f839b5"
+      },
+      {
+        "path": "runs/g1-cpu-qualification06/gate/cpu/tests.log",
+        "sha256": "966d485e5790c129e4754ea74ca66f3b430ada373bec80e9437f4da150cb3f18"
+      },
+      {
+        "path": "runs/g1-cpu-resource-repair01/tests.xml",
+        "sha256": "0a3a042d36cb3a9e0cf77a45e99833c53d9fbe9d4d6307ccc3b8a81d3e85d134"
+      },
+      {
+        "path": "runs/g1-cpu-completion01/bounded.json",
+        "sha256": "e626086d057f574f60c06b1bb9008cda7c82c6ead469b40322ae0d6160010d23"
+      },
+      {
+        "path": "runs/g1-cpu-completion01/gate/complex/result.json",
+        "sha256": "3385035f551bad6c80cd2728a0c34064edb7af55da4cdceb96f999ba2516e118"
+      },
+      {
+        "path": "runs/g1-cpu-completion01/gate/consumer/result.json",
+        "sha256": "6c76186e96bc3cbb9030d001c2ab8d445e3dad14c200ad0dd696e8a3328a2e0c"
+      }
+    ],
+    "development_build": {
+      "status": {
+        "path": "runs/g1-add-assembly-dev01/status.json",
+        "sha256": "faa0b21d68aa465aa40266c36541e89db4c19d173b0d081c33b18677aa8aa84b"
+      },
+      "log": {
+        "path": "runs/g1-add-assembly-dev01/task.log",
+        "sha256": "88ec856764428d1bd003854138326b6bbb4ed684621e888e9a3f3f55aef13f13"
+      },
+      "scope": "477 directed tests passed on frozen dirty source; CPU clean qualification reuses its byte-identical core; not a clean-source build claim"
+    }
+  },
+  "backend_builds": {
+    "cores": [
+      {
+        "name": "g1-add-assembly-dev01",
+        "identity": {
+          "path": "builds/g1-add-assembly-dev01/build-manifest.json",
+          "sha256": "ef8419ad9b0701eaa51f0c3644a119358545f20565a2d7fb4792b9e30a3f9ca5"
+        },
+        "source": "8523353034cc575387bed529caac788bdf03488d",
+        "backend": "cpu",
+        "npu_runtime": null,
+        "binary_sha256": {
+          "libtidegraph.a": "5f0dd9904ff82f9ce51e05e6e4fc18615045b75549a50ff5d3660ef490516e73",
+          "libtidegraph_runtime.a": "432a90ca30643aaf28c8efcf615afcac36ebac28b9a1711b99bb7780f3cb68e9",
+          "_tide_native.so": "227bb09a2194f4fe3f64f817c451a63c79dcebdf01976c6694dce293879878cb",
+          "tidegraph-smoke": "e41f67b09d04340e5aff4efa54dd235bd97974c081414fc427e5c3427964d32c",
+          "tidegraph-kernel-check": "e8424761811d54978dd2703763a7f5200b177f3e2bd429028860c919ec6c3921",
+          "tidegraph-full-check": "629df309dd2edfd147ec3ef30cab74ac31fc8127fae688482028d74f2e16edca",
+          "tidegraph-aggregate-check": "241d3d765e60af55fb96cac3c707ee4f946d2884594c68c65a4689e1e9a2629c",
+          "tidegraph-optimizer-check": "2046984c57e9669d58541e3dbbf25715e85d4787ef2c86ab8aa929afd9c32e20",
+          "tidegraph-checkpoint-check": "85031b81c7104476194e268ba5909e7797b02cdd007eafdca25c81de99a7f7d3",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "00ccc5b697159fdc82ee5cdb4cc552f977afd333d93b33a9ffa4e9de6174b177",
+          "tidegraph-scale-bench": "b5a69524b33ffa20fef8fa6251c8545aeb8fc0f5b36284c87042de02a3511ae6",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "9958c4e7679a2a242e58724e6b2a37608908e085eec47a36e9d02a9f0151fed6",
+          "tidegraph-greedy-check": "740df5db70dc923e08bb4c3c0acfb9dd3fe12b4c6725f17fe809211e4030c9e8",
+          "tidegraph-accelerator-check": "a3385034752cc03cca077356e8d6cadd6ce1c52c45b7040630c36546c992b8f9",
+          "tidegraph-runtime-check": "2a88b83579fd09a52f1d2d3fc45de24fb028600f23f0c555f598cdc7858b7fe0",
+          "tidegraph-read-precision-check": "dc9e4b60707b725d30aa83ed53290852b30d64cd0ef352c34e2a3ed15e73e591",
+          "tidegraph-placement-check": "d097444a6a7870e984d6604ba126c760ebfeaa7cc61764a5aafcda66f9fe486e",
+          "tidegraph-payload-ownership-check": "64f9077749cc7a91fbd5f9c8e48f8b84d8092d94682c76dd2e253279822350d1"
+        }
+      },
+      {
+        "name": "g3-cuda-core-clean02",
+        "identity": {
+          "path": "builds/g3-cuda-core-clean02/build-manifest.json",
+          "sha256": "1e7ba36967f14152d7a6f64d9bfac85dc954eb88c890d5e5bab123ead46700c9"
+        },
+        "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+        "backend": "cuda",
+        "npu_runtime": null,
+        "binary_sha256": {
+          "libtidegraph.a": "972b614e5c4cac177405ca90a5cc32543137d14cb14ce68061d519593ff4db1e",
+          "libtidegraph_runtime.a": "24fc914c1546d5025883bbfd110fad9ddc29b7e769d3a554da4fb2daa49c896f",
+          "_tide_native.so": "7f7814afa6fc949f294657af80765feb819dcee8b82d311ca44c2ab2cac84de6",
+          "tidegraph-smoke": "8159e10bb49d50c37c6ce350e79fd4328248e018950bb8b74e3948b49e3a2896",
+          "tidegraph-kernel-check": "74c1ea4b3b19e85d4224e2c1ab5850e5e6fc32b402d762d109c561bd04f3bc19",
+          "tidegraph-full-check": "d4c17ea9b94d170eb9cd43df2efbb615dc2deaad77ed055211ed55dcbba0998c",
+          "tidegraph-aggregate-check": "b2694a60a3f43218da2b10f6d77e3b20f60d1a65e31b6538e4a0456ed51a7a6a",
+          "tidegraph-optimizer-check": "14678f6e459df95218d069b13611349e6fb1d15b713bf0d882f922f7b50bfcb0",
+          "tidegraph-checkpoint-check": "acbb4ce1961b61d8a609e08146f3d3d6769c9da64a9663d9aa49d13eada09b88",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "31baab16738baa66aaa2cd58ec38b813eda5028bd9ed63ce1b453791577e5242",
+          "tidegraph-scale-bench": "860b43a927bfc17e4eef5628e5e3ed40f9bf233ca955d9ee2dd1f18d60b02487",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "e9525fd2ed3ffedd09eec9fe4d1e23be44d973f4d13dac9908e4391beb32625c",
+          "tidegraph-greedy-check": "d3b15bc1bf28f8cee7b7ff7ead8c968fb7f1aa25b095be97cd97db1edf029798",
+          "tidegraph-accelerator-check": "61bbb4668d54116824ff60bb1e8dc07ac31ee0dace5736c64475f0b56ea6b8fd",
+          "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+          "tidegraph-read-precision-check": "9997d9153afa2c729af7871798a112a1ac75473ba0f5040e0203f16d1c790311",
+          "tidegraph-placement-check": "744a4c2f68ac31826a3a20117b7c300fcba5809be924951163cb7530315a4472",
+          "tidegraph-payload-ownership-check": "0591901b180c8c364e14e2ce548c40ce2a22d75764bb42ab1868dc386bb3104d"
+        }
+      },
+      {
+        "name": "g3-npu-core-python-clean02",
+        "identity": {
+          "path": "builds/g3-npu-core-python-clean02/build-manifest.json",
+          "sha256": "bd7c8dcaff25f264a6929a0a3e34d0581d07a93037f7f994fd017aa94c9fc052"
+        },
+        "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+        "backend": "npu",
+        "npu_runtime": "python",
+        "binary_sha256": {
+          "libtidegraph.a": "fdeff7bac5fd8e46c1de49af37ba8a3d8e6bf3e897f806e53351bd466f119d1a",
+          "libtidegraph_runtime.a": "61fe3fbeb6ed65ca3ac6030948532f164b568818f7b3878042686a40e8a835db",
+          "_tide_native.so": "17a36b95dc1ee10a8c2df34a16a3306014bf5f30f91bc41c6eab251db2b67790"
+        }
+      },
+      {
+        "name": "g3-npu-core-standalone-clean02",
+        "identity": {
+          "path": "builds/g3-npu-core-standalone-clean02/build-manifest.json",
+          "sha256": "c23e0cbe3ea3dad22d948d67c94ccc57a5e694356ed16a142520aaeb2956ed55"
+        },
+        "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "binary_sha256": {
+          "libtidegraph.a": "9d853591caaacc1c7f145a23df954bfb9888583ee2800fd2545b696e6d31fe2e",
+          "libtidegraph_runtime.a": "c458f4b079fee198b6ecd22d5790c69db0aef73b91032cd45b50baa1dd24acce",
+          "tidegraph-smoke": "f8e2b68dcb0541e1c1f99ef51f19ad6a8927c0f97740ffdbaecab9ae51e17f50",
+          "tidegraph-kernel-check": "4f077154a1339e7e669e6037e15b7248e0d028d0a39a1e9968fc75b97f9ec789",
+          "tidegraph-full-check": "c8e6a703ebb8aaa220239b531fea2af25c04dd5e559acc19ff4e48ffc9f897c5",
+          "tidegraph-aggregate-check": "4e7cc2eb80b146ea78e90cc3265223bec18244cf420ebe40190c3f88d0e9750e",
+          "tidegraph-optimizer-check": "e31eaa1e68fed614e9aa0cea237105925eb7cd16dd5b5bff92d7913e7487a1b9",
+          "tidegraph-checkpoint-check": "f1157b77fd0cc84469a48549a27d3cee27567168510e1bc8a2b7f5bc90308c0f",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "e7338400b2fd3b44f89b771a8758aba66cacef12aeaa9f2a6c6301e0b3c5c0f2",
+          "tidegraph-scale-bench": "b2cbd103ce049a5d2001d57b78b88def4bdbfa9f2ec4f2472ddb7fe86281c2a6",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "7d83012045824ac795139d06d6994d82ace7fae0b97fca1a3d23bef419ae0f23",
+          "tidegraph-greedy-check": "84775599bded1e26318a28aabf3e0e02a3f463c7ab59f83022bc9650569da9e5",
+          "tidegraph-accelerator-check": "821bc812d7d41ca079a0d0a06ffd407032b5af442b8faa1d8d8f78e4752fb629",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "5b8f8a6e52da9267ac805c997e9581b891b8d93b3325107f3a587224fd93fb02",
+          "tidegraph-placement-check": "52f85d9ee89ebb1d2d985f0ccf757b78bbf8d3d5b0e25e373595cd1c5180c9f4",
+          "tidegraph-payload-ownership-check": "de9b6d53cc247ee8de7e611d5f8fc951267512af7d1f0f731302c2dab7bd65b2"
+        }
+      }
+    ],
+    "resident": [
+      {
+        "name": "g3-cuda-resident-clean02",
+        "identity": {
+          "path": "builds/g3-cuda-resident-clean02/control-build.json",
+          "sha256": "e884b7cd4d11ce672aa1381f761832f605fa56d3d7dfdd809c6a518554294b5c"
+        },
+        "binary_count": 66,
+        "component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b"
+      },
+      {
+        "name": "g3-cuda-python-clean02",
+        "identity": {
+          "path": "builds/g3-cuda-python-clean02/control-build.json",
+          "sha256": "154942c2c1b521ec1009e55b4fb801e32bdab0b783ee64390ddc8db73524dd2b"
+        },
+        "binary_count": 2,
+        "component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b"
+      },
+      {
+        "name": "g3-npu-resident-clean02",
+        "identity": {
+          "path": "builds/g3-npu-resident-clean02/control-build.json",
+          "sha256": "c77548fbd8c160efcc6af23c18a4522f984ce8f96413127f2c5989aed2e250dc"
+        },
+        "binary_count": 66,
+        "component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b"
+      },
+      {
+        "name": "g3-npu-python-clean02",
+        "identity": {
+          "path": "builds/g3-npu-python-clean02/control-build.json",
+          "sha256": "63801513d6ebf2009fd55f04643e41f2bb91fb2541a8a77d935ef0282a496eba"
+        },
+        "binary_count": 2,
+        "component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b"
+      }
+    ],
+    "consumers": [
+      {
+        "name": "g3-cuda-installed-clean02",
+        "identity": {
+          "path": "builds/g3-cuda-installed-clean02/result.json",
+          "sha256": "a1d1f3af0c4086abb350d033e526a0a690e80e8f58149bb83373bf73c7c7a1e8"
+        },
+        "state": "passed"
+      },
+      {
+        "name": "g3-cuda-online-clean02",
+        "identity": {
+          "path": "builds/g3-cuda-online-clean02/result.json",
+          "sha256": "2cbef1fa107e1887bba3f85664c7f38d1ece633ca6eb7939169512d0dd71a7a4"
+        },
+        "state": "passed"
+      },
+      {
+        "name": "g3-npu-installed-clean02",
+        "identity": {
+          "path": "builds/g3-npu-installed-clean02/result.json",
+          "sha256": "42e3316e6767990ed00f667c38243a80b8c2c60a3599ca6e9b6f162f70c53ad6"
+        },
+        "state": "passed"
+      },
+      {
+        "name": "g3-npu-online-clean02",
+        "identity": {
+          "path": "builds/g3-npu-online-clean02/result.json",
+          "sha256": "47efd669e41f041e93b62f2f5e65d69b8d818a3305383cd8a440d995e7b3b8fb"
+        },
+        "state": "passed"
+      }
+    ]
+  },
+  "host_ctests": {
+    "g1-add-assembly-dev01": {
+      "passed": 12,
+      "log": {
+        "path": "builds/g1-add-assembly-dev01/Testing/Temporary/LastTest.log",
+        "sha256": "9e571001a90de26abfa0183c9ce5437fe89a56b5b302692728f7284589d361ba"
+      }
+    },
+    "g3-cuda-resident-clean02": {
+      "passed": 7,
+      "log": {
+        "path": "builds/g3-cuda-resident-clean02/Testing/Temporary/LastTest.log",
+        "sha256": "c25595a8ba9cd276a554bef9c281d71b8c59afc00fdbdcb249e97c9f3f72a117"
+      }
+    },
+    "g3-npu-resident-clean02": {
+      "passed": 7,
+      "log": {
+        "path": "builds/g3-npu-resident-clean02/Testing/Temporary/LastTest.log",
+        "sha256": "c8b7b31a81e5855f7856d7d0928bcccc49e984a031c3af03223a1f7c056078a9"
+      }
+    },
+    "g3-cuda-contract-clean02": {
+      "passed": 1,
+      "log": {
+        "path": "builds/g3-cuda-contract-clean02/Testing/Temporary/LastTest.log",
+        "sha256": "94e64952273b95cc82a58bafc7d5cd81cb0bbbc7d700c88a4ee4226c98837b3e"
+      }
+    },
+    "g3-npu-scale-clean02": {
+      "passed": 5,
+      "log": {
+        "path": "builds/g3-npu-scale-clean02/Testing/Temporary/LastTest.log",
+        "sha256": "da2349ea942cfac09f053fb6864653deb9f972225b34bd5ecdc67ddba44c168d"
+      }
+    }
+  },
+  "cuda_host": {
+    "passed": 271,
+    "optional_device_skips": 84,
+    "junit": {
+      "path": "runs/g3-cuda-clean02/host.xml",
+      "sha256": "011dc655b9b38343a9744824cdc5f508840763db98205add814aa8972fed15d8"
+    },
+    "limits": "Skipped hardware cases certify no device execution"
+  },
+  "cuda_semantic_sources": 102,
+  "host_preparation": {
+    "identity": {
+      "path": "runs/g3-followup-host01/preparation.json",
+      "sha256": "484d233b3c1a53c8be5945f4908891753fbda7b56a23e96234c035928ba6d9b3"
+    },
+    "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+    "state": "passed",
+    "cases": [
+      {
+        "name": "add-mixed-c",
+        "state": "prepared",
+        "exit_code": 0,
+        "result_sha256": "b43e8ad24ec697b50296aca9c3645f0d9010147bbab8228d540ed2171dfce94a"
+      },
+      {
+        "name": "add-resident",
+        "state": "prepared",
+        "exit_code": 0,
+        "result_sha256": "20a4da0684bcb1e183b40c2a10f9a7e183046c08833811d81654f8486ef0e32f"
+      },
+      {
+        "name": "attention-mixed-c",
+        "state": "prepared",
+        "exit_code": 0,
+        "result_sha256": "8c9ab750ad6f79680215dc7a420913d5ba6b184babfa409147043e5c199cfd1b"
+      },
+      {
+        "name": "attention-resident",
+        "state": "prepared",
+        "exit_code": 0,
+        "result_sha256": "13f67995856d32840a06aec7bc56c4e947be15e778043f7f5e1feae020ed7ed5"
+      }
+    ],
+    "device_execution": false
+  },
+  "dynamic_imports": [
+    {
+      "identity": {
+        "path": "runs/g3-followup-host01/cuda.json",
+        "sha256": "6992d4abca62c52dc95d8020b0b408b2117c48d7000f6f140819b20725c24835"
+      },
+      "state": "passed",
+      "device_initialized": false,
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296"
+    },
+    {
+      "identity": {
+        "path": "runs/g3-followup-host01/npu.json",
+        "sha256": "6f7b9760053c8a6e4e901c9ff01cfb942aae1e3d29da3410fdea3a72f788d5a3"
+      },
+      "state": "passed",
+      "device_initialized": false,
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296"
+    }
+  ],
+  "cuda_absent_refusal": {
+    "path": "runs/g3-followup-host01/cuda-refusal.json",
+    "sha256": "bc8fb14ce439133a4997760303f1d7e65844ae141859b37c3a7e4714b0100072"
+  },
+  "profile_lifecycle": {
+    "passed": 15,
+    "junit": {
+      "path": "runs/g2-profile-entry-clean01/tests.xml",
+      "sha256": "f60b579e42200ea655da9f98a6b80b81cd8f93cdfda70ee61c625349553f7e70"
+    }
+  },
+  "profile_cann_bound_development": {
+    "identity": {
+      "path": "runs/g2-profile-cann-bound-dev01.log",
+      "sha256": "7665a6b1594bf520c9d7d10fadf3eb9b7e6f30ff95de40873d407995217e6cb2"
+    },
+    "passed": 18,
+    "scope": "17 profile checks plus sample-chunk refusal regression; subsequently included in clean e565f96 CPU inventory"
+  },
+  "retained_failures": {
+    "qualification04_cancelled": {
+      "path": "runs/g1-cpu-qualification04/status.json",
+      "sha256": "fe5b21c0cea1f31b5f6c49b38ea7ae72fa2e5d5ef717d7349b51fba11f263c7b"
+    },
+    "owner_map_reproducer": {
+      "path": "runs/g1-cpu-qualification04/owner-map-reproducer.log",
+      "sha256": "855316c91c5932d41b9bc0ea168ceb63575e25eadfe37f4288388715e658891e"
+    },
+    "qualification05_failed": {
+      "status": {
+        "path": "runs/g1-cpu-qualification05/status.json",
+        "sha256": "01a8454e4d7e3029ad7a0be6c01dbdd75111220661c08987053d1055f7f4601f"
+      },
+      "reproduction": {
+        "path": "runs/g1-cpu-qualification05/sample-chunk-reproducer.log",
+        "sha256": "efce00c3b17306ceb13cfa2baf4675ee6bf69b35ee3839b533651e4010575d81"
+      },
+      "fixed": {
+        "path": "runs/g1-cpu-qualification05/sample-chunk-fix.log",
+        "sha256": "c94dceefada2220b095d850b1b40fcd6433587e83188f5b4249fb44a4cc8a055"
+      }
+    },
+    "qualification06_failed": {
+      "path": "runs/g1-cpu-qualification06/status.json",
+      "sha256": "a19d5ad6f8dcc50278caf11bbc8283ba7056ede31503c0951bcdd4d4d20b7f26"
+    },
+    "intentional_timeout_check": {
+      "path": "runs/g-stage-bounded-timeout-check01.json",
+      "sha256": "8066319f09a4698de85e9988a840924ae365eded137c02aa8674b039f09f5dbe"
+    }
+  },
+  "resource_controls": {
+    "inspection": {
+      "path": "runs/g-stage-resource-controls01.json",
+      "sha256": "84ab1948a0de6173060006ce390255953d838ae68c4339a071a9e4fa86faa004"
+    },
+    "guard": {
+      "path": "plans/g-stage-run-bounded01.py",
+      "sha256": "ee6995cd688703ad7ea90ce6bbab592754910f179089b073c468a4f85fee5542"
+    },
+    "cpu_completion_guard": {
+      "path": "runs/g1-cpu-completion01/bounded.json",
+      "sha256": "e626086d057f574f60c06b1bb9008cda7c82c6ead469b40322ae0d6160010d23"
+    },
+    "launch_check": {
+      "path": "runs/g-stage-bounded-launch-check01.json",
+      "sha256": "9e0bed0af93d269448d6e2e086c88bbe132750e9cd0c0ec74d8b4d9528caf67b"
+    },
+    "limits": "background.slice lifecycle separation established; legacy cgroup v1 does not prove requested CPUQuota/MemoryMax/TasksMax enforcement. Existing process-group guard supplies affinity, sampled aggregate RSS and deadline. RSS sampling is not an instantaneous allocation limit."
+  },
+  "device_batch": {
+    "state": "prepared",
+    "submitted": false,
+    "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+    "plan": {
+      "path": "plans/g-stage-device-batch02.json",
+      "sha256": "131ff46850b795823b0316e32562f4ed93b19b1011ac6ee150b3d2760f10a6ac"
+    },
+    "controller": {
+      "path": "plans/g-stage-device-batch02.py",
+      "sha256": "ceae1914edbe977b5fbc80de2af1206d12270821dd5921ecc1dd3c4d8996fb7c"
+    },
+    "preflight": {
+      "path": "runs/g-stage-device-batch02-preflight01.json",
+      "sha256": "d1c096eada67b0d059a9130e01d00b54d7ba502c88c03f53fedd5e5c5a8ef2e9"
+    },
+    "preflight_state": "prepared",
+    "tasks": [
+      {
+        "name": "g4-npu-modules03",
+        "runtime_seconds": 3000,
+        "cpus": 6,
+        "memory_gib": 12,
+        "tasks_max": 192,
+        "npu_count": 1
+      },
+      {
+        "name": "g4-npu-training03",
+        "runtime_seconds": 2700,
+        "cpus": 6,
+        "memory_gib": 12,
+        "tasks_max": 192,
+        "npu_count": 1
+      },
+      {
+        "name": "g4-npu-resident03",
+        "runtime_seconds": 6000,
+        "cpus": 8,
+        "memory_gib": 24,
+        "tasks_max": 256,
+        "npu_count": 3
+      },
+      {
+        "name": "g2-npu-components03",
+        "runtime_seconds": 1500,
+        "cpus": 8,
+        "memory_gib": 12,
+        "tasks_max": 192,
+        "npu_count": 1
+      },
+      {
+        "name": "g2-npu-complete-profiles03",
+        "runtime_seconds": 2700,
+        "cpus": 8,
+        "memory_gib": 16,
+        "tasks_max": 256,
+        "npu_count": 2
+      }
+    ],
+    "budget": {
+      "total_child_service_seconds": 15900,
+      "controller_seconds": 16200,
+      "profiling_cases": 4,
+      "component_measurements": 6,
+      "full_size_cases": 0
+    },
+    "resource_observation": {
+      "path": "runs/g4-npu-resource-inspection05.json",
+      "sha256": "429dd24b56788ca8053c9b1a6d91e6e3d057ea1a0081795120a30c6fb6c4f039"
+    },
+    "latest_observed_free_devices": 0,
+    "tracking": "off; existing project records",
+    "policy": "Finite serial dependency chain; first failure stops; no retry, timeout enlargement, full-size or second-tranche submission.",
+    "previous_resource_observation": {
+      "path": "runs/g4-npu-resource-inspection04.json",
+      "sha256": "2aa5935e39655eb277d2badd0508a9e3979af066b2dbac34a1579e4a65101cc2"
+    },
+    "resource_observed_at": "2026-10-10T13:39:53.097319+00:00"
+  },
+  "jobs": [
+    {
+      "name": "g1-cpu-completion01",
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "state": "passed",
+      "status": {
+        "path": "runs/g1-cpu-completion01/status.json",
+        "sha256": "1e5b9911c2482d9e12f5476e0d57e344c4a7a0be1aed2495e90aa02611e71cda"
+      },
+      "log": {
+        "path": "runs/g1-cpu-completion01/task.log",
+        "sha256": "c3ac0fa82da024636e334f123c6af04b72f6e7bac0cf4d812ce544a65d346a47"
+      },
+      "plan": {
+        "path": "plans/g1-cpu-completion01.sh",
+        "sha256": "2cc2897060a70576c7b4ed0fb887b896fa11568fd5c66a76bbd6d5e32b9f373b"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "g1-cpu-resource-repair01",
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "state": "passed",
+      "status": {
+        "path": "runs/g1-cpu-resource-repair01/status.json",
+        "sha256": "9213fdae5cec4e215c69cce875251d41cf30388163584d3485c82e5f12a76730"
+      },
+      "log": {
+        "path": "runs/g1-cpu-resource-repair01/task.log",
+        "sha256": "d3535248bde71562ff3684fbee24f5b15cd9823a1a978c51ccf6840e44e51046"
+      },
+      "plan": {
+        "path": "plans/g1-cpu-resource-repair01.sh",
+        "sha256": "3f2cb4033f2d50bcde799a908f6cd45c58e8c009e71dbd2f151f4f42e5a3b451"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "g3-cuda-clean02",
+      "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+      "state": "passed",
+      "status": {
+        "path": "runs/g3-cuda-clean02/status.json",
+        "sha256": "3de106c0eb6f66bcf0e9372e6e51905b63b47ec5aed26d47905d2ef8abc47bec"
+      },
+      "log": {
+        "path": "runs/g3-cuda-clean02/task.log",
+        "sha256": "d25f68261a927d187b3d9a5b3fed987eaa36e55d7b223464e8a81c861b8eb5f0"
+      },
+      "plan": {
+        "path": "plans/g3-cuda-clean02.sh",
+        "sha256": "d8cbadc140b89429e60f8969fe424ea95d2ed255bfb869a0a4ae2a9a5181c4fb"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "g3-npu-clean02",
+      "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+      "state": "passed",
+      "status": {
+        "path": "runs/g3-npu-clean02/status.json",
+        "sha256": "2a25308134aa1caf0eba2d800a7f879668d8d74b496b01cb9a45f76cbd318f5b"
+      },
+      "log": {
+        "path": "runs/g3-npu-clean02/task.log",
+        "sha256": "8cbaf6bc1d0d92d956fe7f3b019fb332630999b03025d4d832de74945c62ca84"
+      },
+      "plan": {
+        "path": "plans/g3-npu-clean02.sh",
+        "sha256": "eee7ceb20ffe16eec83e1279872af62fc0b62bdefced48831d1dc72e476867dc"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "g3-followup-host01",
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "state": "passed",
+      "status": {
+        "path": "runs/g3-followup-host01/status.json",
+        "sha256": "1027831b7efa27d0fb53ef5e8b6865144ddde918716f791ddf80a6cb6471bf1b"
+      },
+      "log": {
+        "path": "runs/g3-followup-host01/task.log",
+        "sha256": "d15eaa75e513dbd38a894518b1d9886b6c6923357a9a9915610aa3ee74dc66b5"
+      },
+      "plan": {
+        "path": "plans/g3-followup-host01.sh",
+        "sha256": "9f58cd0c52f80eeb54475b9039aa62ef75a932ab5ccfdb015bf9b4c4649aefd5"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "g2-profile-entry-clean01",
+      "source": "adbd51e0784bdd63dae4ac600db4b883803cf2e4",
+      "state": "passed",
+      "status": {
+        "path": "runs/g2-profile-entry-clean01/status.json",
+        "sha256": "cfa22219d9db4e9565f9a57603b0da8a3fb13a1f85cbab5cc2113ffde40c69ef"
+      },
+      "log": {
+        "path": "runs/g2-profile-entry-clean01/task.log",
+        "sha256": "eb682131b984f09da3bb606b904efa61f0d3a6832bd84c450234711f152333bb"
+      },
+      "plan": {
+        "path": "plans/g2-profile-entry-clean01.sh",
+        "sha256": "3e0442af0038a25d6bf5cc30f3dcb05bee67d81dc75b666ca4041a5a2ac57a6c"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "raw_audit": {
+    "path": "runs/g1-g3-followup-audit01.json",
+    "sha256": "40b5f8a3ae9369ec88bbb58781ea04d9f742b6e7274b3af645e2a5bb65f0c518"
+  },
+  "auditor": {
+    "path": "plans/audit-g1-g3-followup01.py",
+    "sha256": "d2b787a7b2401a1ca2b7710ae245da53172e9b332a9ec86ff453a118d52ba8d2"
+  },
+  "unverified": [
+    "New-source NPU modules, complete training, resident and multicard correctness",
+    "NPU profiling, observed memory calibration, further profile-selected optimizations and route selection",
+    "Actual CUDA operation, correctness, residency, peers, memory calibration and performance",
+    "New x86_64 target execution",
+    "End-to-end speed effect of the Add assembly follow-up"
+  ],
+  "qualification_plan_code": [
+    {
+      "path": "plans/g1-cpu-qualification06.sh",
+      "sha256": "36a19c23e4907ff9c84c20817bad75ce868e83514341e0f5578979ce9ba818a0"
+    },
+    {
+      "path": "plans/g1-cpu-resource-repair01.sh",
+      "sha256": "3f2cb4033f2d50bcde799a908f6cd45c58e8c009e71dbd2f151f4f42e5a3b451"
+    },
+    {
+      "path": "plans/g1-cpu-completion01.sh",
+      "sha256": "2cc2897060a70576c7b4ed0fb887b896fa11568fd5c66a76bbd6d5e32b9f373b"
+    },
+    {
+      "path": "plans/g1-cpu-completion01.py",
+      "sha256": "b3b54b71a61469623dcb32378b95fb191f18cab8df6eff53bb14749cfc16538a"
+    },
+    {
+      "path": "plans/g3-followup-host01.sh",
+      "sha256": "9f58cd0c52f80eeb54475b9039aa62ef75a932ab5ccfdb015bf9b4c4649aefd5"
+    },
+    {
+      "path": "plans/g3-followup-profile-prepare01.py",
+      "sha256": "0d0612240cc9e59f63b4501d80405dd59f8e9d5dcd6b959cafabd13e24778702"
+    },
+    {
+      "path": "plans/g3-plugin-import-cuda02.sh",
+      "sha256": "b01e3861fee21259e1c11665de3423848dbca629b36230b47bb7ad7f990378f8"
+    },
+    {
+      "path": "plans/g3-plugin-import-npu02.sh",
+      "sha256": "6cfcf7da7b1539d4ca3b5c0ede88d374261fbaf890d7b9b27d1c54d58224daf6"
+    }
+  ]
+}

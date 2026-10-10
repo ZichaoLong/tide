@@ -1,198 +1,130 @@
-# Current handoff
+# Current handoff — 2026-10-10
 
-Updated 2026-10-10 (Asia/Shanghai). The G1–G5 stage is active and **not globally
-closed**: CPU correctness, local CUDA/NPU builds, CPU selection evidence and GPU
-handoff are ready; new NPU device qualification/profiling is resource-blocked.
-The user has authorized the follow-up implementation and two-stage experiment plan.
-Current work: reduce Add internal batch assembly/storage overhead with CPU regressions;
-prepare complete standalone mixed/resident profiling and dependency-ordered finite
-submission entries. Performance execution may wait for resources. GPU hotspot
-parallelization follows real-device qualification/profiling.
-Implementation a926703, profile-entry tests adbd51e and owner-map test correction
-2d45fee are committed/pushed. Current HEAD e565f96 also corrects the CANN profile storage validator and
-a backend-neutral refusal test; compiled core/resident/consumer source remains
-identical to a926703. Qualification/build work is running below;
-no device experiment is submitted. This is not a user pause. Continue authorized
-work; commits never impose a pause. No subagents. Selector/new upstream semantics
-remain deferred. Contracts: [execution-flows §11](execution-flows.md).
-Sole backlog: [ROADMAP G1–G5](ROADMAP.md).
-
-## Current follow-up implementation and qualification
-
-Add reuses whole content batches and omits private structural-graph row clones;
-public states still own storage, with first-order/version/None rules preserved.
-The C++ virtual interface changed: matching rebuilt backend cores are required.
-`g1-add-assembly-dev01` passed477 directed FP64/FP32 Add/storage/clock/State/Read
-tests from a frozen dirty snapshot of8523353. Its development tree digest is
-`17ecec8fc01ecccd00af2855d1ccd734de29a31fdba51978505989e9cdbb8555`.
-The exact new core digest is
-`0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0`.
-Raw archive/log/status/development records remain in `runs/g1-add-assembly-dev01`.
-
-The complete standalone profiling entry has28 directed identity/result/CSV
-checks and22 CLI/failure checks passed;2 optional binary skips were followed by
-both standalone CLI cases passing with the historical byte-fixed CPU consumer
-(launcher compatibility only). Clean `g2-profile-entry-clean01` at adbd51e passed15
-lifecycle/acceptance tests without vendor initialization.
-
-`g1-cpu-qualification04` is **cancelled**, exit143, MainPID0/empty cgroup. Its old
-test stub had index but no type for the already backend-neutral owner-map adapter;
-a directed reproduction failed before tensor work. The corrected test covers
-NPU/CUDA names and all18 owner-map checks passed. Reproducer and interrupted
-nested records stay in `runs/g1-cpu-qualification04`; they are not passing evidence.
-
-Qualification05 has one diagnosed stale assertion so far: sample-chunk refusal
-expected `native NPU`, while the shared resident entry now reports
-`native CUDA/NPU`. Its fixed-source reproduction and corrected one-case check
-are retained in `runs/g1-cpu-qualification05/sample-chunk-{reproducer,fix}.log`.
-The full suite continues to collect all failures before another clean gate;
-The sample-chunk assertion fix and CANN profiler minimum-storage correction
-(200MB, matching local msprof help) passed18 directed checks, retained in
-`runs/g2-profile-cann-bound-dev01.log`. These are committed/pushed as e565f96 separately
-from the ongoing gate; compiled core/resident/consumer sources are unchanged.
-Qualification06 is being launched from clean e565f96 in
-`sources/g-stage-followup-clean03`, with the unchanged90min/6CPU/12GiB budget and
-independent process-group guard. Qualification05 continues solely to collect its
-full failure inventory; no performance timing is running. Batch02 now requires
-qualification06 and admits only the exact tests/docs/profile-validator delta
-from a926703, plus unchanged compiled core/resident/consumer identities.
-
-| Active job / service `tide-NAME.service` | Fixed source / scope | Limits |
-| --- | --- | --- |
-| `g1-cpu-qualification05` | clean2d45fee, read-only `sources/g-stage-followup-clean02`; collecting full regression failures; diagnosed obsolete refusal assertion | 90min,6CPUs,12GiB,256tasks |
-| `g1-cpu-qualification06` | clean e565f96, read-only `sources/g-stage-followup-clean03`; full CPU,22 topology cells,installed consumers,CTest; exact reused `builds/g1-add-assembly-dev01` with dirty construction provenance retained; independent RSS/affinity/deadline guard | 90min,6CPUs,12GiB,256tasks |
-| `g3-npu-clean02` | cleana926703, read-only `sources/g-stage-followup-clean01`; fresh dual-runtime cores/resident,installed/online/scale clients,host gates | 3h,4CPUs,16GiB,512tasks |
-| `g3-cuda-clean02` | same cleana926703; fresh core/dual-runtime resident/installed/online,102 CPU semantic sources and directed CPU tests | 3h,4CPUs,16GiB,512tasks |
-
-All use separate background.slice services, job.py records and two build workers;
-no timing jobs overlap. Legacy cgroup v1 keeps cpu/memory/pids controllers at
-parent slices: the table records requested systemd controls, not verified kernel
-enforcement. Build workers2, thread pools1 and wall deadlines are explicit;
-profiling separately guards process-group RSS/storage/affinity. The pending
-device batch now wraps every child with the existing foundation_lifecycle RSS/
-affinity/deadline guard, and its launch/timeout/reap checks passed. Retained snapshot:
-`runs/g-stage-resource-controls01.json`. Logs/receipts: `runs/NAME/{task.log,status.json}`. No running
-job is accepted as passed. After builds finish, validate actual profile commands
-with `--prepare-only` and new native/resident imports without device initialization.
-
-## Source and reviewed delivery
+The authorized G1–G5 stage continues after the previous F1–F7 local closure.
+State/Read batching, the Add assembly follow-up and full declared CUDA resident
+source are implemented. Current CPU qualification, fresh backend builds and
+host preparation have passed. All current task services are terminal. The
+finite NPU batch is **prepared, preflight-passed and not submitted** because
+no safe device was available in the latest retained inspection. This is not
+closure of device qualification or performance work. Selector/upstream semantic
+extensions remain deferred. No historical queue or old pause instruction resumes.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Initial clean HEAD matched c0ce4ee5. Previous implementation
-afbc07556c693e9809bb005154a4b9b806d16c51 and reviewed delivery8523353 are committed/pushed.
-The follow-up above changes source; old qualification/build evidence below stays
-tied to its original identities until the new gates complete.
+`graph-execution-foundation`. Run repository commands with this explicit cwd.
+The original handoff matched clean c0ce4ee5; subsequent authorized implementation
+commits through e565f96 are pushed. The evidence commit containing this handoff
+is documentation/support-matrix only; no implementation is left uncommitted.
+`TASK=/mi/data2T/zlong/tide-execution-flows` below. Contracts:
+[execution-flows §11](execution-flows.md). Sole backlog: [ROADMAP G1–G5](ROADMAP.md).
 
-G1 State/Read132cada, accounting fixes8a4d60f and exact Norm VJP fixa02c18c;
-G3 CUDA/shared boundary bda25de; component profiler d1df03c; target capacity/
-control-policy ecafdf4, logical0 peer entry5018133, compiled-consumer identity
-afbc075. Previous core digest
-`dbc370539ed261846524c427b7b9a37a38f6857ba6a6ccb78ad365168140a150` belongs to those receipts. Frozen qualification sources remain intact.
+## Implemented and verified scope
 
-| Area | Delivered / exact evidence boundary |
+| Area | Current result and boundary |
 | --- | --- |
-| State/Read | Built-in batch first-order VJPs and grouped finite checks; exact Norm FP32 operation order restored. Full/Aggregate batching already existed. Custom/nondefault replay, causal/structural limits and small tensors remain |
-| CPU correctness | Clean a02c18c:9595 FP64/FP32 tests,654 optional skips,22 full topology cells including positive-delay feedback,10 installed checks;12 matching-core standalone CTests also passed |
-| CUDA local | Clean bda25de: standalone/Python/core/installed/combined builds;102 semantic sources,7 host CTests plus1 semantic CTest,229 CPU tests/84 hardware skips. Clean afbc075:6 entry identity tests and absent-CUDA refusal. Dynamic imports passed without device initialization |
-| NPU local | Clean bda25de public-stack dual-runtime/core/resident/installed/combined/scale builds;7 resident host and5 scale CTests. Python imports passed without device initialization. No current-source device correctness or performance claim |
-| Limited CPU selection | Six PyTorch component measurements and two standalone Add measurements accepted; Attention baseline refused before allocation, candidate never started. Batch terminal failed as declared; no retries/full-size expansion |
-| GPU target | Complete3-device zero-skip gate and tracing commands ready. Real correctness, residency, multicard, memory calibration and performance all pending |
+| State/Read | Built-in batch first-order VJPs and grouped finite checks; exact Norm FP32 operation order. Full/Aggregate batching already existed. Custom/nondefault replay, causal depth, per-slot connectivity and small tensors remain costs |
+| Add follow-up | a926703 reuses full content batches and removes private structural-graph row clones; public states retain independent storage/version behavior and per-tick rounding. No new speedup or kernel-fusion claim |
+| CPU qualification | Clean e565f96 accepts9650 unique FP64/FP32 cases:9648 full-run passes plus exactly2 same-source resource-admission repairs;654 optional skips. Also22 topology cells,10 installed consumers and12 matching-core CTests passed |
+| NPU local | Clean a926703 fresh Python/standalone cores,resident owners,installed/online/scale clients;7 resident host and5 scale CTests. Clean e565f96 dynamic imports without device initialization and4 actual complete-profile preparation commands passed. New-source device correctness/performance pending |
+| CUDA local | Clean a926703 fresh core,standalone/Python resident,installed/online consumers;102 semantic sources/1CPU CTest,7 host CTests,271 CPU tests passed/84 optional device skips. Matching e565f96 imports and absent-CUDA refusal passed. No GPU execution |
+| Profiling and selection | Complete native mixed-a/b/c/resident CANN entry implemented; synthetic lifecycle and host preparation passed. Prior finite CPU selection retains its original scope. New6 component measurements and4 complete traces are prepared, with no new timings |
+| GPU target | Full strict3-device zero-skip target gate and trace commands ready. Real correctness,residency,multicard,memory calibration and performance require a GPU host |
 
-[Qualification/build report](evidence/batched-vjp-cuda-local-20261010.md) and
-[finite CPU selection review](evidence/batched-selection-cpu-20261010.md) have
-reviewed JSON companions with source/record hashes. Support matrix NPU status
-is now implemented for current source; historical verified entries are retained as passed source-scoped attempts,
-with their original commits/scopes and contents. CPU qualified; CUDA implemented/build-tested only.
+[Current follow-up evidence](evidence/add-batch-followup-20261010.md) and its JSON
+record the source/build identities, composite CPU acceptance and unsubmitted
+batch. [Initial stage evidence](evidence/batched-vjp-cuda-local-20261010.md) remains
+scoped to a02c18c/bda25de/afbc075. The CPU support cells remain verified; NPU/CUDA
+remain implemented for current source, with old verified attempts preserved.
 
-## Terminal jobs and retained artifacts
+CPU/profile/host source: `e565f962da63a7e5ceb5ffdbd0ec6699db95c296`, frozen at
+`sources/g-stage-followup-clean03`. Backend build source:
+`a926703e9a41ec6cd41bcf8f2f83665f36bdb999`, at `sources/g-stage-followup-clean01`.
+The exact difference is docs/execution-flows.md, profile_execution_flow.py and
+three test files; all compiled sources match. Current core digest:
+`0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0`.
+Resident digest: `53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b`.
+The CPU build `builds/g1-add-assembly-dev01` retains its frozen dirty development
+construction provenance; exact source/binary matching precedes clean qualification.
 
-`TASK=/mi/data2T/zlong/tide-execution-flows`. Paths below use this root.
-Ignored `artifacts/execution-flows-g*` links expose these same receipts to
-`scripts/status.py`. Current active jobs are listed above. Dormant prepared-plan
-links have no run directories and are not submissions. Historical records and the known malformed record are unchanged.
-Previously passed services below have MainPID0 and empty cgroups; inspect with `systemctl --user show UNIT -p ActiveState
--p Result -p MainPID -p ControlGroup` and `runs/NAME/{status.json,task.log}`.
+## Terminal records and retained failures
 
-- `g1-cpu-qualification03`: passed clean a02c18c; gate in `runs/NAME/gate`,
-  source `sources/NAME`, byte-matched reused core `builds/g1-norm-dev06`.
-- `g4-cpu-standalone01`: passed12 CTests; clean afbc075 launch source
-  `sources/g3-target-identity-clean01`, same core. `runs/NAME/ctest.xml`.
-- `g3-cuda-clean01`, `g3-npu-clean01`: passed clean bda25de from
-  `sources/g3-backends-clean01`; builds `g3-{cuda,npu}-*-clean01`.
-- `g3-target-identity-clean01`: passed6 tests and correct absent-CUDA refusal
-  on clean afbc075. `g3-plugin-import01`: both CUDA/NPU imports passed on the
-  same source and matching bda25de binaries; no device initialized.
-- `g2-cpu-assessment01`: failed/exit1 at case9 as its stop policy required.
-  Component source clean ecafdf4 (`sources/g2-components-ecafdf4`), complete
-  baseline c0ce4ee (`sources/g2-baseline-c0ce4ee`) and candidate a02c18c.
-  Eight valid measurements retained. Explicit physicalB32 Attention estimated
-  25,662,653,552B against6GiB admission; no allocation, OOM or timing result.
+Each job has `runs/NAME/{status.json,task.log}`, `plans/NAME.sh` and unit
+`tide-NAME.service`. Ignored `artifacts/execution-flows-g*` links expose these
+records to status.py; prepared plans without run directories are not submissions.
 
-Reviewed audits: `runs/g1-g3-reviewed-audit01.json` and
-`runs/g2-cpu-assessment-reviewed01.json`; auditor scripts of corresponding
-names in `plans/`. They refuse overwrite and never rerun workloads. Original
-CPU gate01 remains73 failed/9451 passed/723 skipped, gate02 cancelled after
-Norm diagnosis. NPU qualification01/02 remain allocation timeouts with no code
-execution. CUDA unavailable01 wrapper remains failed on an obsolete expected
-error substring; `runs/g3-cuda-refusal-audit01.json` separately accepts the
-retained preflight refusal. Earlier failed development attempts remain retained.
+| Job | Terminal result |
+| --- | --- |
+| g1-cpu-completion01 | passed, clean e565f96; audited composite inventory then22 topology/10 installed/12CTest; gate/result.json |
+| g1-cpu-resource-repair01 | passed, same e565f96; exactly2 resource-admission cases,8 visible CPUs,48.37s; tests.xml |
+| g3-cuda-clean02 | passed, clean a926703; fresh CUDA builds and host checks; builds/g3-cuda-*-clean02 |
+| g3-npu-clean02 | passed, clean a926703; fresh dual-owner NPU builds and host checks; builds/g3-npu-*-clean02 |
+| g3-followup-host01 | passed, clean e565f96; fresh imports,expected CUDA refusal,4 prepared profile commands; preparation.json |
+| g2-profile-entry-clean01 | passed15 synthetic lifecycle tests, clean adbd51e; subsequent18 directed storage/refusal checks in runs/g2-profile-cann-bound-dev01.log, covered by the new full CPU inventory |
+| g1-cpu-qualification04 | cancelled/exit143 after obsolete owner-map stub diagnosis; reproducer retained, test corrected in2d45fee |
+| g1-cpu-qualification05 | failed:9647 passed/654 skipped/1 stale backend-name assertion; reproduced and fixed in e565f96 |
+| g1-cpu-qualification06 | failed:9648 passed/654 skipped/2 pre-execution resource-admission refusals; exact same-source repair above, original receipt unchanged |
 
-## Resource blocker and exact next commands
+Qualification06's6-CPU affinity exposed the CLI suite's half-visible-CPU budget:
+2 workers plus2 coordinator slots need8 visible CPUs. Both failures had empty
+workload lists. Completion01 accepts only that exact failure inventory and the
+same-source two-case repair; it does not relabel06. Future complete CPU suite
+launches need at least8 visible CPUs. No numerical tolerance or performance
+budget changed. Directed Add development had477 passing cases; dirty snapshot
+digest `17ecec8fc01ecccd00af2855d1ccd734de29a31fdba51978505989e9cdbb8555`
+and build provenance remain in runs/g1-add-assembly-dev01.
 
-Latest retained read-only inspection: 2026-10-10T11:41:18.704642+00:00; all16 chips
-were unavailable and no free physical IDs were returned.
-`runs/g4-npu-resource-inspection03.json` retains the observation. Public module
-libtorch-npu/2.10.0-cann9.0.0 and msprof were rechecked; no device workload ran.
-No process was touched. Recheck healthy/no-process/HBM/utilization before a
-new allocation; use the helper's two-snapshot and advisory-lock checks. Do not
-mechanically retry an unchanged timed-out lease. The resource-information
-question has no answer yet; authorization to execute is already present.
+Audit `runs/g1-g3-followup-audit01.json` verifies hashes,clean source snapshots,
+terminal passed services with MainPID0/empty cgroups and no CPU guard survivors.
+Its writer `plans/audit-g1-g3-followup01.py` refuses overwrite. Old audits and
+failed/interrupted records remain intact; nested records of cancelled jobs may
+still say running and are not accepted. No active current-task job remains.
 
-Prepared batch `plans/g-stage-device-batch02.{py,json}` is **not submitted**.
-It runs clean e565f96 and hashes all plans, packets and offline capacity records.
-Prerequisites: qualification06 at e565f96 and both backend clean02 gates at a926703;
-the controller verifies the exact docs/profile-validator/test differences, unchanged core/
-resident/compiled-consumer identities, passing receipts and terminal services.
-Batch01 remains a superseded unsubmitted plan because qualification04 was cancelled.
-The new controller's initial check-only correctly refused the still-running
-qualification05. Plan Python/shell syntax passed; complete preflight is pending.
+## Prepared finite device batch and next action
 
-| New plan in `plans/` | Dependency / workload | Service resources |
+Latest retained read-only inventory is `runs/g4-npu-resource-inspection05.json`,
+2026-10-10T13:39:53.097319Z:16 devices,zero free IDs,3-device request unsatisfied.
+No NPU workload was launched. Recheck health/processes/HBM/utilization at a new
+resource opportunity; allocation uses the helper's two snapshots and advisory
+locks. Do not retry an unchanged timed-out lease or touch another workload.
+Execution is already authorized; further startup permission is unnecessary.
+
+`plans/g-stage-device-batch02.{py,json}` is fixed to clean e565f96. Its complete
+`--check-only` passed at13:21:50Z; receipt
+`runs/g-stage-device-batch02-preflight01.json`. It checks CPU completion01,
+backend clean02 builds and host preparation01, exact allowed source differences,
+core/resident/compiled-consumer identities, sealed plan hashes and unused outputs.
+The batch and all five children are **unsubmitted**, not queued. Batch01 and older
+child plans remain superseded unsubmitted artifacts, not work to resume.
+
+| Planned child in dependency order | Scope | Service ceiling |
 | --- | --- | --- |
-| `g4-npu-modules03.{sh,py}` | CPU/backend predecessors passed;1NPU, all named Python/native FP32/FP16 modules and standalone checker;2700s workload | 50min,6CPUs,12GiB,192tasks |
-| `g4-npu-training03.{sh,py}` | modules03 passed;1NPU,8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 training cells;2500s | 45min,6CPUs,12GiB,192tasks |
-| `g4-npu-resident03.sh` | training03 passed;3NPUs, complete strict target gate;5400s | 100min,8CPUs,24GiB,256tasks |
-| `g2-npu-components03.{sh,py}` | all correctness passed;1NPU,6 independent FP32 Read/Add/Attention replay/batch cases32×128;180s/case,1200s total | 25min,8CPUs,12GiB,192tasks |
-| `g2-npu-complete-profiles03.{sh,py}` | components03 passed;2NPUs,4 complete Add/Attention × mixed-c/resident traces;600s collection/export per case,2600s workload | 45min,8CPUs,16GiB,256tasks |
+| g4-npu-modules03 | 1NPU; named Python/native FP32/FP16 modules plus standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
+| g4-npu-training03 | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 training cells;2500s | 45min,6CPU,12GiB,192tasks |
+| g4-npu-resident03 | 3NPU; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
+| g2-npu-components03 | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
+| g2-npu-complete-profiles03 | 2NPU;4 complete Add/Attention × mixed-c/resident traces;600s collection/export per case,2600s total | 45min,8CPU,16GiB,256tasks |
 
-Every allocation wait is capped at60s. `plans/g-stage-run-bounded01.py` guards
-every child with its declared RSS and CPU affinity plus a deadline45s below the
-service ceiling; this does not enlarge workload budgets. `bounded.json` records
-peak sampled RSS and remaining child groups. RSS sampling is not an instantaneous
-kernel allocation cap. Launch/affinity and deliberate timeout/reap checks are
-retained in `runs/g-stage-bounded-{launch,timeout}-check01.json` (the intentional
-timeout stays failed). Components cap process-group RSS at8GiB
-and outputs at2GiB; complete profiles cap each group at12GiB and outputs at2GiB.
+Each allocation wait is capped at60s. First failure stops the chain and leaves
+successors unstarted. Child service ceilings total15900s; controller16200s.
+No retries,timeout expansion,full-size cases or second tranche is declared.
+Heavy measurements are serial; Trackio stays off. After profiles, choose concrete
+implementation changes, requalify them, then declare limited selection cases.
+
 Packets `packets/g2-complete-{add,attention}-profile02/workload.json` use
 D64/B8/T4/V257,32 body nodes/112 edges,TimedDAG prefill,two connected windows,
 one warmup and one collected training step; Add SGD/Attention AdamW. Offline
-8GiB/card admission estimated0.68–2.27GB/card and full physical batch8; **observed
-memory calibration is still required**. Physical chunks preserve batch/gradient/
-optimizer boundaries. Four profiles diagnose execution, not throughput.
+capacity plans fit8GiB/card,estimated0.68–2.27GB/card with physicalB8; this is
+not observed memory calibration. Physical chunks preserve logical batch,
+Attention normalization,gradient and optimizer boundaries. Complete traces
+are diagnostic, not throughput measurements.
 
-First failure stops the dependency chain and leaves successors unstarted. Child
-service ceilings total15900s; controller16200s. No retries,timeout extension or
-full-size/second-tranche cases. Further implementation and selection cases must
-follow concrete profile evidence. Old plans/results/failures stay unchanged.
-
-After qualification06 and both backend services pass, validate without submitting:
+Validate again without submission at the next resource opportunity:
 
 ```bash
 /usr/bin/python3 /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch02.py --check-only
 ```
 
-Only after successful preflight and a fresh safe resource opportunity, submit:
+After a fresh safe resource opportunity and successful preflight, submit once:
 
 ```bash
 TASK=/mi/data2T/zlong/tide-execution-flows
@@ -205,41 +137,54 @@ systemd-run --user --unit=tide-g-stage-device-batch02 --service-type=exec --slic
   -- /usr/bin/python3 "$TASK/plans/g-stage-device-batch02.py"
 ```
 
-`runs/g-stage-device-batch02/batch.json` records all rows, including unstarted
-successors. Inspect current jobs with `systemctl --user show tide-NAME.service
--p ActiveState -p Result -p MainPID -p ControlGroup` and `runs/NAME/{status.json,task.log}`.
-GPU target commands remain in [device-control](device-control.md); local builds
-and CPU checks do not replace real-device correctness,residency,multi-card,memory
-or performance. No device allocation has occurred in this follow-up.
+`runs/g-stage-device-batch02/batch.json` will record every task,including unstarted
+successors. Inspect only current-task units with `systemctl --user show UNIT
+-p ActiveState -p Result -p MainPID -p ControlGroup` and their durable receipts.
+GPU rebuild/full target/residency commands remain in [device-control](device-control.md).
+No local build or CPU check certifies actual GPU execution.
 
-## Performance interpretation and remaining implementation costs
+## Resource controls, remaining costs and performance
 
-Single CPU component ratios: Read3.16×, Add1.28×, Attention2.96×. Complete
-standalone Add3.810711s→4.090873s with equal loss/output/event counts and
-peak RSS701,222,912B→814,317,568B. No whole-graph gain or stable regression size
-is established under external load. Attention has no complete measurement.
-Keep CPU/mixed-a/b/c/resident and fine controls; no new universal route winner.
-Read/State composition is not kernel fusion. Add's clone/view/structural work,
-custom replay, causal depth and per-slot connectivity groups remain costs.
-Resident already has explicit device VJPs; CUDA's initial one-thread semantic
-adapter, serial reductions/scatter and uncalibrated memory remain target limits.
+All long tasks use frozen source and separate background.slice services.
+Legacy cgroup v1 leaves cpu/memory/pids controllers at parent slices, so requested
+CPUQuota/MemoryMax/TasksMax are not proven kernel-enforced. Snapshot:
+`runs/g-stage-resource-controls01.json`. Builds use two workers and thread pools1.
+Later CPU gates and every pending device child use existing foundation_lifecycle
+through `plans/g-stage-run-bounded01.py` for affinity,sampled aggregate RSS and
+an effective deadline45s below the service ceiling. RSS sampling is not an
+instantaneous allocation cap. `bounded.json` records peaks and group cleanup.
+Launch/affinity and deliberate timeout/reap checks are retained in
+`runs/g-stage-bounded-{launch,timeout}-check01.json`; the intentional timeout
+remains failed. Component groups cap RSS8GiB/output2GiB; complete profiles
+cap RSS12GiB/output2GiB per case. No workload budget was enlarged.
 
-Public NPU module `libtorch-npu/2.10.0-cann9.0.0`; Python explicitly under
-`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311`. Standalone SDK
-and wheel owners stay separate. Resident launch sets `ACLNN_CACHE_LIMIT=0` and
-`ACL_OP_INIT_MODE=0` as previously evidenced. Private CUDA module
-`~/privatemodules/torch-cuda/2.10.0-cu128`, tools under
-`/mi/data2T/zlong/gpu-toolchains`. No GPU here; no shared drivers changed.
-Last disk check root64GiB/data101GiB free; recheck before large writes.
+[Prior finite CPU selection](evidence/batched-selection-cpu-20261010.md): Read3.16×,
+Add1.28×,Attention2.96× component ratios; complete standalone Add
+3.810711s→4.090873s,peak RSS701,222,912B→814,317,568B. No whole-graph gain or
+stable regression size was established under external load. Attention was
+refused before allocation and has no complete timing. These precede the Add
+assembly follow-up. Retain CPU/mixed-a/b/c/resident and fine controls; no universal
+route winner. State/Read batching is not proven fusion. Custom replay,causal
+depth,public clones and per-slot connectivity remain costs. CUDA's initial
+one-thread semantic adapter,serial reductions/scatter and uncalibrated peaks
+need target evidence before further optimization.
+
+Public NPU module `libtorch-npu/2.10.0-cann9.0.0`; Python under
+`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311`.
+Standalone SDK and wheel owners remain separate. Resident launch retains
+`ACLNN_CACHE_LIMIT=0` and `ACL_OP_INIT_MODE=0`. Private CUDA module
+`~/privatemodules/torch-cuda/2.10.0-cu128`,tools under
+`/mi/data2T/zlong/gpu-toolchains`. No GPU hardware is present; shared drivers are unchanged.
+Last disk check root64GiB/data102GiB free; recheck before large writes.
 
 ## Protected history
 
-Old F1–F7 qualification and61/120 selection timings retain only their original
+Old F1–F7 qualification and61/120 selection timings retain their original
 sources/configurations; missing cells are not a queue. [Old terminal report](evidence/selection-terminal-20261010.md).
-Preserve the [original strict near-tie witness](evidence/original-add-route-witness-20261004.md):
+Preserve the [strict near-tie witness](evidence/original-add-route-witness-20261004.md):
 CPU246 oneFP32ULP ahead; resident245/246 tie selects245; proposal error7.7039e-6,
 events2325/2327. No relaxed discrete comparison or universal equivalence claim.
 
-**Never resume, stop, signal or clean historical-cpu-attention-01 / worker2686919.**
+**Never resume,stop,signal or clean historical-cpu-attention-01 / worker2686919.**
 Malformed historical build-reverse-gather-python-dev01 can make status.py exit1;
-preserve it. No project writes in ObsidianVault; all reference repositories stay read-only.
+preserve it. No project writes in ObsidianVault; reference repositories remain read-only.

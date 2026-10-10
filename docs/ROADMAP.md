@@ -20,29 +20,37 @@ current handoff. Old evidence below remains tied to its original source.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented; prior a02c18c CPU qualification covers built-in State/Read batching, grouped finite checks and exact Norm VJP order (9595 CPU tests,22 topology cells,10 installed checks,12 CTests). Add assembly follow-up a926703/e565f96 has477 directed checks and new clean qualification in progress. Custom/nondefault replay and structural/small-tensor costs remain. New NPU device qualification is resource-blocked |
-| G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | CPU component profiling completed; Read/Attention host stages improve, Add attachment follow-up removes internal row clones/content restacking;477 directed CPU cases passed, clean qualification pending. Complete native Add shows no observed speed gain. Complete standalone mixed/resident profile entry implemented and directed checks passed; device collection and evidence-driven further optimization await devices; no fusion claim or old-queue restart |
-| G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | source deliverable complete: independent CUDA conditional/P2P backend,102 semantic sources, standalone/Python/installed consumers and strict full target entry. Prior bda25de/afbc075 compile/CPU/import gates passed; fresh a926703 builds are running after the core ABI change. All GPU correctness/residency/multicard/memory/performance remain target-pending |
-| G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | prior-source CPU correctness and dual-runtime NPU builds/host imports passed. Follow-up CPU qualification at e565f96 and fresh backend builds at a926703 are running; current-source NPU modules/full training/resident/multicard await allocation. Historical passing gates remain tied to old sources |
-| G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | finite CPU tranche reviewed:8 measurements,1 preallocation refusal,1 unstarted case; no retry/full-size expansion. Selection advice and GPU target handoff ready. Current NPU route selection evidence remains resource-blocked |
+| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented and CPU-qualified: built-in State/Read VJPs, grouped finite checks, exact Norm VJP order and Add assembly/storage follow-up. Clean e565f96 composite qualification accepts 9650 unique CPU cases, plus22 topology cells,10 installed checks and12 CTests. Custom/nondefault replay and structural/small-tensor costs remain; new NPU qualification awaits resources |
+| G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | finite CPU component evidence reviewed; no observed complete Add gain at the earlier source. Add assembly follow-up removes private row clones/content restacking and is CPU-qualified, without a new timing claim. Complete standalone profile entry is implemented; four actual preparation commands passed. Device collection, calibration and profile-selected further optimization remain pending |
+| G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | source deliverable complete: independent CUDA conditional/P2P backend,102 semantic sources, standalone/Python/installed consumers and strict full target entry. Fresh a926703 ABI-matched builds passed;271 host CPU tests/84 optional skips,7 host CTests and1 semantic CTest. Matching e565f96 imports/refusal passed. Actual GPU correctness/residency/multicard/memory/performance remain target-pending |
+| G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | current CPU composite qualification passed at e565f96; fresh NPU/CUDA builds passed at a926703 with exact compiled-source identity checks, and host preparation passed at e565f96. Original failures are retained. NPU module/full-training/resident/multicard qualification awaits a safe allocation; prior device results keep their original source scope |
+| G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | prior finite CPU tranche reviewed:8 measurements,1 preallocation refusal,1 unstarted case. New serial device batch passed preflight and remains unsubmitted: correctness then6 component measurements and4 complete traces, with fixed bounds/first-failure stop. No new full-size cases or speedup claim. GPU handoff is ready; current NPU selection remains resource-blocked |
 
-[New qualification/build evidence](evidence/batched-vjp-cuda-local-20261010.md)
+[Initial stage qualification/build evidence](evidence/batched-vjp-cuda-local-20261010.md),
+[Add follow-up qualification and preparation](evidence/add-batch-followup-20261010.md)
 and [bounded CPU selection review](evidence/batched-selection-cpu-20261010.md)
-record exact source scopes. This stage is not globally closed: remaining NPU
-work depends on a safe allocation, and actual CUDA execution needs a GPU host.
-Prepared commands and current resource state are in STATUS; no automatic retry
-or historical matrix restart is scheduled.
+retain exact source scopes. The CPU composite combines9648 full-inventory passes
+and exactly2 same-source resource-admission repairs;654 optional skips remain.
+The failed full run is not relabeled. This stage is not globally closed: NPU
+work requires a safe allocation, and actual CUDA execution requires a GPU host.
+STATUS owns current resource observations, prepared plans and exact next commands.
 
-Implementation follow-up authorized: remove demonstrated Add internal batch
-assembly costs while preserving public storage isolation, versions, undefined
-gradients and tick rounding; run related CPU regressions before committing.
-First device tranche: current-source correctness, components and bounded complete
-standalone mixed/resident profiling with memory calibration. The existing six
-PyTorch component cases do not cover complete native/resident bottlenecks.
-Second tranche: implement profile-selected changes, requalify their fixed source,
-then limited comparison/selection cases. Heavy measurements remain serial and
-finite; new source/build identities supersede unsubmitted plans only, never old
-results. CUDA kernel tuning awaits target evidence; no universal speedup claim.
+The locally actionable Add assembly follow-up and complete standalone profiling
+entry are implemented, qualified and reviewed. Remaining work is sequential:
+
+1. Run current-source NPU module, complete-training and resident/multicard gates
+   from the prepared fixed-source batch when resources permit.
+2. Collect the six component cases and four complete mixed/resident traces,
+   including observed memory calibration. Existing PyTorch component results
+   do not establish complete native/resident bottlenecks.
+3. Implement changes supported by those profiles, requalify the changed fixed
+   source, then declare only decision-changing comparison/selection cases.
+4. On a GPU host, run the complete target gate and residency/multicard/memory
+   checks before performance or CUDA kernel tuning.
+
+Heavy measurements remain serial and finite. New source/build identities may
+supersede unsubmitted plans, never old results. No retry, timeout expansion,
+historical matrix restart or undefined second tranche is scheduled.
 
 ## Authorized extension: reusable experiment library
 
