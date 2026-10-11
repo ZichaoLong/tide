@@ -384,7 +384,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling are prepared under explicit 2026-10-11 authorization to use occupied NPUs. No new device result is claimed before terminal qualification. Historical verified results retain their listed commits and scopes.",
+      "reason": "Current public module batching is qualified at4f23993: Python/native FP32/FP16 complete inventory and standalone checker. Complete scale FP32 training passed; FP16 control metadata and resident/multicard qualification require follow-up. Historical evidence retains its own source scope; no new performance claim.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -526,6 +526,21 @@
             "static-cli"
           ],
           "test_command": "Frozen g3-followup-host01 plan and g-stage-device-batch02.py --check-only; exact identities in report"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "4f23993315554f68be3352d7d15533a0e445b260",
+          "scope": "Composite complete public module inventory:57 Python and61 Python/native positive cases per FP32/FP16,2 native CSR refusals,total236 positives. Independent standalone2 graph/3-step/checkpoint/nondefault-stream checker. Exact per-case inventory preserves original2700s failure and fills only missing cases; not full resident or performance.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "qualify_accelerator.py complete per-case inventory from g4-npu-modules07 plus exact g4-module-completion01; tidegraph-accelerator-check; commands and hashes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/npu-module-batching-20261011.md"
         }
       ]
     },
@@ -864,7 +879,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling are prepared under explicit 2026-10-11 authorization to use occupied NPUs. No new device result is claimed before terminal qualification. Historical verified results retain their listed commits and scopes.",
+      "reason": "Current public module batching is qualified at4f23993: Python/native FP32/FP16 complete inventory and standalone checker. Complete scale FP32 training passed; FP16 control metadata and resident/multicard qualification require follow-up. Historical evidence retains its own source scope; no new performance claim.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -1204,6 +1219,21 @@
             "static-cli"
           ],
           "test_command": "Frozen g3-followup-host01 plan and g-stage-device-batch02.py --check-only; exact identities in report"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "4f23993315554f68be3352d7d15533a0e445b260",
+          "scope": "Composite complete public module inventory:57 Python and61 Python/native positive cases per FP32/FP16,2 native CSR refusals,total236 positives. Independent standalone2 graph/3-step/checkpoint/nondefault-stream checker. Exact per-case inventory preserves original2700s failure and fills only missing cases; not full resident or performance.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "qualify_accelerator.py complete per-case inventory from g4-npu-modules07 plus exact g4-module-completion01; tidegraph-accelerator-check; commands and hashes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/npu-module-batching-20261011.md"
         }
       ]
     },

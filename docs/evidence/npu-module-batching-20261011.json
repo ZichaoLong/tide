@@ -1,0 +1,290 @@
+{
+  "schema": "tide-npu-module-composite-evidence-v1",
+  "reviewed": "2026-10-11",
+  "source": "4f23993315554f68be3352d7d15533a0e445b260",
+  "dirty": "",
+  "source_root": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-artifact-cwd-clean01",
+  "scope": "Complete public module inventory; Python PyTorch and Python/native adapter distinguished from independent standalone checker. No complete resident, GPU or performance claim.",
+  "inventory": {
+    "source": "4f23993315554f68be3352d7d15533a0e445b260",
+    "dirty": "",
+    "state": "complete-case-inventory",
+    "expected": 238,
+    "accepted_unique": 238,
+    "positive": 236,
+    "explicit_unsupported": 2,
+    "inventory_sha256": "373883a8977fd6c85ea114412af6d73e2f270fb2b6c5afcb57756180119a1071",
+    "scope": "Per-case observables/VJPs/training/checkpoint inventory only; parent jobs, standalone checker and doctor require separate terminal audit"
+  },
+  "coverage": [
+    {
+      "implementation": "native",
+      "dtype": "float16",
+      "state": "passed",
+      "cases": 61
+    },
+    {
+      "implementation": "native",
+      "dtype": "float16",
+      "state": "unsupported",
+      "cases": 1
+    },
+    {
+      "implementation": "native",
+      "dtype": "float32",
+      "state": "passed",
+      "cases": 61
+    },
+    {
+      "implementation": "native",
+      "dtype": "float32",
+      "state": "unsupported",
+      "cases": 1
+    },
+    {
+      "implementation": "python",
+      "dtype": "float16",
+      "state": "passed",
+      "cases": 57
+    },
+    {
+      "implementation": "python",
+      "dtype": "float32",
+      "state": "passed",
+      "cases": 57
+    }
+  ],
+  "jobs": [
+    {
+      "name": "g-stage-device-batch06",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch06.py"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-artifact-cwd-clean01",
+        "state": "failed",
+        "source": "4f23993315554f68be3352d7d15533a0e445b260",
+        "dirty": "",
+        "started": "2026-10-11T08:39:02.494328+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-11T09:24:12.114233+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "Id": "tide-g-stage-device-batch06.service",
+        "ActiveState": "failed"
+      },
+      "receipts": {
+        "status.json": "a9f357b563919cbaa0d31883bb8e5f8fc6fbb16558a3ce9f44dd250382ca61a2",
+        "task.log": "a331346439c7295be125e557776d73a1b028a4bb9bff4f65a834f33750f077c1",
+        "batch.json": "5f5f318f5e89ec1008a9b9e0fff5c7a67c0d0573a61bf34b24d002d6544503c2"
+      }
+    },
+    {
+      "name": "g4-npu-modules07",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "12",
+          "--seconds",
+          "2955",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-modules07/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-modules07.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-artifact-cwd-clean01",
+        "state": "failed",
+        "source": "4f23993315554f68be3352d7d15533a0e445b260",
+        "dirty": "",
+        "started": "2026-10-11T08:39:02.759416+00:00",
+        "exit_code": 124,
+        "finished": "2026-10-11T09:24:12.034395+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ExecMainStatus": "124",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "Id": "tide-g4-npu-modules07.service",
+        "ActiveState": "failed"
+      },
+      "receipts": {
+        "status.json": "39490abae04ce94112fca6d53dedf17f2da2138cda0e4718b63e8ffc987b5f51",
+        "task.log": "94c42e2cc86af5fb61ed0a47dfb968e05c46e86a7c4c1e4277ecb85dc8ae9d2e",
+        "gate.json": "48f6d42601298986630cad4c2329fc43ec900a0fb947eb1a3afbb7456ba9649c",
+        "bounded.json": "5f59625e96aa3138e14916eb8a0191ccf5706936f489888c4eb3ce847aadadd9",
+        "sharing.json": "7f177d365f34e690ae356a9e5687a10476694c0687ef2c6df634b329fa3aec72"
+      },
+      "guard": {
+        "state": "failed",
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "budget": {
+          "seconds": 2955,
+          "aggregate_rss_bytes": 12884901888
+        },
+        "peak_combined_rss_bytes": 10510934016,
+        "process_seconds": 2709.1833284683526,
+        "exit_code": 124,
+        "remaining_group_pids": []
+      },
+      "sharing": {
+        "state": "failed",
+        "physical_ids": [
+          9
+        ],
+        "logical_mapping": {
+          "0": 9
+        }
+      }
+    },
+    {
+      "name": "g4-module-completion01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "12",
+          "--seconds",
+          "1755",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-module-completion01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-module-completion01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-artifact-cwd-clean01",
+        "state": "passed",
+        "source": "4f23993315554f68be3352d7d15533a0e445b260",
+        "dirty": "",
+        "started": "2026-10-11T09:25:42.084232+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T09:44:25.738320+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "ControlGroup": "",
+        "Id": "tide-g4-module-completion01.service",
+        "ActiveState": "inactive"
+      },
+      "receipts": {
+        "status.json": "97aa5ab57abaffd7e642c5278c8688a54998334afc24b0029b5839ad29f2c97b",
+        "task.log": "22d2e6605fc788aa622f83afd9f51360539b515845dac0a2986ca09fb0341bb2",
+        "gate.json": "398d47277b8dd1ce9b29e90862291341159fb34d73739473cdd0302b786a5738",
+        "bounded.json": "4e149f5daf56af30f44cd7af240960a66df418753f195e51cee150a7a9396b80",
+        "sharing.json": "ae311fb97215f0a3430529848811030d5b48c6b1ec5a8ae97d2541b8b48d0a40"
+      },
+      "guard": {
+        "state": "passed",
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "budget": {
+          "seconds": 1755,
+          "aggregate_rss_bytes": 12884901888
+        },
+        "peak_combined_rss_bytes": 10566848512,
+        "process_seconds": 1122.6431281380355,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      },
+      "sharing": {
+        "state": "passed",
+        "physical_ids": [
+          9
+        ],
+        "logical_mapping": {
+          "0": 9
+        }
+      }
+    }
+  ],
+  "standalone": {
+    "state": "passed",
+    "device": "npu:0",
+    "dtype": "float32",
+    "cases": 2,
+    "training_steps": 3,
+    "workers": 2,
+    "checkpoint_handoff": true,
+    "nondefault_stream": true
+  },
+  "standalone_sha256": "ec8162799d71836d1b8844c1635bc3a1fa52cbf2dbd91d0cac73b20f74cbbba6",
+  "doctor": {
+    "name": "doctor",
+    "command": [
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+      "/home/zlong/.agents/skills/develop-portable-torch/scripts/doctor.py",
+      "--backend",
+      "npu",
+      "--probe",
+      "operator",
+      "--format",
+      "json"
+    ],
+    "timeout_seconds": 120,
+    "state": "passed",
+    "exit_code": 0,
+    "log_sha256": "d8222c279ddaf2a9cdc48c40fccbfc7aaf9ad9fe828e4c93036dfbd65e308b3c"
+  },
+  "inputs": {
+    "plans/g4-module-completion01.json": "1f9f63d3aaea9d16bf4fff8c112d47ca8168e97ec1428c7f8879fd21d20dd3fc",
+    "plans/g4-module-inventory01.json": "373883a8977fd6c85ea114412af6d73e2f270fb2b6c5afcb57756180119a1071",
+    "plans/g4-module-inventory01.py": "8f58f53f15a389f12f91ddb4e141a1817497e5403e5524813ab6d75e8c7ce9a7",
+    "runs/g4-module-inventory-check01.json": "4b6f5a6d3c5fcf23a80505fa56bc2c827a5f3bf7d517b3bb9501c5ed8df5f6cd"
+  },
+  "compiler_limits": {
+    "TE_PARALLEL_COMPILER": "1",
+    "TBE_PARALLEL_COMPILER": "1",
+    "CANN_KNOWLEDGE_BANK_PROCESS_NUM": "1",
+    "MAX_COMPILE_CORE_NUMBER": "1"
+  },
+  "tolerances": {
+    "float32": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    },
+    "float16": {
+      "atol": 0.001,
+      "rtol": 0.02
+    },
+    "discrete": "exact",
+    "connectivity": "None and zero distinct"
+  },
+  "limits": [
+    "Original exit124 stays failed; only exact missing cases ran under the new correctness-only completion budget.",
+    "Shared NPU physical9 to logical0; external contention allowed and recorded.",
+    "Aggregate RSS sampling sums shared mappings; legacy cgroup limits are not claimed to enforce allocation bounds.",
+    "No numerical tolerance or unsupported-request policy changed.",
+    "GPU execution, full training/resident target and performance require separate evidence."
+  ]
+}
