@@ -1,6 +1,6 @@
 {
   "schema": "tide-qualification-environment-evidence-v1",
-  "reviewed": "2026-10-11T08:40:14.666629+00:00",
+  "reviewed": "2026-10-11T09:07:20.353760+00:00",
   "implementation": "4f23993315554f68be3352d7d15533a0e445b260",
   "previous_fix": "dd5e22060d6521ed291938858f40efa54b5c18bd",
   "scope": "qualification process environment and artifact lifecycle; no graph/model/compiled source change, no new performance or GPU claim",
@@ -135,6 +135,21 @@
         },
         "elapsed_seconds": 18.226546689867973
       }
+    },
+    {
+      "name": "g2-component-cwd-cpu-clean01",
+      "source": "7da524268cc8b1eb677cbd99d2847f6690778ea4",
+      "state": "passed",
+      "tests": 30,
+      "scope": "Public component entry initializes vendor runtime in output cwd, records failed resolution and restores cwd; synthetic lifecycle only",
+      "peak_combined_rss_bytes": 278827008,
+      "remaining_group_pids": [],
+      "artifacts": {
+        "runs/g2-component-cwd-cpu-clean01/status.json": "81376aeb7567fa869639a0944abaa1a4fe4af13751d2b6479609ebd287fd0ecf",
+        "runs/g2-component-cwd-cpu-clean01/bounded.json": "0577320019cb0691370d77a8e8b5629187b985171ba19ae682924e12e3890560",
+        "runs/g2-component-cwd-cpu-clean01/tests.xml": "78d1bacd615cb95234447b072c0e0796602540b1cf550498f70739f78e6b374b",
+        "runs/g2-component-cwd-cpu-clean01/task.log": "44c8b0601a5863453af78822891fa2ec813bdb87c2216d57a7b02edc0d12d0f7"
+      }
     }
   ],
   "retained_failures": [
@@ -210,5 +225,14 @@
   "preserved_generated_files": {
     "record": "runs/g4-npu-modules05/artifact-relocation.json",
     "sha256": "5d4101032f49885b8bc440f27644595133574056a653d3220a1fda3971d4ef9b"
+  },
+  "component_entry_followup": {
+    "implementation": "7da524268cc8b1eb677cbd99d2847f6690778ea4",
+    "unchanged_workload_function_sha256": {
+      "make_case": "c7a6a1fb07913c12486208b4bb53bbdfb64becc90c122d85cced440dc1929537",
+      "operation": "c177e8e231a2746fa2b7c1f8bc551cb2f2d0bffea1c734da55f1d87bc7922bee"
+    },
+    "previous": "4f23993315554f68be3352d7d15533a0e445b260",
+    "scope": "Only component orchestration and failure records change; active NPU batch remains frozen at4f23993 with artifact cwd already provided by its launcher"
   }
 }

@@ -146,8 +146,11 @@ records the completed checks separately from the live batch.
 The public `profile_batched_components.py` entry now also changes to its output
 cwd before device resolution/model creation, rather than only before trace
 export. Resolution failures get explicit failed records and no fabricated device.
-30 directed CPU checks passed (`runs/g2-component-cwd-dev01.xml`). Commit this
-entry-only correction then qualify it at `g2-component-cwd-cpu-clean01`.
+Correction7da5242 is committed and pushed.30 directed development tests and30
+clean-source CPU tests passed at `g2-component-cwd-cpu-clean01` (0.60s,no skips);
+unit terminal passed,MainPID0,empty cgroup,no guard survivors. Immutable source:
+`sources/g-stage-component-cwd-clean01`; receipts/JUnit/guard in runs/NAME.
+Workload-generation and operation function hashes match4f23993 exactly.
 The active batch remains frozen at4f23993 and already launches numerical children
 from artifact directories; no running source/plan or timing policy changed.
 
