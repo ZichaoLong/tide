@@ -20,11 +20,11 @@ current handoff. Old evidence below remains tied to its original source.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented and CPU-qualified: built-in State/Read VJPs, grouped finite checks, exact Norm VJP order and Add assembly/storage follow-up. Clean e565f96 composite qualification accepts 9650 unique CPU cases, plus22 topology cells,10 installed checks and12 CTests. Custom/nondefault replay and structural/small-tensor costs remain; new NPU qualification awaits resources |
+| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented and CPU-qualified: built-in State/Read VJPs, grouped finite checks, exact Norm VJP order and Add assembly/storage follow-up. Clean e565f96 composite qualification accepts 9650 unique CPU cases, plus22 topology cells,10 installed checks and12 CTests. Custom/nondefault replay and structural/small-tensor costs remain; new NPU qualification is prepared under the2026-10-11 shared-device authorization |
 | G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | finite CPU component evidence reviewed; no observed complete Add gain at the earlier source. Add assembly follow-up removes private row clones/content restacking and is CPU-qualified, without a new timing claim. Complete standalone profile entry is implemented; four actual preparation commands passed. Device collection, calibration and profile-selected further optimization remain pending |
 | G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | source deliverable complete: independent CUDA conditional/P2P backend,102 semantic sources, standalone/Python/installed consumers and strict full target entry. Fresh a926703 ABI-matched builds passed;271 host CPU tests/84 optional skips,7 host CTests and1 semantic CTest. Matching e565f96 imports/refusal passed. Actual GPU correctness/residency/multicard/memory/performance remain target-pending |
-| G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | current CPU composite qualification passed at e565f96; fresh NPU/CUDA builds passed at a926703 with exact compiled-source identity checks, and host preparation passed at e565f96. Original failures are retained. NPU module/full-training/resident/multicard qualification awaits a safe allocation; prior device results keep their original source scope |
-| G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | prior finite CPU tranche reviewed:8 measurements,1 preallocation refusal,1 unstarted case. New serial device batch passed preflight and remains unsubmitted: correctness then6 component measurements and4 complete traces, with fixed bounds/first-failure stop. No new full-size cases or speedup claim. GPU handoff is ready; current NPU selection remains resource-blocked |
+| G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | current CPU composite qualification passed at e565f96; fresh NPU/CUDA builds passed at a926703 with exact compiled-source identity checks, and host preparation passed at e565f96. Original failures are retained. NPU module/full-training/resident/multicard qualification is prepared with occupied-device use authorized; prior device results keep their original source scope |
+| G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | prior finite CPU tranche reviewed:8 measurements,1 preallocation refusal,1 unstarted case. New shared-device serial batch03 passed preflight and is ready to launch: correctness then6 component measurements and4 complete traces, with fixed bounds/first-failure stop. No new full-size cases or speedup claim. GPU handoff is ready; current NPU selection remains resource-blocked |
 
 [Initial stage qualification/build evidence](evidence/batched-vjp-cuda-local-20261010.md),
 [Add follow-up qualification and preparation](evidence/add-batch-followup-20261010.md)
@@ -32,14 +32,14 @@ and [bounded CPU selection review](evidence/batched-selection-cpu-20261010.md)
 retain exact source scopes. The CPU composite combines9648 full-inventory passes
 and exactly2 same-source resource-admission repairs;654 optional skips remain.
 The failed full run is not relabeled. This stage is not globally closed: NPU
-work requires a safe allocation, and actual CUDA execution requires a GPU host.
+work proceeds under the2026-10-11 occupied-device authorization; actual CUDA execution requires a GPU host.
 STATUS owns current resource observations, prepared plans and exact next commands.
 
 The locally actionable Add assembly follow-up and complete standalone profiling
 entry are implemented, qualified and reviewed. Remaining work is sequential:
 
 1. Run current-source NPU module, complete-training and resident/multicard gates
-   from the prepared fixed-source batch when resources permit.
+   from the prepared fixed-source batch with authorized shared NPU use.
 2. Collect the six component cases and four complete mixed/resident traces,
    including observed memory calibration. Existing PyTorch component results
    do not establish complete native/resident bottlenecks.

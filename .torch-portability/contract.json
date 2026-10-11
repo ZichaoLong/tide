@@ -384,7 +384,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling remain unsubmitted pending a safe allocation; the 2026-10-10T13:39:53Z inspection found all16 chips unavailable. Historical verified results retain only their listed commits and scopes.",
+      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling are prepared under explicit 2026-10-11 authorization to use occupied NPUs. No new device result is claimed before terminal qualification. Historical verified results retain their listed commits and scopes.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -864,7 +864,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling remain unsubmitted pending a safe allocation; the 2026-10-10T13:39:53Z inspection found all16 chips unavailable. Historical verified results retain only their listed commits and scopes.",
+      "reason": "Current State/Read and Add batching plus the shared resident boundary are implemented, rebuilt and host-checked. New-source NPU module/full-training/resident/multicard qualification and profiling are prepared under explicit 2026-10-11 authorization to use occupied NPUs. No new device result is claimed before terminal qualification. Historical verified results retain their listed commits and scopes.",
       "attempts": [
         {
           "date": "2026-09-25",

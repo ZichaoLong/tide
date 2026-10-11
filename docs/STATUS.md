@@ -1,12 +1,13 @@
-# Current handoff — 2026-10-10
+# Current handoff — 2026-10-11
 
 The authorized G1–G5 stage continues after the previous F1–F7 local closure.
 State/Read batching, the Add assembly follow-up and full declared CUDA resident
 source are implemented. Current CPU qualification, fresh backend builds and
-host preparation have passed. All current task services are terminal. The
-finite NPU batch is **prepared, preflight-passed and not submitted** because
-no safe device was available in the latest retained inspection. This is not
-closure of device qualification or performance work. Selector/upstream semantic
+host preparation have passed. The user now explicitly authorizes occupied NPU
+devices, overriding the earlier no-process/low-utilization admission rule. The
+new finite batch03 is **prepared, preflight-passed and ready to launch** with
+unchanged source, workloads and budgets. Device qualification/performance results
+remain pending. Selector/upstream semantic
 extensions remain deferred. No historical queue or old pause instruction resumes.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -79,32 +80,38 @@ Its writer `plans/audit-g1-g3-followup01.py` refuses overwrite. Old audits and
 failed/interrupted records remain intact; nested records of cancelled jobs may
 still say running and are not accepted. No active current-task job remains.
 
-## Prepared finite device batch and next action
+## Shared-device finite batch and current action
 
-Latest retained read-only inventory is `runs/g4-npu-resource-inspection05.json`,
-2026-10-10T13:39:53.097319Z:16 devices,zero free IDs,3-device request unsatisfied.
-No NPU workload was launched. Recheck health/processes/HBM/utilization at a new
-resource opportunity; allocation uses the helper's two snapshots and advisory
-locks. Do not retry an unchanged timed-out lease or touch another workload.
-Execution is already authorized; further startup permission is unnecessary.
+User authorization on2026-10-11 permits use of occupied NPUs and takes precedence
+over the local skill's empty-device rule. No permission question remains. Health,
+observed memory headroom and original resource/time bounds still apply; no other
+process or protected historical worker is stopped, signalled or changed.
 
-`plans/g-stage-device-batch02.{py,json}` is fixed to clean e565f96. Its complete
-`--check-only` passed at13:21:50Z; receipt
-`runs/g-stage-device-batch02-preflight01.json`. It checks CPU completion01,
-backend clean02 builds and host preparation01, exact allowed source differences,
-core/resident/compiled-consumer identities, sealed plan hashes and unused outputs.
-The batch and all five children are **unsubmitted**, not queued. Batch01 and older
-child plans remain superseded unsubmitted artifacts, not work to resume.
+`runs/g-stage-shared-resource01.json` records two new snapshots. Devices6–9 had
+no reported processes at inspection; others were occupied. Each stage rechecks
+and prefers lower load, while allowing occupied/high-utilization devices.
+`plans/g-stage-shared-launch01.py` requires10GiB observed HBM headroom, remaps
+chosen physical IDs to logical0..N-1, and records before/after occupancy in
+`runs/NAME/sharing.json`. It does not claim exclusive ownership or alter account
+queue/lock records. Shared-device performance is labelled externally contended.
+
+New `plans/g-stage-device-batch03.{py,json}` runs the same clean e565f96 source
+and exact backend clean02 artifacts. The complete preflight and five synthetic
+selection checks passed: `runs/g-stage-device-batch03-preflight01.json`.
+Source/compiled-consumer/plan hashes, unchanged predecessors and unused outputs
+are checked. Batch03 and its child04 plans supersede the never-submitted batch02
+and child03 plans; old evidence/receipts remain unchanged. Batch03 is prepared,
+not yet submitted; the next action is the one-time launch below.
 
 | Planned child in dependency order | Scope | Service ceiling |
 | --- | --- | --- |
-| g4-npu-modules03 | 1NPU; named Python/native FP32/FP16 modules plus standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
-| g4-npu-training03 | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 training cells;2500s | 45min,6CPU,12GiB,192tasks |
-| g4-npu-resident03 | 3NPU; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
-| g2-npu-components03 | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
-| g2-npu-complete-profiles03 | 2NPU;4 complete Add/Attention × mixed-c/resident traces;600s collection/export per case,2600s total | 45min,8CPU,16GiB,256tasks |
+| g4-npu-modules04 | 1NPU; named Python/native FP32/FP16 modules plus standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
+| g4-npu-training04 | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 training cells;2500s | 45min,6CPU,12GiB,192tasks |
+| g4-npu-resident04 | 3NPU; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
+| g2-npu-components04 | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
+| g2-npu-complete-profiles04 | 2NPU;4 complete Add/Attention × mixed-c/resident traces;600s collection/export per case,2600s total | 45min,8CPU,16GiB,256tasks |
 
-Each allocation wait is capped at60s. First failure stops the chain and leaves
+Each stage selects immediately after two snapshots, without queuing. First failure stops the chain and leaves
 successors unstarted. Child service ceilings total15900s; controller16200s.
 No retries,timeout expansion,full-size cases or second tranche is declared.
 Heavy measurements are serial; Trackio stays off. After profiles, choose concrete
@@ -118,26 +125,26 @@ not observed memory calibration. Physical chunks preserve logical batch,
 Attention normalization,gradient and optimizer boundaries. Complete traces
 are diagnostic, not throughput measurements.
 
-Validate again without submission at the next resource opportunity:
+Validate without submission:
 
 ```bash
-/usr/bin/python3 /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch02.py --check-only
+/usr/bin/python3 /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch03.py --check-only
 ```
 
-After a fresh safe resource opportunity and successful preflight, submit once:
+After successful preflight, submit once under the shared-device authorization:
 
 ```bash
 TASK=/mi/data2T/zlong/tide-execution-flows
-systemd-run --user --unit=tide-g-stage-device-batch02 --service-type=exec --slice=background.slice \
+systemd-run --user --unit=tide-g-stage-device-batch03 --service-type=exec --slice=background.slice \
   --working-directory="$TASK/sources/g-stage-followup-clean03" \
   --property=KillMode=control-group --property=Nice=10 --property=CPUQuota=100% \
   --property=MemoryMax=512M --property=TasksMax=128 --property=RuntimeMaxSec=16200 \
   --setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin --setenv=PYTHONDONTWRITEBYTECODE=1 \
-  /usr/bin/python3 scripts/job.py --output-dir "$TASK/runs/g-stage-device-batch02" \
-  -- /usr/bin/python3 "$TASK/plans/g-stage-device-batch02.py"
+  /usr/bin/python3 scripts/job.py --output-dir "$TASK/runs/g-stage-device-batch03" \
+  -- /usr/bin/python3 "$TASK/plans/g-stage-device-batch03.py"
 ```
 
-`runs/g-stage-device-batch02/batch.json` will record every task,including unstarted
+`runs/g-stage-device-batch03/batch.json` will record every task,including unstarted
 successors. Inspect only current-task units with `systemctl --user show UNIT
 -p ActiveState -p Result -p MainPID -p ControlGroup` and their durable receipts.
 GPU rebuild/full target/residency commands remain in [device-control](device-control.md).
