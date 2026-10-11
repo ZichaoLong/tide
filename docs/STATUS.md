@@ -14,10 +14,13 @@ policy` before numerical comparison. All later stages are unstarted. Both units
 have MainPID0/empty cgroups; the guard has no survivors. No performance measurement
 has run. Preserve all original receipts and budgets.
 
-Next: commit the tested legacy scale control-metadata correction, create a clean
-fixed-source snapshot and fresh standalone scale build, and run the matching CPU
-and NPU training qualifications. Only tools/accelerator_scale changed; shared
-core/resident/online sources stay identical. Retain all original numerical policies.
+Correction00b1775 is committed and pushed. Clean fixed-source scale build/CPU
+qualification `tide-g4-scale-control-clean01.service` passed:5 CTests and8 CPU
+complete training cells. Peak summed RSS3224432640B;417.59s within855s guard.
+Unit MainPID0,empty cgroup,no guard survivors. Source snapshot sources/NAME;
+outputs runs/NAME/{status.json,task.log,bounded.json,cpu-float32/gates.json,
+cpu-float16/gates.json}. Matching NPU training qualification remains pending.
+Only tools/accelerator_scale changed; shared core/resident/online stay identical.
 
 Development `g4-scale-control-dev01` passed: fresh standalone scale build,5 CTests
 and8 CPU complete training cells (Add/Attention × SGD/AdamW × FP32/FP16).
@@ -29,14 +32,31 @@ adapter fails as expected (`runs/g4-scale-control-red01/result.json`). This is
 development evidence,not clean qualification. FP16 scale training explicitly
 uses its pre-existing0.002/0.02 policy; public module tolerances are unchanged.
 
-Running: `tide-g4-npu-resident10.service` at unchanged clean9c3ffd3, original
-5400s workload/6000s service,8CPU/24GiB/3NPU. Preflight passed and actual component
-checks are running; no full pass yet. Physical8,9,14 map to logical0,1,2.
-Plan `plans/NAME.{json,sh}`; output
-`runs/NAME/{status.json,task.log,bounded.json,sharing.json,gate/result.json}`.
-The scale adapter is outside this gate's device_online/online_bench consumers;
-module qualification and exact source bridge passed. CPU build may overlap
-correctness only; heavy profiling/timing remains serial after qualification.
+Resident10 is terminal failed at clean9c3ffd3 after33 passed component invocations.
+Invocation34,state-read FP32,failed `repeat work bound missing`; later components,
+installed client and public pytest were not run. Physical8,9,14→logical0,1,2;
+MainPID0,empty cgroup,no guard survivors. Plan plans/NAME.{json,sh}; outputs
+runs/NAME/{status.json,bounded.json,sharing.json,gate/components/result.json}.
+The scale adapter is outside this unchanged device_online/online_bench gate.
+One bounded NPU diagnostic `g4-int64-input-probe01` passed: fill_ preserves the
+exact intended int64 timestamp36028797018964285 and phase1. Missing Torch-to-private
+stream synchronization in state_read_check.cpp is under investigation; no cause
+or fix is claimed yet. Diagnostic01 stopped at host compilation (missing local include); no test ran.
+Diagnostic02 passed nosync FP32 and sync FP32/FP16,each48 configurations/336
+windows/18 refusals; the original failure was not deterministically reproduced.
+Source inspection nevertheless confirms the component omitted the required
+Torch/private-stream boundary; production ContentFlow already has it.
+Test-only fix adds that boundary,actual error-code diagnostics and nondefault
+caller-stream coverage; no production kernel/algorithm/tolerance change.
+Passed `tide-g4-state-read-dev01.service`,frozen changed-file development,
+4CPU/8GiB/300s service,255s guard,FP32/FP16 with unchanged retained device libraries.
+plans/NAME.{json,sh,py},sources/NAME/current.cpp,runs/NAME/{status.json,bounded.json,
+diagnostic.json,task.log}. FP32 and FP16 each passed48 configurations/336 windows/
+18 refusals,default/nondefault streams;MainPID0,empty cgroup,no survivors.
+Next: commit test-only correction,clean directed host rebuild/device qualification,
+then complete the98 unstarted component invocations plus installed/public clients.
+Keep the33 original accepted components and separate corrected2 State/Read cells.
+
 
 Resident09 failed before operator execution: visibility9,8,14 violated the
 installed TorchNPU/RTS ascending-order requirement and returned zero devices.
@@ -44,6 +64,22 @@ Its failed receipt remains. Site launcher `g-stage-shared-launch02.py` sorts
 only the selected set;7 synthetic selection/vendor-parser checks passed in
 `runs/g-stage-shared-order-check01.json`. No occupancy restriction was added.
 Old batch07 remains failed and all child08 successors remain unsubmitted.
+
+Prepared,not submitted: `plans/g-stage-device-batch08.{json,py}` at clean00b1775,
+with training09→components09→complete-profiles09. This plan is blocked and must
+be revised: its resident10 prerequisite failed; clean scale CPU passed. Three child service ceilings total
+6900s/controller7200s; scope and performance budgets unchanged. This runs all8
+training cells for the changed scale consumer, then the6 previously unmeasured
+components and4 previously uncollected complete traces. No old module inventory
+or resident gate repeats. Exact9c→00b bridge: `plans/g-stage-scale-source-bridge01.json`.
+After a new passing resident completion and revised plan audit, run `/usr/bin/python3
+/mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch08.py --check-only`,
+retain a unique preflight receipt and submit once through source-root job.py in
+`tide-g-stage-device-batch08.service` (background.slice,100% CPU,512MiB,
+128tasks,7200s), cwd `TASK/sources/g4-scale-control-clean01`, output
+`TASK/runs/g-stage-device-batch08`. First failure stops successors. Before
+submission inspect all prerequisite status/guard/unit records; no pass is assumed.
+
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
@@ -155,7 +191,7 @@ cgroup v1 does not prove requested quotas/memory/tasks kernel enforcement.
 shared mappings are summed. Component inner caps8GiB RSS/2GiB output; complete
 profile caps12GiB RSS/2GiB output. No measurement retries,timeout enlargement,
 full-size cases or undefined second tranche. Trackio is off; heavy work is serial.
-Data disk last observed102GiB free; recheck before large writes.
+Data disk last observed98GiB free; recheck before large writes.
 
 ## Selection limits and protected history
 

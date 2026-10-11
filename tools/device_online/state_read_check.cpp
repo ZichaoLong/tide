@@ -5,8 +5,11 @@
 #include "tide/kernel.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
+#include <c10/core/StreamGuard.h>
+#include <c10/core/impl/VirtualGuardImpl.h>
 #include <iostream>
 #include <limits>
+#include <optional>
 #include <stdexcept>
 
 namespace {
@@ -62,6 +65,15 @@ Snapshot run(at::Device device,at::ScalarType dtype,Index width,const std::strin
   append_read(program,profile,ready,content,state,coefficients,error,16,vectorized);
   auto output=append_content_state(program,profile,ready,content,selection,state,coefficients,stages,total,error,limits);
   commit_content_state(program,state,output,error);program.finish();
+  // DeviceProgram owns a private launch stream. Torch input writes must finish
+  // at this boundary, just as in ContentFlow::advance_device.
+  auto execute=[&]{portable_torch::synchronize(device);program.run();};
+  auto refusal=[&](int expected,const char* why) {
+    const auto actual=error.cpu().item<int>();
+    if(actual!=expected)throw std::runtime_error(std::string(why)+": expected="+std::to_string(expected)
+      +" actual="+std::to_string(actual)+" mode="+mode+" vector="+std::to_string(vectorized)
+      +" width="+std::to_string(width));
+  };
   std::vector<State> expected;
   for(Index b=0;b<samples;++b)for(Index n=0;n<nodes;++n)expected.push_back({initial[b][n],epoch-3,observations});
   const std::vector<Index> offsets{0,3,12,15};
@@ -78,7 +90,7 @@ Snapshot run(at::Device device,at::ScalarType dtype,Index width,const std::strin
     selection.active.copy_(host_active);selection.controls.copy_(host_active.to(device,at::kFloat));
     // The candidate sees only independently constructed input tables, never
     // an oracle's event trace, proposal, score or parameter update.
-    program.run();require(error.cpu().item<int>()==0,"state/Read valid input refused");
+    execute();refusal(0,"state/Read valid input refused");
     require(content.scores.scalar_type()==at::kFloat&&output.event_values.scalar_type()==at::kFloat,"scoring/journal precision changed");
     auto actual=output.event_values.cpu(),metadata=output.event_meta.cpu();
     for(Index row=0;row<count;++row) {
@@ -109,17 +121,17 @@ Snapshot run(at::Device device,at::ScalarType dtype,Index width,const std::strin
     ++windows;
   }
   require(total.cpu().item<Index>()==samples*nodes*steps,"event total mismatch");
-  auto before=state.values.cpu();ready.counts.zero_();program.run();
+  auto before=state.values.cpu();ready.counts.zero_();execute();
   same(state.values,before,"empty replay changed state");++windows;
   // Failed transactions must never publish their partial state proposals.
   if(width==1&&!split&&trace) {
-    auto preserved=state.clocks.cpu();ready.counts[1].fill_(1);error.fill_(6);program.run();
-    require(error.cpu().item<int>()==6,"sticky error changed");same(state.values,before,"sticky error committed state");++refusals;
-    error.zero_();ready.fibers[0][0].fill_(samples);program.run();
-    require(error.cpu().item<int>()==2,"invalid owner accepted");same(state.values,before,"invalid owner committed state");
+    auto preserved=state.clocks.cpu();ready.counts[1].fill_(1);error.fill_(6);execute();
+    refusal(6,"sticky error changed");same(state.values,before,"sticky error committed state");++refusals;
+    error.zero_();ready.fibers[0][0].fill_(samples);execute();
+    refusal(2,"invalid owner accepted");same(state.values,before,"invalid owner committed state");
     same(state.clocks,preserved,"invalid owner committed clock");++refusals;
     error.zero_();ready.fibers[0][0].fill_(0);ready.fibers[0][1].fill_(2);ready.fibers[0][2].fill_(epoch+18+300);
-    program.run();require(error.cpu().item<int>()==8,"repeat work bound missing");same(state.values,before,"bounded refusal committed state");++refusals;
+    execute();refusal(8,"repeat work bound missing");same(state.values,before,"bounded refusal committed state");++refusals;
   }
   return {state.values.cpu(),state.clocks.cpu(),state.present.cpu()};
 }
@@ -135,11 +147,14 @@ int main(int argc,char** argv) {
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
     if(device.type()!=tide::device_online::resident_device_type)throw std::invalid_argument("state/Read requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
+    const auto stream=c10::impl::VirtualGuardImpl(device.type()).getNewStream(device);
     Index cases=0,windows=0,refusals=0;
     for(Index width:smoke?std::vector<Index>{257}:std::vector<Index>{1,7,257,2048})
     for(const std::string mode:smoke?std::vector<std::string>{"proposal"}:std::vector<std::string>{"content","old","proposal"})
     for(bool vectorized:{false,true})for(bool trace:{false,true}) {
       if(smoke&&(!vectorized||!trace))continue;
+      // Exercise both caller streams while the candidate keeps its own stream.
+      c10::OptionalStreamGuard caller(trace?std::optional<c10::Stream>(stream):std::nullopt);
       auto batch=run(device,args.dtype,width,mode,vectorized,false,trace,windows,refusals);
       auto step=run(device,args.dtype,width,mode,vectorized,true,trace,windows,refusals);
       same(batch.state,step.state,"node-time batch changed per-event rounding");
@@ -147,7 +162,7 @@ int main(int argc,char** argv) {
       same(batch.present,step.present,"node-time batch changed presence");++cases;
     }
     std::cout<<"state-read: passed configurations="<<cases<<" windows="<<windows<<" refusals="<<refusals
-      <<" CPU=storage_dtype_canonical_kernels scoring=FP32 per_event_rounding=true scope="<<(smoke?"profile-smoke":"component-only")<<'\n';
+      <<" CPU=storage_dtype_canonical_kernels scoring=FP32 per_event_rounding=true streams=default_nondefault scope="<<(smoke?"profile-smoke":"component-only")<<'\n';
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

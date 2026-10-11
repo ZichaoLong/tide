@@ -169,7 +169,11 @@ It does not promise equality with a half-accumulated selector near a tie.
 `state-read` checks the canonical CPU StateKernel steps, exact clocks above
 2^55, observe/adopt/clear, scalar/vector execution, node-time batches versus
 continued single-time windows, empty/NaN padding and failed commits. It is an
-isolated component gate, not an independently scheduling graph engine.
+isolated component gate, not an independently scheduling graph engine. The checker
+completes Torch input writes before each private DeviceProgram submission and
+covers default/nondefault caller streams; production ContentFlow already enforces
+this input boundary. Refusal diagnostics include the actual error code and case.
+This changes no in-window synchronization or numerical policy.
 The `emission`/`swiglu` FP16 cells are component-only; their FP32 cells also
 retain the complete graph-window regressions. `precision-flow` integrates these
 modules with FP16 HARD resident inference, dense/tiled event and fiber attention,
