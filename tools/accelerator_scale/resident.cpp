@@ -22,9 +22,16 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
     if (node.next_state != "adopt-v1" || (node.memory != "lh-add-repeat-v1"
         && node.memory != "lh-fiber-attention-all-softmax-repeat-v1"))
       throw std::invalid_argument("resident benchmark supports only its declared historical local programs");
-  selection_model_ = model_;
   const auto control_dtype=model_.nodes[0].bias.scalar_type()==at::kDouble?at::kDouble:at::kFloat;
-  selection_model_.nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(at::kCPU).dtype(control_dtype));
+  auto selection_model = [&](at::Device device) {
+    auto model = model_;
+    auto ref = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(device).dtype(control_dtype));
+    // Parameterless regions derive control metadata from their first member.
+    // Update every selection-only reference, not the real payload model.
+    for (auto& node : model.nodes) node.bias = ref;
+    return model;
+  };
+  selection_model_ = selection_model(at::Device(at::kCPU));
   for (const auto& region : graph_.regions)
     if (region.selector != "lh-count-affect-v1" && region.selector != "count-v1")
       throw std::invalid_argument("resident benchmark requires count-only CPU histories");
@@ -38,8 +45,7 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
   for (auto d : placement_.devices) {
     c10::impl::VirtualGuardImpl api(d.type()); streams_.push_back(api.getStream(d));
     if (placement_.scoring.control_device == "model") {
-      device_selection_models_.push_back(model_);
-      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d).dtype(control_dtype));
+      device_selection_models_.push_back(selection_model(d));
     }
   }
   state_.identity = graph_.identity; state_.batch_size = batch;

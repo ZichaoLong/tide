@@ -14,15 +14,36 @@ policy` before numerical comparison. All later stages are unstarted. Both units
 have MainPID0/empty cgroups; the guard has no survivors. No performance measurement
 has run. Preserve all original receipts and budgets.
 
-Next: fix the legacy standalone scale consumer's per-region control reference
-metadata, add CPU FP16 regression to its existing dtype CTest, perform relevant
-development tests, commit the implementation, then qualify a clean fixed build.
-The scale consumer only replaced node0's selection bias, while the current core
-gets parameterless region metadata from each region's first member. Do not
-change the public selector semantics, discrete comparisons or module tolerances.
-After qualification, declare an exact failed/unstarted training completion and
-only the remaining resident/components/complete-profile stages, with new names.
-No automatic retry or entire old matrix is authorized.
+Next: commit the tested legacy scale control-metadata correction, create a clean
+fixed-source snapshot and fresh standalone scale build, and run the matching CPU
+and NPU training qualifications. Only tools/accelerator_scale changed; shared
+core/resident/online sources stay identical. Retain all original numerical policies.
+
+Development `g4-scale-control-dev01` passed: fresh standalone scale build,5 CTests
+and8 CPU complete training cells (Add/Attention × SGD/AdamW × FP32/FP16).
+The frozen dirty snapshot records base0eb34c7 plus exactly resident.cpp and its
+dtype regression; client digest cf465934a167bd499791a10a9ba06def550ac757992e199f81e9e43568e3b282.
+Source and resource record: `runs/NAME/development.json`;6CPU/8GiB/900s service.
+MainPID0,empty cgroup,no guard survivors. New test linked to the retained old
+adapter fails as expected (`runs/g4-scale-control-red01/result.json`). This is
+development evidence,not clean qualification. FP16 scale training explicitly
+uses its pre-existing0.002/0.02 policy; public module tolerances are unchanged.
+
+Running: `tide-g4-npu-resident10.service` at unchanged clean9c3ffd3, original
+5400s workload/6000s service,8CPU/24GiB/3NPU. Preflight passed and actual component
+checks are running; no full pass yet. Physical8,9,14 map to logical0,1,2.
+Plan `plans/NAME.{json,sh}`; output
+`runs/NAME/{status.json,task.log,bounded.json,sharing.json,gate/result.json}`.
+The scale adapter is outside this gate's device_online/online_bench consumers;
+module qualification and exact source bridge passed. CPU build may overlap
+correctness only; heavy profiling/timing remains serial after qualification.
+
+Resident09 failed before operator execution: visibility9,8,14 violated the
+installed TorchNPU/RTS ascending-order requirement and returned zero devices.
+Its failed receipt remains. Site launcher `g-stage-shared-launch02.py` sorts
+only the selected set;7 synthetic selection/vendor-parser checks passed in
+`runs/g-stage-shared-order-check01.json`. No occupancy restriction was added.
+Old batch07 remains failed and all child08 successors remain unsubmitted.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
@@ -118,7 +139,7 @@ warmup and one collected training step; Add SGD/Attention AdamW. Offline estimat
 preserve logical batch,Attention normalization,gradient and optimizer boundaries.
 These profiles diagnose execution; they are not unprofiled throughput results.
 
-User-authorized occupied-card launcher `plans/g-stage-shared-launch01.py` records
+User-authorized occupied-card launcher `plans/g-stage-shared-launch02.py` records
 two occupancy snapshots and physical/logical mapping,prefers lower load and
 requires healthy devices with10GiB observed HBM headroom. No exclusive lease,
 empty-card admission or foreign process operations. External contention disclosed.

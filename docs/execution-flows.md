@@ -321,6 +321,12 @@ Add 的内部结构求导图可使用批量结果的行视图；公共 numeric �
 存储优化；状态时钟包装转发同一契约。此改动不声明内核融合或性能收益。
 
 
+历史 standalone scale 消费者的选择用模型按每个 region 提供控制元数据，
+与公共核心的 region 所有者解析一致。FP16/FP32 payload 的控制值保持 FP32，
+CPU FP64 控制保持 FP64；这些选择用引用不能更改真实模型 payload 或参数所有权。
+scale 的 D8 FP16 数值门禁沿用其单独声明的历史策略，见
+[accelerator-scale](accelerator-scale.md)；公共模块和常驻 Full 的比较策略分别记录。
+
 ### 11.2 CUDA 常驻后端与资格边界
 
 公共 DeviceProgram/DeviceSequence 接口由 CANN 和 CUDA 独立实现。CUDA 将静态
