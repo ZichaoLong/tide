@@ -1,6 +1,6 @@
 {
   "schema": "tide-qualification-environment-evidence-v1",
-  "reviewed": "2026-10-11T09:07:20.353760+00:00",
+  "reviewed": "2026-10-11T09:38:55.710342+00:00",
   "implementation": "4f23993315554f68be3352d7d15533a0e445b260",
   "previous_fix": "dd5e22060d6521ed291938858f40efa54b5c18bd",
   "scope": "qualification process environment and artifact lifecycle; no graph/model/compiled source change, no new performance or GPU claim",
@@ -150,6 +150,21 @@
         "runs/g2-component-cwd-cpu-clean01/tests.xml": "78d1bacd615cb95234447b072c0e0796602540b1cf550498f70739f78e6b374b",
         "runs/g2-component-cwd-cpu-clean01/task.log": "44c8b0601a5863453af78822891fa2ec813bdb87c2216d57a7b02edc0d12d0f7"
       }
+    },
+    {
+      "name": "g2-component-raw-cpu-clean01",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "state": "passed",
+      "tests": 31,
+      "scope": "Public component artifact cwd and NPU callback retention; synthetic CPU lifecycle checks only",
+      "peak_combined_rss_bytes": 283586560,
+      "remaining_group_pids": [],
+      "artifacts": {
+        "runs/g2-component-raw-cpu-clean01/status.json": "99d1f1eb27ea7c15ff12032f32ddccf444c87d74b61b7a86ebe47e6815b68cfe",
+        "runs/g2-component-raw-cpu-clean01/bounded.json": "6e02ab284927e6c18bbf2fbd510d3d946716385768622becf27d2f30be3b937e",
+        "runs/g2-component-raw-cpu-clean01/tests.xml": "b2f1a96f4c01768ed2c83a4014ea581db87f6fdcca519c120515608ced7bc6d6",
+        "runs/g2-component-raw-cpu-clean01/task.log": "9d4a2e9475d7151b356af33071bde36f43aa5439b48f552b695095bc092c6583"
+      }
     }
   ],
   "retained_failures": [
@@ -234,5 +249,33 @@
     },
     "previous": "4f23993315554f68be3352d7d15533a0e445b260",
     "scope": "Only component orchestration and failure records change; active NPU batch remains frozen at4f23993 with artifact cwd already provided by its launcher"
+  },
+  "profile_recording_followup": {
+    "implementation": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+    "source_bridge": {
+      "schema": "tide-exact-entry-source-bridge-v1",
+      "qualified_source": "4f23993315554f68be3352d7d15533a0e445b260",
+      "current_source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "changed_files": [
+        "docs/ROADMAP.md",
+        "docs/STATUS.md",
+        "docs/evidence/qualification-environment-20261011.json",
+        "docs/evidence/qualification-environment-20261011.md",
+        "docs/execution-flows.md",
+        "scripts/profile_batched_components.py",
+        "tests/test_component_profile_environment.py"
+      ],
+      "unchanged": {
+        "core": "0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0",
+        "resident": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b",
+        "functions": {
+          "make_case": "c7a6a1fb07913c12486208b4bb53bbdfb64becc90c122d85cced440dc1929537",
+          "operation": "c177e8e231a2746fa2b7c1f8bc551cb2f2d0bffea1c734da55f1d87bc7922bee"
+        },
+        "timed_segment_sha256": "278e9619685fd83655453e9cd36a7e673a72ea74ce534630e5cc3b4fad373684"
+      },
+      "scope": "Library/model/scheduler/VJP/checkpoint and compiled code unchanged. Only component profiler orchestration,tests and docs changed; original module gate stays4f23993-scoped. New31-case clean CPU gate is mandatory; no old test is relabeled."
+    },
+    "source_bridge_sha256": "4eb9b9bbf3879625612c422beacffe16a9b11ec59218894f0f5343debefcff2e"
   }
 }

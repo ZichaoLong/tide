@@ -19,7 +19,8 @@ standalone checker. New correctness-only budget:1640s workload,1700s shell,
 No passed case or performance measurement repeats. Plan:
 `plans/g4-module-completion01.json`; per-case inventory/admission checks:
 `plans/g4-module-inventory01.{py,json}`,7 synthetic audit checks passed.
-After it passes, preflight and submit `g-stage-device-batch07` / child08 for only
+After it passes, preflight and submit `g-stage-device-batch07` / child08 at
+clean9c3ffd3 for only
 the four previously unstarted stages; unchanged per-stage scopes and ceilings,
 12900s total child ceilings/13200s controller. The successor batch is unsubmitted.
 Completion logs: `runs/g4-module-completion01/{status.json,task.log,bounded.json,gate.json}`;
@@ -162,10 +163,12 @@ The component collector now passes its `analyse_flag=False` callback into the
 TorchNPU profiler. Installed TorchNPU2.10 otherwise resets to export-only mode
 and deletes the original collection; the prior unused callback did not prevent
 that.31 directed CPU checks passed, including synthetic NPU callback/raw-retention
-coverage (`runs/g2-component-raw-dev01.xml`). Commit and qualify this recording
-fix before any component measurement. Model generation,operation,one warmup,
+coverage (`runs/g2-component-raw-dev01.xml`), then31 clean CPU checks passed at
+9c3ffd3 (`g2-component-raw-cpu-clean01`), with MainPID0,empty cgroup and no guard
+survivors. The fix is committed and pushed; source `sources/g-stage-profile-raw-clean01`. Model generation,operation,one warmup,
 one timed step and one untimed trace remain unchanged. The unsubmitted batch07
-will use the new fixed source after exact-delta and workload-function audits;
+now uses9c3ffd3 after exact-delta,core/resident and workload/timing-function
+audits (`plans/g-stage-profile-source-bridge01.json`);
 module completion continues at4f23993 and keeps that evidence scope.
 
 ## Shared NPU execution and finite successor scope

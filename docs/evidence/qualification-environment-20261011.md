@@ -11,6 +11,7 @@ sources,receipt/log hashes and terminal service checks.
 | --- | --- |
 | dd5e220 related CPU entry/library checks | 46 passed,92.94s |
 | 4f23993 related CPU entry/library checks | 50 passed,94.31s; no skips |
+| 9c3ffd3 raw NPU collection callback follow-up | 31 clean CPU lifecycle checks passed; synthetic callback coverage, no NPU profile claim |
 | 7da5242 component-entry lifecycle follow-up | 30 passed,0.60s; no skips; synthetic CPU checks |
 | 4f23993 Python FP32 NPU mixed-pdg | All7 checks passed: complete observables,independent VJPs/None,chunk continuation,trace-disabled results,3 AdamW steps,fresh-process checkpoint,CPU checkpoint handoff |
 
@@ -44,3 +45,12 @@ resolution/operation failures and trace export; they are not device or timing
 evidence. AST source hashes prove make_case/operation unchanged from4f23993.
 The active NPU batch uses that earlier fixed source and already supplies artifact
 cwd; no live plan/source was edited and no measurement was repeated.
+
+**9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b** connects the public TorchNPU
+`analyse_flag=False` handler to the profiler. Installed TorchNPU2.10 source shows
+that omitting it selects temporary export mode and deletes the raw collection.
+The new callback preserves raw data for one explicit export.31 clean CPU checks
+passed; real NPU collection remains a separate stage. The source bridge records
+identical library/core/resident code,make_case/operation hashes and exact warmup/
+measurement statements relative to4f23993. Original qualification stays at its
+original commit; this does not claim an old test was executed on9c3ffd3.
