@@ -134,12 +134,22 @@ Exact launch commands are recorded in status.json; each uses source-root job.py,
 Prepared successor `plans/g-stage-device-batch06.{py,json}` / child07 uses the
 same4f23993, matched clean02 builds, artifact cwd and compiler limits1. It is
 running as `tide-g-stage-device-batch06.service`; the module child is
-`tide-g4-npu-modules07.service`. Both prerequisites and preflight passed. Receipt:
+`tide-g4-npu-modules07.service`. Python FP32 passed all57 named cases;
+Python FP16 is running. Native FP32/FP16,standalone,training,resident and
+performance remain unaccepted. Both prerequisites and preflight passed. Receipt:
 `runs/g-stage-device-batch06-preflight01.json`. Original check-only command (now correctly refuses used outputs):
 `python /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch06.py --check-only`.
 
 [Environment qualification evidence](evidence/qualification-environment-20261011.md)
 records the completed checks separately from the live batch.
+
+The public `profile_batched_components.py` entry now also changes to its output
+cwd before device resolution/model creation, rather than only before trace
+export. Resolution failures get explicit failed records and no fabricated device.
+30 directed CPU checks passed (`runs/g2-component-cwd-dev01.xml`). Commit this
+entry-only correction then qualify it at `g2-component-cwd-cpu-clean01`.
+The active batch remains frozen at4f23993 and already launches numerical children
+from artifact directories; no running source/plan or timing policy changed.
 
 ## Shared NPU execution and finite successor scope
 

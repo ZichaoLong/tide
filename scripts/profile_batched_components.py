@@ -8,13 +8,13 @@ import argparse
 from collections import Counter
 from dataclasses import replace
 import json
-import os
 from pathlib import Path
 import sys
 import time
 import torch
 from durable_records import write_json
 from source_identity import source_state, digest
+from python_environment import working_directory
 
 
 def make_case(kind, rows, width, dtype, device, read_profile):
@@ -96,14 +96,20 @@ def main():
     if not 1 <= a.rows <= 512 or not 2 <= a.width <= 2048 or a.width % 2:
         p.error('finite component profile requires rows1..512 and even width2..2048')
     root = Path(__file__).resolve().parents[1];sys.path.insert(0, str(root/'python'))
-    from tidegraph.runtime import resolve_device, synchronize
     torch.set_num_threads(1);torch.set_num_interop_threads(1)
-    device, reason = resolve_device(a.device)
     out = a.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
+    # Vendor initialization may write kernel caches before the first operator.
+    # Protect the fixed source even when invoked directly from its directory.
+    with working_directory(out):
+        run_component(a, root, out)
+
+
+def run_component(a, root, out):
+    from tidegraph.runtime import resolve_device, synchronize
     source, dirty = source_state(root)
     record = dict(schema='tide-batched-components-v1', state='running', source=source, dirty=dirty,
                   command=sys.argv, kind=a.kind, variant=a.variant, rows=a.rows, width=a.width,
-                  dtype=a.dtype, device=str(device), resolution_reason=reason,
+                  dtype=a.dtype, requested_device=a.device, device=None, resolution_reason='unresolved',
                   read_profile=a.read_profile,
                   torch=torch.__version__, input_seed=19, model_seed=7, warmup=1, measured_steps=1,
                   scope='pure PyTorch component composition; no native/LibTorch graph throughput claim',
@@ -111,6 +117,8 @@ def main():
                   tracking='existing local records only; Trackio off by user contract')
     write_json(out/'result.json', record)
     try:
+        device, reason = resolve_device(a.device)
+        record.update(device=str(device), resolution_reason=reason)
         case = make_case(a.kind, a.rows, a.width, getattr(torch, a.dtype), device, a.read_profile)
         expected = operation(case, a.kind, 'replay')
         actual = operation(case, a.kind, 'batched')
@@ -128,7 +136,6 @@ def main():
         # Save the timing before the separate, untimed profiler pass.
         write_json(out/'measurement.json', record)
         if a.profile:
-            os.chdir(out)
             if device.type == 'npu':
                 import torch_npu
                 profiler = torch_npu.profiler
