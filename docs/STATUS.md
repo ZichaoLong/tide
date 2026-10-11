@@ -37,28 +37,42 @@ Attempt01 failed before build because its site launcher was not created after
 an incorrect core-path assertion;failed receipt retained,no survivors.
 Terminal zero exit,empty cgroup,no survivors;all5 CTests passed.
 
-**Running `tide-g-stage-device-batch09.service`:**`TASK/plans/g-stage-device-batch09.{json,py}` at
+**Failed `tide-g-stage-device-batch09.service`:**`TASK/plans/g-stage-device-batch09.{json,py}` at
 clean00b1775,cwd `TASK/sources/g4-scale-control-clean01`. Its full
 resident/scale/module/CPU prerequisites have passed and been audited. It
 contains only `g2-npu-components10`→`g2-npu-complete-profiles10`:6 component cases
-and4 complete traces,none measured yet. Child service ceilings1500s+2700s;
+and4 complete traces,only Read replay timing completed before export failure. Child service ceilings1500s+2700s;
 controller4500s. Existing inner/workload budgets unchanged. No second tranche.
 
-All correctness/resource/source prerequisites and the batch check-only passed;
-receipt:`TASK/runs/g-stage-device-batch09-preflight.json`. Controller and first
-child g2-npu-components10 are active in separate background.slice cgroups.
-Next: monitor each case to terminal,inspect correctness,timing,
-raw trace,per-device calibration and actual host/device work. Stop at first failure,
-retain measurement/raw outputs,and do not retry measurements or enlarge budgets.
-Controller output:`TASK/runs/g-stage-device-batch09/{status.json,batch.json,task.log}`;
-children:`TASK/runs/g2-npu-{components10,complete-profiles10}`. Exact argv/cwd and
-budgets are in the sealed plans and receipts. Both child units run in their own
-background.slice cgroups with the existing guard. Prior batch08 remains
-unsubmitted/blocked;do not use it. No performance result is available at submission.
+All correctness/source prerequisites passed. Performance batch09 and components10
+failed at first Read replay profile export:aggregate RSS exceeded the unchanged
+8GiB inner cap. Both units are terminal,MainPID0/empty cgroups;guard has no survivors.
+The independent timed measurement completed (0.010990634560585022s),with parity
+checked,then profiler export failed. Preserve measurement.json,raw collection and
+all failed/running nested receipts. No timing repeat or budget enlargement.
+Remaining5 components and all4 complete traces are unstarted,not a live queue.
+Failed tide-g2-read-replay-export01.service before analysis (wrong API entry);
+terminal,MainPID0/empty cgroup,no guarded survivors. Retained unchanged.
+Failed export02:cap1 prematurely exited with pending tasks (NON_BLOCKING helper);
+no trace produced. Terminal,empty cgroup,no survivors.
+Passed tide-g2-read-replay-export03.service:explicit text output and
+blocking timeline after export,one parser worker. Offline raw recovery found235
+actual kernel events;measurement0.010990634560585022s and original raw unchanged.
+4CPU/8GiB/180s service,135s guard;11.1167s,peak2,892,038,144B;terminal zero exit,
+empty cgroup,no survivors. Original batch09/components10/export01/export02
+remain failed. Plans/runs retain exact hashes and logs.
+
+Implemented deferred NPU capture and standalone offline exporter;23 directed CPU
+lifecycle tests passed. No graph/model/backend implementation changed. Next:commit
+this implementation,create clean fixed source g2-profile-export-clean01 and run
+focused CPU qualification;then declare the5 unmeasured component cases with
+capture+export sharing180s/8GiB/2GiB bounds,followed by4 unstarted native traces.
+Controller: TASK/runs/g-stage-device-batch09/{status.json,batch.json,task.log};
+case: TASK/runs/g2-npu-components10/{assessment.json,read-replay.log,
+read-replay/measurement.json,read-replay/raw};plan and input hashes remain sealed.
 
 Latest pushed implementation:e3c86d70795c594eafbc587388d9e984c3f92612 (test-only
-State/Read stream boundary). Repair evidence is committed;new complete resident evidence/support claims are
-being committed separately;active jobs read immutable snapshots,not this worktree.
+State/Read stream boundary). Repair evidence is committed;complete resident evidence/support claims were committed as ffe4e49;active jobs read immutable snapshots,not this worktree.
 Audit writer:`TASK/plans/audit-g4-repair-evidence01.py`.
 
 ## Implemented and qualified scope
@@ -73,7 +87,7 @@ Audit writer:`TASK/plans/audit-g4-repair-evidence01.py`.
 | State/Read checker | Clean e3c86d7:NPU FP32/FP16 each48 configurations,336 windows,18 refusals with default/nondefault streams;fresh checker linked unchanged hashed production libraries |
 | NPU builds | Clean a926703 dual cores,resident owners,installed/online/scale clients;7 resident host+5 scale CTests. Matching e565f96 imports and4 real profile preparation calls passed |
 | CUDA local | Clean a926703 core/resident/clients,102 semantic sources/1 CPU CTest,7 host CTests,271 CPU tests/84 optional skips. e565 imports/absent-CUDA refusal and e3c86d7 changed checker compile/link/help passed;no GPU execution |
-| Profiles/GPU | Complete mixed/resident CANN entry implemented/prepared;6 components and4 traces unstarted. Full GPU target commands ready;correctness,residency,multicard,memory/performance await hardware |
+| Profiles/GPU | Complete mixed/resident CANN entry implemented/prepared;Read replay timing retained;5 components and4 traces unstarted. Full GPU target commands ready;correctness,residency,multicard,memory/performance await hardware |
 
 Evidence:[initial](evidence/batched-vjp-cuda-local-20261010.md),
 [Add follow-up](evidence/add-batch-followup-20261010.md),

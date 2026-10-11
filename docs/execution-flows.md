@@ -396,3 +396,17 @@ CANN 采集容量下限为200MB；采集和导出共用总超时，进程组 RSS
 
 PyTorch 组件采集显式传入保留原始数据且不自动分析的回调，再单次导出时间线；
 不能只创建回调而不连接 profiler，以免厂商临时导出模式删除原始采集。
+
+
+组件可显式使用 `--profile --defer-profile-export`（仅 NPU）保存原始采集并退出。
+此时结果是 `collected`，不代表 trace 验证通过；`measurement.json` 保存原单次计时。
+独立进程运行 `scripts/export_component_profile.py --capture-dir CAPTURE
+--output-dir NEW_EXPORT`，只分析副本，校验原始采集与计时哈希不变。采集和导出
+共用原案例总时限、RSS 与输出预算，不增加测量次数。离线导出明确选择 text
+格式并检查真实设备事件、无 fallback、全部解析任务成功，才记为 `passed`。
+
+当前离线分析适配器限定 TorchNPU 2.10.0：单 session、单解析任务；将已有 timeline
+辅助任务改为等待 export 完成的阻塞任务，避免其 NON_BLOCKING 标记导致单 worker
+提前退出。适配仅在进程内生效并恢复，不修改厂商文件、模型或解析算法；版本／
+任务接口不支持时明确失败。解析器文件哈希与任务状态随导出记录；CPU 测试不能
+代替实际 NPU trace 验证。旧失败只允许独立离线恢复证据，不能改写为成功。

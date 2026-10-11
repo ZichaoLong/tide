@@ -5,9 +5,7 @@ Scalar replay reproduces the pre-batching attachment path using the same packed
 numeric forward. This is a component experiment, not a graph throughput claim.
 """
 import argparse
-from collections import Counter
 from dataclasses import replace
-import json
 from pathlib import Path
 import sys
 import time
@@ -15,6 +13,7 @@ import torch
 from durable_records import write_json
 from source_identity import source_state, digest
 from python_environment import working_directory
+from component_profile_summary import raw_identity, summarize_trace
 
 
 def make_case(kind, rows, width, dtype, device, read_profile):
@@ -91,8 +90,12 @@ def main():
     p.add_argument('--rows', type=int, default=32)
     p.add_argument('--width', type=int, default=128)
     p.add_argument('--profile', action='store_true')
+    p.add_argument('--defer-profile-export', action='store_true',
+                   help='NPU only: retain raw data for export in a separate bounded process')
     p.add_argument('--output-dir', type=Path, required=True)
     a = p.parse_args()
+    if a.defer_profile_export and not a.profile:
+        p.error('--defer-profile-export requires --profile')
     if not 1 <= a.rows <= 512 or not 2 <= a.width <= 2048 or a.width % 2:
         p.error('finite component profile requires rows1..512 and even width2..2048')
     root = Path(__file__).resolve().parents[1];sys.path.insert(0, str(root/'python'))
@@ -119,6 +122,8 @@ def run_component(a, root, out):
     try:
         device, reason = resolve_device(a.device)
         record.update(device=str(device), resolution_reason=reason)
+        if a.defer_profile_export and device.type != 'npu':
+            raise ValueError('deferred profile export requires an NPU')
         case = make_case(a.kind, a.rows, a.width, getattr(torch, a.dtype), device, a.read_profile)
         expected = operation(case, a.kind, 'replay')
         actual = operation(case, a.kind, 'batched')
@@ -150,34 +155,14 @@ def run_component(a, root, out):
                 if device.type == 'cuda':activities.append(profiler.ProfilerActivity.CUDA)
             with profiler.profile(activities=activities, **options) as trace:
                 operation(case, a.kind, a.variant);synchronize(device)
-            trace.export_chrome_trace(str(out/'trace.json'))
-            document = json.loads((out/'trace.json').read_text())
-            events = document if isinstance(document, list) else document['traceEvents']
-            device_pids = {e['pid'] for e in events if e.get('name') == 'process_name'
-                           and e.get('args', {}).get('name') == 'Ascend Hardware'}
-            kernels = [e for e in events if e.get('ph') == 'X' and
-                       ('kernel' in str(e.get('cat', '')).lower() or
-                        (e.get('pid') in device_pids and
-                         str(e.get('args', {}).get('Task Type', '')).startswith('KERNEL')))]
-            if device.type != 'cpu' and not kernels:
-                raise RuntimeError('profile contains no actual accelerator kernel events')
-            fallback = [e.get('name') for e in events if any(t in str(e.get('name', '')).lower()
-                        for t in ('cpu_fallback', 'fallback_to_cpu', 'fallback to cpu'))]
-            if fallback:
-                raise RuntimeError('unexpected CPU fallback events: ' + repr(fallback[:10]))
-            stages = Counter()
-            for e in events:
-                if e.get('ph') == 'X' and e.get('name') in {'batched_read', 'scalar_read_replay',
-                        'packed_numeric', 'batch_graph', 'scalar_state_replay', 'component_backward'}:
-                    stages[e['name']] += e['dur']
-            record.update(host_stage_us=dict(stages), kernel_events=len(kernels),
-                kernel_names=dict(Counter(e['name'] for e in kernels)),
-                kernel_total_us=sum(e['dur'] for e in kernels),
-                kernel_span_us=(max(e['ts']+e['dur'] for e in kernels)-min(e['ts'] for e in kernels)) if kernels else 0,
-                trace_sha256=digest(out/'trace.json'), observed_fallback_events=fallback,
-                trace_event_counts=dict(Counter(e.get('name') for e in events if e.get('ph') == 'X')))
+            if a.defer_profile_export:
+                record.update(profile_state='collected', raw_files_sha256=raw_identity(out/'raw'),
+                              measurement_sha256=digest(out/'measurement.json'))
+            else:
+                trace.export_chrome_trace(str(out/'trace.json'))
+                record.update(summarize_trace(out/'trace.json', device.type), profile_state='exported')
         if source_state(root) != (source, dirty):raise RuntimeError('source changed during component experiment')
-        record['state'] = 'passed'
+        record['state'] = 'collected' if a.defer_profile_export else 'passed'
     except BaseException as error:
         record.update(state='failed', error=repr(error));raise
     finally:
