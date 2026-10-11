@@ -1,0 +1,214 @@
+{
+  "schema": "tide-qualification-environment-evidence-v1",
+  "reviewed": "2026-10-11T08:40:14.666629+00:00",
+  "implementation": "4f23993315554f68be3352d7d15533a0e445b260",
+  "previous_fix": "dd5e22060d6521ed291938858f40efa54b5c18bd",
+  "scope": "qualification process environment and artifact lifecycle; no graph/model/compiled source change, no new performance or GPU claim",
+  "completed": [
+    {
+      "name": "g4-vendor-env-cpu-clean01",
+      "source": "dd5e22060d6521ed291938858f40efa54b5c18bd",
+      "state": "passed",
+      "started": "2026-10-11T08:18:03.466820+00:00",
+      "finished": "2026-10-11T08:19:39.367626+00:00",
+      "peak_combined_rss_bytes": 814571520,
+      "remaining_group_pids": [],
+      "artifacts": {
+        "runs/g4-vendor-env-cpu-clean01/status.json": "9d27e35dfc7720fd3908c333b1a85db9ebd8eefbef70079cb67585836844a516",
+        "runs/g4-vendor-env-cpu-clean01/bounded.json": "6ed2223ade554b56f25d4a9a4003d01448b73ff486900e817bf872186b5187c3",
+        "runs/g4-vendor-env-cpu-clean01/task.log": "049b1784715dc9fe496b080496455868b33606b78314f0a931843517921a187d",
+        "runs/g4-vendor-env-cpu-clean01/tests.xml": "012ffe2d76bcd762591282ed1b35cf40702e028aba987bc22d1aba60bef7d29e"
+      },
+      "tests": 46
+    },
+    {
+      "name": "g4-artifact-cwd-cpu-clean01",
+      "source": "4f23993315554f68be3352d7d15533a0e445b260",
+      "state": "passed",
+      "started": "2026-10-11T08:34:01.873810+00:00",
+      "finished": "2026-10-11T08:35:39.105345+00:00",
+      "peak_combined_rss_bytes": 814440448,
+      "remaining_group_pids": [],
+      "artifacts": {
+        "runs/g4-artifact-cwd-cpu-clean01/status.json": "798f6239645429f0d96a00d899b1b148464f030c3a29de50914011b1ce3219fc",
+        "runs/g4-artifact-cwd-cpu-clean01/bounded.json": "d5fcd676a01f62837e9415412e19ca26589b3d4922219ad8894c676f5cf6420e",
+        "runs/g4-artifact-cwd-cpu-clean01/task.log": "24dc9f42dad8ad3504c8fc58b0abd240d567a0b20e3c8b7c71ee4493a89ba3de",
+        "runs/g4-artifact-cwd-cpu-clean01/tests.xml": "9c1c3e2309cb8846fabc1eadcf5dc663db88d1b4c7b6ec089faeb1e7913a98cb"
+      },
+      "tests": 50
+    },
+    {
+      "name": "g4-npu-resume-calibration02",
+      "source": "4f23993315554f68be3352d7d15533a0e445b260",
+      "state": "passed",
+      "started": "2026-10-11T08:34:01.872741+00:00",
+      "finished": "2026-10-11T08:34:44.359642+00:00",
+      "peak_combined_rss_bytes": 10379898880,
+      "remaining_group_pids": [],
+      "artifacts": {
+        "runs/g4-npu-resume-calibration02/status.json": "345649c0cd93b9cf4b92681176abc87522bbd366d7a12cad806a37acdeb2ab44",
+        "runs/g4-npu-resume-calibration02/bounded.json": "fe753f6d1c398cbb6c8cfd95f280715f4a4d94215ee379e254f114fd58a26084",
+        "runs/g4-npu-resume-calibration02/task.log": "20b4e714cf7e205d539e230e98b9c6defa583a2960e18aa3156d73863745aca3",
+        "runs/g4-npu-resume-calibration02/calibration.json": "ec6006d40cefca88bb8b986c3827c3e011d9718e0f5da4ab86e79dea0a97cbea",
+        "runs/g4-npu-resume-calibration02/gate/result.json": "2d97725d14d8c94b4b4eba6acc4f07e27c5869364c25ef870c07c89405b338d1",
+        "runs/g4-npu-resume-calibration02/sharing.json": "ab021db8baf65eb520fdeb580403ea9c61b5210a74cd13afb84d6606223b3e0f"
+      },
+      "case": {
+        "id": "mixed-pdg",
+        "state": "passed",
+        "coverage": {
+          "nodes": 4,
+          "edges": 4,
+          "regions": 4,
+          "observed_nodes": 4,
+          "unobserved_nodes": 0,
+          "events": 11,
+          "outputs": 2,
+          "pending": 2,
+          "state_owners": 4,
+          "history_owners": 4
+        },
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "checks": [
+          {
+            "name": "complete-observables",
+            "state": "passed"
+          },
+          {
+            "name": "independent-vjps",
+            "state": "passed",
+            "roots": [
+              "all",
+              "output",
+              "state",
+              "pending",
+              "first-content",
+              "first-output",
+              "first-pending"
+            ],
+            "leaves": 59,
+            "disconnected": 12
+          },
+          {
+            "name": "chunk-observables-and-vjps",
+            "state": "passed"
+          },
+          {
+            "name": "requested-trace-disabled-values-and-vjps",
+            "state": "passed"
+          },
+          {
+            "name": "optimizer-trajectory",
+            "state": "passed",
+            "steps": 3,
+            "optimizer": "adamw"
+          },
+          {
+            "name": "fresh-process-checkpoint",
+            "state": "passed",
+            "exit_code": 0
+          },
+          {
+            "name": "checkpoint-handoff-to-cpu",
+            "state": "passed"
+          }
+        ],
+        "tolerances": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "elapsed_seconds": 18.226546689867973
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "g-stage-device-batch03",
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "state": "failed",
+      "reason": "fresh checkpoint process lost vendor PYTHONPATH",
+      "receipt": "runs/g-stage-device-batch03/status.json",
+      "sha256": "54088995a134eb2dbb62ae50d40e8e676e54f57f6b90fdf70255dd4da75110eb"
+    },
+    {
+      "name": "g4-npu-modules04",
+      "source": "e565f962da63a7e5ceb5ffdbd0ec6699db95c296",
+      "state": "failed",
+      "reason": "operator doctor passed; missing tbe in first mixed-pdg resume",
+      "receipt": "runs/g4-npu-modules04/status.json",
+      "sha256": "1b6381666b392bde841b179d21a483182d7ac5b2dce3be5c17915c9458fd1453"
+    },
+    {
+      "name": "g-stage-device-batch04",
+      "source": "dd5e22060d6521ed291938858f40efa54b5c18bd",
+      "state": "failed",
+      "reason": "first module child exceeded original12GiB RSS cap",
+      "receipt": "runs/g-stage-device-batch04/status.json",
+      "sha256": "c9a706af1384e1a85e29da0efe9ddc68c016d1b007641a52fc54272231cc704e"
+    },
+    {
+      "name": "g4-npu-modules05",
+      "source": "dd5e22060d6521ed291938858f40efa54b5c18bd",
+      "state": "failed",
+      "reason": "five first-case checks passed; observed12909670400B RSS above12884901888B cap",
+      "receipt": "runs/g4-npu-modules05/status.json",
+      "sha256": "59e0ffa73339496c34cfa0e8d336c60e178827ea02ff6ad3912c50886ad57f8f"
+    },
+    {
+      "name": "g4-npu-resume-calibration01",
+      "source": "dd5e22060d6521ed291938858f40efa54b5c18bd",
+      "state": "failed",
+      "reason": "guard rejected vendor-generated untracked kernel_meta before workload",
+      "receipt": "runs/g4-npu-resume-calibration01/status.json",
+      "sha256": "c27745a394e415cfcb08183f7dd5ddaa8a21f963b9d1ece95193c280a8de498d"
+    },
+    {
+      "name": "g-stage-device-batch05",
+      "source": "4f23993315554f68be3352d7d15533a0e445b260",
+      "state": "failed",
+      "reason": "child site launcher import failed before device selection",
+      "receipt": "runs/g-stage-device-batch05/status.json",
+      "sha256": "2f672253e2c660150d63628cacb74d03c8c1766f10deb640d3eb5279e4567d83"
+    },
+    {
+      "name": "g4-npu-modules06",
+      "source": "4f23993315554f68be3352d7d15533a0e445b260",
+      "state": "failed",
+      "reason": "shell changed cwd before launcher imported source helpers",
+      "receipt": "runs/g4-npu-modules06/status.json",
+      "sha256": "508340ff518b77ac25875d4223947ddd802e372a23db270f610668d5c87b1893"
+    }
+  ],
+  "compiler_limits": {
+    "TE_PARALLEL_COMPILER": 1,
+    "TBE_PARALLEL_COMPILER": 1,
+    "CANN_KNOWLEDGE_BANK_PROCESS_NUM": 1,
+    "MAX_COMPILE_CORE_NUMBER": 1
+  },
+  "limits": [
+    "Aggregate RSS sums shared process mappings; this is not unique physical memory or a kernel allocation cap.",
+    "One mixed-pdg NPU case does not certify the full module/training/resident matrix.",
+    "Occupied devices are authorized; no other process was manipulated.",
+    "The original near-tie witness and named score-conditioned softmax policy remain unchanged."
+  ],
+  "preserved_generated_files": {
+    "record": "runs/g4-npu-modules05/artifact-relocation.json",
+    "sha256": "5d4101032f49885b8bc440f27644595133574056a653d3220a1fda3971d4ef9b"
+  }
+}

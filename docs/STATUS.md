@@ -4,18 +4,22 @@ The authorized G1–G5 stage continues after the previous F1–F7 local closure.
 State/Read batching, the Add assembly follow-up and full declared CUDA resident
 source are implemented; current CPU qualification and backend builds retain the
 exact source scopes below. Occupied NPU devices are explicitly authorized.
-All current services are terminal. The two new device attempts exposed
+The new clean4f23993 CPU gate passed50 cases; the complete mixed-pdg NPU
+resume calibration passed with peak aggregate RSS10379898880B (9.67GiB).
+The two earlier device attempts exposed
 qualification-environment defects/resource costs, not a passed device suite:
 batch03 lost CANN PYTHONPATH in its resume child; batch04 reached five first-case
-checks then exceeded the original12GiB aggregate RSS cap. Performance has not run.
+checks then exceeded the original12GiB aggregate RSS cap. Performance has not run. Batch05/modules06 also failed before device selection:
+the shell changed cwd before the site launcher imported its source helpers.
+New batch06/child07 keeps launcher cwd fixed; numerical children still use OUT.
+Its import/preflight checks passed; all prior receipts remain unchanged.
 
 The vendor-path correction is committed at dd5e220 and passed46 clean CPU tests.
 This next implementation keeps vendor-generated files in output directories,
 resolves relative native libraries before changing cwd and restores cwd on
 failure.32 directed CPU tests passed (`runs/g4-artifact-cwd-dev01.xml`). Next:
-commit this correction, qualify it from a clean snapshot, and run one bounded
-mixed-pdg resume calibration with CANN compiler pools limited to1. Only after
-that calibration passes, declare a fresh finite device batch with unchanged
+inspect running batch06 and child07 below. The correction is committed and pushed
+at4f23993315554f68be3352d7d15533a0e445b260; CANN compiler pools are limited to1. The calibration is passed and a fresh finite device batch is running with unchanged
 work/time/memory bounds. Do not resubmit failed identities or old matrices.
 Selector/upstream semantic extensions and actual GPU execution remain deferred.
 
@@ -113,10 +117,29 @@ fresh-process resume;500s workload,600s service,555s guard,6CPU,12GiB. This is
 correctness/resource calibration, not a performance measurement or budget increase.
 Vendor-source hashes remain in `plans/g4-npu-resume-calibration01.json`.
 
-Planned new identities: clean snapshot `sources/g-stage-artifact-cwd-clean01`,
+Passed qualification identities: read-only clean snapshot `sources/g-stage-artifact-cwd-clean01`,
 CPU job `g4-artifact-cwd-cpu-clean01` and NPU calibration
-`g4-npu-resume-calibration02`. They are not yet submitted. The CPU gate uses
+`g4-npu-resume-calibration02`. Both started2026-10-11T08:34:01Z in separate
+background.slice services at4f23993 and are terminal passed with MainPID0 and
+empty cgroups. NPU physical9 maps to logical0. CPU50 cases passed in94.31s,
+peak RSS814440448B; NPU case passed all7 checks with peak RSS10379898880B. No
+guarded children remain; the snapshot stayed clean. The CPU gate uses
 32 directed tests plus18 library qualification cases,600s/4CPU/8GiB.
+
+Each unit is `tide-NAME.service`; output is `runs/NAME/{status.json,task.log,bounded.json}`,
+plus CPU tests.xml or NPU calibration.json/gate/. Inspect with
+`systemctl --user show tide-NAME.service -p ActiveState -p Result -p MainPID -p ControlGroup`.
+Exact launch commands are recorded in status.json; each uses source-root job.py,
+`plans/g-stage-run-bounded01.py` and `plans/NAME.sh`. Do not resubmit either.
+Prepared successor `plans/g-stage-device-batch06.{py,json}` / child07 uses the
+same4f23993, matched clean02 builds, artifact cwd and compiler limits1. It is
+running as `tide-g-stage-device-batch06.service`; the module child is
+`tide-g4-npu-modules07.service`. Both prerequisites and preflight passed. Receipt:
+`runs/g-stage-device-batch06-preflight01.json`. Original check-only command (now correctly refuses used outputs):
+`python /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch06.py --check-only`.
+
+[Environment qualification evidence](evidence/qualification-environment-20261011.md)
+records the completed checks separately from the live batch.
 
 ## Shared NPU execution and finite successor scope
 
@@ -132,18 +155,24 @@ It neither claims exclusive ownership nor changes account queue/lock records.
 Shared-device timings must disclose external contention. Earlier inventory:
 `runs/g-stage-shared-resource01.json`; selection is refreshed at each launch.
 
-After calibration and clean CPU qualification pass, a new immutable plan may
+Calibration and clean CPU qualification passed. The immutable batch06 plan now runs
 run these dependencies, each in its own background.slice service:
 
 | Stage | Scope | Service ceiling |
 | --- | --- | --- |
 | modules | 1NPU; named Python/native FP32/FP16 modules and standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
 | training | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 cells;2500s | 45min,6CPU,12GiB,192tasks |
-| resident | 3NPUs; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
+| resident | 3NPUs; complete zero-skip target qualification;5400s | 100min,8CPU,24GiB,256tasks |
 | components | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
 | complete profiles | 2NPUs;4 Add/Attention × mixed-c/resident traces;600s/case,2600s total | 45min,8CPU,16GiB,256tasks |
 
 First failure stops successors; total child ceilings15900s/controller16200s.
+Resident Full trajectories explicitly select the existing score-conditioned softmax
+comparison from [resident-full-vjp](resident-full-vjp.md), whose width257 strict
+failure predates this stage. Only that checker uses the named policy; scores,
+other values/VJPs/updates retain original tolerances and all discrete routes stay
+exact. Original strict failures and the Add near-tie witness remain preserved;
+this is not a uniform strict-equivalence claim or a newly relaxed threshold.
 No automatic retries,timeout expansion,full-size cases or second tranche.
 Heavy measurements are serial; Trackio stays off. Original batch02/child03 plans
 were never submitted; batch03/child04 and batch04/child05 retain failed receipts.
