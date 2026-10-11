@@ -5,7 +5,7 @@ State/Read batching, the Add assembly follow-up and full declared CUDA resident
 source are implemented. Current CPU qualification, fresh backend builds and
 host preparation have passed. The user now explicitly authorizes occupied NPU
 devices, overriding the earlier no-process/low-utilization admission rule. The
-new finite batch03 is **prepared, preflight-passed and ready to launch** with
+new finite batch03 is **running** from2026-10-11T08:11:16Z with
 unchanged source, workloads and budgets. Device qualification/performance results
 remain pending. Selector/upstream semantic
 extensions remain deferred. No historical queue or old pause instruction resumes.
@@ -78,7 +78,7 @@ Audit `runs/g1-g3-followup-audit01.json` verifies hashes,clean source snapshots,
 terminal passed services with MainPID0/empty cgroups and no CPU guard survivors.
 Its writer `plans/audit-g1-g3-followup01.py` refuses overwrite. Old audits and
 failed/interrupted records remain intact; nested records of cancelled jobs may
-still say running and are not accepted. No active current-task job remains.
+still say running and are not accepted. The batch03 controller and its current child are active as recorded below.
 
 ## Shared-device finite batch and current action
 
@@ -100,8 +100,14 @@ and exact backend clean02 artifacts. The complete preflight and five synthetic
 selection checks passed: `runs/g-stage-device-batch03-preflight01.json`.
 Source/compiled-consumer/plan hashes, unchanged predecessors and unused outputs
 are checked. Batch03 and its child04 plans supersede the never-submitted batch02
-and child03 plans; old evidence/receipts remain unchanged. Batch03 is prepared,
-not yet submitted; the next action is the one-time launch below.
+and child03 plans; old evidence/receipts remain unchanged. Batch03 is
+now running as `tide-g-stage-device-batch03.service` in background.slice.
+The first child `tide-g4-npu-modules04.service` is active on physical9→logical0;
+its operator doctor is running. Later children are unstarted, not passed.
+Logs/receipts: `runs/g-stage-device-batch03/{status.json,task.log,batch.json}`
+and `runs/g4-npu-modules04/{status.json,task.log,sharing.json,gate.json}`.
+Next action: inspect these durable records until the batch terminates; do not
+resubmit a running or failed batch.
 
 | Planned child in dependency order | Scope | Service ceiling |
 | --- | --- | --- |
@@ -125,13 +131,13 @@ not observed memory calibration. Physical chunks preserve logical batch,
 Attention normalization,gradient and optimizer boundaries. Complete traces
 are diagnostic, not throughput measurements.
 
-Validate without submission:
+Original preflight command (the post-submission unused-output check now refuses):
 
 ```bash
 /usr/bin/python3 /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch03.py --check-only
 ```
 
-After successful preflight, submit once under the shared-device authorization:
+Recorded launch command, already submitted once; do not repeat:
 
 ```bash
 TASK=/mi/data2T/zlong/tide-execution-flows
