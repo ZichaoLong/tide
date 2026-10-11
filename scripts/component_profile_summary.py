@@ -1,6 +1,7 @@
 """Shared validation of collected component traces; no Torch imports."""
 from collections import Counter
 import json
+import math
 from pathlib import Path
 
 from source_identity import digest
@@ -20,6 +21,16 @@ def raw_identity(directory):
 def summarize_trace(path, device_type):
     document = json.loads(Path(path).read_text())
     events = document if isinstance(document, list) else document['traceEvents']
+    # TorchNPU offline text exports encode timestamps as decimal strings;
+    # Torch/CUDA exports commonly use JSON numbers. Normalize only profiler
+    # microseconds, never model clocks/counts or the retained raw document.
+    for event in events:
+        if event.get('ph') == 'X':
+            for key in ('ts', 'dur'):
+                value = float(event[key])
+                if not math.isfinite(value) or (key == 'dur' and value < 0):
+                    raise ValueError('invalid complete-event profiler time')
+                event[key] = value
     device_pids = {e['pid'] for e in events if e.get('name') == 'process_name'
                    and e.get('args', {}).get('name') == 'Ascend Hardware'}
     kernels = [e for e in events if e.get('ph') == 'X' and

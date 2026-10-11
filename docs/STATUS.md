@@ -63,10 +63,24 @@ empty cgroup,no survivors. Original batch09/components10/export01/export02
 remain failed. Plans/runs retain exact hashes and logs.
 
 Implemented deferred NPU capture and standalone offline exporter;23 directed CPU
-lifecycle tests passed. No graph/model/backend implementation changed. Next:commit
-this implementation,create clean fixed source g2-profile-export-clean01 and run
-focused CPU qualification;then declare the5 unmeasured component cases with
-capture+export sharing180s/8GiB/2GiB bounds,followed by4 unstarted native traces.
+lifecycle tests passed. No graph/model/backend implementation changed. Implementation committed and pushed as 1bba49799fe9a2549a58fa9c55f668219f69ed89.
+Passed tide-g2-profile-export-cpu-clean01.service at1bba497:49 focused CPU
+checks,zero skips;terminal success,empty cgroup,no survivors. Separate evidence
+commit will audit XML/receipts alongside the new actual profile lifecycle.
+
+Failed tide-g-stage-device-batch10 and g2-npu-components11:Read batched
+capture passed,measurement0.0019429884850978851s. All18 offline parser tasks
+succeeded and trace exists;summary failed because TorchNPU text timestamps
+are decimal strings. Original failed receipts retained;no remeasurement.
+Four remaining components and4 native traces unstarted;no active device queue.
+
+Summary normalizes profiler timestamp/duration numbers only;model int64 clocks
+unchanged.29 directed CPU tests passed and the retained actual trace summary
+now parses. Next:commit repair,clean CPU qualification and summary-only recovery
+of existing Read traces. Then execute only4 unmeasured State cases and4 complete
+native traces under unchanged case limits. Components/export use the new fixed
+source;complete native profile entry remains unchanged at clean00b1775 with
+its exact compiled-source checks. Each source scope will be explicit.
 Controller: TASK/runs/g-stage-device-batch09/{status.json,batch.json,task.log};
 case: TASK/runs/g2-npu-components10/{assessment.json,read-replay.log,
 read-replay/measurement.json,read-replay/raw};plan and input hashes remain sealed.

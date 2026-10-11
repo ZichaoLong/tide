@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
 import export_component_profile as entry
 from durable_records import write_json
 from npu_profile_analysis import serial_parser
+from component_profile_summary import summarize_trace
 
 
 def capture_at(path):
@@ -150,3 +151,26 @@ def test_unknown_manager_interface_fails(tmp_path):
         with serial_parser(parser, tmp_path/'tasks.json'):
             pytest.fail('unsupported manager accepted')
     assert parser.ConcurrentTasksManager is object
+
+
+@pytest.mark.parametrize('document_list', [False, True])
+def test_offline_decimal_timestamps_and_numeric_durations(tmp_path, document_list):
+    events = [dict(ph='M', name='process_name', pid=9, args={'name': 'Ascend Hardware'}),
+        dict(ph='X', pid=9, name='first', ts='1760181730000000.125', dur=2.25, args={'Task Type': 'KERNEL_AICORE'}),
+        dict(ph='X', pid=9, name='second', ts='1760181730000004.125', dur='1.5', args={'Task Type': 'KERNEL_AICORE'}),
+        dict(ph='X', name='component_backward', ts='1760181730000000', dur='6.5')]
+    path = tmp_path/'trace.json';write_json(path, events if document_list else dict(traceEvents=events))
+    before = path.read_bytes()
+    summary = summarize_trace(path, 'npu')
+    assert summary['kernel_events'] == 2 and summary['kernel_total_us'] == 3.75
+    assert summary['kernel_span_us'] == 5.5
+    assert summary['host_stage_us'] == {'component_backward': 6.5}
+    assert path.read_bytes() == before
+
+
+@pytest.mark.parametrize('field,value', [('ts', 'nan'), ('ts', 'inf'), ('dur', '-1'), ('dur', 'invalid')])
+def test_invalid_profiler_times_fail(tmp_path, field, value):
+    event = dict(ph='X',cat='kernel',name='device-op',ts=0,dur=1);event[field] = value
+    path = tmp_path/'trace.json';write_json(path, dict(traceEvents=[event]))
+    with pytest.raises(ValueError):
+        summarize_trace(path, 'npu')
