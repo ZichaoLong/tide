@@ -852,6 +852,20 @@
           "result": "failed",
           "reason": "Process time limit reached after4018.027822s warmup update; no valid steady CPU Attention training throughput or CPU/NPU ratio.",
           "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+          "scope": "Fresh standalone scale consumer5 CTests and8 CPU complete training cells after control-metadata fix. Existing FP16 scale tolerance retained.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "short-train"
+          ],
+          "test_command": "build_accelerator_scale.py; verify_accelerator_training.py --device cpu --dtype float32/float16 (exact argv in evidence)",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
+          "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
         }
       ]
     },
@@ -1234,6 +1248,33 @@
           "test_command": "qualify_accelerator.py complete per-case inventory from g4-npu-modules07 plus exact g4-module-completion01; tidegraph-accelerator-check; commands and hashes in audit",
           "result": "passed",
           "environment_manifest": "docs/evidence/npu-module-batching-20261011.md"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+          "scope": "Standalone scale8 NPU complete training cells,Add/Attention\u00d7SGD/AdamW\u00d7FP32/FP16. Three connected windows; independent observables,gradients and updates.",
+          "tiers": [
+            "parity",
+            "short-train"
+          ],
+          "test_command": "verify_accelerator_training.py --device npu --dtype float32/float16 (exact argv in evidence)",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
+          "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "e3c86d70795c594eafbc587388d9e984c3f92612",
+          "scope": "Clean State/Read checker rebuild with unchanged hashed production libraries:FP32/FP16 each48 configurations,336 windows,18 refusals,default/nondefault streams.",
+          "tiers": [
+            "build",
+            "feature",
+            "parity"
+          ],
+          "test_command": "clean tide-state-read-check --device=npu:0 --dtype=float32/float16",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
+          "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
         }
       ]
     },
@@ -1446,6 +1487,19 @@
             "static-cli"
           ],
           "test_command": "Frozen g3-followup-host01 plan: dynamic import/metadata and expected verify_resident_target.py absent-CUDA refusal"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "e3c86d70795c594eafbc587388d9e984c3f92612",
+          "scope": "Changed State/Read checker compiled/linked with unchanged hashed CUDA production libraries; help passed. No GPU hardware execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "clean CUDA tide-state-read-check --help",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
+          "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
         }
       ]
     }

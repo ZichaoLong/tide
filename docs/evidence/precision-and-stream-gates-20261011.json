@@ -1,0 +1,608 @@
+{
+  "schema": "tide-precision-and-stream-gates-v1",
+  "reviewed": "2026-10-11",
+  "scale_source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+  "checker_source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+  "jobs": [
+    {
+      "name": "g4-scale-control-clean01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "8",
+          "--seconds",
+          "855",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-scale-control-clean01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-scale-control-clean01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-scale-control-clean01",
+        "state": "passed",
+        "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+        "dirty": "",
+        "started": "2026-10-11T10:03:36.965154+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T10:10:34.805723+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "6446121504525f8c93733bfe8aad2014eb7ed6a8c870a148c8dbac34041c461b",
+        "task.log": "b7dec37ba0c925b074481ad8a24be4ab5bf725cd8ac29e4c58a5882378b3656e",
+        "bounded.json": "681aaeec30e124fbdddfd0042be031f10f1333d262629ce1ef66ffa95062d29d"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 855,
+          "aggregate_rss_bytes": 8589934592
+        },
+        "peak_combined_rss_bytes": 3224432640,
+        "process_seconds": 417.59103913232684,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-npu-training09",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "12",
+          "--seconds",
+          "2655",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-training09/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-training09.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-scale-control-clean01",
+        "state": "passed",
+        "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+        "dirty": "",
+        "started": "2026-10-11T10:22:54.145636+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T10:24:38.128072+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "76e66d61ccd83e966106d149d73cdfd816d69eea4c67f668cbed92013e45d802",
+        "task.log": "22d2e6605fc788aa622f83afd9f51360539b515845dac0a2986ca09fb0341bb2",
+        "bounded.json": "02e28e6c74c475ec04ba17f1652acc36916702b477c38fbff5d43e23b275eab3",
+        "sharing.json": "fd3a7ae2abe3d756801ee8059d9c813da4cd5fc39d40dd0785987d84a8127897",
+        "gate.json": "657695633892ad5de048bfc95fb411f25c61eccf7e1206c3b6274d9acde44c01"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 2655,
+          "aggregate_rss_bytes": 12884901888
+        },
+        "peak_combined_rss_bytes": 4831240192,
+        "process_seconds": 103.91242543235421,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-state-read-clean01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "4",
+          "--memory-gib",
+          "8",
+          "--seconds",
+          "255",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-state-read-clean01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-state-read-clean01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-state-read-clean01",
+        "state": "passed",
+        "source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+        "dirty": "",
+        "started": "2026-10-11T10:21:13.468654+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T10:22:06.985869+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "401f00f0793f89c28ccd03c4e1e7b3fe301fb03bd478e72ae601b1b7fa5251a3",
+        "task.log": "52ec8d1abf3b278fd08fc92f2ae17a647ac3b07d17b19c617f76f35e86146aa4",
+        "bounded.json": "d6c1b3acd4e97e2587247d8f192a3ffd88584794d0941e2d4a44a741fde7c4e2",
+        "sharing.json": "154231869899b61bf0b6bdb9ac08da523c23ac5ef22faa2e3f9604152ced6954"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 255,
+          "aggregate_rss_bytes": 8589934592
+        },
+        "peak_combined_rss_bytes": 4867731456,
+        "process_seconds": 53.2714931294322,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-state-read-cuda-host01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "4",
+          "--memory-gib",
+          "8",
+          "--seconds",
+          "195",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-state-read-cuda-host01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-state-read-cuda-host01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-state-read-clean01",
+        "state": "passed",
+        "source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+        "dirty": "",
+        "started": "2026-10-11T10:23:58.662964+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T10:24:20.981752+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "77a4162b473866589dcadd671261cf4ee625346c74e0607ed262f6930c34b0ba",
+        "task.log": "9c5aa9d79ed0405e7120e42f530f559600bd6183d5044dd67f6ee5369fa672ac",
+        "bounded.json": "1954597db24e94606c3d6226364f894efd9e526d8fe2bce41a9a6c6e5ea371d2"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 195,
+          "aggregate_rss_bytes": 8589934592
+        },
+        "peak_combined_rss_bytes": 1649061888,
+        "process_seconds": 21.281205885112286,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    }
+  ],
+  "training": [
+    {
+      "dtype": "float32",
+      "device": "cpu",
+      "cases": [
+        {
+          "name": "add-sgd",
+          "log_sha256": "7a8a048188d2e5359255b5240b2ed9559657264368ffd651f3fe986a7284704b",
+          "metrics_sha256": "d55314daf68a7ce13b5ec50c37c9b3f1e9e3fe3cea061db798831ead173f54dd",
+          "updates": 3
+        },
+        {
+          "name": "add-adamw",
+          "log_sha256": "209936ca6a8ab8ea8db35a997bc91df083f5b96bbc73728434fa13b460a4c051",
+          "metrics_sha256": "714b7ab218f02a200214273594996d943f85eab5ae300f9c114d0a447878bca9",
+          "updates": 3
+        },
+        {
+          "name": "attention-sgd",
+          "log_sha256": "9f56c6a376cab8492a69c7cab576bcc7c5a7056e49e7f462a1bb6bd7b8ebcc20",
+          "metrics_sha256": "12dfa5229c97afbe3c07f655bf9f950971bb035fca0d10926839655805b888d1",
+          "updates": 3
+        },
+        {
+          "name": "attention-adamw",
+          "log_sha256": "57f0be751f23a534c4918717a5665678b93dedb32de623ce4e36a85687970af0",
+          "metrics_sha256": "16baacb090f952168c4c0f4da5de61760bbf5181c52d4edc8f61c3647adc46ec",
+          "updates": 3
+        }
+      ],
+      "receipt_sha256": "75f3a5a2ab037632e0e8e0ace5bc372fa2b3bd8f50962cab01b60b4f69289965",
+      "scope": "correctness; emitted timings are incidental, not performance"
+    },
+    {
+      "dtype": "float32",
+      "device": "npu",
+      "cases": [
+        {
+          "name": "add-sgd",
+          "log_sha256": "4b2b4e81d77c0e8af2fff4c70b723aa567cb10a6a6ec3bd9c3be60b08b51c2a5",
+          "metrics_sha256": "fc860d4319118b6c032c1c0d6e37c80c4ef541de01a23910ebd57d26da86efb1",
+          "updates": 3
+        },
+        {
+          "name": "add-adamw",
+          "log_sha256": "69efaf056427f5dacb331422b3f815e2c9e130b3251fd9b33d9a7767eafbe4b6",
+          "metrics_sha256": "c0173f76edbf96873d0afb686372cf5046906450a09c6dea278e5c6577475ebe",
+          "updates": 3
+        },
+        {
+          "name": "attention-sgd",
+          "log_sha256": "7068a075fa55d02a433450f2f1c216169e360bcac086a486d323b86956557497",
+          "metrics_sha256": "bf707827987dd850dadd0c782c934f4670aed570d85e1f4a8d339ee6a6c9f433",
+          "updates": 3
+        },
+        {
+          "name": "attention-adamw",
+          "log_sha256": "c1e5e4cf862a5a4f603faab1578c2eb975f3c26220c649a43af9a948d2e099e3",
+          "metrics_sha256": "6fad72218ea2a4f43301ded82cc1c41b63f01c3996717e58f32cfed3ad1973be",
+          "updates": 3
+        }
+      ],
+      "receipt_sha256": "ae064db6621f3816c74326fcbed62f5d529396a14a84639ecedaef30b583497e",
+      "scope": "correctness; emitted timings are incidental, not performance"
+    },
+    {
+      "dtype": "float16",
+      "device": "cpu",
+      "cases": [
+        {
+          "name": "add-sgd",
+          "log_sha256": "a579b0afda0e7bb934ae2df3bb503450baa4e70167a42a67d369f879e3af7949",
+          "metrics_sha256": "be2db035ec08fc90b85f00b167c4e6e3f0b96710c3c44f982445583c3d863e16",
+          "updates": 3
+        },
+        {
+          "name": "add-adamw",
+          "log_sha256": "6650c7d08b3c32ad7b42b11f217390960c118297c155e908c7cf3cefed25cb37",
+          "metrics_sha256": "881672dfef5a661385635d904fb4aa23395fd6132c6b33b7c49e24163697e481",
+          "updates": 3
+        },
+        {
+          "name": "attention-sgd",
+          "log_sha256": "ef5678f0da8c42f128316de230cd4c20cfeac63087ddea058c41458bc5c306eb",
+          "metrics_sha256": "537953d940a1023242ee5acfbc45eec0cb4288e9f1e7ebe596061ca0ea926e90",
+          "updates": 3
+        },
+        {
+          "name": "attention-adamw",
+          "log_sha256": "88dcf398b464944ea50b9c2e0f2855bbebd9c4d8cd92632891b95f7c0d544c3c",
+          "metrics_sha256": "f3fdd0333376fd0f297dacbbf4b584d295d3dfd6e47580ffe30979f740e4e40f",
+          "updates": 3
+        }
+      ],
+      "receipt_sha256": "c43e175e089d4e3db4bd6e35e0e5a5879cb50be9ea5622e079c0adc9e1296766",
+      "scope": "correctness; emitted timings are incidental, not performance"
+    },
+    {
+      "dtype": "float16",
+      "device": "npu",
+      "cases": [
+        {
+          "name": "add-sgd",
+          "log_sha256": "1f342db22d8b6766467b868d14154adc9bf78685f834160c95fc8c8d91c3cac3",
+          "metrics_sha256": "39bcb9af019c7f01d9e27b102410eac0ddde437014fe19b15dcd9c81d0be5764",
+          "updates": 3
+        },
+        {
+          "name": "add-adamw",
+          "log_sha256": "3d8ee0785eb1a1ebe32d6cf652970bb36a44213d304d18fc723ffc0483967a27",
+          "metrics_sha256": "63b80311196b6876d8bab9e4fc7c42258a414b761f03aa6520f979b9bab2c3de",
+          "updates": 3
+        },
+        {
+          "name": "attention-sgd",
+          "log_sha256": "2426cddb7e408f3fb27cc96476f0a15cdf927ec9fe5adce0facdb8e317e8579e",
+          "metrics_sha256": "5f1fbb4f70cad79be2d2c46e7137f39fad6274ad6a9870aac66236bf04f23b24",
+          "updates": 3
+        },
+        {
+          "name": "attention-adamw",
+          "log_sha256": "982c37fc86b11fe95991b3a7d3a1823fb3c39c0f81b40d11915b542dd47fc3fd",
+          "metrics_sha256": "90ad35cd3bfb1bbfe5aed68ca673949deadeb63ded12ea4f997a1e4a91ac0c27",
+          "updates": 3
+        }
+      ],
+      "receipt_sha256": "5afccf4ba586027b1381a17a122f52aaa93299c36d534f70972ea5c61fc19229",
+      "scope": "correctness; emitted timings are incidental, not performance"
+    }
+  ],
+  "build": {
+    "client_source_sha256": "cf465934a167bd499791a10a9ba06def550ac757992e199f81e9e43568e3b282",
+    "binary_sha256": "5c74f5f7f430ed8ca142be645123826730a852900c8febeab3837361592001bd",
+    "core_sha256": "0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0"
+  },
+  "state_read": {
+    "source_sha256": "6c5213b43782f6ad9ef29a25dc7480e46f2d601d26e881dc785d707cd3722765",
+    "binary_sha256": "335f6e8a8dda38e0abc4d5066bd0b3f19cae508549706c36c7f2089d3c675a22",
+    "dtypes": [
+      "float32",
+      "float16"
+    ],
+    "configurations_per_dtype": 48,
+    "windows_per_dtype": 336,
+    "refusals_per_dtype": 18,
+    "caller_streams": [
+      "default",
+      "nondefault"
+    ],
+    "result_sha256": "0cfaa729fa891476718385aed9ffed036dbd8ff634e69144a6c527ba98aeed28",
+    "retained_libraries": {
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-content-flow.a": "2dc4c4c32c9056b0d5ba72c667b4750f6472f6deedcb8a3ca6a1dcc91ff41224",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-peer.a": "17030c8935daa7618320ed30fe26a51425565d9dfe7403ae02710a5514396b3e",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-packed-full.a": "92f5746709e5e2455313ef425bfab38065383bf8d756c4ec4ca28771a43b51b2",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-packed-lh.a": "7a68960c747cda360eb1d058b84e3a0f7bd689bb525de8f6d118f5b7c86088a9",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-broadcast.a": "6ad1c067c2d1940baf32412fc84ede14ddc973eb5ba252238657e73c9ef6e71a",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_broadcast_kernel.a": "8bbf89209a569e12cf9e1c093d23b97dc7ce9f57d0f8ee12cf5a377db9fe2a29",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-selector.a": "aea9eb21edea0ae43b90ece47e8f0fa51ab1ce8b0dba619183e4ad9b24b0aaf2",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_selector_kernel.a": "0f63b0d8e4b4138fc5f73d949bf1ad9c7e2507eb5e41f2d07373a8f7a01d48c3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-queue.a": "4de84b79165a7d2afe13e74de2ed56b6f4e2d78c8f693c4608ebe49ca4285951",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_queue_kernel.a": "2c668d89e9d9f99958e8b18ae4ba524eab30b3fc0110b1ef6a26eecf11c97a02",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-packed-sum.a": "084d9b100033b6bb92818e46cebec3457b419df862083de9ee3acc62ecf7ee00",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-ready.a": "084a131f1364b281afd763bdf3988e11530f9b364e34bda02e781ff9e716242d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-device-control.a": "04c9a9a8f91a601b943fca87fb41d2170c4c05ad377bcbfca870486ff74a93f3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/libtide-packed-queue.a": "783b42cbb14102324df627f567246d904be45d5c8fd0f21a524811b8f51ba7e3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/core-prefix/lib64/libtidegraph_runtime.a": "c458f4b079fee198b6ecd22d5790c69db0aef73b91032cd45b50baa1dd24acce",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/core-prefix/lib64/libtidegraph.a": "9d853591caaacc1c7f145a23df954bfb9888583ee2800fd2545b696e6d31fe2e",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_closure_kernel.a": "a4ab006f4ef33a250133608f8f5715f8364f9975190fb2cb489cc657648d30d2",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_ready_kernel.a": "25fe5dd48cc1b7b8b6e98d34a425ad65997afba47e22e853a77aae92bf67e1e8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_content_sum_kernel.a": "c2b3a2655d80326c845f96c22f83d4e57cc66fc0662a8ef276eb850fb1894d3d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_sum_plan_kernel.a": "bbe6bd9340e9b7d61f1fc774e1ae21292b448daa2d94e6137ac036d3c02f87a1",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_vector_sum_kernel.a": "e71374ddaa016b748560b697eacc83b85a61e9bccb1e8aa4835a58b9392bcd48",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_reverse_pack_kernel.a": "12919fe05d76d7b491b3b2a7c981be684dbedf8b59ae90b611d917f398db8d81",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_reverse_stage_kernel.a": "7c94a1749214eb64471f69dc4fdc5f67b5b117721eb6b203d7bcd6b0e2d68bff",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_reverse_merge_kernel.a": "aca4553fa02101affd73366d54d22d3e6a9fdff9589f65620cddbf9c717eca28",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_reverse_flags_kernel.a": "071e17c4fc863f6fca78d96a505a220e609c1e0a1a655cc1e960719d7ffab41b",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_read_plan_kernel.a": "6ee60fc92760c9d5c74834057671f4132754ccbbd6d747a972aade43e7e5e9d8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_shard_pack_kernel.a": "efee4c983541eb9abb3cabfdb9f073a2a03503c6c3d7c8057e3c4c654742ddb8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_shard_selection_kernel.a": "c708e84c619cb1402230100aade68f9b1276bbfa90569a4b52d4125bc0db2807",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_shard_merge_kernel.a": "e8b6cd4c15cf045a57b906b64b161d82430d25903f2705469b1d34500781ccd4",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_read_kernel.a": "8fd4686870c5ea5ec8b99a835f66a6779c18ed4cdaa4e8f8742a4619acaa128d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_vector_read_kernel.a": "16ec8e0f11e9ab78eeb841fcd16e9338a7402829307047367b795335bb630d90",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_read_reduce_kernel.a": "49dfca4be1e49bc452a26490e7605f900af18a63a792196ac5507ca134559d30",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_content_state_kernel.a": "01792ca802d135cfe79d05513448a9fccdd70da7313523e20e3e1b13f2f9d5de",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_vector_state_kernel.a": "5a065869f0af8191d87da34668fac7ca3a7b2352a9f172a3004b8f80a545697f",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_vjp_plan_kernel.a": "c2c6b2dd2e6d54d47c34ca7590fcee5a327f03d7d1db6932473df542bc0c41a9",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_state_vjp_kernel.a": "a8c2b5fafd42c09a51e5baa62da4400c8536072dd00bbdfbae1077ba3bdd6431",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_journal_kernel.a": "eb3d6b9750069f727cdb764a3c0bb5c0dda17f171b0402b99bb4cce254c286e8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_kernel.a": "51eba61a7af54cac27b3c2db3fdba4cfc99382ba79c064cc679decc854f5929c",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_shard_kernel.a": "ed9eb669b14a2038e3ef5b548f1580369c71a652b9290aa51ae4dd0c21c8a137",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_reverse_pack_kernel.a": "e403e874707e046728eb18d4e1438a84b99510df56f0c962d3ac60c254f14dde",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_reverse_merge_kernel.a": "b249dbbf1e77c484762ec572de69e8979f135291ff25b1375bc734c3d2634f34",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emission_reverse_links_kernel.a": "1e7842cbacf326fe65c283a62b97c2be3859487f149121ea6237b8c3ee039324",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emission_vjp_plan_kernel.a": "1d586e2729db26c2678a21ceebb916b3ad7b455806a8aa0358bf15b42924aa87",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emission_vjp_payload_kernel.a": "8d4b98c85a2475854272ca3e3eb4df35ffe46455309cbf67f64e248e90dc540f",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_projection_shard_plan_kernel.a": "a84cd2d35c52602bb0331a43c9e722fc7c984443452f1fb1b452fb165cbd3268",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emission_plan_kernel.a": "d92cda6a2859831d716487cd0c9d8a64e04a7f188c49bcdaa358a5c64b4fe832",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emission_chunk_kernel.a": "2736861da8e104293f38048a68351be421c0c5757ff214b0cec633058aa37701",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_plan_kernel.a": "07fdf4189a86735be99ce9d07c91bb09be4092184da7ce1f8dc0a964ef749348",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_chunk_kernel.a": "10444d71852486a70e05c8683936a0a6bbcf95700dbf6dd15061cec13e3cc7d5",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_payload_kernel.a": "2a6b9e87e3184c4b21d3fef25495e964294b7b408619a80dcfbb392c1e8f0fab",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_indices_kernel.a": "1797e6fb64386f465aafada9190c6d12775de017746492517ec56bf6a72e90b6",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_trace_kernel.a": "ac374d0ffc128ec865f8775441f0666e31c70daa72820a854f815774a0e29ba1",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_commit_kernel.a": "ae677f06c9499a88e6991e854928182da2e056603fd137b339ae4699cd971e67",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_pool_kernel.a": "cfaf6a6591a95bb4778913102bba75c7ea53e45ebb27c01ac89024a3f3b1ce49",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_plan_kernel.a": "3f838f9b9763cad4b327ccd8c417265468d4dc9db4171b153e671cdf61680c17",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_payload_kernel.a": "62f2b996e530f2be20311d7494e19e876bafe58883cdb5d97211dba3f035ee3d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_indices_kernel.a": "c1066f4faf6e3424d9389ef6a3c1b803ebcfad9af2e9979a2773ff798faf7dd8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_cache_kernel.a": "d16ece8f7770dd06803ef17841fc56330631a281fc1571d3ff0c1339ab531fb9",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_reverse_links_kernel.a": "2e90e6ed5db06e147b89c64d8a81ffa2b407c2f64d43c59d4a7c30285e6efaa9",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_reverse_plan_kernel.a": "da7695e9da4f46a0347bb6472070a05365c9b407d7908be665d65fe224e33986",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_reverse_pack_kernel.a": "9e3f764ae1b24af30eb5b9cd7ab4b190cb92dbf2d257454b7c700690ef50c537",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_reverse_fold_kernel.a": "d0ef5145b8bb4fab55e4a447d911e3ce9b9d7db78cb561e7d1ed8b36d6f1ad94",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_reverse_reduce_kernel.a": "709c74bc06c63d5780b95ff08dc7aef68b4ed1640db42870dea43cbec2694bbf",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_cache_merge_kernel.a": "d117032cc89b6ffdde76a64c4f7cc48443cfd5589640c1387c0dd4bfe95725c6",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_event_publish_kernel.a": "0037e13a7f70493c8eee16f8995f9c3ca6a109df31db4456bb50929ba034dbc2",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_tile_kernel.a": "088dc812e1c9b16fb24710dc52d262215e5a328dcca04370fb9327f66ef8dc5b",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_softmax_kernel.a": "362d20f6c5210e035ea877af60dca76a434b2758dd02289bc56a28eedf7071e5",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_merge_kernel.a": "b0b20073eec508215a836519b097bbe3bc37d429272bf0fd608254feed94da06",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_reverse_plan_kernel.a": "e68bcf6b59a9f1c82949e89d289c8d438abfb899a44be4ee2734059a05a1ac79",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_reverse_pack_kernel.a": "99ca24fd311fed784be3f4dceb53f146d4e9de8303ad329f061fb61aaa7d106b",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_reverse_weights_kernel.a": "1d4145baa40134dd2e96286a8a5366beb0d1a107c0f41ff8fc00fdc4561eeaf5",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_attention_reverse_reduce_kernel.a": "4506ebde5bf7a4c5e638e7c32b20a050a364f69da2a7564c85a2404cc3aa575e",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_reverse_links_kernel.a": "566b91abdd0ae534a3e087d9d42aa2770a449a3dcb6db1b82c6973dee2a50923",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_reverse_plan_kernel.a": "cdfbb9d02b4791cdc1c18451aa0b7c63d5cb2b51957c9ce51718aebe240af948",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_reverse_pack_kernel.a": "d00d34005f4c85a0f9f5763d9a1e3e771c0776ed0004251dd69ff20059d2799e",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_reverse_fold_kernel.a": "4f96d08a3ee8971f6f359602ce6fe8ddf7f74a96d975000a911b22ceb1d321b3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_cache_bias_merge_kernel.a": "80a0493b3a187c393eb8f53bbe47b159ddd095e5f1a15429087f1468fb79602b",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_plan_kernel.a": "8483415396025bbf6cb1a88f4f2a62645e46ce4f12c26f79370e04703ceac422",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_pool_kernel.a": "c0cf0d396dcd9fe67b434d52f830310660d7ea418b2a5d67d609710f9a8baadc",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_pack_kernel.a": "0d2be6b01f144ddd66614a17c87a7c56115709cd6fb167abc785894235f71697",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_state_kernel.a": "3121ecf41fca29e6631bc9de0143e6b40b5ad4005798ab24a632667fb75f8f39",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_queries_kernel.a": "7c04f12707790215df16282deb78bb3f0ba4781d0f3278c52663dcb04c5120fa",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_fiber_vjp_sources_kernel.a": "c43b7bc34dda2533f63cfa817c832e9f5ef0393baa0888a04527366f61c35b6e",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_aggregate_plan_kernel.a": "8f0e251c0020eee7831977e85a1eea7dd8d6a88ae55442ccfdfcc045ea84973f",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_aggregate_apply_kernel.a": "c0351eadf9e85ba8b92d9b2d1d037a0443b9bd3215bd617dbfcbc2222cf0b20d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_aggregate_vjp_plan_kernel.a": "1e60fcb476731154afa5faa4f6b4ce1f957a0dbf039bc9ea0b5e8bb2a94e7922",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_aggregate_vjp_payload_kernel.a": "7ebe6bd8f85bc681ae845f0bb00c126b9ccc395926ce75e13410be43035d815b",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_aggregate_vjp_reduce_kernel.a": "68bd24547695d1751382e50afd5eee040785fde60f66936fc937a245709922f3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_vjp_plan_kernel.a": "f62ff85b3bf1750bda20745feb725a06041591791359767a43b41cff4094fda2",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_vjp_payload_kernel.a": "66c0852579c531eb5e03870e6b5ed94feb67a54d6aaa864948a27b128d5281f6",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_full_vjp_reduce_kernel.a": "cb3f07e3e2307b7d4c2f9e56517f33ee281eb286050c4e45bebb6337792afb55",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_reverse_links_kernel.a": "83722204d215ef07d3f863b053ecc6c5103686d07ac179a901ae50820e58888a",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_extra_full_plan_kernel.a": "8f6b07c3e1ae2077364d241c8227a645d781a86ddb79fe19413874cabe888794",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_extra_full_payload_kernel.a": "c2d4ccbe40db37ec8974bae8ffc656b04c34940961fed20badf8e62cd2f60940",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_extra_full_reduce_kernel.a": "4436f524984d338db9512cbcdc472aa6bd900bf31f5a2a692cd836171ec70157",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_emit_mix_kernel.a": "9c8b22a9fa44c75cee68b8df4d555ca85d54ead788ba27ea4e23965cb8eeb673",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_control_plan_kernel.a": "71882a9a47c909c7b1d419b77709b57310ade11921c6a3970d27dc5397b14ede",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_control_payload_kernel.a": "fb64eee4664525a3cb5c0e49637586cd91ea62bced9f52794f8e33679d2b8757",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_control_read_reduce_kernel.a": "56f937020896e4f47d560c457e987d79755967a40445983ca0f5ee88a5321d2d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_control_merge_kernel.a": "e06894dc17b16dc700eaaccb82355ed61b096d70fdae751a8e20825cb40a6425",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_graph_reverse_meta_kernel.a": "0e30960b5aa5febf66c9d346688a4ca4baf433237415f32ce4ba1449b246e781",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_graph_reverse_payload_kernel.a": "e086df729f1fea8e0103e74726d1d1cfde722f9f582a6adb405ba93eb4cd9761",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_graph_reverse_scales_kernel.a": "0137698cb8a0659153dc38147bc4c268101f9e42d8314fae6ae90960f4f82f2f",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_parameter_vjp_kernel.a": "9b44b9fc5b9c337d6cbdaaccd0ef38367fa72f0e4bb8916f5ef51ef3231caca3",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_optimizer_plan_kernel.a": "079e0ea1dfca5e04c3c88ae7c7fd55160fa5fc39159a8786674ce28a19def282",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_optimizer_values_kernel.a": "e8f9c75cae8058e5f76a4d4e6ce9ab8d1931c4cc57cef4f59820ac2f34a7f82f",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_optimizer_commit_kernel.a": "8dafb7bff1ab69eff7aa4d9dcc5c314e88291e39538077b366e86716039355d8",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_parameter_publish_kernel.a": "88790566b3033f671133f726d2527b1d99ef630d16a146ca37425410e1d228f9",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_owner_gradient_pack_kernel.a": "90fa58645c6201e6188454cd84b0e2655dfce55c0c2c5c57a41756e398a4b320",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_owner_gradient_reduce_kernel.a": "6f99d84bcd02c3fb7365f41177491f20b12f1464e73c9b5815e7db26759e830d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_owner_parameter_publish_kernel.a": "bf771fb2945ed1dacc73045abea3caac2398ed9cf0efd336ffd3bf593b202824",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_owner_stream_kernel.a": "ae03a94943b63d0fd40ec9fb6ffb66289e7ece2c1d52115f85b3a4762e29a854",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_window_bridge_meta_kernel.a": "9a6d2cdc300121044508ce8ae4087a0f81514f62b58eb58e68fb8ed4303e962c",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_window_bridge_values_kernel.a": "745c89b5c24cb8b4e63a8f820d0f6bc8cd627c14f169f296e3364657131bbf1d",
+      "/mi/data2T/zlong/tide-execution-flows/builds/g3-npu-resident-clean02/lib/libtide_parameter_accumulate_kernel.a": "c66178e1a0a8f9b09d98c3f3773a3bb4f266c8206c4291dfb9d80e982987a9a5"
+    }
+  },
+  "cuda": {
+    "binary_sha256": "37dc9619a50b78a1daad2f5acc11c85514b3de541ca22b9a9afe97d879f0c1fa",
+    "result_sha256": "6905de69b43f1a23d8614078f81e2aebb4c0f89b876ff1c1989df079b00d8727",
+    "scope": "host checker compile/link/help only; actual GPU pending"
+  },
+  "retained_failures": [
+    {
+      "name": "g4-npu-training08",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "12",
+          "--seconds",
+          "2655",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-training08/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-training08.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-profile-raw-clean01",
+        "state": "failed",
+        "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+        "dirty": "",
+        "started": "2026-10-11T09:46:24.478046+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-11T09:47:26.646380+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "files": {
+        "status.json": "dcbd1b70d76f0dd832279b91b3010422af1dacd83ec524ece3ce917bd317783f",
+        "task.log": "a5ada23dae475288a3d5b267182f57b07687d85fdb01c66045476f024c1086e6",
+        "bounded.json": "68c4742838d1e60e940504a018ebebbf5a815ab336903132580dfe3e53b2bdae",
+        "sharing.json": "09d31dc18b7ccffb1b51187c954300075b4a196d96043d960e96515a367a8007",
+        "gate.json": "020ae20d998692c1739bb7c1045f06b961d83e048fb77f08393631b232845ab4"
+      },
+      "guard": {
+        "state": "failed",
+        "budget": {
+          "seconds": 2655,
+          "aggregate_rss_bytes": 12884901888
+        },
+        "peak_combined_rss_bytes": 4797792256,
+        "process_seconds": 62.0990229062736,
+        "exit_code": 1,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-npu-resident10",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "8",
+          "--memory-gib",
+          "24",
+          "--seconds",
+          "5955",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-resident10/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-resident10.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-profile-raw-clean01",
+        "state": "failed",
+        "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+        "dirty": "",
+        "started": "2026-10-11T09:59:50.161289+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-11T10:06:24.820180+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "files": {
+        "status.json": "8c72d667109ab00b282a25a9f851eaa7381f6527cae527269c9d4a3f9adcf24b",
+        "task.log": "c959b91b01bbcc9bb055d2f7ea2dc5f5a04c94fed4fad47d09032f147f9ec3db",
+        "bounded.json": "53767ffe43fdc72cc3dffd7c23d636b614c51f9aa41b2a30c6f990c34bfc0129",
+        "sharing.json": "3195691cc8425e89ddc766377a64390b85b62f1dafa66dc902749dc254cf0ccb"
+      },
+      "guard": {
+        "state": "failed",
+        "budget": {
+          "seconds": 5955,
+          "aggregate_rss_bytes": 25769803776
+        },
+        "peak_combined_rss_bytes": 4981096448,
+        "process_seconds": 394.5806005746126,
+        "exit_code": 1,
+        "remaining_group_pids": []
+      }
+    }
+  ],
+  "diagnosis": {
+    "original_error": "repeat work bound missing",
+    "finite_diagnostic": "nosync FP32 and sync FP32/FP16 all passed; the original failure was not deterministically reproduced",
+    "confirmed_defect": "Checker omitted the required input-write/private-stream boundary; production ContentFlow already synchronizes. Test-only fix, no production algorithm or tolerance change."
+  },
+  "related": {
+    "runs/g4-state-read-diagnostic02/diagnostic.json": "a3df4f4a26b1afcbaea6137f4fa52afffd7e748fa16ad38f19e8f7bb6eb35ed4",
+    "runs/g4-int64-input-probe01/result.json": "bfd46bb893c077740b6566ae3cb905b5c46ab7de23657d2b03dbecef303bd508",
+    "runs/g4-scale-control-red01/result.json": "2aa1aff48eca5742375ad98b6a21ba3d132072729d08ff3da73be0a5487ee844",
+    "plans/g-stage-scale-source-bridge01.json": "6a0fcf1eefc57c7e1918e8afbff505a4fccefb12028ca18a36a8e68139cc64d6",
+    "runs/g4-scale-control-clean01/task.log": "b7dec37ba0c925b074481ad8a24be4ab5bf725cd8ac29e4c58a5882378b3656e"
+  },
+  "limits": [
+    "CPU8 and NPU8 scale training cells; emitted times are incidental correctness durations,not performance.",
+    "Independent full resident component/public gate is separate and remains pending at this evidence boundary.",
+    "FP16 scale uses the pre-existing0.002/0.02 policy; public module and near-tie discrete policies unchanged.",
+    "Test-only source changes do not claim that unchanged production libraries were rebuilt.",
+    "No GPU execution, speedup, or uniform strict cross-device equivalence."
+  ]
+}
