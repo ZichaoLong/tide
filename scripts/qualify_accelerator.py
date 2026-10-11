@@ -8,7 +8,7 @@ import sys
 import torch
 from durable_records import write_json
 from source_identity import source_state
-from python_environment import with_pythonpath
+from python_environment import with_pythonpath, working_directory
 
 
 def main():
@@ -41,6 +41,7 @@ def main():
                   scope="complete named suite" if args.case is None else "development subset", cases=[], unsupported=[])
     if args.native_library:
         location = Path(args.native_library).resolve()
+        args.native_library = str(location)
         record["native_build"] = json.loads(((location if location.is_dir() else location.parent) / "build-manifest.json").read_text())
     write_json(out / "result.json", record)
     try:
@@ -52,7 +53,8 @@ def main():
                 from tidegraph import GraphRuntime
                 reason = "NPU CSR pooling" if backend == "npu" else "CPU FP16 CSR pooling"
                 try:
-                    GraphRuntime(available[name], device=args.device, native_library=args.native_library)
+                    with working_directory(out):
+                        GraphRuntime(available[name], device=args.device, native_library=args.native_library)
                 except ValueError as error:
                     if reason not in str(error):
                         raise
@@ -61,9 +63,12 @@ def main():
                     write_json(out / "result.json", record)
                     continue
                 raise AssertionError("accepted unsupported CSR policy: " + reason)
-            report = qualify(available[name], device=args.device, output_dir=out / name,
-                             native_library=args.native_library, batch_size=1, positions=2, steps=3,
-                             atol=args.atol, rtol=args.rtol, **fixture_options(name, available[name]))
+            # CANN can create kernel_meta during device initialization. Keep it
+            # outside the immutable source, including in the fresh resume child.
+            with working_directory(out):
+                report = qualify(available[name], device=args.device, output_dir=out / name,
+                                 native_library=args.native_library, batch_size=1, positions=2, steps=3,
+                                 atol=args.atol, rtol=args.rtol, **fixture_options(name, available[name]))
             record["cases"].append(dict(id=name, state=report["state"], coverage=report["coverage"],
                                         runtime=report["candidate"]["runtime"], checks=report["checks"],
                                         tolerances=report["tolerances"], elapsed_seconds=report["elapsed_seconds"]))

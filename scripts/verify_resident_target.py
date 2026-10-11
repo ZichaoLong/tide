@@ -114,7 +114,7 @@ def main():
         row = dict(name=name, command=list(map(str, command)), state='running', timeout_seconds=timeout)
         report['stages'].append(row);write_json(out/'result.json', report)
         with (out/(name+'.log')).open('x') as log:
-            result = subprocess.run(row['command'], cwd=root, env=env,
+            result = subprocess.run(row['command'], cwd=out, env=env,
                                     stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
         row.update(exit_code=result.returncode, state='passed' if result.returncode == 0 else 'failed',
                    log_sha256=digest(out/(name+'.log')))
@@ -135,9 +135,10 @@ def main():
             '--checks', *CHECKS], 7200)
         run('installed-client', [client, '--device='+a.device, '--dtype=float32',
                                  '--training-devices=2'], 180)
-        tests = sorted(str(f.relative_to(root)) for f in (root/'tests').glob('test_resident_*.py'))
-        tests += ['tests/test_online_resident_consumer.py', 'tests/test_online_resident_chunking.py',
-                  'tests/test_online_consumer_memory.py', 'tests/test_consumer_capacity_npu.py']
+        tests = sorted(str(f) for f in (root/'tests').glob('test_resident_*.py'))
+        tests += [str(root/'tests'/name) for name in ('test_online_resident_consumer.py',
+                  'test_online_resident_chunking.py', 'test_online_consumer_memory.py',
+                  'test_consumer_capacity_npu.py')]
         run('public-consumers', [sys.executable, '-m', 'pytest', *tests, '-q', '--dtype', 'both',
             '--junitxml', out/'public.xml', '--basetemp', out/'test-tmp'], 7200)
         cases = ET.parse(out/'public.xml').findall('.//testcase')

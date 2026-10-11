@@ -2,22 +2,27 @@
 
 The authorized G1–G5 stage continues after the previous F1–F7 local closure.
 State/Read batching, the Add assembly follow-up and full declared CUDA resident
-source are implemented. Current CPU qualification, fresh backend builds and
-host preparation have passed. The user explicitly authorizes occupied NPU
-devices. Batch03 is terminal **failed** at the first module suite: the actual
-NPU operator doctor passed on physical9, then checkpoint resume lost CANN's
-`tbe` import path because qualify_accelerator.py replaced PYTHONPATH. All later
-training/resident/performance children remain unstarted. The environment-only
-fix in this commit preserves vendor paths;28 directed CPU checks passed.
-Next: qualify the fixed commit and run a new bounded batch; do not rerun batch03. Selector/upstream semantic
-extensions remain deferred. No historical queue or old pause instruction resumes.
+source are implemented; current CPU qualification and backend builds retain the
+exact source scopes below. Occupied NPU devices are explicitly authorized.
+All current services are terminal. The two new device attempts exposed
+qualification-environment defects/resource costs, not a passed device suite:
+batch03 lost CANN PYTHONPATH in its resume child; batch04 reached five first-case
+checks then exceeded the original12GiB aggregate RSS cap. Performance has not run.
+
+The vendor-path correction is committed at dd5e220 and passed46 clean CPU tests.
+This next implementation keeps vendor-generated files in output directories,
+resolves relative native libraries before changing cwd and restores cwd on
+failure.32 directed CPU tests passed (`runs/g4-artifact-cwd-dev01.xml`). Next:
+commit this correction, qualify it from a clean snapshot, and run one bounded
+mixed-pdg resume calibration with CANN compiler pools limited to1. Only after
+that calibration passes, declare a fresh finite device batch with unchanged
+work/time/memory bounds. Do not resubmit failed identities or old matrices.
+Selector/upstream semantic extensions and actual GPU execution remain deferred.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Run repository commands with this explicit cwd.
-The original handoff matched clean c0ce4ee5; subsequent authorized implementation
-commits through e565f96 are pushed. The evidence commit containing this handoff
-is documentation/support-matrix only; no implementation is left uncommitted.
+`graph-execution-foundation`. Use that explicit cwd. The initial c0ce4ee5 handoff
+has advanced through authorized pushed work; no rollback is required.
 `TASK=/mi/data2T/zlong/tide-execution-flows` below. Contracts:
 [execution-flows §11](execution-flows.md). Sole backlog: [ROADMAP G1–G5](ROADMAP.md).
 
@@ -82,82 +87,76 @@ Its writer `plans/audit-g1-g3-followup01.py` refuses overwrite. Old audits and
 failed/interrupted records remain intact; nested records of cancelled jobs may
 still say running and are not accepted. Batch03 and modules04 are terminal failed with MainPID0,empty cgroups and no remaining guarded child groups; original records remain unchanged.
 
-## Retained shared-device batch failure and next action
+## Current qualification environment and retained device failures
 
-User authorization on2026-10-11 permits use of occupied NPUs and takes precedence
-over the local skill's empty-device rule. No permission question remains. Health,
-observed memory headroom and original resource/time bounds still apply; no other
-process or protected historical worker is stopped, signalled or changed.
+| Job | Result and scope |
+| --- | --- |
+| g-stage-device-batch03 / g4-npu-modules04 | failed at e565f96: real NPU doctor passed on physical9→logical0; first mixed-pdg fresh resume could not import CANN tbe. Later children unstarted |
+| g4-vendor-env-cpu-clean01 | passed46 tests at clean dd5e220 in92.94s;28 directed entry/profile plus18 CPU library qualification cases; peak aggregate RSS814571520B |
+| g-stage-device-batch04 / g4-npu-modules05 | failed at dd5e220: doctor and first mixed-pdg's five observable/VJP/update checks passed; fresh resume triggered sampled RSS12909670400B above12884901888B cap. Later children unstarted |
+| g4-npu-resume-calibration01 | failed before workload: guard rejected untracked CANN kernel_meta in the frozen dd5e220 checkout; compiler-limited calibration never ran |
 
-`runs/g-stage-shared-resource01.json` records two new snapshots. Devices6–9 had
-no reported processes at inspection; others were occupied. Each stage rechecks
-and prefers lower load, while allowing occupied/high-utilization devices.
-`plans/g-stage-shared-launch01.py` requires10GiB observed HBM headroom, remaps
-chosen physical IDs to logical0..N-1, and records before/after occupancy in
-`runs/NAME/sharing.json`. It does not claim exclusive ownership or alter account
-queue/lock records. Shared-device performance is labelled externally contended.
+Every listed service has MainPID0 and an empty cgroup. Outer job/guard receipts
+are terminal; interrupted nested gate/sharing records can still say running and
+are not accepted as live or passed. Preserve every original receipt.
+`runs/g4-npu-modules05/artifact-relocation.json` hashes the9 generated vendor
+files moved to that job's `generated-kernel-meta/`. Tracked snapshot bytes never
+changed and `sources/g-stage-vendor-env-clean01` is clean again. The failed
+calibration01 record remains unchanged.
 
-New `plans/g-stage-device-batch03.{py,json}` runs the same clean e565f96 source
-and exact backend clean02 artifacts. The complete preflight and five synthetic
-selection checks passed: `runs/g-stage-device-batch03-preflight01.json`.
-Source/compiled-consumer/plan hashes, unchanged predecessors and unused outputs
-are checked. Batch03 and its child04 plans supersede the never-submitted batch02
-and child03 plans; old evidence/receipts remain unchanged. Batch03 and
-`tide-g4-npu-modules04.service` are terminal failed. Physical9→logical0 ran a
-successful operator doctor and failed the first Python FP32 fresh-process
-checkpoint check on missing CANN `tbe`; both units have MainPID0/empty cgroups.
-Later children remain unstarted, not passed.
-Logs/receipts: `runs/g-stage-device-batch03/{status.json,task.log,batch.json}`
-and `runs/g4-npu-modules04/{status.json,task.log,sharing.json,gate.json}`.
-Next action: qualify the new environment-inheritance correction from a clean
-commit, then create new output/plan identities. Do not resubmit batch03.
+Installed CANN sources establish four independent compiler-pool controls:
+TE_PARALLEL_COMPILER, TBE_PARALLEL_COMPILER,
+CANN_KNOWLEDGE_BANK_PROCESS_NUM and MAX_COMPILE_CORE_NUMBER. The new calibration
+will set all four to1 in launch configuration, without modifying installations
+or changing numerical semantics. One exact Python FP32 mixed-pdg case includes
+fresh-process resume;500s workload,600s service,555s guard,6CPU,12GiB. This is
+correctness/resource calibration, not a performance measurement or budget increase.
+Vendor-source hashes remain in `plans/g4-npu-resume-calibration01.json`.
 
-| Planned child in dependency order | Scope | Service ceiling |
+Planned new identities: clean snapshot `sources/g-stage-artifact-cwd-clean01`,
+CPU job `g4-artifact-cwd-cpu-clean01` and NPU calibration
+`g4-npu-resume-calibration02`. They are not yet submitted. The CPU gate uses
+32 directed tests plus18 library qualification cases,600s/4CPU/8GiB.
+
+## Shared NPU execution and finite successor scope
+
+User authorization on2026-10-11 permits occupied NPUs and overrides the skill's
+empty-device rule. No permission remains outstanding. Health,observed memory
+headroom and declared resource/time bounds still apply; no other process or
+protected historical worker is stopped,signalled or changed.
+
+`plans/g-stage-shared-launch01.py` takes two snapshots, allows occupied/high-load
+cards, prefers lower load and requires10GiB observed HBM headroom. It records
+physical→logical mapping and before/after occupancy in `runs/NAME/sharing.json`.
+It neither claims exclusive ownership nor changes account queue/lock records.
+Shared-device timings must disclose external contention. Earlier inventory:
+`runs/g-stage-shared-resource01.json`; selection is refreshed at each launch.
+
+After calibration and clean CPU qualification pass, a new immutable plan may
+run these dependencies, each in its own background.slice service:
+
+| Stage | Scope | Service ceiling |
 | --- | --- | --- |
-| g4-npu-modules04 | 1NPU; named Python/native FP32/FP16 modules plus standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
-| g4-npu-training04 | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 training cells;2500s | 45min,6CPU,12GiB,192tasks |
-| g4-npu-resident04 | 3NPU; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
-| g2-npu-components04 | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
-| g2-npu-complete-profiles04 | 2NPU;4 complete Add/Attention × mixed-c/resident traces;600s collection/export per case,2600s total | 45min,8CPU,16GiB,256tasks |
+| modules | 1NPU; named Python/native FP32/FP16 modules and standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
+| training | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 cells;2500s | 45min,6CPU,12GiB,192tasks |
+| resident | 3NPUs; complete strict target qualification;5400s | 100min,8CPU,24GiB,256tasks |
+| components | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
+| complete profiles | 2NPUs;4 Add/Attention × mixed-c/resident traces;600s/case,2600s total | 45min,8CPU,16GiB,256tasks |
 
-Each stage selects immediately after two snapshots, without queuing. First failure stops the chain and leaves
-successors unstarted. Child service ceilings total15900s; controller16200s.
-No retries,timeout expansion,full-size cases or second tranche is declared.
-Heavy measurements are serial; Trackio stays off. After profiles, choose concrete
-implementation changes, requalify them, then declare limited selection cases.
+First failure stops successors; total child ceilings15900s/controller16200s.
+No automatic retries,timeout expansion,full-size cases or second tranche.
+Heavy measurements are serial; Trackio stays off. Original batch02/child03 plans
+were never submitted; batch03/child04 and batch04/child05 retain failed receipts.
+A successful calibration must not relabel any of those attempts.
 
-Packets `packets/g2-complete-{add,attention}-profile02/workload.json` use
-D64/B8/T4/V257,32 body nodes/112 edges,TimedDAG prefill,two connected windows,
+Complete-profile packets `packets/g2-complete-{add,attention}-profile02/workload.json`
+use D64/B8/T4/V257,32 nodes/112 edges,TimedDAG prefill,two connected windows,
 one warmup and one collected training step; Add SGD/Attention AdamW. Offline
-capacity plans fit8GiB/card,estimated0.68–2.27GB/card with physicalB8; this is
-not observed memory calibration. Physical chunks preserve logical batch,
-Attention normalization,gradient and optimizer boundaries. Complete traces
-are diagnostic, not throughput measurements.
-
-Original preflight command (the post-submission unused-output check now refuses):
-
-```bash
-/usr/bin/python3 /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch03.py --check-only
-```
-
-Recorded launch command, already submitted once; do not repeat:
-
-```bash
-TASK=/mi/data2T/zlong/tide-execution-flows
-systemd-run --user --unit=tide-g-stage-device-batch03 --service-type=exec --slice=background.slice \
-  --working-directory="$TASK/sources/g-stage-followup-clean03" \
-  --property=KillMode=control-group --property=Nice=10 --property=CPUQuota=100% \
-  --property=MemoryMax=512M --property=TasksMax=128 --property=RuntimeMaxSec=16200 \
-  --setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin --setenv=PYTHONDONTWRITEBYTECODE=1 \
-  /usr/bin/python3 scripts/job.py --output-dir "$TASK/runs/g-stage-device-batch03" \
-  -- /usr/bin/python3 "$TASK/plans/g-stage-device-batch03.py"
-```
-
-`runs/g-stage-device-batch03/batch.json` will record every task,including unstarted
-successors. Inspect only current-task units with `systemctl --user show UNIT
--p ActiveState -p Result -p MainPID -p ControlGroup` and their durable receipts.
-GPU rebuild/full target/residency commands remain in [device-control](device-control.md).
-No local build or CPU check certifies actual GPU execution.
+capacity estimates0.68–2.27GB/card fit the8GiB allowance; observed memory is still
+uncalibrated. Physical chunks preserve logical batch,Attention normalization,
+gradient and optimizer boundaries. These traces diagnose execution,not throughput.
+GPU rebuild/full target/residency commands: [device-control](device-control.md).
+Actual GPU correctness,residency,multicard,memory and performance remain unverified.
 
 ## Resource controls, remaining costs and performance
 

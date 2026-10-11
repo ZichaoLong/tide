@@ -37,7 +37,9 @@ def check_fresh_child(tmp_path, environment):
     assert Path(location) == ROOT/'python/tidegraph/__init__.py'
 
 
-def test_accelerator_entry_preserves_vendor_path_for_fresh_resume(tmp_path, monkeypatch, inherited_vendor):
+@pytest.mark.parametrize('fails', [False, True])
+@pytest.mark.parametrize('implementation', ['python', 'native'])
+def test_accelerator_entry_preserves_vendor_path_for_fresh_resume(tmp_path, monkeypatch, inherited_vendor, fails, implementation):
     import qualify_accelerator as entry
     import accelerator_cases
     import tidegraph.qualification
@@ -45,15 +47,58 @@ def test_accelerator_entry_preserves_vendor_path_for_fresh_resume(tmp_path, monk
     monkeypatch.setattr(entry.torch, 'set_num_interop_threads', lambda count: None)
     monkeypatch.setattr(accelerator_cases, 'cases', lambda *args: [('probe', object())])
     monkeypatch.setattr(accelerator_cases, 'fixture_options', lambda *args: {})
+    monkeypatch.chdir(tmp_path)
+    previous = Path.cwd()
+    library = tmp_path/'core'
+    library.mkdir()
+    (library/'build-manifest.json').write_text('{}')
     def qualify(*args, **kwargs):
-        check_fresh_child(tmp_path, dict(os.environ))
+        assert Path.cwd() == tmp_path/'gate'
+        assert kwargs['native_library'] == (str(library) if implementation == 'native' else None)
+        check_fresh_child(Path.cwd(), dict(os.environ))
+        (Path.cwd()/'kernel_meta').mkdir()
+        if fails:
+            raise RuntimeError('retained qualification failure')
         return dict(state='passed', coverage={}, candidate=dict(runtime={}),
                     checks=[], tolerances={}, elapsed_seconds=0.)
     monkeypatch.setattr(tidegraph.qualification, 'qualify', qualify)
     monkeypatch.setattr(sys, 'argv', ['qualify_accelerator.py', '--device', 'cpu',
-        '--implementation', 'python', '--output-dir', str(tmp_path/'gate'), '--case', 'probe'])
+        '--implementation', implementation, '--output-dir', 'gate', '--case', 'probe'] +
+        (['--native-library', 'core'] if implementation == 'native' else []))
+    if fails:
+        with pytest.raises(RuntimeError, match='retained qualification failure'):
+            entry.main()
+    else:
+        entry.main()
+    assert Path.cwd() == previous
+    assert (tmp_path/'gate/kernel_meta').is_dir()
+    assert json.loads((tmp_path/'gate/result.json').read_text())['state'] == ('failed' if fails else 'passed')
+
+
+def test_unsupported_csr_initialization_keeps_vendor_artifacts_outside_source(tmp_path, monkeypatch):
+    import qualify_accelerator as entry
+    import accelerator_cases
+    import tidegraph
+
+    class Config:
+        def to_dict(self):
+            return {}
+
+    monkeypatch.setattr(entry.torch, 'set_num_interop_threads', lambda count: None)
+    monkeypatch.setattr(accelerator_cases, 'cases', lambda *args: [('fiber-policy-fiber_pooling', Config())])
+    previous = Path.cwd()
+    def reject(*args, **kwargs):
+        assert Path.cwd() == tmp_path/'gate'
+        (Path.cwd()/'kernel_meta').mkdir()
+        raise ValueError('NPU CSR pooling is unsupported')
+    monkeypatch.setattr(tidegraph, 'GraphRuntime', reject)
+    monkeypatch.setattr(sys, 'argv', ['qualify_accelerator.py', '--device', 'npu:0',
+        '--implementation', 'python', '--output-dir', str(tmp_path/'gate')])
     entry.main()
-    assert json.loads((tmp_path/'gate/result.json').read_text())['state'] == 'passed'
+    record = json.loads((tmp_path/'gate/result.json').read_text())
+    assert record['state'] == 'passed' and record['unsupported'][0]['rejection_verified']
+    assert (tmp_path/'gate/kernel_meta').is_dir()
+    assert Path.cwd() == previous
 
 
 @pytest.mark.parametrize('device', ['npu:0', 'cuda:0'])
