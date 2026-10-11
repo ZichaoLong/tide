@@ -1,0 +1,1416 @@
+{
+  "schema": "tide-resident-target-composite-v1",
+  "reviewed": "2026-10-11",
+  "state": "passed",
+  "resident_source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+  "corrected_checker_source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+  "jobs": [
+    {
+      "name": "g4-npu-resident10",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "8",
+          "--memory-gib",
+          "24",
+          "--seconds",
+          "5955",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-resident10/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-resident10.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-profile-raw-clean01",
+        "state": "failed",
+        "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+        "dirty": "",
+        "started": "2026-10-11T09:59:50.161289+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-11T10:06:24.820180+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "files": {
+        "status.json": "8c72d667109ab00b282a25a9f851eaa7381f6527cae527269c9d4a3f9adcf24b",
+        "task.log": "c959b91b01bbcc9bb055d2f7ea2dc5f5a04c94fed4fad47d09032f147f9ec3db",
+        "bounded.json": "53767ffe43fdc72cc3dffd7c23d636b614c51f9aa41b2a30c6f990c34bfc0129",
+        "sharing.json": "3195691cc8425e89ddc766377a64390b85b62f1dafa66dc902749dc254cf0ccb"
+      },
+      "guard": {
+        "state": "failed",
+        "budget": {
+          "seconds": 5955,
+          "aggregate_rss_bytes": 25769803776
+        },
+        "peak_combined_rss_bytes": 4981096448,
+        "process_seconds": 394.5806005746126,
+        "exit_code": 1,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-state-read-clean01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "4",
+          "--memory-gib",
+          "8",
+          "--seconds",
+          "255",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-state-read-clean01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-state-read-clean01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-state-read-clean01",
+        "state": "passed",
+        "source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+        "dirty": "",
+        "started": "2026-10-11T10:21:13.468654+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T10:22:06.985869+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "401f00f0793f89c28ccd03c4e1e7b3fe301fb03bd478e72ae601b1b7fa5251a3",
+        "task.log": "52ec8d1abf3b278fd08fc92f2ae17a647ac3b07d17b19c617f76f35e86146aa4",
+        "bounded.json": "d6c1b3acd4e97e2587247d8f192a3ffd88584794d0941e2d4a44a741fde7c4e2",
+        "sharing.json": "154231869899b61bf0b6bdb9ac08da523c23ac5ef22faa2e3f9604152ced6954"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 255,
+          "aggregate_rss_bytes": 8589934592
+        },
+        "peak_combined_rss_bytes": 4867731456,
+        "process_seconds": 53.2714931294322,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    },
+    {
+      "name": "g4-npu-resident-completion01",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "8",
+          "--memory-gib",
+          "24",
+          "--seconds",
+          "5955",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-npu-resident-completion01/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-npu-resident-completion01.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-profile-raw-clean01",
+        "state": "passed",
+        "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+        "dirty": "",
+        "started": "2026-10-11T10:25:18.850027+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T11:15:17.862047+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "83d6e10ec5962b0da6871f099497ce735876209be322d8541c26277ea95e3876",
+        "task.log": "30070a81b6f39e60891402a96eb76cfe26bcdf74232d7229ff73670e8af25073",
+        "bounded.json": "761190ef45848a29d5b8d9f6854f21d43d2ea9c25799f0e8dc481784749391f9",
+        "sharing.json": "d76a555695da16023cd59e8f8867c1ea0f53c67964a496b0a9194c015c495ade",
+        "gate.json": "ce82eb1a4feab946113333d8dfe7f545000bd42416f7e71a5429bacc141224c4"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 5955,
+          "aggregate_rss_bytes": 25769803776
+        },
+        "peak_combined_rss_bytes": 10962575360,
+        "process_seconds": 2998.9212943315506,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    }
+  ],
+  "cuda_scale_followup": {
+    "job": {
+      "name": "g4-scale-control-cuda-clean02",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g-stage-run-bounded01.py",
+          "--cpus",
+          "6",
+          "--memory-gib",
+          "8",
+          "--seconds",
+          "855",
+          "--record",
+          "/mi/data2T/zlong/tide-execution-flows/runs/g4-scale-control-cuda-clean02/bounded.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/tide-execution-flows/plans/g4-scale-control-cuda-clean02.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/tide-execution-flows/sources/g4-scale-control-clean01",
+        "state": "passed",
+        "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+        "dirty": "",
+        "started": "2026-10-11T11:06:53.112335+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-11T11:13:31.391642+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "files": {
+        "status.json": "61b75005b7f5b06e43e908ef935c243fab01ad916e05021554278ab34f5fcad9",
+        "task.log": "6009cdc4918ac7a9bbdf3ea53feb11a19356bb12fc8871e1a174aefcb3e258db",
+        "bounded.json": "996cd6ca47b65d2b4b0891cbfb81c0193e0c58945bbb1288cec784f5642fd7bd"
+      },
+      "guard": {
+        "state": "passed",
+        "budget": {
+          "seconds": 855,
+          "aggregate_rss_bytes": 8589934592
+        },
+        "peak_combined_rss_bytes": 3246837760,
+        "process_seconds": 398.1990163177252,
+        "exit_code": 0,
+        "remaining_group_pids": []
+      }
+    },
+    "manifest": {
+      "schema": "tide-accelerator-scale-build-v1",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "dirty": "",
+      "client_source_sha256": "cf465934a167bd499791a10a9ba06def550ac757992e199f81e9e43568e3b282",
+      "core": {
+        "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+        "cpp_source_sha256": "0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0",
+        "torch": "2.10.0+cu128",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": null
+        },
+        "backend": "cuda",
+        "npu_runtime": null,
+        "torch_npu": null,
+        "cuda": "12.8",
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "972b614e5c4cac177405ca90a5cc32543137d14cb14ce68061d519593ff4db1e",
+          "libtidegraph_runtime.a": "24fc914c1546d5025883bbfd110fad9ddc29b7e769d3a554da4fb2daa49c896f",
+          "_tide_native.so": "7f7814afa6fc949f294657af80765feb819dcee8b82d311ca44c2ab2cac84de6",
+          "tidegraph-smoke": "8159e10bb49d50c37c6ce350e79fd4328248e018950bb8b74e3948b49e3a2896",
+          "tidegraph-kernel-check": "74c1ea4b3b19e85d4224e2c1ab5850e5e6fc32b402d762d109c561bd04f3bc19",
+          "tidegraph-full-check": "d4c17ea9b94d170eb9cd43df2efbb615dc2deaad77ed055211ed55dcbba0998c",
+          "tidegraph-aggregate-check": "b2694a60a3f43218da2b10f6d77e3b20f60d1a65e31b6538e4a0456ed51a7a6a",
+          "tidegraph-optimizer-check": "14678f6e459df95218d069b13611349e6fb1d15b713bf0d882f922f7b50bfcb0",
+          "tidegraph-checkpoint-check": "acbb4ce1961b61d8a609e08146f3d3d6769c9da64a9663d9aa49d13eada09b88",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "31baab16738baa66aaa2cd58ec38b813eda5028bd9ed63ce1b453791577e5242",
+          "tidegraph-scale-bench": "860b43a927bfc17e4eef5628e5e3ed40f9bf233ca955d9ee2dd1f18d60b02487",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "e9525fd2ed3ffedd09eec9fe4d1e23be44d973f4d13dac9908e4391beb32625c",
+          "tidegraph-greedy-check": "d3b15bc1bf28f8cee7b7ff7ead8c968fb7f1aa25b095be97cd97db1edf029798",
+          "tidegraph-accelerator-check": "61bbb4668d54116824ff60bb1e8dc07ac31ee0dace5736c64475f0b56ea6b8fd",
+          "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+          "tidegraph-read-precision-check": "9997d9153afa2c729af7871798a112a1ac75473ba0f5040e0203f16d1c790311",
+          "tidegraph-placement-check": "744a4c2f68ac31826a3a20117b7c300fcba5809be924951163cb7530315a4472",
+          "tidegraph-payload-ownership-check": "0591901b180c8c364e14e2ce548c40ce2a22d75764bb42ab1868dc386bb3104d"
+        }
+      },
+      "binary_sha256": "09e62b59dd9fb1edc565ec1e3fe58c54c74ecefdd06d29cd799a50c17f145fc3",
+      "loader_sha256": "82b332d75e38dcc94d131a9b5bb50ab22a5994e1eed067a3f431cfe6e73c7a32",
+      "additional_binaries": {
+        "tide-bounded-schedule-check": "522a62b563d673943f542c25d0810b5a8632047cba0063439103efdd3d472fad",
+        "tide-bounded-scale": "9dfe4aa94e59667e63f40be56d827541c72d802eec2d3067f8482c1cf9227085"
+      }
+    },
+    "manifest_sha256": "2241ccb190d4ca4737ff448b1b1713ee521b71b9f7f3e84b80d64ab807411acd",
+    "scope": "fresh CUDA-linked scale consumer,5 CPU CTests; actual GPU pending"
+  },
+  "component_calls": 133,
+  "original_accepted": 33,
+  "corrected_state_read": 2,
+  "completion_calls": 98,
+  "components": [
+    {
+      "check": "peer-sharded-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-sharded-vjp-float32.log",
+      "sha256": "cf67eeee3b2b961e73e7ee7010f346c5f6edc85c03b0b9ee2fa54ec899f86d25"
+    },
+    {
+      "check": "peer-sharded-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-sharded-vjp-float16.log",
+      "sha256": "d4aefc5f1fe1bef90be4669931840139c7d802f56d4cb39247093c075b228e2b"
+    },
+    {
+      "check": "peer-shard-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-shard-flow-float32.log",
+      "sha256": "8f6d63de30ac1faf310556b7b008ba02e7588e85aa2ac003a371110912b57fdd"
+    },
+    {
+      "check": "peer-shard-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-shard-flow-float16.log",
+      "sha256": "02c486248e957729836b074adcbde09529fbf31119c9e732fbc66a89b9a09910"
+    },
+    {
+      "check": "peer-shard-control-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-shard-control-flow-float32.log",
+      "sha256": "a165307a1cf9a76e96f82c631757a396c77cecfd85ec71a051f7bf44d7efea83"
+    },
+    {
+      "check": "peer-shard-control-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-shard-control-flow-float16.log",
+      "sha256": "18c7555eedf1df7340ba8f0e33e5982a1dd36332b7c4c2a08ca07205fa1c4ff5"
+    },
+    {
+      "check": "peer",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-float32.log",
+      "sha256": "6835817a0baaf4fe4b41dead6092d37cf8373f0762899cec56b9a96211ae7c80"
+    },
+    {
+      "check": "peer",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-float16.log",
+      "sha256": "d494f208414ab942ce224030f72a504f2befb6f751f66316b84d2f7fb3d4a641"
+    },
+    {
+      "check": "peer-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-flow-float32.log",
+      "sha256": "ed7bd616afa298af8989dc6984bcf26bdea36f418cee8d913c5c18375e2247cd"
+    },
+    {
+      "check": "peer-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-flow-float16.log",
+      "sha256": "f1193d64ef44b0c2d0738299d59b8605559c2ac33ab94a46027230e95b8b46a4"
+    },
+    {
+      "check": "peer-control-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-control-flow-float32.log",
+      "sha256": "5902f403608c929f7c828b1704467869a3b1310a832b7b0fede81e90c833547d"
+    },
+    {
+      "check": "peer-control-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/peer-control-flow-float16.log",
+      "sha256": "b1cc261c665e4ce91d2b1b4d401a7a347fff318bce78d2ac2ba763dfe8d55b9e"
+    },
+    {
+      "check": "control",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/control-float32.log",
+      "sha256": "87e85f2c49086160d4a32d051a38337ebfc2f9e48b07665d64c48601e6419dec"
+    },
+    {
+      "check": "failure",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/failure-float32.log",
+      "sha256": "9239571766dff0bcc3d4b08148d54ab2119742b8b894bbe996af355a7ae28bc3"
+    },
+    {
+      "check": "numerical",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/numerical-float32.log",
+      "sha256": "5463689bcb9bd9a88e32fc7d229c296282598fc249cd78ec7be0bf2f88150a0f"
+    },
+    {
+      "check": "numerical",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/numerical-float16.log",
+      "sha256": "7801a06f2e75b568f7964d0d5bc6a750fd4d313e3e7de470d50d56c5284d5aee"
+    },
+    {
+      "check": "queue",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/queue-float32.log",
+      "sha256": "e68628c94218404ea7f1adbce50b4a85c688d00f5f923ee0a0b54b7e1d0f050b"
+    },
+    {
+      "check": "closure",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/closure-float32.log",
+      "sha256": "220940868969dbddda31fc017189742c799c92af9e66c476ffcfc1a2fbdb3223"
+    },
+    {
+      "check": "transaction",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/transaction-float32.log",
+      "sha256": "3eb35bf451441ee87b922a3cc08e2fa7f09fc1373f3ad23f6ddad08eb8e79d7a"
+    },
+    {
+      "check": "transaction",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/transaction-float16.log",
+      "sha256": "ec44c0b8288f5895073f9886061bbad27911bbd8008303f2420eb5fd0e32e0f6"
+    },
+    {
+      "check": "broadcast",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/broadcast-float32.log",
+      "sha256": "b6d6b6a4e5ff0d0968695fcce85616933c7f28e8052c3b0cf71d6c3e6d50df65"
+    },
+    {
+      "check": "broadcast",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/broadcast-float16.log",
+      "sha256": "1a2cb284b90bcbdb24ba92c6341eb73651eea556df51ae781735b3b39de4957f"
+    },
+    {
+      "check": "ready",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/ready-float32.log",
+      "sha256": "d6890a2a7837c8d56716bbbf8b4b45ef6ccddea035dca4a8b387fabd44124558"
+    },
+    {
+      "check": "ready",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/ready-float16.log",
+      "sha256": "70e52073b5ca4d2d01edf934d9c4a3e8bdc3fe2bc201aaeb489b6f843fcd3741"
+    },
+    {
+      "check": "selector",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/selector-float32.log",
+      "sha256": "9cecee9a1d02543391f7d8a84bd9b399848643ccdf3689b9dfe2f553b355c494"
+    },
+    {
+      "check": "content",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/content-float32.log",
+      "sha256": "95ee75593028213ef24421602426afa5084d23752a6447c2195fff2f1d848a9c"
+    },
+    {
+      "check": "window",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/window-float32.log",
+      "sha256": "49945c858f17b3d494cffcca4822eae2fe1d09b47bb7f561413785ebe57bb341"
+    },
+    {
+      "check": "full",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/full-float32.log",
+      "sha256": "e642a40a86f366a041bc109f4900edafcee92f31c589c8bd89f1939e4b440bed"
+    },
+    {
+      "check": "full",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/full-float16.log",
+      "sha256": "9dff9acad7d59d6e73ec7ff1f38dab99be213dd2f375488513a40b3e8f1df742"
+    },
+    {
+      "check": "packed-lh",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/packed-lh-float32.log",
+      "sha256": "8ab10c309d67ecc874a94e1c3a18e481e5dc764480c8ff9fa63783fdda489cf0"
+    },
+    {
+      "check": "packed-lh",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/packed-lh-float16.log",
+      "sha256": "ef155237733225ac1808c783ec8139b5c5658c06e70b7aa918a39f932b4eb0bb"
+    },
+    {
+      "check": "aggregate-payload",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/aggregate-payload-float32.log",
+      "sha256": "94d6549afb5a3a861b7b989d8f4d6326efdfe63b2517d48f10a7e877b3fa9d0f"
+    },
+    {
+      "check": "aggregate-payload",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident10/gate/components/aggregate-payload-float16.log",
+      "sha256": "2485ee1d8efb3d55bd3a99d3818922ed2c89a92dc842f902f34a28c4f78eced0"
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/precision-flow-float32.log",
+      "sha256": "9f8ebfa4e1440fccd0b522f7d2d5504e263669e2d745c966a5d059926070c1d1"
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/precision-flow-float16.log",
+      "sha256": "4e29e21b20bfb74a6fd5ae62795151746b0def2020acdb2f308db514a7989cd8"
+    },
+    {
+      "check": "attention-payload",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/attention-payload-float32.log",
+      "sha256": "2e5157ee55c1e4df338a5da47777655f00d215862ab5f33130fe83c1ee9db759"
+    },
+    {
+      "check": "attention-payload",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/attention-payload-float16.log",
+      "sha256": "4b135c1076522d1f3ef47faa1d78f74ed9f76ce18b0e373f16e1d28219beca71"
+    },
+    {
+      "check": "sum",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/sum-float32.log",
+      "sha256": "eaac6c91a065d112af32735dc77d8751de15c0a621fe121635aebe845bbdfadc"
+    },
+    {
+      "check": "sum",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/sum-float16.log",
+      "sha256": "b7607e61d921e8ad8e8e083178c6dd8f68a8d8268dfd74d8ee63965e6cf6589f"
+    },
+    {
+      "check": "add",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/add-float32.log",
+      "sha256": "613d7b1e7b3fa39224db21eb1223830b083ef5c25b248238ff522019ef4091e4"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/graph-vjp-float32.log",
+      "sha256": "8b4529114e64315dcb892ccb94324dfe97aa14c1d291c5870ab013bc3e617785"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/graph-vjp-float16.log",
+      "sha256": "c43aa3c599ffd943d3be2f51c62956785d9b27bee5f92af1cc53cdb44cb1e0c5"
+    },
+    {
+      "check": "parameter-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/parameter-vjp-float32.log",
+      "sha256": "d2cd052d92ffa4051eb2e6d7fd6413056341cc154d46e9df963113bdac77ef97"
+    },
+    {
+      "check": "optimizer",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/optimizer-float32.log",
+      "sha256": "0050c661e2ec6d974d363b16156bddbf3647ae68f7f64ec8b01dd2c0aca1d2e0"
+    },
+    {
+      "check": "optimizer",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/optimizer-float16.log",
+      "sha256": "78abdacc53addbc2b055b632139b07413a63526b2172397a18aa1d55af2cc655"
+    },
+    {
+      "check": "master-publication",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/master-publication-float32.log",
+      "sha256": "4e6a87b6f1befd75a0f0a16ff5207dd48fb168fa3b05cc141a202775ea820243"
+    },
+    {
+      "check": "master-publication",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/master-publication-float16.log",
+      "sha256": "cb8beb05b6235de22ea390930f125170bee00f981ff37fc16279d7872c9589f8"
+    },
+    {
+      "check": "training-step",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/training-step-float32.log",
+      "sha256": "c921fe6a7b9e6f594250522bad36e337f3e6e1f1240ba482504b68dc308d2ccb"
+    },
+    {
+      "check": "retained",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/retained-float32.log",
+      "sha256": "a8e59ae645bd7f7be67a192d118d139d67efec4014b5f83eb390e7df9a3be0d8"
+    },
+    {
+      "check": "retained",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/retained-float16.log",
+      "sha256": "0921526f19319356df66c1726707a39dc6e51f287b998c81c0e9a52702493a58"
+    },
+    {
+      "check": "extended-retained",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/extended-retained-float32.log",
+      "sha256": "e9cf9bfa8994d6ea40b25dd39da46affc084d66dc9f806b5a264e1e685e280fc"
+    },
+    {
+      "check": "extended-retained",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/extended-retained-float16.log",
+      "sha256": "8671b1e75ec8ebf8c02f0fee56b03fa085fd7baad469ef6652129454ccd5b3a4"
+    },
+    {
+      "check": "event-retained",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-retained-float32.log",
+      "sha256": "bd1fdec721ce8d712d461ef0b6ccfb498a4ae1849ec716351992141a8f4b96fd"
+    },
+    {
+      "check": "event-retained",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-retained-float16.log",
+      "sha256": "5b7d1811a96ad52437c26b792f840da50c418d9134eaa9e0d0079fbe241bd383"
+    },
+    {
+      "check": "fiber-retained",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-retained-float32.log",
+      "sha256": "a4812a1ea330fb7acbfff490942913ca3feeb2c33a221a998dab7681cfdf905f"
+    },
+    {
+      "check": "fiber-retained",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-retained-float16.log",
+      "sha256": "34c76a6f81be995a2f08a078ce58bf7430ad58019341e817d1b2edc32bef775f"
+    },
+    {
+      "check": "half-training",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/half-training-float16.log",
+      "sha256": "b910aeace1bd465a019c262dafd446069a5ec97ab2d2025ca14a6da422d59311"
+    },
+    {
+      "check": "half-cache-training",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/half-cache-training-float16.log",
+      "sha256": "7901cf2439118cb7df63ffc5e9e12064bfe68e2ef1df9880ab424b7358472b92"
+    },
+    {
+      "check": "reverse-links",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/reverse-links-float32.log",
+      "sha256": "c8f5f0d54f70a49d1f2ab69586d2258eca312b6e8717876fdd15ce62ce4ae15d"
+    },
+    {
+      "check": "reverse-links",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/reverse-links-float16.log",
+      "sha256": "8fe7e2cdb4a61ad817dfeaa75e806196c91ab6ce391b46bf417d8fac2f3e25ae"
+    },
+    {
+      "check": "full-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/full-vjp-float32.log",
+      "sha256": "7b4cf4832016761c562c3d8c1ddf232779d5d082db51bc7f3e131d52555f80af"
+    },
+    {
+      "check": "full-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/full-vjp-float16.log",
+      "sha256": "8619e79b936ebb014252b6c090aad32c45682e2997bffdead8733836be97aa97"
+    },
+    {
+      "check": "state-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/state-vjp-float32.log",
+      "sha256": "ca4b374ca51f4dca0512c18766b94f12898d424e622c93aa98efdee3bb9eb6e9"
+    },
+    {
+      "check": "state-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/state-vjp-float16.log",
+      "sha256": "5ed5d878eaf7f57caea5df10f01fa0a8a9e10e12f3b11341ef297c907935bbc1"
+    },
+    {
+      "check": "clock",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/clock-float32.log",
+      "sha256": "44cc2b6377bbcb58f1fc6a92e7d159b053248afa22f3c02652cf1b673b1f14e3"
+    },
+    {
+      "check": "norm32",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/norm32-float32.log",
+      "sha256": "dfceb21b98920b0c7c3fbb793b22078154c43106e0a6293b4568db33b732277b"
+    },
+    {
+      "check": "lh-full",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/lh-full-float32.log",
+      "sha256": "5570bc739fcd1ae516b546ba0e2b38dfe6f1b1c1b993ad6dca400e9cfd490dde"
+    },
+    {
+      "check": "origins",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/origins-float32.log",
+      "sha256": "8143236f9ad67384a1fd0433181aa6cf3ad06a9fda5cedb5ada92a3aad541e38"
+    },
+    {
+      "check": "emission",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/emission-float32.log",
+      "sha256": "84ecdaed89eb856d4e11f52137ba14a6385b80d049535a02db9726d368080dfa"
+    },
+    {
+      "check": "emission",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/emission-float16.log",
+      "sha256": "671a9b8c4504e3ad7893efae1dd019aee9eca1a75472b1201996e08409ae70aa"
+    },
+    {
+      "check": "swiglu",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/swiglu-float32.log",
+      "sha256": "9d0a985ed6477ea582e046131f516dc1fbe9d3d3f0042761e2a4f97f7522078a"
+    },
+    {
+      "check": "swiglu",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/swiglu-float16.log",
+      "sha256": "7d97892a198da4db8970e3031e97aaf36521772aaef7e7bbd351bcb54eb4afb6"
+    },
+    {
+      "check": "fiber",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-float32.log",
+      "sha256": "a3b7aeee58fb6a4d524af0d59d1180a33e4e4437f240ff9c5241f58e617ab687"
+    },
+    {
+      "check": "fiber-pool",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-pool-float32.log",
+      "sha256": "e8a091fe790e515ef47f422eecd9a93018df0f869136763e2a0e5e981845cef6"
+    },
+    {
+      "check": "event-attention",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-attention-float32.log",
+      "sha256": "ab18c63883c7403c6fbbbacba616511d696e159a55b75223c8c0c6f21ac9f8a8"
+    },
+    {
+      "check": "attention-tile",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/attention-tile-float32.log",
+      "sha256": "f53f25aab10cff141f54cb22ea2bc4ac474d4e15dcdab838612452f2e6d78a6d"
+    },
+    {
+      "check": "memory",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/memory-float32.log",
+      "sha256": "fce4e925bd713791589aa42d843f3d8fe40123e56f78631cdae9a033cbb4ed05"
+    },
+    {
+      "check": "event-batch",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-batch-float32.log",
+      "sha256": "7d7bf4d565f092aec6806e983593d326fe27ada3bbc03c42c9d490a285bc0f1a"
+    },
+    {
+      "check": "fiber-batch",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-batch-float32.log",
+      "sha256": "e850823106ff4ececf5de1253fb6a8a16bb81b3cb45298b1542f81b66efcb067"
+    },
+    {
+      "check": "aggregate",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/aggregate-float32.log",
+      "sha256": "0b7a3b0ee88bf58359717a515c2a56b6b875de7d07b426959ecdf321a665e058"
+    },
+    {
+      "check": "resident",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/resident-float32.log",
+      "sha256": "a0a27817248461225b924acf3a6a8da66c950af77a489878e883c3623a80ecf2"
+    },
+    {
+      "check": "resident-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/resident-training-float32.log",
+      "sha256": "7db8f7ee2cf39231287723e7bc77120798a29df43f7d76381139ca3dbe4a65d3"
+    },
+    {
+      "check": "full-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/full-training-float32.log",
+      "sha256": "872ae43abdc50b62e8dce88bcd5ffd6a14a12e47ca9a657f1f085563afa4b2b1"
+    },
+    {
+      "check": "extra-full-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/extra-full-vjp-float32.log",
+      "sha256": "961516509c92c6b76b1b4aeb14a4b31b534d35102b72f5993488094292da3b09"
+    },
+    {
+      "check": "extra-full-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/extra-full-vjp-float16.log",
+      "sha256": "a7351942b33bd3f9233103e0a949ef11ae73796d5582ac5784a3fb99dfe72b4f"
+    },
+    {
+      "check": "aggregate-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/aggregate-vjp-float32.log",
+      "sha256": "65908dd489869366eea2e644d3eb4c63786c02ba114167fae37a560e4d879113"
+    },
+    {
+      "check": "aggregate-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/aggregate-vjp-float16.log",
+      "sha256": "5ed439a54c0306bd77567e94a1718a9b84cfa857cae5d9cfe7d077f41b5a7bdb"
+    },
+    {
+      "check": "aggregate-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/aggregate-training-float32.log",
+      "sha256": "3a8f9af495fb0e3d068ffdc6f74eb6fcf4538bc4c8f7fd58df611a22751a2bb7"
+    },
+    {
+      "check": "control-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/control-vjp-float32.log",
+      "sha256": "a7b0c0a7974caca585a0684063a5b54df44640a9ab173f27ee3b3a9ff39fdf4e"
+    },
+    {
+      "check": "control-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/control-vjp-float16.log",
+      "sha256": "a7ca52b68fd1c3577725df445990b33af3fa66dca5565e85a72a9a1e84074620"
+    },
+    {
+      "check": "precision-control-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/precision-control-flow-float32.log",
+      "sha256": "a545db11a468bcc341c7d287e52e5b634c84a630b855365a7cb034d988600660"
+    },
+    {
+      "check": "precision-control-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/precision-control-flow-float16.log",
+      "sha256": "86b4dc89af770bd411a57eba22ab04769e0d4cbf399e61c5183b2ab1b4026536"
+    },
+    {
+      "check": "control-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/control-training-float32.log",
+      "sha256": "e4faf0807684a67d6faedc72f53a233ce40f1c70193edff0ddca477f13c949f3"
+    },
+    {
+      "check": "attention-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/attention-vjp-float32.log",
+      "sha256": "a8816ad1881c967ab8091690db7467412851ead76b7d76b6f8f5db55b14f4c22"
+    },
+    {
+      "check": "attention-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/attention-vjp-float16.log",
+      "sha256": "dbb8db060032fd1e5b6c39b72cfceb58d1da780ff70d88e652dc5d71965fde07"
+    },
+    {
+      "check": "event-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-vjp-float32.log",
+      "sha256": "ddb84bc75ecab2898cd204099f0e4e5ea38f68522efb1b563183450d200addfe"
+    },
+    {
+      "check": "event-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-vjp-float16.log",
+      "sha256": "adf8e896b9f2bb4378000007012028e53ae47eb2d2f66513369cdb499d4e81a4"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/event-training-float32.log",
+      "sha256": "1cd2f27e275c41f782fdcaf6a32d140b91db18dbb42d6de1f0fb66044024d54f"
+    },
+    {
+      "check": "fiber-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-vjp-float32.log",
+      "sha256": "13cb50f7095a3db9b63fee91d9b75f2d7053b3a48bae9526e5618fb5a2a8c4d6"
+    },
+    {
+      "check": "fiber-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-vjp-float16.log",
+      "sha256": "45d1e3cfabda491911fae5446afd59d39979516dbfacf75c4eb233722e8e9223"
+    },
+    {
+      "check": "fiber-reverse",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-reverse-float32.log",
+      "sha256": "913a2bb253ab4000e47a383083aec6fb8b592c28e08a7f2984404d0b45d13feb"
+    },
+    {
+      "check": "fiber-reverse",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-reverse-float16.log",
+      "sha256": "fabb30d37ea01ca4ba7670bff3228170c1de372552aba3897cefa87f32d7a8f6"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/fiber-training-float32.log",
+      "sha256": "7cff6cdf2ef9c0f84bd378d2618072860381e67dd8ae47ce275e904448f5e38c"
+    },
+    {
+      "check": "peer-sharded-optimizer",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-sharded-optimizer-float32.log",
+      "sha256": "c88dd8c2990549dea54859dd9e110c9be262958dad4df3e1c4894db2d1bc9001"
+    },
+    {
+      "check": "peer-sharded-optimizer",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-sharded-optimizer-float16.log",
+      "sha256": "a017d2c59807ed804eb6dbc442fd1e6264cdcd55b99b4e4ca71b72d8e67c74d0"
+    },
+    {
+      "check": "peer-owner-stream",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-owner-stream-float32.log",
+      "sha256": "3bb54bcb68756a598edf61df748d4b1eb08fc4d75d26266cd90032c2823c131f"
+    },
+    {
+      "check": "peer-sharded-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-sharded-training-float32.log",
+      "sha256": "3b485a6fcf6dd6f019dfd6d9feb920abf6ce35d4efb734d4573648a69af5f636"
+    },
+    {
+      "check": "peer-sharded-training",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-sharded-training-float16.log",
+      "sha256": "69510967cb24f7f182b39229a73337c36393939a8d566c811a4e57c4bb270a7f"
+    },
+    {
+      "check": "peer-state-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-flow-float32.log",
+      "sha256": "fe933b9725a788e43c968c28e139a0176c675fe2ca3b674d7c5a80dc4f0af78c"
+    },
+    {
+      "check": "peer-state-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-flow-float16.log",
+      "sha256": "4b460fb9951246eb34553d5c1d343c418a2b1c50f8b526c7b88a9c3d5a92b6e9"
+    },
+    {
+      "check": "peer-state-control-flow",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-control-flow-float32.log",
+      "sha256": "769195fc1633bb9e2527d01f078572d7131786dfb6a43ff4616d3f06d49a1c2d"
+    },
+    {
+      "check": "peer-state-control-flow",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-control-flow-float16.log",
+      "sha256": "2320926265a29fac01ccba18483227c0ce648e60749605ff121a52fc60bf99bc"
+    },
+    {
+      "check": "peer-state-transaction",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-transaction-float32.log",
+      "sha256": "a4e64919d9a2cdeeb01233cf02b04ec9497adab5ee4d7230157f214c7a6920f4"
+    },
+    {
+      "check": "peer-state-transaction",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-transaction-float16.log",
+      "sha256": "acc3d6941845c8a376bb9c85fb1a052377570e5b62a1a61fba8f39b694e8d2e8"
+    },
+    {
+      "check": "peer-state-vjp",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-vjp-float32.log",
+      "sha256": "84e8c4ca161495e0f35f843a44e1c5fd4fd1a6a575557ed05b30cbd5bbb41829"
+    },
+    {
+      "check": "peer-state-vjp",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-vjp-float16.log",
+      "sha256": "b625a5c7a3d0a0f96c35e82289a1703f3105ed33229d8d1e8fed2ddaaf9c366e"
+    },
+    {
+      "check": "peer-state-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-training-float32.log",
+      "sha256": "41a816e6e6de0b78d9fe935680973fb809a36842c7f4b351742c5eb1598d72fc"
+    },
+    {
+      "check": "peer-state-training",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-state-training-float16.log",
+      "sha256": "20da51cbcfb1b52eef90c92995fcdbe45c5522e9b5d6b9d85de141a126a94b8b"
+    },
+    {
+      "check": "sequence",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/sequence-float32.log",
+      "sha256": "f5dc32ae2ccd4a5b8714da9b9c4cac68fa3b4323f522935dd51bf6d965c9bbe6"
+    },
+    {
+      "check": "resident-sharded-training",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/resident-sharded-training-float32.log",
+      "sha256": "544adb612d237c22ade376187d24f10d883a1215f054cd50fb1e005b89bc0b1e"
+    },
+    {
+      "check": "resident-sharded-training",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/resident-sharded-training-float16.log",
+      "sha256": "ecfb0a636b7d374526ca4dfe78cf8a5e51fd9097ddc6da31c3dba4a21dbcd735"
+    },
+    {
+      "check": "peer-resident-accumulation",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-accumulation-float32.log",
+      "sha256": "feb0f30e0b8241798d82557f440d074a198131d3eb976c53c9fb2c349163c877"
+    },
+    {
+      "check": "peer-resident-accumulation",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-accumulation-float16.log",
+      "sha256": "3c74b94096637bb026e7aa8aa00b13a69ab282ac3cc0dd0195467bb0977d8443"
+    },
+    {
+      "check": "peer-resident-contexts",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-contexts-float32.log",
+      "sha256": "42d20ad1cf87b4081b2de13ec9bc3d68ed9d87de67c529ac5a70580f130d92d5"
+    },
+    {
+      "check": "peer-resident-contexts",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-contexts-float16.log",
+      "sha256": "6ea5c4ad3840000699482fd13a58301e3130834d19398ce08ff613e9825ce366"
+    },
+    {
+      "check": "peer-resident-compact-contexts",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-contexts-float32.log",
+      "sha256": "144af9638f8ac260ca00047381eb9334e0256b37567ebba249ecd3040df99744"
+    },
+    {
+      "check": "peer-resident-compact-contexts",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-contexts-float16.log",
+      "sha256": "34e48c434cad573625f05ae7aec71205c536be7887c9ef26f33521f80ffaa237"
+    },
+    {
+      "check": "peer-resident-compact-journals",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-journals-float32.log",
+      "sha256": "a7464f6a6c0fc70faf334d4fd6238f37c928f8e15e345127b314535b4642af50"
+    },
+    {
+      "check": "peer-resident-compact-journals",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-journals-float16.log",
+      "sha256": "9b63baf1d4d743c5b4d7d039b03bb182fd7b1b3cafacc222daa2d6d5f98cdb71"
+    },
+    {
+      "check": "peer-resident-compact-projections",
+      "dtype": "float32",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-projections-float32.log",
+      "sha256": "723a03f195e169317effb7715cdde63bb4fa1d7d6761b3882a2310cb91b2e18e"
+    },
+    {
+      "check": "peer-resident-compact-projections",
+      "dtype": "float16",
+      "source": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+      "log": "runs/g4-npu-resident-completion01/components/peer-resident-compact-projections-float16.log",
+      "sha256": "fa7fec302230daca653543c79aca97bfcc8388660e9e094d18ea30bf448a8865"
+    },
+    {
+      "check": "state-read",
+      "dtype": "float32",
+      "source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+      "log": "runs/g4-state-read-clean01/current-float32.log",
+      "sha256": "e9e6feba6537dd1cbab77d6b2a9688318f93f478f6588add0364c2ab0db03ab5"
+    },
+    {
+      "check": "state-read",
+      "dtype": "float16",
+      "source": "e3c86d70795c594eafbc587388d9e984c3f92612",
+      "log": "runs/g4-state-read-clean01/current-float16.log",
+      "sha256": "24ea389ee05b6032ea186b2dfa38858da449e4e83bd534b2313637cf5e754a32"
+    }
+  ],
+  "public_cases": 547,
+  "public_junit_sha256": "b0dc8d7079cc78b4f3e88a867b5a32152c45f831a2d3c2381256d7ab003fdc8e",
+  "installed_client_log_sha256": "98bded248935d4ca64c2b2775b1ac3d4fe7867a9719648cce1bc0530f6161b68",
+  "build": {
+    "schema": "tide-device-control-build-v1",
+    "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+    "dirty": "",
+    "component_sha256": "53dfba264427b829ead61e59524e28d490488f1ce854c767be43b00b1ccf058b",
+    "core": {
+      "source": "a926703e9a41ec6cd41bcf8f2f83665f36bdb999",
+      "cpp_source_sha256": "0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0",
+      "torch": "2.10.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.0.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+        }
+      },
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "9d853591caaacc1c7f145a23df954bfb9888583ee2800fd2545b696e6d31fe2e",
+        "libtidegraph_runtime.a": "c458f4b079fee198b6ecd22d5790c69db0aef73b91032cd45b50baa1dd24acce",
+        "tidegraph-smoke": "f8e2b68dcb0541e1c1f99ef51f19ad6a8927c0f97740ffdbaecab9ae51e17f50",
+        "tidegraph-kernel-check": "4f077154a1339e7e669e6037e15b7248e0d028d0a39a1e9968fc75b97f9ec789",
+        "tidegraph-full-check": "c8e6a703ebb8aaa220239b531fea2af25c04dd5e559acc19ff4e48ffc9f897c5",
+        "tidegraph-aggregate-check": "4e7cc2eb80b146ea78e90cc3265223bec18244cf420ebe40190c3f88d0e9750e",
+        "tidegraph-optimizer-check": "e31eaa1e68fed614e9aa0cea237105925eb7cd16dd5b5bff92d7913e7487a1b9",
+        "tidegraph-checkpoint-check": "f1157b77fd0cc84469a48549a27d3cee27567168510e1bc8a2b7f5bc90308c0f",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "e7338400b2fd3b44f89b771a8758aba66cacef12aeaa9f2a6c6301e0b3c5c0f2",
+        "tidegraph-scale-bench": "b2cbd103ce049a5d2001d57b78b88def4bdbfa9f2ec4f2472ddb7fe86281c2a6",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "7d83012045824ac795139d06d6994d82ace7fae0b97fca1a3d23bef419ae0f23",
+        "tidegraph-greedy-check": "84775599bded1e26318a28aabf3e0e02a3f463c7ab59f83022bc9650569da9e5",
+        "tidegraph-accelerator-check": "821bc812d7d41ca079a0d0a06ffd407032b5af442b8faa1d8d8f78e4752fb629",
+        "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+        "tidegraph-read-precision-check": "5b8f8a6e52da9267ac805c997e9581b891b8d93b3325107f3a587224fd93fb02",
+        "tidegraph-placement-check": "52f85d9ee89ebb1d2d985f0ccf757b78bbf8d3d5b0e25e373595cd1c5180c9f4",
+        "tidegraph-payload-ownership-check": "de9b6d53cc247ee8de7e611d5f8fc951267512af7d1f0f731302c2dab7bd65b2"
+      }
+    },
+    "backend": "npu",
+    "runtime": "standalone",
+    "npu_runtime": "standalone",
+    "cuda_architectures": null,
+    "ascendc_soc": "Ascend910_9392",
+    "binary_sha256": {
+      "tide-sharded-vjp-check": "1e89d724593e4a9a9820caf0de87869963c56b3c95c885544569156f751f5200",
+      "tide-precision-flow-check": "b799512a8b2a69100021d206a3a9f670fb8c30b87d4b5fe2789d65fe82bd3bf4",
+      "tide-device-peer-check": "808c89103a844ecae7e3f6c008ddab23712383a0b82cd68f12846579ba0169fa",
+      "tide-device-control-check": "991e1449a6c3b5b19774c81a7aee6df47c8a18eb4a7b8c09e0e781a74589471b",
+      "tide-device-failure-check": "182b814d72bd2321a921735039aba2930642855497726aa7c49f95e143a89bf0",
+      "tide-device-numerical-check": "d4125f4156ae44f8fc1d508cc80a50fbd91038e5e17a44802d1a6d9dc6c57e05",
+      "tide-packed-queue-check": "9e64ee746054f4de0ebdd0599675546f4486d4663d9718ec30dc85be6097bd47",
+      "tide-device-closure-check": "1d44076afcc57136887e3e7d2eeea375695214b2f541bf9d95adf920b9bcc98a",
+      "tide-device-queue-check": "62790a27fc40cfcfb5cc8a6f8fa424f461e9378581cc02d221e668e2d46ed5bf",
+      "tide-device-broadcast-check": "1cedd3fe308891db69ffc6e98739abd29af857978241fc98a60f25ee22036c06",
+      "tide-device-ready-check": "3a8ad9a84c794ad7d7b0001e8ca3f34a87a8f8b1557a39dfdc5b614910c64a93",
+      "tide-device-selector-check": "8b545a5b3550a1124af70c8b6f143afc9f1df2fc228b0d042c9351ba2821bd19",
+      "tide-content-flow-check": "820f1834c7ae2fc52fa69f586e5beeebe78efd6ddd586d6f435733c6cc2e2e3f",
+      "tide-content-window-check": "86898e2a60638aa7a768db0b409ea2c122d5534699522859df49ce1827338641",
+      "tide-packed-full-check": "53725e9a5c386432715925fa17a9a9bcf28f64ccc5c4f5f3b570bfa1e2b5c894",
+      "tide-packed-lh-check": "c889ab9c21463c06c7a41fd5db8eea0f5a7b64f054223478b6bd7343d5b4649c",
+      "tide-aggregate-payload-check": "cef3839480682740301bf5b7c7c654b3cfe71fee851276323cb82f7d0b2f35cd",
+      "tide-state-read-check": "3593ee3dc1c2370f52347be7eb917fc7e5120d228e3d7c468d057bbbfebea8ab",
+      "tide-attention-payload-check": "e86a74228f33ca4d7b95c1be083b402632a1472e08f27f0141cb1b9b072d5e8d",
+      "tide-packed-sum-check": "0d384e1657dc17949f863a6556aa8483d5ee4ae3771120e56e206d196efff5dc",
+      "tide-device-add-check": "ee2c178b31d76a0a117d7a2f198f6dbbb7aa75390d7be045ae73ab590b45e476",
+      "tide-device-graph-vjp-check": "16869fb04cca764f1fa6ae4d420741a079d7ad6ca8f03cf8ad825d219e5aa3e7",
+      "tide-device-parameter-vjp-check": "224157eaffd819688ee66a5af9c67df0da4549c53bbb40fde8a584f6eee12027",
+      "tide-device-optimizer-check": "9c9e0d51e2b879e17ec223cbfc02c6fc608b2c6516a006a0a4c1fab2ac1605ca",
+      "tide-master-publication-check": "237ac95b7392c2e6abea410da735f60d78686c195ee4104ce1eaf098e98092a6",
+      "tide-device-training-step-check": "e48ffa2b546a33edb67e0603584ce6fc73ace0aeb22e0d61f55363aa742552ab",
+      "tide-device-retained-check": "2c907efe8119f3fd8b07f23f05cc352381d57c57d674935e0fdd04e5f3d60946",
+      "tide-resident-half-training-check": "3edc48c2c10d978ced864f787b53c4338a837f5d436999c04eadb6926995844e",
+      "tide-device-reverse-links-check": "1aa1f76372339e7c1773acecbbbb22d4bdee166039957fbb7a538df25d3fc7ae",
+      "tide-device-full-vjp-check": "6ec06107de9199cda669d61aaedaed527448a3dbcf5029c95ea80cd2420bfa35",
+      "tide-device-state-vjp-check": "9c59f817cfa3246c37d4f7e4fec6a5d3131e1ae80ced41bf3572672f1d97f90a",
+      "tide-device-clock-check": "fd698b291ea4b6bf600b6d9795b1caad243bfea22765cbde4ecf119a6a86b87b",
+      "tide-device-norm-check": "f89403d0f6cc35a0dfec54444c644039253590a3662ab04d04333d7ddc02e777",
+      "tide-device-lh-full-check": "a614f73bd50fa74b5dbe63c9a22dde3ac867430cb80fb384241e0c4412658eb1",
+      "tide-device-origin-check": "00f6f478428a4d730b3bbb15037db37b17831353ba9aa802ce35c08d03cbf35c",
+      "tide-device-emission-check": "dba8efc300b4ba590f36174bfb7a5fc5705d8d4d500f5db3f0007e0dc47bc03f",
+      "tide-device-swiglu-check": "d03cc08acf0a33d172023cb915a8b2d3d8a30a10385d5ba5bd60a10c194edbc7",
+      "tide-device-fiber-check": "66101023b1181bbc57a1576773d458b40f52c43758f26e66532e78b1863be136",
+      "tide-device-fiber-pool-check": "94d57a8725e5c428c9fc8ae720a0b8f2941688be5d8b10b3fb689748beb5300b",
+      "tide-device-event-attention-check": "2ed6af488284c24068f9f8e0c7b6e2b6a5d0d9260bd326ee8f9836825fbaee43",
+      "tide-device-attention-tile-check": "b89eea9b72a75d489c036b13a0cd02c25618d8c2f3c7345f6a7ac94d5226e3b7",
+      "tide-device-memory-check": "33eddb7fbd9572cb717b7ef016b8ea477e02a2d28910c3e51d8171fc9afb9aca",
+      "tide-device-event-batch-check": "a04e239f43a699b85daf8f245bd5bf4af90860916447e32d9fc6d1314abea700",
+      "tide-device-fiber-batch-check": "da3ce3676a715e176567365f3da1518133cdf8e060f34e11133098e3b8583919",
+      "tide-device-aggregate-check": "614bdc79c4ea4b2d190507676364352b6a2d2d3713a7986c58e708ef11d43d60",
+      "tide-resident-check": "9a762ba8088aff952795bf1b3730afdecb9295f644cfd87842b71b6c3beec402",
+      "tide-resident-training-check": "7dafe88813adb7b29deabedced11d13f4579dfc9a68c8f161d21a9f9ec16313c",
+      "tide-resident-full-training-check": "b36153ee4b8e14c793b1811929ad733cc8260b55500d226a3d3ef132891f135a",
+      "tide-device-extra-full-vjp-check": "311ff50d99968bbd2d22aba8aa536a7cb6fea7b6ee00a8e43b1f142d6920c9fe",
+      "tide-device-aggregate-vjp-check": "d853c0e2cf31d4afe2ea3a7d27cbdf73e7d7eabaa6df245ef639307bdae5e014",
+      "tide-resident-aggregate-training-check": "afb53b5dd156125f0968aa2ab9700109956d81e2d3dae19dea5c4744d4e14b9a",
+      "tide-device-control-vjp-check": "4e66a8d7eb80f16620a62781c16cc4cadfb6b4e86141549db58eb41e1b93f04f",
+      "tide-resident-control-training-check": "09697d6999fa6faabeedbd3b884f8e2d99019dff931c61eb9a4a574558c23abc",
+      "tide-device-attention-vjp-check": "f320639b26caa4837e40c95e8da8a1c7d972b0c9314ad6137d1a3ae06f0697b5",
+      "tide-device-event-vjp-check": "3667989f8a353be0a8622926482df96e2638fea4565917bf0834122d7693e484",
+      "tide-resident-event-training-check": "ca7e5848b2672b98d650916a21bfba0677669eb9040eae0cc1e160725590afd2",
+      "tide-device-fiber-vjp-check": "d53e50b2bee6fb4eb7896616f41fd57dbee287c714ab4bd00f7fc474faadc13c",
+      "tide-device-fiber-reverse-check": "a0776781d47ae3d30169ed376eeeba0a2bb0b491832258bb80c5ef3fc4b1d650",
+      "tide-resident-fiber-training-check": "4032988a8556e9b6fe89b53af91df81109360cd7bd7f6226c80b456023a6a44e",
+      "tide-sharded-optimizer-check": "3661495be84d3661a39281e239d5d9e44f09520818fed4f16eb76c766ba3ed5a",
+      "tide-owner-stream-check": "ce01ec62b2384dcaac244a98f7e4ed78a8f75adc1ce7c258c000bf12b545dda9",
+      "tide-sharded-training-check": "82f950ff4f80ed1e23b1b94ec0d9d4d9dd8d0b6131ab6f07a1921b0832451bd4",
+      "tide-state-shard-check": "c1459c27a5a3cbac3e0e7e1f93814b111a88463c08aa0d7213021df19d2c195b",
+      "tide-device-sequence-check": "c4738df12df82d597b6bd0fb8cc133d77425abf149cc67afc154ae052bdb6840",
+      "tide-resident-sharded-session-check": "76d9ce18d16362b7b4f186534015dc6342b299161301f725cc6ea4bb484f068e",
+      "libtide-resident.so": "813b8400613fcf9a0f3c2777efa7eaa2952e01a231afa916a3ddd6fb5881d4b7"
+    },
+    "loader_sha256": {
+      "tide-sharded-vjp-check": "56816ce220dfd73a30c5aad4ac911e6d6eb9203bfc17c862724ff1bbfd66910e",
+      "tide-precision-flow-check": "f207c9aba328b7a5513b835bcebdd5619bf3487c30f2a3abc2283c7f9a5cf17e",
+      "tide-device-peer-check": "57a86174ef3dcdbe3eb522e980b7e659fd0de587ad7021328849e6c5dcfbdd31",
+      "tide-device-control-check": "23ff245df019e0940bfcfd930fa0339d3a2cd6ebd0fec51057be98457f466235",
+      "tide-device-failure-check": "86d8bda9d75c80daaf84072d64802738310da8311ab7ec235fa40c1d8dbf8e5b",
+      "tide-device-numerical-check": "3b9940fe18383f069a38297ca5e23dd8f5a02cbe55f56576161fda197eee532e",
+      "tide-packed-queue-check": "2c92a3a7ecf1c60697344d6c9b8ce8297ea94826dea4cee74c4e4e738d99f83d",
+      "tide-device-closure-check": "ce908e2f90d37a43bd08f30e4148c417a6b92245a64fa289128438e7831140f1",
+      "tide-device-queue-check": "136b8c99e5e6a20d83fe57a19b8f4dc2ddf69acca00b79904349c4c7d10927ee",
+      "tide-device-broadcast-check": "546c6d5bb2625b1793ae28bbe71f27489ea8b4646c161363f330185ee54b39a1",
+      "tide-device-ready-check": "62a1253b93b3a558fbfd99a24f5839b0ddd8cf351215821790c5182b368e68ed",
+      "tide-device-selector-check": "aab211ba114f5ffa248ca66b7c9754a881213ce80b63a8541098204fe98a3308",
+      "tide-content-flow-check": "b741d93c830e607ad8cc825d697bf00fe45082a6c866e02de71707f158000248",
+      "tide-content-window-check": "87eb7679d177ac0b6208f8afa53fe1e01bc591ccfbaec1b813476c7fe6771d2b",
+      "tide-packed-full-check": "9576234aa0aed6cea56864fb5853c94a0bc447dbca2aa57af406a325331426f9",
+      "tide-packed-lh-check": "4e98556186dc1d45aad531302dc80acd15597fa034b8041f19ace8fd15da1323",
+      "tide-aggregate-payload-check": "cfac5d97e7a2628cee85431ded96e6128979edee79a09e9e7bbc27e5e3f007d6",
+      "tide-state-read-check": "bc47f95a99c13bee103b52c6a9e8ef067ee038b68d3b559b294a2e3edaaa67df",
+      "tide-attention-payload-check": "4ba08fbdb24f01d05b3c901372d657eeb72df1a7b9d64b258ceffe5f931ce055",
+      "tide-packed-sum-check": "4924ef9c7f9cf7f5068cd87038b8e5363acfac41427a93cf28c9c524a5744629",
+      "tide-device-add-check": "4d48833d7587a3163854e08702e514a66459783d3877e8ab7f03c864585cc406",
+      "tide-device-graph-vjp-check": "806aca19081bab165ae2e3e477ddff38af5234a5ad06039d5b95ff98f8515ac2",
+      "tide-device-parameter-vjp-check": "322a2d6eb1b2a8132c87849206bf206ca54b354d69beb335f898eca77ba75ac9",
+      "tide-device-optimizer-check": "8a9032cfca42af1699f2172be3a5c2909774f750c903e6140665223b7157655d",
+      "tide-master-publication-check": "bc3485e640da0105479ef09fadf7c551906444bf037b59f93ec3c50f755603bb",
+      "tide-device-training-step-check": "5e2c218a8d483674abbf99af1b71fc48f3894cc9f411acb25b49d52781c4ebbf",
+      "tide-device-retained-check": "0505eb9b611d692ff72b881a8ab393004874ef79c27f8b43d0e0c73043152e93",
+      "tide-resident-half-training-check": "5ab902558e143642e31bc1edd950d3d9227d459435d083339f7b8e089c269d7a",
+      "tide-device-reverse-links-check": "2a81496fa41a2bbdc6bd8fdd63dd1e5769aa91dca112dfdbfd49ca7da2f6fea4",
+      "tide-device-full-vjp-check": "36f84821a07e8ba085ebf4e00d0dd57f4062eea2342a4990a4afdb28ce3166ba",
+      "tide-device-state-vjp-check": "7765ecf912d1bfa2587972b4bde6dff89ca285696596d9cdc9bb536671c0d414",
+      "tide-device-clock-check": "94841580e5cefa789df911279fa5a8e1caf96195c21c0d19afa0a45572b1bd05",
+      "tide-device-norm-check": "1f828bb4a9f526d44e750317330501165d18d00f8ca30843f2a7ca7d9a35f65c",
+      "tide-device-lh-full-check": "b915dc748c9f40c248d576db575c02c610db85cfbc5737e55d0bed356fd473e5",
+      "tide-device-origin-check": "9254780d8241cf459a37ce335434aa157c7c12793eb169fc02c4428110191bdf",
+      "tide-device-emission-check": "94605e855f3de8e068f518ca4677979f094b02e46b3f92e31e0ecce365de0f07",
+      "tide-device-swiglu-check": "cfdf6da2c954ec1850fa704e304e61a51afc58d63cf7c786b0e30af081155c39",
+      "tide-device-fiber-check": "b71c6b62b43892aee82ca9b716334e6ee3dd5c5496a71e29128754840fcd9b94",
+      "tide-device-fiber-pool-check": "87efd2d1780396ca2071ac0b05cc194163ebb6f2de6504f4b5384c368a03ae2e",
+      "tide-device-event-attention-check": "122679aa83d632b22f22a97754ba9ea838e5f8a6deb1859e4a053abc35d78780",
+      "tide-device-attention-tile-check": "710d3e0e24fbaeb720027b7717c54e7c4387dea5ec37f537d63a6d88eb338059",
+      "tide-device-memory-check": "fe79a6248139731bc0718df1e2dba9edd1e72eef16b96bc4e3e27e506431f43d",
+      "tide-device-event-batch-check": "0ab2c2c8d458c42ee620ee1dadd38e5a12c02d9240079c56db3e45f9be2325b6",
+      "tide-device-fiber-batch-check": "5d114b23234d86e386cf9aa04efc2d75121221d565ea19b5292e32b498e739ec",
+      "tide-device-aggregate-check": "ad5402aeb6d7a545d34b9ee7490f7967ba78666850f165baf639d5742d7cd6a4",
+      "tide-resident-check": "695ce3cc9b88c360d4c4e23c6b70d41dbb866f7342dcd7a1c70cefee7e0578c4",
+      "tide-resident-training-check": "543880b08d0ad861bcc3e9abb2a98d7878d1774cc7ea23069e762144161743bc",
+      "tide-resident-full-training-check": "e96ef9b8d697a8c764adf79d9d3bca512e99e4877bda80df61a0e0033f5bb586",
+      "tide-device-extra-full-vjp-check": "d3fe94cd5f545e017282121247b5f9f6773bb579ae669e3da5f21346bb671600",
+      "tide-device-aggregate-vjp-check": "94f7714840c8098dec9b8ebe45382621c6850bab2595ac2e18c4c2417869f90a",
+      "tide-resident-aggregate-training-check": "0ca74bf49809d4541e0b86bd177b418a8eedbf7d60f6f4808ce6309cf60463a4",
+      "tide-device-control-vjp-check": "07e8d307252e62b3f963a2dc5eef7d3dc6271772f14fb5351e815408de97c116",
+      "tide-resident-control-training-check": "fe86fe7ad5018957526bc669ca5f07dc9e7298f93d66e42a813159482ab8d447",
+      "tide-device-attention-vjp-check": "f7a058d6e6aac5c46609e69239bbf212b839d05f565357dc6ca1155e2327c760",
+      "tide-device-event-vjp-check": "618c2231f871262f9cfc290e4f0467ba81b30bc562bf2c46af7690b62ab72155",
+      "tide-resident-event-training-check": "6b5f3b3e7a9fd53d6f13be95f3c83df69324e37fdfdebbc526fe560757f2a997",
+      "tide-device-fiber-vjp-check": "90227eba70a4c5b650aeb7a46cf8d7f645dc8a048c9fc7c855b4add3a7c79cf7",
+      "tide-device-fiber-reverse-check": "83dc9fcab1426d7410572515143f075211deb3d99a677437b6446f976947a866",
+      "tide-resident-fiber-training-check": "e17d59a813485fcb7e1acad4ad35faae4ccb5790001401b5970e6eab6a15bd49",
+      "tide-sharded-optimizer-check": "6be78e215e147f7c10c14286e45230027e881e8a5270d14671ee00b8a4fa8c21",
+      "tide-owner-stream-check": "9a93e59fb3f5f14cfedf08a01ab52dbf28ed4df5ba4644b405d664275e79ad75",
+      "tide-sharded-training-check": "1e1cce2cec90b2fc7d510cb33f7462c5711d0b092efa600a59ec4e388fb4bda9",
+      "tide-state-shard-check": "f57ffdbf69e0edd01b1d784c00daf2c4c90c3338f94f8e32b8097f6829a4959b",
+      "tide-device-sequence-check": "8b7a263aed54392b516dbedd95c280dc0026dc4471adc9d9583bead027c27ecf",
+      "tide-resident-sharded-session-check": "3fa2a24ca96659cd9614ba74db17ac2e9c15e4d354cb4d0023c3d3040bf86aa4",
+      "libtide-resident.so": "641276eeecf943d51708fc54e5451da041530c066b365fc51621078b23f882ae"
+    },
+    "requested_checks": null,
+    "scope": "build/loader/help only; device control check required separately"
+  },
+  "result_sha256": "ce82eb1a4feab946113333d8dfe7f545000bd42416f7e71a5429bacc141224c4",
+  "component_result_sha256": "5df91cb21cf435bb07ba30c1d110f47f1f62d4867f15e09317b03e65a4c803db",
+  "comparison": "Existing explicit Full score-conditioned policy; all discrete decisions and other tensor/VJP/update policies unchanged",
+  "limitations": [
+    "Composite exact inventory,not a single rerun; original failed resident10 remains failed.",
+    "Production libraries unchanged at build a926703; checker rebuilt at e3c86d7.",
+    "Independent CPU oracles do not precompute candidate event/routing/VJP traces.",
+    "Correctness includes three graph families,both schedules,FP32/FP16,forward/VJP/optimizer,continuation/checkpoint,capacity and1/2/3 owner placement.",
+    "No actual GPU or new performance/residency profiling evidence from correctness durations."
+  ]
+}

@@ -380,11 +380,11 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "implemented",
+      "status": "verified",
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Current public module batching is qualified at4f23993: Python/native FP32/FP16 complete inventory and standalone checker. Complete scale FP32 training passed; FP16 control metadata and resident/multicard qualification require follow-up. Historical evidence retains its own source scope; no new performance claim.",
+      "reason": "Current declared NPU correctness profile qualified:236 positive public module cases+2 explicit CSR refusals at4f; standalone scale CPU/NPU training at00b1775; exact composite133 resident components,installed client and547 public cases with zero skips at9c plus corrected State/Read checker at e3. Existing numerical policies and original strict near-tie limitations retained; no new performance claim.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -541,6 +541,42 @@
           "test_command": "qualify_accelerator.py complete per-case inventory from g4-npu-modules07 plus exact g4-module-completion01; tidegraph-accelerator-check; commands and hashes in audit",
           "result": "passed",
           "environment_manifest": "docs/evidence/npu-module-batching-20261011.md"
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+          "scope": "Exact composite133 resident component dtype invocations (33 original+98 completion at9c;2 corrected checkers at e3c86d7),installed client and547 public cases/zero skips. Three graph families,both schedules,FP32/FP16,training,continuation,checkpoint,capacity and1/2/3 owners.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "feature",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-composite-20261011.md",
+          "reason": "Composite qualified sources; original failed receipt retained. Existing Full conditioned policy and strict discrete checks unchanged."
+        }
+      ],
+      "evidence": [
+        {
+          "date": "2026-10-11",
+          "commit": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+          "scope": "Composite verified scope:production binaries built at a926703 with exact core/resident source identity at9c;public module qualification at4f and scale repair at00b1775 retained separately. Exact composite133 resident component dtype invocations (33 original+98 completion at9c;2 corrected checkers at e3c86d7),installed client and547 public cases/zero skips. Three graph families,both schedules,FP32/FP16,training,continuation,checkpoint,capacity and1/2/3 owners.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-composite-20261011.md"
         }
       ]
     },
@@ -888,12 +924,12 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "implemented",
+      "status": "verified",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Current public module batching is qualified at4f23993: Python/native FP32/FP16 complete inventory and standalone checker. Complete scale FP32 training passed; FP16 control metadata and resident/multicard qualification require follow-up. Historical evidence retains its own source scope; no new performance claim.",
+      "reason": "Current declared NPU correctness profile qualified:236 positive public module cases+2 explicit CSR refusals at4f; standalone scale CPU/NPU training at00b1775; exact composite133 resident components,installed client and547 public cases with zero skips at9c plus corrected State/Read checker at e3. Existing numerical policies and original strict near-tie limitations retained; no new performance claim.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -1275,6 +1311,42 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
           "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+          "scope": "Exact composite133 resident component dtype invocations (33 original+98 completion at9c;2 corrected checkers at e3c86d7),installed client and547 public cases/zero skips. Three graph families,both schedules,FP32/FP16,training,continuation,checkpoint,capacity and1/2/3 owners.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "feature",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-composite-20261011.md",
+          "reason": "Composite qualified sources; original failed receipt retained. Existing Full conditioned policy and strict discrete checks unchanged."
+        }
+      ],
+      "evidence": [
+        {
+          "date": "2026-10-11",
+          "commit": "9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b",
+          "scope": "Composite verified scope:production binaries built at a926703 with exact core/resident source identity at9c;public module qualification at4f and scale repair at00b1775 retained separately. Exact composite133 resident component dtype invocations (33 original+98 completion at9c;2 corrected checkers at e3c86d7),installed client and547 public cases/zero skips. Three graph families,both schedules,FP32/FP16,training,continuation,checkpoint,capacity and1/2/3 owners.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-composite-20261011.md"
         }
       ]
     },
@@ -1500,6 +1572,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/precision-and-stream-gates-20261011.md",
           "reason": "Exact scoped gates passed; complete resident qualification and actual GPU execution remain separate. No performance claim."
+        },
+        {
+          "date": "2026-10-11",
+          "commit": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+          "scope": "Fresh CUDA-linked standalone scale consumer after control-precision repair;5 CPU CTests passed. No actual GPU execution.",
+          "tiers": [
+            "build",
+            "cpu-semantic"
+          ],
+          "test_command": "build_accelerator_scale.py --core-build CUDA_CORE --build-dir NEW_BUILD --jobs 2",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-composite-20261011.md",
+          "reason": "Clean source CUDA consumer compile/link and host checks; real GPU validation remains pending."
         }
       ]
     }

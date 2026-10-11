@@ -11,10 +11,10 @@ card admission or foreign process operations. No subagents. Repository
 
 ## Active work and exact next action
 
-**Running `tide-g4-npu-resident-completion01.service`** at unchanged clean
+**Passed `tide-g4-npu-resident-completion01.service`** at unchanged clean
 9c3ffd3acad1a6be31f37e349e6505a14ffc4e1b,cwd
-`TASK/sources/g-stage-profile-raw-clean01`. It runs exactly98 previously unstarted
-component invocations,then the installed client and full zero-skip public tests.
+`TASK/sources/g-stage-profile-raw-clean01`. It passed exactly98 previously unstarted
+component invocations,then the installed client and547 public cases with zero skips.
 It retains33 accepted resident10 invocations;the2 corrected State/Read dtype
 invocations passed separately at clean e3c86d7. Production resident libraries
 are unchanged. This is a composite qualification,not a new whole-matrix rerun.
@@ -28,27 +28,37 @@ Inspect unit with `systemctl --user show tide-NAME.service -p ActiveState
 call a live stage passed. Stop command for this project-owned task if requested:
 `systemctl --user stop tide-g4-npu-resident-completion01.service`.
 
-**Prepared,not submitted:**`TASK/plans/g-stage-device-batch09.{json,py}` at
-clean00b1775,cwd `TASK/sources/g4-scale-control-clean01`. It depends on the full
-resident completion above and the already passed scale/module/CPU gates. It
+Also passed CPU-only `tide-g4-scale-control-cuda-clean02.service`,clean00b1775,
+cwd `TASK/sources/g4-scale-control-clean01`:fresh CUDA-linked scale consumer
+and5 CTests after the control repair.6CPU/8GiB/900s service,855s guard,2 build jobs.
+plans/NAME.{json,sh};runs/NAME/{status.json,bounded.json,task.log};builds/NAME.
+CUDA core is builds/g3-cuda-core-clean02 (one core for both runtime consumers).
+Attempt01 failed before build because its site launcher was not created after
+an incorrect core-path assertion;failed receipt retained,no survivors.
+Terminal zero exit,empty cgroup,no survivors;all5 CTests passed.
+
+**Running `tide-g-stage-device-batch09.service`:**`TASK/plans/g-stage-device-batch09.{json,py}` at
+clean00b1775,cwd `TASK/sources/g4-scale-control-clean01`. Its full
+resident/scale/module/CPU prerequisites have passed and been audited. It
 contains only `g2-npu-components10`→`g2-npu-complete-profiles10`:6 component cases
 and4 complete traces,none measured yet. Child service ceilings1500s+2700s;
 controller4500s. Existing inner/workload budgets unchanged. No second tranche.
 
-Next: inspect resident completion to terminal,audit exact133 registered dtype
-invocations (33 original+2 corrected+98 completion),installed/public zero-skips,
-source/guard/unit closure and retained failures. Only if those pass,run
-`/usr/bin/python3 TASK/plans/g-stage-device-batch09.py --check-only`,retain a
-unique receipt,and submit once via source-root job.py in
-`tide-g-stage-device-batch09.service` (background.slice,100% CPU,512MiB,
-128tasks,4500s). Parent output:`TASK/runs/g-stage-device-batch09`. Child services
-are created serially by that controller. Audit all declared prerequisite hashes;
-never overwrite receipts or resubmit names. Earlier batch08 remains unsubmitted
-and blocked by its failed resident10 prerequisite;do not use it.
+All correctness/resource/source prerequisites and the batch check-only passed;
+receipt:`TASK/runs/g-stage-device-batch09-preflight.json`. Controller and first
+child g2-npu-components10 are active in separate background.slice cgroups.
+Next: monitor each case to terminal,inspect correctness,timing,
+raw trace,per-device calibration and actual host/device work. Stop at first failure,
+retain measurement/raw outputs,and do not retry measurements or enlarge budgets.
+Controller output:`TASK/runs/g-stage-device-batch09/{status.json,batch.json,task.log}`;
+children:`TASK/runs/g2-npu-{components10,complete-profiles10}`. Exact argv/cwd and
+budgets are in the sealed plans and receipts. Both child units run in their own
+background.slice cgroups with the existing guard. Prior batch08 remains
+unsubmitted/blocked;do not use it. No performance result is available at submission.
 
 Latest pushed implementation:e3c86d70795c594eafbc587388d9e984c3f92612 (test-only
-State/Read stream boundary). New repair evidence/docs/support attempts are being
-committed separately;active jobs read immutable snapshots,not this worktree.
+State/Read stream boundary). Repair evidence is committed;new complete resident evidence/support claims are
+being committed separately;active jobs read immutable snapshots,not this worktree.
 Audit writer:`TASK/plans/audit-g4-repair-evidence01.py`.
 
 ## Implemented and qualified scope
@@ -69,9 +79,10 @@ Evidence:[initial](evidence/batched-vjp-cuda-local-20261010.md),
 [Add follow-up](evidence/add-batch-followup-20261010.md),
 [NPU modules](evidence/npu-module-batching-20261011.md),
 [environment](evidence/qualification-environment-20261011.md),
-[control precision/stream gates](evidence/precision-and-stream-gates-20261011.md).
-CPU remains verified;NPU/CUDA full profiles remain implemented pending their
-separate full target gates. Incidental correctness timings are not benchmarks.
+[control precision/stream gates](evidence/precision-and-stream-gates-20261011.md),
+[resident composite](evidence/resident-composite-20261011.md).
+CPU/NPU declared correctness profiles are verified with exact cited scopes;CUDA
+actual execution remains pending. NPU profiling/performance remain separate. Incidental correctness timings are not benchmarks.
 
 ## Immutable inputs and terminal receipts
 
