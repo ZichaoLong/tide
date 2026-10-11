@@ -387,3 +387,6 @@ python scripts/profile_execution_flow.py --packet WORKLOAD.json --build-dir ONLI
 CANN 采集容量下限为200MB；采集和导出共用总超时，进程组 RSS 与全部输出
 大小均受限；首次失败保留记录
 并停止，不重试、不扩大预算。计时比较使用单独的不带 profiler 进程。
+
+PyTorch 组件采集显式传入保留原始数据且不自动分析的回调，再单次导出时间线；
+不能只创建回调而不连接 profiler，以免厂商临时导出模式删除原始采集。

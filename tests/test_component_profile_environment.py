@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -10,22 +11,30 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
 import profile_batched_components as entry
 
 
-@pytest.mark.parametrize('mode', ['passed', 'profiled', 'resolution-failed', 'execution-failed'])
+@pytest.mark.parametrize('mode', ['passed', 'profiled', 'npu-profiled', 'resolution-failed', 'execution-failed'])
 def test_component_initialization_and_profile_keep_artifacts_outside_caller(tmp_path, monkeypatch, mode):
     import tidegraph.runtime as runtime
 
     caller = tmp_path/'caller';caller.mkdir()
     out = tmp_path/'result'
+    profiled = mode in {'profiled', 'npu-profiled'}
+    npu = mode == 'npu-profiled'
+    requested = 'npu:0' if npu else 'cpu'
+    class SyntheticDevice:
+        type = 'npu'
+        def __str__(self):
+            return 'npu:0'
     monkeypatch.chdir(caller)
     monkeypatch.setattr(entry.torch, 'set_num_interop_threads', lambda count: None)
     monkeypatch.setattr(entry, 'source_state', lambda root: ('fixed', ''))
     def resolve(spec):
-        assert spec == 'cpu' and Path.cwd() == out
+        assert spec == requested and Path.cwd() == out
         Path('kernel_meta').mkdir()
         if mode == 'resolution-failed':
             raise RuntimeError('synthetic unavailable device')
-        return torch.device('cpu'), 'explicit:cpu'
+        return (SyntheticDevice(), 'explicit:npu') if npu else (torch.device('cpu'), 'explicit:cpu')
     monkeypatch.setattr(runtime, 'resolve_device', resolve)
+    monkeypatch.setattr(runtime, 'synchronize', lambda device: None)
     def make_case(*args):
         assert Path.cwd() == out
         Path('kernel_meta/model-cache').write_text('synthetic vendor artifact')
@@ -44,14 +53,31 @@ def test_component_initialization_and_profile_keep_artifacts_outside_caller(tmp_
             assert Path.cwd() == out
             return self
         def __exit__(self, *args):
+            if npu:
+                callback(self)
             return False
         def export_chrome_trace(self, path):
             assert Path.cwd() == out
-            Path(path).write_text(json.dumps({'traceEvents': []}))
+            events = [dict(ph='X',cat='kernel',name='synthetic-device-event',ts=0,dur=1)] if npu else []
+            Path(path).write_text(json.dumps({'traceEvents': events}))
     monkeypatch.setattr(entry.torch.profiler, 'profile', lambda **kwargs: Trace())
-    argv = ['profile_batched_components', '--device', 'cpu', '--kind', 'read',
+    def callback(trace):
+        assert (out/'raw/collection').is_file()
+    def handler(directory, *, analyse_flag):
+        assert Path(directory) == out/'raw' and analyse_flag is False
+        return callback
+    def npu_profile(**kwargs):
+        # Model TorchNPU's export-only cleanup when on_trace_ready is omitted.
+        assert kwargs['on_trace_ready'] is callback
+        (out/'raw').mkdir();(out/'raw/collection').write_text('synthetic raw collection')
+        return Trace()
+    if npu:
+        profiler = SimpleNamespace(profile=npu_profile, tensorboard_trace_handler=handler,
+                                   ProfilerActivity=SimpleNamespace(CPU='CPU', NPU='NPU'))
+        monkeypatch.setitem(sys.modules, 'torch_npu', SimpleNamespace(profiler=profiler))
+    argv = ['profile_batched_components', '--device', requested, '--kind', 'read',
             '--variant', 'batched', '--rows', '2', '--width', '4', '--output-dir', '../result']
-    if mode == 'profiled':
+    if profiled:
         argv.append('--profile')
     monkeypatch.setattr(sys, 'argv', argv)
     if mode.endswith('failed'):
@@ -63,12 +89,14 @@ def test_component_initialization_and_profile_keep_artifacts_outside_caller(tmp_
     assert (out/'kernel_meta').is_dir()
     record = json.loads((out/'result.json').read_text())
     assert record['state'] == ('failed' if mode.endswith('failed') else 'passed')
-    assert record['requested_device'] == 'cpu'
+    assert record['requested_device'] == requested
     if mode == 'resolution-failed':
         assert record['device'] is None and not calls
     elif mode == 'execution-failed':
         assert calls == ['replay'] and not (out/'measurement.json').exists()
     else:
-        assert calls == ['replay', 'batched', 'batched', 'batched'] + (['batched'] if mode == 'profiled' else [])
+        assert calls == ['replay', 'batched', 'batched', 'batched'] + (['batched'] if profiled else [])
         assert record['warmup'] == record['measured_steps'] == 1
-        assert (out/'trace.json').exists() == (mode == 'profiled')
+        assert (out/'trace.json').exists() == profiled
+        if npu:
+            assert (out/'raw/collection').read_text() == 'synthetic raw collection'

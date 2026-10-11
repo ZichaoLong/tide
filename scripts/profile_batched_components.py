@@ -136,16 +136,19 @@ def run_component(a, root, out):
         # Save the timing before the separate, untimed profiler pass.
         write_json(out/'measurement.json', record)
         if a.profile:
+            options = dict(record_shapes=True)
             if device.type == 'npu':
                 import torch_npu
                 profiler = torch_npu.profiler
-                profiler.tensorboard_trace_handler(str(out/'raw'), analyse_flag=False)
+                # Supplying the handler keeps TorchNPU out of temporary export
+                # mode, which otherwise deletes the original collection.
+                options['on_trace_ready'] = profiler.tensorboard_trace_handler(str(out/'raw'), analyse_flag=False)
                 activities = [profiler.ProfilerActivity.CPU, profiler.ProfilerActivity.NPU]
             else:
                 profiler = torch.profiler
                 activities = [profiler.ProfilerActivity.CPU]
                 if device.type == 'cuda':activities.append(profiler.ProfilerActivity.CUDA)
-            with profiler.profile(activities=activities, record_shapes=True) as trace:
+            with profiler.profile(activities=activities, **options) as trace:
                 operation(case, a.kind, a.variant);synchronize(device)
             trace.export_chrome_trace(str(out/'trace.json'))
             document = json.loads((out/'trace.json').read_text())

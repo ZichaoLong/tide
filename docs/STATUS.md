@@ -158,6 +158,16 @@ Workload-generation and operation function hashes match4f23993 exactly.
 The device batch remains frozen at4f23993 and already launches numerical children
 from artifact directories; no running source/plan or timing policy changed.
 
+The component collector now passes its `analyse_flag=False` callback into the
+TorchNPU profiler. Installed TorchNPU2.10 otherwise resets to export-only mode
+and deletes the original collection; the prior unused callback did not prevent
+that.31 directed CPU checks passed, including synthetic NPU callback/raw-retention
+coverage (`runs/g2-component-raw-dev01.xml`). Commit and qualify this recording
+fix before any component measurement. Model generation,operation,one warmup,
+one timed step and one untimed trace remain unchanged. The unsubmitted batch07
+will use the new fixed source after exact-delta and workload-function audits;
+module completion continues at4f23993 and keeps that evidence scope.
+
 ## Shared NPU execution and finite successor scope
 
 User authorization on2026-10-11 permits occupied NPUs and overrides the skill's
