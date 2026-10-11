@@ -4,23 +4,28 @@ The authorized G1–G5 stage continues after the previous F1–F7 local closure.
 State/Read batching, the Add assembly follow-up and full declared CUDA resident
 source are implemented; current CPU qualification and backend builds retain the
 exact source scopes below. Occupied NPU devices are explicitly authorized.
-The new clean4f23993 CPU gate passed50 cases; the complete mixed-pdg NPU
-resume calibration passed with peak aggregate RSS10379898880B (9.67GiB).
-The two earlier device attempts exposed
-qualification-environment defects/resource costs, not a passed device suite:
-batch03 lost CANN PYTHONPATH in its resume child; batch04 reached five first-case
-checks then exceeded the original12GiB aggregate RSS cap. Performance has not run. Batch05/modules06 also failed before device selection:
-the shell changed cwd before the site launcher imported its source helpers.
-New batch06/child07 keeps launcher cwd fixed; numerical children still use OUT.
-Its import/preflight checks passed; all prior receipts remain unchanged.
+The new clean4f23993 CPU gate passed50 cases; complete mixed-pdg NPU resume
+calibration passed within the unchanged12GiB cap. Batch06/modules07 is now
+terminal failed/exit124 at its original2700s workload ceiling:168 module cases
+passed (57 Python FP32,57 Python FP16,54 native FP32). No numerical case failed;
+one native case was interrupted and the remaining work never ran. Later training,
+resident and performance stages remain unstarted. MainPID0,empty cgroups and no
+guard survivors are verified. Original receipts remain unchanged.
 
-The vendor-path correction is committed at dd5e220 and passed46 clean CPU tests.
-This next implementation keeps vendor-generated files in output directories,
-resolves relative native libraries before changing cwd and restores cwd on
-failure.32 directed CPU tests passed (`runs/g4-artifact-cwd-dev01.xml`). Next:
-inspect running batch06 and child07 below. The correction is committed and pushed
-at4f23993315554f68be3352d7d15533a0e445b260; CANN compiler pools are limited to1. The calibration is passed and a fresh finite device batch is running with unchanged
-work/time/memory bounds. Do not resubmit failed identities or old matrices.
+Running: `tide-g4-module-completion01.service` from the same clean4f23993, covering exactly
+70 missing combinations (68 positive plus2 explicit CSR refusals) and the unstarted
+standalone checker. New correctness-only budget:1640s workload,1700s shell,
+1800s service/1755s guard,6CPU,12GiB; per-suite1200s and checker120s unchanged.
+No passed case or performance measurement repeats. Plan:
+`plans/g4-module-completion01.json`; per-case inventory/admission checks:
+`plans/g4-module-inventory01.{py,json}`,7 synthetic audit checks passed.
+After it passes, preflight and submit `g-stage-device-batch07` / child08 for only
+the four previously unstarted stages; unchanged per-stage scopes and ceilings,
+12900s total child ceilings/13200s controller. The successor batch is unsubmitted.
+Completion logs: `runs/g4-module-completion01/{status.json,task.log,bounded.json,gate.json}`;
+exact command/cwd/source in status.json; inspect with `systemctl --user show
+tide-g4-module-completion01.service -p ActiveState -p Result -p MainPID -p ControlGroup`.
+
 Selector/upstream semantic extensions and actual GPU execution remain deferred.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -133,10 +138,9 @@ Exact launch commands are recorded in status.json; each uses source-root job.py,
 `plans/g-stage-run-bounded01.py` and `plans/NAME.sh`. Do not resubmit either.
 Prepared successor `plans/g-stage-device-batch06.{py,json}` / child07 uses the
 same4f23993, matched clean02 builds, artifact cwd and compiler limits1. It is
-running as `tide-g-stage-device-batch06.service`; the module child is
-`tide-g4-npu-modules07.service`. Python FP32 passed all57 named cases;
-Python FP16 is running. Native FP32/FP16,standalone,training,resident and
-performance remain unaccepted. Both prerequisites and preflight passed. Receipt:
+terminal failed as `tide-g-stage-device-batch06.service`; module child
+`tide-g4-npu-modules07.service` hit2700s/exit124 after168 accepted cases.
+Native FP16,standalone,training,resident and performance remain unaccepted. Both prerequisites and preflight passed. Receipt:
 `runs/g-stage-device-batch06-preflight01.json`. Original check-only command (now correctly refuses used outputs):
 `python /mi/data2T/zlong/tide-execution-flows/plans/g-stage-device-batch06.py --check-only`.
 
@@ -151,7 +155,7 @@ clean-source CPU tests passed at `g2-component-cwd-cpu-clean01` (0.60s,no skips)
 unit terminal passed,MainPID0,empty cgroup,no guard survivors. Immutable source:
 `sources/g-stage-component-cwd-clean01`; receipts/JUnit/guard in runs/NAME.
 Workload-generation and operation function hashes match4f23993 exactly.
-The active batch remains frozen at4f23993 and already launches numerical children
+The device batch remains frozen at4f23993 and already launches numerical children
 from artifact directories; no running source/plan or timing policy changed.
 
 ## Shared NPU execution and finite successor scope
@@ -168,18 +172,17 @@ It neither claims exclusive ownership nor changes account queue/lock records.
 Shared-device timings must disclose external contention. Earlier inventory:
 `runs/g-stage-shared-resource01.json`; selection is refreshed at each launch.
 
-Calibration and clean CPU qualification passed. The immutable batch06 plan now runs
+Calibration and clean CPU qualification passed. The prepared batch07 plan, after exact module completion, will run
 run these dependencies, each in its own background.slice service:
 
 | Stage | Scope | Service ceiling |
 | --- | --- | --- |
-| modules | 1NPU; named Python/native FP32/FP16 modules and standalone checker;2700s workload | 50min,6CPU,12GiB,192tasks |
 | training | 1NPU;8 positive-delay PDG Add/Attention × SGD/AdamW × FP32/FP16 cells;2500s | 45min,6CPU,12GiB,192tasks |
 | resident | 3NPUs; complete zero-skip target qualification;5400s | 100min,8CPU,24GiB,256tasks |
 | components | 1NPU;6 Read/Add/Attention replay/batch FP32 cases32×128;180s/case,1200s total | 25min,8CPU,12GiB,192tasks |
 | complete profiles | 2NPUs;4 Add/Attention × mixed-c/resident traces;600s/case,2600s total | 45min,8CPU,16GiB,256tasks |
 
-First failure stops successors; total child ceilings15900s/controller16200s.
+First failure stops successors; batch07 total child ceilings12900s/controller13200s.
 Resident Full trajectories explicitly select the existing score-conditioned softmax
 comparison from [resident-full-vjp](resident-full-vjp.md), whose width257 strict
 failure predates this stage. Only that checker uses the named policy; scores,
