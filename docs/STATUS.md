@@ -76,11 +76,36 @@ Four remaining components and4 native traces unstarted;no active device queue.
 
 Summary normalizes profiler timestamp/duration numbers only;model int64 clocks
 unchanged.29 directed CPU tests passed and the retained actual trace summary
-now parses. Next:commit repair,clean CPU qualification and summary-only recovery
-of existing Read traces. Then execute only4 unmeasured State cases and4 complete
-native traces under unchanged case limits. Components/export use the new fixed
-source;complete native profile entry remains unchanged at clean00b1775 with
-its exact compiled-source checks. Each source scope will be explicit.
+now parses. Repair committed/pushed9fd5263. Passed g2-profile-summary-cpu-clean01:
+55 CPU checks plus summary-only recovery of both existing Read traces;terminal
+success/empty cgroup/no survivors. Read replay10.99063456ms/235kernels;
+batched1.94298849ms/21kernels. No repeated model execution or export.
+
+Terminal failed tide-g-stage-device-batch11.service at clean9fd5263,
+cwd TASK/sources/g2-profile-export-clean02;controller4500s. Dependency chain:
+1. tide-g2-npu-components12.service:4 unmeasured Add/Attention replay/batch
+   cases at9fd5263;8CPU/12GiB/1500s service/1200s workload;each capture+export
+   shares180s/8GiB RSS/2GiB output. Read cases explicitly excluded.
+2. tide-g2-npu-complete-profiles12.service:4 never-started native traces,
+   clean00b1775,cwd TASK/sources/g4-scale-control-clean01;8CPU/16GiB,
+   2700s service/2600s workload;600s/12GiB/2GiB per case. Profile/native
+   computation unchanged;build identities checked against that exact source.
+First failure stops;no retries,larger limits,or full-size queue. Shared cards
+allowed;two snapshots and >=10GiB headroom,no operations on other users/jobs.
+Inspect systemctl --user show tide-g-stage-device-batch11.service -p ActiveState
+-p Result -p MainPID -p ControlGroup,then current child assessment/log.
+TASK/plans/NAME.{json,py,sh};TASK/runs/NAME/{status,bounded,sharing,assessment}.json,
+task.log;controller uses batch.json. Stop only if newly requested via
+systemctl --user stop on these exact new task units. Old protected work untouched.
+Components12 passed all4 cases;the six-case composite is audited in
+docs/evidence/npu-batched-components-20261011.{md,json}. Complete profiles12
+passed Add mixed-c (125063 ops;observed allocator growth38,956,544/38,110,720B),
+then failed Add resident before valid timing:compact reverse packet subbudget.
+All task units terminal,MainPID0/empty cgroups/no survivors. Attention cases unstarted.
+HBM admission is distinct from per-window/per-owner reverse tensor subbudgets.
+Next:derive a safe physical sample cap from existing static traffic bounds,then
+declare a finite new split configuration plus the still-unstarted cases. Do not
+repeat original B8 resident or mixed Add. GPU hardware validation remains pending.
 Controller: TASK/runs/g-stage-device-batch09/{status.json,batch.json,task.log};
 case: TASK/runs/g2-npu-components10/{assessment.json,read-replay.log,
 read-replay/measurement.json,read-replay/raw};plan and input hashes remain sealed.

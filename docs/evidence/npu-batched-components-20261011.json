@@ -1,0 +1,1148 @@
+{
+  "schema": "tide-component-profile-evidence-v1",
+  "state": "passed",
+  "date": "2026-10-11",
+  "tracking": "off",
+  "jobs": [
+    {
+      "name": "g2-profile-export-cpu-clean01",
+      "source": "1bba49799fe9a2549a58fa9c55f668219f69ed89",
+      "state": "passed",
+      "status": {
+        "path": "runs/g2-profile-export-cpu-clean01/status.json",
+        "sha256": "c9c84d46a65a0e991cf83e84beb8cb940a2567dc2202ea8c4dac5cef43d8ab65"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-profile-export-cpu-clean01/bounded.json",
+        "sha256": "213ba1eee3f576a71cdf240100b2238f5d565e6e757dfa1813ec5b6f0d7e0610"
+      },
+      "peak_rss_bytes": 283766784,
+      "process_seconds": 2.8222170062363148,
+      "budget": {
+        "seconds": 135,
+        "aggregate_rss_bytes": 4294967296
+      },
+      "tests": 49,
+      "junit": {
+        "path": "runs/g2-profile-export-cpu-clean01/tests.xml",
+        "sha256": "968382b8bc6ec653c3d191e9d882f255f7db3bcecf0225320f0f673c8b0d42b4"
+      }
+    },
+    {
+      "name": "g2-profile-summary-cpu-clean01",
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "state": "passed",
+      "status": {
+        "path": "runs/g2-profile-summary-cpu-clean01/status.json",
+        "sha256": "df3fdbaf7e3444905f9e3c1879d225efbe7eea1c5077d9fc7dcd6c88101778d0"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-profile-summary-cpu-clean01/bounded.json",
+        "sha256": "f2a2c0ac14809964946a692102156475776de7f79b6a462342b2050c7e7be42c"
+      },
+      "peak_rss_bytes": 289185792,
+      "process_seconds": 2.8238098733127117,
+      "budget": {
+        "seconds": 135,
+        "aggregate_rss_bytes": 4294967296
+      },
+      "tests": 55,
+      "junit": {
+        "path": "runs/g2-profile-summary-cpu-clean01/tests.xml",
+        "sha256": "aa92669702fd0b6e418daf2c72ef010e676e085e1fbe21a3165af2f6c570602b"
+      }
+    },
+    {
+      "name": "g2-read-replay-export03",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "state": "passed",
+      "status": {
+        "path": "runs/g2-read-replay-export03/status.json",
+        "sha256": "a0c2d63cd539f7b57413d5a54c4bfd53ba2201a39078df17363ec0f3e79e44b5"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-read-replay-export03/bounded.json",
+        "sha256": "c0f08e787186040727a188e27a1a881c10e67ad76191efbd22cc8c11e3502317"
+      },
+      "peak_rss_bytes": 2892038144,
+      "process_seconds": 11.116745330393314,
+      "budget": {
+        "seconds": 135,
+        "aggregate_rss_bytes": 8589934592
+      }
+    },
+    {
+      "name": "g2-npu-components12",
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "state": "passed",
+      "status": {
+        "path": "runs/g2-npu-components12/status.json",
+        "sha256": "c2d044f79e7c5c409b844e6ef4429c3f539d07d90f48725ef2e8ea0bd5de1e5e"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-npu-components12/bounded.json",
+        "sha256": "a774ea1778487c2d647d0cff929b0162dad7a0aeafd3e8dc525fccdfb528c2e8"
+      },
+      "peak_rss_bytes": 5317246976,
+      "process_seconds": 121.47171156853437,
+      "budget": {
+        "seconds": 1455,
+        "aggregate_rss_bytes": 12884901888
+      }
+    },
+    {
+      "name": "g-stage-device-batch09",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "state": "failed",
+      "status": {
+        "path": "runs/g-stage-device-batch09/status.json",
+        "sha256": "b041269f22cb3217882d3ae96627af14b50b102a4e6b439df022c13d6e3756ee"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      }
+    },
+    {
+      "name": "g2-npu-components10",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "state": "failed",
+      "status": {
+        "path": "runs/g2-npu-components10/status.json",
+        "sha256": "9f985d875c30d2f9408c7444c03cf4633de99c51f929e7dee26e221e5e496d7e"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-npu-components10/bounded.json",
+        "sha256": "a5b5a0da81e700bc89bc76cc6e4e7f6b3ee27a0397b22370c4bd60da26bbdd63"
+      },
+      "peak_rss_bytes": 10235559936,
+      "process_seconds": 20.24527920410037,
+      "budget": {
+        "seconds": 1455,
+        "aggregate_rss_bytes": 12884901888
+      }
+    },
+    {
+      "name": "g2-read-replay-export01",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "state": "failed",
+      "status": {
+        "path": "runs/g2-read-replay-export01/status.json",
+        "sha256": "bc05bdec3e2d8c18ef437c5137c57a4c3b70bf4de556f9a23f14b7cc255b118b"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-read-replay-export01/bounded.json",
+        "sha256": "5b3624ba55ce0349297b30eebf77adb7a0a7b19693874e10fa7bea62e577efa7"
+      },
+      "peak_rss_bytes": 1142304768,
+      "process_seconds": 7.059012271463871,
+      "budget": {
+        "seconds": 135,
+        "aggregate_rss_bytes": 8589934592
+      }
+    },
+    {
+      "name": "g2-read-replay-export02",
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "state": "failed",
+      "status": {
+        "path": "runs/g2-read-replay-export02/status.json",
+        "sha256": "17a73c4adf2274987461ad3eba2ff714f33d1ffd2b000b6ca0c3653460b31bdf"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-read-replay-export02/bounded.json",
+        "sha256": "8e1226b940f9bda5ba6c366db3dfe84ff8ee8f254c60ea2bab394a8f270fd6ba"
+      },
+      "peak_rss_bytes": 2939187200,
+      "process_seconds": 10.91031163930893,
+      "budget": {
+        "seconds": 135,
+        "aggregate_rss_bytes": 8589934592
+      }
+    },
+    {
+      "name": "g-stage-device-batch10",
+      "source": "1bba49799fe9a2549a58fa9c55f668219f69ed89",
+      "state": "failed",
+      "status": {
+        "path": "runs/g-stage-device-batch10/status.json",
+        "sha256": "518bd73bca9ed0860cfc86eadb8ca6550217cd362c2afc6a32a8dbe1897ef90e"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      }
+    },
+    {
+      "name": "g2-npu-components11",
+      "source": "1bba49799fe9a2549a58fa9c55f668219f69ed89",
+      "state": "failed",
+      "status": {
+        "path": "runs/g2-npu-components11/status.json",
+        "sha256": "fafc56e1c1456c03d42bd0e587fbe115018cf41c06a8a99a8205a5376a94334e"
+      },
+      "unit": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "ControlGroup": ""
+      },
+      "bounded": {
+        "path": "runs/g2-npu-components11/bounded.json",
+        "sha256": "83174e917eaa3b94029510f0ab9d1d75cbe38b5cf2ad84ba54610504a0cb80c3"
+      },
+      "peak_rss_bytes": 5222404096,
+      "process_seconds": 34.56143357977271,
+      "budget": {
+        "seconds": 1455,
+        "aggregate_rss_bytes": 12884901888
+      }
+    }
+  ],
+  "cases": [
+    {
+      "kind": "read",
+      "variant": "replay",
+      "seconds": 0.010990634560585022,
+      "source": "00b1775ce15afa20fb0552d51f6afdf4392ccc1c",
+      "measurement": {
+        "path": "runs/g2-npu-components10/read-replay/measurement.json",
+        "sha256": "3a6192d41b821d6915ffde7553acfd735d7e2f37dbbb2ec22c96878d37bf8ee0"
+      },
+      "trace": {
+        "path": "runs/g2-read-replay-export03/raw-copy/liteserver-mi-dev-00001_3187092_20261011192032809_ascend_pt/ASCEND_PROFILER_OUTPUT/trace_view.json",
+        "sha256": "0714feeb5e3d843ac6ee7114c5fc69ae19cfe4962c7345a091fd2f891c58a01f"
+      },
+      "summary": {
+        "host_stage_us": {
+          "scalar_read_replay": 9613.42,
+          "component_backward": 5328.43
+        },
+        "kernel_events": 235,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 2,
+          "aclnnLinalgVectorNorm_LpNormV2_LpNormV2": 33,
+          "aclnnIsFinite_IsFiniteAiCore_IsFinite": 64,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 33,
+          "aclnnDiv_RealDivAiCore_RealDiv": 32,
+          "aclnnEqScalar_EqualAiCore_Equal": 32,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 32
+        },
+        "kernel_total_us": 393.9,
+        "kernel_span_us": 14571.75,
+        "trace_sha256": "0714feeb5e3d843ac6ee7114c5fc69ae19cfe4962c7345a091fd2f891c58a01f",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 234,
+          "aclnnStack": 2,
+          "aten::stack": 2,
+          "aten::to": 33,
+          "aclnnLinalgVectorNorm": 33,
+          "aten::linalg_vector_norm": 33,
+          "aten::as_strided": 129,
+          "aten::select": 64,
+          "aten::unbind": 1,
+          "aclnnIsFinite": 64,
+          "aten::isfinite": 64,
+          "aten::_local_scalar_dense": 64,
+          "aten::item": 64,
+          "aten::is_nonzero": 64,
+          "detach": 32,
+          "aten::detach": 32,
+          "aclnnInplaceCopy": 32,
+          "aten::copy_": 32,
+          "aten::clone": 32,
+          "_SemanticValue": 32,
+          "scalar_read_replay": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "aten::expand": 1,
+          "aclnnDivs": 1,
+          "aten::div": 33,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "aten::mul": 34,
+          "aclnnMul": 33,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 1,
+          "autograd::engine::evaluate_function: StackBackward0": 1,
+          "_SemanticValueBackward": 32,
+          "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+          "aten::unsqueeze": 64,
+          "aclnnDiv": 32,
+          "aclnnEqScalar": 32,
+          "aten::eq": 32,
+          "aclnnInplaceMaskedFillScalar": 32,
+          "aten::masked_fill_": 32,
+          "LinalgVectorNormBackward0": 32,
+          "autograd::engine::evaluate_function: LinalgVectorNormBackward0": 32,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 32,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 2,
+          "aclnnLinalgVectorNorm_LpNormV2_LpNormV2": 33,
+          "aclnnIsFinite_IsFiniteAiCore_IsFinite": 64,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 33,
+          "aclnnDiv_RealDivAiCore_RealDiv": 32,
+          "aclnnEqScalar_EqualAiCore_Equal": 32,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 32,
+          "MEMCPY_ASYNC": 32,
+          "Computing": 235,
+          "Free": 234
+        }
+      }
+    },
+    {
+      "kind": "read",
+      "variant": "batched",
+      "seconds": 0.0019429884850978851,
+      "source": "1bba49799fe9a2549a58fa9c55f668219f69ed89",
+      "measurement": {
+        "path": "runs/g2-npu-components11/read-batched/measurement.json",
+        "sha256": "daeb090ed17fb2a8cb212c0b9cd4190297d84a8e79ef44f090ffa3707b18657d"
+      },
+      "trace": {
+        "path": "runs/g2-npu-components11/read-batched-export/trace.json",
+        "sha256": "73a5e578af2a0303fe73c9115e43924eec3f2f0a7d02aaf4fb50a9a045fac97d"
+      },
+      "summary": {
+        "host_stage_us": {
+          "batched_read": 1368.23,
+          "component_backward": 2285.89
+        },
+        "kernel_events": 21,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 4,
+          "aclnnLinalgVectorNorm_LpNormV2_LpNormV2": 1,
+          "aclnnIsFinite_IsFiniteAiCore_IsFinite": 1,
+          "aclnnAll_ReduceAll_ReduceAll": 1,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 2,
+          "aclnnIndexSelect_GatherV3AiCore_GatherV3": 2,
+          "aclnnDiv_RealDivAiCore_RealDiv": 1,
+          "aclnnEqScalar_EqualAiCore_Equal": 1,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 1
+        },
+        "kernel_total_us": 121.02000000000001,
+        "kernel_span_us": 2635.75,
+        "trace_sha256": "73a5e578af2a0303fe73c9115e43924eec3f2f0a7d02aaf4fb50a9a045fac97d",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 21,
+          "aclnnStack": 4,
+          "aten::stack": 4,
+          "aten::to": 3,
+          "aclnnLinalgVectorNorm": 1,
+          "aten::linalg_vector_norm": 1,
+          "aten::as_strided": 101,
+          "aten::select": 96,
+          "aten::unbind": 2,
+          "_Read": 1,
+          "aclnnIsFinite": 1,
+          "aten::isfinite": 1,
+          "aclnnAll": 1,
+          "aten::all": 1,
+          "aten::_local_scalar_dense": 1,
+          "aten::item": 1,
+          "aten::is_nonzero": 1,
+          "batched_read": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "aten::expand": 3,
+          "aclnnDivs": 1,
+          "aten::div": 2,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "aten::mul": 3,
+          "aclnnMul": 2,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 1,
+          "autograd::engine::evaluate_function: StackBackward0": 1,
+          "aten::empty": 1,
+          "aten::empty_strided": 1,
+          "aten::copy_": 2,
+          "aten::_to_copy": 1,
+          "aten::lift_fresh": 1,
+          "detach_": 1,
+          "aten::detach_": 1,
+          "aten::unsqueeze": 2,
+          "aclnnIndexSelect": 2,
+          "aten::index_select": 2,
+          "aclnnDiv": 1,
+          "aclnnEqScalar": 1,
+          "aten::eq": 1,
+          "aclnnInplaceCopy": 1,
+          "aten::clone": 1,
+          "aclnnInplaceMaskedFillScalar": 1,
+          "aten::masked_fill_": 1,
+          "aten::masked_fill": 1,
+          "_ReadBackward": 1,
+          "autograd::engine::evaluate_function: _ReadBackward": 1,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 33,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 4,
+          "aclnnLinalgVectorNorm_LpNormV2_LpNormV2": 1,
+          "aclnnIsFinite_IsFiniteAiCore_IsFinite": 1,
+          "aclnnAll_ReduceAll_ReduceAll": 1,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 2,
+          "aclnnIndexSelect_GatherV3AiCore_GatherV3": 2,
+          "aclnnDiv_RealDivAiCore_RealDiv": 1,
+          "aclnnEqScalar_EqualAiCore_Equal": 1,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 1,
+          "MEMCPY_ASYNC": 1,
+          "Computing": 21,
+          "Free": 20
+        }
+      }
+    },
+    {
+      "kind": "state-add",
+      "variant": "replay",
+      "seconds": 0.01472262293100357,
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "measurement": {
+        "path": "runs/g2-npu-components12/state-add-replay/measurement.json",
+        "sha256": "a249fc73b7741aad08eb656d8309dafefeec29e5cc66af7555f66c9f925ff99c"
+      },
+      "trace": {
+        "path": "runs/g2-npu-components12/state-add-replay-export/trace.json",
+        "sha256": "fff80262943b8fcec606f5267561c3757e9222b0fe376274db8982e72e34637b"
+      },
+      "export": {
+        "path": "runs/g2-npu-components12/state-add-replay-export/result.json",
+        "sha256": "a809f05fb11156e39d5143091c01da1a2855169b39702c3f59dfb86d411c58be"
+      },
+      "analysis_tasks": {
+        "path": "runs/g2-npu-components12/state-add-replay-export/analysis-tasks.json",
+        "sha256": "36c67c13c890b4124a31d1c65ecb176b04a54923e1d27c8ab4a87613b6d57272"
+      },
+      "summary": {
+        "host_stage_us": {
+          "packed_numeric": 2387.62,
+          "scalar_state_replay": 7196.6,
+          "component_backward": 12401.04
+        },
+        "kernel_events": 526,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 3,
+          "aclnnMul_MulAiCore_Mul": 292,
+          "aclnnAdd_AddAiCore_Add": 128,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 96
+        },
+        "kernel_total_us": 665.1800000000002,
+        "kernel_span_us": 21594.0,
+        "trace_sha256": "fff80262943b8fcec606f5267561c3757e9222b0fe376274db8982e72e34637b",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 494,
+          "aclnnStack": 3,
+          "aten::stack": 3,
+          "aclnnMul": 292,
+          "aten::mul": 293,
+          "aclnnAdd": 33,
+          "aten::add": 33,
+          "aten::as_strided": 65,
+          "aten::select": 64,
+          "aten::unbind": 1,
+          "aclnnInplaceCopy": 64,
+          "aten::copy_": 64,
+          "aten::clone": 64,
+          "packed_numeric": 1,
+          "detach": 32,
+          "aten::detach": 32,
+          "_SemanticValue": 32,
+          "scalar_state_replay": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "aten::expand": 1,
+          "aclnnDivs": 1,
+          "aten::div": 1,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 1,
+          "autograd::engine::evaluate_function: StackBackward0": 1,
+          "_SemanticValueBackward": 32,
+          "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+          "AddBackward0": 32,
+          "autograd::engine::evaluate_function: AddBackward0": 32,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 65,
+          "MulBackward0": 96,
+          "aclnnReduceSum": 96,
+          "aten::sum": 96,
+          "autograd::engine::evaluate_function: MulBackward0": 96,
+          "aclnnInplaceAdd": 95,
+          "aten::add_": 95,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 3,
+          "aclnnMul_MulAiCore_Mul": 292,
+          "aclnnAdd_AddAiCore_Add": 128,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 96,
+          "MEMCPY_ASYNC": 64,
+          "Computing": 526,
+          "Free": 525
+        }
+      },
+      "phase_peaks": [
+        5181784064,
+        2930667520
+      ]
+    },
+    {
+      "kind": "state-add",
+      "variant": "batched",
+      "seconds": 0.0056592002511024475,
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "measurement": {
+        "path": "runs/g2-npu-components12/state-add-batched/measurement.json",
+        "sha256": "b8785ea879c9c0bbf55c352d6bbb71919186082b5e2d3323ed6d4d2327a278b9"
+      },
+      "trace": {
+        "path": "runs/g2-npu-components12/state-add-batched-export/trace.json",
+        "sha256": "764f53d3ac4362226634178d82f3d6c1c260403b60ac79a04d882ed21b95608c"
+      },
+      "export": {
+        "path": "runs/g2-npu-components12/state-add-batched-export/result.json",
+        "sha256": "fd398a34c6c071874ea53712a3ba3cf048ee464a45516aa5f8dbcdfe057a1b65"
+      },
+      "analysis_tasks": {
+        "path": "runs/g2-npu-components12/state-add-batched-export/analysis-tasks.json",
+        "sha256": "36c67c13c890b4124a31d1c65ecb176b04a54923e1d27c8ab4a87613b6d57272"
+      },
+      "summary": {
+        "host_stage_us": {
+          "packed_numeric": 2372.96,
+          "batch_graph": 3084.79,
+          "component_backward": 3270.16
+        },
+        "kernel_events": 33,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 6,
+          "aclnnMul_MulAiCore_Mul": 13,
+          "aclnnAdd_AddAiCore_Add": 4,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 3
+        },
+        "kernel_total_us": 220.98000000000002,
+        "kernel_span_us": 7027.75,
+        "trace_sha256": "764f53d3ac4362226634178d82f3d6c1c260403b60ac79a04d882ed21b95608c",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 94,
+          "aclnnStack": 6,
+          "aten::stack": 6,
+          "aclnnMul": 13,
+          "aten::mul": 14,
+          "aclnnAdd": 2,
+          "aten::add": 2,
+          "aten::as_strided": 161,
+          "aten::select": 160,
+          "aten::unbind": 2,
+          "aclnnInplaceCopy": 64,
+          "aten::copy_": 64,
+          "aten::clone": 64,
+          "packed_numeric": 1,
+          "detach": 101,
+          "aten::detach": 101,
+          "_State": 1,
+          "batch_graph": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "aten::expand": 1,
+          "aclnnDivs": 1,
+          "aten::div": 1,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 3,
+          "autograd::engine::evaluate_function: StackBackward0": 3,
+          "torch::autograd::GraphRoot": 1,
+          "autograd::engine::evaluate_function: torch::autograd::GraphRoot": 1,
+          "UnbindBackward0": 1,
+          "autograd::engine::evaluate_function: UnbindBackward0": 1,
+          "AddBackward0": 1,
+          "autograd::engine::evaluate_function: AddBackward0": 1,
+          "MulBackward0": 3,
+          "aclnnReduceSum": 3,
+          "aten::sum": 3,
+          "autograd::engine::evaluate_function: MulBackward0": 3,
+          "aclnnInplaceAdd": 2,
+          "aten::add_": 2,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 134,
+          "_StateBackward": 1,
+          "autograd::engine::evaluate_function: _StateBackward": 1,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 6,
+          "aclnnMul_MulAiCore_Mul": 13,
+          "aclnnAdd_AddAiCore_Add": 4,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnDivs_RealDivAiCore_RealDiv": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 3,
+          "MEMCPY_ASYNC": 64,
+          "Computing": 33,
+          "Free": 32
+        }
+      },
+      "phase_peaks": [
+        5188907008,
+        2914492416
+      ]
+    },
+    {
+      "kind": "state-attention",
+      "variant": "replay",
+      "seconds": 0.0652332678437233,
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "measurement": {
+        "path": "runs/g2-npu-components12/state-attention-replay/measurement.json",
+        "sha256": "59983a2ccc04172452e69ce9012d1793887de19f728cc463e6ab04ca6aa3033a"
+      },
+      "trace": {
+        "path": "runs/g2-npu-components12/state-attention-replay-export/trace.json",
+        "sha256": "716237b55ceefa78093e465717b68ed8a0d94ab5c2b85bd9bc3fec01e659616d"
+      },
+      "export": {
+        "path": "runs/g2-npu-components12/state-attention-replay-export/result.json",
+        "sha256": "2bb0540ce3ffff6a4190efda279fa8b460209752c7568e255c7a70defdaaa5bf"
+      },
+      "analysis_tasks": {
+        "path": "runs/g2-npu-components12/state-attention-replay-export/analysis-tasks.json",
+        "sha256": "36c67c13c890b4124a31d1c65ecb176b04a54923e1d27c8ab4a87613b6d57272"
+      },
+      "summary": {
+        "host_stage_us": {
+          "packed_numeric": 9230.91,
+          "scalar_state_replay": 30450.02,
+          "component_backward": 61881.22
+        },
+        "kernel_events": 2393,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 5,
+          "aclnnMatmul_MatMulCommon_MatMulV2": 516,
+          "aclnnCat_ConcatD_ConcatD": 160,
+          "aclnnMatmul_TransposeAiCore_Transpose": 130,
+          "aclnnMatmul_BatchMatMulNd_BatchMatMulV2": 2,
+          "aclnnDivs_RealDivAiCore_RealDiv": 130,
+          "aclnnArange_ArangeAiCore_Range": 2,
+          "aclnnAdds_AddAiCore_Add": 1,
+          "aclnnLeTensor_LessEqualAiCore_LessEqual": 1,
+          "aclnnBitwiseNot_LogicalNotAiCore_LogicalNot": 1,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 1,
+          "aclnnSoftmax_SoftmaxAiCore_SoftmaxV2": 65,
+          "aclnnMatmul_SliceAiCore_Slice": 256,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 1,
+          "aclnnMatmul_MulAiCore_Mul": 256,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 192,
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike": 192,
+          "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy": 128,
+          "aclnnSoftmaxBackward_SoftmaxGrad_SoftmaxGrad": 64,
+          "aclnnAdd_AddAiCore_Add": 284
+        },
+        "kernel_total_us": 7593.699999999989,
+        "kernel_span_us": 101049.0,
+        "trace_sha256": "716237b55ceefa78093e465717b68ed8a0d94ab5c2b85bd9bc3fec01e659616d",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 1884,
+          "aclnnStack": 5,
+          "aten::stack": 5,
+          "aclnnMatmul": 774,
+          "aten::matmul": 262,
+          "aten::view": 388,
+          "aten::reshape": 196,
+          "aten::as_strided": 2441,
+          "aten::slice": 288,
+          "aclnnCat": 160,
+          "aten::cat": 160,
+          "aten::transpose": 515,
+          "aclnnRepeatInterleaveIntWithDim": 2,
+          "aten::repeat_interleave": 2,
+          "aten::permute": 1,
+          "aten::_local_scalar_dense": 130,
+          "aten::item": 130,
+          "aclnnDivs": 130,
+          "aten::div": 130,
+          "aclnnArange": 2,
+          "aten::arange": 2,
+          "aten::unsqueeze": 1026,
+          "aclnnAdds": 1,
+          "aten::add": 33,
+          "aclnnLeTensor": 1,
+          "aten::le": 1,
+          "aclnnBitwiseNot": 1,
+          "aten::bitwise_not": 1,
+          "aten::expand": 3,
+          "aclnnInplaceCopy": 449,
+          "aten::copy_": 449,
+          "aten::clone": 257,
+          "aclnnInplaceMaskedFillScalar": 1,
+          "aten::masked_fill_": 1,
+          "aten::masked_fill": 1,
+          "aclnnSoftmax": 65,
+          "aten::_softmax": 65,
+          "aten::softmax": 65,
+          "aten::select": 544,
+          "packed_numeric": 1,
+          "detach": 96,
+          "aten::detach": 96,
+          "_SemanticValue": 96,
+          "scalar_state_replay": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "aten::mul": 2,
+          "aclnnMul": 1,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 1,
+          "autograd::engine::evaluate_function: StackBackward0": 1,
+          "_SemanticValueBackward": 32,
+          "autograd::engine::evaluate_function: _SemanticValueBackward": 32,
+          "aten::matmul_backward": 256,
+          "MatmulBackward0": 256,
+          "aclnnReduceSum": 192,
+          "aten::sum": 192,
+          "autograd::engine::evaluate_function: MatmulBackward0": 256,
+          "aten::narrow": 192,
+          "CatBackward0": 96,
+          "autograd::engine::evaluate_function: CatBackward0": 96,
+          "aclnnInplaceZero": 192,
+          "aten::zero_": 192,
+          "aten::zeros": 192,
+          "aten::select_backward": 192,
+          "SelectBackward0": 192,
+          "autograd::engine::evaluate_function: SelectBackward0": 192,
+          "aclnnSoftmaxBackward": 64,
+          "aten::_softmax_backward_data": 64,
+          "SoftmaxBackward0": 64,
+          "autograd::engine::evaluate_function: SoftmaxBackward0": 64,
+          "DivBackward0": 64,
+          "autograd::engine::evaluate_function: DivBackward0": 64,
+          "aten::squeeze": 64,
+          "aclnnInplaceAdd": 252,
+          "aten::add_": 252,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 100,
+          "ViewBackward0": 96,
+          "autograd::engine::evaluate_function: ViewBackward0": 96,
+          "aclnnAdd": 32,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 5,
+          "aclnnMatmul_MatMulCommon_MatMulV2": 516,
+          "aclnnCat_ConcatD_ConcatD": 160,
+          "aclnnMatmul_TransposeAiCore_Transpose": 130,
+          "aclnnMatmul_BatchMatMulNd_BatchMatMulV2": 2,
+          "aclnnDivs_RealDivAiCore_RealDiv": 130,
+          "aclnnArange_ArangeAiCore_Range": 2,
+          "aclnnAdds_AddAiCore_Add": 1,
+          "aclnnLeTensor_LessEqualAiCore_LessEqual": 1,
+          "aclnnBitwiseNot_LogicalNotAiCore_LogicalNot": 1,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 1,
+          "aclnnSoftmax_SoftmaxAiCore_SoftmaxV2": 65,
+          "aclnnMatmul_SliceAiCore_Slice": 256,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 1,
+          "aclnnMatmul_MulAiCore_Mul": 256,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 192,
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike": 192,
+          "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy": 128,
+          "aclnnSoftmaxBackward_SoftmaxGrad_SoftmaxGrad": 64,
+          "aclnnAdd_AddAiCore_Add": 284,
+          "MEMCPY_ASYNC": 323,
+          "Computing": 2393,
+          "Free": 2392
+        }
+      },
+      "phase_peaks": [
+        5276798976,
+        2940149760
+      ]
+    },
+    {
+      "kind": "state-attention",
+      "variant": "batched",
+      "seconds": 0.028677266091108322,
+      "source": "9fd52630e5154956f489f29256610ee34922d455",
+      "measurement": {
+        "path": "runs/g2-npu-components12/state-attention-batched/measurement.json",
+        "sha256": "596c80fa56b93127332a0a8cacb426426130b466a17fb3513a43c78689c3ad23"
+      },
+      "trace": {
+        "path": "runs/g2-npu-components12/state-attention-batched-export/trace.json",
+        "sha256": "8d689b70337179dfe87558564c120a7a2f50ec0e5f6d115386947d7f0602b2a3"
+      },
+      "export": {
+        "path": "runs/g2-npu-components12/state-attention-batched-export/result.json",
+        "sha256": "a326f5d249f08602b6a9afc65568b969d6e0419f1c293375c21c77df5fe952b0"
+      },
+      "analysis_tasks": {
+        "path": "runs/g2-npu-components12/state-attention-batched-export/analysis-tasks.json",
+        "sha256": "36c67c13c890b4124a31d1c65ecb176b04a54923e1d27c8ab4a87613b6d57272"
+      },
+      "summary": {
+        "host_stage_us": {
+          "packed_numeric": 9200.36,
+          "batch_graph": 14923.82,
+          "component_backward": 21854.8
+        },
+        "kernel_events": 484,
+        "kernel_names": {
+          "aclnnStack_PackAiCore_Pack": 9,
+          "aclnnMatmul_MatMulCommon_MatMulV2": 16,
+          "aclnnCat_ConcatD_ConcatD": 128,
+          "aclnnMatmul_TransposeAiCore_Transpose": 6,
+          "aclnnMatmul_BatchMatMulNd_BatchMatMulV2": 6,
+          "aclnnDivs_RealDivAiCore_RealDiv": 4,
+          "aclnnArange_ArangeAiCore_Range": 4,
+          "aclnnAdds_AddAiCore_Add": 2,
+          "aclnnLeTensor_LessEqualAiCore_LessEqual": 2,
+          "aclnnBitwiseNot_LogicalNotAiCore_LogicalNot": 2,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 3,
+          "aclnnSoftmax_SoftmaxAiCore_SoftmaxV2": 2,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 1,
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike": 160,
+          "aclnnAdd_AddAiCore_Add": 126,
+          "aclnnMatmul_MulAiCore_Mul": 2,
+          "aclnnReduceSum_TransposeAiCore_Transpose": 2,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 2,
+          "aclnnSoftmaxBackward_SoftmaxGrad_SoftmaxGrad": 1
+        },
+        "kernel_total_us": 1527.9799999999946,
+        "kernel_span_us": 43927.0,
+        "trace_sha256": "8d689b70337179dfe87558564c120a7a2f50ec0e5f6d115386947d7f0602b2a3",
+        "observed_fallback_events": [],
+        "trace_event_counts": {
+          "empty_tensor": 641,
+          "aclnnStack": 9,
+          "aten::stack": 9,
+          "aclnnMatmul": 24,
+          "aten::matmul": 12,
+          "aten::view": 19,
+          "aten::reshape": 15,
+          "aten::as_strided": 931,
+          "aten::slice": 416,
+          "aclnnCat": 128,
+          "aten::cat": 128,
+          "aten::transpose": 21,
+          "aclnnRepeatInterleaveIntWithDim": 4,
+          "aten::repeat_interleave": 4,
+          "aten::permute": 3,
+          "aten::_local_scalar_dense": 5,
+          "aten::item": 5,
+          "aclnnDivs": 4,
+          "aten::div": 4,
+          "aclnnArange": 4,
+          "aten::arange": 4,
+          "aten::unsqueeze": 4,
+          "aclnnAdds": 2,
+          "aten::add": 2,
+          "aclnnLeTensor": 2,
+          "aten::le": 2,
+          "aclnnBitwiseNot": 2,
+          "aten::bitwise_not": 2,
+          "aten::expand": 7,
+          "aclnnInplaceCopy": 451,
+          "aten::copy_": 451,
+          "aten::clone": 291,
+          "aclnnInplaceMaskedFillScalar": 3,
+          "aten::masked_fill_": 3,
+          "aten::masked_fill": 3,
+          "aclnnSoftmax": 2,
+          "aten::_softmax": 2,
+          "aten::softmax": 2,
+          "aten::select": 480,
+          "packed_numeric": 1,
+          "detach": 232,
+          "aten::detach": 232,
+          "_State": 1,
+          "batch_graph": 1,
+          "aten::result_type": 2,
+          "aclnnPowTensorScalar": 2,
+          "aten::pow": 2,
+          "aten::square": 1,
+          "aclnnMean": 1,
+          "aten::mean": 1,
+          "aten::empty_like": 1,
+          "aclnnInplaceFillScalar": 1,
+          "aten::fill_": 1,
+          "aten::ones_like": 1,
+          "MeanBackward0": 1,
+          "autograd::engine::evaluate_function: MeanBackward0": 1,
+          "aclnnMuls": 1,
+          "aten::mul": 2,
+          "aclnnMul": 1,
+          "PowBackward0": 1,
+          "autograd::engine::evaluate_function: PowBackward0": 1,
+          "StackBackward0": 5,
+          "autograd::engine::evaluate_function: StackBackward0": 5,
+          "torch::autograd::GraphRoot": 1,
+          "autograd::engine::evaluate_function: torch::autograd::GraphRoot": 1,
+          "CloneBackward0": 32,
+          "autograd::engine::evaluate_function: CloneBackward0": 32,
+          "aclnnInplaceZero": 160,
+          "aten::zero_": 160,
+          "aten::zeros": 160,
+          "aten::select_backward": 64,
+          "SelectBackward0": 64,
+          "autograd::engine::evaluate_function: SelectBackward0": 64,
+          "aclnnInplaceAdd": 126,
+          "aten::add_": 126,
+          "aten::matmul_backward": 6,
+          "MatmulBackward0": 6,
+          "autograd::engine::evaluate_function: MatmulBackward0": 6,
+          "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad": 236,
+          "ViewBackward0": 4,
+          "autograd::engine::evaluate_function: ViewBackward0": 4,
+          "TransposeBackward0": 3,
+          "autograd::engine::evaluate_function: TransposeBackward0": 3,
+          "aclnnReduceSum": 2,
+          "aten::sum": 2,
+          "npu::repeat_interleave_backward_int": 2,
+          "RepeatInterleaveBackward1": 2,
+          "autograd::engine::evaluate_function: RepeatInterleaveBackward1": 2,
+          "aclnnSoftmaxBackward": 1,
+          "aten::_softmax_backward_data": 1,
+          "SoftmaxBackward0": 1,
+          "autograd::engine::evaluate_function: SoftmaxBackward0": 1,
+          "MaskedFillBackward0": 1,
+          "autograd::engine::evaluate_function: MaskedFillBackward0": 1,
+          "DivBackward0": 1,
+          "autograd::engine::evaluate_function: DivBackward0": 1,
+          "PermuteBackward0": 1,
+          "autograd::engine::evaluate_function: PermuteBackward0": 1,
+          "aten::narrow": 128,
+          "CatBackward0": 64,
+          "autograd::engine::evaluate_function: CatBackward0": 64,
+          "aten::slice_backward": 96,
+          "SliceBackward0": 96,
+          "autograd::engine::evaluate_function: SliceBackward0": 96,
+          "_StateBackward": 1,
+          "autograd::engine::evaluate_function: _StateBackward": 1,
+          "component_backward": 1,
+          "aclnnStack_PackAiCore_Pack": 9,
+          "aclnnMatmul_MatMulCommon_MatMulV2": 16,
+          "aclnnCat_ConcatD_ConcatD": 128,
+          "aclnnMatmul_TransposeAiCore_Transpose": 6,
+          "aclnnMatmul_BatchMatMulNd_BatchMatMulV2": 6,
+          "aclnnDivs_RealDivAiCore_RealDiv": 4,
+          "aclnnArange_ArangeAiCore_Range": 4,
+          "aclnnAdds_AddAiCore_Add": 2,
+          "aclnnLeTensor_LessEqualAiCore_LessEqual": 2,
+          "aclnnBitwiseNot_LogicalNotAiCore_LogicalNot": 2,
+          "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill": 3,
+          "aclnnSoftmax_SoftmaxAiCore_SoftmaxV2": 2,
+          "aclnnPowTensorScalar_PowsAiCore_Pows": 1,
+          "aclnnMean_ReduceMeanAiCore_ReduceMean": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnDivs_BroadcastToAiCore_BroadcastTo": 1,
+          "aclnnPowTensorScalar_PowAiCore_Pow": 1,
+          "aclnnMuls_MulAiCore_Mul": 1,
+          "aclnnMul_MulAiCore_Mul": 1,
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike": 160,
+          "aclnnAdd_AddAiCore_Add": 126,
+          "aclnnMatmul_MulAiCore_Mul": 2,
+          "aclnnReduceSum_TransposeAiCore_Transpose": 2,
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum": 2,
+          "aclnnSoftmaxBackward_SoftmaxGrad_SoftmaxGrad": 1,
+          "MEMCPY_ASYNC": 455,
+          "Computing": 484,
+          "Free": 483
+        }
+      },
+      "phase_peaks": [
+        5280215040,
+        2959396864
+      ]
+    }
+  ],
+  "read_recovery": {
+    "path": "runs/g2-profile-summary-cpu-clean01/read-composite.json",
+    "sha256": "2c764f5e6d9abee7ed5302a3d34530b9cae06bbbe638d28601d8791064574e7b"
+  },
+  "assessment": {
+    "path": "runs/g2-npu-components12/assessment.json",
+    "sha256": "22a268ec480905560419b108914cab0c6ee7448866eb2bd57b39d9cf5ef99ff8"
+  },
+  "comparison": {
+    "component_function_ast_sha256": "82bcbc1446c86460128bee0ea06e648d469fadc4f07c2d5b91db9aacf60c46ea",
+    "python_and_core_sources_unchanged": true,
+    "workload": "FP32 NPU pure PyTorch,32 rows,width128,norm-fp32-v1,seed19/model7,1 warmup/1 synchronized measured operation;separate profiled operation",
+    "limitations": [
+      "Single independent process per variant;external contention accepted;no statistical speedup guarantee.",
+      "Kernel and host stage observations are from a separate profiled invocation.",
+      "No complete graph,resident VJP,full-size or GPU performance inference."
+    ]
+  },
+  "sharing": [
+    {
+      "path": "runs/g2-npu-components10/sharing.json",
+      "sha256": "f314a358e2323d4677b23ec9c8c0420ce8c3e193ef9edb3833e45f20ca7fc0bd"
+    },
+    {
+      "path": "runs/g2-npu-components11/sharing.json",
+      "sha256": "e3c7f893042413c4f6e25d8ccdb15af6ae3fa41ca39a43f43d88970a4f35a586"
+    },
+    {
+      "path": "runs/g2-npu-components12/sharing.json",
+      "sha256": "4fc44baf25cae26fc6567cf8fae92f783608e8d1df9e9e206fb98961ba09a876"
+    }
+  ],
+  "ratios": {
+    "read": 5.656561860700543,
+    "state-add": 2.601537722248919,
+    "state-attention": 2.2747380324357187
+  }
+}
