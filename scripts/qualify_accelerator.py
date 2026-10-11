@@ -8,6 +8,7 @@ import sys
 import torch
 from durable_records import write_json
 from source_identity import source_state
+from python_environment import with_pythonpath
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     sys.path.insert(0, str(root / "python"))
-    os.environ["PYTHONPATH"] = str(root / "python")
+    os.environ["PYTHONPATH"] = with_pythonpath(os.environ, root / "python")["PYTHONPATH"]
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
     from tidegraph.qualification import qualify

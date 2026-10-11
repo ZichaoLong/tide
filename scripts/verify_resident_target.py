@@ -18,6 +18,15 @@ from build_identity import source_hash
 from device_component_checks import CHECKS
 from durable_records import write_json
 from source_identity import source_state, digest
+from python_environment import with_pythonpath
+
+
+def target_environment(root, core, python_build, binary, device):
+    return with_pythonpath(dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0',
+        OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1',
+        TIDE_BUILD_DIR=str(core), TIDE_RESIDENT_DEVICE=device,
+        TIDE_RESIDENT_LIBRARY=str(python_build), TIDE_ONLINE_DEVICE=device,
+        TIDE_ONLINE_BINARY=str(binary)), root/'python', core)
 
 
 def check_build(root, build, *, backend, owner):
@@ -99,12 +108,7 @@ def main():
                   python_build=py_record, standalone_build=cpp_record,
                   scope='complete declared resident correctness; independent CPU oracles, FP32/FP16, three families, both schedules, VJPs, optimizers, windows, checkpoints, capacity, 1/2/3 owners; no performance or profiling claim')
     write_json(out/'result.json', report)
-    env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0', OMP_NUM_THREADS='1',
-               OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1',
-               PYTHONPATH=os.pathsep.join((str(root/'python'), str(core))),
-               TIDE_BUILD_DIR=str(core), TIDE_RESIDENT_DEVICE=a.device,
-               TIDE_RESIDENT_LIBRARY=str(python_build), TIDE_ONLINE_DEVICE=a.device,
-               TIDE_ONLINE_BINARY=str(binary))
+    env = target_environment(root, core, python_build, binary, a.device)
 
     def run(name, command, timeout):
         row = dict(name=name, command=list(map(str, command)), state='running', timeout_seconds=timeout)

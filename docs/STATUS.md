@@ -3,11 +3,13 @@
 The authorized G1–G5 stage continues after the previous F1–F7 local closure.
 State/Read batching, the Add assembly follow-up and full declared CUDA resident
 source are implemented. Current CPU qualification, fresh backend builds and
-host preparation have passed. The user now explicitly authorizes occupied NPU
-devices, overriding the earlier no-process/low-utilization admission rule. The
-new finite batch03 is **running** from2026-10-11T08:11:16Z with
-unchanged source, workloads and budgets. Device qualification/performance results
-remain pending. Selector/upstream semantic
+host preparation have passed. The user explicitly authorizes occupied NPU
+devices. Batch03 is terminal **failed** at the first module suite: the actual
+NPU operator doctor passed on physical9, then checkpoint resume lost CANN's
+`tbe` import path because qualify_accelerator.py replaced PYTHONPATH. All later
+training/resident/performance children remain unstarted. The environment-only
+fix in this commit preserves vendor paths;28 directed CPU checks passed.
+Next: qualify the fixed commit and run a new bounded batch; do not rerun batch03. Selector/upstream semantic
 extensions remain deferred. No historical queue or old pause instruction resumes.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -78,9 +80,9 @@ Audit `runs/g1-g3-followup-audit01.json` verifies hashes,clean source snapshots,
 terminal passed services with MainPID0/empty cgroups and no CPU guard survivors.
 Its writer `plans/audit-g1-g3-followup01.py` refuses overwrite. Old audits and
 failed/interrupted records remain intact; nested records of cancelled jobs may
-still say running and are not accepted. The batch03 controller and its current child are active as recorded below.
+still say running and are not accepted. Batch03 and modules04 are terminal failed with MainPID0,empty cgroups and no remaining guarded child groups; original records remain unchanged.
 
-## Shared-device finite batch and current action
+## Retained shared-device batch failure and next action
 
 User authorization on2026-10-11 permits use of occupied NPUs and takes precedence
 over the local skill's empty-device rule. No permission question remains. Health,
@@ -100,14 +102,15 @@ and exact backend clean02 artifacts. The complete preflight and five synthetic
 selection checks passed: `runs/g-stage-device-batch03-preflight01.json`.
 Source/compiled-consumer/plan hashes, unchanged predecessors and unused outputs
 are checked. Batch03 and its child04 plans supersede the never-submitted batch02
-and child03 plans; old evidence/receipts remain unchanged. Batch03 is
-now running as `tide-g-stage-device-batch03.service` in background.slice.
-The first child `tide-g4-npu-modules04.service` is active on physical9→logical0;
-its operator doctor is running. Later children are unstarted, not passed.
+and child03 plans; old evidence/receipts remain unchanged. Batch03 and
+`tide-g4-npu-modules04.service` are terminal failed. Physical9→logical0 ran a
+successful operator doctor and failed the first Python FP32 fresh-process
+checkpoint check on missing CANN `tbe`; both units have MainPID0/empty cgroups.
+Later children remain unstarted, not passed.
 Logs/receipts: `runs/g-stage-device-batch03/{status.json,task.log,batch.json}`
 and `runs/g4-npu-modules04/{status.json,task.log,sharing.json,gate.json}`.
-Next action: inspect these durable records until the batch terminates; do not
-resubmit a running or failed batch.
+Next action: qualify the new environment-inheritance correction from a clean
+commit, then create new output/plan identities. Do not resubmit batch03.
 
 | Planned child in dependency order | Scope | Service ceiling |
 | --- | --- | --- |
