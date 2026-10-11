@@ -10,53 +10,58 @@ its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
 
-## Active extension: batched execution and CUDA resident (2026-10-10)
+## Batched execution and CUDA resident: local delivery (2026-10-11)
 
-The current user prompt starts a new local stage after F6/F7 closure. Historical
-queues and budgets remain closed; no old “pause after the next commit” applies.
-Continue all locally achievable work, commit and push; no subagents. Definitions
-and precedence: [execution-flows §11](execution-flows.md). STATUS is the sole
-current handoff. Old evidence below remains tied to its original source.
+The G1–G5 local stage is closed under the user's finite acceptance criterion:
+implementation,CPU/NPU correctness,limited selection evidence and the GPU target
+handoff are delivered. Actual GPU execution remains pending hardware. Historical
+F-stage budgets/queues are not reopened. There is no new pause instruction and
+no automatic next performance tranche. No subagents. Contract:
+[execution-flows §11](execution-flows.md);current handoff:[STATUS](STATUS.md).
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented and CPU-qualified: built-in State/Read VJPs, grouped finite checks, exact Norm VJP order and Add assembly/storage follow-up. Clean e565f96 composite qualification accepts 9650 unique CPU cases, plus22 topology cells,10 installed checks and12 CTests. Custom/nondefault replay and structural/small-tensor costs remain; clean4f23993 NPU module qualification accepts236 positive cases plus2 explicit CSR refusals; complete scale CPU/NPU training and resident composite133 components+547 public/zero-skips also passed |
-| G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | finite CPU component evidence reviewed; no observed complete Add gain at the earlier source. Add assembly follow-up removes private row clones/content restacking and is CPU-qualified, without a new timing claim. Complete standalone profile entry is implemented; four actual preparation commands passed. Six NPU component observations and actual traces accepted with no repeated measurement:Read5.66×,Add2.60×,Attention2.27× single-sample ratios. Complete Add mixed-c trace/calibration passed;resident B8 was explicitly refused by its separate reverse-packet subbudget. Remaining bounded trace/configuration work is tracked in STATUS |
-| G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | source deliverable complete: independent CUDA conditional/P2P backend,102 semantic sources, standalone/Python/installed consumers and strict full target entry. Fresh a926703 ABI-matched builds passed;271 host CPU tests/84 optional skips,7 host CTests and1 semantic CTest. Matching e565f96 imports/refusal passed. Actual GPU correctness/residency/multicard/memory/performance remain target-pending |
-| G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | current CPU composite qualification passed at e565f96; fresh NPU/CUDA builds passed at a926703 with exact compiled-source identity checks, and host preparation passed at e565f96. Original failures are retained. clean4f23993 NPU module composite and standalone checker passed;9c3ffd3 complete training passed4 FP32 cells and failed the first FP16 control-metadata assertion. Scale adapter repair passed5 CTests and8 CPU training cells from clean00b1775; NPU8-cell training passed. The independent resident/multicard gate at9c3ffd3 passed33 component invocations then failed the State/Read repeat-bound assertion; test-only boundary correction passed clean e3c86d7 FP32/FP16 and CUDA host compile. Exact98 missing component invocations and installed client passed;547 public cases passed with zero skips. Prior evidence keeps its scope |
-| G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | CPU tranche retains its original scope. Shared NPU module qualification is complete; environment corrections are separately CPU/device qualified. Complete-training FP16 exposed a stale per-region control-metadata adapter and stopped batch07 before resident or profiling. That repair and full resident composite are now qualified;All six component cases completed as an audited composite after capture/export lifecycle repair,without remeasurement. Add mixed-c complete profile passed;resident reverse-packet budget refusal is retained. No new full-size claim. GPU handoff is ready |
+| G1 | Built-in State/Read batch first-order VJPs,grouped finite checks,exact Norm VJP order,Add assembly/storage;independent reference and None/zero retained | Implemented and CPU/NPU-qualified. Full/Aggregate batch consumers retained.6 real NPU component observations support batching in this scope;custom/nondefault replay,causal/selected-clear constraints and small-tensor costs remain |
+| G2 | Finite component/complete profiling,NPU mixed/resident assessment and justified optimization | Local assessment complete:6 components,3 accepted complete traces and2 explicit budget refusals. Add assembly optimization retained;Read/State host batching reduces component costs. Mixed submission/synchronization and resident gather/scatter/packing remain visible;no unsupported fusion or universal speedup claim |
+| G3 | Full declared CUDA resident source:3 graph families,2 schedules,modules,forward/backward,optimizers,checkpoint/continuation,capacity,multicard/locality | Source delivered;independent conditional/P2P backend,102 semantic sources,fresh matching builds and CPU contracts passed. Actual GPU correctness,residency,multicard,memory/performance are target-pending |
+| G4 | Related fixed-source CPU/NPU qualification,exact discrete checks and original failure preservation | Verified in exact cited scopes:CPU9650 composite,22 topology/10 installed/12CTests;NPU236 public module positives+2CSR refusals,8 scale training cells,133 resident components+547 public/zero skips. Scale repair and test-only State/Read stream correction separately qualified. New profiler tools:55 focused CPU checks and actual deferred exports |
+| G5 | Finite selection advice,reviewed records and GPU target commands | Local delivery complete:5 new standalone unprofiled observations,one process/cell;3 accepted complete traces,2 capacity refusals retained;all current task services terminal. No full-size expansion,automatic repeat or unfinished local queue |
 
-[Initial stage qualification/build evidence](evidence/batched-vjp-cuda-local-20261010.md),
-[Add follow-up qualification and preparation](evidence/add-batch-followup-20261010.md)
-and [bounded CPU selection review](evidence/batched-selection-cpu-20261010.md)
-and [new NPU module qualification](evidence/npu-module-batching-20261011.md)
-and [control precision/stream gates](evidence/precision-and-stream-gates-20261011.md)
-and [complete NPU resident composite](evidence/resident-composite-20261011.md)
-and [six NPU component observations](evidence/npu-batched-components-20261011.md)
-retain exact source scopes. The CPU composite combines9648 full-inventory passes
-and exactly2 same-source resource-admission repairs;654 optional skips remain.
-The failed full run is not relabeled. This stage is not globally closed: NPU
-work proceeds under the2026-10-11 occupied-device authorization; actual CUDA execution requires a GPU host.
-STATUS owns current resource observations, prepared plans and exact next commands.
+Evidence retains its exact source and scope:
+[initial qualification](evidence/batched-vjp-cuda-local-20261010.md),
+[Add follow-up](evidence/add-batch-followup-20261010.md),
+[earlier CPU observations](evidence/batched-selection-cpu-20261010.md),
+[NPU modules](evidence/npu-module-batching-20261011.md),
+[control precision/stream gates](evidence/precision-and-stream-gates-20261011.md),
+[resident composite](evidence/resident-composite-20261011.md),
+[NPU components](evidence/npu-batched-components-20261011.md),
+[complete native selection and terminal audit](evidence/native-selection-20261011.md).
+The CPU composite is9648 original passes+2 same-source admission repairs,with654
+optional skips. The resident composite is33 original+98 missing invocations at9c
+and2 corrected State/Read dtype checks at e3;original failures remain failed.
 
-The locally actionable Add assembly follow-up and complete standalone profiling
-entry are implemented, qualified and reviewed. Remaining work is sequential:
+The five new D64/logicalB8 TimedDAG FP32 training observations favor CPU in this
+moderate scope. Add resident B4 is close to CPU and faster than mixed-c;Attention
+resident was refused by its cache-adjoint reservation and has no accepted timing.
+Total HBM admission does not replace private reverse tensor budgets. B4 was a
+separately declared static-capacity configuration with unchanged logical batch,
+windows and update boundary. No budget was enlarged and no measurement repeated.
+These results do not close every historical performance cell or define a ceiling.
 
-1. Correctness closure passed:public modules,scale CPU/NPU training and exact
-   resident133-component/547-public zero-skip composite. CUDA control repair
-   consumer also rebuilt with5 host CTests;actual GPU remains pending.
-2. Six NPU components and Add mixed-c complete profile are accepted. Distinguish
-   total HBM admission from separate reverse tensor subbudgets;the original
-   physical B8 resident profile refused before a valid timed step. Inspect the
-   refusal and use only explicitly bounded new configurations/unstarted cases.
-3. Implement changes supported by those profiles, requalify the changed fixed
-   source, then declare only decision-changing comparison/selection cases.
-4. On a GPU host, run the complete target gate and residency/multicard/memory
-   checks before performance or CUDA kernel tuning.
+Remaining work and optional future optimization:
 
-Heavy measurements remain serial and finite. New source/build identities may
-supersede unsubmitted plans, never old results. No retry, timeout expansion,
-historical matrix restart or undefined second tranche is scheduled.
+1. **GPU hardware gate:**rebuild the final fixed source with the target toolchain,
+   run the complete declared gate and separate residency/multicard/memory checks,
+   then declare a finite performance budget. Commands:[device-control](device-control.md).
+   Local CUDA compilation/CPU tests cannot satisfy this item.
+2. **Future performance work,not a current queue:**mixed host submission/device
+   switches,semantic Next replay,selected-clear/causal batching limits,small
+   tensors;resident gather/scatter,packing,scans,communication and private budget
+   sizing;CUDA's initial one-thread semantic adapter and serial reductions.
+   A new implementation should follow a targeted profile/causal comparison,
+   preserve the existing contracts and qualify its own fixed source.
+3. **Upstream semantics:**selector/new canon remains deferred until the user
+   supplies it. No semantics extension is inferred from this stage.
 
 ## Authorized extension: reusable experiment library
 
