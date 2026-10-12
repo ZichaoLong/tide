@@ -42,8 +42,9 @@
 ## Structure and contracts
 
 - One responsibility per file; target < 350 lines, investigate files > 500.
-  Split by semantic layer rather than arbitrary line count. Generated data and
-  lock files are exempt. Use symbol searches and bounded reads, not whole trees.
+  Split by semantic layer rather than arbitrary line count. Generated data,
+  lock files and checksummed immutable upstream snapshots are exempt. Use symbol
+  searches and bounded reads, not whole trees.
 - Keep the C++ core independent of Python. Bindings are a testing/client adapter.
   Python reference scheduling must remain independent of native scheduling.
 - Specializations must have independent schedules. Wrapping a generic executor
@@ -65,6 +66,8 @@
 - `docs/evidence/` contains small reviewed reports tied to exact source commits.
   Build products, raw logs, snapshots and checkpoints belong under ignored
   `artifacts/` or `build/`, never alongside source.
+  The single retired-record archive documented in `docs/artifact-retention.md` is
+  an explicit preservation exception, not a destination for new raw runs.
 - Preserve active-job inputs, unsaved changes and minimal reproducers for new
   unresolved issues. The user authorized retirement of historical experiment
   artifacts on 2026-10-12; old reports need not be re-audited by default. Follow
