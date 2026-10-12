@@ -11,9 +11,33 @@ Git 保留源码、测试、构建/验证/测量入口、固定教材快照，�
 可用的失败诊断。历史绝对路径作为来源标签保留，不是新线程的依赖路径。
 必要记录应可由仓库取得；大型原始 trace、缓存、二进制和重复源码副本无需常驻。
 
+本次归档直接随 Git 保存，约 38.5 MiB；索引、SHA256 与数量见
+[退役凭据](evidence/artifact-retirement-20261012.json)。635 个旧工作副本的基线
+提交都在当前分支历史中，431 份相对 HEAD 的补丁和 5,049 个未跟踪源码文件
+按原字节保留（包括构建模板），不必保留重复 checkout。
+配置/结果小记录保留原文，大结果保存明确标记的摘要及原文件哈希，日志只保留尾部。
+原始张量、完整 profiler 时间线和构建二进制不在归档保证范围；旧报告中的
+逐项观察量不一定可从摘要展开，需要时应重新生成并验证。
+
 旧 CPU/NPU 性能只是当时源码与环境下的观测。共享资源争用不可原样重放；
 即使同源码重新编译，也不保证二进制哈希、内存峰值或浮点轨迹逐位相同。
 新结果使用新配置/环境/源码身份，不改写旧通过数或严格失败。
+
+## 按需读取旧记录
+
+正常接续无需读取归档。需要定位某条历史来源时，在仓库根目录执行：
+
+```sh
+python scripts/read_retired_record.py --list-prefix /mi/data2T/zlong/tide-accelerator/sources/native-dev01
+python scripts/read_retired_record.py \
+  --path /mi/data2T/zlong/tide-accelerator/sources/native-dev01:git-diff-HEAD \
+  --output /tmp/gef-retired-native-dev01.patch
+```
+
+工具先校验整个归档；`--path` 单独使用只显示元数据，`--output` 校验并提取
+一个记录，拒绝覆盖已有文件。不执行旧脚本，也不向归档中的绝对路径写回。
+源码复现需要相应 Git 基线、补丁、未跟踪文件和匹配依赖；先审阅并在新目录组装。
+历史绝对路径是查询标签，不能直接当作本机现在存在的输入。
 
 ## 重建
 

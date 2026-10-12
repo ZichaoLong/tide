@@ -17,6 +17,7 @@
 - NPU：[公共模块](npu-module-batching-20261011.md)、[常驻完整组件](resident-composite-20261011.md)、[stream/精度](precision-and-stream-gates-20261011.md)。
 - 性能：[旧全尺寸结论](selection-terminal-20261010.md)、[六组件](npu-batched-components-20261011.md)、[最新完整选型](native-selection-20261011.md)。
 - 不能忽略的限制：[原始近似平票路由失败](original-add-route-witness-20261004.md)、最新完整选型中的两项容量拒绝。
+- 接续与清理：[固定教材/干净 clone 起步验证及历史产物退役](artifact-retirement-20261012.md)。
 
 查看某个结果时先确认源码、环境、模块、图类别、精度、输入和观察量范围。
 跨硬件浮点结果、共享服务器争用与历史计时不能承诺原样重放。

@@ -1,0 +1,589 @@
+{
+  "schema_version": 1,
+  "state": "passed",
+  "date": "2026-10-12",
+  "maintenance_source": "7781ef15a387718bb1b90ac524ab1335cd421a96",
+  "archive": {
+    "path": "docs/evidence/archive/retired-records-20261012.jsonl.gz",
+    "archive_bytes": 40407191,
+    "records": {
+      "policy": 1,
+      "source-identity": 635,
+      "source-patch": 431,
+      "untracked-source": 5049,
+      "result-config": 13016,
+      "log-tail": 3631,
+      "result-summary": 3727,
+      "reproduction-source": 8100,
+      "input-plan": 592
+    },
+    "logical_bytes": {
+      "policy": 211,
+      "source-identity": 85471,
+      "source-patch": 20630736,
+      "untracked-source": 23069871,
+      "result-config": 76535162,
+      "log-tail": 11489291,
+      "result-summary": 15207499,
+      "reproduction-source": 35138278,
+      "input-plan": 14362982
+    },
+    "policy": "Exact source patches/untracked sources/helpers/inputs; large results are labelled summaries with original hashes; logs retain tails. Raw tensors/profiler timelines/build products are not retained.",
+    "omitted": {
+      "reconstructible-source-copies": 26986
+    },
+    "excluded_untracked_artifacts": {
+      "raw-profiler-files": 292
+    },
+    "sha256": "8d5a564fcc6cbb80dada6f978585931284ed3972020bde6f9eb393ea6c4d7194"
+  },
+  "source_preservation": {
+    "worktrees": 635,
+    "distinct_base_commits": 317,
+    "patches": 431,
+    "untracked_files": 5049,
+    "all_base_commits_retained_in_branch": true,
+    "exact_head_patch_and_untracked_hash_recheck": true
+  },
+  "dry_run": {
+    "state": "dry-run-only",
+    "created": "2026-10-12T02:48:49.206637+00:00",
+    "source": "7781ef15a387718bb1b90ac524ab1335cd421a96",
+    "script_sha256": "2facac1f3db52d7e3716f211441b10617617566d26a78cb93c66966a838e193b",
+    "guard_script_sha256": "9c2d707bf0f93f7bce74bf443eb628f064e63e50bf80e28213e59d24b81c3bda",
+    "roots": [
+      {
+        "path": "/mi/data2T/zlong/tide-accelerator",
+        "identity": {
+          "dev": 2065,
+          "ino": 93618181,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790579553315130426,
+          "ctime_ns": 1790579553315130426
+        },
+        "allocated_bytes": 1409335296
+      },
+      {
+        "path": "/mi/data2T/zlong/tide-device-scheduler",
+        "identity": {
+          "dev": 2065,
+          "ino": 93626647,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790674630327267556,
+          "ctime_ns": 1790674630327267556
+        },
+        "allocated_bytes": 10134810624
+      },
+      {
+        "path": "/mi/data2T/zlong/tide-execution-flows",
+        "identity": {
+          "dev": 2065,
+          "ino": 94028047,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1791626567129952698,
+          "ctime_ns": 1791626567129952698
+        },
+        "allocated_bytes": 102540689408
+      },
+      {
+        "path": "/mi/data2T/zlong/tide-npu-performance",
+        "identity": {
+          "dev": 2065,
+          "ino": 93814990,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790602154576393352,
+          "ctime_ns": 1790602154576393352
+        },
+        "allocated_bytes": 1329704960
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/artifacts",
+        "identity": {
+          "dev": 2050,
+          "ino": 1639474,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1791720813591896314,
+          "ctime_ns": 1791720813591896314
+        },
+        "allocated_bytes": 326041600
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/development",
+        "identity": {
+          "dev": 2050,
+          "ino": 2081830,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790232056197562332,
+          "ctime_ns": 1790232056197562332
+        },
+        "allocated_bytes": 36024320
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/qualification",
+        "identity": {
+          "dev": 2050,
+          "ino": 1655152,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1791261715649116739,
+          "ctime_ns": 1791261715649116739
+        },
+        "allocated_bytes": 202711040
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/relocated",
+        "identity": {
+          "dev": 2050,
+          "ino": 1762339,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790270355491266456,
+          "ctime_ns": 1790270355491266456
+        },
+        "allocated_bytes": 35172352
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-l3-source",
+        "identity": {
+          "dev": 2050,
+          "ino": 1671955,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790561016910318697,
+          "ctime_ns": 1790561016910318697
+        },
+        "allocated_bytes": 3829760
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-release-source",
+        "identity": {
+          "dev": 2050,
+          "ino": 2999182,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790561483226672009,
+          "ctime_ns": 1790561483226672009
+        },
+        "allocated_bytes": 3850240
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-release-source-b",
+        "identity": {
+          "dev": 2050,
+          "ino": 2598024,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790563221226959968,
+          "ctime_ns": 1790563221226959968
+        },
+        "allocated_bytes": 4890624
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-validator-source",
+        "identity": {
+          "dev": 2050,
+          "ino": 1663664,
+          "mode": 16877,
+          "uid": 1003,
+          "mtime_ns": 1790564526567079104,
+          "ctime_ns": 1790564526567079104
+        },
+        "allocated_bytes": 3887104
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/lh-scope-check",
+        "identity": {
+          "dev": 2050,
+          "ino": 1626492,
+          "mode": 33261,
+          "uid": 1003,
+          "mtime_ns": 1790029291084663386,
+          "ctime_ns": 1790029291084663386
+        },
+        "allocated_bytes": 45056
+      }
+    ],
+    "archive_sha256": "8d5a564fcc6cbb80dada6f978585931284ed3972020bde6f9eb393ea6c4d7194",
+    "archive_bytes": 40407191,
+    "source_worktrees": 635,
+    "source_patches": 431,
+    "untracked_source_files": 5049,
+    "all_base_commits_retained_in_branch": true,
+    "guard": {
+      "active_services": [],
+      "inaccessible_transport_supervisors": [
+        [
+          "2647425",
+          "sshd-session"
+        ],
+        [
+          "2647428",
+          "sshd-session"
+        ],
+        [
+          "2731430",
+          "(sd-pam)"
+        ]
+      ]
+    },
+    "policy": "Reviewed explicit project directory removal after terminal/usage guards and exact historical source-delta checks; no per-file inventory archive."
+  },
+  "validation": {
+    "state": "passed",
+    "source": "7781ef15a387718bb1b90ac524ab1335cd421a96",
+    "started": 1791772281.0516453,
+    "checks": [
+      {
+        "name": "clone",
+        "command": [
+          "git",
+          "clone",
+          "--quiet",
+          "--no-hardlinks",
+          "--no-checkout",
+          "/home/zlong/llm/graph-execution-foundation",
+          "/mi/data2T/zlong/gef-maintenance-20261012/fresh-clone"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "checkout",
+        "command": [
+          "git",
+          "checkout",
+          "--quiet",
+          "--detach",
+          "7781ef15a387718bb1b90ac524ab1335cd421a96"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "status",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-B",
+          "scripts/status.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "upstream",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-B",
+          "scripts/check_upstream.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "python-semantic",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_semantics.py",
+          "--dtype",
+          "both",
+          "--basetemp",
+          "/mi/data2T/zlong/gef-maintenance-20261012/validation/test-tmp",
+          "-p",
+          "no:cacheprovider"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "wheel",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-m",
+          "pip",
+          "wheel",
+          "--no-deps",
+          "--no-build-isolation",
+          "--wheel-dir",
+          "/mi/data2T/zlong/gef-maintenance-20261012/validation/wheels",
+          "."
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "install",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-m",
+          "pip",
+          "install",
+          "--no-deps",
+          "--no-compile",
+          "--target",
+          "/mi/data2T/zlong/gef-maintenance-20261012/validation/installed",
+          "/mi/data2T/zlong/gef-maintenance-20261012/validation/wheels/tidegraph-0.2.0-py3-none-any.whl"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "installed-import",
+        "command": [
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+          "-B",
+          "-c",
+          "import tidegraph; from pathlib import Path; print(tidegraph.__file__); assert Path(tidegraph.__file__).is_relative_to(Path(\"/mi/data2T/zlong/gef-maintenance-20261012/validation/installed\")); from tidegraph import GraphRuntime, GraphConfig"
+        ],
+        "exit_code": 0
+      },
+      {
+        "name": "cmake-cpu",
+        "command": [
+          "cmake",
+          "-S",
+          "/mi/data2T/zlong/gef-maintenance-20261012/fresh-clone",
+          "-B",
+          "/mi/data2T/zlong/gef-maintenance-20261012/validation/cmake-cpu",
+          "-DTIDE_BACKEND=CPU",
+          "-DTIDE_PYTHON_BINDINGS=OFF",
+          "-DTIDE_BUILD_CLIENTS=OFF",
+          "-DCMAKE_PREFIX_PATH=/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "scope": "Clean-clone re-entry, offline textbook, package, CPU semantic smoke and CMake configuration; no accelerator run or full qualification.",
+    "finished": 1791772289.6739953,
+    "torch": "2.10.0+cpu",
+    "python": "3.11.15",
+    "fresh_build_and_artifacts_absent": true,
+    "python_semantic_summary": "...........                                                              [100%]\n11 passed in 0.19s",
+    "unit": "gef-reentry-validation-20261012.service",
+    "unit_exit_code": 0
+  },
+  "maintenance_attempts": [
+    {
+      "unit": "gef-reentry-retire-plan-20261012.service",
+      "result": "timeout",
+      "runtime_limit_seconds": 600,
+      "deleted_anything": false,
+      "stage": "per-file inventory/archive planning",
+      "exec_main_status": 15
+    },
+    {
+      "unit": "gef-reentry-retire-plan02-20261012.service",
+      "result": "timeout",
+      "runtime_limit_seconds": 300,
+      "deleted_anything": false,
+      "stage": "per-file inventory/archive planning",
+      "exec_main_status": 15
+    },
+    {
+      "unit": "gef-reentry-retire-directories-apply-20261012.service",
+      "result": "exit-code",
+      "exec_main_status": 1,
+      "error": "PermissionError(13, 'Permission denied')",
+      "state": "failed",
+      "removed_complete_roots": [
+        "/mi/data2T/zlong/tide-accelerator",
+        "/mi/data2T/zlong/tide-device-scheduler"
+      ],
+      "partially_removed_root": "/mi/data2T/zlong/tide-execution-flows",
+      "permission_failure": "frozen snapshot directory denied unlink; successful follow-up recorded separately"
+    }
+  ],
+  "scope": "Historical artifacts only. No graph/runtime semantic changes or old experiment reruns.",
+  "cleanup": {
+    "state": "passed",
+    "started": "2026-10-12T02:52:53.071338+00:00",
+    "plan_sha256": "6079b0fcea89a2a93a071a7159eebb0b4d0c056634d121139d7708176cee31fc",
+    "archive_sha256": "8d5a564fcc6cbb80dada6f978585931284ed3972020bde6f9eb393ea6c4d7194",
+    "script_sha256": "9132b7794ce42041aa46c32f32360e192d0ea51d304405e08547445e3827429f",
+    "previous_attempt_state": "failed",
+    "guard": {
+      "active_services": [],
+      "inaccessible_transport_supervisors": [
+        [
+          "2647425",
+          "sshd-session"
+        ],
+        [
+          "2647428",
+          "sshd-session"
+        ],
+        [
+          "2731430",
+          "(sd-pam)"
+        ]
+      ]
+    },
+    "data_free_before": 73134702592,
+    "root_free_before": 67227582464,
+    "already_removed": [
+      {
+        "path": "/mi/data2T/zlong/tide-accelerator",
+        "allocated_bytes_before": 1409335296
+      },
+      {
+        "path": "/mi/data2T/zlong/tide-device-scheduler",
+        "allocated_bytes_before": 10134810624
+      }
+    ],
+    "removed": [
+      {
+        "path": "/mi/data2T/zlong/tide-execution-flows",
+        "allocated_bytes_before": 102540689408
+      },
+      {
+        "path": "/mi/data2T/zlong/tide-npu-performance",
+        "allocated_bytes_before": 1329704960
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/artifacts",
+        "allocated_bytes_before": 326041600
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/development",
+        "allocated_bytes_before": 36024320
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/qualification",
+        "allocated_bytes_before": 202711040
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/relocated",
+        "allocated_bytes_before": 35172352
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-l3-source",
+        "allocated_bytes_before": 3829760
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-release-source",
+        "allocated_bytes_before": 3850240
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-release-source-b",
+        "allocated_bytes_before": 4890624
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/library-validator-source",
+        "allocated_bytes_before": 3887104
+      },
+      {
+        "path": "/var/tmp/zlong-graph-execution-foundation/lh-scope-check",
+        "allocated_bytes_before": 45056
+      }
+    ],
+    "finished": "2026-10-12T02:54:15.369528+00:00",
+    "removed_directory_allocated_bytes": 116030992384,
+    "data_free_after": 187964362752,
+    "root_free_after": 67840159744,
+    "owner_directory_write_permission_repairs": {
+      "count": 212,
+      "examples": [
+        "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-component-cwd-clean01/benchmarks",
+        "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-component-cwd-clean01",
+        "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-component-cwd-clean01/.torch-portability",
+        "/mi/data2T/zlong/tide-execution-flows/sources/g-stage-component-cwd-clean01/tests"
+      ],
+      "full_list_sha256": "98d6efd1bb05fa5cf11d55ce25ed045bc09dcd8d4cfd777dbf34c190680899f1"
+    },
+    "unit": "gef-reentry-retire-directories-finish-20261012.service",
+    "unit_exit_code": 0
+  },
+  "local_housekeeping": {
+    "state": "passed",
+    "pruned_worktree_registrations": 635,
+    "remaining_worktrees": 1,
+    "prune_dry_run_sha256": "023a3b3fc1ca2554a0db8224f568639d908829278fbab627cd826687d4377ee7",
+    "removed_caches": [
+      {
+        "path": ".pytest_cache",
+        "allocated_bytes_before": 1064960
+      },
+      {
+        "path": "python/tidegraph/__pycache__",
+        "allocated_bytes_before": 1478656
+      },
+      {
+        "path": "scripts/__pycache__",
+        "allocated_bytes_before": 999424
+      },
+      {
+        "path": "tests/__pycache__",
+        "allocated_bytes_before": 3047424
+      },
+      {
+        "path": "tools/cpu_compare/__pycache__",
+        "allocated_bytes_before": 131072
+      },
+      {
+        "path": "tools/lh_repro/__pycache__",
+        "allocated_bytes_before": 12288
+      },
+      {
+        "path": "tools/online_bench/__pycache__",
+        "allocated_bytes_before": 200704
+      }
+    ],
+    "cache_allocated_bytes": 6934528,
+    "removed_dangling_symlinks": [
+      "build",
+      "artifacts"
+    ]
+  },
+  "followup_validation": {
+    "state": "passed",
+    "python": "3.9.9",
+    "archive_all_record_checksums_and_dedup_references": true,
+    "archive_record_count": 35182,
+    "reader_checks": [
+      "source patch extraction",
+      "deduplicated blob extraction",
+      "appended build template lookup",
+      "missing label rejection",
+      "existing output rejection",
+      "archive checksum mismatch rejection before output"
+    ],
+    "current_document_links": {
+      "files": 96,
+      "relative_links": 549,
+      "semantic_heading_links": 22,
+      "errors": 0
+    },
+    "source_file": "scripts/read_retired_record.py",
+    "reader_sha256": "ef23f54412017198f3b70900fc60c67e67532072be02439bb598e42419019c8a",
+    "entry_status_exit_code": 0,
+    "active_project_units": [],
+    "project_timers": [],
+    "queued_project_units": [],
+    "old_build_and_artifacts_absent": true
+  },
+  "temporary_housekeeping": {
+    "state": "passed",
+    "path": "/mi/data2T/zlong/gef-maintenance-20261012",
+    "allocated_bytes_before": 350896128,
+    "guard": {
+      "active_services": [],
+      "inaccessible_transport_supervisors": [
+        [
+          "2647425",
+          "sshd-session"
+        ],
+        [
+          "2647428",
+          "sshd-session"
+        ],
+        [
+          "2731430",
+          "(sd-pam)"
+        ]
+      ]
+    },
+    "started": "2026-10-12T03:00:54.716886+00:00",
+    "finished": "2026-10-12T03:00:54.992329+00:00"
+  }
+}

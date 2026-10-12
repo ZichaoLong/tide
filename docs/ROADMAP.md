@@ -16,6 +16,7 @@
 | G3：CUDA 常驻 | 声明范围源码和本机构建完成；[目标机门禁](device-control.md) 尚待真机 |
 | G4：CPU/NPU 相关验证 | 完成；[公共模块](evidence/npu-module-batching-20261011.md)、[常驻 composite](evidence/resident-composite-20261011.md)、[精度/stream 修复](evidence/precision-and-stream-gates-20261011.md) |
 | G5：有限建议与目标机交接 | 本机阶段完成；[最终选型](evidence/native-selection-20261011.md) |
+| 新线程接续整理 | 完成；[固定教材与语义索引](semantic-map.md)、[干净源码入口](development.md)、[产物退役与起步验证](evidence/artifact-retirement-20261012.md) |
 
 这些结论保留各自提交、环境、模块和输入范围。接口存在不证明任意模型可导入；
 源码/编译不证明设备运行；单次观测不证明稳定速度排名。历史失败不改为通过。
