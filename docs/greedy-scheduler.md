@@ -3,8 +3,8 @@
 `schedule=greedy` / native `tide::Greedy` is an optional host scheduler for
 general positive-delay graphs. It uses the existing local region-block
 contracts and an independent scalar schedule for verification. It does not
-replace `streaming`, the older DAG `frontier`, or the future resident NPU
-scheduler. Accelerator tensor placement alone does not device-place this loop.
+replace `streaming`, the DAG `frontier`, or the separate
+[resident device scheduler](resident-library.md). Accelerator tensor placement alone does not device-place this loop.
 
 At a sealed finite window boundary, all external inputs and incoming pending
 messages are known. Retain actual unprocessed fibers, keyed by sample/node/time.
@@ -39,8 +39,10 @@ messages, subsequent bounds and batch shapes. Topology-specific cases are absent
 pending work, not cumulative events or logical clock span. It is an explicit
 structural refusal limit, not yet the complete payload/activation memory budget
 or safe-chunking policy required by execution-flows.md. No events are dropped.
-The current host transport still has per-atom bookkeeping; packed accelerator
-transport and fully device-owned progression remain separate unfinished work.
+This host algorithm retains per-atom bookkeeping. Optional
+[packed eager transport](execution-placement.md#packed-eager-transport) and
+[device-owned progression](resident-library.md) have separate contracts and
+verification; their delivery does not make this host loop device-resident.
 
 Counters report `greedy_stages`, `greedy_relaxed_edges`, `max_live_fibers`,
 `max_greedy_frames`, actual candidates/selected events/edges and the existing

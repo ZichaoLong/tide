@@ -4,10 +4,13 @@
 
 1. Run `git status --short --branch` and `python scripts/status.py`.
 2. Read `docs/STATUS.md`; follow its next action and active-job record.
-3. Read only the relevant section of `docs/ROADMAP.md`, then use
-   `docs/architecture.md` and `rg` to locate the implementation/test.
+3. Read `docs/ROADMAP.md` and `docs/execution-flows.md`. Use
+   `docs/semantic-map.md`, `docs/architecture.md` and `rg` to locate definitions,
+   implementation and independent tests. `docs/development.md` starts from a clean checkout.
 4. Consult `docs/semantics.md` before changing an observable behavior.
-   The immutable upstream revision is in `docs/upstream.json`.
+   The immutable upstream revision and offline textbook snapshot hashes are in
+   `docs/upstream.json`; run `python scripts/check_upstream.py`. Do not adopt
+   an upstream working-tree draft or a new semantic version without the user's task.
 5. Preserve user changes and work only on the authorized branch. Reference
    repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only.
 
@@ -51,19 +54,23 @@
   tests. HST is a declared VJP; do not gradcheck its hard forward.
 - Avoid in-place autograd mutation. Compare final states, in-flight messages,
   history, routes and gradients, not just outputs. Check disconnected gradients.
-- CPU FP64/FP32 remain required. The authorized accelerator extension covers
-  Python/LibTorch CUDA and Ascend NPU, initially single-device eager FP32.
+- CPU FP64/FP32 remain the reference. Eager and resident CPU/CUDA/NPU scopes
+  are declared separately in the execution contract and module capability gates.
   Explicit unavailable devices/dtypes must fail; never silently substitute an
-  algorithm. Keep compiled, device-verified and target-machine-pending evidence separate.
+  algorithm. CUDA hardware validation remains pending; keep source/build and
+  actual-device evidence separate. User alignment overrides generic experiment skills.
 
 ## Evidence and housekeeping
 
 - `docs/evidence/` contains small reviewed reports tied to exact source commits.
   Build products, raw logs, snapshots and checkpoints belong under ignored
   `artifacts/` or `build/`, never alongside source.
-- Keep failure reproducers until fixed and tested. Keep artifacts cited by
-  current evidence and active jobs. Remove only known obsolete project-owned
-  artifacts; inspect a dry run before deleting. Never clean reference repos.
+- Preserve active-job inputs, unsaved changes and minimal reproducers for new
+  unresolved issues. The user authorized retirement of historical experiment
+  artifacts on 2026-10-12; old reports need not be re-audited by default. Follow
+  `docs/artifact-retention.md`: keep necessary records, inspect the dry run,
+  and distinguish historical citations from live dependencies. Never clean
+  reference repositories or shared toolchains as experiment artifacts.
 - Git history retains superseded plans/evidence; do not keep renamed copies of
   old handoffs. Fix broken navigation when moving files.
 - Report implemented/verified/planned separately. A small formula profile does

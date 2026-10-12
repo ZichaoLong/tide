@@ -57,10 +57,10 @@ Frontier can still batch Aggregate, Read and Full. A time scan or fast long-gap
 power profile is not silently substituted. Costs grow with deferred tick gaps;
 no large-gap speed claim follows from sparse allocation.
 
-The profile name already participates in graph identity v11; the value checkpoint (current schema in `semantics.md`) stores
+The profile name participates in graph identity; the value checkpoint (current schemas in `semantics.md`) stores
 the required value/time/count. No schema change is needed.
 
-## Experimental resident inference
+## Resident implementation
 
 The optional `tools/device_online` ContentFlow implements the same repeat profile
 with device int64 clocks and observation counts. State payload tiles run across
@@ -78,8 +78,10 @@ truncates time or advances idle nodes. The limit concerns work inside one update
 not total logical runtime; ordinary windows continue from device-owned clocks.
 Periodic state clocks convert elapsed time to local ticks on device, while stored
 timestamps and message coordinates stay global. The repeat-work limit applies to
-these local ticks. This profile currently requires FP32, the declared built-in
-modules and no autograd. It is not resident backward/optimizer support.
+these local ticks. Current FP32/FP16 public inference and explicit first-order
+training coverage are declared in [resident library](resident-library.md),
+[State VJP](resident-state-vjp.md) and [training owner](resident-training.md);
+the initial inference-only evidence does not itself qualify later training.
 
 ## Original Add comparison
 

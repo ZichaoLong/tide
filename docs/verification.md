@@ -54,11 +54,12 @@ fixture inventory. A partial or old unscoped manifest is rejected.
    Check source identity, clean state, inventories and acceptance counts. Commit
    reviewed evidence separately. A submitted or live job has no pass result.
 
-Retain artifacts referenced by evidence and unresolved failure reproducers.
-After terminal verification, remove only redundant frozen worktrees/builds whose
-commit and logs remain available. Inspect the cleanup dry run; do not remove
-active jobs or reference sources. Project `build`/`artifacts` may be symlinks to
-a filesystem with space; never assume the shared repository volume has room.
+Preserve active inputs, unsaved changes and minimal reproducers for new issues.
+The 2026-10-12 user authorization permits retiring historical raw artifacts
+after necessary records are retained; follow [retention](artifact-retention.md).
+Historical absolute paths need not remain online and do not gate new development.
+Inspect cleanup dry runs; never clean reference repositories or toolchains.
+Project `build`/`artifacts` may be symlinks; check their targets and disk capacity.
 
 ## Durable record failures
 

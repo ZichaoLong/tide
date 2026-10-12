@@ -10,5 +10,13 @@
     "timed-dag-chunk-prefill-learning-note.md",
     "settlegraph-learning-note.md"
   ],
-  "local_profile": "ema-ffn-v1"
+  "local_profile": "ema-ffn-v1",
+  "snapshot_directory": "docs/upstream/tide-core-3",
+  "sha256": {
+    "semantics-anchor.md": "832f50d70121ef051aee4a6171ea35df2a97c7103263b7147086aac9a2e5efd5",
+    "positive-delay-graph-finite-cut-learning-note.md": "0fc6eed8edd0bd62ab3ff791c4a7fa2eb8defabffe676925ed1f4127c418cdc5",
+    "timed-dag-region-selector-learning-note.md": "bb78f43717a1bb29e5afbfb2758b885adc1ba7aa684f5b203f7b547d13e3ca12",
+    "timed-dag-chunk-prefill-learning-note.md": "5c71155b5b011e0280bce0022a7f30b52d92af4059b0c28b80c756a5f2a6d0f7",
+    "settlegraph-learning-note.md": "4bb735b9a7ec65522056d985be0820e108e2df0bb27a2c23fac991e5f0bdb17f"
+  }
 }

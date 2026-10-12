@@ -2,6 +2,8 @@
 
 Authority: `tide-core-3` at the revision in `upstream.json`. Local formulas below
 instantiate the abstract interfaces; changing them is a versioned local change.
+The [semantic map](semantic-map.md) links the pinned offline textbook, concrete
+input/output domains, implementation layers and independent tests.
 
 The experimental historical-workload bounded scheduler is a separate finite
 representation of these formulas, described in [bounded scheduling](bounded-scheduler.md).

@@ -1,144 +1,51 @@
-# Architecture and navigation
+# 架构与源码导航
 
-## Layers
+先读 [语义索引](semantic-map.md)，再进入本页定位实现。
+数学版本由 [upstream.json](upstream.json) 固定，本地契约由 [semantics](semantics.md)
+维护；历史验收在 [evidence](evidence/README.md)，不作为当前待办。
 
-| Path | Responsibility |
+## 分层
+
+| 层 | 位置 | 职责 |
+| --- | --- | --- |
+| 公共接口 | `python/tidegraph/config.py`, `runtime.py`, `session.py`; `cpp/include/tide/` | 配置、图/模型所有权、执行策略、结果与状态续接 |
+| 数学对象与记录 | `python/tidegraph/graph.py`, `records.py`, `history.py`, `coordinates.py`; `cpp/include/tide/types.h`, `cpp/src/graph.cpp` | 图、物理边、逻辑来源、时间、状态、history、消息与输入完整性 |
+| 局部计算 | `aggregate.py`, `state_program.py`, `readout.py`, `region.py`, `next.py`, `full.py`; 对应 C++ Kernel 接口 | Agg/Upd/Read/SelStep/Next/Full/Emit，批量能力和局部 VJP |
+| 独立 host 调度 | `reference.py`, `streaming.py`, `frontier.py`, `greedy.py`, `specialized.py`, `settle.py`; `cpp/src/stream.cpp`, `frontier.cpp`, `greedy.cpp`, `specialized.cpp`, `settle.cpp` | 完整纤维、就绪、因果顺序、稳定提交、图编码与独立特化 |
+| 原生适配 | `python/tidegraph/native*.py`, `cursor.py`; `cpp/src/bind*.cpp` | Python/native 转换与测试适配，不拥有 C++ 核心语义 |
+| eager 放置与批量反向 | `placement*.py`, `state_vjp.py`, `read_vjp.py`; `cpp/src/placement*.cpp`, `isolated_*.cpp`, `state_vjp.cpp` | 数据/评分/选择位置、公共根连接、批量组合算子反向 |
+| 常驻公共库 | `python/tidegraph/resident*.py`; `tools/device_online/` | 设备队列、就绪/选择、批量消息、窗口、journals、显式 VJP、优化器、跨卡所有权 |
+| 常驻硬件后端 | `tools/device_online/control_flow.*`, `program.*`, `ascendc/`, `cuda/` | CANN 与 CUDA 独立控制流、算子/内核提交、完成通知及 P2P；共享语义不等于共享驱动实现 |
+| 参数与持久化 | `checkpoint*.py`, `token_checkpoint.py`; `cpp/src/parameters.cpp`, `optimizer.cpp`, `checkpoint*.cpp` | 别名归属、值保存/恢复、显式梯度边界；格式版本见 semantics |
+| 消费者与验证 | `examples/`, `tools/online_bench/`, `tests/`, `cpp/test/`, `scripts/` | 独立调用、公式/差分测试、构建、资格、有限性能入口 |
+
+局部算子可以在同一语言的多个调度中共享；特化必须拥有独立循环/依赖次序。
+独立 Python 调度、C++ 调度和手算公式共同避免“两个入口调用同一个调度”的自证。
+常驻源码位于 tools 并不表示只是性能脚本：它构建为公共 resident 库。
+
+## 按问题找文档
+
+| 问题 | 契约 |
 | --- | --- |
-| `python/tidegraph/` | Public configuration/runtime/session, independent Torch oracle and installed configuration qualification |
-| `docs/library.md` | External dependency, configuration, execution, checkpoints and compatibility |
-| `examples/consumer`, `examples/consumer_cpp` | Independent installed Python and CMake clients |
-| `cpp/include/tide/` | Public graph, state, kernel, owner and executor interfaces |
-| `cpp/src/` | LibTorch kernels, streaming/frontier execution and binding adapter |
-| `tests/` | Analytic formulas, invariant tests and differential qualification |
-| `scripts/` | Configure/build/verify, durable job and re-entry helpers |
-| `docs/verification.md` | Explicit development/full gates and frozen worktree lifecycle |
-| `docs/bounded-scheduler.md` | Optional finite device tensor scheduling, native replay, peer completion and training boundaries |
-| `docs/evidence/accelerator-cpu-npu-comparison-20260929.md` | Matched full-size CPU/NPU timing, four device traces, source/record audit and retained limitations |
-| `docs/semantics.md` | Adopted semantics and local formula/gradient contracts |
-| `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
-| `docs/STATUS.md` | Only current handoff, next action and active jobs |
-| `docs/evidence/` | Small immutable-source qualification reports |
-| `docs/evidence/selection-review-20261009.md`, `docs/evidence/selection-terminal-20261010.md` | Original-size CPU/mixed/resident selection guidance,FP16/profiling,support limits and final local disposition |
-| `docs/module-extension-plan.md` | Local program catalog and extension contracts |
-| `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
-| `docs/pdg-scale-benchmark.md` | Graph-only LH-scale Attention workload, fresh parameters, native cursor and row Emit timing |
-| `docs/attention-packing-policy.md` | Exact versus single padded fiber attention policy, native API and validation |
-| `docs/attention-grouping-comparison.md` | LH padded queries versus PDG exact buckets, cache layout and pooling |
-| `tools/cpu_compare/README.md` | Two portable one-command CPU runners and source/graph packet |
-| `docs/online-consumers.md`, `tools/online_bench/` | Continuous v2 model packets, independent Python/LibTorch public consumers, full loss/update and bounded diagnostics |
-| `docs/add-scale-comparison.md` | Fixed-graph Add count, grad-forward mode and bounded local comparison contract |
-| `docs/operator-work.md` | Optional LH/PDG inference matrix work, attention padding and Emit boundary accounting |
-| `docs/operator-profiling.md` | Optional exclusive calling-thread timers, common boundaries and interpretation |
-| `docs/fiber-efficiency.md` | CSR pooling, immutable KV ownership, deferred state retirement and matrix layout |
-| `docs/streaming-optimizations.md` | Independent region scheduling, compact event ownership, bounded dense projection and validation |
-| `docs/packed-transport.md` | Optional shared source-row transport and batch Next/reset; scalar fallbacks and public VJPs |
-| `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
-| `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
-| `docs/evidence/lh-local-scale-pilot.md` | Original-LH local 9B Add measurements, aligned grad/thread comparisons and explicit unmeasured scope |
-| `docs/lh-original-test.md` | Exact a10fdb1 Attention algorithms, explicit parameter overrides, original100-step timing and resource bounds |
-| `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
-| `docs/token-application-checkpoint.md` | Two-clock bundle, partial-window/ledger state, cross-graph ownership and whole-bundle preflight |
-| `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership, atomic publication and preflight restore |
-| `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
-| `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
-| `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |
-| `docs/state-clocks.md` | Compact periodic state clocks, global continuation and delegated batching |
-| `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
-| `docs/cross-family-policies.md` | Python/native policies, independent block schedules and v2 benchmark entry |
-| `docs/aggregate-batched-autograd.md` | Optional native Aggregate source VJP, normalization precision and independent roots |
-| `docs/full-batched-autograd.md` | Optional native Full affine VJP, row isolation, capability and validation boundary |
-| `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
-| `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
-| `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
-| `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
-| `docs/region-programs.md` | Selector interfaces, typed history, controls and persistence |
-| `docs/lh-add-plan.md` | Lazy Add design notes, decay precision and physical state projection |
-| `docs/lazy-add.md` | Explicit tick-repeat Add, physical decode, batch buckets and parameter-epoch limits |
-| `docs/lh-full.md` | LH activation/normalization backbones and per-edge signaling mapping |
-| `docs/lh-attention-plan.md` | Same-fiber cache/visibility/decay and post-attention pooling gate |
-| `docs/fiber-attention.md` | Same-fiber sum attention, encoded log bias and independent scalar anchors |
-| `docs/fiber-packing.md` | Source/event offsets, per-sample attention buckets, visibility masks and replay |
-| `docs/fiber-pooling.md` | Post-attention mean/linear/softmax Confluence, slot domains and vector VJPs |
-| `docs/token-window.md` | Sealed body-to-token conversion, norm-only readout, labeled logits and continuation |
-| `docs/lh-pronounce-plan.md` | Token clock, sealed-window adapter, original readout oracle and whole-model obligations |
-| `docs/lh-iocortex-plan.md` | Actual whole-model oracle, four-block wiring and remaining containment obligations |
-| `docs/single-graph-training.md` | Two-clock/single-PDG VJPs, shared optimizer owners and partial-window truncation |
-| `docs/lh-single-graph.md` | Bounded single-PDG IOCortex construction, every-cut projection and readout ledger boundary |
-| `docs/lh-iocortex.md` | Original whole-model entry points, precise graph projection and cross-language oracle scope |
-| `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
-| `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
+| 端口、物理边与逻辑来源 | [local-ports](local-ports.md)、[source-domains](source-domains.md) |
+| 内容、聚合、状态、读取与 Next | [aggregate](aggregate-programs.md)、[content](content-programs.md)、[state](state-programs.md)、[read](read-programs.md)、[next](next-programs.md) |
+| 区域选择、history 与控制 | [region](region-programs.md)、[LH selector](lh-selector.md) |
+| Full、Emit、HARD/HST/SOFTP | [full](full-programs.md)、[LH Full](lh-full.md)、[精度](precision.md) |
+| EMA/SSM/矩阵记忆/Add/Attention | [模块目录](module-extension-plan.md)、[matrix](matrix-memory.md)、[Add](lazy-add.md)、[attention](attention.md) |
+| same-fiber 注意力与 pooling | [fiber attention](fiber-attention.md)、[packing](fiber-packing.md)、[pooling](fiber-pooling.md) |
+| host prefill 与流式状态 | [greedy](greedy-scheduler.md)、[frontier](frontier-contract.md)、[cursor](streaming-cursor.md) |
+| 三图关系和特化适用域 | [Settle 编码](settle-embedding.md)、[跨类策略](cross-family-policies.md) |
+| eager 与常驻、窗口与多卡 | [放置](execution-placement.md)、[resident 库](resident-library.md)、[训练](resident-training.md)、[peers](resident-peers.md) |
+| 批量化的梯度连接 | [packed autograd](packed-autograd.md)、[Full VJP](full-batched-autograd.md)、[Aggregate VJP](aggregate-batched-autograd.md)、[resident graph VJP](resident-graph-vjp.md) |
+| 实验调用、loss/更新、容量 | [library](library.md)、[online consumers](online-consumers.md)、[容量](consumer-capacity.md)、[eager 容量](eager-consumer-capacity.md) |
+| LH 对照与 token 层 | [compatibility](lh-compatibility.md)、[IOCortex](lh-iocortex.md)、[single graph](lh-single-graph.md)、[token checkpoint](token-application-checkpoint.md) |
 
-One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
-Embeddings transform clocks, boundary nodes and source tags explicitly. Local
-operators are shared within a language; schedules are independent. Cross-
-language implementations and analytic examples check the operator formulas.
+## 定位规则
 
-## Runtime decisions
+从语义符号找到接口，再用 `rg` 查调用者、校验和测试。`Tensor` 类型本身不证明
+shape、dtype、设备、有限性、时间顺序或所有权正确；必须结合模块契约和验证入口。
+新图编码要给出观察量投影及适用 cut，新批量路径要声明精确联合求值条件，
+新设备模块要同时处理前向、声明的 VJP、容量、生命周期与不支持的请求。
 
-- Graph compilation builds CSR outgoing and CSC incoming edge indexes once.
-  Runtime touches only scheduled events, candidate regions and outgoing edges.
-- A batch is independent sequence instances with disjoint state/history. Lazy
-  state allocation is keyed by (sample, node); histories by (sample, region).
-- Fibers contain tagged external atoms or edge messages. Sort deterministically
-  before aggregation; retain source identity even when payloads are equal.
-- Input completeness is explicit. A sealed half-open window carries all external
-  records in that window. Queue emptiness alone never advances logical time.
-- `Next` and comparison snapshot precede `Full`. Full may be packed/parallel;
-  it cannot write persistent state. Node and region owners are unique.
-- Native workers compute independent node results. The coordinating thread
-  commits them in stable order; workers inherit Torch thread-local state.
-- TimedDAG frontier blocks require declared exact contracts. Stateful selection,
-  clear/reset and feedback may restrict batching. Report the block sizes and
-  fallback, rather than naming a sequential loop “prefill”.
-- Runtime checkpoints serialize values/spec identity, not a live autograd graph.
-  In-memory cuts preserve graph connectivity unless explicitly detached.
-
-State preparation now uses `cpp/include/tide/kernel.h`, with named tensor slots
-and an opt-in exact sequence contract. Built-in profiles are EMA, identity and
-selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed state
-prefill is isolated in `block_prepare.cpp`; its checked segment representation is
-in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
-from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
-native kernels and replay evaluation in separate source files.
-`isolated_aggregate.cpp` batches source VJPs; `bind_aggregate.cpp` is only a
-primitive test adapter. Read is separate
-in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
-Regions use `region.py`/`region.h`, with typed history in `history.py`/`types.h`.
-Node and region tensor slots participate in comparisons, explicit detach and
-the checkpoint schema in `semantics.md`. Built-in counters use checked int64 arithmetic.
-`coordinates.py` rejects non-int/bool metadata before Python execution or native
-record conversion. Cursor imports validate complete metadata once; advances only
-check the window bounds and incoming external records.
-
-Build qualification checks a source fingerprint and binary hashes from
-`build/build-manifest.json`; stale native modules cannot certify newer C++ code.
-Custom build directories propagate explicitly to pytest. `scripts/clean_artifacts.py`
-defaults to a dry run and protects referenced, failed and active-job artifacts.
-`scripts/durable_records.py` owns fsynced atomic text/JSON records and isolated
-job-record read failures; `status.py` reports unknown records without hiding
-healthy jobs or rewriting historical failures.
-
-Named native parameters are a separate layer in `parameters.h`/`parameters.cpp`:
-`ParameterRegistry` collects explicit tensors or trainable `Model` fields,
-groups aliases by TensorImpl identity and exposes canonical owner names. The
-standalone `optimizer.h`/`optimizer.cpp` layer applies CPU FP32/FP64 SGD and
-AdamW without Python callbacks. The native `checkpoint.h` layer uses separate
-codec, preflight and publication files to persist named values and built-in
-optimizer state in `TIDENCK1` schema v1; it has no Python-file interoperability
-or graph-continuation responsibility. SettleGraph construction and embedding have independent Python (`settle.py`)
-and native (`settle.h`, `settle.cpp`, `settle_projection.cpp`) frontends. The
-native entry owns a compiled rank-aligned encoding and selects Frontier or Streaming;
-`bind_settle.cpp` is only its client/test adapter.
-
-## Module boundaries
-
-Nodes expose Agg, Upd, Read, Next, Full/Emit with typed state. State modules need
-step and optional exact block interfaces; advertise limitations (mask, position
-clock, same-fiber policy, window, reset). Initial profiles cover a small EMA and
-FFN as a validation anchor; attention/GQA, linear attention, DeltaRule, SSM and
-SwiGLU are separately qualified implementations. No generic interface by itself
-proves that an arbitrary pretrained checkpoint can be imported.
-
-Packed data needs sample IDs, node IDs, event/sequence offsets, source-edge IDs,
-logical times, positions and state slots. Padding never creates candidates.
-An absent message is distinct from a numerical zero message.
+源码与当前测试由 Git 保存；旧 build-manifest、运行路径和机器队列不是开发依赖。
+重新构建时生成新源码/二进制身份，不能沿用历史通过数认证新的库。

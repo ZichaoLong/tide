@@ -5,7 +5,7 @@ Python `Model(region_programs={region: module})` registers parameters; native
 clients install a functional `RegionKernel` in `Model.regions[r].kernel` and its
 tensors in `RegionWeights.extra`. The Python adapter exports supported built-ins
 and rejects Python overrides. `Region.selector` is a versioned graph profile;
-native graph identity is v11. A custom implementation must use its own profile
+current graph identity and checkpoint versions are owned by [semantics](semantics.md). A custom implementation must use its own profile
 and maintain its code/parameter interpretation across restoration.
 
 ## Request and result
@@ -53,7 +53,7 @@ impose an increment rule on custom state/history programs.
 
 History belongs to `(sample, region)`, even when parameters are shared. Forks
 copy metadata and retain tensor graphs. Detach cuts all history tensors together
-with state and pending messages. Checkpoint **v4** encodes plain records and
+with state and pending messages. The current checkpoint schema in [semantics](semantics.md) encodes plain records and
 detached values; old versions are rejected. Identity, parameter aliases and
 record validity are checked before changing weights. The native cursor clones
 history tensors at import and snapshot, and detaches them explicitly. Advancing

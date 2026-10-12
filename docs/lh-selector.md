@@ -7,10 +7,11 @@ rounded FP32 norm is not this operation. Zero norm uses Torch's connected-zero
 VJP. Its ordinary norm VJP is a Tide training choice; LH is an inference oracle
 only and its own selector detaches scores.
 
-Read programs declare `precision = payload | float64`; native ReadKernel exposes
+Read programs declare explicit `precision = payload | float32 | float64`; native ReadKernel exposes
 `descriptor_dtype(payload_dtype)`. The profile name is part of graph identity.
-The adapter rejects changes to built-in precision policies. No graph schema bump
-is needed beyond v11 because new profiles have new explicit names.
+The adapter rejects changes to built-in precision policies. Profiles have
+explicit versioned names; current structural/checkpoint schemas are owned by
+[semantics](semantics.md).
 
 Region requests now include payload dtype/device metadata separately from
 descriptors. A region can contain both payload-precision and FP64 descriptors.
