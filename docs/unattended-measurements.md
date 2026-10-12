@@ -82,5 +82,9 @@ classification. Keep the new CPU series separate from old timings.
 systemctl --user show tide-execution-flows-selection-followups01.service -p ActiveState -p MainPID -p ControlGroup
 ```
 
-Never resume/stop/signal/clean `historical-cpu-attention-01` (worker2686919).
-It is unrelated protected history. Source/build/trace/failed-run artifacts remain.
+`historical-cpu-attention-01` was cancelled by explicit user instruction on
+2026-10-12, superseding the former keep-paused protection. Its four processes,
+including worker2686919, are gone; no measured update existed. Preserve the
+original pause and pre-cancel records and the terminal cancellation receipt at
+`TASK/runs/historical-cpu-attention-01/cancellation.json`. Do not restart it.
+Source/build/trace/failed-run evidence remains retained.

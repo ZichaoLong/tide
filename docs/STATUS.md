@@ -1,10 +1,11 @@
-# Current handoff — 2026-10-11
+# Current handoff — 2026-10-12
 
 The authorized G1–G5 **local delivery is complete**:implementation and CPU/NPU
 correctness closure,finite selection evidence and GPU target handoff. Actual GPU
 validation remains pending hardware. No current task job or performance queue
-is live;the protected historical record is excluded. No new pause instruction
-exists. User authorization includes commits/pushes and occupied NPU use;no
+is live. The formerly protected historical CPU task was cancelled by explicit
+user instruction on 2026-10-12; its records remain preserved. No new pause
+instruction exists. User authorization includes commits/pushes and occupied NPU use;no
 empty-card admission or foreign-process operations. No subagents.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -12,7 +13,8 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `graph-execution-foundation`. Always use explicit repository cwd.
 `TASK=/mi/data2T/zlong/tide-execution-flows` below. Sole backlog:
 [ROADMAP G1–G5](ROADMAP.md);contract:[execution-flows §11](execution-flows.md).
-This handoff is part of the final evidence commit;resolve current HEAD with Git.
+Implementation delivery is recorded at `0edcd2b`; this handoff includes subsequent
+maintenance. Resolve current HEAD with Git.
 No production model path changed after the cited qualification sources.
 
 ## Delivered implementation and exact qualification
@@ -92,6 +94,12 @@ peak summed RSS5,019,664,384B. `g5-final-audit02` passed source/binary/result/tr
 device coverage and memory review in48.47s,peak95,584,256B,without device work.
 Audit01's API-prefix assertion failure is retained.
 
+[Storage maintenance on 2026-10-12](evidence/storage-maintenance-20261012.md)
+removed 35,176 uncited private build objects/dependencies, reclaiming 16.60 GiB.
+Preservation checks passed for 1,297 record hashes and metadata of 3,380 linked
+products. Sources, linked binaries, logs, traces and cited objects remain;
+rebuilding may regenerate the deleted intermediates. Cleanup service is terminal.
+
 TASK/plans/NAME.{json,py,sh} hold frozen commands/budgets;TASK/runs/NAME hold
 status.json,task.log,bounded.json and workload records:
 
@@ -151,17 +159,24 @@ GPU tools are under `/mi/data2T/zlong/gpu-toolchains`,private module
 or vendor-file edits. Site launcher `plans/g-stage-shared-launch02.py` honors
 occupied-card authorization,two snapshots,health/headroom and sorted physical
 visibility. Thread/compiler pools1;resident ACLNN_CACHE_LIMIT=0. Raw device
-initialization/caches stay in artifact directories. Data disk last observed80GiB
-free;recheck before large writes. Trackio remains off.
+initialization/caches stay in artifact directories. Data disk last observed
+71.97 GiB free after the 2026-10-12 cleanup; recheck before large writes.
+Trackio remains off.
 
 Long work uses frozen sources,separate background.slice services,affinity,
 sampled aggregate RSS/deadlines and process-group cleanup. Legacy cgroup-v1
 CPUQuota/MemoryMax/TasksMax are requested,not proven kernel-enforced. Shared
 mappings count repeatedly in RSS. No automatic retries or timeout enlargement.
 
-**Never resume,stop,signal or clean historical-cpu-attention-01 / worker2686919.**
-Its retained running record is excluded from current task closure. Malformed
-historical build-reverse-gather-python-dev01 may make status.py exit1;do not
+**historical-cpu-attention-01 was cancelled by the user on 2026-10-12.**
+The service exited 143 with MainPID 0 and an empty cgroup; all four processes,
+including worker 2686919, are gone. No measured update existed. Original pause
+and pre-cancel records are preserved; current job/run/matrix records are
+cancelled. Receipt:
+`TASK/runs/historical-cpu-attention-01/cancellation.json`. Do not restart it.
+This authorization supersedes the former keep-paused protection; preserve its
+evidence. Malformed historical build-reverse-gather-python-dev01 may make
+status.py exit 1; do not
 rewrite it or treat it as a new blocker. ObsidianVault,lh and fractal-latcarf stay
 read-only. Old F1–F7 and61/120 timings keep their original scope and closed budgets:
 [earlier terminal report](evidence/selection-terminal-20261010.md).
