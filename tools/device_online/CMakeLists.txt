@@ -196,7 +196,7 @@ if(TIDE_DEVICE_KERNELS)
   target_link_libraries(tide-weighted-describe PUBLIC tide-weighted-row tide::tidegraph)
   add_library(tide-weighted-flow SHARED weighted_flow.cpp weighted_flow_budget.cpp weighted_flow_copy.cpp weighted_flow_local.cpp weighted_flow_state.cpp
     weighted_flow_source.cpp weighted_flow_parameters.cpp weighted_flow_describe_parameters.cpp
-    weighted_flow_packing.cpp weighted_flow_records.cpp)
+    weighted_flow_packing.cpp weighted_flow_records.cpp weighted_flow_adjoint.cpp weighted_flow_node_vjp.cpp weighted_flow_region_vjp.cpp)
   set_target_properties(tide-weighted-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-flow PRIVATE tide-weighted-recurrent tide-weighted-describe tide-weighted-region
     tide-weighted-kv-update tide-weighted-kv-sum tide-weighted-kv-query tide-weighted-kv-full tide-weighted-source
@@ -245,6 +245,9 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-flow-check weighted_flow_check.cpp weighted_flow_boundary_check.cpp ../../cpp/test/weighted_graph_fixture.cpp)
     target_compile_options(tide-weighted-flow-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-flow-check PRIVATE tide-weighted-flow tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-stage-check weighted_stage_check.cpp weighted_stage_fixture.cpp weighted_stage_compare.cpp weighted_flow_fixture.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-stage-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-stage-check PRIVATE tide-weighted-flow tide-weighted-parameters tide-device-services tide::runtime)
     add_executable(tide-weighted-pool-check weighted_pool_check.cpp)
     target_compile_options(tide-weighted-pool-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-pool-check PRIVATE tide-weighted-pool tide::tidegraph)

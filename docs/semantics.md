@@ -93,6 +93,8 @@ These extensions do not automatically implement weighted memory or region formul
 
 ## Weighted KV binding
 
+The [weighted stage VJP](resident-weighted-stage-vjp.md) composes the declared local first-order maps with separate raw-field/descriptor roots, actual regional packing and canonical parameter roles. This component is distinct from the complete retained graph training lifecycle.
+
 The [complete weighted resident flow](resident-weighted-flow.md) composes the
 five memory families with online device readiness, regional selection, physical
 edge routing and exact raw continuation. Its FP32 inference owner has a separate

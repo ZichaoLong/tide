@@ -39,14 +39,21 @@ CUDA修复8eebceccc8e209a6f5f08caf4d262a4e388d280b固定资格通过：架构8�
 实现和本次证据待正常推送；不重跑无关NPU数值。
 完整数值阶段VJP开发已写入主工作区：weighted_flow_{adjoint,node_vjp,region_vjp}与阶段检查，
 复用forward局部绑定、独立raw/Describe/Content/control/Full根、角色切片/canonical共享参数；尚未构建/实机验收。
-任务core5-weighted-stage-dev正在构建，active/running：
-- unit tide-core5-weighted-stage-dev-20261028.service；冻结artifacts/worktrees/core5-sdk（tree1e3813f8d1d9ca6fae998ee6ea565d55a6022b9d，已归档source.tree/source.tar），不得编辑。
-- 输出artifacts/jobs/core5-weighted-stage-dev/；launcher .local/core5-weighted-stage-dev{,-workload}.sh。
-- 1800秒、2workers、BLAS1、background.slice/Nice10；queue180秒、阶段检查600秒；重编整个flow及新check，
-  新参数归约kernel按需构建，其余逐源码/二进制比对已有dev9和manifest。
-- 15个五记忆×三Read数值阶段配置/各独立根与完整forward回归；结果未知。
-检查`systemctl --user show tide-core5-weighted-stage-dev-20261028.service -p ActiveState -p Result -p ExecMainStatus`及status/task.log/checks。
-停止`systemctl --user stop tide-core5-weighted-stage-dev-20261028.service`。
+core5-weighted-stage-dev tree1e3813f8d1d9ca6fae998ee6ea565d55a6022b9d已failed/exit1：数值阶段库编译/链接完成，
+测试fixture缺ATen grad_mode头导致检查程序编译失败，未运行设备。原日志/归档保留。
+core5-weighted-stage-dev2 tree15474abc0dfedc82550730a7e09c34bb0bbf9471也已failed/exit1，compare测试源同样缺grad_mode头；未运行设备。
+已补显式include。dev2/partial-build.json保留成功构建库摘要和原失败；下次只重编测试，逐文件确认数值库源码未变。
+core5-weighted-stage-dev3 tree76e8528394709b85b7e46d63a1b87f96f5e6ca14已通过：15阶段配置各独立根/完整canonical参数与raw字段，
+完整forward 21图/边界回归通过；物理1→npu:0，unit inactive/success/exit0。
+core5-weighted-stage-dev4 tree5d4f5927a5e66d0758ee344e64bdb249591cfa4f已failed/exit1：基础15与qry/att/match/grouped三快照18配置通过，
+kv_node_gain content的all根输入mass梯度actual.4053/expected.2913。检查参考在all case丢掉非活动候选单独control根；
+已改按显式rootflags加入该根，不改候选数学/容差，原失败保留。
+core5-weighted-stage-dev5 tree771e16417f6d98f58ab02752150846ed1b38bbf6已passed：24配置全部独立根、参数/物理输入/raw字段、
+连接零及非有限根拒绝通过；物理1→npu:0。unit inactive/success/exit0，输出artifacts/jobs/core5-weighted-stage-dev5/。
+数值库和候选数学未改；compare按显式rootflags正确包括非活动候选control，修复测试见证不改变旧failed记录。
+当前无活动reader；SDK frozen tree771e164，CUDA checkout clean 8eebcec。主工作区数值阶段实现/契约/测试将提交。
+下一动作：提交完整阶段VJP，固定实现提交；NPU24配置+完整forward回归、metadata5，CUDA三架构构建/loader分别资格。
+NPU可严格复用dev5全部源码/库摘要一致构建；CUDA按新目标正常增量构建。资格完成后单独证据提交推送。
 继续完整retained VJP/optimizer和精确训练恢复：反向读取候选实际device journal，链接消息生产者/状态前驱，
 复用已验局部VJP并汇总canonical参数；不得CPU参考重放或主机逐事件推进冒充resident。
 随后FP16/peer、有限profiling与代表性完整成本选型、最终追溯；不做全部开关笛卡尔积。

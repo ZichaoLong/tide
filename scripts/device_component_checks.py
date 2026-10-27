@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-stage": ("tide-weighted-stage-check", ("float32",)),
     "services": ("tide-device-services-check", ("float32",)),
     "weighted-flow-config": ("tide-weighted-flow-config-check", ("float32",)),
     "weighted-flow": ("tide-weighted-flow-check", ("float32",)),
@@ -297,3 +298,5 @@ MARKERS["weighted-flow"] = "weighted-flow: passed"
 
 KERNELS["weighted-flow-config"] = "tide_weighted_region_pack"
 MARKERS["weighted-flow-config"] = "weighted-flow-config: passed"
+KERNELS["weighted-stage"] = "tide_weighted_row_accumulate"
+MARKERS["weighted-stage"] = "weighted-stage: passed"
