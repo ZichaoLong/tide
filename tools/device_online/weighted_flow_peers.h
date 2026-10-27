@@ -8,6 +8,8 @@
 namespace tide::device_online {
 struct WeightedFlowNode;
 struct WeightedNodeInput;
+struct WeightedNodeRoots;
+struct WeightedNodeGradient;
 class WeightedFlowPeers {
  public:
   WeightedFlowPeers(at::Device,const WeightedFlowLimits&);
@@ -17,10 +19,15 @@ class WeightedFlowPeers {
   void bind(const Graph&,Nodes&,const Budget&);
   void append_begin(DeviceProgram&,const at::Tensor& error);
   void append_local_send(DeviceProgram&,const Graph&,Nodes&,const std::vector<WeightedNodeInput>&,
-                         std::vector<WeightedFlowView>&,const at::Tensor&,const Budget&);
+                         std::vector<WeightedFlowView>&,const at::Tensor&,const Budget&,
+                         const std::vector<WeightedRawState>* saved_old=nullptr);
   void append_local_receive(DeviceProgram&,const at::Tensor& error);
   void append_full(DeviceProgram&,Nodes&,std::vector<WeightedFlowView>&,const at::Tensor&,const Budget&);
   void append_commit(DeviceProgram&,Nodes&,const at::Tensor& error);
+  // Reverse replays actual journal operands on each owner. This terminates
+  // the peer loop in place of append_commit; it never adopts replayed state.
+  void append_reverse(DeviceProgram&,const Graph&,Nodes&,const std::vector<WeightedNodeRoots>&,
+                      std::vector<WeightedNodeGradient>&,const at::Tensor&,const Budget&);
   void append_stop(DeviceProgram&);
   void finish();
   void synchronize_inputs();

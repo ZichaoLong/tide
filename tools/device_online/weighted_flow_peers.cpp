@@ -1,5 +1,6 @@
 #include "weighted_flow_peers.h"
 #include "weighted_flow_internal.h"
+#include "weighted_flow_vjp.h"
 #include "peer_exchange.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
 namespace tide::device_online {
@@ -17,7 +18,7 @@ struct Shard {
   at::Tensor error,status,command,remote_command,stop,work;
   std::unique_ptr<DeviceProgram> program;
   std::unique_ptr<TaskServices> services;
-  Exchange initial,request,read,selection,full,decision,completion;
+  Exchange initial,request,read,selection,full,decision,completion,roots,gradient;
   size_t head=0,end=0;
   explicit Shard(at::Device d):device(d){}
 };
@@ -65,7 +66,8 @@ void WeightedFlowPeers::append_begin(DeviceProgram& p,const at::Tensor& error){
   for(auto& a:impl_->shards){a->initial->append_receive(p);merge(p,a->status,error);}
 }
 void WeightedFlowPeers::append_local_send(DeviceProgram& coordinator,const Graph& g,Nodes& nodes,
-    const std::vector<WeightedNodeInput>& inputs,std::vector<WeightedFlowView>& views,const at::Tensor& error,const Budget& remaining){
+    const std::vector<WeightedNodeInput>& inputs,std::vector<WeightedFlowView>& views,const at::Tensor& error,const Budget& remaining,
+    const std::vector<WeightedRawState>* saved_old){
   auto& s=*impl_;
   for(auto& owned:s.shards){auto& a=*owned;auto& p=*a.program;
     a.command=at::zeros_like(error);a.stop=at::zeros_like(error);a.work=at::ones_like(error);
@@ -74,12 +76,14 @@ void WeightedFlowPeers::append_local_send(DeviceProgram& coordinator,const Graph
     for(auto v:a.nodes){auto& n=*nodes[v];const auto& input=inputs[v];
       auto copy=[&](const at::Tensor& x){auto y=s.mirror(x,a.device,p);request.push_back({x,y});return y;};
       n.input={copy(input.payload),copy(input.owners),copy(input.lengths),copy(input.times),copy(input.present),copy(input.bank),copy(input.indices)};
+      if(saved_old){const auto& old=saved_old->at(v);
+        request.push_back({old.floating,n.state.floating});request.push_back({old.integer,n.state.integer});}
     }
     a.request=s.exchange(std::move(request),p);a.head=p.label();const auto body=p.label();a.end=p.label();
     p.mark(a.head);a.request->append_receive(p);p.branch(a.remote_command,{a.end,body});p.mark(body);
     PeerExchange::Fields result{{a.error,a.status}};
     for(auto v:a.nodes){auto& n=*nodes[v];append_weighted_node_local(p,*a.services,n,g.regions[g.nodes[v].region].read_mode,a.error,remaining);
-      auto& view=views[v];view.present=inputs[v].present;view.times=inputs[v].times;
+      auto& view=views[v];view.present=inputs[v].present;view.times=inputs[v].times;view.bank=inputs[v].bank;
       auto back=[&](const at::Tensor& x){auto y=s.mirror(x,s.coordinator,p);result.push_back({x,y});return y;};
       view.content=back(n.aggregate->output);view.old={back(n.old.floating),back(n.old.integer)};
       view.proposal={back(n.proposal.floating),back(n.proposal.integer)};
@@ -122,6 +126,32 @@ void WeightedFlowPeers::append_commit(DeviceProgram& coordinator,Nodes& nodes,co
     a.decision->append_send(coordinator);a.completion->append_receive(coordinator);
   }
 }
+void WeightedFlowPeers::append_reverse(DeviceProgram& coordinator,const Graph& graph,Nodes& nodes,
+    const std::vector<WeightedNodeRoots>& roots,std::vector<WeightedNodeGradient>& gradients,
+    const at::Tensor& error,const Budget& remaining){
+  auto& s=*impl_;
+  for(auto& owned:s.shards){auto& a=*owned;auto& p=*a.program;
+    PeerExchange::Fields request{{error,a.error}},result{{a.error,a.status}};
+    std::vector<WeightedNodeRoots> local;
+    auto copy=[&](const at::Tensor& x){auto y=s.mirror(x,a.device,p);request.push_back({x,y});return y;};
+    auto row=[&](const WeightedRowAdjoint& x){return WeightedRowAdjoint{copy(x.value),copy(x.connected)};};
+    for(auto v:a.nodes){const auto& r=roots.at(v);WeightedNodeRoots owned;
+      owned.content=row(r.content);owned.full=row(r.full);owned.proposal={copy(r.proposal.value),copy(r.proposal.connected)};
+      for(const auto& [name,x]:r.describe)owned.describe[name]=row(x);local.push_back(std::move(owned));}
+    a.roots=s.exchange(std::move(request),p);a.roots->append_receive(p);
+    auto back=[&](const at::Tensor& x){auto y=s.mirror(x,s.coordinator,p);result.push_back({x,y});return y;};
+    for(size_t j=0;j<a.nodes.size();++j){const auto v=a.nodes[j];auto& n=*nodes[v];
+      auto g=append_weighted_node_vjp(p,*a.services,n,graph.regions[graph.nodes[v].region].read_mode,local[j],a.error,remaining);
+      auto& returned=gradients.at(v);returned.old={back(g.old.value),back(g.old.connected)};
+      returned.initial={back(g.initial.value),back(g.initial.connected)};
+      returned.payload=back(g.payload);returned.connected=back(g.connected);
+      for(const auto& part:g.parameters)returned.parameters.push_back({part.name,back(part.values),back(part.connected)});
+    }
+    a.gradient=s.exchange(std::move(result),p);a.gradient->append_send(p);
+    p.branch(at::zeros_like(a.error),{a.head});p.mark(a.end);a.roots->append_send(coordinator);
+  }
+  for(auto& a:s.shards){a->gradient->append_receive(coordinator);merge(coordinator,a->status,error);}
+}
 void WeightedFlowPeers::append_stop(DeviceProgram& p){for(auto& a:impl_->shards){p.copy(a->command,a->stop);a->request->append_send(p);}}
 void WeightedFlowPeers::finish(){for(auto& a:impl_->shards){a->services->append_stop();a->services->finish();a->program->finish();}}
 void WeightedFlowPeers::synchronize_inputs(){for(auto& a:impl_->shards){a->error.zero_();c10::impl::VirtualGuardImpl(a->device.type()).synchronizeDevice(a->device.index());}}
@@ -131,9 +161,9 @@ void WeightedFlowPeers::wait(){std::exception_ptr error;
   if(error)std::rethrow_exception(error);
 }
 void WeightedFlowPeers::close(){for(auto& a:impl_->shards){a->program->close();a->services->close();
-  for(auto* x:{a->initial.get(),a->request.get(),a->read.get(),a->selection.get(),a->full.get(),a->decision.get(),a->completion.get()})if(x)x->close();}}
+  for(auto* x:{a->initial.get(),a->request.get(),a->read.get(),a->selection.get(),a->full.get(),a->decision.get(),a->completion.get(),a->roots.get(),a->gradient.get()})if(x)x->close();}}
 std::vector<const DeviceProgram*> WeightedFlowPeers::programs()const{
-  std::vector<const DeviceProgram*> result;for(const auto& a:impl_->shards)if(a->services){auto ps=a->services->programs();result.insert(result.end(),ps.begin(),ps.end());}return result;
+  std::vector<const DeviceProgram*> result;for(const auto& a:impl_->shards)if(a->services){auto ps=a->services->programs();result.insert(result.end(),ps.begin(),ps.end());result.push_back(a->program.get());}return result;
 }
 std::vector<at::Tensor> WeightedFlowPeers::tensors()const{
   auto out=impl_->held;for(const auto& a:impl_->shards)for(const auto& t:{a->error,a->status,a->command,a->remote_command,a->stop,a->work})if(t.defined())out.push_back(t);return out;
@@ -143,5 +173,5 @@ at::Tensor WeightedFlowPeers::boundary_present(int64_t node)const{return impl_->
 int64_t WeightedFlowPeers::size()const{return impl_->shards.size();}
 int64_t WeightedFlowPeers::workspace_bytes()const{int64_t out=0;for(const auto& a:impl_->shards)out+=a->services->workspace_bytes();return out;}
 int64_t WeightedFlowPeers::packet_bytes()const{int64_t out=0;for(const auto& a:impl_->shards)
-  for(auto* x:{a->initial.get(),a->request.get(),a->read.get(),a->selection.get(),a->full.get(),a->decision.get(),a->completion.get()})if(x)out+=x->packet_bytes();return out;}
+  for(auto* x:{a->initial.get(),a->request.get(),a->read.get(),a->selection.get(),a->full.get(),a->decision.get(),a->completion.get(),a->roots.get(),a->gradient.get()})if(x)out+=x->packet_bytes();return out;}
 }

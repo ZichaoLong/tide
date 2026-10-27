@@ -4,7 +4,8 @@
 指定一个同后端、显式逻辑设备；空C++列表或Python的None保持全部节点在coordinator。
 设备可重复、可以没有节点放在coordinator；区域、队列、history与完整返回journal仍由
 coordinator拥有。这是同一图/样本内的物理放置，和[独立样本副本](resident-weighted-peers.md)不同。
-当前新增前向/精确续接实现等待资格；放置后的retained VJP与公共训练接入仍在实施中。
+前向/精确续接资格与实现身份由STATUS链接的报告分别记录。放置后的retained VJP已接入实现、
+尚待固定源码资格；公共训练/optimizer发布仍在实施中。
 
 `weighted_flow_peers.cpp::WeightedFlowPeers`为每个远端设备建立一个服务组。
 节点实际参数bank、完整原始状态、Upd/Read/Full及局部数值tape在指定owner上。
@@ -31,7 +32,7 @@ coordinator拥有。这是同一图/样本内的物理放置，和[独立样本�
 逻辑时间与逐条时间戳仍为int64。公共checkpoint解码实际私有owner状态、history、pending
 和输入账本，可在另一份合法节点放置下恢复，物理放置不进入数学graph identity。
 参数共享仍按CPU模型的canonical别名记录；每个owner的物理bank副本不是新的数学参数。
-跨owner反向贡献归约与共同optimizer发布必须另行接通和验收，不从前向结果外推。
+跨owner反向贡献归约与共同optimizer发布分别验收，不从前向结果外推。
 
 预算统计跨程序唯一tensor storage、完整journal、peer镜像与packet、各owner数值workspace。
 显式设备、长度/后端/索引、无法访问的peer及容量不满足均拒绝；没有CPU后备。
@@ -49,3 +50,27 @@ coordinator拥有。这是同一图/样本内的物理放置，和[独立样本�
 同时断言raw、Full与每个实际参数bank的物理设备，不能仅根据manifest请求列表认证放置。
 `test_weighted_resident_placement.py`只验证静态owner定义域，不作设备执行证据。
 各dtype、Python适配、standalone、CUDA构建与真机结果仍分别记录。
+
+## 放置后的窗口反向
+
+`WeightedWindowSnapshot`保存每节点的物理owner；在窗口边界把实际右切面raw字段与存在位
+复制到coordinator，供公共字段根和跨窗桥使用。原owner的raw存储、参数bank、服务程序和
+这些镜像均按storage身份计入预算；复制前检查容量。保留快照克隆全部实际操作数，
+关闭原前向后仍可求导；不重新执行参考、不用有效状态补写raw内容。
+
+`WeightedWindowAdjoint`以coordinator上的实际journal逆序推进，装配物理完整纤维并把该阶段
+实际old快照传回原owner。各owner重建自身Aggregate/Upd/Read/Full数值tape，完整区域选择
+及其VJP仍由coordinator一次完成。`WeightedFlowView::bank`保留每行存在/参数绑定，
+`append_weighted_region_views_vjp`不依赖远端未传回的局部tape。
+
+`WeightedFlowPeers::append_reverse`将独立Content、G、proposal与每个Describe根发给owner，
+在那里执行局部VJP；返回实际payload/old/initial及具名参数贡献。coordinator保持每节点
+滚动raw伴随、逐物理边祖先路由和canonical归约，按稳定节点顺序汇总所有共享使用者。
+反向重放不采用私有状态，不改变前向continuation。空窗发送stop；全部设备先提交再等待。
+None/零连接位、int64元数据、冻结参数和梯度根身份沿用[窗口VJP](resident-weighted-window-vjp.md)。
+
+新`weighted-node-window`检查定义FP32四组合×12独立根，以及两个三窗桥（含空窗）；
+覆盖五记忆、同秩HB、非对齐图、反馈/重复边、Read初态/旧态/候选态、全区域Attention、
+来源变换、跨owner共享参数、全部节点远端放置和原前向关闭后的反向。检查真实反向节点的
+raw/Full/参数bank设备。独立CPU Greedy/autograd提供完整字段和梯度对照，不能替代局部公式锚点。
+此检查定义不表示已运行通过；FP16反向、公共训练、optimizer与跨放置训练checkpoint继续独立验收。

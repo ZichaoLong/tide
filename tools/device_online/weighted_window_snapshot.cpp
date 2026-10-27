@@ -23,14 +23,21 @@ std::shared_ptr<WeightedWindowSnapshot> WeightedWindowSnapshot::borrow(WeightedF
   if(at::GradMode::is_enabled()||!flow.impl_||flow.impl_->failed||!flow.impl_->ran)
     throw std::invalid_argument("weighted snapshot requires a successful live no-grad window");
   const auto& f=*flow.impl_;auto out=std::make_shared<WeightedWindowSnapshot>();auto& s=*out;
-  if(f.peers->size())throw std::invalid_argument("weighted placed-node retained adjoint is not yet implemented");
-  s.graph=f.graph;s.model=f.model;s.boundary=f.boundary;s.device=f.device;s.limits=f.limits;
+  s.graph=f.graph;s.model=f.model;s.boundary=f.boundary;s.device=f.device;s.limits=f.limits;s.node_devices=f.node_devices;
   s.samples=f.boundary.batch_size;s.start=f.begin.cpu().item<int64_t>();s.generation=f.generation;s.bytes=f.bytes;s.stages=f.stages;s.external=f.external;s.pending=f.pending->atoms();
   s.journal=std::shared_ptr<WeightedWindowJournal>(f.journal.get(),[](WeightedWindowJournal*){});
   s.programs=f.services->programs();s.programs.push_back(f.program.get());
+  auto programs=f.peers->programs();s.programs.insert(s.programs.end(),programs.begin(),programs.end());
+  s.held=f.peers->tensors();
+  long double gather=0;for(const auto& n:f.nodes)if(n->state.floating.device()!=s.device)
+    gather+=n->state.floating.nbytes()+n->state.integer.nbytes()+n->state_present.nbytes();
+  if(gather>s.limits.tensor_bytes-s.bytes)throw std::invalid_argument("weighted boundary gather exceeds tensor budget before copying");
+  s.bytes+=static_cast<int64_t>(gather);
   for(const auto& n:f.nodes){s.layouts.push_back(n->layout);s.descriptors.emplace_back();
     for(const auto& [name,x]:n->describe->fields)s.descriptors.back().push_back(name);
-    s.final.push_back(n->state);s.present.push_back(n->state_present);
+    // Public roots share the journal device. Copy the actual right cut only;
+    // the saved owner list still controls all local numerical replay and VJP.
+    s.final.push_back({n->state.floating.to(s.device),n->state.integer.to(s.device)});s.present.push_back(n->state_present.to(s.device));
     for(const auto& raw:{n->initial,n->state,n->old,n->proposal}){s.held.push_back(raw.floating);s.held.push_back(raw.integer);}
     for(const auto& [name,role]:n->banks.roles()){s.bank_bytes+=role.bank.nbytes();s.held.push_back(role.bank);}
   }

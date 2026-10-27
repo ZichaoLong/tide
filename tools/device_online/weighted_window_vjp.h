@@ -40,6 +40,7 @@ class WeightedWindowAdjoint {
   void check()const;
   std::unique_ptr<DeviceProgram> program_;
   std::unique_ptr<TaskServices> services_;
+  std::unique_ptr<WeightedFlowPeers> peers_;
   WeightedFlowNodes nodes_;
   std::vector<std::unique_ptr<WeightedFlowRegion>> regions_;
   WeightedWindowRoots roots_;

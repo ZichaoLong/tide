@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
-最近推送357477b（资格入口修正）；d072c17三项构建仍在运行。当前提交只修正/增强双卡检查器，运行库源码不变。
+最近推送1289bc9；d072c17 SDK/Python任务仍在运行，CUDA构建已passed。修正检查器与运行库源码身份分列。
 用户授权持续实施、有限实验、提交与正常推送；不用子代理。总体goal active，**未完成**。
 唯一待办[ROADMAP](ROADMAP.md)，持续规则[execution-flows](execution-flows.md)；参考仓库/公共工具链只读。
 
@@ -59,26 +59,48 @@ unit MainPID0/failed；没有排队申请设备或执行资格。原因是反例
 为了避免重复编译完全未改动的vendor内核，待原SDK构建完成后，可单独编译修正后的C++检查器，
 链接d072c17已建运行库。先验证两提交`tools/device_online`除`weighted_flow_peer_check.cpp`外逐字节相同，
 并核对原manifest全部binary hash；分别记录运行库源d072c17与检查器新源码。常规干净重建亦可复现。
-原d072c17脚本预期入口失败仍须等真实终态；单设备flow/training回归可继续用其未改动检查器独立验收。
+原d072c17脚本预期入口失败仍须等真实终态；单设备flow/training回归用其未改动检查器独立验收。
+
+修正检查器1289bc9冻结到`artifacts/worktrees/core5-weighted-node-check`。
+`core5-weighted-node-check-cuda-qualify`保留failed/exit1：新检查器6步编译/链接及loader/help成功，
+辅助脚本错误要求安装前后运行库字节摘要相同。审计确认ELF仅.dynstr/.dynamic改变，符合CMake去RPATH。
+`core5-weighted-node-check-npu-qualify`在等待依赖时主动取消，持久cancelled/exit143，无设备运行。
+不修改两旧任务结果或其输入。新的`.local/build-weighted-node-check-v2.py`在经manifest校验的私有
+库副本上执行CMake RPATH_REMOVE，再与installed库逐字节核对，并记录安装前/后摘要及实际loader路径。
+
+`core5-weighted-node-install-{npu,cuda}-qualify`在job.py启动前因输出目录已存在而失败，
+捕获Traceback与postmortem记录保留；未构建/未申请设备。不要预建job.py要求独占创建的输出目录。
+新jobs `core5-weighted-node-install-{npu,cuda}-v2-qualify`即将提交，units `tide-JOB-20261028.service`。
+冻结源码仍1289bc9，只编检查器；链接d072c17原运行库。每项依赖等待900秒/构建360秒(2worker)，
+NPU双卡queue180秒/设备900秒，整job2340秒、unit2400秒，background.slice/Nice10/ATen及BLAS1。
+launcher `.local/JOB.sh`、`JOB-workload.sh`、NPU另有`JOB-device.sh`，均只读。
+记录`artifacts/jobs/JOB/{status.json,task.log,build/result.json}`；NPU另有checks/和single-device-regression/。
+结果待审；CUDA仅build/loader/help，没有真机。
 
 ## 原工作树在实施的下一步
 
-单样本节点放置的前向源码已写入本提交、尚未做设备资格；不是f72a6cc观测证据的一部分。
-涉及`tools/device_online/weighted_flow*`、公共header/CMake/check注册、Python resident及placement adapter、
-新模块契约`docs/resident-weighted-placement.md`与semantic-map链接。
-每个远端设备拥有完整节点局部计算/私有raw状态；coordinator保留全区域选择/队列/journal，
-完整纤维请求→Read返回→全局选择→Full返回→队列预检→共同采用。空窗/错误stop协议已写。
-原先单设备区域计算拆为实际字段view，远端view只复制实际结果，不执行参考。
-CPU静态放置定义域8项开发检查通过；C++编译及双卡资格尚未进行。
-放置后的retained VJP、公共训练/optimizer发布尚未接入；暂时显式拒绝从placed flow创建adjoint，继续实施，不能据此前向宣称目标完成。
+1289bc9/d072c17前向资格见上文；Python-owned50项、修正SDK两dtype各9配置已通过，
+CUDA修正检查器build/安装RPATH逐字节复现/loader/help passed。SDK单设备flow/training回归仍运行。
+尚未形成前向证据提交；等待任务真实终态后审阅、记录并单独提交。
+
+原工作树未提交的窗口反向实现：`weighted_flow_peers`增加journal旧态请求和局部根/VJP响应，
+`weighted_flow_views`/region_vjp读取coordinator实际字段；`weighted_window_snapshot`保存放置，
+边界gather真实raw并计预算；`weighted_window_vjp/owner`保持逆序/祖先路由/参数归约在coordinator，
+局部tape/VJP在原owner。相关模块契约已更新；6个实现TU SDK syntax-only通过（非设备证据）。
+新`weighted_window_peer_check.cpp`定义4组合×12独立根与2个三窗桥；复用独立CPU调度/autograd。
+`weighted_retained_case.cpp`从旧checker提取，旧入口保持8组合。4个检查器TU SDK syntax-only通过；CPU静态owner定义域8项通过，git diff --check通过。
+公共训练放置、optimizer发布与FP16 placed反向仍未接通/资格，不能据此前向或内部源码宣称完成。
 
 接着执行：
-1. 本提交后建立只读checkout `artifacts/worktrees/core5-weighted-node-placement`；CPU静态8项已通过。
-2. 固定源码NPU SDK构建`weighted-node-peer`和单设备`weighted-flow`/`weighted-training`必要回归；
-   双卡FP32/FP16九配置、完整记录/跨放置磁盘恢复/空窗/共同拒绝。随后Python-owned适配及CUDA三架构构建。
-   `scripts/device_component_checks.py`已注册新检查；`weighted_flow_peer_check.cpp`是真实双卡独立调度对照。
-3. 扩展`weighted_window_snapshot`/`weighted_window_vjp`、canonical贡献归约及公共training/checkpoint，
-   不把step_replicas包装成单样本切分；反向、共享参数、optimizer与恢复分别验收。
+1. 审阅`core5-weighted-node-install-npu-v2-qualify`全部终态，原失败/取消保持独立记录；提交前向证据。
+2. 本次窗口反向实现提交后冻结到`artifacts/worktrees/core5-weighted-node-window`，跟踪源码只读。
+   jobs `core5-weighted-node-window-{npu,cuda}-qualify`，units `tide-JOB-20261028.service`，
+   launcher `.local/JOB.sh`及`JOB-workload.sh`，记录`artifacts/jobs/JOB/{status.json,task.log}`。
+   SDK构建weighted-node-window/window/training；双卡新4组合×12根与2个三窗桥，单设备
+   HB/proposal与feedback/old窗口、FP32/FP16训练必要回归；CUDA三架构只build/loader/help。
+   构建1500秒/2worker，NPUqueue180秒/设备2400秒，整job4140秒、unit4200秒；
+   background.slice/Nice10/ATen及BLAS1。当前尚未提交服务，不称资格通过。
+3. 完成公共training的node_devices构造/恢复、共同optimizer与参数bank发布，FP32/FP16训练/恢复分别验收。
 4. 最终公共接口/能力矩阵/追溯审计。CUDA真机继续独立待验，不阻塞本机工作。
 
 ## 环境与必要保留

@@ -2,7 +2,9 @@
 #include "weighted_window_vjp.h"
 #include "tide/greedy.h"
 namespace tide::device_online::window_check {
-void run_window(at::Device,Graph,Model,std::vector<External>,const std::string& label,bool split,bool prefill,bool retained=false);
+void run_window(at::Device,Graph,Model,std::vector<External>,const std::string& label,bool split,bool prefill,bool retained=false,
+                const std::vector<at::Device>& node_devices={});
+void run_retained(at::Device,const std::string& topology,const std::string& read,const std::vector<at::Device>& node_devices={});
 using Objective=std::pair<std::vector<at::Tensor>,std::vector<at::Tensor>>;
 Objective objective(const Result&,const WeightedWindowAdjoint&,const std::map<std::string,at::Tensor>&);
 void check_gradient(const at::Tensor&,bool,const at::Tensor&,const std::string&);
