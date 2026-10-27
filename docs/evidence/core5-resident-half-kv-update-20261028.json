@@ -1,0 +1,195 @@
+{
+  "source": "69bf4f0a05533ef52b282e2db73794c8eb7268ad",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "component": "KV update with FP16 raw storage and explicit FP32 math/adjoints",
+  "jobs": [
+    {
+      "source": "69bf4f0a05533ef52b282e2db73794c8eb7268ad",
+      "state": "passed",
+      "started": "2026-10-27T21:14:57.706802+00:00",
+      "finished": "2026-10-27T21:17:56.090694+00:00",
+      "exit_code": 0,
+      "name": "core5-half-kv-update-npu-qualify",
+      "unit": "tide-core5-half-kv-update-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "bcbea119a72f3441c8ea7c61aee7a7b0c008f68adbfa882e1509ac10c0f9a16d",
+      "log_sha256": "28f9ae17f6c3bd1450ee180f223bf70ccc5aab6ff7cb7bc8f7eb340a71afe558",
+      "build": {
+        "component_sha256": "3c6aa8a14cc56b054c1bae7e4dd90cf907a08470541a6db84dd61a522346fe07",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-kv-update",
+          "weighted-raw"
+        ],
+        "binary_sha256": {
+          "tide-weighted-kv-update-check": "473a113c01b3698666686b0516df92c99dd978a28ab4db6b6c509a972ba95c78",
+          "tide-weighted-raw-check": "918a66d3454c48ea9c4e28f1c002e4eadb4e94912bb93f05b02f1dc64b35a577"
+        },
+        "loader_sha256": {
+          "tide-weighted-kv-update-check": "96e7084dcfa06d86571c537acae10117c898afc78d44237587e9da1e1d03e371",
+          "tide-weighted-raw-check": "bcb84dc01a83016e9e0054cdee78bf15e72a0d57bd36014f44d8fb6db8522e8f"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cpu": {
+        "passed": 26,
+        "skipped": 0,
+        "testcase_seconds": 2.4699999999999984,
+        "xml_sha256": "7fd367cd7ad081384a928cdf2221b09f5ca3102091b9126862d573942af3a1d3"
+      },
+      "cases": [
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2e8391afb8fa709aa5e872f10c8d868693a624a461ccf6f203f25bf2b2707c75",
+          "markers": [
+            "weighted-kv-update: passed replay_rows=72 banks=3 roots=5 full_parameter_chain=true none_zero=true saved_versions=true exact_int64=true failed_no_commit=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "8e29b3aa2e67d4826fa9dfeba13ee5a066f9a4939a459806e120d1cce3d16170",
+          "markers": [
+            "weighted-kv-update: passed replay_rows=72 banks=3 roots=5 full_parameter_chain=true none_zero=true saved_versions=true exact_int64=true failed_no_commit=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-raw",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "cd4f5414d88406ca97876db4e33e0b318e224339ed45e98ea9c20873e7147f8c",
+          "markers": [
+            "weighted-raw-codec: passed families=5 dtypes=3",
+            "weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true adoption_bits=true payload_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-raw",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "0fa17e0d22019e5cb2c49d02fdd928c828f56500604d9dd53c514ef319de5f7c",
+          "markers": [
+            "weighted-raw-codec: passed families=5 dtypes=3",
+            "weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true adoption_bits=true payload_dtype=float16 adjoint_dtype=float32"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 42.20191265270114,
+        "job_id": "core5-half-kv-update-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:17:56.068016+00:00"
+      }
+    },
+    {
+      "source": "69bf4f0a05533ef52b282e2db73794c8eb7268ad",
+      "state": "passed",
+      "started": "2026-10-27T21:14:57.706892+00:00",
+      "finished": "2026-10-27T21:16:28.336866+00:00",
+      "exit_code": 0,
+      "name": "core5-half-kv-update-cuda-qualify",
+      "unit": "tide-core5-half-kv-update-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "4f1611be13e6f6339a56f3d14de5995854b32af6fc6938226c1f211ff9888867",
+      "log_sha256": "5b75a5fd646fa8854d2a8d3ee5240b99f6fd095b2430aa5965616b41ed030a6f",
+      "build": {
+        "component_sha256": "3c6aa8a14cc56b054c1bae7e4dd90cf907a08470541a6db84dd61a522346fe07",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-kv-update",
+          "weighted-raw"
+        ],
+        "binary_sha256": {
+          "tide-weighted-kv-update-check": "72566d0c4422736500a50f41c06dca8d0979d44c599aa8c4c2fd6e383b57a7b2",
+          "tide-weighted-raw-check": "90e6ae5ebf94c53954f6a631f53fe297a531f5338230ec8af4f87696481d6d8f"
+        },
+        "loader_sha256": {
+          "tide-weighted-kv-update-check": "3d3f54936c228194c581af625114593c72a081fdefd1c68eaf101d412e211a56",
+          "tide-weighted-raw-check": "05cc985743a716999dba9825013da0d5ef9bffcbed3948f5edbe4d8b337778d2"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cuda": {
+        "configured_commands": 160,
+        "selected_compile_commands": 13,
+        "effective_architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "a0d167161458922dda85957fcd8d4695f7735d7104787219958339bff8922ac9",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "kv-update": "7ddf17c0609e1a00ee1401d0ce2a43b737476bed0d1c54d193fc519598fe9741",
+        "raw": "4a1d7adff9f3f8256e992b8c71b4a36ae23225b67e2f139fc02320e16332a7ab"
+      }
+    }
+  ],
+  "contract": {
+    "raw_storage": [
+      "float32",
+      "float16"
+    ],
+    "arithmetic": "float32 vendor operators; int64 metadata",
+    "inputs_and_parameters": "float32",
+    "adjoints": "explicit FP32 first-order identity-cast VJP at actual quantized raw operands",
+    "results": "one final half raw store, guarded overflow refusal; positive FP32 receptions retain entries even when stored weight rounds to zero"
+  },
+  "limits": [
+    "Local components only, not complete half graph, optimizer or checkpoint qualification.",
+    "No Python-owned FP16 component run in this report.",
+    "CUDA build/loader/help only; no GPU hardware or performance conclusion."
+  ],
+  "reproduction": [
+    "git checkout 69bf4f0a05533ef52b282e2db73794c8eb7268ad",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE --jobs 2 --runtime standalone --checks weighted-kv-update weighted-raw --ascendc-soc SOC",
+    "python scripts/verify_device_control.py --build-dir NEW_DEVICE --device npu:0 --checks weighted-kv-update weighted-raw --output-dir NEW_CHECKS",
+    "CUDA build uses matching core, --cuda-architectures '80;90;100' and no Ascend SoC; GPU runtime remains separately required."
+  ]
+}

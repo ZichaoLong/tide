@@ -1,0 +1,193 @@
+{
+  "source": "db85db6e2e91559b71915200298203e6f313982c",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "component": "KV read with FP16 raw storage and explicit FP32 math/adjoints",
+  "jobs": [
+    {
+      "source": "db85db6e2e91559b71915200298203e6f313982c",
+      "state": "passed",
+      "started": "2026-10-27T21:11:48.141620+00:00",
+      "finished": "2026-10-27T21:15:48.726332+00:00",
+      "exit_code": 0,
+      "name": "core5-half-kv-read-npu-qualify",
+      "unit": "tide-core5-half-kv-read-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "d7f8584b30f8d9fc44483d6fd787f0227686af10f8f7aa56da34e704e1cbab0a",
+      "log_sha256": "dda338df22fae9e136cddc25bdae55c6cafac662a68c7b75105c221ecf3a1409",
+      "build": {
+        "component_sha256": "8568b19dd8a13f5f52e438880f5e2a12cb6a1f10777b4f592e6a9a118c35fdbb",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-kv-sum",
+          "weighted-kv-query"
+        ],
+        "binary_sha256": {
+          "tide-weighted-kv-sum-check": "ff5241d04dc939ff52f72794a5c8496f99b69b118ef7add640b28726a9d8b5e8",
+          "tide-weighted-kv-query-check": "1a9fec6b2deab110890243e277a473fbf2432059c37eb7fb080c7faef102930e"
+        },
+        "loader_sha256": {
+          "tide-weighted-kv-sum-check": "8ec2caa8646ead09c52dc9c42ba9c299d999eae8ff79a105923e2f83cfc465ca",
+          "tide-weighted-kv-query-check": "79d84441f18a6c3873b080701e64fa21ee99a48ee3b765aac8700699fc2cb358"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cpu": {
+        "passed": 27,
+        "skipped": 0,
+        "testcase_seconds": 2.569999999999999,
+        "xml_sha256": "dc362b05188f97686d49e1140601eac664e311e316a678efc001450d76a8a458"
+      },
+      "cases": [
+        {
+          "check": "weighted-kv-sum",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b5f37c6e4f58cfeaafe33901f237d7956174a8446e6a18c866786bdbd3c4028a",
+          "markers": [
+            "weighted-kv-sum: passed horizons=2 replay_rows=120 independent_mem_roots=4 raw_vjp=true saved_versions=true exact_int64=true read_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-sum",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "668aa9e1fb934de3a3db893b054f49239bb0468af6d8d06abeecb8418e2233ad",
+          "markers": [
+            "weighted-kv-sum: passed horizons=2 replay_rows=120 independent_mem_roots=4 raw_vjp=true saved_versions=true exact_int64=true read_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-query",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "dd90d861fe4813a9a725ca50830e4e4c4cbac26ad19c03bbee0d6da7d245f8a2",
+          "markers": [
+            "weighted-kv-query: passed horizons=2 replay_rows=120 independent_roots=4 full_input_parameter_raw_vjp=true saved_versions=true read_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-query",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "7442c38038bef0ffee8448a4f5d0cbf9a0a391e48b70d98f565cc0c133a72800",
+          "markers": [
+            "weighted-kv-query: passed horizons=2 replay_rows=120 independent_roots=4 full_input_parameter_raw_vjp=true saved_versions=true read_dtype=float32 adjoint_dtype=float32"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 44.303079683333635,
+        "job_id": "core5-half-kv-read-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:15:48.703434+00:00"
+      }
+    },
+    {
+      "source": "db85db6e2e91559b71915200298203e6f313982c",
+      "state": "passed",
+      "started": "2026-10-27T21:11:48.140426+00:00",
+      "finished": "2026-10-27T21:13:48.741130+00:00",
+      "exit_code": 0,
+      "name": "core5-half-kv-read-cuda-qualify",
+      "unit": "tide-core5-half-kv-read-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "41d13be9db80faae44cfb651527f706ef96dea669a00a7e3d16fd4db011da608",
+      "log_sha256": "fcf9c1cfd95d6e0b4251298ac8a3544e4a9cc1f93746479803e366d1fb3d019e",
+      "build": {
+        "component_sha256": "8568b19dd8a13f5f52e438880f5e2a12cb6a1f10777b4f592e6a9a118c35fdbb",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-kv-sum",
+          "weighted-kv-query"
+        ],
+        "binary_sha256": {
+          "tide-weighted-kv-sum-check": "93316323fba8691b9ec72983d4b5428931ae4bb8a4910158ad554983b59cb895",
+          "tide-weighted-kv-query-check": "a297e0c65c1959dea9053aef48badc4c8e61fcebe182cf15a204323eb627d2e9"
+        },
+        "loader_sha256": {
+          "tide-weighted-kv-sum-check": "12c2b92eeaffce9126f9c545264271cf000b66cf441a651fc36d1f841c03928d",
+          "tide-weighted-kv-query-check": "61eae45145deced68230711a59b1c4b3ce655d90ef9c28043739014732e3d693"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cuda": {
+        "configured_commands": 160,
+        "selected_compile_commands": 23,
+        "effective_architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "1c637d8315f07450a87ceb59c79ed8129f9b0ff5309f2f256d177253a6759a78",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "kv-sum": "b83eb6c1b07b49ecb944548cf762acdeda575ff33a3f7d5990297be723c666bc",
+        "kv-query": "a5f511b234af65e39896989a62b2a9bd05a0022bebd12b6c3511fb7cbbce642d"
+      }
+    }
+  ],
+  "contract": {
+    "raw_storage": [
+      "float32",
+      "float16"
+    ],
+    "arithmetic": "float32 vendor operators; int64 metadata",
+    "inputs_and_parameters": "float32",
+    "adjoints": "explicit FP32 first-order identity-cast VJP at actual quantized raw operands",
+    "results": "FP32 Mem four returns"
+  },
+  "limits": [
+    "Local components only, not complete half graph, optimizer or checkpoint qualification.",
+    "No Python-owned FP16 component run in this report.",
+    "CUDA build/loader/help only; no GPU hardware or performance conclusion."
+  ],
+  "reproduction": [
+    "git checkout db85db6e2e91559b71915200298203e6f313982c",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE --jobs 2 --runtime standalone --checks weighted-kv-sum weighted-kv-query --ascendc-soc SOC",
+    "python scripts/verify_device_control.py --build-dir NEW_DEVICE --device npu:0 --checks weighted-kv-sum weighted-kv-query --output-dir NEW_CHECKS",
+    "CUDA build uses matching core, --cuda-architectures '80;90;100' and no Ascend SoC; GPU runtime remains separately required."
+  ]
+}
