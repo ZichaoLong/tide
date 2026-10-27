@@ -51,8 +51,12 @@ build4-dev（tree748c3735）完整SDK/AscendC构建与真实NPU FP32开发检查
 失败不提交/sticky error/容量拒绝通过。构建、checks/result、source.tar/tree保留在对应job。
 组件CPU独立公式29项已通过；修复只涉及SDK检查构造与诊断。提交实现后以干净固定源码
 资格CPU29/NPU同检查，并独立构建CUDA组件（无GPU）；不将开发snapshot计正式资格。
-下一步：固定resident worktree到新实现commit；使用scripts/verify_device_control.py --checks weighted-allocation，
-复用build4前核验component/core/binary摘要，新job/output/有限服务；CUDA单独build-dir、2workers。
+2814b87固定源码CPU29（2.67秒）、NPU六种分配配置/完整VJP/重放与拒绝通过；
+独立CUDA sm80/90/100组件/loader构建通过，无GPU。npu-qualify和cuda-qualify均clean/exit0/inactive。
+证据core5-resident-allocation-20261027，原manifest/build4 source字段和所有开发failed记录保留。
+resident worktree无活动reader，仍固定2814b87。当前未提交：weighted sending常驻原语及其独立CPU测试25项通过；
+Direct/Unit/Pooled attention、proportional、sorted fractional fill与hard，完整五输入VJP、int64 stable IDs。
+下一步补全发送的实际NPU重放/容量与正式资格，再接区域控制/图生命周期；当前没有把发送源码视为设备通过。
 完整weighted resident仍需Agg、typed state/五记忆、Describe/全部发送、图调度、训练/恢复/跨卡。
 CUDA tools2干净670ead3已构建、CPU24项（143.99秒），显式不可用拒绝通过，证据已推送；GPU真机未验。
 
