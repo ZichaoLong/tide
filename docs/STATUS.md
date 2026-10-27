@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送d8b4646（92751c0完整Aggregate及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送6f709f8（来源低秩实现）；固定证据本次另提交。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -50,17 +50,19 @@ None/零、动态因子/长度重放、原来源改写后的保存版本反向�
 原首次setup遗漏registry的3 errors（无数值检查）保留treebf59ee14及
 artifacts/reproducers/core5-source-guard-registration/{source.tar,result.json}，不改passed。
 
-当前提交source实现，随后冻结commit运行core5-resident-source-{npu,cuda}-qualify。
-NPU重验CPU18与完整组件，仅在component/core/binary摘要一致时复用dev构建；
-CUDA新建sm80/90/100组件/loader，无真机证据。background.slice/Nice10，2build workers/BLAS单线程，
-NPU600秒/队列180秒、CUDA1200秒。输出artifacts/jobs同名目录；正式结果尚未知。
-命令.local/core5-resident-source-{npu,cuda}-qualify{,-workload}.sh；检查/停止同名tide-UNIT-20261027.service。
+6f709f8已推送；source固定资格CPU18（1.83秒）、NPU完整参数链、CUDA三架构构建均通过。
+core5-resident-source-{npu,cuda}-qualify均clean/exit0/inactive，详见evidence/core5-resident-source-20261027.json。
+NPU完整component/core/binary摘要相符，保留原dev manifest；CUDA无真机证据。
+resident worktree固定6f709f8、clean/read-only，无活动reader。
 
-主工作区另有weighted_parameter_vjp.h/.cpp、weighted_parameter_reduce.h及CPU检查初稿，
-参数角色按ParameterRegistry真实TensorImpl身份汇总为已有ParameterVjp；CPU3项通过（1.26秒）。
-尚未登记设备入口、构建或接设备optimizer验证，不包含在source实现/资格中。
-下一动作：source固定资格与独立证据提交推送，继续canonical参数owner+optimizer/恢复检查，
-再接五记忆/Describe、在线图调度与完整生命周期。
+主工作区未提交weighted_parameter_vjp.h/.cpp、weighted_parameter_reduce.h及登记入口，
+weighted_parameter_check.cpp、CMake/检查登记及CPU归约测试。CPU3项通过（1.25秒）。
+设备tile错误使用独立64-byte行避免多worker scalar cache-line冲突。
+静态别名由ParameterRegistry真实TensorImpl身份决定，动态独立roots在设备归约；
+输出接已有ParameterVjp/DeviceOptimizer/publish。standalone检查包含跨bank/角色别名、
+SGD/AdamW四步、全部参数/slots/None计数、新owner恢复后两步精确状态及失败不提交；尚未设备验证。
+下一步补契约并冻结新的parameters-dev任务，检查真实结果后提交/固定资格/证据。
+随后继续五记忆/Describe、在线图调度与完整生命周期。
 
 完整weighted resident仍缺参数owner集成、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
