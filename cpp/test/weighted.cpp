@@ -3,6 +3,7 @@
 #include "tide/stream.h"
 #include "tide/frontier.h"
 #include <torch/csrc/autograd/autograd.h>
+#include <ATen/core/grad_mode.h>
 #include <cmath>
 #include <stdexcept>
 
@@ -62,4 +63,22 @@ void check_weighted(const at::TensorOptions& o){
   if(!at::equal(zero.slots.at("times"),state.slots.at("times")))throw std::runtime_error("weighted zero receive changed exact state");
   auto mem=memory(model.nodes[0],zero,clock+20,at::ones({1},o),c);
   for(const auto& value:mem)close(value,at::zeros_like(value));
+  {
+    at::NoGradGuard guard;const auto& w=model.nodes[0];
+    auto rows=at::tensor({0.,5.,.5,1.,1.,-1.,0.,9.,.3,1.},o).reshape({5,2});
+    PackedSequence batch{rows,{0,3,5},{{0,0},{1,0}},
+      {clock+1,clock+2,clock+7,clock+1,clock+4},{}};
+    for(Index i=0;i<5;++i)batch.views.push_back(ContentView{rows[i]});
+    auto actual=w.kernel->packed_sequence(w,{state,state},batch);
+    if(actual.calls!=1||actual.scalar_steps!=0||actual.max_batch!=2)
+      throw std::runtime_error("weighted KV did not use joint projections");
+    for(size_t owner=0;owner<2;++owner){auto expected=state;
+      for(Index j=batch.offsets[owner];j<batch.offsets[owner+1];++j){
+        expected=w.kernel->step(w,expected,batch.views[j],batch.times[j]);
+        for(const auto& [name,value]:expected.slots)close(value,actual.states[j].slots.at(name));
+      }
+    }
+    if(actual.states[2].slots.at("times").numel()!=1||actual.states[2].slots.at("times")[0].item<Index>()!=clock+7)
+      throw std::runtime_error("weighted packed KV window lost original time");
+  }
 }

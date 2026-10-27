@@ -25,36 +25,38 @@
 
 ## 当前任务与下一动作
 
-评分资格 unit `tide-core5-scoring-qualify-20261027` 已终态 inactive/success、exit 0。
-只读 worktree `artifacts/worktrees/core5-bootstrap` 干净固定 cacb645；结果在
-`artifacts/jobs/core5-scoring-qualify/{status.json,task.log,development.json,source.tar.gz}`。
-launcher `.local/core5-scoring-qualify.sh`，全部 16 个带权测试入口加 standalone 局部公式。
-实现与证据本次推送；失败详情保留如下。无 live job。
+评分资格 `tide-core5-scoring-qualify-20261027` 已终态 inactive/success、exit 0；
+实现 cacb645 与证据 8a6208e 已推送。详情及该阶段原失败见评分证据。
 
-主工作区下一增量未提交：实际 KV ragged 投影与 affine/delta 前缀复合。
-新 Python weighted/{packing,kv_packed,recurrent_packed}.py 和独立 C++ weighted_*packed，
-接入 packed_sequence、sequence、独立 batch；没有调用逐步 Upd 补写数值。
-零接收原样保留 raw tuple、时间差先 int64、完整正前缀可解码；现有语义 VJP 重放仍保留，
-不声称完成批量反向。新 Python 独立前缀/非交换矩阵/稀疏时间/独立根 **18 项通过**。
-C++ 尚待构建；不是评分 cacb645 的资格。无用户修改。
+实际 packed 增量已完成开发：KV ragged 投影、四种循环仿射前缀、GDN/SSD 原始时间卷积。
+[契约](weighted-packed.md)明确输入域、数学对应、解码和实际统计；不调用 scalar Upd 补写数值。
+零接收保留 raw tuple，时间差先 int64，完整正前缀可解码。语义 VJP 重放仍保留，
+批量反向/Read/Full/区域/设备推进尚未宣称完成。无用户修改。
 
-下一命令：补 standalone packed 手算与 native 入口测试；用 `.local/freeze-core5.py tide-core5-scoring-qualify-20261027`
-冻结开发树，新的 background.slice 服务构建并运行 tests/test_weighted_packed.py 和相关执行回归。
-之后继续 GDN/SSD 的固定时间卷积联合特征、批量 VJP、mixed/resident、
-standalone 完整训练与有限 profiling。总体任务尚未完成，持续推进。
+最后开发门禁 `tide-core5-packed-order-20261027` 已终态 inactive/success、exit 0：
+**57 passed / 0 failed / 0 skipped**，冻结树 `85b317aff9ab7f0f0962ba815b0d6941fc0ac15e`。
+包含全部新 packed、五个原失败及 standalone；结果在 artifacts/jobs/core5-packed-order。
+另外 Python 新边界和原失败定向 42 项通过；不累计为独立资格样本。
+当前无 live job；实现/测试/契约同增量提交后，冻结该提交到 task-owned worktree
+`artifacts/worktrees/core5-bootstrap`，核验干净/只读与匹配构建。
 
-## 本增量保留的失败与修复
+下一动作：沿 `.local/core5-packed-build.sh` 的相关完整门禁，使用新 packed-qualify job
+和 develop.py --reuse-build，固定实现源码运行不可变资格；终态后单独提交证据并推送。
+随后继续嵌套参数捕获、按正接收分组的批量 State VJP，处理空卷积缓存的梯度连接，
+再推进 Read/Full、mixed/resident、standalone 完整训练与有限 profiling。
+总体任务尚未完成，持续推进。
 
-| job / 冻结树 | 终态 | 原因与修复 |
-| --- | --- | --- |
-| scoring-dev / f1b561974cbeeb8926b4e75c9d91c3b46d50addc | 345 passed / 3 failed，exit 1 | FP32 共同阈值残差被 AdamW 放大；解析 shift VJP 修复。两个 Read 快照根的数值顺序差见下 |
-| scoring-vjp / 9b5b17a17c3363857bff997bf8c91e4ec9946bb2 | 246 passed / 40 failed，exit 1 | C++ custom Function 的 undefined shift 占位无 device；改为不求导零标量 |
-| scoring-vjp-fixed / 1304ab4b2523095303c7cd888b0142799bceb49e | 301 passed / 1 failed，exit 1 | FP32 PDG Read− key.out_bias 差 2.0266e-6；统一 Encoder/Query 求值顺序后所有 cut 通过，诊断最大差 2.98e-8 |
+## 当前增量保留的失败
 
-原日志/status/source 在 `artifacts/jobs/core5-<job>/`，全部失败保留。
-最小诊断 `.local/diagnose-core5-scoring.py` 与 `.local/diagnose-scoring-order.py`；
-输出分别在 scoring-dev/diagnosis.txt 和 scoring-vjp-fixed/order-diagnosis.txt。
-不得把新通过结果覆盖旧失败。
+- packed-dev，树 9897132ce8ff886bb885790f04401d3ef242a9d4：构建 failed/exit 1。
+  核心编译通过，两个 standalone 测试遗漏 NoGradGuard 头文件；已补显式 include，pytest 未运行。
+- packed-build，树 9b40c97226d71b0d8033342cd19c10c60d48af83：**363 passed / 5 failed**，exit 1。
+  FP32 SSD Read−/+ 的 Python/native input.2 根差 2.13e-6 / 4.83e-6；PDG Read− key.out_bias 差 1.91e-6。
+  `.local/diagnose-packed-order.py` 与该 job 的 order-diagnosis.txt 定位为行批投影的浮点顺序；
+  列批和单行列向量变体通过 SSD 两快照及 PDG 全 cut，行批/bmm 保留失败。
+  正式 Python/C++ 统一权重矩阵乘输入列批；未改公式、输入、容差、dtype 或裁剪梯度。
+
+原 status/source/log 保留在 `artifacts/jobs/core5-<job>/`，新通过不覆盖旧失败。
 
 ## 环境与保留事项
 

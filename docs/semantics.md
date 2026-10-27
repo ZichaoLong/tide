@@ -140,6 +140,13 @@ Heterogeneous KV/recurrent bindings keep the common payload and region contract.
 Checkpoint versions are unchanged; new profile hashes carry configuration and
 actual raw slots. Joint, mixed/resident and hardware evidence remain separate.
 
+The [weighted joint state evaluation](weighted-packed.md) uses batched KV
+projections, exact-time convolution gathers and ordered affine prefix composition
+for all four recurrent families. It decodes actual computed raw states at every
+event; zero receives preserve the previous tuple. Numeric joint execution does
+not itself certify batched VJP or resident scheduling. Existing first-order
+semantic binding preserves independent root connectivity; identities are unchanged.
+
 ## First local profile: `ema-ffn-v1`
 
 For tagged values x_i and learned source weights w_i, `h=sum_i w_i*x_i`.

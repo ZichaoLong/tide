@@ -3,6 +3,7 @@
 #include "tide/weighted_convolution.h"
 #include "tide/full.h"
 #include <torch/csrc/autograd/autograd.h>
+#include <ATen/core/grad_mode.h>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
@@ -56,6 +57,23 @@ void check_weighted_recurrent(const at::TensorOptions& o){
     w.kernel->validate_weights(w);w.full_kernel->validate_weights(w,1);
     auto initial=w.kernel->initial(w);const auto receive=ContentView{at::ones({2},o)};
     auto next=w.kernel->step(w,initial,receive,0);w.kernel->validate_state(w,next);
+    {
+      at::NoGradGuard guard;auto h=at::tensor({1.,1.,1.,1.,0.,9.,1.,1.},o).reshape({4,2});
+      PackedSequence batch{h,{0,4},{{0,0}},{0,1,2,4},{}};
+      for(Index i=0;i<4;++i)batch.views.push_back(ContentView{h[i]});
+      auto actual=w.kernel->packed_sequence(w,{initial},batch);
+      if(actual.calls!=1||actual.scalar_steps||!w.kernel->joint_sequence())
+        throw std::runtime_error("weighted recurrent did not use joint prefixes");
+      auto expected=initial;
+      for(Index j=0;j<4;++j){
+        expected=w.kernel->step(w,expected,batch.views[j],batch.times[j]);
+        for(const auto& [name,value]:expected.slots)close(value,actual.states[j].slots.at(name));
+      }
+      if(c.basic()){
+        const double gain=family=="affine"?1.:.5,retain=family=="affine"?.5:.25;
+        close(actual.states.back().slots.at("H")[1],at::full({1,1},gain*(1+retain+retain*retain),o));
+      }
+    }
     auto expected_h=family=="delta"||family=="gated_delta"?.5:1.;
     close(next.slots.at("H"),at::full_like(next.slots.at("H"),expected_h));
     for(const auto& name:{"Z","W"})close(next.slots.at(name),at::ones_like(next.slots.at(name)));
