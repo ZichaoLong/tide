@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 CUDA链接构建与CPU24项资格](core5-cuda-eager-20261027.md)：670ead3；GPU真机待验。
+
 - [Core-5 standalone master/schema2资格](core5-native-master-20261027.md)：670ead3；CPU24项，NPU FP16显式SGD24图/AdamW2图及设备→CPU精确恢复续接。
 
 - [Core-5 eager FP16 NPU有限资格](core5-half-device-20261027.md)：01689c0；CPU12项、Python/native mixed与显式同步双卡、master恢复及归属profile。

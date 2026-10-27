@@ -1,0 +1,128 @@
+{
+  "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "CUDA-linked core build and CPU-only four-entry native optimizer/checkpoint/training gate; no GPU execution",
+  "job": {
+    "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+    "state": "passed",
+    "exit_code": 0,
+    "started": "2026-10-27T12:07:20.442294+00:00",
+    "finished": "2026-10-27T12:25:32.442613+00:00"
+  },
+  "unit": "tide-core5-cuda-eager-tools2-qualify-20261027",
+  "clean": true,
+  "source_content_sha256": "08a01cf8c120ecb32f417f0c3e9f5b692634088756b697d26d70ba1ae15d7a5a",
+  "log_sha256": "4d988e644380b49431b1bed796649fd06c26311c6f3cee79825f1f56c850f392",
+  "build": {
+    "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+    "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+    "torch": "2.10.0+cu128",
+    "backend": "cuda",
+    "cuda": "12.8",
+    "architecture": "aarch64",
+    "python": "3.11.15",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "45382d439056b80d6e4f3e6cd6c4d7423cd70ae05c2fd86a58b35ac2baab5c58",
+      "libtidegraph_runtime.a": "02f117a9d9a5109e88f916bb8573e9298db664345485c928bca02a997835698e",
+      "_tide_native.so": "5940683be56d8eb3db0cc60db3ca8239744b5b43ec44e68471c7e7a4207a013e",
+      "tidegraph-smoke": "0ae365d7fee62620d2625c36ff244f2939e57bd9663effda821bdfdf8d99315a",
+      "tidegraph-kernel-check": "e72d789b461ac226798c9bbcc6d206fa4f93e97070e1544007795326b31cdb87",
+      "tidegraph-full-check": "9c2d47c4b93057262c738427bb0a4b69f75ab21cdfc84de6f3a18499edb4e293",
+      "tidegraph-aggregate-check": "3856671b0502dc8ec4f451c2a342072bde77cd37cd7fbba02cba241142bce3a9",
+      "tidegraph-optimizer-check": "23c9d6a63451db9d746a5dea556467128363affaedbb670f1b8e290ff7ec8ff2",
+      "tidegraph-checkpoint-check": "07beffad9e817253b680fc5e1f8fbacc394256e5dc6f4630f3958105e0000dac",
+      "tidegraph-weighted-training-check": "1df4c89cda12ce4b7888a2de6c8ea24d1fa1965f485b3482f6b2c3cce5095bb7",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "4e6397fc5336d5601cdc4a8f12967d3d49c79e07279e6589a8ea00d6dfae44ac",
+      "tidegraph-scale-bench": "0bdc7e5112e0b0283a76f2c434e42628346114d2b9209d3b4db3f4eab6216c83",
+      "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+      "tidegraph-settle-check": "419e509bd1c70db412514a1f548b1a8fe11b5f8afab16e4e5680b0cf75ffeda8",
+      "tidegraph-greedy-check": "0cb1155591e17c9211fffdb24a19bf110a85b356a301bc5bc1709c288d4aad5e",
+      "tidegraph-accelerator-check": "461c351aedf533010a9da1937217b4cf6a5beb65e5be6a78c71cf6f82f8e163d",
+      "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+      "tidegraph-read-precision-check": "427713cc45d3379f123330af6ca364d0151982f7504cea2e73521050f3e787a8",
+      "tidegraph-placement-check": "fff6d2d6a0ba0e969576bca8763b6b9f7a953ba4796a0cb1bf2af54ceb6eab51",
+      "tidegraph-payload-ownership-check": "b89783d869e7d68b7c673757d427e73890550e6c6fb50f2c0d84a3a68e8caede"
+    }
+  },
+  "environment": {
+    "compiler": "c++ (GCC) 10.3.1",
+    "toolkit": "12.8.1",
+    "nvcc": "12.8.93",
+    "gpu_available": false
+  },
+  "commands": [
+    [
+      "python",
+      "scripts/build.py",
+      "--backend",
+      "cuda",
+      "--build-dir",
+      "build/cuda",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/develop.py",
+      "--output-dir",
+      "NEW",
+      "--build-dir",
+      "build/cuda",
+      "--reuse-build",
+      "--jobs",
+      "2",
+      "tests/test_cpp_master_optimizer.py",
+      "tests/test_cpp_optimizer.py",
+      "tests/test_cpp_checkpoint.py",
+      "tests/test_cpp_weighted_training.py"
+    ]
+  ],
+  "tests": {
+    "passed": 24,
+    "seconds": 143.99,
+    "dtype": "float64/float32 plus explicitly configured half master cases",
+    "placement": "cpu"
+  },
+  "explicit_unavailability": {
+    "requested": "cuda:0",
+    "available": false,
+    "command": [
+      "build/cuda/tidegraph-runtime-check",
+      "--device",
+      "cuda:0",
+      "--dtype",
+      "float32"
+    ],
+    "exit_code": 2,
+    "message": "CUDA was explicitly requested but the logical device is unavailable\n",
+    "state": "passed explicit unavailability refusal",
+    "binary_sha256": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161"
+  },
+  "prior_failures": [
+    {
+      "job": "core5-cuda-eager-qualify",
+      "state": "failed",
+      "reason": "CMake could not find Ninja in minimal service PATH"
+    },
+    {
+      "job": "core5-cuda-eager-tools-qualify",
+      "state": "failed",
+      "exit_code": 127,
+      "reason": "launcher preparation interrupted by command -v ninja; no workload started"
+    }
+  ],
+  "resource_limits": {
+    "slice": "background.slice",
+    "Nice": 10,
+    "build_workers": 2,
+    "aten_blas_threads": 1,
+    "timeout_seconds": 1800
+  },
+  "pending": [
+    "Actual CUDA operators and mixed placement complete records/VJP",
+    "CUDA resident component build/run",
+    "CUDA retained training/optimizer/checkpoint/peer/throughput"
+  ]
+}

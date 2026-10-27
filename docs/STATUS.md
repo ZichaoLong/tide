@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83；授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送87e4031；670ead3及本次standalone证据准备提交/推送。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
+已推送11c47a7（670ead3实现及standalone证据）。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
 
 ## 当前实现与证据
 
@@ -37,7 +37,20 @@ output artifacts/jobs/core5-cuda-eager-qualify，.local/core5-cuda-eager-qualify
 无workload，postmortem已保存。准备独立tide-core5-cuda-eager-tools2-qualify-20261027，
 对应同名job/.local launcher，追加项目私有Ninja入口，使用新build/cuda-tools2。
 新CUDA-linked核心构建/2workers/1800秒，以上四个CPU测试入口验证新栈，GPU真机仍待验。
-之后继续weighted resident、CUDA源码/构建/真机分账、有限性能及最终追溯。
+当前未提交：weighted resident Alloc组件与显式精确解VJP（quad/bern/ent），文档/29项独立CPU源码检查通过。
+首次resident-allocation-dev（tree b05f7226）CPU29通过，但AscendC编译因min/max/abs名称与内建冲突失败，
+未运行设备；原failed及源码包保留。已修正限定名，并让紧凑行由单一scalar worker拥有，避免cache line共享写。
+第二次build2-dev（tree9b925b05）CPU29通过，kernel/host编译通过；check可执行文件缺-fPIC导致链接失败。
+已按现有standalone检查规范补-fPIC，未运行设备，两次失败记录均保留。
+build3-dev（tree1ecb80b3）完整SDK/AscendC构建、链接、loader通过；运行因launcher覆盖CANN PYTHONPATH，
+初始化找不到tbe，未运行数值检查。原failed保留，构建manifest已存job目录。
+runtime-dev已终止failed：tbe路径已修复；SDK不支持at::tensor(bool列表)，fixture构造在求解前失败。
+改用int32→bool建立完全相同的独立根，增加rule/row/field数值诊断，不改输入、算法或容差。
+准备tide-core5-resident-allocation-build4-dev-20261027；同resident worktree冻结新dirty snapshot，
+新build/resident-allocation-build4-dev，output artifacts/jobs/core5-resident-allocation-build4-dev，.local/同名launcher，
+SDK核心摘要保持，2workers/1200秒/1卡等待180秒，检查完整前向/VJP/重放/容量。
+CUDA tools2干净670ead3已完成构建、24项CPU门禁（143.99秒），exit0；显式CUDA不可用拒绝通过；证据core5-cuda-eager-20261027，GPU真机未验。
+尚未实际设备通过，不代表完整weighted resident。之后继续图集成、CUDA分账、有限性能及追溯。
 
 ## 未解除的真实失败
 
