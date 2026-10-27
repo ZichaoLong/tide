@@ -1,0 +1,204 @@
+{
+  "source": "ce63aefcceabb83471737a9cdc7a5295b8e26e33",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "FP32 complete resident SelStep composition: descriptor reductions, vendor context/query heads, ten sending functions, actual support/history and first-order VJP; not full graph lifecycle",
+  "jobs": [
+    {
+      "source": "ce63aefcceabb83471737a9cdc7a5295b8e26e33",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T13:21:04.806466+00:00",
+      "finished": "2026-10-27T13:21:32.405127+00:00",
+      "name": "core5-resident-region-npu-qualify",
+      "unit": "tide-core5-resident-region-npu-qualify-20261027",
+      "clean": true,
+      "log_sha256": "5f514666c793e47fcc89256c811bccfcc9140a7e377d435fb1373e601349c621",
+      "cpu_tests": 33,
+      "cpu_seconds": 8.69,
+      "device_cases": [
+        {
+          "check": "weighted-region",
+          "dtype": "float32",
+          "command": [
+            "build/resident-region/tide-weighted-region-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-region-float32.log",
+          "log_sha256": "cb5f36522c14831a726810ab588b18d88f9b16be055659596aac34460d361f21"
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 16.308865763247013,
+        "job_id": "core5-resident-region-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T13:21:32.389761+00:00"
+      },
+      "observations": {
+        "configurations": 14,
+        "physical_rows": 140,
+        "logical_frames": 112,
+        "complete_fields_and_parameters_vjp": true,
+        "shared_parameter_owners": true,
+        "none_and_connected_zero": true,
+        "actual_saved_input_and_parameter_versions": true,
+        "device_length_and_input_replay": true,
+        "int64_ids_and_history": true,
+        "padding_poison": true,
+        "capacity_refusal": true,
+        "failed_window_no_commit": true,
+        "float_atol": 1e-06,
+        "float_rtol": 1e-05,
+        "workspace_budget_bytes": 67108864
+      },
+      "build": {
+        "source": "161ccead025f33da2fb9a4f956982a43997a56b4",
+        "component_sha256": "a3a6cde931eafff8847f5a895f211adf063892fb0dfaf70e758a46eee53c2cab",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-region-check": "94ecac37a5d6ee3b5a91bea47c4034954bdf7acb9d9a7b380135a1c07640501f"
+        },
+        "loader_sha256": {
+          "tide-weighted-region-check": "8f899c12760c07e672c549a801d457c405f630e3d72936b59a3bc01b85dba50d"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original dirty development tree 4a161a96 and manifest source retained; qualification verifier checked exact component/core/binary hashes against clean ce63aef."
+      }
+    },
+    {
+      "source": "ce63aefcceabb83471737a9cdc7a5295b8e26e33",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T13:21:04.806468+00:00",
+      "finished": "2026-10-27T13:23:12.282837+00:00",
+      "name": "core5-resident-region-cuda-qualify",
+      "unit": "tide-core5-resident-region-cuda-qualify-20261027",
+      "clean": true,
+      "log_sha256": "9e510151198f59f6c3a3fde7f21345bc681b6a43dcbe8c1ed6bf48eb64011bd0",
+      "build": {
+        "source": "ce63aefcceabb83471737a9cdc7a5295b8e26e33",
+        "component_sha256": "a3a6cde931eafff8847f5a895f211adf063892fb0dfaf70e758a46eee53c2cab",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-region-check": "c6d9ef32f0da021c91733f6dfdc96a7f7f7d2e14073710d47dd254a985ff911f"
+        },
+        "loader_sha256": {
+          "tide-weighted-region-check": "24b4b245935b95268c3f2405662f611aafe83063b42abc87a1757ee49c6b6217"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA build of fixed clean source; Toolkit 12.8.1, no GPU execution."
+      }
+    }
+  ],
+  "development": {
+    "tree": "4a161a96505deac564ec9ccbf3c5bd4e18dbd551",
+    "job": "core5-resident-region-dev",
+    "state": "passed",
+    "cpu_tests": 33,
+    "cpu_seconds": 8.54
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_region_math.py",
+      "tests/test_resident_weighted_region_kernels.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NEW_NPU_BUILD",
+      "--checks",
+      "weighted-region",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--device",
+      "npu:0",
+      "--checks",
+      "weighted-region"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-region",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_build_seconds": 1200,
+    "queue_wait_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "Nice": 10
+  },
+  "pending": [
+    "Agg, typed raw memory/Describe and full online weighted graph",
+    "Retained training/optimizer/exact checkpoint/peer lifecycle",
+    "Actual CUDA execution",
+    "FP16 resident and finite performance selection"
+  ]
+}

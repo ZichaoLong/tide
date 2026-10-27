@@ -74,3 +74,5 @@
 - [Core-5 熵分配 CPU 定向资格](core5-entropy-20261027.md)：a05d3ff，226 项通过。
 
 - [Core-5 十种发送函数 CPU 定向资格](core5-sending-20261027.md)：4a08588，320 项通过。
+
+- [常驻完整带权区域组合](core5-resident-region-20261027.md)：ce63aef，CPU33/NPU14配置完整VJP与保存版本，CUDA三架构构建。

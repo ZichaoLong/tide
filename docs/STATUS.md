@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送4745de2（161ccea常驻head实现及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送ce63aef（完整Region实现）；本次证据另提交。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -27,16 +27,16 @@ CPU33项（8.54秒）；NPU14配置/140物理行112非空帧，全部字段/共�
 参考RegionKernel使用完整静态成员并调用validate_weights，独立CPU公式另作数学锚点。
 resident worktree原HEAD161ccea、无活动reader，NPU build/resident-region-dev保留原开发manifest。
 
-当前提交Region实现，随后冻结该提交并运行两个新资格任务：
-core5-resident-region-npu-qualify（CPU33+NPU完整组合；相同组件/core/binary摘要才复用dev构建），
-core5-resident-region-cuda-qualify（CUDA sm80/90/100新构建/loader，无GPU真机）。
-background.slice、Nice10、2构建线程、BLAS/ATen单线程；NPU限600秒/队列180秒，CUDA构建限1200秒。
-正式结果尚未知。查看python scripts/status.py和各任务status.json/task.log；终止用systemctl --user stop UNIT。
-精确命令为.local/core5-resident-region-{npu,cuda}-qualify{,-workload}.sh，输出同名artifacts/jobs目录。
+ce63aef已推送；固定源码Region资格CPU33（8.69秒）、NPU完整14配置、CUDA sm80/90/100构建均通过。
+core5-resident-region-{npu,cuda}-qualify任务均clean/exit0/inactive，详见evidence/core5-resident-region-20261027.json。
+NPU复用dev构建且组件/core/binary全摘要相符，原manifest保留；CUDA新构建，无GPU真机。
+resident worktree固定ce63aef、clean/read-only，无活动reader。
 
-主工作区另有下一阶段未提交Agg数学helper、CPU适配与公式测试，15项短检查通过（1.28秒）；
-未登记设备入口、未接vendor组合，不包含在Region实现提交或资格声明中。
-下一动作：Region固定资格及独立证据提交推送，继续Aggregate设备组合，再接状态/Describe/图生命周期。
+主工作区下一阶段未提交：weighted_aggregate_math.h、四个设备入口、weighted_aggregate{,_vjp}.cpp/.h、
+内部buffer校验与CPU适配/公式测试。15项局部CPU开发检查通过（1.28秒）；
+尚未登记新入口/构建check，也未验证vendor RMS/源变换完整组合，不包含在Region资格中。
+下一步完善Aggregate standalone独立公式/根/共享参数/保存版本/容量检查与对应契约，
+注册入口并冻结新开发树，按同一限额运行新的Agg任务，再提交、资格和证据。随后接状态/Describe/图生命周期。
 
 完整weighted resident仍缺Agg、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
