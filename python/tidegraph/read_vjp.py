@@ -50,13 +50,17 @@ def supported(program):
     from .readout import LinearRead, NormRead, NormFloat32Read
     from .placement_read import PlacedRead
     from .weighted.programs import Describe
-    return type(program) in {LinearRead, NormRead, NormFloat32Read, PlacedRead, Describe}
+    from .weighted.placement import PlacedDescribe
+    return type(program) in {LinearRead, NormRead, NormFloat32Read, PlacedRead, Describe, PlacedDescribe}
 
 
 def evaluate(program, weights, requests):
     if not requests:
         return []
     from .weighted.programs import Describe
+    from .weighted.placement import PlacedDescribe
+    if type(program) is PlacedDescribe:
+        return program.batch_grad(weights, requests)
     if type(program) is Describe:
         from .weighted.query_vjp import evaluate as query
         return query(program, weights, requests)

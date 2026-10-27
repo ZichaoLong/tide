@@ -83,6 +83,16 @@ Only recognized built-in Read/Region programs are adapted. Custom/mismatched
 handles, unsupported devices, conflicting precision and resident requests fail
 explicitly instead of replacing a user's custom mathematical program.
 
+## Weighted-message programs
+
+The separate [weighted placement contract](weighted-placement.md) adapts the
+core-5 structured Describe and all formal Sending candidates. It preserves
+raw int64 metadata, original parameter aliases, explicit scoring precision and
+independent batched transfer/query/region VJPs. Control prepares complete-frame
+scores and bounds; selection performs allocation on its requested device.
+The legacy scalar/softmax descriptions above do not define the weighted branch.
+Actual CPU, accelerator and resident evidence remains separate.
+
 ## Eager payload owners
 
 `GraphRuntime(..., node_devices=[...])` accepts one logical device per body node.

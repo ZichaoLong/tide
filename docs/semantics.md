@@ -448,6 +448,16 @@ Temporary normal/base operands flow through the first-order State VJP, preservin
 all users and private adapter/summary roots. They are not Content or checkpoint
 state; raw entry decoding, graph identity and checkpoint v5 remain unchanged.
 
+## Weighted execution placement
+
+[Weighted placement](weighted-placement.md) gives Describe a temporary typed
+view of its actual initial/old/proposal state, and separates complete-region
+control preparation from sending/allocation. Explicit scoring precision leaves
+raw int64 metadata unchanged. Cast/copy VJPs preserve original versions, actual
+aliases and independent row roots; positive sending support lost by the final
+payload cast is explicitly rejected. This eager execution policy changes no
+graph/checkpoint identity and does not certify resident or device execution.
+
 ## Configurable low precision
 
 The explicitly selected FP16 extension retains the same graph, delay, scheduling,

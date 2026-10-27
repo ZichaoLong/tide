@@ -1,5 +1,6 @@
 #include "placement_internal.h"
 #include "tide/counters.h"
+#include "weighted_placement.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 
@@ -96,6 +97,7 @@ class PlacedRegion final : public RegionKernel {
 };
 }
 std::shared_ptr<const RegionKernel> region_kernel(const Region& spec, const RegionWeights& w, const ResolvedPlacement& p) {
+  if(auto placed=weighted::place_region(w,p))return placed;
   const auto previous = dynamic_cast<const PlacedRegion*>(w.kernel.get());
   if (w.kernel && !(previous ? previous->matches(spec) : builtin_region(*w.kernel, spec)))
     throw std::invalid_argument("placement cannot replace a custom or mismatched Region kernel");

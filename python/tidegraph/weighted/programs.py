@@ -205,17 +205,29 @@ class RegionalTotal(RegionProgram):
         shift = None
         if mode in TOTAL:
             low = high = self.total(w,mu,fields["evidence"])
-            result = total_zero(scores,mu,low,nodes) if mode == "regional_total_zero" else None
+        elif mode not in ATTENTION and mode != "proportional":
+            eta = self.context(w,mu,fields["evidence"]) if c.region_control_mode == "context" else c.eta
+            shift = torch.as_tensor(eta, device=scores.device, dtype=scores.dtype)
+            low = (w.sum() if c.regional else mu.sum()).clamp_max(1)
+            high = c.k
+        selection = getattr(self, "_selection_device", None)
+        if selection is not None:
+            from .placement_tensors import move
+            w, mu, scores = (move(t, selection) for t in (w, mu, scores))
+            shift = move(shift, selection)
+            if mode not in ATTENTION and mode != "proportional":
+                low = move(low, selection)
+                if isinstance(high, torch.Tensor):
+                    high = move(high, selection)
+        result = None
+        if mode == "regional_total_zero":
+            result = total_zero(scores,mu,low,nodes)
         elif mode in ATTENTION:
             result = attention_send(scores,mu,w,mode=mode,base=c.allocation_base,temperature=c.allocation_temperature)
         elif mode == "proportional":
             result = proportional(mu,c.k)
-        else:
-            eta = self.context(w,mu,fields["evidence"]) if c.region_control_mode == "context" else c.eta
-            shift = eta
-            result = hard_selection(scores-eta,mu,c.k,nodes) if mode in HARD else None
-            low = (w.sum() if c.regional else mu.sum()).clamp_max(1)
-            high = c.k
+        elif mode in HARD:
+            result = hard_selection(scores-shift,mu,c.k,nodes)
         if result is None:
             result = allocate(scores,mu,low,high,c.allocation_temperature,
                               regularizer=c.regularizer,ent_alpha=c.ent_alpha,score_shift=shift).controls
