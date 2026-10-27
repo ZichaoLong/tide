@@ -36,6 +36,17 @@
         "requires_explicit_device": true,
         "supports_init_from": false,
         "supports_resume": false
+      },
+      "weighted_benchmark": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
+      },
+      "weighted_resident_training": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": true,
+        "kind": "library API; explicit graph/model construction or checkpoint restore"
       }
     },
     "cpu_reference": {
@@ -80,7 +91,23 @@
       "init_from": "weights or explicitly declared initial state; starts new progress",
       "resume": "complete state declared by the schema",
       "portable_handoff": true,
-      "exact_resume": "not-promised"
+      "exact_resume": "same-stack-only",
+      "scope": "Complete graph/raw/pending, declared parameter aliases and optimizer state. Checkpoints detach autograd; loss, data cursor, RNG and downstream controller belong to the caller. Schemas and exact supported identities are owned by docs/semantics.md, docs/native-master-optimizer.md and docs/resident-weighted-training.md."
+    },
+    "support_scope": "Target status applies only to each explicitly scoped fixed-source record. Legacy core-3 evidence is retained and does not certify core-5 weighted semantics. Current navigation is docs/execution-capabilities.md and docs/semantic-map.md; STATUS/ROADMAP alone own active work.",
+    "semantic_profiles": {
+      "weighted_core5": {
+        "version": "tide-core-5",
+        "upstream": "0770593838a37c790a568226930567ed60f99b83",
+        "definition_lock": "docs/upstream.json",
+        "mapping": "docs/semantic-map.md",
+        "capabilities": "docs/execution-capabilities.md",
+        "evidence_index": "docs/evidence/README.md"
+      },
+      "legacy_generic": {
+        "scope": "Existing generic module bindings at each historical source; not reinterpreted as weighted functions",
+        "mapping": "docs/module-extension-plan.md"
+      }
     }
   },
   "targets": [
@@ -94,7 +121,7 @@
       "required_tiers": [
         "cpu-semantic"
       ],
-      "reason": "Target-machine rebuild/verification is an extension; this acceptance requires CPU FP32/FP64 on the available aarch64 host."
+      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
     },
     {
       "id": "python-cpu-aarch64",
@@ -359,6 +386,22 @@
             "short-train"
           ],
           "test_command": "Full qualify_library.py --reuse-build inventory plus exact 2-test resource repair and library_complex.py/library_consumer.py/CTest completion; exact frozen plans and audit in report"
+        },
+        {
+          "date": "2026-10-27",
+          "commit": "9234c13ed7bba0d258503de6db80e4805201e409",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 weighted CPU FP64/FP32 placement and scoring conversions: 508 directed cases, full records, five memories, three Read snapshots, ten sending functions, isolated roots, three AdamW updates and fourth-step restore. Not a repository-wide or accelerator gate.",
+          "tiers": [
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Fixed 9234c13 pytest inventory and matching builds in the report JSON; --dtype both.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-placement-20261027.md"
         }
       ]
     },
@@ -372,7 +415,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail. This x86_64 target also still requires its own build/host gate."
+      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
     },
     {
       "id": "python-npu-aarch64",
@@ -384,7 +427,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Current declared NPU correctness profile qualified:236 positive public module cases+2 explicit CSR refusals at4f; standalone scale CPU/NPU training at00b1775; exact composite133 resident components,installed client and547 public cases with zero skips at9c plus corrected State/Read checker at e3. Existing numerical policies and original strict near-tie limitations retained; no new performance claim.",
+      "reason": "Qualified only for the dated core-3 and core-5 scopes below. Core-5 resident FP32/FP16 full graph/training and two-device sample replicas have distinct Python-owned Torch2.12/CANN9.1 and standalone Torch2.10/CANN9.0 evidence. Node placement forward is qualified separately; placed VJP/training qualification is tracked in STATUS. Eager asynchronous peer, eager-half GDN and SDK FP32 affine strict failures remain.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -577,6 +620,39 @@
           "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-composite-20261011.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "d072c1710f33c07736b5dfe1d0f4b841005efc1c",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 Python-owned node placement forward: 50 tests (4 placed, 28 single-device flow, 18 training including 2 static checks). Complete records, physical owners, raw cuts, relocated checkpoint, empty windows and capacity refusal. Placed backward/optimizer not certified by this report.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff"
+          ],
+          "test_command": "New matching build --checks weighted-node-peer weighted-flow weighted-training; independent Python placement/flow/training test files and actual split-source commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-placement-20261028.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "672e9484ea9ca6033f2b09ab1efaf57db56eefea",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 Python-owned two-device sample replicas: four FP32/FP16 cases, three common updates and disk restore. Complete private roots, shared parameter gradient sum, common optimizer, exact slot rejection and recovery; no node-split training claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "--checks weighted-training weighted-peer; Python test_resident_weighted_peers.py; exact source/runtime separation in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-resident-weighted-peers-20261028.md"
         }
       ]
     },
@@ -591,7 +667,7 @@
         "build",
         "cpu-semantic"
       ],
-      "reason": "Target-machine rebuild/verification is an extension; this acceptance requires CPU FP32/FP64 on the available aarch64 host."
+      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
     },
     {
       "id": "cpp-cpu-aarch64",
@@ -874,6 +950,39 @@
             "short-train"
           ],
           "test_command": "Full qualify_library.py --reuse-build inventory plus exact 2-test resource repair and library_complex.py/library_consumer.py/CTest completion; exact frozen plans and audit in report"
+        },
+        {
+          "date": "2026-10-27",
+          "commit": "9234c13ed7bba0d258503de6db80e4805201e409",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 weighted CPU FP64/FP32 placement and scoring conversions: 508 directed cases, full records, five memories, three Read snapshots, ten sending functions, isolated roots, three AdamW updates and fourth-step restore. Not a repository-wide or accelerator gate.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Fixed 9234c13 pytest inventory and matching builds in the report JSON; --dtype both.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-placement-20261027.md"
+        },
+        {
+          "date": "2026-10-27",
+          "commit": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 standalone typed schema2/master checkpoint: CPU 24 directed checks, 24 full graph cases per FP64/FP32, explicit half SGD plus two half AdamW cases. Does not remove strict default eager-half GDN failure.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Exact CPU standalone and pytest commands in report JSON.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-native-master-20261027.md"
         }
       ],
       "attempts": [
@@ -916,7 +1025,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail. This x86_64 target also still requires its own build/host gate."
+      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -929,7 +1038,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Current declared NPU correctness profile qualified:236 positive public module cases+2 explicit CSR refusals at4f; standalone scale CPU/NPU training at00b1775; exact composite133 resident components,installed client and547 public cases with zero skips at9c plus corrected State/Read checker at e3. Existing numerical policies and original strict near-tie limitations retained; no new performance claim.",
+      "reason": "Qualified only for the dated core-3 and core-5 scopes below. Core-5 resident FP32/FP16 full graph/training and two-device sample replicas have distinct Python-owned Torch2.12/CANN9.1 and standalone Torch2.10/CANN9.0 evidence. Node placement forward is qualified separately; placed VJP/training qualification is tracked in STATUS. Eager asynchronous peer, eager-half GDN and SDK FP32 affine strict failures remain.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -1347,6 +1456,39 @@
           "test_command": "verify_resident_target.py original inventory plus exact component completion; clean corrected State/Read checks; exact argv/source scopes in audit",
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-composite-20261011.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "d072c1710f33c07736b5dfe1d0f4b841005efc1c",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 standalone node placement forward: two dtypes each 9 placed configurations, 21 single-device graph cases and 5 training configurations/20 updates. Corrected checker is 1289bc9; installed-library RPATH conversion audited. Complete records, physical owners, raw cuts, relocated checkpoint, empty windows and capacity refusal. Placed backward/optimizer not certified by this report.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff"
+          ],
+          "test_command": "New matching build --checks weighted-node-peer weighted-flow weighted-training; independent Python placement/flow/training test files and actual split-source commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-placement-20261028.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "7db0b08e33c90b3fc278f2acdbce2ba738297310",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 standalone sample replicas: per dtype two configurations/six common updates, plus five single-device configurations/20 updates rechecking repaired master assertions. Complete private roots, shared parameter gradient sum, common optimizer, exact slot rejection and recovery; no node-split training claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "--checks weighted-training weighted-peer; Python test_resident_weighted_peers.py; exact source/runtime separation in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-resident-weighted-peers-20261028.md"
         }
       ]
     },
@@ -1360,7 +1502,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail.",
+      "reason": "Core-5 eager and resident FP32/FP16 source implemented. aarch64 CUDA12.8/Torch2.10 builds and CPU/loader checks only; resident sm80/90/100 kernels compiled. All real GPU operator, graph, backward, optimizer, checkpoint, residency, multi-device, memory and performance gates remain unverified.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -1452,6 +1594,20 @@
             "static-cli"
           ],
           "test_command": "Frozen g3-followup-host01 plan: dynamic import/metadata and expected verify_resident_target.py absent-CUDA refusal"
+        },
+        {
+          "date": "2026-10-27",
+          "commit": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 CUDA-linked aarch64 core/native/standalone build, 24 CPU master/checkpoint/full-graph tests and explicit absent-GPU refusal; no CUDA tensor execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "build.py --backend cuda and exact CPU inventory in report JSON.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261027.md"
         }
       ]
     },
@@ -1466,7 +1622,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Eager paths and full declared resident FP32/FP16 source profile implemented, including three graph families, both schedules, training, continuation/checkpoint, capacity and multi-owner/locality. CUDA12.8 conditional control and bidirectional peer/native system atomics are required for the resident profile. Real GPU correctness, residency, multi-card behavior, memory calibration and performance remain unverified; explicit unsupported requests fail.",
+      "reason": "Core-5 eager and resident FP32/FP16 source implemented. aarch64 CUDA12.8/Torch2.10 builds and CPU/loader checks only; resident sm80/90/100 kernels compiled. All real GPU operator, graph, backward, optimizer, checkpoint, residency, multi-device, memory and performance gates remain unverified.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -1585,6 +1741,33 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-composite-20261011.md",
           "reason": "Clean source CUDA consumer compile/link and host checks; real GPU validation remains pending."
+        },
+        {
+          "date": "2026-10-27",
+          "commit": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 CUDA-linked aarch64 core/native/standalone build, 24 CPU master/checkpoint/full-graph tests and explicit absent-GPU refusal; no CUDA tensor execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "build.py --backend cuda and exact CPU inventory in report JSON.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261027.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "d072c1710f33c07736b5dfe1d0f4b841005efc1c",
+          "semantic_version": "tide-core-5",
+          "scope": "Core-5 standalone resident node placement/full training dependency build for sm80/90/100; loader/help plus installed corrected 1289bc9 peer checker. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "build_device_control.py --checks weighted-node-peer weighted-flow weighted-training --cuda-architectures 80;90;100; actual install audit in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-placement-20261028.md"
         }
       ]
     }

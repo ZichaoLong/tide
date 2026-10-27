@@ -1,8 +1,43 @@
 # Execution capability audit
 
-Qualified source:81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5;
-[7741-test final CPU gate](evidence/foundation-final.md). This is the current
-capability description; ROADMAP owns stage status and extensions. CPU FP32/FP64 required.
+## Core-5 weighted binding
+
+The current mathematical source is `tide-core-5` at `0770593`, pinned in
+[upstream.json](upstream.json). The [semantic map](semantic-map.md) connects its
+definitions, public bindings, independent tests and fixed-source evidence.
+The table below describes execution layers; each linked report retains its own
+source, dtype, topology, configuration and acceptance scope. It is not one
+Cartesian qualification of every option.
+
+| Layer | Implemented interface and evidence boundary |
+| --- | --- |
+| General graphs and ports | PositiveDelayGraph, nonaligned TimedDAG and general SettleGraph with same-rank regions; [Settle embedding](settle-embedding.md), [typed records](structured-records.md) |
+| CPU mathematical baseline | Independent Python schedules and C++ core; five weighted memories, formal sending/scoring/evidence/key configurations and fixed-time convolution; [binding](weighted-message.md), [recurrent functions](weighted-recurrent.md), [sending](weighted-sending.md), [scoring](weighted-scoring.md) |
+| Exact joint evaluation | Online greedy prefill, actual ragged projection/affine scans, independent field roots, batched local VJPs and explicit sharing; [packing](weighted-packed.md), [region batches](weighted-region-batch.md), [sharing](weighted-compute-sharing.md) |
+| Mixed execution | Explicit payload/Read/control/selection placement; [placement](weighted-placement.md), [device qualification](weighted-device-validation.md), [precision](weighted-precision.md). Python/native and standalone evidence remain separate |
+| Resident single device | Independent device readiness/selection/progress, complete fields and raw cuts, retained first-order training, canonical FP32 masters and SGD/AdamW; [FP32/FP16 qualification](evidence/core5-resident-half-training-20261028.md) and [master assertion correction](evidence/core5-resident-weighted-peers-20261028.md) |
+| Resident sample replicas | Private graph states, canonical gradient sum and one optimizer boundary; [two-device qualification](evidence/core5-resident-weighted-peers-20261028.md) |
+| Resident node placement | One sample split by node, complete regional selection and exact cuts; [forward qualification](evidence/core5-weighted-node-placement-20261028.md). Placed window VJP and optimizer publication are implemented; their active qualification is tracked only in [STATUS](STATUS.md) |
+| CUDA | Source and aarch64 build/loader evidence, including sm80/90/100 resident kernels. Actual GPU correctness, training, residency, peers, capacity and performance remain unverified; x86_64 also needs its own build |
+| Performance | [Finite small/medium comparison](evidence/core5-weighted-performance-20261028.md) and [startup/memory observations](evidence/core5-weighted-observation-20261028.md); no large-model or cross-card throughput claim |
+
+CPU FP64/FP32 remain the reference. NPU reports distinguish Torch2.12/CANN9.1
+Python-owned code from Torch2.10/CANN9.0 standalone SDK code. Resident FP16 has
+FP32 arithmetic, adjoints and masters with explicit storage-boundary casts;
+it does not certify the different eager FP16 path. Explicit unavailable devices,
+dtypes, capacities and configurations fail. The retained strict eager GDN,
+asynchronous peer, SDK affine and PDG rounding failures are linked from
+[STATUS](STATUS.md) and the relevant reports. Source/build evidence never
+substitutes for device execution.
+
+## Legacy generic-module qualification
+
+The remaining tables describe the earlier generic module catalog, independently
+of the weighted binding above. Qualified source:
+`81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5`;
+[7741-test CPU gate](evidence/foundation-final.md). Later legacy extensions retain
+their own evidence below; none of these counts certifies core-5 weighted functions.
+Current backlog remains in [ROADMAP](ROADMAP.md). CPU FP32/FP64 required.
 Device support and finite CUDA/NPU qualification are separate from schedule
 capabilities; see [accelerators.md](accelerators.md). Python schedules are serial with batch/sequence
 support. Native schedules support node workers. Training denotes first-order
@@ -14,14 +49,15 @@ programs with isolated roots and per-event normalization backward. Its
 [bounded qualification and performance evidence](evidence/aggregate-batched-autograd.md)
 separates graph correctness, wide grad-forward and small complete training.
 
-## Active cross-family extension
+## Legacy cross-family extension
 
 [cross-family-policies.md](cross-family-policies.md) describes the implemented
-v2 interfaces now under validation: Python packed tick streaming, independent
+v2 interfaces: Python packed tick streaming, independent
 chain/diamond/Settle block schedules, Python isolated Full/Aggregate VJPs,
 native Settle streaming/frontend transitions, shared native causal state batches
-and separated scheduler/kernel/layout benchmark options. ROADMAP E1-E5 owns
-acceptance. The older evidence below does not certify this new extension.
+and separated scheduler/kernel/layout benchmark options. Its historical gates
+are linked from that contract and the [evidence index](evidence/README.md).
+This scope is separate from the current weighted implementation.
 
 ## Graph × schedule × option × mode
 

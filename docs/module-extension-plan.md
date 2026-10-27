@@ -1,4 +1,12 @@
-# Local program catalog and extension contracts (M5)
+# Legacy local program catalog and extension contracts (M5)
+
+This page describes the earlier representative module profiles. For the current
+core-5 weighted binding, use [the semantic map](semantic-map.md),
+[five memories and fixed-time convolution](weighted-recurrent.md),
+[sending](weighted-sending.md), [scoring/evidence/key](weighted-scoring.md) and
+[execution capabilities](execution-capabilities.md). In particular, the weighted
+KV logical-time position rules and convolution have their own implementations
+and evidence; the old model-adapter exclusions below do not restrict those functions.
 
 The initial state-program seam and SSM/SwiGLU are implemented and qualified in
 `evidence/m5a-state-programs.md`. Matrix-memory profiles are qualified in
@@ -10,7 +18,7 @@ Aggregated-event GQA/window attention and packed sequence interfaces are
 qualified in `evidence/m5c-attention.md` (`attention.md`). LH same-fiber attention,
 packing and pooling have separate contracts and evidence in `fiber-attention.md`,
 `fiber-packing.md` and `fiber-pooling.md`. RoPE/model-specific position rules are
-outside these representative profiles.
+outside these legacy representative profiles.
 Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing.md`.
 
 ## General local programs
