@@ -37,3 +37,5 @@ FP32局部常驻域，设备窗口错误31、窗口VJP错误32，底层归约错
 
 入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-sum`。
 CPU helper、实际NPU与CUDA构建/GPU实机分别记录；局部Mem不认证完整图或retained训练。
+
+固定源码资格见[fea6fa7运行证据](evidence/core5-resident-kv-sum-20261027.md)。
