@@ -33,6 +33,7 @@ void trajectory(at::Device device,const std::string& topology,const std::string&
   auto model=dtype==at::kHalf?weighted_precision_check::reference_model(candidate):weighted_check::model(graph,family,at::kCPU,at::kFloat);freeze(model,frozen);
   auto masters=dtype==at::kHalf?weighted_precision_check::reference_model(model):model;
   auto master_registry=masters.parameters();
+  const auto master_owners=master_registry.owners(); // Own returned metadata while borrowing Tensor fields.
   auto registry=model.parameters();Continuation q;q.identity=graph.identity;q.batch_size=2;
   OptimizerGroup group;for(const auto& owner:registry.owners())group.parameters.push_back(owner.canonical);
   group.lr=.001;group.weight_decay=.01;if(kind==ResidentOptimizerKind::sgd)group.momentum=.3;else group.amsgrad=true;
@@ -84,7 +85,7 @@ void trajectory(at::Device device,const std::string& topology,const std::string&
     const auto checkpoint=session->checkpoint();
     if(update==0&&frozen!="all")require(!at::equal(original,checkpoint.state.values)&&checkpoint.state.steps.gt(0).any().item<bool>(),"training check performed no parameter update");
     for(const auto& owner:model.parameters(false).owners())require(at::allclose(checkpoint.parameters.at(owner.canonical).to(at::kFloat),owner.value,1e-5,1e-6),"updated parameter differs: "+owner.canonical);
-    for(size_t j=0;j<master_registry.owners().size();++j){const auto& x=master_registry.owners()[j].value;
+    for(size_t j=0;j<master_owners.size();++j){const auto& x=master_owners[j].value;
       require(at::allclose(checkpoint.state.values.narrow(0,checkpoint.offsets[j],x.numel()).reshape(x.sizes()),x,3e-5,3e-6),"independent FP32 optimizer master differs");}
     require(session->generation()==int64_t(update+1),"parameter generation did not advance");
   }

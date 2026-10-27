@@ -25,7 +25,9 @@ void run(at::Device device,at::ScalarType dtype,const std::string& topology,cons
   auto candidate=weighted_check::model(graph,family,at::kCPU,dtype);
   auto model=dtype==at::kHalf?weighted_precision_check::reference_model(candidate):weighted_check::model(graph,family,at::kCPU,at::kFloat);
   auto masters=weighted_precision_check::reference_model(model);auto registry=model.parameters(),master_registry=masters.parameters();
-  OptimizerGroup group;for(const auto& p:registry.owners())group.parameters.push_back(p.canonical);
+  // owners() returns a vector by value. Keep it alive before taking element references.
+  const auto parameter_owners=registry.owners();
+  OptimizerGroup group;for(const auto& p:parameter_owners)group.parameters.push_back(p.canonical);
   group.lr=.001;group.weight_decay=.01;group.momentum=kind==ResidentOptimizerKind::sgd?.3:0.;group.amsgrad=kind==ResidentOptimizerKind::adamw;
   std::unique_ptr<NamedOptimizer> optimizer;
   if(kind==ResidentOptimizerKind::sgd)optimizer=std::make_unique<SGD>(master_registry,std::vector<OptimizerGroup>{group});
@@ -35,7 +37,8 @@ void run(at::Device device,at::ScalarType dtype,const std::string& topology,cons
   for(auto d:{device,other}){Continuation q;q.identity=graph.identity;q.batch_size=1;qs[owners.size()]=q;
     owners.push_back(std::make_unique<WeightedTrainingSession>(graph,candidate,q,d,kind,std::vector<OptimizerGroup>{group},l));}
   for(int update=0;update<3;++update){
-    const auto input=weighted_check::inputs(graph,at::kCPU,dtype,10*update);std::vector<at::Tensor> total(registry.owners().size());
+    std::cout<<"weighted-peer begin update="<<update<<" topology="<<topology<<'\n'<<std::flush;
+    const auto input=weighted_check::inputs(graph,at::kCPU,dtype,10*update);std::vector<at::Tensor> total(parameter_owners.size());
     for(size_t replica=0;replica<2;++replica){
       independent(qs[replica]);const auto initial=qs[replica];std::vector<External> xs;
       for(auto x:input)if(x.batch==int64_t(replica)){x.batch=0;x.position+=2*update;xs.push_back(x);}
@@ -46,7 +49,7 @@ void run(at::Device device,at::ScalarType dtype,const std::string& topology,cons
       {at::AutoGradMode grad(true);Options options;options.packed=false;
         reference=Greedy(graph,model,options).run(qs[replica],ref_xs,10*(update+1),10*(update+1));qs[replica]=reference.continuation;
         auto objective_roots=objective(w,roots,reference,model);
-        for(const auto& p:registry.owners())leaves.push_back(p.value);for(const auto& x:ref_xs)leaves.push_back(x.value);
+        for(const auto& p:parameter_owners)leaves.push_back(p.value);for(const auto& x:ref_xs)leaves.push_back(x.value);
         for(const auto& a:initial.pending)leaves.push_back(a.value);
         for(const auto& [_,s]:initial.states){leaves.push_back(s.value);for(const auto& [name,x]:s.slots)if(x.is_floating_point())leaves.push_back(x);}
         expected=torch::autograd::grad(objective_roots.first,leaves,objective_roots.second,false,false,true);}
@@ -60,12 +63,12 @@ void run(at::Device device,at::ScalarType dtype,const std::string& topology,cons
       require(refused,"weighted peer budget not refused before allocation");}
     auto result=WeightedTrainingSession::step_replicas(group_owners);
     require(result.step.applied&&result.parameters.size()==2&&result.transferred_bytes>0,"weighted peer step did not transfer/commit");
-    for(const auto& g:result.parameters)for(size_t j=0;j<total.size();++j){const auto& p=registry.owners()[j];
+    for(const auto& g:result.parameters)for(size_t j=0;j<total.size();++j){const auto& p=parameter_owners[j];
       gradient(g.values.narrow(0,g.offsets[j],p.value.numel()).reshape(p.value.sizes()),g.connected[j].item<bool>(),total[j],"peer canonical sum "+p.canonical);}
-    optimizer->zero_grad();for(size_t j=0;j<total.size();++j)master_registry.value(registry.owners()[j].canonical).mutable_grad()=total[j];optimizer->step();
-    for(const auto& p:registry.owners())p.value.copy_(master_registry.value(p.canonical).to(dtype).to(at::kFloat));
+    optimizer->zero_grad();for(size_t j=0;j<total.size();++j)master_registry.value(parameter_owners[j].canonical).mutable_grad()=total[j];optimizer->step();
+    for(const auto& p:parameter_owners)p.value.copy_(master_registry.value(p.canonical).to(dtype).to(at::kFloat));
     auto a=owners[0]->checkpoint(),b=owners[1]->checkpoint();same_slots(a,b);
-    for(size_t j=0;j<registry.owners().size();++j){const auto& p=registry.owners()[j];
+    for(size_t j=0;j<parameter_owners.size();++j){const auto& p=parameter_owners[j];
       require(at::allclose(a.parameters.at(p.canonical).to(at::kFloat),p.value,1e-5,1e-6),"peer parameter update differs from independent optimizer");
       require(at::allclose(a.state.values.narrow(0,a.offsets[j],p.value.numel()).reshape(p.value.sizes()),master_registry.value(p.canonical),3e-5,3e-6),"peer FP32 master differs");}
     if(!update)for(size_t j=0;j<2;++j){auto checkpoint=owners[j]->checkpoint();owners[j]->close();

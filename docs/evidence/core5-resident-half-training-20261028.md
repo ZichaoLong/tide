@@ -16,6 +16,11 @@ NPU standalone为SDK Torch2.10/CANN9.0，物理11→npu:0；Python-owned为Torch
 各自构建与core身份独立校验，没有混用二进制。每任务1800秒、2个build worker、ATen/BLAS1、
 Nice10、独立background.slice，设备排队180秒、执行600秒。CPU codec与安装消费者没有在本批重跑。
 
+后续检查器审计补注（2026-10-28）：standalone训练的最后master比较曾引用
+`master_registry.owners()[j].value`中临时vector的成员，生命周期无效。本批实际退出状态不变，
+但该一处master数值断言不能作为可靠独立证据；Python master检查与其他完整记录/VJP检查不受这处影响。
+当前修复持有owners vector，并重做standalone训练/peer定向资格，状态见[STATUS](../STATUS.md)。
+
 精度采用[公共训练契约](../resident-weighted-training.md)：raw与实际发送payload按FP32或FP16存储，
 局部算术、Describe/control、舍入前Full G、所有伴随和optimizer master/槽使用FP32；
 时间、计数与原始缓存坐标为int64。存储Cast声明identity VJP，参数发布先half舍入再拓宽计算bank。
