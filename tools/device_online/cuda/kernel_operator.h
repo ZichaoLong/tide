@@ -119,6 +119,7 @@ TIDE_VECTOR_BINARY(Max,((x!=x)?x:((y!=y)?y:(x>y?x:y))))
 template<class T> __device__ void Muls(LocalTensor<T> to,LocalTensor<T> a,T b,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,a.GetValue(i)*b);}
 template<class T> __device__ void Adds(LocalTensor<T> to,LocalTensor<T> a,T b,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,a.GetValue(i)+b);}
 template<class T> __device__ void Exp(LocalTensor<T> to,LocalTensor<T> a,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,expf(float(a.GetValue(i))));}
+template<class T> __device__ void Ln(LocalTensor<T> to,LocalTensor<T> a,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,logf(float(a.GetValue(i))));}
 template<class T> __device__ void Sqrt(LocalTensor<T> to,LocalTensor<T> a,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,sqrtf(float(a.GetValue(i))));}
 template<class T> __device__ void Abs(LocalTensor<T> to,LocalTensor<T> a,uint32_t n){for(uint32_t i=0;i<n;++i)to.SetValue(i,fabsf(float(a.GetValue(i))));}
 template<class T> __device__ void ReduceSum(LocalTensor<T> to,LocalTensor<T> a,LocalTensor<T>,int32_t n){T x=0;for(int32_t i=0;i<n;++i)x+=a.GetValue(i);to.SetValue(0,x);}
