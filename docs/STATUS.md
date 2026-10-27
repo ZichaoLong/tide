@@ -4,7 +4,7 @@
 用户授权持续实施、私有环境、有限实验、阶段提交及正常推送；无子代理，参考仓库只读。
 总体未完成，阶段提交后继续。[ROADMAP](ROADMAP.md)为唯一待办，[execution-flows](execution-flows.md)为持续契约。
 实现`343429db76c091541ae24ef7b3792ce027e9bea2`已提交并正常推送；HEAD/origin一致。
-当前未提交包括本交接更新及 weighted raw FP16 组件开发；后者CPU16项通过，尚未编译/设备验证，不属于343429d固定资格。
+新增实现2097dc9：weighted raw FP16组件已提交，CPU16项通过；设备资格待执行，与343429d完整训练资格分开。
 
 ## 已实现与开发检查
 
@@ -63,7 +63,7 @@ NPU/CUDA已终态passed，systemd inactive/success/0；Python仍running，尚无
 当前主区 FP16 开发：weighted_raw_update采用显式FP16 primal与FP32算术/保存值/一阶伴随；
 raw adopt新增dtype参数并按位提交；weighted-raw设备检查拟扩为两dtype，CPU新增提交位模式/错误拒绝。
 短测 `tests/test_resident_weighted_raw_update.py` 16通过/1.35秒；最初因全局dtype fixture重复参数化而收集失败，改为storage_dtype后通过。设备尚未运行。
-resident-weighted-state契约已同步；准备提交本组件后冻结到独立core5-raw-half checkout，使用新build/npu与build/cuda重编weighted-raw。
+resident-weighted-state契约已同步；已提交2097dc9并冻结到独立core5-raw-half checkout，使用新build/npu与build/cuda重编weighted-raw。
 kernel签名已改，不能复用旧host-only kernel archives路径。其后继续完整数值FP16/peer/性能与追溯。
 
 不要预建job.py输出目录，service stdout放.local。
@@ -101,3 +101,14 @@ SDK独立shell：module load libtorch-npu/2.10.0-cann9.0.0；配套Python $LIBTO
 CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh（Torch2.10/cu128/Toolkit12.8.1，无GPU）。
 TORCH_DEVICE_BACKEND_AUTOLOAD=0、ACL_OP_INIT_MODE=0、保留模块CANN PYTHONPATH；2build workers/BLAS1。
 STATUS使用scripts/durable_records.py原子写并回读。公共环境、参考仓库均未修改。
+
+## 新组件固定资格（提交前记录）
+
+源码2097dc9，checkout `artifacts/worktrees/core5-raw-half`（跟踪文件只读），新build/npu、build/cuda。
+units `tide-core5-raw-half-{npu,cuda}-qualify-20261028.service`；launchers `.local/core5-raw-half-{npu,cuda}-qualify{,-workload}.sh`。
+output `artifacts/jobs/core5-raw-half-{npu,cuda}-qualify/`；日志task.log，状态status.json。
+两个独立任务均900秒/2worker/BLAS1/Nice10/background.slice；NPU queue180秒，设备检查180秒。
+范围weighted-raw两dtype、三dtype codec、16项CPU语义；CUDA构建/loader/help。NPU已失败：构建通过，但CPU codec拒绝新增见证把非零次正规数放入必须为零的value适配字段；未运行NPU。改为合法keys/H字段。CUDA首任务因launcher漏加私有ninja PATH在CMake配置期失败，未编译；原失败保留。
+CUDA qualify2又因launcher字符串替换误改core目录为cuda2-tools2而失败，未构建；已定位，下一新任务固定实际cuda-tools2。
+三处失败均保留，不是设备数值失败；raw fixture修正单独提交后，以新源码新build重新资格。
+主区另有尚未验证的FP16 projection/convolution源码改动；使用显式FP32算术/伴随和半精度存储，设备溢出拒绝及underflow连接检查正在补齐。

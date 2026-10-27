@@ -30,8 +30,9 @@ std::vector<State> fixture(const WeightedRawLayout& l,at::ScalarType dtype=at::k
   for(int row=0;row<4;++row){const int64_t n=l.capacity()?stamps[row].size():0;
     State s;s.last_time=clocks[row];s.observations=row?9:0;
     for(const auto& f:l.fields()){auto shape=f.shape;if(f.ragged)shape.insert(shape.begin(),n);
-      auto x=values(shape,.3+row,dtype);if(f.name=="value"){x.zero_();x[0].fill_(-0.0);x[1].fill_(0x1p-24);s.value=x;}
-      else {if(f.name=="W"||f.name=="weights")x=x.abs()+.1;s.slots[f.name]=x;}}
+      auto x=values(shape,.3+row,dtype);if(f.name=="value"){x.zero_();x[0].fill_(-0.0);s.value=x;}
+      else {if(f.name=="W"||f.name=="weights")x=x.abs()+.1;
+        if((f.name=="keys"||f.name=="H")&&x.numel())x.reshape({-1})[0].fill_(0x1p-24);s.slots[f.name]=x;}}
     if(!l.kv())s.slots["time"]=at::scalar_tensor(std::max<int64_t>(0,s.last_time),at::kLong);
     if(l.capacity())s.slots[l.kv()?"times":"conv_times"]=at::tensor(stamps[row],at::kLong);
     out.push_back(std::move(s));
