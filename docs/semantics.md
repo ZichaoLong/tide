@@ -104,6 +104,18 @@ checkpoint v5 stores actual raw entries/pending, including expired entries retai
 by zero receive. This addition does not change the generic adoption/Next contract.
 Backend qualification and remaining formal candidates are recorded separately.
 
+## Weighted sending bindings
+
+[Sending functions](weighted-sending.md) add threshold, node gains, three Attention
+amplitudes, proportional, fractional zero-temperature fill and two hard selections.
+Descriptor layouts contain only the applicable three/four fields. k limits total
+strength except the two hard maps, where K=k; all other maps use region-size K.
+Stable node-ID ties, exact positive support, and complete-candidate semantics remain.
+Attention has the declared zero-base right derivative and all-zero zero VJP;
+sorted fill and hard caps have separately named branch derivatives, never HST.
+Inactive configuration fields are rejected. The original regional_total profile
+identity remains; new functions enter distinct hashed graph/checkpoint bindings.
+
 ## Weighted recurrent binding
 
 [Weighted recurrent memory](weighted-recurrent.md) separately binds affine,

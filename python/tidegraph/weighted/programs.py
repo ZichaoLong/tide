@@ -10,6 +10,8 @@ from ..history import History
 from ..readout import ReadProgram
 from ..region import RegionProgram, Selection
 from .entropy_allocation import allocate
+from .config import TOTAL, HARD, ATTENTION
+from .sending import attention_send, proportional, total_zero, hard_selection
 from .tensors import Payload, Received, norm, parameter
 
 
@@ -62,10 +64,16 @@ class Describe(ReadProgram):
         self.profile, self.memory_config, self.config = profile, memory_config, region_config
         width = memory_config.width+4*memory_config.summary_width+3
         self.score = ScalarHead(width,region_config.hidden_width,generator,dtype)
-        self.field_layout = {"w": (), "mu": (), "score": (), "evidence": (region_config.region_control_width,)}
+        self.field_layout = {"w": (), "mu": (), "score": ()}
+        if region_config.regional:
+            self.field_layout["evidence"] = (region_config.region_control_width,)
         if region_config.region_control_mode == "context":
             self.evidence_weight = parameter((region_config.region_control_width,width),generator,dtype)
             self.evidence_bias = parameter((region_config.region_control_width,),generator,dtype)
+        if region_config.send_gain == "context":
+            self.gain = ScalarHead(width,region_config.hidden_width,generator,dtype)
+        elif region_config.gain_logit is not None:
+            self.gain_logit = torch.nn.Parameter(torch.tensor(region_config.gain_logit,dtype=dtype))
 
     def features(self, memory, state, time, h):
         short, long, ws, wl = memory.mem(state,time,h.content)
@@ -79,14 +87,26 @@ class Describe(ReadProgram):
         # engine's mode-restricted request marker, never a mathematical state.
         state = memory.initial(weights) if request.state is None else request.state
         features = self.features(memory,state,request.time,h)
-        evidence = (norm(self.evidence_weight@features+self.evidence_bias,self.memory_config.epsilon)
-                    if self.config.region_control_mode == "context" else features.new_zeros(self.config.region_control_width))
         received = h.mass.clamp(max=1)
-        return {"w": received, "mu": (self.config.gamma_max*received).clamp(max=1),
-                "score": self.score(features), "evidence": evidence}
+        if self.config.regional:
+            mu = (self.config.gamma_max*received).clamp(max=1)
+        else:
+            if self.config.send_gain == "context":
+                gamma = 1+(self.config.gamma_max-1)*self.gain(features).sigmoid()
+            elif self.config.gain_logit is not None:
+                gamma = 1+(self.config.gamma_max-1)*self.gain_logit.sigmoid()
+            else:
+                gamma = self.config.fixed_gain
+            mu = (gamma*h.mass).clamp(max=1)
+        result = {"w": received, "mu": mu, "score": self.score(features)}
+        if self.config.regional:
+            result["evidence"] = (norm(self.evidence_weight@features+self.evidence_bias,self.memory_config.epsilon)
+                if self.config.region_control_mode == "context" else features.new_zeros(self.config.region_control_width))
+        return result
 
 
 class RegionalTotal(RegionProgram):
+    """Weighted region binding; historical class name remains for API compatibility."""
     def __init__(self, profile, config, generator, dtype):
         super().__init__()
         self.profile, self.config = profile, config
@@ -94,9 +114,9 @@ class RegionalTotal(RegionProgram):
             self.head = ScalarHead(config.region_control_width+2,config.hidden_width,generator,dtype)
 
     def validate_weights(self, layout):
-        if (self.config.k > len(layout.members) or layout.spec.budget != len(layout.members)
+        if (layout.spec.budget != self.config.capacity(len(layout.members))
                 or not layout.spec.observe_all):
-            raise ValueError("regional_total requires K=region size, observe_all and k<=K")
+            raise ValueError("weighted region requires the declared k/K and observe_all")
 
     def validate_history(self, history, layout):
         if history.scalars or history.node_maps or history.tensors:
@@ -105,21 +125,37 @@ class RegionalTotal(RegionProgram):
     def total(self, w, mu, evidence):
         recv, mass = w.sum(), mu.sum()
         low, high = recv.clamp(max=1), mass.clamp(max=self.config.k)
-        if self.config.region_control_mode == "context":
-            z = (w.unsqueeze(-1)*evidence).sum(0)/recv.clamp(min=1)
-            features = torch.cat((z, recv.log1p().reshape(1), mass.log1p().reshape(1)))
-            fraction = self.head(features).sigmoid()
-        else:
-            fraction = recv.new_tensor(self.config.total_fraction)
+        fraction = (self.context(w,mu,evidence).sigmoid() if self.config.region_control_mode == "context"
+                    else recv.new_tensor(self.config.total_fraction))
         return low+fraction*(high-low)
+
+    def context(self, w, mu, evidence):
+        recv, mass = w.sum(), mu.sum()
+        z = (w.unsqueeze(-1)*evidence).sum(0)/recv.clamp(min=1)
+        return self.head(torch.cat((z,recv.log1p().reshape(1),mass.log1p().reshape(1))))
 
     def step(self, r):
         nodes, descriptors = zip(*r.candidates)
-        fields = {name: torch.stack([d[name] for d in descriptors]) for name in ("w","mu","score","evidence")}
-        b = self.total(fields["w"],fields["mu"],fields["evidence"])
-        allocation = allocate(fields["score"],fields["mu"],b,b,self.config.allocation_temperature,
-                              regularizer=self.config.regularizer,ent_alpha=self.config.ent_alpha)
-        controls = dict(zip(nodes,allocation.controls.unbind()))
+        fields = {name: torch.stack([d[name] for d in descriptors]) for name in descriptors[0]}
+        c, mode = self.config, self.config.selection_mode
+        w, mu, scores = (fields[n] for n in ("w","mu","score"))
+        if mode in TOTAL:
+            low = high = self.total(w,mu,fields["evidence"])
+            result = total_zero(scores,mu,low,nodes) if mode == "regional_total_zero" else None
+        elif mode in ATTENTION:
+            result = attention_send(scores,mu,w,mode=mode,base=c.allocation_base,temperature=c.allocation_temperature)
+        elif mode == "proportional":
+            result = proportional(mu,c.k)
+        else:
+            eta = self.context(w,mu,fields["evidence"]) if c.region_control_mode == "context" else c.eta
+            scores = scores-eta
+            result = hard_selection(scores,mu,c.k,nodes) if mode in HARD else None
+            low = (w.sum() if c.regional else mu.sum()).clamp_max(1)
+            high = c.k
+        if result is None:
+            result = allocate(scores,mu,low,high,c.allocation_temperature,
+                              regularizer=c.regularizer,ent_alpha=c.ent_alpha).controls
+        controls = dict(zip(nodes,result.unbind()))
         return Selection({v for v,c in controls.items() if c.detach() > 0}, controls, History(last_time=r.time))
 
 

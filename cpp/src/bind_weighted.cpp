@@ -1,4 +1,5 @@
 #include "tide/weighted.h"
+#include "tide/weighted_sending.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -12,11 +13,13 @@ void bind_weighted(py::module_& module){
     FIELD(KVConfig,beta_short) FIELD(KVConfig,epsilon) FIELD(KVConfig,alpha_att) FIELD(KVConfig,alpha_ff)
     FIELD(KVConfig,position_origin) FIELD(KVConfig,position_scale) FIELD(KVConfig,full_frequencies)
     FIELD(KVConfig,read_frequencies) FIELD(KVConfig,distance_slopes).def("validate",&KVConfig::validate);
-  py::class_<RegionalConfig>(module,"WeightedRegionalConfig").def(py::init<>())
+  py::class_<RegionalConfig>(module,"WeightedRegionalConfig").def(py::init<>()).def(py::init<std::string>())
     FIELD(RegionalConfig,hidden_width) FIELD(RegionalConfig,region_control_width) FIELD(RegionalConfig,k)
     FIELD(RegionalConfig,gamma_max) FIELD(RegionalConfig,allocation_temperature)
     FIELD(RegionalConfig,total_fraction) FIELD(RegionalConfig,region_control_mode)
-    FIELD(RegionalConfig,regularizer) FIELD(RegionalConfig,ent_alpha).def("validate",&RegionalConfig::validate);
+    FIELD(RegionalConfig,regularizer) FIELD(RegionalConfig,ent_alpha) FIELD(RegionalConfig,selection_mode)
+    FIELD(RegionalConfig,region_evidence) FIELD(RegionalConfig,send_gain) FIELD(RegionalConfig,fixed_gain)
+    FIELD(RegionalConfig,gain_logit) FIELD(RegionalConfig,eta) FIELD(RegionalConfig,allocation_base).def("validate",&RegionalConfig::validate);
   py::class_<RecurrentConfig>(module,"WeightedRecurrentConfig").def(py::init<>())
     FIELD(RecurrentConfig,memory_family) FIELD(RecurrentConfig,memory_read)
     FIELD(RecurrentConfig,width) FIELD(RecurrentConfig,summary_width) FIELD(RecurrentConfig,key_width)
@@ -41,5 +44,10 @@ void bind_weighted(py::module_& module){
                                     const std::string& regularizer,std::optional<double> alpha){
     return allocate(t,mu,lo,hi,tau,regularizer,alpha).controls;
   });
+  module.def("weighted_attention_shares",&attention_shares);
+  module.def("weighted_attention_send",&attention_send);
+  module.def("weighted_proportional",&proportional);
+  module.def("weighted_total_zero",&total_zero);
+  module.def("weighted_hard_selection",&hard_selection);
 #undef FIELD
 }

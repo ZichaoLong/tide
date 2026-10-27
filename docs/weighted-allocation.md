@@ -36,7 +36,7 @@ C++ 入口为 `tide::weighted::allocate_quad`：独立使用附录 S.2 的逆响
 `allocate(scores, caps, lower, upper, temperature, regularizer=..., ent_alpha=...)`
 扩展同一个 Alloc 定义域与返回。regularizer=bern 使用 μ*h_B(c/μ)；ent 使用固定
 alpha∈[1,2]，alpha=1 是 Shannon。alpha 必须显式给出，其他正则不接受 ent_alpha；
-它不是可训练变量。`RegionalConfig` 把这些函数接入 regional_total，形状进入图身份；
+它不是可训练变量。`RegionalConfig` 把这些函数接入 regional_total/regional_threshold/constrained，形状进入图身份；
 默认 quad 的既有图/checkpoint 身份保持不变。C++ 公共入口为 weighted::allocate。
 
 Python 以逆响应点建立区间，使用受区间保护的 Newton/二分，最多 80 轮；C++ 独立使用

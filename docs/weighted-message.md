@@ -19,6 +19,7 @@ PDG 包含正时延反馈，TimedDAG 可以非对齐；一般端口日程不依�
 NoPE/各头部分或完整 RoPE、独立 Read 旋转及距离偏置。默认旋转为空、距离偏置为零。
 fixed 要显式给 total_fraction，region_evidence 取 None；context 不接受固定比例。
 [分配](weighted-allocation.md)提供 quad/bern/ent，ent 另给固定 ent_alpha∈[1,2]。
+[其他发送规则](weighted-sending.md)接入十种正式发送函数、固定/上下文节点增益及各自适用字段。
 配置检查不将未知、不适用或尚未实现的选项换成其他函数。
 
 `KVConfig` 给出内容宽度 d、摘要宽度 ds、适配秩、头数、FFN 宽度、窗口、
@@ -51,7 +52,7 @@ checkpoint 检查别名图；共享参数不合并私有状态。当前没有声
 | KV 原始状态 | `times: int64[N]`、`keys/values: [N,d]`、`summaries: [N,ds]`、`weights: [N]` |
 | State.value | 宽 d+1 的固定零，仅适配通用记录，不承载数学记忆；状态校验拒绝非零 |
 | 状态时钟/计数 | last_time 是最近正接收写入时间；observations 是累计正写入数，Python int64 域；不用于窗口或位置 |
-| Describe | 独立字段 `w:[]`、`mu:[]`、`score:[]`、`evidence:[dreg]`；字段根相互独立 |
+| Describe | regional 使用 `w:[]`、`mu:[]`、`score:[]`、`evidence:[dreg]`；节点增益函数只有前三项；字段根独立 |
 | Full | 返回 `[c,G]`，同一载荷广播所有逐边/端口槽，不按出度分强度；各槽身份仍分开 |
 | 区域历史 | 数学单点；History.last_time 只记录最后处理时间，不新增学习状态 |
 
@@ -65,7 +66,7 @@ Full 始终读 proposal，所有候选的 Next 都返回 proposal，未激活也
 本绑定拒绝旧输入 origin 适配器，直接使用一般物理端口。
 通用引擎的输入/聚合/边/输出尺度固定为不可训练的 1，并在执行及 checkpoint 预检中校验；
 发送强度只在本支线的聚合或显式数值投影中乘一次。
-legacy Emit 接口必须取 hard；此处仅表示不插入额外 Emit 变换，分配仍是正温度精确映射。
+legacy Emit 接口必须取 hard；此处仅表示不插入额外 Emit 变换，发送反向由所选函数单独声明。
 
 checkpoint v5 保存实际原始状态与 typed tensors、全部 pending、ledger、共享参数和 optimizer；
 加载开始新梯度段。有效状态投影不用于 checkpoint 解码，解码不调用参考递归。
@@ -84,7 +85,7 @@ checkpoint v5 保存实际原始状态与 typed tensors、全部 pending、ledge
 | 架构 §7、Batch/正典继续 | 既有独立调度、checkpoint v5 | `test_weighted_execution.py`：FC/HB、非对齐 DAG、反馈 PDG，全记录/根、多步 AdamW、每切点 pending/恢复 |
 
 局部独立数学检查与调度比较分别承担公式和执行顺序验收。完整图的参数方向差分限定
-在不跨支持分支的 FP64 小扰动；没有对硬函数作通常 gradcheck。
+在不跨支持分支的 FP64 小扰动；硬排序只在明确固定顺序的光滑分支作方向检查，不跨离散边界。
 本阶段开发测试域为 CPU FP64/FP32 的 Python、Python/native 与 standalone C++；
 [KV 不可变资格](evidence/core5-weighted-kv-20261027.md)独立记录；批量 VJP、mixed/resident 与硬件资格继续独立推进。
 通用 prefill 可使用声明的完整驱动序列递归能力，缺少 joint 能力时合法退化并保留计数；
