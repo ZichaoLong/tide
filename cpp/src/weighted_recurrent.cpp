@@ -106,6 +106,7 @@ class Recurrent final:public MemoryKernel {
   }
   bool exact_sequence() const override{return true;}
   bool joint_batch() const override{return true;}
+  bool batched_autograd() const override{return true;}
   bool joint_sequence() const override{return true;}
   PackedStates packed_sequence(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch) const override {
     return packed::recurrent(w,old,batch,c_);

@@ -20,7 +20,7 @@ Python `weighted/packing.py::Writes` 与 C++ `weighted_packed.cpp::Writes` 将�
 
 | 定义与计算 | Python / C++ | 实际计算与返回 |
 | --- | --- | --- |
-| KV 写入投影 | kv_packed.py / weighted_kv_packed.cpp | 正接收内容一次归一化、批量 KV/summary 投影；每 owner 将左缓存和实际新项连接一次，再按每个原始时间选取实际前缀/窗口 |
+| KV 写入投影 | kv_packed.py / weighted_kv_packed.cpp | 正接收内容按写入/summary 分支批量归一化与投影；每 owner 将左缓存和实际新项连接一次，再按每个原始时间选取实际前缀/窗口 |
 | affine/delta §4.2 系数 | recurrent_packed.py / weighted_recurrent_packed.cpp | 批量 key/value/门和实际时间衰减；affine 取标量系数，delta 取右乘矩阵系数 |
 | GDN/SSD §2/§4 | gated_packed.py / weighted_gated_packed.cpp | 批量输入投影、固定时间卷积、头/组展开、保留及写入系数，系数生成不读取未知 H |
 | 固定时间卷积 | convolution_packed.py / weighted_gated_packed.cpp::convolve | int64 原始时间 searchsorted/gather；历史取实际带权 raw 写入，当前 tap 使用未加权 raw；缓存按逻辑 horizon 解码 |
@@ -34,8 +34,8 @@ sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 
 
 ## 一阶反向、数值与适用域
 
-本阶段数值由联合候选计算；引擎仍用已有逐局部语义图绑定一阶反向，
-`semantic_state_replays` 如实计入。不能把联合数值通过称为批量 VJP 已完成。
+数值由联合候选计算；[批量 State VJP](weighted-state-vjp.md)另行定义嵌套参数、
+零/正接收分支、独立槽连接与对应资格。原 packed 实现提交的语义重放证据仍按当时范围保留。
 所有公共独立根、None/连接零、参数共享贡献保持；int64 槽不求导。
 联合算子本身是普通 ATen 表达式，但直接对拼接输入求导有单个 packed Tensor 的普通连接语义。
 公共引擎通过明确绑定保存每条原始输入的连接身份。
@@ -46,7 +46,7 @@ sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 
 路由/支持/平票与 int64 元数据仍严格比较。没有精度升级或路由宽容。
 未定义新的 checkpoint/图版本；保存的仍是候选实际原始状态。
 本实现是 eager host 管理 packing/元数据；不构成设备常驻就绪或推进证明。
-完整 Read/Full/区域打包、批量 VJP、容量切分与跨卡需各自验收。
+完整 Read/Full/区域打包及其批量 VJP、容量切分与跨卡需各自验收。
 
 ## 独立验证
 

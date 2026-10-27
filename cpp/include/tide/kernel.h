@@ -28,6 +28,9 @@ class StateKernel {
   virtual bool joint_batch() const { return false; }
   // Builtins declare row-independent tensor dependencies for batched first-order VJP.
   virtual bool batched_autograd() const { return false; }
+  // Additional structural branch identity for declared row-independent VJPs.
+  // It may depend on actual local inputs; never on incoming cotangent values.
+  virtual std::string batch_autograd_key(const State&,const ContentView&,Index) const { return {}; }
   virtual bool joint_sequence() const { return false; }
   // Named non-differentiable metadata slots, always int64 on the state device.
   virtual std::set<std::string> integer_slots() const { return {}; }

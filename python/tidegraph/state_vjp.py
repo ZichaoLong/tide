@@ -11,6 +11,7 @@ from .content import Content, SourceInput
 
 
 def supported(kernel):
+    from .weighted.parameter_tree import supported as weighted
     from .memory import EMA, DiagonalSSM
     from .matrix_memory import MatrixMemory
     from .attention import Attention
@@ -19,7 +20,7 @@ def supported(kernel):
     from .clocked_state import ClockedState
     if type(kernel) is ClockedState:
         return supported(kernel.program)
-    return type(kernel) in {EMA, DiagonalSSM, MatrixMemory, Attention, LazyAdd, FiberAttention}
+    return weighted(kernel) or type(kernel) in {EMA, DiagonalSSM, MatrixMemory, Attention, LazyAdd, FiberAttention}
 
 
 def _rows(rows, transform):
@@ -35,19 +36,30 @@ def _rows(rows, transform):
 
 
 def _weights(weights, transform):
-    return SimpleNamespace(**{k: transform(getattr(weights, k)) for k in ("decay", "weight", "bias", "read")},
-                           extra={k: transform(v) for k, v in sorted(weights.extra.items())}, kernel=weights.kernel)
+    from .weighted.parameter_tree import rebind, supported as weighted
+    count = 0
+    def capture(value):
+        nonlocal count
+        count += 1
+        return transform(value)
+    result = SimpleNamespace(**{k: capture(getattr(weights, k)) for k in ("decay", "weight", "bias", "read")},
+                             extra={k: capture(v) for k, v in sorted(weights.extra.items())}, kernel=weights.kernel)
+    if weighted(weights.kernel):
+        result.kernel = rebind(weights.kernel, capture)
+    result._vjp_weights = count
+    return result
 
 
 def _values(state):
     return [state.value, *[v for k, v in sorted(state.slots.items())]]
 
 
-def _signature(row):
+def _signature(row, kernel):
     tensors = []
     _rows([row], lambda t: tensors.append((tuple(t.shape), t.device, t.dtype, t.requires_grad)))
     old, view, time = row
-    return (time, old.last_time, old.observations, tuple(sorted(old.slots)),
+    branch = kernel.batch_autograd_key(old, view, time) if hasattr(kernel, "batch_autograd_key") else ()
+    return (branch, time, old.last_time, old.observations, tuple(sorted(old.slots)),
             tuple(s.slot for s in view.sources), tuple(sorted(view.contributions)), tuple(tensors))
 
 
@@ -73,7 +85,7 @@ class _State(torch.autograd.Function):
                 raise ValueError("State VJP changed tensor metadata")
         outputs = tuple(v.detach().clone() for v in packed)
         ctx.mark_non_differentiable(*(v for v, ref in zip(outputs, refs) if not ref.requires_grad))
-        ctx.rows, ctx.weights = len(rows), 4+len(weights.extra)
+        ctx.rows, ctx.weights = len(rows), weights._vjp_weights
         ctx.row_inputs, ctx.row_outputs = (len(inputs)-ctx.weights)//len(rows), len(refs)//len(rows)
         ctx.save_for_backward(*inputs, *leaves, *refs)
         return outputs
@@ -108,13 +120,13 @@ class _State(torch.autograd.Function):
 def bind_batch(weights, old, views, times, numeric):
     rows, groups = list(zip(old, views, times)), {}
     for i, row in enumerate(rows):
-        groups.setdefault(_signature(row), []).append(i)
+        groups.setdefault(_signature(row, weights.kernel), []).append(i)
     result = list(numeric)
     for ids in groups.values():
         inputs = []
         def capture(t):
             inputs.append(t)
-            return None
+            return t  # Preserve tensor aliases when rebinding a nested module.
         plan = (_weights(weights, capture), _rows([rows[i] for i in ids], capture))
         values = iter(_State.apply(plan, [numeric[i] for i in ids], *inputs))
         for i in ids:

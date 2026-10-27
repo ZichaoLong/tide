@@ -38,29 +38,33 @@
 unit `tide-core5-packed-qualify-20261027` 已终态 inactive/success、exit 0；
 干净只读 worktree artifacts/worktrees/core5-bootstrap，源码 26dad7d。
 原始 job/status/log/source/development 在 artifacts/jobs/core5-packed-qualify；
-launcher `.local/core5-packed-qualify.sh`。实现与本证据提交后推送；原失败保留如下。
-当前无 live job。
+launcher `.local/core5-packed-qualify.sh`。实现与证据 727a7b5 已推送。
+当前活动开发任务如下。
 
-主工作区已开始下一增量：嵌套参数捕获/别名保留、零/正接收分组的 State VJP，
-以及空卷积缓存的无连接分支。Python 新定向 13 项与 packed/legacy 回归 53 项通过；
-相关 C++ 能力/结构 key 已写但尚未构建。不属于 26dad7d 的资格；无用户修改。
-下一命令：资格终态并记录证据后，冻结新 VJP 树，构建并运行
-tests/test_weighted_state_vjp.py tests/test_weighted_packed.py tests/test_state_batched_vjp.py
-与相关带权执行/训练回归；新参数树/反向契约见 weighted-state-vjp.md。
-再推进 Read/Full、mixed/resident、standalone 完整训练与有限 profiling。
-总体任务尚未完成，持续推进。
+主工作区下一增量未提交：嵌套参数捕获/别名保留、零/正接收分组的 State VJP，
+及空卷积缓存的无连接分支。Python 新连接检查 13 项和 packed/legacy 53 项先通过。
+相关 C++ 已构建。StateKernel 能力增加结构 key，依赖对象全部重建，未复用旧 ABI。
+standalone C++ packed 输出根的手算反向与能力统计已接入并通过。
 
-## 当前增量保留的失败
+开发 `tide-core5-state-vjp-dev-20261027` 已终态 failed/exit 1：**337 passed / 6 failed**。
+冻结树 `96d7b2d8c253ffbeab9b6896e42c233013ce2c5c`，原日志/源码/status 保留 artifacts/jobs/core5-state-vjp-dev。
+FP32 affine Read0 score.bias 差 7.63e-6；SSD Read−/+ input.2 差 2.13e-6 / 3.87e-6；
+Python/native 各三项。完整前向/新增连接测试已通过。独立诊断
+`.local/diagnose-state-vjp.py` / 该 job 的 diagnosis.txt 定位：共享归一化先合并 cotangent 再
+做一次 RMS VJP，改变 scalar 各分支先反传再相加的浮点顺序。分开 norm 的变体全通过。
+正式 Python/C++ 保留写入、GDN 控制、p_v 摘要的各批量归一化分支；
+未改数学/数值前向、容差、dtype 或裁剪梯度。修正后 Python 定向 **56 项通过**。
 
-- packed-dev，树 9897132ce8ff886bb885790f04401d3ef242a9d4：构建 failed/exit 1。
-  核心编译通过，两个 standalone 测试遗漏 NoGradGuard 头文件；已补显式 include，pytest 未运行。
-- packed-build，树 9b40c97226d71b0d8033342cd19c10c60d48af83：**363 passed / 5 failed**，exit 1。
-  FP32 SSD Read−/+ 的 Python/native input.2 根差 2.13e-6 / 4.83e-6；PDG Read− key.out_bias 差 1.91e-6。
-  `.local/diagnose-packed-order.py` 与该 job 的 order-diagnosis.txt 定位为行批投影的浮点顺序；
-  列批和单行列向量变体通过 SSD 两快照及 PDG 全 cut，行批/bmm 保留失败。
-  正式 Python/C++ 统一权重矩阵乘输入列批；未改公式、输入、容差、dtype 或裁剪梯度。
-
-原 status/source/log 保留在 `artifacts/jobs/core5-<job>/`，新通过不覆盖旧失败。
+修正开发 `tide-core5-state-vjp-norm-20261027` 已终态 inactive/success、exit 0：
+**81 passed / 0 failed / 0 skipped**，冻结树 d3282cab7f596a296434d1d046c79cabffa23ac3。
+launcher `.local/core5-state-vjp-norm.sh`，记录 artifacts/jobs/core5-state-vjp-norm；
+新 weighted_state_vjp/weighted_packed、六个原失败、standalone 全部通过。
+当前无 live job；实现/测试/契约同增量提交后，以固定提交运行不可变相关资格。
+下一动作：冻结到 task-owned worktree 并核验干净只读，通过 develop.py --reuse-build 校验构建，
+新 state-vjp-qualify job 沿 state-vjp-dev 的完整八入口运行，终态后独立记录证据并推送。
+契约 weighted-state-vjp.md；整段/每切点/optimizer 与旧 State VJP 回归需要在资格中保持。
+再推进 Aggregate/Read/Full、mixed/resident、standalone 完整训练与有限 profiling。
+总体任务尚未完成；无用户修改，持续推进。
 
 ## 环境与保留事项
 

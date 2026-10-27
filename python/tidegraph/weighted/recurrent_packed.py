@@ -41,7 +41,9 @@ def packed(memory, old, batch):
     else:
         from .gated_packed import coefficients
         a, b, matrix, caches = coefficients(memory, plan, old, x, delta)
-    z = plan.weight[:, None]*project(x, memory.summary)
+    # p_v is a distinct scalar-formula branch. Sharing its normalization with
+    # the matrix update changes FP32 adjoint summation before the RMS VJP.
+    z = plan.weight[:, None]*project(norm(plan.content, c.epsilon), memory.summary)
     slots = [None]*len(plan.ids)
     for length, owners in plan.groups.items():
         ids = plan.group_index(length, owners)

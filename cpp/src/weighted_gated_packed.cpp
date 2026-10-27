@@ -18,7 +18,7 @@ std::pair<Tensor,std::vector<std::map<std::string,Tensor>>> convolve(const NodeW
     auto now=plan.times.slice(0,a,b);
     auto times=at::cat({old[i].slots.at("conv_times"),now});
     auto values=at::cat({old[i].slots.at("conv_values"),plan.receive.slice(0,a,b).unsqueeze(-1)*raw.slice(0,a,b)});
-    if(c.conv_size>1){
+    if(c.conv_size>1&&(b-a>1||old[i].slots.at("conv_times").numel())){
       auto queries=now.unsqueeze(-1)-taps,indices=at::searchsorted(times,queries);
       auto safe=indices.clamp_max(times.numel()-1);
       auto present=(indices<times.numel())&(times.index({safe})==queries)&(queries>=0);
@@ -46,8 +46,9 @@ Coefficients gated_coefficients(const NodeWeights& w,const std::vector<State>& o
   if(c.memory_family=="gated_delta"){
     auto parts=projected.reshape({-1,c.heads,2*c.key_width+c.value_width}).split_with_sizes({c.key_width,c.key_width,c.value_width},-1);
     auto key=parts[1]/at::sqrt(c.qk_epsilon+parts[1].square().sum(-1,true)),value=parts[2];
-    dt=at::softplus(project(x,weight(w,"kernel.delta"))+weight(w,"kernel.delta_bias"));
-    auto gain=plan.receive.unsqueeze(-1)*at::sigmoid(project(x,weight(w,"kernel.write"))+weight(w,"kernel.write_bias"));
+    auto control=normalize(plan.input,c.epsilon);
+    dt=at::softplus(project(control,weight(w,"kernel.delta"))+weight(w,"kernel.delta_bias"));
+    auto gain=plan.receive.unsqueeze(-1)*at::sigmoid(project(control,weight(w,"kernel.write"))+weight(w,"kernel.write_bias"));
     auto retain=at::exp(-plan.receive.unsqueeze(-1)*weight(w,"kernel.log_rate").exp()*dt);
     auto a=at::eye(c.key_width,x.options())-gain.unsqueeze(-1).unsqueeze(-1)*key.unsqueeze(-1)*key.unsqueeze(-2);
     a=a*(decay*retain).unsqueeze(-1).unsqueeze(-1);

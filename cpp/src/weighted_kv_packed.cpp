@@ -9,7 +9,7 @@ PackedStates kv(const NodeWeights& w,const std::vector<State>& old,const PackedS
   auto matrix=weight(w,"kernel.base")+at::matmul(weight(w,"kernel.adapter_u"),weight(w,"kernel.adapter_v"));
   auto values=project(x,matrix);
   std::map<std::string,Tensor> entries{{"times",plan.times},{"keys",values.slice(1,0,c.width)},
-    {"values",values.slice(1,c.width)},{"summaries",project(x,weight(w,"kernel.summary"))},{"weights",plan.receive}};
+    {"values",values.slice(1,c.width)},{"summaries",project(normalize(plan.input,c.epsilon),weight(w,"kernel.summary"))},{"weights",plan.receive}};
   std::vector<std::map<std::string,Tensor>> slots;
   for(size_t i=0;i<old.size();++i){auto a=plan.offsets[i],b=plan.offsets[i+1];if(a==b)continue;
     std::map<std::string,Tensor> joined;
