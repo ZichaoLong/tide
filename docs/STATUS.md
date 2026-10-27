@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送6f709f8（来源低秩实现）；固定证据本次另提交。总体未完成，不在阶段提交后暂停。
+已推送cb0dd30（6f709f8来源低秩实现及固定证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -18,55 +18,32 @@ CPU完整训练与恢复从[证据索引](evidence/README.md)进入；定向资�
 
 ## 当前阶段与下一动作
 
-完整区域开发tree4a161a96505deac564ec9ccbf3c5bd4e18dbd551已冻结并通过，
-任务tide-core5-resident-region-dev-20261027.service inactive/exit0。
-artifacts/jobs/core5-resident-region-dev保存source.tar/source.tree/status.json/task.log/checks/result.json。
-CPU33项（8.54秒）；NPU14配置/140物理行112非空帧，全部字段/共享参数一阶VJP、
-独立原始版本反向、重放、int64支持/history、容量拒绝与失败不提交通过。
-实现为weighted_region{,_vjp}.cpp/.h及五个登记入口；契约docs/resident-weighted-region.md。
-参考RegionKernel使用完整静态成员并调用validate_weights，独立CPU公式另作数学锚点。
-resident worktree原HEAD161ccea、无活动reader，NPU build/resident-region-dev保留原开发manifest。
+6f709f8来源低秩链和固定证据cb0dd30均已推送。此前完整Region ce63aef、Aggregate92751c0、
+source6f709f8的CPU/NPU及CUDA三架构构建资格通过；[证据索引](evidence/README.md)保留各项精确范围。
+它们是局部常驻组件，不代表完整图。CUDA无真机证据。
 
-ce63aef已推送；固定源码Region资格CPU33（8.69秒）、NPU完整14配置、CUDA sm80/90/100构建均通过。
-core5-resident-region-{npu,cuda}-qualify任务均clean/exit0/inactive，详见evidence/core5-resident-region-20261027.json。
-NPU复用dev构建且组件/core/binary全摘要相符，原manifest保留；CUDA新构建，无GPU真机。
-resident worktree固定ce63aef、clean/read-only，无活动reader。
+canonical参数归约尚未提交；符号与契约见resident-weighted-parameters.md。
+开发任务tide-core5-resident-parameters-dev-20261027.service已failed/exit1，
+冻结tree18b4665df189605cfb6c62baa38097a0f18edc9f；CPU3项通过、NPU构建通过，
+设备检查在canonical None/zero optimizer counter断言失败。
+最小原因：检查fixture传入显式空参数group（语义是选择零参数），未将canonical owners加入group；
+主工作区已修正fixture，数值实现和容差未改。原source.tar/source.tree/status.json及检查日志保留在
+artifacts/jobs/core5-resident-parameters-dev；原失败不改passed。
 
-Aggregate开发tree8f9bc2bfbdcecb586bcad6d9343cabf8d5a113bd通过；
-tide-core5-resident-aggregate-dev-20261027.service inactive/exit0。CPU15（1.13秒），
-NPU两配置/24物理行20非空纤维，vendor RMS/源变换、全部载荷与源参数VJP、
-同类重复、零/负质量、四种补零隐藏宽度、None/零、原来源改写后的保存版本反向、容量/失败不提交通过。
-实际记录artifacts/jobs/core5-resident-aggregate-dev/{status.json,task.log,source.tree,checks/result.json}。
+新开发任务tide-core5-resident-parameters-dev2-20261027.service已inactive/exit0，
+冻结tree3f166d4cb17373dba759c64bccef6c2d8af208c4。CPU3项通过；NPU完整组合通过：
+跨bank/角色10个canonical owners、SGD/Nesterov与AdamW/AMSGrad各4步、全部参数/slots、
+None/零计数、新program恢复后两步精确状态、非有限事务与513维尾块溢出/容量拒绝。
+输出artifacts/jobs/core5-resident-parameters-dev2保存source.tar/source.tree/status.json/task.log/checks/result.json。
 
-92751c0已推送；Aggregate固定资格CPU15、NPU完整组件、CUDA sm80/90/100构建均通过。
-core5-resident-aggregate-{npu,cuda}-qualify均clean/exit0/inactive，详见evidence/core5-resident-aggregate-20261027.json。
-NPU复用dev构建且完整component/core/binary摘要相符；原manifest保留。CUDA无真机证据。
-resident worktree固定92751c0、clean/read-only，无活动reader。
+当前提交canonical参数归约实现、数学/CPU测试与局部训练check。随后固定此实现提交，
+启动core5-resident-parameters-{npu,cuda}-qualify；NPU复用完整component/core/binary摘要一致的
+build/resident-parameters-dev2并保留原manifest，CPU3项和设备完整组合重验；CUDA新三架构构建。
+资格完成后独立证据提交并推送，继续typed raw state与五记忆。所有旧失败仍保留。
 
-来源低秩链开发treea3ee2b018d751ef6374b50227cf242a3b9f0ba26通过，
-tide-core5-resident-source-dev-20261027.service inactive/exit0。CPU guard+Agg数学18项；
-NPU独立逐原子公式与autograd比较完整Agg、七种参数角色/四因子VJP、共享使用者、
-None/零、动态因子/长度重放、原来源改写后的保存版本反向、容量拒绝/失败不提交通过。
-原首次setup遗漏registry的3 errors（无数值检查）保留treebf59ee14及
-artifacts/reproducers/core5-source-guard-registration/{source.tar,result.json}，不改passed。
-
-6f709f8已推送；source固定资格CPU18（1.83秒）、NPU完整参数链、CUDA三架构构建均通过。
-core5-resident-source-{npu,cuda}-qualify均clean/exit0/inactive，详见evidence/core5-resident-source-20261027.json。
-NPU完整component/core/binary摘要相符，保留原dev manifest；CUDA无真机证据。
-resident worktree固定6f709f8、clean/read-only，无活动reader。
-
-主工作区未提交weighted_parameter_vjp.h/.cpp、weighted_parameter_reduce.h及登记入口，
-weighted_parameter_check.cpp、CMake/检查登记及CPU归约测试。CPU3项通过（1.25秒）。
-设备tile错误使用独立64-byte行避免多worker scalar cache-line冲突。
-静态别名由ParameterRegistry真实TensorImpl身份决定，动态独立roots在设备归约；
-输出接已有ParameterVjp/DeviceOptimizer/publish。standalone检查包含跨bank/角色别名、
-SGD/AdamW四步、全部参数/slots/None计数、新owner恢复后两步精确状态及失败不提交；尚未设备验证。
-下一步补契约并冻结新的parameters-dev任务，检查真实结果后提交/固定资格/证据。
-随后继续五记忆/Describe、在线图调度与完整生命周期。
-
-完整weighted resident仍缺参数owner集成、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
-retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
-后续有限profiling/性能选型与最终追溯不做全开关笛卡尔积；CUDA源码/构建/实机分账。
+完整weighted resident仍缺typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
+retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow
+或CPU捕获轨迹宣称完成。随后有限profiling/性能选型与最终追溯，不做全开关笛卡尔积。
 
 ## 未解除的严格限制
 
