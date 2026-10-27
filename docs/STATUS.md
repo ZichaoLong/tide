@@ -33,16 +33,20 @@
 零接收保留 raw tuple，时间差先 int64，完整正前缀可解码。语义 VJP 重放仍保留，
 批量反向/Read/Full/区域/设备推进尚未宣称完成。无用户修改。
 
-最后开发门禁 `tide-core5-packed-order-20261027` 已终态 inactive/success、exit 0：
-**57 passed / 0 failed / 0 skipped**，冻结树 `85b317aff9ab7f0f0962ba815b0d6941fc0ac15e`。
-包含全部新 packed、五个原失败及 standalone；结果在 artifacts/jobs/core5-packed-order。
-另外 Python 新边界和原失败定向 42 项通过；不累计为独立资格样本。
-当前无 live job；实现/测试/契约同增量提交后，冻结该提交到 task-owned worktree
-`artifacts/worktrees/core5-bootstrap`，核验干净/只读与匹配构建。
+精确联合记忆实现 `26dad7d22d61468823a986fb67608fc8df3b74e0` 已完成不可变资格：
+**378 passed / 0 failed / 0 skipped**，CPU FP64/FP32；[证据](evidence/core5-packed-20261027.md)。
+unit `tide-core5-packed-qualify-20261027` 已终态 inactive/success、exit 0；
+干净只读 worktree artifacts/worktrees/core5-bootstrap，源码 26dad7d。
+原始 job/status/log/source/development 在 artifacts/jobs/core5-packed-qualify；
+launcher `.local/core5-packed-qualify.sh`。实现与本证据提交后推送；原失败保留如下。
+当前无 live job。
 
-下一动作：沿 `.local/core5-packed-build.sh` 的相关完整门禁，使用新 packed-qualify job
-和 develop.py --reuse-build，固定实现源码运行不可变资格；终态后单独提交证据并推送。
-随后继续嵌套参数捕获、按正接收分组的批量 State VJP，处理空卷积缓存的梯度连接，
+主工作区已开始下一增量：嵌套参数捕获/别名保留、零/正接收分组的 State VJP，
+以及空卷积缓存的无连接分支。Python 新定向 13 项与 packed/legacy 回归 53 项通过；
+相关 C++ 能力/结构 key 已写但尚未构建。不属于 26dad7d 的资格；无用户修改。
+下一命令：资格终态并记录证据后，冻结新 VJP 树，构建并运行
+tests/test_weighted_state_vjp.py tests/test_weighted_packed.py tests/test_state_batched_vjp.py
+与相关带权执行/训练回归；新参数树/反向契约见 weighted-state-vjp.md。
 再推进 Read/Full、mixed/resident、standalone 完整训练与有限 profiling。
 总体任务尚未完成，持续推进。
 
