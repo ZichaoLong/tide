@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+- [Core-5 常驻完整数值阶段 VJP](core5-resident-weighted-stage-20261028.md)：ebe5471；NPU24配置/342根模式/完整前向回归，CUDA三架构与安装loader；跨阶段训练继续。
+
 - [Core-5 完整 weighted 常驻 CUDA 构建](core5-weighted-flow-cuda-20261028.md)：8eebcec；显式sm80/90/100、架构8项、DSO及安装loader通过；无GPU真机。
 
 - [Core-5 完整 weighted 常驻推理](core5-resident-weighted-flow-20261028.md)：5efce32；CPU50、standalone NPU21图/15配置、Python-owned23项、安装消费者与精确续接。训练另验收。

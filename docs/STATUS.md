@@ -8,55 +8,42 @@
 
 一般SettleGraph、SrcClass/int64、五记忆/逻辑时间短卷积、正式配置、packed/VJP/计算共享、
 CPU完整训练及恢复从[证据索引](evidence/README.md)进入；定向资格不认证未测矩阵。
-Python/native有限mixed、显式同步双NPU、half/master及standalone恢复范围见ROADMAP；严格失败保持。
-常驻各数值组件与显式局部VJP已有固定资格，完整图训练仍需组合。
+Python/native有限mixed、显式同步双NPU、half/master及standalone恢复见ROADMAP；严格失败保留。
+5efce32完整weighted resident FP32推理固定资格CPU50、standalone NPU21图/15配置/安装consumer、
+Python-owned23项通过；8eebcec显式CUDA80/90/100完整图构建与安装loader通过；无GPU真机。
+实现与这些证据已正常推送至2ae8496。
 
-最新实现5efce32471f3b407b25fa669706e56e88436a3e9：完整weighted resident单设备FP32推理。
-设备决定就绪、选择、队列、路由与推进；NPU局部阶段用TaskServices通知握手和串行共享workspace。
-五记忆、三Read快照、十种发送/正式配置、异宽来源、一般端口、完整记录与raw checkpoint；
-独立C++/Python入口、TideWeightedResident安装包及跨DSO配置识别已实现。
-固定资格evidence/core5-resident-weighted-flow-20261028.{md,json}：
-- CPU50项/22.91秒、kernel FP64/FP32、DSO双向检查通过。
-- standalone NPU metadata5项、services、21图/边界、15配置及安装消费者通过；物理3→npu:0。
-- Python-owned NPU23项/24.14秒（18公共图+5metadata）通过；物理1→npu:0。
-三个unit tide-core5-weighted-flow-{cpu,npu,python}-qualify-20261028.service均inactive/success/exit0。
-输出artifacts/jobs/core5-weighted-flow-{cpu,npu,python}-qualify/；status/task.log、build manifest、checks和consumer日志。
-源码均clean 5efce32；checkout分别artifacts/worktrees/core5-{bootstrap,sdk,device}，目前无活动reader。
-原开发manifest保留；复用编译源码/core/binary摘要核验，安装规则变化只重配置，不声称重编。
-开发dev1–8、Python dev1–3、安装末尾rg127及CPU fixture缺字段均保留原失败/取消终态，精确tree见本次机器报告。
+最新实现ebe547115e8a70347c42ae420d669f1c6ea65fba：完整数值阶段VJP，尚未推送。
+Full→Describe→Mem→Upd→Aggregate，三种Read快照、独立raw/描述/Content/control/Full根，
+物理输入和来源低秩链、角色切片与canonical共享参数。阶段不等于完整retained图训练。
+固定资格已通过，证据evidence/core5-resident-weighted-stage-20261028.{md,json}待单独提交：
+- NPU unit tide-core5-weighted-stage-npu-qualify-20261028.service inactive/success/exit0；
+  clean ebe5471，metadata5项/.78秒、24配置/342根模式及非有限拒绝、完整forward21图/边界；物理3→npu:0。
+  输出artifacts/jobs/core5-weighted-stage-npu-qualify/：status/task.log、control-build、checks/result.json、queue-state。
+  复用dev5全部源码/component/core/binary摘要一致构建，原manifest保留，不声称重编。
+- CUDA unit tide-core5-weighted-stage-cuda-qualify-20261028.service inactive/success/exit0；
+  clean ebe5471，stage/flow/lib与安装consumer构建/loader通过；159个已配置CUDA命令仅80/90/100；无真机。
+  输出artifacts/jobs/core5-weighted-stage-cuda-qualify/：status/task.log、control-build、installed/result.json。
+共同component摘要17fa110fa6a8724e9631f5e9411028deba4de23efd403aa0e42b47b6e0199bd6。
+NPU600秒/queue180、CUDA1200秒，2workers/BLAS1/background.slice/Nice10。
+两checkout artifacts/worktrees/core5-{sdk,cuda}当前clean ebe5471、无活动reader。
+阶段dev1/2编译失败、dev4参考漏control独立根的失败保持；dev3/5通过，精确tree见机器报告。
 
 ## 当前工作与下一动作
 
-前向证据3d1bd20与实现5efce32已正常推送。
-CUDA开发core5-weighted-flow-cuda-dev2已inactive/success/exit0；冻结tree9f02feaa11168e4473270f30d8efbc2c2032ec2f。
-三架构所有CUDA编译命令集合精确80/90/100，完整图/services/config及安装consumer构建/loader通过；无真机。
-输出artifacts/jobs/core5-weighted-flow-cuda-dev2/；checkout artifacts/worktrees/core5-cuda目前无活动reader。
-旧cuda-dev tree78b86b672ce185f0341ae4cbbb2baaab1c00a5cf failed：Torch隐式加sm50，peer __nanosleep编译失败。
-CUDA修复8eebceccc8e209a6f5f08caf4d262a4e388d280b固定资格通过：架构8项/.12秒、DSO、完整图/services/config三架构构建与安装loader。
-证据evidence/core5-weighted-flow-cuda-20261028.{md,json}；unit tide-core5-weighted-flow-cuda-qualify-20261028.service inactive/success/exit0。
-源码clean 8eebcec，检查159个配置CUDA编译命令仅80/90/100；实际所选目标构建，无GPU真机。
-输出artifacts/jobs/core5-weighted-flow-cuda-qualify/；checkout artifacts/worktrees/core5-cuda无活动reader。
-实现和本次证据待正常推送；不重跑无关NPU数值。
-完整数值阶段VJP开发已写入主工作区：weighted_flow_{adjoint,node_vjp,region_vjp}与阶段检查，
-复用forward局部绑定、独立raw/Describe/Content/control/Full根、角色切片/canonical共享参数；尚未构建/实机验收。
-core5-weighted-stage-dev tree1e3813f8d1d9ca6fae998ee6ea565d55a6022b9d已failed/exit1：数值阶段库编译/链接完成，
-测试fixture缺ATen grad_mode头导致检查程序编译失败，未运行设备。原日志/归档保留。
-core5-weighted-stage-dev2 tree15474abc0dfedc82550730a7e09c34bb0bbf9471也已failed/exit1，compare测试源同样缺grad_mode头；未运行设备。
-已补显式include。dev2/partial-build.json保留成功构建库摘要和原失败；下次只重编测试，逐文件确认数值库源码未变。
-core5-weighted-stage-dev3 tree76e8528394709b85b7e46d63a1b87f96f5e6ca14已通过：15阶段配置各独立根/完整canonical参数与raw字段，
-完整forward 21图/边界回归通过；物理1→npu:0，unit inactive/success/exit0。
-core5-weighted-stage-dev4 tree5d4f5927a5e66d0758ee344e64bdb249591cfa4f已failed/exit1：基础15与qry/att/match/grouped三快照18配置通过，
-kv_node_gain content的all根输入mass梯度actual.4053/expected.2913。检查参考在all case丢掉非活动候选单独control根；
-已改按显式rootflags加入该根，不改候选数学/容差，原失败保留。
-core5-weighted-stage-dev5 tree771e16417f6d98f58ab02752150846ed1b38bbf6已passed：24配置全部独立根、参数/物理输入/raw字段、
-连接零及非有限根拒绝通过；物理1→npu:0。unit inactive/success/exit0，输出artifacts/jobs/core5-weighted-stage-dev5/。
-数值库和候选数学未改；compare按显式rootflags正确包括非活动候选control，修复测试见证不改变旧failed记录。
-当前无活动reader；SDK frozen tree771e164，CUDA checkout clean 8eebcec。主工作区数值阶段实现/契约/测试将提交。
-下一动作：提交完整阶段VJP，固定实现提交；NPU24配置+完整forward回归、metadata5，CUDA三架构构建/loader分别资格。
-NPU可严格复用dev5全部源码/库摘要一致构建；CUDA按新目标正常增量构建。资格完成后单独证据提交推送。
-继续完整retained VJP/optimizer和精确训练恢复：反向读取候选实际device journal，链接消息生产者/状态前驱，
-复用已验局部VJP并汇总canonical参数；不得CPU参考重放或主机逐事件推进冒充resident。
-随后FP16/peer、有限profiling与代表性完整成本选型、最终追溯；不做全部开关笛卡尔积。
+跨阶段消息反向路由未提交：weighted_reverse_route.{h,cpp}、AscendC kernel/math、C++设备检查、
+tests/test_resident_weighted_reverse_route.py以及CMake/组件检查注册。
+按实际int64发送time/source/sample寻找早期Full；重复物理边各贡献一次，left-pending/external按完整六元坐标独立根。
+连接位独立于数值零；身份/ancestry拒绝41、非有限/溢出拒绝37，sticky error使整个导数失效。
+CPU语义10项/1.22秒通过；C++wrapper/NPU/CUDA尚未构建运行，尚未接完整window reverse owner。
+先单独提交推送已完成阶段证据（不混入新路由实现），再冻结开发源码做路由设备检查。
+短检查：source /etc/profile.d/modules.sh；module purge；module load ascend/dev-workspace-9.1.0；
+source .local/venv-core5/bin/activate；TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+python -m pytest -q tests/test_resident_weighted_reverse_route.py。
+继续完整retained VJP/optimizer和精确训练恢复：扩展实际device journal的fibers/offsets，
+设备逆序读取局部tape/旧态并重算，链接消息生产者与状态前驱，汇总canonical参数；
+不CPU参考重放、不主机逐事件推进。初始绑定常量不能伪装为checkpoint叶子。
+随后FP16/peer、有限profiling和代表性完整成本选型、最终追溯；不做全开关笛卡尔积。
 
 ## 未解除的严格限制
 
