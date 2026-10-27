@@ -137,7 +137,7 @@ void half_storage(at::Device device){
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("weighted convolution requires explicit accelerator FP32/FP16");
-    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);run(device,1,args.dtype);run(device,3,args.dtype);snapshots(device,args.dtype);
+    args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);run(device,1,args.dtype);run(device,3,args.dtype);snapshots(device,args.dtype);
     if(args.dtype==at::kFloat)absent_tap_overflow(device);else half_storage(device);
     std::cout<<"weighted-convolution: passed tap_counts=2 replay_rows=20 shared_banks=3 saved_reverse=true raw_update_composition=true int64_taps=true failed_no_commit=true adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}
