@@ -47,6 +47,10 @@ def main():
     parser.add_argument("--implementation", choices=("python", "native"), required=True)
     parser.add_argument("--native-library")
     parser.add_argument("--placement", choices=("mixed-a", "mixed-b", "mixed-c"), required=True)
+    parser.add_argument("--dtype", choices=("float32", "float16"), default="float32")
+    parser.add_argument("--scoring-dtype", choices=("profile", "float32", "float64"), default="profile")
+    parser.add_argument("--optimizer", choices=("adamw", "sgd"), default="adamw")
+    parser.add_argument("--loss-scale", type=float, help="Static FP16 loss scale (default 16)")
     parser.add_argument("--case", default="heterogeneous-attention")
     parser.add_argument("--output-dir", required=True)
     args = parser.parse_args()
@@ -59,6 +63,13 @@ def main():
     from tidegraph.qualification_checks import coverage, plain, finite
     from weighted_device_cases import CASES, fixture, inputs_to
     from weighted_device_checks import runner, check_live
+    from weighted_device_precision import Precision
+    try:
+        precision = Precision(getattr(torch, args.dtype), args.optimizer, args.loss_scale)
+        if args.dtype == "float16" and args.scoring_dtype == "profile":
+            raise ValueError("float16 payload requires explicit --scoring-dtype float32 or float64")
+    except ValueError as error:
+        parser.error(str(error))
     cases = {c.name: c for c in CASES}
     if args.case not in cases:
         parser.error("unknown case")
@@ -70,34 +81,35 @@ def main():
     if device.type not in {"cuda", "npu"}:
         parser.error("profile requires an explicit accelerator")
     torch.set_num_threads(1); torch.set_num_interop_threads(1)
-    placement = ExecutionPlacement(preset=args.placement)
+    placement = ExecutionPlacement(preset=args.placement, scoring_dtype=args.scoring_dtype)
     out = Path(args.output_dir).resolve(); out.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
     record = dict(state="running", schema="tide-weighted-device-profile-v1", source=source, dirty=dirty,
                   argv=sys.argv[1:], case=asdict(cases[args.case]), implementation=args.implementation,
-                  runtime=manifest(device, reason, torch.float32), requested_placement=placement.to_dict(),
+                  runtime=manifest(device, reason, precision.dtype), requested_placement=placement.to_dict(),
+                  precision=precision.record(),
                   dispatch_environment={name: os.environ.get(name) for name in
                       ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")},
                   resolved_placement={k: str(v) for k, v in placement.resolve(device).items()},
                   warmup_steps=1, profiled_steps=1, tracking="project JSON and raw profiler artifacts",
                   question="actual weighted eager kernel placement, copies and host scalar decisions",
-                  scope="input preparation/upload, schedule/packing, forward/loss, backward/finite checks, AdamW and sync",
+                  scope="input preparation/upload, schedule/packing, forward/loss, backward/finite checks, optimizer and sync",
                   excluded="model construction, fixture generation, optimizer construction, warmup and compilation",
                   caveat="finite small graph; profile is not a throughput result or exhaustive absence-of-fallback proof")
     write_json(out/"result.json", record)
     try:
-        binding, cpu_inputs, stop = fixture(cases[args.case])
+        binding, cpu_inputs, stop = fixture(cases[args.case], precision.dtype)
         torch.save(dict(weights=binding.model.state_dict(), inputs=plain(cpu_inputs)), out/"fixture.pt")
         record["fixture_sha256"] = hashlib.sha256((out/"fixture.pt").read_bytes()).hexdigest()
         binding.model.to(device)
         execute = runner(binding, args.implementation, placement, args.native_library)
-        opt = torch.optim.AdamW(binding.model.parameters(), lr=.001)
+        opt = precision.make_optimizer(binding.model)
         def step():
             xs = inputs_to(cpu_inputs, device)
             opt.zero_grad(set_to_none=True)
             r = execute(Continuation(binding.graph.identity, 2), xs, stop, sealed_until=stop)
             loss = objective(r)
-            loss.backward()
+            precision.backward(opt, loss)
             checks = [torch.isfinite(p.grad).all() for p in binding.model.parameters() if p.grad is not None]
             if not torch.stack(checks).all():
                 raise FloatingPointError("nonfinite weighted gradient")

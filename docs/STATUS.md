@@ -2,7 +2,7 @@
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 graph-execution-foundation。
 用户授权持续实施、私有环境、有限实验、分阶段提交推送；不使用子代理，参考仓库只读。
-FP16实现8c8824f及独立CPU资格已完成；本次证据提交后推送并继续。总体未完成，下一阶段按 [ROADMAP](ROADMAP.md)。
+FP16实现8c8824f及独立CPU资格已完成；已推送6b7687b，继续设备入口。总体未完成，下一阶段按 [ROADMAP](ROADMAP.md)。
 
 ## 已完成与当前增量
 
@@ -43,10 +43,22 @@ output artifacts/jobs/core5-half-policy-dev，status.json/development.json/task.
 
 CPU固定资格 tide-core5-half-qualify-20261027 已inactive/success/exit0：
 [99passed/2strict-xfailed](evidence/core5-half-20261027.md)，未计为完整FP16矩阵。
-bootstrap干净8c8824f/tree691e16c9158100f702901d8b002ad3cd8d46cfc3，无reader；
-output artifacts/jobs/core5-half-qualify，manifest与日志已独立保存；device/sdk仍470ce06。
-1. 当前未提交设备入口草稿：显式dtype/optimizer/loss-scale、FP32 masters，恢复raw/master严格逐值；
-   tests/test_weighted_device_precision.py待开发门禁。冻结新快照后执行该测试入口，接着实际NPU half。
+bootstrap已冻结下一设备入口草稿，准备tide-core5-half-device-cpu-dev-20261027；
+launcher .local/core5-half-device-cpu-dev.sh，output artifacts/jobs/core5-half-device-cpu-dev，600秒，
+CPU入口9passed/exit0，unit已终止；复用校验C++摘要构建。
+output artifacts/jobs/core5-half-qualify，manifest与日志已独立保存。
+bootstrap/device当前草稿tree cfee98d5a7a931b2de66b88d793f219183d55bf4；
+device准备tide-core5-half-npu-build-dev-20261027，launcher .local/core5-half-npu-build-dev.sh，
+output artifacts/jobs/core5-half-npu-build-dev；2workers/1800秒，NPU Python栈构建，不需设备。
+sdk仍干净470ce06，无reader。
+设备快照cfee98d5上两个Python NPU FP16开发任务均passed/exit0（各1卡动态排队/1200秒）：
+core5-half-python-dev：KV/affine/delta/SSD显式AdamW；core5-half-python-sgd-dev：GDN/异构显式SGD。
+units为tide-上述名-20261027；launchers .local/上述名.sh；output artifacts/jobs/上述名。
+检查dtype=float16/scoring=float32/loss_scale16，四步更新、raw/master精确恢复与CPU handoff。
+这6个开发组合通过完整比较；不是固定源码资格。NPU构建终止前禁止更新device快照。
+1. 设备入口实现准备提交：显式dtype/optimizer/loss-scale、FP32 masters，恢复raw/master严格逐值；
+   CPU入口9项通过，新增profile CLI拒绝检查6项通过；完整12项固定资格下一步。
+   profile支持相同精度/optimizer，仍只回答算子归属。冻结新提交后CPU与NPU Python/native分验收。
 2. 扩展check_weighted_device.py显式dtype/scoring/master/optimizer；实际NPU half训练恢复，
    不用CPU或旧core-3 half资格代替。继续SDK、异步peer失败定位。
 3. standalone half masters/checkpoint、weighted resident、CUDA源码/构建/真机分账、有限选型性能与最终追溯仍待完成。
