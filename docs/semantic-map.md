@@ -15,7 +15,7 @@
 前向/精确恢复已有[固定源码资格](evidence/core5-weighted-node-placement-20261028.md)。
 放置后的窗口VJP、公共训练和optimizer发布已实现，独立资格状态见[STATUS](STATUS.md)。
 
-[Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；开发/资格状态另记，公共训练owner继续。
+[Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；其公共生命周期由[训练owner](resident-weighted-training.md)组合并独立验收。
 
 [Weighted实际窗口VJP](resident-weighted-window-vjp.md)组合设备journal逆序、消息与状态前驱及canonical参数累加；公共训练owner另验收。
 
@@ -111,7 +111,7 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [带权执行位置](weighted-placement.md)对应结构化 Read 临时快照、control/selection 分置、精度与独立转移 VJP。
 [带权设备检查](weighted-device-validation.md)对应实际 mixed 执行、精确 int64 排序、独立状态根、跨 owner 续接及候选 profile。
 [独立LibTorch FP32 master与typed checkpoint](native-master-optimizer.md)对应显式精度策略、具名owner和格式迁移。
-[带权 FP16 开发契约](weighted-precision.md)对应显式评分精度、归一化的一阶收缩与尚未解除的严格训练见证。
+[带权 eager FP16 契约](weighted-precision.md)对应显式评分精度、归一化的一阶收缩与尚未解除的严格训练见证。
 
 `θ` 是逻辑时间；`B` 是已完整且非空的同时间带来源纤维；`q` 是旧状态，
 `q̃` 是 Upd proposal，`q̄` 是选择后的 comparison，`h` 是本地内容。

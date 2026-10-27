@@ -22,7 +22,8 @@ tape拥有实际输入、owner、聚集参数、preactivation和hidden；后向�
 `append_weighted_head_vjp` 接收每行独立cotangent/存在标志，以批量矩阵乘求偏导，
 再按设备owner稳定汇总所有使用者，返回input梯度、四个bank梯度及row/owner bool连接。
 零cotangent仍连接；未被任何根使用的bank不连接。数值零不能作为root存在性替代。
-只声明一阶；尚未接宿主autograd、optimizer或retained图owner。
+本组件只声明显式一阶VJP；宿主loss根、optimizer和retained图生命周期由
+[公共训练owner](resident-weighted-training.md)组合，本组件本身不提供宿主autograd适配。
 tape下一次调用覆盖前须由训练owner保留；存原始来源的引用不等于已保存权重版本。
 
 独立前向/反向scratch准入，设备错误2为owner元数据、20为非有限值、23为反向溢出。

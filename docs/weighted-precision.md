@@ -1,8 +1,10 @@
-# 带权局部函数的 FP16 开发契约
+# 带权 eager 局部函数的 FP16 契约
 
 固定数学定义从 [带权绑定](weighted-message.md)、[循环](weighted-recurrent.md) 和
 [配置对应](semantic-map.md)进入；实际资格由 [STATUS](STATUS.md) 与证据索引给出。
-本增量仍在开发，下面的数值策略不表示完整 FP16 矩阵已通过。
+下面定义eager数值策略；[CPU资格](evidence/core5-half-20261027.md)与
+[有限NPU资格](evidence/core5-half-device-20261027.md)分别记录通过范围及严格失败。
+这些结果不表示全部FP16配置都通过，也不替代不同算术边界的[常驻精度契约](resident-weighted-training.md)。
 
 `bind(..., dtype=torch.float16)` 用同一 seeded FP32 参数量化初始化。
 payload、参数和浮点原始状态保持 FP16；时间、计数、KV 与卷积戳保持 int64。
@@ -36,6 +38,7 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 这两个 Python/native 案例在测试入口具名 `xfail(strict=True)`，不计作通过；原始失败日志保留。
 使用相同图、输入与容差的显式 SGD 配置单独检查四步与恢复。默认 AdamW 不被自动替换，
 实际 dtype、算术策略和 optimizer 都由调用者明确选择。
-不能靠放宽容差或修改输入抹掉这一见证。CPU Python/native 开发门禁已覆盖长逻辑时间、
-局部公式与四步训练恢复；固定源码资格另记。实际设备、standalone master 格式与
-resident 半精度仍须单独完成，不能从现有 core-3 FP16 证据推定。
+不能靠放宽容差或修改输入抹掉这一见证。上述CPU资格覆盖长逻辑时间、局部公式与四步训练恢复。
+设备范围见上列NPU报告；[standalone master/schema2](evidence/core5-native-master-20261027.md)与
+[resident半精度全图/训练](evidence/core5-resident-half-training-20261028.md)各有独立固定源码证据，
+不能从core-3或其他算术路径推定。常驻报告不解除本页eager GDN的严格失败。

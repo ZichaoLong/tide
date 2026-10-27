@@ -24,7 +24,8 @@ Read 字段、控制头和分配使用该描述量精度；最终 controls 转�
 再按既有 owner 规则传向各节点。NPU 的 Read/control/selection 不接受 FP64；
 NPU payload 配 CPU FP64 的全部评分路径可显式请求，实际设备资格单列。
 所有时间、逐条 KV/卷积戳始终 int64，不经 scoring dtype 转换。
-FP32/FP64 是当前带权 model 构建域；本增量不自动完成 FP16/master 支线。
+CPU FP32/FP64是参考构建域；FP16的显式评分/算术和master边界见
+[eager精度契约](weighted-precision.md)，其资格与本页原始FP32/FP64门禁分别记录。
 
 正支持在分配所在设备由实际数值结果确定；正值向 payload 转换若下溢为零，明确拒绝，
 不悄悄丢弃消息或伪造活动集合。分配器自身的数学支持/下溢契约仍见

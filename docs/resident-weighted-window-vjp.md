@@ -1,6 +1,6 @@
 # Weighted 实际窗口反向
 
-本页描述正在集成的内部后端接口 `WeightedWindowAdjoint`，实现/运行状态以STATUS为准。
+本页定义内部后端接口 `WeightedWindowAdjoint`；单设备固定源码资格见文末证据。
 公共retained token、optimizer发布和训练checkpoint属于独立[训练owner](resident-weighted-training.md)。
 单样本节点放置的[窗口反向协议](resident-weighted-placement.md#放置后的窗口反向)保持完整区域与局部owner分别计算，资格独立记录。
 数学固定到[局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)

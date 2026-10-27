@@ -40,12 +40,19 @@ resident约2.60–2.71s。完整计时含调度/packing/通信/反向/更新/同
 另补公共安装消费者`--node-placed`：peer手算恒等VJP、None optimizer及换放置恢复，
 同时检查新构造/恢复重载和实际放置。它不替代完整图/参数发布资格。
 SDK两个改动TU syntax-only、CPU静态/入口10项及diff检查通过；设备修复尚待验证。
+0155b0f已正常推送；本工作区仅STATUS与后续文档审计（eager FP16/局部组件过时进度措辞）未提交。
 
-## 37922eb公共训练资格仍在运行
+## 37922eb公共训练原资格终态
 
 冻结`artifacts/worktrees/core5-weighted-node-training`，源码`37922eb8ccd79f792042bf2aad308fd915f0f432`；
 jobs `core5-weighted-node-training-{npu,python,cuda}-qualify`，units均`tide-JOB-20261028.service`。
-三项已确认独立background.slice/cgroup，目前running，不称设备训练通过。
+三项已确认独立background.slice/cgroup。CUDA已passed/exit0；Python已passed/exit0，30项通过。
+SDK已failed/exit1：FP32五配置20次更新/三窗与恢复通过，随后refusal检查失败；后续FP16、
+node-replicas与原回归未执行。两NPU物理3/13→逻辑0/1，设备约173秒。
+日志checks/weighted-node-training-float32.log。原终态保留，不标为整组通过。
+检查器把数值溢出的optimizer_finite_error=20误写为21（int64 step overflow）。
+独立FP64更新值转存储dtype的溢出前提已通过；当前修复用具名常量并增加实际结果诊断，
+尚须固定检查器重新核验实际拒绝码、无提交及后续续接。生产优化器不变。SDK改动TU syntax-only、修改文档本地链接和diff检查通过。
 只读launcher `.local/JOB.sh`/`JOB-workload.sh`；记录`artifacts/jobs/JOB/{status.json,task.log}`。
 SDK `checks/result.json`、CPU `cpu.xml`；Python `tests.xml`；CUDA build manifest/loader/help。
 SDK两dtype各5放置配置/20更新、各2个放置样本副本/6更新，以及原单设备/样本副本回归；
@@ -54,11 +61,18 @@ Python新增8项、原训练18项/peers4项。构建1500秒/2worker，queue180�
 
 ## 接着执行
 
-1. 提交本次修复与消费者，固定新checkout `artifacts/worktrees/core5-weighted-node-services`。
-2. 启动新jobs `core5-weighted-node-services-{npu,python,cuda}-qualify`；每项独立background.slice、Nice10，
+1. 本次修复与消费者已提交0155b0f，固定只读checkout `artifacts/worktrees/core5-weighted-node-services`。
+2. 已提交并核对live的新jobs `core5-weighted-node-services-{npu,python,cuda}-qualify`；每项独立background.slice、Nice10，
    两build workers、ATen/BLAS1。SDK只复验受影响node-window/node-training/node-replicas、两个单设备窗口和安装消费者；
    Python只复验8个放置训练用例；CUDA三架构构建及安装消费者。不要更改原失败或活动输入。
-3. 审阅37922eb与新修复终态，必要问题保留反例继续修复；分别提交固定源码证据。
+   已核对三份持久status source=0155b0f且dirty为空；目前running。构建1500秒、queue180秒，
+   SDK设备2400秒/安装180秒/job4320秒/unit4380秒；Python设备1200秒/job2940秒/unit3000秒；
+   CUDA安装180秒/job1800秒/unit1860秒。launcher .local/JOB.sh和JOB-workload.sh，只读。
+   结果artifacts/jobs/JOB/{status.json,task.log}，SDK checks/result.json、single-window.json、consumer-checks.json，
+   两standalone的client/result.json与loader，Python tests.xml。
+3. 固定检查器修复后，链接已核验运行库进行定向资格；不要修改0155b0f活动源码/检查器。
+   该资格含同一硬编码误判，预计需独立记录其终态并补齐未执行项目。
+   审阅所有原资格与修复终态，保留失败；分别提交固定源码证据。
 4. 最终更新能力/追溯入口、STATUS/ROADMAP并推送；CUDA真机独立待验，不等待硬件。
 
 精确复现命令由冻结workload脚本、build/运行JSON及最终证据记录；当前不恢复旧队列。
