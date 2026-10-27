@@ -31,6 +31,8 @@ def main():
     parser.add_argument("--ascendc-soc", help="Explicit target SoC; enable Ascend C closure")
     parser.add_argument("--runtime", choices=("standalone", "python"), help="CUDA runtime owner; NPU must match its core")
     parser.add_argument("--cuda-architectures", help="Explicit CMake CUDA architecture list, CC80 or newer")
+    parser.add_argument("--python-component", choices=("all", "weighted"), default="all",
+                        help="Build an independent weighted Python adapter or all Python consumers")
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
                         help="Build only named standalone components; omitted builds the complete backend")
     args = parser.parse_args()
@@ -47,9 +49,11 @@ def main():
         parser.error("CUDA requires --cuda-architectures and no Ascend SoC")
     if backend == "npu" and runtime == "python" and not args.ascendc_soc:
         parser.error("Python resident backend requires --ascendc-soc")
+    if args.python_component != "all" and runtime != "python":
+        parser.error("--python-component requires the Python runtime owner")
     if args.checks and runtime != "standalone":
         parser.error("component subsets require a standalone runtime owner")
-    if backend == "npu" and args.checks and not args.ascendc_soc and any(check not in {"peer", "control", "failure", "numerical", "queue"} for check in args.checks):
+    if backend == "npu" and args.checks and not args.ascendc_soc and any(check not in {"peer", "services", "control", "failure", "numerical", "queue"} for check in args.checks):
         parser.error("selected component requires --ascendc-soc")
     if manifest["cpp_source_sha256"] != source_hash(root):
         parser.error("core source differs; rebuild the native core")
@@ -63,6 +67,8 @@ def main():
     package, = prefix.glob("lib*/cmake/TideGraph")
     prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
     targets = [CHECKS[check][0] for check in dict.fromkeys(args.checks or [])]
+    if args.python_component == "weighted":
+        targets = ["_tide_weighted_resident"]
     subprocess.run(["cmake", "-S", str(root / "tools/device_online"), "-B", str(build),
                     # CANN9 legacy host-stub extraction uses literal object
                     # paths; Ninja emits /./ paths inconsistent with its JSON.
@@ -89,13 +95,17 @@ def main():
                             *(["-R", "^(" + "|".join(tests) + ")$"] if targets else [])],
                            check=True, timeout=120)
     binaries, loaders = {}, {}
-    names = [CHECKS[c][0] for c in ("peer", "sequence", "control", "failure", "numerical", "queue")]
+    names = [CHECKS[c][0] for c in ("peer", "sequence", "services", "control", "failure", "numerical", "queue")]
     if args.ascendc_soc or backend == "cuda":
         names = list(dict.fromkeys(name for name, _ in CHECKS.values())) + ["libtide-resident.so"]
     if runtime == "python":
-        names = ["_tide_resident.so", "libtide-resident.so"]
+        names = ["_tide_resident.so", "libtide-resident.so", "_tide_weighted_resident.so"]
     if targets:
-        names = targets
+        names = ["_tide_weighted_resident.so"] if args.python_component == "weighted" else targets
+    # A selected weighted graph check and the Python adapter both load this
+    # independent public library. Its identity is part of the build evidence.
+    if (build / "libtide-weighted-flow.so").is_file():
+        names.append("libtide-weighted-flow.so")
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)
@@ -119,7 +129,7 @@ def main():
         cuda_architectures=args.cuda_architectures,
         ascendc_soc=args.ascendc_soc,
         binary_sha256=binaries, loader_sha256=loaders,
-        requested_checks=args.checks,
+        requested_checks=args.checks, python_component=args.python_component if runtime == "python" else None,
         scope="build/loader/help only; device control check required separately"))
 
 

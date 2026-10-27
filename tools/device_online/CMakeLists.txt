@@ -58,7 +58,17 @@ target_compile_features(tide-device-control PUBLIC cxx_std_17)
 set_target_properties(tide-device-control PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(tide-device-peer PUBLIC tide-device-control)
 set_target_properties(tide-device-peer PROPERTIES POSITION_INDEPENDENT_CODE ON)
+if(TIDE_DEVICE_BACKEND STREQUAL "CUDA")
+  add_library(tide-device-services STATIC cuda/task_services.cpp)
+else()
+  add_library(tide-device-services STATIC cann_task_services.cpp)
+endif()
+set_target_properties(tide-device-services PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(tide-device-services PUBLIC tide-device-peer)
+
 if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+  add_executable(tide-device-services-check task_services_check.cpp)
+  target_link_libraries(tide-device-services-check PRIVATE tide-device-services)
   add_executable(tide-device-peer-check peer_check.cpp)
   target_link_libraries(tide-device-peer-check PRIVATE tide-device-peer)
   add_executable(tide-device-sequence-check sequence_check.cpp)
@@ -181,6 +191,20 @@ if(TIDE_DEVICE_KERNELS)
   add_library(tide-weighted-describe STATIC weighted_describe.cpp weighted_describe_shapes.cpp)
   set_target_properties(tide-weighted-describe PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-describe PUBLIC tide-weighted-row tide::tidegraph)
+  add_library(tide-weighted-flow SHARED weighted_flow.cpp weighted_flow_budget.cpp weighted_flow_copy.cpp weighted_flow_local.cpp weighted_flow_state.cpp
+    weighted_flow_source.cpp weighted_flow_parameters.cpp weighted_flow_describe_parameters.cpp
+    weighted_flow_packing.cpp weighted_flow_records.cpp)
+  set_target_properties(tide-weighted-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-weighted-flow PRIVATE tide-weighted-recurrent tide-weighted-describe tide-weighted-region
+    tide-weighted-kv-update tide-weighted-kv-sum tide-weighted-kv-query tide-weighted-kv-full tide-weighted-source
+    tide-device-ready tide-device-queue tide-device-broadcast tide-device-services
+    tide_weighted_node_pack_kernel tide_weighted_region_pack_kernel tide_weighted_owner_adopt_kernel)
+  target_link_libraries(tide-weighted-flow PUBLIC tide::tidegraph)
+  target_link_options(tide-weighted-flow PRIVATE -Wl,-z,defs)
+  target_include_directories(tide-weighted-flow PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+  set_target_properties(tide-weighted-flow PROPERTIES EXPORT_NAME weighted_resident)
+  add_library(tide::weighted_resident ALIAS tide-weighted-flow)
   add_library(tide-weighted-pool STATIC weighted_pool.cpp)
   set_target_properties(tide-weighted-pool PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-pool PUBLIC tide-device-control tide_weighted_source_guard_kernel
@@ -212,6 +236,12 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-describe-check weighted_describe_check.cpp weighted_describe_formula.cpp)
     target_compile_options(tide-weighted-describe-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-describe-check PRIVATE tide-weighted-describe)
+    add_executable(tide-weighted-flow-config-check weighted_flow_config_check.cpp weighted_flow_fixture.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-flow-config-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-flow-config-check PRIVATE tide-weighted-flow tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-flow-check weighted_flow_check.cpp weighted_flow_boundary_check.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-flow-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-flow-check PRIVATE tide-weighted-flow tide-device-test-compare tide::runtime)
     add_executable(tide-weighted-pool-check weighted_pool_check.cpp)
     target_compile_options(tide-weighted-pool-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-pool-check PRIVATE tide-weighted-pool tide::tidegraph)
@@ -487,6 +517,9 @@ if(TIDE_DEVICE_KERNELS)
     find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
     Python3_add_library(_tide_resident MODULE resident_bindings.cpp training_bindings.cpp)
     target_link_libraries(_tide_resident PRIVATE tide-resident ${TORCH_PYTHON_LIBRARY})
+    Python3_add_library(_tide_weighted_resident MODULE weighted_flow_bindings.cpp)
+    target_link_libraries(_tide_weighted_resident PRIVATE tide-weighted-flow ${TORCH_PYTHON_LIBRARY})
+    set_target_properties(_tide_weighted_resident PROPERTIES BUILD_RPATH "$ORIGIN")
     set_target_properties(_tide_resident PROPERTIES BUILD_RPATH "$ORIGIN")
   else()
     add_library(tide-resident-test-support STATIC training_test.cpp training_trajectory.cpp training_compare.cpp training_numerics.cpp)
@@ -538,14 +571,27 @@ if(TIDE_DEVICE_KERNELS)
       INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideResident)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/TideResidentConfig.cmake"
       DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideResident)
+    # The weighted public consumer can install its selected build without
+    # requiring the unrelated legacy resident shared library to be built.
+    install(TARGETS tide-weighted-flow EXPORT TideWeightedResidentTargets
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT weighted)
+    install(FILES include/tide/resident_weighted.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tide COMPONENT weighted)
+    install(EXPORT TideWeightedResidentTargets NAMESPACE tide::
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted)
+    configure_package_config_file(TideWeightedResidentConfig.cmake.in
+      "${CMAKE_CURRENT_BINARY_DIR}/TideWeightedResidentConfig.cmake"
+      INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/TideWeightedResidentConfig.cmake"
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted)
   endif()
 endif()
 
 # One aggregate target prevents GNU Make's per-top-level-target recursion from
 # repeatedly executing the vendor's ExternalProject configure/build steps.
 if(TIDE_DEVICE_CHECK_TARGETS)
-  if(NOT TIDE_DEVICE_RUNTIME STREQUAL "standalone")
-    message(FATAL_ERROR "Selected checks require a standalone runtime owner")
+  if(NOT TIDE_DEVICE_RUNTIME STREQUAL "standalone" AND NOT
+      (TIDE_DEVICE_RUNTIME STREQUAL "python" AND TIDE_DEVICE_CHECK_TARGETS STREQUAL "_tide_weighted_resident"))
+    message(FATAL_ERROR "Selected checks require standalone; the weighted Python component requires its own runtime")
   endif()
   foreach(check IN LISTS TIDE_DEVICE_CHECK_TARGETS)
     if(NOT TARGET "${check}")

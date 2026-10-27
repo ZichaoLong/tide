@@ -93,6 +93,13 @@ These extensions do not automatically implement weighted memory or region formul
 
 ## Weighted KV binding
 
+The [complete weighted resident flow](resident-weighted-flow.md) composes the
+five memory families with online device readiness, regional selection, physical
+edge routing and exact raw continuation. Its FP32 inference owner has a separate
+qualification from local adjoints, retained training, half precision and peers.
+NPU numerical stages use device notification handshakes and a serialized shared
+workspace; no host-selected event sequence supplies the window's progress.
+
 The [resident weighted Aggregate component](resident-weighted-aggregate.md)
 preserves every physical atom, actual positive mass and source-function banks.
 Its saved first-order VJP distinguishes absent fiber roots from connected zeros
