@@ -3,6 +3,8 @@
 [固定源码有限对照](evidence/core5-weighted-performance-20261028.md)记录24配置22通过、两项FP32反馈严格失败，
 分别给出CPU、Python/native NPU与standalone结果、profile及测量缺口。它不认证所有模型/规模或CUDA真机。
 
+[f72a6cc启动/内存补充](evidence/core5-weighted-observation-20261028.md)另验四个新进程和SDK allocator，不改写原24项测量。
+
 本页规定性能消费者的范围；运行结果从[证据索引](evidence/README.md)进入。
 测量不扩展数学资格，也不代表模型效果或所有规模的性能。遵守
 [执行契约 §6](execution-flows.md)，每配置默认一个独立进程，项目重型计时串行。
