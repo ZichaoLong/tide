@@ -1,0 +1,28 @@
+{
+  "source": "efb9d629438fb77582842bb133158be7f9f70afb",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted core-5 adoption/general SettleGraph CPU qualification",
+  "result": {
+    "passed": 247,
+    "failed": 0,
+    "skipped": 0
+  },
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "compiler": "c++ (GCC) 10.3.1",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "ae5b00fae434d22f827f41ce94aae50fc8a41dbdbbaabcbe17764a6f355ae0d5",
+  "tree_sha256": "cf254b5dffa7a344416cd667263868112c77c67c82a5ac5772ede121d0a42bd3",
+  "binary_sha256": {
+    "libtidegraph.a": "cbbc7073620e30ad391b7437ef210498a742a223ed04fa88c53a22cdc99d0579",
+    "_tide_native.so": "241fd45f6fc69133dbdff0709dc485333b5ec43b22aba9f161776abec4bb0452",
+    "tidegraph-settle-check": "9cce93fa3c881c19dd95d7d0273c42adcbba76c3600bcc40994db1e4df991fca"
+  },
+  "log_sha256": "45278d72f0edc0dc35bf8eb9efff9332be021071c3a56042688e49288b01679f",
+  "started": "2026-10-27T04:52:51.936390+00:00",
+  "finished": "2026-10-27T04:53:33.702625+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-settle-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-settle-qualify"
+}

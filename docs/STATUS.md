@@ -23,21 +23,20 @@
   包含 Python、Python/native 和独立 C++ 公式/梯度/续接/共享参数检查。
   固定开发树 `4ded7416941fc279b04fad43242b544ee3e6fc51`；详细源码归档、构建身份和
   终态见 `artifacts/jobs/core5-settle-dev/{status.json,development.json,task.log}`。
-- 当前无活动长任务。先提交已通过的一般 SettleGraph/来源采用，再在不可变提交上运行
-  `tide-core5-settle-qualify-20261027`。复用源码哈希一致的 native build，检查集合同开发任务。
-  输出预定为 `artifacts/jobs/core5-settle-qualify`，线程/时长预算不变。
+- 实现提交 `efb9d629438fb77582842bb133158be7f9f70afb` 的不可变资格已通过：247 项，
+  `tide-core5-settle-qualify-20261027` 终态成功、退出 0；证据
+  [core5-settle-20261027](evidence/core5-settle-20261027.md)。当前无活动长任务。
 - 当前未提交内容：本交接和随后 core-5 采用/表示实现。没有用户未保存修改。
 
 ## 下一动作
 
-1. 提交暂存区的一般 SettleGraph/采用实现；工作区其余结构化 Read/int64/字段打包/SrcClass
-   改动是下一增量，不能混进首阶段提交。它们的 16 项定向 Python 检查已通过，C++ 待构建。
-2. 在已停止的 `artifacts/worktrees/core5-bootstrap` 切到首阶段不可变提交，标记只读，
-   运行 `scripts/develop.py --reuse-build --output-dir <repo>/artifacts/jobs/core5-settle-qualify
-   --build-dir build/cpu` 加开发任务的同一测试列表，用独立 service/job 记录终态。
-3. 资格结束后单独提交证据并推送当前分支，继续实现；不要暂停等待授权。
-4. 接续带权公共表示与首个 KV 组合；全部候选、设备和性能范围见 ROADMAP，继续实施。
+1. 单独提交上述资格证据并推送授权分支。主工作区保留下一增量：具名 Read 字段、
+   int64 状态槽、独立根字段打包和 SrcClass；16 项 Python 定向检查已通过，C++ 尚未编译。
+2. 完成 `docs/structured-records.md` 与对应表，运行旧 Read/State/Checkpoint 相关回归；
+   冻结当前开发树，用新 `core5-structured-dev` job 在已停止的临时 worktree 增量构建。
+   长任务仍用固定源码、两个编译线程、ATen/BLAS 单线程与有限时长，启动前更新本交接。
+3. 通过后提交表示增量并资格；继续带权 Agg/KV/Describe/分配/Full 的首个完整组合，
+   不暂停等待授权。完整候选、设备、性能与剩余边界见 ROADMAP。
 
 环境：`module purge; module load ascend/dev-workspace-9.1.0; source .local/venv-core5/bin/activate`。
-没有数学歧义。GPU 真机独立待验；没有用户未保存修改。当前未提交：一般端口 Python/C++、
-19 份固定教材、来源校验与测试、语义/开发/路线图/本交接更新。
+没有数学歧义或用户未保存修改。参考仓库保持只读。GPU 真机独立待验。
