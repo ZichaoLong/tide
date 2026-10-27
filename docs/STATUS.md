@@ -20,26 +20,30 @@
 | 26dad7d | KV/循环实际 packed 与固定时间卷积 | 378 | [报告](evidence/core5-packed-20261027.md) |
 | 7a017bf | State 批量 VJP | 343 | [报告](evidence/core5-state-vjp-20261027.md) |
 | d90cfbc | Aggregate 数值/batched VJP、训练恢复 | 704 | [报告](evidence/core5-aggregate-20261027.md) |
+| 7b8b469 | Read/Full 数值批量、完整快照 | 377 | [报告](evidence/core5-query-20261027.md) |
 
-最后资格：tide-core5-aggregate-qualify-20261027，已终态 inactive/success、exit 0；
-干净只读 worktree artifacts/worktrees/core5-bootstrap，源码 d90cfbc99bc9af821d24dec11cc27cc59926b02e。
-输出 artifacts/jobs/core5-aggregate-qualify；launcher `.local/core5-aggregate-qualify.sh`。
-**704 passed / 0 failed / 0 skipped**。build/source/log hashes 已保存到独立证据；
-build-manifest 的旧 baseline 字段不代替 job 的干净固定提交。实现与证据 58cae5a 已推送当前分支。
+最后资格：tide-core5-query-qualify-20261027，已终态 inactive/success、exit 0；
+干净只读 worktree artifacts/worktrees/core5-bootstrap，源码 7b8b4696a5998ea7caa4fa55dfa9c81945f1ab17。
+输出 artifacts/jobs/core5-query-qualify；launcher `.local/core5-query-qualify.sh`。
+**377 passed / 0 failed / 0 skipped**。build/source/log hashes 与命令已单独记录；
+build manifest 已另存到该 job 目录，后续重建不覆盖旧资格身份。
 
 ## 当前任务与精确下一动作
 
-Read/Full 数值批量化尚未提交，契约 [weighted-query-batch](weighted-query-batch.md)。
-Python/C++ 都已接入 joint_batch；Read 实际批量 Mem，p_v/有限描述头保留逐行运算次序，
-Full 实际批量记忆混合/门/RMS/FFN。反向仍是显式语义 replay。
-当前没有活动长任务。最近开发 unit `tide-core5-query-heads-dev-20261027` 已终态
-failed/exit-code、exit 1，**397 passed / 1 failed**；冻结 tree e5fb6e079865e65e7c11ba1f38737cf6be0af309。
-源码/日志/状态在 artifacts/jobs/core5-query-heads-dev；launcher `.local/core5-query-heads-dev.sh`。
-失败是新 PDG 三样本 FP32/native case 3 的 evidence 独立根，最大差 1.33e-6。
-`.local/diagnose-query-native.py` 确认 native streaming/greedy unpacked/packed 均复现同一差异；
-Python GroupedEvidence 的行向量乘转置与 C++ 列向量投影次序不一致。
-主工作区已将该标量头对齐教材列向量次序，未改输入、dtype、容差或数学函数；
-失败用例、全部 query VJP 原型与评分公式的定向检查 **64 项通过**。
+Read/Full 数值增量及固定源码资格已完成，证据 [core5-query](evidence/core5-query-20261027.md)。
+当前没有活动长任务。主工作区正在接入 Read/Full 实际批量 VJP：Python/C++ 私有参数叶、
+逐行/逐字段根、形状与零分支分组、原始版本与一阶限制；Read 自动采用新能力，
+Full 显式 `full_autograd="batched"`，默认 replay 保留。
+Python 局部/公共路径 108 项通过；共享参数/重复输入与方向差分新增 10 项通过；
+HB/反馈 PDG 三步 AdamW、含 pending checkpoint 换 owner 恢复和保留图切点新增 6 项通过。
+C++ 尚未构建；新 standalone 手算 VJP 与 native probe 待运行，不能称为通过。
+
+最近数值开发 unit `tide-core5-query-heads-dev-20261027` 保持 failed/exit 1、**397/1**，
+tree e5fb6e079865e65e7c11ba1f38737cf6be0af309。新增三样本 PDG FP32/native case 3 的 evidence
+独立根差 1.33e-6；native streaming/greedy unpacked/packed 都复现，诊断见
+artifacts/diagnostics/core5-query-native-projection。Python GroupedEvidence 标量行向量投影
+现与教材/native 列向量顺序一致；未改输入、dtype、容差或数学函数。
+失败用例、query VJP 原型与评分公式的定向检查 **64 项通过**。
 
 原全头矩阵批开发 unit `tide-core5-query-dev-20261027` 仍为 failed/exit 1、355/1，
 源码 tree 4924c94415107900e688516d8e0f18f064e63f2b；其 FP32 evidence_weight 差异和原日志保留。
@@ -47,15 +51,12 @@ Python query VJP 原型首次 32/10 的失败源码 tree 20960d1b9477610558ab3ec
 及各投影诊断在 artifacts/diagnostics/core5-query-vjp-projection；headrows 修正检查 42/0，
 最近完整开发中的原型检查通过，但尚未接入公共路径。
 
-未提交源码：weighted/{query_batch,read_batch,full_batch}.py，独立 C++ weighted_query_*、
-weighted_describe_batch/weighted_full_batch，programs、scoring、CMake、standalone weighted 检查，
-test_weighted_read_batch 和语义索引/契约。query_vjp.py/tests 与 C++ query_vjp 草稿是下一增量，
-不纳入本次数值提交。全部修改为本任务所作，无用户遗留修改。
-
-数值增量相关开发检查已完成，当前提交固定实现；下一步冻结提交运行 qualification 并单独提交证据。
-随后接入 Read/Full 批量 VJP，继续区域批量 VJP、计算共享和正式参数绑定，
+未提交包含 query_vjp Python/C++、公共 Read/Full capability 接口与 policy、
+诊断 bindings、standalone query VJP、query 局部/训练测试、数值测试的能力统计更新。
+所有修改均为本任务所作。下一步完善契约并冻结草稿，启动有界开发构建/测试。
+通过后提交实现，固定源码再资格并单独提交证据；继续区域批量 VJP、正式参数绑定/计算共享，
 mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/graph continuation，
-有限 profiling 与最终追溯验收。CUDA 源码/构建/真机分别记账；无 GPU 不阻塞其余工作。
+有限 profiling 与最终追溯。CUDA 源码/构建/真机分别记账，无 GPU 不阻塞其他工作。
 
 ## 环境与保留事项
 
