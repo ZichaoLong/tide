@@ -119,3 +119,7 @@
 [常驻四循环 Upd/Mem/Full 固定源码资格](core5-resident-recurrent-20261028.md)：6e2ecb7，CPU/NPU完整组件及CUDA三架构构建。
 
 [已安装带权配置检查接口](core5-weighted-binding-20261028.md)：ce21a83，CPU Python/native 45 项与 C++ 两种 dtype。
+
+[常驻半精度KV读取](core5-resident-half-kv-read-20261028.md)：db85db6，CPU27、NPU sum/qry两dtype及CUDA三架构构建。
+
+[常驻半精度KV更新](core5-resident-half-kv-update-20261028.md)：69bf4f0，CPU26、NPU更新/raw两dtype及CUDA三架构构建。
