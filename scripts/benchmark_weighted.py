@@ -14,7 +14,6 @@ import json
 import os
 from pathlib import Path
 import platform
-import resource
 import statistics
 import sys
 import time
@@ -53,6 +52,7 @@ def main():
     from tidegraph.qualification_checks import finite
     from weighted_benchmark_cases import Workload, fixture, fingerprint
     from weighted_benchmark_runners import Eager, Resident, work
+    from weighted_benchmark_observation import initialize, Memory
     source, dirty = source_state(root)
     if dirty and not args.allow_dirty:
         parser.error("controlled measurement requires clean immutable source")
@@ -63,19 +63,16 @@ def main():
     torch.set_num_threads(1); torch.set_num_interop_threads(1)
     shape = dict(width=4, samples=1, positions=2) if args.size == "small" else dict(width=32, samples=4, positions=4)
     config = Workload(args.topology, args.family, seed=args.seed, **shape)
-    binding, inputs, span = fixture(config)
-    expected_binding, expected_inputs, _ = fixture(config)
-    fixture_hash = fingerprint(binding, inputs, config)
     out = Path(args.output_dir).resolve(); out.mkdir(parents=True, exist_ok=False)
     # NPU initialization itself can create temporary kernel_meta/, before a
     # profiler is entered. Keep all runtime scratch outside the source tree.
     os.chdir(out)
     now = lambda: datetime.now(timezone.utc).isoformat()
     record = dict(schema="tide-weighted-benchmark-v1", state="running", source=source, dirty=dirty,
-        started=now(), argv=sys.argv[1:], config=asdict(config), fixture_sha256=fixture_hash,
+        started=now(), argv=sys.argv[1:], config=asdict(config),
         requested_device=args.device, implementation=args.implementation,
         mode=args.mode, schedule=args.schedule, placement=args.placement,
-        workload_span=span, warmup_windows=1, measured_windows=1 if args.profile else args.steps,
+        warmup_windows=1, measured_windows=1 if args.profile else args.steps,
         kind="profile" if args.profile else "benchmark", tracking="project JSON; execution-flows §1",
         timing="complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
         excluded="fixture/model/owner/optimizer construction, warmup, validation, final parameter export, profiler parsing",
@@ -85,24 +82,34 @@ def main():
     write_json(out/"result.json", record)
     candidate = None
     try:
+        start = time.perf_counter()
         device, reason = resolve_device(args.device)
         if args.placement != "native" and device.type == "cpu":
             raise ValueError("mixed placement requires an accelerator")
         if args.implementation == "resident" and device.type == "cpu":
             raise ValueError("resident requires an accelerator")
+        initialize(args, device)
+        record["runtime_initialization_seconds"] = time.perf_counter()-start
         record["runtime"] = manifest(device, reason, torch.float32)
+        memory = Memory(device)
+        record["memory"] = memory.capture("runtime_ready", reset=True)
+        start = time.perf_counter()
+        binding, inputs, span = fixture(config)
+        expected_binding, expected_inputs, _ = fixture(config)
+        record["fixture_sha256"] = fingerprint(binding, inputs, config)
+        record["workload_span"] = span
+        record["fixture_preparation_seconds"] = time.perf_counter()-start
         write_json(out/"result.json", record)
         start = time.perf_counter()
         cls = Resident if args.implementation == "resident" else Eager
         candidate = cls(binding, inputs, span, config, args, device)
         synchronize(device); record["construction_seconds"] = time.perf_counter()-start
+        memory.capture("construction", reset=True)
         record["effective"] = candidate.manifest()
         actual = []; metrics = []
         start = time.perf_counter(); actual.append(candidate.step(0))
         record["warmup_seconds"] = time.perf_counter()-start
-        accelerator = getattr(torch, device.type) if device.type != "cpu" else None
-        if accelerator is not None:
-            accelerator.reset_peak_memory_stats(device)
+        memory.capture("warmup", reset=True)
         count = record["measured_windows"]
         for step in range(1, count+1):
             if args.profile:
@@ -133,11 +140,8 @@ def main():
                 elapsed = time.perf_counter()-start
                 event = dict(step=step, seconds=elapsed, loss=actual[-1][1], **work(actual[-1][0]))
                 metrics.append(event); write_json(out/"metrics.json", metrics)
+        memory.capture("measurement")
         parameters = candidate.parameters()
-        record["memory"] = dict(process_lifetime_peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024)
-        if accelerator is not None:
-            record["memory"].update(device_peak_allocated_bytes=accelerator.max_memory_allocated(device),
-                                    device_peak_reserved_bytes=accelerator.max_memory_reserved(device))
         # Only after the measurement: independent scalar CPU schedule and
         # full-record/optimizer check. It supplies no execution hints.
         reference = Eager(expected_binding, expected_inputs, span, config, args, torch.device("cpu"), reference=True)

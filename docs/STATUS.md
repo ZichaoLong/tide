@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 `graph-execution-foundation`。
-最近已推送a2fb5bd（样本副本及master复验证据）；本提交归档有限性能并修复公共导航中的过时采用/能力描述。
+最近已推送abc9952（有限性能与公共导航）；本次新增独立进程启动边界及Python/standalone分阶段allocator观测，等待固定源码补充资格。
 用户授权持续实施、有限实验、分阶段提交与正常推送；不用子代理。总体goal仍active，**未完成**。
 唯一待办 [ROADMAP](ROADMAP.md)，持续规则 [execution-flows](execution-flows.md)。参考仓库/公共环境只读。
 
@@ -49,6 +49,11 @@ launcher `.local/JOB.sh`；只读清单`.local/core5-weighted-performance-cases.
 CPU每项120秒/组1500秒，NPU每项180秒/组960秒/queue180秒；Nice10/background.slice、ATen/BLAS1。
 **当前没有活动任务。**
 
+新观测入口开发检查：`tests/test_weighted_process_observation.py` 5项通过；
+Python CPU小型KV/HB一warmup+一测量窗完整记录/SGD对照通过（dirty开发检查，不作资格）。
+输出`artifacts/weighted-observation-dev-20261028`。启动观测包括库校验/首个算子及同步，
+内存采样独立于计时；详见`docs/weighted-performance.md`。
+
 ## 新严格失败与必要保留输入
 
 FP32 PDG两项初次报maxabs4.11272e-6与2.71201e-6（shape33），不能作等价加速结论。
@@ -65,8 +70,10 @@ profile2数值通过但有周期结束警告；ceae7bf显式完成采集周期�
 
 ## 下一步
 
-1. 提交/推送本次性能证据和导航修正；随后继续工作，不暂停。
-2. 补小型runtime冷启动与standalone内存观测入口，使用新固定源码/新目录；不重复完整性能清单。
+1. 提交/推送本次观测实现，在新冻结checkout构建CPU/SDK消费者。
+2. 有限补充仅KV/HB small训练：CPU Python和standalone、NPU Python resident和standalone各一个新进程，
+   1warmup+1测量窗；外部启动观测、四阶段allocator与完整独立记录/参数对照。
+   两个构建worker、ATen/BLAS1、每运行180秒，NPU queue最多180秒；不重跑24项矩阵。
 3. 实施一般单样本跨卡节点/状态放置：保持完整区域选择/Attention、物理边与原始时钟、私有state，
    设备请求/响应及共同commit，完整VJP/别名归约/optimizer发布与精确恢复分别验收。
    可复用`peer_exchange`、`remote_state`、`task_services`，新weighted路径尚未写代码。
