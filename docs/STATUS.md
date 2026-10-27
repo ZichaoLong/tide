@@ -3,8 +3,8 @@
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
 用户授权持续实施、私有环境、有限实验、阶段提交及正常推送；无子代理，参考仓库只读。
 总体未完成，阶段提交后继续。[ROADMAP](ROADMAP.md)为唯一待办，[execution-flows](execution-flows.md)为持续契约。
-本阶段实现提交前基线HEAD/origin为`0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28`。
-当前全部源码修改均为本任务，已准备作为一个公共保留训练增量提交。
+实现`343429db76c091541ae24ef7b3792ce027e9bea2`已提交并正常推送；HEAD/origin一致。
+当前未提交包括本交接更新及 weighted raw FP16 组件开发；后者CPU16项通过，尚未编译/设备验证，不属于343429d固定资格。
 
 ## 已实现与开发检查
 
@@ -42,20 +42,31 @@
 
 ## 当前任务与精确下一步
 
-当前无活动任务，以上单位均已终态。先提交本阶段实现并正常推送，再冻结该提交分别资格：
-1. `git add -A`；`git commit`；`git push origin graph-execution-foundation`。
-2. `.local/freeze-weighted-{sdk,cuda,python}.py PRIOR_UNIT SOURCE_COMMIT` 写入冻结工作区；
-   helper不移动HEAD，须另核对detached身份并将HEAD更新到SOURCE_COMMIT，使git status干净。
-3. 独立background.slice服务运行 `.local/core5-weighted-training-{npu,cuda,python}-qualify.sh`；
-   output `artifacts/jobs/core5-weighted-training-{npu,cuda,python}-qualify/`，对应unit加`tide-`前缀及`-20261028.service`后缀。
-   NPU/CUDA原build复用，先验证同源码component、core和kernel二进制；NPU只重建host目标避免CANN重复preprocess。
-   helper `.local/qualify-weighted-training.py`；NPU workload/device脚本同前缀。
-   Python用全新 `build/weighted-training-python-qualify`，官方build脚本，实际训练+flow测试33项预期。
-   资格包括copy、saved-window、retained、training、flow/config及两安装消费者；CUDA仅构建/loader/help。
-   NPU资格附28项CPU门禁。1800秒/2worker/BLAS1/queue180秒/NPU1/background.slice/Nice10。
-4. 核对systemd/持久status及binary/loader、实际测试；证据单独提交并推送，继续FP16、peer与性能/最终追溯。
+开发任务均已终态；开始固定实现343429db76c091541ae24ef7b3792ce027e9bea2的三个独立资格任务。
+已冻结SDK/CUDA/Python checkout到该提交，detached HEAD及git status干净，三处component均为上列d3e07a3。
+- unit `tide-core5-weighted-training-npu-qualify-20261028.service`：checkout `artifacts/worktrees/core5-sdk`，
+  build `build/weighted-flow-dev`，output `artifacts/jobs/core5-weighted-training-npu-qualify/`。
+  launcher `.local/core5-weighted-training-npu-qualify{,-workload,-device}.sh`，helper `.local/qualify-weighted-training.py npu`。
+- unit `tide-core5-weighted-training-cuda-qualify-20261028.service`：checkout `artifacts/worktrees/core5-cuda`，
+  build `build/weighted-flow-cuda-dev`，output `artifacts/jobs/core5-weighted-training-cuda-qualify/`。
+  launcher `.local/core5-weighted-training-cuda-qualify{,-workload}.sh`，同helper cuda。
+- unit `tide-core5-weighted-training-python-qualify-20261028.service`：checkout `artifacts/worktrees/core5-device`，
+  全新build `build/weighted-training-python-qualify`，output `artifacts/jobs/core5-weighted-training-python-qualify/`。
+  launcher `.local/core5-weighted-training-python-qualify{,-workload}.sh`，官方build脚本；训练+flow测试预期33项。
+全部1800秒/2worker/BLAS1/background.slice/Nice10；NPU任务queue180秒/NPU1，禁止主机预跑。
+NPU资格：copy、saved-window、retained、training、flow/config、两安装消费者及28项CPU门禁。
+CUDA同目标的构建/loader/help，无真机。NPU复用经同源码/二进制核验的kernel archives，重建host检查；
+Python从全新build编译，避免旧CANN9.1增量preprocess缺陷。
+NPU/CUDA已终态passed，systemd inactive/success/0；Python仍running，尚无完整资格结果。
+全部终态后运行 `.local/record-weighted-training-evidence.py` 复核摘要并单独提交证据，不混入下列FP16源码。
 
-启动前更新本节的SOURCE_COMMIT、unit和实际状态。不要预建job.py输出目录，service stdout放.local。
+当前主区 FP16 开发：weighted_raw_update采用显式FP16 primal与FP32算术/保存值/一阶伴随；
+raw adopt新增dtype参数并按位提交；weighted-raw设备检查拟扩为两dtype，CPU新增提交位模式/错误拒绝。
+短测 `tests/test_resident_weighted_raw_update.py` 16通过/1.35秒；最初因全局dtype fixture重复参数化而收集失败，改为storage_dtype后通过。设备尚未运行。
+resident-weighted-state契约已同步；准备提交本组件后冻结到独立core5-raw-half checkout，使用新build/npu与build/cuda重编weighted-raw。
+kernel签名已改，不能复用旧host-only kernel archives路径。其后继续完整数值FP16/peer/性能与追溯。
+
+不要预建job.py输出目录，service stdout放.local。
 检查：`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；停止：`systemctl --user stop UNIT`。
 不可编辑活动任务读取的checkout；不要将running当passed。
 

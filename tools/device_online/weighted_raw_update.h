@@ -13,6 +13,9 @@ struct WeightedRawUpdateGradient {
 // proposal is in the raw floating layout: fixed post-update fields and one
 // unweighted entry at each ragged field's start. KV weights come from mass.
 // This layer owns raw retention/clock/cache; memory formulas supply fixed fields.
+// Primal storage/mass/proposal are all FP32 or all FP16. FP16 uses vendor casts
+// around FP32 raw arithmetic; actual saved operands and all adjoints are FP32.
+// Casts have the declared identity VJP, independent of rounding staircases.
 WeightedRawUpdateTape append_weighted_raw_update(DeviceProgram&,const WeightedRawLayout&,
   const WeightedRawState&,const at::Tensor& time,const at::Tensor& mass,const at::Tensor& present,
   const at::Tensor& proposal,const at::Tensor& error,int64_t budget=256*1024*1024);

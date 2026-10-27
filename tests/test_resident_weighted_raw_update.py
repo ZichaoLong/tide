@@ -16,6 +16,7 @@ def library(tmp_path_factory):
     directory=tmp_path_factory.mktemp("raw-update");source=directory/"adapter.cpp";output=directory/"adapter.so"
     source.write_text('''#define TIDE_KERNEL_CPU
 #include "weighted_raw_update_math.h"
+#include "tide_weighted_raw_adopt.cpp"
 using I=int64_t;
 extern "C" void forward(void** p,I rows,I width,I cap,I count,I kv,I conv,I horizon){
  tide_weighted_raw_device::plan((I*)p[0],(I*)p[1],(float*)p[2],(I*)p[3],(float*)p[4],(uint8_t*)p[5],
@@ -28,15 +29,38 @@ extern "C" void reverse(void** p,I rows,I width,I cap,I count,I conv){
    (uint8_t*)p[6],(float*)p[7],(uint8_t*)p[8],(float*)p[9],(float*)p[10],(float*)p[11],
    (uint8_t*)p[12],(uint8_t*)p[13],(uint8_t*)p[14],(int32_t*)p[15],rows,width,cap,count,conv);
 }
+extern "C" void adopt(void** p,I nf,I ni,I half){
+ tide_weighted_raw_adopt((GM_ADDR)p[0],(GM_ADDR)p[1],(GM_ADDR)p[2],(GM_ADDR)p[3],(GM_ADDR)p[4],nf,ni,half);
+}
 ''')
     subprocess.run(["g++","-std=c++17","-shared","-fPIC","-O2","-ffp-contract=off","-I"+str(root/"cuda"),
                     "-I"+str(root/"ascendc"),"-I"+str(Path(torch.__file__).parent/"include"),str(source),"-o",str(output)],check=True)
     lib=ctypes.CDLL(str(output));lib.forward.argtypes=[ctypes.POINTER(ctypes.c_void_p)]+[ctypes.c_int64]*7
     lib.reverse.argtypes=[ctypes.POINTER(ctypes.c_void_p)]+[ctypes.c_int64]*5
+    lib.adopt.argtypes=[ctypes.POINTER(ctypes.c_void_p)]+[ctypes.c_int64]*3
     return lib
 
 
 def pointers(ts):return (ctypes.c_void_p*len(ts))(*(t.data_ptr() for t in ts))
+
+
+@pytest.mark.parametrize("storage_dtype", [torch.float16, torch.float32])
+def test_raw_commit_preserves_bits_and_shared_refusal(library, storage_dtype):
+    # Signed zero, subnormal and padding NaN payload bits survive a commit.
+    patterns = ([0, 0x8000, 0x3c00, 0x7e42, 1] if storage_dtype == torch.float16
+                else [0, 0x80000000, 0x3f800000, 0x7fc00042, 1])
+    source = torch.tensor(patterns, dtype=torch.uint16 if storage_dtype == torch.float16 else torch.uint32).view(storage_dtype)
+    integer = torch.tensor([2**54+3, 2**63-1, -1], dtype=torch.int64)
+    target = torch.empty_like(source);target.view(torch.uint8).fill_(165)
+    metadata = torch.full_like(integer, -42);error = torch.ones(1, dtype=torch.int32)
+    before = target.clone()
+    args = pointers([source, integer, target, metadata, error])
+    library.adopt(args, source.numel(), integer.numel(), storage_dtype == torch.float16)
+    assert torch.equal(target.view(torch.uint8), before.view(torch.uint8))
+    assert metadata.eq(-42).all()
+    error.zero_();library.adopt(args, source.numel(), integer.numel(), storage_dtype == torch.float16)
+    assert torch.equal(target.view(torch.uint8), source.view(torch.uint8))
+    assert torch.equal(metadata, integer)
 
 
 @dataclass
