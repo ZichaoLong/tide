@@ -17,6 +17,8 @@ class SemanticValue : public torch::autograd::Function<SemanticValue> {
 Tensor semantic_value(const Tensor& packed, const Tensor& reference) {
   if (packed.sizes() != reference.sizes() || packed.scalar_type() != reference.scalar_type()
       || packed.device() != reference.device()) throw std::invalid_argument("batching contract changed tensor metadata");
+  if (!reference.is_floating_point() && !reference.is_complex() && !at::equal(packed, reference))
+    throw std::invalid_argument("batching contract changed integer metadata values");
   if (!reference.requires_grad()) return packed.detach();
   return SemanticValue::apply(reference, packed.detach());
 }

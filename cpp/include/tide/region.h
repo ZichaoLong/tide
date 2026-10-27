@@ -9,7 +9,11 @@ struct RegionLayout {
   c10::ArrayRef<Index> members;
   Index slot(Index node) const;
 };
-struct Candidate { Index node; Tensor descriptor; };
+struct Candidate {
+  Index node;
+  Tensor descriptor;
+  std::map<std::string, Tensor> fields;
+};
 struct RegionInput {
   const History& history;
   Index time;

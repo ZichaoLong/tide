@@ -24,6 +24,9 @@ class ReadProgram(torch.nn.Module):
     profile = "custom"
     joint_batch = False
     precision = "payload"
+    # Core-5 Describe: None keeps the scalar API; otherwise named float fields
+    # have independent shapes and gradient roots (docs/structured-records.md).
+    field_layout = None
 
     def descriptor_device(self, payload):
         return payload
@@ -110,12 +113,17 @@ def validate_program(weights, spec, *, native=False):
         raise ValueError("invalid Read precision policy")
 
 
-def validate(value, r, precision="payload", device=None, *, check_finite=True):
+def validate(value, r, precision="payload", device=None, *, check_finite=True, field_layout=None):
     ref = r.content.value
     choices = {"payload": ref.dtype, "float32": torch.float32, "float64": torch.float64}
     if precision not in choices:
         raise ValueError("invalid Read precision policy")
     dtype = choices[precision]
+    if field_layout is not None:
+        from .tensor_fields import validate_fields
+        validate_fields(value, field_layout, dtype, ref.device if device is None else device,
+                        check_finite=check_finite)
+        return
     if not isinstance(value, torch.Tensor) or (value.shape, value.dtype, value.device) != (
             torch.Size([]), dtype, ref.device if device is None else device):
         raise ValueError("Read returned incompatible scalar metadata")
@@ -126,7 +134,8 @@ def validate(value, r, precision="payload", device=None, *, check_finite=True):
 def finite_batch(values):
     groups = {}
     for value in values:
-        groups.setdefault((value.device, value.dtype), []).append(value)
+        for field in value.values() if isinstance(value, dict) else (value,):
+            groups.setdefault((field.device, field.dtype, field.shape), []).append(field)
     if any(not torch.isfinite(torch.stack(rows)).all() for rows in groups.values()):
         raise ValueError("nonfinite selector score from Read")
 
@@ -145,12 +154,15 @@ def evaluate(weights, requests, *, packed=False):
     if len(values) != len(requests):
         raise ValueError("Read batch changed event count")
     for value, r in zip(values, requests):
-        validate(value, r, program.precision, program.descriptor_device(r.content.value.device), check_finite=False)
+        validate(value, r, program.precision, program.descriptor_device(r.content.value.device),
+                 check_finite=False, field_layout=program.field_layout)
     finite_batch(values)
     if packed and torch.is_grad_enabled() and not batched:
         semantic = [program.step(weights, r) for r in requests]
         for value, r in zip(semantic, requests):
-            validate(value, r, program.precision, program.descriptor_device(r.content.value.device), check_finite=False)
+            validate(value, r, program.precision, program.descriptor_device(r.content.value.device),
+                     check_finite=False, field_layout=program.field_layout)
         finite_batch(semantic)
-        values = [autograd.value(a, b) for a, b in zip(values, semantic)]
+        values = [{k: autograd.value(a[k], b[k]) for k in a} if isinstance(a, dict)
+                  else autograd.value(a, b) for a, b in zip(values, semantic)]
     return values

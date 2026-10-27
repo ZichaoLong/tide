@@ -1,5 +1,6 @@
 #pragma once
 #include "tide/packed.h"
+#include <set>
 
 namespace tide {
 // A C++ client can provide its own immutable program in NodeWeights::kernel.
@@ -28,6 +29,8 @@ class StateKernel {
   // Builtins declare row-independent tensor dependencies for batched first-order VJP.
   virtual bool batched_autograd() const { return false; }
   virtual bool joint_sequence() const { return false; }
+  // Named non-differentiable metadata slots, always int64 on the state device.
+  virtual std::set<std::string> integer_slots() const { return {}; }
   // A configured nondefault packed policy uses the scalar oracle on causal
   // fallback/replay. Executors report that path instead of silently ignoring it.
   virtual bool scalar_policy_fallback() const { return false; }

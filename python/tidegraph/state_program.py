@@ -8,6 +8,8 @@ class StateProgram(torch.nn.Module):
     profile = "custom"
     sequence_contract = False
     joint_sequence = False
+    # Explicit nondifferentiable int64 slots; all other slots keep payload dtype.
+    integer_slots = frozenset()
 
     def initial(self, weights):
         return State(torch.zeros_like(weights.bias))

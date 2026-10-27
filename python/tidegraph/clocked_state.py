@@ -20,6 +20,10 @@ class ClockedState(StateProgram):
     def joint_sequence(self):
         return self.program.joint_sequence
 
+    @property
+    def integer_slots(self):
+        return getattr(self.program, "integer_slots", frozenset())
+
     def initial(self, weights):
         return self.clock.global_state(self.program.initial(weights))
 

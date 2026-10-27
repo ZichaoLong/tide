@@ -131,6 +131,8 @@ struct Event {
   Index batch, node, time;
   std::vector<Atom> fiber;
   Tensor content, proposal, descriptor, control, comparison, next, full;
+  // A structured Read leaves descriptor undefined and publishes named fields.
+  std::map<std::string, Tensor> descriptor_fields;
   State old, proposed_state, comparison_state, next_state;
   bool active = false;
   std::vector<SlotValue> emitted;

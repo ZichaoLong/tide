@@ -21,7 +21,7 @@ class RegionLayout:
 class RegionInput:
     history: History
     time: int
-    candidates: tuple[tuple[int, torch.Tensor], ...]
+    candidates: tuple[tuple[int, torch.Tensor | dict[str, torch.Tensor]], ...]
     layout: RegionLayout
     payload_dtype: torch.dtype
     payload_device: torch.device
