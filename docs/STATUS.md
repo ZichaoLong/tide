@@ -1,60 +1,49 @@
 # 当前交接 — 2026-10-27
 
-固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支
-`graph-execution-foundation`。持续实施、私有环境、有限实验、提交及推送均已授权；不使用子代理。
-历史等待授权/提交后暂停要求已被取代。完整未完成范围以 [ROADMAP](ROADMAP.md) 为准。
+固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 graph-execution-foundation。
+持续实施、私有环境、有限实验、提交和推送均已授权；不使用子代理。参考仓库只读。
+历史等待授权/提交后暂停已被取代。完整未完成范围以 [ROADMAP](ROADMAP.md) 为准。
 
-## 已完成的阶段
+## 阶段结果
 
-- 一般 SettleGraph `efb9d629438fb77582842bb133158be7f9f70afb`，固定源码 CPU 247 项通过；
-  [证据](evidence/core5-settle-20261027.md)，实现与证据 d0acd3c 已推送。
-- 具名 Read、int64 状态、typed packing、SrcClass `714d5f963b676d95a0ae763171a7d93806f183d3`，
-  固定源码 CPU 212 项通过；[证据](evidence/core5-structured-20261027.md)，实现与证据 cbdd3fd 已推送。
-- 带权 KV 首组合 `6fb467c25755a2b3f8938952f1b2ec1011cbcd11`，Python/native、FC/HB 正式绑定，
-  独立公式、完整记录/根、多步优化器和恢复，固定源码 CPU FP64/FP32 **129 项通过**。
-  [证据](evidence/core5-weighted-kv-20261027.md)单独提交；首组合不代表完整任务已完成。
+- 一般 SettleGraph `efb9d62`：247 项固定源码 CPU 定向资格，证据 d0acd3c，已推送。
+- 结构化 Read/int64/SrcClass `714d5f9`：212 项固定源码 CPU 定向资格，证据 cbdd3fd，已推送。
+- KV 首组合 `6fb467c`：129 项固定源码 CPU 定向资格，证据 572d4ff，均已推送。
+- affine/delta、完整 GDN/SSD、固定时间短卷积与异构绑定
+  `442e8b2701164eb7e4241da56c8a395a832ebeb0`：**544 passed / 0 failed / 0 skipped**，
+  CPU FP64/FP32；[契约](weighted-recurrent.md)、[证据](evidence/core5-recurrent-20261027.md)。
+  证据单独提交后与实现一起推送。首组合和循环阶段均不代表完整总体任务完成。
 
-## 当前任务和下一动作
+## 当前任务与下一动作
 
-KV 不可变资格已终止成功，129 项通过，证据提交 572d4ff 和实现 6fb467c 均已推送。
-原始记录 `artifacts/jobs/core5-weighted-kv-qualify`，固定源码 checkout 原为 6fb467c。
+循环不可变资格 `tide-core5-recurrent-qualify-20261027` 终态 inactive/success、退出 0。
+源码 442e8b2；`artifacts/worktrees/core5-bootstrap` 干净、只读。
+记录 `artifacts/jobs/core5-recurrent-qualify/{status.json,task.log,development.json}`。
+launcher `.local/core5-recurrent-qualify.sh`；background.slice、Nice=10、单线程、15 分钟上限。
+当前无 live job，确认终态后可复用该 task-owned worktree/build。
 
-当前增量已编写 affine/delta、固定逻辑时间短卷积、完整 GDN/SSD 的 Python/独立 C++、
-共同描述、异构绑定与 native 适配；契约 [weighted-recurrent](weighted-recurrent.md)。
-开发快照 `ea36b7521e8547e2f94666bb466abeeb47a27316` 的
-`tide-core5-recurrent-build-20261027` 已构建完成，测试 **212 passed / 1 failed**，终态 exit-code/1。
-失败是 SSD FP32 Read0 复合标量目标梯度：前向逐位相同，分组 output/state/pending VJP 逐位相同，
-比较器未固定字典字段归约顺序，目标相差 1.9e-6，平方目标的相消梯度差 7.15e-6。
-主工作区已修复比较目标的字段/owner排序，未改模型公式/容差；排列不变性和原失败短测 3 项通过。
-原失败源码、日志/清单位于 `artifacts/jobs/core5-recurrent-build`，保持失败。
-首轮 core5-recurrent-dev 的目录预创建 launcher 失败亦保留，未开始构建/测试。
+下一增量正在主工作区：Bernoulli、Shannon 和固定 alpha ent 正则的稳定响应/精确映射 VJP。
+未提交 `weighted/regularizers.py`、`weighted/entropy_allocation.py`、
+`tests/test_weighted_entropy_allocation.py`：35 项 Python 定向检查通过，含独立 80 位 Decimal 求解、
+VJP/方向差分、边界/温度和正支持下溢拒绝。C++ weighted_entropy.cpp/weighted_regularizers.h 与
+公共头声明已编写，尚未构建；尚未接入 RegionalConfig、native 和公共导出。
+这些文件不属于 442e8b2 或其资格。没有用户修改。
 
-修复后的冻结开发树 `2fa1fb1793753a17a4c4f7d98f07678d11c5774c` 已完成
-`tide-core5-recurrent-fix-20261027`：**536 passed，退出 0，inactive/success**。
-原始源码/日志/清单在 `artifacts/jobs/core5-recurrent-fix`。
-包含全部 weighted 测试、比较目标排列不变性、structured_records、semantics、
-isolated_gradients 和 CLI standalone C++ kernel。另补非对齐 TimedDAG 四族/no_grad 8 项短测通过。
-本增量合并范围为 544 项，尚未对该合并源码执行不可变资格。
-
-当前无 live job。此提交固定 affine/delta、GDN/SSD、固定时间短卷积与异构绑定，
-并修复验证目标的字段归约顺序；没有其他用户修改。
-下一动作：将 `artifacts/worktrees/core5-bootstrap` 更新为本实现提交的干净只读 checkout，
-运行 `.local/core5-recurrent-qualify.sh` 调用 job.py/develop.py --reuse-build 的相同定向范围，
-服务 `tide-core5-recurrent-qualify-20261027`、background.slice、Nice=10、15 分钟上限。
-输出 `artifacts/jobs/core5-recurrent-qualify/{status.json,task.log,development.json}`。
-先确认实际终态/退出码/计数和源码干净，再将证据单独提交并推送，继续后续阶段。
-查看 `systemctl --user show tide-core5-recurrent-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
-停止 `systemctl --user stop tide-core5-recurrent-qualify-20261027`。
-
-仍待完整正式分配/评分/证据/key、联合/packed/批量 VJP、mixed/resident、standalone 完整训练和有限选型。
+接下来完成正则公共/native/区域集成及独立 C++ 检查，再实现其余正式发送函数、match/att、
+grouped 证据/content key、参数共享。随后继续联合/packed/批量 VJP、mixed/resident、
+standalone 完整训练与有限 profiling。不要把明确拒绝未完成配置当作完成。
+短测命令（环境下）：`python -m pytest -q tests/test_weighted_entropy_allocation.py --dtype both`。
+长构建/资格继续固定输入、独立 background.slice 服务和有界资源；先更新本交接。
 
 ## 环境与保留事项
 
-实际路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`；/home/zlong 指向当前 home。
-现行规范 `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 与对应 /etc/modulefiles。
+实际路径 /mi/data2T/zlong/home/llm/graph-execution-foundation；/home/zlong 指向当前 home。
+规范 /opt/software/ascend-locks/dev-workspace-9.1.0/README.md 与对应 /etc/modulefiles。
 `source /etc/profile.d/modules.sh; module purge; module load ascend/dev-workspace-9.1.0; source .local/venv-core5/bin/activate`。
-Python 3.12.13、Torch 2.12.0+cpu、GCC 10.3.1、aarch64。未修改公共环境，无用户未保存修改。
-ObsidianVault/lh/fractal-latcarf 只读。CUDA 源码/构建/真机分别记录，GPU 真机待验不阻塞其余工作。
+Python 3.12.13、Torch 2.12.0+cpu、GCC 10.3.1、aarch64。未修改公共环境。
+CUDA 源码/构建/真机分别记录；无 GPU 不阻塞其他工作。
 
 旧 bootstrap 缺 Ninja、缺 TIDE_BUILD_DIR 的 24 项前置失败、structured-dev 的 210/2、
-weighted-kv-dev 的 C++ Options 构建失败均保留原记录；后续成功不改写旧失败。
+weighted-kv-dev 的 C++ Options 构建失败，以及 recurrent-dev launcher 失败保持原记录。
+recurrent-build 的 212/1 是比较目标字段归约顺序问题，修复后新开发和不可变资格分别通过；
+原因与修复详见循环证据。原失败日志/源码留在相应 artifacts/jobs 目录。

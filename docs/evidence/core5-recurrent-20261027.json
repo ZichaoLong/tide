@@ -1,0 +1,29 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "c0eb60d784e2696b987b9c023db06f9cf89ed51d39d19212d6ffc89c92fd36b4",
+  "source": "442e8b2701164eb7e4241da56c8a395a832ebeb0",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted weighted recurrent memory, fixed logical-time convolution and integration CPU qualification",
+  "result": {
+    "passed": 544,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "b7be629754836906405bd9349d23c4f4ef43ca1ae8d50143a946b699ff9900f4",
+  "binary_sha256": {
+    "libtidegraph.a": "db09fab4d1b6809de7e1e3c6af0a0bc8bb00c6a348883e12a553a82f6ba5b560",
+    "_tide_native.so": "debdab0c07ebf2b64b1023ec945854aa5da262fdfa08c614617c3114a19886a4",
+    "tidegraph-kernel-check": "03956beae0fee80ceace9657bf9ffad66cc1874f803fdf95d7ea8cfaf62aba76"
+  },
+  "log_sha256": "b8a54ab0c8ca0ee9704d7d45a26efae1a56edb6a754967b087afe99f8eea68f3",
+  "started": "2026-10-27T05:44:11.652534+00:00",
+  "finished": "2026-10-27T05:46:53.438140+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-recurrent-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-recurrent-qualify",
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
