@@ -1,0 +1,204 @@
+{
+  "component": "projection",
+  "scope": "FP32 shared linear projection with optional input RMS and optional bias, all private input and shared parameter first-order adjoints",
+  "observations": {
+    "configurations": 4,
+    "replay_rows": 48,
+    "parameter_banks": 3,
+    "independent_autograd_and_directional_derivative": true,
+    "all_input_parameter_vjps": true,
+    "none_zero": true,
+    "saved_source_versions": true,
+    "capacity_refusal": true,
+    "float_rtol": 1e-06,
+    "float_atol": 1e-07
+  },
+  "prior_failures": [],
+  "source": "2af401dc0b2912fcf09faac9ab1f31a43aec489a",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "2af401dc0b2912fcf09faac9ab1f31a43aec489a",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:42:30.419511+00:00",
+      "finished": "2026-10-27T14:42:49.601635+00:00",
+      "name": "core5-resident-projection-npu-qualify",
+      "unit": "tide-core5-resident-projection-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "d9075fff25db5e6390b8a6b7f31fb14e1d7bd5a2e576565042a07b53f8082817",
+      "device_cases": [
+        {
+          "check": "weighted-projection",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-projection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-projection-float32.log",
+          "log_sha256": "a4acf3c27db8fc691451b139d284d7153ee8764b9d3b1f97d129007540b5218e"
+        }
+      ],
+      "cpu_tests": 4,
+      "cpu_seconds": 1.03,
+      "queue": {
+        "elapsed_seconds": 15.173737615346909,
+        "job_id": "core5-resident-projection-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T14:42:49.586856+00:00"
+      },
+      "observations": {
+        "configurations": 4,
+        "replay_rows": 48,
+        "parameter_banks": 3,
+        "independent_autograd_and_directional_derivative": true,
+        "all_input_parameter_vjps": true,
+        "none_zero": true,
+        "saved_source_versions": true,
+        "capacity_refusal": true,
+        "float_rtol": 1e-06,
+        "float_atol": 1e-07
+      },
+      "build": {
+        "source": "f89bdfee0fd4ce57803e75bcd5f3924af448289e",
+        "component_sha256": "6f4982a93105f779e47af592ce743a13f3ff0c41f2beded26812643a670a89f2",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-projection-check": "b2d7d4a98c53aee054482436bed0f9a6b2edda36f4863aa1a4e26b74499d864b"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "2af401dc0b2912fcf09faac9ab1f31a43aec489a",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:42:30.420673+00:00",
+      "finished": "2026-10-27T14:43:45.252399+00:00",
+      "name": "core5-resident-projection-cuda-qualify",
+      "unit": "tide-core5-resident-projection-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "78deaa2ff21992b3902d4c16023c34a29b0fa2ca32c4b62bb329ea07434e6153",
+      "build": {
+        "source": "2af401dc0b2912fcf09faac9ab1f31a43aec489a",
+        "component_sha256": "6f4982a93105f779e47af592ce743a13f3ff0c41f2beded26812643a670a89f2",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-projection-check": "c9e5af7f140d06d60862e0d03e9d7a7db3df596943ba65565f46947f6cecca62"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-projection-dev",
+    "tree": "e741c50847de858517264e9546eb503e20d36cb4",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_projection_norm.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-projection",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-projection",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-projection",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
