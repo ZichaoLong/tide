@@ -101,6 +101,13 @@ effective matrix adjoints into bases and four saved low-rank factors. The [canon
 actual module partials to ParameterRegistry owners for device optimization and
 publication. Full graph and retained training owners remain separate layers.
 
+[Resident raw state](resident-weighted-state.md) packs named floating fields and
+int64 clocks/cache timestamps separately. Its explicit detached codec restores
+actual raw tuples, including expired entries retained by zero reception. The
+FP32 resident cache action and independent field VJP preserve original-time
+membership, saved inputs, None/zero connections and guarded adoption. Numerical
+memory formulas and full graph/checkpoint lifecycle require separate composition.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
