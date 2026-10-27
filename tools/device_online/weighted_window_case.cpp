@@ -10,7 +10,7 @@ void leaf(Continuation& q){for(auto& a:q.pending)leaf(a.value);for(auto& [key,s]
   for(auto& [name,x]:s.slots)if(x.scalar_type()==at::kFloat)leaf(x);}}
 }
 void run_window(at::Device device,Graph g,Model m,std::vector<External> xs,
-    const std::string& label,bool split,bool prefill){
+    const std::string& label,bool split,bool prefill,bool retained){
   auto mark=[&](const std::string& phase){std::cout<<"weighted-window phase "<<label<<' '<<phase<<'\n'<<std::flush;};
   for(auto& x:xs)leaf(x.value);
   Continuation q;q.identity=g.identity;q.batch_size=2;WeightedFlowLimits limits;limits.cache=16;limits.stages=32;limits.queue=64;
@@ -22,13 +22,26 @@ void run_window(at::Device device,Graph g,Model m,std::vector<External> xs,
   mark("budget-refusal");bool refused=false;
   try{WeightedWindowAdjoint too_small(forward,forward.reserved_bytes());}catch(const std::invalid_argument&){refused=true;}
   if(!refused)throw std::runtime_error("window VJP admitted roots without room beyond the forward owner");
-  mark("construct-adjoint");WeightedWindowAdjoint vjp(forward);
+  std::shared_ptr<WeightedWindowSnapshot> saved;
+  if(retained){
+    bool refused=false;try{WeightedWindowSnapshot::retain(forward,1);}catch(const std::invalid_argument&){refused=true;}
+    if(!refused)throw std::runtime_error("retained window omitted capacity preflight");
+    mark("retain");saved=WeightedWindowSnapshot::retain(forward,limits.tensor_bytes);
+    mark("overwrite-forward");forward.advance({},12);forward.close();saved->validate();
+  }
+  mark("construct-adjoint");auto owner=retained?std::make_unique<WeightedWindowAdjoint>(saved):std::make_unique<WeightedWindowAdjoint>(forward);auto& vjp=*owner;
   mark("decode-adjoint");const auto records=vjp.records();
   Result expected;{at::AutoGradMode enabled(true);Options options;options.packed=false;expected=Greedy(g,m,options).run(q,xs,10,10);}
   tide_bench::compare(actual,expected,true,at::kFloat);
   for(const std::string mode:{"none","full","content","control","describe","old","proposal","final","messages","fibers","pending","all"}){
     mark("seed-"+mode);seed(vjp,records,actual,mode);mark("run-"+mode);vjp.run();mark("verify-"+mode);
     verify(g,m,q,xs,expected,vjp,records,mode);}
+  if(retained){
+    // Even an in-place write of the same exact integer is a saved-version edit.
+    saved->stages.add_(0);bool refused=false;try{vjp.run();}catch(const std::logic_error&){refused=true;}
+    if(!refused)throw std::runtime_error("modified saved window metadata accepted");
+    vjp.close();std::cout<<"weighted-retained case "<<label<<" passed modes=12 closed_forward=true mutation_refused=true\n"<<std::flush;return;
+  }
   mark("close-adjoint");vjp.close();
   // An empty new window is an identity on exact checkpoint leaves and pending.
   mark("empty-advance");q=forward.checkpoint();leaf(q);auto empty=forward.advance({},10);mark("empty-adjoint");WeightedWindowAdjoint identity(forward);const auto empty_records=identity.records();

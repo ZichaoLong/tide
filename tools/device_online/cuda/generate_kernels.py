@@ -10,6 +10,14 @@ from pathlib import Path
 import re
 
 
+def write_changed(path, content):
+    # CMake configures these adapters before dependency-aware builds. Preserve
+    # timestamps when bytes are unchanged so reconfiguration does not rebuild
+    # every numerical kernel merely because another check target was selected.
+    if not path.is_file() or path.read_text() != content:
+        path.write_text(content)
+
+
 def generate(source, output, backend):
     output.mkdir(parents=True, exist_ok=True)
     registry = re.findall(r"ascendc_library\((\w+) STATIC (\w+\.cpp)\)", (source / "CMakeLists.txt").read_text())
@@ -43,13 +51,13 @@ def generate(source, output, backend):
                 wrapper += f'  tide_cuda::workers=blocks;for(tide_cuda::worker=0;tide_cuda::worker<blocks;++tide_cuda::worker){symbol}({",".join(casts)});return 0;\n}}\n'
             else:
                 wrapper += f'  {symbol}<<<blocks,1,tide_cuda::scratch_bytes,static_cast<cudaStream_t>(stream)>>>({",".join(casts)});return int(cudaGetLastError());\n}}\n'
-            (output / (symbol + (".cpp" if backend == "cpu" else ".cu"))).write_text(text + wrapper)
-        (output / f"device_launch_{symbol}.h").write_text(header)
+            write_changed(output / (symbol + (".cpp" if backend == "cpu" else ".cu")), text + wrapper)
+        write_changed(output / f"device_launch_{symbol}.h", header)
         targets.append((target, symbol))
     if backend != "npu":
         extension = ".cpp" if backend == "cpu" else ".cu"
         cmake = [f'add_library({t} STATIC "{output / (s + extension)}")\nset_target_properties({t} PROPERTIES POSITION_INDEPENDENT_CODE ON)\n' for t, s in targets]
-        (output / "targets.cmake").write_text("".join(cmake))
+        write_changed(output / "targets.cmake", "".join(cmake))
     return targets
 
 

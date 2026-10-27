@@ -1,6 +1,9 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-training": ("tide-weighted-training-check", ("float32",)),
+    "weighted-retained": ("tide-weighted-retained-check", ("float32",)),
+    "weighted-saved-window": ("tide-weighted-window-check", ("float32",)),
     "weighted-copy": ("tide-weighted-copy-check", ("float32",)),
     "weighted-window-config": ("tide-weighted-window-config-check", ("float32",)),
     "weighted-window": ("tide-weighted-window-check", ("float32",)),
@@ -313,3 +316,11 @@ KERNELS["weighted-window-config"] = "tide_weighted_reverse_route"
 MARKERS["weighted-window-config"] = "weighted-window-config: passed"
 KERNELS["weighted-copy"] = "tide_weighted_node_pack"
 MARKERS["weighted-copy"] = "weighted-copy: passed"
+
+KERNELS["weighted-saved-window"] = "tide_weighted_reverse_route"
+MARKERS["weighted-saved-window"] = "weighted-saved-window: passed"
+
+KERNELS["weighted-retained"] = "tide_weighted_reverse_route"
+MARKERS["weighted-retained"] = "weighted-retained: passed"
+KERNELS["weighted-training"] = "tide_optimizer_plan"
+MARKERS["weighted-training"] = "weighted-training: passed"

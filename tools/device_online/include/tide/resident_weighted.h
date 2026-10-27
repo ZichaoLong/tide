@@ -22,6 +22,8 @@ class WeightedFlow {
   void close();
  private:
   friend class WeightedWindowAdjoint;
+  friend class WeightedTrainingSession;
+  friend struct WeightedWindowSnapshot;
   struct Impl;std::unique_ptr<Impl> impl_;
 };
 }

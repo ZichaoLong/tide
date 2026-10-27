@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <atomic>
 #include <thread>
+#include <cstdlib>
 
 namespace tide::device_online {
 namespace {
@@ -91,6 +92,12 @@ struct DeviceProgram::Impl {
     workspace_used=std::max(workspace_used,allocation);
     commands.push_back([this, execute, size, executor, name] {
       CannApi::check(execute(workspace.data_ptr(), size, executor, stream), name);
+      if(std::getenv("TIDE_CANN_TRACE_OPS")) {
+        int32_t sid=-1;uint32_t tid=0;
+        CannApi::check(CannApi::symbol<int(*)(void*,int32_t*)>(api.runtime,"aclrtStreamGetId")(stream,&sid),"trace stream id");
+        CannApi::check(CannApi::symbol<int(*)(uint32_t*)>(api.runtime,"aclrtGetThreadLastTaskId")(&tid),"trace task id");
+        std::cerr<<"cann-op stream="<<sid<<" last_task="<<tid<<" name="<<name<<" workspace="<<size<<'\n';
+      }
     });
   }
   void release() {
@@ -300,6 +307,11 @@ void DeviceProgram::batch_matmul(const at::Tensor& a,const at::Tensor& b,const a
 }
 void DeviceProgram::index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source) {
   auto& p=*impl_;
+  if(std::getenv("TIDE_CANN_TRACE_OPS"))p.commands.push_back([&p,target,axis,indices,source]{
+    int32_t sid=-1;CannApi::check(CannApi::symbol<int(*)(void*,int32_t*)>(p.api.runtime,"aclrtStreamGetId")(p.stream,&sid),"trace stream id");
+    std::cerr<<"cann-index-copy stream="<<sid<<" dtype="<<target.scalar_type()<<" target="<<target.sizes()
+      <<" axis="<<axis<<" indices="<<indices.sizes()<<" source="<<source.sizes()<<'\n';
+  });
   p.op("aclnnInplaceIndexCopy",p.tensor(target,target.scalar_type()),axis,p.tensor(indices,at::kLong),p.tensor(source,target.scalar_type()));
 }
 void DeviceProgram::permute(const at::Tensor& input,const std::vector<int64_t>& axes,const at::Tensor& output) {

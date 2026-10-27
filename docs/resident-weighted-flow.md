@@ -95,8 +95,9 @@ CUDA 架构须为显式计算能力代码（80及以上）；`native/all`、低�
 
 NPU_CORE 必须是当前 Python/Torch 匹配的 Python-owned 原生库。CUDA 使用显式
 `--runtime python --cuda-architectures '80;90;100'` 并省略 Ascend SoC。
-`_tide_weighted_resident` 只链接独立 `libtide-weighted-flow`；loader 核验实际 native
-和这两个二进制的摘要，另一条 resident 支线仍用原入口。这里只是构建命令，实机资格见 STATUS。
+`_tide_weighted_resident` 通过独立 `libtide-weighted-training` 与 `libtide-weighted-flow` 提供两种owner；
+loader核验native、适配器和两个公共库的摘要，另一条resident支线仍用原入口。旧仅推理build仍按原manifest加载。
+这里只是构建命令，实机资格见STATUS。
 
 `weighted_flow_config_check.cpp` 的15配置全图核验涵盖十种发送、两种key、match/grouped、
 四种正则分配形态、KV qry/原始时间位置、异宽来源与低秩适配；公共 Python 检查在

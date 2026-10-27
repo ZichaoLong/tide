@@ -59,6 +59,21 @@ def test_shared_contributions_keep_zero_connection_and_ignore_absent_poison(libr
     assert not error.item() and out.eq(0).all() and connected.tolist()==[True,True,False]
 
 
+def test_retained_bridge_initializes_disconnected_destination_before_addition(library):
+    # Direct roots may be None (poisoned storage) before a later cut contributes.
+    owner=torch.tensor([0,0,0,0]);value=torch.tensor([[.25,-.5],[0.,0.],[2.,3.],[float("nan")]*2])
+    out=torch.tensor([[float("nan")]*2,[float("nan")]*2,[5.,7.],[float("nan")]*2])
+    roots=torch.tensor([True,True,True,False]);connected=torch.tensor([False,False,True,False])
+    error=torch.zeros(1,dtype=torch.int32)
+    library.accumulate(*(t.data_ptr() for t in (owner,value,roots,out,connected,error)),4,2)
+    assert not error.item() and connected.tolist()==[True,True,True,False]
+    torch.testing.assert_close(out[:3],torch.tensor([[.25,-.5],[0.,0.],[7.,10.]]),rtol=0,atol=0)
+    assert out[3].isnan().all()
+    value[0,0]=float("nan")
+    library.accumulate(*(t.data_ptr() for t in (owner,value,roots,out,connected,error)),4,2)
+    assert error.item()==37  # A connected poison still refuses the whole result.
+
+
 def test_nonnegative_statistics_and_missing_owner_binding(library):
     owner=torch.tensor([1,-1]);x=torch.tensor([[.2,0.],[float("nan")]*2]);out=torch.zeros_like(x);error=torch.zeros(1,dtype=torch.int32)
     library.bind(*(t.data_ptr() for t in (owner,x,out,error)),2,2,2,True)

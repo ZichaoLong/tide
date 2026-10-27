@@ -67,4 +67,15 @@ std::map<std::string,at::Tensor> WeightedWindowJournal::decode(int64_t stages)co
   if(stages<0||stages>stages_)throw std::logic_error("invalid weighted window journal length");
   std::map<std::string,at::Tensor> out;for(const auto& [name,x]:fields_)out[name]=x.narrow(0,0,stages).to(at::kCPU).clone();return out;
 }
+std::vector<at::Tensor> WeightedWindowJournal::tensors()const{
+  std::vector<at::Tensor> out;for(const auto& [name,x]:fields_)out.push_back(x);
+  for(const auto& [name,x]:boundary_)out.push_back(x);return out;
+}
+std::shared_ptr<WeightedWindowJournal> WeightedWindowJournal::retain(int64_t budget)const{
+  if(budget<allocated_)throw std::invalid_argument("retained weighted journal exceeds tensor budget");
+  auto out=std::make_shared<WeightedWindowJournal>(stages_,allocated_);
+  for(const auto& [name,x]:fields_)out->fields_[name]=x.detach().clone();
+  for(const auto& [name,x]:boundary_)out->boundary_[name]=x.detach().clone();
+  out->allocated_=allocated_;out->remaining_=0;return out;
+}
 }

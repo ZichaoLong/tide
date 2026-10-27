@@ -88,14 +88,18 @@ WeightedFlow::WeightedFlow(Graph g,Model m,const Continuation& q,at::Device d,We
 WeightedFlow::~WeightedFlow()=default;
 Result WeightedFlow::advance(const std::vector<External>& xs,Index until){
   if(!impl_||impl_->failed)throw std::logic_error("weighted flow closed/failed; restore an earlier checkpoint into a new owner");
-  if(at::GradMode::is_enabled())throw std::invalid_argument("weighted inference owner requires no-grad");auto& s=*impl_;
+  impl_->execute(xs,until);return impl_->decode();
+}
+void WeightedFlow::Impl::execute(const std::vector<External>& xs,Index until){
+  if(failed)throw std::logic_error("weighted flow failed; restore an earlier checkpoint into a new owner");
+  if(at::GradMode::is_enabled())throw std::invalid_argument("weighted inference owner requires no-grad");auto& s=*this;
   if(xs.size()>size_t(s.limits.queue))throw std::invalid_argument("weighted external input capacity exceeded");
   auto input=validate_external(s.graph,s.model,s.boundary,xs,until,until); // Retryable boundary rejection.
   try {
     fill(s.external,input.atoms);s.begin.fill_(s.boundary.cut);s.stop.fill_(until);s.stages.zero_();++s.generation;
     sync(s.device);s.services->submit();s.program->run(s.limits.timeout_ms);s.services->wait(s.limits.timeout_ms);
     const auto code=s.error.item<int32_t>();if(code)throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code));
-    s.boundary.cut=until;for(const auto& [owner,last]:input.ledger_updates)s.boundary.ledger[owner]=last;s.ran=true;return s.decode();
+    s.boundary.cut=until;for(const auto& [owner,last]:input.ledger_updates)s.boundary.ledger[owner]=last;s.ran=true;
   }catch(...){s.failed=true;throw;}
 }
 Continuation WeightedFlow::checkpoint()const{

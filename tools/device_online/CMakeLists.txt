@@ -214,9 +214,20 @@ if(TIDE_DEVICE_KERNELS)
   add_library(tide-weighted-reverse STATIC weighted_reverse_route.cpp)
   set_target_properties(tide-weighted-reverse PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-reverse PUBLIC tide-device-control tide_weighted_reverse_route_kernel)
-  add_library(tide-weighted-window STATIC weighted_window_vjp.cpp weighted_window_roots.cpp weighted_window_owner.cpp)
+  add_library(tide-weighted-window STATIC weighted_window_vjp.cpp weighted_window_roots.cpp weighted_window_owner.cpp weighted_window_snapshot.cpp weighted_window_bridge.cpp)
   set_target_properties(tide-weighted-window PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-window PUBLIC tide-weighted-flow tide-weighted-reverse tide-weighted-parameters tide-parameter-accumulate tide-device-services)
+  add_library(tide-device-optimizer STATIC device_optimizer.cpp optimizer_checkpoint.cpp owner_parameter_publish.cpp training_parameters.cpp)
+  set_target_properties(tide-device-optimizer PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-device-optimizer PUBLIC tide-device-control tide::tidegraph
+    tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_owner_parameter_publish_kernel)
+  add_library(tide-weighted-training SHARED weighted_training_owner.cpp weighted_training_backward.cpp weighted_training_optimizer.cpp
+    weighted_training_parameters.cpp weighted_training_view.cpp weighted_training_roots.cpp)
+  target_link_libraries(tide-weighted-training PRIVATE tide-weighted-window tide-device-optimizer)
+  target_link_libraries(tide-weighted-training PUBLIC tide-weighted-flow)
+  target_link_options(tide-weighted-training PRIVATE -Wl,-z,defs)
+  set_target_properties(tide-weighted-training PROPERTIES EXPORT_NAME weighted_training)
+  add_library(tide::weighted_training ALIAS tide-weighted-training)
   add_library(tide-weighted-pool STATIC weighted_pool.cpp)
   set_target_properties(tide-weighted-pool PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-pool PUBLIC tide-device-control tide_weighted_source_guard_kernel
@@ -266,6 +277,12 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-window-config-check weighted_window_config_check.cpp weighted_window_case.cpp weighted_window_roots_check.cpp weighted_window_compare.cpp weighted_flow_fixture.cpp ../../cpp/test/weighted_graph_fixture.cpp)
     target_compile_options(tide-weighted-window-config-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-window-config-check PRIVATE tide-weighted-window tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-retained-check weighted_retained_check.cpp weighted_window_roots_check.cpp weighted_window_compare.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-retained-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-retained-check PRIVATE tide-weighted-window tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-training-check weighted_training_check.cpp weighted_training_trajectory.cpp weighted_training_objective.cpp weighted_training_failures.cpp weighted_training_accumulation_check.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-training-check PRIVATE tide-weighted-training tide-device-test-compare tide::runtime)
     add_executable(tide-weighted-copy-check weighted_copy_check.cpp)
     target_compile_options(tide-weighted-copy-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-copy-check PRIVATE tide-weighted-flow tide::runtime)
@@ -293,11 +310,9 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-projection-check weighted_projection_check.cpp)
     target_compile_options(tide-weighted-projection-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-projection-check PRIVATE tide-weighted-projection tide::tidegraph)
-    add_executable(tide-weighted-parameters-check weighted_parameter_check.cpp
-      device_optimizer.cpp optimizer_checkpoint.cpp owner_parameter_publish.cpp)
+    add_executable(tide-weighted-parameters-check weighted_parameter_check.cpp)
     target_compile_options(tide-weighted-parameters-check PRIVATE -fPIC)
-    target_link_libraries(tide-weighted-parameters-check PRIVATE tide-weighted-parameters tide-weighted-head
-      tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_owner_parameter_publish_kernel)
+    target_link_libraries(tide-weighted-parameters-check PRIVATE tide-weighted-parameters tide-weighted-head tide-device-optimizer)
     add_executable(tide-weighted-source-check weighted_source_adaptation_check.cpp)
     target_compile_options(tide-weighted-source-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-source-check PRIVATE tide-weighted-source tide::tidegraph)
@@ -371,10 +386,10 @@ if(TIDE_DEVICE_KERNELS)
     target_compile_options(tide-packed-lh-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-lh-check PRIVATE tide-packed-lh tide::tidegraph)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp state_profile.cpp state_profile_compat.cpp state_reverse_view.cpp state_reverse_compat.cpp state_owner_tape.cpp state_reverse_pack.cpp state_reverse_stage.cpp state_reverse_merge.cpp state_owner_read.cpp state_owner_reverse.cpp sharded_state_vjp.cpp state_shard_pack.cpp state_owner.cpp remote_state.cpp sharded_state.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp emission_vjp.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp state_profile.cpp state_profile_compat.cpp state_reverse_view.cpp state_reverse_compat.cpp state_owner_tape.cpp state_reverse_pack.cpp state_reverse_stage.cpp state_reverse_merge.cpp state_owner_read.cpp state_owner_reverse.cpp sharded_state_vjp.cpp state_shard_pack.cpp state_owner.cpp remote_state.cpp sharded_state.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp emission_vjp.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp parameter_publish.cpp
     retained_tape.cpp retained_journals.cpp window_bridge.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp control_scores.cpp
     content_flow.cpp content_export.cpp content_input.cpp content_continuation.cpp continuation_pack.cpp remote_full.cpp full_placement.cpp full_shard_pack.cpp sharded_full.cpp full_shard_tape.cpp full_reverse_pack.cpp full_reverse_merge.cpp sharded_full_vjp.cpp
-    sharded_parameter_sources.cpp sharded_parameter_layout.cpp owner_gradient_packet.cpp owner_stream.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp owner_parameter_publish.cpp device_journal.cpp packed_emission.cpp projection_shard.cpp packed_swiglu_full.cpp
+    sharded_parameter_sources.cpp sharded_parameter_layout.cpp owner_gradient_packet.cpp owner_stream.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp device_journal.cpp packed_emission.cpp projection_shard.cpp packed_swiglu_full.cpp
     fiber_cache.cpp fiber_tape.cpp fiber_reverse.cpp fiber_cache_reverse.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp fiber_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-peer tide-packed-full tide-packed-lh tide-device-ready tide-device-broadcast
@@ -396,7 +411,7 @@ if(TIDE_DEVICE_KERNELS)
     tide_emit_mix_kernel tide_control_plan_kernel tide_control_payload_kernel tide_control_read_reduce_kernel tide_control_merge_kernel
     tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel tide_parameter_vjp_kernel
     tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_parameter_publish_kernel tide_owner_gradient_pack_kernel tide_owner_gradient_reduce_kernel tide_owner_parameter_publish_kernel tide_owner_stream_kernel
-    tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide-parameter-accumulate)
+    tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide-parameter-accumulate tide-device-optimizer)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     # Shared, independent CPU-oracle fixtures compile once per runtime build.
     add_library(tide-device-test-fixtures STATIC full_vjp_fixture.cpp graph_vjp_fixture.cpp retained_fixture.cpp
@@ -529,7 +544,7 @@ if(TIDE_DEVICE_KERNELS)
 endif()
 
 if(TIDE_DEVICE_KERNELS)
-  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp training_accumulation.cpp training_continuation.cpp
+  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_backward.cpp training_checkpoint.cpp training_accumulation.cpp training_continuation.cpp
     sharded_training_owner.cpp sharded_training_backward.cpp sharded_training_checkpoint.cpp)
   target_link_libraries(tide-resident PRIVATE tide-content-flow)
   target_link_options(tide-resident PRIVATE -Wl,-z,defs)
@@ -542,10 +557,10 @@ if(TIDE_DEVICE_KERNELS)
   if(TIDE_DEVICE_RUNTIME STREQUAL "python")
     find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
     find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-    Python3_add_library(_tide_resident MODULE resident_bindings.cpp training_bindings.cpp)
+    Python3_add_library(_tide_resident MODULE resident_bindings.cpp training_bindings.cpp training_binding_types.cpp)
     target_link_libraries(_tide_resident PRIVATE tide-resident ${TORCH_PYTHON_LIBRARY})
-    Python3_add_library(_tide_weighted_resident MODULE weighted_flow_bindings.cpp)
-    target_link_libraries(_tide_weighted_resident PRIVATE tide-weighted-flow ${TORCH_PYTHON_LIBRARY})
+    Python3_add_library(_tide_weighted_resident MODULE weighted_flow_bindings.cpp weighted_training_bindings.cpp training_binding_types.cpp)
+    target_link_libraries(_tide_weighted_resident PRIVATE tide-weighted-training ${TORCH_PYTHON_LIBRARY})
     set_target_properties(_tide_weighted_resident PROPERTIES BUILD_RPATH "$ORIGIN")
     set_target_properties(_tide_resident PROPERTIES BUILD_RPATH "$ORIGIN")
   else()
@@ -603,6 +618,12 @@ if(TIDE_DEVICE_KERNELS)
     install(TARGETS tide-weighted-flow EXPORT TideWeightedResidentTargets
       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT weighted)
     install(FILES include/tide/resident_weighted.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tide COMPONENT weighted)
+    install(TARGETS tide-weighted-training EXPORT TideWeightedTrainingTargets
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT weighted-training)
+    install(FILES include/tide/resident_weighted_training.h include/tide/resident_training.h include/tide/resident.h
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tide COMPONENT weighted-training)
+    install(EXPORT TideWeightedTrainingTargets NAMESPACE tide::
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted-training)
     install(EXPORT TideWeightedResidentTargets NAMESPACE tide::
       DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted)
     configure_package_config_file(TideWeightedResidentConfig.cmake.in

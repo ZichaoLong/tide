@@ -15,13 +15,16 @@ def main():
     parser.add_argument("--core-build", type=Path, required=True)
     parser.add_argument("--resident-build", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--component", choices=("resident", "weighted"), default="resident")
+    parser.add_argument("--component", choices=("resident", "weighted", "weighted-training"), default="resident")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    weighted = args.component == "weighted"
+    weighted = args.component.startswith("weighted")
+    training = args.component == "weighted-training"
     package_name = "TideWeightedResident" if weighted else "TideResident"
     consumer_dir = "weighted_resident_consumer" if weighted else "resident_consumer"
     binary_name = "weighted-resident-consumer" if weighted else "resident-consumer"
+    if training:
+        binary_name = "weighted-training-consumer"
     core, backend, out = (p.resolve() for p in (args.core_build, args.resident_build, args.output_dir))
     core_record = json.loads((core / "build-manifest.json").read_text())
     record = json.loads((backend / "control-build.json").read_text())
@@ -47,11 +50,14 @@ def main():
         for directory in (core, backend):
             run(["cmake", "--install", directory, "--prefix", prefix,
                  *(["--component", "weighted"] if directory == backend and weighted else [])])
+        if training:
+            run(["cmake", "--install", backend, "--prefix", prefix, "--component", "weighted-training"])
         package, = prefix.glob("lib*/cmake/" + package_name)
         prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
         run(["cmake", "-S", root / "tools" / consumer_dir, "-B", build, "-G", "Ninja",
              "-DCMAKE_BUILD_TYPE=Release", "-D"+package_name+"_DIR="+str(package),
-             "-DTorch_DIR="+cache_values(core)["Torch_DIR"], "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p)])
+             "-DTorch_DIR="+cache_values(core)["Torch_DIR"], "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
+             *(["-DTIDE_WEIGHTED_TRAINING=ON"] if training else [])])
         run(["cmake", "--build", build, "--parallel", "2"])
         binary = build / binary_name
         loader = subprocess.check_output(["ldd", str(binary)], text=True)

@@ -6,16 +6,16 @@ namespace py=pybind11;
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name,&T::name)
 #define VIEW(T, name) .def_readonly(#name,&T::name)
+void bind_training_types(py::module_&);
 void bind_resident_training(py::module_& m) {
-  py::enum_<ResidentOptimizerKind>(m,"OptimizerKind")
-    .value("sgd",ResidentOptimizerKind::sgd).value("adamw",ResidentOptimizerKind::adamw);
+  bind_training_types(m);
+
   py::class_<ResidentTrainingLimits>(m,"TrainingLimits").def(py::init<>())
     FIELD(ResidentTrainingLimits,forward) FIELD(ResidentTrainingLimits,windows) FIELD(ResidentTrainingLimits,retained_bytes)
     FIELD(ResidentTrainingLimits,backward_bytes) FIELD(ResidentTrainingLimits,optimizer_bytes)
     FIELD(ResidentTrainingLimits,program_workspace_bytes) FIELD(ResidentTrainingLimits,reverse_chunk_rows)
     FIELD(ResidentTrainingLimits,placement);
-  py::class_<ResidentToken>(m,"TrainingToken")
-    VIEW(ResidentToken,session) VIEW(ResidentToken,index) VIEW(ResidentToken,generation);
+
   py::class_<ResidentCacheWindow>(m,"CacheWindow")
     VIEW(ResidentCacheWindow,nodes) VIEW(ResidentCacheWindow,key) VIEW(ResidentCacheWindow,value)
     VIEW(ResidentCacheWindow,lengths) VIEW(ResidentCacheWindow,present) VIEW(ResidentCacheWindow,log_bias);
@@ -34,9 +34,7 @@ void bind_resident_training(py::module_& m) {
   py::class_<ResidentStateGradient>(m,"StateGradient")
     VIEW(ResidentStateGradient,nodes) VIEW(ResidentStateGradient,initial)
     VIEW(ResidentStateGradient,initial_connected) VIEW(ResidentStateGradient,cache);
-  py::class_<ResidentParameterGradient>(m,"ParameterGradient")
-    VIEW(ResidentParameterGradient,names) VIEW(ResidentParameterGradient,aliases) VIEW(ResidentParameterGradient,offsets)
-    VIEW(ResidentParameterGradient,values) VIEW(ResidentParameterGradient,connected);
+
   py::class_<ResidentTrainingWindow>(m,"TrainingWindow")
     VIEW(ResidentTrainingWindow,token) VIEW(ResidentTrainingWindow,start) VIEW(ResidentTrainingWindow,stop)
     VIEW(ResidentTrainingWindow,outputs) VIEW(ResidentTrainingWindow,pending_coordinates)
@@ -48,25 +46,15 @@ void bind_resident_training(py::module_& m) {
     FIELD(ResidentCotangents,pending) FIELD(ResidentCotangents,pending_connected)
     FIELD(ResidentCotangents,final) FIELD(ResidentCotangents,final_connected) FIELD(ResidentCotangents,cache)
     FIELD(ResidentCotangents,states);
-  py::class_<ResidentBoundaryGradient>(m,"BoundaryGradient")
-    VIEW(ResidentBoundaryGradient,token) VIEW(ResidentBoundaryGradient,coordinates) VIEW(ResidentBoundaryGradient,values)
-    VIEW(ResidentBoundaryGradient,valid) VIEW(ResidentBoundaryGradient,connected);
+
   py::class_<ResidentGradients>(m,"Gradients")
     VIEW(ResidentGradients,names) VIEW(ResidentGradients,aliases) VIEW(ResidentGradients,offsets)
     VIEW(ResidentGradients,values) VIEW(ResidentGradients,connected) VIEW(ResidentGradients,initial)
     VIEW(ResidentGradients,initial_connected) VIEW(ResidentGradients,boundaries) VIEW(ResidentGradients,initial_cache)
     VIEW(ResidentGradients,parameter_shards) VIEW(ResidentGradients,initial_shards) VIEW(ResidentGradients,statistics);
-  py::class_<ResidentOptimizerState>(m,"DeviceOptimizerState").def(py::init<>())
-    FIELD(ResidentOptimizerState,values) FIELD(ResidentOptimizerState,first) FIELD(ResidentOptimizerState,second)
-    FIELD(ResidentOptimizerState,maximum) FIELD(ResidentOptimizerState,steps) FIELD(ResidentOptimizerState,corrections);
-  py::class_<ResidentTrainingCheckpoint>(m,"TrainingCheckpoint").def(py::init<>())
-    FIELD(ResidentTrainingCheckpoint,schema) FIELD(ResidentTrainingCheckpoint,generation) FIELD(ResidentTrainingCheckpoint,next_token)
-    FIELD(ResidentTrainingCheckpoint,continuation) FIELD(ResidentTrainingCheckpoint,parameters) FIELD(ResidentTrainingCheckpoint,aliases)
-    FIELD(ResidentTrainingCheckpoint,trainable) FIELD(ResidentTrainingCheckpoint,optimizer) FIELD(ResidentTrainingCheckpoint,groups)
-    FIELD(ResidentTrainingCheckpoint,offsets) FIELD(ResidentTrainingCheckpoint,state)
-    FIELD(ResidentTrainingCheckpoint,mode) FIELD(ResidentTrainingCheckpoint,zeta);
-  py::class_<ResidentStep>(m,"TrainingStep")
-    VIEW(ResidentStep,applied) VIEW(ResidentStep,refusal_code) VIEW(ResidentStep,generation);
+
+
+
   py::class_<ResidentTrainingSession>(m,"TrainingSession")
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,std::vector<OptimizerGroup>,ResidentTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
     .def(py::init<Graph,Model,const ResidentTrainingCheckpoint&,at::Device,ResidentTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
