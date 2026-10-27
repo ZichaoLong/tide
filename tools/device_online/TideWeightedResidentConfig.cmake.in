@@ -1,0 +1,12 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+find_dependency(TideGraph 0.2 CONFIG REQUIRED)
+if("@TIDE_DEVICE_BACKEND@" STREQUAL "NPU" AND NOT TARGET TideGraph::NpuSDK)
+  message(FATAL_ERROR "TideWeightedResident requires its standalone NPU TideGraph package")
+endif()
+if("@TIDE_DEVICE_BACKEND@" STREQUAL "CUDA" AND (NOT TARGET torch_cuda OR TARGET TideGraph::NpuSDK))
+  message(FATAL_ERROR "TideWeightedResident requires its CUDA TideGraph package")
+endif()
+set(TideWeightedResident_BACKEND "@TIDE_DEVICE_BACKEND@")
+include("${CMAKE_CURRENT_LIST_DIR}/TideWeightedResidentTargets.cmake")
+check_required_components(TideWeightedResident)

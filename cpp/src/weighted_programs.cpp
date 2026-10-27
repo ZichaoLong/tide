@@ -13,7 +13,9 @@
 
 namespace tide::weighted {
 using namespace detail;
-namespace {
+// Named linkage preserves installed-function RTTI across independently linked
+// native/client shared libraries with the same source/ABI identity.
+namespace installed {
 class Aggregate final:public AggregateKernel {
  public:
   Aggregate(SourceClasses classes,double alpha,double epsilon):classes_(std::move(classes)),alpha_(alpha),epsilon_(epsilon){}
@@ -129,6 +131,9 @@ template<class Config> class Full final:public FullKernel {
  private:Config c_;
 };
 }
+using installed::Aggregate;
+using installed::Describe;
+using installed::Full;
 std::shared_ptr<const StateKernel> make_kv(const KVConfig&);
 std::optional<KVConfig> kv_configuration(const StateKernel&);
 std::optional<RecurrentConfig> recurrent_configuration(const StateKernel&);

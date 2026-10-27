@@ -72,12 +72,19 @@ class DeviceProgram {
   // workspace allocation. A refusal poisons construction, never executes a prefix.
   void limit_workspace(int64_t bytes);
   int64_t workspace_bytes() const;
-  int64_t retained_tensor_bytes() const; // Unique tensor storage, excluding vendor internals.
+  int64_t retained_tensor_bytes(const std::vector<at::Tensor>& additional={}) const; // Unique tensor storage, excluding vendor internals.
+  // Count unique storage across cooperating programs and boundary-only owners.
+  int64_t retained_tensor_bytes(const std::vector<at::Tensor>& additional,
+                               const std::vector<const DeviceProgram*>& programs) const;
  private:
   // Deterministic API-failure injection belongs to the standalone test adapter;
   // no environment switches or runtime mutation of a live program are exposed.
   friend struct DeviceProgramTestAccess;
   friend class DeviceSequence;
+  friend class TaskServices;
+  // CANN only: TaskServices proves that notification handshakes serialize all
+  // numerical workspace uses, including the coordinator. Not a general pool.
+  void shared_workspace(const at::Tensor&);
   void order_after(const DeviceProgram&); // CUDA top-level sequence completion.
   DeviceProgram(at::Device, const std::function<void(CannApi&)>& configure_api);
   struct Impl;

@@ -15,8 +15,13 @@ def main():
     parser.add_argument("--core-build", type=Path, required=True)
     parser.add_argument("--resident-build", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--component", choices=("resident", "weighted"), default="resident")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
+    weighted = args.component == "weighted"
+    package_name = "TideWeightedResident" if weighted else "TideResident"
+    consumer_dir = "weighted_resident_consumer" if weighted else "resident_consumer"
+    binary_name = "weighted-resident-consumer" if weighted else "resident-consumer"
     core, backend, out = (p.resolve() for p in (args.core_build, args.resident_build, args.output_dir))
     core_record = json.loads((core / "build-manifest.json").read_text())
     record = json.loads((backend / "control-build.json").read_text())
@@ -31,7 +36,8 @@ def main():
     source, dirty = source_state(root)
     report = dict(schema="tide-resident-consumer-build-v1", source=source, dirty=dirty,
                   core=core_record, backend=record, state="running", commands=[],
-                  consumer_sources={p.name:digest(p) for p in (root / "tools/resident_consumer").iterdir() if p.is_file()},
+                  component=args.component,
+                  consumer_sources={p.name:digest(p) for p in (root / "tools" / consumer_dir).iterdir() if p.is_file()},
                   scope="installed-package build/loader only; live device execution required separately")
     def run(command):
         report["commands"].append(list(map(str, command)))
@@ -39,14 +45,15 @@ def main():
         subprocess.run(report["commands"][-1], check=True)
     try:
         for directory in (core, backend):
-            run(["cmake", "--install", directory, "--prefix", prefix])
-        package, = prefix.glob("lib*/cmake/TideResident")
+            run(["cmake", "--install", directory, "--prefix", prefix,
+                 *(["--component", "weighted"] if directory == backend and weighted else [])])
+        package, = prefix.glob("lib*/cmake/" + package_name)
         prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
-        run(["cmake", "-S", root / "tools/resident_consumer", "-B", build, "-G", "Ninja",
-             "-DCMAKE_BUILD_TYPE=Release", "-DTideResident_DIR="+str(package),
+        run(["cmake", "-S", root / "tools" / consumer_dir, "-B", build, "-G", "Ninja",
+             "-DCMAKE_BUILD_TYPE=Release", "-D"+package_name+"_DIR="+str(package),
              "-DTorch_DIR="+cache_values(core)["Torch_DIR"], "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p)])
         run(["cmake", "--build", build, "--parallel", "2"])
-        binary = build / "resident-consumer"
+        binary = build / binary_name
         loader = subprocess.check_output(["ldd", str(binary)], text=True)
         if any(x in loader.lower() for x in ("not found", "libtorch_python", "libpython", "/stub/", "/stubs/", "/simulator/")):
             raise RuntimeError("installed resident loader closure failed")

@@ -73,7 +73,9 @@ void validate_content_weights(const NodeWeights& w,const RecurrentConfig& c){
     }else {shape(w,"full_program.content.direct",{c.heads});shape(w,"full_program.content.rho",{c.heads*c.value_width});}
   }
 }
-namespace {
+// Named linkage preserves installed-function RTTI across independently linked
+// native/client shared libraries with the same source/ABI identity.
+namespace installed {
 class Recurrent final:public MemoryKernel {
  public:
   explicit Recurrent(RecurrentConfig c):c_(std::move(c)){c_.validate();}
@@ -152,6 +154,7 @@ class Recurrent final:public MemoryKernel {
  private:RecurrentConfig c_;
 };
 }
+using installed::Recurrent;
 std::shared_ptr<const StateKernel> make_recurrent(const RecurrentConfig& c){return std::make_shared<Recurrent>(c);}
 std::optional<RecurrentConfig> recurrent_configuration(const StateKernel& kernel){
   if(auto value=dynamic_cast<const Recurrent*>(&kernel))return value->configuration();return std::nullopt;

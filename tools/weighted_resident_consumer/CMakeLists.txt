@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.18)
+project(tide_weighted_resident_consumer LANGUAGES CXX)
+find_package(TideWeightedResident CONFIG REQUIRED)
+add_executable(weighted-resident-consumer main.cpp)
+target_link_libraries(weighted-resident-consumer PRIVATE tide::weighted_resident tide::runtime)

@@ -7,7 +7,9 @@
 
 namespace tide::weighted {
 using namespace detail;
-namespace {
+// Named linkage preserves installed-function RTTI across independently linked
+// native/client shared libraries with the same source/ABI identity.
+namespace installed {
 class Sending final:public RegionKernel {
  public:
   explicit Sending(RegionalConfig c):c_(std::move(c)){c_.validate();}
@@ -34,6 +36,7 @@ class Sending final:public RegionKernel {
  private:RegionalConfig c_;
 };
 }
+using installed::Sending;
 Selection region_step(const RegionWeights& w,const RegionInput& r,const RegionalConfig& c,
                       std::optional<at::Device> selection){
     std::map<std::string,std::vector<Tensor>> columns;std::vector<Index> nodes;

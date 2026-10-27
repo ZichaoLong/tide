@@ -1,6 +1,9 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "services": ("tide-device-services-check", ("float32",)),
+    "weighted-flow-config": ("tide-weighted-flow-config-check", ("float32",)),
+    "weighted-flow": ("tide-weighted-flow-check", ("float32",)),
     "weighted-recurrent": ("tide-weighted-recurrent-check", ("float32",)),
     "weighted-describe": ("tide-weighted-describe-check", ("float32",)),
     "weighted-kv-full": ("tide-weighted-kv-full-check", ("float32",)),
@@ -77,6 +80,7 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "services": "task-services: passed",
     "weighted-parameters": "weighted-parameters: passed",
     "weighted-source": "weighted-source: passed",
     "weighted-aggregate": "weighted-aggregate: passed",
@@ -288,3 +292,8 @@ MARKERS["weighted-describe"] = "weighted-describe: passed"
 
 KERNELS["weighted-recurrent"] = "tide_weighted_recurrent_"
 MARKERS["weighted-recurrent"] = "weighted-recurrent: passed"
+KERNELS["weighted-flow"] = "tide_weighted_node_pack"
+MARKERS["weighted-flow"] = "weighted-flow: passed"
+
+KERNELS["weighted-flow-config"] = "tide_weighted_region_pack"
+MARKERS["weighted-flow-config"] = "weighted-flow-config: passed"

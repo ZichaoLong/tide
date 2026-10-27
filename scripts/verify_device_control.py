@@ -36,6 +36,10 @@ def main():
         name, _ = CHECKS[check]
         if not (build / name).is_file() or digest(build / name) != manifest["binary_sha256"].get(name):
             parser.error("component unavailable or changed: " + name)
+    if "libtide-weighted-flow.so" in manifest["binary_sha256"]:
+        library=build / "libtide-weighted-flow.so"
+        if not library.is_file() or digest(library)!=manifest["binary_sha256"][library.name]:
+            parser.error("weighted resident library changed")
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
@@ -77,7 +81,7 @@ def main():
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=360 if check in ("peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                                            timeout=360 if check in ("weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

@@ -1,5 +1,8 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[完整 weighted 常驻图](resident-weighted-flow.md)记录开发中的设备队列、五记忆、
+参数角色、完整返回与原始状态续接绑定；实际资格状态从 STATUS/证据进入。
+
 [Resident recurrent numerical functions](resident-weighted-recurrent.md) implement the four recurrent Upd/Mem/Full formulas with exact-time snapshots, fixed-time convolution and independently rooted saved adjoints. Full graph lifecycle is separately qualified.
 
 带权常驻分配的完整区域表示、精确解VJP、CPU独立公式与设备检查入口见

@@ -151,11 +151,15 @@ void DeviceProgram::limit_workspace(int64_t bytes) {
   p.workspace_limit=bytes;
 }
 int64_t DeviceProgram::workspace_bytes() const{return impl_->workspace.defined()?impl_->workspace.nbytes():0;}
-int64_t DeviceProgram::retained_tensor_bytes() const {
+int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional) const {return retained_tensor_bytes(additional,{});}
+int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional,const std::vector<const DeviceProgram*>& programs) const {
   std::unordered_set<const c10::StorageImpl*> seen;int64_t bytes=0;
-  for(const auto& t:impl_->owners)if(seen.insert(t.storage().unsafeGetStorageImpl()).second) {
+  auto account=[&](const at::Tensor& t){if(t.defined()&&seen.insert(t.storage().unsafeGetStorageImpl()).second) {
     auto n=t.storage().nbytes();if(n>uint64_t(std::numeric_limits<int64_t>::max()-bytes))throw std::overflow_error("CUDA retained storage byte overflow");bytes+=n;
-  }
+  }};
+  for(const auto& t:impl_->owners)account(t);
+  for(const auto& t:additional)account(t);
+  for(const auto* program:programs)for(const auto& t:program->impl_->owners)account(t);
   return bytes;
 }
 }

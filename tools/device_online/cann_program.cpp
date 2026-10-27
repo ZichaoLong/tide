@@ -341,7 +341,7 @@ void DeviceProgram::finish() {
   // CANN requires target-list creation BEFORE the first label is marked.
   // Defer all task emission, preserving source order, until lists are complete.
   try {
-    if(p.workspace_used)p.workspace=at::empty({p.workspace_used},at::TensorOptions().device(p.device).dtype(at::kByte));
+    if(p.workspace_used&&!p.workspace.defined())p.workspace=at::empty({p.workspace_used},at::TensorOptions().device(p.device).dtype(at::kByte));
     if(!p.labels.empty()) {
       CannApi::check(p.api.create_list(p.labels.data(),p.labels.size(),&p.target_list),"create control target list");
       p.lists.push_back(p.target_list);
@@ -388,14 +388,27 @@ void DeviceProgram::limit_workspace(int64_t bytes) {
   if(bytes<0||p.workspace_used)throw std::invalid_argument("set workspace budget before numerical operations");
   p.workspace_limit=bytes;
 }
-int64_t DeviceProgram::retained_tensor_bytes() const {
+void DeviceProgram::shared_workspace(const at::Tensor& workspace) {
+  auto& p=*impl_;p.building();
+  if(p.workspace.defined()||!workspace.defined()||workspace.device()!=p.device||workspace.scalar_type()!=at::kByte
+      ||workspace.dim()!=1||!workspace.is_contiguous()||workspace.requires_grad()
+      ||workspace.numel()<p.workspace_used||workspace.numel()>p.workspace_limit)
+    throw std::invalid_argument("invalid serialized CANN service workspace");
+  p.workspace=workspace;
+}
+int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional) const {return retained_tensor_bytes(additional,{});}
+int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional,const std::vector<const DeviceProgram*>& programs) const {
   std::unordered_set<const c10::StorageImpl*> seen;int64_t total=0;
-  for(const auto& tensor:impl_->owners) {
-    const auto storage=tensor.storage();if(!seen.insert(storage.unsafeGetStorageImpl()).second)continue;
+  auto account=[&](const at::Tensor& tensor){
+    if(!tensor.defined())return;
+    const auto storage=tensor.storage();if(!seen.insert(storage.unsafeGetStorageImpl()).second)return;
     const auto bytes=storage.nbytes();
     if(bytes>uint64_t(std::numeric_limits<int64_t>::max()-total))throw std::overflow_error("retained tensor bytes");
     total+=bytes;
-  }
+  };
+  for(const auto& tensor:impl_->owners)account(tensor);
+  for(const auto& tensor:additional)account(tensor);
+  for(const auto* program:programs)for(const auto& tensor:program->impl_->owners)account(tensor);
   return total;
 }
 }  // namespace tide::device_online
