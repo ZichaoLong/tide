@@ -1,42 +1,47 @@
 # 当前交接 — 2026-10-27
 
-本轮采用固定上游 `0770593838a37c790a568226930567ed60f99b83` 的 tide-core-5 与
-带权消息局部定义。用户授权完整阶段目标、私有环境、有限实验、分阶段提交并推送；
-不使用子代理。历史等待授权/提交后暂停安排已被本次任务取代。
+固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支
+`graph-execution-foundation`。用户授权持续实施、私有环境、有限实验、提交及推送；
+不使用子代理。历史等待授权/提交后暂停要求已被取代。
 
-## 当前状态
+## 已实现与证据
 
-- 实现基线 `35d63588f3a967e4b65da9c55be05a47f4d964f8`，授权分支
-  `graph-execution-foundation`；启动工作区干净，上游固定提交与工作区已核实且只读。
-- 实际路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`；`/home/zlong` 指向
-  `/mi/data2T/zlong/home`。旧 `/var/tmp` 路径不是启动依赖。
-- 旧 core-3 快照离线校验通过；core-5 采用、一般 SettleGraph 与公共表示扩展正在实施。
-  历史证据仅认证其各自源码，不认证本轮功能。
-- 本机旧个人 Ascend 指南已不存在；当前来源为
-  `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 与
-  `/etc/modulefiles/ascend/dev-workspace-9.1.0`。使用该模块及项目
-  `.local/venv-core5`，不修改公共工具链。CPU 算子探针与 11 项最小语义检查通过（Torch 2.12.0+cpu，Python 3.12.13）。
-- 基线长任务 `tide-core5-bootstrap-tools-20261027` 已通过，93 项 CPU FP64/FP32 检查；
-  原生全部构建目标成功。来源 `35d6358`，原始日志/清单保留于
-  `artifacts/jobs/core5-bootstrap-tools`。首轮 `core5-bootstrap` 缺 Ninja 失败保持失败。
-- 一般端口开发任务 `tide-core5-settle-dev-20261027` 已通过：247 项 CPU FP64/FP32，
-  包含 Python、Python/native 和独立 C++ 公式/梯度/续接/共享参数检查。
-  固定开发树 `4ded7416941fc279b04fad43242b544ee3e6fc51`；详细源码归档、构建身份和
-  终态见 `artifacts/jobs/core5-settle-dev/{status.json,development.json,task.log}`。
-- 实现提交 `efb9d629438fb77582842bb133158be7f9f70afb` 的不可变资格已通过：247 项，
-  `tide-core5-settle-qualify-20261027` 终态成功、退出 0；证据
-  [core5-settle-20261027](evidence/core5-settle-20261027.md)。当前无活动长任务。
-- 当前未提交内容：本交接和随后 core-5 采用/表示实现。没有用户未保存修改。
+- `efb9d629438fb77582842bb133158be7f9f70afb` 采用 core-5 的 19 份固定原文，
+  实施一般端口 SettleGraph：同秩区域、稀疏日程、逐边/端口、原样嵌入和任意切点。
+  不可变 CPU FP64/FP32 定向资格 247 项通过，证据提交 `d0acd3c`，两者已推送。
+- 结构化表示增量即将提交：具名 Read、独立字段根、typed packing、int64 状态槽、
+  SourceClasses。`core5-structured-dev` 已构建成功，但测试 **210 passed / 2 failed**，
+  原因是 Python 通用校验读取 BoundaryWeights 不存在的 kernel；主工作区已修复；新冻结树 `f29dfb13d2aae33786dd39cd8b5d8d447ad0afa1`
+  的 `core5-structured-fix` 已通过 **212 项**、退出 0。
+  原失败保持，冻结开发树 `464b7a002a77027f94157bce9961955b8d547115`。
+- 带权首组合的 Python 工作正在主工作区独立开发，尚未提交/不可变资格：
+  `weighted/` 提供 quad 精确解/VJP、KV sum/qry、显式初态/旧/新 Read、cat 评分/证据、
+  regional_total、(c,G) 广播、FC/HB 物理拓扑。50 项定向检查通过；
+  包含独立枚举/手算/方向差分、非对齐 DAG/PDG 反馈、各切点、共享参数、AdamW 与恢复。
+  不认证 native、packed、mixed/resident 或其他正式候选。
+- 旧 `core5-bootstrap` 缺 Ninja 的失败及缺 TIDE_BUILD_DIR 的 24 项前置条件失败仍保留；
+  后续成功记录不改写旧失败。详细完整待办见 ROADMAP。
 
-## 下一动作
+## 当前任务与下一动作
 
-1. 单独提交上述资格证据并推送授权分支。主工作区保留下一增量：具名 Read 字段、
-   int64 状态槽、独立根字段打包和 SrcClass；16 项 Python 定向检查已通过，C++ 尚未编译。
-2. 完成 `docs/structured-records.md` 与对应表，运行旧 Read/State/Checkpoint 相关回归；
-   冻结当前开发树，用新 `core5-structured-dev` job 在已停止的临时 worktree 增量构建。
-   长任务仍用固定源码、两个编译线程、ATen/BLAS 单线程与有限时长，启动前更新本交接。
-3. 通过后提交表示增量并资格；继续带权 Agg/KV/Describe/分配/Full 的首个完整组合，
-   不暂停等待授权。完整候选、设备、性能与剩余边界见 ROADMAP。
+结构化表示开发检查已终止：`tide-core5-structured-fix-20261027`，212 项通过、退出 0。
+日志/结果：`artifacts/jobs/core5-structured-fix/{status.json,task.log,development.json}`。
+`core5-structured-dev` 的原 2 项失败保持，不改写为成功。
 
+下一步只提交已暂存表示增量，然后在该不可变提交上复用 C++ source/binary hash
+均匹配的构建，运行同一 212 项集合。拟用 unit `tide-core5-structured-qualify-20261027`，
+输出 `artifacts/jobs/core5-structured-qualify`；实际提交及启动状态在启动前更新。
+该集合包含 structured/read/state-clock/coordinate-checkpoint、独立 C++ kernel、
+一般端口 SettleGraph 和 Read 批量 VJP；不是全仓库/全设备矩阵。
+
+未暂存的带权 Python/C++ 代码、测试、契约与 validation/checkpoint 绑定 hook
+保留为后续增量，继续完善 native/standalone 首组合证据，再依 ROADMAP 扩展完整范围。
+
+## 环境与未提交内容
+
+实际路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`，`/home/zlong` 是当前 home 的软链。
+现行规范 `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 与 `/etc/modulefiles`。
 环境：`module purge; module load ascend/dev-workspace-9.1.0; source .local/venv-core5/bin/activate`。
-没有数学歧义或用户未保存修改。参考仓库保持只读。GPU 真机独立待验。
+Python 3.12.13、Torch 2.12.0+cpu、GCC 10.3.1、aarch64。未修改公共环境。
+当前无用户未保存修改或数学歧义；参考仓库只读。GPU 真机待验单列，不能替代为编译证据。
+未暂存的带权代码/测试/契约是同一已授权任务后续增量，不在当前表示资格快照内。

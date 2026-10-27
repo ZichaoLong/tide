@@ -144,6 +144,7 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Event>(m, "Event")
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)
+    FIELD(Event, descriptor_fields)
     FIELD(Event, next) FIELD(Event, full) FIELD(Event, active) FIELD(Event, history)
     .def_property_readonly("emitted", [](const Event& e) {
       std::map<Index, Tensor> result;

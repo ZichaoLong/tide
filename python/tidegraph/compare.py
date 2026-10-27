@@ -46,7 +46,8 @@ def objective(result, root="all"):
         terms += [square(x) * 0.7 for _, _, _, x in result.outputs]
     if root in {"all", "state"}:
         terms += [square(s.value) * 0.3 for s in result.continuation.states.values()]
-        terms += [square(v) * 0.11 for s in result.continuation.states.values() for v in s.slots.values()]
+        terms += [square(v) * 0.11 for s in result.continuation.states.values() for v in s.slots.values()
+                  if v.is_floating_point() or v.is_complex()]
     if root in {"all", "history"}:
         terms += [square(v) * 0.13 for h in result.continuation.history.values() for v in h.tensors.values()]
     if root in {"all", "pending"}:

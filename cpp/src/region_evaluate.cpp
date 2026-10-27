@@ -38,7 +38,7 @@ Selection evaluate_selection(const Graph& g, const Model& m, const History* prev
     const auto& e = events[i];
     if (e.batch != first.batch || e.time != first.time || e.node <= previous || g.nodes[e.node].region != owner.second)
       throw std::invalid_argument("invalid region candidate domain/order");
-    candidates.push_back({e.node, e.descriptor}); nodes.insert(e.node); previous = e.node;
+    candidates.push_back({e.node, e.descriptor, e.descriptor_fields}); nodes.insert(e.node); previous = e.node;
   }
   History initial;
   if (!previous_history) {

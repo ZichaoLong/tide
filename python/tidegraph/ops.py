@@ -151,7 +151,8 @@ class NodeWeights(nn.Module):
         views = [Content(h) for h in contents] if views is None else views
         states = self.propose_block(old, contents, times, views)
         previous = [old, *states[:-1]]
-        return states, torch.stack([self.describe(a, b, c, t, read_mode) for a, b, c, t in zip(previous, states, views, times)])
+        descriptors = [self.describe(a, b, c, t, read_mode) for a, b, c, t in zip(previous, states, views, times)]
+        return states, descriptors if self.read_program.field_layout is not None else torch.stack(descriptors)
 
     @property
     def can_prefill(self):

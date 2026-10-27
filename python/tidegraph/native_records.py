@@ -38,6 +38,8 @@ def window_records(result):
                                           "control", "comparison", "next", "active", "history",
                                           "proposal_slots", "comparison_slots", "next_slots", "contributions")}
         event["history"] = history(e.history)
+        if e.descriptor is None:
+            event["descriptor"] = e.descriptor_fields
         event["fiber"] = [atom(a) for a in e.fiber]
         if e.active:
             event["full"] = e.full

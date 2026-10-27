@@ -76,6 +76,19 @@ validated against explicit int64 event coordinates. Checkpoint decoding restores
 all graph state and pending; execution under a Settle time code also validates
 state/history/ledger/message alignment. See [mapping](settle-embedding.md).
 
+## Structured local representation
+
+[Named tensor fields](structured-records.md) extend Read to explicitly declared
+finite products without conflating descriptor, payload, aggregate or state widths.
+A custom State program can declare named int64 metadata slots; float slots remain
+independent differentiable tensors. Checkpoint v5 preserves their actual dtype and
+exact values; profile-specific layout validation remains mandatory. Fields retain
+separate public roots through explicit packing, using actual computed field handles
+for in-memory VJP binding. Decoding never invokes a reference recurrence.
+`SourceClasses` is a parameter classification over physical ports/edges, allowing
+several atoms in one class; it does not change SourceDomain's exclusivity contract.
+These extensions do not automatically implement weighted memory or region formulas.
+
 ## First local profile: `ema-ffn-v1`
 
 For tagged values x_i and learned source weights w_i, `h=sum_i w_i*x_i`.

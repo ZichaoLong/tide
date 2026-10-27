@@ -17,6 +17,8 @@ class _SemanticValue(torch.autograd.Function):
 def value(packed, reference):
     if (packed.shape, packed.dtype, packed.device) != (reference.shape, reference.dtype, reference.device):
         raise ValueError("batching contract changed tensor metadata")
+    if not (reference.is_floating_point() or reference.is_complex()) and not torch.equal(packed, reference):
+        raise ValueError("batching contract changed integer metadata values")
     if not reference.requires_grad:
         return packed.detach()
     return _SemanticValue.apply(reference, packed.detach())

@@ -112,6 +112,10 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
     const auto& e = events[i];
     requests.push_back(read_input(mode, e.old, e.proposed_state, e.time, e.local_content()));
   }
+  if (w.read_kernel->structured()) {
+    evaluate_read_fields(w, events, ids, requests, packed);
+    return;
+  }
   std::vector<Tensor> values;
   const bool batched=packed && at::GradMode::is_enabled() && w.read_kernel->batched_autograd();
   if (batched) values=w.read_kernel->batch_grad(w,requests);

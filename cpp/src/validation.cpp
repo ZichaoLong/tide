@@ -81,7 +81,13 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
     const auto& ref = m.nodes[owner.second].bias;
     check_tensor(state.value, ref, {m.width()});
     m.nodes[owner.second].kernel->validate_state(m.nodes[owner.second], state);
-    for (const auto& [name, value] : state.slots) check_tensor(value, ref, value.sizes());
+    const auto metadata = m.nodes[owner.second].kernel->integer_slots();
+    for (const auto& [name, value] : state.slots) {
+      if (metadata.count(name)) {
+        require(value.defined() && value.device() == ref.device() && value.scalar_type() == at::kLong
+                && !value.requires_grad(), "invalid int64 state metadata slot");
+      } else check_tensor(value, ref, value.sizes());
+    }
   }
   for (const auto& [owner, history] : q.history) {
     require(batch(owner.first) && owner.second >= 0 && owner.second < r, "invalid history owner");

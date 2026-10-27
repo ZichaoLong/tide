@@ -45,8 +45,10 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         reference = model.nodes[v].bias
         tensor(state.value, reference)
         model.nodes[v].validate(state)
-        for value in state.slots.values():
-            if value.device != reference.device or value.dtype != reference.dtype or not torch.isfinite(value).all():
+        metadata = getattr(getattr(model.nodes[v], "kernel", None), "integer_slots", frozenset())
+        for name, value in state.slots.items():
+            dtype = torch.int64 if name in metadata else reference.dtype
+            if value.device != reference.device or value.dtype != dtype or not torch.isfinite(value).all():
                 raise ValueError("incompatible state slot dtype/device/value")
     for (b, r), history in q.history.items():
         if not 0 <= b < q.batch_size or not 0 <= r < len(graph.regions):
