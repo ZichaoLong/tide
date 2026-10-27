@@ -117,6 +117,8 @@ Absent bias is a missing parameter role; None/zero roots and all shared users
 are retained by its explicit first-order VJP. This is a local algebra component,
 not a replacement for the complete memory/Describe/Full definitions.
 
+The [resident KV update](resident-weighted-kv-update.md) composes actual low-rank and summary projections with raw original-time cache updates. Its saved first-order adjoint preserves separate KV/summary parameter roles and private content/state roots. Mem/Describe/Full and graph lifecycle require their own acceptance.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
