@@ -25,40 +25,29 @@
 | 5391017 | 区域数值/batched VJP、稳定均值反向 | 536 | [报告](evidence/core5-region-20261027.md) |
 | 503f609 | 来源绑定/类别宽度、稳定 Attention/RMS VJP | 665 | [报告](evidence/core5-source-20261027.md) |
 | 52dee1e | Aggregate 精确计算复用 | 543 | [报告](evidence/core5-sharing-20261027.md) |
+| 6dc2665 | KV 基座投影复用 | 309 | [报告](evidence/core5-kv-sharing-20261027.md) |
 
 ## 当前任务与精确下一动作
 
-Aggregate 复用实现 52dee1e5da119851e97fc302f71a52098aef270d 的固定资格已完成：
-unit tide-core5-sharing-qualify-20261027，inactive/success、exit 0，543 passed / 0 failed / 0 skipped。
-只读 worktree artifacts/worktrees/core5-bootstrap 干净，tree 8bcfe5d0485b7dae63e556f9e93408f345e69c39；
-输出 artifacts/jobs/core5-sharing-qualify，build manifest 已独立保存；launcher .local/core5-sharing-qualify.sh。
-本次证据单独提交推送，不混入后续 KV 实现。Aggregate 证据已推送到 82917c2；当前 KV 状态见下文。
+KV 基座投影复用实现 6dc2665c4fbd9053173bbd9d26c7e1b03b62abae 已完成固定资格：
+unit tide-core5-kv-sharing-qualify-20261027，inactive/success、exit 0，309 passed / 0 failed / 0 skipped。
+worktree artifacts/worktrees/core5-bootstrap 干净，tree 8a2f2705a9021a7ee2bd05d41ea0c74b5b6d7c08；
+输出 artifacts/jobs/core5-kv-sharing-qualify，build manifest 已独立保存；launcher .local/core5-kv-sharing-qualify.sh。
+证据独立提交推送；主工作区 native checkpoint 草稿不属于本资格。
 
-KV 基座复用开发已通过：tide-core5-kv-sharing-dev-20261027，inactive/success、exit 0，
-309 passed / 0 failed / 0 skipped；源码 tree ac222fb4b72840e69884a795be9009064e2055e3。
-177 项编译/链接完成，Python/native 共享基座、私有状态/适配器、全部使用者 VJP、
-在线三种调度、三步 AdamW/pending 恢复，以及通用 State/五种记忆回归和 standalone 手算通过。
-输出 artifacts/jobs/core5-kv-sharing-dev，build manifest 已保存；launcher .local/core5-kv-sharing-dev.sh。
-当前没有活动任务。正在从上述已测 tree 提交 KV 实现，不混入后续 native checkpoint 草稿。
-
-下一步冻结该实现提交，启动 tide-core5-kv-sharing-qualify-20261027；
-launcher .local/core5-kv-sharing-qualify.sh，输出 artifacts/jobs/core5-kv-sharing-qualify。
---reuse-build 校验 C++ 源码和全部二进制 hash，测试范围与开发相同；
+下一步冻结原生 checkpoint/standalone 训练增量并启动 tide-core5-native-training-dev-20261027。
+launcher .local/core5-native-training-dev.sh，输出 artifacts/jobs/core5-native-training-dev；
 独立 background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
-检查 `systemctl --user show tide-core5-kv-sharing-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`、
-`cat artifacts/jobs/core5-kv-sharing-qualify/status.json`、`tail -n 30 artifacts/jobs/core5-kv-sharing-qualify/task.log`。
-尚未启动资格，不可标为通过。通过后单独提交证据并推送，继续下述实现。
-一次新续接测试误将中间状态 objective 计入整段目标，2 项失败；改为完整末态和拼接输出后通过，
-实现未因此改变。所有未提交修改均为本任务所作。
+检查 `systemctl --user show tide-core5-native-training-dev-20261027 -p ActiveState -p Result -p ExecMainStatus`、
+`cat artifacts/jobs/core5-native-training-dev/status.json`、`tail -n 30 artifacts/jobs/core5-native-training-dev/task.log`。
+尚未启动开发构建，不可标为通过。主工作区所有未提交源码均为该增量，含 graph_checkpoint*、
+二进制 codec、独立 C++ 五记忆/异构 × FC/HB/非对齐/反馈训练恢复，
+以及完整比较器的 descriptor_fields/int64 检查。契约 docs/native-graph-checkpoint.md。
+新加载拒绝测试使用校验和正确但时钟非法的记录，确认完整验证先于任何参数变更。
 
-主工作区开始后续独立原生完整 checkpoint 草稿：graph_checkpoint* 与共享二进制 codec，
-已接入 CMake/build manifest，增加独立 C++ 五记忆/异构 × FC/HB/非对齐/反馈的训练恢复检查，
-尚未构建测试；契约 docs/native-graph-checkpoint.md。不属于 ac222fb，不能随 KV 实现提交或认证。
-cpp/bench/compare.cpp 同时补齐结构化 Read 字段与整数 Tensor 严格比较。
-后续 launcher 已写 .local/core5-native-training-dev.sh（未启动），须先完成 KV 实现/固定资格/证据，
-再冻结新的全工作树，启动独立新 job 输出 artifacts/jobs/core5-native-training-dev。
-随后继续 mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/续接、
-有限 profiling 与最终追溯，完整范围见 ROADMAP。CUDA 源码/构建/真机分别记录。
+通过后提交该实现，再冻结实现提交进行同范围资格，单独提交证据并推送；
+继续 mixed/resident 前向/反向/optimizer/跨卡、有限 profiling 与最终追溯。
+CUDA 源码/构建/真机分别记录；总体剩余见 ROADMAP。
 
 ## 环境与保留事项
 
