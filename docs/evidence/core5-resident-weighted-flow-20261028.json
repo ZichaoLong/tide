@@ -1,0 +1,365 @@
+{
+  "component": "complete weighted resident inference",
+  "date": "2026-10-28",
+  "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": [
+    "CPU FP32 model/boundary, single-device FP32 no-grad resident owner",
+    "Five memories; three Read snapshots; ten sending functions and applicable scores/evidence/keys",
+    "PDG feedback, nonaligned TimedDAG, general Settle ports, FC/HB, streaming/prefill",
+    "Complete records, physical edges/ports, controls, exact raw state/history/pending and new-owner checkpoint",
+    "NPU device-controlled stages and notification handshake; shared workspace; no host event sequence"
+  ],
+  "jobs": [
+    {
+      "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+      "state": "passed",
+      "started": "2026-10-27T17:41:06.816617+00:00",
+      "finished": "2026-10-27T17:41:46.038842+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-flow-cpu-qualify",
+      "unit": "tide-core5-weighted-flow-cpu-qualify-20261028.service",
+      "clean": true,
+      "log_sha256": "5bd5b66f6250ad99a0dbf257194f93af0beb21af94ed230d71420f08a5620df0",
+      "build": {
+        "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+        "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+        "backend": "cpu",
+        "torch": "2.12.0+cpu",
+        "python": "3.12.13",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "4cc5b676cb7b80c31e11e9b49c186d2266f135a8d46666007d7b3c3c14ca6cd5",
+          "libtidegraph_runtime.a": "2408028b27f6164e238f48662af7d1250a39c627aadec3854b04a7c84393ba77",
+          "_tide_native.so": "0e8e19605de97113030d2f02032644d7e10251d2da5ed08146c558c5b5de695d",
+          "tidegraph-smoke": "962aa30eb31657ad422811555fdc281a0c31b8dca0957424c60ca400f497bdac",
+          "tidegraph-kernel-check": "d41ac650b9741dce7c562944098c6b0ae0b7bc297095b28d0fd7a0b4591003d7",
+          "tidegraph-full-check": "196b5c00cc4ddce9f871f40d099bdebc3afcc9b88090675fac223dcd088dab2e",
+          "tidegraph-aggregate-check": "7c81dc0e9ff8d0a5894000d87be1f172086e52cd8fbe1eacd3c06614ffccfac2",
+          "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+          "tidegraph-checkpoint-check": "90451a028bd3cacd7ad6d322ae074cd57e755caf005ec30eaf928249d8e810e8",
+          "tidegraph-weighted-training-check": "c8ca6e426906d1dca449d2e5ba5b5481395dd97d333cd225307a2bb7218f2c3d",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0b7072ff0faee77b4d642e1dc7ed37b05b0d65c3673e579ca348960297e34790",
+          "tidegraph-scale-bench": "e344808fc7c3590fc5a1fd8907484ba4b7d3dea8fb4429ba02952323a625f7b5",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "a60d52f7ef0caea88130c4cf92f17cd991df2f501707dff3e5d289f811c71d72",
+          "tidegraph-greedy-check": "78d7e8bb2dd0c0fafbdbd4407c138fd1de67075bc848ca90fc897eef576e334b",
+          "tidegraph-accelerator-check": "5c09f90ad1fd0c8a2a8c29d3fd2c3278d1b2363c7a17f85dc3841ab998d62629",
+          "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+          "tidegraph-read-precision-check": "1422b0fa409791030c1c7ec4129fd628861c7eadb3adbfa43ab8d4934e4651d2",
+          "tidegraph-placement-check": "6324441167eeeb964dbafabdd212bbf869d1e611eed8c6f18f26d790b81272ce",
+          "tidegraph-payload-ownership-check": "ea98976eedb5802cf76ff18e95de6aed4fba51a375401ad9b57af244003ba7fe",
+          "tidegraph-weighted-binding-module-check": "2d01c1972eb6f5783a01ca7e598f37a31686462bcc9910bae971d22fd735b37d",
+          "libtidegraph-weighted-binding-module.so": "84d7fa7d59842b6119fcd026cc21aded58bb481c8403516cfa18b54605d97b85"
+        }
+      },
+      "observations": {
+        "pytest": 50,
+        "seconds": 22.91,
+        "kernel_dtypes": [
+          "float64",
+          "float32"
+        ],
+        "cross_dso_ctest": "passed"
+      }
+    },
+    {
+      "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+      "state": "passed",
+      "started": "2026-10-27T17:39:32.283108+00:00",
+      "finished": "2026-10-27T17:41:13.012869+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-flow-npu-qualify",
+      "unit": "tide-core5-weighted-flow-npu-qualify-20261028.service",
+      "clean": true,
+      "log_sha256": "44be5cb5e4343f5c5e190b4d1b9b912dd1ef20c951ada634f8d32a6511ce1ff1",
+      "build": {
+        "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+        "component_sha256": "2304f81682a9fb32fa486b22f7ab07116c148877c52abffa10df283505ff7b43",
+        "backend": "npu",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-device-services-check": "1b620f391004f43b7b7214cc47f3f4a77a508412c7ad78894bc5bd2ba22a63dd",
+          "tide-weighted-flow-check": "ebbcfa2cf953dea2701d35d875e8df1619073cb23911937085d616cc5fcd102b",
+          "tide-weighted-flow-config-check": "48997cc3f926420d62e513a37b03d02391f40271a57ce6930f45da8a21ea69c2",
+          "libtide-weighted-flow.so": "ec0394a8ece9b4be319af2f7cd83e9c0bf3102e700e7a5a035d67dc25a93f48b"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "backend": "npu",
+          "cxx11_abi": true
+        },
+        "reuse": "Compiled sources and binary digests verified against the frozen clean source; original development receipts retained. Installation-only CMake changes reconfigured without claiming binary recompilation."
+      },
+      "queue": {
+        "elapsed_seconds": 78.16900208219886,
+        "job_id": "core5-weighted-flow-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 3,
+        "physical_ids": [
+          3
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T17:41:12.989987+00:00"
+      },
+      "device_cases": [
+        {
+          "check": "services",
+          "dtype": "float32",
+          "command": [
+            "tide-device-services-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "services-float32.log",
+          "log_sha256": "2e3ba8e2fa7f5ebf10bd5ecb306b754b670360e5581eae69c9228010f9a7d8f3"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "command": [
+            "tide-weighted-flow-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-float32.log",
+          "log_sha256": "605c07a98c6e4cb4314321beca4d372aa029515c30b247f2b4d2b2a193487b05"
+        },
+        {
+          "check": "weighted-flow-config",
+          "dtype": "float32",
+          "command": [
+            "tide-weighted-flow-config-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-config-float32.log",
+          "log_sha256": "995d8a30c70ead93fd6f3382aaae2047efa2808bd70eda19a0ab929ac42b3307"
+        }
+      ],
+      "observations": {
+        "cpu_metadata_tests": 5,
+        "cpu_metadata_seconds": 0.77,
+        "cross_dso_ctest": "passed",
+        "graph_cases": 21,
+        "configuration_cases": 15,
+        "boundaries": "passed",
+        "services_workspace_bytes": 16777472
+      },
+      "installed_consumer": {
+        "state": "passed",
+        "component": "weighted",
+        "binary_sha256": "054944835eab2a813976e39c7f8e8b5ac870f847b9a36fec0b0f61034678a132",
+        "loader_sha256": "e04c69946a7adf36b36ac618c75ceff127b7c50bc2c0f7e2dc4b527b3cfde1e2",
+        "consumer_sources": {
+          "CMakeLists.txt": "94b341cb9a486f0a6b9469d078bc738faea5669600c82725466d17f5a77d3560",
+          "main.cpp": "d49ee630d0203e7cc242206667e312fa3b0432f2cb83c6f8ebb6594d6c240b1a"
+        },
+        "runtime": "NPU npu:0; independent public-header hand calculation and split/new-owner continuation passed",
+        "runtime_log_sha256": "1a62375d16653cfa974c4648beedd70fdf6a93da061904bd42698a69a66dc770"
+      }
+    },
+    {
+      "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+      "state": "passed",
+      "started": "2026-10-27T17:39:32.286843+00:00",
+      "finished": "2026-10-27T17:40:18.406998+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-flow-python-qualify",
+      "unit": "tide-core5-weighted-flow-python-qualify-20261028.service",
+      "clean": true,
+      "log_sha256": "2ede4167d81153d898e2d7f3976bffd0faf87d22176489a16188837ae18d7712",
+      "build": {
+        "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+        "component_sha256": "2304f81682a9fb32fa486b22f7ab07116c148877c52abffa10df283505ff7b43",
+        "backend": "npu",
+        "runtime": "python",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "22899f2c645ab00462a987d9426c0f029ff79ebf09211e6f0a602f298ebfa90d",
+          "libtide-weighted-flow.so": "2c3171a2b767f0ef372b22183515f3bea8cbcc8e94b142f1c6e45538c7509b20"
+        },
+        "core": {
+          "source": "01689c00da713413af494b8be0b42d2fe12b59c3",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.12.0+cpu",
+          "python": "3.12.13",
+          "architecture": "aarch64",
+          "backend": "npu",
+          "cxx11_abi": true
+        },
+        "reuse": "Compiled sources and binary digests verified against the frozen clean source; original development receipts retained. Installation-only CMake changes reconfigured without claiming binary recompilation."
+      },
+      "queue": {
+        "elapsed_seconds": 36.05773762613535,
+        "job_id": "core5-weighted-flow-python-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T17:40:18.375512+00:00"
+      },
+      "observations": {
+        "pytest": 23,
+        "seconds": 24.14,
+        "public_graph_cases": 18,
+        "metadata_tests": 5
+      }
+    }
+  ],
+  "development_failures": [
+    {
+      "job": "core5-weighted-flow-dev",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "C++ local variable name conflict",
+      "tree": "5bf94a7eccaed71608d1eb04df23721bd905df5b"
+    },
+    {
+      "job": "core5-weighted-flow-dev2",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "check executable missing runtime linkage",
+      "tree": "97f3f6f3dede48f84da2ba286b3c8b77c6ef1755"
+    },
+    {
+      "job": "core5-weighted-flow-dev3",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "strict reuse preflight rejected unrelated binding change",
+      "tree": "36345adf1e4a2f6d987da563373eb3a1ae4136d0"
+    },
+    {
+      "job": "core5-weighted-flow-dev4",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "CANN stream task capacity 361001/507002",
+      "tree": "36345adf1e4a2f6d987da563373eb3a1ae4136d0"
+    },
+    {
+      "job": "core5-weighted-flow-dev5",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "HUGE stream still reached CANN task capacity; approach withdrawn",
+      "tree": "918aeaa37daf8e4a497e356f052437fe77bdd3a9"
+    },
+    {
+      "job": "core5-weighted-flow-dev6",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "workspace sum exceeded budget; replaced by device-serialized shared workspace",
+      "tree": "e92e0d50554d8b9839e681f3c8c07470260aa713"
+    },
+    {
+      "job": "core5-weighted-flow-dev7",
+      "state": "failed",
+      "exit_code": 8,
+      "cause": "DSO fixture missing selection_width",
+      "tree": "ce2603ddb84acd8d4d2d656c9a7f788239d28e88"
+    },
+    {
+      "job": "core5-weighted-flow-dev8",
+      "state": "cancelled",
+      "exit_code": 143,
+      "cause": "cancelled after discovering stale incremental object layout",
+      "tree": "53fbe96589efd27e6bd736d6f34322190c7bb65a"
+    },
+    {
+      "job": "core5-weighted-flow-python-dev",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "CMake target guard",
+      "tree": "7896685d56b2809d35a3ec9eda8bd83c21f8012c"
+    },
+    {
+      "job": "core5-weighted-flow-python-dev2",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "anonymous installed types not recognized across DSOs",
+      "tree": "918aeaa37daf8e4a497e356f052437fe77bdd3a9"
+    },
+    {
+      "job": "core5-weighted-flow-python-dev3",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "stale incremental object layout",
+      "tree": "ce2603ddb84acd8d4d2d656c9a7f788239d28e88"
+    },
+    {
+      "job": "core5-weighted-flow-installed-dev",
+      "state": "failed",
+      "exit_code": 127,
+      "cause": "consumer passed; final rg marker unavailable in service PATH (127)",
+      "tree": "4eb35420624e7526545479ea4c84665b0558d599"
+    },
+    {
+      "job": "core5-weighted-flow-cuda-dev",
+      "state": "failed",
+      "exit_code": 1,
+      "cause": "Torch injected sm50; __nanosleep compile failure",
+      "tree": "78b86b672ce185f0341ae4cbbb2baaab1c00a5cf"
+    },
+    {
+      "job": "core5-weighted-binding-dso-dev",
+      "state": "failed",
+      "exit_code": 8,
+      "tree": "7757a47807c9df81dd4d0a8df45cf6466880e516",
+      "cause": "45 Python/native tests and kernel checks passed, final DSO fixture omitted selection_width"
+    }
+  ],
+  "independence": "CPU Greedy owns its schedule; local formula/directional/independent-field anchors are linked by the module contract. Installed consumer uses a separate hand-computable binding. Decode reads actual candidate buffers only.",
+  "commands": [
+    "python scripts/develop.py --output-dir NEW --build-dir CPU_BUILD --jobs 2 tests/test_weighted_binding_inspection.py tests/test_weighted_native.py tests/test_resident_weighted_flow_packing.py",
+    "CPU_BUILD/tidegraph-kernel-check --dtype=float64 (and float32)",
+    "ctest --test-dir CORE_BUILD -R ^weighted-binding-module$ --output-on-failure",
+    "python scripts/build_device_control.py --core-build NPU_CORE --build-dir NPU_BUILD --checks services weighted-flow weighted-flow-config --ascendc-soc Ascend910_9392 --jobs 2",
+    "python scripts/verify_device_control.py --build-dir NPU_BUILD --output-dir NEW_CHECKS --checks services weighted-flow weighted-flow-config --device npu:0",
+    "python scripts/build_resident_consumer.py --core-build NPU_CORE --resident-build NPU_BUILD --output-dir NEW_CLIENT --component weighted",
+    "NEW_CLIENT/consumer/weighted-resident-consumer --device=npu:0 --dtype=float32",
+    "python scripts/build_device_control.py --core-build PYTHON_NPU_CORE --build-dir PYTHON_NPU_BUILD --python-component weighted --ascendc-soc Ascend910_9392 --jobs 2",
+    "TIDE_BUILD_DIR=PYTHON_NPU_CORE TIDE_RESIDENT_LIBRARY=PYTHON_NPU_BUILD TIDE_RESIDENT_DEVICE=npu:0 python -m pytest -q tests/test_resident_weighted_flow.py tests/test_resident_weighted_flow_packing.py"
+  ],
+  "limits": {
+    "seconds_per_job": 600,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete retained graph VJP, optimizer and exact training checkpoint",
+    "FP16 and peer resident graph paths",
+    "CUDA new architecture-controlled build and actual hardware separately",
+    "Finite profiling and performance selection"
+  ]
+}
