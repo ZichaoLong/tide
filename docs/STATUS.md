@@ -27,25 +27,35 @@
 | 52dee1e | Aggregate 精确计算复用 | 543 | [报告](evidence/core5-sharing-20261027.md) |
 | 6dc2665 | KV 基座投影复用 | 309 | [报告](evidence/core5-kv-sharing-20261027.md) |
 | a7106fc | standalone 训练/完整数值 checkpoint | 20 | [报告](evidence/core5-native-training-20261027.md) |
+| 9234c13 | typed weighted placement / packed copy VJP | 508 | [报告](evidence/core5-placement-20261027.md) |
 
 ## 当前任务与精确下一动作
 
-weighted placement 第二轮开发已通过：508 passed / 0 failed / 0 skipped，inactive/success、exit 0。
-unit tide-core5-weighted-placement2-dev-20261027；冻结 tree 259db933bc5d1bc55c62fb52e861d39d5220bb45，
-输出 artifacts/jobs/core5-weighted-placement2-dev，build manifest 已保存。
-五种记忆/三种 Read、十种发送、共享参数/完整记录/VJP/AdamW/续接/CPU checkpoint，
-CPU FP64/FP32 与显式评分 cast；不代表真实设备通过。
+placement 实现 9234c13，固定 tree 81d829ed987729e1d697078b10a8fa81615f1ea8 的 CPU 资格已通过：
+508 passed / 0 failed / 0 skipped；unit tide-core5-weighted-placement-qualify-20261027，inactive/success、exit0。
+输出 artifacts/jobs/core5-weighted-placement-qualify，build manifest 已保存，证据独立提交推送。
+第一轮开发缺测试头文件的失败记录仍保留，见该证据。
 
-第一轮 tree 2cb09da838d5e1335e691dc2fa83a1a31cad4150 因测试缺 ATen/core/grad_mode.h 编译失败，
-原记录 artifacts/jobs/core5-weighted-placement-dev 保持 failed/exit 1；补头文件后第二轮通过。
-短公式检查原先误把固定非 grad 参数加入根清单，原失败保留；修正后已由完整套件覆盖。
+设备开发 frozen tree 73f75c559f99a2278a8c27de9281fbc959bfde7e，worktree artifacts/worktrees/core5-device，
+HEAD9234c13，新增三个检查脚本。**该 worktree 尚被活动 build 使用，禁止修改。**
+- tide-core5-npu-python-build-20261027：仍在编译当前 Torch2.12/CANN9.1 的 NPU Python adapter；
+  .local/core5-npu-python-build.sh；output artifacts/jobs/core5-npu-python-build；2 workers、1800秒。
+- tide-core5-weighted-npu-python-dev-20261027：passed/exit0、19 代表案例全部通过。
+  output artifacts/jobs/core5-weighted-npu-python-dev；mixed-c 纯 Python，完整记录/独立根/四步 optimizer/恢复与 CPU handoff；
+  physical1→logical npu:0，由 queue 动态选择。开发证据不代替固定提交最终资格。
+- 短探针 artifacts/jobs/core5-npu-sorted-probe：exit0；physical3→npu:0，
+  标量硬发送设备排序、大 int64 平票、分数 total 和 literal VJP、typed packed copy 已通过。
+  厂商报告 int64 argsort 在设备 AiCPU 执行，未转 float、不把它称为 AiCore 核。
 
-下一动作：提交已测 placement 实现，固定提交至 artifacts/worktrees/core5-bootstrap，
-运行 .local/core5-weighted-placement-qualify.sh（复用校验后的 CPU build），
-新 unit tide-core5-weighted-placement-qualify-20261027 / output artifacts/jobs/core5-weighted-placement-qualify。
-资格通过后独立证据提交推送。主工作区新增三个 scripts/weighted_device* / check_weighted_device.py
-是后续真实 mixed-a/b/c、完整训练/恢复检查草稿，尚未验证，不进入本次 placement 提交。
-继续 weighted resident、低精度、真实跨卡、有限 profiling 与最终追溯；整体目标仍未完成。
+主工作区未提交：check_weighted_device.py / weighted_device_cases.py / weighted_device_checks.py /
+weighted_device_primitives.py，以及 Python/C++ 标量硬发送的设备 batch 排序入口、standalone 训练检查的
+独立 CPU reference 与 placement/case 开关。设备开发第一轮不包含后加的 warm state 根和排序入口。
+下一动作：核对上述 build 终态，保存 manifest；冻结最新增量，再跑相关 CPU 与实际 mixed-a/b/c native，
+以及独立 libtorch-npu/2.10.0-cann9.0.0 SDK 构建/真机。实现通过后提交，固定资格再独立证据。
+继续 weighted resident、低精度、跨卡、有限 profiling 与最终追溯；整体目标仍未完成。
+
+检查当前 build：systemctl --user show tide-core5-npu-python-build-20261027 -p ActiveState -p Result -p ExecMainStatus；
+cat artifacts/jobs/core5-npu-python-build/status.json；tail -n 30 artifacts/jobs/core5-npu-python-build/task.log。
 
 ## 环境与保留事项
 

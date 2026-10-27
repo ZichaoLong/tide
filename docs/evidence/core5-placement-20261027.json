@@ -1,0 +1,53 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "38d307bd44ad8f78d662759287b0983c2714d3d6a08d59c2be6ae51d559450eb",
+  "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Weighted typed Read and Sending placement, packed temporary transfer and first-order VJP; CPU FP64/FP32 only",
+  "result": {
+    "passed": 508,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "3cb89edf5da8d75de06825b1427c613fdb8ccbb3a9f8fdc0967e93f403a24db2",
+  "git_tree": "81d829ed987729e1d697078b10a8fa81615f1ea8",
+  "binary_sha256": {
+    "libtidegraph.a": "d11300d39085eaba0d7f1120c59be6b064a0b56ff2aca7d525c2db469da6184a",
+    "_tide_native.so": "098774b3b964920440bb4c56e08fdfc07969e0e7ab2504b98df1b3fc673f7aa2",
+    "tidegraph-kernel-check": "99729eaf7e348d0b883c5231ea29cce0eee505419249f2c317eaf759c5fa8007",
+    "tidegraph-weighted-training-check": "b6a7a4de56096f56ca04d4f83d2cc62214db67ade93a81ba4dabd425f766ea6d"
+  },
+  "log_sha256": "ebeb86080dd0e6431a06cb850181a90fc51997162bbd6b80dbaab0424760060f",
+  "started": "2026-10-27T10:46:18.599974+00:00",
+  "finished": "2026-10-27T10:50:00.229739+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-weighted-placement-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-weighted-placement-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_placement.py",
+      "tests/test_placement.py",
+      "tests/test_weighted_sending.py",
+      "tests/test_weighted_sending_native.py",
+      "tests/test_weighted_sending_batch.py",
+      "tests/test_weighted_region_batch.py",
+      "tests/test_weighted_region_execution.py",
+      "tests/test_weighted_query_vjp.py",
+      "tests/test_cpp_weighted_training.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-weighted-placement-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes checked by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
