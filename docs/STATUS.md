@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 `graph-execution-foundation`。
-当前源码672e948已推送；最近证据bf71bae，完整half训练源码21ed86d、样本副本源码672e948待设备资格。用户授权持续实施、私有环境、有限实验、分阶段提交与正常推送；不用子代理，参考仓库只读。
+当前源码e478bd4已推送；完整half训练21ed86d资格已审阅，样本副本672e948资格继续。用户授权持续实施、私有环境、有限实验、分阶段提交与正常推送；不用子代理，参考仓库只读。
 总体未完成，阶段提交后继续。唯一待办 [ROADMAP](ROADMAP.md)，持续契约 [execution-flows](execution-flows.md)。
 重入已核对实际路径/git/jobs；固定上游19文件与旧版5文件校验通过。
 
@@ -59,7 +59,7 @@ C++训练与Python-owned扩展构建已完成；下面单列实际运行范围�
 - `core5-half-training-npu-qualify`：standalone两dtype完整图/配置/训练，CPU32；NPU queue180秒，gate600秒。
 - `core5-half-training-python-qualify`：Python-owned完整图/训练/手算根与磁盘/新进程恢复；queue180秒，pytest600秒。
 - `core5-half-training-cuda-qualify`：三架构选定完整图/配置/训练build/loader/help；无GPU数值结论。
-新任务均1800秒、2workers/BLAS1、Nice10/background.slice；已启动并核对独立Transient服务。CUDA已终态passed/exit0，unit inactive/success/0。Python-owned终态passed/exit0，52项通过/165.29秒，物理9→npu:0。standalone NPU已完成两dtype的21图/15配置，仍在多步训练；物理11→npu:0。三者完整证据待审阅，live任务不标passed。
+新任务均1800秒、2workers/BLAS1、Nice10/background.slice；已启动并核对独立Transient服务。三个任务均终态passed/exit0，units inactive/success/0，已完整审阅[报告](evidence/core5-resident-half-training-20261028.md)。CPU32；Python-owned52项/165.29秒，物理9→npu:0；standalone两dtype各21图/15配置/5训练轨迹20更新，物理11→npu:0。CUDA265步、选定67条CUDA编译与全部配置161条均80/90/100。
 units均为`tide-JOB-20261028.service`，输出`artifacts/jobs/JOB/`、launcher `.local/JOB{,-workload}.sh`。
 固定checkout跟踪文件只读，三个任务运行期间不可改动。
 
@@ -78,7 +78,7 @@ units均为`tide-JOB-20261028.service`，输出`artifacts/jobs/JOB/`、launcher 
 CPU guard首跑3通过/1失败：测试传入temporary.clone().data_ptr()后clone提前释放；改为持有clone后4项通过/0.76秒；原失败保留此处。
 短C++语法检查已通过：独立参考、half轨迹、peer函数及peer检查；不是设备构建资格。
 Python接口/测试及检查注册模块AST通过。跨卡实现672e948已提交推送，另冻结到artifacts/worktrees/core5-weighted-peer。
-已启动core5-weighted-peer-{npu,cuda,python}-qualify，三个任务均running/active，unit模式及输出/launcher规则同上；三个新build目录npu/cuda/python。
+已启动core5-weighted-peer-{npu,cuda,python}-qualify，CUDA已passed/exit0，NPU/Python仍running/active，unit模式及输出/launcher规则同上；三个新build目录npu/cuda/python。
 NPU为两卡队列180秒、设备检查600秒；CPU guard4，standalone weighted-peer两dtype，Python-owned四配置；CUDA build/loader/help。
 每任务1800秒/2workers/BLAS1/Nice10/background.slice。库存16颗健康NPU，本次快照无进程，实际分配仍由队列双快照决定。
 不重复已通过的完整矩阵；half与peer分开核验，当前没有新的硬件通过结论。
@@ -88,8 +88,8 @@ NPU为两卡队列180秒、设备检查600秒；CPU guard4，standalone weighted
 新增scripts/benchmark_weighted.py及独立fixture/runner模块，docs/weighted-performance.md定义完整计时边界。
 纯Python KV/非对齐DAG prefill、SSD/HB streaming和Python调用native KV/DAG的短CPU入口检查通过；
 每项1个warmup+1个测量窗及事后完整独立记录/参数比较。这些dirty入口检查不是正式性能证据。
-另通过CPU推理profile入口，导出独立trace并事后核对完整记录。未启动受控性能测量；
-standalone独立入口、NPU入口资格和有限profiling仍继续。
+另通过CPU推理profile入口，导出独立trace并事后核对完整记录。未启动受控性能测量。
+主区未提交：scripts/export_weighted_benchmark.py及tools/weighted_benchmark/，新增静态fixture编解码和独立C++完整计时消费者，尚待语法/构建/入口验证。Python exporter短检查通过；NPU入口资格和有限profiling继续。
 
 ## 保留限制与环境
 

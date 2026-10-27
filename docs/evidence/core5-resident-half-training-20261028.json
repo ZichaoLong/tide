@@ -1,0 +1,339 @@
+{
+  "source": "21ed86d019d5dcbe3bffa363be02506433e23a7f",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "scope": "Public complete weighted FP32/FP16 inference, declared first-order training, SGD/AdamW and exact cuts",
+  "jobs": [
+    {
+      "source": "21ed86d019d5dcbe3bffa363be02506433e23a7f",
+      "state": "passed",
+      "started": "2026-10-27T21:34:24.609549+00:00",
+      "finished": "2026-10-27T21:52:19.386111+00:00",
+      "exit_code": 0,
+      "name": "core5-half-training-npu-qualify",
+      "unit": "tide-core5-half-training-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "ff280653db95a1055615f00172a619ea305adf85c2a1b2522b951ba7c1d5537f",
+      "log_sha256": "1bdc98d96811c798d04c0f3fd8ff127c3ae04f0d4a6e884457e002964003f247",
+      "build": {
+        "component_sha256": "0969c3ccd6f0752289e930c5ee02d2ea58edfdfd8160cd958e605f46df78f3ab",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-flow",
+          "weighted-flow-config",
+          "weighted-training"
+        ],
+        "binary_sha256": {
+          "tide-weighted-flow-check": "5fd2b2046d653396f50097df26c50dd5d19646eac3f552c481068b37999621ce",
+          "tide-weighted-flow-config-check": "c2d9fc75ee9f94660bc821620f574408477c4c80e72726d4240c62422eac7129",
+          "tide-weighted-training-check": "d9471bb93d1d4e6223ad698b8f720ad31cd80254539da2454ad557053efbf1f8",
+          "libtide-weighted-flow.so": "a81bd4899ffad34121b0aa5339430f173c02a01b9269ff53277e81968dff2aea",
+          "libtide-weighted-training.so": "27f5adbaed8aee2b6a9751b5bcf641b929c99515da68ef5363d1cafc05eafd9c"
+        },
+        "loader_sha256": {
+          "tide-weighted-flow-check": "d1fe9bd2516df826158eec7c6a13daeca893333288a93b0690ee3e489914e3fe",
+          "tide-weighted-flow-config-check": "4bbdc6f37ec858d087a584107aaf73996d41ef5786ca9555bcbee491564bdf16",
+          "tide-weighted-training-check": "74820e79115ff0ab1c8d5889daf4368d8c24eadd60f6c290741a42380d09de1d",
+          "libtide-weighted-flow.so": "ba476707996f287e65feee555ba519a14d02023f7cfd4874dd15c97ebd538e5f",
+          "libtide-weighted-training.so": "30f0a8a608b3b308be348707b858a9e253c611c771ae9d7d2ebc2a3cdaea0d05"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cpu": {
+        "passed": 32,
+        "skipped": 0,
+        "testcase_seconds": 3.451999999999998,
+        "xml_sha256": "e034b3801e63e9ecca3a922ed919d034df51408d37ca3ad52363d03e066e4ae4",
+        "classes": {
+          "tests.test_weighted_storage_reference": 9,
+          "tests.test_resident_weighted_payload_precision": 6,
+          "tests.test_resident_weighted_flow_packing": 5,
+          "tests.test_resident_weighted_reverse_route": 12
+        }
+      },
+      "cases": [
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "4d0524b6f2ee18c6be58750b6f490858aad7f508f87d72976c700d13205ebca0",
+          "markers": [
+            "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "22d6ba3f18651c83543de796ae56a0cebcadd52d3a96e05f87b867ba2ad34387",
+          "markers": [
+            "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-flow-config",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "1f5379120e8d7728b92c656fbe6e81557416cf29cce24fa43e595de95552ddac",
+          "markers": [
+            "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+          ]
+        },
+        {
+          "check": "weighted-flow-config",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "988693747eae5a3e26b0b0d582942dad88c366a4a2e802144bc3a112ca3936b3",
+          "markers": [
+            "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+          ]
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "70e88f0f977847bee5fe33cb3f93058465a55ea87db764134b9f0ed4df78cc62",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "76a70f038ac15998e0b6114bc21cc3039316c0f9398aaaf25cdbd590aa1842fd",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 310.8518151938915,
+        "job_id": "core5-half-training-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 11,
+        "physical_ids": [
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:52:19.362561+00:00"
+      }
+    },
+    {
+      "source": "21ed86d019d5dcbe3bffa363be02506433e23a7f",
+      "state": "passed",
+      "started": "2026-10-27T21:34:24.615348+00:00",
+      "finished": "2026-10-27T21:43:31.867516+00:00",
+      "exit_code": 0,
+      "name": "core5-half-training-cuda-qualify",
+      "unit": "tide-core5-half-training-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "55b2d2c43aada7bd0b9012b9cc7bc2139744a526018f9d6cd4e175592bdce762",
+      "log_sha256": "1b1d86779c9b98d84b6e0691e4667f79907e83dbf88d29fb9a9bf89a9e4310e2",
+      "build": {
+        "component_sha256": "0969c3ccd6f0752289e930c5ee02d2ea58edfdfd8160cd958e605f46df78f3ab",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-flow",
+          "weighted-flow-config",
+          "weighted-training"
+        ],
+        "binary_sha256": {
+          "tide-weighted-flow-check": "64dd8fcf5952180c98a15789c5c25f8f0af83ff82a0901c5eb93e4fae5bc1c75",
+          "tide-weighted-flow-config-check": "84e2b6a73af1e8c40386c03ec80ec70c3dda479915e53d9f9525bdb1eb03fbbf",
+          "tide-weighted-training-check": "611fc02efbe4c8e06257a98a169557ff8710a1d6cc6677d62f9b141441d52a07",
+          "libtide-weighted-flow.so": "649c7045187f75d3fb47ca0b77a67131123c7fecc8968e8f97424dc9a1a5c29a",
+          "libtide-weighted-training.so": "4f65e474a4169cd132c88b790c34e21780694bb7db788b982b8728693ce39a6e"
+        },
+        "loader_sha256": {
+          "tide-weighted-flow-check": "ccf8a68ec1032f3e59fbd650622f503b0766c39611b6732a75f71a7d92292a29",
+          "tide-weighted-flow-config-check": "83ebc4eeb1d1dbc392b687da345ef2690055c0914e256f03dd8c7b21b1dc18cd",
+          "tide-weighted-training-check": "ebece0f121abe25d85bf24ae9b9bf81a89e329d5d9604026e11829986efa3a7f",
+          "libtide-weighted-flow.so": "9f0263ebc76fe6b1c050d7cd54b0f76a8ec47e7f7457f6a90c9a5e83169e585a",
+          "libtide-weighted-training.so": "3d4280a0494551c572c9d94b7658edd0b62462983440f8e48599c17ab19c4ec2"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cuda": {
+        "configured_compile_commands": 161,
+        "selected_compile_commands": 67,
+        "architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "da2d4c12ae5e508cdf947dadcab4456b403d54a74f43ef4bcb8beb3fa91d271c",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "weighted-flow": "c6df444b85abe11165c8040575c645dd6f3f4961759867ccabeeeb30d0aafe52",
+        "weighted-flow-config": "7198db6d5b9a69bd53f8bdcb057f84117907bf902284387a0561db68f67903a1",
+        "weighted-training": "12dd45acf1c188361eaa36018cd2ca71e7ce67ab225e1fd6cb2f9ddb7776005c"
+      }
+    },
+    {
+      "source": "21ed86d019d5dcbe3bffa363be02506433e23a7f",
+      "state": "passed",
+      "started": "2026-10-27T21:34:24.631836+00:00",
+      "finished": "2026-10-27T21:48:53.890746+00:00",
+      "exit_code": 0,
+      "name": "core5-half-training-python-qualify",
+      "unit": "tide-core5-half-training-python-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "9d4b83e05819114c08cc662e658cf4236c81ee6710b357f66315ca4e47558003",
+      "log_sha256": "6f39afa3e12b491982820255b904fc39d5de87384d258177e1c04e7babc44084",
+      "build": {
+        "component_sha256": "0969c3ccd6f0752289e930c5ee02d2ea58edfdfd8160cd958e605f46df78f3ab",
+        "backend": "npu",
+        "runtime": "python",
+        "requested_checks": null,
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "f494b064b4b214b7a008834a6bd4621bfbf8b14504fb313268dd7db188adb321",
+          "libtide-weighted-flow.so": "ecf1c54ca4c79407f99e04815f8380aa2aebbef1fbcd6be884dbd99ebf08123b",
+          "libtide-weighted-training.so": "b7ca3dc032b855764138504ae99c4981ac21830e0387db30c0ed28a58e0bf2f5"
+        },
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "8a82309756aeafdc91e1732770a01177c0dcf0d05361fc37093a0f8fbfe831dc",
+          "libtide-weighted-flow.so": "9552d05bbcafd2f29876d3ae55c06590888b8ab956963c8900ac7f6ee433845c",
+          "libtide-weighted-training.so": "69d27b604fe5ded9e443a8f58d69d826929d0dae8a3324b9ab8ca3dcacbcba9f"
+        },
+        "core": {
+          "source": "01689c00da713413af494b8be0b42d2fe12b59c3",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "python": "3.12.13",
+          "cxx11_abi": true
+        }
+      },
+      "pytest": {
+        "passed": 52,
+        "skipped": 0,
+        "testcase_seconds": 164.80900000000005,
+        "xml_sha256": "c5b192180a91a031ecf6dcbd1607a0095498c974a5cf4e0a0db26cde04b3a963",
+        "classes": {
+          "tests.test_resident_weighted_training": 18,
+          "tests.test_resident_weighted_flow": 28,
+          "tests.test_resident_weighted_storage_roots": 6
+        }
+      },
+      "queue": {
+        "elapsed_seconds": 177.6847062855959,
+        "job_id": "core5-half-training-python-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:48:53.866631+00:00"
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "job": "core5-half-flow-npu-qualify",
+      "source": "31e017f8416ede8bf714b4c3f175aa7accc9916f",
+      "state": "failed",
+      "exit_code": 1,
+      "status_sha256": "a8c6682369e14bece3c9d376f904376c072705041042a47e06239e7e2063fec4",
+      "log_sha256": "99ec5fc35ad64b05775afe6e2867cdf19edd2c7664a8c86c37a31074979a89a6"
+    },
+    {
+      "job": "core5-half-flow-cuda-qualify",
+      "source": "31e017f8416ede8bf714b4c3f175aa7accc9916f",
+      "state": "failed",
+      "exit_code": 1,
+      "status_sha256": "4fca5eb7c5aca19c5090b1a6ef5fd1899838e000bef7813603fcac38d582567c",
+      "log_sha256": "0a875a00d40ff6d8cbb4f7b340aeaf3cf3b173e5f3dd15e5ff4fd800b5e91f50"
+    },
+    {
+      "job": "core5-half-flow-npu-qualify2",
+      "source": "31e017f8416ede8bf714b4c3f175aa7accc9916f",
+      "state": "failed",
+      "exit_code": 1,
+      "status_sha256": "a96476977437fcbbb4a451ee4ad219f898f5d34336ad33e86955d816d8815001",
+      "log_sha256": "0298922052b861aa848f55f479fcaee007b24e43754ee2276e3eb05f987e2061"
+    }
+  ],
+  "precision": {
+    "storage": "FP32 or FP16 raw/payload, exact int64 metadata",
+    "arithmetic": "FP32",
+    "adjoints": "FP32 identity VJP at storage casts",
+    "optimizer": "FP32 master/slots; publish rounds through requested storage",
+    "record_tolerance_half": {
+      "rtol": 0.02,
+      "atol": 0.001
+    },
+    "gradient_tolerance": {
+      "rtol": 3e-05,
+      "atol": 3e-06
+    },
+    "named_parameter_tolerance": {
+      "rtol": 1e-05,
+      "atol": 1e-06
+    }
+  },
+  "independence": [
+    "CPU time-major Python and C++ Greedy schedules, original textbook local math and explicit storage boundary.",
+    "Single-node KV literal keys/summaries/weights roots, RMS Jacobian and outer-product parameter gradients.",
+    "Complete full/raw/descriptor/control/message/port/pending roots; no reference recurrence in decode."
+  ],
+  "limits": [
+    "CUDA build/loader/help only; all real GPU paths pending.",
+    "No multi-device or performance acceptance in this report.",
+    "No new installed-consumer gate in this batch; earlier FP32 installed-consumer evidence remains separately scoped.",
+    "Half record tolerances do not relax discrete, int64, physical identity or None/connected-zero comparisons.",
+    "Original eager half GDN AdamW and asynchronous eager peer limitations remain; this is a distinct FP32-compute resident policy."
+  ]
+}

@@ -1,7 +1,8 @@
 # Weighted 公共训练 owner
 
 本页定义公共层契约；单设备FP32的session、完整字段视图、共享参数、两优化器与精确恢复
-已取得[343429d固定资格](evidence/core5-resident-weighted-training-20261028.md)。FP16、peer和性能分别验收。
+已取得[343429d固定资格](evidence/core5-resident-weighted-training-20261028.md)。FP32/FP16公共完整图、
+训练及精确恢复另取得[21ed86d固定资格](evidence/core5-resident-half-training-20261028.md)；peer和性能分别验收。
 [样本副本与共同更新](resident-weighted-peers.md)定义新增跨卡归约、精确optimizer一致性和全体提交边界；其资格另记。
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 FP16公共全图/训练资格](core5-resident-half-training-20261028.md)：21ed86d；CPU32、Python-owned NPU52、standalone两dtype各21图/15配置/20更新、完整VJP与精确恢复；CUDA三架构构建，peer与性能另验收。
+
 [Core-5 FP16四循环/KV Full资格](core5-resident-half-memory-20261028.md)：bcef2c4；CPU24、NPU两dtype四组合、CUDA三架构构建；完整half图另验收。
 
 [Core-5 FP16原始状态/投影/卷积资格](core5-resident-half-primitives-20261028.md)：2e4d445；CPU32、NPU两dtype六组合、CUDA三架构构建；明确FP32算术/伴随，完整half图另验收。
