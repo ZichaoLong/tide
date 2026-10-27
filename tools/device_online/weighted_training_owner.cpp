@@ -27,8 +27,8 @@ WeightedTrainingSession::Impl::Impl(Graph graph,Model model,const Continuation& 
     throw std::invalid_argument("weighted training requires explicit device and positive jointly bounded tensor reservations");
   if(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw)throw std::invalid_argument("unknown weighted optimizer");
   for(const auto& p:model.parameters(false).owners()){
-    if(!p.value.device().is_cpu()||p.value.scalar_type()!=at::kFloat)
-      throw std::invalid_argument("weighted training requires CPU FP32 boundary parameters");
+    if(!p.value.device().is_cpu()||(p.value.scalar_type()!=at::kFloat&&p.value.scalar_type()!=at::kHalf))
+      throw std::invalid_argument("weighted training requires CPU FP32/FP16 boundary parameters");
     guard_weighted_training(originals,p.value);}
   std::vector<training_detail::Version> unused;model=training_detail::freeze_model(std::move(model),d,unused);
   if(c){if(c->mode!="weighted"||c->zeta!=1.)throw std::invalid_argument("checkpoint is not a weighted training cut");
@@ -44,7 +44,7 @@ WeightedTrainingSession::Impl::Impl(Graph graph,Model model,const Continuation& 
         ||c->state.values.scalar_type()!=at::kFloat||c->state.values.sizes()!=layout.values.sizes())
       throw std::invalid_argument("weighted checkpoint packed parameter layout differs");
     for(size_t i=0;i<layout.owners.size();++i){const auto& p=layout.owners[i];
-      if(!at::equal(c->state.values.narrow(0,layout.offsets[i],p.value.numel()).reshape(p.value.sizes()),p.value))
+      if(!at::equal(c->state.values.narrow(0,layout.offsets[i],p.value.numel()).reshape(p.value.sizes()).to(p.value.scalar_type()),p.value))
         throw std::invalid_argument("weighted checkpoint named and master parameters disagree");}
     optimizer->restore(c->state);generation=c->generation;next_token=c->next_token;
   }

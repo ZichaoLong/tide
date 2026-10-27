@@ -9,11 +9,11 @@ void check(const at::Tensor& x,const at::Tensor& reference,at::ScalarType dtype,
 }
 }
 WeightedRowAdjoint zeros(DeviceProgram& p,const at::Tensor& shape){
-  WeightedRowAdjoint g{at::zeros_like(shape),at::zeros({shape.size(0)},shape.options().dtype(at::kBool))};
+  WeightedRowAdjoint g{at::zeros(shape.sizes(),shape.options().dtype(at::kFloat)),at::zeros({shape.size(0)},shape.options().dtype(at::kBool))};
   p.zero(g.value);p.zero(g.connected);return g;
 }
 WeightedRawAdjoint zeros(DeviceProgram& p,const WeightedRawLayout& l,const at::Tensor& shape){
-  WeightedRawAdjoint g{at::zeros_like(shape),at::zeros({shape.size(0),int64_t(l.fields().size())},shape.options().dtype(at::kBool))};
+  WeightedRawAdjoint g{at::zeros(shape.sizes(),shape.options().dtype(at::kFloat)),at::zeros({shape.size(0),int64_t(l.fields().size())},shape.options().dtype(at::kBool))};
   p.zero(g.value);p.zero(g.connected);return g;
 }
 void add(DeviceProgram& p,const WeightedRowAdjoint& target,const WeightedRowAdjoint& source,

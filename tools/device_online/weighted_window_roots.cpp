@@ -2,11 +2,11 @@
 namespace tide::device_online::weighted_window {
 WeightedRowAdjoint row(const at::Tensor& x,int64_t leading){
   auto shape=x.sizes().vec();shape.resize(leading);
-  return {at::zeros_like(x),at::zeros(shape,x.options().dtype(at::kBool))};
+  return {at::zeros(x.sizes(),x.options().dtype(at::kFloat)),at::zeros(shape,x.options().dtype(at::kBool))};
 }
 WeightedRawAdjoint raw(const WeightedRawLayout& l,const at::Tensor& x,int64_t leading){
   auto shape=x.sizes().vec();shape.resize(leading);shape.push_back(l.fields().size());
-  return {at::zeros_like(x),at::zeros(shape,x.options().dtype(at::kBool))};
+  return {at::zeros(x.sizes(),x.options().dtype(at::kFloat)),at::zeros(shape,x.options().dtype(at::kBool))};
 }
 at::Tensor load(DeviceProgram& p,const at::Tensor& stage,const at::Tensor& x){
   auto shape=x.sizes().vec();shape.erase(shape.begin());auto result=at::zeros(shape,x.options());

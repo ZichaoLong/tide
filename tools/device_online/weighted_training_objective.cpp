@@ -1,6 +1,7 @@
 // Public fields -> independent Greedy mathematical returns. No native adjoint
 // helper or reference-derived execution schedule enters the candidate.
 #include "weighted_training_check.h"
+#include "weighted_precision_reference.h"
 #include <cmath>
 #include <iostream>
 namespace tide::device_online::weighted_training_check {
@@ -48,13 +49,14 @@ WeightedCotangents seed(const WeightedTrainingWindow& w,const std::string& mode)
   }
   return result;
 }
-Objective objective(const WeightedTrainingWindow& w,const WeightedCotangents& seed,const Result& reference){
+Objective objective(const WeightedTrainingWindow& w,const WeightedCotangents& seed,const Result& reference,const Model& model){
   Objective out;std::map<std::string,int64_t> seen;
   std::map<std::string,at::Tensor> values,flags,metadata;
   for(const auto& [name,f]:w.fields){values[name]=f.values.cpu();flags[name]=f.present.cpu();}
   for(const auto& [name,x]:w.metadata)metadata[name]=x.cpu();
   auto take=[&](const std::string& name,at::Tensor actual,at::Tensor value,at::Tensor bar){
-    ++seen[name];require(at::allclose(actual.reshape(value.sizes()),value.detach(),1e-5,1e-6),"public field differs: "+name);
+    ++seen[name];const bool half=w.fields.at("outputs").values.scalar_type()==at::kHalf;
+    require(at::allclose(actual.reshape(value.sizes()).to(at::kFloat),value.detach().to(at::kFloat),half?2e-2:1e-5,half?1e-3:1e-6),"public field differs: "+name);
     if(value.requires_grad()){out.first.push_back(value);out.second.push_back(bar.reshape(value.sizes()));}
   };
   auto row=[&](const std::string& name,const at::Tensor& value,int64_t t,int64_t b,bool final=false){
@@ -67,7 +69,7 @@ Objective objective(const WeightedTrainingWindow& w,const WeightedCotangents& se
     auto present=w.fields.at(prefix+"content").present.cpu(),times=metadata.at(prefix+"times");
     for(int64_t t=0;t<present.size(0);++t)if(present[t][e.batch].item<bool>()&&times[t][e.batch].item<int64_t>()==e.time){require(stage<0,"duplicate public event");stage=t;}
     require(stage>=0,"missing public event");row(prefix+"content",e.content,stage,e.batch);row(prefix+"control",e.control.reshape({1}),stage,e.batch);
-    if(e.active)row(prefix+"full",e.full.narrow(0,1,e.full.numel()-1),stage,e.batch);
+    if(e.active)row(prefix+"full",weighted_precision_check::unrounded_full(model,e),stage,e.batch);
     for(const auto& [name,x]:e.descriptor_fields)row(prefix+"describe."+name,x,stage,e.batch);
     for(const auto& item:std::vector<std::pair<std::string,State>>{{"old.",e.old},{"proposal.",e.proposed_state}}){
       row(prefix+item.first+"value",item.second.value,stage,e.batch);

@@ -18,10 +18,11 @@ from resident_test_target import target_device
 from resident_training_cases import tree_equal
 from test_weighted_execution import setup
 from test_weighted_recurrent_execution import model as recurrent_model
+from weighted_precision_reference import reference_model, widen, assert_records
 
 
-def binding(family, topology):
-    return setup(torch.float32, topology) if family == "kv" else recurrent_model(torch.float32, family, topology=topology)
+def binding(family, topology, storage_dtype=torch.float32):
+    return setup(storage_dtype, topology) if family == "kv" else recurrent_model(storage_dtype, family, topology=topology)
 
 
 def owner(b, device, **kw):
@@ -41,7 +42,7 @@ def cotangents(session, w, mode):
     # A separate consumer autograd context creates detached task-loss roots.
     f = w.fields["outputs"]
     with torch.enable_grad():
-        x = f.values.detach().clone().requires_grad_()
+        x = f.values.detach().float().clone().requires_grad_()
         loss = torch.where(f.present.unsqueeze(-1), x, torch.zeros_like(x)).sum() * (.07 if mode == "outputs" else 0.)
         bar, = torch.autograd.grad(loss, x)
     return session.cotangents(w, {"outputs": (bar, f.present)})
@@ -50,16 +51,20 @@ def cotangents(session, w, mode):
 @pytest.mark.parametrize("family,topology,kind", [
     ("kv", "fc", "sgd"), ("kv", "hb", "adamw"), ("kv", "dag", "sgd"), ("kv", "pdg", "adamw"),
     ("affine", "pdg", "sgd"), ("delta", "pdg", "adamw"), ("gated_delta", "pdg", "sgd"), ("ssd", "pdg", "adamw")])
-def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kind, tmp_path):
+@pytest.mark.parametrize("storage_dtype", [torch.float32, torch.float16])
+def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kind, storage_dtype, tmp_path):
     device = target_device()
-    candidate, _, base, span = binding(family, topology)
+    candidate, _, base, span = binding(family, topology, storage_dtype)
     cpu, _, _, _ = binding(family, topology)
+    if storage_dtype == torch.float16:
+        cpu = replace(candidate, model=reference_model(candidate.model))
     parameters = tuple(p for p in cpu.model.parameters() if p.requires_grad)
+    masters = tuple(p.detach().clone().requires_grad_() for p in parameters) if storage_dtype == torch.float16 else parameters
     names = dict(cpu.model.named_parameters(remove_duplicate=False))
     options = dict(lr=.001, weight_decay=.01)
     if kind == "sgd": options["momentum"] = .3
     else: options["amsgrad"] = True
-    optimizer = getattr(torch.optim, "SGD" if kind == "sgd" else "AdamW")(parameters, **options)
+    optimizer = getattr(torch.optim, "SGD" if kind == "sgd" else "AdamW")(masters, **options)
     q = Continuation(cpu.graph.identity, 1)
     with torch.no_grad():
         session = owner(candidate, device, optimizer=kind, groups=[options])
@@ -69,21 +74,23 @@ def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kin
         for update, mode in enumerate(("outputs", "zero", "outputs")):
             xs = [replace(x, time=x.time+update*span, position=x.position+2*update,
                           value=x.value.detach().clone().requires_grad_()) for x in base]
+            ref_xs = [replace(x, value=x.value.detach().float().requires_grad_()) for x in xs]
             split = update*span+span//2
             groups = ([x for x in xs if x.time < split], [], [x for x in xs if x.time >= split])
+            ref_groups = ([x for x in ref_xs if x.time < split], [], [x for x in ref_xs if x.time >= split])
             roots, losses = [], []
-            for part, stop in zip(groups, (split, split, (update+1)*span)):
+            for part, ref_part, stop in zip(groups, ref_groups, (split, split, (update+1)*span)):
                 w = session.advance(part, stop=stop, sealed_until=stop)
                 roots.append(cotangents(session, w, mode))
                 with torch.enable_grad():
-                    expected = reference(cpu.graph, cpu.model, q, part, stop, sealed_until=stop)
+                    expected = reference(cpu.graph, cpu.model, q, ref_part, stop, sealed_until=stop)
                     q = expected.continuation
                     losses.extend(x[-1].sum()*(.07 if mode == "outputs" else 0.) for x in expected.outputs)
-                equivalent(session.result(), expected)
+                assert_records(session.result(), expected, storage_dtype)
                 for name, value in w.metadata.items():
                     if not name.endswith("present"): assert value.dtype == torch.int64
             with torch.enable_grad():
-                expected = torch.autograd.grad(torch.stack(losses).sum(), (*parameters, *(x.value for x in xs)), allow_unused=True)
+                expected = torch.autograd.grad(torch.stack(losses).sum(), (*parameters, *(x.value for x in ref_xs)), allow_unused=True)
             actual = session.backward(roots)
             lookup = {id(p): value for p, value in zip(parameters, expected)}
             p = actual.parameters
@@ -103,12 +110,23 @@ def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kin
                 assert boundary.connected[j].item() == (value is not None)
                 if value is not None: torch.testing.assert_close(boundary.values[j].cpu(), value, rtol=3e-5, atol=3e-6)
             optimizer.zero_grad(set_to_none=True)
-            for p, value in zip(parameters, expected): p.grad = value
-            optimizer.step(); assert session.step().applied
+            for p, value in zip(masters, expected): p.grad = value
+            optimizer.step()
+            if storage_dtype == torch.float16:
+                for p, master in zip(parameters, masters): p.copy_(master.half().float())
+            assert session.step().applied
             checkpoint = session.checkpoint()
             for name, value in checkpoint["parameters"].items():
                 translated = name.replace(".extra.", ".")
-                if translated in names: torch.testing.assert_close(value, names[translated], rtol=1e-5, atol=1e-6)
+                if translated in names:
+                    assert value.dtype == storage_dtype
+                    torch.testing.assert_close(value.float(), names[translated], rtol=1e-5, atol=1e-6)
+            master_lookup = {id(p): master for p, master in zip(parameters, masters)}
+            for name, offset in zip(actual.parameters.names, actual.parameters.offsets):
+                parameter = names[name.replace(".extra.", ".")]
+                master = master_lookup[id(parameter)]
+                torch.testing.assert_close(checkpoint["state"]["values"][offset:offset+master.numel()].reshape(master.shape),
+                                           master, rtol=3e-5, atol=3e-6)
             if update == 0:
                 assert not torch.equal(initial, checkpoint["state"]["values"])
                 assert checkpoint["state"]["steps"].gt(0).any()
@@ -126,7 +144,7 @@ def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kin
             session.save(source);continue_cut(session, base, span)
             expected = session.checkpoint();session.close()
             subprocess.run([sys.executable, str(Path(__file__).with_name("weighted_training_worker.py")),
-                            device, str(source), str(result)], check=True, timeout=120)
+                            device, str(source), str(result), str(storage_dtype).removeprefix("torch.")], check=True, timeout=120)
             tree_equal(expected, torch.load(result, map_location="cpu", weights_only=True))
         session.close()
 

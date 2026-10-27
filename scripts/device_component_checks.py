@@ -1,7 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
-    "weighted-training": ("tide-weighted-training-check", ("float32",)),
+    "weighted-training": ("tide-weighted-training-check", ("float32", "float16")),
     "weighted-retained": ("tide-weighted-retained-check", ("float32",)),
     "weighted-saved-window": ("tide-weighted-window-check", ("float32",)),
     "weighted-copy": ("tide-weighted-copy-check", ("float32",)),

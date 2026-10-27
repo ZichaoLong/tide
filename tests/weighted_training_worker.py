@@ -13,8 +13,8 @@ def continue_cut(session, base, span):
 
 
 if __name__ == "__main__":
-    target, source, destination = sys.argv[1:]
-    b, _, xs, span = binding("kv", "fc")
+    target, source, destination, dtype = sys.argv[1:]
+    b, _, xs, span = binding("kv", "fc", getattr(torch, dtype))
     with torch.no_grad():
         session = owner(b, target, checkpoint=source)
         continue_cut(session, xs, span)

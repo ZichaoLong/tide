@@ -27,6 +27,11 @@ Full的未存储G及保存值均为FP32；Update最终raw和每次发送的(c,G)
 控制c与实际payload中的舍入c分别保存；解码逐边/端口返回实际payload，不能重算替代。
 raw过期保留、次正规数、int64、None/零及容量失败保持局部契约。完整FP16资格另记。
 
+完整记录参考以实际量化参数/输入为起点，在独立CPU数学与调度中显式执行相同raw/payload
+存储边界；局部计算为FP32。它不使用eager逐算子half舍入作为同函数参考，也不消费候选轨迹。
+候选解码后的raw/消息dtype与FP32计算字段分别核验，half值仅作无损拓宽以比较全部字段。
+CPP的`weighted_precision_reference`和Python同名测试辅助不被生产库链接或调用。
+
 ## 数学到执行的对应
 
 共同定义见 [架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)、
