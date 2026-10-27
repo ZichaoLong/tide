@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-pool": ("tide-weighted-pool-check", ("float32",)),
     "weighted-kv-update": ("tide-weighted-kv-update-check", ("float32",)),
     "weighted-projection": ("tide-weighted-projection-check", ("float32",)),
     "weighted-convolution": ("tide-weighted-convolution-check", ("float32",)),
@@ -260,3 +261,6 @@ MARKERS["weighted-projection"] = "weighted-projection: passed"
 
 KERNELS["weighted-kv-update"] = "tide_weighted_kv_"
 MARKERS["weighted-kv-update"] = "weighted-kv-update: passed"
+
+KERNELS["weighted-pool"] = "tide_weighted_pool_"
+MARKERS["weighted-pool"] = "weighted-pool: passed"
