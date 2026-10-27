@@ -44,3 +44,5 @@ RMS使用保存的真实归一化/rstd执行normalized-coordinate一阶VJP，不
 
 目标入口 `verify_device_control.py --checks weighted-aggregate --device npu:0`。
 CPU helper只能证明其算术；完整设备组合资格和固定源码证据独立记录。
+
+固定92751c0的[CPU/NPU/CUDA构建资格](evidence/core5-resident-aggregate-20261027.md)已记录；低秩参数链和完整图生命周期另验收。
