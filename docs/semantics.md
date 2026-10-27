@@ -1,5 +1,7 @@
 # Adopted semantics and validation contract
 
+[Weighted消息反向路由](resident-weighted-reverse-route.md)从实际journal恢复逐边祖先和独立边界根，完整训练owner另行验收。
+
 [Resident recurrent numerical functions](resident-weighted-recurrent.md) implement the four recurrent Upd/Mem/Full formulas with exact-time snapshots, fixed-time convolution and independently rooted saved adjoints. Full graph lifecycle is separately qualified.
 
 Authority: `tide-core-5` at `0770593838a37c790a568226930567ed60f99b83`, locked in `upstream.json`.
