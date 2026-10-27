@@ -1,0 +1,56 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "4c20b49db147226a49c5f791dbca3e004fe213a924f99bad12330c1854eb8d00",
+  "source": "53910174d036e0809be7893527ca1b1c204a460b",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "weighted complete regional numeric batches, exact-map VJPs and online training integration; CPU FP64/FP32",
+  "result": {
+    "passed": 536,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "b9065df2f101ea2126801b0dee50d5ab03e03bfc6b2fb03c79d5e53bec5c38eb",
+  "binary_sha256": {
+    "libtidegraph.a": "121e414f0bfed4f405aacccf8aabde3826341b4d186054b7024d777441911d03",
+    "_tide_native.so": "18c71b3cc97f0f7dacfaae54e01d665e83dc7b04baf979f7a1ec113bcba42ccd",
+    "tidegraph-kernel-check": "774817bdc0fb96fe0d22ddc338e4b68fc392941c2f8ef63b3bebe65146809078"
+  },
+  "log_sha256": "55f0248074677e842e3f0e8da65df1670ac94c333ae356ea210ecfbfc1bc43fd",
+  "started": "2026-10-27T09:07:32.872681+00:00",
+  "finished": "2026-10-27T09:10:36.855007+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-region-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-region-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_allocation_batch.py",
+      "tests/test_weighted_sending_batch.py",
+      "tests/test_weighted_region_batch.py",
+      "tests/test_weighted_region_execution.py",
+      "tests/test_region_contract.py",
+      "tests/test_region_schedules.py",
+      "tests/test_region_continuation.py",
+      "tests/test_weighted_scoring_execution.py",
+      "tests/test_weighted_sending_execution.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "tests/test_weighted_mean.py",
+      "tests/test_weighted_aggregate_batch.py",
+      "tests/test_weighted_aggregate_vjp.py",
+      "tests/test_weighted_aggregate_training.py",
+      "tests/test_weighted_kv_formulas.py",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-region-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
