@@ -72,22 +72,35 @@ def test_job_launcher_persists_real_exit_and_preserves_existing_output(tmp_path,
 
 @pytest.mark.parametrize("bad", ["{", "[]", '{"state":"passed"}',
                                   '{"state":"passed","exit_code":2,"started":"x","source":"y"}'])
-def test_reentry_reports_broken_record_without_hiding_healthy_jobs(tmp_path, bad):
+@pytest.mark.parametrize("namespace", ["", "jobs"])
+def test_reentry_reports_broken_record_without_hiding_healthy_jobs(tmp_path, bad, namespace):
     root = tmp_path/"checkout"; (root/"scripts").mkdir(parents=True); (root/"docs").mkdir()
     for name in ("status.py", "durable_records.py"): shutil.copyfile(ROOT/"scripts"/name, root/"scripts"/name)
     (root/"docs/STATUS.md").write_text("Current handoff\n")
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     subprocess.run(["git", "-c", "user.name=Record Test", "-c", "user.email=record@example.invalid",
                     "-c", "commit.gpgsign=false", "commit", "--allow-empty", "-qm", "fixture"], cwd=root, check=True)
-    for name in ("broken", "healthy"): (root/"artifacts"/name).mkdir(parents=True)
-    (root/"artifacts/broken/status.json").write_text(bad)
-    records.write_json(root/"artifacts/healthy/status.json", {"state": "passed", "source": "test",
+    artifacts = root/"artifacts"/namespace
+    for name in ("broken", "healthy"): (artifacts/name).mkdir(parents=True)
+    (artifacts/"broken/status.json").write_text(bad)
+    records.write_json(artifacts/"healthy/status.json", {"state": "passed", "source": "test",
                        "started": "2026-09-22T00:00:00Z", "exit_code": 0})
     result = subprocess.run([sys.executable, str(root/"scripts/status.py")], capture_output=True, text=True)
     assert result.returncode == 1, result.stderr
     assert "unknown state" in result.stdout and "broken/status.json" in result.stdout
     assert 'healthy/status.json: {"state": "passed"' in result.stdout
     assert "Current handoff" in result.stdout
+
+
+def test_mixed_job_layouts_keep_live_records_without_scanning_worktrees(tmp_path):
+    live = {"state": "running", "source": "current", "started": "2026-10-27T00:00:00Z"}
+    old = {"state": "failed", "source": "historical", "started": "2026-09-22T00:00:00Z", "exit_code": 7}
+    for path, value in (("jobs/live", live), ("old", old), ("worktrees/frozen/artifacts/jobs/copy", live)):
+        folder = tmp_path/path; folder.mkdir(parents=True)
+        records.write_json(folder/"status.json", value)
+    actual, errors = records.read_jobs(tmp_path)
+    assert not errors
+    assert actual == [(tmp_path/"jobs/live/status.json", live), (tmp_path/"old/status.json", old)]
 
 
 def test_explicit_terminal_postmortem_has_no_invented_start_time(tmp_path):

@@ -71,7 +71,9 @@ after replacement is still reported, even though the new complete file may exist
 This does not certify behavior under actual power loss; orphan staging files can
 remain after a killed process. Record writers require one coordinated owner.
 
-The status command continues to show healthy jobs if another status.json is
+The status command reads current `artifacts/jobs/NAME/status.json` and legacy
+`artifacts/NAME/status.json` records. It does not recursively scan frozen worktrees
+or archived copies. It continues to show healthy jobs if another status.json is
 unreadable or inconsistent, reports that record's state as unknown and exits
 nonzero. An explicit terminal systemd postmortem can use its observed timestamp
 without inventing a workload start. Historical failures remain failed. Always

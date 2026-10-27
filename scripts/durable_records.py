@@ -33,9 +33,11 @@ def write_json(path, record):
 
 
 def read_jobs(directory):
-    """Retain healthy records even if a different historical file is damaged."""
+    """Read canonical jobs/ and legacy flat records, excluding worktree copies."""
     records, errors = [], []
-    for path in Path(directory).glob("*/status.json"):
+    root = Path(directory)
+    paths = set(root.glob("*/status.json")) | set(root.glob("jobs/*/status.json"))
+    for path in sorted(paths):
         try:
             data = json.loads(path.read_text())
             if not isinstance(data, dict) or data.get("state") not in {"starting", "running", "passed", "failed", "cancelled"}:
