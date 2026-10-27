@@ -1,0 +1,79 @@
+{
+  "source": "8c8824f7894310a1523c77198ed69240e08c559e",
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "7bff654d0b4e3b131768f2003cdd2f74589f1831e758f20bf8e8e7234bb42cba",
+  "binary_sha256": {
+    "libtidegraph.a": "ce11320267b3d1d50ba423b9656ff56cf6bf7a7df1a7f6c28671ae9e29c6b1a7",
+    "libtidegraph_runtime.a": "84e466777dbc39efc58e3debe2e42ae1c8a171e62a70392f532f18b3ab606706",
+    "_tide_native.so": "4d6ad5e60702aca74fd59e75a36afec3b16886f329b77b5dee5e633946b93301",
+    "tidegraph-smoke": "496aceabdced6ea03ee131bdca1ff8d6b9e012f49e8213f0ab7307e9065f9902",
+    "tidegraph-kernel-check": "f7b278f78f9e2fa384a2047064c3eb90f993a10f26fd0cc01d16c15ab4f979f8",
+    "tidegraph-full-check": "71180400c14b571dc912d6231ee5a69befd8fe2c90492a826eb2361212a7695f",
+    "tidegraph-aggregate-check": "83ddb38f052319c1a8abb20398bd6d414cc9bc610a6bf6bb947988155d7a2e02",
+    "tidegraph-optimizer-check": "12360760458cd432885ebbcb7f6b75a72055ad2f0973609827804468da16746d",
+    "tidegraph-checkpoint-check": "be16c744ca3717df9395967b54900fedef3785c5b35fc40d35470fd3147659a1",
+    "tidegraph-weighted-training-check": "e364a89ff2283bd84607e14db6aea8206ddedc86d104a2fc1be94b5ced50482b",
+    "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+    "tidegraph-streaming-bench": "35c1627f32219a3c4f02d50035209be0030a4f471889a9f3c6bcd40ffc8cbd64",
+    "tidegraph-scale-bench": "07c5e0e9eb1c37fcc504c24d10f55b900f1bb7b2901bd78f5eafed881b3be57f",
+    "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+    "tidegraph-settle-check": "e68ecad21b87b07bb3255b5b86e3110df7ae687ff0dadcb9aa5855f71c7da903",
+    "tidegraph-greedy-check": "b109ad9def8370add9802542c2b5db55df4414f2d15ac797787a59b6956e7088",
+    "tidegraph-accelerator-check": "ecd2eb88db150b53fc7133125d335067876d2b887f8ec7eda15d0edc887d3fd4",
+    "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+    "tidegraph-read-precision-check": "008b2f8ebf7e0aabfeb8efd39867ce30aa7914aa181c14b1a062bfc6264a4f2c",
+    "tidegraph-placement-check": "a59e5731cb2991637f7f1e785e93e04e6159cbe6da60588be5c7eb560bb9a062",
+    "tidegraph-payload-ownership-check": "36d1f53696b9ae5281cffe072ecaf29a3500e42b26bb67f54f09d394c2c37a07"
+  },
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "git_tree": "691e16c9158100f702901d8b002ad3cd8d46cfc3",
+  "tree_sha256": "07d6e468d098d2764869fadb36b5b13a5065a9b4ac1e1ea0761e59b49da2d35c",
+  "scope": "CPU FP16 weighted arithmetic/long clocks/master training; FP32/FP64 local regressions",
+  "result": {
+    "passed": 99,
+    "failed": 0,
+    "skipped": 0,
+    "xfailed": 2
+  },
+  "strict_witnesses": [
+    "test_half_payload_explicit_scoring_master_updates_and_resume[False-gated_delta]",
+    "test_half_payload_explicit_scoring_master_updates_and_resume[True-gated_delta]"
+  ],
+  "witness_policy": "GDNAdamWParityError for nodes.5.kernel.conv.weight update only; strict xfail, not passing training cases",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "scripts/build.py",
+      "--jobs",
+      "2",
+      "--build-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-bootstrap/build/cpu"
+    ],
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_half_clocks.py",
+      "tests/test_weighted_half_normalization.py",
+      "tests/test_weighted_precision.py",
+      "tests/test_weighted_normalization.py",
+      "tests/test_weighted_recurrent_formulas.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-half-qualify/test-tmp"
+    ]
+  ],
+  "started": "2026-10-27T11:39:19.502985+00:00",
+  "finished": "2026-10-27T11:40:05.726485+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-half-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-half-qualify",
+  "log_sha256": "cbf42daf6e15607cde1ad6990633b00dd196e78df91e71e306e833c3a19fb81b",
+  "compiler": "c++ (GCC) 10.3.1"
+}

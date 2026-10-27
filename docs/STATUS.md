@@ -2,7 +2,7 @@
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 graph-execution-foundation。
 用户授权持续实施、私有环境、有限实验、分阶段提交推送；不使用子代理，参考仓库只读。
-已推送到 f702893；当前准备提交 FP16 数值策略。总体未完成，下一阶段按 [ROADMAP](ROADMAP.md)。
+FP16实现8c8824f及独立CPU资格已完成；本次证据提交后推送并继续。总体未完成，下一阶段按 [ROADMAP](ROADMAP.md)。
 
 ## 已完成与当前增量
 
@@ -41,11 +41,12 @@ output artifacts/jobs/core5-half-policy-dev，status.json/development.json/task.
 
 ## 下一动作与任务状态
 
-当前无活动reader；bootstrap为上述dirty-index快照，device/sdk为干净470ce06。
-1. 完成FP16实现提交；冻结该提交到bootstrap，运行同范围CPU固定资格并单独记录证据。
-   tests/test_weighted_half_clocks.py tests/test_weighted_half_normalization.py
-   tests/test_weighted_precision.py tests/test_weighted_normalization.py
-   tests/test_weighted_recurrent_formulas.py tests/test_cli.py::test_cpp_custom_state_kernel。
+CPU固定资格 tide-core5-half-qualify-20261027 已inactive/success/exit0：
+[99passed/2strict-xfailed](evidence/core5-half-20261027.md)，未计为完整FP16矩阵。
+bootstrap干净8c8824f/tree691e16c9158100f702901d8b002ad3cd8d46cfc3，无reader；
+output artifacts/jobs/core5-half-qualify，manifest与日志已独立保存；device/sdk仍470ce06。
+1. 当前未提交设备入口草稿：显式dtype/optimizer/loss-scale、FP32 masters，恢复raw/master严格逐值；
+   tests/test_weighted_device_precision.py待开发门禁。冻结新快照后执行该测试入口，接着实际NPU half。
 2. 扩展check_weighted_device.py显式dtype/scoring/master/optimizer；实际NPU half训练恢复，
    不用CPU或旧core-3 half资格代替。继续SDK、异步peer失败定位。
 3. standalone half masters/checkpoint、weighted resident、CUDA源码/构建/真机分账、有限选型性能与最终追溯仍待完成。
