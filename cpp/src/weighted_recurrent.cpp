@@ -1,5 +1,6 @@
 // 0770593 recurrent-memory: exact raw state, common summaries and dispatch.
 #include "weighted_recurrent_detail.h"
+#include "weighted_packed.h"
 #include <limits>
 
 namespace tide::weighted {
@@ -104,6 +105,21 @@ class Recurrent final:public MemoryKernel {
     return next;
   }
   bool exact_sequence() const override{return true;}
+  bool joint_batch() const override{return true;}
+  bool joint_sequence() const override{return true;}
+  PackedStates packed_sequence(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch) const override {
+    return packed::recurrent(w,old,batch,c_);
+  }
+  std::vector<State> batch(const NodeWeights& w,const std::vector<State>& old,const Tensor& h,
+      const std::vector<Index>& times,const ContentViews& views) const override {
+    if(old.empty())return {};
+    return packed_sequence(w,old,packed::independent(old,h,times,views)).states;
+  }
+  std::vector<State> sequence(const NodeWeights& w,const State& old,const Tensor& h,
+      const std::vector<Index>& times,const ContentViews& views) const override {
+    if(times.empty())return {};
+    return packed_sequence(w,{old},{h,{0,static_cast<Index>(times.size())},{{0,0}},times,views}).states;
+  }
   std::set<std::string> integer_slots() const override{return c_.basic()?std::set<std::string>{"time"}:std::set<std::string>{"time","conv_times"};}
   void validate_policy(const Node& n,Index) const override {
     require(!n.clear&&!n.identity&&n.next_state=="adopt-v1"&&n.state_clock==StateClock{},"weighted recurrence requires proposal retention and logical clock");

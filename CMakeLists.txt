@@ -38,6 +38,8 @@ add_library(tidegraph STATIC
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/read_fields.cpp cpp/src/tensor_fields.cpp cpp/src/isolated_read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
+  cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_recurrent_packed.cpp
+  cpp/src/weighted_gated_packed.cpp
   cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp
   cpp/src/weighted_scoring.cpp
   cpp/src/weighted_recurrent.cpp cpp/src/weighted_basic.cpp cpp/src/weighted_gated_delta.cpp

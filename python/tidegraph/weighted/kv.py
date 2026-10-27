@@ -13,6 +13,7 @@ from .tensors import Received, norm, parameter, rotate_relative
 
 class KVMemory(StateProgram):
     sequence_contract = True  # Given complete local driving content/time sequence.
+    joint_sequence = True
     integer_slots = frozenset({"times"})
 
     def __init__(self, config, profile, base, generator, dtype):
@@ -43,6 +44,14 @@ class KVMemory(StateProgram):
 
     def current(self, u):
         return norm(u, self.config.epsilon) @ self.summary.t()
+
+    def packed_sequence(self, w, old, batch):
+        from .kv_packed import packed
+        return packed(self, old, batch)
+
+    def sequence(self, w, old, values, times, views=None):
+        from .packing import sequence
+        return sequence(self, w, old, values, times, views)
 
     def step(self, w, old, content, time):
         h = Received.decode(content.value)

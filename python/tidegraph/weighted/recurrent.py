@@ -14,6 +14,15 @@ from .tensors import Received, norm, parameter
 
 class RecurrentMemory(StateProgram):
     sequence_contract = True
+    joint_sequence = True
+
+    def packed_sequence(self, w, old, batch):
+        from .recurrent_packed import packed
+        return packed(self, old, batch)
+
+    def sequence(self, w, old, values, times, views=None):
+        from .packing import sequence
+        return sequence(self, w, old, values, times, views)
 
     def __init__(self, config, profile, generator, dtype):
         super().__init__()
