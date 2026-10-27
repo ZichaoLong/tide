@@ -5,6 +5,7 @@ from ..coordinates import integers
 from ..source_class import SourceClasses
 from .binding import bind
 from .config import KVConfig, RegionalConfig, finite, positive_int
+from .recurrent_config import RecurrentConfig
 from .tensors import Payload
 
 
@@ -21,8 +22,22 @@ def bind_layered(spec, *, memory=KVConfig(), regions=RegionalConfig(), window_po
     finite("short_rate_per_position",short_rate_per_position,0,True)
     window = window_positions*spec.stride
     positive_int("logical window",window,0)
-    memories = tuple(replace(memory,window=window,beta_short=short_rate_per_position/spec.stride,
-                             position_origin=spec.rank(v),position_scale=spec.stride) for v in range(len(spec.graph.nodes)))
+    supplied = ((memory,)*len(spec.graph.nodes) if isinstance(memory,(KVConfig,RecurrentConfig)) else tuple(memory))
+    if len(supplied) != len(spec.graph.nodes):
+        raise ValueError("layered memory count mismatch")
+    if window_positions and not any(isinstance(c,KVConfig) for c in supplied):
+        raise ValueError("window_positions applies only to KV nodes")
+    def at_node(v, c):
+        if isinstance(c,KVConfig):
+            return replace(c,window=window,beta_short=short_rate_per_position/spec.stride,
+                           position_origin=spec.rank(v),position_scale=spec.stride)
+        if not isinstance(c,RecurrentConfig):
+            raise ValueError("invalid layered memory config")
+        # Instance §4.3: fixed position slots, passive rates per position.
+        return replace(c,lambda_short=short_rate_per_position/spec.stride,
+                       matrix_rates=tuple(rate/spec.stride for rate in c.matrix_rates),
+                       conv_stride=1 if c.basic else spec.stride)
+    memories = tuple(at_node(v,c) for v,c in enumerate(supplied))
     # 0 names the external class; node v has a separate class v+1.
     classes = SourceClasses(tuple(e.source+1 for e in spec.graph.edges),(0,)*len(spec.graph.inputs))
     bound = bind(spec.graph,memories=memories,regions=regions,source_classes=classes,**kwargs)

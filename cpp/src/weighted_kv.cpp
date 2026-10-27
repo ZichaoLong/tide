@@ -62,7 +62,12 @@ Tensor content(const NodeWeights& w,const State& s,Index time,const Tensor& u,co
   return x+c.alpha_ff*at::matmul(weight(w,"full_program.content.down"),
           at::silu(at::matmul(weight(w,"full_program.content.gate"),normal))*at::matmul(weight(w,"full_program.content.up"),normal));
 }
-class KV final:public StateKernel {
+void validate_content_weights(const NodeWeights& w,const KVConfig& c){
+  for(const std::string name:{"query","out"})shape(w,"full_program.content."+name,{c.width,c.width});
+  for(const std::string name:{"gate","up"})shape(w,"full_program.content."+name,{c.ffn_width,c.width});
+  shape(w,"full_program.content.down",{c.width,c.ffn_width});
+}
+class KV final:public MemoryKernel {
  public:
   explicit KV(KVConfig c):c_(std::move(c)){c_.validate();}
   State initial(const NodeWeights& w) const override {
@@ -115,7 +120,7 @@ class KV final:public StateKernel {
 std::shared_ptr<const StateKernel> make_kv(const KVConfig& c){return std::make_shared<KV>(c);}
 void validate_transport(const Graph& g,const Model& m){
   std::vector<bool> weighted;
-  for(const auto& w:m.nodes)weighted.push_back(dynamic_cast<const KV*>(w.kernel.get())!=nullptr);
+  for(const auto& w:m.nodes)weighted.push_back(dynamic_cast<const MemoryKernel*>(w.kernel.get())!=nullptr);
   auto unit=[](const Tensor& scale){
     require(!scale.requires_grad()&&at::equal(scale,at::ones_like(scale)),"weighted payload transport requires fixed unit scales");
   };
