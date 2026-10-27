@@ -27,45 +27,33 @@ control-build/original-control-build、NPU checks/queue-state；component摘要b
 
 ## 当前开发与下一动作
 
-未提交：完整window VJP、实际fiber/边界journal、nested TaskServices、NPU静态bool布局copy、
-独立窗口/正式配置/copy检查和完整持有资源预算。设备逆序循环重算局部tape，沿真实消息祖先及
-raw前驱回传并累加canonical参数；参数可全部/部分冻结。公共retained token、optimizer发布及
-训练checkpoint仍待实施。数学/表示见[窗口VJP契约](resident-weighted-window-vjp.md)。
+最新实现2622e605e77c19360a44b8954cdae5989c3fd724完整window VJP已固定资格通过：
+- CPU17项/1.49秒；NPU三层services、18owner/54copy提交、12异构/15正式配置共324根模式，
+  27空窗/容量/旧generation拒绝，以及21图+15配置完整前向回归通过；物理9→npu:0。
+- CUDA相同六目标及weighted-flow库构建/loader/help通过，160已配置CUDA命令仅80/90/100；无GPU。
+- unit tide-core5-weighted-window-{npu,cuda}-qualify-20261028.service均inactive/success/exit0；clean2622e60。
+  输出artifacts/jobs/core5-weighted-window-{npu,cuda}-qualify/，status/task.log/control-build/original-control-build；
+  NPU另cpu.log/checks/result/queue-state。源码/二进制/loader/结果摘要已复核。
+- 证据[evidence/core5-resident-weighted-window-20261028.md](evidence/core5-resident-weighted-window-20261028.md)及同名JSON，
+  待本次证据提交推送；窗口契约resident-weighted-window-vjp.md。公共训练仍未完成。
 
-开发dev9已inactive/success/exit0，status与checks/result均passed：
-- unit tide-core5-weighted-window-dev9-20261028.service；物理9→npu:0；tree ce76fb54886950b314dd5c4d804aa0f3f725b4de。
-- 三层services、18 owner/54提交静态copy、12异构窗口、15正式配置通过。
-  每个窗口配置12类独立根，共324模式；另空窗口、预算拒绝/可重试、旧generation拒绝。
-- 输出artifacts/jobs/core5-weighted-window-dev9/：source.tar/tree、status、task.log、control-build、checks/result及各log。
-- launcher .local/core5-weighted-window-dev9{,-workload}.sh；helper .local/build-weighted-window9.py。
-  SDK冻结checkout artifacts/worktrees/core5-sdk、build/weighted-flow-dev；已无活动reader。
-  下一次干净资格前将其旧kernel_meta生成物移入ignored artifacts，不能删除源码。
+主工作区未提交保留层：weighted_window_snapshot/bridge及对应检查，WindowAdjoint新增保存操作数入口。
+journal/raw/pending/参数快照脱离前向生命周期；三窗反向经实际物理pending与raw边界连接，canonical参数汇总。
+文档resident-weighted-retained.md。尚未编译/运行，公共token/optimizer/checkpoint尚未实施。
+下一开发验证需新冻结快照/新job，在固定资格终态后再复用SDK checkout，不能改活动输入。
+保留层首次CUDA开发任务failed/exit1：weighted_window_snapshot.cpp缺tide/parameters.h完整声明，
+未进入设备运行；另将版本计数类型改为int64，补requires_grad修改检查。当前主工作区已修正，未再编译。
+unit tide-core5-weighted-retained-cuda-dev-20261028.service；tree404ed95b7e8eab68a54002adf2ff9c360e219dea。
+输出artifacts/jobs/core5-weighted-retained-cuda-dev/：source.tar/tree、status/log/original-control-build、partial-build。
+partial-build仅记录失败后实际cache字节，不伪称全部二进制来自新源码；原通过build receipt未重写。
+主工作区另改生成脚本仅写变化内容，三后端重复生成均保持内容/mtime；减少无意义全kernel重编。
+NPU脚本.local/core5-weighted-retained-npu-dev{,-workload}.sh已准备尚未启动；helper .local/build-weighted-retained.py。
+下一步新冻结快照运行NPU开发与CUDA dev2（需明确读取旧失败partial bytes后依赖感知重建），
+900秒/queue180秒/2workers/BLAS1/background.slice/Nice10；两个旧checkout目前均无活动reader。
 
-CUDA开发构建已inactive/success/exit0，status passed、binary/loader摘要已复核：
-- unit tide-core5-weighted-window-cuda-dev-20261028.service；tree 282d21d5b27fc3413f2994173626547495e0d634。
-- checkout artifacts/worktrees/core5-cuda；build/weighted-flow-cuda-dev；目前无活动reader。
-- 输出artifacts/jobs/core5-weighted-window-cuda-dev/；launcher .local/core5-weighted-window-cuda-dev{,-workload}.sh；
-  helper .local/build-weighted-window-cuda.py。2workers、1200秒、background.slice/Nice10。
-  四个检查程序及weighted-flow库构建/loader/help通过，160个已配置CUDA命令仅80/90/100。
-- 依赖感知Ninja构建、明确sm80/90/100、loader/help；无GPU真机。
-  检查systemctl --user show tide-core5-weighted-window-cuda-dev-20261028.service -p ActiveState -p Result -p ExecMainStatus。
-  停止systemctl --user stop tide-core5-weighted-window-cuda-dev-20261028.service。
-
-保留的开发失败（均终态，不能改为passed）：artifacts/jobs/core5-weighted-window-dev{,2,3,4,5,6,7,8}/。
-dev1测试辅助set与ATen ADL冲突，dev2单流任务容量361001；后者通过严格LIFO嵌套服务拆分。
-dev3/6/7在完整顺序第9 nonaligned/proposal窗口报CANN507011/0x91；dev5独立同用例通过。
-dev7实际PID2991769 stream411/task29定位raw连接位bool ScatterUpdate，target[10]/source[2]；
-不是coordinator stage/node元数据scatter。底层日志及更正存dev3/6/7的diagnostics。
-dev8仍同样失败，54 copy提交通过但新分支被错误#ifndef排除；后端宏为0，故不能检验修复。
-dev9修正为#if !TIDE_RESIDENT_CUDA后首次真正启用静态bool copy，完整顺序通过；未推断厂商内部根因。
-dev4在设备/构建前因预建输出目录被job.py拒绝；core5-cann-lifecycle探针因缺compile_commands在编译前失败，
-helper已修正但未重跑。原始status/log/reproducer保留，定向修复通过后不重复历史诊断。
-
-定向CPU开发检查17项/1.93秒通过（flow packing、实际消息反向路由），git diff --check通过。
-下一步：实现与审查通过，提交实现；冻结确切提交，NPU窗口/正式配置和
-必要forward回归、CUDA构建/loader分别资格，证据另提交并正常推送。然后继续公共retained VJP、
-optimizer及精确训练恢复，再FP16/peer、有限profiling/代表性完整成本选型与最终追溯。
-初态常量不伪装成checkpoint叶子；禁止CPU预跑或主机逐事件推进。总体未完成，提交后继续。
+窗口开发dev1–dev9、诊断日志与launcher失败已集中记录于上述证据和artifacts/jobs/原status。
+不得将历史失败重标passed，亦无需为接续重复诊断。当前只继续保留层、公共token/optimizer/恢复，
+随后FP16/peer、有限profiling/代表性完整成本和最终追溯。总体未完成，提交后持续实施。
 
 ## 未解除的严格限制
 
