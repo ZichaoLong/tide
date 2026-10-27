@@ -1,0 +1,29 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "88de5fc90a2a9100a5d21206530f56c0d6fe778dadfac7e26457f60d142433f4",
+  "source": "4a0858880831cb46ad96191ab9dd58fca5260223",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted ten weighted sending functions and gains CPU qualification",
+  "result": {
+    "passed": 320,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "1d6e22a01f2c11bd1cfdfb419f9b0644d50f5c3198b71229b78d9bfbb4e3eae3",
+  "binary_sha256": {
+    "libtidegraph.a": "d945bd01810ed16cac541079634185e213702fba6d7c8d5741ecd5f390e7ba9d",
+    "_tide_native.so": "29fcfb9c16b0aa2d8b4a16ec682a924fa830b84c5f78558ff510424380d79e92",
+    "tidegraph-kernel-check": "d995d29e012bf0e914cc178667ddac813f9373589c6994b0e9ea14d35309fd66"
+  },
+  "log_sha256": "da61ac469e86e523728c20efb403d5d6399f4f4d0e1d94ec72b3725d4e2aa1c7",
+  "started": "2026-10-27T06:12:34.110419+00:00",
+  "finished": "2026-10-27T06:15:16.877003+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-sending-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-sending-qualify",
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
