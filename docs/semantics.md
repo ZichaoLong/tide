@@ -96,6 +96,9 @@ preserves every physical atom, actual positive mass and source-function banks.
 Its saved first-order VJP distinguishes absent fiber roots from connected zeros
 and the zero-total mass-only branch. Effective parameter banks do not imply
 completion of their outer low-rank/alias mapping or full graph lifecycle.
+The [source adaptation component](resident-weighted-source.md) separately chains
+effective matrix adjoints into bases and four saved low-rank factors. Canonical
+alias reduction and the full graph owner remain separate integration layers.
 
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
