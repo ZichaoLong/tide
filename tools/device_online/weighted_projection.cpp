@@ -32,11 +32,25 @@ WeightedProjectionTape append_weighted_projection(DeviceProgram& p,const at::Ten
     const at::Tensor& owners,const WeightedProjectionParameters& w,std::optional<double> epsilon,const at::Tensor& error,int64_t available){
   if(at::GradMode::is_enabled()||!input.defined()||input.dim()!=2||input.size(0)<1||input.size(1)<1||input.device().type()!=resident_device_type
     ||!w.matrix.defined()||w.matrix.dim()!=3||w.matrix.size(0)<1||w.matrix.size(1)<1||epsilon&&(!std::isfinite(*epsilon)||*epsilon<=0))
-    throw std::invalid_argument("weighted projection requires explicit bounded FP32 accelerator rows and RMS option");
+    throw std::invalid_argument("weighted projection requires explicit bounded FP32/FP16 accelerator rows and RMS option");
   const auto device=input.device();validate_kernel_device(device);const auto rows=input.size(0),in=input.size(1),out=w.matrix.size(1),banks=w.matrix.size(0);
+  const long double base=rows*(4.L*(2.L*in+2.L*in*out+2.L*out+1)+28);
+  if(input.scalar_type()==at::kHalf){
+    check(input,device,at::kHalf,{rows,in});check(owners,device,at::kLong,{rows});check(error,device,at::kInt,{1});
+    check(w.matrix,device,at::kHalf,{banks,out,in});if(w.bias.defined())check(w.bias,device,at::kHalf,{banks,out});
+    const long double extra=4.L*(input.numel()+w.matrix.numel()+(w.bias.defined()?w.bias.numel():0))+rows*(6.L*out+4);
+    budget(base+extra,available);
+    auto x=at::empty(input.sizes(),input.options().dtype(at::kFloat));
+    WeightedProjectionParameters widened{at::empty(w.matrix.sizes(),x.options()),w.bias.defined()?at::empty(w.bias.sizes(),x.options()):at::Tensor{}};
+    p.cast(input,x);p.cast(w.matrix,widened.matrix);if(w.bias.defined())p.cast(w.bias,widened.bias);
+    auto t=append_weighted_projection(p,x,owners,widened,epsilon,error,available-static_cast<int64_t>(extra));
+    auto result=at::empty(t.output.sizes(),input.options()),checked=at::empty_like(t.output);
+    p.cast(t.output,result);p.cast(result,checked);guard(p,t,checked,error,error,error,error,1);
+    t.output=result;return t;
+  }
   check(input,device,at::kFloat,{rows,in});check(owners,device,at::kLong,{rows});check(error,device,at::kInt,{1});
   check(w.matrix,device,at::kFloat,{banks,out,in});if(w.bias.defined())check(w.bias,device,at::kFloat,{banks,out});
-  budget(rows*(4.L*(2.L*in+2.L*in*out+2.L*out+1)+28),available);
+  budget(base,available);
   WeightedProjectionTape t{at::zeros_like(input),at::ones({rows,1},input.options()),at::zeros_like(owners),at::zeros_like(owners),
     at::zeros({rows,out,in},input.options()),at::zeros({rows,out},input.options()),at::zeros({rows,out},input.options()),banks,epsilon.has_value(),w.bias.defined()};
   auto clean=at::zeros_like(input),errors=at::zeros({rows},error.options());p.copy(t.owners,owners);
@@ -56,7 +70,9 @@ WeightedProjectionGradient append_weighted_projection_vjp(DeviceProgram& p,const
     throw std::invalid_argument("invalid weighted projection tape");
   const auto device=t.input.device();const auto rows=t.input.size(0),in=t.input.size(1),out=t.output.size(1),banks=t.banks;
   check(t.input,device,at::kFloat,{rows,in});check(t.rstd,device,at::kFloat,{rows,1});check(t.owners,device,at::kLong,{rows});
-  check(t.matrix,device,at::kFloat,{rows,out,in});check(t.bias,device,at::kFloat,{rows,out});check(t.output,device,at::kFloat,{rows,out});
+  check(t.matrix,device,at::kFloat,{rows,out,in});check(t.bias,device,at::kFloat,{rows,out});
+  if(t.output.scalar_type()!=at::kFloat&&t.output.scalar_type()!=at::kHalf)throw std::invalid_argument("projection output storage must be FP32/FP16");
+  check(t.output,device,t.output.scalar_type(),{rows,out});
   check(gradient,device,at::kFloat,{rows,out});check(roots,device,at::kBool,{rows});check(error,device,at::kInt,{1});
   budget(rows*(4.L*(in+out+static_cast<long double>(out)*in)+9)+banks*(4.L*(out*static_cast<long double>(in)+(t.has_bias?out:0))+5),available);
   auto dg=at::zeros_like(gradient),dw=at::zeros_like(t.matrix);

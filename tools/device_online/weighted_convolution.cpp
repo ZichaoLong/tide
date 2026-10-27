@@ -14,8 +14,9 @@ void check(const at::Tensor& t,at::Device device,at::ScalarType type,at::IntArra
 void budget(long double bytes,int64_t available){if(available<1||bytes>available)throw std::invalid_argument("weighted convolution tensor budget exceeded");}
 void domain(const WeightedRawLayout& l,const WeightedRawState& s,const at::Tensor& error){
   validate_weighted_raw_buffers(l,s);
-  if(!l.convolution()||s.floating.device().type()!=resident_device_type||s.floating.scalar_type()!=at::kFloat)
-    throw std::invalid_argument("weighted convolution requires GDN/SSD raw schema and explicit FP32 accelerator");
+  if(at::GradMode::is_enabled()||!l.convolution()||s.floating.device().type()!=resident_device_type
+      ||(s.floating.scalar_type()!=at::kFloat&&s.floating.scalar_type()!=at::kHalf))
+    throw std::invalid_argument("weighted convolution requires GDN/SSD raw schema and explicit FP32/FP16 accelerator no-grad");
   validate_kernel_device(s.floating.device());check(error,s.floating.device(),at::kInt,{1});
 }
 void guard(DeviceProgram& p,const WeightedConvTape& t,const at::Tensor& values,const at::Tensor& roots,
@@ -35,9 +36,23 @@ WeightedConvTape append_weighted_convolution(DeviceProgram& p,const WeightedRawL
   const auto banks=w.weight.size(0),size=w.weight.size(1);
   if(size-1>(std::numeric_limits<int64_t>::max()-1)/stride||(size-1)*stride!=l.horizon())
     throw std::invalid_argument("convolution taps/stride differ from raw schema horizon");
+  const long double base=rows*(8.L*l.integer_width()+8.L*(size+2)+4.L*features*(3.L*size+2));
+  if(old.floating.scalar_type()==at::kHalf){
+    check(w.weight,device,at::kHalf,{banks,size,features});check(w.bias,device,at::kHalf,{banks,features});
+    check(time,device,at::kLong,{rows});check(current,device,at::kHalf,{rows,features});check(owners,device,at::kLong,{rows});
+    const long double extra=4.L*(old.floating.numel()+current.numel()+w.weight.numel()+w.bias.numel())+6.L*rows*features;
+    budget(base+extra,available);
+    auto raw=at::empty(old.floating.sizes(),old.floating.options().dtype(at::kFloat)),x=at::empty(current.sizes(),raw.options());
+    WeightedConvParameters widened{at::empty(w.weight.sizes(),raw.options()),at::empty(w.bias.sizes(),raw.options())};
+    p.cast(old.floating,raw);p.cast(current,x);p.cast(w.weight,widened.weight);p.cast(w.bias,widened.bias);
+    auto t=append_weighted_convolution(p,l,{raw,old.integer},time,x,owners,widened,stride,error,available-static_cast<int64_t>(extra));
+    auto result=at::empty(t.output.sizes(),old.floating.options()),checked=at::empty_like(t.output);
+    p.cast(t.output,result);p.cast(result,checked);guard(p,t,checked,error,error,error,error,1);
+    t.output=result;return t;
+  }
   check(w.weight,device,at::kFloat,{banks,size,features});check(w.bias,device,at::kFloat,{banks,features});
   check(time,device,at::kLong,{rows});check(current,device,at::kFloat,{rows,features});check(owners,device,at::kLong,{rows});
-  budget(rows*(8.L*l.integer_width()+8.L*(size+2)+4.L*features*(3.L*size+2)),available);
+  budget(base,available);
   WeightedConvTape t{l,{at::zeros({rows,size,features},current.options()),at::zeros_like(current)},at::zeros_like(owners),
     at::zeros_like(owners),at::zeros_like(old.integer),at::zeros({rows,size},owners.options()),
     at::zeros({rows,size,features},current.options()),at::zeros_like(current),banks,stride};
@@ -61,7 +76,8 @@ WeightedConvGradient append_weighted_convolution_vjp(DeviceProgram& p,const Weig
   check(t.owners,device,at::kLong,{rows});check(t.old_integer,device,at::kLong,{rows,l.integer_width()});
   check(t.mapping,device,at::kLong,{rows,size});check(t.taps,device,at::kFloat,{rows,size,features});
   check(t.rows.weight,device,at::kFloat,{rows,size,features});check(t.rows.bias,device,at::kFloat,{rows,features});
-  check(t.output,device,at::kFloat,{rows,features});check(gradient,device,at::kFloat,{rows,features});
+  if(t.output.scalar_type()!=at::kFloat&&t.output.scalar_type()!=at::kHalf)throw std::invalid_argument("convolution output storage must be FP32/FP16");
+  check(t.output,device,t.output.scalar_type(),{rows,features});check(gradient,device,at::kFloat,{rows,features});
   check(roots,device,at::kBool,{rows});check(error,device,at::kInt,{1});
   budget(rows*(4.L*l.floating_width()+4.L*features*(2.L*size+2)+2)+t.banks*(4.L*(size+1)*features+1),available);
   auto dg=at::zeros_like(gradient),dt=at::zeros_like(t.taps),dw=at::zeros_like(t.taps);

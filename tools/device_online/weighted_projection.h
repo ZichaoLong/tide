@@ -13,6 +13,9 @@ struct WeightedProjectionGradient {
 };
 // Shared linear maps used by weighted memory/Describe/Full. Optional input RMS
 // is the pinned N_d, with saved normalized-coordinate first-order contraction.
+// Input/parameters/output use one explicit FP32/FP16 storage dtype. Arithmetic,
+// saved values and adjoints are FP32; FP16 output rounds once after bias. Casts
+// declare identity VJP. Finite FP32 results overflowing FP16 storage are refused.
 WeightedProjectionTape append_weighted_projection(DeviceProgram&,const at::Tensor& input,
   const at::Tensor& owners,const WeightedProjectionParameters&,std::optional<double> epsilon,
   const at::Tensor& error,int64_t budget=256*1024*1024);
