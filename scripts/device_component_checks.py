@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-allocation": ("tide-weighted-allocation-check", ("float32",)),
     "peer-sharded-vjp": ("tide-sharded-vjp-check", ("float32", "float16")),
     "peer-shard-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer-shard-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
@@ -58,6 +59,7 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "weighted-allocation": "weighted-allocation: passed",
     "peer-sharded-vjp": "sharded-graph-vjp: passed",
     "peer-shard-flow": "peer-flow: passed",
     "peer-shard-control-flow": "peer-flow: passed",
@@ -224,3 +226,5 @@ KERNELS["peer-resident-compact-journals"] = "tide_state_reverse_"
 CHECKS["peer-resident-compact-projections"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
 MARKERS["peer-resident-compact-projections"] = "emission=1 compact_journals=1"
 KERNELS["peer-resident-compact-projections"] = "tide_owner_stream"
+
+KERNELS["weighted-allocation"] = "tide_weighted_allocat"

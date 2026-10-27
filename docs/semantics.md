@@ -454,6 +454,11 @@ state; raw entry decoding, graph identity and checkpoint v5 remain unchanged.
 
 ## Weighted execution placement
 
+[Resident weighted allocation](resident-weighted-allocation.md) separately defines
+complete FP32 candidate rows, int64 lengths/branches and explicit first-order
+solution-map VJPs. It does not change graph/checkpoint identity or certify a
+complete weighted resident graph, retained training or checkpoint lifecycle.
+
 [Weighted placement](weighted-placement.md) gives Describe a temporary typed
 view of its actual initial/old/proposal state, and separates complete-region
 control preparation from sending/allocation. Explicit scoring precision leaves

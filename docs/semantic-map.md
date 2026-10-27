@@ -1,5 +1,8 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+带权常驻分配的完整区域表示、精确解VJP、CPU独立公式与设备检查入口见
+[resident weighted allocation](resident-weighted-allocation.md)。组件资格不代表全图常驻完成。
+
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。
 [semantics](semantics.md) 拥有本地公式、精度、梯度和序列化版本。

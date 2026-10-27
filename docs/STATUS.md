@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83；授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送11c47a7（670ead3实现及standalone证据）。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
+已推送1732b47（standalone masters与CUDA新栈core/CPU证据）。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
 
 ## 当前实现与证据
 
@@ -27,7 +27,7 @@ CPU固定资格24项通过；独立SDK2.10/CANN9.0构建、loader与实际NPU FP
 开发门禁native-master-dev20项、final-dev9项、handoff-dev9项及原manifest/snapshot保留。
 固定CPU、SDK build/qualify均已inactive/success，具体job/commands/hashes见证据JSON。
 loader检查的shell rg缺失，已单独Python验证同一loader文件（通过），未重跑workload。
-bootstrap/sdk/device无活动reader；CUDA worktree有活动构建，不可编辑。
+bootstrap/sdk/device/resident/CUDA均无活动reader；修改冻结worktree前仍核验对应unit终态。
 
 CUDA私有栈已重新定位并读其现行README：/mi/data2T/zlong/gpu-toolchains，激活activate-cuda.sh；
 Torch2.10.0+cu128/Python3.11.15/Toolkit12.8.1，available=false。
@@ -46,11 +46,15 @@ build3-dev（tree1ecb80b3）完整SDK/AscendC构建、链接、loader通过；�
 初始化找不到tbe，未运行数值检查。原failed保留，构建manifest已存job目录。
 runtime-dev已终止failed：tbe路径已修复；SDK不支持at::tensor(bool列表)，fixture构造在求解前失败。
 改用int32→bool建立完全相同的独立根，增加rule/row/field数值诊断，不改输入、算法或容差。
-准备tide-core5-resident-allocation-build4-dev-20261027；同resident worktree冻结新dirty snapshot，
-新build/resident-allocation-build4-dev，output artifacts/jobs/core5-resident-allocation-build4-dev，.local/同名launcher，
-SDK核心摘要保持，2workers/1200秒/1卡等待180秒，检查完整前向/VJP/重放/容量。
-CUDA tools2干净670ead3已完成构建、24项CPU门禁（143.99秒），exit0；显式CUDA不可用拒绝通过；证据core5-cuda-eager-20261027，GPU真机未验。
-尚未实际设备通过，不代表完整weighted resident。之后继续图集成、CUDA分账、有限性能及追溯。
+build4-dev（tree748c3735）完整SDK/AscendC构建与真实NPU FP32开发检查通过，exit0，已inactive。
+六种regularizer、同program两组长度/输入重放、72物理行/60非空帧，完整六输入VJP/None与零、
+失败不提交/sticky error/容量拒绝通过。构建、checks/result、source.tar/tree保留在对应job。
+组件CPU独立公式29项已通过；修复只涉及SDK检查构造与诊断。提交实现后以干净固定源码
+资格CPU29/NPU同检查，并独立构建CUDA组件（无GPU）；不将开发snapshot计正式资格。
+下一步：固定resident worktree到新实现commit；使用scripts/verify_device_control.py --checks weighted-allocation，
+复用build4前核验component/core/binary摘要，新job/output/有限服务；CUDA单独build-dir、2workers。
+完整weighted resident仍需Agg、typed state/五记忆、Describe/全部发送、图调度、训练/恢复/跨卡。
+CUDA tools2干净670ead3已构建、CPU24项（143.99秒），显式不可用拒绝通过，证据已推送；GPU真机未验。
 
 ## 未解除的真实失败
 
