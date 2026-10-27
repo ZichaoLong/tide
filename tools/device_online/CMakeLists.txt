@@ -128,6 +128,11 @@ if(TIDE_DEVICE_KERNELS)
   target_link_libraries(tide-weighted-region PUBLIC tide-weighted-head tide-weighted-allocation tide-weighted-sending
     tide_weighted_region_prepare_kernel tide_weighted_region_finish_kernel tide_weighted_region_result_kernel
     tide_weighted_region_reverse_finish_kernel tide_weighted_region_reverse_prepare_kernel)
+  add_library(tide-weighted-aggregate STATIC weighted_aggregate.cpp weighted_aggregate_vjp.cpp)
+  set_target_properties(tide-weighted-aggregate PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-weighted-aggregate PUBLIC tide-weighted-head
+    tide_weighted_aggregate_prepare_kernel tide_weighted_aggregate_reduce_kernel
+    tide_weighted_aggregate_reverse_kernel tide_weighted_aggregate_norm_vjp_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     add_executable(tide-weighted-allocation-check weighted_allocation_check.cpp)
     target_compile_options(tide-weighted-allocation-check PRIVATE -fPIC)
@@ -138,6 +143,9 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-head-check weighted_head_check.cpp)
     target_compile_options(tide-weighted-head-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-head-check PRIVATE tide-weighted-head tide::tidegraph)
+    add_executable(tide-weighted-aggregate-check weighted_aggregate_check.cpp)
+    target_compile_options(tide-weighted-aggregate-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-aggregate-check PRIVATE tide-weighted-aggregate tide::tidegraph)
     add_executable(tide-weighted-region-check weighted_region_check.cpp)
     target_compile_options(tide-weighted-region-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-region-check PRIVATE tide-weighted-region tide::tidegraph)

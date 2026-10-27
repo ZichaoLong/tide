@@ -91,6 +91,12 @@ These extensions do not automatically implement weighted memory or region formul
 
 ## Weighted KV binding
 
+The [resident weighted Aggregate component](resident-weighted-aggregate.md)
+preserves every physical atom, actual positive mass and source-function banks.
+Its saved first-order VJP distinguishes absent fiber roots from connected zeros
+and the zero-total mass-only branch. Effective parameter banks do not imply
+completion of their outer low-rank/alias mapping or full graph lifecycle.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
