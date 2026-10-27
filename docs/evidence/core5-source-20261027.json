@@ -1,0 +1,61 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "39832c3f0cb3021452446c56cfac92e232e5682c6d1fd118d6834ecc9da2b155",
+  "source": "503f6092d35dc57f2052c598e15073fde65e834b",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "four source parameter bindings and class widths; stable first-order Attention/RMS reductions; CPU FP64/FP32",
+  "result": {
+    "passed": 665,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "901761de7c6ee512672fbe96fdf3b6a3e8e5ee173178611b341b82cc062566d3",
+  "git_tree": "3146f4c20c11d5c57edc6b213b956bdd83e91207",
+  "binary_sha256": {
+    "libtidegraph.a": "0cee863db7c37d3b9982dd1ece4a4afa22adaabf6c851eae728d12dca13b479d",
+    "_tide_native.so": "6dd0d9721552a24dc541082505a89715a161e07244bf639889279c24577d5a91",
+    "tidegraph-kernel-check": "40a5142bcc476f20d64289dd5590f5de2de6fb8afe46de6c1a40a0d71c455936"
+  },
+  "log_sha256": "4f51be06ff0f7e415a46f7a03cd4ececcc456ebf388d61ca170b61641031cca3",
+  "started": "2026-10-27T09:42:09.342517+00:00",
+  "finished": "2026-10-27T09:46:14.041387+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-source-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-source-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_source_binding.py",
+      "tests/test_weighted_source_execution.py",
+      "tests/test_weighted_source_training.py",
+      "tests/test_weighted_aggregate_batch.py",
+      "tests/test_weighted_aggregate_vjp.py",
+      "tests/test_weighted_aggregate_training.py",
+      "tests/test_weighted_kv_formulas.py",
+      "tests/test_checkpoint_ownership.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "tests/test_weighted_attention_mean.py",
+      "tests/test_weighted_read_batch.py",
+      "tests/test_weighted_query_vjp.py",
+      "tests/test_weighted_query_training.py",
+      "tests/test_weighted_normalization.py",
+      "tests/test_weighted_recurrent_formulas.py",
+      "tests/test_weighted_scoring.py",
+      "tests/test_weighted_region_batch.py",
+      "tests/test_weighted_region_execution.py",
+      "tests/test_weighted_state_vjp.py",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-source-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
