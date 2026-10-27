@@ -125,6 +125,8 @@ The [resident KV window/sum](resident-weighted-kv-sum.md) selects snapshots usin
 
 The [resident relative rotation](resident-weighted-rotary.md) converts exact integer ages to the declared FP32 numerical phase, retaining saved vendor sine/cosine for its first-order transpose. It does not change logical timestamps or window membership.
 
+The [resident KV query](resident-weighted-kv-query.md) composes normalized Q and independent raw K/V projections, read-relative rotation and two weighted Attention channels. Four return roots preserve private input/raw fields and shared parameter contributions, including empty short-channel constants after numerical decay underflow. Caller-bound snapshots and graph lifecycle remain separate.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
