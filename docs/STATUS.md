@@ -63,13 +63,19 @@ tide-core5-resident-kv-query-dev2-20261027.service inactive/success/exit0；原s
 8b1be80709e501447875ecf3f729afd0a90c5143固定资格：CPU38、NPU完整qry/120行、四独立根全部VJP，CUDA三架构构建/loader通过。
 两个qualify unit均inactive/success/exit0；原NPU manifest保留且全部摘要一致；证据evidence/core5-resident-kv-query-20261027.json。
 
-下一动作启动tide-core5-resident-kv-full-dev-20261027.service（结果未知），完整Full残差/SwiGLU与KV Full。
-主工作区已登记数值链、独立公式与raw/参数/输入VJP、保存版本、极大age；CPU Full时间/选择5项通过。
-冻结artifacts/worktrees/core5-resident，输出artifacts/jobs/core5-resident-kv-full-dev/{source.tree,source.tar,status.json,task.log,checks/result.json}。
-launcher .local/core5-resident-kv-full-dev{,-workload}.sh；CPU相关/公式测试与NPU weighted-residual、weighted-kv-full。
-background.slice/Nice10、600秒、2build workers/BLAS单线程、NPU queue180秒；
+Full开发tree5c4d2c92c6335c6c330d7254376e5187b017dbaf：CPU50项、NPU residual与KV Full完整检查通过。
+tide-core5-resident-kv-full-dev-20261027.service inactive/success/exit0；原source/log/status保留。
+本次提交Full残差/SwiGLU、KV Full与完整VJP/契约/独立公式检查。
+下一动作运行tide-core5-resident-kv-full-{npu,cuda}-qualify-20261027.service，结果未知。
+冻结artifacts/worktrees/core5-resident到本提交，NPU复用dev产物但核验全部摘要，CUDA新建三架构。
+输出artifacts/jobs/core5-resident-kv-full-{npu,cuda}-qualify/{status.json,task.log,checks/result.json或control-build.json}；
+launcher .local/core5-resident-kv-full-{npu,cuda}-qualify{,-workload}.sh。
+background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS单线程、NPU queue180秒；
 检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。
-通过后提交Full实现、固定资格并单独提交证据；继续Describe、四循环与完整图。
+
+主工作区另有weighted_row_graph/weighted_describe草稿和DeviceProgram log1p/minimum扩展；
+目标为所有正式评分/证据/key/增益的静态局部组合与独立字段VJP。尚未注册/编译，不能称通过。
+不进入Full提交或资格树。后续独立公式/设备资格后接四循环与完整在线图。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。
