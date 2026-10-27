@@ -17,6 +17,7 @@ void check_fiber_policy(const at::TensorOptions&);
 void check_state_clocks(const at::TensorOptions&);
 void check_structured_records(const at::TensorOptions&);
 void check_weighted(const at::TensorOptions&);
+void check_weighted_aggregate(const at::TensorOptions&);
 void check_weighted_recurrent(const at::TensorOptions&);
 void check_weighted_entropy(const at::TensorOptions&);
 void check_weighted_sending(const at::TensorOptions&);
@@ -109,6 +110,7 @@ int main(int argc, char** argv) {
     check_state_clocks(options);
     check_structured_records(options);
     check_weighted(options);
+    check_weighted_aggregate(options);
     check_weighted_recurrent(options);
     check_weighted_entropy(options);
     check_weighted_sending(options);

@@ -27,6 +27,17 @@ class SourceTransform(torch.nn.Module):
 
 
 class WeightedAggregate(AggregateProgram):
+    joint_batch = True
+    batched_autograd = True
+
+    def batch_grad(self, weights, requests):
+        from .aggregate_vjp import evaluate
+        return evaluate(self, weights, requests)
+
+    def batch(self, weights, requests):
+        from .aggregate_batch import evaluate
+        return evaluate(self, requests)
+
     def __init__(self, profile, classes, transforms, alpha, epsilon, hidden_width):
         super().__init__()
         self.profile, self.classes = profile, classes

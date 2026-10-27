@@ -1,6 +1,7 @@
 // 0770593 architecture §2–4, allocation §2–3. See docs/weighted-message.md.
 #include "weighted_recurrent_detail.h"
 #include "weighted_scoring.h"
+#include "weighted_aggregate.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -10,6 +11,14 @@ namespace {
 class Aggregate final:public AggregateKernel {
  public:
   Aggregate(SourceClasses classes,double alpha,double epsilon):classes_(std::move(classes)),alpha_(alpha),epsilon_(epsilon){}
+  bool joint_batch() const override{return true;}
+  bool batched_autograd() const override{return true;}
+  std::vector<AggregateResult> batch_grad(const NodeWeights& w,const std::vector<AggregateInput>& requests) const override {
+    return aggregate_batch_vjp(w,requests,classes_,alpha_,epsilon_);
+  }
+  std::vector<AggregateResult> batch(const NodeWeights& w,const std::vector<AggregateInput>& requests) const override {
+    return aggregate_batch(w,requests,classes_,alpha_,epsilon_);
+  }
   AggregateResult step(const NodeWeights& w,const AggregateInput& r) const override {
     std::vector<Tensor> masses,terms;
     for(const auto& source:r.sources){

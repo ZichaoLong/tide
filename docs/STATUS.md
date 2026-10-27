@@ -46,20 +46,32 @@ State 批量 VJP 实现 `7a017bf4eea93787ca2d8e72baf436b128266afd` 固定源码�
 unit tide-core5-state-vjp-qualify-20261027 已终态 inactive/success、exit 0；
 worktree artifacts/worktrees/core5-bootstrap 干净固定 7a017bf。
 输出 artifacts/jobs/core5-state-vjp-qualify；launcher `.local/core5-state-vjp-qualify.sh`。
-本证据与实现提交后推送。原开发 337/6 与修正 81/0 分别保留，原因/修复见证据，未覆盖原失败。
+实现与证据 4468439 已推送。原开发 337/6 与修正 81/0 分别保留，原因/修复见证据，未覆盖原失败。
 
-主工作区下一增量未提交：WeightedAggregate 的 class 投影批与按实际 fiber 长度的完整归约。
-Python weighted/aggregate_batch.py 与独立 C++ weighted_aggregate.{h,cpp} 已接入，
-同类不同物理原子仍每条参与；alpha=0、零总量、缺失 fiber 不合并。
-这里只完成数值 batch，Aggregate 反向仍走明确的语义重放；Read/Full/区域仍待扩展。
-Python 手算/多类原子/反馈与非对齐图/独立根/续接 **8 项通过**；
-新增 native 与 standalone 检查尚未构建，不属于 7a017bf 的资格。无用户修改。
+WeightedAggregate 增量完成开发：class 投影批、完整 fiber 归约与独立批量 VJP。
+数值开发 unit tide-core5-aggregate-dev-20261027 已终态 inactive/success、exit 0，**288 passed**；
+开发 tree d9758c37765f4bda35f4a91bd32ba42402d49ddd，原记录在 artifacts/jobs/core5-aggregate-dev。
+批量 VJP 开发 unit tide-core5-aggregate-vjp-dev-20261027 已终态 inactive/success、exit 0，
+**696 passed / 0 failed / 0 skipped**，tree 4ebfbaeb9848217a423a922c101c2615913190f1；
+记录在 artifacts/jobs/core5-aggregate-vjp-dev。额外 HB/PDG batched AdamW/checkpoint **8 项通过**。
+最初局部短测的 4 项错误是固定 scale 不需要梯度却列为根，已修正夹具为显式独立根；
+修正局部 **9 项通过**，未改变数学公式或容差。契约 docs/weighted-aggregate-batch.md。
 
-下一动作：补 Aggregate 批量契约和追溯，冻结新开发树；新的 background.slice 服务
-构建并运行 test_weighted_aggregate_batch、weighted_state_vjp、weighted_execution、
-weighted_native、scoring/sending/recurrent execution 及 standalone。
-结果终态后固定实现、独立资格/证据，再继续 Aggregate VJP、Read/Full、mixed/resident、
-standalone 完整训练与有限 profiling。当前无 live job；总体任务尚未完成，持续推进。
+准备提交该实现并启动 `tide-core5-aggregate-qualify-20261027`，launcher `.local/core5-aggregate-qualify.sh`。
+资格只读 artifacts/worktrees/core5-bootstrap，冻结本次实现提交；独立于主工作区后续 Read/Full 草稿。
+输出 artifacts/jobs/core5-aggregate-qualify/{status.json,task.log,development.json,source.tar.gz}。
+background.slice、Nice=10、两个 build workers、ATen/BLAS 单线程、15 分钟上限。
+精确校验已有 build 的 C++ 源码与全部二进制 hashes，运行上述相关测试及新增训练恢复。
+检查 `systemctl --user show tide-core5-aggregate-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
+日志 `tail -40 artifacts/jobs/core5-aggregate-qualify/task.log`；停止同名服务。结果尚未知。
+终态成功后单独提交证据并推送，继续实施，不在阶段提交后暂停。
+
+主工作区下一增量尚未提交：weighted/query_batch.py、read_batch.py、full_batch.py，
+cpp/src/weighted_query_batch.h、weighted_query_kv.cpp、weighted_query_recurrent.cpp 和
+ tests/test_weighted_read_batch.py。Python 局部数值 **60 项通过**；C++ 尚未接入/构建，
+Read/Full 仍未切换能力，不能声明完成。所有未提交修改均本任务所作，无用户修改。
+后续为 Read/Full/区域的数值与批量 VJP、计算共享（包括正式参数绑定方式），mixed/resident、
+standalone 完整训练/graph continuation 与有限 profiling。总体任务尚未完成。
 
 ## 环境与保留事项
 
