@@ -1,0 +1,210 @@
+{
+  "source": "2e335e7a77f255c0418ce46b7f1673165330ccfc",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "FP32 resident canonical parameter alias reduction composed with head, SGD/Nesterov and AdamW/AMSGrad; local optimizer resume; not full graph checkpoint",
+  "jobs": [
+    {
+      "source": "2e335e7a77f255c0418ce46b7f1673165330ccfc",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:04:02.830101+00:00",
+      "finished": "2026-10-27T14:04:21.554546+00:00",
+      "name": "core5-resident-parameters-npu-qualify",
+      "unit": "tide-core5-resident-parameters-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "424ead482f323976e3373167b66cf4dad8b7b6a44438b28004249bfc3ab1fdd3",
+      "device_cases": [
+        {
+          "check": "weighted-parameters",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-parameters-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-parameters-float32.log",
+          "log_sha256": "cde6e338dabfb1f2d1cf991829d2dd2065c458cc5fd20e4166d02cb52b8f221a"
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 15.301290951669216,
+        "job_id": "core5-resident-parameters-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T14:04:21.544274+00:00"
+      },
+      "cpu_tests": 3,
+      "cpu_seconds": 0.77,
+      "observations": {
+        "optimizers": [
+          "SGD Nesterov",
+          "AdamW AMSGrad"
+        ],
+        "updates": 8,
+        "canonical_owners": 10,
+        "cross_role_and_bank_aliases": true,
+        "equal_independent_leaves": true,
+        "all_parameter_gradients": true,
+        "all_parameter_and_slot_updates": true,
+        "none_connected_zero_counters": true,
+        "exact_new_owner_resume_next_steps": true,
+        "failed_update_and_publication_unchanged": true,
+        "tail_extent": 513,
+        "sum_overflow_refused": true,
+        "capacity_refused": true,
+        "float_atol": 1e-06,
+        "float_rtol": 1e-05
+      },
+      "build": {
+        "source": "6f709f8332f179ffce3c315bd3f77e7e7c26cca8",
+        "component_sha256": "29dd22c092c5ac0a4f13c0bbabd9595770879cc72bae438d86202ef157031299",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-parameters-check": "105f0cb6c998a8cef381ca318a2d431899de8affa8eb0b56fbff1dcc3eabccb1"
+        },
+        "loader_sha256": {},
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original dirty development tree 3f166d4c and manifest retained; full component/core/binary hashes verified against fixed clean source."
+      }
+    },
+    {
+      "source": "2e335e7a77f255c0418ce46b7f1673165330ccfc",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:04:02.817017+00:00",
+      "finished": "2026-10-27T14:06:01.695809+00:00",
+      "name": "core5-resident-parameters-cuda-qualify",
+      "unit": "tide-core5-resident-parameters-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "07173a03daa1be5ed2aa416ecc4096f52638fb007139d740c33b130c35d2050e",
+      "build": {
+        "source": "2e335e7a77f255c0418ce46b7f1673165330ccfc",
+        "component_sha256": "29dd22c092c5ac0a4f13c0bbabd9595770879cc72bae438d86202ef157031299",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-parameters-check": "1333b0e78c2700c1942360ddb7f52ad95f42d8b1e079e1a2b5d35d295950b73c"
+        },
+        "loader_sha256": {},
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New sm80/90/100 CUDA build; no NVIDIA hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "tree": "3f166d4cb17373dba759c64bccef6c2d8af208c4",
+    "job": "core5-resident-parameters-dev2",
+    "state": "passed",
+    "cpu_tests": 3,
+    "cpu_seconds": 0.78
+  },
+  "prior_failures": [
+    {
+      "tree": "18b4665df189605cfb6c62baa38097a0f18edc9f",
+      "job": "core5-resident-parameters-dev",
+      "state": "failed",
+      "reason": "Standalone check supplied explicit empty optimizer parameter group, so no parameter was selected; counter assertion failed. Fixture now selects canonical owners; numerical code/tolerance unchanged."
+    }
+  ],
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_parameter_reduce.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-parameters",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-parameters",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-parameters",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Full model/typed memory/Describe bindings",
+    "Full online weighted graph, retained VJP and exact graph checkpoint",
+    "Peer and FP16 resident extension",
+    "Actual CUDA hardware and finite performance selection"
+  ]
+}

@@ -80,3 +80,5 @@
 - [常驻完整带权Aggregate](core5-resident-aggregate-20261027.md)：92751c0，CPU15/NPU物理原子及完整VJP/保存版本，CUDA三架构构建。
 
 - [常驻来源低秩参数链](core5-resident-source-20261027.md)：6f709f8，CPU18/NPU完整因子链与保存版本，CUDA三架构构建。
+
+[带权常驻参数归约与局部训练](core5-resident-parameters-20261027.md)：2e335e7，CPU3/NPU八步更新与新owner恢复、CUDA三架构构建。

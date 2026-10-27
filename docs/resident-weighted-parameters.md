@@ -40,3 +40,5 @@ FP32梯度可归属于FP32/FP16注册参数；本项新完整组合检查首先�
 入口 `verify_device_control.py --checks weighted-parameters --device npu:0`。
 这项局部训练组合不包含图continuation、retained跨窗口反向或磁盘checkpoint；完整图生命周期另验收。
 CPU helper、NPU实际执行、CUDA构建/真机分别记录。
+
+固定源码资格见[2e335e7运行证据](evidence/core5-resident-parameters-20261027.md)。
