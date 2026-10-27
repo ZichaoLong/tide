@@ -4,6 +4,8 @@
 [resident weighted allocation](resident-weighted-allocation.md)。组件资格不代表全图常驻完成。
 [常驻发送原语](resident-weighted-sending.md)对应Attention/比例/分数填充/硬选择的实际buffer、
 独立精确/分支VJP与验证入口，完整区域控制和图推进另行集成。
+[常驻ScalarHead/Query](resident-weighted-head.md)定义厂商批量算子、动态owner共享参数、
+独立根连接与实际权重版本的显式VJP。
 
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。

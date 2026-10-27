@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送e875dc1；8e7298d发送实现及本次证据提交后继续推送。总体未完成，不在阶段提交后暂停。
+已推送afe8c8d（8e7298d发送实现及固定证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -24,13 +24,16 @@ resident worktree artifacts/worktrees/core5-resident 固定8e7298d，clean/read-
 NPU复用build2，完整component/core/binary摘要相符，原manifest source字段保留。
 开发sending-dev的bool→float AscendC失败保持failed；build2-dev通过不改旧状态。
 
-当前未提交：resident weighted head（ScalarHead/Query共同双仿射+SiLU），实际vendor bmm/SiLU及显式VJP，
-动态int64 owner聚集、共享bank汇总、None/零、实际input/parameter版本保存；CPU元数据/归约8项通过。
-新文件tools/device_online/weighted_head*、ascendc/tide_weighted_head_*、tests/test_resident_weighted_head.py，
-文档resident-weighted-head及注册变更。尚未构建或实际设备通过。
-下一步冻结main dirty snapshot，独立head开发任务构建SDK并执行
-scripts/verify_device_control.py --build-dir NEW --output-dir NEW --device npu:0 --checks weighted-head。
-通过后提交实现/固定资格；随后组合区域context/query与Alloc/发送形成完整SelStep，再推进图生命周期。
+当前resident weighted head开发完成：ScalarHead/Query公共双仿射+SiLU由真实vendor批量算子执行；
+动态int64 owner聚集、共享参数完整汇总、独立根None/零、实际input/parameter版本保存。
+head-workspace-dev（tree68c50c18）CPU8、SDK构建/loader、NPU两种形状/24行/完整VJP、
+原bank改写后的保存tape反向、失败不提交/容量拒绝通过，已inactive/exit0。
+实际operator workspace高水位16777728 bytes，测试显式64MiB；前向/反向scratch独立准入。
+原head-dev非连续转置拒绝、layout-dev 4MiB工作区容量拒绝保留failed；没有数值失败冒充通过。
+提交head实现后固定CPU8/NPU及CUDA三架构构建资格，随后组合完整区域SelStep。
+当前另有未提交的区域组合初稿：weighted_region_layout.h、ascendc/weighted_region_prepare.h、
+ascendc/weighted_region_reverse.h；含完整候选摘要/query/控制bounds及链式VJP，还未注册、接head或测试，
+不包含在head提交/资格中。下一步实现设备stage封装、组合已有head/Alloc/sending、独立公式与完整区域VJP。
 
 完整weighted resident仍缺Agg、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。

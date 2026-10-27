@@ -128,6 +128,12 @@ identity remains; new functions enter distinct hashed graph/checkpoint bindings.
 
 ## Weighted scoring bindings
 
+The [resident ScalarHead/Query component](resident-weighted-head.md) uses
+vendor batched affine/SiLU operations, private row activations and device-selected
+parameter owners. Its explicit first-order adjoint sums all selected users and
+retains None/zero connectivity plus actual input/weight versions. Full region and
+graph integration remain separate from component acceptance.
+
 The separate [resident sending primitives](resident-weighted-sending.md) retain
 complete candidate lengths/int64 IDs and explicit first-order connectivity for
 Attention, proportional, fractional fill and hard cap maps. Device programs
