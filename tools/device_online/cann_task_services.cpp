@@ -21,44 +21,48 @@ void await(DeviceProgram& p,const std::shared_ptr<Signal>& signal){
 }
 struct Service {
   std::shared_ptr<Signal> request,done;at::Tensor command,work,stop;
-  std::unique_ptr<DeviceProgram> program;size_t head,end;
+  std::unique_ptr<DeviceProgram> program;DeviceProgram* parent=nullptr;size_t head,end;
   bool ended=false;
 };
 }
 struct TaskServices::Impl {
   DeviceProgram& coordinator;at::Device device;int64_t budget;
-  std::vector<std::unique_ptr<Service>> services;bool stopped=false,finished=false;
+  std::vector<std::unique_ptr<Service>> services;std::vector<size_t> open;bool stopped=false,finished=false;
   Impl(DeviceProgram& p,at::Device d,int64_t b):coordinator(p),device(d),budget(b){}
 };
 TaskServices::TaskServices(DeviceProgram& p,at::Device d,int64_t budget):impl_(std::make_unique<Impl>(p,d,budget)){}
 TaskServices::~TaskServices()=default;
 DeviceProgram& TaskServices::begin(){
-  auto& s=*impl_;if(s.stopped||s.finished||(!s.services.empty()&&!s.services.back()->ended))throw std::logic_error("invalid local service construction order");
+  auto& s=*impl_;if(s.stopped||s.finished)throw std::logic_error("invalid local service construction order");
   if(s.budget<1)throw std::invalid_argument("complete local service workspace budget exceeded");
   auto x=std::make_unique<Service>();x->request=std::make_shared<Signal>(s.device);x->done=std::make_shared<Signal>(s.device);
+  x->parent=s.open.empty()?&s.coordinator:s.services[s.open.back()]->program.get();
   auto opts=at::TensorOptions().device(s.device).dtype(at::kInt);x->command=at::zeros({1},opts);x->work=at::ones_like(x->command);x->stop=at::zeros_like(x->command);
   x->program=std::make_unique<DeviceProgram>(s.device);auto& p=*x->program;p.limit_workspace(s.budget);
   x->head=p.label();const auto body=p.label();x->end=p.label();p.mark(x->head);await(p,x->request);p.branch(x->command,{x->end,body});p.mark(body);
-  s.coordinator.copy(x->command,x->work);record(s.coordinator,x->request);
-  s.services.push_back(std::move(x));return p;
+  x->parent->copy(x->command,x->work);record(*x->parent,x->request);
+  s.open.push_back(s.services.size());s.services.push_back(std::move(x));return p;
 }
 void TaskServices::end(DeviceProgram& p){
-  auto& s=*impl_;if(s.services.empty())throw std::logic_error("missing local service");auto& x=*s.services.back();
+  auto& s=*impl_;if(s.open.empty())throw std::logic_error("missing local service");auto& x=*s.services[s.open.back()];
   if(x.program.get()!=&p||x.ended)throw std::logic_error("local service boundary mismatch");
   // No numerical operations follow done before the next request. In
   // particular the unconditional jump does not read/update shared workspace.
   record(p,x.done);p.branch(x.stop,{x.head});p.mark(x.end);record(p,x.done);
-  await(s.coordinator,x.done);x.ended=true;
+  await(*x.parent,x.done);x.ended=true;s.open.pop_back();
 }
 void TaskServices::append_stop(){
-  auto& s=*impl_;if(s.stopped||(!s.services.empty()&&!s.services.back()->ended))throw std::logic_error("invalid local service stop boundary");
+  auto& s=*impl_;if(s.stopped||!s.open.empty())throw std::logic_error("invalid local service stop boundary");
+  // At the root boundary every descendant is idle. Stop parents then children;
+  // the root owns this final request/done pair after each normal caller returned.
   for(auto& x:s.services){s.coordinator.copy(x->command,x->stop);record(s.coordinator,x->request);await(s.coordinator,x->done);}s.stopped=true;
 }
 void TaskServices::finish(){
   auto& s=*impl_;if(!s.stopped||s.finished)throw std::logic_error("invalid local service finish");
   if(workspace_bytes()>s.budget)throw std::invalid_argument("complete local service workspace budget exceeded");
   // Coordinator -> request -> worker -> done -> coordinator is a strict
-  // device happens-before chain. One high-water arena serves every stage.
+  // device happens-before chain, including nested parents suspended on a child.
+  // One high-water arena serves every stage; no sibling work overlaps.
   auto workspace=at::empty({workspace_bytes()},at::TensorOptions().device(s.device).dtype(at::kByte));
   s.coordinator.shared_workspace(workspace);
   for(auto& x:s.services)x->program->shared_workspace(workspace);

@@ -52,6 +52,17 @@ void WeightedWindowJournal::save(DeviceProgram& p,const at::Tensor& stage,const 
   auto shape=x.sizes().vec();shape.insert(shape.begin(),stages_);auto stored=at::zeros(shape,x.options());
   fields_[name]=stored;p.index_copy(stored,0,stage,x.unsqueeze(0));
 }
+void WeightedWindowJournal::capture(DeviceProgram& p,const std::string& name,const at::Tensor& x){
+  if(boundary_.count(name)||!x.defined()||!x.is_contiguous()||x.numel()<1)
+    throw std::invalid_argument("invalid weighted boundary journal field");
+  const auto cost=x.numel()*x.element_size();
+  if(cost>remaining_)throw std::invalid_argument("weighted boundary journal exceeds tensor budget");
+  remaining_-=cost;allocated_+=cost;auto stored=at::zeros_like(x);boundary_[name]=stored;p.copy(stored,x);
+}
+at::Tensor WeightedWindowJournal::load(DeviceProgram& p,const at::Tensor& stage,const std::string& name)const{
+  const auto& x=fields_.at(name);auto shape=x.sizes().vec();shape.erase(shape.begin());
+  auto out=at::zeros(shape,x.options());p.index_select(x,0,stage,out.unsqueeze(0));return out;
+}
 std::map<std::string,at::Tensor> WeightedWindowJournal::decode(int64_t stages)const{
   if(stages<0||stages>stages_)throw std::logic_error("invalid weighted window journal length");
   std::map<std::string,at::Tensor> out;for(const auto& [name,x]:fields_)out[name]=x.narrow(0,0,stages).to(at::kCPU).clone();return out;

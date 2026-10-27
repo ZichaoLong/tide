@@ -1,5 +1,7 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[Weighted实际窗口VJP](resident-weighted-window-vjp.md)组合设备journal逆序、消息与状态前驱及canonical参数累加；公共训练owner另验收。
+
 [Weighted消息反向路由](resident-weighted-reverse-route.md)从实际journal恢复逐边祖先和独立边界根，完整训练owner另行验收。
 
 [常驻完整数值阶段 VJP](resident-weighted-stage-vjp.md)绑定真实局部 tape、三种快照、完整区域和 canonical 参数角色；跨窗口训练 owner 另行验收。

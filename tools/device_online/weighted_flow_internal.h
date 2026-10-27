@@ -60,11 +60,16 @@ class WeightedWindowJournal {
  public:
   WeightedWindowJournal(int64_t stages,int64_t bytes):stages_(stages),remaining_(bytes){}
   void save(DeviceProgram&,const at::Tensor& stage,const std::string&,const at::Tensor&);
+  void capture(DeviceProgram&,const std::string&,const at::Tensor&);
+  const at::Tensor& field(const std::string& name)const{return fields_.at(name);}
+  const at::Tensor& boundary(const std::string& name)const{return boundary_.at(name);}
+  at::Tensor load(DeviceProgram&,const at::Tensor& stage,const std::string&)const;
   std::map<std::string,at::Tensor> decode(int64_t stages)const;
   int64_t allocated_bytes()const{return allocated_;}
  private:
   int64_t stages_,remaining_,allocated_=0;
   std::map<std::string,at::Tensor> fields_;
+  std::map<std::string,at::Tensor> boundary_;
 };
 struct WeightedFlow::Impl {
   Graph graph;Model model;Continuation boundary;at::Device device;WeightedFlowLimits limits;
@@ -73,8 +78,8 @@ struct WeightedFlow::Impl {
   std::vector<std::unique_ptr<WeightedFlowNode>> nodes;
   std::vector<std::unique_ptr<WeightedFlowRegion>> regions;
   std::unique_ptr<WeightedWindowJournal> journal;
-  at::Tensor error,stop,stages;AtomBatch external;
-  bool failed=false,ran=false;int64_t bytes=0,journal_bytes=0;
+  at::Tensor error,begin,stop,stages;AtomBatch external;
+  bool failed=false,ran=false;int64_t bytes=0,journal_bytes=0,generation=0;
   Impl(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits);
   void construct();
   int64_t remaining(DeviceProgram&)const;

@@ -4,6 +4,7 @@ namespace tide::device_online {
 void WeightedFlow::Impl::save_stage(DeviceProgram& p,const ReadyBatch& ready,const AtomBatch& arrivals){
   auto save=[&](const std::string& name,const at::Tensor& x){journal->save(p,stages,name,x);};
   save("fiber.meta",ready.atoms.coordinates);save("fiber.values",ready.atoms.values);save("fiber.present",ready.atoms.valid);
+  save("fiber.rows",ready.fibers);save("fiber.offsets",ready.fiber_offsets);
   save("message.meta",arrivals.coordinates);save("message.values",arrivals.values);save("message.present",arrivals.valid);
   save("counts",ready.counts);
   for(size_t v=0;v<nodes.size();++v){const auto& n=*nodes[v];const auto prefix="node."+std::to_string(v)+".";
