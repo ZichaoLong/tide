@@ -41,30 +41,24 @@ output artifacts/jobs/core5-half-policy-dev，status.json/development.json/task.
 
 ## 下一动作与任务状态
 
-CPU固定资格 tide-core5-half-qualify-20261027 已inactive/success/exit0：
-[99passed/2strict-xfailed](evidence/core5-half-20261027.md)，未计为完整FP16矩阵。
-bootstrap已冻结下一设备入口草稿，准备tide-core5-half-device-cpu-dev-20261027；
-launcher .local/core5-half-device-cpu-dev.sh，output artifacts/jobs/core5-half-device-cpu-dev，600秒，
-CPU入口9passed/exit0，unit已终止；复用校验C++摘要构建。
-output artifacts/jobs/core5-half-qualify，manifest与日志已独立保存。
-bootstrap/device当前草稿tree cfee98d5a7a931b2de66b88d793f219183d55bf4；
-device准备tide-core5-half-npu-build-dev-20261027，launcher .local/core5-half-npu-build-dev.sh，
-output artifacts/jobs/core5-half-npu-build-dev；2workers/1800秒，NPU Python栈构建，不需设备。
-sdk仍干净470ce06，无reader。
-设备快照cfee98d5上两个Python NPU FP16开发任务均passed/exit0（各1卡动态排队/1200秒）：
-core5-half-python-dev：KV/affine/delta/SSD显式AdamW；core5-half-python-sgd-dev：GDN/异构显式SGD。
-units为tide-上述名-20261027；launchers .local/上述名.sh；output artifacts/jobs/上述名。
-检查dtype=float16/scoring=float32/loss_scale16，四步更新、raw/master精确恢复与CPU handoff。
-这6个开发组合通过完整比较；不是固定源码资格。NPU构建终止前禁止更新device快照。
-1. 设备入口实现准备提交：显式dtype/optimizer/loss-scale、FP32 masters，恢复raw/master严格逐值；
-   CPU入口9项通过，新增profile CLI拒绝检查6项通过；完整12项固定资格下一步。
-   profile支持相同精度/optimizer，仍只回答算子归属。冻结新提交后CPU与NPU Python/native分验收。
-2. 扩展check_weighted_device.py显式dtype/scoring/master/optimizer；实际NPU half训练恢复，
-   不用CPU或旧core-3 half资格代替。继续SDK、异步peer失败定位。
-3. standalone half masters/checkpoint、weighted resident、CUDA源码/构建/真机分账、有限选型性能与最终追溯仍待完成。
+[01689c0设备half固定资格](evidence/core5-half-device-20261027.md)已全部终止通过：CPU12项，
+Python/native各mixed-c AdamW4+SGD2、mixed-a/b各1、显式同步两卡各1。
+native half profile35945kernels/1222hostscalar/1368memcpy，32candidate/31Full/44messages，
+20设备AiCPU；非吞吐排名。全部命令/环境/输入及结果哈希已整理入证据JSON。
+device保持干净01689c0/treefe3dc71f67b2a7520e3316a57b8cdf52c0f854c1，无reader；sdk仍470ce06。
 
-更新worktree前检查所有关联unit终态和status.json；活动任务只读冻结源码。
-保存build manifest及源码/二进制摘要后才允许复用构建；新任务新输出，不覆盖失败。
+standalone master/codec v2增量尚未提交（git status）：显式OptimizerPrecision、FP32 masters与scale，
+Half原值、schema1读取/schema2写入、exact raw/slot恢复、独立Torch公式和畸形v1/不一致master拒绝。
+CPU开发任务tide-core5-native-master-dev-20261027正在运行，不计通过；
+bootstrap source01689c0+tree0f337e7cfa7d4fa79b0d468b5519d799cf6a8719，活动时不可编辑。
+launcher .local/core5-native-master-dev.sh，output artifacts/jobs/core5-native-master-dev，
+2workers/1800秒；test_cpp_master_optimizer/optimizer/checkpoint/weighted_training四入口。
+主工作区另有晚于冻结的测试追加：有效checksum但master不一致的加载拒绝；standalone结果显式精度字段。
+
+下一命令：systemctl --user show tide-core5-native-master-dev-20261027 -p ActiveState -p Result -p ExecMainStatus；
+读取output/status.json、development.json及task.log。修复真实失败后冻结最终草稿并运行相关门禁，
+再提交实现、固定资格与单独证据。不能将01689c0设备通过延伸到新的native optimizer/格式。
+随后继续standalone NPU、weighted resident、CUDA源码/构建/真机分账、有限性能与最终追溯；总体未完成。
 
 ## 环境与命令
 
