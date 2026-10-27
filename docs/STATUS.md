@@ -40,10 +40,22 @@ dev4 tree1ef73cfc9a56e0e2748759ef4992bdad9a2cd9c6（SDK不支持CPU bool列表�
 证据evidence/core5-resident-recurrent-20261028.{md,json}；两个tide-core5-resident-recurrent-{npu,cuda}-qualify-20261028.service均inactive/success/exit0。
 原始记录artifacts/jobs/core5-resident-recurrent-{npu,cuda}-qualify/，checkout artifacts/worktrees/core5-resident，无活动reader。
 NPU复用dev5原manifest、全部component/core/binary摘要一致；CUDA独立构建，无真机。
-下一命令：单独提交本批证据并推送，然后完成公共安装配置检查接口测试、接入完整weighted在线图。
-当前未提交源码：weighted.h、weighted_{kv,recurrent,programs,region,configuration}.cpp、bind_weighted.cpp、cpp/test/weighted.cpp和根CMakeLists.txt。
-这些是纯元数据node_binding/region_binding及配置一致性校验，尚未构建；不能混入循环组件证据提交或宣称图已完成。
-后续构建需重建core摘要，不能继续复用670ead3 core来认证新接口。
+循环证据7480187已推送。公共安装配置检查接口开发通过：
+core5-weighted-binding-dev2，tree9744c93eaa3ee37f9738a8ddccfe88fda0c63842，Python/native45项/22.87秒，C++kernel FP64/FP32均通过。
+unit tide-core5-weighted-binding-dev2-20261028.service inactive/success/exit0。
+原dev仅launcher失败（预建目录与job.py排他创建冲突），构建未启动；原failed记录保留。
+当前提交该接口后以固定提交资格：tide-core5-weighted-binding-qualify-20261028.service，
+冻结artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-weighted-binding-qualify/；
+launcher .local/core5-weighted-binding-qualify{,-workload}.sh，复用开发库并检查全部C++源码/二进制摘要，
+同45项及两种dtype C++检查；300秒/BLAS1/background.slice/Nice10。正式结果未知。
+下一命令：检查status.json/task.log/development.json与unit；通过后证据独立提交推送，继续完整图。
+
+完整图增量尚未通过设备验证：tools/device_online/weighted_flow*、三个metadata kernel、CMake/检查注册、
+测试test_resident_weighted_flow_packing.py、公共C++/Python入口和契约resident-weighted-flow.md。CPU metadata5项/0.81秒通过。
+新开发任务tide-core5-weighted-flow-dev-20261028.service；冻结artifacts/worktrees/core5-sdk（与binding CPU reader分离），
+输出artifacts/jobs/core5-weighted-flow-dev/；launcher .local/core5-weighted-flow-dev{,-workload}.sh。
+先增量重建standalone core，再构建weighted-flow、queue180秒后跑NPU完整图检查；1800秒/2workers/BLAS1/background.slice/Nice10。
+任务未获结果，不能称通过。检查status.json/task.log/checks/result.json及systemctl；停止systemctl --user stop上述unit。
 
 接续完整在线图就绪/选择/推进、retained训练/optimizer、
 精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。

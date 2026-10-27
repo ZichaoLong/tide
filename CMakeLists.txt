@@ -37,7 +37,7 @@ add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/read_fields.cpp cpp/src/tensor_fields.cpp cpp/src/isolated_read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
-  cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
+  cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp cpp/src/weighted_configuration.cpp
   cpp/src/weighted_aggregate.cpp
   cpp/src/weighted_mean.cpp
   cpp/src/weighted_attention_mean.cpp

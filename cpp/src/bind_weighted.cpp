@@ -43,6 +43,13 @@ void bind_weighted(py::module_& module){
     configure_node(w,c,r,SourceClasses{edges,inputs},alpha);
   });
   module.def("configure_weighted_region",&configure_region);
+  module.def("weighted_node_binding",[](const NodeWeights& w){
+    auto binding=node_binding(w);py::dict result;
+    result["memory"]=py::cast(binding.memory);result["regional"]=py::cast(binding.regional);
+    result["edge_classes"]=py::cast(binding.sources.edges);result["input_classes"]=py::cast(binding.sources.inputs);
+    result["aggregate_alpha"]=binding.aggregate_alpha;return result;
+  });
+  module.def("weighted_region_binding",&region_binding);
   module.def("weighted_allocate_quad",[](const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau){
     return allocate_quad(t,mu,lo,hi,tau).controls;
   });

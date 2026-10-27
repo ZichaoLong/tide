@@ -148,8 +148,12 @@ class Recurrent final:public MemoryKernel {
       require((b.times<=s.last_time).all().item<bool>()&&b.times.numel()<=s.observations,"invalid recurrent convolution clock/count");
     }
   }
+  RecurrentConfig configuration() const{return c_;}
  private:RecurrentConfig c_;
 };
 }
 std::shared_ptr<const StateKernel> make_recurrent(const RecurrentConfig& c){return std::make_shared<Recurrent>(c);}
+std::optional<RecurrentConfig> recurrent_configuration(const StateKernel& kernel){
+  if(auto value=dynamic_cast<const Recurrent*>(&kernel))return value->configuration();return std::nullopt;
+}
 }

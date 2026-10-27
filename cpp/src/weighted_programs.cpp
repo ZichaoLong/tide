@@ -51,6 +51,9 @@ class Aggregate final:public AggregateKernel {
       validate_source(w,prefix,d);
     }
   }
+  SourceClasses classes()const{return classes_;}
+  double alpha()const{return alpha_;}
+  double epsilon()const{return epsilon_;}
  private:SourceClasses classes_;double alpha_,epsilon_;
 };
 template<class Config> class Describe final:public ReadKernel {
@@ -97,6 +100,8 @@ template<class Config> class Describe final:public ReadKernel {
   void validate_weights(const NodeWeights& w) const override {
     validate_describe(w,r_,c_.width,c_.summary_width);
   }
+  Config configuration()const{return c_;}
+  RegionalConfig regional()const{return r_;}
  private:Config c_;RegionalConfig r_;
 };
 template<class Config> class Full final:public FullKernel {
@@ -120,10 +125,30 @@ template<class Config> class Full final:public FullKernel {
   void validate_weights(const NodeWeights& w,Index) const override {
     validate_content_weights(w,c_);
   }
+  Config configuration()const{return c_;}
  private:Config c_;
 };
 }
 std::shared_ptr<const StateKernel> make_kv(const KVConfig&);
+std::optional<KVConfig> kv_configuration(const StateKernel&);
+std::optional<RecurrentConfig> recurrent_configuration(const StateKernel&);
+namespace {
+template<class Config> NodeBinding inspect(const NodeWeights& w,const Config& c,const Aggregate& aggregate){
+  const auto* read=dynamic_cast<const Describe<Config>*>(w.read_kernel.get());
+  const auto* full=dynamic_cast<const Full<Config>*>(w.full_kernel.get());
+  require(read&&full&&same_configuration(c,read->configuration())&&same_configuration(c,full->configuration())
+    &&aggregate.epsilon()==c.epsilon,"weighted functions bind inconsistent configurations");
+  c.validate();auto regional=read->regional();regional.validate();
+  return {c,std::move(regional),aggregate.classes(),aggregate.alpha()};
+}
+}
+NodeBinding node_binding(const NodeWeights& w){
+  const auto* aggregate=dynamic_cast<const Aggregate*>(w.aggregate_kernel.get());
+  require(w.kernel&&aggregate,"node binding requires installed weighted memory and Aggregate");
+  if(auto c=kv_configuration(*w.kernel))return inspect(w,*c,*aggregate);
+  if(auto c=recurrent_configuration(*w.kernel))return inspect(w,*c,*aggregate);
+  throw std::invalid_argument("node binding requires installed weighted memory");
+}
 bool is_describe(const ReadKernel& kernel){
   return dynamic_cast<const Describe<KVConfig>*>(&kernel)||dynamic_cast<const Describe<RecurrentConfig>*>(&kernel);
 }
