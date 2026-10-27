@@ -111,6 +111,11 @@ The [fixed-time convolution component](resident-weighted-convolution.md) packs
 actual int64-indexed taps and evaluates vendor batched products/reductions. Its
 current term is unweighted, and saved adjoints distinguish absent cache roots
 from connected zero matches. Raw-update composition preserves that distinction.
+The [shared projection component](resident-weighted-projection.md) implements
+optional input RMS and batched linear maps with actual saved parameter rows.
+Absent bias is a missing parameter role; None/zero roots and all shared users
+are retained by its explicit first-order VJP. This is a local algebra component,
+not a replacement for the complete memory/Describe/Full definitions.
 
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or

@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-projection": ("tide-weighted-projection-check", ("float32",)),
     "weighted-convolution": ("tide-weighted-convolution-check", ("float32",)),
     "weighted-raw": ("tide-weighted-raw-check", ("float32",)),
     "weighted-parameters": ("tide-weighted-parameters-check", ("float32",)),
@@ -253,3 +254,5 @@ KERNELS["weighted-raw"] = "tide_weighted_raw"
 MARKERS["weighted-raw"] = "weighted-raw: passed"
 KERNELS["weighted-convolution"] = "tide_weighted_conv_"
 MARKERS["weighted-convolution"] = "weighted-convolution: passed"
+KERNELS["weighted-projection"] = "tide_weighted_projection_"
+MARKERS["weighted-projection"] = "weighted-projection: passed"
