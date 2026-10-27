@@ -2,6 +2,7 @@
 #include "weighted_recurrent_detail.h"
 #include "weighted_scoring.h"
 #include "weighted_aggregate.h"
+#include "weighted_query_batch.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -48,6 +49,10 @@ template<class Config> class Describe final:public ReadKernel {
  public:
   Describe(Config c,RegionalConfig r):c_(std::move(c)),r_(std::move(r)){}
   bool structured() const override{return true;}
+  bool joint_batch() const override{return true;}
+  std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    return query::describe(w,requests,c_,r_);
+  }
   FieldLayout field_layout(const NodeWeights&) const override {
     FieldLayout result{{"w",{}},{"mu",{}},{"score",{}}};
     if(r_.regional())result["evidence"]={*r_.region_control_width};
@@ -85,6 +90,10 @@ template<class Config> class Describe final:public ReadKernel {
 template<class Config> class Full final:public FullKernel {
  public:
   explicit Full(Config c):c_(std::move(c)){}
+  bool joint_batch() const override{return true;}
+  std::vector<FullResult> batch(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
+    return query::full(w,requests,slots,options,c_);
+  }
   FullResult step(const NodeWeights& w,const FullInput& r,Index slots,const Options& options) const override {
     require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
     auto g=content(w,*r.comparison,r.time,r.content.value.slice(0,1),c_);

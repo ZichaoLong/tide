@@ -40,6 +40,10 @@ add_library(tidegraph STATIC
   cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
   cpp/src/weighted_aggregate.cpp
   cpp/src/weighted_aggregate_vjp.cpp
+  cpp/src/weighted_query_kv.cpp
+  cpp/src/weighted_query_recurrent.cpp
+  cpp/src/weighted_describe_batch.cpp
+  cpp/src/weighted_full_batch.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_recurrent_packed.cpp
   cpp/src/weighted_gated_packed.cpp
   cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp

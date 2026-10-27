@@ -156,6 +156,9 @@ length, retaining every physical atom. Numeric batching and Aggregate batched
 VJP are separately declared capabilities. The optional batched policy preserves
 independent fiber roots, parameter aliases and the zero-total branch without
 scalar Aggregate replay; the default replay policy remains available.
+The [weighted Read/Full numeric batches](weighted-query-batch.md) preserve each
+actual snapshot, int64 visibility and unscaled payload, with scalar semantic VJP
+replay still explicit. This capability does not certify batched query backward.
 
 ## First local profile: `ema-ffn-v1`
 

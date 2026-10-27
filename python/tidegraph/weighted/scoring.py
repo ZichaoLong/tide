@@ -79,6 +79,11 @@ class GroupedEvidence(torch.nn.Module):
 
     def forward(self, groups):
         cur,mem,stat = (self.encoders[name](groups[name]) for name in ("cur","mem","stat"))
+        if cur.ndim == 1:
+            # Keep the textbook/native column-vector reduction order. RMS
+            # exposes GEMV versus transposed-row rounding in small VJPs.
+            return norm(self.cur@cur+self.mem@mem+self.stat@stat
+                        +self.interaction@(cur*mem)+self.bias,self.epsilon)
         return norm(cur@self.cur.t()+mem@self.mem.t()+stat@self.stat.t()
                     +(cur*mem)@self.interaction.t()+self.bias,self.epsilon)
 

@@ -60,6 +60,12 @@ class WeightedAggregate(AggregateProgram):
 
 
 class Describe(ReadProgram):
+    joint_batch = True
+
+    def batch(self, weights, requests):
+        from .read_batch import evaluate
+        return evaluate(self, weights, requests)
+
     def __init__(self, profile, memory_config, region_config, generator, dtype):
         super().__init__()
         self.profile, self.memory_config, self.config = profile, memory_config, region_config
@@ -113,7 +119,11 @@ class Describe(ReadProgram):
         # engine's mode-restricted request marker, never a mathematical state.
         state = memory.initial(weights) if request.state is None else request.state
         features, groups = self.inputs(memory,state,request.time,h)
-        received = h.mass.clamp(max=1)
+        return self.describe(h.mass, features, groups)
+
+    def describe(self, mass, features, groups):
+        """Finite descriptor head; its scalar operation order is kept in batches."""
+        received = mass.clamp(max=1)
         if self.config.regional:
             mu = (self.config.gamma_max*received).clamp(max=1)
         else:
@@ -123,7 +133,7 @@ class Describe(ReadProgram):
                 gamma = 1+(self.config.gamma_max-1)*self.gain_logit.sigmoid()
             else:
                 gamma = self.config.fixed_gain
-            mu = (gamma*h.mass).clamp(max=1)
+            mu = (gamma*mass).clamp(max=1)
         result = {"w": received, "mu": mu, "score": self.score(features if self.config.local_score == "cat" else groups)}
         if self.config.regional:
             if self.config.region_control_mode == "fixed":
@@ -204,6 +214,12 @@ class RegionalTotal(RegionProgram):
 
 
 class WeightedFull(FullProgram):
+    joint_batch = True
+
+    def batch(self, weights, requests, slots, mode, zeta):
+        from .full_batch import evaluate
+        return evaluate(self, weights, requests, slots, mode, zeta)
+
     def __init__(self, profile, content):
         super().__init__()
         self.profile, self.content = profile, content
