@@ -13,7 +13,7 @@
 
 [单样本节点放置](resident-weighted-placement.md)另行实现完整纤维请求、全区域选择与共同提交；
 前向/精确恢复已有[固定源码资格](evidence/core5-weighted-node-placement-20261028.md)。
-放置后的窗口VJP、公共训练和optimizer发布已实现，独立资格状态见[STATUS](STATUS.md)。
+放置后的窗口VJP、公共训练和optimizer发布见[固定窗口反向/公共训练资格](evidence/core5-weighted-node-training-20261028.md)，包含跨放置恢复及数值拒绝后的续接。
 
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；其公共生命周期由[训练owner](resident-weighted-training.md)组合并独立验收。
 
@@ -31,7 +31,7 @@
 带权常驻分配的完整区域表示、精确解VJP、CPU独立公式与设备检查入口见
 [resident weighted allocation](resident-weighted-allocation.md)。组件资格不代表全图常驻完成。
 [常驻发送原语](resident-weighted-sending.md)对应Attention/比例/分数填充/硬选择的实际buffer、
-独立精确/分支VJP与验证入口，完整区域控制和图推进另行集成。
+独立精确/分支VJP与验证入口；完整组合分别由[Region](resident-weighted-region.md)与[图owner](resident-weighted-flow.md)负责。
 [常驻ScalarHead/Query](resident-weighted-head.md)定义厂商批量算子、动态owner共享参数、
 独立根连接与实际权重版本的显式VJP。
 [常驻完整区域组合](resident-weighted-region.md)接完整描述、head、十种发送、实际支持/history及字段/参数VJP。
@@ -89,7 +89,7 @@
 | 定义 | 固定入口 | 实施追溯 |
 | --- | --- | --- |
 | 共同局部架构 | [architecture](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md) §1–7 | [具名 Read / int64 状态 / SrcClass](structured-records.md)；[带权 KV 绑定](weighted-message.md)给出 payload/content、初态、Full/Next、共享参数与逐函数测试 |
-| 区域函数与配置 | [allocation](upstream/tide-core-5/local-semantics/weighted-message/region-allocation-learning-note.md) 附录 S、§2–6 | [十种发送/增益与独立反向](weighted-sending.md)、[完整评分/证据/key](weighted-scoring.md)和 [quad/bern/ent 精确解 VJP](weighted-allocation.md)已接入；各候选与后端资格按 ROADMAP 继续，不能复用旧 HST 身份 |
+| 区域函数与配置 | [allocation](upstream/tide-core-5/local-semantics/weighted-message/region-allocation-learning-note.md) 附录 S、§2–6 | [十种发送/增益与独立反向](weighted-sending.md)、[完整评分/证据/key](weighted-scoring.md)和 [quad/bern/ent 精确解 VJP](weighted-allocation.md)已接入；各候选与后端资格由模块文档/证据定位，剩余边界见 ROADMAP，不能复用旧 HST 身份 |
 | 记忆 | [KV](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)、[循环](upstream/tide-core-5/local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md)、[GDN](upstream/tide-core-5/local-semantics/weighted-message/recurrent-memory/gated-delta-learning-note.md)、[SSD](upstream/tide-core-5/local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md)、[卷积](upstream/tide-core-5/local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md) | KV 按 [绑定契约](weighted-message.md) 接入；[循环/短卷积](weighted-recurrent.md) 对应全部状态、函数、快照和独立公式；旧 Attention/SSM/Delta 不冒充新定义 |
 | 实例 | [FC](upstream/tide-core-5/instances/fully-connected-layered-weighted-message.md)、[HB](upstream/tide-core-5/instances/hb-lattice-weighted-message.md) | [首组合](weighted-message.md)接入 FC/HB、非对齐 DAG/反馈 PDG；HB 同秩不改写时间；各后端证据独立 |
 | 验收 | [核对 §1.1–1.4](upstream/tide-core-5/reference/weighted-message-implementation-checks.md) | 定义→配置/参数/快照→符号→独立测试→固定源码证据；各后端分别记录 |

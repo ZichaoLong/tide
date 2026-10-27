@@ -47,4 +47,4 @@ left/right，按真实 bank 归约所有使用者。参数源或原内容后续�
 当前数值域为FP32，raw存储为FP32/FP16。CPU helper、NPU 实际执行、CUDA 构建与 GPU 真机分别记录。
 
 固定源码资格见[681a7e9运行证据](evidence/core5-resident-kv-update-20261027.md)。
-新增FP16 raw更新为开发中，设备资格未完成；不代替完整FP16图/训练验收。
+FP16 raw更新已有[69bf4f0固定资格](evidence/core5-resident-half-kv-update-20261028.md)；完整half图与训练由[公共训练owner](resident-weighted-training.md)独立验收。

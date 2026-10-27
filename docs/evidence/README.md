@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 单样本节点放置反向/训练](core5-weighted-node-training-20261028.md)：0155b0f运行库/220052a检查器；FP32四组合×12根及跨窗桥、两dtype各20训练更新/6次副本共同更新、Python原30项与修复后8项、安装消费者通过。CUDA三架构/loader通过，无真机；原设备与检查器失败保留。
+
 [Core-5 单样本节点放置前向](core5-weighted-node-placement-20261028.md)：d072c17运行库/1289bc9检查器；CPU8、Python-owned50、NPU两dtype各9双卡配置及单设备图/训练回归通过；CUDA三架构与安装消费者构建通过。放置后的VJP/optimizer另验收。
 
 [Core-5 新进程启动与内存](core5-weighted-observation-20261028.md)：f72a6cc；四个补充配置完整对照通过，四阶段allocator/启动边界，CPU5项及CPU/NPU/CUDA消费者构建通过；CUDA无真机。

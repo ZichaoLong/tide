@@ -163,7 +163,7 @@ TIDE_BUILD_DIR=PYTHON_CORE TIDE_RESIDENT_LIBRARY=NEW_PYTHON_DEVICE TIDE_RESIDENT
 C++两种构造（初始continuation和training checkpoint）均新增末尾`vector<at::Device> node_devices`
 重载，原构造保留；Python `WeightedResidentTraining(..., node_devices=[...])`使用同一原生owner。
 None/空C++列表保持所有节点在coordinator；定义域和完整区域语义沿[节点放置](resident-weighted-placement.md)。
-此新增实现尚待独立资格，不能引用旧单设备训练或前向放置资格作为通过证据。
+独立运行范围见[固定窗口反向/公共训练资格](evidence/core5-weighted-node-training-20261028.md)；旧单设备训练和前向放置报告保持各自范围。
 
 公开窗口字段、cotangent、参数梯度与跨窗桥仍在coordinator；快照保存物理owner，
 完整raw状态在边界复制，窗口内的局部反向仍回到原owner。参数共享与私有状态保持分开。
@@ -186,4 +186,4 @@ None/空C++列表保持所有节点在coordinator；定义域和完整区域语�
 有限梯度会超出目标存储范围，验证共同拒绝及下一窗实际bank仍使用旧参数。
 `weighted-node-replicas`把两个独立样本owner各自跨卡放置，核对共享梯度和、完整私有根、恢复及slot不一致拒绝。
 Python `test_resident_weighted_node_training.py`另检查四组合×两dtype、独立Python调度/autograd、
-三次更新、磁盘恢复到另一放置及KV/FC新进程续接。这些是检查定义；固定源码运行结果由STATUS/证据单列。
+三次更新、磁盘恢复到另一放置及KV/FC新进程续接。这些检查在上述固定源码报告中分别记录；不外推全部配置或GPU真机。
