@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 有限完整调用性能](core5-weighted-performance-20261028.md)：ceae7bf；24配置22通过，CPU反馈两项严格浮点失败保留；CPU/mixed/resident、Python与standalone分列，独立profile及工作量，冷启动/SDK allocator指标仍有限制。
+
 [Core-5 常驻样本副本与master复验](core5-resident-weighted-peers-20261028.md)：7db0b08；standalone两dtype各20训练更新及6次双卡共同更新，Python-owned672e948四项通过；CUDA三架构构建。原检查器失败保留；单样本节点切分未由此实现。
 
 [Core-5 FP16公共全图/训练资格](core5-resident-half-training-20261028.md)：21ed86d；CPU32、Python-owned NPU52、standalone两dtype各21图/15配置/20更新、完整VJP与精确恢复；CUDA三架构构建，peer与性能另验收。

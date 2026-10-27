@@ -36,7 +36,7 @@
 | same-fiber 注意力与 pooling | [fiber attention](fiber-attention.md)、[packing](fiber-packing.md)、[pooling](fiber-pooling.md) |
 | host prefill 与流式状态 | [greedy](greedy-scheduler.md)、[frontier](frontier-contract.md)、[cursor](streaming-cursor.md) |
 | 三图关系和特化适用域 | [Settle 编码](settle-embedding.md)、[跨类策略](cross-family-policies.md) |
-| eager 与常驻、窗口与多卡 | [放置](execution-placement.md)、[resident 库](resident-library.md)、[训练](resident-training.md)、[peers](resident-peers.md) |
+| eager 与常驻、窗口与多卡 | [放置](execution-placement.md)、[resident 库](resident-library.md)、[训练](resident-training.md)、[peers](resident-peers.md)、[带权公共训练](resident-weighted-training.md)、[带权样本副本](resident-weighted-peers.md) |
 | 批量化的梯度连接 | [packed autograd](packed-autograd.md)、[Full VJP](full-batched-autograd.md)、[Aggregate VJP](aggregate-batched-autograd.md)、[resident graph VJP](resident-graph-vjp.md) |
 | 实验调用、loss/更新、容量 | [library](library.md)、[online consumers](online-consumers.md)、[容量](consumer-capacity.md)、[eager 容量](eager-consumer-capacity.md) |
 | LH 对照与 token 层 | [compatibility](lh-compatibility.md)、[IOCortex](lh-iocortex.md)、[single graph](lh-single-graph.md)、[token checkpoint](token-application-checkpoint.md) |

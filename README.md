@@ -16,6 +16,7 @@
 | 源码分层和模块导航 | [架构](docs/architecture.md) |
 | 从干净源码开始构建、检查和开发 | [开发入口](docs/development.md) |
 | 作为 Python/LibTorch 依赖调用 | [公共库](docs/library.md)、[安装客户端](examples/consumer/README.md) |
+| core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
 | CPU/CUDA/NPU 与常驻后端 | [加速器](docs/accelerators.md)、[设备控制与 GPU 验证](docs/device-control.md)、[常驻库](docs/resident-library.md) |
 | 旧实验结论及产物保留规则 | [历史证据](docs/evidence/README.md)、[产物退役](docs/artifact-retention.md) |
 
@@ -44,4 +45,4 @@ python scripts/check_upstream.py
 先固定用户确认的教材提交，比较定义域、值域、依赖和观察量，再确定实现变化。
 新的特例可以实例化现有接口，也可能暴露需要扩展的表示或设备能力；不能只改版本号，
 也不能用通用执行器包装冒充独立特化。先建立小型独立参考与相关回归，再考虑性能。
-当前新版教材尚未采用，不自动恢复旧性能任务。
+当前已采用固定 core-5；后续定义变更仍需明确任务授权。旧性能任务不自动恢复。

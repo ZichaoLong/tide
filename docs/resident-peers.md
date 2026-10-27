@@ -2,7 +2,9 @@
 
 `tools/device_online/peer_exchange.h` is an internal CANN transport primitive.
 Its build and hardware qualification are recorded in [STATUS](STATUS.md).
-It does not yet expose a multi-device graph or training owner. The historical
+The primitive itself transports fields; graph/training ownership is supplied
+by its callers. The core-5 [weighted sample-replica API](resident-weighted-peers.md)
+has separate public training qualification. The historical
 [finite capture transport](bounded-scheduler.md) has a separate scope.
 
 A packet consists of fixed-capacity contiguous tensor fields on two different
