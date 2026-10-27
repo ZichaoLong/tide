@@ -1,0 +1,216 @@
+{
+  "component": "describe",
+  "scope": "FP32 complete local Describe configurations and saved independent field/parameter first-order VJP",
+  "observations": {
+    "configurations": 8,
+    "cat_match": true,
+    "cat_grouped_fixed_evidence": true,
+    "content_content_stats_key": true,
+    "fixed_logit_context_gain": true,
+    "independent_fields": true,
+    "all_inputs_parameters_vjp": true,
+    "dynamic_absent_to_present": true,
+    "saved_versions": true,
+    "clamp_equal_derivative": 1,
+    "none_zero": true,
+    "capacity_refusal": true,
+    "rtol": 2e-05,
+    "atol": 2e-06
+  },
+  "source": "cd576d24434c5daaa21f57d316a93b9bf1c91f0a",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "cd576d24434c5daaa21f57d316a93b9bf1c91f0a",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T16:00:14.347348+00:00",
+      "finished": "2026-10-27T16:00:37.967586+00:00",
+      "name": "core5-resident-describe-npu-qualify",
+      "unit": "tide-core5-resident-describe-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "3150963a30285a9f81a794ef9afcd771fd9b62f086e3fa248456cbdbc77e6625",
+      "device_cases": [
+        {
+          "check": "weighted-describe",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-describe-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-describe-float32.log",
+          "log_sha256": "aa68fc34e7d58f629813c270db0f9206bd3ffbaf51fdb769af1518e79aa16d7a"
+        }
+      ],
+      "cpu_tests": 38,
+      "cpu_seconds": 3.86,
+      "queue": {
+        "elapsed_seconds": 17.135047033429146,
+        "job_id": "core5-resident-describe-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T16:00:37.952715+00:00"
+      },
+      "observations": {
+        "configurations": 8,
+        "cat_match": true,
+        "cat_grouped_fixed_evidence": true,
+        "content_content_stats_key": true,
+        "fixed_logit_context_gain": true,
+        "independent_fields": true,
+        "all_inputs_parameters_vjp": true,
+        "dynamic_absent_to_present": true,
+        "saved_versions": true,
+        "clamp_equal_derivative": 1,
+        "none_zero": true,
+        "capacity_refusal": true,
+        "rtol": 2e-05,
+        "atol": 2e-06
+      },
+      "build": {
+        "source": "386970a9dcd0b826e390be020c2a86ea0c7a3437",
+        "component_sha256": "af50310a5a4c1aeb3c7c1daca7b1f5776d5b85644fd9cb9dc144d3be004a06f7",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-describe-check": "f03877e49d0e74dfa4faaa9d8932bb17c546c0ab022d27308768f02190241fa4"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "cd576d24434c5daaa21f57d316a93b9bf1c91f0a",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T16:00:14.348392+00:00",
+      "finished": "2026-10-27T16:02:02.238766+00:00",
+      "name": "core5-resident-describe-cuda-qualify",
+      "unit": "tide-core5-resident-describe-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "25341ca42bcd0ef1cacbd530b40910243b99a1b324a8cc5765a378564a4d8898",
+      "build": {
+        "source": "cd576d24434c5daaa21f57d316a93b9bf1c91f0a",
+        "component_sha256": "af50310a5a4c1aeb3c7c1daca7b1f5776d5b85644fd9cb9dc144d3be004a06f7",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-describe-check": "1702b220a7689512cfb5aa109576cd237b6d06b2a2d931799bc52e0832609bc8"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-describe-dev2",
+    "tree": "88c5895efb483c4b0470a60b76b893c6d28e8d00",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_describe.py",
+      "tests/test_resident_weighted_head.py",
+      "tests/test_resident_weighted_projection_norm.py",
+      "tests/test_weighted_scoring.py",
+      "--dtype",
+      "both"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-describe",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-describe",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-describe",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
