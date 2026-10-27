@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83；授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送87e4031。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
+已推送87e4031；670ead3及本次standalone证据准备提交/推送。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
 
 ## 当前实现与证据
 
@@ -19,25 +19,24 @@ AdamW4+SGD2、mixed-a/b各1、显式同步两卡各1，均完整反向/四步/ra
 native half profile35945kernels/1222hostscalar/1368memcpy，32candidate/31Full/44messages，
 20设备AiCPU；是有限算子归属调查，不是吞吐排名或完整FP16配置认证。
 
-## 当前 standalone master 增量
+## 当前阶段与活动任务
 
-准备提交实现：OptimizerPrecision显式FP32 masters/静态loss scale，None/零/alias保持；
-原参数/完整图格式schema1读取兼容、schema2新增Half原值和master/scale。Graph v13、Python checkpoint v5不变。
-完整preflight、精确raw/slots恢复、独立Torch更新、有效checksum但不一致master拒绝及standalone设备→CPU续接入口。
-所有源码/契约见git status；这些内容不在01689c0的设备资格内。
+[670ead3 standalone masters/schema2](evidence/core5-native-master-20261027.md)：
+CPU固定资格24项通过；独立SDK2.10/CANN9.0构建、loader与实际NPU FP16训练通过。
+显式SGD24图、AdamW的fc/kv和feedback/delta两图；均包括精确raw/master/slots恢复和设备→CPU第四步。
+开发门禁native-master-dev20项、final-dev9项、handoff-dev9项及原manifest/snapshot保留。
+固定CPU、SDK build/qualify均已inactive/success，具体job/commands/hashes见证据JSON。
+loader检查的shell rg缺失，已单独Python验证同一loader文件（通过），未重跑workload。
+bootstrap/sdk/device无活动reader；CUDA worktree有活动构建，不可编辑。
 
-开发门禁均已终止：
-- native-master-dev：tree0f337e7cfa7d4fa79b0d468b5519d799cf6a8719，20passed/exit0；
-  含FP64/FP32各24图、half显式SGD24图及AdamW2图，四步和完整raw恢复。
-- native-master-final-dev：tree560b91b6a41dd190afc2790031dd18cf3776e25d，9passed/exit0；新增拒绝/精度报告。
-- native-master-handoff-dev：tree18e7e04d7ee3fd64ff9862f1b21b2927bed601d1，9passed/exit0；编译最终设备→CPU验收分支。
-units为tide-core5-上述名-20261027，output artifacts/jobs/core5-上述名，manifest已保存。
-bootstrap当前为最后开发快照，device干净01689c0，sdk干净470ce06；当前无reader。
-
-下一动作：提交这项实现后冻结精确SHA到bootstrap/sdk；CPU固定资格运行
-`tests/test_cpp_master_optimizer.py tests/test_cpp_optimizer.py tests/test_cpp_checkpoint.py tests/test_cpp_weighted_training.py`，
-最终完整24项。SDK独立栈重建并检查loader，再执行half/FP32 scoring/显式SGD及AdamW有限完整图资格。
-先实现提交、后固定资格、再单独证据；不推定SDK或新native格式已获设备通过。
+CUDA私有栈已重新定位并读其现行README：/mi/data2T/zlong/gpu-toolchains，激活activate-cuda.sh；
+Torch2.10.0+cu128/Python3.11.15/Toolkit12.8.1，available=false。
+准备tide-core5-cuda-eager-qualify-20261027：干净670ead3 worktree artifacts/worktrees/core5-cuda，
+output artifacts/jobs/core5-cuda-eager-qualify，.local/core5-cuda-eager-qualify.sh；
+首次配置因服务PATH无Ninja失败；原failed保留。第二次launcher准备未执行而服务引用缺失脚本，exit127，
+无workload，postmortem已保存。准备独立tide-core5-cuda-eager-tools2-qualify-20261027，
+对应同名job/.local launcher，追加项目私有Ninja入口，使用新build/cuda-tools2。
+新CUDA-linked核心构建/2workers/1800秒，以上四个CPU测试入口验证新栈，GPU真机仍待验。
 之后继续weighted resident、CUDA源码/构建/真机分账、有限性能及最终追溯。
 
 ## 未解除的真实失败
