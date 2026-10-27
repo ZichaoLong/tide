@@ -89,6 +89,10 @@ python scripts/build_device_control.py --core-build NPU_CORE --build-dir NEW_BUI
   --python-component weighted --ascendc-soc Ascend910_9392 --jobs 2
 ```
 
+CUDA 架构须为显式计算能力代码（80及以上）；`native/all`、低于80和
+`-real/-virtual`后缀提前拒绝。Torch legacy FindCUDA 与 CMake CUDA 使用同一请求，
+避免无GPU主机从wheel自动继承额外架构。真实GPU运行仍单独验收。
+
 NPU_CORE 必须是当前 Python/Torch 匹配的 Python-owned 原生库。CUDA 使用显式
 `--runtime python --cuda-architectures '80;90;100'` 并省略 Ascend SoC。
 `_tide_weighted_resident` 只链接独立 `libtide-weighted-flow`；loader 核验实际 native
