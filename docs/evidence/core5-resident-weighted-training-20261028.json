@@ -1,0 +1,465 @@
+{
+  "component": "weighted retained complete first-order training and exact cut checkpoint",
+  "date": "2026-10-28",
+  "source": "343429db76c091541ae24ef7b3792ce027e9bea2",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "343429db76c091541ae24ef7b3792ce027e9bea2",
+      "state": "passed",
+      "started": "2026-10-27T20:51:26.187346+00:00",
+      "finished": "2026-10-27T20:57:01.628431+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-training-npu-qualify",
+      "unit": "tide-core5-weighted-training-npu-qualify-20261028.service",
+      "clean": true,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "1dea58afe67bdad0b60fe36dd1715d0d74aec5d4cc52bbe8091712b4bdf68eaa",
+      "log_sha256": "d4f18450670d49234b26c77740da322432a773c0ff6d8aecc66698f548ebc6eb",
+      "build": {
+        "component_sha256": "d3e07a3fc3bc378243515dde065f6d766c61c506c0423da0b05b06efe24c2ec3",
+        "backend": "npu",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-weighted-copy-check": "20d59450d8ebf43c7a72161df052e94146092f2bb0903044cfc286f94323a712",
+          "tide-weighted-window-check": "1cff0285af8990201df7295a6437dcab184b94bca16358776ed2399b1b3f7946",
+          "tide-weighted-retained-check": "ec1b4a000f6c3d3bfa09e3a16734f9f7855dc250f4f79901c0d287c78116d774",
+          "tide-weighted-training-check": "30a9a73f0de23f5b96d2adafea550bcbec5cdad503dbd6a80c69545b2ffcc7ce",
+          "tide-weighted-flow-check": "461907d7071e1a3786292667860d1628668910a258290083be94e061c351433f",
+          "tide-weighted-flow-config-check": "2fe305c1f549e8496e61d45b23e984888ef1ede89163e8e3a96df7b5e5988b60",
+          "libtide-weighted-flow.so": "2557b1a38f8b0bfa4c710378ad1746fbbab0c1b0ec104059af54d6f99d2d9a4a",
+          "libtide-weighted-training.so": "98ce5d09fbc51bdd38bb8660f45f3dbff00b4a7af1500bb3099e3880ff3c414a"
+        },
+        "loader_sha256": {
+          "tide-weighted-copy-check": "76478124c5bb7adb79931aff76e280cad7d1b1e866aaf2efd4624370078e2518",
+          "tide-weighted-window-check": "d74e0c4177f84bc9bd0a68ed586f4fa741d2e77d06694522ac84141b688dab91",
+          "tide-weighted-retained-check": "8efee443e7f0bba91728e459f510d599a103e63a08d5620f8bd1d79162bf9ac4",
+          "tide-weighted-training-check": "053f1dbe6d9671a438f923411d1fe3ad742c1df90c4eb5e89ac317aeb517daf0",
+          "tide-weighted-flow-check": "5593d5c68babb920203ca66a871d6c34018327fac698125f7302678772e20233",
+          "tide-weighted-flow-config-check": "9456905952e23530c270c042ed86b42635e73ec79b1a91b79952d1f2a0f84eea",
+          "libtide-weighted-flow.so": "5947f1c2bb2e9d58fe520e62e85d34d52a562d5f4dee41da96395687ef254674",
+          "libtide-weighted-training.so": "54d716403d4cecdb7b00a99eef34a42a9f7600e71f8b01bbbb5a6a48cee0b0b4"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cpu",
+          "architecture": "aarch64",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        },
+        "requested_checks": [
+          "weighted-copy",
+          "weighted-saved-window",
+          "weighted-retained",
+          "weighted-training",
+          "weighted-flow",
+          "weighted-flow-config"
+        ]
+      },
+      "prior_receipt_sha256": "55db9e304d6cc904ac1bb049f06418f3a8b682e2cedd3fb467f96404bce2298a",
+      "consumers": {
+        "inference": {
+          "state": "passed",
+          "component": "weighted",
+          "binary_sha256": "9910e096cfff049ab84325e14e4fcb504b1c07f2ffed805507e1b2896e003ab0",
+          "loader_sha256": "52fb529301f5d164996dd380740fbeca7171aa0036dadfb0f12ac6ec5d80b1f5",
+          "scope": "installed-package build/loader only; live device execution required separately",
+          "record_sha256": "98da6bf0b815abddb07e9c0db9d0d79e9fceacbd822a103fe487dc946296a37e",
+          "execution_log_sha256": "e58c62e36b8cdb5d50927572475b74fdbf81b413b1d1c225e0653b47b92257b2",
+          "execution_scope": "actual NPU hand formula and exact cut recovery"
+        },
+        "training": {
+          "state": "passed",
+          "component": "weighted-training",
+          "binary_sha256": "29d24bdc2085770f4f00cd8c2be567e67015164727e6bb8843e02b4777b55ff3",
+          "loader_sha256": "09d2d515d4d13f370130d58b9e949f7f7d10296b73de4565cad35714a70dc6c4",
+          "scope": "installed-package build/loader only; live device execution required separately",
+          "record_sha256": "7658268c6fabc5a2287fcf3f806b6a4786ff5fa90d1ba88edcfa1520938ea1cf",
+          "execution_log_sha256": "bce6f3185a3ee4bc0442a636f228dd59eee59dcb44cfe1e558e936cfcd6528c1",
+          "execution_scope": "actual NPU hand formula and exact cut recovery"
+        }
+      },
+      "cases": [
+        {
+          "check": "weighted-copy",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "f1e691351b460239d7d8ad71d2c07a0307fe83022ce3f524603147d71a8cd76c"
+        },
+        {
+          "check": "weighted-saved-window",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "da99416d237baeea70c0896f6ac7cf9ff271262ad4f0b37c02aca1265b499094"
+        },
+        {
+          "check": "weighted-retained",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "fabb2146d976b8394946c1dfe4890990b2819e13535068958528697d92c2a0ba"
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9dfc1fafbe9e92b9d16a1abacf83d44b096939ab8c02e29516ea904f525d9d07"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "22959c07a8b1c19baa9cb5d355da3f8b5e21dc80ebbc430d93c3ea3391a65a2b"
+        },
+        {
+          "check": "weighted-flow-config",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "aa75a47acfc215e854af1ff09734da4b2e58f4caa8b793e78975f50e1982ad90"
+        }
+      ],
+      "markers": {
+        "weighted-copy": [
+          "weighted-copy: passed owners=18 submissions=54 exact_bool_int64=true strided_source_target=true recurrent_flags=true"
+        ],
+        "weighted-saved-window": [
+          "weighted-saved-window: passed configurations=12 complete_window=true device_reverse_loop=true independent_roots=true"
+        ],
+        "weighted-retained": [
+          "weighted-retained: passed configurations=8 windows=3 empty_bridge=true independent_roots=true"
+        ],
+        "weighted-training": [
+          "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+        ],
+        "weighted-flow": [
+          "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+        ],
+        "weighted-flow-config": [
+          "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+        ]
+      },
+      "cpu": {
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "testcase_seconds": 2.4879999999999973,
+        "sha256": "9eb7671223abaa43465c34fc1daf31c1f6c4596e7a7eb147094e93f9fa41c44f"
+      },
+      "reused_kernel_archives_sha256": "58983e7d7d8c5fa18a7959accdcb7a336780dbfbffe8c07ca87872b62334ae46",
+      "queue": {
+        "elapsed_seconds": 280.11305264756083,
+        "job_id": "core5-weighted-training-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T20:57:01.605406+00:00"
+      }
+    },
+    {
+      "source": "343429db76c091541ae24ef7b3792ce027e9bea2",
+      "state": "passed",
+      "started": "2026-10-27T20:51:26.194199+00:00",
+      "finished": "2026-10-27T20:53:11.484075+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-training-cuda-qualify",
+      "unit": "tide-core5-weighted-training-cuda-qualify-20261028.service",
+      "clean": true,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "5fe29efcb0687b252a726ebd5098a7a55a7e7c50cc3d103018de5ea660b91044",
+      "log_sha256": "ba76e44559c5c72a7439f5d789a587c98f33f72d6dcfe13c045cb10c745ca239",
+      "build": {
+        "component_sha256": "d3e07a3fc3bc378243515dde065f6d766c61c506c0423da0b05b06efe24c2ec3",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-weighted-copy-check": "fff43cc1130b4435aa9a03c76572a0852701ffe50e9fd24b3fb717ccd4833f1a",
+          "tide-weighted-window-check": "338ca395d1294229ed55e6aabf22a294a4ea6825e7c38bbf34f0e490405874db",
+          "tide-weighted-retained-check": "bcca5bbc072d8b502a5971bbb140fd2c8c8f6377078c4b6c9eb44fe6018a498b",
+          "tide-weighted-training-check": "11c0344a3731e9bd2edc7ac18cc1c866b8ee136177c66f19c059ac005db57c1d",
+          "tide-weighted-flow-check": "3c6d70fccd50e2345035403a5c78ec9782fef6c94673bc371747902fb20dc8cf",
+          "tide-weighted-flow-config-check": "4ddf0a26d81213d92a948e39b1696af649a09c4c2ddbaa410daba64d8a8c2131",
+          "libtide-weighted-flow.so": "a8a5fa858c53b8b532299804d50fdb1dde831a0a9d258609c15e0009534bb191",
+          "libtide-weighted-training.so": "9ece708a012eaa7ebb6b6e94691a7115023f626745d8dd152c492d653cfdeab5"
+        },
+        "loader_sha256": {
+          "tide-weighted-copy-check": "460d6ab08813df11592ef7529025235e21101764172fb34a0730fa36c95ed394",
+          "tide-weighted-window-check": "7c8c3269e17948daa5c506ca3f63b643fce53564260277ec6dbe74ff01f3c3d9",
+          "tide-weighted-retained-check": "9ffbd49ab72c05cd683a859c4d67071848276445b424c5560593d0dc9ec284a7",
+          "tide-weighted-training-check": "c08ca193b5e107104d5a6786f98629503d791cb6fc92812cc6e3806f3979c8e6",
+          "tide-weighted-flow-check": "2a27f3604c7e3b743e6018a0880daf6ea3b79d0c0574a65fca844c75db1d7ba8",
+          "tide-weighted-flow-config-check": "d33520b4199985ddcb0ffad5ee01713662b56251231c4c16f6d05dcfe039ddfe",
+          "libtide-weighted-flow.so": "87ceadca59764414d7c67b21ef43fd9b496c0f83ac2f50bd8e344771fcf39d75",
+          "libtide-weighted-training.so": "992ab38bcd495cd785ee4d53c3010d3c5a376f7b71f1751fd8641d1b7404dfca"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cu128",
+          "architecture": "aarch64",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        },
+        "requested_checks": [
+          "weighted-copy",
+          "weighted-saved-window",
+          "weighted-retained",
+          "weighted-training",
+          "weighted-flow",
+          "weighted-flow-config"
+        ],
+        "configured_cuda_commands": 160,
+        "effective_cuda_architectures": [
+          "80",
+          "90",
+          "100"
+        ]
+      },
+      "prior_receipt_sha256": "60f68939da3798838aea258c64dab39a51c720fd8d51b4d4e72f18e6cb7cb96b",
+      "consumers": {
+        "inference": {
+          "state": "passed",
+          "component": "weighted",
+          "binary_sha256": "ea9e4d1f5d55daddb25560a62378c3a2bab6bf151e37197a155687f86ba93e72",
+          "loader_sha256": "e6ab7195f263d79e66c4a99cc66bc28fa792a661687bb8b7dd8868db3589d081",
+          "scope": "installed-package build/loader only; live device execution required separately",
+          "record_sha256": "293ac215cbc843782fd91c645743be98c0f637346d95aa28b1c9e3015211b120",
+          "execution_log_sha256": "c8c2b23d22dab453d3b07f75bbe7e37bc22a11c736ad6f2a813c598fe0f242a1",
+          "execution_scope": "loader/help only; no GPU"
+        },
+        "training": {
+          "state": "passed",
+          "component": "weighted-training",
+          "binary_sha256": "3be7490d8efe62627a80b6b412881a175999236b7894b936f4ba8441723579aa",
+          "loader_sha256": "28eb736e24c0a6610556b9c1b399dbdfbf0f24bfe94afdfbb4d6ef2cb06caf23",
+          "scope": "installed-package build/loader only; live device execution required separately",
+          "record_sha256": "1ab5f93fabaa94cda457706fdce1e6399a2c792d0e3faf1195f176b5f8482d33",
+          "execution_log_sha256": "14c5f55dfe0f6c7fbc168aef66412307b25359a7e9734c770c1f91a371040e94",
+          "execution_scope": "loader/help only; no GPU"
+        }
+      },
+      "hardware_validation": "pending: no GPU"
+    },
+    {
+      "source": "343429db76c091541ae24ef7b3792ce027e9bea2",
+      "state": "passed",
+      "started": "2026-10-27T20:51:26.213113+00:00",
+      "finished": "2026-10-27T21:04:16.272605+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-training-python-qualify",
+      "unit": "tide-core5-weighted-training-python-qualify-20261028.service",
+      "clean": true,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "e127de4753d67870255c7acde8d8ae40bd42fad2c3fe982b1be4d1da76c7a0f3",
+      "log_sha256": "95420cd6e3b2c768c504ab2017026b5880c79a8fae1bebeea1f8aeb1e5d12daa",
+      "build": {
+        "component_sha256": "d3e07a3fc3bc378243515dde065f6d766c61c506c0423da0b05b06efe24c2ec3",
+        "backend": "npu",
+        "runtime": "python",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "d0c8e8d9e2a9fb0e1682a9bb72442d9c35ffc4138f64c1583dc87f98c87d68c6",
+          "libtide-weighted-flow.so": "943dead5127de6ede910d37fb16cb253e46d1f616103b18ea6695f82284518b8",
+          "libtide-weighted-training.so": "e9c594ce81ce7d1ea4600856b87e52ddf606c6a464436dcd39811532b029682b"
+        },
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "049e876592809d7d1c79d22966f44a6b224bbe2f6e40b468554845efa6635ca3",
+          "libtide-weighted-flow.so": "1cc1e82bed49a062a4b6a20a958ad8260a81700dda02a9e1a15ca1a10abe1a2c",
+          "libtide-weighted-training.so": "0ac1f707ecd2811438cdd867068356920dba3be8c18e34d7d6778d0ae005ed96"
+        },
+        "core": {
+          "source": "01689c00da713413af494b8be0b42d2fe12b59c3",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.12.0+cpu",
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true
+        }
+      },
+      "queue": {
+        "elapsed_seconds": 101.76892987266183,
+        "job_id": "core5-weighted-training-python-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:04:16.249450+00:00"
+      },
+      "pytest": {
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "testcase_seconds": 89.418,
+        "sha256": "399bc8b78403355b7e438d916d694e04685865eee5898239e422c90cc4d41f98",
+        "files": {
+          "tests.test_resident_weighted_training": 10,
+          "tests.test_resident_weighted_flow": 18
+        }
+      }
+    }
+  ],
+  "retained_failed_development": [
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:10:17.441318+00:00",
+      "finished": "2026-10-27T20:21:15.276363+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-python-dev",
+      "tree": "70e3b5ac46736290e92d66e2cc20a4ff195e9c9d",
+      "reason": "Pybind enum type::of rejected by PyTorch 2.12 bundled pybind11; no numerical execution.",
+      "status_sha256": "55c9711a3c79f25dc9bee5e9f17711dc91dc20bfdf44c34f21569b077b2d0356",
+      "log_sha256": "f9767197b3db19912e1bf53995c179d1c2c0398c81656c8a9ac1120b6abe1a40"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:21:48.831427+00:00",
+      "finished": "2026-10-27T20:22:06.113073+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-python-dev2",
+      "tree": "1e8f5b6d1413b2a8b35fcb3fbcf8bc23394e1ff7",
+      "reason": "Repeated CANN 9.1 preprocess rejected merged object as unknown file type; no numerical execution.",
+      "status_sha256": "735579e4c55a25d7c3bac321ee3ed23d00efc932f806c68bd00c6dec86f4da7e",
+      "log_sha256": "540a9aa19127dda1a56007866ff7a67b65eb9749b3aa46cd80fb2f0b73876326"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:24:36.405737+00:00",
+      "finished": "2026-10-27T20:25:43.404400+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-python-dev3",
+      "tree": "8d5b960d81c0ab1e58985400235dadd0a57196af",
+      "reason": "Fixture incorrectly used every alias as an optimizer owner; production duplicate-owner validation rejected it.",
+      "status_sha256": "a1bd6cd563cfdbc7a201147f0609e374e67190a065dba3c2a5c438af68f47023",
+      "log_sha256": "6cc082b286cfeac57e436498069e309a1e231332d98625c4f1ad59d0211926ee"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:12:36.003253+00:00",
+      "finished": "2026-10-27T20:21:52.603057+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-npu-dev",
+      "tree": "0e70d333c36c888afcf1df3699e2fe020677769a",
+      "reason": "Duplicate output port fixture omitted recompiling its default slot layout; graph construction rejected it.",
+      "status_sha256": "9ede75ee944a9de37b329deb77e78e22c9f767ff952db47c99559a7d605ace4f",
+      "log_sha256": "40c3131d8c7e7f578f748298d6a5439c6b3d4e7726b4a7e5caf61bed0aed4a13"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:22:24.643438+00:00",
+      "finished": "2026-10-27T20:30:11.504832+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-npu-dev2",
+      "tree": "39d597b71c2af3f50f1cd94a8acefa52b883c05f",
+      "reason": "Fixture repeated shared aliases in optimizer groups; rejected before numerical training.",
+      "status_sha256": "134b12f2d08a239b79ccd443138cfeff3cfc0d9afbb75604aeb571d44f2f6b05",
+      "log_sha256": "e2a0d5d0869deb4fad7657dcb05114b500d9521f22c43d9e9d7e89155a971ec7"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:30:42.561274+00:00",
+      "finished": "2026-10-27T20:33:21.318916+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-npu-dev3",
+      "tree": "ed76e561f850bdf36f83d5be6f515bc54543d052",
+      "reason": "Restore check compared undefined journal padding; logical fields and exact decoded results retained in corrected check.",
+      "status_sha256": "f42596651b78a05702b255eec38994081ce93eabfe49d4727d853ddba3b33c8d",
+      "log_sha256": "d4203bc64abb415c4e30d776f21b1c7e30118137a884332a51778e74f0d1ff75"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:34:35.573204+00:00",
+      "finished": "2026-10-27T20:36:45.135142+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-npu-dev4",
+      "tree": "fe658bdb19f628c28cd08ec41c6dee779e1f9677",
+      "reason": "Restored recurrent backward failed in CANN AICPU ScatterUpdate after logical restore values agreed exactly.",
+      "status_sha256": "7766a4727f431e68547efcedb6335fe2d99a2cf26605dee2874be94d3847d6b8",
+      "log_sha256": "7f82e94def60ac7f0f177bbd385e58b645340b5203353357cefeed54e6d80e0c"
+    },
+    {
+      "source": "0f5e0323df7c13b5ab3abe0df54d03a8a1e62d28",
+      "state": "failed",
+      "started": "2026-10-27T20:41:25.797563+00:00",
+      "finished": "2026-10-27T20:43:48.549825+00:00",
+      "exit_code": 1,
+      "name": "core5-weighted-training-npu-dev5",
+      "tree": "322fccde9713e34a12a0dc41330f9c4440366a3d",
+      "reason": "Full unchanged order reproduced failure: Bool target [2,4], axis 1, source [2,1] in recurrent_detail::insert. Fixed static row copy; vendor internal cause not proven.",
+      "status_sha256": "1af540a93384918218458b213473908aabbfd2490e7063ace97bfd83c5be7df2",
+      "log_sha256": "bdb1dca3ea408c89d0032f69d019eb3ce65725b433733c684c9c6e63f7cce4db",
+      "diagnosis_sha256": "c95a1744998f902a290891e6d4adafc1e38f474018b05fbc471c823aba9bc139",
+      "plog_sha256": {
+        "plog-3311730_20261028044348119.log": "2e6f615a5fea8e154c6875f463b172ce12b2c82d39de1d93faafa869cde26cf3"
+      }
+    }
+  ],
+  "numerical_contract": {
+    "forward_rtol": 1e-05,
+    "forward_atol": 1e-06,
+    "vjp_rtol": 3e-05,
+    "vjp_atol": 3e-06,
+    "restore": "bitwise logical fields and optimizer checkpoint on same stack",
+    "padding": "no value contract outside present/ragged valid; exact raw retained entries remain covered"
+  },
+  "limits": [
+    "FP32 single-device weighted resident scope only; FP16 and peer are separate work.",
+    "No CUDA hardware evidence, no throughput conclusion.",
+    "Standalone complete-cut recovery is an in-memory public C++ record; Python additionally verifies disk and fresh-process recovery.",
+    "Prior FP16 GDN AdamW, default async Python two-NPU and SDK2.10 affine witnesses remain unresolved."
+  ],
+  "reproduction": [
+    "git checkout 343429db76c091541ae24ef7b3792ce027e9bea2",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE --runtime standalone --ascendc-soc SOC --jobs 2 --checks weighted-copy weighted-saved-window weighted-retained weighted-training weighted-flow weighted-flow-config",
+    "python scripts/verify_device_control.py --build-dir NEW_DEVICE --device npu:0 --output-dir NEW_GATE --checks weighted-copy weighted-saved-window weighted-retained weighted-training weighted-flow weighted-flow-config",
+    "python scripts/build_resident_consumer.py --core-build CORE --resident-build NEW_DEVICE --output-dir NEW_CLIENT --component weighted-training",
+    "NEW_CLIENT/consumer/weighted-training-consumer --device=npu:0 --dtype=float32",
+    "CUDA build uses matching CUDA core and --cuda-architectures 80;90;100 instead of --ascendc-soc; actual GPU is required for execution.",
+    "Python uses a matching Python-owned core, --runtime python --python-component weighted, then tests/test_resident_weighted_training.py and tests/test_resident_weighted_flow.py with explicit device/build environment."
+  ]
+}
