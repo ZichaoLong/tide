@@ -51,7 +51,7 @@ void check(at::Device device,int64_t horizon){
   auto bars=at::zeros({R,2,2},raw.floating.options()),stats=at::zeros({R,2},raw.floating.options()),roots=at::zeros({R,4},present.options());
   DeviceProgram program(device);program.limit_workspace(64*1024*1024);auto tape=append_weighted_kv_sum(program,c,raw,time,present,error);
   auto g=append_weighted_kv_sum_vjp(program,tape,bars,stats,roots,error);program.finish();
-  for(int pass=0;pass<2;++pass){auto times=at::tensor(std::vector<int64_t>{0,clock+(pass?1:5),30,last,0,-99},at::kLong);
+  for(int pass=0;pass<2;++pass){auto times=at::tensor(std::vector<int64_t>{0,clock+(pass?1:5),pass?clock:30,last,0,-99},at::kLong);
     auto selected=at::tensor({1,1,1,1,1,0},at::kInt).to(at::kBool);auto ref=reference(layout,states,times,selected);
     raw.floating.copy_(source.floating);raw.integer.copy_(source.integer);raw.floating[5].fill_(NAN);raw.integer[5].fill_(-99);time.copy_(times);present.copy_(selected);
     for(int test=0;test<5;++test){auto flags=at::zeros({R,4},at::kBool),dy=at::full({R,2,2},NAN,at::kFloat),dw=at::full({R,2},NAN,at::kFloat);

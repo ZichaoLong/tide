@@ -123,6 +123,8 @@ The [resident weighted pool](resident-weighted-pool.md) computes sum or positive
 
 The [resident KV window/sum](resident-weighted-kv-sum.md) selects snapshots using exact int64 ages and returns four independently rooted Mem fields. Numerical decay underflow retains raw visibility and zero gradient connections; caller-bound old/new/initial snapshots remain explicit.
 
+The [resident relative rotation](resident-weighted-rotary.md) converts exact integer ages to the declared FP32 numerical phase, retaining saved vendor sine/cosine for its first-order transpose. It does not change logical timestamps or window membership.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
