@@ -48,19 +48,30 @@ SDK构建weighted-node-window/window/training，新双卡4组合×12独立根、
 各节点局部tape/VJP在原owner。边界复制实际raw到公开根设备，快照保留owner及精确元数据；
 所有共享参数使用者贡献汇总，反向重放不采用前向状态。预算新增peer主程序持有storage的核算。
 
-## 原工作树未提交与下一步
+## 公共训练放置实现与下一步
 
-正在接入公共训练的`node_devices`构造/恢复、manifest及跨设备参数bank发布。
-草稿涉及public training header、owner/bindings、Python resident_training、training_optimizer/peer，
-新`weighted_training_publish.{h,cpp}`和CMake。canonical FP32 master/slots仍统一，远端接收同一
-决策与已更新值；所有设备先提交再等待。不修改活动f84a007输入。
-草稿尚未完成定向测试/提交；放置后的FP16训练与checkpoint仍待资格。
+本次提交公共training的`node_devices`构造/恢复、请求/生效manifest及跨设备参数bank发布。
+`WeightedTrainingPublication`保持canonical FP32 master/slots统一，远端接收同一设备决策与实际
+更新值；全部设备先提交再等待。样本副本也可分别拥有自己的节点放置，通信预算计入两层副本。
+checkpoint仍保存实际完整raw/optimizer，恢复可指定另一放置。相关契约与独立检查已更新。
+
+开发检查：9个SDK实现/检查TU、Python-owned binding TU syntax-only通过；CPU静态放置/入口10项通过，
+8个新增Python设备用例收集通过，git diff --check通过。这些不构成设备训练资格。
+新standalone检查weighted-node-training两dtype各5组合/20更新、完整独立根/跨放置恢复/累计与
+共同可表示性拒绝；weighted-node-replicas两dtype各2组合/6更新及共同slot拒绝。
+
+本提交后冻结到`artifacts/worktrees/core5-weighted-node-training`，build/{npu,python,cuda}独立；
+jobs `core5-weighted-node-training-{npu,python,cuda}-qualify`，units `tide-JOB-20261028.service`。
+launcher `.local/JOB.sh`和`JOB-workload.sh`；记录`artifacts/jobs/JOB/{status.json,task.log}`。
+SDKchecks/result.json，Python tests.xml，CUDA只有build manifest/loader/help。
+构建1500秒/2worker，NPU queue180秒；SDK设备3600秒、Python1800秒，整job5340秒/3540秒，
+unit5400秒/3600秒；CUDA整job1560秒/unit1620秒。background.slice/Nice10/ATen及BLAS1。
+目前尚未提交这些新服务，不称设备资格通过。f84a007两任务继续独立运行，不编辑其输入。
 
 接着执行：
-1. 核对两个f84a007任务终态/日志；新失败保留最小反例，不把运行中任务写成通过。
-2. 完成公共training放置独立检查：两dtype、全部字段梯度、共享参数、SGD/AdamW多步、累计、
-   优化器共同拒绝、跨放置恢复；Python adapter与standalone分别验收，必要样本副本回归。
-3. 提交训练实现，冻结源码做有界NPU/CUDA资格；分别提交已完成的前向/反向/训练证据。
+1. 提交/推送训练实现，创建只读冻结checkout，提交上述三个独立服务并核对live cgroup/status。
+2. 审阅f84a007窗口反向及新训练任务终态；必要新问题保留反例、在主工作树修复，不改活动输入。
+3. 分别记录固定源码反向/训练证据，Python和standalone、FP32/FP16、CUDA构建/真机分列。
 4. 最终公共接口/能力矩阵/数学追溯审计；CUDA真机独立待验，不阻塞本机工作。
 
 ## 环境和保留限制

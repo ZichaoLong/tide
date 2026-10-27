@@ -25,7 +25,7 @@ void equal_checkpoint(const ResidentTrainingCheckpoint& a,const ResidentTraining
   tide_bench::compare(Result{a.continuation},Result{b.continuation},true,at::kFloat);
 }
 }
-void trajectory(at::Device device,const std::string& topology,const std::string& family,ResidentOptimizerKind kind,const std::string& frozen,at::ScalarType dtype){
+void trajectory(at::Device device,const std::string& topology,const std::string& family,ResidentOptimizerKind kind,const std::string& frozen,at::ScalarType dtype,const std::vector<at::Device>& placement){
   auto graph=weighted_check::graph(topology,family);
   graph.outputs.push_back(graph.outputs.front());
   graph.layout.reset();graph.compile(); // New physical port needs a new default slot layout.
@@ -41,7 +41,8 @@ void trajectory(at::Device device,const std::string& topology,const std::string&
   if(kind==ResidentOptimizerKind::sgd)optimizer=std::make_unique<SGD>(master_registry,std::vector<OptimizerGroup>{group});
   else optimizer=std::make_unique<AdamW>(master_registry,std::vector<OptimizerGroup>{group});
   at::NoGradGuard ng;auto l=limits();l.forward.prefill=topology!="nonaligned";
-  auto session=std::make_unique<WeightedTrainingSession>(graph,candidate,q,device,kind,std::vector<OptimizerGroup>{group},l);
+  auto session=std::make_unique<WeightedTrainingSession>(graph,candidate,q,device,kind,std::vector<OptimizerGroup>{group},l,placement);
+  if(!placement.empty())require(session->node_devices()==placement,"training node placement differs");
   const auto original=session->checkpoint().state.values;
   const std::vector<std::string> modes{"outputs","zero","all","outputs"};
   for(size_t update=0;update<modes.size();++update){
@@ -49,7 +50,7 @@ void trajectory(at::Device device,const std::string& topology,const std::string&
     independent_left(q);auto initial=q;
     std::unique_ptr<WeightedTrainingSession> restored;
     if(update==1){std::cout<<"  restore checkpoint\n"<<std::flush;
-      const auto checkpoint=session->checkpoint();restored=std::make_unique<WeightedTrainingSession>(graph,candidate,checkpoint,device,l);equal_checkpoint(checkpoint,restored->checkpoint());}
+      const auto checkpoint=session->checkpoint();restored=std::make_unique<WeightedTrainingSession>(graph,candidate,checkpoint,device,l,[&]{auto moved=placement;for(auto& d:moved)d=at::Device(d.type(),1-d.index());return moved;}());equal_checkpoint(checkpoint,restored->checkpoint());}
     auto inputs=weighted_check::inputs(graph,at::kCPU,dtype,10*update);
     std::vector<std::vector<External>> windows(3);for(auto x:inputs){leaf(x.value);x.position+=2*update;windows[x.time<10*update+4?0:2].push_back(x);}
     auto reference_windows=windows;

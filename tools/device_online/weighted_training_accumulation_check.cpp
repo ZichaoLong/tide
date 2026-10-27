@@ -4,11 +4,11 @@
 #include "../../cpp/test/weighted_graph_fixture.h"
 #include <ATen/core/grad_mode.h>
 namespace tide::device_online::weighted_training_check {
-void accumulation(at::Device device,at::ScalarType dtype){
+void accumulation(at::Device device,at::ScalarType dtype,const std::vector<at::Device>& placement){
   at::NoGradGuard ng;auto graph=weighted_check::graph("fc","kv");auto model=weighted_check::model(graph,"kv",at::kCPU,dtype);
   Continuation initial;initial.identity=graph.identity;initial.batch_size=2;OptimizerGroup group;
   for(const auto& owner:model.parameters().owners())group.parameters.push_back(owner.canonical);group.lr=.002;
-  WeightedTrainingSession session(graph,model,initial,device,ResidentOptimizerKind::sgd,{group},limits());
+  WeightedTrainingSession session(graph,model,initial,device,ResidentOptimizerKind::sgd,{group},limits(),placement);
   auto before=session.checkpoint();auto xs=weighted_check::inputs(graph,at::kCPU,dtype);
   std::vector<External> head,tail;for(const auto& x:xs)(x.time<4?head:tail).push_back(x);
   auto one=session.advance(head,4);auto first=session.backward({seed(one,"outputs")});

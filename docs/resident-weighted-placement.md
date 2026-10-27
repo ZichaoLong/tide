@@ -5,7 +5,7 @@
 设备可重复、可以没有节点放在coordinator；区域、队列、history与完整返回journal仍由
 coordinator拥有。这是同一图/样本内的物理放置，和[独立样本副本](resident-weighted-peers.md)不同。
 前向/精确续接资格与实现身份由STATUS链接的报告分别记录。放置后的retained VJP已接入实现、
-尚待固定源码资格；公共训练/optimizer发布仍在实施中。
+尚待固定源码资格；公共训练/optimizer发布已接入草稿，独立资格待验。
 
 `weighted_flow_peers.cpp::WeightedFlowPeers`为每个远端设备建立一个服务组。
 节点实际参数bank、完整原始状态、Upd/Read/Full及局部数值tape在指定owner上。
@@ -73,4 +73,5 @@ None/零连接位、int64元数据、冻结参数和梯度根身份沿用[窗口
 覆盖五记忆、同秩HB、非对齐图、反馈/重复边、Read初态/旧态/候选态、全区域Attention、
 来源变换、跨owner共享参数、全部节点远端放置和原前向关闭后的反向。检查真实反向节点的
 raw/Full/参数bank设备。独立CPU Greedy/autograd提供完整字段和梯度对照，不能替代局部公式锚点。
-此检查定义不表示已运行通过；FP16反向、公共训练、optimizer与跨放置训练checkpoint继续独立验收。
+此检查定义不表示已运行通过；FP16反向、公共训练、optimizer与跨放置训练checkpoint
+由[公共训练放置契约](resident-weighted-training.md#单样本节点放置与发布)独立验收。

@@ -1,4 +1,5 @@
 #include "weighted_training_internal.h"
+#include "weighted_training_publish.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <limits>
 namespace tide::device_online {
@@ -37,9 +38,11 @@ ResidentStep WeightedTrainingSession::step(){
   try{
     auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));DeviceProgram p(s.device);p.limit_workspace(s.limits.forward.operator_bytes);
     s.optimizer->append_step(p,s.accumulated_batches?s.accumulated:s.gradient,error);
-    append_owner_parameter_publish(p,s.writes(),s.optimizer->values(),error,s.limits.optimizer_bytes/8);
-    p.finish();c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());p.run(s.limits.forward.timeout_ms);
-    const auto code=error.cpu().item<int>();p.close();
+    WeightedTrainingPublication publication(p,s.writes(),s.optimizer->values(),error,s.limits.optimizer_bytes/4,
+      s.limits.forward.operator_bytes,s.limits.forward.timeout_ms);
+    p.finish();publication.synchronize_inputs();c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());
+    publication.submit();p.submit();p.wait(s.limits.forward.timeout_ms);publication.wait();
+    const auto code=error.cpu().item<int>();p.close();publication.close();
     if(code==20||code==21)return {false,code,s.generation}; // Masters, slots and role banks unchanged.
     if(code)throw std::runtime_error("weighted optimizer refused, error="+std::to_string(code));
     s.mirror_parameters();++s.generation;++s.flow->impl_->generation;s.flow->impl_->ran=false;s.discard();return {true,0,s.generation};
