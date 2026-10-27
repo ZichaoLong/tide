@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送0e148ae（cb68d91原始状态/缓存及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送fa02b88（f89bdfe固定时间卷积及独立证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -53,10 +53,12 @@ core5-resident-convolution-{npu,cuda}-qualify均clean/exit0/inactive；详见evi
 原conv1d重载编译失败保留；NPU复用dev3全摘要一致构建并保留manifest，CUDA无实机。
 worktree固定f89bdfe且无活动reader。
 
-主工作区未提交共享投影：weighted_projection.h/.cpp/check、norm math/kernel、CMake/registry、契约/导航。
-CPU RMS VJP4项通过（1.17秒），完整检查包含有/无bias、有/无RMS的4配置、48行重放、
-输入/共享参数全部VJP、None/零、原版本保存反向及拒绝。尚未构建/设备验证。
-下一步冻结projection开发任务，通过后提交/固定资格/证据并推送，继续实际KV和循环记忆数值/Describe。
+共享投影开发treee741c50847de858517264e9546eb503e20d36cb4通过，
+tide-core5-resident-projection-dev-20261027.service inactive/exit0；CPU4，NPU有/无bias与RMS四配置，
+48行重放、三个bank、完整输入/矩阵/bias VJP、None/零、实际版本保存及拒绝通过。
+实际记录artifacts/jobs/core5-resident-projection-dev/{source.tar,source.tree,status.json,task.log,checks/result.json}。
+当前提交projection实现/契约/测试，随后固定该提交进行CPU/NPU/CUDA资格。
+然后继续实际KV Upd的基座/低秩/摘要参数链、原始时间缓存和完整独立反向，再扩展数值Mem/Describe及循环模块。
 
 完整weighted resident仍缺五记忆数值/卷积读取、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow
