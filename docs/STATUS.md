@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送afe8c8d（8e7298d发送实现及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送4745de2（161ccea常驻head实现及固定证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -18,27 +18,25 @@ CPU完整训练与恢复从[证据索引](evidence/README.md)进入；定向资�
 
 ## 当前阶段与下一动作
 
-resident worktree artifacts/worktrees/core5-resident 固定8e7298d，clean/read-only，无活动reader。
-发送npu-qualify/cuda-qualify均exit0/inactive；输出artifacts/jobs/core5-resident-sending-{npu,cuda}-qualify，
-具体命令/source/build/hash见evidence/core5-resident-sending-20261027.json。
-NPU复用build2，完整component/core/binary摘要相符，原manifest source字段保留。
-开发sending-dev的bool→float AscendC失败保持failed；build2-dev通过不改旧状态。
+完整区域开发tree4a161a96505deac564ec9ccbf3c5bd4e18dbd551已冻结并通过，
+任务tide-core5-resident-region-dev-20261027.service inactive/exit0。
+artifacts/jobs/core5-resident-region-dev保存source.tar/source.tree/status.json/task.log/checks/result.json。
+CPU33项（8.54秒）；NPU14配置/140物理行112非空帧，全部字段/共享参数一阶VJP、
+独立原始版本反向、重放、int64支持/history、容量拒绝与失败不提交通过。
+实现为weighted_region{,_vjp}.cpp/.h及五个登记入口；契约docs/resident-weighted-region.md。
+参考RegionKernel使用完整静态成员并调用validate_weights，独立CPU公式另作数学锚点。
+resident worktree原HEAD161ccea、无活动reader，NPU build/resident-region-dev保留原开发manifest。
 
-当前resident weighted head开发完成：ScalarHead/Query公共双仿射+SiLU由真实vendor批量算子执行；
-动态int64 owner聚集、共享参数完整汇总、独立根None/零、实际input/parameter版本保存。
-head-workspace-dev（tree68c50c18）CPU8、SDK构建/loader、NPU两种形状/24行/完整VJP、
-原bank改写后的保存tape反向、失败不提交/容量拒绝通过，已inactive/exit0。
-实际operator workspace高水位16777728 bytes，测试显式64MiB；前向/反向scratch独立准入。
-原head-dev非连续转置拒绝、layout-dev 4MiB工作区容量拒绝保留failed；没有数值失败冒充通过。
-161ccea固定资格：CPU8（2.05秒）、NPU两种形状/完整共享VJP与保存版本通过；CUDA sm80/90/100构建通过。
-head-npu-qualify及head-cuda-qualify均clean/exit0/inactive，详见evidence/core5-resident-head-20261027.json。
-resident worktree固定161ccea，clean/read-only，无活动reader。核心build摘要与670ead3一致，原manifest保持。
-当前未提交的完整区域组合初稿：weighted_region_layout.h、ascendc/weighted_region_prepare.h、
-ascendc/weighted_region_reverse.h、tests/resident_region_adapter.py/test_resident_weighted_region_math.py。
-完整候选摘要、Query、控制bounds及十种发送的链式VJP已有25项CPU公式检查通过（5.57秒）；
-CPU head使用普通Torch公式，这不是完整设备SelStep验收。尚未注册设备kernel或接公共DeviceProgram。
-下一步实现region四个stage的device入口，组合已验head/Alloc/sending，保留实际field/head tape，
-检查所有字段/共享参数独立根、padding/absent、重放/容量与完整区域NPU结果，再接图生命周期。
+当前提交Region实现，随后冻结该提交并运行两个新资格任务：
+core5-resident-region-npu-qualify（CPU33+NPU完整组合；相同组件/core/binary摘要才复用dev构建），
+core5-resident-region-cuda-qualify（CUDA sm80/90/100新构建/loader，无GPU真机）。
+background.slice、Nice10、2构建线程、BLAS/ATen单线程；NPU限600秒/队列180秒，CUDA构建限1200秒。
+正式结果尚未知。查看python scripts/status.py和各任务status.json/task.log；终止用systemctl --user stop UNIT。
+精确命令为.local/core5-resident-region-{npu,cuda}-qualify{,-workload}.sh，输出同名artifacts/jobs目录。
+
+主工作区另有下一阶段未提交Agg数学helper、CPU适配与公式测试，15项短检查通过（1.28秒）；
+未登记设备入口、未接vendor组合，不包含在Region实现提交或资格声明中。
+下一动作：Region固定资格及独立证据提交推送，继续Aggregate设备组合，再接状态/Describe/图生命周期。
 
 完整weighted resident仍缺Agg、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。

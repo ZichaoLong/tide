@@ -4,6 +4,7 @@ CHECKS = {
     "weighted-allocation": ("tide-weighted-allocation-check", ("float32",)),
     "weighted-sending": ("tide-weighted-sending-check", ("float32",)),
     "weighted-head": ("tide-weighted-head-check", ("float32",)),
+    "weighted-region": ("tide-weighted-region-check", ("float32",)),
     "peer-sharded-vjp": ("tide-sharded-vjp-check", ("float32", "float16")),
     "peer-shard-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer-shard-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
@@ -64,6 +65,7 @@ MARKERS = {
     "weighted-allocation": "weighted-allocation: passed",
     "weighted-sending": "weighted-sending: passed",
     "weighted-head": "weighted-head: passed",
+    "weighted-region": "weighted-region: passed",
     "peer-sharded-vjp": "sharded-graph-vjp: passed",
     "peer-shard-flow": "peer-flow: passed",
     "peer-shard-control-flow": "peer-flow: passed",
@@ -234,3 +236,4 @@ KERNELS["peer-resident-compact-projections"] = "tide_owner_stream"
 KERNELS["weighted-allocation"] = "tide_weighted_allocat"
 KERNELS["weighted-sending"] = "tide_weighted_send"
 KERNELS["weighted-head"] = "tide_weighted_head"
+KERNELS["weighted-region"] = "tide_weighted_region"
