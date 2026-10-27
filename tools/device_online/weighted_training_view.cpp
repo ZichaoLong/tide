@@ -41,7 +41,7 @@ WeightedTrainingWindow weighted_training_view(const WeightedWindowSnapshot& s,Re
   if(!s.graph.outputs.empty()){
     std::vector<at::Tensor> values,present,coordinates;auto batches=at::arange(samples,s.stages.options()).reshape({1,samples}).expand({stages,samples});
     for(size_t port=0;port<s.graph.outputs.size();++port){const auto prefix="node."+std::to_string(s.graph.outputs[port])+".";
-      values.push_back(at::cat({j.field(prefix+"control").unsqueeze(-1),j.field(prefix+"full")},-1));
+      values.push_back(j.field(prefix+"payload"));
       present.push_back(j.field(prefix+"active")&stage);
       coordinates.push_back(at::stack({batches,j.field(prefix+"times"),at::full_like(batches,port)},-1));
     }

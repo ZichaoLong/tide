@@ -88,14 +88,14 @@ void WeightedFlow::Impl::append_regions(DeviceProgram& p){
 }
 ActionBatch WeightedFlow::Impl::append_full(DeviceProgram& p){
   const auto samples=boundary.batch_size,count=static_cast<int64_t>(nodes.size()),width=model.width();
-  const auto opts=at::TensorOptions().dtype(at::kFloat).device(device);
+  const auto opts=at::TensorOptions().dtype(model.nodes.at(0).bias.scalar_type()).device(device);
   ActionBatch out{at::zeros({count*samples,4},opts.dtype(at::kLong)),at::zeros({count*samples,width},opts),at::zeros({count*samples},opts.dtype(at::kBool))};
   for(int64_t v=0;v<count;++v){auto& n=*nodes[v];
     append_weighted_node_full(*services,n,error,[&](DeviceProgram& worker){return remaining(worker);});
     auto meta=out.coordinates.narrow(0,v*samples,samples);weighted_copy(p,meta.select(1,0),at::arange(samples,meta.options()));weighted_copy(p,meta.select(1,1),at::full({samples},v,meta.options()));
     weighted_copy(p,meta.select(1,2),n.input.times);weighted_copy(p,meta.select(1,3),n.input.times);
-    weighted_copy(p,out.values.narrow(0,v*samples,samples).narrow(1,0,1),n.control.reshape({samples,1}));
-    weighted_copy(p,out.values.narrow(0,v*samples,samples).narrow(1,1,width-1),n.full);weighted_copy(p,out.valid.narrow(0,v*samples,samples),n.active);
+    n.payload=append_weighted_payload(p,n.control,n.full,n.active,out.values.scalar_type(),error);
+    weighted_copy(p,out.values.narrow(0,v*samples,samples),n.payload);weighted_copy(p,out.valid.narrow(0,v*samples,samples),n.active);
   }
   return out;
 }

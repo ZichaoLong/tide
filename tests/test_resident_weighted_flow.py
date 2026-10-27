@@ -28,18 +28,20 @@ def owner(binding, target, *, q=None, prefill=True, **limits):
         limits=dict(queue=64,stages=64,cache=16,prefill=prefill,**limits))
 
 
+@pytest.mark.parametrize("storage_dtype",[torch.float32,torch.float16])
 @pytest.mark.parametrize("family",["kv","affine","delta","gated_delta","ssd"])
 @pytest.mark.parametrize("prefill",[False,True])
-def test_public_full_records_raw_checkpoint_and_private_windows(family,prefill,tmp_path):
+def test_public_full_records_raw_checkpoint_and_private_windows(family,prefill,storage_dtype,tmp_path):
     target=target_device()
-    b,_,xs,stop=(setup(torch.float32,"pdg") if family=="kv" else recurrent_model(torch.float32,family))
+    b,_,xs,stop=(setup(storage_dtype,"pdg") if family=="kv" else recurrent_model(storage_dtype,family))
     q=Continuation(b.graph.identity,1)
+    tolerance=dict(atol=1e-3,rtol=2e-2) if storage_dtype==torch.float16 else {}
     with torch.no_grad():
         flow=owner(b,target,prefill=prefill)
         head=[x for x in xs if x.time<3];tail=[x for x in xs if x.time>=3]
         first=flow.advance(head,stop=3,sealed_until=3)
         expected=reference(b.graph,b.model,q,head,3,sealed_until=3)
-        equivalent(first,expected)
+        equivalent(first,expected,**tolerance)
         snapshot=flow.checkpoint()
         save(tmp_path/"weighted.pt",b.graph,b.model,snapshot)
         restored=load(tmp_path/"weighted.pt",b.graph,b.model)
@@ -48,7 +50,7 @@ def test_public_full_records_raw_checkpoint_and_private_windows(family,prefill,t
         flow=owner(b,target,q=restored,prefill=prefill)
         actual=flow.advance(tail,stop=stop,sealed_until=stop)
         expected=reference(b.graph,b.model,expected.continuation,tail,stop,sealed_until=stop)
-        equivalent(actual,expected)
+        equivalent(actual,expected,**tolerance)
         view=flow.checkpoint()
         for state in view.states.values():state.value.fill_(float("nan"))
         equivalent(actual.continuation,flow.checkpoint())
@@ -56,6 +58,10 @@ def test_public_full_records_raw_checkpoint_and_private_windows(family,prefill,t
         assert manifest["execution"]=="resident" and manifest["effective_device"]==target
         assert 0<manifest["reserved_tensor_bytes"]<=manifest["effective_limits"]["tensor_bytes"]
         assert manifest["training"] is False
+        assert manifest["dtype"]==str(storage_dtype).removeprefix("torch.")
+        assert manifest["raw_dtype"]==manifest["dtype"] and manifest["compute_dtype"]=="float32"
+        assert all(x[-1].dtype==storage_dtype for x in actual.outputs)
+        assert all(x.value.dtype==storage_dtype for x in actual.continuation.pending)
         empty=flow.advance([],stop=stop,sealed_until=stop)
         assert not empty.trace
         equivalent(empty.continuation,actual.continuation)

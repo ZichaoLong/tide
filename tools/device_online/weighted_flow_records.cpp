@@ -12,6 +12,7 @@ void WeightedFlow::Impl::save_stage(DeviceProgram& p,const ReadyBatch& ready,con
     save(prefix+"old.float",n.old.floating);save(prefix+"old.int",n.old.integer);
     save(prefix+"proposal.float",n.proposal.floating);save(prefix+"proposal.int",n.proposal.integer);
     save(prefix+"control",n.control);save(prefix+"active",n.active);save(prefix+"full",n.full);
+    save(prefix+"payload",n.payload);
     for(const auto& [name,x]:n.describe->fields)save(prefix+"describe."+name,x);
   }
   for(size_t r=0;r<regions.size();++r){const auto& t=*regions[r]->selection;
@@ -52,7 +53,7 @@ Result WeightedFlow::Impl::decode()const{
         for(const auto& [name,_]:n.describe->fields){auto x=get(prefix+"describe."+name,t)[b].clone();
           e.descriptor_fields[name]=(name=="w"||name=="mu"||name=="score")?x.reshape({}):x;}
         const auto region=graph.nodes[v].region;e.history.last_time=get("region."+std::to_string(region)+".times",t)[b].item<int64_t>();
-        if(e.active){++fulls;e.full=at::cat({e.control.reshape({1}),get(prefix+"full",t)[b]});
+        if(e.active){++fulls;e.full=get(prefix+"payload",t)[b].clone();
           const auto start=graph.outgoing_ports.offsets[v],end=graph.outgoing_ports.offsets[v+1];
           for(auto slot=start;slot<end;++slot){e.emitted.push_back({slot-start,e.full});const auto binding=graph.outgoing_ports.bindings[slot];
             if(binding.kind==0)result.outputs.push_back({b,e.time,binding.id,e.full});}

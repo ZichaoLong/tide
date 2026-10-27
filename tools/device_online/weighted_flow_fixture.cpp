@@ -3,7 +3,7 @@
 #include "weighted_flow_fixture.h"
 #include "tide/ops.h"
 namespace tide::device_online::weighted_flow_check {
-std::pair<Graph,Model> configured(const weighted::RegionalConfig& r,bool query,bool sources,bool origin){
+std::pair<Graph,Model> configured(const weighted::RegionalConfig& r,bool query,bool sources,bool origin,at::ScalarType dtype){
   Graph g;g.regions={{r.capacity(2),true,false,"proposal","weighted-check-"+r.selection_mode},
                    {r.capacity(2),true,false,"old","weighted-check-"+r.selection_mode}};
   g.nodes={Node{0},Node{0},Node{1},Node{1}};
@@ -54,6 +54,15 @@ std::pair<Graph,Model> configured(const weighted::RegionalConfig& r,bool query,b
   }
   for(auto collection:{&m.input_scale,&m.output_scale,&m.edge_scale,&m.agg_scale}){
     auto count=collection==&m.input_scale?g.inputs.size():collection==&m.output_scale?g.outputs.size():g.edges.size();collection->assign(count,at::ones({},at::kFloat));}
+  if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("weighted configuration fixture dtype");
+  if(dtype==at::kHalf){
+    std::map<const void*,at::Tensor> converted;
+    auto cast=[&](at::Tensor& x){const auto id=x.unsafeGetTensorImpl();
+      if(!converted.count(id))converted[id]=x.detach().to(dtype).set_requires_grad(x.requires_grad());x=converted.at(id);};
+    for(auto& w:m.nodes){for(auto x:{&w.decay,&w.weight,&w.bias,&w.read})cast(*x);for(auto& [_,x]:w.extra)cast(x);}
+    for(auto& w:m.regions)for(auto& [_,x]:w.extra)cast(x);
+    for(auto group:{&m.input_scale,&m.output_scale,&m.edge_scale,&m.agg_scale})for(auto& x:*group)cast(x);
+  }
   configure_model(g,m);validate_model(g,m);return {g,m};
 }
 std::vector<weighted::RegionalConfig> configurations(){

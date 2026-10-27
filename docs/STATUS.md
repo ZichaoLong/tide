@@ -57,3 +57,17 @@ TORCH_DEVICE_BACKEND_AUTOLOAD=0、PYTHONDONTWRITEBYTECODE=1、ACL_OP_INIT_MODE=0
 任务检查 `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`，停止 `systemctl --user stop UNIT`。
 不预建job.py输出目录，service stdout写.local；STATUS用scripts/durable_records.py原子写并回读。
 公共环境与参考仓库未改；上游19文件重入校验通过。
+
+## 新局部资格
+
+固定实现bcef2c49dfdbde277d4115f450e4fec07d7f8dc9已冻结到`artifacts/worktrees/core5-half-memory`，跟踪文件只读。
+units `tide-core5-half-memory-{npu,cuda}-qualify-20261028.service`；outputs `artifacts/jobs/core5-half-memory-{npu,cuda}-qualify/`。
+launchers `.local/core5-half-memory-{npu,cuda}-qualify{,-workload}.sh`，build/npu、build/cuda。
+范围四循环24配置×两dtype、KV Full4配置×两dtype、CPU24；CUDA三架构build/loader/help。
+两任务1200秒、2workers/BLAS1、Nice10/background.slice；queue180秒、device gate360秒。两任务已running并核对Transient/background.slice；尚无NPU数值结果。
+
+公共图FP16源码现已接入：队列/raw/实际发送载荷half，局部compute/scoring与参数bank拓宽FP32。
+新增实际payload journal，逐边/端口解码读取实际存储结果；正c下溢拒绝，G下溢允许，溢出拒绝。
+两dtype完整图与配置检查及Python公开接口检查已扩展。CPU guard/packing/raw相关27项通过/2.94秒；
+最初一次CPU命令含不存在的training_view测试路径，未收集任何测试，纠正路径后上述27项通过。
+C++公共图尚未构建/执行。先提交这一完整实现，再冻结独立NPU/CUDA资格；训练FP16/peer继续。

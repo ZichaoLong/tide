@@ -1,6 +1,6 @@
 """Explicit native resident weighted owner; architecture §1–4, core-5 cuts.
 
-CPU FP32 model/boundary records, an explicit accelerator, and torch.no_grad()
+CPU FP32/FP16 model/boundary records, an explicit accelerator, and torch.no_grad()
 are required. Window-internal scheduling and numerical execution are in C++.
 This adapter neither runs a reference trajectory nor changes requested dtype.
 """
@@ -29,12 +29,13 @@ class WeightedResident:
         self.device=torch.device(device)
         if self.device.type not in {"cuda","npu"} or self.device.index is None:
             raise ValueError("weighted resident requires an explicit indexed accelerator")
-        if any(x.device.type!="cpu" or x.dtype!=torch.float32 for x in model.state_dict().values()):
-            raise ValueError("weighted resident boundary requires CPU FP32 parameters")
+        if any(x.device.type!="cpu" or x.dtype not in {torch.float32,torch.float16} for x in model.state_dict().values()):
+            raise ValueError("weighted resident boundary requires CPU FP32/FP16 parameters")
         model.validate_binding(graph)
         self.core=load_native(native_library,backend=self.device.type)
         self.module,self.build_record=load_resident(resident_library,self.core,component="weighted")
         self.graph,self.model=graph,model
+        self.dtype=next(iter(model.state_dict().values())).dtype
         self.compiled,weights=encode_model(self.core,graph,model)
         q=Continuation(graph.identity,batch_size) if continuation is None else continuation
         if q.batch_size!=batch_size:
@@ -76,7 +77,9 @@ class WeightedResident:
         self._validate();return from_continuation(self.graph,self.owner.checkpoint())
 
     def manifest(self):
-        return dict(requested_device=str(self.device),effective_device=str(self.device),dtype="float32",
+        return dict(requested_device=str(self.device),effective_device=str(self.device),dtype=str(self.dtype).removeprefix("torch."),
+                    raw_dtype=str(self.dtype).removeprefix("torch."),compute_dtype="float32",
+                    scoring_dtype="float32",adjoint_dtype="float32",
                     execution="resident",requested_limits=self.requested_limits,
                     effective_limits=self.effective_limits,reserved_tensor_bytes=self.owner.reserved_bytes,
                     build=self.build_record,training=False)

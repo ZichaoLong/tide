@@ -30,8 +30,8 @@ WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Weig
     ||static_cast<long double>(l.queue)*q.batch_size*std::max<int64_t>(1,model.width())*64>l.tensor_bytes)
     throw std::invalid_argument("invalid weighted flow capacities/budget");
   graph.compile();configure_model(graph,model);validate_model(graph,model);
-  for(const auto& w:model.nodes)if(!w.bias.device().is_cpu()||w.bias.scalar_type()!=at::kFloat||!w.next_kernel->comparison_identity())
-    throw std::invalid_argument("weighted flow requires CPU FP32 parameters and comparison-identity Next");
+  for(const auto& w:model.nodes)if(!w.bias.device().is_cpu()||(w.bias.scalar_type()!=at::kFloat&&w.bias.scalar_type()!=at::kHalf)||!w.next_kernel->comparison_identity())
+    throw std::invalid_argument("weighted flow requires CPU FP32/FP16 parameters and comparison-identity Next");
   journal_bytes=weighted_flow_preflight(graph,model,q.batch_size,l);
   model=snapshot(std::move(model));validate_window(graph,model,boundary,{},q.cut,q.cut);
   for(size_t v=0;v<graph.nodes.size();++v){auto n=std::make_unique<WeightedFlowNode>(model,v,boundary,d,l.cache,l.tensor_bytes);
@@ -41,7 +41,7 @@ WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Weig
     nodes.push_back(std::move(n));
   }
   for(size_t r=0;r<graph.regions.size();++r)regions.push_back(std::make_unique<WeightedFlowRegion>(graph,model,r,boundary,d));
-  const auto opts=at::TensorOptions().dtype(at::kFloat).device(d);
+  const auto opts=at::TensorOptions().dtype(model.nodes.at(0).bias.scalar_type()).device(d);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);begin=stop.clone();
   pending=std::make_unique<QueueTransaction>(l.queue,model.width(),graph.nodes.size(),q.batch_size,opts,error);
   external={at::zeros({l.queue,6},opts.dtype(at::kLong)),at::zeros({l.queue,model.width()},opts),at::zeros({l.queue},opts.dtype(at::kBool))};

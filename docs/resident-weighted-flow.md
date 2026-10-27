@@ -1,7 +1,7 @@
 # 完整 weighted 常驻图
 
 固定来源为 [0770593](upstream.json) 的三种图正典与带权局部教材。
-公共入口 `tide/resident_weighted.h::WeightedFlow`，CMake 目标 `tide::weighted_resident`；当前为 FP32
+公共入口 `tide/resident_weighted.h::WeightedFlow`，CMake 目标 `tide::weighted_resident`；已资格范围为 FP32
 独立 C++ 推理 owner，[固定资格](evidence/core5-resident-weighted-flow-20261028.md)分别记录 standalone 与 Python-owned NPU。完整训练、半精度和跨卡各自验收。
 
 ## 函数与状态绑定
@@ -17,6 +17,15 @@ A/B/e 批量调用；填充不是参数，低秩适配在设备上计算，原�
 初态，Read^- 读取旧态，Read^+ 读取候选态；Full 始终读取候选态。发送载荷为 `(c,G)`，
 广播逐物理边与逐输出端口返回，强度不重复乘入 G。所有候选保留更新，零接收保留
 完整原始状态。参数拷贝与 int64 原始时钟分开，不用有效状态投影代替恢复。
+
+公共FP16源码扩展显式接CPU half参数/边界，队列、pending、raw与发送载荷实际为half，
+参数角色bank是实际half参数的FP32精确拓宽。Aggregate、content、Mem、Describe、控制、
+Full的未存储G及保存值均为FP32；Update最终raw和每次发送的(c,G)各舍入一次。
+这是声明的混合精度算术，不宣称FP16 GEMM或复现eager每算子的half舍入顺序。
+局部组件的独立量化公式与全图独立eager调度分别验收；同一浮点容差不能放宽离散支持。
+发送前后用FP32检查实际存储值，非有限或正c下溢成零拒绝(error24)，G的数值下溢允许。
+控制c与实际payload中的舍入c分别保存；解码逐边/端口返回实际payload，不能重算替代。
+raw过期保留、次正规数、int64、None/零及容量失败保持局部契约。完整FP16资格另记。
 
 ## 数学到执行的对应
 
@@ -76,11 +85,12 @@ NPU通知握手保证coordinator与所有局部数值阶段互斥使用算子wor
 这些检查不自动认证 retained VJP、optimizer、FP16、peer、吞吐或 CUDA 真机。
 
 Python 适配器为 `tidegraph.weighted.WeightedResident`，使用匹配的 native 与 resident
-库，显式接收 `device`、CPU FP32 模型、batch_size、Continuation 和容量。
+库，显式接收 `device`、CPU FP32/FP16 模型、batch_size、Continuation 和容量。
 `advance(inputs, stop=..., sealed_until=...)` 要求完整 seal；不运行 Python 参考。
 `manifest()` 保存请求/生效容量及设备、dtype 和库身份；`checkpoint()` 返回通用
 Continuation，可通过原 `tidegraph.checkpoint.save/load` 序列化。参数版本或对象替换
 使旧 owner 拒绝执行，用户须从显式切面构造新 owner。
+manifest另记raw/payload dtype、compute/scoring/adjoint FP32，不静默替换用户模型dtype。
 
 公开 Python 适配器可独立构建：
 

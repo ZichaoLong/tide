@@ -30,7 +30,7 @@ WeightedFlowSource bind_weighted_flow_source(DeviceProgram&,WeightedBanks&,const
 struct WeightedFlowNode {
   weighted::NodeBinding binding;WeightedRawLayout layout;WeightedBanks banks;
   WeightedRawState initial,state,old,proposal;
-  at::Tensor state_present,control,active,full,content,mass;
+  at::Tensor state_present,control,active,full,payload,content,mass;
   WeightedFlowSource source;WeightedNodeInput input;
   std::optional<WeightedAggregateTape> aggregate;
   std::optional<WeightedKVUpdateTape> kv_update;
@@ -52,6 +52,8 @@ using WeightedFlowNodes=std::vector<std::unique_ptr<WeightedFlowNode>>;
 void append_weighted_node_local(DeviceProgram&,TaskServices&,WeightedFlowNode&,const std::string& read_mode,
   const at::Tensor& error,const WeightedFlowBudget&);
 void append_weighted_node_full(TaskServices&,WeightedFlowNode&,const at::Tensor& error,const WeightedFlowBudget&);
+at::Tensor append_weighted_payload(DeviceProgram&,const at::Tensor& control,const at::Tensor& full,
+  const at::Tensor& active,at::ScalarType storage,const at::Tensor& error);
 void append_weighted_region_local(DeviceProgram&,TaskServices&,WeightedFlowRegion&,const WeightedFlowNodes&,
   const at::Tensor& error,const WeightedFlowBudget&);
 // A bounded window journal, independent of reclaimable queue capacity. The
