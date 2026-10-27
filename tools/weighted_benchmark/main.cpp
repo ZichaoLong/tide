@@ -1,6 +1,7 @@
 // Standalone LibTorch timing. Python is an optional static-fixture author,
 // never a runtime scheduler, loss callback or source of selected actions.
 #include "benchmark.h"
+#include "observation.h"
 #include "tide/greedy.h"
 #include "tide/stream.h"
 #include "tide/optimizer.h"
@@ -11,7 +12,6 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <sys/resource.h>
 namespace {
 using namespace weighted_benchmark;
 struct Eager {
@@ -41,7 +41,7 @@ struct Eager {
 };
 }
 int main(int argc,char** argv){
-  portable_torch::RuntimeSession runtime;Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
+  Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
   try{
     std::string input,device,implementation="native",mode="training",schedule="prefill";Index steps=3;
     for(int i=1;i<argc;++i){std::string key=argv[i];if(key=="--help"){
@@ -55,17 +55,26 @@ int main(int argc,char** argv){
         ||(mode!="inference"&&mode!="training")||(schedule!="streaming"&&schedule!="prefill"))throw std::invalid_argument("invalid bounded benchmark request");
     if(implementation=="native"&&device!="cpu")throw std::invalid_argument("standalone eager measurement requires explicit CPU; resident measures accelerator");
     if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
-    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=at::kFloat;
-    const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(1);at::set_num_interop_threads(1);
-    std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");const Json data=Json::parse(file);
+    input=std::filesystem::absolute(input);output=std::filesystem::absolute(output);
     if(!std::filesystem::create_directory(output))throw std::invalid_argument("benchmark output directory must be new");
     created=true;
-    report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v1"},{"fixture_sha256",data.at("fixture_sha256")},
-      {"config",data.at("config")},{"device",device},{"backend",portable_torch::compiled_backend()},{"dtype","float32"},
+    std::filesystem::current_path(output);
+    auto runtime_start=tide_bench::Clock::now();portable_torch::RuntimeSession runtime;
+    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=at::kFloat;
+    const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(1);at::set_num_interop_threads(1);
+    runtime_probe(target);const auto runtime_seconds=tide_bench::seconds(runtime_start);
+    report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v1"},
+      {"device",device},{"backend",portable_torch::compiled_backend()},{"dtype","float32"},
+      {"runtime_initialization_seconds",runtime_seconds},
       {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
       {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
       {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export"},
       {"metrics",Json::array()}};write(output/"result.json",report);
+    capture_memory(report,target,"runtime_ready",true);
+    auto fixture_start=tide_bench::Clock::now();
+    std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");const Json data=Json::parse(file);
+    report["fixture_sha256"]=data.at("fixture_sha256");report["config"]=data.at("config");
+    report["fixture_preparation_seconds"]=tide_bench::seconds(fixture_start);
     std::unique_ptr<Eager> eager;std::unique_ptr<Resident> remote;
     const bool training=mode=="training",prefill=schedule=="prefill";auto start=tide_bench::Clock::now();
     if(implementation=="native")eager=std::make_unique<Eager>(data,training,prefill);
@@ -77,15 +86,17 @@ int main(int argc,char** argv){
 #endif
     }
     portable_torch::synchronize(target);report["construction_seconds"]=tide_bench::seconds(start);
+    capture_memory(report,target,"construction",true);
     std::vector<Step> actual;auto execute=[&](Index i){return eager?eager->step(i):remote->step(i);};
     start=tide_bench::Clock::now();actual.push_back(execute(0));portable_torch::synchronize(target);report["warmup_seconds"]=tide_bench::seconds(start);
+    capture_memory(report,target,"warmup",true);
     for(Index step=1;step<=steps;++step){portable_torch::synchronize(target);start=tide_bench::Clock::now();actual.push_back(execute(step));
       portable_torch::synchronize(target);const auto seconds=tide_bench::seconds(start);
       auto event=work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
       report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
     }
-    const auto parameters=eager?eager->parameters():remote->parameters();rusage usage{};getrusage(RUSAGE_SELF,&usage);
-    report["process_lifetime_peak_rss_bytes"]=int64_t(usage.ru_maxrss)*1024;
+    capture_memory(report,target,"measurement");
+    const auto parameters=eager?eager->parameters():remote->parameters();
     // A separate scalar schedule runs only after timing and never guides the candidate.
     Eager reference(data,training,!prefill,true);
     for(Index i=0;i<=steps;++i){const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,at::kFloat);

@@ -76,3 +76,24 @@ NEW_BUILD/client/weighted-benchmark --fixture NEW_FIXTURE_JSON --device cpu \
 C++计时后使用另一个独立scalar调度核对全部记录、loss及最终SGD参数，局部函数锚点沿语义索引追溯。
 训练计时包含新建独立输入、完整CPU返回、loss、VJP、finite checks、SGD和同步；
 结果文件采用fsynced staging及原子替换，存在的运行目录直接拒绝。
+
+## 启动与内存观测
+
+`scripts/measure_weighted_process.py --output-dir NEW_OBSERVATION --timeout-seconds 180 -- COMMAND...`
+在新进程外部观测启动到`TIDE_WEIGHTED_RUNTIME_READY_V1`的时间。两个消费者在校验/加载
+所请求库、完成首个1×1设备矩阵乘法及同步之后、fixture构造之前发出该标记。
+该值包含exec、动态loader/Python导入、参数/源码检查和管道送达成本；是新进程启动，
+没有清空OS文件缓存，不声称隔离测出了loader耗时。标记之后还必须正常结束，缺失、
+重复标记、超时或非零退出均失败。外部总进程时间包含事后独立正确性对照，不是吞吐时间。
+`runtime_initialization_seconds`仅计程序内显式运行时/库校验及首个算子，
+不含main之前的C++动态链接或Python最初导入。两种语言的初始化分界不同，需分别解释。
+fixture准备、owner构造与warmup各自单列；Python fixture准备还包含独立参考的静态绑定。
+
+`weighted_benchmark_observation.py::Memory`与C++`observation.cpp::capture_memory`
+记录runtime_ready、construction、warmup、measurement四个边界，前三个边界读取后重置
+设备峰值。measurement峰值包含整个测量窗组，排除最后参数导出及事后参考；每个阶段
+峰值仍包含此前保留的活动分配。采样在单步计时之外，当前/峰值allocated/reserved都保留。
+CPU仅记录进程生命周期RSS峰值，不能从差值恢复每阶段真实峰值。设备分配器不包括所有
+厂商/驱动分配，也不替代驱动空闲内存或容量准入。观测失效明确失败，不把缺失指标写为零。
+`test_weighted_process_observation.py`验证真实子进程成功、缺失/重复标记、非零退出及超时记录；
+设备计数器与实际完整训练分别用固定源码的有限补充测量验证。
