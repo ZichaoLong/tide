@@ -1,0 +1,99 @@
+{
+  "source": "ce21a8359146854696af786379b48367756fd456",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Installed weighted node/region binding inspection; no tensor evaluation or inference from shapes/profile names",
+  "job": "core5-weighted-binding-qualify",
+  "unit": "tide-core5-weighted-binding-qualify-20261028.service",
+  "state": "passed",
+  "clean": true,
+  "exit_code": 0,
+  "started": "2026-10-27T16:52:38.077492+00:00",
+  "finished": "2026-10-27T16:53:06.025442+00:00",
+  "cpu_tests": 45,
+  "cpu_seconds": 21.78,
+  "cpp_kernel_dtypes": [
+    "float64",
+    "float32"
+  ],
+  "log_sha256": "a0439c3fded9a655d0e4dc2e150eb1de9efa87fe070f0baba50d4a481a700014",
+  "build": {
+    "source": "6e2ecb7f169cd1f7f1040258027d882a532e72f5",
+    "cpp_source_sha256": "8129407ee77d7d859a3279b762261343d126767638f27ed3eb68c8f6fca2af29",
+    "torch": "2.12.0+cpu",
+    "backend": "cpu",
+    "architecture": "aarch64",
+    "python": "3.12.13",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "9aa602f079704f2bff9fca6dfcfac05f4abbcb2ab95cd616e6fb38456dccd6d7",
+      "libtidegraph_runtime.a": "5136edb94e2ccc77cc7fd170b0df89f92185e4f5c07ba2cda309d5199fec5cf6",
+      "_tide_native.so": "6ab271febaa15cf5f58b2006652be084b26ac3f33b0ac3aa4b07fef0e80bea76",
+      "tidegraph-smoke": "962aa30eb31657ad422811555fdc281a0c31b8dca0957424c60ca400f497bdac",
+      "tidegraph-kernel-check": "d47641e3cbbb251e0147cc04bb65324dda60c0660db26cfc9ac13748fbc5f4a7",
+      "tidegraph-full-check": "196b5c00cc4ddce9f871f40d099bdebc3afcc9b88090675fac223dcd088dab2e",
+      "tidegraph-aggregate-check": "7c81dc0e9ff8d0a5894000d87be1f172086e52cd8fbe1eacd3c06614ffccfac2",
+      "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+      "tidegraph-checkpoint-check": "90451a028bd3cacd7ad6d322ae074cd57e755caf005ec30eaf928249d8e810e8",
+      "tidegraph-weighted-training-check": "befc1044bfd49554f7bf1968fdd233b12e61088d8057891f6fcc14749c88aca7",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "0b7072ff0faee77b4d642e1dc7ed37b05b0d65c3673e579ca348960297e34790",
+      "tidegraph-scale-bench": "e344808fc7c3590fc5a1fd8907484ba4b7d3dea8fb4429ba02952323a625f7b5",
+      "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+      "tidegraph-settle-check": "a60d52f7ef0caea88130c4cf92f17cd991df2f501707dff3e5d289f811c71d72",
+      "tidegraph-greedy-check": "78d7e8bb2dd0c0fafbdbd4407c138fd1de67075bc848ca90fc897eef576e334b",
+      "tidegraph-accelerator-check": "5c09f90ad1fd0c8a2a8c29d3fd2c3278d1b2363c7a17f85dc3841ab998d62629",
+      "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+      "tidegraph-read-precision-check": "1422b0fa409791030c1c7ec4129fd628861c7eadb3adbfa43ab8d4934e4651d2",
+      "tidegraph-placement-check": "6ff0422a7936c680fef6e1e51f819d678cafdbf1103c8874c2559d7432c4339d",
+      "tidegraph-payload-ownership-check": "a05e459804f101f8b402f6705c77dd9136a648ba5a67a2b1e71424185ed1b9e6"
+    }
+  },
+  "reuse_note": "Original development manifest retained; develop.py --reuse-build verified complete C++ source and binary hashes against clean fixed ce21a83. Manifest source is the earlier dirty development base.",
+  "commands": [
+    [
+      "python",
+      "scripts/develop.py",
+      "--reuse-build",
+      "--output-dir",
+      "NEW",
+      "--build-dir",
+      "CPU_BUILD",
+      "--jobs",
+      "2",
+      "tests/test_weighted_binding_inspection.py",
+      "tests/test_weighted_native.py"
+    ],
+    [
+      "CPU_BUILD/tidegraph-kernel-check",
+      "--dtype=float64"
+    ],
+    [
+      "CPU_BUILD/tidegraph-kernel-check",
+      "--dtype=float32"
+    ]
+  ],
+  "development": {
+    "job": "core5-weighted-binding-dev2",
+    "tree": "9744c93eaa3ee37f9738a8ddccfe88fda0c63842",
+    "state": "passed",
+    "tests": 45,
+    "seconds": 22.87
+  },
+  "preserved_failure": {
+    "job": "core5-weighted-binding-dev",
+    "state": "failed",
+    "exit_code": 1,
+    "scope": "Launcher only; output directory already existed; no build/tests started"
+  },
+  "limits": {
+    "seconds": 300,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "not_certified": [
+    "Complete weighted resident graph",
+    "Resident training or checkpoint",
+    "Device hardware or performance"
+  ]
+}

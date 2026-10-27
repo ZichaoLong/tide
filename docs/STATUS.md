@@ -44,11 +44,10 @@ NPU复用dev5原manifest、全部component/core/binary摘要一致；CUDA独立�
 core5-weighted-binding-dev2，tree9744c93eaa3ee37f9738a8ddccfe88fda0c63842，Python/native45项/22.87秒，C++kernel FP64/FP32均通过。
 unit tide-core5-weighted-binding-dev2-20261028.service inactive/success/exit0。
 原dev仅launcher失败（预建目录与job.py排他创建冲突），构建未启动；原failed记录保留。
-当前提交该接口后以固定提交资格：tide-core5-weighted-binding-qualify-20261028.service，
-冻结artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-weighted-binding-qualify/；
-launcher .local/core5-weighted-binding-qualify{,-workload}.sh，复用开发库并检查全部C++源码/二进制摘要，
-同45项及两种dtype C++检查；300秒/BLAS1/background.slice/Nice10。正式结果未知。
-下一命令：检查status.json/task.log/development.json与unit；通过后证据独立提交推送，继续完整图。
+配置接口 ce21a8359146854696af786379b48367756fd456 固定资格已通过：45项/21.78秒及C++ FP64/FP32。
+unit tide-core5-weighted-binding-qualify-20261028.service inactive/success/exit0；冻结checkout clean。
+证据 evidence/core5-weighted-binding-20261028.{md,json}；原开发manifest与全部source/binary摘要一致。
+下一动作：配置证据单独提交推送，再检查下述完整图开发任务；不将未测试图增量混入证据提交。
 
 完整图增量尚未通过设备验证：tools/device_online/weighted_flow*、三个metadata kernel、CMake/检查注册、
 测试test_resident_weighted_flow_packing.py、公共C++/Python入口和契约resident-weighted-flow.md。CPU metadata5项/0.81秒通过。
