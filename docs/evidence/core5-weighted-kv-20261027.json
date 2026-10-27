@@ -1,0 +1,29 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "011d1ef2d5e302a99976a77c10d1cd0266387283b89702fe248cf6aac6210830",
+  "source": "6fb467c25755a2b3f8938952f1b2ec1011cbcd11",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted weighted KV binding and exact quad VJP CPU qualification",
+  "result": {
+    "passed": 129,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "4a3190af4d2b58e7da5c01153f753927148de2c1f3edd69669ab3b037e4ad636",
+  "binary_sha256": {
+    "libtidegraph.a": "a1c49a5dcfc3746e2db84b894d19f6fe759948d6b5e3ffda5b3c760f024f3e7f",
+    "_tide_native.so": "ac230e12d061c5c483cfdb6fbe840666f1a4145ad9b90731cb0935e3c229f9bb",
+    "tidegraph-kernel-check": "730085ba35bf051cfc8ccf0e674e58570e91f1cbf6cd708823219f8bd5f9c891"
+  },
+  "log_sha256": "4269767f7539c535a4cc9899c691bad205a81a43aa112fe8fa8b1613454aa8e1",
+  "started": "2026-10-27T05:24:36.072707+00:00",
+  "finished": "2026-10-27T05:25:27.472911+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-weighted-kv-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-weighted-kv-qualify",
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not the qualification source identity."
+}
