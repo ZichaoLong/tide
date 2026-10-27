@@ -32,10 +32,21 @@ CUDA开发core5-weighted-flow-cuda-dev2已inactive/success/exit0；冻结tree9f0
 三架构所有CUDA编译命令集合精确80/90/100，完整图/services/config及安装consumer构建/loader通过；无真机。
 输出artifacts/jobs/core5-weighted-flow-cuda-dev2/；checkout artifacts/worktrees/core5-cuda目前无活动reader。
 旧cuda-dev tree78b86b672ce185f0341ae4cbbb2baaab1c00a5cf failed：Torch隐式加sm50，peer __nanosleep编译失败。
-主工作区CUDA架构修复与8项CMake策略检查将单独提交；固定源码资格随后运行。
-回归初版用pytest保留参数名request导致收集错误，已改名；不涉及设备运行。
-下一动作：固定构建修复提交，冻结core5-cuda，运行架构8项检查/构建/DSO/安装loader。
-按源码摘要与Ninja命令依赖复用已构建对象；无需重跑无关NPU数值。
+CUDA修复8eebceccc8e209a6f5f08caf4d262a4e388d280b固定资格通过：架构8项/.12秒、DSO、完整图/services/config三架构构建与安装loader。
+证据evidence/core5-weighted-flow-cuda-20261028.{md,json}；unit tide-core5-weighted-flow-cuda-qualify-20261028.service inactive/success/exit0。
+源码clean 8eebcec，检查159个配置CUDA编译命令仅80/90/100；实际所选目标构建，无GPU真机。
+输出artifacts/jobs/core5-weighted-flow-cuda-qualify/；checkout artifacts/worktrees/core5-cuda无活动reader。
+实现和本次证据待正常推送；不重跑无关NPU数值。
+完整数值阶段VJP开发已写入主工作区：weighted_flow_{adjoint,node_vjp,region_vjp}与阶段检查，
+复用forward局部绑定、独立raw/Describe/Content/control/Full根、角色切片/canonical共享参数；尚未构建/实机验收。
+任务core5-weighted-stage-dev正在构建，active/running：
+- unit tide-core5-weighted-stage-dev-20261028.service；冻结artifacts/worktrees/core5-sdk（tree1e3813f8d1d9ca6fae998ee6ea565d55a6022b9d，已归档source.tree/source.tar），不得编辑。
+- 输出artifacts/jobs/core5-weighted-stage-dev/；launcher .local/core5-weighted-stage-dev{,-workload}.sh。
+- 1800秒、2workers、BLAS1、background.slice/Nice10；queue180秒、阶段检查600秒；重编整个flow及新check，
+  新参数归约kernel按需构建，其余逐源码/二进制比对已有dev9和manifest。
+- 15个五记忆×三Read数值阶段配置/各独立根与完整forward回归；结果未知。
+检查`systemctl --user show tide-core5-weighted-stage-dev-20261028.service -p ActiveState -p Result -p ExecMainStatus`及status/task.log/checks。
+停止`systemctl --user stop tide-core5-weighted-stage-dev-20261028.service`。
 继续完整retained VJP/optimizer和精确训练恢复：反向读取候选实际device journal，链接消息生产者/状态前驱，
 复用已验局部VJP并汇总canonical参数；不得CPU参考重放或主机逐事件推进冒充resident。
 随后FP16/peer、有限profiling与代表性完整成本选型、最终追溯；不做全部开关笛卡尔积。

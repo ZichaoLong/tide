@@ -1,0 +1,104 @@
+{
+  "component": "complete weighted resident CUDA build and installation",
+  "source": "8eebceccc8e209a6f5f08caf4d262a4e388d280b",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "job": {
+    "name": "core5-weighted-flow-cuda-qualify",
+    "unit": "tide-core5-weighted-flow-cuda-qualify-20261028.service",
+    "state": "passed",
+    "exit_code": 0,
+    "started": "2026-10-27T17:49:16.284186+00:00",
+    "finished": "2026-10-27T17:53:07.017945+00:00",
+    "clean": true,
+    "log_sha256": "58092c0cfe4f53d8c2bdebda3e012bf51dbcf4d98face5025f6f8e372cfedd36"
+  },
+  "build": {
+    "source": "8eebceccc8e209a6f5f08caf4d262a4e388d280b",
+    "component_sha256": "b9023ab467e4f56a53ca9a6953b03695a6b6b835747c63dabf7358d344104eb2",
+    "backend": "cuda",
+    "runtime": "standalone",
+    "cuda_architectures": "80;90;100",
+    "effective_cuda_architectures": [
+      "80",
+      "90",
+      "100"
+    ],
+    "cuda_translation_units": 159,
+    "binary_sha256": {
+      "tide-device-services-check": "ba7f83c24653da8db781ca0035b27d36bcd4a5e5872cb18b6ac496f41eb2023d",
+      "tide-weighted-flow-check": "25a313d323bc47816252f6c6f0016f7647bd40255665347a8be06da9617302eb",
+      "tide-weighted-flow-config-check": "adbb8e884b55e409c200848c9354893e5e33cb99e9e14f67e15684f6b09cfe35",
+      "libtide-weighted-flow.so": "f48b0648bb0e805931bd39315bf5b78274123caf1b0746ac1fe7078c60a1d7ac"
+    },
+    "loader_sha256": {
+      "tide-device-services-check": "fcc7b8ae5e7db315bf6270b424f90e3eb3dcb5afc422605cc529fb030a8a70a1",
+      "tide-weighted-flow-check": "8bdaa473a7e7414dcd8cc5695052a89e4493f1e5c33cfe193119e6aa88b726c7",
+      "tide-weighted-flow-config-check": "ae041bdfc51350b088c59d2be90067ea29056f0ee4353236b1b5e2d26ae0aa6c",
+      "libtide-weighted-flow.so": "a43fd3f836f9aa94afef5fa0536006a74c1ccb38c2dad1d6c38ad9906d587a89"
+    }
+  },
+  "core": {
+    "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+    "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+    "torch": "2.10.0+cu128",
+    "python": "3.11.15",
+    "architecture": "aarch64",
+    "backend": "cuda",
+    "cxx11_abi": true
+  },
+  "installed_consumer": {
+    "source": "8eebceccc8e209a6f5f08caf4d262a4e388d280b",
+    "state": "passed",
+    "component": "weighted",
+    "binary_sha256": "e28029dd2f6251d5d3fba3450bffc9cb42956b06fe976ffac36df78f93eff518",
+    "loader_sha256": "c62ce2d367cae9d4f3e8c90c883cd6fd1dce6902cdc1b0cb4fbe74084b1dc88f",
+    "consumer_sources": {
+      "CMakeLists.txt": "94b341cb9a486f0a6b9469d078bc738faea5669600c82725466d17f5a77d3560",
+      "main.cpp": "d49ee630d0203e7cc242206667e312fa3b0432f2cb83c6f8ebb6594d6c240b1a"
+    }
+  },
+  "checks": {
+    "architecture_policy_tests": 8,
+    "seconds": 0.12,
+    "cross_dso_ctest": "passed",
+    "compiled_targets": [
+      "tide-device-services-check",
+      "tide-weighted-flow-check",
+      "tide-weighted-flow-config-check",
+      "libtide-weighted-flow.so",
+      "installed weighted-resident-consumer"
+    ],
+    "compile_command_scope": "159 configured CUDA translation-unit commands inspected; the listed selected targets were built. Every command requested only sm/compute 80,90,100.",
+    "loader": "standalone closure checked; no libtorch_python/libpython/stubs or missing dependencies"
+  },
+  "development": {
+    "job": "core5-weighted-flow-cuda-dev2",
+    "tree": "9f02feaa11168e4473270f30d8efbc2c2032ec2f",
+    "state": "passed"
+  },
+  "previous_failure": {
+    "job": "core5-weighted-flow-cuda-dev",
+    "tree": "78b86b672ce185f0341ae4cbbb2baaab1c00a5cf",
+    "state": "failed",
+    "cause": "Torch legacy FindCUDA added sm50; __nanosleep unavailable in peer kernel"
+  },
+  "commands": [
+    "python -m pytest -q tests/test_resident_cuda_architectures.py",
+    "ctest --test-dir CUDA_CORE -R ^weighted-binding-module$ --output-on-failure",
+    "python scripts/build_device_control.py --core-build CUDA_CORE --build-dir NEW_BUILD --checks services weighted-flow weighted-flow-config --runtime standalone --cuda-architectures 80;90;100 --jobs 2",
+    "python scripts/build_resident_consumer.py --core-build CUDA_CORE --resident-build NEW_BUILD --output-dir NEW_CONSUMER --component weighted"
+  ],
+  "limits": {
+    "seconds": 600,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "unverified": [
+    "CUDA actual-device execution",
+    "CUDA complete training and restoration",
+    "CUDA peer and performance"
+  ]
+}

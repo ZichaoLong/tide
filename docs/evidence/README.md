@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+- [Core-5 完整 weighted 常驻 CUDA 构建](core5-weighted-flow-cuda-20261028.md)：8eebcec；显式sm80/90/100、架构8项、DSO及安装loader通过；无GPU真机。
+
 - [Core-5 完整 weighted 常驻推理](core5-resident-weighted-flow-20261028.md)：5efce32；CPU50、standalone NPU21图/15配置、Python-owned23项、安装消费者与精确续接。训练另验收。
 
 - [Core-5 常驻批量head资格](core5-resident-head-20261027.md)：161ccea；CPU8/NPU完整共享VJP与实际版本，CUDA三架构构建。
