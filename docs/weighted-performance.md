@@ -46,3 +46,25 @@ python scripts/benchmark_weighted.py --device npu:0 --implementation resident \
 用于判断实际算子、copy和host scalar成本，其带profiling开销的执行不作为吞吐样本。
 `--allow-dirty`只供入口开发检查，输出保留完整dirty清单，不作固定源码资格或选型证据。
 没有CUDA真机时只记录待验，不运行CPU代替CUDA结果。
+
+独立LibTorch入口在`tools/weighted_benchmark`。静态fixture由
+`export_weighted_benchmark.py`导出实际参数TensorImpl别名、完整图/端口、配置与输入；
+它不执行图，不包含路由或作用序列。C++解码重新核对完整图identity，安装公共数学函数，
+候选使用自己的Streaming/Greedy或resident程序；运行时不链接Python。
+同一fixture hash用于Python/standalone对照，工具链版本与接口成本仍需分别解释。
+这一有限benchmark数据格式不代替通用图序列化或checkpoint。
+
+```sh
+python scripts/export_weighted_benchmark.py --native-library CPU_CORE \
+  --topology dag --family kv --size small --output NEW_FIXTURE_JSON
+python scripts/build_weighted_benchmark.py --core-build CORE --output-dir NEW_BUILD
+NEW_BUILD/client/weighted-benchmark --fixture NEW_FIXTURE_JSON --device cpu \
+  --implementation native --schedule prefill --mode training --output-dir NEW_RUN
+```
+
+常驻standalone构建另给`--resident-build STANDALONE_RESIDENT`，运行显式指定
+`--device npu:0 --implementation resident`。构建器校验core/backend与源码、binary hash、
+无Python依赖的loader和help；这些检查本身没有真机或性能结论。
+C++计时后使用另一个独立scalar调度核对全部记录、loss及最终SGD参数，局部函数锚点沿语义索引追溯。
+训练计时包含新建独立输入、完整CPU返回、loss、VJP、finite checks、SGD和同步；
+结果文件采用fsynced staging及原子替换，存在的运行目录直接拒绝。
