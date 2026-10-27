@@ -77,6 +77,11 @@ finite serial measurement budget. No GPU timing is accepted on this CPU/NPU host
 
 ## Runtime control
 
+For bounded NPU failure diagnosis, `TIDE_CANN_TRACE_OPS=1` records each ACLNN
+submission's stream, last task ID and workspace, plus IndexCopy shapes/dtype.
+This is a construction trace, not a device execution timeline or performance
+measurement. It reads no numerical tensors and does not select the event sequence.
+
 `DeviceProgram` binds a persistent stream to an explicit runtime model. Device
 int32 indices choose labels; raw ACLNN tasks can perform packed FP32/FP16
 arithmetic inside bounded device loops. One global target list is created before task emission, as CANN requires.

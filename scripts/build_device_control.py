@@ -106,6 +106,8 @@ def main():
     # independent public library. Its identity is part of the build evidence.
     if (build / "libtide-weighted-flow.so").is_file():
         names.append("libtide-weighted-flow.so")
+    if (build / "libtide-weighted-training.so").is_file():
+        names.append("libtide-weighted-training.so")
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)

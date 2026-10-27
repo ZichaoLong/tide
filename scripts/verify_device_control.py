@@ -36,10 +36,11 @@ def main():
         name, _ = CHECKS[check]
         if not (build / name).is_file() or digest(build / name) != manifest["binary_sha256"].get(name):
             parser.error("component unavailable or changed: " + name)
-    if "libtide-weighted-flow.so" in manifest["binary_sha256"]:
-        library=build / "libtide-weighted-flow.so"
-        if not library.is_file() or digest(library)!=manifest["binary_sha256"][library.name]:
-            parser.error("weighted resident library changed")
+    for name in ("libtide-weighted-flow.so", "libtide-weighted-training.so"):
+        if name in manifest["binary_sha256"]:
+            library=build / name
+            if not library.is_file() or digest(library)!=manifest["binary_sha256"][name]:
+                parser.error("weighted resident library changed: " + name)
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
@@ -52,6 +53,8 @@ def main():
             name, dtypes = CHECKS[check]
             for dtype in dtypes:
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
+                if check == "weighted-saved-window":
+                    command.append("--saved-window")
                 if check == "full-training":
                     command.append("--control-check=" + args.full_training_control_check)
                 if check in ("precision-control-flow", "peer-control-flow", "peer-shard-control-flow", "peer-state-control-flow"):
@@ -81,7 +84,7 @@ def main():
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=600 if check == "weighted-stage" else 360 if check in ("weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                                            timeout=600 if check in ("weighted-stage", "weighted-training") else 360 if check in ("weighted-retained", "weighted-saved-window", "weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

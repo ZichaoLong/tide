@@ -65,6 +65,8 @@ class WeightedWindowJournal {
   const at::Tensor& boundary(const std::string& name)const{return boundary_.at(name);}
   at::Tensor load(DeviceProgram&,const at::Tensor& stage,const std::string&)const;
   std::map<std::string,at::Tensor> decode(int64_t stages)const;
+  std::shared_ptr<WeightedWindowJournal> retain(int64_t byte_budget)const;
+  std::vector<at::Tensor> tensors()const;
   int64_t allocated_bytes()const{return allocated_;}
  private:
   int64_t stages_,remaining_,allocated_=0;
@@ -82,6 +84,7 @@ struct WeightedFlow::Impl {
   bool failed=false,ran=false;int64_t bytes=0,journal_bytes=0,generation=0;
   Impl(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits);
   void construct();
+  void execute(const std::vector<External>&,Index until);
   int64_t remaining(DeviceProgram&)const;
   void append_nodes(DeviceProgram&,const ReadyBatch&);
   void append_regions(DeviceProgram&);

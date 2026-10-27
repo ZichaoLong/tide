@@ -22,6 +22,8 @@ def load_resident(location, core, *, component="resident"):
         raise ValueError("resident backend requires the exact native core recorded by its build")
     libraries=([module_name+".so", "libtide-weighted-flow.so"] if component=="weighted" else
                [module_name+".so", "libtide-resident.so"])
+    if component=="weighted" and "libtide-weighted-training.so" in record["binary_sha256"]:
+        libraries.append("libtide-weighted-training.so")
     for name in libraries:
         if hashlib.sha256((build / name).read_bytes()).hexdigest() != record["binary_sha256"].get(name):
             raise ValueError("resident binary differs from its build manifest")

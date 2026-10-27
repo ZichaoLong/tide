@@ -9,9 +9,11 @@ __aicore__ inline void bind(__gm__ I* owners,__gm__ float* input,__gm__ float* o
 }
 __aicore__ inline void accumulate(__gm__ I* owners,__gm__ float* input,__gm__ uint8_t* roots,
     __gm__ float* output,__gm__ uint8_t* connected,__gm__ int32_t* error,I rows,I width){
-  if(error[0])return;for(I r=0;r<rows;++r){if(owners[r]<0||!roots[r])continue;connected[r]=1;
-    for(I j=0;j<width;++j){const I i=r*width+j;const float x=input[i],sum=output[i]+x;
-      if(!finite(x)||!finite(sum)){error[0]=37;return;}output[i]=sum;}}
+  if(error[0])return;for(I r=0;r<rows;++r){if(owners[r]<0||!roots[r])continue;const bool prior=connected[r];
+    // A disconnected destination may contain poison. Its numerical storage is
+    // not a contribution until a connected root initializes this row.
+    for(I j=0;j<width;++j){const I i=r*width+j;const float x=input[i],sum=(prior?output[i]:0.f)+x;
+      if(!finite(x)||!finite(sum)){error[0]=37;return;}output[i]=sum;}connected[r]=1;}
 }
 __aicore__ inline void derivative(__gm__ float* input,__gm__ float* value,__gm__ float* gradient,
     __gm__ uint8_t* roots,__gm__ float* output,__gm__ int32_t* error,I rows,I width,I mode,float scalar){
