@@ -26,33 +26,27 @@
 
 | 503f609 | 来源绑定/类别宽度、稳定 Attention/RMS VJP | 665 | [报告](evidence/core5-source-20261027.md) |
 
+| 52dee1e | Aggregate 精确计算复用 | 543 | [报告](evidence/core5-sharing-20261027.md) |
+
 ## 当前任务与精确下一动作
 
-来源实现 503f6092d35dc57f2052c598e15073fde65e834b 的固定资格已完成：
-unit tide-core5-source-qualify-20261027，inactive/success、exit 0，665 passed / 0 failed / 0 skipped。
-只读 worktree artifacts/worktrees/core5-bootstrap 干净，tree 3146f4c20c11d5c57edc6b213b956bdd83e91207；
-输出 artifacts/jobs/core5-source-qualify，build manifest 已独立保存。
-完整命令与日志 hash 见证据，launcher .local/core5-source-qualify.sh。来源资格没有活动进程。
-本次证据单独提交并推送；不混入主工作区的下一增量。
-
-Aggregate 计算复用开发已完成：tide-core5-sharing-dev-20261027，inactive/success、exit 0，
-543 passed / 0 failed / 0 skipped；源码 tree ae014cf867a308a1aa87c5d9527f4a62c9bdcd91。
-输出 artifacts/jobs/core5-sharing-dev，build manifest 已保存；launcher .local/core5-sharing-dev.sh。
-包含 Python/native 相同输入/参数复用、物理来源、独立根、AdamW/pending 恢复与 standalone，
-以及相关来源、Aggregate、图和调度回归。准备从此已测试 tree 提交实现。
-
-下一步以该实现提交显式冻结，启动 tide-core5-sharing-qualify-20261027；
-launcher .local/core5-sharing-qualify.sh，输出 artifacts/jobs/core5-sharing-qualify。
-采用 --reuse-build 校验 C++ 源码与全部二进制 hash，范围与开发相同；
-独立 background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
-检查 `systemctl --user show tide-core5-sharing-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`、
-`cat artifacts/jobs/core5-sharing-qualify/status.json` 与 `tail -n 30 artifacts/jobs/core5-sharing-qualify/task.log`。
-当前尚未启动此资格，不可标为通过；通过后另提交证据并推送。
+Aggregate 复用实现 52dee1e5da119851e97fc302f71a52098aef270d 的固定资格已完成：
+unit tide-core5-sharing-qualify-20261027，inactive/success、exit 0，543 passed / 0 failed / 0 skipped。
+只读 worktree artifacts/worktrees/core5-bootstrap 干净，tree 8bcfe5d0485b7dae63e556f9e93408f345e69c39；
+输出 artifacts/jobs/core5-sharing-qualify，build manifest 已独立保存；launcher .local/core5-sharing-qualify.sh。
+本次证据单独提交推送，不混入后续 KV 实现。当前没有活动任务。
 
 主工作区另有下一增量：KV 基座投影复用，经显式 State preparation 能力接入，
 保留节点适配器、summary、私有状态及所有使用者贡献；不属于上述 Aggregate tree。
 新 state_preparation/weighted.kv_projection 与 packed/State VJP 已接入 Python/C++；
-6 项 Python 手算/完整根/保留图检查通过，C++ 尚未构建；训练/恢复后续开发门禁补验。
+14 项 Python 手算/完整根/保留图/streaming/frontier/大 int64/原位及一阶检查通过；
+C++ 尚未构建，训练/恢复仍待后续开发门禁。
+下一步用 .local/freeze-core5.py tide-core5-sharing-qualify-20261027 冻结当前增量，
+再用 .local/core5-kv-sharing-dev.sh 启动
+tide-core5-kv-sharing-dev-20261027，输出 artifacts/jobs/core5-kv-sharing-dev，
+2 build workers、单线程 ATen/BLAS、1800 秒上限（核心头文件触发完整重编译）；先记录冻结 tree。
+检查 `systemctl --user show tide-core5-kv-sharing-dev-20261027 -p ActiveState -p Result -p ExecMainStatus`、
+`cat artifacts/jobs/core5-kv-sharing-dev/status.json` 和 `tail -n 40 artifacts/jobs/core5-kv-sharing-dev/task.log`。
 一次新续接测试误将中间状态 objective 计入整段目标，2 项失败；改为完整末态和拼接输出后通过，
 实现未因此改变。所有未提交修改均为本任务所作。
 随后继续 mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/续接、

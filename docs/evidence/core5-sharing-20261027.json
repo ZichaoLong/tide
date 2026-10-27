@@ -1,0 +1,57 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "2b388e6a4512471bc77b9a9ba6e75e04582e3872f2182f0b58c16a22f630af24",
+  "source": "52dee1e5da119851e97fc302f71a52098aef270d",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "exact Aggregate computation sharing with physical-source decoding, independent roots, training and continuation; CPU FP64/FP32",
+  "result": {
+    "passed": 543,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "c20c363e09afa03dd253eba0975354ddec9089c3532149805a2b8e87f5d75613",
+  "git_tree": "8bcfe5d0485b7dae63e556f9e93408f345e69c39",
+  "binary_sha256": {
+    "libtidegraph.a": "b03e4046d0f3c45357698300578d48e7a43c6cb4073a694526a6d64222ff5359",
+    "_tide_native.so": "c86d011d50610dedb8e2cf40bbf783fc2490b3ed3d9992be5337bf4f392f4145",
+    "tidegraph-kernel-check": "45da6d465cfcf94d12977160eab2f6319ec96444eefe290f394d49e9cc8f79a7"
+  },
+  "log_sha256": "0926f80afda3da50589f93c4e2d406ebd82b8da1b89ccba51cce15de56e239c7",
+  "started": "2026-10-27T09:56:24.153613+00:00",
+  "finished": "2026-10-27T10:00:47.338053+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-sharing-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-sharing-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_compute_sharing.py",
+      "tests/test_weighted_instances.py",
+      "tests/test_weighted_source_binding.py",
+      "tests/test_weighted_source_execution.py",
+      "tests/test_weighted_source_training.py",
+      "tests/test_weighted_aggregate_batch.py",
+      "tests/test_weighted_aggregate_vjp.py",
+      "tests/test_weighted_aggregate_training.py",
+      "tests/test_weighted_execution.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_packed.py",
+      "tests/test_aggregate_schedules.py",
+      "tests/test_greedy.py",
+      "tests/test_cpp_greedy.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-sharing-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
