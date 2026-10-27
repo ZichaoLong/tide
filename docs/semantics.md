@@ -97,8 +97,9 @@ Its saved first-order VJP distinguishes absent fiber roots from connected zeros
 and the zero-total mass-only branch. Effective parameter banks do not imply
 completion of their outer low-rank/alias mapping or full graph lifecycle.
 The [source adaptation component](resident-weighted-source.md) separately chains
-effective matrix adjoints into bases and four saved low-rank factors. Canonical
-alias reduction and the full graph owner remain separate integration layers.
+effective matrix adjoints into bases and four saved low-rank factors. The [canonical role reducer](resident-weighted-parameters.md) separately maps
+actual module partials to ParameterRegistry owners for device optimization and
+publication. Full graph and retained training owners remain separate layers.
 
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or

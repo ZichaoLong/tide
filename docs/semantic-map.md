@@ -12,6 +12,8 @@
 
 [常驻来源低秩链](resident-weighted-source.md)对应有效A/B与真实基座/因子的一阶VJP及实际保存版本。
 
+[常驻canonical参数归约](resident-weighted-parameters.md)汇总所有模块/角色实际别名根并连接设备optimizer/发布。
+
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。
 [semantics](semantics.md) 拥有本地公式、精度、梯度和序列化版本。
