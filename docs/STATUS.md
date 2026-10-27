@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`（core-5及带权局部定义）。
-授权分支 `graph-execution-foundation`；HEAD/origin `3516bef`。用户授权持续实施、有限实验、
+授权分支 `graph-execution-foundation`；HEAD/origin `fea42aa`。用户授权持续实施、有限实验、
 分阶段提交与正常推送，不用子代理。总体目标未完成；唯一待办 [ROADMAP](ROADMAP.md)，
 持续规则 [execution-flows](execution-flows.md)。参考仓库与公共环境只读。
 
@@ -29,7 +29,7 @@
 | job | 最近状态 | build / 范围 |
 | --- | --- | --- |
 | core5-peer-owner-lifetime-npu-qualify | running，AscendC约92% | build/npu；CPU guard4、standalone weighted-training/weighted-peer两dtype |
-| core5-peer-owner-lifetime-cuda-qualify | running，约201/264 | build/cuda；同两check三架构build/loader/help，无GPU数值结论 |
+| core5-peer-owner-lifetime-cuda-qualify | passed/exit0，264步构建 | build/cuda；同两check三架构build/loader/help，无GPU数值结论 |
 
 units为`tide-JOB-20261028.service`；输出`artifacts/jobs/JOB/`，包含status.json、task.log、
 control-build.json和NPU checks/result.json/queue-state.json；launcher `.local/JOB{,-workload}.sh`。
@@ -59,11 +59,16 @@ launcher `.local/core5-weighted-profile-source-diagnose.sh` 调用 `.local/diagn
 主区已将源码检查移到设备初始化前，运行cwd提前切到独立输出目录，相对库路径先解析。
 同时补profile阶段耗时、kernel覆盖、copy/scalar耗时（非profile不启用标记）。
 短CPU native profile与完整独立记录/参数比较通过；六阶段实际trace和重叠kernel区间手算通过。
-下一步固定提交，以新目录重做NPU profile，不放宽洁净门禁。
+修复fea42aa已提交推送；冻结checkout `artifacts/worktrees/core5-weighted-performance`，跟踪文件只读。
+`core5-weighted-benchmark-python-profile2`已passed/exit0，同原profile配置与已资格库；新输出/launcher以profile2命名。
+预算600秒/queue180秒/profile360秒，Nice10/background.slice，ATen/BLAS1；源码/结果旧失败保留。完整记录与参数事后对照通过；小规模profile阶段记录含backward/finite约1.24秒，kernel覆盖约.135秒。
+profile2默认采集周期结束有vendor不完整解析警告；保留记录，不把事件计数当完整硬件工作量。
+主区已显式单周期并在导出前prof.step；CPU medium推理profile、完整记录及阶段事件检查通过。
+下一次planned medium profile使用固定新版本，不盲目重跑small。
 
 ## 下一步与检查命令
 
-1. 提交profile cwd/阶段记录修复；冻结新checkout并以新目录运行NPU profile。
+1. 固定显式profile周期增量，运行medium resident与mixed profile；随后有限正式计时，保留profile2周期警告。
 2. 审阅7db0b08两个资格终态，更新half报告master断言复验与新增peer证据。
 3. 审阅CPU消费者；NPU组件终态后构建matching standalone benchmark，开展小中规模profiling与有限完整计时。
    项目自身重型计时串行，默认每配置一次独立测量；无全开关笛卡尔积。

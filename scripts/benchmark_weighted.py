@@ -114,8 +114,10 @@ def main():
                     profiler = torch.profiler
                     activities = [profiler.ProfilerActivity.CPU]
                     if device.type == "cuda": activities.append(profiler.ProfilerActivity.CUDA)
-                with profiler.profile(activities=activities, record_shapes=True) as prof:
+                schedule = profiler.schedule(wait=0, warmup=0, active=1, repeat=1)
+                with profiler.profile(activities=activities, record_shapes=True, schedule=schedule) as prof:
                     actual.append(candidate.step(step))
+                    prof.step()  # Complete the capture cycle before export.
                 prof.export_chrome_trace(str(out/"trace.json"))
                 if device.type != "cpu":
                     from profile_weighted_device import inspect_trace
