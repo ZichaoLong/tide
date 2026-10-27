@@ -6,8 +6,8 @@
 namespace tide::checkpoint_detail {
 namespace {
 constexpr std::string_view kMagic = "TIDENCK1";
-constexpr uint32_t kSchema = 1;
-constexpr uint8_t kLittleEndian = 1, kFloat32 = 1, kFloat64 = 2, kCpu = 0;
+constexpr uint32_t kSchema = 2;
+constexpr uint8_t kLittleEndian = 1, kFloat32 = 1, kFloat64 = 2, kFloat16 = 4, kCpu = 0;
 }
 bool little_endian() {
   const uint16_t value = 1;
@@ -26,12 +26,14 @@ uint64_t checksum(const uint8_t* data, size_t size) {
 uint8_t dtype_code(at::ScalarType dtype) {
   if (dtype == at::kFloat) return kFloat32;
   if (dtype == at::kDouble) return kFloat64;
-  fail("only CPU FP32/FP64 tensors are supported");
+  if (dtype == at::kHalf) return kFloat16;
+  fail("only CPU FP16/FP32/FP64 tensors are supported");
 }
 
 at::ScalarType scalar_type(uint8_t code) {
   if (code == kFloat32) return at::kFloat;
   if (code == kFloat64) return at::kDouble;
+  if (code == kFloat16) return at::kHalf;
   fail("unknown tensor dtype");
 }
 
@@ -61,6 +63,7 @@ void Writer::tensor(const Tensor& value, bool metadata) {
 Tensor Reader::tensor(bool metadata) {
   if (u8() != kCpu) fail("tensor device is not CPU");
   const auto code=u8();
+  if (code == kFloat16 && !allow_half) fail("FP16 requires native schema v2");
   const auto dtype = metadata && code==3 ? at::kLong : scalar_type(code);
   const auto dimensions = u8();
   if (dimensions > 64) fail("tensor has too many dimensions");
@@ -69,7 +72,7 @@ Tensor Reader::tensor(bool metadata) {
   for (uint8_t i = 0; i < dimensions; ++i) shape.push_back(i64());
   const auto expected = element_count(shape);
   if (u64() != expected) fail("tensor element count mismatch");
-  const auto item_size = dtype == at::kFloat ? 4ULL : 8ULL;
+  const auto item_size = dtype == at::kHalf ? 2ULL : dtype == at::kFloat ? 4ULL : 8ULL;
   if (expected > (limit - offset) / item_size) fail("truncated tensor payload");
   const auto byte_count = static_cast<size_t>(expected * item_size);
   auto result = at::empty(shape, at::TensorOptions().dtype(dtype).device(at::kCPU));
@@ -101,7 +104,7 @@ OptimizerGroup read_group(Reader& reader) {
 }
 
 std::vector<uint8_t> encode(const Decoded& record) {
-  if (!little_endian()) fail("big-endian hosts are unsupported by schema v1");
+  if (!little_endian()) fail("big-endian hosts are unsupported");
   Writer writer;
   writer.bytes.insert(writer.bytes.end(), kMagic.begin(), kMagic.end());
   writer.u32(kSchema); writer.u8(kLittleEndian); writer.string(record.identity);
@@ -132,6 +135,10 @@ std::vector<uint8_t> encode(const Decoded& record) {
       if (state.exp_avg_sq.defined()) writer.tensor(state.exp_avg_sq);
       if (state.max_exp_avg_sq.defined()) writer.tensor(state.max_exp_avg_sq);
     }
+    writer.u8(record.precision.fp32_masters); writer.f64(record.precision.loss_scale);
+    if (record.masters.size() > kMaxCollection) fail("too many optimizer masters");
+    writer.u64(record.masters.size());
+    for (const auto& [name, value] : record.masters) { writer.string(name); writer.tensor(value); }
   }
   const auto hash = checksum(writer.bytes.data(), writer.bytes.size());
   writer.u64(hash);
@@ -147,8 +154,10 @@ Decoded decode(const std::vector<uint8_t>& file) {
   if (checksum(file.data(), payload_size) != stored) fail("checksum mismatch");
   Reader reader{file, payload_size};
   for (const auto expected : kMagic) if (reader.u8() != static_cast<uint8_t>(expected)) fail("magic mismatch");
-  if (reader.u32() != kSchema || reader.u8() != kLittleEndian) fail("unsupported schema or byte order");
-  Decoded decoded; decoded.identity = reader.string();
+  const auto schema = reader.u32();
+  if ((schema != 1 && schema != kSchema) || reader.u8() != kLittleEndian) fail("unsupported schema or byte order");
+  reader.allow_half = schema >= 2;
+  Decoded decoded; decoded.schema = schema; decoded.identity = reader.string();
   const auto owner_count = reader.u64();
   if (owner_count > kMaxCollection) fail("too many parameter owners");
   decoded.owners.reserve(static_cast<size_t>(owner_count));
@@ -180,6 +189,14 @@ Decoded decode(const std::vector<uint8_t>& file) {
       if (flags & 8) state.max_exp_avg_sq = reader.tensor();
       if (flags & 0xf0) fail("unknown optimizer state slot");
       decoded.state.emplace(name, std::move(state));
+    }
+    if (schema >= 2) {
+      decoded.precision.fp32_masters = reader.boolean(); decoded.precision.loss_scale = reader.f64();
+      const auto count = reader.u64(); if (count > kMaxCollection) fail("too many optimizer masters");
+      for (uint64_t i = 0; i < count; ++i) {
+        auto name = reader.string(); auto value = reader.tensor();
+        if (!decoded.masters.emplace(name, value).second) fail("duplicate optimizer master");
+      }
     }
   }
   if (reader.offset != payload_size) fail("trailing payload bytes");

@@ -67,7 +67,7 @@ add_library(tidegraph STATIC
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/block_step.cpp cpp/src/frontier.cpp cpp/src/greedy.cpp cpp/src/greedy_plan.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp cpp/src/settle_ports.cpp
   cpp/src/kernel.cpp cpp/src/state_evaluate.cpp cpp/src/state_vjp.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
-  cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
+  cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp cpp/src/optimizer_precision.cpp
   cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp
   cpp/src/graph_checkpoint.cpp cpp/src/graph_checkpoint_codec.cpp)
 set_target_properties(tidegraph PROPERTIES POSITION_INDEPENDENT_CODE ON)

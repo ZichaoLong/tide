@@ -39,8 +39,8 @@ void validate_adamw(const OptimizerGroup& group) {
 }  // namespace
 
 NamedOptimizer::NamedOptimizer(ParameterRegistry& registry, std::vector<OptimizerGroup> groups,
-                               std::string class_name)
-    : registry_(registry), groups_(std::move(groups)), class_name_(std::move(class_name)) {
+                               std::string class_name, OptimizerPrecision precision)
+    : registry_(registry), groups_(std::move(groups)), class_name_(std::move(class_name)), precision_(precision) {
   if (groups_.empty()) {
     OptimizerGroup group;
     for (const auto& owner : registry_.owners()) group.parameters.push_back(owner.canonical);
@@ -57,10 +57,12 @@ NamedOptimizer::NamedOptimizer(ParameterRegistry& registry, std::vector<Optimize
     }
     group.parameters = std::move(canonical);
   }
+  initialize_precision();
 }
 
 void NamedOptimizer::step() {
   at::NoGradGuard guard;
+  if (precision_.fp32_masters) { master_step(); return; }
   for (const auto& group : groups_) for (const auto& name : group.parameters) {
     const auto parameter = registry_.value(name);
     const auto gradient = parameter.grad();
@@ -74,6 +76,7 @@ void NamedOptimizer::step() {
 
 void NamedOptimizer::zero_grad(bool set_to_none) {
   at::NoGradGuard guard;
+  scaled_backward_ = false;
   for (const auto& group : groups_) for (const auto& name : group.parameters) {
     auto parameter = registry_.value(name);
     if (!parameter.grad().defined()) continue;
@@ -88,8 +91,8 @@ OptimizerLayout NamedOptimizer::layout() const {
   return result;
 }
 
-SGD::SGD(ParameterRegistry& registry, std::vector<OptimizerGroup> groups)
-    : NamedOptimizer(registry, std::move(groups), "torch.optim.sgd.SGD") {
+SGD::SGD(ParameterRegistry& registry, std::vector<OptimizerGroup> groups, OptimizerPrecision precision)
+    : NamedOptimizer(registry, std::move(groups), "torch.optim.sgd.SGD", precision) {
   for (const auto& group : this->groups()) validate_sgd(group);
 }
 
@@ -106,8 +109,8 @@ void SGD::update(const std::string& name, const Tensor& parameter, const Tensor&
   parameter.add_(direction, -group.lr);
 }
 
-AdamW::AdamW(ParameterRegistry& registry, std::vector<OptimizerGroup> groups)
-    : NamedOptimizer(registry, std::move(groups), "torch.optim.adamw.AdamW") {
+AdamW::AdamW(ParameterRegistry& registry, std::vector<OptimizerGroup> groups, OptimizerPrecision precision)
+    : NamedOptimizer(registry, std::move(groups), "torch.optim.adamw.AdamW", precision) {
   for (const auto& group : this->groups()) validate_adamw(group);
 }
 

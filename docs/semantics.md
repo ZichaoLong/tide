@@ -287,16 +287,20 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   changing weights. Reconstruct the same sharing and optimizer groups when
   restoring; see `checkpoint-ownership.md`. Older schemas are rejected. Checkpoints do not
   claim to restore a full training controller, data cursor or framework RNG.
-  The standalone C++ owner layer additionally defines `TIDENCK1` schema v1 for
-  CPU FP32/FP64 named values and built-in SGD/AdamW state. It is a separate
+  The standalone C++ owner layer additionally defines `TIDENCK1` schema v2 for
+  CPU FP16/FP32/FP64 named values and built-in SGD/AdamW state, with optional
+  explicit FP32 masters/static loss scale; previous v1 FP32/FP64 records remain readable. It is a separate
   little-endian, checksummed format with identity and alias preflight and
   exclusive no-overwrite publication; it is not interoperable with Python torch
   files and does not restore graph continuation or a training controller.
   The separate [complete native graph format](native-graph-checkpoint.md),
-  `TIDEGCK1` schema 1, embeds that unchanged parameter record and exact raw
+  `TIDEGCK1` schema 2, embeds that parameter record and exact raw
   continuation fields, including int64 tensor metadata. It adds no retained
   differentiation, RNG or training-controller state. Both native formats remain
   distinct from eager checkpoint v5 and do not change graph identity v13.
+  Previous paired schema-1 graph/parameter records remain readable; new saves use
+  schema 2. [Native masters](native-master-optimizer.md) define scale/FP32 slot
+  ownership, exact half correspondence and failure preflight.
 - `None` versus connected-zero is observable for optimizer parameter groups;
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.

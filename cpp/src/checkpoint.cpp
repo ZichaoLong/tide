@@ -14,6 +14,7 @@ void Checkpoint::save(const std::filesystem::path& path, const ParameterRegistry
     record.optimizer_class = optimizer->layout().class_name;
     record.groups = optimizer->groups();
     record.state = optimizer->state();
+    record.precision = optimizer->precision(); record.masters = optimizer->masters();
   }
   validate_decoded(record, registry, optimizer, identity);
   publish_exclusive(path, encode(record));
@@ -34,10 +35,13 @@ void Checkpoint::load(const std::filesystem::path& path, ParameterRegistry& regi
     for (auto* slot : {&state.momentum_buffer, &state.exp_avg, &state.exp_avg_sq, &state.max_exp_avg_sq})
       if (slot->defined()) *slot = slot->to(device);
   }
+  for (auto& [name, value] : decoded.masters) value = value.to(values.at(name).device());
   for (const auto& owner : decoded.owners) values.at(owner.aliases.front()).copy_(owner.value);
   if (optimizer) {
     optimizer->groups_.swap(decoded.groups);
     optimizer->state_.swap(decoded.state);
+    optimizer->masters_.swap(decoded.masters); optimizer->precision_ = decoded.precision;
+    optimizer->scaled_backward_ = false;
   }
 }
 }  // namespace tide

@@ -56,13 +56,15 @@ PyTorch's SGD/AdamW.
 
 ## Standalone native value checkpoints
 
-The independent value layer uses the self-describing `TIDENCK1` schema version
-1 in `cpp/include/tide/checkpoint.h` and the separate codec, preflight and
+The independent value layer uses the self-describing `TIDENCK1` format (current
+version in [semantics](semantics.md)) in `cpp/include/tide/checkpoint.h` and the separate codec, preflight and
 publication sources. A file records a caller-supplied graph identity, the
-complete canonical alias partition, CPU FP32/FP64 dense owner values, and
+complete canonical alias partition, CPU FP16/FP32/FP64 dense owner values, and
 optionally the built-in `torch.optim.sgd.SGD` or `torch.optim.adamw.AdamW`
 class, ordered canonical owner groups, group options and named optimizer
-slots. Tensor bytes are little-endian IEEE values and the payload has an
+slots. The [explicit native master policy](native-master-optimizer.md) additionally
+records FP32 masters and static loss scale with exact half-weight correspondence;
+previous FP32/FP64 version-1 records remain readable. Tensor bytes are little-endian IEEE values and the payload has an
 FNV-1a checksum. The format is deliberately independent of Python's torch
 serialization; no Python-file interoperability claim follows from it.
 

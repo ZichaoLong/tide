@@ -17,12 +17,15 @@ constexpr uint64_t kMaxTensorElements = 1ULL << 28;
 }
 struct DecodedOwner { std::vector<std::string> aliases; Tensor value; };
 struct Decoded {
+  uint32_t schema = 2;
   std::string identity;
   std::vector<DecodedOwner> owners;
   bool has_optimizer = false;
   std::string optimizer_class;
   std::vector<OptimizerGroup> groups;
   std::map<std::string, OptimizerState> state;
+  OptimizerPrecision precision;
+  std::map<std::string, Tensor> masters;
 };
 void validate_value(const Tensor& value, const std::string& where);
 std::map<std::string, Tensor> owner_values(const ParameterRegistry& registry);
