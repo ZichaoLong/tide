@@ -1,5 +1,5 @@
 // 0770593 architecture §2–4, allocation §2–3. See docs/weighted-message.md.
-#include "weighted_detail.h"
+#include "weighted_recurrent_detail.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -34,9 +34,9 @@ class Aggregate final:public AggregateKernel {
   }
  private:SourceClasses classes_;double alpha_,epsilon_;
 };
-class Describe final:public ReadKernel {
+template<class Config> class Describe final:public ReadKernel {
  public:
-  Describe(KVConfig c,RegionalConfig r):c_(std::move(c)),r_(std::move(r)){}
+  Describe(Config c,RegionalConfig r):c_(std::move(c)),r_(std::move(r)){}
   bool structured() const override{return true;}
   FieldLayout field_layout(const NodeWeights&) const override {
     return {{"w",{}},{"mu",{}},{"score",{}},{"evidence",{r_.region_control_width}}};
@@ -62,11 +62,11 @@ class Describe final:public ReadKernel {
       shape(w,"read_program.evidence_weight",{r_.region_control_width,f});shape(w,"read_program.evidence_bias",{r_.region_control_width});
     }
   }
- private:KVConfig c_;RegionalConfig r_;
+ private:Config c_;RegionalConfig r_;
 };
-class Full final:public FullKernel {
+template<class Config> class Full final:public FullKernel {
  public:
-  explicit Full(KVConfig c):c_(std::move(c)){}
+  explicit Full(Config c):c_(std::move(c)){}
   FullResult step(const NodeWeights& w,const FullInput& r,Index slots,const Options& options) const override {
     require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
     auto g=content(w,*r.comparison,r.time,r.content.value.slice(0,1),c_);
@@ -75,11 +75,9 @@ class Full final:public FullKernel {
     return result;
   }
   void validate_weights(const NodeWeights& w,Index) const override {
-    for(const std::string name:{"query","out"})shape(w,"full_program.content."+name,{c_.width,c_.width});
-    for(const std::string name:{"gate","up"})shape(w,"full_program.content."+name,{c_.ffn_width,c_.width});
-    shape(w,"full_program.content.down",{c_.width,c_.ffn_width});
+    validate_content_weights(w,c_);
   }
- private:KVConfig c_;
+ private:Config c_;
 };
 class RegionalTotal final:public RegionKernel {
  public:
@@ -133,7 +131,13 @@ std::shared_ptr<const StateKernel> make_kv(const KVConfig&);
 void configure_node(NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const SourceClasses& classes,double alpha){
   c.validate();r.validate();require(std::isfinite(alpha)&&alpha>=0,"invalid source transform scale");
   w.kernel=make_kv(c);w.aggregate_kernel=std::make_shared<Aggregate>(classes,alpha,c.epsilon);
-  w.read_kernel=std::make_shared<Describe>(c,r);w.full_kernel=std::make_shared<Full>(c);
+  w.read_kernel=std::make_shared<Describe<KVConfig>>(c,r);w.full_kernel=std::make_shared<Full<KVConfig>>(c);
+}
+std::shared_ptr<const StateKernel> make_recurrent(const RecurrentConfig&);
+void configure_node(NodeWeights& w,const RecurrentConfig& c,const RegionalConfig& r,const SourceClasses& classes,double alpha){
+  c.validate();r.validate();require(std::isfinite(alpha)&&alpha>=0,"invalid source transform scale");
+  w.kernel=make_recurrent(c);w.aggregate_kernel=std::make_shared<Aggregate>(classes,alpha,c.epsilon);
+  w.read_kernel=std::make_shared<Describe<RecurrentConfig>>(c,r);w.full_kernel=std::make_shared<Full<RecurrentConfig>>(c);
 }
 void configure_region(RegionWeights& w,const RegionalConfig& r){w.kernel=std::make_shared<RegionalTotal>(r);}
 }  // namespace tide::weighted

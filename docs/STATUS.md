@@ -16,18 +16,37 @@
 
 ## 当前任务和下一动作
 
-KV 不可变资格 `tide-core5-weighted-kv-qualify-20261027` 已终止：inactive/success、退出 0。
-源码 6fb467c，冻结 checkout `artifacts/worktrees/core5-bootstrap` 干净；
-记录 `artifacts/jobs/core5-weighted-kv-qualify/{status.json,task.log,development.json}`。
-命令 `.local/core5-weighted-kv-qualify.sh`，background.slice、Nice=10、单线程、10 分钟上限。
-无 live job；该 checkout/build 可在确认终态后用于下一冻结增量。
+KV 不可变资格已终止成功，129 项通过，证据提交 572d4ff 和实现 6fb467c 均已推送。
+原始记录 `artifacts/jobs/core5-weighted-kv-qualify`，固定源码 checkout 原为 6fb467c。
 
-下一步继续 affine/delta、固定逻辑时间短卷积、完整 GDN/SSD，随后正式分配/评分/证据/key、
-异构、精确联合/packed/批量 VJP、mixed/resident 与有限选型。不能在 KV 首组合处暂停。
-未提交 `python/tidegraph/weighted/convolution.py`、`tests/test_weighted_convolution.py`
-是后续短卷积原型，8 项短测通过，尚未接入 GDN/SSD 或 C++，不属于 KV 资格。
-先补 int64 最大时间 projection 边界，再实现基础循环。
-短测环境下执行 `python -m pytest -q tests/test_weighted_convolution.py --dtype both`。
+当前增量已编写 affine/delta、固定逻辑时间短卷积、完整 GDN/SSD 的 Python/独立 C++、
+共同描述、异构绑定与 native 适配；契约 [weighted-recurrent](weighted-recurrent.md)。
+开发快照 `ea36b7521e8547e2f94666bb466abeeb47a27316` 的
+`tide-core5-recurrent-build-20261027` 已构建完成，测试 **212 passed / 1 failed**，终态 exit-code/1。
+失败是 SSD FP32 Read0 复合标量目标梯度：前向逐位相同，分组 output/state/pending VJP 逐位相同，
+比较器未固定字典字段归约顺序，目标相差 1.9e-6，平方目标的相消梯度差 7.15e-6。
+主工作区已修复比较目标的字段/owner排序，未改模型公式/容差；排列不变性和原失败短测 3 项通过。
+原失败源码、日志/清单位于 `artifacts/jobs/core5-recurrent-build`，保持失败。
+首轮 core5-recurrent-dev 的目录预创建 launcher 失败亦保留，未开始构建/测试。
+
+修复后的冻结开发树 `2fa1fb1793753a17a4c4f7d98f07678d11c5774c` 已完成
+`tide-core5-recurrent-fix-20261027`：**536 passed，退出 0，inactive/success**。
+原始源码/日志/清单在 `artifacts/jobs/core5-recurrent-fix`。
+包含全部 weighted 测试、比较目标排列不变性、structured_records、semantics、
+isolated_gradients 和 CLI standalone C++ kernel。另补非对齐 TimedDAG 四族/no_grad 8 项短测通过。
+本增量合并范围为 544 项，尚未对该合并源码执行不可变资格。
+
+当前无 live job。此提交固定 affine/delta、GDN/SSD、固定时间短卷积与异构绑定，
+并修复验证目标的字段归约顺序；没有其他用户修改。
+下一动作：将 `artifacts/worktrees/core5-bootstrap` 更新为本实现提交的干净只读 checkout，
+运行 `.local/core5-recurrent-qualify.sh` 调用 job.py/develop.py --reuse-build 的相同定向范围，
+服务 `tide-core5-recurrent-qualify-20261027`、background.slice、Nice=10、15 分钟上限。
+输出 `artifacts/jobs/core5-recurrent-qualify/{status.json,task.log,development.json}`。
+先确认实际终态/退出码/计数和源码干净，再将证据单独提交并推送，继续后续阶段。
+查看 `systemctl --user show tide-core5-recurrent-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
+停止 `systemctl --user stop tide-core5-recurrent-qualify-20261027`。
+
+仍待完整正式分配/评分/证据/key、联合/packed/批量 VJP、mixed/resident、standalone 完整训练和有限选型。
 
 ## 环境与保留事项
 

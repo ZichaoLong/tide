@@ -1,10 +1,10 @@
-# 带权 KV 公共绑定
+# 带权消息与 KV 公共绑定
 
 固定来源 `0770593838a37c790a568226930567ed60f99b83`；共同定义见
 [架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)、
 [KV](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)和
 [区域分配](upstream/tide-core-5/local-semantics/weighted-message/region-allocation-learning-note.md)。
-以下是本地明确的函数与表示绑定，未完成的其他候选仍见 ROADMAP。
+以下是本地明确的函数与表示绑定；[循环/短卷积](weighted-recurrent.md)给出其他记忆的接口、状态与逐函数对应，剩余候选仍见 ROADMAP。
 
 ## 调用与配置
 
@@ -85,7 +85,7 @@ checkpoint v5 保存实际原始状态与 typed tensors、全部 pending、ledge
 局部独立数学检查与调度比较分别承担公式和执行顺序验收。完整图的参数方向差分限定
 在不跨支持分支的 FP64 小扰动；没有对硬函数作通常 gradcheck。
 本阶段开发测试域为 CPU FP64/FP32 的 Python、Python/native 与 standalone C++；
-不可变资格待单独记录，批量 VJP、mixed/resident 与硬件资格继续独立推进。
+[KV 不可变资格](evidence/core5-weighted-kv-20261027.md)独立记录；批量 VJP、mixed/resident 与硬件资格继续独立推进。
 通用 prefill 可使用声明的完整驱动序列递归能力，缺少 joint 能力时合法退化并保留计数；
 当前标量循环不称为完成 packed 执行。浮点指数下溢可影响数值记忆，原始状态/时间不据此删除；
 quad 正支持按实际求得控制判定，严格路由对照不能用数值容差放宽。

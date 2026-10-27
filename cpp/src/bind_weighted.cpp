@@ -16,7 +16,19 @@ void bind_weighted(py::module_& module){
     FIELD(RegionalConfig,hidden_width) FIELD(RegionalConfig,region_control_width) FIELD(RegionalConfig,k)
     FIELD(RegionalConfig,gamma_max) FIELD(RegionalConfig,allocation_temperature)
     FIELD(RegionalConfig,total_fraction) FIELD(RegionalConfig,region_control_mode).def("validate",&RegionalConfig::validate);
+  py::class_<RecurrentConfig>(module,"WeightedRecurrentConfig").def(py::init<>())
+    FIELD(RecurrentConfig,memory_family) FIELD(RecurrentConfig,memory_read)
+    FIELD(RecurrentConfig,width) FIELD(RecurrentConfig,summary_width) FIELD(RecurrentConfig,key_width)
+    FIELD(RecurrentConfig,value_width) FIELD(RecurrentConfig,ffn_width) FIELD(RecurrentConfig,heads)
+    FIELD(RecurrentConfig,groups) FIELD(RecurrentConfig,matrix_rates) FIELD(RecurrentConfig,conv_size)
+    FIELD(RecurrentConfig,conv_stride) FIELD(RecurrentConfig,lambda_short) FIELD(RecurrentConfig,epsilon)
+    FIELD(RecurrentConfig,alpha_mem) FIELD(RecurrentConfig,alpha_ff) FIELD(RecurrentConfig,qk_epsilon)
+    FIELD(RecurrentConfig,output_epsilon).def("validate",&RecurrentConfig::validate);
   module.def("configure_weighted_node",[](NodeWeights& w,const KVConfig& c,const RegionalConfig& r,
+                                         const std::vector<Index>& edges,const std::vector<Index>& inputs,double alpha){
+    configure_node(w,c,r,SourceClasses{edges,inputs},alpha);
+  });
+  module.def("configure_weighted_recurrent_node",[](NodeWeights& w,const RecurrentConfig& c,const RegionalConfig& r,
                                          const std::vector<Index>& edges,const std::vector<Index>& inputs,double alpha){
     configure_node(w,c,r,SourceClasses{edges,inputs},alpha);
   });

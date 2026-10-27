@@ -1,7 +1,8 @@
 """Tensor-preserving adapter; execution and formulas are wholly C++ owned."""
 from dataclasses import asdict
 from ..native_model import encode_records
-from .kv import KVMemory
+from .config import KVConfig
+from .binding import MEMORY_TYPES, memory_family
 from .programs import Describe, WeightedAggregate, WeightedFull, RegionalTotal
 
 
@@ -19,7 +20,8 @@ def region_config(core, config):
 def encode(core, graph, model):
     model.validate_binding(graph)
     for node,spec in zip(model.nodes,graph.nodes):
-        for name,kind,profile in (("kernel",KVMemory,spec.memory),("read_program",Describe,spec.readout),
+        state_type,_ = MEMORY_TYPES[memory_family(node.kernel.config)]
+        for name,kind,profile in (("kernel",state_type,spec.memory),("read_program",Describe,spec.readout),
                                   ("aggregate_program",WeightedAggregate,spec.aggregation),
                                   ("full_program",WeightedFull,spec.emission)):
             program = getattr(node,name)
@@ -31,13 +33,15 @@ def encode(core, graph, model):
     nodes = list(m.nodes)
     for i,(weight,pyweight) in enumerate(zip(nodes,model.nodes)):
         weight.extra = dict(pyweight.named_parameters(remove_duplicate=False))
-        config = core.WeightedKVConfig()
+        is_kv = isinstance(pyweight.kernel.config,KVConfig)
+        config = core.WeightedKVConfig() if is_kv else core.WeightedRecurrentConfig()
         for name,value in asdict(pyweight.kernel.config).items():
             setattr(config,name,value)
         config.validate()
         region = region_config(core,model.regions[graph.nodes[i].region].config)
         agg = pyweight.aggregate_program
-        core.configure_weighted_node(weight,config,region,agg.classes.edges,agg.classes.inputs,agg.alpha)
+        configure = core.configure_weighted_node if is_kv else core.configure_weighted_recurrent_node
+        configure(weight,config,region,agg.classes.edges,agg.classes.inputs,agg.alpha)
     m.nodes = nodes
     regions = list(m.regions)
     for weight,program in zip(regions,model.regions):

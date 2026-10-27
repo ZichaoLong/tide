@@ -104,6 +104,19 @@ checkpoint v5 stores actual raw entries/pending, including expired entries retai
 by zero receive. This addition does not change the generic adoption/Next contract.
 Backend qualification and remaining formal candidates are recorded separately.
 
+## Weighted recurrent binding
+
+[Weighted recurrent memory](weighted-recurrent.md) separately binds affine,
+delta, gated_delta and SSD, with sum/state reads and fixed logical-time
+convolution. Exact state includes int64 `time` (mathematical initial s=0),
+private matrices and summaries, plus int64 convolution stamps and projected
+values for GDN/SSD. The engine's initially -1 last_time remains separate.
+Zero receive preserves the complete raw tuple; all positive candidates retain
+updates. Full reads proposal independently of the selected descriptor snapshot.
+Heterogeneous KV/recurrent bindings keep the common payload and region contract.
+Checkpoint versions are unchanged; new profile hashes carry configuration and
+actual raw slots. Joint, mixed/resident and hardware evidence remain separate.
+
 ## First local profile: `ema-ffn-v1`
 
 For tagged values x_i and learned source weights w_i, `h=sum_i w_i*x_i`.

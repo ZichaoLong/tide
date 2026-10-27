@@ -6,8 +6,25 @@ from ..ops import Model
 from ..source_class import SourceClasses
 from .config import KVConfig, RegionalConfig, finite, identity, positive_int
 from .kv import KVContent, KVMemory
+from .recurrent_config import RecurrentConfig
+from .recurrent import BasicContent, BasicMemory
+from .gated_delta import GatedDeltaContent, GatedDeltaMemory
+from .ssd import SSDContent, SSDMemory
 from .programs import Describe, RegionalTotal, SourceTransform, WeightedAggregate, WeightedFull
 from .tensors import parameter
+
+
+MEMORY_TYPES = {"kv": (KVMemory, KVContent), "affine": (BasicMemory, BasicContent),
+                "delta": (BasicMemory, BasicContent), "gated_delta": (GatedDeltaMemory, GatedDeltaContent),
+                "ssd": (SSDMemory, SSDContent)}
+
+
+def memory_family(config):
+    return "kv" if isinstance(config, KVConfig) else config.memory_family
+
+
+def memory_profile(config):
+    return identity("weighted-"+memory_family(config)+"-v1", config)
 
 
 class WeightedModel(Model):
@@ -20,7 +37,7 @@ class WeightedModel(Model):
         for v,(node,spec) in enumerate(zip(self.nodes,graph.nodes)):
             c,r = node.kernel.config,self.regions[spec.region].config
             agg = node.aggregate_program
-            expected = (identity("weighted-kv-v1",c),identity("weighted-describe-v1",c,r),
+            expected = (memory_profile(c),identity("weighted-describe-v1",c,r),
                         identity("weighted-full-v1",c),
                         identity("weighted-aggregate-v1",agg.classes,agg.alpha,agg.hidden_width,c.epsilon))
             if ((spec.memory,spec.readout,spec.emission,spec.aggregation) != expected
@@ -42,14 +59,14 @@ class WeightedModel(Model):
 class Binding:
     graph: Graph
     model: WeightedModel
-    memories: tuple[KVConfig, ...]
+    memories: tuple[KVConfig | RecurrentConfig, ...]
     regions: tuple[RegionalConfig, ...]
     source_classes: SourceClasses
 
 
 def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_classes=None,
          alpha_agg=0., source_hidden_width=4, dtype=torch.float64, device="cpu", seed=7):
-    """Bind physical topology/ports to weighted KV; supplied old local programs are replaced.
+    """Bind physical topology/ports to weighted memory; replace old local programs.
 
     KV bases and source A/B matrices share within each region. KV adapters,
     summaries, Describe/Full parameters and state are private per node. Source
@@ -61,10 +78,10 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     if topology.origins:
         raise ValueError("weighted physical topology cannot contain legacy input-origin adapters")
     finite("alpha_agg",alpha_agg,0); positive_int("source_hidden_width",source_hidden_width)
-    memory = (memories,)*len(topology.nodes) if isinstance(memories,KVConfig) else tuple(memories)
+    memory = (memories,)*len(topology.nodes) if isinstance(memories,(KVConfig,RecurrentConfig)) else tuple(memories)
     region = (regions,)*len(topology.regions) if isinstance(regions,RegionalConfig) else tuple(regions)
     if (len(memory) != len(topology.nodes) or len(region) != len(topology.regions)
-            or any(not isinstance(x,KVConfig) for x in memory)
+            or any(not isinstance(x,(KVConfig,RecurrentConfig)) for x in memory)
             or any(not isinstance(x,RegionalConfig) for x in region)
             or len({c.width for c in memory}) != 1):
         raise ValueError("weighted binding node/region/width domain mismatch")
@@ -80,11 +97,13 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     embeddings, states, readers, aggregates, fulls, nodes = {}, {}, {}, {}, {}, []
     for v,(spec,c) in enumerate(zip(topology.nodes,memory)):
         rc, j = region[spec.region], spec.region
-        sid = identity("weighted-kv-v1",c)
+        sid = memory_profile(c)
         rid = identity("weighted-describe-v1",c,rc)
         aid = identity("weighted-aggregate-v1",classes,alpha_agg,source_hidden_width,c.epsilon)
         fid = identity("weighted-full-v1",c)
-        states[v] = KVMemory(c,sid,bases[j],generator,dtype)
+        state_type, content_type = MEMORY_TYPES[memory_family(c)]
+        states[v] = (state_type(c,sid,bases[j],generator,dtype) if isinstance(c,KVConfig)
+                     else state_type(c,sid,generator,dtype))
         readers[v] = Describe(rid,c,rc,generator,dtype)
         labels = {classes.inputs[p] for p,n in enumerate(topology.inputs) if n == v}
         labels |= {classes.edges[e] for e,edge in enumerate(topology.edges) if edge.target == v}
@@ -95,7 +114,7 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
                 embeddings[key] = parameter((source_hidden_width,),generator,dtype)
             transforms[label] = SourceTransform(source_a[j],source_b[j],embeddings[key])
         aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width)
-        fulls[v] = WeightedFull(fid,KVContent(c,generator,dtype))
+        fulls[v] = WeightedFull(fid,content_type(c,generator,dtype))
         nodes.append(Node(j,memory=sid,readout=rid,aggregation=aid,emission=fid))
     specs = tuple(Region(len(layout.members),observe_all=True,count_priority=False,
                          read_mode={"0":"content","-":"old","+":"proposal"}[c.read_mode],

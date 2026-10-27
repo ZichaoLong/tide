@@ -17,6 +17,7 @@ void check_fiber_policy(const at::TensorOptions&);
 void check_state_clocks(const at::TensorOptions&);
 void check_structured_records(const at::TensorOptions&);
 void check_weighted(const at::TensorOptions&);
+void check_weighted_recurrent(const at::TensorOptions&);
 
 namespace {
 class CustomAccumulator final : public tide::StateKernel {
@@ -105,6 +106,7 @@ int main(int argc, char** argv) {
     check_state_clocks(options);
     check_structured_records(options);
     check_weighted(options);
+    check_weighted_recurrent(options);
     const std::string report = "custom-state-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");
