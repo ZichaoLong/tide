@@ -16,7 +16,7 @@
 | eager 放置与批量反向 | `placement*.py`, `state_vjp.py`, `read_vjp.py`; `cpp/src/placement*.cpp`, `isolated_*.cpp`, `state_vjp.cpp` | 数据/评分/选择位置、公共根连接、批量组合算子反向 |
 | 常驻公共库 | `python/tidegraph/resident*.py`; `tools/device_online/` | 设备队列、就绪/选择、批量消息、窗口、journals、显式 VJP、优化器、跨卡所有权 |
 | 带权常驻图 | `python/tidegraph/weighted/resident.py`; `tools/device_online/weighted_flow*` | 五记忆与正式配置的独立在线组合、typed raw state、逐边/端口和精确续接；[资格范围](resident-weighted-flow.md) |
-| 带权常驻训练与物理放置 | `include/tide/resident_weighted_training.h`, `python/tidegraph/weighted/resident_training.py`; `tools/device_online/weighted_window*`, `weighted_training*`, `weighted_flow_peers*` | 保留窗口、独立字段根、原owner局部VJP、canonical master/槽、节点bank发布与样本副本共同更新；[训练](resident-weighted-training.md)、[节点放置](resident-weighted-placement.md) |
+| 带权常驻训练与物理放置 | `tools/device_online/include/tide/resident_weighted_training.h`, `python/tidegraph/weighted/resident_training.py`; `tools/device_online/weighted_window*`, `weighted_training*`, `weighted_flow_peers*` | 保留窗口、独立字段根、原owner局部VJP、canonical master/槽、节点bank发布与样本副本共同更新；[训练](resident-weighted-training.md)、[节点放置](resident-weighted-placement.md) |
 | 常驻硬件后端 | `tools/device_online/control_flow.*`, `program.*`, `ascendc/`, `cuda/` | CANN 与 CUDA 独立控制流、算子/内核提交、完成通知及 P2P；共享语义不等于共享驱动实现 |
 | 参数与持久化 | `checkpoint*.py`, `token_checkpoint.py`; `cpp/src/parameters.cpp`, `optimizer.cpp`, `checkpoint*.cpp` | 别名归属、值保存/恢复、显式梯度边界；格式版本见 semantics |
 | 消费者与验证 | `examples/`, `tools/online_bench/`, `tests/`, `cpp/test/`, `scripts/` | 独立调用、公式/差分测试、构建、资格、有限性能入口 |

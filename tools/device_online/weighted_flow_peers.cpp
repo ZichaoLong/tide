@@ -141,7 +141,12 @@ void WeightedFlowPeers::append_reverse(DeviceProgram& coordinator,const Graph& g
     a.roots=s.exchange(std::move(request),p);a.roots->append_receive(p);
     auto back=[&](const at::Tensor& x){auto y=s.mirror(x,s.coordinator,p);result.push_back({x,y});return y;};
     for(size_t j=0;j<a.nodes.size();++j){const auto v=a.nodes[j];auto& n=*nodes[v];
-      auto g=append_weighted_node_vjp(p,*a.services,n,graph.regions[graph.nodes[v].region].read_mode,local[j],a.error,remaining);
+      // Match the coordinator's per-node service boundary. Appending every
+      // node's raw/parameter reductions to this peer's control stream can
+      // exhaust CANN's task buffer even when each numerical component fits.
+      auto& worker=a.services->begin();
+      auto g=append_weighted_node_vjp(worker,*a.services,n,graph.regions[graph.nodes[v].region].read_mode,local[j],a.error,remaining);
+      a.services->end(worker);
       auto& returned=gradients.at(v);returned.old={back(g.old.value),back(g.old.connected)};
       returned.initial={back(g.initial.value),back(g.initial.connected)};
       returned.payload=back(g.payload);returned.connected=back(g.connected);

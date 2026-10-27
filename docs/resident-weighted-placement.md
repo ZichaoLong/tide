@@ -68,6 +68,9 @@ coordinator拥有。这是同一图/样本内的物理放置，和[独立样本�
 滚动raw伴随、逐物理边祖先路由和canonical归约，按稳定节点顺序汇总所有共享使用者。
 反向重放不采用私有状态，不改变前向continuation。空窗发送stop；全部设备先提交再等待。
 None/零连接位、int64元数据、冻结参数和梯度根身份沿用[窗口VJP](resident-weighted-window-vjp.md)。
+每个远端节点的局部VJP及raw/参数归约放入独立的嵌套设备服务，主peer程序只按原顺序
+请求并等待；所有阶段仍串行共享workspace。该分段避免把多个节点的完整归约累积到同一
+CANN任务缓冲区，不改变区域可见性、梯度归约或窗口边界；CUDA继续使用同一条件图。
 
 新`weighted-node-window`检查定义FP32四组合×12独立根，以及两个三窗桥（含空窗）；
 覆盖五记忆、同秩HB、非对齐图、反馈/重复边、Read初态/旧态/候选态、全区域Attention、
