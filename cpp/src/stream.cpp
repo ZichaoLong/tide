@@ -5,6 +5,7 @@
 #include "tide/autograd.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/aggregate_sharing.h"
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
@@ -86,6 +87,16 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     stats["candidate_events"] += events.size();
     profile.phase("profile_update_ns");
     std::vector<std::function<void()>> jobs;
+    auto shared=plan_aggregate_sharing(graph_,model_,events,by_node,options_.packed,stats);
+    const bool reuse=!shared.copies.empty();
+    if(reuse){
+      for(const auto& [node,ids]:shared.compute){
+        ++stats["aggregate_calls"];
+        jobs.push_back([&,ids]{evaluate_aggregate(graph_,model_,events,ids,options_.packed,options_.packed_sources,options_.aggregate_autograd);});
+      }
+      pool_.run(std::move(jobs));jobs.clear();
+      decode_shared_aggregates(graph_,model_,events,shared);
+    }
     for (const auto& [node, ids] : by_node) {
       if (!graph_.nodes[node].identity) stats["body_candidate_events"] += ids.size();
       stats["max_node_batch"] = std::max<Index>(stats["max_node_batch"], ids.size());
@@ -101,7 +112,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         else if (replay) stats["fiber_policy_semantic_replays"] += ids.size();
       }
       if (options_.packed && !model_.nodes[node].kernel->joint_batch()) stats["state_scalar_batch_steps"] += ids.size();
-      stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
+      if(!reuse)stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats[options_.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
       if (options_.packed_sources) {
@@ -109,7 +120,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         else stats["packed_source_fallback_events"] += ids.size();
       }
       jobs.push_back([&, node, ids] {
-        auto packed_content = evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources, options_.aggregate_autograd);
+        auto packed_content = reuse?Tensor{}:evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources, options_.aggregate_autograd);
         evaluate_state(model_, events, ids, options_.packed, packed_content);
         evaluate_read(graph_, model_, events, ids, options_.packed);
       });

@@ -4,6 +4,7 @@
 #include "tide/autograd.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/aggregate_sharing.h"
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
@@ -38,18 +39,22 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     }
   }
   std::vector<std::function<void()>> jobs;
+  auto shared=plan_aggregate_sharing(g,m,events,by_node,options.packed,stats);
   for (const auto& [node, ids] : by_node) {
     if (!g.nodes[node].identity) stats["body_candidate_events"] += ids.size();
-    stats["aggregate_calls"] += options.packed ? 1 : ids.size();
     if (options.packed && at::GradMode::is_enabled()) stats[options.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
     if (!m.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
     if (options.packed_sources) {
       if (m.nodes[node].aggregate_kernel->joint_sources()) ++stats["packed_source_batches"];
       else stats["packed_source_fallback_events"] += ids.size();
     }
+  }
+  for(const auto& [node,ids]:shared.compute){
+    stats["aggregate_calls"]+=options.packed?1:ids.size();
     jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, options.packed, options.packed_sources, options.aggregate_autograd); });
   }
   pool.run(std::move(jobs));
+  decode_shared_aggregates(g,m,events,shared);
   prefill_states(g, m, q, options, pool, events, by_sequence, stats);
   std::vector<std::vector<size_t>> waves;
   Index previous_time = -1;

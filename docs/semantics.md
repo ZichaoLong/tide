@@ -108,6 +108,11 @@ The [source binding contract](weighted-source-binding.md) adds the four architec
 and private node/class low-rank factors. The default regional identity and
 initialization remain stable; nondefault bindings enter aggregation profile hashes.
 Checkpoint aliases preserve actual parameter sharing independently of private state.
+The optional [Aggregate reuse capability](weighted-compute-sharing.md) applies only
+within a certified packed block, with exact ordered class/input and parameter
+identities. Numeric equality of independent input roots is insufficient. The
+candidate decodes its actual shared result with each event's physical sources;
+all downstream contributions reach shared roots, and state owners remain private.
 
 ## Weighted sending bindings
 

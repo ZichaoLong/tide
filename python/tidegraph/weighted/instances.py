@@ -51,9 +51,12 @@ def layered_inputs(spec, values, *, start_position=0, start_occurrence=None):
         raise ValueError("layered input requires [batch,position,width]")
     occurrence = start_position if start_occurrence is None else start_occurrence
     payload = Payload(torch.ones(values.shape[:-1],dtype=values.dtype,device=values.device),values).encode()
-    return [row for batch in range(len(values)) for port in range(len(spec.graph.inputs))
-            for row in spec.port_external(payload[batch],range(start_position,start_position+values.shape[1]),
-                                          port=port,batch=batch,start_occurrence=occurrence)]
+    # One actual input Tensor per sample/position, broadcast to physical ports.
+    # Equal independent leaf tensors elsewhere do not acquire this identity.
+    rows = [list(sample.unbind()) for sample in payload.unbind()]
+    return [replace(row, value=rows[batch][k]) for batch in range(len(values)) for port in range(len(spec.graph.inputs))
+            for k, row in enumerate(spec.port_external(payload[batch],range(start_position,start_position+values.shape[1]),
+                                          port=port,batch=batch,start_occurrence=occurrence))]
 
 
 def readout(outputs, coordinates, reference, *, batch=0):

@@ -8,8 +8,7 @@
 #include <stdexcept>
 
 namespace tide {
-namespace {
-AggregateInput request(const Graph& g, const Model& m, const Event& event) {
+AggregateInput aggregate_request(const Graph& g, const Model& m, const Event& event) {
   AggregateInput result{event.time, g.source_counts[event.node], {}};
   std::set<Index> present;
   for (const auto& atom : event.fiber) {
@@ -29,6 +28,7 @@ AggregateInput request(const Graph& g, const Model& m, const Event& event) {
     std::stable_sort(result.sources.begin(), result.sources.end(), [](const auto& a, const auto& b) { return a.atom.key() < b.atom.key(); });
   return result;
 }
+namespace {
 void validate(const AggregateResult& result, const AggregateInput& input) {
   const auto& reference = input.sources[0].atom.value;
   auto tensor = [&](const Tensor& value) {
@@ -97,7 +97,7 @@ Tensor evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& ev
   op_profile::Scope profile(op_profile::Aggregate);
   const auto& w = m.nodes[events[ids[0]].node];
   std::vector<AggregateInput> requests;
-  for (auto i : ids) requests.push_back(request(g, m, events[i]));
+  for (auto i : ids) requests.push_back(aggregate_request(g, m, events[i]));
   std::vector<AggregateResult> results;
   AggregateBatch transport;
   if (packed && at::GradMode::is_enabled() && autograd == "batched") {

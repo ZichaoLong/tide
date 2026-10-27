@@ -32,23 +32,31 @@
 unit tide-core5-source-qualify-20261027，inactive/success、exit 0，665 passed / 0 failed / 0 skipped。
 只读 worktree artifacts/worktrees/core5-bootstrap 干净，tree 3146f4c20c11d5c57edc6b213b956bdd83e91207；
 输出 artifacts/jobs/core5-source-qualify，build manifest 已独立保存。
-完整命令与日志 hash 见证据，launcher .local/core5-source-qualify.sh。当前没有活动任务。
+完整命令与日志 hash 见证据，launcher .local/core5-source-qualify.sh。来源资格没有活动进程。
 本次证据单独提交并推送；不混入主工作区的下一增量。
 
-主工作区正在实施 Aggregate 精确计算复用，所有未提交修改均为本任务所作。
-Python aggregate_sharing/weighted.sharing 与 blocks、单位广播身份已接入；
-C++ aggregate_sharing、weighted_sharing 与 block/stream/delivery 已接入，尚未构建。
-12 项 Python 新检查和此前 17 项 instance/semantics 通过；12 项 native 尚未运行。
-契约 docs/weighted-compute-sharing.md；一般程序必须显式声明纯函数共享能力，
-按相同有序输入和实际参数身份复用，不合并物理原子/私有状态或独立同值根。
+Aggregate 计算复用开发已完成：tide-core5-sharing-dev-20261027，inactive/success、exit 0，
+543 passed / 0 failed / 0 skipped；源码 tree ae014cf867a308a1aa87c5d9527f4a62c9bdcd91。
+输出 artifacts/jobs/core5-sharing-dev，build manifest 已保存；launcher .local/core5-sharing-dev.sh。
+包含 Python/native 相同输入/参数复用、物理来源、独立根、AdamW/pending 恢复与 standalone，
+以及相关来源、Aggregate、图和调度回归。准备从此已测试 tree 提交实现。
 
-下一步：以 .local/freeze-core5.py tide-core5-source-qualify-20261027 冻结当前增量，
-创建 .local/core5-sharing-dev.sh，独立 background.slice、2 build workers、
-单线程 ATen/BLAS、1200 秒上限，输出 artifacts/jobs/core5-sharing-dev。
-检查新共享、来源/实例/aggregate、相关调度/训练恢复及 standalone；
-通过后实现提交，固定资格，证据另提交推送，然后继续 KV base 共享与设备路径。
-后续完整范围见 ROADMAP：mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/续接、
-有限 profiling 与最终追溯。CUDA 源码/构建/真机分开记录，无 GPU 不阻塞其他实施。
+下一步以该实现提交显式冻结，启动 tide-core5-sharing-qualify-20261027；
+launcher .local/core5-sharing-qualify.sh，输出 artifacts/jobs/core5-sharing-qualify。
+采用 --reuse-build 校验 C++ 源码与全部二进制 hash，范围与开发相同；
+独立 background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
+检查 `systemctl --user show tide-core5-sharing-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`、
+`cat artifacts/jobs/core5-sharing-qualify/status.json` 与 `tail -n 30 artifacts/jobs/core5-sharing-qualify/task.log`。
+当前尚未启动此资格，不可标为通过；通过后另提交证据并推送。
+
+主工作区另有下一增量：KV 基座投影复用，经显式 State preparation 能力接入，
+保留节点适配器、summary、私有状态及所有使用者贡献；不属于上述 Aggregate tree。
+新 state_preparation/weighted.kv_projection 与 packed/State VJP 已接入 Python/C++；
+6 项 Python 手算/完整根/保留图检查通过，C++ 尚未构建；训练/恢复后续开发门禁补验。
+一次新续接测试误将中间状态 objective 计入整段目标，2 项失败；改为完整末态和拼接输出后通过，
+实现未因此改变。所有未提交修改均为本任务所作。
+随后继续 mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/续接、
+有限 profiling 与最终追溯，完整范围见 ROADMAP。CUDA 源码/构建/真机分别记录。
 
 ## 环境与保留事项
 
