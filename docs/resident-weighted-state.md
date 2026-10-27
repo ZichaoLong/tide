@@ -53,3 +53,5 @@ w>1 的导数为零但仍连接。此 VJP 只反向结构/缓存作用；数值 
 | `verify_device_control.py --checks weighted-raw` | 显式 NPU/CUDA 实际组件检查入口；编译与实际设备证据独立 |
 
 当前开发结果及固定资格按 STATUS/证据索引记录。该层不是整个记忆数值函数，也不构成完整图训练/checkpoint或常驻性能证据。
+
+固定源码资格见[cb68d91运行证据](evidence/core5-resident-raw-20261027.md)。
