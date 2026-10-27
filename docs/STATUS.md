@@ -17,27 +17,24 @@
 - Bernoulli/Shannon/固定 alpha ent 分配 `a05d3ffc946985cfeb124a5e3b3074ceeece306d`：
   **226 passed / 0 failed / 0 skipped**，CPU FP64/FP32；[证据](evidence/core5-entropy-20261027.md)。
 
+- 十种发送/节点增益 `4a0858880831cb46ad96191ab9dd58fca5260223`：**320 passed / 0 failed / 0 skipped**，
+  CPU FP64/FP32；[证据](evidence/core5-sending-20261027.md)。实现与本次证据待一起推送。
+
 ## 当前任务与下一动作
 
-十种发送规则、固定/上下文节点增益、三/四字段描述、配置适用性与独立反向已完成本增量。
-[契约与追溯](weighted-sending.md)。开发 `tide-core5-sending-dev-20261027`：**304 passed**；
-端点/独立增益与弱总量反例补充 `tide-core5-sending-corners-20261027`：**70 passed**。
-两服务均 inactive/success、退出 0；计数是不同测试集合，不合并为唯一测试数。
-开发冻结树分别 `79186cbfdc7e77238bef61b769129ba27a374a23`、
-`ce335087a6430391ee59cea1e933f9b8e931ad94`；相应 artifacts/jobs 下保留 status/log/source。
-新增原语、绑定、测试和契约在本次一并固定提交，无用户修改。
+发送不可变资格 `tide-core5-sending-qualify-20261027` 已终态 inactive/success，退出 0。
+冻结 worktree `artifacts/worktrees/core5-bootstrap` 干净只读、源码 4a08588；目前无 live job。
+记录 `artifacts/jobs/core5-sending-qualify/{status.json,task.log,development.json}`；launcher `.local/core5-sending-qualify.sh`。
+原开发与端点快照日志/源码保留在 sending-dev / sending-corners，计数分别 304 / 70，不合并。
 
-接下来不可变资格 `tide-core5-sending-qualify-20261027`，launcher `.local/core5-sending-qualify.sh`，
-将 task-owned worktree `artifacts/worktrees/core5-bootstrap` 对齐本次实现提交、核验干净并只读。
-输出 `artifacts/jobs/core5-sending-qualify/{status.json,task.log,development.json}`。
-沿 sending-dev 九个入口运行完整本增量测试集合（包括后来补充），--reuse-build 先核验 C++ 源码/二进制。
-background.slice、Nice=10、ATen/BLAS 单线程、15 分钟上限；运行期间源码/build 不得修改。
-查看 `systemctl --user show tide-core5-sending-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
-日志 `tail -60 artifacts/jobs/core5-sending-qualify/task.log`；停止同名服务。
-尚无本次不可变资格通过结论；通过后单独提交证据并推送。
-
-继续 match/att/grouped/content key，然后联合/packed/批量 VJP、mixed/resident、
-standalone 完整训练与有限 profiling。阶段成果不代表总体任务完成，持续推进。
+下一增量未提交：match、att、grouped evidence、content_stats/content key，及其适用配置。
+Python scoring.py 和 C++ weighted_scoring.{h,cpp} 已编写并接描述/区域/native；
+新三/四/五/六字段按函数布局，评分/证据/key 默认参数独立，现无计算共享优化声明。
+Python 新手算、独立标量 Encoder/全部根、key 直接依赖、query 权重及 KV/熵回归 **71 项通过**。
+C++ 新增评分尚未构建，整图/共享/训练/续接检查待补；不属于发送 4a08588 资格。
+无用户修改。接下来完成本增量测试、冻结开发构建，再固定实现与独立资格。
+随后联合/packed/批量 VJP、mixed/resident、standalone 完整训练与有限 profiling。
+总体任务尚未完成，持续推进。
 
 ## 环境与保留事项
 
