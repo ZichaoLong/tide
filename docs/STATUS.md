@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送837a075（ce63aef完整Region实现及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送92751c0（完整Aggregate实现）；固定证据本次另提交。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -38,16 +38,18 @@ NPU两配置/24物理行20非空纤维，vendor RMS/源变换、全部载荷与�
 同类重复、零/负质量、四种补零隐藏宽度、None/零、原来源改写后的保存版本反向、容量/失败不提交通过。
 实际记录artifacts/jobs/core5-resident-aggregate-dev/{status.json,task.log,source.tree,checks/result.json}。
 
-当前提交Aggregate实现，随后冻结提交，运行core5-resident-aggregate-{npu,cuda}-qualify：
-NPU重验CPU15和完整组件，只有component/core/binary摘要一致才复用dev构建；
-CUDA新建sm80/90/100组件/loader。background.slice/Nice10、2build workers/BLAS单线程，
-NPU600秒/队列180秒、CUDA1200秒。新结果未知，不能预先标通过。
-命令.local/core5-resident-aggregate-{npu,cuda}-qualify{,-workload}.sh；输出同名artifacts/jobs目录。
+92751c0已推送；Aggregate固定资格CPU15、NPU完整组件、CUDA sm80/90/100构建均通过。
+core5-resident-aggregate-{npu,cuda}-qualify均clean/exit0/inactive，详见evidence/core5-resident-aggregate-20261027.json。
+NPU复用dev构建且完整component/core/binary摘要相符；原manifest保留。CUDA无真机证据。
+resident worktree固定92751c0、clean/read-only，无活动reader。
 
-下一阶段未提交weighted_source_adaptation.h/.cpp和tide_weighted_source_guard.cpp，
-用于实际保存低秩因子及vendor BMM的完整因子VJP；尚未登记、测试，不在Aggregate资格内。
-下一动作：固定Aggregate资格/独立证据提交推送，继续source参数链测试与别名owner，
-再接五记忆/Describe、图在线推进及完整训练/恢复。
+下一阶段未提交weighted_source_adaptation.h/.cpp、tide_weighted_source_guard.cpp及standalone组合check，
+CPU guard检查、构建登记已补齐。首次CPU setup遗漏登记导致3 errors（没有数值检查），
+原treebf59ee14bf5c77cab3edbe81306c79c04721997f和失败记录保存在
+artifacts/reproducers/core5-source-guard-registration/{source.tar,result.json}，不改为passed。
+该组件保存实际低秩因子并使用vendor BMM/permute完整反向；尚未设备构建/验证，不能视为通过。
+下一步核查CPU修正结果、补对应契约，冻结新的source-dev任务运行，再提交/固定资格/证据。
+随后继续canonical参数owner、五记忆/Describe、在线图调度与训练/恢复。
 
 完整weighted resident仍缺参数owner集成、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
