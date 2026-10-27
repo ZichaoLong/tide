@@ -19,7 +19,10 @@ void bind_weighted(py::module_& module){
     FIELD(RegionalConfig,total_fraction) FIELD(RegionalConfig,region_control_mode)
     FIELD(RegionalConfig,regularizer) FIELD(RegionalConfig,ent_alpha) FIELD(RegionalConfig,selection_mode)
     FIELD(RegionalConfig,region_evidence) FIELD(RegionalConfig,send_gain) FIELD(RegionalConfig,fixed_gain)
-    FIELD(RegionalConfig,gain_logit) FIELD(RegionalConfig,eta) FIELD(RegionalConfig,allocation_base).def("validate",&RegionalConfig::validate);
+    FIELD(RegionalConfig,gain_logit) FIELD(RegionalConfig,eta) FIELD(RegionalConfig,allocation_base)
+    FIELD(RegionalConfig,local_score) FIELD(RegionalConfig,region_score) FIELD(RegionalConfig,selection_width)
+    FIELD(RegionalConfig,region_key) FIELD(RegionalConfig,query_weight) FIELD(RegionalConfig,alpha_match)
+    FIELD(RegionalConfig,alpha_res) FIELD(RegionalConfig,alpha_loc) FIELD(RegionalConfig,alpha_sel).def("validate",&RegionalConfig::validate);
   py::class_<RecurrentConfig>(module,"WeightedRecurrentConfig").def(py::init<>())
     FIELD(RecurrentConfig,memory_family) FIELD(RecurrentConfig,memory_read)
     FIELD(RecurrentConfig,width) FIELD(RecurrentConfig,summary_width) FIELD(RecurrentConfig,key_width)
@@ -43,6 +46,10 @@ void bind_weighted(py::module_& module){
   module.def("weighted_allocate",[](const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau,
                                     const std::string& regularizer,std::optional<double> alpha){
     return allocate(t,mu,lo,hi,tau,regularizer,alpha).controls;
+  });
+  module.def("weighted_allocate_shifted",[](const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau,
+                                    const std::string& regularizer,std::optional<double> alpha,const Tensor& shift){
+    return allocate(t,mu,lo,hi,tau,regularizer,alpha,shift).controls;
   });
   module.def("weighted_attention_shares",&attention_shares);
   module.def("weighted_attention_send",&attention_send);

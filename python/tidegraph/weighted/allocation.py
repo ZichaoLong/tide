@@ -86,9 +86,9 @@ def _solve(t, mu, target, temperature):
 
 class _ExactQuad(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, t, mu, target, temperature, c, multiplier, equality):
+    def forward(ctx, t, mu, target, temperature, c, multiplier, equality, shift):
         ctx.set_materialize_grads(False)
-        ctx.save_for_backward(t, mu, temperature, c, multiplier)
+        ctx.save_for_backward(t, mu, target, temperature, c, multiplier, shift)
         ctx.equality = equality
         return c.clone()
 
@@ -96,23 +96,30 @@ class _ExactQuad(torch.autograd.Function):
     @once_differentiable
     def backward(ctx, grad):
         if grad is None:
-            return (None,)*7
-        t, mu, temperature, c, multiplier = ctx.saved_tensors
+            return (None,)*8
+        t, mu, _, temperature, c, multiplier, shift = ctx.saved_tensors
         free = (c > 0) & (c < mu)
         a = free.to(c.dtype)/temperature
         # At an exact upper breakpoint choose the saturated-side derivative;
         # zero cap and lower breakpoint choose the zero-side derivative.
         e = ((c == mu) & (mu > 0)).to(c.dtype)
         total = a.sum()
-        mean = (a*grad).sum()/total if ctx.equality and total > 0 else grad.new_zeros(())
-        centered = grad-mean
+        if ctx.equality and total > 0:
+            anchor = grad[a.argmax()]
+            relative = grad-anchor
+            offset = (a*relative).sum()/total
+            mean, centered = anchor+offset, relative-offset
+        else:
+            mean, centered = grad.new_zeros(()), grad
         gt = a*centered
         gm = e*centered
-        gtemp = (-a*(t-multiplier)/temperature*centered).sum()
-        return gt, gm, mean, gtemp, None, None, None
+        response = t-multiplier if shift is None else t-shift-multiplier
+        gtemp = (-a*response/temperature*centered).sum()
+        gshift = None if shift is None else grad.new_zeros(()) if ctx.equality else -gt.sum()
+        return gt, gm, mean, gtemp, None, None, None, gshift
 
 
-def allocate_quad(scores, caps, lower, upper, temperature=1.0):
+def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=None):
     """Solve max s·c - τ/2 ||c||², 0≤c≤caps, lower≤Σc≤upper.
 
     Returns actual controls, multiplier, selected branch and KKT/feasibility
@@ -120,7 +127,13 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0):
     one complete region; joint region packing is a separate execution policy.
     """
     lower, upper, temperature = _validate(scores, caps, lower, upper, temperature)
+    score_shift = None if score_shift is None else _scalar(score_shift, scores, "score_shift")
+    original_scores = scores
     with torch.no_grad():
+        if score_shift is not None:
+            scores = scores-score_shift
+            if not torch.isfinite(scores).all():
+                raise ArithmeticError("shifted allocation scores exceed requested dtype range")
         mass = caps.sum()
         zero = scores.new_zeros(())
         if mass == 0 or upper == 0:
@@ -152,5 +165,5 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0):
         result = caps  # Singleton feasible set: identity in caps only.
     else:
         target = lower if branch in {"lower", "equality"} else upper
-        result = _ExactQuad.apply(scores, caps, target, temperature, c, lam, branch != "slack")
+        result = _ExactQuad.apply(original_scores, caps, target, temperature, c, lam, branch != "slack", score_shift)
     return Allocation(result, lam, branch, free, residual)

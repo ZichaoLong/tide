@@ -1,5 +1,6 @@
 // Allocation §2, §4: independent C++ complete region step, no scheduler policy.
 #include "weighted_detail.h"
+#include "weighted_scoring.h"
 #include "tide/weighted_sending.h"
 
 namespace tide::weighted {
@@ -9,15 +10,15 @@ class Sending final:public RegionKernel {
  public:
   explicit Sending(RegionalConfig c):c_(std::move(c)){c_.validate();}
   Selection step(const RegionWeights& w,const RegionInput& r) const override {
-    std::vector<Tensor> received,caps,scores,evidence;std::vector<Index> nodes;
+    std::map<std::string,std::vector<Tensor>> columns;std::vector<Index> nodes;
     for(const auto& d:r.candidates){
-      nodes.push_back(d.node);received.push_back(d.fields.at("w"));caps.push_back(d.fields.at("mu"));
-      scores.push_back(d.fields.at("score"));if(c_.regional())evidence.push_back(d.fields.at("evidence"));
+      nodes.push_back(d.node);for(const auto& [name,value]:d.fields)columns[name].push_back(value);
     }
-    auto recv=at::stack(received),mu=at::stack(caps),s=at::stack(scores),sum=recv.sum(),mass=mu.sum();
-    Tensor control,low,high,result;
+    std::map<std::string,Tensor> fields;for(const auto& [name,values]:columns)fields[name]=at::stack(values);
+    auto recv=fields.at("w"),mu=fields.at("mu"),s=region_scores(w,c_,fields),sum=recv.sum(),mass=mu.sum();
+    Tensor control,low,high,result,shift;
     if(c_.region_control_mode=="context"){
-      auto z=(recv.unsqueeze(-1)*at::stack(evidence)).sum(0)/sum.clamp_min(1);
+      auto z=(recv.unsqueeze(-1)*fields.at("evidence")).sum(0)/sum.clamp_min(1);
       control=head(w.extra,"head",at::cat({z,sum.log1p().reshape({1}),mass.log1p().reshape({1})}));
     }
     if(c_.total()){
@@ -28,17 +29,18 @@ class Sending final:public RegionKernel {
       result=attention_send(s,mu,recv,c_.selection_mode,*c_.allocation_base,at::full({},*c_.allocation_temperature,s.options()));
     } else if(c_.selection_mode=="proportional")result=proportional(mu,*c_.k);
     else {
-      s=s-(control.defined()?control:at::full({},*c_.eta,s.options()));
-      if(c_.hard())result=hard_selection(s,mu,*c_.k,nodes);
+      shift=control.defined()?control:at::full({},*c_.eta,s.options());
+      if(c_.hard())result=hard_selection(s-shift,mu,*c_.k,nodes);
       low=(c_.regional()?sum:mass).clamp_max(1);high=at::full({},*c_.k,s.options());
     }
-    if(!result.defined())result=allocate(s,mu,low,high,at::full({},*c_.allocation_temperature,s.options()),*c_.regularizer,c_.ent_alpha).controls;
+    if(!result.defined())result=allocate(s,mu,low,high,at::full({},*c_.allocation_temperature,s.options()),*c_.regularizer,c_.ent_alpha,shift).controls;
     Selection answer;answer.history.last_time=r.time;
     for(size_t i=0;i<nodes.size();++i){answer.controls[nodes[i]]=result[i];if(result[i].item<double>()>0)answer.active.insert(nodes[i]);}
     return answer;
   }
   void validate_weights(const RegionWeights& w,const RegionLayout& layout) const override {
     require(layout.spec.budget==c_.capacity(layout.members.size())&&layout.spec.observe_all,"weighted region requires declared k/K and observe-all");
+    validate_query(w,c_);
     if(c_.region_control_mode=="context"){
       require(w.extra.at("head.matrix").sizes()==at::IntArrayRef({c_.hidden_width,*c_.region_control_width+2})
         &&w.extra.at("head.hidden_bias").sizes()==at::IntArrayRef({c_.hidden_width})

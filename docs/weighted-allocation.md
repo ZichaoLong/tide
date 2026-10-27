@@ -70,3 +70,21 @@ ent(alpha=2) 与 scores+tau/2 的 quad 对应分别比较；不把不同函数�
 链路、独立根、三步 AdamW、pending/checkpoint，以及下溢和版本变更拒绝。
 standalone `cpp/test/weighted_entropy.cpp` 使用等评分 Bern 的手算控制/Jacobian 与独立 softmax。
 当前增量的开发/不可变运行状态见 STATUS；不据此提前认证其他发送规则或新设备路径。
+
+## 显式共同评分平移与稳定 VJP
+
+`allocate(..., score_shift=eta)`（quad 入口同样提供）定义对 `scores-eta` 的同一 Alloc。
+eta 是同 dtype/device 的有限标量，作为独立输入保存版本。
+regional_threshold/constrained 通过该入口传入共同阈值。总量约束起作用时，
+整个可微分支的共同阈值导数解析为连接零；松弛时为各评分导数之和的负值。
+如果 eta 同时影响 bounds/caps 等，其他真实路径仍照常回传；没有按梯度数值截断。
+全零/全上限单点分支仍按原约定返回无关零/原上限。
+
+约束分支的加权根均值先对 cotangent 减去一个公共分量，再求加权均值，最后还原
+总量根。这与 §6.2 的原式代数相同，减少大公共 cotangent 的相消；任意常数根偏移
+只改变总量导数。没有改正则、求根次数、前向值、容差或梯度身份。
+[独立平移检查](../tests/test_weighted_allocation_shift.py)核对四种正则的上下界/等式/松弛、
+精确阈值零方向、bound 的其他依赖、共同 cotangent 偏移和版本检查。
+
+此修正来源于新 match 训练见证：下界活动时约 5e-10 的浮点伪阈值梯度被 AdamW
+放大成约 1e-5 的参数差异。原失败与后续资格分别保留，不将旧失败重标为成功。

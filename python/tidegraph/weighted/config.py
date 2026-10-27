@@ -97,13 +97,20 @@ class RegionalConfig:
     fixed_gain: float | None = None
     gain_logit: float | None = None
     allocation_base: str | None = None
+    selection_width: int | None = None
+    region_key: str | None = None
+    query_weight: str | None = None
+    alpha_match: float | None = None
+    alpha_res: float | None = None
+    alpha_loc: float | None = None
+    alpha_sel: float | None = None
 
     def __post_init__(self):
         positive_int("hidden_width", self.hidden_width)
         if self.read_mode not in {"0", "-", "+"}:
             raise ValueError("read_mode must be 0/-/+")
-        if (self.local_score, self.region_score) != ("cat", "ind"):
-            raise ValueError("this binding currently implements cat/ind scoring")
+        if self.local_score not in {"cat", "match"} or self.region_score not in {"ind", "att"}:
+            raise ValueError("invalid local_score/region_score")
         if self.selection_mode not in REGIONAL | GAIN:
             raise ValueError("unknown selection_mode")
         finite("gamma_max", self.gamma_max, 1)
@@ -137,8 +144,8 @@ class RegionalConfig:
             if self.region_control_mode == "context":
                 self._default("region_evidence", "cat")
                 self._absent("eta", "total_fraction")
-                if self.region_evidence != "cat":
-                    raise ValueError("context currently requires cat evidence")
+                if self.region_evidence not in {"cat", "grouped"}:
+                    raise ValueError("region_evidence must be cat/grouped")
             elif self.region_control_mode == "fixed":
                 self._absent("region_evidence")
                 if self.selection_mode in TOTAL:
@@ -172,6 +179,28 @@ class RegionalConfig:
                 finite("eta", self.eta)
             else:
                 self._absent("eta")
+        if self.local_score == "match" or self.region_score == "att" or self.region_evidence == "grouped":
+            self._default("selection_width", 4)
+            positive_int("selection_width", self.selection_width)
+        else:
+            self._absent("selection_width")
+        if self.local_score == "match":
+            for field in ("alpha_match", "alpha_res"):
+                self._default(field, 1.)
+                finite(field, getattr(self, field), 0)
+        else:
+            self._absent("alpha_match", "alpha_res")
+        if self.region_score == "att":
+            self._default("region_key", "content_stats")
+            self._default("query_weight", "received" if self.regional else "mu")
+            if (self.region_key not in {"content_stats", "content"} or self.query_weight not in {"mu", "received"}
+                    or self.regional and self.query_weight != "received"):
+                raise ValueError("invalid region_key/query_weight")
+            for field in ("alpha_loc", "alpha_sel"):
+                self._default(field, 1.)
+                finite(field, getattr(self, field), 0)
+        else:
+            self._absent("region_key", "query_weight", "alpha_loc", "alpha_sel")
 
     @property
     def regional(self):
@@ -205,7 +234,8 @@ class RegionalConfig:
         fields = asdict(self)
         # Preserve pre-entropy quad graph/checkpoint identities. An absent
         # fixed entropy shape has no semantics; an actual shape always enters.
-        for name in ("ent_alpha", "eta", "send_gain", "fixed_gain", "gain_logit", "allocation_base"):
+        for name in ("ent_alpha", "eta", "send_gain", "fixed_gain", "gain_logit", "allocation_base",
+                     "selection_width", "region_key", "query_weight", "alpha_match", "alpha_res", "alpha_loc", "alpha_sel"):
             if fields[name] is None:
                 fields.pop(name)
         return fields

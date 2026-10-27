@@ -18,23 +18,42 @@
   **226 passed / 0 failed / 0 skipped**，CPU FP64/FP32；[证据](evidence/core5-entropy-20261027.md)。
 
 - 十种发送/节点增益 `4a0858880831cb46ad96191ab9dd58fca5260223`：**320 passed / 0 failed / 0 skipped**，
-  CPU FP64/FP32；[证据](evidence/core5-sending-20261027.md)。实现与本次证据待一起推送。
+  CPU FP64/FP32；[证据](evidence/core5-sending-20261027.md)。实现与证据 76c698e 均已推送。
 
 ## 当前任务与下一动作
 
-发送不可变资格 `tide-core5-sending-qualify-20261027` 已终态 inactive/success，退出 0。
-冻结 worktree `artifacts/worktrees/core5-bootstrap` 干净只读、源码 4a08588；目前无 live job。
-记录 `artifacts/jobs/core5-sending-qualify/{status.json,task.log,development.json}`；launcher `.local/core5-sending-qualify.sh`。
-原开发与端点快照日志/源码保留在 sending-dev / sending-corners，计数分别 304 / 70，不合并。
+评分与分配 VJP 增量已完成开发：match/att/grouped、content_stats/content key，
+独立参数和显式共享、3/4/5/6 字段描述、五种异构记忆、Read0/-/+、PDG、AdamW/恢复。
+分配增加显式共同 score_shift 及其活动总量约束的解析连接零 VJP；保留 caps/bounds 路径。
+没有改前向、容差、dtype 或加梯度裁剪；共同 cotangent 中心改善相消。
+Encoder/Query 一维输入统一矩阵乘列向量顺序，保留任意 leading batch axes。
+相关代码、测试、契约同增量提交；无用户修改。
 
-下一增量未提交：match、att、grouped evidence、content_stats/content key，及其适用配置。
-Python scoring.py 和 C++ weighted_scoring.{h,cpp} 已编写并接描述/区域/native；
-新三/四/五/六字段按函数布局，评分/证据/key 默认参数独立，现无计算共享优化声明。
-Python 新手算、独立标量 Encoder/全部根、key 直接依赖、query 权重及 KV/熵回归 **71 项通过**。
-C++ 新增评分尚未构建，整图/共享/训练/续接检查待补；不属于发送 4a08588 资格。
-无用户修改。接下来完成本增量测试、冻结开发构建，再固定实现与独立资格。
-随后联合/packed/批量 VJP、mixed/resident、standalone 完整训练与有限 profiling。
-总体任务尚未完成，持续推进。
+当前无 live job。最后主工作区定向复核：
+`TIDE_BUILD_DIR="$PWD/artifacts/worktrees/core5-bootstrap/build/cpu" python -m pytest -q tests/test_weighted_scoring.py tests/test_weighted_scoring_execution.py --dtype both`
+**66 passed / 0 failed / 0 skipped**；完整整图/梯度/优化器/续接的原评分失败已消失。
+这是开发检查，不能替代固定源码资格。
+
+下一动作：固定该实现提交，冻结 task-owned worktree `artifacts/worktrees/core5-bootstrap`，
+将 worktree HEAD/index 对齐固定提交并核验干净只读；通过 `develop.py --reuse-build` 核验
+C++ 源码和二进制 hash，启动新的 scoring-qualify background.slice 服务。
+联合检查 allocation_shift/allocation/entropy、scoring/scoring_execution、sending/execution、
+weighted KV/recurrent/config 和 standalone 局部公式；精确命令在资格 launcher 与 job 记录。
+资格终态后独立提交证据并推送，继续精确联合/packed/批量 VJP、mixed/resident、
+standalone 完整训练与有限 profiling。总体任务尚未完成，持续推进。
+
+## 本增量保留的失败与修复
+
+| job / 冻结树 | 终态 | 原因与修复 |
+| --- | --- | --- |
+| scoring-dev / f1b561974cbeeb8926b4e75c9d91c3b46d50addc | 345 passed / 3 failed，exit 1 | FP32 共同阈值残差被 AdamW 放大；解析 shift VJP 修复。两个 Read 快照根的数值顺序差见下 |
+| scoring-vjp / 9b5b17a17c3363857bff997bf8c91e4ec9946bb2 | 246 passed / 40 failed，exit 1 | C++ custom Function 的 undefined shift 占位无 device；改为不求导零标量 |
+| scoring-vjp-fixed / 1304ab4b2523095303c7cd888b0142799bceb49e | 301 passed / 1 failed，exit 1 | FP32 PDG Read− key.out_bias 差 2.0266e-6；统一 Encoder/Query 求值顺序后所有 cut 通过，诊断最大差 2.98e-8 |
+
+原日志/status/source 在 `artifacts/jobs/core5-<job>/`，全部失败保留。
+最小诊断 `.local/diagnose-core5-scoring.py` 与 `.local/diagnose-scoring-order.py`；
+输出分别在 scoring-dev/diagnosis.txt 和 scoring-vjp-fixed/order-diagnosis.txt。
+不得把新通过结果覆盖旧失败。
 
 ## 环境与保留事项
 

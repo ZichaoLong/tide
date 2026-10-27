@@ -10,7 +10,9 @@ def region_config(core, config):
     result = core.WeightedRegionalConfig()
     for name in ("hidden_width","region_control_width","k","gamma_max","total_fraction",
                  "allocation_temperature","region_control_mode","regularizer","ent_alpha","selection_mode",
-                 "region_evidence","eta","send_gain","fixed_gain","gain_logit","allocation_base"):
+                 "region_evidence","eta","send_gain","fixed_gain","gain_logit","allocation_base",
+                 "local_score","region_score","selection_width","region_key","query_weight","alpha_match",
+                 "alpha_res","alpha_loc","alpha_sel"):
         setattr(result,name,getattr(config,name))
     result.validate()
     return result

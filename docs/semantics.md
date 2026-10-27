@@ -116,6 +116,17 @@ sorted fill and hard caps have separately named branch derivatives, never HST.
 Inactive configuration fields are rejected. The original regional_total profile
 identity remains; new functions enter distinct hashed graph/checkpoint bindings.
 
+## Weighted scoring bindings
+
+[Scoring/evidence/key](weighted-scoring.md) binds match, grouped evidence,
+regional Attention scores, content_stats and content keys to the same actual
+Mem snapshot. Region query weights are received for regional control and an
+explicit received/mu choice for node-gain functions. Three/four-field ind
+layouts gain x/key vectors for att. Independent parameters may be explicitly
+tied; contributions from every user remain connected. Content-key direct
+statistics independence does not erase the memory/query/selection dependencies.
+Old inactive-default configuration hashes remain stable; qualified scopes are separate.
+
 ## Weighted recurrent binding
 
 [Weighted recurrent memory](weighted-recurrent.md) separately binds affine,

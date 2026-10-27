@@ -1,6 +1,6 @@
 // 0770593 architecture §2–4, allocation §2–3. See docs/weighted-message.md.
 #include "weighted_recurrent_detail.h"
-#include "weighted_regularizers.h"
+#include "weighted_scoring.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -41,14 +41,16 @@ template<class Config> class Describe final:public ReadKernel {
   bool structured() const override{return true;}
   FieldLayout field_layout(const NodeWeights&) const override {
     FieldLayout result{{"w",{}},{"mu",{}},{"score",{}}};
-    if(r_.regional())result["evidence"]={*r_.region_control_width};return result;
+    if(r_.regional())result["evidence"]={*r_.region_control_width};
+    if(r_.region_score=="att"){result["x"]={*r_.selection_width};result["key"]={*r_.selection_width};}
+    return result;
   }
   TensorFields fields_step(const NodeWeights& w,const ReadInput& r) const override {
     auto initial=r.state?State{}:w.kernel->initial(w);const auto& state=r.state?*r.state:initial;
     auto mass=r.content.value[0],u=r.content.value.slice(0,1);
     auto mem=memory(w,state,r.time,u,c_);auto p=current(w,u,c_);
-    auto features=at::cat({normalize(u,c_.epsilon),mass.log1p().reshape({1}),mem[0],mem[1],
-                          mem[2].log1p().reshape({1}),mem[3].log1p().reshape({1}),p*mem[0],p*mem[1]});
+    Groups groups{normalize(u,c_.epsilon),at::cat({mem[0],mem[1]}),at::stack({mass.log1p(),mem[2].log1p(),mem[3].log1p()})};
+    auto features=at::cat({groups[0],groups[2].slice(0,0,1),mem[0],mem[1],groups[2].slice(0,1),p*mem[0],p*mem[1]});
     auto received=mass.clamp_max(1);
     Tensor mu;
     if(r_.regional())mu=(r_.gamma_max*received).clamp_max(1);
@@ -58,23 +60,16 @@ template<class Config> class Describe final:public ReadKernel {
       else if(r_.gain_logit)gamma=1+(r_.gamma_max-1)*weight(w,"read_program.gain_logit").sigmoid();
       mu=(gamma*mass).clamp_max(1);
     }
-    TensorFields result{{"w",received},{"mu",mu},{"score",head(w.extra,"read_program.score",features)}};
-    if(r_.regional())result["evidence"]=r_.region_control_mode=="context"
-      ?normalize(at::matmul(weight(w,"read_program.evidence_weight"),features)+weight(w,"read_program.evidence_bias"),c_.epsilon)
-      :at::zeros({*r_.region_control_width},features.options());
+    TensorFields result{{"w",received},{"mu",mu},{"score",local_score(w,r_,features,groups,c_.epsilon)}};
+    if(r_.regional())result["evidence"]=region_evidence(w,r_,features,groups,c_.epsilon);
+    if(r_.region_score=="att"){
+      result["x"]=at::matmul(weight(w,"read_program.current_weight"),groups[0])+weight(w,"read_program.current_bias");
+      result["key"]=memory_key(w,r_,groups,c_.epsilon);
+    }
     return result;
   }
   void validate_weights(const NodeWeights& w) const override {
-    const auto f=c_.width+4*c_.summary_width+3;
-    shape(w,"read_program.score.matrix",{r_.hidden_width,f});shape(w,"read_program.score.hidden_bias",{r_.hidden_width});
-    shape(w,"read_program.score.vector",{r_.hidden_width});shape(w,"read_program.score.bias",{});
-    if(r_.region_control_mode=="context"){
-      shape(w,"read_program.evidence_weight",{*r_.region_control_width,f});shape(w,"read_program.evidence_bias",{*r_.region_control_width});
-    }
-    if(r_.send_gain=="context"){
-      shape(w,"read_program.gain.matrix",{r_.hidden_width,f});shape(w,"read_program.gain.hidden_bias",{r_.hidden_width});
-      shape(w,"read_program.gain.vector",{r_.hidden_width});shape(w,"read_program.gain.bias",{});
-    } else if(r_.gain_logit)shape(w,"read_program.gain_logit",{});
+    validate_describe(w,r_,c_.width,c_.summary_width);
   }
  private:Config c_;RegionalConfig r_;
 };
