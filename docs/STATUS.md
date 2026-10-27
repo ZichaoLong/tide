@@ -9,7 +9,7 @@
 - `efb9d629438fb77582842bb133158be7f9f70afb` 采用 core-5 的 19 份固定原文，
   实施一般端口 SettleGraph：同秩区域、稀疏日程、逐边/端口、原样嵌入和任意切点。
   不可变 CPU FP64/FP32 定向资格 247 项通过，证据提交 `d0acd3c`，两者已推送。
-- 结构化表示增量即将提交：具名 Read、独立字段根、typed packing、int64 状态槽、
+- 结构化表示已提交 `714d5f963b676d95a0ae763171a7d93806f183d3`：具名 Read、独立字段根、typed packing、int64 状态槽、
   SourceClasses。`core5-structured-dev` 已构建成功，但测试 **210 passed / 2 failed**，
   原因是 Python 通用校验读取 BoundaryWeights 不存在的 kernel；主工作区已修复；新冻结树 `f29dfb13d2aae33786dd39cd8b5d8d447ad0afa1`
   的 `core5-structured-fix` 已通过 **212 项**、退出 0。
@@ -28,11 +28,10 @@
 日志/结果：`artifacts/jobs/core5-structured-fix/{status.json,task.log,development.json}`。
 `core5-structured-dev` 的原 2 项失败保持，不改写为成功。
 
-下一步只提交已暂存表示增量，然后在该不可变提交上复用 C++ source/binary hash
-均匹配的构建，运行同一 212 项集合。拟用 unit `tide-core5-structured-qualify-20261027`，
-输出 `artifacts/jobs/core5-structured-qualify`；实际提交及启动状态在启动前更新。
-该集合包含 structured/read/state-clock/coordinate-checkpoint、独立 C++ kernel、
-一般端口 SettleGraph 和 Read 批量 VJP；不是全仓库/全设备矩阵。
+不可变 `714d5f963b676d95a0ae763171a7d93806f183d3` 的资格已通过：
+`tide-core5-structured-qualify-20261027` 终态成功、退出 0、212 项通过，
+冻结 checkout 干净。证据 [core5-structured](evidence/core5-structured-20261027.md)。
+当前无活动长任务；下一步提交证据并推送，继续带权 native 局部函数与首组合。
 
 未暂存的带权 Python/C++ 代码、测试、契约与 validation/checkpoint 绑定 hook
 保留为后续增量，继续完善 native/standalone 首组合证据，再依 ROADMAP 扩展完整范围。

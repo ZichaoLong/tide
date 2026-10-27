@@ -7,7 +7,7 @@
 | 阶段 | 交付与验收范围 | 当前状态 |
 | --- | --- | --- |
 | 0 起步与采用 | 迁移路径/工具链、最小 CPU 开发链路、固定原文与验收 §1.1–1.4 | 路径/来源核对与 Python 起步通过；原生基线构建与 93 项检查通过；core-5 19 文件逐字节校验通过 |
-| 1 公共表示与一般图 | 同秩区域、任意端口日程、逐边/端口返回、原样嵌入；SrcClass 多原子、结构化 payload/content/Read、int64 元数据与精确编解码 | 一般 SettleGraph efb9d62 固定提交定向资格 247 项通过；带权表示正在实施 |
+| 1 公共表示与一般图 | 同秩区域、任意端口日程、逐边/端口返回、原样嵌入；SrcClass 多原子、结构化 payload/content/Read、int64 元数据与精确编解码 | 一般 SettleGraph efb9d62 固定提交定向资格 247 项通过；结构化 Read/int64/SrcClass 表示 714d5f9 固定提交定向资格 212 项通过；具体带权绑定在下一阶段 |
 | 2 首个完整组合 | kv/sum/+、cat/ind、regional_total/context/cat/quad；明确尺寸/初态/共享，FC 与 HB | 待实现；含 PDG 反馈、非对齐 TimedDAG、一般端口，完整记录、独立根 VJP、优化器、续接/checkpoint |
 | 3 正式候选 | affine/delta/gated_delta/ssd、固定逻辑时间短卷积；全部适用发送/评分/证据/key、异构组合 | 待逐函数实现、配置适用性与独立数学测试；旧同名内核不自动符合新定义 |
 | 4 精确联合/packed/VJP | 在线贪心 prefill、完整记录与右切面、实际 packing、参数/计算共享和私有状态 | 待扩展各函数的批量契约与梯度连接证据，禁止轨迹预跑 |
