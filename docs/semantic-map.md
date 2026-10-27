@@ -31,6 +31,8 @@
 [常驻Full残差](resident-weighted-residual.md)对应实际内容/记忆输入、SwiGLU及四个参数角色的一阶VJP；
 [常驻KV Full](resident-weighted-kv-full.md)组合实际选择、候选快照、多头Attention/位置与完整未缩放内容G。
 
+[常驻完整Describe](resident-weighted-describe.md)对应实际Mem四字段、cat/match、两种evidence/key及三类增益的独立字段/参数VJP。
+
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。
 [semantics](semantics.md) 拥有本地公式、精度、梯度和序列化版本。

@@ -6,7 +6,7 @@ namespace tide::device_online::cuda_backend {
 // CUDA numerical kernels use explicit storage and no dynamic allocation.
 // Dense matrix multiplication is submitted to cuBLAS separately.
 enum Type { F32,F16,I64,I32,U8,BOOL };
-enum Op { Copy,Add,Mul,Div,Equal,Less,And,Softplus,Sigmoid,Tanh,Relu,Silu,
+enum Op { Copy,Add,Mul,Div,Equal,Less,And,Softplus,Sigmoid,Tanh,Relu,Silu,Log1p,Minimum,
           TanhBackward,SiluBackward,ReluBackward,Cast,Sin,Cos };
 struct Layout {
   int rank=0;
