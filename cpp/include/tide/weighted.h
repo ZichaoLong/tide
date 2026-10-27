@@ -6,6 +6,7 @@
 #include "tide/source_class.h"
 #include <array>
 #include <optional>
+#include <variant>
 
 namespace tide::weighted {
 // Marker for the local binding's transport invariant, not a scheduler policy.
@@ -56,6 +57,20 @@ struct RegionalConfig {
   Index capacity(Index size) const;
   void validate() const;
 };
+// Value-only inspection of installed weighted functions. No tensor evaluation,
+// parameter cloning, profile-name parsing or inference from parameter shapes.
+using MemoryConfiguration=std::variant<KVConfig,RecurrentConfig>;
+struct NodeBinding {
+  MemoryConfiguration memory;
+  RegionalConfig regional;
+  SourceClasses sources;
+  double aggregate_alpha;
+};
+NodeBinding node_binding(const NodeWeights&);
+RegionalConfig region_binding(const RegionWeights&);
+bool same_configuration(const KVConfig&,const KVConfig&);
+bool same_configuration(const RecurrentConfig&,const RecurrentConfig&);
+bool same_configuration(const RegionalConfig&,const RegionalConfig&);
 struct Allocation {
   Tensor controls, multiplier, free, residual;
   std::string constraint;

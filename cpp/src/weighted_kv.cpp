@@ -152,9 +152,13 @@ class KV final:public MemoryKernel {
             "invalid KV timestamp/metadata state");
     require((s.slots.at("weights")>=0).all().item<bool>()&&(s.slots.at("weights")<=1).all().item<bool>(),"invalid KV write weights");
   }
+  KVConfig configuration() const{return c_;}
  private:KVConfig c_;
 };
 std::shared_ptr<const StateKernel> make_kv(const KVConfig& c){return std::make_shared<KV>(c);}
+std::optional<KVConfig> kv_configuration(const StateKernel& kernel){
+  if(auto value=dynamic_cast<const KV*>(&kernel))return value->configuration();return std::nullopt;
+}
 void validate_transport(const Graph& g,const Model& m){
   std::vector<bool> weighted;
   for(const auto& w:m.nodes)weighted.push_back(dynamic_cast<const MemoryKernel*>(w.kernel.get())!=nullptr);

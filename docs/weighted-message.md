@@ -97,6 +97,12 @@ quad 正支持按实际求得控制判定，严格路由对照不能用数值容
 
 C++ 公共局部接口位于 `cpp/include/tide/weighted.h`，分别由 weighted_kv.cpp、
 weighted_programs.cpp、weighted_allocation.cpp 实现；native.py 只传 Tensor 和固定配置。
+`node_binding/region_binding` 返回实际安装函数的配置副本、来源分类与 Aggregate 系数；
+它们不运行张量、不解析 profile 名称、不从参数形状猜配置。节点检查同时验证
+State/Describe/Full 配置及 Aggregate epsilon 一致；未安装或混装函数提前拒绝。
+Read 的初态/旧态/候选态选择仍属于 Graph::Region。Python 传输适配器为
+`weighted_node_binding/weighted_region_binding`；`test_weighted_binding_inspection.py`
+逐字段核验五族及副本隔离，C++ `check_weighted` 独立拒绝不一致的 Full。
 C++ 使用独立有界二分与响应段校正，Python 使用断点扫描；两者都声明精确解映射 VJP。
 standalone `cpp/test/weighted.cpp` 有自己的手算、共享根导数、大时钟及零事件原状态检查。
 原生定向开发检查已通过；不可变资格与证据状态见 STATUS。

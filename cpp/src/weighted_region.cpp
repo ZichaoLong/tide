@@ -69,4 +69,8 @@ std::optional<RegionalConfig> sending_config(const RegionKernel& kernel){
   return std::nullopt;
 }
 void configure_region(RegionWeights& w,const RegionalConfig& r){w.kernel=std::make_shared<Sending>(r);}
+RegionalConfig region_binding(const RegionWeights& w){
+  if(w.kernel)if(auto c=sending_config(*w.kernel)){c->validate();return *c;}
+  throw std::invalid_argument("region binding requires installed weighted Sending");
+}
 }

@@ -49,6 +49,21 @@ void check_weighted(const at::TensorOptions& o){
     configure_node(w,c,r,SourceClasses{{},{0,0}},0.);model.nodes.push_back(w);
   }
   model.regions.resize(1);configure_region(model.regions[0],r);
+  {
+    auto snapshot=node_binding(model.nodes[0]);snapshot.sources.validate(g);
+    if(!same_configuration(std::get<KVConfig>(snapshot.memory),c)||!same_configuration(snapshot.regional,r)
+      ||!same_configuration(region_binding(model.regions[0]),r)||snapshot.aggregate_alpha!=0)
+      throw std::runtime_error("weighted binding inspection changed installed configuration");
+    std::get<KVConfig>(snapshot.memory).window=999;snapshot.sources.inputs[0]=999;
+    if(!same_configuration(std::get<KVConfig>(node_binding(model.nodes[0]).memory),c)
+      ||node_binding(model.nodes[0]).sources.inputs[0]!=0)
+      throw std::runtime_error("weighted inspection mutates installed configuration");
+    auto other=model.nodes[0];auto changed=c;changed.window=6;
+    configure_node(other,changed,r,SourceClasses{{},{0,0}},0.);
+    auto mismatch=model.nodes[0];mismatch.full_kernel=other.full_kernel;
+    bool rejected=false;try{node_binding(mismatch);}catch(const std::invalid_argument&){rejected=true;}
+    if(!rejected)throw std::runtime_error("weighted inconsistent Full binding accepted");
+  }
   model.input_scale=model.output_scale={at::ones({},o),at::ones({},o)};
   auto x=at::tensor({1.,1.},o).set_requires_grad(true),y=at::tensor({1.,-1.},o).set_requires_grad(true);
   Continuation q;q.identity=g.identity;const Index clock=(Index{1}<<54)+9;q.cut=clock;
