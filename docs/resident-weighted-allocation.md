@@ -45,3 +45,5 @@ invalid长度用既有metadata错误2；数值域20、数学正支持下溢21、
 CPU语义适配器只执行同一份登记kernel源，验证其公式与内存接口；不是常驻CPU后备，
 不能认证CANN/CUDA运行。独立SDK目标为`--checks weighted-allocation`，FP32 scoring。
 实际设备、CUDA编译和CPU源码检查分别记录；完整weighted resident图生命周期仍在ROADMAP。
+
+固定源码2814b87的[CPU/NPU/CUDA构建资格](evidence/core5-resident-allocation-20261027.md)已记录；CUDA实机待验。
