@@ -1,0 +1,226 @@
+{
+  "component": "kv-query",
+  "scope": "FP32 actual normalized query, independent raw key/value projections, read-relative rotation and two weighted Attention channels with four independently rooted Mem returns",
+  "observations": {
+    "horizons": [
+      0,
+      5
+    ],
+    "replay_rows": 120,
+    "independent_roots": 4,
+    "parameter_banks": 3,
+    "all_input_parameter_raw_gradients": true,
+    "independent_formula_autograd": true,
+    "empty_attention_none_vs_total_connected_zero": true,
+    "int64_huge_age": true,
+    "saved_versions": true,
+    "capacity_and_invalid_domain_refusal": true,
+    "rtol": 2e-05,
+    "atol": 2e-06
+  },
+  "prior_failures": [
+    {
+      "job": "core5-resident-kv-query-dev",
+      "tree": "c1b5ddb319c043aba2cdc8ea09606eddac5ff8f7",
+      "state": "failed",
+      "exit_code": 4,
+      "reason": "Launcher named a nonexistent projection test path; no tests or builds ran. New launcher uses actual test_resident_weighted_projection_norm.py; original record retained."
+    }
+  ],
+  "source": "8b1be80709e501447875ecf3f729afd0a90c5143",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "8b1be80709e501447875ecf3f729afd0a90c5143",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:40:46.676759+00:00",
+      "finished": "2026-10-27T15:41:08.887306+00:00",
+      "name": "core5-resident-kv-query-npu-qualify",
+      "unit": "tide-core5-resident-kv-query-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "d5a22a03a62e687c331accfb59cd768d86ebc7f85eca1351f4b0868ac7f4212f",
+      "device_cases": [
+        {
+          "check": "weighted-kv-query",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-kv-query-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-kv-query-float32.log",
+          "log_sha256": "371799c383ecfe568eab4844bd524a0260d273181250c1c264dde53df8fca807"
+        }
+      ],
+      "cpu_tests": 38,
+      "cpu_seconds": 4.17,
+      "queue": {
+        "elapsed_seconds": 15.342940833419561,
+        "job_id": "core5-resident-kv-query-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T15:41:08.872301+00:00"
+      },
+      "observations": {
+        "horizons": [
+          0,
+          5
+        ],
+        "replay_rows": 120,
+        "independent_roots": 4,
+        "parameter_banks": 3,
+        "all_input_parameter_raw_gradients": true,
+        "independent_formula_autograd": true,
+        "empty_attention_none_vs_total_connected_zero": true,
+        "int64_huge_age": true,
+        "saved_versions": true,
+        "capacity_and_invalid_domain_refusal": true,
+        "rtol": 2e-05,
+        "atol": 2e-06
+      },
+      "build": {
+        "source": "1eb4b72759716118a92fa70e05268f46a20f2443",
+        "component_sha256": "a0ca5852f06bc8ffab5d0ff7ecb0ded3ed3667d881e82378688efc45c19a48c8",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-kv-query-check": "c50f20f4939ec0112571952102d6d65c28ea4cae5a87ae72c71f5e38239d9a7f"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "8b1be80709e501447875ecf3f729afd0a90c5143",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:40:46.704781+00:00",
+      "finished": "2026-10-27T15:43:40.385774+00:00",
+      "name": "core5-resident-kv-query-cuda-qualify",
+      "unit": "tide-core5-resident-kv-query-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "77992d54865a087e39be94cb78a88b07323710d2ed607752d5b9e446b12ef778",
+      "build": {
+        "source": "8b1be80709e501447875ecf3f729afd0a90c5143",
+        "component_sha256": "a0ca5852f06bc8ffab5d0ff7ecb0ded3ed3667d881e82378688efc45c19a48c8",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-kv-query-check": "1516fae960b6ecacae37f4c1cdf5755213ec90e994e27b5a1dc0a3a1392c6607"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-kv-query-dev2",
+    "tree": "ef1c888bdb4a9d39f085deaeda7e7e25fb59f062",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_kv_query.py",
+      "tests/test_resident_weighted_rotary.py",
+      "tests/test_resident_weighted_kv_window.py",
+      "tests/test_resident_weighted_pool.py",
+      "tests/test_resident_weighted_projection_norm.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-kv-query",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-kv-query",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-kv-query",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
