@@ -653,6 +653,23 @@
           "test_command": "--checks weighted-training weighted-peer; Python test_resident_weighted_peers.py; exact source/runtime separation in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-resident-weighted-peers-20261028.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "0155b0f679caab089cbabccf7986e479fe5493a5",
+          "semantic_version": "tide-core-5",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-training-20261028.md",
+          "scope": "Core-5 placed public training: 8 FP32/FP16 cases rechecked at 0155b0f; previous 37922eb broader 30-case suite passed. Independent Python schedules/autograd/optimizer, complete fields, three updates, swapped placement and fresh-process disk resume. Not all options or eager asynchronous peers.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Matching Python-owned build --python-component weighted; test_resident_weighted_node_training.py; original training/peers regression and exact commands in report."
         }
       ]
     },
@@ -1489,6 +1506,24 @@
           "test_command": "--checks weighted-training weighted-peer; Python test_resident_weighted_peers.py; exact source/runtime separation in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-resident-weighted-peers-20261028.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "0155b0f679caab089cbabccf7986e479fe5493a5",
+          "semantic_version": "tide-core-5",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-training-20261028.md",
+          "checker_commit": "220052abb592bc9a9aab6f27e4e042a55415edeb",
+          "scope": "Core-5 placed window VJP: four FP32 configurations/12 root modes and two bridges. Per dtype FP32/FP16 five public training configurations/20 updates plus two placed-sample-replica configurations/six common updates. Numerical refusal, continued old-bank use, relocated exact restore, single-window regressions and installed consumers. Original failed gates retained.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "distributed",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "--checks weighted-node-window weighted-node-training weighted-node-replicas; two single-window cases and installed training consumer with/without --node-placed. Corrected checker linked audited unchanged runtime; see report."
         }
       ]
     },
@@ -1768,6 +1803,20 @@
           "test_command": "build_device_control.py --checks weighted-node-peer weighted-flow weighted-training --cuda-architectures 80;90;100; actual install audit in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-weighted-node-placement-20261028.md"
+        },
+        {
+          "date": "2026-10-28",
+          "commit": "0155b0f679caab089cbabccf7986e479fe5493a5",
+          "semantic_version": "tide-core-5",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-weighted-node-training-20261028.md",
+          "checker_commit": "220052abb592bc9a9aab6f27e4e042a55415edeb",
+          "scope": "Core-5 placed VJP/training/sample-replica dependency build for sm80/90/100; installed training consumer and corrected checker linked against audited runtime, loader/help passed. No GPU correctness, training, residency, peers, capacity or performance claim.",
+          "tiers": [
+            "build",
+            "static-cli"
+          ],
+          "test_command": "build_device_control.py --checks weighted-node-window weighted-window weighted-node-training weighted-node-replicas --cuda-architectures 80;90;100; installed consumer and corrected checker commands in report."
         }
       ]
     }
