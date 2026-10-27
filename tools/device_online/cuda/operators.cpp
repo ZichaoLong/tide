@@ -59,11 +59,11 @@ void DeviceProgram::zero(const at::Tensor& out) {
   impl_->append([out](cudaStream_t s){check(cudaMemsetAsync(out.data_ptr(),0,out.nbytes(),s),"zero CUDA buffer");},{out});
 }
 #define BINARY(name,op) void DeviceProgram::name(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out){impl_->element(op,a,b,out);}
-BINARY(multiply,Mul) BINARY(divide,Div) BINARY(equal,Equal) BINARY(less,Less) BINARY(logical_and,And)
+BINARY(multiply,Mul) BINARY(divide,Div) BINARY(minimum,Minimum) BINARY(equal,Equal) BINARY(less,Less) BINARY(logical_and,And)
 BINARY(tanh_backward,TanhBackward) BINARY(silu_backward,SiluBackward) BINARY(relu_backward,ReluBackward)
 #undef BINARY
 #define UNARY(name,op) void DeviceProgram::name(const at::Tensor& a,const at::Tensor& out){same(a,out);impl_->element(op,a,{},out);}
-UNARY(sin,Sin) UNARY(cos,Cos) UNARY(softplus,Softplus) UNARY(sigmoid,Sigmoid) UNARY(tanh,Tanh) UNARY(relu,Relu) UNARY(silu,Silu)
+UNARY(log1p,Log1p) UNARY(sin,Sin) UNARY(cos,Cos) UNARY(softplus,Softplus) UNARY(sigmoid,Sigmoid) UNARY(tanh,Tanh) UNARY(relu,Relu) UNARY(silu,Silu)
 #undef UNARY
 void DeviceProgram::cast_index(const at::Tensor& in,const at::Tensor& out) {
   if(in.scalar_type()!=at::kBool||out.scalar_type()!=at::kInt||in.sizes()!=out.sizes())

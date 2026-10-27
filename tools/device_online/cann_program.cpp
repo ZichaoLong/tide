@@ -218,6 +218,12 @@ void DeviceProgram::softplus(const at::Tensor& input,const at::Tensor& out) {
   if(!limit)throw std::runtime_error("create softplus threshold failed");p.scalars.push_back(limit);
   p.op("aclnnSoftplus",p.tensor(input,input.scalar_type()),beta,limit,p.tensor(out,input.scalar_type()));
 }
+void DeviceProgram::minimum(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+  auto& p=*impl_;const auto type=a.scalar_type();p.op("aclnnMinimum",p.tensor(a,type),p.tensor(b,type),p.tensor(out,type));
+}
+void DeviceProgram::log1p(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnLog1p",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
 void DeviceProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::Tensor& out) {
   auto& p=*impl_;p.building();const auto dtype=input.scalar_type();
   if((dtype!=at::kFloat&&dtype!=at::kHalf)||axis<0||axis>=input.dim())

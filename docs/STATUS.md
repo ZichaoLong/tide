@@ -26,17 +26,17 @@ CUDA源码/三架构构建通过范围见各报告，无GPU真机；不自动重
 
 ## 当前工作与下一动作
 
-完整Describe已写数值组合、静态局部row表达式一阶反向、8配置独立逐行公式检查与契约。
-包括cat/match、cat/grouped/fixed证据、content/content_stats key、固定/可训练/上下文增益；
-DeviceProgram新增vendor log1p/minimum，clamp边界VJP单独声明。CPU新5项通过，设备尚未构建。
-这些主工作区修改尚未提交。它们不决定图就绪，不从参考递归补结果。
-
-下一动作启动tide-core5-resident-describe-dev-20261027.service，结果未知。
-冻结artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-describe-dev/{source.tree,source.tar,status.json,task.log,checks/result.json}。
-launcher .local/core5-resident-describe-dev{,-workload}.sh；CPU相关/独立公式与NPU weighted-describe。
-background.slice/Nice10、600秒、2build workers/BLAS单线程、NPU queue180秒。
-检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。
-通过后先提交实现、固定NPU资格与CUDA构建，再单独提交证据推送。
+完整Describe：cat/match、cat/grouped/fixed证据、content/content_stats key、固定/可训练/context增益；
+独立字段根与参数角色VJP、保存版本、动态owner/输入、缺席后出现常值回填已实现。
+开发dev tree2d5bd7a2c2ed355cd764752d26958463c9924361通过但未含动态出现；
+dev2 tree88c5895efb483c4b0470a60b76b893c6d28e8d00通过且含修复回归；两任务均inactive/success/exit0。
+clamp等号导数用非零cotangent增强CPU断言；待提交实现后启动固定资格。
+下一命令：冻结实现提交，启动tide-core5-resident-describe-{npu,cuda}-qualify-20261027.service。
+固定checkout artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-describe-{npu,cuda}-qualify/。
+NPU复用dev2摘要一致二进制，保留原manifest；CUDA单独sm80/90/100构建。结果尚未知。
+background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS1、queue180秒。
+检查systemctl --user show上述unit及status.json/task.log/checks/result.json；停止systemctl --user stop UNIT。
+通过后单独提交证据推送，继续下一增量。
 
 接续四循环的实际数值Upd/Mem/Full、完整在线图就绪/选择/推进、retained训练/optimizer、
 精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
