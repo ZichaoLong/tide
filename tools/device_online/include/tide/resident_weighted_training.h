@@ -50,6 +50,9 @@ class WeightedTrainingSession {
   WeightedTrainingSession(Graph,Model,const Continuation&,at::Device,
     ResidentOptimizerKind kind=ResidentOptimizerKind::sgd,std::vector<OptimizerGroup> groups={},WeightedTrainingLimits limits={});
   WeightedTrainingSession(Graph,Model,const ResidentTrainingCheckpoint&,at::Device,WeightedTrainingLimits={});
+  WeightedTrainingSession(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,
+    std::vector<OptimizerGroup>,WeightedTrainingLimits,std::vector<at::Device> node_devices);
+  WeightedTrainingSession(Graph,Model,const ResidentTrainingCheckpoint&,at::Device,WeightedTrainingLimits,std::vector<at::Device> node_devices);
   ~WeightedTrainingSession();
   WeightedTrainingSession(const WeightedTrainingSession&)=delete;
   WeightedTrainingSession& operator=(const WeightedTrainingSession&)=delete;
@@ -68,6 +71,7 @@ class WeightedTrainingSession {
   Index generation()const;
   ResidentOptimizerKind optimizer_kind()const;
   std::vector<OptimizerGroup> optimizer_groups()const;
+  std::vector<at::Device> node_devices()const;
   void close();
  private:
   struct Impl;std::unique_ptr<Impl> impl_;

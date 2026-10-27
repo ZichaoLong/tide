@@ -18,7 +18,7 @@ int64_t weighted_training_view_bytes(const WeightedTrainingWindow& w){
   for(const auto& [name,x]:w.metadata)bytes+=x.nbytes();return bytes;
 }
 WeightedTrainingSession::Impl::Impl(Graph graph,Model model,const Continuation& q,at::Device d,
-    ResidentOptimizerKind k,std::vector<OptimizerGroup> groups,WeightedTrainingLimits l,const ResidentTrainingCheckpoint* c)
+    ResidentOptimizerKind k,std::vector<OptimizerGroup> groups,WeightedTrainingLimits l,const ResidentTrainingCheckpoint* c,std::vector<at::Device> placement)
     :limits(l),kind(k),device(d),session(training_detail::session_id()){
   training_detail::no_grad();
   if(d.type()!=resident_device_type||d.index()<0||l.windows<1||l.retained_bytes<1||l.backward_bytes<1
@@ -33,7 +33,7 @@ WeightedTrainingSession::Impl::Impl(Graph graph,Model model,const Continuation& 
   std::vector<training_detail::Version> unused;model=training_detail::freeze_model(std::move(model),d,unused);
   if(c){if(c->mode!="weighted"||c->zeta!=1.)throw std::invalid_argument("checkpoint is not a weighted training cut");
     training_detail::restore_parameters(model,*c);}
-  flow=std::make_unique<WeightedFlow>(std::move(graph),std::move(model),training_detail::freeze_continuation(q),d,l.forward);
+  flow=std::make_unique<WeightedFlow>(std::move(graph),std::move(model),training_detail::freeze_continuation(q),d,l.forward,std::move(placement));
   auto& f=*flow->impl_;registry=f.model.parameters();
   layout=weighted_training_layout(registry,d,l.optimizer_bytes/16);
   optimizer=std::make_unique<DeviceOptimizer>(layout,k==ResidentOptimizerKind::sgd?DeviceOptimizerKind::sgd:DeviceOptimizerKind::adamw,
@@ -80,6 +80,12 @@ WeightedTrainingSession::WeightedTrainingSession(Graph g,Model m,const Continuat
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,k,std::move(groups),l)){}
 WeightedTrainingSession::WeightedTrainingSession(Graph g,Model m,const ResidentTrainingCheckpoint& c,at::Device d,WeightedTrainingLimits l)
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),c.continuation,d,c.optimizer,c.groups,l,&c)){}
+WeightedTrainingSession::WeightedTrainingSession(Graph g,Model m,const Continuation& q,at::Device d,
+    ResidentOptimizerKind k,std::vector<OptimizerGroup> groups,WeightedTrainingLimits l,std::vector<at::Device> placement)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,k,std::move(groups),l,nullptr,std::move(placement))){}
+WeightedTrainingSession::WeightedTrainingSession(Graph g,Model m,const ResidentTrainingCheckpoint& c,at::Device d,
+    WeightedTrainingLimits l,std::vector<at::Device> placement)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),c.continuation,d,c.optimizer,c.groups,l,&c,std::move(placement))){}
 WeightedTrainingSession::~WeightedTrainingSession()=default;
 WeightedTrainingWindow WeightedTrainingSession::advance(const std::vector<External>& xs,Index stop){
   auto& s=*impl_;s.check();
@@ -102,5 +108,6 @@ void WeightedTrainingSession::detach(){auto& s=*impl_;s.check();s.discard();}
 Result WeightedTrainingSession::result()const{impl_->check();if(!impl_->flow->impl_->ran)throw std::logic_error("weighted session has no latest window");return impl_->flow->impl_->decode();}
 Index WeightedTrainingSession::cut()const{impl_->check();return impl_->flow->impl_->boundary.cut;}
 Index WeightedTrainingSession::generation()const{impl_->check();return impl_->generation;}
+std::vector<at::Device> WeightedTrainingSession::node_devices()const{impl_->check();return impl_->flow->node_devices();}
 void WeightedTrainingSession::close(){if(impl_&&impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->discard();impl_->optimizer.reset();impl_->layout={};}}
 }

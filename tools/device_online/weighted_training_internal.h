@@ -25,7 +25,7 @@ struct WeightedTrainingSession::Impl {
   uint64_t session;Index generation=0,next_token=0,saved_bytes=0,window_bytes=0,accumulated_batches=0;
   bool gradients_ready=false,failed=false;
   Impl(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,
-    std::vector<OptimizerGroup>,WeightedTrainingLimits,const ResidentTrainingCheckpoint* =nullptr);
+    std::vector<OptimizerGroup>,WeightedTrainingLimits,const ResidentTrainingCheckpoint* =nullptr,std::vector<at::Device> ={});
   void check()const;
   void discard(bool accumulator=true);
   void run(DeviceProgram&,const at::Tensor& error);

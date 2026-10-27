@@ -28,6 +28,8 @@ void bind_weighted_training(py::module_& m){
   py::class_<WeightedTrainingSession>(m,"WeightedTrainingSession")
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,std::vector<OptimizerGroup>,WeightedTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
     .def(py::init<Graph,Model,const ResidentTrainingCheckpoint&,at::Device,WeightedTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
+    .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,std::vector<OptimizerGroup>,WeightedTrainingLimits,std::vector<at::Device>>(),py::call_guard<py::gil_scoped_release>())
+    .def(py::init<Graph,Model,const ResidentTrainingCheckpoint&,at::Device,WeightedTrainingLimits,std::vector<at::Device>>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&WeightedTrainingSession::advance,py::call_guard<py::gil_scoped_release>())
     .def("backward",&WeightedTrainingSession::backward,py::call_guard<py::gil_scoped_release>())
     .def("accumulate",&WeightedTrainingSession::accumulate,py::call_guard<py::gil_scoped_release>())
@@ -38,6 +40,7 @@ void bind_weighted_training(py::module_& m){
     .def("checkpoint",&WeightedTrainingSession::checkpoint,py::call_guard<py::gil_scoped_release>())
     .def("optimizer_kind",&WeightedTrainingSession::optimizer_kind)
     .def("optimizer_groups",&WeightedTrainingSession::optimizer_groups)
+    .def("node_devices",&WeightedTrainingSession::node_devices)
     .def("result",&WeightedTrainingSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&WeightedTrainingSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&WeightedTrainingSession::cut).def_property_readonly("generation",&WeightedTrainingSession::generation);

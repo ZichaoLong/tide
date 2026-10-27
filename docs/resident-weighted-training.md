@@ -7,7 +7,7 @@
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。
 
-公共入口声明在`include/tide/resident_weighted_training.h`。单设备FP32/FP16 owner拥有参数generation、
+公共入口声明在`include/tide/resident_weighted_training.h`。FP32/FP16 owner拥有参数generation、
 连续保留窗口、显式一阶backward、SGD/AdamW更新及完整切面导出。loss、任务头和数据游标由调用者拥有。
 前向窗口内的就绪、选择和推进仍由设备引擎决定；窗口边界的根打包不是参考预跑。
 
@@ -52,7 +52,7 @@ advance只执行设备窗口并导出实际字段，不强制CPU完整解码；`
 `backward`消费同一generation的全部窗口；`accumulate`保留参数梯度并切断状态梯度，最后一批也须显式累积；
 `step`按canonical owner更新，再发布每个实际角色bank及CPU参数镜像。None不触发权衰减/step计数，连接零参与更新。
 所有冻结/部分冻结参数保持身份。调用者改写原参数、已保存视图（含mask/int64元数据）或待消费梯度均拒绝。
-`manifest()`分别记录请求/实际设备、容量和optimizer分组；恢复时实际optimizer来自checkpoint。
+`manifest()`分别记录请求/实际节点放置、设备、容量和optimizer分组；恢复时实际optimizer来自checkpoint。
 原生`optimizer_kind()`/`optimizer_groups()`只读取配置，不导出状态或执行参考计算。
 
 给定已绑定的`binding`、窗口输入`inputs`及完整封闭上界`stop`，消费一个窗口的示例：
@@ -154,3 +154,33 @@ TIDE_BUILD_DIR=PYTHON_CORE TIDE_RESIDENT_LIBRARY=NEW_PYTHON_DEVICE TIDE_RESIDENT
 恢复比较对`present`与ragged `valid`定义的全部逻辑字段逐位精确，含过期但仍保留的raw条目；
 未使用的journal行和容量padding没有指定值。另核对完整解码结果及精确参数/optimizer/checkpoint，
 不能由一个有效状态投影替代完整raw检查。
+
+## 单样本节点放置与发布
+
+C++两种构造（初始continuation和training checkpoint）均新增末尾`vector<at::Device> node_devices`
+重载，原构造保留；Python `WeightedResidentTraining(..., node_devices=[...])`使用同一原生owner。
+None/空C++列表保持所有节点在coordinator；定义域和完整区域语义沿[节点放置](resident-weighted-placement.md)。
+此新增实现尚待独立资格，不能引用旧单设备训练或前向放置资格作为通过证据。
+
+公开窗口字段、cotangent、参数梯度与跨窗桥仍在coordinator；快照保存物理owner，
+完整raw状态在边界复制，窗口内的局部反向仍回到原owner。参数共享与私有状态保持分开。
+`node_devices()`返回实际构造的放置；Python manifest记录请求/生效列表。放置不进入数学identity，
+完整CPU checkpoint可在另一合法放置下恢复；optimizer/master、alias、trainable集合和精确raw解码规则不变。
+
+`WeightedTrainingPublication`按实际bank设备分组。canonical master和SGD/AdamW槽只在coordinator
+更新一次；`DeviceOptimizer`先检验所有owner的有限性和各自FP32/FP16可表示性，再共同采用。
+各远端程序接收同一错误字和实际master值，只在成功时按绑定payload dtype舍入并发布所有角色bank；
+原始私有状态不参与这次发布。CPU参数镜像与generation只在所有设备完成后更新。
+20/21拒绝保持master、槽、bank与generation，梯度可显式detach；设备通信/运行异常使owner失效，
+必须从先前切面重建，不能返回部分更新成功。
+
+发布前按分组数、完整master副本和描述表预检optimizer预算的四分之一；该选择不宣称最小通信。
+各设备程序全部提交后才等待。样本副本共同更新可再把同一canonical决策发布到每个样本的节点放置，
+`communication_bytes`亦提前计入这些副本，返回传输量包含两层通信；各owner四分区预算仍生效。
+
+独立检查：`weighted-node-training`两dtype各五组合/20更新，全部字段根、None/零、全部/部分冻结、
+重复端口、三窗含空窗、SGD/AdamW、累计与交换节点放置后恢复；额外用FP64算术确认一个
+有限梯度会超出目标存储范围，验证共同拒绝及下一窗实际bank仍使用旧参数。
+`weighted-node-replicas`把两个独立样本owner各自跨卡放置，核对共享梯度和、完整私有根、恢复及slot不一致拒绝。
+Python `test_resident_weighted_node_training.py`另检查四组合×两dtype、独立Python调度/autograd、
+三次更新、磁盘恢复到另一放置及KV/FC新进程续接。这些是检查定义；固定源码运行结果由STATUS/证据单列。

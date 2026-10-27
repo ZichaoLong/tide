@@ -7,9 +7,10 @@
 每个样本的状态、消息、历史和调度独立；只有模型参数共享。
 
 `WeightedTrainingSession::step_replicas` / Python `WeightedResidentTraining.step_replicas`
-消费2至16个不同逻辑设备上的公共owner。每个owner运行完整图，局部sample ID属于该owner；
+消费2至16个不同逻辑设备上的公共owner。每个owner处理一个完整逻辑图，局部sample ID属于该owner；
 下游负责将独立样本分组和保存这一静态映射。每张卡的窗口内就绪、选择、合批及推进仍在设备上完成。
-同一样本内不切分Attention、候选区域或原始时间窗口。这是样本并行接口；不宣称已提供单样本的跨卡节点切分。
+Attention、候选区域和原始时间窗口的数学可见性保持完整。样本并行接口与
+[单样本节点放置](resident-weighted-placement.md)可组合；组合运行资格独立于上述旧样本副本证据。
 
 调用次序为各owner的advance、完整backward或显式accumulate，然后一次step_replicas。
 参数梯度按传入owner顺序求和，连接位为逻辑或；不除以卡数，不改变用户loss的归约。

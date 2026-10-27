@@ -53,6 +53,10 @@ def cotangents(session, w, mode):
     ("affine", "pdg", "sgd"), ("delta", "pdg", "adamw"), ("gated_delta", "pdg", "sgd"), ("ssd", "pdg", "adamw")])
 @pytest.mark.parametrize("storage_dtype", [torch.float32, torch.float16])
 def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kind, storage_dtype, tmp_path):
+    check_cut_updates_and_disk_resume(family, topology, kind, storage_dtype, tmp_path)
+
+
+def check_cut_updates_and_disk_resume(family, topology, kind, storage_dtype, tmp_path, *, placed=False):
     device = target_device()
     candidate, _, base, span = binding(family, topology, storage_dtype)
     cpu, _, _, _ = binding(family, topology)
@@ -66,8 +70,10 @@ def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kin
     else: options["amsgrad"] = True
     optimizer = getattr(torch.optim, "SGD" if kind == "sgd" else "AdamW")(masters, **options)
     q = Continuation(cpu.graph.identity, 1)
+    placements = [str(torch.device(torch.device(device).type, v % 2)) for v in range(len(candidate.graph.nodes))] if placed else None
     with torch.no_grad():
-        session = owner(candidate, device, optimizer=kind, groups=[options])
+        session = owner(candidate, device, optimizer=kind, groups=[options], node_devices=placements)
+        if placed: assert session.manifest()["effective_node_devices"] == placements
         assert session.manifest()["effective_optimizer"] == kind
         assert session.manifest()["effective_groups"][0]["parameters"]
         initial = session.checkpoint()["state"]["values"].clone()
@@ -132,7 +138,10 @@ def test_python_owned_complete_cut_updates_and_disk_resume(family, topology, kin
                 assert checkpoint["state"]["steps"].gt(0).any()
                 path = tmp_path/"weighted-training.pt";session.save(path)
                 with pytest.raises(FileExistsError): session.save(path)
-                session.close();session = owner(candidate, device, checkpoint=path)
+                session.close()
+                moved = [str(torch.device(torch.device(device).type, 1-v % 2)) for v in range(len(candidate.graph.nodes))] if placed else None
+                session = owner(candidate, device, checkpoint=path, node_devices=moved)
+                if placed: assert session.manifest()["requested_node_devices"] == session.manifest()["effective_node_devices"] == moved
                 tree_equal(checkpoint, session.checkpoint())
                 assert session.manifest()["initialization"] == "resume"
                 assert session.manifest()["effective_groups"] == checkpoint["groups"]

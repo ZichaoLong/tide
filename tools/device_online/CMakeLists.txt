@@ -222,7 +222,7 @@ if(TIDE_DEVICE_KERNELS)
   target_link_libraries(tide-device-optimizer PUBLIC tide-device-control tide::tidegraph
     tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_owner_parameter_publish_kernel)
   add_library(tide-weighted-training SHARED weighted_training_owner.cpp weighted_training_backward.cpp weighted_training_optimizer.cpp
-    weighted_training_parameters.cpp weighted_training_view.cpp weighted_training_roots.cpp weighted_training_peer.cpp)
+    weighted_training_parameters.cpp weighted_training_view.cpp weighted_training_roots.cpp weighted_training_peer.cpp weighted_training_publish.cpp)
   target_link_libraries(tide-weighted-training PRIVATE tide-weighted-window tide-device-optimizer tide-device-peer tide_weighted_peer_equal_kernel)
   target_link_libraries(tide-weighted-training PUBLIC tide-weighted-flow)
   target_link_options(tide-weighted-training PRIVATE -Wl,-z,defs)
@@ -283,6 +283,9 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-training-check weighted_precision_reference.cpp weighted_training_check.cpp weighted_training_trajectory.cpp weighted_training_objective.cpp weighted_training_failures.cpp weighted_training_accumulation_check.cpp ../../cpp/test/weighted_graph_fixture.cpp)
     target_compile_options(tide-weighted-training-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-training-check PRIVATE tide-weighted-training tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-node-training-check weighted_precision_reference.cpp weighted_training_node_check.cpp weighted_training_trajectory.cpp weighted_training_objective.cpp weighted_training_failures.cpp weighted_training_accumulation_check.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-node-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-node-training-check PRIVATE tide-weighted-training tide-device-test-compare tide::runtime)
     add_executable(tide-weighted-peer-check weighted_training_peer_check.cpp weighted_training_objective.cpp
       weighted_training_trajectory.cpp weighted_precision_reference.cpp ../../cpp/test/weighted_graph_fixture.cpp)
     target_compile_options(tide-weighted-peer-check PRIVATE -fPIC)

@@ -17,7 +17,8 @@ from ..resident_training_options import GROUP_FIELDS, optimizer_groups
 
 class WeightedResidentTraining:
     def __init__(self, graph, model, *, device, native_library, resident_library,
-                 batch_size=1, continuation=None, optimizer=None, groups=None, limits=None, checkpoint=None):
+                 batch_size=1, continuation=None, optimizer=None, groups=None, limits=None, checkpoint=None,
+                 node_devices=None):
         integers("weighted training batch size", batch_size)
         if batch_size < 1 or torch.is_grad_enabled():
             raise ValueError("weighted training requires positive batch size and torch.no_grad()")
@@ -31,6 +32,9 @@ class WeightedResidentTraining:
         self.device = torch.device(device)
         if self.device.type not in {"npu", "cuda"} or self.device.index is None:
             raise ValueError("weighted training requires an explicit indexed accelerator")
+        from .resident_placement import node_placement
+        placement = node_placement(node_devices, self.device, len(graph.nodes))
+        self.requested_node_devices = None if node_devices is None else list(map(str, placement))
         if any(x.device.type != "cpu" or x.dtype not in {torch.float32, torch.float16} for x in model.state_dict().values()):
             raise ValueError("weighted training requires CPU FP32/FP16 boundary parameters")
         model.validate_binding(graph)
@@ -68,7 +72,7 @@ class WeightedResidentTraining:
             if isinstance(checkpoint, (str, Path)):
                 checkpoint = torch.load(checkpoint, map_location="cpu", weights_only=True)
             from .resident_training_checkpoint import prepare
-            self.owner = self.module.WeightedTrainingSession(self.compiled, weights, prepare(self, checkpoint), self.device, spec)
+            self.owner = self.module.WeightedTrainingSession(self.compiled, weights, prepare(self, checkpoint), self.device, spec, placement)
         else:
             optimizer = "sgd" if optimizer is None else optimizer
             if optimizer not in {"sgd", "adamw"}:
@@ -78,7 +82,8 @@ class WeightedResidentTraining:
                 raise ValueError("weighted continuation batch size differs")
             self.owner = self.module.WeightedTrainingSession(self.compiled, weights,
                 to_continuation(self.core, graph, self.compiled, q), self.device,
-                getattr(self.module.OptimizerKind, optimizer), optimizer_groups(self.core, groups), spec)
+                getattr(self.module.OptimizerKind, optimizer), optimizer_groups(self.core, groups), spec, placement)
+        self.effective_node_devices = list(map(str, self.owner.node_devices()))
         self.effective_optimizer = "sgd" if self.owner.optimizer_kind() == self.module.OptimizerKind.sgd else "adamw"
         self.effective_groups = [{name: getattr(g, name) for name in GROUP_FIELDS} for g in self.owner.optimizer_groups()]
 
@@ -173,6 +178,7 @@ class WeightedResidentTraining:
         return dict(requested_device=str(self.device), effective_device=str(self.device), dtype=str(self.dtype).removeprefix("torch."),
                     raw_dtype=str(self.dtype).removeprefix("torch."), compute_dtype="float32",
                     scoring_dtype="float32", adjoint_dtype="float32", master_dtype="float32",
+                    requested_node_devices=self.requested_node_devices, effective_node_devices=self.effective_node_devices,
                     execution="resident", training=True, requested_limits=self.requested_limits,
                     effective_limits=self.effective_limits, initialization=self.initialization,
                     requested_optimizer=self.requested_optimizer, requested_groups=deepcopy(self.requested_groups),

@@ -1,6 +1,7 @@
 // Sample-independent graphs share one summed update. No reference execution,
 // host gradient reduction or per-event host decisions enter this composition.
 #include "weighted_training_internal.h"
+#include "weighted_training_publish.h"
 #include "peer_exchange.h"
 #include "device_launch_tide_weighted_peer_equal.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
@@ -66,7 +67,8 @@ WeightedPeerStep WeightedTrainingSession::step_replicas(const std::vector<Weight
   // metadata and returned sums coexist. No allocation/search by trial OOM.
   long double reserve=4096.L*n;
   for(auto* s:owners){reserve+=4.L*(s->layout.values.nbytes()+s->layout.connected.nbytes());
-    for(const auto& x:slots(*s->optimizer))reserve+=x.nbytes();}
+    for(const auto& x:slots(*s->optimizer))reserve+=x.nbytes();
+    reserve+=WeightedTrainingPublication::required_bytes(s->writes(),s->optimizer->values());}
   if(reserve>budget)throw std::invalid_argument("weighted peer communication tensor budget exceeded before allocation");
   std::vector<std::unique_ptr<PeerExchange>> packets;
   std::vector<std::unique_ptr<DeviceProgram>> programs; // Destruct before packets.
@@ -99,16 +101,22 @@ WeightedPeerStep WeightedTrainingSession::step_replicas(const std::vector<Weight
   for(size_t j=0;j<n;++j)owners[j]->optimizer->append_propose(*programs[j],sums[j],errors[j]);
   for(size_t j=1;j<n;++j){auto e=at::zeros_like(errors[0]);transfer(j,0,{{errors[j],e}});sticky(*programs[0],e,errors[0]);}
   for(size_t j=1;j<n;++j)transfer(0,j,{{errors[0],errors[j]}});
+  std::vector<std::unique_ptr<WeightedTrainingPublication>> publications;
   for(size_t j=0;j<n;++j){auto& s=*owners[j];s.optimizer->append_commit(*programs[j],sums[j],errors[j]);
-    append_owner_parameter_publish(*programs[j],s.writes(),s.optimizer->values(),errors[j],s.limits.optimizer_bytes/8);
+    publications.push_back(std::make_unique<WeightedTrainingPublication>(*programs[j],s.writes(),s.optimizer->values(),errors[j],
+      s.limits.optimizer_bytes/4,s.limits.forward.operator_bytes,static_cast<uint32_t>(timeout)));
+    out.transferred_bytes+=publications.back()->transferred_bytes();
     if(programs[j]->retained_tensor_bytes()>budget+s.limits.optimizer_bytes)
       throw std::invalid_argument("weighted peer programs exceed admitted tensor budget");
     programs[j]->finish();}
   try{
+    for(auto& publication:publications)publication->synchronize_inputs();
     for(auto* s:owners)c10::impl::VirtualGuardImpl(s->device.type()).synchronizeDevice(s->device.index());
+    for(auto& publication:publications)publication->submit();
     for(auto& p:programs)p->submit();for(auto& p:programs)p->wait(static_cast<int32_t>(timeout));
+    for(auto& publication:publications)publication->wait();
     const auto code=errors[0].cpu().item<int>();
-    for(auto& p:programs)p->close();for(auto& packet:packets)packet->close();
+    for(auto& p:programs)p->close();for(auto& publication:publications)publication->close();for(auto& packet:packets)packet->close();
     if(code&&code!=20&&code!=21&&code!=25)throw std::runtime_error("weighted peer optimizer refused, error="+std::to_string(code));
     out.step={code==0,code,lead.generation+(code==0)};
     for(const auto& g:sums)out.parameters.push_back(public_gradient(g));

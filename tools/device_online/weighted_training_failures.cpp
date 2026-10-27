@@ -6,12 +6,12 @@ namespace {
 template<class F>void refuses(F f,const std::string& name){bool refused=false;
   try{f();}catch(const std::logic_error&){refused=true;}require(refused,"accepted invalid weighted training "+name);}
 }
-void failures(at::Device device,at::ScalarType dtype){
+void failures(at::Device device,at::ScalarType dtype,const std::vector<at::Device>& placement){
   at::NoGradGuard ng;auto g=weighted_check::graph("fc","kv");
   auto m=weighted_check::model(g,"kv",at::kCPU,dtype);Continuation q;q.identity=g.identity;q.batch_size=2;
   auto l=limits();l.windows=1;
-  auto small=l;small.total_bytes=1;refuses([&]{WeightedTrainingSession bad(g,m,q,device,ResidentOptimizerKind::sgd,{},small);},"total budget");
-  WeightedTrainingSession session(g,m,q,device,ResidentOptimizerKind::sgd,{},l);const auto initial=session.checkpoint();
+  auto small=l;small.total_bytes=1;refuses([&]{WeightedTrainingSession bad(g,m,q,device,ResidentOptimizerKind::sgd,{},small,placement);},"total budget");
+  WeightedTrainingSession session(g,m,q,device,ResidentOptimizerKind::sgd,{},l,placement);const auto initial=session.checkpoint();
   auto xs=weighted_check::inputs(g,at::kCPU,dtype);std::vector<External> first;for(const auto& x:xs)if(x.time<4)first.push_back(x);
   auto w=session.advance(first,4);const auto good=seed(w,"outputs");
   refuses([&]{session.checkpoint();},"checkpoint with live tape");
@@ -24,16 +24,16 @@ void failures(at::Device device,at::ScalarType dtype){
   bad=good;bad.fields.at("outputs").values=at::full_like(bad.fields.at("outputs").values,NAN);refuses([&]{session.backward({bad});},"connected poison");
   auto gradients=session.backward({good});refuses([&]{session.backward({good});},"reused backward");
   gradients.parameters.values.add_(0);refuses([&]{session.step();},"modified public gradient");session.close();
-  auto checkpoint=initial;checkpoint.mode="hard";refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l);},"checkpoint binding");
-  checkpoint=initial;checkpoint.aliases.clear();refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l);},"checkpoint aliases");
-  checkpoint=initial;checkpoint.state.values=checkpoint.state.values+1;refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l);},"checkpoint named/master mismatch");
-  WeightedTrainingSession empty(g,m,initial,device,l);
+  auto checkpoint=initial;checkpoint.mode="hard";refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l,placement);},"checkpoint binding");
+  checkpoint=initial;checkpoint.aliases.clear();refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l,placement);},"checkpoint aliases");
+  checkpoint=initial;checkpoint.state.values=checkpoint.state.values+1;refuses([&]{WeightedTrainingSession bad(g,m,checkpoint,device,l,placement);},"checkpoint named/master mismatch");
+  WeightedTrainingSession empty(g,m,initial,device,l,placement);
   for(int repeat=0;repeat<2;++repeat){auto view=empty.advance({},0);auto grad=empty.backward({seed(view,"none")});
     require(!grad.parameters.connected.any().item<bool>(),"empty window introduced parameter connection");empty.accumulate();}
   refuses([&]{empty.checkpoint();},"checkpoint with accumulated gradients");require(empty.step().applied,"empty gradient update failed");
   auto after=empty.checkpoint();require(after.state.steps.eq(0).all().item<bool>(),"None gradients advanced owner counters");
   require(at::equal(after.state.values,initial.state.values),"None gradients changed weights");empty.close();
-  WeightedTrainingSession guarded(g,m,initial,device,l);auto output=guarded.advance(first,4);
+  WeightedTrainingSession guarded(g,m,initial,device,l,placement);auto output=guarded.advance(first,4);
   output.fields.at("outputs").present.logical_not_();refuses([&]{guarded.backward({seed(output,"none")});},"modified view support");guarded.close();
 }
 }
