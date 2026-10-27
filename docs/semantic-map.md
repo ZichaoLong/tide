@@ -5,6 +5,9 @@
 其FP16存储/FP32算术、伴随与master边界由同页规定；独立精度参考和单节点KV手算根
 分别核验完整记录与局部数学，不能由旧eager half轨迹或投影比较代替。
 
+[带权样本副本](resident-weighted-peers.md)把独立私有状态和共享参数贡献分开，通过
+完整参数梯度和与共同提交保持一个optimizer边界；单样本跨卡节点切分未由此接口实现。
+
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；开发/资格状态另记，公共训练owner继续。
 
 [Weighted实际窗口VJP](resident-weighted-window-vjp.md)组合设备journal逆序、消息与状态前驱及canonical参数累加；公共训练owner另验收。

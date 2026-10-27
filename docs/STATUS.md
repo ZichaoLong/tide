@@ -30,7 +30,7 @@ FP16组件：实际half存储，FP32局部算术/保存值/伴随，存储cast�
    两unit复核inactive/success/0，持久passed/exit0；NPU物理9→npu:0，四组合通过。
    范围四循环24配置×两dtype、KV Full4配置×两dtype、CPU24；CUDA111步构建完成。
    launchers `.local/core5-half-memory-{npu,cuda}-qualify{,-workload}.sh`；1200秒、2workers/BLAS1、Nice10/background.slice、queue180秒/device360秒。
-2. **31e017f公共图FP16：CUDA已passed，NPU仍running。**
+2. **31e017f公共图FP16：CUDA passed；NPU终态failed/exit1。**
    checkout `artifacts/worktrees/core5-sdk` 与 `artifacts/worktrees/core5-cuda` 固定31e017f，跟踪文件只读，不能修改。
    units `tide-core5-half-flow-{npu,cuda}-qualify2-20261028.service`；各自build/weighted-half-flow。
    outputs `artifacts/jobs/core5-half-flow-{npu,cuda}-qualify2/`，launchers `.local/core5-half-flow-{npu,cuda}-qualify2{,-workload}.sh`。
@@ -41,7 +41,7 @@ FP16组件：实际half存储，FP32局部算术/保存值/伴随，存储cast�
 正c存储下溢拒绝，G下溢允许，溢出拒绝；CPU guard/packing/raw27通过。最初误指不存在测试路径未收集，纠正后通过。
 **已修正主区参考边界：**完整图/配置/边界与训练检查使用独立CPU数学及调度，在raw和发送处显式half存储。
 每类字段dtype分别检查后，无损拓宽half以比较全部记录。公开训练Full根另用舍入前G，不能用已存储payload替代。
-活动资格仍检验原31e017f；若失败保留它，不修改活动源码。
+原31e017f NPU FP32完整图已通过，随后FP16失败；原日志保留，配置检查尚未运行。新21ed86d资格另记。
 
 ## 本提交的实现与下一步
 
@@ -55,16 +55,29 @@ CPU开发命令已通过32项/3.90秒：
 `python -m pytest -q tests/test_weighted_storage_reference.py tests/test_resident_weighted_payload_precision.py tests/test_resident_weighted_flow_packing.py tests/test_resident_weighted_reverse_route.py`。
 C++训练扩展尚未构建/真机资格，Python-owned尚未运行；不要把源码已实现当作资格通过。
 
-本提交后冻结到 `artifacts/worktrees/core5-half-training`，三个独立新目录 build/npu、build/cuda、build/python：
+实现21ed86d019d5dcbe3bffa363be02506433e23a7f已冻结到 `artifacts/worktrees/core5-half-training`，三个独立新目录 build/npu、build/cuda、build/python：
 - `core5-half-training-npu-qualify`：standalone两dtype完整图/配置/训练，CPU32；NPU queue180秒，gate600秒。
 - `core5-half-training-python-qualify`：Python-owned完整图/训练/手算根与磁盘/新进程恢复；queue180秒，pytest600秒。
 - `core5-half-training-cuda-qualify`：三架构选定完整图/配置/训练build/loader/help；无GPU数值结论。
-新任务均计划1800秒、2workers/BLAS1、Nice10/background.slice，**尚未启动**。
+新任务均1800秒、2workers/BLAS1、Nice10/background.slice；已启动，均核对active/running、Transient=yes、Slice=background.slice；暂无新资格结果。
+units均为`tide-JOB-20261028.service`，输出`artifacts/jobs/JOB/`、launcher `.local/JOB{,-workload}.sh`。
+固定checkout跟踪文件只读，三个任务运行期间不可改动。
 
 短检查：`python scripts/status.py`；`python scripts/check_upstream.py`。
 任务检查：`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；停止：`systemctl --user stop UNIT`。
 下一步核对固定source与干净工作区后启动上述资格，跟进原NPU终态；根据真实失败修复再固定新提交。
 其后继续peer、有限profiling与最终追溯；总体未完成。
+
+## 本提交跨卡增量（待固定资格）
+
+活动21ed86d checkout保持只读；主区新增样本副本step_replicas：设备梯度求和、精确optimizer状态校验、
+全部proposal→共同拒绝决定→commit/publish，独立raw状态不切分。接口/契约在resident-weighted-peers.md。
+新文件tools/device_online/weighted_training_peer.cpp、ascendc/tide_weighted_peer_equal.cpp及CPU guard测试；
+公共header/binding/Python/CMake及standalone/Python两dtype多步、完整根、恢复与共同拒绝检查已接入。
+尚无多卡构建/数值资格，不能宣称跨卡已通过。
+CPU guard首跑3通过/1失败：测试传入temporary.clone().data_ptr()后clone提前释放；改为持有clone后4项通过/0.76秒；原失败保留此处。
+短C++语法检查已通过：独立参考、half轨迹、peer函数及peer检查；不是设备构建资格。
+Python接口/测试及检查注册模块AST通过。下一步等当前三任务终态并审阅结果，再冻结新提交资格；不自动重复已通过的完整矩阵。
 
 ## 保留限制与环境
 

@@ -23,6 +23,8 @@ void bind_weighted_training(py::module_& m){
     VIEW(WeightedStateGradient,present) VIEW(WeightedStateGradient,fields);
   py::class_<WeightedGradients>(m,"WeightedGradients") VIEW(WeightedGradients,parameters) VIEW(WeightedGradients,initial)
     VIEW(WeightedGradients,boundaries) VIEW(WeightedGradients,statistics);
+  py::class_<WeightedPeerStep>(m,"WeightedPeerStep") VIEW(WeightedPeerStep,step) VIEW(WeightedPeerStep,parameters)
+    VIEW(WeightedPeerStep,transferred_bytes) VIEW(WeightedPeerStep,reserved_tensor_bytes);
   py::class_<WeightedTrainingSession>(m,"WeightedTrainingSession")
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,std::vector<OptimizerGroup>,WeightedTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
     .def(py::init<Graph,Model,const ResidentTrainingCheckpoint&,at::Device,WeightedTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
@@ -30,6 +32,8 @@ void bind_weighted_training(py::module_& m){
     .def("backward",&WeightedTrainingSession::backward,py::call_guard<py::gil_scoped_release>())
     .def("accumulate",&WeightedTrainingSession::accumulate,py::call_guard<py::gil_scoped_release>())
     .def("step",&WeightedTrainingSession::step,py::call_guard<py::gil_scoped_release>())
+    .def_static("step_replicas",&WeightedTrainingSession::step_replicas,py::arg("sessions"),
+      py::arg("communication_bytes")=256*1024*1024,py::arg("timeout_ms")=30000,py::call_guard<py::gil_scoped_release>())
     .def("detach",&WeightedTrainingSession::detach,py::call_guard<py::gil_scoped_release>())
     .def("checkpoint",&WeightedTrainingSession::checkpoint,py::call_guard<py::gil_scoped_release>())
     .def("optimizer_kind",&WeightedTrainingSession::optimizer_kind)

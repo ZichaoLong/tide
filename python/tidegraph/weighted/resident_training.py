@@ -131,6 +131,27 @@ class WeightedResidentTraining:
     def step(self):
         self._check(); return self.owner.step()
 
+    @staticmethod
+    def step_replicas(sessions, *, communication_bytes=256*1024*1024, timeout_ms=30000):
+        """Sum independent samples' gradients once, then update all replicas.
+
+        Every owner has the same graph, parameters and optimizer state on a
+        distinct device. Loss normalization belongs to the caller; no implicit
+        average is applied. Private raw state and local sample IDs stay private.
+        """
+        sessions = list(sessions)
+        integers("weighted peer budget/timeout", communication_bytes, timeout_ms)
+        if not 2 <= len(sessions) <= 16 or communication_bytes < 1 or not 1 <= timeout_ms <= 60000:
+            raise ValueError("weighted peer step needs 2..16 replicas and bounded resources")
+        for session in sessions:
+            if not isinstance(session, WeightedResidentTraining):
+                raise ValueError("weighted peer step requires training owners")
+            session._check()
+            if session.module is not sessions[0].module:
+                raise ValueError("weighted peer owners require the same resident library")
+        return sessions[0].module.WeightedTrainingSession.step_replicas(
+            [session.owner for session in sessions], communication_bytes, timeout_ms)
+
     def detach(self):
         self._check(); self.owner.detach()
 
