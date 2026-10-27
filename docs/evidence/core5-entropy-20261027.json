@@ -1,0 +1,29 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "48be010fac5e5740e6e7e52dff491b237351eca697d72b7659270de74ca56063",
+  "source": "a05d3ffc946985cfeb124a5e3b3074ceeece306d",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted weighted entropy allocation and regional training CPU qualification",
+  "result": {
+    "passed": 226,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "ce51a43e697a93dfcfb97de2081152d40d6198562c0bab951bc686b6ae477431",
+  "binary_sha256": {
+    "libtidegraph.a": "2aef4e842beb85cd2804b41d9ca99b1b34a1deb8b2a1b59d83be707fb3c0ef9e",
+    "_tide_native.so": "d399164d58a9008c92faeab338ff78c147b7481d7d5d4f5b9401eacc0670f90b",
+    "tidegraph-kernel-check": "91387a000ada0a5359c2cc630ec65b28ce36ee35ded239c843d64d9ed6ac4d4b"
+  },
+  "log_sha256": "6889018f12dc9b9695ed4d9f7d85078039cfcf297446a4159e9e529b031cbe6d",
+  "started": "2026-10-27T05:57:33.550548+00:00",
+  "finished": "2026-10-27T05:59:41.123462+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-entropy-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-entropy-qualify",
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
