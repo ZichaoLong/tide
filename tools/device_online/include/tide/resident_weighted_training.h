@@ -10,7 +10,8 @@ struct WeightedTrainingLimits {
 };
 // Each present row is an independent mathematical root. A ragged field has a
 // separate valid mask over [row,slot]; slots outside it are not logical values.
-// Values use FP32; clocks, counts and coordinates remain separate int64 metadata.
+// Raw/payload values use the model dtype; arithmetic fields and all cotangents
+// use FP32. Clocks, counts and coordinates remain separate int64 metadata.
 struct WeightedTrainingField {Tensor values,present,valid;};
 struct WeightedTrainingWindow {
   ResidentToken token;
@@ -36,7 +37,12 @@ struct WeightedGradients {
   std::vector<ResidentBoundaryGradient> boundaries;
   std::map<std::string,Index> statistics;
 };
-// Explicit single-device FP32, complete weighted first-order training owner.
+struct WeightedPeerStep {
+  ResidentStep step;
+  std::vector<ResidentParameterGradient> parameters; // Complete sum on each device.
+  Index transferred_bytes=0,reserved_tensor_bytes=0;
+};
+// Explicit FP32/FP16 storage, complete weighted first-order training owner.
 // Loss/task heads are consumer-owned; all calls require no-grad. Tokens name
 // actual retained windows under one parameter generation, never a CPU replay.
 class WeightedTrainingSession {
@@ -51,6 +57,10 @@ class WeightedTrainingSession {
   WeightedGradients backward(const std::vector<WeightedCotangents>&);
   void accumulate(); // Sum detached groups without changing optimizer boundary.
   ResidentStep step();
+  // Independent sample replicas, identical parameters/optimizer state. Sum
+  // gradients once (never average), agree on refusal, then update every replica.
+  static WeightedPeerStep step_replicas(const std::vector<WeightedTrainingSession*>&,
+    Index communication_bytes=256*1024*1024,Index timeout_ms=30000);
   void detach();
   ResidentTrainingCheckpoint checkpoint()const; // No outstanding tapes/gradients.
   Result result()const; // Explicit diagnostic decode of the latest actual window.
