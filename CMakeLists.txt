@@ -42,7 +42,7 @@ add_library(tidegraph STATIC
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
-  cpp/src/block.cpp cpp/src/block_step.cpp cpp/src/frontier.cpp cpp/src/greedy.cpp cpp/src/greedy_plan.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp
+  cpp/src/block.cpp cpp/src/block_step.cpp cpp/src/frontier.cpp cpp/src/greedy.cpp cpp/src/greedy_plan.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp cpp/src/settle_ports.cpp
   cpp/src/kernel.cpp cpp/src/state_evaluate.cpp cpp/src/state_vjp.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
   cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp)
@@ -77,7 +77,7 @@ target_include_directories(tidegraph-profile-check PRIVATE cpp/include)
 target_link_libraries(tidegraph-profile-check PRIVATE Threads::Threads)
 add_executable(tidegraph-smoke cpp/src/main.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph_runtime)
-add_executable(tidegraph-settle-check cpp/test/settle.cpp)
+add_executable(tidegraph-settle-check cpp/test/settle.cpp cpp/test/settle_ports.cpp)
 target_link_libraries(tidegraph-settle-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-greedy-check cpp/test/greedy.cpp cpp/bench/compare.cpp)
 target_link_libraries(tidegraph-greedy-check PRIVATE tidegraph_runtime)

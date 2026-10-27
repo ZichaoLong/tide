@@ -3,25 +3,29 @@
 #include "tide/ops.h"
 #include <algorithm>
 #include <limits>
-#include <set>
 #include <stdexcept>
 
 namespace tide {
-SettleGraph::SettleGraph(Graph body, std::vector<Index> ranks)
-    : body_(std::move(body)), ranks_(std::move(ranks)) {
+SettleGraph::SettleGraph(Graph body, std::vector<Index> ranks, std::string binding, Index time_stride)
+    : body_(std::move(body)), ranks_(std::move(ranks)), binding_(std::move(binding)) {
   body_.compile();
+  if (binding_ != "ports" && binding_ != "broadcast_sum")
+    throw std::invalid_argument("unknown SettleGraph boundary binding");
   if (ranks_.size() != body_.regions.size() ||
-      std::set<Index>(ranks_.begin(), ranks_.end()).size() != ranks_.size() ||
-      std::any_of(ranks_.begin(), ranks_.end(), [](Index r) {
-        return r <= 0 || r > std::numeric_limits<Index>::max() - 2;
-      })) throw std::invalid_argument("SettleGraph requires distinct positive representable region ranks");
+      std::any_of(ranks_.begin(), ranks_.end(), [&](Index r) {
+        return r <= 0 || r > std::numeric_limits<Index>::max() - (binding_ == "ports" ? 1 : 2);
+      })) throw std::invalid_argument("SettleGraph requires positive representable region ranks");
   if (body_.inputs.empty() || body_.outputs.empty())
     throw std::invalid_argument("SettleGraph requires input and output boundaries");
-  stride_ = *std::max_element(ranks_.begin(), ranks_.end()) + 2;
+  output_rank_ = *std::max_element(ranks_.begin(), ranks_.end()) + 1;
+  stride_ = time_stride == 0 ? output_rank_ + (binding_ == "broadcast_sum") : time_stride;
+  if (stride_ <= (binding_ == "ports" ? output_rank_-1 : output_rank_))
+    throw std::invalid_argument("SettleGraph stride must exceed all processing ranks");
   for (const auto& edge : body_.edges)
     if (edge.delay != rank(edge.target) - rank(edge.source))
       throw std::invalid_argument("SettleGraph edges must follow region ranks with matching delays");
   encoded_ = body_;
+  if (binding_ == "ports") return;
   const Index n = body_.nodes.size(), r = body_.regions.size();
   encoded_.nodes.push_back(Node{r, false, true});
   encoded_.nodes.push_back(Node{r + 1, false, true});
@@ -56,6 +60,7 @@ Index SettleGraph::rank(Index node) const { return ranks_.at(body_.nodes.at(node
 Model SettleGraph::embed_model(const Model& body) const {
   Model result = body;
   configure_model(body_, result); validate_model(body_, result);
+  if (binding_ == "ports") return result;
   const auto options = body.nodes[0].bias.options().requires_grad(false);
   for (int i = 0; i < 2; ++i) {
     result.nodes.push_back({at::zeros({body.width()}, options), at::zeros({body.width(), body.width()}, options),
@@ -72,6 +77,11 @@ Model SettleGraph::embed_model(const Model& body) const {
 }
 
 Continuation SettleGraph::embed_initial(const Continuation& initial) const {
+  if (binding_ == "ports") {
+    if (initial.identity != body_.identity)
+      throw std::invalid_argument("invalid identity in SettleGraph embedding");
+    return initial;
+  }
   if (initial.identity != body_.identity || initial.batch_size < 1 || initial.cut != 0 ||
       !initial.pending.empty() || !initial.ledger.empty())
     throw std::invalid_argument("SettleGraph embed_initial requires body identity and an initial cut");
@@ -88,6 +98,8 @@ Continuation SettleGraph::embed_initial(const Continuation& initial) const {
 }
 
 std::vector<External> SettleGraph::external(const Tensor& values, Index start, bool encoded) const {
+  if (binding_ != "broadcast_sum")
+    throw std::invalid_argument("ports binding requires port_external with an explicit schedule");
   if (!values.defined() || values.dim() != 3 || values.size(0) < 1 || values.size(2) < 1)
     throw std::invalid_argument("SettleGraph values require [batch, sequence, width]");
   // Bound the complete stop as well as every event, without intermediate overflow.
@@ -117,6 +129,8 @@ SettleExecutor::SettleExecutor(SettleGraph spec, Model model, Options options, s
 }
 
 Result SettleExecutor::run(const Continuation& initial, const Tensor& values) {
+  if (spec_.binding() != "broadcast_sum")
+    throw std::invalid_argument("ports binding requires run_ports with explicit external records");
   if (initial.cut < 0 || initial.cut % spec_.stride() || !initial.pending.empty())
     throw std::invalid_argument("SettleGraph run requires a complete position boundary");
   const auto start = initial.cut / spec_.stride();

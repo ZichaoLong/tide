@@ -64,18 +64,25 @@ CPU、CUDA、Python-owned NPU 或 standalone NPU 构建；它们不能混用二�
 常驻库另建，并核验与 core 对应的 manifest。缺少显式后端、库或 dtype 必须失败。
 CUDA 实机门禁仍未完成；不要将本机编译结果写成 GPU 运行通过。
 
-本机截至 2026-10-12 的定位提示（迁移时不依赖这些路径）：
+本机截至 2026-10-27 的实际规范来源是
+`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 和对应 `/etc/modulefiles`。
+旧 `/home/zlong/ASCEND_CODING_AGENT_GUIDE.md` 已不存在，不按失效路径加载环境。
+当前公共入口为 `ascend/dev-workspace-9.1.0`（CANN 9.1、Torch 2.12、Python 3.12）。
+项目私有增量使用模块提供的 constraints，不修改公共环境：
 
-- NPU：公共 module `libtorch-npu/2.10.0-cann9.0.0`；配套 Python 位于
-  `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`。
-- CUDA：私有 module `torch-cuda/2.10.0-cu128`，工具链在
-  `/mi/data2T/zlong/gpu-toolchains`；本机没有 GPU。
-- CANN 使用 environment modules 暴露的 `/opt` 版本；不改共享驱动或厂商库。
-- 长任务用本机 `run-durable-user-task` 规范的独立 `background.slice` 服务。
-  设备使用按用户授权和本机 skill 检查健康/余量；不停止其他用户的进程。
-  cgroup 配置是请求，不能据此宣称内核已完全执行资源隔离。
+```sh
+module purge
+module load ascend/dev-workspace-9.1.0
+python -m venv --system-site-packages .local/venv-core5  # 首次
+source .local/venv-core5/bin/activate
+python -m pip install -c "$ASCEND_CONSTRAINTS_FILE" pytest ninja
+python -m pip install --no-build-isolation --no-deps -e .
+```
 
-这些环境没有随旧实验产物清理。未来启动前核对实际模块和设备，别沿用旧任务队列。
+新环境的最小 CPU 链路与后续各设备证据分开；环境存在不代表完整矩阵通过。
+旧独立 LibTorch-NPU 2.10/CANN9.0 与私有 CUDA2.10/cu128 是不同工具链，不能混用二进制。
+长任务继续使用 `run-durable-user-task` 的独立 `background.slice` 服务，
+固定源码、两个构建线程、单线程 ATen/BLAS 与有限时长。实际任务见 STATUS。
 
 ## 实现与验证次序
 

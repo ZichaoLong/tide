@@ -1,40 +1,24 @@
 # 当前路线图与验收范围
 
-本文件只记录当前待办和完成边界。[STATUS](STATUS.md) 是唯一现场交接，
-[执行契约](execution-flows.md) 是持续约束，历史逐阶段过程保存在 Git 和
-[证据索引](evidence/README.md)。已关闭阶段不是新实验队列。
+本轮任务：固定 `0770593838a37c790a568226930567ed60f99b83` 的 core-5 与带权局部语义。
+用户授权持续实施、私有环境、有限实验和当前分支分阶段提交推送；首个 KV 组合不代表完成。
+[STATUS](STATUS.md) 是唯一当前交接，[execution-flows](execution-flows.md) 是持续契约。
 
-## 已完成：tide-core-3 本机交付
+| 阶段 | 交付与验收范围 | 当前状态 |
+| --- | --- | --- |
+| 0 起步与采用 | 迁移路径/工具链、最小 CPU 开发链路、固定原文与验收 §1.1–1.4 | 路径/来源核对与 Python 起步通过；原生基线构建与 93 项检查通过；core-5 19 文件逐字节校验通过 |
+| 1 公共表示与一般图 | 同秩区域、任意端口日程、逐边/端口返回、原样嵌入；SrcClass 多原子、结构化 payload/content/Read、int64 元数据与精确编解码 | 一般 SettleGraph 开发检查 247 项通过，固定提交资格待记录；带权表示正在实施 |
+| 2 首个完整组合 | kv/sum/+、cat/ind、regional_total/context/cat/quad；明确尺寸/初态/共享，FC 与 HB | 待实现；含 PDG 反馈、非对齐 TimedDAG、一般端口，完整记录、独立根 VJP、优化器、续接/checkpoint |
+| 3 正式候选 | affine/delta/gated_delta/ssd、固定逻辑时间短卷积；全部适用发送/评分/证据/key、异构组合 | 待逐函数实现、配置适用性与独立数学测试；旧同名内核不自动符合新定义 |
+| 4 精确联合/packed/VJP | 在线贪心 prefill、完整记录与右切面、实际 packing、参数/计算共享和私有状态 | 待扩展各函数的批量契约与梯度连接证据，禁止轨迹预跑 |
+| 5 设备与执行位置 | CPU、mixed、resident，前向/反向/优化器/跨卡/容量/续接分验收 | 新支线待实现核验；CUDA 源码、构建、真机独立记录，无 GPU 不阻塞其余工作 |
+| 6 有限选型与交付 | 小中规模 profiling、代表性完整训练与推理；计入调度/packing/通信/同步等 | 待正确性后回答选型问题；默认每配置一次独立测量，不展开全开关矩阵 |
 
-| 范围 | 状态与入口 |
-| --- | --- |
-| 原始六阶段基座 | 完成；[最终验收](evidence/foundation-final.md) |
-| 跨图类别、独立特化、公共实验库 | 完成；[跨类资格](evidence/cross-family-qualification.md)、[库资格](evidence/library-foundation.md) |
-| eager CPU/CUDA/NPU 扩展 | 源码交付，CPU/NPU 声明范围实测；[加速器资格](evidence/accelerators-20260928.md)；CUDA 实机待办独立保留 |
-| G1：State/Read 批量一阶 VJP、Add 组织 | 完成；[实现与资格](evidence/batched-vjp-cuda-local-20261010.md)、[Add 后续](evidence/add-batch-followup-20261010.md) |
-| G2：有限 profiling 与选型 | 完成；[六组件](evidence/npu-batched-components-20261011.md)、[完整消费者](evidence/native-selection-20261011.md) |
-| G3：CUDA 常驻 | 声明范围源码和本机构建完成；[目标机门禁](device-control.md) 尚待真机 |
-| G4：CPU/NPU 相关验证 | 完成；[公共模块](evidence/npu-module-batching-20261011.md)、[常驻 composite](evidence/resident-composite-20261011.md)、[精度/stream 修复](evidence/precision-and-stream-gates-20261011.md) |
-| G5：有限建议与目标机交接 | 本机阶段完成；[最终选型](evidence/native-selection-20261011.md) |
-| 新线程接续整理 | 完成；[固定教材与语义索引](semantic-map.md)、[干净源码入口](development.md)、[产物退役与起步验证](evidence/artifact-retirement-20261012.md) |
+每项都维护固定定义→配置/参数/快照→代码→独立测试→固定源码运行证据。
+同函数完整记录等价、指定投影等价、不同函数的性质比较分别列明；精确解 VJP、
+有限迭代导数、硬函数代理反向分别命名。数学不适用、实现未完成、硬件待验不能混写。
 
-这些结论保留各自提交、环境、模块和输入范围。接口存在不证明任意模型可导入；
-源码/编译不证明设备运行；单次观测不证明稳定速度排名。历史失败不改为通过。
-
-## 剩余与后续任务
-
-1. **外部验证**：在 GPU 真机重建干净提交，运行正确性、实际常驻、多卡、续接、
-   内存校准和有限性能门禁。其他主机架构/工具链版本也分别验证。
-2. **待用户提供**：新版教材与特例。先按 [语义索引](semantic-map.md) 比较变化，
-   再决定需要添加局部模块、独立特化、表示扩展还是调度/反向修复；当前不预先实现。
-3. **可选优化**：混合提交/同步、小 Tensor、因果批宽、常驻 gather/scatter/通信、
-   CUDA 初版串行语义适配等。需要具体 profiling 问题和有限预算，不是自动待跑任务。
-
-## 新任务验收顺序
-
-固定数学与输入域 → 独立小型参考/反例 → 实现与相关回归 → 干净源码必要资格
-→ 更新能力与限制 → 仅在需要选型时运行有限性能实验。
-
-新特例仍验证完整观察量、续接、独立根 VJP、优化器与 checkpoint 的适用范围。
-原规范内的任意合法拓扑/输入不得因为某个批量契约缺失而被静默换模型；
-合法 streaming 后备与明确设备能力拒绝按现有接口分别处理。
+已有 core-3 基座及历史通过范围保留于 [证据索引](evidence/README.md) 与 Git：
+三图/独立调度、模块/训练/续接、CPU/NPU 与 CUDA 源码；不重新排队旧任务。
+旧近似平票路由失败、容量拒绝与设备边界继续保留，不能用历史数字认证新实现。
+当前图/checkpoint 版本由 [semantics](semantics.md) 统一维护。

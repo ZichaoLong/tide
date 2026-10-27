@@ -8,6 +8,8 @@
 #include <iostream>
 #include <limits>
 
+void check_settle_ports(at::TensorOptions);
+
 namespace {
 using namespace tide;
 void require(bool ok, const char* reason) { if (!ok) throw std::runtime_error(reason); }
@@ -126,6 +128,7 @@ int main(int argc, char** argv) {
       throw std::invalid_argument("output exists");
     at::set_num_threads(1); at::set_num_interop_threads(1);
     check(at::TensorOptions().device(device).dtype(args.dtype));
+    check_settle_ports(at::TensorOptions().device(device).dtype(args.dtype));
     const std::string report = "standalone-settle: passed; native encoding, formula, VJP, aliases, prefill, chunk, rejection\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");

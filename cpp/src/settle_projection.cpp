@@ -7,6 +7,7 @@ Result SettleGraph::project(const Result& encoded) const {
   const auto& initial = encoded.continuation;
   if (initial.identity != encoded_.identity || initial.batch_size < 1)
     throw std::invalid_argument("SettleGraph projection identity/batch mismatch");
+  if (binding_ == "ports") return encoded;
   if (initial.cut < 0 || initial.cut % stride_ || !initial.pending.empty())
     throw std::invalid_argument("SettleGraph projection requires a complete position cut");
   const Index n = body_.nodes.size(), r = body_.regions.size(), edges = body_.edges.size();

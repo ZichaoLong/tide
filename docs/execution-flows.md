@@ -3,7 +3,7 @@
 本契约整理已确认的持续要求，替代已完成阶段的临时排队与操作清单。
 当前任务/状态以用户最新指令和 [STATUS](STATUS.md) 为准；唯一待办表是
 [ROADMAP](ROADMAP.md)。旧实验默认不复核、不自动恢复。
-新版教材待用户确认；当前数学版本由 [upstream.json](upstream.json) 固定。
+2026-10-27 任务已授权采用 core-5 和带权局部定义；当前数学版本由 [upstream.json](upstream.json) 固定。
 
 ## 1. 基座定位与独立执行
 
