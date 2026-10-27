@@ -91,7 +91,7 @@ Formula formula(const weighted::RecurrentConfig& c,WeightedRecurrentAction actio
   at::AutoGradMode enabled(true);const auto rows=states.size();const auto banks=weights.at("summary.matrix").size(0);Formula f;auto old=states;
   std::vector<Fields> params(banks);std::vector<Tensor> masses,inputs;
   for(size_t r=0;r<rows;++r){for(const auto& field:l.fields()){
-      auto& value=field.name=="value"?old[r].value:old[r].slots.at(field.name);value=value.clone().set_requires_grad(true);
+      auto& value=field.name=="value"?old[r].value:old[r].slots.at(field.name);value=value.to(at::kFloat).clone().set_requires_grad(true);
       f.leaves.push_back(value);f.labels.push_back({"raw."+field.name,int64_t(r),false});}
     masses.push_back(mass[r].reshape({1}).clone().set_requires_grad(true));f.leaves.push_back(masses.back());f.labels.push_back({"mass",int64_t(r),false});
     inputs.push_back(content[r].clone().set_requires_grad(true));f.leaves.push_back(inputs.back());f.labels.push_back({"content",int64_t(r),false});}

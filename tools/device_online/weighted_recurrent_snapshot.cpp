@@ -9,10 +9,17 @@ WeightedRecurrentSnapshot append_weighted_recurrent_snapshot(DeviceProgram& p,co
   c.validate();if(!raw.integer.defined()||raw.integer.dim()!=2||raw.integer.size(1)<4||banks<1)
     throw std::invalid_argument("invalid recurrent snapshot metadata/banks");
   WeightedRawLayout l(c,raw.integer.size(1)-4);validate_weighted_raw_buffers(l,raw);const auto device=raw.floating.device();const auto rows=raw.floating.size(0);
-  if(device.type()!=resident_device_type||raw.floating.scalar_type()!=at::kFloat)throw std::invalid_argument("recurrent snapshot requires explicit accelerator FP32");
+  if(device.type()!=resident_device_type||(raw.floating.scalar_type()!=at::kFloat&&raw.floating.scalar_type()!=at::kHalf))
+    throw std::invalid_argument("recurrent snapshot requires explicit accelerator FP32/FP16 raw storage");
   validate_kernel_device(device);check(times,device,at::kLong,{rows});check(mass,device,at::kFloat,{rows});
   check(owners,device,at::kLong,{rows});check(present,device,at::kBool,{rows});check(error,device,at::kInt,{1});
   if(budget<1||rows*(12.L*l.floating_width()+8.L*l.integer_width()+9)>budget)throw std::invalid_argument("recurrent snapshot tensor budget exceeded");
+  if(raw.floating.scalar_type()==at::kHalf){
+    const auto extra=4*raw.floating.numel();
+    if(rows*(16.L*l.floating_width()+8.L*l.integer_width()+9)>budget)throw std::invalid_argument("half recurrent snapshot tensor budget exceeded");
+    auto values=at::empty(raw.floating.sizes(),raw.floating.options().dtype(at::kFloat));p.cast(raw.floating,values);
+    return append_weighted_recurrent_snapshot(p,c,{values,raw.integer},times,mass,owners,present,banks,positive,error,budget-extra);
+  }
   std::vector<float> rates;if(c.basic())rates={float(c.lambda_short),0};else if(c.matrix_rates.empty())rates.resize(c.heads,0);else for(auto rate:c.matrix_rates){
     if(rate>0&&float(rate)==0)throw std::invalid_argument("positive recurrent passive rate underflows FP32");rates.push_back(float(rate));}
   rates.push_back(float(c.lambda_short));rates.push_back(0);

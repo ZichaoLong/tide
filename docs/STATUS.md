@@ -22,10 +22,11 @@ FP16组件使用实际half存储、FP32算术/保存值/一阶伴随，Cast声�
 
 ## 当前源码与下一步
 
-HEAD实现69bf4f0已推送。主区正在扩展四循环raw FP16及KV Full读取：
+KV两批证据5ff8679已提交推送。当前实现扩展四循环raw FP16及KV Full读取：
 FP32快照和完整算术，Update最终一次half存储及溢出guard；Mem/Full输入参数结果仍为FP32。
 独立24配置检查扩到两dtype，增加次正规快照、零接收按位保留、弱正接收、完整字段VJP与失败不提交。
-这些代码尚未构建/设备验证，不属于上述证据；相关契约和CPU检查完成后提交实现，再冻结资格。
+契约已同步，定向CPU24项通过/2.90秒；C++尚未构建/设备验证，不属于上述证据。
+本提交后冻结到core5-half-memory，启动两后端局部资格。
 
 四个KV资格任务已全部终态，不再有活动源码读者：
 - `tide-core5-half-kv-read-{npu,cuda}-qualify-20261028.service`；
@@ -36,7 +37,7 @@ FP32快照和完整算术，Update最终一次half存储及溢出guard；Mem/Ful
 - launchers `.local/core5-half-kv-{read,update}-{npu,cuda}-qualify{,-workload}.sh`；900秒、2workers、BLAS1、Nice10/background.slice。
   NPU queue180秒/device gate240秒，实际物理9→npu:0。记录脚本 `.local/record-half-kv-evidence.py read|update`。
 
-下一步定向CPU：`python -m pytest -q tests/test_resident_weighted_recurrent.py tests/test_resident_weighted_kv_full.py tests/test_resident_weighted_raw_update.py`。
+已通过的定向CPU：`python -m pytest -q tests/test_resident_weighted_recurrent.py tests/test_resident_weighted_kv_full.py tests/test_resident_weighted_raw_update.py`。
 再冻结新实现，用`build_device_control.py --checks weighted-recurrent weighted-kv-full`和匹配`verify_device_control.py`资格。
 其后完成完整图FP16、训练/恢复、peer、有限profiling与最终追溯；不要在局部组件阶段结束总体任务。
 
