@@ -1,22 +1,73 @@
 {
-  "semantic_version": "tide-core-3",
+  "semantic_version": "tide-core-5",
   "repository": "https://github.com/ZichaoLong/ObsidianVault",
-  "revision": "bd7483b927e047bf17fd4ba52278d20bc67f999e",
+  "revision": "0770593838a37c790a568226930567ed60f99b83",
   "directory": "20-tide-decentralized-neural-network",
   "sources": [
-    "semantics-anchor.md",
+    "README.md",
+    "instances/fully-connected-layered-weighted-message.md",
+    "instances/hb-lattice-weighted-message.md",
+    "local-semantics/weighted-message/architecture-learning-note.md",
+    "local-semantics/weighted-message/kv-memory-learning-note.md",
+    "local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md",
+    "local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md",
+    "local-semantics/weighted-message/recurrent-memory/gated-delta-learning-note.md",
+    "local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md",
+    "local-semantics/weighted-message/region-allocation-learning-note.md",
     "positive-delay-graph-finite-cut-learning-note.md",
-    "timed-dag-region-selector-learning-note.md",
+    "records/semantic-versions-and-adoption.md",
+    "reference/semantic-interface-index.md",
+    "reference/weighted-message-implementation-checks.md",
+    "settlegraph-learning-note.md",
     "timed-dag-chunk-prefill-learning-note.md",
-    "settlegraph-learning-note.md"
+    "timed-dag-region-selector-learning-note.md",
+    "topologies/fully-connected-layered.md",
+    "topologies/hb-lattice.md"
   ],
-  "local_profile": "ema-ffn-v1",
-  "snapshot_directory": "docs/upstream/tide-core-3",
+  "snapshot_directory": "docs/upstream/tide-core-5",
   "sha256": {
-    "semantics-anchor.md": "832f50d70121ef051aee4a6171ea35df2a97c7103263b7147086aac9a2e5efd5",
-    "positive-delay-graph-finite-cut-learning-note.md": "0fc6eed8edd0bd62ab3ff791c4a7fa2eb8defabffe676925ed1f4127c418cdc5",
-    "timed-dag-region-selector-learning-note.md": "bb78f43717a1bb29e5afbfb2758b885adc1ba7aa684f5b203f7b547d13e3ca12",
-    "timed-dag-chunk-prefill-learning-note.md": "5c71155b5b011e0280bce0022a7f30b52d92af4059b0c28b80c756a5f2a6d0f7",
-    "settlegraph-learning-note.md": "4bb735b9a7ec65522056d985be0820e108e2df0bb27a2c23fac991e5f0bdb17f"
-  }
+    "README.md": "b4eb2066c6bbe872ca30e9ea9badf25a0f532d1458e01113386024e5e845ff8f",
+    "instances/fully-connected-layered-weighted-message.md": "4d2b2a66e44dd39de0b84319de95cf027b40ded598f83152fac9cbceee0609e6",
+    "instances/hb-lattice-weighted-message.md": "d9fa272586cb59a14ea297483b3258ec10c3f56c44cae5567335f15e7c11143c",
+    "local-semantics/weighted-message/architecture-learning-note.md": "1d19912a9f5c8f4d665cb7ae9f7c19c0bc7f8c9c3c210194fd540b9747e602f9",
+    "local-semantics/weighted-message/kv-memory-learning-note.md": "a83d9ac4f112b612321025c5458ec9107d9b57c7a95352764fde5fddf77089d1",
+    "local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md": "c578ab1a4022fb6a498fa907d74c2a0ea6ad801c7bbda6d929cede664e8041d8",
+    "local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md": "51a8948874cbfe58ecbbb855488c123593901adcfb2c0a72de316c3aa2140418",
+    "local-semantics/weighted-message/recurrent-memory/gated-delta-learning-note.md": "a9f1844170d253eb25b77f793fc97689177aa1a4f62995eef680e798688015f7",
+    "local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md": "1b77eeef82ae851fda8ec0b271ced1ec07ea51494384f2002324c79d0f42ba2f",
+    "local-semantics/weighted-message/region-allocation-learning-note.md": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf",
+    "positive-delay-graph-finite-cut-learning-note.md": "042782c97a4e1f7ba357d3aca097196b00bb9bf25c816f02ed4c8e35238a6be2",
+    "records/semantic-versions-and-adoption.md": "0e2d256b61d52f37e8424dd01c00624378545565e7bac14251d02726c96eee8e",
+    "reference/semantic-interface-index.md": "1f01b5e05ef2ae70ac0936776b160fd7d5ba6e25dc5d21f46b9169a5e887a7db",
+    "reference/weighted-message-implementation-checks.md": "cc3f337c9641a17d7b96f9fcace32514e37917bbb31cc27946a4c2176c5c951f",
+    "settlegraph-learning-note.md": "631bb877a197c2d5179b0fa17d4a74d2a294ed9e492278f4f040bb0b1925e362",
+    "timed-dag-chunk-prefill-learning-note.md": "5fc0deef0980ca4ea640fb165e2974e023a0754fca23bbbd051153cc9c2280b2",
+    "timed-dag-region-selector-learning-note.md": "5a9157fb8f76219d1aaa91a1dc9ed1c1bfc1902f4966e5e03ddee0abf2b24866",
+    "topologies/fully-connected-layered.md": "b9fd0596209e9912b37e6db7f498603d954fdfc67b164af9bc39a2b44d71f596",
+    "topologies/hb-lattice.md": "1a9c4572812c2cc0f42e1fbac996c2af8777364fd5f139c99e92c2a220675750"
+  },
+  "legacy": [
+    {
+      "semantic_version": "tide-core-3",
+      "repository": "https://github.com/ZichaoLong/ObsidianVault",
+      "revision": "bd7483b927e047bf17fd4ba52278d20bc67f999e",
+      "directory": "20-tide-decentralized-neural-network",
+      "sources": [
+        "semantics-anchor.md",
+        "positive-delay-graph-finite-cut-learning-note.md",
+        "timed-dag-region-selector-learning-note.md",
+        "timed-dag-chunk-prefill-learning-note.md",
+        "settlegraph-learning-note.md"
+      ],
+      "local_profile": "ema-ffn-v1",
+      "snapshot_directory": "docs/upstream/tide-core-3",
+      "sha256": {
+        "semantics-anchor.md": "832f50d70121ef051aee4a6171ea35df2a97c7103263b7147086aac9a2e5efd5",
+        "positive-delay-graph-finite-cut-learning-note.md": "0fc6eed8edd0bd62ab3ff791c4a7fa2eb8defabffe676925ed1f4127c418cdc5",
+        "timed-dag-region-selector-learning-note.md": "bb78f43717a1bb29e5afbfb2758b885adc1ba7aa684f5b203f7b547d13e3ca12",
+        "timed-dag-chunk-prefill-learning-note.md": "5c71155b5b011e0280bce0022a7f30b52d92af4059b0c28b80c756a5f2a6d0f7",
+        "settlegraph-learning-note.md": "4bb735b9a7ec65522056d985be0820e108e2df0bb27a2c23fac991e5f0bdb17f"
+      }
+    }
+  ]
 }

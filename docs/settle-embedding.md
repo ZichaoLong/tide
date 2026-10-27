@@ -1,6 +1,66 @@
-# SettleGraph encoding and independent anchors
+# SettleGraph: general ports and explicit boundary bindings
 
-`SettleGraph(graph, ranks)` requires a distinct positive integer rank per region
+Authority: core-5 Settle §2–6, §9–11 at the revision locked in [upstream.json](upstream.json).
+All coordinates are signed int64. Equal ranks are legal for independent regions;
+every physical edge must increase rank with delay equal to the difference.
+Parameters, states, descriptors and Full slots retain their chosen local contracts.
+
+## General ports (`binding="ports"`)
+
+Python `SettleGraph(graph, ranks, binding="ports", time_stride=D)` and C++
+`SettleGraph(graph, ranks, "ports", D)` encode §2.4. D exceeds every region rank;
+the default is `max(ranks)+1`. Graph nodes/edges/regions/ports and parameter owners
+remain exactly the same in `embed`/`embed_model`; §10 adds no adapter nodes.
+Python `port_external(values, positions, port=..., batch=..., start_occurrence=...)`
+and the C++ counterpart map a `[occurrences,width]` tensor and strictly increasing
+global positions to external rows. For occurrence k, `position=start_occurrence+k`
+is the per-port ordinal while `time=D*positions[k]+rank(target)` is logical time.
+Different ports can have different schedules, including gaps, and can attach to
+interior nodes. Empty input slices do not create events or increment ledgers.
+
+Python `settle_ports.run_ports` owns a region-major schedule. Strict ranks prove
+that all possible incoming edges are settled before a region is processed;
+sealed inputs provide the external completeness proof. The planner inspects
+actual fibers, never scans the gap between sparse times, and does not pre-run a
+reference trace. With `prefill=True` it uses exact local region/state/Full blocks;
+with `False` it processes scalar frames. Module-specific fallback counters remain
+visible. C++ `SettleExecutor::run_ports(q, rows, stop, sealed_until)` executes the
+same specification through independently implemented streaming/frontier/greedy
+schedulers; it is an embedding frontend, not an independent specialization.
+
+Every logical cut is valid. `project` is the identity decoding for this binding,
+including private state/history, per-port ledgers, messages and pending. Alignment
+is checked for external rows, pending send/arrival times, state/history timestamps
+and ledger times. `decode_slots(spec, result, start_position, stop_position)`
+materializes named `(batch, global_position, edge/port)` families for a declared
+complete-position interval: present values retain the actual Tensor handle,
+missing records become `None` (mathematical ⊥), including inactive/no-input slots.
+It never calls a reference formula. This slot view is not a checkpoint format;
+checkpoint v5 preserves the full continuation, including interior-cut pending.
+
+| Definition / conditions | Code and independent acceptance |
+| --- | --- |
+| LegalRegionRank/LegalTimeCode, §2.3–2.4 | Python/C++ `SettleGraph` constructors, `port_external`, `validate_alignment`; `test_time_code_validation_and_sparse_int64` rejects wrong rank/delay/clock and checks times above 2^54 |
+| Named edge/port values and absence, §3/§6 | `settle_ports.decode_slots`; `test_named_slots_literal_parallel_paths` uses literal 31x+88y+3z coefficients, duplicate edges, interior inputs, separate outputs, zero versus absent and independent input VJPs |
+| Identical record embedding, §10 | Same graph/model and tensor owners; `test_every_cut_records_independent_roots_and_continuation` compares Python time/region and native orders, all cuts, output/state/pending roots, None/zero gradients |
+| Stateful composition, §9; first-order training | `test_shared_optimizer_and_checkpoint_with_pending`: three AdamW steps, shared parameters/private states, exact pending restore, resumed step |
+| Standalone C++ | `cpp/test/settle_ports.cpp::check_settle_ports` checks literal parallel-path coefficients/gradients, absent root, same-rank nodes, port occurrence versus global position and every cut with all three native schedulers |
+
+Float tolerances are CPU FP64 1e-10/1e-8, FP32 1e-6/1e-5; discrete records and
+integer metadata are exact. HST in the scheduling tests is the existing declared
+profile, not the new weighted-message allocation derivative. Port payloads here
+still use existing local modules; structured weighted payloads have a separate
+implementation milestone. Current run status and source-qualified evidence are
+listed in STATUS and the evidence index; source availability is not a device claim.
+
+## Broadcast input and summed output (`binding="broadcast_sum"`)
+
+This is the old default convenience API and the explicit core-5 §6.4 binding.
+Its time stride defaults to max(rank)+2, with output rank max(rank)+1. A larger
+explicit stride is allowed and does not alter the output rank. The following
+adapter/projection details apply only to this binding.
+
+`SettleGraph(graph, ranks)` requires a positive integer rank per region
 and edge delay equal to target rank minus source rank. `stride=max(rank)+2`;
 the output boundary rank is `max(rank)+1`. Each (sample,position) input is sent
 through a stateless source adapter at `stride*position`; the output adapter
@@ -38,7 +98,7 @@ develop-portable-torch C++ asset; only CPU FP64/FP32 are accepted by this target
 ## Standalone native frontend
 
 `SettleGraph(Graph, region_ranks)` compiles the body and builds the encoded graph.
-Ranks are distinct positive int64 values with room for output rank and stride;
+Ranks are positive int64 values with room for output rank and stride;
 all edges must match the strictly increasing rank difference. Empty boundaries,
 bad owners/ports/domains and overflow fail. `embed_model` preserves the body
 TensorImpl owners and aliases, including shared input/output scales; only frozen
@@ -96,8 +156,8 @@ The TimedDAG-to-PDG inclusion changes no clocks, values or identities: a compile
 acyclic positive-delay graph can run through either frontier or streaming.
 
 These constructors instantiate the rank-aligned, broadcast-input/summed-output
-profile already used by the Python frontend. They do not prove arbitrary
-SettleGraph encodings, arbitrary custom modules or arbitrary model equivalence.
+profile already used by the Python frontend. General ports use the separate identity binding above. Neither binding proves arbitrary custom
+modules or arbitrary model equivalence.
 Local program sequence/clear/Next capabilities still control legal prefill.
 
 ## Fixed-topology specialization domains

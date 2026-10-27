@@ -10,18 +10,33 @@ from .ports import PortLayout
 from .origins import InputOrigin
 from .source_domain import SourceDomain
 from .validation import validate_window
+from .coordinates import integers
 
 
 @dataclass(frozen=True)
 class SettleGraph:
+    """Core-5 Settle §2/§10; ``broadcast_sum`` is the explicit §6.4 binding.
+
+    ``ports`` preserves the original graph, per-port records and every cut.
+    See docs/settle-embedding.md for the representation and independent tests.
+    """
     graph: Graph
     ranks: tuple[int, ...]  # One strictly positive rank per region.
+    binding: str = "broadcast_sum"
+    time_stride: int | None = None
 
     def __post_init__(self):
         g = self.graph
-        if (len(self.ranks) != len(g.regions) or len(set(self.ranks)) != len(self.ranks)
-                or any(type(rank) is not int or rank <= 0 for rank in self.ranks)):
-            raise ValueError("regions require distinct positive ranks")
+        if self.binding not in {"ports", "broadcast_sum"}:
+            raise ValueError("unknown SettleGraph boundary binding")
+        integers("region ranks", *self.ranks)
+        if (len(self.ranks) != len(g.regions)
+                or any(not 0 < rank <= 2**63-(2 if self.binding == "ports" else 3) for rank in self.ranks)):
+            raise ValueError("regions require positive representable ranks")
+        integers("SettleGraph stride", self.stride)
+        limit = max(self.ranks) if self.binding == "ports" else self.output_rank
+        if self.stride <= limit:
+            raise ValueError("SettleGraph stride must exceed all processing ranks")
         if not g.inputs or not g.outputs:
             raise ValueError("SettleGraph requires input and output boundaries")
         for e in g.edges:
@@ -37,17 +52,30 @@ class SettleGraph:
 
     @property
     def stride(self):
-        return self.output_rank + 1
+        default = self.output_rank + (self.binding == "broadcast_sum")
+        return default if self.time_stride is None else self.time_stride
 
     def external(self, values, start_position=0, encoded=False):
+        if self.binding != "broadcast_sum":
+            raise ValueError("ports binding requires port_external with an explicit schedule")
+        integers("SettleGraph start position", start_position)
         if values.ndim != 3:
             raise ValueError("values require [batch, sequence, width]")
+        if start_position < 0 or start_position + values.shape[1] > (2**63-1)//self.stride:
+            raise ValueError("SettleGraph position clock overflow")
         return [External(b, p, start_position + t,
                          self.stride * (start_position + t) + (0 if encoded else self.rank(v)), values[b, t])
                 for b in range(len(values)) for p, v in enumerate((0,) if encoded else self.graph.inputs)
                 for t in range(values.shape[1])]
 
+    def port_external(self, values, positions, *, port, batch=0, start_occurrence=0):
+        """Encode t_i(k) (§2.4), keeping occurrence k distinct from position t."""
+        from .settle_ports import port_external
+        return port_external(self, values, positions, port, batch, start_occurrence)
+
     def embed(self, model):
+        if self.binding == "ports":
+            return self.graph, model  # §10: same graph, functions, ports and owners.
         g = self.graph
         n, r = len(g.nodes), len(g.regions)
         edges = (g.edges + tuple(Edge(n, v, self.rank(v)) for v in g.inputs)
@@ -79,6 +107,10 @@ class SettleGraph:
         return encoded, em
 
     def embed_initial(self, q, encoded):
+        if self.binding == "ports":
+            if q.identity != self.graph.identity or encoded.identity != self.graph.identity:
+                raise ValueError("invalid identity in SettleGraph embedding")
+            return q.fork()
         if q.cut or q.pending or q.ledger:
             raise ValueError("embed_initial requires an initial cut; retain encoded continuation for subsequent windows")
         if q.identity != self.graph.identity or any(
@@ -89,6 +121,10 @@ class SettleGraph:
         return replace(q.fork(), identity=encoded.identity)
 
     def project(self, result):
+        if self.binding == "ports":
+            if result.continuation.identity != self.graph.identity:
+                raise ValueError("invalid identity in SettleGraph projection")
+            return result
         if result.continuation.cut % self.stride or result.continuation.pending:
             raise ValueError("SettleGraph projection requires a complete position cut")
         g = self.graph
@@ -116,6 +152,8 @@ class SettleGraph:
 def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True, packed=True,
         full_autograd="replay", aggregate_autograd="replay"):
     """Independent SettleGraph schedule: each region settles the whole sequence."""
+    if spec.binding != "broadcast_sum":
+        raise ValueError("ports binding requires run_ports with explicit external records")
     from .block_policy import validate
     policy = dict(packed=packed, full_autograd=full_autograd, aggregate_autograd=aggregate_autograd)
     validate(model, **policy)

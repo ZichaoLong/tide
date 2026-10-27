@@ -3,21 +3,26 @@
 import argparse
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import subprocess
 import sys
 
 
-def check(root, upstream=None):
-    lock = json.loads((root / "docs/upstream.json").read_text())
+def check_entry(root, lock, upstream):
+    """Verify one immutable adoption, including nested local-definition files."""
     folder = root / lock["snapshot_directory"]
-    if set(lock["sources"]) != set(lock["sha256"]):
+    if (len(set(lock["sources"])) != len(lock["sources"])
+            or set(lock["sources"]) != set(lock["sha256"])):
         raise ValueError("upstream source and hash inventories differ")
-    if {p.name for p in folder.iterdir()} != set(lock["sources"]):
+    paths = list(folder.rglob("*"))
+    if any(p.is_symlink() for p in paths):
+        raise ValueError("upstream snapshot cannot contain symlinks")
+    if {p.relative_to(folder).as_posix() for p in paths if p.is_file()} != set(lock["sources"]):
         raise ValueError("upstream snapshot inventory differs from the lock")
     for name in lock["sources"]:
-        if Path(name).name != name:
-            raise ValueError("upstream filenames must be local basenames")
+        path = PurePosixPath(name)
+        if path.is_absolute() or ".." in path.parts or path.as_posix() != name:
+            raise ValueError("upstream filenames must be canonical relative paths")
         data = (folder / name).read_bytes()
         if hashlib.sha256(data).hexdigest() != lock["sha256"][name]:
             raise ValueError(f"upstream snapshot checksum mismatch: {name}")
@@ -31,6 +36,14 @@ def check(root, upstream=None):
     return {"state": "passed", "semantic_version": lock["semantic_version"],
             "revision": lock["revision"], "files": len(lock["sources"]),
             "compared_with_upstream_git": upstream is not None}
+
+
+def check(root, upstream=None):
+    lock = json.loads((root / "docs/upstream.json").read_text())
+    result = check_entry(root, lock, upstream)
+    result["legacy"] = [check_entry(root, entry, upstream)
+                        for entry in lock.get("legacy", [])]
+    return result
 
 
 def main():

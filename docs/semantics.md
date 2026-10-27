@@ -1,6 +1,10 @@
 # Adopted semantics and validation contract
 
-Authority: `tide-core-3` at the revision in `upstream.json`. Local formulas below
+Authority: `tide-core-5` at `0770593838a37c790a568226930567ed60f99b83`, locked in `upstream.json`.
+The weighted-message definitions are pinned to the same commit. Adoption is not
+a claim that every local candidate/backend has been implemented or qualified;
+see ROADMAP and the semantic map. The legacy core-3 snapshot remains separately
+checksummed for historical formula/evidence references. Local formulas below
 instantiate the abstract interfaces; changing them is a versioned local change.
 The [semantic map](semantic-map.md) links the pinned offline textbook, concrete
 input/output domains, implementation layers and independent tests.
@@ -51,6 +55,26 @@ semantics. `advance` keeps queues/state native; snapshots explicitly clone tenso
 storage and preserve gradients in ordinary grad mode. Input rejection is
 retryable; execution exceptions require restoring a prior snapshot into a new
 cursor. See `streaming-cursor.md` for ownership and recovery details.
+
+## Core-5 SettleGraph time code
+
+`SettleGraph(..., binding="ports", time_stride=D)` allows independent regions
+with equal positive int64 ranks. Every edge strictly increases rank and its delay
+equals the rank difference; D exceeds every processing rank. A port occurrence k
+at global position t_i(k) arrives at D*t_i(k)+rank(target). Occurrence counters
+remain contiguous per port; global positions may be sparse and differ by port.
+The TimedDAG embedding is the same graph/model/records. Per-edge and per-port
+values stay separate, and every logical cut retains exact pending messages.
+The Python region schedule uses actual complete fibers and owns its order;
+native streaming/frontier/greedy use independent C++ schedules. State, Full and
+VJP capabilities are those of the chosen local modules, not implied by topology.
+
+`binding="broadcast_sum"` remains the old default convenience binding: common
+input, two adapter nodes, terminal sum, complete-position projection only.
+Neither binding changes graph v13 or checkpoint v5: rank/time restrictions are
+validated against explicit int64 event coordinates. Checkpoint decoding restores
+all graph state and pending; execution under a Settle time code also validates
+state/history/ledger/message alignment. See [mapping](settle-embedding.md).
 
 ## First local profile: `ema-ffn-v1`
 
