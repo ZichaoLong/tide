@@ -24,6 +24,13 @@ class StateKernel {
                                      const std::vector<Index>&, const ContentViews&) const;
   virtual PackedStates packed_sequence(const NodeWeights&, const std::vector<State>&,
                                        const PackedSequence&) const;
+  // Optional pure subexpressions; the key must identify actual input/parameter
+  // handles and configuration. No numeric equality or persistent state reuse.
+  virtual std::string preparation_key(const NodeWeights&,const Tensor&) const { return {}; }
+  virtual std::map<std::string,Tensor> prepare_shared(const NodeWeights&,const Tensor&) const { return {}; }
+  virtual std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
+      const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
+      const std::vector<std::map<std::string,Tensor>>&) const;
   virtual bool exact_sequence() const { return false; }
   virtual bool joint_batch() const { return false; }
   // Builtins declare row-independent tensor dependencies for batched first-order VJP.

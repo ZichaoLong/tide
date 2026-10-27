@@ -22,6 +22,7 @@ void check_weighted_source(const at::TensorOptions&);
 void check_weighted_attention_mean(const at::TensorOptions&);
 void check_weighted_normalization(const at::TensorOptions&);
 void check_weighted_sharing(const at::TensorOptions&);
+void check_weighted_kv_sharing(const at::TensorOptions&);
 void check_weighted_recurrent(const at::TensorOptions&);
 void check_weighted_entropy(const at::TensorOptions&);
 void check_weighted_sending(const at::TensorOptions&);
@@ -120,6 +121,7 @@ int main(int argc, char** argv) {
     check_weighted_attention_mean(options);
     check_weighted_normalization(options);
     check_weighted_sharing(options);
+    check_weighted_kv_sharing(options);
     check_weighted_recurrent(options);
     check_weighted_entropy(options);
     check_weighted_sending(options);

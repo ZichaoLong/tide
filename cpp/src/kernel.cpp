@@ -8,6 +8,12 @@
 #include "tide/clocked_kernel.h"
 
 namespace tide {
+std::vector<State> StateKernel::prepared_batch(const NodeWeights& w,const std::vector<State>& old,
+    const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
+    const std::vector<std::map<std::string,Tensor>>& prepared) const {
+  for(const auto& row:prepared)if(!row.empty())throw std::invalid_argument("State program has no preparation contract");
+  return batch_graph(w,old,h,times,views);
+}
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
                                     const std::vector<Index>& times, const ContentViews& views) const {
   std::vector<State> states;

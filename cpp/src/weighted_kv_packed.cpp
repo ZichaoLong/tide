@@ -1,15 +1,13 @@
 // KV §2/§5: one projection batch, actual raw caches at every positive prefix.
-#include "weighted_packed.h"
+#include "weighted_kv_projection.h"
 
 namespace tide::weighted::packed {
 using detail::weight;
 PackedStates kv(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch,const KVConfig& c){
   Writes plan(old,batch);if(plan.ids.empty())return plan.decode(old,batch,{},0);
-  auto x=normalize(plan.input,c.epsilon);
-  auto matrix=weight(w,"kernel.base")+at::matmul(weight(w,"kernel.adapter_u"),weight(w,"kernel.adapter_v"));
-  auto values=project(x,matrix);
+  auto [values,summaries]=kv_projections(w,plan,batch,c);
   std::map<std::string,Tensor> entries{{"times",plan.times},{"keys",values.slice(1,0,c.width)},
-    {"values",values.slice(1,c.width)},{"summaries",project(normalize(plan.input,c.epsilon),weight(w,"kernel.summary"))},{"weights",plan.receive}};
+    {"values",values.slice(1,c.width)},{"summaries",summaries},{"weights",plan.receive}};
   std::vector<std::map<std::string,Tensor>> slots;
   for(size_t i=0;i<old.size();++i){auto a=plan.offsets[i],b=plan.offsets[i+1];if(a==b)continue;
     std::map<std::string,Tensor> joined;

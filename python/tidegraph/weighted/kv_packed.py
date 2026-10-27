@@ -1,7 +1,7 @@
 """KV §2/§5: joint write projections and actual ragged prefix caches."""
 import torch
-from .packing import Writes, project
-from .tensors import norm
+from .packing import Writes
+from .kv_projection import projections
 
 
 def packed(memory, old, batch):
@@ -9,10 +9,10 @@ def packed(memory, old, batch):
     if not plan.ids:
         return plan.decode(old, batch, []), 0
     c = memory.config
-    x = norm(plan.content, c.epsilon)
-    key, value = project(x, memory.base+memory.adapter_u@memory.adapter_v).chunk(2, -1)
+    values, summaries = projections(memory, plan, batch)
+    key, value = values.chunk(2, -1)
     entries = dict(times=plan.times, keys=key, values=value,
-                   summaries=project(norm(plan.content, c.epsilon), memory.summary), weights=plan.weight)
+                   summaries=summaries, weights=plan.weight)
     slots = []
     for i, state in enumerate(old):
         a, b = plan.offsets[i:i+2]

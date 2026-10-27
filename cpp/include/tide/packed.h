@@ -11,6 +11,7 @@ struct PackedSequence {
   std::vector<Owner> owners;  // sample, node
   std::vector<Index> times;
   ContentViews views;
+  std::vector<std::map<std::string,Tensor>> prepared;
   void validate() const;
 };
 struct PackedStates {

@@ -5,7 +5,8 @@ namespace tide {
 // Bind independently computed packed values to batched step graphs, preserving
 // structural disconnection for each row and each state slot.
 std::vector<State> state_batch_vjp(const NodeWeights&, const std::vector<State>& old,
-    const ContentViews&, const std::vector<Index>& times, const std::vector<State>& numeric);
+    const ContentViews&, const std::vector<Index>& times, const std::vector<State>& numeric,
+    const std::vector<std::map<std::string,Tensor>>& prepared={});
 void state_sequence_vjp(const NodeWeights&, const std::vector<State>& old,
     const PackedSequence&, std::vector<State>& numeric, std::vector<State>& previous);
 }

@@ -15,6 +15,7 @@ struct Request {
   std::vector<SourceInput> sources;
   std::vector<SlotValue> contributions;
   Index time;
+  std::map<std::string,Tensor> prepared;
   ContentView view() const { return {content,sources,contributions}; }
 };
 template<class F> void tensors(Request& row,F f) {
@@ -23,6 +24,7 @@ template<class F> void tensors(Request& row,F f) {
   f(row.content);
   for (auto& s:row.sources) { f(s.atom.value); f(s.scale); }
   for (auto& s:row.contributions) f(s.value);
+  for (auto& [name,t]:row.prepared) f(t);
 }
 template<class F> void tensors(NodeWeights& w,F f) {
   f(w.decay); f(w.weight); f(w.bias); f(w.read);
@@ -44,6 +46,8 @@ std::string signature(Request r,const StateKernel& kernel) {
   for (const auto& a:r.sources) s << ':' << a.slot;
   s << ":contributions" << r.contributions.size();
   for (const auto& a:r.contributions) s << ':' << a.slot;
+  s << ":prepared" << r.prepared.size();
+  for(const auto& [name,t]:r.prepared)s << ':' << name;
   tensors(r,[&](Tensor& t) { s << '/' << t.sizes() << t.device() << int(t.scalar_type()) << t.requires_grad(); });
   return s.str();
 }
@@ -115,11 +119,12 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
   variable_list content;
   ContentViews views;
   std::vector<Index> times;
-  for (const auto& row:rows) { old.push_back(row.old); content.push_back(row.content); views.push_back(row.view()); times.push_back(row.time); }
+  std::vector<std::map<std::string,Tensor>> prepared;
+  for (const auto& row:rows) { old.push_back(row.old); content.push_back(row.content); views.push_back(row.view()); times.push_back(row.time); prepared.push_back(row.prepared); }
   std::vector<State> semantic;
   {
     at::AutoGradMode enable(true);
-    semantic=w.kernel->batch_graph(w,old,at::stack(content),times,views);
+    semantic=w.kernel->prepared_batch(w,old,at::stack(content),times,views,prepared);
   }
   if (semantic.size()!=numeric.size()) throw std::invalid_argument("State VJP changed batch length");
   auto result=numeric;
@@ -149,13 +154,16 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
 }
 }
 std::vector<State> state_batch_vjp(const NodeWeights& w,const std::vector<State>& old,
-    const ContentViews& views,const std::vector<Index>& times,const std::vector<State>& numeric) {
+    const ContentViews& views,const std::vector<Index>& times,const std::vector<State>& numeric,
+    const std::vector<std::map<std::string,Tensor>>& prepared) {
   work::StateReplayTimer timer(work::StateBatchGraphNs);
+  if(!prepared.empty()&&prepared.size()!=old.size())throw std::invalid_argument("State VJP preparation count mismatch");
   std::map<std::string,std::vector<size_t>> groups;
   std::vector<Request> requests;
   for (size_t i=0;i<old.size();++i) {
     requests.push_back({old[i],views[i].value,{views[i].sources.begin(),views[i].sources.end()},
-                       {views[i].contributions.begin(),views[i].contributions.end()},times[i]});
+                       {views[i].contributions.begin(),views[i].contributions.end()},times[i],
+                       prepared.empty()?std::map<std::string,Tensor>{}:prepared.at(i)});
     groups[signature(requests.back(),*w.kernel)].push_back(i);
   }
   auto result=numeric;
@@ -174,13 +182,15 @@ void state_sequence_vjp(const NodeWeights& w,const std::vector<State>& old,
     std::vector<size_t> owners,ids;
     std::vector<State> initial,packed;
     ContentViews views;std::vector<Index> times;
+    std::vector<std::map<std::string,Tensor>> prepared;
     for (size_t i=0;i<old.size();++i) if (p.offsets[i]+depth<p.offsets[i+1]) {
       const auto j=p.offsets[i]+depth; owners.push_back(i);ids.push_back(j);
       previous[j]=current[i];initial.push_back(current[i]);packed.push_back(numeric[j]);
       views.push_back(p.views[j]);times.push_back(p.times[j]);
+      prepared.push_back(p.prepared.empty()?std::map<std::string,Tensor>{}:p.prepared.at(j));
     }
     if (ids.empty()) break;
-    auto bound=state_batch_vjp(w,initial,views,times,packed);
+    auto bound=state_batch_vjp(w,initial,views,times,packed,prepared);
     for (size_t i=0;i<ids.size();++i) current[owners[i]]=numeric[ids[i]]=std::move(bound[i]);
   }
 }

@@ -50,6 +50,14 @@ class KVMemory(StateProgram):
         from .kv_packed import packed
         return packed(self, old, batch)
 
+    def preparation_key(self, content):
+        from .kv_projection import key
+        return key(self, content)
+
+    def prepare_shared(self, content):
+        from .kv_projection import prepare
+        return prepare(self, content)
+
     def batch_autograd_key(self, old, view, time):
         return (bool(view.value[0] > 0),)
 

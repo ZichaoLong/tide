@@ -12,12 +12,14 @@ class PackedSequence:
     owners: list[tuple[int, int]]  # (sample,node), one common node/program
     times: list[int]
     views: list[Content]   # program-visible sources and Aggregate contributions
+    prepared: list[dict[str, torch.Tensor]] | None = None  # ephemeral State operands
 
     def validate(self):
         if (self.contents.ndim != 2 or not self.owners or not self.offsets or self.offsets[0] != 0
                 or len(self.offsets) != len(self.owners) + 1
                 or self.offsets[-1] != len(self.contents)
                 or len(self.times) != len(self.contents) or len(self.views) != len(self.contents)
+                or self.prepared is not None and len(self.prepared) != len(self.contents)
                 or any(not isinstance(c, Content) for c in self.views)
                 or any((c.value.shape, c.value.dtype, c.value.device) != (
                     self.contents.shape[1:], self.contents.dtype, self.contents.device) for c in self.views)
@@ -39,7 +41,8 @@ def prepare_sequences(weights, sequences, q, read_mode="proposal"):
     replay = torch.is_grad_enabled()
     with torch.no_grad():
         batch = PackedSequence(torch.stack([e["content"] for e in flat]), offsets, owners,
-                               [e["time"] for e in flat], [e["_content"] for e in flat])
+                               [e["time"] for e in flat], [e["_content"] for e in flat],
+                               [e.get("_state_prepared", {}) for e in flat])
         batch.validate()
         if hasattr(getattr(weights, "kernel", None), "packed_sequence"):
             states, calls = weights.kernel.packed_sequence(weights, old, batch)

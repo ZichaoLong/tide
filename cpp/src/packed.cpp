@@ -8,7 +8,8 @@ void PackedSequence::validate() const {
   auto fail = [] { throw std::invalid_argument("invalid packed sequence metadata"); };
   if (!contents.defined() || contents.dim() != 2 || owners.empty() || offsets.size() != owners.size() + 1
       || offsets.front() != 0 || offsets.back() != contents.size(0)
-      || times.size() != static_cast<size_t>(contents.size(0)) || views.size() != times.size()) fail();
+      || times.size() != static_cast<size_t>(contents.size(0)) || views.size() != times.size()
+      || (!prepared.empty() && prepared.size()!=times.size())) fail();
   std::set<Owner> seen;
   for (size_t i = 0; i < owners.size(); ++i) {
     if (owners[i].first < 0 || owners[i].second < 0 || owners[i].second != owners.front().second
