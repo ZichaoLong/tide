@@ -2,6 +2,7 @@
 import torch
 from .convolution_packed import convolve
 from .packing import project
+from .tensors import norm
 
 
 def coefficients(memory, plan, old, x, gap):
@@ -17,8 +18,9 @@ def coefficients(memory, plan, old, x, gap):
         _, key, value = projected.reshape(-1, c.heads, 2*c.key_width+c.value_width).split(
             (c.key_width, c.key_width, c.value_width), -1)
         key = key/torch.sqrt(c.qk_epsilon+key.square().sum(-1, keepdim=True))
-        dt = torch.nn.functional.softplus(project(x, memory.delta)+memory.delta_bias)
-        gain = plan.weight[:, None]*torch.sigmoid(project(x, memory.write)+memory.write_bias)
+        control = norm(plan.content, c.epsilon)
+        dt = torch.nn.functional.softplus(project(control, memory.delta)+memory.delta_bias)
+        gain = plan.weight[:, None]*torch.sigmoid(project(control, memory.write)+memory.write_bias)
         retain = torch.exp(-plan.weight[:, None]*memory.log_rate.exp()*dt)
         a = torch.eye(c.key_width, dtype=x.dtype, device=x.device)-gain[..., None, None]*key.unsqueeze(-1)*key.unsqueeze(-2)
         a = a*(decay*retain)[..., None, None]

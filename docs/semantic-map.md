@@ -35,7 +35,8 @@
 ## 局部函数的域、值域与依赖
 
 带权局部 Upd 的 [精确联合/实际 packing 对应](weighted-packed.md)独立列出
-KV ragged 投影、四种循环的仿射前缀和原始时间卷积；反向/后端资格分别声明。
+KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
+[State 批量 VJP](weighted-state-vjp.md)独立声明嵌套参数、结构分组、输出槽与运行资格。
 
 `θ` 是逻辑时间；`B` 是已完整且非空的同时间带来源纤维；`q` 是旧状态，
 `q̃` 是 Upd proposal，`q̄` 是选择后的 comparison，`h` 是本地内容。

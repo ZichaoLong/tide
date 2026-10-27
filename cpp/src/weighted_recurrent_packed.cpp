@@ -25,7 +25,7 @@ PackedStates recurrent(const NodeWeights& w,const std::vector<State>& old,const 
     auto coefficients=gated_coefficients(w,old,plan,x,delta,c);
     a=coefficients.a;b=coefficients.b;matrix=coefficients.matrix;caches=std::move(coefficients.caches);
   }
-  auto z=plan.receive.unsqueeze(-1)*project(x,weight(w,"kernel.summary"));
+  auto z=plan.receive.unsqueeze(-1)*project(normalize(plan.input,c.epsilon),weight(w,"kernel.summary"));
   std::vector<std::map<std::string,Tensor>> slots(plan.ids.size());
   for(const auto& [length,owners]:plan.groups){
     auto ids=plan.group_index(length,owners);std::vector<Tensor> ih,iz,iw;

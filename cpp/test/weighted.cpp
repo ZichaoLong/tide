@@ -57,6 +57,10 @@ void check_weighted(const at::TensorOptions& o){
   for(size_t i=0;i<a.outputs.size();++i)close(a.outputs[i].value,b.outputs[i].value);
   auto grad=torch::autograd::grad({a.outputs[0].value[1]-a.outputs[1].value[1]},{base})[0];
   close(grad,at::tensor({0.,std::sqrt(2.)},o).reshape({2,1}));
+  auto packed_grad=torch::autograd::grad({b.outputs[0].value[1]-b.outputs[1].value[1]},{base})[0];
+  close(packed_grad,at::tensor({0.,std::sqrt(2.)},o).reshape({2,1}));
+  if(!b.stats.at("batched_state_events")||b.stats.count("semantic_state_replays")&&b.stats.at("semantic_state_replays"))
+    throw std::runtime_error("weighted standalone State VJP fell back to scalar replay");
   const auto& state=a.continuation.states.at({0,0});
   if(state.slots.at("times")[0].item<Index>()!=clock)throw std::runtime_error("weighted clock lost int64 precision");
   auto zero=model.nodes[0].kernel->step(model.nodes[0],state,ContentView{at::tensor({0.,5.},o)},clock+20);

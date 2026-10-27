@@ -9,7 +9,12 @@
 
 namespace tide::weighted {
 // Marker for the local binding's transport invariant, not a scheduler policy.
-class MemoryKernel : public StateKernel {};
+class MemoryKernel : public StateKernel {
+ public:
+  std::string batch_autograd_key(const State&,const ContentView& h,Index) const override {
+    return h.value[0].item<double>()>0 ? "positive-write" : "retain-raw";
+  }
+};
 struct KVConfig {
   Index width=4, summary_width=2, adapter_rank=2, heads=1, ffn_width=8, window=0;
   std::string memory_read="sum";

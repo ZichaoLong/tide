@@ -19,7 +19,9 @@ def convolve(conv, plan, old, raw):
             raise ValueError("convolution writes require increasing logical time")
         times = torch.cat((state.slots["conv_times"], plan.times[a:b]))
         values = torch.cat((state.slots["conv_values"], plan.weight[a:b, None]*raw[a:b]))
-        if conv.size > 1:
+        # A single write with empty left cache has no history dependency in
+        # the scalar function. Do not add a spurious zero VJP to empty slots.
+        if conv.size > 1 and (b-a > 1 or len(cache.times)):
             queries = plan.times[a:b, None]-taps
             indices = torch.searchsorted(times, queries)
             safe = indices.clamp(max=len(times)-1)

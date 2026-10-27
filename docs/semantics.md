@@ -146,6 +146,10 @@ for all four recurrent families. It decodes actual computed raw states at every
 event; zero receives preserve the previous tuple. Numeric joint execution does
 not itself certify batched VJP or resident scheduling. Existing first-order
 semantic binding preserves independent root connectivity; identities are unchanged.
+The separate [weighted batched State VJP](weighted-state-vjp.md) captures the
+registered parameter tree and groups actual zero/positive receive branches.
+Private batch graphs preserve empty-cache absence and independent output slots;
+undefined cotangent patterns determine input ownership, never numeric zeros.
 
 ## First local profile: `ema-ffn-v1`
 

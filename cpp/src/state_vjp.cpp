@@ -33,11 +33,12 @@ variable_list values(const State& s) {
   for (const auto& [name,t]:s.slots) result.push_back(t);
   return result;
 }
-std::string signature(Request r) {
+std::string signature(Request r,const StateKernel& kernel) {
   // Only declared builtins enter here. Their branches use these coordinates,
-  // shapes and source slots, never payload values or a CPU-computed trajectory.
+  // shapes, source slots and an explicit local structural branch identity.
   std::ostringstream s;
   s << r.time << ':' << r.old.last_time << ':' << r.old.observations;
+  s << ':' << kernel.batch_autograd_key(r.old,r.view(),r.time);
   for (const auto& [name,t]:r.old.slots) s << ':' << name;
   s << ":sources" << r.sources.size();
   for (const auto& a:r.sources) s << ':' << a.slot;
@@ -155,7 +156,7 @@ std::vector<State> state_batch_vjp(const NodeWeights& w,const std::vector<State>
   for (size_t i=0;i<old.size();++i) {
     requests.push_back({old[i],views[i].value,{views[i].sources.begin(),views[i].sources.end()},
                        {views[i].contributions.begin(),views[i].contributions.end()},times[i]});
-    groups[signature(requests.back())].push_back(i);
+    groups[signature(requests.back(),*w.kernel)].push_back(i);
   }
   auto result=numeric;
   for (const auto& [key,ids]:groups) {

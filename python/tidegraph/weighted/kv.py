@@ -49,6 +49,9 @@ class KVMemory(StateProgram):
         from .kv_packed import packed
         return packed(self, old, batch)
 
+    def batch_autograd_key(self, old, view, time):
+        return (bool(view.value[0] > 0),)
+
     def sequence(self, w, old, values, times, views=None):
         from .packing import sequence
         return sequence(self, w, old, values, times, views)

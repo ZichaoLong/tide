@@ -11,7 +11,8 @@ def packed(memory, old, batch):
     c = memory.config
     x = norm(plan.content, c.epsilon)
     key, value = project(x, memory.base+memory.adapter_u@memory.adapter_v).chunk(2, -1)
-    entries = dict(times=plan.times, keys=key, values=value, summaries=project(x, memory.summary), weights=plan.weight)
+    entries = dict(times=plan.times, keys=key, values=value,
+                   summaries=project(norm(plan.content, c.epsilon), memory.summary), weights=plan.weight)
     slots = []
     for i, state in enumerate(old):
         a, b = plan.offsets[i:i+2]
