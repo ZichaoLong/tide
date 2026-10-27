@@ -49,12 +49,17 @@ class _Read(torch.autograd.Function):
 def supported(program):
     from .readout import LinearRead, NormRead, NormFloat32Read
     from .placement_read import PlacedRead
-    return type(program) in {LinearRead, NormRead, NormFloat32Read, PlacedRead}
+    from .weighted.programs import Describe
+    return type(program) in {LinearRead, NormRead, NormFloat32Read, PlacedRead, Describe}
 
 
 def evaluate(program, weights, requests):
     if not requests:
         return []
+    from .weighted.programs import Describe
+    if type(program) is Describe:
+        from .weighted.query_vjp import evaluate as query
+        return query(program, weights, requests)
     if getattr(program, "identity", False):
         return program.batch(weights, requests)
     rows = [r.content.value if r.state is None else r.state.value for r in requests]

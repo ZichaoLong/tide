@@ -3,6 +3,7 @@
 #include "weighted_scoring.h"
 #include "weighted_aggregate.h"
 #include "weighted_query_batch.h"
+#include "weighted_query_vjp.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -50,6 +51,10 @@ template<class Config> class Describe final:public ReadKernel {
   Describe(Config c,RegionalConfig r):c_(std::move(c)),r_(std::move(r)){}
   bool structured() const override{return true;}
   bool joint_batch() const override{return true;}
+  bool batched_autograd() const override{return true;}
+  std::vector<TensorFields> fields_batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    return query::read_vjp(w,requests,c_,r_);
+  }
   std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
     return query::describe(w,requests,c_,r_);
   }
@@ -91,6 +96,10 @@ template<class Config> class Full final:public FullKernel {
  public:
   explicit Full(Config c):c_(std::move(c)){}
   bool joint_batch() const override{return true;}
+  bool batched_autograd() const override{return true;}
+  std::vector<FullResult> batch_grad(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
+    return query::full_vjp(w,requests,slots,options,c_);
+  }
   std::vector<FullResult> batch(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
     return query::full(w,requests,slots,options,c_);
   }

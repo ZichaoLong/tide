@@ -1,5 +1,7 @@
 #include "tide/weighted.h"
 #include "tide/weighted_sending.h"
+#include "tide/read.h"
+#include "tide/full.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -56,5 +58,26 @@ void bind_weighted(py::module_& module){
   module.def("weighted_proportional",&proportional);
   module.def("weighted_total_zero",&total_zero);
   module.def("weighted_hard_selection",&hard_selection);
+  // Diagnostic adapters only: return actual C++ query roots, never replay Python.
+  module.def("weighted_read_probe",[](const NodeWeights& w,const std::vector<std::optional<State>>& states,
+      const std::vector<Index>& times,const std::vector<Tensor>& content){
+    if(states.size()!=times.size()||states.size()!=content.size())throw std::invalid_argument("query row domain mismatch");
+    std::vector<ReadInput> requests;
+    for(size_t i=0;i<states.size();++i)requests.push_back({states[i]?&*states[i]:nullptr,times[i],ContentView{content[i]}});
+    return w.read_kernel->fields_batch_grad(w,requests);
+  },py::call_guard<py::gil_scoped_release>());
+  module.def("weighted_full_probe",[](const NodeWeights& w,const std::vector<State>& states,
+      const std::vector<Index>& times,const std::vector<Tensor>& content,const std::vector<Tensor>& controls,Index slots){
+    if(states.size()!=times.size()||states.size()!=content.size()||states.size()!=controls.size()||slots<0)
+      throw std::invalid_argument("query row domain mismatch");
+    std::vector<FullInput> requests;
+    for(size_t i=0;i<states.size();++i)requests.push_back({&states[i],times[i],ContentView{content[i]},controls[i]});
+    std::vector<std::pair<Tensor,std::map<Index,Tensor>>> result;
+    for(const auto& row:w.full_kernel->batch_grad(w,requests,slots,Options{})){
+      std::map<Index,Tensor> emitted;for(const auto& slot:row.emitted)emitted[slot.slot]=slot.value;
+      result.emplace_back(row.value,std::move(emitted));
+    }
+    return result;
+  },py::call_guard<py::gil_scoped_release>());
 #undef FIELD
 }

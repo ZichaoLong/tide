@@ -44,6 +44,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_query_recurrent.cpp
   cpp/src/weighted_describe_batch.cpp
   cpp/src/weighted_full_batch.cpp
+  cpp/src/weighted_query_vjp.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_recurrent_packed.cpp
   cpp/src/weighted_gated_packed.cpp
   cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp
@@ -112,6 +113,7 @@ if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
 endif()
 add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp cpp/test/weighted.cpp cpp/test/weighted_recurrent.cpp cpp/test/weighted_entropy.cpp cpp/test/weighted_sending.cpp cpp/test/weighted_scoring.cpp cpp/test/weighted_aggregate.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph_runtime)
+target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_query_vjp.cpp)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp)

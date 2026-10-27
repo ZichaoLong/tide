@@ -62,7 +62,11 @@ class MatchScore(torch.nn.Module):
     def forward(self, groups):
         cur,mem,stat = (self.encoders[name](groups[name]) for name in ("cur","mem","stat"))
         f = torch.cat((cur,mem,stat),-1)
-        residual = (torch.nn.functional.silu(f@self.gate.t()+self.gate_bias)*(f@self.up.t()+self.up_bias)*self.vector).sum(-1)
+        if f.ndim == 1:
+            gate, up = self.gate@f+self.gate_bias, self.up@f+self.up_bias
+        else:
+            gate, up = f@self.gate.t()+self.gate_bias, f@self.up.t()+self.up_bias
+        residual = (torch.nn.functional.silu(gate)*up*self.vector).sum(-1)
         return (self.bias+self.config.alpha_match*(cur*mem).sum(-1)/math.sqrt(self.config.selection_width)
                 +self.config.alpha_res*residual)
 

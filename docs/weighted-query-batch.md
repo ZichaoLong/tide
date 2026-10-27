@@ -45,10 +45,11 @@ Read/Full 的 `joint_batch` 声明数值合批，记录中 `read_scalar_batch_st
 `full_scalar_fallback_steps` 为零。形状分桶、索引准备仍在 eager 主机侧，
 不把一次 API 调用计作一个设备核，也不认证常驻就绪/选择/推进。
 
-本增量继续逐请求/字段的显式语义 VJP replay，统计保留 `semantic_read_replays` 与
-`semantic_full_replays`。独立公共字段、状态槽和 Full 槽根的 None/零契约不变。
-批量 VJP 将另行实现并验收，不能以数值批量化宣称训练已消除重放。
+数值批量与反向能力分别验收。[批量 VJP](weighted-query-vjp.md)定义当前 Read 自动采用的
+实际私有批量图及可选 `full_autograd="batched"`；Full 默认仍为显式 semantic replay，
+统计保留 `semantic_full_replays`。逐字段/状态槽/Full 槽根的 None/零契约不变。
 参数共享身份和私有状态保留；复用参数不意味着不同输入/快照可以复用计算。
+数值资格 7b8b469 使用当时的 Read/Full replay，不能冒用为后续批量反向资格。
 
 ## 验证与资格
 

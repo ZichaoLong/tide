@@ -23,6 +23,10 @@ class FullResult:
 class FullProgram(torch.nn.Module):
     profile = "custom"  # Declare a versioned name in Node.emission for persistence.
     joint_batch = False
+    batched_autograd = False
+
+    def batch_grad(self, weights, requests, slots, mode, zeta):
+        raise ValueError("Full program has no batched autograd implementation")
 
     def step(self, weights, request, slots, mode, zeta):
         raise NotImplementedError
@@ -33,6 +37,11 @@ class FullProgram(torch.nn.Module):
 
 class ProjectionEmit(FullProgram):
     joint_batch = True
+    batched_autograd = True
+
+    def batch_grad(self, weights, requests, slots, mode, zeta):
+        from .full_rows import evaluate
+        return evaluate(self, weights, requests, slots, mode, zeta)
 
     def __init__(self, spec=None):
         super().__init__()
@@ -134,11 +143,10 @@ def evaluate(weights, requests, slots, mode, zeta, packed=False, full_autograd="
     program = weights.full_program
     if full_autograd not in {"replay", "batched"} or (full_autograd == "batched" and not packed):
         raise ValueError("invalid Full autograd policy or unpacked execution")
-    if full_autograd == "batched" and type(program) is not ProjectionEmit:
+    if full_autograd == "batched" and not program.batched_autograd:
         raise ValueError("Full program has no batched autograd implementation")
     if packed and full_autograd == "batched" and torch.is_grad_enabled():
-        from .full_rows import evaluate as batch_grad
-        results = batch_grad(program, weights, requests, slots, mode, zeta)
+        results = program.batch_grad(weights, requests, slots, mode, zeta)
     elif not packed:
         results = [program.step(weights, r, slots, mode, zeta) for r in requests]
     else:
@@ -153,6 +161,8 @@ def evaluate(weights, requests, slots, mode, zeta, packed=False, full_autograd="
                 reference = program.step(weights, r, slots, mode, zeta)
                 validate(reference, r, slots)
                 results[i] = bind(results[i], reference)
+    if len(results) != len(requests):
+        raise ValueError("Full batch changed event count")
     for request, result in zip(requests, results):
         validate(result, request, slots)
     return results

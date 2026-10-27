@@ -69,7 +69,8 @@ regional query 始终使用 received，改变节点增益不暗改这一规则�
 alpha_loc=0 或 alpha_sel=0 使用普通乘法的连接零梯度；描述仍保留该局部分/key。
 alpha_loc=1、alpha_sel=0 只证明最终评分的数值投影等于 ind，不能声称完整记录等价。
 
-一维 Encoder/Query 采用矩阵乘列向量的教材顺序，与 C++ 的浮点归约一致；
+一维 Encoder/Query、MatchScore 的残差 gate/up 与 GroupedEvidence 的四个投影
+采用矩阵乘列向量的教材顺序，与 C++ 的浮点归约一致；
 任意 leading axes 保留批量求值。逐标量公式与方向差分继续独立核验数学映射。
 所有映射使用标准 ATen/PyTorch 一阶链式反向；发送映射自己的精确/排序分支 VJP 另见发送契约。
 共同阈值通过分配的显式 score_shift 参数回传，以解析的活动总量约束零方向避免伪梯度。

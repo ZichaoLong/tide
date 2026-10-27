@@ -88,7 +88,7 @@ def test_full_comparison_batch_broadcast_and_unscaled_payload(dtype, family, rea
 
 @pytest.mark.parametrize("case", [0, 3, 4])
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_joint_queries_complete_records_and_replay_boundary(dtype, case, native, monkeypatch):
+def test_joint_queries_complete_records_and_autograd_boundary(dtype, case, native, monkeypatch):
     from tidegraph import Continuation, External
     from tidegraph.compare import objective
     from tidegraph.greedy import run as greedy
@@ -110,7 +110,8 @@ def test_joint_queries_complete_records_and_replay_boundary(dtype, case, native,
     for name in expected.trace[0]["descriptor"]:
         equivalent(vjp(expected.trace[0]["descriptor"][name], roots), vjp(actual.trace[0]["descriptor"][name], roots))
     assert actual.stats.get("read_scalar_batch_steps", 0) == actual.stats.get("full_scalar_fallback_steps", 0) == 0
-    assert actual.stats["semantic_read_replays"] > 0 and actual.stats["semantic_full_replays"] > 0
+    assert actual.stats["batched_read_events"] > 0 and actual.stats.get("semantic_read_replays", 0) == 0
+    assert actual.stats["semantic_full_replays"] > 0  # Default policy remains explicit replay.
     if not native:
         def forbidden(*a, **kw):
             raise AssertionError("numeric query batch called scalar Read or Full")

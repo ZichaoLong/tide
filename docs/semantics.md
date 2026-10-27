@@ -157,8 +157,11 @@ VJP are separately declared capabilities. The optional batched policy preserves
 independent fiber roots, parameter aliases and the zero-total branch without
 scalar Aggregate replay; the default replay policy remains available.
 The [weighted Read/Full numeric batches](weighted-query-batch.md) preserve each
-actual snapshot, int64 visibility and unscaled payload, with scalar semantic VJP
-replay still explicit. This capability does not certify batched query backward.
+actual snapshot, int64 visibility and unscaled payload. The separate
+[query VJP](weighted-query-vjp.md) uses actual private batch graphs, independent
+row/field cotangents and original version checks. Packed Read declares the
+capability; Full selects it with `full_autograd="batched"`, retaining default
+replay. Numeric qualification does not certify this later backward capability.
 
 ## First local profile: `ema-ffn-v1`
 
