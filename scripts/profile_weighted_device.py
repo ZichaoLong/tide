@@ -35,9 +35,24 @@ def inspect_trace(path):
         raise RuntimeError("unexpected host fallback events: "+repr(fallback[:10]))
     transfers = Counter(e.get("name") for e in events if any(x in str(e.get("name", "")).lower()
                         for x in ("memcpy", "mem_copy", "_local_scalar_dense")))
+    def durations(rows):
+        total = Counter()
+        for e in rows:
+            if e.get("ph") == "X":
+                total[e.get("name", "unknown")] += max(0., float(e.get("dur", 0.)))
+        return dict(total.most_common())
+    intervals = sorted((float(e["ts"]), float(e["ts"])+max(0., float(e.get("dur", 0.)))) for e in kernels)
+    union, end = 0., float("-inf")
+    for start, stop in intervals:
+        union += max(0., stop-max(start, end)); end = max(end, stop)
     return dict(kernel_events=len(kernels), kernel_names=dict(Counter(e["name"] for e in kernels)),
                 kernel_types=dict(Counter(e.get("args", {}).get("Task Type", "cuda") for e in kernels)),
                 transfer_and_scalar_events=dict(transfers), observed_host_fallback_events=fallback,
+                kernel_duration_us=durations(kernels), kernel_union_us=union,
+                phases_inclusive_us=durations(e for e in events if str(e.get("name", "")).startswith("tide.")),
+                transfer_and_scalar_inclusive_us=durations(e for e in events if e.get("name") in transfers),
+                host_operators_inclusive_us=durations(e for e in events if e.get("cat") == "cpu_op"),
+                duration_caveat="inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution",
                 trace_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 
 

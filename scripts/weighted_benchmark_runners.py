@@ -1,5 +1,6 @@
 """Public candidates and a separately invoked scalar reference consumer."""
 from dataclasses import fields, is_dataclass, replace
+from contextlib import nullcontext
 import json
 from pathlib import Path
 import torch
@@ -7,6 +8,10 @@ from tidegraph import Continuation
 from tidegraph.placement import ExecutionPlacement
 from tidegraph.runtime import synchronize
 from weighted_benchmark_cases import window, limits
+
+
+def phase(args, name):
+    return torch.profiler.record_function("tide."+name) if args.profile else nullcontext()
 
 
 def snapshot(value):
@@ -51,21 +56,27 @@ class Eager:
         self.optimizer = torch.optim.SGD(binding.model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
 
     def step(self, index):
-        xs = window(self.inputs, self.span, self.config.positions, index, self.device)
+        with phase(self.args, "prepare"):
+            xs = window(self.inputs, self.span, self.config.positions, index, self.device)
         with torch.set_grad_enabled(self.args.mode == "training"):
             self.optimizer.zero_grad(set_to_none=True)
-            result = self.execute(self.state, xs, (index+1)*self.span, sealed_until=(index+1)*self.span)
-            loss = loss_from_outputs(result)
+            with phase(self.args, "forward"):
+                result = self.execute(self.state, xs, (index+1)*self.span, sealed_until=(index+1)*self.span)
+            with phase(self.args, "loss"):
+                loss = loss_from_outputs(result)
             if self.args.mode == "training":
-                loss.backward()
-                checks = [torch.isfinite(p.grad).all() for p in self.binding.model.parameters() if p.grad is not None]
-                if not checks or not torch.stack(checks).all():
-                    raise FloatingPointError("nonfinite or absent benchmark parameter gradients")
-                self.optimizer.step()
-        self.state = result.continuation.detach()
-        actual = snapshot(result)  # Complete CPU return is included for every candidate.
-        value = float(loss.detach().cpu())
-        synchronize(self.device)
+                with phase(self.args, "backward_finite"):
+                    loss.backward()
+                    checks = [torch.isfinite(p.grad).all() for p in self.binding.model.parameters() if p.grad is not None]
+                    if not checks or not torch.stack(checks).all():
+                        raise FloatingPointError("nonfinite or absent benchmark parameter gradients")
+                with phase(self.args, "optimizer"):
+                    self.optimizer.step()
+        with phase(self.args, "detach_return_sync"):
+            self.state = result.continuation.detach()
+            actual = snapshot(result)  # Complete CPU return is included for every candidate.
+            value = float(loss.detach().cpu())
+            synchronize(self.device)
         return actual, value
 
     def parameters(self):
@@ -108,29 +119,35 @@ class Resident:
 
     def step(self, index):
         # Public resident entry owns the CPU-boundary upload and native packing.
-        xs = window(self.inputs, self.span, self.config.positions, index, "cpu")
+        with phase(self.args, "prepare"):
+            xs = window(self.inputs, self.span, self.config.positions, index, "cpu")
         with torch.no_grad():
-            result = self.owner.advance(xs, stop=(index+1)*self.span, sealed_until=(index+1)*self.span)
+            with phase(self.args, "forward"):
+                result = self.owner.advance(xs, stop=(index+1)*self.span, sealed_until=(index+1)*self.span)
             if self.training:
                 output = result.fields["outputs"]
-                with torch.enable_grad():
+                with phase(self.args, "loss"), torch.enable_grad():
                     x = output.values.detach().float().clone().requires_grad_()
                     numeric = x[..., :1]*x[..., 1:]
                     loss = torch.where(output.present[..., None], numeric.square(), torch.zeros_like(numeric)).sum()*.001
                     bar, = torch.autograd.grad(loss, x)
-                roots = self.owner.cotangents(result, {"outputs": bar})
-                actual = self.owner.result()
-                gradients = self.owner.backward([roots])
-                if not torch.isfinite(gradients.parameters.values).all():
-                    raise FloatingPointError("nonfinite resident parameter gradient")
-                step = self.owner.step()
-                if not step.applied:
-                    raise RuntimeError("resident optimizer refused: "+str(step.refusal_code))
+                with phase(self.args, "decode_roots"):
+                    roots = self.owner.cotangents(result, {"outputs": bar})
+                    actual = self.owner.result()
+                with phase(self.args, "backward_finite"):
+                    gradients = self.owner.backward([roots])
+                    if not torch.isfinite(gradients.parameters.values).all():
+                        raise FloatingPointError("nonfinite resident parameter gradient")
+                with phase(self.args, "optimizer"):
+                    step = self.owner.step()
+                    if not step.applied:
+                        raise RuntimeError("resident optimizer refused: "+str(step.refusal_code))
             else:
                 actual = result; loss = loss_from_outputs(actual)
-            actual = snapshot(actual)
-            value = float(loss.detach().cpu())
-            synchronize(self.device)
+            with phase(self.args, "detach_return_sync"):
+                actual = snapshot(actual)
+                value = float(loss.detach().cpu())
+                synchronize(self.device)
             return actual, value
 
     def parameters(self):

@@ -44,7 +44,12 @@ python scripts/benchmark_weighted.py --device npu:0 --implementation resident \
 
 `--profile`必须在另一个独立进程/目录运行，只记录一个profile窗口；导出的CPU/CANN/CUDA trace
 用于判断实际算子、copy和host scalar成本，其带profiling开销的执行不作为吞吐样本。
+profile进程另标记prepare、forward、loss、decode/roots、backward/finite、optimizer和完整返回/同步阶段。
+报告包含阶段墙钟、kernel时间覆盖及copy/scalar耗时；嵌套host事件不相加作为独占时间，
+kernel覆盖也不等于已证明的关键路径瓶颈。非profile测量不启用这些标记。
 `--allow-dirty`只供入口开发检查，输出保留完整dirty清单，不作固定源码资格或选型证据。
+源码身份在设备初始化前核对；运行工作目录切到独立输出目录，CANN初始化产生的
+临时`kernel_meta/`及profile scratch也归于artifacts。相对库路径先解析为绝对路径。
 没有CUDA真机时只记录待验，不运行CPU代替CUDA结果。
 
 独立LibTorch入口在`tools/weighted_benchmark`。静态fixture由
