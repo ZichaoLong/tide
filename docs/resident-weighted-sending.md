@@ -48,3 +48,5 @@ tape在下一次program调用覆盖，retained训练owner须先journal；本组�
 CPU适配直接编译登记的kernel源，不能认证NPU/CUDA；实际设备检查入口
 `verify_device_control.py --checks weighted-sending --device npu:0`。
 源码、构建、实际设备与完整图范围分别记录到证据和ROADMAP。
+
+固定8e7298d的[CPU/NPU/CUDA构建资格](evidence/core5-resident-sending-20261027.md)；完整SelStep及GPU实机未据此认证。
