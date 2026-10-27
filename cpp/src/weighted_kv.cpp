@@ -5,7 +5,6 @@
 
 namespace tide::weighted {
 using namespace detail;
-Tensor normalize(const Tensor& x,double eps){return x/at::sqrt(eps+x.square().mean(-1,true));}
 void KVConfig::validate() const {
   require(width>0&&summary_width>0&&adapter_rank>0&&heads>0&&width%heads==0&&ffn_width>0&&window>=0,"invalid weighted KV sizes");
   for(auto x:{beta_short,epsilon,position_scale})require(std::isfinite(x)&&x>0,"invalid KV positive scalar");

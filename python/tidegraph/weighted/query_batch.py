@@ -10,6 +10,7 @@ from .config import KVConfig
 from .convolution import ConvCache
 from .packing import project
 from .tensors import norm, rotate_relative
+from .attention_mean import attention_mean
 
 
 def weighted_read(logits, values, weights, totals):
@@ -28,8 +29,7 @@ def weighted_read(logits, values, weights, totals):
         l = logits[owners[:, None], selected]
         w = weights[owners[:, None], selected]
         v = values[owners[:, None], selected]
-        probabilities = (l+w.log()).softmax(1)
-        reads = totals[owners].clamp(max=1)[:, None]*(probabilities[..., None]*v).sum(1)
+        reads = totals[owners].clamp(max=1)[:, None]*attention_mean(l+w.log(), v)
         for i, value in zip(rows, reads.unbind()):
             result[i] = value
     return torch.stack(result)

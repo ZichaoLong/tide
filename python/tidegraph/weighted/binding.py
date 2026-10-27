@@ -4,14 +4,15 @@ import torch
 from ..graph import Graph, Node, Region
 from ..ops import Model
 from ..source_class import SourceClasses
-from .config import KVConfig, RegionalConfig, finite, identity, positive_int, region_profile
+from .config import KVConfig, RegionalConfig, finite, identity, region_profile
 from .kv import KVContent, KVMemory
 from .recurrent_config import RecurrentConfig
 from .recurrent import BasicContent, BasicMemory
 from .gated_delta import GatedDeltaContent, GatedDeltaMemory
 from .ssd import SSDContent, SSDMemory
-from .programs import Describe, RegionalTotal, SourceTransform, WeightedAggregate, WeightedFull
+from .programs import Describe, RegionalTotal, WeightedAggregate, WeightedFull
 from .tensors import parameter
+from .source_binding import SourceBinding, SourceFactory, aggregate_profile, normalize_widths, source_width
 
 
 MEMORY_TYPES = {"kv": (KVMemory, KVContent), "affine": (BasicMemory, BasicContent),
@@ -39,11 +40,17 @@ class WeightedModel(Model):
             agg = node.aggregate_program
             expected = (memory_profile(c),identity("weighted-describe-v1",c,r),
                         identity("weighted-full-v1",c),
-                        identity("weighted-aggregate-v1",agg.classes,agg.alpha,agg.hidden_width,c.epsilon))
+                        aggregate_profile(agg.classes,agg.alpha,agg.hidden_width,c.epsilon,agg.source_binding))
             if ((spec.memory,spec.readout,spec.emission,spec.aggregation) != expected
                     or node.read_program.memory_config != c or node.read_program.config != r
                     or node.full_program.content.config != c or agg.epsilon != c.epsilon):
                 raise ValueError("weighted function configuration changed without a new graph binding")
+            labels = {agg.classes.inputs[p] for p,n in enumerate(graph.inputs) if n == v}
+            labels |= {agg.classes.edges[e] for e,edge in enumerate(graph.edges) if edge.target == v}
+            if set(agg.transforms) != {str(label) for label in labels}:
+                raise ValueError("source transform class domain mismatch")
+            for label, transform in agg.transforms.items():
+                transform.validate(c.width, source_width(agg.hidden_width, int(label)), agg.source_binding.rank)
         if any(spec.selector != region_profile(program.config)
                for spec,program in zip(graph.regions,self.regions)):
             raise ValueError("weighted region configuration changed without a new graph binding")
@@ -62,22 +69,29 @@ class Binding:
     memories: tuple[KVConfig | RecurrentConfig, ...]
     regions: tuple[RegionalConfig, ...]
     source_classes: SourceClasses
+    source_binding: SourceBinding = SourceBinding()
 
 
 def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_classes=None,
-         alpha_agg=0., source_hidden_width=4, dtype=torch.float64, device="cpu", seed=7):
+         alpha_agg=0., source_hidden_width=4, source_binding=SourceBinding(), dtype=torch.float64, device="cpu", seed=7):
     """Bind physical topology/ports to weighted memory; replace old local programs.
 
-    KV bases and source A/B matrices share within each region. KV adapters,
-    summaries, Describe/Full parameters and state are private per node. Source
-    embeddings share within (region,class). Callers may explicitly tie same-shape
+    KV bases share within each region. SourceBinding selects the four textbook
+    source parameter bindings (default: regional A/B and region/class embedding).
+    The adapted mode keeps regional bases with node/class factors and embedding.
+    source_hidden_width is a positive int or a complete class->width mapping;
+    classes sharing a matrix must have equal widths. KV adapters,
+    summaries, Describe/Full parameters and state are private per node.
+    Callers may explicitly tie same-shape
     Parameters afterwards; checkpoint preflight preserves that alias topology.
     """
     if dtype not in {torch.float32,torch.float64}:
         raise ValueError("weighted binding currently requires FP32/FP64")
+    if not isinstance(source_binding, SourceBinding):
+        raise ValueError("source_binding must be an explicit SourceBinding")
     if topology.origins:
         raise ValueError("weighted physical topology cannot contain legacy input-origin adapters")
-    finite("alpha_agg",alpha_agg,0); positive_int("source_hidden_width",source_hidden_width)
+    finite("alpha_agg",alpha_agg,0)
     memory = (memories,)*len(topology.nodes) if isinstance(memories,(KVConfig,RecurrentConfig)) else tuple(memories)
     region = (regions,)*len(topology.regions) if isinstance(regions,RegionalConfig) else tuple(regions)
     if (len(memory) != len(topology.nodes) or len(region) != len(topology.regions)
@@ -87,33 +101,26 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
         raise ValueError("weighted binding node/region/width domain mismatch")
     classes = source_classes or SourceClasses((0,)*len(topology.edges),(0,)*len(topology.inputs))
     classes.validate(topology)
+    source_hidden_width = normalize_widths(source_hidden_width, classes)
     generator = torch.Generator().manual_seed(seed)
     width = memory[0].width
     region_ids = [region_profile(c) for c in region]
     rp = {j: RegionalTotal(region_ids[j],c,generator,dtype) for j,c in enumerate(region)}
     bases = [parameter((2*width,width),generator,dtype) for _ in region]
-    source_a = [parameter((source_hidden_width,width),generator,dtype) for _ in region]
-    source_b = [parameter((width,source_hidden_width),generator,dtype) for _ in region]
-    embeddings, states, readers, aggregates, fulls, nodes = {}, {}, {}, {}, {}, []
+    sources = SourceFactory(topology,classes,source_binding,width,source_hidden_width,generator,dtype)
+    states, readers, aggregates, fulls, nodes = {}, {}, {}, {}, []
     for v,(spec,c) in enumerate(zip(topology.nodes,memory)):
         rc, j = region[spec.region], spec.region
         sid = memory_profile(c)
         rid = identity("weighted-describe-v1",c,rc)
-        aid = identity("weighted-aggregate-v1",classes,alpha_agg,source_hidden_width,c.epsilon)
+        aid = aggregate_profile(classes,alpha_agg,source_hidden_width,c.epsilon,source_binding)
         fid = identity("weighted-full-v1",c)
         state_type, content_type = MEMORY_TYPES[memory_family(c)]
         states[v] = (state_type(c,sid,bases[j],generator,dtype) if isinstance(c,KVConfig)
                      else state_type(c,sid,generator,dtype))
         readers[v] = Describe(rid,c,rc,generator,dtype)
-        labels = {classes.inputs[p] for p,n in enumerate(topology.inputs) if n == v}
-        labels |= {classes.edges[e] for e,edge in enumerate(topology.edges) if edge.target == v}
-        transforms = {}
-        for label in sorted(labels):
-            key = (j,label)
-            if key not in embeddings:
-                embeddings[key] = parameter((source_hidden_width,),generator,dtype)
-            transforms[label] = SourceTransform(source_a[j],source_b[j],embeddings[key])
-        aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width)
+        transforms = sources.transforms(v,j)
+        aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width,source_binding)
         fulls[v] = WeightedFull(fid,content_type(c,generator,dtype))
         nodes.append(Node(j,memory=sid,readout=rid,aggregation=aid,emission=fid))
     specs = tuple(Region(c.capacity(len(layout.members)),observe_all=True,count_priority=False,
@@ -137,4 +144,4 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     model.validate_binding(graph)
     for j,p in enumerate(model.regions):
         p.validate_weights(graph.region_layouts[j])
-    return Binding(graph,model,memory,region,classes)
+    return Binding(graph,model,memory,region,classes,source_binding)

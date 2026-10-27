@@ -2,6 +2,7 @@
 #include "weighted_aggregate.h"
 #include "weighted_packed.h"
 #include "weighted_mean.h"
+#include "weighted_source.h"
 
 namespace tide::weighted {
 std::vector<AggregateResult> aggregate_batch(const NodeWeights& w,const std::vector<AggregateInput>& requests,
@@ -23,8 +24,9 @@ std::vector<AggregateResult> aggregate_batch(const NodeWeights& w,const std::vec
   for(const auto& [label,members]:labels){
     auto ids=at::tensor(members,ints),x=original.index_select(0,ids);
     auto prefix="aggregate_program.transforms."+std::to_string(label);
-    auto hidden=at::silu(packed::project(normalize(x,epsilon),detail::weight(w,prefix+".a"))+detail::weight(w,prefix+".embedding"));
-    auto values=x+alpha*packed::project(hidden,detail::weight(w,prefix+".b"));
+    auto [a,b]=detail::source_matrices(w,prefix);
+    auto hidden=at::silu(packed::project(normalize(x,epsilon),a)+detail::weight(w,prefix+".embedding"));
+    auto values=x+alpha*packed::project(hidden,b);
     content=content.index_copy(0,ids,values);
   }
   std::vector<AggregateResult> result(requests.size());

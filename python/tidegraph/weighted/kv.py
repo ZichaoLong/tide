@@ -9,6 +9,7 @@ from ..history import increment
 from ..records import State
 from ..state_program import StateProgram
 from .tensors import Received, norm, parameter, rotate_relative
+from .attention_mean import attention_mean
 
 
 class KVMemory(StateProgram):
@@ -111,8 +112,7 @@ def weighted_read(logits, values, weights, total):
     positive = weights > 0
     if not positive.any():
         return values.new_zeros(values.shape[-1])
-    probabilities = (logits[positive]+weights[positive].log()).softmax(0)
-    return total.clamp(max=1)*(probabilities.unsqueeze(-1)*values[positive]).sum(0)
+    return total.clamp(max=1)*attention_mean(logits[positive]+weights[positive].log(), values[positive])
 
 
 class KVContent(torch.nn.Module):

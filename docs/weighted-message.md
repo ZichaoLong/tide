@@ -34,7 +34,9 @@ gamma_max、k 和正分配温度。全部有界性与形状条件在构造时校
 函数验证使用显式参数覆盖，不依赖随机值实现预期。无隐式可训练初态：KV 初态为空。
 KV 区域基座共享；节点适配、摘要、Read 与 Full 参数私有；源 A/B 在区域共享，
 embedding 在区域/来源类别共享。参数使用普通 Parameter 身份，允许显式同形绑定，
-checkpoint 检查别名图；共享参数不合并私有状态。当前没有声称消除了共享计算。
+checkpoint 检查别名图；共享参数不合并私有状态。
+[来源绑定](weighted-source-binding.md)另提供 node/source/adapted 模式、显式低秩因子和类别宽度；
+当前没有声称消除了共享计算。
 
 `bind_layered` 另外落实 FC/HB 实例 §1/§4.4：来源类别为父节点身份，入口为单独 in 类；
 以输入位置窗口 H 和短期率 beta_bar 绑定 T=D*H、beta=beta_bar/D、Pos=(theta-rank)/D。

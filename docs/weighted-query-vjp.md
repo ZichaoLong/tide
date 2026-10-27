@@ -33,6 +33,25 @@ Attention 的零/非零分支。全零权重或空可见集不连接本来未参
 标量 MatchScore 的 residual gate/up 与 Encoder/GroupedEvidence 一样采用教材列向量次序；
 该数值约定避免 Python/native 方向不同的微小投影舍入被复合独立根放大，公式与容差不变。
 
+KV §3/4 的 Attention 读取保持原 softmax 概率加权和前向；一阶反向先以首个值为基准
+形成 `delta_i=v_i-v_0`，logit 导数为 `p_i*dot(bar,delta_i-sum_j p_j*delta_j)`，
+value 导数为 `p_i*bar`。这是精确映射的等价导数表达，不微分数值求解或作阈值裁剪。
+相同值的 logit 根是连接零；先有正权重筛选和原总量增益，零分支仍不连接 Q/K/V。
+实现：[Python](../python/tidegraph/weighted/attention_mean.py)、
+[C++](../cpp/src/weighted_attention_mean.cpp)，分别接入 scalar/batch 的 Mem 与 Full。
+[独立测试](../tests/test_weighted_attention_mean.py)用二项解析 Jacobian、平移不变性、
+相同值不变性及独立标量方向差分；[standalone](../cpp/test/weighted_attention_mean.cpp)另算解析值。
+此改进由来源 node 绑定的 FP32 PDG 第二次 AdamW 更新发现的微小 query 梯度消减误差驱动；
+不改变前向函数、输入、dtype 或既定容差，具体资格与原失败见来源绑定证据。
+
+架构 §1 的共同 RMS 归一化另采用 `(bar-n*mean(bar*n))/denominator` 一阶 VJP，
+其中 `n=x/denominator`，前向表达式不变。先在归一化坐标内收缩，再除一次 denominator，
+避免独立形成逆幂项。实现 [Python](../python/tidegraph/weighted/normalization.py) /
+[C++](../cpp/src/weighted_normalization.cpp)；[解析 Jacobian/方向差分](../tests/test_weighted_normalization.py)
+及 [standalone](../cpp/test/weighted_normalization.cpp) 单独验证。
+扩展回归在此前 5391017 复现的 FP32 混合记忆评分梯度差异由这一等价表达修正；
+原失败与后续资格分别记录，不修改比较容差。
+
 ## 梯度与所有权
 
 公开每行的每个 Describe 字段是独立根；Full 的 value 与广播槽复用该行实际 payload。

@@ -30,8 +30,9 @@ def evaluate(program, requests):
     for label, members in sorted(classes.items()):
         ids = torch.tensor(members, dtype=torch.int64, device=payload.device)
         x = original[ids]; transform = program.transforms[str(label)]
-        hidden = torch.nn.functional.silu(project(norm(x, program.epsilon), transform.a)+transform.embedding)
-        values = x+program.alpha*project(hidden, transform.b)
+        a, b = transform.matrices()
+        hidden = torch.nn.functional.silu(project(norm(x, program.epsilon), a)+transform.embedding)
+        values = x+program.alpha*project(hidden, b)
         content = content.index_copy(0, ids, values)  # Distinct physical rows; no conflicting scatter.
     result = [None]*len(requests)
     for length, owners in sorted(sizes.items()):

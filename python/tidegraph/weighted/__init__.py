@@ -7,10 +7,11 @@ from .config import KVConfig, RegionalConfig
 from .recurrent_config import RecurrentConfig
 from .convolution import ConvCache, FixedTimeConv
 from .tensors import Payload, Received
+from .source_binding import SourceBinding
 from .topology import fully_connected, hb_lattice
 from .instances import bind_layered, layered_inputs, readout
 
-__all__ = ["Allocation", "allocate", "allocate_quad", "Binding", "bind", "KVConfig", "RegionalConfig",
+__all__ = ["Allocation", "allocate", "allocate_quad", "Binding", "bind", "KVConfig", "RegionalConfig", "SourceBinding",
            "attention_shares", "attention_send", "proportional", "total_zero", "hard_selection",
            "RecurrentConfig", "ConvCache", "FixedTimeConv", "Payload", "Received",
            "fully_connected", "hb_lattice", "bind_layered", "layered_inputs", "readout"]
