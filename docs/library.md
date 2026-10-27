@@ -6,11 +6,21 @@ graph/module configuration, execution policy and graph continuation. CPU
 FP32/FP64 is the required baseline. Python/native CUDA and NPU implementations
 use explicit device selection and independent CPU qualification. See the
 [accelerator guide](accelerators.md) for isolated builds, tested scopes and
-target-machine acceptance. NPU requires FP32; CUDA device results need a CUDA host.
+target-machine acceptance. Device/dtype support follows the selected local
+profile and its precision contract; CUDA device results need a CUDA host.
 The optional [resident inference library](resident-library.md) exposes device-owned
 windows through the same configuration boundary, with separate capacity,
 parameter-freezing and export rules. Its CANN implementation is built independently
 for Python-owned and standalone runtimes.
+
+The core-5 weighted API starts at [`tidegraph.weighted.bind`](weighted-message.md),
+with [five memory families and fixed-time convolution](weighted-recurrent.md),
+[explicit eager placement](weighted-placement.md), [resident inference](resident-weighted-flow.md),
+[retained first-order training/checkpoints](resident-weighted-training.md) and
+[sample replicas](resident-weighted-peers.md). The [performance consumer](weighted-performance.md)
+uses these public interfaces and records Python/native/standalone separately.
+The `GraphConfig` examples below select the generic module catalog; weighted
+bindings supply their own fixed function configurations and structured fields.
 
 ## Configuration and runtime
 

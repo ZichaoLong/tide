@@ -1,5 +1,10 @@
 # Optional resident inference backend
 
+For the core-5 weighted binding, use [WeightedResident](resident-weighted-flow.md),
+[WeightedResidentTraining](resident-weighted-training.md) and its
+[sample-replica update](resident-weighted-peers.md). This page describes the
+generic module backend and its own capability/placement domain.
+
 The CANN and CUDA implementations use an optional library alongside the portable Tide core. It
 owns the actual online queue, readiness, node-time batches, selection and
 recursive advancement on a coordinator device with optional Full/state/KV owners

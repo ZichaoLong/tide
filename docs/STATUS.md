@@ -1,130 +1,92 @@
 # 当前交接 — 2026-10-28
 
-固定上游 `0770593838a37c790a568226930567ed60f99b83`（core-5及带权局部定义）。
-授权分支 `graph-execution-foundation`；HEAD/origin `ceae7bf`。用户授权持续实施、有限实验、
-分阶段提交与正常推送，不用子代理。总体目标未完成；唯一待办 [ROADMAP](ROADMAP.md)，
-持续规则 [execution-flows](execution-flows.md)。参考仓库与公共环境只读。
+固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 `graph-execution-foundation`。
+最近已推送a2fb5bd（样本副本及master复验证据）；本提交归档有限性能并修复公共导航中的过时采用/能力描述。
+用户授权持续实施、有限实验、分阶段提交与正常推送；不用子代理。总体goal仍active，**未完成**。
+唯一待办 [ROADMAP](ROADMAP.md)，持续规则 [execution-flows](execution-flows.md)。参考仓库/公共环境只读。
 
-## 当前结论
+## 已实现与已验证
 
-- 公共表示、五记忆/正式候选、独立调度、packed/VJP、mixed及常驻FP32/FP16图与训练
-  已实现；各自固定证据从 [semantic-map](semantic-map.md) 和 [evidence](evidence/README.md) 导航。
-- 完整FP16图/训练源码21ed86d：[报告](evidence/core5-resident-half-training-20261028.md)。
-  CPU32、Python-owned NPU52、standalone两dtype各21图/15配置/20更新通过；CUDA三架构构建通过。
-  后续发现standalone最后master比较借用临时owners vector，原passed状态保留，但该断言无可靠独立证据；
-  7db0b08已修正，下面独立复验。Python master与其他完整记录/VJP不受此处影响。
-- 跨卡样本副本实现672e948：Python-owned4项/62.50秒通过（物理9/13→0/1）；CUDA构建通过。
-  原standalone NPU failed/exit1（物理1/3→0/1）：FP32首用例std::bad_alloc，FP16未运行。
-  GDB诊断core5-weighted-peer-bad-alloc-diagnose定位到检查器run()字符串reserve；7db0b08修复两处临时owners引用。
-  诊断exit0仅表示抓栈成功，不是数值通过。旧失败保留，不重新标记。
-- 样本副本是独立私有状态、梯度归约与共同optimizer提交；**单样本跨卡节点切分仍未实现**。
-- 性能消费者3516bef：Python/native/resident入口、独立LibTorch消费者、无轨迹静态fixture和完整计时契约
-  见 [weighted-performance](weighted-performance.md)。尚无正式性能选型报告。
+- core-5公共表示、同秩一般Settle/端口、五记忆及正式发送/评分/证据/key、独立调度、
+  packed/VJP、mixed、常驻FP32/FP16图/完整一阶训练及续接证据从 [semantic-map](semantic-map.md) 导航。
+- [21ed86d完整FP16图/训练](evidence/core5-resident-half-training-20261028.md)：CPU32、Python-owned NPU52，
+  standalone两dtype各21图/15配置/20更新；CUDA三架构构建，GPU真机待验。
+- [7db0b08样本副本与master复验](evidence/core5-resident-weighted-peers-20261028.md)：
+  standalone两dtype各20训练更新（修正后的master断言）、6次双卡共同更新通过；CPU guard4。
+  Python-owned672e948四项/62.496秒通过，CUDA264步及68条选定三架构CUDA编译通过。
+  两批NPU物理9/13→0/1；三个unit终态与source/binary/loader/log/XML hash均审阅。
+  原672e948 standalone bad_alloc失败及21ed86d悬空master断言审计补注保留，不改写旧状态。
+- 样本副本拥有各卡完整图及私有状态；**单样本跨卡节点/状态切分尚未实现**，不能由上述资格外推。
 
-## 已审阅的定向资格
+## 有限性能已终态、已审阅
 
-冻结checkout `artifacts/worktrees/core5-peer-owner-lifetime`，固定
-`7db0b08e33c90b3fc278f2acdbce2ba738297310`，跟踪源码只读，不能移动HEAD。
+[性能报告](evidence/core5-weighted-performance-20261028.md)及同名JSON：固定脚本/fixture
+`ceae7bf3173cc3c85250ff6ed46a6470b77a6971`。24配置22通过；CPU反馈PDG两项严格浮点失败。
+每配置1个进程、1warmup+3连续测量窗，FP32/SGD、每窗detach，全部计入调度/packing/完整CPU返回/反向/optimizer/同步。
+CPU/Python-owned Torch2.12；NPU Python CANN9.1，standalone SDK2.10/CANN9.0；各自身份独立。
 
-| job | 最近状态 | build / 范围 |
-| --- | --- | --- |
-| core5-peer-owner-lifetime-npu-qualify | passed/exit0；物理9/13→0/1，两dtype训练及peer通过 | build/npu；CPU guard4、standalone weighted-training/weighted-peer两dtype |
-| core5-peer-owner-lifetime-cuda-qualify | passed/exit0，264步构建 | build/cuda；同两check三架构build/loader/help，无GPU数值结论 |
+| job | 终态与范围 |
+| --- | --- |
+| core5-weighted-performance-cpu | failed/exit1；13配置完整对照通过、PDG streaming/prefill两项严格失败 |
+| core5-weighted-performance-npu-python | passed/exit0；resident small/medium训练与medium推理、Python/native mixed-c各一项，共5项 |
+| core5-weighted-performance-npu-standalone | passed/exit0；KV small/medium训练、medium推理及SSD medium训练，共4项 |
+| core5-weighted-medium-profiles | passed/exit0；KV/HB medium resident与mixed-c完整周期profile，各自事后完整对照 |
+| core5-weighted-benchmark-{cpu,npu}-entry | passed/exit0；新消费者构建/loader/help及CPU三项、NPU一项入口，不作正式吞吐 |
 
-units为`tide-JOB-20261028.service`；输出`artifacts/jobs/JOB/`，包含status.json、task.log、
-control-build.json和NPU checks/result.json/queue-state.json；launcher `.local/JOB{,-workload}.sh`。
-每任务1800秒、2workers/BLAS1、Nice10/background.slice。NPU两卡queue180秒/device600秒。
-已核验Transient=yes、独立ControlGroup。严格master与全体提交断言已通过；source/binary/loader/log/XML/unit身份审阅完成，证据见
-[样本副本与master复验](evidence/core5-resident-weighted-peers-20261028.md)，本提交归档。
+NPU性能两组均物理9→npu:0，本项目性能任务串行。CPU期间另有NPU正确性资格，争用记录保留。
+CPU HB/KV medium standalone prefill约350ms、streaming约456ms；NPU mixed-c约1.41–1.61秒、resident约2.60–2.71秒。
+这是有限尺寸的实际选择，非统计稳定/普遍最快结论；没有稀疏发送、多卡或CUDA吞吐结论。
+构造/warmup单列；runtime/loader冷启动没有独立计时，SDK allocator峰值未导出，需补有限指标。
 
-## 性能入口最新终态
+冻结checkout：`artifacts/worktrees/core5-weighted-measurement`（ceae7bf，跟踪文件只读）。
+CPU consumer另在`artifacts/worktrees/core5-weighted-benchmark/build/cpu`（3516bef，消费者C++源码未变）；
+NPU consumer在上述measurement的`build/npu`，匹配7db resident。各component/core/binary身份已审阅。
+静态fixture在`artifacts/core5-weighted-measurement-fixtures/`，5个配置，只含静态参数/输入/别名，无轨迹。
 
-冻结checkout `artifacts/worktrees/core5-weighted-benchmark`，固定
-`3516bef9fef8d1571af0082402ebef71d88d8c32`，跟踪源码只读。
+units均`tide-JOB-20261028.service`，输出`artifacts/jobs/JOB/`（status/task.log/measurements/各case result及log）。
+launcher `.local/JOB.sh`；只读清单`.local/core5-weighted-performance-cases.json`与harness`.local/run-core5-weighted-performance.py`。
+审阅脚本`.local/record-weighted-performance.py`，peer审阅`.local/record-weighted-peer-evidence.py`。
+CPU每项120秒/组1500秒，NPU每项180秒/组960秒/queue180秒；Nice10/background.slice、ATen/BLAS1。
+**当前没有活动任务。**
 
-- `core5-weighted-benchmark-cpu-entry`：passed/exit0，待审阅归档。
-  build/cpu安装CPU core并构建standalone，KV/DAG prefill训练、SSD/HB streaming训练、
-  Python调用native KV/DAG各1warmup+1测量窗，事后完整独立比较通过。仅入口资格，不作选型测量。
-  预算1200秒、2workers/BLAS1，launcher `.local/core5-weighted-benchmark-cpu-entry{,-workload}.sh`。
-- `core5-weighted-benchmark-python-profile`：failed/exit2，物理9→npu:0。
-  `benchmark_weighted.py`在测量前报controlled measurement requires clean immutable source；没有profile/result.json。
-  诊断已证实resolve_device后出现临时`?? kernel_meta/`，退出后消失；保留原失败。
-  生产库672e948/Python-owned（7db只改C++检查器）；预算600秒/queue180秒/profile360秒。
-  launcher `.local/core5-weighted-benchmark-python-profile.sh`。
+## 新严格失败与必要保留输入
 
-以上unit/output同一命名规则。CPU入口与profile不作为正式性能结果。
+FP32 PDG两项初次报maxabs4.11272e-6与2.71201e-6（shape33），不能作等价加速结论。
+有限诊断`core5-weighted-pdg-rounding-diagnose`完成exit0：独立Python与两native日程、四窗口SGD，
+两dtype离散结构相同；FP32首先在pending/后在raw出现差异，最终参数仍过原容差；
+同一FP32初值提升FP64后完整记录/参数全部通过。此诊断不改变原失败，也不是新的性能测量。
+保留CPU测量job中的两个PDG result/log、同source fixture `kv-pdg-medium.json`、上述CPU consumer、
+诊断job的diagnosis.json和`.local/diagnose-weighted-pdg-rounding.py`作为最小复现；不修改输入/容差。
 
-源码拒绝诊断passed/exit0（仅环境诊断）：`core5-weighted-profile-source-diagnose`，同3516bef checkout；
-launcher `.local/core5-weighted-profile-source-diagnose.sh` 调用 `.local/diagnose-weighted-profile-source.py`，只打印指定Git身份和NPU初始化前后状态。
-预算360秒/queue180秒/probe120秒，一卡；unit/output沿上述规则，不代表性能或数值资格。
-主区已将源码检查移到设备初始化前，运行cwd提前切到独立输出目录，相对库路径先解析。
-同时补profile阶段耗时、kernel覆盖、copy/scalar耗时（非profile不启用标记）。
-短CPU native profile与完整独立记录/参数比较通过；六阶段实际trace和重叠kernel区间手算通过。
-修复fea42aa已提交推送；冻结checkout `artifacts/worktrees/core5-weighted-performance`，跟踪文件只读。
-`core5-weighted-benchmark-python-profile2`已passed/exit0，同原profile配置与已资格库；新输出/launcher以profile2命名。
-预算600秒/queue180秒/profile360秒，Nice10/background.slice，ATen/BLAS1；源码/结果旧失败保留。完整记录与参数事后对照通过；小规模profile阶段记录含backward/finite约1.24秒，kernel覆盖约.135秒。
-profile2默认采集周期结束有vendor不完整解析警告；保留记录，不把事件计数当完整硬件工作量。
-主区已显式单周期并在导出前prof.step；CPU medium推理profile、完整记录及阶段事件检查通过。
-显式周期增量ceae7bf已提交推送，冻结checkout `artifacts/worktrees/core5-weighted-measurement`。
-`core5-weighted-medium-profiles`已passed/exit0：KV/HB medium完整训练，resident与纯PyTorch mixed-c各独立进程，串行。
-unit/output沿同规则，launcher `.local/core5-weighted-medium-profiles.sh`与同名前缀-workload.py；
-每配置timeout360秒，合计workload780秒、queue180秒、service1020秒；一个NPU、ATen/BLAS1、Nice10/background.slice。
-resident与mixed-c完整记录/loss/参数对照及完整采集周期通过，无Incorrect schedule警告；物理9→npu:0。
-记录profile开销、阶段/实际kernel与事后完整对照；不是正式吞吐。
+原profile初次因NPU初始化临时kernel_meta污染cwd而exit2；修复fea42aa把cwd提前放到输出目录。
+profile2数值通过但有周期结束警告；ceae7bf显式完成采集周期，medium两项已通过。
+原GDB诊断留下的9个CANN scratch文件已在确认旧进程终止后带hash移至原诊断job/cann-kernel-meta，未删除。
+详情与原失败hash见对应报告，不恢复旧队列。
 
+## 下一步
 
-## 有限选型测量（新任务）
+1. 提交/推送本次性能证据和导航修正；随后继续工作，不暂停。
+2. 补小型runtime冷启动与standalone内存观测入口，使用新固定源码/新目录；不重复完整性能清单。
+3. 实施一般单样本跨卡节点/状态放置：保持完整区域选择/Attention、物理边与原始时钟、私有state，
+   设备请求/响应及共同commit，完整VJP/别名归约/optimizer发布与精确恢复分别验收。
+   可复用`peer_exchange`、`remote_state`、`task_services`，新weighted路径尚未写代码。
+   `weighted_flow_internal.h`、`weighted_flow_local.cpp`、`weighted_window_snapshot.cpp`、`weighted_window_vjp.cpp`
+   是目前已定位的单设备边界；不得把样本副本包装成单样本切分。
+4. 最终核对公共接口/模块能力/追溯与支持矩阵。既有严格数值见证和CUDA真机清单单列。
 
-固定脚本源码ceae7bf；静态fixture `artifacts/core5-weighted-measurement-fixtures/` 由同源码导出，
-KV/HB small与medium、SSD/HB medium、KV/非对齐DAG medium、KV/反馈PDG medium共5项；没有执行轨迹。
-受控清单 `.local/core5-weighted-performance-cases.json` 共24配置（CPU15/NPU9），不是开关笛卡尔积。
-问题：完整返回下的CPU streaming/prefill与接口成本；小中规模mixed/resident完整训练是否合适；
-SSD、非对齐/反馈与推理是否改变选型。每配置一独立进程、1warmup+3连续测量窗；FP32/SGD、每窗detach。
+检查：`git status --short --branch`；`python scripts/status.py`；`python scripts/check_upstream.py`。
+任务复核：`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；停止`systemctl --user stop UNIT`。
 
-`core5-weighted-performance-cpu`已failed/exit1：13配置通过，PDG streaming/prefill两项严格数值拒绝。
-首个tensor差异maxabs分别4.11272e-6、2.71201e-6，完整门禁未通过，不能报告为等价加速。
-原FP32 fixture/日志/测量时间保留，不修改容差或输入。（unit/output同命名规则），源码checkout
-`artifacts/worktrees/core5-weighted-measurement`。launcher `.local/core5-weighted-performance-cpu.sh`，
-共享只读harness `.local/run-core5-weighted-performance.py`，逐配置记录其hash、CLI、输入与build身份、
-load average和当时活动project job。使用3516bef已通过的CPU standalone binary（consumer源码未变）。
-单配置120秒、组1500秒、service1560秒、ATen/BLAS1、Nice10/background.slice。
-当前7db standalone NPU正确性资格仍在跑，主机争用明确记录；没有其他本项目性能计时。
-CPU组已终态，NPU计时组待本次诊断完成后串行启动。NPU standalone入口`core5-weighted-benchmark-npu-entry`准备启动；7db资格与二进制身份已完整审阅。
-源码checkout仍ceae7bf，build/npu；匹配SDK core与7db resident，不重编core。
-launcher `.local/core5-weighted-benchmark-npu-entry{,-workload}.sh`；安装/build/loader/help后，KV/HB small完整训练1warmup+1窗。
-静态fixture由Torch2.12 CPU导出，SDK2.10消费者独立读取JSON；不跨ABI加载Python扩展。
-任务720秒/2workers、ATen/BLAS1、queue180秒/device180秒，Nice10/background.slice；仅入口资格，不作正式选型。
+## 环境与保留限制
 
-诊断`core5-weighted-pdg-rounding-diagnose`已passed/exit0：两dtype四窗口离散结构全相同；FP32差异先见pending/后见raw，最终参数仍过严格比较；同初值提升FP64后两native日程全部完整记录与参数通过，固定ceae7bf checkout；单线程CPU、180秒/服务240秒。
-launcher `.local/core5-weighted-pdg-rounding-diagnose.sh`，脚本`.local/diagnose-weighted-pdg-rounding.py`；
-原FP32初值及其FP64提升、独立Python时间递归与native两日程、4窗口与SGD；输出diagnosis.json。
-诊断退出0只表示完成分析，原PDG严格失败不改写。
-
-## 下一步与检查命令
-
-1. 固定显式profile周期增量，运行medium resident与mixed profile；随后有限正式计时，保留profile2周期警告。
-2. 审阅7db0b08两个资格终态，更新half报告master断言复验与新增peer证据。
-3. 审阅CPU消费者；NPU组件终态后构建matching standalone benchmark，开展小中规模profiling与有限完整计时。
-   项目自身重型计时串行，默认每配置一次独立测量；无全开关笛卡尔积。
-4. 继续单样本跨卡节点切分与最终追溯/支持矩阵，不能将样本副本外推此能力。
-
-`python scripts/status.py`（历史审计用`--all-jobs`）；`python scripts/check_upstream.py`。
-`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；停止`systemctl --user stop UNIT`。
-源码不可编辑到活动checkout；实现先提交、固定源码资格、证据另提交。正常推送已授权。
-
-## 保留限制与环境
-
-- eager FP16 GDN默认AdamW严格差约.001984，strict xfail；SGD不解除。
-- 默认异步双NPU Python VJP的CANN invalid event；显式launch blocking通过不解除。
-- SDK2.10 FP32 fc/affine第三轮evidence差3.09944e-6，mixed-a同见证。
-- CUDA所有真机范围待硬件，构建结果不能代替。
-- 原half-flow首次目录拒绝、31e017f FP16参考拒绝等旧失败留在独立记录与报告，不改写。
-
-实际cwd `/mi/data2T/zlong/home/llm/graph-execution-foundation`，zlong；最近可用磁盘约3.3TiB。
-现行规范 `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 与 `/etc/modulefiles`；旧guide失效，用户已授权采用现行规范。
+实际cwd `/mi/data2T/zlong/home/llm/graph-execution-foundation`，zlong，可用磁盘约3.3TiB。
+现行规范 `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`、`/etc/modulefiles`；旧guide失效已获用户授权采用现行规范。
 Python：source /etc/profile.d/modules.sh；module purge；module load ascend/dev-workspace-9.1.0；source .local/venv-core5/bin/activate。
 SDK：module load libtorch-npu/2.10.0-cann9.0.0；Python为$LIBTORCH_ROOT/../../../../bin/python。
 CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh；PATH追加本项目.local/venv-core5/bin供ninja。
 TORCH_DEVICE_BACKEND_AUTOLOAD=0、PYTHONDONTWRITEBYTECODE=1、ACL_OP_INIT_MODE=0、ATen/BLAS1；保留CANN PYTHONPATH。
-不预建job.py输出目录；service stdout写.local。官方build入口要求新build目录。
-STATUS使用scripts/durable_records.py fsync+原子写并回读；只维护当前交接，历史详情见对应报告。
+长任务固定源码、独立background.slice、有限时长，不编辑活动checkout。STATUS用durable_records原子写并回读。
+
+保留：eager FP16 GDN默认AdamW约.001984 strict xfail；默认异步双NPU Python VJP CANN invalid event
+（launch blocking通过不解除）；SDK2.10 FP32 fc/affine第三轮evidence差3.09944e-6、mixed-a同见证。
+CUDA所有真机范围待硬件，不以CPU或编译冒充。公共环境与只读参考仓库未改。

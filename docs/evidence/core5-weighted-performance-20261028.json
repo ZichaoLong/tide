@@ -1,0 +1,3978 @@
+{
+  "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "question": [
+    "Complete-return CPU streaming/prefill and Python/standalone costs at two scales.",
+    "Complete-training mixed/resident costs with preparation, packing, backward, optimizer and synchronization.",
+    "Whether SSD, nonaligned DAG, feedback PDG or inference changes the local choice."
+  ],
+  "policy": "One independent process per configuration; one warmup and three evolving measured windows. No Cartesian sweep or speed threshold. SDK2.10 and Python2.12 are separate environments.",
+  "case_inventory_sha256": "4f3a1e3f31689b3834461059aa1ff2fa7937b7e0e468fcf9442d0705db124584",
+  "harness_sha256": "2b147a0fc87e56cee0858c2ec9a1b832a6c96c4872e2e76f2dc525ab2a8e5b65",
+  "jobs": [
+    {
+      "name": "core5-weighted-performance-cpu",
+      "unit": "tide-core5-weighted-performance-cpu-20261028.service",
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-27T22:13:42.398632+00:00",
+      "finished": "2026-10-27T22:15:10.607301+00:00",
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "status_sha256": "8a0d8ec2b79bd5af436c35b5e58fda24b9e654cdda98a49e8cd0a5b4be557268",
+      "log_sha256": "cb6aab2804ed0645d67aa8e25637ed0c767871c084e75362daf57b287f0d8f67",
+      "measurements_sha256": "b2d178c038b5743afc3a6e64fd2c1a63a27d9b5e74e64e21d92ef476d20015b8"
+    },
+    {
+      "name": "core5-weighted-performance-npu-python",
+      "unit": "tide-core5-weighted-performance-npu-python-20261028.service",
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T22:19:37.539364+00:00",
+      "finished": "2026-10-27T22:22:01.366046+00:00",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "status_sha256": "c841d673c067a9ccca16635359b3f70c02db25ca730c250f463887009278fec2",
+      "log_sha256": "7b81a5fab067e35716ac4047b8b66e2df4b64012b0b7216de62a3bbeb693b295",
+      "queue": {
+        "elapsed_seconds": 143.18541913852096,
+        "job_id": "core5-weighted-performance-npu-python-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T22:22:01.349695+00:00"
+      },
+      "measurements_sha256": "ed67237b52b0d07db2e5e046887fac27f18bcc3df868542d37d8177477485f8b"
+    },
+    {
+      "name": "core5-weighted-performance-npu-standalone",
+      "unit": "tide-core5-weighted-performance-npu-standalone-20261028.service",
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T22:22:41.978287+00:00",
+      "finished": "2026-10-27T22:24:09.733930+00:00",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "status_sha256": "1da09372d606e452c587b6ada5fbd17856c4bbf6fa8588895ce5f647dca9547d",
+      "log_sha256": "93f458baa1a95aedf40eabe9d0a6e43b5b671b9375f620b0dfe186a1c91b2ef4",
+      "queue": {
+        "elapsed_seconds": 87.12134854122996,
+        "job_id": "core5-weighted-performance-npu-standalone-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T22:24:09.719359+00:00"
+      },
+      "measurements_sha256": "fc4b3cc9ca59a1c6f792199dbb4bda7c024e253679e2114f5c73ac3fbf59fbc3"
+    }
+  ],
+  "cases": [
+    {
+      "name": "cpu-python-kv-hb-small",
+      "engine": "cpu-python",
+      "topology": "hb",
+      "family": "kv",
+      "size": "small",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "fixture_file_sha256": "58487f22466a051ab735d17b64f5d3958ea5d832dba2d8bb0fb4c5a64a484513",
+      "result_sha256": "0f15a25515698244be3c1a7356a5be97154706d9dd406bd74b4d212e906b7693",
+      "log_sha256": "f2cdbd20a9d705e744f90c5f314b1acaac66a85cdd97508fb8a7a2b99af19631",
+      "seconds": [
+        0.14853940159082413,
+        0.1288842037320137,
+        0.12873587384819984
+      ],
+      "median_seconds": 0.1288842037320137,
+      "construction_seconds": 0.8435712121427059,
+      "warmup_seconds": 0.18919609114527702,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 3.9766576290130615,
+      "load_average_before": [
+        34.83,
+        36.43,
+        37.43
+      ],
+      "load_average_after": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          16,
+          16,
+          16
+        ],
+        "full_calls": [
+          16,
+          16,
+          16
+        ],
+        "messages": [
+          24,
+          24,
+          24
+        ],
+        "outputs": [
+          4,
+          4,
+          4
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        9.062433673534542e-05,
+        9.116377623286098e-05,
+        9.119624883169308e-05
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          2,
+          2,
+          2
+        ],
+        "max_state_batch": [
+          1,
+          1,
+          1
+        ],
+        "max_full_batch": [
+          2,
+          2,
+          2
+        ],
+        "aggregate_reused_events": [
+          6,
+          6,
+          6
+        ],
+        "state_preparation_reused_events": [
+          6,
+          6,
+          6
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 334127104
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-hb-small-streaming",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "small",
+      "mode": "training",
+      "schedule": "streaming",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "fixture_file_sha256": "58487f22466a051ab735d17b64f5d3958ea5d832dba2d8bb0fb4c5a64a484513",
+      "result_sha256": "1bde22e9aa55d17c6f40b61a489f332acb613fc9bee14e19338862e03341efbc",
+      "log_sha256": "b5be4cb5f5904fd9583b0e6cc5d2a8baf013b060e444e5906a501af985c1cd8e",
+      "seconds": [
+        0.086450314,
+        0.087005949,
+        0.0871516
+      ],
+      "median_seconds": 0.087005949,
+      "construction_seconds": 0.065282924,
+      "warmup_seconds": 0.090878266,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 1.2613990306854248,
+      "load_average_before": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "load_average_after": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          16,
+          16,
+          16
+        ],
+        "full_calls": [
+          16,
+          16,
+          16
+        ],
+        "messages": [
+          24,
+          24,
+          24
+        ],
+        "outputs": [
+          4,
+          4,
+          4
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        9.062433673534542e-05,
+        9.116377623286098e-05,
+        9.119624883169308e-05
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "max_state_batch": [
+          1,
+          1,
+          1
+        ],
+        "max_full_batch": [
+          1,
+          1,
+          1
+        ],
+        "aggregate_reused_events": [
+          6,
+          6,
+          6
+        ],
+        "state_preparation_reused_events": [
+          6,
+          6,
+          6
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 146571264,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-hb-small-prefill",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "small",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "fixture_file_sha256": "58487f22466a051ab735d17b64f5d3958ea5d832dba2d8bb0fb4c5a64a484513",
+      "result_sha256": "69e90dca8754e196b39479de6959db5fa8fd03cd71889cc3a05218bace0513c5",
+      "log_sha256": "481f36f25d414ee63228fc1ed54b65f0a09635a522dcae3ae52ba819f89df95b",
+      "seconds": [
+        0.092144728,
+        0.083440166,
+        0.083624258
+      ],
+      "median_seconds": 0.083624258,
+      "construction_seconds": 0.06261467,
+      "warmup_seconds": 0.096489548,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 1.1757330894470215,
+      "load_average_before": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "load_average_after": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          16,
+          16,
+          16
+        ],
+        "full_calls": [
+          16,
+          16,
+          16
+        ],
+        "messages": [
+          24,
+          24,
+          24
+        ],
+        "outputs": [
+          4,
+          4,
+          4
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        9.062433673534542e-05,
+        9.116377623286098e-05,
+        9.119624883169308e-05
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          2,
+          2,
+          2
+        ],
+        "max_state_batch": [
+          1,
+          1,
+          1
+        ],
+        "max_full_batch": [
+          2,
+          2,
+          2
+        ],
+        "aggregate_reused_events": [
+          6,
+          6,
+          6
+        ],
+        "state_preparation_reused_events": [
+          6,
+          6,
+          6
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 146636800,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-python-kv-hb-medium",
+      "engine": "cpu-python",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "a81ef20721720e92b9bada036b9799cf16a3e6832d3e1f8209e155cf1cc17efc",
+      "log_sha256": "b05d198f316f71911edc785ebf999b421c809295b4a7f7f3f88653add036bf8b",
+      "seconds": [
+        0.6919502839446068,
+        0.5411447435617447,
+        0.5368892140686512
+      ],
+      "median_seconds": 0.5411447435617447,
+      "construction_seconds": 0.8810584470629692,
+      "warmup_seconds": 0.6542325988411903,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 10.45110821723938,
+      "load_average_before": [
+        35.01,
+        36.44,
+        37.42
+      ],
+      "load_average_after": [
+        34.92,
+        36.37,
+        37.39
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.07078699767589569,
+        0.07049597054719925
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 361594880
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-hb-medium-streaming",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "streaming",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "934d63aea57fbaab21bd70f2331ab175319cad17a6563d7c1597cf0bdf64617e",
+      "log_sha256": "e3f30534c1837d20afa508fa366401c8d43bbaaef4e7d70193430dc78f4854b9",
+      "seconds": [
+        0.452994425,
+        0.456475998,
+        0.458928321
+      ],
+      "median_seconds": 0.456475998,
+      "construction_seconds": 0.058961235,
+      "warmup_seconds": 0.455953262,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 5.4749650955200195,
+      "load_average_before": [
+        34.92,
+        36.37,
+        37.39
+      ],
+      "load_average_after": [
+        34.85,
+        36.33,
+        37.37
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.07078699767589569,
+        0.07049597054719925
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          4,
+          4,
+          4
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 182165504,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-hb-medium-prefill",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "6db83c3339d913d6be19e36eb76b13cd1fd330950f319e947f614886416e1b27",
+      "log_sha256": "49b094caee08d2a093aaf826d906ea224d27320dcdde86b4b2bc71c2ef58957e",
+      "seconds": [
+        0.425168103,
+        0.350377679,
+        0.350485899
+      ],
+      "median_seconds": 0.350485899,
+      "construction_seconds": 0.073120968,
+      "warmup_seconds": 0.411163191,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 5.403632640838623,
+      "load_average_before": [
+        34.85,
+        36.33,
+        37.37
+      ],
+      "load_average_after": [
+        35.42,
+        36.43,
+        37.4
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.0707869902253151,
+        0.07049596309661865
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 177868800,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-python-native-kv-hb-medium",
+      "engine": "cpu-native",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "0974e54653b27a823a9d59bd43e9554c8b6ee2d8e3460fc2fd4d624f6154db39",
+      "log_sha256": "b05d198f316f71911edc785ebf999b421c809295b4a7f7f3f88653add036bf8b",
+      "seconds": [
+        0.40661608055233955,
+        0.356412086635828,
+        0.45860937610268593
+      ],
+      "median_seconds": 0.40661608055233955,
+      "construction_seconds": 0.932915773242712,
+      "warmup_seconds": 0.41375505924224854,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 9.469394207000732,
+      "load_average_before": [
+        35.42,
+        36.43,
+        37.4
+      ],
+      "load_average_after": [
+        35.44,
+        36.4,
+        37.38
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.0707869902253151,
+        0.07049596309661865
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 366030848
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-python-ssd-hb-medium",
+      "engine": "cpu-python",
+      "topology": "hb",
+      "family": "ssd",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "1aec17f7a51f80d34924992f12a7d4add9daaf5183953dbb8718af7f99c63f40",
+      "fixture_file_sha256": "c9483733430f5a9f05fff1b5ade3f12e71e45f79331cbcaec04c2da28bbee52d",
+      "result_sha256": "d7c89bd79672484e08ee09bd4d867d88f2f19e20e3f0534e75e2e184caf47137",
+      "log_sha256": "ac0a0cf5edf0a53f23e5d2007b48ec754a08c41e08693d3d7443d8ac3952c309",
+      "seconds": [
+        0.6405387483537197,
+        0.5766430087387562,
+        0.5709576085209846
+      ],
+      "median_seconds": 0.5766430087387562,
+      "construction_seconds": 0.8362542726099491,
+      "warmup_seconds": 0.6714634820818901,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 11.00225043296814,
+      "load_average_before": [
+        35.44,
+        36.4,
+        37.38
+      ],
+      "load_average_after": [
+        35.54,
+        36.39,
+        37.36
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.015526949428021908,
+        0.015641257166862488,
+        0.01566593162715435
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 369102848
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-python-kv-dag-medium",
+      "engine": "cpu-python",
+      "topology": "dag",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "aee7c3036f8dd5fe28542f10ad77dce911d4a156622f4020aa8eef7918cb4293",
+      "fixture_file_sha256": "ac40d2740bcf640471275e90778929471da111702525f08c2b39b71e06a898d6",
+      "result_sha256": "9fa31846cf7ff2436923a15e1df3fb28a644d35a19862add19635794ee816b17",
+      "log_sha256": "4b268715d9f09dec0b2842219ba239c51e696ef1735e6ea0cd06d03d85648026",
+      "seconds": [
+        0.6807820275425911,
+        0.6172948516905308,
+        0.6179127655923367
+      ],
+      "median_seconds": 0.6179127655923367,
+      "construction_seconds": 0.8465315587818623,
+      "warmup_seconds": 0.621591929346323,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 9.316208362579346,
+      "load_average_before": [
+        35.54,
+        36.39,
+        37.36
+      ],
+      "load_average_after": [
+        35.68,
+        36.39,
+        37.35
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          112,
+          112,
+          112
+        ],
+        "full_calls": [
+          112,
+          112,
+          112
+        ],
+        "messages": [
+          96,
+          96,
+          96
+        ],
+        "outputs": [
+          96,
+          96,
+          96
+        ],
+        "pending": [
+          4,
+          4,
+          4
+        ]
+      },
+      "loss": [
+        0.4630558490753174,
+        0.4104405343532562,
+        0.381971538066864
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          12,
+          12,
+          12
+        ],
+        "max_state_sequence": [
+          1,
+          1,
+          1
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          4,
+          4,
+          4
+        ],
+        "aggregate_reused_events": [
+          16,
+          16,
+          16
+        ],
+        "state_preparation_reused_events": [
+          16,
+          16,
+          16
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 368361472
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-python-kv-hb-medium-inference",
+      "engine": "cpu-python",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "inference",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "71dff5b9f771b271dfd1f83343d9381e1cc125557051c1d2ad6318a0bc53c41f",
+      "log_sha256": "b05d198f316f71911edc785ebf999b421c809295b4a7f7f3f88653add036bf8b",
+      "seconds": [
+        0.21811475232243538,
+        0.28464436158537865,
+        0.20768918469548225
+      ],
+      "median_seconds": 0.21811475232243538,
+      "construction_seconds": 0.8916496969759464,
+      "warmup_seconds": 0.2514268271625042,
+      "complete_records": true,
+      "optimizer_values": false,
+      "error": null,
+      "process_seconds": 7.235298156738281,
+      "load_average_before": [
+        35.68,
+        36.39,
+        37.35
+      ],
+      "load_average_after": [
+        36.11,
+        36.46,
+        37.37
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0715152695775032,
+        0.07105709612369537,
+        0.07093668729066849
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "cpu",
+        "backend": "cpu",
+        "logical_device_index": null,
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "logical_device_count": 1
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 341229568
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "cpu-standalone-ssd-hb-medium",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "ssd",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "1aec17f7a51f80d34924992f12a7d4add9daaf5183953dbb8718af7f99c63f40",
+      "fixture_file_sha256": "c9483733430f5a9f05fff1b5ade3f12e71e45f79331cbcaec04c2da28bbee52d",
+      "result_sha256": "985afc25d5178f7dbfdc2d320b35fddc2aa907109374217f0a9d96b462fa98e8",
+      "log_sha256": "7887d18d6c393a4c00ff07460e838eaa0edf7d49ce1496a0982985f3fe6a3f94",
+      "seconds": [
+        0.349043646,
+        0.350703622,
+        0.351824792
+      ],
+      "median_seconds": 0.350703622,
+      "construction_seconds": 0.059039836,
+      "warmup_seconds": 0.384386968,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 5.264070510864258,
+      "load_average_before": [
+        36.11,
+        36.46,
+        37.37
+      ],
+      "load_average_after": [
+        36.02,
+        36.43,
+        37.35
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.015526949428021908,
+        0.015641257166862488,
+        0.01566593162715435
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 184332288,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-dag-medium",
+      "engine": "cpu-standalone",
+      "topology": "dag",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "aee7c3036f8dd5fe28542f10ad77dce911d4a156622f4020aa8eef7918cb4293",
+      "fixture_file_sha256": "ac40d2740bcf640471275e90778929471da111702525f08c2b39b71e06a898d6",
+      "result_sha256": "65fe5bb373c94e5a5bab6079c6616a732b420826e00aa590a6de1c045ae13853",
+      "log_sha256": "7d82a6c80ac9f8fcc71bb654b39c511352d011ade40dafdef3e3474e4cf593e3",
+      "seconds": [
+        0.353171015,
+        0.35690996,
+        0.357503546
+      ],
+      "median_seconds": 0.35690996,
+      "construction_seconds": 0.05630249,
+      "warmup_seconds": 0.340497845,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 4.445187330245972,
+      "load_average_before": [
+        36.02,
+        36.43,
+        37.35
+      ],
+      "load_average_after": [
+        35.86,
+        36.39,
+        37.33
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          112,
+          112,
+          112
+        ],
+        "full_calls": [
+          112,
+          112,
+          112
+        ],
+        "messages": [
+          96,
+          96,
+          96
+        ],
+        "outputs": [
+          96,
+          96,
+          96
+        ],
+        "pending": [
+          4,
+          4,
+          4
+        ]
+      },
+      "loss": [
+        0.4630558490753174,
+        0.4104405343532562,
+        0.381971538066864
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          12,
+          12,
+          12
+        ],
+        "max_state_sequence": [
+          1,
+          1,
+          1
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          4,
+          4,
+          4
+        ],
+        "aggregate_reused_events": [
+          16,
+          16,
+          16
+        ],
+        "state_preparation_reused_events": [
+          16,
+          16,
+          16
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 182767616,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-hb-medium-inference",
+      "engine": "cpu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "inference",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "60f28e1406abd0f719a0eda60681d3889c53fa749266b420a858a84b0d79c72e",
+      "log_sha256": "4fc1c87c133f9414b45ec273d2dc3ee9063bfe9d5b913822a96be434d83fbc03",
+      "seconds": [
+        0.114582218,
+        0.109588801,
+        0.109915254
+      ],
+      "median_seconds": 0.109915254,
+      "construction_seconds": 0.060292258,
+      "warmup_seconds": 0.1157788,
+      "complete_records": true,
+      "optimizer_values": false,
+      "error": null,
+      "process_seconds": 2.6333632469177246,
+      "load_average_before": [
+        35.86,
+        36.39,
+        37.33
+      ],
+      "load_average_after": [
+        35.86,
+        36.39,
+        37.33
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0715152695775032,
+        0.07105709612369537,
+        0.07093668729066849
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 159453184,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-pdg-medium-streaming",
+      "engine": "cpu-standalone",
+      "topology": "pdg",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "streaming",
+      "placement": "native",
+      "state": "failed",
+      "exit_code": 2,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "9cfb40b0cc1c64a70088ee0e61ab76d5efc5e06ccaae8b45ef6f60227a736cd7",
+      "fixture_file_sha256": "592b1e3ca288c23b571498546b51341b715876e81d932f4a9d0f47a346bcb63b",
+      "result_sha256": "a8075b4210719b5890a7b12ce861a05b549f1b218778dbc0bb7d22f90717d903",
+      "log_sha256": "95d6c25efe47d6c52a4448024656684e67330b06a5b677e4de5dcde5d170c942",
+      "seconds": [
+        1.057675397,
+        1.06765211,
+        1.077744836
+      ],
+      "median_seconds": 1.06765211,
+      "construction_seconds": 0.065732458,
+      "warmup_seconds": 0.924815676,
+      "complete_records": false,
+      "optimizer_values": false,
+      "error": "benchmark parity: tensor value (dtype=Float, shape=[33], max_abs_error=4.11272e-06, reference_max_abs=7.14253)",
+      "process_seconds": 5.861776113510132,
+      "load_average_before": [
+        35.86,
+        36.39,
+        37.33
+      ],
+      "load_average_after": [
+        35.71,
+        36.35,
+        37.32
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          240,
+          240,
+          240
+        ],
+        "full_calls": [
+          240,
+          240,
+          240
+        ],
+        "messages": [
+          400,
+          400,
+          400
+        ],
+        "outputs": [
+          160,
+          160,
+          160
+        ],
+        "pending": [
+          32,
+          32,
+          32
+        ]
+      },
+      "loss": [
+        20.971893310546875,
+        42.472938537597656,
+        59.16862869262695
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          4,
+          4,
+          4
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 252047360,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "cpu-standalone-kv-pdg-medium-prefill",
+      "engine": "cpu-standalone",
+      "topology": "pdg",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "failed",
+      "exit_code": 2,
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "fixture_sha256": "9cfb40b0cc1c64a70088ee0e61ab76d5efc5e06ccaae8b45ef6f60227a736cd7",
+      "fixture_file_sha256": "592b1e3ca288c23b571498546b51341b715876e81d932f4a9d0f47a346bcb63b",
+      "result_sha256": "575b8aadbe97469c6322e8bb97a87f3a4e237ddc8ba0927197289b5ec82ad25e",
+      "log_sha256": "76b41abe549baa07231388b80c7c941e814cb8ed982ad6b2477c5c5207bd6781",
+      "seconds": [
+        0.792842054,
+        0.798445196,
+        0.800958721
+      ],
+      "median_seconds": 0.798445196,
+      "construction_seconds": 0.055741555,
+      "warmup_seconds": 0.703990687,
+      "complete_records": false,
+      "optimizer_values": false,
+      "error": "benchmark parity: tensor value (dtype=Float, shape=[33], max_abs_error=2.71201e-06, reference_max_abs=7.14253)",
+      "process_seconds": 4.499037742614746,
+      "load_average_before": [
+        35.71,
+        36.35,
+        37.32
+      ],
+      "load_average_after": [
+        35.57,
+        36.31,
+        37.3
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-cpu",
+        "core5-peer-owner-lifetime-npu-qualify"
+      ],
+      "workload": {
+        "candidate_updates": [
+          240,
+          240,
+          240
+        ],
+        "full_calls": [
+          240,
+          240,
+          240
+        ],
+        "messages": [
+          400,
+          400,
+          400
+        ],
+        "outputs": [
+          160,
+          160,
+          160
+        ],
+        "pending": [
+          32,
+          32,
+          32
+        ]
+      },
+      "loss": [
+        20.97188949584961,
+        42.472938537597656,
+        59.168617248535156
+      ],
+      "identity": {
+        "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+        "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          20,
+          20,
+          20
+        ],
+        "max_state_sequence": [
+          2,
+          2,
+          2
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          8,
+          8,
+          8
+        ]
+      },
+      "runtime": {
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "cpu",
+        "compiled_backend": "cpu",
+        "dtype": "float32",
+        "cann_version": "9.1.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 250699776,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "npu-resident-kv-hb-small",
+      "engine": "npu-resident",
+      "topology": "hb",
+      "family": "kv",
+      "size": "small",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "fixture_file_sha256": "58487f22466a051ab735d17b64f5d3958ea5d832dba2d8bb0fb4c5a64a484513",
+      "result_sha256": "5ab737e688baf528eef8bcc82c1e2fea34d9c67dab69f159f0ea5529df0f2904",
+      "log_sha256": "e7bf16f67d904edbe43caf1b851253f51b53135857431c7fe2322682031e9b9b",
+      "seconds": [
+        1.0773694068193436,
+        1.0974614210426807,
+        1.0601142384111881
+      ],
+      "median_seconds": 1.0773694068193436,
+      "construction_seconds": 1.3461884446442127,
+      "warmup_seconds": 1.486300453543663,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 27.381365299224854,
+      "load_average_before": [
+        33.53,
+        34.86,
+        36.43
+      ],
+      "load_average_after": [
+        34.84,
+        35.04,
+        36.44
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-python"
+      ],
+      "workload": {
+        "candidate_updates": [
+          16,
+          16,
+          16
+        ],
+        "full_calls": [
+          16,
+          16,
+          16
+        ],
+        "messages": [
+          24,
+          24,
+          24
+        ],
+        "outputs": [
+          4,
+          4,
+          4
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        9.062432945938781e-05,
+        9.116379078477621e-05,
+        9.119624155573547e-05
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          4,
+          4,
+          4
+        ],
+        "physical_local_rows": [
+          32,
+          32,
+          32
+        ],
+        "physical_full_rows": [
+          32,
+          32,
+          32
+        ],
+        "received_atoms": [
+          28,
+          28,
+          28
+        ],
+        "resident_tensor_bytes": [
+          1740719,
+          1740719,
+          1740719
+        ],
+        "operator_workspace_bytes": [
+          20972032,
+          20972032,
+          20972032
+        ]
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2685222912,
+        "device_peak_allocated_bytes": 87138304,
+        "device_peak_reserved_bytes": 106954752
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "npu-resident-kv-hb-medium",
+      "engine": "npu-resident",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "d958b5ae9a1914ac0ae7e23dafd0dea0558a8d39be60e4cf4c9d6e4b48510a97",
+      "log_sha256": "9b31897cc2b03e8258b25f9fcc9391031add49a82151ab04fe4e0892d0a2b295",
+      "seconds": [
+        2.72947945445776,
+        2.706106122583151,
+        2.6781633608043194
+      ],
+      "median_seconds": 2.706106122583151,
+      "construction_seconds": 1.2063003480434418,
+      "warmup_seconds": 3.062781821936369,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 33.395323038101196,
+      "load_average_before": [
+        34.84,
+        35.04,
+        36.44
+      ],
+      "load_average_after": [
+        34.88,
+        35.03,
+        36.39
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-python"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919922709465,
+        0.0707869902253151,
+        0.07049597054719925
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          6,
+          6,
+          6
+        ],
+        "physical_local_rows": [
+          192,
+          192,
+          192
+        ],
+        "physical_full_rows": [
+          192,
+          192,
+          192
+        ],
+        "received_atoms": [
+          224,
+          224,
+          224
+        ],
+        "resident_tensor_bytes": [
+          141889835,
+          141889835,
+          141889835
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2725036032,
+        "device_peak_allocated_bytes": 514849280,
+        "device_peak_reserved_bytes": 532676608
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "npu-resident-kv-hb-medium-inference",
+      "engine": "npu-resident",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "inference",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "8427767fb8f3a5b08db1e339b91088e082f6d92cc28e3709daf0ca8927a3c121",
+      "log_sha256": "152fdb2b25193377b4d2878a76b3782ba5fa4f3d43112d355874bc341a70711d",
+      "seconds": [
+        0.4940600097179413,
+        0.4853765293955803,
+        0.4791625998914242
+      ],
+      "median_seconds": 0.4853765293955803,
+      "construction_seconds": 1.1449297219514847,
+      "warmup_seconds": 0.49212580546736717,
+      "complete_records": true,
+      "optimizer_values": false,
+      "error": null,
+      "process_seconds": 21.762482404708862,
+      "load_average_before": [
+        34.88,
+        35.03,
+        36.39
+      ],
+      "load_average_after": [
+        36.35,
+        35.38,
+        36.47
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-python"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0715152770280838,
+        0.07105711102485657,
+        0.07093670219182968
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          6,
+          6,
+          6
+        ],
+        "physical_local_rows": [
+          192,
+          192,
+          192
+        ],
+        "physical_full_rows": [
+          192,
+          192,
+          192
+        ],
+        "received_atoms": [
+          224,
+          224,
+          224
+        ],
+        "resident_tensor_bytes": [
+          141889835,
+          141889835,
+          141889835
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2446041088,
+        "device_peak_allocated_bytes": 161429504,
+        "device_peak_reserved_bytes": 188743680
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "npu-python-mixed-c-kv-hb-medium",
+      "engine": "npu-python",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "mixed-c",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "684f5c6e6b1f5a2f1717c94080c63d9c74aa2b812cfabba037da95c587511aa1",
+      "log_sha256": "b1b19ba8234b24607fb5e6cfb9d918a6ca33c84664b095bb82427257200a776c",
+      "seconds": [
+        1.7509092912077904,
+        1.6086058244109154,
+        1.6118905954062939
+      ],
+      "median_seconds": 1.6118905954062939,
+      "construction_seconds": 0.04107131436467171,
+      "warmup_seconds": 2.613519299775362,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 27.863373041152954,
+      "load_average_before": [
+        36.35,
+        35.38,
+        36.47
+      ],
+      "load_average_after": [
+        36.65,
+        35.54,
+        36.49
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-python"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.07078699767589569,
+        0.07049597054719925
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2461978624,
+        "device_peak_allocated_bytes": 39165952,
+        "device_peak_reserved_bytes": 41943040
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "npu-native-mixed-c-kv-hb-medium",
+      "engine": "npu-native",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "mixed-c",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "4144437ce13c0086859952e8aca0f592958484b737676cce7b5148521d89232f",
+      "log_sha256": "06a4dea68ac2a60535e24babaac39dab95974d7fa0e437f981152d5b2bd097e0",
+      "seconds": [
+        1.515266951173544,
+        1.4137373752892017,
+        1.3976386971771717
+      ],
+      "median_seconds": 1.4137373752892017,
+      "construction_seconds": 0.2660828083753586,
+      "warmup_seconds": 1.9102127589285374,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 25.850197076797485,
+      "load_average_before": [
+        36.65,
+        35.54,
+        36.49
+      ],
+      "load_average_after": [
+        37.17,
+        35.75,
+        36.54
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-python"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.07078699767589569,
+        0.07049596309661865
+      ],
+      "identity": {
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "greedy_stages": [
+          3,
+          3,
+          3
+        ],
+        "max_state_sequence": [
+          4,
+          4,
+          4
+        ],
+        "max_state_batch": [
+          4,
+          4,
+          4
+        ],
+        "max_full_batch": [
+          16,
+          16,
+          16
+        ],
+        "aggregate_reused_events": [
+          48,
+          48,
+          48
+        ],
+        "state_preparation_reused_events": [
+          48,
+          48,
+          48
+        ]
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2462064640,
+        "device_peak_allocated_bytes": 39308288,
+        "device_peak_reserved_bytes": 41943040
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      }
+    },
+    {
+      "name": "npu-standalone-kv-hb-small",
+      "engine": "npu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "small",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "fixture_file_sha256": "58487f22466a051ab735d17b64f5d3958ea5d832dba2d8bb0fb4c5a64a484513",
+      "result_sha256": "30f1010ed1d54aad5cc8d9223e388174f71a62b87f218272004a8e30c857f138",
+      "log_sha256": "ae4c437d62d836a306dce65c325540e10d789fb2be824fa229698584e7d0b590",
+      "seconds": [
+        1.029151438,
+        0.984589688,
+        0.977266069
+      ],
+      "median_seconds": 0.984589688,
+      "construction_seconds": 1.129535212,
+      "warmup_seconds": 1.302119857,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 17.918899059295654,
+      "load_average_before": [
+        34.58,
+        35.26,
+        36.33
+      ],
+      "load_average_after": [
+        35.44,
+        35.42,
+        36.36
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-standalone"
+      ],
+      "workload": {
+        "candidate_updates": [
+          16,
+          16,
+          16
+        ],
+        "full_calls": [
+          16,
+          16,
+          16
+        ],
+        "messages": [
+          24,
+          24,
+          24
+        ],
+        "outputs": [
+          4,
+          4,
+          4
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        9.062431490747258e-05,
+        9.116379078477621e-05,
+        9.119623427977785e-05
+      ],
+      "identity": {
+        "build_sha256": "c20b5725b68ab3f71727ff7ec25679402e0e7a4d91ccae826922b48f0e568c7a",
+        "binary_sha256": "0c45a68fb440c8872fc5b02892d24dccb53259e06fceaa9c6b70e25a9cc5d862",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          4,
+          4,
+          4
+        ],
+        "physical_local_rows": [
+          32,
+          32,
+          32
+        ],
+        "physical_full_rows": [
+          32,
+          32,
+          32
+        ],
+        "received_atoms": [
+          28,
+          28,
+          28
+        ],
+        "resident_tensor_bytes": [
+          1740719,
+          1740719,
+          1740719
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "torch": "2.10.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "npu:0",
+        "compiled_backend": "npu",
+        "dtype": "float32",
+        "cann_version": "9.0.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2443153408,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "npu-standalone-kv-hb-medium",
+      "engine": "npu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "3039755625d55c0b33f9d99c4cee5c52b8ea573313a0ad1fb82c715c3a3086a1",
+      "log_sha256": "d1f640844519d0ba4ded7c5feed39ea75cf0d2ee51620e29701e008dadaaf053",
+      "seconds": [
+        2.622225983,
+        2.59957563,
+        2.587887
+      ],
+      "median_seconds": 2.59957563,
+      "construction_seconds": 0.982139795,
+      "warmup_seconds": 2.833617143,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 22.495445013046265,
+      "load_average_before": [
+        35.44,
+        35.42,
+        36.36
+      ],
+      "load_average_after": [
+        34.89,
+        35.3,
+        36.3
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-standalone"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0713919848203659,
+        0.0707869902253151,
+        0.07049597054719925
+      ],
+      "identity": {
+        "build_sha256": "c20b5725b68ab3f71727ff7ec25679402e0e7a4d91ccae826922b48f0e568c7a",
+        "binary_sha256": "0c45a68fb440c8872fc5b02892d24dccb53259e06fceaa9c6b70e25a9cc5d862",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          6,
+          6,
+          6
+        ],
+        "physical_local_rows": [
+          192,
+          192,
+          192
+        ],
+        "physical_full_rows": [
+          192,
+          192,
+          192
+        ],
+        "received_atoms": [
+          224,
+          224,
+          224
+        ],
+        "resident_tensor_bytes": [
+          141889835,
+          141889835,
+          141889835
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "torch": "2.10.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "npu:0",
+        "compiled_backend": "npu",
+        "dtype": "float32",
+        "cann_version": "9.0.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2500022272,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "npu-standalone-kv-hb-medium-inference",
+      "engine": "npu-standalone",
+      "topology": "hb",
+      "family": "kv",
+      "size": "medium",
+      "mode": "inference",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "fixture_file_sha256": "b69ae6cd5d028ea72873218c61e25dedd95ea9104438a2d1bda8ed9aee8a04ba",
+      "result_sha256": "52f67178009cd4fb958ff150182d214e126e261d76134712cb0dd166ba75bbb4",
+      "log_sha256": "9ce62b524d925cd88da33fd8ad7ca87faae3fe37b5bd23189e6c301dec3ab610",
+      "seconds": [
+        0.446907357,
+        0.440648658,
+        0.445230761
+      ],
+      "median_seconds": 0.445230761,
+      "construction_seconds": 0.956587004,
+      "warmup_seconds": 0.440693358,
+      "complete_records": true,
+      "optimizer_values": false,
+      "error": null,
+      "process_seconds": 12.337338209152222,
+      "load_average_before": [
+        34.89,
+        35.3,
+        36.3
+      ],
+      "load_average_after": [
+        34.53,
+        35.2,
+        36.25
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-standalone"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.0715152770280838,
+        0.07105711102485657,
+        0.07093670219182968
+      ],
+      "identity": {
+        "build_sha256": "c20b5725b68ab3f71727ff7ec25679402e0e7a4d91ccae826922b48f0e568c7a",
+        "binary_sha256": "0c45a68fb440c8872fc5b02892d24dccb53259e06fceaa9c6b70e25a9cc5d862",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          6,
+          6,
+          6
+        ],
+        "physical_local_rows": [
+          192,
+          192,
+          192
+        ],
+        "physical_full_rows": [
+          192,
+          192,
+          192
+        ],
+        "received_atoms": [
+          224,
+          224,
+          224
+        ],
+        "resident_tensor_bytes": [
+          141889835,
+          141889835,
+          141889835
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "torch": "2.10.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "npu:0",
+        "compiled_backend": "npu",
+        "dtype": "float32",
+        "cann_version": "9.0.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2211160064,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    },
+    {
+      "name": "npu-standalone-ssd-hb-medium",
+      "engine": "npu-standalone",
+      "topology": "hb",
+      "family": "ssd",
+      "size": "medium",
+      "mode": "training",
+      "schedule": "prefill",
+      "placement": "native",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "fixture_sha256": "1aec17f7a51f80d34924992f12a7d4add9daaf5183953dbb8718af7f99c63f40",
+      "fixture_file_sha256": "c9483733430f5a9f05fff1b5ade3f12e71e45f79331cbcaec04c2da28bbee52d",
+      "result_sha256": "a3cf3165d0e868f249225a42e5e50cbc935d01956e655466604886e91fe525f7",
+      "log_sha256": "a262873db59d7776a909d41729d684b988d61aa6aeb4e7efb51f3c8b236d4f4d",
+      "seconds": [
+        3.668130147,
+        3.619289688,
+        3.67483637
+      ],
+      "median_seconds": 3.668130147,
+      "construction_seconds": 1.201750592,
+      "warmup_seconds": 3.949766959,
+      "complete_records": true,
+      "optimizer_values": true,
+      "error": null,
+      "process_seconds": 27.533597469329834,
+      "load_average_before": [
+        34.53,
+        35.2,
+        36.25
+      ],
+      "load_average_after": [
+        34.68,
+        35.18,
+        36.21
+      ],
+      "live_project_jobs": [
+        "core5-weighted-performance-npu-standalone"
+      ],
+      "workload": {
+        "candidate_updates": [
+          128,
+          128,
+          128
+        ],
+        "full_calls": [
+          128,
+          128,
+          128
+        ],
+        "messages": [
+          192,
+          192,
+          192
+        ],
+        "outputs": [
+          32,
+          32,
+          32
+        ],
+        "pending": [
+          0,
+          0,
+          0
+        ]
+      },
+      "loss": [
+        0.015526949428021908,
+        0.015641259029507637,
+        0.01566593162715435
+      ],
+      "identity": {
+        "build_sha256": "c20b5725b68ab3f71727ff7ec25679402e0e7a4d91ccae826922b48f0e568c7a",
+        "binary_sha256": "0c45a68fb440c8872fc5b02892d24dccb53259e06fceaa9c6b70e25a9cc5d862",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971"
+      },
+      "execution_stats": {
+        "resident_stages": [
+          6,
+          6,
+          6
+        ],
+        "physical_local_rows": [
+          192,
+          192,
+          192
+        ],
+        "physical_full_rows": [
+          192,
+          192,
+          192
+        ],
+        "received_atoms": [
+          224,
+          224,
+          224
+        ],
+        "resident_tensor_bytes": [
+          147375659,
+          147375659,
+          147375659
+        ],
+        "operator_workspace_bytes": [
+          16777728,
+          16777728,
+          16777728
+        ]
+      },
+      "runtime": {
+        "torch": "2.10.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true,
+        "device": "npu:0",
+        "compiled_backend": "npu",
+        "dtype": "float32",
+        "cann_version": "9.0.0"
+      },
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 2680791040,
+        "device_allocator_peak": "not exported by standalone consumer"
+      }
+    }
+  ],
+  "profiles": [
+    {
+      "job": {
+        "name": "core5-weighted-benchmark-python-profile2",
+        "unit": "tide-core5-weighted-benchmark-python-profile2-20261028.service",
+        "source": "fea42aa24d8a3296d9afa56183e41bf78caab975",
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-27T22:08:32.606792+00:00",
+        "finished": "2026-10-27T22:09:14.081390+00:00",
+        "systemd": {
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ActiveState": "inactive"
+        },
+        "status_sha256": "96272c526b97f3a62d567041c82df565950a05d8597c976a40fb3cf46a91fe0e",
+        "log_sha256": "f69f85ffea648c373a3d1cccda6aa7489e6d3d003a65448b6c1237c3f9a6e610",
+        "queue": {
+          "elapsed_seconds": 40.800213269889355,
+          "job_id": "core5-weighted-benchmark-python-profile2-20261028",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 9,
+          "physical_ids": [
+            9
+          ],
+          "priority": 0,
+          "project": "graph-execution-foundation",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-27T22:09:14.065624+00:00"
+        }
+      },
+      "source": "fea42aa24d8a3296d9afa56183e41bf78caab975",
+      "configuration": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 4,
+        "samples": 1,
+        "positions": 2,
+        "seed": 7
+      },
+      "implementation": "resident",
+      "placement": "native",
+      "complete_capture_cycle": false,
+      "trace_sha256": "9f671f5ccb32fb143c5aec9847e9cbfacabd8ffc0044297d74b783e228fcab0f",
+      "result_sha256": "772ed85e02629b50833c4215bfecb58aff6bf94932c488ae278254d65bf52cf9",
+      "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81",
+      "phases_inclusive_us": {
+        "tide.backward_finite": 1241437.28,
+        "tide.decode_roots": 84348.93,
+        "tide.forward": 70400.52,
+        "tide.detach_return_sync": 12961.9,
+        "tide.optimizer": 8606.05,
+        "tide.loss": 1637.23,
+        "tide.prepare": 380.71
+      },
+      "kernel_events": 50205,
+      "kernel_union_us": 135081.25,
+      "top_kernel_duration_us": [
+        [
+          "aclnnIndexSelect_GatherV3AiCore_GatherV3",
+          29046.419999999634
+        ],
+        [
+          "aclnnInplaceIndexCopy_TransposeAiCore_Transpose",
+          16112.499999999985
+        ],
+        [
+          "Transpose_9a632dc5b6be9e1b4215e3cf2b1aff0d_high_performance_0",
+          9963.280000000024
+        ],
+        [
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+          9614.779999999788
+        ],
+        [
+          "aclnnPermute_TransposeAiCore_Transpose",
+          7607.939999999998
+        ],
+        [
+          "aclnnArange_ArangeAiCore_Range",
+          7262.600000000038
+        ],
+        [
+          "tide_weighted_row_accumulate_0",
+          4068.4400000000815
+        ],
+        [
+          "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+          3998.340000000019
+        ],
+        [
+          "tide_weighted_head_guard_0",
+          3788.4599999999978
+        ],
+        [
+          "Transpose_9a632dc5b6be9e1b4215e3cf2b1aff0d_high_performance_6",
+          3639.120000000001
+        ],
+        [
+          "tide_weighted_allocation_status_0",
+          3581.820000000181
+        ],
+        [
+          "ScatterUpdate",
+          3077.8599999999997
+        ]
+      ],
+      "top_host_duration_us": [
+        [
+          "tide.backward_finite",
+          1241437.28
+        ],
+        [
+          "aten::zeros",
+          89960.78999999982
+        ],
+        [
+          "tide.decode_roots",
+          84348.93
+        ],
+        [
+          "aten::zero_",
+          77605.54000000001
+        ],
+        [
+          "tide.forward",
+          70400.52
+        ],
+        [
+          "aten::zeros_like",
+          61806.68000000002
+        ],
+        [
+          "aten::copy_",
+          49558.58000000011
+        ],
+        [
+          "aten::to",
+          44333.94999999995
+        ],
+        [
+          "aten::empty_strided",
+          39441.03000000002
+        ],
+        [
+          "aten::_to_copy",
+          39416.639999999985
+        ],
+        [
+          "aclnnInplaceZero",
+          39333.40000000006
+        ],
+        [
+          "empty_tensor",
+          39127.68999999988
+        ]
+      ],
+      "transfer_and_scalar_inclusive_us": {
+        "MEMCPY_ASYNC": 6268.520000000113,
+        "aten::_local_scalar_dense": 3399.660000000007
+      },
+      "observed_host_fallback_events": [],
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 3187908608,
+        "device_peak_allocated_bytes": 87138304,
+        "device_peak_reserved_bytes": 106954752
+      },
+      "duration_caveat": "inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution"
+    },
+    {
+      "job": {
+        "name": "core5-weighted-medium-profiles",
+        "unit": "tide-core5-weighted-medium-profiles-20261028.service",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-27T22:10:27.857148+00:00",
+        "finished": "2026-10-27T22:12:07.018182+00:00",
+        "systemd": {
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ActiveState": "inactive"
+        },
+        "status_sha256": "818a8b625a4ed594eb3689f0c98c17ab115bccd4ebc6230869f404ce5b2472a5",
+        "log_sha256": "31aa1e37695d1ee2b5af1e602417b744303490785202321076cba89255ada58f",
+        "queue": {
+          "elapsed_seconds": 98.52013831958175,
+          "job_id": "core5-weighted-medium-profiles-20261028",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 9,
+          "physical_ids": [
+            9
+          ],
+          "priority": 0,
+          "project": "graph-execution-foundation",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-27T22:12:07.002498+00:00"
+        }
+      },
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "configuration": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "implementation": "resident",
+      "placement": "native",
+      "complete_capture_cycle": true,
+      "trace_sha256": "1710cfb3d259f7727439402a1197c497423bf4327ee504ac137eead7a929c83e",
+      "result_sha256": "402b3df5cd71ff97878737adbfbf22e9d65267c20c6b7c6a3ee2e4a62f2c82b0",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "phases_inclusive_us": {
+        "tide.backward_finite": 2509743.36,
+        "tide.forward": 384644.41,
+        "tide.decode_roots": 335383.73,
+        "tide.detach_return_sync": 75677.19,
+        "tide.optimizer": 8644.58,
+        "tide.loss": 1541.33,
+        "tide.prepare": 686.46
+      },
+      "kernel_events": 72933,
+      "kernel_union_us": 1440217.25,
+      "top_kernel_duration_us": [
+        [
+          "tide_weighted_head_guard_0",
+          414311.56000000023
+        ],
+        [
+          "tide_weighted_head_reduce_0",
+          386762.56000000023
+        ],
+        [
+          "aclnnInplaceIndexCopy_ScatterUpdateAiCore_ScatterUpdate",
+          163636.5000000001
+        ],
+        [
+          "tide_weighted_row_accumulate_0",
+          76514.59999999996
+        ],
+        [
+          "aclnnIndexSelect_GatherV3AiCore_GatherV3",
+          66408.77999999985
+        ],
+        [
+          "aclnnInplaceIndexCopy_TransposeAiCore_Transpose",
+          28567.040000000077
+        ],
+        [
+          "tide_weighted_raw_apply_0",
+          24302.059999999998
+        ],
+        [
+          "tide_weighted_source_guard_0",
+          24171.799999999992
+        ],
+        [
+          "tide_weighted_window_prepare_0",
+          18672.41999999999
+        ],
+        [
+          "tide_weighted_rotary_apply_0",
+          14561.699999999997
+        ],
+        [
+          "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+          12458.459999999755
+        ],
+        [
+          "Transpose_9a632dc5b6be9e1b4215e3cf2b1aff0d_high_performance_13",
+          11524.040000000025
+        ]
+      ],
+      "top_host_duration_us": [
+        [
+          "ProfilerStep#0",
+          3323617.55
+        ],
+        [
+          "tide.backward_finite",
+          2509743.36
+        ],
+        [
+          "tide.forward",
+          384644.41
+        ],
+        [
+          "tide.decode_roots",
+          335383.73
+        ],
+        [
+          "aten::to",
+          110750.28999999943
+        ],
+        [
+          "aten::copy_",
+          102935.26000000017
+        ],
+        [
+          "aten::zeros",
+          94474.75999999995
+        ],
+        [
+          "aten::_to_copy",
+          93358.81000000001
+        ],
+        [
+          "aten::select",
+          84486.38000000031
+        ],
+        [
+          "aten::zero_",
+          80250.60000000012
+        ],
+        [
+          "aten::clone",
+          77915.96999999978
+        ],
+        [
+          "tide.detach_return_sync",
+          75677.19
+        ]
+      ],
+      "transfer_and_scalar_inclusive_us": {
+        "aten::_local_scalar_dense": 10453.070000000002,
+        "MEMCPY_ASYNC": 9519.960000000834
+      },
+      "observed_host_fallback_events": [],
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 3509723136,
+        "device_peak_allocated_bytes": 514849280,
+        "device_peak_reserved_bytes": 532676608
+      },
+      "duration_caveat": "inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution"
+    },
+    {
+      "job": {
+        "name": "core5-weighted-medium-profiles",
+        "unit": "tide-core5-weighted-medium-profiles-20261028.service",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-27T22:10:27.857148+00:00",
+        "finished": "2026-10-27T22:12:07.018182+00:00",
+        "systemd": {
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ActiveState": "inactive"
+        },
+        "status_sha256": "818a8b625a4ed594eb3689f0c98c17ab115bccd4ebc6230869f404ce5b2472a5",
+        "log_sha256": "31aa1e37695d1ee2b5af1e602417b744303490785202321076cba89255ada58f",
+        "queue": {
+          "elapsed_seconds": 98.52013831958175,
+          "job_id": "core5-weighted-medium-profiles-20261028",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 9,
+          "physical_ids": [
+            9
+          ],
+          "priority": 0,
+          "project": "graph-execution-foundation",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-27T22:12:07.002498+00:00"
+        }
+      },
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "configuration": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "implementation": "python",
+      "placement": "mixed-c",
+      "complete_capture_cycle": true,
+      "trace_sha256": "fec10fcbae5ac86a59afc56a5f1f4a793958f4e8db473d0fab1cfcbd271cb9b3",
+      "result_sha256": "6fc95503dd4f1dfd31c720e2a2359b89ca3707743a9675a3a1a39c5055c98bd8",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "phases_inclusive_us": {
+        "tide.forward": 1376473.29,
+        "tide.backward_finite": 1172764.4,
+        "tide.detach_return_sync": 229405.95,
+        "tide.optimizer": 5624.49,
+        "tide.loss": 3802.35,
+        "tide.prepare": 2526.95
+      },
+      "kernel_events": 55928,
+      "kernel_union_us": 187023.75,
+      "top_kernel_duration_us": [
+        [
+          "aclnnNonzeroV2_NonzeroAiCore_MemSet",
+          23862.551999999927
+        ],
+        [
+          "aclnnIndex_IndexAiCore_Index",
+          23529.879999999936
+        ],
+        [
+          "aclnnNonzeroV2_NonzeroAiCore_NonZero",
+          20811.000000000033
+        ],
+        [
+          "aclnnIndex_IndexAiCpu_Index",
+          12376.168000000001
+        ],
+        [
+          "aclnnIndexPutImpl_IndexPut_IndexPut",
+          10968.064000000004
+        ],
+        [
+          "aclnnIndex_IndexCheck_IndexCheck",
+          8429.992000000004
+        ],
+        [
+          "aclnnIndexPutImpl_IndexPutV2_IndexPutV2",
+          7946.304000000013
+        ],
+        [
+          "aclnnAdd_AddAiCore_Add",
+          6207.247999999911
+        ],
+        [
+          "aclnnStack_PackAiCore_Pack",
+          5788.112000000003
+        ],
+        [
+          "aclnnAdd_TransposeAiCore_Transpose",
+          5269.583999999999
+        ],
+        [
+          "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+          4820.69599999999
+        ],
+        [
+          "aclnnMul_MulAiCore_Mul",
+          4335.639999999982
+        ]
+      ],
+      "top_host_duration_us": [
+        [
+          "ProfilerStep#0",
+          2797582.8
+        ],
+        [
+          "tide.forward",
+          1376473.29
+        ],
+        [
+          "tide.backward_finite",
+          1172764.4
+        ],
+        [
+          "autograd::engine::evaluate_function: _QueryBackward",
+          776571.0000000005
+        ],
+        [
+          "_QueryBackward",
+          751385.9900000002
+        ],
+        [
+          "_Query",
+          607929.8300000001
+        ],
+        [
+          "aten::index",
+          436622.16000000015
+        ],
+        [
+          "autograd::engine::evaluate_function: IndexBackward0",
+          342518.2900000001
+        ],
+        [
+          "IndexBackward0",
+          332132.67000000033
+        ],
+        [
+          "aten::_index_put_impl_",
+          293986.26000000036
+        ],
+        [
+          "autograd::engine::evaluate_function: _StateBackward",
+          286778.63
+        ],
+        [
+          "_StateBackward",
+          270137.73000000004
+        ]
+      ],
+      "transfer_and_scalar_inclusive_us": {
+        "aten::_local_scalar_dense": 105172.2700000003,
+        "MEMCPY_ASYNC": 2825.8239999999414
+      },
+      "observed_host_fallback_events": [],
+      "memory": {
+        "process_lifetime_peak_rss_bytes": 3420676096,
+        "device_peak_allocated_bytes": 39074816,
+        "device_peak_reserved_bytes": 41943040
+      },
+      "duration_caveat": "inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution"
+    }
+  ],
+  "entry_checks": [
+    {
+      "job": {
+        "name": "core5-weighted-benchmark-cpu-entry",
+        "unit": "tide-core5-weighted-benchmark-cpu-entry-20261028.service",
+        "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-27T22:01:38.610980+00:00",
+        "finished": "2026-10-27T22:02:28.070583+00:00",
+        "systemd": {
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ActiveState": "inactive"
+        },
+        "status_sha256": "9ac771ec66cad066b8029b5da9c0fb7ac6eaf2b59c354996845ed18657b3d03e",
+        "log_sha256": "469b1c26ea78efbbb88a3c1e96e97f5f24ba6e00de7c951bea297ad0c596e04c"
+      },
+      "build_sha256": "6162680fe384c778d973be9281114f5547b964509bcdcf28905fa56dbc024a53",
+      "binary_sha256": "95ebf74330ec2392203cbbfd29a1102686d36865fefdee33790b522d64ed7d5f",
+      "loader_sha256": "d241b74e6eb1ff482504a4afb3172668106a0dd4b8af25f7c2cd8645da7164fd",
+      "help_sha256": "0cddb2717ec9edb9b7c2c6bceefd92a61eeb60d4d2e5144bd55da848b7d93722",
+      "cases": [
+        {
+          "name": "kv-prefill",
+          "result_sha256": "6ef8f29a0b646ffbce6d4c973e279b75820120aa92d886ab71af05b37667e5e1",
+          "fixture_sha256": "ceaa24094ead555c3c5ef5c5c894cfb1375cff95a96fd82865d72ca3ad5999ee"
+        },
+        {
+          "name": "ssd-streaming",
+          "result_sha256": "5a3a23d572310c184765f5f0d5cb7e12eb78396419e6316c2a2ed3e4785562bc",
+          "fixture_sha256": "8fbe03cbcea71aae4df67eff9a5773f55522273298324244d3728c1c27efe218"
+        },
+        {
+          "name": "python-native-kv",
+          "result_sha256": "e3b25b5dbec03c28be371d9ec8624dd00d1a4b2e233ba77b46c4726ec2744160",
+          "fixture_sha256": "ceaa24094ead555c3c5ef5c5c894cfb1375cff95a96fd82865d72ca3ad5999ee"
+        }
+      ],
+      "scope": "entry qualification only; not selected throughput samples"
+    },
+    {
+      "job": {
+        "name": "core5-weighted-benchmark-npu-entry",
+        "unit": "tide-core5-weighted-benchmark-npu-entry-20261028.service",
+        "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-27T22:17:45.317802+00:00",
+        "finished": "2026-10-27T22:18:54.577331+00:00",
+        "systemd": {
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ActiveState": "inactive"
+        },
+        "status_sha256": "05f6e800f469e7f21fac6eeed5293e250c48051102a31ecd7a8f6c09a57e92db",
+        "log_sha256": "a4a500e5a4b160864e497db5948eb516c524c896e1ab4ee537ce79ae1fa9ce20",
+        "queue": {
+          "elapsed_seconds": 17.97436824440956,
+          "job_id": "core5-weighted-benchmark-npu-entry-20261028",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 9,
+          "physical_ids": [
+            9
+          ],
+          "priority": 0,
+          "project": "graph-execution-foundation",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-27T22:18:54.562038+00:00"
+        }
+      },
+      "build_sha256": "c20b5725b68ab3f71727ff7ec25679402e0e7a4d91ccae826922b48f0e568c7a",
+      "binary_sha256": "0c45a68fb440c8872fc5b02892d24dccb53259e06fceaa9c6b70e25a9cc5d862",
+      "loader_sha256": "0eb583662ed1d38e1ff57c72375aaecfddeccf7ea1f277e4401933bfce92c3f5",
+      "help_sha256": "0cddb2717ec9edb9b7c2c6bceefd92a61eeb60d4d2e5144bd55da848b7d93722",
+      "cases": [
+        {
+          "name": "resident-kv",
+          "result_sha256": "047bedf2867666d8043ad36d14cee256c9dd7472496c3d0b981470e1bb8b16c1",
+          "fixture_sha256": "6a065dfafbcc0ac93dc4ed131055e13cd9b1acce0f12febc1b11ebda221d2b81"
+        }
+      ],
+      "scope": "entry qualification only; not selected throughput samples"
+    }
+  ],
+  "pdg_diagnosis": {
+    "job": {
+      "name": "core5-weighted-pdg-rounding-diagnose",
+      "unit": "tide-core5-weighted-pdg-rounding-diagnose-20261028.service",
+      "source": "ceae7bf3173cc3c85250ff6ed46a6470b77a6971",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T22:16:47.195056+00:00",
+      "finished": "2026-10-27T22:17:23.861341+00:00",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "status_sha256": "224f012b9a4296062e7e770778837d2328b50a353f688bf245fd94322c40280c",
+      "log_sha256": "868f8ec5eedcdd3c6de0da7eb45e8590992f9dff26f41ba5c460bedad4ab18bd"
+    },
+    "result_sha256": "868f8ec5eedcdd3c6de0da7eb45e8590992f9dff26f41ba5c460bedad4ab18bd",
+    "script_sha256": "e0f695c2a512973aa1c14f30338795bee13c0a16bd94fc5bd253aa7dbeb64108",
+    "cases": [
+      {
+        "dtype": "torch.float32",
+        "fixture_sha256": "9cfb40b0cc1c64a70088ee0e61ab76d5efc5e06ccaae8b45ef6f60227a736cd7",
+        "windows": [
+          {
+            "window": 0,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.pending[0].value: Tensor-likes are not close!\n\nMismatched elements: 1 / 33 (3.0%)\nGreatest absolute difference: 2.3245811462402344e-06 at index (10,) (up to 1e-06 allowed)\nGreatest relative difference: 3.993880091002211e-05 at index (10,) (up to 1e-05 allowed)"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.pending[0].value: Tensor-likes are not close!\n\nMismatched elements: 1 / 33 (3.0%)\nGreatest absolute difference: 2.3245811462402344e-06 at index (10,) (up to 1e-06 allowed)\nGreatest relative difference: 3.993880091002211e-05 at index (10,) (up to 1e-05 allowed)"
+              }
+            ]
+          },
+          {
+            "window": 1,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.pending[3].value: Tensor-likes are not close!\n\nMismatched elements: 1 / 33 (3.0%)\nGreatest absolute difference: 1.3113021850585938e-06 at index (30,) (up to 1e-06 allowed)\nGreatest relative difference: 7.629537140019238e-05 at index (30,) (up to 1e-05 allowed)"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.states[(2, 1)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1248 (0.1%)\nGreatest absolute difference: 1.1986121535301208e-06 at index (37, 6) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013527274131774902 at index (37, 6) (up to 1e-05 allowed)"
+              }
+            ]
+          },
+          {
+            "window": 2,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.pending[8].value: Tensor-likes are not close!\n\nMismatched elements: 1 / 33 (3.0%)\nGreatest absolute difference: 3.3974647521972656e-06 at index (1,) (up to 1e-06 allowed)\nGreatest relative difference: 4.1092276660492644e-05 at index (1,) (up to 1e-05 allowed)"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.states[(2, 1)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1280 (0.1%)\nGreatest absolute difference: 1.1986121535301208e-06 at index (18, 6) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013527274131774902 at index (18, 6) (up to 1e-05 allowed)"
+              }
+            ]
+          },
+          {
+            "window": 3,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.states[(0, 2)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1280 (0.1%)\nGreatest absolute difference: 1.1147931218147278e-06 at index (31, 23) (up to 1e-06 allowed)\nGreatest relative difference: 0.00010300623398507014 at index (31, 23) (up to 1e-05 allowed)"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "failed",
+                "error": "root.continuation.states[(2, 0)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 2 / 1280 (0.2%)\nGreatest absolute difference: 1.16787850856781e-06 at index (33, 13) (up to 1e-06 allowed)\nGreatest relative difference: 0.0018144826171919703 at index (35, 13) (up to 1e-05 allowed)"
+              }
+            ]
+          }
+        ],
+        "final_parameters": [
+          {
+            "schedule": "streaming",
+            "state": "passed"
+          },
+          {
+            "schedule": "prefill",
+            "state": "passed"
+          }
+        ]
+      },
+      {
+        "dtype": "torch.float64",
+        "fixture_sha256": "9cfb40b0cc1c64a70088ee0e61ab76d5efc5e06ccaae8b45ef6f60227a736cd7",
+        "windows": [
+          {
+            "window": 0,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "passed"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "passed"
+              }
+            ]
+          },
+          {
+            "window": 1,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "passed"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "passed"
+              }
+            ]
+          },
+          {
+            "window": 2,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "passed"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "passed"
+              }
+            ]
+          },
+          {
+            "window": 3,
+            "schedules": [
+              {
+                "schedule": "streaming",
+                "structure_exact": true,
+                "complete_records": "passed"
+              },
+              {
+                "schedule": "prefill",
+                "structure_exact": true,
+                "complete_records": "passed"
+              }
+            ]
+          }
+        ],
+        "final_parameters": [
+          {
+            "schedule": "streaming",
+            "state": "passed"
+          },
+          {
+            "schedule": "prefill",
+            "state": "passed"
+          }
+        ]
+      }
+    ],
+    "scope": "Independent scalar Python and native schedules; same FP32 initial values promoted for FP64 diagnosis. No changed input, tolerance or production algorithm."
+  },
+  "retained_profile_failure": {
+    "job": {
+      "name": "core5-weighted-benchmark-python-profile",
+      "unit": "tide-core5-weighted-benchmark-python-profile-20261028.service",
+      "source": "3516bef9fef8d1571af0082402ebef71d88d8c32",
+      "state": "failed",
+      "exit_code": 2,
+      "started": "2026-10-27T22:02:08.568860+00:00",
+      "finished": "2026-10-27T22:02:36.076856+00:00",
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "2",
+        "ActiveState": "failed"
+      },
+      "status_sha256": "a975e669f5e9e53ab752ec4a46b6b3cfa0dcd39b7b20c1641b9a397c210aafe6",
+      "log_sha256": "6b145bbf70f6f1910431a7b2dbe241f2d6081cd4a637c00dff9533219e859f46",
+      "queue": {
+        "elapsed_seconds": 26.849167063832283,
+        "job_id": "core5-weighted-benchmark-python-profile-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 2,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-10-27T22:02:36.060436+00:00"
+      }
+    },
+    "reason": "NPU initialization created temporary kernel_meta/ in the frozen cwd before the source guard; no measurement was performed.",
+    "diagnostic_log_sha256": "408d25d2ae3c2208cc8e4e994dcf908bb164d272e963e6d171bb4b8f14fcc85a"
+  },
+  "limits": [
+    "One process/configuration and evolving windows; no statistical stability or universal winner claim.",
+    "CPU measurements overlapped the separate NPU correctness qualification; other users were not excluded. Host load and physical mappings are recorded.",
+    "FP32 PDG strict complete-record failures remain failures; their times are ineligible for equivalent-speed claims.",
+    "Python2.12/CANN9.1 and standalone SDK2.10/CANN9.0 are different complete execution choices, not an isolated language-only comparison.",
+    "Small resident profile has a vendor capture-cycle warning; medium profiles explicitly complete the cycle. Inclusive/overlapping durations are not additive.",
+    "All timed cases are FP32, single-device, widths4/32 and full-support sending; no large-model, sparse-routing, cross-card, FP16 throughput or CUDA-hardware claim.",
+    "No isolated runtime/loader cold-start timing or standalone allocator peak; construction/warmup and whole-process elapsed are separately reported."
+  ]
+}

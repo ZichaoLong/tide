@@ -1,5 +1,8 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[公共性能消费者](weighted-performance.md)只使用静态参数/输入和候选实际结果，
+[有限运行证据](evidence/core5-weighted-performance-20261028.md)区分完整记录通过、严格拒绝、profile和吞吐。
+
 [Weighted公共训练](resident-weighted-training.md)定义完整字段根、跨窗token、参数发布、四分区预算与独立checkpoint绑定；运行资格单列。
 
 其FP16存储/FP32算术、伴随与master边界由同页规定；独立精度参考和单节点KV手算根
