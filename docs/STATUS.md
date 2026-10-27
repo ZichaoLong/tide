@@ -21,15 +21,12 @@ NPU保留开发treee741c50847de858517264e9546eb503e20d36cb4原manifest并核验�
 
 ## 当前工作与下一动作
 
-主工作区未提交KV Upd草稿：tools/device_online/weighted_kv_update{.h,.cpp,_internal.h,_vjp.cpp}，
-ascendc/weighted_kv_update_math.h及tide_weighted_kv_{prepare,roots,merge}.cpp。
-它们组合base+U@V、独立summary投影与原始时间raw更新；尚未编译验证，未宣称通过。
-接着补CMake/registry、独立完整公式与字段根/参数VJP检查、文档对应；冻结开发测试后提交实现，
-再固定提交资格和独立证据。随后继续数值Mem/Describe及四循环记忆、完整在线图生命周期。
-
-准确入口：python scripts/status.py；rg -n weighted-projection tools/device_online/CMakeLists.txt scripts/device_component_checks.py。
-开发冻结使用.local/freeze-resident.py，所有reader终止后才重写artifacts/worktrees/core5-resident。
-当前该worktree固定2af401d。不得把主工作区草稿混入已完成projection的证据身份。
+KV Upd开发tree28f8ee2ef2fe9201eea8f80a442849c352f074cf通过：CPU24，NPU72行重放/三bank、五个独立字段根、
+完整私有输入/旧state及base/U/V/summary VJP、None/零、保存版本、超大int64及失败不提交。
+tide-core5-resident-kv-update-dev-20261027.service inactive/exit0；原记录位于artifacts/jobs/core5-resident-kv-update-dev。
+实现/对应见resident-weighted-kv-update.md。提交本实现后，固定提交运行NPU资格及CUDA三架构构建，再提交证据。
+然后继续KV sum/qry读取、Describe/Full、循环记忆与完整图生命周期，不在阶段提交后暂停。
+投影证据abd1098已推送。冻结worktree无活动reader。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。
