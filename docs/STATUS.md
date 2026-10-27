@@ -4,7 +4,7 @@
 用户授权持续实施、私有环境、有限实验、分阶段提交及正常推送；无子代理，参考仓库只读。
 总体未完成，阶段提交后继续。[ROADMAP](ROADMAP.md)为唯一待办，[execution-flows](execution-flows.md)为持续契约。
 已推送343429d完整FP32公共训练，以及2097dc9/9d547ea原始状态FP16及合法次正规数见证修正。
-本提交新增FP16共享投影/固定时间卷积：统一FP16存储，明确FP32算术、保存值与伴随，最终一次舍入，
+661a92e新增FP16共享投影/固定时间卷积：统一FP16存储，明确FP32算术、保存值与伴随，最终一次舍入，
 存储溢出拒绝、underflow连接保留；契约见resident-weighted-projection/convolution。尚未编译/设备资格。
 CPU相关32项通过/2.92秒（projection_norm、convolution、raw_update）；diff --check通过。
 
@@ -20,16 +20,15 @@ CPU相关32项通过/2.92秒（projection_norm、convolution、raw_update）；d
 | --- | --- | --- | --- |
 | NPU standalone | tide-core5-weighted-training-npu-qualify-20261028.service | artifacts/worktrees/core5-sdk / build/weighted-flow-dev | passed，inactive/success/0 |
 | CUDA | tide-core5-weighted-training-cuda-qualify-20261028.service | artifacts/worktrees/core5-cuda / build/weighted-flow-cuda-dev | passed，inactive/success/0；无GPU |
-| Python-owned NPU | tide-core5-weighted-training-python-qualify-20261028.service | artifacts/worktrees/core5-device / build/weighted-training-python-qualify | running，构建完成，实机测试中；物理9→npu:0 |
+| Python-owned NPU | tide-core5-weighted-training-python-qualify-20261028.service | artifacts/worktrees/core5-device / build/weighted-training-python-qualify | passed，inactive/success/0；物理9→npu:0 |
 
 output均为`artifacts/jobs/core5-weighted-training-{npu,cuda,python}-qualify/`，task.log/status.json。
 launchers `.local/core5-weighted-training-{npu,cuda,python}-qualify{,-workload}.sh`；NPU另有-device.sh。
 全部1800秒/2worker/BLAS1/background.slice/Nice10；NPU queue180秒/NPU1。不得改活动checkout。
 NPU范围copy/saved-window/retained/training/flow/config、两独立安装消费者、CPU28项；
-Python训练+flow预期33项；CUDA同目标构建/loader/help，不含真机。
-下一步：终态后运行 `PYTHONDONTWRITEBYTECODE=1 python .local/record-weighted-training-evidence.py`。
-脚本复核源码、core、binary、loader、消费者摘要、systemd、CPU28及Python33项，生成小型JSON。
-再写Markdown报告、更新证据索引/ROADMAP/契约，只提交该证据及相关文档，不混入新实现。
+Python训练+flow实际28项（10+18），无skip；原预估33错误，源码完整收集28；CUDA同目标构建/loader/help，不含真机。
+已运行`.local/record-weighted-training-evidence.py`，复核源码/core/binary/loader/消费者/systemd与CPU/Python28项。
+证据见`docs/evidence/core5-resident-weighted-training-20261028.{md,json}`，本次仅提交证据及相关文档。
 
 ## 原始状态FP16固定资格：9d547ea
 
@@ -37,9 +36,10 @@ Python训练+flow预期33项；CUDA同目标构建/loader/help，不含真机。
 units `tide-core5-raw-half-npu-qualify2-20261028.service`、`tide-core5-raw-half-cuda-qualify3-20261028.service`。
 outputs `artifacts/jobs/core5-raw-half-{npu-qualify2,cuda-qualify3}/`；build/npu2、build/cuda3。
 launchers `.local/core5-raw-half-{npu-qualify2,cuda-qualify3}{,-workload}.sh`；官方build/verify脚本。
-两任务已running，slice/Transient核验；900秒/2worker/BLAS1/Nice10/background.slice，queue180秒。
+两任务已终态：CUDA passed；NPU failed，FP32完整通过后，FP16在入口被默认RuntimeOptions门禁拒绝（NPU requires float32）。
+修正需显式args.allow_npu_float16=true；尚未验证该FP16数值。预算900秒/2worker/BLAS1/Nice10/background.slice，queue180秒。
 NPU范围weighted-raw两dtype/每dtype五schema40行、独立FP32字段VJP、位提交/拒绝、16项CPU及三dtype codec；
-CUDA三架构build/loader/help及CPU codec。尚无设备资格结论。core使用已核验匹配源码的SDK/CUDA已有build。
+CUDA三架构build/loader/help及CPU codec通过，尚待汇总摘要。core使用已核验匹配源码的SDK/CUDA已有build。
 
 保留2097dc9失败：npu-qualify构建通过，CPU codec因新增测试将非零次正规数放入必须为零的value字段而拒绝；
 9d547ea将见证改到合法keys/H字段。cuda-qualify漏私有ninja PATH，cuda-qualify2误改core路径，均未构建。
@@ -47,7 +47,11 @@ CUDA三架构build/loader/help及CPU codec。尚无设备资格结论。core使�
 
 ## 接下来
 
-当前投影/卷积实现提交后，冻结到新`artifacts/worktrees/core5-half-math`，不修改活动raw或training源码。
+投影/卷积实现661a92e已冻结到新`artifacts/worktrees/core5-half-math`，跟踪文件只读，不修改活动raw或training源码。
+units `tide-core5-half-math-{npu,cuda}-qualify-20261028.service`；output `artifacts/jobs/core5-half-math-{npu,cuda}-qualify/`。
+launchers `.local/core5-half-math-{npu,cuda}-qualify{,-workload}.sh`；task.log/status.json为日志状态。
+NPU已主动停止并保留cancelled/143：同一入口未启用half，继续会在数值前拒绝；CUDA仍构建中。
+主区未提交：三个check入口显式启用NPU FP16。待CUDA终态后固定这些修正，重新资格raw/projection/convolution。
 用新build/npu、build/cuda和独立900秒background服务，官方`build_device_control.py --checks weighted-projection weighted-convolution`
 及`verify_device_control.py`检查两dtype；CPU固定32项。CUDA仅构建/loader/help，不冒充真机。
 两组件VJP使用实际量化输入上的独立FP32公式；原始时间和int64保持，反向拒绝FP16根。

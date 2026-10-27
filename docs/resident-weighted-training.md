@@ -1,7 +1,7 @@
 # Weighted 公共训练 owner
 
-本页是正在集成的公共层契约；session、字段视图、参数辅助及Python适配已接入，尚未取得完整资格。
-实际完成与运行状态见STATUS/ROADMAP，不能由本页推断训练交付完成。
+本页定义公共层契约；单设备FP32的session、完整字段视图、共享参数、两优化器与精确恢复
+已取得[343429d固定资格](evidence/core5-resident-weighted-training-20261028.md)。FP16、peer和性能分别验收。
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。
 
@@ -40,9 +40,9 @@ Raw字段保持自身shape，ragged字段加capacity轴。metadata中的`node.v.
 布局，即使某个owner没有梯度也保留其槽，None由连接位表示。此布局不允许参数值相等就合并身份。
 所有实际使用的role bank都从同一master发布，私有状态不参与参数共享。
 
-公共token、step/accumulate/detach、SGD/AdamW发布与checkpoint已接入，尚待完整运行资格。
+公共token、step/accumulate/detach、SGD/AdamW发布与checkpoint已接入；FP32资格见上列证据。
 保存的局部/窗口数学与独立锚点沿[窗口](resident-weighted-window-vjp.md)和
-[保留切面](resident-weighted-retained.md)追溯；公共完整返回/训练/恢复需要另行资格。
+[保留切面](resident-weighted-retained.md)追溯；公共完整返回/训练/恢复由上列独立资格覆盖。
 
 公共Python入口为`WeightedResidentTraining`，原生为`tide::device_online::WeightedTrainingSession`，
 安装目标`tide::weighted_training`。所有方法要求no-grad；任务loss在独立autograd上下文计算。
