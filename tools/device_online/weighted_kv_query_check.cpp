@@ -12,10 +12,10 @@ void close(const Tensor& a,const Tensor& b){require(a.sizes()==b.sizes(),"KV qry
 Tensor values(at::IntArrayRef shape,float shift){int64_t n=1;for(auto x:shape)n*=x;return (at::arange(n,at::kFloat)*.13+shift).sin().reshape(shape)*.2;}
 Tensor& field(State& s,const std::string& name){return name=="value"?s.value:s.slots.at(name);}
 std::vector<Tensor> roles(const WeightedKVQueryParameters& w){return {w.query,w.key,w.value};}
-std::vector<State> fixture(const WeightedRawLayout& l){
+std::vector<State> fixture(const WeightedRawLayout& l,at::ScalarType dtype){
   std::vector<std::vector<int64_t>> stamps{{},{clock,clock+2},{0,2},{last-4,last-2},{0},{}};std::vector<State> states;
   for(int64_t r=0;r<R;++r){State s;s.last_time=stamps[r].empty()?-1:stamps[r].back();s.observations=stamps[r].size();s.slots["times"]=at::tensor(stamps[r],at::kLong);
-    for(const auto& part:l.fields()){auto shape=part.shape;if(part.ragged)shape.insert(shape.begin(),stamps[r].size());auto x=values(shape,.1+r);
+    for(const auto& part:l.fields()){auto shape=part.shape;if(part.ragged)shape.insert(shape.begin(),stamps[r].size());auto x=values(shape,.1+r).to(dtype);
       if(part.name=="value")s.value=at::zeros_like(x);else s.slots[part.name]=part.name=="weights"?x.abs()+.1:x;}
     if(r==4)s.slots["weights"].zero_();states.push_back(s);}return states;
 }
@@ -23,7 +23,7 @@ struct Formula {std::vector<Tensor> leaves;std::vector<std::array<Tensor,4>> out
 Formula reference(const weighted::KVConfig& c,const WeightedRawLayout& l,const std::vector<State>& old,const Tensor& times,
     const Tensor& input,const Tensor& owners,const Tensor& present,const WeightedKVQueryParameters& w){
   at::AutoGradMode enabled(true);Formula f;std::vector<State> states=old;std::vector<std::vector<Tensor>> params(3);
-  for(int64_t r=0;r<R;++r)for(const auto& part:l.fields()){auto x=field(states[r],part.name).clone().set_requires_grad(true);field(states[r],part.name)=x;f.leaves.push_back(x);}
+  for(int64_t r=0;r<R;++r)for(const auto& part:l.fields()){auto x=field(states[r],part.name).to(at::kFloat).clone().set_requires_grad(true);field(states[r],part.name)=x;f.leaves.push_back(x);}
   for(int64_t r=0;r<R;++r)f.leaves.push_back(input[r].clone().set_requires_grad(true));
   auto parameters=roles(w);for(int role=0;role<3;++role)for(int bank=0;bank<B;++bank){auto x=parameters[role][bank].clone().set_requires_grad(true);params[role].push_back(x);f.leaves.push_back(x);}
   for(int64_t r=0;r<R;++r){std::array<Tensor,4> output{at::zeros({2},at::kFloat),at::zeros({2},at::kFloat),at::zeros({},at::kFloat),at::zeros({},at::kFloat)};
@@ -57,9 +57,9 @@ void compare(const WeightedRawLayout& l,const Formula& f,const Tensor& bars,cons
   for(int role=0;role<3;++role)for(int bank=0;bank<B;++bank){const auto& e=expected[R*6+role*B+bank];require(flags[role][bank].item<bool>()==e.defined(),"KV qry parameter role None/zero differs");
     if(e.defined())close(gradients[role][bank],e);else require(gradients[role][bank].cpu().eq(0).all().item<bool>(),"absent qry parameter derivative nonzero");}
 }
-void check(at::Device device,int64_t horizon){
+void check(at::Device device,int64_t horizon,at::ScalarType dtype){
   at::NoGradGuard ng;weighted::KVConfig c;c.width=3;c.summary_width=2;c.memory_read="qry";c.read_frequencies={.13};c.position_scale=7;c.epsilon=.13;c.beta_short=.2;c.window=horizon;
-  WeightedRawLayout l(c,C);auto states=fixture(l);auto source=encode_weighted_raw_state(l,states),raw=copy_weighted_raw_state(source,device);auto opt=raw.floating.options();
+  WeightedRawLayout l(c,C);auto states=fixture(l,dtype);auto source=encode_weighted_raw_state(l,states),raw=copy_weighted_raw_state(source,device);auto opt=raw.floating.options().dtype(at::kFloat);
   auto input=at::zeros({R,3},opt),times=at::zeros({R},opt.dtype(at::kLong)),owners=at::zeros_like(times),present=at::zeros({R},opt.dtype(at::kBool));
   auto bars=at::zeros({R,2,2},opt),stats=at::zeros({R,2},opt),roots=at::zeros({R,4},present.options()),error=at::zeros({1},opt.dtype(at::kInt));
   WeightedKVQueryParameters w{at::zeros({B,2,3},opt),at::zeros({B,2,3},opt),at::zeros({B,2,3},opt)};
@@ -86,7 +86,7 @@ void check(at::Device device,int64_t horizon){
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("KV qry requires explicit accelerator/FP32");
-    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);for(int64_t horizon:{0,5})check(device,horizon);
-    std::cout<<"weighted-kv-query: passed horizons=2 replay_rows=120 independent_roots=4 full_input_parameter_raw_vjp=true saved_versions=true\n";return 0;
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("KV qry requires explicit accelerator and FP32/FP16 raw storage");
+    args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);for(int64_t horizon:{0,5})check(device,horizon,args.dtype);
+    std::cout<<"weighted-kv-query: passed horizons=2 replay_rows=120 independent_roots=4 full_input_parameter_raw_vjp=true saved_versions=true read_dtype=float32 adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

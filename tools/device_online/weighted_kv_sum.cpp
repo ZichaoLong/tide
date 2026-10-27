@@ -14,10 +14,11 @@ WeightedKVSumTape append_weighted_kv_sum(DeviceProgram& p,const weighted::KVConf
   c.validate();if(c.memory_read!="sum"||!raw.floating.defined()||raw.floating.dim()!=2||!raw.integer.defined()||raw.integer.dim()!=2||raw.integer.size(1)<=4)
     throw std::invalid_argument("KV sum Mem requires sum configuration and typed raw cache");
   const auto rows=raw.floating.size(0),capacity=raw.integer.size(1)-4;const auto device=raw.floating.device();
-  budget(rows*(128.L*capacity*(static_cast<long double>(c.width)+c.summary_width+1)+256),available);
+  budget(rows*(128.L*capacity*(static_cast<long double>(c.width)+c.summary_width+1)+256)
+    +(raw.floating.scalar_type()==at::kHalf?4.L*raw.floating.numel():0),available);
   auto window=append_weighted_kv_window(p,c,raw,time,present,error,available);
   std::vector<int64_t> ids;for(int64_t r=0;r<rows;++r){ids.push_back(r);ids.push_back(r);}
-  auto indices=at::tensor(ids,at::kLong).to(device),values=at::zeros({2*rows,capacity,c.summary_width},raw.floating.options());
+  auto indices=at::tensor(ids,at::kLong).to(device),values=at::zeros({2*rows,capacity,c.summary_width},window.summaries.options());
   auto lengths=at::zeros({2*rows},raw.integer.options()),selected=at::zeros({2*rows},present.options());
   p.index_select(window.summaries,0,indices,values);p.index_select(window.lengths,0,indices,lengths);p.index_select(window.present,0,indices,selected);
   auto pool=append_weighted_pool(p,window.weights.reshape({2*rows,capacity}),values,{},lengths,selected,error,available);

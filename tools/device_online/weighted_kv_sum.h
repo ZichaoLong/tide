@@ -8,6 +8,7 @@ struct WeightedKVSumTape {
   at::Tensor memory,total; // [R,2,ds], [R,2]: short then long.
 };
 // KV §3.1/3.2/3.4, sum mode. Caller explicitly chooses old/new/bound initial raw.
+// FP32/FP16 raw storage yields FP32 memory/total and FP32 first-order adjoints.
 WeightedKVSumTape append_weighted_kv_sum(DeviceProgram&,const weighted::KVConfig&,
   const WeightedRawState&,const at::Tensor& times,const at::Tensor& present,const at::Tensor& error,
   int64_t budget=256*1024*1024);

@@ -5,6 +5,10 @@
 没有将它称为 qry、Describe 或 Full；这些函数按各自契约继续接入。
 
 `append_weighted_kv_window` 接 typed raw KV 状态、int64 times[R]、bool present[R]。
+raw浮点存储可显式选择FP32或FP16；FP16经设备Cast精确拓宽后读取。窗口K/V/p、
+两通道权重、衰减、sum的memory/total及所有伴随均保持FP32；raw存储精度不决定Read精度。
+没有把低于半精度下限的正FP32证据再舍入成零。Cast声明一阶identity VJP，反向拒绝FP16根，
+不声称等于半精度叶梯度的逐步累加。拓宽缓冲计入窗口与组合scratch预算。
 窗口先按 int64 原始写入时间判定 0<=theta-xi<T，再打包实际 K/V/p、两通道权重及长度。
 保留原 raw tuple，不触发过期条目清理。保存int64 ages/mapping与实际衰减系数；
 没有压紧事件后重编号、浮点时间戳或接收次数代替逻辑时间。
@@ -25,13 +29,14 @@ mapping、长度、原始状态与梯度连接均保留；不以数值零删除�
 窗口VJP还提供K/V/p及两个权重通道各自的根，供后续qry/Full组合复用。
 所有反向仅用保存的实际mapping/decay/数值，不读取被修改的原状态，也不调用参考补写。
 
-FP32局部常驻域，设备窗口错误31、窗口VJP错误32，底层归约错误及保守组合预算单独保留。
+FP32数值/FP32或FP16 raw存储的局部常驻域，设备窗口错误31、窗口VJP错误32，底层归约错误及保守组合预算单独保留。
 失败结果不可采用为live状态或checkpoint。本层读取不会更新原raw owner。
 
 | 固定定义与边界 | 独立验证入口 |
 | --- | --- |
 | int64窗口、短长权重、raw字段伴随 | `test_resident_weighted_kv_window.py`：独立时间列表/公式/autograd，>2^54/MAX、未来/过期、衰减下溢与连接 |
-| 完整sum四元组、四个根和所有raw字段 | `weighted_kv_sum_check.cpp`：独立逐行公式/autograd，有限/无限窗口、120行重放、空/全零快照 |
+| 完整sum四元组、四个根和所有raw字段 | `weighted_kv_sum_check.cpp`：每raw dtype独立逐行FP32公式/autograd，使用实际量化raw；有限/无限窗口、120行重放、空/全零快照 |
+| raw精度与Read精度分离 | 同check最小half次正规K/V/权重的精确拓宽、低于half下限的正FP32短期证据、精确int64 age及独立统计量根 |
 | 保存版本与拒绝 | 同check修改原始raw、时间和存在标记后再反向，非法raw拒绝和scratch预算 |
 | 归约数值和clamp边界 | `test_resident_weighted_pool.py`；sum/Attention身份独立 |
 
@@ -39,3 +44,4 @@ FP32局部常驻域，设备窗口错误31、窗口VJP错误32，底层归约错
 CPU helper、实际NPU与CUDA构建/GPU实机分别记录；局部Mem不认证完整图或retained训练。
 
 固定源码资格见[fea6fa7运行证据](evidence/core5-resident-kv-sum-20261027.md)。
+新增FP16 raw读取开发中；完整FP16图、Upd和训练须另行验收。

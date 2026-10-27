@@ -11,7 +11,8 @@ WeightedKVQueryTape append_weighted_kv_query(DeviceProgram& p,const weighted::KV
   const auto device=raw.floating.device();const auto rows=raw.floating.size(0),capacity=raw.integer.size(1)-4,d=c.width,ds=c.summary_width,banks=w.query.size(0);
   check(input,device,at::kFloat,{rows,d});check(owners,device,at::kLong,{rows});
   for(const auto& x:{w.query,w.key,w.value})check(x,device,at::kFloat,{banks,ds,d});
-  budget(rows*(256.L*capacity*(static_cast<long double>(d)*ds+d+ds+1)+256),available);
+  budget(rows*(256.L*capacity*(static_cast<long double>(d)*ds+d+ds+1)+256)
+    +(raw.floating.scalar_type()==at::kHalf?4.L*raw.floating.numel():0),available);
   auto window=append_weighted_kv_window(p,c,raw,time,present,error,available);
   auto clean=at::zeros_like(input),query_ids=at::zeros_like(owners),entry_ids=at::zeros({rows*capacity},owners.options());
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_query_plan)(1,stream,

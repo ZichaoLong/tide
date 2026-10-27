@@ -18,6 +18,8 @@ struct WeightedKVQueryGradient {
   at::Tensor query_connected,key_connected,value_connected;
 };
 // KV §3.3/3.4: current normalized query, separate K/V projections and read RoPE.
+// Raw storage may be FP32/FP16. Read input/parameters, numerical outputs and
+// all adjoints remain explicitly FP32, independently of raw state storage.
 WeightedKVQueryTape append_weighted_kv_query(DeviceProgram&,const weighted::KVConfig&,const WeightedRawState&,
   const at::Tensor& time,const at::Tensor& input,const at::Tensor& owners,const at::Tensor& present,
   const WeightedKVQueryParameters&,const at::Tensor& error,int64_t budget=256*1024*1024);
