@@ -12,7 +12,8 @@
 完整参数梯度和与共同提交保持一个optimizer边界；单样本跨卡节点切分未由此接口实现。
 
 [单样本节点放置](resident-weighted-placement.md)另行实现完整纤维请求、全区域选择与共同提交；
-当前新前向/精确恢复待资格，放置后的VJP和训练接入继续实施。
+前向/精确恢复已有[固定源码资格](evidence/core5-weighted-node-placement-20261028.md)。
+放置后的窗口VJP、公共训练和optimizer发布已实现，独立资格状态见[STATUS](STATUS.md)。
 
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；开发/资格状态另记，公共训练owner继续。
 

@@ -4,8 +4,8 @@
 指定一个同后端、显式逻辑设备；空C++列表或Python的None保持全部节点在coordinator。
 设备可重复、可以没有节点放在coordinator；区域、队列、history与完整返回journal仍由
 coordinator拥有。这是同一图/样本内的物理放置，和[独立样本副本](resident-weighted-peers.md)不同。
-前向/精确续接资格与实现身份由STATUS链接的报告分别记录。放置后的retained VJP已接入实现、
-尚待固定源码资格；公共训练/optimizer发布已接入草稿，独立资格待验。
+前向/精确续接已有[固定源码资格](evidence/core5-weighted-node-placement-20261028.md)。
+放置后的retained VJP与公共训练/optimizer发布已实现，独立固定源码资格状态见[STATUS](STATUS.md)。
 
 `weighted_flow_peers.cpp::WeightedFlowPeers`为每个远端设备建立一个服务组。
 节点实际参数bank、完整原始状态、Upd/Read/Full及局部数值tape在指定owner上。

@@ -2,8 +2,9 @@
 
 本分支是 20-tide 训练、推理实验的公共图执行与等价性验证基座。
 实验项目拥有数据、模型头、loss 和训练配方；本库提供图、局部程序、执行策略、
-状态续接、声明的一阶反向与可独立比较的实现。当前数学依据固定为 **tide-core-5**（`0770593`）；带权局部实现正在分阶段扩展，
-已完成范围与证据见 STATUS/ROADMAP，旧资格不认证新功能。
+状态续接、声明的一阶反向与可独立比较的实现。当前数学依据固定为 **tide-core-5**（`0770593`）。
+已实现一般图与端口、五种带权记忆、正式发送与评分、在线批量执行和训练续接；
+各后端的固定源码资格及剩余限制见 [能力范围](docs/execution-capabilities.md)，当前任务见 STATUS/ROADMAP。
 
 ## 开始阅读
 
@@ -16,7 +17,7 @@
 | 源码分层和模块导航 | [架构](docs/architecture.md) |
 | 从干净源码开始构建、检查和开发 | [开发入口](docs/development.md) |
 | 作为 Python/LibTorch 依赖调用 | [公共库](docs/library.md)、[安装客户端](examples/consumer/README.md) |
-| core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
+| core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[节点放置](docs/resident-weighted-placement.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
 | CPU/CUDA/NPU 与常驻后端 | [加速器](docs/accelerators.md)、[设备控制与 GPU 验证](docs/device-control.md)、[常驻库](docs/resident-library.md) |
 | 旧实验结论及产物保留规则 | [历史证据](docs/evidence/README.md)、[产物退役](docs/artifact-retention.md) |
 

@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游`0770593838a37c790a568226930567ed60f99b83`；授权分支`graph-execution-foundation`。
-f84a007窗口反向实现已提交推送；本次提交前向独立证据，窗口反向资格仍在运行。
+37922eb公共训练放置实现已提交并推送；8b2a340前向证据已推送，f84a007窗口反向资格仍在运行。
 用户授权持续实施、私有环境、有限实验、提交与正常推送；不使用子代理。总体goal active，未完成。
 唯一待办[ROADMAP](ROADMAP.md)，持续契约[execution-flows](execution-flows.md)，参考仓库/公共工具链只读。
 
@@ -35,7 +35,8 @@ resident约2.60–2.71s。完整调用含调度、packing、返回、VJP、optim
 源码`f84a00718188b1a19fe5e7da958a816147f629fc`；只读冻结
 `artifacts/worktrees/core5-weighted-node-window`，build/{npu,cuda}独立，不编辑活动输入。
 jobs `core5-weighted-node-window-{npu,cuda}-qualify`，units `tide-JOB-20261028.service`。
-两项已确认live在独立background.slice/cgroup；当前running，尚无终态结论。
+两项已确认在独立background.slice/cgroup。CUDA已passed/exit0并终止，待完成证据审阅；
+NPU仍running，不能声明窗口设备资格通过。
 launcher `.local/JOB.sh`及`JOB-workload.sh`；SDK设备入口`.local/run-weighted-node-window.py`。
 记录`artifacts/jobs/JOB/{status.json,task.log}`；SDK另有checks/result.json与single-window.json。
 
@@ -66,13 +67,19 @@ launcher `.local/JOB.sh`和`JOB-workload.sh`；记录`artifacts/jobs/JOB/{status
 SDKchecks/result.json，Python tests.xml，CUDA只有build manifest/loader/help。
 构建1500秒/2worker，NPU queue180秒；SDK设备3600秒、Python1800秒，整job5340秒/3540秒，
 unit5400秒/3600秒；CUDA整job1560秒/unit1620秒。background.slice/Nice10/ATen及BLAS1。
-目前尚未提交这些新服务，不称设备资格通过。f84a007两任务继续独立运行，不编辑其输入。
+三个服务已提交，重入核对仍为active/running，源码37922eb8ccd79f792042bf2aad308fd915f0f432；不称设备资格通过。
+f84a007 CUDA已终态passed/exit0、NPU仍active/running；五个服务各自位于background.slice，不编辑其输入。
 
 接着执行：
-1. 提交/推送训练实现，创建只读冻结checkout，提交上述三个独立服务并核对live cgroup/status。
+1. 审阅五个已提交服务的持久记录与真实终态；不要重复提交。
 2. 审阅f84a007窗口反向及新训练任务终态；必要新问题保留反例、在主工作树修复，不改活动输入。
 3. 分别记录固定源码反向/训练证据，Python和standalone、FP32/FP16、CUDA构建/真机分列。
 4. 最终公共接口/能力矩阵/数学追溯审计；CUDA真机独立待验，不阻塞本机工作。
+
+本次文档审计修订README、architecture、execution-capabilities、module-extension-plan、semantic-map、
+resident-weighted-placement、证据索引及单一portability契约，明确legacy/core-5范围与分层证据，
+补齐当前aarch64证据与精确同栈恢复边界。JSON schema、链接和diff检查通过；不改活动源码。
+此文档提交之后继续审阅四个运行任务，未将CUDA构建等同真机验证。
 
 ## 环境和保留限制
 
