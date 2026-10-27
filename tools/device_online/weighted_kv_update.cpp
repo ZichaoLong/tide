@@ -10,12 +10,20 @@ WeightedKVUpdateTape append_weighted_kv_update(DeviceProgram& p,const weighted::
   WeightedRawLayout l(c,old.integer.size(1)-4);validate_weighted_raw_buffers(l,old);const auto device=old.floating.device();
   if(device.type()!=resident_device_type)throw std::invalid_argument("resident KV update requires explicit accelerator");validate_kernel_device(device);
   const auto rows=old.floating.size(0),banks=w.base.size(0),d=c.width,ds=c.summary_width,rank=c.adapter_rank;
-  check(old.floating,device,at::kFloat,{rows,l.floating_width()});check(h,device,at::kFloat,{rows,d+1});
+  if(old.floating.scalar_type()!=at::kFloat&&old.floating.scalar_type()!=at::kHalf)throw std::invalid_argument("KV update raw storage must be FP32/FP16");
+  check(old.floating,device,old.floating.scalar_type(),{rows,l.floating_width()});check(h,device,at::kFloat,{rows,d+1});
   check(time,device,at::kLong,{rows});check(owners,device,at::kLong,{rows});check(present,device,at::kBool,{rows});check(error,device,at::kInt,{1});
   check(w.base,device,at::kFloat,{banks,2*d,d});check(w.left,device,at::kFloat,{banks,2*d,rank});
   check(w.right,device,at::kFloat,{banks,rank,d});check(w.summary,device,at::kFloat,{banks,ds,d});
   // Conservative complete composition bound, including child tapes/guards.
-  budget(rows*(20.L*l.floating_width()+32.L*l.integer_width()+100.L*(d*static_cast<long double>(d)+rank*static_cast<long double>(d)+ds*static_cast<long double>(d))+64.L*(d+ds)+400)+64.L*(d+ds),available);
+  const long double base=rows*(20.L*l.floating_width()+32.L*l.integer_width()+100.L*(d*static_cast<long double>(d)+rank*static_cast<long double>(d)+ds*static_cast<long double>(d))+64.L*(d+ds)+400)+64.L*(d+ds);
+  if(old.floating.scalar_type()==at::kHalf){
+    const long double extra=rows*(16.L*l.floating_width()+24.L*l.integer_width()+16.L*std::max<int64_t>(1,l.capacity())+32)+64.L*l.fields().size();
+    budget(base+extra,available);auto values=at::empty(old.floating.sizes(),old.floating.options().dtype(at::kFloat));p.cast(old.floating,values);
+    auto t=append_weighted_kv_update(p,c,{values,old.integer},h,time,owners,present,w,error,available-static_cast<int64_t>(extra));
+    t.raw.result=append_weighted_raw_half_store(p,l,t.raw.result,error,static_cast<int64_t>(extra)-4*values.numel());return t;
+  }
+  budget(base,available);
   auto u=at::zeros({rows,d},h.options()),mass=at::zeros({rows},h.options()),positive=at::zeros_like(present);
   auto ids=at::zeros_like(owners),indices=at::zeros_like(owners),row_ids=at::zeros_like(owners);
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_kv_prepare)(1,stream,

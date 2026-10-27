@@ -16,6 +16,11 @@ void error_buffer(const at::Tensor& error,at::Device device){
   if(at::GradMode::is_enabled()||device.type()!=resident_device_type)throw std::invalid_argument("weighted raw update requires explicit accelerator no-grad");
   validate_kernel_device(device);check(error,device,at::kInt,{1});
 }
+at::Tensor field_metadata(const WeightedRawLayout& l,at::Device device){
+  std::vector<int64_t> fields;for(const auto& f:l.fields())fields.insert(fields.end(),
+    {f.offset,f.width,int64_t(f.ragged),f.name=="value"?0:(f.name=="weights"?2:(f.name=="W"?3:1))});
+  return at::tensor(fields,at::kLong).to(device);
+}
 }
 WeightedRawUpdateTape append_weighted_raw_update(DeviceProgram& p,const WeightedRawLayout& l,const WeightedRawState& old,
     const at::Tensor& times,const at::Tensor& mass,const at::Tensor& present,const at::Tensor& proposal,const at::Tensor& error,int64_t budget){
@@ -39,10 +44,8 @@ WeightedRawUpdateTape append_weighted_raw_update(DeviceProgram& p,const Weighted
   check(old.floating,device,at::kFloat,{rows,width});check(times,device,at::kLong,{rows});
   check(mass,device,at::kFloat,{rows});check(present,device,at::kBool,{rows});check(proposal,device,at::kFloat,{rows,width});
   bounded(base,budget);
-  std::vector<int64_t> fields;for(const auto& f:l.fields())fields.insert(fields.end(),
-    {f.offset,f.width,int64_t(f.ragged),f.name=="value"?0:(f.name=="weights"?2:(f.name=="W"?3:1))});
   WeightedRawUpdateTape t{l,{at::zeros_like(old.floating),at::zeros_like(old.integer)},at::zeros_like(old.integer),
-    at::zeros_like(proposal),at::tensor(fields,at::kLong).to(device),
+    at::zeros_like(proposal),field_metadata(l,device),
     at::zeros({rows,std::max<int64_t>(1,capacity)},old.integer.options()),at::zeros({rows,2},mass.options()),at::zeros_like(present)};
   p.copy(t.old_integer,old.integer);p.copy(t.proposal,proposal);
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_raw_plan)(1,stream,
@@ -54,6 +57,26 @@ WeightedRawUpdateTape append_weighted_raw_update(DeviceProgram& p,const Weighted
     ptr(t.fields),ptr(old.floating),ptr(t.proposal),ptr(t.mapping),ptr(t.receive),ptr(t.written),ptr(t.result.floating),ptr(error),
     rows,width,capacity,count,int64_t(l.convolution())),"weighted raw exact retention and append");},
     {t.fields,old.floating,t.proposal,t.mapping,t.receive,t.written,t.result.floating,error});return t;
+}
+WeightedRawState append_weighted_raw_half_store(DeviceProgram& p,const WeightedRawLayout& l,
+    const WeightedRawState& source,const at::Tensor& error,int64_t budget){
+  validate_weighted_raw_buffers(l,source);const auto device=source.floating.device();error_buffer(error,device);
+  const auto rows=source.floating.size(0),width=l.floating_width(),capacity=l.capacity(),count=int64_t(l.fields().size());
+  check(source.floating,device,at::kFloat,{rows,width});
+  bounded(rows*(6.L*width+8.L*l.integer_width()+8.L*std::max<int64_t>(1,capacity)+22)+32.L*count,budget);
+  auto result=at::empty(source.floating.sizes(),source.floating.options().dtype(at::kHalf)),values=at::empty_like(source.floating);
+  p.cast(source.floating,result);p.cast(result,values);
+  auto fields=field_metadata(l,device),meta=at::zeros_like(source.integer),mapping=at::zeros({rows,std::max<int64_t>(1,capacity)},source.integer.options());
+  auto time=at::zeros({rows},source.integer.options()),mass=at::zeros({rows},values.options()),receive=at::zeros({rows,2},values.options());
+  auto present=at::zeros({rows},values.options().dtype(at::kBool)),written=at::zeros_like(present);
+  // Reuse the raw-domain validator with no current receptions. It checks only
+  // actual fixed/ragged fields after rounding, never unused capacity padding.
+  // Temporary plan outputs are not published as state or execution records.
+  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_raw_plan)(1,stream,
+    ptr(fields),ptr(source.integer),ptr(values),ptr(time),ptr(mass),ptr(present),ptr(values),ptr(meta),ptr(mapping),ptr(receive),ptr(written),ptr(error),
+    rows,width,capacity,count,int64_t(l.kv()),int64_t(l.convolution()),l.horizon()),"validate actual raw fields after half storage");},
+    {fields,source.integer,values,time,mass,present,meta,mapping,receive,written,error});
+  return {result,source.integer};
 }
 WeightedRawUpdateGradient append_weighted_raw_update_vjp(DeviceProgram& p,const WeightedRawUpdateTape& t,
     const at::Tensor& bar,const at::Tensor& roots,const at::Tensor& error,int64_t budget){

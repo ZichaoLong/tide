@@ -20,7 +20,7 @@ CHECKS = {
     "weighted-rotary": ("tide-weighted-rotary-check", ("float32",)),
     "weighted-kv-sum": ("tide-weighted-kv-sum-check", ("float32", "float16")),
     "weighted-pool": ("tide-weighted-pool-check", ("float32",)),
-    "weighted-kv-update": ("tide-weighted-kv-update-check", ("float32",)),
+    "weighted-kv-update": ("tide-weighted-kv-update-check", ("float32", "float16")),
     "weighted-projection": ("tide-weighted-projection-check", ("float32", "float16")),
     "weighted-convolution": ("tide-weighted-convolution-check", ("float32", "float16")),
     "weighted-raw": ("tide-weighted-raw-check", ("float32", "float16")),

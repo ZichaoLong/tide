@@ -53,6 +53,11 @@ w>1 的导数为零但仍连接。此 VJP 只反向结构/缓存作用；数值 
 失败不能改变 live owner。提交按实际 FP32/FP16 位模式复制浮点存储和 int64 元数据，
 保留负零及未用 padding 的原始位。该小型设备索引/控制 kernel 不承担矩阵计算；后续矩阵层使用批量 vendor 算子。
 
+`append_weighted_raw_half_store`另提供FP32数值结果到FP16 raw的存储边界，供完整记忆更新组合。
+设备Cast后只校验实际字段与metadata，复用无当前接收的raw计划校验，不生成事件或修改整数。
+临时校验计划不作为数学结果导出；未用padding不读。舍入溢出或非法实际字段置error24，
+随后guarded adopt拒绝提交；合法下溢零不删除条目。该新增组合存储入口仍待自己的设备资格。
+
 | 验证 | 能验证的范围 |
 | --- | --- |
 | `test_resident_weighted_raw_update.py` | 独立原始时间列表/每字段 autograd；五 schema、弱/零/饱和接收、>2^54/MAX、过期保留、padding poison、None/零、保存来源、容量/非法拒绝；FP32/FP16提交位模式 |
