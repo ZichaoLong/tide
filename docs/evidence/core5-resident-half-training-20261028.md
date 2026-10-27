@@ -19,7 +19,8 @@ Nice10、独立background.slice，设备排队180秒、执行600秒。CPU codec�
 后续检查器审计补注（2026-10-28）：standalone训练的最后master比较曾引用
 `master_registry.owners()[j].value`中临时vector的成员，生命周期无效。本批实际退出状态不变，
 但该一处master数值断言不能作为可靠独立证据；Python master检查与其他完整记录/VJP检查不受这处影响。
-当前修复持有owners vector，并重做standalone训练/peer定向资格，状态见[STATUS](../STATUS.md)。
+修复7db0b08持有owners vector；[standalone训练/peer定向复验](core5-resident-weighted-peers-20261028.md)
+已通过两dtype各5配置20更新及双卡共同更新，补齐该master断言的新证据。本批原状态与本审计补注保留。
 
 精度采用[公共训练契约](../resident-weighted-training.md)：raw与实际发送payload按FP32或FP16存储，
 局部算术、Describe/control、舍入前Full G、所有伴随和optimizer master/槽使用FP32；

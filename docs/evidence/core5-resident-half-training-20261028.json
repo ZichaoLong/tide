@@ -340,6 +340,6 @@
     "date": "2026-10-28",
     "issue": "Standalone final-master assertion borrowed a Tensor field from a temporary owners() vector. Terminal jobs remain passed, but this assertion is not reliable independent evidence.",
     "unaffected": "Python master validation; standalone complete records and other VJP/named-parameter checks.",
-    "action": "Hold owner metadata and repeat standalone training/peer at a new fixed source; see STATUS."
+    "action": "Completed standalone training/peer requalification at 7db0b08e33c90b3fc278f2acdbce2ba738297310; see core5-resident-weighted-peers-20261028.json. Original statuses and audit issue retained."
   }
 }

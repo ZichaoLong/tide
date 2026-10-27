@@ -1,6 +1,7 @@
 # 带权常驻的样本副本与共同更新
 
-本页定义新增源码路径；实际资格从[STATUS](STATUS.md)进入，目前尚未通过设备验收。
+本页定义样本副本契约；[固定NPU/CUDA资格](evidence/core5-resident-weighted-peers-20261028.md)
+分别记录Python-owned、standalone两dtype与CUDA构建。CUDA真机待验。
 数学采用[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)
 与[局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)。
 每个样本的状态、消息、历史和调度独立；只有模型参数共享。

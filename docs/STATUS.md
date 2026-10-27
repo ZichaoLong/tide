@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游 `0770593838a37c790a568226930567ed60f99b83`（core-5及带权局部定义）。
-授权分支 `graph-execution-foundation`；HEAD/origin `fea42aa`。用户授权持续实施、有限实验、
+授权分支 `graph-execution-foundation`；HEAD/origin `ceae7bf`。用户授权持续实施、有限实验、
 分阶段提交与正常推送，不用子代理。总体目标未完成；唯一待办 [ROADMAP](ROADMAP.md)，
 持续规则 [execution-flows](execution-flows.md)。参考仓库与公共环境只读。
 
@@ -21,20 +21,21 @@
 - 性能消费者3516bef：Python/native/resident入口、独立LibTorch消费者、无轨迹静态fixture和完整计时契约
   见 [weighted-performance](weighted-performance.md)。尚无正式性能选型报告。
 
-## 活动资格（运行中，不作通过结论）
+## 已审阅的定向资格
 
 冻结checkout `artifacts/worktrees/core5-peer-owner-lifetime`，固定
 `7db0b08e33c90b3fc278f2acdbce2ba738297310`，跟踪源码只读，不能移动HEAD。
 
 | job | 最近状态 | build / 范围 |
 | --- | --- | --- |
-| core5-peer-owner-lifetime-npu-qualify | running，AscendC约92% | build/npu；CPU guard4、standalone weighted-training/weighted-peer两dtype |
+| core5-peer-owner-lifetime-npu-qualify | passed/exit0；物理9/13→0/1，两dtype训练及peer通过 | build/npu；CPU guard4、standalone weighted-training/weighted-peer两dtype |
 | core5-peer-owner-lifetime-cuda-qualify | passed/exit0，264步构建 | build/cuda；同两check三架构build/loader/help，无GPU数值结论 |
 
 units为`tide-JOB-20261028.service`；输出`artifacts/jobs/JOB/`，包含status.json、task.log、
 control-build.json和NPU checks/result.json/queue-state.json；launcher `.local/JOB{,-workload}.sh`。
 每任务1800秒、2workers/BLAS1、Nice10/background.slice。NPU两卡queue180秒/device600秒。
-已核验Transient=yes、独立ControlGroup。结束后审阅严格master与全体提交断言，单独提交证据。
+已核验Transient=yes、独立ControlGroup。严格master与全体提交断言已通过；source/binary/loader/log/XML/unit身份审阅完成，证据见
+[样本副本与master复验](evidence/core5-resident-weighted-peers-20261028.md)，本提交归档。
 
 ## 性能入口最新终态
 
@@ -64,7 +65,40 @@ launcher `.local/core5-weighted-profile-source-diagnose.sh` 调用 `.local/diagn
 预算600秒/queue180秒/profile360秒，Nice10/background.slice，ATen/BLAS1；源码/结果旧失败保留。完整记录与参数事后对照通过；小规模profile阶段记录含backward/finite约1.24秒，kernel覆盖约.135秒。
 profile2默认采集周期结束有vendor不完整解析警告；保留记录，不把事件计数当完整硬件工作量。
 主区已显式单周期并在导出前prof.step；CPU medium推理profile、完整记录及阶段事件检查通过。
-下一次planned medium profile使用固定新版本，不盲目重跑small。
+显式周期增量ceae7bf已提交推送，冻结checkout `artifacts/worktrees/core5-weighted-measurement`。
+`core5-weighted-medium-profiles`已passed/exit0：KV/HB medium完整训练，resident与纯PyTorch mixed-c各独立进程，串行。
+unit/output沿同规则，launcher `.local/core5-weighted-medium-profiles.sh`与同名前缀-workload.py；
+每配置timeout360秒，合计workload780秒、queue180秒、service1020秒；一个NPU、ATen/BLAS1、Nice10/background.slice。
+resident与mixed-c完整记录/loss/参数对照及完整采集周期通过，无Incorrect schedule警告；物理9→npu:0。
+记录profile开销、阶段/实际kernel与事后完整对照；不是正式吞吐。
+
+
+## 有限选型测量（新任务）
+
+固定脚本源码ceae7bf；静态fixture `artifacts/core5-weighted-measurement-fixtures/` 由同源码导出，
+KV/HB small与medium、SSD/HB medium、KV/非对齐DAG medium、KV/反馈PDG medium共5项；没有执行轨迹。
+受控清单 `.local/core5-weighted-performance-cases.json` 共24配置（CPU15/NPU9），不是开关笛卡尔积。
+问题：完整返回下的CPU streaming/prefill与接口成本；小中规模mixed/resident完整训练是否合适；
+SSD、非对齐/反馈与推理是否改变选型。每配置一独立进程、1warmup+3连续测量窗；FP32/SGD、每窗detach。
+
+`core5-weighted-performance-cpu`已failed/exit1：13配置通过，PDG streaming/prefill两项严格数值拒绝。
+首个tensor差异maxabs分别4.11272e-6、2.71201e-6，完整门禁未通过，不能报告为等价加速。
+原FP32 fixture/日志/测量时间保留，不修改容差或输入。（unit/output同命名规则），源码checkout
+`artifacts/worktrees/core5-weighted-measurement`。launcher `.local/core5-weighted-performance-cpu.sh`，
+共享只读harness `.local/run-core5-weighted-performance.py`，逐配置记录其hash、CLI、输入与build身份、
+load average和当时活动project job。使用3516bef已通过的CPU standalone binary（consumer源码未变）。
+单配置120秒、组1500秒、service1560秒、ATen/BLAS1、Nice10/background.slice。
+当前7db standalone NPU正确性资格仍在跑，主机争用明确记录；没有其他本项目性能计时。
+CPU组已终态，NPU计时组待本次诊断完成后串行启动。NPU standalone入口`core5-weighted-benchmark-npu-entry`准备启动；7db资格与二进制身份已完整审阅。
+源码checkout仍ceae7bf，build/npu；匹配SDK core与7db resident，不重编core。
+launcher `.local/core5-weighted-benchmark-npu-entry{,-workload}.sh`；安装/build/loader/help后，KV/HB small完整训练1warmup+1窗。
+静态fixture由Torch2.12 CPU导出，SDK2.10消费者独立读取JSON；不跨ABI加载Python扩展。
+任务720秒/2workers、ATen/BLAS1、queue180秒/device180秒，Nice10/background.slice；仅入口资格，不作正式选型。
+
+诊断`core5-weighted-pdg-rounding-diagnose`已passed/exit0：两dtype四窗口离散结构全相同；FP32差异先见pending/后见raw，最终参数仍过严格比较；同初值提升FP64后两native日程全部完整记录与参数通过，固定ceae7bf checkout；单线程CPU、180秒/服务240秒。
+launcher `.local/core5-weighted-pdg-rounding-diagnose.sh`，脚本`.local/diagnose-weighted-pdg-rounding.py`；
+原FP32初值及其FP64提升、独立Python时间递归与native两日程、4窗口与SGD；输出diagnosis.json。
+诊断退出0只表示完成分析，原PDG严格失败不改写。
 
 ## 下一步与检查命令
 
