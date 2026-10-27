@@ -53,14 +53,13 @@ def main():
     from tidegraph.qualification_checks import finite
     from weighted_benchmark_cases import Workload, fixture, fingerprint
     from weighted_benchmark_runners import Eager, Resident, work
-    device, reason = resolve_device(args.device)
-    if args.placement != "native" and device.type == "cpu":
-        parser.error("mixed placement requires an accelerator")
-    if args.implementation == "resident" and device.type == "cpu":
-        parser.error("resident requires an accelerator")
     source, dirty = source_state(root)
     if dirty and not args.allow_dirty:
         parser.error("controlled measurement requires clean immutable source")
+    for name in ("native_library", "resident_library"):
+        value = getattr(args, name)
+        if value:
+            setattr(args, name, str(Path(value).resolve()))
     torch.set_num_threads(1); torch.set_num_interop_threads(1)
     shape = dict(width=4, samples=1, positions=2) if args.size == "small" else dict(width=32, samples=4, positions=4)
     config = Workload(args.topology, args.family, seed=args.seed, **shape)
@@ -68,10 +67,13 @@ def main():
     expected_binding, expected_inputs, _ = fixture(config)
     fixture_hash = fingerprint(binding, inputs, config)
     out = Path(args.output_dir).resolve(); out.mkdir(parents=True, exist_ok=False)
+    # NPU initialization itself can create temporary kernel_meta/, before a
+    # profiler is entered. Keep all runtime scratch outside the source tree.
+    os.chdir(out)
     now = lambda: datetime.now(timezone.utc).isoformat()
     record = dict(schema="tide-weighted-benchmark-v1", state="running", source=source, dirty=dirty,
         started=now(), argv=sys.argv[1:], config=asdict(config), fixture_sha256=fixture_hash,
-        runtime=manifest(device, reason, torch.float32), implementation=args.implementation,
+        requested_device=args.device, implementation=args.implementation,
         mode=args.mode, schedule=args.schedule, placement=args.placement,
         workload_span=span, warmup_windows=1, measured_windows=1 if args.profile else args.steps,
         kind="profile" if args.profile else "benchmark", tracking="project JSON; execution-flows §1",
@@ -83,6 +85,13 @@ def main():
     write_json(out/"result.json", record)
     candidate = None
     try:
+        device, reason = resolve_device(args.device)
+        if args.placement != "native" and device.type == "cpu":
+            raise ValueError("mixed placement requires an accelerator")
+        if args.implementation == "resident" and device.type == "cpu":
+            raise ValueError("resident requires an accelerator")
+        record["runtime"] = manifest(device, reason, torch.float32)
+        write_json(out/"result.json", record)
         start = time.perf_counter()
         cls = Resident if args.implementation == "resident" else Eager
         candidate = cls(binding, inputs, span, config, args, device)
@@ -105,7 +114,6 @@ def main():
                     profiler = torch.profiler
                     activities = [profiler.ProfilerActivity.CPU]
                     if device.type == "cuda": activities.append(profiler.ProfilerActivity.CUDA)
-                os.chdir(out)  # CANN export scratch files belong under artifacts.
                 with profiler.profile(activities=activities, record_shapes=True) as prof:
                     actual.append(candidate.step(step))
                 prof.export_chrome_trace(str(out/"trace.json"))
