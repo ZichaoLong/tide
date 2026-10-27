@@ -31,12 +31,26 @@ build manifest 已另存到该 job 目录，后续重建不覆盖旧资格身份
 ## 当前任务与精确下一动作
 
 Read/Full 数值增量及固定源码资格已完成，证据 [core5-query](evidence/core5-query-20261027.md)。
-当前没有活动长任务。主工作区正在接入 Read/Full 实际批量 VJP：Python/C++ 私有参数叶、
+数值实现/证据 9d30066 已推送当前分支。主工作区已接入 Read/Full 实际批量 VJP：Python/C++ 私有参数叶、
 逐行/逐字段根、形状与零分支分组、原始版本与一阶限制；Read 自动采用新能力，
 Full 显式 `full_autograd="batched"`，默认 replay 保留。
 Python 局部/公共路径 108 项通过；共享参数/重复输入与方向差分新增 10 项通过；
 HB/反馈 PDG 三步 AdamW、含 pending checkpoint 换 owner 恢复和保留图切点新增 6 项通过。
 C++ 尚未构建；新 standalone 手算 VJP 与 native probe 待运行，不能称为通过。
+首个 VJP 开发 unit `tide-core5-query-vjp-dev-20261027` 已终态 failed/exit-code、exit 1；
+tree 5e93638676346279ab69d7b4182b7b8aeb2f991c。C++ helper 的未限定 bind 调用被 ADL 解析到
+std::bind，编译失败，pytest 未启动；原源码/日志在 artifacts/jobs/core5-query-vjp-dev。
+已重命名为 bind_queries，避免该重载冲突，未改数学计算。
+已冻结 tree 35145d0b86090b2c77f472367b6fd8e9443bc6df 并启动 `tide-core5-query-vjp2-dev-20261027`，launcher `.local/core5-query-vjp2-dev.sh`，
+worktree artifacts/worktrees/core5-bootstrap，输出 artifacts/jobs/core5-query-vjp2-dev。
+background.slice、Nice=10、两 build workers、ATen/BLAS 单线程、RuntimeMaxSec=1200。
+检查 `systemctl --user show tide-core5-query-vjp2-dev-20261027 -p ActiveState -p Result -p ExecMainStatus`；
+日志 `tail -60 artifacts/jobs/core5-query-vjp2-dev/task.log`；停止同名服务。已核验 active/running；C++ 构建已通过，pytest 运行中出现一项失败，尚无终态。
+
+新 VJP 局部失败已定位：FP32/native/gated_delta/sum 混合字段根 input.3 差 1.43e-5；
+Python MatchScore residual 的行向量投影与 C++ 列向量顺序不同。仅切换标量投影次序后
+native query VJP 全部 52 项通过；修正后的完整 query VJP、训练/恢复与评分短检查 **137 项通过**。诊断在 artifacts/diagnostics/core5-query-match-projection。
+当前主工作区已修正，未改变数学、输入、dtype 或容差；活动 job 仍读修正前冻结树。
 
 最近数值开发 unit `tide-core5-query-heads-dev-20261027` 保持 failed/exit 1、**397/1**，
 tree e5fb6e079865e65e7c11ba1f38737cf6be0af309。新增三样本 PDG FP32/native case 3 的 evidence
@@ -53,12 +67,22 @@ Python query VJP 原型首次 32/10 的失败源码 tree 20960d1b9477610558ab3ec
 
 未提交包含 query_vjp Python/C++、公共 Read/Full capability 接口与 policy、
 诊断 bindings、standalone query VJP、query 局部/训练测试、数值测试的能力统计更新。
-所有修改均为本任务所作。下一步完善契约并冻结草稿，启动有界开发构建/测试。
+所有修改均为本任务所作；契约 weighted-query-vjp.md 已更新。另有下一阶段未接入的
+allocation_batch.py 与测试：同时求解 quad/bern/ent。首轮 17/6 中失败均为 sort 参数拼写，
+最小原源码/记录在 artifacts/diagnostics/core5-allocation-batch-api，已改为关键字 dim。
+区域草稿的 allocation_rows 批量精确映射 VJP 已有 33 项通过，sending_batch 的 Attention/
+proportional/零温填充/硬选择新增 17 项通过；均尚未接入公共区域调度/C++，
+不纳入当前 Read/Full VJP 提交。下一步检查开发构建/测试。
 通过后提交实现，固定源码再资格并单独提交证据；继续区域批量 VJP、正式参数绑定/计算共享，
 mixed/resident 前向/反向/optimizer/跨卡、standalone 完整训练/graph continuation，
 有限 profiling 与最终追溯。CUDA 源码/构建/真机分别记账，无 GPU 不阻塞其他工作。
 
 ## 环境与保留事项
+
+接续工具发现并修正：status 原先只扫描 artifacts/NAME，漏掉当前 artifacts/jobs/NAME。
+现在同时读取这两种布局，不递归扫描 worktree/archive 副本；**21 项持久记录测试通过**。
+真实 status 输出已显示当前 live job 与最近三项终态，旧失败状态保持不变。
+
 
 实际路径 /mi/data2T/zlong/home/llm/graph-execution-foundation；/home/zlong 指向当前 home。
 规范 /opt/software/ascend-locks/dev-workspace-9.1.0/README.md 与对应 /etc/modulefiles。
