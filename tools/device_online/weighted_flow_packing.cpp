@@ -27,7 +27,7 @@ WeightedRegionInput append_weighted_region_input(DeviceProgram& p,const at::Tens
   const auto evidence=c.regional()?*c.region_control_width:1,query=c.region_score=="att"?*c.selection_width:1;
   if(width!=3+evidence+2*query)throw std::logic_error("weighted descriptor packing width mismatch");
   auto longs=time.options();auto ids=at::tensor(nodes,at::kLong).to(time.device()),order=at::zeros({rows},longs);
-  WeightedRegionInput x;x.ids=at::zeros({samples,members},longs);x.inverse=at::zeros_like(x.ids);
+  WeightedRegionInput x;x.ids=at::zeros({samples,members},longs);x.inverse=at::zeros_like(x.ids);x.order=order;
   x.times=at::zeros({samples},longs);x.lengths=at::zeros_like(x.times);
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_region_pack)(1,stream,
     ptr(present),ptr(time),ptr(ids),ptr(order),ptr(x.ids),ptr(x.times),ptr(x.lengths),ptr(x.inverse),ptr(error),samples,members),
