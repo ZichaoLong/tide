@@ -1,0 +1,383 @@
+{
+  "component": "complete weighted actual-window VJP",
+  "date": "2026-10-28",
+  "source": "2622e605e77c19360a44b8954cdae5989c3fd724",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "2622e605e77c19360a44b8954cdae5989c3fd724",
+      "state": "passed",
+      "started": "2026-10-27T19:11:33.658701+00:00",
+      "finished": "2026-10-27T19:22:10.415274+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-window-npu-qualify",
+      "unit": "tide-core5-weighted-window-npu-qualify-20261028.service",
+      "clean": true,
+      "systemd": "inactive/success/exit0",
+      "build": {
+        "component_sha256": "2414b286d89663c9a0a2e7fccea550e9fa42e68bedd1383ce8469aeb9f37c85f",
+        "backend": "npu",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-device-services-check": "82d549d8ceb57b1e044616ac67868993f850eacd2edaf4ebda0f609eb0d294f1",
+          "tide-weighted-copy-check": "17326461aa30afc33090ee98c300ddc9f2bd45270657ba81faf0a5adac78db35",
+          "tide-weighted-window-check": "134c34347b493bef7b17f83ca0b88df6216449144c2e9966627c292ba075dee8",
+          "tide-weighted-window-config-check": "9576b4aa8fd29929a96c50318c30134c7f76922d4aaadea72c3b48d0ee0ec81c",
+          "tide-weighted-flow-check": "ebbcfa2cf953dea2701d35d875e8df1619073cb23911937085d616cc5fcd102b",
+          "tide-weighted-flow-config-check": "48997cc3f926420d62e513a37b03d02391f40271a57ce6930f45da8a21ea69c2",
+          "libtide-weighted-flow.so": "1100bf521bd83d99e3f4d9704bad147714c79a4b168669b9ab71b48ee1db7434"
+        },
+        "loader_sha256": {
+          "tide-device-services-check": "47b7078fab924390388aa3c5cdd9faaa2b9d5587e04a74f7cc5ff2c67e83157f",
+          "tide-weighted-copy-check": "52e06d0a20180d4bc3cd2a8780b236bf16a1e5d5d61ca2b35e3616a003048f8a",
+          "tide-weighted-window-check": "20914385b1b0e8887b73e302e7aeb68133344c182a1f9d37bd25c6c34da275f2",
+          "tide-weighted-window-config-check": "14131cbbf25057f914adcb2d0dd7b49ee52466ad1c02481f1f0a2d81eee475f3",
+          "tide-weighted-flow-check": "547fea12fa850b96c21dab94237bdf746fefd70360dc3b8fb5871528d1150166",
+          "tide-weighted-flow-config-check": "3a613aea559012e638762ee54c787ee4e04312b6c7810760c0570ea034a8207b",
+          "libtide-weighted-flow.so": "789ad7c7fc88a9c2f825d7b409a8240a6f6f885801bd92c8070fe82cff87ecdf"
+        },
+        "requested_checks": [
+          "services",
+          "weighted-copy",
+          "weighted-window",
+          "weighted-window-config",
+          "weighted-flow",
+          "weighted-flow-config"
+        ],
+        "scope": "Immutable complete window adjoint, nested services/static layout copy and complete forward regressions. Original receipt retained; unchanged core verified; dependency-aware selected-target build and fresh loader/help checks.",
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        }
+      },
+      "log_sha256": "18ae33781424840c9bc67de7393121ee5506f71a2a960a5b45d32f8c7aca672b",
+      "build_record_sha256": "3bfb197e61c17066fb7fb2d420c4a146936d562d3a5e5de4d6fbf29dd7fbc270",
+      "prior_record_sha256": "321d12d93e135dce34ea20164a22346e106bfc88a47d0a81d5147d5346d6e8dc",
+      "cases": [
+        {
+          "check": "services",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "services-float32.log",
+          "log_sha256": "69ab2412af5dead5671668c12a14320980642a3c822859449ba6fa134b775baf"
+        },
+        {
+          "check": "weighted-copy",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-copy-float32.log",
+          "log_sha256": "d563bd21d1bb0bf47b0f3cf1030bcd956ce17db37075ae958e9aad84ce5da9de"
+        },
+        {
+          "check": "weighted-window",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-window-float32.log",
+          "log_sha256": "17f0a320c61ecb27a55a27076916fd8fda73eb9cb1f2744df2efdc6ec92fc99f"
+        },
+        {
+          "check": "weighted-window-config",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-window-config-float32.log",
+          "log_sha256": "9e342aa4f0466b9e3568a6d85b7a079e3bb0d8bd727fc33a6d8d712273da904f"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-float32.log",
+          "log_sha256": "d4684108e2e05dca31a236fa2a0254eced699e202be7811d14993101842057a3"
+        },
+        {
+          "check": "weighted-flow-config",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-config-float32.log",
+          "log_sha256": "8d3acd568831fe216ca73a50b3358f337fbcb97296fca7530d7787110bf01cf8"
+        }
+      ],
+      "observations": {
+        "cpu_tests": 17,
+        "cpu_seconds": 1.49,
+        "cpu_log_sha256": "b25bbfe468faab5911b80d4028466e03f603a8e72be8d2abf077890f7871f99f",
+        "heterogeneous_window_configurations": 12,
+        "formal_configurations": 15,
+        "window_root_modes": 324,
+        "extra_empty_windows": 27,
+        "budget_refusals": 27,
+        "stale_generation_refusals": 27,
+        "copy_owners": 18,
+        "copy_submissions": 54,
+        "service_depth": 3
+      },
+      "queue": {
+        "elapsed_seconds": 185.81108639016747,
+        "job_id": "core5-weighted-window-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T19:22:10.391884+00:00"
+      },
+      "markers": {
+        "services": [
+          "task-services: passed repeated_windows=true empty_window=true nested_levels=3 shared_workspace_bytes=16777472"
+        ],
+        "weighted-copy": [
+          "weighted-copy: passed owners=18 submissions=54 exact_bool_int64=true strided_source_target=true"
+        ],
+        "weighted-window": [
+          "weighted-window: passed configurations=12 complete_window=true device_reverse_loop=true independent_roots=true"
+        ],
+        "weighted-window-config": [
+          "weighted-window-config: passed configurations=15 independent_roots=true qry=true exact_raw_boundaries=true"
+        ],
+        "weighted-flow": [
+          "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+        ],
+        "weighted-flow-config": [
+          "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+        ]
+      }
+    },
+    {
+      "source": "2622e605e77c19360a44b8954cdae5989c3fd724",
+      "state": "passed",
+      "started": "2026-10-27T19:11:33.689638+00:00",
+      "finished": "2026-10-27T19:16:00.649716+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-window-cuda-qualify",
+      "unit": "tide-core5-weighted-window-cuda-qualify-20261028.service",
+      "clean": true,
+      "systemd": "inactive/success/exit0",
+      "build": {
+        "component_sha256": "2414b286d89663c9a0a2e7fccea550e9fa42e68bedd1383ce8469aeb9f37c85f",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-device-services-check": "abd682dde8fb2cfdc680d8c7c507a73066ffcd0ae12e4b3ebcb871e061c74aff",
+          "tide-weighted-copy-check": "d7528965c7c6654c2b1ae02e237458fb6297c114bb123384588d3c2c90f18fc5",
+          "tide-weighted-window-check": "180a4989afa11dc0281ca63f0f1d0cbe6590446e68355a62fd4d71e9b64cc4da",
+          "tide-weighted-window-config-check": "071533cd91589467a823a1b696fcc1889c036b25516b59cd1c0cf87c42d1b083",
+          "tide-weighted-flow-check": "25a313d323bc47816252f6c6f0016f7647bd40255665347a8be06da9617302eb",
+          "tide-weighted-flow-config-check": "adbb8e884b55e409c200848c9354893e5e33cb99e9e14f67e15684f6b09cfe35",
+          "libtide-weighted-flow.so": "456410dd6814ee88a73fb2527209185002e703c46ab0b244488a48ef6d7c2fb6"
+        },
+        "loader_sha256": {
+          "tide-device-services-check": "5b02393a16282e093108f22f4dc7557337834b71aea9c9a685f4c031f7d545f3",
+          "tide-weighted-copy-check": "ba04dae831ab2f5d216d02962f6f81ed662dd83537d070e4802395d1e23bc4cb",
+          "tide-weighted-window-check": "e6a600126bb236908c84f21b359b6967759ecbd0ef4df7a1e7bf0b40871a656f",
+          "tide-weighted-window-config-check": "b69b6d711dea56cedfce7267f6c21a6ecc497a861019e768aa117dfe65e43df7",
+          "tide-weighted-flow-check": "476a051c32489dd378c6691dd15ac9d442a982f9b2c84d665d6b07c3960a323c",
+          "tide-weighted-flow-config-check": "57d757184362c93c6f77dcc04f67e51ef0ca6eb94b6d4a5f4430b5193f62b2d5",
+          "libtide-weighted-flow.so": "17d079f19fd2dd5bb6e6ae44776acc25c8386e477bddd5d85b5a7dae68a9dc5d"
+        },
+        "requested_checks": [
+          "services",
+          "weighted-copy",
+          "weighted-window",
+          "weighted-window-config",
+          "weighted-flow",
+          "weighted-flow-config"
+        ],
+        "scope": "Immutable complete window adjoint, nested services/static layout copy and complete forward regressions. Original receipt retained; unchanged core verified; dependency-aware selected-target build and fresh loader/help checks.",
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        }
+      },
+      "log_sha256": "8d2c6901440cc3f57320768507bbe853f85f028970218d1479d191829e6f50a2",
+      "build_record_sha256": "9bd3a60ccc47240d5572bace8429a268b1a3f5bc96f2d1a3261034dadaf5afd5",
+      "prior_record_sha256": "b2a594f0f2c0d03132c56192799dcd51b08df2f252b01dc98c4591e8a4c347be",
+      "observations": {
+        "configured_cuda_commands": 160,
+        "effective_cuda_architectures": [
+          "80",
+          "90",
+          "100"
+        ]
+      },
+      "hardware": "pending: no GPU"
+    }
+  ],
+  "independence": "Candidate executes first using its device queue. Independent CPU Greedy/autograd compares complete forward, each root mode, all parameter/input/raw/pending leaves and exact connection bits. Local formula/KKT/directional anchors remain separately linked from the stage and numerical component contracts; these window comparisons alone do not independently derive all formulas.",
+  "tolerance": {
+    "rtol": 3e-05,
+    "atol": 3e-06,
+    "exact": [
+      "int64 metadata",
+      "boolean support",
+      "physical routes",
+      "None versus connected zero"
+    ]
+  },
+  "commands": [
+    "python -m pytest -q tests/test_resident_weighted_flow_packing.py tests/test_resident_weighted_reverse_route.py",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_BUILD --checks services weighted-copy weighted-window weighted-window-config weighted-flow weighted-flow-config --jobs 2 (explicit SOC or CUDA architectures)",
+    "python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_CHECKS --device npu:0 --checks services weighted-copy weighted-window weighted-window-config weighted-flow weighted-flow-config"
+  ],
+  "limits": {
+    "seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "development": [
+    {
+      "job": "core5-weighted-window-dev",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "C++ test helper set collided with ATen ADL; device execution not reached.",
+      "tree": "18c067b63e627299bb6aaf2428c6f474ad7a413a",
+      "log_sha256": "db36d31d207d0b7ba76a07cf03933bc0683cabc61f08641ae3b18e4768eaf2c1"
+    },
+    {
+      "job": "core5-weighted-window-dev2",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "First window reverse construction exceeded a CANN stream task capacity (361001); fixed by nested serial services.",
+      "tree": "baf9d483528f2a1e74514e82d0ad57be91128ba0",
+      "log_sha256": "4929a06233017f8887a3c54b59b5c032f599ea2c5cd201502e56720b04a4e8b5"
+    },
+    {
+      "job": "core5-weighted-window-dev3",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Full sequence failed at nonaligned/proposal with CANN 507011/0x91 ScatterUpdate; original failure retained.",
+      "tree": "b033ebe658dd6573b9285f85834e8c83501e0c01",
+      "log_sha256": "95e43f02b21357e18efae4e55d60c939fa1de5d5c21fb69d7e446745cd0382a9",
+      "diagnostics": {
+        "diagnostics/device-2971925_20261028024212968.log": "bb038e27b9e48b3636a6bd363eae61a1f463422e6062af525a1ab3cacd92293b",
+        "diagnostics/manifest.json": "b899b1ebfb5dfa0dc029e048900a630f55fd5db817a02b33eeb8011197bb5402",
+        "diagnostics/plog-2971925_20261028024208614.log": "91be5f6f1cb49a17036588f3c407128b517fa116e8f34dcc0422e9281225be5b",
+        "diagnostics/plog-2971925_20261028024256588.log": "25d6e49d122623430091748118ef038c31f3732881060ba099589a5cdf4da87e"
+      }
+    },
+    {
+      "job": "core5-weighted-window-dev4",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "a3472a1d3494294c7a49ea8fc795b68c1354a0e4",
+      "note": "Launcher precreated output directory; job.py refused before build/device work."
+    },
+    {
+      "job": "core5-weighted-window-dev5",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Unchanged isolated nonaligned/proposal passed; does not replace complete-sequence failures.",
+      "tree": "adb6c4b29c8d252f322d694a020dfc03831bc8c8",
+      "log_sha256": "5cd3e9a2fe458cdf8b4fc2007ad85511e45dae9f35054d2daabe707acc90514c"
+    },
+    {
+      "job": "core5-weighted-window-dev6",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Complete sequence again failed on first reverse run-none of ninth configuration.",
+      "tree": "adb6c4b29c8d252f322d694a020dfc03831bc8c8",
+      "log_sha256": "9806fd08cb6408295c2a1d5e22d9aec0c2f63606ba42d4a6c298e0af28b93e19",
+      "diagnostics": {
+        "diagnostics/device-2983577_20261028024942030.log": "ab0c06e455f5c7f37540352a7cf157fa098b71c42760e3dbc5c60298cd297cc6",
+        "diagnostics/manifest.json": "92510a01a749e8d950828d4cd07a4378364f6a55860169f00982ca4148275303",
+        "diagnostics/plog-2983577_20261028024937902.log": "cbfafc5cec4c3fdd5bf308978e02db5ff5ecd58331fa1619ce6f3b97eb875e72",
+        "diagnostics/plog-2983577_20261028025026081.log": "dd2bd88967661bbda26298ce91f9724bbca5f9e203276d2428833b8f1faf2eba"
+      }
+    },
+    {
+      "job": "core5-weighted-window-dev7",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Operator trace localized actual PID2991769 stream411/task29 to raw-connected bool scatter target[10]/source[2], not coordinator stage/node scatter.",
+      "tree": "f39a47f201044c5caa671ff7a44d4b0abc4079e5",
+      "log_sha256": "a04ab7a420fcea5162ba1db1220738715432ca94cfa00c55cfd791fe8889be18",
+      "diagnostics": {
+        "diagnostics/device-2991769_20261028025405062.log": "c05a2a1a51af6c34268a863e9c29d459a622f33af9aabbe82354bcf4ae3e1699",
+        "diagnostics/failing-stream.txt": "495e6b5e8752ce96d328dcc393c4e8742d334f91472fee3e48ef34d310d52ff7",
+        "diagnostics/manifest.json": "da5431088f655bef5e558f79aacc1481274d03408bc34ea128507fa7a6ac34fb",
+        "diagnostics/plog-2991769_20261028025401171.log": "2b574ad3eecce2ba9eb44f98c089a561bbf71934564fa370649d047cb868e0af",
+        "diagnostics/plog-2991769_20261028025452304.log": "87ab826f1670fbbfa3ed7c543f24eb5202c2171c6e202ac3f2cf9ac4e7ce8e2b"
+      }
+    },
+    {
+      "job": "core5-weighted-window-dev8",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Copy54 submissions passed, complete window sequence still failed. New NPU bool copy code was excluded by incorrect ifndef on a macro defined as zero; not evidence against that fix.",
+      "tree": "8d26b29da04f88cc4a23e6fa176bd3503ddcd04f",
+      "log_sha256": "89b988ca4aa134b0ecae6b3460988ee66937f2ccb229c4fc3faf3765015526b8",
+      "diagnostics": {
+        "diagnostics/device-3001028_20261028025931091.log": "31727be3700e994ac43b8592529c5af045d9e7a4fc1545e5a0b89eabc40b10df",
+        "diagnostics/manifest.json": "a44595c380937152f5ca5402678c2ce15cbe8aad240ebc69b5c9f09aa4f303fc",
+        "diagnostics/plog-3001028_20261028025926928.log": "f9c7440b4762d132370115f1d13b3cc9d6a7f137ac4c7a22e414ab7a62285e96",
+        "diagnostics/plog-3001028_20261028030014835.log": "842ed811eff0b9103db73a3f2790a0f5d66451260942716078af488625901d88"
+      }
+    },
+    {
+      "job": "core5-cann-lifecycle",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Launcher required absent compile_commands.json; failed before compiling/running probe. Corrected helper was not rerun.",
+      "tree": "8d26b29da04f88cc4a23e6fa176bd3503ddcd04f",
+      "log_sha256": "bef6018d09e0579683076baa4338bc7e88a76683db86b2c84e5517cb9a6ec116"
+    },
+    {
+      "job": "core5-weighted-window-dev9",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Correct #if !TIDE_RESIDENT_CUDA enabled static bool layout copy. All 27 window configurations, services and copy passed; no vendor-internal root cause claimed.",
+      "tree": "ce76fb54886950b314dd5c4d804aa0f3f725b4de",
+      "log_sha256": "cd295477f74356c203d7cbdee4442ff1f9f4b015105ce180317d20020687ba65"
+    },
+    {
+      "job": "core5-weighted-window-cuda-dev",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "ad8e7b82a20b1e41403ff5274fa034c1c43a8a10",
+      "note": "Selected window/copy/services build, loader/help for sm80/90/100 passed; no hardware.",
+      "tree": "282d21d5b27fc3413f2994173626547495e0d634",
+      "log_sha256": "33c572c1b4c3abf4879b3694a4926f6d9721bfd98fb5692bb1e932c4b90a9872"
+    }
+  ],
+  "pending": [
+    "public retained training tokens and complete lifecycle",
+    "optimizer publication and training checkpoint",
+    "weighted resident FP16 and peers",
+    "CUDA actual-device execution",
+    "finite profiling and selection"
+  ]
+}
