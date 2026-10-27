@@ -1,5 +1,7 @@
 # Adopted semantics and validation contract
 
+[Resident recurrent numerical functions](resident-weighted-recurrent.md) implement the four recurrent Upd/Mem/Full formulas with exact-time snapshots, fixed-time convolution and independently rooted saved adjoints. Full graph lifecycle is separately qualified.
+
 Authority: `tide-core-5` at `0770593838a37c790a568226930567ed60f99b83`, locked in `upstream.json`.
 The weighted-message definitions are pinned to the same commit. Adoption is not
 a claim that every local candidate/backend has been implemented or qualified;

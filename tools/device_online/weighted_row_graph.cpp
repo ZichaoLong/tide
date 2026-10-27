@@ -81,6 +81,9 @@ size_t WeightedRowGraph::unary(WeightedRowOp kind,size_t a,double scalar){
     case WeightedRowOp::Sigmoid:program_->sigmoid(value(a),out);break;
     case WeightedRowOp::Silu:program_->silu(value(a),out);break;
     case WeightedRowOp::Log1p:program_->log1p(value(a),out);break;
+    case WeightedRowOp::Exp:program_->exp(value(a),out);break;
+    case WeightedRowOp::Sqrt:program_->sqrt(value(a),out);break;
+    case WeightedRowOp::Softplus:program_->softplus(value(a),out);break;
     case WeightedRowOp::Clamp:program_->minimum(value(a),at::full({1},float(scalar),out.options()),out);break;
     default:throw std::logic_error("invalid row unary operation");}
   WeightedRowExpression e{kind,out,{a}};e.scalar=scalar;return push(e);
@@ -88,5 +91,8 @@ size_t WeightedRowGraph::unary(WeightedRowOp kind,size_t a,double scalar){
 size_t WeightedRowGraph::sigmoid(size_t a){return unary(WeightedRowOp::Sigmoid,a);}
 size_t WeightedRowGraph::silu(size_t a){return unary(WeightedRowOp::Silu,a);}
 size_t WeightedRowGraph::log1p(size_t a){return unary(WeightedRowOp::Log1p,a);}
+size_t WeightedRowGraph::exp(size_t a){return unary(WeightedRowOp::Exp,a);}
+size_t WeightedRowGraph::sqrt(size_t a){return unary(WeightedRowOp::Sqrt,a);}
+size_t WeightedRowGraph::softplus(size_t a){return unary(WeightedRowOp::Softplus,a);}
 size_t WeightedRowGraph::clamp_max(size_t a,double bound){if(!std::isfinite(bound)||!std::isfinite(float(bound)))throw std::invalid_argument("invalid row clamp bound");return unary(WeightedRowOp::Clamp,a,bound);}
 }

@@ -17,13 +17,13 @@ def library(tmp_path_factory):
     source.write_text('''#define TIDE_KERNEL_CPU
 #include "weighted_row_graph_math.h"
 extern "C" void bind(int64_t* owner,float* input,float* output,int32_t* error,int64_t rows,int64_t width,int64_t banks,int64_t positive){
- tide_weighted_row_device::bind(owner,input,output,error,rows,width,banks,positive);
+ tide_cuda::reset_arena();tide_weighted_row_device::bind(owner,input,output,error,rows,width,banks,positive);
 }
 extern "C" void accumulate(int64_t* owner,float* input,uint8_t* roots,float* output,uint8_t* connected,int32_t* error,int64_t rows,int64_t width){
- tide_weighted_row_device::accumulate(owner,input,roots,output,connected,error,rows,width);
+ tide_cuda::reset_arena();tide_weighted_row_device::accumulate(owner,input,roots,output,connected,error,rows,width);
 }
 extern "C" void derivative(float* input,float* value,float* gradient,uint8_t* roots,float* output,int32_t* error,int64_t rows,int64_t width,int64_t mode,float scalar){
- tide_weighted_row_device::derivative(input,value,gradient,roots,output,error,rows,width,mode,scalar);
+ tide_cuda::reset_arena();tide_weighted_row_device::derivative(input,value,gradient,roots,output,error,rows,width,mode,scalar);
 }
 ''')
     subprocess.run(["g++","-std=c++17","-shared","-fPIC","-O2","-I"+str(root/"cuda"),
@@ -35,10 +35,12 @@ extern "C" void derivative(float* input,float* value,float* gradient,uint8_t* ro
     return lib
 
 
-@pytest.mark.parametrize("mode", [0,1,2])
+@pytest.mark.parametrize("mode", [0,1,2,3,4,5])
 def test_declared_scalar_derivative_including_cap_equality(library,mode):
-    x=torch.tensor([[0.,.2,1.,2.], [.3,.5,.9,1.2]],requires_grad=True)
-    value=(x.sigmoid() if mode==0 else x.log1p() if mode==1 else x.clamp_max(1))
+    x=torch.tensor([[.1,.2,1.,21.], [.3,.5,.9,1.2]],requires_grad=True)
+    value=(x.sigmoid() if mode==0 else x.log1p() if mode==1 else x.clamp_max(1)
+           if mode==2 else x.exp() if mode==3 else x.sqrt() if mode==4
+           else torch.nn.functional.softplus(x))
     bar=torch.tensor([[.2,-.4,.6,.7], [.1,.2,.3,.4]])
     expected,=torch.autograd.grad(value,x,bar)
     flags=torch.tensor([True,False]);bar[1]=float("nan")
