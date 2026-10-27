@@ -127,6 +127,8 @@ The [resident relative rotation](resident-weighted-rotary.md) converts exact int
 
 The [resident KV query](resident-weighted-kv-query.md) composes normalized Q and independent raw K/V projections, read-relative rotation and two weighted Attention channels. Four return roots preserve private input/raw fields and shared parameter contributions, including empty short-channel constants after numerical decay underflow. Caller-bound snapshots and graph lifecycle remain separate.
 
+The [resident residual](resident-weighted-residual.md) computes the memory projection and normalized SwiGLU Full chain, preserving connected-zero scales and all parameter roles. [Resident KV Full](resident-weighted-kv-full.md) composes the actual selected proposal snapshot, per-head relative positions, weighted Attention and residual into unscaled G. Saved adjoints preserve input/raw/parameter identities; graph emission, scheduling and checkpoint owners remain separate.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
