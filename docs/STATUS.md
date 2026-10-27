@@ -51,18 +51,19 @@ rotary-dev3冻结tree7207e6dd66b334935329d3ce896863b1f4f38702通过：CPU13、NP
 tide-core5-resident-rotary-dev3-20261027.service inactive/success/exit0；原source/log/status保留。
 本次提交旋转、周期归约和大age数值转换修复；此前两个开发失败仍保留failed。
 
-下一动作对本实现提交运行tide-core5-resident-rotary-{npu,cuda}-qualify-20261027.service，结果未知。
-使用冻结artifacts/worktrees/core5-resident；NPU复用dev3产物并核验全部摘要，不改原manifest。
-输出artifacts/jobs/core5-resident-rotary-{npu,cuda}-qualify/{status.json,task.log,checks/result.json或control-build.json}。
-launcher .local/core5-resident-rotary-{npu,cuda}-qualify{,-workload}.sh；两者检查weighted-kv-sum和weighted-rotary。
-background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS单线程、NPU queue180秒。
-检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。失败不标passed。
-通过后证据另提交推送，继续qry、Describe/Full和完整图。
+1eb4b72759716118a92fa70e05268f46a20f2443固定资格：CPU13（1.93秒）、NPU两个组件完整通过；
+CUDA sm80/90/100构建/loader通过，无GPU真机。两资格unit均inactive/success/exit0，冻结reader已停止。
+证据evidence/core5-resident-rotary-20261027.json；NPU复用dev3产物并核验全部摘要，原manifest保留。
 
-主工作区另有weighted_kv_query{.h,.cpp,_vjp.cpp,_internal.h}、query plan/roots kernel草稿；
-主工作区已补CMake/registry、契约和CPU依赖测试7项通过，尚未编译，不进入rotary提交/资格树。数值链为window→Q/K/V→read RoPE→两通道Attention→四返回；
-VJP按独立返回根回传各参数角色/私有u/raw。后续继续qry、Describe/Full、四循环及完整图生命周期。
-KV sum证据c198a43已推送，不修改活动reader的冻结源码。
+下一动作启动tide-core5-resident-kv-query-dev-20261027.service（结果未知）。
+主工作区KV qry完整Q/K/V→Read相对旋转→两通道Attention→四返回及保存版本VJP已写好；
+已登记CMake/registry、契约，CPU依赖检查7项通过；新任务还运行旋转/窗口/pool/projection相关CPU测试及NPU完整公式VJP。
+冻结仅含qry与已提交代码，排除未注册weighted_residual{.h,.cpp,_check.cpp}与residual guard/契约草稿。
+输出artifacts/jobs/core5-resident-kv-query-dev/{source.tree,source.tar,status.json,task.log,checks/result.json}；
+launcher .local/core5-resident-kv-query-dev{,-workload}.sh；冻结artifacts/worktrees/core5-resident。
+background.slice/Nice10、600秒、2build workers/BLAS单线程、NPU queue180秒；
+检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。
+通过后先提交qry，再固定资格并记录证据；继续Full残差/完整KV读取、Describe、循环与完整图。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。

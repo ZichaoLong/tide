@@ -94,3 +94,5 @@
 [常驻带权摘要与 Attention 归约资格](core5-resident-pool-20261027.md)：afe7b5e，CPU/NPU完整组件及CUDA三架构构建。
 
 [常驻 KV 原始时间窗口与 sum 记忆资格](core5-resident-kv-sum-20261027.md)：fea6fa7，CPU/NPU完整组件及CUDA三架构构建。
+
+[常驻相对旋转与极大逻辑年龄数值转换资格](core5-resident-rotary-20261027.md)：1eb4b72，CPU/NPU完整组件及CUDA三架构构建。

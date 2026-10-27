@@ -30,3 +30,5 @@ NPU对应aclnnSin/aclnnCos。此路径不在主机计算真实时间相位。
 | 厂商Sin/Cos及完整返回/VJP | `weighted_rotary_check.cpp`：三个配置、两次重放、相同FP32相位的独立CPU矩阵与autograd、修改来源后反向 |
 
 入口 `scripts/{build,verify}_device_control.py --checks weighted-rotary`。
+
+固定源码资格见[1eb4b72运行证据](evidence/core5-resident-rotary-20261027.md)。
