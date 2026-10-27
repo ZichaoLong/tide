@@ -150,6 +150,12 @@ The separate [weighted batched State VJP](weighted-state-vjp.md) captures the
 registered parameter tree and groups actual zero/positive receive branches.
 Private batch graphs preserve empty-cache absence and independent output slots;
 undefined cotangent patterns determine input ownership, never numeric zeros.
+The separate [weighted Aggregate batch](weighted-aggregate-batch.md) groups
+source projections by parameter class and complete reductions by actual fiber
+length, retaining every physical atom. Numeric batching and Aggregate batched
+VJP are separately declared capabilities. The optional batched policy preserves
+independent fiber roots, parameter aliases and the zero-total branch without
+scalar Aggregate replay; the default replay policy remains available.
 
 ## First local profile: `ema-ffn-v1`
 

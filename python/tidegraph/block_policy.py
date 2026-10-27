@@ -13,5 +13,8 @@ def validate(model, *, packed=True, full_autograd="replay", aggregate_autograd="
         if policy == "batched":
             if not packed:
                 raise ValueError(f"batched {label} autograd requires packed execution")
-            if any(type(getattr(w, field)) is not cls for w in model.nodes):
+            programs = [getattr(w, field) for w in model.nodes]
+            supported = (all(p.batched_autograd for p in programs) if label == "Aggregate"
+                         else all(type(p) is cls for p in programs))
+            if not supported:
                 raise ValueError(f"{label} program has no batched autograd implementation")

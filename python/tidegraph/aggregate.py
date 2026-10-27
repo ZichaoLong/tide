@@ -23,6 +23,7 @@ class AggregateResult:
 class AggregateProgram(torch.nn.Module):
     profile = "custom"  # Version this name in Node.aggregation.
     joint_batch = False
+    batched_autograd = False
 
     def step(self, weights, request):
         raise NotImplementedError
@@ -30,9 +31,17 @@ class AggregateProgram(torch.nn.Module):
     def batch(self, weights, requests):
         return [self.step(weights, r) for r in requests]
 
+    def batch_grad(self, weights, requests):
+        raise ValueError("Aggregate program has no batched autograd implementation")
+
 
 class SourceAggregate(AggregateProgram):
     joint_batch = True
+    batched_autograd = True
+
+    def batch_grad(self, weights, requests):
+        from .aggregate_rows import evaluate
+        return evaluate(self, weights, requests)
 
     def __init__(self, kind="sum"):
         super().__init__()
@@ -133,11 +142,10 @@ def evaluate(graph, model, events, packed=False, aggregate_autograd="replay"):
     w = model.nodes[events[0]["node"]]
     requests = [request(graph, model, e["fiber"]) for e in events]
     program = w.aggregate_program
-    if aggregate_autograd == "batched" and type(program) is not SourceAggregate:
+    if aggregate_autograd == "batched" and not program.batched_autograd:
         raise ValueError("Aggregate program has no batched autograd implementation")
     if packed and aggregate_autograd == "batched" and torch.is_grad_enabled():
-        from .aggregate_rows import evaluate as batch_grad
-        results = batch_grad(program, w, requests)
+        results = program.batch_grad(w, requests)
     elif packed:
         with torch.no_grad():
             results = program.batch(w, requests)
@@ -156,6 +164,8 @@ def evaluate(graph, model, events, packed=False, aggregate_autograd="replay"):
                 results[i] = AggregateResult(value, terms)
     else:
         results = [program.step(w, r) for r in requests]
+    if len(results) != len(events):
+        raise ValueError("Aggregate batch changed event count")
     for event, result, r in zip(events, results, requests):
         validate(result, r)
         event.update(content=result.value, contributions=result.contributions)
