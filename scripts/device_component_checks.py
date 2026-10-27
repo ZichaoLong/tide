@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-aggregate": ("tide-weighted-aggregate-check", ("float32",)),
     "weighted-allocation": ("tide-weighted-allocation-check", ("float32",)),
     "weighted-sending": ("tide-weighted-sending-check", ("float32",)),
     "weighted-head": ("tide-weighted-head-check", ("float32",)),
@@ -62,6 +63,7 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "weighted-aggregate": "weighted-aggregate: passed",
     "weighted-allocation": "weighted-allocation: passed",
     "weighted-sending": "weighted-sending: passed",
     "weighted-head": "weighted-head: passed",
@@ -237,3 +239,5 @@ KERNELS["weighted-allocation"] = "tide_weighted_allocat"
 KERNELS["weighted-sending"] = "tide_weighted_send"
 KERNELS["weighted-head"] = "tide_weighted_head"
 KERNELS["weighted-region"] = "tide_weighted_region"
+
+KERNELS["weighted-aggregate"] = "tide_weighted_aggregate"

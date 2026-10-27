@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送ce63aef（完整Region实现）；本次证据另提交。总体未完成，不在阶段提交后暂停。
+已推送837a075（ce63aef完整Region实现及固定证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -32,13 +32,24 @@ core5-resident-region-{npu,cuda}-qualify任务均clean/exit0/inactive，详见ev
 NPU复用dev构建且组件/core/binary全摘要相符，原manifest保留；CUDA新构建，无GPU真机。
 resident worktree固定ce63aef、clean/read-only，无活动reader。
 
-主工作区下一阶段未提交：weighted_aggregate_math.h、四个设备入口、weighted_aggregate{,_vjp}.cpp/.h、
-内部buffer校验与CPU适配/公式测试。15项局部CPU开发检查通过（1.28秒）；
-尚未登记新入口/构建check，也未验证vendor RMS/源变换完整组合，不包含在Region资格中。
-下一步完善Aggregate standalone独立公式/根/共享参数/保存版本/容量检查与对应契约，
-注册入口并冻结新开发树，按同一限额运行新的Agg任务，再提交、资格和证据。随后接状态/Describe/图生命周期。
+Aggregate开发tree8f9bc2bfbdcecb586bcad6d9343cabf8d5a113bd通过；
+tide-core5-resident-aggregate-dev-20261027.service inactive/exit0。CPU15（1.13秒），
+NPU两配置/24物理行20非空纤维，vendor RMS/源变换、全部载荷与源参数VJP、
+同类重复、零/负质量、四种补零隐藏宽度、None/零、原来源改写后的保存版本反向、容量/失败不提交通过。
+实际记录artifacts/jobs/core5-resident-aggregate-dev/{status.json,task.log,source.tree,checks/result.json}。
 
-完整weighted resident仍缺Agg、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
+当前提交Aggregate实现，随后冻结提交，运行core5-resident-aggregate-{npu,cuda}-qualify：
+NPU重验CPU15和完整组件，只有component/core/binary摘要一致才复用dev构建；
+CUDA新建sm80/90/100组件/loader。background.slice/Nice10、2build workers/BLAS单线程，
+NPU600秒/队列180秒、CUDA1200秒。新结果未知，不能预先标通过。
+命令.local/core5-resident-aggregate-{npu,cuda}-qualify{,-workload}.sh；输出同名artifacts/jobs目录。
+
+下一阶段未提交weighted_source_adaptation.h/.cpp和tide_weighted_source_guard.cpp，
+用于实际保存低秩因子及vendor BMM的完整因子VJP；尚未登记、测试，不在Aggregate资格内。
+下一动作：固定Aggregate资格/独立证据提交推送，继续source参数链测试与别名owner，
+再接五记忆/Describe、图在线推进及完整训练/恢复。
+
+完整weighted resident仍缺参数owner集成、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
 后续有限profiling/性能选型与最终追溯不做全开关笛卡尔积；CUDA源码/构建/实机分账。
 
