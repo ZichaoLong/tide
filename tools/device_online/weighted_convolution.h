@@ -14,6 +14,9 @@ struct WeightedConvGradient {
 };
 // Owners -1 mark absent rows. Cache is the selected initial/old/proposal state;
 // current tap is always unweighted z, even if cache contains theta -> w*z.
+// Raw/current/parameters/output use one explicit FP32/FP16 dtype. Multiply,
+// reduction, saved taps and VJP are FP32. FP16 rounds once after bias; overflow
+// is refused. Casts have the declared identity first-order VJP.
 WeightedConvTape append_weighted_convolution(DeviceProgram&,const WeightedRawLayout&,const WeightedRawState&,
   const at::Tensor& time,const at::Tensor& current,const at::Tensor& owners,const WeightedConvParameters&,
   int64_t stride,const at::Tensor& error,int64_t budget=256*1024*1024);
