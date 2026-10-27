@@ -1,0 +1,58 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "31afe9b0e7758286df016023632d83287533cf023790f17a973d6fe53fe02114",
+  "source": "cacb645adc64ed06e454f7ac8d8572bf09b98ee2",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted complete weighted local branch CPU qualification including match/att/grouped/key and allocation shift VJP",
+  "result": {
+    "passed": 593,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "821145fb4d3451e89ea90efb9c01386df68db7277cc4bf7ae8554da9839855c1",
+  "binary_sha256": {
+    "libtidegraph.a": "1f9abe6862ce97e1143153563ea8aef785da23f2ab184c84cb3700ef68d8ed58",
+    "_tide_native.so": "163e36fd57a696b585765b3bed3ceecbeafebd1a0881d6face7a29b768fe7efe",
+    "tidegraph-kernel-check": "1af2bf1cb325a67186166b27abb0c7546980c221fefc4fd2ea58e5da27ba74f8"
+  },
+  "log_sha256": "9213f6e8bad4efde84b7a436eedfae077792388e0cdf68f915301c5a0d73708c",
+  "started": "2026-10-27T06:43:04.493947+00:00",
+  "finished": "2026-10-27T06:46:51.458363+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-scoring-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-scoring-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_allocation.py",
+      "tests/test_weighted_allocation_shift.py",
+      "tests/test_weighted_convolution.py",
+      "tests/test_weighted_entropy_allocation.py",
+      "tests/test_weighted_entropy_native.py",
+      "tests/test_weighted_execution.py",
+      "tests/test_weighted_instances.py",
+      "tests/test_weighted_kv_formulas.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_recurrent_execution.py",
+      "tests/test_weighted_recurrent_formulas.py",
+      "tests/test_weighted_scoring.py",
+      "tests/test_weighted_scoring_execution.py",
+      "tests/test_weighted_sending.py",
+      "tests/test_weighted_sending_execution.py",
+      "tests/test_weighted_sending_native.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-scoring-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
