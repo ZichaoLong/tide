@@ -42,7 +42,7 @@ class RegionVjp final:public torch::autograd::Node {
   void release_variables() override{originals.clear();leaves.clear();outputs.clear();}
   std::string name() const override{return "tide::weighted::RegionBatchVjp";}
 };
-std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>& requests,const RegionalConfig& c){
+std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>& requests,const RegionalConfig& c,std::optional<at::Device> selection){
   auto node=std::make_shared<RegionVjp>();variable_list inputs,leaves;
   auto leaf=[&](Tensor& t){inputs.push_back(t);t=t.detach().set_requires_grad(t.requires_grad());leaves.push_back(t);};
   std::map<const c10::TensorImpl*,Tensor> aliases;
@@ -61,7 +61,7 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   std::vector<RegionInput> bound;
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];bound.push_back({r.history,r.time,candidates[i],r.layout,r.payload_options});}
   std::vector<Selection> results;
-  {at::AutoGradMode enable(true);results=regions(w,bound,c,&node->dependencies);}
+  {at::AutoGradMode enable(true);results=regions(w,bound,c,&node->dependencies,selection);}
   node->row_outputs=results[0].controls.size();
   for(size_t i=0;i<results.size();++i){
     size_t j=0;for(auto& [id,t]:results[i].controls){
@@ -73,7 +73,7 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   return results;
 }
 }
-std::vector<Selection> region_vjp(const RegionWeights& w,const std::vector<RegionInput>& requests,const RegionalConfig& c){
+std::vector<Selection> region_vjp(const RegionWeights& w,const std::vector<RegionInput>& requests,const RegionalConfig& c,std::optional<at::Device> selection){
   std::map<std::string,std::vector<size_t>> groups;std::vector<Selection> result(requests.size());
   for(size_t i=0;i<requests.size();++i){
     std::ostringstream key;key<<requests[i].candidates.size();
@@ -82,7 +82,7 @@ std::vector<Selection> region_vjp(const RegionWeights& w,const std::vector<Regio
   }
   for(const auto& [key,ids]:groups){
     std::vector<RegionInput> rows;for(auto i:ids)rows.push_back(requests[i]);
-    auto values=bind_group(w,rows,c);for(size_t j=0;j<ids.size();++j)result[ids[j]]=std::move(values[j]);
+    auto values=bind_group(w,rows,c,selection);for(size_t j=0;j<ids.size();++j)result[ids[j]]=std::move(values[j]);
   }
   return result;
 }

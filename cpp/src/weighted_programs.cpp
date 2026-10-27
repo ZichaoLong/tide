@@ -7,6 +7,7 @@
 #include "weighted_sharing.h"
 #include "weighted_query_batch.h"
 #include "weighted_query_vjp.h"
+#include "weighted_placement.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -123,6 +124,9 @@ template<class Config> class Full final:public FullKernel {
 };
 }
 std::shared_ptr<const StateKernel> make_kv(const KVConfig&);
+bool is_describe(const ReadKernel& kernel){
+  return dynamic_cast<const Describe<KVConfig>*>(&kernel)||dynamic_cast<const Describe<RecurrentConfig>*>(&kernel);
+}
 void configure_node(NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const SourceClasses& classes,double alpha){
   c.validate();r.validate();require(std::isfinite(alpha)&&alpha>=0,"invalid source transform scale");
   w.kernel=make_kv(c);w.aggregate_kernel=std::make_shared<Aggregate>(classes,alpha,c.epsilon);

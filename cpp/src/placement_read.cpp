@@ -1,5 +1,6 @@
 #include "placement_internal.h"
 #include "tide/isolated_read.h"
+#include "weighted_placement.h"
 #include <stdexcept>
 
 namespace tide::placement_detail {
@@ -44,6 +45,7 @@ class PlacedRead final : public ReadKernel {
 };
 }
 std::shared_ptr<const ReadKernel> read_kernel(const Node& node, const NodeWeights& w, const ResolvedPlacement& p) {
+  if(auto placed=weighted::place_read(w,p))return placed;
   const auto previous = dynamic_cast<const PlacedRead*>(w.read_kernel.get());
   if (w.read_kernel && !(previous ? previous->matches(node) : builtin_read(*w.read_kernel, node)))
     throw std::invalid_argument("placement cannot replace a custom or mismatched Read kernel");

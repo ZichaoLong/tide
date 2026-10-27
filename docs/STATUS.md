@@ -30,24 +30,22 @@
 
 ## 当前任务与精确下一动作
 
-完整原生 checkpoint/standalone 训练 a7106fc 的固定资格已完成：
-unit tide-core5-native-training-qualify-20261027，inactive/success、exit 0；20 passed / 0 failed / 0 skipped。
-干净 worktree artifacts/worktrees/core5-bootstrap，tree 6efba49f16535366a5975228d041019c913f737f；
-输出 artifacts/jobs/core5-native-training-qualify，build manifest 已独立保存；launcher .local/core5-native-training-qualify.sh。
-证据将单独提交推送。当前没有活动任务。
+weighted placement 第二轮开发已通过：508 passed / 0 failed / 0 skipped，inactive/success、exit 0。
+unit tide-core5-weighted-placement2-dev-20261027；冻结 tree 259db933bc5d1bc55c62fb52e861d39d5220bb45，
+输出 artifacts/jobs/core5-weighted-placement2-dev，build manifest 已保存。
+五种记忆/三种 Read、十种发送、共享参数/完整记录/VJP/AdamW/续接/CPU checkpoint，
+CPU FP64/FP32 与显式评分 cast；不代表真实设备通过。
 
-主工作区正在实现 weighted placement，尚未构建：结构化 Read 的临时记忆/参数/状态转移，
-区域 control/query 与 selection/分配分别放置，保留原参数身份与精确 raw int64；
-显式 scoring dtype、原始 VJP 版本检查与发送正支持的转换拒绝。
-Python/C++ 实现与 tests/test_weighted_placement.py 已写，仍需完善契约、构建并修正检查。
-短定向公式测试曾误把固定非 grad 参数列为梯度根，1 项失败；已修正测试根清单，待重测。
-这些草稿不属于 a7106fc 或本固定资格。
+第一轮 tree 2cb09da838d5e1335e691dc2fa83a1a31cad4150 因测试缺 ATen/core/grad_mode.h 编译失败，
+原记录 artifacts/jobs/core5-weighted-placement-dev 保持 failed/exit 1；补头文件后第二轮通过。
+短公式检查原先误把固定非 grad 参数加入根清单，原失败保留；修正后已由完整套件覆盖。
 
-下一步完成 placement 实现/契约与定向检查，冻结新的开发 tree，
-启动 tide-core5-weighted-placement-dev-20261027，launcher .local/core5-weighted-placement-dev.sh，
-输出 artifacts/jobs/core5-weighted-placement-dev；background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
-通过后提交实现，再固定资格并独立记录证据。继续真实 mixed/resident 前向/反向/optimizer/跨卡、
-有限 profiling 与最终追溯；CUDA 源码/构建/真机分别记录。总体剩余见 ROADMAP。
+下一动作：提交已测 placement 实现，固定提交至 artifacts/worktrees/core5-bootstrap，
+运行 .local/core5-weighted-placement-qualify.sh（复用校验后的 CPU build），
+新 unit tide-core5-weighted-placement-qualify-20261027 / output artifacts/jobs/core5-weighted-placement-qualify。
+资格通过后独立证据提交推送。主工作区新增三个 scripts/weighted_device* / check_weighted_device.py
+是后续真实 mixed-a/b/c、完整训练/恢复检查草稿，尚未验证，不进入本次 placement 提交。
+继续 weighted resident、低精度、真实跨卡、有限 profiling 与最终追溯；整体目标仍未完成。
 
 ## 环境与保留事项
 
@@ -65,3 +63,10 @@ region4-dev 的 480/2 原失败与诊断在 artifacts/diagnostics/core5-region-p
 artifacts/NAME 与 artifacts/jobs/NAME，不递归 worktree/archive 副本。
 
 来源两轮真实失败与旧5391017基线复现保留在来源证据及原始诊断；不因665项新通过覆盖旧失败。
+
+本轮环境探针：当前 Torch-NPU2.12/CANN9.1 栈的实际 FP32 matmul/relu/sum 得到 152，
+physical13→logical npu:0（Ascend910_9392），queue core5-npu-operator-20261027 completed/exit0；
+仅基础算子探针，不是带权模型资格。queue 记录 artifacts/diagnostics/core5-npu-operator/queue-state.json；
+完整 doctor 输出仅在会话工具记录。后续任务重新选卡，不沿用当时物理 ID。
+独立公开 C++ 入口 libtorch-npu/2.10.0-cann9.0.0 的 SDK 静态/loader 检查通过，
+与 Python2.12 分栈；本轮尚未编译/运行其项目真机检查。未改公共环境。

@@ -2,11 +2,12 @@
 #include "weighted_region_batch.h"
 #include "weighted_sending_batch.h"
 #include "weighted_detail.h"
+#include "weighted_placement.h"
 #include <sstream>
 
 namespace tide::weighted::batch {
 std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionInput>& requests,const RegionalConfig& c,
-                               std::vector<std::string>* dependencies){
+                               std::vector<std::string>* dependencies,std::optional<at::Device> selection){
   std::vector<Selection> result(requests.size());std::map<std::string,std::vector<size_t>> groups;
   if(dependencies)dependencies->resize(requests.size());
   for(size_t i=0;i<requests.size();++i){
@@ -41,14 +42,15 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
     if(c.total()){
       auto rho=context.defined()?context.sigmoid():at::full_like(received,*c.total_fraction);
       low=received.clamp_max(1)+rho*(mass.clamp_max(*c.k)-received.clamp_max(1));high=low;
-      if(c.selection_mode=="regional_total_zero")values=sorted_send(scores,caps,nodes,low);
-    }else if(c.attention())values=attention(scores,caps,recv,c.selection_mode,*c.allocation_base,at::full_like(received,*c.allocation_temperature));
-    else if(c.selection_mode=="proportional")values=proportional(caps,*c.k);
-    else{
+    }else if(!c.attention()&&c.selection_mode!="proportional"){
       shift=context.defined()?context:at::full_like(received,*c.eta);
-      if(c.hard())values=sorted_send(scores-shift.unsqueeze(1),caps,nodes,at::zeros_like(received),*c.k);
       low=(c.regional()?received:mass).clamp_max(1);high=at::full_like(received,*c.k);
     }
+    if(selection)for(auto* t:{&recv,&caps,&scores,&nodes,&received,&low,&high,&shift})if(t->defined())*t=placement_copy(*t,*selection,t->scalar_type());
+    if(c.selection_mode=="regional_total_zero")values=sorted_send(scores,caps,nodes,low);
+    else if(c.attention())values=attention(scores,caps,recv,c.selection_mode,*c.allocation_base,at::full_like(received,*c.allocation_temperature));
+    else if(c.selection_mode=="proportional")values=proportional(caps,*c.k);
+    else if(c.hard())values=sorted_send(scores-shift.unsqueeze(1),caps,nodes,at::zeros_like(received),*c.k);
     std::vector<Tensor> rows;
     if(!values.defined()){
       std::vector<AllocationRow> inputs;

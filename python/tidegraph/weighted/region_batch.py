@@ -41,18 +41,25 @@ def evaluate(program, requests, *, dependencies=None):
             low, high = received.clamp_max(1), mass.clamp_max(c.k)
             rho = context.sigmoid() if context is not None else received.new_full(received.shape, c.total_fraction)
             low = high = low+rho*(high-low)
-            if mode == "regional_total_zero":
-                values = sorted_send(scores, caps, nodes, target=low)
+        elif mode not in ATTENTION and mode != "proportional":
+            shift = context if context is not None else None if c.eta is None else received.new_full(received.shape, c.eta)
+            low = (received if c.regional else mass).clamp_max(1)
+            high = received.new_full(received.shape, c.k)
+        selection = getattr(program, "_selection_device", None)
+        if selection is not None:
+            from .placement_tensors import move
+            recv, caps, scores, nodes, received = (move(t, selection) for t in (recv, caps, scores, nodes, received))
+            shift = move(shift, selection)
+            if mode not in ATTENTION and mode != "proportional":
+                low, high = move(low, selection), move(high, selection)
+        if mode == "regional_total_zero":
+            values = sorted_send(scores, caps, nodes, target=low)
         elif mode in ATTENTION:
             values = attention(scores, caps, recv, mode, c.allocation_base, received.new_full(received.shape, c.allocation_temperature))
         elif mode == "proportional":
             values = proportional(caps, c.k)
-        else:
-            shift = context if context is not None else None if c.eta is None else received.new_full(received.shape, c.eta)
-            if mode in HARD:
-                values = sorted_send(scores-shift[:, None], caps, nodes, k=c.k)
-            low = (received if c.regional else mass).clamp_max(1)
-            high = received.new_full(received.shape, c.k)
+        elif mode in HARD:
+            values = sorted_send(scores-shift[:, None], caps, nodes, k=c.k)
         if values is None:
             allocations = allocate_batch(list(scores.unbind()), list(caps.unbind()), list(low.unbind()), list(high.unbind()),
                 c.allocation_temperature, regularizer=c.regularizer, ent_alpha=c.ent_alpha,

@@ -67,7 +67,7 @@ def read_dtype(spec, payload, placement):
     declared = {"norm-fp32-v1": torch.float32, "norm-fp64-v1": torch.float64}.get(spec.readout, payload)
     precision = placement["scoring_dtype"]
     dtype = declared if precision == "profile" else payload if precision == "payload" else getattr(torch, precision)
-    if spec.readout != "linear-v1" and dtype != declared:
+    if spec.readout != "linear-v1" and not spec.readout.startswith("weighted-describe-v1") and dtype != declared:
         raise ValueError("scoring precision conflicts with the named norm Read contract")
     if dtype == torch.float64 and any(placement[key].type == "npu" for key in ("read", "control", "selection")):
         raise ValueError("NPU Read/control/selection cannot consume FP64 descriptors; select CPU or explicit FP32 Read")
@@ -98,6 +98,8 @@ def place_model(graph, model, placement):
     """
     from .placement_read import PlacedRead
     from .placement_region import PlacedRegion
+    from .weighted.placement import PlacedDescribe, PlacedSending
+    from .weighted.programs import Describe, RegionalTotal
     from .ownership import region_reference
     config = request(placement)
     if len(model.nodes) != len(graph.nodes) or len(model.regions) != len(graph.regions):
@@ -109,9 +111,10 @@ def place_model(graph, model, placement):
         if p["events"].type != "cpu":
             raise ValueError("host model placement cannot provide device-resident event progression")
         node = _shallow_module(weights)
-        node.read_program = PlacedRead(spec, weights.read_program, read_dtype(spec, weights.bias.dtype, p), p["read"])
+        adapter = PlacedDescribe if type(weights.read_program) in {Describe, PlacedDescribe} else PlacedRead
+        node.read_program = adapter(spec, weights.read_program, read_dtype(spec, weights.bias.dtype, p), p["read"])
         nodes.append(node)
     result.nodes = torch.nn.ModuleList(nodes)
-    result.regions = torch.nn.ModuleList(PlacedRegion(spec, program, config.resolve(
+    result.regions = torch.nn.ModuleList((PlacedSending if type(program) in {RegionalTotal, PlacedSending} else PlacedRegion)(spec, program, config.resolve(
         region_reference(graph, model, r).device)) for r, (spec, program) in enumerate(zip(graph.regions, model.regions)))
     return result

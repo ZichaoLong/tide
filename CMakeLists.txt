@@ -53,6 +53,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_query_vjp.cpp
   cpp/src/weighted_allocation_batch.cpp cpp/src/weighted_allocation_rows.cpp
   cpp/src/weighted_sending_batch.cpp cpp/src/weighted_region_batch.cpp cpp/src/weighted_region_vjp.cpp
+  cpp/src/weighted_placement_copy.cpp cpp/src/weighted_placement_read.cpp cpp/src/weighted_placement_region.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_recurrent_packed.cpp
   cpp/src/weighted_gated_packed.cpp
   cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp
@@ -129,6 +130,7 @@ target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_attention_mean.c
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_normalization.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_sharing.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_kv_sharing.cpp)
+target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_placement.cpp)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp)
