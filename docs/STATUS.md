@@ -36,10 +36,15 @@ artifacts/jobs/core5-resident-parameters-dev；原失败不改passed。
 None/零计数、新program恢复后两步精确状态、非有限事务与513维尾块溢出/容量拒绝。
 输出artifacts/jobs/core5-resident-parameters-dev2保存source.tar/source.tree/status.json/task.log/checks/result.json。
 
-当前提交canonical参数归约实现、数学/CPU测试与局部训练check。随后固定此实现提交，
-启动core5-resident-parameters-{npu,cuda}-qualify；NPU复用完整component/core/binary摘要一致的
-build/resident-parameters-dev2并保留原manifest，CPU3项和设备完整组合重验；CUDA新三架构构建。
-资格完成后独立证据提交并推送，继续typed raw state与五记忆。所有旧失败仍保留。
+2e335e7固定资格CPU3、NPU完整局部训练组合及CUDA三架构构建通过。
+core5-resident-parameters-{npu,cuda}-qualify均clean/exit0/inactive，证据
+[evidence/core5-resident-parameters-20261027.json](evidence/core5-resident-parameters-20261027.json)。
+NPU保留原dev2 manifest并核验全部摘要；CUDA无GPU实测。worktree固定2e335e7，无活动reader。
+
+主工作区正在实现typed raw state：weighted_raw_state.h/.cpp、weighted_raw_update.h/.cpp、
+ascendc/weighted_raw_update_math.h及四个登记入口；尚未集成构建或运行，不声称通过。
+全部五记忆的原始字段与int64元数据布局、严格CPU编码/解码、正/零接收与原始时间缓存更新、
+独立字段VJP和事务adopt。下一步补CPU独立公式及standalone检查，冻结开发/固定资格后继续数值记忆。
 
 完整weighted resident仍缺typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow
