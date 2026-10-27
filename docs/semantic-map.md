@@ -6,6 +6,7 @@
 独立精确/分支VJP与验证入口，完整区域控制和图推进另行集成。
 [常驻ScalarHead/Query](resident-weighted-head.md)定义厂商批量算子、动态owner共享参数、
 独立根连接与实际权重版本的显式VJP。
+[常驻完整区域组合](resident-weighted-region.md)接完整描述、head、十种发送、实际支持/history及字段/参数VJP。
 
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。

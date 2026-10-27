@@ -128,6 +128,11 @@ identity remains; new functions enter distinct hashed graph/checkpoint bindings.
 
 ## Weighted scoring bindings
 
+The [resident complete region composition](resident-weighted-region.md) binds
+complete descriptor rows to control/query heads, sending, positive support and
+actual int64 history. Its saved first-order VJP preserves field/parameter roots.
+This SelStep component is separate from full graph scheduling and training owners.
+
 The [resident ScalarHead/Query component](resident-weighted-head.md) uses
 vendor batched affine/SiLU operations, private row activations and device-selected
 parameter owners. Its explicit first-order adjoint sums all selected users and
