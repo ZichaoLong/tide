@@ -1,0 +1,237 @@
+{
+  "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+  "git_tree": "cee0ea977943ee4e3f7463d0533f1a2753c7cde8",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "native explicit FP32 masters/static scale; paired schema2 raw graph checkpoint; CPU and finite standalone NPU half training",
+  "jobs": [
+    {
+      "name": "core5-native-master-qualify",
+      "unit": "tide-core5-native-master-qualify-20261027",
+      "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+      "clean": true,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T12:00:01.263051+00:00",
+      "finished": "2026-10-27T12:02:18.455625+00:00",
+      "log_sha256": "8b7304fc2e61e039323f07090702b9cc5efab24f7efa4ca2a6c8da54ccdac51a",
+      "passed_tests": 24,
+      "source_content_sha256": "08a01cf8c120ecb32f417f0c3e9f5b692634088756b697d26d70ba1ae15d7a5a",
+      "commands": [
+        [
+          "$REPO/.local/venv-core5/bin/python",
+          "-m",
+          "pytest",
+          "tests/test_cpp_master_optimizer.py",
+          "tests/test_cpp_optimizer.py",
+          "tests/test_cpp_checkpoint.py",
+          "tests/test_cpp_weighted_training.py",
+          "-q",
+          "--dtype",
+          "both",
+          "--basetemp",
+          "$REPO/artifacts/jobs/core5-native-master-qualify/test-tmp"
+        ]
+      ]
+    },
+    {
+      "name": "core5-native-master-sdk-build",
+      "unit": "tide-core5-native-master-sdk-build-20261027",
+      "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+      "clean": true,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T12:00:01.272266+00:00",
+      "finished": "2026-10-27T12:04:59.161929+00:00",
+      "log_sha256": "85d140b9e26c23597c019f6f550a3c1e8c5589b1479aff4387c90d1e44046930"
+    },
+    {
+      "name": "core5-native-master-sdk-qualify",
+      "unit": "tide-core5-native-master-sdk-qualify-20261027",
+      "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+      "clean": true,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T12:05:27.778622+00:00",
+      "finished": "2026-10-27T12:08:05.504051+00:00",
+      "log_sha256": "48d2f06777e01b77ebeb661fbcb81b7ea3a062779afb07b75a2e94e85f5df1f9",
+      "queue": {
+        "npu_count": 1,
+        "physical_ids": [
+          9
+        ],
+        "logical_devices": [
+          "npu:0"
+        ],
+        "return_code": 0,
+        "status": "completed"
+      },
+      "results": [
+        {
+          "state": "passed",
+          "cases": 24,
+          "updates_per_case": 4,
+          "complete_native_checkpoint": true,
+          "cpu_reference": true,
+          "placement": "mixed-c",
+          "payload_dtype": "float16",
+          "scoring_dtype": "float32",
+          "optimizer": "sgd",
+          "loss_scale": 16,
+          "fp32_masters": true
+        },
+        {
+          "state": "passed",
+          "cases": 2,
+          "updates_per_case": 4,
+          "complete_native_checkpoint": true,
+          "cpu_reference": true,
+          "placement": "mixed-c",
+          "payload_dtype": "float16",
+          "scoring_dtype": "float32",
+          "optimizer": "adamw",
+          "loss_scale": 16,
+          "fp32_masters": true
+        }
+      ],
+      "commands": [
+        [
+          "build/npu-sdk/tidegraph-weighted-training-check",
+          "--device",
+          "npu:0",
+          "--dtype",
+          "float16",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--optimizer",
+          "sgd",
+          "--loss-scale",
+          "16",
+          "--output-dir",
+          "NEW"
+        ],
+        [
+          "build/npu-sdk/tidegraph-weighted-training-check",
+          "--device",
+          "npu:0",
+          "--dtype",
+          "float16",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--optimizer",
+          "adamw",
+          "--loss-scale",
+          "16",
+          "--case",
+          "fc/kv",
+          "--case",
+          "feedback/delta",
+          "--output-dir",
+          "NEW"
+        ]
+      ],
+      "loader": {
+        "state": "passed",
+        "sha256": "73c17ff46b584962b6d6ac76b07f57c30b14ece4fd987c12e5523201cb3583a0",
+        "forbidden": [
+          "not found",
+          "libtorch_python",
+          "/stubs/",
+          "/stub/",
+          "/simulator/"
+        ],
+        "note": "Independent Python check after submission: shell rg was unavailable. No workload retry. Build script also verifies its loader closure."
+      }
+    }
+  ],
+  "builds": {
+    "cpu": {
+      "source": "01689c00da713413af494b8be0b42d2fe12b59c3",
+      "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+      "torch": "2.12.0+cpu",
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.1.0"
+      },
+      "manifest_sha256": "d3912d800eb0073528da009e3e45073b7cbcb477d97cc25f077b1b6395f74e3c",
+      "binary_sha256": {
+        "libtidegraph.a": "054a6b9774a95f2ffaa32dad22cc6993edc9a59d1b37026d94837f3222cae5e0",
+        "_tide_native.so": "4c72f5675e9e9288ad31c3769550db982e73b5b66fb45e70d1bdb9169136bddb",
+        "tidegraph-weighted-training-check": "3bac46584cb97b4f31ee6294802df0eb80f33475c1cb5d148680954f5841ef69"
+      }
+    },
+    "npu_standalone": {
+      "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+      "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+      "torch": "2.10.0+cpu",
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.0.0"
+      },
+      "sdk_hashes": {
+        "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+        "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+      },
+      "manifest_sha256": "dd4f02a5a31e3deaae9e023fff0f543f03548afae76e0a3d40a1c1a6765f201a",
+      "binary_sha256": {
+        "libtidegraph.a": "987e11dd3cc4a6000510131ad6ba45ef0a545a37a15a2617c815effe6bfead1e",
+        "tidegraph-weighted-training-check": "33b105e3e59e819ebeb44a9fc44914686bcb602e72e7b5ff972b0138542609b1"
+      }
+    }
+  },
+  "cpu_build_reuse": "Original build source01689c0+dirty snapshot18e7e04d; exact C++ and all binary hashes verified for670ead3. Preserve original manifest source field.",
+  "fixture_hashes": {
+    "cpp/test/weighted_graph_fixture.cpp": "9c3d6401bc71902115f70b69c1dc1492b6c86cc272d27cd4b9298105861b6de7",
+    "cpp/test/weighted_graph_training.cpp": "2e4ce3651bc225f13b374a1aee8835fc83063f5649b0366daa015a023042a5ac",
+    "tests/test_cpp_master_optimizer.py": "73e59107ea964a40af4879899f0c2f359037da2bfa8f593d662f57016a2a5cce",
+    "tests/test_cpp_weighted_training.py": "58f0c854941a33561e9dc480a1d09d9c59b332d4254eae1ae2d616e27cc60dab"
+  },
+  "tolerances": {
+    "float64": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    },
+    "float32": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    },
+    "float16_and_master_observables": {
+      "atol": 0.001,
+      "rtol": 0.02
+    },
+    "discrete": "exact",
+    "checkpoint_raw_master_slots": "exact"
+  },
+  "resources": {
+    "slice": "background.slice",
+    "nice": 10,
+    "build_workers": 2,
+    "aten_blas_threads": 1,
+    "cpu_build_timeout_s": 1800,
+    "npu_queue_wait_s": 180,
+    "npu_runtime_timeout_s": 1200
+  }
+}

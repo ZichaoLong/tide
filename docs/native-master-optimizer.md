@@ -34,3 +34,6 @@ master量化必须与文件里的实际half参数逐值一致。所有分配/own
 standalone入口新增`--dtype=float16 --scoring-dtype float32 --optimizer sgd|adamw --loss-scale 16`。
 half比较atol1e-3/rtol2e-2用于所有浮点观察量；离散与None严格；恢复的raw/master/slots逐值精确。
 默认AdamW不会因某个图失败而自动换SGD。开发、固定源码资格与设备范围分别记录于STATUS/证据索引。
+
+[670ead3固定资格](evidence/core5-native-master-20261027.md)分别覆盖CPU24项及
+独立SDK实际NPU FP16显式SGD24图/AdamW2图、设备→CPU checkpoint后的第四步。
