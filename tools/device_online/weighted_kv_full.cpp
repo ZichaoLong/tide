@@ -11,10 +11,12 @@ WeightedKVFullTape append_weighted_kv_full(DeviceProgram& p,const weighted::KVCo
     ||!w.query.defined()||w.query.dim()!=3||w.query.size(0)<1)
     throw std::invalid_argument("KV Full requires explicit rows and raw snapshot");
   const auto device=input.device();const auto rows=input.size(0),d=c.width,heads=c.heads,dh=d/heads,capacity=raw.integer.size(1)-4,banks=w.query.size(0);
+  const auto initial_bytes=p.retained_tensor_bytes();
   check(input,device,at::kFloat,{rows,d});check(owners,device,at::kLong,{rows});check(active,device,at::kBool,{rows});check(w.query,device,at::kFloat,{banks,d,d});
   check(w.residual.out,device,at::kFloat,{banks,d,d});check(w.residual.gate,device,at::kFloat,{banks,c.ffn_width,d});
   check(w.residual.up,device,at::kFloat,{banks,c.ffn_width,d});check(w.residual.down,device,at::kFloat,{banks,d,c.ffn_width});
-  check(error,device,at::kInt,{1});budget(rows*(256.L*(capacity*(d+c.summary_width+heads+1.L)+static_cast<long double>(d)*d+3.L*d*c.ffn_width+d)+256),available);
+  check(error,device,at::kInt,{1});budget(rows*(256.L*(capacity*(d+c.summary_width+heads+1.L)+static_cast<long double>(d)*d+3.L*d*c.ffn_width+d)+256)
+    +(raw.floating.scalar_type()==at::kHalf?4.L*raw.floating.numel():0),available);
   for(auto slope:c.distance_slopes)if(!std::isfinite(float(slope)))throw std::invalid_argument("unrepresentable Full distance slope");
   auto window=append_weighted_kv_window(p,c,raw,time,active,error,available);
   auto full_owners=at::zeros_like(owners),qowners=at::zeros_like(owners),entry_owners=at::zeros({rows*capacity},owners.options()),clean=at::zeros_like(input);
@@ -40,6 +42,7 @@ WeightedKVFullTape append_weighted_kv_full(DeviceProgram& p,const weighted::KVCo
   }
   auto memory=merge(p,reads).reshape({rows,d});
   auto residual=append_weighted_residual(p,input,memory,full_owners,w.residual,c.epsilon,c.alpha_att,c.alpha_ff,error,available);
+  budget(p.retained_tensor_bytes()-initial_bytes,available);
   return {window,query,rotary,pool,residual,queries,scale,residual.output};
 }
 }

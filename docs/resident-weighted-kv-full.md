@@ -26,12 +26,16 @@ raw 摘要和适配 value 不被 Full 读取，保持 None；数值零不充当�
 所有数值和连接使用保存 tape，原参数/输入/状态改写不改变该次反向。
 checkpoint 的精确状态仍用原始raw codec，本函数不以有效状态投影代替状态。
 
-显式 FP32 accelerator 与独立scratch准入；非法原始状态、非有限相位/数值及容量不足
+显式accelerator；raw存储FP32/FP16，输入、参数、窗口与Full结果G、保存值和所有伴随为FP32。
+half raw经设备Cast精确拓宽，VJP声明identity；这是实际量化原始状态上的FP32 Full，
+不是half参数/Full输出路径。独立scratch准入覆盖拓宽，组合末尾还核验实际保留张量量。
+非法原始状态、非有限相位/数值及容量不足
 明确拒绝。完整在线图的选择、队列、输出提交、retained训练和checkpoint仍需上层验收。
 
 `weighted_kv_full_check.cpp` 使用逐条独立CPU公式、dense旋转矩阵和autograd，
 覆盖有限/无限窗口×NoPE/两种头旋转共四配置、96重放行、两个头/三个共享bank，
 全部五参数角色、u/raw五字段、None/零、极大age、保存版本及容量拒绝。
+两dtype各自独立检查，公式直接消费实际量化raw；不将FP32资格自动扩大到FP16。
 公共残差检查另覆盖四组零/非零尺度和完整反向。
 CPU逻辑时间距离/选择使用检查在 `test_resident_weighted_kv_full.py`；
 入口 `scripts/{build,verify}_device_control.py --checks weighted-residual weighted-kv-full`。

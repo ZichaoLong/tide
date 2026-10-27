@@ -23,7 +23,7 @@ struct Formula {std::vector<Tensor> leaves,output;};
 Formula reference(const weighted::KVConfig& c,const WeightedRawLayout& l,const std::vector<State>& old,const Tensor& times,
     const Tensor& input,const Tensor& owners,const Tensor& active,const WeightedKVFullParameters& w){
   at::AutoGradMode enabled(true);Formula f;auto states=old;std::vector<std::vector<Tensor>> params(5);
-  for(int r=0;r<R;++r)for(const auto& part:l.fields()){auto x=field(states[r],part.name).clone().set_requires_grad(true);field(states[r],part.name)=x;f.leaves.push_back(x);}
+  for(int r=0;r<R;++r)for(const auto& part:l.fields()){auto x=field(states[r],part.name).to(at::kFloat).clone().set_requires_grad(true);field(states[r],part.name)=x;f.leaves.push_back(x);}
   for(int r=0;r<R;++r)f.leaves.push_back(input[r].clone().set_requires_grad(true));
   for(int role=0;role<5;++role)for(int bank=0;bank<B;++bank){auto x=roles(w)[role][bank].clone().set_requires_grad(true);params[role].push_back(x);f.leaves.push_back(x);}
   const auto dh=D/c.heads;
@@ -64,10 +64,11 @@ void compare(const WeightedRawLayout& l,const Formula& f,const Tensor& bars,cons
   for(int role=0;role<5;++role)for(int bank=0;bank<B;++bank){const auto& e=expected[6*R+role*B+bank];require(flags[role][bank].item<bool>()==e.defined(),"KV Full parameter role None/zero differs");
     if(e.defined())close(parameters[role][bank],e);else require(parameters[role][bank].cpu().eq(0).all().item<bool>(),"absent Full parameter derivative nonzero");}
 }
-void check(at::Device device,int64_t horizon,bool positions){
+void check(at::Device device,at::ScalarType dtype,int64_t horizon,bool positions){
   at::NoGradGuard ng;weighted::KVConfig c;c.width=D;c.summary_width=DS;c.ffn_width=F;c.heads=2;c.epsilon=.13;c.position_scale=7;c.window=horizon;
   c.alpha_att=.3;c.alpha_ff=positions?.7:.4;if(positions){c.full_frequencies={{.13},{-.07,.11}};c.distance_slopes={.01,.03};}
-  WeightedRawLayout l(c,C);auto states=fixture(l);auto source=encode_weighted_raw_state(l,states),raw=copy_weighted_raw_state(source,device);auto opt=raw.floating.options();
+  WeightedRawLayout l(c,C);auto states=fixture(l);for(auto& state:states)for(const auto& part:l.fields())field(state,part.name)=field(state,part.name).to(dtype);
+  auto source=encode_weighted_raw_state(l,states),raw=copy_weighted_raw_state(source,device);auto opt=raw.floating.options().dtype(at::kFloat);
   auto input=at::zeros({R,D},opt),times=at::zeros({R},opt.dtype(at::kLong)),owners=at::zeros_like(times),active=at::zeros({R},opt.dtype(at::kBool));
   auto bars=at::zeros_like(input),roots=at::zeros_like(active),error=at::zeros({1},opt.dtype(at::kInt));
   WeightedKVFullParameters w{at::zeros({B,D,D},opt),{at::zeros({B,D,D},opt),at::zeros({B,F,D},opt),at::zeros({B,F,D},opt),at::zeros({B,D,F},opt)}};
@@ -92,8 +93,9 @@ void check(at::Device device,int64_t horizon,bool positions){
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("KV Full requires explicit accelerator/FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("KV Full requires explicit accelerator FP32/FP16 raw storage");
+    args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
-    for(int64_t horizon:{0,5})for(bool positions:{false,true})check(device,horizon,positions);
-    std::cout<<"weighted-kv-full: passed configurations=4 replay_rows=96 heads=2 all_parameter_input_raw_vjp=true saved_versions=true\n";return 0;
+    for(int64_t horizon:{0,5})for(bool positions:{false,true})check(device,args.dtype,horizon,positions);
+    std::cout<<"weighted-kv-full: passed configurations=4 replay_rows=96 heads=2 all_parameter_input_raw_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

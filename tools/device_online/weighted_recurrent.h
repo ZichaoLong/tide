@@ -24,6 +24,9 @@ struct WeightedRecurrentTape {
 };
 // Memory reads explicitly supplied initial/old/proposal raw state. Full caller
 // supplies proposal + actual active mask. Update retains every positive receive.
+// Raw storage accepts FP32/FP16. Content, mass, parameters, effective snapshots,
+// Memory/Full returns and all saved adjoints are FP32. Update rounds raw once
+// after full FP32 computation and validates storage before guarded adoption.
 WeightedRecurrentTape append_weighted_recurrent(DeviceProgram&,const weighted::RecurrentConfig&,WeightedRecurrentAction,
   const WeightedRawState&,const at::Tensor& time,const at::Tensor& mass,const at::Tensor& content,
   const at::Tensor& owners,const at::Tensor& present,const WeightedRecurrentParameters&,

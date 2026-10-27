@@ -7,7 +7,8 @@
 
 `append_weighted_recurrent` 接 `RecurrentConfig`、Update/Memory/Full action、实际 raw state、
 `time[R] int64`、`mass[R]`、`content[R,d]`、`owners[R] int64`、`present[R] bool`及参数bank。
-FP32数值、int64时间/计数/缓存时间戳分离；raw布局及精确编解码见[状态契约](resident-weighted-state.md)。
+raw存储显式FP32/FP16；mass/content/参数、有效快照、算术、Mem/Full返回及全部伴随为FP32。
+int64时间/计数/缓存时间戳分离；raw布局及精确编解码见[状态契约](resident-weighted-state.md)。
 参数bank与私有状态行分离，owner指定实际共享参数；缺席由present决定。
 Update的mass<=0直接保留整个raw元组，正接收更新全部候选；Full由调用者绑定实际active与proposal。
 Memory明确绑定所需初态/旧态/候选态，不用有效状态替代checkpoint原始元组。
@@ -36,12 +37,22 @@ softplus和归一化是设备批量算子。bounded key用sqrt(max(1,||k||²))�
 配置的正衰减率若在FP32中下溢成零则提前拒绝；数值衰减下溢零仍连接原H/Z/W字段，不删cache、不改逻辑活动集合。
 容量准入覆盖局部张量和独立vendor workspace，非法值或超容量显式拒绝。
 
+FP16旧态精确拓宽到FP32，完整Update完成后只在最终raw存储处舍入一次，所有实际
+固定/变长字段再次校验；padding不参与校验。有限FP32结果溢出half时拒绝，不提交live owner。
+零接收保留原始位模式；正FP32接收即使最终W或缓存值下溢成half零，仍保留更新、
+时间/计数和原始时间缓存条目。Cast声明identity一阶VJP，不能把FP16叶梯度累加或
+舍入阶梯导数当作此组件反向。raw伴随始终FP32，FP16 cotangent拒绝。
+快照与完整组合分别预算拓宽/舍入/guard缓冲，完整组合末尾核验实际保留张量量。
+
 `test_resident_weighted_recurrent.py`独立核验巨大原始age、负差钳制、下溢连接、
 精确metadata和身份路径；`test_resident_weighted_describe.py`核验扩展标量VJP。
 `weighted_recurrent_formula.cpp`逐行直接写教材公式，不调用候选局部代数、快照、更新或卷积；
 `weighted_recurrent_check.cpp`覆盖四族×两种Mem×三action，完整字段及共享参数根、
 零接收、空缓存、两组四头SSD、非对齐时间、保存版本与动态出现。原有Python手算公式是另一独立锚点。
 入口 `scripts/{build,verify}_device_control.py --checks weighted-recurrent`。
+两dtype检查直接在实际量化raw的独立FP32公式上求导；仅Update前向期望最终舍入。
+额外四族见证精确检查次正规快照、零接收按位保留、2^-25正接收后零W/缓存条目及质量根、
+生成值溢出不提交。两dtype源码扩展的设备资格另记，不追溯改变旧报告范围。
 
 这部分仍是局部数值组件；全图在线就绪/选择/推进、retained训练、精确图checkpoint、peer与性能另行验收。
 
