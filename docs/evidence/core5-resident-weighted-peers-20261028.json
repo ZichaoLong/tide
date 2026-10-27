@@ -1,0 +1,341 @@
+{
+  "source": "7db0b08e33c90b3fc278f2acdbce2ba738297310",
+  "python_source": "672e9484ea9ca6033f2b09ab1efaf57db56eefea",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "scope": "Public independent-sample replica gradients, shared SGD/AdamW updates and exact continuations; standalone master-check lifetime requalification",
+  "jobs": [
+    {
+      "source": "7db0b08e33c90b3fc278f2acdbce2ba738297310",
+      "state": "passed",
+      "started": "2026-10-27T21:59:45.177480+00:00",
+      "finished": "2026-10-27T22:16:45.423981+00:00",
+      "exit_code": 0,
+      "name": "core5-peer-owner-lifetime-npu-qualify",
+      "unit": "tide-core5-peer-owner-lifetime-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "7105c967bda17b6d9d38ca9ff6858ac453494dd0797fb23f72f5ba14ed0b4fe7",
+      "log_sha256": "68e6ba2311d72ff5d41077105fea372c0738fd28d31a0363e08180da2756ae0a",
+      "build": {
+        "component_sha256": "f6fced5b02bbe19db9cdd7fd1315c2f77573d31ad009df92cf1ae6b314504dcf",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-training",
+          "weighted-peer"
+        ],
+        "binary_sha256": {
+          "tide-weighted-training-check": "f3caceaadcd0bbbbd2ae91c659512bf989931368e11ebb306ce04940a3350e74",
+          "tide-weighted-peer-check": "8ea73f833948c3eebdad357b699b7b0ac7111b326a55457ae14e61fca0952550",
+          "libtide-weighted-flow.so": "a81bd4899ffad34121b0aa5339430f173c02a01b9269ff53277e81968dff2aea",
+          "libtide-weighted-training.so": "5d9d1c24b60ea07d8f7e10c989540618c9a753ef811e9e73fb5eca7523b00396"
+        },
+        "loader_sha256": {
+          "tide-weighted-training-check": "1d37fcb11f07630f6bb205c508e8ca4c1777b32c298c7971831be2a0d67682ab",
+          "tide-weighted-peer-check": "9536729896ce48c53d19762bb2108306cf645a0535119ed296b0ffef91ac74e2",
+          "libtide-weighted-flow.so": "4a1f15dc4220c9d01285c2831883514e2d7f980b77b9bd3d2aac114964b972ec",
+          "libtide-weighted-training.so": "74882c0ce4fc706745c80196bff204b3d2176c5ae01c870fe6f1cbb581d0f95d"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cpu": {
+        "passed": 4,
+        "skipped": 0,
+        "seconds": 0.724,
+        "xml_sha256": "547c13f1a6929f917441eecda1848deeeff01b046c6bb0323f04f1bad9b1c4ff",
+        "cases": [
+          {
+            "classname": "tests.test_resident_weighted_peer_identity",
+            "name": "test_replica_difference_is_exact_and_sticky[left0-right0]",
+            "time": "0.669"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peer_identity",
+            "name": "test_replica_difference_is_exact_and_sticky[left1-right1]",
+            "time": "0.001"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peer_identity",
+            "name": "test_replica_difference_is_exact_and_sticky[left2-right2]",
+            "time": "0.000"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peer_identity",
+            "name": "test_replica_difference_is_exact_and_sticky[left3-right3]",
+            "time": "0.001"
+          }
+        ]
+      },
+      "cases": [
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "e235d7bf130e0218533dfd3b095a58ee0181681fa8df27af84059ad0ef392123",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "799b9870a32456f1def4e449bf8e08c2a9769b4b4d22343511227c7409b256b8",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        },
+        {
+          "check": "weighted-peer",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "fec694dcddc95b672e8c411d2791717529c3dddd9832353dc5b034a395357ce8",
+          "markers": [
+            "weighted-peer: passed configurations=2 updates=6 replicas=2 complete_roots=true both_optimizers=true resume=true consensus_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-peer",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c4237a0269a49db141011b6bfab5372050645536a019ed0b3d272817ed0860e0",
+          "markers": [
+            "weighted-peer: passed configurations=2 updates=6 replicas=2 complete_roots=true both_optimizers=true resume=true consensus_refusal=true"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 273.5315493158996,
+        "job_id": "core5-peer-owner-lifetime-npu-qualify-20261028",
+        "logical_devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "npu_count": 2,
+        "physical_ids": [
+          9,
+          13
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T22:16:45.401258+00:00"
+      }
+    },
+    {
+      "source": "7db0b08e33c90b3fc278f2acdbce2ba738297310",
+      "state": "passed",
+      "started": "2026-10-27T21:59:45.178592+00:00",
+      "finished": "2026-10-27T22:08:36.845616+00:00",
+      "exit_code": 0,
+      "name": "core5-peer-owner-lifetime-cuda-qualify",
+      "unit": "tide-core5-peer-owner-lifetime-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "dc51ad6a638513b96cec98b822718df53b774b72685b38aaa2b4ed00aa45dffb",
+      "log_sha256": "b170e4941536507592c10fd3033acfc988a3760eb902ad862a7853f11afe14fe",
+      "build": {
+        "component_sha256": "f6fced5b02bbe19db9cdd7fd1315c2f77573d31ad009df92cf1ae6b314504dcf",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-training",
+          "weighted-peer"
+        ],
+        "binary_sha256": {
+          "tide-weighted-training-check": "f752380fad27d21e7052c5b747a303ae73954e77ab4ceda9cc5c485deb110344",
+          "tide-weighted-peer-check": "be6cc0e1071cb0adc4ed96fda7f3ea5f77e8e6e78fd558648ebc712c0cbef7c4",
+          "libtide-weighted-flow.so": "85eedb9d1f93becdb3bf2a788bee52c56502d5473445132cc46be32ab9d1acd5",
+          "libtide-weighted-training.so": "1b7b6d66865221891cf6e249562641efa97ee82ad712e38f8821d597c697896e"
+        },
+        "loader_sha256": {
+          "tide-weighted-training-check": "493c3e03cce6ae31d9fad1648981667bf1b695546c5127ea25abc0368480f42c",
+          "tide-weighted-peer-check": "9d11117ee2dae64da558c0112ec69d33a0829fd7344f76ca3d998718669a5aba",
+          "libtide-weighted-flow.so": "e8c316fa98e45cc572b21da05fa26b3845d9abe5c6dd87efef298138dac8aac0",
+          "libtide-weighted-training.so": "54097228db2761b40a2016b5d1b383b524a3749856823655284443502285e41e"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cuda": {
+        "selected_compile_commands": 68,
+        "architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "9ff2f91ee98dc4f3b64abcad30519507a5b701c8a3beb56890d25a5f27f8c84c",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "weighted-training": "12dd45acf1c188361eaa36018cd2ca71e7ce67ab225e1fd6cb2f9ddb7776005c",
+        "weighted-peer": "8fe8ce51f7ce70dd256de5e28a8f57adc7389c9725f06b0bef9ed51fa6003069"
+      }
+    },
+    {
+      "source": "672e9484ea9ca6033f2b09ab1efaf57db56eefea",
+      "state": "passed",
+      "started": "2026-10-27T21:43:22.999195+00:00",
+      "finished": "2026-10-27T21:56:16.854863+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-peer-python-qualify",
+      "unit": "tide-core5-weighted-peer-python-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "525af0f1c1788ec9d5f88b2d41fe028073b1c9bc93b8800d5c7366845fe20637",
+      "log_sha256": "d3a57c3a731f5b30dd3f7a5ab7d23463a1306138852a4030ec6525bfbbb3ebdd",
+      "build": {
+        "component_sha256": "13364d29fb1e959dc3ac36d6138139372412c1894eaf0b0938563cd9ae490985",
+        "backend": "npu",
+        "runtime": "python",
+        "requested_checks": null,
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "6525e057d32935d54af3393abd810f4eba03f6df34875a541c556a5b04467138",
+          "libtide-weighted-flow.so": "ecf1c54ca4c79407f99e04815f8380aa2aebbef1fbcd6be884dbd99ebf08123b",
+          "libtide-weighted-training.so": "70a598ed5688bc1db27c462b1e722627ef474d93b5a5ac5ce545824d5efcd0a2"
+        },
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "d031aa1febd49745eca50aa5aa360be9cb78b542f4be264cf1247e455ab56ba7",
+          "libtide-weighted-flow.so": "5d516e866961d94efafb829d2862e86f82e3411fbf2d180b141a4aa0b6b3237f",
+          "libtide-weighted-training.so": "8ae63bb42d3ed4d2056f0da1fee4e141ffe73b67fd132ff32f8ca1d3d0c79320"
+        },
+        "core": {
+          "source": "01689c00da713413af494b8be0b42d2fe12b59c3",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "python": "3.12.13",
+          "cxx11_abi": true
+        }
+      },
+      "pytest": {
+        "passed": 4,
+        "skipped": 0,
+        "seconds": 62.496,
+        "xml_sha256": "8b1f55c042317557ab5885ec0d1adee43ce7ac310729345e38344a45077bc18b",
+        "cases": [
+          {
+            "classname": "tests.test_resident_weighted_peers",
+            "name": "test_public_sample_replicas_share_one_update[kv-pdg-sgd-storage_dtype0]",
+            "time": "17.291"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peers",
+            "name": "test_public_sample_replicas_share_one_update[kv-pdg-sgd-storage_dtype1]",
+            "time": "6.178"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peers",
+            "name": "test_public_sample_replicas_share_one_update[ssd-hb-adamw-storage_dtype0]",
+            "time": "19.252"
+          },
+          {
+            "classname": "tests.test_resident_weighted_peers",
+            "name": "test_public_sample_replicas_share_one_update[ssd-hb-adamw-storage_dtype1]",
+            "time": "19.496"
+          }
+        ]
+      },
+      "queue": {
+        "elapsed_seconds": 74.93363928422332,
+        "job_id": "core5-weighted-peer-python-qualify-20261028",
+        "logical_devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "npu_count": 2,
+        "physical_ids": [
+          9,
+          13
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:56:16.837072+00:00"
+      }
+    }
+  ],
+  "changed_production_tree_files": [
+    "tools/device_online/weighted_training_peer_check.cpp",
+    "tools/device_online/weighted_training_trajectory.cpp"
+  ],
+  "retained_failure": {
+    "job": "core5-weighted-peer-npu-qualify",
+    "source": "672e9484ea9ca6033f2b09ab1efaf57db56eefea",
+    "state": "failed",
+    "exit_code": 1,
+    "status_sha256": "4d2a7702cacc8ca79a8cf32cbfba7d29cb91df8e989b860a3f0c1cc8f62aa3e9",
+    "log_sha256": "dded0f2faf87a65b2c48bf35b9ca71a92072737e43b4df608ce3a3cd3c7442ba",
+    "reason": "standalone checker referred to elements in temporary owners() vectors; FP32 bad_alloc, FP16 not reached"
+  },
+  "diagnosis": {
+    "job": "core5-weighted-peer-bad-alloc-diagnose",
+    "log_sha256": "0377b9ed12a9c7e076f1d3d9938a716895d5ed9da1a273924c38adffc334e0ec",
+    "scope": "GDB exception trace in checker run()/std::string::reserve; diagnostic exit 0 is not numerical acceptance"
+  },
+  "independence": [
+    "Independent CPU time recursion/Greedy per sample; complete private state/message/control/pending observables.",
+    "Canonical partial gradients and all connected flags sum across every sample; local raw/input roots checked independently.",
+    "Independent NamedOptimizer/torch.optim trajectory, master-to-storage publication, three joint updates, accumulation and restore.",
+    "Exact optimizer identity guard uses literal int64, signed zero and FP32/half byte witnesses."
+  ],
+  "precision": {
+    "storage": [
+      "float32",
+      "float16"
+    ],
+    "arithmetic": "float32",
+    "adjoints": "float32",
+    "masters": "float32",
+    "gradients": {
+      "rtol": 3e-05,
+      "atol": 3e-06
+    },
+    "parameters": {
+      "rtol": 1e-05,
+      "atol": 1e-06
+    },
+    "half_records": {
+      "rtol": 0.02,
+      "atol": 0.001
+    }
+  },
+  "limits": [
+    "Independent-sample replicas only; single-sample node/state partitioning is not implemented by this interface.",
+    "CUDA build/loader/help only; real hardware pending.",
+    "No throughput or new installed-consumer claim.",
+    "This requalification does not relabel the original failure or validate its dangling-reference assertions.",
+    "Eager asynchronous peer, FP16 GDN AdamW and SDK affine strict witnesses remain separate."
+  ]
+}
