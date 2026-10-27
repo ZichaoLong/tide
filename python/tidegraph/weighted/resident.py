@@ -17,7 +17,7 @@ from ..resident_loader import load_resident
 
 class WeightedResident:
     def __init__(self, graph, model, *, device, native_library, resident_library,
-                 batch_size=1, continuation=None, limits=None):
+                 batch_size=1, continuation=None, limits=None, node_devices=None):
         integers("resident batch size",batch_size)
         if batch_size<1 or torch.is_grad_enabled():
             raise ValueError("weighted resident inference requires positive batch size and torch.no_grad()")
@@ -29,6 +29,9 @@ class WeightedResident:
         self.device=torch.device(device)
         if self.device.type not in {"cuda","npu"} or self.device.index is None:
             raise ValueError("weighted resident requires an explicit indexed accelerator")
+        from .resident_placement import node_placement
+        placement=node_placement(node_devices,self.device,len(graph.nodes))
+        self.requested_node_devices=None if node_devices is None else list(map(str,placement))
         if any(x.device.type!="cpu" or x.dtype not in {torch.float32,torch.float16} for x in model.state_dict().values()):
             raise ValueError("weighted resident boundary requires CPU FP32/FP16 parameters")
         model.validate_binding(graph)
@@ -54,7 +57,8 @@ class WeightedResident:
         self.effective_limits={name:getattr(spec,name) for name in
             ("queue","stages","cache","tensor_bytes","operator_bytes","timeout_ms","prefill")}
         self.identity=parameter_identity(model)
-        self.owner=self.module.WeightedFlow(self.compiled,weights,to_continuation(self.core,graph,self.compiled,q),self.device,spec)
+        self.owner=self.module.WeightedFlow(self.compiled,weights,to_continuation(self.core,graph,self.compiled,q),self.device,spec,placement)
+        self.effective_node_devices=list(map(str,self.owner.node_devices))
         self.cut=q.cut
 
     def _validate(self):
@@ -82,6 +86,7 @@ class WeightedResident:
                     scoring_dtype="float32",adjoint_dtype="float32",
                     execution="resident",requested_limits=self.requested_limits,
                     effective_limits=self.effective_limits,reserved_tensor_bytes=self.owner.reserved_bytes,
+                    requested_node_devices=self.requested_node_devices,effective_node_devices=self.effective_node_devices,
                     build=self.build_record,training=False)
 
     def close(self):

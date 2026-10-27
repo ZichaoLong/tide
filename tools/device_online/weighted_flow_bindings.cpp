@@ -10,9 +10,11 @@ PYBIND11_MODULE(_tide_weighted_resident,module){
     FIELD(queue) FIELD(stages) FIELD(cache) FIELD(tensor_bytes) FIELD(operator_bytes) FIELD(timeout_ms) FIELD(prefill);
   py::class_<WeightedFlow>(module,"WeightedFlow")
     .def(py::init<Graph,Model,const Continuation&,at::Device,WeightedFlowLimits>(),py::call_guard<py::gil_scoped_release>())
+    .def(py::init<Graph,Model,const Continuation&,at::Device,WeightedFlowLimits,std::vector<at::Device>>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&WeightedFlow::advance,py::call_guard<py::gil_scoped_release>())
     .def("checkpoint",&WeightedFlow::checkpoint,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("reserved_bytes",&WeightedFlow::reserved_bytes)
+    .def_property_readonly("node_devices",&WeightedFlow::node_devices)
     .def("close",&WeightedFlow::close,py::call_guard<py::gil_scoped_release>());
 #undef FIELD
   bind_weighted_training(module);

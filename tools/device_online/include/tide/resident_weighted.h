@@ -11,6 +11,9 @@ struct WeightedFlowLimits {
 class WeightedFlow {
  public:
   WeightedFlow(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits={});
+  // Empty placement keeps every node on the coordinator. Otherwise exactly one
+  // indexed same-backend device per node; region/queue ownership stays global.
+  WeightedFlow(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits,std::vector<at::Device> node_devices);
   ~WeightedFlow();
   WeightedFlow(const WeightedFlow&)=delete;
   WeightedFlow& operator=(const WeightedFlow&)=delete;
@@ -19,11 +22,13 @@ class WeightedFlow {
   Result advance(const std::vector<External>&,Index until);
   Continuation checkpoint()const; // Detached exact raw state, ledger and pending.
   int64_t reserved_bytes()const;
+  std::vector<at::Device> node_devices()const;
   void close();
  private:
   friend class WeightedWindowAdjoint;
   friend class WeightedTrainingSession;
   friend struct WeightedWindowSnapshot;
+  friend struct WeightedFlowPeerTestAccess;
   struct Impl;std::unique_ptr<Impl> impl_;
 };
 }

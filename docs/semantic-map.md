@@ -11,6 +11,9 @@
 [带权样本副本](resident-weighted-peers.md)把独立私有状态和共享参数贡献分开，通过
 完整参数梯度和与共同提交保持一个optimizer边界；单样本跨卡节点切分未由此接口实现。
 
+[单样本节点放置](resident-weighted-placement.md)另行实现完整纤维请求、全区域选择与共同提交；
+当前新前向/精确恢复待资格，放置后的VJP和训练接入继续实施。
+
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；开发/资格状态另记，公共训练owner继续。
 
 [Weighted实际窗口VJP](resident-weighted-window-vjp.md)组合设备journal逆序、消息与状态前驱及canonical参数累加；公共训练owner另验收。

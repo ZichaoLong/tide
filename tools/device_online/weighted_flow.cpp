@@ -4,6 +4,8 @@
 #include <ATen/core/grad_mode.h>
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <limits>
+#include <set>
+#include <algorithm>
 namespace tide::device_online {
 namespace {
 Model snapshot(Model m){
@@ -22,19 +24,28 @@ void fill(const AtomBatch& target,const std::vector<Atom>& atoms){
 }
 void sync(at::Device d){c10::impl::VirtualGuardImpl(d.type()).synchronizeDevice(d.index());}
 }
-WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,WeightedFlowLimits l)
-  :graph(std::move(g)),model(std::move(m)),boundary(q),device(d),limits(l){
+WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,WeightedFlowLimits l,std::vector<at::Device> placement)
+  :graph(std::move(g)),model(std::move(m)),boundary(q),device(d),limits(l),node_devices(std::move(placement)){
   if(at::GradMode::is_enabled()||d.type()!=resident_device_type)throw std::invalid_argument("weighted flow requires explicit no-grad resident device");
   validate_kernel_device(d);
   if(l.queue<1||l.stages<1||l.cache<1||l.tensor_bytes<1||l.operator_bytes<1||l.timeout_ms<1||q.batch_size<1
     ||static_cast<long double>(l.queue)*q.batch_size*std::max<int64_t>(1,model.width())*64>l.tensor_bytes)
     throw std::invalid_argument("invalid weighted flow capacities/budget");
   graph.compile();configure_model(graph,model);validate_model(graph,model);
+  if(node_devices.empty())node_devices.assign(graph.nodes.size(),d);
+  if(node_devices.size()!=graph.nodes.size())throw std::invalid_argument("weighted placement needs one device per node");
+  std::set<int64_t> checked;
+  for(auto target:node_devices){
+    if(target.type()!=d.type()||target.index()<0)throw std::invalid_argument("weighted node placement requires indexed same-backend devices");
+    if(checked.insert(target.index()).second)validate_kernel_device(target);
+  }
+  if(l.timeout_ms>60000&&std::any_of(node_devices.begin(),node_devices.end(),[&](at::Device x){return x!=d;}))
+    throw std::invalid_argument("weighted peer notification timeout must not exceed 60000ms");
   for(const auto& w:model.nodes)if(!w.bias.device().is_cpu()||(w.bias.scalar_type()!=at::kFloat&&w.bias.scalar_type()!=at::kHalf)||!w.next_kernel->comparison_identity())
     throw std::invalid_argument("weighted flow requires CPU FP32/FP16 parameters and comparison-identity Next");
   journal_bytes=weighted_flow_preflight(graph,model,q.batch_size,l);
   model=snapshot(std::move(model));validate_window(graph,model,boundary,{},q.cut,q.cut);
-  for(size_t v=0;v<graph.nodes.size();++v){auto n=std::make_unique<WeightedFlowNode>(model,v,boundary,d,l.cache,l.tensor_bytes);
+  for(size_t v=0;v<graph.nodes.size();++v){auto n=std::make_unique<WeightedFlowNode>(model,v,boundary,node_devices[v],l.cache,l.tensor_bytes);
     n->binding.sources.validate(graph);const auto r=graph.nodes[v].region;
     if(!weighted::same_configuration(n->binding.regional,weighted::region_binding(model.regions.at(r))))
       throw std::invalid_argument("weighted node Describe and region configuration differ");
@@ -58,13 +69,18 @@ void WeightedFlow::Impl::construct(){
   BroadcastRouter router(nodes.size(),boundary.batch_size,wires,limits.queue,device);
   program=std::make_unique<DeviceProgram>(device);auto& p=*program;p.limit_workspace(limits.operator_bytes);
   services=std::make_unique<TaskServices>(p,device,limits.operator_bytes);
-  for(size_t v=0;v<nodes.size();++v){auto& worker=services->begin();
+  peers=std::make_unique<WeightedFlowPeers>(device,limits);
+  for(size_t v=0;v<nodes.size();++v)if(node_devices[v]==device){auto& worker=services->begin();
     nodes[v]->source=bind_weighted_flow_source(worker,nodes[v]->banks,graph,v,nodes[v]->binding,error,remaining(worker));services->end(worker);}
+  peers->bind(graph,nodes,[&](DeviceProgram& worker){return remaining(worker);});
+  for(const auto& n:nodes)input_classes.push_back(n->source.classes.to(device));
+  views.resize(nodes.size());peers->append_begin(p,error);
 
   journal->capture(p,"begin",begin);
   journal->capture(p,"pending.meta",pending->atoms().coordinates);journal->capture(p,"pending.present",pending->atoms().valid);
   for(size_t v=0;v<nodes.size();++v){const auto prefix="node."+std::to_string(v)+".";
-    journal->capture(p,prefix+"integer",nodes[v]->state.integer);journal->capture(p,prefix+"present",nodes[v]->state_present);}
+    journal->capture(p,prefix+"integer",node_devices[v]==device?nodes[v]->state.integer:peers->boundary_integer(v));
+    journal->capture(p,prefix+"present",node_devices[v]==device?nodes[v]->state_present:peers->boundary_present(v));}
   pending->append_stage(p,at::zeros({limits.queue},error.options()),external);
   auto cap=at::full_like(stages,limits.stages),one=at::ones_like(stages),index=at::zeros_like(error),budget_error=at::full_like(error,4);
   auto predicate=at::zeros({1},error.options().dtype(at::kBool));
@@ -77,14 +93,18 @@ void WeightedFlow::Impl::construct(){
   save_stage(p,frame,arrivals);
   // Every numerical/capacity preflight completes before any persistent owner.
   pending->commit_stage(p,transaction);
-  for(auto& n:nodes){append_weighted_raw_adopt(p,n->state,n->proposal,error);append_weighted_owner_adopt(p,n->state_present,n->input.present,n->input.times,error,false);}
+  for(size_t v=0;v<nodes.size();++v)if(node_devices[v]==device){auto& n=*nodes[v];
+    append_weighted_raw_adopt(p,n.state,n.proposal,error);append_weighted_owner_adopt(p,n.state_present,n.input.present,n.input.times,error,false);}
+  peers->append_commit(p,nodes,error);
   for(auto& r:regions)append_weighted_owner_adopt(p,r->history,r->selection->history_present,r->selection->history_times,error,true);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);weighted_copy(p,error,budget_error);p.mark(end);
-  services->append_stop();bytes=limits.tensor_bytes-remaining(p);services->finish();p.finish();
+  peers->append_stop(p);services->append_stop();bytes=limits.tensor_bytes-remaining(p);peers->finish();services->finish();p.finish();
   bytes=limits.tensor_bytes-remaining(p);
 }
 WeightedFlow::WeightedFlow(Graph g,Model m,const Continuation& q,at::Device d,WeightedFlowLimits l)
-  :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l)){}
+  :WeightedFlow(std::move(g),std::move(m),q,d,l,{}){}
+WeightedFlow::WeightedFlow(Graph g,Model m,const Continuation& q,at::Device d,WeightedFlowLimits l,std::vector<at::Device> placement)
+  :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,std::move(placement))){}
 WeightedFlow::~WeightedFlow()=default;
 Result WeightedFlow::advance(const std::vector<External>& xs,Index until){
   if(!impl_||impl_->failed)throw std::logic_error("weighted flow closed/failed; restore an earlier checkpoint into a new owner");
@@ -97,7 +117,8 @@ void WeightedFlow::Impl::execute(const std::vector<External>& xs,Index until){
   auto input=validate_external(s.graph,s.model,s.boundary,xs,until,until); // Retryable boundary rejection.
   try {
     fill(s.external,input.atoms);s.begin.fill_(s.boundary.cut);s.stop.fill_(until);s.stages.zero_();++s.generation;
-    sync(s.device);s.services->submit();s.program->run(s.limits.timeout_ms);s.services->wait(s.limits.timeout_ms);
+    s.peers->synchronize_inputs();sync(s.device);s.peers->submit();s.services->submit();s.program->run(s.limits.timeout_ms);
+    s.services->wait(s.limits.timeout_ms);s.peers->wait();
     const auto code=s.error.item<int32_t>();if(code)throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code));
     s.boundary.cut=until;for(const auto& [owner,last]:input.ledger_updates)s.boundary.ledger[owner]=last;s.ran=true;
   }catch(...){s.failed=true;throw;}
@@ -106,5 +127,6 @@ Continuation WeightedFlow::checkpoint()const{
   if(!impl_||at::GradMode::is_enabled())throw std::logic_error("weighted checkpoint requires live no-grad owner");return impl_->checkpoint();
 }
 int64_t WeightedFlow::reserved_bytes()const{if(!impl_)throw std::logic_error("closed weighted flow");return impl_->bytes;}
-void WeightedFlow::close(){if(impl_){impl_->program->close();impl_->services->close();impl_.reset();}}
+std::vector<at::Device> WeightedFlow::node_devices()const{if(!impl_)throw std::logic_error("closed weighted flow");return impl_->node_devices;}
+void WeightedFlow::close(){if(impl_){impl_->program->close();impl_->services->close();impl_->peers->close();impl_.reset();}}
 }
