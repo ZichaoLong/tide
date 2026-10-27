@@ -11,4 +11,5 @@ def test_standalone_weighted_complete_training_checkpoint(dtype, tmp_path):
                              "--output-dir", str(tmp_path/"native-weighted")],
                             capture_output=True, text=True, check=True)
     report = json.loads(result.stdout)
-    assert report == dict(state="passed", cases=24, updates_per_case=4, complete_native_checkpoint=True)
+    assert report == dict(state="passed", cases=24, updates_per_case=4, complete_native_checkpoint=True,
+                          cpu_reference=True, placement="native")

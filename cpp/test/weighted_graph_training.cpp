@@ -2,9 +2,11 @@
 #include "weighted_graph_fixture.h"
 #include "tide/greedy.h"
 #include "tide/graph_checkpoint.h"
+#include "tide/placement.h"
 #include "../bench/streaming.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 void check_native_graph_records(const std::filesystem::path&,at::Device,at::ScalarType);
@@ -44,16 +46,18 @@ void compare(const Result& a,const Result& b,at::ScalarType dtype){
   require(a.continuation.identity==b.continuation.identity,"native graph identity mismatch");
   tide_bench::compare(a,b,true,dtype);
 }
-void case_check(const std::string& topology,const std::string& family,at::Device device,at::ScalarType dtype,const std::filesystem::path& dir){
+void case_check(const std::string& topology,const std::string& family,at::Device device,at::ScalarType dtype,
+                const std::filesystem::path& dir,const ExecutionPlacement& placement){
   auto g=weighted_check::graph(topology,family);
-  auto a=weighted_check::model(g,family,device,dtype),b=weighted_check::model(g,family,device,dtype);
+  auto a=weighted_check::model(g,family,at::Device(at::kCPU),dtype),b=weighted_check::model(g,family,device,dtype);
   auto pa=a.parameters(),pb=b.parameters();OptimizerGroup group;group.lr=.001;group.weight_decay=.01;
   for(const auto& o:pa.owners())group.parameters.push_back(o.canonical);
   AdamW oa(pa,{group}),ob(pb,{group});Options options;options.packed=true;options.full_autograd=options.aggregate_autograd="batched";
-  Streaming scalar(g,a,Options{});Greedy candidate(g,b,options);
+  auto placed=place_model(g,b,placement);
+  Streaming scalar(g,a,Options{});Greedy candidate(g,placed,options);
   const Index stop=10,cut=2;Continuation q;q.identity=g.identity;q.batch_size=2;
   for(Index step=0;step<3;++step){
-    oa.zero_grad();ob.zero_grad();auto xa=weighted_check::inputs(g,device,dtype),xb=weighted_check::inputs(g,device,dtype);
+    oa.zero_grad();ob.zero_grad();auto xa=weighted_check::inputs(g,at::Device(at::kCPU),dtype),xb=weighted_check::inputs(g,device,dtype);
     auto expected=scalar.run(q,xa,stop,stop),actual=candidate.run(q,xb,stop,stop);compare(expected,actual,dtype);
     loss(expected).backward();loss(actual).backward();owners(pa,pb,true);
     for(size_t i=0;i<xa.size();++i)close(xa[i].value.grad(),xb[i].value.grad());
@@ -72,7 +76,7 @@ void case_check(const std::string& topology,const std::string& family,at::Device
   auto ga=torch::autograd::grad({loss(whole)},params,{},false,false,true);
   auto gb=torch::autograd::grad({loss(joined)},params,{},false,false,true);
   for(size_t i=0;i<ga.size();++i)close(ga[i],gb[i]);
-  Greedy resume(g,restored,options);ob.zero_grad();restored_opt.zero_grad();
+  Greedy resume(g,place_model(g,restored,placement),options);ob.zero_grad();restored_opt.zero_grad();
   auto expected=candidate.run(detach(first.continuation),tail,stop,stop),actual=resume.run(state,tail,stop,stop);compare(expected,actual,dtype);
   loss(expected).backward();loss(actual).backward();owners(pb,pr,true);ob.step();restored_opt.step();owners(pb,pr,false);optimizer(ob,restored_opt);
   // Validation precedes publication/mutation, and publication never overwrites.
@@ -101,18 +105,34 @@ void case_check(const std::string& topology,const std::string& family,at::Device
 int main(int argc,char** argv){
   portable_torch::RuntimeSession runtime;
   try{
-    auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
+    tide::ExecutionPlacement placement;std::vector<std::string> cases;
+    std::vector<char*> remaining{argv[0]};
+    for(int i=1;i<argc;++i){
+      std::string arg=argv[i];
+      if(arg=="--placement"||arg=="--case"){
+        if(++i>=argc)throw std::invalid_argument(arg+" requires a value");
+        if(arg=="--placement")placement.preset=argv[i];else cases.push_back(argv[i]);
+      }else remaining.push_back(argv[i]);
+    }
+    auto args=portable_torch::parse_cli(remaining.size(),remaining.data(),true);
+    if(args.help){portable_torch::print_usage(std::cout,argv[0]);
+      std::cout<<"  --placement cpu|mixed-a|mixed-b|mixed-c  --case TOPOLOGY/FAMILY (repeatable)\n";return 0;}
     auto device=portable_torch::resolve_device(args);
+    auto resolved=tide::resolve_placement(placement,device);tide::Index checked=0;
     if(args.dtype!=at::kFloat&&args.dtype!=at::kDouble)throw std::invalid_argument("FP32/FP64 required");
     if(args.output_dir.empty()||std::filesystem::exists(args.output_dir))throw std::invalid_argument("new output directory required");
     std::filesystem::create_directories(args.output_dir);at::set_num_threads(1);at::set_num_interop_threads(1);
     for(const std::string topology:{"fc","hb","nonaligned","feedback"})
       for(const std::string family:{"kv","affine","delta","gated_delta","ssd","heterogeneous"}){
-        try{case_check(topology,family,device,args.dtype,args.output_dir);}
+        const auto key=topology+"/"+family;
+        if(!cases.empty()&&std::find(cases.begin(),cases.end(),key)==cases.end())continue;
+        try{case_check(topology,family,device,args.dtype,args.output_dir,placement);++checked;}
         catch(const std::exception& e){throw std::runtime_error(topology+"/"+family+": "+e.what());}
       }
+    if(!checked)throw std::invalid_argument("no matching weighted graph cases");
     check_native_graph_records(args.output_dir,device,args.dtype);
     portable_torch::synchronize(device);
-    std::cout<<"{\"state\":\"passed\",\"cases\":24,\"updates_per_case\":4,\"complete_native_checkpoint\":true}\n";return 0;
+    std::cout<<"{\"state\":\"passed\",\"cases\":"<<checked<<",\"updates_per_case\":4,\"complete_native_checkpoint\":true,"
+      <<"\"cpu_reference\":true,\"placement\":\""<<placement.preset<<"\"}\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
 }
