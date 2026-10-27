@@ -37,3 +37,5 @@ left/right，按真实 bank 归约所有使用者。参数源或原内容后续�
 
 构建/运行入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-update`。
 当前实现域为 FP32 常驻组件。CPU helper、NPU 实际执行、CUDA 构建与 GPU 真机分别记录。
+
+固定源码资格见[681a7e9运行证据](evidence/core5-resident-kv-update-20261027.md)。

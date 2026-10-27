@@ -1,0 +1,212 @@
+{
+  "component": "kv-update",
+  "scope": "FP32 complete KV Upd with shared base, low-rank adapters, independent summary and original-time raw cache; all private and parameter first-order roots",
+  "observations": {
+    "replay_rows": 72,
+    "parameter_banks": 3,
+    "independent_raw_fields": 5,
+    "independent_formula_autograd": true,
+    "full_base_left_right_summary_chain": true,
+    "weak_zero_negative_saturated_and_absent_reception": true,
+    "none_zero": true,
+    "saved_source_versions": true,
+    "int64_over_2pow54_and_max": true,
+    "failure_no_commit": true,
+    "capacity_refusal": true,
+    "float_rtol": 1e-05,
+    "float_atol": 1e-06
+  },
+  "prior_failures": [],
+  "source": "681a7e9f712922d13c615baf1837516cc0060dbe",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "681a7e9f712922d13c615baf1837516cc0060dbe",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:53:02.668432+00:00",
+      "finished": "2026-10-27T14:53:24.350490+00:00",
+      "name": "core5-resident-kv-update-npu-qualify",
+      "unit": "tide-core5-resident-kv-update-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "e5a8caf757b2ac905ff906d99e52c71dde8ae6f643113c410d5902c301265a49",
+      "device_cases": [
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-kv-update-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-kv-update-float32.log",
+          "log_sha256": "d36d2e71ad3222e9cfb3633c1e8e4415060f19056568c4a68770669b7414d1ec"
+        }
+      ],
+      "cpu_tests": 24,
+      "cpu_seconds": 2.63,
+      "queue": {
+        "elapsed_seconds": 16.368345022201538,
+        "job_id": "core5-resident-kv-update-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T14:53:24.335666+00:00"
+      },
+      "observations": {
+        "replay_rows": 72,
+        "parameter_banks": 3,
+        "independent_raw_fields": 5,
+        "independent_formula_autograd": true,
+        "full_base_left_right_summary_chain": true,
+        "weak_zero_negative_saturated_and_absent_reception": true,
+        "none_zero": true,
+        "saved_source_versions": true,
+        "int64_over_2pow54_and_max": true,
+        "failure_no_commit": true,
+        "capacity_refusal": true,
+        "float_rtol": 1e-05,
+        "float_atol": 1e-06
+      },
+      "build": {
+        "source": "2af401dc0b2912fcf09faac9ab1f31a43aec489a",
+        "component_sha256": "aa0a0abe954f30c1ccd58b0cb392902da78e15295cef0683bd8bdbd510fd7765",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-kv-update-check": "15adab86af122b0fbea9bdf3c0f1d47cc22179ba4d57239e8dd7a3e1488d4d39"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "681a7e9f712922d13c615baf1837516cc0060dbe",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:53:02.670275+00:00",
+      "finished": "2026-10-27T14:55:04.378750+00:00",
+      "name": "core5-resident-kv-update-cuda-qualify",
+      "unit": "tide-core5-resident-kv-update-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "5097274f4cb776b72e4aa8b2535ae6571698278d34b69eb34b178157e101629d",
+      "build": {
+        "source": "681a7e9f712922d13c615baf1837516cc0060dbe",
+        "component_sha256": "aa0a0abe954f30c1ccd58b0cb392902da78e15295cef0683bd8bdbd510fd7765",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-kv-update-check": "272b0fd042110812dcd076a8bb68fc00a034d322827ed36ba150379800e8b3cf"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-kv-update-dev",
+    "tree": "28f8ee2ef2fe9201eea8f80a442849c352f074cf",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_kv_update.py",
+      "tests/test_resident_weighted_raw_update.py",
+      "tests/test_resident_weighted_projection_norm.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-kv-update",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-kv-update",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-kv-update",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
