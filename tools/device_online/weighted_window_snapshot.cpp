@@ -23,6 +23,7 @@ std::shared_ptr<WeightedWindowSnapshot> WeightedWindowSnapshot::borrow(WeightedF
   if(at::GradMode::is_enabled()||!flow.impl_||flow.impl_->failed||!flow.impl_->ran)
     throw std::invalid_argument("weighted snapshot requires a successful live no-grad window");
   const auto& f=*flow.impl_;auto out=std::make_shared<WeightedWindowSnapshot>();auto& s=*out;
+  if(f.peers->size())throw std::invalid_argument("weighted placed-node retained adjoint is not yet implemented");
   s.graph=f.graph;s.model=f.model;s.boundary=f.boundary;s.device=f.device;s.limits=f.limits;
   s.samples=f.boundary.batch_size;s.start=f.begin.cpu().item<int64_t>();s.generation=f.generation;s.bytes=f.bytes;s.stages=f.stages;s.external=f.external;s.pending=f.pending->atoms();
   s.journal=std::shared_ptr<WeightedWindowJournal>(f.journal.get(),[](WeightedWindowJournal*){});

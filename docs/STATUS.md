@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
-最近推送f72a6cc（启动/allocator观测实现）；本提交记录已终态的有限补充证据。
+最近推送0223571（启动/allocator补充证据）；本提交固定单样本节点放置前向实现，设备资格待运行。
 用户授权持续实施、有限实验、提交与正常推送；不用子代理。总体goal active，**未完成**。
 唯一待办[ROADMAP](ROADMAP.md)，持续规则[execution-flows](execution-flows.md)；参考仓库/公共工具链只读。
 
@@ -37,11 +37,11 @@ units：`tide-JOB-20261028.service`；launcher`.local/JOB.sh`及可选`JOB-workl
 六个job均持久passed/exit0；提交时确认background.slice/独立cgroup，成功瞬态unit已回收，
 最终show为inactive/not-found；不能把默认Result/ExecMainStatus当终态依据，实际以持久status及输出校验为准。
 两worker/ATen及BLAS1/Nice10，构建600秒、每候选180秒、NPU queue180秒/整测量job420秒。
-**当前没有活动任务。** 不重跑原24项性能矩阵。
+**当前没有活动任务。** 下一批节点放置资格采用新源码/目录；不重跑原24项性能矩阵。
 
 ## 原工作树在实施的下一步
 
-单样本节点放置的前向源码已写、未提交/未做设备资格；不是本次观测证据的一部分。
+单样本节点放置的前向源码已写入本提交、尚未做设备资格；不是f72a6cc观测证据的一部分。
 涉及`tools/device_online/weighted_flow*`、公共header/CMake/check注册、Python resident及placement adapter、
 新模块契约`docs/resident-weighted-placement.md`与semantic-map链接。
 每个远端设备拥有完整节点局部计算/私有raw状态；coordinator保留全区域选择/队列/journal，
@@ -51,7 +51,7 @@ CPU静态放置定义域8项开发检查通过；C++编译及双卡资格尚未�
 放置后的retained VJP、公共训练/optimizer发布尚未接入；暂时显式拒绝从placed flow创建adjoint，继续实施，不能据此前向宣称目标完成。
 
 接着执行：
-1. 完成源码复核与相关小检查，提交节点放置前向实现，建立新只读checkout。
+1. 本提交后建立只读checkout `artifacts/worktrees/core5-weighted-node-placement`；CPU静态8项已通过。
 2. 固定源码NPU SDK构建`weighted-node-peer`和单设备`weighted-flow`/`weighted-training`必要回归；
    双卡FP32/FP16九配置、完整记录/跨放置磁盘恢复/空窗/共同拒绝。随后Python-owned适配及CUDA三架构构建。
    `scripts/device_component_checks.py`已注册新检查；`weighted_flow_peer_check.cpp`是真实双卡独立调度对照。

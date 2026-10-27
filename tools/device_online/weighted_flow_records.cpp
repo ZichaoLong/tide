@@ -7,13 +7,13 @@ void WeightedFlow::Impl::save_stage(DeviceProgram& p,const ReadyBatch& ready,con
   save("fiber.rows",ready.fibers);save("fiber.offsets",ready.fiber_offsets);
   save("message.meta",arrivals.coordinates);save("message.values",arrivals.values);save("message.present",arrivals.valid);
   save("counts",ready.counts);
-  for(size_t v=0;v<nodes.size();++v){const auto& n=*nodes[v];const auto prefix="node."+std::to_string(v)+".";
-    save(prefix+"present",n.input.present);save(prefix+"times",n.input.times);save(prefix+"content",n.aggregate->output);
+  for(size_t v=0;v<nodes.size();++v){const auto& n=views[v];const auto prefix="node."+std::to_string(v)+".";
+    save(prefix+"present",n.present);save(prefix+"times",n.times);save(prefix+"content",n.content);
     save(prefix+"old.float",n.old.floating);save(prefix+"old.int",n.old.integer);
     save(prefix+"proposal.float",n.proposal.floating);save(prefix+"proposal.int",n.proposal.integer);
     save(prefix+"control",n.control);save(prefix+"active",n.active);save(prefix+"full",n.full);
     save(prefix+"payload",n.payload);
-    for(const auto& [name,x]:n.describe->fields)save(prefix+"describe."+name,x);
+    for(const auto& [name,x]:n.describe)save(prefix+"describe."+name,x);
   }
   for(size_t r=0;r<regions.size();++r){const auto& t=*regions[r]->selection;
     save("region."+std::to_string(r)+".times",t.history_times);save("region."+std::to_string(r)+".present",t.history_present);
@@ -69,6 +69,7 @@ Result WeightedFlow::Impl::decode()const{
     {"messages",static_cast<int64_t>(result.messages.size())},{"one_time_per_region",1},{"resident_tensor_bytes",bytes},
     {"physical_local_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
     {"physical_full_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
-    {"operator_workspace_bytes",services->workspace_bytes()}};return result;
+    {"operator_workspace_bytes",services->workspace_bytes()+peers->workspace_bytes()},
+    {"node_peer_devices",peers->size()},{"node_peer_packet_bytes",peers->packet_bytes()}};return result;
 }
 }

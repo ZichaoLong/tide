@@ -7,6 +7,8 @@
 #include "queue_transaction.h"
 #include "broadcast_router.h"
 #include "tide/ops.h"
+#include "weighted_flow_views.h"
+#include "weighted_flow_peers.h"
 #include <optional>
 namespace tide::device_online {
 int64_t weighted_flow_preflight(const Graph&,const Model&,int64_t samples,const WeightedFlowLimits&);
@@ -56,6 +58,8 @@ at::Tensor append_weighted_payload(DeviceProgram&,const at::Tensor& control,cons
   const at::Tensor& active,at::ScalarType storage,const at::Tensor& error);
 void append_weighted_region_local(DeviceProgram&,TaskServices&,WeightedFlowRegion&,const WeightedFlowNodes&,
   const at::Tensor& error,const WeightedFlowBudget&);
+void append_weighted_region_views(DeviceProgram&,TaskServices&,WeightedFlowRegion&,std::vector<WeightedFlowView>&,
+  const at::Tensor& error,const WeightedFlowBudget&);
 // A bounded window journal, independent of reclaimable queue capacity. The
 // current stage is device int64; no host-selected capture sequence is supplied.
 class WeightedWindowJournal {
@@ -78,13 +82,17 @@ class WeightedWindowJournal {
 struct WeightedFlow::Impl {
   Graph graph;Model model;Continuation boundary;at::Device device;WeightedFlowLimits limits;
   std::unique_ptr<TaskServices> services;
+  std::unique_ptr<WeightedFlowPeers> peers;
   std::unique_ptr<DeviceProgram> program;std::unique_ptr<QueueTransaction> pending;
   std::vector<std::unique_ptr<WeightedFlowNode>> nodes;
   std::vector<std::unique_ptr<WeightedFlowRegion>> regions;
+  std::vector<WeightedFlowView> views;
+  std::vector<at::Tensor> input_classes;
+  std::vector<at::Device> node_devices;
   std::unique_ptr<WeightedWindowJournal> journal;
   at::Tensor error,begin,stop,stages;AtomBatch external;
   bool failed=false,ran=false;int64_t bytes=0,journal_bytes=0,generation=0;
-  Impl(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits);
+  Impl(Graph,Model,const Continuation&,at::Device,WeightedFlowLimits,std::vector<at::Device>);
   void construct();
   void execute(const std::vector<External>&,Index until);
   int64_t remaining(DeviceProgram&)const;

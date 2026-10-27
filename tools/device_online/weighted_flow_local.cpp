@@ -45,28 +45,6 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
   n.describe=append_weighted_describe(describe,x,n.input.bank,bind_weighted_describe(n.banks,n.input.payload.size(2)-1,summary,n.binding.regional),
     n.binding.regional,eps,error,remaining(describe));services.end(describe);
 }
-void append_weighted_region_local(DeviceProgram& p,TaskServices& services,WeightedFlowRegion& r,const WeightedFlowNodes& nodes,
-  const at::Tensor& error,const WeightedFlowBudget& remaining){
-  const auto samples=nodes.at(r.nodes.at(0))->input.present.numel(),members=static_cast<int64_t>(r.nodes.size());
-  const auto opts=nodes.at(r.nodes.at(0))->content.options();
-  const auto e=r.config.regional()?*r.config.region_control_width:1,q=r.config.region_score=="att"?*r.config.selection_width:1,width=3+e+2*q;
-  auto desc=at::zeros({samples,members,width},opts),time=at::zeros({samples,members},opts.dtype(at::kLong)),present=at::zeros({samples,members},opts.dtype(at::kBool));
-  for(int64_t j=0;j<members;++j){auto& n=*nodes[r.nodes[j]];const auto& f=n.describe->fields;
-    auto target=desc.select(1,j);weighted_copy(p,target.narrow(1,0,1),f.at("w"));weighted_copy(p,target.narrow(1,1,1),f.at("mu"));weighted_copy(p,target.narrow(1,2,1),f.at("score"));
-    if(f.count("evidence"))weighted_copy(p,target.narrow(1,3,e),f.at("evidence"));
-    if(f.count("x")){weighted_copy(p,target.narrow(1,3+e,q),f.at("x"));weighted_copy(p,target.narrow(1,3+e+q,q),f.at("key"));}
-    weighted_copy(p,time.select(1,j),n.input.times);weighted_copy(p,present.select(1,j),n.input.present);
-  }
-  r.input=append_weighted_region_input(p,desc,present,time,r.nodes,r.config,error);
-  auto& selection=services.begin();
-  r.selection=append_weighted_region(selection,r.input.fields,r.input.ids,r.input.times,r.input.lengths,bind_weighted_region(r.banks,r.config,samples),r.config,error,remaining(selection));
-  services.end(selection);
-  auto control=at::zeros({samples*members+1},opts),active=at::zeros({samples*members+1},opts.dtype(at::kBool));
-  weighted_copy(p,control.narrow(0,0,samples*members),r.selection->controls.reshape({-1}));weighted_copy(p,active.narrow(0,0,samples*members),r.selection->active.reshape({-1}));
-  auto controls=at::zeros({samples,members},opts),actives=at::zeros({samples,members},opts.dtype(at::kBool));
-  p.index_select(control,0,r.input.inverse.reshape({-1}),controls.reshape({-1}));p.index_select(active,0,r.input.inverse.reshape({-1}),actives.reshape({-1}));
-  for(int64_t j=0;j<members;++j){auto& n=*nodes[r.nodes[j]];n.control=weighted_columns(p,controls,j,1).reshape({samples});n.active=weighted_columns(p,actives,j,1).reshape({samples});}
-}
 void append_weighted_node_full(TaskServices& services,WeightedFlowNode& n,const at::Tensor& error,const WeightedFlowBudget& remaining){
   auto& full=services.begin();
   if(auto c=std::get_if<weighted::KVConfig>(&n.binding.memory)){
@@ -78,24 +56,31 @@ void append_weighted_node_full(TaskServices& services,WeightedFlowNode& n,const 
   services.end(full);
 }
 void WeightedFlow::Impl::append_nodes(DeviceProgram& p,const ReadyBatch& ready){
-  for(size_t v=0;v<nodes.size();++v){auto& n=*nodes[v];
-    n.input=append_weighted_node_input(p,ready,n.source.classes,v,boundary.batch_size,graph.inputs.size(),error);
+  std::vector<WeightedNodeInput> inputs;
+  for(size_t v=0;v<nodes.size();++v)inputs.push_back(append_weighted_node_input(p,ready,input_classes[v],v,boundary.batch_size,graph.inputs.size(),error));
+  peers->append_local_send(p,graph,nodes,inputs,views,error,[&](DeviceProgram& worker){return remaining(worker);});
+  for(size_t v=0;v<nodes.size();++v)if(node_devices[v]==device){auto& n=*nodes[v];n.input=inputs[v];
     append_weighted_node_local(p,*services,n,graph.regions[graph.nodes[v].region].read_mode,error,[&](DeviceProgram& worker){return remaining(worker);});
+    views[v]=weighted_flow_view(n);
   }
+  peers->append_local_receive(p,error);
 }
 void WeightedFlow::Impl::append_regions(DeviceProgram& p){
-  for(auto& r:regions)append_weighted_region_local(p,*services,*r,nodes,error,[&](DeviceProgram& worker){return remaining(worker);});
+  for(auto& r:regions)append_weighted_region_views(p,*services,*r,views,error,[&](DeviceProgram& worker){return remaining(worker);});
 }
 ActionBatch WeightedFlow::Impl::append_full(DeviceProgram& p){
   const auto samples=boundary.batch_size,count=static_cast<int64_t>(nodes.size()),width=model.width();
   const auto opts=at::TensorOptions().dtype(model.nodes.at(0).bias.scalar_type()).device(device);
   ActionBatch out{at::zeros({count*samples,4},opts.dtype(at::kLong)),at::zeros({count*samples,width},opts),at::zeros({count*samples},opts.dtype(at::kBool))};
-  for(int64_t v=0;v<count;++v){auto& n=*nodes[v];
+  for(int64_t v=0;v<count;++v)if(node_devices[v]==device){auto& n=*nodes[v];auto& view=views[v];n.control=view.control;n.active=view.active;
     append_weighted_node_full(*services,n,error,[&](DeviceProgram& worker){return remaining(worker);});
+    n.payload=append_weighted_payload(p,n.control,n.full,n.active,out.values.scalar_type(),error);view.full=n.full;view.payload=n.payload;
+  }
+  peers->append_full(p,nodes,views,error,[&](DeviceProgram& worker){return remaining(worker);});
+  for(int64_t v=0;v<count;++v){const auto& view=views[v];
     auto meta=out.coordinates.narrow(0,v*samples,samples);weighted_copy(p,meta.select(1,0),at::arange(samples,meta.options()));weighted_copy(p,meta.select(1,1),at::full({samples},v,meta.options()));
-    weighted_copy(p,meta.select(1,2),n.input.times);weighted_copy(p,meta.select(1,3),n.input.times);
-    n.payload=append_weighted_payload(p,n.control,n.full,n.active,out.values.scalar_type(),error);
-    weighted_copy(p,out.values.narrow(0,v*samples,samples),n.payload);weighted_copy(p,out.valid.narrow(0,v*samples,samples),n.active);
+    weighted_copy(p,meta.select(1,2),view.times);weighted_copy(p,meta.select(1,3),view.times);
+    weighted_copy(p,out.values.narrow(0,v*samples,samples),view.payload);weighted_copy(p,out.valid.narrow(0,v*samples,samples),view.active);
   }
   return out;
 }

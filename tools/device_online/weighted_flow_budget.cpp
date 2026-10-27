@@ -29,7 +29,10 @@ int64_t WeightedFlow::Impl::remaining(DeviceProgram& p)const{
   for(const auto& n:nodes){for(const auto& raw:{n->initial,n->state,n->old}){held.push_back(raw.floating);held.push_back(raw.integer);}
     held.push_back(n->state_present);for(const auto& [_,role]:n->banks.roles())held.push_back(role.bank);}
   for(const auto& r:regions){held.push_back(r->history);for(const auto& [_,role]:r->banks.roles())held.push_back(role.bank);}
-  const auto used=p.retained_tensor_bytes(held,services->programs()),reserved=journal_bytes-journal->allocated_bytes();
+  auto programs=services->programs();
+  if(peers){auto ps=peers->programs();programs.insert(programs.end(),ps.begin(),ps.end());
+    auto xs=peers->tensors();held.insert(held.end(),xs.begin(),xs.end());}
+  const auto used=p.retained_tensor_bytes(held,programs),reserved=journal_bytes-journal->allocated_bytes();
   if(used>limits.tensor_bytes-reserved)throw std::invalid_argument("complete weighted flow tensor budget exceeded");
   return limits.tensor_bytes-used-reserved;
 }
