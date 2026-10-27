@@ -30,10 +30,15 @@ head-workspace-dev（tree68c50c18）CPU8、SDK构建/loader、NPU两种形状/24
 原bank改写后的保存tape反向、失败不提交/容量拒绝通过，已inactive/exit0。
 实际operator workspace高水位16777728 bytes，测试显式64MiB；前向/反向scratch独立准入。
 原head-dev非连续转置拒绝、layout-dev 4MiB工作区容量拒绝保留failed；没有数值失败冒充通过。
-提交head实现后固定CPU8/NPU及CUDA三架构构建资格，随后组合完整区域SelStep。
-当前另有未提交的区域组合初稿：weighted_region_layout.h、ascendc/weighted_region_prepare.h、
-ascendc/weighted_region_reverse.h；含完整候选摘要/query/控制bounds及链式VJP，还未注册、接head或测试，
-不包含在head提交/资格中。下一步实现设备stage封装、组合已有head/Alloc/sending、独立公式与完整区域VJP。
+161ccea固定资格：CPU8（2.05秒）、NPU两种形状/完整共享VJP与保存版本通过；CUDA sm80/90/100构建通过。
+head-npu-qualify及head-cuda-qualify均clean/exit0/inactive，详见evidence/core5-resident-head-20261027.json。
+resident worktree固定161ccea，clean/read-only，无活动reader。核心build摘要与670ead3一致，原manifest保持。
+当前未提交的完整区域组合初稿：weighted_region_layout.h、ascendc/weighted_region_prepare.h、
+ascendc/weighted_region_reverse.h、tests/resident_region_adapter.py/test_resident_weighted_region_math.py。
+完整候选摘要、Query、控制bounds及十种发送的链式VJP已有25项CPU公式检查通过（5.57秒）；
+CPU head使用普通Torch公式，这不是完整设备SelStep验收。尚未注册设备kernel或接公共DeviceProgram。
+下一步实现region四个stage的device入口，组合已验head/Alloc/sending，保留实际field/head tape，
+检查所有字段/共享参数独立根、padding/absent、重放/容量与完整区域NPU结果，再接图生命周期。
 
 完整weighted resident仍缺Agg、typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
