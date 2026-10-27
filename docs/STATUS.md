@@ -47,27 +47,16 @@ core5-resident-raw-{npu,cuda}-qualify均clean/exit0/inactive。详见evidence/co
 NPU保留dev3原manifest；worktree固定cb68d91且无活动reader。
 两次原检查helper失败保留在raw-dev与raw-dev2，原因/树记录见证据，未修改为passed。
 
-主工作区未提交固定时间卷积：weighted_convolution.h/.cpp/check、math header/三个kernel入口，
-CMake/registry及契约/导航。CPU11（1.30秒）通过；整批tap选择、vendor index_select/multiply/sum，
-完整私有cache/当前项/共享参数VJP、保存实际版本、raw update组合check已写，尚未构建设备验证。
-convolution-dev tree9a86a0b94b247abec63f9f0f086f2a27aef6b3b2已failed/exit1；CPU25通过，
-数值库与kernels构建通过，check的conv1d调用在整数padding/string padding重载间歧义。
-已明确IntArrayRef，不改数值实现。原日志/source.tar保留，无设备执行证据。
+f89bdfe卷积固定资格CPU26（2.04秒）、NPU完整组件及CUDA三架构构建通过。
+core5-resident-convolution-{npu,cuda}-qualify均clean/exit0/inactive；详见evidence/core5-resident-convolution-20261027.json。
+覆盖20重放行/私有cache与共享bank完整VJP/保存版本/raw update快照组合/未匹配tap临时溢出边界/失败不提交。
+原conv1d重载编译失败保留；NPU复用dev3全摘要一致构建并保留manifest，CUDA无实机。
+worktree固定f89bdfe且无活动reader。
 
-convolution-dev2 treef6ba47c82fd922e2910e04ac6dd1155f97878716通过（CPU25、NPU完整组件），
-旧范围包括20重放行/共享bank/保存版本及raw update组合。
-代码审查补上缺失tap临时乘积溢出边界：只有实际映射到缓存或当前项的tap梯度需要有限性检查；
-未匹配历史项的临时Inf不应拒绝实际返回均有限的VJP。已加CPU/设备回归，CPU12卷积项通过。
-
-convolution-dev3 treef88a6ac85c8bda68a982560db4d4a5f15af64b1a通过，
-tide-core5-resident-convolution-dev3-20261027.service inactive/exit0；CPU26，NPU完整两K/20重放行、
-三共享bank/全部cache-current-参数VJP/原版本反向/raw update组合、缺失tap临时溢出边界及失败不提交通过。
-实际记录artifacts/jobs/core5-resident-convolution-dev3/{source.tar,source.tree,status.json,task.log,checks/result.json}。
-当前提交完整卷积实现/契约/测试，随后固定此提交进行CPU/NPU/CUDA资格；原构建失败记录保留。
-
-额外projection草稿未提交/未接入CMake：weighted_projection.h/.cpp，norm math/kernel，
-CPU RMS VJP4项通过（1.17秒）。用于共享线性投影/可选RMS；复用head元数据守卫/归约及vendor BMM，
-尚无完整设备检查，不以CPU helper认证完整投影。接下来补完整forward/输入参数VJP及保存版本检查。
+主工作区未提交共享投影：weighted_projection.h/.cpp/check、norm math/kernel、CMake/registry、契约/导航。
+CPU RMS VJP4项通过（1.17秒），完整检查包含有/无bias、有/无RMS的4配置、48行重放、
+输入/共享参数全部VJP、None/零、原版本保存反向及拒绝。尚未构建/设备验证。
+下一步冻结projection开发任务，通过后提交/固定资格/证据并推送，继续实际KV和循环记忆数值/Describe。
 
 完整weighted resident仍缺五记忆数值/卷积读取、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow

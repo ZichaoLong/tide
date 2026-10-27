@@ -1,0 +1,226 @@
+{
+  "component": "convolution",
+  "scope": "FP32 original-time tap packing, vendor multiply/reduction, private cache/current and shared parameter VJP, raw-update composition",
+  "observations": {
+    "tap_counts": [
+      1,
+      3
+    ],
+    "replay_rows": 20,
+    "parameter_banks": 3,
+    "independent_grouped_conv1d": true,
+    "all_cache_current_parameter_vjps": true,
+    "saved_source_versions": true,
+    "raw_update_snapshot_composition": true,
+    "connected_zero_mass": true,
+    "missing_tap_temporary_overflow": true,
+    "int64_over_2pow54_and_max": true,
+    "failure_no_commit": true,
+    "capacity_refusal": true,
+    "float_rtol": 1e-06,
+    "float_atol": 1e-07
+  },
+  "prior_failures": [
+    {
+      "tree": "9a86a0b94b247abec63f9f0f086f2a27aef6b3b2",
+      "job": "core5-resident-convolution-dev",
+      "state": "failed",
+      "reason": "Standalone reference check conv1d overload ambiguity between integer and string padding; explicit IntArrayRef fixed compilation. No device execution occurred."
+    }
+  ],
+  "source": "f89bdfee0fd4ce57803e75bcd5f3924af448289e",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "f89bdfee0fd4ce57803e75bcd5f3924af448289e",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:35:05.454782+00:00",
+      "finished": "2026-10-27T14:35:25.377428+00:00",
+      "name": "core5-resident-convolution-npu-qualify",
+      "unit": "tide-core5-resident-convolution-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "b25acee1fe9c03aa53992698bdcff2057a3e694f5b2e625616b6e7153b7e156e",
+      "device_cases": [
+        {
+          "check": "weighted-convolution",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-convolution-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-convolution-float32.log",
+          "log_sha256": "ee3864ab6845d5bbd514d0cc540141d812d87ca122fb53949296560ed86ceee7"
+        }
+      ],
+      "cpu_tests": 26,
+      "cpu_seconds": 2.04,
+      "queue": {
+        "elapsed_seconds": 15.21140756830573,
+        "job_id": "core5-resident-convolution-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T14:35:25.362257+00:00"
+      },
+      "observations": {
+        "tap_counts": [
+          1,
+          3
+        ],
+        "replay_rows": 20,
+        "parameter_banks": 3,
+        "independent_grouped_conv1d": true,
+        "all_cache_current_parameter_vjps": true,
+        "saved_source_versions": true,
+        "raw_update_snapshot_composition": true,
+        "connected_zero_mass": true,
+        "missing_tap_temporary_overflow": true,
+        "int64_over_2pow54_and_max": true,
+        "failure_no_commit": true,
+        "capacity_refusal": true,
+        "float_rtol": 1e-06,
+        "float_atol": 1e-07
+      },
+      "build": {
+        "source": "cb68d9187999edc07559b73eb35d53a45575d23f",
+        "component_sha256": "96fdf3a799a97fba4893c4a707a6a10639ce47b0a02bd76e9f0c4386a1b66994",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-convolution-check": "19a0692c2f796043dcc3eca5f4aee1e52819340acbb2cce6f877ac2aadac8d8b"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "f89bdfee0fd4ce57803e75bcd5f3924af448289e",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T14:35:05.453691+00:00",
+      "finished": "2026-10-27T14:36:40.196318+00:00",
+      "name": "core5-resident-convolution-cuda-qualify",
+      "unit": "tide-core5-resident-convolution-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "c9bb9590a58dfbc174a88cf32df8633d5c4111004a4e3e7d64f153489febd9cc",
+      "build": {
+        "source": "f89bdfee0fd4ce57803e75bcd5f3924af448289e",
+        "component_sha256": "96fdf3a799a97fba4893c4a707a6a10639ce47b0a02bd76e9f0c4386a1b66994",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-convolution-check": "59ec9822aeb3d6fabb7140e403df7c2d065aa352ce080f0f3aad4e712bec5b49"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-convolution-dev3",
+    "tree": "f88a6ac85c8bda68a982560db4d4a5f15af64b1a",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_convolution.py",
+      "tests/test_resident_weighted_raw_update.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-convolution",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-convolution",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-convolution",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
