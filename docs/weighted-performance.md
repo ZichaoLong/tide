@@ -42,7 +42,7 @@ python scripts/benchmark_weighted.py --device npu:0 --implementation resident \
   --topology hb --family ssd --size small --mode training --output-dir NEW_RUN
 ```
 
-`--profile`必须在另一个独立进程/目录运行，只记录一个profile窗口；导出的CPU/CANN/CUDA trace
+`--profile`必须在另一个独立进程/目录运行，先做独立warmup，再显式完成单个采集周期，只记录一个profile窗口；导出的CPU/CANN/CUDA trace
 用于判断实际算子、copy和host scalar成本，其带profiling开销的执行不作为吞吐样本。
 profile进程另标记prepare、forward、loss、decode/roots、backward/finite、optimizer和完整返回/同步阶段。
 报告包含阶段墙钟、kernel时间覆盖及copy/scalar耗时；嵌套host事件不相加作为独占时间，
