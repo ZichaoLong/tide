@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83；授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送1732b47（standalone masters与CUDA新栈core/CPU证据）。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
+已推送e875dc1（含2814b87常驻Alloc及固定CPU/NPU/CUDA构建资格）。总体未完成，下一阶段见[ROADMAP](ROADMAP.md)，不在阶段提交后暂停。
 
 ## 当前实现与证据
 
@@ -54,9 +54,13 @@ build4-dev（tree748c3735）完整SDK/AscendC构建与真实NPU FP32开发检查
 2814b87固定源码CPU29（2.67秒）、NPU六种分配配置/完整VJP/重放与拒绝通过；
 独立CUDA sm80/90/100组件/loader构建通过，无GPU。npu-qualify和cuda-qualify均clean/exit0/inactive。
 证据core5-resident-allocation-20261027，原manifest/build4 source字段和所有开发failed记录保留。
-resident worktree无活动reader，仍固定2814b87。当前未提交：weighted sending常驻原语及其独立CPU测试25项通过；
+resident worktree无活动reader，仍固定2814b87。当前未提交：weighted sending常驻原语及其独立CPU测试34项通过，连同Alloc共63项通过；
 Direct/Unit/Pooled attention、proportional、sorted fractional fill与hard，完整五输入VJP、int64 stable IDs。
-下一步补全发送的实际NPU重放/容量与正式资格，再接区域控制/图生命周期；当前没有把发送源码视为设备通过。
+sending-dev（treeeb57f3c5）CPU63通过，AscendC拒绝bool直接转float；未运行数值检查，原failed保留。
+用明确1.f/0.f写相同饱和掩码；build2-dev（tree6d94073d）CPU63、SDK构建/loader、
+真实NPU FP32八配置完整VJP/96物理行80非空帧/两组输入长度重放/拒绝与容量全部通过，已inactive/exit0。
+原failed保留。提交sending实现后固定源码进行CPU34+NPU发送资格，CUDA三架构组件构建分开。
+下一步区域控制/Query的真实批量vendor head及完整SelStep组合，再接图生命周期。
 完整weighted resident仍需Agg、typed state/五记忆、Describe/全部发送、图调度、训练/恢复/跨卡。
 CUDA tools2干净670ead3已构建、CPU24项（143.99秒），显式不可用拒绝通过，证据已推送；GPU真机未验。
 

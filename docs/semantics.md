@@ -128,6 +128,12 @@ identity remains; new functions enter distinct hashed graph/checkpoint bindings.
 
 ## Weighted scoring bindings
 
+The separate [resident sending primitives](resident-weighted-sending.md) retain
+complete candidate lengths/int64 IDs and explicit first-order connectivity for
+Attention, proportional, fractional fill and hard cap maps. Device programs
+produce their own controls/tapes and reject positive-support underflow. This
+does not change graph/checkpoint versions or certify the full resident graph.
+
 [Scoring/evidence/key](weighted-scoring.md) binds match, grouped evidence,
 regional Attention scores, content_stats and content keys to the same actual
 Mem snapshot. Region query weights are received for regional control and an
