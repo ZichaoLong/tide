@@ -76,7 +76,7 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   std::vector<WeightedRawAdjoint> rolling;std::vector<WeightedParameterPartial> partials;
   for(int64_t v=0;v<count;++v){auto& n=*nodes_[v];const auto& r=roots_.nodes[v];
     auto& worker=services.begin();auto& p=worker;
-    rolling.push_back({at::zeros_like(n.state.floating),at::zeros({samples,int64_t(n.layout.fields().size())},options.dtype(at::kBool))});
+    rolling.push_back({at::zeros(n.state.floating.sizes(),n.state.floating.options().dtype(at::kFloat)),at::zeros({samples,int64_t(n.layout.fields().size())},options.dtype(at::kBool))});
     auto control=weighted_reverse::zeros(p,at::zeros({samples,1},options.dtype(at::kFloat)));
     weighted_reverse::add(p,control,weighted_window::load(p,stage_,r.control),n.input.bank,error);
     weighted_reverse::add(p,control,{weighted_columns(p,event_values[v],0,1),event_flags[v]},n.input.bank,error);controls[v]=control;

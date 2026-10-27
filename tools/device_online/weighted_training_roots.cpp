@@ -4,7 +4,7 @@ void seed_weighted_cotangents(const WeightedWindowSnapshot& s,const WeightedTrai
     const WeightedCotangents& supplied,WeightedWindowRoots& roots){
   validate_weighted_cotangents(window,supplied);s.validate();
   auto pair=[&](const std::string& name){const auto& shape=window.fields.at(name);const auto found=supplied.fields.find(name);
-    if(found==supplied.fields.end()||!found->second.values.defined())return WeightedCotangent{at::zeros_like(shape.values),at::zeros_like(shape.present)};
+    if(found==supplied.fields.end()||!found->second.values.defined())return WeightedCotangent{at::zeros(shape.values.sizes(),shape.values.options().dtype(at::kFloat)),at::zeros_like(shape.present)};
     const auto& r=found->second;auto mask=r.connected;while(mask.dim()<r.values.dim())mask=mask.unsqueeze(-1);
     return WeightedCotangent{at::where(mask,r.values,at::zeros_like(r.values)),r.connected};};
   auto row=[&](const std::string& name,WeightedRowAdjoint& target){auto r=pair(name);target.value.copy_(r.values);target.connected.copy_(r.connected);};

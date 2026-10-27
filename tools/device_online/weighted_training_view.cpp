@@ -56,7 +56,7 @@ void validate_weighted_cotangents(const WeightedTrainingWindow& window,const Wei
     const auto& field=found->second;
     if(r.values.defined()!=r.connected.defined())throw std::invalid_argument("incomplete weighted root pair");if(!r.values.defined())continue;
     for(const auto& pair:std::vector<std::pair<at::Tensor,at::Tensor>>{{r.values,field.values},{r.connected,field.present}})
-      if(pair.first.device()!=pair.second.device()||pair.first.scalar_type()!=pair.second.scalar_type()||pair.first.sizes()!=pair.second.sizes()||pair.first.requires_grad()||!pair.first.is_contiguous())
+      if(pair.first.device()!=pair.second.device()||pair.first.scalar_type()!=(pair.second.is_floating_point()?at::kFloat:pair.second.scalar_type())||pair.first.sizes()!=pair.second.sizes()||pair.first.requires_grad()||!pair.first.is_contiguous())
         throw std::invalid_argument("weighted root shape/device/dtype differs: "+name);
     if((r.connected&field.present.logical_not()).any().item<bool>())throw std::invalid_argument("weighted root connects an absent value: "+name);
     auto connected=r.connected;while(connected.dim()<r.values.dim())connected=connected.unsqueeze(-1);

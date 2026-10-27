@@ -6,13 +6,13 @@ namespace {
 template<class F>void refuses(F f,const std::string& name){bool refused=false;
   try{f();}catch(const std::logic_error&){refused=true;}require(refused,"accepted invalid weighted training "+name);}
 }
-void failures(at::Device device){
+void failures(at::Device device,at::ScalarType dtype){
   at::NoGradGuard ng;auto g=weighted_check::graph("fc","kv");
-  auto m=weighted_check::model(g,"kv",at::kCPU,at::kFloat);Continuation q;q.identity=g.identity;q.batch_size=2;
+  auto m=weighted_check::model(g,"kv",at::kCPU,dtype);Continuation q;q.identity=g.identity;q.batch_size=2;
   auto l=limits();l.windows=1;
   auto small=l;small.total_bytes=1;refuses([&]{WeightedTrainingSession bad(g,m,q,device,ResidentOptimizerKind::sgd,{},small);},"total budget");
   WeightedTrainingSession session(g,m,q,device,ResidentOptimizerKind::sgd,{},l);const auto initial=session.checkpoint();
-  auto xs=weighted_check::inputs(g,at::kCPU,at::kFloat);std::vector<External> first;for(const auto& x:xs)if(x.time<4)first.push_back(x);
+  auto xs=weighted_check::inputs(g,at::kCPU,dtype);std::vector<External> first;for(const auto& x:xs)if(x.time<4)first.push_back(x);
   auto w=session.advance(first,4);const auto good=seed(w,"outputs");
   refuses([&]{session.checkpoint();},"checkpoint with live tape");
   refuses([&]{session.step();},"step before backward");

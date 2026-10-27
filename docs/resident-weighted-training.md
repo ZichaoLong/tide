@@ -5,11 +5,11 @@
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。
 
-公共入口声明在`include/tide/resident_weighted_training.h`。单设备FP32 owner拥有参数generation、
+公共入口声明在`include/tide/resident_weighted_training.h`。单设备FP32/FP16 owner拥有参数generation、
 连续保留窗口、显式一阶backward、SGD/AdamW更新及完整切面导出。loss、任务头和数据游标由调用者拥有。
 前向窗口内的就绪、选择和推进仍由设备引擎决定；窗口边界的根打包不是参考预跑。
 
-`WeightedTrainingWindow`以token和[start,stop)定位实际窗口。fields中的每项有FP32 values与bool
+`WeightedTrainingWindow`以token和[start,stop)定位实际窗口。fields中的每项有浮点 values与bool
 present；每个present行是独立数学根。ragged字段另有valid前缀mask，空字段仍可有连接零根。
 metadata保存精确int64坐标、时钟、计数、长度和原始状态整数槽，不混入浮点buffer。
 
@@ -30,7 +30,7 @@ outputs.coordinates为[sample,time,port]，消息坐标保持完整六元身份�
 Raw字段保持自身shape，ragged字段加capacity轴。metadata中的`node.v.{old,proposal,final}.integer`
 保留raw整数表示，不能用effective state重建checkpoint。别名端口可分别种根，各贡献累加一次。
 
-`WeightedCotangents`省略字段表示None。提供的values/connected必须成对、匹配布局/设备/dtype且
+`WeightedCotangents`省略字段表示None。提供的values/connected必须成对、匹配布局/设备，分别为FP32/bool且
 无autograd依赖；不能连接不存在的行，连接的ragged padding须为零。未连接毒值不参与VJP。
 `weighted_training_view.cpp`只从实际快照创建字段；`weighted_training_roots.cpp`按静态字段/端口绑定
 根并区分G和c，不重复乘发送强度。消费者可在另一个autograd上下文计算任务loss的cotangent。
@@ -108,6 +108,20 @@ NEW_CLIENT/consumer/weighted-training-consumer --device=npu:0 --dtype=float32
 ```
 
 消费者的单节点手算恒等VJP、无作用参数None和新owner切面恢复不代替完整图训练资格。
+
+FP16源码路径沿用[完整图精度边界](resident-weighted-flow.md)：raw、实际输出/消息/纤维/pending为half，
+content/Describe/control与舍入前的Full G为FP32。每个浮点字段的cotangent以及参数、输入、raw伴随
+都为FP32，不随公开字段的存储dtype变化；half cotangent明确拒绝。存储Cast的声明VJP为identity。
+优化器保留FP32 master及槽，发布时先将master舍入half，再精确拓宽到FP32计算bank；
+checkpoint同时保存实际half named参数与FP32 master，恢复要求named等于master舍入后的值。
+manifest分列raw/compute/scoring/adjoint/master dtype。此源码扩展的实际资格单列，不沿用FP32通过结论。
+
+半精度全图参考使用原有CPU数学函数和独立调度，只在raw和发送payload边界显式half存储。
+`weighted_precision_reference.{h,cpp}`与`tests/weighted_precision_reference.py`是检查辅助，
+不进入生产调度或解码。完整记录先核验每类dtype，再对half精确拓宽后的全部字段比较；
+没有丢弃raw字段或元数据。训练的`node.v.full`根另读独立公式的舍入前G，不能用实际payload替代。
+`test_weighted_storage_reference.py`和`test_resident_weighted_storage_roots.py`的单节点KV手算
+独立核对key/summary/weight根、RMS Jacobian、参数外积、FP32输入伴随及无关参数None。
 `weighted_training_accumulation_check.cpp`独立用两次已声明detach的梯度之和计算一次SGD结果，
 并改写已消费的公共梯度以核对内部累积快照独立。Python FC另外在新进程读取磁盘切面并比较后续一步完整checkpoint。
 显式optimizer group须列出参数名称；空组有其字面含义，未提供groups才默认包含全部trainable owner。

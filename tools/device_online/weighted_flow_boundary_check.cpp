@@ -1,5 +1,6 @@
 // Capacity refusal, exact disk codec and unbounded cumulative logical time.
 #include "weighted_flow.h"
+#include "weighted_precision_reference.h"
 #include "weighted_flow_internal.h"
 #include "../../cpp/test/weighted_graph_fixture.h"
 #include "../../cpp/bench/streaming.h"
@@ -34,12 +35,13 @@ void check_weighted_flow_boundaries(at::Device device,at::ScalarType dtype,const
   GraphCheckpoint::save(path,g,m,snapshot);auto other=weighted_check::model(g,"kv",at::kCPU,dtype);
   auto loaded=GraphCheckpoint::load(path,g,other);compare(Result{loaded},Result{snapshot},dtype,true);
   WeightedFlow restored(g,other,loaded,device,limits);auto result=restored.advance(tail,10);
-  Greedy reference(g,m,Options{});compare(result,reference.run(snapshot,tail,10,10),dtype);
+  Greedy reference(g,dtype==at::kHalf?weighted_precision_check::reference_model(m):m,Options{});
+  compare(result,reference.run(weighted_precision_check::reference_continuation(snapshot),weighted_precision_check::reference_inputs(tail),10,10),dtype);
   // No pending in this DAG. Crossing a huge empty time interval must not use
   // one stage/tick or reinterpret original time as a reception counter.
   const Index time=(Index{1}<<54)+31;std::vector<External> later;
   for(Index b=0;b<2;++b)for(Index port=0;port<2;++port)later.push_back({b,port,2,time,at::tensor({.6,.2,-.3},at::kFloat).to(dtype)});
-  auto distant=restored.advance(later,time+4);compare(distant,reference.run(result.continuation,later,time+4,time+4),dtype);
+  auto distant=restored.advance(later,time+4);compare(distant,reference.run(weighted_precision_check::reference_continuation(result.continuation),weighted_precision_check::reference_inputs(later),time+4,time+4),dtype);
   require(distant.stats.at("resident_stages")<limits.stages,"resident logical-time gap consumed stage capacity");restored.close();
   std::filesystem::remove(path);
   auto reject=[&](WeightedFlowLimits cap,const std::vector<External>& input,const char* marker){
@@ -51,7 +53,7 @@ void check_weighted_flow_boundaries(at::Device device,at::ScalarType dtype,const
   cap=limits;cap.cache=1;reject(cap,xs,"device error=");
   WeightedFlow retry(g,m,q,device,limits);auto bad=xs;bad[0].position=9;bool refused=false;
   try{retry.advance(bad,10);}catch(const std::invalid_argument&){refused=true;}require(refused,"bad boundary accepted");
-  compare(Result{retry.checkpoint()},Result{q},dtype,true);compare(retry.advance(xs,10),reference.run(q,xs,10,10),dtype);retry.close();
+  compare(Result{retry.checkpoint()},Result{q},dtype,true);compare(retry.advance(xs,10),reference.run(q,weighted_precision_check::reference_inputs(xs),10,10),dtype);retry.close();
   cap=limits;cap.tensor_bytes=1;refused=false;
   try{WeightedFlow too_large(g,m,q,device,cap);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"weighted graph tensor budget omitted");

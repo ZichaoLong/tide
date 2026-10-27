@@ -7,8 +7,8 @@ ParameterVjp weighted_training_layout(const ParameterRegistry& registry,at::Devi
     throw std::invalid_argument("weighted training layout requires bounded explicit no-grad device");
   ParameterVjp out;out.owners=registry.owners();long double count=0;
   for(const auto& owner:out.owners){
-    if(!owner.value.device().is_cpu()||owner.value.scalar_type()!=at::kFloat||owner.value.numel()<1)
-      throw std::invalid_argument("weighted training requires CPU FP32 canonical parameters");
+    if(!owner.value.device().is_cpu()||(owner.value.scalar_type()!=at::kFloat&&owner.value.scalar_type()!=at::kHalf)||owner.value.numel()<1)
+      throw std::invalid_argument("weighted training requires CPU FP32/FP16 canonical parameters");
     if(count>std::numeric_limits<int64_t>::max()-owner.value.numel())throw std::invalid_argument("weighted parameter extent overflow");
     out.offsets.push_back(static_cast<int64_t>(count));count+=owner.value.numel();
   }
@@ -46,7 +46,7 @@ std::vector<ParameterWrite> weighted_training_writes(const ParameterRegistry& al
       throw std::invalid_argument("weighted publication role differs from original parameter");
     const auto found=offsets.find(all.canonical_name(role.parameter));if(found==offsets.end())continue; // Frozen owner.
     if(found->second<0)throw std::invalid_argument("weighted training publication omitted a trainable owner");
-    writes.push_back({found->second+role.offset,{role.bank,at::kFloat}});
+    writes.push_back({found->second+role.offset,{role.bank,x.scalar_type()}});
   }
   return writes;
 }

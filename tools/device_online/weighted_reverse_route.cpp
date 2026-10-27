@@ -20,7 +20,8 @@ void append_weighted_reverse_route(DeviceProgram& p,const AtomBatch& a,const at:
   const auto rows=gradients.size(0),slots=gradients.size(1),width=gradients.size(2),atoms=a.values.size(0),boundary=b.values.size(0);
   const auto stages=e.times.size(0),nodes=e.times.size(1),samples=e.times.size(2);
   if(rows<1||slots<1||width<2||atoms<1||boundary<1||stages<1||nodes<1||samples<1)throw std::invalid_argument("weighted reverse route capacities must be positive");
-  check(a.coordinates,device,at::kLong,{atoms,6});check(a.valid,device,at::kBool,{atoms});check(a.values,device,at::kFloat,{atoms,width});
+  if(a.values.scalar_type()!=at::kFloat&&a.values.scalar_type()!=at::kHalf)throw std::invalid_argument("weighted journal payload must be FP32/FP16");
+  check(a.coordinates,device,at::kLong,{atoms,6});check(a.valid,device,at::kBool,{atoms});check(a.values,device,a.values.scalar_type(),{atoms,width});
   check(indices,device,at::kLong,{rows,slots});check(lengths,device,at::kLong,{rows});
   check(gradients,device,at::kFloat,{rows,slots,width});check(roots,device,at::kBool,{rows,slots});check(edges,device,at::kLong,{edges.numel()});
   check(e.times,device,at::kLong,{stages,nodes,samples});check(e.present,device,at::kBool,e.times.sizes());

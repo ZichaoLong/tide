@@ -1,5 +1,6 @@
 // Allocation §2–5 and KV qry/position: whole graph composition and named roles.
 #include "weighted_flow.h"
+#include "weighted_precision_reference.h"
 #include "weighted_flow_fixture.h"
 #include "../../cpp/test/weighted_graph_fixture.h"
 #include "../../cpp/bench/streaming.h"
@@ -18,7 +19,9 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
       auto xs=weighted_check::inputs(g,at::kCPU,args.dtype);for(auto& x:xs)x.value=x.value*at::tensor({.3f,1.f,1.f}).to(args.dtype);
       xs[0].value=at::zeros_like(xs[0].value);Continuation q;q.identity=g.identity;q.batch_size=2;
       WeightedFlowLimits limits;limits.cache=8;limits.stages=32;WeightedFlow owner(g,m,q,device,limits);
-      auto actual=owner.advance(xs,10);Greedy reference(g,m,Options{});auto expected=reference.run(q,xs,10,10);
+      auto actual=owner.advance(xs,10);weighted_precision_check::validate_storage(actual,args.dtype);
+      Greedy reference(g,args.dtype==at::kHalf?weighted_precision_check::reference_model(m):m,Options{});
+      auto expected=reference.run(q,weighted_precision_check::reference_inputs(xs),10,10);
       tide_bench::compare(actual,expected,true,args.dtype,std::nullopt,args.dtype==at::kHalf?2e-2:-1.,args.dtype==at::kHalf?1e-3:-1.);owner.close();++count;
       std::cout<<"weighted-flow-config case="<<count<<" mode="<<c.selection_mode<<" score="<<c.local_score<<" key="<<c.region_key.value_or("none")<<" passed\n"<<std::flush;
     }
