@@ -5,6 +5,7 @@
 #include "tide/region.h"
 #include "tide/source_class.h"
 #include <array>
+#include <optional>
 
 namespace tide::weighted {
 // Marker for the local binding's transport invariant, not a scheduler policy.
@@ -34,14 +35,20 @@ struct RegionalConfig {
   Index hidden_width=4, region_control_width=2, k=1;
   double gamma_max=1, allocation_temperature=1, total_fraction=.5;
   std::string region_control_mode="context";
+  std::string regularizer="quad";
+  std::optional<double> ent_alpha;
   void validate() const;
 };
 struct Allocation {
   Tensor controls, multiplier, free, residual;
   std::string constraint;
+  std::string backward="quad-exact-map-v1";
 };
 Allocation allocate_quad(const Tensor& scores, const Tensor& caps, const Tensor& lower,
                          const Tensor& upper, const Tensor& temperature);
+Allocation allocate(const Tensor& scores, const Tensor& caps, const Tensor& lower,
+                    const Tensor& upper, const Tensor& temperature, const std::string& regularizer,
+                    std::optional<double> ent_alpha=std::nullopt);
 // Caller supplies named finite parameters in NodeWeights::extra. This function
 // installs immutable C++ kernels; no Python callbacks enter graph execution.
 void configure_node(NodeWeights&, const KVConfig&, const RegionalConfig&, const SourceClasses&, double alpha_agg);

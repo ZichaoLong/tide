@@ -9,7 +9,7 @@ from ..full import FullProgram, FullResult
 from ..history import History
 from ..readout import ReadProgram
 from ..region import RegionProgram, Selection
-from .allocation import allocate_quad
+from .entropy_allocation import allocate
 from .tensors import Payload, Received, norm, parameter
 
 
@@ -117,7 +117,8 @@ class RegionalTotal(RegionProgram):
         nodes, descriptors = zip(*r.candidates)
         fields = {name: torch.stack([d[name] for d in descriptors]) for name in ("w","mu","score","evidence")}
         b = self.total(fields["w"],fields["mu"],fields["evidence"])
-        allocation = allocate_quad(fields["score"],fields["mu"],b,b,self.config.allocation_temperature)
+        allocation = allocate(fields["score"],fields["mu"],b,b,self.config.allocation_temperature,
+                              regularizer=self.config.regularizer,ent_alpha=self.config.ent_alpha)
         controls = dict(zip(nodes,allocation.controls.unbind()))
         return Selection({v for v,c in controls.items() if c.detach() > 0}, controls, History(last_time=r.time))
 

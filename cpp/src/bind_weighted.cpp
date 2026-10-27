@@ -15,7 +15,8 @@ void bind_weighted(py::module_& module){
   py::class_<RegionalConfig>(module,"WeightedRegionalConfig").def(py::init<>())
     FIELD(RegionalConfig,hidden_width) FIELD(RegionalConfig,region_control_width) FIELD(RegionalConfig,k)
     FIELD(RegionalConfig,gamma_max) FIELD(RegionalConfig,allocation_temperature)
-    FIELD(RegionalConfig,total_fraction) FIELD(RegionalConfig,region_control_mode).def("validate",&RegionalConfig::validate);
+    FIELD(RegionalConfig,total_fraction) FIELD(RegionalConfig,region_control_mode)
+    FIELD(RegionalConfig,regularizer) FIELD(RegionalConfig,ent_alpha).def("validate",&RegionalConfig::validate);
   py::class_<RecurrentConfig>(module,"WeightedRecurrentConfig").def(py::init<>())
     FIELD(RecurrentConfig,memory_family) FIELD(RecurrentConfig,memory_read)
     FIELD(RecurrentConfig,width) FIELD(RecurrentConfig,summary_width) FIELD(RecurrentConfig,key_width)
@@ -35,6 +36,10 @@ void bind_weighted(py::module_& module){
   module.def("configure_weighted_region",&configure_region);
   module.def("weighted_allocate_quad",[](const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau){
     return allocate_quad(t,mu,lo,hi,tau).controls;
+  });
+  module.def("weighted_allocate",[](const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau,
+                                    const std::string& regularizer,std::optional<double> alpha){
+    return allocate(t,mu,lo,hi,tau,regularizer,alpha).controls;
   });
 #undef FIELD
 }
