@@ -26,17 +26,12 @@ CUDA源码/三架构构建通过范围见各报告，无GPU真机；不自动重
 
 ## 当前工作与下一动作
 
-完整Describe：cat/match、cat/grouped/fixed证据、content/content_stats key、固定/可训练/context增益；
-独立字段根与参数角色VJP、保存版本、动态owner/输入、缺席后出现常值回填已实现。
-开发dev tree2d5bd7a2c2ed355cd764752d26958463c9924361通过但未含动态出现；
-dev2 tree88c5895efb483c4b0470a60b76b893c6d28e8d00通过且含修复回归；两任务均inactive/success/exit0。
-clamp等号导数用非零cotangent增强CPU断言；待提交实现后启动固定资格。
-下一命令：冻结实现提交，启动tide-core5-resident-describe-{npu,cuda}-qualify-20261027.service。
-固定checkout artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-describe-{npu,cuda}-qualify/。
-NPU复用dev2摘要一致二进制，保留原manifest；CUDA单独sm80/90/100构建。结果尚未知。
-background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS1、queue180秒。
-检查systemctl --user show上述unit及status.json/task.log/checks/result.json；停止systemctl --user stop UNIT。
-通过后单独提交证据推送，继续下一增量。
+cd576d24434c5daaa21f57d316a93b9bf1c91f0a完整Describe固定资格通过：CPU38/3.86秒，NPU八配置，CUDA三架构构建。
+证据evidence/core5-resident-describe-20261027.{md,json}；两个资格unit均inactive/success/exit0，无活动reader。
+开发dev2 tree88c5895efb483c4b0470a60b76b893c6d28e8d00，动态缺席→出现回归通过；原dev记录保留原范围。
+当前主工作区正在实现四循环数值：row algebra矩阵/除法/exp/sqrt/softplus/卷积、
+原始时间快照与affine/delta/GDN/SSD的Upd/Mem/Full；这些修改未提交、未构建，尚无通过结论。
+下一动作完成独立直接公式与字段根/参数VJP测试，冻结开发树进行相关CPU与NPU检查，随后固定提交资格。
 
 接续四循环的实际数值Upd/Mem/Full、完整在线图就绪/选择/推进、retained训练/optimizer、
 精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
