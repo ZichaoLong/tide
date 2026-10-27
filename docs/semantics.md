@@ -155,13 +155,22 @@ source projections by parameter class and complete reductions by actual fiber
 length, retaining every physical atom. Numeric batching and Aggregate batched
 VJP are separately declared capabilities. The optional batched policy preserves
 independent fiber roots, parameter aliases and the zero-total branch without
-scalar Aggregate replay; the default replay policy remains available.
+scalar Aggregate replay; the default replay policy remains available. The weighted
+mean retains its original forward quotient, with the algebraically equivalent
+centered first-order VJP `dot(bar_u,z_i-u)/M` for mass and `(m_i/M)*bar_u` for
+content. The positive singleton mass derivative is connected zero. Zero-total
+branch ownership and parameter connectivity are unchanged.
 The [weighted Read/Full numeric batches](weighted-query-batch.md) preserve each
 actual snapshot, int64 visibility and unscaled payload. The separate
 [query VJP](weighted-query-vjp.md) uses actual private batch graphs, independent
 row/field cotangents and original version checks. Packed Read declares the
 capability; Full selects it with `full_autograd="batched"`, retaining default
-replay. Numeric qualification does not certify this later backward capability.
+replay. Numeric qualification does not certify this later backward capability. The separate
+[regional batching contract](weighted-region-batch.md) preserves complete candidates,
+actual KKT branches, independent control roots and singleton weighted history.
+General history-dependent programs retain causal order; no implicit independence
+is introduced by the batch capability. Exact-map VJPs remain separate from solver
+iteration derivatives and hard sending's declared branch derivatives.
 
 ## First local profile: `ema-ffn-v1`
 

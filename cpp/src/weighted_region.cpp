@@ -2,6 +2,7 @@
 #include "weighted_detail.h"
 #include "weighted_scoring.h"
 #include "tide/weighted_sending.h"
+#include "weighted_region_batch.h"
 
 namespace tide::weighted {
 using namespace detail;
@@ -9,6 +10,11 @@ namespace {
 class Sending final:public RegionKernel {
  public:
   explicit Sending(RegionalConfig c):c_(std::move(c)){c_.validate();}
+  bool joint_batch() const override{return true;}
+  bool batched_autograd() const override{return true;}
+  bool history_independent() const override{return true;}
+  std::vector<Selection> batch(const RegionWeights& w,const std::vector<RegionInput>& r) const override{return batch::regions(w,r,c_);}
+  std::vector<Selection> batch_grad(const RegionWeights& w,const std::vector<RegionInput>& r) const override{return batch::region_vjp(w,r,c_);}
   Selection step(const RegionWeights& w,const RegionInput& r) const override {
     std::map<std::string,std::vector<Tensor>> columns;std::vector<Index> nodes;
     for(const auto& d:r.candidates){

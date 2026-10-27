@@ -39,12 +39,15 @@ add_library(tidegraph STATIC
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
   cpp/src/weighted_aggregate.cpp
+  cpp/src/weighted_mean.cpp
   cpp/src/weighted_aggregate_vjp.cpp
   cpp/src/weighted_query_kv.cpp
   cpp/src/weighted_query_recurrent.cpp
   cpp/src/weighted_describe_batch.cpp
   cpp/src/weighted_full_batch.cpp
   cpp/src/weighted_query_vjp.cpp
+  cpp/src/weighted_allocation_batch.cpp cpp/src/weighted_allocation_rows.cpp
+  cpp/src/weighted_sending_batch.cpp cpp/src/weighted_region_batch.cpp cpp/src/weighted_region_vjp.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_recurrent_packed.cpp
   cpp/src/weighted_gated_packed.cpp
   cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp
@@ -114,6 +117,7 @@ endif()
 add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp cpp/test/weighted.cpp cpp/test/weighted_recurrent.cpp cpp/test/weighted_entropy.cpp cpp/test/weighted_sending.cpp cpp/test/weighted_scoring.cpp cpp/test/weighted_aggregate.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph_runtime)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_query_vjp.cpp)
+target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_region_batch.cpp)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp)
@@ -132,7 +136,7 @@ endif()
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
   find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp cpp/src/bind_weighted.cpp)
+  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp cpp/src/bind_weighted.cpp cpp/src/bind_weighted_batch.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()
 

@@ -10,7 +10,7 @@
 | 1 公共表示与一般图 | 同秩区域、任意端口日程、逐边/端口返回、原样嵌入；SrcClass 多原子、结构化 payload/content/Read、int64 元数据与精确编解码 | 一般 SettleGraph efb9d62 固定提交定向资格 247 项通过；结构化 Read/int64/SrcClass 表示 714d5f9 固定提交定向资格 212 项通过；具体带权绑定在下一阶段 |
 | 2 首个完整组合 | kv/sum/+、cat/ind、regional_total/context/cat/quad；明确尺寸/初态/共享，FC 与 HB | Python/独立 C++ 首组合 6fb467c 固定提交定向资格 129 项通过；含 FC/HB、PDG 反馈、非对齐 TimedDAG、一般端口、完整记录/独立根、多步优化器与恢复；standalone 完整训练矩阵仍待补齐 |
 | 3 正式候选 | affine/delta/gated_delta/ssd、固定逻辑时间短卷积；全部适用发送/评分/证据/key、异构组合 | affine/delta、完整 GDN/SSD、固定时间短卷积与异构 Python/C++ 442e8b2 固定源码资格 544 项通过。Bernoulli/Shannon/固定 alpha ent 分配 a05d3ff 固定源码资格 226 项通过。十种发送/节点增益 4a08588 固定源码资格 320 项通过；match/att/grouped evidence 与两种 key cacb645 固定源码带权支线资格 593 项通过；旧同名内核不自动符合新定义 |
-| 4 精确联合/packed/VJP | 在线贪心 prefill、完整记录与右切面、实际 packing、参数/计算共享和私有状态 | KV 实际 ragged 投影、四种循环仿射前缀及原始时间卷积联合计算已实现；26dad7d 固定源码相关资格 378 项通过；State 批量 VJP 7a017bf 固定源码相关资格 343 项通过；Aggregate 数值/batched VJP d90cfbc 固定源码 704 项通过；Read/Full 数值批量 7b8b469 固定源码相关资格 377 项通过。Read/Full 批量 VJP 67854b3 固定源码 647 项通过；区域与计算共享继续；禁止轨迹预跑 |
+| 4 精确联合/packed/VJP | 在线贪心 prefill、完整记录与右切面、实际 packing、参数/计算共享和私有状态 | KV 实际 ragged 投影、四种循环仿射前缀及原始时间卷积联合计算已实现；26dad7d 固定源码相关资格 378 项通过；State 批量 VJP 7a017bf 固定源码相关资格 343 项通过；Aggregate 数值/batched VJP d90cfbc 固定源码 704 项通过；Read/Full 数值批量 7b8b469 固定源码相关资格 377 项通过。Read/Full 批量 VJP 67854b3 固定源码 647 项通过；区域实际数值/批量 VJP 及在线调度已完成开发 536 项检查，固定源码资格待验；来源四种绑定/计算共享继续；禁止轨迹预跑 |
 | 5 设备与执行位置 | CPU、mixed、resident，前向/反向/优化器/跨卡/容量/续接分验收 | 新支线待实现核验；CUDA 源码、构建、真机独立记录，无 GPU 不阻塞其余工作 |
 | 6 有限选型与交付 | 小中规模 profiling、代表性完整训练与推理；计入调度/packing/通信/同步等 | 待正确性后回答选型问题；默认每配置一次独立测量，不展开全开关矩阵 |
 

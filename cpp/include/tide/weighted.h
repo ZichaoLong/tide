@@ -66,6 +66,9 @@ Allocation allocate_quad(const Tensor& scores, const Tensor& caps, const Tensor&
 Allocation allocate(const Tensor& scores, const Tensor& caps, const Tensor& lower,
                     const Tensor& upper, const Tensor& temperature, const std::string& regularizer,
                     std::optional<double> ent_alpha=std::nullopt, const Tensor& score_shift={});
+struct AllocationRow {Tensor scores,caps,lower,upper,temperature,shift;};
+std::vector<Allocation> allocate_batch(const std::vector<AllocationRow>&,const std::string& regularizer,
+                                      std::optional<double> ent_alpha=std::nullopt);
 // Caller supplies named finite parameters in NodeWeights::extra. This function
 // installs immutable C++ kernels; no Python callbacks enter graph execution.
 void configure_node(NodeWeights&, const KVConfig&, const RegionalConfig&, const SourceClasses&, double alpha_agg);

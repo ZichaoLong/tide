@@ -8,6 +8,7 @@ import torch
 from ..aggregate import AggregateResult
 from .packing import project
 from .tensors import norm
+from .mean import weighted_mean
 
 
 def evaluate(program, requests):
@@ -32,14 +33,12 @@ def evaluate(program, requests):
         hidden = torch.nn.functional.silu(project(norm(x, program.epsilon), transform.a)+transform.embedding)
         values = x+program.alpha*project(hidden, transform.b)
         content = content.index_copy(0, ids, values)  # Distinct physical rows; no conflicting scatter.
-    terms = mass[:, None]*content
     result = [None]*len(requests)
     for length, owners in sorted(sizes.items()):
         ids = torch.tensor([[offsets[i]+j for j in range(length)] for i in owners],
                            dtype=torch.int64, device=payload.device)
         total = mass[ids].sum(1)
-        denominator = torch.where(total > 0, total, torch.ones_like(total))
-        values = terms[ids].sum(1)/denominator[:, None]
+        values = weighted_mean(mass[ids], content[ids])
         values = torch.where((total > 0)[:, None], values, torch.zeros_like(values))
         encoded = torch.cat((total[:, None], values), -1)
         for row, owner in enumerate(owners):

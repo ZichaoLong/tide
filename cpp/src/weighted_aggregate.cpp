@@ -1,6 +1,7 @@
 // Architecture §2: parameter-class projections, distinct atoms, complete fibers.
 #include "weighted_aggregate.h"
 #include "weighted_packed.h"
+#include "weighted_mean.h"
 
 namespace tide::weighted {
 std::vector<AggregateResult> aggregate_batch(const NodeWeights& w,const std::vector<AggregateInput>& requests,
@@ -26,15 +27,13 @@ std::vector<AggregateResult> aggregate_batch(const NodeWeights& w,const std::vec
     auto values=x+alpha*packed::project(hidden,detail::weight(w,prefix+".b"));
     content=content.index_copy(0,ids,values);
   }
-  auto terms=mass.unsqueeze(-1)*content;
   std::vector<AggregateResult> result(requests.size());
   for(const auto& [length,owners]:sizes){
     std::vector<Index> flat;
     for(auto owner:owners)for(Index j=0;j<length;++j)flat.push_back(offsets[owner]+j);
     auto ids=at::tensor(flat,ints).reshape({static_cast<Index>(owners.size()),length});
     auto total=mass.index({ids}).sum(1),positive=total>0;
-    auto denominator=at::where(positive,total,at::ones_like(total));
-    auto values=terms.index({ids}).sum(1)/denominator.unsqueeze(-1);
+    auto values=weighted_mean(mass.index({ids}),content.index({ids}));
     values=at::where(positive.unsqueeze(-1),values,at::zeros_like(values));
     auto encoded=at::cat({total.unsqueeze(-1),values},-1);
     for(size_t row=0;row<owners.size();++row)result[owners[row]]={encoded[row],{}};

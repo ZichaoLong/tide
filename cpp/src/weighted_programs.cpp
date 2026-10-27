@@ -2,6 +2,7 @@
 #include "weighted_recurrent_detail.h"
 #include "weighted_scoring.h"
 #include "weighted_aggregate.h"
+#include "weighted_mean.h"
 #include "weighted_query_batch.h"
 #include "weighted_query_vjp.h"
 #include "tide/aggregate.h"
@@ -22,7 +23,7 @@ class Aggregate final:public AggregateKernel {
     return aggregate_batch(w,requests,classes_,alpha_,epsilon_);
   }
   AggregateResult step(const NodeWeights& w,const AggregateInput& r) const override {
-    std::vector<Tensor> masses,terms;
+    std::vector<Tensor> masses,values;
     for(const auto& source:r.sources){
       const auto& x=source.atom.value;auto mass=x[0].clamp_min(0),z=x.slice(0,1);
       if(alpha_){
@@ -30,10 +31,10 @@ class Aggregate final:public AggregateKernel {
         auto hidden=at::silu(at::matmul(weight(w,prefix+".a"),normalize(z,epsilon_))+weight(w,prefix+".embedding"));
         z=z+alpha_*at::matmul(weight(w,prefix+".b"),hidden);
       }
-      masses.push_back(mass);terms.push_back(mass*z);
+      masses.push_back(mass);values.push_back(z);
     }
     auto mass=at::stack(masses).sum();
-    auto u=mass.item<double>()>0?at::stack(terms).sum(0)/mass:at::zeros_like(terms[0]);
+    auto u=mass.item<double>()>0?weighted_mean(at::stack(masses),at::stack(values)):at::zeros_like(values[0]);
     return {at::cat({mass.reshape({1}),u}),{}};
   }
   void validate_weights(const NodeWeights& w,Index) const override {

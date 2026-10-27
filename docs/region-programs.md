@@ -24,7 +24,8 @@ generic control type is one finite floating tensor per candidate, in the payload
 dtype/device; it need not be a scalar or a probability. Built-in projection Emit
 and control-blend Next explicitly require scalar controls. Named heterogeneous
 control records are a future interface extension if an actual profile needs them.
-Descriptors are finite scalars under an explicit payload/FP64 precision policy.
+Descriptors are finite scalars or explicitly declared named tensor fields; see
+[structured records](structured-records.md). Scalar built-ins retain their payload/FP64 precision policy.
 Region requests carry payload dtype/device separately; see `lh-selector.md` for
 FP64 norm accumulation and built-in control/history conversion rules.
 
@@ -33,8 +34,12 @@ stored history. A nonempty region with empty selection still runs Upd, Read and
 Next on its candidates, updates history and executes no Full/delivery. The
 independent fixed-topology loops follow the same rule. Selection/history scanning
 is causal across frames; region history does not block exact state prefill when
-State and comparison-identity Next permit it. No joint region batch is claimed;
-`region_steps` counts actual nonempty selector calls in native and block schedules.
+State and comparison-identity Next permit it. The separate declared `joint_batch`
+and `batched_autograd` capabilities allow complete independent frames to batch.
+Repeated history owners additionally require `history_independent`; defaults are false.
+The [weighted regional binding](weighted-region-batch.md) supplies these capabilities.
+General history programs retain causal order. `region_steps` counts actual nonempty
+frames, with batch-call and fallback statistics recorded separately.
 
 ## History ownership and persistence
 

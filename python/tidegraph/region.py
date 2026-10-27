@@ -36,12 +36,21 @@ class Selection:
 
 class RegionProgram(torch.nn.Module):
     profile = "custom"
+    joint_batch = False
+    batched_autograd = False
+    history_independent = False
 
     def initial(self, layout, reference):
         return History()
 
     def step(self, request):
         raise NotImplementedError
+
+    def batch(self, requests):
+        return [self.step(r) for r in requests]
+
+    def batch_grad(self, requests):
+        raise ValueError("region program does not declare batched VJP")
 
     def validate_history(self, history, layout):
         pass
@@ -152,8 +161,7 @@ def validate_program(program, layout, reference, *, native=False):
     program.validate_weights(layout)
 
 
-def evaluate(graph, model, q, batch, region, time, candidates):
-    """Only called for a complete, canonical nonempty candidate set."""
+def prepare_request(graph, model, q, batch, region, time, candidates):
     layout, p = graph.region_layouts[region], model.regions[region]
     from .ownership import region_reference
     reference = region_reference(graph, model, region)
@@ -167,7 +175,14 @@ def evaluate(graph, model, q, batch, region, time, candidates):
         old = p.initial(layout, model.nodes[0].bias.to(reference.device))
         validate_history(old, layout, reference, time-1)
         p.validate_history(old, layout)
-    result = p.step(RegionInput(old, time, tuple(candidates), layout, reference.dtype, reference.device))
+    return RegionInput(old, time, tuple(candidates), layout, reference.dtype, reference.device)
+
+
+def validate_selection(graph, model, region, request, result):
+    from .ownership import region_reference
+    layout, p = request.layout, model.regions[region]
+    reference = region_reference(graph, model, region)
+    nodes = [v for v, _ in request.candidates]
     if (not isinstance(result, Selection) or not isinstance(result.active, set)
             or any(type(v) is not int for v in result.active) or not result.active <= set(nodes)
             or len(result.active) > layout.spec.budget):
@@ -180,8 +195,43 @@ def evaluate(graph, model, q, batch, region, time, candidates):
             raise ValueError("region selector returned incompatible control dtype/device")
         if not torch.isfinite(control).all():
             raise ValueError("region selector returned nonfinite control")
-    validate_history(result.history, layout, reference, time)
+    validate_history(result.history, layout, reference, request.time)
     p.validate_history(result.history, layout)
-    q.history[batch, region] = result.history
     result.controls = {node: value.to(model.nodes[node].bias.device) for node, value in result.controls.items()}
+    return result
+
+
+def evaluate(graph, model, q, batch, region, time, candidates):
+    """Only called for a complete, canonical nonempty candidate set."""
+    request = prepare_request(graph, model, q, batch, region, time, candidates)
+    result = validate_selection(graph, model, region, request, model.regions[region].step(request))
+    q.history[batch, region] = result.history
     return result.active, result.controls, result.history
+
+
+def evaluate_batch(graph, model, q, frames):
+    """Ready complete frames; repeated owners require history independence.
+
+    Returns validated selections without committing histories. The caller commits
+    each actual result in causal order alongside state adoption and Next.
+    """
+    groups, results = {}, [None]*len(frames)
+    for i, (batch, region, time, candidates) in enumerate(frames):
+        groups.setdefault(region, []).append(i)
+    for region, ids in groups.items():
+        p = model.regions[region]
+        owners = [frames[i][0] for i in ids]
+        if not p.joint_batch or (len(set(owners)) != len(owners) and not p.history_independent):
+            raise ValueError("region batch requires independent histories and a declared joint capability")
+        requests = [prepare_request(graph, model, q, *frames[i]) for i in ids]
+        if torch.is_grad_enabled():
+            if not p.batched_autograd:
+                raise ValueError("region batch requires a declared batched VJP in grad mode")
+            values = p.batch_grad(requests)
+        else:
+            values = p.batch(requests)
+        if len(values) != len(requests):
+            raise ValueError("region batch returned the wrong number of frames")
+        for i, request, value in zip(ids, requests, values):
+            results[i] = validate_selection(graph, model, region, request, value)
+    return results
