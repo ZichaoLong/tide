@@ -44,6 +44,8 @@ coordinator拥有。这是同一图/样本内的物理放置，和[独立样本�
 
 独立验证：`weighted_flow_peer_check.cpp`使用独立CPU调度核对五记忆、同秩HB、非对齐DAG、
 反馈PDG、完整区域Attention/来源变换、零接收、重复边/端口、全部记录、跨放置磁盘恢复及空窗。
-容量反例还直接检查每个物理节点的raw状态和presence，证明拒绝阶段没有部分采用。
+容量反例先用独立CPU调度确认首区域两个跨卡节点同时作用、第一阶段的4条消息超出容量2，
+再检查每个物理节点的raw状态/presence及区域history，证明拒绝阶段没有部分采用。
+同时断言raw、Full与每个实际参数bank的物理设备，不能仅根据manifest请求列表认证放置。
 `test_weighted_resident_placement.py`只验证静态owner定义域，不作设备执行证据。
 各dtype、Python适配、standalone、CUDA构建与真机结果仍分别记录。

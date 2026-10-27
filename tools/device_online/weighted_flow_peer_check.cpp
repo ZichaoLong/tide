@@ -12,6 +12,15 @@
 #include <filesystem>
 namespace tide::device_online {
 struct WeightedFlowPeerTestAccess {
+  static void placed_owners(const WeightedFlow& flow){
+    const auto& s=*flow.impl_;
+    for(size_t v=0;v<s.nodes.size();++v){const auto& n=*s.nodes[v];const auto d=s.node_devices[v];
+      for(const auto& raw:{n.initial,n.state,n.old,n.proposal})
+        if(raw.floating.device()!=d||raw.integer.device()!=d)throw std::runtime_error("raw node owner ignored physical placement");
+      if(n.full.device()!=d)throw std::runtime_error("node Full did not run on its owner");
+      for(const auto& [name,role]:n.banks.roles())if(role.bank.device()!=d)throw std::runtime_error("node parameter bank is on the wrong device");
+    }
+  }
   static void rejected_first_stage(const WeightedFlow& flow){
     const auto& s=*flow.impl_;
     for(const auto& n:s.nodes)
@@ -41,6 +50,7 @@ void run(at::Device device,at::ScalarType dtype,Graph g,Model m,const std::strin
   WeightedFlowLimits limits;limits.prefill=prefill;limits.cache=16;limits.stages=64;
   const auto owners=placement(g,device);
   WeightedFlow flow(g,m,q,device,limits,owners);require(flow.node_devices()==owners,"effective node placement differs");
+  WeightedFlowPeerTestAccess::placed_owners(flow);
   auto actual=flow.advance(xs,10),expected=reference.run(q,weighted_precision_check::reference_inputs(xs),10,10);compare(actual,expected,dtype);
   require(actual.stats.at("node_peer_devices")==1&&actual.stats.at("node_peer_packet_bytes")>0,"node peer execution absent");
   compare(Result{flow.checkpoint()},Result{actual.continuation},dtype,true);flow.close();
@@ -61,12 +71,20 @@ void refusals(at::Device device,at::ScalarType dtype){
   auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",at::kCPU,dtype);auto xs=weighted_check::inputs(g,at::kCPU,dtype);
   Continuation q;q.identity=g.identity;q.batch_size=2;auto owners=placement(g,device);WeightedFlowLimits limits;limits.cache=8;limits.stages=32;
   at::NoGradGuard ng;
-  for(const auto& invalid:std::vector<std::vector<at::Device>>{{device},{at::Device(at::kCPU),device,device,device}}){
+  auto wrong_backend=owners;wrong_backend[0]=at::Device(at::kCPU);
+  for(const auto& invalid:std::vector<std::vector<at::Device>>{{device},wrong_backend}){
     bool refused=false;try{WeightedFlow owner(g,m,q,device,limits,invalid);}catch(const std::invalid_argument&){refused=true;}
     require(refused,"invalid physical node placement accepted");
   }
+  // Both nodes of the first region are active, on different physical owners.
+  // Four arrivals cannot fit queue=2 in the *first* stage; no prior accepted
+  // stage is allowed to invalidate the initial-state refusal assertion.
+  std::vector<External> first{xs[0],xs[1]};Options scalar;scalar.packed=false;
+  auto reference=dtype==at::kHalf?weighted_precision_check::reference_model(m):m;
+  auto premise=Greedy(g,reference,scalar).run(q,weighted_precision_check::reference_inputs(first),2,2);
+  require(premise.trace.size()==2&&premise.messages.size()==4&&premise.continuation.pending.size()==4,"queue counterexample does not reject the first stage");
   limits.queue=2;WeightedFlow blocked(g,m,q,device,limits,owners);bool refused=false;
-  try{blocked.advance({xs[0]},10);}catch(const std::exception& e){refused=std::string(e.what()).find("device error=1")!=std::string::npos;}
+  try{blocked.advance(first,10);}catch(const std::exception& e){refused=std::string(e.what()).find("device error=1")!=std::string::npos;}
   require(refused,"cross-owner queue overflow was not refused");WeightedFlowPeerTestAccess::rejected_first_stage(blocked);blocked.close();
   limits.queue=64;WeightedFlow retry(g,m,q,device,limits,owners);auto bad=xs;bad[0].position=9;refused=false;
   try{retry.advance(bad,10);}catch(const std::invalid_argument&){refused=true;}require(refused,"bad boundary was accepted");
