@@ -41,4 +41,5 @@ value 的贡献求和，再经保存的旋转/投影/窗口 tape 回传。只取
 CPU 元数据、NPU 实机、CUDA 构建和 CUDA 真机证据分别记录。
 
 固定源码资格见[8b1be80运行证据](evidence/core5-resident-kv-query-20261027.md)。
-新增FP16 raw读取开发中，设备资格尚未完成。
+FP16 raw读取另有[db85db6固定资格](evidence/core5-resident-half-kv-read-20261028.md)；
+完整half图和训练从[公共训练](resident-weighted-training.md)进入，不能由局部Mem资格外推。

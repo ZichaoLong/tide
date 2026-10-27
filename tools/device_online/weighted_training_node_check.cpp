@@ -1,5 +1,6 @@
 // Public placed-node training: independent CPU schedules, roots and optimizers.
 #include "weighted_training_check.h"
+#include "optimizer_layout.h"
 #include "weighted_precision_reference.h"
 #include "../../cpp/test/weighted_graph_fixture.h"
 #include "../../cpp/bench/streaming.h"
@@ -27,7 +28,10 @@ void refusal(at::Device device,at::ScalarType dtype){
   // requested storage dtype; no candidate status is used as the premise.
   const auto proposed=before.state.values.to(at::kDouble)-group.lr*grad.parameters.values.cpu().to(at::kDouble);
   require(!at::isfinite(proposed.to(dtype)).all().item<bool>(),"publication refusal premise did not overflow storage");
-  auto step=owner.step();require(!step.applied&&step.refusal_code==21,"placed optimizer did not jointly refuse overflow");
+  auto step=owner.step();
+  require(!step.applied&&step.refusal_code==tide_device::optimizer_finite_error,
+      "placed optimizer did not jointly refuse overflow: applied="+std::to_string(step.applied)+
+      " code="+std::to_string(step.refusal_code));
   owner.detach();auto after=owner.checkpoint();
   for(const auto& [name,x]:before.parameters)require(at::equal(x,after.parameters.at(name)),"rejected publication changed named parameter");
   for(const auto& pair:std::vector<std::pair<Tensor,Tensor>>{{before.state.values,after.state.values},{before.state.first,after.state.first},
