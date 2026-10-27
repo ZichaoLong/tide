@@ -64,6 +64,7 @@ BINARY(tanh_backward,TanhBackward) BINARY(silu_backward,SiluBackward) BINARY(rel
 #undef BINARY
 #define UNARY(name,op) void DeviceProgram::name(const at::Tensor& a,const at::Tensor& out){same(a,out);impl_->element(op,a,{},out);}
 UNARY(log1p,Log1p) UNARY(sin,Sin) UNARY(cos,Cos) UNARY(softplus,Softplus) UNARY(sigmoid,Sigmoid) UNARY(tanh,Tanh) UNARY(relu,Relu) UNARY(silu,Silu)
+UNARY(exp,Exp) UNARY(sqrt,Sqrt)
 #undef UNARY
 void DeviceProgram::cast_index(const at::Tensor& in,const at::Tensor& out) {
   if(in.scalar_type()!=at::kBool||out.scalar_type()!=at::kInt||in.sizes()!=out.sizes())

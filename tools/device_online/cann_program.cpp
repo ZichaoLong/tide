@@ -224,6 +224,12 @@ void DeviceProgram::minimum(const at::Tensor& a,const at::Tensor& b,const at::Te
 void DeviceProgram::log1p(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.op("aclnnLog1p",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
+void DeviceProgram::exp(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnExp",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void DeviceProgram::sqrt(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnSqrt",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
 void DeviceProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::Tensor& out) {
   auto& p=*impl_;p.building();const auto dtype=input.scalar_type();
   if((dtype!=at::kFloat&&dtype!=at::kHalf)||axis<0||axis>=input.dim())

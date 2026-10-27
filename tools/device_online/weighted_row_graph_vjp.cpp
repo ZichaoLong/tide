@@ -46,11 +46,25 @@ WeightedRowReverse WeightedRowGraph::reverse(DeviceProgram& p,const std::vector<
       case WeightedRowOp::Product:{for(int j=0;j<2;++j){auto dx=at::zeros_like(e.value);p.multiply(bar.value,value(e.parents[1-j]),dx);
           if(value(e.parents[j]).size(1)==1&&e.value.size(1)!=1){auto reduced=at::zeros_like(value(e.parents[j]));p.sum(dx,1,true,reduced);accumulate(e.parents[j],reduced,bar.connected);}
           else accumulate(e.parents[j],dx,bar.connected);}break;}
+      case WeightedRowOp::Divide:{auto dx=at::zeros_like(x),dy=at::zeros_like(x),negative=at::zeros_like(x);
+        p.divide(bar.value,value(e.parents[1]),dx);p.multiply(dx,e.value,dy);p.multiply(dy,at::full({1},-1,x.options()),negative);
+        accumulate(a,dx,bar.connected);
+        if(value(e.parents[1]).size(1)==1&&x.size(1)!=1){auto reduced=at::zeros_like(value(e.parents[1]));p.sum(negative,1,true,reduced);accumulate(e.parents[1],reduced,bar.connected);}
+        else accumulate(e.parents[1],negative,bar.connected);break;}
+      case WeightedRowOp::Matmul:{const auto m=e.dimensions[0],k=e.dimensions[1],n=e.dimensions[2];
+        auto xt=at::zeros({rows_,k,m},x.options()),yt=at::zeros({rows_,n,k},x.options()),dx=at::zeros_like(x),dy=at::zeros_like(value(e.parents[1]));
+        p.permute(x.view({rows_,m,k}),{0,2,1},xt);p.permute(value(e.parents[1]).view({rows_,k,n}),{0,2,1},yt);
+        p.batch_matmul(bar.value.view({rows_,m,n}),yt,dx.view({rows_,m,k}));p.batch_matmul(xt,bar.value.view({rows_,m,n}),dy.view({rows_,k,n}));
+        accumulate(a,dx,bar.connected);accumulate(e.parents[1],dy,bar.connected);break;}
+      case WeightedRowOp::Convolution:{auto g=append_weighted_convolution_vjp(p,*e.convolution,bar.value,bar.connected,error,available);
+        auto cache=at::zeros_like(value(e.parents[1]));p.index_select(g.raw_cache,1,e.indices[0],cache);
+        accumulate(a,g.current,g.row_connected);accumulate(e.parents[1],cache,g.cache_connected);
+        parameter(e.role+".weight",g.parameters.weight,g.owner_connected);parameter(e.role+".bias",g.parameters.bias,g.owner_connected);break;}
       case WeightedRowOp::Scale:{auto dx=at::zeros_like(x);p.multiply(bar.value,at::full({1},float(e.scalar),x.options()),dx);accumulate(a,dx,bar.connected);break;}
       case WeightedRowOp::Sum:{auto dx=at::zeros_like(x);p.multiply(bar.value,at::ones_like(x),dx);accumulate(a,dx,bar.connected);break;}
       case WeightedRowOp::Silu:{auto dx=at::zeros_like(x);p.silu_backward(bar.value,x,dx);accumulate(a,dx,bar.connected);break;}
-      case WeightedRowOp::Sigmoid:case WeightedRowOp::Log1p:case WeightedRowOp::Clamp:{auto dx=at::zeros_like(x);
-        const int64_t mode=e.kind==WeightedRowOp::Sigmoid?0:(e.kind==WeightedRowOp::Log1p?1:2);
+      case WeightedRowOp::Sigmoid:case WeightedRowOp::Log1p:case WeightedRowOp::Clamp:case WeightedRowOp::Exp:case WeightedRowOp::Sqrt:case WeightedRowOp::Softplus:{auto dx=at::zeros_like(x);
+        const int64_t mode=e.kind==WeightedRowOp::Sigmoid?0:(e.kind==WeightedRowOp::Log1p?1:(e.kind==WeightedRowOp::Clamp?2:(e.kind==WeightedRowOp::Exp?3:(e.kind==WeightedRowOp::Sqrt?4:5))));
         p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_row_derivative)(1,stream,
           ptr(x),ptr(e.value),ptr(bar.value),ptr(bar.connected),ptr(dx),ptr(error),x.size(0),x.size(1),mode,float(e.scalar)),
           "local declared scalar-map VJP");},{x,e.value,bar.value,bar.connected,dx,error});accumulate(a,dx,bar.connected);break;}

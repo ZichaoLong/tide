@@ -29,11 +29,21 @@ CUDA源码/三架构构建通过范围见各报告，无GPU真机；不自动重
 cd576d24434c5daaa21f57d316a93b9bf1c91f0a完整Describe固定资格通过：CPU38/3.86秒，NPU八配置，CUDA三架构构建。
 证据evidence/core5-resident-describe-20261027.{md,json}；两个资格unit均inactive/success/exit0，无活动reader。
 开发dev2 tree88c5895efb483c4b0470a60b76b893c6d28e8d00，动态缺席→出现回归通过；原dev记录保留原范围。
-当前主工作区正在实现四循环数值：row algebra矩阵/除法/exp/sqrt/softplus/卷积、
-原始时间快照与affine/delta/GDN/SSD的Upd/Mem/Full；这些修改未提交、未构建，尚无通过结论。
-下一动作完成独立直接公式与字段根/参数VJP测试，冻结开发树进行相关CPU与NPU检查，随后固定提交资格。
+四循环局部数值已完成开发检查：affine/delta/GDN/SSD的Upd/Mem/Full，原始时间有效快照、固定时间卷积、完整独立字段/参数VJP。
+recurrent-dev5 treed01f0a2f55b14aa546e08895afe40d806ad8c092：CPU98项/4.39秒，NPU24配置完整数值及Describe八配置回归通过，unit inactive/success/exit0。
+包含两组四头SSD、零残差尺度连接、巨大age/查询早于保存时钟、零接收保留、保存版本、正率FP32下溢拒绝及全组合预算拒绝。
+先前开发失败保留：dev tree1e9228502d28801ea891ad9230276de619490fd7（AscendC scalar expf）；
+dev2 tree75cd1f9ea50b0427e2154f0eacb55447af134685（CPU adapter arena未重置）；
+dev3 tree08aa35c441dac6569434fa10f2a3269778296c8f（公式函数normal与ATen重载冲突）；
+dev4 tree1ef73cfc9a56e0e2748759ef4992bdad9a2cd9c6（SDK不支持CPU bool列表构造）。这些记录均failed，不由dev5覆盖。
+下一命令：提交实现后冻结该提交，启动tide-core5-resident-recurrent-{npu,cuda}-qualify-20261028.service。
+checkout artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-recurrent-{npu,cuda}-qualify/。
+launcher .local/core5-resident-recurrent-{npu,cuda}-qualify{,-workload}.sh；NPU复用dev5原manifest并核验全摘要；CUDA独立sm80/90/100构建。
+background.slice/Nice10，NPU600秒/CUDA1200秒，2build workers/BLAS1，NPU queue180秒。正式结果尚未知。
+检查systemctl --user show UNIT及status.json/task.log/checks/result.json；停止systemctl --user stop UNIT。
+通过后单独提交证据推送，继续完整图增量。
 
-接续四循环的实际数值Upd/Mem/Full、完整在线图就绪/选择/推进、retained训练/optimizer、
+接续完整在线图就绪/选择/推进、retained训练/optimizer、
 精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
 随后有限profiling/性能选型与最终追溯，不做全开关笛卡尔积。
 

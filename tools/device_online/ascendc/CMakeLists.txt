@@ -169,3 +169,6 @@ ascendc_library(tide_state_reverse_flags_kernel STATIC tide_state_reverse_flags.
 ascendc_library(tide_state_read_plan_kernel STATIC tide_state_read_plan.cpp)
 
 ascendc_library(tide_projection_shard_plan_kernel STATIC tide_projection_shard_plan.cpp)
+
+ascendc_library(tide_weighted_recurrent_prepare_kernel STATIC tide_weighted_recurrent_prepare.cpp)
+ascendc_library(tide_weighted_recurrent_reverse_kernel STATIC tide_weighted_recurrent_reverse.cpp)

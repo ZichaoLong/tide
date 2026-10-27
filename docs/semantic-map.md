@@ -1,5 +1,7 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[Resident recurrent numerical functions](resident-weighted-recurrent.md) implement the four recurrent Upd/Mem/Full formulas with exact-time snapshots, fixed-time convolution and independently rooted saved adjoints. Full graph lifecycle is separately qualified.
+
 带权常驻分配的完整区域表示、精确解VJP、CPU独立公式与设备检查入口见
 [resident weighted allocation](resident-weighted-allocation.md)。组件资格不代表全图常驻完成。
 [常驻发送原语](resident-weighted-sending.md)对应Attention/比例/分数填充/硬选择的实际buffer、

@@ -28,6 +28,8 @@ class DeviceProgram {
   void divide(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void minimum(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void log1p(const at::Tensor&, const at::Tensor& output);
+  void exp(const at::Tensor&, const at::Tensor& output);
+  void sqrt(const at::Tensor&, const at::Tensor& output);
   void softplus(const at::Tensor&, const at::Tensor& output); // beta=1, threshold=20
   void sum(const at::Tensor&, int64_t axis, bool keep_dimension, const at::Tensor& output);
   void softmax(const at::Tensor&, int64_t axis, const at::Tensor& output);

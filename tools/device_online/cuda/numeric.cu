@@ -34,6 +34,7 @@ __global__ void elements(Op op,const void* a,Type at,const void* b,Type bt,void*
     else if(op==Softplus)z=x>20?x:log1pf(expf(x));
     else if(op==Sin)z=sinf(x);else if(op==Cos)z=cosf(x);
     else if(op==Log1p)z=log1pf(x);else if(op==Minimum)z=x!=x?x:(y!=y?y:fminf(x,y));
+    else if(op==Exp)z=expf(x);else if(op==Sqrt)z=sqrtf(x);
     else if(op==Sigmoid)z=1.f/(1.f+expf(-x));else if(op==Tanh)z=tanhf(x);
     else if(op==Relu)z=x!=x?x:(x>0?x:0.f);else if(op==Silu)z=x/(1.f+expf(-x));
     else if(op==TanhBackward)z=x*(1.f-y*y);

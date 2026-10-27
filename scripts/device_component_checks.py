@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-recurrent": ("tide-weighted-recurrent-check", ("float32",)),
     "weighted-describe": ("tide-weighted-describe-check", ("float32",)),
     "weighted-kv-full": ("tide-weighted-kv-full-check", ("float32",)),
     "weighted-residual": ("tide-weighted-residual-check", ("float32",)),
@@ -284,3 +285,6 @@ KERNELS["weighted-residual"] = "tide_weighted_residual_"
 MARKERS["weighted-residual"] = "weighted-residual: passed"
 KERNELS["weighted-describe"] = "tide_weighted_row_"
 MARKERS["weighted-describe"] = "weighted-describe: passed"
+
+KERNELS["weighted-recurrent"] = "tide_weighted_recurrent_"
+MARKERS["weighted-recurrent"] = "weighted-recurrent: passed"
