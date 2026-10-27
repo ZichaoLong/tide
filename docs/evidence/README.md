@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+- [Core-5 常驻发送原语资格](core5-resident-sending-20261027.md)：8e7298d；CPU34/NPU八配置完整VJP，CUDA三架构构建。
+
 - [Core-5 常驻Alloc组件资格](core5-resident-allocation-20261027.md)：2814b87；CPU29项、NPU FP32完整VJP，CUDA三架构构建，未认证完整图。
 
 [Core-5 CUDA链接构建与CPU24项资格](core5-cuda-eager-20261027.md)：670ead3；GPU真机待验。

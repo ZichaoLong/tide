@@ -1,0 +1,200 @@
+{
+  "source": "8e7298d181bca157def003fc898cea60b869fbee",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "resident FP32 Attention, proportional, fractional fill and hard sending primitives with declared first-order VJP; not full SelStep or full-graph resident execution",
+  "jobs": [
+    {
+      "source": "8e7298d181bca157def003fc898cea60b869fbee",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T12:44:52.089454+00:00",
+      "finished": "2026-10-27T12:45:13.594336+00:00",
+      "name": "core5-resident-sending-npu-qualify",
+      "unit": "tide-core5-resident-sending-npu-qualify-20261027",
+      "clean": true,
+      "log_sha256": "dd6c26f311a79f9bd271aa8d56658e28087429117fa9c6197f82fb5467facd3d",
+      "cpu_tests": 34,
+      "cpu_seconds": 2.55,
+      "device_cases": [
+        {
+          "check": "weighted-sending",
+          "dtype": "float32",
+          "command": [
+            "build/resident-sending/tide-weighted-sending-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-sending-float32.log",
+          "log_sha256": "5f33cd68f3f71dd3bfca9825b107c2bd53789737f8d0ec0d8d2baf2c7e40896b"
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 16.31628193333745,
+        "job_id": "core5-resident-sending-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T12:45:13.579399+00:00"
+      },
+      "observations": {
+        "configurations": 8,
+        "replay_rows": 96,
+        "logical_frames": 80,
+        "complete_vjp": true,
+        "stable_int64_ids": true,
+        "none_zero": true,
+        "replay_input_lengths": true,
+        "capacity_refusal": true,
+        "sticky_error_no_commit": true
+      },
+      "build": {
+        "source": "2814b8799b0b9f7ba251e656f4191a7af4e6c7be",
+        "dirty": "M  docs/ROADMAP.md\nM  docs/STATUS.md\nM  docs/evidence/README.md\nA  docs/evidence/core5-resident-allocation-20261027.json\nA  docs/evidence/core5-resident-allocation-20261027.md\nM  docs/resident-weighted-allocation.md\nA  docs/resident-weighted-sending.md\nM  docs/semantic-map.md\nM  docs/semantics.md\nM  scripts/device_component_checks.py\nA  tests/resident_sending_adapter.py\nA  tests/test_resident_weighted_sending.py\nM  tools/device_online/CMakeLists.txt\nM  tools/device_online/ascendc/CMakeLists.txt\nA  tools/device_online/ascendc/tide_weighted_send.cpp\nA  tools/device_online/ascendc/tide_weighted_sending_vjp.cpp\nA  tools/device_online/weighted_sending.cpp\nA  tools/device_online/weighted_sending.h\nA  tools/device_online/weighted_sending_check.cpp\nA  tools/device_online/weighted_sending_layout.h",
+        "component_sha256": "f02c919dae62ec76a19af63a64352cf933dc1a9471ff9e6de0eb6d4363cc08d8",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-sending-check": "d6f7923d67495996244bf4a819da333db6d1de56f6b00852c11168f10a958a98"
+        },
+        "loader_sha256": {
+          "tide-weighted-sending-check": "02f43d5c8668b7ea0eda6476e477e9f96b9e9cbc31b70783f0f210ccfdf69865"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "NPU build2 from archived dirty tree 6d94073d; exact component/core/binary hashes match fixed source; original identity retained"
+      }
+    },
+    {
+      "source": "8e7298d181bca157def003fc898cea60b869fbee",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T12:44:52.089377+00:00",
+      "finished": "2026-10-27T12:46:01.640948+00:00",
+      "name": "core5-resident-sending-cuda-qualify",
+      "unit": "tide-core5-resident-sending-cuda-qualify-20261027",
+      "clean": true,
+      "log_sha256": "dfc1f275efd193f4959ba9f6ab5227ef26618a6193decf3216dcd335a108e473",
+      "build": {
+        "source": "8e7298d181bca157def003fc898cea60b869fbee",
+        "dirty": "",
+        "component_sha256": "f02c919dae62ec76a19af63a64352cf933dc1a9471ff9e6de0eb6d4363cc08d8",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-sending-check": "cd481274a5b0d9eb1d088625fe404aa147d8baf2d5557988c5acb93a2ae67370"
+        },
+        "loader_sha256": {
+          "tide-weighted-sending-check": "1c6fa32d8cb8516ad5f35d2f33c6f5f846b718a36d3637515e00cf79f36e7a13"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "fresh nvcc build of clean source; no GPU execution"
+      }
+    }
+  ],
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_sending.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CORE_BUILD",
+      "--build-dir",
+      "NEW_NPU_BUILD",
+      "--checks",
+      "weighted-sending",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--device",
+      "npu:0",
+      "--checks",
+      "weighted-sending"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE_BUILD",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-sending",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "prior_development_failures": [
+    {
+      "name": "core5-resident-sending-dev",
+      "state": "failed",
+      "source_tree": "eb57f3c589a8094eb3465d674f1645162889fa5b",
+      "reason": "AscendC rejects implicit bool-to-float cast; changed mask write to explicit 1.f/0.f; CPU63 passed, no device run"
+    }
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_build_seconds": 1200,
+    "queue_wait_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "Nice": 10
+  },
+  "pending": [
+    "Full region context/query and SelStep integration",
+    "Weighted full graph and resident retained training/optimizer/checkpoint/peer",
+    "Actual CUDA execution",
+    "FP16 payload integration and throughput"
+  ]
+}
