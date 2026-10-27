@@ -26,6 +26,7 @@ void RegionalConfig::validate() const {
   require(regional()||attention()||selection_mode=="constrained"||selection_mode=="hard_selection"||selection_mode=="proportional",
     "unknown weighted selection mode");
   require(hidden_width>0&&std::isfinite(gamma_max)&&gamma_max>=1,"invalid weighted region dimensions/gamma_max");
+  require((local_score=="cat"||local_score=="match")&&(region_score=="ind"||region_score=="att"),"invalid local_score/region_score");
   const bool allocated=selection_mode=="regional_total"||selection_mode=="regional_threshold"||selection_mode=="constrained";
   if(allocated||attention())require(allocation_temperature&&std::isfinite(*allocation_temperature)&&*allocation_temperature>0,
     "positive sending temperature required");
@@ -40,7 +41,7 @@ void RegionalConfig::validate() const {
   } else require(k&&*k>0&&!allocation_base,"positive k required; allocation_base is inapplicable");
   if(regional()){
     require(!send_gain&&!fixed_gain&&!gain_logit&&region_control_width&&*region_control_width>0,"invalid regional control fields");
-    if(region_control_mode=="context")require(region_evidence=="cat"&&!eta&&!total_fraction,"invalid context control fields");
+    if(region_control_mode=="context")require((region_evidence=="cat"||region_evidence=="grouped")&&!eta&&!total_fraction,"invalid context control fields");
     else {
       require(region_control_mode=="fixed"&&!region_evidence,"fixed control requires no evidence function");
       if(total())require(total_fraction&&std::isfinite(*total_fraction)&&*total_fraction>=0&&*total_fraction<=1,"invalid total_fraction");
@@ -58,5 +59,15 @@ void RegionalConfig::validate() const {
     if(selection_mode=="constrained"||selection_mode=="hard_selection")require(eta&&std::isfinite(*eta),"finite eta required");
     else require(!eta,"eta is inapplicable");
   }
+  if(local_score=="match"||region_score=="att"||region_evidence=="grouped")require(selection_width&&*selection_width>0,"positive selection_width required");
+  else require(!selection_width,"selection_width is inapplicable");
+  auto scale=[](const std::optional<double>& a){return a&&std::isfinite(*a)&&*a>=0;};
+  if(local_score=="match")require(scale(alpha_match)&&scale(alpha_res),"invalid match scales");
+  else require(!alpha_match&&!alpha_res,"match scales are inapplicable");
+  if(region_score=="att"){
+    require((region_key=="content"||region_key=="content_stats")&&(query_weight=="mu"||query_weight=="received")
+      &&(!regional()||query_weight=="received"),"invalid region_key/query_weight");
+    require(scale(alpha_loc)&&scale(alpha_sel),"invalid regional score scales");
+  } else require(!region_key&&!query_weight&&!alpha_loc&&!alpha_sel,"Attention score fields are inapplicable");
 }
 }

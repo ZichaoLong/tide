@@ -3,7 +3,7 @@
 固定 [区域分配教材](upstream/tide-core-5/local-semantics/weighted-message/region-allocation-learning-note.md)
 `0770593` §2、§4、§6.3、附录 S。共同 payload、Read 快照、状态保留、
 Full 和 checkpoint 见 [带权绑定](weighted-message.md)；本页补发送函数的定义域与反向。
-当前评分是 cat/ind，context 证据是 cat；match/att/grouped/key 的推进状态见 ROADMAP。
+[评分扩展](weighted-scoring.md)独立绑定 cat/match、ind/att、cat/grouped 及两种 key；资格状态见 STATUS。
 
 ## 公共配置与描述
 

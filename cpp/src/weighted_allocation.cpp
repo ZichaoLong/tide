@@ -12,27 +12,29 @@ Tensor response(const Tensor& t,const Tensor& mu,const Tensor& tau,const Tensor&
 class ExactQuad:public torch::autograd::Function<ExactQuad> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor t,Tensor mu,Tensor target,
-                        Tensor tau,Tensor c,Tensor lam,bool equality) {
-    ctx->set_materialize_grads(false);ctx->save_for_backward({t,mu,tau,c,lam});
+                        Tensor tau,Tensor c,Tensor lam,bool equality,Tensor shift) {
+    ctx->set_materialize_grads(false);ctx->save_for_backward({t,mu,target,tau,c,lam,shift});
     ctx->saved_data["equality"]=equality;return c.clone();
   }
   static torch::autograd::variable_list backward(torch::autograd::AutogradContext* ctx,
                                                 torch::autograd::variable_list grads) {
-    if(!grads[0].defined()) return std::vector<Tensor>(7);
+    if(!grads[0].defined()) return std::vector<Tensor>(8);
     at::AutoGradMode first_order(false);
-    auto s=ctx->get_saved_variables();auto t=s[0],mu=s[1],tau=s[2],c=s[3],lam=s[4];
+    auto s=ctx->get_saved_variables();auto t=s[0],mu=s[1],tau=s[3],c=s[4],lam=s[5],shift=s[6];
     auto a=((c>0)&(c<mu)).to(c.scalar_type())/tau;
     auto e=((c==mu)&(mu>0)).to(c.scalar_type()), total=a.sum();
-    auto mean=ctx->saved_data.at("equality").toBool() && total.item<double>()>0
-              ?(a*grads[0]).sum()/total:at::zeros({},c.options());
-    auto centered=grads[0]-mean;
-    return {a*centered,e*centered,mean,(-a*(t-lam)/tau*centered).sum(),{},{},{}};
+    const bool equality=ctx->saved_data.at("equality").toBool();auto mean=at::zeros({},c.options()),centered=grads[0];
+    if(equality&&total.item<double>()>0){auto anchor=grads[0][a.argmax().item<Index>()],relative=grads[0]-anchor,offset=(a*relative).sum()/total;mean=anchor+offset;centered=relative-offset;}
+    auto gt=a*centered,response=shift.defined()?t-shift-lam:t-lam;
+    auto gs=shift.defined()?(equality?at::zeros({},c.options()):-gt.sum()):Tensor{};
+    return {gt,e*centered,mean,(-a*response/tau*centered).sum(),{},{},{},gs};
   }
 };
 void check(bool ok,const char* text){if(!ok)throw std::invalid_argument(text);}
 }
-Allocation allocate_quad(const Tensor& t,const Tensor& mu,const Tensor& lower,
-                         const Tensor& upper,const Tensor& tau) {
+Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lower,
+                         const Tensor& upper,const Tensor& tau,const Tensor& shift) {
+  auto t=input;
   check(t.defined()&&t.dim()==1&&t.numel()>0&&(t.scalar_type()==at::kFloat||t.scalar_type()==at::kDouble),
         "weighted allocation requires FP32/FP64 scores");
   for(const auto& x:{mu,lower,upper,tau})
@@ -43,9 +45,13 @@ Allocation allocate_quad(const Tensor& t,const Tensor& mu,const Tensor& lower,
   check((mu>=0).all().item<bool>()&&(mu<=1).all().item<bool>()&&lower.item<double>()>=0
         &&upper.item<double>()>=lower.item<double>()&&lower.item<double>()<=mu.sum().item<double>()&&tau.item<double>()>0,
         "infeasible weighted allocation bounds/temperature");
+  if(shift.defined())check(shift.dim()==0&&shift.device()==t.device()&&shift.scalar_type()==t.scalar_type()
+    &&at::isfinite(shift).item<bool>(),"invalid allocation score_shift");
   Allocation result;
   {
-    at::NoGradGuard guard;auto mass=mu.sum(),zero=at::zeros({},t.options());result.multiplier=zero;
+    at::NoGradGuard guard;
+    if(shift.defined()){t=input-shift;check(at::isfinite(t).all().item<bool>(),"shifted allocation scores exceed requested dtype range");}
+    auto mass=mu.sum(),zero=at::zeros({},t.options());result.multiplier=zero;
     if(mass.item<double>()==0||upper.item<double>()==0){result.controls=at::zeros_like(t);result.constraint="zero";}
     else if(lower.item<double>()==mass.item<double>()){result.controls=mu.clone();result.constraint="caps";}
     else {
@@ -89,7 +95,10 @@ Allocation allocate_quad(const Tensor& t,const Tensor& mu,const Tensor& lower,
   if(result.constraint=="caps")result.controls=mu;
   else if(result.constraint!="zero"){
     auto target=(result.constraint=="lower"||result.constraint=="equality")?lower:upper;
-    result.controls=ExactQuad::apply(t,mu,target,tau,result.controls,result.multiplier,result.constraint!="slack");
+    // C++ custom Function records VariableInfo even for non-grad arguments;
+    // its optional absent shift therefore needs a real scalar constant.
+    auto bound_shift=shift.defined()?shift:at::zeros({},input.options());
+    result.controls=ExactQuad::apply(input,mu,target,tau,result.controls,result.multiplier,result.constraint!="slack",bound_shift);
   }
   return result;
 }

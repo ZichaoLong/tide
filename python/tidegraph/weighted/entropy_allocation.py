@@ -5,7 +5,7 @@ CPU dtype limits that erase a mathematically positive message fail explicitly.
 """
 import torch
 from torch.autograd.function import once_differentiable
-from .allocation import Allocation, _validate, allocate_quad
+from .allocation import Allocation, _validate, _scalar, allocate_quad
 from .regularizers import Regularizer
 
 
@@ -36,9 +36,9 @@ def _solve(t, caps, target, temperature, rule):
 
 class _ExactEntropy(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, t, caps, target, temperature, controls, response_input, equality, rule):
+    def forward(ctx, t, caps, target, temperature, controls, response_input, equality, rule, shift):
         ctx.set_materialize_grads(False)
-        ctx.save_for_backward(t, caps, target, temperature, controls, response_input)
+        ctx.save_for_backward(t, caps, target, temperature, controls, response_input, shift)
         ctx.equality, ctx.rule = equality, rule
         return controls.clone()
 
@@ -46,16 +46,23 @@ class _ExactEntropy(torch.autograd.Function):
     @once_differentiable
     def backward(ctx, grad):
         if grad is None:
-            return (None,)*8
-        _, caps, _, temperature, controls, x = ctx.saved_tensors
+            return (None,)*9
+        _, caps, _, temperature, controls, x, shift = ctx.saved_tensors
         a, e, dtau = ctx.rule.derivatives(x, caps, temperature, controls)
         total = a.sum()
-        mean = (a*grad).sum()/total if ctx.equality and total > 0 else grad.new_zeros(())
-        centered = grad-mean
-        return a*centered, e*centered, mean, (dtau*centered).sum(), None, None, None, None
+        if ctx.equality and total > 0:
+            anchor = grad[a.argmax()]
+            relative = grad-anchor
+            offset = (a*relative).sum()/total
+            mean, centered = anchor+offset, relative-offset
+        else:
+            mean, centered = grad.new_zeros(()), grad
+        scores = a*centered
+        gshift = None if shift is None else grad.new_zeros(()) if ctx.equality else -scores.sum()
+        return scores, e*centered, mean, (dtau*centered).sum(), None, None, None, None, gshift
 
 
-def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None):
+def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None, score_shift=None):
     """Exact Alloc from §4.1; same input domain and boundary policy as quad.
 
     Bern/Shannon positive support must remain representable. Underflow to zero
@@ -63,9 +70,15 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
     """
     rule = Regularizer(regularizer, ent_alpha)
     if rule.kind == "quad":
-        return allocate_quad(scores, caps, lower, upper, temperature)
+        return allocate_quad(scores, caps, lower, upper, temperature, score_shift=score_shift)
     lower, upper, temperature = _validate(scores, caps, lower, upper, temperature)
+    score_shift = None if score_shift is None else _scalar(score_shift, scores, "score_shift")
+    original_scores = scores
     with torch.no_grad():
+        if score_shift is not None:
+            scores = scores-score_shift
+            if not torch.isfinite(scores).all():
+                raise ArithmeticError("shifted allocation scores exceed requested dtype range")
         mass, zero = caps.sum(), scores.new_zeros(())
         if mass == 0 or upper == 0:
             c, lam, x, branch = torch.zeros_like(scores), zero, scores, "zero"
@@ -96,6 +109,6 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
         result = caps
     else:
         target = lower if branch in {"lower", "equality"} else upper
-        result = _ExactEntropy.apply(scores, caps, target, temperature, c, x, branch != "slack", rule)
+        result = _ExactEntropy.apply(original_scores, caps, target, temperature, c, x, branch != "slack", rule, score_shift)
     name = "bern" if rule.kind == "bern" else "ent"
     return Allocation(result, lam, branch, free, residual, name+"-exact-map-v1")

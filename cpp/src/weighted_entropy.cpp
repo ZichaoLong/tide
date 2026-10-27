@@ -9,16 +9,17 @@ namespace {
 class ExactEntropy:public torch::autograd::Function<ExactEntropy> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor scores,Tensor caps,Tensor target,
-                        Tensor temperature,Tensor c,Tensor a,Tensor e,Tensor dtau,bool equality){
-    ctx->set_materialize_grads(false);ctx->save_for_backward({scores,caps,target,temperature,a,e,dtau});
+                        Tensor temperature,Tensor c,Tensor a,Tensor e,Tensor dtau,bool equality,Tensor shift){
+    ctx->set_materialize_grads(false);ctx->save_for_backward({scores,caps,target,temperature,a,e,dtau,shift});
     ctx->saved_data["equality"]=equality;return c.clone();
   }
   static torch::autograd::variable_list backward(torch::autograd::AutogradContext* ctx,torch::autograd::variable_list grads){
-    if(!grads[0].defined())return std::vector<Tensor>(9);
+    if(!grads[0].defined())return std::vector<Tensor>(10);
     at::AutoGradMode first_order(false);auto s=ctx->get_saved_variables();auto a=s[4],e=s[5],dtau=s[6],total=a.sum();
-    auto mean=ctx->saved_data.at("equality").toBool()&&total.item<double>()>0?(a*grads[0]).sum()/total:at::zeros({},a.options());
-    auto centered=grads[0]-mean;
-    return {a*centered,e*centered,mean,(dtau*centered).sum(),{},{},{},{},{}};
+    const bool equality=ctx->saved_data.at("equality").toBool();auto mean=at::zeros({},a.options()),centered=grads[0];
+    if(equality&&total.item<double>()>0){auto anchor=grads[0][a.argmax().item<Index>()],relative=grads[0]-anchor,offset=(a*relative).sum()/total;mean=anchor+offset;centered=relative-offset;}
+    auto gt=a*centered,shift=s[7];auto gs=shift.defined()?(equality?at::zeros({},a.options()):-gt.sum()):Tensor{};
+    return {gt,e*centered,mean,(dtau*centered).sum(),{},{},{},{},{},gs};
   }
 };
 void validate(const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi,const Tensor& tau){
@@ -29,14 +30,19 @@ void validate(const Tensor& t,const Tensor& mu,const Tensor& lo,const Tensor& hi
     &&lo.item<double>()<=mu.sum().item<double>()&&tau.item<double>()>0,"infeasible allocation bounds/temperature");
 }
 }
-Allocation allocate(const Tensor& t,const Tensor& mu,const Tensor& lower,const Tensor& upper,const Tensor& tau,
-                    const std::string& regularizer,std::optional<double> alpha){
+Allocation allocate(const Tensor& input,const Tensor& mu,const Tensor& lower,const Tensor& upper,const Tensor& tau,
+                    const std::string& regularizer,std::optional<double> alpha,const Tensor& shift){
+  auto t=input;
   Regularizer rule(regularizer,alpha);
-  if(regularizer=="quad")return allocate_quad(t,mu,lower,upper,tau);
+  if(regularizer=="quad")return allocate_quad(t,mu,lower,upper,tau,shift);
   validate(t,mu,lower,upper,tau);Allocation result;Tensor x,a,e,dtau;
+  if(shift.defined())require(shift.dim()==0&&shift.device()==t.device()&&shift.scalar_type()==t.scalar_type()
+    &&at::isfinite(shift).item<bool>(),"invalid allocation score_shift");
   result.backward=regularizer+"-exact-map-v1";
   {
-    at::NoGradGuard guard;auto mass=mu.sum(),zero=at::zeros({},t.options());result.multiplier=zero;
+    at::NoGradGuard guard;
+    if(shift.defined()){t=input-shift;require(at::isfinite(t).all().item<bool>(),"shifted allocation scores exceed requested dtype range");}
+    auto mass=mu.sum(),zero=at::zeros({},t.options());result.multiplier=zero;
     if(mass.item<double>()==0||upper.item<double>()==0){result.controls=at::zeros_like(t);result.constraint="zero";}
     else if(lower.item<double>()==mass.item<double>()){result.controls=mu.clone();result.constraint="caps";}
     else {
@@ -71,7 +77,8 @@ Allocation allocate(const Tensor& t,const Tensor& mu,const Tensor& lower,const T
   if(result.constraint=="caps")result.controls=mu;
   else if(result.constraint!="zero"){
     auto target=(result.constraint=="lower"||result.constraint=="equality")?lower:upper;
-    result.controls=ExactEntropy::apply(t,mu,target,tau,result.controls,a,e,dtau,result.constraint!="slack");
+    auto bound_shift=shift.defined()?shift:at::zeros({},input.options());
+    result.controls=ExactEntropy::apply(input,mu,target,tau,result.controls,a,e,dtau,result.constraint!="slack",bound_shift);
   }
   return result;
 }

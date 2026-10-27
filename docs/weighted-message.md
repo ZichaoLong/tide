@@ -20,6 +20,7 @@ NoPE/各头部分或完整 RoPE、独立 Read 旋转及距离偏置。默认旋�
 fixed 要显式给 total_fraction，region_evidence 取 None；context 不接受固定比例。
 [分配](weighted-allocation.md)提供 quad/bern/ent，ent 另给固定 ent_alpha∈[1,2]。
 [其他发送规则](weighted-sending.md)接入十种正式发送函数、固定/上下文节点增益及各自适用字段。
+[评分/证据/key](weighted-scoring.md)进一步给出 cat/match、ind/att、cat/grouped 和 content_stats/content 的独立绑定。
 配置检查不将未知、不适用或尚未实现的选项换成其他函数。
 
 `KVConfig` 给出内容宽度 d、摘要宽度 ds、适配秩、头数、FFN 宽度、窗口、
@@ -52,7 +53,7 @@ checkpoint 检查别名图；共享参数不合并私有状态。当前没有声
 | KV 原始状态 | `times: int64[N]`、`keys/values: [N,d]`、`summaries: [N,ds]`、`weights: [N]` |
 | State.value | 宽 d+1 的固定零，仅适配通用记录，不承载数学记忆；状态校验拒绝非零 |
 | 状态时钟/计数 | last_time 是最近正接收写入时间；observations 是累计正写入数，Python int64 域；不用于窗口或位置 |
-| Describe | regional 使用 `w:[]`、`mu:[]`、`score:[]`、`evidence:[dreg]`；节点增益函数只有前三项；字段根独立 |
+| Describe | regional/ind 为 w、mu、score、evidence，节点增益/ind 为前三项；att 另含 x/key:[dsel]；见评分契约 |
 | Full | 返回 `[c,G]`，同一载荷广播所有逐边/端口槽，不按出度分强度；各槽身份仍分开 |
 | 区域历史 | 数学单点；History.last_time 只记录最后处理时间，不新增学习状态 |
 

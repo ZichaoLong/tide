@@ -39,6 +39,10 @@ struct RegionalConfig {
   std::string selection_mode;
   std::optional<std::string> region_control_mode="context", region_evidence="cat", regularizer="quad";
   std::optional<std::string> send_gain, allocation_base;
+  std::string local_score="cat", region_score="ind";
+  std::optional<Index> selection_width;
+  std::optional<std::string> region_key, query_weight;
+  std::optional<double> alpha_match, alpha_res, alpha_loc, alpha_sel;
   explicit RegionalConfig(std::string mode="regional_total");
   bool regional() const;
   bool total() const;
@@ -53,10 +57,10 @@ struct Allocation {
   std::string backward="quad-exact-map-v1";
 };
 Allocation allocate_quad(const Tensor& scores, const Tensor& caps, const Tensor& lower,
-                         const Tensor& upper, const Tensor& temperature);
+                         const Tensor& upper, const Tensor& temperature, const Tensor& score_shift={});
 Allocation allocate(const Tensor& scores, const Tensor& caps, const Tensor& lower,
                     const Tensor& upper, const Tensor& temperature, const std::string& regularizer,
-                    std::optional<double> ent_alpha=std::nullopt);
+                    std::optional<double> ent_alpha=std::nullopt, const Tensor& score_shift={});
 // Caller supplies named finite parameters in NodeWeights::extra. This function
 // installs immutable C++ kernels; no Python callbacks enter graph execution.
 void configure_node(NodeWeights&, const KVConfig&, const RegionalConfig&, const SourceClasses&, double alpha_agg);
