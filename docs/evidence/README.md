@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 单样本节点放置前向](core5-weighted-node-placement-20261028.md)：d072c17运行库/1289bc9检查器；CPU8、Python-owned50、NPU两dtype各9双卡配置及单设备图/训练回归通过；CUDA三架构与安装消费者构建通过。放置后的VJP/optimizer另验收。
+
 [Core-5 新进程启动与内存](core5-weighted-observation-20261028.md)：f72a6cc；四个补充配置完整对照通过，四阶段allocator/启动边界，CPU5项及CPU/NPU/CUDA消费者构建通过；CUDA无真机。
 
 [Core-5 有限完整调用性能](core5-weighted-performance-20261028.md)：ceae7bf；24配置22通过，CPU反馈两项严格浮点失败保留；CPU/mixed/resident、Python与standalone分列，独立profile及工作量，冷启动/SDK allocator指标仍有限制。
