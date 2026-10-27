@@ -16,11 +16,18 @@ WeightedKVWindowTape append_weighted_kv_window(DeviceProgram& p,const weighted::
   c.validate();if(!raw.integer.defined()||raw.integer.dim()!=2||raw.integer.size(1)<=4)
     throw std::invalid_argument("invalid KV window raw capacity");
   WeightedRawLayout l(c,raw.integer.size(1)-4);validate_weighted_raw_buffers(l,raw);const auto device=raw.floating.device();
-  if(device.type()!=resident_device_type||raw.floating.scalar_type()!=at::kFloat||!std::isfinite(float(c.beta_short))||float(c.beta_short)<=0)
-    throw std::invalid_argument("KV window needs explicit FP32 accelerator and representable positive beta");
+  if(device.type()!=resident_device_type||(raw.floating.scalar_type()!=at::kFloat&&raw.floating.scalar_type()!=at::kHalf)
+      ||!std::isfinite(float(c.beta_short))||float(c.beta_short)<=0)
+    throw std::invalid_argument("KV window needs explicit FP32/FP16 raw storage and representable positive FP32 beta");
   validate_kernel_device(device);const auto rows=raw.floating.size(0),capacity=l.capacity(),d=c.width,ds=c.summary_width;
   check(times,device,at::kLong,{rows});check(present,device,at::kBool,{rows});check(error,device,at::kInt,{1});
-  budget(rows*(4.L*capacity*(2.L*d+ds+4)+16.L*capacity+9),available);
+  const long double base=rows*(4.L*capacity*(2.L*d+ds+4)+16.L*capacity+9);
+  if(raw.floating.scalar_type()==at::kHalf){
+    const long double extra=4.L*raw.floating.numel();budget(base+extra,available);
+    auto values=at::empty(raw.floating.sizes(),raw.floating.options().dtype(at::kFloat));p.cast(raw.floating,values);
+    return append_weighted_kv_window(p,c,{values,raw.integer},times,present,error,available-static_cast<int64_t>(extra));
+  }
+  budget(base,available);
   auto f=raw.floating.options(),i=raw.integer.options();
   WeightedKVWindowTape t{l,at::zeros({rows,capacity,d},f),at::zeros({rows,capacity,d},f),at::zeros({rows,capacity,ds},f),
     at::zeros({rows,2,capacity},f),at::zeros({rows,2,capacity},f),at::zeros({rows,capacity},i),at::zeros({rows,capacity},i),

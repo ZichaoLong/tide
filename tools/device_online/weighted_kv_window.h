@@ -3,6 +3,8 @@
 #include "device_program.h"
 namespace tide::device_online {
 // KV §1.3/3.1: original int64 time masking and two passive weight channels.
+// Raw storage is FP32/FP16; numerical snapshots/decay and all adjoints are FP32.
+// FP16 raw values widen exactly before arithmetic, with identity cast VJP.
 struct WeightedKVWindowTape {
   WeightedRawLayout layout;
   at::Tensor keys,values,summaries,weights,decay,ages,mapping,lengths,present;

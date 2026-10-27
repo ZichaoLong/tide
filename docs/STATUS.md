@@ -3,7 +3,7 @@
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
 用户授权持续实施、私有环境、有限实验、阶段提交及正常推送；无子代理，参考仓库只读。
 总体未完成，阶段提交后继续。[ROADMAP](ROADMAP.md)为唯一待办，[execution-flows](execution-flows.md)为持续契约。
-实现2e4d445及此前完整训练证据56d751d已正常推送。本提交只记录基础FP16组件资格，不混入KV读取开发。
+实现2e4d445、完整训练证据56d751d及基础FP16组件证据a585376已正常推送。本提交新增KV半精度raw读取，设备资格随后执行。
 
 ## 最新固定资格
 
@@ -27,14 +27,14 @@ launchers `.local/core5-half-primitives-{npu,cuda}-qualify{,-workload}.sh`；900
 
 ## 当前开发与下一步
 
-主区未提交：KV window接受FP16 raw，设备拓宽后在FP32读取；sum/qry的Read输入、参数、
+本提交：KV window接受FP16 raw，设备拓宽后在FP32读取；sum/qry的Read输入、参数、
 memory/total和全部伴随明确保持FP32。raw、描述与反向精度分开，时间和窗口成员始终int64。
 sum分配改用实际window输出dtype，完整预算计入拓宽缓冲；query原有FP32输入/参数域不变。
 两个standalone检查新增half raw域，在实际量化raw上独立FP32公式/四根VJP，保存版本仍独立。
 额外sum见证检查半精度最小次正规K/V/权重、正的短期FP32证据低于半精度下限仍保留、四根连接及int64 age。
 尚未编译/设备运行。CPU相关27项通过/2.79秒：
 `python -m pytest -q tests/test_resident_weighted_kv_window.py tests/test_resident_weighted_kv_query.py tests/test_resident_weighted_pool.py`。
-下一步同步resident-weighted-kv-sum/query契约，审查dtype/预算/独立期望后提交本组件。
+resident-weighted-kv-sum/query契约已同步，dtype/预算/独立期望已审查。下一步冻结本提交并运行定向资格。
 所有旧资格均终态后可将core5-half-math冻结到该新提交，在新build/kv-read-npu、build/kv-read-cuda构建：
 `python scripts/build_device_control.py --core-build CORE --build-dir NEW --runtime standalone --jobs 2 --checks weighted-kv-sum weighted-kv-query`，
 NPU加`--ascendc-soc Ascend910_9392`，CUDA加`--cuda-architectures '80;90;100'`；实际NPU用verify_device_control.py两dtype资格。

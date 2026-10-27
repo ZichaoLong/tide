@@ -11,10 +11,10 @@ void close(const Tensor& a,const Tensor& b){require(a.sizes()==b.sizes(),"KV sum
   std::cerr<<a.cpu()<<" versus "<<b<<'\n';throw std::runtime_error("KV sum numeric mismatch");}}
 Tensor values(at::IntArrayRef shape,float shift){int64_t n=1;for(auto x:shape)n*=x;return (at::arange(n,at::kFloat)*.13+shift).sin().reshape(shape)*.2;}
 Tensor& field(State& s,const std::string& name){return name=="value"?s.value:s.slots.at(name);}
-std::vector<State> fixture(const WeightedRawLayout& l){
+std::vector<State> fixture(const WeightedRawLayout& l,at::ScalarType dtype){
   std::vector<std::vector<int64_t>> stamps{{},{clock,clock+2},{0,2},{last-4,last-2},{0},{}};std::vector<State> states;
   for(int64_t r=0;r<R;++r){State s;s.last_time=stamps[r].empty()?-1:stamps[r].back();s.observations=stamps[r].size();s.slots["times"]=at::tensor(stamps[r],at::kLong);
-    for(const auto& part:l.fields()){auto shape=part.shape;if(part.ragged)shape.insert(shape.begin(),stamps[r].size());auto x=values(shape,.1+r);
+    for(const auto& part:l.fields()){auto shape=part.shape;if(part.ragged)shape.insert(shape.begin(),stamps[r].size());auto x=values(shape,.1+r).to(dtype);
       if(part.name=="value")s.value=at::zeros_like(x);else s.slots[part.name]=part.name=="weights"?x.abs()+.1:x;}
     if(r==4)s.slots["weights"].zero_();states.push_back(s);}return states;
 }
@@ -22,7 +22,7 @@ struct Formula {std::vector<Tensor> leaves,memory,total;};
 Formula reference(const WeightedRawLayout& l,const std::vector<State>& states,const Tensor& times,const Tensor& present){
   at::AutoGradMode enabled(true);Formula f;
   for(int64_t r=0;r<R;++r){State state=states[r];for(const auto& part:l.fields()){
-    auto x=field(state,part.name).clone().set_requires_grad(true);f.leaves.push_back(x);field(state,part.name)=x;}
+    auto x=field(state,part.name).to(at::kFloat).clone().set_requires_grad(true);f.leaves.push_back(x);field(state,part.name)=x;}
     if(!present[r].item<bool>()){f.memory.push_back(at::zeros({2,2},at::kFloat));f.total.push_back(at::zeros({2},at::kFloat));continue;}
     std::vector<int64_t> selected,ages;auto stamps=state.slots.at("times");for(int64_t i=0;i<stamps.numel();++i){auto stamp=stamps[i].item<int64_t>(),time=times[r].item<int64_t>();
       if(stamp<=time&&(!l.horizon()||time-stamp<l.horizon())){selected.push_back(i);ages.push_back(time-stamp);}}
@@ -44,11 +44,11 @@ void compare(const WeightedRawLayout& l,const Formula& ref,const Tensor& bars,co
     if(dy.defined())close(g.raw[r].slice(0,part.offset,part.offset+dy.numel()).reshape(dy.sizes()),dy);
     else require(g.raw[r].slice(0,part.offset,part.offset+part.width*(part.ragged?l.capacity():1)).cpu().eq(0).all().item<bool>(),"KV sum absent raw derivative nonzero");}
 }
-void check(at::Device device,int64_t horizon){
+void check(at::Device device,int64_t horizon,at::ScalarType dtype){
   at::NoGradGuard ng;weighted::KVConfig c;c.width=3;c.summary_width=2;c.window=horizon;c.beta_short=.2;
-  WeightedRawLayout layout(c,C);auto states=fixture(layout);auto source=encode_weighted_raw_state(layout,states),raw=copy_weighted_raw_state(source,device);
+  WeightedRawLayout layout(c,C);auto states=fixture(layout,dtype);auto source=encode_weighted_raw_state(layout,states),raw=copy_weighted_raw_state(source,device);
   auto time=at::zeros({R},raw.integer.options()),present=at::zeros({R},raw.integer.options().dtype(at::kBool)),error=at::zeros({1},raw.integer.options().dtype(at::kInt));
-  auto bars=at::zeros({R,2,2},raw.floating.options()),stats=at::zeros({R,2},raw.floating.options()),roots=at::zeros({R,4},present.options());
+  auto bars=at::zeros({R,2,2},raw.floating.options().dtype(at::kFloat)),stats=at::zeros({R,2},raw.floating.options().dtype(at::kFloat)),roots=at::zeros({R,4},present.options());
   DeviceProgram program(device);program.limit_workspace(64*1024*1024);auto tape=append_weighted_kv_sum(program,c,raw,time,present,error);
   auto g=append_weighted_kv_sum_vjp(program,tape,bars,stats,roots,error);program.finish();
   for(int pass=0;pass<2;++pass){auto times=at::tensor(std::vector<int64_t>{0,clock+(pass?1:5),pass?clock:30,last,0,-99},at::kLong);
@@ -66,11 +66,36 @@ void check(at::Device device,int64_t horizon){
   DeviceProgram denied(device);bool refused=false;try{append_weighted_kv_sum(denied,c,raw,time,present,error,1);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"KV sum scratch budget omitted");denied.close();
 }
+void half_snapshot(at::Device device){
+  at::NoGradGuard ng;weighted::KVConfig c;c.width=1;c.summary_width=1;c.beta_short=.2;WeightedRawLayout l(c,2);
+  State s;s.last_time=0;s.observations=1;s.value=at::zeros({2},at::kHalf);
+  s.slots["times"]=at::zeros({1},at::kLong);s.slots["keys"]=at::full({1,1},0x1p-24,at::kHalf);
+  s.slots["values"]=at::full({1,1},-0x1p-24,at::kHalf);s.slots["summaries"]=s.slots.at("keys").clone();
+  s.slots["weights"]=at::full({1},0x1p-24,at::kHalf);
+  auto raw=copy_weighted_raw_state(encode_weighted_raw_state(l,{s}),device);auto longs=raw.integer.options(),f=raw.floating.options().dtype(at::kFloat);
+  auto times=at::ones({1},longs),present=at::ones({1},longs.dtype(at::kBool)),error=at::zeros({1},longs.dtype(at::kInt));
+  auto bars=at::full({1,2,1},NAN,f),totals=at::ones({1,2},f),roots=at::tensor({0,0,1,1},at::kInt).to(at::kBool).reshape({1,4}).to(device);
+  DeviceProgram p(device);auto t=append_weighted_kv_sum(p,c,raw,times,present,error);
+  auto g=append_weighted_kv_sum_vjp(p,t,bars,totals,roots,error);p.finish();portable_torch::synchronize(device);p.run();
+  require(!error.cpu().item<int>(),"half KV snapshot rejected subnormal raw values");
+  require(t.memory.scalar_type()==at::kFloat&&t.total.scalar_type()==at::kFloat&&g.raw.scalar_type()==at::kFloat,"KV Read precision inherited raw storage");
+  require(at::equal(t.window.keys[0][0].cpu(),at::full({1},0x1p-24,at::kFloat))
+    &&at::equal(t.window.values[0][0].cpu(),at::full({1},-0x1p-24,at::kFloat)),"KV snapshot cast changed subnormal features");
+  auto decay=at::exp(at::full({},-.2,at::kFloat));auto expected=at::stack({decay*0x1p-24,at::full({},0x1p-24,at::kFloat)}).reshape({1,2});
+  require(at::allclose(t.total.cpu(),expected,1e-6,0)&&at::allclose(t.memory.cpu(),expected.unsqueeze(-1)*0x1p-24,1e-6,0),"KV Read rounded positive FP32 evidence into half underflow");
+  require(t.window.lengths.cpu().item<int64_t>()==1&&t.window.ages[0][0].cpu().item<int64_t>()==1,"half KV snapshot lost raw logical coordinates");
+  require(at::equal(g.connected.cpu(),at::tensor({0,0,0,0,1},at::kInt).to(at::kBool).reshape({1,5})),"half KV total fabricated raw field roots");
+  close(g.raw[0][l.field("weights").offset],decay+1);p.close();
+  DeviceProgram invalid(device);bool refused=false;
+  try{append_weighted_kv_sum_vjp(invalid,t,bars.to(at::kHalf),totals,roots,error);}catch(const std::invalid_argument&){refused=true;}
+  require(refused,"KV Read accepted half cotangents");invalid.close();
+}
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("KV sum check requires explicit accelerator/FP32");
-    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
-    for(int64_t horizon:{0,5})check(device,horizon);
-    std::cout<<"weighted-kv-sum: passed horizons=2 replay_rows=120 independent_mem_roots=4 raw_vjp=true saved_versions=true exact_int64=true\n";return 0;
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("KV sum check requires explicit accelerator and FP32/FP16 raw storage");
+    args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
+    for(int64_t horizon:{0,5})check(device,horizon,args.dtype);
+    if(args.dtype==at::kHalf)half_snapshot(device);
+    std::cout<<"weighted-kv-sum: passed horizons=2 replay_rows=120 independent_mem_roots=4 raw_vjp=true saved_versions=true exact_int64=true read_dtype=float32 adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}
