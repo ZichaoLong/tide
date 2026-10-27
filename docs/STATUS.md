@@ -30,15 +30,15 @@ core5-resident-pool-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/c
 开发tree202f8b0f683f115d93d8c74e6bb27df8d75f82d5；NPU保留manifest并核验全部摘要。
 原dev/dev2/dev3失败、FP32 clamp边界诊断及CPU adapter reset问题均按原树/失败状态保留在证据中。
 
-KV window/sum开发treecac7cbde71943a29db7f09487c7d013665e74a3e通过：CPU20（1.94秒），NPU两窗口120行/四Mem根、
-全部raw字段VJP、>2^54/MAX时间、空/全零/未来/过期快照、原始输入改写后的保存版本及容量拒绝。
-tide-core5-resident-kv-sum-dev-20261027.service inactive/exit0；原记录artifacts/jobs/core5-resident-kv-sum-dev保留。
-接着提交本实现，固定NPU/CUDA资格，再独立记录证据。pool证据214d8d1已推送。
+fea6fa7 KV window/sum固定资格通过：CPU20（1.95秒）、NPU两窗口120行/四Mem根完整raw VJP、
+原始int64快照/保存版本及CUDA三架构构建。core5-resident-kv-sum-{npu,cuda}-qualify均clean/exit0/inactive。
+证据evidence/core5-resident-kv-sum-20261027.json，开发treecac7cbde71943a29db7f09487c7d013665e74a3e。
+CPU adapter原exit139及invalid horizon见原诊断记录，未改历史终态。
 
-主工作区另有未验证weighted_rotary{.h,.cpp}、phase/apply kernels与DeviceProgram sin/cos后端草稿。
-它们不纳入本次KV sum实现/资格；尚未注册CMake/registry或写完整测试，不宣称完成。
-随后以原始int64 age计算相对位置，接qry与Full位置匹配、Describe、四循环及完整在线图训练生命周期。
-当前无活动reader。
+主工作区未提交rotary/phase/apply kernels、DeviceProgram Sin/Cos后端、CPU/NPU检查及对应文档。
+已注册CMake/registry；CPU短检查4项通过，尚无设备数值资格。
+接着冻结开发验证原始int64 age相位、NoPE/部分旋转、极大age及保存VJP。
+之后接qry、Describe/Full、四循环及完整在线图训练生命周期。当前无活动reader。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。
