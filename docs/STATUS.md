@@ -1,12 +1,13 @@
 # 当前交接 — 2026-10-27
 
-固定上游 `0770593838a37c790a568226930567ed60f99b83`；授权分支 graph-execution-foundation。
-用户授权持续实施、私有环境、有限实验、提交和推送；不使用子代理，参考仓库只读。
-总体尚未完成，不在阶段提交后暂停；完整待办以 [ROADMAP](ROADMAP.md) 为准。
+固定上游 `0770593838a37c790a568226930567ed60f99b83`，授权分支 graph-execution-foundation。
+用户授权持续实施、私有环境、有限实验、提交推送；不使用子代理，参考仓库只读。
+实现470ce06已推送；本次记录固定设备资格证据后继续，不在阶段提交后暂停。
+总体待办以 [ROADMAP](ROADMAP.md) 为准。
 
 ## 已固定的阶段资格
 
-均为 CPU FP64/FP32、具体定向范围，不代表总体/设备矩阵完成。
+此前各阶段为 CPU FP64/FP32；本轮设备资格另列，均为具体范围，不代表总体完成。
 
 | 实现提交 | 范围 | 通过数 | 证据 |
 | --- | --- | --- | --- |
@@ -29,67 +30,55 @@
 | a7106fc | standalone 训练/完整数值 checkpoint | 20 | [报告](evidence/core5-native-training-20261027.md) |
 | 9234c13 | typed weighted placement / packed copy VJP | 508 | [报告](evidence/core5-placement-20261027.md) |
 
-## 当前任务与下一动作
+## 当前设备资格与真实限制
 
-当前 HEAD 1c314a7 已推送。即将提交设备检查与设备排序增量，然后固定源码资格，单独提交证据。
-本增量不包含主工作区的 FP16 草稿。设备 tree2a1af585025625a4710b109ad33e82ca7514e8f4
-已冻结于 core5-bootstrap / core5-device；SDK tree01fe819ed2b60345c97701d9a0a8d6882508c930
-的 C++ 源码与之相同。新入口增加 dispatch 环境与源码稳定性记录。
+[固定证据](evidence/core5-device-20261027.md)：470ce06112b888ed0b08866c3d791501b3bcd240，
+tree6cf3e7a6cd9b2d5c00960b59b6132146751531fa。CPU200项、Python/native mixed-a/b各2、
+mixed-c各19、两卡显式ASCEND_LAUNCH_BLOCKING=1各2组合全部passed/exit0。三个worktree
+core5-bootstrap/core5-device/core5-sdk均冻结该提交；当前所有相关任务已终止，无活动reader。
+完整unit、命令、结果摘要、hash在证据JSON，原始 artifacts/jobs/core5-...-qualify。
 
-### 开发证据（不是固定提交资格）
+默认异步两卡完整Python VJP仍有CANN invalid event；最小复现 artifacts/diagnostics/core5-peer-event。
+current0/current1/serial失败保留；普通P2P小probe通过不解除限制。
+standalone SDK build/loader已通过，使用匹配Python bin的PATH后开发两图四步通过。
+固定24图门禁在fc/affine第三轮forward的evidence字段超容差，max_abs_error3.09944e-6。
+原任务 artifacts/jobs/core5-weighted-sdk-qualify保持failed；诊断副本
+artifacts/diagnostics/core5-sdk-affine/diagnostic.cpp与build-commands.json，
+unit tide-core5-sdk-affine-diagnostic-20261027，output artifacts/jobs/core5-sdk-affine-diagnostic，
+同样failed。前两轮forward/gradient/parameter比较通过；后续定位实际参数漂移/数值归约，
+不放宽路由或容差，不把其余未执行图推定通过。
 
-- 单卡 Python/native mixed-a/b 各2代表组合，mixed-c各19组合通过，包含完整记录、
-  独立原始 State/descriptor/output/control 根、三步 AdamW、checkpoint 后第四步与 CPU handoff。
-  输出 artifacts/jobs/core5-weighted-{python,native}-mixed-{a,b,c}-dev。
-- CPU 首轮198通过/2失败；两处 standalone新增报告字段与旧完整dict断言不符。
-  修正后 CPU2 两项通过，且两个 native完整检查通过。原 failed记录保留。
-- NPU Python build/build2 passed，manifest已保存；SDK build刚完成 passed/exit0，manifest已保存。
-  SDK使用独立Torch2.10/CANN9.0，不混用Python2.12二进制。
-- Python完整两卡默认异步在首个NPU all-VJP失败：CANN rtStreamWaitEvent invalid event。
-  current-device0/1与串行autograd定位均失败；普通P2P/两个根小探针可通过，尚未定位根因。
-  最小复现 artifacts/diagnostics/core5-peer-event，失败job保持failed。
-- 显式 ASCEND_LAUNCH_BLOCKING=1 的完整Python两卡检查通过：delta-pdg、heterogeneous-attention，
-  四步/恢复/交换owner；output artifacts/jobs/core5-weighted-python-peers-sync-dev。
-  不认证默认异步、native或resident。当前开始对应native同步检查。
-- Python profile passed：28301设备kernel、其中20设备AiCPU，2733主机scalar、1243memcpy，
-  32candidate/31Full/44messages；输出 artifacts/jobs/core5-weighted-python-profile-dev。
-  有profiler警告；有限trace未发现命名host fallback，不能泛化。不是吞吐排名。
-  int64 Argsort厂商在设备AiCPU执行，保持精确ID，不称为主机回退或AiCore。
+native固定profile已passed：31531kernel、1641hostscalar、1372memcpy；Python开发profile
+28301/2733/1243，两者32candidate/31Full/44messages。均有20设备AiCPU。非吞吐排名。
 
-### 活动任务与失败后的新检查
+## 未提交增量与精确下一动作
 
-| unit（均以 -20261027 结尾） | frozen worktree | launcher / output | 预算 |
-| --- | --- | --- | --- |
-| tide-core5-weighted-native-peers-sync-dev | artifacts/worktrees/core5-device tree2a1af | .local/core5-weighted-native-peers-sync-dev.sh / artifacts/jobs/core5-weighted-native-peers-sync-dev | 2卡动态队列，同步dispatch，1800秒 |
-| tide-core5-weighted-sdk-dev | artifacts/worktrees/core5-sdk tree01fe819 | .local/core5-weighted-sdk-dev.sh / artifacts/jobs/core5-weighted-sdk-dev | 1卡动态队列，两组合，1800秒 |
+FP16草稿仍未提交（git status列出），不在上述资格内：
+- binding.py允许half，显式scoring_dtype=float32，基于同一FP32随机参数量化。
+- weighted_detail.h及recurrent/gated/query packed C++ Half常量构造草稿尚未编译。
+- tests/test_weighted_precision.py检查五记忆、三步FP32 master AdamW与checkpoint后第四步。
+- Python normalization.py + gated_delta.py/ssd.py/full_batch.py新增half scaled-RMS稳定一阶VJP，
+  保持实际half前向操作数，内部FP32归约；尚未补C++、独立公式与完整契约。
+  最新短检查 artifacts/diagnostics/core5-half-python-stable2/test.log：4passed/1failed/6deselected。
+  SSD NaN已消除；GDN仍在nodes.4.kernel.conv.weight因小梯度舍入造成AdamW差异.001907，未放宽容差。
+  首次stable启动仅缺basetemp父目录5errors，日志core5-half-python-stable.log保留。
+- 还要处理half原始int64长时差转换溢出、KV位置/衰减，不能压紧逻辑时间。
+  standalone FP16 master/checkpoint、weighted resident尚未实现。
 
-启动后 systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus；
-读取对应 status.json、task.log、checks结果。停止用 systemctl --user stop UNIT。
-活动时不得编辑对应worktree；当前SDK build与Python peers-sync均已终止。
-SDK首轮实际初始化failed/exit1：CANN内嵌Python找不到numpy（模型尚未运行）。
-匹配Torch2.10解释器自带NumPy1.26.4，loader闭包通过；新sdk2-dev仅在launcher的PATH
-前置同一配套Python bin，不安装或修改公共包；相同binary/two cases、1800秒。
-unit tide-core5-weighted-sdk2-dev-20261027；launcher/output将sdk-dev替换为sdk2-dev。
-下一步：完成上述开发检查，隔离FP16草稿提交设备增量；冻结该提交，跑CPU相关200项、
-Python/native有限mixed矩阵和两卡同步配置、SDK必要图案例及native profile；固定证据后继续。
+下一动作：提交本轮设备证据并推送；继续定位SDK fc/affine及两卡异步事件问题，
+完成FP16稳定VJP/长时间/精度契约与相关验证后独立实现提交。长构建前把所需草稿冻结到
+空闲worktree，记录tree与新unit/output，绝不让任务读取主工作区。现有CPU/NPU/SDK build目录
+必须分栈使用；更新worktree前先检查相关unit与status.json为终态。
 
-## 未提交 FP16 草稿与待解决问题
+## 环境、命令与保留
 
-不混入设备增量：python/tidegraph/weighted/binding.py、cpp/src/weighted_detail.h、
-weighted_{gated_packed,query_recurrent,recurrent,recurrent_packed}.cpp、tests/test_weighted_precision.py。
-KV首轮2失败（half常量构造、继承payload误差的FP32 descriptor过严容差）；
-Python第二轮4通过/2失败：GDN小梯度舍入导致AdamW不同更新、SSD反向NaN。
-诊断 artifacts/diagnostics/core5-half-{kv,python}-dev；C++Half常量草稿尚未编译。
-后续修复稳定VJP和原始int64长时间差溢出，保持精度契约；standalone FP16 master/checkpoint尚未实现。
-weighted resident、CUDA源码/构建/真机分账、有限性能和最终追溯继续，整体目标未完成。
-
-## 环境与保留事项
-
-真实路径 /mi/data2T/zlong/home/llm/graph-execution-foundation；/home/zlong 指向当前home。
-旧 ASCEND_CODING_AGENT_GUIDE.md 已不存在；现行规范 /opt/software/ascend-locks/dev-workspace-9.1.0/README.md
-及 /etc/modulefiles 已核对。Python环境：source /etc/profile.d/modules.sh，module purge，
-module load ascend/dev-workspace-9.1.0，source .local/venv-core5/bin/activate。
-Python3.12.13/Torch2.12.0+cpu/Torch-NPU2.12.0.post2/CANN9.1/GCC10.3.1，aarch64。
-SDK单独 module load libtorch-npu/2.10.0-cann9.0.0；ACL_OP_INIT_MODE=0。
-未修改公共环境，3.3TiB空闲；2 build workers，ATen/BLAS1线程，background.slice/Nice10。
-保留所有历史真实失败、最小复现与原证据；status --all-jobs 可审计，不为恢复上下文重跑旧任务。
+现行规范 /opt/software/ascend-locks/dev-workspace-9.1.0/README.md 及 /etc/modulefiles；
+旧ASCEND_CODING_AGENT_GUIDE.md不存在。实际路径 /mi/data2T/zlong/home/llm/graph-execution-foundation。
+Python：source /etc/profile.d/modules.sh，module purge，module load ascend/dev-workspace-9.1.0，
+source .local/venv-core5/bin/activate；Python3.12.13/Torch2.12.0+cpu/Torch-NPU2.12.0.post2/CANN9.1/GCC10.3.1。
+SDK单独module load libtorch-npu/2.10.0-cann9.0.0，ACL_OP_INIT_MODE=0；PATH前置
+$LIBTORCH_ROOT/../../../../bin让CANN内嵌Python找到同栈NumPy。无需修改公共包。
+ATen/BLAS单线程、2build workers、background.slice/Nice10、有限时长；3.3TiB空闲。
+检查：python scripts/status.py；systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus；
+读取status.json/task.log。停止：systemctl --user stop UNIT。保留所有失败、最小复现和原证据；
+不恢复旧队列、不重跑历史矩阵，CUDA源码/构建/真机与CPU/NPU证据严格分开。

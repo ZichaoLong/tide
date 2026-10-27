@@ -1,0 +1,827 @@
+{
+  "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+  "git_tree": "6cf3e7a6cd9b2d5c00960b59b6132146751531fa",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Weighted eager host scheduling, explicit placement, first-order training and exact checkpoint; resident excluded",
+  "cpu": {
+    "job_directory": "artifacts/jobs/core5-device-cpu-qualify",
+    "unit": "tide-core5-device-cpu-qualify-20261027",
+    "state": "passed",
+    "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+    "dirty": false,
+    "started": "2026-10-27T11:11:52.394967+00:00",
+    "finished": "2026-10-27T11:14:11.558262+00:00",
+    "exit_code": 0,
+    "systemd": {
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    },
+    "log_sha256": "8a1105935c0ac821bd95f50c9fdcc57609cf94b15db49587f15066f38f359623",
+    "passed": 200,
+    "failed": 0,
+    "skipped": 0,
+    "tests": [
+      "tests/test_weighted_sending.py",
+      "tests/test_weighted_sending_native.py",
+      "tests/test_weighted_sending_batch.py",
+      "tests/test_weighted_placement.py",
+      "tests/test_cpp_weighted_training.py"
+    ],
+    "dtype": "both",
+    "reuse_build": "Exact C++ source/binary fingerprints checked; no source read from mutable main worktree."
+  },
+  "targets": [
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-mixed-a-qualify",
+      "unit": "tide-core5-weighted-python-mixed-a-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:11:52.420806+00:00",
+      "finished": "2026-10-27T11:12:46.886238+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "946c17278928323a7e105b0daab16d81b4402c46b32db7275f6bf94ae9e52644",
+      "implementation": "python",
+      "requested_placement": {
+        "preset": "mixed-a",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "cpu",
+        "control": "cpu",
+        "selection": "cpu",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "6d3ad94ea2e0cf09aa8f0c10b932066951044d0a104c3696115a5bbf5a1e7fec",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-mixed-b-qualify",
+      "unit": "tide-core5-weighted-python-mixed-b-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:11:52.432698+00:00",
+      "finished": "2026-10-27T11:12:46.886053+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "bb22ab734287e9cc2a5beeb0e00f745cc7d5aa3bcba70c00b760ef61e586cb06",
+      "implementation": "python",
+      "requested_placement": {
+        "preset": "mixed-b",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "cpu",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "2ce036d93e9c62ef1a182b26cf60a06f202d712857fb602f432a3eb638895093",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-mixed-c-qualify",
+      "unit": "tide-core5-weighted-python-mixed-c-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:11:52.447288+00:00",
+      "finished": "2026-10-27T11:14:46.247709+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "e998ccd649b0c32101368a7ed00af01ea80d96ce8f9c0bc51c60e13035a13ad7",
+      "implementation": "python",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": "case_inventory",
+      "result_sha256": "77d4ccc287db75bf07ce3d3518c4c10d7004351b1887f2a6419694b2266779c3",
+      "raw_state_roots_range": [
+        22,
+        60
+      ],
+      "checkpoint_pending_range": [
+        0,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "4a218a06ff353af8113e371a164625a69f7e10340cd21cbb2c923be1eb1b764b",
+      "fixture_count": 19
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-peers-sync-qualify",
+      "unit": "tide-core5-weighted-python-peers-sync-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:11:52.458338+00:00",
+      "finished": "2026-10-27T11:13:15.028993+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "f186a90f9a71c698d8fb3718fe48fccca06e09c383e07d6b8a154afb1f223ed6",
+      "implementation": "python",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": "1",
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "eec09d491b9b1ac7e959dcb5bb7762670cb7b1b8db387282ce1e89724d770548",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "transport_stats": {
+        "delta-pdg": {
+          "cross_device_copy_groups": 12,
+          "cross_device_rows": 20,
+          "cross_device_bytes": 240,
+          "max_cross_device_batch": 2
+        },
+        "heterogeneous-attention": {
+          "cross_device_copy_groups": 2,
+          "cross_device_rows": 22,
+          "cross_device_bytes": 264,
+          "max_cross_device_batch": 14
+        }
+      },
+      "runtime_overrides": {
+        "logical_device_count": 2
+      },
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-native-mixed-a-qualify",
+      "unit": "tide-core5-weighted-native-mixed-a-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:12:18.154184+00:00",
+      "finished": "2026-10-27T11:12:58.356872+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "f9a63dd01fc699c99adc6bca579e5746dfbca2544a56e4b4cffbe10c4cce7977",
+      "implementation": "native",
+      "requested_placement": {
+        "preset": "mixed-a",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "cpu",
+        "control": "cpu",
+        "selection": "cpu",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "9fe18325306658e027096c9bdaf2fc829df0dfbafcb0a5322908178edc40ba0a",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-native-mixed-b-qualify",
+      "unit": "tide-core5-weighted-native-mixed-b-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:12:18.164150+00:00",
+      "finished": "2026-10-27T11:13:06.239031+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "aa25d7aebae11ed0568c1898c35c27c1f77dbd8b6908f15b951e8c7f5f126951",
+      "implementation": "native",
+      "requested_placement": {
+        "preset": "mixed-b",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "cpu",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "6258e9069021ffc2275fe615fe1d6f75bf62144575b3d2113bd50621e3de2226",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-native-mixed-c-qualify",
+      "unit": "tide-core5-weighted-native-mixed-c-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:12:18.175830+00:00",
+      "finished": "2026-10-27T11:14:55.245867+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "37aa33ee561fcb280790ed9043d436d2a70bc8d21397299a547ff366d548d9cb",
+      "implementation": "native",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": "case_inventory",
+      "result_sha256": "6fed5dbca9c34c614d586c53ce56ff5591e53c9837a0d270b751c9833f21ff48",
+      "raw_state_roots_range": [
+        22,
+        60
+      ],
+      "checkpoint_pending_range": [
+        0,
+        8
+      ],
+      "runtime_overrides": {},
+      "fixture_inventory_sha256": "4a218a06ff353af8113e371a164625a69f7e10340cd21cbb2c923be1eb1b764b",
+      "fixture_count": 19
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-native-peers-sync-qualify",
+      "unit": "tide-core5-weighted-native-peers-sync-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:12:18.187952+00:00",
+      "finished": "2026-10-27T11:13:41.163501+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "cbff894744d1de4360ebfcee1a3c71cb2fa984b0a3602bbdb6445ec281ea5e92",
+      "implementation": "native",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": "1",
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "cases": [
+        "delta-pdg",
+        "heterogeneous-attention"
+      ],
+      "result_sha256": "2de7b7cee99a2b976050458d5646e3796b4baeca6356b98fb5d23cfb904254a9",
+      "raw_state_roots_range": [
+        24,
+        56
+      ],
+      "checkpoint_pending_range": [
+        4,
+        8
+      ],
+      "transport_stats": {
+        "delta-pdg": {
+          "cross_device_bytes": 240,
+          "cross_device_copy_groups": 12,
+          "cross_device_rows": 20,
+          "max_cross_device_batch": 2
+        },
+        "heterogeneous-attention": {
+          "cross_device_bytes": 264,
+          "cross_device_copy_groups": 2,
+          "cross_device_rows": 22,
+          "max_cross_device_batch": 14
+        }
+      },
+      "runtime_overrides": {
+        "logical_device_count": 2
+      },
+      "fixture_inventory_sha256": "f5a318afae97301843569bc94b76fcc7c051185d239dcf2006d4170dd24063b6",
+      "fixture_count": 2
+    }
+  ],
+  "builds": {
+    "cpu": {
+      "python": "3.12.13",
+      "torch": "2.12.0+cpu",
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "cpp_source_sha256": "30ef17a863c1b1af0e7821037e888333c5f5cbf9f0e6ec6f8a002d35f94c03c3",
+      "binary_sha256": {
+        "libtidegraph.a": "394823a97ecf3a8f987b2b62b0569e5aba3f65e28720fb6cc5820d6a5b91dc02",
+        "_tide_native.so": "1d4504be4f316fb982fdf805789db2f2c32362febf8ae28560adc6e41cce7ad4",
+        "tidegraph-weighted-training-check": "1d854e00e6bdfe114e3f1afd19aed36476007e44defc37714707b5a4558bcb06"
+      },
+      "manifest_sha256": "65f32f5ed8cb07c5d056d38517cb0a5161764415ad2c0d5efaf4806f70983341"
+    },
+    "npu_python": {
+      "python": "3.12.13",
+      "torch": "2.12.0+cpu",
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "cpp_source_sha256": "30ef17a863c1b1af0e7821037e888333c5f5cbf9f0e6ec6f8a002d35f94c03c3",
+      "binary_sha256": {
+        "libtidegraph.a": "ed8660dd7d192e1cf5a0ad580f8f73dafb1c6caa38f0c1167829ce4d9ab6f372",
+        "_tide_native.so": "813a7dd399f91e364a91ffb1efbdb9bd44d2169de44375d40f69d8c85b1891a6"
+      },
+      "manifest_sha256": "e03a4dd128168763bff7edef0096687b0fa0e0362a75bc2f4a4fcb7af09e8221"
+    },
+    "npu_standalone": {
+      "python": "3.11.15",
+      "torch": "2.10.0+cpu",
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "cpp_source_sha256": "30ef17a863c1b1af0e7821037e888333c5f5cbf9f0e6ec6f8a002d35f94c03c3",
+      "binary_sha256": {
+        "libtidegraph.a": "e82c9631a47aab68b3bccbb3ee4960af2565b0644738fa4b05aa9cd78bc41cf4",
+        "tidegraph-weighted-training-check": "b627277c2f8ba32b9b597f4a6f84e45cfb1c6a514806399997778164493a159e"
+      },
+      "manifest_sha256": "096f2378c17e82e3ef78c6a788416375cbcd53a51f47a095dc70cd04834795f7"
+    }
+  },
+  "profiles": [
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-profile-dev",
+      "unit": "tide-core5-weighted-python-profile-dev-20261027",
+      "state": "passed",
+      "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+      "dirty": true,
+      "started": "2026-10-27T10:57:28.330996+00:00",
+      "finished": "2026-10-27T10:58:02.026778+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "8e466fcc0d8f9c5b1dd810c27c2cdefb0e96c5a0b2705d11b4faa1415bc835d8",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "implementation": "python",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "kernel_events": 28301,
+      "kernel_types": {
+        "KERNEL_AIVEC": 23645,
+        "KERNEL_MIX_AIV": 2803,
+        "KERNEL_AICORE": 1833,
+        "KERNEL_AICPU": 20
+      },
+      "transfer_and_scalar_events": {
+        "aten::_local_scalar_dense": 2733,
+        "MEMCPY_ASYNC": 1243
+      },
+      "candidate_updates": 32,
+      "full_calls": 31,
+      "messages": 44,
+      "trace_sha256": "4942353dd0e48ecd8ad4860e7984b2fc20ccc4af22a227aedb29e448d4518d12",
+      "observed_host_fallback_events": [],
+      "scope": "input preparation/upload, schedule/packing, forward/loss, backward/finite checks, AdamW and sync",
+      "caveat": "finite small graph; profile is not a throughput result or exhaustive absence-of-fallback proof",
+      "result_sha256": "2b2e56516e0b8f67ae346c8b2f41257ad6eae1db83f519fc98b18238bb62bd71",
+      "development_tree": "2a1af585025625a4710b109ad33e82ca7514e8f4"
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-native-profile-qualify",
+      "unit": "tide-core5-weighted-native-profile-qualify-20261027",
+      "state": "passed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:15:11.246644+00:00",
+      "finished": "2026-10-27T11:15:42.534345+00:00",
+      "exit_code": 0,
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "log_sha256": "cbb300598c7f884a34fcdde2d3886a46732c0b804969358f2eebacfb01464f3a",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "implementation": "native",
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "kernel_events": 31531,
+      "kernel_types": {
+        "KERNEL_AIVEC": 26273,
+        "KERNEL_MIX_AIV": 3352,
+        "KERNEL_AICORE": 1886,
+        "KERNEL_AICPU": 20
+      },
+      "transfer_and_scalar_events": {
+        "aten::_local_scalar_dense": 1641,
+        "MEMCPY_ASYNC": 1372
+      },
+      "candidate_updates": 32,
+      "full_calls": 31,
+      "messages": 44,
+      "trace_sha256": "134b614a6d1f39a739acd35e245d1a83b4ade65bff5352890e01286bc9f04361",
+      "observed_host_fallback_events": [],
+      "scope": "input preparation/upload, schedule/packing, forward/loss, backward/finite checks, AdamW and sync",
+      "caveat": "finite small graph; profile is not a throughput result or exhaustive absence-of-fallback proof",
+      "result_sha256": "3e31ff0f5c858aa927d64970d676e7de5e234d973bc55b0ea746a2e52157f20b"
+    }
+  ],
+  "limitations": [
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-python-peers-dev",
+      "unit": "tide-core5-weighted-python-peers-dev-20261027",
+      "state": "failed",
+      "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+      "dirty": true,
+      "started": "2026-10-27T10:57:28.326723+00:00",
+      "finished": "2026-10-27T10:57:53.626232+00:00",
+      "exit_code": 1,
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "log_sha256": "880263df14412a4b61e84b00e524a132d67dd1263b61ebcca5b4772793141827",
+      "detail": "Full asynchronous two-NPU first all-VJP: rtStreamWaitEvent invalid event. Current-device 0/1 and serial-autograd probes also failed; explicit launch blocking has separate passing qualification."
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-sdk-dev",
+      "unit": "tide-core5-weighted-sdk-dev-20261027",
+      "state": "failed",
+      "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+      "dirty": true,
+      "started": "2026-10-27T11:09:23.411412+00:00",
+      "finished": "2026-10-27T11:09:46.585146+00:00",
+      "exit_code": 1,
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "log_sha256": "750c7f83d2634a7e99781e2bd5393bf8ff0a6796ae595ee8c5a73274343a7a06",
+      "detail": "CANN embedded Python could not import numpy before model execution; same binary passed two cases with PATH selecting matching SDK Python."
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-weighted-sdk-qualify",
+      "unit": "tide-core5-weighted-sdk-qualify-20261027",
+      "state": "failed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:12:21.619314+00:00",
+      "finished": "2026-10-27T11:13:12.544251+00:00",
+      "exit_code": 1,
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "log_sha256": "6c3b335867ce5fed49dbe3429591940b391f52afb5572d9c75bba781192ec8cd",
+      "detail": "24-case gate stopped at fc/affine: third forward after two AdamW updates, evidence descriptor [2], max absolute error 3.09944e-6; strict tolerance retained."
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-sdk-affine-diagnostic",
+      "unit": "tide-core5-sdk-affine-diagnostic-20261027",
+      "state": "failed",
+      "source": "470ce06112b888ed0b08866c3d791501b3bcd240",
+      "dirty": false,
+      "started": "2026-10-27T11:14:37.458498+00:00",
+      "finished": "2026-10-27T11:15:18.495459+00:00",
+      "exit_code": 1,
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "log_sha256": "17cdfce027bd2a907254c67df72a078690c80d923bfafe6f0091c42bc8f72362",
+      "detail": "Instrumented copy of fixed training-check source independently reproduced third-forward evidence failure. Source at artifacts/diagnostics/core5-sdk-affine/diagnostic.cpp; core binary unchanged."
+    },
+    {
+      "job_directory": "artifacts/jobs/core5-device-cpu-dev",
+      "unit": "tide-core5-device-cpu-dev-20261027",
+      "state": "failed",
+      "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+      "dirty": true,
+      "started": "2026-10-27T10:52:00.781604+00:00",
+      "finished": "2026-10-27T10:54:41.130611+00:00",
+      "exit_code": 1,
+      "systemd": {
+        "Result": "exit-code",
+        "ExecMainStatus": "1",
+        "ActiveState": "failed"
+      },
+      "log_sha256": "d8850b84ecefad6a47291f8df17a871f85a7597c9023473af84345294779357f",
+      "detail": "198 passed, 2 failed due to newly added standalone report fields conflicting with old complete-dict assertion. Fixed assertions then passed; prior failure preserved."
+    }
+  ],
+  "standalone_development": {
+    "job_directory": "artifacts/jobs/core5-weighted-sdk2-dev",
+    "unit": "tide-core5-weighted-sdk2-dev-20261027",
+    "state": "passed",
+    "source": "9234c13ed7bba0d258503de6db80e4805201e409",
+    "dirty": true,
+    "started": "2026-10-27T11:10:37.936812+00:00",
+    "finished": "2026-10-27T11:11:08.220391+00:00",
+    "exit_code": 0,
+    "systemd": {
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    },
+    "log_sha256": "d737f8f63e574f7778a85d691db0a9af4843d5ee70dc23cd92cf5d7784adc1c6",
+    "cases": [
+      "feedback/delta",
+      "hb/heterogeneous"
+    ],
+    "updates_per_case": 4,
+    "stack": "Standalone LibTorch-NPU2.10.0/CANN9.0.0; matching Python bin in PATH; ACL_OP_INIT_MODE=0; no Python model scheduler"
+  },
+  "diagnostic_source_sha256": "a928bf336983bf084ea720e9557dcc8dc1969dd1c100cf73e93ab6fc63209ea3",
+  "target_runtime": {
+    "resolved_device": "npu:0",
+    "backend": "npu",
+    "logical_device_index": 0,
+    "resolution_reason": "explicit:npu",
+    "dtype": "float32",
+    "host_architecture": "aarch64",
+    "torch": "2.12.0+cpu",
+    "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+    "python": "3.12.13",
+    "cxx11_abi": true,
+    "torch_npu": "2.12.0.post2",
+    "logical_device_count": 1,
+    "device_name": "Ascend910_9392",
+    "cann_version": "9.1.0",
+    "matmul_allow_hf32": false
+  },
+  "case_inventory": [
+    "kv-fc",
+    "kv-hb",
+    "kv-pdg-initial",
+    "affine-dag-old",
+    "delta-pdg",
+    "gated-hb",
+    "ssd-dag",
+    "heterogeneous-attention",
+    "ports-sparse",
+    "entropy-shannon",
+    "send-regional_threshold",
+    "send-regional_total_zero",
+    "send-regional_threshold_hard",
+    "send-hard_selection",
+    "send-constrained",
+    "send-proportional",
+    "send-unit_attention",
+    "send-direct_attention",
+    "send-pooled_attention"
+  ]
+}

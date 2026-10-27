@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+- [Core-5 eager NPU 混合与两卡同步资格](core5-device-20261027.md)：470ce06；CPU200项、Python/native有限矩阵通过，standalone严格失败单列。
+
 - [Core-5 带权执行位置 CPU 资格](core5-placement-20261027.md)：9234c13，508 项；typed Read/control/selection、packed copy VJP 与训练恢复。
 
 - [Core-5 standalone 完整训练/checkpoint CPU 资格](core5-native-training-20261027.md)：a7106fc，20 项；每 dtype 24 图案例、三步训练与恢复后第四次更新。
