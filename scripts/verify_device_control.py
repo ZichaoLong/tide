@@ -18,7 +18,8 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
-                        default=[name for name in CHECKS if not name.startswith("peer") and name != "resident-sharded-training"],
+                        default=[name for name in CHECKS if not name.startswith("peer") and name not in
+                                 {"resident-sharded-training", "weighted-peer", "weighted-node-peer"}],
                         help="Single-device checks by default; peer requires visible devices with the declared backend capabilities")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
@@ -53,6 +54,8 @@ def main():
             name, dtypes = CHECKS[check]
             for dtype in dtypes:
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
+                if check == "weighted-node-peer":
+                    command.append("--output-dir="+str(out/(check+"-"+dtype+"-artifacts")))
                 if check == "weighted-saved-window":
                     command.append("--saved-window")
                 if check == "full-training":
@@ -84,7 +87,7 @@ def main():
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=600 if check in ("weighted-stage", "weighted-training", "weighted-peer") else 360 if check in ("weighted-retained", "weighted-saved-window", "weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                                            timeout=600 if check in ("weighted-stage", "weighted-training", "weighted-peer") else 360 if check in ("weighted-node-peer", "weighted-retained", "weighted-saved-window", "weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:
