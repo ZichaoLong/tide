@@ -127,3 +127,6 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 6. 只运行受影响的必要门禁；性能以明确问题和有限预算开展，不重启旧队列。
 
 工程辅助函数沿所在模块追溯即可；本页不为内存管理、日志、构建脚本虚构教材同名定义。
+
+完整独立 C++ 数值 checkpoint 的切面、int64、参数/optimizer 与独立训练追溯见
+[native-graph-checkpoint](native-graph-checkpoint.md)。

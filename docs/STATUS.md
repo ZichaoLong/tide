@@ -33,17 +33,21 @@ KV 基座投影复用实现 6dc2665c4fbd9053173bbd9d26c7e1b03b62abae 已完成�
 unit tide-core5-kv-sharing-qualify-20261027，inactive/success、exit 0，309 passed / 0 failed / 0 skipped。
 worktree artifacts/worktrees/core5-bootstrap 干净，tree 8a2f2705a9021a7ee2bd05d41ea0c74b5b6d7c08；
 输出 artifacts/jobs/core5-kv-sharing-qualify，build manifest 已独立保存；launcher .local/core5-kv-sharing-qualify.sh。
-证据独立提交推送；主工作区 native checkpoint 草稿不属于本资格。
+证据 ffe6d8d 已推送；主工作区 native checkpoint 草稿不属于本资格。
 
-下一步冻结原生 checkpoint/standalone 训练增量并启动 tide-core5-native-training-dev-20261027。
-launcher .local/core5-native-training-dev.sh，输出 artifacts/jobs/core5-native-training-dev；
-独立 background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
-检查 `systemctl --user show tide-core5-native-training-dev-20261027 -p ActiveState -p Result -p ExecMainStatus`、
-`cat artifacts/jobs/core5-native-training-dev/status.json`、`tail -n 30 artifacts/jobs/core5-native-training-dev/task.log`。
-尚未启动开发构建，不可标为通过。主工作区所有未提交源码均为该增量，含 graph_checkpoint*、
-二进制 codec、独立 C++ 五记忆/异构 × FC/HB/非对齐/反馈训练恢复，
-以及完整比较器的 descriptor_fields/int64 检查。契约 docs/native-graph-checkpoint.md。
-新加载拒绝测试使用校验和正确但时钟非法的记录，确认完整验证先于任何参数变更。
+原生 checkpoint/standalone 训练开发 tree 4c70968719d7235a2459a72baab94a044fb60ebd 已通过：
+unit tide-core5-native-training-dev-20261027，inactive/success、exit 0；43 项编译/链接、20 passed / 0 failed / 0 skipped。
+输出 artifacts/jobs/core5-native-training-dev，build manifest 已独立保存；launcher .local/core5-native-training-dev.sh。
+原生进程每 dtype 覆盖五记忆/异构 × FC/HB/非对齐/反馈共 24 案例，三步 AdamW、保留图切点、
+含 pending checkpoint 换 owner 以及恢复后的第四次更新；真实原始 int64/非空 History/别名与加载拒绝通过。
+正从已测 tree 提交该增量；主工作区后续 weighted placement 草稿尚未编译，不混入本提交或资格。
+
+下一步冻结该实现提交，启动 tide-core5-native-training-qualify-20261027，
+launcher .local/core5-native-training-qualify.sh、输出 artifacts/jobs/core5-native-training-qualify，--reuse-build、
+background.slice、单线程 ATen/BLAS、1200 秒上限。
+检查 `systemctl --user show tide-core5-native-training-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`、
+`cat artifacts/jobs/core5-native-training-qualify/status.json`、`tail -n 30 artifacts/jobs/core5-native-training-qualify/task.log`。
+尚未启动固定资格，不可标为通过。
 
 通过后提交该实现，再冻结实现提交进行同范围资格，单独提交证据并推送；
 继续 mixed/resident 前向/反向/optimizer/跨卡、有限 profiling 与最终追溯。

@@ -55,7 +55,7 @@ manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": torc
             "binary_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                               for p in (target / "libtidegraph.a", target / "libtidegraph_runtime.a", target / "_tide_native.so", target / "tidegraph-smoke", target / "tidegraph-kernel-check",
                                         target / "tidegraph-full-check", target / "tidegraph-aggregate-check",
-                                        target / "tidegraph-optimizer-check", target / "tidegraph-checkpoint-check",
+                                        target / "tidegraph-optimizer-check", target / "tidegraph-checkpoint-check", target / "tidegraph-weighted-training-check",
                                         target / "tidegraph-lh-scope-check", target / "tidegraph-streaming-bench",
                                         target / "tidegraph-scale-bench", target / "tidegraph-profile-check",
                                         target / "tidegraph-settle-check", target / "tidegraph-greedy-check",

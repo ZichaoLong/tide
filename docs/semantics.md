@@ -292,6 +292,11 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   little-endian, checksummed format with identity and alias preflight and
   exclusive no-overwrite publication; it is not interoperable with Python torch
   files and does not restore graph continuation or a training controller.
+  The separate [complete native graph format](native-graph-checkpoint.md),
+  `TIDEGCK1` schema 1, embeds that unchanged parameter record and exact raw
+  continuation fields, including int64 tensor metadata. It adds no retained
+  differentiation, RNG or training-controller state. Both native formats remain
+  distinct from eager checkpoint v5 and do not change graph identity v13.
 - `None` versus connected-zero is observable for optimizer parameter groups;
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.

@@ -1,4 +1,4 @@
-#include "checkpoint_internal.h"
+#include "checkpoint_binary.h"
 #include <cstring>
 #include <limits>
 #include <string_view>
@@ -8,89 +8,11 @@ namespace {
 constexpr std::string_view kMagic = "TIDENCK1";
 constexpr uint32_t kSchema = 1;
 constexpr uint8_t kLittleEndian = 1, kFloat32 = 1, kFloat64 = 2, kCpu = 0;
-constexpr uint64_t kMaxString = 1 << 20;
 }
 bool little_endian() {
   const uint16_t value = 1;
   return *reinterpret_cast<const uint8_t*>(&value) == 1;
 }
-
-struct Writer {
-  std::vector<uint8_t> bytes;
-
-  void room(uint64_t size) const {
-    if (size > kMaxFileBytes - bytes.size()) fail("checkpoint is too large");
-  }
-  void raw(const uint8_t* data, size_t size) {
-    room(size);
-    if (size) bytes.insert(bytes.end(), data, data + size);
-  }
-  void u8(uint8_t value) { room(1); bytes.push_back(value); }
-  void u32(uint32_t value) {
-    for (int shift = 0; shift < 32; shift += 8) u8(static_cast<uint8_t>(value >> shift));
-  }
-  void u64(uint64_t value) {
-    for (int shift = 0; shift < 64; shift += 8) u8(static_cast<uint8_t>(value >> shift));
-  }
-  void i64(int64_t value) { u64(static_cast<uint64_t>(value)); }
-  void f64(double value) {
-    uint64_t bits;
-    static_assert(sizeof(bits) == sizeof(value), "unexpected double width");
-    std::memcpy(&bits, &value, sizeof(bits));
-    u64(bits);
-  }
-  void string(const std::string& value) {
-    if (value.size() > kMaxString) fail("string is too large");
-    u64(value.size());
-    raw(reinterpret_cast<const uint8_t*>(value.data()), value.size());
-  }
-  void tensor(const Tensor& value);
-};
-
-struct Reader {
-  const std::vector<uint8_t>& bytes;
-  size_t limit;
-  size_t offset = 0;
-
-  uint8_t u8() {
-    if (offset >= limit) fail("truncated payload");
-    return bytes[offset++];
-  }
-  uint32_t u32() {
-    uint32_t value = 0;
-    for (int shift = 0; shift < 32; shift += 8) value |= static_cast<uint32_t>(u8()) << shift;
-    return value;
-  }
-  uint64_t u64() {
-    uint64_t value = 0;
-    for (int shift = 0; shift < 64; shift += 8) value |= static_cast<uint64_t>(u8()) << shift;
-    return value;
-  }
-  int64_t i64() {
-    const auto value = u64();
-    if (value > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) fail("negative or overflowing integer");
-    return static_cast<int64_t>(value);
-  }
-  bool boolean() {
-    const auto value = u8();
-    if (value > 1) fail("invalid boolean tag");
-    return value != 0;
-  }
-  double f64() {
-    const auto bits = u64();
-    double value;
-    std::memcpy(&value, &bits, sizeof(value));
-    return value;
-  }
-  std::string string() {
-    const auto size = u64();
-    if (size > kMaxString || size > limit - offset) fail("invalid string length");
-    std::string value(reinterpret_cast<const char*>(bytes.data() + offset), static_cast<size_t>(size));
-    offset += static_cast<size_t>(size);
-    return value;
-  }
-  Tensor tensor();
-};
 
 uint64_t checksum(const uint8_t* data, size_t size) {
   uint64_t hash = 14695981039346656037ULL;
@@ -123,20 +45,23 @@ uint64_t element_count(at::IntArrayRef shape) {
   return count;
 }
 
-void Writer::tensor(const Tensor& value) {
-  validate_value(value, "save");
+void Writer::tensor(const Tensor& value, bool metadata) {
+  const bool integer=metadata && value.defined() && value.scalar_type()==at::kLong;
+  if(!integer)validate_value(value, "save");
+  else if(value.layout()!=at::kStrided)fail("unsupported integer tensor layout");
   const auto contiguous = value.detach().to(at::kCPU).contiguous();
   if (contiguous.dim() > 64) fail("tensor has too many dimensions");
-  u8(kCpu); u8(dtype_code(contiguous.scalar_type())); u8(static_cast<uint8_t>(contiguous.dim()));
+  u8(kCpu); u8(integer ? 3 : dtype_code(contiguous.scalar_type())); u8(static_cast<uint8_t>(contiguous.dim()));
   for (const auto size : contiguous.sizes()) i64(size);
   const auto count = element_count(contiguous.sizes());
   u64(count);
   raw(static_cast<const uint8_t*>(contiguous.const_data_ptr()), count * contiguous.element_size());
 }
 
-Tensor Reader::tensor() {
+Tensor Reader::tensor(bool metadata) {
   if (u8() != kCpu) fail("tensor device is not CPU");
-  const auto dtype = scalar_type(u8());
+  const auto code=u8();
+  const auto dtype = metadata && code==3 ? at::kLong : scalar_type(code);
   const auto dimensions = u8();
   if (dimensions > 64) fail("tensor has too many dimensions");
   std::vector<int64_t> shape;
@@ -150,7 +75,7 @@ Tensor Reader::tensor() {
   auto result = at::empty(shape, at::TensorOptions().dtype(dtype).device(at::kCPU));
   if (byte_count) std::memcpy(result.mutable_data_ptr(), bytes.data() + offset, byte_count);
   offset += byte_count;
-  validate_value(result, "load");
+  if(dtype!=at::kLong)validate_value(result, "load");
   return result;
 }
 
