@@ -35,7 +35,7 @@ void GraphCheckpoint::save(const std::filesystem::path& path,const Graph& g,cons
   auto registry=m.parameters(false);GraphRecord record;record.continuation=q;auto& p=record.parameters;p.identity=g.identity;
   for(const auto& o:registry.owners())p.owners.push_back({o.aliases,o.value});
   if(optimizer){p.has_optimizer=true;p.optimizer_class=optimizer->layout().class_name;
-    p.groups=optimizer->groups();p.state=optimizer->state();}
+    p.groups=optimizer->groups();p.state=optimizer->state();p.precision=optimizer->precision();p.masters=optimizer->masters();}
   validate_decoded(p,registry,optimizer,g.identity);
   publish_exclusive(path,encode_graph(record));
 }
@@ -53,8 +53,10 @@ Continuation GraphCheckpoint::load(const std::filesystem::path& path,const Graph
   validate_window(g,staged,record.continuation,{},record.continuation.cut,record.continuation.cut);
   for(auto& [name,s]:p.state){auto device=current.at(name).device();
     for(auto* t:{&s.momentum_buffer,&s.exp_avg,&s.exp_avg_sq,&s.max_exp_avg_sq})if(t->defined())*t=t->to(device);}
+  for(auto& [name,t]:p.masters)t=t.to(current.at(name).device());
   for(const auto& o:p.owners)current.at(o.aliases.front()).copy_(o.value);
-  if(optimizer){optimizer->groups_.swap(p.groups);optimizer->state_.swap(p.state);}
+  if(optimizer){optimizer->groups_.swap(p.groups);optimizer->state_.swap(p.state);
+    optimizer->masters_.swap(p.masters);optimizer->precision_=p.precision;optimizer->scaled_backward_=false;}
   return std::move(record.continuation);
 }
 }

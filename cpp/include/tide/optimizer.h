@@ -40,19 +40,29 @@ struct OptimizerState {
   Tensor max_exp_avg_sq;
 };
 
+// Explicit half payload policy. Masters and optimizer slots are FP32; scaling
+// is static and serialized. No clipping, skipped update or automatic fallback.
+struct OptimizerPrecision {
+  bool fp32_masters = false;
+  double loss_scale = 1.;
+};
+
 class NamedOptimizer {
  public:
   virtual ~NamedOptimizer() = default;
   void step();
   void zero_grad(bool set_to_none = true);
+  void backward(const Tensor& loss, bool retain_graph = false);
   const ParameterRegistry& registry() const { return registry_; }
   const std::vector<OptimizerGroup>& groups() const { return groups_; }
   OptimizerLayout layout() const;
   const std::map<std::string, OptimizerState>& state() const { return state_; }
+  const OptimizerPrecision& precision() const { return precision_; }
+  const std::map<std::string, Tensor>& masters() const { return masters_; }
 
  protected:
   NamedOptimizer(ParameterRegistry& registry, std::vector<OptimizerGroup> groups,
-                 std::string class_name);
+                 std::string class_name, OptimizerPrecision precision = {});
   virtual void update(const std::string& name, const Tensor& parameter,
                       const Tensor& gradient, const OptimizerGroup& group) = 0;
   std::map<std::string, OptimizerState> state_;
@@ -63,12 +73,17 @@ class NamedOptimizer {
   ParameterRegistry& registry_;
   std::vector<OptimizerGroup> groups_;
   std::string class_name_;
+  OptimizerPrecision precision_;
+  std::map<std::string, Tensor> masters_;
+  bool scaled_backward_ = false;
+  void initialize_precision();
+  void master_step();
 };
 
 class SGD final : public NamedOptimizer {
  public:
   explicit SGD(ParameterRegistry& registry,
-               std::vector<OptimizerGroup> groups = {});
+               std::vector<OptimizerGroup> groups = {}, OptimizerPrecision precision = {});
 
  protected:
   void update(const std::string& name, const Tensor& parameter,
@@ -78,7 +93,7 @@ class SGD final : public NamedOptimizer {
 class AdamW final : public NamedOptimizer {
  public:
   explicit AdamW(ParameterRegistry& registry,
-                 std::vector<OptimizerGroup> groups = {});
+                 std::vector<OptimizerGroup> groups = {}, OptimizerPrecision precision = {});
 
  protected:
   void update(const std::string& name, const Tensor& parameter,

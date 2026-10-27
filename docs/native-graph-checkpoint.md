@@ -11,11 +11,12 @@
 每个原始 State slot、区域 History、逐边 pending 和完整输入 ledger。
 KV 包括尚未清理的过期条目；卷积包括原始时间槽，不用有效投影代替可逆解码。
 
-格式版本由 [semantics](semantics.md) 维护：`TIDEGCK1` schema 1 是完整图容器，
-其中嵌入不变的 `TIDENCK1` 参数/优化器记录。外层和内层均有校验和；
+格式版本由 [semantics](semantics.md) 维护：`TIDEGCK1` schema 2 是完整图容器，
+其中嵌入schema 2的 `TIDENCK1` 参数/优化器记录。之前的配对schema 1仍可读，新保存均为v2。外层和内层均有校验和；
 所有时间/计数/索引及 int64 slot 都按整数存储，不经浮点编解码。
-参数和浮点状态当前声明 FP32/FP64；格式使用 CPU 字节序列，可向重建模型的实际 owner 设备恢复。
-具体设备构建和实机证据仍各自验收；当前范围不宣称完整 FP16/master 格式。
+参数和浮点状态声明 FP16/FP32/FP64；格式使用 CPU 字节序列，可向重建模型的实际 owner 设备恢复。
+[显式FP32 master](native-master-optimizer.md)保存优化器精度策略、scale和全部master/slot；
+半精度payload与master量化对应须逐值相等。设备构建和实机证据仍各自验收。
 
 保存先校验当前模型和 continuation，采用 fsync staging、排他发布与目录 fsync，
 已存在的目标不覆盖。加载先解码全部记录、校验别名/优化器域、分配目标传输，
@@ -34,7 +35,7 @@ KV 包括尚未清理的过期条目；卷积包括原始时间槽，不用有�
 | typed 原始状态、历史、pending、ledger | [完整图 codec](../cpp/src/graph_checkpoint_codec.cpp)、[受限二进制原语](../cpp/src/checkpoint_binary.h)；大于 2^54 的逻辑时间、损坏与别名拒绝 |
 | 全图训练/续接 | [独立 C++ 可执行文件](../cpp/test/weighted_graph_training.cpp)与[固定参数/拓扑](../cpp/test/weighted_graph_fixture.cpp)：FC、HB depth=1、非对齐 DAG、PDG 反馈/重复边；五种记忆及异构，三步 AdamW、保留图切点、含 pending 恢复后的下一更新 |
 | 独立数学与完整比较 | 各 weighted 公式 standalone 检查锚定函数；全图 Streaming 与 Greedy 独立调度，比较完整 Read fields、状态、控制、逐边/端口记录和全部具名梯度/优化器槽；整数 Tensor 严格相等 |
-| 原参数格式兼容 | [原生参数/optimizer 测试](../tests/test_cpp_checkpoint.py)，v1 既有格式和排他发布保持 |
+| 原参数格式兼容 | [原生参数/optimizer 测试](../tests/test_cpp_checkpoint.py)，v1读取兼容、v2 typed值/master和排他发布 |
 
 复现入口为 `tidegraph-weighted-training-check --device=cpu --dtype=float64 --output-dir NEW`，
 FP32 另运行独立流程。Python 的 [启动测试](../tests/test_cpp_weighted_training.py)只检查进程/结果；

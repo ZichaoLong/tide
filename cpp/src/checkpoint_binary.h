@@ -43,6 +43,7 @@ struct Reader {
   const std::vector<uint8_t>& bytes;
   size_t limit;
   size_t offset = 0;
+  bool allow_half = false;
 
   uint8_t u8() {
     if (offset >= limit) fail("truncated payload");

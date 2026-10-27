@@ -20,7 +20,8 @@ Graph graph(const std::string& topology,const std::string& family){
 Model model(const Graph& g,const std::string& family,at::Device device,at::ScalarType dtype){
   Model m;const auto o=at::TensorOptions().dtype(dtype);Index serial=0;
   auto parameter=[&](std::vector<Index> shape){Index n=1;for(auto d:shape)n*=d;
-    return (.12*at::sin(at::arange(n,o)*.7+(++serial)*.3)).reshape(shape).to(device).set_requires_grad(true);};
+    auto compute=dtype==at::kHalf?o.dtype(at::kFloat):o;
+    return (.12*at::sin(at::arange(n,compute)*.7+(++serial)*.3)).reshape(shape).to(device,dtype).set_requires_grad(true);};
   RegionalConfig r;r.k=2;r.hidden_width=3;r.region_control_width=2;r.gamma_max=2;
   SourceClasses classes;for(const auto& e:g.edges)classes.edges.push_back(e.source+1);classes.inputs=std::vector<Index>(g.inputs.size(),0);
   std::map<Index,Tensor> bases,as,bs;std::map<std::pair<Index,Index>,Tensor> embeddings;
@@ -80,7 +81,7 @@ Model model(const Graph& g,const std::string& family,at::Device device,at::Scala
 std::vector<External> inputs(const Graph& g,at::Device device,at::ScalarType dtype,Index start){
   std::vector<External> xs;
   for(Index b=0;b<2;++b)for(Index pos=0;pos<2;++pos){
-    auto h=at::tensor({1.,.2+.1*b,-.3+.2*pos},at::TensorOptions().dtype(dtype)).to(device).set_requires_grad(true);
+    auto h=at::tensor({1.,.2+.1*b,-.3+.2*pos},at::TensorOptions().dtype(dtype==at::kHalf?at::kFloat:dtype)).to(device,dtype).set_requires_grad(true);
     for(size_t port=0;port<g.inputs.size();++port)xs.push_back({b,static_cast<Index>(port),pos,start+1+5*pos,h});}
   return xs;
 }

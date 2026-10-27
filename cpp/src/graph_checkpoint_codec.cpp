@@ -1,4 +1,4 @@
-// Native graph checkpoint v1: exact raw fields, never effective-state projection.
+// Native graph checkpoint v2: exact raw fields, including half payload/int64 metadata.
 #include "graph_checkpoint_internal.h"
 #include "checkpoint_binary.h"
 #include <string_view>
@@ -57,7 +57,7 @@ Continuation continuation(Reader& r){
 }
 std::vector<uint8_t> encode_graph(const GraphRecord& record){
   if(!little_endian())fail("big-endian graph checkpoints are unsupported");
-  Writer w;w.raw(reinterpret_cast<const uint8_t*>(magic.data()),magic.size());w.u32(1);w.u8(1);
+  Writer w;w.raw(reinterpret_cast<const uint8_t*>(magic.data()),magic.size());w.u32(2);w.u8(1);
   auto parameters=encode(record.parameters);w.u64(parameters.size());w.raw(parameters.data(),parameters.size());
   continuation(w,record.continuation);w.u64(checksum(w.bytes.data(),w.bytes.size()));return std::move(w.bytes);
 }
@@ -66,10 +66,14 @@ GraphRecord decode_graph(const std::vector<uint8_t>& file){
   const auto limit=file.size()-8;Reader tail{file,file.size(),limit};
   if(checksum(file.data(),limit)!=tail.u64())fail("graph checkpoint checksum mismatch");
   Reader r{file,limit};for(auto c:magic)if(r.u8()!=static_cast<uint8_t>(c))fail("graph checkpoint magic mismatch");
-  if(r.u32()!=1||r.u8()!=1)fail("unsupported graph checkpoint schema/byte order");
+  const auto schema=r.u32();
+  if((schema!=1&&schema!=2)||r.u8()!=1)fail("unsupported graph checkpoint schema/byte order");
+  r.allow_half=schema>=2;
   auto n=r.u64();if(n>r.limit-r.offset)fail("truncated parameter record");
   std::vector<uint8_t> blob(file.begin()+r.offset,file.begin()+r.offset+n);r.offset+=n;
-  GraphRecord record;record.parameters=decode(blob);record.continuation=continuation(r);
+  GraphRecord record;record.parameters=decode(blob);
+  if(record.parameters.schema!=schema)fail("graph and parameter checkpoint schemas disagree");
+  record.continuation=continuation(r);
   if(r.offset!=limit)fail("trailing graph checkpoint payload");return record;
 }
 }

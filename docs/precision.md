@@ -44,7 +44,9 @@ precision, shape, owner order, SGD/AdamW state, static scale and correspondence
 between quantized masters and model weights before mutating live owners.
 Same-stack continuation and CPU handoff need their own qualification. C++ native
 execution through Python uses this same Python checkpoint boundary. The separate
-standalone C++ owner checkpoint/NamedOptimizer interface remains FP32/FP64; the
+standalone C++ owner checkpoint/NamedOptimizer interface now has an
+[explicit FP32 master and native-format policy](native-master-optimizer.md);
+its qualifications remain independent of the Python helper. The historical
 full-size consumer supplies its own FP32 masters and does not import checkpoints.
 The continuous eager benchmark consumer now implements the same explicit
 payload-gradient/FP32-master policy in Python and independently in C++, with

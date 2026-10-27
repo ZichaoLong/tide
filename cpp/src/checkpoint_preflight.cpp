@@ -6,7 +6,7 @@
 
 namespace tide::checkpoint_detail {
 void validate_value(const Tensor& value, const std::string& where) {
-  if (!supported_payload(value))
+  if (!supported_kernel_payload(value))
     fail("unsupported tensor in " + where);
   if (!at::isfinite(value).all().item<bool>()) fail("nonfinite tensor in " + where);
 }
@@ -74,7 +74,7 @@ void validate_decoded(const Decoded& decoded, const ParameterRegistry& registry,
     const auto it = values.find(canonical);
     if (it == values.end()) fail("checkpoint has an unknown parameter owner");
     const auto& target = it->second;
-    if (!supported_payload(target) || target.layout() != at::kStrided
+    if (!supported_kernel_payload(target) || target.layout() != at::kStrided
         || !target.is_non_overlapping_and_dense())
       fail("unsupported destination layout/device: " + canonical);
     if (target.numel()) {
@@ -94,6 +94,8 @@ void validate_decoded(const Decoded& decoded, const ParameterRegistry& registry,
   if (optimizer) {
     if (!decoded.has_optimizer) fail("checkpoint has no optimizer state");
     if (decoded.optimizer_class != optimizer->layout().class_name) fail("optimizer class mismatch");
+    if (decoded.precision.fp32_masters != optimizer->precision().fp32_masters)
+      fail("optimizer precision policy mismatch");
     if (!same_group_names(decoded.groups, optimizer->groups())) fail("optimizer group ownership/order mismatch");
     for (const auto& group : optimizer->groups()) for (const auto& name : group.parameters)
       if (!values.count(name) || values.at(name).unsafeGetTensorImpl() != optimizer->registry().value(name).unsafeGetTensorImpl())
@@ -109,9 +111,31 @@ void validate_decoded(const Decoded& decoded, const ParameterRegistry& registry,
       if (!grouped.insert(name).second) fail("optimizer repeats a parameter owner");
     }
   }
+  if (!std::isfinite(decoded.precision.loss_scale) || decoded.precision.loss_scale <= 0 ||
+      (!decoded.precision.fp32_masters && decoded.precision.loss_scale != 1.))
+    fail("invalid optimizer loss scale");
+  if (decoded.precision.fp32_masters) {
+    if (decoded.masters.size() != grouped.size()) fail("master owner inventory mismatch");
+    std::map<std::string, Tensor> saved;
+    for (const auto& owner : decoded.owners) saved.emplace(owner.aliases.front(), owner.value);
+    for (const auto& name : grouped) {
+      auto it = decoded.masters.find(name);
+      if (it == decoded.masters.end()) fail("missing optimizer master");
+      const auto& master = it->second; const auto& payload = saved.at(name);
+      validate_value(master, "master " + name);
+      if (master.scalar_type() != at::kFloat || payload.scalar_type() != at::kHalf || master.sizes() != payload.sizes())
+        fail("master shape/dtype mismatch");
+      if (!at::equal(master.to(at::kCPU).to(at::kHalf), payload.to(at::kCPU)))
+        fail("master and payload values disagree");
+    }
+  } else {
+    if (!decoded.masters.empty()) fail("unexpected optimizer masters");
+    for (const auto& name : grouped) if (values.at(name).scalar_type() == at::kHalf)
+      fail("FP16 optimizer checkpoint requires FP32 masters");
+  }
   for (const auto& [name, state] : decoded.state) {
     if (!grouped.count(name) || state.step < 0) fail("optimizer state has an unowned parameter");
-    const auto parameter = values.at(name);
+    const auto parameter = decoded.precision.fp32_masters ? decoded.masters.at(name) : values.at(name);
     const auto group_it = std::find_if(decoded.groups.begin(), decoded.groups.end(), [&name](const auto& group) {
       return std::find(group.parameters.begin(), group.parameters.end(), name) != group.parameters.end();
     });

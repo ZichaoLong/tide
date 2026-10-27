@@ -110,14 +110,21 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_readonly("exp_avg", &OptimizerState::exp_avg)
     .def_readonly("exp_avg_sq", &OptimizerState::exp_avg_sq)
     .def_readonly("max_exp_avg_sq", &OptimizerState::max_exp_avg_sq);
+  py::class_<OptimizerPrecision>(m, "OptimizerPrecision")
+    .def(py::init<>())
+    FIELD(OptimizerPrecision, fp32_masters) FIELD(OptimizerPrecision, loss_scale);
   py::class_<NamedOptimizer>(m, "NamedOptimizer")
     .def("step", &NamedOptimizer::step)
     .def("zero_grad", &NamedOptimizer::zero_grad, py::arg("set_to_none") = true)
     .def("layout", &NamedOptimizer::layout)
     .def("groups", &NamedOptimizer::groups)
-    .def("state", &NamedOptimizer::state);
+    .def("state", &NamedOptimizer::state)
+    .def("masters", &NamedOptimizer::masters)
+    .def("precision", &NamedOptimizer::precision)
+    .def("backward", &NamedOptimizer::backward, py::arg("loss"), py::arg("retain_graph") = false,
+         py::call_guard<py::gil_scoped_release>());
   py::class_<SGD, NamedOptimizer>(m, "SGD")
-    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
+    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>, OptimizerPrecision>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{}, py::arg("precision") = OptimizerPrecision{},
          py::keep_alive<1, 2>())
     .def("step", &SGD::step)
     .def("zero_grad", &SGD::zero_grad, py::arg("set_to_none") = true)
@@ -125,7 +132,7 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("groups", &SGD::groups)
     .def("state", &SGD::state);
   py::class_<AdamW, NamedOptimizer>(m, "AdamW")
-    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
+    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>, OptimizerPrecision>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{}, py::arg("precision") = OptimizerPrecision{},
          py::keep_alive<1, 2>())
     .def("step", &AdamW::step)
     .def("zero_grad", &AdamW::zero_grad, py::arg("set_to_none") = true)
