@@ -42,7 +42,7 @@ WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Weig
   }
   for(size_t r=0;r<graph.regions.size();++r)regions.push_back(std::make_unique<WeightedFlowRegion>(graph,model,r,boundary,d));
   const auto opts=at::TensorOptions().dtype(at::kFloat).device(d);
-  error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
+  error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);begin=stop.clone();
   pending=std::make_unique<QueueTransaction>(l.queue,model.width(),graph.nodes.size(),q.batch_size,opts,error);
   external={at::zeros({l.queue,6},opts.dtype(at::kLong)),at::zeros({l.queue,model.width()},opts),at::zeros({l.queue},opts.dtype(at::kBool))};
   fill(pending->atoms(),q.pending);pending->stats()[0]=q.pending.size();pending->stats()[1]=q.pending.size();
@@ -61,6 +61,10 @@ void WeightedFlow::Impl::construct(){
   for(size_t v=0;v<nodes.size();++v){auto& worker=services->begin();
     nodes[v]->source=bind_weighted_flow_source(worker,nodes[v]->banks,graph,v,nodes[v]->binding,error,remaining(worker));services->end(worker);}
 
+  journal->capture(p,"begin",begin);
+  journal->capture(p,"pending.meta",pending->atoms().coordinates);journal->capture(p,"pending.present",pending->atoms().valid);
+  for(size_t v=0;v<nodes.size();++v){const auto prefix="node."+std::to_string(v)+".";
+    journal->capture(p,prefix+"integer",nodes[v]->state.integer);journal->capture(p,prefix+"present",nodes[v]->state_present);}
   pending->append_stage(p,at::zeros({limits.queue},error.options()),external);
   auto cap=at::full_like(stages,limits.stages),one=at::ones_like(stages),index=at::zeros_like(error),budget_error=at::full_like(error,4);
   auto predicate=at::zeros({1},error.options().dtype(at::kBool));
@@ -88,7 +92,8 @@ Result WeightedFlow::advance(const std::vector<External>& xs,Index until){
   if(xs.size()>size_t(s.limits.queue))throw std::invalid_argument("weighted external input capacity exceeded");
   auto input=validate_external(s.graph,s.model,s.boundary,xs,until,until); // Retryable boundary rejection.
   try {
-    fill(s.external,input.atoms);s.stop.fill_(until);s.stages.zero_();sync(s.device);s.services->submit();s.program->run(s.limits.timeout_ms);s.services->wait(s.limits.timeout_ms);
+    fill(s.external,input.atoms);s.begin.fill_(s.boundary.cut);s.stop.fill_(until);s.stages.zero_();++s.generation;
+    sync(s.device);s.services->submit();s.program->run(s.limits.timeout_ms);s.services->wait(s.limits.timeout_ms);
     const auto code=s.error.item<int32_t>();if(code)throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code));
     s.boundary.cut=until;for(const auto& [owner,last]:input.ledger_updates)s.boundary.ledger[owner]=last;s.ran=true;return s.decode();
   }catch(...){s.failed=true;throw;}

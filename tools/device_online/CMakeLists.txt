@@ -153,6 +153,9 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-parameters PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-parameters PUBLIC tide-device-control tide::tidegraph
     tide_weighted_parameter_reduce_kernel tide_weighted_allocation_status_kernel)
+  add_library(tide-parameter-accumulate STATIC parameter_accumulate.cpp)
+  set_target_properties(tide-parameter-accumulate PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-parameter-accumulate PUBLIC tide-device-control tide_parameter_accumulate_kernel)
   add_library(tide-weighted-raw STATIC weighted_raw_state.cpp weighted_raw_update.cpp)
   set_target_properties(tide-weighted-raw PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-raw PUBLIC tide-device-control tide::tidegraph
@@ -211,6 +214,9 @@ if(TIDE_DEVICE_KERNELS)
   add_library(tide-weighted-reverse STATIC weighted_reverse_route.cpp)
   set_target_properties(tide-weighted-reverse PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-reverse PUBLIC tide-device-control tide_weighted_reverse_route_kernel)
+  add_library(tide-weighted-window STATIC weighted_window_vjp.cpp weighted_window_roots.cpp weighted_window_owner.cpp)
+  set_target_properties(tide-weighted-window PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-weighted-window PUBLIC tide-weighted-flow tide-weighted-reverse tide-weighted-parameters tide-parameter-accumulate tide-device-services)
   add_library(tide-weighted-pool STATIC weighted_pool.cpp)
   set_target_properties(tide-weighted-pool PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-pool PUBLIC tide-device-control tide_weighted_source_guard_kernel
@@ -254,6 +260,15 @@ if(TIDE_DEVICE_KERNELS)
     add_executable(tide-weighted-reverse-route-check weighted_reverse_route_check.cpp)
     target_compile_options(tide-weighted-reverse-route-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-reverse-route-check PRIVATE tide-weighted-reverse tide::runtime)
+    add_executable(tide-weighted-window-check weighted_window_check.cpp weighted_window_case.cpp weighted_window_roots_check.cpp weighted_window_compare.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-window-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-window-check PRIVATE tide-weighted-window tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-window-config-check weighted_window_config_check.cpp weighted_window_case.cpp weighted_window_roots_check.cpp weighted_window_compare.cpp weighted_flow_fixture.cpp ../../cpp/test/weighted_graph_fixture.cpp)
+    target_compile_options(tide-weighted-window-config-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-window-config-check PRIVATE tide-weighted-window tide-device-test-compare tide::runtime)
+    add_executable(tide-weighted-copy-check weighted_copy_check.cpp)
+    target_compile_options(tide-weighted-copy-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-copy-check PRIVATE tide-weighted-flow tide::runtime)
     add_executable(tide-weighted-pool-check weighted_pool_check.cpp)
     target_compile_options(tide-weighted-pool-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-pool-check PRIVATE tide-weighted-pool tide::tidegraph)
@@ -357,7 +372,7 @@ if(TIDE_DEVICE_KERNELS)
     target_link_libraries(tide-packed-lh-check PRIVATE tide-packed-lh tide::tidegraph)
   endif()
   add_library(tide-content-flow STATIC content_profile.cpp state_profile.cpp state_profile_compat.cpp state_reverse_view.cpp state_reverse_compat.cpp state_owner_tape.cpp state_reverse_pack.cpp state_reverse_stage.cpp state_reverse_merge.cpp state_owner_read.cpp state_owner_reverse.cpp sharded_state_vjp.cpp state_shard_pack.cpp state_owner.cpp remote_state.cpp sharded_state.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp emission_vjp.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
-    retained_tape.cpp retained_journals.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp control_scores.cpp
+    retained_tape.cpp retained_journals.cpp window_bridge.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp control_scores.cpp
     content_flow.cpp content_export.cpp content_input.cpp content_continuation.cpp continuation_pack.cpp remote_full.cpp full_placement.cpp full_shard_pack.cpp sharded_full.cpp full_shard_tape.cpp full_reverse_pack.cpp full_reverse_merge.cpp sharded_full_vjp.cpp
     sharded_parameter_sources.cpp sharded_parameter_layout.cpp owner_gradient_packet.cpp owner_stream.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp owner_parameter_publish.cpp device_journal.cpp packed_emission.cpp projection_shard.cpp packed_swiglu_full.cpp
     fiber_cache.cpp fiber_tape.cpp fiber_reverse.cpp fiber_cache_reverse.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp fiber_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
@@ -381,7 +396,7 @@ if(TIDE_DEVICE_KERNELS)
     tide_emit_mix_kernel tide_control_plan_kernel tide_control_payload_kernel tide_control_read_reduce_kernel tide_control_merge_kernel
     tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel tide_parameter_vjp_kernel
     tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_parameter_publish_kernel tide_owner_gradient_pack_kernel tide_owner_gradient_reduce_kernel tide_owner_parameter_publish_kernel tide_owner_stream_kernel
-    tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide_parameter_accumulate_kernel)
+    tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide-parameter-accumulate)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     # Shared, independent CPU-oracle fixtures compile once per runtime build.
     add_library(tide-device-test-fixtures STATIC full_vjp_fixture.cpp graph_vjp_fixture.cpp retained_fixture.cpp

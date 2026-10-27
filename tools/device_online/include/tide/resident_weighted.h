@@ -21,6 +21,7 @@ class WeightedFlow {
   int64_t reserved_bytes()const;
   void close();
  private:
+  friend class WeightedWindowAdjoint;
   struct Impl;std::unique_ptr<Impl> impl_;
 };
 }

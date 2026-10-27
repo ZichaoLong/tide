@@ -17,11 +17,13 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
     DeviceProgram coordinator(device);coordinator.limit_workspace(64*1024*1024);TaskServices services(coordinator,device,64*1024*1024);
     const auto head=coordinator.label(),body=coordinator.label(),end=coordinator.label();coordinator.mark(head);
     coordinator.less(count,limit,condition);coordinator.cast_index(condition,branch);coordinator.branch(branch,{end,body});coordinator.mark(body);
-    auto& first=services.begin();first.rms_norm(x,.3,normal);services.end(first);
-    auto& second=services.begin();second.multiply(normal,factor,scaled);second.rms_norm(scaled,.2,y);services.end(second);
+    auto& first=services.begin();first.rms_norm(x,.3,normal);
+    auto& second=services.begin();second.multiply(normal,factor,scaled);
+    auto& third=services.begin();third.rms_norm(scaled,.2,y);services.end(third);
+    services.end(second);services.end(first);
     coordinator.copy(x,y);coordinator.add(count,one);coordinator.branch(branch,{head});coordinator.mark(end);services.append_stop();
     const auto workspace=services.workspace_bytes();
-#ifndef TIDE_RESIDENT_CUDA
+#if !TIDE_RESIDENT_CUDA
     int64_t summed=0;for(const auto* p:services.programs())summed+=p->workspace_bytes();
     if(!(workspace>0&&summed>workspace))throw std::runtime_error("services did not exercise shared workspace");
 #endif
@@ -33,6 +35,6 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
         expected=expected/at::sqrt(expected.square().mean(1,true)+.2);}
       if(count.item<int64_t>()!=loops||!at::allclose(x.cpu(),expected,2e-5,2e-6))throw std::runtime_error("service cycle/window differs from independent recurrence");
     }
-    coordinator.close();services.close();std::cout<<"task-services: passed repeated_windows=true empty_window=true shared_workspace_bytes="<<workspace<<'\n';return 0;
+    coordinator.close();services.close();std::cout<<"task-services: passed repeated_windows=true empty_window=true nested_levels=3 shared_workspace_bytes="<<workspace<<'\n';return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }
