@@ -49,4 +49,4 @@ FP32算术结果在存为FP16时溢出也设error27；不裁剪。次正规数�
 入口 `verify_device_control.py --checks weighted-convolution --device npu:0`。
 本组件不认证完整 GDN/SSD、Describe、在线图生命周期或性能；固定源码 CPU/NPU 与 CUDA 构建/真机证据分别记录。
 
-FP32固定源码资格见[f89bdfe运行证据](evidence/core5-resident-convolution-20261027.md)。FP16扩展开发中，尚未资格。
+FP32固定源码资格见[f89bdfe运行证据](evidence/core5-resident-convolution-20261027.md)。FP32/FP16组件扩展见[2e4d445固定资格](evidence/core5-resident-half-primitives-20261028.md)。

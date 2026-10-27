@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 FP16原始状态/投影/卷积资格](core5-resident-half-primitives-20261028.md)：2e4d445；CPU32、NPU两dtype六组合、CUDA三架构构建；明确FP32算术/伴随，完整half图另验收。
+
 [Core-5 weighted公共训练资格](core5-resident-weighted-training-20261028.md)：343429d；CPU28、Python-owned NPU28、standalone五配置20更新、保留窗口/累计/精确恢复与两安装消费者，CUDA三架构构建；FP16/peer另验收。
 
 [Core-5 weighted完整窗口VJP资格](core5-resident-weighted-window-20261028.md)：2622e60，NPU27配置/324根模式与36前向回归、CPU17项及CUDA三架构构建；公共retained训练另验收。

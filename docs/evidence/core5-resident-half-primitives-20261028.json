@@ -1,0 +1,282 @@
+{
+  "source": "2e4d445e49118d10b0d02a13f19379c99ff15478",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "component": "typed raw state, shared projection and fixed-logical-time convolution; explicit FP16 storage and FP32 math/adjoints",
+  "jobs": [
+    {
+      "source": "2e4d445e49118d10b0d02a13f19379c99ff15478",
+      "state": "passed",
+      "started": "2026-10-27T21:06:19.838662+00:00",
+      "finished": "2026-10-27T21:09:36.581898+00:00",
+      "exit_code": 0,
+      "name": "core5-half-primitives-npu-qualify",
+      "unit": "tide-core5-half-primitives-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "3fa4cac41cfbfb31243f4d9076a7a1c6d71413d08f3c9902b1968ac08a0b0280",
+      "log_sha256": "d8c9529168a925541d9cbfcccdbea447e1e44f1c89585e69de7a922d02cc9202",
+      "build": {
+        "component_sha256": "aed4724c5ae0c97b01ef81acbe8a2cd7ddcb97901f518e2e3685e1d781e4c7e7",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-raw",
+          "weighted-projection",
+          "weighted-convolution"
+        ],
+        "binary_sha256": {
+          "tide-weighted-raw-check": "3c27fc4ef976d10cb5d6396c9dac9675dee1fa6762811e72b41d86cf3ce412e1",
+          "tide-weighted-projection-check": "3af8e5eb81d421ad74f4a6ded3bd67f4fae910bd98c85151dd1cd870f13abf6e",
+          "tide-weighted-convolution-check": "32c38853821d35d99cc06a2da1032fc8ad8740b22fa35458828d03ba6e404a4e"
+        },
+        "loader_sha256": {
+          "tide-weighted-raw-check": "e547d5e00430a3c3b3213f0dd7269f554b211c5d3c078fed6dbda05b1c1731c4",
+          "tide-weighted-projection-check": "fdf5a28005da6f159e400ef34d46aec69f0775805b7375fd679c95154cb244d0",
+          "tide-weighted-convolution-check": "a00041f48c102c1f5cc28c82fb375c3874f2d13f1dfdd3c5f76c847f390759b6"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "codec_log_sha256": "f56421443989e357601a431a870da95d3ee531e93fdb48287cecbbe5b7e79c38",
+      "cpu": {
+        "passed": 32,
+        "skipped": 0,
+        "testcase_seconds": 2.6,
+        "xml_sha256": "8f619a2fdcdc704bbbb36bae3593557e5dad2286dbdad3655d76bdbe3263b043"
+      },
+      "cases": [
+        {
+          "check": "weighted-raw",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "f6c02254d641341f6828d06c912b0be786870f797b411010a2fa1861e352f6fe",
+          "markers": [
+            "weighted-raw-codec: passed families=5 dtypes=3",
+            "weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true adoption_bits=true payload_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-raw",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "4d0e062fe37d0c67d4831ce70a3c852c0e34d4e0d576993af574ff4ee4ef9f7a",
+          "markers": [
+            "weighted-raw-codec: passed families=5 dtypes=3",
+            "weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true adoption_bits=true payload_dtype=float16 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-projection",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b4a74c8157c4ff4232f13e4d2559ac68c37550e0ad63a7f6c70f299f445f6a0e",
+          "markers": [
+            "weighted-projection: passed configurations=4 replay_rows=48 shared_banks=3 all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-projection",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "7616022db957a6ec5af7913a19cfe092d13d3aa212a17898244273d86d7f958a",
+          "markers": [
+            "weighted-projection: passed configurations=4 replay_rows=48 shared_banks=3 all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-convolution",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "78d12574642c70d32fd4bc7e8cd89d72c1bb903e85b3ebabfaa07d8da4c8ac80",
+          "markers": [
+            "weighted-convolution: passed tap_counts=2 replay_rows=20 shared_banks=3 saved_reverse=true raw_update_composition=true int64_taps=true failed_no_commit=true adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-convolution",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "19bdefa3cae72eff93b4de854edb453bbfb1d9b3a0d9a0664f7e2ca3814e9a07",
+          "markers": [
+            "weighted-convolution: passed tap_counts=2 replay_rows=20 shared_banks=3 saved_reverse=true raw_update_composition=true int64_taps=true failed_no_commit=true adjoint_dtype=float32"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 62.3509830199182,
+        "job_id": "core5-half-primitives-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:09:36.563948+00:00"
+      }
+    },
+    {
+      "source": "2e4d445e49118d10b0d02a13f19379c99ff15478",
+      "state": "passed",
+      "started": "2026-10-27T21:06:19.839820+00:00",
+      "finished": "2026-10-27T21:08:03.562238+00:00",
+      "exit_code": 0,
+      "name": "core5-half-primitives-cuda-qualify",
+      "unit": "tide-core5-half-primitives-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "df60df16d84944163bff54c923ef1aeb9228559a30940c60e0482c9b1c6ccf61",
+      "log_sha256": "8b2922553254726bd9cfad3f869a8cf2da50a2ad8460287f0dd75f527a9ea494",
+      "build": {
+        "component_sha256": "aed4724c5ae0c97b01ef81acbe8a2cd7ddcb97901f518e2e3685e1d781e4c7e7",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-raw",
+          "weighted-projection",
+          "weighted-convolution"
+        ],
+        "binary_sha256": {
+          "tide-weighted-raw-check": "50e9f439af9c696796fb33df06d048920141c8998eba7a0da609038ac4429e59",
+          "tide-weighted-projection-check": "d717e096b4b2fffa248343a3b08303844f18d836447bc059ecafc9b1061535c7",
+          "tide-weighted-convolution-check": "67d9720b4ffca7f629d58fb170029298a1325eb77d254e457189e9f0d573f8e5"
+        },
+        "loader_sha256": {
+          "tide-weighted-raw-check": "ed1dd48cdc5f81fbf4af8b9d16d1a8c517b18712f6435e4beb87949f3d4027d1",
+          "tide-weighted-projection-check": "c071a8263ca817b12ad8392f3c2690a6195f8a0137e84d0d3b1778e4938ffa34",
+          "tide-weighted-convolution-check": "a8b9771e848a1bb25bbedd32b6844af83019646355bed35cc88b6d649ea336f5"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "codec_log_sha256": "f56421443989e357601a431a870da95d3ee531e93fdb48287cecbbe5b7e79c38",
+      "cuda": {
+        "configured_commands": 160,
+        "selected_compile_commands": 12,
+        "effective_architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "a8fab33f4c0fdbeaf57f1d95f8a1e87e92fe12e8ce8e5265f8a5182c759adec3",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "raw": "49ac8c3d7937d1465785c4d8945105f2626eeccffcdd58477b17866b888127ec",
+        "projection": "e636a79aa24bb998cdfa0e92d7995f6b079f5a67b31395fa4e163b7741af2e91",
+        "convolution": "80dc30827acd6ea3e66c3ff146778ae7b2869ced62b87bcb128c1fbe43e4560d"
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "core5-raw-half-npu-qualify",
+      "reason": "Build passed; CPU codec correctly refused a subnormal test placed in the required-zero adapter field. Witness moved to actual keys/H in 9d547ea.",
+      "source": "2097dc9e808364e907d0e860000605a6802c6a69",
+      "state": "failed",
+      "started": "2026-10-27T21:00:46.591337+00:00",
+      "finished": "2026-10-27T21:01:53.270876+00:00",
+      "exit_code": 2,
+      "status_sha256": "2253e662bd8ded0a9f11ada420d57b5e31969b4476c8b1d3db4d211e82b1941f",
+      "log_sha256": "8001d89bf788b03e03ee48e72e84041e6538fb1c4c9c24e4b9dfe0ee95a2b65f"
+    },
+    {
+      "name": "core5-raw-half-cuda-qualify",
+      "reason": "Launcher omitted private Ninja from PATH; CMake configuration failed before compilation.",
+      "source": "2097dc9e808364e907d0e860000605a6802c6a69",
+      "state": "failed",
+      "started": "2026-10-27T21:00:46.590778+00:00",
+      "finished": "2026-10-27T21:00:46.794748+00:00",
+      "exit_code": 1,
+      "status_sha256": "d4b25f359f49f9ae71786a43a22fd6885f40fa50d5bf35092a2aae260f4d7d5d",
+      "log_sha256": "7617ae117739a048a5f68774180d5251aee4b37b983c07aadd7aa09e39c53c19"
+    },
+    {
+      "name": "core5-raw-half-cuda-qualify2",
+      "reason": "Launcher substitution changed the core path to a nonexistent directory; no compilation.",
+      "source": "2097dc9e808364e907d0e860000605a6802c6a69",
+      "state": "failed",
+      "started": "2026-10-27T21:01:22.482901+00:00",
+      "finished": "2026-10-27T21:01:22.544571+00:00",
+      "exit_code": 1,
+      "status_sha256": "c65de9e4a52b77adbd8746b63848a82fa0c8fee472b79189860d6f9cbdc78e2e",
+      "log_sha256": "cf33ffb81bc3b425c7eb84ee17044c5da4cb5d3be40e2e6b16951141075c9b96"
+    },
+    {
+      "name": "core5-raw-half-npu-qualify2",
+      "reason": "FP32 passed; FP16 rejected before execution because the check omitted allow_npu_float16. Fixed in 2e4d445.",
+      "source": "9d547ea354a54ce73f368c339539d4fbb4a24ed6",
+      "state": "failed",
+      "started": "2026-10-27T21:02:54.593851+00:00",
+      "finished": "2026-10-27T21:04:27.299651+00:00",
+      "exit_code": 1,
+      "status_sha256": "1ad24ed1df23cccfe8d56aaf741908ca94df4d4371e356fe8b6456c18aee1a71",
+      "log_sha256": "cacf1024d5137b37c122f9bff1679c89c556069c6d9574b6bbd0e7719534bea3"
+    },
+    {
+      "name": "core5-half-math-npu-qualify",
+      "reason": "Stopped during build after detecting the same missing half-entry capability. Terminal cancelled/143; no numerical claim.",
+      "source": "661a92ef279293e0325dcc4c6e775ed5d15ca8de",
+      "state": "cancelled",
+      "started": "2026-10-27T21:04:28.295104+00:00",
+      "finished": "2026-10-27T21:04:58.664875+00:00",
+      "exit_code": 143,
+      "status_sha256": "13b7c7638bf7294d98355175f0d29e303c9f553edb724cd36a5bbbb0f197f89f",
+      "log_sha256": "263abec9de9d58c77e0db5638b15db28e261b6b184f12067eea8cfb3dc09726d"
+    }
+  ],
+  "contract": {
+    "storage": [
+      "float32",
+      "float16"
+    ],
+    "arithmetic": "float32 vendor operators; one final half store; int64 metadata",
+    "adjoints": "explicit FP32 first-order identity-cast VJP at actual quantized operands, not half-leaf accumulation or derivative of rounding staircase",
+    "underflow": "subnormal and rounded zero checked exactly; connections retained",
+    "overflow": "half-store overflow refused before owner adoption"
+  },
+  "limits": [
+    "Local components only, not complete half memory, graph, optimizer or checkpoint qualification.",
+    "No Python-owned FP16 component run in this report.",
+    "CUDA build/loader/help only; no GPU hardware or performance conclusion."
+  ],
+  "reproduction": [
+    "git checkout 2e4d445e49118d10b0d02a13f19379c99ff15478",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE --jobs 2 --runtime standalone --checks weighted-raw weighted-projection weighted-convolution --ascendc-soc SOC",
+    "python scripts/verify_device_control.py --build-dir NEW_DEVICE --device npu:0 --checks weighted-raw weighted-projection weighted-convolution --output-dir NEW_CHECKS",
+    "CUDA build uses matching core, --cuda-architectures '80;90;100' and no Ascend SoC; GPU runtime remains separately required.",
+    "python -m pytest -q tests/test_resident_weighted_projection_norm.py tests/test_resident_weighted_convolution.py tests/test_resident_weighted_raw_update.py"
+  ]
+}

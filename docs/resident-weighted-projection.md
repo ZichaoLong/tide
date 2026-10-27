@@ -40,4 +40,4 @@ permute 和 batch_matmul；可选 bias 用 vendor add。没有输入值的主机
 入口 `verify_device_control.py --checks weighted-projection --device npu:0`。
 CPU helper、实际NPU、CUDA构建与GPU真机分别记录；局部投影资格不自动扩展为五记忆或完整常驻图资格。
 
-FP32固定源码资格见[2af401d运行证据](evidence/core5-resident-projection-20261027.md)。FP16扩展开发中，尚未资格。
+FP32固定源码资格见[2af401d运行证据](evidence/core5-resident-projection-20261027.md)。FP32/FP16组件扩展见[2e4d445固定资格](evidence/core5-resident-half-primitives-20261028.md)。

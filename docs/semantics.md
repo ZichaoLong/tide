@@ -123,7 +123,7 @@ publication. Full graph and retained training owners remain separate layers.
 [Resident raw state](resident-weighted-state.md) packs named floating fields and
 int64 clocks/cache timestamps separately. Its explicit detached codec restores
 actual raw tuples, including expired entries retained by zero reception. The
-FP32 resident cache action and independent field VJP preserve original-time
+FP32/FP16 raw-storage cache action and declared FP32 field VJP preserve original-time
 membership, saved inputs, None/zero connections and guarded adoption. Numerical
 memory formulas and full graph/checkpoint lifecycle require separate composition.
 The [fixed-time convolution component](resident-weighted-convolution.md) packs
