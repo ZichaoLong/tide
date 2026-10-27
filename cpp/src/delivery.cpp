@@ -1,5 +1,6 @@
 #include "tide/delivery.h"
 #include "tide/transfer.h"
+#include "tide/weighted.h"
 #include <algorithm>
 
 namespace tide {
@@ -16,7 +17,10 @@ Delivery prepare_delivery(const Graph& g,const Model& m,const std::vector<Event>
       if(binding.kind==1) {
         const auto& edge=g.edges[id];
         if(e.time>std::numeric_limits<Index>::max()-edge.delay)throw std::overflow_error("logical time overflow");
-        auto value=emission.value*m.edge_scale[id].to(emission.value.device());
+        // The weighted binding already validates fixed unit transport. Preserve
+        // actual broadcast aliases so equal-input computation can be reused.
+        auto value=dynamic_cast<const weighted::MemoryKernel*>(m.nodes[e.node].kernel.get())?
+          emission.value:emission.value*m.edge_scale[id].to(emission.value.device());
         const auto target=m.nodes[edge.target].bias.device();
         if(value.device()!=target)
           groups[{value.device().str(),target.str(),value.scalar_type(),value.sizes().vec()}].push_back(result.messages.size());

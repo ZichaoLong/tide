@@ -32,10 +32,14 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
             by_node[node].append(event); by_sequence[batch, node].append(event)
             by_time[time].append(event)
             by_frame[batch, time].append(event); events.append(event)
+    if packed:
+        from .aggregate_sharing import evaluate_shared
+        evaluate_shared(graph, model, by_node, stats, packed=packed, aggregate_autograd=aggregate_autograd)
     for node in by_node:
         es = by_node[node]
-        evaluate_aggregate(graph, model, es, packed=packed, aggregate_autograd=aggregate_autograd)
-        stats["aggregate_calls"] = stats.get("aggregate_calls", 0) + (1 if packed else len(es))
+        if not packed:
+            evaluate_aggregate(graph, model, es, packed=packed, aggregate_autograd=aggregate_autograd)
+            stats["aggregate_calls"] = stats.get("aggregate_calls", 0)+len(es)
         if torch.is_grad_enabled() and packed:
             key = "batched_aggregate_events" if aggregate_autograd == "batched" else "semantic_aggregate_replays"
             stats[key] = stats.get(key, 0) + len(es)
@@ -178,7 +182,7 @@ def deliver(graph, model, events, fibers, messages, outputs, *, packed=True, sta
                 arrival = time + edge.delay
                 if arrival >= 2**63:
                     raise ValueError("logical time overflow")
-                payload = value * model.edge_scale[source].to(value.device)
+                payload = value if getattr(model, "identity_transport", False) else value * model.edge_scale[source].to(value.device)
                 a = Atom(batch, edge.target, arrival, 1, source, time, payload)
                 atoms.append(a); destinations.append(model.nodes[edge.target].bias.device)
             else:

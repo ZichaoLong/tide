@@ -19,6 +19,9 @@ class AggregateKernel {
   virtual bool joint_batch() const { return false; }
   virtual bool joint_sources() const { return false; }
   virtual bool batched_autograd() const { return false; }
+  // An opt-in pure-function key scoped to one evaluation block. Empty disables
+  // sharing. Equal keys must preserve the complete result and input roots.
+  virtual std::string sharing_key(const NodeWeights&, const AggregateInput&) const { return {}; }
   virtual std::vector<AggregateResult> batch_grad(const NodeWeights&, const std::vector<AggregateInput>&) const;
   virtual AggregateBatch source_batch(const NodeWeights& w, const std::vector<AggregateInput>& r) const {
     return {batch(w, r), {}, {}};
@@ -29,4 +32,5 @@ std::shared_ptr<const AggregateKernel> make_aggregate_kernel(const Node&);
 Tensor evaluate_aggregate(const Graph&, const Model&, std::vector<Event>&, const std::vector<size_t>&,
                           bool packed, bool packed_sources = false, const std::string& autograd = "replay");
 void validate_aggregate_autograd(const Model&, const Options&);
+AggregateInput aggregate_request(const Graph&, const Model&, const Event&);
 }  // namespace tide

@@ -4,6 +4,7 @@
 #include "weighted_aggregate.h"
 #include "weighted_mean.h"
 #include "weighted_source.h"
+#include "weighted_sharing.h"
 #include "weighted_query_batch.h"
 #include "weighted_query_vjp.h"
 #include "tide/aggregate.h"
@@ -17,6 +18,9 @@ class Aggregate final:public AggregateKernel {
   Aggregate(SourceClasses classes,double alpha,double epsilon):classes_(std::move(classes)),alpha_(alpha),epsilon_(epsilon){}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
+  std::string sharing_key(const NodeWeights& w,const AggregateInput& r) const override {
+    return aggregate_key(w,r,classes_,alpha_,epsilon_);
+  }
   std::vector<AggregateResult> batch_grad(const NodeWeights& w,const std::vector<AggregateInput>& requests) const override {
     return aggregate_batch_vjp(w,requests,classes_,alpha_,epsilon_);
   }

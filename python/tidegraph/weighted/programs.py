@@ -23,6 +23,10 @@ class WeightedAggregate(AggregateProgram):
     joint_batch = True
     batched_autograd = True
 
+    def sharing_key(self, request):
+        from .sharing import aggregate_key
+        return aggregate_key(self, request)
+
     def batch_grad(self, weights, requests):
         from .aggregate_vjp import evaluate
         return evaluate(self, weights, requests)

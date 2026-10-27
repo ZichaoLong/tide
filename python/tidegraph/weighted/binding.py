@@ -29,6 +29,8 @@ def memory_profile(config):
 
 
 class WeightedModel(Model):
+    identity_transport = True  # Validated unit scales; keep broadcast Tensor aliases.
+
     def validate_binding(self, graph):
         if graph.identity != self.graph_identity:
             raise ValueError("weighted graph/model binding mismatch")
