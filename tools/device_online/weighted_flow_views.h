@@ -6,7 +6,7 @@
 namespace tide::device_online {
 struct WeightedFlowNode;
 struct WeightedFlowView {
-  at::Tensor present,times,content;
+  at::Tensor present,times,content,bank;
   WeightedRawState old,proposal;
   std::map<std::string,at::Tensor> describe;
   at::Tensor control,active,full,payload;

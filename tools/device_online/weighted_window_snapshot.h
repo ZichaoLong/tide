@@ -5,6 +5,7 @@ namespace tide::device_online {
 struct WeightedWindowSnapshot {
   Graph graph;Model model;Continuation boundary;
   at::Device device=at::kCPU;WeightedFlowLimits limits;
+  std::vector<at::Device> node_devices;
   int64_t samples=0,start=0,generation=0,bytes=0,bank_bytes=0;
   at::Tensor stages;AtomBatch external,pending;
   std::shared_ptr<WeightedWindowJournal> journal;

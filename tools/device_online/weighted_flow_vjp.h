@@ -25,6 +25,9 @@ WeightedNodeGradient append_weighted_node_vjp(DeviceProgram&,TaskServices&,const
 WeightedRegionAdjoint append_weighted_flow_region_vjp(DeviceProgram&,TaskServices&,const WeightedFlowRegion&,
   const WeightedFlowNodes&,const std::map<int64_t,WeightedRowAdjoint>& controls,
   const at::Tensor& error,const WeightedFlowBudget&);
+WeightedRegionAdjoint append_weighted_region_views_vjp(DeviceProgram&,TaskServices&,const WeightedFlowRegion&,
+  const std::vector<WeightedFlowView>&,const std::map<int64_t,WeightedRowAdjoint>& controls,
+  const at::Tensor& error,const WeightedFlowBudget&);
 namespace weighted_reverse {
 WeightedRowAdjoint zeros(DeviceProgram&,const at::Tensor& shape);
 WeightedRawAdjoint zeros(DeviceProgram&,const WeightedRawLayout&,const at::Tensor& shape);

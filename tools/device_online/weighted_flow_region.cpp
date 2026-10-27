@@ -23,7 +23,7 @@ void append_weighted_region_views(DeviceProgram& p,TaskServices& services,Weight
   for(int64_t j=0;j<members;++j){auto& n=nodes[r.nodes[j]];n.control=weighted_columns(p,controls,j,1).reshape({samples});n.active=weighted_columns(p,actives,j,1).reshape({samples});}
 }
 WeightedFlowView weighted_flow_view(const WeightedFlowNode& n){
-  return {n.input.present,n.input.times,n.aggregate->output,n.old,n.proposal,n.describe->fields,n.control,n.active,n.full,n.payload};
+  return {n.input.present,n.input.times,n.aggregate->output,n.input.bank,n.old,n.proposal,n.describe->fields,n.control,n.active,n.full,n.payload};
 }
 void append_weighted_region_local(DeviceProgram& p,TaskServices& services,WeightedFlowRegion& r,const WeightedFlowNodes& nodes,
   const at::Tensor& error,const WeightedFlowBudget& remaining){

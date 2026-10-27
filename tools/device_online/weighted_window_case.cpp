@@ -10,12 +10,12 @@ void leaf(Continuation& q){for(auto& a:q.pending)leaf(a.value);for(auto& [key,s]
   for(auto& [name,x]:s.slots)if(x.scalar_type()==at::kFloat)leaf(x);}}
 }
 void run_window(at::Device device,Graph g,Model m,std::vector<External> xs,
-    const std::string& label,bool split,bool prefill,bool retained){
+    const std::string& label,bool split,bool prefill,bool retained,const std::vector<at::Device>& node_devices){
   auto mark=[&](const std::string& phase){std::cout<<"weighted-window phase "<<label<<' '<<phase<<'\n'<<std::flush;};
   for(auto& x:xs)leaf(x.value);
   Continuation q;q.identity=g.identity;q.batch_size=2;WeightedFlowLimits limits;limits.cache=16;limits.stages=32;limits.queue=64;
   limits.tensor_bytes=768*1024*1024;limits.operator_bytes=128*1024*1024;limits.timeout_ms=60000;limits.prefill=prefill;
-  at::NoGradGuard ng;mark("construct-forward");WeightedFlow forward(g,m,q,device,limits);
+  at::NoGradGuard ng;mark("construct-forward");WeightedFlow forward(g,m,q,device,limits,node_devices);
   if(split){std::vector<External> first,tail;for(const auto& x:xs)(x.time<4?first:tail).push_back(x);
     mark("advance-head");q=forward.advance(first,4).continuation;leaf(q);xs=tail;}
   mark("advance-tail");auto actual=forward.advance(xs,10);
@@ -30,6 +30,9 @@ void run_window(at::Device device,Graph g,Model m,std::vector<External> xs,
     mark("overwrite-forward");forward.advance({},12);forward.close();saved->validate();
   }
   mark("construct-adjoint");auto owner=retained?std::make_unique<WeightedWindowAdjoint>(saved):std::make_unique<WeightedWindowAdjoint>(forward);auto& vjp=*owner;
+  for(size_t v=0;v<vjp.nodes().size();++v){const auto& n=*vjp.nodes()[v];const auto target=node_devices.empty()?device:node_devices.at(v);
+    if(n.state.floating.device()!=target||n.full.device()!=target)throw std::runtime_error("node adjoint numerical owner ignored placement");
+    for(const auto& [name,role]:n.banks.roles())if(role.bank.device()!=target)throw std::runtime_error("node adjoint bank ignored placement");}
   mark("decode-adjoint");const auto records=vjp.records();
   Result expected;{at::AutoGradMode enabled(true);Options options;options.packed=false;expected=Greedy(g,m,options).run(q,xs,10,10);}
   tide_bench::compare(actual,expected,true,at::kFloat);

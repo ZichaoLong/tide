@@ -10,6 +10,8 @@ int64_t WeightedWindowAdjoint::remaining(DeviceProgram& p)const{
     for(const auto& [name,r]:n.describe)row(r);}
   row(roots_.pending);row(roots_.messages);row(roots_.fibers);
   auto programs=services_->programs();
+  if(peers_){auto ps=peers_->programs();programs.insert(programs.end(),ps.begin(),ps.end());
+    auto xs=peers_->tensors();held.insert(held.end(),xs.begin(),xs.end());}
   programs.insert(programs.end(),source_->programs.begin(),source_->programs.end());
   held.insert(held.end(),source_->held.begin(),source_->held.end());
   auto nodes=[&](const auto& collection){for(const auto& n:collection){
@@ -31,8 +33,9 @@ void WeightedWindowAdjoint::check()const{
 int64_t WeightedWindowAdjoint::reserved_bytes()const{check();return budget_-remaining(*program_);}
 void WeightedWindowAdjoint::run(){
   check();const auto& s=*source_;
-  try{c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());services_->submit();
-    program_->run(s.limits.timeout_ms);services_->wait(s.limits.timeout_ms);
+  try{error_.zero_();peers_->synchronize_inputs();c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());
+    peers_->submit();services_->submit();program_->submit();
+    program_->wait(s.limits.timeout_ms);services_->wait(s.limits.timeout_ms);peers_->wait();
     const auto code=error_.cpu().item<int32_t>();if(code)throw std::runtime_error("weighted window VJP refused, device error="+std::to_string(code));
   }catch(...){failed_=true;throw;}
 }
@@ -41,5 +44,5 @@ std::map<std::string,at::Tensor> WeightedWindowAdjoint::records()const{
   result["right.pending.meta"]=s.pending.coordinates.cpu().clone();
   result["right.pending.present"]=s.pending.valid.cpu().clone();return result;
 }
-void WeightedWindowAdjoint::close(){if(program_){program_->close();services_->close();program_.reset();services_.reset();}}
+void WeightedWindowAdjoint::close(){if(program_){program_->close();services_->close();peers_->close();program_.reset();services_.reset();peers_.reset();}}
 }

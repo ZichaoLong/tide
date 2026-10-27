@@ -7,7 +7,8 @@ WeightedWindowAdjoint::WeightedWindowAdjoint(WeightedFlow& forward,int64_t budge
 WeightedWindowAdjoint::WeightedWindowAdjoint(std::shared_ptr<const WeightedWindowSnapshot> source,int64_t budget):source_(std::move(source)){construct(budget);}
 void WeightedWindowAdjoint::construct(int64_t budget){
   if(at::GradMode::is_enabled()||!source_||!source_->journal||source_->samples<1
-      ||source_->layouts.size()!=source_->graph.nodes.size()||source_->descriptors.size()!=source_->layouts.size())
+      ||source_->layouts.size()!=source_->graph.nodes.size()||source_->descriptors.size()!=source_->layouts.size()
+      ||source_->node_devices.size()!=source_->layouts.size())
     throw std::invalid_argument("weighted window adjoint requires complete no-grad saved operands");
   source_->validate();const auto& s=*source_;auto& journal=*s.journal;generation_=s.generation;
   if(budget<0)throw std::invalid_argument("negative weighted window total tensor budget");
@@ -26,19 +27,24 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   if(root_bytes+s.bytes>=budget_)throw std::invalid_argument("weighted window roots exceed total tensor budget before allocation");
   program_=std::make_unique<DeviceProgram>(device);auto& p=*program_;p.limit_workspace(s.limits.operator_bytes);
   services_=std::make_unique<TaskServices>(p,device,s.limits.operator_bytes);auto& services=*services_;
+  peers_=std::make_unique<WeightedFlowPeers>(device,s.limits);
   error_=at::zeros({1},options);stage_=at::zeros_like(s.stages);const auto& error=error_;
   Continuation initial;initial.identity=s.graph.identity;initial.batch_size=samples;initial.cut=0;
   auto remaining=[&](DeviceProgram& worker){return this->remaining(worker);};
-  for(int64_t v=0;v<count;++v){nodes_.push_back(std::make_unique<WeightedFlowNode>(s.model,v,initial,device,s.limits.cache,budget_));auto& n=*nodes_.back();
-    auto& worker=services.begin();n.source=bind_weighted_flow_source(worker,n.banks,s.graph,v,n.binding,error,remaining(worker));services.end(worker);
+  for(int64_t v=0;v<count;++v){nodes_.push_back(std::make_unique<WeightedFlowNode>(s.model,v,initial,s.node_devices[v],s.limits.cache,budget_));auto& n=*nodes_.back();
     const auto prefix="node."+std::to_string(v)+".";WeightedWindowNodeRoots r;
     r.content=weighted_window::row(journal.field(prefix+"content"));r.control=weighted_window::row(journal.field(prefix+"control").unsqueeze(-1));
     r.full=weighted_window::row(journal.field(prefix+"full"));r.old=weighted_window::raw(n.layout,journal.field(prefix+"old.float"));
-    r.proposal=weighted_window::raw(n.layout,journal.field(prefix+"proposal.float"));r.final=weighted_window::raw(n.layout,n.state.floating,1);
+    r.proposal=weighted_window::raw(n.layout,journal.field(prefix+"proposal.float"));r.final=weighted_window::raw(n.layout,s.final[v].floating,1);
     for(const auto& name:s.descriptors[v])r.describe[name]=weighted_window::row(journal.field(prefix+"describe."+name));
     roots_.nodes.push_back(std::move(r));
   }
   for(size_t r=0;r<s.graph.regions.size();++r)regions_.push_back(std::make_unique<WeightedFlowRegion>(s.graph,s.model,r,initial,device));
+  peers_->bind(s.graph,nodes_,remaining);
+  for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];auto& worker=services.begin();
+    n.source=bind_weighted_flow_source(worker,n.banks,s.graph,v,n.binding,error,remaining(worker));services.end(worker);}
+  std::vector<at::Tensor> classes;for(const auto& n:nodes_)classes.push_back(n->source.classes.to(device));
+  peers_->append_begin(p,error);
   roots_.pending=weighted_window::row(s.pending.values,1);
   roots_.messages=weighted_window::row(journal.field("message.values"));roots_.fibers=weighted_window::row(journal.field("fiber.values"));
   WeightedReverseEvents events{at::zeros({stages,count,samples},options.dtype(at::kLong)),at::zeros({stages,count,samples},options.dtype(at::kBool)),
@@ -62,28 +68,34 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   ReadyBatch ready;ready.atoms={journal.load(p,stage_,"fiber.meta"),journal.load(p,stage_,"fiber.values"),journal.load(p,stage_,"fiber.present")};
   ready.fibers=journal.load(p,stage_,"fiber.rows");ready.fiber_offsets=journal.load(p,stage_,"fiber.offsets");ready.counts=journal.load(p,stage_,"counts");
   weighted_window::route(p,ready.atoms,weighted_window::load(p,stage_,roots_.fibers),edges,events,boundary_,stage_,begin,error);
-  for(int64_t v=0;v<count;++v){auto& n=*nodes_[v];const auto prefix="node."+std::to_string(v)+".";
-    auto& worker=services.begin();auto& p=worker;
-    weighted_copy(p,n.state.floating,journal.load(p,stage_,prefix+"old.float"));weighted_copy(p,n.state.integer,journal.load(p,stage_,prefix+"old.int"));
-    n.input=append_weighted_node_input(p,ready,n.source.classes,v,samples,s.graph.inputs.size(),error);
-    append_weighted_node_local(p,services,n,s.graph.regions[s.graph.nodes[v].region].read_mode,error,remaining);
-    services.end(worker);
-  }
-  for(auto& r:regions_){auto& worker=services.begin();append_weighted_region_local(worker,services,*r,nodes_,error,remaining);services.end(worker);}
-  for(auto& n:nodes_)append_weighted_node_full(services,*n,error,remaining);
+  std::vector<WeightedNodeInput> inputs;std::vector<WeightedRawState> old;
+  std::vector<WeightedFlowView> views(count);
+  for(int64_t v=0;v<count;++v){const auto prefix="node."+std::to_string(v)+".";
+    inputs.push_back(append_weighted_node_input(p,ready,classes[v],v,samples,s.graph.inputs.size(),error));
+    old.push_back({journal.load(p,stage_,prefix+"old.float"),journal.load(p,stage_,prefix+"old.int")});}
+  peers_->append_local_send(p,s.graph,nodes_,inputs,views,error,remaining,&old);
+  for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];auto& worker=services.begin();
+    weighted_copy(worker,n.state.floating,old[v].floating);weighted_copy(worker,n.state.integer,old[v].integer);n.input=inputs[v];
+    append_weighted_node_local(worker,services,n,s.graph.regions[s.graph.nodes[v].region].read_mode,error,remaining);
+    services.end(worker);views[v]=weighted_flow_view(n);}
+  peers_->append_local_receive(p,error);
+  for(auto& r:regions_){auto& worker=services.begin();append_weighted_region_views(worker,services,*r,views,error,remaining);services.end(worker);}
+  for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];n.control=views[v].control;n.active=views[v].active;
+    append_weighted_node_full(services,n,error,remaining);views[v].full=n.full;}
+  peers_->append_full(p,nodes_,views,error,remaining);
   auto event_values=weighted_window::load(p,stage_,events.values),event_flags=weighted_window::load(p,stage_,events.connected);
   std::map<int64_t,WeightedRowAdjoint> controls;std::vector<WeightedNodeRoots> locals;
   std::vector<WeightedRawAdjoint> rolling;std::vector<WeightedParameterPartial> partials;
   for(int64_t v=0;v<count;++v){auto& n=*nodes_[v];const auto& r=roots_.nodes[v];
     auto& worker=services.begin();auto& p=worker;
-    rolling.push_back({at::zeros(n.state.floating.sizes(),n.state.floating.options().dtype(at::kFloat)),at::zeros({samples,int64_t(n.layout.fields().size())},options.dtype(at::kBool))});
+    rolling.push_back({at::zeros(old[v].floating.sizes(),old[v].floating.options().dtype(at::kFloat)),at::zeros({samples,int64_t(n.layout.fields().size())},options.dtype(at::kBool))});
     auto control=weighted_reverse::zeros(p,at::zeros({samples,1},options.dtype(at::kFloat)));
-    weighted_reverse::add(p,control,weighted_window::load(p,stage_,r.control),n.input.bank,error);
-    weighted_reverse::add(p,control,{weighted_columns(p,event_values[v],0,1),event_flags[v]},n.input.bank,error);controls[v]=control;
-    WeightedNodeRoots local;local.content=weighted_window::load(p,stage_,r.content);local.full=weighted_reverse::zeros(p,n.full);
-    weighted_reverse::add(p,local.full,weighted_window::load(p,stage_,r.full),n.input.bank,error);
-    weighted_reverse::add(p,local.full,{weighted_columns(p,event_values[v],1,width-1),event_flags[v]},n.input.bank,error);
-    local.proposal=weighted_reverse::zeros(p,n.layout,n.state.floating);
+    weighted_reverse::add(p,control,weighted_window::load(p,stage_,r.control),inputs[v].bank,error);
+    weighted_reverse::add(p,control,{weighted_columns(p,event_values[v],0,1),event_flags[v]},inputs[v].bank,error);controls[v]=control;
+    WeightedNodeRoots local;local.content=weighted_window::load(p,stage_,r.content);local.full=weighted_reverse::zeros(p,views[v].full);
+    weighted_reverse::add(p,local.full,weighted_window::load(p,stage_,r.full),inputs[v].bank,error);
+    weighted_reverse::add(p,local.full,{weighted_columns(p,event_values[v],1,width-1),event_flags[v]},inputs[v].bank,error);
+    local.proposal=weighted_reverse::zeros(p,n.layout,old[v].floating);
     weighted_reverse::add(p,n.layout,local.proposal,rolling.back(),error);
     weighted_reverse::add(p,n.layout,local.proposal,weighted_window::load(p,stage_,r.proposal),error);
     for(const auto& [name,g]:r.describe)local.describe[name]=weighted_window::load(p,stage_,g);
@@ -91,17 +103,19 @@ void WeightedWindowAdjoint::construct(int64_t budget){
     services.end(worker);
   }
   for(auto& r:regions_){auto& worker=services.begin();auto& p=worker;
-    auto g=append_weighted_flow_region_vjp(p,services,*r,nodes_,controls,error,remaining);
+    auto g=append_weighted_region_views_vjp(p,services,*r,views,controls,error,remaining);
     partials.insert(partials.end(),g.parameters.begin(),g.parameters.end());
     for(const auto& [v,fields]:g.describe)for(const auto& [name,part]:fields){auto combined=weighted_reverse::zeros(p,part.value);
-      weighted_reverse::add(p,combined,locals[v].describe.at(name),nodes_[v]->input.bank,error);
-      weighted_reverse::add(p,combined,part,nodes_[v]->input.bank,error);locals[v].describe[name]=combined;}services.end(worker);}
+      weighted_reverse::add(p,combined,locals[v].describe.at(name),inputs[v].bank,error);
+      weighted_reverse::add(p,combined,part,inputs[v].bank,error);locals[v].describe[name]=combined;}services.end(worker);}
+  std::vector<WeightedNodeGradient> gradients(count);
+  peers_->append_reverse(p,s.graph,nodes_,locals,gradients,error,remaining);
   for(int64_t v=0;v<count;++v){auto& n=*nodes_[v];const auto& r=roots_.nodes[v];
     auto& worker=services.begin();auto& p=worker;
-    auto g=append_weighted_node_vjp(p,services,n,s.graph.regions[s.graph.nodes[v].region].read_mode,locals[v],error,remaining);
+    auto g=s.node_devices[v]==device?append_weighted_node_vjp(p,services,n,s.graph.regions[s.graph.nodes[v].region].read_mode,locals[v],error,remaining):gradients[v];
     weighted_reverse::add(p,n.layout,g.old,weighted_window::load(p,stage_,r.old),error);
     weighted_copy(p,rolling[v].value,g.old.value);weighted_copy(p,rolling[v].connected,g.old.connected);
-    append_weighted_reverse_route(p,ready.atoms,n.input.indices,n.input.lengths,g.payload,g.connected,edges,events,boundary_,stage_,begin,error);
+    append_weighted_reverse_route(p,ready.atoms,inputs[v].indices,inputs[v].lengths,g.payload,g.connected,edges,events,boundary_,stage_,begin,error);
     partials.insert(partials.end(),g.parameters.begin(),g.parameters.end());
     services.end(worker);
   }
@@ -125,6 +139,6 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   weighted_window::route(p,s.pending,roots_.pending,edges,events,boundary_,stage_,begin,error);p.branch(index,{test});
   p.mark(done);
   for(int64_t v=0;v<count;++v){auto& worker=services.begin();left_.push_back(weighted_window::mask(worker,nodes_[v]->layout,rolling[v],journal.boundary("node."+std::to_string(v)+".present"),error));services.end(worker);}
-  services.append_stop();remaining(p);services.finish();p.finish();remaining(p);
+  peers_->append_stop(p);services.append_stop();remaining(p);services.finish();peers_->finish();p.finish();remaining(p);
 }
 }

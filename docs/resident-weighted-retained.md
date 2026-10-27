@@ -8,6 +8,8 @@
 `WeightedWindowSnapshot::retain`在窗口边界复制候选实际journal、完整raw字段、精确int64元数据、
 存在位、左右pending及外部输入身份，并保留真实参数值及alias分区。它不调用参考递归、不预跑
 未来轨迹、不用有效状态投影代替raw解码。保存前按实际张量尺寸检查独立字节预算。
+快照另保存节点物理放置，边界raw镜像只复制实际计算结果；局部反向回到原owner，
+公开根与跨窗桥保留coordinator布局。具体见[节点放置](resident-weighted-placement.md)。
 GPU张量与CPU参数快照有版本检查，原地改写即使数值相同也使记录失效。
 
 `WeightedWindowAdjoint(saved)`不依赖原前向owner存活；复用已声明的实际journal逆序算法。
