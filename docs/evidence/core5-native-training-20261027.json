@@ -1,0 +1,52 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "efe3353fc0deb8c22264280cd88e7099cee4e6001c1a6bf04e92ac069e9558e2",
+  "source": "a7106fc0dc90d1eefdd77662d9df392b7f2b36cc",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Standalone LibTorch complete weighted graph training and exact raw numerical checkpoint; CPU FP64/FP32",
+  "result": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0
+  },
+  "standalone_graph_cases_per_dtype": 24,
+  "updates_per_case": 4,
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "33ee646c8338f68ae0c2fe69fc4ab64c51e023b8210c985616267b4fb8d4e39a",
+  "git_tree": "6efba49f16535366a5975228d041019c913f737f",
+  "binary_sha256": {
+    "libtidegraph.a": "78da4f30b81b452f266dbd67dac2258100667b3bf0e975c56df30b3581a4b2cc",
+    "_tide_native.so": "5e279c95015992c8be391736a372875a81455b18de9e8097a438485b8f76aefd",
+    "tidegraph-weighted-training-check": "7d8d12884351a7c42c008858a4551b9e747a2127c00024ffd6393bb6ceada725",
+    "tidegraph-checkpoint-check": "be16c744ca3717df9395967b54900fedef3785c5b35fc40d35470fd3147659a1",
+    "tidegraph-optimizer-check": "12360760458cd432885ebbcb7f6b75a72055ad2f0973609827804468da16746d"
+  },
+  "log_sha256": "4ed31610f976c8132ac48c74f0d337b224b3b6af5252976aba9ea23e12e71437",
+  "started": "2026-10-27T10:32:22.560617+00:00",
+  "finished": "2026-10-27T10:33:49.383208+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-native-training-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-native-training-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_cpp_weighted_training.py",
+      "tests/test_cpp_checkpoint.py",
+      "tests/test_cpp_optimizer.py",
+      "tests/test_cpp_accelerator.py",
+      "tests/test_cpp_greedy.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-native-training-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes checked by develop.py --reuse-build; build baseline field is not qualification source identity."
+}

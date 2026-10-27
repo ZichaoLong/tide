@@ -26,32 +26,28 @@
 | 503f609 | 来源绑定/类别宽度、稳定 Attention/RMS VJP | 665 | [报告](evidence/core5-source-20261027.md) |
 | 52dee1e | Aggregate 精确计算复用 | 543 | [报告](evidence/core5-sharing-20261027.md) |
 | 6dc2665 | KV 基座投影复用 | 309 | [报告](evidence/core5-kv-sharing-20261027.md) |
+| a7106fc | standalone 训练/完整数值 checkpoint | 20 | [报告](evidence/core5-native-training-20261027.md) |
 
 ## 当前任务与精确下一动作
 
-KV 基座投影复用实现 6dc2665c4fbd9053173bbd9d26c7e1b03b62abae 已完成固定资格：
-unit tide-core5-kv-sharing-qualify-20261027，inactive/success、exit 0，309 passed / 0 failed / 0 skipped。
-worktree artifacts/worktrees/core5-bootstrap 干净，tree 8a2f2705a9021a7ee2bd05d41ea0c74b5b6d7c08；
-输出 artifacts/jobs/core5-kv-sharing-qualify，build manifest 已独立保存；launcher .local/core5-kv-sharing-qualify.sh。
-证据 ffe6d8d 已推送；主工作区 native checkpoint 草稿不属于本资格。
+完整原生 checkpoint/standalone 训练 a7106fc 的固定资格已完成：
+unit tide-core5-native-training-qualify-20261027，inactive/success、exit 0；20 passed / 0 failed / 0 skipped。
+干净 worktree artifacts/worktrees/core5-bootstrap，tree 6efba49f16535366a5975228d041019c913f737f；
+输出 artifacts/jobs/core5-native-training-qualify，build manifest 已独立保存；launcher .local/core5-native-training-qualify.sh。
+证据将单独提交推送。当前没有活动任务。
 
-原生 checkpoint/standalone 训练开发 tree 4c70968719d7235a2459a72baab94a044fb60ebd 已通过：
-unit tide-core5-native-training-dev-20261027，inactive/success、exit 0；43 项编译/链接、20 passed / 0 failed / 0 skipped。
-输出 artifacts/jobs/core5-native-training-dev，build manifest 已独立保存；launcher .local/core5-native-training-dev.sh。
-原生进程每 dtype 覆盖五记忆/异构 × FC/HB/非对齐/反馈共 24 案例，三步 AdamW、保留图切点、
-含 pending checkpoint 换 owner 以及恢复后的第四次更新；真实原始 int64/非空 History/别名与加载拒绝通过。
-正从已测 tree 提交该增量；主工作区后续 weighted placement 草稿尚未编译，不混入本提交或资格。
+主工作区正在实现 weighted placement，尚未构建：结构化 Read 的临时记忆/参数/状态转移，
+区域 control/query 与 selection/分配分别放置，保留原参数身份与精确 raw int64；
+显式 scoring dtype、原始 VJP 版本检查与发送正支持的转换拒绝。
+Python/C++ 实现与 tests/test_weighted_placement.py 已写，仍需完善契约、构建并修正检查。
+短定向公式测试曾误把固定非 grad 参数列为梯度根，1 项失败；已修正测试根清单，待重测。
+这些草稿不属于 a7106fc 或本固定资格。
 
-下一步冻结该实现提交，启动 tide-core5-native-training-qualify-20261027，
-launcher .local/core5-native-training-qualify.sh、输出 artifacts/jobs/core5-native-training-qualify，--reuse-build、
-background.slice、单线程 ATen/BLAS、1200 秒上限。
-检查 `systemctl --user show tide-core5-native-training-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`、
-`cat artifacts/jobs/core5-native-training-qualify/status.json`、`tail -n 30 artifacts/jobs/core5-native-training-qualify/task.log`。
-尚未启动固定资格，不可标为通过。
-
-通过后提交该实现，再冻结实现提交进行同范围资格，单独提交证据并推送；
-继续 mixed/resident 前向/反向/optimizer/跨卡、有限 profiling 与最终追溯。
-CUDA 源码/构建/真机分别记录；总体剩余见 ROADMAP。
+下一步完成 placement 实现/契约与定向检查，冻结新的开发 tree，
+启动 tide-core5-weighted-placement-dev-20261027，launcher .local/core5-weighted-placement-dev.sh，
+输出 artifacts/jobs/core5-weighted-placement-dev；background.slice、2 build workers、单线程 ATen/BLAS、1200 秒上限。
+通过后提交实现，再固定资格并独立记录证据。继续真实 mixed/resident 前向/反向/optimizer/跨卡、
+有限 profiling 与最终追溯；CUDA 源码/构建/真机分别记录。总体剩余见 ROADMAP。
 
 ## 环境与保留事项
 
