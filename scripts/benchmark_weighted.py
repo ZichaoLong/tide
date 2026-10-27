@@ -138,7 +138,9 @@ def main():
         if parameters is not None:
             for name, value in reference.parameters().items():
                 torch.testing.assert_close(parameters[name], value, rtol=1e-5, atol=1e-6)
-        record.update(state="passed", post_measurement_complete_records=True, optimizer_values_checked=parameters is not None,
+        record.update(state="passed", post_measurement_complete_records=True,
+                      parameter_values_checked=parameters is not None,
+                      optimizer_values_checked=args.mode == "training" and parameters is not None,
                       metrics=metrics, load_average_after=list(os.getloadavg()))
         if metrics:
             times = [x["seconds"] for x in metrics]

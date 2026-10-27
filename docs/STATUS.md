@@ -88,7 +88,12 @@ NPU为两卡队列180秒、设备检查600秒；CPU guard4，standalone weighted
 预算300秒、queue180秒、gdb90秒、2卡；诊断终态exit0仅表示抓栈成功，不是数值通过。gdb结束inferior引发TBE子进程/信号量清理提示；原资格仍failed。
 同类审计发现weighted_training_trajectory.cpp最后master比较也借用了临时vector成员；一并改为持有master_owners。
 已在21ed86d报告补注：原任务passed状态不变，但该master断言不能作为可靠独立证据；Python与其他记录/VJP不受这处影响。
-下一步提交两处检查器生命周期修复，用新固定源码重做standalone weighted-training/weighted-peer两dtype；Python-owned和CUDA原资格单列。
+修复7db0b08已提交推送，CPU guard4项/0.75秒、peer C++语法通过。
+新固定checkout artifacts/worktrees/core5-peer-owner-lifetime（跟踪文件只读）；已启动core5-peer-owner-lifetime-{npu,cuda}-qualify；均active/running、Transient=yes、独立background.slice。
+units tide-JOB-20261028.service；日志/status/build/checks在artifacts/jobs/JOB/，launchers .local/JOB{,-workload}.sh。
+新build/npu、build/cuda，standalone weighted-training/weighted-peer各两dtype；NPU两卡queue180秒/device600秒，CPU guard4；
+CUDA两check的三架构build/loader/help。每任务1800秒、2workers/BLAS1、Nice10、独立background.slice。
+核对新资格终态与严格master/全体提交断言；Python-owned与CUDA原资格继续单列，不改写失败。
 
 ## 当前性能入口增量
 
@@ -96,7 +101,9 @@ NPU为两卡队列180秒、设备检查600秒；CPU guard4，standalone weighted
 纯Python KV/非对齐DAG prefill、SSD/HB streaming和Python调用native KV/DAG的短CPU入口检查通过；
 每项1个warmup+1个测量窗及事后完整独立记录/参数比较。这些dirty入口检查不是正式性能证据。
 另通过CPU推理profile入口，导出独立trace并事后核对完整记录。未启动受控性能测量。
-主区未提交：scripts/export_weighted_benchmark.py及tools/weighted_benchmark/，新增静态fixture编解码和独立C++完整计时消费者，尚待语法/构建/入口验证。Python exporter短检查通过；NPU入口资格和有限profiling继续。
+主区新增scripts/export_weighted_benchmark.py、build_weighted_benchmark.py及tools/weighted_benchmark/，静态fixture编解码和独立C++完整计时消费者。
+Python exporter通过；C++ fixture/records/main/resident/atomic record writer语法通过；初次fixture缺少tide/ops.h声明，修正后通过。
+完整CPU/NPU consumer构建与入口资格、有限profiling仍待运行。下一步固定此增量并单独构建consumer，不重编core；NPU consumer等待7db0b08新资格的matching组件。
 
 ## 保留限制与环境
 
