@@ -41,33 +41,18 @@ core5-resident-parameters-{npu,cuda}-qualify均clean/exit0/inactive，证据
 [evidence/core5-resident-parameters-20261027.json](evidence/core5-resident-parameters-20261027.json)。
 NPU保留原dev2 manifest并核验全部摘要；CUDA无GPU实测。worktree固定2e335e7，无活动reader。
 
-typed raw state与缓存作用在主工作区未提交：weighted_raw_state/update头与实现、
-weighted_raw_check.cpp、四个kernel入口、CMake/registry、CPU测试及契约resident-weighted-state.md。
-CPU14项通过（1.38秒）。覆盖五schema的原始字段/int64布局、严格CPU编解码、
-正/零接收缓存保留与int64推进、独立字段VJP和事务adopt；矩阵/投影数值公式另行接入。
+cb68d91 raw state/cache固定资格通过：CPU14（1.26秒）、五schema/三dtype精确codec、
+NPU40重放行/全部独立字段VJP/保存版本/int64/容量/失败不提交；CUDA三架构构建通过，无真机。
+core5-resident-raw-{npu,cuda}-qualify均clean/exit0/inactive。详见evidence/core5-resident-raw-20261027.json。
+NPU保留dev3原manifest；worktree固定cb68d91且无活动reader。
+两次原检查helper失败保留在raw-dev与raw-dev2，原因/树记录见证据，未修改为passed。
 
-首次raw开发treeb4550df23bcf6968a5c921b4d509f1f98d0de047任务已failed/exit1，CPU14通过、构建通过；
-设备检查的参考autograd图被第一次grad释放，保存版本对照第二次grad报错。
-weighted_raw_check.cpp已明确retain_graph，设备实现/容差不改。原任务/source.tar/log保留。
+主工作区未提交固定时间卷积：weighted_convolution.h/.cpp/check、math header/三个kernel入口，
+CMake/registry及契约/导航。CPU11（1.30秒）通过；整批tap选择、vendor index_select/multiply/sum，
+完整私有cache/当前项/共享参数VJP、保存实际版本、raw update组合check已写，尚未构建设备验证。
+下一步冻结开发任务，通过后实现提交、固定资格、证据/推送，再继续实际数值记忆和Describe。
 
-第二次raw开发tree8985c902d50fc107dcb05811c1326d3a54395bfa任务已failed/exit1，CPU14通过、构建通过；
-KV部分通过后，循环codec检查对int64标量直接view(Byte)报维度错误。exact测试helper改为先flatten，
-并提供显式 --device cpu 的独立codec检查入口。设备实现/容差仍未改，两个原失败/source.tar/log保留。
-
-第三次raw开发tree5a501d4611bb9020c0b4a7acc6b20a9acbccb25a通过，
-tide-core5-resident-raw-dev3-20261027.service inactive/exit0。CPU14（1.34秒），
-五schema/三dtype codec、NPU40重放行/完整独立字段VJP/保存版本/精确int64、容量拒绝/失败不提交通过。
-实际记录artifacts/jobs/core5-resident-raw-dev3/{source.tar,source.tree,status.json,task.log,checks/result.json}。
-
-当前提交raw实现/契约/测试；随后冻结该提交进行raw-npu-qualify与raw-cuda-qualify，
-NPU复用全摘要一致的dev3构建、CPU14及独立codec检查，CUDA新三架构构建。
-资格完成后独立证据/推送，继续实际数值记忆/卷积读取与Describe。
-
-额外未提交convolution草稿：weighted_convolution.h/.cpp/check、math header及三个kernel入口；
-CPU11项通过（1.29秒），刚补cache数学容量校验，待回归。尚无CMake/registry接入或设备构建。后续按固定逻辑时间打包tap，再接vendor乘法/归约与完整独立VJP。
-然后继续实际数值记忆和Describe，不在局部组件交付后停止。
-
-完整weighted resident仍缺typed raw state/五记忆/卷积、Describe、完整图在线就绪与推进、
+完整weighted resident仍缺五记忆数值/卷积读取、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow
 或CPU捕获轨迹宣称完成。随后有限profiling/性能选型与最终追溯，不做全开关笛卡尔积。
 
