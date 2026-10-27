@@ -3,6 +3,8 @@ import torch
 from .convolution_packed import convolve
 from .packing import project
 from .tensors import norm
+from .normalization import epsilon_l2
+from .numeric_time import passive_decay
 
 
 def coefficients(memory, plan, old, x, gap):
@@ -13,11 +15,11 @@ def coefficients(memory, plan, old, x, gap):
         dt = torch.nn.functional.softplus(dt+memory.delta_bias)
     convolved, caches = convolve(memory.conv, plan, old, raw)
     projected = torch.nn.functional.silu(convolved)
-    decay = torch.exp(-gap[:, None]*x.new_tensor(c.matrix_rates))
+    decay = passive_decay(gap[:, None], c.matrix_rates, x)
     if c.memory_family == "gated_delta":
         _, key, value = projected.reshape(-1, c.heads, 2*c.key_width+c.value_width).split(
             (c.key_width, c.key_width, c.value_width), -1)
-        key = key/torch.sqrt(c.qk_epsilon+key.square().sum(-1, keepdim=True))
+        key = epsilon_l2(key, c.qk_epsilon)
         control = norm(plan.content, c.epsilon)
         dt = torch.nn.functional.softplus(project(control, memory.delta)+memory.delta_bias)
         gain = plan.weight[:, None]*torch.sigmoid(project(control, memory.write)+memory.write_bias)

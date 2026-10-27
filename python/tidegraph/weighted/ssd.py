@@ -2,6 +2,7 @@
 import torch
 from .recurrent import RecurrentMemory, RecurrentContent
 from .tensors import norm, parameter
+from .normalization import scaled_rms
 
 
 class SSDMemory(RecurrentMemory):
@@ -48,5 +49,5 @@ class SSDContent(RecurrentContent):
         H, _, _ = memory.effective(state, time)
         read = (H@query.unsqueeze(-1)).squeeze(-1)
         y = (read+self.direct[:, None]*value).flatten()*torch.nn.functional.silu(gate)
-        mix = self.out@(self.rho*y/torch.sqrt(c.output_epsilon+y.square().mean()))
+        mix = self.out@scaled_rms(y, self.rho, c.output_epsilon)
         return self.finish(u, mix)

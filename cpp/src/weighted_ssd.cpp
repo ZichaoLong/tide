@@ -28,7 +28,7 @@ Tensor ssd_mix(const NodeWeights& w,const State& s,Index time,const Tensor& u,co
   auto f=features(w,s,time,u,c);
   auto read=at::matmul(effective(s,time,c)[0],f.query.unsqueeze(-1)).squeeze(-1);
   auto y=(read+weight(w,"full_program.content.direct").unsqueeze(-1)*f.value).flatten()*at::silu(f.gate);
-  return at::matmul(weight(w,"full_program.content.out"),weight(w,"full_program.content.rho")*y/at::sqrt(c.output_epsilon+y.square().mean()));
+  return at::matmul(weight(w,"full_program.content.out"),scaled_rms(y,weight(w,"full_program.content.rho"),c.output_epsilon));
 }
 void validate_ssd(const NodeWeights& w,const RecurrentConfig& c){
   shape(w,"kernel.projection",{c.heads*c.value_width+c.conv_width()+c.heads,c.width});

@@ -8,8 +8,8 @@ Features features(const NodeWeights& w,const State& s,Index time,const Tensor& u
   auto raw=at::matmul(weight(w,"kernel.projection"),normalize(u,c.epsilon));
   auto rows=at::silu(convolve(cache(s),time,raw,weight(w,"kernel.conv.weight"),weight(w,"kernel.conv.bias"),c.conv_stride)).reshape({c.heads,-1});
   auto q=rows.slice(1,0,c.key_width),k=rows.slice(1,c.key_width,2*c.key_width),v=rows.slice(1,2*c.key_width);
-  q=q/at::sqrt(c.qk_epsilon+q.square().sum(-1,true))/std::sqrt(c.key_width);
-  k=k/at::sqrt(c.qk_epsilon+k.square().sum(-1,true));return {raw,q,k,v};
+  q=epsilon_l2(q,c.qk_epsilon)/std::sqrt(c.key_width);
+  k=epsilon_l2(k,c.qk_epsilon);return {raw,q,k,v};
 }
 }
 std::pair<Tensor,Tensor> gdn_update(const NodeWeights& w,const State& s,Index time,const Tensor& u,const Tensor& receive,const Tensor& H,const RecurrentConfig& c){
@@ -26,7 +26,7 @@ Tensor gdn_read(const NodeWeights& w,const State& s,Index time,const Tensor& u,c
 }
 Tensor gdn_mix(const NodeWeights& w,const State& s,Index time,const Tensor& u,const RecurrentConfig& c){
   auto read=gdn_read(w,s,time,u,c);
-  auto rms=weight(w,"full_program.content.rho")*read/at::sqrt(c.output_epsilon+read.square().mean(-1,true));
+  auto rms=scaled_rms(read,weight(w,"full_program.content.rho"),c.output_epsilon);
   auto gate=at::silu(at::matmul(weight(w,"full_program.content.output_gate"),normalize(u,c.epsilon)));
   return at::matmul(weight(w,"full_program.content.out"),rms.flatten()*gate);
 }

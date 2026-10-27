@@ -87,8 +87,13 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     Callers may explicitly tie same-shape
     Parameters afterwards; checkpoint preflight preserves that alias topology.
     """
-    if dtype not in {torch.float32,torch.float64}:
-        raise ValueError("weighted binding currently requires FP32/FP64")
+    if dtype not in {torch.float16,torch.float32,torch.float64}:
+        raise ValueError("weighted binding requires FP16/FP32/FP64")
+    payload_dtype = dtype
+    # A precision change quantizes the same seeded FP32 parameters. It must not
+    # choose a different random initialization or alter any int64 metadata.
+    if dtype == torch.float16:
+        dtype = torch.float32
     if not isinstance(source_binding, SourceBinding):
         raise ValueError("source_binding must be an explicit SourceBinding")
     if topology.origins:
@@ -130,7 +135,7 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
                          selector=region_ids[j]) for j,(layout,c) in enumerate(zip(topology.region_layouts,region)))
     # Physical source slots remain distinct even when parameter classes coincide.
     graph = Graph(tuple(nodes),topology.edges,specs,topology.inputs,topology.outputs,topology.ports)
-    model = WeightedModel(graph,width=width+1,seed=seed,dtype=dtype,device=device,
+    model = WeightedModel(graph,width=width+1,seed=seed,dtype=payload_dtype,device=device,
                           state_programs=states,read_programs=readers,aggregate_programs=aggregates,
                           full_programs=fulls,region_programs=rp)
     # Legacy scalar-profile parameters have no role in this binding.

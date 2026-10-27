@@ -6,8 +6,8 @@ using detail::weight;
 PackedStates recurrent(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch,const RecurrentConfig& c){
   Writes plan(old,batch);if(plan.ids.empty())return plan.decode(old,batch,{},0);
   auto x=normalize(plan.input,c.epsilon);
-  auto delta=plan.gaps(old).to(x.scalar_type());
-  auto decay=at::exp(-delta.unsqueeze(-1)*at::tensor({c.lambda_short,0.},x.options()));
+  auto delta=plan.gaps(old);
+  auto decay=detail::passive_decay(delta.unsqueeze(-1),{c.lambda_short,0.},x);
   Tensor a,b;bool matrix=false;std::vector<std::map<std::string,Tensor>> caches;
   if(c.basic()){
   auto key=project(x,weight(w,"kernel.key"));key=key/key.norm(2,-1,true).clamp_min(1);

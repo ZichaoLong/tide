@@ -27,11 +27,11 @@ void RecurrentConfig::validate() const {
 namespace recurrent {
 std::array<Tensor,3> effective(const State& s,Index time,const RecurrentConfig& c){
   require(time>=0,"negative recurrent query time");
-  auto delta=(at::full({},time,s.slots.at("time").options())-s.slots.at("time")).clamp_min(0).to(s.value.scalar_type());
+  auto delta=(at::full({},time,s.slots.at("time").options())-s.slots.at("time")).clamp_min(0);
   auto rates=c.basic()?std::vector<double>{c.lambda_short,0.}:c.matrix_rates;
   if(rates.empty())rates.resize(c.heads,0.);
-  auto matrix_decay=at::exp(-at::tensor(rates,s.value.options())*delta);
-  auto decay=at::exp(-at::tensor({c.lambda_short,0.},s.value.options())*delta);
+  auto matrix_decay=passive_decay(delta,rates,s.value);
+  auto decay=passive_decay(delta,{c.lambda_short,0.},s.value);
   return {matrix_decay.reshape({-1,1,1})*s.slots.at("H"),decay.unsqueeze(-1)*s.slots.at("Z"),decay*s.slots.at("W")};
 }
 Tensor finish(const NodeWeights& w,const Tensor& u,const Tensor& mix,const RecurrentConfig& c){

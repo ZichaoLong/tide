@@ -10,9 +10,11 @@ class _AttentionMean(torch.autograd.Function):
     @staticmethod
     def forward(ctx, logits, values):
         ctx.set_materialize_grads(False)
-        probabilities = logits.softmax(-1)
+        probabilities = (logits.float() if values.dtype == torch.float16 else logits).softmax(-1)
         ctx.save_for_backward(logits, values, probabilities)
-        return (probabilities.unsqueeze(-1)*values).sum(-2)
+        operand = values.float() if values.dtype == torch.float16 else values
+        result = (probabilities.unsqueeze(-1)*operand).sum(-2)
+        return result.to(values.dtype) if values.dtype == torch.float16 else result
 
     @staticmethod
     def backward(ctx, bar):
@@ -20,11 +22,14 @@ class _AttentionMean(torch.autograd.Function):
             raise ValueError("weighted Attention supports first-order VJP only")
         if bar is None:
             return None, None
-        _, values, probabilities = ctx.saved_tensors
+        original_logits, original_values, probabilities = ctx.saved_tensors
+        values = original_values
+        if values.dtype == torch.float16:
+            values, bar = values.float(), bar.float()
         delta = values-values[..., :1, :]
         centered = delta-(probabilities.unsqueeze(-1)*delta).sum(-2, keepdim=True)
         logits = probabilities*(centered*bar.unsqueeze(-2)).sum(-1)
-        return logits, probabilities.unsqueeze(-1)*bar.unsqueeze(-2)
+        return logits.to(original_logits.dtype), (probabilities.unsqueeze(-1)*bar.unsqueeze(-2)).to(original_values.dtype)
 
 
 attention_mean = _AttentionMean.apply

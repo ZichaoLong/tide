@@ -46,6 +46,7 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [KV 基座投影复用](weighted-kv-sharing.md)对应临时准备操作数、节点私有适配器/状态及全部使用者 VJP。
 [带权执行位置](weighted-placement.md)对应结构化 Read 临时快照、control/selection 分置、精度与独立转移 VJP。
 [带权设备检查](weighted-device-validation.md)对应实际 mixed 执行、精确 int64 排序、独立状态根、跨 owner 续接及候选 profile。
+[带权 FP16 开发契约](weighted-precision.md)对应显式评分精度、归一化的一阶收缩与尚未解除的严格训练见证。
 
 `θ` 是逻辑时间；`B` 是已完整且非空的同时间带来源纤维；`q` 是旧状态，
 `q̃` 是 Upd proposal，`q̄` 是选择后的 comparison，`h` 是本地内容。

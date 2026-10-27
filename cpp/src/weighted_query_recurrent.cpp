@@ -36,11 +36,11 @@ Tensor convolve(const NodeWeights& w,const States& states,const Times& times,con
 std::array<Tensor,3> effective(const States& states,const Times& times,const RecurrentConfig& c){
   for(auto t:times)require(t>=0,"negative recurrent query time");
   auto clock=slot(states,"time"),H=slot(states,"H"),Z=slot(states,"Z"),W=slot(states,"W");
-  auto delta=(at::tensor(times,clock.options())-clock).clamp_min(0).to(H.scalar_type());
+  auto delta=(at::tensor(times,clock.options())-clock).clamp_min(0);
   auto rates=c.basic()?std::vector<double>{c.lambda_short,0.}:c.matrix_rates;
   if(rates.empty())rates.resize(c.heads,0.);
-  auto matrix=at::exp(-delta.unsqueeze(-1)*at::tensor(rates,H.options()));
-  auto summary=at::exp(-delta.unsqueeze(-1)*at::tensor({c.lambda_short,0.},Z.options()));
+  auto matrix=passive_decay(delta.unsqueeze(-1),rates,H);
+  auto summary=passive_decay(delta.unsqueeze(-1),{c.lambda_short,0.},Z);
   return {matrix.unsqueeze(-1).unsqueeze(-1)*H,summary.unsqueeze(-1)*Z,summary*W};
 }
 Features features(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c){
@@ -54,8 +54,8 @@ Features features(const NodeWeights& w,const States& states,const Times& times,c
   if(c.memory_family=="gated_delta"){
     all=all.reshape({-1,c.heads,2*c.key_width+c.value_width});
     f.query=all.slice(-1,0,c.key_width);f.key=all.slice(-1,c.key_width,2*c.key_width);f.value=all.slice(-1,2*c.key_width);
-    f.query=f.query/at::sqrt(c.qk_epsilon+f.query.square().sum(-1,true))/std::sqrt(c.key_width);
-    f.key=f.key/at::sqrt(c.qk_epsilon+f.key.square().sum(-1,true));
+    f.query=epsilon_l2(f.query,c.qk_epsilon)/std::sqrt(c.key_width);
+    f.key=epsilon_l2(f.key,c.qk_epsilon);
   }else{
     f.value=all.slice(1,0,inner).reshape({-1,c.heads,c.value_width});
     f.key=all.slice(1,inner,inner+bc).reshape({-1,c.groups,c.key_width}).repeat_interleave(c.heads/c.groups,1);

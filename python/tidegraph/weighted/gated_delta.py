@@ -3,6 +3,7 @@ import math
 import torch
 from .recurrent import RecurrentMemory, RecurrentContent
 from .tensors import norm, parameter
+from .normalization import scaled_rms, epsilon_l2
 
 
 class GatedDeltaMemory(RecurrentMemory):
@@ -19,8 +20,8 @@ class GatedDeltaMemory(RecurrentMemory):
         raw = self.projection@norm(u, c.epsilon)
         projected = torch.nn.functional.silu(self.conv(self.cache(state), time, raw))
         q, k, value = projected.reshape(c.heads, -1).split((c.key_width, c.key_width, c.value_width), dim=-1)
-        q = q/torch.sqrt(c.qk_epsilon+q.square().sum(-1, keepdim=True))/math.sqrt(c.key_width)
-        k = k/torch.sqrt(c.qk_epsilon+k.square().sum(-1, keepdim=True))
+        q = epsilon_l2(q, c.qk_epsilon)/math.sqrt(c.key_width)
+        k = epsilon_l2(k, c.qk_epsilon)
         return raw, q, k, value
 
     def update_matrix(self, state, time, u, weight, H):
@@ -50,6 +51,6 @@ class GatedDeltaContent(RecurrentContent):
     def forward(self, memory, state, time, u):
         c = self.config
         read = memory.matrix_read(state, time, u)
-        rms = self.rho*read/torch.sqrt(c.output_epsilon+read.square().mean(-1, keepdim=True))
+        rms = scaled_rms(read, self.rho, c.output_epsilon)
         gate = torch.nn.functional.silu(self.output_gate@norm(u, c.epsilon))
         return self.finish(u, self.out@(rms.flatten()*gate))

@@ -10,6 +10,7 @@ from ..records import State
 from ..state_program import StateProgram
 from .tensors import Received, norm, parameter, rotate_relative
 from .attention_mean import attention_mean
+from .numeric_time import time_values, passive_decay
 
 
 class KVMemory(StateProgram):
@@ -84,15 +85,15 @@ class KVMemory(StateProgram):
         c = self.config
         mask, age = self.visible(state, time)
         s = {name: value[mask] for name, value in state.slots.items()}
-        age = age[mask].to(u.dtype)
-        weights = (s["weights"]*torch.exp(-c.beta_short*age), s["weights"])
+        age = age[mask]
+        weights = (s["weights"]*passive_decay(age, c.beta_short, u), s["weights"])
         totals = tuple(w.sum() for w in weights)
         if c.memory_read == "sum":
             values = tuple((w.unsqueeze(-1)*s["summaries"]).sum(0)/total.clamp(min=1)
                            for w, total in zip(weights, totals))
         else:
             q = self.read_q@norm(u, c.epsilon)
-            k = rotate_relative(s["keys"]@self.read_k.t(), -age/c.position_scale, c.read_frequencies)
+            k = rotate_relative(s["keys"]@self.read_k.t(), -time_values(age, u)/c.position_scale, c.read_frequencies)
             logits = k@q/math.sqrt(c.summary_width)
             v = s["values"]@self.read_v.t()
             values = tuple(weighted_read(logits, v, w, total) for w, total in zip(weights, totals))
@@ -142,7 +143,7 @@ class KVContent(torch.nn.Module):
         keys = s["keys"][mask].reshape(-1, c.heads, c.width//c.heads)
         values = s["values"][mask].reshape_as(keys)
         queries = (self.query@norm(u,c.epsilon)).reshape(c.heads,-1)
-        displacement = -age[mask].to(u.dtype)/c.position_scale
+        displacement = -time_values(age[mask], u)/c.position_scale
         reads = []
         for h in range(c.heads):
             key = rotate_relative(keys[:,h], displacement, c.full_frequencies[h])
