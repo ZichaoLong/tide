@@ -1,5 +1,6 @@
 // 0770593 architecture §2–4, allocation §2–3. See docs/weighted-message.md.
 #include "weighted_recurrent_detail.h"
+#include "weighted_regularizers.h"
 #include "tide/aggregate.h"
 #include "tide/full.h"
 
@@ -97,7 +98,7 @@ class RegionalTotal final:public RegionKernel {
       fraction=head(w.extra,"head",features).sigmoid();
     }
     auto total=low+fraction*(high-low);
-    auto allocation=allocate_quad(at::stack(scores),mu,total,total,at::full({},c_.allocation_temperature,sum.options()));
+    auto allocation=allocate(at::stack(scores),mu,total,total,at::full({},c_.allocation_temperature,sum.options()),c_.regularizer,c_.ent_alpha);
     Selection result;result.history.last_time=r.time;
     for(size_t i=0;i<r.candidates.size();++i){
       auto node=r.candidates[i].node;auto c=allocation.controls[i];result.controls[node]=c;
@@ -122,6 +123,7 @@ class RegionalTotal final:public RegionKernel {
 };
 }
 void RegionalConfig::validate() const {
+  Regularizer rule(regularizer,ent_alpha);
   require(hidden_width>0&&region_control_width>0&&k>0&&std::isfinite(gamma_max)&&gamma_max>=1
           &&std::isfinite(allocation_temperature)&&allocation_temperature>0,"invalid weighted region config");
   require(region_control_mode=="context"||region_control_mode=="fixed","invalid weighted region control mode");

@@ -93,7 +93,7 @@ These extensions do not automatically implement weighted memory or region formul
 
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
-fixed control and quad allocation. Payload (m,z), aggregate (r,u), descriptor
+fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
 fields and exact typed memory state have distinct decoders. Physical transport
 scales are fixed to one. All candidates retain their proposal; active means c>0
 and Full broadcasts (c,G). K is region size, independently of total-strength k.

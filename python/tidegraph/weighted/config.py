@@ -10,7 +10,8 @@ import math
 
 
 def identity(prefix, *bindings):
-    raw = json.dumps([asdict(x) if hasattr(x, "__dataclass_fields__") else x for x in bindings],
+    raw = json.dumps([x.identity_fields() if hasattr(x, "identity_fields") else
+                      asdict(x) if hasattr(x, "__dataclass_fields__") else x for x in bindings],
                      sort_keys=True, separators=(",", ":"), allow_nan=False)
     return prefix+":"+hashlib.sha256(raw.encode()).hexdigest()
 
@@ -84,6 +85,7 @@ class RegionalConfig:
     region_control_mode: str = "context"
     region_evidence: str | None = "cat"
     regularizer: str = "quad"
+    ent_alpha: float | None = None
     hidden_width: int = 4
     region_control_width: int = 2
     gamma_max: float = 1.
@@ -96,9 +98,10 @@ class RegionalConfig:
             positive_int(name, getattr(self, name))
         if self.read_mode not in {"0", "-", "+"}:
             raise ValueError("read_mode must be 0/-/+")
-        if (self.local_score, self.region_score, self.selection_mode, self.regularizer) != (
-                "cat", "ind", "regional_total", "quad"):
-            raise ValueError("this binding currently implements cat/ind/regional_total/quad")
+        if (self.local_score, self.region_score, self.selection_mode) != ("cat", "ind", "regional_total"):
+            raise ValueError("this binding currently implements cat/ind/regional_total")
+        from .regularizers import Regularizer
+        Regularizer(self.regularizer, self.ent_alpha)
         finite("gamma_max", self.gamma_max, 1)
         finite("allocation_temperature", self.allocation_temperature, 0, True)
         if self.region_control_mode == "context":
@@ -112,3 +115,11 @@ class RegionalConfig:
                 raise ValueError("total_fraction exceeds one")
         else:
             raise ValueError("invalid region_control_mode")
+
+    def identity_fields(self):
+        fields = asdict(self)
+        # Preserve pre-entropy quad graph/checkpoint identities. An absent
+        # fixed entropy shape has no semantics; an actual shape always enters.
+        if self.ent_alpha is None:
+            fields.pop("ent_alpha")
+        return fields

@@ -9,7 +9,7 @@ from .programs import Describe, WeightedAggregate, WeightedFull, RegionalTotal
 def region_config(core, config):
     result = core.WeightedRegionalConfig()
     for name in ("hidden_width","region_control_width","k","gamma_max",
-                 "allocation_temperature","region_control_mode"):
+                 "allocation_temperature","region_control_mode","regularizer","ent_alpha"):
         setattr(result,name,getattr(config,name))
     if config.total_fraction is not None:
         result.total_fraction = config.total_fraction

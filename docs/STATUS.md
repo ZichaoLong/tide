@@ -12,28 +12,32 @@
 - affine/delta、完整 GDN/SSD、固定时间短卷积与异构绑定
   `442e8b2701164eb7e4241da56c8a395a832ebeb0`：**544 passed / 0 failed / 0 skipped**，
   CPU FP64/FP32；[契约](weighted-recurrent.md)、[证据](evidence/core5-recurrent-20261027.md)。
-  证据单独提交后与实现一起推送。首组合和循环阶段均不代表完整总体任务完成。
+  证据 955912c 与实现已一起推送。首组合和循环阶段均不代表完整总体任务完成。
 
 ## 当前任务与下一动作
 
-循环不可变资格 `tide-core5-recurrent-qualify-20261027` 终态 inactive/success、退出 0。
-源码 442e8b2；`artifacts/worktrees/core5-bootstrap` 干净、只读。
-记录 `artifacts/jobs/core5-recurrent-qualify/{status.json,task.log,development.json}`。
-launcher `.local/core5-recurrent-qualify.sh`；background.slice、Nice=10、单线程、15 分钟上限。
-当前无 live job，确认终态后可复用该 task-owned worktree/build。
+熵分配开发 `tide-core5-entropy-dev-20261027` 已终止 inactive/success，退出 0，
+冻结开发树 `42fdcc30af20d7a101e4fd423c7912bc70ef2c0d`，**226 passed / 0 failed / 0 skipped**。
+记录 `artifacts/jobs/core5-entropy-dev/{status.json,task.log,development.json,source.tar.gz}`。
+Bernoulli、Shannon 与固定 alpha ent 的响应、精确映射一阶 VJP 已接公共/native RegionalTotal；
+默认 quad 图身份保持。独立 Decimal 求解、隐式 Jacobian、支持下溢拒绝、完整训练/恢复检查通过。
+本次固定实现后即启动不可变 CPU 定向资格，结果另提交；不把开发快照当完整总体资格。
 
-下一增量正在主工作区：Bernoulli、Shannon 和固定 alpha ent 正则的稳定响应/精确映射 VJP。
-未提交 `weighted/regularizers.py`、`weighted/entropy_allocation.py`、
-`tests/test_weighted_entropy_allocation.py`：35 项 Python 定向检查通过，含独立 80 位 Decimal 求解、
-VJP/方向差分、边界/温度和正支持下溢拒绝。C++ weighted_entropy.cpp/weighted_regularizers.h 与
-公共头声明已编写，尚未构建；尚未接入 RegionalConfig、native 和公共导出。
-这些文件不属于 442e8b2 或其资格。没有用户修改。
+计划 unit `tide-core5-entropy-qualify-20261027`，launcher `.local/core5-entropy-qualify.sh`；
+实现源码为本次提交，task-owned worktree `artifacts/worktrees/core5-bootstrap`，build/cpu。
+确认上一服务终态后对齐该提交、核验干净并置源码只读，保留已归档开发源码。
+输出 `artifacts/jobs/core5-entropy-qualify/{status.json,task.log,development.json}`。
+background.slice、Nice=10、ATen/BLAS 单线程、两个构建线程、15 分钟上限；
+develop.py --reuse-build 核验二进制/源码哈希，测试集合沿 entropy-dev 八个入口。
+查看 `systemctl --user show tide-core5-entropy-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
+日志 `tail -60 artifacts/jobs/core5-entropy-qualify/task.log`；
+停止 `systemctl --user stop tide-core5-entropy-qualify-20261027`。
+运行期间不得修改该 worktree/build，尚无不可变资格通过结论。
 
-接下来完成正则公共/native/区域集成及独立 C++ 检查，再实现其余正式发送函数、match/att、
-grouped 证据/content key、参数共享。随后继续联合/packed/批量 VJP、mixed/resident、
-standalone 完整训练与有限 profiling。不要把明确拒绝未完成配置当作完成。
-短测命令（环境下）：`python -m pytest -q tests/test_weighted_entropy_allocation.py --dtype both`。
-长构建/资格继续固定输入、独立 background.slice 服务和有界资源；先更新本交接。
+随后继续正式发送函数（Attention 零基权重右导数、零温/硬排序及 k/K 分离）、
+match/att/grouped/content key；再推进联合/packed/批量 VJP、mixed/resident、
+standalone 完整训练与有限 profiling。首组合与循环/熵增量不代表总体任务完成。
+当前增量未包含其他用户修改；实现/契约/测试将在本次一并提交。
 
 ## 环境与保留事项
 

@@ -18,6 +18,7 @@ PDG 包含正时延反馈，TimedDAG 可以非对齐；一般端口日程不依�
 同一 KV 增量也提供 `memory_read=qry`、`read_mode=0/-/+`、fixed 总量控制、
 NoPE/各头部分或完整 RoPE、独立 Read 旋转及距离偏置。默认旋转为空、距离偏置为零。
 fixed 要显式给 total_fraction，region_evidence 取 None；context 不接受固定比例。
+[分配](weighted-allocation.md)提供 quad/bern/ent，ent 另给固定 ent_alpha∈[1,2]。
 配置检查不将未知、不适用或尚未实现的选项换成其他函数。
 
 `KVConfig` 给出内容宽度 d、摘要宽度 ds、适配秩、头数、FFN 宽度、窗口、
@@ -77,7 +78,7 @@ checkpoint v5 保存实际原始状态与 typed tensors、全部 pending、ledge
 | KV §1–3 | `KVConfig/KVMemory.initial,step,mem,current` | `test_kv_write_mass_window_zero_and_hand_full`：未预乘内容、原始时间窗口、零接收原状态；位置测试覆盖 >2**54 |
 | 架构 §3、区域 §3.1/3.4 | `Describe.features/step` | `test_read_snapshot_and_full_are_separate`；具名根在执行检查中分别求导 |
 | 区域 §2–3.5 | `RegionalTotal.total/step`、`ScalarHead` | `test_textbook_evidence_to_total_complete_run`：独立表达式覆盖内容→证据→头→B→c |
-| 区域 §4.1、§6 | `allocate_quad` | [分配契约与独立求解/方向差分](weighted-allocation.md) |
+| 区域 §4.1、§6 | `allocate_quad` | [quad/bern/ent 的分配契约与独立求解/方向差分](weighted-allocation.md) |
 | KV §4、架构 §4 | `KVContent/WeightedFull` | 手算加权 attention、独立旋转公式、载荷强度仅一次 |
 | FC/HB 拓扑 §1–4 | `fully_connected/hb_lattice` | 教材 22 区域/1408 节点/3584 边，HB 同秩；完整运行保留每端口 |
 | 架构 §7、Batch/正典继续 | 既有独立调度、checkpoint v5 | `test_weighted_execution.py`：FC/HB、非对齐 DAG、反馈 PDG，全记录/根、多步 AdamW、每切点 pending/恢复 |
