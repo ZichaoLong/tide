@@ -458,6 +458,14 @@ aliases and independent row roots; positive sending support lost by the final
 payload cast is explicitly rejected. This eager execution policy changes no
 graph/checkpoint identity and does not certify resident or device execution.
 
+[Weighted target checks](weighted-device-validation.md) separately establish
+actual tensor placement, complete observations, independent State/parameter/input
+roots and optimizer/checkpoint handoff. Accelerator scalar hard/zero-temperature
+sending uses device stable int64/score sorting and fractional fill, with the same
+declared first-order map as the independent CPU scalar function. Device AiCPU
+execution is recorded separately from a host fallback; this remains eager host
+scheduling, not device-resident progression.
+
 ## Configurable low precision
 
 The explicitly selected FP16 extension retains the same graph, delay, scheduling,

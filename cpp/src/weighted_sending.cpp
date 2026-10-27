@@ -1,6 +1,7 @@
 // Independent C++ sending formulas; no Python or legacy Emit/HST dependency.
 #include "tide/weighted_sending.h"
 #include "weighted_detail.h"
+#include "weighted_sending_batch.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <algorithm>
 #include <set>
@@ -55,6 +56,12 @@ std::vector<Index> order(const Tensor& s,const Tensor& mu,const std::vector<Inde
   std::sort(indices.begin(),indices.end(),[&](Index i,Index j){return scores[i]!=scores[j]?scores[i]>scores[j]:nodes[i]<nodes[j];});
   return indices;
 }
+Tensor device_order_ids(const Tensor& s,const std::vector<Index>& nodes){
+  require(static_cast<Index>(nodes.size())==s.numel()&&std::set<Index>(nodes.begin(),nodes.end()).size()==nodes.size(),
+    "sending node IDs must be distinct nonnegative int64");
+  for(auto n:nodes)require(n>=0,"sending node IDs must be distinct nonnegative int64");
+  return at::tensor(nodes,at::TensorOptions().dtype(at::kLong)).to(s.device()).unsqueeze(0);
+}
 class SortedSending:public torch::autograd::Function<SortedSending> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor s,Tensor mu,Tensor total,std::vector<Index> ordered,Index k){
@@ -108,10 +115,12 @@ Tensor proportional(const Tensor& mu,Index k){
 Tensor total_zero(const Tensor& s,const Tensor& mu,const Tensor& total,const std::vector<Index>& nodes){
   vectors(s,mu,true);scalar(total,s);
   require(total.item<double>()>=0&&total.item<double>()<=mu.sum().item<double>(),"infeasible zero-temperature sending total");
+  if(!s.device().is_cpu())return batch::sorted_send(s.unsqueeze(0),mu.unsqueeze(0),device_order_ids(s,nodes),total.unsqueeze(0),0)[0];
   return SortedSending::apply(s,mu,total,order(s,mu,nodes),Index{0});
 }
 Tensor hard_selection(const Tensor& s,const Tensor& mu,Index k,const std::vector<Index>& nodes){
   vectors(s,mu,true);require(k>0,"sending k must be positive");
+  if(!s.device().is_cpu())return batch::sorted_send(s.unsqueeze(0),mu.unsqueeze(0),device_order_ids(s,nodes),at::zeros({1},s.options()),k)[0];
   return SortedSending::apply(s,mu,at::zeros({},s.options()),order(s,mu,nodes),k);
 }
 }

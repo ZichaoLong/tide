@@ -159,6 +159,8 @@ def total_zero(scores, caps, total, nodes):
     total = _scalar(total, scores, "total")
     if total < 0 or total > caps.sum():
         raise ValueError("infeasible zero-temperature sending total")
+    if scores.device.type != "cpu":
+        return _device_sorted(scores, caps, nodes, total, None)
     return _SortedSending.apply(scores, caps, total, _order(scores, caps, nodes), None)
 
 
@@ -166,5 +168,22 @@ def hard_selection(adjusted_scores, caps, k, nodes):
     """§4.4.1/3: positive top-k or one best nonpositive, cap amplitude VJP."""
     positive_int("k", k)
     _vectors(adjusted_scores, caps, caps=True)
+    if adjusted_scores.device.type != "cpu":
+        return _device_sorted(adjusted_scores, caps, nodes, None, k)
     return _SortedSending.apply(adjusted_scores, caps, caps.new_zeros(()),
                                 _order(adjusted_scores, caps, nodes), k)
+
+
+def _device_sorted(scores, caps, nodes, total, k):
+    """Scalar target dispatch uses device ordering, with the same declared VJP.
+
+    Static IDs can be prepared on the host; actual score ordering and fractional
+    fill are tensor operations on the requested selection device.
+    """
+    from .sending_batch import sorted_send
+    if (len(nodes) != scores.numel() or any(type(v) is not int or not 0 <= v < 2**63 for v in nodes)
+            or len(set(nodes)) != len(nodes)):
+        raise ValueError("sending node IDs must be distinct nonnegative int64")
+    ids = torch.tensor([nodes], device=scores.device, dtype=torch.int64)
+    return sorted_send(scores.unsqueeze(0), caps.unsqueeze(0), ids,
+                       target=None if total is None else total.unsqueeze(0), k=k)[0]
