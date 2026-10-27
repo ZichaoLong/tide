@@ -22,6 +22,9 @@ void tensor(const at::Tensor& actual, const at::Tensor& expected) {
   }
   require(at::isfinite(a).all().item<bool>() && at::isfinite(b).all().item<bool>(), "nonfinite tensor");
   require(a.scalar_type() == b.scalar_type() && a.sizes() == b.sizes(), "tensor metadata");
+  if(!a.is_floating_point()&&!a.is_complex()){
+    require(at::equal(a,b),"integer/bool tensor value");return;
+  }
   // FP64 descriptors computed from FP32 intermediates inherit FP32 error.
   const bool fp64 = a.scalar_type() == at::kDouble && payload_dtype==at::kDouble;
   if (!at::allclose(a, b, rtol>=0 ? rtol : fp64 ? 1e-8 : 1e-5, atol>=0 ? atol : fp64 ? 1e-10 : 1e-6)) {
@@ -83,6 +86,7 @@ void result(const tide::Result& a, const tide::Result& b, bool traces) {
     state(u.comparison_state, v.comparison_state); state(u.next_state, v.next_state);
     tensor(u.content, v.content); tensor(u.proposal, v.proposal); tensor(u.descriptor, v.descriptor);
     tensor(u.control, v.control); tensor(u.comparison, v.comparison); tensor(u.next, v.next); tensor(u.full, v.full);
+    slots(u.descriptor_fields,v.descriptor_fields);
     emitted(u.emitted, v.emitted); emitted(u.contributions, v.contributions);
     require(u.sources.size() == v.sources.size(), "source count");
     for (size_t j = 0; j < u.sources.size(); ++j) {

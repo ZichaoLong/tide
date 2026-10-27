@@ -8,6 +8,7 @@
 namespace tide {
 
 class Checkpoint;
+class GraphCheckpoint;
 
 // The group keeps the ordered owner names and all options needed by the two
 // built-in optimizers.  An optimizer normalizes aliases to canonical names at
@@ -58,6 +59,7 @@ class NamedOptimizer {
 
  private:
   friend class Checkpoint;
+  friend class GraphCheckpoint;
   ParameterRegistry& registry_;
   std::vector<OptimizerGroup> groups_;
   std::string class_name_;
