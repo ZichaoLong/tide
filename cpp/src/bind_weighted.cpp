@@ -6,6 +6,7 @@
 #include <pybind11/stl.h>
 
 namespace py=pybind11;
+void bind_weighted_batch(py::module_&);
 void bind_weighted(py::module_& module){
   using namespace tide;using namespace tide::weighted;
 #define FIELD(type,name) .def_readwrite(#name,&type::name)
@@ -80,4 +81,5 @@ void bind_weighted(py::module_& module){
     return result;
   },py::call_guard<py::gil_scoped_release>());
 #undef FIELD
+  bind_weighted_batch(module);
 }

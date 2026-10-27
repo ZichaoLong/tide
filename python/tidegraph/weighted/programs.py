@@ -15,6 +15,7 @@ from .config import TOTAL, HARD, ATTENTION
 from .sending import attention_send, proportional, total_zero, hard_selection
 from .scoring import ScalarHead, Encoder, MatchScore, GroupedEvidence, Query
 from .tensors import Payload, Received, norm, parameter
+from .mean import weighted_mean
 
 
 class SourceTransform(torch.nn.Module):
@@ -46,16 +47,16 @@ class WeightedAggregate(AggregateProgram):
         self.hidden_width = hidden_width
 
     def step(self, w, request):
-        masses, terms = [], []
+        masses, values = [], []
         for source in request.sources:
             p = Payload.decode(source.atom.value)
             mass = p.strength.clamp_min(0)
             z = p.content
             if self.alpha:
                 z = z+self.alpha*self.transforms[str(self.classes.classify(source.atom))](z,self.epsilon)
-            masses.append(mass); terms.append(mass*z)
+            masses.append(mass); values.append(z)
         mass = torch.stack(masses).sum()
-        u = torch.stack(terms).sum(0)/mass if mass > 0 else terms[0].new_zeros(terms[0].shape)
+        u = weighted_mean(torch.stack(masses), torch.stack(values)) if mass > 0 else values[0].new_zeros(values[0].shape)
         return AggregateResult(Received(mass,u).encode(), {})
 
 
@@ -149,6 +150,18 @@ class Describe(ReadProgram):
 
 class RegionalTotal(RegionProgram):
     """Weighted region binding; historical class name remains for API compatibility."""
+    joint_batch = True
+    batched_autograd = True
+    history_independent = True
+
+    def batch(self, requests):
+        from .region_batch import evaluate
+        return evaluate(self, requests)
+
+    def batch_grad(self, requests):
+        from .region_vjp import evaluate
+        return evaluate(self, requests)
+
     def __init__(self, profile, config, generator, dtype):
         super().__init__()
         self.profile, self.config = profile, config

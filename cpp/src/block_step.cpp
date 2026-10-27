@@ -55,12 +55,15 @@ void advance_block_events(const Graph& g, const Model& m, Continuation& q,
       parallel_stream_regions(g, m, q, events, regions, pool, options.workers, options.trace);
       ++stats["region_parallel_waves"];
       stats["max_region_wave"] = std::max<Index>(stats["max_region_wave"], regions.size());
-    } else for (const auto& [owner, candidates] : regions) {
-      select_events(g, m, q, events, candidates, options.trace);
+    } else {
+      if(options.packed)select_event_batches(g,m,q,events,regions,options.trace,stats);
+      for (const auto& [owner, candidates] : regions) {
+      if(!options.packed){select_events(g, m, q, events, candidates, options.trace);++stats["region_scalar_calls"];}
       for (auto i : candidates) {
         auto& e = events[i];
         e.comparison_state = g.regions[owner.second].observe_all || e.active ? e.proposed_state : e.old;
         e.comparison = e.comparison_state.value;
+      }
       }
     }
     stats["region_steps"] += regions.size();

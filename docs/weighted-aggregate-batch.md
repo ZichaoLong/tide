@@ -54,3 +54,16 @@ alpha=0 时不执行源变换。空 request 列表返回空 batch；单个空纤
 [训练恢复](../tests/test_weighted_aggregate_training.py)显式选择 batched 策略，在 HB 与反馈 PDG
 比较三步 AdamW 全部参数/梯度/optimizer slots，并从含 pending 的切面保存、换 owner、
 恢复后继续训练。Python 调度与 native 分别测试；不以默认 replay 的训练结果代替本策略。
+
+## 归一化 VJP 的稳定表达
+
+Architecture §2 的前向仍是原始 `u=sum(m_i*z_i)/M`，不改数值投影、活动集合或输入 dtype。
+`weighted.mean.weighted_mean` / C++ `weighted_mean` 先计算 `z_i-u`，使用
+`bar_m_i = dot(bar_u, z_i-u)/M`、`bar_z_i = (m_i/M)*bar_u`；总量输出的导数另行相加。
+单一正质量原子的均值在数学上与质量无关，直接返回该质量根的连接零。零总量由既有
+Aggregate 分支处理，不引入源 transform 依赖。只声明一阶，保留版本检查。
+
+该表达避免先分别计算两个较大的商导数再相减。新增双样本 SSD/KV/affine 反馈 PDG
+在旧表达下的 FP32 质量根严格失败已保留；没有改变输入、dtype、前向公式或容差。
+`test_weighted_mean` 用单原子不变性和独立标量方向差分检查，既有 literal mean Jacobian
+与共享/独立根测试继续适用。此数值改进不保证任意浮点条件数下的位级一致。

@@ -3,7 +3,7 @@ from collections import defaultdict
 import torch
 from .state_vjp import supported as batched_state
 from .read_vjp import supported as batched_read
-from .region import evaluate as select
+from .region import evaluate as select, evaluate_batch as select_batch
 from .records import Atom, State
 from .packing import prepare_sequences
 from .full import FullInput, evaluate as evaluate_full
@@ -75,11 +75,32 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
                 stats["read_scalar_batch_steps"] = stats.get("read_scalar_batch_steps", 0) + len(es)
             if not getattr(getattr(model.nodes[node], "kernel", None), "joint_sequence", True):
                 stats["state_scalar_sequence_steps"] = stats.get("state_scalar_sequence_steps", 0) + sum(len(es) for _, es in sequences)
+    selections = {}
+    def batch_select(ready):
+        records = [(batch, region, time, [(e["node"], e["descriptor"]) for e in by_frame[batch, time]])
+                   for batch, region, time, _ in ready if by_frame[batch, time]]
+        for frame, result in zip(records, select_batch(graph, model, q, records)):
+            selections[frame[:3]] = result
+        stats["region_batch_calls"] = stats.get("region_batch_calls", 0)+1
+        stats["max_region_batch"] = max(stats.get("max_region_batch", 0), len(records))
+        if torch.is_grad_enabled():
+            stats["batched_region_frames"] = stats.get("batched_region_frames", 0)+len(records)
+
+    def can_batch(region):
+        p = model.regions[region]
+        return packed and p.joint_batch and (not torch.is_grad_enabled() or p.batched_autograd)
+
+    # Cross-time selection is legal only when every descriptor is already ready
+    # and this program explicitly promises not to read predecessor history.
+    if frames and all(can_batch(r) and model.regions[r].history_independent for _, r, _, _ in frames) and all("proposal" in e for e in events):
+        batch_select(frames)
     previous_time = None
     for batch, region_id, time, _ in frames:
         if packed and time != previous_time:
             from .block_steps import prepare_tick
             prepare_tick(graph, model, q, by_time[time], stats)
+            if not selections and can_batch(region_id):
+                batch_select([f for f in frames if f[2] == time])
         previous_time = time
         es = by_frame[batch, time]
         if not es:
@@ -94,8 +115,14 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
                 stats["state_steps"] += 1
                 stats["read_calls"] = stats.get("read_calls", 0) + 1
         nodes = [e["node"] for e in es]
-        active, controls, history = select(graph, model, q, batch, region_id, time,
-                                           [(e["node"], e["descriptor"]) for e in es])
+        chosen = selections.pop((batch, region_id, time), None)
+        if chosen is None:
+            active, controls, history = select(graph, model, q, batch, region_id, time,
+                                               [(e["node"], e["descriptor"]) for e in es])
+            stats["region_scalar_calls"] = stats.get("region_scalar_calls", 0)+1
+        else:
+            active, controls, history = chosen.active, chosen.controls, chosen.history
+            q.history[batch, region_id] = history
         stats["region_steps"] = stats.get("region_steps", 0) + 1
         for e in es:
             node = e["node"]
