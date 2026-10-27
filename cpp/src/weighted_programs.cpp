@@ -3,6 +3,7 @@
 #include "weighted_scoring.h"
 #include "weighted_aggregate.h"
 #include "weighted_mean.h"
+#include "weighted_source.h"
 #include "weighted_query_batch.h"
 #include "weighted_query_vjp.h"
 #include "tide/aggregate.h"
@@ -28,8 +29,9 @@ class Aggregate final:public AggregateKernel {
       const auto& x=source.atom.value;auto mass=x[0].clamp_min(0),z=x.slice(0,1);
       if(alpha_){
         auto prefix="aggregate_program.transforms."+std::to_string(classes_.classify(source.atom));
-        auto hidden=at::silu(at::matmul(weight(w,prefix+".a"),normalize(z,epsilon_))+weight(w,prefix+".embedding"));
-        z=z+alpha_*at::matmul(weight(w,prefix+".b"),hidden);
+        auto [a,b]=source_matrices(w,prefix);
+        auto hidden=at::silu(at::matmul(a,normalize(z,epsilon_))+weight(w,prefix+".embedding"));
+        z=z+alpha_*at::matmul(b,hidden);
       }
       masses.push_back(mass);values.push_back(z);
     }
@@ -41,8 +43,7 @@ class Aggregate final:public AggregateKernel {
     // Shapes are checked per class; one class may bind several physical atoms.
     for(const auto& [name,value]:w.extra)if(name.find("aggregate_program.transforms.")==0&&name.substr(name.size()-2)==".a"){
       auto prefix=name.substr(0,name.size()-2);const auto d=w.bias.numel()-1;
-      require(value.dim()==2&&value.size(1)==d,"invalid source A shape");
-      shape(w,prefix+".b",{d,value.size(0)});shape(w,prefix+".embedding",{value.size(0)});
+      validate_source(w,prefix,d);
     }
   }
  private:SourceClasses classes_;double alpha_,epsilon_;

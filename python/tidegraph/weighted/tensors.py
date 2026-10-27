@@ -1,10 +1,7 @@
 """Architecture §1–2: separate typed views of payload (m,z) and content (r,u)."""
 from dataclasses import dataclass
 import torch
-
-
-def norm(x, epsilon):
-    return x/torch.sqrt(epsilon+x.square().mean(dim=-1, keepdim=True))
+from .normalization import norm
 
 
 @dataclass(frozen=True)

@@ -16,15 +16,7 @@ from .sending import attention_send, proportional, total_zero, hard_selection
 from .scoring import ScalarHead, Encoder, MatchScore, GroupedEvidence, Query
 from .tensors import Payload, Received, norm, parameter
 from .mean import weighted_mean
-
-
-class SourceTransform(torch.nn.Module):
-    def __init__(self, a, b, embedding):
-        super().__init__()
-        self.a, self.b, self.embedding = a, b, embedding
-
-    def forward(self, z, epsilon):
-        return self.b@torch.nn.functional.silu(self.a@norm(z,epsilon)+self.embedding)
+from .source_binding import SourceTransform, SourceBinding
 
 
 class WeightedAggregate(AggregateProgram):
@@ -39,12 +31,13 @@ class WeightedAggregate(AggregateProgram):
         from .aggregate_batch import evaluate
         return evaluate(self, requests)
 
-    def __init__(self, profile, classes, transforms, alpha, epsilon, hidden_width):
+    def __init__(self, profile, classes, transforms, alpha, epsilon, hidden_width, source_binding=SourceBinding()):
         super().__init__()
         self.profile, self.classes = profile, classes
         self.transforms = torch.nn.ModuleDict({str(k): v for k,v in transforms.items()})
         self.alpha, self.epsilon = alpha, epsilon
         self.hidden_width = hidden_width
+        self.source_binding = source_binding
 
     def step(self, w, request):
         masses, values = [], []

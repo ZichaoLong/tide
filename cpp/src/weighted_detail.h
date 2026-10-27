@@ -1,4 +1,5 @@
 #pragma once
+#include "weighted_attention_mean.h"
 #include "tide/weighted.h"
 #include <cmath>
 #include <stdexcept>
@@ -28,8 +29,7 @@ inline Tensor rotate(const Tensor& keys,const Tensor& displacement,const std::ve
 inline Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& weights,const Tensor& total){
   auto positive=weights>0;
   if(!positive.any().item<bool>())return at::zeros({values.size(-1)},values.options());
-  auto probabilities=(logits.index({positive})+weights.index({positive}).log()).softmax(0);
-  return total.clamp_max(1)*(probabilities.unsqueeze(-1)*values.index({positive})).sum(0);
+  return total.clamp_max(1)*attention_mean(logits.index({positive})+weights.index({positive}).log(),values.index({positive}));
 }
 inline Tensor head(const std::map<std::string,Tensor>& w,const std::string& prefix,const Tensor& x){
   return w.at(prefix+".bias")+(at::silu(at::matmul(x,w.at(prefix+".matrix").t())+w.at(prefix+".hidden_bias"))*w.at(prefix+".vector")).sum(-1);

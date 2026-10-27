@@ -41,6 +41,7 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [Read/Full 批量数值求值](weighted-query-batch.md)列出完整快照、KV 可见性、卷积槽和字段解码；
 [Read/Full 批量 VJP](weighted-query-vjp.md)逐项声明私有图、公开字段/行根、共享参数与资格边界。
 [区域完整批量/VJP](weighted-region-batch.md)对应分配分支、control 根、history 能力和在线调度。
+[来源函数四种参数绑定](weighted-source-binding.md)对应 A/B/embedding 别名、私有低秩因子、类别宽度及训练恢复。
 
 `θ` 是逻辑时间；`B` 是已完整且非空的同时间带来源纤维；`q` 是旧状态，
 `q̃` 是 Upd proposal，`q̄` 是选择后的 comparison，`h` 是本地内容。

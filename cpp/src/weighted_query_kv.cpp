@@ -26,8 +26,7 @@ Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& wei
     auto ids=at::tensor(rows,weights.options().dtype(at::kLong)),cols=at::stack(columns);
     auto l=logits.index({ids.unsqueeze(-1),cols}),w=weights.index({ids.unsqueeze(-1),cols});
     auto v=values.index({ids.unsqueeze(-1),cols});
-    auto probabilities=(l+w.log()).softmax(1);
-    auto reads=totals.index_select(0,ids).clamp_max(1).unsqueeze(-1)*(probabilities.unsqueeze(-1)*v).sum(1);
+    auto reads=totals.index_select(0,ids).clamp_max(1).unsqueeze(-1)*attention_mean(l+w.log(),v);
     for(size_t i=0;i<rows.size();++i)result[rows[i]]=reads[i];
   }
   return at::stack(result);

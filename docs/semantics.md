@@ -103,6 +103,11 @@ Frozen function configuration and source classes enter the graph profile identit
 checkpoint v5 stores actual raw entries/pending, including expired entries retained
 by zero receive. This addition does not change the generic adoption/Next contract.
 Backend qualification and remaining formal candidates are recorded separately.
+The [source binding contract](weighted-source-binding.md) adds the four architecture
+§2.2 parameter groups, per-class hidden widths with equal-width shared matrices,
+and private node/class low-rank factors. The default regional identity and
+initialization remain stable; nondefault bindings enter aggregation profile hashes.
+Checkpoint aliases preserve actual parameter sharing independently of private state.
 
 ## Weighted sending bindings
 
@@ -171,6 +176,19 @@ actual KKT branches, independent control roots and singleton weighted history.
 General history-dependent programs retain causal order; no implicit independence
 is introduced by the batch capability. Exact-map VJPs remain separate from solver
 iteration derivatives and hard sending's declared branch derivatives.
+KV weighted Attention retains the original softmax probability sum in forward.
+Its first-order logit VJP contracts value differences before reduction:
+`p_i * dot(bar, (v_i-v_0)-sum_j p_j*(v_j-v_0))`; value VJP is `p_i*bar`.
+This algebraically equal form preserves constant-value logit independence and
+avoids cancellation when nearly equal values produce tiny query gradients.
+The positive-weight selection, total-strength gain and zero branch are unchanged;
+this is distinct from the regional Attention sending function.
+Architecture §1 RMS normalization keeps the forward `n=x/sqrt(epsilon+mean(x²))`.
+Its first-order VJP is `(bar-n*mean(bar*n))/sqrt(epsilon+mean(x²))`, contracting
+in normalized coordinates before one final division. This avoids separately
+rounded inverse-power terms; no dtype promotion, gradient clipping or support
+change is introduced. Independent literal Jacobians and directional differences
+anchor this equivalent expression; original input version guards remain.
 
 ## First local profile: `ema-ffn-v1`
 
