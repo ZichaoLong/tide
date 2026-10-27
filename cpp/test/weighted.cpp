@@ -9,6 +9,8 @@
 #include <cmath>
 #include <stdexcept>
 
+void check_weighted_query_vjp(tide::NodeWeights,tide::State,tide::Index,const at::TensorOptions&);
+
 namespace {
 using namespace tide;
 void close(const Tensor& a,const Tensor& b){
@@ -64,6 +66,7 @@ void check_weighted(const at::TensorOptions& o){
   if(!b.stats.at("batched_state_events")||b.stats.count("semantic_state_replays")&&b.stats.at("semantic_state_replays"))
     throw std::runtime_error("weighted standalone State VJP fell back to scalar replay");
   const auto& state=a.continuation.states.at({0,0});
+  check_weighted_query_vjp(model.nodes[0],state,clock,o);
   if(state.slots.at("times")[0].item<Index>()!=clock)throw std::runtime_error("weighted clock lost int64 precision");
   auto zero=model.nodes[0].kernel->step(model.nodes[0],state,ContentView{at::tensor({0.,5.},o)},clock+20);
   if(!at::equal(zero.slots.at("times"),state.slots.at("times")))throw std::runtime_error("weighted zero receive changed exact state");

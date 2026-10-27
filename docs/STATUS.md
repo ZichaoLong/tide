@@ -36,7 +36,7 @@ Read/Full 数值增量及固定源码资格已完成，证据 [core5-query](evid
 Full 显式 `full_autograd="batched"`，默认 replay 保留。
 Python 局部/公共路径 108 项通过；共享参数/重复输入与方向差分新增 10 项通过；
 HB/反馈 PDG 三步 AdamW、含 pending checkpoint 换 owner 恢复和保留图切点新增 6 项通过。
-C++ 尚未构建；新 standalone 手算 VJP 与 native probe 待运行，不能称为通过。
+C++ 构建与 standalone 手算 VJP 已完成；native probe/完整执行的通过与失败范围如下。
 首个 VJP 开发 unit `tide-core5-query-vjp-dev-20261027` 已终态 failed/exit-code、exit 1；
 tree 5e93638676346279ab69d7b4182b7b8aeb2f991c。C++ helper 的未限定 bind 调用被 ADL 解析到
 std::bind，编译失败，pytest 未启动；原源码/日志在 artifacts/jobs/core5-query-vjp-dev。
@@ -45,12 +45,13 @@ std::bind，编译失败，pytest 未启动；原源码/日志在 artifacts/jobs
 worktree artifacts/worktrees/core5-bootstrap，输出 artifacts/jobs/core5-query-vjp2-dev。
 background.slice、Nice=10、两 build workers、ATen/BLAS 单线程、RuntimeMaxSec=1200。
 检查 `systemctl --user show tide-core5-query-vjp2-dev-20261027 -p ActiveState -p Result -p ExecMainStatus`；
-日志 `tail -60 artifacts/jobs/core5-query-vjp2-dev/task.log`；停止同名服务。已核验 active/running；C++ 构建已通过，pytest 运行中出现一项失败，尚无终态。
+日志 `tail -60 artifacts/jobs/core5-query-vjp2-dev/task.log`；停止同名服务。已终态 failed/exit-code、exit 1；**646 passed / 1 failed**。
 
 新 VJP 局部失败已定位：FP32/native/gated_delta/sum 混合字段根 input.3 差 1.43e-5；
 Python MatchScore residual 的行向量投影与 C++ 列向量顺序不同。仅切换标量投影次序后
 native query VJP 全部 52 项通过；修正后的完整 query VJP、训练/恢复与评分短检查 **137 项通过**。诊断在 artifacts/diagnostics/core5-query-match-projection。
-当前主工作区已修正，未改变数学、输入、dtype 或容差；活动 job 仍读修正前冻结树。
+当前主工作区已修正，未改变数学、输入、dtype 或容差；失败 job 的修正前源码/日志保持。
+相关开发检查完成，本次提交固定 Read/Full VJP 实现；下一步冻结提交进行正式定向资格。
 
 最近数值开发 unit `tide-core5-query-heads-dev-20261027` 保持 failed/exit 1、**397/1**，
 tree e5fb6e079865e65e7c11ba1f38737cf6be0af309。新增三样本 PDG FP32/native case 3 的 evidence

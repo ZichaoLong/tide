@@ -18,6 +18,10 @@ std::vector<TensorFields> ReadKernel::fields_batch(const NodeWeights& w,
   for (const auto& request : requests) result.push_back(fields_step(w, request));
   return result;
 }
+std::vector<TensorFields> ReadKernel::fields_batch_grad(const NodeWeights&,
+                                                       const std::vector<ReadInput>&) const {
+  throw std::invalid_argument("structured Read program has no batched VJP");
+}
 namespace {
 void validate(const TensorFields& fields, const FieldLayout& layout, at::Device device, at::ScalarType dtype) {
   if (fields.size() != layout.size()) throw std::invalid_argument("structured Read field domain mismatch");
@@ -35,7 +39,9 @@ void evaluate_read_fields(const NodeWeights& w, std::vector<Event>& events,
   const auto& kernel = *w.read_kernel;
   const auto layout = kernel.field_layout(w);
   std::vector<TensorFields> values;
-  if (packed) { at::NoGradGuard guard; values = kernel.fields_batch(w, requests); }
+  const bool batched = packed && at::GradMode::is_enabled() && kernel.batched_autograd();
+  if (batched) values = kernel.fields_batch_grad(w, requests);
+  else if (packed) { at::NoGradGuard guard; values = kernel.fields_batch(w, requests); }
   else for (const auto& request : requests) values.push_back(kernel.fields_step(w, request));
   if (values.size() != ids.size()) throw std::invalid_argument("structured Read batch changed event count");
   for (size_t i = 0; i < ids.size(); ++i) {
@@ -45,7 +51,7 @@ void evaluate_read_fields(const NodeWeights& w, std::vector<Event>& events,
     if (dtype != payload.scalar_type() && dtype != at::kDouble && dtype != at::kFloat)
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[i], layout, device, dtype);
-    if (packed && at::GradMode::is_enabled()) {
+    if (packed && at::GradMode::is_enabled() && !batched) {
       const auto semantic = kernel.fields_step(w, requests[i]);
       validate(semantic, layout, device, dtype);
       for (auto& [name, value] : values[i]) value = semantic_value(value, semantic.at(name));

@@ -22,6 +22,7 @@ class ReadKernel {
   virtual bool joint_batch() const { return false; }
   virtual bool batched_autograd() const { return false; }
   virtual std::vector<Tensor> batch_grad(const NodeWeights&, const std::vector<ReadInput>&) const;
+  virtual std::vector<TensorFields> fields_batch_grad(const NodeWeights&, const std::vector<ReadInput>&) const;
   virtual at::ScalarType descriptor_dtype(at::ScalarType payload) const { return payload; }
   virtual at::Device descriptor_device(at::Device payload) const { return payload; }
   virtual void validate_weights(const NodeWeights&) const = 0;

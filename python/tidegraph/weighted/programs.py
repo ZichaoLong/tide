@@ -215,6 +215,11 @@ class RegionalTotal(RegionProgram):
 
 class WeightedFull(FullProgram):
     joint_batch = True
+    batched_autograd = True
+
+    def batch_grad(self, weights, requests, slots, mode, zeta):
+        from .query_vjp import evaluate
+        return evaluate(self, weights, requests, kind="full", slots=slots, mode=mode, zeta=zeta)
 
     def batch(self, weights, requests, slots, mode, zeta):
         from .full_batch import evaluate
