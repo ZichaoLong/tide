@@ -13,10 +13,10 @@ Python/native有限mixed、显式同步双NPU、half/master及standalone恢复�
 Python-owned23项通过；8eebcec显式CUDA80/90/100完整图构建与安装loader通过；无GPU真机。
 实现与这些证据已正常推送至2ae8496。
 
-最新实现ebe547115e8a70347c42ae420d669f1c6ea65fba：完整数值阶段VJP，尚未推送。
+最新阶段实现ebe547115e8a70347c42ae420d669f1c6ea65fba：完整数值阶段VJP；证据ad03d13与实现均已正常推送。
 Full→Describe→Mem→Upd→Aggregate，三种Read快照、独立raw/描述/Content/control/Full根，
 物理输入和来源低秩链、角色切片与canonical共享参数。阶段不等于完整retained图训练。
-固定资格已通过，证据evidence/core5-resident-weighted-stage-20261028.{md,json}待单独提交：
+固定资格已通过，证据evidence/core5-resident-weighted-stage-20261028.{md,json}已提交：
 - NPU unit tide-core5-weighted-stage-npu-qualify-20261028.service inactive/success/exit0；
   clean ebe5471，metadata5项/.78秒、24配置/342根模式及非有限拒绝、完整forward21图/边界；物理3→npu:0。
   输出artifacts/jobs/core5-weighted-stage-npu-qualify/：status/task.log、control-build、checks/result.json、queue-state。
@@ -35,8 +35,8 @@ NPU600秒/queue180、CUDA1200秒，2workers/BLAS1/background.slice/Nice10。
 tests/test_resident_weighted_reverse_route.py以及CMake/组件检查注册。
 按实际int64发送time/source/sample寻找早期Full；重复物理边各贡献一次，left-pending/external按完整六元坐标独立根。
 连接位独立于数值零；身份/ancestry拒绝41、非有限/溢出拒绝37，sticky error使整个导数失效。
-CPU语义10项/1.22秒通过；C++wrapper/NPU/CUDA尚未构建运行，尚未接完整window reverse owner。
-先单独提交推送已完成阶段证据（不混入新路由实现），再冻结开发源码做路由设备检查。
+CPU语义12项/1.21秒通过；C++wrapper/NPU/CUDA尚未构建运行，尚未接完整window reverse owner。
+阶段证据已提交推送。路由补充相邻巨大int64发送时间和溢出/sticky检查，共12项；准备冻结开发源码做NPU/CUDA构建检查。
 短检查：source /etc/profile.d/modules.sh；module purge；module load ascend/dev-workspace-9.1.0；
 source .local/venv-core5/bin/activate；TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 python -m pytest -q tests/test_resident_weighted_reverse_route.py。
@@ -68,3 +68,24 @@ CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh，Torch2.10+cu128
 先更新STATUS、固定源码，不编辑活动reader。源码/构建/实际设备/性能分别记录。
 检查systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus及status.json/task.log/checks/result.json；
 停止systemctl --user stop UNIT。STATUS用scripts/durable_records.py原子更新并回读。
+
+## 当前开发任务
+
+路由开发准备启动，结果未知；两个独立新build，冻结主工作区tree到sdk/cuda checkout。
+unit tide-core5-weighted-route-{npu,cuda}-dev-20261028.service；输出artifacts/jobs/core5-weighted-route-{npu,cuda}-dev/。
+launcher .local/core5-weighted-route-{npu,cuda}-dev{,-workload}.sh；source.tar/source.tree、status/task.log、control-build/checks。
+CPU12项；NPU新kernel/wrapper构建与12设备案例，CUDA新构建/loader和显式80/90/100命令检查（无真机）。
+600秒上限、queue180秒、2workers/BLAS1/background.slice/Nice10。
+查看systemctl --user show对应unit -p ActiveState -p Result -p ExecMainStatus及status/task.log；停止systemctl --user stop对应unit。
+不得编辑活动checkout。结束后固定实现提交，再做干净资格，证据另提交。
+
+路由dev两后端均failed/exit1（tree f65166a2fa45a3c7e013b5e7dc8526cb0aace9b2）：新wrapper头未显式include DeviceProgram，
+CPU12项和kernel编译已过，未运行NPU；原日志/快照保留。已补头，准备dev2新输出与新build，不改数学或容差。
+unit tide-core5-weighted-route-{npu,cuda}-dev2-20261028.service；输出artifacts/jobs/core5-weighted-route-{npu,cuda}-dev2/，
+launcher .local/core5-weighted-route-{npu,cuda}-dev2{,-workload}.sh；同600秒/queue180/2workers/BLAS1，结果未知。
+
+路由dev2两任务已passed/exit0，冻结tree da033ebc16a6a4d1837c736cec19c46a60de709a。
+NPU12项CPU检查、wrapper/kernel新构建及12设备案例/dtype拒绝通过；物理9→npu:0。
+CUDA12项CPU检查、wrapper/kernel新三架构构建/loader通过；160个已配置CUDA命令精确80/90/100，无真机。
+检查artifacts/jobs/core5-weighted-route-{npu,cuda}-dev2/{status.json,task.log,control-build.json}及NPU checks/CUDA architectures。
+当前无活动reader；下一步提交路由实现，固定该提交验证后单独记录证据。随后实现设备整窗口逆序VJP。
