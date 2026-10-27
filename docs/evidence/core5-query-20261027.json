@@ -1,0 +1,51 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "0f274a7ce65ce6b2b0834f7a149ace4b5719f72a294038f5ef2b4858f25f1e75",
+  "source": "7b8b4696a5998ea7caa4fa55dfa9c81945f1ab17",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "weighted Read/Full numeric batching CPU qualification; scalar semantic VJP replay",
+  "result": {
+    "passed": 377,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "fa7ac249a3e2a03ebf91f0b3067e69ddc9572ccdb982eac7403e8865556235b1",
+  "binary_sha256": {
+    "libtidegraph.a": "2847f3ef51b35d966ec448f8614f42ea73413289c7345cd920b5e9f041be141c",
+    "_tide_native.so": "0fd592a1cceabfd41a6685687ef454a5b64ecec6348578f624561160f42f9257",
+    "tidegraph-kernel-check": "ca966a9bc8082f114ce22da3d0364aab9ac85bf6688381baf510983fffe27e9c"
+  },
+  "log_sha256": "87769ff669d29d84a046947b84a5c14c665c4ba634792fb3af2e7a8cbf2d4e3a",
+  "started": "2026-10-27T08:09:46.898385+00:00",
+  "finished": "2026-10-27T08:14:17.582994+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-query-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-query-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_read_batch.py",
+      "tests/test_weighted_scoring.py",
+      "tests/test_weighted_aggregate_training.py",
+      "tests/test_weighted_state_vjp.py",
+      "tests/test_weighted_execution.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_recurrent_execution.py",
+      "tests/test_weighted_scoring_execution.py",
+      "tests/test_weighted_sending_execution.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-query-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
