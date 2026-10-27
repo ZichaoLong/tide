@@ -41,3 +41,5 @@ python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_R
 
 源码、实机验证和尚未完成的完整训练边界从 STATUS/证据索引进入；本页不把测试定义
 当作已运行证据。当前数值阶段为 FP32，CUDA 构建与真机也分别记录。
+
+固定源码阶段资格见[2026-10-28报告](evidence/core5-resident-weighted-stage-20261028.md)；完整训练范围独立记录。

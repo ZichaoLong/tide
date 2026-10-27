@@ -1,0 +1,211 @@
+{
+  "component": "weighted resident numerical stage VJP",
+  "date": "2026-10-28",
+  "source": "ebe547115e8a70347c42ae420d669f1c6ea65fba",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": [
+    "FP32 complete Aggregate/Upd/Mem/Describe/region/Full numerical-stage adjoint",
+    "Independent raw fields, descriptors, Content, control and unscaled Full roots",
+    "Three Read snapshots, five memories, shared canonical parameter roles and physical input roots"
+  ],
+  "jobs": [
+    {
+      "source": "ebe547115e8a70347c42ae420d669f1c6ea65fba",
+      "state": "passed",
+      "started": "2026-10-27T18:07:59.664370+00:00",
+      "finished": "2026-10-27T18:09:11.135664+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-stage-npu-qualify",
+      "unit": "tide-core5-weighted-stage-npu-qualify-20261028.service",
+      "clean": true,
+      "log_sha256": "07a53b562c6b0bc40ad1d1e850c16fabd04bf4fee48b07af85503601a95acf05",
+      "build": {
+        "source": "5efce32471f3b407b25fa669706e56e88436a3e9",
+        "component_sha256": "17fa110fa6a8724e9631f5e9411028deba4de23efd403aa0e42b47b6e0199bd6",
+        "backend": "npu",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-weighted-stage-check": "252fcc34c23d03918455484ef7f8585d86a792540ff0d040252283262821ea5f",
+          "tide-weighted-flow-check": "ebbcfa2cf953dea2701d35d875e8df1619073cb23911937085d616cc5fcd102b",
+          "libtide-weighted-flow.so": "13e7f47859277efe8013dd94d18d2864e02060d11affc52a7290da11c42440dd"
+        },
+        "loader_sha256": {
+          "tide-weighted-stage-check": "74974384722de06b72f61a0a097f75277258c612ddc6bbfacb20e659d6c9a6d4",
+          "tide-weighted-flow-check": "b5e8f59b328488d11f47c730ae2ca0aa1e84812c188a5cc0c666aef1e48c3c73",
+          "libtide-weighted-flow.so": "218f1faed545f863434f4c64b2072773400eabc05506c21d92bcfa32c9fe402c"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse": "Original development manifest retained. All component sources, core identity and binary hashes matched the frozen clean commit; no claim of recompilation."
+      },
+      "queue": {
+        "elapsed_seconds": 68.0902713611722,
+        "job_id": "core5-weighted-stage-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 3,
+        "physical_ids": [
+          3
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T18:09:11.113438+00:00"
+      },
+      "cases": [
+        {
+          "check": "weighted-stage",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-stage-float32.log",
+          "log_sha256": "918b4035ec6d22725e41d7012e131f70ce7fbc8a030aca9ebf0681b17c9479b1"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-float32.log",
+          "log_sha256": "79d93a22dd2420c80b376ab97b34649dd5c99d8c5faefe6e140d1d82fd775c58"
+        }
+      ],
+      "observations": {
+        "metadata_tests": 5,
+        "metadata_seconds": 0.78,
+        "stage_configurations": 24,
+        "root_modes": 342,
+        "forward_graph_cases": 21,
+        "connected_nonfinite_refusal": true,
+        "rtol": 3e-05,
+        "atol": 3e-06
+      }
+    },
+    {
+      "source": "ebe547115e8a70347c42ae420d669f1c6ea65fba",
+      "state": "passed",
+      "started": "2026-10-27T18:07:59.661828+00:00",
+      "finished": "2026-10-27T18:13:01.072586+00:00",
+      "exit_code": 0,
+      "name": "core5-weighted-stage-cuda-qualify",
+      "unit": "tide-core5-weighted-stage-cuda-qualify-20261028.service",
+      "clean": true,
+      "log_sha256": "a22b8c38c1d183ea4559f2cc7681b249ae267c0e859e85843edbb07946f067cd",
+      "build": {
+        "source": "ebe547115e8a70347c42ae420d669f1c6ea65fba",
+        "component_sha256": "17fa110fa6a8724e9631f5e9411028deba4de23efd403aa0e42b47b6e0199bd6",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "binary_sha256": {
+          "tide-weighted-stage-check": "6ea97b9a1f9224fa6742a085eb8223778e51a0920681abd4ba2084e8cb25e625",
+          "tide-weighted-flow-check": "25a313d323bc47816252f6c6f0016f7647bd40255665347a8be06da9617302eb",
+          "libtide-weighted-flow.so": "26c2b64cbf9e9a8e3e1d8aedd7350bf820324c4104cc2031eb897f41cd216632"
+        },
+        "loader_sha256": {
+          "tide-weighted-stage-check": "5e21b28ec21bc6fc3295c9c506174d09e71b0ce2afec50867a583d88ffd54984",
+          "tide-weighted-flow-check": "5a662e2ac0ee0e9f09b4afc549314133b2954a8437d558c1bf9a0d7323787953",
+          "libtide-weighted-flow.so": "ab05d51fe9cb95cf05b7a6a8915dddc6ac581fbdb410c26032ec69413c0e8def"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "effective_cuda_architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "cuda_translation_units": 159
+      },
+      "observations": {
+        "configured_cuda_commands": 159,
+        "selected_targets": "stage, complete flow and shared flow library",
+        "scope": "build and loader only; no GPU hardware"
+      },
+      "installed_consumer": {
+        "state": "passed",
+        "binary_sha256": "678cc49ea99a683d8863a0423902da85b177e05e3883bd81362d6cc3563503bc",
+        "loader_sha256": "9b088d4f03ead5e875cecbfafbb846ebfb832c72622d5dab8129b8139039c67e",
+        "consumer_sources": {
+          "CMakeLists.txt": "94b341cb9a486f0a6b9469d078bc738faea5669600c82725466d17f5a77d3560",
+          "main.cpp": "d49ee630d0203e7cc242206667e312fa3b0432f2cb83c6f8ebb6594d6c240b1a"
+        }
+      }
+    }
+  ],
+  "development_records": [
+    {
+      "job": "core5-weighted-stage-dev",
+      "state": "failed",
+      "exit_code": 1,
+      "tree": "1e3813f8d1d9ca6fae998ee6ea565d55a6022b9d",
+      "observation": "fixture missing ATen grad_mode header; no device execution"
+    },
+    {
+      "job": "core5-weighted-stage-dev2",
+      "state": "failed",
+      "exit_code": 1,
+      "tree": "15474abc0dfedc82550730a7e09c34bb0bbf9471",
+      "observation": "compare missing ATen grad_mode header; no device execution"
+    },
+    {
+      "job": "core5-weighted-stage-dev3",
+      "state": "passed",
+      "exit_code": 0,
+      "tree": "76e8528394709b85b7e46d63a1b87f96f5e6ca14",
+      "observation": "15 configurations and forward regression passed"
+    },
+    {
+      "job": "core5-weighted-stage-dev4",
+      "state": "failed",
+      "exit_code": 1,
+      "tree": "5d4f5927a5e66d0758ee344e64bdb249591cfa4f",
+      "observation": "CPU reference omitted independent inactive-candidate control root in all-root case; corrected reference flags only, no candidate/tolerance change"
+    },
+    {
+      "job": "core5-weighted-stage-dev5",
+      "state": "passed",
+      "exit_code": 0,
+      "tree": "771e16417f6d98f58ab02752150846ed1b38bbf6",
+      "observation": "24 configurations passed including independent roots and nonfinite refusal"
+    }
+  ],
+  "independence": "CPU Greedy schedule and scalar autograd functions check stage composition. Independent formulas/directional derivatives remain the anchors in each linked local-component contract; this report does not claim independent mathematics from two shared formula implementations.",
+  "commands": [
+    "python -m pytest -q tests/test_resident_weighted_flow_packing.py",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_BUILD --checks weighted-stage weighted-flow --jobs 2 (explicit backend SOC/architectures)",
+    "python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_CHECKS --device npu:0 --checks weighted-stage weighted-flow",
+    "python scripts/build_resident_consumer.py --core-build CORE --resident-build NEW_BUILD --output-dir NEW_CONSUMER --component weighted"
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Cross-stage/window retained graph adjoint",
+    "Optimizer publication and exact training restoration",
+    "FP16 and peer graph paths",
+    "CUDA actual-device execution",
+    "Finite profiling and performance selection"
+  ]
+}
