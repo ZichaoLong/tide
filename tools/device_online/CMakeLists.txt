@@ -152,6 +152,10 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-projection PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-projection PUBLIC tide-device-control tide_weighted_head_plan_kernel
     tide_weighted_head_guard_kernel tide_weighted_head_reduce_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel)
+  add_library(tide-weighted-kv-sum STATIC weighted_kv_window.cpp weighted_kv_sum.cpp)
+  set_target_properties(tide-weighted-kv-sum PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-weighted-kv-sum PUBLIC tide-weighted-raw tide-weighted-pool
+    tide_weighted_window_prepare_kernel tide_weighted_window_reverse_kernel tide_weighted_sum_roots_kernel)
   add_library(tide-weighted-pool STATIC weighted_pool.cpp)
   set_target_properties(tide-weighted-pool PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-pool PUBLIC tide-device-control tide_weighted_source_guard_kernel
@@ -162,6 +166,9 @@ if(TIDE_DEVICE_KERNELS)
   target_link_libraries(tide-weighted-kv-update PUBLIC tide-weighted-projection tide-weighted-raw
     tide_weighted_source_guard_kernel tide_weighted_kv_prepare_kernel tide_weighted_kv_roots_kernel tide_weighted_kv_merge_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+    add_executable(tide-weighted-kv-sum-check weighted_kv_sum_check.cpp)
+    target_compile_options(tide-weighted-kv-sum-check PRIVATE -fPIC)
+    target_link_libraries(tide-weighted-kv-sum-check PRIVATE tide-weighted-kv-sum)
     add_executable(tide-weighted-pool-check weighted_pool_check.cpp)
     target_compile_options(tide-weighted-pool-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-pool-check PRIVATE tide-weighted-pool tide::tidegraph)
