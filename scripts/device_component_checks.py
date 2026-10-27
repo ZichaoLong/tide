@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "weighted-raw": ("tide-weighted-raw-check", ("float32",)),
     "weighted-parameters": ("tide-weighted-parameters-check", ("float32",)),
     "weighted-source": ("tide-weighted-source-check", ("float32",)),
     "weighted-aggregate": ("tide-weighted-aggregate-check", ("float32",)),
@@ -247,3 +248,5 @@ KERNELS["weighted-region"] = "tide_weighted_region"
 KERNELS["weighted-aggregate"] = "tide_weighted_aggregate"
 KERNELS["weighted-source"] = "tide_weighted_source"
 KERNELS["weighted-parameters"] = "tide_weighted_parameter"
+KERNELS["weighted-raw"] = "tide_weighted_raw"
+MARKERS["weighted-raw"] = "weighted-raw: passed"
