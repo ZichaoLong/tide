@@ -15,6 +15,7 @@
 [常驻canonical参数归约](resident-weighted-parameters.md)汇总所有模块/角色实际别名根并连接设备optimizer/发布。
 
 [常驻原始状态与缓存作用](resident-weighted-state.md)对应五记忆typed布局、精确解码、原始时间缓存和独立字段VJP。
+[常驻固定时间短卷积](resident-weighted-convolution.md)对应原始时间tap打包、vendor归约、私有cache/共享参数VJP和新旧快照组合。
 
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。

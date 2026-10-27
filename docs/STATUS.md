@@ -2,7 +2,7 @@
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
-已推送e0a6547（2e335e7 canonical归约/训练及固定证据）。总体未完成，不在阶段提交后暂停。
+已推送0e148ae（cb68d91原始状态/缓存及固定证据）。总体未完成，不在阶段提交后暂停。
 当前完整backlog见[ROADMAP](ROADMAP.md)，执行契约见[execution-flows](execution-flows.md)。
 
 ## 已实现与固定证据
@@ -50,7 +50,24 @@ NPU保留dev3原manifest；worktree固定cb68d91且无活动reader。
 主工作区未提交固定时间卷积：weighted_convolution.h/.cpp/check、math header/三个kernel入口，
 CMake/registry及契约/导航。CPU11（1.30秒）通过；整批tap选择、vendor index_select/multiply/sum，
 完整私有cache/当前项/共享参数VJP、保存实际版本、raw update组合check已写，尚未构建设备验证。
-下一步冻结开发任务，通过后实现提交、固定资格、证据/推送，再继续实际数值记忆和Describe。
+convolution-dev tree9a86a0b94b247abec63f9f0f086f2a27aef6b3b2已failed/exit1；CPU25通过，
+数值库与kernels构建通过，check的conv1d调用在整数padding/string padding重载间歧义。
+已明确IntArrayRef，不改数值实现。原日志/source.tar保留，无设备执行证据。
+
+convolution-dev2 treef6ba47c82fd922e2910e04ac6dd1155f97878716通过（CPU25、NPU完整组件），
+旧范围包括20重放行/共享bank/保存版本及raw update组合。
+代码审查补上缺失tap临时乘积溢出边界：只有实际映射到缓存或当前项的tap梯度需要有限性检查；
+未匹配历史项的临时Inf不应拒绝实际返回均有限的VJP。已加CPU/设备回归，CPU12卷积项通过。
+
+convolution-dev3 treef88a6ac85c8bda68a982560db4d4a5f15af64b1a通过，
+tide-core5-resident-convolution-dev3-20261027.service inactive/exit0；CPU26，NPU完整两K/20重放行、
+三共享bank/全部cache-current-参数VJP/原版本反向/raw update组合、缺失tap临时溢出边界及失败不提交通过。
+实际记录artifacts/jobs/core5-resident-convolution-dev3/{source.tar,source.tree,status.json,task.log,checks/result.json}。
+当前提交完整卷积实现/契约/测试，随后固定此提交进行CPU/NPU/CUDA资格；原构建失败记录保留。
+
+额外projection草稿未提交/未接入CMake：weighted_projection.h/.cpp，norm math/kernel，
+CPU RMS VJP4项通过（1.17秒）。用于共享线性投影/可选RMS；复用head元数据守卫/归约及vendor BMM，
+尚无完整设备检查，不以CPU helper认证完整投影。接下来补完整forward/输入参数VJP及保存版本检查。
 
 完整weighted resident仍缺五记忆数值/卷积读取、Describe、完整图在线就绪与推进、
 retained训练/optimizer/精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow

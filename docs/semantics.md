@@ -107,6 +107,10 @@ actual raw tuples, including expired entries retained by zero reception. The
 FP32 resident cache action and independent field VJP preserve original-time
 membership, saved inputs, None/zero connections and guarded adoption. Numerical
 memory formulas and full graph/checkpoint lifecycle require separate composition.
+The [fixed-time convolution component](resident-weighted-convolution.md) packs
+actual int64-indexed taps and evaluates vendor batched products/reductions. Its
+current term is unweighted, and saved adjoints distinguish absent cache roots
+from connected zero matches. Raw-update composition preserves that distinction.
 
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
