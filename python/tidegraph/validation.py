@@ -10,6 +10,8 @@ from .ownership import region_reference
 def validate_window(graph, model, continuation, external, stop, sealed_until):
     external = window_inputs(external, stop, sealed_until)
     validate_coordinates(continuation)
+    if hasattr(model, "validate_binding"):
+        model.validate_binding(graph)
     from .full import validate_program
     from .aggregate import validate_program as validate_aggregate
     from .state_program import validate_program as validate_state_program

@@ -89,6 +89,21 @@ for in-memory VJP binding. Decoding never invokes a reference recurrence.
 several atoms in one class; it does not change SourceDomain's exclusivity contract.
 These extensions do not automatically implement weighted memory or region formulas.
 
+## Weighted KV binding
+
+The separately versioned [weighted-message binding](weighted-message.md) provides
+the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
+fixed control and quad allocation. Payload (m,z), aggregate (r,u), descriptor
+fields and exact typed memory state have distinct decoders. Physical transport
+scales are fixed to one. All candidates retain their proposal; active means c>0
+and Full broadcasts (c,G). K is region size, independently of total-strength k.
+The [exact allocation-map VJP](weighted-allocation.md) is independent of legacy
+Emit/HST; legacy mode hard merely leaves the weighted Full payload unchanged.
+Frozen function configuration and source classes enter the graph profile identity;
+checkpoint v5 stores actual raw entries/pending, including expired entries retained
+by zero receive. This addition does not change the generic adoption/Next contract.
+Backend qualification and remaining formal candidates are recorded separately.
+
 ## First local profile: `ema-ffn-v1`
 
 For tagged values x_i and learned source weights w_i, `h=sum_i w_i*x_i`.

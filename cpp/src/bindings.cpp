@@ -22,6 +22,7 @@ void bind_aggregate(py::module_&);
 void bind_settle(py::module_&);
 void bind_metrics(py::module_&);
 void bind_placement(py::module_&);
+void bind_weighted(py::module_&);
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name, &T::name)
 PYBIND11_MODULE(_tide_native, m) {
@@ -196,5 +197,6 @@ PYBIND11_MODULE(_tide_native, m) {
   bind_settle(m);
   bind_metrics(m);
   bind_placement(m);
+  bind_weighted(m);
 }
 #undef FIELD

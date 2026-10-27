@@ -7,6 +7,7 @@
 #include "tide/region.h"
 #include "tide/device.h"
 #include "tide/ownership.h"
+#include "tide/weighted.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -66,6 +67,7 @@ void validate_model(const Graph& g, const Model& m) {
       require(supported_kernel_payload(w) && w.scalar_type() == ref.scalar_type(), "incompatible scale dtype/device");
       check_tensor(w, w, {});
     }
+  weighted::validate_transport(g,m);
 }
 std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& q,
                                  const std::vector<External>& external, Index stop, Index seal) {
