@@ -41,30 +41,25 @@ unit `tide-core5-packed-qualify-20261027` 已终态 inactive/success、exit 0；
 launcher `.local/core5-packed-qualify.sh`。实现与证据 727a7b5 已推送。
 当前活动开发任务如下。
 
-主工作区下一增量未提交：嵌套参数捕获/别名保留、零/正接收分组的 State VJP，
-及空卷积缓存的无连接分支。Python 新连接检查 13 项和 packed/legacy 53 项先通过。
-相关 C++ 已构建。StateKernel 能力增加结构 key，依赖对象全部重建，未复用旧 ABI。
-standalone C++ packed 输出根的手算反向与能力统计已接入并通过。
+State 批量 VJP 实现 `7a017bf4eea93787ca2d8e72baf436b128266afd` 固定源码资格：
+**343 passed / 0 failed / 0 skipped**，CPU FP64/FP32；[证据](evidence/core5-state-vjp-20261027.md)。
+unit tide-core5-state-vjp-qualify-20261027 已终态 inactive/success、exit 0；
+worktree artifacts/worktrees/core5-bootstrap 干净固定 7a017bf。
+输出 artifacts/jobs/core5-state-vjp-qualify；launcher `.local/core5-state-vjp-qualify.sh`。
+本证据与实现提交后推送。原开发 337/6 与修正 81/0 分别保留，原因/修复见证据，未覆盖原失败。
 
-开发 `tide-core5-state-vjp-dev-20261027` 已终态 failed/exit 1：**337 passed / 6 failed**。
-冻结树 `96d7b2d8c253ffbeab9b6896e42c233013ce2c5c`，原日志/源码/status 保留 artifacts/jobs/core5-state-vjp-dev。
-FP32 affine Read0 score.bias 差 7.63e-6；SSD Read−/+ input.2 差 2.13e-6 / 3.87e-6；
-Python/native 各三项。完整前向/新增连接测试已通过。独立诊断
-`.local/diagnose-state-vjp.py` / 该 job 的 diagnosis.txt 定位：共享归一化先合并 cotangent 再
-做一次 RMS VJP，改变 scalar 各分支先反传再相加的浮点顺序。分开 norm 的变体全通过。
-正式 Python/C++ 保留写入、GDN 控制、p_v 摘要的各批量归一化分支；
-未改数学/数值前向、容差、dtype 或裁剪梯度。修正后 Python 定向 **56 项通过**。
+主工作区下一增量未提交：WeightedAggregate 的 class 投影批与按实际 fiber 长度的完整归约。
+Python weighted/aggregate_batch.py 与独立 C++ weighted_aggregate.{h,cpp} 已接入，
+同类不同物理原子仍每条参与；alpha=0、零总量、缺失 fiber 不合并。
+这里只完成数值 batch，Aggregate 反向仍走明确的语义重放；Read/Full/区域仍待扩展。
+Python 手算/多类原子/反馈与非对齐图/独立根/续接 **8 项通过**；
+新增 native 与 standalone 检查尚未构建，不属于 7a017bf 的资格。无用户修改。
 
-修正开发 `tide-core5-state-vjp-norm-20261027` 已终态 inactive/success、exit 0：
-**81 passed / 0 failed / 0 skipped**，冻结树 d3282cab7f596a296434d1d046c79cabffa23ac3。
-launcher `.local/core5-state-vjp-norm.sh`，记录 artifacts/jobs/core5-state-vjp-norm；
-新 weighted_state_vjp/weighted_packed、六个原失败、standalone 全部通过。
-当前无 live job；实现/测试/契约同增量提交后，以固定提交运行不可变相关资格。
-下一动作：冻结到 task-owned worktree 并核验干净只读，通过 develop.py --reuse-build 校验构建，
-新 state-vjp-qualify job 沿 state-vjp-dev 的完整八入口运行，终态后独立记录证据并推送。
-契约 weighted-state-vjp.md；整段/每切点/optimizer 与旧 State VJP 回归需要在资格中保持。
-再推进 Aggregate/Read/Full、mixed/resident、standalone 完整训练与有限 profiling。
-总体任务尚未完成；无用户修改，持续推进。
+下一动作：补 Aggregate 批量契约和追溯，冻结新开发树；新的 background.slice 服务
+构建并运行 test_weighted_aggregate_batch、weighted_state_vjp、weighted_execution、
+weighted_native、scoring/sending/recurrent execution 及 standalone。
+结果终态后固定实现、独立资格/证据，再继续 Aggregate VJP、Read/Full、mixed/resident、
+standalone 完整训练与有限 profiling。当前无 live job；总体任务尚未完成，持续推进。
 
 ## 环境与保留事项
 

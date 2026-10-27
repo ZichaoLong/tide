@@ -1,0 +1,49 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "bc579ad894563c8af34dc3ef8e93d4917c893ee333b915e89aed5ce508dc2d9d",
+  "source": "7a017bf4eea93787ca2d8e72baf436b128266afd",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted weighted State batch first-order VJP CPU qualification, independent slots and nested parameter ownership",
+  "result": {
+    "passed": 343,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "bd2661649639270ae2f7daa5b8e7a40e565884b0207c1dffa7d2166de7d69254",
+  "binary_sha256": {
+    "libtidegraph.a": "b591fd709f4e59befcf4ce3414c91e12951ef803795775ed08e9ac5b0516ef28",
+    "_tide_native.so": "930d9adaf035d4f4a34697a4060a283df14497d500edccdf2c0f8b4e2076cee7",
+    "tidegraph-kernel-check": "7d80d322b9b6f2eab667bae632143f4dc4f21576b89e6c8fa97759e9ea498bc5"
+  },
+  "log_sha256": "95b1544227c8dfc9a529e4cbcfc57a2d9ce4759d87ff1eb1fb6b7db0a52542ad",
+  "started": "2026-10-27T07:20:00.787819+00:00",
+  "finished": "2026-10-27T07:23:35.033677+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-state-vjp-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-state-vjp-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_state_vjp.py",
+      "tests/test_weighted_packed.py",
+      "tests/test_state_batched_vjp.py",
+      "tests/test_weighted_recurrent_execution.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_scoring_execution.py",
+      "tests/test_weighted_sending_execution.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-state-vjp-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
