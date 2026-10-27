@@ -6,6 +6,9 @@ set_property(CACHE TIDE_DEVICE_BACKEND PROPERTY STRINGS NPU CUDA)
 # Torch's legacy CUDA discovery resets CMAKE_CUDA_ARCHITECTURES to OFF.
 # Preserve the user's explicit architecture request across dependency loading.
 set(TIDE_CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}" CACHE STRING "Explicit resident CUDA architectures")
+if(TIDE_DEVICE_BACKEND STREQUAL "CUDA")
+  include(CudaArchitectures.cmake)
+endif()
 find_package(TideGraph 0.2 CONFIG REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 set(TIDE_DEVICE_RUNTIME "standalone" CACHE STRING "Runtime owner: standalone or python")

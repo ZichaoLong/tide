@@ -27,24 +27,15 @@ Python/native有限mixed、显式同步双NPU、half/master及standalone恢复�
 
 ## 当前工作与下一动作
 
-本次交接已核验HEAD5efce32；证据待单独提交推送（此前origin344276c）。
-主工作区未提交：本段证据/导航，以及独立CUDA架构修复CMakeLists.txt/CudaArchitectures.cmake；提交时分开。
-
-唯一活动任务core5-weighted-flow-cuda-dev2：
-- unit tide-core5-weighted-flow-cuda-dev2-20261028.service，active/running，结果未知。
-- 冻结checkout artifacts/worktrees/core5-cuda；tree9f02feaa11168e4473270f30d8efbc2c2032ec2f，不得编辑。
-- 输出artifacts/jobs/core5-weighted-flow-cuda-dev2/；build/weighted-flow-cuda-dev；core build/cuda-tools2。
-- launcher .local/core5-weighted-flow-cuda-dev2{,-workload}.sh；helper .local/build-weighted-cuda-incremental.py。
-- 1800秒、2workers、BLAS1、background.slice/Nice10；源码/构建/安装loader，无CUDA真机。
-- 已核验每个CUDA编译命令的实际架构精确为80/90/100；当前Ninja构建，终态待查。
+前向证据3d1bd20与实现5efce32已正常推送。
+CUDA开发core5-weighted-flow-cuda-dev2已inactive/success/exit0；冻结tree9f02feaa11168e4473270f30d8efbc2c2032ec2f。
+三架构所有CUDA编译命令集合精确80/90/100，完整图/services/config及安装consumer构建/loader通过；无真机。
+输出artifacts/jobs/core5-weighted-flow-cuda-dev2/；checkout artifacts/worktrees/core5-cuda目前无活动reader。
 旧cuda-dev tree78b86b672ce185f0341ae4cbbb2baaab1c00a5cf failed：Torch隐式加sm50，peer __nanosleep编译失败。
-新修复在find_package前统一Torch与CMake显式请求架构；旧failed不覆盖。
-
-下一命令：
-`systemctl --user show tide-core5-weighted-flow-cuda-dev2-20261028.service -p ActiveState -p Result -p ExecMainStatus`
-并读`artifacts/jobs/core5-weighted-flow-cuda-dev2/status.json`和`task.log`。
-停止：`systemctl --user stop tide-core5-weighted-flow-cuda-dev2-20261028.service`。
-先提交5efce32前向证据并推送；CUDA开发通过后单独提交构建修复、固定源码资格与证据，不重跑无关NPU数值。
+主工作区CUDA架构修复与8项CMake策略检查将单独提交；固定源码资格随后运行。
+回归初版用pytest保留参数名request导致收集错误，已改名；不涉及设备运行。
+下一动作：固定构建修复提交，冻结core5-cuda，运行架构8项检查/构建/DSO/安装loader。
+按源码摘要与Ninja命令依赖复用已构建对象；无需重跑无关NPU数值。
 继续完整retained VJP/optimizer和精确训练恢复：反向读取候选实际device journal，链接消息生产者/状态前驱，
 复用已验局部VJP并汇总canonical参数；不得CPU参考重放或主机逐事件推进冒充resident。
 随后FP16/peer、有限profiling与代表性完整成本选型、最终追溯；不做全部开关笛卡尔积。

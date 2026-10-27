@@ -1,0 +1,23 @@
+# Torch's legacy FindCUDA injects its own -gencode flags before the native
+# CMake CUDA language is enabled. Derive both paths from the explicit request;
+# otherwise a GPU-less host can inherit sm50 and every arch in the wheel.
+if(NOT TIDE_CUDA_ARCHITECTURES)
+  message(FATAL_ERROR "Resident CUDA requires explicit architectures (80 or newer)")
+endif()
+set(_tide_torch_architectures "")
+foreach(_tide_arch IN LISTS TIDE_CUDA_ARCHITECTURES)
+  if(NOT _tide_arch MATCHES "^([0-9]+)([a-z]?)$")
+    message(FATAL_ERROR "Resident CUDA architecture must be an explicit code: ${_tide_arch}")
+  endif()
+  set(_tide_code "${CMAKE_MATCH_1}")
+  set(_tide_feature "${CMAKE_MATCH_2}")
+  if(_tide_code LESS 80)
+    message(FATAL_ERROR "Resident CUDA requires CC80 or newer: ${_tide_arch}")
+  endif()
+  math(EXPR _tide_major "${_tide_code} / 10")
+  math(EXPR _tide_minor "${_tide_code} % 10")
+  list(APPEND _tide_torch_architectures "${_tide_major}.${_tide_minor}${_tide_feature}")
+endforeach()
+list(REMOVE_DUPLICATES _tide_torch_architectures)
+set(ENV{TORCH_CUDA_ARCH_LIST} "${_tide_torch_architectures}")
+message(STATUS "Resident requested architectures: ${TIDE_CUDA_ARCHITECTURES}; Torch: ${_tide_torch_architectures}")
