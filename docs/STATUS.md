@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
-最近推送d072c17（节点放置前向）；三项资格仍在构建。当前提交修复通用资格脚本的新入口参数，组件源码不变。
+最近推送357477b（资格入口修正）；d072c17三项构建仍在运行。当前提交只修正/增强双卡检查器，运行库源码不变。
 用户授权持续实施、有限实验、提交与正常推送；不用子代理。总体goal active，**未完成**。
 唯一待办[ROADMAP](ROADMAP.md)，持续规则[execution-flows](execution-flows.md)；参考仓库/公共工具链只读。
 
@@ -49,6 +49,17 @@ NPU standalone另有checks/和cpu.xml；Python有tests.xml；CUDA只有三个hel
 独立case目录，并把两个weighted双卡检查从默认单设备列表移除。原NPU任务预计会在新检查入口退出，
 尚未实际失败；保留其真实终态，不修改活动脚本。构建成功后可在新冻结源码用同component hash
 复用已建SDK二进制做新资格，明确区分组件源码d072c17与修正后的qualifier源码。
+修正入口357477b已冻结到`artifacts/worktrees/core5-node-qualification-entry`。
+后继job `core5-weighted-node-entry-npu-qualify`在等待依赖时已主动取消，持久cancelled/exit143，
+unit MainPID0/failed；没有排队申请设备或执行资格。原因是反例复核发现检查器原先只给首节点输入，
+队列=2会在后续阶段拒绝，不能断言所有节点仍为初态。本提交改为首区域两个跨卡节点同时输入，
+用独立CPU参考确认第一阶段2个作用/4条消息/4条pending，再检查共同拒绝未采用任何state/history。
+另补实际raw/Full/参数bank设备断言和等长错误后端列表，防止仅返回请求配置而未真实放置。
+
+为了避免重复编译完全未改动的vendor内核，待原SDK构建完成后，可单独编译修正后的C++检查器，
+链接d072c17已建运行库。先验证两提交`tools/device_online`除`weighted_flow_peer_check.cpp`外逐字节相同，
+并核对原manifest全部binary hash；分别记录运行库源d072c17与检查器新源码。常规干净重建亦可复现。
+原d072c17脚本预期入口失败仍须等真实终态；单设备flow/training回归可继续用其未改动检查器独立验收。
 
 ## 原工作树在实施的下一步
 
