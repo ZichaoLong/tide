@@ -1,0 +1,54 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "d23ca998de74473a5c566714f28691e208916687f7a258dcae6e16cadb9ba706",
+  "source": "6dc2665c4fbd9053173bbd9d26c7e1b03b62abae",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Exact KV common projection with private adapter/state and explicit prepared State VJP operands; CPU FP64/FP32",
+  "result": {
+    "passed": 309,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "638a568b26ea9adf5a4bab1f956e26a72bd328e621dc216cfb1c3cc8f8890d75",
+  "git_tree": "8a2f2705a9021a7ee2bd05d41ea0c74b5b6d7c08",
+  "binary_sha256": {
+    "libtidegraph.a": "36db13d9d2f33e5f1b438d5cde3a32f7ddd0205733ba215859f266df31a8ce81",
+    "_tide_native.so": "e08cbfb52e2683c80e246bc70afeb5b6fdaa92c16b3a8f0377c1d99735004d10",
+    "tidegraph-kernel-check": "007a067fc5e247ed425c2d66ac6c663db8dc038ac7ade0da63619244a9334f82"
+  },
+  "log_sha256": "ca94b100e81a5e9e61b31a34899ff55c35af9f1484569b7f7f763cfb672c64f2",
+  "started": "2026-10-27T10:22:52.386347+00:00",
+  "finished": "2026-10-27T10:25:35.786117+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-kv-sharing-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-kv-sharing-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_kv_sharing.py",
+      "tests/test_weighted_compute_sharing.py",
+      "tests/test_weighted_instances.py",
+      "tests/test_weighted_packed.py",
+      "tests/test_weighted_state_vjp.py",
+      "tests/test_state_batched_vjp.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_source_training.py",
+      "tests/test_weighted_query_training.py",
+      "tests/test_weighted_kv_formulas.py",
+      "tests/test_weighted_recurrent_formulas.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-kv-sharing-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes checked by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
