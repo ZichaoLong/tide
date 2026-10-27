@@ -38,3 +38,5 @@ tape下一次调用覆盖前须由训练owner保留；存原始来源的引用�
 
 CPU元数据适配不能证明厂商算子或GPU执行。目标检查为
 `verify_device_control.py --checks weighted-head --device npu:0`；固定源码、构建和实际设备证据分列。
+
+固定161ccea的[CPU/NPU/CUDA构建资格](evidence/core5-resident-head-20261027.md)已记录；完整区域及GPU真机分开验收。

@@ -1,0 +1,212 @@
+{
+  "source": "161ccead025f33da2fb9a4f956982a43997a56b4",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "FP32 resident vendor-batched ScalarHead/Query shape and explicit first-order adjoint with shared parameter banks; not full region or graph execution",
+  "jobs": [
+    {
+      "source": "161ccead025f33da2fb9a4f956982a43997a56b4",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T13:01:47.715100+00:00",
+      "finished": "2026-10-27T13:02:08.700258+00:00",
+      "name": "core5-resident-head-npu-qualify",
+      "unit": "tide-core5-resident-head-npu-qualify-20261027",
+      "clean": true,
+      "log_sha256": "fd90e90dbc1f4af00b53efc18ac74628fb1606275c76359f30265d037f25e937",
+      "cpu_tests": 8,
+      "cpu_seconds": 2.05,
+      "device_cases": [
+        {
+          "check": "weighted-head",
+          "dtype": "float32",
+          "command": [
+            "build/resident-head/tide-weighted-head-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-head-float32.log",
+          "log_sha256": "249b11b55d003beea97355eeaf6f85d5de4895585f81644baa9e0480a67367bc"
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 16.342683102935553,
+        "job_id": "core5-resident-head-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T13:02:08.686028+00:00"
+      },
+      "observations": {
+        "profiles": [
+          "ScalarHead I4/H5/O1",
+          "Query I3/H3/O3"
+        ],
+        "rows": 24,
+        "complete_vjp": true,
+        "shared_nonzero_users": true,
+        "unused_owner_none": true,
+        "independent_row_roots": true,
+        "saved_input_and_parameter_versions": true,
+        "device_owner_replay": true,
+        "capacity_refusal": true,
+        "failed_window_no_commit": true,
+        "workspace_high_water_bytes_per_profile": 16777728,
+        "workspace_budget_bytes": 67108864
+      },
+      "build": {
+        "source": "8e7298d181bca157def003fc898cea60b869fbee",
+        "dirty": "M  docs/ROADMAP.md\nM  docs/STATUS.md\nM  docs/evidence/README.md\nA  docs/evidence/core5-resident-sending-20261027.json\nA  docs/evidence/core5-resident-sending-20261027.md\nA  docs/resident-weighted-head.md\nM  docs/resident-weighted-sending.md\nM  docs/semantic-map.md\nM  scripts/device_component_checks.py\nA  tests/test_resident_weighted_head.py\nM  tools/device_online/CMakeLists.txt\nM  tools/device_online/ascendc/CMakeLists.txt\nA  tools/device_online/ascendc/tide_weighted_head_guard.cpp\nA  tools/device_online/ascendc/tide_weighted_head_plan.cpp\nA  tools/device_online/ascendc/tide_weighted_head_reduce.cpp\nA  tools/device_online/weighted_head.cpp\nA  tools/device_online/weighted_head.h\nA  tools/device_online/weighted_head_check.cpp",
+        "component_sha256": "f25575fec33484e1b693783a1e55b618315b1ecad78c5b5229c7aa513c922d1d",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-head-check": "b48a074907fb19305a60b8a52443c06499652bf8d01e7d28d763e5bf5dd76349"
+        },
+        "loader_sha256": {
+          "tide-weighted-head-check": "31660b0b7082a7b3caa0fc51619c7f6b2111f098b3b5269763d9af71c7b0dfce"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "NPU archived dirty tree 68c50c18; full component/core/binary hash equality checked against fixed qualification source; original identity preserved"
+      }
+    },
+    {
+      "source": "161ccead025f33da2fb9a4f956982a43997a56b4",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T13:01:47.714910+00:00",
+      "finished": "2026-10-27T13:02:59.093249+00:00",
+      "name": "core5-resident-head-cuda-qualify",
+      "unit": "tide-core5-resident-head-cuda-qualify-20261027",
+      "clean": true,
+      "log_sha256": "53a9d298eeca4412d8cb4fc5c886aaa86230d77e909676b87b023b4925fd3150",
+      "build": {
+        "source": "161ccead025f33da2fb9a4f956982a43997a56b4",
+        "dirty": "",
+        "component_sha256": "f25575fec33484e1b693783a1e55b618315b1ecad78c5b5229c7aa513c922d1d",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-head-check": "a224b47473cd1c0bda86395172c2de1fe1b5a925c2101642db325ae13e53916f"
+        },
+        "loader_sha256": {
+          "tide-weighted-head-check": "c1af6fd2de35dd24b5ad98034f47e27caa7f7f8978d9ec27fac6b1d15f8da9df"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "new nvcc build of fixed clean source; no GPU"
+      }
+    }
+  ],
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_head.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CORE_BUILD",
+      "--build-dir",
+      "NEW_NPU_BUILD",
+      "--checks",
+      "weighted-head",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--device",
+      "npu:0",
+      "--checks",
+      "weighted-head"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE_BUILD",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-head",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "prior_development_failures": [
+    {
+      "name": "core5-resident-head-dev",
+      "state": "failed",
+      "tree": "9f473f4489059fc3a8312057409f0fdc0df6a82d",
+      "reason": "noncontiguous transposed weights rejected at program construction; replaced by explicit vendor permute and budgeted scratch"
+    },
+    {
+      "name": "core5-resident-head-layout-dev",
+      "state": "failed",
+      "tree": "2435ce9da05c10cf8a3ee72feff33610bfdaa55c",
+      "reason": "Permute requires 16777728-byte workspace, exceeding explicit 4 MiB test limit; next test declares 64 MiB; refusal remains failed"
+    }
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_build_seconds": 1200,
+    "queue_wait_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "Nice": 10
+  },
+  "pending": [
+    "Full region context/query/normalization/SelStep composition",
+    "Full resident weighted graph, retained training, optimizer, checkpoint, peer",
+    "Actual CUDA execution",
+    "FP16 and throughput"
+  ]
+}
