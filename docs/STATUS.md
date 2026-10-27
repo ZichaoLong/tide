@@ -74,14 +74,21 @@ units均为`tide-JOB-20261028.service`，输出`artifacts/jobs/JOB/`、launcher 
 全部proposal→共同拒绝决定→commit/publish，独立raw状态不切分。接口/契约在resident-weighted-peers.md。
 新文件tools/device_online/weighted_training_peer.cpp、ascendc/tide_weighted_peer_equal.cpp及CPU guard测试；
 公共header/binding/Python/CMake及standalone/Python两dtype多步、完整根、恢复与共同拒绝检查已接入。
-尚无多卡构建/数值资格，不能宣称跨卡已通过。
+尚无standalone多卡完整资格，不能把Python-owned通过外推SDK。CUDA构建已完成；原失败保留。
 CPU guard首跑3通过/1失败：测试传入temporary.clone().data_ptr()后clone提前释放；改为持有clone后4项通过/0.76秒；原失败保留此处。
 短C++语法检查已通过：独立参考、half轨迹、peer函数及peer检查；不是设备构建资格。
 Python接口/测试及检查注册模块AST通过。跨卡实现672e948已提交推送，另冻结到artifacts/worktrees/core5-weighted-peer。
-已启动core5-weighted-peer-{npu,cuda,python}-qualify，CUDA已passed/exit0，NPU/Python仍running/active，unit模式及输出/launcher规则同上；三个新build目录npu/cuda/python。
+已启动core5-weighted-peer-{npu,cuda,python}-qualify，CUDA与Python已passed/exit0（Python4项/62.50秒、物理9/13→0/1）；standalone NPU失败exit1（物理1/3→0/1），首个FP32报std::bad_alloc、FP16未运行，unit模式及输出/launcher规则同上；三个新build目录npu/cuda/python。
 NPU为两卡队列180秒、设备检查600秒；CPU guard4，standalone weighted-peer两dtype，Python-owned四配置；CUDA build/loader/help。
 每任务1800秒/2workers/BLAS1/Nice10/background.slice。库存16颗健康NPU，本次快照无进程，实际分配仍由队列双快照决定。
-不重复已通过的完整矩阵；half与peer分开核验，当前没有新的硬件通过结论。
+不重复已通过的完整矩阵；half与peer分开核验。
+源码审阅发现peer检查两处const auto&绑定registry.owners()[j]临时vector元素，存在悬空引用；已用原固定binary抓到bad_alloc位于run()内std::string::reserve，吻合参数名称悬空；主区改为持有owners vector，再取元素。
+诊断任务core5-weighted-peer-bad-alloc-diagnose，unit tide-core5-weighted-peer-bad-alloc-diagnose-20261028.service；
+原672e948 checkout，launcher .local/core5-weighted-peer-bad-alloc-diagnose.sh；输出artifacts/jobs/core5-weighted-peer-bad-alloc-diagnose/。
+预算300秒、queue180秒、gdb90秒、2卡；诊断终态exit0仅表示抓栈成功，不是数值通过。gdb结束inferior引发TBE子进程/信号量清理提示；原资格仍failed。
+同类审计发现weighted_training_trajectory.cpp最后master比较也借用了临时vector成员；一并改为持有master_owners。
+已在21ed86d报告补注：原任务passed状态不变，但该master断言不能作为可靠独立证据；Python与其他记录/VJP不受这处影响。
+下一步提交两处检查器生命周期修复，用新固定源码重做standalone weighted-training/weighted-peer两dtype；Python-owned和CUDA原资格单列。
 
 ## 当前性能入口增量
 

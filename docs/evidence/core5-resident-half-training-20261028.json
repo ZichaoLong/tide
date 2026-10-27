@@ -335,5 +335,11 @@
     "No new installed-consumer gate in this batch; earlier FP32 installed-consumer evidence remains separately scoped.",
     "Half record tolerances do not relax discrete, int64, physical identity or None/connected-zero comparisons.",
     "Original eager half GDN AdamW and asynchronous eager peer limitations remain; this is a distinct FP32-compute resident policy."
-  ]
+  ],
+  "post_review_note": {
+    "date": "2026-10-28",
+    "issue": "Standalone final-master assertion borrowed a Tensor field from a temporary owners() vector. Terminal jobs remain passed, but this assertion is not reliable independent evidence.",
+    "unaffected": "Python master validation; standalone complete records and other VJP/named-parameter checks.",
+    "action": "Hold owner metadata and repeat standalone training/peer at a new fixed source; see STATUS."
+  }
 }
