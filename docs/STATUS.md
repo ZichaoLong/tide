@@ -1,102 +1,85 @@
 # 当前交接 — 2026-10-28
 
-固定上游`0770593838a37c790a568226930567ed60f99b83`；授权分支`graph-execution-foundation`。
-37922eb公共训练放置实现已提交并推送；8b2a340前向证据已推送，f84a007窗口反向资格仍在运行。
-用户授权持续实施、私有环境、有限实验、提交与正常推送；不使用子代理。总体goal active，未完成。
-唯一待办[ROADMAP](ROADMAP.md)，持续契约[execution-flows](execution-flows.md)，参考仓库/公共工具链只读。
+固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
+37922eb公共训练放置实现与e405b1b能力/文档审计已提交推送。总体goal active，未完成。
+用户授权持续实施、私有环境、有限实验及正常提交推送；不使用子代理。
+[ROADMAP](ROADMAP.md)是唯一待办，[execution-flows](execution-flows.md)是持续契约。
+参考仓库和公共工具链只读；活动冻结源码/launcher不得修改。
 
-## 当前完成范围与新证据
+## 已完成范围与证据
 
-公共core-5、一般Settle与端口、五记忆及正式发送/评分/证据/key、独立调度、packed/VJP、mixed、
-常驻FP32/FP16完整图/训练与恢复从[semantic-map](semantic-map.md)进入。
-[FP16完整图/训练](evidence/core5-resident-half-training-20261028.md)和
-[样本副本/master](evidence/core5-resident-weighted-peers-20261028.md)保持各自固定源码资格。
+公共core-5、一般Settle/端口、五记忆及正式发送/评分/证据/key、独立调度、packed/VJP、mixed，
+常驻FP32/FP16完整图/训练/恢复从[semantic-map](semantic-map.md)和[能力范围](execution-capabilities.md)进入。
+[半精度完整图/训练](evidence/core5-resident-half-training-20261028.md)、
+[样本副本/master](evidence/core5-resident-weighted-peers-20261028.md)、
+[节点放置前向](evidence/core5-weighted-node-placement-20261028.md)各保留固定源码资格。
+前向报告运行库d072c17/检查器1289bc9：CPU8、Python50、SDK两dtype各9双卡配置，
+单设备两dtype各21图/20更新；CUDA sm80/90/100构建及安装消费者，没有真机。
 
-新增[单样本节点放置前向](evidence/core5-weighted-node-placement-20261028.md)：运行库d072c17，
-修正检查器1289bc9。CPU8、Python-owned50（放置4/单设备图28/训练18）、SDK两dtype各9双卡配置，
-以及单设备各21图/各5配置20训练更新全部通过。完整记录、真实owner、跨放置磁盘切面、空窗、
-首阶段共同容量拒绝独立核验。CUDA sm80/90/100构建/loader/help及修正安装消费者通过，无真机。
-该前向证据不认证放置后的反向或optimizer。审阅脚本`.local/record-weighted-node-placement.py`。
+[有限性能](evidence/core5-weighted-performance-20261028.md)ceae7bf的24配置22通过，FP32 PDG两项严格失败。
+本组小中规模CPU成本最低；medium HB standalone prefill约350ms，streaming456ms，mixed-c约1.41–1.61s，
+resident约2.60–2.71s。完整计时含调度/packing/通信/反向/更新/同步，无大型模型或跨卡吞吐结论。
+[f72a6cc启动/内存](evidence/core5-weighted-observation-20261028.md)补充已完成，不重跑旧性能矩阵。
 
-原始冻结`artifacts/worktrees/core5-weighted-node-placement`；检查器冻结`artifacts/worktrees/core5-weighted-node-check`。
-最终jobs `core5-weighted-node-install-{npu,cuda}-v2-qualify`均passed/exit0；Python原任务也passed。
-记录`artifacts/jobs/JOB/{status.json,task.log}`，SDK有checks/result.json和single-device-regression/result.json。
-原SDKoutput-dir入口失败、错误安装摘要断言、两次预建输出目录的启动失败、两个等待任务取消
-保持原终态，详情在报告/JSON。RPATH_REMOVE在已验副本上逐字节复现实际安装库变化，不混淆hash。
+## f84a007窗口反向失败与本次修复
 
-[ceae7bf有限性能](evidence/core5-weighted-performance-20261028.md)：24配置22通过，CPU反馈PDG两项严格失败。
-小中规模CPU成本最低；medium HB standalone prefill约350ms/streaming456ms，NPU mixed-c约1.41–1.61s、
-resident约2.60–2.71s。完整调用含调度、packing、返回、VJP、optimizer与同步；无大模型/跨卡吞吐结论。
-[f72a6cc启动/内存补充](evidence/core5-weighted-observation-20261028.md)四新进程与三个消费者通过。
-不重跑旧24项性能矩阵；已有局部profile不认证全部尺度。
+原固定源码`f84a00718188b1a19fe5e7da958a816147f629fc`，冻结`artifacts/worktrees/core5-weighted-node-window`。
+`core5-weighted-node-window-cuda-qualify`已passed/exit0，构建/loader/help待汇总审阅；无设备结论。
+`core5-weighted-node-window-npu-qualify`已failed/exit1，原终态保留：CPU8通过，HB12类独立根通过后，
+全节点远端nonaligned在construct-adjoint报aclnnInplaceCopy/CANN361001。
+原vendor日志复制保存在该job/vendor-diagnostic；底层报告stream task buffer full。
 
-## 活动资格：f84a007节点窗口反向
+独立诊断`core5-node-window-failure-diagnose`已passed/exit0，只表示GDB抓栈完成，inferior退出2。
+同一原binary重现，栈为CannApi::check→DeviceProgram::finish→WeightedFlowPeers::finish。
+记录`artifacts/jobs/JOB/{status.json,task.log}`；两卡物理1/9→逻辑0/1。
+对应只读launcher `.local/core5-node-window-failure-diagnose.sh`和`.local/node-window-failure.gdb`。
 
-源码`f84a00718188b1a19fe5e7da958a816147f629fc`；只读冻结
-`artifacts/worktrees/core5-weighted-node-window`，build/{npu,cuda}独立，不编辑活动输入。
-jobs `core5-weighted-node-window-{npu,cuda}-qualify`，units `tide-JOB-20261028.service`。
-两项已确认在独立background.slice/cgroup。CUDA已passed/exit0并终止，待完成证据审阅；
-NPU仍running，不能声明窗口设备资格通过。
-launcher `.local/JOB.sh`及`JOB-workload.sh`；SDK设备入口`.local/run-weighted-node-window.py`。
-记录`artifacts/jobs/JOB/{status.json,task.log}`；SDK另有checks/result.json与single-window.json。
+本次修复在`weighted_flow_peers.cpp`为每个远端节点的VJP/raw/参数归约增加外层嵌套服务，
+避免全部节点归约落到peer主程序。次序、全区域函数、根和canonical归约不变；CUDA仍在同一条件图。
+已有全远端nonaligned反例、HB/反馈/全区域Attention及跨窗桥将原样复验。
+另补公共安装消费者`--node-placed`：peer手算恒等VJP、None optimizer及换放置恢复，
+同时检查新构造/恢复重载和实际放置。它不替代完整图/参数发布资格。
+SDK两个改动TU syntax-only、CPU静态/入口10项及diff检查通过；设备修复尚待验证。
 
-SDK构建weighted-node-window/window/training，新双卡4组合×12独立根、2个三窗桥（含空窗），
-单设备HB/proposal和feedback/old窗口，以及FP32/FP16训练必要回归。CUDA sm80/90/100只构建/loader/help。
-构建1500秒/2worker，NPUqueue180秒/设备2400秒，整job4140秒、unit4200秒；Nice10/ATen及BLAS1。
-本提交已通过6个实现TU和4个checker TU的SDK syntax-only、CPU静态8项；这些不是设备资格。
+## 37922eb公共训练资格仍在运行
 
-实现保持journal逆序、消息祖先、完整region VJP和canonical归约在coordinator；
-各节点局部tape/VJP在原owner。边界复制实际raw到公开根设备，快照保留owner及精确元数据；
-所有共享参数使用者贡献汇总，反向重放不采用前向状态。预算新增peer主程序持有storage的核算。
+冻结`artifacts/worktrees/core5-weighted-node-training`，源码`37922eb8ccd79f792042bf2aad308fd915f0f432`；
+jobs `core5-weighted-node-training-{npu,python,cuda}-qualify`，units均`tide-JOB-20261028.service`。
+三项已确认独立background.slice/cgroup，目前running，不称设备训练通过。
+只读launcher `.local/JOB.sh`/`JOB-workload.sh`；记录`artifacts/jobs/JOB/{status.json,task.log}`。
+SDK `checks/result.json`、CPU `cpu.xml`；Python `tests.xml`；CUDA build manifest/loader/help。
+SDK两dtype各5放置配置/20更新、各2个放置样本副本/6更新，以及原单设备/样本副本回归；
+Python新增8项、原训练18项/peers4项。构建1500秒/2worker，queue180秒；SDK设备3600秒、Python1800秒，
+整job5340/3540秒、unit5400/3600秒；CUDA job1560秒/unit1620秒。
 
-## 公共训练放置实现与下一步
+## 接着执行
 
-本次提交公共training的`node_devices`构造/恢复、请求/生效manifest及跨设备参数bank发布。
-`WeightedTrainingPublication`保持canonical FP32 master/slots统一，远端接收同一设备决策与实际
-更新值；全部设备先提交再等待。样本副本也可分别拥有自己的节点放置，通信预算计入两层副本。
-checkpoint仍保存实际完整raw/optimizer，恢复可指定另一放置。相关契约与独立检查已更新。
+1. 提交本次修复与消费者，固定新checkout `artifacts/worktrees/core5-weighted-node-services`。
+2. 启动新jobs `core5-weighted-node-services-{npu,python,cuda}-qualify`；每项独立background.slice、Nice10，
+   两build workers、ATen/BLAS1。SDK只复验受影响node-window/node-training/node-replicas、两个单设备窗口和安装消费者；
+   Python只复验8个放置训练用例；CUDA三架构构建及安装消费者。不要更改原失败或活动输入。
+3. 审阅37922eb与新修复终态，必要问题保留反例继续修复；分别提交固定源码证据。
+4. 最终更新能力/追溯入口、STATUS/ROADMAP并推送；CUDA真机独立待验，不等待硬件。
 
-开发检查：9个SDK实现/检查TU、Python-owned binding TU syntax-only通过；CPU静态放置/入口10项通过，
-8个新增Python设备用例收集通过，git diff --check通过。这些不构成设备训练资格。
-新standalone检查weighted-node-training两dtype各5组合/20更新、完整独立根/跨放置恢复/累计与
-共同可表示性拒绝；weighted-node-replicas两dtype各2组合/6更新及共同slot拒绝。
+精确复现命令由冻结workload脚本、build/运行JSON及最终证据记录；当前不恢复旧队列。
+状态检查：`python scripts/status.py`；`systemctl --user show UNIT -p ActiveState -p MainPID -p Result -p ExecMainStatus`。
+停止自有任务：`systemctl --user stop UNIT`。新服务提交后必须核对live cgroup和持久status。
 
-本提交后冻结到`artifacts/worktrees/core5-weighted-node-training`，build/{npu,python,cuda}独立；
-jobs `core5-weighted-node-training-{npu,python,cuda}-qualify`，units `tide-JOB-20261028.service`。
-launcher `.local/JOB.sh`和`JOB-workload.sh`；记录`artifacts/jobs/JOB/{status.json,task.log}`。
-SDKchecks/result.json，Python tests.xml，CUDA只有build manifest/loader/help。
-构建1500秒/2worker，NPU queue180秒；SDK设备3600秒、Python1800秒，整job5340秒/3540秒，
-unit5400秒/3600秒；CUDA整job1560秒/unit1620秒。background.slice/Nice10/ATen及BLAS1。
-三个服务已提交，重入核对仍为active/running，源码37922eb8ccd79f792042bf2aad308fd915f0f432；不称设备资格通过。
-f84a007 CUDA已终态passed/exit0、NPU仍active/running；五个服务各自位于background.slice，不编辑其输入。
+## 环境与保留限制
 
-接着执行：
-1. 审阅五个已提交服务的持久记录与真实终态；不要重复提交。
-2. 审阅f84a007窗口反向及新训练任务终态；必要新问题保留反例、在主工作树修复，不改活动输入。
-3. 分别记录固定源码反向/训练证据，Python和standalone、FP32/FP16、CUDA构建/真机分列。
-4. 最终公共接口/能力矩阵/数学追溯审计；CUDA真机独立待验，不阻塞本机工作。
-
-本次文档审计修订README、architecture、execution-capabilities、module-extension-plan、semantic-map、
-resident-weighted-placement、证据索引及单一portability契约，明确legacy/core-5范围与分层证据，
-补齐当前aarch64证据与精确同栈恢复边界。JSON schema、链接和diff检查通过；不改活动源码。
-此文档提交之后继续审阅四个运行任务，未将CUDA构建等同真机验证。
-
-## 环境和保留限制
-
-cwd`/mi/data2T/zlong/home/llm/graph-execution-foundation`，zlong，可用磁盘约3.3TiB。
+cwd`/mi/data2T/zlong/home/llm/graph-execution-foundation`，zlong，磁盘约3.3TiB可用。
 现行规范`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`和`/etc/modulefiles`；旧guide已失效。
 Python：source /etc/profile.d/modules.sh；module purge；module load ascend/dev-workspace-9.1.0；source .local/venv-core5/bin/activate。
-SDK：module load libtorch-npu/2.10.0-cann9.0.0；Python为$LIBTORCH_ROOT/../../../../bin/python。
-CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh；PATH追加项目.local/venv-core5/bin供ninja。
-TORCH_DEVICE_BACKEND_AUTOLOAD=0、PYTHONDONTWRITEBYTECODE=1、ACL_OP_INIT_MODE=0、ATen/BLAS1，保留CANN PYTHONPATH。
-STATUS使用durable_records原子写并回读；长任务固定源码、独立background.slice/有限时长。
+SDK：module load libtorch-npu/2.10.0-cann9.0.0，Python为$LIBTORCH_ROOT/../../../../bin/python。
+CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh，PATH追加项目.local/venv-core5/bin供ninja。
+TORCH_DEVICE_BACKEND_AUTOLOAD=0、PYTHONDONTWRITEBYTECODE=1、ACL_OP_INIT_MODE=0、ATen/BLAS1；保留CANN PYTHONPATH。
+STATUS用durable_records原子写并回读。e405b1b文档/portability schema与链接检查通过，不认证新设备结果。
 
-严格失败保留：eager FP16 GDN默认AdamW约.001984 strict xfail；默认异步两NPU Python VJP CANN invalid event
-（launch blocking通过不解除）；SDK2.10 FP32 fc/affine第三轮evidence差3.09944e-6/mixed-a同见证；
-ceae7bf FP32 PDG性能两项maxabs4.11272e-6/2.71201e-6。独立FP64提升通过不解除原失败。
-PDG最小复现保留原fixture、性能job两result/log与CPU consumer，及core5-weighted-pdg-rounding-diagnose/diagnosis.json。
-原672e948 standalone bad_alloc检查器失败保持；7db0b08修复后master/peer复验通过。所有CUDA真机范围待验。
+严格失败保留：eager FP16 GDN默认AdamW约.001984 strict xfail；默认异步两NPU Python VJP CANN invalid event，
+显式launch blocking通过不解除；SDK2.10 FP32 fc/affine第三轮evidence差3.09944e-6/mixed-a同见证；
+ceae7bf FP32 PDG性能两项maxabs4.11272e-6/2.71201e-6，独立FP64提升通过不解除。
+PDG最小复现保留原fixture/两result/log/CPU consumer与core5-weighted-pdg-rounding-diagnose/diagnosis.json。
+前向checker/安装launcher历史失败与取消、672e948检查器bad_alloc均保留，详见报告；不重写为passed。
+所有CUDA真机范围待验。
 
 重入：`git status --short --branch`；`python scripts/status.py`；`python scripts/check_upstream.py`。
-任务检查：`systemctl --user show UNIT -p ActiveState -p MainPID -p Result -p ExecMainStatus`，并核对持久status/结果。
-停止自有任务：`systemctl --user stop UNIT`；不恢复旧队列。

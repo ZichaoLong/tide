@@ -110,6 +110,9 @@ NEW_CLIENT/consumer/weighted-training-consumer --device=npu:0 --dtype=float32
 ```
 
 消费者的单节点手算恒等VJP、无作用参数None和新owner切面恢复不代替完整图训练资格。
+追加`--node-placed`时需要逻辑设备0/1，先在peer上执行同一手算VJP，再在coordinator上
+恢复下一窗；它检查安装包的新放置构造/恢复重载与实际返回的放置列表。
+这项调用边界检查不代替多节点共享参数发布与完整根资格。
 
 FP16源码路径沿用[完整图精度边界](resident-weighted-flow.md)：raw、实际输出/消息/纤维/pending为half，
 content/Describe/control与舍入前的Full G为FP32。每个浮点字段的cotangent以及参数、输入、raw伴随
