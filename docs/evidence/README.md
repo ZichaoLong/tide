@@ -102,3 +102,5 @@
 [常驻 KV 完整内容与公共残差资格](core5-resident-kv-full-20261027.md)：386970a，CPU/NPU完整组件及CUDA三架构构建。
 
 [常驻完整 Describe 资格](core5-resident-describe-20261027.md)：cd576d2，CPU/NPU完整组件及CUDA三架构构建。
+
+[常驻四循环 Upd/Mem/Full 固定源码资格](core5-resident-recurrent-20261028.md)：6e2ecb7，CPU/NPU完整组件及CUDA三架构构建。
