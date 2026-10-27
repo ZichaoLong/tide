@@ -2,6 +2,10 @@
 
 
 def encode_model(core, graph, model):
+    from .weighted.binding import WeightedModel
+    if isinstance(model, WeightedModel):
+        from .weighted.native import encode
+        return encode(core, graph, model)
     from .full import ProjectionEmit, validate_program
     from .aggregate import SourceAggregate, validate_program as validate_aggregate
     from .state_program import validate_program as validate_state_program
@@ -24,6 +28,11 @@ def encode_model(core, graph, model):
     from .ownership import region_reference
     for r, (p, layout) in enumerate(zip(model.regions, graph.region_layouts)):
         validate_region(p, layout, region_reference(graph, model, r), native=True)
+    return encode_records(core, graph, model)
+
+
+def encode_records(core, graph, model):
+    """Tensor/graph transport only; callers validate their local program binding."""
     g = core.Graph()
     nodes = []
     for n in graph.nodes:

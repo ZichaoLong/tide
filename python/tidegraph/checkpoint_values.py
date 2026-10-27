@@ -54,3 +54,5 @@ def validate_weights(model, actual, aliases):
     for names in aliases:
         if any(not torch.equal(actual[names[0]], actual[name]) for name in names[1:]):
             raise ValueError("checkpoint shared parameter values disagree")
+    if hasattr(model, "validate_checkpoint_weights"):
+        model.validate_checkpoint_weights(actual)

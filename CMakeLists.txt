@@ -37,6 +37,7 @@ add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/read_fields.cpp cpp/src/tensor_fields.cpp cpp/src/isolated_read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
+  cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
   cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp cpp/src/ownership.cpp
   cpp/src/transfer.cpp cpp/src/delivery.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
@@ -97,7 +98,7 @@ if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
     add_test(NAME payload-ownership-${dtype} COMMAND tidegraph-payload-ownership-check --device=cpu --dtype=${dtype})
   endforeach()
 endif()
-add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp)
+add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp cpp/test/weighted.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
@@ -117,7 +118,7 @@ endif()
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
   find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp)
+  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp cpp/src/bind_weighted.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()
 
