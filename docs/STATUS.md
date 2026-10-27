@@ -11,38 +11,36 @@ CPU完整训练及恢复从[证据索引](evidence/README.md)进入；定向资�
 Python/native有限mixed、显式同步双NPU、half/master及standalone恢复见ROADMAP；严格失败保留。
 5efce32完整weighted resident FP32推理固定资格CPU50、standalone NPU21图/15配置/安装consumer、
 Python-owned23项通过；8eebcec显式CUDA80/90/100完整图构建与安装loader通过；无GPU真机。
-实现与这些证据已正常推送至2ae8496。
+ebe5471完整数值阶段VJP固定NPU24配置/342根模式和完整前向回归、CUDA三架构/安装loader通过；
+证据core5-resident-weighted-stage-20261028.{md,json}。阶段实现与证据已推送ad03d13。
 
-最新阶段实现ebe547115e8a70347c42ae420d669f1c6ea65fba：完整数值阶段VJP；证据ad03d13与实现均已正常推送。
-Full→Describe→Mem→Upd→Aggregate，三种Read快照、独立raw/描述/Content/control/Full根，
-物理输入和来源低秩链、角色切片与canonical共享参数。阶段不等于完整retained图训练。
-固定资格已通过，证据evidence/core5-resident-weighted-stage-20261028.{md,json}已提交：
-- NPU unit tide-core5-weighted-stage-npu-qualify-20261028.service inactive/success/exit0；
-  clean ebe5471，metadata5项/.78秒、24配置/342根模式及非有限拒绝、完整forward21图/边界；物理3→npu:0。
-  输出artifacts/jobs/core5-weighted-stage-npu-qualify/：status/task.log、control-build、checks/result.json、queue-state。
-  复用dev5全部源码/component/core/binary摘要一致构建，原manifest保留，不声称重编。
-- CUDA unit tide-core5-weighted-stage-cuda-qualify-20261028.service inactive/success/exit0；
-  clean ebe5471，stage/flow/lib与安装consumer构建/loader通过；159个已配置CUDA命令仅80/90/100；无真机。
-  输出artifacts/jobs/core5-weighted-stage-cuda-qualify/：status/task.log、control-build、installed/result.json。
-共同component摘要17fa110fa6a8724e9631f5e9411028deba4de23efd403aa0e42b47b6e0199bd6。
-NPU600秒/queue180、CUDA1200秒，2workers/BLAS1/background.slice/Nice10。
-两checkout artifacts/worktrees/core5-{sdk,cuda}当前clean ebe5471、无活动reader。
-阶段dev1/2编译失败、dev4参考漏control独立根的失败保持；dev3/5通过，精确tree见机器报告。
+最新实现ad8e7b82a20b1e41403ff5274fa034c1c43a8a10：实际消息祖先反向路由。
+重复物理边各贡献一次、精确int64发送时间/样本、独立left-pending/external根；None/连接零、错误37/41。
+固定资格通过，证据core5-resident-weighted-route-20261028.{md,json}待单独提交推送：
+- unit tide-core5-weighted-route-npu-qualify-20261028.service inactive/success/exit0；clean ad8e7b8；
+  CPU12项/.76秒、NPU12设备案例/dtype拒绝；物理9→npu:0。
+- unit tide-core5-weighted-route-cuda-qualify2-20261028.service inactive/success/exit0；clean ad8e7b8；
+  路由kernel/wrapper构建/loader通过，160个已配置命令仅80/90/100，无GPU真机。
+输出artifacts/jobs/core5-weighted-route-npu-qualify/及core5-weighted-route-cuda-qualify2/，status/task.log、
+control-build/original-control-build、NPU checks/queue-state；component摘要b58cc9508d0bafa2e1e2775068d80ff96a25792ac6321a67e8b006a6a612f1e5。
+开发dev两后端缺头失败、CUDA首次资格launcher错误要求重编摘要不变的失败保留，详见机器报告。
 
-## 当前工作与下一动作
+## 当前开发与下一动作
 
-跨阶段消息反向路由未提交：weighted_reverse_route.{h,cpp}、AscendC kernel/math、C++设备检查、
-tests/test_resident_weighted_reverse_route.py以及CMake/组件检查注册。
-按实际int64发送time/source/sample寻找早期Full；重复物理边各贡献一次，left-pending/external按完整六元坐标独立根。
-连接位独立于数值零；身份/ancestry拒绝41、非有限/溢出拒绝37，sticky error使整个导数失效。
-CPU语义12项/1.21秒通过；C++wrapper/NPU/CUDA尚未构建运行，尚未接完整window reverse owner。
-阶段证据已提交推送。路由补充相邻巨大int64发送时间和溢出/sticky检查，共12项；准备冻结开发源码做NPU/CUDA构建检查。
-短检查：source /etc/profile.d/modules.sh；module purge；module load ascend/dev-workspace-9.1.0；
-source .local/venv-core5/bin/activate；TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
-python -m pytest -q tests/test_resident_weighted_reverse_route.py。
-继续完整retained VJP/optimizer和精确训练恢复：扩展实际device journal的fibers/offsets，
-设备逆序读取局部tape/旧态并重算，链接消息生产者与状态前驱，汇总canonical参数；
-不CPU参考重放、不主机逐事件推进。初始绑定常量不能伪装为checkpoint叶子。
+主工作区未提交完整window VJP：weighted_window_{vjp,roots,owner}.cpp、header及独立检查；
+forward journal新增实际fibers/offsets、left pending/原始metadata/存在位及begin，预算同步；
+复用参数累加拆成公共静态target。内部设备逆序重算局部tape、串消息和raw状态、归约canonical参数。
+尚未编译/验收；公共retained训练owner、optimizer发布及训练checkpoint还未完成。
+开发服务已提交，结果未知：unit tide-core5-weighted-window-dev-20261028.service。
+冻结tree见artifacts/jobs/core5-weighted-window-dev/source.tree，checkout artifacts/worktrees/core5-sdk；禁止编辑活动reader。
+输出同job目录source.tar/tree/status/task.log/control-build/checks；launcher .local/core5-weighted-window-dev{,-workload}.sh，
+build helper .local/build-weighted-window.py。内部layout已变化，清理完整tide-weighted-flow target后依赖构建；
+不变组件逐源核验ebe5471。CPU metadata/route17项；NPU12配置×12根模式、空窗、初态常量与generation拒绝。
+1200秒/queue180秒/2workers/BLAS1/background.slice/Nice10。
+查看systemctl --user show tide-core5-weighted-window-dev-20261028.service -p ActiveState -p Result -p ExecMainStatus；
+查看task.log/checks/result.json；停止systemctl --user stop该unit。
+先提交推送路由证据（不混入新window代码），继续处理窗口资格，随后接公共retained VJP、optimizer及精确训练恢复。
+初始绑定常量不能伪装成checkpoint叶子；不能CPU预跑或主机逐事件推进。
 随后FP16/peer、有限profiling和代表性完整成本选型、最终追溯；不做全开关笛卡尔积。
 
 ## 未解除的严格限制
@@ -69,23 +67,3 @@ CUDA：source /mi/data2T/zlong/gpu-toolchains/activate-cuda.sh，Torch2.10+cu128
 检查systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus及status.json/task.log/checks/result.json；
 停止systemctl --user stop UNIT。STATUS用scripts/durable_records.py原子更新并回读。
 
-## 当前开发任务
-
-路由开发准备启动，结果未知；两个独立新build，冻结主工作区tree到sdk/cuda checkout。
-unit tide-core5-weighted-route-{npu,cuda}-dev-20261028.service；输出artifacts/jobs/core5-weighted-route-{npu,cuda}-dev/。
-launcher .local/core5-weighted-route-{npu,cuda}-dev{,-workload}.sh；source.tar/source.tree、status/task.log、control-build/checks。
-CPU12项；NPU新kernel/wrapper构建与12设备案例，CUDA新构建/loader和显式80/90/100命令检查（无真机）。
-600秒上限、queue180秒、2workers/BLAS1/background.slice/Nice10。
-查看systemctl --user show对应unit -p ActiveState -p Result -p ExecMainStatus及status/task.log；停止systemctl --user stop对应unit。
-不得编辑活动checkout。结束后固定实现提交，再做干净资格，证据另提交。
-
-路由dev两后端均failed/exit1（tree f65166a2fa45a3c7e013b5e7dc8526cb0aace9b2）：新wrapper头未显式include DeviceProgram，
-CPU12项和kernel编译已过，未运行NPU；原日志/快照保留。已补头，准备dev2新输出与新build，不改数学或容差。
-unit tide-core5-weighted-route-{npu,cuda}-dev2-20261028.service；输出artifacts/jobs/core5-weighted-route-{npu,cuda}-dev2/，
-launcher .local/core5-weighted-route-{npu,cuda}-dev2{,-workload}.sh；同600秒/queue180/2workers/BLAS1，结果未知。
-
-路由dev2两任务已passed/exit0，冻结tree da033ebc16a6a4d1837c736cec19c46a60de709a。
-NPU12项CPU检查、wrapper/kernel新构建及12设备案例/dtype拒绝通过；物理9→npu:0。
-CUDA12项CPU检查、wrapper/kernel新三架构构建/loader通过；160个已配置CUDA命令精确80/90/100，无真机。
-检查artifacts/jobs/core5-weighted-route-{npu,cuda}-dev2/{status.json,task.log,control-build.json}及NPU checks/CUDA architectures。
-当前无活动reader；下一步提交路由实现，固定该提交验证后单独记录证据。随后实现设备整窗口逆序VJP。

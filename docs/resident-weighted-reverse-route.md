@@ -38,3 +38,5 @@ python scripts/build_device_control.py --core-build CORE --build-dir NEW_BUILD \
 python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_CHECKS \
   --checks weighted-reverse-route --device npu:0
 ```
+
+固定来源的组件资格见[2026-10-28报告](evidence/core5-resident-weighted-route-20261028.md)。

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+- [Core-5 消息祖先反向资格](core5-resident-weighted-route-20261028.md)：ad8e7b8；CPU12/NPU12、精确时间和独立边界根，CUDA三架构构建；完整窗口继续。
+
 - [Core-5 常驻完整数值阶段 VJP](core5-resident-weighted-stage-20261028.md)：ebe5471；NPU24配置/342根模式/完整前向回归，CUDA三架构与安装loader；跨阶段训练继续。
 
 - [Core-5 完整 weighted 常驻 CUDA 构建](core5-weighted-flow-cuda-20261028.md)：8eebcec；显式sm80/90/100、架构8项、DSO及安装loader通过；无GPU真机。
