@@ -78,7 +78,7 @@ void half_storage(at::Device device){
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("weighted projection requires explicit accelerator/FP32 or FP16");
-    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
+    args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
     for(bool norm:{false,true})for(bool bias:{false,true})check(device,norm,bias,args.dtype);
     if(args.dtype==at::kHalf)half_storage(device);
     std::cout<<"weighted-projection: passed configurations=4 replay_rows=48 shared_banks=3 all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32\n";return 0;
