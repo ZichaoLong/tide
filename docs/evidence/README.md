@@ -86,3 +86,5 @@
 [常驻原始状态与缓存](core5-resident-raw-20261027.md)：cb68d91，CPU14/五schema三dtype精确codec/NPU完整字段VJP及CUDA三架构构建。
 
 [常驻固定时间短卷积资格](core5-resident-convolution-20261027.md)：f89bdfe，CPU/NPU完整组件及CUDA三架构构建。
+
+[常驻共享投影资格](core5-resident-projection-20261027.md)：2af401d，CPU/NPU完整组件及CUDA三架构构建。
