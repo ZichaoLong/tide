@@ -1,0 +1,56 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+cpu",
+  "architecture": "aarch64",
+  "cxx11_abi": true,
+  "cpp_source_sha256": "50c29c5907d06c24c03981e5fb0b7783f4230cede9a854529701be7fdf1b77ea",
+  "source": "67854b306a97a1e39d6c4ae995906963507bdc7b",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "weighted Read/Full actual batched first-order VJP CPU qualification",
+  "result": {
+    "passed": 647,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compiler": "c++ (GCC) 10.3.1",
+  "tree_sha256": "0a9f4595b2a591915349506ea276ff1c43464f662603054fa2d37d8b009b8b58",
+  "binary_sha256": {
+    "libtidegraph.a": "556ec48232b08f54ebeb00d48b95c076eef0f8bf5b8af1a31571b0498365bd95",
+    "_tide_native.so": "3a68aa16ccbb2ae9915ae4bb4984ed9fd33e8afe347c57750083f8ed931133b2",
+    "tidegraph-kernel-check": "ed1cb3c22ddc1b97f442093498aa1db731fc40cf7fb6216e1214e9753e7c928e"
+  },
+  "log_sha256": "73c179f80ecb023c545775f97210135ae5cf6519de21d83e7c92acadd97d4cb7",
+  "started": "2026-10-27T08:32:46.265465+00:00",
+  "finished": "2026-10-27T08:38:07.780958+00:00",
+  "exit_code": 0,
+  "unit": "tide-core5-query-vjp-qualify-20261027",
+  "job_directory": "artifacts/jobs/core5-query-vjp-qualify",
+  "commands": [
+    [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_weighted_query_vjp.py",
+      "tests/test_weighted_query_training.py",
+      "tests/test_weighted_read_batch.py",
+      "tests/test_read_batched_vjp.py",
+      "tests/test_full_autograd.py",
+      "tests/test_full_contract.py",
+      "tests/test_weighted_scoring.py",
+      "tests/test_weighted_aggregate_training.py",
+      "tests/test_weighted_state_vjp.py",
+      "tests/test_weighted_execution.py",
+      "tests/test_weighted_native.py",
+      "tests/test_weighted_recurrent_execution.py",
+      "tests/test_weighted_scoring_execution.py",
+      "tests/test_weighted_sending_execution.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel",
+      "-q",
+      "--dtype",
+      "both",
+      "--basetemp",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-query-vjp-qualify/test-tmp"
+    ]
+  ],
+  "build_reuse": "Exact C++ source and all binary hashes verified by develop.py --reuse-build; build baseline field is not qualification source identity."
+}
