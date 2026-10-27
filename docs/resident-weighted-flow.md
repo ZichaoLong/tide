@@ -1,8 +1,8 @@
 # 完整 weighted 常驻图
 
 固定来源为 [0770593](upstream.json) 的三种图正典与带权局部教材。
-公共入口 `tide/resident_weighted.h::WeightedFlow`，CMake 目标 `tide::weighted_resident`；当前为开发中的 FP32
-独立 C++ 推理 owner，资格状态见 STATUS。完整训练、半精度和跨卡各自验收。
+公共入口 `tide/resident_weighted.h::WeightedFlow`，CMake 目标 `tide::weighted_resident`；当前为 FP32
+独立 C++ 推理 owner，[固定资格](evidence/core5-resident-weighted-flow-20261028.md)分别记录 standalone 与 Python-owned NPU。完整训练、半精度和跨卡各自验收。
 
 ## 函数与状态绑定
 
