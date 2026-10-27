@@ -43,3 +43,5 @@ standalone 检查将 raw update → 新快照卷积 → 卷积 VJP → raw updat
 
 入口 `verify_device_control.py --checks weighted-convolution --device npu:0`。
 本组件不认证完整 GDN/SSD、Describe、在线图生命周期或性能；固定源码 CPU/NPU 与 CUDA 构建/真机证据分别记录。
+
+固定源码资格见[f89bdfe运行证据](evidence/core5-resident-convolution-20261027.md)。
