@@ -11,6 +11,8 @@ from .convolution import ConvCache
 from .packing import project
 from .tensors import norm, rotate_relative
 from .attention_mean import attention_mean
+from .normalization import epsilon_l2
+from .numeric_time import passive_decay, time_values
 
 
 def weighted_read(logits, values, weights, totals):
@@ -44,8 +46,8 @@ def kv(memory, states, times, u):
     result = [None]*len(states)
     for length, rows in groups.items():
         s = {k: torch.stack([visible[i][0][k] for i in rows]) for k in visible[rows[0]][0]}
-        age = torch.stack([visible[i][1] for i in rows]).to(u.dtype)
-        weights = (s["weights"]*torch.exp(-c.beta_short*age), s["weights"])
+        age = torch.stack([visible[i][1] for i in rows])
+        weights = (s["weights"]*passive_decay(age, c.beta_short, u), s["weights"])
         totals = tuple(w.sum(1) for w in weights)
         if c.memory_read == "sum":
             values = tuple((w[..., None]*s["summaries"]).sum(1)/total.clamp(min=1)[:, None]
@@ -53,7 +55,7 @@ def kv(memory, states, times, u):
         else:
             q = project(norm(u[rows], c.epsilon), memory.read_q)
             k = project(s["keys"].reshape(-1, c.width), memory.read_k).reshape(len(rows), length, c.summary_width)
-            k = rotate_relative(k, -age/c.position_scale, c.read_frequencies)
+            k = rotate_relative(k, -time_values(age, u)/c.position_scale, c.read_frequencies)
             logits = (k*q[:, None]).sum(-1)/math.sqrt(c.summary_width)
             v = project(s["values"].reshape(-1, c.width), memory.read_v).reshape(len(rows), length, c.summary_width)
             values = tuple(weighted_read(logits, v, w, total) for w, total in zip(weights, totals))
@@ -66,10 +68,10 @@ def effective(memory, states, times):
     c = memory.config
     old = {k: torch.stack([s.slots[k] for s in states]) for k in ("H", "Z", "W", "time")}
     # No float conversion before subtraction, including times above 2**53.
-    delta = (old["time"].new_tensor(times)-old["time"]).clamp_min(0).to(old["H"].dtype)
+    delta = (old["time"].new_tensor(times)-old["time"]).clamp_min(0)
     matrix_rates = (c.lambda_short, 0.) if c.basic else c.matrix_rates
-    matrix_decay = torch.exp(-delta[:, None]*old["H"].new_tensor(matrix_rates))
-    summary_decay = torch.exp(-delta[:, None]*old["Z"].new_tensor((c.lambda_short, 0.)))
+    matrix_decay = passive_decay(delta[:, None], matrix_rates, old["H"])
+    summary_decay = passive_decay(delta[:, None], (c.lambda_short, 0.), old["Z"])
     return (matrix_decay[..., None, None]*old["H"],
             summary_decay[..., None]*old["Z"], summary_decay*old["W"])
 
@@ -106,8 +108,8 @@ def features(memory, states, times, u):
     if c.memory_family == "gated_delta":
         q, k, value = projected.reshape(-1, c.heads, 2*c.key_width+c.value_width).split(
             (c.key_width, c.key_width, c.value_width), -1)
-        q = q/torch.sqrt(c.qk_epsilon+q.square().sum(-1, keepdim=True))/math.sqrt(c.key_width)
-        k = k/torch.sqrt(c.qk_epsilon+k.square().sum(-1, keepdim=True))
+        q = epsilon_l2(q, c.qk_epsilon)/math.sqrt(c.key_width)
+        k = epsilon_l2(k, c.qk_epsilon)
         return raw, q, k, value
     value, key, query = projected.split((c.heads*c.value_width, c.groups*c.key_width, c.groups*c.key_width), -1)
     key = key.reshape(-1, c.groups, c.key_width).repeat_interleave(c.heads//c.groups, dim=1)

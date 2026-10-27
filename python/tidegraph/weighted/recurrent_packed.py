@@ -7,6 +7,7 @@ import torch
 from ..scan import affine_scan
 from .packing import Writes, matrix_scan, project
 from .tensors import norm
+from .numeric_time import passive_decay
 
 
 def basic_coefficients(memory, plan, x, decay):
@@ -33,8 +34,8 @@ def packed(memory, old, batch):
         return plan.decode(old, batch, []), 0
     c = memory.config
     x = norm(plan.content, c.epsilon)
-    delta = plan.gaps(old).to(x.dtype)
-    decay = torch.exp(-delta[:, None]*x.new_tensor((c.lambda_short, 0.)))
+    delta = plan.gaps(old)
+    decay = passive_decay(delta[:, None], (c.lambda_short, 0.), x)
     caches = None
     if c.basic:
         a, b, matrix = basic_coefficients(memory, plan, x, decay)

@@ -50,9 +50,12 @@ def rotate_relative(keys, displacement, frequencies):
     """qᵀ Rot(Pos(xi)-Pos(theta)) k; int64 subtraction precedes casting."""
     if not frequencies:
         return keys
+    payload_dtype = keys.dtype
+    if payload_dtype == torch.float16:
+        keys, displacement = keys.float(), displacement.float()
     count = len(frequencies)
     phase = displacement.unsqueeze(-1)*keys.new_tensor(frequencies)
     pairs = keys[..., -2*count:].reshape(*keys.shape[:-1], count, 2)
     a, b = pairs.unbind(-1)
     rotated = torch.stack((a*phase.cos()-b*phase.sin(), a*phase.sin()+b*phase.cos()), -1)
-    return torch.cat((keys[..., :-2*count], rotated.flatten(-2)), -1)
+    return torch.cat((keys[..., :-2*count], rotated.flatten(-2)), -1).to(payload_dtype)

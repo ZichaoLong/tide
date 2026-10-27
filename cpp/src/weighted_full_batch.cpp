@@ -14,7 +14,7 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
     auto keys=visible.slot(states,rows,"keys").reshape({n,length,c.heads,d});
     auto values=visible.slot(states,rows,"values").reshape_as(keys);
     auto weights=visible.slot(states,rows,"weights"),total=weights.sum(1);
-    auto displacement=-visible.age(rows).to(u.scalar_type())/c.position_scale;
+    auto displacement=-time_values(visible.age(rows),u)/c.position_scale;
     std::vector<Tensor> reads;
     for(Index h=0;h<c.heads;++h){
       auto k=rotate(keys.select(2,h).reshape({-1,d}),displacement.flatten(),c.full_frequencies.empty()?empty:c.full_frequencies[h]).reshape({n,length,d});
@@ -38,12 +38,12 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   }else{
     auto f=features(w,states,times,u,c);auto read=at::matmul(H,f.query.unsqueeze(-1)).squeeze(-1);
     if(c.memory_family=="gated_delta"){
-      auto rms=weight(w,p+"rho")*read/at::sqrt(c.output_epsilon+read.square().mean(-1,true));
+      auto rms=scaled_rms(read,weight(w,p+"rho"),c.output_epsilon);
       auto gate=at::silu(project(normalize(u,c.epsilon),weight(w,p+"output_gate")));
       combined=project(rms.flatten(1)*gate,weight(w,p+"out"));
     }else{
       auto y=(read+weight(w,p+"direct").unsqueeze(-1)*f.value).flatten(1)*at::silu(f.gate);
-      combined=project(weight(w,p+"rho")*y/at::sqrt(c.output_epsilon+y.square().mean(-1,true)),weight(w,p+"out"));
+      combined=project(scaled_rms(y,weight(w,p+"rho"),c.output_epsilon),weight(w,p+"out"));
     }
   }
   return c.alpha_mem*combined;

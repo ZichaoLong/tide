@@ -7,6 +7,8 @@ from .config import KVConfig
 from .packing import project
 from .query_batch import effective, features, weighted_read
 from .tensors import norm, rotate_relative
+from .normalization import scaled_rms
+from .numeric_time import time_values
 
 
 def kv(program, memory, states, times, u):
@@ -22,7 +24,7 @@ def kv(program, memory, states, times, u):
         keys = s["keys"].reshape(len(rows), length, c.heads, c.width//c.heads)
         values = s["values"].reshape_as(keys)
         weights, total = s["weights"], s["weights"].sum(1)
-        displacement = -torch.stack([visible[i][1] for i in rows]).to(u.dtype)/c.position_scale
+        displacement = -time_values(torch.stack([visible[i][1] for i in rows]), u)/c.position_scale
         reads = []
         for h in range(c.heads):
             key = rotate_relative(keys[:, :, h], displacement, c.full_frequencies[h])
@@ -46,11 +48,11 @@ def recurrent(program, memory, states, times, u):
     query = f[1] if c.memory_family == "gated_delta" else f[4]
     read = (H@query.unsqueeze(-1)).squeeze(-1)
     if c.memory_family == "gated_delta":
-        rms = program.rho*read/torch.sqrt(c.output_epsilon+read.square().mean(-1, keepdim=True))
+        rms = scaled_rms(read, program.rho, c.output_epsilon)
         gate = torch.nn.functional.silu(project(norm(u, c.epsilon), program.output_gate))
         return project(rms.flatten(1)*gate, program.out)
     y = (read+program.direct[:, None]*f[2]).flatten(1)*torch.nn.functional.silu(f[1])
-    return project(program.rho*y/torch.sqrt(c.output_epsilon+y.square().mean(-1, keepdim=True)), program.out)
+    return project(scaled_rms(y, program.rho, c.output_epsilon), program.out)
 
 
 def evaluate(program, weights, requests, slots, mode, zeta):

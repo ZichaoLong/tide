@@ -10,6 +10,7 @@ from ..records import State
 from ..state_program import StateProgram
 from .convolution import ConvCache, FixedTimeConv
 from .tensors import Received, norm, parameter
+from .numeric_time import passive_decay
 
 
 class RecurrentMemory(StateProgram):
@@ -60,10 +61,10 @@ class RecurrentMemory(StateProgram):
         if time < 0:
             raise ValueError("negative recurrent query time")
         c, s = self.config, state.slots
-        delta = (s["time"].new_tensor(time)-s["time"]).clamp_min(0).to(s["H"].dtype)
+        delta = (s["time"].new_tensor(time)-s["time"]).clamp_min(0)
         rates = (c.lambda_short, 0.) if c.basic else c.matrix_rates
-        matrix_decay = torch.exp(-s["H"].new_tensor(rates)*delta)
-        summary_decay = torch.exp(-s["Z"].new_tensor((c.lambda_short, 0.))*delta)
+        matrix_decay = passive_decay(delta, rates, s["H"])
+        summary_decay = passive_decay(delta, (c.lambda_short, 0.), s["Z"])
         return (matrix_decay[:, None, None]*s["H"], summary_decay[:, None]*s["Z"], summary_decay*s["W"])
 
     def step(self, w, old, content, time):

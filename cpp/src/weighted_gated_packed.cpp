@@ -42,10 +42,10 @@ Coefficients gated_coefficients(const NodeWeights& w,const std::vector<State>& o
   }
   auto [conv,caches]=convolve(w,old,plan,raw,c);auto projected=at::silu(conv);
   auto rates=c.matrix_rates;if(rates.empty())rates.resize(c.heads,0.);
-  auto decay=at::exp(-gap.unsqueeze(-1)*at::tensor(rates,x.options()));
+  auto decay=detail::passive_decay(gap.unsqueeze(-1),rates,x);
   if(c.memory_family=="gated_delta"){
     auto parts=projected.reshape({-1,c.heads,2*c.key_width+c.value_width}).split_with_sizes({c.key_width,c.key_width,c.value_width},-1);
-    auto key=parts[1]/at::sqrt(c.qk_epsilon+parts[1].square().sum(-1,true)),value=parts[2];
+    auto key=detail::epsilon_l2(parts[1],c.qk_epsilon),value=parts[2];
     auto control=normalize(plan.input,c.epsilon);
     dt=at::softplus(project(control,weight(w,"kernel.delta"))+weight(w,"kernel.delta_bias"));
     auto gain=plan.receive.unsqueeze(-1)*at::sigmoid(project(control,weight(w,"kernel.write"))+weight(w,"kernel.write_bias"));

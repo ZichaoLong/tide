@@ -468,6 +468,14 @@ scheduling, not device-resident progression.
 
 ## Configurable low precision
 
+The [weighted FP16 development policy](weighted-precision.md) explicitly retains
+half payload/raw state with int64 metadata and separately requested FP32 scoring.
+Its RMS/epsilon-L2/scaled-RMS operators normalize and contract first-order VJPs
+in FP32, then cast public results/gradients to their original half owners.
+FP32/FP64 operator formulas and ordering remain unchanged. Current GDN AdamW
+strict discrepancies and long-time/standalone/device gaps remain recorded;
+this implementation policy does not certify a completed weighted FP16 matrix.
+
 The explicitly selected FP16 extension retains the same graph, delay, scheduling,
 HST and owner semantics. FP32/FP64 remain the original required references. FP16
 rounding, overflow and underflow can change values or discrete near-tie decisions;

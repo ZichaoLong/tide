@@ -34,15 +34,15 @@ Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& wei
 std::array<Tensor,4> memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c){
   Visible visible(states,times,c);std::vector<std::array<Tensor,4>> result(states.size());
   for(const auto& [length,rows]:visible.groups){
-    const Index n=rows.size();auto age=visible.age(rows).to(u.scalar_type());
+    const Index n=rows.size();auto age=visible.age(rows);
     auto writes=visible.slot(states,rows,"weights");
-    std::array<Tensor,2> weights{writes*at::exp(-c.beta_short*age),writes};
+    std::array<Tensor,2> weights{writes*passive_decay(age,c.beta_short,u),writes};
     std::array<Tensor,4> values;Tensor logits,projected;
     if(c.memory_read=="qry"){
       auto ids=at::tensor(rows,u.options().dtype(at::kLong));
       auto q=project(normalize(u.index_select(0,ids),c.epsilon),weight(w,"kernel.read_q"));
       auto k=project(visible.slot(states,rows,"keys").reshape({-1,c.width}),weight(w,"kernel.read_k"));
-      k=rotate(k,(-age/c.position_scale).flatten(),c.read_frequencies).reshape({n,length,c.summary_width});
+      k=rotate(k,(-time_values(age,u)/c.position_scale).flatten(),c.read_frequencies).reshape({n,length,c.summary_width});
       logits=(k*q.unsqueeze(1)).sum(-1)/std::sqrt(c.summary_width);
       projected=project(visible.slot(states,rows,"values").reshape({-1,c.width}),weight(w,"kernel.read_v")).reshape({n,length,c.summary_width});
     }

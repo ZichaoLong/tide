@@ -25,7 +25,7 @@ template<class Config> std::string signature(const NodeWeights& w,Row row,const 
       const auto& [mask,age]=visibility;
       Tensor writes=state.slots.at("weights").index({mask}).detach();
       s << ":long=" << (writes>0).any().item<bool>();
-      if(!is_full){Tensor short_weights=writes*at::exp(-c.beta_short*age.index({mask}).to(writes.scalar_type()));
+      if(!is_full){Tensor short_weights=writes*detail::passive_decay(age.index({mask}),c.beta_short,writes);
         s << ":short=" << (short_weights>0).any().item<bool>();}
     }
   }

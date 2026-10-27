@@ -10,6 +10,7 @@ from ..full import FullResult
 from ..records import State
 from .config import KVConfig
 from .parameter_tree import rebind
+from .numeric_time import passive_decay
 
 
 def _rows(requests, kind, transform):
@@ -37,7 +38,7 @@ def _signature(memory, weights, request, kind):
         writes = state.slots["weights"][mask].detach()
         branch = (bool((writes > 0).any()),)
         if kind == "read":
-            short = writes*torch.exp(-c.beta_short*age[mask].to(writes.dtype))
+            short = writes*passive_decay(age[mask], c.beta_short, writes)
             branch += (bool((short > 0).any()),)
     return slots, branch, tuple(tensors)
 

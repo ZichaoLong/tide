@@ -26,14 +26,14 @@ Tensor current(const NodeWeights& w,const Tensor& u,const KVConfig& c){
   return at::matmul(normalize(u,c.epsilon),weight(w,"kernel.summary").t());
 }
 std::array<Tensor,4> memory(const NodeWeights& w,const State& s,Index time,const Tensor& u,const KVConfig& c){
-  auto [mask,ages]=visible(s,time,c);auto age=ages.index({mask}).to(u.scalar_type());
+  auto [mask,ages]=visible(s,time,c);auto age=ages.index({mask});
   auto writes=s.slots.at("weights").index({mask});
-  std::array<Tensor,2> weights{writes*at::exp(-c.beta_short*age),writes};
+  std::array<Tensor,2> weights{writes*passive_decay(age,c.beta_short,u),writes};
   std::array<Tensor,4> result;Tensor logits,values;
   if(c.memory_read=="qry"){
     auto query=at::matmul(weight(w,"kernel.read_q"),normalize(u,c.epsilon));
     auto keys=at::matmul(s.slots.at("keys").index({mask}),weight(w,"kernel.read_k").t());
-    keys=rotate(keys,-age/c.position_scale,c.read_frequencies);
+    keys=rotate(keys,-time_values(age,u)/c.position_scale,c.read_frequencies);
     logits=at::matmul(keys,query)/std::sqrt(c.summary_width);
     values=at::matmul(s.slots.at("values").index({mask}),weight(w,"kernel.read_v").t());
   }
@@ -50,7 +50,7 @@ Tensor content(const NodeWeights& w,const State& s,Index time,const Tensor& u,co
   auto keys=s.slots.at("keys").index({mask}).reshape({-1,c.heads,c.width/c.heads});
   auto values=s.slots.at("values").index({mask}).reshape_as(keys);
   auto queries=at::matmul(weight(w,"full_program.content.query"),normalize(u,c.epsilon)).reshape({c.heads,-1});
-  auto displacement=-age.index({mask}).to(u.scalar_type())/c.position_scale;
+  auto displacement=-time_values(age.index({mask}),u)/c.position_scale;
   std::vector<Tensor> reads;const std::vector<double> empty;
   for(Index h=0;h<c.heads;++h){
     auto key=rotate(keys.select(1,h),displacement,c.full_frequencies.empty()?empty:c.full_frequencies[h]);
