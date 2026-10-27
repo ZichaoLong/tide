@@ -1,0 +1,194 @@
+{
+  "source": "bcef2c49dfdbde277d4115f450e4fec07d7f8dc9",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "date": "2026-10-28",
+  "component": "Four recurrent families and KV Full with FP16 raw storage and FP32 math/adjoints",
+  "jobs": [
+    {
+      "source": "bcef2c49dfdbde277d4115f450e4fec07d7f8dc9",
+      "state": "passed",
+      "started": "2026-10-27T21:19:31.473548+00:00",
+      "finished": "2026-10-27T21:25:09.884831+00:00",
+      "exit_code": 0,
+      "name": "core5-half-memory-npu-qualify",
+      "unit": "tide-core5-half-memory-npu-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "4470732258f315735103d8af3136a4c281d09e22204ee530523ee10cb9f935b9",
+      "log_sha256": "ac6c0ab88b13e893c8aef6c350ec7a932b1fd372e3486fdab7d8ba18bc50ecc1",
+      "build": {
+        "component_sha256": "c914ee01588d9c282c9371b8ac03623051b939f22b6ccb470be6f11a684f3a54",
+        "backend": "npu",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-recurrent",
+          "weighted-kv-full"
+        ],
+        "binary_sha256": {
+          "tide-weighted-recurrent-check": "b6eaaa1500e4a58a95c182f1422e6d8f1025c83612db363c6d8e01ad873dca16",
+          "tide-weighted-kv-full-check": "1af56485b69826ebab18552fdbd2d779ba78629d5d45d8da44fff2c6b6f86b52"
+        },
+        "loader_sha256": {
+          "tide-weighted-recurrent-check": "9cdba1b8b74e2adf25f67905546c2374efe2bf454e39272340472fd472cbb716",
+          "tide-weighted-kv-full-check": "af5c17001794fa423135a33bfda91afd48e900984052b637aded2290ac49b053"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cpu": {
+        "passed": 24,
+        "skipped": 0,
+        "testcase_seconds": 2.596,
+        "xml_sha256": "f305dba7f759483ccfe0f068d99fa5f3bd300a369e63f73f0b96f31b40826fb7"
+      },
+      "cases": [
+        {
+          "check": "weighted-recurrent",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9df892837a9090d0ee69d0cb69eda1b4acf2104ce99a7adf0f0e0596f51e170f",
+          "markers": [
+            "weighted-recurrent: passed configurations=24 complete_upd_mem_full=true independent_raw_fields=true all_parameter_input_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-recurrent",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "833e2370fe5c700f1f11b15561868c54e94d6e00a34bf840da71a791392796e2",
+          "markers": [
+            "weighted-recurrent: passed configurations=24 complete_upd_mem_full=true independent_raw_fields=true all_parameter_input_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-full",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ecd630914a039b3bdafaf379b788a37fc33fc8cb3cf1b3dd4f9f640a15519b45",
+          "markers": [
+            "weighted-kv-full: passed configurations=4 replay_rows=96 heads=2 all_parameter_input_raw_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        },
+        {
+          "check": "weighted-kv-full",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "06e34c1428e8b77ca6d55cfe0c38c7c08828c5a32384231eb0aa75f9851b32cf",
+          "markers": [
+            "weighted-kv-full: passed configurations=4 replay_rows=96 heads=2 all_parameter_input_raw_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32"
+          ]
+        }
+      ],
+      "queue": {
+        "elapsed_seconds": 49.12143408879638,
+        "job_id": "core5-half-memory-npu-qualify-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T21:25:09.868564+00:00"
+      }
+    },
+    {
+      "source": "bcef2c49dfdbde277d4115f450e4fec07d7f8dc9",
+      "state": "passed",
+      "started": "2026-10-27T21:19:31.474716+00:00",
+      "finished": "2026-10-27T21:22:35.848081+00:00",
+      "exit_code": 0,
+      "name": "core5-half-memory-cuda-qualify",
+      "unit": "tide-core5-half-memory-cuda-qualify-20261028.service",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive"
+      },
+      "build_record_sha256": "4d18a84264a10568537548f381d848f4b2b44abb5949d749cda8206c60b6d67a",
+      "log_sha256": "5d3cc8f0212057e4cf45fe130b0ce39883f50bac4ad0bd91f47808f40a27338a",
+      "build": {
+        "component_sha256": "c914ee01588d9c282c9371b8ac03623051b939f22b6ccb470be6f11a684f3a54",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "requested_checks": [
+          "weighted-recurrent",
+          "weighted-kv-full"
+        ],
+        "binary_sha256": {
+          "tide-weighted-recurrent-check": "be7aeed6c96cff83faf1a0f77de9f30d6870acd457ef554e37a8b683dbd02a5f",
+          "tide-weighted-kv-full-check": "c98727246a40788b6b094526d2e9833a7fe712b9b4ded794ffa20e5c98dc1c5f"
+        },
+        "loader_sha256": {
+          "tide-weighted-recurrent-check": "e16afdefce3e2214a5ae7d157e3aea2cd3fa7af8a5eaf055a0754873b3cfe8b0",
+          "tide-weighted-kv-full-check": "613235a63de7a6d3991ab7a247330e03bba232883c2438dd210e83ca00820eae"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "b501ab287f3fd515f957c3ef224fb6f85b21580d3daef73297eadbdb75a9b729",
+          "architecture": "aarch64",
+          "torch": "2.10.0+cu128",
+          "python": "3.11.15",
+          "cxx11_abi": true
+        }
+      },
+      "cuda": {
+        "configured_commands": 160,
+        "selected_compile_commands": 34,
+        "effective_architectures": [
+          "80",
+          "90",
+          "100"
+        ],
+        "command_inventory_sha256": "55e475a5cd30a4cce75730f21900f2aa7a6e37fc7f9a12011559ac8ef49971fc",
+        "hardware": "pending: no GPU"
+      },
+      "help_sha256": {
+        "recurrent": "4c962bf267dd3d5e42441facd7b5cc42c0a6874e60326d717b0bcdc2e1fa0b34",
+        "kv-full": "0d142f4e252bb506c52398ae100039741f0a9281719a4a435e54276d25a9850f"
+      }
+    }
+  ],
+  "contract": {
+    "raw_storage": [
+      "float32",
+      "float16"
+    ],
+    "arithmetic": "float32 vendor operators; int64 metadata",
+    "inputs_and_parameters": "float32",
+    "adjoints": "explicit FP32 first-order identity-cast VJP at actual quantized raw operands",
+    "results": "FP32 Mem/Full; recurrent update stores raw once with finite half guard"
+  },
+  "limits": [
+    "Local components only, not complete half graph, optimizer or checkpoint qualification.",
+    "No Python-owned FP16 component run in this report.",
+    "CUDA build/loader/help only; no GPU hardware or performance conclusion.",
+    "CPU codec was not repeated; separate earlier primitive evidence owns it."
+  ],
+  "reproduction": [
+    "git checkout bcef2c49dfdbde277d4115f450e4fec07d7f8dc9",
+    "python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE --jobs 2 --runtime standalone --checks weighted-recurrent weighted-kv-full --ascendc-soc SOC",
+    "python scripts/verify_device_control.py --build-dir NEW_DEVICE --device npu:0 --checks weighted-recurrent weighted-kv-full --output-dir NEW_CHECKS",
+    "CUDA build uses matching core, --cuda-architectures '80;90;100' and no Ascend SoC; GPU runtime remains separately required."
+  ]
+}
