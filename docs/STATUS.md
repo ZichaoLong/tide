@@ -20,26 +20,27 @@
 - 十种发送/节点增益 `4a0858880831cb46ad96191ab9dd58fca5260223`：**320 passed / 0 failed / 0 skipped**，
   CPU FP64/FP32；[证据](evidence/core5-sending-20261027.md)。实现与证据 76c698e 均已推送。
 
+- 完整评分/证据/key 与共同阈值 VJP `cacb645adc64ed06e454f7ac8d8572bf09b98ee2`：
+  **593 passed / 0 failed / 0 skipped**，CPU FP64/FP32；[证据](evidence/core5-scoring-20261027.md)。
+
 ## 当前任务与下一动作
 
-评分与分配 VJP 增量已完成开发：match/att/grouped、content_stats/content key，
-独立参数和显式共享、3/4/5/6 字段描述、五种异构记忆、Read0/-/+、PDG、AdamW/恢复。
-分配增加显式共同 score_shift 及其活动总量约束的解析连接零 VJP；保留 caps/bounds 路径。
-没有改前向、容差、dtype 或加梯度裁剪；共同 cotangent 中心改善相消。
-Encoder/Query 一维输入统一矩阵乘列向量顺序，保留任意 leading batch axes。
-相关代码、测试、契约同增量提交；无用户修改。
+评分资格 unit `tide-core5-scoring-qualify-20261027` 已终态 inactive/success、exit 0。
+只读 worktree `artifacts/worktrees/core5-bootstrap` 干净固定 cacb645；结果在
+`artifacts/jobs/core5-scoring-qualify/{status.json,task.log,development.json,source.tar.gz}`。
+launcher `.local/core5-scoring-qualify.sh`，全部 16 个带权测试入口加 standalone 局部公式。
+实现与证据本次推送；失败详情保留如下。无 live job。
 
-当前无 live job。最后主工作区定向复核：
-`TIDE_BUILD_DIR="$PWD/artifacts/worktrees/core5-bootstrap/build/cpu" python -m pytest -q tests/test_weighted_scoring.py tests/test_weighted_scoring_execution.py --dtype both`
-**66 passed / 0 failed / 0 skipped**；完整整图/梯度/优化器/续接的原评分失败已消失。
-这是开发检查，不能替代固定源码资格。
+主工作区下一增量未提交：实际 KV ragged 投影与 affine/delta 前缀复合。
+新 Python weighted/{packing,kv_packed,recurrent_packed}.py 和独立 C++ weighted_*packed，
+接入 packed_sequence、sequence、独立 batch；没有调用逐步 Upd 补写数值。
+零接收原样保留 raw tuple、时间差先 int64、完整正前缀可解码；现有语义 VJP 重放仍保留，
+不声称完成批量反向。新 Python 独立前缀/非交换矩阵/稀疏时间/独立根 **18 项通过**。
+C++ 尚待构建；不是评分 cacb645 的资格。无用户修改。
 
-下一动作：固定该实现提交，冻结 task-owned worktree `artifacts/worktrees/core5-bootstrap`，
-将 worktree HEAD/index 对齐固定提交并核验干净只读；通过 `develop.py --reuse-build` 核验
-C++ 源码和二进制 hash，启动新的 scoring-qualify background.slice 服务。
-联合检查 allocation_shift/allocation/entropy、scoring/scoring_execution、sending/execution、
-weighted KV/recurrent/config 和 standalone 局部公式；精确命令在资格 launcher 与 job 记录。
-资格终态后独立提交证据并推送，继续精确联合/packed/批量 VJP、mixed/resident、
+下一命令：补 standalone packed 手算与 native 入口测试；用 `.local/freeze-core5.py tide-core5-scoring-qualify-20261027`
+冻结开发树，新的 background.slice 服务构建并运行 tests/test_weighted_packed.py 和相关执行回归。
+之后继续 GDN/SSD 的固定时间卷积联合特征、批量 VJP、mixed/resident、
 standalone 完整训练与有限 profiling。总体任务尚未完成，持续推进。
 
 ## 本增量保留的失败与修复
