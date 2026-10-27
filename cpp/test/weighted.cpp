@@ -2,6 +2,8 @@
 #include "tide/weighted.h"
 #include "tide/stream.h"
 #include "tide/frontier.h"
+#include "tide/read.h"
+#include "tide/full.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/core/grad_mode.h>
 #include <cmath>
@@ -84,5 +86,29 @@ void check_weighted(const at::TensorOptions& o){
     }
     if(actual.states[2].slots.at("times").numel()!=1||actual.states[2].slots.at("times")[0].item<Index>()!=clock+7)
       throw std::runtime_error("weighted packed KV window lost original time");
+  }
+  {
+    // Describe/Full joint queries: the populated state, an expired view and
+    // Read^0 must differ. Explicit formula avoids using fields_step as oracle.
+    at::NoGradGuard guard;auto w=model.nodes[0];
+    w.extra["read_program.score.matrix"]=at::zeros({4,8},o);
+    w.extra["read_program.score.matrix"][0][2].fill_(1);
+    w.extra["read_program.score.vector"]=at::tensor({1.,0.,0.,0.},o);
+    auto h=at::tensor({1.,1.},o),control=at::full({},.2,o);
+    std::vector<ReadInput> reads{{&state,clock,ContentView{h}},{&state,clock+20,ContentView{h}},
+      {nullptr,clock,ContentView{h}},{&state,clock,ContentView{h}}};
+    auto descriptors=w.read_kernel->fields_batch(w,reads);
+    const double short_value=4/std::sqrt(2.);
+    for(size_t i=0;i<reads.size();++i){
+      close(descriptors[i].at("score"),at::full({},2+((i==0||i==3)?short_value/(1+std::exp(-short_value)):0),o));
+      close(descriptors[i].at("w"),at::ones({},o));close(descriptors[i].at("mu"),at::ones({},o));
+    }
+    std::vector<FullInput> fulls{{&state,clock,ContentView{h},control},{&state,clock+20,ContentView{h},control}};
+    auto values=w.full_kernel->batch(w,fulls,3,Options{});
+    close(values[0].value,at::tensor({.2,1+3/std::sqrt(2.)},o));
+    close(values[1].value,at::tensor({.2,1.},o));
+    for(const auto& result:values)for(const auto& emitted:result.emitted)
+      if(!emitted.value.is_same(result.value))throw std::runtime_error("weighted Full batch lost broadcast alias");
+    if(!w.read_kernel->joint_batch()||!w.full_kernel->joint_batch())throw std::runtime_error("missing weighted query batch capability");
   }
 }
