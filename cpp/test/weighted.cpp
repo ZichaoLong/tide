@@ -26,6 +26,7 @@ void check_weighted(const at::TensorOptions& o){
   close(gradients[2],at::full({},-.125,o));
   KVConfig c;c.width=c.summary_width=c.adapter_rank=c.heads=c.ffn_width=1;c.epsilon=1;c.alpha_ff=0;c.window=5;
   RegionalConfig r;r.k=2;r.region_control_mode="fixed";r.total_fraction=.4;r.allocation_temperature=2;
+  r.region_evidence.reset();
   Graph g;g.nodes={{0},{0}};g.regions={{2,true,false,"proposal","weighted-total-test"}};
   for(auto& n:g.nodes){n.memory="weighted-kv-test";n.readout="weighted-read-test";n.emission="weighted-full-test";n.aggregation="weighted-aggregate-test";}
   g.inputs={0,1};g.outputs={0,1};g.compile();

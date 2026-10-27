@@ -19,19 +19,25 @@
 
 ## 当前任务与下一动作
 
-熵分配不可变资格 `tide-core5-entropy-qualify-20261027` 已终态 inactive/success，退出 0。
-记录 `artifacts/jobs/core5-entropy-qualify/{status.json,task.log,development.json}`；
-launcher `.local/core5-entropy-qualify.sh`；冻结源码 a05d3ff。
-worktree `artifacts/worktrees/core5-bootstrap` 干净只读；无 live job，可在确认终态后复用。
-开发快照与原日志保留在 entropy-dev；开发和本次资格各 226 项，不合并计数。
+十种发送规则、固定/上下文节点增益、三/四字段描述、配置适用性与独立反向已完成本增量。
+[契约与追溯](weighted-sending.md)。开发 `tide-core5-sending-dev-20261027`：**304 passed**；
+端点/独立增益与弱总量反例补充 `tide-core5-sending-corners-20261027`：**70 passed**。
+两服务均 inactive/success、退出 0；计数是不同测试集合，不合并为唯一测试数。
+开发冻结树分别 `79186cbfdc7e77238bef61b769129ba27a374a23`、
+`ce335087a6430391ee59cea1e933f9b8e931ad94`；相应 artifacts/jobs 下保留 status/log/source。
+新增原语、绑定、测试和契约在本次一并固定提交，无用户修改。
 
-下一增量已开始：`python/tidegraph/weighted/sending.py` 与
-`cpp/include/tide/weighted_sending.h`、`cpp/src/weighted_sending.cpp` 是未提交的新发送原语。
-实现 Attention 正支持/零基权重右导数、比例、固定排序零温填入与 hard 选择；
-尚未接 CMake/配置、尚未测试，不在熵分配资格内。无用户修改。
-接下来补独立公式/方向导数、全部发送配置与节点增益绑定、native 完整记录/训练/恢复。
-随后 match/att/grouped/content key、联合/packed/批量 VJP、mixed/resident、
-standalone 完整训练与有限 profiling。阶段成果不代表总体完成，持续推进。
+接下来不可变资格 `tide-core5-sending-qualify-20261027`，launcher `.local/core5-sending-qualify.sh`，
+将 task-owned worktree `artifacts/worktrees/core5-bootstrap` 对齐本次实现提交、核验干净并只读。
+输出 `artifacts/jobs/core5-sending-qualify/{status.json,task.log,development.json}`。
+沿 sending-dev 九个入口运行完整本增量测试集合（包括后来补充），--reuse-build 先核验 C++ 源码/二进制。
+background.slice、Nice=10、ATen/BLAS 单线程、15 分钟上限；运行期间源码/build 不得修改。
+查看 `systemctl --user show tide-core5-sending-qualify-20261027 -p ActiveState -p Result -p ExecMainStatus`；
+日志 `tail -60 artifacts/jobs/core5-sending-qualify/task.log`；停止同名服务。
+尚无本次不可变资格通过结论；通过后单独提交证据并推送。
+
+继续 match/att/grouped/content key，然后联合/packed/批量 VJP、mixed/resident、
+standalone 完整训练与有限 profiling。阶段成果不代表总体任务完成，持续推进。
 
 ## 环境与保留事项
 

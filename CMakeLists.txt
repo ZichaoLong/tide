@@ -38,7 +38,7 @@ add_library(tidegraph STATIC
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/read_fields.cpp cpp/src/tensor_fields.cpp cpp/src/isolated_read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/weighted_allocation.cpp cpp/src/weighted_kv.cpp cpp/src/weighted_programs.cpp
-  cpp/src/weighted_entropy.cpp
+  cpp/src/weighted_entropy.cpp cpp/src/weighted_sending.cpp cpp/src/weighted_region.cpp cpp/src/weighted_region_config.cpp
   cpp/src/weighted_recurrent.cpp cpp/src/weighted_basic.cpp cpp/src/weighted_gated_delta.cpp
   cpp/src/weighted_ssd.cpp cpp/src/weighted_convolution.cpp
   cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp cpp/src/ownership.cpp
@@ -101,7 +101,7 @@ if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
     add_test(NAME payload-ownership-${dtype} COMMAND tidegraph-payload-ownership-check --device=cpu --dtype=${dtype})
   endforeach()
 endif()
-add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp cpp/test/weighted.cpp cpp/test/weighted_recurrent.cpp cpp/test/weighted_entropy.cpp)
+add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/test/structured_records.cpp cpp/test/weighted.cpp cpp/test/weighted_recurrent.cpp cpp/test/weighted_entropy.cpp cpp/test/weighted_sending.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)

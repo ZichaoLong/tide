@@ -4,7 +4,7 @@ import torch
 from ..graph import Graph, Node, Region
 from ..ops import Model
 from ..source_class import SourceClasses
-from .config import KVConfig, RegionalConfig, finite, identity, positive_int
+from .config import KVConfig, RegionalConfig, finite, identity, positive_int, region_profile
 from .kv import KVContent, KVMemory
 from .recurrent_config import RecurrentConfig
 from .recurrent import BasicContent, BasicMemory
@@ -44,7 +44,7 @@ class WeightedModel(Model):
                     or node.read_program.memory_config != c or node.read_program.config != r
                     or node.full_program.content.config != c or agg.epsilon != c.epsilon):
                 raise ValueError("weighted function configuration changed without a new graph binding")
-        if any(spec.selector != identity("weighted-regional-total-v1",program.config)
+        if any(spec.selector != region_profile(program.config)
                for spec,program in zip(graph.regions,self.regions)):
             raise ValueError("weighted region configuration changed without a new graph binding")
 
@@ -89,7 +89,7 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     classes.validate(topology)
     generator = torch.Generator().manual_seed(seed)
     width = memory[0].width
-    region_ids = [identity("weighted-regional-total-v1",c) for c in region]
+    region_ids = [region_profile(c) for c in region]
     rp = {j: RegionalTotal(region_ids[j],c,generator,dtype) for j,c in enumerate(region)}
     bases = [parameter((2*width,width),generator,dtype) for _ in region]
     source_a = [parameter((source_hidden_width,width),generator,dtype) for _ in region]
@@ -116,7 +116,7 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
         aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width)
         fulls[v] = WeightedFull(fid,content_type(c,generator,dtype))
         nodes.append(Node(j,memory=sid,readout=rid,aggregation=aid,emission=fid))
-    specs = tuple(Region(len(layout.members),observe_all=True,count_priority=False,
+    specs = tuple(Region(c.capacity(len(layout.members)),observe_all=True,count_priority=False,
                          read_mode={"0":"content","-":"old","+":"proposal"}[c.read_mode],
                          selector=region_ids[j]) for j,(layout,c) in enumerate(zip(topology.region_layouts,region)))
     # Physical source slots remain distinct even when parameter classes coincide.

@@ -32,11 +32,19 @@ struct RecurrentConfig {
   void validate() const;
 };
 struct RegionalConfig {
-  Index hidden_width=4, region_control_width=2, k=1;
-  double gamma_max=1, allocation_temperature=1, total_fraction=.5;
-  std::string region_control_mode="context";
-  std::string regularizer="quad";
-  std::optional<double> ent_alpha;
+  Index hidden_width=4;
+  std::optional<Index> region_control_width=2, k=1;
+  double gamma_max=1;
+  std::optional<double> allocation_temperature=1, total_fraction, ent_alpha, eta, fixed_gain, gain_logit;
+  std::string selection_mode;
+  std::optional<std::string> region_control_mode="context", region_evidence="cat", regularizer="quad";
+  std::optional<std::string> send_gain, allocation_base;
+  explicit RegionalConfig(std::string mode="regional_total");
+  bool regional() const;
+  bool total() const;
+  bool hard() const;
+  bool attention() const;
+  Index capacity(Index size) const;
   void validate() const;
 };
 struct Allocation {

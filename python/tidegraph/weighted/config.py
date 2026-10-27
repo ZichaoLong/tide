@@ -82,44 +82,143 @@ class RegionalConfig:
     local_score: str = "cat"
     region_score: str = "ind"
     selection_mode: str = "regional_total"
-    region_control_mode: str = "context"
-    region_evidence: str | None = "cat"
-    regularizer: str = "quad"
+    region_control_mode: str | None = None
+    region_evidence: str | None = None
+    regularizer: str | None = None
     ent_alpha: float | None = None
     hidden_width: int = 4
-    region_control_width: int = 2
+    region_control_width: int | None = None
     gamma_max: float = 1.
-    k: int = 1
-    allocation_temperature: float = 1.
+    k: int | None = None
+    allocation_temperature: float | None = None
     total_fraction: float | None = None
+    eta: float | None = None
+    send_gain: str | None = None
+    fixed_gain: float | None = None
+    gain_logit: float | None = None
+    allocation_base: str | None = None
 
     def __post_init__(self):
-        for name in ("hidden_width", "region_control_width", "k"):
-            positive_int(name, getattr(self, name))
+        positive_int("hidden_width", self.hidden_width)
         if self.read_mode not in {"0", "-", "+"}:
             raise ValueError("read_mode must be 0/-/+")
-        if (self.local_score, self.region_score, self.selection_mode) != ("cat", "ind", "regional_total"):
-            raise ValueError("this binding currently implements cat/ind/regional_total")
-        from .regularizers import Regularizer
-        Regularizer(self.regularizer, self.ent_alpha)
+        if (self.local_score, self.region_score) != ("cat", "ind"):
+            raise ValueError("this binding currently implements cat/ind scoring")
+        if self.selection_mode not in REGIONAL | GAIN:
+            raise ValueError("unknown selection_mode")
         finite("gamma_max", self.gamma_max, 1)
-        finite("allocation_temperature", self.allocation_temperature, 0, True)
-        if self.region_control_mode == "context":
-            if self.region_evidence != "cat" or self.total_fraction is not None:
-                raise ValueError("context requires cat evidence and computes total_fraction")
-        elif self.region_control_mode == "fixed":
-            if self.region_evidence is not None or self.total_fraction is None:
-                raise ValueError("fixed control needs total_fraction and no evidence function")
-            finite("total_fraction", self.total_fraction, 0)
-            if self.total_fraction > 1:
-                raise ValueError("total_fraction exceeds one")
+        if self.selection_mode in ALLOCATED | ATTENTION:
+            self._default("allocation_temperature", 1.)
+            finite("allocation_temperature", self.allocation_temperature, 0, True)
         else:
-            raise ValueError("invalid region_control_mode")
+            self._absent("allocation_temperature")
+        if self.selection_mode in ALLOCATED:
+            self._default("regularizer", "quad")
+            from .regularizers import Regularizer
+            Regularizer(self.regularizer, self.ent_alpha)
+        else:
+            self._absent("regularizer", "ent_alpha")
+        if self.selection_mode not in ATTENTION:
+            self._default("k", 1)
+            positive_int("k", self.k)
+            self._absent("allocation_base")
+        else:
+            self._absent("k", "eta")
+            self._default("allocation_base", "uniform" if self.selection_mode == "unit_attention" else "mu")
+            allowed = {"direct_attention": {"mu", "received"}, "unit_attention": {"uniform", "mu"},
+                       "pooled_attention": {"mu"}}
+            if self.allocation_base not in allowed[self.selection_mode]:
+                raise ValueError("inapplicable allocation_base")
+        if self.regional:
+            self._absent("send_gain", "fixed_gain", "gain_logit")
+            self._default("region_control_mode", "context")
+            self._default("region_control_width", 2)
+            positive_int("region_control_width", self.region_control_width)
+            if self.region_control_mode == "context":
+                self._default("region_evidence", "cat")
+                self._absent("eta", "total_fraction")
+                if self.region_evidence != "cat":
+                    raise ValueError("context currently requires cat evidence")
+            elif self.region_control_mode == "fixed":
+                self._absent("region_evidence")
+                if self.selection_mode in TOTAL:
+                    finite("total_fraction", self.total_fraction, 0)
+                    if self.total_fraction > 1:
+                        raise ValueError("total_fraction exceeds one")
+                else:
+                    self._default("eta", 0.)
+                    finite("eta", self.eta)
+            else:
+                raise ValueError("invalid region_control_mode")
+            self._absent("eta" if self.selection_mode in TOTAL else "total_fraction")
+        else:
+            self._absent("region_control_mode", "region_control_width", "region_evidence", "total_fraction")
+            self._default("send_gain", "fixed")
+            if self.send_gain == "context":
+                self._absent("fixed_gain", "gain_logit")
+            elif self.send_gain == "fixed":
+                if self.gain_logit is not None:
+                    self._absent("fixed_gain")
+                    finite("gain_logit", self.gain_logit)
+                else:
+                    self._default("fixed_gain", self.gamma_max)
+                    finite("fixed_gain", self.fixed_gain, 1)
+                    if self.fixed_gain > self.gamma_max:
+                        raise ValueError("fixed_gain exceeds gamma_max")
+            else:
+                raise ValueError("send_gain must be fixed/context")
+            if self.selection_mode in {"constrained", "hard_selection"}:
+                self._default("eta", 0.)
+                finite("eta", self.eta)
+            else:
+                self._absent("eta")
+
+    @property
+    def regional(self):
+        return self.selection_mode in REGIONAL
+
+    def capacity(self, size):
+        if self.k is not None and self.k > size:
+            raise ValueError("sending k exceeds region size")
+        return self.k if self.selection_mode in HARD else size
+
+    @property
+    def backward_identity(self):
+        if self.selection_mode in ALLOCATED:
+            return self.regularizer+"-exact-map-v1"
+        if self.selection_mode in ATTENTION:
+            return "weighted-attention-map-v1"
+        if self.selection_mode == "proportional":
+            return "weighted-proportional-map-v1"
+        return "weighted-hard-cap-branch-v1" if self.selection_mode in HARD else "weighted-sorted-fill-branch-v1"
+
+    def _default(self, name, value):
+        if getattr(self, name) is None:
+            object.__setattr__(self, name, value)
+
+    def _absent(self, *names):
+        for name in names:
+            if getattr(self, name) is not None:
+                raise ValueError(f"{name} is inapplicable to {self.selection_mode}/{self.region_control_mode}")
 
     def identity_fields(self):
         fields = asdict(self)
         # Preserve pre-entropy quad graph/checkpoint identities. An absent
         # fixed entropy shape has no semantics; an actual shape always enters.
-        if self.ent_alpha is None:
-            fields.pop("ent_alpha")
+        for name in ("ent_alpha", "eta", "send_gain", "fixed_gain", "gain_logit", "allocation_base"):
+            if fields[name] is None:
+                fields.pop(name)
         return fields
+
+
+TOTAL = {"regional_total", "regional_total_zero"}
+HARD = {"regional_threshold_hard", "hard_selection"}
+REGIONAL = TOTAL | {"regional_threshold", "regional_threshold_hard"}
+ATTENTION = {"direct_attention", "unit_attention", "pooled_attention"}
+ALLOCATED = {"regional_total", "regional_threshold", "constrained"}
+GAIN = ATTENTION | {"constrained", "hard_selection", "proportional"}
+
+
+def region_profile(config):
+    return identity("weighted-regional-total-v1" if config.selection_mode == "regional_total" else
+                    "weighted-region-v1", config)
