@@ -35,10 +35,34 @@ fea6fa7 KV window/sum固定资格通过：CPU20（1.95秒）、NPU两窗口120�
 证据evidence/core5-resident-kv-sum-20261027.json，开发treecac7cbde71943a29db7f09487c7d013665e74a3e。
 CPU adapter原exit139及invalid horizon见原诊断记录，未改历史终态。
 
-主工作区未提交rotary/phase/apply kernels、DeviceProgram Sin/Cos后端、CPU/NPU检查及对应文档。
-已注册CMake/registry；CPU短检查4项通过，尚无设备数值资格。
-接着冻结开发验证原始int64 age相位、NoPE/部分旋转、极大age及保存VJP。
-之后接qry、Describe/Full、四循环及完整在线图训练生命周期。当前无活动reader。
+rotary开发tree0027114a70778f701e019a1e00b951a51e5e922e：CPU4通过、NPU构建通过但极大age旋转错误，
+tide-core5-resident-rotary-dev-20261027.service failed/exit1，原source/log/status保留。
+观察符合int64数值转换截成低32位，正分开检查相位和厂商Sin/Cos；不改测试输入/容差。
+已实现显式IEEE最近偶数舍入的非负int64→FP32 helper，同时用于窗口衰减与旋转；
+CPU新增转换舍入边界、窗口+旋转共11项通过。NPU窗口新增真正极大age（此前只有极大绝对时间与小age）。
+
+rotary-dev2冻结tree952c7789fb90f88ab3310cc73bc4773fd0e35f0d：CPU11、NPU构建通过；
+实际FP32 phase与CPU逐位相同，但厂商Sin/Cos在巨大相位下结果错误，旋转不保范数。
+unit tide-core5-resident-rotary-dev2-20261027.service failed/exit1；后续kv-sum未执行。
+已补有限FP32全指数范围的Payne–Hanek周期归约，再调用厂商Sin/Cos和象限还原；
+CPU独立math.sin/cos与窗口合计13项通过，设备尚未验。原失败/source/log/status保留。
+
+rotary-dev3冻结tree7207e6dd66b334935329d3ce896863b1f4f38702通过：CPU13、NPU窗口/sum与旋转完整检查。
+tide-core5-resident-rotary-dev3-20261027.service inactive/success/exit0；原source/log/status保留。
+本次提交旋转、周期归约和大age数值转换修复；此前两个开发失败仍保留failed。
+
+下一动作对本实现提交运行tide-core5-resident-rotary-{npu,cuda}-qualify-20261027.service，结果未知。
+使用冻结artifacts/worktrees/core5-resident；NPU复用dev3产物并核验全部摘要，不改原manifest。
+输出artifacts/jobs/core5-resident-rotary-{npu,cuda}-qualify/{status.json,task.log,checks/result.json或control-build.json}。
+launcher .local/core5-resident-rotary-{npu,cuda}-qualify{,-workload}.sh；两者检查weighted-kv-sum和weighted-rotary。
+background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS单线程、NPU queue180秒。
+检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。失败不标passed。
+通过后证据另提交推送，继续qry、Describe/Full和完整图。
+
+主工作区另有weighted_kv_query{.h,.cpp,_vjp.cpp,_internal.h}、query plan/roots kernel草稿；
+主工作区已补CMake/registry、契约和CPU依赖测试7项通过，尚未编译，不进入rotary提交/资格树。数值链为window→Q/K/V→read RoPE→两通道Attention→四返回；
+VJP按独立返回根回传各参数角色/私有u/raw。后续继续qry、Describe/Full、四循环及完整图生命周期。
+KV sum证据c198a43已推送，不修改活动reader的冻结源码。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。

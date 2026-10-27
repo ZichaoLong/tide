@@ -24,6 +24,8 @@
 
 [常驻KV原始时间窗口/sum记忆](resident-weighted-kv-sum.md)对应精确时间mask、四个Mem返回及私有raw字段VJP。
 
+[常驻相对位置旋转](resident-weighted-rotary.md)对应精确age到FP32相位、vendor Sin/Cos及保存线性VJP。
+
 本页是导航与实现域说明，不另定义数学语义。固定版本与逐字节校验见
 [upstream.json](upstream.json)；`python scripts/check_upstream.py` 可离线核验。
 [semantics](semantics.md) 拥有本地公式、精度、梯度和序列化版本。

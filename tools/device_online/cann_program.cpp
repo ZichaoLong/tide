@@ -234,6 +234,12 @@ void DeviceProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnSigmoid",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
+void DeviceProgram::sin(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnSin",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void DeviceProgram::cos(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnCos",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
 void DeviceProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnTanh",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));

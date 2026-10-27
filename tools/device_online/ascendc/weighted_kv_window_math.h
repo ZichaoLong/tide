@@ -1,5 +1,5 @@
 #pragma once
-#include "weighted_allocation_math.h"
+#include "weighted_numeric_time.h"
 namespace tide_weighted_window_device {
 using namespace tide_weighted_device;
 __aicore__ inline void prepare(__gm__ float* raw,__gm__ I* meta,__gm__ I* times,
@@ -25,7 +25,7 @@ __aicore__ inline void prepare(__gm__ float* raw,__gm__ I* meta,__gm__ I* times,
       const I a=r*capacity+used;ages[a]=age;mapping[a]=i;
       for(I j=0;j<d;++j){keys[a*d+j]=raw[r*fw+kw+i*d+j];values[a*d+j]=raw[r*fw+vw+i*d+j];}
       for(I j=0;j<ds;++j)summaries[a*ds+j]=raw[r*fw+pw+i*ds+j];
-      const float short_decay=math.exp(-float(age)*beta);
+      const float short_decay=math.exp(-tide_weighted_time_device::as_float(age)*beta);
       if(!finite(short_decay)||short_decay<0||short_decay>1){error[0]=31;return;}
       decay[r*2*capacity+used]=short_decay;decay[(r*2+1)*capacity+used]=1;
       weights[r*2*capacity+used]=w*short_decay;weights[(r*2+1)*capacity+used]=w;++used;

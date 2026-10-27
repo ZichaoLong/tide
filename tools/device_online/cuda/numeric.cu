@@ -32,6 +32,7 @@ __global__ void elements(Op op,const void* a,Type at,const void* b,Type bt,void*
     float x=get_float(a,at,ai),y=b?get_float(b,bt,bi):0,z=x;
     if(op==Add)z=x+y;else if(op==Mul)z=x*y;else if(op==Div)z=x/y;
     else if(op==Softplus)z=x>20?x:log1pf(expf(x));
+    else if(op==Sin)z=sinf(x);else if(op==Cos)z=cosf(x);
     else if(op==Sigmoid)z=1.f/(1.f+expf(-x));else if(op==Tanh)z=tanhf(x);
     else if(op==Relu)z=x!=x?x:(x>0?x:0.f);else if(op==Silu)z=x/(1.f+expf(-x));
     else if(op==TanhBackward)z=x*(1.f-y*y);

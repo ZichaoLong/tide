@@ -30,6 +30,8 @@ class DeviceProgram {
   void sum(const at::Tensor&, int64_t axis, bool keep_dimension, const at::Tensor& output);
   void softmax(const at::Tensor&, int64_t axis, const at::Tensor& output);
   void sigmoid(const at::Tensor&, const at::Tensor& output);
+  void sin(const at::Tensor&, const at::Tensor& output);
+  void cos(const at::Tensor&, const at::Tensor& output);
   void tanh(const at::Tensor&, const at::Tensor& output);
   void tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& output);
   void relu(const at::Tensor&, const at::Tensor& output);
