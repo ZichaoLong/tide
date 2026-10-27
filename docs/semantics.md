@@ -121,6 +121,8 @@ The [resident KV update](resident-weighted-kv-update.md) composes actual low-ran
 
 The [resident weighted pool](resident-weighted-pool.md) computes sum or positive weighted Attention plus an independently rooted total. Saved first-order adjoints preserve zero-weight attenuation paths and empty/absent identities. It does not define windows, position, or a graph schedule.
 
+The [resident KV window/sum](resident-weighted-kv-sum.md) selects snapshots using exact int64 ages and returns four independently rooted Mem fields. Numerical decay underflow retains raw visibility and zero gradient connections; caller-bound old/new/initial snapshots remain explicit.
+
 The separately versioned [weighted-message binding](weighted-message.md) provides
 the pinned KV sum/qry memory, cat/ind Describe, regional_total with context/cat or
 fixed control and quad/Bernoulli/fixed-alpha entropy allocation. Payload (m,z), aggregate (r,u), descriptor
