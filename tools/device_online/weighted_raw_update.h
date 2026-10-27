@@ -19,6 +19,11 @@ struct WeightedRawUpdateGradient {
 WeightedRawUpdateTape append_weighted_raw_update(DeviceProgram&,const WeightedRawLayout&,
   const WeightedRawState&,const at::Tensor& time,const at::Tensor& mass,const at::Tensor& present,
   const at::Tensor& proposal,const at::Tensor& error,int64_t budget=256*1024*1024);
+// FP32 numerical result -> FP16 raw storage, retaining exact integer metadata.
+// Guard the actual rounded fields before any owner commit; padding is ignored.
+// Cast declares identity first-order VJP; this operation creates no new event.
+WeightedRawState append_weighted_raw_half_store(DeviceProgram&,const WeightedRawLayout&,
+  const WeightedRawState&,const at::Tensor& error,int64_t budget=256*1024*1024);
 // Independent roots per row and named floating field, including adapter value.
 WeightedRawUpdateGradient append_weighted_raw_update_vjp(DeviceProgram&,const WeightedRawUpdateTape&,
   const at::Tensor& gradient,const at::Tensor& roots,const at::Tensor& error,int64_t budget=256*1024*1024);

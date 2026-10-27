@@ -22,19 +22,23 @@
 checkout `artifacts/worktrees/core5-half-math`固定2e4d445，build/npu2、build/cuda2；跟踪文件只读。
 output `artifacts/jobs/core5-half-primitives-{npu,cuda}-qualify/`，task.log/status.json；实际NPU物理9→npu:0。
 launchers `.local/core5-half-primitives-{npu,cuda}-qualify{,-workload}.sh`；900秒/2worker/BLAS1/Nice10/background.slice。
-记录脚本 `.local/record-half-primitives-evidence.py` 已验证并生成报告。当前没有活动项目任务。
+记录脚本 `.local/record-half-primitives-evidence.py` 已验证并生成报告。上述任务均已结束；下列KV读取新资格即将启动。
 完整训练三任务与原失败的精确路径/摘要从上述机器记录进入，不在STATUS重复成旧队列。
 
 ## 当前开发与下一步
 
-本提交：KV window接受FP16 raw，设备拓宽后在FP32读取；sum/qry的Read输入、参数、
+实现db85db6：KV window接受FP16 raw，设备拓宽后在FP32读取；sum/qry的Read输入、参数、
 memory/total和全部伴随明确保持FP32。raw、描述与反向精度分开，时间和窗口成员始终int64。
 sum分配改用实际window输出dtype，完整预算计入拓宽缓冲；query原有FP32输入/参数域不变。
 两个standalone检查新增half raw域，在实际量化raw上独立FP32公式/四根VJP，保存版本仍独立。
 额外sum见证检查半精度最小次正规K/V/权重、正的短期FP32证据低于半精度下限仍保留、四根连接及int64 age。
 尚未编译/设备运行。CPU相关27项通过/2.79秒：
 `python -m pytest -q tests/test_resident_weighted_kv_window.py tests/test_resident_weighted_kv_query.py tests/test_resident_weighted_pool.py`。
-resident-weighted-kv-sum/query契约已同步，dtype/预算/独立期望已审查。下一步冻结本提交并运行定向资格。
+resident-weighted-kv-sum/query契约已同步，dtype/预算/独立期望已审查。
+已冻结db85db6e2e91559b71915200298203e6f313982c到core5-half-math，跟踪文件只读。
+units `tide-core5-half-kv-read-{npu,cuda}-qualify-20261028.service`；outputs `artifacts/jobs/core5-half-kv-read-{npu,cuda}-qualify/`。
+launchers `.local/core5-half-kv-read-{npu,cuda}-qualify{,-workload}.sh`；build/kv-read-npu、build/kv-read-cuda。
+两个900秒/2worker/BLAS1/Nice10/background.slice任务；NPU queue180秒，device gate240秒；两个任务已running，Slice/Transient已核验。
 所有旧资格均终态后可将core5-half-math冻结到该新提交，在新build/kv-read-npu、build/kv-read-cuda构建：
 `python scripts/build_device_control.py --core-build CORE --build-dir NEW --runtime standalone --jobs 2 --checks weighted-kv-sum weighted-kv-query`，
 NPU加`--ascendc-soc Ascend910_9392`，CUDA加`--cuda-architectures '80;90;100'`；实际NPU用verify_device_control.py两dtype资格。
@@ -60,3 +64,9 @@ TORCH_DEVICE_BACKEND_AUTOLOAD=0、PYTHONDONTWRITEBYTECODE=1、ACL_OP_INIT_MODE=0
 任务检查`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；停止`systemctl --user stop UNIT`。
 不预建job.py输出目录，service stdout放.local；STATUS用scripts/durable_records.py原子写并回读。
 公共环境和参考仓库未修改；上游19文件已重新校验通过。
+
+当前主区另有未提交KV Upd FP16 raw开发：FP32 content/参数与完整算术，最终raw一次half存储；
+新增append_weighted_raw_half_store在设备上复用无当前接收的raw校验计划，实际字段溢出拒绝，padding忽略。
+独立检查新增量化旧态/完整字段VJP、padding poison、正接收下溢仍保留条目/计数及质量根、生成值溢出不提交。
+契约已同步。CPU相关26项通过/2.85秒（kv_update/raw_update/projection_norm），C++/设备尚未运行。
+这些改动不属于db85db6活动读取资格；不要混入它的证据提交。

@@ -18,6 +18,9 @@ struct WeightedKVUpdateGradient {
 };
 // KV §1.2–1.3: actual shared base + private adapter, independent summary,
 // positive reception only, original-time window and complete raw state.
+// Raw old/result storage is FP32/FP16. Content and parameter banks remain FP32;
+// arithmetic, saved values and VJP are FP32. The final half raw store is guarded
+// for representability and has the declared identity cast VJP.
 WeightedKVUpdateTape append_weighted_kv_update(DeviceProgram&,const weighted::KVConfig&,
   const WeightedRawState&,const at::Tensor& content,const at::Tensor& time,
   const at::Tensor& owners,const at::Tensor& present,const WeightedKVParameters&,

@@ -10,6 +10,13 @@ left[B,2d,r_a]、right[B,r_a,d]、summary[B,d_s,d]。同组固定 d、d_s、r_a�
 参数角色可经[canonical归约](resident-weighted-parameters.md)绑定到实际共享 owner；
 节点状态仍私有。不同节点的 base 可以共享，适配因子和摘要不必共享。
 
+raw旧态与结果可显式为FP32或FP16；content、四个参数bank、算术、保存值和所有伴随仍为FP32。
+FP16旧态先精确拓宽，完成公式后仅在最终raw存储舍入；Cast声明一阶identity VJP。
+`append_weighted_raw_half_store`检查舍入后的所有实际定长字段/有效ragged前缀，忽略未用padding，
+保留精确int64元数据。有限FP32生成值若溢出half则以error24拒绝，不能提交live owner。
+FP32正接收在存储时可成为零权重，但仍是已发生的接收：保留新条目、时间戳和计数及质量根。
+这与r<=0的原样保留分支不同；没有添加人为裁剪。额外拓宽/存储/校验缓冲纳入组合预算。
+
 设备依据实际 r>0 决定是否求投影。缺席行、零或负接收不读取 u 或参数 owner，
 并保留完整旧 tuple；旧 tuple 本身仍必须有效。正接收计算
 (base+left@right)N_d(u) 与 summary N_d(u)，用 vendor BMM/RMS/index 操作完成数值，
@@ -31,11 +38,13 @@ left/right，按真实 bank 归约所有使用者。参数源或原内容后续�
 | 定义与边界 | 独立证据入口 |
 | --- | --- |
 | 正接收、缺席/零接收、独立字段根 | `test_resident_weighted_kv_update.py`：分支、poison、None/零、合并溢出 |
-| 完整低秩/摘要/私有内容梯度 | `weighted_kv_update_check.cpp`：独立逐行公式和 autograd，五个独立输出根及联合根 |
+| 完整低秩/摘要/私有内容梯度 | `weighted_kv_update_check.cpp`：每raw dtype在实际量化旧态上用独立逐行FP32公式/autograd，五个独立输出根及联合根；half结果仅在最终存储舍入 |
 | 原始窗口、完整 tuple、强弱/饱和接收、保存版本 | 同 check：动态 bank、旧缓存清理、过期缓存保留、>2^54/MAX int64、失败不提交 |
 | raw 子层与 RMS 导数 | `test_resident_weighted_raw_update.py` 与 `test_resident_weighted_projection_norm.py` |
+| 半精度存储域 | 同standalone check：padding poison、正接收权重下溢仍追加条目/计数、独立质量VJP及生成字段溢出不提交 |
 
 构建/运行入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-update`。
-当前实现域为 FP32 常驻组件。CPU helper、NPU 实际执行、CUDA 构建与 GPU 真机分别记录。
+当前数值域为FP32，raw存储为FP32/FP16。CPU helper、NPU 实际执行、CUDA 构建与 GPU 真机分别记录。
 
 固定源码资格见[681a7e9运行证据](evidence/core5-resident-kv-update-20261027.md)。
+新增FP16 raw更新为开发中，设备资格未完成；不代替完整FP16图/训练验收。
