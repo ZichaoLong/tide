@@ -1,0 +1,251 @@
+{
+  "component": "pool",
+  "scope": "FP32 ragged sum or positive weighted Attention with independent vector/total returns and all saved map adjoints",
+  "observations": {
+    "configurations": 4,
+    "replay_rows": 144,
+    "widths": [
+      3,
+      129
+    ],
+    "independent_vector_total_roots": true,
+    "independent_formula_autograd": true,
+    "smooth_joint_directional_derivative": true,
+    "fp32_total_boundary": true,
+    "translation_invariant_attention_vjp": true,
+    "none_zero": true,
+    "saved_source_versions": true,
+    "zero_weight_attenuation_derivative": true,
+    "capacity_refusal": true,
+    "cpu_adapter_replays": 2048,
+    "float_rtol": 2e-05,
+    "float_atol": 2e-06
+  },
+  "prior_failures": [
+    {
+      "tree": "55d572d1ae9376aef9ebddd5c13ae5d2c5e63a2f",
+      "job": "core5-resident-pool-dev",
+      "state": "failed",
+      "reason": "CPU adapter pointer and dimension parameter name collision; no device build."
+    },
+    {
+      "tree": "28c947c732b8dd552c51de35875137570672530c",
+      "job": "core5-resident-pool-boundary-diagnostic",
+      "state": "failed",
+      "reason": "11 passed / 2 failed: lifting .4f+.6f to FP64 before total reduction changed clamp branch. Boundary oracle now computes independent FP32 total; inputs, candidate and tolerances unchanged; smooth directional oracle stays FP64."
+    },
+    {
+      "tree": "b7b4dc00638c9836418af7b1b0f236cc2100bba6",
+      "job": "core5-resident-pool-dev2",
+      "state": "failed",
+      "reason": "CPU13 passed; C++ Tensor={} assignment overload ambiguous. Explicit at::Tensor{} fixed build; no numerical change."
+    },
+    {
+      "tree": "5a84f2ad4e2944e324c23ba2a0784e6aa168f9ab",
+      "job": "core5-resident-pool-dev3",
+      "state": "failed",
+      "reason": "Build script refused existing output directory; subsequent dev4 used a new directory."
+    },
+    {
+      "tree": "f5113b5a5f95edd6fc93bd8eddf2087aae38985c",
+      "job": "core5-resident-window-cpu-diagnostic",
+      "state": "failed",
+      "reason": "Related window CPU adapter exited139 after missing semantic-arena reset; pool adapter audit fixed same latent lifecycle omission. Production CUDA resets each kernel arena; NPU uses TPipe. Qualification includes 2048-call CPU regression."
+    }
+  ],
+  "source": "afe7b5e3a1d415a4cbeed67f3654bcd285f4e28d",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "afe7b5e3a1d415a4cbeed67f3654bcd285f4e28d",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:05:50.718643+00:00",
+      "finished": "2026-10-27T15:06:09.665602+00:00",
+      "name": "core5-resident-pool-npu-qualify",
+      "unit": "tide-core5-resident-pool-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "8692d7413faafb35d3dad56fabacba53f0c1507d41adc6dc7a4bfc5377285450",
+      "device_cases": [
+        {
+          "check": "weighted-pool",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-pool-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-pool-float32.log",
+          "log_sha256": "cfc379b85f24f4557314229cc2d6b5a7f249808dc934b78bcada11296566d78c"
+        }
+      ],
+      "cpu_tests": 14,
+      "cpu_seconds": 1.2,
+      "queue": {
+        "elapsed_seconds": 15.15198926255107,
+        "job_id": "core5-resident-pool-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T15:06:09.650106+00:00"
+      },
+      "observations": {
+        "configurations": 4,
+        "replay_rows": 144,
+        "widths": [
+          3,
+          129
+        ],
+        "independent_vector_total_roots": true,
+        "independent_formula_autograd": true,
+        "smooth_joint_directional_derivative": true,
+        "fp32_total_boundary": true,
+        "translation_invariant_attention_vjp": true,
+        "none_zero": true,
+        "saved_source_versions": true,
+        "zero_weight_attenuation_derivative": true,
+        "capacity_refusal": true,
+        "cpu_adapter_replays": 2048,
+        "float_rtol": 2e-05,
+        "float_atol": 2e-06
+      },
+      "build": {
+        "source": "681a7e9f712922d13c615baf1837516cc0060dbe",
+        "component_sha256": "d9c46ff14750cd1249273544b2af8e27fd641b58bb7e4d95b9246e81e18d8999",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-pool-check": "3cb34bb333b121ba3a7bb89b6167a075ac1388f0a6c5bcc78a24031aba299b0c"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "afe7b5e3a1d415a4cbeed67f3654bcd285f4e28d",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:05:50.717460+00:00",
+      "finished": "2026-10-27T15:07:08.982503+00:00",
+      "name": "core5-resident-pool-cuda-qualify",
+      "unit": "tide-core5-resident-pool-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "bcfc5706173ef84a65987212d8b559763d806c877a50439e872083f65739fb60",
+      "build": {
+        "source": "afe7b5e3a1d415a4cbeed67f3654bcd285f4e28d",
+        "component_sha256": "d9c46ff14750cd1249273544b2af8e27fd641b58bb7e4d95b9246e81e18d8999",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-pool-check": "7420c4bdb69aeca5deeab517304987829186e1a541fe0c0c51c03a58ca87d57a"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-pool-dev4",
+    "tree": "202f8b0f683f115d93d8c74e6bb27df8d75f82d5",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_pool.py"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-pool",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-pool",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-pool",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}

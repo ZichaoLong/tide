@@ -25,20 +25,16 @@ NPU保留开发treee741c50847de858517264e9546eb503e20d36cb4原manifest并核验�
 core5-resident-kv-update-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/core5-resident-kv-update-20261027.json。
 开发tree28f8ee2ef2fe9201eea8f80a442849c352f074cf，原manifest保留且摘要匹配。
 
-weighted_pool开发tree202f8b0f683f115d93d8c74e6bb27df8d75f82d5通过：CPU13、NPU四配置144行、独立vector/total根、
-全部VJP/None零/保存版本。tide-core5-resident-pool-dev4-20261027.service inactive/exit0。
-原dev failed（adapter形参重名，tree55d572d1ae9376aef9ebddd5c13ae5d2c5e63a2f）、
-dev2 failed（Tensor={}歧义，treeb7b4dc00638c9836418af7b1b0f236cc2100bba6）、
-dev3 failed（拒绝复用已有build目录，tree5a84f2ad4e2944e324c23ba2a0784e6aa168f9ab）均保留。
-FP64 oracle边界诊断tree28c947c732b8dd552c51de35875137570672530c保存在pool-boundary-diagnostic。
-窗口CPU检查另发现测试adapter漏reset_arena；treef5113b5a5f95edd6fc93bd8eddf2087aae38985c与exit139诊断
-在artifacts/jobs/core5-resident-window-cpu-diagnostic。pool/window helper修正生命周期后18项通过，
-另补2048次arena重放回归。设备数值实现未改，CUDA生成器本来就逐kernel reset。
+afe7b5e pool固定资格通过：CPU14（1.20秒）、NPU四配置144行完整VJP/独立返回根/保存版本及CUDA三架构构建。
+core5-resident-pool-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/core5-resident-pool-20261027.json。
+开发tree202f8b0f683f115d93d8c74e6bb27df8d75f82d5；NPU保留manifest并核验全部摘要。
+原dev/dev2/dev3失败、FP32 clamp边界诊断及CPU adapter reset问题均按原树/失败状态保留在证据中。
 
-提交pool实现后固定资格；NPU复用dev4并核验摘要，CPU包含新增arena回归，CUDA新构建。
-主工作区另有KV window/sum数值Mem草稿与独立检查，尚未注册CMake/registry，无设备资格，勿混入pool冻结树。
-接着运行sum完整字段VJP/原始时间快照，继续qry/Describe/Full和循环记忆。
-KV更新及证据32c0664已推送；当前无活动reader。
+主工作区未提交KV window/sum：原始int64窗口、两权重通道、完整sum四元组、raw字段VJP，
+及tests/test_resident_weighted_kv_window.py、weighted_kv_sum_check.cpp、CMake/registry/对应文档。
+CPU前五项短检查通过，新加衰减下溢保留连接检查待开发任务；尚无NPU数值资格。
+接着冻结开发测试CPU窗口/池化及NPU两个窗口120行四Mem根，通过后提交实现和固定资格证据。
+之后qry、Describe/Full与循环记忆、完整在线图和训练生命周期。当前无活动reader。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。

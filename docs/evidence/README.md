@@ -90,3 +90,5 @@
 [常驻共享投影资格](core5-resident-projection-20261027.md)：2af401d，CPU/NPU完整组件及CUDA三架构构建。
 
 [常驻 KV 接收更新资格](core5-resident-kv-update-20261027.md)：681a7e9，CPU/NPU完整组件及CUDA三架构构建。
+
+[常驻带权摘要与 Attention 归约资格](core5-resident-pool-20261027.md)：afe7b5e，CPU/NPU完整组件及CUDA三架构构建。
