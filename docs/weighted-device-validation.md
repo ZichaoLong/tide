@@ -18,6 +18,17 @@ CUDA 使用对应 device 与匹配构建。显式缺失后端失败，不跳过�
 并非所有开关的笛卡尔积。FP32 atol=1e-6、rtol=1e-5；整数、消息存在性、平票次序、
 参数别名和 None/连接零保持严格。图与配置不因设备修改。
 
+`--dtype float16 --scoring-dtype float32` 显式选择半精度payload与FP32评分；
+未声明评分精度会在初始化设备前拒绝。`--optimizer adamw|sgd` 默认AdamW，
+half使用FP32 master和静态`--loss-scale`（默认16）；FP32不使用loss scaling。
+入口记录请求和实际精度、优化器、学习率与scale。不会为GDN自动改用SGD。
+[半精度算术](weighted-precision.md)的atol=1e-3/rtol=2e-2用于所有浮点观察量，
+包括从half操作数产生的FP32描述量、未缩放VJP和master slots；离散与连接性严格。
+checkpoint恢复的raw state与optimizer/master逐值精确，第四步跨设备更新单独比较。
+CPU与目标都采用同一量化初态；CPU FP32是另一个精度基准，不能冒充half数学路径。
+`test_weighted_device_precision.py`先检查此入口的完整记录/独立根/四步与配置拒绝；
+实际NPU/CUDA及默认AdamW的已知严格失败分别保留在证据中。
+
 | 范围 | 入口及检查 |
 | --- | --- |
 | CPU 创建的同一参数/输入 | [cases](../scripts/weighted_device_cases.py)，记录 fixture；FC/HB、反馈重复边 PDG、非对齐 DAG、稀疏独立端口、五记忆及异构组合 |

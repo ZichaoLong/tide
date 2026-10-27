@@ -5,7 +5,7 @@ from tidegraph.weighted.sending import total_zero, hard_selection
 from tidegraph.weighted.placement_tensors import mapper
 
 
-def check(device):
+def check(device, payload_dtype=torch.float32):
     # IDs cannot be sorted after a float cast: these values differ below FP64 ULP.
     ids = [2**54+7, 2**54+5, 2**54+6]
     s = torch.tensor([1., 1., 1.], device=device, requires_grad=True)
@@ -24,7 +24,7 @@ def check(device):
     gs, gm = torch.autograd.grad((c*bars).sum(), (s, mu), allow_unused=True)
     assert gs is None
     compare_finite(torch.tensor([0., 3., 0.]), gm)
-    source = [torch.tensor([.25, .5], requires_grad=True) for _ in range(3)]
+    source = [torch.tensor([.25, .5], dtype=payload_dtype, requires_grad=True) for _ in range(3)]
     clock = torch.tensor([2**54+7, -1], dtype=torch.int64)
     move = mapper([*source, source[0], clock], device, torch.float32)
     assert move(source[0]) is move(source[0])
@@ -32,8 +32,8 @@ def check(device):
     assert_placement(move(clock), device)
     loss = move(source[0]).sum()*3+move(source[1]).sum()*0
     ga, gb, gc = torch.autograd.grad(loss, source, allow_unused=True)
-    compare_finite(torch.tensor([3., 3.]), ga)
-    compare_finite(torch.zeros(2), gb)
+    compare_finite(source[0].new_tensor([3., 3.]), ga)
+    compare_finite(torch.zeros_like(source[1]), gb)
     assert gc is None
     return ["stable-large-int64-score-ties", "fractional-fill-literal-VJP",
             "nonpositive-hard-fallback-literal-VJP", "packed-transfer-None-zero-aliases-int64"]

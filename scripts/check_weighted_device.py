@@ -24,6 +24,9 @@ def main():
     parser.add_argument("--native-library")
     parser.add_argument("--placement", choices=("cpu", "mixed-a", "mixed-b", "mixed-c"), required=True)
     parser.add_argument("--scoring-dtype", choices=("profile", "float32", "float64"), default="profile")
+    parser.add_argument("--dtype", choices=("float32", "float16"), default="float32")
+    parser.add_argument("--optimizer", choices=("adamw", "sgd"), default="adamw")
+    parser.add_argument("--loss-scale", type=float, help="Static FP16 loss scale (default 16); FP32 uses 1")
     parser.add_argument("--case", action="append", default=[])
     parser.add_argument("--skip-training", action="store_true")
     parser.add_argument("--output-dir", required=True)
@@ -35,6 +38,13 @@ def main():
     from weighted_device_cases import CASES
     from weighted_device_checks import check_case
     from weighted_device_primitives import check as primitives
+    from weighted_device_precision import Precision
+    try:
+        precision = Precision(getattr(torch, args.dtype), args.optimizer, args.loss_scale)
+        if args.dtype == "float16" and args.scoring_dtype == "profile":
+            raise ValueError("float16 payload requires explicit --scoring-dtype float32 or float64")
+    except ValueError as error:
+        parser.error(str(error))
     names = {c.name for c in CASES}
     if set(args.case)-names:
         parser.error("unknown case; available: "+", ".join(sorted(names)))
@@ -54,14 +64,15 @@ def main():
     record = dict(state="running", source=source, dirty=dirty, implementation=args.implementation,
                   argv=sys.argv[1:], dispatch_environment={name: os.environ.get(name) for name in
                       ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")},
-                  runtime=manifest(device, reason, torch.float32), requested_placement=placement.to_dict(),
+                  runtime=manifest(device, reason, precision.dtype), requested_placement=placement.to_dict(),
+                  precision=precision.record(),
                   peer_devices=None if peers is None else [str(d) for d in peers],
                   resolved_placement={k: str(v) for k, v in resolved.items()}, cases=[],
                   scope="eager host schedule; actual device transfers; not resident",
-                  tolerances=dict(atol=1e-6, rtol=1e-5), fallback_visibility="requires separate profile/log audit")
+                  tolerances=precision.tolerances, fallback_visibility="requires separate profile/log audit")
     write_json(out/"result.json", record)
     try:
-        record["primitives"] = primitives(device)
+        record["primitives"] = primitives(device, precision.dtype)
         write_json(out/"result.json", record)
         for case in CASES:
             if args.case and case.name not in args.case:
@@ -70,7 +81,8 @@ def main():
             record["cases"].append(entry); write_json(out/"result.json", record)
             path = out/case.name; path.mkdir()
             entry.update(check_case(case, device, args.implementation, placement, path,
-                                    args.native_library, training=not args.skip_training, peers=peers), state="passed")
+                                    args.native_library, training=not args.skip_training, peers=peers,
+                                    precision=precision), state="passed")
             for target in peers or (device,):
                 synchronize(target)
             write_json(out/"result.json", record)
