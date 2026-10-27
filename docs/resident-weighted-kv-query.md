@@ -36,3 +36,5 @@ value 的贡献求和，再经保存的旋转/投影/窗口 tape 回传。只取
 
 入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-query`；
 CPU 元数据、NPU 实机、CUDA 构建和 CUDA 真机证据分别记录。
+
+固定源码资格见[8b1be80运行证据](evidence/core5-resident-kv-query-20261027.md)。
