@@ -30,7 +30,7 @@ std::vector<State> fixture(const WeightedRawLayout& l,at::ScalarType dtype=at::k
   for(int row=0;row<4;++row){const int64_t n=l.capacity()?stamps[row].size():0;
     State s;s.last_time=clocks[row];s.observations=row?9:0;
     for(const auto& f:l.fields()){auto shape=f.shape;if(f.ragged)shape.insert(shape.begin(),n);
-      auto x=values(shape,.3+row,dtype);if(f.name=="value"){x.zero_();x[0].fill_(-0.0);s.value=x;}
+      auto x=values(shape,.3+row,dtype);if(f.name=="value"){x.zero_();x[0].fill_(-0.0);x[1].fill_(0x1p-24);s.value=x;}
       else {if(f.name=="W"||f.name=="weights")x=x.abs()+.1;s.slots[f.name]=x;}}
     if(!l.kv())s.slots["time"]=at::scalar_tensor(std::max<int64_t>(0,s.last_time),at::kLong);
     if(l.capacity())s.slots[l.kv()?"times":"conv_times"]=at::tensor(stamps[row],at::kLong);
@@ -42,6 +42,9 @@ void equal_states(const std::vector<State>& a,const std::vector<State>& b,bool b
   for(size_t i=0;i<a.size();++i){require(a[i].last_time==b[i].last_time&&a[i].observations==b[i].observations&&a[i].slots.size()==b[i].slots.size(),"raw state clock/count/domain");
     auto compare=[&](const Tensor& x,const Tensor& y){if(bits||x.scalar_type()==at::kLong)exact(x,y);else close(x,y);};
     compare(a[i].value,b[i].value);for(const auto& [name,value]:a[i].slots)compare(value,b[i].slots.at(name));}
+}
+std::vector<State> converted(std::vector<State> states,at::ScalarType dtype){
+  for(auto& s:states){s.value=s.value.to(dtype);for(auto& [name,x]:s.slots)if(x.is_floating_point())x=x.to(dtype);}return states;
 }
 void codec(const WeightedRawLayout& l){
   at::NoGradGuard ng;
@@ -95,10 +98,10 @@ void gradients(const WeightedRawLayout& l,const Reference& ref,const Tensor& bar
     require(mf[row].item<bool>()==expected.back().defined(),"raw receive root differs");if(expected.back().defined())close(m[row],expected.back());
   }
 }
-void device_check(const WeightedRawLayout& l,at::Device device){
-  at::NoGradGuard ng;auto states=fixture(l);auto raw=encode_weighted_raw_state(l,states),old=copy_weighted_raw_state(raw,device),owner=copy_weighted_raw_state(raw,device);
+void device_check(const WeightedRawLayout& l,at::Device device,at::ScalarType dtype){
+  at::NoGradGuard ng;auto states=fixture(l,dtype);auto raw=encode_weighted_raw_state(l,states),old=copy_weighted_raw_state(raw,device),owner=copy_weighted_raw_state(raw,device);
   const auto f=old.floating.options();auto proposal=at::zeros_like(old.floating),mass=at::zeros({4},f),times=at::zeros({4},f.dtype(at::kLong));
-  auto present=at::zeros({4},f.dtype(at::kBool)),error=at::zeros({1},f.dtype(at::kInt));auto bars=at::zeros_like(proposal),roots=at::zeros({4,int64_t(l.fields().size())},present.options());
+  auto present=at::zeros({4},f.dtype(at::kBool)),error=at::zeros({1},f.dtype(at::kInt));auto bars=at::zeros(proposal.sizes(),f.dtype(at::kFloat)),roots=at::zeros({4,int64_t(l.fields().size())},present.options());
   DeviceProgram p(device);p.limit_workspace(64*1024*1024);auto t=append_weighted_raw_update(p,l,old,times,mass,present,proposal,error);
   auto g=append_weighted_raw_update_vjp(p,t,bars,roots,error);append_weighted_raw_adopt(p,owner,t.result,error);p.finish();
   for(int pass=0;pass<2;++pass){
@@ -107,16 +110,19 @@ void device_check(const WeightedRawLayout& l,at::Device device){
     raw=encode_weighted_raw_state(l,states);old.floating.copy_(raw.floating);old.integer.copy_(raw.integer);
     auto writes=at::full_like(raw.floating,NAN);for(int row=0;row<4;++row)for(size_t j=1;j<l.fields().size();++j){const auto& field=l.fields()[j];
       if(field.name!="weights")writes[row].slice(0,field.offset,field.offset+field.width).copy_(values({field.width},.2+row).abs());}
-    auto r=at::tensor(std::vector<float>{pass?0.f:.3f,pass?.2f:1.f,0.f,1.5f},at::kFloat);
+    auto r=at::tensor(std::vector<float>{pass?0.f:.3f,pass?.2f:1.f,0.f,1.5f},at::kFloat).to(dtype);
     auto theta=at::tensor(std::vector<int64_t>{0,clock+4,30,last},at::kLong),active=at::ones({4},at::kBool);
     if(pass){active[2]=false;r[2]=NAN;theta[2]=-1;}
-    auto ref=reference(l,states,writes,r,theta,active);auto bar=at::full_like(raw.floating,NAN),flags=at::zeros({4,int64_t(l.fields().size())},at::kBool);
+    // Independent FP32 Jacobian at the actual quantized operands. The declared
+    // cast VJP is identity in FP32; the forward oracle is rounded only on store.
+    auto ref=reference(l,converted(states,at::kFloat),writes.to(at::kFloat),r.to(at::kFloat),theta,active);
+    auto bar=at::full(raw.floating.sizes(),NAN,raw.floating.options().dtype(at::kFloat)),flags=at::zeros({4,int64_t(l.fields().size())},at::kBool);
     for(int row=0;row<4;++row)for(size_t j=0;j<l.fields().size();++j){flags[row][j]=(row+j+pass)%3!=0;if(!flags[row][j].item<bool>())continue;
       const auto& field=l.fields()[j];const auto size=::field(ref.states[row],field.name).numel();
       bar[row].slice(0,field.offset,field.offset+size).copy_(row==2?at::zeros({size},at::kFloat):values({size},.9));}
     proposal.copy_(writes);times.copy_(theta);mass.copy_(r);present.copy_(active);bars.copy_(bar);roots.copy_(flags);
     portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"raw device update rejected valid tuple");
-    equal_states(decode_weighted_raw_state(l,copy_weighted_raw_state(owner,at::kCPU)),ref.states,false);gradients(l,ref,bar,flags,g);
+    equal_states(decode_weighted_raw_state(l,copy_weighted_raw_state(owner,at::kCPU)),converted(ref.states,dtype),dtype==at::kHalf);gradients(l,ref,bar,flags,g);
     if(pass){
       DeviceProgram reverse(device);auto saved=append_weighted_raw_update_vjp(reverse,t,bars,roots,error);reverse.finish();
       old.integer.fill_(-99);old.floating.fill_(NAN);proposal.fill_(NAN);mass.fill_(NAN);times.fill_(-99);present.zero_();
@@ -129,10 +135,22 @@ void device_check(const WeightedRawLayout& l,at::Device device){
   try{append_weighted_raw_update(refusal,l,old,times,mass,present,proposal,error,1);}catch(const std::invalid_argument&){denied=true;}
   require(denied,"raw update scratch capacity omitted");refusal.close();
 }
-void capacity(at::Device device){
+void adoption_bits(at::Device device,at::ScalarType dtype){
+  at::NoGradGuard ng;
+  auto bits=dtype==at::kHalf
+    ?at::tensor(std::vector<int16_t>{0,-32768,15360,32322,1},at::kShort).view(at::kHalf)
+    :at::tensor(std::vector<int32_t>{0,INT32_MIN,1065353216,2143289410,1},at::kInt).view(at::kFloat);
+  WeightedRawState source{bits.to(device),at::tensor(std::vector<int64_t>{clock,last,-1},at::kLong).to(device)};
+  WeightedRawState target{at::full_like(source.floating,-3),at::full_like(source.integer,-42)};
+  auto before=copy_weighted_raw_state(target,at::kCPU);auto error=at::ones({1},target.integer.options().dtype(at::kInt));
+  DeviceProgram p(device);append_weighted_raw_adopt(p,target,source,error);p.finish();
+  portable_torch::synchronize(device);p.run();exact(target.floating,before.floating);exact(target.integer,before.integer);
+  error.zero_();portable_torch::synchronize(device);p.run();exact(target.floating,bits);exact(target.integer,source.integer.cpu());p.close();
+}
+void capacity(at::Device device,at::ScalarType dtype){
   at::NoGradGuard ng;weighted::KVConfig config;config.width=3;config.summary_width=2;WeightedRawLayout l(config,1);
-  auto s=fixture(l);s.erase(s.begin()+1,s.end());s[0].last_time=0;s[0].observations=1;s[0].slots["times"]=at::zeros({1},at::kLong);
-  for(const auto& f:l.fields())if(f.ragged)s[0].slots[f.name]=at::ones({1,f.width},at::kFloat).reshape(f.shape.empty()?std::vector<int64_t>{1}:std::vector<int64_t>{1,f.width});
+  auto s=fixture(l,dtype);s.erase(s.begin()+1,s.end());s[0].last_time=0;s[0].observations=1;s[0].slots["times"]=at::zeros({1},at::kLong);
+  for(const auto& f:l.fields())if(f.ragged)s[0].slots[f.name]=at::ones({1,f.width},at::TensorOptions().dtype(dtype)).reshape(f.shape.empty()?std::vector<int64_t>{1}:std::vector<int64_t>{1,f.width});
   const auto raw=encode_weighted_raw_state(l,s),old=copy_weighted_raw_state(raw,device),owner=copy_weighted_raw_state(raw,device);const auto opt=old.floating.options();
   auto time=at::ones({1},opt.dtype(at::kLong)),mass=at::ones({1},opt),yes=at::ones({1},opt.dtype(at::kBool)),error=at::zeros({1},opt.dtype(at::kInt));
   DeviceProgram p(device);auto t=append_weighted_raw_update(p,l,old,time,mass,yes,at::zeros_like(old.floating),error);
@@ -144,11 +162,13 @@ void capacity(at::Device device){
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("weighted raw check requires explicit accelerator and FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("weighted raw check requires explicit device and FP32/FP16");
     const auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
     for(const std::string family:{"kv","affine","delta","gated_delta","ssd"})codec(layout(family));
     std::cout<<"weighted-raw-codec: passed families=5 dtypes=3\n";
     if(device.is_cpu())return 0;
-    for(const std::string family:{"kv","affine","delta","gated_delta","ssd"})device_check(layout(family),device);
-    capacity(device);std::cout<<"weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true\n";return 0;
+    for(const std::string family:{"kv","affine","delta","gated_delta","ssd"})device_check(layout(family),device,args.dtype);
+    capacity(device,args.dtype);adoption_bits(device,args.dtype);
+    std::cout<<"weighted-raw: passed families=5 codec_dtypes=3 replay_rows=40 independent_field_vjp=true saved_reverse=true exact_int64=true failed_no_commit=true adoption_bits=true payload_dtype="
+      <<(args.dtype==at::kHalf?"float16":"float32")<<" adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

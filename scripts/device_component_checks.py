@@ -23,7 +23,7 @@ CHECKS = {
     "weighted-kv-update": ("tide-weighted-kv-update-check", ("float32",)),
     "weighted-projection": ("tide-weighted-projection-check", ("float32",)),
     "weighted-convolution": ("tide-weighted-convolution-check", ("float32",)),
-    "weighted-raw": ("tide-weighted-raw-check", ("float32",)),
+    "weighted-raw": ("tide-weighted-raw-check", ("float32", "float16")),
     "weighted-parameters": ("tide-weighted-parameters-check", ("float32",)),
     "weighted-source": ("tide-weighted-source-check", ("float32",)),
     "weighted-aggregate": ("tide-weighted-aggregate-check", ("float32",)),

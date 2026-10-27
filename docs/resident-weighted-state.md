@@ -22,10 +22,16 @@ CPU import/export 要求显式 no-grad 与 detached 数据，保留 FP64/FP32/FP
 未用 padding 不属于数学状态，可以是 poison；正负零和实际字段原值保留。
 `copy_weighted_raw_state` 是显式边界拷贝；持久化格式沿用公共 State/checkpoint，不新建另一数学状态版本。
 
-`append_weighted_raw_update` 接 old、int64 time[R]、FP32 mass[R]、bool present[R]、
-FP32 proposal[R,F] 与 sticky error。proposal 的定长字段是数值记忆模块已计算的完整 H/Z/W；
+`append_weighted_raw_update` 接 old、int64 time[R]、mass[R]、bool present[R]、
+proposal[R,F] 与 sticky error。old 浮点、mass 和 proposal 必须同时为 FP32 或同时为 FP16。
+proposal 的定长字段是数值记忆模块已计算的完整 H/Z/W；
 每个 ragged 字段首槽放未加权新特征；KV weights 由质量产生，不读取占位 proposal weights。
-当前数值常驻操作明确限定 FP32，编解码的 FP16/FP64 不扩大设备计算资格。
+FP16 路径将实际量化输入通过设备 Cast 拓宽为 FP32，执行本层缓存作用后，结果一次舍入到
+FP16 存储。卷积追加的 `w*raw` 在 FP32 计算；时钟、计数、成员判断始终使用 int64。
+保存的 proposal、接收系数及全部伴随明确为 FP32。Cast 声明一阶 identity VJP，
+不是浮点舍入阶梯的数学导数，也不声称复现 CPU FP16 叶的逐步舍入梯度。
+新增临时缓冲计入 byte budget；FP64 只支持 codec，不扩大设备计算资格。
+这是原始状态组件的精度契约；完整记忆数值、图执行和训练的 FP16 支持须另行验证。
 
 设备上完成分支和缓存成员决定。present=false 不读取当前 time/mass/proposal；
 mass≤0 原样保留原始 tuple，包括已过期缓存、数学时间和计数。
@@ -44,14 +50,15 @@ w>1 的导数为零但仍连接。此 VJP 只反向结构/缓存作用；数值 
 
 计划先校验所有行，error24 表示状态/输入非法，25 表示实时缓存容量不足，26 表示非有限梯度。
 数值输出只在计划成功后产生；`append_weighted_raw_adopt` 在所有调用者共享错误决定后提交，
-失败不能改变 live owner。该小型设备索引/控制 kernel 不承担矩阵计算；后续矩阵层使用批量 vendor 算子。
+失败不能改变 live owner。提交按实际 FP32/FP16 位模式复制浮点存储和 int64 元数据，
+保留负零及未用 padding 的原始位。该小型设备索引/控制 kernel 不承担矩阵计算；后续矩阵层使用批量 vendor 算子。
 
 | 验证 | 能验证的范围 |
 | --- | --- |
-| `test_resident_weighted_raw_update.py` | 独立原始时间列表/每字段 autograd；五 schema、弱/零/饱和接收、>2^54/MAX、过期保留、padding poison、None/零、保存来源、容量/非法拒绝 |
-| `weighted_raw_check.cpp` | 三 dtype CPU codec 精确字节往返；五 schema实际设备重放、40行完整状态与独立字段VJP；原来源改写后的反向；容量/非有限不提交 |
+| `test_resident_weighted_raw_update.py` | 独立原始时间列表/每字段 autograd；五 schema、弱/零/饱和接收、>2^54/MAX、过期保留、padding poison、None/零、保存来源、容量/非法拒绝；FP32/FP16提交位模式 |
+| `weighted_raw_check.cpp` | 三 dtype CPU codec 精确字节往返；显式 FP32/FP16五 schema设备重放、40行完整状态与独立 FP32 字段VJP；原来源改写后的反向；容量/非有限不提交 |
 | `verify_device_control.py --checks weighted-raw` | 显式 NPU/CUDA 实际组件检查入口；编译与实际设备证据独立 |
 
 当前开发结果及固定资格按 STATUS/证据索引记录。该层不是整个记忆数值函数，也不构成完整图训练/checkpoint或常驻性能证据。
 
-固定源码资格见[cb68d91运行证据](evidence/core5-resident-raw-20261027.md)。
+FP32固定源码资格见[cb68d91运行证据](evidence/core5-resident-raw-20261027.md)。新增FP16为开发中，资格未完成。
