@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 固定上游`0770593838a37c790a568226930567ed60f99b83`，授权分支`graph-execution-foundation`。
-最近推送0223571（启动/allocator补充证据）；本提交固定单样本节点放置前向实现，设备资格待运行。
+最近推送d072c17（节点放置前向）；三项资格仍在构建。当前提交修复通用资格脚本的新入口参数，组件源码不变。
 用户授权持续实施、有限实验、提交与正常推送；不用子代理。总体goal active，**未完成**。
 唯一待办[ROADMAP](ROADMAP.md)，持续规则[execution-flows](execution-flows.md)；参考仓库/公共工具链只读。
 
@@ -37,7 +37,18 @@ units：`tide-JOB-20261028.service`；launcher`.local/JOB.sh`及可选`JOB-workl
 六个job均持久passed/exit0；提交时确认background.slice/独立cgroup，成功瞬态unit已回收，
 最终show为inactive/not-found；不能把默认Result/ExecMainStatus当终态依据，实际以持久status及输出校验为准。
 两worker/ATen及BLAS1/Nice10，构建600秒、每候选180秒、NPU queue180秒/整测量job420秒。
-**当前没有活动任务。** 下一批节点放置资格采用新源码/目录；不重跑原24项性能矩阵。
+**d072c17节点放置资格即将提交。**
+
+job `core5-weighted-node-placement-{npu,python,cuda}-qualify`，unit `tide-JOB-20261028.service`；
+冻结checkout `artifacts/worktrees/core5-weighted-node-placement`，跟踪文件只读；build/{npu,python,cuda}。
+launcher `.local/JOB.sh`、`JOB-workload.sh`；输出`artifacts/jobs/JOB/{status.json,task.log}`。
+NPU standalone另有checks/和cpu.xml；Python有tests.xml；CUDA只有三个help和build manifest。
+构建1500秒/两个worker，设备资格900秒/queue180秒，整任务2640秒；background.slice/Nice10/ATen及BLAS1。
+三项结果均待审；不编辑活动checkout。CUDA无真机；不重跑原24项性能矩阵。
+启动后复核发现d072c17通用资格脚本漏传weighted-node-peer的必需output-dir；主工作树已补传
+独立case目录，并把两个weighted双卡检查从默认单设备列表移除。原NPU任务预计会在新检查入口退出，
+尚未实际失败；保留其真实终态，不修改活动脚本。构建成功后可在新冻结源码用同component hash
+复用已建SDK二进制做新资格，明确区分组件源码d072c17与修正后的qualifier源码。
 
 ## 原工作树在实施的下一步
 
