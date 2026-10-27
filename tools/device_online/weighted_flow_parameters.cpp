@@ -8,9 +8,9 @@ at::Tensor WeightedBanks::bind(const std::string& role,const std::string& name,c
   if(at::GradMode::is_enabled()||roles_.count(role))throw std::invalid_argument("duplicate/grad-enabled weighted parameter binding");
   const auto& x=parameters_.at(name);int64_t count=1;
   for(auto n:shape){if(n<1||count>std::numeric_limits<int64_t>::max()/n)throw std::invalid_argument("invalid parameter bank shape");count*=n;}
-  if(!x.device().is_cpu()||x.scalar_type()!=at::kFloat||offset<0||offset>x.numel()||count>x.numel()-offset)
-    throw std::invalid_argument("weighted bank requires explicit CPU FP32 parameter and exact slice");
-  auto value=x.detach().reshape({-1}).narrow(0,offset,count).reshape(shape).to(device_).clone();
+  if(!x.device().is_cpu()||(x.scalar_type()!=at::kFloat&&x.scalar_type()!=at::kHalf)||offset<0||offset>x.numel()||count>x.numel()-offset)
+    throw std::invalid_argument("weighted bank requires explicit CPU FP32/FP16 parameter and exact slice");
+  auto value=x.detach().reshape({-1}).narrow(0,offset,count).reshape(shape).to(device_,at::kFloat).clone();
   roles_.emplace(role,WeightedBankRole{prefix_+name,value,x.sizes().vec(),offset});return value;
 }
 at::Tensor WeightedBanks::direct(const std::string& role,const std::string& name){

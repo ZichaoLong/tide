@@ -19,7 +19,9 @@ WeightedNodeInput append_weighted_node_input(DeviceProgram& p,const ReadyBatch& 
     ptr(x.lengths),ptr(x.times),ptr(x.present),ptr(x.bank),ptr(error),node,samples,cap,inputs,classes.size(0)),"weighted complete node fiber plan");},
     {r.fibers,r.fiber_offsets,r.atoms.coordinates,r.counts,classes,x.indices,x.owners,x.lengths,x.times,x.present,x.bank,error});
   auto joined=at::zeros({cap+1,width},r.atoms.values.options());weighted_copy(p,joined.narrow(0,0,cap),r.atoms.values);
-  p.index_select(joined,0,x.indices.reshape({-1}),x.payload.reshape({samples*cap,width}));return x;
+  p.index_select(joined,0,x.indices.reshape({-1}),x.payload.reshape({samples*cap,width}));
+  if(x.payload.scalar_type()==at::kHalf){auto widened=at::empty(x.payload.sizes(),x.payload.options().dtype(at::kFloat));p.cast(x.payload,widened);x.payload=widened;}
+  return x;
 }
 WeightedRegionInput append_weighted_region_input(DeviceProgram& p,const at::Tensor& desc,const at::Tensor& present,
     const at::Tensor& time,const std::vector<int64_t>& nodes,const weighted::RegionalConfig& c,const at::Tensor& error){

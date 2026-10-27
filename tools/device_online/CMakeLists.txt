@@ -198,13 +198,13 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-describe PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-describe PUBLIC tide-weighted-row tide::tidegraph)
   add_library(tide-weighted-flow SHARED weighted_flow.cpp weighted_flow_budget.cpp weighted_flow_copy.cpp weighted_flow_local.cpp weighted_flow_state.cpp
-    weighted_flow_source.cpp weighted_flow_parameters.cpp weighted_flow_describe_parameters.cpp
+    weighted_flow_source.cpp weighted_flow_parameters.cpp weighted_flow_describe_parameters.cpp weighted_flow_precision.cpp
     weighted_flow_packing.cpp weighted_flow_records.cpp weighted_flow_adjoint.cpp weighted_flow_node_vjp.cpp weighted_flow_region_vjp.cpp)
   set_target_properties(tide-weighted-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-flow PRIVATE tide-weighted-recurrent tide-weighted-describe tide-weighted-region
     tide-weighted-kv-update tide-weighted-kv-sum tide-weighted-kv-query tide-weighted-kv-full tide-weighted-source
     tide-device-ready tide-device-queue tide-device-broadcast tide-device-services
-    tide_weighted_node_pack_kernel tide_weighted_region_pack_kernel tide_weighted_owner_adopt_kernel)
+    tide_weighted_node_pack_kernel tide_weighted_region_pack_kernel tide_weighted_owner_adopt_kernel tide_weighted_payload_guard_kernel)
   target_link_libraries(tide-weighted-flow PUBLIC tide::tidegraph)
   target_link_options(tide-weighted-flow PRIVATE -Wl,-z,defs)
   target_include_directories(tide-weighted-flow PUBLIC

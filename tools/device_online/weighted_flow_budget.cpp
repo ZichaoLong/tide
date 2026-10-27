@@ -16,7 +16,7 @@ int64_t weighted_flow_preflight(const Graph& g,const Model& m,int64_t samples,co
     persistent+=3*raw+8.L*samples;
     boundary+=8.L*samples*(layout.integer_width()+1);
     const auto& r=b.regional;const auto descriptors=3+(r.regional()?*r.region_control_width:0)+(r.region_score=="att"?2**r.selection_width:0);
-    journal+=2*raw+samples*(14.L+4.L*m.width()+4.L*(m.width()-1)+4.L*descriptors);
+    journal+=2*raw+samples*(14.L+8.L*m.width()+4.L*(m.width()-1)+4.L*descriptors);
   }
   journal=journal*l.stages+boundary;
   if(persistent+journal>l.tensor_bytes||journal>std::numeric_limits<int64_t>::max())
