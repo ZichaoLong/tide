@@ -6,79 +6,40 @@
 
 ## 已实现与固定证据
 
-一般SettleGraph、SrcClass/int64、五记忆/逻辑时间短卷积、正式配置、实际packed/VJP/计算共享、
+一般SettleGraph、SrcClass/int64、五记忆/逻辑时间短卷积、正式配置、packed/VJP/计算共享、
 CPU完整训练与恢复从[证据索引](evidence/README.md)进入；定向资格不认证未测矩阵。
-470ce06/01689c0 Python/native有限mixed、显式同步双卡及master恢复；670ead3 standalone masters/schema2
-CPU24、NPU FP16显式SGD24图/AdamW2图和CPU handoff通过。CUDA新栈core构建/CPU24通过，无GPU实机。
-常驻Alloc/发送/head/Region/Aggregate/来源低秩/canonical参数/raw state/固定时间卷积已逐项固定资格；
-均为局部组件，不代表完整weighted resident图。旧失败及精确范围见各项证据，不自动重跑。
+Python/native有限mixed、显式同步双NPU、half/master及standalone恢复范围见ROADMAP；严格失败保持。
+常驻Alloc/发送/head/Region/Aggregate/来源低秩/canonical参数/raw state/卷积/共享投影/实际KV Upd、
+pool、sum/qry Mem及KV Full已逐项固定资格；均为局部组件，不代表完整weighted resident图。
+CUDA源码/三架构构建通过范围见各报告，无GPU真机；不自动重跑历史矩阵。
 
-最新实现2af401dc0b2912fcf09faac9ab1f31a43aec489a：共享投影/可选RMS与bias。
-固定资格CPU4（1.03秒）、NPU四配置48行/三bank/完整VJP/None零/保存版本与容量；CUDA sm80/90/100构建通过。
-证据[evidence/core5-resident-projection-20261027.json](evidence/core5-resident-projection-20261027.json)。
-core5-resident-projection-{npu,cuda}-qualify均clean/exit0/inactive；无活动reader。
-NPU保留开发treee741c50847de858517264e9546eb503e20d36cb4原manifest并核验全部摘要。
+本段最新固定资格：
+- 1eb4b72：旋转/周期归约与真实巨大age数值转换。CPU13、NPU rotary及KV sum完整回归、CUDA三架构。
+  evidence/core5-resident-rotary-20261027.json；开发dev/dev2设备失败均保留，dev3 tree7207e6dd66b334935329d3ce896863b1f4f38702通过。
+- 8b1be80：完整qry Mem。CPU38、NPU120行四根及全部参数/输入/rawVJP、CUDA三架构。
+  evidence/core5-resident-kv-query-20261027.json；dev启动脚本路径错误exit4保留，dev2 treeef1c888bdb4a9d39f085deaeda7e7e25fb59f062通过。
+- 386970a9dcd0b826e390be020c2a86ea0c7a3437：公共Full残差与多头KV Full。CPU50、NPU residual48行/Full96行，
+  全参数/input/raw VJP、保存版本、None/零及容量；CUDA三架构构建/loader。
+  evidence/core5-resident-kv-full-20261027.json；开发tree5c4d2c92c6335c6c330d7254376e5187b017dbaf通过。
+  core5-resident-kv-full-{npu,cuda}-qualify均inactive/success/exit0；无活动reader。
+所有NPU固定资格保留原开发manifest并核验全部源码/core/binary摘要。
 
 ## 当前工作与下一动作
 
-681a7e9 KV Upd固定资格通过：CPU24（2.63秒）、NPU72行/三bank/五字段完整VJP及CUDA三架构构建。
-core5-resident-kv-update-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/core5-resident-kv-update-20261027.json。
-开发tree28f8ee2ef2fe9201eea8f80a442849c352f074cf，原manifest保留且摘要匹配。
+完整Describe已写数值组合、静态局部row表达式一阶反向、8配置独立逐行公式检查与契约。
+包括cat/match、cat/grouped/fixed证据、content/content_stats key、固定/可训练/上下文增益；
+DeviceProgram新增vendor log1p/minimum，clamp边界VJP单独声明。CPU新5项通过，设备尚未构建。
+这些主工作区修改尚未提交。它们不决定图就绪，不从参考递归补结果。
 
-afe7b5e pool固定资格通过：CPU14（1.20秒）、NPU四配置144行完整VJP/独立返回根/保存版本及CUDA三架构构建。
-core5-resident-pool-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/core5-resident-pool-20261027.json。
-开发tree202f8b0f683f115d93d8c74e6bb27df8d75f82d5；NPU保留manifest并核验全部摘要。
-原dev/dev2/dev3失败、FP32 clamp边界诊断及CPU adapter reset问题均按原树/失败状态保留在证据中。
-
-fea6fa7 KV window/sum固定资格通过：CPU20（1.95秒）、NPU两窗口120行/四Mem根完整raw VJP、
-原始int64快照/保存版本及CUDA三架构构建。core5-resident-kv-sum-{npu,cuda}-qualify均clean/exit0/inactive。
-证据evidence/core5-resident-kv-sum-20261027.json，开发treecac7cbde71943a29db7f09487c7d013665e74a3e。
-CPU adapter原exit139及invalid horizon见原诊断记录，未改历史终态。
-
-rotary开发tree0027114a70778f701e019a1e00b951a51e5e922e：CPU4通过、NPU构建通过但极大age旋转错误，
-tide-core5-resident-rotary-dev-20261027.service failed/exit1，原source/log/status保留。
-观察符合int64数值转换截成低32位，正分开检查相位和厂商Sin/Cos；不改测试输入/容差。
-已实现显式IEEE最近偶数舍入的非负int64→FP32 helper，同时用于窗口衰减与旋转；
-CPU新增转换舍入边界、窗口+旋转共11项通过。NPU窗口新增真正极大age（此前只有极大绝对时间与小age）。
-
-rotary-dev2冻结tree952c7789fb90f88ab3310cc73bc4773fd0e35f0d：CPU11、NPU构建通过；
-实际FP32 phase与CPU逐位相同，但厂商Sin/Cos在巨大相位下结果错误，旋转不保范数。
-unit tide-core5-resident-rotary-dev2-20261027.service failed/exit1；后续kv-sum未执行。
-已补有限FP32全指数范围的Payne–Hanek周期归约，再调用厂商Sin/Cos和象限还原；
-CPU独立math.sin/cos与窗口合计13项通过，设备尚未验。原失败/source/log/status保留。
-
-rotary-dev3冻结tree7207e6dd66b334935329d3ce896863b1f4f38702通过：CPU13、NPU窗口/sum与旋转完整检查。
-tide-core5-resident-rotary-dev3-20261027.service inactive/success/exit0；原source/log/status保留。
-本次提交旋转、周期归约和大age数值转换修复；此前两个开发失败仍保留failed。
-
-1eb4b72759716118a92fa70e05268f46a20f2443固定资格：CPU13（1.93秒）、NPU两个组件完整通过；
-CUDA sm80/90/100构建/loader通过，无GPU真机。两资格unit均inactive/success/exit0，冻结reader已停止。
-证据evidence/core5-resident-rotary-20261027.json；NPU复用dev3产物并核验全部摘要，原manifest保留。
-
-qry-dev冻结treec1b5ddb319c043aba2cdc8ea09606eddac5ff8f7因launcher测试路径误写而failed/exit4；未运行任何测试/构建。
-已改为实际test_resident_weighted_projection_norm.py；原任务/日志保留。
-qry-dev2冻结treeef1c888bdb4a9d39f085deaeda7e7e25fb59f062通过：CPU相关38项和NPU完整qry检查。
-tide-core5-resident-kv-query-dev2-20261027.service inactive/success/exit0；原source/log/status保留。
-本提交固定qry的Q/K/V→Read旋转→两通道Attention→四返回与保存版本VJP、契约及测试。
-8b1be80709e501447875ecf3f729afd0a90c5143固定资格：CPU38、NPU完整qry/120行、四独立根全部VJP，CUDA三架构构建/loader通过。
-两个qualify unit均inactive/success/exit0；原NPU manifest保留且全部摘要一致；证据evidence/core5-resident-kv-query-20261027.json。
-
-Full开发tree5c4d2c92c6335c6c330d7254376e5187b017dbaf：CPU50项、NPU residual与KV Full完整检查通过。
-tide-core5-resident-kv-full-dev-20261027.service inactive/success/exit0；原source/log/status保留。
-本次提交Full残差/SwiGLU、KV Full与完整VJP/契约/独立公式检查。
-下一动作运行tide-core5-resident-kv-full-{npu,cuda}-qualify-20261027.service，结果未知。
-冻结artifacts/worktrees/core5-resident到本提交，NPU复用dev产物但核验全部摘要，CUDA新建三架构。
-输出artifacts/jobs/core5-resident-kv-full-{npu,cuda}-qualify/{status.json,task.log,checks/result.json或control-build.json}；
-launcher .local/core5-resident-kv-full-{npu,cuda}-qualify{,-workload}.sh。
-background.slice/Nice10、NPU600秒/CUDA1200秒、2build workers/BLAS单线程、NPU queue180秒；
+下一动作启动tide-core5-resident-describe-dev-20261027.service，结果未知。
+冻结artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-describe-dev/{source.tree,source.tar,status.json,task.log,checks/result.json}。
+launcher .local/core5-resident-describe-dev{,-workload}.sh；CPU相关/独立公式与NPU weighted-describe。
+background.slice/Nice10、600秒、2build workers/BLAS单线程、NPU queue180秒。
 检查systemctl --user show上述unit及durable记录；停止systemctl --user stop上述unit。
+通过后先提交实现、固定NPU资格与CUDA构建，再单独提交证据推送。
 
-主工作区另有weighted_row_graph/weighted_describe草稿和DeviceProgram log1p/minimum扩展；
-目标为所有正式评分/证据/key/增益的静态局部组合与独立字段VJP。尚未注册/编译，不能称通过。
-不进入Full提交或资格树。后续独立公式/设备资格后接四循环与完整在线图。
-
-完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
-精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。
+接续四循环的实际数值Upd/Mem/Full、完整在线图就绪/选择/推进、retained训练/optimizer、
+精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。
 随后有限profiling/性能选型与最终追溯，不做全开关笛卡尔积。
 
 ## 未解除的严格限制

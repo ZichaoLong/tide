@@ -1,0 +1,260 @@
+{
+  "component": "kv-full",
+  "scope": "FP32 selected multihead KV Attention, independent positions/distance bias, unscaled G and shared output/SwiGLU residual with saved complete first-order VJP",
+  "checks": [
+    "weighted-residual",
+    "weighted-kv-full"
+  ],
+  "observations": {
+    "residual_configurations": 4,
+    "residual_replay_rows": 48,
+    "full_configurations": 4,
+    "full_replay_rows": 96,
+    "heads": 2,
+    "banks": 3,
+    "horizons": [
+      0,
+      5
+    ],
+    "nope_partial_and_full_rotation": true,
+    "distance_slopes": true,
+    "unscaled_content": true,
+    "all_input_parameter_raw_gradients": true,
+    "independent_formula_autograd": true,
+    "none_zero": true,
+    "zero_residual_scales_connected": true,
+    "saved_versions": true,
+    "huge_actual_int64_age": true,
+    "capacity_refusal": true,
+    "full_rtol": 2e-05,
+    "full_atol": 2e-06,
+    "residual_rtol": 1e-05,
+    "residual_atol": 1e-06
+  },
+  "source": "386970a9dcd0b826e390be020c2a86ea0c7a3437",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "source": "386970a9dcd0b826e390be020c2a86ea0c7a3437",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:49:12.104998+00:00",
+      "finished": "2026-10-27T15:49:45.183025+00:00",
+      "name": "core5-resident-kv-full-npu-qualify",
+      "unit": "tide-core5-resident-kv-full-npu-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "527582f420491456cea26c258bbb7e07913a0b64822538139537a45e07a44bc6",
+      "device_cases": [
+        {
+          "check": "weighted-residual",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-residual-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-residual-float32.log",
+          "log_sha256": "c89c7dd19c85130657f3148e64cecf0fa79f261f82629b838ceb8fe136ed788d"
+        },
+        {
+          "check": "weighted-kv-full",
+          "dtype": "float32",
+          "command": [
+            "NPU_BUILD/tide-weighted-kv-full-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-kv-full-float32.log",
+          "log_sha256": "2a87d22f438fd98c671614702d44ce7229985de4b7a090a4e4ea1f9231dfc681"
+        }
+      ],
+      "cpu_tests": 50,
+      "cpu_seconds": 4.28,
+      "queue": {
+        "elapsed_seconds": 26.12709940597415,
+        "job_id": "core5-resident-kv-full-npu-qualify-20261027",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-27T15:49:45.167684+00:00"
+      },
+      "observations": {
+        "residual_configurations": 4,
+        "residual_replay_rows": 48,
+        "full_configurations": 4,
+        "full_replay_rows": 96,
+        "heads": 2,
+        "banks": 3,
+        "horizons": [
+          0,
+          5
+        ],
+        "nope_partial_and_full_rotation": true,
+        "distance_slopes": true,
+        "unscaled_content": true,
+        "all_input_parameter_raw_gradients": true,
+        "independent_formula_autograd": true,
+        "none_zero": true,
+        "zero_residual_scales_connected": true,
+        "saved_versions": true,
+        "huge_actual_int64_age": true,
+        "capacity_refusal": true,
+        "full_rtol": 2e-05,
+        "full_atol": 2e-06,
+        "residual_rtol": 1e-05,
+        "residual_atol": 1e-06
+      },
+      "build": {
+        "source": "8b1be80709e501447875ecf3f729afd0a90c5143",
+        "component_sha256": "f76853bbd04592757edc0ce73fad528456b13dd091526455f3c5acb4ac0208d9",
+        "backend": "npu",
+        "runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-residual-check": "6890c696ac3c706f0839182fc3fb735b5f5cd9513747657411522c086b5b0b71",
+          "tide-weighted-kv-full-check": "f75e48ddf2d3d8fabf763ee50e5d8cad41689a9b20fb3c0da76b803bea45383f"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cpu",
+          "backend": "npu",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "Original development manifest retained; full component/core/binary hashes checked against clean fixed source."
+      }
+    },
+    {
+      "source": "386970a9dcd0b826e390be020c2a86ea0c7a3437",
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-27T15:49:12.136141+00:00",
+      "finished": "2026-10-27T15:52:23.471753+00:00",
+      "name": "core5-resident-kv-full-cuda-qualify",
+      "unit": "tide-core5-resident-kv-full-cuda-qualify-20261027.service",
+      "clean": true,
+      "log_sha256": "6e7a5ae48504d6c1946baaa2d3dda09e7104e0dd804bdc21d414404867cef5b4",
+      "build": {
+        "source": "386970a9dcd0b826e390be020c2a86ea0c7a3437",
+        "component_sha256": "f76853bbd04592757edc0ce73fad528456b13dd091526455f3c5acb4ac0208d9",
+        "backend": "cuda",
+        "runtime": "standalone",
+        "cuda_architectures": "80;90;100",
+        "ascendc_soc": null,
+        "binary_sha256": {
+          "tide-weighted-residual-check": "805c64696918f93d6fae5135350e0cac580900563e0c4a7b6c2c6908cc051f7c",
+          "tide-weighted-kv-full-check": "ea9f640075b03069f6590bcbada64135661fbadbd7a94132954f180e50e1a27f"
+        },
+        "core": {
+          "source": "670ead324744bfb45b006d9ef3a22d1572ed0829",
+          "cpp_source_sha256": "8feb79d441231da97da6ce0ac39a8c1e335bb986873443f272e45c6b27f813a9",
+          "torch": "2.10.0+cu128",
+          "backend": "cuda",
+          "python": "3.11.15",
+          "architecture": "aarch64",
+          "cxx11_abi": true
+        },
+        "reuse_note": "New CUDA sm80/90/100 build; loader checked; no NVIDIA GPU hardware execution."
+      }
+    }
+  ],
+  "development": {
+    "job": "core5-resident-kv-full-dev",
+    "tree": "5c4d2c92c6335c6c330d7254376e5187b017dbaf",
+    "state": "passed"
+  },
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_kv_full.py",
+      "tests/test_resident_weighted_rotary.py",
+      "tests/test_resident_weighted_kv_window.py",
+      "tests/test_resident_weighted_pool.py",
+      "tests/test_resident_weighted_projection_norm.py",
+      "tests/test_weighted_kv_formulas.py",
+      "--dtype",
+      "both"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "NPU_CORE",
+      "--build-dir",
+      "NPU_BUILD",
+      "--checks",
+      "weighted-residual",
+      "weighted-kv-full",
+      "--ascendc-soc",
+      "Ascend910_9392",
+      "--jobs",
+      "2"
+    ],
+    [
+      "python",
+      "scripts/verify_device_control.py",
+      "--build-dir",
+      "NPU_BUILD",
+      "--output-dir",
+      "NEW",
+      "--checks",
+      "weighted-residual",
+      "weighted-kv-full",
+      "--device",
+      "npu:0"
+    ],
+    [
+      "python",
+      "scripts/build_device_control.py",
+      "--core-build",
+      "CUDA_CORE",
+      "--build-dir",
+      "NEW_CUDA_BUILD",
+      "--checks",
+      "weighted-residual",
+      "weighted-kv-full",
+      "--runtime",
+      "standalone",
+      "--cuda-architectures",
+      "80;90;100",
+      "--jobs",
+      "2"
+    ]
+  ],
+  "limits": {
+    "npu_seconds": 600,
+    "cuda_seconds": 1200,
+    "queue_seconds": 180,
+    "build_workers": 2,
+    "blas_threads": 1,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "pending": [
+    "Complete numerical memory/Describe/Full and full online weighted graph",
+    "Retained VJP, exact graph checkpoint and peers",
+    "Resident FP16 and actual CUDA hardware",
+    "Finite performance selection"
+  ]
+}
