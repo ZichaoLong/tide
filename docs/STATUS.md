@@ -1,4 +1,4 @@
-# 当前交接 — 2026-10-27
+# 当前交接 — 2026-10-28
 
 固定上游0770593838a37c790a568226930567ed60f99b83，授权分支graph-execution-foundation。
 用户授权持续实施/私有环境/有限实验/阶段提交推送；不使用子代理，参考仓库只读。
@@ -36,12 +36,14 @@ recurrent-dev5 treed01f0a2f55b14aa546e08895afe40d806ad8c092：CPU98项/4.39秒�
 dev2 tree75cd1f9ea50b0427e2154f0eacb55447af134685（CPU adapter arena未重置）；
 dev3 tree08aa35c441dac6569434fa10f2a3269778296c8f（公式函数normal与ATen重载冲突）；
 dev4 tree1ef73cfc9a56e0e2748759ef4992bdad9a2cd9c6（SDK不支持CPU bool列表构造）。这些记录均failed，不由dev5覆盖。
-下一命令：提交实现后冻结该提交，启动tide-core5-resident-recurrent-{npu,cuda}-qualify-20261028.service。
-checkout artifacts/worktrees/core5-resident；输出artifacts/jobs/core5-resident-recurrent-{npu,cuda}-qualify/。
-launcher .local/core5-resident-recurrent-{npu,cuda}-qualify{,-workload}.sh；NPU复用dev5原manifest并核验全摘要；CUDA独立sm80/90/100构建。
-background.slice/Nice10，NPU600秒/CUDA1200秒，2build workers/BLAS1，NPU queue180秒。正式结果尚未知。
-检查systemctl --user show UNIT及status.json/task.log/checks/result.json；停止systemctl --user stop UNIT。
-通过后单独提交证据推送，继续完整图增量。
+固定实现6e2ecb7f169cd1f7f1040258027d882a532e72f5资格通过：CPU98/4.47秒，NPU24配置及Describe8配置回归；CUDA sm80/90/100构建/loader。
+证据evidence/core5-resident-recurrent-20261028.{md,json}；两个tide-core5-resident-recurrent-{npu,cuda}-qualify-20261028.service均inactive/success/exit0。
+原始记录artifacts/jobs/core5-resident-recurrent-{npu,cuda}-qualify/，checkout artifacts/worktrees/core5-resident，无活动reader。
+NPU复用dev5原manifest、全部component/core/binary摘要一致；CUDA独立构建，无真机。
+下一命令：单独提交本批证据并推送，然后完成公共安装配置检查接口测试、接入完整weighted在线图。
+当前未提交源码：weighted.h、weighted_{kv,recurrent,programs,region,configuration}.cpp、bind_weighted.cpp、cpp/test/weighted.cpp和根CMakeLists.txt。
+这些是纯元数据node_binding/region_binding及配置一致性校验，尚未构建；不能混入循环组件证据提交或宣称图已完成。
+后续构建需重建core摘要，不能继续复用670ead3 core来认证新接口。
 
 接续完整在线图就绪/选择/推进、retained训练/optimizer、
 精确checkpoint/跨卡；不能借旧ContentFlow或CPU捕获轨迹宣称完成。

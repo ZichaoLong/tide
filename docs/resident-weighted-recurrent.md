@@ -44,3 +44,5 @@ softplus和归一化是设备批量算子。bounded key用sqrt(max(1,||k||²))�
 入口 `scripts/{build,verify}_device_control.py --checks weighted-recurrent`。
 
 这部分仍是局部数值组件；全图在线就绪/选择/推进、retained训练、精确图checkpoint、peer与性能另行验收。
+
+固定源码资格见[6e2ecb7运行证据](evidence/core5-resident-recurrent-20261028.md)。
