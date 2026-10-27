@@ -98,3 +98,5 @@
 [常驻相对旋转与极大逻辑年龄数值转换资格](core5-resident-rotary-20261027.md)：1eb4b72，CPU/NPU完整组件及CUDA三架构构建。
 
 [常驻 KV 内容检索完整 Mem 资格](core5-resident-kv-query-20261027.md)：8b1be80，CPU/NPU完整组件及CUDA三架构构建。
+
+[常驻 KV 完整内容与公共残差资格](core5-resident-kv-full-20261027.md)：386970a，CPU/NPU完整组件及CUDA三架构构建。

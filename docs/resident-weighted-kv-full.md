@@ -35,3 +35,5 @@ checkpoint 的精确状态仍用原始raw codec，本函数不以有效状态投
 公共残差检查另覆盖四组零/非零尺度和完整反向。
 CPU逻辑时间距离/选择使用检查在 `test_resident_weighted_kv_full.py`；
 入口 `scripts/{build,verify}_device_control.py --checks weighted-residual weighted-kv-full`。
+
+固定源码资格见[386970a运行证据](evidence/core5-resident-kv-full-20261027.md)。

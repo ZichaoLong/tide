@@ -25,3 +25,5 @@ alpha=0 仍保留数学图的连接零梯度。保存前向实际版本，反向
 含未使用的 poison bank/行、零 cotangent、保存版本及容量拒绝。
 公共入口 `scripts/{build,verify}_device_control.py --checks weighted-residual`；
 CPU 公式基线、NPU 实机和 CUDA 构建/真机各自记账。
+
+固定源码资格见[386970a运行证据](evidence/core5-resident-kv-full-20261027.md)。
