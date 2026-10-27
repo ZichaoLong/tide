@@ -2,6 +2,7 @@
 #include "weighted_detail.h"
 #include "weighted_packed.h"
 #include <limits>
+#include <cstdint>
 
 namespace tide::weighted {
 using namespace detail;
@@ -93,6 +94,26 @@ class KV final:public MemoryKernel {
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   bool joint_sequence() const override{return true;}
+  std::string preparation_key(const NodeWeights& w,const Tensor& h) const override {
+    if(h[0].item<double>()<=0)return {};
+    std::string key;
+    for(const auto& t:{weight(w,"kernel.base"),h}){
+      auto id=reinterpret_cast<std::uintptr_t>(t.unsafeGetTensorImpl());
+      key.append(reinterpret_cast<const char*>(&id),sizeof(id));
+    }
+    key.append(reinterpret_cast<const char*>(&c_.epsilon),sizeof(c_.epsilon));
+    return key;
+  }
+  std::map<std::string,Tensor> prepare_shared(const NodeWeights& w,const Tensor& h) const override {
+    auto x=normalize(h.slice(0,1),c_.epsilon);
+    return {{"normal",x},{"base",at::matmul(weight(w,"kernel.base"),x)}};
+  }
+  std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
+      const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
+      const std::vector<std::map<std::string,Tensor>>& prepared) const override {
+    auto batch=packed::independent(old,h,times,views);batch.prepared=prepared;
+    return packed::kv(w,old,batch,c_).states;
+  }
   PackedStates packed_sequence(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch) const override {
     return packed::kv(w,old,batch,c_);
   }

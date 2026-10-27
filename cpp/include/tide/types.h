@@ -142,6 +142,8 @@ struct Event {
   Index source_row = -1;
   ContentView local_content() const { return {content, sources, contributions, source_batch, source_row}; }
   History history;
+  // Execution-only shared State operands. Never part of continuation/checkpoint.
+  std::map<std::string, Tensor> state_prepared;
 };
 struct Output { Index batch, time, port; Tensor value; };
 struct Result {

@@ -42,6 +42,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
     std::vector<Tensor> values;
     for (auto j : task.ids) {
       values.push_back(events[j].content); batch.times.push_back(events[j].time); batch.views.push_back(events[j].local_content());
+      batch.prepared.push_back(events[j].state_prepared);
     }
     const auto& w = m.nodes[task.node];
     {

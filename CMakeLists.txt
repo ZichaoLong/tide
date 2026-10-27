@@ -43,6 +43,8 @@ add_library(tidegraph STATIC
   cpp/src/weighted_attention_mean.cpp
   cpp/src/weighted_normalization.cpp
   cpp/src/aggregate_sharing.cpp
+  cpp/src/state_preparation.cpp
+  cpp/src/weighted_kv_projection.cpp
   cpp/src/weighted_aggregate_vjp.cpp
   cpp/src/weighted_query_kv.cpp
   cpp/src/weighted_query_recurrent.cpp
@@ -125,6 +127,7 @@ target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_source.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_attention_mean.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_normalization.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_sharing.cpp)
+target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_kv_sharing.cpp)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp)

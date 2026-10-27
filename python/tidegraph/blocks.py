@@ -35,6 +35,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
     if packed:
         from .aggregate_sharing import evaluate_shared
         evaluate_shared(graph, model, by_node, stats, packed=packed, aggregate_autograd=aggregate_autograd)
+        from .state_preparation import prepare_shared
+        prepare_shared(model, events, stats)
     for node in by_node:
         es = by_node[node]
         if not packed:
@@ -162,6 +164,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
     for event in events:
         event.pop("_comparison_state")
         event.pop("_content")
+        event.pop("_state_prepared", None)
     stats.update(candidate_events=len(events), selected_events=sum(e["active"] for e in events),
                  source_rows=sum(len(e["fiber"]) for e in events))
     return events, stats

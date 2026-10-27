@@ -38,5 +38,5 @@ pending/checkpoint 继续编码实际原子与原始状态，不保存此执行�
 `aggregate_computed_events` 数实际求值的代表纤维，`aggregate_reused_events` 数复用的纤维，
 两者相加仍等于候选数。`aggregate_calls` 数实际 batch/scalar 调用；既有 batched-autograd
 事件计数描述能力覆盖的逻辑事件数。source rows、候选写入、Full、消息数量不因此减少。
-本项不是跨节点共享 KV base 投影，也不认证 mixed/resident；这些继续单独实施。
+跨节点共享 KV base 投影由 [独立契约](weighted-kv-sharing.md)继续实现；本项不认证 mixed/resident。
 当前实现/资格状态见 [STATUS](STATUS.md)，未构建路径不宣称通过。

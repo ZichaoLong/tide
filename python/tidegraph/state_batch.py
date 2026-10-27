@@ -4,7 +4,7 @@ from .records import State
 from .history import increment
 
 
-def step(kernel, weights, old, views, times):
+def step(kernel, weights, old, views, times, prepared=None):
     from .clocked_state import ClockedState
     from .matrix_memory import MatrixMemory
     from .lazy_add import LazyAdd
@@ -35,5 +35,5 @@ def step(kernel, weights, old, views, times):
         values = values @ weights.extra["mem_out"]
         return [State(values[i], times[i], increment(s.observations),
                       {"matrix": matrix[i], **({"normalizer": z[i]} if linear else {})}) for i, s in enumerate(old)]
-    batch = PackedSequence(h, list(range(len(old)+1)), [(i, 0) for i in range(len(old))], list(times), list(views))
+    batch = PackedSequence(h, list(range(len(old)+1)), [(i, 0) for i in range(len(old))], list(times), list(views), prepared)
     return kernel.packed_sequence(weights, old, batch)[0]

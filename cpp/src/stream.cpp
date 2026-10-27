@@ -6,6 +6,7 @@
 #include "tide/full.h"
 #include "tide/aggregate.h"
 #include "tide/aggregate_sharing.h"
+#include "tide/state_preparation.h"
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
@@ -96,6 +97,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       }
       pool_.run(std::move(jobs));jobs.clear();
       decode_shared_aggregates(graph_,model_,events,shared);
+      prepare_shared_state(model_,events,stats);
     }
     for (const auto& [node, ids] : by_node) {
       if (!graph_.nodes[node].identity) stats["body_candidate_events"] += ids.size();
@@ -196,6 +198,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       ++stats["visited_edges"];
     }, [&](const Output& output) { result.outputs.push_back(output); });
     for (auto& event : events) {
+      event.state_prepared.clear();
       if (options_.compact_events && !options_.trace) {
         auto& state = q.states[{event.batch, event.node}];
         if (options_.defer_state_release) std::swap(state, event.next_state);

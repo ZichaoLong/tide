@@ -25,13 +25,13 @@ def supported(kernel):
 
 def _rows(rows, transform):
     result = []
-    for old, view, time in rows:
+    for old, view, time, prepared in rows:
         state = State(transform(old.value), old.last_time, old.observations,
                       {k: transform(v) for k, v in sorted(old.slots.items())})
         content = Content(transform(view.value), tuple(
             SourceInput(s.slot, replace(s.atom, value=transform(s.atom.value)), transform(s.scale))
             for s in view.sources), {k: transform(v) for k, v in sorted(view.contributions.items())})
-        result.append((state, content, time))
+        result.append((state, content, time, {k: transform(v) for k, v in sorted(prepared.items())}))
     return result
 
 
@@ -57,9 +57,9 @@ def _values(state):
 def _signature(row, kernel):
     tensors = []
     _rows([row], lambda t: tensors.append((tuple(t.shape), t.device, t.dtype, t.requires_grad)))
-    old, view, time = row
+    old, view, time, prepared = row
     branch = kernel.batch_autograd_key(old, view, time) if hasattr(kernel, "batch_autograd_key") else ()
-    return (branch, time, old.last_time, old.observations, tuple(sorted(old.slots)),
+    return (branch, time, old.last_time, old.observations, tuple(sorted(old.slots)), tuple(sorted(prepared)),
             tuple(s.slot for s in view.sources), tuple(sorted(view.contributions)), tuple(tensors))
 
 
@@ -72,9 +72,9 @@ class _State(torch.autograd.Function):
         it = iter(leaves)
         weights = _weights(plan[0], lambda _: next(it))
         rows = _rows(plan[1], lambda _: next(it))
-        old, views, times = zip(*rows)
+        old, views, times, prepared = zip(*rows)
         with torch.enable_grad():
-            states = step(weights.kernel, weights, list(old), list(views), list(times))
+            states = step(weights.kernel, weights, list(old), list(views), list(times), list(prepared))
         refs = [v for s in states for v in _values(s)]
         packed = [v for s in numeric for v in _values(s)]
         for a, b in zip(states, numeric):
@@ -117,8 +117,10 @@ class _State(torch.autograd.Function):
         return None, None, *result
 
 
-def bind_batch(weights, old, views, times, numeric):
-    rows, groups = list(zip(old, views, times)), {}
+def bind_batch(weights, old, views, times, numeric, prepared=None):
+    if prepared is not None and len(prepared) != len(old):
+        raise ValueError("State VJP preparation count mismatch")
+    rows, groups = list(zip(old, views, times, prepared or [{} for _ in old])), {}
     for i, row in enumerate(rows):
         groups.setdefault(_signature(row, weights.kernel), []).append(i)
     result = list(numeric)
@@ -146,7 +148,8 @@ def bind_sequence(weights, old, batch, states):
         for i, j in pairs:
             previous[j] = current[i]
         bound = bind_batch(weights, [current[i] for i, j in pairs], [batch.views[j] for i, j in pairs],
-                           [batch.times[j] for i, j in pairs], [states[j] for i, j in pairs])
+                           [batch.times[j] for i, j in pairs], [states[j] for i, j in pairs],
+                           [batch.prepared[j] for i, j in pairs] if batch.prepared else None)
         for (i, j), s in zip(pairs, bound):
             current[i] = states[j] = s
         depth += 1

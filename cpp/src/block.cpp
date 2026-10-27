@@ -5,6 +5,7 @@
 #include "tide/full.h"
 #include "tide/aggregate.h"
 #include "tide/aggregate_sharing.h"
+#include "tide/state_preparation.h"
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
@@ -55,6 +56,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   }
   pool.run(std::move(jobs));
   decode_shared_aggregates(g,m,events,shared);
+  if(options.packed)prepare_shared_state(m,events,stats);
   prefill_states(g, m, q, options, pool, events, by_sequence, stats);
   std::vector<std::vector<size_t>> waves;
   Index previous_time = -1;
@@ -83,6 +85,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     jobs.push_back([&, ids] { evaluate_full(g, m, events, ids, options, options.packed); });
   }
   pool.run(std::move(jobs));
+  for(auto& e:events)e.state_prepared.clear();
   return events;
 }
 }  // namespace tide
