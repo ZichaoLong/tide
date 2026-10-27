@@ -21,12 +21,14 @@ NPU保留开发treee741c50847de858517264e9546eb503e20d36cb4原manifest并核验�
 
 ## 当前工作与下一动作
 
-KV Upd开发tree28f8ee2ef2fe9201eea8f80a442849c352f074cf通过：CPU24，NPU72行重放/三bank、五个独立字段根、
-完整私有输入/旧state及base/U/V/summary VJP、None/零、保存版本、超大int64及失败不提交。
-tide-core5-resident-kv-update-dev-20261027.service inactive/exit0；原记录位于artifacts/jobs/core5-resident-kv-update-dev。
-实现/对应见resident-weighted-kv-update.md。提交本实现后，固定提交运行NPU资格及CUDA三架构构建，再提交证据。
-然后继续KV sum/qry读取、Describe/Full、循环记忆与完整图生命周期，不在阶段提交后暂停。
-投影证据abd1098已推送。冻结worktree无活动reader。
+681a7e9 KV Upd固定资格通过：CPU24（2.63秒）、NPU72行/三bank/五字段完整VJP及CUDA三架构构建。
+core5-resident-kv-update-{npu,cuda}-qualify均clean/exit0/inactive；证据evidence/core5-resident-kv-update-20261027.json。
+开发tree28f8ee2ef2fe9201eea8f80a442849c352f074cf，原manifest保留且摘要匹配。
+
+主工作区未提交weighted_pool{.h,.cpp,_check.cpp}、四个pool kernel及CPU测试、CMake/registry和契约。
+该层接sum与正权重Attention、独立vector/total根及全部VJP；尚未运行，无资格结论。
+接着冻结开发测试，通过后提交实现并固定资格。之后实际KV窗口/时间权重/查询、Describe/Full和循环记忆。
+当前冻结worktree无活动reader；不得把pool草稿混入已完成的KV资格身份。
 
 完整weighted resident仍缺五记忆数值/Mem/Describe/Full、图在线就绪与推进、retained训练/optimizer、
 精确checkpoint/跨卡；继续局部组件与完整生命周期，不借旧ContentFlow或CPU捕获轨迹宣称完成。
