@@ -232,3 +232,8 @@ CPU显式FP64测量、最终梯度/SGD槽验证及同材料精度/预算边界�
 [1f1ec57固定证据](evidence/core5-stable-preparation-precision-20261028.md)覆盖共享准备稳定顺序、
 精确续接和真实optimizer观测；CPU整体572通过/2原FP32 GDN失败保持分列。
 D64/D2048显式FP64通过不解除原FP32边界；新增GDN近零梯度见证由[精度契约](weighted-precision.md)追溯。
+
+GDN §1 epsilon-L2、GDN/SSD §3 scaled-RMS的FP32一阶收缩由Python/C++
+`weighted_normalization`实现；FP32前向不变、FP64路径不变，独立实数Jacobian及广播/零根由
+`test_weighted_half_normalization.py`和C++ `weighted_normalization.cpp`验证。
+原GDN完整AdamW/checkpoint测试保持输入和容差，局部通过不替代整图资格。

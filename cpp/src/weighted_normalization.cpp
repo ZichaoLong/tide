@@ -18,7 +18,7 @@ class Normalize:public torch::autograd::Function<Normalize> {
     return {((bar-n*(bar*n).mean(-1,true))/denominator).to(s[0].scalar_type()),Tensor{}};
   }
 };
-class HalfScaledRMS:public torch::autograd::Function<HalfScaledRMS> {
+class FP32ScaledRMS:public torch::autograd::Function<FP32ScaledRMS> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor value,Tensor scale,double epsilon){
     ctx->set_materialize_grads(false);auto x=value.to(at::kFloat);
@@ -35,7 +35,7 @@ class HalfScaledRMS:public torch::autograd::Function<HalfScaledRMS> {
     return {dx.to(s[0].scalar_type()),ds.to(s[1].scalar_type()),Tensor{}};
   }
 };
-class HalfL2:public torch::autograd::Function<HalfL2> {
+class FP32L2:public torch::autograd::Function<FP32L2> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor value,double epsilon){
     ctx->set_materialize_grads(false);auto x=value.to(at::kFloat);
@@ -53,11 +53,11 @@ class HalfL2:public torch::autograd::Function<HalfL2> {
 Tensor normalize(const Tensor& x,double epsilon){return Normalize::apply(x,epsilon);}
 namespace detail {
 Tensor scaled_rms(const Tensor& value,const Tensor& scale,double epsilon){
-  if(value.scalar_type()==at::kHalf)return HalfScaledRMS::apply(value,scale,epsilon);
+  if(value.scalar_type()==at::kHalf||value.scalar_type()==at::kFloat)return FP32ScaledRMS::apply(value,scale,epsilon);
   return scale*value/at::sqrt(epsilon+value.square().mean(-1,true));
 }
 Tensor epsilon_l2(const Tensor& value,double epsilon){
-  if(value.scalar_type()==at::kHalf)return HalfL2::apply(value,epsilon);
+  if(value.scalar_type()==at::kHalf||value.scalar_type()==at::kFloat)return FP32L2::apply(value,epsilon);
   return value/at::sqrt(epsilon+value.square().sum(-1,true));
 }
 }

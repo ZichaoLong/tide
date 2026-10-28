@@ -7,7 +7,7 @@
 
 实现`1f1ec5780e054e460e3471547519ace3f38fa3af`：共享准备按首事件稳定求值，修复换owner后的梯度微差；
 CPU benchmark显式FP64/真实静态存储计费，实际最终梯度/optimizer槽核对；两步精确checkpoint诊断。
-[固定证据](evidence/core5-stable-preparation-precision-20261028.md)及同名JSON已完成，准备单独证据提交。
+[固定证据](evidence/core5-stable-preparation-precision-20261028.md)及同名JSON已作为`0e04da6`单独提交并推送。
 
 - CPU扩大门禁`core5-stable-preparation-qualify`：**failed/1，572 passed、2 failed**。两项为FP32 GDN
   HB/default AdamW；旧1850434同样复现，第三次conv.weight[0,2]差1.411885e-6。原断言/失败保留。
@@ -33,9 +33,14 @@ CPU开发缓存`artifacts/worktrees/core5-stable-preparation-dev/build/cpu`可�
 L2/scaled-RMS一阶收缩应用于FP32，原前向/输入/容差不变，三步最后参数差约7.00355e-7。
 该探针尚不是公共实现，不认证native/Jacobian/checkpoint；没有回写上面的原失败。
 
-下一步直接实施：把同一解析一阶收缩接入Python/C++ FP32，保留原FP16/FP64及int64边界；
+已在主工作区接入Python/C++ FP32同一解析一阶收缩，保留原FP16/FP64及int64边界；
+短检查11项通过（后又补L2版本/零根和C++FP32逐值前向反例，须在下项开发门禁核验）。
+已完成`core5-fp32-normalization-dev-20261028`，冻结输入复用已终态的`core5-stable-preparation-dev`；
+入口`.local/core5-fp32-normalization-dev.sh`，输出`artifacts/jobs/core5-fp32-normalization-dev`。
+background.slice/Nice10、build2/算子1、64G/15min，增量重建core后183项通过，含原两项FP32 GDN AdamW及恢复、独立Jacobian、FP32逐值前向、版本/None/零。
+下一步：
 扩大独立literal Jacobian与版本/None/零检查，复验原两项GDN失败和相关循环/packed/多步恢复。
-开发通过后提交，再固定源码资格并记录证据；若候选不能完整通过，保留失败，不因探针有利而采用。
+实现已准备提交；随后以该提交运行相关CPU与NPU/CUDA固定资格，另记证据；原1f1ec57失败保持原终态。
 不重跑已经通过的D2048 KV测量（候选不改变KV公式），除非实际源码依赖或新失败要求。
 本阶段原算术探针、启动失败及首个arithmetic-trace误覆盖的partial边界已纳入证据，不恢复旧队列。
 
@@ -45,3 +50,6 @@ D64/D2048 FP32、FP32/FP16 GDN AdamW、SDK affine、反馈PDG、默认异步双N
 CUDA真机/x86_64、大型设备完整训练与跨卡吞吐待验。广泛私有合批、resident组合矩阵/窗口反向仍有空间。
 唯一待办见[ROADMAP](ROADMAP.md)，可复用经验见[performance-lessons](performance-lessons.md)。
 重入：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+
+下一固定资格预定`core5-fp32-normalization-{qualify,npu,cuda}-20261028`，新输出同名artifacts/jobs，
+CPU使用新的固定worktree，设备checkout仅在旧任务终态后切换；background.slice/Nice10，build2/算子1，64G/20min。

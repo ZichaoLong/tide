@@ -1,4 +1,4 @@
-"""Quantized operands against literal real Jacobians, including zero SSD reads."""
+"""FP16/FP32 operands against literal real Jacobians, including zero SSD reads."""
 import math
 import pytest
 import torch
@@ -7,10 +7,11 @@ from tidegraph.weighted.attention_mean import attention_mean
 
 
 @pytest.mark.parametrize("kind", ["rms", "l2", "scaled"])
-def test_half_normalization_literal_jacobian_and_broadcast_scale(kind):
-    x = torch.tensor([[0., 0.], [1e-4, -2e-4], [3., 4.]], dtype=torch.float16, requires_grad=True)
-    scale = torch.tensor([.3, -.7], dtype=torch.float16, requires_grad=True)
-    bar = torch.tensor([[.4, -.2], [.6, .8], [-.3, .5]], dtype=torch.float16)
+@pytest.mark.parametrize("precision", [torch.float16, torch.float32])
+def test_normalization_literal_jacobian_and_broadcast_scale(kind, precision):
+    x = torch.tensor([[0., 0.], [1e-4, -2e-4], [3., 4.]], dtype=precision, requires_grad=True)
+    scale = torch.tensor([.3, -.7], dtype=precision, requires_grad=True)
+    bar = torch.tensor([[.4, -.2], [.6, .8], [-.3, .5]], dtype=precision)
     epsilon = 1e-5
     value = scaled_rms(x, scale, epsilon) if kind == "scaled" else (norm if kind == "rms" else epsilon_l2)(x, epsilon)
     expected, dx, ds = torch.empty_like(x), torch.empty_like(x), torch.zeros(2, dtype=torch.float64)
@@ -23,27 +24,38 @@ def test_half_normalization_literal_jacobian_and_broadcast_scale(kind):
             expected[i, j] = gains[j]*row[j]/den
             dx[i, j] = sum(cotangent[k]*gains[k]*(float(j == k)/den-row[j]*row[k]/(divisor*den**3)) for k in range(2))
             ds[j] += cotangent[j]*row[j]/den
-    torch.testing.assert_close(value, expected, atol=1e-3, rtol=2e-3)
+    atol, rtol = (1e-3, 2e-3) if precision == torch.float16 else (1e-6, 1e-5)
+    torch.testing.assert_close(value, expected, atol=atol, rtol=rtol)
+    if precision == torch.float32:
+        reduction = x.square().sum(-1, keepdim=True) if kind == "l2" else x.square().mean(-1, keepdim=True)
+        original = (scale*x if kind == "scaled" else x)/torch.sqrt(epsilon+reduction)
+        assert torch.equal(value, original)
     gradients = torch.autograd.grad(value, (x, scale), bar, allow_unused=True)
     assert torch.isfinite(gradients[0]).all()
-    torch.testing.assert_close(gradients[0], dx, atol=1e-3, rtol=2e-3)
+    torch.testing.assert_close(gradients[0], dx, atol=atol, rtol=rtol)
     if kind == "scaled":
-        torch.testing.assert_close(gradients[1], ds.half(), atol=1e-3, rtol=2e-3)
+        torch.testing.assert_close(gradients[1], ds.to(precision), atol=atol, rtol=rtol)
     else:
         assert gradients[1] is None
 
 
-def test_half_scaled_rms_original_version_and_first_order():
-    x = torch.zeros(2, dtype=torch.float16, requires_grad=True)
-    scale = torch.ones(2, dtype=torch.float16, requires_grad=True)
-    y = scaled_rms(x, scale, 1e-5)
-    dx, ds = torch.autograd.grad(y.sum()*0, (x, scale))
-    assert torch.equal(dx, torch.zeros_like(x)) and torch.equal(ds, torch.zeros_like(scale))
+@pytest.mark.parametrize("precision", [torch.float16, torch.float32])
+@pytest.mark.parametrize("kind", ["l2", "scaled"])
+def test_normalization_original_version_and_first_order(precision, kind):
+    x = torch.zeros(2, dtype=precision, requires_grad=True)
+    scale = torch.ones(2, dtype=precision, requires_grad=True)
+    compute = lambda: scaled_rms(x, scale, 1e-5) if kind == "scaled" else epsilon_l2(x, 1e-5)
+    dx, ds = torch.autograd.grad(compute().sum()*0, (x, scale), allow_unused=True)
+    assert torch.equal(dx, torch.zeros_like(x))
+    if kind == "scaled":
+        assert torch.equal(ds, torch.zeros_like(scale))
+    else:
+        assert ds is None
     with pytest.raises(ValueError, match="first-order"):
-        torch.autograd.grad(scaled_rms(x, scale, 1e-5).sum(), x, create_graph=True)
-    y = scaled_rms(x, scale, 1e-5)
+        torch.autograd.grad(compute().sum(), x, create_graph=True)
+    y = compute()
     with torch.no_grad():
-        scale.add_(1)
+        (scale if kind == "scaled" else x).add_(1)
     with pytest.raises(RuntimeError, match="modified by an inplace"):
         y.sum().backward()
 
