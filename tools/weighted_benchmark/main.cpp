@@ -69,7 +69,7 @@ int main(int argc,char** argv){
       {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
       {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
       {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export"},
-      {"metrics",Json::array()}};write(output/"result.json",report);
+      {"phase","fixture-preparation"},{"metrics",Json::array()}};write(output/"result.json",report);
     capture_memory(report,target,"runtime_ready",true);
     auto fixture_start=tide_bench::Clock::now();
     std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");Json data=Json::parse(file);
@@ -81,7 +81,9 @@ int main(int argc,char** argv){
     }
     report["fixture_preparation_seconds"]=tide_bench::seconds(fixture_start);
     std::unique_ptr<Eager> eager;std::unique_ptr<Resident> remote;
-    const bool training=mode=="training",prefill=schedule=="prefill";auto start=tide_bench::Clock::now();
+    const bool training=mode=="training",prefill=schedule=="prefill";
+    report["phase"]="construction";write(output/"result.json",report);
+    auto start=tide_bench::Clock::now();
     if(implementation=="native")eager=std::make_unique<Eager>(data,training,prefill);
     else {
 #ifdef TIDE_WEIGHTED_RESIDENT
@@ -94,14 +96,19 @@ int main(int argc,char** argv){
     capture_memory(report,target,"construction",true);
     std::vector<Step> actual;auto execute=[&](Index i){report["phase"]=i?"measurement":"warmup";report["window"]=i;
       return eager?eager->step(i):remote->step(i);};
+    report["phase"]="warmup";report["window"]=0;write(output/"result.json",report);
     start=tide_bench::Clock::now();actual.push_back(execute(0));portable_torch::synchronize(target);report["warmup_seconds"]=tide_bench::seconds(start);
     capture_memory(report,target,"warmup",true);
-    for(Index step=1;step<=steps;++step){portable_torch::synchronize(target);start=tide_bench::Clock::now();actual.push_back(execute(step));
+    for(Index step=1;step<=steps;++step){
+      // Persist progress before synchronization/timing, never inside a step.
+      report["phase"]="measurement";report["window"]=step;write(output/"result.json",report);
+      portable_torch::synchronize(target);start=tide_bench::Clock::now();actual.push_back(execute(step));
       portable_torch::synchronize(target);const auto seconds=tide_bench::seconds(start);
       auto event=work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
       report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
     }
     capture_memory(report,target,"measurement");
+    report["phase"]="validation-preparation";write(output/"result.json",report);
     // Inference does not update parameters. Avoid exporting a second complete
     // bank, and release the candidate before constructing the independent run.
     const auto parameters=training?(eager?eager->parameters():remote->parameters()):std::map<std::string,Tensor>{};
@@ -109,11 +116,12 @@ int main(int argc,char** argv){
     // A separate scalar schedule runs only after timing and never guides the candidate.
     Eager reference(data,training,!prefill,true);
     for(Index i=0;i<=steps;++i){report["phase"]="independent-check";report["window"]=i;
+      write(output/"result.json",report);
       const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,at::kFloat);
       if(std::abs(actual[i].loss-expected.loss)>1e-6+1e-5*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
     if(!parameters.empty())for(const auto& [name,value]:reference.parameters())
       if(!at::allclose(parameters.at(name),value,1e-5,1e-6))throw std::runtime_error("benchmark final optimizer parameter differs: "+name);
-    report["state"]="passed";report["post_measurement_complete_records"]=true;
+    report["state"]="passed";report["phase"]="complete";report["post_measurement_complete_records"]=true;
     report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=training&&!parameters.empty();write(output/"result.json",report);return 0;
   }catch(const std::exception& e){report["state"]="failed";report["error"]=e.what();
     if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try{
