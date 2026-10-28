@@ -91,6 +91,29 @@ void check(at::Device device,weighted_allocation::Rule rule,float alpha){
   try{append_weighted_allocation(refusal,s,mu,b,n,error,rule,alpha,true,1);}catch(const std::invalid_argument&){rejected=true;}
   require(rejected,"resident allocation omitted explicit scratch admission");refusal.close();
 }
+void check_quad_offset(at::Device device){
+  // Independent affine-face solutions and exact-map cotangents, no eager solve.
+  at::NoGradGuard guard;
+  auto s=at::tensor({10000.f,9999.f,0.f,0.f,10000.5f,10000.f,10002.f,9997.f}).reshape({2,4}).to(device);
+  auto mu=at::tensor({1.f,1.f,0.f,0.f,1.f,1.f,.25f,1.f}).reshape({2,4}).to(device);
+  auto b=at::tensor({.7f,.7f,1.f,0.f,.95f,.95f,1.f,64.f}).reshape({2,4}).to(device);
+  auto n=at::tensor({2,4},at::kLong).to(device),error=at::zeros({1},n.options().dtype(at::kInt));
+  auto root=at::ones({2},n.options().dtype(at::kBool));
+  auto g=at::tensor({2.f,-1.f,0.f,0.f,2.f,-1.f,4.f,7.f}).reshape({2,4}).to(device);
+  DeviceProgram p(device);p.limit_workspace(1024*1024);
+  auto tape=append_weighted_allocation(p,s,mu,b,n,error,weighted_allocation::Quad,1);
+  auto grads=append_weighted_allocation_vjp(p,tape,g,root,error);
+  p.finish();portable_torch::synchronize(device);p.run();
+  require(error.cpu().item<int>()==0,"resident quad rejected closed-form offset case");
+  close(tape.controls,at::tensor({.7f,0.f,0.f,0.f,.6f,.1f,.25f,0.f}).reshape({2,4}));
+  close(grads.vectors,at::tensor({0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,
+                                1.5f,-1.5f,0.f,0.f,0.f,0.f,3.5f,0.f}).reshape({2,2,4}));
+  close(grads.scalars,at::tensor({2.f,0.f,0.f,0.f,.5f,0.f,-.75f,0.f}).reshape({2,4}));
+  auto flags=grads.connected.cpu();
+  require(flags.eq(at::tensor({1,1,1,0,1,1},at::kInt).to(at::kBool).repeat({2,1})).all().item<bool>(),
+          "offset independent-root connections differ");
+  p.close();
+}
 }
 int main(int argc,char** argv){
   portable_torch::RuntimeSession runtime;
@@ -101,6 +124,7 @@ int main(int argc,char** argv){
     auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
     check(device,weighted_allocation::Quad,1);check(device,weighted_allocation::Bernoulli,1);
     for(float alpha:{1.f,1.000001f,1.5f,2.f})check(device,weighted_allocation::Entropy,alpha);
-    std::cout<<"weighted-allocation: passed rules=6 replay_rows=72 logical_frames=60 complete_vjp=true host_decisions_per_solve=0\n";return 0;
+    check_quad_offset(device);
+    std::cout<<"weighted-allocation: passed rules=6 replay_rows=72 logical_frames=60 offset_closed_form_rows=2 complete_vjp=true host_decisions_per_solve=0\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

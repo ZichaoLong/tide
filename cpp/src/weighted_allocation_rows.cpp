@@ -31,10 +31,6 @@ class AllocationVjp final:public torch::autograd::Node {
       for(size_t j=0;j<width;++j){variable_list col;for(auto i:normal)col.push_back(xs[i*width+j]);fields.push_back(at::stack(col));}
       for(auto i:normal)gs.push_back(full[i]);auto grad=at::stack(gs),tau=fields[4].unsqueeze(1);
       Tensor x=response.index({ids});
-      if(rule.kind=="quad"){
-        x=fields[0]-multiplier.index({ids}).unsqueeze(1);
-        if(width==6)x=fields[0]-fields[5].unsqueeze(1)-multiplier.index({ids}).unsqueeze(1);
-      }
       auto slopes=rule.slopes(x,fields[1],tau,c.index({ids}));auto a=slopes[0],e=slopes[1],dtau=slopes[2],total=a.sum(1);
       auto constrained=(branch.index({ids})!=batch::Slack)&(total>0);
       auto anchor=grad.gather(1,a.argmax(1).unsqueeze(1)).squeeze(1),relative=grad-anchor.unsqueeze(1);

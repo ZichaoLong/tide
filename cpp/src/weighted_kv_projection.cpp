@@ -2,13 +2,21 @@
 namespace tide::weighted::packed {
 std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,const PackedSequence& batch,const KVConfig& c){
   std::vector<Index> shared,independent;
+  std::vector<Tensor> values(p.ids.size()),summaries(p.ids.size());
   for(size_t k=0;k<p.ids.size();++k){
     auto j=p.ids[k];
+    if(!batch.prepared.empty()&&batch.prepared[j].size()==2&&batch.prepared[j].count("values")&&batch.prepared[j].count("summaries")){
+      const auto& row=batch.prepared[j];auto v=row.at("values"),s=row.at("summaries");
+      detail::require(v.sizes()==at::IntArrayRef({2*c.width})&&s.sizes()==at::IntArrayRef({c.summary_width}),
+                      "invalid KV private preparation shape");
+      for(const auto& t:{v,s})detail::require(t.device()==p.input.device()&&t.scalar_type()==p.input.scalar_type(),
+                                             "invalid KV private preparation dtype/device");
+      values[k]=v;summaries[k]=s;continue;
+    }
     (batch.prepared.empty()||batch.prepared[j].empty()?independent:shared).push_back(k);
   }
-  std::vector<Tensor> values(p.ids.size()),summaries(p.ids.size());
   const auto& left=detail::weight(w,"kernel.adapter_u");const auto& right=detail::weight(w,"kernel.adapter_v");
-  if(shared.empty())return {project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.base")+at::matmul(left,right)),
+  if(independent.size()==p.ids.size())return {project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.base")+at::matmul(left,right)),
       project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.summary"))};
   if(!independent.empty()){
     auto ids=at::tensor(independent,p.input.options().dtype(at::kLong));

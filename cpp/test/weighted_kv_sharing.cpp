@@ -30,6 +30,8 @@ void check_weighted_kv_sharing(const at::TensorOptions& o){
   std::map<std::string,Index> stats;prepare_shared_state(m,events,stats);
   if(stats["state_preparation_calls"]!=1||stats["state_preparation_reused_events"]!=1)
     throw std::runtime_error("shared KV repeated base projection");
+  if(stats["max_state_private_projection_batch"]!=2||stats["state_private_projection_calls"]!=3)
+    throw std::runtime_error("private KV projections were not real row batches");
   for(size_t i=0;i<2;++i)evaluate_state(m,events,{i},true);
   auto& a=events[0].proposed_state;auto& b=events[1].proposed_state;
   const double n=2/std::sqrt(5);

@@ -95,6 +95,21 @@ def test_resident_quad_literal_map_and_exact_connected_zero(library):
     assert s[0, 0] == 1
 
 
+def test_resident_quad_offset_independent_affine_faces(library):
+    s = torch.tensor([[10000., 9999., 0., 0.], [10000.5, 10000., 10002., 9997.]])
+    mu = torch.tensor([[1., 1., 0., 0.], [1., 1., .25, 1.]])
+    bounds = torch.tensor([[.7, .7, 1., 0.], [.95, .95, 1., 64.]])
+    run = Run(library, s, mu, bounds, [2, 4])
+    assert run.error.item() == 0
+    close(run.controls, torch.tensor([[.7, 0., 0., 0.], [.6, .1, .25, 0.]]))
+    vectors, scalars, flags = run.backward(torch.tensor([[2., -1., 0., 0.], [2., -1., 4., 7.]]))
+    assert run.error.item() == 0
+    close(vectors, torch.tensor([[[0., 0., 0., 0.], [0., 0., 0., 0.]],
+                                [[1.5, -1.5, 0., 0.], [0., 0., 3.5, 0.]]]))
+    close(scalars, torch.tensor([[2., 0., 0., 0.], [.5, 0., -.75, 0.]]))
+    assert flags.tolist() == [[True, True, True, False, True, True]]*2
+
+
 @pytest.mark.parametrize("kind,alpha,name", RULES)
 def test_resident_absent_zero_caps_singleton_and_saturated(library, kind, alpha, name):
     s = torch.tensor([[float("nan"), 1.], [2., -1.], [0., 0.], [0., float("nan")]])

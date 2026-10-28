@@ -81,14 +81,14 @@ def _solve(t, mu, target, temperature):
         capped = (c == mu) & ~free
         lam = (centered[free].sum()+temperature*(mu[capped].sum()-target))/free.sum()
         c = _response(centered, mu, temperature, lam)
-    return c, lam+shift
+    return c, lam+shift, centered-lam
 
 
 class _ExactQuad(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, t, mu, target, temperature, c, multiplier, equality, shift):
+    def forward(ctx, t, mu, target, temperature, c, multiplier, equality, shift, response):
         ctx.set_materialize_grads(False)
-        ctx.save_for_backward(t, mu, target, temperature, c, multiplier, shift)
+        ctx.save_for_backward(t, mu, target, temperature, c, multiplier, shift, response)
         ctx.equality = equality
         return c.clone()
 
@@ -96,8 +96,8 @@ class _ExactQuad(torch.autograd.Function):
     @once_differentiable
     def backward(ctx, grad):
         if grad is None:
-            return (None,)*8
-        t, mu, _, temperature, c, multiplier, shift = ctx.saved_tensors
+            return (None,)*9
+        _, mu, _, temperature, c, _, shift, response = ctx.saved_tensors
         free = (c > 0) & (c < mu)
         a = free.to(c.dtype)/temperature
         # At an exact upper breakpoint choose the saturated-side derivative;
@@ -113,10 +113,9 @@ class _ExactQuad(torch.autograd.Function):
             mean, centered = grad.new_zeros(()), grad
         gt = a*centered
         gm = e*centered
-        response = t-multiplier if shift is None else t-shift-multiplier
-        gtemp = (-a*response/temperature*centered).sum()
+        gtemp = (-a*torch.where(free, response/temperature, 0)*centered).sum()
         gshift = None if shift is None else grad.new_zeros(()) if ctx.equality else -gt.sum()
-        return gt, gm, mean, gtemp, None, None, None, gshift
+        return gt, gm, mean, gtemp, None, None, None, gshift, None
 
 
 def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=None):
@@ -136,6 +135,7 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
                 raise ArithmeticError("shifted allocation scores exceed requested dtype range")
         mass = caps.sum()
         zero = scores.new_zeros(())
+        response = scores
         if mass == 0 or upper == 0:
             c, lam, branch = torch.zeros_like(scores), zero, "zero"
         elif lower == mass:
@@ -148,14 +148,14 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
             target = lower if branch in {"lower", "equality"} else upper
             lam = zero
             if branch != "slack":
-                c, lam = _solve(scores, caps, target, temperature)
+                c, lam, response = _solve(scores, caps, target, temperature)
         free = (c > 0) & (c < caps)
         if branch in {"zero", "caps"}:
             residual = zero
         else:
-            if ((caps > 0) & (scores > lam) & (c == 0)).any():
+            if ((caps > 0) & (response > 0) & (c == 0)).any():
                 raise ArithmeticError("positive quadratic allocation support underflowed in requested dtype")
-            response_error = (c-_response(scores, caps, temperature, lam)).abs().max()
+            response_error = (c-_response(response, caps, temperature, zero)).abs().max()
             residual = torch.stack((response_error, (lower-c.sum()).clamp_min(0),
                                     (c.sum()-upper).clamp_min(0))).max()
             tolerance = 64*torch.finfo(scores.dtype).eps*max(1, scores.numel())
@@ -167,5 +167,6 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
         result = caps  # Singleton feasible set: identity in caps only.
     else:
         target = lower if branch in {"lower", "equality"} else upper
-        result = _ExactQuad.apply(original_scores, caps, target, temperature, c, lam, branch != "slack", score_shift)
+        result = _ExactQuad.apply(original_scores, caps, target, temperature, c, lam,
+                                  branch != "slack", score_shift, response)
     return Allocation(result, lam, branch, free, residual)

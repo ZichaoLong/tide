@@ -23,14 +23,23 @@ def projections(memory, plan, batch):
     """Return actual write rows in positive-write order; no state reconstruction."""
     prepared = getattr(batch, "prepared", None)
     common, independent = [], []
+    results = [None]*len(plan.ids)
+    summaries = [None]*len(plan.ids)
     for k, j in enumerate(plan.ids):
-        (common if prepared and prepared[j] else independent).append((k, j))
-    if not common:
+        row = prepared[j] if prepared else {}
+        if set(row) == {"values", "summaries"}:
+            v, s = row["values"], row["summaries"]
+            if v.shape != (2*memory.config.width,) or s.shape != (memory.config.summary_width,):
+                raise ValueError("invalid KV private preparation shape")
+            if any((t.dtype, t.device) != (plan.content.dtype, plan.content.device) for t in (v, s)):
+                raise ValueError("invalid KV private preparation dtype/device")
+            results[k], summaries[k] = v, s
+        else:
+            (common if row else independent).append((k, j))
+    if len(independent) == len(plan.ids):
         x = norm(plan.content, memory.config.epsilon)
         return (project(x, memory.base+memory.adapter_u@memory.adapter_v),
                 project(norm(plan.content, memory.config.epsilon), memory.summary))
-    results = [None]*len(plan.ids)
-    summaries = [None]*len(plan.ids)
     if independent:
         ids = [k for k, _ in independent]
         x = norm(plan.content[ids], memory.config.epsilon)

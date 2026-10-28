@@ -96,13 +96,16 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 
 本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。
 
-## 已知共同偏移拒绝
+## 共同偏移下的实际响应
 
-`2da3f2c`/`0503593`的eager quad尚有独立数值限制：输入`[10000,9999]`、
-caps=`[1,1]`、lower=upper=`0.7`、temperature=`1`，独立手算唯一解为`[0.7,0]`，
-Python/native的scalar与batch在FP32和FP64都以原残差检查拒绝；去掉共同偏移的`[0,-1]`通过。
-求解使用居中坐标，但残差及温度VJP仍从原坐标中的已舍入乘子重建响应，可能发生相消。
-这说明仅增加dtype精度不保证解除该拒绝；不是教材的定义域限制，也不是正支持下溢。
-当前没有放宽容差、改变支持或自动升精度。后续稳定化须同时处理实际响应、指定VJP、乘子
-解释和正支持守卫，不能只删残差检查。反例与大型拒绝分别见
-[本轮证据](evidence/core5-performance-transfer-20261028.md)；未证明所有D2048拒绝都有同一个成因。
+`2da3f2c`/`0503593` 对 `[10000,9999]`、caps=`[1,1]`、lower=upper=`0.7`、tau=`1`
+的手算解 `[0.7,0]` 曾在 FP32/FP64 都残差拒绝，原失败见
+[固定报告](evidence/core5-performance-transfer-20261028.md)。原因是从原坐标舍入乘子重建响应。
+
+当前 scalar、batch 和 resident quad 保存/使用实际居中响应 `x=(scores-center)-lambda_center`；
+残差与温度 VJP 都在这个点求值。公开 multiplier 仍是原坐标的近似浮点报告，不能据它重建
+实际浮点响应。原输入继续保存版本；松弛分支使用实际 `scores-score_shift`，单点分支不变。
+正支持守卫在除温度前检查 `caps>0 && x>0`，原可行性容差、边界约定、精确映射 VJP 身份不变。
+[闭式反例](../tests/test_weighted_quad_offset.py)独立验收单个/多个内部响应、饱和/零坐标、
+评分/上限/总量/温度/共同阈值根及版本；resident checker 直接使用手算解与梯度，
+不借用 eager 求解器。这项修复不证明其他 D2048 或 D64 的严格差异都已解除。

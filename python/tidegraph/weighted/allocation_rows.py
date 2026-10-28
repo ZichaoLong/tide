@@ -52,12 +52,7 @@ class _Rows(torch.autograd.Function):
             fields = [torch.stack([inputs[i*ctx.width+j] for i in normal]) for j in range(ctx.width)]
             scores, caps, _, _, temperature = fields[:5]
             c, tau, grad = controls[normal], temperature[:, None], torch.stack([bars[i] for i in normal])
-            if ctx.rule.kind == "quad":
-                x = scores-multiplier[normal, None]
-                if ctx.shifted:
-                    x = scores-fields[5][:, None]-multiplier[normal, None]
-            else:
-                x = response[normal]
+            x = response[normal]
             a, e, dtau = ctx.rule.derivatives(x, caps, tau, c)
             total = a.sum(1)
             constrained = (branch[normal] != SLACK) & (total > 0)

@@ -9,7 +9,9 @@
 `prepare_shared`。默认无能力。KV 的充分判据为正接收分支、完整 Content Tensor 身份、
 实际 base Parameter 身份和 epsilon 相同；不比较浮点值，不跨块缓存，不读取参考轨迹。
 至少两个请求满足判据时计算一次 `x=N(u)` 和 `b=base@x`，形成临时具名张量 `{normal,base}`。
-逐节点继续计算 `b+adapter_u@(adapter_v@x)` 和 `summary@x`，按实际逻辑时间写入自己的缓存。
+在同一共享键内按私有矩阵形状/dtype/device 再分组，两个以上同形行使用真正 BMM 计算
+`adapter_v@x`、`adapter_u@low` 和 `summary@x`，再加共同 `b`。单行或不同形状组沿用已有路径。
+各节点按实际逻辑时间写入自己的缓存。
 低秩分支不构造稠密adapter矩阵；完整根/VJP、共享使用者、优化器和续接仍与独立combined-matrix锚点对照。
 无复用的行保留 `(base+adapter_u@adapter_v)@N(u)` 求值；两式是同一数学函数的不同算术分组，
 FP32/FP64 仍使用既定容差与严格离散路由检查。没有为复用修改 dtype、输入或平票规则。
@@ -21,7 +23,7 @@ autograd 保留反向所需引用；checkpoint 仍只编码原始条目、时间
 零接收保持完整旧状态，包括已过期条目；不计算新投影。窗口和 int64 时间不变。
 
 State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本，按实际准备字段结构分组。
-局部适配器/summary 贡献由各自私有图返回；共享投影图累加全部使用者的 cotangent。
+局部适配器/summary 贡献由独立行的一阶 VJP 返回；共享投影图累加全部使用者的 cotangent。
 未使用的准备字段返回 None，连接零不被数值屏蔽；独立同值输入与独立同值参数不合并。
 共享基座、适配器或输入的实际别名由 autograd 汇总；不通过再次计算完整基座来补写反向。
 本接口延续明确的一阶限制，不能对准备图求高阶导数来绕过 State VJP 边界。
@@ -35,6 +37,27 @@ State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本
 
 `state_preparation_calls` 数实际共同准备调用，`state_preparation_events` 数其覆盖的事件，
 `state_preparation_reused_events` 数省去的重复准备；后两者之差等于前者。
-准备按独立键分别计算，节点内适配/写入仍批量执行；没有声称跨键合并了所有投影调用。
+`state_private_projection_calls` 数实际私有矩阵批调用，`state_private_projection_rows` 数这些调用的总行数，
+`max_state_private_projection_batch` 取跨执行块最大值（不是累计）。State 回调数继续单独报告；
+实际合批的是私有线性映射，私有缓存写入并未合并。没有声称跨键合并了所有投影调用。
 候选写入、私有 KV 长度、选择、Full 和消息数量均不因本项减少。
 本项是 eager packed 路径，mixed/resident 与真实设备资格单独验收；当前运行证据见 [STATUS](STATUS.md)。
+
+## 独立私有行的一阶边界
+
+`StateKernel::prepare_private_batch` 是默认原样传递的可选能力；Python 同名方法亦可缺省。
+它只处理已确定共同函数/输入的准备组，不改变一般引擎的状态或拓扑表达域。
+KV 的 `linear_rows` 接受各行向量及各自矩阵，实际前向为 BMM；反向仅合批有根的行：
+`dx=Wᵀg`、`dW=gxᵀ`，没有根的行保持 None，连接零保持零。重复参数/输入身份继续由
+外层 autograd 汇总，数值相等的独立根仍分开。原输入/参数全部保存版本，拒绝高阶。
+不能直接用裸 stack/BMM 的自动反向替代这个边界，否则独立未用行会变成连接零。
+
+| 定义对应 | 实现/独立检查 |
+| --- | --- |
+| 私有线性映射与分组 | [Python](../python/tidegraph/weighted/kv_projection_batch.py)、[C++](../cpp/src/weighted_kv_preparation.cpp) |
+| 实际 BMM 与独立 VJP | [Python](../python/tidegraph/weighted/row_linear.py)、[C++](../cpp/src/weighted_row_linear.cpp) |
+| 手算解/Jacobian、别名、未用行、零根、版本、不同 rank 分组 | [Python tests](../tests/test_weighted_private_projection.py)、[standalone](../cpp/test/weighted_sharing.cpp) |
+
+准备结果 `{values,summaries}` 只携带候选实际计算结果，现有 State VJP 把它们作为独立操作数；
+没有参考重算或状态补写。无共享键的私有 base/输入仍走原路径，这一边界不宣称全节点异构合批。
+对应性能与后端资格必须由固定源码运行单独给出，单元测试不构成提速证据。
