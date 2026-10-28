@@ -43,7 +43,7 @@ journal/adjoint、通信、临时packing、workspace及allocator开销仍需执�
 
 计划固定schema/upstream/hash、物理拓扑、逐节点/区域配置、source分类、共享模式、宽度、
 初态构造策略、输入强度和原始时间。span/stride为int64域；不把事件编号当逻辑时间。
-CLI生成全活动或指定k；`regional_total_zero`的k仍为发送强度上限，不改成普通Top-k。
+CLI取k=区域规模或指定k，实际正支持在线决定；`regional_total_zero`的k仍为发送强度上限，不改成普通Top-k。
 一般合法配置可经程序接口构造，正式runtime Config拥有最终适用性验证。
 
 benchmark fixture v2以JSON保存结构与索引，FP32小端二进制保存实际TensorImpl去重的张量。
@@ -55,3 +55,16 @@ OpenSSL Crypto只用于独立benchmark材料校验，不增加公共C++核心或
 性能计时和独立事后完整返回比较沿用[性能契约](weighted-performance.md)。初始化/材料I/O、
 完整训练、参考验证分别记录；大模型不展开成JSON scalar lists。新结果连回
 [性能经验](performance-lessons.md)，失败、容量拒绝和负收益同样保留。
+
+## 分歧隔离与历史消费者
+
+`scripts/diagnose_weighted_workload.py --workload PLAN --dtype float32|float64
+--implementation python|native --output-dir NEW` 使用同一FP32种子材料；FP64由两条独立
+调度在开始前显式提升。分别记录完整返回、离散结构、输出loss参数梯度及一至两步SGD参数。
+native另需`--native-library CORE`。原严格容差和None/零区别保持；FP64通过不是FP32修复，
+这个输出loss诊断也不替代独立字段根与checkpoint的完整训练门禁。
+
+`scripts/decode_weighted_fixture.py --input V2.json --output V1.json` 在默认2000万元素上限内，
+校验完整文件和逐张量哈希，原样保留张量表索引/共享身份及每个FP32值，只把冻结零编码展开。
+它让历史独立消费者读取同一实际材料，不运行参考、不重新初始化；旧消费者仍须自己验证
+其适用域。大模型继续使用v2，不能通过这个诊断入口无限展开JSON。

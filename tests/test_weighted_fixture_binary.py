@@ -1,5 +1,6 @@
 """Binary material preserves actual aliases, exact bytes and publication."""
 import hashlib
+import json
 from pathlib import Path
 import sys
 import pytest
@@ -38,3 +39,33 @@ def test_binary_refuses_mislabelled_zero_and_aborts_without_publication(tmp_path
     with pytest.raises(ValueError, match="FP32"): w.tensor(torch.ones(1, dtype=torch.float64))
     w.abort()
     assert not path.exists() and not list(tmp_path.iterdir())
+
+
+def test_legacy_decode_keeps_tensor_indices_exact_values_and_refusals(tmp_path):
+    from decode_weighted_fixture import decode
+    from durable_records import write_json
+    w = TensorWriter(tmp_path/'material.bin')
+    x = torch.tensor([0., -0., 1/3, 1e-40, -7.25])
+    a, b = w.tensor(x), w.tensor(x.clone())
+    z = w.tensor(torch.zeros(2), zero=True)
+    data = dict(schema='tide-weighted-benchmark-fixture-v2', tensors=w.rows,
+                binary=w.finish(), nodes=[{'first': a, 'shared': a, 'equal': b, 'zero': z}])
+    source = tmp_path/'material.json'
+    write_json(source, data)
+    restored = decode(source, max_elements=12)
+    assert restored['nodes'] == data['nodes'] and a != b
+    assert len(restored['tensors']) == 3 and restored['tensors'][z]['values'] == [0., 0.]
+    # Compare bytes: all FP32 values, subnormal and signed zero survive JSON.
+    row = json.loads(json.dumps(restored))['tensors'][a]
+    assert torch.tensor(row['values'], dtype=torch.float32).numpy().tobytes() == x.numpy().tobytes()
+    with pytest.raises(ValueError, match='element ceiling'):
+        decode(source, max_elements=11)
+    data['tensors'][a]['offset'] = -1
+    write_json(source, data)
+    with pytest.raises(ValueError, match='byte range'):
+        decode(source, max_elements=12)
+    data['tensors'][a]['offset'] = 0
+    write_json(source, data)
+    (tmp_path/'material.bin').write_bytes(b'\0'*data['binary']['nbytes'])
+    with pytest.raises(ValueError, match='hash mismatch'):
+        decode(source, max_elements=12)
