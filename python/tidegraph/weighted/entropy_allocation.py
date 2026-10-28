@@ -92,7 +92,9 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
             lam, x = zero, scores
             if branch != "slack":
                 target = lower if branch in {"lower", "equality"} else upper
-                c, lam, x = _solve(scores, caps, target, temperature, rule)
+                c, lam, x = _solve(original_scores, caps, target, temperature, rule)
+                if score_shift is not None:
+                    lam = lam-score_shift
         residual = zero
         if branch not in {"zero", "caps"}:
             residual = torch.stack(((c-rule.response(x, caps, temperature)).abs().max(),

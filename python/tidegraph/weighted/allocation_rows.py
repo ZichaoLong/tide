@@ -8,6 +8,7 @@ import torch
 from .allocation import Allocation, _validate, _scalar
 from .allocation_batch import solve, ZERO, CAPS, SLACK, LOWER, EQUALITY, NAMES
 from .regularizers import Regularizer
+from .allocation_failure import AllocationFailure
 
 
 class _Rows(torch.autograd.Function):
@@ -97,7 +98,11 @@ def allocate_batch(scores, caps, lower, upper, temperature=1., *, regularizer="q
         groups[(len(t), t.dtype, t.device, shift is not None)].append(i)
     for (_, _, _, shifted), ids in groups.items():
         fields = [torch.stack([inputs[i][j] for i in ids]) for j in range(6 if shifted else 5)]
-        numeric = solve(*fields[:5], rule, fields[5] if shifted else None)
+        try:
+            numeric = solve(*fields[:5], rule, fields[5] if shifted else None)
+        except AllocationFailure as error:
+            error.row = ids[error.row]
+            raise
         flat = [t for i in ids for t in inputs[i]]
         controls = _Rows.apply(rule, shifted, numeric, *flat)
         identity = regularizer+"-exact-map-v1"

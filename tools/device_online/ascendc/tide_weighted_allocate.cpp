@@ -1,4 +1,5 @@
 #include "weighted_allocation_math.h"
+#include "weighted_quad_coordinates.h"
 namespace {
 using namespace tide_weighted_device;
 using namespace tide::device_online::weighted_allocation;
@@ -7,10 +8,10 @@ __aicore__ inline int solve(Response& rule,__gm__ float* s,__gm__ float* mu,__gm
   const float low=b[Lo],high=b[Hi],tau=b[Temperature],shift=b[Shift];
   for(I j=0;j<BoundFields;++j)if(!finite(b[j]))return Domain;
   if(low<0||high<low||tau<=0)return Domain;
-  float mass=0,center=-inf(),total=0;
+  float mass=0,center=-inf(),total=0,max_cap=0;
   for(I j=0;j<n;++j){
     if(!finite(s[j])||!finite(mu[j])||mu[j]<0||mu[j]>1||!finite(s[j]-shift))return Domain;
-    mass+=mu[j];center=maximum(center,s[j]-shift);
+    mass+=mu[j];max_cap=maximum(max_cap,mu[j]);center=maximum(center,s[j]);
     total+=rule.value(s[j]-shift,mu[j],tau);
   }
   if(!finite(mass)||!finite(total)||low>mass)return Domain;
@@ -21,38 +22,40 @@ __aicore__ inline int solve(Response& rule,__gm__ float* s,__gm__ float* mu,__gm
   if(*branch!=Slack){
     const float target=(*branch==Lower||*branch==Equality)?low:high;
     float lo=inf(),hi=-inf();
-    for(I j=0;j<n;++j)if(mu[j]>0){
-      const float point=(s[j]-shift-center)-rule.inverse(target/mass,mu[j],tau);
-      lo=minimum(lo,point);hi=maximum(hi,point);
+    if(rule.kind==Quad){center=quad_pivot(s,mu,n,0,target);lo=-tau*max_cap;hi=0;if(lo==0)return SupportUnderflow;}
+    else for(I j=0;j<n;++j)if(mu[j]>0){
+        const float point=(s[j]-center)-rule.inverse(target/mass,mu[j],tau);
+        lo=minimum(lo,point);hi=maximum(hi,point);
     }
     if(!finite(lo)||!finite(hi))return Domain;
     // Forward iterations only. The separately recorded response slopes define
     // the exact solution-map adjoint, not a derivative through these decisions.
     for(I iteration=0;iteration<80;++iteration){
       const float mid=lo+(hi-lo)/2;float sum=0;
-      for(I j=0;j<n;++j)sum+=rule.value(s[j]-shift-center-mid,mu[j],tau);
+      if(mid==lo||mid==hi)break;
+      for(I j=0;j<n;++j)sum+=rule.value(s[j]-center-mid,mu[j],tau);
       if(sum>target)lo=mid;else hi=mid;
     }
     lam=lo+(hi-lo)/2;
     if(rule.kind==Quad){
       float free_sum=0,capped=0;I count=0;
       for(I j=0;j<n;++j){
-        const float x=s[j]-shift-center,v=rule.value(x-lam,mu[j],tau);
+        const float x=s[j]-center,v=rule.value(x-lam,mu[j],tau);
         if(v>0&&v<mu[j]){free_sum+=x;++count;}else if(v==mu[j])capped+=mu[j];
       }
       if(count)lam=(free_sum+tau*(capped-target))/float(count);
     }else{
       float best=inf(),chosen=lo;
       for(I k=0;k<3;++k){const float point=k==0?lo:k==1?lam:hi;float sum=0;
-        for(I j=0;j<n;++j)sum+=rule.value(s[j]-shift-center-point,mu[j],tau);
+        for(I j=0;j<n;++j)sum+=rule.value(s[j]-center-point,mu[j],tau);
         const float error=magnitude(sum-target);if(error<best){best=error;chosen=point;}}
       lam=chosen;
     }
-    stats[0]=lam+center;
+    stats[0]=lam+center-shift;
   }
   float sum=0,residual=0;
   for(I j=0;j<n;++j){
-    const float x=*branch==Slack?s[j]-shift:s[j]-shift-center-lam;
+    const float x=*branch==Slack?s[j]-shift:s[j]-center-lam;
     c[j]=rule.value(x,mu[j],tau);sum+=c[j];
     if(rule.support(x,mu[j],tau)&&c[j]==0)return SupportUnderflow;
     // Global multiplier is a report only; use the actual centered response.

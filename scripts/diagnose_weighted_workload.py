@@ -5,6 +5,7 @@ An explicit FP64 promotion is a distinct diagnostic, never a repair or passing
 replacement for the original FP32 measurement. No reference guides a candidate.
 """
 import argparse
+from contextlib import nullcontext
 from dataclasses import fields, is_dataclass, replace
 import os
 from pathlib import Path
@@ -34,7 +35,10 @@ def main():
     p.add_argument("--native-library")
     p.add_argument("--steps", type=int, choices=(1, 2), default=2)
     p.add_argument("--output-dir", type=Path, required=True)
+    p.add_argument("--capture-allocations", action="store_true", help="Python only: actual scalar/batch operands and branch/free masks, outside performance timing")
     args = p.parse_args()
+    if args.capture_allocations and args.implementation != "python":
+        p.error("allocation observation currently requires the independent Python schedules")
     if args.implementation == "native" and not args.native_library:
         p.error("native needs its explicit matching library")
     if args.native_library:
@@ -71,6 +75,9 @@ def main():
             return str(error)
         return None
 
+    from weighted_allocation_observer import observe_allocations
+    observer = observe_allocations() if args.capture_allocations else nullcontext(None)
+    allocation_records = observer.__enter__()
     try:
         bindings, data = [], []
         for _ in range(2):
@@ -110,6 +117,10 @@ def main():
         report.update(state="failed", error=repr(error))
         raise
     finally:
+        observer.__exit__(None, None, None)
+        if allocation_records is not None:
+            write_json(out/"allocations.json", allocation_records)
+            report["allocation_observations"] = "allocations.json"
         write_json(out/"result.json", report)
     raise SystemExit(0 if report["state"] == "passed" else 2)
 

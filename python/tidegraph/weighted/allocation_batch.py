@@ -5,6 +5,8 @@ Newton iterates are forward numerics only. The declared VJP is a separate layer.
 """
 from dataclasses import dataclass
 import torch
+from .allocation_failure import AllocationFailure
+from .quadratic_coordinates import coordinates
 
 
 ZERO, CAPS, SLACK, LOWER, UPPER, EQUALITY = range(6)
@@ -22,23 +24,23 @@ class BatchAllocation:
 
 
 def quad(t, caps, target, temperature):
-    shift = t.max(1).values
-    centered, tau = t-shift[:, None], temperature[:, None]
-    points, order = torch.cat((centered-tau*caps, centered), 1).sort(dim=1, stable=True)
+    centered, shift, work, cap, remaining = coordinates(t, caps, target, temperature)
+    tau = temperature[:, None]
+    points, order = torch.cat((work-tau*cap, work), 1).sort(dim=1, stable=True)
     n = t.shape[1]
     enter, index = order < n, order.remainder(n)
     count = torch.where(enter, 1, -1).cumsum(1)
-    selected = centered.gather(1, index)/tau
-    delta = torch.where(enter, selected-caps.gather(1, index), -selected)
-    intercept = caps.sum(1)[:, None]+delta.cumsum(1)
+    selected = work.gather(1, index)/tau
+    delta = torch.where(enter, selected-cap.gather(1, index), -selected)
+    intercept = cap.sum(1)[:, None]+delta.cumsum(1)
     totals = intercept-count*points/tau
     right = torch.cat((points[:, 1:], points[:, -1:]), 1)
-    eligible = (count > 0) & (points < right) & (totals >= target[:, None])
+    eligible = (count > 0) & (points < right) & (totals >= remaining[:, None])
     chosen = torch.where(eligible, torch.arange(2*n, device=t.device), -1).max(1).values
     if (chosen < 0).any():
         raise ArithmeticError("quadratic batch lost feasible breakpoint interval")
     row = torch.arange(len(t), device=t.device)
-    lam = (intercept[row, chosen]-target)*temperature/count[row, chosen]
+    lam = (intercept[row, chosen]-remaining)*temperature/count[row, chosen]
     result = torch.minimum(((centered-lam[:, None])/tau).clamp_min(0), caps)
     free = (result > 0) & (result < caps)
     capped = (result == caps) & ~free
@@ -121,9 +123,11 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
             rows = ids[constrained]
             target = torch.where((branch[rows] == LOWER) | (branch[rows] == EQUALITY), lower[rows], upper[rows])
             if rule.kind == "quad":
-                values, multipliers, x = quad(t[rows], caps[rows], target, temperature[rows])
+                values, multipliers, x = quad(scores[rows], caps[rows], target, temperature[rows])
             else:
-                values, multipliers, x = entropy(t[rows], caps[rows], target, temperature[rows], rule)
+                values, multipliers, x = entropy(scores[rows], caps[rows], target, temperature[rows], rule)
+            if shift is not None:
+                multipliers = multipliers-shift[rows]
             result[rows], lam[rows], response[rows] = values, multipliers, x
         # Use the response actually solved, not a rounded global multiplier.
         x = response[ids]
@@ -131,8 +135,19 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
         residual[ids] = torch.stack((errors, (lower[ids]-result[ids].sum(1)).clamp_min(0),
                                     (result[ids].sum(1)-upper[ids]).clamp_min(0)), 1).max(1).values
         tolerance = 64*torch.finfo(t.dtype).eps*t.shape[1]
-        if not torch.isfinite(residual).all() or (residual > tolerance).any():
-            raise ArithmeticError("allocation batch residual exceeds dtype tolerance")
-        if (rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any():
-            raise ArithmeticError("positive allocation batch support underflowed in requested dtype")
+        def reject(mask, message):
+            if not mask.any():
+                return
+            bad = mask.nonzero().flatten()
+            row = int(ids[bad[0]])
+            raise AllocationFailure(message, row,
+                dict(scores=scores[row], caps=caps[row], lower=lower[row], upper=upper[row],
+                     temperature=temperature[row], shift=None if shift is None else shift[row],
+                     controls=result[row], response=response[row], multiplier=lam[row],
+                     residual=residual[row], tolerance=scores.new_tensor(tolerance)),
+                dict(regularizer=rule.kind, alpha=str(rule.alpha), branch=NAMES[int(branch[row])], solver="python-batch"))
+        reject(~torch.isfinite(residual[ids]) | (residual[ids] > tolerance),
+               "allocation batch residual exceeds dtype tolerance")
+        reject((rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any(1),
+               "positive allocation batch support underflowed in requested dtype")
     return BatchAllocation(result, lam, branch, response, (result > 0) & (result < caps), residual)

@@ -1,7 +1,11 @@
 // Independent C++ bounded bisection across complete rows; no scalar solve replay.
 #include "weighted_allocation_batch.h"
+#include "tide/allocation_failure.h"
+#include "weighted_quadratic_coordinates.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
+#include <iomanip>
+#include <sstream>
 
 namespace tide::weighted::batch {
 using detail::require;
@@ -37,13 +41,21 @@ NumericAllocation solve(const Tensor& scores,const Tensor& caps,const Tensor& lo
     auto rows=ids.index({branch!=Slack});
     if(rows.numel()){
       auto target=at::where((out.branch.index({rows})==Lower)|(out.branch.index({rows})==Equality),lower.index({rows}),upper.index({rows}));
-      auto ts=t.index({rows}),mu=caps.index({rows}),tt=temperature.index({rows}).unsqueeze(1);
-      auto center=maximum(ts),centered=ts-center.unsqueeze(1);
-      auto points=centered-rule.inverse((target/mass.index({rows})).unsqueeze(1),mu,tt);
-      auto positive=mu>0;
-      auto a=minimum(points.masked_fill(~positive,INFINITY)),b=maximum(points.masked_fill(~positive,-INFINITY));
+      auto ts=scores.index({rows}),mu=caps.index({rows}),tt=temperature.index({rows}).unsqueeze(1);
+      auto center=rule.kind=="quad"?detail::quad_pivot(ts,mu,target):maximum(ts),centered=ts-center.unsqueeze(1);
+      Tensor a,b;
+      if(rule.kind=="quad"){
+        a=-tt.squeeze(1)*maximum(mu);b=at::zeros_like(a);
+        if(!(a<0).all().item<bool>())throw std::runtime_error("quadratic transition interval underflowed in requested dtype");
+      }
+      else{
+        auto points=centered-rule.inverse((target/mass.index({rows})).unsqueeze(1),mu,tt),positive=mu>0;
+        a=minimum(points.masked_fill(~positive,INFINITY));b=maximum(points.masked_fill(~positive,-INFINITY));
+      }
       for(int iteration=0;iteration<80;++iteration){
-        auto middle=a+(b-a)/2,above=rule.response(centered-middle.unsqueeze(1),mu,tt).sum(1)>target;
+        auto middle=a+(b-a)/2;
+        if(iteration%8==0&&((middle==a)|(middle==b)).all().item<bool>())break;
+        auto above=rule.response(centered-middle.unsqueeze(1),mu,tt).sum(1)>target;
         a=at::where(above,middle,a);b=at::where(above,b,middle);
       }
       auto lam=a+(b-a)/2;
@@ -59,7 +71,9 @@ NumericAllocation solve(const Tensor& scores,const Tensor& caps,const Tensor& lo
         lam=at::stack(values,1).gather(1,chosen.unsqueeze(1)).squeeze(1);
       }
       auto x=centered-lam.unsqueeze(1);
-      out.controls.index_put_({rows},rule.response(x,mu,tt));out.multiplier.index_put_({rows},lam+center);
+      out.controls.index_put_({rows},rule.response(x,mu,tt));
+      auto multiplier=lam+center;if(shift.defined())multiplier=multiplier-shift.index({rows});
+      out.multiplier.index_put_({rows},multiplier);
       out.response.index_put_({rows},x);
     }
     auto c=out.controls.index({ids});
@@ -68,10 +82,20 @@ NumericAllocation solve(const Tensor& scores,const Tensor& caps,const Tensor& lo
     auto residual=maximum(at::stack({error,(lo-c.sum(1)).clamp_min(0),(c.sum(1)-hi).clamp_min(0)},1));
     out.residual.index_put_({ids},residual);
     const double eps=scores.scalar_type()==at::kDouble?std::numeric_limits<double>::epsilon():std::numeric_limits<float>::epsilon();
-    if(!at::isfinite(residual).all().item<bool>()||(residual>64*eps*scores.size(1)).any().item<bool>())
-      throw std::runtime_error("allocation batch residual exceeds dtype tolerance");
-    if((rule.support(x,cn,tau)&(c==0)).any().item<bool>())
-      throw std::runtime_error("positive allocation batch support underflowed in requested dtype");
+    auto reject=[&](const Tensor& mask,const std::string& message){
+      if(!mask.any().item<bool>())return;auto bad=at::nonzero(mask).flatten();
+      const auto row=ids[bad[0]].item<Index>();
+      std::ostringstream shape;shape<<std::setprecision(std::numeric_limits<double>::max_digits10)<<rule.alpha;
+      throw AllocationFailure(message,row,{{"scores",scores[row]},{"caps",caps[row]},
+        {"lower",lower[row]},{"upper",upper[row]},{"temperature",temperature[row]},
+        {"shift",shift.defined()?shift[row]:Tensor{}},{"controls",out.controls[row]},
+        {"response",out.response[row]},{"multiplier",out.multiplier[row]},
+        {"residual",out.residual[row]},{"tolerance",at::full({},64*eps*scores.size(1),scores.options())}},
+        {{"regularizer",rule.kind},{"alpha",shape.str()},
+         {"branch",branches[out.branch[row].item<Index>()]},{"solver","native-batch"}});
+    };
+    reject(~at::isfinite(residual)|(residual>64*eps*scores.size(1)),"allocation batch residual exceeds dtype tolerance");
+    reject((rule.support(x,cn,tau)&(c==0)).any(1),"positive allocation batch support underflowed in requested dtype");
   }
   out.free=(out.controls>0)&(out.controls<caps);return out;
 }

@@ -1,5 +1,6 @@
 // Independent public row roots over the actual KKT solution, not iterations.
 #include "weighted_allocation_batch.h"
+#include "tide/allocation_failure.h"
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
 #include <sstream>
@@ -63,7 +64,9 @@ std::vector<Allocation> allocate_batch(const std::vector<AllocationRow>& rows,co
     const size_t width=rows[ids[0]].shift.defined()?6:5;variable_list inputs,fields;
     for(auto i:ids){const auto& r=rows[i];for(auto t:{r.scores,r.caps,r.lower,r.upper,r.temperature})inputs.push_back(t);if(width==6)inputs.push_back(r.shift);}
     for(size_t j=0;j<width;++j){variable_list column;for(size_t i=0;i<ids.size();++i)column.push_back(inputs[i*width+j]);fields.push_back(at::stack(column));}
-    auto numeric=batch::solve(fields[0],fields[1],fields[2],fields[3],fields[4],rule,width==6?fields[5]:Tensor{});
+    batch::NumericAllocation numeric;
+    try{numeric=batch::solve(fields[0],fields[1],fields[2],fields[3],fields[4],rule,width==6?fields[5]:Tensor{});}
+    catch(AllocationFailure& e){e.row=ids.at(e.row);throw;}
     auto node=std::make_shared<AllocationVjp>(rule);node->width=width;
     node->set_next_edges(torch::autograd::collect_next_edges(inputs));
     for(auto& t:inputs)node->inputs.emplace_back(t,false);

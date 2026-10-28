@@ -1,6 +1,7 @@
 #pragma once
 // Static benchmark input codec only. No reference trace enters a candidate.
 #include "tide/weighted.h"
+#include "tide/allocation_failure.h"
 #include <nlohmann/json.hpp>
 #include <filesystem>
 namespace weighted_benchmark {
@@ -15,6 +16,7 @@ Result detached(Result);
 Tensor loss(const Result&);
 Json work(const Result&);
 void write(const std::filesystem::path&,const Json&);
+Json allocation_failure(const tide::weighted::AllocationFailure&);
 struct Step {Result result;double loss;};
 class Resident {
  public:
