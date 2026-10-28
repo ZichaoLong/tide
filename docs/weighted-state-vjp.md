@@ -61,3 +61,5 @@ Python 测试禁止调用 scalar Upd；native 路径检查真实能力统计并�
 `test_weighted_clocked_vjp.py` 覆盖五记忆与两种参考dtype的每个独立状态根，
 并检查包装内参数版本、KV/共享delta三步SGD及None/零连接；它不单独认证native时钟组合。
 实际通过范围以固定源码证据为准，开发检查不代替原生资格。
+
+本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。

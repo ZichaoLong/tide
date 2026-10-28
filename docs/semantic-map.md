@@ -1,5 +1,7 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[三项审查修复资格](evidence/core5-review-fixes-20261028.md)补验ClockedState带权VJP、quad正支持拒绝与resident参数bank分配前准入；数学/图/checkpoint版本保持。
+
 [公共性能消费者](weighted-performance.md)只使用静态参数/输入和候选实际结果，
 [有限运行证据](evidence/core5-weighted-performance-20261028.md)区分完整记录通过、严格拒绝、profile和吞吐。
 

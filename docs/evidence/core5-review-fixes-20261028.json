@@ -1,0 +1,801 @@
+{
+  "schema": "tide-review-fixes-v1",
+  "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "created": "2026-10-28T02:39:37.739297+00:00",
+  "baseline": {
+    "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+    "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 .local/venv-core5/bin/python -m pytest -q -p no:cacheprovider -o pythonpath=$PWD/artifacts/worktrees/core5-review-fixes-dev/python tests/test_weighted_clocked_vjp.py tests/test_weighted_quad_support.py -k \"not native\" --dtype both",
+    "note": "Executed before overlaying the worktree with the repair patch. Tests are new and identified separately. First attempt used repository pytest pythonpath and imported current source; excluded from baseline evidence.",
+    "expected_failures": 19,
+    "passed": 4,
+    "deselected": 8,
+    "exit_code": 1,
+    "log": "artifacts/review-fixes-baseline-corrected.txt",
+    "log_sha256": "911bdbdfd2076c6227cd276730818846c3e8a985c3312103367845d9da81d429",
+    "test_sha256": {
+      "tests/test_weighted_clocked_vjp.py": "eb1de75c5782d5d8dc3547b67c8208ff234e1460a58a3c9d7cee1ee7e29f2687",
+      "tests/test_weighted_quad_support.py": "7ea03d59b8ac0cc56f68829962433ffdfe90721818672c502a694dfe919b9b7e"
+    }
+  },
+  "development": [
+    {
+      "name": "core5-review-fixes-dev",
+      "unit": "tide-core5-review-fixes-dev-20261028.service",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:48:24.168300+00:00",
+      "finished": "2026-10-28T02:05:31.834804+00:00",
+      "command": [
+        "timeout",
+        "2400",
+        "python",
+        "scripts/develop.py",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-review-fixes-dev",
+        "--build-dir",
+        "build/cpu",
+        "--jobs",
+        "2",
+        "tests/test_weighted_clocked_vjp.py",
+        "tests/test_weighted_quad_support.py",
+        "tests/test_weighted_state_vjp.py",
+        "tests/test_state_clock_contract.py",
+        "tests/test_state_clock_schedules.py",
+        "tests/test_state_clock_edges.py",
+        "tests/test_weighted_allocation.py",
+        "tests/test_weighted_allocation_batch.py",
+        "tests/test_weighted_entropy_allocation.py",
+        "tests/test_weighted_entropy_native.py",
+        "tests/test_cli.py::test_cpp_custom_state_kernel"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-dev/status.json",
+        "sha256": "ea980c91115999281a5f0433c469fd651714836e29ccae417683e5dd691a5b18"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-dev/task.log",
+        "sha256": "7d745fe47f99e10d8c9c1f850591601a0f4eb1b324b4fd675ebf17b1a8c65aa8"
+      }
+    },
+    {
+      "name": "core5-review-fixes-sdk-dev",
+      "unit": "tide-core5-review-fixes-sdk-dev-20261028.service",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:50:50.984755+00:00",
+      "finished": "2026-10-28T02:05:57.623290+00:00",
+      "command": [
+        "timeout",
+        "2400",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/../../../../bin/python",
+        "scripts/build.py",
+        "--backend",
+        "npu",
+        "--npu-runtime",
+        "standalone",
+        "--build-dir",
+        "build/npu-core",
+        "--jobs",
+        "2"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-sdk-dev/status.json",
+        "sha256": "bb25a83986f80c68b107ddc8924ea5352b96a9b66d1a925633f54ad601f1d5f8"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-sdk-dev/task.log",
+        "sha256": "752046fe56cedb3ce82c21230f4f2ac4ca2f8826a244943b349a678b793e171d"
+      }
+    },
+    {
+      "name": "core5-review-fixes-cuda-dev",
+      "unit": "tide-core5-review-fixes-cuda-dev-20261028.service",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:51:49.098646+00:00",
+      "finished": "2026-10-28T02:07:55.064319+00:00",
+      "command": [
+        "timeout",
+        "2400",
+        "python",
+        "scripts/build.py",
+        "--backend",
+        "cuda",
+        "--build-dir",
+        "build/cuda-core",
+        "--jobs",
+        "2"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-cuda-dev/status.json",
+        "sha256": "609beb1e9be253e7effc929abd6456628ca2869c4f6bf3323c686249f79a892c"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-cuda-dev/task.log",
+        "sha256": "f6bd7b4a09014d8f25988cf9c5c82096df6143fb4fe81219f68e4320ac90a1c1"
+      }
+    }
+  ],
+  "cpu": {
+    "name": "core5-review-fixes-cpu-qualify",
+    "unit": "tide-core5-review-fixes-cpu-qualify-20261028.service",
+    "state": "passed",
+    "exit_code": 0,
+    "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+    "dirty": "",
+    "started": "2026-10-28T02:09:12.689814+00:00",
+    "finished": "2026-10-28T02:10:08.678658+00:00",
+    "command": [
+      "timeout",
+      "900",
+      "python",
+      "scripts/develop.py",
+      "--output-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-review-fixes-cpu-qualify",
+      "--build-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-dev/build/cpu",
+      "--jobs",
+      "2",
+      "--reuse-build",
+      "tests/test_weighted_clocked_vjp.py",
+      "tests/test_weighted_quad_support.py",
+      "tests/test_weighted_state_vjp.py",
+      "tests/test_state_clock_contract.py",
+      "tests/test_state_clock_schedules.py",
+      "tests/test_state_clock_edges.py",
+      "tests/test_weighted_allocation.py",
+      "tests/test_weighted_allocation_batch.py",
+      "tests/test_weighted_entropy_allocation.py",
+      "tests/test_weighted_entropy_native.py",
+      "tests/test_cli.py::test_cpp_custom_state_kernel"
+    ],
+    "status": {
+      "path": "artifacts/jobs/core5-review-fixes-cpu-qualify/status.json",
+      "sha256": "52859b3d1f6b6557f18ef7972072e6e96549d1900565a7839db543042ed93de5"
+    },
+    "log": {
+      "path": "artifacts/jobs/core5-review-fixes-cpu-qualify/task.log",
+      "sha256": "a2c1d950a895912850aed3cb6c8d29535880baa78776823c3691ed7328e110ff"
+    },
+    "pytest": {
+      "tests": 442,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "by_module": {
+        "tests.test_cli": 2,
+        "tests.test_state_clock_contract": 39,
+        "tests.test_state_clock_edges": 28,
+        "tests.test_state_clock_schedules": 198,
+        "tests.test_weighted_allocation": 16,
+        "tests.test_weighted_allocation_batch": 43,
+        "tests.test_weighted_clocked_vjp": 15,
+        "tests.test_weighted_entropy_allocation": 36,
+        "tests.test_weighted_entropy_native": 26,
+        "tests.test_weighted_quad_support": 16,
+        "tests.test_weighted_state_vjp": 23
+      },
+      "xml": {
+        "path": "artifacts/jobs/core5-review-fixes-cpu-qualify/tests.xml",
+        "sha256": "c072edf53d9e7224e81b517d6513c2946d3171ec11bd2c4ba4ed31ee9493d2f7"
+      }
+    },
+    "core": {
+      "manifest": {
+        "path": "artifacts/worktrees/core5-review-fixes-dev/build/cpu/build-manifest.json",
+        "sha256": "eecb5cda7ad041c068b217f1e4216604872175f84637e7d47fc77b461898222e"
+      },
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "cpp_source_sha256": "b6be97fcafa20f4f3db84c0cacbf247ced9ac6b12ec017f2ffc31401c8ea7bd8",
+      "torch": "2.12.0+cpu",
+      "python": "3.12.13",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.1.0"
+      },
+      "cuda": null,
+      "backend": "cpu",
+      "runtime": null,
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "binaries": {
+        "libtidegraph.a": "e9721735611aa1659dcffc6c2fe344a861f889d659089331d79a629227358581",
+        "libtidegraph_runtime.a": "a64a8ce2dcce0ec3ac6b3d3886410c260b5494ba4e4b2ea69dafeea7f2229fa2",
+        "_tide_native.so": "729c94a3b711822c3fd6dda3e4afe2843ddfc1f0e39bd6646989676c14252163",
+        "tidegraph-kernel-check": "2012c4c6d4cd357c1591b2c925c51d397a034624a6f25debdb3fb28fdbf4e1c9"
+      }
+    },
+    "development": {
+      "path": "artifacts/jobs/core5-review-fixes-cpu-qualify/development.json",
+      "sha256": "3148db03f4ea87d4153163b87b38decc8c01ef82825cd664e26389947a77c25c"
+    },
+    "test_commands": [
+      [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_weighted_clocked_vjp.py",
+        "tests/test_weighted_quad_support.py",
+        "tests/test_weighted_state_vjp.py",
+        "tests/test_state_clock_contract.py",
+        "tests/test_state_clock_schedules.py",
+        "tests/test_state_clock_edges.py",
+        "tests/test_weighted_allocation.py",
+        "tests/test_weighted_allocation_batch.py",
+        "tests/test_weighted_entropy_allocation.py",
+        "tests/test_weighted_entropy_native.py",
+        "tests/test_cli.py::test_cpp_custom_state_kernel",
+        "-q",
+        "--dtype",
+        "both",
+        "--basetemp",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-review-fixes-cpu-qualify/test-tmp"
+      ]
+    ]
+  },
+  "npu": {
+    "name": "core5-review-fixes-npu-runtime-qualify",
+    "unit": "tide-core5-review-fixes-npu-runtime-qualify-20261028.service",
+    "state": "passed",
+    "exit_code": 0,
+    "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+    "dirty": "",
+    "started": "2026-10-28T02:28:17.969566+00:00",
+    "finished": "2026-10-28T02:38:44.870863+00:00",
+    "command": [
+      "timeout",
+      "3300",
+      "/bin/bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-npu-runtime-qualify-workload.sh",
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/../../../../bin/python"
+    ],
+    "status": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-runtime-qualify/status.json",
+      "sha256": "e822094bce9b062bc62fd3a12152c08bb0ccd7e96799a42134cfb17fdf8488cf"
+    },
+    "log": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-runtime-qualify/task.log",
+      "sha256": "42fe407e62f961c81760648e1351ccf69e8d46bd8874febba42b660c5acf42d6"
+    },
+    "core": {
+      "manifest": {
+        "path": "artifacts/worktrees/core5-review-fixes-dev/build/npu-core/build-manifest.json",
+        "sha256": "8d61c3a4e17e3c232c6ec1f641e653bb301b59adc3a413cc43f4d87d51f046ba"
+      },
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "cpp_source_sha256": "b6be97fcafa20f4f3db84c0cacbf247ced9ac6b12ec017f2ffc31401c8ea7bd8",
+      "torch": "2.10.0+cpu",
+      "python": "3.11.15",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.0.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+        }
+      },
+      "cuda": null,
+      "backend": "npu",
+      "runtime": "standalone",
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "binaries": {
+        "libtidegraph.a": "df6f7652bff29fc2349afc12d50afc43fc455d8ea227d32d04619e13a56a6bf2",
+        "libtidegraph_runtime.a": "b5a182c395b441a84d02aa9e472cfe330f036ade593721c9b9fa36743ef6d5e5",
+        "tidegraph-kernel-check": "7f8e4b66ac815a4fd2fb68746a86051c3df4838719ca43f203be22089c3000f1"
+      }
+    },
+    "component": {
+      "manifest": {
+        "path": "artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/control-build.json",
+        "sha256": "04c6285ae8637968a3b7195789761022b5ac15f98aeef17b6b1cd2601e1765f4"
+      },
+      "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+      "component_sha256": "9ef5b749d42a11041df7175aa6d6a60f6f15014d5eb66354c081510b8a70b6c2",
+      "backend": "npu",
+      "runtime": "standalone",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "requested_checks": [
+        "weighted-flow",
+        "weighted-flow-config",
+        "weighted-training",
+        "weighted-node-training"
+      ],
+      "binaries": {
+        "tide-weighted-flow-check": "44152b189072a14fe9b5a6f6229ae1a80c289840bee9f63962b09d0a6927fe4d",
+        "tide-weighted-flow-config-check": "983e1b2f246b26e2965ba485532ae9c8deb2513b36535da38c520dc92d90004d",
+        "tide-weighted-training-check": "8c53d09e371c10c5f8f84b41a0334b356dd79f7fbafc1f6e1ca6f45e0995f3a5",
+        "tide-weighted-node-training-check": "2d5691fd9dedb023eb2cf3f7b6925c6e53b71a3aecda77cb20a88755cd448e14",
+        "libtide-weighted-flow.so": "6f945847d8133679846cda033cbfd88ab55eab6e6ad4a57e5bbfc6511b902657",
+        "libtide-weighted-training.so": "cf9a8591f565d96d2b13738bb913f74e8a0783876ee0d90766bef7fd0c096c9e"
+      },
+      "loaders": {
+        "tide-weighted-flow-check": "4e23a8ea11fd69e09b2de9dabb1c4c8fffbf61b362fe82b0544939144d7e8e19",
+        "tide-weighted-flow-config-check": "13aa5c26a31e22a5cb7b24f7fe190ac113537bb66b6aaa468e1cfb2fa57e8e15",
+        "tide-weighted-training-check": "2a1a711551d6430c1bb9623316e4c3cc61e8402c6321112d8f5625a688c1b164",
+        "tide-weighted-node-training-check": "a2376e03d777c242612102fd88a146045dc8ec12ff50af0d5d35ad505d880562",
+        "libtide-weighted-flow.so": "8291cca3d62ced5618caf153472353337fe0e7b585a17df314b34f25c1b54412",
+        "libtide-weighted-training.so": "d645f5109afb77f6502014ec3bc0fff5256f07ed41cd445719025fd8ad00f93b"
+      }
+    },
+    "result": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-runtime-qualify/checks/result.json",
+      "sha256": "8c86d01c492397469a176e540a9f36c9d7300dbf3e287cdc91700cabaa0a8ac0"
+    },
+    "cases": [
+      {
+        "check": "weighted-flow",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-flow-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-float32.log",
+        "log_sha256": "a8b6c938232c77bb2376d99b46f83f6b63686e143d704223bf781c5b4344b664"
+      },
+      {
+        "check": "weighted-flow",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-flow-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-float16.log",
+        "log_sha256": "fef6043c3660700d5bc011cae44cdbe6cb62fed89c59c063dc940601cf29b790"
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-flow-config-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-config-float32.log",
+        "log_sha256": "cdaf47124bb90e5170d0f7a233acf8d9ab01102d73ca52c4b7f30c7b656d700f"
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-flow-config-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-config-float16.log",
+        "log_sha256": "d2287b2420e17600b876ee2769fb53710e9f50af9fc3dd3752ed23ad98acd96b"
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-training-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-training-float32.log",
+        "log_sha256": "735517067dfc1a56d03cc828de147b856eade5320987480d5e83584eea98da5a"
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-training-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-training-float16.log",
+        "log_sha256": "1f041512dddf1b203e6ea3337114d9f52af21482a2d658cb8ded97f32bc49206"
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-node-training-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-node-training-float32.log",
+        "log_sha256": "8e6c5907a8b2dbfc4683bbef6de5d2058979f355cbbbaf89243b83ac57ea6d0f"
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-node-training-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-node-training-float16.log",
+        "log_sha256": "58bcc62267a36280c16ec811ec96859b6a538ba6a6b6964c2f4c404bef8f5d0a"
+      }
+    ],
+    "queue": {
+      "elapsed_seconds": 626.2357954010367,
+      "job_id": "core5-review-fixes-npu-runtime-qualify-20261028",
+      "logical_devices": [
+        "npu:0",
+        "npu:1"
+      ],
+      "npu_count": 2,
+      "physical_ids": [
+        1,
+        13
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-10-28T02:38:44.855783+00:00"
+    },
+    "terminal_service_observation": {
+      "RuntimeMaxUSec": "infinity",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "Slice": "",
+      "ControlGroup": "",
+      "CPUQuotaPerSecUSec": "infinity",
+      "MemoryMax": "infinity",
+      "Nice": "0",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "Transient": "no",
+      "interpretation": "Unit was collected after termination; default unloaded properties are not workload exit evidence. The durable job, queue and all eight case records establish completion."
+    },
+    "live_service_observation": {
+      "record_kind": "Postmortem transcription of live properties observed in this session tool response; distinct from terminal/default properties.",
+      "MainPID": 246835,
+      "ActiveState": "active",
+      "SubState": "running",
+      "Slice": "background.slice",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-core5-review-fixes-npu-runtime-qualify-20261028.service",
+      "Transient": "yes",
+      "Nice": 10,
+      "CPUQuotaPerSecUSec": "2s",
+      "MemoryMax": 25769803776,
+      "RuntimeMaxUSec": "1h"
+    },
+    "standalone_cpu_checks": {
+      "job": "core5-review-fixes-npu-qualify",
+      "dtypes": [
+        "float32",
+        "float64"
+      ]
+    },
+    "runtime_environment": "libtorch-npu/2.10.0-cann9.0.0; SDK Python 3.11.15 bin first in PATH; ACL_OP_INIT_MODE=0; ATen/BLAS threads=1",
+    "case_summaries": [
+      {
+        "check": "weighted-flow",
+        "dtype": "float32",
+        "summary": [
+          "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+        ]
+      },
+      {
+        "check": "weighted-flow",
+        "dtype": "float16",
+        "summary": [
+          "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+        ]
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float32",
+        "summary": [
+          "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+        ]
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float16",
+        "summary": [
+          "weighted-flow-config: passed configurations=15 full_records=true qry=true source_padding=true"
+        ]
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float32",
+        "summary": [
+          "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+        ]
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float16",
+        "summary": [
+          "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+        ]
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float32",
+        "summary": [
+          "weighted-node-training: passed configurations=5 updates=20 windows=3 relocated_resume=true common_refusal=true"
+        ]
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float16",
+        "summary": [
+          "weighted-node-training: passed configurations=5 updates=20 windows=3 relocated_resume=true common_refusal=true"
+        ]
+      }
+    ]
+  },
+  "cuda": {
+    "name": "core5-review-fixes-cuda-qualify",
+    "unit": "tide-core5-review-fixes-cuda-qualify-20261028.service",
+    "state": "passed",
+    "exit_code": 0,
+    "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+    "dirty": "",
+    "started": "2026-10-28T02:09:12.697005+00:00",
+    "finished": "2026-10-28T02:19:32.534897+00:00",
+    "command": [
+      "timeout",
+      "5400",
+      "/bin/bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-cuda-qualify-workload.sh",
+      "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python"
+    ],
+    "status": {
+      "path": "artifacts/jobs/core5-review-fixes-cuda-qualify/status.json",
+      "sha256": "576044c07f44d357600cabdc33272158034a557b97d6022f6229a4c2d3f63159"
+    },
+    "log": {
+      "path": "artifacts/jobs/core5-review-fixes-cuda-qualify/task.log",
+      "sha256": "c26c86995786e4c9a94f50bbd2761c4e6472b910279d3f3beaabf65de6a69924"
+    },
+    "pytest_cpu": {
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "by_module": {
+        "tests.test_weighted_clocked_vjp": 15,
+        "tests.test_weighted_quad_support": 16
+      },
+      "xml": {
+        "path": "artifacts/jobs/core5-review-fixes-cuda-qualify/tests.xml",
+        "sha256": "d7f1bd6887889256ef901d003d322af449f1eb5c127bbf93bee95f4d2b05da15"
+      }
+    },
+    "core": {
+      "manifest": {
+        "path": "artifacts/worktrees/core5-review-fixes-dev/build/cuda-core/build-manifest.json",
+        "sha256": "106dca33332a5b561c0bc97210584ad9bf2082b5b031f78723410afb3c5c2f72"
+      },
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "cpp_source_sha256": "b6be97fcafa20f4f3db84c0cacbf247ced9ac6b12ec017f2ffc31401c8ea7bd8",
+      "torch": "2.10.0+cu128",
+      "python": "3.11.15",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+        "cann_version": null
+      },
+      "cuda": "12.8",
+      "backend": "cuda",
+      "runtime": null,
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "binaries": {
+        "libtidegraph.a": "3a96a94a5dcf7c00c20ff4609a70133b08f72767b9286e6183a1437ec66f2953",
+        "libtidegraph_runtime.a": "ff18bfadf67732f43e20e3c72c60426e1a62628739663b61bc75b3fdf59f919a",
+        "_tide_native.so": "3a715d05f6631f352c24c6030376d33bf2549b5d921e4e5aa6f8a6004775e6fe",
+        "tidegraph-kernel-check": "c7d889f7739cec38e5f6643800e1782e5711ee26b041882733fdf0858ae1fe7f"
+      }
+    },
+    "component": {
+      "manifest": {
+        "path": "artifacts/worktrees/core5-review-fixes-qualify/build/cuda-resident/control-build.json",
+        "sha256": "7bc13f7f1d3ea514bb540279af8e988a07014324eed76307952df9191b81518c"
+      },
+      "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+      "component_sha256": "9ef5b749d42a11041df7175aa6d6a60f6f15014d5eb66354c081510b8a70b6c2",
+      "backend": "cuda",
+      "runtime": "standalone",
+      "cuda_architectures": "80;90;100",
+      "ascendc_soc": null,
+      "requested_checks": [
+        "weighted-flow",
+        "weighted-flow-config",
+        "weighted-training",
+        "weighted-node-training"
+      ],
+      "binaries": {
+        "tide-weighted-flow-check": "e5605d363e503ffd7cb210d381e538583a77394c665522839aa5d4bd57a358ec",
+        "tide-weighted-flow-config-check": "564730ad082edb1621bfd570f5764387f675496de025efba2e75ab14aea35738",
+        "tide-weighted-training-check": "0bce8618ec4c2ee8ae3aef80bcc78e76be722da2e294ebfb2ec212b24f0f0bc1",
+        "tide-weighted-node-training-check": "dae0b0b048a3b54c77bb29a2fef5382011812417b622ffbc8cc1fdb13a94e232",
+        "libtide-weighted-flow.so": "fb2f72b9bf660712d7e38f653b5d51251e5e628dd71e18f4fd1178445599a8ec",
+        "libtide-weighted-training.so": "9ff0c882a3d54246086d4ba8dd58e1da7f7c8c5abbf50ffa5eb2d3afb30c2450"
+      },
+      "loaders": {
+        "tide-weighted-flow-check": "12b858dd74dc9bf4ffcb0f767e0885a69aff4d5011a5b34b3e52a51edc7aef02",
+        "tide-weighted-flow-config-check": "735ff733280eb4f4c9c513ac2bdb9ac10d19ea5738c280dfc042b78171cfee24",
+        "tide-weighted-training-check": "9389677a9227252aefaaa0beb096d051f97df940d1906957d0fc890e32e33433",
+        "tide-weighted-node-training-check": "e3d2ebca744958bd1a51e9ad28a5c71beb4ba1b44bdf4543aa5206750eef6241",
+        "libtide-weighted-flow.so": "ce0033ceb5aa246cacb9f5e467db485c431ef6df4fa3839ff0d2387b06afbddc",
+        "libtide-weighted-training.so": "0fd548778f0f5b68726cd1b898b11d39c620e971f64a0f75d90750ec3ac98b7f"
+      }
+    },
+    "gpu_hardware_verified": false,
+    "help_checks": 4
+  },
+  "npu_initial_build_and_runtime_failure": {
+    "name": "core5-review-fixes-npu-qualify",
+    "unit": "tide-core5-review-fixes-npu-qualify-20261028.service",
+    "state": "failed",
+    "exit_code": 1,
+    "source": "1d19c5998b96689b3620ecb69c7f712a9dd84ad0",
+    "dirty": "",
+    "started": "2026-10-28T02:09:12.689821+00:00",
+    "finished": "2026-10-28T02:23:11.460096+00:00",
+    "command": [
+      "timeout",
+      "5400",
+      "/bin/bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-npu-qualify-workload.sh",
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/../../../../bin/python"
+    ],
+    "status": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-qualify/status.json",
+      "sha256": "fb4f91815c40404d5635a7b8abdc005e0f3b4d6ab1d9f3979b5ae81596c477c6"
+    },
+    "log": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-qualify/task.log",
+      "sha256": "355627c6ee9529109b2261c51492ad94d10493d838e5dbaccb33466a19235f57"
+    },
+    "result": {
+      "path": "artifacts/jobs/core5-review-fixes-npu-qualify/checks/result.json",
+      "sha256": "27de1339c8c6eaffe3f8fc7277002d5e9679c02a9eee0cd97392a29f8f68ccaa"
+    },
+    "cases": [
+      {
+        "check": "weighted-flow",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-review-fixes-qualify/build/npu-resident/tide-weighted-flow-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "failed",
+        "exit_code": 2,
+        "log": "weighted-flow-float32.log",
+        "log_sha256": "e1e87c308cbf33f3dae14c1ba23da14abdc1bc0f9571fd44535e4a7079e14b6f"
+      }
+    ],
+    "cause": "CANN E40001 at initialization: launcher PATH did not select SDK Python 3.11 python3-config. Component build succeeded; no semantic case passed.",
+    "resolution": "New bounded runtime-only job with SDK Python bin first; same source and hashed binaries, no shared environment changes."
+  },
+  "cancelled": [
+    {
+      "name": "core5-review-fixes-npu-components-dev",
+      "unit": "tide-core5-review-fixes-npu-components-dev-20261028.service",
+      "state": "cancelled",
+      "exit_code": 143,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:57:23.682699+00:00",
+      "finished": "2026-10-28T01:57:41.551107+00:00",
+      "command": [
+        "timeout",
+        "3600",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-npu-components-dev-workload.sh",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/../../../../bin/python"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-npu-components-dev/status.json",
+        "sha256": "6b4d660107a85c3445a18d3da21216de76b8127b70e2187e9b0004e9865217be"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-npu-components-dev/task.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "core5-review-fixes-npu-components-dev2",
+      "unit": "tide-core5-review-fixes-npu-components-dev2-20261028.service",
+      "state": "cancelled",
+      "exit_code": 143,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:57:52.734430+00:00",
+      "finished": "2026-10-28T02:00:02.799214+00:00",
+      "command": [
+        "timeout",
+        "3600",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-npu-components-dev2-workload.sh",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/../../../../bin/python"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-npu-components-dev2/status.json",
+        "sha256": "7015679f22e09498ebbb9f0c3d7a4fb8893d82c131817fe1176cf7b1c5de648b"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-npu-components-dev2/task.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "core5-review-fixes-cuda-components-dev",
+      "unit": "tide-core5-review-fixes-cuda-components-dev-20261028.service",
+      "state": "cancelled",
+      "exit_code": 143,
+      "source": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "dirty": "M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py",
+      "started": "2026-10-28T01:57:23.682817+00:00",
+      "finished": "2026-10-28T02:00:02.799774+00:00",
+      "command": [
+        "timeout",
+        "3600",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-review-fixes-cuda-components-dev-workload.sh",
+        "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python"
+      ],
+      "status": {
+        "path": "artifacts/jobs/core5-review-fixes-cuda-components-dev/status.json",
+        "sha256": "f925675ca50df43524c9efb9484df99530d772367205b8be740a0d142d84fd83"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-review-fixes-cuda-components-dev/task.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "build_reuse": "Core builds used the frozen 2c46aa7 plus patch snapshot, whose complete C++ source hash equals the implementation commit. Device components and qualification used clean 1d19c59, including the later Full-output reservation.",
+  "source_archive": {
+    "path": "artifacts/jobs/core5-review-fixes-dev/source.tar.gz",
+    "sha256": "0c724374aa0fc66ebcc49f14020d1a07b9ad75121200a443f587e2119d960b75"
+  },
+  "limits": [
+    "No GPU hardware verification.",
+    "No x86_64 qualification.",
+    "No performance remeasurement.",
+    "Previously documented strict numerical/asynchronous failures remain.",
+    "Selected regression scope, not the full historical matrix."
+  ]
+}

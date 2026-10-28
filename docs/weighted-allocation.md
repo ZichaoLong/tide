@@ -93,3 +93,5 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 
 此修正来源于新 match 训练见证：下界活动时约 5e-10 的浮点伪阈值梯度被 AdamW
 放大成约 1e-5 的参数差异。原失败与后续资格分别保留，不将旧失败重标为成功。
+
+本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。
