@@ -13,7 +13,8 @@ from test_weighted_compute_sharing import fixture, runner
 from test_weighted_execution import variables
 
 
-def test_shared_base_literal_formula_and_all_user_jacobian(dtype):
+@pytest.mark.parametrize("prepared", [False, True])
+def test_shared_base_literal_formula_and_all_user_jacobian(dtype, prepared):
     # Scalar textbook example; explicit analytic derivatives, no oracle schedule.
     h = torch.tensor([.4, 2.], dtype=dtype, requires_grad=True)
     base = torch.tensor([[2.], [3.]], dtype=dtype, requires_grad=True)
@@ -23,7 +24,7 @@ def test_shared_base_literal_formula_and_all_user_jacobian(dtype):
     config = SimpleNamespace(epsilon=1., width=1)
     memory = SimpleNamespace(config=config, base=base, adapter_u=a, adapter_v=b, summary=summary)
     shared = prepare(memory, h)
-    batch = SimpleNamespace(prepared=[shared])
+    batch = SimpleNamespace(prepared=[shared] if prepared else [])
     plan = SimpleNamespace(ids=[0], content=h[None, 1:])
     values, s = projections(memory, plan, batch)
     n = 2/math.sqrt(5)

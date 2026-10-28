@@ -83,7 +83,8 @@ class KV final:public MemoryKernel {
     if(mass.item<double>()<=0)return old;
     require(time>old.last_time&&old.observations<std::numeric_limits<Index>::max(),"invalid KV write time/count");
     auto [mask,age]=visible(old,time,c_);
-    auto kv=at::matmul(weight(w,"kernel.base")+at::matmul(weight(w,"kernel.adapter_u"),weight(w,"kernel.adapter_v")),normalize(u,c_.epsilon));
+    auto normal=normalize(u,c_.epsilon);
+    auto kv=at::matmul(weight(w,"kernel.base"),normal)+at::matmul(weight(w,"kernel.adapter_u"),at::matmul(weight(w,"kernel.adapter_v"),normal));
     std::map<std::string,Tensor> entries{{"keys",kv.slice(0,0,c_.width)},{"values",kv.slice(0,c_.width)},
       {"summaries",current(w,u,c_)},{"weights",mass.clamp_max(1)},
       {"times",at::full({},time,h.value.options().dtype(at::kLong))}};

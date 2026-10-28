@@ -146,3 +146,46 @@ def test_read_snapshot_and_full_are_separate(dtype,mode):
     close(descriptor["score"],w.read_program.score(features))
     assert m.mem(chosen,2,h.value[1:])[3].item() == pytest.approx({"0":0.,"-":.7,"+":1.1}[mode],rel=1e-6)
     assert not torch.equal(w.full_program.content(m,new,2,h.value[1:]),w.full_program.content(m,old,2,h.value[1:]))
+
+
+@pytest.mark.parametrize("path", ["scalar", "packed", "prepared"])
+def test_low_rank_write_against_independent_dense_matrix_and_roots(dtype, path):
+    # KV §1.2: rank>1 and unequal widths expose contraction/transposition errors.
+    # This oracle expands the matrix, independent of all eager low-rank helpers.
+    from tidegraph.compare import equivalent
+    from tidegraph.packing import PackedSequence
+    from tidegraph.state_vjp import bind_sequence
+    from isolated_cases import vjp
+    cfg = KVConfig(width=3, summary_width=2, adapter_rank=2, epsilon=.5)
+    bound = fixture(dtype, memories=cfg)
+    w = bound.model.nodes[0]; m = w.kernel
+    rows = [torch.tensor(h, dtype=dtype, requires_grad=True)
+            for h in ([.4, .2, -.3, .7], [.8, -.5, .6, .1])]
+    clock = 2**54+3
+    old = m.initial(w)
+    if path == "scalar":
+        actual = old
+        for i, h in enumerate(rows):
+            actual = m.step(w, actual, Content(h), clock+i)
+    else:
+        prepared = [m.prepare_shared(h) for h in rows] if path == "prepared" else None
+        batch = PackedSequence(torch.stack(rows), [0, 2], [(0, 0)], [clock, clock+1],
+                               [Content(h) for h in rows], prepared)
+        with torch.no_grad():
+            states, _ = m.packed_sequence(w, [old], batch)
+        bind_sequence(w, [old], batch, states)
+        actual = states[-1]
+    x = torch.stack([h[1:]/torch.sqrt(.5+h[1:].square().mean()) for h in rows])
+    dense = m.base+m.adapter_u@m.adapter_v
+    kv = x@dense.t()
+    expected = dict(keys=kv[:, :3], values=kv[:, 3:], summaries=x@m.summary.t(),
+                    weights=torch.stack([h[0] for h in rows]))
+    roots = dict(m.named_parameters()) | {f"input.{i}": h for i, h in enumerate(rows)}
+    for field, value in expected.items():
+        equivalent(actual.slots[field], value)
+        # Root only the first write: the later independent input must stay None/zero
+        # according to the same structural packing contract on both sides.
+        equivalent(vjp(actual.slots[field][0], roots), vjp(value[0], roots))
+        equivalent(vjp(actual.slots[field].square(), roots), vjp(value.square(), roots))
+    assert actual.slots["times"].dtype == torch.int64
+    assert actual.slots["times"].tolist() == [clock, clock+1]
