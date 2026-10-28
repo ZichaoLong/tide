@@ -39,3 +39,5 @@
 异步双NPU eager VJP、eager FP16 GDN/AdamW、SDK FP32 affine及FP32反馈PDG严格失败尚未解除。
 CUDA真机/x86_64、大规模容量和跨卡吞吐单列。旧性能只覆盖宽4/32，不能外推十亿级参数。
 当前待办仅[ROADMAP](ROADMAP.md)，经验仅[performance-lessons](performance-lessons.md)，最终证据单独提交。
+
+纯Torch补充诊断：core5-stock-peer-20261028，固定62073dd只读副本artifacts/worktrees/core5-stock-peer；默认异步/显式blocking各一进程，队列180秒，每进程90秒，总420秒，MemoryMax16G/ATen1。输出artifacts/jobs/core5-stock-peer，已终态failed/exit1：纯Torch默认异步同样invalid event，显式blocking通过；见数值隔离证据。

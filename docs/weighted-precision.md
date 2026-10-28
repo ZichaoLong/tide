@@ -42,3 +42,5 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 设备范围见上列NPU报告；[standalone master/schema2](evidence/core5-native-master-20261027.md)与
 [resident半精度全图/训练](evidence/core5-resident-half-training-20261028.md)各有独立固定源码证据，
 不能从core-3或其他算术路径推定。常驻报告不解除本页eager GDN的严格失败。
+
+[首次分歧与纯Torch异步隔离](evidence/core5-numerical-isolation-20261028.md)记录近零梯度被AdamW放大，以及当前Torch-NPU/CANN双设备反向的小反例。严格失败与显式blocking通过分别保留。
