@@ -140,6 +140,8 @@ def check_case(case, device, implementation, placement, out, native_library=None
     report["independent_raw_state_roots"] = len(warm_roots[0])
     report["node_owners"] = [str(d) for d in owners]
     report["transport_stats"] = {k: v for k, v in actual.stats.items() if "cross_device" in k}
+    report["preparation_stats"] = {k: v for k, v in actual.stats.items()
+                                   if "preparation" in k or "projection" in k}
     if len(devices) > 1 and not actual.stats.get("cross_device_rows", 0):
         raise AssertionError("peer check performed no cross-device transport")
     if not training:

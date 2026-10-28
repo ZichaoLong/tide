@@ -45,7 +45,7 @@ State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本
 `state_preparation_reused_events` 数省去的重复准备；后两者之差等于前者。
 `state_private_projection_calls` 数实际私有矩阵批调用，`state_private_projection_rows` 数这些调用的总行数，
 `max_state_private_projection_batch` 取跨执行块最大值（不是累计）。State 回调数继续单独报告；
-实际合批的是私有线性映射，私有缓存写入并未合并。没有声称跨键合并了所有投影调用。
+实际合批的是私有线性映射，私有缓存写入并未合并。不同键的补充批见下节。
 候选写入、私有 KV 长度、选择、Full 和消息数量均不因本项减少。
 本项是 eager packed 路径，mixed/resident 与真实设备资格单独验收；
 [07e56ca资格和有限对照](evidence/core5-private-projection-20261028.md)给出CPU、mixed-c与独立后端证据，
@@ -54,7 +54,8 @@ State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本
 ## 独立私有行的一阶边界
 
 `StateKernel::prepare_private_batch` 是默认原样传递的可选能力；Python 同名方法亦可缺省。
-它只处理已确定共同函数/输入的准备组，不改变一般引擎的状态或拓扑表达域。
+它只处理已确定共同函数/输入的准备组；独立行使用下节的另一项可选能力。
+两项都不改变一般引擎的状态或拓扑表达域。
 KV 的 `linear_rows` 接受各行向量及各自矩阵，实际前向为 BMM；反向仅合批有根的行：
 `dx=Wᵀg`、`dW=gxᵀ`，没有根的行保持 None，连接零保持零。重复参数/输入身份继续由
 外层 autograd 汇总，数值相等的独立根仍分开。原输入/参数全部保存版本，拒绝高阶。
@@ -67,9 +68,31 @@ KV 的 `linear_rows` 接受各行向量及各自矩阵，实际前向为 BMM；�
 | 手算解/Jacobian、别名、未用行、零根、版本、不同 rank 分组 | [Python tests](../tests/test_weighted_private_projection.py)、[standalone](../cpp/test/weighted_sharing.cpp) |
 
 准备结果 `{values,summaries}` 只携带候选实际计算结果，现有 State VJP 把它们作为独立操作数；
-没有参考重算或状态补写。无共享键的私有 base/输入仍走原路径，这一边界不宣称全节点异构合批。
+没有参考重算或状态补写。该接口本身不跨共享键合批。
 对应性能与后端资格必须由固定源码运行单独给出，单元测试不构成提速证据。
 
 [474f9af资格](evidence/core5-local-allocation-factorized-kv-20261028.md)另核对所有eager行的低秩形式、
 独立dense公式/完整Jacobian和训练恢复；中型单次收益有限，大图严格失败保留。
 这不扩展共享判据，也不等于resident已采用同一算术组织。
+
+## 不同输入与基座的矩阵批
+
+KV §1.2 的独立正接收行可使用 `prepare_independent_batch`：先保留上述已有计算复用，
+再把尚未准备、同形同dtype/device的 KV 行按事件首次出现顺序分组。
+每行保留自己的 epsilon、content、base、adapter_u/v 与 summary；normal逐行计算，
+四个实际 BMM 分别计算 base、两层低秩适配和 summary。没有共同输入或参数的行也可参与，
+数值相等不产生计算复用。每行返回实际 `{values,summaries}`，仍由原 State VJP 消费。
+独立行的 None/零根、参数别名和全部使用者梯度由 `linear_rows` 保持；不合并私有缓存。
+
+本项是可选 State 能力，默认缺省；非KV程序保持原表达域。零接收不准备、不裁剪旧状态。
+分组按原始矩阵形状，不假定所有模块参数量相同。单批预算8MiB，以四倍逐行矩阵字节数
+保守限制堆叠操作数、输出和保存缓冲；预算不够形成两行或末尾单行时沿用原逐行计算。
+该预算只约束此矩阵批，不代表整个计算图/激活/设备总内存上限。没有更改dtype或执行位置。
+
+`state_independent_projection_calls/rows` 分别计实际矩阵批调用和总行数，
+`max_state_independent_projection_batch` 是最大单批；这些行不计为计算复用。
+代码：[Python](../python/tidegraph/weighted/kv_independent_batch.py)、
+[C++](../cpp/src/weighted_kv_preparation.cpp)、通用准备入口同上。
+独立手算/Jacobian、不同epsilon、别名贡献、None/零、异形、预算和版本见
+[Python tests](../tests/test_weighted_independent_preparation.py)及 C++ `weighted_sharing.cpp`；
+完整图与恢复由既有KV/计算共享/训练检查继续验收。实际后端与性能范围从 STATUS 导航。

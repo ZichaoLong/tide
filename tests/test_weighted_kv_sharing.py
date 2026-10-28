@@ -78,6 +78,7 @@ def test_private_base_parameter_prevents_computation_sharing(dtype, native):
     actual = runner(b, native)(q, xs, stop, sealed_until=stop)
     equivalent(expected, actual)
     assert actual.stats.get("state_preparation_events", 0) == 0
+    assert actual.stats["max_state_independent_projection_batch"] > 1
     assert actual.stats["aggregate_reused_events"] > 0
     equivalent(vjp(objective(expected), variables(b, xs)), vjp(objective(actual), variables(b, xs)))
 
