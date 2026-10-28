@@ -228,3 +228,7 @@ opaque key只作相等判断，不能以内存地址决定反向图创建次序�
 `test_weighted_workload_training.py`，要求实际checkpoint解码而非参考补写。
 CPU显式FP64测量、最终梯度/SGD槽验证及同材料精度/预算边界见[性能契约](weighted-performance.md)
 与[工作负载设施](weighted-workloads.md)；它们不解除既有FP32严格失败。
+
+[1f1ec57固定证据](evidence/core5-stable-preparation-precision-20261028.md)覆盖共享准备稳定顺序、
+精确续接和真实optimizer观测；CPU整体572通过/2原FP32 GDN失败保持分列。
+D64/D2048显式FP64通过不解除原FP32边界；新增GDN近零梯度见证由[精度契约](weighted-precision.md)追溯。

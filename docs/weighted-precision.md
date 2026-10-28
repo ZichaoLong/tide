@@ -47,3 +47,15 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 
 [D64/D2048增量诊断](evidence/core5-performance-transfer-20261028.md)另记录FP32完整记录、参数梯度及SGD参数的严格差异；
 同源FP64两步通过只适用于该CPU诊断。quad共同评分偏移的独立反例在FP64也拒绝，因此更宽dtype不是通用修复。
+
+## FP32 GDN 的补充严格见证
+
+固定1f1ec57扩大CPU资格时，原`test_recurrent_multistep_optimizer_and_restore`
+的HB/GDN FP32、默认AdamW在Python/native两条候选均失败；改动前1850434同样复现，
+并非本次共享准备顺序修复引入。前向记录及梯度通过原容差，第三次更新
+`nodes.5.kernel.conv.weight[0,2]`相差1.411885e-6，超过原参数容差。
+第一步两侧梯度约−2.00200247e-8和−2.00375894e-8；默认AdamW的epsilon为1e-8，
+梯度的微小差异会影响更新。独立80位Decimal使用实际梯度及旧动量计算，复现更新差异的放大；
+这不证明所有上游梯度差异的来源均已定位，也不把FP64或其他optimizer的通过回填给此配置。
+原测试和断言保持失败，没有改为xfail或放宽容差。详见
+[稳定共享/精度证据](evidence/core5-stable-preparation-precision-20261028.md)。
