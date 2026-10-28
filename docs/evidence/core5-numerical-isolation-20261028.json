@@ -1,0 +1,211 @@
+{
+  "schema": "tide-numerical-isolation-evidence-v1",
+  "cases": [
+    {
+      "schema": "tide-weighted-numerical-diagnostic-v1",
+      "source": "b0321b99ba3c4c7cffa091fceb09e8a3a3d50bc9",
+      "state": "strict_mismatch",
+      "implementation": "python",
+      "fixture_sha256": "45d7ada2e6e313d75508c19e1db860bd795a52da82ad4e5e325c0515fa6ef0e4",
+      "witness_sha256": "b05d84f721ef3894c173bdb0b1f985c0bc590460afebd2e28341b6ee761590a7",
+      "artifact_sha256": "6b796d5864320ef0b9d11cde4955ec092b192144c41d463c231bba2bf08d606b",
+      "job": "core5-half-python",
+      "case": "checks",
+      "steps": [
+        {
+          "step": 0,
+          "complete_forward": "passed",
+          "losses": [
+            7.608858585357666,
+            7.608860015869141
+          ],
+          "parameter_witnesses": []
+        },
+        {
+          "step": 1,
+          "complete_forward": "passed",
+          "losses": [
+            7.585606575012207,
+            7.585603713989258
+          ],
+          "parameter_witnesses": [
+            {
+              "name": "nodes.5.kernel.conv.weight",
+              "index": [
+                0,
+                2
+              ],
+              "reference": 0.0262603759765625,
+              "candidate": 0.0282440185546875,
+              "max_abs": 0.001983642578125,
+              "reference_gradient": 1.862645149230957e-08,
+              "candidate_gradient": 4.842877388000488e-08,
+              "strict_error": "root: Tensor-likes are not close!\n\nMismatched elements: 1 / 42 (2.4%)\nGreatest absolute difference: 0.001983642578125 at index (0, 2) (up to 0.001 allowed)\nGreatest relative difference: 0.07025146484375 at index (0, 2) (up to 0.02 allowed)"
+            }
+          ]
+        }
+      ],
+      "first_watched_gradient": [
+        3.3527612686157227e-08,
+        -2.9802322387695312e-08
+      ],
+      "job_terminal": "failed"
+    },
+    {
+      "schema": "tide-weighted-numerical-diagnostic-v1",
+      "source": "b0321b99ba3c4c7cffa091fceb09e8a3a3d50bc9",
+      "state": "strict_mismatch",
+      "implementation": "native",
+      "fixture_sha256": "45d7ada2e6e313d75508c19e1db860bd795a52da82ad4e5e325c0515fa6ef0e4",
+      "witness_sha256": "d807fec5c5c7aeea67fc167cd88b4301079a3a684904876847cfba66dbcd2779",
+      "artifact_sha256": "9e1b59485b302506f6ab0b9a80d9797f361fa297c25600144a5495f8c7b43746",
+      "job": "core5-half-native",
+      "case": "checks",
+      "steps": [
+        {
+          "step": 0,
+          "complete_forward": "passed",
+          "losses": [
+            7.608858585357666,
+            7.608860015869141
+          ],
+          "parameter_witnesses": []
+        },
+        {
+          "step": 1,
+          "complete_forward": "passed",
+          "losses": [
+            7.585606575012207,
+            7.585603713989258
+          ],
+          "parameter_witnesses": [
+            {
+              "name": "nodes.5.kernel.conv.weight",
+              "index": [
+                0,
+                2
+              ],
+              "reference": 0.0262603759765625,
+              "candidate": 0.0282440185546875,
+              "max_abs": 0.001983642578125,
+              "reference_gradient": 1.862645149230957e-08,
+              "candidate_gradient": 4.842877388000488e-08,
+              "strict_error": "root: Tensor-likes are not close!\n\nMismatched elements: 1 / 42 (2.4%)\nGreatest absolute difference: 0.001983642578125 at index (0, 2) (up to 0.001 allowed)\nGreatest relative difference: 0.07025146484375 at index (0, 2) (up to 0.02 allowed)"
+            }
+          ]
+        }
+      ],
+      "first_watched_gradient": [
+        3.3527612686157227e-08,
+        -2.9802322387695312e-08
+      ],
+      "job_terminal": "failed"
+    },
+    {
+      "schema": "tide-weighted-async-diagnostic-v1",
+      "source": "b0321b99ba3c4c7cffa091fceb09e8a3a3d50bc9",
+      "state": "failed",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 2,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "peer": "npu:1",
+      "launch_blocking": null,
+      "copy_policy": "stock",
+      "phases": [
+        "before_candidate",
+        "complete_forward_passed",
+        "before_all_root_vjp"
+      ],
+      "scope": "first complete forward and all-root VJP only; stock copies do not certify independent None/zero roots",
+      "artifact_sha256": "e0739e89b5787da8be225a3207caf716b51f0e5dfaedc31414b0224663318f54",
+      "job": "core5-async-stock",
+      "case": "checks",
+      "failure": "rtStreamWaitEvent invalid event (EE1017)",
+      "job_terminal": "failed"
+    },
+    {
+      "schema": "tide-stock-peer-diagnostic-v1",
+      "source": "62073ddfbf0f5a8822ba1f1d60feefc12642a09d",
+      "state": "failed",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 2,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "peer": "npu:1",
+      "launch_blocking": null,
+      "phases": [
+        "before_stock_forward",
+        "stock_forward_passed"
+      ],
+      "scope": "12 stock elementwise/copy rounds; scalar roots from both devices; no graph executor/custom Function",
+      "artifact_sha256": "595f10cc91e6e2541ef15cf34e7502ebf808db52aeade5b9b57c5345f2b84b0a",
+      "job": "core5-stock-peer",
+      "case": "default",
+      "failure": "rtStreamWaitEvent invalid event (EE1017)",
+      "job_terminal": "failed"
+    },
+    {
+      "schema": "tide-stock-peer-diagnostic-v1",
+      "source": "62073ddfbf0f5a8822ba1f1d60feefc12642a09d",
+      "state": "passed",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 2,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "peer": "npu:1",
+      "launch_blocking": "1",
+      "phases": [
+        "before_stock_forward",
+        "stock_forward_passed",
+        "stock_vjp_returned"
+      ],
+      "scope": "12 stock elementwise/copy rounds; scalar roots from both devices; no graph executor/custom Function",
+      "artifact_sha256": "c1915c733e38011dc8cf6904ebd5c381fe060e555ebce20af3b2ea10dcfdd896",
+      "job": "core5-stock-peer",
+      "case": "blocking",
+      "job_terminal": "failed"
+    }
+  ],
+  "scope": "failure localization, not a new general backend qualification",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83"
+}
