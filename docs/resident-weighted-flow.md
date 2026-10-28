@@ -144,3 +144,5 @@ NEW_CLIENT/consumer/weighted-resident-consumer --device=npu:0 --dtype=float32
 
 该消费者用`gamma=1`、残差强度为零的单节点手算`(c,G)=(m,z)`，验证公开配置跨库传输与两段新owner续接。
 它是安装/调用边界检查，完整图范围仍由上面的独立调度与公式证据承担。
+
+本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。

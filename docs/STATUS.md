@@ -1,44 +1,43 @@
 # 当前交接 — 2026-10-28
 
-用户授权的三项审查修复已实现，等待固定源码资格。分支`graph-execution-foundation`，
-数学固定`0770593838a37c790a568226930567ed60f99b83`；实现基线`2c46aa7`。
-本页随修复实现提交；当前工作路径`/mi/data2T/zlong/home/llm/graph-execution-foundation`。
+三项审查修复及本机相关资格已完成。授权分支`graph-execution-foundation`，工作路径
+`/mi/data2T/zlong/home/llm/graph-execution-foundation`；固定实现
+`1d19c5998b96689b3620ecb69c7f712a9dd84ad0`已推送。本页与资格证据单独提交。
+数学仍为`0770593838a37c790a568226930567ed60f99b83`，19份快照及5份legacy已与上游Git对象核对。
+[审查修复报告](evidence/core5-review-fixes-20261028.md)提供范围、独立反例和干净源码复现命令；
+[同名JSON](evidence/core5-review-fixes-20261028.json)保存哈希、源码/构建身份及全部任务终态。
 
-## 修复与开发证据
+## 完成范围
 
-- ClockedState递归捕获带权参数，按实际局部时间透传分支分组与prepared数据；五记忆独立根、参数版本、共享delta/KV三步SGD回归。
-- Python/C++ scalar/batch quad显式拒绝数学正支持下溢；独立dyadic闭式解与可表示正数/真实零边界。
-- 参数bank在reshape/转换/拷贝前取得并逐次扣减FP32额度，来源表/填充及Full输出预留纳入预算；原参数身份与角色存储分开。
-- 原提交上新增Python测试19失败、4通过；首次baseline命令受pytest路径配置影响读到当前源码，已排除，修正命令/日志/哈希见`artifacts/review-fixes-baseline.json`。
-- `core5-review-fixes-dev` passed/exit0，442项开发门禁；冻结快照`artifacts/worktrees/core5-review-fixes-dev`是2c46aa7加补丁，原始归档/哈希与命令在`artifacts/jobs/core5-review-fixes-dev/`。
-- 主工作区C++核心哈希与开发构建相同。冻结开发快照没有随后补齐的resident Full输出预留；组件资格必须从本次实现提交新建干净快照构建。
+- ClockedState递归捕获带权参数，按实际局部时间透传分组/prepared；五记忆独立根、版本及共享KV/delta三步SGD通过。
+- Python/C++ scalar/batch quad拒绝数学正支持的除法下溢；独立闭式反例与可表示正数/真实零边界通过。
+- resident参数bank在展开/转换/拷贝前准入，逐角色扣减FP32额度，来源表/填充及Full输出预留；CPU与NPU真实边界通过。
+- CPU正式442项全部通过；CUDA工具链CPU定向31项及sm80/90/100四组件构建/loader/help通过，无GPU真机资格。
+- standalone NPU FP32/FP16各21图、15配置、单设备与双卡各五配置20次更新通过；含完整记录、反向、共享参数、optimizer、恢复及拒绝。
 
-## 活动任务与下一步
+核心复用冻结开发快照，完整C++哈希与1d19c59一致；resident组件含最终Full预留，
+从干净1d19c59重新构建。详细来源与复用范围在报告中分列。
+首次NPU任务构建通过，但CANN因任务PATH中的Python入口不匹配而初始化失败，exit1保留；
+修正后的独立runtime任务复用相同二进制完成8组。公共工具链未修改，任务入口规范已补入[开发文档](development.md)。
+三项早期等待依赖时取消的任务仍为exit143；旧失败不改称通过。
 
-两个核心构建仍在运行，均读取上述冻结开发快照、Nice10、两个workers、ATen/BLAS1、2400秒限时：
-- `tide-core5-review-fixes-sdk-dev-20261028.service`，`build/npu-core`，libtorch-npu/2.10.0-cann9.0.0。
-- `tide-core5-review-fixes-cuda-dev-20261028.service`，`build/cuda-core`，账户activate-cuda工具链。
+## 任务终态与接续
 
-任务记录为`artifacts/jobs/core5-review-fixes-{sdk,cuda}-dev/{status.json,task.log}`；启动器为`.local/JOB.sh`。
-检查：`python scripts/status.py`，`tail -n 30 artifacts/jobs/JOB/task.log`。
-不要修改活动任务的快照，不将live任务计为通过。
+无活动任务；本轮修复无需继续运行或恢复旧队列。
+记录位于`artifacts/jobs/core5-review-fixes-NAME/{status.json,task.log}`：
+`cpu-qualify`、`cuda-qualify`、`npu-runtime-qualify`均passed/exit0，`npu-qualify`仍failed/exit1。
+对应unit为`tide-core5-review-fixes-NAME-20261028.service`；NPU另有`queue-state.json`和`checks/result.json`。
+新NPU任务物理1/13→逻辑0/1、3300秒任务/3600秒unit，独立background.slice；最终状态、全部用例及哈希已核验。
 
-实现提交后：新建`artifacts/worktrees/core5-review-fixes-qualify`于该提交并冻结；
-CPU按相同442项门禁复用经源码/二进制哈希核验的核心构建。
-NPU用新组件build、Ascend910_9392，限定flow/config/training/node-training，两dtype及必要双卡；
-CUDA同组件sm80/90/100构建/loader与CPU适配器检查，GPU真机仍未验。
-资格使用新的`core5-review-fixes-{cpu,npu,cuda}-qualify`任务，不恢复旧队列。
-完成后单独提交证据与最终STATUS/ROADMAP，再推送授权分支。
-
-NPU组件dev因SoC误写9391在依赖等待中取消；正确目标已核对9392。
-NPU组件dev2及CUDA组件dev因补齐Full输出预算预留，在依赖等待中取消。
-三项均exit143，未开始组件编译或设备运行，旧记录保留。
+下一次接续先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`，
+再按新需求与[ROADMAP](ROADMAP.md)选择范围。仓库导航与复现不依赖旧运行目录。
+本次最终改动仅为证据、当前交接与文档链接；实现仍为上述固定提交。
 
 ## 保留边界
 
-参考仓库和公共环境只读。现行规范为`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`与`/etc/modulefiles`；
-Python私有环境`.local/venv-core5`，CPU禁止vendor autoload。长任务使用独立background.slice及有限时长。
-只做相关资格，不重跑历史性能矩阵。当前导航见[ROADMAP](ROADMAP.md)、[语义对应](semantic-map.md)、[证据索引](evidence/README.md)。
-既有严格限制保留：FP16 GDN默认AdamW约.001984；默认异步双NPU eager VJP CANN invalid event；
-SDK2.10 FP32 fc/affine第三轮evidence差3.09944e-6；FP32反馈PDG两项4.11272e-6/2.71201e-6。
-CUDA真机未验、x86_64未资格，本次CPU/构建结果不解除这些限制。
+参考仓库与公共环境只读；本机工具链入口为现行`/etc/modulefiles`与
+`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`，不同Torch/CANN环境分别构建。
+CUDA真机和x86_64未资格；本轮未新增性能测量或Python-owned NPU资格。
+既有GDN FP16默认AdamW约.001984、默认异步双NPU eager VJP invalid event、
+SDK FP32 affine第三轮evidence差3.09944e-6、FP32反馈PDG两项4.11272e-6/2.71201e-6继续保留。
+条件和独立证据见[ROADMAP](ROADMAP.md)、[语义对应](semantic-map.md)、[证据索引](evidence/README.md)。

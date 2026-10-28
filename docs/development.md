@@ -81,6 +81,10 @@ python -m pip install --no-build-isolation --no-deps -e .
 
 新环境的最小 CPU 链路与后续各设备证据分开；环境存在不代表完整矩阵通过。
 旧独立 LibTorch-NPU 2.10/CANN9.0 与私有 CUDA2.10/cu128 是不同工具链，不能混用二进制。
+使用独立 SDK 时，CANN 还需配套 Python 的运行时入口：把该 SDK 配套 Python 的 `bin`
+置于任务 `PATH` 首位，并核对 `python3-config --prefix` 与该 Python 的 `sys.prefix` 一致。
+本机 `libtorch-npu/2.10.0-cann9.0.0` 模块本身不设置 Python PATH；不能让 9.1 私有 venv
+或系统 `python3-config` 混入该任务。只调整任务环境，不修改公共 module 或软件栈。
 长任务继续使用 `run-durable-user-task` 的独立 `background.slice` 服务，
 固定源码、两个构建线程、单线程 ATen/BLAS 与有限时长。实际任务见 STATUS。
 
