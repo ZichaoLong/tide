@@ -81,6 +81,11 @@ CPU更高精度的完整通过不能回填到FP32失败；也不代表与旧core
 两条调度的真实状态/参数/动量，换owner精确解码；第二窗口分别对照各自未中断执行，完整返回、
 参数梯度、参数和optimizer均要求逐值相等。它不向另一调度提供参考状态或轨迹。
 
+[算术边界诊断](weighted-arithmetic-diagnostics.md)另提供`--arithmetic`与已有
+`--scoring-dtype`的明确组合，以及最早精确事件差异、命名参数/梯度误差统计。
+算术探针限Python CPU FP32，拒绝native和其他payload dtype；它不进入生产执行或性能测量。
+局部干预、完整Read精度与整条FP64各有独立身份，完整比较和实际恢复仍使用原断言。
+
 Python 诊断可加 `--capture-allocations` 保存两条调度实际调用的分配输入、分支、free掩码、
 控制和残差到 `allocations.json`；原函数和反向连接不变，观察不进入性能计时。
 记录明确标为成功调用的观察，不冒充抛出的失败。native 的此类全调用观察尚未实现。

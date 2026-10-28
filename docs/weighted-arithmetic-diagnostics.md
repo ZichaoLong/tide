@@ -1,0 +1,67 @@
+# 带权执行的算术边界诊断
+
+数学函数及指定一阶反向仍由[语义对应](semantic-map.md)和[精度契约](weighted-precision.md)定义。
+`scripts/diagnose_weighted_workload.py`独立构造相同材料的scalar参考与greedy/packed候选，
+检查完整返回、离散结构、参数梯度、SGD参数和动量槽。任何比较失败保留exit 2。
+`--checkpoint-check`在首步更新后保存实际状态/参数/optimizer，再换owner解码并精确比较下一窗。
+`--dtype float64`是已有的整条CPU FP64配置；从同一seeded FP32材料提升，不换输入或初始化。
+
+## 干预的身份与边界
+
+可选`--arithmetic`只供**Python CPU FP32诊断**，native和其他payload dtype提前拒绝。
+默认`none`不干预算术；这些探针没有加入公共执行器、C++公式或benchmark候选。
+实现为`scripts/weighted_arithmetic_probe.py`的显式上下文，两个独立调度使用相同干预。
+调用方必须分别包住forward/loss和backward；optimizer、checkpoint编码/解码在上下文外。
+
+| 名称 | 选定边界 |
+| --- | --- |
+| `linear64` | ATen mm/bmm/mv/dot/addmm的FP32输入临时提升FP64，结果转回FP32；同时覆盖实际出现的反向调用 |
+| `reduce64` | sum/mean的FP32归约临时FP64，结果转回FP32 |
+| `linear_reduce64` | 上述两组 |
+| `norm64` | Architecture §1 RMS的分母、normalized向量和一阶收缩FP64；输出/输入梯度返回原dtype |
+| `linear_reduce_norm64` | 上述三组 |
+| `nonlinear64` | 三组加SiLU/sigmoid及其ATen backward、exp/log/sqrt边界 |
+| `backward_linear_reduce64` | 只在backward干预矩阵乘加与归约，forward保持原样 |
+
+算子每次返回就舍入，不等同于整个模块、完整计算图或共享叶累加保持FP64；
+也不能直接等同于把Python表达式换成`.double()`后由autograd生成另一张图。
+例如归约变宽不会恢复此前FP32乘法已舍掉的信息。增加干预不保证误差单调减少。
+norm干预保存原tensor用于版本检查，保留None/连接零，拒绝二阶，作用域结束或异常时恢复原函数。
+这是单进程单线程定位工具，不是供并发调用的全局精度切换器。
+FP64/非浮点张量不被算子探针量化；逻辑时间/计数继续int64。
+
+`--scoring-dtype float64`则调用**已有公共**Read/区域控制精度配置，参考与候选一致采用。
+可与探针组合研究完整Read边界。raw状态、消息、参数和SGD仍用payload dtype；
+这与整条`--dtype float64`不同。检查点不保存临时探针，诊断入口在恢复的两条调度上显式重用同一设置。
+不能把这些CPU干预的效果外推到设备或native；不发生隐式CPU搬移。
+
+## 记录与复现
+
+结果保存原公共比较的首个失败，同时附加：
+
+- 按(time,batch,node)排序的首个精确事件差异；这是观测位置，不证明因果来源。
+- 唯一命名参数/梯度的精确不等张量数、超容差张量数和最多10个最差见证；None/零、
+  非有限值和元数据错误单列。误差比使用该dtype的原容差，不改变完整比较。
+- 前向/反向实际被干预的ATen调用计数。不是完整算子量、FLOPs或性能计时。
+- 两步实际候选/Full/消息数、loss、optimizer槽、每条调度自身的精确恢复结果。
+
+本机长任务遵守[固定源码资格](verification.md)，从干净checkout可生成同一D64静态计划：
+
+```sh
+python scripts/prepare_weighted_workload.py --topology ranked --layers 15 --region-width 32 \
+  --width 64 --samples 1 --positions 1 --match-core3 add --output-dir NEW_PLAN
+python scripts/diagnose_weighted_workload.py --workload NEW_PLAN/workload.json --dtype float32 \
+  --implementation python --arithmetic linear_reduce_norm64 --checkpoint-check --output-dir NEW_CHECK
+```
+
+每个配置使用新目录/独立进程，不自动重试或扫描全部开关。当前原D64预期仍有严格不等价；
+生成报告不等于获得通过资格。去掉`--arithmetic`是原FP32对照；增加`--scoring-dtype float64`
+是完整Read边界探针；整条FP64用`--dtype float64`且不带算术干预。
+native整条FP64另给`--native-library CPU_CORE --implementation native`。
+原计划SHA256为`6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3`；
+生成后的hash、参数清单与实际源码都要核对。
+
+`tests/test_weighted_arithmetic_probe.py`以手算相消、独立literal Jacobian验证干预本身，
+并覆盖int64、None/零报告、非有限值、版本、异常恢复、适用域拒绝和小图两步实际checkpoint。
+`test_weighted_workload_training.py`保持Python/native默认两dtype的完整训练/恢复检查。
+局部测试通过只认证诊断机制，D64和生产算术是否等价由各自实际报告决定。

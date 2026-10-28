@@ -1,7 +1,33 @@
-# 当前交接 — 2026-10-28
+# 当前交接 — 2026-10-29
 
 授权分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`。
 参考仓库/公共环境只读；不使用子代理。实现、有限验证、阶段提交和普通推送已获授权。
+
+## 当前任务：D64算术边界诊断的复现与验收
+
+基线`e75e1f5bca347b45301990689d8d7d088dd6e16b`，固定原D64计划
+`6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3`。
+`core5-d64-precision-stage1-20261029`和`stage2-20261029`均终态failed/2，9个变体均未通过原两步检查。
+三组算术内部FP64首步全通过，第二步仍2个梯度张量/状态/动量槽失败；仅反向提升几乎无效。
+加非线性或完整Read FP64第二步仍失败。参数更新通过不能替代梯度与槽验收；不采用局部生产策略。
+原记录保留`artifacts/jobs/core5-d64-precision-stage{1,2}/`，只读源码树`core5-d64-precision-baseline`。
+
+仓库诊断入口已完成：`--arithmetic`/`--scoring-dtype`、精确事件差异、命名梯度/参数统计。
+生产Python/C++算术和默认精度不改。开发冻结树`artifacts/worktrees/core5-arithmetic-dev`
+为e75e1f5+dirty快照；`core5-arithmetic-dev-20261029`终态passed/0，**19 passed**。
+覆盖新探针独立公式/版本/拒绝/清理、小图两步checkpoint，以及原Python/native两dtype训练/恢复和精度设施。
+输出`artifacts/jobs/core5-arithmetic-dev/{status.json,task.log,development.json,source.tar.gz}`，
+C++源码hash与缓存23个binary hash已核验，不重构无变化C++。
+
+接下来提交本增量并从该固定源码启动`core5-arithmetic-qualified-20261029`。
+只读树`artifacts/worktrees/core5-arithmetic-qualified`；入口`.local/core5-arithmetic-qualified.sh`；
+输出`artifacts/jobs/core5-arithmetic-qualified/{status.json,task.log,qualification.json,tests.xml}`，
+D64子作业`d64-local64/{status.json,task.log}`和`d64-local64/check/result.json`。
+范围：复核19项设施检查、重新生成同hash原计划、最佳局部三组FP64的D64两步和精确恢复。
+预期D64仍strict_mismatch/2，不将预计失败改成通过；分别记录设施检查和原数值限制。
+background.slice/Nice10/32G/10min、算子1；子任务240s，异常/非预期终态停止。
+检查`python scripts/status.py`，停止`systemctl --user stop core5-arithmetic-qualified-20261029`。
+实现提交后不暂停；检查固定资格，独立提交证据/更新唯一STATUS和ROADMAP，再普通推送。
 
 ## 当前结果
 
@@ -48,8 +74,8 @@ FP32反馈PDG、默认异步双NPU VJP；CUDA真机/x86_64、大型设备训练/
 
 ## 收尾与重入
 
-本轮约定的数值定位、修复、有限参数匹配测量和定向资格均已终态；不恢复旧队列。
+上一阶段数值修复、有限参数匹配测量和定向资格均已终态；本轮任务见页首，不恢复旧队列。
 本次证据与追溯文档作为实现后的独立提交保存；推送对齐由`git status --short --branch`核对。
-没有待收尾的数值作业，不需要重复已通过的门禁。
+此前通过门禁不重复；新诊断按页首固定范围执行。
 重入先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
 后续独立优化按ROADMAP选取能验证的具体问题，保留现有严格失败与精度边界。
