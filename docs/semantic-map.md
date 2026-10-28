@@ -5,6 +5,8 @@
 [公共性能消费者](weighted-performance.md)只使用静态参数/输入和候选实际结果，
 [参数清单与匹配用例](weighted-workloads.md)逐角色核对固定公式、真实共享、二进制材料和容量下界；
 [有限运行证据](evidence/core5-weighted-performance-20261028.md)区分完整记录通过、严格拒绝、profile和吞吐。
+[参数匹配/历史经验迁移证据](evidence/core5-performance-transfer-20261028.md)把逐角色清单、
+同源材料、共享存储与复制优化连到独立资格和有限测量；大图FP32及分配拒绝单列，不扩大语义资格。
 
 [Weighted公共训练](resident-weighted-training.md)定义完整字段根、跨窗token、参数发布、四分区预算与独立checkpoint绑定；运行资格单列。
 
