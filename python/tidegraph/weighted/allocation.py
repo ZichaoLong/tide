@@ -153,6 +153,8 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
         if branch in {"zero", "caps"}:
             residual = zero
         else:
+            if ((caps > 0) & (scores > lam) & (c == 0)).any():
+                raise ArithmeticError("positive quadratic allocation support underflowed in requested dtype")
             response_error = (c-_response(scores, caps, temperature, lam)).abs().max()
             residual = torch.stack((response_error, (lower-c.sum()).clamp_min(0),
                                     (c.sum()-upper).clamp_min(0))).max()

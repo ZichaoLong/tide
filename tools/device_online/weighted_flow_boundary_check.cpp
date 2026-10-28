@@ -22,8 +22,32 @@ void half_payload(at::Device device){
   control[0]=0x1p-25;portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()==24,"half sending support underflow not refused");
   error.zero_();control[0]=1;full[0].fill_(1e5);portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()==24,"half Full overflow not refused");p.close();
 }
+void parameter_banks(at::Device device,at::ScalarType dtype){
+  at::NoGradGuard no_grad;
+  const std::string prefix="full_program.content.";
+  std::map<std::string,at::Tensor> parameters;
+  for(const auto& name:{"query","out"})parameters[prefix+name]=at::ones({2,2},at::TensorOptions().dtype(dtype));
+  auto tied=at::ones({3,2},at::TensorOptions().dtype(dtype));
+  parameters[prefix+"gate"]=parameters[prefix+"up"]=tied;parameters[prefix+"down"]=tied.t();
+  constexpr int64_t bytes=104; // 2*(2*2*4) + 3*(3*2*4), including tied roles.
+  WeightedBanks short_bank(parameters,"",device);bool refused=false;
+  try{bind_weighted_kv_full(short_bank,bytes-1);}catch(const std::invalid_argument& e){
+    refused=std::string(e.what()).find("before allocation")!=std::string::npos;}
+  require(refused&&!short_bank.roles().count("full.down"),"parameter group exceeded budget before refusal");
+  int64_t used=0;for(const auto& [_,role]:short_bank.roles())used+=role.bank.nbytes();
+  require(used<=bytes-1,"over-budget parameter role allocated");
+  WeightedBanks exact(parameters,"",device);auto full=bind_weighted_kv_full(exact,bytes);
+  require(full.residual.gate.data_ptr()!=full.residual.up.data_ptr(),"tied parameter roles shared mutable bank storage");
+  require(at::equal(full.residual.down.cpu(),tied.t().to(at::kFloat).unsqueeze(0)),"bank transpose/half conversion differs");
+  parameters[prefix+"gate"]=at::ones({1},at::TensorOptions().dtype(dtype)).expand({1000000,2});
+  WeightedBanks large(parameters,"",device);refused=false;
+  try{bind_weighted_kv_full(large,1024*1024);}catch(const std::invalid_argument& e){
+    refused=std::string(e.what()).find("before allocation")!=std::string::npos;}
+  require(refused&&!large.roles().count("full.gate"),"large bank materialized before admission");
+}
 }
 void check_weighted_flow_boundaries(at::Device device,at::ScalarType dtype,const std::filesystem::path& directory){
+  parameter_banks(device,dtype);
   if(dtype==at::kHalf)half_payload(device);
   auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",at::kCPU,dtype);
   Continuation q;q.identity=g.identity;q.batch_size=2;auto xs=weighted_check::inputs(g,at::kCPU,dtype);

@@ -35,6 +35,10 @@ class ClockedState(StateProgram):
         result = self.program.step(weights, self.clock.local_state(old), content, self.event(time))
         return self.clock.global_state(result)
 
+    def batch_autograd_key(self, old, view, time):
+        key = getattr(self.program, "batch_autograd_key", None)
+        return () if key is None else key(self.clock.local_state(old), view, self.event(time))
+
     def sequence(self, weights, old, values, times, views=None):
         results = self.program.sequence(weights, self.clock.local_state(old), values,
                                         [self.event(t) for t in times], views)

@@ -100,7 +100,7 @@
 
 带权局部 Upd 的 [精确联合/实际 packing 对应](weighted-packed.md)独立列出
 KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
-[State 批量 VJP](weighted-state-vjp.md)独立声明嵌套参数、结构分组、输出槽与运行资格。
+[State 批量 VJP](weighted-state-vjp.md)独立声明嵌套参数、结构分组、输出槽与运行资格；一般ClockedState组合的递归捕获与独立根由`test_weighted_clocked_vjp.py`核对。
 带权 [Aggregate 批量计算/VJP](weighted-aggregate-batch.md)单列原子/class/fiber 布局、独立根和零总量分支。
 [Read/Full 批量数值求值](weighted-query-batch.md)列出完整快照、KV 可见性、卷积槽和字段解码；
 [Read/Full 批量 VJP](weighted-query-vjp.md)逐项声明私有图、公开字段/行根、共享参数与资格边界。

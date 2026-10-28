@@ -1,33 +1,38 @@
 #include "weighted_flow_parameters.h"
+#include "tide/parameter_bank.h"
 #include <ATen/core/grad_mode.h>
-#include <limits>
 namespace tide::device_online {
 WeightedBanks::WeightedBanks(const std::map<std::string,at::Tensor>& p,std::string prefix,at::Device d)
   :parameters_(p),prefix_(std::move(prefix)),device_(d){}
+void WeightedBanks::limit_bytes(int64_t available){
+  if(available<0)throw std::invalid_argument("negative weighted parameter bank budget");
+  available_=available;
+}
 at::Tensor WeightedBanks::bind(const std::string& role,const std::string& name,const std::vector<int64_t>& shape,int64_t offset){
   if(at::GradMode::is_enabled()||roles_.count(role))throw std::invalid_argument("duplicate/grad-enabled weighted parameter binding");
-  const auto& x=parameters_.at(name);int64_t count=1;
-  for(auto n:shape){if(n<1||count>std::numeric_limits<int64_t>::max()/n)throw std::invalid_argument("invalid parameter bank shape");count*=n;}
-  if(!x.device().is_cpu()||(x.scalar_type()!=at::kFloat&&x.scalar_type()!=at::kHalf)||offset<0||offset>x.numel()||count>x.numel()-offset)
-    throw std::invalid_argument("weighted bank requires explicit CPU FP32/FP16 parameter and exact slice");
-  auto value=x.detach().reshape({-1}).narrow(0,offset,count).reshape(shape).to(device_,at::kFloat).clone();
+  const auto& x=parameters_.at(name);
+  auto value=copy_parameter_bank(x,shape,offset,device_,available_);
   roles_.emplace(role,WeightedBankRole{prefix_+name,value,x.sizes().vec(),offset});return value;
 }
 at::Tensor WeightedBanks::direct(const std::string& role,const std::string& name){
   auto shape=parameters_.at(name).sizes().vec();shape.insert(shape.begin(),1);return bind(role,name,shape);
 }
-WeightedKVParameters bind_weighted_kv_update(WeightedBanks& b){
+WeightedKVParameters bind_weighted_kv_update(WeightedBanks& b,int64_t available){
+  b.limit_bytes(available);
   return {b.direct("upd.base","kernel.base"),b.direct("upd.left","kernel.adapter_u"),
     b.direct("upd.right","kernel.adapter_v"),b.direct("upd.summary","kernel.summary")};
 }
-WeightedKVQueryParameters bind_weighted_kv_query(WeightedBanks& b){
+WeightedKVQueryParameters bind_weighted_kv_query(WeightedBanks& b,int64_t available){
+  b.limit_bytes(available);
   return {b.direct("mem.query","kernel.read_q"),b.direct("mem.key","kernel.read_k"),b.direct("mem.value","kernel.read_v")};
 }
-WeightedKVFullParameters bind_weighted_kv_full(WeightedBanks& b){
+WeightedKVFullParameters bind_weighted_kv_full(WeightedBanks& b,int64_t available){
+  b.limit_bytes(available);
   return {b.direct("full.query","full_program.content.query"),{b.direct("full.out","full_program.content.out"),
     b.direct("full.gate","full_program.content.gate"),b.direct("full.up","full_program.content.up"),b.direct("full.down","full_program.content.down")}};
 }
-WeightedRecurrentParameters bind_weighted_recurrent(WeightedBanks& b,const weighted::RecurrentConfig& c){
+WeightedRecurrentParameters bind_weighted_recurrent(WeightedBanks& b,const weighted::RecurrentConfig& c,int64_t available){
+  b.limit_bytes(available);
   WeightedRecurrentParameters result;
   for(const auto& [role,shape]:weighted_recurrent_parameter_shapes(1,c)){
     std::string name=role;int64_t offset=0;
@@ -49,7 +54,9 @@ WeightedRecurrentParameters bind_weighted_recurrent(WeightedBanks& b,const weigh
   }
   return result;
 }
-WeightedRegionParameters bind_weighted_region(WeightedBanks& b,const weighted::RegionalConfig& c,int64_t rows){
+WeightedRegionParameters bind_weighted_region(WeightedBanks& b,const weighted::RegionalConfig& c,int64_t rows,int64_t available){
+  if(rows<0||rows>available/16)throw std::invalid_argument("weighted region parameter owners exceed tensor budget before allocation");
+  b.limit_bytes(available-16*rows);
   WeightedRegionParameters p;
   auto head=[&](const std::string& role,const std::string& prefix,int64_t input,int64_t hidden,int64_t output,bool scalar){
     return WeightedHeadParameters{b.bind(role+".matrix",prefix+(scalar?".matrix":".in_weight"),{1,hidden,input}),

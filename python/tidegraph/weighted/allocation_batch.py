@@ -134,6 +134,6 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
         tolerance = 64*torch.finfo(t.dtype).eps*t.shape[1]
         if not torch.isfinite(residual).all() or (residual > tolerance).any():
             raise ArithmeticError("allocation batch residual exceeds dtype tolerance")
-        if rule.kind != "quad" and (rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any():
+        if (rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any():
             raise ArithmeticError("positive allocation batch support underflowed in requested dtype")
     return BatchAllocation(result, lam, branch, response, (result > 0) & (result < caps), residual)

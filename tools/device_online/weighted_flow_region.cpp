@@ -14,7 +14,8 @@ void append_weighted_region_views(DeviceProgram& p,TaskServices& services,Weight
   }
   r.input=append_weighted_region_input(p,desc,present,time,r.nodes,r.config,error);
   auto& selection=services.begin();
-  r.selection=append_weighted_region(selection,r.input.fields,r.input.ids,r.input.times,r.input.lengths,bind_weighted_region(r.banks,r.config,samples),r.config,error,remaining(selection));
+  const auto parameters=bind_weighted_region(r.banks,r.config,samples,remaining(selection));
+  r.selection=append_weighted_region(selection,r.input.fields,r.input.ids,r.input.times,r.input.lengths,parameters,r.config,error,remaining(selection));
   services.end(selection);
   auto control=at::zeros({samples*members+1},opts),active=at::zeros({samples*members+1},opts.dtype(at::kBool));
   weighted_copy(p,control.narrow(0,0,samples*members),r.selection->controls.reshape({-1}));weighted_copy(p,active.narrow(0,0,samples*members),r.selection->active.reshape({-1}));

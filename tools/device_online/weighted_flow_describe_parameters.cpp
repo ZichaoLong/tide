@@ -1,6 +1,7 @@
 #include "weighted_flow_parameters.h"
 namespace tide::device_online {
-WeightedDescribeParameters bind_weighted_describe(WeightedBanks& b,int64_t d,int64_t ds,const weighted::RegionalConfig& c){
+WeightedDescribeParameters bind_weighted_describe(WeightedBanks& b,int64_t d,int64_t ds,const weighted::RegionalConfig& c,int64_t available){
+  b.limit_bytes(available);
   WeightedDescribeParameters result;
   const auto shapes=weighted_describe_parameter_shapes(1,d,ds,c);
   auto add=[&](const std::string& role,const std::string& parameter){result[role]=b.bind("describe."+role,parameter,shapes.at(role));};

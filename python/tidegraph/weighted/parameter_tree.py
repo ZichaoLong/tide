@@ -32,8 +32,11 @@ def rebind(module, transform):
 
 
 def supported(kernel):
+    from ..clocked_state import ClockedState
     from .kv import KVMemory
     from .recurrent import BasicMemory
     from .gated_delta import GatedDeltaMemory
     from .ssd import SSDMemory
+    if type(kernel) is ClockedState:
+        return supported(kernel.program)
     return type(kernel) in {KVMemory, BasicMemory, GatedDeltaMemory, SSDMemory}

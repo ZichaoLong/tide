@@ -33,6 +33,7 @@ if(TIDE_BACKEND STREQUAL "NPU")
   endif()
 endif()
 add_library(tidegraph STATIC
+  cpp/src/parameter_bank.cpp
   cpp/src/device.cpp
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/read_fields.cpp cpp/src/tensor_fields.cpp cpp/src/isolated_read.cpp cpp/src/next.cpp
@@ -139,6 +140,7 @@ target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_normalization.cp
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_sharing.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_kv_sharing.cpp)
 target_sources(tidegraph-kernel-check PRIVATE cpp/test/weighted_placement.cpp)
+target_sources(tidegraph-kernel-check PRIVATE cpp/test/parameter_bank.cpp)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp)

@@ -99,6 +99,10 @@ for in-memory VJP binding. Decoding never invokes a reference recurrence.
 several atoms in one class; it does not change SourceDomain's exclusivity contract.
 These extensions do not automatically implement weighted memory or region formulas.
 
+参数bank分配前准入见[常驻图预算](resident-weighted-flow.md)：共享参数身份与实际bank存储分别处理，
+`tide::copy_parameter_bank`在设备拷贝前扣减额度。该资源拒绝和quad正支持下溢守卫落实既有契约，
+不改变数学函数、图v13、checkpoint v5或指定一阶VJP身份。
+
 ## Weighted KV binding
 
 The [weighted stage VJP](resident-weighted-stage-vjp.md) composes the declared local first-order maps with separate raw-field/descriptor roots, actual regional packing and canonical parameter roles. This component is distinct from the complete retained graph training lifecycle.
