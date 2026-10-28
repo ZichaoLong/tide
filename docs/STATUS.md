@@ -1,43 +1,41 @@
 # 当前交接 — 2026-10-28
 
-执行用户新授权的三个方面：已知限制处理、LH/fractal及本仓库core-3性能经验迁移、
-正确性与参数匹配性能设施。按ROADMAP的A—E持续实施，不在阶段提交后暂停。
-授权分支graph-execution-foundation；基线58de04b1bfd64704616f55f4f9ea84a404775ded，
-实现基线1d19c5998b96689b3620ecb69c7f712a9dd84ad0，固定数学0770593838a37c790a568226930567ed60f99b83。
+继续用户授权A—E：已知限制、LH/fractal/core-3经验迁移、参数匹配与性能/正确性设施。
+分支graph-execution-foundation；已推送b0321b9。固定数学0770593838a37c790a568226930567ed60f99b83。
+不使用子代理；参考仓库和公共环境只读。阶段提交后继续。
 
 ## 当前工作与下一步
 
-启动状态干净，无继承活动任务；19份core-5/5份legacy快照校验通过。
-当前实施A/B：静态参数清单、参数预算匹配、可扩展拓扑/用例、历史经验索引与过时文档纠偏。
-随后处理最小数值/异步复现，依赖独立时并行推进工程工作；不使用子代理。
-静态参数/计划及Python共享计算开发测试120项通过，低秩手算/完整根另16项通过。
-新增二进制材料、五族standalone配置解码、初始化/共享KV/ready副本优化。
-下一步：冻结开发副本构建核心与standalone，跑相关完整根/训练/恢复及损坏材料拒绝测试；通过后固定实现提交。
-长任务开始前在此记录冻结源码、unit、日志、有限资源及确切检查命令。
+已有未提交：五族参数清单/预算匹配、可扩展FC/HB/DAG/PDG、二进制材料、共享KV低秩投影、
+初始化冗余消除、resident共享ready副本与冻结参数bank、发布去重、完整比较错误字段路径。
+具体清单由git status给出。先完成以下开发任务，再提交实现并用固定提交验证；随后有限性能对照。
+当前新加纯Torch双卡诊断入口用于缩小异步错误范围；它不替代完整图训练资格。
 
 ## 活动任务
 
-准备提交core5-performance-dev开发服务：background.slice，Nice10，2构建线程/单线程ATen，CPUQuota200%、MemoryMax64G、2400秒上限。
-固定副本artifacts/worktrees/core5-performance-dev，基线58de04b加本轮dirty快照；scripts/develop.py记录source.tar.gz与树hash。
-unit=core5-performance-dev-20261028；记录artifacts/jobs/core5-performance-dev/{status.json,task.log,development.json}。
-检查：systemctl --user show core5-performance-dev-20261028 -p ActiveState -p Result -p ExecMainStatus；python scripts/status.py。
-停止：systemctl --user stop core5-performance-dev-20261028。开发任务不替代固定提交资格；开发服务已核验active/running、Transient=yes及独立ControlGroup；终态待验。
-另提交core5-async-baseline-20261028：固定58de04b，artifacts/worktrees/core5-performance-baseline，
-默认异步双NPU Python delta-pdg完整VJP，当前9.1工具链；队列等候180秒、运行300秒，
-Nice10/单线程/MemoryMax32G，日志artifacts/jobs/core5-async-baseline/task.log和checks/result.json。
-已终态failed/exit1：完整all-VJP重现CANN rtStreamWaitEvent invalid event，设备物理1/13。
-CPU半精度GDN诊断开发重现step1 nodes.5.kernel.conv.weight[0,2]差.001983642578125；
-显式保留原容差及失败，开发记录artifacts/core5-half-numeric-dev，待固定提交复核。
-检查/停止同名systemctl unit；该任务独立记录旧限制重现，失败不改记通过。
-旧core5-review-fixes各任务保持终态，不恢复旧队列。
+冻结dirty副本：artifacts/worktrees/core5-performance-dev2，b0321b9加归档修改；严禁编辑该副本。
+两个服务均background.slice、Nice10、CPUQuota200%、MemoryMax64G、build2/ATen1。
+
+| unit（均后缀-20261028） | 输出artifacts/jobs/ | 工作/预算 | 当前状态 |
+| --- | --- | --- | --- |
+| core5-performance-dev2 | core5-performance-dev2 | CPU core/参数bank与相关测试、standalone五族材料/完整训练；2400秒 | running |
+| core5-performance-npu-dev3 | core5-performance-npu-dev3 | SDK core/resident flow/config/训练/双卡；5400秒，队列180/设备2400秒 | running |
+
+检查：`python scripts/status.py`；`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`；
+查看各输出的task.log、status.json、development.json或checks/result.json。停止：`systemctl --user stop UNIT`。
+新NPU任务修正PATH：SDK配套Python优先，项目私有ninja随后；不修改公共module。
+
+## 已终态的新结果
+
+- 第一开发core5-performance-dev：CPU363 passed、2 strict xfail；随后standalone缺少ParameterRegistry头导致构建失败，整体failed。dev2已加入头文件修复。
+- core5-performance-npu-dev2：配置期找不到ninja，failed；未编译或访问设备。dev3是有明确修复的新任务。
+- 固定b0321b9的core5-half-python/core5-half-native均failed/exit2：首步同一conv梯度+3.35e-8/-2.98e-8，AdamW放大后step1差.00198364，原容差保持。
+- 固定b0321b9的core5-async-stock failed/exit1：普通Torch拷贝仍在双NPU完整VJP出现invalid event，不能归因于自定义传输函数。
+- 所有旧失败保留原终态，不恢复旧队列。源码、原始日志、fixture/witness hashes在各独立输出。
 
 ## 已有证据与保留边界
 
-[上一实现资格](evidence/core5-review-fixes-20261028.md)：CPU442项，standalone NPU FP32/FP16四组件、
-单设备/双卡训练恢复通过；CUDA sm80/90/100构建与CPU31项通过，无GPU真机资格。
-CANN任务Python PATH问题已解决，旧失败仍保留；参考仓库和公共工具链保持只读。
-默认异步双NPU eager VJP、eager FP16 GDN/AdamW、SDK FP32 affine及FP32反馈PDG严格失败
-尚未由当前新增工作解除。CUDA真机/x86_64、大规模容量和跨卡吞吐另验。
-现有core-5性能仅覆盖宽4/32、3/8节点；不能外推旧core-3十亿级参数用例。
-
-本轮源修改及证据以git status和ROADMAP为准；本页取代此前已完成审查任务的当前状态。
+[上一固定资格](evidence/core5-review-fixes-20261028.md)：CPU442项，NPU FP32/FP16单/双卡训练恢复；CUDA sm80/90/100构建/CPU31项，无GPU真机资格。
+异步双NPU eager VJP、eager FP16 GDN/AdamW、SDK FP32 affine及FP32反馈PDG严格失败尚未解除。
+CUDA真机/x86_64、大规模容量和跨卡吞吐单列。旧性能只覆盖宽4/32，不能外推十亿级参数。
+当前待办仅[ROADMAP](ROADMAP.md)，经验仅[performance-lessons](performance-lessons.md)，最终证据单独提交。
