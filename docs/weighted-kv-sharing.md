@@ -95,4 +95,12 @@ KV §1.2 的独立正接收行可使用 `prepare_independent_batch`：先保留�
 [C++](../cpp/src/weighted_kv_preparation.cpp)、通用准备入口同上。
 独立手算/Jacobian、不同epsilon、别名贡献、None/零、异形、预算和版本见
 [Python tests](../tests/test_weighted_independent_preparation.py)及 C++ `weighted_sharing.cpp`；
-完整图与恢复由既有KV/计算共享/训练检查继续验收。实际后端与性能范围从 STATUS 导航。
+完整图与恢复由既有KV/计算共享/训练检查继续验收。
+[f03e9be固定资格与有限对照](evidence/core5-independent-projection-20261029.md)记录CPU、纯PyTorch、
+Python/native及standalone NPU的独立结果，D64完整训练/逐值恢复及实际投影覆盖。
+本次三对完整计时未见明确加速；合批覆盖扩大不等于性能资格提升。
+
+独立输入的“无计算复用”不等于“没有准备字段”：C++ `weighted_kv_sharing.cpp` 直接检查
+零复用计数、手算输入梯度，以及另一行输入和私有adapter仍为None。
+新增可选virtual能力要求重新构建C++核心及链接它的消费者；旧manifest不能代表新ABI。
+Python/native、纯PyTorch和standalone SDK的实际设备资格各自记录，不能用其中一项代替另一项。

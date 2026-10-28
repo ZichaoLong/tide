@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[独立输入KV矩阵批资格与有限对照](core5-independent-projection-20261029.md)：f03e9be；CPU273 passed/2原FP16 strict xfail，纯Python与Python/native NPU各六组、公共常驻12项、新SDK两dtype六项及eager六组通过。D64显式FP64两步训练/逐值恢复通过；479次写入投影全部覆盖，但CPU中型单次+4.35%、D64+0.16%、NPU中型+1.36%，未见明确加速。独立profile与全部原失败保留；GPU延后，原数值/异步边界不改。
+
 [非GPU已知边界与定向解除](core5-nongpu-boundaries-20261029.md)：aadd3b4设施14项通过；外层FP64汇合不足以解除D64，原反馈FP32失败/显式FP64四窗全通过，各自逐值恢复。SDK原affine mixed-a/c四次更新与恢复通过；FP16 GDN和默认异步双NPU严格失败保留。GPU延后，无新增吞吐结论。
 
 [D64算术边界与跨步误差隔离](core5-arithmetic-isolation-20261029.md)：e75e1f5九项探索均严格失败；d8f7132交付可复现诊断，CPU19项设施检查通过。最佳局部方案首步事件逐值相同，但反向/更新仍有容差内差异，第二步状态/梯度/动量槽失败；两条调度自身精确恢复通过。没有采用局部生产策略或新增吞吐/设备声明。

@@ -1,48 +1,56 @@
 # 当前交接 — 2026-10-29
 
-授权分支`graph-execution-foundation`；数学固定0770593838a37c790a568226930567ed60f99b83。
-用户要求继续本机非GPU工作，GPU限制延后。参考仓库/公共环境只读；不使用子代理。
-阶段提交及普通推送已授权。当前HEAD为38ebf422b198d7cc041b6238fb954cf9775c02c0。
-本轮数值/异步诊断aadd3b4已推送；38ebf42是已提交的对应证据，待随本阶段普通推送。
+授权分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`。
+用户授权本机非GPU工作、分阶段提交及普通推送；GPU限制延后。参考仓库/公共环境只读，不使用子代理。
+本轮实现固定`f03e9bee0f069d48f5f1544d3821b7781409a27f`，对照固定`38ebf422b198d7cc041b6238fb954cf9775c02c0`。
+实现已推送；本交接与新增证据/导航构成后续文档交付，生产源码没有未提交修改。
 
-## 当前实现与开发验证
+## 本轮闭环结果
 
-KV新增不同输入/基座的同形矩阵批：先保持合法共同操作数复用，再合批未准备行；
-逐行参数/epsilon、独立None/零根、私有状态保留。8MiB局部矩阵packing预算，不改变dtype/图/checkpoint。
-本提交交付该实现；公共接口、独立公式、完整图/恢复检查及契约同步。
-纯Python26项及节点/区域三步AdamW/逐值恢复Python4项、native4项已通过。
+[独立输入KV合批报告](evidence/core5-independent-projection-20261029.md)及同名JSON保存精确命令、
+源码/二进制身份、独立公式与完整训练证据、终态和原日志hash；无需旧运行目录即可从公共入口复现。
 
-- `core5-independent-dev`：C++构建完成，构建+测试共1170秒到限，failed/124；不计测试通过。
-- `core5-independent-dev-tests`：复用经hash核对的构建，235 passed、2旧FP16 strict xfail、2 failed。
-  两个失败为旧C++检查把独立输入的“无共享”写成“无准备值”。现改为零计算复用、真实独立批、
-  手算输入梯度及另一行输入/adapter为None；生产实现及原容差不改。
-  原始source.tar.gz、manifest与failure-explanation.json保留在该job目录。
+- KV剩余同形正接收行按独立输入/基座合批；保留原计算复用、每行epsilon、None/零根及私有状态。
+  新局部矩阵packing预算8MiB，不改变dtype、图v13、checkpoint v5或原数值容差。
+- CPU相关固定资格：273 passed、2原FP16 GDN/default AdamW strict xfail；复用库前核对C++内容和23个binary hash。
+- 纯PyTorch NPU与Python/native NPU各六组eager通过（FP32/FP16、FC/HB/一般ports、4更新、独立根、恢复/CPU交接）；
+  Python/native公共KV常驻前向/训练/磁盘恢复12项通过。
+- 新standalone SDK core/resident构建通过。两dtype的flow/training/node-training六项通过：
+  每dtype前向21案例、单卡训练5配置/20更新、双卡节点训练5配置/20更新及换放置恢复/共同拒绝；
+  SDK eager另有两dtype×3图×4次AdamW及完整原生checkpoint/CPU交接通过。
+- 三对单次完整训练计时均通过全部返回、最后梯度、参数和SGD槽核对：CPU中型388.129→405.010ms，
+  同参数D64 CPU显式FP64 2991.719→2996.551ms，NPU纯PyTorch mixed-c中型1825.444→1850.355ms。
+  未观察到明确端到端加速。D64的34次共享+445次独立准备覆盖479次写入，State最大batch仍1。
+- D64两步完整训练与两调度换owner下一窗的记录/梯度/参数/SGD槽逐值恢复通过；独立profile也通过。
+  反向/finite阶段跨度最大，仍有大量Query/Aggregate VJP和字段拆装；不能只凭BMM数推断性能完成。
 
-修正开发任务`core5-independent-fix-dev-20261029`已终态passed/0，50项通过；
-包括C++独立输入手算/None根、节点/区域三步AdamW精确续接及设备检查入口。
-完整source archive、构建manifest与tests.xml位于`artifacts/jobs/core5-independent-fix-dev`。
-先前failed/124及failed/1记录均保留，不回填为通过。当前没有活跃任务。
-下一步以本实现提交冻结源码做定向资格；不得把开发archive身份当正式提交资格。
+## 作业终态与停止边界
 
-## 下一步
+**当前无排队或运行任务；本轮约定的有限资格、计时和profile全部结束。**
+作业前缀为`core5-independent-`，unit均追加`-20261029.service`：
+`fix-dev`、`qualify`、`npu-build`、`python-npu`、`pynative-device-fixed`、`study-cpu`、`study-npu`均passed/0。
+记录在`artifacts/jobs/core5-independent-*/status.json`及`task.log`；pynative-device-fixed的目录名为`pynative-device`。
+CPU study七个stage、NPU study两个stage均passed/0；完整运行记录见各目录的`study.json`。
+四个原失败仍failed：`dev`构建+测试1170秒到限/124；`dev-tests`235 passed/2 strict xfail/2旧断言失败；
+`npu`配置缺Ninja/1；`pynative-npu`覆盖CANN PYTHONPATH导致tbe初始化失败/1。
+后两项只修正任务私有环境。开发原archive、manifest及failure-explanation保留；未将旧任务回填通过。
 
-1. 建立本实现提交的`core5-independent-qualified`固定干净树；baseline固定38ebf42。
-2. `.local/core5-independent-qualify.sh`：固定CPU定向资格，完整核对新C++/binary hash后复用。
-3. `.local/core5-independent-npu.sh`：新SDK core及相关resident ABI重建和设备门禁；
-   `.local/core5-independent-python-npu.sh`：纯Python mixed-c KV FC/HB/一般端口两dtype训练恢复。
-   以上尚未启动，实际源码写`.local/core5-independent-source`；不得把旧设备二进制用于新ABI。
-4. 资格终态后有限性能对照：CPU native中型与同参数D64显式FP64，纯Python NPU mixed中型，
-   baseline/current每配置一次独立进程；另一个D64 profile进程。项目重型计时串行。
-   入口`.local/core5-independent-study-{cpu,npu}.sh`，尚未启动；输出新job目录。
-5. 固定证据、经验、当前契约和ROADMAP同步，证据另提交并普通推送；不恢复旧队列或GPU任务。
+作业输入仍是只读固定树`artifacts/worktrees/core5-independent-qualified`（f03e9be）和
+`artifacts/worktrees/core5-independent-baseline`（38ebf42）；它们是运行来源，不是公共复现的依赖。
+生产ABI增量已在CPU及两套NPU环境重建/核对；本提交没有新增CUDA构建或真机资格，旧构建只认证原提交。
 
-## 数值和异步边界
+## 仍保留的边界与接续
 
-[已提交非GPU边界证据](evidence/core5-nongpu-boundaries-20261029.md)保存全部终态、见证和复现入口。
-aadd3b4设施14项通过。原D64外层FP64汇合仍严格失败，局部私有VJP仍原精度；未采用生产探针。
-原FP32反馈四窗记录/梯度/动量槽失败，参数通过，各调度自身恢复逐值通过；显式FP64四窗全通过。
-FP16 GDN原AdamW差约.001984仍保留。默认异步双NPU纯Torch stock/guard失败，单线程只通过小例，
-完整图仍abort；没有公共环境改动或已验证的非阻塞替代。
-原SDK fc/affine FP32 mixed-a/c在ead6f34已通过四更新/完整checkpoint/CPU交接，不外推全矩阵。
-D2048 FP32、CUDA真机延后、x86_64无本机硬件、大型设备训练/吞吐仍分列。
-当前待办与适用范围以[ROADMAP](ROADMAP.md)为准。既有资格从[证据索引](evidence/README.md)导航。
+[非GPU边界证据](evidence/core5-nongpu-boundaries-20261029.md)及[ROADMAP](ROADMAP.md)区分已解除与未解除：
+D64/D2048及原反馈FP32完整等价、eager FP16 GDN/default AdamW、默认异步双NPU仍未解除。
+外层FP64汇合和既定九项分段精度探针不足，未采用为生产修复；两调度各自精确恢复不替代跨调度训练等价。
+显式CPU FP64已有独立可用资格；原SDK affine mixed-a/c见证已通过，不外推整个旧矩阵。
+CUDA按用户要求延后，x86_64无本机硬件，大型设备训练/跨卡吞吐未验，容量/正支持拒绝继续生效。
+
+本轮不继续重复既定探针、旧队列或扩大性能矩阵。新的算术方案须覆盖局部贡献舍入、独立根与跨步更新；
+异步问题须有新运行时/修复，并同时通过纯Torch反例和完整图恢复。性能后续按新profile优先审查
+Read/Full/Aggregate私有VJP与字段拆装，再考虑resident组合矩阵/窗口反向复用；没有低成本优化耗尽的结论。
+历史core-3、LH与本轮正负结果都在[性能经验](performance-lessons.md)，无需重跑旧实验恢复上下文。
+
+接续只需先执行：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+本轮无必须恢复的长任务；按ROADMAP中的新证据触发条件开展下一项，不将未解除限制改写为通过。

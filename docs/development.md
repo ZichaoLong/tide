@@ -85,6 +85,13 @@ python -m pip install --no-build-isolation --no-deps -e .
 置于任务 `PATH` 首位，并核对 `python3-config --prefix` 与该 Python 的 `sys.prefix` 一致。
 本机 `libtorch-npu/2.10.0-cann9.0.0` 模块本身不设置 Python PATH；不能让 9.1 私有 venv
 或系统 `python3-config` 混入该任务。只调整任务环境，不修改公共 module 或软件栈。
+该 SDK 任务还须能找到 Ninja；`build.py` 明确选择 Ninja，缺少它会在配置阶段失败。
+可以从项目私有工具目录提供 Ninja，但 SDK 配套 Python/bin 必须在 PATH 最前，
+且不激活另一套 Python 环境。分别核对 `command -v ninja`、`python3-config --prefix`
+和实际 SDK Python；构建工具可复用不表示 Torch/CANN 二进制可混用。
+NPU 验证启动器添加项目 `PYTHONPATH` 时须保留 module 已提供的路径；直接覆盖会使
+CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建已通过。
+这是任务环境错误，应修正私有启动器并保留原失败；不要据此改数学实现或安装另一套公共包。
 长任务继续使用 `run-durable-user-task` 的独立 `background.slice` 服务，
 固定源码、两个构建线程、单线程 ATen/BLAS 与有限时长。实际任务见 STATUS。
 

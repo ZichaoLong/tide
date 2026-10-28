@@ -116,6 +116,8 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [不同输入矩阵批](weighted-kv-sharing.md#不同输入与基座的矩阵批)保持KV §1.2逐行参数/epsilon与独立根，
 由 `kv_independent_batch` / `prepare_independent_kv` 和 `test_weighted_independent_preparation` 对应，
 不是扩大计算复用判据；预算、完整图与实际运行资格分列。
+[f03e9be独立资格/有限对照](evidence/core5-independent-projection-20261029.md)记录CPU与两套NPU ABI、
+D64 FP64完整梯度/optimizer/精确恢复及未见明确加速的单次测量；原FP32边界不改。
 [带权执行位置](weighted-placement.md)对应结构化 Read 临时快照、control/selection 分置、精度与独立转移 VJP。
 [带权设备检查](weighted-device-validation.md)对应实际 mixed 执行、精确 int64 排序、独立状态根、跨 owner 续接及候选 profile。
 [独立LibTorch FP32 master与typed checkpoint](native-master-optimizer.md)对应显式精度策略、具名owner和格式迁移。
