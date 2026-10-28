@@ -1,7 +1,7 @@
 """KV §1.2 / FC §6.2: base projection reuse with node-private adapters.
 
-Only actual common input/parameter handles license reuse. Scalars and unpacked
-execution continue using the textbook combined matrix as independent anchors.
+Only actual common input/parameter handles license reuse. All eager paths keep
+the low-rank factors; literal dense/FP64 formulas remain independent test anchors.
 """
 import torch
 from .tensors import norm
@@ -38,13 +38,13 @@ def projections(memory, plan, batch):
             (common if row else independent).append((k, j))
     if len(independent) == len(plan.ids):
         x = norm(plan.content, memory.config.epsilon)
-        return (project(x, memory.base+memory.adapter_u@memory.adapter_v),
-                project(norm(plan.content, memory.config.epsilon), memory.summary))
+        return (project(x, memory.base)+project(project(x, memory.adapter_v), memory.adapter_u),
+                project(x, memory.summary))
     if independent:
         ids = [k for k, _ in independent]
         x = norm(plan.content[ids], memory.config.epsilon)
-        values = project(x, memory.base+memory.adapter_u@memory.adapter_v)
-        local = project(norm(plan.content[ids], memory.config.epsilon), memory.summary)
+        values = project(x, memory.base)+project(project(x, memory.adapter_v), memory.adapter_u)
+        local = project(x, memory.summary)
         for r, (k, _) in enumerate(independent):
             results[k], summaries[k] = values[r], local[r]
     if common:
@@ -58,7 +58,7 @@ def projections(memory, plan, batch):
         if x.shape != (len(common), memory.config.width) or base.shape != (len(common), 2*memory.config.width):
             raise ValueError("invalid KV preparation shape")
         # FC §6.2: the adapter is a low-rank map, not a dense temporary.
-        # The unpacked combined matrix remains an independent numerical anchor.
+        # Independent dense formulas are tests, not large runtime temporaries.
         values = base+project(project(x, memory.adapter_v), memory.adapter_u)
         local = project(x, memory.summary)
         for r, (k, _) in enumerate(common):

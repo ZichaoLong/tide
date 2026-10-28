@@ -12,9 +12,12 @@
 在同一共享键内按私有矩阵形状/dtype/device 再分组，两个以上同形行使用真正 BMM 计算
 `adapter_v@x`、`adapter_u@low` 和 `summary@x`，再加共同 `b`。单行或不同形状组沿用已有路径。
 各节点按实际逻辑时间写入自己的缓存。
-低秩分支不构造稠密adapter矩阵；完整根/VJP、共享使用者、优化器和续接仍与独立combined-matrix锚点对照。
-无复用的行保留 `(base+adapter_u@adapter_v)@N(u)` 求值；两式是同一数学函数的不同算术分组，
-FP32/FP64 仍使用既定容差与严格离散路由检查。没有为复用修改 dtype、输入或平票规则。
+所有eager行（标量、未共享packed、共享组）都保留低秩形式`base@x+adapter_u@(adapter_v@x)`，
+避免反复构造大小`2d×d`的稠密adapter临时矩阵。未共享packed行的归一化结果也供summary使用。
+独立调度仍分别执行；[手算完整Jacobian](../tests/test_weighted_kv_sharing.py)、
+[多维dense矩阵/字段根](../tests/test_weighted_kv_formulas.py)与显式FP64诊断保留作公式锚点，不能用两条相同错误的执行自证。
+这是同一数学函数的算术分组选择，FP32/FP64仍使用既定容差和严格离散检查，不改dtype、输入或平票。
+resident目前仍使用稠密组合矩阵/tape，另按实际设备与完整记录验收；本次eager优化不声称已经优化该路径。
 
 准备结果不是新的数学 Content 字段、持久状态或 checkpoint 记录。
 它们由当前事件私有地携带，经 `PackedSequence.prepared` 传入精确前缀与 State VJP；

@@ -16,13 +16,15 @@ std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,con
     (batch.prepared.empty()||batch.prepared[j].empty()?independent:shared).push_back(k);
   }
   const auto& left=detail::weight(w,"kernel.adapter_u");const auto& right=detail::weight(w,"kernel.adapter_v");
-  if(independent.size()==p.ids.size())return {project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.base")+at::matmul(left,right)),
-      project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.summary"))};
+  if(independent.size()==p.ids.size()){
+    auto x=normalize(p.input,c.epsilon);
+    return {project(x,detail::weight(w,"kernel.base"))+project(project(x,right),left),project(x,detail::weight(w,"kernel.summary"))};
+  }
   if(!independent.empty()){
     auto ids=at::tensor(independent,p.input.options().dtype(at::kLong));
     auto input=p.input.index_select(0,ids),x=normalize(input,c.epsilon);
-    auto v=project(x,detail::weight(w,"kernel.base")+at::matmul(left,right));
-    auto s=project(normalize(input,c.epsilon),detail::weight(w,"kernel.summary"));
+    auto v=project(x,detail::weight(w,"kernel.base"))+project(project(x,right),left);
+    auto s=project(x,detail::weight(w,"kernel.summary"));
     for(size_t i=0;i<independent.size();++i){values[independent[i]]=v[i];summaries[independent[i]]=s[i];}
   }
   if(!shared.empty()){

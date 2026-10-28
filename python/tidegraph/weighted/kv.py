@@ -78,7 +78,7 @@ class KVMemory(StateProgram):
             raise ValueError("KV write times must strictly increase")
         mask, _ = self.visible(old, time)
         nu = norm(h.content, self.config.epsilon)
-        key, value = ((self.base+self.adapter_u@self.adapter_v)@nu).chunk(2)
+        key, value = (self.base@nu+self.adapter_u@(self.adapter_v@nu)).chunk(2)
         entries = {"keys": key, "values": value, "summaries": self.current(h.content),
                    "weights": h.mass.clamp(max=1),
                    "times": torch.tensor(time, dtype=torch.int64, device=h.mass.device)}

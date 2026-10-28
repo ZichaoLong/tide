@@ -525,9 +525,11 @@ device-resident progression and from packed multi-device performance acceptance.
 ## Weighted KV common projection operands
 
 [KV base sharing](weighted-kv-sharing.md) applies the pinned KV §1.2 expression
-as `base@N(u)+(U@V)@N(u)` for repeated actual input/base handles. The scalar
-reference and independent rows retain the combined-matrix expression. This
-algebraic regrouping changes no dtype, tolerance, positive-write rule or clock.
+as `base@N(u)+U@(V@N(u))` in scalar, independent packed and shared eager rows.
+Only actual equal input/base handles license common-operand reuse. Literal
+dense formulas and analytic Jacobians independently anchor this regrouping;
+it changes no dtype, tolerance, positive-write rule or clock. Resident KV still
+uses its separately qualified combined matrix and tape.
 Temporary normal/base operands flow through the first-order State VJP, preserving
 all users and private adapter/summary roots. They are not Content or checkpoint
 state; raw entry decoding, graph identity and checkpoint v5 remain unchanged.
