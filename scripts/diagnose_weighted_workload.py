@@ -6,7 +6,7 @@ replacement for the original FP32 measurement. No reference guides a candidate.
 """
 import argparse
 from contextlib import nullcontext
-from dataclasses import fields, is_dataclass, replace
+from dataclasses import fields, is_dataclass
 import os
 from pathlib import Path
 import sys
@@ -36,7 +36,10 @@ def main():
     p.add_argument("--steps", type=int, choices=(1, 2), default=2)
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--capture-allocations", action="store_true", help="Python only: actual scalar/batch operands and branch/free masks, outside performance timing")
+    p.add_argument("--checkpoint-check", action="store_true", help="two steps: save after first update; check restored next records/gradients/SGD exactly on both schedules")
     args = p.parse_args()
+    if args.checkpoint_check and args.steps != 2:
+        p.error("checkpoint check needs two steps")
     if args.capture_allocations and args.implementation != "python":
         p.error("allocation observation currently requires the independent Python schedules")
     if args.implementation == "native" and not args.native_library:
@@ -63,14 +66,14 @@ def main():
     report = dict(schema="tide-weighted-workload-diagnostic-v1", source=source, dirty=dirty,
         workload_sha256=plan["sha256"], implementation=args.implementation, dtype=args.dtype,
         input_policy="same seeded FP32 material; explicit promotion before both schedules",
-        scope="CPU complete records, discrete structure, output-loss gradients, SGD updates; not throughput",
+        scope="CPU complete records, discrete structure, output-loss gradients, SGD values/slots; optional exact next-window resume; not throughput",
         tolerances="unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
         state="running", steps=[])
     write_json(out/"result.json", report)
 
-    def check(a, b):
+    def check(a, b, *, exact=False):
         try:
-            equivalent(a, b)
+            equivalent(a, b, **(dict(atol=0, rtol=0) if exact else {}))
         except AssertionError as error:
             return str(error)
         return None
@@ -79,13 +82,11 @@ def main():
     observer = observe_allocations() if args.capture_allocations else nullcontext(None)
     allocation_records = observer.__enter__()
     try:
-        bindings, data = [], []
+        bindings, data, resumes = [], [], []
         for _ in range(2):
-            bound, xs, span = materialize(plan, max_bytes=1024**3)
-            bound.model.to(dtype=getattr(torch, args.dtype))
-            copies = {id(x.value): x.value.to(dtype=getattr(torch, args.dtype)) for x in xs}
+            bound, xs, span = materialize(plan, max_bytes=1024**3, dtype=getattr(torch, args.dtype))
             bindings.append(bound)
-            data.append([replace(x, value=copies[id(x.value)]) for x in xs])
+            data.append(xs)
         a, b = bindings
         execute = runner(b, args.implementation, ExecutionPlacement(), args.native_library)
         states = [Continuation(a.graph.identity, config.samples), Continuation(b.graph.identity, config.samples)]
@@ -108,11 +109,41 @@ def main():
             for optimizer in optimizers:
                 optimizer.step()
             row["parameters"] = check(*(dict(x.model.named_parameters()) for x in bindings))
+            row["optimizer"] = check(*(o.state_dict() for o in optimizers))
+            if resumes:
+                row["exact_resume"] = []
+                for i, (bound, continuation, optimizer, resumed, inputs) in enumerate(resumes):
+                    optimizer.zero_grad(set_to_none=True)
+                    restored_result = resumed(continuation, window(inputs, span, config.positions, step, "cpu"),
+                                              (step+1)*span, sealed_until=(step+1)*span)
+                    loss_from_outputs(restored_result).backward()
+                    errors = dict(records=check((left, right)[i], restored_result, exact=True),
+                                  gradients=check(gradients[i], {n:p.grad for n,p in bound.model.named_parameters()}, exact=True))
+                    optimizer.step()
+                    errors.update(parameters=check(dict(bindings[i].model.named_parameters()), dict(bound.model.named_parameters()), exact=True),
+                                  optimizer=check(optimizers[i].state_dict(), optimizer.state_dict(), exact=True))
+                    row["exact_resume"].append(errors)
             states = [r.continuation.detach() for r in (left, right)]
+            if args.checkpoint_check and step == 0:
+                from tidegraph.checkpoint import save, load as restore
+                for i, (binding, state, optimizer) in enumerate(zip(bindings, states, optimizers)):
+                    path = out/f"checkpoint-{i}.pt"
+                    save(path, binding.graph, binding.model, state, optimizer)
+                    bound, inputs, _ = materialize(plan, max_bytes=1024**3, dtype=getattr(torch, args.dtype))
+                    fresh_optimizer = torch.optim.SGD(bound.model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
+                    continuation = restore(path, bound.graph, bound.model, fresh_optimizer)
+                    equivalent(state, continuation, atol=0, rtol=0)
+                    equivalent(binding.model.state_dict(), bound.model.state_dict(), atol=0, rtol=0)
+                    equivalent(optimizer.state_dict(), fresh_optimizer.state_dict(), atol=0, rtol=0)
+                    resumed = ((lambda b: lambda *a, **kw: scalar(b.graph,b.model,*a,**kw))(bound) if i == 0
+                               else runner(bound, args.implementation, ExecutionPlacement(), args.native_library))
+                    resumes.append((bound, continuation, fresh_optimizer, resumed, inputs))
+                row["checkpoint_exact_decode"] = True
             write_json(out/"result.json", report)
         report["state"] = "strict_mismatch" if any(
             row[k] is not None for row in report["steps"]
-            for k in ("discrete", "complete_records", "gradients", "parameters")) else "passed"
+            for k in ("discrete", "complete_records", "gradients", "parameters", "optimizer")) or any(
+                error is not None for row in report["steps"] for item in row.get("exact_resume", []) for error in item.values()) else "passed"
     except BaseException as error:
         report.update(state="failed", error=repr(error))
         raise

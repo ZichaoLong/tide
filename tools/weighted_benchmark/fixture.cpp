@@ -36,7 +36,7 @@ weighted::RecurrentConfig recurrent(const Json& x){
   c.validate();return c;
 }
 }
-Fixture fixture(const Json& data){
+Fixture fixture(const Json& data,at::ScalarType dtype){
   if(data.at("schema")!="tide-weighted-benchmark-fixture-v1"&&data.at("schema")!="tide-weighted-benchmark-fixture-v2")
     throw std::invalid_argument("unknown benchmark fixture schema");
   const auto& config=data.at("config");Fixture f;auto& g=f.graph;auto& m=f.model;
@@ -58,7 +58,7 @@ Fixture fixture(const Json& data){
   const auto& l=graph.at("layout");g.layout=PortLayout{l.at("edge_source"),l.at("edge_target"),l.at("input"),l.at("output")};
   const auto& d=graph.at("domain");g.source_domain=SourceDomain{d.at("edge_target"),d.at("input")};g.compile();
   if(g.identity!=graph.at("native_identity"))throw std::invalid_argument("decoded fixture graph identity differs");
-  auto values=tensors(data);
+  auto values=tensors(data,dtype);
   auto tensor=[&](const Json& i){return values.at(i.get<size_t>());};
   const auto& classes=data.at("classes");SourceClasses sources{classes.at("edges"),classes.at("inputs")};
   for(size_t v=0;v<g.nodes.size();++v){const auto& x=data.at("nodes").at(v);

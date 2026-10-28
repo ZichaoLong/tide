@@ -27,4 +27,17 @@ Json work(const Result& r){
   return { {"candidate_updates",r.trace.size()},{"full_calls",full},{"messages",r.messages.size()},
     {"outputs",r.outputs.size()},{"pending",r.continuation.pending.size()},{"actual_stats",r.stats} };
 }
+void compare_tensors(const std::map<std::string,Tensor>& actual,const std::map<std::string,Tensor>& expected,
+                     at::ScalarType dtype,const std::string& label){
+  if(actual.size()!=expected.size())throw std::runtime_error(label+" owner count differs");
+  for(const auto& [name,value]:expected){
+    const auto found=actual.find(name);
+    if(found==actual.end())throw std::runtime_error(label+" owner missing: "+name);
+    const auto& got=found->second;
+    if(got.defined()!=value.defined())throw std::runtime_error(label+" None/zero differs: "+name);
+    if(value.defined()&&(got.sizes()!=value.sizes()||got.scalar_type()!=value.scalar_type()||
+        !at::allclose(got,value,dtype==at::kDouble?1e-8:1e-5,dtype==at::kDouble?1e-10:1e-6)))
+      throw std::runtime_error(label+" differs: "+name);
+  }
+}
 }

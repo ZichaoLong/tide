@@ -71,6 +71,16 @@ OpenSSL Crypto只用于独立benchmark材料校验，不增加公共C++核心或
 native另需`--native-library CORE`。原严格容差和None/零区别保持；FP64通过不是FP32修复，
 这个输出loss诊断也不替代独立字段根与checkpoint的完整训练门禁。
 
+两种CPU benchmark现可显式给`--dtype float64`，沿用同一FP32材料并在两条调度开始前提升；
+参数数量、共享身份和拓扑不变。计划的`memory_floor`仍表示其原FP32材料，运行额外记录
+`effective_static_tensor_bytes`，静态存储准入按请求dtype计费；转换过程峰值仍不包含在下界中。
+二进制fixture保持原FP32编码与SHA256，standalone只在逐张量校验后转换，每个表项一次，保留别名。
+CPU更高精度的完整通过不能回填到FP32失败；也不代表与旧core-3不同dtype计时可直接算加速。
+
+诊断每步另比较optimizer完整state_dict。`--checkpoint-check --steps 2`在第一次更新后分别保存
+两条调度的真实状态/参数/动量，换owner精确解码；第二窗口分别对照各自未中断执行，完整返回、
+参数梯度、参数和optimizer均要求逐值相等。它不向另一调度提供参考状态或轨迹。
+
 Python 诊断可加 `--capture-allocations` 保存两条调度实际调用的分配输入、分支、free掩码、
 控制和残差到 `allocations.json`；原函数和反向连接不变，观察不进入性能计时。
 记录明确标为成功调用的观察，不冒充抛出的失败。native 的此类全调用观察尚未实现。

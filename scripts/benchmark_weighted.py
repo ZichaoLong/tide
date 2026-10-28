@@ -25,6 +25,7 @@ from source_identity import source_state
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
+    parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
     parser.add_argument("--implementation", choices=("python", "native", "resident"), required=True)
     parser.add_argument("--placement", choices=("native", "mixed-a", "mixed-b", "mixed-c"), default="native")
     parser.add_argument("--schedule", choices=("streaming", "prefill"), default="prefill")
@@ -55,6 +56,7 @@ def main():
     from weighted_benchmark_cases import Workload, fixture, fingerprint
     from weighted_benchmark_runners import Eager, Resident, work
     from weighted_benchmark_observation import initialize, Memory
+    from weighted_benchmark_precision import promote, tolerances, validate
     source, dirty = source_state(root)
     if dirty and not args.allow_dirty:
         parser.error("controlled measurement requires clean immutable source")
@@ -76,12 +78,12 @@ def main():
     now = lambda: datetime.now(timezone.utc).isoformat()
     record = dict(schema="tide-weighted-benchmark-v1", state="running", source=source, dirty=dirty,
         started=now(), argv=sys.argv[1:], config=asdict(config),
-        requested_device=args.device, implementation=args.implementation,
+        requested_device=args.device, requested_dtype=args.dtype, implementation=args.implementation,
         mode=args.mode, schedule=args.schedule, placement=args.placement,
         warmup_windows=1, measured_windows=1 if args.profile else args.steps,
         kind="profile" if args.profile else "benchmark", tracking="project JSON; execution-flows §1",
         timing="complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
-        excluded="fixture/model/owner/optimizer construction, warmup, validation, final parameter export, profiler parsing",
+        excluded="fixture/model/owner/optimizer construction, warmup, validation, final parameter/gradient/optimizer export, profiler parsing",
         load_average_before=list(os.getloadavg()), host_arch=platform.machine(),
         caveat="one process per configuration; evolving continuation; no statistical or universal speed claim",
         dispatch_environment={k: os.environ.get(k) for k in ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")})
@@ -90,23 +92,35 @@ def main():
     try:
         start = time.perf_counter()
         device, reason = resolve_device(args.device)
+        validate(args.dtype, device, args.implementation)
+        dtype = getattr(torch, args.dtype)
+        atol, rtol = tolerances(dtype)
         if args.placement != "native" and device.type == "cpu":
             raise ValueError("mixed placement requires an accelerator")
         if args.implementation == "resident" and device.type == "cpu":
             raise ValueError("resident requires an accelerator")
         initialize(args, device)
         record["runtime_initialization_seconds"] = time.perf_counter()-start
-        record["runtime"] = manifest(device, reason, torch.float32)
+        record["runtime"] = manifest(device, reason, dtype)
+        record["precision"] = dict(effective_dtype=args.dtype, fixture_dtype="float32",
+            input_policy="same seeded FP32 material; explicit promotion before both schedules", atol=atol, rtol=rtol)
         memory = Memory(device)
         record["memory"] = memory.capture("runtime_ready", reset=True)
         start = time.perf_counter()
-        create = (lambda: materialize(plan, max_bytes=args.max_materialize_bytes)) if plan else lambda: fixture(config)
+        def create():
+            if plan:
+                return materialize(plan, max_bytes=args.max_materialize_bytes, dtype=dtype)
+            binding, inputs, span = fixture(config)
+            binding, inputs = promote(binding, inputs, dtype)
+            return binding, inputs, span
         binding, inputs, span = create()
         record["fixture_sha256"] = fingerprint(binding, inputs, config)
         record["workload_span"] = span
         if plan:
             record["parameter_inventory"] = plan["inventory"]
             record["memory_floor"] = plan["memory_floor"]
+            record["effective_static_tensor_bytes"] = (plan["memory_floor"]["logical_parameter_bytes"]+
+                plan["memory_floor"]["legacy_inert_buffer_bytes"])*(2 if dtype == torch.float64 else 1)
             record["parameter_match"] = plan.get("parameter_match")
         record["fixture_preparation_seconds"] = time.perf_counter()-start
         write_json(out/"result.json", record)
@@ -118,12 +132,14 @@ def main():
         record["effective"] = candidate.manifest()
         actual = []; metrics = []; record["metrics"] = metrics
         record.update(phase="warmup", window=0)
+        write_json(out/"result.json", record)
         start = time.perf_counter(); actual.append(candidate.step(0))
         record["warmup_seconds"] = time.perf_counter()-start
         memory.capture("warmup", reset=True)
         count = record["measured_windows"]
         for step in range(1, count+1):
             record.update(phase="measurement", window=step)
+            write_json(out/"result.json", record)
             if args.profile:
                 if device.type == "npu":
                     import torch_npu
@@ -154,6 +170,7 @@ def main():
                 metrics.append(event); write_json(out/"metrics.json", metrics)
         memory.capture("measurement")
         parameters = candidate.parameters() if args.mode == "training" else None
+        training_state = candidate.training_state() if args.mode == "training" else None
         candidate.close(); candidate = None
         del binding, inputs
         # Only after the measurement: independent scalar CPU schedule and
@@ -162,15 +179,19 @@ def main():
         reference = Eager(expected_binding, expected_inputs, span, config, args, torch.device("cpu"), reference=True)
         for step, (result, loss) in enumerate(actual):
             record.update(phase="independent-check", window=step)
+            write_json(out/"result.json", record)
             expected, expected_loss = reference.step(step)
             finite(result); equivalent(result, expected, check_device=False)
-            torch.testing.assert_close(torch.tensor(loss), torch.tensor(expected_loss), rtol=1e-5, atol=1e-6)
+            torch.testing.assert_close(torch.tensor(loss, dtype=dtype), torch.tensor(expected_loss, dtype=dtype), rtol=rtol, atol=atol)
         if parameters is not None:
             for name, value in reference.parameters().items():
-                torch.testing.assert_close(parameters[name], value, rtol=1e-5, atol=1e-6)
+                torch.testing.assert_close(parameters[name], value, rtol=rtol, atol=atol)
+        if training_state is not None:
+            equivalent(training_state, reference.training_state(), check_device=False)
         record.update(state="passed", post_measurement_complete_records=True,
                       parameter_values_checked=parameters is not None,
-                      optimizer_values_checked=args.mode == "training" and parameters is not None,
+                      optimizer_values_checked=training_state is not None,
+                      final_parameter_gradients_checked=training_state is not None,
                       metrics=metrics, load_average_after=list(os.getloadavg()))
         if metrics:
             times = [x["seconds"] for x in metrics]

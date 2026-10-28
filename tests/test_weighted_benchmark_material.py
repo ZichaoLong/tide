@@ -1,6 +1,7 @@
 """Public native codec -> independent standalone execution and strict damage refusal."""
 import json
 import hashlib
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -29,7 +30,8 @@ def command(*args):
 
 @pytest.mark.parametrize("family,selection", [("kv","regional_total"), ("affine","regional_total_zero"),
     ("delta","hard_selection"), ("gated_delta","regional_total"), ("ssd","regional_total")])
-def test_five_families_binary_material_and_complete_training(tmp_path, family, selection):
+@pytest.mark.parametrize("precision", ["float32", "float64"])
+def test_five_families_binary_material_and_complete_training(tmp_path, family, selection, precision):
     executable = binary()
     plan, _ = make_plan(topology("fc", depth=2, region_width=2), family=family, selection=selection,
                          width=4, samples=1, positions=2)
@@ -40,12 +42,13 @@ def test_five_families_binary_material_and_complete_training(tmp_path, family, s
                    "--workload", tmp_path/"plan.json", "--binary", "--output", tmp_path/"fixture.json")
     assert made.returncode == 0, made.stderr
     assert json.loads((tmp_path/"fixture.json").read_text())["alpha_agg"] == .31
-    result = command(executable,"--fixture",tmp_path/"fixture.json","--device","cpu","--steps","1", "--output-dir",tmp_path/"run")
+    result = command(executable,"--fixture",tmp_path/"fixture.json","--device","cpu","--dtype",precision,"--steps","1", "--output-dir",tmp_path/"run")
     assert result.returncode == 0, result.stderr
     record = json.loads((tmp_path/"run/result.json").read_text())
     assert record["state"] == "passed" and record["optimizer_values_checked"] and record["post_measurement_complete_records"]
+    assert record["dtype"] == precision and record["final_parameter_gradients_checked"]
     assert record["phase"] == "complete"
-    if family != "kv": return
+    if family != "kv" or precision != "float32": return
     data = json.loads((tmp_path/"fixture.json").read_text())
     # Distinct corruptions must fail with stable reasons before any timed step.
     for label, edit, expected in (
@@ -57,6 +60,13 @@ def test_five_families_binary_material_and_complete_training(tmp_path, family, s
         failed = command(executable,"--fixture",tmp_path/(label+".json"),"--device","cpu","--steps","1", "--output-dir",tmp_path/label)
         assert failed.returncode and expected in failed.stderr, failed.stderr
         assert json.loads((tmp_path/label/"result.json").read_text())["phase"] == "construction"
+    # Original FP32 material fits this ceiling; explicit FP64 storage does not.
+    actual_bytes = sum(4*math.prod(t["shape"]) for t in data["tensors"])
+    data["max_materialize_bytes"] = 2*actual_bytes-1
+    write_json(tmp_path/"double-budget.json", data)
+    refused = command(executable,"--fixture",tmp_path/"double-budget.json","--device","cpu","--dtype","float64",
+                      "--steps","1","--output-dir",tmp_path/"double-budget")
+    assert refused.returncode and "ceiling" in refused.stderr
 
 
 def test_standalone_persists_phase_before_blocking_fixture_read(tmp_path):
