@@ -109,3 +109,5 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 [闭式反例](../tests/test_weighted_quad_offset.py)独立验收单个/多个内部响应、饱和/零坐标、
 评分/上限/总量/温度/共同阈值根及版本；resident checker 直接使用手算解与梯度，
 不借用 eager 求解器。这项修复不证明其他 D2048 或 D64 的严格差异都已解除。
+[07e56ca固定资格](evidence/core5-private-projection-20261028.md)记录CPU、NPU实机和CUDA构建分别通过的范围，
+并保存原大型材料的残差拒绝；不得把手算共同偏移例的修复扩展成任意分数范围的数值保证。

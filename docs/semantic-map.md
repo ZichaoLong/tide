@@ -207,3 +207,5 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 私有同形 KV 投影进一步合批仍对应 KV §1.2 / FC §6.2，入口与独立根/VJP、实际矩阵批统计见
 [KV 计算复用](weighted-kv-sharing.md#独立私有行的一阶边界)；共同评分偏移的实际响应修复见
 [分配契约](weighted-allocation.md#共同偏移下的实际响应)。两项不改变图 v13/checkpoint v5。
+对应[07e56ca固定资格/有限对照](evidence/core5-private-projection-20261028.md)区分CPU、NPU实机、CUDA构建，
+并保留原D64训练和D2048残差失败；独立闭式/VJP通过不扩大成任意数值域资格。

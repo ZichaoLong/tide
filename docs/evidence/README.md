@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 Quad响应修复与私有矩阵批](core5-private-projection-20261028.md)：07e56ca；共同偏移闭式解/VJP、真实私有BMM/独立行根。CPU574 passed/2 strict xfail、NPU单/双卡相关资格及CUDA三架构构建通过；有限CPU近持平、mixed-c稍慢，D64完整训练及D2048残差仍严格失败，没有GPU真机或大型吞吐结论。
+
 [Core-5 参数匹配与性能经验迁移](core5-performance-transfer-20261028.md)：2da3f2c/0503593；五族真实参数清单、core-3主体匹配、实际92.62亿参数材料、共享存储/复制优化；CPU376 passed/2 strict xfail、设施14项、NPU八项及CUDA构建/CPU核验。单次CPU下降、NPU稍慢且allocated小降；新增D64完整训练和quad共同偏移严格失败均保留。
 
 [Core-5 三项审查修复](core5-review-fixes-20261028.md)：1d19c59；ClockedState参数/VJP、quad正支持与参数bank准入。CPU442项、standalone NPU两dtype四组件、CUDA CPU31项/三架构构建通过；NPU首次环境失败保留，无GPU真机。
