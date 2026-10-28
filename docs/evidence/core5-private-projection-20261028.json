@@ -1,0 +1,3533 @@
+{
+  "schema": "tide-core5-private-projection-evidence-v1",
+  "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "targeted qualifications, one finite before/after process per config, strict failures retained",
+  "qualification_state": "passed",
+  "performance_study_state": "contains_strict_failures",
+  "jobs": [
+    {
+      "name": "core5-quad-dev",
+      "unit": "core5-quad-dev-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "2370",
+          "python",
+          "scripts/develop.py",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-quad-dev",
+          "--build-dir",
+          "build/cpu",
+          "--jobs",
+          "2",
+          "tests/test_weighted_quad_offset.py",
+          "tests/test_weighted_quad_support.py",
+          "tests/test_weighted_allocation.py",
+          "tests/test_weighted_allocation_shift.py",
+          "tests/test_weighted_region_batch.py",
+          "tests/test_weighted_entropy_allocation.py",
+          "tests/test_weighted_entropy_native.py",
+          "tests/test_weighted_execution.py"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-quad-dev",
+        "state": "passed",
+        "source": "b7c5173c3672d02307164b0b88382d28766e256b",
+        "dirty": "M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/weighted-allocation.md\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/allocation_rows.py\n M tools/device_online/ascendc/tide_weighted_allocate.cpp\n M tools/device_online/weighted_allocation_check.cpp\n?? tests/test_weighted_quad_offset.py",
+        "started": "2026-10-28T07:26:47.319417+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-28T07:43:51.341555+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-quad-dev/status.json",
+        "bytes": 1399,
+        "sha256": "b9a3e7da4ee5ee53645a29e607c3a3400db44bc86731c5e2b697fd5332148a67"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-quad-dev/task.log",
+        "bytes": 19479,
+        "sha256": "595d8a349135d37c5a9fe1c34c3e6622766dfcd0ca19865ba7047dd24ae7edf5"
+      },
+      "dirty_development_snapshot": {
+        "path": "artifacts/jobs/core5-quad-dev/source.tar.gz",
+        "bytes": 45046534,
+        "sha256": "584ce87ff54cbeb4409172a4d032be20276ab8217cdcb76f1197efd73881b27a"
+      }
+    },
+    {
+      "name": "core5-private-dev",
+      "unit": "core5-private-dev-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "2370",
+          "python",
+          "scripts/develop.py",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-private-dev",
+          "--build-dir",
+          "build/cpu",
+          "--jobs",
+          "2",
+          "tests/test_weighted_private_projection.py",
+          "tests/test_weighted_kv_sharing.py",
+          "tests/test_weighted_compute_sharing.py",
+          "tests/test_weighted_execution.py",
+          "tests/test_weighted_packed.py",
+          "tests/test_weighted_state_vjp.py",
+          "tests/test_weighted_clocked_vjp.py",
+          "tests/test_state_batched_vjp.py",
+          "tests/test_semantics.py",
+          "tests/test_cli.py::test_cpp_custom_state_kernel",
+          "tests/test_resident_weighted_allocation.py"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-quad-dev",
+        "state": "failed",
+        "source": "b7c5173c3672d02307164b0b88382d28766e256b",
+        "dirty": "M CMakeLists.txt\n M cpp/include/tide/kernel.h\n M cpp/src/state_preparation.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_kv.cpp\n M cpp/src/weighted_kv_projection.cpp\n M cpp/test/weighted.cpp\n M cpp/test/weighted_kv_sharing.cpp\n M cpp/test/weighted_sharing.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/semantic-map.md\n M docs/semantics.md\n M docs/weighted-allocation.md\n M docs/weighted-kv-sharing.md\n M python/tidegraph/state_preparation.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/allocation_rows.py\n M python/tidegraph/weighted/kv.py\n M python/tidegraph/weighted/kv_projection.py\n M tests/test_weighted_kv_sharing.py\n M tools/device_online/ascendc/tide_weighted_allocate.cpp\n M tools/device_online/weighted_allocation_check.cpp\n?? cpp/src/weighted_kv_preparation.cpp\n?? cpp/src/weighted_kv_preparation.h\n?? cpp/src/weighted_row_linear.cpp\n?? cpp/src/weighted_row_linear.h\n?? python/tidegraph/weighted/kv_projection_batch.py\n?? python/tidegraph/weighted/row_linear.py\n?? tests/test_weighted_private_projection.py\n?? tests/test_weighted_quad_offset.py",
+        "started": "2026-10-28T07:47:11.190908+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-28T07:53:31.862703+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-dev/status.json",
+        "bytes": 2302,
+        "sha256": "cb449c73f809c851d7ebef295cc14d8d4d9f136aedd6a1f3f9efd12bdfc1cc47"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-dev/task.log",
+        "bytes": 11737,
+        "sha256": "7a97dab74373a353ccd7dfa39ac8837dd68224a9b8dd44e2870524473c9f1de2"
+      },
+      "dirty_development_snapshot": {
+        "path": "artifacts/jobs/core5-private-dev/source.tar.gz",
+        "bytes": 45053740,
+        "sha256": "c03405766f0b9d936f1da23e875382a8d1a764224d3b4fcfac44ecd3bd6faeb6"
+      }
+    },
+    {
+      "name": "core5-private-dev2",
+      "unit": "core5-private-dev2-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "2370",
+          "python",
+          "scripts/develop.py",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-private-dev2",
+          "--build-dir",
+          "build/cpu",
+          "--jobs",
+          "2",
+          "tests/test_weighted_private_projection.py",
+          "tests/test_weighted_kv_sharing.py",
+          "tests/test_weighted_compute_sharing.py",
+          "tests/test_weighted_execution.py",
+          "tests/test_weighted_packed.py",
+          "tests/test_weighted_state_vjp.py",
+          "tests/test_weighted_clocked_vjp.py",
+          "tests/test_state_batched_vjp.py",
+          "tests/test_semantics.py",
+          "tests/test_cli.py::test_cpp_custom_state_kernel",
+          "tests/test_resident_weighted_allocation.py"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-quad-dev",
+        "state": "passed",
+        "source": "b7c5173c3672d02307164b0b88382d28766e256b",
+        "dirty": "M CMakeLists.txt\n M cpp/include/tide/kernel.h\n M cpp/src/state_preparation.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_kv.cpp\n M cpp/src/weighted_kv_projection.cpp\n M cpp/test/weighted.cpp\n M cpp/test/weighted_kv_sharing.cpp\n M cpp/test/weighted_sharing.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-allocation.md\n M docs/semantic-map.md\n M docs/semantics.md\n M docs/weighted-allocation.md\n M docs/weighted-kv-sharing.md\n M python/tidegraph/state_preparation.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/allocation_rows.py\n M python/tidegraph/weighted/kv.py\n M python/tidegraph/weighted/kv_projection.py\n M tests/test_resident_weighted_allocation.py\n M tests/test_weighted_kv_sharing.py\n M tools/device_online/ascendc/tide_weighted_allocate.cpp\n M tools/device_online/weighted_allocation_check.cpp\n?? cpp/src/weighted_kv_preparation.cpp\n?? cpp/src/weighted_kv_preparation.h\n?? cpp/src/weighted_row_linear.cpp\n?? cpp/src/weighted_row_linear.h\n?? python/tidegraph/weighted/kv_projection_batch.py\n?? python/tidegraph/weighted/row_linear.py\n?? tests/test_weighted_private_projection.py\n?? tests/test_weighted_quad_offset.py",
+        "started": "2026-10-28T07:55:09.917730+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-28T07:58:11.520994+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-dev2/status.json",
+        "bytes": 2391,
+        "sha256": "ea110bdc2e7f032d1f912943a1da1a9c1a9bd22a87e742b8e3163eb43fc99ea4"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-dev2/task.log",
+        "bytes": 3403,
+        "sha256": "c9eee5126837f60ca4e4fab929b72bd1c4e553d3addf9fddd67652ee697d388e"
+      },
+      "dirty_development_snapshot": {
+        "path": "artifacts/jobs/core5-private-dev2/source.tar.gz",
+        "bytes": 45053749,
+        "sha256": "0849a5c8cddcb62e1206154c2fda23c2b24b050f85b539a1b3fac4b4b36ddc36"
+      }
+    },
+    {
+      "name": "core5-private-qualify-cpu",
+      "unit": "core5-private-qualify-cpu-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "1170",
+          "python",
+          "REPO/.local/core5-private-qualify-cpu.py"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-private-qualified",
+        "state": "passed",
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "dirty": "",
+        "started": "2026-10-28T08:00:43.902954+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-28T08:06:15.375468+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-qualify-cpu/status.json",
+        "bytes": 477,
+        "sha256": "b42d00f283dc30d0ddabe840d42fc7dd00a73f407a63fc79d2cabaf1ee32fb9b"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-qualify-cpu/task.log",
+        "bytes": 14133,
+        "sha256": "25030db94bb030122f03b160aa69513ff314783d77b1e9e4bfd6886cea92f6e1"
+      }
+    },
+    {
+      "name": "core5-private-qualify-npu",
+      "unit": "core5-private-qualify-npu-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "5370",
+          "/bin/bash",
+          "REPO/.local/core5-private-qualify-npu-workload.sh"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-private-qualified",
+        "state": "passed",
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "dirty": "",
+        "started": "2026-10-28T08:00:43.954081+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-28T08:42:57.370813+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-qualify-npu/status.json",
+        "bytes": 489,
+        "sha256": "f89a3e41b483c11a41142f0be48aabe3c355dcfe6d4c483a3a7c3f1a46432063"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-qualify-npu/task.log",
+        "bytes": 1066901,
+        "sha256": "da6312ac44c055a16c7d678e6a3309f55a44ee4de1ee6e2aca740b990cc93a24"
+      }
+    },
+    {
+      "name": "core5-private-qualify-cuda",
+      "unit": "core5-private-qualify-cuda-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "5370",
+          "/bin/bash",
+          "REPO/.local/core5-private-qualify-cuda-workload.sh"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-private-qualified",
+        "state": "passed",
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "dirty": "",
+        "started": "2026-10-28T08:00:43.912737+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-28T08:28:06.432826+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-qualify-cuda/status.json",
+        "bytes": 490,
+        "sha256": "a8e899b36a5e79a6d6d40490009cc18a9b6df77e834149212aec7d86d959b725"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-qualify-cuda/task.log",
+        "bytes": 65270,
+        "sha256": "93fe9f9e3d72cb2f5a1374d08f401735e3b6637fa50835c22de41cc416c0a429"
+      }
+    },
+    {
+      "name": "core5-private-study-cpu",
+      "unit": "core5-private-study-cpu-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "4170",
+          "python",
+          "REPO/.local/core5-followup-study.py",
+          "--core",
+          "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+          "--binary",
+          "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+          "--baseline-binary",
+          "REPO/artifacts/jobs/core5-performance-qualify-cpu/standalone-build/client/weighted-benchmark",
+          "--materials",
+          "REPO/artifacts/jobs/core5-performance-study-cpu/runs",
+          "--output",
+          "REPO/artifacts/jobs/core5-private-study-cpu/runs"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-private-qualified",
+        "state": "failed",
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "dirty": "",
+        "started": "2026-10-28T08:45:03.577564+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-28T09:00:39.447115+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-study-cpu/status.json",
+        "bytes": 1171,
+        "sha256": "9d4dee3bdc5098aab300fe19a0a70a11e0cc37ec4e224698b38cb2e34624bc3a"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-study-cpu/task.log",
+        "bytes": 154,
+        "sha256": "a092886d4bfb9f5155ca865962208e257ff51dfe009b85d485b2850f51edb0a4"
+      }
+    },
+    {
+      "name": "core5-private-study-npu",
+      "unit": "core5-private-study-npu-20261028",
+      "status": {
+        "command": [
+          "timeout",
+          "1170",
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+          "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "--job-id",
+          "core5-private-study-npu-20261028",
+          "--project",
+          "graph-execution-foundation",
+          "--priority",
+          "0",
+          "--npu-count",
+          "1",
+          "--max-wait-seconds",
+          "180",
+          "--state-file",
+          "REPO/artifacts/jobs/core5-private-study-npu/queue-state.json",
+          "--",
+          "timeout",
+          "900",
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+          "REPO/.local/core5-private-npu-study.py",
+          "--output",
+          "REPO/artifacts/jobs/core5-private-study-npu/runs"
+        ],
+        "cwd": "REPO/artifacts/worktrees/core5-private-qualified",
+        "state": "failed",
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "dirty": "",
+        "started": "2026-10-28T09:02:00.283916+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-28T09:03:10.149139+00:00"
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-private-study-npu/status.json",
+        "bytes": 1202,
+        "sha256": "f62e2fe9eeaf931084276222a1099c5a6d9063bcd9ef929d6efa23e4c5134f86"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-private-study-npu/task.log",
+        "bytes": 797,
+        "sha256": "a4631ba66c2bacc52a48cea0fd409c44c5994e0a7f008eb87fe2d27f34279287"
+      }
+    }
+  ],
+  "timing": "one warmup and one measured connected window; input preparation, schedule/packing, forward, full return, loss, backward, finite checks, SGD, detach and sync included; construction, warmup and post-measurement independent comparison excluded",
+  "resource_policy": "background.slice, Nice10, build workers2, operator threads1; project heavy measurement jobs serial; external shared-host load not excluded; systemd properties do not prove exclusive cgroup resources",
+  "cpu_qualification": {
+    "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+    "passed": 574,
+    "strict_xfail": 2,
+    "preserved_xfail": "eager FP16 GDN/AdamW Python/native",
+    "report": {
+      "path": "artifacts/jobs/core5-private-qualify-cpu/qualification.json",
+      "bytes": 5317,
+      "sha256": "d4247dca179c61c9915b80f7a1d94596a5efffcec060680dee714ca59487cda0"
+    },
+    "junit": {
+      "path": "artifacts/jobs/core5-private-qualify-cpu/tests.xml",
+      "bytes": 86135,
+      "sha256": "2ead916f40be9ab2b655d1d99599afd20624e5e1dbecdd00e4050708f4f419dd"
+    },
+    "stages": [
+      {
+        "command": [
+          "REPO/.local/venv-core5/bin/python",
+          "scripts/check_upstream.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "REPO/.local/venv-core5/bin/python",
+          "scripts/build_weighted_benchmark.py",
+          "--core-build",
+          "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "REPO/.local/venv-core5/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_weighted_quad_offset.py",
+          "tests/test_weighted_quad_support.py",
+          "tests/test_weighted_allocation.py",
+          "tests/test_weighted_allocation_shift.py",
+          "tests/test_weighted_region_batch.py",
+          "tests/test_weighted_entropy_allocation.py",
+          "tests/test_weighted_entropy_native.py",
+          "tests/test_weighted_private_projection.py",
+          "tests/test_weighted_kv_sharing.py",
+          "tests/test_weighted_compute_sharing.py",
+          "tests/test_weighted_execution.py",
+          "tests/test_weighted_packed.py",
+          "tests/test_weighted_state_vjp.py",
+          "tests/test_weighted_clocked_vjp.py",
+          "tests/test_state_batched_vjp.py",
+          "tests/test_semantics.py",
+          "tests/test_resident_weighted_allocation.py",
+          "tests/test_cpp_weighted_training.py",
+          "tests/test_weighted_precision.py",
+          "tests/test_cli.py::test_cpp_custom_state_kernel",
+          "--dtype",
+          "both",
+          "--junitxml=REPO/artifacts/jobs/core5-private-qualify-cpu/tests.xml"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "core": {
+      "source": "b7c5173c3672d02307164b0b88382d28766e256b",
+      "cpp_source_sha256": "59c58d077ed171f46e93383132910f6d56ec97c36a495f809da4b124e8171871",
+      "torch": "2.12.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.1.0"
+      },
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "e0f91e59c31e750604724ba365fb7309797014dc65785ced40512205ad0a0bff",
+        "libtidegraph_runtime.a": "36f861bbead37bfe5434f473a9dba4184cb0ea50408389f46c4e367987adf48a",
+        "_tide_native.so": "6a1a00e5358aba9eb310ba385818f077ab6e790e3f1c485bb3c35e75f613e658",
+        "tidegraph-smoke": "9edb182251047970617f213415a54f3fa6e6f5615da5eca6715c72091a7d84c9",
+        "tidegraph-kernel-check": "94c6ef0ab364afc520bfe3efc926174aada83a13b57f4830a48896f325552d8f",
+        "tidegraph-full-check": "ddc6c407727cf3a0c477c550ef07329312e942f3a3570566f7ddd310e962a66a",
+        "tidegraph-aggregate-check": "b877d6aba003acce5a3fe9e4045dc6f1d268d9370b0405e5b0594dd669f3477a",
+        "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+        "tidegraph-checkpoint-check": "90451a028bd3cacd7ad6d322ae074cd57e755caf005ec30eaf928249d8e810e8",
+        "tidegraph-weighted-training-check": "f974391153762a97d73272281a24b6f9cac0fc8ffd0e2190838f5e32fc3106d1",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "4ec86a7ce67fac53e4295beb402f3b3d2c4df086f1e034966650e36b85b2d4d2",
+        "tidegraph-scale-bench": "78d049e35900e35c59d53ce75bcd026f6e2060c9f266af962b2c4f6396352a3e",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "6b093b7d421d6901e13b1130be947c63d8f5e26f3170a063a3a274f32371194a",
+        "tidegraph-greedy-check": "428514d41dc33eb9c30b8176c9f9d27ff93543e0d6d4f0cd011d99f4feadaf9a",
+        "tidegraph-accelerator-check": "d21465dfc9a2b18d845352a0783fb9aaaec127d624821b29c44621d3fd080f82",
+        "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+        "tidegraph-read-precision-check": "990177f74ca9d9f0e0c26f909db8def839d885d007bcf0e8cb1c3b445b9c5d40",
+        "tidegraph-placement-check": "186eded13e36b3beaf99c4ea73d926a11bb00e35d25b28f5c1ce4a687ca17cb7",
+        "tidegraph-payload-ownership-check": "e5c14081271d3ff6496cf27ce35023b522d3af00fa19f68464f983974cfae086",
+        "tidegraph-weighted-binding-module-check": "225d8924c944939434e574eae28abc87b7d9a4bdfe4ff0e3d153a91e98fc6149",
+        "libtidegraph-weighted-binding-module.so": "4eb15ea353efe98d9b44fc4301f78746298d6c0cbdcee994d7784ea41b906f91"
+      }
+    },
+    "reuse": "development core binary hashes and complete C++ content hash rechecked at immutable source; development base commit is not qualification identity",
+    "standalone_benchmark": {
+      "path": "artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+      "bytes": 3196568,
+      "sha256": "8997c9af3d5d08bd4f12f451e86511e105deef87112eaa70ae9d1c5c1219b9bf"
+    }
+  },
+  "cpu_baseline_benchmark": {
+    "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+    "binary": {
+      "path": "artifacts/jobs/core5-performance-qualify-cpu/standalone-build/client/weighted-benchmark",
+      "bytes": 3126208,
+      "sha256": "bcbd5073dd542f4a16066db7c8f0e6a067af44a199e88b65e2e6a80c57c5e1df"
+    }
+  },
+  "npu_qualification": {
+    "build": {
+      "schema": "tide-device-control-build-v1",
+      "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+      "dirty": "",
+      "component_sha256": "8c5ac7b1c484828ae866ceeea49cfb60cdc09dcc1182cff33bda15c454c282f1",
+      "core": {
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "cpp_source_sha256": "59c58d077ed171f46e93383132910f6d56ec97c36a495f809da4b124e8171871",
+        "torch": "2.10.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.0.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+          }
+        },
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "b933a8c118a5be6b9c529e2204c94506602c193ac891c182a14373f99753f78a",
+          "libtidegraph_runtime.a": "8fb4f9b018bfe9103eb87770a8a8ed4b6b5dcb4955664abf485efe4a7d388949",
+          "tidegraph-smoke": "facbd6a0d751f67aa5c70f8a8f79e3a49bbf0d92e231bc6535145001b69fb58d",
+          "tidegraph-kernel-check": "2b6b070a8b647632388b2031d273776dccec16f7c62901a8e1aeedbbbf03dfcd",
+          "tidegraph-full-check": "e69876a15cd37e58d55c259f465d32eea9cd6f5aa2f1c29f9e4402a723a913e1",
+          "tidegraph-aggregate-check": "75a69d5623b38f0a613bf3da53fa26e2022b2b22d7d82174823029016f8065d8",
+          "tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+          "tidegraph-checkpoint-check": "cb2a782b3d2510e5bc4588754ee7da1175eca18e314642fe6f3d5ed16013f138",
+          "tidegraph-weighted-training-check": "30a91a31386249bb9d619560a33e725d5b34dbab9444a7bebe690c42d2ba8613",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "014e46d9f8fc2273f1af56bd5b9638aaff2ac4ac5812e5a73d798efd0c260370",
+          "tidegraph-scale-bench": "d14eedf32a9b832e9b1f0daf897da89867f862feab2c3fd7a0e31168e01b2ae2",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "2e84227b4312e3e2e7e611f1ceb7c1d3bdadd59a65e8e47ccae448760413a010",
+          "tidegraph-greedy-check": "37620cc2d31028a6fc4bf5b1b00289fa29816cf14860298effb0d81d536db1c0",
+          "tidegraph-accelerator-check": "e89037a05657d601ad678bd991296b6f90e62a1780b4d445d2cd8a1a51d301b0",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "51739f6e516bf769487ec293be9a1254ae008320e680e50751d3150e305f7542",
+          "tidegraph-placement-check": "5708929e9737b356502962d2691d39698a30fe69a1244eb6024bdac88c34510a",
+          "tidegraph-payload-ownership-check": "aeb886d360271e7d8814244151867d0cef28f8f1001e75809a78160e2d4d5d9f",
+          "tidegraph-weighted-binding-module-check": "56fe512abeba55097a8f56c0c052cd91127b83facfb2346981007f95ea5b8f79",
+          "libtidegraph-weighted-binding-module.so": "092ad158e2080e4ee629603a65d783439e1c7d503eaff1f28f8f1a78c37c2131"
+        }
+      },
+      "backend": "npu",
+      "runtime": "standalone",
+      "npu_runtime": "standalone",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "tide-weighted-allocation-check": "3838f2566609805684645c30f45088d935b69ba8a1aa5e5fd280712a7e20b00d",
+        "tide-weighted-flow-check": "f6ae00cb59a5d3cc474435d141b44aa403084ffe8cfeabe30ca0ce34535d5ace",
+        "tide-weighted-flow-config-check": "c675662555664a3ea17e316e575c83784e170198b9b1092725578b597d5f5bb5",
+        "tide-weighted-training-check": "aed86874e9cba716cf362dfbad2d436e8000a206230d7127acb4ec59b4c56208",
+        "tide-weighted-node-training-check": "39410892231ecb2ff205cd1752b863cd56a4ecd0104711252276dd1e76cb2053",
+        "libtide-weighted-flow.so": "2190e4d4359647e2797c037a26c3b099703e06e0fd860b0542b20e6488029dce",
+        "libtide-weighted-training.so": "c3d10df2b6c6ee7b8d10524efde0e278ea47de93509e05bb68478885d9299d48"
+      },
+      "loader_sha256": {
+        "tide-weighted-allocation-check": "4a7610c1872674890b76672d0b0ed7b90cac50d377c082e2997f21a3a1cc91c0",
+        "tide-weighted-flow-check": "c709ddd73ee45b9c04cde9f620d1f0a89a4bdaf2822a431d0faba3c6f34b795c",
+        "tide-weighted-flow-config-check": "090e894e9547765927fcb069c45f5ab90adf31b2c3bee98a91b5a2e6c7477ba6",
+        "tide-weighted-training-check": "49ab1380d3d0e5873b19bc8fd58d4ad2435206c8e915edbec8b37b1c27cfbc48",
+        "tide-weighted-node-training-check": "3260a26b351dc84655d8e6c82d86649ee4f7d6f5654da080206fad048d65418d",
+        "libtide-weighted-flow.so": "6aa2a2da48b38ead2f63804ddeac4140ee179680f7adec998f960ad016cc1222",
+        "libtide-weighted-training.so": "6d70e3e001d0cc5a0a4f229377713b2bf5a493cd06bf30c4908133874700cc96"
+      },
+      "requested_checks": [
+        "weighted-allocation",
+        "weighted-flow",
+        "weighted-flow-config",
+        "weighted-training",
+        "weighted-node-training"
+      ],
+      "python_component": null,
+      "scope": "build/loader/help only; device control check required separately"
+    },
+    "build_manifest": {
+      "path": "artifacts/worktrees/core5-private-qualified/build/npu-resident/control-build.json",
+      "bytes": 5516,
+      "sha256": "5929f6a35b96012f61eed286d259474d918e258380eb29c09e420839473f13e3"
+    },
+    "cases": [
+      {
+        "check": "weighted-allocation",
+        "dtype": "float32",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-allocation-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-allocation-float32.log",
+        "log_sha256": "f15fe16716bc260503de9537a4656915ef7f421464ee3afe81ca40b494fe40e9"
+      },
+      {
+        "check": "weighted-flow",
+        "dtype": "float32",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-flow-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-float32.log",
+        "log_sha256": "32d083118a9b7cc95fb09fdd41c78c28e8bb93e5288f249a22190fa0f69e71e0"
+      },
+      {
+        "check": "weighted-flow",
+        "dtype": "float16",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-flow-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-float16.log",
+        "log_sha256": "fbc62dca0cb36be7273aefc207b085b0a7cacfe6e3ab2d8c7b50f8096d20e65a"
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float32",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-flow-config-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-config-float32.log",
+        "log_sha256": "2a9356ad5625aaf205762c1b9a17fb158b804880b27589b9c2e582ecea8e5c11"
+      },
+      {
+        "check": "weighted-flow-config",
+        "dtype": "float16",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-flow-config-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-flow-config-float16.log",
+        "log_sha256": "6e1dc9eeb5eb6febd56458ba0f6e0b94c5c31dde72062b3dec31007e9b6764b5"
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float32",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-training-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-training-float32.log",
+        "log_sha256": "28fdbccd08783b0f871146fc83aba3b2d6b6f44d9f2400c427e60a182d8a960c"
+      },
+      {
+        "check": "weighted-training",
+        "dtype": "float16",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-training-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-training-float16.log",
+        "log_sha256": "f0f1c754996f4f08cb241a829de4981f151f886948aa23886b6bec772e339c1e"
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float32",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-node-training-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-node-training-float32.log",
+        "log_sha256": "50a232fa026b15be91ba07dbc76242fc1a7629f4888e558ba818bb66c1043557"
+      },
+      {
+        "check": "weighted-node-training",
+        "dtype": "float16",
+        "command": [
+          "REPO/artifacts/worktrees/core5-private-qualified/build/npu-resident/tide-weighted-node-training-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "weighted-node-training-float16.log",
+        "log_sha256": "92c58ac22e5c934dbd79c19560a9449e8ff1ab4672fc7bffa8966b3dce8b6d41"
+      }
+    ],
+    "result": {
+      "path": "artifacts/jobs/core5-private-qualify-npu/checks/result.json",
+      "bytes": 10475,
+      "sha256": "254e194b8f9740743871c9c0893925bf5b77aa2bda7e6578fcdb3479ba9e5e82"
+    },
+    "queue": {
+      "elapsed_seconds": 736.3251189813018,
+      "job_id": "core5-private-qualify-npu-20261028",
+      "logical_devices": [
+        "npu:0",
+        "npu:1"
+      ],
+      "npu_count": 2,
+      "physical_ids": [
+        1,
+        11
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-10-28T08:42:57.353448+00:00"
+    },
+    "eager_python": {
+      "state": "passed",
+      "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+      "dirty": "",
+      "implementation": "python",
+      "argv": [
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--placement",
+        "mixed-c",
+        "--case",
+        "kv-fc",
+        "--output-dir",
+        "REPO/artifacts/jobs/core5-private-qualify-npu/python-kv"
+      ],
+      "dispatch_environment": {
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "CUDA_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post2",
+        "logical_device_count": 2,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.1.0",
+        "matmul_allow_hf32": false
+      },
+      "requested_placement": {
+        "preset": "mixed-c",
+        "read": "auto",
+        "control": "auto",
+        "selection": "auto",
+        "events": "auto",
+        "scoring_dtype": "profile"
+      },
+      "precision": {
+        "payload_dtype": "torch.float32",
+        "optimizer": "adamw",
+        "learning_rate": 0.001,
+        "loss_scale": 1.0,
+        "master_dtype": null,
+        "tolerances": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        }
+      },
+      "peer_devices": null,
+      "resolved_placement": {
+        "payload": "npu:0",
+        "read": "npu:0",
+        "control": "npu:0",
+        "selection": "npu:0",
+        "events": "cpu",
+        "scoring_dtype": "profile"
+      },
+      "cases": [
+        {
+          "configuration": {
+            "name": "kv-fc",
+            "family": "kv",
+            "topology": "fc",
+            "read": "+",
+            "sending": "regional_total",
+            "regularizer": "quad",
+            "attention": false
+          },
+          "state": "passed",
+          "coverage": {
+            "nodes": 4,
+            "edges": 4,
+            "regions": 2,
+            "observed_nodes": 4,
+            "unobserved_nodes": 0,
+            "events": 16,
+            "outputs": 8,
+            "pending": 0,
+            "state_owners": 8,
+            "history_owners": 4
+          },
+          "roots": [
+            "all",
+            "first-output",
+            "first-descriptor-w",
+            "first-descriptor-mu",
+            "first-descriptor-score",
+            "first-descriptor-evidence",
+            "first-control"
+          ],
+          "fixture_sha256": "2107c8c754584178304b2ffd3ab3f526ccbca33619df2a457e9b282dc7739a8b",
+          "pending_at_cut": 0,
+          "retained_cut": 3,
+          "streaming": true,
+          "prefill": true,
+          "inference": true,
+          "training_updates": 4,
+          "independent_raw_state_roots": 40,
+          "node_owners": [
+            "npu:0",
+            "npu:0",
+            "npu:0",
+            "npu:0"
+          ],
+          "transport_stats": {},
+          "same_device_resume": true,
+          "cpu_checkpoint_handoff": true
+        }
+      ],
+      "scope": "eager host schedule; actual device transfers; not resident",
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "fallback_visibility": "requires separate profile/log audit",
+      "primitives": [
+        "stable-large-int64-score-ties",
+        "fractional-fill-literal-VJP",
+        "nonpositive-hard-fallback-literal-VJP",
+        "packed-transfer-None-zero-aliases-int64"
+      ]
+    },
+    "eager_standalone": "fc/kv FP32 exit0; stdout retained in job log; complete VJP/4 updates/checkpoint"
+  },
+  "cuda_qualification": {
+    "build": {
+      "schema": "tide-device-control-build-v1",
+      "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+      "dirty": "",
+      "component_sha256": "8c5ac7b1c484828ae866ceeea49cfb60cdc09dcc1182cff33bda15c454c282f1",
+      "core": {
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "cpp_source_sha256": "59c58d077ed171f46e93383132910f6d56ec97c36a495f809da4b124e8171871",
+        "torch": "2.10.0+cu128",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": null
+        },
+        "backend": "cuda",
+        "npu_runtime": null,
+        "torch_npu": null,
+        "cuda": "12.8",
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "8298fa2a5e23c35bfc3c7a16657cbf4d123c8375f0eb30901dec68145a1762a9",
+          "libtidegraph_runtime.a": "64ae253e7d7655eb9d53249d5d1d276381e202cf58554cb9d5e913b5ca88a60a",
+          "_tide_native.so": "74e6b288f4d408901f69e111a74d5f3bc60227fb314ce8be18a504099f8c6b5b",
+          "tidegraph-smoke": "d963f37c24c30d033a43c43ed77d45d72858b0384745f74a935a9844043cf084",
+          "tidegraph-kernel-check": "b921d5678472859f576f62ece55d92a651b58e830d94f01b47488b324d6c37f9",
+          "tidegraph-full-check": "7418f2b7477eb368d367f33ac07bef25b24f7b776c818b79d1db3fc056e202b4",
+          "tidegraph-aggregate-check": "e987c6fa1ac81852df04075fcf9d1c704eb567dec2b0436277f3ffa3532d606e",
+          "tidegraph-optimizer-check": "23c9d6a63451db9d746a5dea556467128363affaedbb670f1b8e290ff7ec8ff2",
+          "tidegraph-checkpoint-check": "07beffad9e817253b680fc5e1f8fbacc394256e5dc6f4630f3958105e0000dac",
+          "tidegraph-weighted-training-check": "a6f5b5680e877e2014d90a99764fcc2af9f74dc82ed460b7ca47659f28edc7b3",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "566c333f4594a3d1da6224d47b9111d763294b52beb1af463ad275260e4695f3",
+          "tidegraph-scale-bench": "9578335b57503631a89b63672da0f0a7be08665fe35e81f78fe3afcea94581c6",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "4821bcf4b96f8d8bc9a08c947a5780fe5f3fb3150b00948f977b8e379ac727ca",
+          "tidegraph-greedy-check": "600cd72cb9f01921530561a00d95d94e01f11f665031986a97ec0ad4b2b38eac",
+          "tidegraph-accelerator-check": "0153788f9c62dae2a2a8a8a874075a8cb80e5810723afddd470e5274df050b85",
+          "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+          "tidegraph-read-precision-check": "e63440931c674ef65791c35ff4e74e148ad2d20baeba773d4127a1044824220e",
+          "tidegraph-placement-check": "7a32cc001d2d9799fc59b6ba108d3b01014d15c2aca7fb30a41df7805b52afce",
+          "tidegraph-payload-ownership-check": "ec28b3d32dee93c038875643befadc43d85a7218d841d696d83d32f1dd3a6908",
+          "tidegraph-weighted-binding-module-check": "9fd6b94604c4cea8a84d87c492500c4b7163c573f027d9037f6b37b9396fccb2",
+          "libtidegraph-weighted-binding-module.so": "33be9afd28d874f8fde3d8bc5dd46f7a1358c35f2e85b86eed8e7d5ee19d41b7"
+        }
+      },
+      "backend": "cuda",
+      "runtime": "standalone",
+      "npu_runtime": null,
+      "cuda_architectures": "80;90;100",
+      "ascendc_soc": null,
+      "binary_sha256": {
+        "tide-weighted-allocation-check": "e9e467cb8a73a429be8f468c6952f5846dbe490afe89a97ba630102c3bb6ae00",
+        "tide-weighted-flow-check": "3caad1146bea724f8d26a3e0904f98accc38506525b21f05fdd472ff519790ea",
+        "tide-weighted-flow-config-check": "b5704573400cebf3aab44c1cd207f22b11798fef0d13c1a431fecadce8d81cf7",
+        "tide-weighted-training-check": "aad716319db2ebca0c250f78d5adade0e3058b4f533fedd2de101dca943b9e89",
+        "tide-weighted-node-training-check": "00c30f6ffeaf5dcef5e4315b11022547b06e9f84ca8ff9be10ef6df180b9c013",
+        "libtide-weighted-flow.so": "b7b415fc00b355a613071e52a35f734a8ce4cd323bdb55e8811e8b4fde875aa9",
+        "libtide-weighted-training.so": "83d8c38a687bbeae72527edf7baf8ffdc589c6464f6460338be3a7c1682b9ad1"
+      },
+      "loader_sha256": {
+        "tide-weighted-allocation-check": "2adffce32d7546a251eead9f0fda115f5a39c6e17f785f9fe66ec813bfd8fd2c",
+        "tide-weighted-flow-check": "294e4b596569368d2d65332174e318b8d7c13fcaf14065756738e6485a808e4e",
+        "tide-weighted-flow-config-check": "a733fa323577c7bf8c11c0e88367be8ff00dec2f35a4ee56231f969d016ebdb3",
+        "tide-weighted-training-check": "a53b2e081e54811bdeda2857db6ff7c7d6aa21f677df50cb96465397527f4fa3",
+        "tide-weighted-node-training-check": "2a632a8d0d0918913a0093f3049a0ab8d7ce1dd72e686a33a3f51cb33be0e10a",
+        "libtide-weighted-flow.so": "caf69f9028d1203bfdbcb9de15fb0f69a77e8dde4b5fe6103320a0c0ede8aa48",
+        "libtide-weighted-training.so": "c66aea46db8d25dd04dd884df380e15c20ca99e624f696b983d4a777247f47f7"
+      },
+      "requested_checks": [
+        "weighted-allocation",
+        "weighted-flow",
+        "weighted-flow-config",
+        "weighted-training",
+        "weighted-node-training"
+      ],
+      "python_component": null,
+      "scope": "build/loader/help only; device control check required separately"
+    },
+    "build_manifest": {
+      "path": "artifacts/worktrees/core5-private-qualified/build/cuda-resident/control-build.json",
+      "bytes": 5248,
+      "sha256": "153fee7dbe6e8e201b59a672c8e804a28dd2c60dbb44bb869c5787b0b1d35025"
+    },
+    "hardware_validation": false,
+    "validated": "fresh core and resident sm80/90/100 builds, loader/help, core CPU FP32/FP64 checks"
+  },
+  "studies": {
+    "cpu": {
+      "run": {
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "state": "failed",
+        "cases": [
+          {
+            "name": "before-medium",
+            "command": [
+              "REPO/artifacts/jobs/core5-performance-qualify-cpu/standalone-build/client/weighted-benchmark",
+              "--fixture",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/original.json",
+              "--device",
+              "cpu",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/before-medium"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              56.55,
+              64.38,
+              69.08
+            ],
+            "exit_code": 0,
+            "seconds": 2.9690059311687946,
+            "log_sha256": "c7bedb9cc52a0dd7969353c6aaa5dc3812116f9ee011808b8350684b3fdc4b50",
+            "load_after": [
+              56.55,
+              64.38,
+              69.08
+            ]
+          },
+          {
+            "name": "after-medium",
+            "command": [
+              "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+              "--fixture",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/original.json",
+              "--device",
+              "cpu",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/after-medium"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              56.55,
+              64.38,
+              69.08
+            ],
+            "exit_code": 0,
+            "seconds": 2.919379360973835,
+            "log_sha256": "c77d3a7be6eddb4f7921fb8d16a70e0635f56e5acc5805ea1e37d9fb0ebac0ad",
+            "load_after": [
+              54.9,
+              63.91,
+              68.9
+            ]
+          },
+          {
+            "name": "ranked64",
+            "command": [
+              "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+              "--fixture",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64.json",
+              "--device",
+              "cpu",
+              "--steps",
+              "1",
+              "--mode",
+              "training",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/ranked64"
+            ],
+            "limit_seconds": 360,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              54.9,
+              63.91,
+              68.9
+            ],
+            "exit_code": 2,
+            "seconds": 13.93314691632986,
+            "log_sha256": "e0b19c24d476ea6fd42df34f27414f4aa743e68a8de24cfdaf86c1adef7c00af",
+            "load_after": [
+              51.13,
+              62.63,
+              68.4
+            ]
+          },
+          {
+            "name": "wide2048",
+            "command": [
+              "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+              "--fixture",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/wide2048.json",
+              "--device",
+              "cpu",
+              "--steps",
+              "1",
+              "--mode",
+              "training",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/wide2048"
+            ],
+            "limit_seconds": 360,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              51.13,
+              62.63,
+              68.4
+            ],
+            "exit_code": 2,
+            "seconds": 4.472890712320805,
+            "log_sha256": "8a8203615cf238d5c4a1e855486d5d77d1f70fa46c5d2a3a76e2bbff59330578",
+            "load_after": [
+              50.39,
+              62.28,
+              68.26
+            ]
+          },
+          {
+            "name": "matched2048",
+            "command": [
+              "REPO/artifacts/jobs/core5-private-qualify-cpu/standalone-build/client/weighted-benchmark",
+              "--fixture",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/matched2048.json",
+              "--device",
+              "cpu",
+              "--steps",
+              "1",
+              "--mode",
+              "inference",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/matched2048"
+            ],
+            "limit_seconds": 1200,
+            "address_space_limit_bytes": 206158430208,
+            "load_before": [
+              50.39,
+              62.28,
+              68.26
+            ],
+            "exit_code": 2,
+            "seconds": 497.13477905094624,
+            "log_sha256": "8a8203615cf238d5c4a1e855486d5d77d1f70fa46c5d2a3a76e2bbff59330578",
+            "load_after": [
+              88.11,
+              103.69,
+              85.56
+            ]
+          },
+          {
+            "name": "python-float32",
+            "command": [
+              "REPO/.local/venv-core5/bin/python",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/diagnose_weighted_workload.py",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--dtype",
+              "float32",
+              "--implementation",
+              "python",
+              "--native-library",
+              "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/python-float32"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              88.11,
+              103.69,
+              85.56
+            ],
+            "exit_code": 2,
+            "seconds": 26.84977614507079,
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "load_after": [
+              76.54,
+              99.6,
+              84.68
+            ]
+          },
+          {
+            "name": "python-float64",
+            "command": [
+              "REPO/.local/venv-core5/bin/python",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/diagnose_weighted_workload.py",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--dtype",
+              "float64",
+              "--implementation",
+              "python",
+              "--native-library",
+              "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/python-float64"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              76.54,
+              99.6,
+              84.68
+            ],
+            "exit_code": 0,
+            "seconds": 33.30544778704643,
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "load_after": [
+              61.78,
+              93.42,
+              83.17
+            ]
+          },
+          {
+            "name": "native-float32",
+            "command": [
+              "REPO/.local/venv-core5/bin/python",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/diagnose_weighted_workload.py",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--dtype",
+              "float32",
+              "--implementation",
+              "native",
+              "--native-library",
+              "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/native-float32"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              61.78,
+              93.42,
+              83.17
+            ],
+            "exit_code": 2,
+            "seconds": 22.999667529016733,
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "load_after": [
+              56.92,
+              89.72,
+              82.22
+            ]
+          },
+          {
+            "name": "native-float64",
+            "command": [
+              "REPO/.local/venv-core5/bin/python",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/diagnose_weighted_workload.py",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--dtype",
+              "float64",
+              "--implementation",
+              "native",
+              "--native-library",
+              "REPO/artifacts/worktrees/core5-quad-dev/build/cpu",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/native-float64"
+            ],
+            "limit_seconds": 300,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              56.92,
+              89.72,
+              82.22
+            ],
+            "exit_code": 0,
+            "seconds": 28.660926058888435,
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "load_after": [
+              55.48,
+              86.65,
+              81.39
+            ]
+          },
+          {
+            "name": "ranked64-profile",
+            "command": [
+              "REPO/.local/venv-core5/bin/python",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/benchmark_weighted.py",
+              "--device",
+              "cpu",
+              "--implementation",
+              "python",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--profile",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/ranked64-profile"
+            ],
+            "limit_seconds": 360,
+            "address_space_limit_bytes": 34359738368,
+            "load_before": [
+              55.48,
+              86.65,
+              81.39
+            ],
+            "exit_code": 1,
+            "seconds": 302.51717726513743,
+            "log_sha256": "c01e2acfc1a24b324813aa3375108b5f36e853ea405d41fe0e6e67a616005309",
+            "load_after": [
+              72.49,
+              76.9,
+              78.28
+            ]
+          }
+        ],
+        "load_average_before": [
+          56.55,
+          64.38,
+          69.08
+        ],
+        "policy": "one process/config, one warmup plus one measured connected window; diagnostics/profile separate; no retries",
+        "question": "private KV matrix batches: actual work and complete training cost; stable quad: prior D2048 refusal",
+        "caveat": "project builds must be terminal before timing; external shared-host load is not excluded",
+        "load_average_after": [
+          72.49,
+          76.9,
+          78.28
+        ]
+      },
+      "manifest": {
+        "path": "artifacts/jobs/core5-private-study-cpu/runs/study.json",
+        "bytes": 11315,
+        "sha256": "32950114aa06471db094c0052b858e76744e72f22f0e2e1c365a18c21cd49ca9"
+      },
+      "cases": [
+        {
+          "name": "before-medium",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/before-medium/result.json",
+            "bytes": 3227,
+            "sha256": "60d88e5db765092e70f9605226c5da4a296c4928b48891cd3864fdf1f591bb84"
+          },
+          "result": {
+            "backend": "cpu",
+            "config": {
+              "family": "kv",
+              "positions": 4,
+              "samples": 4,
+              "seed": 7,
+              "topology": "hb",
+              "width": 32
+            },
+            "construction_seconds": 0.006949476,
+            "device": "cpu",
+            "dtype": "float32",
+            "excluded": "static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export",
+            "fixture_preparation_seconds": 0.032450938,
+            "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+            "implementation": "native",
+            "measured_windows": 1,
+            "memory": {
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 119959552
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 128077824
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 168484864
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 173232128
+                }
+              ],
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+              "schema": "tide-weighted-memory-v1",
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+            },
+            "metrics": [
+              {
+                "actual_stats": {
+                  "aggregate_calls": 5,
+                  "aggregate_computed_events": 80,
+                  "aggregate_reused_events": 48,
+                  "attention_score_elements": 0,
+                  "batched_aggregate_events": 128,
+                  "batched_full_events": 128,
+                  "batched_read_events": 128,
+                  "batched_region_frames": 64,
+                  "batched_state_events": 128,
+                  "body_candidate_events": 128,
+                  "body_selected_events": 128,
+                  "candidate_events": 128,
+                  "full_blocks": 8,
+                  "full_calls": 8,
+                  "greedy_relaxed_edges": 24,
+                  "greedy_stages": 3,
+                  "max_full_batch": 16,
+                  "max_greedy_frames": 16,
+                  "max_live_fibers": 64,
+                  "max_region_batch": 4,
+                  "max_state_batch": 4,
+                  "max_state_sequence": 4,
+                  "next_steps": 128,
+                  "read_calls": 8,
+                  "region_batch_calls": 16,
+                  "region_blocks": 4,
+                  "region_steps": 64,
+                  "selected_events": 128,
+                  "source_rows": 224,
+                  "state_blocks": 32,
+                  "state_preparation_calls": 48,
+                  "state_preparation_events": 96,
+                  "state_preparation_reused_events": 48,
+                  "state_scalar_sequence_steps": 0,
+                  "state_sequence_calls": 8,
+                  "visited_edges": 192
+                },
+                "candidate_updates": 128,
+                "full_calls": 128,
+                "loss": 0.0713919848203659,
+                "messages": 192,
+                "outputs": 32,
+                "pending": 0,
+                "seconds": 0.388921215,
+                "step": 1
+              }
+            ],
+            "mode": "training",
+            "optimizer_values_checked": true,
+            "parameter_values_checked": true,
+            "post_measurement_complete_records": true,
+            "process_lifetime_peak_rss_bytes": 173232128,
+            "runtime_initialization_seconds": 0.053529099,
+            "schedule": "prefill",
+            "schema": "tide-weighted-standalone-benchmark-v1",
+            "state": "passed",
+            "timing": "input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync",
+            "warmup_seconds": 0.401378933,
+            "warmup_windows": 1
+          }
+        },
+        {
+          "name": "after-medium",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/after-medium/result.json",
+            "bytes": 3368,
+            "sha256": "ae695eeba6bbb2515e38c3ac10a47dc1db4a72c110776363a6dd6d44ed6b2fef"
+          },
+          "result": {
+            "backend": "cpu",
+            "config": {
+              "family": "kv",
+              "positions": 4,
+              "samples": 4,
+              "seed": 7,
+              "topology": "hb",
+              "width": 32
+            },
+            "construction_seconds": 0.00738284,
+            "device": "cpu",
+            "dtype": "float32",
+            "excluded": "static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export",
+            "fixture_preparation_seconds": 0.034016973,
+            "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+            "implementation": "native",
+            "measured_windows": 1,
+            "memory": {
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 120180736
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 127856640
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 168738816
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 173326336
+                }
+              ],
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+              "schema": "tide-weighted-memory-v1",
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+            },
+            "metrics": [
+              {
+                "actual_stats": {
+                  "aggregate_calls": 5,
+                  "aggregate_computed_events": 80,
+                  "aggregate_reused_events": 48,
+                  "attention_score_elements": 0,
+                  "batched_aggregate_events": 128,
+                  "batched_full_events": 128,
+                  "batched_read_events": 128,
+                  "batched_region_frames": 64,
+                  "batched_state_events": 128,
+                  "body_candidate_events": 128,
+                  "body_selected_events": 128,
+                  "candidate_events": 128,
+                  "full_blocks": 8,
+                  "full_calls": 8,
+                  "greedy_relaxed_edges": 24,
+                  "greedy_stages": 3,
+                  "max_full_batch": 16,
+                  "max_greedy_frames": 16,
+                  "max_live_fibers": 64,
+                  "max_region_batch": 4,
+                  "max_state_batch": 4,
+                  "max_state_private_projection_batch": 2,
+                  "max_state_sequence": 4,
+                  "next_steps": 128,
+                  "read_calls": 8,
+                  "region_batch_calls": 16,
+                  "region_blocks": 4,
+                  "region_steps": 64,
+                  "selected_events": 128,
+                  "source_rows": 224,
+                  "state_blocks": 32,
+                  "state_preparation_calls": 48,
+                  "state_preparation_events": 96,
+                  "state_preparation_reused_events": 48,
+                  "state_private_projection_calls": 144,
+                  "state_private_projection_rows": 288,
+                  "state_scalar_sequence_steps": 0,
+                  "state_sequence_calls": 8,
+                  "visited_edges": 192
+                },
+                "candidate_updates": 128,
+                "full_calls": 128,
+                "loss": 0.0713919848203659,
+                "messages": 192,
+                "outputs": 32,
+                "pending": 0,
+                "seconds": 0.387704294,
+                "step": 1
+              }
+            ],
+            "mode": "training",
+            "optimizer_values_checked": true,
+            "parameter_values_checked": true,
+            "post_measurement_complete_records": true,
+            "process_lifetime_peak_rss_bytes": 173326336,
+            "runtime_initialization_seconds": 0.060256793,
+            "schedule": "prefill",
+            "schema": "tide-weighted-standalone-benchmark-v1",
+            "state": "passed",
+            "timing": "input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync",
+            "warmup_seconds": 0.394874771,
+            "warmup_windows": 1
+          }
+        },
+        {
+          "name": "ranked64",
+          "exit_code": 2,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/ranked64/result.json",
+            "bytes": 4985,
+            "sha256": "c516cd7971368bff48bd581517a4fe3b12ee3e471aaa48eb6883d3583e63b5df"
+          },
+          "result": {
+            "backend": "cpu",
+            "config": {
+              "family": "kv",
+              "positions": 1,
+              "samples": 1,
+              "seed": 7,
+              "topology": "ranked-local",
+              "width": 64,
+              "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+            },
+            "construction_seconds": 1.573909332,
+            "device": "cpu",
+            "dtype": "float32",
+            "error": "benchmark parity: continuation.states[0,86].slots.keys tensor value (dtype=Float, shape=[1, 64], max_abs_error=4.11272e-06, reference_max_abs=1.7285)",
+            "excluded": "static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export",
+            "fixture_preparation_seconds": 0.068098897,
+            "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+            "implementation": "native",
+            "measured_windows": 1,
+            "memory": {
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 120438784
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 228392960
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 476700672
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 502165504
+                }
+              ],
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+              "schema": "tide-weighted-memory-v1",
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+            },
+            "memory_floor": {
+              "complete_admission": false,
+              "dtype": "float32",
+              "excluded": [
+                "raw states/KV/convolution",
+                "message queues",
+                "retained journals/adjoints",
+                "communication",
+                "temporary packing",
+                "operator workspace",
+                "allocator/vendor overhead"
+              ],
+              "fp32_gradient_bytes": 36307900,
+              "fp32_master_bytes": 36307900,
+              "fp32_optimizer_slot_bytes": 72615800,
+              "kind": "lower_bounds_not_runtime_admission",
+              "legacy_inert_buffer_bytes": 8486400,
+              "logical_parameter_bytes": 36325820,
+              "optimizer": "adamw",
+              "resident_default_cache": 36,
+              "resident_raw_initial_state_old_bytes": 34220160,
+              "resident_raw_one_snapshot_bytes": 11406720,
+              "role_expanded_fp32_bytes": 124823740
+            },
+            "metrics": [
+              {
+                "actual_stats": {
+                  "aggregate_calls": 447,
+                  "aggregate_computed_events": 447,
+                  "aggregate_reused_events": 32,
+                  "attention_score_elements": 0,
+                  "batched_aggregate_events": 479,
+                  "batched_full_events": 344,
+                  "batched_read_events": 479,
+                  "batched_region_frames": 15,
+                  "batched_state_events": 479,
+                  "body_candidate_events": 479,
+                  "body_selected_events": 344,
+                  "candidate_events": 479,
+                  "full_blocks": 344,
+                  "full_calls": 344,
+                  "greedy_relaxed_edges": 196,
+                  "greedy_stages": 15,
+                  "max_full_batch": 1,
+                  "max_greedy_frames": 1,
+                  "max_live_fibers": 63,
+                  "max_region_batch": 1,
+                  "max_state_batch": 1,
+                  "max_state_private_projection_batch": 32,
+                  "max_state_sequence": 1,
+                  "next_steps": 479,
+                  "read_calls": 479,
+                  "region_batch_calls": 15,
+                  "region_blocks": 15,
+                  "region_steps": 15,
+                  "selected_events": 344,
+                  "source_rows": 1636,
+                  "state_blocks": 479,
+                  "state_preparation_calls": 2,
+                  "state_preparation_events": 34,
+                  "state_preparation_reused_events": 32,
+                  "state_private_projection_calls": 6,
+                  "state_private_projection_rows": 102,
+                  "state_scalar_sequence_steps": 0,
+                  "state_sequence_calls": 479,
+                  "visited_edges": 1604
+                },
+                "candidate_updates": 479,
+                "full_calls": 344,
+                "loss": 4.841984272003174,
+                "messages": 1604,
+                "outputs": 19,
+                "pending": 0,
+                "seconds": 3.183396902,
+                "step": 1
+              }
+            ],
+            "mode": "training",
+            "parameter_inventory": {
+              "owners": 12170,
+              "sha256": "e67b06c2bf071be8cf05403da1478e7ff42f14f6c934003b5fc27ee14fc00d31",
+              "totals": {
+                "frozen": 4480,
+                "role_elements": 31205935,
+                "trainable": 9076975,
+                "unique": 9081455
+              }
+            },
+            "parameter_match": {
+              "actual_body": 9076975,
+              "difference": 47,
+              "ffn_widths": [
+                4,
+                5
+              ],
+              "method": "private_ffn_integer_widths",
+              "reference": {
+                "memory": "add",
+                "semantics": "core-3",
+                "task_head_parameters_excluded": true,
+                "topology": "same physical graph",
+                "width": 64
+              },
+              "relative_difference": 5.177963293308045e-06,
+              "target_body": 9076928
+            },
+            "process_lifetime_peak_rss_bytes": 502165504,
+            "runtime_initialization_seconds": 0.05894561,
+            "schedule": "prefill",
+            "schema": "tide-weighted-standalone-benchmark-v1",
+            "state": "failed",
+            "timing": "input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync",
+            "warmup_seconds": 3.129543831,
+            "warmup_windows": 1
+          }
+        },
+        {
+          "name": "wide2048",
+          "exit_code": 2,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/wide2048/result.json",
+            "bytes": 2624,
+            "sha256": "29ddc8cd75cea69170c52868632e16f0faba16c5be227d603b6c63af44cb61ce"
+          },
+          "result": {
+            "backend": "cpu",
+            "config": {
+              "family": "kv",
+              "positions": 1,
+              "samples": 1,
+              "seed": 7,
+              "topology": "ranked-local",
+              "width": 2048,
+              "workload_sha256": "955bce00af3a5fb8531d75a7648ea3a96822b0448d8a5835b7136bad86149501"
+            },
+            "construction_seconds": 2.636446906,
+            "device": "cpu",
+            "dtype": "float32",
+            "error": "allocation batch residual exceeds dtype tolerance",
+            "excluded": "static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export",
+            "fixture_preparation_seconds": 0.000645926,
+            "fixture_sha256": "fd4e1bd7d0df1dc595884a1961e30e0ff6a414bff5392484c69eb54e07a9d2f2",
+            "implementation": "native",
+            "measured_windows": 1,
+            "memory": {
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 120692736
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 1146966016
+                }
+              ],
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+              "schema": "tide-weighted-memory-v1",
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+            },
+            "memory_floor": {
+              "complete_admission": false,
+              "dtype": "float32",
+              "excluded": [
+                "raw states/KV/convolution",
+                "message queues",
+                "retained journals/adjoints",
+                "communication",
+                "temporary packing",
+                "operator workspace",
+                "allocator/vendor overhead"
+              ],
+              "fp32_gradient_bytes": 805855384,
+              "fp32_master_bytes": 805855384,
+              "fp32_optimizer_slot_bytes": 1611710768,
+              "kind": "lower_bounds_not_runtime_admission",
+              "legacy_inert_buffer_bytes": 67272768,
+              "logical_parameter_bytes": 805855432,
+              "optimizer": "adamw",
+              "resident_default_cache": 10,
+              "resident_raw_initial_state_old_bytes": 2557776,
+              "resident_raw_one_snapshot_bytes": 852592,
+              "role_expanded_fp32_bytes": 1007206600
+            },
+            "metrics": [],
+            "mode": "training",
+            "parameter_inventory": {
+              "owners": 85,
+              "sha256": "b1bda4cea30323f27b4b7ae456156722f948a42828ed70c2b0d250379e8a42bf",
+              "totals": {
+                "frozen": 12,
+                "role_elements": 251801650,
+                "trainable": 201463846,
+                "unique": 201463858
+              }
+            },
+            "process_lifetime_peak_rss_bytes": 1146966016,
+            "runtime_initialization_seconds": 0.059461535,
+            "schedule": "prefill",
+            "schema": "tide-weighted-standalone-benchmark-v1",
+            "state": "failed",
+            "timing": "input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync",
+            "warmup_windows": 1
+          }
+        },
+        {
+          "name": "matched2048",
+          "exit_code": 2,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/matched2048/result.json",
+            "bytes": 3231,
+            "sha256": "1ddef38109deb1272783586759f0f7ab0f15d8f5efb1a23839a47d29de20da51"
+          },
+          "result": {
+            "backend": "cpu",
+            "config": {
+              "family": "kv",
+              "positions": 1,
+              "samples": 1,
+              "seed": 7,
+              "topology": "ranked-local",
+              "width": 2048,
+              "workload_sha256": "b833df0ae02a4fdd35ff36211b9c1434ff921eceaab119a44becfbc851d75fee"
+            },
+            "construction_seconds": 195.639725961,
+            "device": "cpu",
+            "dtype": "float32",
+            "error": "allocation batch residual exceeds dtype tolerance",
+            "excluded": "static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export",
+            "fixture_preparation_seconds": 0.067871985,
+            "fixture_sha256": "9cb74b353fcbcddef1171988a3c34509cebf4758ca77e041ced2d86ed85d0bd9",
+            "implementation": "native",
+            "measured_windows": 1,
+            "memory": {
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 120000512
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 50311962624
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 50596757504
+                }
+              ],
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+              "schema": "tide-weighted-memory-v1",
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+            },
+            "memory_floor": {
+              "complete_admission": false,
+              "dtype": "float32",
+              "excluded": [
+                "raw states/KV/convolution",
+                "message queues",
+                "retained journals/adjoints",
+                "communication",
+                "temporary packing",
+                "operator workspace",
+                "allocator/vendor overhead"
+              ],
+              "fp32_gradient_bytes": 37048026044,
+              "fp32_master_bytes": 37048026044,
+              "fp32_optimizer_slot_bytes": 74096052088,
+              "kind": "lower_bounds_not_runtime_admission",
+              "legacy_inert_buffer_bytes": 8072732160,
+              "logical_parameter_bytes": 37048043964,
+              "optimizer": "adamw",
+              "resident_default_cache": 36,
+              "resident_raw_initial_state_old_bytes": 1074153600,
+              "resident_raw_one_snapshot_bytes": 358051200,
+              "role_expanded_fp32_bytes": 127320730044
+            },
+            "metrics": [],
+            "mode": "inference",
+            "parameter_inventory": {
+              "owners": 12170,
+              "sha256": "76857ec4e78e35f5b12e364e6d0b5a5718afef6f0c2e8b248f14f75454ace193",
+              "totals": {
+                "frozen": 4480,
+                "role_elements": 31830182511,
+                "trainable": 9262006511,
+                "unique": 9262010991
+              }
+            },
+            "parameter_match": {
+              "actual_body": 9262006511,
+              "difference": -2001,
+              "ffn_widths": [
+                319,
+                320
+              ],
+              "method": "private_ffn_integer_widths",
+              "reference": {
+                "memory": "add",
+                "semantics": "core-3",
+                "task_head_parameters_excluded": true,
+                "topology": "same physical graph",
+                "width": 2048
+              },
+              "relative_difference": -2.1604385241143688e-07,
+              "target_body": 9262008512
+            },
+            "process_lifetime_peak_rss_bytes": 50596757504,
+            "runtime_initialization_seconds": 0.062183611,
+            "schedule": "prefill",
+            "schema": "tide-weighted-standalone-benchmark-v1",
+            "state": "failed",
+            "timing": "input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync",
+            "warmup_seconds": 161.019908257,
+            "warmup_windows": 1
+          }
+        },
+        {
+          "name": "python-float32",
+          "exit_code": 2,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/python-float32/result.json",
+            "bytes": 6479,
+            "sha256": "267f7f8293f23d9b1ed96fade66a9e8f404c8338be828409c7cf5d58578425cc"
+          },
+          "result": {
+            "schema": "tide-weighted-workload-diagnostic-v1",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+            "implementation": "python",
+            "dtype": "float32",
+            "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+            "scope": "CPU complete records, discrete structure, output-loss gradients, SGD updates; not throughput",
+            "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+            "state": "strict_mismatch",
+            "steps": [
+              {
+                "step": 0,
+                "discrete": null,
+                "complete_records": "root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 64 (1.6%)\nGreatest absolute difference: 1.383945345878601e-06 at index (0, 37) (up to 1e-06 allowed)\nGreatest relative difference: 5.008963489672169e-05 at index (0, 37) (up to 1e-05 allowed)",
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "greedy_stages": 15,
+                    "greedy_relaxed_edges": 196,
+                    "region_blocks": 15,
+                    "candidate_events": 479,
+                    "visited_edges": 1541,
+                    "max_live_fibers": 63,
+                    "max_greedy_frames": 1,
+                    "state_blocks": 479,
+                    "state_steps": 0,
+                    "full_blocks": 331,
+                    "state_sequence_calls": 479,
+                    "semantic_state_replays": 0,
+                    "semantic_full_replays": 0,
+                    "full_scalar_fallback_steps": 0,
+                    "aggregate_calls": 445,
+                    "aggregate_computed_events": 445,
+                    "aggregate_reused_events": 34,
+                    "state_private_projection_calls": 12,
+                    "state_private_projection_rows": 114,
+                    "max_state_private_projection_batch": 32,
+                    "state_preparation_calls": 4,
+                    "state_preparation_events": 38,
+                    "state_preparation_reused_events": 34,
+                    "batched_aggregate_events": 479,
+                    "batched_state_events": 479,
+                    "max_state_batch": 1,
+                    "max_state_sequence": 1,
+                    "read_calls": 479,
+                    "batched_read_events": 479,
+                    "region_batch_calls": 15,
+                    "max_region_batch": 1,
+                    "batched_region_frames": 15,
+                    "region_steps": 15,
+                    "next_steps": 479,
+                    "max_full_batch": 1,
+                    "full_calls": 331,
+                    "batched_full_events": 331,
+                    "selected_events": 331,
+                    "source_rows": 1573
+                  }
+                },
+                "losses": [
+                  5.5178070068359375,
+                  5.517806053161621
+                ],
+                "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 4023 / 8192 (49.1%)\nGreatest absolute difference: 0.0018894672393798828 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.01696891151368618 at index (74, 14) (up to 1e-05 allowed)",
+                "parameters": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 15 / 8192 (0.2%)\nGreatest absolute difference: 1.8887221813201904e-06 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.0005574225215241313 at index (79, 5) (up to 1e-05 allowed)"
+              },
+              {
+                "step": 1,
+                "discrete": null,
+                "complete_records": "root.continuation.states[(0, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 9 / 128 (7.0%)\nGreatest absolute difference: 4.798173904418945e-06 at index (1, 38) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013229668547865003 at index (1, 13) (up to 1e-05 allowed)",
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "greedy_stages": 15,
+                    "greedy_relaxed_edges": 196,
+                    "region_blocks": 15,
+                    "candidate_events": 479,
+                    "visited_edges": 1604,
+                    "max_live_fibers": 63,
+                    "max_greedy_frames": 1,
+                    "state_blocks": 479,
+                    "state_steps": 0,
+                    "full_blocks": 344,
+                    "state_sequence_calls": 479,
+                    "semantic_state_replays": 0,
+                    "semantic_full_replays": 0,
+                    "full_scalar_fallback_steps": 0,
+                    "aggregate_calls": 447,
+                    "aggregate_computed_events": 447,
+                    "aggregate_reused_events": 32,
+                    "state_private_projection_calls": 6,
+                    "state_private_projection_rows": 102,
+                    "max_state_private_projection_batch": 32,
+                    "state_preparation_calls": 2,
+                    "state_preparation_events": 34,
+                    "state_preparation_reused_events": 32,
+                    "batched_aggregate_events": 479,
+                    "batched_state_events": 479,
+                    "max_state_batch": 1,
+                    "max_state_sequence": 1,
+                    "read_calls": 479,
+                    "batched_read_events": 479,
+                    "region_batch_calls": 15,
+                    "max_region_batch": 1,
+                    "batched_region_frames": 15,
+                    "region_steps": 15,
+                    "next_steps": 479,
+                    "max_full_batch": 1,
+                    "full_calls": 344,
+                    "batched_full_events": 344,
+                    "selected_events": 344,
+                    "source_rows": 1636
+                  }
+                },
+                "losses": [
+                  4.8421220779418945,
+                  4.842006683349609
+                ],
+                "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3780 / 8192 (46.1%)\nGreatest absolute difference: 0.00010664388537406921 at index (111, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.26971471309661865 at index (94, 0) (up to 1e-05 allowed)",
+                "parameters": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 57 / 8192 (0.7%)\nGreatest absolute difference: 2.5033950805664062e-06 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.0009226567926816642 at index (98, 24) (up to 1e-05 allowed)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "python-float64",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/python-float64/result.json",
+            "bytes": 4758,
+            "sha256": "999dfd6ac1b5721013cfd30c1c70105594b49f3056473ccfbf6d0f048ed4605a"
+          },
+          "result": {
+            "schema": "tide-weighted-workload-diagnostic-v1",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+            "implementation": "python",
+            "dtype": "float64",
+            "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+            "scope": "CPU complete records, discrete structure, output-loss gradients, SGD updates; not throughput",
+            "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+            "state": "passed",
+            "steps": [
+              {
+                "step": 0,
+                "discrete": null,
+                "complete_records": null,
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "greedy_stages": 15,
+                    "greedy_relaxed_edges": 196,
+                    "region_blocks": 15,
+                    "candidate_events": 479,
+                    "visited_edges": 1541,
+                    "max_live_fibers": 63,
+                    "max_greedy_frames": 1,
+                    "state_blocks": 479,
+                    "state_steps": 0,
+                    "full_blocks": 331,
+                    "state_sequence_calls": 479,
+                    "semantic_state_replays": 0,
+                    "semantic_full_replays": 0,
+                    "full_scalar_fallback_steps": 0,
+                    "aggregate_calls": 445,
+                    "aggregate_computed_events": 445,
+                    "aggregate_reused_events": 34,
+                    "state_private_projection_calls": 12,
+                    "state_private_projection_rows": 114,
+                    "max_state_private_projection_batch": 32,
+                    "state_preparation_calls": 4,
+                    "state_preparation_events": 38,
+                    "state_preparation_reused_events": 34,
+                    "batched_aggregate_events": 479,
+                    "batched_state_events": 479,
+                    "max_state_batch": 1,
+                    "max_state_sequence": 1,
+                    "read_calls": 479,
+                    "batched_read_events": 479,
+                    "region_batch_calls": 15,
+                    "max_region_batch": 1,
+                    "batched_region_frames": 15,
+                    "region_steps": 15,
+                    "next_steps": 479,
+                    "max_full_batch": 1,
+                    "full_calls": 331,
+                    "batched_full_events": 331,
+                    "selected_events": 331,
+                    "source_rows": 1573
+                  }
+                },
+                "losses": [
+                  5.517806822098871,
+                  5.5178068220988585
+                ],
+                "gradients": null,
+                "parameters": null
+              },
+              {
+                "step": 1,
+                "discrete": null,
+                "complete_records": null,
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "greedy_stages": 15,
+                    "greedy_relaxed_edges": 196,
+                    "region_blocks": 15,
+                    "candidate_events": 479,
+                    "visited_edges": 1604,
+                    "max_live_fibers": 63,
+                    "max_greedy_frames": 1,
+                    "state_blocks": 479,
+                    "state_steps": 0,
+                    "full_blocks": 344,
+                    "state_sequence_calls": 479,
+                    "semantic_state_replays": 0,
+                    "semantic_full_replays": 0,
+                    "full_scalar_fallback_steps": 0,
+                    "aggregate_calls": 447,
+                    "aggregate_computed_events": 447,
+                    "aggregate_reused_events": 32,
+                    "state_private_projection_calls": 6,
+                    "state_private_projection_rows": 102,
+                    "max_state_private_projection_batch": 32,
+                    "state_preparation_calls": 2,
+                    "state_preparation_events": 34,
+                    "state_preparation_reused_events": 32,
+                    "batched_aggregate_events": 479,
+                    "batched_state_events": 479,
+                    "max_state_batch": 1,
+                    "max_state_sequence": 1,
+                    "read_calls": 479,
+                    "batched_read_events": 479,
+                    "region_batch_calls": 15,
+                    "max_region_batch": 1,
+                    "batched_region_frames": 15,
+                    "region_steps": 15,
+                    "next_steps": 479,
+                    "max_full_batch": 1,
+                    "full_calls": 344,
+                    "batched_full_events": 344,
+                    "selected_events": 344,
+                    "source_rows": 1636
+                  }
+                },
+                "losses": [
+                  4.8420862796884,
+                  4.842086279688246
+                ],
+                "gradients": null,
+                "parameters": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "native-float32",
+          "exit_code": 2,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/native-float32/result.json",
+            "bytes": 6507,
+            "sha256": "532e8c41fee58691dd9c87ae937bc6879c27c1c85e36bb368d2fa3578581d7c8"
+          },
+          "result": {
+            "schema": "tide-weighted-workload-diagnostic-v1",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+            "implementation": "native",
+            "dtype": "float32",
+            "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+            "scope": "CPU complete records, discrete structure, output-loss gradients, SGD updates; not throughput",
+            "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+            "state": "strict_mismatch",
+            "steps": [
+              {
+                "step": 0,
+                "discrete": null,
+                "complete_records": "root.continuation.states[(0, 86)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 3 / 64 (4.7%)\nGreatest absolute difference: 4.112720489501953e-06 at index (0, 26) (up to 1e-06 allowed)\nGreatest relative difference: 7.650660700164735e-05 at index (0, 23) (up to 1e-05 allowed)",
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "aggregate_calls": 445,
+                    "aggregate_computed_events": 445,
+                    "aggregate_reused_events": 34,
+                    "attention_score_elements": 0,
+                    "batched_aggregate_events": 479,
+                    "batched_full_events": 331,
+                    "batched_read_events": 479,
+                    "batched_region_frames": 15,
+                    "batched_state_events": 479,
+                    "body_candidate_events": 479,
+                    "body_selected_events": 331,
+                    "candidate_events": 479,
+                    "full_blocks": 331,
+                    "full_calls": 331,
+                    "greedy_relaxed_edges": 196,
+                    "greedy_stages": 15,
+                    "max_full_batch": 1,
+                    "max_greedy_frames": 1,
+                    "max_live_fibers": 63,
+                    "max_region_batch": 1,
+                    "max_state_batch": 1,
+                    "max_state_private_projection_batch": 32,
+                    "max_state_sequence": 1,
+                    "next_steps": 479,
+                    "read_calls": 479,
+                    "region_batch_calls": 15,
+                    "region_blocks": 15,
+                    "region_steps": 15,
+                    "selected_events": 331,
+                    "source_rows": 1573,
+                    "state_blocks": 479,
+                    "state_preparation_calls": 4,
+                    "state_preparation_events": 38,
+                    "state_preparation_reused_events": 34,
+                    "state_private_projection_calls": 12,
+                    "state_private_projection_rows": 114,
+                    "state_scalar_sequence_steps": 0,
+                    "state_sequence_calls": 479,
+                    "visited_edges": 1541
+                  }
+                },
+                "losses": [
+                  5.5178070068359375,
+                  5.517812728881836
+                ],
+                "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3922 / 8192 (47.9%)\nGreatest absolute difference: 0.002045154571533203 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.01830505207180977 at index (74, 14) (up to 1e-05 allowed)",
+                "parameters": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 25 / 8192 (0.3%)\nGreatest absolute difference: 2.045184373855591e-06 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.0006278851651586592 at index (79, 5) (up to 1e-05 allowed)"
+              },
+              {
+                "step": 1,
+                "discrete": null,
+                "complete_records": "root.continuation.states[(0, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 9 / 128 (7.0%)\nGreatest absolute difference: 5.066394805908203e-06 at index (1, 38) (up to 1e-06 allowed)\nGreatest relative difference: 0.00014564135926775634 at index (1, 13) (up to 1e-05 allowed)",
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "aggregate_calls": 447,
+                    "aggregate_computed_events": 447,
+                    "aggregate_reused_events": 32,
+                    "attention_score_elements": 0,
+                    "batched_aggregate_events": 479,
+                    "batched_full_events": 344,
+                    "batched_read_events": 479,
+                    "batched_region_frames": 15,
+                    "batched_state_events": 479,
+                    "body_candidate_events": 479,
+                    "body_selected_events": 344,
+                    "candidate_events": 479,
+                    "full_blocks": 344,
+                    "full_calls": 344,
+                    "greedy_relaxed_edges": 196,
+                    "greedy_stages": 15,
+                    "max_full_batch": 1,
+                    "max_greedy_frames": 1,
+                    "max_live_fibers": 63,
+                    "max_region_batch": 1,
+                    "max_state_batch": 1,
+                    "max_state_private_projection_batch": 32,
+                    "max_state_sequence": 1,
+                    "next_steps": 479,
+                    "read_calls": 479,
+                    "region_batch_calls": 15,
+                    "region_blocks": 15,
+                    "region_steps": 15,
+                    "selected_events": 344,
+                    "source_rows": 1636,
+                    "state_blocks": 479,
+                    "state_preparation_calls": 2,
+                    "state_preparation_events": 34,
+                    "state_preparation_reused_events": 32,
+                    "state_private_projection_calls": 6,
+                    "state_private_projection_rows": 102,
+                    "state_scalar_sequence_steps": 0,
+                    "state_sequence_calls": 479,
+                    "visited_edges": 1604
+                  }
+                },
+                "losses": [
+                  4.8421220779418945,
+                  4.841984272003174
+                ],
+                "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3817 / 8192 (46.6%)\nGreatest absolute difference: 0.000136449933052063 at index (111, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.35578107833862305 at index (94, 0) (up to 1e-05 allowed)",
+                "parameters": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 76 / 8192 (0.9%)\nGreatest absolute difference: 2.7194619178771973e-06 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.001072219107300043 at index (107, 53) (up to 1e-05 allowed)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "native-float64",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/native-float64/result.json",
+            "bytes": 4789,
+            "sha256": "75535b00d8f2ea4baf9ae84e912150af62c59b4b00dac0b07fab2a13d5dc718f"
+          },
+          "result": {
+            "schema": "tide-weighted-workload-diagnostic-v1",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+            "implementation": "native",
+            "dtype": "float64",
+            "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+            "scope": "CPU complete records, discrete structure, output-loss gradients, SGD updates; not throughput",
+            "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+            "state": "passed",
+            "steps": [
+              {
+                "step": 0,
+                "discrete": null,
+                "complete_records": null,
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 331,
+                  "messages": 1541,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "aggregate_calls": 445,
+                    "aggregate_computed_events": 445,
+                    "aggregate_reused_events": 34,
+                    "attention_score_elements": 0,
+                    "batched_aggregate_events": 479,
+                    "batched_full_events": 331,
+                    "batched_read_events": 479,
+                    "batched_region_frames": 15,
+                    "batched_state_events": 479,
+                    "body_candidate_events": 479,
+                    "body_selected_events": 331,
+                    "candidate_events": 479,
+                    "full_blocks": 331,
+                    "full_calls": 331,
+                    "greedy_relaxed_edges": 196,
+                    "greedy_stages": 15,
+                    "max_full_batch": 1,
+                    "max_greedy_frames": 1,
+                    "max_live_fibers": 63,
+                    "max_region_batch": 1,
+                    "max_state_batch": 1,
+                    "max_state_private_projection_batch": 32,
+                    "max_state_sequence": 1,
+                    "next_steps": 479,
+                    "read_calls": 479,
+                    "region_batch_calls": 15,
+                    "region_blocks": 15,
+                    "region_steps": 15,
+                    "selected_events": 331,
+                    "source_rows": 1573,
+                    "state_blocks": 479,
+                    "state_preparation_calls": 4,
+                    "state_preparation_events": 38,
+                    "state_preparation_reused_events": 34,
+                    "state_private_projection_calls": 12,
+                    "state_private_projection_rows": 114,
+                    "state_scalar_sequence_steps": 0,
+                    "state_sequence_calls": 479,
+                    "visited_edges": 1541
+                  }
+                },
+                "losses": [
+                  5.517806822098871,
+                  5.517806822098855
+                ],
+                "gradients": null,
+                "parameters": null
+              },
+              {
+                "step": 1,
+                "discrete": null,
+                "complete_records": null,
+                "reference_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "candidate_events": 479
+                  }
+                },
+                "candidate_work": {
+                  "candidate_updates": 479,
+                  "full_calls": 344,
+                  "messages": 1604,
+                  "outputs": 19,
+                  "pending": 0,
+                  "actual_stats": {
+                    "aggregate_calls": 447,
+                    "aggregate_computed_events": 447,
+                    "aggregate_reused_events": 32,
+                    "attention_score_elements": 0,
+                    "batched_aggregate_events": 479,
+                    "batched_full_events": 344,
+                    "batched_read_events": 479,
+                    "batched_region_frames": 15,
+                    "batched_state_events": 479,
+                    "body_candidate_events": 479,
+                    "body_selected_events": 344,
+                    "candidate_events": 479,
+                    "full_blocks": 344,
+                    "full_calls": 344,
+                    "greedy_relaxed_edges": 196,
+                    "greedy_stages": 15,
+                    "max_full_batch": 1,
+                    "max_greedy_frames": 1,
+                    "max_live_fibers": 63,
+                    "max_region_batch": 1,
+                    "max_state_batch": 1,
+                    "max_state_private_projection_batch": 32,
+                    "max_state_sequence": 1,
+                    "next_steps": 479,
+                    "read_calls": 479,
+                    "region_batch_calls": 15,
+                    "region_blocks": 15,
+                    "region_steps": 15,
+                    "selected_events": 344,
+                    "source_rows": 1636,
+                    "state_blocks": 479,
+                    "state_preparation_calls": 2,
+                    "state_preparation_events": 34,
+                    "state_preparation_reused_events": 32,
+                    "state_private_projection_calls": 6,
+                    "state_private_projection_rows": 102,
+                    "state_scalar_sequence_steps": 0,
+                    "state_sequence_calls": 479,
+                    "visited_edges": 1604
+                  }
+                },
+                "losses": [
+                  4.8420862796884,
+                  4.842086279688244
+                ],
+                "gradients": null,
+                "parameters": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "ranked64-profile",
+          "exit_code": 1,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-cpu/runs/ranked64-profile/result.json",
+            "bytes": 31809,
+            "sha256": "3db0e0719a5a305918a4f530832cf6d754bb79a24eb5bf4c6abc0fd974286220"
+          },
+          "result": {
+            "schema": "tide-weighted-benchmark-v1",
+            "state": "failed",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "started": "2026-10-28T08:55:38.599058+00:00",
+            "argv": [
+              "--device",
+              "cpu",
+              "--implementation",
+              "python",
+              "--workload",
+              "REPO/artifacts/jobs/core5-performance-study-cpu/runs/ranked64-plan.json",
+              "--profile",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-cpu/runs/ranked64-profile"
+            ],
+            "config": {
+              "topology": "ranked-local",
+              "family": "kv",
+              "width": 64,
+              "samples": 1,
+              "positions": 1,
+              "seed": 7,
+              "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+            },
+            "requested_device": "cpu",
+            "implementation": "python",
+            "mode": "training",
+            "schedule": "prefill",
+            "placement": "native",
+            "warmup_windows": 1,
+            "measured_windows": 1,
+            "kind": "profile",
+            "tracking": "project JSON; execution-flows \u00a71",
+            "timing": "complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
+            "excluded": "fixture/model/owner/optimizer construction, warmup, validation, final parameter export, profiler parsing",
+            "load_average_before": [
+              54.96,
+              86.03,
+              81.22
+            ],
+            "host_arch": "aarch64",
+            "caveat": "one process per configuration; evolving continuation; no statistical or universal speed claim",
+            "dispatch_environment": {
+              "ASCEND_LAUNCH_BLOCKING": null,
+              "CUDA_LAUNCH_BLOCKING": null,
+              "TASK_QUEUE_ENABLE": null
+            },
+            "runtime_initialization_seconds": 0.0531928613781929,
+            "runtime": {
+              "resolved_device": "cpu",
+              "backend": "cpu",
+              "logical_device_index": null,
+              "resolution_reason": "explicit:cpu",
+              "dtype": "float32",
+              "host_architecture": "aarch64",
+              "torch": "2.12.0+cpu",
+              "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "logical_device_count": 1
+            },
+            "memory": {
+              "schema": "tide-weighted-memory-v1",
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 262602752
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 392036352
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 643432448
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 17403076608
+                }
+              ],
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+            },
+            "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+            "workload_span": 17,
+            "parameter_inventory": {
+              "sha256": "e67b06c2bf071be8cf05403da1478e7ff42f14f6c934003b5fc27ee14fc00d31",
+              "totals": {
+                "trainable": 9076975,
+                "frozen": 4480,
+                "role_elements": 31205935,
+                "unique": 9081455
+              },
+              "owners": 12170
+            },
+            "memory_floor": {
+              "kind": "lower_bounds_not_runtime_admission",
+              "dtype": "float32",
+              "optimizer": "adamw",
+              "logical_parameter_bytes": 36325820,
+              "fp32_master_bytes": 36307900,
+              "fp32_gradient_bytes": 36307900,
+              "fp32_optimizer_slot_bytes": 72615800,
+              "role_expanded_fp32_bytes": 124823740,
+              "legacy_inert_buffer_bytes": 8486400,
+              "resident_default_cache": 36,
+              "resident_raw_one_snapshot_bytes": 11406720,
+              "resident_raw_initial_state_old_bytes": 34220160,
+              "excluded": [
+                "raw states/KV/convolution",
+                "message queues",
+                "retained journals/adjoints",
+                "communication",
+                "temporary packing",
+                "operator workspace",
+                "allocator/vendor overhead"
+              ],
+              "complete_admission": false
+            },
+            "parameter_match": {
+              "target_body": 9076928,
+              "actual_body": 9076975,
+              "difference": 47,
+              "relative_difference": 5.177963293308045e-06,
+              "method": "private_ffn_integer_widths",
+              "ffn_widths": [
+                4,
+                5
+              ],
+              "reference": {
+                "semantics": "core-3",
+                "memory": "add",
+                "topology": "same physical graph",
+                "width": 64,
+                "task_head_parameters_excluded": true
+              }
+            },
+            "fixture_preparation_seconds": 2.067428208887577,
+            "construction_seconds": 1.206835549324751,
+            "effective": {
+              "execution": "native",
+              "schedule": "prefill",
+              "operator": "aten",
+              "effective_placement": {
+                "payload": "cpu",
+                "read": "cpu",
+                "control": "cpu",
+                "selection": "cpu",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              },
+              "complete_cpu_records": true,
+              "precision": "FP32",
+              "optimizer": "sgd",
+              "gradient_boundary": "detach per window"
+            },
+            "metrics": [],
+            "warmup_seconds": 5.87816384807229,
+            "profile": {
+              "trace_sha256": "894805c015053cba0584b5df7c9507b360bcac4c45287cab5845e652b0862099",
+              "operators": [
+                {
+                  "name": "tide.prepare",
+                  "calls": 1,
+                  "self_cpu_us": 139.28000000000003
+                },
+                {
+                  "name": "aten::copy_",
+                  "calls": 100523,
+                  "self_cpu_us": 159870.65100025572
+                },
+                {
+                  "name": "tide.forward",
+                  "calls": 1,
+                  "self_cpu_us": 1502449.1420000074
+                },
+                {
+                  "name": "aten::select",
+                  "calls": 51337,
+                  "self_cpu_us": 152330.7900000069
+                },
+                {
+                  "name": "aten::stack",
+                  "calls": 13202,
+                  "self_cpu_us": 77579.7410001083
+                },
+                {
+                  "name": "aten::mm",
+                  "calls": 22501,
+                  "self_cpu_us": 261355.5919999706
+                },
+                {
+                  "name": "aten::bmm",
+                  "calls": 12,
+                  "self_cpu_us": 683.9270000040997
+                },
+                {
+                  "name": "tide.backward_finite",
+                  "calls": 1,
+                  "self_cpu_us": 135845.59500010964
+                },
+                {
+                  "name": "tide.optimizer",
+                  "calls": 1,
+                  "self_cpu_us": 74.75100000016391
+                },
+                {
+                  "name": "tide.detach_return_sync",
+                  "calls": 1,
+                  "self_cpu_us": 167731.9149999488
+                }
+              ],
+              "self_cpu_us_total": 9094150.797999997
+            },
+            "error": "AssertionError('root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\\n\\nMismatched elements: 1 / 64 (1.6%)\\nGreatest absolute difference: 1.383945345878601e-06 at index (0, 37) (up to 1e-06 allowed)\\nGreatest relative difference: 5.0092145102098584e-05 at index (0, 37) (up to 1e-05 allowed)')",
+            "finished": "2026-10-28T08:59:43.117577+00:00"
+          }
+        }
+      ]
+    },
+    "npu": {
+      "run": {
+        "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+        "state": "failed",
+        "cases": [
+          {
+            "name": "before-mixed",
+            "command": [
+              "/bin/bash",
+              "REPO/.local/core5-study-python.sh",
+              "REPO/artifacts/worktrees/core5-diagnostics-qualified/scripts/benchmark_weighted.py",
+              "--device",
+              "npu:0",
+              "--implementation",
+              "python",
+              "--placement",
+              "mixed-c",
+              "--topology",
+              "hb",
+              "--size",
+              "medium",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-npu/runs/before-mixed"
+            ],
+            "limit_seconds": 240,
+            "exit_code": 0,
+            "seconds": 23.645806305110455,
+            "log_sha256": "9bfb8c73b26e8ebe5adf98b8ce6f3d1689d1868e5e7ad3d69fc60f18a069c1dc"
+          },
+          {
+            "name": "after-mixed",
+            "command": [
+              "/bin/bash",
+              "REPO/.local/core5-study-python.sh",
+              "REPO/artifacts/worktrees/core5-private-qualified/scripts/benchmark_weighted.py",
+              "--device",
+              "npu:0",
+              "--implementation",
+              "python",
+              "--placement",
+              "mixed-c",
+              "--topology",
+              "hb",
+              "--size",
+              "medium",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-npu/runs/after-mixed"
+            ],
+            "limit_seconds": 240,
+            "exit_code": 0,
+            "seconds": 23.746715240180492,
+            "log_sha256": "b3f6ead560bff4bcef40438c24efe2beaaead8ba6d3be12529184949477579d0"
+          },
+          {
+            "name": "sdk-affine",
+            "command": [
+              "REPO/artifacts/worktrees/core5-private-qualified/build/npu-core/tidegraph-weighted-training-check",
+              "--device",
+              "npu:0",
+              "--dtype",
+              "float32",
+              "--case",
+              "fc/affine",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-npu/runs/sdk-affine"
+            ],
+            "limit_seconds": 240,
+            "exit_code": 1,
+            "seconds": 14.984770003706217,
+            "log_sha256": "832c089a9d8a0942b2e46adf9d44fa1a054508145c1f68ff976f7cac7eae38d8"
+          }
+        ],
+        "physical_devices": "1",
+        "load_average_before": [
+          63.21,
+          72.88,
+          76.74
+        ],
+        "policy": "one process/config; one warmup and one measured full training window",
+        "question": "private matrices in eager mixed-c; retained SDK affine numerical witness; no resident throughput claim",
+        "load_average_after": [
+          80.18,
+          75.43,
+          77.34
+        ]
+      },
+      "manifest": {
+        "path": "artifacts/jobs/core5-private-study-npu/runs/study.json",
+        "bytes": 2853,
+        "sha256": "6a46f036f9302ca7bd49e64a96f57cc78bcaa763f47aafcfb71cd4770b5bb67a"
+      },
+      "cases": [
+        {
+          "name": "before-mixed",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-npu/runs/before-mixed/result.json",
+            "bytes": 6076,
+            "sha256": "5e6e8392db87a4d0f105ade49abb0c8dd55e12672697b6d2074a77cdc31010f0"
+          },
+          "result": {
+            "schema": "tide-weighted-benchmark-v1",
+            "state": "passed",
+            "source": "0503593d71a64d26f24e0a4168e16af8c1633baa",
+            "dirty": "",
+            "started": "2026-10-28T09:02:09.397002+00:00",
+            "argv": [
+              "--device",
+              "npu:0",
+              "--implementation",
+              "python",
+              "--placement",
+              "mixed-c",
+              "--topology",
+              "hb",
+              "--size",
+              "medium",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-npu/runs/before-mixed"
+            ],
+            "config": {
+              "topology": "hb",
+              "family": "kv",
+              "width": 32,
+              "samples": 4,
+              "positions": 4,
+              "seed": 7
+            },
+            "requested_device": "npu:0",
+            "implementation": "python",
+            "mode": "training",
+            "schedule": "prefill",
+            "placement": "mixed-c",
+            "warmup_windows": 1,
+            "measured_windows": 1,
+            "kind": "benchmark",
+            "tracking": "project JSON; execution-flows \u00a71",
+            "timing": "complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
+            "excluded": "fixture/model/owner/optimizer construction, warmup, validation, final parameter export, profiler parsing",
+            "load_average_before": [
+              63.21,
+              72.88,
+              76.74
+            ],
+            "host_arch": "aarch64",
+            "caveat": "one process per configuration; evolving continuation; no statistical or universal speed claim",
+            "dispatch_environment": {
+              "ASCEND_LAUNCH_BLOCKING": null,
+              "CUDA_LAUNCH_BLOCKING": null,
+              "TASK_QUEUE_ENABLE": null
+            },
+            "runtime_initialization_seconds": 10.747405041009188,
+            "runtime": {
+              "resolved_device": "npu:0",
+              "backend": "npu",
+              "logical_device_index": 0,
+              "resolution_reason": "explicit:npu",
+              "dtype": "float32",
+              "host_architecture": "aarch64",
+              "torch": "2.12.0+cpu",
+              "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "torch_npu": "2.12.0.post2",
+              "logical_device_count": 1,
+              "device_name": "Ascend910_9392",
+              "cann_version": "9.1.0",
+              "matmul_allow_hf32": false
+            },
+            "memory": {
+              "schema": "tide-weighted-memory-v1",
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 2263523328,
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 1024,
+                  "peak_reserved_bytes": 2097152
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 2263523328,
+                  "device": "npu:0",
+                  "allocated_bytes": 538624,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 538624,
+                  "peak_reserved_bytes": 2097152
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 2439364608,
+                  "device": "npu:0",
+                  "allocated_bytes": 1624064,
+                  "reserved_bytes": 41943040,
+                  "peak_allocated_bytes": 37862400,
+                  "peak_reserved_bytes": 41943040
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 2448416768,
+                  "device": "npu:0",
+                  "allocated_bytes": 1689600,
+                  "reserved_bytes": 41943040,
+                  "peak_allocated_bytes": 38882304,
+                  "peak_reserved_bytes": 41943040
+                }
+              ],
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+            },
+            "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+            "workload_span": 20,
+            "fixture_preparation_seconds": 0.08038297668099403,
+            "construction_seconds": 0.03577953949570656,
+            "effective": {
+              "execution": "mixed-c",
+              "schedule": "prefill",
+              "operator": "aten",
+              "effective_placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              },
+              "complete_cpu_records": true,
+              "precision": "FP32",
+              "optimizer": "sgd",
+              "gradient_boundary": "detach per window"
+            },
+            "metrics": [
+              {
+                "step": 1,
+                "seconds": 1.8744800947606564,
+                "loss": 0.0713919848203659,
+                "candidate_updates": 128,
+                "full_calls": 128,
+                "messages": 192,
+                "outputs": 32,
+                "pending": 0,
+                "actual_stats": {
+                  "greedy_stages": 3,
+                  "greedy_relaxed_edges": 24,
+                  "region_blocks": 4,
+                  "candidate_events": 128,
+                  "visited_edges": 192,
+                  "max_live_fibers": 64,
+                  "max_greedy_frames": 16,
+                  "state_blocks": 32,
+                  "state_steps": 0,
+                  "full_blocks": 8,
+                  "state_sequence_calls": 8,
+                  "semantic_state_replays": 0,
+                  "semantic_full_replays": 0,
+                  "full_scalar_fallback_steps": 0,
+                  "aggregate_calls": 5,
+                  "aggregate_computed_events": 80,
+                  "aggregate_reused_events": 48,
+                  "state_preparation_calls": 48,
+                  "state_preparation_events": 96,
+                  "state_preparation_reused_events": 48,
+                  "batched_aggregate_events": 128,
+                  "batched_state_events": 128,
+                  "max_state_batch": 4,
+                  "max_state_sequence": 4,
+                  "read_calls": 8,
+                  "batched_read_events": 128,
+                  "region_batch_calls": 4,
+                  "max_region_batch": 16,
+                  "batched_region_frames": 64,
+                  "region_steps": 64,
+                  "next_steps": 128,
+                  "max_full_batch": 16,
+                  "full_calls": 8,
+                  "batched_full_events": 128,
+                  "selected_events": 128,
+                  "source_rows": 224
+                }
+              }
+            ],
+            "warmup_seconds": 2.458230923861265,
+            "post_measurement_complete_records": true,
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "load_average_after": [
+              64.49,
+              72.66,
+              76.6
+            ],
+            "timing_summary": {
+              "total_seconds": 1.8744800947606564,
+              "median_seconds": 1.8744800947606564,
+              "min_seconds": 1.8744800947606564,
+              "max_seconds": 1.8744800947606564,
+              "candidate_updates_per_second": 68.2856010889482
+            },
+            "finished": "2026-10-28T09:02:27.175290+00:00"
+          }
+        },
+        {
+          "name": "after-mixed",
+          "exit_code": 0,
+          "result_file": {
+            "path": "artifacts/jobs/core5-private-study-npu/runs/after-mixed/result.json",
+            "bytes": 6220,
+            "sha256": "28b7020d6a17c7683a003a428c2b89558745d0bb3c57094e300811ae0ecca00d"
+          },
+          "result": {
+            "schema": "tide-weighted-benchmark-v1",
+            "state": "passed",
+            "source": "07e56ca03b72e177f2e7ee5cbcb47994710e04ac",
+            "dirty": "",
+            "started": "2026-10-28T09:02:32.970049+00:00",
+            "argv": [
+              "--device",
+              "npu:0",
+              "--implementation",
+              "python",
+              "--placement",
+              "mixed-c",
+              "--topology",
+              "hb",
+              "--size",
+              "medium",
+              "--steps",
+              "1",
+              "--output-dir",
+              "REPO/artifacts/jobs/core5-private-study-npu/runs/after-mixed"
+            ],
+            "config": {
+              "topology": "hb",
+              "family": "kv",
+              "width": 32,
+              "samples": 4,
+              "positions": 4,
+              "seed": 7
+            },
+            "requested_device": "npu:0",
+            "implementation": "python",
+            "mode": "training",
+            "schedule": "prefill",
+            "placement": "mixed-c",
+            "warmup_windows": 1,
+            "measured_windows": 1,
+            "kind": "benchmark",
+            "tracking": "project JSON; execution-flows \u00a71",
+            "timing": "complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
+            "excluded": "fixture/model/owner/optimizer construction, warmup, validation, final parameter export, profiler parsing",
+            "load_average_before": [
+              68.33,
+              73.18,
+              76.73
+            ],
+            "host_arch": "aarch64",
+            "caveat": "one process per configuration; evolving continuation; no statistical or universal speed claim",
+            "dispatch_environment": {
+              "ASCEND_LAUNCH_BLOCKING": null,
+              "CUDA_LAUNCH_BLOCKING": null,
+              "TASK_QUEUE_ENABLE": null
+            },
+            "runtime_initialization_seconds": 10.800973683595657,
+            "runtime": {
+              "resolved_device": "npu:0",
+              "backend": "npu",
+              "logical_device_index": 0,
+              "resolution_reason": "explicit:npu",
+              "dtype": "float32",
+              "host_architecture": "aarch64",
+              "torch": "2.12.0+cpu",
+              "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "torch_npu": "2.12.0.post2",
+              "logical_device_count": 1,
+              "device_name": "Ascend910_9392",
+              "cann_version": "9.1.0",
+              "matmul_allow_hf32": false
+            },
+            "memory": {
+              "schema": "tide-weighted-memory-v1",
+              "phases": [
+                {
+                  "phase": "runtime_ready",
+                  "process_lifetime_peak_rss_bytes": 2267889664,
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 1024,
+                  "peak_reserved_bytes": 2097152
+                },
+                {
+                  "phase": "construction",
+                  "process_lifetime_peak_rss_bytes": 2267889664,
+                  "device": "npu:0",
+                  "allocated_bytes": 538624,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 538624,
+                  "peak_reserved_bytes": 2097152
+                },
+                {
+                  "phase": "warmup",
+                  "process_lifetime_peak_rss_bytes": 2465943552,
+                  "device": "npu:0",
+                  "allocated_bytes": 1619968,
+                  "reserved_bytes": 41943040,
+                  "peak_allocated_bytes": 38317056,
+                  "peak_reserved_bytes": 41943040
+                },
+                {
+                  "phase": "measurement",
+                  "process_lifetime_peak_rss_bytes": 2474995712,
+                  "device": "npu:0",
+                  "allocated_bytes": 1669120,
+                  "reserved_bytes": 41943040,
+                  "peak_allocated_bytes": 39332864,
+                  "peak_reserved_bytes": 41943040
+                }
+              ],
+              "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+              "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+            },
+            "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+            "workload_span": 20,
+            "fixture_preparation_seconds": 0.08297780156135559,
+            "construction_seconds": 0.036374278366565704,
+            "effective": {
+              "execution": "mixed-c",
+              "schedule": "prefill",
+              "operator": "aten",
+              "effective_placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              },
+              "complete_cpu_records": true,
+              "precision": "FP32",
+              "optimizer": "sgd",
+              "gradient_boundary": "detach per window"
+            },
+            "metrics": [
+              {
+                "step": 1,
+                "seconds": 1.9888767264783382,
+                "loss": 0.0713919848203659,
+                "candidate_updates": 128,
+                "full_calls": 128,
+                "messages": 192,
+                "outputs": 32,
+                "pending": 0,
+                "actual_stats": {
+                  "greedy_stages": 3,
+                  "greedy_relaxed_edges": 24,
+                  "region_blocks": 4,
+                  "candidate_events": 128,
+                  "visited_edges": 192,
+                  "max_live_fibers": 64,
+                  "max_greedy_frames": 16,
+                  "state_blocks": 32,
+                  "state_steps": 0,
+                  "full_blocks": 8,
+                  "state_sequence_calls": 8,
+                  "semantic_state_replays": 0,
+                  "semantic_full_replays": 0,
+                  "full_scalar_fallback_steps": 0,
+                  "aggregate_calls": 5,
+                  "aggregate_computed_events": 80,
+                  "aggregate_reused_events": 48,
+                  "state_private_projection_calls": 144,
+                  "state_private_projection_rows": 288,
+                  "max_state_private_projection_batch": 2,
+                  "state_preparation_calls": 48,
+                  "state_preparation_events": 96,
+                  "state_preparation_reused_events": 48,
+                  "batched_aggregate_events": 128,
+                  "batched_state_events": 128,
+                  "max_state_batch": 4,
+                  "max_state_sequence": 4,
+                  "read_calls": 8,
+                  "batched_read_events": 128,
+                  "region_batch_calls": 4,
+                  "max_region_batch": 16,
+                  "batched_region_frames": 64,
+                  "region_steps": 64,
+                  "next_steps": 128,
+                  "max_full_batch": 16,
+                  "full_calls": 8,
+                  "batched_full_events": 128,
+                  "selected_events": 128,
+                  "source_rows": 224
+                }
+              }
+            ],
+            "warmup_seconds": 2.6371965631842613,
+            "post_measurement_complete_records": true,
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "load_average_after": [
+              70.05,
+              73.3,
+              76.71
+            ],
+            "timing_summary": {
+              "total_seconds": 1.9888767264783382,
+              "median_seconds": 1.9888767264783382,
+              "min_seconds": 1.9888767264783382,
+              "max_seconds": 1.9888767264783382,
+              "candidate_updates_per_second": 64.35793545970387
+            },
+            "finished": "2026-10-28T09:02:51.132348+00:00"
+          }
+        },
+        {
+          "name": "sdk-affine",
+          "exit_code": 1,
+          "result": "no JSON result; exact stdout and exit code in case log",
+          "last_log_line": "fc/affine: train forward step=2: benchmark parity: trace[4][b=0,v=2,t=2].descriptor_fields.evidence tensor value (dtype=Float, shape=[2], max_abs_error=3.09944e-06, reference_max_abs=0.33103)"
+        }
+      ]
+    }
+  },
+  "materials": [
+    {
+      "name": "original",
+      "fixture": {
+        "path": "artifacts/jobs/core5-performance-study-cpu/runs/original.json",
+        "bytes": 3224273,
+        "sha256": "81551574c04e16fbfcaa38aa5bbacf29a4d31bc74120d737c7c07242dfb28d67"
+      },
+      "metadata": {
+        "schema": "tide-weighted-benchmark-fixture-v1",
+        "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+        "dirty": "",
+        "config": {
+          "topology": "hb",
+          "family": "kv",
+          "width": 32,
+          "samples": 4,
+          "positions": 4,
+          "seed": 7
+        },
+        "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+        "span": 20
+      }
+    },
+    {
+      "name": "ranked64",
+      "fixture": {
+        "path": "artifacts/jobs/core5-performance-study-cpu/runs/ranked64.json",
+        "bytes": 6458278,
+        "sha256": "442681829a78d2677bdd257e84a8e75800ca93232b598f224a402f34e3207616"
+      },
+      "metadata": {
+        "schema": "tide-weighted-benchmark-fixture-v2",
+        "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+        "dirty": "",
+        "config": {
+          "topology": "ranked-local",
+          "family": "kv",
+          "width": 64,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+        },
+        "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+        "span": 17,
+        "binary": {
+          "file": "ranked64.tensors.bin",
+          "nbytes": 36326080,
+          "sha256": "2a7f209dbedc1366c9c333f46f79f7490e5a1aa4088019101313283e735f935d",
+          "byte_order": "little"
+        },
+        "workload": {
+          "schema": "tide-weighted-workload-v1",
+          "upstream": "0770593838a37c790a568226930567ed60f99b83",
+          "width": 64,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "stride": 17,
+          "span": 17,
+          "sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+          "parameter_match": {
+            "target_body": 9076928,
+            "actual_body": 9076975,
+            "difference": 47,
+            "relative_difference": 5.177963293308045e-06,
+            "method": "private_ffn_integer_widths",
+            "ffn_widths": [
+              4,
+              5
+            ],
+            "reference": {
+              "semantics": "core-3",
+              "memory": "add",
+              "topology": "same physical graph",
+              "width": 64,
+              "task_head_parameters_excluded": true
+            }
+          },
+          "memory_floor": {
+            "kind": "lower_bounds_not_runtime_admission",
+            "dtype": "float32",
+            "optimizer": "adamw",
+            "logical_parameter_bytes": 36325820,
+            "fp32_master_bytes": 36307900,
+            "fp32_gradient_bytes": 36307900,
+            "fp32_optimizer_slot_bytes": 72615800,
+            "role_expanded_fp32_bytes": 124823740,
+            "legacy_inert_buffer_bytes": 8486400,
+            "resident_default_cache": 36,
+            "resident_raw_one_snapshot_bytes": 11406720,
+            "resident_raw_initial_state_old_bytes": 34220160,
+            "excluded": [
+              "raw states/KV/convolution",
+              "message queues",
+              "retained journals/adjoints",
+              "communication",
+              "temporary packing",
+              "operator workspace",
+              "allocator/vendor overhead"
+            ],
+            "complete_admission": false
+          }
+        }
+      }
+    },
+    {
+      "name": "wide2048",
+      "fixture": {
+        "path": "artifacts/jobs/core5-performance-study-cpu/runs/wide2048.json",
+        "bytes": 49756,
+        "sha256": "a0808ee5f537387fd15cbaec04fe781fe80a7cf8183a61e77e332d6c94a46c6c"
+      },
+      "metadata": {
+        "schema": "tide-weighted-benchmark-fixture-v2",
+        "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+        "dirty": "",
+        "config": {
+          "topology": "ranked-local",
+          "family": "kv",
+          "width": 2048,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "workload_sha256": "955bce00af3a5fb8531d75a7648ea3a96822b0448d8a5835b7136bad86149501"
+        },
+        "fixture_sha256": "fd4e1bd7d0df1dc595884a1961e30e0ff6a414bff5392484c69eb54e07a9d2f2",
+        "span": 4,
+        "binary": {
+          "file": "wide2048.tensors.bin",
+          "nbytes": 805863628,
+          "sha256": "ee6fc56ffd3a54d61f8efced054d118c8e4f133e1d1c114ff7e4066d55dbb558",
+          "byte_order": "little"
+        },
+        "workload": {
+          "schema": "tide-weighted-workload-v1",
+          "upstream": "0770593838a37c790a568226930567ed60f99b83",
+          "width": 2048,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "stride": 4,
+          "span": 4,
+          "sha256": "955bce00af3a5fb8531d75a7648ea3a96822b0448d8a5835b7136bad86149501",
+          "memory_floor": {
+            "kind": "lower_bounds_not_runtime_admission",
+            "dtype": "float32",
+            "optimizer": "adamw",
+            "logical_parameter_bytes": 805855432,
+            "fp32_master_bytes": 805855384,
+            "fp32_gradient_bytes": 805855384,
+            "fp32_optimizer_slot_bytes": 1611710768,
+            "role_expanded_fp32_bytes": 1007206600,
+            "legacy_inert_buffer_bytes": 67272768,
+            "resident_default_cache": 10,
+            "resident_raw_one_snapshot_bytes": 852592,
+            "resident_raw_initial_state_old_bytes": 2557776,
+            "excluded": [
+              "raw states/KV/convolution",
+              "message queues",
+              "retained journals/adjoints",
+              "communication",
+              "temporary packing",
+              "operator workspace",
+              "allocator/vendor overhead"
+            ],
+            "complete_admission": false
+          }
+        }
+      }
+    },
+    {
+      "name": "matched2048",
+      "fixture": {
+        "path": "artifacts/jobs/core5-performance-study-cpu/runs/matched2048.json",
+        "bytes": 6538333,
+        "sha256": "de26031cc637b6e0f126b5ae04d801baf5ff623a576ecccdcbd0eab67b3523b4"
+      },
+      "metadata": {
+        "schema": "tide-weighted-benchmark-fixture-v2",
+        "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+        "dirty": "",
+        "config": {
+          "topology": "ranked-local",
+          "family": "kv",
+          "width": 2048,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "workload_sha256": "b833df0ae02a4fdd35ff36211b9c1434ff921eceaab119a44becfbc851d75fee"
+        },
+        "fixture_sha256": "9cb74b353fcbcddef1171988a3c34509cebf4758ca77e041ced2d86ed85d0bd9",
+        "span": 17,
+        "binary": {
+          "file": "matched2048.tensors.bin",
+          "nbytes": 37048052160,
+          "sha256": "8bcc36d0b76ee274d6dba1f2f5a0d4df8f773b8f426d943328cd6adcd206f90f",
+          "byte_order": "little"
+        },
+        "workload": {
+          "schema": "tide-weighted-workload-v1",
+          "upstream": "0770593838a37c790a568226930567ed60f99b83",
+          "width": 2048,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "stride": 17,
+          "span": 17,
+          "sha256": "b833df0ae02a4fdd35ff36211b9c1434ff921eceaab119a44becfbc851d75fee",
+          "parameter_match": {
+            "target_body": 9262008512,
+            "actual_body": 9262006511,
+            "difference": -2001,
+            "relative_difference": -2.1604385241143688e-07,
+            "method": "private_ffn_integer_widths",
+            "ffn_widths": [
+              319,
+              320
+            ],
+            "reference": {
+              "semantics": "core-3",
+              "memory": "add",
+              "topology": "same physical graph",
+              "width": 2048,
+              "task_head_parameters_excluded": true
+            }
+          },
+          "memory_floor": {
+            "kind": "lower_bounds_not_runtime_admission",
+            "dtype": "float32",
+            "optimizer": "adamw",
+            "logical_parameter_bytes": 37048043964,
+            "fp32_master_bytes": 37048026044,
+            "fp32_gradient_bytes": 37048026044,
+            "fp32_optimizer_slot_bytes": 74096052088,
+            "role_expanded_fp32_bytes": 127320730044,
+            "legacy_inert_buffer_bytes": 8072732160,
+            "resident_default_cache": 36,
+            "resident_raw_one_snapshot_bytes": 358051200,
+            "resident_raw_initial_state_old_bytes": 1074153600,
+            "excluded": [
+              "raw states/KV/convolution",
+              "message queues",
+              "retained journals/adjoints",
+              "communication",
+              "temporary packing",
+              "operator workspace",
+              "allocator/vendor overhead"
+            ],
+            "complete_admission": false
+          }
+        }
+      }
+    }
+  ],
+  "prior_evidence": [
+    "core5-performance-transfer-20261028.md",
+    "core5-numerical-isolation-20261028.md"
+  ],
+  "remaining_limits": [
+    "FP32 D64 complete records/gradients/SGD strict mismatch; explicit FP64 diagnostic passes do not fix FP32",
+    "D2048 allocation residual refusal remains after the common-offset repair; no successful large throughput sample",
+    "eager FP16 GDN AdamW and default async Torch-NPU cross-device VJP remain limited",
+    "SDK affine witness and old feedback-PDG strict failures remain separately recorded",
+    "private BMM batches only inside proven shared-base/shared-input groups; max State callback batch can remain1",
+    "window backward construction, unshared-base projections and physical inactive rows remain optimization candidates",
+    "CUDA hardware, x86_64 and untested large-scale accelerator/peer throughput remain unqualified"
+  ]
+}

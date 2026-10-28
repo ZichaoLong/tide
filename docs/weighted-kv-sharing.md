@@ -41,7 +41,9 @@ State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本
 `max_state_private_projection_batch` 取跨执行块最大值（不是累计）。State 回调数继续单独报告；
 实际合批的是私有线性映射，私有缓存写入并未合并。没有声称跨键合并了所有投影调用。
 候选写入、私有 KV 长度、选择、Full 和消息数量均不因本项减少。
-本项是 eager packed 路径，mixed/resident 与真实设备资格单独验收；当前运行证据见 [STATUS](STATUS.md)。
+本项是 eager packed 路径，mixed/resident 与真实设备资格单独验收；
+[07e56ca资格和有限对照](evidence/core5-private-projection-20261028.md)给出CPU、mixed-c与独立后端证据，
+包括未改善的性能和严格数值失败；当前交接见 [STATUS](STATUS.md)。
 
 ## 独立私有行的一阶边界
 
