@@ -20,6 +20,35 @@ RULES = [(0, 1., "quad"), (1, 1., "bern"), (2, 1., "ent"),
          (2, 1.000001, "ent"), (2, 1.5, "ent"), (2, 2., "ent")]
 
 
+def test_resident_quad_wide_coordinates_and_independent_vjp(library):
+    scores = torch.tensor([[-306.8722839355469, -1376.8216552734375], [1e8, 0.], [-1e38, 1e38]])
+    caps = torch.ones_like(scores)
+    bounds = torch.tensor([[1.7806066274642944]*2+[1., 0.], [1.7, 1.7, 1., 0.], [1.7, 1.7, 1., 0.]])
+    run = Run(library, scores, caps, bounds, [2]*3)
+    assert run.error.item() == 0
+    expected = torch.tensor([[1., .7806066274642944], [1., .7000000476837158], [.7000000476837158, 1.]])
+    close(run.controls, expected)
+    vectors, scalars, flags = run.backward(torch.tensor([[2., -1.], [2., -1.], [-1., 2.]]))
+    assert run.error.item() == 0
+    close(vectors, torch.tensor([[[0., 0.], [3., 0.]], [[0., 0.], [3., 0.]], [[0., 0.], [0., 3.]]]))
+    close(scalars, torch.tensor([[-1., 0., 0., 0.]]).repeat(3, 1))
+    assert flags.tolist() == [[True, True, True, False, True, True]]*3
+
+
+@pytest.mark.parametrize("kind,alpha,name", RULES)
+def test_resident_constrained_large_shift_invariance(library, kind, alpha, name):
+    scores = torch.tensor([[.2, .4]])
+    caps = torch.ones_like(scores)
+    bounds = torch.tensor([[.7, .7, 1., 0.]])
+    unshifted = Run(library, scores, caps, bounds, [2], kind, alpha)
+    bounds[0, 3] = 1e30
+    shifted = Run(library, scores, caps, bounds, [2], kind, alpha)
+    assert unshifted.error.item() == shifted.error.item() == 0
+    assert torch.equal(unshifted.controls, shifted.controls)
+    vectors, scalars, flags = shifted.backward(torch.tensor([[2., -1.]]))
+    assert flags[0, 5] and scalars[0, 3] == 0
+
+
 def close(actual, expected):
     torch.testing.assert_close(actual, expected, atol=1e-6, rtol=1e-5)
 

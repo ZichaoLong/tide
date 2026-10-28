@@ -3,6 +3,7 @@
 #include "weighted_sending_batch.h"
 #include "weighted_detail.h"
 #include "weighted_placement.h"
+#include "tide/allocation_failure.h"
 #include <sstream>
 
 namespace tide::weighted::batch {
@@ -55,7 +56,13 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
     if(!values.defined()){
       std::vector<AllocationRow> inputs;
       for(size_t j=0;j<ids.size();++j)inputs.push_back({scores[j],caps[j],low[j],high[j],at::full({},*c.allocation_temperature,scores.options()),shift.defined()?shift[j]:Tensor{}});
-      auto allocations=allocate_batch(inputs,*c.regularizer,c.ent_alpha);
+      std::vector<Allocation> allocations;
+      try{allocations=allocate_batch(inputs,*c.regularizer,c.ent_alpha);}
+      catch(AllocationFailure& e){
+        e.row=ids.at(e.row);const auto& request=requests[e.row];e.time=request.time;e.members=request.layout.members.vec();
+        for(const auto& candidate:request.candidates)e.nodes.push_back(candidate.node);
+        throw;
+      }
       for(size_t j=0;j<ids.size();++j){rows.push_back(allocations[j].controls);if(dependencies)(*dependencies)[ids[j]]=allocations[j].constraint;}
     }else{
       rows=values.unbind();if(dependencies)for(auto i:ids)(*dependencies)[i]=c.selection_mode;

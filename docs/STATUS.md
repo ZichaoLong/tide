@@ -1,63 +1,45 @@
 # 当前交接 — 2026-10-28
 
-分支 `graph-execution-foundation`；路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`。
-固定数学 `0770593838a37c790a568226930567ed60f99b83`；19份当前/5份旧快照校验通过。
-用户批准的 A—E 有界工作已完成：限制复现定位、LH/fractal/core-3经验、五族参数/匹配用例设施、
-具体性能改进及有限独立验证。已实现、通过范围、性能负结果和保留限制分别记录；不是全部数值域/硬件/优化资格。
-没有活动或排队作业，不恢复历史队列。参考仓库和公共环境保持只读，全程不使用子代理。
+授权分支 `graph-execution-foundation`，实现基线 `07e56ca`，文档基线 `a7d6ecf`（已推送）。
+固定数学 `0770593838a37c790a568226930567ed60f99b83`；19/5快照启动核验通过。
+用户批准继续：捕获大型分配失败→独立高精度定位/修复→D64及训练差异→有依据的求解/批量优化→原材料/参数匹配测量→固定资格/提交推送。
+参考仓库和公共环境只读，不使用子代理，不恢复旧队列，不修改旧失败终态。
 
-## 交付与固定来源
+## 当前增量
 
-- `b0321b9`/`62073dd`/`12ad204`：GDN首次梯度分歧、纯Torch双NPU异步反例和历史经验调查。
-- `2da3f2c76c13cff0c41af45fddb5f24f2e99421f`：五族真实参数/别名清单，core-3主体预算匹配，
-  FC/HB/ranked/非对齐DAG/反馈PDG及v2二进制材料；共享低秩计算、初始化消冗、ready复制、冻结bank及发布去重。
-- `0503593d71a64d26f24e0a4168e16af8c1633baa`：有界无损材料解码、独立FP32/FP64训练诊断、设备scratch隔离和失败metrics保留。
-- `07e56ca03b72e177f2e7ee5cbcb47994710e04ac`：quad实际居中响应/残差/VJP修复；合法共享base/输入组内
-  私有矩阵真实BMM及独立行一阶VJP，保留None/零、别名贡献、版本、私有状态和精确恢复。
-- 实现已推送；本交接所在文档提交单独保存证据，不修改已测试源码。数学、图v13/checkpoint v5、原容差不变。
+`core5-capture-dev-20261028` 已于10:54:21 UTC终态passed/exit0：156定向测试、standalone构建、两个原材料的失败快照取得。
+这仅是诊断收集成功；`artifacts/jobs/core5-capture-dev/{wide2048,matched2048}/result.json`均仍failed/exit2，metrics空。
+实际快照和独立120位Decimal分析位于同目录 `allocation-failure.json` / `decimal.json`。
+wide2048误差3.3021e-5；matched2048在time26有20个候选，原残差1.7166e-4超过1.5259e-4。
+两个失败行已原样复制为 `tests/data/quad-{wide2048,matched2048}-failure.json`，正式成果不依赖旧运行目录。
 
-[最新固定证据](evidence/core5-private-projection-20261028.md)及同名JSON记录源码/二进制/材料/日志身份、
-独立手算、资格与严格失败；[前轮设施/迁移证据](evidence/core5-performance-transfer-20261028.md)、
-[数值/异步定位](evidence/core5-numerical-isolation-20261028.md)保留原结果。
-[经验文档](performance-lessons.md)包含本仓库core-3、LH、fractal及本轮正/负经验。
+工作区实现了按cap质量分位评分选原点的quad求解；真实根落在[-tau*max(mu),0]，Python只排序可变带，
+C++独立二分，设备用32次整数key查询选原点；保持原dtype/容差、原始响应和精确解VJP。
+同时约束分支在原评分坐标消去共同阈值，避免先舍入scores-eta丢失评分差；松弛分支不变。
+新失败快照、Decimal/成功调用观察、projection诊断及benchmark核对阶段峰值改进仍未提交。
+纯Python定向138项及大共同shift22项通过；开发native/Python定向432项、二进制材料训练5项通过。
+主树新增常驻源码CPU适配37项通过；NPU新求解真机/CUDA新构建尚未验证。
 
-## 最新终态
+`core5-local-allocation-dev-20261028` / `artifacts/jobs/core5-local-allocation-dev` 已终态failed/exit1。
+构建/上述定向测试通过；wide2048完整窗口已执行(单次1.39249s)但keys差5.34058e-5严格失败；
+Python/native D64两步离散结构一致，完整返回/梯度/SGD仍strict_mismatch，不作等价加速。
+复用已终态的开发工作树路径 `artifacts/worktrees/core5-capture-dev` 作下一冻结快照和增量build；
+先前快照精确保留在旧job/source.tar.gz和tree hash，旧standalone安装及失败记录不改写。
+上述原用例复验已终态。下一步固定本次数值/诊断增量；继续KV投影算术与性能增量，随后必要固定资格和大型matched2048测量。
+资源：线程1/build2、Nice10、128G配置上限、50分钟；新status.json/task.log记录全部终态。
 
-job路径均为 `artifacts/jobs/NAME`，unit为 `NAME-20261028`，状态/日志为 `status.json`/`task.log`。
-固定只读源码 `artifacts/worktrees/core5-private-qualified` 在07e56ca；CPU复用core前核对全部源码/二进制hash。
+## 已有证据与保留边界
 
-| NAME | 终态及范围 |
-| --- | --- |
-| core5-private-qualify-cpu | passed/exit0；574 passed、2 strict xfail；standalone两dtype各24图×4更新和精确checkpoint |
-| core5-private-qualify-npu | passed/exit0；物理1/11，9个组件dtype项，完整单/双卡训练恢复；SDK eager KV及纯Python mixed-c KV通过 |
-| core5-private-qualify-cuda | passed/exit0；新core/resident sm80/90/100、loader/help和CPU两dtype核验，无GPU真机 |
-| core5-private-study-cpu | failed/exit1；同材料medium前后均通过；ranked64/其profile严格失败，D2048残差拒绝；Python/native FP64两步通过，FP32仍失败 |
-| core5-private-study-npu | failed/exit1；物理1，同材料mixed-c前后均通过；SDK affine step2原数值见证复现 |
+[最新固定资格](evidence/core5-private-projection-20261028.md)：CPU574 passed/2 strict xfail、NPU相关单/双卡训练恢复、CUDA构建/CPU核验。
+[性能设施](evidence/core5-performance-transfer-20261028.md)、[数值/异步隔离](evidence/core5-numerical-isolation-20261028.md)、[经验](performance-lessons.md)。
+原D2048/参数匹配仍残差拒绝；D64 FP32完整记录/梯度/SGD失败、FP64诊断通过不解除它。
+eager FP16 GDN AdamW、SDK FP32 affine、默认异步双NPU和FP32反馈PDG严格失败保留。
+CUDA真机/x86_64和大规模设备/跨卡吞吐待验；本轮尚无新通过或性能结论。
+378旧job全部终态，最新private-study-cpu/npu为原failed；不要重标或复跑以恢复上下文。
 
-CPU研究2026-10-28 09:00:39 UTC终态，随后NPU串行测量于09:03:10 UTC终态。
-开发quad332项、private244项通过；首次private新测试括号/include编译失败仍在原job/source.tar.gz，不重标。
-所有既有严格失败保留，最新通过不替换历史失败；当前无须重跑完整旧矩阵。
+## 接续
 
-## 实测结论与保留限制
-
-同材料CPU完整训练388.921→387.704ms（单次约−0.3%），pure Python mixed-c为1874.480→1988.877ms
-（单次约+6.1%）；均完整对照通过，没有稳定提速结论。NPU本轮测量allocator峰值略增，旧resident存储小收益另列。
-ranked64真实私有矩阵批最大32，但只覆盖34/479次State；State回调最大批仍1。完整FP32记录、梯度和SGD参数严格失败，
-显式FP64两步通过不解除FP32限制。profile保留22501次mm/12次bmm/100523次copy和自身采集分析成本。
-92.62亿参数匹配材料完成实际构造/warmup，随后仍残差拒绝，metrics为空；没有大型吞吐或训练峰值结论。
-
-尚存：eager FP16 GDN/AdamW、默认异步双NPU、SDK FP32 affine、FP32反馈PDG及D64训练、D2048残差边界；
-CUDA真机/x86_64、大规模设备/跨卡吞吐待验。不同base/输入的私有模块批、物理缺席行和窗口反向构造仍有优化空间。
-正支持/容量等公开拒绝保持，不通过改dtype、容差、活动集或无声截断制造通过。
-
-## 下一步与复现
-
-唯一待办为[ROADMAP](ROADMAP.md)，持续约束为[execution-flows](execution-flows.md)。
-后续优先取得D2048失败分配的实际输入并定位数值机制，再扩大私有矩阵批或复用反向程序；新硬件单独资格。
-这些是保留边界和后续候选，不是待恢复的后台队列。
-
-重新进入：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-`python scripts/status.py --all-jobs`审查历史原失败；不从已回收unit默认状态推断通过。
-新checkout按[开发](development.md)、[workload](weighted-workloads.md)和报告公共命令生成材料/构建/验证；
-正式成果无需旧运行目录。长任务继续固定源码、独立background.slice、有限资源/时长及新输出目录。
-本次收尾仅提交文档/证据；原始日志、构建、材料和本机launcher保持忽略，不进入源码。
+`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+新unit启动后用 `systemctl --user show core5-capture-dev-20261028 -p ActiveState -p SubState -p ExecMainStatus` 和job记录核验。
+实际failure JSON与Decimal已完成；继续核对未共享KV稠密组合矩阵和factorized投影的完整差异，不放宽容差。
+ROADMAP为唯一待办，execution-flows为持续契约。本轮改动尚未提交，正式资格先固定实现提交。

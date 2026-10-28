@@ -114,6 +114,24 @@ void check_quad_offset(at::Device device){
           "offset independent-root connections differ");
   p.close();
 }
+void check_quad_scale(at::Device device){
+  // Row zero is the captured wide2048 failure. All rows have one free response.
+  at::NoGradGuard guard;
+  auto s=at::tensor({-306.8722839355469f,-1376.8216552734375f,1e8f,0.f,-1e38f,1e38f}).reshape({3,2}).to(device);
+  auto mu=at::ones_like(s),b=at::tensor({1.7806066274642944f,1.7806066274642944f,1.f,0.f,
+                                      1.7f,1.7f,1.f,0.f,1.7f,1.7f,1.f,0.f}).reshape({3,4}).to(device);
+  auto n=at::full({3},2,at::TensorOptions().dtype(at::kLong).device(device));
+  auto error=at::zeros({1},n.options().dtype(at::kInt)),root=at::ones({3},n.options().dtype(at::kBool));
+  auto g=at::tensor({2.f,-1.f,2.f,-1.f,-1.f,2.f}).reshape({3,2}).to(device);
+  DeviceProgram p(device);p.limit_workspace(1024*1024);
+  auto tape=append_weighted_allocation(p,s,mu,b,n,error,weighted_allocation::Quad,1);
+  auto gradients=append_weighted_allocation_vjp(p,tape,g,root,error);
+  p.finish();portable_torch::synchronize(device);p.run();
+  require(error.cpu().item<int>()==0,"resident quad rejected local-coordinate scale case");
+  close(tape.controls,at::tensor({1.f,.7806066274642944f,1.f,.7000000476837158f,.7000000476837158f,1.f}).reshape({3,2}));
+  close(gradients.vectors,at::tensor({0.f,0.f,3.f,0.f,0.f,0.f,3.f,0.f,0.f,0.f,0.f,3.f}).reshape({3,2,2}));
+  close(gradients.scalars,at::tensor({-1.f,0.f,0.f,0.f}).repeat({3,1}));p.close();
+}
 }
 int main(int argc,char** argv){
   portable_torch::RuntimeSession runtime;
@@ -125,6 +143,7 @@ int main(int argc,char** argv){
     check(device,weighted_allocation::Quad,1);check(device,weighted_allocation::Bernoulli,1);
     for(float alpha:{1.f,1.000001f,1.5f,2.f})check(device,weighted_allocation::Entropy,alpha);
     check_quad_offset(device);
-    std::cout<<"weighted-allocation: passed rules=6 replay_rows=72 logical_frames=60 offset_closed_form_rows=2 complete_vjp=true host_decisions_per_solve=0\n";return 0;
+    check_quad_scale(device);
+    std::cout<<"weighted-allocation: passed rules=6 replay_rows=72 logical_frames=60 offset_closed_form_rows=2 scale_closed_form_rows=3 complete_vjp=true host_decisions_per_solve=0\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

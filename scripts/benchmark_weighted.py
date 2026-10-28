@@ -117,11 +117,13 @@ def main():
         memory.capture("construction", reset=True)
         record["effective"] = candidate.manifest()
         actual = []; metrics = []; record["metrics"] = metrics
+        record.update(phase="warmup", window=0)
         start = time.perf_counter(); actual.append(candidate.step(0))
         record["warmup_seconds"] = time.perf_counter()-start
         memory.capture("warmup", reset=True)
         count = record["measured_windows"]
         for step in range(1, count+1):
+            record.update(phase="measurement", window=step)
             if args.profile:
                 if device.type == "npu":
                     import torch_npu
@@ -151,12 +153,15 @@ def main():
                 event = dict(step=step, seconds=elapsed, loss=actual[-1][1], **work(actual[-1][0]))
                 metrics.append(event); write_json(out/"metrics.json", metrics)
         memory.capture("measurement")
-        parameters = candidate.parameters()
+        parameters = candidate.parameters() if args.mode == "training" else None
+        candidate.close(); candidate = None
+        del binding, inputs
         # Only after the measurement: independent scalar CPU schedule and
         # full-record/optimizer check. It supplies no execution hints.
         expected_binding, expected_inputs, _ = create()
         reference = Eager(expected_binding, expected_inputs, span, config, args, torch.device("cpu"), reference=True)
         for step, (result, loss) in enumerate(actual):
+            record.update(phase="independent-check", window=step)
             expected, expected_loss = reference.step(step)
             finite(result); equivalent(result, expected, check_device=False)
             torch.testing.assert_close(torch.tensor(loss), torch.tensor(expected_loss), rtol=1e-5, atol=1e-6)
@@ -175,6 +180,15 @@ def main():
         if source_state(root) != (source, dirty):
             raise RuntimeError("source changed during measurement")
     except BaseException as error:
+        from tidegraph.weighted.allocation_failure import AllocationFailure
+        if isinstance(error, AllocationFailure):
+            try:
+                failure = error.record()
+                failure["execution"] = dict(phase=record.get("phase"), window=record.get("window"))
+                write_json(out/"allocation-failure.json", failure)
+                record["allocation_failure"] = "allocation-failure.json"
+            except Exception as write_error:
+                record["allocation_failure_write_error"] = repr(write_error)
         record.update(state="failed", error=repr(error)); raise
     finally:
         if candidate is not None:

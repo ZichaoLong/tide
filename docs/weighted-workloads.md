@@ -69,6 +69,23 @@ OpenSSL Crypto只用于独立benchmark材料校验，不增加公共C++核心或
 native另需`--native-library CORE`。原严格容差和None/零区别保持；FP64通过不是FP32修复，
 这个输出loss诊断也不替代独立字段根与checkpoint的完整训练门禁。
 
+Python 诊断可加 `--capture-allocations` 保存两条调度实际调用的分配输入、分支、free掩码、
+控制和残差到 `allocations.json`；原函数和反向连接不变，观察不进入性能计时。
+记录明确标为成功调用的观察，不冒充抛出的失败。native 的此类全调用观察尚未实现。
+`scripts/diagnose_weighted_projection.py --workload PLAN --output-dir NEW` 在实际标量 KV 操作数上
+比较展开矩阵与低秩投影，并显式用 FP64 算术诊断局部误差；不据局部误差推断完整训练通过。
+
+批量分配拒绝时，两种 benchmark 消费者保存候选实际失败行 `allocation-failure.json`，
+包含原 dtype/device、完整分配输入、实际响应与控制、区域节点/int64时间、执行阶段与窗口。
+独立 `python scripts/diagnose_allocation_failure.py --failure ROW.json --output NEW.json`
+只用标准库 Decimal，以捕获的二进制浮点值为精确输入，从扩张区间独立求根；不调用生产分配器、
+不重建模型。输出真实可行性、候选值误差和隐含乘子差；它认证局部分配，不能替代完整图/VJP。
+`AllocationFailure.record()`、公共 C++ 异常及未覆盖的拒绝类型见[分配契约](weighted-allocation.md)。
+
+推理测量不导出未更新的完整参数副本，事后参数比较仅用于训练。两条路径在独立核对前释放
+候选执行器，再构造参考；完整候选返回仍逐项保留和比较。测量计时边界不变，验证阶段的额外峰值
+与候选执行峰值分开解释，不能因少了一个参数副本就声称模型执行本身节省了同等内存。
+
 `scripts/decode_weighted_fixture.py --input V2.json --output V1.json` 在默认2000万元素上限内，
 校验完整文件和逐张量哈希，原样保留张量表索引/共享身份及每个FP32值，只把冻结零编码展开。
 它让历史独立消费者读取同一实际材料，不运行参考、不重新初始化；旧消费者仍须自己验证

@@ -207,5 +207,12 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 私有同形 KV 投影进一步合批仍对应 KV §1.2 / FC §6.2，入口与独立根/VJP、实际矩阵批统计见
 [KV 计算复用](weighted-kv-sharing.md#独立私有行的一阶边界)；共同评分偏移的实际响应修复见
 [分配契约](weighted-allocation.md#共同偏移下的实际响应)。两项不改变图 v13/checkpoint v5。
+
+分配§6/S.2的数值坐标进一步对应`quadratic_coordinates.coordinates`、C++ `detail::quad_pivot`
+与设备`weighted_quad_coordinates.h`：按cap质量分位评分建立局部根区间。返回全部原始响应、
+exact-map VJP和拒绝阈值不变；`test_weighted_quad_scale`保留两份实际D2048失败行并独立手算，
+`test_weighted_large_shift`核对共同阈值消去，`diagnose_allocation_failure.py`使用独立Decimal。
+失败快照的公开结构、行号/节点/int64时间和编码由[分配](weighted-allocation.md)与
+[测量设施](weighted-workloads.md)说明；开发检查、固定资格和完整模型的严格失败由STATUS分别列出。
 对应[07e56ca固定资格/有限对照](evidence/core5-private-projection-20261028.md)区分CPU、NPU实机、CUDA构建，
 并保留原D64训练和D2048残差失败；独立闭式/VJP通过不扩大成任意数值域资格。

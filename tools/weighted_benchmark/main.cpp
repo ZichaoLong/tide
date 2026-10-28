@@ -92,7 +92,8 @@ int main(int argc,char** argv){
     }
     portable_torch::synchronize(target);report["construction_seconds"]=tide_bench::seconds(start);
     capture_memory(report,target,"construction",true);
-    std::vector<Step> actual;auto execute=[&](Index i){return eager?eager->step(i):remote->step(i);};
+    std::vector<Step> actual;auto execute=[&](Index i){report["phase"]=i?"measurement":"warmup";report["window"]=i;
+      return eager?eager->step(i):remote->step(i);};
     start=tide_bench::Clock::now();actual.push_back(execute(0));portable_torch::synchronize(target);report["warmup_seconds"]=tide_bench::seconds(start);
     capture_memory(report,target,"warmup",true);
     for(Index step=1;step<=steps;++step){portable_torch::synchronize(target);start=tide_bench::Clock::now();actual.push_back(execute(step));
@@ -101,16 +102,24 @@ int main(int argc,char** argv){
       report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
     }
     capture_memory(report,target,"measurement");
-    const auto parameters=eager?eager->parameters():remote->parameters();
+    // Inference does not update parameters. Avoid exporting a second complete
+    // bank, and release the candidate before constructing the independent run.
+    const auto parameters=training?(eager?eager->parameters():remote->parameters()):std::map<std::string,Tensor>{};
+    if(remote)remote->close();eager.reset();remote.reset();
     // A separate scalar schedule runs only after timing and never guides the candidate.
     Eager reference(data,training,!prefill,true);
-    for(Index i=0;i<=steps;++i){const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,at::kFloat);
+    for(Index i=0;i<=steps;++i){report["phase"]="independent-check";report["window"]=i;
+      const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,at::kFloat);
       if(std::abs(actual[i].loss-expected.loss)>1e-6+1e-5*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
     if(!parameters.empty())for(const auto& [name,value]:reference.parameters())
       if(!at::allclose(parameters.at(name),value,1e-5,1e-6))throw std::runtime_error("benchmark final optimizer parameter differs: "+name);
-    if(remote)remote->close();report["state"]="passed";report["post_measurement_complete_records"]=true;
+    report["state"]="passed";report["post_measurement_complete_records"]=true;
     report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=training&&!parameters.empty();write(output/"result.json",report);return 0;
   }catch(const std::exception& e){report["state"]="failed";report["error"]=e.what();
+    if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try{
+      auto record=allocation_failure(*failure);record["execution"]={{"phase",report.value("phase","")},{"window",report.value("window",Index(-1))}};
+      write(output/"allocation-failure.json",record);report["allocation_failure"]="allocation-failure.json";
+    }catch(const std::exception& write_error){report["allocation_failure_write_error"]=write_error.what();}
     if(created)try{write(output/"result.json",report);}catch(const std::exception& write_error){std::cerr<<write_error.what()<<'\n';}
     std::cerr<<e.what()<<'\n';return 2;}
 }

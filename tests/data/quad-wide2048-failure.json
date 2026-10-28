@@ -1,0 +1,118 @@
+{
+  "details": {
+    "alpha": "0.000000",
+    "branch": "equality",
+    "regularizer": "quad",
+    "solver": "native-batch"
+  },
+  "error": "allocation batch residual exceeds dtype tolerance",
+  "execution": {
+    "phase": "warmup",
+    "window": 0
+  },
+  "members": [
+    0,
+    1
+  ],
+  "nodes": [
+    0,
+    1
+  ],
+  "row": 0,
+  "schema": "tide-allocation-failure-v1",
+  "tensors": {
+    "caps": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [
+        2
+      ],
+      "values": [
+        1.0,
+        1.0
+      ]
+    },
+    "controls": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [
+        2
+      ],
+      "values": [
+        1.0,
+        0.7806396484375
+      ]
+    },
+    "lower": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        1.7806066274642944
+      ]
+    },
+    "multiplier": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        -1377.602294921875
+      ]
+    },
+    "residual": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        3.3020973205566406e-05
+      ]
+    },
+    "response": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [
+        2
+      ],
+      "values": [
+        1070.72998046875,
+        0.7806396484375
+      ]
+    },
+    "scores": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [
+        2
+      ],
+      "values": [
+        -306.8722839355469,
+        -1376.8216552734375
+      ]
+    },
+    "temperature": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        1.0
+      ]
+    },
+    "tolerance": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        1.52587890625e-05
+      ]
+    },
+    "upper": {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [],
+      "values": [
+        1.7806066274642944
+      ]
+    }
+  },
+  "time": 1
+}

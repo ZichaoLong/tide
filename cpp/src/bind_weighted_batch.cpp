@@ -1,11 +1,21 @@
 // Testing/client adapters; all numerical computation is owned by LibTorch.
 #include "tide/weighted.h"
+#include "tide/allocation_failure.h"
 #include "weighted_sending_batch.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 namespace py=pybind11;
 void bind_weighted_batch(py::module_& m){
   using namespace tide;using namespace tide::weighted;
+  py::register_exception_translator([](std::exception_ptr pointer){
+    try{if(pointer)std::rethrow_exception(pointer);}
+    catch(const AllocationFailure& e){
+      auto type=py::module_::import("tidegraph.weighted.allocation_failure").attr("AllocationFailure");
+      auto value=type(e.what(),e.row,e.tensors,e.details);
+      value.attr("time")=py::cast(e.time);value.attr("nodes")=py::cast(e.nodes);value.attr("members")=py::cast(e.members);
+      PyErr_SetObject(type.ptr(),value.ptr());
+    }
+  });
   using Row=std::tuple<Tensor,Tensor,Tensor,Tensor,Tensor,std::optional<Tensor>>;
   m.def("weighted_allocation_batch",[](const std::vector<Row>& rows,const std::string& regularizer,std::optional<double> alpha){
     std::vector<AllocationRow> inputs;

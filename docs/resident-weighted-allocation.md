@@ -15,7 +15,11 @@
 判定zero/caps/slack/lower/upper/equality分支、执行有界求解和活动面修正。
 行之间独立，无主机标量决定迭代；紧凑短行由单个scalar worker拥有，避免不同行共享
 cache line时的并发写。Exp/Ln使用CANN vector primitive，CUDA源有独立适配。
-固定80次二分是前向数值过程，绝不是迭代导数。还没有据此声称融合矩阵算子、
+至多80次二分（不能进一步缩小时提前停）是前向数值过程，绝不是迭代导数。quad原点使用
+cap质量分位评分，以32次有序FP32整数key查询在设备上找到实际评分，再在宽度至多`tau*max(cap)`
+的局部区间求根；整数key仅用于内部值选择，不把索引/时间转成浮点。宽度下溢拒绝为21。
+约束分支在原评分坐标消去共同shift；实际响应和反向不从舍入的全局乘子恢复。
+这些源码变化的CPU适配/构建/真机资格由当前STATUS单列。还没有据此声称融合矩阵算子、
 全图packed常驻或性能优势；Agg/State/Describe/发送/图调度的集成分别验收。
 
 返回实际计算的controls、multiplier/residual、分支与响应斜率tape。

@@ -7,6 +7,7 @@ or the legacy HST. Boundary conventions are in docs/weighted-allocation.md.
 from dataclasses import dataclass
 import torch
 from torch.autograd.function import once_differentiable
+from .quadratic_coordinates import coordinates
 
 
 @dataclass(frozen=True)
@@ -54,32 +55,31 @@ def _solve(t, mu, target, temperature):
     Center scores first. The integer free count is exact, including tied
     breakpoints. An affine segment determines the multiplier in one division.
     """
-    shift = t.max()
-    centered = t-shift
-    points = torch.cat((centered-temperature*mu, centered))
+    centered, shift, work, cap, remaining = coordinates(t, mu, target, temperature)
+    points = torch.cat((work-temperature*cap, work))
     points, order = points.sort(stable=True)
     # Each lower breakpoint changes a capped coordinate to free; each upper
     # changes a free coordinate to zero. Zero-cap pairs cancel at their tie.
     enter = order < t.numel()
     index = order.remainder(t.numel())
     count = torch.cumsum(torch.where(enter, 1, -1), 0)
-    delta = torch.where(enter, centered[index]/temperature-mu[index], -centered[index]/temperature)
-    intercept = mu.sum()+torch.cumsum(delta, 0)
+    delta = torch.where(enter, work[index]/temperature-cap[index], -work[index]/temperature)
+    intercept = cap.sum()+torch.cumsum(delta, 0)
     totals = intercept-count*points/temperature
     right = torch.cat((points[1:], points[-1:]))
-    candidates = (count > 0) & (points < right) & (totals >= target)
+    candidates = (count > 0) & (points < right) & (totals >= remaining)
     # On a flat segment the endpoint solution is still unique. Choose the
     # last nonempty descending segment whose left total includes the target.
     chosen = torch.where(candidates, torch.arange(len(points), device=t.device), -1).max()
     if chosen < 0:
         raise ArithmeticError("quadratic allocation lost its feasible breakpoint interval")
-    lam = (intercept[chosen]-target)*temperature/count[chosen]
+    lam = (intercept[chosen]-remaining)*temperature/count[chosen]
     c = _response(centered, mu, temperature, lam)
     # Reconstruct from actual responses to reduce prefix-sum cancellation.
     free = (c > 0) & (c < mu)
     if free.any():
         capped = (c == mu) & ~free
-        lam = (centered[free].sum()+temperature*(mu[capped].sum()-target))/free.sum()
+        lam = (torch.where(free, centered, 0).sum()+temperature*(torch.where(capped, mu, 0).sum()-target))/free.sum()
         c = _response(centered, mu, temperature, lam)
     return c, lam+shift, centered-lam
 
@@ -148,7 +148,9 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
             target = lower if branch in {"lower", "equality"} else upper
             lam = zero
             if branch != "slack":
-                c, lam, response = _solve(scores, caps, target, temperature)
+                c, lam, response = _solve(original_scores, caps, target, temperature)
+                if score_shift is not None:
+                    lam = lam-score_shift
         free = (c > 0) & (c < caps)
         if branch in {"zero", "caps"}:
             residual = zero

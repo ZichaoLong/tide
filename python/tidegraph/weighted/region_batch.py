@@ -10,6 +10,7 @@ from ..history import History
 from ..region import Selection
 from .config import TOTAL, ATTENTION, HARD
 from .allocation_rows import allocate_batch
+from .allocation_failure import AllocationFailure
 from .sending_batch import attention, proportional, sorted_send
 
 
@@ -61,9 +62,17 @@ def evaluate(program, requests, *, dependencies=None):
         elif mode in HARD:
             values = sorted_send(scores-shift[:, None], caps, nodes, k=c.k)
         if values is None:
-            allocations = allocate_batch(list(scores.unbind()), list(caps.unbind()), list(low.unbind()), list(high.unbind()),
-                c.allocation_temperature, regularizer=c.regularizer, ent_alpha=c.ent_alpha,
-                score_shift=None if shift is None else list(shift.unbind()))
+            try:
+                allocations = allocate_batch(list(scores.unbind()), list(caps.unbind()), list(low.unbind()), list(high.unbind()),
+                    c.allocation_temperature, regularizer=c.regularizer, ent_alpha=c.ent_alpha,
+                    score_shift=None if shift is None else list(shift.unbind()))
+            except AllocationFailure as error:
+                error.row = rows[error.row]
+                request = requests[error.row]
+                error.time = request.time
+                error.nodes = [v for v, _ in request.candidates]
+                error.members = list(request.layout.members)
+                raise
             values = [a.controls for a in allocations]
             if dependencies is not None:
                 for i, allocation in zip(rows, allocations):

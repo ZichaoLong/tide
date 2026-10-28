@@ -1,5 +1,6 @@
 // Allocation §6/S.2: independent bracket solver + exact response-map VJP.
 #include "tide/weighted.h"
+#include "weighted_quadratic_coordinates.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <limits>
 #include <stdexcept>
@@ -62,14 +63,14 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
       result.constraint=branch;
       if(result.constraint!="slack") {
         auto target=(result.constraint=="lower"||result.constraint=="equality")?lower:upper;
-        auto shift=t.max(), centered=t-shift;
-        auto point=centered-tau*(target/mass)*mu;
-        auto positive=mu>0;
-        auto lo=point.index({positive}).min(),hi=point.index({positive}).max();
+        auto origin=detail::quad_pivot(input,mu,target),centered=input-origin;
+        auto lo=-tau*mu.max(),hi=at::zeros_like(lo);
+        if(!(lo<0).item<bool>())throw std::runtime_error("quadratic transition interval underflowed in requested dtype");
         // Fixed bounded bisection is forward numerics only. The backward below
         // differentiates the exact map, independently of these iterations.
         for(int i=0;i<80;++i){
           auto middle=lo+(hi-lo)/2;
+          if(i%8==0&&((middle==lo)|(middle==hi)).item<bool>())break;
           auto above=response(centered,mu,tau,middle).sum()>target;
           lo=at::where(above,middle,lo);hi=at::where(above,hi,middle);
         }
@@ -77,10 +78,10 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
         auto free=(c>0)&(c<mu);
         if(free.any().item<bool>()){
           auto capped=(c==mu)&~free;
-          lam=(centered.index({free}).sum()+tau*(mu.index({capped}).sum()-target))/free.sum();
+          lam=(at::where(free,centered,0).sum()+tau*(at::where(capped,mu,0).sum()-target))/free.sum();
           c=response(centered,mu,tau,lam);
         }
-        result.multiplier=lam+shift;
+        result.multiplier=lam+origin;if(shift.defined())result.multiplier=result.multiplier-shift;
         response_input=centered-lam;
       }
       result.controls=c;

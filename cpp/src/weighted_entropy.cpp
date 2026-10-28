@@ -51,16 +51,18 @@ Allocation allocate(const Tensor& input,const Tensor& mu,const Tensor& lower,con
       if(lower.item<double>()==upper.item<double>())result.constraint="equality";
       if(result.constraint!="slack"){
         auto target=(result.constraint=="lower"||result.constraint=="equality")?lower:upper;
-        auto shift=t.max(),centered=t-shift;auto points=centered-rule.inverse(target/mass,mu,tau);
+        auto origin=input.max(),centered=input-origin;auto points=centered-rule.inverse(target/mass,mu,tau);
         auto positive=mu>0;auto low=points.index({positive}).min(),high=points.index({positive}).max();
         for(int i=0;i<80;++i){
-          auto middle=low+(high-low)/2;auto total=rule.response(centered-middle,mu,tau).sum();
+          auto middle=low+(high-low)/2;
+          if(i%8==0&&((middle==low)|(middle==high)).item<bool>())break;
+          auto total=rule.response(centered-middle,mu,tau).sum();
           auto above=total>target;low=at::where(above,middle,low);high=at::where(above,high,middle);
         }
         auto middle=low+(high-low)/2;std::vector<Tensor> choices{low,middle,high},errors;
         for(const auto& value:choices)errors.push_back((rule.response(centered-value,mu,tau).sum()-target).abs());
         auto lam=choices[at::stack(errors).argmin().item<Index>()];x=centered-lam;c=rule.response(x,mu,tau);
-        result.multiplier=lam+shift;
+        result.multiplier=lam+origin;if(shift.defined())result.multiplier=result.multiplier-shift;
       }
       result.controls=c;
     }
