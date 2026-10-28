@@ -13,8 +13,8 @@
 `bind(topology, memories=RecurrentConfig(...), regions=RegionalConfig(...))` 使用
 `memory_family=affine|delta|gated_delta|ssd`。memories 可为逐节点配置元组，与 KV 混合，
 内容宽度 d 必须一致；各节点自己的摘要、矩阵和 FFN 宽度可以不同。区域描述最终宽度
-由区域配置确定。当前共用 cat/ind/regional_total 的描述、选择与 Full 绑定；其他正式评分/
-发送候选的进展见 ROADMAP，不把数学不适用与实现待补混为一谈。
+由区域配置确定。正式评分、证据、key与十种发送共用[评分](weighted-scoring.md)、
+[发送](weighted-sending.md)绑定；各组合和后端的运行资格分别记录，不把配置不适用与待验混同。
 
 | 字段 | 数学参数及适用域 |
 | --- | --- |
@@ -98,6 +98,8 @@ Full 每头 RMS 后乘 SiLU 输出门。SSD 的 B/C 不做 L2，写入系数严�
 standalone `cpp/test/weighted_recurrent.cpp` 独立实现教材标量和局部 VJP/时钟/卷积检查。
 Python/native、纯 PyTorch 和 standalone 证据分别记录。
 
-当前标量序列实现声明 exact_sequence，使用合法递归后备；矩阵仿射性和连续缓存不自动
-构成 packed 联合算法。联合前缀、批量 VJP、mixed/resident 与完整 standalone 训练矩阵
-继续单独实现/验收。当前开发运行与不可变资格分别见 STATUS 和 [证据索引](evidence/README.md)。
+标量序列仍提供合法递归后备；[packed联合前缀](weighted-packed.md)、
+[State批量VJP](weighted-state-vjp.md)、[mixed](weighted-device-validation.md)及
+[resident完整训练](resident-weighted-training.md)已经分别实现并按其声明范围验收。
+这些能力不意味着所有后端使用相同批量粒度；当前开发运行与不可变资格从
+STATUS和[证据索引](evidence/README.md)进入。
