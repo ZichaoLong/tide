@@ -27,6 +27,7 @@ int64_t WeightedFlow::Impl::remaining(DeviceProgram& p)const{
   std::vector<at::Tensor> held{error,begin,stop,stages,external.coordinates,external.values,external.valid,
     pending->atoms().coordinates,pending->atoms().values,pending->atoms().valid,pending->stats()};
   for(const auto& n:nodes){for(const auto& raw:{n->initial,n->state,n->old}){held.push_back(raw.floating);held.push_back(raw.integer);}
+    for(const auto& x:{n->source.classes,n->source.values.a,n->source.values.b,n->source.values.embedding})held.push_back(x);
     held.push_back(n->state_present);for(const auto& [_,role]:n->banks.roles())held.push_back(role.bank);}
   for(const auto& r:regions){held.push_back(r->history);for(const auto& [_,role]:r->banks.roles())held.push_back(role.bank);}
   auto programs=services->programs();

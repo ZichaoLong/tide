@@ -15,6 +15,7 @@ int64_t WeightedWindowAdjoint::remaining(DeviceProgram& p)const{
   programs.insert(programs.end(),source_->programs.begin(),source_->programs.end());
   held.insert(held.end(),source_->held.begin(),source_->held.end());
   auto nodes=[&](const auto& collection){for(const auto& n:collection){
+    for(const auto& x:{n->source.classes,n->source.values.a,n->source.values.b,n->source.values.embedding})held.push_back(x);
     for(const auto& raw:{n->initial,n->state,n->old,n->proposal}){held.push_back(raw.floating);held.push_back(raw.integer);}
     held.push_back(n->state_present);for(const auto& [name,role]:n->banks.roles())held.push_back(role.bank);}};
   auto regions=[&](const auto& collection){for(const auto& r:collection){held.push_back(r->history);

@@ -11,10 +11,11 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
   weighted_copy(p,n.old.floating,n.state.floating);weighted_copy(p,n.old.integer,n.state.integer);
   auto& update=services.begin();
   if(auto c=std::get_if<weighted::KVConfig>(&n.binding.memory)){
+    const auto parameters=bind_weighted_kv_update(n.banks,remaining(update));
     n.kv_update=append_weighted_kv_update(update,*c,n.old,n.aggregate->output,n.input.times,n.input.bank,n.input.present,
-      bind_weighted_kv_update(n.banks),error,remaining(update));n.proposal=n.kv_update->raw.result;
+      parameters,error,remaining(update));n.proposal=n.kv_update->raw.result;
   }else{
-    const auto& rc=std::get<weighted::RecurrentConfig>(n.binding.memory);n.recurrent_parameters=bind_weighted_recurrent(n.banks,rc);
+    const auto& rc=std::get<weighted::RecurrentConfig>(n.binding.memory);n.recurrent_parameters=bind_weighted_recurrent(n.banks,rc,remaining(update));
     n.recurrent_update=append_weighted_recurrent(update,rc,WeightedRecurrentAction::Update,n.old,n.input.times,n.mass,n.content,
       n.input.bank,n.input.present,n.recurrent_parameters,error,remaining(update));n.proposal=n.recurrent_update->update->result;
   }
@@ -27,8 +28,9 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
     if(c->memory_read=="sum"){
       n.kv_sum=append_weighted_kv_sum(mem,*c,read,n.input.times,n.input.present,error,remaining(mem));memory=n.kv_sum->memory;total=n.kv_sum->total;
     }else{
+      const auto parameters=bind_weighted_kv_query(n.banks,remaining(mem));
       n.kv_query=append_weighted_kv_query(mem,*c,read,n.input.times,n.content,n.input.bank,n.input.present,
-        bind_weighted_kv_query(n.banks),error,remaining(mem));memory=n.kv_query->memory;total=n.kv_query->total;
+        parameters,error,remaining(mem));memory=n.kv_query->memory;total=n.kv_query->total;
     }
     x.short_memory=weighted_columns(mem,memory.reshape({samples,2*summary}),0,summary);
     x.long_memory=weighted_columns(mem,memory.reshape({samples,2*summary}),summary,summary);
@@ -42,13 +44,15 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
   }
   services.end(mem);
   auto& describe=services.begin();
-  n.describe=append_weighted_describe(describe,x,n.input.bank,bind_weighted_describe(n.banks,n.input.payload.size(2)-1,summary,n.binding.regional),
+  const auto parameters=bind_weighted_describe(n.banks,n.input.payload.size(2)-1,summary,n.binding.regional,remaining(describe));
+  n.describe=append_weighted_describe(describe,x,n.input.bank,parameters,
     n.binding.regional,eps,error,remaining(describe));services.end(describe);
 }
 void append_weighted_node_full(TaskServices& services,WeightedFlowNode& n,const at::Tensor& error,const WeightedFlowBudget& remaining){
   auto& full=services.begin();
   if(auto c=std::get_if<weighted::KVConfig>(&n.binding.memory)){
-    n.kv_full=append_weighted_kv_full(full,*c,n.proposal,n.input.times,n.content,n.input.bank,n.active,bind_weighted_kv_full(n.banks),error,remaining(full));n.full=n.kv_full->output;
+    const auto parameters=bind_weighted_kv_full(n.banks,remaining(full));
+    n.kv_full=append_weighted_kv_full(full,*c,n.proposal,n.input.times,n.content,n.input.bank,n.active,parameters,error,remaining(full));n.full=n.kv_full->output;
   }else{
     n.recurrent_full=append_weighted_recurrent(full,std::get<weighted::RecurrentConfig>(n.binding.memory),WeightedRecurrentAction::Full,
       n.proposal,n.input.times,n.mass,n.content,n.input.bank,n.active,n.recurrent_parameters,error,remaining(full));n.full=n.recurrent_full->fields.at("G");
@@ -71,12 +75,19 @@ void WeightedFlow::Impl::append_regions(DeviceProgram& p){
 ActionBatch WeightedFlow::Impl::append_full(DeviceProgram& p){
   const auto samples=boundary.batch_size,count=static_cast<int64_t>(nodes.size()),width=model.width();
   const auto opts=at::TensorOptions().dtype(model.nodes.at(0).bias.scalar_type()).device(device);
+  // These outputs are not retained by a program until the final copies below.
+  // Reserve them for every local/remote Full binding in the intervening stage.
+  const long double cost=static_cast<long double>(count)*samples*(33.L+static_cast<long double>(width)*c10::elementSize(model.nodes.at(0).bias.scalar_type()));
+  if(cost>remaining(p))throw std::invalid_argument("weighted Full outputs exceed tensor budget before allocation");
+  const auto reserved=static_cast<int64_t>(cost);
+  auto available=[&](DeviceProgram& worker){const auto left=remaining(worker);
+    if(reserved>left)throw std::invalid_argument("weighted Full output reservation exceeds tensor budget");return left-reserved;};
   ActionBatch out{at::zeros({count*samples,4},opts.dtype(at::kLong)),at::zeros({count*samples,width},opts),at::zeros({count*samples},opts.dtype(at::kBool))};
   for(int64_t v=0;v<count;++v)if(node_devices[v]==device){auto& n=*nodes[v];auto& view=views[v];n.control=view.control;n.active=view.active;
-    append_weighted_node_full(*services,n,error,[&](DeviceProgram& worker){return remaining(worker);});
+    append_weighted_node_full(*services,n,error,available);
     n.payload=append_weighted_payload(p,n.control,n.full,n.active,out.values.scalar_type(),error);view.full=n.full;view.payload=n.payload;
   }
-  peers->append_full(p,nodes,views,error,[&](DeviceProgram& worker){return remaining(worker);});
+  peers->append_full(p,nodes,views,error,available);
   for(int64_t v=0;v<count;++v){const auto& view=views[v];
     auto meta=out.coordinates.narrow(0,v*samples,samples);weighted_copy(p,meta.select(1,0),at::arange(samples,meta.options()));weighted_copy(p,meta.select(1,1),at::full({samples},v,meta.options()));
     weighted_copy(p,meta.select(1,2),view.times);weighted_copy(p,meta.select(1,3),view.times);

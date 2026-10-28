@@ -69,6 +69,14 @@ Python 适配器额外拒绝模型参数版本变化。共享参数身份随快�
 拒绝保留原错误。CUDA将这些阶段追加到同一conditional graph，真机资格独立记录。失败 owner 不再执行；使用先前完整 checkpoint 创建新 owner。
 非法外部输入在提交前可重试。总设备张量与 vendor workspace 分别有准入预算。状态与完整窗口 journal 在大额分配前静态预检；
 各组件使用剩余额度，按实际唯一存储计入未被执行路径读取的初态与参数 bank。
+每组 `WeightedBanks` 绑定先取得当前剩余额度；`tide::copy_parameter_bank` 在reshape、
+dtype转换和设备拷贝之前检查形状/切片及FP32字节数，每个实际角色逐次扣减额度。
+共享参数的不同角色若持有不同bank存储，分别计费；半精度参数按实际FP32 bank收费。
+源变换的填充、来源表和已构造的适配结果同样占用剩余额度。绑定完成后再给局部数值
+组件计算剩余额度，不依赖C++函数实参求值顺序。失败构造不会提交部分程序。
+Full输出缓冲区在写入程序前尚未进入其存储统计，构造阶段显式预留这部分字节，
+同一额度覆盖本地与远端节点的Full参数绑定。
+预算约束owner张量存储；厂商allocator峰值/workspace仍遵守各自契约。
 NPU通知握手保证coordinator与所有局部数值阶段互斥使用算子workspace，因此共享一个按最大需求
 分配的arena。发出完成通知后直到下一请求前只执行无workspace的控制任务；不允许并行数值阶段借用此arena。
 静态非连续视图用连续 gather/scatter 拷贝，未放宽底层设备算子的连续存储契约。
@@ -79,6 +87,11 @@ NPU通知握手保证coordinator与所有局部数值阶段互斥使用算子wor
 使用既有 Continuation/图身份，图 v13 与 checkpoint v5 不变；磁盘序列化使用现有契约。
 
 ## 独立核验与范围
+
+`cpp/test/parameter_bank.cpp` 用手算字节数、精确边界、共享角色的独立存储、half拓宽与
+非连续切片核对准入；巨大广播视图配合不可用目标设备，验证拒绝先于展开/目标分配。
+`weighted_flow_boundary_check.cpp` 在实际目标上核对整个Full参数组的边界，
+以及百万FFN宽度广播视图的提前拒绝；不通过真正耗尽HBM来验证预算。
 
 `test_resident_weighted_flow_packing.py` 独立断言重复类别、SourceDomain 冲突、缺席、
 同一私有状态多时间拒绝、原始巨大时间、origin 排序、完整区域与提交前错误保留。

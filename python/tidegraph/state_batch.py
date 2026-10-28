@@ -11,7 +11,7 @@ def step(kernel, weights, old, views, times, prepared=None):
     from .packing import PackedSequence
     if type(kernel) is ClockedState:
         values = step(kernel.program, weights, [kernel.clock.local_state(s) for s in old],
-                      views, [kernel.event(t) for t in times])
+                      views, [kernel.event(t) for t in times], prepared)
         return [kernel.clock.global_state(s) for s in values]
     h = torch.stack([v.value for v in views])
     if type(kernel) is LazyAdd:

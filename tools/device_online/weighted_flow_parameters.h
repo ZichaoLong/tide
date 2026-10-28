@@ -19,6 +19,9 @@ struct WeightedBankRole {
 class WeightedBanks {
  public:
   WeightedBanks(const std::map<std::string,at::Tensor>&,std::string prefix,at::Device);
+  // One binding group receives the owner's current remaining allowance. Each
+  // role consumes it before the next role can allocate, even for tied parameters.
+  void limit_bytes(int64_t available);
   at::Tensor bind(const std::string& role,const std::string& parameter,
                   const std::vector<int64_t>& shape,int64_t offset=0);
   at::Tensor direct(const std::string& role,const std::string& parameter);
@@ -29,11 +32,12 @@ class WeightedBanks {
   const std::map<std::string,at::Tensor>& parameters_;
   std::string prefix_;at::Device device_;
   std::map<std::string,WeightedBankRole> roles_;
+  int64_t available_=0;
 };
-WeightedDescribeParameters bind_weighted_describe(WeightedBanks&,int64_t width,int64_t summary,const weighted::RegionalConfig&);
-WeightedRecurrentParameters bind_weighted_recurrent(WeightedBanks&,const weighted::RecurrentConfig&);
-WeightedRegionParameters bind_weighted_region(WeightedBanks&,const weighted::RegionalConfig&,int64_t rows);
-WeightedKVParameters bind_weighted_kv_update(WeightedBanks&);
-WeightedKVQueryParameters bind_weighted_kv_query(WeightedBanks&);
-WeightedKVFullParameters bind_weighted_kv_full(WeightedBanks&);
+WeightedDescribeParameters bind_weighted_describe(WeightedBanks&,int64_t width,int64_t summary,const weighted::RegionalConfig&,int64_t available);
+WeightedRecurrentParameters bind_weighted_recurrent(WeightedBanks&,const weighted::RecurrentConfig&,int64_t available);
+WeightedRegionParameters bind_weighted_region(WeightedBanks&,const weighted::RegionalConfig&,int64_t rows,int64_t available);
+WeightedKVParameters bind_weighted_kv_update(WeightedBanks&,int64_t available);
+WeightedKVQueryParameters bind_weighted_kv_query(WeightedBanks&,int64_t available);
+WeightedKVFullParameters bind_weighted_kv_full(WeightedBanks&,int64_t available);
 }

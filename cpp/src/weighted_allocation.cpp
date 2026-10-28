@@ -85,6 +85,8 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
     }
     auto c=result.controls;result.free=(c>0)&(c<mu);result.residual=zero;
     if(result.constraint!="zero"&&result.constraint!="caps"){
+      if(((mu>0)&(t>result.multiplier)&(c==0)).any().item<bool>())
+        throw std::runtime_error("positive quadratic allocation support underflowed in requested dtype");
       result.residual=at::stack({(c-response(t,mu,tau,result.multiplier)).abs().max(),
                                (lower-c.sum()).clamp_min(0),(c.sum()-upper).clamp_min(0)}).max();
       const double eps=t.scalar_type()==at::kDouble?std::numeric_limits<double>::epsilon():std::numeric_limits<float>::epsilon();

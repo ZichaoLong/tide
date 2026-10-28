@@ -70,7 +70,7 @@ NumericAllocation solve(const Tensor& scores,const Tensor& caps,const Tensor& lo
     const double eps=scores.scalar_type()==at::kDouble?std::numeric_limits<double>::epsilon():std::numeric_limits<float>::epsilon();
     if(!at::isfinite(residual).all().item<bool>()||(residual>64*eps*scores.size(1)).any().item<bool>())
       throw std::runtime_error("allocation batch residual exceeds dtype tolerance");
-    if(rule.kind!="quad"&&(rule.support(x,cn,tau)&(c==0)).any().item<bool>())
+    if((rule.support(x,cn,tau)&(c==0)).any().item<bool>())
       throw std::runtime_error("positive allocation batch support underflowed in requested dtype");
   }
   out.free=(out.controls>0)&(out.controls<caps);return out;

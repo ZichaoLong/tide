@@ -12,6 +12,11 @@ Python `state_vjp.py::_weights` 对声明的五种记忆捕获 legacy 字段、e
 嵌套卷积权重、KV 共享 base、适配器和所有实际参数均进入版本检查与梯度所有权。
 C++ 同名参数已经位于 NodeWeights::extra，由 `state_vjp.cpp` 独立捕获。
 
+一般 `Model(state_programs=...)` 将上述记忆置于 `ClockedState` 内时，能力判定与参数
+捕获同时递归到内层，`rebind` 保留整个包装树；不能仅宣布支持而漏掉内层梯度根。
+包装的 `batch_autograd_key` 使用与实际 step 相同的局部时间/左状态，区分零/正接收。
+这属于一般引擎的显式时钟绑定；`weighted.bind` 的教材原始逻辑时间绑定保持不变。
+
 结构分组包括逻辑时间、左状态时钟/计数、槽形状/dtype/device/求导标志、内容来源，
 以及 `batch_autograd_key` 声明的实际零/正接收分支。这个分支来自本次真实输入；
 不按梯度数值分组，也不从参考轨迹取得。零接收返回原 tuple，不能和正写入的
@@ -53,4 +58,6 @@ Python 测试禁止调用 scalar Upd；native 路径检查真实能力统计并�
 同形 key/value/summary 共享验证参数只捕获一次但累加全部使用者；
 嵌套卷积参数版本变化及高阶请求拒绝分别测试。
 已有公式、方向差分、多步 optimizer 和 checkpoint 测试保持独立职责。
+`test_weighted_clocked_vjp.py` 覆盖五记忆与两种参考dtype的每个独立状态根，
+并检查包装内参数版本、KV/共享delta三步SGD及None/零连接；它不单独认证native时钟组合。
 实际通过范围以固定源码证据为准，开发检查不代替原生资格。
