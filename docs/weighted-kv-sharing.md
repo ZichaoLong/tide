@@ -66,3 +66,7 @@ KV 的 `linear_rows` 接受各行向量及各自矩阵，实际前向为 BMM；�
 准备结果 `{values,summaries}` 只携带候选实际计算结果，现有 State VJP 把它们作为独立操作数；
 没有参考重算或状态补写。无共享键的私有 base/输入仍走原路径，这一边界不宣称全节点异构合批。
 对应性能与后端资格必须由固定源码运行单独给出，单元测试不构成提速证据。
+
+[474f9af资格](evidence/core5-local-allocation-factorized-kv-20261028.md)另核对所有eager行的低秩形式、
+独立dense公式/完整Jacobian和训练恢复；中型单次收益有限，大图严格失败保留。
+这不扩展共享判据，也不等于resident已采用同一算术组织。
