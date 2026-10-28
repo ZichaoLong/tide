@@ -50,6 +50,8 @@ CLI取k=区域规模或指定k，实际正支持在线决定；`regional_total_z
 预算清单、实际92.62亿参数KV材料与有限执行；大型拒绝和完整返回不通过不能解释为性能通过。
 [07e56ca后续同材料复核](evidence/core5-private-projection-20261028.md)保留D64训练及D2048残差失败，
 并记录新增真实私有矩阵批的覆盖率、完整调用成本和资源边界。
+[474f9af后续复核](evidence/core5-local-allocation-factorized-kv-20261028.md)中，同一D2048材料
+已执行测量窗，随后完整状态核对严格失败；D64完整训练限制仍保留，不能解释为等价吞吐。
 
 benchmark fixture v2以JSON保存结构与索引，FP32小端二进制保存实际TensorImpl去重的张量。
 每张量有shape/offset/bytes/SHA256，全文件有bytes/SHA256；只对实际冻结零buffer使用零编码。

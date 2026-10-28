@@ -1,62 +1,52 @@
 # 当前交接 — 2026-10-28
 
-授权分支`graph-execution-foundation`；实现`474f9af32d35ca7d8bc7bf6359dbddb3ec91dfb3`已提交推送，
-包含`56631eb`局部分配坐标/诊断与全部eager KV低秩求值。固定数学`0770593838a37c790a568226930567ed60f99b83`；
-19/5快照已同上游Git对象核对。参考仓库/公共环境只读，不使用子代理，不恢复旧队列。
-用户授权持续实现、有限实验、分阶段提交及普通推送，提交后继续。
+授权分支`graph-execution-foundation`；数值实现`474f9af32d35ca7d8bc7bf6359dbddb3ec91dfb3`（含`56631eb`），
+阶段记录设施`b62f2db7e9bd72b652cdcb97b11fa6e1317b396a`。数学固定
+`0770593838a37c790a568226930567ed60f99b83`；19/5份新/旧快照已同上游Git对象核对。
+参考仓库和公共环境保持只读，不使用子代理。用户授权实现、有限实验、阶段提交及普通推送；不强推、不恢复旧队列。
 
-## 当前资格
+## 本轮结果
 
-固定只读工作树`artifacts/worktrees/core5-private-qualified`检出474f9af。
-CPU `core5-factorized-qualify-cpu-v2-20261028`终态passed/exit0：687 passed/2 strict xfail；
-另固定源码59项诊断/大共同阈值测试通过，结果`artifacts/diagnostics/core5-factorized-extra-tests`，合计746 passed。
-CPU core复用开发产物前已重新核对完整C++内容hash和每个binary hash；独立benchmark在固定源码重新构建。
-CUDA `core5-factorized-qualify-cuda-v3-20261028`终态passed/exit0：core/resident sm80/90/100构建、loader和core CPU检查。
-本机无NVIDIA设备节点，GPU实机仍待验。
-NPU `core5-factorized-qualify-npu-v3-20261028`终态passed/exit0：core/resident构建通过，队列已取得物理1/13，
-allocation FP32及flow/config/training/node-training两dtype共9项真机全部通过；SDK和纯Python eager KV各4次更新/恢复通过。
-输出统一为`artifacts/jobs/core5-factorized-qualify-{cpu-v2,npu-v3,cuda-v3}`，查看status.json/task.log。
-服务均background.slice/Nice10、线程1/build2/MemoryMax128G；CPU30min、设备90min，NPU队列180s/设备1800s。
-首批启动因预建输出目录拒绝、设备v2因已有resident目录拒绝均保留原failed；没有覆盖失败记录。
+[数值/低秩与设施证据](evidence/core5-local-allocation-factorized-kv-20261028.md)及同名JSON是本轮完整入口；
+[语义对应](semantic-map.md)、[参数匹配材料](weighted-workloads.md)、[性能经验](performance-lessons.md)可独立导航和复现。
 
-## 数值结果与下一步
+- 两份原D2048实际分配失败行已提交，独立120位Decimal核对有解；cap质量分位局部区间与约束共同阈值消去修复局部相消，保留正支持/残差/精确解VJP。
+- 全部eager KV标量、独立packed与共享行保留低秩式；独立dense公式/Jacobian、参数/状态根、共享、optimizer/恢复分别核验。resident组合矩阵/tape未由本项改变。
+- 固定474f9af：CPU687 passed/2 strict xfail，补充59项通过，共746 passed；NPU九项组件/完整训练/单双卡恢复及SDK/Python eager KV各四次更新通过；CUDA构建/loader/CPU检查通过，无GPU真机。
+- CPU medium单次366.831→363.974ms，NPU mixed累计2189.634→2145.125ms，完整对照均通过；不足以证明稳定收益。profile独立执行，外部争用未排除。
+- D64训练窗和约92.62亿主体参数D2048推理窗均已执行，事后keys严格核对失败（2.26498e-6/4.48227e-5）。大模型推理窗130.351s、测量后生命周期RSS约47.19GiB，不计等价吞吐。
+- D64两步FP32返回/梯度/SGD仍失败；30组实际分配局部误差≤8.33111e-8，评分进入求解器前已不同。两条显式FP64两步诊断通过，仅用于隔离，不解除FP32失败。
+- b62f2db在计时外持久化fixture/构造/warmup/measurement/验证阶段；开发和固定提交各6项通过，含五族FP32训练、损坏材料及FIFO中断。其资格与数值资格分列。
 
-开发`core5-factorized-kv-dev`终态failed：198 passed/2 xfail、standalone材料5项通过；
-原wide2048可执行完整窗（1.17269s），但keys最大差4.95911e-5仍strict mismatch。原开发日志/快照保留。
-D64 Python/native两步均离散结构一致，完整返回/梯度/SGD仍严格不等价。
-30组实际分配经独立120位Decimal复核，分支/free集合一致，局部误差最大8.34e-8；
-评分差在传入求解器前已出现，不能继续把全部差异归为分配迭代误差。
-实际wide操作数的重复行BMM探针仍有2.861e-6差异，只是局部算术证据，不是整图差异的完整解释。
-两个原大型残差失败行已存tests/data；本次修复保持dtype/容差/活动集/精确解VJP，未放宽守卫。
+## 作业终态与来源
 
-CPU `core5-factorized-study-cpu-20261028`已终态failed/exit1：两个medium完整训练通过（56631eb 0.366831s、474f9af 0.363974s；单次约持平），D64及matched2048均完成测量窗后严格核对失败。
-D64 keys最大差2.26498e-6；约92.62亿主体参数matched2048 keys最大差4.48227e-5，推理窗130.351s、RSS峰值约50.67GB，不是等价吞吐。
-两条显式FP64独立调度两步诊断及medium独立CPU profile通过。原始材料、残差失败和本次完整对照失败均保留。
-输出`artifacts/jobs/core5-factorized-study-cpu/{status.json,task.log,runs/study.json}`；systemd同名unit退出1。
-原始CPU基线binary与固定56631eb的C++/消费者内容hash一致，身份`.local/core5-factorized-baseline-identity.json`。
+所有本轮任务已终止，没有排队或运行中的项目任务；原失败没有重标通过。
 
-NPU `core5-factorized-study-npu-20261028`终态passed/exit0，物理13→npu:0：HB medium纯Python mixed-c，0503593→474f9af单次2.189634s→2.145125s，完整返回/optimizer核对通过。
-这是累计修改对照，约−2.0%不足以证明稳定收益；每配置一次流程，外部负载未隔离。
-输出`artifacts/jobs/core5-factorized-study-npu/{status.json,task.log,queue-state.json,runs/study.json}`，服务已终止。
+| 服务unit（均后缀`-20261028`） | 终态 | 输出目录（仓库相对路径） |
+| --- | --- | --- |
+| core5-factorized-qualify-cpu-v2 | passed/0，687+2 strict xfail | artifacts/jobs/core5-factorized-qualify-cpu-v2 |
+| core5-factorized-qualify-npu-v3 | passed/0，物理1/13，九项及eager | artifacts/jobs/core5-factorized-qualify-npu-v3 |
+| core5-factorized-qualify-cuda-v3 | passed/0，仅构建/loader/CPU | artifacts/jobs/core5-factorized-qualify-cuda-v3 |
+| core5-factorized-study-cpu | failed/1，5项通过/2项严格失败 | artifacts/jobs/core5-factorized-study-cpu |
+| core5-factorized-study-npu | passed/0，两项，物理13→npu:0 | artifacts/jobs/core5-factorized-study-npu |
+| core5-benchmark-progress-dev | passed/0，开发构建+6项 | artifacts/jobs/core5-benchmark-progress-dev |
+| core5-benchmark-progress-qualify | passed/0，固定b62f2db构建+6项 | artifacts/jobs/core5-benchmark-progress-qualify |
 
-阶段记录开发任务`core5-benchmark-progress-dev-20261028`已终态passed/exit0：新standalone构建及6项检查通过（五族FP32完整训练、损坏材料拒绝、FIFO强制中断后阶段可读）。
-固定开发树`artifacts/worktrees/core5-benchmark-progress-dev`，源码归档/tree hash在job内；没有改变474f9af已完成的数值测量。
-输出`artifacts/jobs/core5-benchmark-progress-dev/{status.json,task.log,development.json,standalone-build/result.json}`。
+每个目录含status.json/task.log；study另有runs/study.json，CPU/设施资格有qualification.json和JUnit，NPU有checks/result.json。
+补充59项在`artifacts/diagnostics/core5-factorized-extra-tests`。各阶段源码/快照/binary hash和原失败清单已收录证据JSON。
+数值固定树`artifacts/worktrees/core5-private-qualified`，设施固定树`artifacts/worktrees/core5-benchmark-progress-qualified`；均保留未修改。
+CPU core复用前已核对完整C++内容及每个binary hash，消费者从固定源码重建；开发manifest基提交不能代替资格身份。
+长任务均独立background.slice、Nice10、算子线程1/build2；资源/时限、物理映射和终态见报告，不宣称资源独占。
+本文件随证据提交；提交/推送身份与是否有未提交修改，以`git status --short --branch`及`git log -3 --oneline`核验。
 
-当前提交设施修正（main.cpp、材料测试与weighted-performance契约）；提交后立即创建
-`artifacts/worktrees/core5-benchmark-progress-qualified`，冻结该提交，单独运行CPU定向资格。
-准备服务`core5-benchmark-progress-qualify-20261028`：background.slice/Nice10/线程1/build2/MemoryMax32G/15min；
-从新固定源码构建消费者、重新校验未改动core内容/binary hash、运行相同6项并保存JUnit。
-输出将为`artifacts/jobs/core5-benchmark-progress-qualify/{status.json,task.log,qualification.json,tests.xml}`，当前尚未启动。
-下一命令：创建固定工作树→启动`.local/core5-benchmark-progress-qualify.sh`→核验终态→汇总证据/经验/ROADMAP→证据提交、推送。
-数值资格仍对应474f9af，阶段记录资格另对应本次设施提交；不得混用。
+## 剩余限制与接续
 
-## 保留边界
+总体大图FP32严格正确性仍未通过；不能以局部修复、FP64诊断或完成计时窗宣布全目标完成。
+原eager FP16 GDN默认AdamW、SDK FP32 affine、默认异步双NPU VJP和反馈PDG见证继续保留。
+CUDA真机、x86_64、大型设备完整训练/跨卡吞吐未验；有限容量/正支持数值拒绝不静默放宽。
+共享组外同形投影、resident组合矩阵、物理缺席行和窗口反向构造仍有性能空间；当前没有低成本优化已穷尽的结论。
 
-[既有完整基座与资格](evidence/README.md)、[性能经验](performance-lessons.md)、[数值/异步隔离](evidence/core5-numerical-isolation-20261028.md)。
-eager FP16 GDN AdamW、SDK FP32 affine、默认异步双NPU、FP32反馈PDG及新D64严格失败仍保留。
-resident KV仍用其原稠密组合矩阵/tape，本次低秩改变只作用于eager。
-CUDA真机、x86_64、大型设备完整训练/跨卡吞吐待验；局部公式或参数匹配不认证全规模性能。
-主树有STATUS、standalone阶段记录修正及相关测试/契约未提交；运行任务只读取固定只读工作树。
-
-standalone阶段信息原来仅在窗口结束时持久化，本轮在fixture/构造/warmup/measurement/验证阶段于计时外落盘；不改变474f9af测量或数值算法。
+当前约定的F1—F4实施、必要资格和有限测量均已终态，证据/经验已入库；唯一后续清单见[ROADMAP](ROADMAP.md)。
+接续先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`，再读上述报告。
+下一项有依据的调查是D64首个真实投影/评分差异的传播与一阶训练边界，先提取小操作数反例；
+不要自动重跑本次大型材料或全开关矩阵。现有材料/命令可由公共workload工具重建，不依赖历史绝对运行目录。

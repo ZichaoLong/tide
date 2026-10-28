@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 局部分配坐标与全部eager KV低秩](core5-local-allocation-factorized-kv-20261028.md)：474f9af（含56631eb）；实际失败行/独立Decimal、cap质量分位局部根和共同阈值消去。CPU746 passed/2 strict xfail、NPU九项及eager训练恢复、CUDA构建通过；两个大图已执行测量窗但完整状态仍失败。CPU中型约持平、NPU单次约−2%，不作稳定加速声明。b62f2db阶段持久化另有6项固定资格。
+
 [Core-5 Quad响应修复与私有矩阵批](core5-private-projection-20261028.md)：07e56ca；共同偏移闭式解/VJP、真实私有BMM/独立行根。CPU574 passed/2 strict xfail、NPU单/双卡相关资格及CUDA三架构构建通过；有限CPU近持平、mixed-c稍慢，D64完整训练及D2048残差仍严格失败，没有GPU真机或大型吞吐结论。
 
 [Core-5 参数匹配与性能经验迁移](core5-performance-transfer-20261028.md)：2da3f2c/0503593；五族真实参数清单、core-3主体匹配、实际92.62亿参数材料、共享存储/复制优化；CPU376 passed/2 strict xfail、设施14项、NPU八项及CUDA构建/CPU核验。单次CPU下降、NPU稍慢且allocated小降；新增D64完整训练和quad共同偏移严格失败均保留。

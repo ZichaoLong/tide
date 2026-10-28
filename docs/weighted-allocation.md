@@ -128,3 +128,7 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 不借用 eager 求解器。这项修复不证明其他 D2048 或 D64 的严格差异都已解除。
 [07e56ca固定资格](evidence/core5-private-projection-20261028.md)记录CPU、NPU实机和CUDA构建分别通过的范围，
 并保存原大型材料的残差拒绝；不得把手算共同偏移例的修复扩展成任意分数范围的数值保证。
+
+[474f9af固定资格及原材料复核](evidence/core5-local-allocation-factorized-kv-20261028.md)记录
+实际失败行的独立Decimal、局部坐标/阈值修复、CPU/NPU及CUDA构建。原大图已能执行测量窗，
+但完整KV状态/训练仍有严格差异；局部分配通过不能解除这些完整模型限制。
