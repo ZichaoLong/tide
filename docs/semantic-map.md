@@ -239,3 +239,8 @@ GDN §1 epsilon-L2、GDN/SSD §3 scaled-RMS的FP32一阶收缩由Python/C++
 原GDN完整AdamW/checkpoint测试保持输入和容差，局部通过不替代整图资格。
 [ad6d1e7固定资格](evidence/core5-fp32-normalization-20261028.md)记录原FP32见证通过、
 FP16严格失败保留，以及CPU/纯Python NPU/standalone NPU/CUDA构建的不同验证范围。
+
+Architecture §1 RMS和各线性映射的[算术边界诊断](weighted-arithmetic-diagnostics.md)
+由`weighted_arithmetic_probe`显式隔离CPU FP32乘加/归约/normalized VJP；
+`test_weighted_arithmetic_probe`以相消手算、literal Jacobian和实际checkpoint验证诊断机制。
+这不是新的公共数学绑定或生产精度策略，默认Python/C++函数和图/checkpoint版本不变。

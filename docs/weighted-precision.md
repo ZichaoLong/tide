@@ -70,3 +70,7 @@ scale广播、None/连接零、版本和一阶边界，并要求FP32前向逐值
 为CPU453 passed/2个原FP16 strict xfail，原两项FP32 GDN完整AdamW/恢复通过；
 standalone NPU四组及纯Python NPU两组相关训练/恢复通过，CUDA构建通过。
 旧1f1ec57失败记录不改；该修复不解除FP16、其他图/数值域或双卡异步边界。
+
+[算术边界诊断](weighted-arithmetic-diagnostics.md)提供显式CPU分段FP64探针、
+逐步梯度/参数误差和精确续接检查。探针不是公共精度策略；部分误差改善不解除D64原FP32失败。
+整条显式FP64、局部算子干预与原FP32分别记录，不静默替换默认执行。
