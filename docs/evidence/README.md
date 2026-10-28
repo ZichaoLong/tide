@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[FP32 GDN/SSD归一化反向](core5-fp32-normalization-20261028.md)：ad6d1e7；CPU453 passed/2原FP16 strict xfail，原两项FP32 GDN AdamW/恢复通过。独立实数Jacobian及逐值前向、standalone NPU四组/纯Python NPU两组完整训练恢复、CUDA构建/CPU核通过；旧失败记录和其他精度/硬件边界保留。
+
 [稳定共享准备、显式精度与完整训练观测](core5-stable-preparation-precision-20261028.md)：1f1ec57；精确恢复修复、真实梯度/optimizer槽检查。CPU572 passed/2原FP32 GDN失败（旧基线复现），NPU eager KV训练及CUDA构建通过；D64四项FP64训练和匹配92.62亿主体参数的CPU FP64推理完整通过，原FP32失败仍保留。
 
 [Core-5 局部分配坐标与全部eager KV低秩](core5-local-allocation-factorized-kv-20261028.md)：474f9af（含56631eb）；实际失败行/独立Decimal、cap质量分位局部根和共同阈值消去。CPU746 passed/2 strict xfail、NPU九项及eager训练恢复、CUDA构建通过；两个大图已执行测量窗但完整状态仍失败。CPU中型约持平、NPU单次约−2%，不作稳定加速声明。b62f2db阶段持久化另有6项固定资格。

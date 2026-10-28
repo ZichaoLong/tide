@@ -237,3 +237,5 @@ GDN §1 epsilon-L2、GDN/SSD §3 scaled-RMS的FP32一阶收缩由Python/C++
 `weighted_normalization`实现；FP32前向不变、FP64路径不变，独立实数Jacobian及广播/零根由
 `test_weighted_half_normalization.py`和C++ `weighted_normalization.cpp`验证。
 原GDN完整AdamW/checkpoint测试保持输入和容差，局部通过不替代整图资格。
+[ad6d1e7固定资格](evidence/core5-fp32-normalization-20261028.md)记录原FP32见证通过、
+FP16严格失败保留，以及CPU/纯Python NPU/standalone NPU/CUDA构建的不同验证范围。

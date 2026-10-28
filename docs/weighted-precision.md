@@ -66,4 +66,7 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 `test_weighted_half_normalization.py`与C++ literal Jacobian同时覆盖FP16/FP32、零/小量、
 scale广播、None/连接零、版本和一阶边界，并要求FP32前向逐值不变。
 这是同一实值函数的一阶导数重排，不是有限迭代导数、HST或二阶承诺；
-原GDN完整AdamW/恢复用例仍使用原参数、输入及容差，实际资格见STATUS。
+原GDN完整AdamW/恢复用例仍使用原参数、输入及容差。[ad6d1e7固定资格](evidence/core5-fp32-normalization-20261028.md)
+为CPU453 passed/2个原FP16 strict xfail，原两项FP32 GDN完整AdamW/恢复通过；
+standalone NPU四组及纯Python NPU两组相关训练/恢复通过，CUDA构建通过。
+旧1f1ec57失败记录不改；该修复不解除FP16、其他图/数值域或双卡异步边界。

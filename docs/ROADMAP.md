@@ -67,7 +67,7 @@ CPU442项、NPU两dtype四组件（含单设备/双卡训练与恢复）、CUDA�
 | --- | --- |
 | CUDA真机 | 源码、aarch64构建、sm80/90/100常驻核及安装loader已交付；实际GPU前向、反向、optimizer、驻留、跨卡、容量/恢复与性能未验。有硬件后按[设备门禁](device-control.md)与各模块复现命令分层执行，不以CPU/编译替代 |
 | x86_64目标 | 源码保留可移植入口；本轮工具链与设备证据来自aarch64。新目标须独立构建及资格，不能继承本机结果 |
-| eager FP32/FP16 GDN默认AdamW | 新扩大CPU门禁补记FP32两项失败：约1.411885e-6，旧1850434同样复现，原测试保持failed；FP16约.001984的strict xfail仍保留。显式SGD、master和resident不同精度边界的通过不解除它；见[精度](weighted-precision.md) |
+| eager GDN默认AdamW数值边界 | ad6d1e7的FP32 normalized L2/scaled-RMS通过原两项失败及恢复；旧1f1ec57/1850434失败记录保留。FP16约.001984的两个strict xfail仍保留，其他数值域未由此认证；见[精度](weighted-precision.md)和[新固定资格](evidence/core5-fp32-normalization-20261028.md) |
 | 默认异步双NPU eager VJP | 当前Torch2.12/CANN9.1纯Torch双卡反向也重现invalid event；显式launch blocking通过，不宣称异步已修复；见[mixed设备报告](evidence/core5-device-20261027.md) |
 | standalone SDK FP32 affine | fc/affine第三轮evidence差3.09944e-6，mixed-a同见证，原严格失败不改容差；见[mixed设备报告](evidence/core5-device-20261027.md) |
 | FP32反馈PDG性能严格对照 | ceae7bf两项maxabs4.11272e-6/2.71201e-6；24配置中的这两项不计等价加速，FP64提升诊断不解除原失败；见[性能报告](evidence/core5-weighted-performance-20261028.md) |
@@ -80,14 +80,16 @@ CPU442项、NPU两dtype四组件（含单设备/双卡训练与恢复）、CUDA�
 并取得五项显式FP64同材料/参数匹配测量。CPU扩大门禁为572通过/2个原FP32 GDN失败；
 NPU eager KV及CUDA构建通过，均见[本阶段证据](evidence/core5-stable-preparation-precision-20261028.md)。
 
+FP32 GDN后续增量已闭环：ad6d1e7 Python/C++ normalized VJP、独立Jacobian与原两项失败/恢复通过，
+CPU453 passed/2原FP16 strict xfail；NPU两套入口的相关训练、CUDA构建通过，
+见[本次证据](evidence/core5-fp32-normalization-20261028.md)。原历史失败及其他边界不改。
+
 后续优先顺序：
-1. 对新补记的FP32 GDN默认AdamW边界验证normalized L2/scaled-RMS一阶收缩：动态Python三步探针通过，
-   还需公共Python/C++实现、独立Jacobian、原两项失败及多步恢复/后端资格；不凭探针回写原失败。
-2. D64/D2048 FP32的完整浮点一致性仍待改进；已有row/reduction/BMM/局部VJP探针未解决完整训练，未采用。
+1. D64/D2048 FP32的完整浮点一致性仍待改进；已有row/reduction/BMM/局部VJP探针未解决完整训练，未采用。
    已验证的显式FP64是独立配置，不是隐式替换。
-3. 扩大跨不同输入/基座的同形私有模块合批、降低设备小批提交及resident窗口反向构造成本；
+2. 扩大跨不同输入/基座的同形私有模块合批、降低设备小批提交及resident窗口反向构造成本；
    每项先核对独立根/共享/恢复，再据一次有限完整计时决定收益。
-4. 在可获得硬件上完成CUDA真机和x86_64资格；异步双NPU原最小反例与显式blocking通过分列。
+3. 在可获得硬件上完成CUDA真机和x86_64资格；异步双NPU原最小反例与显式blocking通过分列。
 
 不自动恢复旧队列、不重跑所有开关矩阵，不以参数量匹配等同函数、模型效果或完整训练工作量匹配。
 公共任务头、loss配方和模型效果仍由下游负责。当前具体任务/源码/作业只见STATUS。

@@ -1,55 +1,55 @@
 # 当前交接 — 2026-10-28
 
 授权分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`。
-参考仓库/公共环境只读，不使用子代理；实现、有限实验、分阶段提交和普通推送继续获授权。
+参考仓库/公共环境只读；不使用子代理。实现、有限验证、阶段提交和普通推送已获授权。
 
-## 已完成阶段
+## 当前结果
 
-实现`1f1ec5780e054e460e3471547519ace3f38fa3af`：共享准备按首事件稳定求值，修复换owner后的梯度微差；
-CPU benchmark显式FP64/真实静态存储计费，实际最终梯度/optimizer槽核对；两步精确checkpoint诊断。
-[固定证据](evidence/core5-stable-preparation-precision-20261028.md)及同名JSON已作为`0e04da6`单独提交并推送。
+实现提交`ad6d1e71d8798a68765e0efa6f8192c00bfc5a94`已完成正式定向资格。
+GDN epsilon-L2及GDN/SSD scaled-RMS的FP32解析一阶收缩更稳定；原FP32前向逐值不变，
+输入/容差/AdamW默认值不变，不隐式提升到FP64。图v13、checkpoint v5保持。
+[本次报告](evidence/core5-fp32-normalization-20261028.md)及同名JSON是固定证据。
 
-- CPU扩大门禁`core5-stable-preparation-qualify`：**failed/1，572 passed、2 failed**。两项为FP32 GDN
-  HB/default AdamW；旧1850434同样复现，第三次conv.weight[0,2]差1.411885e-6。原断言/失败保留。
-- `core5-stable-preparation-diagnostics`passed：D64 FP64 Python/native各两步完整记录、梯度、参数、
-  optimizer和实际checkpoint换owner后下一窗口逐值恢复通过。
-- NPU SDK2.10/CANN9.0 core/consumer及FC/KV、HB/KV各4次更新/恢复通过；物理13→npu:0。
-  CUDA2.10/cu128 core/consumer和CPU两dtype反例通过，无GPU真机。本次未改/重跑resident核矩阵。
-- `core5-explicit-precision-study`passed/0，五项都完整核对：D64四种接口/调度FP64训练5.702/2.896/2.958/2.903s；
-  同拓扑/core-3主体参数匹配的D2048 FP64推理151.416s，424候选/199 Full/946消息。
-  大例约92.62亿主体参数，测量后RSS峰值约90.35GiB；原FP32失败不解除，无大型训练/跨卡吞吐资格。
-  每配置一次流程、项目计时串行、外部争用未隔离。
+- CPU：**453 passed、2原FP16 strict xfail、0 failed**；原两项FP32 GDN/HB/default AdamW
+  通过原断言与恢复检查。覆盖独立Jacobian、版本/None/零、相关循环和批量VJP、完整记录与每切面续接。
+  standalone另含每dtype 24图×4次更新、实际checkpoint与optimizer恢复。
+- NPU SDK2.10/CANN9.0：core构建/CPU两dtype核及FC/HB×GDN/SSD四组FP32通过，
+  各4次AdamW、同设备恢复及CPU交接。队列选择物理1→npu:0。
+- 当前Python/Torch-NPU2.12/CANN9.1：纯Python mixed-c GDN/HB、SSD非对齐DAG两组通过，
+  独立根、四次AdamW、原始状态/optimizer精确解码与CPU交接；物理9→npu:0。
+- CUDA2.10/cu128：同源core/绑定构建及CPU两dtype核通过；无GPU真机。resident核和
+  benchmark消费者本轮未重建；Python/native NPU适配矩阵不冒充已重验。
 
-上述unit均加`-20261028`，日志/结果位于`artifacts/jobs/同名`，全部终态。
-CPU固定树`artifacts/worktrees/core5-stable-preparation-qualified`；设备固定树`core5-private-qualified`，均只读1f1ec57。
-CPU开发缓存`artifacts/worktrees/core5-stable-preparation-dev/build/cpu`可在原任务终态后顺序增量复用；
-其dirty快照和此前资格hash均已保留，不能把开发基提交当资格来源。
+## 作业与来源
 
-## 正在接续的增量
+`core5-fp32-normalization-{qualify,npu,cuda,python-npu}-20261028`均**passed/0**，
+无活动作业；transient服务已卸载，终态以持久status/exit code及验收产物为准。
+启动时已核对PID/Transient/background.slice。日志/终态位于`artifacts/jobs/core5-fp32-normalization-对应后缀/`。
+主资格记录为`qualification.json`、`status.json`、`task.log`；CPU另有`tests.xml`，
+Python NPU另有`checks/result.json`；精确命令及hash已入仓库证据，不依赖.local重建。
+background.slice/Nice10，build2/算子1；前三者64G/20min，Python NPU64G/10min，队列wait180s。
+CPU只读树`artifacts/worktrees/core5-fp32-normalization-qualified`、设备只读树`core5-private-qualified`
+均为ad6d1e7。CPU开发缓存`core5-stable-preparation-dev/build/cpu`复用前后完整核验源码hash及23个binary hash；
+原开发manifest的1850434基提交保持，不能当成正式资格来源。开发183项通过也另保留。
 
-新发现GDN边界的`core5-gdn-fp32-witness`保留实际近零梯度、槽值和独立80位Decimal更新，failed/2。
-默认AdamW会把约1e-11的梯度微差累积为参数越界；前向/梯度在容差内不能替代更新检查。
-一次后续动态`core5-gdn-stable-normalization-probe`已passed/0：仅Python，把half已用的normalized
-L2/scaled-RMS一阶收缩应用于FP32，原前向/输入/容差不变，三步最后参数差约7.00355e-7。
-该探针尚不是公共实现，不认证native/Jacobian/checkpoint；没有回写上面的原失败。
+## 前阶段选型结果与剩余边界
 
-已在主工作区接入Python/C++ FP32同一解析一阶收缩，保留原FP16/FP64及int64边界；
-短检查11项通过（后又补L2版本/零根和C++FP32逐值前向反例，须在下项开发门禁核验）。
-已完成`core5-fp32-normalization-dev-20261028`，冻结输入复用已终态的`core5-stable-preparation-dev`；
-入口`.local/core5-fp32-normalization-dev.sh`，输出`artifacts/jobs/core5-fp32-normalization-dev`。
-background.slice/Nice10、build2/算子1、64G/15min，增量重建core后183项通过，含原两项FP32 GDN AdamW及恢复、独立Jacobian、FP32逐值前向、版本/None/零。
-下一步：
-扩大独立literal Jacobian与版本/None/零检查，复验原两项GDN失败和相关循环/packed/多步恢复。
-实现已准备提交；随后以该提交运行相关CPU与NPU/CUDA固定资格，另记证据；原1f1ec57失败保持原终态。
-不重跑已经通过的D2048 KV测量（候选不改变KV公式），除非实际源码依赖或新失败要求。
-本阶段原算术探针、启动失败及首个arithmetic-trace误覆盖的partial边界已纳入证据，不恢复旧队列。
+1f1ec57共享准备顺序、真实梯度/optimizer检查和显式FP64已提交推送为0e04da6证据，
+见[上一阶段](evidence/core5-stable-preparation-precision-20261028.md)。其CPU原572 passed/2 failed、
+旧基线复现、近零梯度/独立Decimal见证均不回写；FP32 GDN的新通过只属于ad6d1e7。
+此前一次流程的D64 FP64完整训练5.702/2.896/2.958/2.903s，D2048约92.62亿主体参数匹配
+FP64推理151.416s/窗，完整核对通过；后者424候选/199 Full/946消息，测量后RSS峰值约90.35GiB。
+外部争用未隔离。KV不调用本次两个函数，因此没有重复大型测量，也没有新增性能收益声明。
 
-## 未解除边界
+尚未解除：D64/D2048 KV FP32完整记录/训练、FP16 GDN默认AdamW、SDK FP32 affine、
+FP32反馈PDG、默认异步双NPU VJP；CUDA真机/x86_64、大型设备训练/跨卡吞吐待验。
+跨不同输入的私有合批、设备小算子提交、resident组合矩阵/窗口反向仍有空间。
+全部剩余事项见唯一[ROADMAP](ROADMAP.md)，历史LH/core-3及本轮经验见[performance-lessons](performance-lessons.md)。
 
-D64/D2048 FP32、FP32/FP16 GDN AdamW、SDK affine、反馈PDG、默认异步双NPU严格见证保留；
-CUDA真机/x86_64、大型设备完整训练与跨卡吞吐待验。广泛私有合批、resident组合矩阵/窗口反向仍有空间。
-唯一待办见[ROADMAP](ROADMAP.md)，可复用经验见[performance-lessons](performance-lessons.md)。
-重入：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+## 收尾与重入
 
-下一固定资格预定`core5-fp32-normalization-{qualify,npu,cuda}-20261028`，新输出同名artifacts/jobs，
-CPU使用新的固定worktree，设备checkout仅在旧任务终态后切换；background.slice/Nice10，build2/算子1，64G/20min。
+本轮约定的数值定位、修复、有限参数匹配测量和定向资格均已终态；不恢复旧队列。
+本次证据与追溯文档作为实现后的独立提交保存；推送对齐由`git status --short --branch`核对。
+没有待收尾的数值作业，不需要重复已通过的门禁。
+重入先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+后续独立优化按ROADMAP选取能验证的具体问题，保留现有严格失败与精度边界。
