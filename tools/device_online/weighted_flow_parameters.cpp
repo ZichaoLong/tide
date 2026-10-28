@@ -2,8 +2,8 @@
 #include "tide/parameter_bank.h"
 #include <ATen/core/grad_mode.h>
 namespace tide::device_online {
-WeightedBanks::WeightedBanks(const std::map<std::string,at::Tensor>& p,std::string prefix,at::Device d)
-  :parameters_(p),prefix_(std::move(prefix)),device_(d){}
+WeightedBanks::WeightedBanks(const std::map<std::string,at::Tensor>& p,std::string prefix,at::Device d,std::shared_ptr<ParameterBankPool> pool)
+  :parameters_(p),prefix_(std::move(prefix)),device_(d),pool_(std::move(pool)){}
 void WeightedBanks::limit_bytes(int64_t available){
   if(available<0)throw std::invalid_argument("negative weighted parameter bank budget");
   available_=available;
@@ -11,7 +11,7 @@ void WeightedBanks::limit_bytes(int64_t available){
 at::Tensor WeightedBanks::bind(const std::string& role,const std::string& name,const std::vector<int64_t>& shape,int64_t offset){
   if(at::GradMode::is_enabled()||roles_.count(role))throw std::invalid_argument("duplicate/grad-enabled weighted parameter binding");
   const auto& x=parameters_.at(name);
-  auto value=copy_parameter_bank(x,shape,offset,device_,available_);
+  auto value=pool_?pool_->bind(x,shape,offset,device_,available_):copy_parameter_bank(x,shape,offset,device_,available_);
   roles_.emplace(role,WeightedBankRole{prefix_+name,value,x.sizes().vec(),offset});return value;
 }
 at::Tensor WeightedBanks::direct(const std::string& role,const std::string& name){

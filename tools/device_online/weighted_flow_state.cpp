@@ -9,9 +9,9 @@ WeightedRawLayout layout(const weighted::MemoryConfiguration& c,int64_t capacity
 }
 State detach(State x){x.value=x.value.detach();for(auto& [_,v]:x.slots)v=v.detach();return x;}
 }
-WeightedFlowNode::WeightedFlowNode(const Model& model,int64_t node,const Continuation& q,at::Device d,int64_t capacity,int64_t budget)
+WeightedFlowNode::WeightedFlowNode(const Model& model,int64_t node,const Continuation& q,at::Device d,int64_t capacity,int64_t budget,std::shared_ptr<ParameterBankPool> pool)
   :binding(weighted::node_binding(model.nodes.at(node))),layout(device_online::layout(binding.memory,capacity)),
-   banks(model.nodes.at(node).extra,"nodes."+std::to_string(node)+".extra.",d){
+   banks(model.nodes.at(node).extra,"nodes."+std::to_string(node)+".extra.",d,std::move(pool)){
   std::vector<State> initial_states,states;std::vector<int64_t> present;
   for(int64_t b=0;b<q.batch_size;++b){
     const auto& w=model.nodes.at(node);auto init=w.kernel->initial(w);initial_states.push_back(init);
@@ -22,8 +22,8 @@ WeightedFlowNode::WeightedFlowNode(const Model& model,int64_t node,const Continu
   old={at::zeros_like(state.floating),at::zeros_like(state.integer)};
   state_present=at::tensor(present,at::kLong).to(d);
 }
-WeightedFlowRegion::WeightedFlowRegion(const Graph& g,const Model& m,int64_t region,const Continuation& q,at::Device d)
-  :config(weighted::region_binding(m.regions.at(region))),banks(m.regions.at(region).extra,"regions."+std::to_string(region)+".",d){
+WeightedFlowRegion::WeightedFlowRegion(const Graph& g,const Model& m,int64_t region,const Continuation& q,at::Device d,std::shared_ptr<ParameterBankPool> pool)
+  :config(weighted::region_binding(m.regions.at(region))),banks(m.regions.at(region).extra,"regions."+std::to_string(region)+".",d,std::move(pool)){
   for(auto i=g.region_index.offsets[region];i<g.region_index.offsets[region+1];++i)nodes.push_back(g.region_index.edges[i]);
   auto h=at::zeros({q.batch_size,2},at::kLong);h.select(1,0).fill_(-1);
   for(int64_t b=0;b<q.batch_size;++b){auto found=q.history.find({b,region});if(found!=q.history.end()){h[b][0]=found->second.last_time;h[b][1]=1;}}

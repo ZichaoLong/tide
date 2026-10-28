@@ -13,8 +13,9 @@
 namespace tide::device_online {
 int64_t weighted_flow_preflight(const Graph&,const Model&,int64_t samples,const WeightedFlowLimits&);
 struct WeightedNodeInput {at::Tensor payload,owners,lengths,times,present,bank,indices;};
+at::Tensor append_weighted_ready_values(DeviceProgram&,const ReadyBatch&);
 WeightedNodeInput append_weighted_node_input(DeviceProgram&,const ReadyBatch&,const at::Tensor& source_banks,
-  int64_t node,int64_t samples,int64_t input_ports,const at::Tensor& error);
+  int64_t node,int64_t samples,int64_t input_ports,const at::Tensor& error,const at::Tensor& padded_values);
 struct WeightedRegionInput {WeightedRegionFields fields;at::Tensor ids,times,lengths,inverse,order;};
 WeightedRegionInput append_weighted_region_input(DeviceProgram&,const at::Tensor& descriptors,const at::Tensor& present,
   const at::Tensor& times,const std::vector<int64_t>& nodes,const weighted::RegionalConfig&,const at::Tensor& error);
@@ -42,12 +43,13 @@ struct WeightedFlowNode {
   std::optional<WeightedRecurrentTape> recurrent_update,recurrent_mem,recurrent_full;
   WeightedRecurrentParameters recurrent_parameters;
   std::optional<WeightedDescribeTape> describe;
-  WeightedFlowNode(const Model&,int64_t node,const Continuation&,at::Device,int64_t capacity,int64_t budget);
+  WeightedFlowNode(const Model&,int64_t node,const Continuation&,at::Device,int64_t capacity,int64_t budget,
+                   std::shared_ptr<ParameterBankPool> pool=nullptr);
 };
 struct WeightedFlowRegion {
   weighted::RegionalConfig config;WeightedBanks banks;std::vector<int64_t> nodes;
   WeightedRegionInput input;std::optional<WeightedRegionTape> selection;at::Tensor history;
-  WeightedFlowRegion(const Graph&,const Model&,int64_t,const Continuation&,at::Device);
+  WeightedFlowRegion(const Graph&,const Model&,int64_t,const Continuation&,at::Device,std::shared_ptr<ParameterBankPool> pool=nullptr);
 };
 using WeightedFlowBudget=std::function<int64_t(DeviceProgram&)>;
 using WeightedFlowNodes=std::vector<std::unique_ptr<WeightedFlowNode>>;

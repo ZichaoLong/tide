@@ -9,7 +9,8 @@
 `prepare_shared`。默认无能力。KV 的充分判据为正接收分支、完整 Content Tensor 身份、
 实际 base Parameter 身份和 epsilon 相同；不比较浮点值，不跨块缓存，不读取参考轨迹。
 至少两个请求满足判据时计算一次 `x=N(u)` 和 `b=base@x`，形成临时具名张量 `{normal,base}`。
-逐节点继续计算 `b+(adapter_u@adapter_v)@x` 和 `summary@x`，按实际逻辑时间写入自己的缓存。
+逐节点继续计算 `b+adapter_u@(adapter_v@x)` 和 `summary@x`，按实际逻辑时间写入自己的缓存。
+低秩分支不构造稠密adapter矩阵；完整根/VJP、共享使用者、优化器和续接仍与独立combined-matrix锚点对照。
 无复用的行保留 `(base+adapter_u@adapter_v)@N(u)` 求值；两式是同一数学函数的不同算术分组，
 FP32/FP64 仍使用既定容差与严格离散路由检查。没有为复用修改 dtype、输入或平票规则。
 

@@ -42,14 +42,16 @@ def emit(h, g, p, mode, zeta=1.0):
 class NodeWeights(nn.Module):
     def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
                  input_slots=0, aggregate_program=None, state_program=None, read_program=None, transition=None,
-                 projection_layout="input"):
+                 projection_layout="input", *, legacy_parameters=True):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
-        self.decay = parameter((width,), 0.1)
-        self.weight = parameter((width, width), 0.15)
-        self.bias = parameter((width,), 0.05)
-        self.read = parameter((width,), 0.2)
+        for name, shape, scale in (("decay", (width,), .1), ("weight", (width,width), .15),
+                                   ("bias", (width,), .05), ("read", (width,), .2)):
+            if legacy_parameters:
+                setattr(self, name, parameter(shape, scale))
+            else:
+                self.register_buffer(name, torch.zeros(shape, dtype=dtype))
         self.kernel = kernel("ema" if spec is None else spec.memory, spec, input_slots) if state_program is None else state_program
         if spec is not None:
             self.kernel = with_clock(self.kernel, spec.state_clock)
@@ -166,6 +168,7 @@ class NodeWeights(nn.Module):
 
 
 class Model(nn.Module):
+    legacy_parameters = True
     def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None,
                  state_programs=None, read_programs=None, next_programs=None, region_programs=None,
                  projection_layout="input", device=None):
@@ -200,7 +203,7 @@ class Model(nn.Module):
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
             graph.source_counts[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v),
-            projection_layout) for v, n in enumerate(graph.nodes))
+            projection_layout, legacy_parameters=self.legacy_parameters) for v, n in enumerate(graph.nodes))
         from .region import program as region_program
         selectors = {} if region_programs is None else region_programs
         if any(type(r) is not int or not 0 <= r < len(graph.regions) for r in selectors):

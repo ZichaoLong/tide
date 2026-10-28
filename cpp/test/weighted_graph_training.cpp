@@ -79,7 +79,8 @@ void case_check(const std::string& topology,const std::string& family,at::Device
   const Index stop=10,cut=2;Continuation q;q.identity=g.identity;q.batch_size=2;
   for(Index step=0;step<3;++step){
     oa.zero_grad();ob.zero_grad();auto xa=weighted_check::inputs(g,at::Device(at::kCPU),dtype),xb=weighted_check::inputs(g,device,dtype);
-    auto expected=scalar.run(q,xa,stop,stop),actual=candidate.run(q,xb,stop,stop);compare(expected,actual,dtype);
+    auto expected=scalar.run(q,xa,stop,stop),actual=candidate.run(q,xb,stop,stop);
+    try{compare(expected,actual,dtype);}catch(const std::exception& e){throw std::runtime_error("train forward step="+std::to_string(step)+": "+e.what());}
     oa.backward(loss(expected));ob.backward(loss(actual));owners(pa,pb,true,precision.loss_scale);
     for(size_t i=0;i<xa.size();++i)close(xa[i].value.grad()/precision.loss_scale,xb[i].value.grad()/precision.loss_scale);
     oa.step();ob.step();owners(pa,pb,false);optimizer(oa,ob);

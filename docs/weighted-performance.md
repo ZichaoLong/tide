@@ -6,6 +6,8 @@
 [f72a6cc启动/内存补充](evidence/core5-weighted-observation-20261028.md)另验四个新进程和SDK allocator，不改写原24项测量。
 
 本页规定性能消费者的范围；运行结果从[证据索引](evidence/README.md)进入。
+[历史与新性能经验](performance-lessons.md)分列LH、fractal、core-3和core-5的实际证据及适用条件；
+[参数匹配扩展](weighted-workloads.md)提供五族、可扩展拓扑和二进制材料；下面的small/medium仍指原固定用例。
 测量不扩展数学资格，也不代表模型效果或所有规模的性能。遵守
 [执行契约 §6](execution-flows.md)，每配置默认一个独立进程，项目重型计时串行。
 
@@ -89,7 +91,8 @@ C++计时后使用另一个独立scalar调度核对全部记录、loss及最终S
 重复标记、超时或非零退出均失败。外部总进程时间包含事后独立正确性对照，不是吞吐时间。
 `runtime_initialization_seconds`仅计程序内显式运行时/库校验及首个算子，
 不含main之前的C++动态链接或Python最初导入。两种语言的初始化分界不同，需分别解释。
-fixture准备、owner构造与warmup各自单列；Python fixture准备还包含独立参考的静态绑定。
+fixture准备、owner构造与warmup各自单列；新版本将独立参考的静态绑定延至测量之后，
+避免候选测量期间保留第二份大模型。旧证据仍按其固定版本的构造/内存边界解释。
 
 `weighted_benchmark_observation.py::Memory`与C++`observation.cpp::capture_memory`
 记录runtime_ready、construction、warmup、measurement四个边界，前三个边界读取后重置

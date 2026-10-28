@@ -30,5 +30,16 @@ void check_parameter_bank(){
     refused(parameter,{1},0,bytes);
     bytes=8;auto slice=tide::copy_parameter_bank(parameter,{2},2,at::kCPU,bytes);
     require(bytes==0&&at::equal(slice,parameter.reshape({-1}).narrow(0,2,2).to(at::kFloat)));
+    tide::ParameterBankPool pool;bytes=48;
+    auto shared=pool.bind(parameter,{1,6},0,at::kCPU,bytes);
+    auto alias=pool.bind(parameter,{2,3},0,at::kCPU,bytes);
+    require(bytes==24&&shared.data_ptr()==alias.data_ptr()&&shared.data_ptr()!=parameter.data_ptr());
+    auto independent=pool.bind(parameter.clone(),{6},0,at::kCPU,bytes);
+    require(bytes==0&&independent.data_ptr()!=shared.data_ptr());
+    shared.fill_(9);require(alias.sum().item<float>()==54&&independent.sum().item<float>()==15);
+    // A pool belongs to one frozen parameter version, not a global cache.
+    parameter.add_(1);bool rejected=false;
+    try{pool.bind(parameter,{6},0,at::kCPU,bytes);}catch(const std::invalid_argument&){rejected=true;}
+    require(rejected&&bytes==0);
   }
 }

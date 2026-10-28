@@ -1,6 +1,7 @@
 #include "weighted_training_parameters.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
+#include <tuple>
 namespace tide::device_online {
 ParameterVjp weighted_training_layout(const ParameterRegistry& registry,at::Device device,int64_t budget){
   if(at::GradMode::is_enabled()||device.type()!=resident_device_type||device.index()<0||budget<1)
@@ -41,12 +42,20 @@ std::vector<ParameterWrite> weighted_training_writes(const ParameterRegistry& al
     const std::vector<WeightedBankRole>& roles){
   std::map<std::string,int64_t> offsets;for(size_t i=0;i<layout.owners.size();++i)offsets[layout.owners[i].canonical]=layout.offsets.at(i);
   std::vector<ParameterWrite> writes;
+  // A frozen pool can expose the same physical slice to multiple logical
+  // roles. Gradients still sum every use; publication writes each slice once.
+  std::map<std::tuple<int,int,std::uintptr_t,int64_t>,std::pair<int64_t,at::ScalarType>> destinations;
   for(const auto& role:roles){const auto x=all.value(role.parameter);
     if(x.sizes().vec()!=role.original_shape||role.offset<0||role.offset>x.numel()||role.bank.numel()>x.numel()-role.offset)
       throw std::invalid_argument("weighted publication role differs from original parameter");
     const auto found=offsets.find(all.canonical_name(role.parameter));if(found==offsets.end())continue; // Frozen owner.
     if(found->second<0)throw std::invalid_argument("weighted training publication omitted a trainable owner");
-    writes.push_back({found->second+role.offset,{role.bank,x.scalar_type()}});
+    const auto key=std::make_tuple(int(role.bank.device().type()),int(role.bank.device().index()),
+        reinterpret_cast<std::uintptr_t>(role.bank.data_ptr()),role.bank.numel());
+    const auto value=std::make_pair(found->second+role.offset,x.scalar_type());
+    const auto inserted=destinations.emplace(key,value);
+    if(!inserted.second){if(inserted.first->second!=value)throw std::invalid_argument("aliased publication destinations disagree");continue;}
+    writes.push_back({value.first,{role.bank,value.second}});
   }
   return writes;
 }

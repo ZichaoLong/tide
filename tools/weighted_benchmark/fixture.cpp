@@ -1,15 +1,21 @@
 #include "benchmark.h"
 #include "tide/kernel.h"
 #include "tide/ops.h"
+#include "tide/parameters.h"
 namespace weighted_benchmark {
 namespace {
 weighted::RegionalConfig regional(const Json& x){
-  if(x.at("selection_mode")!="regional_total"||x.at("local_score")!="cat"||x.at("region_score")!="ind"
-      ||x.at("region_control_mode")!="context"||x.at("region_evidence")!="cat"||x.at("regularizer")!="quad")
-    throw std::invalid_argument("benchmark fixture is outside the declared first-combination domain");
-  weighted::RegionalConfig c;c.k=x.at("k").get<Index>();c.hidden_width=x.at("hidden_width");
-  c.region_control_width=x.at("region_control_width").get<Index>();c.gamma_max=x.at("gamma_max");
-  c.allocation_temperature=x.at("allocation_temperature").get<double>();c.validate();return c;
+  weighted::RegionalConfig c(x.at("selection_mode").get<std::string>());
+#define FIELD(name) c.name=x.at(#name).get<decltype(c.name)>()
+  FIELD(hidden_width);FIELD(gamma_max);FIELD(local_score);FIELD(region_score);
+#undef FIELD
+#define OPTIONAL(name) if(x.at(#name).is_null())c.name.reset();else c.name=x.at(#name).get<decltype(c.name)::value_type>()
+  OPTIONAL(region_control_width);OPTIONAL(k);OPTIONAL(allocation_temperature);OPTIONAL(total_fraction);
+  OPTIONAL(ent_alpha);OPTIONAL(eta);OPTIONAL(fixed_gain);OPTIONAL(gain_logit);OPTIONAL(region_control_mode);
+  OPTIONAL(region_evidence);OPTIONAL(regularizer);OPTIONAL(send_gain);OPTIONAL(allocation_base);OPTIONAL(selection_width);
+  OPTIONAL(region_key);OPTIONAL(query_weight);OPTIONAL(alpha_match);OPTIONAL(alpha_res);OPTIONAL(alpha_loc);OPTIONAL(alpha_sel);
+#undef OPTIONAL
+  c.validate();return c;
 }
 weighted::KVConfig kv(const Json& x){
   weighted::KVConfig c;
@@ -27,14 +33,15 @@ weighted::RecurrentConfig recurrent(const Json& x){
   FIELD(heads);FIELD(groups);FIELD(conv_size);FIELD(conv_stride);FIELD(lambda_short);FIELD(epsilon);FIELD(alpha_mem);FIELD(alpha_ff);
   FIELD(qk_epsilon);FIELD(output_epsilon);FIELD(matrix_rates);
 #undef FIELD
-  if(c.memory_family!="ssd")throw std::invalid_argument("benchmark recurrence must be SSD");c.validate();return c;
+  c.validate();return c;
 }
 }
 Fixture fixture(const Json& data){
-  if(data.at("schema")!="tide-weighted-benchmark-fixture-v1")throw std::invalid_argument("unknown benchmark fixture schema");
+  if(data.at("schema")!="tide-weighted-benchmark-fixture-v1"&&data.at("schema")!="tide-weighted-benchmark-fixture-v2")
+    throw std::invalid_argument("unknown benchmark fixture schema");
   const auto& config=data.at("config");Fixture f;auto& g=f.graph;auto& m=f.model;
   f.span=data.at("span");f.samples=config.at("samples");f.positions=config.at("positions");
-  if(f.samples<1||f.samples>16||f.positions<1||f.positions>16||f.span<1||f.span>128)
+  if(f.samples<1||f.samples>512||f.positions<1||f.positions>128||f.span<1||f.span>(int64_t(1)<<59))
     throw std::invalid_argument("benchmark fixture exceeds bounded windows");
   const auto& graph=data.at("graph");
   for(const auto& x:graph.at("nodes")){
@@ -51,21 +58,16 @@ Fixture fixture(const Json& data){
   const auto& l=graph.at("layout");g.layout=PortLayout{l.at("edge_source"),l.at("edge_target"),l.at("input"),l.at("output")};
   const auto& d=graph.at("domain");g.source_domain=SourceDomain{d.at("edge_target"),d.at("input")};g.compile();
   if(g.identity!=graph.at("native_identity"))throw std::invalid_argument("decoded fixture graph identity differs");
-  std::vector<Tensor> values;
-  for(const auto& x:data.at("tensors")){
-    if(x.at("dtype")!="float32")throw std::invalid_argument("finite benchmark requires explicit FP32");
-    values.push_back(at::tensor(x.at("values").get<std::vector<float>>(),at::kFloat)
-      .reshape(x.at("shape").get<std::vector<Index>>()).set_requires_grad(x.at("trainable").get<bool>()));
-  }
+  auto values=tensors(data);
   auto tensor=[&](const Json& i){return values.at(i.get<size_t>());};
   const auto& classes=data.at("classes");SourceClasses sources{classes.at("edges"),classes.at("inputs")};
   for(size_t v=0;v<g.nodes.size();++v){const auto& x=data.at("nodes").at(v);
     NodeWeights n{tensor(x.at("decay")),tensor(x.at("weight")),tensor(x.at("bias")),tensor(x.at("read"))};
     for(const auto& [name,i]:x.at("extra").items())n.extra[name]=tensor(i);
     const auto& memory=data.at("memories").at(v);const auto region=regional(data.at("regions").at(g.nodes[v].region));
-    if(config.at("family")=="kv")weighted::configure_node(n,kv(memory),region,sources,data.at("alpha_agg"));
-    else if(config.at("family")=="ssd")weighted::configure_node(n,recurrent(memory),region,sources,data.at("alpha_agg"));
-    else throw std::invalid_argument("unknown finite benchmark memory");m.nodes.push_back(std::move(n));
+    if(!memory.contains("memory_family"))weighted::configure_node(n,kv(memory),region,sources,data.at("alpha_agg"));
+    else weighted::configure_node(n,recurrent(memory),region,sources,data.at("alpha_agg"));
+    m.nodes.push_back(std::move(n));
   }
   for(size_t r=0;r<g.regions.size();++r){RegionWeights w;
     for(const auto& [name,i]:data.at("region_weights").at(r).items())w.extra[name]=tensor(i);
@@ -76,6 +78,16 @@ Fixture fixture(const Json& data){
   for(const auto& i:scales.at("edge_scale"))m.edge_scale.push_back(tensor(i));
   for(const auto& i:scales.at("agg_scale"))m.agg_scale.push_back(tensor(i));
   configure_model(g,m);validate_model(g,m);
+  if(data.at("schema")=="tide-weighted-benchmark-fixture-v2"){
+    const auto parameters=m.parameters();
+    if(Json(parameters.alias_partitions())!=data.at("parameter_aliases"))
+      throw std::invalid_argument("fixture parameter alias partitions differ");
+    if(data.contains("workload")){
+      int64_t total=0;for(const auto& owner:parameters.owners())total+=owner.value.numel();
+      if(total!=data.at("workload").at("inventory").at("totals").at("trainable"))
+        throw std::invalid_argument("fixture trainable parameter inventory differs");
+    }
+  }
   for(const auto& x:data.at("inputs"))f.inputs.push_back({x.at("batch"),x.at("port"),x.at("position"),x.at("time"),tensor(x.at("value"))});
   return f;
 }

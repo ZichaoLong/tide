@@ -7,13 +7,13 @@ std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,con
     (batch.prepared.empty()||batch.prepared[j].empty()?independent:shared).push_back(k);
   }
   std::vector<Tensor> values(p.ids.size()),summaries(p.ids.size());
-  auto adapter=at::matmul(detail::weight(w,"kernel.adapter_u"),detail::weight(w,"kernel.adapter_v"));
-  if(shared.empty())return {project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.base")+adapter),
+  const auto& left=detail::weight(w,"kernel.adapter_u");const auto& right=detail::weight(w,"kernel.adapter_v");
+  if(shared.empty())return {project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.base")+at::matmul(left,right)),
       project(normalize(p.input,c.epsilon),detail::weight(w,"kernel.summary"))};
   if(!independent.empty()){
     auto ids=at::tensor(independent,p.input.options().dtype(at::kLong));
     auto input=p.input.index_select(0,ids),x=normalize(input,c.epsilon);
-    auto v=project(x,detail::weight(w,"kernel.base")+adapter);
+    auto v=project(x,detail::weight(w,"kernel.base")+at::matmul(left,right));
     auto s=project(normalize(input,c.epsilon),detail::weight(w,"kernel.summary"));
     for(size_t i=0;i<independent.size();++i){values[independent[i]]=v[i];summaries[independent[i]]=s[i];}
   }
@@ -28,7 +28,7 @@ std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,con
           "invalid KV preparation dtype/device");
       xs.push_back(row.at("normal"));bases.push_back(row.at("base"));
     }
-    auto x=at::stack(xs),v=at::stack(bases)+project(x,adapter);
+    auto x=at::stack(xs),v=at::stack(bases)+project(project(x,right),left);
     auto s=project(x,detail::weight(w,"kernel.summary"));
     for(size_t i=0;i<shared.size();++i){values[shared[i]]=v[i];summaries[shared[i]]=s[i];}
   }

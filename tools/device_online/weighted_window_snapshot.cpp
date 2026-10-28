@@ -2,6 +2,7 @@
 #include "tide/parameters.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
+#include <set>
 namespace tide::device_online {
 namespace {
 Model clone_parameters(Model m){
@@ -33,16 +34,21 @@ std::shared_ptr<WeightedWindowSnapshot> WeightedWindowSnapshot::borrow(WeightedF
     gather+=n->state.floating.nbytes()+n->state.integer.nbytes()+n->state_present.nbytes();
   if(gather>s.limits.tensor_bytes-s.bytes)throw std::invalid_argument("weighted boundary gather exceeds tensor budget before copying");
   s.bytes+=static_cast<int64_t>(gather);
+  std::set<const void*> bank_storage;
+  auto hold_bank=[&](const at::Tensor& x){
+    if(bank_storage.insert(x.storage().unsafeGetStorageImpl()).second)s.bank_bytes+=x.storage().nbytes();
+    s.held.push_back(x);
+  };
   for(const auto& n:f.nodes){s.layouts.push_back(n->layout);s.descriptors.emplace_back();
     for(const auto& [name,x]:n->describe->fields)s.descriptors.back().push_back(name);
     // Public roots share the journal device. Copy the actual right cut only;
     // the saved owner list still controls all local numerical replay and VJP.
     s.final.push_back({n->state.floating.to(s.device),n->state.integer.to(s.device)});s.present.push_back(n->state_present.to(s.device));
     for(const auto& raw:{n->initial,n->state,n->old,n->proposal}){s.held.push_back(raw.floating);s.held.push_back(raw.integer);}
-    for(const auto& [name,role]:n->banks.roles()){s.bank_bytes+=role.bank.nbytes();s.held.push_back(role.bank);}
+    for(const auto& [name,role]:n->banks.roles())hold_bank(role.bank);
   }
   for(const auto& r:f.regions){s.history.push_back(r->history);
-    for(const auto& [name,role]:r->banks.roles()){s.bank_bytes+=role.bank.nbytes();s.held.push_back(role.bank);}}
+    for(const auto& [name,role]:r->banks.roles())hold_bank(role.bank);}
   auto values=operands(s);s.held.insert(s.held.end(),values.begin(),values.end());return out;
 }
 std::shared_ptr<WeightedWindowSnapshot> WeightedWindowSnapshot::retain(WeightedFlow& flow,int64_t budget){

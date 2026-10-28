@@ -42,3 +42,13 @@ FP32梯度可归属于FP32/FP16注册参数；本项新完整组合检查首先�
 CPU helper、NPU实际执行、CUDA构建/真机分别记录。
 
 固定源码资格见[2e335e7运行证据](evidence/core5-resident-parameters-20261027.md)。
+
+## 冻结参数池补充
+
+`ParameterBankPool`只在一个私有冻结owner/反向重放内存活，按实际TensorImpl、切片和设备
+共享FP32数值bank；同值独立参数不合并，跨设备仍有各自副本。源句柄保留，源版本变化拒绝，
+首次分配前检查剩余预算；复用不重复扣实际分配。通用`copy_parameter_bank`仍提供独立拷贝。
+各角色仍保存自己的参数名和VJP贡献；训练发布按物理目标去重并校验canonical source一致，
+避免对共享bank重复并发写。checkpoint的参数别名、状态私有性和optimizer边界不变。
+CPU独立切片/别名/版本/预算反例在`cpp/test/parameter_bank.cpp`；设备完整根、训练、恢复
+与实际节省须由当前固定源码资格和测量认证，不能仅凭少扣费推断内存收益。

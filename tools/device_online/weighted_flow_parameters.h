@@ -7,6 +7,7 @@
 #include "weighted_kv_full.h"
 #include "weighted_region.h"
 #include "weighted_source_adaptation.h"
+#include "tide/parameter_bank.h"
 namespace tide::device_online {
 // A role may reshape/select a registered parameter, but never acquires a new
 // parameter identity. The reverse mapping adds all role/user contributions.
@@ -18,7 +19,8 @@ struct WeightedBankRole {
 };
 class WeightedBanks {
  public:
-  WeightedBanks(const std::map<std::string,at::Tensor>&,std::string prefix,at::Device);
+  WeightedBanks(const std::map<std::string,at::Tensor>&,std::string prefix,at::Device,
+                std::shared_ptr<ParameterBankPool> pool=nullptr);
   // One binding group receives the owner's current remaining allowance. Each
   // role consumes it before the next role can allocate, even for tied parameters.
   void limit_bytes(int64_t available);
@@ -32,6 +34,7 @@ class WeightedBanks {
   const std::map<std::string,at::Tensor>& parameters_;
   std::string prefix_;at::Device device_;
   std::map<std::string,WeightedBankRole> roles_;
+  std::shared_ptr<ParameterBankPool> pool_;
   int64_t available_=0;
 };
 WeightedDescribeParameters bind_weighted_describe(WeightedBanks&,int64_t width,int64_t summary,const weighted::RegionalConfig&,int64_t available);

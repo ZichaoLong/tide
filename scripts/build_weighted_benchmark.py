@@ -16,10 +16,11 @@ def main():
     parser.add_argument("--core-build", type=Path, required=True)
     parser.add_argument("--resident-build", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--allow-dirty", action="store_true", help="frozen development snapshot only, not qualification")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     source, dirty = source_state(root)
-    if dirty:
+    if dirty and not args.allow_dirty:
         parser.error("standalone benchmark build requires clean immutable source")
     core, out = args.core_build.resolve(), args.output_dir.resolve()
     core_record = json.loads((core/"build-manifest.json").read_text())

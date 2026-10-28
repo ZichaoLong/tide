@@ -45,13 +45,14 @@ WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Weig
     throw std::invalid_argument("weighted flow requires CPU FP32/FP16 parameters and comparison-identity Next");
   journal_bytes=weighted_flow_preflight(graph,model,q.batch_size,l);
   model=snapshot(std::move(model));validate_window(graph,model,boundary,{},q.cut,q.cut);
-  for(size_t v=0;v<graph.nodes.size();++v){auto n=std::make_unique<WeightedFlowNode>(model,v,boundary,node_devices[v],l.cache,l.tensor_bytes);
+  auto banks=std::make_shared<ParameterBankPool>();
+  for(size_t v=0;v<graph.nodes.size();++v){auto n=std::make_unique<WeightedFlowNode>(model,v,boundary,node_devices[v],l.cache,l.tensor_bytes,banks);
     n->binding.sources.validate(graph);const auto r=graph.nodes[v].region;
     if(!weighted::same_configuration(n->binding.regional,weighted::region_binding(model.regions.at(r))))
       throw std::invalid_argument("weighted node Describe and region configuration differ");
     nodes.push_back(std::move(n));
   }
-  for(size_t r=0;r<graph.regions.size();++r)regions.push_back(std::make_unique<WeightedFlowRegion>(graph,model,r,boundary,d));
+  for(size_t r=0;r<graph.regions.size();++r)regions.push_back(std::make_unique<WeightedFlowRegion>(graph,model,r,boundary,d,banks));
   const auto opts=at::TensorOptions().dtype(model.nodes.at(0).bias.scalar_type()).device(d);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);begin=stop.clone();
   pending=std::make_unique<QueueTransaction>(l.queue,model.width(),graph.nodes.size(),q.batch_size,opts,error);

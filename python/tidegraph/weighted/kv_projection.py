@@ -48,7 +48,9 @@ def projections(memory, plan, batch):
         base = torch.stack([prepared[j]["base"] for _, j in common])
         if x.shape != (len(common), memory.config.width) or base.shape != (len(common), 2*memory.config.width):
             raise ValueError("invalid KV preparation shape")
-        values = base+project(x, memory.adapter_u@memory.adapter_v)
+        # FC §6.2: the adapter is a low-rank map, not a dense temporary.
+        # The unpacked combined matrix remains an independent numerical anchor.
+        values = base+project(project(x, memory.adapter_v), memory.adapter_u)
         local = project(x, memory.summary)
         for r, (k, _) in enumerate(common):
             results[k], summaries[k] = values[r], local[r]
