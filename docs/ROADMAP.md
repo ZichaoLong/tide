@@ -65,7 +65,7 @@ CPU442项、NPU两dtype四组件（含单设备/双卡训练与恢复）、CUDA�
 
 | 事项 | 当前状态与下一步条件 |
 | --- | --- |
-| CUDA真机 | 源码、aarch64构建、sm80/90/100常驻核及安装loader已交付；实际GPU前向、反向、optimizer、驻留、跨卡、容量/恢复与性能未验。有硬件后按[设备门禁](device-control.md)与各模块复现命令分层执行，不以CPU/编译替代 |
+| CUDA真机（用户明确延后） | 2026-10-29用户要求延后GPU限制，本轮不排队真机资格；源码、aarch64构建、sm80/90/100常驻核及安装loader已交付；实际GPU前向、反向、optimizer、驻留、跨卡、容量/恢复与性能未验。有硬件后按[设备门禁](device-control.md)与各模块复现命令分层执行，不以CPU/编译替代 |
 | x86_64目标 | 源码保留可移植入口；本轮工具链与设备证据来自aarch64。新目标须独立构建及资格，不能继承本机结果 |
 | eager GDN默认AdamW数值边界 | ad6d1e7的FP32 normalized L2/scaled-RMS通过原两项失败及恢复；旧1f1ec57/1850434失败记录保留。FP16约.001984的两个strict xfail仍保留，其他数值域未由此认证；见[精度](weighted-precision.md)和[新固定资格](evidence/core5-fp32-normalization-20261028.md) |
 | 默认异步双NPU eager VJP | 当前Torch2.12/CANN9.1纯Torch双卡反向也重现invalid event；显式launch blocking通过，不宣称异步已修复；见[mixed设备报告](evidence/core5-device-20261027.md) |

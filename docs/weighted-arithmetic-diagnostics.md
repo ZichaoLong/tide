@@ -61,6 +61,37 @@ native整条FP64另给`--native-library CPU_CORE --implementation native`。
 原计划SHA256为`6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3`；
 生成后的hash、参数清单与实际源码都要核对。
 
+## 外层反向汇合点诊断
+
+`diagnose_weighted_joins.py`复用上述CLI，仅允许Python CPU FP32，以FP64缓冲累加外层反向图
+各汇合点的贡献，再转回原dtype交给局部VJP。它使用Torch2.12的私有node接口，只供有限定位；
+自定义Function内部的`autograd.grad`仍由原引擎执行，所以不是整张反向图全精度。
+广播输入梯度按原形状缩减，Python Function的非Tensor参数不当作梯度边；None/连接零分别保留。
+只支持全标量loss、一阶、已清空leaf梯度、无hook/retain-grad的诊断用例，拒绝其他接口请求。
+不能作为生产引擎、独立数学oracle、native/设备或性能资格。入口退出会还原临时补丁。
+
+```sh
+python scripts/diagnose_weighted_joins.py --self-check
+python scripts/diagnose_weighted_joins.py --workload NEW_PLAN/workload.json --dtype float32 \
+  --implementation python --arithmetic linear_reduce_norm64 --checkpoint-check --output-dir NEW_JOIN_CHECK
+```
+
+`join-probe.json`单列实际汇合/广播次数；`result.json`的完整记录/梯度/optimizer失败仍以exit2返回。
+`test_weighted_join_probe`验证手算相消、广播VJP、非Tensor参数/None/零、两步小图真实恢复及禁止覆盖。
+只提升外层汇总不能恢复已经在局部VJP里舍掉的信息，也不保证误差单调减少。
+
+## 原反馈图与异步见证
+
+`diagnose_weighted_feedback.py --native-library CPU_CORE --dtype float32 --output-dir NEW_FEEDBACK`
+固定原W32/B4/每窗4位置/seed7的KV反馈PDG材料，比较独立Python标量与native streaming/prefill。
+四个连续窗逐项核对完整记录、命名参数梯度、SGD参数/动量；第三次更新后各自保存实际checkpoint，
+换owner后第四窗完整记录/梯度/参数/槽要求逐值恢复。`--dtype float64`是显式另一个配置。
+任何严格差异返回2，元数据/数值有限性仍由公共比较检查；没有吞吐采样。
+
+`diagnose_torch_peer.py --policy stock|single_thread|device_guard|cpu_bridge`保留同一个12轮
+纯Torch小反例。每种政策使用独立进程并显式unset launch blocking；CPU桥是有意经主机传输的
+定位方案。任一小反例通过都不代表完整图异步资格；不安装生产传输替换或修改公共环境。
+
 `tests/test_weighted_arithmetic_probe.py`以手算相消、独立literal Jacobian验证干预本身，
 并覆盖int64、None/零报告、非有限值、版本、异常恢复、适用域拒绝和小图两步实际checkpoint。
 `test_weighted_workload_training.py`保持Python/native默认两dtype的完整训练/恢复检查。
