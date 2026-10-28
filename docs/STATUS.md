@@ -1,43 +1,43 @@
 # 当前交接 — 2026-10-28
 
-三项审查修复及本机相关资格已完成。授权分支`graph-execution-foundation`，工作路径
-`/mi/data2T/zlong/home/llm/graph-execution-foundation`；固定实现
-`1d19c5998b96689b3620ecb69c7f712a9dd84ad0`已推送。本页与资格证据单独提交。
-数学仍为`0770593838a37c790a568226930567ed60f99b83`，19份快照及5份legacy已与上游Git对象核对。
-[审查修复报告](evidence/core5-review-fixes-20261028.md)提供范围、独立反例和干净源码复现命令；
-[同名JSON](evidence/core5-review-fixes-20261028.json)保存哈希、源码/构建身份及全部任务终态。
+执行用户新授权的三个方面：已知限制处理、LH/fractal及本仓库core-3性能经验迁移、
+正确性与参数匹配性能设施。按ROADMAP的A—E持续实施，不在阶段提交后暂停。
+授权分支graph-execution-foundation；基线58de04b1bfd64704616f55f4f9ea84a404775ded，
+实现基线1d19c5998b96689b3620ecb69c7f712a9dd84ad0，固定数学0770593838a37c790a568226930567ed60f99b83。
 
-## 完成范围
+## 当前工作与下一步
 
-- ClockedState递归捕获带权参数，按实际局部时间透传分组/prepared；五记忆独立根、版本及共享KV/delta三步SGD通过。
-- Python/C++ scalar/batch quad拒绝数学正支持的除法下溢；独立闭式反例与可表示正数/真实零边界通过。
-- resident参数bank在展开/转换/拷贝前准入，逐角色扣减FP32额度，来源表/填充及Full输出预留；CPU与NPU真实边界通过。
-- CPU正式442项全部通过；CUDA工具链CPU定向31项及sm80/90/100四组件构建/loader/help通过，无GPU真机资格。
-- standalone NPU FP32/FP16各21图、15配置、单设备与双卡各五配置20次更新通过；含完整记录、反向、共享参数、optimizer、恢复及拒绝。
+启动状态干净，无继承活动任务；19份core-5/5份legacy快照校验通过。
+当前实施A/B：静态参数清单、参数预算匹配、可扩展拓扑/用例、历史经验索引与过时文档纠偏。
+随后处理最小数值/异步复现，依赖独立时并行推进工程工作；不使用子代理。
+静态参数/计划及Python共享计算开发测试120项通过，低秩手算/完整根另16项通过。
+新增二进制材料、五族standalone配置解码、初始化/共享KV/ready副本优化。
+下一步：冻结开发副本构建核心与standalone，跑相关完整根/训练/恢复及损坏材料拒绝测试；通过后固定实现提交。
+长任务开始前在此记录冻结源码、unit、日志、有限资源及确切检查命令。
 
-核心复用冻结开发快照，完整C++哈希与1d19c59一致；resident组件含最终Full预留，
-从干净1d19c59重新构建。详细来源与复用范围在报告中分列。
-首次NPU任务构建通过，但CANN因任务PATH中的Python入口不匹配而初始化失败，exit1保留；
-修正后的独立runtime任务复用相同二进制完成8组。公共工具链未修改，任务入口规范已补入[开发文档](development.md)。
-三项早期等待依赖时取消的任务仍为exit143；旧失败不改称通过。
+## 活动任务
 
-## 任务终态与接续
+准备提交core5-performance-dev开发服务：background.slice，Nice10，2构建线程/单线程ATen，CPUQuota200%、MemoryMax64G、2400秒上限。
+固定副本artifacts/worktrees/core5-performance-dev，基线58de04b加本轮dirty快照；scripts/develop.py记录source.tar.gz与树hash。
+unit=core5-performance-dev-20261028；记录artifacts/jobs/core5-performance-dev/{status.json,task.log,development.json}。
+检查：systemctl --user show core5-performance-dev-20261028 -p ActiveState -p Result -p ExecMainStatus；python scripts/status.py。
+停止：systemctl --user stop core5-performance-dev-20261028。开发任务不替代固定提交资格；开发服务已核验active/running、Transient=yes及独立ControlGroup；终态待验。
+另提交core5-async-baseline-20261028：固定58de04b，artifacts/worktrees/core5-performance-baseline，
+默认异步双NPU Python delta-pdg完整VJP，当前9.1工具链；队列等候180秒、运行300秒，
+Nice10/单线程/MemoryMax32G，日志artifacts/jobs/core5-async-baseline/task.log和checks/result.json。
+已终态failed/exit1：完整all-VJP重现CANN rtStreamWaitEvent invalid event，设备物理1/13。
+CPU半精度GDN诊断开发重现step1 nodes.5.kernel.conv.weight[0,2]差.001983642578125；
+显式保留原容差及失败，开发记录artifacts/core5-half-numeric-dev，待固定提交复核。
+检查/停止同名systemctl unit；该任务独立记录旧限制重现，失败不改记通过。
+旧core5-review-fixes各任务保持终态，不恢复旧队列。
 
-无活动任务；本轮修复无需继续运行或恢复旧队列。
-记录位于`artifacts/jobs/core5-review-fixes-NAME/{status.json,task.log}`：
-`cpu-qualify`、`cuda-qualify`、`npu-runtime-qualify`均passed/exit0，`npu-qualify`仍failed/exit1。
-对应unit为`tide-core5-review-fixes-NAME-20261028.service`；NPU另有`queue-state.json`和`checks/result.json`。
-新NPU任务物理1/13→逻辑0/1、3300秒任务/3600秒unit，独立background.slice；最终状态、全部用例及哈希已核验。
+## 已有证据与保留边界
 
-下一次接续先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`，
-再按新需求与[ROADMAP](ROADMAP.md)选择范围。仓库导航与复现不依赖旧运行目录。
-本次最终改动仅为证据、当前交接与文档链接；实现仍为上述固定提交。
+[上一实现资格](evidence/core5-review-fixes-20261028.md)：CPU442项，standalone NPU FP32/FP16四组件、
+单设备/双卡训练恢复通过；CUDA sm80/90/100构建与CPU31项通过，无GPU真机资格。
+CANN任务Python PATH问题已解决，旧失败仍保留；参考仓库和公共工具链保持只读。
+默认异步双NPU eager VJP、eager FP16 GDN/AdamW、SDK FP32 affine及FP32反馈PDG严格失败
+尚未由当前新增工作解除。CUDA真机/x86_64、大规模容量和跨卡吞吐另验。
+现有core-5性能仅覆盖宽4/32、3/8节点；不能外推旧core-3十亿级参数用例。
 
-## 保留边界
-
-参考仓库与公共环境只读；本机工具链入口为现行`/etc/modulefiles`与
-`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`，不同Torch/CANN环境分别构建。
-CUDA真机和x86_64未资格；本轮未新增性能测量或Python-owned NPU资格。
-既有GDN FP16默认AdamW约.001984、默认异步双NPU eager VJP invalid event、
-SDK FP32 affine第三轮evidence差3.09944e-6、FP32反馈PDG两项4.11272e-6/2.71201e-6继续保留。
-条件和独立证据见[ROADMAP](ROADMAP.md)、[语义对应](semantic-map.md)、[证据索引](evidence/README.md)。
+本轮源修改及证据以git status和ROADMAP为准；本页取代此前已完成审查任务的当前状态。
