@@ -60,3 +60,8 @@ CPU与目标都采用同一量化初态；CPU FP32是另一个精度基准，不
 构造和 warmup 单列。记录真实 kernel 类型/名称、显式传输/主机标量、candidate/Full/消息工作量，
 保留原始 trace 并拒绝观测到的意外 host fallback。该小 profile 不作吞吐排名，也不证明所有
 算子在任何形状都不会回退。NPU 的设备 AiCPU 算子与主机 CPU fallback 分开记录。
+
+[2026-10-29定向核对](evidence/core5-nongpu-boundaries-20261029.md)将原standalone SDK
+fc/affine FP32 mixed-a/c两项在ead6f34分别验收通过（原AdamW、四次更新和恢复）。
+旧470ce06失败保持原记录，不外推全24图。新纯Torch四政策小反例仍保留stock/guard失败，
+单线程小反例通过而完整图失败；默认异步资格未解除，公共环境与生产传输未改。
