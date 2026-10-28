@@ -5,18 +5,24 @@
 #include <cmath>
 #include <stdexcept>
 namespace {
-void half_literal(){
+void low_precision_literal(at::ScalarType dtype){
   using namespace tide::weighted::detail;
   auto old=at::full({},(tide::Index{1}<<54)+7,at::kLong),now=old+100000;
   auto decay=passive_decay(now-old,{0.,1e-6},at::zeros({2},at::kHalf));
   if(!at::equal(decay,at::tensor({1.,std::exp(-.1)},at::kFloat).to(at::kHalf)))
     throw std::runtime_error("half long-clock zero-rate decay mismatch");
-  auto x=at::tensor({0.,0.,1e-4,-2e-4,3.,4.},at::kFloat).to(at::kHalf).reshape({3,2}).set_requires_grad(true);
-  auto scale=at::tensor({.3,-.7},at::kFloat).to(at::kHalf).set_requires_grad(true);
-  auto bar=at::tensor({.4,-.2,.6,.8,-.3,.5},at::kFloat).to(at::kHalf).reshape({3,2});
+  auto x=at::tensor({0.,0.,1e-4,-2e-4,3.,4.},at::kFloat).to(dtype).reshape({3,2}).set_requires_grad(true);
+  auto scale=at::tensor({.3,-.7},at::kFloat).to(dtype).set_requires_grad(true);
+  auto bar=at::tensor({.4,-.2,.6,.8,-.3,.5},at::kFloat).to(dtype).reshape({3,2});
+  const double rtol=dtype==at::kHalf?2e-3:1e-5,atol=dtype==at::kHalf?1e-3:1e-6;
   for(int kind=0;kind<3;++kind){
     auto y=kind==2?tide::weighted::detail::scaled_rms(x,scale,1e-5):
       kind==1?tide::weighted::detail::epsilon_l2(x,1e-5):tide::weighted::normalize(x,1e-5);
+    if(dtype==at::kFloat){
+      auto denominator=at::sqrt(1e-5+(kind==1?x.square().sum(-1,true):x.square().mean(-1,true)));
+      auto original=(kind==2?scale*x:x)/denominator;
+      if(!at::equal(y,original))throw std::runtime_error("FP32 normalization forward changed");
+    }
     auto expected=at::zeros_like(x),dx=at::zeros_like(x),ds=at::zeros({2},at::kDouble);
     const double divisor=kind==1?1.:2.;
     for(int i=0;i<3;++i){double v[2]={x[i][0].item<double>(),x[i][1].item<double>()};
@@ -28,14 +34,14 @@ void half_literal(){
       }
     }
     auto g=torch::autograd::grad({y},{x,scale},{bar},false,false,true);
-    if(!at::allclose(y,expected,2e-3,1e-3)||!at::allclose(g[0],dx,2e-3,1e-3)||
-       (kind==2?!at::allclose(g[1],ds.to(at::kHalf),2e-3,1e-3):g[1].defined()))
-      throw std::runtime_error("half normalization literal Jacobian mismatch");
+    if(!at::allclose(y,expected,rtol,atol)||!at::allclose(g[0],dx,rtol,atol)||
+       (kind==2?!at::allclose(g[1],ds.to(dtype),rtol,atol):g[1].defined()))
+      throw std::runtime_error("FP16/FP32 normalization literal Jacobian mismatch");
   }
 }
 }
 void check_weighted_normalization(const at::TensorOptions& o){
-  if(o.dtype()==at::kFloat)half_literal();
+  if(o.dtype()==at::kFloat){low_precision_literal(at::kHalf);low_precision_literal(at::kFloat);}
   auto x=at::tensor({3.,4.,-2.,.5},o).reshape({2,2}).set_requires_grad(true);
   auto y=tide::weighted::normalize(x,2.);
   if(!at::equal(y,x/at::sqrt(2.+x.square().mean(-1,true))))throw std::runtime_error("RMS forward changed");

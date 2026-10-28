@@ -33,8 +33,8 @@ class _Normalize(torch.autograd.Function):
 norm = _Normalize.apply
 
 
-class _HalfScaledRMS(torch.autograd.Function):
-    """Half operands/output with FP32 normalization and first-order contraction."""
+class _FP32ScaledRMS(torch.autograd.Function):
+    """FP16/FP32 operands, FP32 normalization and normalized first-order VJP."""
     @staticmethod
     def forward(ctx, value, scale, epsilon):
         ctx.set_materialize_grads(False)
@@ -57,12 +57,12 @@ class _HalfScaledRMS(torch.autograd.Function):
 
 
 def scaled_rms(value, scale, epsilon):
-    if value.dtype == torch.float16:
-        return _HalfScaledRMS.apply(value, scale, epsilon)
+    if value.dtype in (torch.float16, torch.float32):
+        return _FP32ScaledRMS.apply(value, scale, epsilon)
     return scale*value/torch.sqrt(epsilon+value.square().mean(-1, keepdim=True))
 
 
-class _HalfL2(torch.autograd.Function):
+class _FP32L2(torch.autograd.Function):
     @staticmethod
     def forward(ctx, value, epsilon):
         ctx.set_materialize_grads(False)
@@ -84,6 +84,6 @@ class _HalfL2(torch.autograd.Function):
 
 
 def epsilon_l2(value, epsilon):
-    if value.dtype == torch.float16:
-        return _HalfL2.apply(value, epsilon)
+    if value.dtype in (torch.float16, torch.float32):
+        return _FP32L2.apply(value, epsilon)
     return value/torch.sqrt(epsilon+value.square().sum(-1, keepdim=True))

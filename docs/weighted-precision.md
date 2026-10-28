@@ -1,4 +1,4 @@
-# 带权 eager 局部函数的 FP16 契约
+# 带权 eager 局部函数的精度契约
 
 固定数学定义从 [带权绑定](weighted-message.md)、[循环](weighted-recurrent.md) 和
 [配置对应](semantic-map.md)进入；实际资格由 [STATUS](STATUS.md) 与证据索引给出。
@@ -13,7 +13,9 @@ payload、参数和浮点原始状态保持 FP16；时间、计数、KV 与卷�
 发送强度转回 payload dtype 时丢失正支持仍明确拒绝。
 
 Architecture §1 RMS、GDN §1 epsilon-L2 和 GDN/SSD §3 scaled-RMS 使用原始 half 输入，
-在 FP32 计算范数、缩放及一阶收缩后返回 half；FP32/FP64 公式与运算顺序不变。
+在 FP32 计算范数、缩放及一阶收缩后返回 half。
+FP32的GDN epsilon-L2与GDN/SSD scaled-RMS也使用下述normalized一阶收缩；
+其前向保持原FP32表达式逐值相同，不提升到FP64。FP64路径的表达式与反向保持不变。
 设 `n=x/d`，RMS 的输入 VJP 是 `(b-n*mean(b*n))/d`，L2 将 mean 替换为 sum；
 有逐通道 rho 时 b 替换为 b*rho，rho 的 VJP 为 `b*n` 并归约广播使用者。
 浮点 cast 使用声明的一阶 identity VJP，不对 rounding 阶梯做 gradcheck。
@@ -57,5 +59,11 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 第一步两侧梯度约−2.00200247e-8和−2.00375894e-8；默认AdamW的epsilon为1e-8，
 梯度的微小差异会影响更新。独立80位Decimal使用实际梯度及旧动量计算，复现更新差异的放大；
 这不证明所有上游梯度差异的来源均已定位，也不把FP64或其他optimizer的通过回填给此配置。
-原测试和断言保持失败，没有改为xfail或放宽容差。详见
+上述固定提交的原测试和断言保持失败，没有改为xfail或放宽容差。详见
 [稳定共享/精度证据](evidence/core5-stable-preparation-precision-20261028.md)。
+
+当前后续实现把normalized L2/scaled-RMS解析VJP接入Python/C++ FP32；
+`test_weighted_half_normalization.py`与C++ literal Jacobian同时覆盖FP16/FP32、零/小量、
+scale广播、None/连接零、版本和一阶边界，并要求FP32前向逐值不变。
+这是同一实值函数的一阶导数重排，不是有限迭代导数、HST或二阶承诺；
+原GDN完整AdamW/恢复用例仍使用原参数、输入及容差，实际资格见STATUS。

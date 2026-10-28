@@ -75,8 +75,10 @@ GDN 使用 epsilon-L2 key/query、dk^(-1/2) query 缩放、输入决定的保留
 Full 每头 RMS 后乘 SiLU 输出门。SSD 的 B/C 不做 L2，写入系数严格为 d=w*Delta，
 不是精确零阶保持系数；输出加入 D*value，先门控，再对全部内部宽度做 RMS。
 两者再使用共同的输入残差与 normalized SwiGLU。门和衰减不改变消息存在性；
-浮点下溢不触发人为删除原始状态。公开 VJP 为这些实值函数的普通一阶自动微分，
+浮点下溢不触发人为删除原始状态。公开 VJP 为这些实值函数的普通一阶导数，
 包含全部门、卷积、归一化、摘要和参数共享贡献；不借用旧 HST。
+FP32 L2/scaled-RMS采用normalized解析收缩，前向逐值不变；对应公式、精度边界与
+literal Jacobian见[精度契约](weighted-precision.md)，完整训练/恢复独立验收。
 
 ## 逐函数对应及独立检查
 
