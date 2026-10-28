@@ -1,0 +1,798 @@
+{
+  "schema": "tide-core5-fp32-normalization-evidence-v1",
+  "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "jobs": [
+    {
+      "name": "core5-fp32-normalization-qualify",
+      "unit": "core5-fp32-normalization-qualify-20261028",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "status": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "dirty": "",
+        "state": "passed",
+        "started": "2026-10-28T14:12:32.452324+00:00",
+        "finished": "2026-10-28T14:18:31.202874+00:00",
+        "exit_code": 0,
+        "command": [
+          "timeout",
+          "1170",
+          "python",
+          "REPO/.local/core5-fp32-normalization-qualify.py"
+        ]
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-fp32-normalization-qualify/status.json",
+        "bytes": 495,
+        "sha256": "a57bbefc3ffec47fae416ac54aa9e1a674db8e565bf7f3e724601793b39cd754"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-fp32-normalization-qualify/task.log",
+        "bytes": 937,
+        "sha256": "1cbce19a6c2231f1c03ceba43c035a5833f5d2fc5a8b0e0310448c5a9b3a4fbf"
+      },
+      "launcher": {
+        "path": ".local/core5-fp32-normalization-qualify.sh",
+        "bytes": 590,
+        "sha256": "71cac394ed1cc04a1be0bb6189ea929b85bb88459f38846e02a82da4e1b1e63b"
+      },
+      "lifecycle_evidence": "Live PID, Transient=yes, background.slice and external control group were checked immediately after launch in this session. Terminal unit was unloaded; default systemctl success fields are not a workload result. Durable status/exit code and acceptance reports establish the result.",
+      "qualification": {
+        "path": "artifacts/jobs/core5-fp32-normalization-qualify/qualification.json",
+        "bytes": 4932,
+        "sha256": "c67e556f320189c617ad7d18c8382f9f1e8207785a4172451a19d0b5a679d413"
+      },
+      "stages": [
+        {
+          "command": [
+            "REPO/.local/venv-core5/bin/python",
+            "scripts/check_upstream.py"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "REPO/.local/venv-core5/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_weighted_half_normalization.py",
+            "tests/test_weighted_normalization.py",
+            "tests/test_weighted_recurrent_formulas.py",
+            "tests/test_weighted_recurrent_execution.py",
+            "tests/test_weighted_packed.py",
+            "tests/test_weighted_state_vjp.py",
+            "tests/test_weighted_read_batch.py",
+            "tests/test_weighted_query_vjp.py",
+            "tests/test_weighted_query_training.py",
+            "tests/test_weighted_precision.py",
+            "tests/test_cpp_weighted_training.py",
+            "tests/test_cli.py::test_cpp_custom_state_kernel",
+            "--dtype",
+            "both",
+            "--junitxml=REPO/artifacts/jobs/core5-fp32-normalization-qualify/tests.xml"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "core": {
+        "source": "1850434d842227994fd11aa2f8b65ed1d503638d",
+        "cpp_source_sha256": "8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2",
+        "torch": "2.12.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.1.0"
+        },
+        "backend": "cpu",
+        "npu_runtime": null,
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "4ec7d42a49bbe1aaf65c056f0d56b98e2ce6d9e622a528414c0b195b4c4bf785",
+          "libtidegraph_runtime.a": "4ed64b0f6fbb49ec9a553855f2ae198019fc2c99ccd3ff4ebd80b3d974d35061",
+          "_tide_native.so": "7ed4ad0311fc3f5bdd2ebadee578b82b128905ad579471f3023f86b2d2b96d52",
+          "tidegraph-smoke": "ce7218de9d6ad3248d5512d00ac8bc1ea6be30b92bae86b023b86075571f18f9",
+          "tidegraph-kernel-check": "7e88b90b04133844ea203423e9b9144ea23d788b99d2da1d533b9e1d0ccc0f65",
+          "tidegraph-full-check": "d6aa5aae438b9e9bc91f569da631f6d0340a40cbd6fcc7423cb791f9043377ba",
+          "tidegraph-aggregate-check": "57f6e49a26499bbda15011d9a737a2adf38d04fe42a62234d95bc188d36d1731",
+          "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+          "tidegraph-checkpoint-check": "90451a028bd3cacd7ad6d322ae074cd57e755caf005ec30eaf928249d8e810e8",
+          "tidegraph-weighted-training-check": "3fa0ad93ede54b661e0108a1a8bd820eb957defcf47641917a0189f2847753b7",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "1b29561ed9a074f925604ffd26e1ed4022d4bfa3c5c4513a4b34a6f3c75e53a9",
+          "tidegraph-scale-bench": "1c62d65fe58d543ed21fef953fa0bd7c3dc3d26bbde16731e2b221e9ab948c75",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "49f57d03e9e33bfa0aedc673116019a2d1de4968c39b1b0b0f19cfb4ad4ec377",
+          "tidegraph-greedy-check": "046def15655e7dbbb0c5108588d96f0177ba708e3ff3d2614e96bb2c779bf091",
+          "tidegraph-accelerator-check": "b47bf58e484649e8c3c0c9b6bbc24174fc74b105d1a515714af782321b1dbe24",
+          "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+          "tidegraph-read-precision-check": "e6c2b24ae77dcd3604ebb3ceae30ff0a68207fbf4912e897f3ceaf4b85b07add",
+          "tidegraph-placement-check": "43530019d9635d7c94e2ecb9fae2eb0f78f564d037fdbf55900ac43cd312eb72",
+          "tidegraph-payload-ownership-check": "67cfec57b5dccbb68b059775d73e0a5c28167c054028b7e4de3b3f257525d6b1",
+          "tidegraph-weighted-binding-module-check": "6e50c03e7887ff8273d1adc58c6fe231f0020daa9ab415f73ddff73fa354853a",
+          "libtidegraph-weighted-binding-module.so": "8c469913e860099b1a673e9df0a0b0ef1fcea6fd45fba9c9cc08e10044e72be2"
+        }
+      },
+      "reuse": {
+        "verified_binary_count": 23,
+        "verified_cpp_source_sha256": "8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2",
+        "note": "Cached development base SHA is retained, not relabeled. Full C++ content and every binary hash matched this clean qualification commit before and after execution."
+      },
+      "driver_sha256": "3cf6cb2cc6e1b2114db686d1178db2fe97a4ea353d815e3d5fd952398a65a3b4"
+    },
+    {
+      "name": "core5-fp32-normalization-npu",
+      "unit": "core5-fp32-normalization-npu-20261028",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "status": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "dirty": "",
+        "state": "passed",
+        "started": "2026-10-28T14:12:32.502031+00:00",
+        "finished": "2026-10-28T14:13:34.455692+00:00",
+        "exit_code": 0,
+        "command": [
+          "timeout",
+          "1170",
+          "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+          "REPO/.local/core5-fp32-normalization-backend.py",
+          "npu"
+        ]
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-fp32-normalization-npu/status.json",
+        "bytes": 567,
+        "sha256": "a8ce1f1ecfc2917886d1b12490d85951d4c3cb890c2bb6602995bdd6cb02da45"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-fp32-normalization-npu/task.log",
+        "bytes": 3320,
+        "sha256": "59c21331887e1ca10e2d2d54ef3cb17971d26f4be5e5b4ee1b2095ee8c02d04b"
+      },
+      "launcher": {
+        "path": ".local/core5-fp32-normalization-npu.sh",
+        "bytes": 704,
+        "sha256": "7f28563ddf3cb4eeb8df1ffbfa5523e63b9f0355acdae8e17bedde66c7222810"
+      },
+      "lifecycle_evidence": "Live PID, Transient=yes, background.slice and external control group were checked immediately after launch in this session. Terminal unit was unloaded; default systemctl success fields are not a workload result. Durable status/exit code and acceptance reports establish the result.",
+      "qualification": {
+        "path": "artifacts/jobs/core5-fp32-normalization-npu/qualification.json",
+        "bytes": 9560,
+        "sha256": "376c3e441d44b09e19fac99a57f59e66b0764f7eef1c2820d2ff766df17f9e13"
+      },
+      "stages": [
+        {
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+            "REPO/artifacts/worktrees/core5-private-qualified/scripts/build.py",
+            "--backend",
+            "npu",
+            "--build-dir",
+            "REPO/artifacts/worktrees/core5-private-qualified/build/npu-core",
+            "--jobs",
+            "2",
+            "--npu-runtime",
+            "standalone"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "REPO/artifacts/worktrees/core5-private-qualified/build/npu-core/tidegraph-kernel-check",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float32"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "REPO/artifacts/worktrees/core5-private-qualified/build/npu-core/tidegraph-kernel-check",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+            "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+            "--job-id",
+            "core5-fp32-normalization-npu-20261028",
+            "--project",
+            "graph-execution-foundation",
+            "--priority",
+            "0",
+            "--npu-count",
+            "1",
+            "--max-wait-seconds",
+            "180",
+            "--state-file",
+            "REPO/artifacts/jobs/core5-fp32-normalization-npu/queue-state.json",
+            "--",
+            "timeout",
+            "300",
+            "REPO/artifacts/worktrees/core5-private-qualified/build/npu-core/tidegraph-weighted-training-check",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float32",
+            "--case",
+            "fc/gated_delta",
+            "--case",
+            "hb/gated_delta",
+            "--case",
+            "fc/ssd",
+            "--case",
+            "hb/ssd",
+            "--output-dir",
+            "REPO/artifacts/jobs/core5-fp32-normalization-npu/eager-recurrent"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "core": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "cpp_source_sha256": "8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2",
+        "torch": "2.10.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.0.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+          }
+        },
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "01e87ed6fcc537a8816caffe6bee62b6af33f87cf1a6e88330bb75b90af0658e",
+          "libtidegraph_runtime.a": "8fb4f9b018bfe9103eb87770a8a8ed4b6b5dcb4955664abf485efe4a7d388949",
+          "tidegraph-smoke": "b26558cc42013d1c2515c35d7c9eb5aefca277af0e48deb57155db0c71c1c7a4",
+          "tidegraph-kernel-check": "d767916d61d0458e7f1177f68b27fa9a73a31aec34520dafb828271a9adbe5c2",
+          "tidegraph-full-check": "a55a2442ac6ed0c245f82230258570e69a0c17c681d99303ceeb0652d14e5a61",
+          "tidegraph-aggregate-check": "97c3213fae4eaa8ddc937ce00daafa59d9a977f3ea25e9ccf27f048efc813a2c",
+          "tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+          "tidegraph-checkpoint-check": "cb2a782b3d2510e5bc4588754ee7da1175eca18e314642fe6f3d5ed16013f138",
+          "tidegraph-weighted-training-check": "cc70deb7bd17c6a904a1b0531b331382485fc86d86774d83c80a9103a0058f0b",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "91f0024620b8c02d4c0cf17f781403ce05c17ca9a6e843cca9e9a4ed7d57c9bc",
+          "tidegraph-scale-bench": "63e2b988d141b01f88507bcaf395e14abdff8608fa82db427329260955ccf3de",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "4c6a10446994ed1cbaf736692dcc46fc3ad046111585114de449667b37562079",
+          "tidegraph-greedy-check": "34517809793af39be5e651315c8b495ae8f4af4cb3ce981cbc13dd38fa31bdab",
+          "tidegraph-accelerator-check": "bacaac03f8bc3e9ac6314351b7688acec7522a418c83d3e3d65aed1e597db07a",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "5e4094037f5c1d889f72a091daff85391845d5361a3bdec2308be07760b83c46",
+          "tidegraph-placement-check": "c5abec16de744d32fb75d73a91dd009f566d14f0057654f59c330f4c1bc7b198",
+          "tidegraph-payload-ownership-check": "f31c2e86d9e765e3186220e5f1d39bdc60aa5ab1add5ab8735b6a9c8f1ae418b",
+          "tidegraph-weighted-binding-module-check": "c657814b94bb1f4cef58a765118547ecd1e34dbe6ab51a0840a8b57f480f956d",
+          "libtidegraph-weighted-binding-module.so": "e48d04489cf335fec764feb5519800de084765ff290a0f008ff88461c9a98e12"
+        }
+      },
+      "driver_sha256": "6cad60af25d63877261578d68f7dc61bb6189f3b814bf1d7f1a55de1ba5057ae",
+      "queue": {
+        "elapsed_seconds": 35.69911539927125,
+        "job_id": "core5-fp32-normalization-npu-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-28T14:13:34.415020+00:00"
+      },
+      "training": {
+        "state": "passed",
+        "cases": 4,
+        "updates_per_case": 4,
+        "complete_native_checkpoint": true,
+        "cpu_reference": true,
+        "placement": "native",
+        "payload_dtype": "float32",
+        "scoring_dtype": "profile",
+        "optimizer": "adamw",
+        "loss_scale": 1,
+        "fp32_masters": false
+      }
+    },
+    {
+      "name": "core5-fp32-normalization-cuda",
+      "unit": "core5-fp32-normalization-cuda-20261028",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "status": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "dirty": "",
+        "state": "passed",
+        "started": "2026-10-28T14:12:32.535417+00:00",
+        "finished": "2026-10-28T14:12:56.370061+00:00",
+        "exit_code": 0,
+        "command": [
+          "timeout",
+          "1170",
+          "python",
+          "REPO/.local/core5-fp32-normalization-backend.py",
+          "cuda"
+        ]
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-fp32-normalization-cuda/status.json",
+        "bytes": 496,
+        "sha256": "2cf74c832422d515ef33e5f90f41d318c02500762467206b7e9af3dc2cacbc13"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-fp32-normalization-cuda/task.log",
+        "bytes": 3951,
+        "sha256": "9571266ebb7cc4abf108894bdaff90e66cdeaac26a0447a808f48e699ff405d9"
+      },
+      "launcher": {
+        "path": ".local/core5-fp32-normalization-cuda.sh",
+        "bytes": 607,
+        "sha256": "117ce636e095c4f700aed74a747a4508a82cd4015e8b530815fb0bb079811f9a"
+      },
+      "lifecycle_evidence": "Live PID, Transient=yes, background.slice and external control group were checked immediately after launch in this session. Terminal unit was unloaded; default systemctl success fields are not a workload result. Durable status/exit code and acceptance reports establish the result.",
+      "qualification": {
+        "path": "artifacts/jobs/core5-fp32-normalization-cuda/qualification.json",
+        "bytes": 7785,
+        "sha256": "f960e410c85e634f223f4319fea41087f7aecdb64823e03966d0d3ffeb1e78d6"
+      },
+      "stages": [
+        {
+          "command": [
+            "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python",
+            "REPO/artifacts/worktrees/core5-private-qualified/scripts/build.py",
+            "--backend",
+            "cuda",
+            "--build-dir",
+            "REPO/artifacts/worktrees/core5-private-qualified/build/cuda-core",
+            "--jobs",
+            "2"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "REPO/artifacts/worktrees/core5-private-qualified/build/cuda-core/tidegraph-kernel-check",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float32"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "REPO/artifacts/worktrees/core5-private-qualified/build/cuda-core/tidegraph-kernel-check",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "core": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "cpp_source_sha256": "8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2",
+        "torch": "2.10.0+cu128",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": null
+        },
+        "backend": "cuda",
+        "npu_runtime": null,
+        "torch_npu": null,
+        "cuda": "12.8",
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "625cd236e70644b89130274c511839716ee5c2aedb38e3ce2d4d20714a59061c",
+          "libtidegraph_runtime.a": "64ae253e7d7655eb9d53249d5d1d276381e202cf58554cb9d5e913b5ca88a60a",
+          "_tide_native.so": "3f90d2694eca0f96497e91102936ee86e3fd31268b9ad90480ea13c6c5f802dd",
+          "tidegraph-smoke": "b5f375bc7291bdfba0c65e80c4ccb0e5a5fdbc0302911eaa5e59557227df573e",
+          "tidegraph-kernel-check": "8d857e448e36e5b6c8ab233124ba188aef42215f17094af95db2a66a833ae77c",
+          "tidegraph-full-check": "6f3298b5042d189307eeef21534bf774584705aaf353b2a85035992a6a0a32be",
+          "tidegraph-aggregate-check": "e496c58c4fac950ac50fe38a01e2485c24af4814391800a9387c33726838b1de",
+          "tidegraph-optimizer-check": "23c9d6a63451db9d746a5dea556467128363affaedbb670f1b8e290ff7ec8ff2",
+          "tidegraph-checkpoint-check": "07beffad9e817253b680fc5e1f8fbacc394256e5dc6f4630f3958105e0000dac",
+          "tidegraph-weighted-training-check": "a77175acddf5b648d91a756600d78d138a5fa0e0e428f668c4f432b3f4e63371",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "f0e7df0647d9618c198d8c0dc3841858ce964c190ffaaf10758a81ef4a776558",
+          "tidegraph-scale-bench": "202efa1c2f44759eb232c60b0610b14fb3bfd6b5ad89dbc7862fda359590960d",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "cee34ab8a75bfb9ba5bbe76798e785ce64aaad0e8f45f4c87a4bf86f19431fe6",
+          "tidegraph-greedy-check": "4bf394b1ed3c210750c447d2a7211031607bb12f3416ad7e701979af000011d3",
+          "tidegraph-accelerator-check": "76392d2ce172b1457b1938395cb9f21bb552712be58596a5cbeb6dd412d321a9",
+          "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+          "tidegraph-read-precision-check": "9fa6c37962f8f69264b1bb9d6ea3f6b37698451a2627b5fb009498fd391d361c",
+          "tidegraph-placement-check": "3651abb11f1e4e162ddefd774bfdb9e649254d8a62cea4070029ad7a0f92582c",
+          "tidegraph-payload-ownership-check": "0f89da1a86b6088d270ab709bc1af8aa18d19f0ce6bba0dcd9c9f88413adf68a",
+          "tidegraph-weighted-binding-module-check": "7883c11b8c44b3b9f43acaabef8dbfc0d7b7943da780dd44ec4d88efe16f1313",
+          "libtidegraph-weighted-binding-module.so": "f9e689f71ba7a7e1ee310d88f7f4518298811b7bc06829027d5a9d4d341d809b"
+        }
+      },
+      "driver_sha256": "6cad60af25d63877261578d68f7dc61bb6189f3b814bf1d7f1a55de1ba5057ae"
+    },
+    {
+      "name": "core5-fp32-normalization-python-npu",
+      "unit": "core5-fp32-normalization-python-npu-20261028",
+      "systemd": {
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "status": {
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "dirty": "",
+        "state": "passed",
+        "started": "2026-10-28T14:14:19.864502+00:00",
+        "finished": "2026-10-28T14:15:20.336118+00:00",
+        "exit_code": 0,
+        "command": [
+          "python",
+          "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "--job-id",
+          "core5-fp32-normalization-python-npu-20261028",
+          "--project",
+          "graph-execution-foundation",
+          "--priority",
+          "0",
+          "--npu-count",
+          "1",
+          "--max-wait-seconds",
+          "180",
+          "--state-file",
+          "REPO/artifacts/jobs/core5-fp32-normalization-python-npu/queue-state.json",
+          "--",
+          "timeout",
+          "360",
+          "python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "npu:0",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--dtype",
+          "float32",
+          "--case",
+          "gated-hb",
+          "--case",
+          "ssd-dag",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-fp32-normalization-python-npu/checks"
+        ]
+      },
+      "status_file": {
+        "path": "artifacts/jobs/core5-fp32-normalization-python-npu/status.json",
+        "bytes": 1220,
+        "sha256": "8926a190c4db103943107065fefa8242fa74f112fbebf0a469fb34039e65adec"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-fp32-normalization-python-npu/task.log",
+        "bytes": 4756,
+        "sha256": "90fee35e71f7dcfef6e07882a2a9875fba772286e557b090f849283df283b3f0"
+      },
+      "launcher": {
+        "path": ".local/core5-fp32-normalization-python-npu.sh",
+        "bytes": 1115,
+        "sha256": "7b1ab6234516b3f569eb1002a55888b1130fb309d3613807b879f310d683b717"
+      },
+      "lifecycle_evidence": "Live PID, Transient=yes, background.slice and external control group were checked immediately after launch in this session. Terminal unit was unloaded; default systemctl success fields are not a workload result. Durable status/exit code and acceptance reports establish the result.",
+      "queue": {
+        "elapsed_seconds": 59.83526245132089,
+        "job_id": "core5-fp32-normalization-python-npu-20261028",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-28T14:15:20.321726+00:00"
+      },
+      "result": {
+        "state": "passed",
+        "source": "ad6d1e71d8798a68765e0efa6f8192c00bfc5a94",
+        "dirty": "",
+        "implementation": "python",
+        "argv": [
+          "--device",
+          "npu:0",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--dtype",
+          "float32",
+          "--case",
+          "gated-hb",
+          "--case",
+          "ssd-dag",
+          "--output-dir",
+          "REPO/artifacts/jobs/core5-fp32-normalization-python-npu/checks"
+        ],
+        "dispatch_environment": {
+          "ASCEND_LAUNCH_BLOCKING": null,
+          "CUDA_LAUNCH_BLOCKING": null,
+          "TASK_QUEUE_ENABLE": null
+        },
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "torch_npu": "2.12.0.post2",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.1.0",
+          "matmul_allow_hf32": false
+        },
+        "requested_placement": {
+          "preset": "mixed-c",
+          "read": "auto",
+          "control": "auto",
+          "selection": "auto",
+          "events": "auto",
+          "scoring_dtype": "profile"
+        },
+        "precision": {
+          "payload_dtype": "torch.float32",
+          "optimizer": "adamw",
+          "learning_rate": 0.001,
+          "loss_scale": 1.0,
+          "master_dtype": null,
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          }
+        },
+        "peer_devices": null,
+        "resolved_placement": {
+          "payload": "npu:0",
+          "read": "npu:0",
+          "control": "npu:0",
+          "selection": "npu:0",
+          "events": "cpu",
+          "scoring_dtype": "profile"
+        },
+        "cases": [
+          {
+            "configuration": {
+              "name": "gated-hb",
+              "family": "gated_delta",
+              "topology": "hb",
+              "read": "+",
+              "sending": "regional_total",
+              "regularizer": "quad",
+              "attention": false
+            },
+            "state": "passed",
+            "coverage": {
+              "nodes": 8,
+              "edges": 12,
+              "regions": 4,
+              "observed_nodes": 8,
+              "unobserved_nodes": 0,
+              "events": 32,
+              "outputs": 8,
+              "pending": 0,
+              "state_owners": 16,
+              "history_owners": 8
+            },
+            "roots": [
+              "all",
+              "first-output",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-control"
+            ],
+            "fixture_sha256": "1fe4ba71eeb4dfbb3de56e56d80ce7c8a4c98840bfd1cb454ca2435e2317b91b",
+            "pending_at_cut": 8,
+            "retained_cut": 3,
+            "streaming": true,
+            "prefill": true,
+            "inference": true,
+            "training_updates": 4,
+            "independent_raw_state_roots": 60,
+            "node_owners": [
+              "npu:0",
+              "npu:0",
+              "npu:0",
+              "npu:0",
+              "npu:0",
+              "npu:0",
+              "npu:0",
+              "npu:0"
+            ],
+            "transport_stats": {},
+            "same_device_resume": true,
+            "cpu_checkpoint_handoff": true
+          },
+          {
+            "configuration": {
+              "name": "ssd-dag",
+              "family": "ssd",
+              "topology": "dag",
+              "read": "+",
+              "sending": "regional_total",
+              "regularizer": "quad",
+              "attention": false
+            },
+            "state": "passed",
+            "coverage": {
+              "nodes": 3,
+              "edges": 4,
+              "regions": 2,
+              "observed_nodes": 3,
+              "unobserved_nodes": 0,
+              "events": 20,
+              "outputs": 16,
+              "pending": 2,
+              "state_owners": 6,
+              "history_owners": 4
+            },
+            "roots": [
+              "all",
+              "first-output",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-control"
+            ],
+            "fixture_sha256": "e0abd9640837490bff81d3048cd41be90b233b3e028ceb4cc073187a94efb4ac",
+            "pending_at_cut": 2,
+            "retained_cut": 3,
+            "streaming": true,
+            "prefill": true,
+            "inference": true,
+            "training_updates": 4,
+            "independent_raw_state_roots": 30,
+            "node_owners": [
+              "npu:0",
+              "npu:0",
+              "npu:0"
+            ],
+            "transport_stats": {},
+            "same_device_resume": true,
+            "cpu_checkpoint_handoff": true
+          }
+        ],
+        "scope": "eager host schedule; actual device transfers; not resident",
+        "tolerances": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "fallback_visibility": "requires separate profile/log audit",
+        "primitives": [
+          "stable-large-int64-score-ties",
+          "fractional-fill-literal-VJP",
+          "nonpositive-hard-fallback-literal-VJP",
+          "packed-transfer-None-zero-aliases-int64"
+        ]
+      },
+      "result_file": {
+        "path": "artifacts/jobs/core5-fp32-normalization-python-npu/checks/result.json",
+        "bytes": 4669,
+        "sha256": "005247f6c896113b4fc6ca9a412654803bc265b36b377032b1939c01f494c99a"
+      },
+      "limitation": "Current Python-owned NPU only; Python/native NPU adapter matrix and resident kernels not rerun. Int64 ArgSort reports vendor AiCPU execution, not FP32 timestamp substitution."
+    }
+  ],
+  "scope": "FP32 GDN L2 and GDN/SSD scaled-RMS first-order adjoints; unchanged FP32 forward, FP16 and FP64 policy. Directed qualification, not the entire historical matrix.",
+  "resources": "background.slice/Nice10; build2, operator1; CPU and SDK jobs64GiB/1200s; Python-owned NPU64GiB/600s; queue priority0/count1/wait180s; no benchmark or exclusive-resource claim",
+  "cpu_tests": {
+    "counts": {
+      "tests": 455,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 2
+    },
+    "passed": 453,
+    "strict_xfails": [
+      "test_half_payload_explicit_scoring_master_updates_and_resume[False-gated_delta]",
+      "test_half_payload_explicit_scoring_master_updates_and_resume[True-gated_delta]"
+    ],
+    "original_fp32_regressions": [
+      "test_recurrent_multistep_optimizer_and_restore[float32-python-gated_delta]",
+      "test_recurrent_multistep_optimizer_and_restore[float32-native-gated_delta]"
+    ],
+    "junit": {
+      "path": "artifacts/jobs/core5-fp32-normalization-qualify/tests.xml",
+      "bytes": 70837,
+      "sha256": "f490e63990aa47b5247311a5e17fa245908fbd88db69644e8deae6bc83e2b1d1"
+    },
+    "seconds": 355.903
+  },
+  "preserved_history": {
+    "source": "1f1ec5780e054e460e3471547519ace3f38fa3af",
+    "evidence": "core5-stable-preparation-precision-20261028.json",
+    "state": "failed",
+    "passed": 572,
+    "failures": 2,
+    "baseline": "1850434d842227994fd11aa2f8b65ed1d503638d",
+    "note": "Original input, tolerances, AdamW epsilon and failure records unchanged; new passing regressions apply only to ad6d1e7."
+  },
+  "limits": [
+    "Two eager FP16 GDN/default AdamW strict xfails remain; no arbitrary-numerical-domain or second-order guarantee",
+    "D64/D2048 KV FP32 complete-record/training failures remain; validated explicit FP64 measurements are separate",
+    "SDK FP32 affine, FP32 feedback-PDG and default asynchronous dual-NPU VJP witnesses remain",
+    "CUDA real-device, x86_64, large accelerator training and cross-device throughput unverified",
+    "No new performance measurement; unchanged KV does not call these two normalizers, prior same-material study not repeated",
+    "Resident kernels and standalone benchmark consumers not rebuilt or recertified in this increment"
+  ]
+}
