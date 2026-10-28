@@ -2,7 +2,8 @@
 
 分支`graph-execution-foundation`；工作路径`/mi/data2T/zlong/home/llm/graph-execution-foundation`。
 固定数学`0770593838a37c790a568226930567ed60f99b83`，19份当前/5份旧快照校验通过。
-本轮限制调查、LH/fractal/core-3经验迁移、参数匹配设施及有限验证已终态；没有活动任务或待恢复队列。
+前一轮限制调查与有限验证已终态；A—E 完成审计发现 D 的进一步合批尚未交付，继续本轮授权工作。
+当前已实现 quad 实际响应与共享组内私有适配矩阵批，开发验证中；旧失败与旧证据保持不变。
 源码、固定证据及未解除的限制分别记录；不能据本轮称所有数值域、硬件或性能优化已经完成。
 
 ## 已交付与来源
@@ -48,3 +49,25 @@ eager FP16 GDN/AdamW、默认异步双NPU、SDK FP32 affine、反馈PDG原严格
 查看本轮终态：`python scripts/status.py --all-jobs`；核对独立结果与日志，不能只依赖已回收unit的默认状态。
 复现使用[workload入口](weighted-workloads.md)与[开发规范](development.md)，新建输出目录、固定源码和有限任务；
 不依赖历史绝对运行目录、不自动恢复或扩大矩阵。当前提交只维护本交接、待办、相关契约与小型固定证据。
+
+## 当前继续工作
+
+以 b7c5173 为起点交付 quad scalar/batch/resident 实际响应修复与共享组内私有投影 BMM。
+独立行 VJP 保持 None/零、别名贡献和版本；新增统计分开真实矩阵批与 State 回调。
+`core5-quad-dev-20261028` passed：332 项 CPU FP32/FP64 分配/区域/执行回归。
+`core5-private-dev-20261028` failed：新增 standalone 测试括号/include 编译错误，原记录保留。
+修正后 `core5-private-dev2-20261028` passed：244 项私有投影/共享/State VJP/图/设备源适配；
+全部开发源码分别在对应 job/source.tar.gz。当前开发副本为 `artifacts/worktrees/core5-quad-dev`，已终态。
+
+接下来将固定实现提交到 `artifacts/worktrees/core5-private-qualified`，只读运行三个新 job/unit：
+`core5-private-qualify-cpu-20261028`、`core5-private-qualify-npu-20261028`、
+`core5-private-qualify-cuda-20261028`；输出各自 `artifacts/jobs/NAME/{status.json,task.log}`。
+CPU 复用逐文件/二进制哈希相同的开发构建，定向完整资格和 standalone benchmark client；
+NPU/CUDA 各自重新构建匹配 core，分配组件与完整 flow/配置/训练/双卡训练组件单列。
+NPU 真机限等候180秒，CUDA只构建/loader/CPU检查，无GPU真机。
+2 build workers、单线程算子，CPU32GiB/20min，设备构建64GiB/90min；scratch在job输出中。
+源码固定后运行，不能将计划/运行中的任务标为通过。
+
+三项终态后以同一材料做一次完整训练前后测量，并定向重验 D64 梯度/参数与 D2048 拒绝；
+大型案例限单样本单位置推理、96GiB/20min，不扩大旧矩阵或恢复旧队列。
+下一步核对 `python scripts/status.py`、每个新 job 的原始记录；停止用 `systemctl --user stop UNIT`。

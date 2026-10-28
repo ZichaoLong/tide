@@ -125,9 +125,8 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
             else:
                 values, multipliers, x = entropy(t[rows], caps[rows], target, temperature[rows], rule)
             result[rows], lam[rows], response[rows] = values, multipliers, x
-        # Scalar quad's residual uses original response coordinates; entropy
-        # keeps the centered response point to avoid shifting it twice.
-        x = t[ids]-lam[ids, None] if rule.kind == "quad" else response[ids]
+        # Use the response actually solved, not a rounded global multiplier.
+        x = response[ids]
         errors = (result[ids]-rule.response(x, caps[ids], temperature[ids, None])).abs().max(1).values
         residual[ids] = torch.stack((errors, (lower[ids]-result[ids].sum(1)).clamp_min(0),
                                     (result[ids].sum(1)-upper[ids]).clamp_min(0)), 1).max(1).values

@@ -51,6 +51,8 @@ def test_shared_kv_complete_snapshots_and_independent_roots(dtype, native):
     assert actual.stats["state_preparation_calls"] > 0
     assert actual.stats["state_preparation_events"] == actual.stats["candidate_events"]
     assert actual.stats["state_preparation_reused_events"] == 2*actual.stats["state_preparation_calls"]
+    assert actual.stats["max_state_private_projection_batch"] == 3
+    assert actual.stats["state_private_projection_rows"] == 3*actual.stats["candidate_events"]
     roots = variables(b, xs)
     for field in ("keys", "values", "summaries", "weights"):
         a, c = (r.trace[0]["proposal_slots"][field] for r in (expected, actual))
@@ -100,7 +102,8 @@ def test_shared_kv_online_schedules_and_inference(dtype, native, algorithm):
     equivalent(actual, inference)
 
 
-def test_prepared_kv_mixed_rows_raw_zero_and_large_logical_time(dtype):
+@pytest.mark.parametrize("completed", [False, True])
+def test_prepared_kv_mixed_rows_raw_zero_and_large_logical_time(dtype, completed):
     from tidegraph.content import Content
     from tidegraph.packing import PackedSequence
     from tidegraph.state_vjp import bind_sequence
@@ -113,6 +116,8 @@ def test_prepared_kv_mixed_rows_raw_zero_and_large_logical_time(dtype):
     other = torch.tensor([.6, -.5, .7], dtype=dtype, requires_grad=True)
     rows, times = [shared, zero, other, shared], [clock+1, clock+9, clock+12, clock+2]
     common = prepare(m, shared)
+    if completed:
+        common = m.prepare_private_batch([m, m], common, {})[0]
     batch = PackedSequence(torch.stack(rows), [0, 3, 4], [(0, 0), (1, 0)], times,
                            [Content(h) for h in rows], [common, {}, {}, common])
     expected = []

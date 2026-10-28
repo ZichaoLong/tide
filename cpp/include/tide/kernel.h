@@ -28,6 +28,11 @@ class StateKernel {
   // handles and configuration. No numeric equality or persistent state reuse.
   virtual std::string preparation_key(const NodeWeights&,const Tensor&) const { return {}; }
   virtual std::map<std::string,Tensor> prepare_shared(const NodeWeights&,const Tensor&) const { return {}; }
+  // Optional real matrix batches after shared pure operands are established.
+  // Rows keep private parameters/state; unused row roots must remain absent.
+  virtual std::vector<std::map<std::string,Tensor>> prepare_private_batch(
+      const std::vector<const NodeWeights*>& rows,const std::map<std::string,Tensor>& shared,
+      std::map<std::string,Index>&) const { return std::vector<std::map<std::string,Tensor>>(rows.size(),shared); }
   virtual std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
       const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
       const std::vector<std::map<std::string,Tensor>>&) const;

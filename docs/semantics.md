@@ -576,3 +576,8 @@ Read/control/dispatch consumer. BF16 and automatic mixed precision remain outsid
 this extension. NPU FP64 and CSR pooling stay explicitly unsupported.
 CPU FP16 CSR pooling is also explicitly unsupported; selecting event pooling is
 a caller-visible policy choice, not a runtime fallback or implicit promotion.
+
+KV 共享准备可在同一合法块中进一步批量求值同形私有适配/summary 矩阵，保留独立行 None/零、
+参数版本、全部共享使用者与私有缓存；详见 [KV 准备](weighted-kv-sharing.md)。quad 的实际居中响应
+用于残差/支持与精确映射温度 VJP，公开原坐标乘子仅是近似报告，详见 [分配](weighted-allocation.md)。
+这是既有函数的数值稳定性与执行改进，不改变图/checkpoint/一阶反向身份。

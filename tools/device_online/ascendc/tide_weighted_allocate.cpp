@@ -55,11 +55,9 @@ __aicore__ inline int solve(Response& rule,__gm__ float* s,__gm__ float* mu,__gm
     const float x=*branch==Slack?s[j]-shift:s[j]-shift-center-lam;
     c[j]=rule.value(x,mu[j],tau);sum+=c[j];
     if(rule.support(x,mu[j],tau)&&c[j]==0)return SupportUnderflow;
-    // Match the declared quad VJP's actual multiplier arithmetic, while entropy
-    // slopes retain the centered response point needed at extreme scores.
-    const float derivative_x=rule.kind==Quad?s[j]-shift-stats[0]:x;
-    rule.slopes(derivative_x,mu[j],tau,c[j],slopes+j*SlopeFields);
-    if(rule.kind==Quad)residual=maximum(residual,magnitude(c[j]-rule.value(derivative_x,mu[j],tau)));
+    // Global multiplier is a report only; use the actual centered response.
+    rule.slopes(x,mu[j],tau,c[j],slopes+j*SlopeFields);
+    if(rule.kind==Quad)residual=maximum(residual,magnitude(c[j]-rule.value(x,mu[j],tau)));
   }
   residual=maximum(residual,maximum(low-sum,sum-high));stats[1]=residual;
   if(!finite(residual)||residual>64.f*float(n)*1.1920928955078125e-7f)return Residual;

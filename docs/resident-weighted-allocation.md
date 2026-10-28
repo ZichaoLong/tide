@@ -22,7 +22,9 @@ cache line时的并发写。Exp/Ln使用CANN vector primitive，CUDA源有独立
 三种正则分别使用其精确响应映射VJP，连接标志与数值零分开：zero无根、caps只连cap，
 普通分支连接score/cap/temperature及实际选中的bound，shift按显式输入声明。
 slack的upper根为连接零；等式约束的shift为连接零。Bernoulli即使前向舍入为cap，
-仍保留声明的正响应斜率。反向用实际响应点，anchor居中归约保留常数根的零score梯度。
+仍保留声明的正响应斜率。反向用实际居中响应点，anchor居中归约保留常数根的零score梯度。
+quad 的残差/斜率不从舍入的原坐标 multiplier 重建；该字段是近似报告，响应定义见
+[分配契约](weighted-allocation.md#共同偏移下的实际响应)。
 `append_weighted_allocation_vjp`接受每行独立root存在标志，输出[score,cap]、
 [lower,upper,temperature,shift]及六项bool连接；调用者再与实际参数requires-grad相交。
 该接口是显式一阶组件，不挂接宿主autograd，不提供二阶导数或HST。
@@ -40,7 +42,7 @@ invalid长度用既有metadata错误2；数值域20、数学正支持下溢21、
 | 定义域、解与返回 | `ascendc/tide_weighted_allocate.cpp`；`test_resident_weighted_allocation.py`枚举quad可行面、80位Decimal熵响应、小型手算 |
 | 精确解一阶VJP | `tide_weighted_allocation_vjp.cpp`；独立隐式公式/标量参考、光滑分支方向差分、孤立行根及None/零 |
 | padding、正支持、严格失败 | CPU语义源码适配检查poison padding、empty/zero/full/singleton、Bernoulli舍入cap斜率、非有限及下溢拒绝 |
-| 实际设备重放 | `weighted_allocation_check.cpp`；同program改变输入/长度，CPU独立Alloc对照、全部梯度/连接、失败不提交及容量拒绝 |
+| 实际设备重放 | `weighted_allocation_check.cpp`；同program改变输入/长度，CPU独立Alloc对照、大共同偏移的手算解/梯度、全部连接、失败不提交及容量拒绝 |
 
 CPU语义适配器只执行同一份登记kernel源，验证其公式与内存接口；不是常驻CPU后备，
 不能认证CANN/CUDA运行。独立SDK目标为`--checks weighted-allocation`，FP32 scoring。

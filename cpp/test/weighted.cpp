@@ -29,6 +29,15 @@ void check_weighted(const at::TensorOptions& o){
   auto gradients=torch::autograd::grad({allocation.controls[0]},{t,total,tau});
   close(gradients[0],at::tensor({.25,-.25,0.},o));close(gradients[1],at::full({},.5,o));
   close(gradients[2],at::full({},-.125,o));
+  // Independent affine face at a large common score offset.
+  auto shifted=at::tensor({10000.5,10000.,10002.,9997.},o).set_requires_grad(true);
+  auto caps=at::tensor({1.,1.,.25,1.},o).set_requires_grad(true);
+  auto bound=at::full({},.95,o).set_requires_grad(true),temp=at::ones({},o).set_requires_grad(true);
+  auto offset=allocate_quad(shifted,caps,bound,bound,temp);
+  close(offset.controls,at::tensor({.6,.1,.25,0.},o));
+  auto bars=torch::autograd::grad({offset.controls},{shifted,caps,bound,temp},{at::tensor({2.,-1.,4.,7.},o)});
+  close(bars[0],at::tensor({1.5,-1.5,0.,0.},o));close(bars[1],at::tensor({0.,0.,3.5,0.},o));
+  close(bars[2],at::full({},.5,o));close(bars[3],at::full({},-.75,o));
   KVConfig c;c.width=c.summary_width=c.adapter_rank=c.heads=c.ffn_width=1;c.epsilon=1;c.alpha_ff=0;c.window=5;
   RegionalConfig r;r.k=2;r.region_control_mode="fixed";r.total_fraction=.4;r.allocation_temperature=2;
   r.region_evidence.reset();

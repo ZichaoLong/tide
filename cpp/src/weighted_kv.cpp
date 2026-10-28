@@ -1,6 +1,7 @@
 // KV §1–4, original-time sequence state and exact zero-receive preservation.
 #include "weighted_detail.h"
 #include "weighted_packed.h"
+#include "weighted_kv_preparation.h"
 #include <limits>
 #include <cstdint>
 
@@ -107,6 +108,10 @@ class KV final:public MemoryKernel {
   std::map<std::string,Tensor> prepare_shared(const NodeWeights& w,const Tensor& h) const override {
     auto x=normalize(h.slice(0,1),c_.epsilon);
     return {{"normal",x},{"base",at::matmul(weight(w,"kernel.base"),x)}};
+  }
+  std::vector<std::map<std::string,Tensor>> prepare_private_batch(const std::vector<const NodeWeights*>& rows,
+      const std::map<std::string,Tensor>& shared,std::map<std::string,Index>& stats) const override {
+    return prepare_private_kv(rows,shared,stats);
   }
   std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
       const Tensor& h,const std::vector<Index>& times,const ContentViews& views,

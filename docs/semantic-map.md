@@ -203,3 +203,7 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 
 完整独立 C++ 数值 checkpoint 的切面、int64、参数/optimizer 与独立训练追溯见
 [native-graph-checkpoint](native-graph-checkpoint.md)。
+
+私有同形 KV 投影进一步合批仍对应 KV §1.2 / FC §6.2，入口与独立根/VJP、实际矩阵批统计见
+[KV 计算复用](weighted-kv-sharing.md#独立私有行的一阶边界)；共同评分偏移的实际响应修复见
+[分配契约](weighted-allocation.md#共同偏移下的实际响应)。两项不改变图 v13/checkpoint v5。

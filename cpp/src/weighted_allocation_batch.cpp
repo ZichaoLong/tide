@@ -63,7 +63,7 @@ NumericAllocation solve(const Tensor& scores,const Tensor& caps,const Tensor& lo
       out.response.index_put_({rows},x);
     }
     auto c=out.controls.index({ids});
-    auto x=rule.kind=="quad"?tn-out.multiplier.index({ids}).unsqueeze(1):out.response.index({ids});
+    auto x=out.response.index({ids});
     auto error=maximum((c-rule.response(x,cn,tau)).abs());
     auto residual=maximum(at::stack({error,(lo-c.sum(1)).clamp_min(0),(c.sum(1)-hi).clamp_min(0)},1));
     out.residual.index_put_({ids},residual);
