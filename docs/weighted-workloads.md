@@ -46,6 +46,9 @@ journal/adjoint、通信、临时packing、workspace及allocator开销仍需执�
 CLI取k=区域规模或指定k，实际正支持在线决定；`regional_total_zero`的k仍为发送强度上限，不改成普通Top-k。
 一般合法配置可经程序接口构造，正式runtime Config拥有最终适用性验证。
 
+[固定源码运行证据](evidence/core5-performance-transfer-20261028.md)包含五族Add/Attention主体
+预算清单、实际92.62亿参数KV材料与有限执行；大型拒绝和完整返回不通过不能解释为性能通过。
+
 benchmark fixture v2以JSON保存结构与索引，FP32小端二进制保存实际TensorImpl去重的张量。
 每张量有shape/offset/bytes/SHA256，全文件有bytes/SHA256；只对实际冻结零buffer使用零编码。
 相等但独立的张量不去重；C++复核字节范围、完整文件、逐张量、别名索引及图identity后安装公共函数。

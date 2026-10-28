@@ -9,6 +9,12 @@ The table below describes execution layers; each linked report retains its own
 source, dtype, topology, configuration and acceptance scope. It is not one
 Cartesian qualification of every option.
 
+[Parameter-matched workload evidence](evidence/core5-performance-transfer-20261028.md)
+adds fixed CPU/NPU gates, storage/copy changes and actual large material. D64
+FP32 complete records, gradients and optimizer values can fail strict checks;
+the D2048 run refused an allocation residual. These are numerical limitations,
+not expanded passing workload coverage. CUDA remains build/CPU evidence only.
+
 | Layer | Implemented interface and evidence boundary |
 | --- | --- |
 | General graphs and ports | PositiveDelayGraph, nonaligned TimedDAG and general SettleGraph with same-rank regions; [Settle embedding](settle-embedding.md), [typed records](structured-records.md) |

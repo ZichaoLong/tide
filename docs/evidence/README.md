@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Core-5 参数匹配与性能经验迁移](core5-performance-transfer-20261028.md)：2da3f2c/0503593；五族真实参数清单、core-3主体匹配、实际92.62亿参数材料、共享存储/复制优化；CPU376 passed/2 strict xfail、设施14项、NPU八项及CUDA构建/CPU核验。单次CPU下降、NPU稍慢且allocated小降；新增D64完整训练和quad共同偏移严格失败均保留。
+
 [Core-5 三项审查修复](core5-review-fixes-20261028.md)：1d19c59；ClockedState参数/VJP、quad正支持与参数bank准入。CPU442项、standalone NPU两dtype四组件、CUDA CPU31项/三架构构建通过；NPU首次环境失败保留，无GPU真机。
 
 [Core-5 单样本节点放置反向/训练](core5-weighted-node-training-20261028.md)：0155b0f运行库/220052a检查器；FP32四组合×12根及跨窗桥、两dtype各20训练更新/6次副本共同更新、Python原30项与修复后8项、安装消费者通过。CUDA三架构/loader通过，无真机；原设备与检查器失败保留。

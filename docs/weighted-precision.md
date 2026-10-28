@@ -44,3 +44,6 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 不能从core-3或其他算术路径推定。常驻报告不解除本页eager GDN的严格失败。
 
 [首次分歧与纯Torch异步隔离](evidence/core5-numerical-isolation-20261028.md)记录近零梯度被AdamW放大，以及当前Torch-NPU/CANN双设备反向的小反例。严格失败与显式blocking通过分别保留。
+
+[D64/D2048增量诊断](evidence/core5-performance-transfer-20261028.md)另记录FP32完整记录、参数梯度及SGD参数的严格差异；
+同源FP64两步通过只适用于该CPU诊断。quad共同评分偏移的独立反例在FP64也拒绝，因此更宽dtype不是通用修复。

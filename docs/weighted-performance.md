@@ -5,6 +5,9 @@
 
 [f72a6cc启动/内存补充](evidence/core5-weighted-observation-20261028.md)另验四个新进程和SDK allocator，不改写原24项测量。
 
+[参数匹配及经验迁移](evidence/core5-performance-transfer-20261028.md)补五族预算、实际D2048材料、
+共享存储/复制改动、同材料前后对照和新严格失败。参数数量相近不代表函数或实际工作量相同。
+
 本页规定性能消费者的范围；运行结果从[证据索引](evidence/README.md)进入。
 [历史与新性能经验](performance-lessons.md)分列LH、fractal、core-3和core-5的实际证据及适用条件；
 [参数匹配扩展](weighted-workloads.md)提供五族、可扩展拓扑和二进制材料；下面的small/medium仍指原固定用例。
@@ -36,6 +39,8 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 测量结束后才执行独立CPU时间递归，核对全部窗口记录、loss和最终optimizer参数值。
 它不向候选提供选定序列、批次或容量。严格失败保留为失败，不能在该配置上宣称等价加速。
 此有限对照不代替局部手算VJP、独立根、共享参数、checkpoint及完整设备资格。
+验证失败时也保留已完成的`metrics.json`；0503593起同时保留在最终`result.json`。
+这些时间是失败候选的成本观察，不能用来宣称等价加速。
 
 示例（干净固定源码，匹配本机环境与持久任务规范）：
 
