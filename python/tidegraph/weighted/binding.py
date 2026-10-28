@@ -30,6 +30,9 @@ def memory_profile(config):
 
 class WeightedModel(Model):
     identity_transport = True  # Validated unit scales; keep broadcast Tensor aliases.
+    # Same inert checkpoint buffers; avoid constructing then discarding random
+    # dense legacy weights. Weighted modules have their own seeded generator.
+    legacy_parameters = False
 
     def validate_binding(self, graph):
         if graph.identity != self.graph_identity:
@@ -138,11 +141,6 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     model = WeightedModel(graph,width=width+1,seed=seed,dtype=payload_dtype,device=device,
                           state_programs=states,read_programs=readers,aggregate_programs=aggregates,
                           full_programs=fulls,region_programs=rp)
-    # Legacy scalar-profile parameters have no role in this binding.
-    for node in model.nodes:
-        for name in ("decay","weight","bias","read"):
-            old = node._parameters.pop(name)
-            node.register_buffer(name,torch.zeros_like(old))
     for name in ("input_scale","agg_scale","edge_scale","output_scale"):
         for scale in getattr(model,name):
             scale.requires_grad_(False)

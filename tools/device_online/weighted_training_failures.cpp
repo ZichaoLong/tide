@@ -1,13 +1,26 @@
 #include "weighted_training_check.h"
+#include "weighted_training_parameters.h"
 #include "../../cpp/test/weighted_graph_fixture.h"
 #include <ATen/core/grad_mode.h>
 namespace tide::device_online::weighted_training_check {
 namespace {
 template<class F>void refuses(F f,const std::string& name){bool refused=false;
   try{f();}catch(const std::logic_error&){refused=true;}require(refused,"accepted invalid weighted training "+name);}
+void pooled_writes(at::Device device,at::ScalarType dtype){
+  auto x=at::ones({2},at::TensorOptions().dtype(dtype)),y=x.clone();ParameterRegistry registry;
+  registry.add("a",x);registry.add("b",x);registry.add("c",y);
+  ParameterVjp layout;layout.owners=registry.owners();layout.offsets={0,2};
+  auto bank=at::ones({2},at::TensorOptions().device(device)),other=bank.clone();
+  std::vector<WeightedBankRole> roles{{"a",bank,{2},0},{"b",bank,{2},0},{"c",other,{2},0}};
+  auto writes=weighted_training_writes(registry,layout,roles);
+  require(writes.size()==2&&writes[0].offset==0&&writes[1].offset==2,"pooled publication did not preserve unique canonical destinations");
+  roles.back().bank=bank;
+  refuses([&]{weighted_training_writes(registry,layout,roles);},"conflicting canonical publication to one bank");
+}
 }
 void failures(at::Device device,at::ScalarType dtype,const std::vector<at::Device>& placement){
   at::NoGradGuard ng;auto g=weighted_check::graph("fc","kv");
+  pooled_writes(device,dtype);
   auto m=weighted_check::model(g,"kv",at::kCPU,dtype);Continuation q;q.identity=g.identity;q.batch_size=2;
   auto l=limits();l.windows=1;
   auto small=l;small.total_bytes=1;refuses([&]{WeightedTrainingSession bad(g,m,q,device,ResidentOptimizerKind::sgd,{},small,placement);},"total budget");

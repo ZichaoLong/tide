@@ -3,6 +3,7 @@
 [三项审查修复资格](evidence/core5-review-fixes-20261028.md)补验ClockedState带权VJP、quad正支持拒绝与resident参数bank分配前准入；数学/图/checkpoint版本保持。
 
 [公共性能消费者](weighted-performance.md)只使用静态参数/输入和候选实际结果，
+[参数清单与匹配用例](weighted-workloads.md)逐角色核对固定公式、真实共享、二进制材料和容量下界；
 [有限运行证据](evidence/core5-weighted-performance-20261028.md)区分完整记录通过、严格拒绝、profile和吞吐。
 
 [Weighted公共训练](resident-weighted-training.md)定义完整字段根、跨窗token、参数发布、四分区预算与独立checkpoint绑定；运行资格单列。

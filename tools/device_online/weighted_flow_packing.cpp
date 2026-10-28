@@ -8,9 +8,16 @@ at::Tensor weighted_columns(DeviceProgram& p,const at::Tensor& x,int64_t start,i
   auto out=at::zeros({x.size(0),count},x.options());
   p.index_select(x,1,at::arange(start,start+count,x.options().dtype(at::kLong)),out);return out;
 }
+at::Tensor append_weighted_ready_values(DeviceProgram& p,const ReadyBatch& r){
+  const auto cap=r.atoms.valid.numel(),width=r.atoms.values.size(1);
+  auto joined=at::zeros({cap+1,width},r.atoms.values.options());
+  weighted_copy(p,joined.narrow(0,0,cap),r.atoms.values);return joined;
+}
 WeightedNodeInput append_weighted_node_input(DeviceProgram& p,const ReadyBatch& r,const at::Tensor& classes,
-    int64_t node,int64_t samples,int64_t inputs,const at::Tensor& error){
+    int64_t node,int64_t samples,int64_t inputs,const at::Tensor& error,const at::Tensor& joined){
   const auto cap=r.atoms.valid.numel(),width=r.atoms.values.size(1);auto longs=r.fibers.options();
+  if(joined.sizes()!=at::IntArrayRef({cap+1,width})||joined.options().dtype()!=r.atoms.values.options().dtype()||joined.device()!=r.atoms.values.device())
+    throw std::invalid_argument("weighted shared ready values layout differs");
   WeightedNodeInput x;x.payload=at::zeros({samples,cap,width},r.atoms.values.options());x.owners=at::full({samples,cap},-1,longs);
   x.indices=at::full({samples,cap},cap,longs);x.lengths=at::zeros({samples},longs);x.times=at::zeros_like(x.lengths);
   x.present=at::zeros({samples},longs.dtype(at::kBool));x.bank=at::full({samples},-1,longs);
@@ -18,7 +25,6 @@ WeightedNodeInput append_weighted_node_input(DeviceProgram& p,const ReadyBatch& 
     ptr(r.fibers),ptr(r.fiber_offsets),ptr(r.atoms.coordinates),ptr(r.counts),ptr(classes),ptr(x.indices),ptr(x.owners),
     ptr(x.lengths),ptr(x.times),ptr(x.present),ptr(x.bank),ptr(error),node,samples,cap,inputs,classes.size(0)),"weighted complete node fiber plan");},
     {r.fibers,r.fiber_offsets,r.atoms.coordinates,r.counts,classes,x.indices,x.owners,x.lengths,x.times,x.present,x.bank,error});
-  auto joined=at::zeros({cap+1,width},r.atoms.values.options());weighted_copy(p,joined.narrow(0,0,cap),r.atoms.values);
   p.index_select(joined,0,x.indices.reshape({-1}),x.payload.reshape({samples*cap,width}));
   if(x.payload.scalar_type()==at::kHalf){auto widened=at::empty(x.payload.sizes(),x.payload.options().dtype(at::kFloat));p.cast(x.payload,widened);x.payload=widened;}
   return x;

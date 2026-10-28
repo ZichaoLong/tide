@@ -33,6 +33,8 @@ def main():
     parser.add_argument("--family", choices=("kv", "ssd"), default="kv")
     parser.add_argument("--size", choices=("small", "medium"), default="small")
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--workload", type=Path, help="static parameter-accounted plan; replaces legacy fixture options")
+    parser.add_argument("--max-materialize-bytes", type=int, default=2*1024**3)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--profile", action="store_true")
     parser.add_argument("--native-library")
@@ -63,6 +65,10 @@ def main():
     torch.set_num_threads(1); torch.set_num_interop_threads(1)
     shape = dict(width=4, samples=1, positions=2) if args.size == "small" else dict(width=32, samples=4, positions=4)
     config = Workload(args.topology, args.family, seed=args.seed, **shape)
+    plan = None
+    if args.workload:
+        from weighted_plan_materialize import load, materialize
+        plan, config = load(args.workload.resolve())
     out = Path(args.output_dir).resolve(); out.mkdir(parents=True, exist_ok=False)
     # NPU initialization itself can create temporary kernel_meta/, before a
     # profiler is entered. Keep all runtime scratch outside the source tree.
@@ -94,10 +100,14 @@ def main():
         memory = Memory(device)
         record["memory"] = memory.capture("runtime_ready", reset=True)
         start = time.perf_counter()
-        binding, inputs, span = fixture(config)
-        expected_binding, expected_inputs, _ = fixture(config)
+        create = (lambda: materialize(plan, max_bytes=args.max_materialize_bytes)) if plan else lambda: fixture(config)
+        binding, inputs, span = create()
         record["fixture_sha256"] = fingerprint(binding, inputs, config)
         record["workload_span"] = span
+        if plan:
+            record["parameter_inventory"] = plan["inventory"]
+            record["memory_floor"] = plan["memory_floor"]
+            record["parameter_match"] = plan.get("parameter_match")
         record["fixture_preparation_seconds"] = time.perf_counter()-start
         write_json(out/"result.json", record)
         start = time.perf_counter()
@@ -144,6 +154,7 @@ def main():
         parameters = candidate.parameters()
         # Only after the measurement: independent scalar CPU schedule and
         # full-record/optimizer check. It supplies no execution hints.
+        expected_binding, expected_inputs, _ = create()
         reference = Eager(expected_binding, expected_inputs, span, config, args, torch.device("cpu"), reference=True)
         for step, (result, loss) in enumerate(actual):
             expected, expected_loss = reference.step(step)

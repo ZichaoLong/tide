@@ -31,7 +31,8 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   error_=at::zeros({1},options);stage_=at::zeros_like(s.stages);const auto& error=error_;
   Continuation initial;initial.identity=s.graph.identity;initial.batch_size=samples;initial.cut=0;
   auto remaining=[&](DeviceProgram& worker){return this->remaining(worker);};
-  for(int64_t v=0;v<count;++v){nodes_.push_back(std::make_unique<WeightedFlowNode>(s.model,v,initial,s.node_devices[v],s.limits.cache,budget_));auto& n=*nodes_.back();
+  auto banks=std::make_shared<ParameterBankPool>();
+  for(int64_t v=0;v<count;++v){nodes_.push_back(std::make_unique<WeightedFlowNode>(s.model,v,initial,s.node_devices[v],s.limits.cache,budget_,banks));auto& n=*nodes_.back();
     const auto prefix="node."+std::to_string(v)+".";WeightedWindowNodeRoots r;
     r.content=weighted_window::row(journal.field(prefix+"content"));r.control=weighted_window::row(journal.field(prefix+"control").unsqueeze(-1));
     r.full=weighted_window::row(journal.field(prefix+"full"));r.old=weighted_window::raw(n.layout,journal.field(prefix+"old.float"));
@@ -39,7 +40,7 @@ void WeightedWindowAdjoint::construct(int64_t budget){
     for(const auto& name:s.descriptors[v])r.describe[name]=weighted_window::row(journal.field(prefix+"describe."+name));
     roots_.nodes.push_back(std::move(r));
   }
-  for(size_t r=0;r<s.graph.regions.size();++r)regions_.push_back(std::make_unique<WeightedFlowRegion>(s.graph,s.model,r,initial,device));
+  for(size_t r=0;r<s.graph.regions.size();++r)regions_.push_back(std::make_unique<WeightedFlowRegion>(s.graph,s.model,r,initial,device,banks));
   peers_->bind(s.graph,nodes_,remaining);
   for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];auto& worker=services.begin();
     n.source=bind_weighted_flow_source(worker,n.banks,s.graph,v,n.binding,error,remaining(worker));services.end(worker);}
@@ -70,8 +71,9 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   weighted_window::route(p,ready.atoms,weighted_window::load(p,stage_,roots_.fibers),edges,events,boundary_,stage_,begin,error);
   std::vector<WeightedNodeInput> inputs;std::vector<WeightedRawState> old;
   std::vector<WeightedFlowView> views(count);
+  const auto values=append_weighted_ready_values(p,ready);
   for(int64_t v=0;v<count;++v){const auto prefix="node."+std::to_string(v)+".";
-    inputs.push_back(append_weighted_node_input(p,ready,classes[v],v,samples,s.graph.inputs.size(),error));
+    inputs.push_back(append_weighted_node_input(p,ready,classes[v],v,samples,s.graph.inputs.size(),error,values));
     old.push_back({journal.load(p,stage_,prefix+"old.float"),journal.load(p,stage_,prefix+"old.int")});}
   peers_->append_local_send(p,s.graph,nodes_,inputs,views,error,remaining,&old);
   for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];auto& worker=services.begin();

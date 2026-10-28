@@ -61,6 +61,11 @@ Python 适配器额外拒绝模型参数版本变化。共享参数身份随快�
 `candidate_updates/full_evaluations`统计实际数学作用，`physical_local_rows/physical_full_rows`
 另记提交给局部组件的物理行数；未活动行可能仍占厂商批量算术，稀疏发送不等于全部计算减少。
 
+每阶段只构造/复制一次带零填充行的ready values，各节点以独立indices gather实际纤维；
+反向journal重放使用同样的阶段级共享。共享仅限不可变输入缓冲，节点payload/状态/梯度仍私有；
+不改变cap、元数据、队列提交或缺席连接。逐节点`[samples,cap,width]`payload开销仍保留，
+这项减少队列副本，不能称为已完成紧凑纤维打包或跨节点局部GEMM。
+
 所有容量与数值检查在 queue/state/history 提交之前。`queue` 限制同时在途原子，
 `cache` 限制每私有状态的实际原始缓存，`stages` 限制单窗口作用轮数与诊断 journal，
 均不限制累计逻辑时间。NPU将局部数值阶段放入独立的persistent程序，通过设备通知请求、

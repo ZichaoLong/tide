@@ -72,8 +72,13 @@ int main(int argc,char** argv){
       {"metrics",Json::array()}};write(output/"result.json",report);
     capture_memory(report,target,"runtime_ready",true);
     auto fixture_start=tide_bench::Clock::now();
-    std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");const Json data=Json::parse(file);
+    std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");Json data=Json::parse(file);
+    data["__fixture_root"]=std::filesystem::path(input).parent_path().string();
     report["fixture_sha256"]=data.at("fixture_sha256");report["config"]=data.at("config");
+    if(data.contains("workload")){
+      report["parameter_inventory"]=data["workload"]["inventory"];report["memory_floor"]=data["workload"]["memory_floor"];
+      if(data["workload"].contains("parameter_match"))report["parameter_match"]=data["workload"]["parameter_match"];
+    }
     report["fixture_preparation_seconds"]=tide_bench::seconds(fixture_start);
     std::unique_ptr<Eager> eager;std::unique_ptr<Resident> remote;
     const bool training=mode=="training",prefill=schedule=="prefill";auto start=tide_bench::Clock::now();

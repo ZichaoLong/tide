@@ -8,6 +8,7 @@ using Json=nlohmann::json;
 using namespace tide;
 struct Fixture {Graph graph;Model model;std::vector<External> inputs;Index span,samples,positions;};
 Fixture fixture(const Json&);
+std::vector<Tensor> tensors(const Json&);
 std::vector<External> inputs(const Fixture&,Index step);
 Continuation detached(Continuation);
 Result detached(Result);

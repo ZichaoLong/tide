@@ -61,7 +61,8 @@ void append_weighted_node_full(TaskServices& services,WeightedFlowNode& n,const 
 }
 void WeightedFlow::Impl::append_nodes(DeviceProgram& p,const ReadyBatch& ready){
   std::vector<WeightedNodeInput> inputs;
-  for(size_t v=0;v<nodes.size();++v)inputs.push_back(append_weighted_node_input(p,ready,input_classes[v],v,boundary.batch_size,graph.inputs.size(),error));
+  const auto values=append_weighted_ready_values(p,ready);
+  for(size_t v=0;v<nodes.size();++v)inputs.push_back(append_weighted_node_input(p,ready,input_classes[v],v,boundary.batch_size,graph.inputs.size(),error,values));
   peers->append_local_send(p,graph,nodes,inputs,views,error,[&](DeviceProgram& worker){return remaining(worker);});
   for(size_t v=0;v<nodes.size();++v)if(node_devices[v]==device){auto& n=*nodes[v];n.input=inputs[v];
     append_weighted_node_local(p,*services,n,graph.regions[graph.nodes[v].region].read_mode,error,[&](DeviceProgram& worker){return remaining(worker);});

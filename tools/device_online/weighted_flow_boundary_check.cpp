@@ -39,6 +39,12 @@ void parameter_banks(at::Device device,at::ScalarType dtype){
   WeightedBanks exact(parameters,"",device);auto full=bind_weighted_kv_full(exact,bytes);
   require(full.residual.gate.data_ptr()!=full.residual.up.data_ptr(),"tied parameter roles shared mutable bank storage");
   require(at::equal(full.residual.down.cpu(),tied.t().to(at::kFloat).unsqueeze(0)),"bank transpose/half conversion differs");
+  auto pool=std::make_shared<ParameterBankPool>();
+  WeightedBanks pooled(parameters,"",device,pool);auto shared=bind_weighted_kv_full(pooled,bytes-24);
+  require(shared.residual.gate.data_ptr()==shared.residual.up.data_ptr(),"frozen pool did not reuse actual parameter alias");
+  require(shared.query.data_ptr()!=shared.residual.out.data_ptr(),"frozen pool merged independent equal values");
+  WeightedBanks second(parameters,"",device,pool);auto reused=bind_weighted_kv_full(second,0);
+  require(reused.query.data_ptr()==shared.query.data_ptr(),"frozen pool charged/duplicated a previously bound slice");
   parameters[prefix+"gate"]=at::ones({1},at::TensorOptions().dtype(dtype)).expand({1000000,2});
   WeightedBanks large(parameters,"",device);refused=false;
   try{bind_weighted_kv_full(large,1024*1024);}catch(const std::invalid_argument& e){
