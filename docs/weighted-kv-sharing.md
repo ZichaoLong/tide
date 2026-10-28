@@ -12,6 +12,9 @@
 在同一共享键内按私有矩阵形状/dtype/device 再分组，两个以上同形行使用真正 BMM 计算
 `adapter_v@x`、`adapter_u@low` 和 `summary@x`，再加共同 `b`。单行或不同形状组沿用已有路径。
 各节点按实际逻辑时间写入自己的缓存。
+共同准备组按其首个实际事件的顺序执行。含Tensor身份的key只判断是否可复用，不能按地址
+排序创建autograd节点，否则checkpoint换owner会改变共享梯度的浮点累加顺序。
+此稳定顺序不改变参数共享判据或活动集合；换owner下一窗口的完整记录/VJP/optimizer另验收。
 所有eager行（标量、未共享packed、共享组）都保留低秩形式`base@x+adapter_u@(adapter_v@x)`，
 避免反复构造大小`2d×d`的稠密adapter临时矩阵。未共享packed行的归一化结果也供summary使用。
 独立调度仍分别执行；[手算完整Jacobian](../tests/test_weighted_kv_sharing.py)、

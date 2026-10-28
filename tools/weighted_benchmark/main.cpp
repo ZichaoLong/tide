@@ -17,7 +17,7 @@ using namespace weighted_benchmark;
 struct Eager {
   Fixture data;Continuation state;ParameterRegistry registry;std::unique_ptr<SGD> optimizer;
   bool training,prefill;Options options;
-  Eager(const Json& j,bool train,bool batch,bool scalar=false):data(fixture(j)),registry(data.model.parameters()),training(train),prefill(batch){
+  Eager(const Json& j,bool train,bool batch,bool scalar=false,at::ScalarType dtype=at::kFloat):data(fixture(j,dtype)),registry(data.model.parameters()),training(train),prefill(batch){
     state.identity=data.graph.identity;state.batch_size=data.samples;
     options.packed=!scalar;options.full_autograd=options.aggregate_autograd=scalar?"replay":"batched";
     OptimizerGroup group;for(const auto& p:registry.owners())group.parameters.push_back(p.canonical);
@@ -38,21 +38,35 @@ struct Eager {
   std::map<std::string,Tensor> parameters()const{
     std::map<std::string,Tensor> out;for(const auto& p:registry.owners())out[p.canonical]=p.value.detach().clone();return out;
   }
+  TrainingState training_state()const{
+    TrainingState out;
+    for(const auto& p:registry.owners()){
+      const auto g=p.value.grad();out.gradients[p.canonical]=g.defined()?g.detach().clone():Tensor{};
+      const auto found=optimizer->state().find(p.canonical);
+      const auto slot=found==optimizer->state().end()?Tensor{}:found->second.momentum_buffer;
+      out.momentum[p.canonical]=slot.defined()?slot.detach().clone():Tensor{};
+    }
+    return out;
+  }
 };
 }
 int main(int argc,char** argv){
   Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
   try{
-    std::string input,device,implementation="native",mode="training",schedule="prefill";Index steps=3;
+    std::string input,device,implementation="native",mode="training",schedule="prefill",precision="float32";Index steps=3;
     for(int i=1;i<argc;++i){std::string key=argv[i];if(key=="--help"){
-        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
+        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float32|float64 --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
       if(i+1==argc)throw std::invalid_argument("missing benchmark option value");std::string value=argv[++i];
       if(key=="--fixture")input=value;else if(key=="--device")device=value;else if(key=="--implementation")implementation=value;
       else if(key=="--mode")mode=value;else if(key=="--schedule")schedule=value;else if(key=="--steps")steps=std::stoll(value);
+      else if(key=="--dtype")precision=value;
       else if(key=="--output-dir")output=value;else throw std::invalid_argument("unknown benchmark option "+key);
     }
     if(input.empty()||device.empty()||output.empty()||steps<1||steps>8||(implementation!="native"&&implementation!="resident")
-        ||(mode!="inference"&&mode!="training")||(schedule!="streaming"&&schedule!="prefill"))throw std::invalid_argument("invalid bounded benchmark request");
+        ||(mode!="inference"&&mode!="training")||(schedule!="streaming"&&schedule!="prefill")
+        ||(precision!="float32"&&precision!="float64"))throw std::invalid_argument("invalid bounded benchmark request");
+    if(precision=="float64"&&(device!="cpu"||implementation!="native"))throw std::invalid_argument("FP64 benchmark requires CPU eager execution; no implicit substitution");
+    const auto dtype=precision=="float64"?at::kDouble:at::kFloat;
     if(implementation=="native"&&device!="cpu")throw std::invalid_argument("standalone eager measurement requires explicit CPU; resident measures accelerator");
     if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
     input=std::filesystem::absolute(input);output=std::filesystem::absolute(output);
@@ -60,15 +74,16 @@ int main(int argc,char** argv){
     created=true;
     std::filesystem::current_path(output);
     auto runtime_start=tide_bench::Clock::now();portable_torch::RuntimeSession runtime;
-    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=at::kFloat;
+    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=dtype;
     const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(1);at::set_num_interop_threads(1);
-    runtime_probe(target);const auto runtime_seconds=tide_bench::seconds(runtime_start);
+    runtime_probe(target,dtype);const auto runtime_seconds=tide_bench::seconds(runtime_start);
     report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v1"},
-      {"device",device},{"backend",portable_torch::compiled_backend()},{"dtype","float32"},
+      {"device",device},{"backend",portable_torch::compiled_backend()},{"dtype",precision},{"requested_dtype",precision},
+      {"fixture_dtype","float32"},{"input_policy","same hashed FP32 material; explicit promotion before both schedules"},
       {"runtime_initialization_seconds",runtime_seconds},
       {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
       {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
-      {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter export"},
+      {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter/gradient/optimizer export"},
       {"phase","fixture-preparation"},{"metrics",Json::array()}};write(output/"result.json",report);
     capture_memory(report,target,"runtime_ready",true);
     auto fixture_start=tide_bench::Clock::now();
@@ -77,6 +92,9 @@ int main(int argc,char** argv){
     report["fixture_sha256"]=data.at("fixture_sha256");report["config"]=data.at("config");
     if(data.contains("workload")){
       report["parameter_inventory"]=data["workload"]["inventory"];report["memory_floor"]=data["workload"]["memory_floor"];
+      const auto& floor=data["workload"]["memory_floor"];
+      report["effective_static_tensor_bytes"]=(floor["logical_parameter_bytes"].get<int64_t>()+
+        floor["legacy_inert_buffer_bytes"].get<int64_t>())*(dtype==at::kDouble?2:1);
       if(data["workload"].contains("parameter_match"))report["parameter_match"]=data["workload"]["parameter_match"];
     }
     report["fixture_preparation_seconds"]=tide_bench::seconds(fixture_start);
@@ -84,7 +102,7 @@ int main(int argc,char** argv){
     const bool training=mode=="training",prefill=schedule=="prefill";
     report["phase"]="construction";write(output/"result.json",report);
     auto start=tide_bench::Clock::now();
-    if(implementation=="native")eager=std::make_unique<Eager>(data,training,prefill);
+    if(implementation=="native")eager=std::make_unique<Eager>(data,training,prefill,false,dtype);
     else {
 #ifdef TIDE_WEIGHTED_RESIDENT
       remote=resident(data,target,training,prefill);
@@ -112,17 +130,22 @@ int main(int argc,char** argv){
     // Inference does not update parameters. Avoid exporting a second complete
     // bank, and release the candidate before constructing the independent run.
     const auto parameters=training?(eager?eager->parameters():remote->parameters()):std::map<std::string,Tensor>{};
+    const bool checked_training=training&&bool(eager);
+    const auto trained=checked_training?eager->training_state():TrainingState{};
     if(remote)remote->close();eager.reset();remote.reset();
     // A separate scalar schedule runs only after timing and never guides the candidate.
-    Eager reference(data,training,!prefill,true);
+    Eager reference(data,training,!prefill,true,dtype);
     for(Index i=0;i<=steps;++i){report["phase"]="independent-check";report["window"]=i;
       write(output/"result.json",report);
-      const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,at::kFloat);
-      if(std::abs(actual[i].loss-expected.loss)>1e-6+1e-5*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
-    if(!parameters.empty())for(const auto& [name,value]:reference.parameters())
-      if(!at::allclose(parameters.at(name),value,1e-5,1e-6))throw std::runtime_error("benchmark final optimizer parameter differs: "+name);
+      const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,dtype);
+      if(std::abs(actual[i].loss-expected.loss)>(dtype==at::kDouble?1e-10:1e-6)+(dtype==at::kDouble?1e-8:1e-5)*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
+    if(!parameters.empty())compare_tensors(parameters,reference.parameters(),dtype,"final parameter");
+    if(checked_training){const auto expected=reference.training_state();
+      compare_tensors(trained.gradients,expected.gradients,dtype,"final parameter gradient");
+      compare_tensors(trained.momentum,expected.momentum,dtype,"final SGD momentum");}
     report["state"]="passed";report["phase"]="complete";report["post_measurement_complete_records"]=true;
-    report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=training&&!parameters.empty();write(output/"result.json",report);return 0;
+    report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=checked_training;
+    report["final_parameter_gradients_checked"]=checked_training;write(output/"result.json",report);return 0;
   }catch(const std::exception& e){report["state"]="failed";report["error"]=e.what();
     if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try{
       auto record=allocation_failure(*failure);record["execution"]={{"phase",report.value("phase","")},{"window",report.value("window",Index(-1))}};

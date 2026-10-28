@@ -45,7 +45,7 @@ class Eager:
         from weighted_device_checks import runner
         self.binding, self.inputs, self.span, self.config, self.args, self.device = binding, inputs, span, config, args, device
         self.binding.model.to(device)
-        placement = ExecutionPlacement(preset=args.placement, scoring_dtype="float32")
+        placement = ExecutionPlacement(preset=args.placement, scoring_dtype=getattr(args, "dtype", "float32"))
         if reference:
             from tidegraph.reference import run
             self.execute = lambda *a, **kw: run(binding.graph, binding.model, *a, **kw)
@@ -82,11 +82,16 @@ class Eager:
     def parameters(self):
         return snapshot(dict(self.binding.model.named_parameters()))
 
+    def training_state(self):
+        return snapshot(dict(gradients={n: p.grad for n, p in self.binding.model.named_parameters()},
+                             optimizer=self.optimizer.state_dict()))
+
     def manifest(self):
-        placement = ExecutionPlacement(preset=self.args.placement, scoring_dtype="float32")
+        dtype = getattr(self.args, "dtype", "float32")
+        placement = ExecutionPlacement(preset=self.args.placement, scoring_dtype=dtype)
         result = dict(execution=self.args.placement, schedule=self.args.schedule, operator="aten",
                       effective_placement={k: str(v) for k, v in placement.resolve(self.device).items()},
-                      complete_cpu_records=True, precision="FP32", optimizer="sgd", gradient_boundary="detach per window")
+                      complete_cpu_records=True, precision=dtype, optimizer="sgd", gradient_boundary="detach per window")
         if self.args.implementation == "native":
             path = Path(self.args.native_library)
             result["build"] = json.loads(((path if path.is_dir() else path.parent)/"build-manifest.json").read_text())
@@ -155,6 +160,11 @@ class Resident:
             return None
         with torch.no_grad():
             return {n.replace(".extra.", "."): x for n, x in self.owner.checkpoint()["parameters"].items()}
+
+    def training_state(self):
+        # Resident gradients/slots have independent qualification gates. This
+        # benchmark currently exports final parameters only: do not claim more.
+        return None
 
     def manifest(self):
         with torch.no_grad():

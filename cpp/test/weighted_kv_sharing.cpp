@@ -3,8 +3,10 @@
 #include "tide/state_evaluate.h"
 #include "tide/weighted.h"
 #include <torch/csrc/autograd/autograd.h>
+#include <torch/csrc/autograd/function.h>
 #include <cmath>
 #include <stdexcept>
+#include <utility>
 void check_weighted_kv_sharing(const at::TensorOptions& o){
   using namespace tide;using namespace tide::weighted;
   auto close=[&](const Tensor& a,const Tensor& b){
@@ -51,4 +53,18 @@ void check_weighted_kv_sharing(const at::TensorOptions& o){
   prepare_shared_state(m,events,stats);
   if(!events[0].state_prepared.empty()||!events[1].state_prepared.empty())
     throw std::runtime_error("shared KV merged independent equal content roots");
+  // Opaque identity keys test equality, not execution order. Make their
+  // lexical order explicitly opposite to first-use order, independent of
+  // allocator addresses. A restored owner must create its graph consistently.
+  auto first=h.detach().clone().set_requires_grad(true),second=first.detach().clone().set_requires_grad(true);
+  const auto& w=m.nodes[0];
+  if(w.kernel->preparation_key(w,first)<w.kernel->preparation_key(w,second))std::swap(first,second);
+  std::vector<Event> interleaved(4);
+  for(size_t i=0;i<4;++i){interleaved[i].node=i/2;interleaved[i].content=i%2?second:first;}
+  stats.clear();prepare_shared_state(m,interleaved,stats);
+  const auto& a0=interleaved[0].state_prepared.at("values");
+  const auto& b0=interleaved[1].state_prepared.at("values");
+  if(stats["state_preparation_calls"]!=2||stats["state_preparation_events"]!=4||
+      a0.grad_fn()->sequence_nr()>=b0.grad_fn()->sequence_nr())
+    throw std::runtime_error("shared preparation followed opaque addresses instead of first use");
 }

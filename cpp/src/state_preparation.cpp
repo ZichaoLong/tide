@@ -2,6 +2,7 @@
 #include "tide/kernel.h"
 #include <typeinfo>
 #include <stdexcept>
+#include <algorithm>
 namespace tide {
 void prepare_shared_state(const Model& m,std::vector<Event>& events,std::map<std::string,Index>& stats){
   std::map<std::pair<std::string,std::string>,std::vector<size_t>> groups;
@@ -11,7 +12,13 @@ void prepare_shared_state(const Model& m,std::vector<Event>& events,std::map<std
     auto key=w.kernel->preparation_key(w,e.content);
     if(!key.empty())groups[{typeid(*w.kernel).name(),key}].push_back(i);
   }
-  for(const auto& [key,ids]:groups){
+  // Keys establish equality and may contain TensorImpl addresses. They must
+  // not order autograd node creation: restoring equal values into new owners
+  // would otherwise change the reduction order of their shared gradients.
+  std::vector<std::vector<size_t>> ordered;
+  for(auto& [key,ids]:groups)ordered.push_back(std::move(ids));
+  std::sort(ordered.begin(),ordered.end(),[](const auto& a,const auto& b){return a.front()<b.front();});
+  for(const auto& ids:ordered){
     if(ids.size()<2)continue;
     const auto& first=events[ids[0]];const auto& w=m.nodes[first.node];
     auto values=w.kernel->prepare_shared(w,first.content);

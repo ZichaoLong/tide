@@ -35,8 +35,8 @@ void device_memory(Json& row,at::Device device,bool reset){
   throw std::invalid_argument("benchmark allocator unavailable for requested device");
 }
 }
-void runtime_probe(at::Device device){
-  const auto x=at::ones({1,1},at::TensorOptions().dtype(at::kFloat).device(device));
+void runtime_probe(at::Device device,at::ScalarType dtype){
+  const auto x=at::ones({1,1},at::TensorOptions().dtype(dtype).device(device));
   const auto y=at::matmul(x,x);portable_torch::synchronize(device);
   std::cout<<"TIDE_WEIGHTED_RUNTIME_READY_V1\n"<<std::flush;
 }

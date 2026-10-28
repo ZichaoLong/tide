@@ -31,15 +31,18 @@ def load(path):
     return plan, config
 
 
-def materialize(plan, *, max_bytes):
+def materialize(plan, *, max_bytes, dtype=None):
+    import torch
+    dtype = torch.float32 if dtype is None else dtype
+    if dtype not in (torch.float32, torch.float64):
+        raise ValueError("materialization requires float32 or float64")
     inv = validate_plan(plan)
     positive("max materialization bytes", max_bytes, 2**63-1)
     floor = plan["memory_floor"]
-    required = floor["logical_parameter_bytes"]+floor["legacy_inert_buffer_bytes"]
+    required = (floor["logical_parameter_bytes"]+floor["legacy_inert_buffer_bytes"])*(2 if dtype == torch.float64 else 1)
     if required > max_bytes:
         raise ValueError(f"materialization persistent tensors need at least {required} bytes, ceiling {max_bytes}; "
                          "this excludes initialization peak, optimizer, states and execution")
-    import torch
     from tidegraph import Edge, External, Graph, Node, Region
     from tidegraph.source_class import SourceClasses
     from tidegraph.weighted import KVConfig, RecurrentConfig, RegionalConfig, SourceBinding, bind
@@ -81,4 +84,6 @@ def materialize(plan, *, max_bytes):
             for port, v in enumerate(graph.inputs):
                 origin = g["ranks"][g["node_regions"][v]] if g["kind"] == "ranked-local" else 0
                 xs.append(External(sample, port, position, origin+plan["stride"]*position, value))
+    from weighted_benchmark_precision import promote
+    bound, xs = promote(bound, xs, dtype)
     return bound, xs, plan["span"]

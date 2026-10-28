@@ -15,7 +15,7 @@ def initialize(args, device):
         if args.implementation == "resident":
             from tidegraph.resident_loader import load_resident
             load_resident(args.resident_library, core, component="weighted")
-    probe = torch.ones((1, 1), device=device)
+    probe = torch.ones((1, 1), device=device, dtype=getattr(torch, getattr(args, "dtype", "float32")))
     probe = probe @ probe
     synchronize(device)
     print(READY, flush=True)

@@ -17,7 +17,10 @@
 `scripts/benchmark_weighted.py`消费公共Python、Python调用native或resident接口。
 `weighted_benchmark_cases.py`只构造固定输入、参数和拓扑，不执行参考轨迹。
 配置包括非对齐TimedDAG、同秩HB SettleGraph与反馈PDG；KV/sum首组合或完整SSD，
-FP32、SGD动量、原始时间窗口与短卷积。HB保留真实同秩区域，重复边逐条发送。
+默认FP32、SGD动量、原始时间窗口与短卷积。CPU eager另支持显式`--dtype float64`；
+Python、调用native与standalone均从同一FP32种子/哈希材料在执行前提升，不重新随机初始化。
+请求与生效dtype、输入精度及容差分别记录；FP64使用既有atol1e-10/rtol1e-8，不能替代原FP32资格。
+此benchmark的FP64设备/resident请求提前拒绝，不静默替换。HB保留真实同秩区域，重复边逐条发送。
 small为内容宽4、1样本、每窗2位置；medium为宽32、4样本、每窗4位置。
 这两个有限尺寸用于判断调度与接口成本，不代表大型模型。
 
@@ -36,7 +39,13 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 不把调用裸kernel或只计forward当完整训练。记录实际配置、源码与输入hash、栈、分配器峰值、
 进程生命周期RSS峰值、负载均值和已知争用；不据单次流程声称统计稳定或普遍最快。
 
-测量结束后才执行独立CPU时间递归，核对全部窗口记录、loss和最终optimizer参数值。
+测量结束后才执行独立CPU时间递归，核对全部窗口记录、loss和最终参数值。
+CPU eager/native另导出实际最终参数梯度与SGD动量槽，保留None/连接零，分别对照。
+Python还比较完整optimizer state_dict；standalone的本入口只有固定SGD组，比较所有owner的动量槽。
+最后导出在计时之外；它认证最后窗口梯度/更新槽，不声称逐窗全部梯度都已保存。
+resident本入口仍只比较最终参数，`optimizer_values_checked`及`final_parameter_gradients_checked`为false；
+其完整训练门禁仍由[训练资格](resident-weighted-training.md)给出。旧报告同名optimizer标志
+实际只核对了更新后的参数，不能据此推断当时已验证动量槽；历史报告保留原始记录。
 它不向候选提供选定序列、批次或容量。严格失败保留为失败，不能在该配置上宣称等价加速。
 此有限对照不代替局部手算VJP、独立根、共享参数、checkpoint及完整设备资格。
 验证失败时也保留已完成的`metrics.json`；0503593起同时保留在最终`result.json`。
@@ -82,7 +91,7 @@ NEW_BUILD/client/weighted-benchmark --fixture NEW_FIXTURE_JSON --device cpu \
 常驻standalone构建另给`--resident-build STANDALONE_RESIDENT`，运行显式指定
 `--device npu:0 --implementation resident`。构建器校验core/backend与源码、binary hash、
 无Python依赖的loader和help；这些检查本身没有真机或性能结论。
-C++计时后使用另一个独立scalar调度核对全部记录、loss及最终SGD参数，局部函数锚点沿语义索引追溯。
+C++计时后使用另一个独立scalar调度核对全部记录、loss、最终SGD参数及上述最后梯度/动量，局部函数锚点沿语义索引追溯。
 训练计时包含新建独立输入、完整CPU返回、loss、VJP、finite checks、SGD和同步；
 结果文件采用fsynced staging及原子替换，存在的运行目录直接拒绝。
 

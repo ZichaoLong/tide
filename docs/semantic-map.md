@@ -220,3 +220,11 @@ exact-map VJP和拒绝阈值不变；`test_weighted_quad_scale`保留两份实�
 全部eager KV行的低秩式及独立dense公式/Jacobian由[KV契约](weighted-kv-sharing.md)定位；
 [474f9af固定资格](evidence/core5-local-allocation-factorized-kv-20261028.md)覆盖该改动与局部分配修复。
 大图已越过原残差拒绝但完整状态/训练仍严格不一致，不把局部解准确或FP64诊断扩展为FP32通过。
+
+FC §6.2的共享准备仍由相同输入/参数身份许可；`prepare_shared_state`按首个事件稳定求值，
+opaque key只作相等判断，不能以内存地址决定反向图创建次序。
+独立C++反例见`weighted_kv_sharing.cpp`（故意让key顺序与事件顺序相反）；
+两dtype/Python与native的换owner下一窗口完整记录、梯度和optimizer见
+`test_weighted_workload_training.py`，要求实际checkpoint解码而非参考补写。
+CPU显式FP64测量、最终梯度/SGD槽验证及同材料精度/预算边界见[性能契约](weighted-performance.md)
+与[工作负载设施](weighted-workloads.md)；它们不解除既有FP32严格失败。
