@@ -30,5 +30,21 @@ void prepare_shared_state(const Model& m,std::vector<Event>& events,std::map<std
     stats["state_preparation_events"]+=ids.size();
     stats["state_preparation_reused_events"]+=ids.size()-1;
   }
+  std::map<std::string,std::vector<size_t>> independent;
+  for(size_t i=0;i<events.size();++i){
+    const auto& kernel=m.nodes[events[i].node].kernel;
+    if(events[i].state_prepared.empty()&&kernel->independent_preparation())
+      independent[typeid(*kernel).name()].push_back(i);
+  }
+  ordered.clear();for(auto& [key,ids]:independent)ordered.push_back(std::move(ids));
+  std::sort(ordered.begin(),ordered.end(),[](const auto& a,const auto& b){return a.front()<b.front();});
+  for(const auto& ids:ordered){
+    if(ids.size()<2)continue;
+    std::vector<const NodeWeights*> rows;std::vector<Tensor> contents;
+    for(auto i:ids){rows.push_back(&m.nodes[events[i].node]);contents.push_back(events[i].content);}
+    auto values=rows[0]->kernel->prepare_independent_batch(rows,contents,stats);
+    if(values.size()!=ids.size())throw std::invalid_argument("independent preparation row count mismatch");
+    for(size_t j=0;j<ids.size();++j)events[ids[j]].state_prepared=std::move(values[j]);
+  }
 }
 }

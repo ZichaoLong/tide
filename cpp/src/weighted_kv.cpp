@@ -114,6 +114,17 @@ class KV final:public MemoryKernel {
       const std::map<std::string,Tensor>& shared,std::map<std::string,Index>& stats) const override {
     return prepare_private_kv(rows,shared,stats);
   }
+  bool independent_preparation() const override{return true;}
+  std::vector<std::map<std::string,Tensor>> prepare_independent_batch(const std::vector<const NodeWeights*>& rows,
+      const std::vector<Tensor>& contents,std::map<std::string,Index>& stats) const override {
+    std::vector<double> eps;
+    for(const auto* row:rows){
+      const auto* kernel=dynamic_cast<const KV*>(row->kernel.get());
+      require(kernel!=nullptr,"independent KV preparation kernel mismatch");
+      eps.push_back(kernel->c_.epsilon);
+    }
+    return prepare_independent_kv(rows,contents,eps,stats);
+  }
   std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
       const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
       const std::vector<std::map<std::string,Tensor>>& prepared) const override {

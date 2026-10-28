@@ -33,6 +33,12 @@ class StateKernel {
   virtual std::vector<std::map<std::string,Tensor>> prepare_private_batch(
       const std::vector<const NodeWeights*>& rows,const std::map<std::string,Tensor>& shared,
       std::map<std::string,Index>&) const { return std::vector<std::map<std::string,Tensor>>(rows.size(),shared); }
+  // Optional pure numeric batching across distinct input/parameter identities.
+  // Empty row maps retain the ordinary path; no computation-sharing is implied.
+  virtual bool independent_preparation() const { return false; }
+  virtual std::vector<std::map<std::string,Tensor>> prepare_independent_batch(
+      const std::vector<const NodeWeights*>& rows,const std::vector<Tensor>&,
+      std::map<std::string,Index>&) const { return std::vector<std::map<std::string,Tensor>>(rows.size()); }
   virtual std::vector<State> prepared_batch(const NodeWeights& w,const std::vector<State>& old,
       const Tensor& h,const std::vector<Index>& times,const ContentViews& views,
       const std::vector<std::map<std::string,Tensor>>&) const;

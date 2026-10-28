@@ -63,6 +63,10 @@ class KVMemory(StateProgram):
         from .kv_projection_batch import prepare
         return prepare(memories, shared, stats)
 
+    def prepare_independent_batch(self, memories, contents, stats):
+        from .kv_independent_batch import prepare
+        return prepare(memories, contents, stats)
+
     def batch_autograd_key(self, old, view, time):
         return (bool(view.value[0] > 0),)
 

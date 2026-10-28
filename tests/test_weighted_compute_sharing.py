@@ -80,9 +80,10 @@ def test_equal_independent_inputs_are_not_shared_and_every_use_contributes(dtype
 
 
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_shared_aggregate_optimizer_and_pending_resume(dtype, native, tmp_path):
+@pytest.mark.parametrize("mode", ["region", "node"])
+def test_shared_aggregate_optimizer_and_pending_resume(dtype, native, mode, tmp_path):
     from tidegraph.checkpoint import save, load
-    a, xa, stop = fixture(dtype, "region"); b, xb, _ = fixture(dtype, "region")
+    a, xa, stop = fixture(dtype, mode); b, xb, _ = fixture(dtype, mode)
     def opt(model):
         return torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=.001)
     oa, ob = opt(a.model), opt(b.model); execute = runner(b, native)
@@ -90,6 +91,8 @@ def test_shared_aggregate_optimizer_and_pending_resume(dtype, native, tmp_path):
         oa.zero_grad(set_to_none=True); ob.zero_grad(set_to_none=True)
         ra = reference(a.graph, a.model, Continuation(a.graph.identity, 2), xa, stop, sealed_until=stop)
         rb = execute(Continuation(b.graph.identity, 2), xb, stop, sealed_until=stop)
+        if mode == "node":
+            assert rb.stats["max_state_independent_projection_batch"] > 1
         equivalent(ra, rb)
         objective(ra).backward(); objective(rb).backward()
         for x, y in zip(a.model.parameters(), b.model.parameters()): equivalent(x.grad, y.grad)
@@ -98,13 +101,14 @@ def test_shared_aggregate_optimizer_and_pending_resume(dtype, native, tmp_path):
     first = execute(Continuation(b.graph.identity, 2), [x for x in xb if x.time < cut], cut, sealed_until=cut)
     assert first.continuation.pending
     path = tmp_path/"shared.pt"; save(path, b.graph, b.model, first.continuation, ob)
-    c, _, _ = fixture(dtype, "region"); oc = opt(c.model)
+    c, _, _ = fixture(dtype, mode); oc = opt(c.model)
     restored = load(path, c.graph, c.model, oc)
     equivalent(first.continuation.detach(), restored); equivalent(ob.state_dict(), oc.state_dict())
     tail = [x for x in xb if x.time >= cut]
     ob.zero_grad(set_to_none=True); oc.zero_grad(set_to_none=True)
     rb = execute(first.continuation.detach(), tail, stop, sealed_until=stop)
     rc = runner(c, native)(restored, tail, stop, sealed_until=stop)
-    equivalent(rb, rc)
+    equivalent(rb, rc, atol=0, rtol=0)
     objective(rb).backward(); objective(rc).backward(); ob.step(); oc.step()
-    equivalent(b.model.state_dict(), c.model.state_dict()); equivalent(ob.state_dict(), oc.state_dict())
+    equivalent(b.model.state_dict(), c.model.state_dict(), atol=0, rtol=0)
+    equivalent(ob.state_dict(), oc.state_dict(), atol=0, rtol=0)

@@ -2,10 +2,39 @@
 #include "tide/aggregate_sharing.h"
 #include "tide/weighted.h"
 #include "../src/weighted_row_linear.h"
+#include "../src/weighted_kv_preparation.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 namespace {
+void check_independent_preparation(const at::TensorOptions& o){
+  using namespace tide;
+  auto leaf=[&](std::initializer_list<double> values){return at::tensor(values,o).set_requires_grad(true);};
+  NodeWeights a,b;
+  for(auto* w:{&a,&b}){
+    w->extra["kernel.base"]=leaf({2.,3.}).reshape({2,1});
+    w->extra["kernel.adapter_u"]=leaf({.4,-.2}).reshape({2,1});
+    w->extra["kernel.adapter_v"]=leaf({.5}).reshape({1,1});
+    w->extra["kernel.summary"]=leaf({.7}).reshape({1,1});
+  }
+  auto x=leaf({.4,2.}),y=leaf({.4,-3.});std::map<std::string,Index> stats;
+  auto rows=weighted::prepare_independent_kv({&a,&b},{x,y},{1.,2.},stats);
+  const auto n=2/std::sqrt(5.);
+  const auto tol=o.dtype()==at::kDouble?1e-10:1e-6;
+  if(!at::allclose(rows[0].at("values"),at::tensor({2.2*n,2.9*n},o),tol,tol)
+      ||!at::allclose(rows[1].at("summaries"),at::tensor({-2.1/std::sqrt(11.)},o),tol,tol))
+    throw std::runtime_error("independent KV literal map");
+  auto grads=torch::autograd::grad({rows[0].at("values").sum()+2*rows[0].at("summaries").sum()},
+      {x,y,a.extra.at("kernel.base"),b.extra.at("kernel.base")},{},true,false,true);
+  if(!at::allclose(grads[0],at::tensor({0.,6.5/std::pow(5.,1.5)},o),tol,tol)
+      ||grads[1].defined()||grads[3].defined()
+      ||!at::allclose(grads[2],at::full({2,1},n,o),tol,tol))
+    throw std::runtime_error("independent KV literal Jacobian/None");
+  if(stats.at("max_state_independent_projection_batch")!=2)
+    throw std::runtime_error("independent KV did not batch");
+  stats.clear();auto empty=weighted::prepare_independent_kv({&a,&b},{x,y},{1.,2.},stats,1);
+  if(!empty[0].empty()||!empty[1].empty()||!stats.empty())throw std::runtime_error("KV pack budget ignored");
+}
 void check_private_rows(const at::TensorOptions& o){
   using tide::Tensor;using tide::weighted::linear_rows;
   auto x=at::tensor({2.,-1.},o).set_requires_grad(true);
@@ -31,6 +60,7 @@ void check_private_rows(const at::TensorOptions& o){
 }
 void check_weighted_sharing(const at::TensorOptions& o){
   check_private_rows(o);
+  check_independent_preparation(o);
   using namespace tide;
   Graph g;g.nodes={{0},{0}};g.regions={{2,true,false,"proposal"}};g.inputs={0,1};g.outputs={0,1};g.compile();
   Model m;m.input_scale=m.output_scale={at::ones({},o),at::ones({},o)};

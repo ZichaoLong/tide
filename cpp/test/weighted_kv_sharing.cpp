@@ -51,8 +51,14 @@ void check_weighted_kv_sharing(const at::TensorOptions& o){
   if(unused[0].defined())throw std::runtime_error("shared KV merged private adapter roots");
   events[1].content=h.detach().clone().set_requires_grad(true);events[0].state_prepared.clear();events[1].state_prepared.clear();stats.clear();
   prepare_shared_state(m,events,stats);
-  if(!events[0].state_prepared.empty()||!events[1].state_prepared.empty())
-    throw std::runtime_error("shared KV merged independent equal content roots");
+  if(stats["state_preparation_calls"]!=0||stats["max_state_independent_projection_batch"]!=2)
+    throw std::runtime_error("independent KV rows must batch without computation reuse");
+  for(size_t i=0;i<2;++i)evaluate_state(m,events,{i},true);
+  auto separate=torch::autograd::grad({events[0].proposed_state.slots.at("keys").sum()},
+      {h,events[1].content,roots[3]},{},false,false,true);
+  close(separate[0],at::tensor({0.,2.2/std::pow(5.,1.5)},o));
+  if(separate[1].defined()||separate[2].defined())
+    throw std::runtime_error("independent KV batch connected another row's roots");
   // Opaque identity keys test equality, not execution order. Make their
   // lexical order explicitly opposite to first-use order, independent of
   // allocator addresses. A restored owner must create its graph consistently.
