@@ -5,6 +5,7 @@ This isolates runtime event handling. Passing this smaller graph does not clear
 the weighted graph's asynchronous failure. No production transfer is replaced.
 """
 import argparse
+from contextlib import nullcontext
 import os
 from pathlib import Path
 import sys
@@ -13,20 +14,30 @@ from durable_records import write_json
 from source_identity import source_state
 
 
-def chain(x, a, b):
+def chain(x, a, b, policy="stock"):
+    def move(value, destination):
+        return (value.cpu().to(destination) if policy == "cpu_bridge" and value.device != destination
+                else value.to(destination))
+    def guard(device):
+        return torch.get_device_module(device).device(device) if policy == "device_guard" and device.type != "cpu" else nullcontext()
     terms = []
     for _ in range(12):
-        x = x.to(a.device)*a + .1
-        terms.append(x.square().sum())
-        x = x.to(b.device)*b - .05
-        terms.append(x.square().sum())
-    return sum(t.to(b.device) for t in terms)
+        with guard(a.device):
+            x = move(x, a.device)*a + .1
+            terms.append(x.square().sum())
+        with guard(b.device):
+            x = move(x, b.device)*b - .05
+            terms.append(x.square().sum())
+    with guard(b.device):
+        return sum(move(t, b.device) for t in terms)
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--device", required=True)
     p.add_argument("--peer-device", required=True)
+    p.add_argument("--policy", choices=("stock", "single_thread", "device_guard", "cpu_bridge"), default="stock",
+                   help="diagnostic only; no production transfer or graph support change")
     p.add_argument("--output-dir", type=Path, required=True)
     args = p.parse_args()
     root = Path(__file__).resolve().parents[1]
@@ -45,6 +56,7 @@ def main():
     report = dict(schema="tide-stock-peer-diagnostic-v1", source=source, dirty=dirty,
         state="running", runtime=manifest(device, reason, torch.float32), peer=str(peer),
         launch_blocking=os.environ.get("ASCEND_LAUNCH_BLOCKING"),
+        policy=args.policy,
         scope="12 stock elementwise/copy rounds; scalar roots from both devices; no graph executor/custom Function",
         phases=[])
 
@@ -58,10 +70,11 @@ def main():
         right = tuple(x.to(d).requires_grad_() for x, d in zip(initial, (device, device, peer)))
         expected = chain(*left)
         phase("before_stock_forward")
-        actual = chain(*right)
+        actual = chain(*right, policy=args.policy)
         torch.testing.assert_close(actual.cpu(), expected, rtol=1e-5, atol=1e-6)
         phase("stock_forward_passed")
-        gradients = torch.autograd.grad(actual, right)
+        with torch.autograd.set_multithreading_enabled(False) if args.policy == "single_thread" else nullcontext():
+            gradients = torch.autograd.grad(actual, right)
         phase("stock_vjp_returned")
         reference = torch.autograd.grad(expected, left)
         for x, y in zip(gradients, reference):
