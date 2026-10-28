@@ -107,3 +107,9 @@ CPU仅记录进程生命周期RSS峰值，不能从差值恢复每阶段真实�
 厂商/驱动分配，也不替代驱动空闲内存或容量准入。观测失效明确失败，不把缺失指标写为零。
 `test_weighted_process_observation.py`验证真实子进程成功、缺失/重复标记、非零退出及超时记录；
 设备计数器与实际完整训练分别用固定源码的有限补充测量验证。
+
+standalone消费者在fixture读取、模型构造、warmup、每个measurement窗口、验证准备和
+独立核对前持久化`phase`/`window`，成功后为`phase=complete`。阶段写入使用已有fsync/原子替换，
+在单步同步/计时之前执行，不放进完整训练计时。进程被强制终止时，最后结果可以仍为running；
+外层job的退出码决定终态，不能仅凭部分metrics认定通过。`test_weighted_benchmark_material.py`
+用阻塞FIFO与真实子进程中断验证最后阶段可读，另验五族完整训练及损坏材料的失败阶段。

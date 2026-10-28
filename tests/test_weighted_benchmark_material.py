@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"scripts"))
@@ -43,6 +44,7 @@ def test_five_families_binary_material_and_complete_training(tmp_path, family, s
     assert result.returncode == 0, result.stderr
     record = json.loads((tmp_path/"run/result.json").read_text())
     assert record["state"] == "passed" and record["optimizer_values_checked"] and record["post_measurement_complete_records"]
+    assert record["phase"] == "complete"
     if family != "kv": return
     data = json.loads((tmp_path/"fixture.json").read_text())
     # Distinct corruptions must fail with stable reasons before any timed step.
@@ -54,3 +56,30 @@ def test_five_families_binary_material_and_complete_training(tmp_path, family, s
         copy = json.loads(json.dumps(data)); edit(copy); write_json(tmp_path/(label+".json"),copy)
         failed = command(executable,"--fixture",tmp_path/(label+".json"),"--device","cpu","--steps","1", "--output-dir",tmp_path/label)
         assert failed.returncode and expected in failed.stderr, failed.stderr
+        assert json.loads((tmp_path/label/"result.json").read_text())["phase"] == "construction"
+
+
+def test_standalone_persists_phase_before_blocking_fixture_read(tmp_path):
+    # A FIFO blocks fixture preparation without a large model or timing race.
+    # Termination leaves a running partial result; the outer job owns exit status.
+    executable = binary()
+    fixture = tmp_path/"blocked.json"
+    os.mkfifo(fixture)
+    out = tmp_path/"run"
+    with (tmp_path/"process.log").open("w") as log:
+        process = subprocess.Popen([executable, "--fixture", str(fixture), "--device", "cpu",
+                                    "--output-dir", str(out)], stdout=log, stderr=subprocess.STDOUT)
+        try:
+            deadline = time.monotonic()+30
+            while not (out/"result.json").exists():
+                assert process.poll() is None, "benchmark exited before persisting progress"
+                assert time.monotonic() < deadline, "benchmark did not persist progress"
+                time.sleep(.02)
+            record = json.loads((out/"result.json").read_text())
+            assert record["state"] == "running" and record["phase"] == "fixture-preparation"
+            assert record["metrics"] == []
+            assert process.poll() is None
+        finally:
+            process.terminate()
+            process.wait(timeout=10)
+    assert json.loads((out/"result.json").read_text()) == record
