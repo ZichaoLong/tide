@@ -12,8 +12,13 @@ Cartesian qualification of every option.
 [Parameter-matched workload evidence](evidence/core5-performance-transfer-20261028.md)
 adds fixed CPU/NPU gates, storage/copy changes and actual large material. D64
 FP32 complete records, gradients and optimizer values can fail strict checks;
-the D2048 run refused an allocation residual. These are numerical limitations,
-not expanded passing workload coverage. CUDA remains build/CPU evidence only.
+the original D2048 residual refusal has a separate local numerical repair. Its
+FP32 complete records still fail; explicit CPU FP64 has bounded complete-record
+qualification in the [precision report](evidence/core5-stable-preparation-precision-20261028.md).
+The [new boundary checks](evidence/core5-nongpu-boundaries-20261029.md) clear the
+original SDK fc/affine mixed-a/c witnesses while retaining FP16 GDN, FP32
+feedback and default asynchronous peer failures. CUDA hardware is deferred by
+the user; earlier build/CPU evidence does not certify new GPU execution.
 
 | Layer | Implemented interface and evidence boundary |
 | --- | --- |
@@ -32,7 +37,7 @@ Python-owned code from Torch2.10/CANN9.0 standalone SDK code. Resident FP16 has
 FP32 arithmetic, adjoints and masters with explicit storage-boundary casts;
 it does not certify the different eager FP16 path. Explicit unavailable devices,
 dtypes, capacities and configurations fail. The retained strict eager GDN,
-asynchronous peer, SDK affine and PDG rounding failures are linked from
+asynchronous peer and PDG rounding failures, and the separately cleared SDK affine witnesses, are linked from
 [STATUS](STATUS.md) and the relevant reports. Source/build evidence never
 substitutes for device execution.
 

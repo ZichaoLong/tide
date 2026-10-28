@@ -68,9 +68,8 @@ CPU442项、NPU两dtype四组件（含单设备/双卡训练与恢复）、CUDA�
 | CUDA真机（用户明确延后） | 2026-10-29用户要求延后GPU限制，本轮不排队真机资格；源码、aarch64构建、sm80/90/100常驻核及安装loader已交付；实际GPU前向、反向、optimizer、驻留、跨卡、容量/恢复与性能未验。有硬件后按[设备门禁](device-control.md)与各模块复现命令分层执行，不以CPU/编译替代 |
 | x86_64目标 | 源码保留可移植入口；本轮工具链与设备证据来自aarch64。新目标须独立构建及资格，不能继承本机结果 |
 | eager GDN默认AdamW数值边界 | ad6d1e7的FP32 normalized L2/scaled-RMS通过原两项失败及恢复；旧1f1ec57/1850434失败记录保留。FP16约.001984的两个strict xfail仍保留，其他数值域未由此认证；见[精度](weighted-precision.md)和[新固定资格](evidence/core5-fp32-normalization-20261028.md) |
-| 默认异步双NPU eager VJP | 当前Torch2.12/CANN9.1纯Torch双卡反向也重现invalid event；显式launch blocking通过，不宣称异步已修复；见[mixed设备报告](evidence/core5-device-20261027.md) |
-| standalone SDK FP32 affine | fc/affine第三轮evidence差3.09944e-6，mixed-a同见证，原严格失败不改容差；见[mixed设备报告](evidence/core5-device-20261027.md) |
-| FP32反馈PDG性能严格对照 | ceae7bf两项maxabs4.11272e-6/2.71201e-6；24配置中的这两项不计等价加速，FP64提升诊断不解除原失败；见[性能报告](evidence/core5-weighted-performance-20261028.md) |
+| 默认异步双NPU eager VJP | aadd3b4纯Torch stock/device guard仍EE1017；单线程/CPU桥仅通过小反例。ead6f34单线程完整图仍abort，不能解除；显式blocking原完整资格另列。见[本轮边界](evidence/core5-nongpu-boundaries-20261029.md) |
+| FP32反馈PDG性能严格对照 | aadd3b4原W32/B4四窗仍有记录/梯度/SGD槽差异，参数通过；各调度自身换owner精确恢复通过。显式FP64四窗完整训练与恢复通过，不替代原FP32。见[本轮边界](evidence/core5-nongpu-boundaries-20261029.md) |
 | 新D64 KV完整训练 | 480节点CPU两种调度、Python及HB64 CPU/resident/mixed存在严格浮点差异；两步CPU诊断还见参数梯度和SGD参数差异。1f1ec57的显式FP64两步完整记录/optimizer及换owner下一窗口精确恢复通过；四种接口/调度训练测量通过。d8f7132局部三组FP64首步事件逐值相同但4186梯度/1383参数有容差内差异，第二步状态/2个梯度/动量槽失败；两条各自精确恢复通过。原FP32资格未解除，见[算术隔离](evidence/core5-arithmetic-isolation-20261029.md) |
 | quad大D数值域 | 已捕获并修复两份原失败行的局部相消，原完整材料已越过残差拒绝并执行窗口；但keys严格核对失败。30组实际分配与独立Decimal已分离求解误差/输入差异；1f1ec57同材料D2048显式FP64推理完整核对通过，不能回填FP32；其他数值域未获资格，正支持下溢/区间塌缩继续明确拒绝 |
 | 后续性能优化 | 全部eager KV低秩已实施；私有BMM仍限共享base/输入组，ranked64只覆盖34/479次State、State最大批1。medium新profile有1394次mm/288次bmm，但不是大图统计。跨不同输入的同形运算、小批设备提交、resident组合矩阵与窗口反向复用仍有空间；完整梯度/恢复和端到端成本一起验证 |
@@ -87,8 +86,9 @@ CPU453 passed/2原FP16 strict xfail；NPU两套入口的相关训练、CUDA构�
 后续优先顺序：
 1. D64/D2048 FP32的完整浮点一致性仍待改进；row/reduction/BMM/局部VJP及后续9种分段FP64探针
    均未解决完整训练，未接入生产算术。d8f7132已交付仓库诊断和实际恢复；新证据把最佳局部方案的
-   首步剩余差异缩小到反向求值/汇总，尚未证明唯一的共享叶累加根因。未来扩大伴随量/贡献精度时
-   要覆盖进入汇总前的舍入、独立根及跨步更新，不默认只改最终累加即可修复。
+   首步剩余差异缩小到反向求值/汇总，尚未证明唯一的共享叶累加根因。aadd3b4外层汇合FP64诊断仍有首步2个、第二步9个
+   梯度张量及动量槽超容差，未接入生产；内层私有图仍原精度。新方案须覆盖局部贡献舍入
+   和独立根/跨步更新，不重复已失败探针，也不默认只改最终累加即可修复。
    已验证的显式整条CPU FP64继续作为独立可用配置；原输入、容差和失败不改，不重复既定探针。
 2. 扩大跨不同输入/基座的同形私有模块合批、降低设备小批提交及resident窗口反向构造成本；
    每项先核对独立根/共享/恢复，再据一次有限完整计时决定收益。
@@ -96,3 +96,12 @@ CPU453 passed/2原FP16 strict xfail；NPU两套入口的相关训练、CUDA构�
 
 不自动恢复旧队列、不重跑所有开关矩阵，不以参数量匹配等同函数、模型效果或完整训练工作量匹配。
 公共任务头、loss配方和模型效果仍由下游负责。当前具体任务/源码/作业只见STATUS。
+
+## 非GPU边界的本轮定向闭环
+
+[固定诊断与边界证据](evidence/core5-nongpu-boundaries-20261029.md)：aadd3b4设施14项通过，
+同hash D64外层FP64汇合探针仍严格失败、原反馈FP32失败/显式FP64四窗通过，均逐值恢复通过。
+FP16 GDN原AdamW见证仍保留；默认异步双NPU是可独立复现的运行时阻塞。
+**原SDK fc/affine FP32 mixed-a及mixed-c已在ead6f34完整通过四次更新/恢复**，
+复用构建的C++和22个binary hash逐一核对；旧470ce06失败不改，不能推定全24图资格。
+后续性能增量的实施/验证进度仅见STATUS，尚未以合批源码或调用数声明性能收益。

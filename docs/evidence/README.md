@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[非GPU已知边界与定向解除](core5-nongpu-boundaries-20261029.md)：aadd3b4设施14项通过；外层FP64汇合不足以解除D64，原反馈FP32失败/显式FP64四窗全通过，各自逐值恢复。SDK原affine mixed-a/c四次更新与恢复通过；FP16 GDN和默认异步双NPU严格失败保留。GPU延后，无新增吞吐结论。
+
 [D64算术边界与跨步误差隔离](core5-arithmetic-isolation-20261029.md)：e75e1f5九项探索均严格失败；d8f7132交付可复现诊断，CPU19项设施检查通过。最佳局部方案首步事件逐值相同，但反向/更新仍有容差内差异，第二步状态/梯度/动量槽失败；两条调度自身精确恢复通过。没有采用局部生产策略或新增吞吐/设备声明。
 
 [FP32 GDN/SSD归一化反向](core5-fp32-normalization-20261028.md)：ad6d1e7；CPU453 passed/2原FP16 strict xfail，原两项FP32 GDN AdamW/恢复通过。独立实数Jacobian及逐值前向、standalone NPU四组/纯Python NPU两组完整训练恢复、CUDA构建/CPU核通过；旧失败记录和其他精度/硬件边界保留。

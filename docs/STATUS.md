@@ -18,25 +18,23 @@ unit `core5-independent-dev-20261029`，入口`.local/core5-independent-dev.sh`�
 检查`python scripts/status.py`；停止`systemctl --user stop core5-independent-dev-20261029`。
 下一步：核对开发终态，修复真实失败；通过后提交实现、固定源码定向资格，再有限同材料性能对照。
 
-## 本轮已取得的结果（均ead6f34，尚待整理证据提交）
+## 本轮已提交诊断与待提交证据
 
-- `core5-contribution-v2-20261029` passed/0，`artifacts/jobs/core5-contribution-v2/result.json`：
-  最佳局部FP64探针下首步完整事件逐值相同，中间content伴随量先不同；未证明最终leaf为唯一根因。
-  同Full输出伴随量的私有Full参数梯度相同。descriptor边界别名差异须谨慎解释。
-- `core5-wide-adjoint-v3-20261029` failed/2，`artifacts/jobs/core5-wide-adjoint-v3/check/result.json`：
-  外层汇合点FP64累加、局部VJP原dtype及原三组探针，原D64两步仍严格失败；
-  手算/广播/小型packed图通过，内部私有图仍原autograd。该私有接口只供诊断，未接入生产。
-  原v1/v2分别因广播缩减/Python Function调用失败，保留failed/1，不产生数学结论。
-- `core5-async-boundaries-20261029` failed/2，`artifacts/jobs/core5-async-boundaries/study.json`：
-  stock和device guard仍EE1017；关闭autograd多线程/CPU桥小反例通过。
-  `core5-async-full-20261029` failed/134：单线程完整图仍invalid event，小反例不能认证完整异步。
-- `core5-affine-current-20261029` **passed/0**，`artifacts/jobs/core5-affine-current/result.json`：
-  当前C++与22个binary hash完整相符，复用ad6d1e7 SDK构建；原fc/affine FP32 mixed-c默认AdamW
-  四次更新/完整checkpoint/CPU交接通过。旧470ce06失败保留；mixed-a尚未重验，不外推全24图。
-  C++ hash 8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2。
+诊断实现aadd3b4已普通推送；固定资格全部终态，报告：
+[非GPU边界](evidence/core5-nongpu-boundaries-20261029.md)及同名JSON。
+- core5-join-aadd3b4：failed/2；设施14 passed/0 skipped。原D64外层FP64汇合仍严格失败，
+  两条自身精确恢复通过；反馈FP32四窗记录/梯度/槽失败、参数通过，显式FP64全通过，
+  三条自身第四窗恢复逐值通过。
+- core5-peer-aadd3b4：failed/2；stock/device guard纯Torch失败，single_thread/CPU桥小反例通过。
+  早期ead6f34完整图single_thread仍failed/134，默认异步限制未解除。
+- core5-affine-current及-a：passed/0，ead6f34原SDK fc/affine mixed-c/mixed-a FP32默认AdamW
+  四次更新/完整checkpoint/CPU交接通过。C++及22个binary hash完整核对；不外推全24图。
+- core5-remaining-numeric：failed/1；两个FP16 GDN子任务各strict_mismatch，原值.001983642578125；
+  反馈导入路径错误另开core5-feedback-current，后者正常完成strict_mismatch/2。
 
-上述探索原始驱动在.local/core5-*，固定树`artifacts/worktrees/core5-contribution-baseline`。
-所有探索任务均终态，无需恢复旧队列。正式复现入口/独立见证待随本轮证据归入仓库。
+各原始目录为artifacts/jobs/同名；固定诊断树artifacts/worktrees/core5-join-aadd3b4。
+早期join v1/v2诊断器错误和一次启动目录碰撞保留原failed，报告明确区分基础设施与数学结果。
+没有采用新的生产精度/optimizer，也没有新增吞吐声明。可复现入口均已归入scripts。
 
 ## 仍有效的已提交资格
 
@@ -52,21 +50,9 @@ CUDA真机延后、x86_64无硬件证据、大型设备训练/吞吐未验。SDK
 其余仍按实际范围核验。性能不因矩阵批调用减少就宣称改善，经验写入performance-lessons。
 当前全部待办以[ROADMAP](ROADMAP.md)为准；重入运行status、固定上游核验。
 
-补充两项已声明的定向核对（同ead6f34只读树；默认参数与原容差不变）：
-- `core5-affine-current-a-20261029` / `artifacts/jobs/core5-affine-current-a`，SDK同binary只检查原mixed-a，
-  入口`.local/core5-affine-current-a.sh`；队列180s/计算180s/16G/7min。
-- `core5-remaining-numeric-20261029` / `artifacts/jobs/core5-remaining-numeric`，
-  原FP16 GDN Python/native及原W32/B4反馈PDG四窗完整梯度/SGD槽/换owner恢复；
-  入口`.local/core5-remaining-numeric.sh`，冻结新反馈记录器hash写入result.json；
-  CPU算子1/16G/8min，每项150s。原失败保留，开发探针不冒充新实现资格。
+## 下一步
 
-补充终态：SDK affine mixed-a passed/0；两条原FP16 GDN仍step1严格失败，maxabs .001983642578125。
-`core5-remaining-numeric`总体failed/1是反馈驱动缺scripts导入路径，未运行反馈数学检查。
-仅补反馈新unit `core5-feedback-current-20261029`，`artifacts/jobs/core5-feedback-current`，
-入口`.local/core5-feedback-current.sh`已明确PYTHONPATH；同ead6f34，16G/3min，计算150s。
-不重跑已终态的两条half诊断。
-
-阶段提交准备：仓库化外层FP64汇合诊断（2项机制/小图精确恢复测试通过）、
-原反馈四窗/梯度/SGD槽/逐值恢复入口及纯Torch异步政策开关。它们均为诊断，不改生产默认。
-原反馈新驱动在ead6f34通过执行并保留strict_mismatch/2；记录见core5-feedback-current。
-独立投影性能增量仍在冻结开发构建中，不能把本诊断提交当成其资格。
+数值/异步诊断及SDK具体旧见证的本轮证据准备单独提交；原默认FP32/FP16和异步限制如上保留。
+唯一活跃任务是页首core5-independent-dev（冻结tree53afed324c793b8585ea6df39b2303f784fc0cbd）。
+新的节点私有来源模式三步AdamW/精确恢复Python4项已通过，稍后用新C++检查native同项。
+开发门禁通过后提交KV合批实现、固定源码定向资格及一次有限对照；不恢复旧队列。

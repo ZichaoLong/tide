@@ -74,3 +74,8 @@ standalone NPU四组及纯Python NPU两组相关训练/恢复通过，CUDA构建
 [算术边界诊断](weighted-arithmetic-diagnostics.md)提供显式CPU分段FP64探针、
 逐步梯度/参数误差和精确续接检查。探针不是公共精度策略；部分误差改善不解除D64原FP32失败。
 整条显式FP64、局部算子干预与原FP32分别记录，不静默替换默认执行。
+
+[非GPU边界补充](evidence/core5-nongpu-boundaries-20261029.md)以固定aadd3b4诊断确认：
+外层FP64反向汇合并不足以解除D64；原FP32反馈图的梯度/动量槽仍有严格差异，
+各调度自身逐值恢复通过。同材料显式CPU FP64四窗完整训练通过，FP16 GDN原AdamW失败保持。
+这些是有限数值域的证据，没有采用新的生产dtype或改变optimizer。
