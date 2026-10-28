@@ -1,0 +1,699 @@
+{
+  "schema": "tide-core5-arithmetic-isolation-evidence-v1",
+  "source": "d8f71327f2c1515d78c2ccf3e355fc427673708f",
+  "exploratory_source": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+  "scope": "CPU arithmetic diagnostics only; no production formula/precision or C++ changes; no new throughput/device claim",
+  "optimizer": {
+    "kind": "SGD",
+    "lr": 0.001,
+    "momentum": 0.3,
+    "weight_decay": 0.01
+  },
+  "tolerances": {
+    "float32": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    },
+    "float64": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    }
+  },
+  "exploratory_jobs": [
+    {
+      "name": "core5-d64-precision-stage1",
+      "unit": "core5-d64-precision-stage1-20261029",
+      "status": {
+        "source": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+        "dirty": "",
+        "state": "failed",
+        "started": "2026-10-28T16:24:21.670830+00:00",
+        "finished": "2026-10-28T16:31:14.738734+00:00",
+        "exit_code": 2
+      },
+      "study": {
+        "path": "artifacts/jobs/core5-d64-precision-stage1/study.json",
+        "bytes": 4252,
+        "sha256": "75916a52bebd2a731e4c2831b41e6b1ec29e5789024696096ef9104ce7128416"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-d64-precision-stage1/task.log",
+        "bytes": 31455,
+        "sha256": "f453977acbd24a789856b2cfba6c150c8652ca871fcb45864af3bba6d9f96c3c"
+      },
+      "driver_sha256": "ffa8010dbd4ff0573536fbe0b12cea61edb04035b2624c2e14dc34fb0be7b404",
+      "probe_sha256": "2aed594143d2042a6110fe2b6b4cfc722eea2df83d19eaccea1fa14f4d988325",
+      "variants": [
+        {
+          "variant": "baseline",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/baseline/result.json",
+            "bytes": 16100,
+            "sha256": "46babb14f75ca59f9280d52bc170f94ae15043cca0f6df8ca90c1a272289e993"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 3 / 64 (4.7%)\nGreatest absolute difference: 2.8759241104125977e-06 at index (0, 63) (up to 1e-06 allowed)\nGreatest relative difference: 8.608994539827108e-05 at index (0, 37) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2393,
+              "parameter_failing_tensors": 3,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.5720725059509277e-06 at index (1, 13) (up to 1e-06 allowed)\nGreatest relative difference: 5.806276385555975e-05 at index (1, 13) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2566,
+              "parameter_failing_tensors": 6,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "linear64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/linear64/result.json",
+            "bytes": 10601,
+            "sha256": "60809d250e86a5e86c68ebdf3c7c514b67d41a2a9ec17c984a95cef875e338e2"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": true,
+              "records_first_error": null,
+              "gradient_failing_tensors": 2,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 160)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.5124678611755371e-06 at index (1, 33) (up to 1e-06 allowed)\nGreatest relative difference: 4.840023393626325e-05 at index (1, 33) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 48,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "reduce64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/reduce64/result.json",
+            "bytes": 16201,
+            "sha256": "c6a638fe1cbccb5ea3a2d075f14a052260e90ba865bfc4d9d7c738941b1745de"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 131)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 2 / 64 (3.1%)\nGreatest absolute difference: 1.475214958190918e-06 at index (0, 57) (up to 1e-06 allowed)\nGreatest relative difference: 0.00012015509855700657 at index (0, 4) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2371,
+              "parameter_failing_tensors": 4,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 0)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 22 / 128 (17.2%)\nGreatest absolute difference: 6.489455699920654e-06 at index (1, 12) (up to 1e-06 allowed)\nGreatest relative difference: 0.0012172921560704708 at index (1, 34) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2667,
+              "parameter_failing_tensors": 4,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "linear_reduce64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/linear_reduce64/result.json",
+            "bytes": 10986,
+            "sha256": "55689020713022a4e99b647e2cc3a7ae58cf0790c0af0594f04f3c7406694faa"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": true,
+              "records_first_error": null,
+              "gradient_failing_tensors": 2,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 214)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.519918441772461e-06 at index (1, 57) (up to 1e-06 allowed)\nGreatest relative difference: 0.00015901077131275088 at index (1, 57) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 22,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "norm64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/norm64/result.json",
+            "bytes": 13475,
+            "sha256": "6293dd3d35c5c8c63d54917cc449611090fa2d63ff04a976fda797783f79b821"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 111)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 1 / 64 (1.6%)\nGreatest absolute difference: 1.4193356037139893e-06 at index (0, 3) (up to 1e-06 allowed)\nGreatest relative difference: 4.279041968402453e-05 at index (0, 3) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2088,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 0)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 6 / 128 (4.7%)\nGreatest absolute difference: 2.9280781745910645e-06 at index (1, 34) (up to 1e-06 allowed)\nGreatest relative difference: 0.0005746445967815816 at index (1, 34) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2387,
+              "parameter_failing_tensors": 1,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "linear_reduce_norm64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/linear_reduce_norm64/result.json",
+            "bytes": 7462,
+            "sha256": "ba4556dd7fc194e0b487015d989e5795961cc85a6a5dd5434796433a9b75b8c4"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": true,
+              "records_first_error": null,
+              "gradient_failing_tensors": 0,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": true
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 294)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.341104507446289e-06 at index (1, 13) (up to 1e-06 allowed)\nGreatest relative difference: 0.00018027328769676387 at index (1, 13) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "backward_linear_reduce64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage1/backward_linear_reduce64/result.json",
+            "bytes": 16594,
+            "sha256": "33ac3e1aa69c5466e0dfab6f8a35eba604f3bf2ef33c74043bcdad0dd651e7bc"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 3 / 64 (4.7%)\nGreatest absolute difference: 2.8759241104125977e-06 at index (0, 63) (up to 1e-06 allowed)\nGreatest relative difference: 8.608994539827108e-05 at index (0, 37) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2392,
+              "parameter_failing_tensors": 3,
+              "optimizer_pass": false
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.5720725059509277e-06 at index (1, 13) (up to 1e-06 allowed)\nGreatest relative difference: 5.806271656183526e-05 at index (1, 13) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 2590,
+              "parameter_failing_tensors": 6,
+              "optimizer_pass": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "core5-d64-precision-stage2",
+      "unit": "core5-d64-precision-stage2-20261029",
+      "status": {
+        "source": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+        "dirty": "",
+        "state": "failed",
+        "started": "2026-10-28T16:35:05.375326+00:00",
+        "finished": "2026-10-28T16:37:23.412157+00:00",
+        "exit_code": 2
+      },
+      "study": {
+        "path": "artifacts/jobs/core5-d64-precision-stage2/study.json",
+        "bytes": 1519,
+        "sha256": "a310827570f498ac6612a6aa9123363fc107b98c879344ee3777226cb9cea688"
+      },
+      "log": {
+        "path": "artifacts/jobs/core5-d64-precision-stage2/task.log",
+        "bytes": 5150,
+        "sha256": "8f8ce0661908fe4cee5aa65788394265f2e7b8d4a8ebdfeca35f4b917ff36166"
+      },
+      "driver_sha256": "7ed6653ba4b00121c7c5df22d12d6760dde0c1b86077c0172b52dfc2f8835690",
+      "probe_sha256": "9e39d490f233e34093cf98925282b27520a9a18b7621014f8f0daccd205ec06f",
+      "variants": [
+        {
+          "variant": "nonlinear64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage2/nonlinear64/result.json",
+            "bytes": 10239,
+            "sha256": "bbab91815ffd58d77d12d2ca5b49899dd8420617942b01e66017b51db1be38f1"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": true,
+              "records_first_error": null,
+              "gradient_failing_tensors": 0,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": true
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 229)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 2.000480890274048e-06 at index (1, 39) (up to 1e-06 allowed)\nGreatest relative difference: 5.808868081658147e-05 at index (1, 39) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 16,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            }
+          ]
+        },
+        {
+          "variant": "coherent_read64",
+          "exit_code": 2,
+          "result": {
+            "path": "artifacts/jobs/core5-d64-precision-stage2/coherent_read64/result.json",
+            "bytes": 9785,
+            "sha256": "93e28e0574f1b484f30606e820ec32cb28866673fd944913b2bcdb61cdfe508c"
+          },
+          "steps": [
+            {
+              "step": 0,
+              "discrete_pass": true,
+              "records_pass": true,
+              "records_first_error": null,
+              "gradient_failing_tensors": 0,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": true
+            },
+            {
+              "step": 1,
+              "discrete_pass": true,
+              "records_pass": false,
+              "records_first_error": "root.continuation.states[(0, 277)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.3113021850585938e-06 at index (1, 33) (up to 1e-06 allowed)\nGreatest relative difference: 0.0005099202389828861 at index (1, 33) (up to 1e-05 allowed)",
+              "gradient_failing_tensors": 17,
+              "parameter_failing_tensors": 0,
+              "optimizer_pass": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fixed_qualification": {
+    "status": {
+      "source": "d8f71327f2c1515d78c2ccf3e355fc427673708f",
+      "dirty": "",
+      "state": "failed",
+      "started": "2026-10-28T16:47:19.649354+00:00",
+      "finished": "2026-10-28T16:49:56.726585+00:00",
+      "exit_code": 2
+    },
+    "unit": "core5-arithmetic-qualified-20261029",
+    "live_unit": {
+      "MainPID": "1976072",
+      "Slice": "background.slice",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/core5-arithmetic-qualified-20261029.service",
+      "ActiveState": "active",
+      "Transient": "yes"
+    },
+    "environment": {
+      "torch": "2.12.0+cpu",
+      "architecture": "aarch64",
+      "threads": 1
+    },
+    "facility_checks": "passed",
+    "tests": {
+      "tests": "19",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "25.878"
+    },
+    "cpp": {
+      "source_sha256": "8c942fa686ed276204b3bd5a04a026513a3ca21d0a480506c2ae3ba32211d7b2",
+      "matched_binary_count": 23,
+      "cache_manifest_base_source": "1850434d842227994fd11aa2f8b65ed1d503638d",
+      "reused_only_after_full_hash_checks": true,
+      "rebuilt": false
+    },
+    "artifacts": [
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/qualification.json",
+        "bytes": 6127,
+        "sha256": "c4dcc7ccb4a583df1d673a9204fda0c4c67a4882e0263ffdb72e81d5dff5d31d"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/status.json",
+        "bytes": 480,
+        "sha256": "6b544676a05342ffe2ed9e34afaa37a24d6f34bfed1483532e12205c948daa68"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/task.log",
+        "bytes": 901,
+        "sha256": "b8bb73ec435c1759eadbba32d5ee1217d2a6b7c6ba194eb7c212157fbfe941b5"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/tests.xml",
+        "bytes": 3108,
+        "sha256": "ac8faf18b3ddf0a647aed412eb92a23d210a189f13db08536ee6db0eaccb9f34"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/plan/workload.json",
+        "bytes": 290258,
+        "sha256": "f36f89feb83b8c83f0156638a1d0490a39b5dc178357748bcb4563d735ebe810"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/d64-local64/status.json",
+        "bytes": 924,
+        "sha256": "28dbefe2f8bb3fe584121cf8d3d552b7b4b763f56c2fa6b217f58f747da8b411"
+      },
+      {
+        "path": "artifacts/jobs/core5-arithmetic-qualified/d64-local64/check/result.json",
+        "bytes": 8878,
+        "sha256": "e7db29fb335bd87796f53cffade8ef8d2e554061eddcfad60932544c302ccbc0"
+      }
+    ],
+    "d64_status": {
+      "source": "d8f71327f2c1515d78c2ccf3e355fc427673708f",
+      "dirty": "",
+      "state": "failed",
+      "started": "2026-10-28T16:47:49.947254+00:00",
+      "finished": "2026-10-28T16:49:56.351067+00:00",
+      "exit_code": 2
+    },
+    "result": {
+      "schema": "tide-weighted-workload-diagnostic-v1",
+      "source": "d8f71327f2c1515d78c2ccf3e355fc427673708f",
+      "dirty": "",
+      "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+      "implementation": "python",
+      "dtype": "float32",
+      "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+      "scope": "CPU complete records, discrete structure, output-loss gradients, SGD values/slots; optional exact next-window resume; not throughput",
+      "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+      "arithmetic": {
+        "variant": "linear_reduce_norm64",
+        "widened_ops": [
+          "aten.addmm.default",
+          "aten.bmm.default",
+          "aten.dot.default",
+          "aten.mean.default",
+          "aten.mean.dim",
+          "aten.mm.default",
+          "aten.mv.default",
+          "aten.sum.default",
+          "aten.sum.dim_IntList"
+        ],
+        "normalization_fp64": true,
+        "backward_only": false,
+        "operation_counts": {
+          "forward:aten.mv.default": 22997,
+          "forward:aten.sum.default": 7380,
+          "forward:aten.sum.dim_IntList": 23183,
+          "forward:aten.mm.default": 32504,
+          "forward:aten.bmm.default": 24,
+          "backward:aten.sum.default": 4232,
+          "backward:aten.mv.default": 21743,
+          "backward:aten.sum.dim_IntList": 22329,
+          "backward:aten.mm.default": 51882,
+          "backward:aten.bmm.default": 24
+        },
+        "result_boundary": "selected operator result cast to FP32; norm internal FP64 with FP32 result/VJP",
+        "optimizer": "outside intervention, unchanged",
+        "scope": "diagnostic only; not public implementation, native/device qualification or throughput"
+      },
+      "scoring_dtype": "profile",
+      "state": "strict_mismatch",
+      "steps": [
+        {
+          "step": 0,
+          "discrete": null,
+          "complete_records": null,
+          "reference_work": {
+            "candidate_updates": 479,
+            "full_calls": 331,
+            "messages": 1541,
+            "outputs": 19,
+            "pending": 0,
+            "actual_stats": {
+              "candidate_events": 479
+            }
+          },
+          "candidate_work": {
+            "candidate_updates": 479,
+            "full_calls": 331,
+            "messages": 1541,
+            "outputs": 19,
+            "pending": 0,
+            "actual_stats": {
+              "greedy_stages": 15,
+              "greedy_relaxed_edges": 196,
+              "region_blocks": 15,
+              "candidate_events": 479,
+              "visited_edges": 1541,
+              "max_live_fibers": 63,
+              "max_greedy_frames": 1,
+              "state_blocks": 479,
+              "state_steps": 0,
+              "full_blocks": 331,
+              "state_sequence_calls": 479,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 445,
+              "aggregate_computed_events": 445,
+              "aggregate_reused_events": 34,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 114,
+              "max_state_private_projection_batch": 32,
+              "state_preparation_calls": 4,
+              "state_preparation_events": 38,
+              "state_preparation_reused_events": 34,
+              "batched_aggregate_events": 479,
+              "batched_state_events": 479,
+              "max_state_batch": 1,
+              "max_state_sequence": 1,
+              "read_calls": 479,
+              "batched_read_events": 479,
+              "region_batch_calls": 15,
+              "max_region_batch": 1,
+              "batched_region_frames": 15,
+              "region_steps": 15,
+              "next_steps": 479,
+              "max_full_batch": 1,
+              "full_calls": 331,
+              "batched_full_events": 331,
+              "selected_events": 331,
+              "source_rows": 1573
+            }
+          },
+          "first_exact_trace_difference": null,
+          "losses": [
+            5.517802715301514,
+            5.517802715301514
+          ],
+          "gradients": null,
+          "gradient_detail": {
+            "examined_tensors": 6381,
+            "nonidentical_tensors": 4186,
+            "failing_tensors": 0,
+            "worst": []
+          },
+          "parameters": null,
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 1383,
+            "failing_tensors": 0,
+            "worst": []
+          },
+          "optimizer": null,
+          "checkpoint_exact_decode": true
+        },
+        {
+          "step": 1,
+          "discrete": null,
+          "complete_records": "root.continuation.states[(0, 294)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.341104507446289e-06 at index (1, 13) (up to 1e-06 allowed)\nGreatest relative difference: 0.00018027328769676387 at index (1, 13) (up to 1e-05 allowed)",
+          "reference_work": {
+            "candidate_updates": 479,
+            "full_calls": 344,
+            "messages": 1604,
+            "outputs": 19,
+            "pending": 0,
+            "actual_stats": {
+              "candidate_events": 479
+            }
+          },
+          "candidate_work": {
+            "candidate_updates": 479,
+            "full_calls": 344,
+            "messages": 1604,
+            "outputs": 19,
+            "pending": 0,
+            "actual_stats": {
+              "greedy_stages": 15,
+              "greedy_relaxed_edges": 196,
+              "region_blocks": 15,
+              "candidate_events": 479,
+              "visited_edges": 1604,
+              "max_live_fibers": 63,
+              "max_greedy_frames": 1,
+              "state_blocks": 479,
+              "state_steps": 0,
+              "full_blocks": 344,
+              "state_sequence_calls": 479,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 447,
+              "aggregate_computed_events": 447,
+              "aggregate_reused_events": 32,
+              "state_private_projection_calls": 6,
+              "state_private_projection_rows": 102,
+              "max_state_private_projection_batch": 32,
+              "state_preparation_calls": 2,
+              "state_preparation_events": 34,
+              "state_preparation_reused_events": 32,
+              "batched_aggregate_events": 479,
+              "batched_state_events": 479,
+              "max_state_batch": 1,
+              "max_state_sequence": 1,
+              "read_calls": 479,
+              "batched_read_events": 479,
+              "region_batch_calls": 15,
+              "max_region_batch": 1,
+              "batched_region_frames": 15,
+              "region_steps": 15,
+              "next_steps": 479,
+              "max_full_batch": 1,
+              "full_calls": 344,
+              "batched_full_events": 344,
+              "selected_events": 344,
+              "source_rows": 1636
+            }
+          },
+          "first_exact_trace_difference": {
+            "left_event": [
+              18,
+              0,
+              0
+            ],
+            "right_event": [
+              18,
+              0,
+              0
+            ],
+            "error": "root[content]: Tensor-likes are not equal!\n\nMismatched elements: 7 / 65 (10.8%)\nGreatest absolute difference: 1.4901161193847656e-08 at index (45,)\nGreatest relative difference: 7.418782843160443e-06 at index (32,)"
+          },
+          "losses": [
+            4.842075824737549,
+            4.842075824737549
+          ],
+          "gradients": "root[nodes.171.read_program.score.vector]: Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 1.426786184310913e-06 at index (3,) (up to 1e-06 allowed)\nGreatest relative difference: 3.585679587558843e-05 at index (3,) (up to 1e-05 allowed)",
+          "gradient_detail": {
+            "examined_tensors": 6496,
+            "nonidentical_tensors": 5254,
+            "failing_tensors": 2,
+            "worst": [
+              {
+                "name": "nodes.457.read_program.score.vector",
+                "scaled_error": 1.42431687467304,
+                "maxabs": 2.7045607566833496e-06,
+                "flat_index": 10,
+                "left": 0.08988747000694275,
+                "right": 0.08988476544618607
+              },
+              {
+                "name": "nodes.171.read_program.score.vector",
+                "scaled_error": 1.0206549760970067,
+                "maxabs": 1.426786184310913e-06,
+                "flat_index": 3,
+                "left": 0.039792660623788834,
+                "right": 0.03979123383760452
+              }
+            ]
+          },
+          "parameters": null,
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 2144,
+            "failing_tensors": 0,
+            "worst": []
+          },
+          "optimizer": "root[state][7273][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 2.7045607566833496e-06 at index (10,) (up to 1e-06 allowed)\nGreatest relative difference: 2.9749757231911644e-05 at index (10,) (up to 1e-05 allowed)",
+          "exact_resume": [
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            },
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "development": {
+    "status": {
+      "source": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+      "dirty": "M docs/STATUS.md\n M docs/weighted-precision.md\n M scripts/diagnose_weighted_workload.py\n?? docs/weighted-arithmetic-diagnostics.md\n?? scripts/weighted_arithmetic_probe.py\n?? scripts/weighted_numeric_differences.py\n?? tests/test_weighted_arithmetic_probe.py",
+      "state": "passed",
+      "started": "2026-10-28T16:44:42.789553+00:00",
+      "finished": "2026-10-28T16:45:13.855736+00:00",
+      "exit_code": 0
+    },
+    "result": {
+      "path": "artifacts/jobs/core5-arithmetic-dev/development.json",
+      "bytes": 1163,
+      "sha256": "0d6deae66af48b61a0c1ef8d20a3558838776bcd69dabc38469ce86054d0f1e3"
+    },
+    "snapshot": {
+      "path": "artifacts/jobs/core5-arithmetic-dev/source.tar.gz",
+      "bytes": 45202864,
+      "sha256": "1224010d33b5b963471b187054075fa34cf58e38a2b8a76a9f23b792fc3a338a"
+    },
+    "tests": 19
+  }
+}
