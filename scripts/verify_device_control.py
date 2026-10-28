@@ -88,7 +88,10 @@ def main():
                     command.extend(("--emission", "--compact-journals", "--explicit-owners"))
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
-                    result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
+                    # Vendor initialization can write kernel_meta/ before the
+                    # first operator. Keep runtime scratch out of frozen source,
+                    # including when another backend is being built there.
+                    result = subprocess.run(command, cwd=out, stdout=log, stderr=subprocess.STDOUT,
                                             timeout=600 if check in ("weighted-stage", "weighted-training", "weighted-peer", "weighted-node-window", "weighted-node-training", "weighted-node-replicas") else 360 if check in ("weighted-node-peer", "weighted-retained", "weighted-saved-window", "weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text

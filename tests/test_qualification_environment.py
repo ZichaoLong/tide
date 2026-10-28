@@ -116,3 +116,35 @@ def test_unset_vendor_path_does_not_add_current_directory(inherited, tmp_path):
     env = {} if inherited is None else {'PYTHONPATH': inherited}
     result = with_pythonpath(env, tmp_path/'fixed')
     assert result['PYTHONPATH'].split(os.pathsep) == [str(tmp_path/'fixed')]
+
+
+@pytest.mark.parametrize('fails', [False, True])
+def test_standalone_component_scratch_is_outside_frozen_source(tmp_path, monkeypatch, fails):
+    import verify_device_control as entry
+    from source_identity import digest
+
+    build = tmp_path/'build'
+    build.mkdir()
+    binary = build/'probe'
+    binary.write_text('#!/bin/sh\nmkdir kernel_meta\n' + ('exit 2\n' if fails else 'echo component-passed\n'))
+    binary.chmod(0o700)
+    (build/'control-build.json').write_text(json.dumps(dict(
+        backend='npu', component_sha256='component', core=dict(cpp_source_sha256='core'),
+        binary_sha256={'probe': digest(binary)})))
+    monkeypatch.setattr(entry, 'component_hash', lambda _: 'component')
+    monkeypatch.setattr(entry, 'source_hash', lambda _: 'core')
+    monkeypatch.setattr(entry, 'source_state', lambda _: ('fixed', ''))
+    monkeypatch.setattr(entry, 'CHECKS', {'probe': ('probe', ('float32',))})
+    monkeypatch.setattr(entry, 'MARKERS', {'probe': 'component-passed'})
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(sys, 'argv', ['verify_device_control.py', '--device', 'npu:0',
+        '--build-dir', 'build', '--output-dir', 'gate', '--checks', 'probe'])
+    if fails:
+        with pytest.raises(RuntimeError, match='device gate failed'):
+            entry.main()
+    else:
+        entry.main()
+    assert (tmp_path/'gate/kernel_meta').is_dir()
+    assert not (tmp_path/'kernel_meta').exists()
+    assert Path.cwd() == tmp_path
+    assert json.loads((tmp_path/'gate/result.json').read_text())['state'] == ('failed' if fails else 'passed')

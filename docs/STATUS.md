@@ -1,7 +1,7 @@
 # 当前交接 — 2026-10-28
 
 继续用户授权A—E：已知限制、LH/fractal/core-3经验迁移、参数匹配与性能/正确性设施。
-分支graph-execution-foundation；已推送b0321b9。固定数学0770593838a37c790a568226930567ed60f99b83。
+分支graph-execution-foundation；已推送2da3f2c。固定数学0770593838a37c790a568226930567ed60f99b83。
 不使用子代理；参考仓库和公共环境只读。阶段提交后继续。
 
 ## 当前工作与下一步
@@ -45,3 +45,9 @@ CUDA真机/x86_64、大规模容量和跨卡吞吐单列。旧性能只覆盖宽
 CUDA构建补验：core5-performance-cuda-dev2-20261028，同一dev2冻结源码，sm80/90/100 core及四resident组件；build2、CPUQuota200%、MemoryMax64G、5400秒、background.slice/Nice10。artifacts/jobs/core5-performance-cuda-dev2与build/cuda-core、cuda-resident。仅构建/CPU核验，无GPU真机结论。
 
 开发终态：dev2的58项、standalone材料5项及24用例×4更新/精确checkpoint通过；主工作树最终参数/材料119项通过（含新增scaled core-3与严格标签、非默认alpha_agg）。尚不替代固定提交资格。NPU/CUDA服务继续读取旧冻结副本，C++与当前实现字节一致。
+
+固定资格：core5-performance-qualify-cpu-20261028，源码2da3f2c只读副本artifacts/worktrees/core5-performance-qualified；复核并复用dev2同C++源码hash二进制，重新构建standalone消费者。相关完整CPU/材料/训练门禁，1200秒、CPUQuota200%、MemoryMax64G、background.slice/Nice10。输出artifacts/jobs/core5-performance-qualify-cpu，已passed：376 passed/2 strict xfail，24图用例×4更新及checkpoint通过。
+
+有限CPU选型：core5-performance-study-cpu-20261028，固定2da3f2c同只读副本；baseline/new original-medium，480节点D64主体参数匹配，D2048四节点训练，480节点D2048约92.62亿参数推理，HB64全上限/稀疏/SSD及独立CPU profile。每配置1warmup+1测量，单进程900秒、总3600秒、MemoryMax192G、CPUQuota200%、ATen1。输出artifacts/jobs/core5-performance-study-cpu/runs。真实比较/容量失败保留；CUDA/NPU有限构建并行产生已知CPU争用，无其他本项目重型计时并行。
+
+当前审查补丁：设备子进程cwd移入独立输出目录，防止NPU kernel_meta污染并行构建的源码身份；保留CUDA原failed终态（编译完成后身份检查拒绝）。新增有界v2→v1无损材料解码及CPU FP32/FP64分歧诊断，14项定向测试、小型native FP64两步诊断通过。随后提交并以新固定源码核验；数学函数/容差未改。

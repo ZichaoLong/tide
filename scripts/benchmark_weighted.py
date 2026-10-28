@@ -116,7 +116,7 @@ def main():
         synchronize(device); record["construction_seconds"] = time.perf_counter()-start
         memory.capture("construction", reset=True)
         record["effective"] = candidate.manifest()
-        actual = []; metrics = []
+        actual = []; metrics = []; record["metrics"] = metrics
         start = time.perf_counter(); actual.append(candidate.step(0))
         record["warmup_seconds"] = time.perf_counter()-start
         memory.capture("warmup", reset=True)
