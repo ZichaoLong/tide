@@ -5,6 +5,7 @@ Run under scripts/job.py in a durable service. Keep checkout/build caches frozen
 until termination. Clean qualification still uses scripts/verify.py.
 """
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 import json
 from pathlib import Path
@@ -16,7 +17,7 @@ from build_identity import source_hash
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
-parser.add_argument("--jobs", type=int, default=2)
+add_build_jobs(parser)
 parser.add_argument("--build-dir", default="build")
 parser.add_argument("--reuse-build", action="store_true", help="Verify and reuse an immutable matching build")
 parser.add_argument("tests", nargs="+", help="pytest paths or node IDs")

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build against the exact Torch imported by this Python; no site paths."""
 import argparse
+from build_resources import add_build_jobs
 import os
 from pathlib import Path
 import subprocess
@@ -14,7 +15,7 @@ from build_environment import check_reuse, environment
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--build-dir", default="build")
-parser.add_argument("--jobs", type=int, default=2)
+add_build_jobs(parser)
 parser.add_argument("--backend", choices=("cpu", "cuda", "npu"), default="cpu")
 parser.add_argument("--npu-runtime", choices=("python", "standalone"), default="python")
 args = parser.parse_args()
@@ -47,7 +48,7 @@ subprocess.run(["cmake", "--build", str(target), "--parallel", str(args.jobs)], 
 if source_hash(root) != before:
     raise RuntimeError("C++ source changed during build; freeze the source and rebuild")
 manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": torch.__version__,
-            "environment": environment(target),
+            "environment": environment(target), "build_jobs": args.jobs,
             "backend": args.backend, "npu_runtime": args.npu_runtime if args.backend == "npu" else None,
             "torch_npu": vendor, "cuda": torch.version.cuda,
             "architecture": platform.machine(), "python": platform.python_version(),

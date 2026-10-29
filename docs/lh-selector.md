@@ -43,9 +43,9 @@ in serial, node-parallel packed streaming and frontier modes.
 ```sh
 python scripts/snapshot_lh.py --source /path/to/lh --json-include /path/to/include \
   --output-dir artifacts/lh-source-unique
-TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/build.py --jobs 2
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/build.py --jobs all
 python scripts/check_lh_selector.py --device cpu --dtype both \
-  --snapshot artifacts/lh-source-unique --output-dir artifacts/lh-oracle-unique --jobs 2
+  --snapshot artifacts/lh-source-unique --output-dir artifacts/lh-oracle-unique --jobs all
 ```
 
 Use the durable job workflow for builds. The oracle verifies snapshot identity,

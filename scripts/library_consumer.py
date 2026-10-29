@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build/install a wheel and consume only installed Python/native/C++ surfaces."""
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 import json
 import os
@@ -21,6 +22,7 @@ def main():
     parser.add_argument("--python-only", action="store_true", help="development scope; full consumption is the default")
     parser.add_argument("--device", default="cpu", help="explicit accelerator for target-machine consumption")
     parser.add_argument("--skip-cpp", action="store_true", help="Python-owned NPU adapters need a separate standalone SDK gate")
+    add_build_jobs(parser)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     out, build = Path(args.output_dir).resolve(), Path(args.build_dir).resolve()
@@ -99,7 +101,7 @@ def main():
             shutil.copytree(root / "examples/consumer_cpp", out / "cpp-application")
             run(["cmake", "-S", out / "cpp-application", "-B", out / "cpp-build", "-G", "Ninja",
                  "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={out / 'prefix'};{torch.utils.cmake_prefix_path}"])
-            run(["cmake", "--build", out / "cpp-build", "--parallel", "2"])
+            run(["cmake", "--build", out / "cpp-build", "--parallel", str(args.jobs)])
             dtypes = ["float32", "float64"] if args.device == "cpu" else ["float32"]
             for dtype in dtypes:
                 run([out / "cpp-build/consumer", "--device", args.device, "--dtype", dtype])

@@ -35,7 +35,11 @@
 - Use `docs/verification.md` for development/full gate scopes and isolated
   qualification. Smoke evidence must never stand in for a complete matrix.
 - Long builds/tests use a detached user service in `background.slice`, bounded
-  build/CPU threads, a frozen checkout and durable status/logs. Never edit source
+  build/CPU threads, a frozen checkout and durable status/logs. Builds default to
+  all affinity-available CPUs; `--jobs half` or an explicit positive count is
+  allowed. No fixed two-worker cap. Record actual constraints when reducing
+  workers. Tests may use idle CPU/NPU/memory; heavy timing and builds do not
+  overlap within this project. Never edit source
   that an active job reads. Short checks may run interactively.
 - Do not delegate to sub-agents unless the user explicitly requests delegation.
 

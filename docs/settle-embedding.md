@@ -124,7 +124,7 @@ auto body_result = spec.project(encoded_result);
 Build without Python headers/bindings using normal LibTorch CMake discovery:
 `cmake -S . -B BUILD -DCMAKE_PREFIX_PATH=LIBTORCH_PREFIX
 -DTIDE_PYTHON_BINDINGS=OFF`; then
-`cmake --build BUILD --target tidegraph-settle-check --parallel 2`.
+`cmake --build BUILD --target tidegraph-settle-check --parallel "$(python scripts/build_resources.py)"`.
 `tidegraph-settle-check --device=cpu --dtype=float64` (also float32) constructs,
 encodes and runs a two-layer graph and checks a literal independent recurrence,
 initial-state/input/shared-parameter VJPs, unused Read gradients, actual sequence

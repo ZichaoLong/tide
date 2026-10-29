@@ -36,7 +36,7 @@ TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m pytest -q tests/test_semantics.py --dt
 ## 构建 LibTorch CPU 与相关开发测试
 
 ```sh
-TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/build.py --backend cpu --build-dir build/cpu --jobs 2
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/build.py --backend cpu --build-dir build/cpu --jobs all
 TIDE_BUILD_DIR="$PWD/build/cpu" python -m pytest -q tests/test_semantics.py tests/test_native_settle.py --dtype both
 ```
 
@@ -46,7 +46,7 @@ TIDE_BUILD_DIR="$PWD/build/cpu" python -m pytest -q tests/test_semantics.py test
 ```sh
 cmake -S . -B build/cpu-standalone -DCMAKE_PREFIX_PATH=/path/to/libtorch \
   -DTIDE_BACKEND=CPU -DTIDE_PYTHON_BINDINGS=OFF
-cmake --build build/cpu-standalone --parallel 2
+cmake --build build/cpu-standalone --parallel "$(python scripts/build_resources.py)"
 ctest --test-dir build/cpu-standalone --output-on-failure
 ```
 
@@ -93,7 +93,9 @@ NPU 验证启动器添加项目 `PYTHONPATH` 时须保留 module 已提供的路
 CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建已通过。
 这是任务环境错误，应修正私有启动器并保留原失败；不要据此改数学实现或安装另一套公共包。
 长任务继续使用 `run-durable-user-task` 的独立 `background.slice` 服务，
-固定源码、两个构建线程、单线程 ATen/BLAS 与有限时长。实际任务见 STATUS。
+固定源码与有限时长。构建默认使用进程可用的全部 CPU，`--jobs half` 使用一半，
+也可显式指定正整数；实际资源约束造成的降低须说明原因。测试使用空闲 CPU/NPU/内存，
+计时前固定并记录 ATen/BLAS/调度线程，项目重型构建与性能计时分开。实际任务见 STATUS。
 
 ## 实现与验证次序
 

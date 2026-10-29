@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Fixed 16-case first streaming comparison; no search or adaptive enlargement."""
 import argparse
+from build_resources import add_build_jobs
 import itertools
 import json
 from pathlib import Path
@@ -16,7 +17,7 @@ def main():
     parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--build-dir", default="build")
-    parser.add_argument("--jobs", type=int, default=2)
+    add_build_jobs(parser)
     parser.add_argument("--tracking", choices=("off", "best-effort", "required"), default="best-effort")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]; out = Path(args.output_dir).resolve()

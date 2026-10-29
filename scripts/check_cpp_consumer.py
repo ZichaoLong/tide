@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Install and relocate the CMake consumer; Python only orchestrates the build."""
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ def main():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
+    add_build_jobs(parser)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     build, out = Path(args.build_dir).resolve(), Path(args.output_dir).resolve()
@@ -42,7 +44,7 @@ def main():
         run(["cmake", "-S", out / "application", "-B", out / "build", "-G", "Ninja",
              "-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
              "-DTorch_DIR="+torch_dir])
-        run(["cmake", "--build", out / "build", "--parallel", "2"])
+        run(["cmake", "--build", out / "build", "--parallel", str(args.jobs)])
         binary = out / "build/consumer"
         closure = subprocess.check_output(["ldd", str(binary)], text=True)
         (out / "loader.txt").write_text(closure)

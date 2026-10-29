@@ -6,6 +6,7 @@ AdamW epsilon1e-5 and measured forward/backward/optimizer/complete-step phases.
 Large evaluation retains failures and stops scaling a family at its first limit.
 """
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -78,7 +79,7 @@ def main():
     parser.add_argument('--modes',nargs='+',choices=['nograd-forward','grad-forward','backward','optimizer','train-step'])
     parser.add_argument('--build-dir',type=Path,default=Path('build'))
     parser.add_argument('--build',action='store_true',help='build the target-local native core before running')
-    parser.add_argument('--build-jobs',type=int,choices=[1,2],default=2)
+    add_build_jobs(parser, "--build-jobs")
     parser.add_argument('--output-dir',type=Path)
     parser.add_argument('--suite',type=Path,default=Path(__file__).resolve().parents[1]/'benchmarks/foundation-v1.json')
     parser.add_argument('--workers',type=int,default=4)
@@ -111,8 +112,6 @@ def main():
     if dirty and not (args.tier=='smoke' and args.allow_dirty_smoke):parser.error('formal timing requires clean frozen source')
     build=args.build_dir.resolve()
     if args.build:
-        from foundation_resources import resources
-        if args.build_jobs>resources()['cpu_budget']:parser.error('build jobs exceed aggregate CPU budget')
         subprocess.run([sys.executable,str(root/'scripts/build.py'),'--build-dir',str(build),
                         '--jobs',str(args.build_jobs)],cwd=root,check=True)
     manifest=json.loads((build/'build-manifest.json').read_text())

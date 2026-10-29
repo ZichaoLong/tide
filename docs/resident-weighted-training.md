@@ -137,7 +137,7 @@ manifest分列raw/compute/scoring/adjoint/master dtype。此源码扩展的实�
 
 ```sh
 python scripts/build_device_control.py --core-build CORE --build-dir NEW_DEVICE_BUILD \
-  --runtime standalone --ascendc-soc SOC --jobs 2 \
+  --runtime standalone --ascendc-soc SOC --jobs all \
   --checks weighted-copy weighted-saved-window weighted-retained weighted-training weighted-flow weighted-flow-config
 python scripts/verify_device_control.py --build-dir NEW_DEVICE_BUILD --device npu:0 \
   --output-dir NEW_CHECKS \
@@ -149,7 +149,7 @@ CUDA构建使用匹配CUDA core，改用`--cuda-architectures '80;90;100'`并去
 
 ```sh
 python scripts/build_device_control.py --core-build PYTHON_CORE --build-dir NEW_PYTHON_DEVICE \
-  --runtime python --python-component weighted --ascendc-soc SOC --jobs 2
+  --runtime python --python-component weighted --ascendc-soc SOC --jobs all
 TIDE_BUILD_DIR=PYTHON_CORE TIDE_RESIDENT_LIBRARY=NEW_PYTHON_DEVICE TIDE_RESIDENT_DEVICE=npu:0 \
   python -m pytest -q tests/test_resident_weighted_training.py tests/test_resident_weighted_flow.py
 ```

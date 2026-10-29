@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Freeze a named LH revision and build its unchanged original CPU test."""
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 import io
 import json
@@ -49,10 +50,8 @@ def main():
     p.add_argument('--graph-input', required=True, help='existing graph-generation input record; its model is not used')
     p.add_argument('--json-include', required=True)
     p.add_argument('--output-dir', required=True)
-    p.add_argument('--jobs', type=int, default=2)
+    add_build_jobs(p)
     args = p.parse_args()
-    if not 1 <= args.jobs <= 4:
-        p.error('build jobs must be in [1,4]')
     width = args.width if args.width is not None else (2048 if args.profile == 'wide' else 128)
     if not 4 <= width <= 2048 or width % 4 or not 1 <= args.batch <= 512 or not 1 <= args.steps <= 100:
         p.error('outside bounded original-test parameters')
@@ -129,7 +128,7 @@ def main():
         raise ValueError('source changed during build')
     artifacts = {str(f.relative_to(out)): digest(f) for f in [build / 'test-cortexnet-grad',
         build / 'test-cortexnet-nograd', build / 'libConnectome.so']}
-    write_json(out / 'build-manifest.json', dict(schema='lh-original-test-build-v1', source=str(source),
+    write_json(out / 'build-manifest.json', dict(schema='lh-original-test-build-v1', build_jobs=args.jobs, source=str(source),
         source_revision=revision, source_files_sha256=before, parameter_files_sha256=parameter_files,
         parameter_changes=changes, cmake_sha256=digest(cmake), accounting=args.accounting,
         operator_profile=args.accounting,

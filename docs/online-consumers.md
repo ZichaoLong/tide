@@ -201,7 +201,7 @@ Build the independent C++ program against an installed matching public core:
 
 ```bash
 cmake -S tools/online_bench -B build/online -DCMAKE_PREFIX_PATH=/path/to/TideGraph/prefix
-cmake --build build/online --parallel 2
+cmake --build build/online --parallel "$(python scripts/build_resources.py)"
 python scripts/run_execution_flow.py --packet artifacts/flow-input/workload.json \
   --output-dir artifacts/flow-libtorch --device cpu --dtype float32 --family pdg \
   --implementation libtorch --native-binary build/online/tidegraph-online-bench \

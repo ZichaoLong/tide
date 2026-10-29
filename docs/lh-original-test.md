@@ -80,7 +80,7 @@ Build/run from a frozen Tide commit and use fresh output directories:
 python scripts/build_lh_original.py --source /home/zlong/llm/lh \
   --revision a10fdb1 --profile wide \
   --graph-input /absolute/artifacts/lh-local-wide-input-20260922-0720/prepared/input.json \
-  --json-include /absolute/lh-snapshot/vendor --output-dir /absolute/new-prepared --jobs 2
+  --json-include /absolute/lh-snapshot/vendor --output-dir /absolute/new-prepared --jobs all
 python scripts/benchmark_lh_original.py --device cpu --dtype float32 \
   --prepared /absolute/new-prepared --output-dir /absolute/new-run \
   --mode nograd --threads 160 --blas-threads 1 --memory-gib 1280 --timeout-seconds 1800

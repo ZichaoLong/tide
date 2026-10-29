@@ -335,9 +335,9 @@ paths. The kernel target name must be a valid C++ identifier, and consumers use
 PIC objects because the vendor interface links PIE executables.
 
 ```sh
-python scripts/build_device_control.py --core-build CORE --build-dir NEW --jobs 2
+python scripts/build_device_control.py --core-build CORE --build-dir NEW --jobs all
 python scripts/build_device_control.py --core-build CORE --build-dir NEW \
-  --ascendc-soc ACTUAL_SOC --jobs 2
+  --ascendc-soc ACTUAL_SOC --jobs all
 NEW/tide-device-control-check --device=npu:0 --dtype=float32
 NEW/tide-device-numerical-check --device=npu:0 --dtype=float16
 NEW/tide-packed-queue-check --device=cpu --dtype=float64

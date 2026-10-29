@@ -34,7 +34,7 @@
 
 ```sh
 python scripts/build_device_control.py --core-build CORE --build-dir NEW_BUILD \
-  --checks weighted-stage weighted-flow --ascendc-soc Ascend910_9392 --jobs 2
+  --checks weighted-stage weighted-flow --ascendc-soc Ascend910_9392 --jobs all
 python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_RESULT \
   --checks weighted-stage weighted-flow --device npu:0
 ```
