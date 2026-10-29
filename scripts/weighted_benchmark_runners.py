@@ -44,6 +44,12 @@ def work(result):
 class Eager:
     def __init__(self, binding, inputs, span, config, args, device, reference=False):
         from tidegraph.weighted.execution import eager_runner
+        self.storage_reference = reference and args.implementation == "resident" and getattr(args, "dtype", "float32") == "float16"
+        if self.storage_reference:
+            from dataclasses import replace
+            from tidegraph.qualification_weighted_precision import reference_model, widen
+            binding = replace(binding, model=reference_model(binding.model))
+            inputs = widen(inputs)
         self.binding, self.inputs, self.span, self.config, self.args, self.device = binding, inputs, span, config, args, device
         self.devices = (device,) if reference else tuple(torch.device(d) for d in getattr(args, "peer_devices", None) or (device,))
         self.node_owners = None
@@ -64,7 +70,10 @@ class Eager:
                                   packing=getattr(args, "packing", "auto"))
         self.state = Continuation(binding.graph.identity, config.samples)
         self.half = next(binding.model.parameters()).dtype == torch.float16
-        if self.half:
+        if self.storage_reference:
+            from weighted_storage_optimizer import StorageSGD
+            self.optimizer = StorageSGD(p for p in binding.model.parameters() if p.requires_grad)
+        elif self.half:
             from tidegraph.precision import FP32MasterOptimizer
             self.optimizer = FP32MasterOptimizer([p for p in binding.model.parameters() if p.requires_grad],
                 optimizer="sgd", loss_scale=1., lr=.001, momentum=.3, weight_decay=.01)
@@ -83,7 +92,7 @@ class Eager:
                 loss = loss_from_outputs(result)
             if self.args.mode == "training":
                 with phase(self.args, "backward_finite"):
-                    self.optimizer.backward(loss) if self.half else loss.backward()
+                    self.optimizer.backward(loss) if self.half or self.storage_reference else loss.backward()
                     checks = {}
                     for p in self.binding.model.parameters():
                         if p.grad is not None:
@@ -102,6 +111,8 @@ class Eager:
         return actual, value
 
     def parameters(self):
+        if self.storage_reference:
+            return snapshot({n: p.half() for n, p in self.binding.model.named_parameters()})
         return snapshot(dict(self.binding.model.named_parameters()))
 
     def training_state(self):
@@ -212,3 +223,4 @@ class Resident:
     def close(self):
         with torch.no_grad():
             self.owner.close()
+            self.last_parameter_gradients = None

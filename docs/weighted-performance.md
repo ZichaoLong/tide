@@ -133,3 +133,11 @@ atol=1e-3/rtol=2e-2，整数/路由/连接关系与同配置恢复仍严格核�
 请求和生效packing、线程、scoring、放置与peer分别记录。standalone内存表包含每个peer，
 不是只报coordinator；运行时允许half的声明与实际设备资格仍分开。
 CPU FP16先从相同FP32材料转换，materialize准入保守保留FP32初始化的存储下界。
+
+resident FP16核对使用`qualification_weighted_precision.reference_model`的独立CPU时间递归：
+FP32算术/梯度，实际raw/payload边界显式half store，SGD独立FP32 master更新后再发布half。
+它复用原设备资格的精度参考，检查公开存储dtype后无损展开比较全部字段；不能把中间字段
+强制转half来掩盖算术政策差异。standalone使用已有`weighted_precision_reference`及独立C++调度。
+报告`reference_precision`区分该契约与eager同dtype参考；这不是放宽容差或修复原FP16 GDN/AdamW边界。
+resident恢复检查先保存实际CPU checkpoint及下一窗口结果，关闭旧owner后再建新owner，
+避免仅为验收同时保留两套设备程序/参数bank；磁盘raw解码和完整下一窗核对仍精确，且在计时外。

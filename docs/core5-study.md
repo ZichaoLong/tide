@@ -117,3 +117,5 @@ standalone须提供本源码的构建记录与实际binary hash；CPU/Python-own
 `check_weighted_benchmark.py`在真实standalone进程中核对KV/SSD训练和恢复。
 CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八个小组合。
 这些检查与区域分配手算/独立根测试、性能测量的职责不同，不互相替代。
+`test_core5_recipe_training.py`另验五族/混合及关键评分/分配小组合的完整CPU FP64多步训练、
+独立调度与磁盘新owner；不是全排列，也不解除原较大FP32边界。

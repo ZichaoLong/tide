@@ -14,6 +14,7 @@
 #include <iostream>
 #include <set>
 #include "eager.h"
+#include "../device_online/weighted_precision_reference.h"
 using namespace weighted_benchmark;
 int main(int argc,char** argv){
   Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
@@ -141,9 +142,10 @@ int main(int argc,char** argv){
         px=eager->parameters();py=restored.parameters();
       }else{
 #ifdef TIDE_WEIGHTED_RESIDENT
-        remote->save(path);auto restored=resident(data,target,training,prefill,dtype,peers);restored->restore(path);
-        a=remote->step(steps+1);b=restored->step(steps+1);x=remote->training_state();y=restored->training_state();
-        px=remote->parameters();py=restored->parameters();restored->close();
+        remote->save(path);a=remote->step(steps+1);x=remote->training_state();px=remote->parameters();
+        remote->close();remote.reset();
+        auto restored=resident(data,target,training,prefill,dtype,peers);restored->restore(path);
+        b=restored->step(steps+1);y=restored->training_state();py=restored->parameters();restored->close();
 #endif
       }
       tide_bench::compare(a.result,b.result,true,dtype,{},0.,0.);
@@ -157,10 +159,14 @@ int main(int argc,char** argv){
     if(remote)remote->close();eager.reset();remote.reset();
     // A separate scalar schedule runs only after timing and never guides the candidate.
     ExecutionPlacement cpu;cpu.scoring_dtype=scoring;
-    Eager reference(data,training,!prefill,true,dtype,at::Device(at::kCPU),cpu);
+    const bool storage_reference=implementation=="resident"&&dtype==at::kHalf;
+    Eager reference(data,training,!prefill,true,dtype,at::Device(at::kCPU),cpu,1,{},storage_reference);
+    report["reference_precision"]=storage_reference?"fp16-storage-fp32-arithmetic":"same-dtype-eager";
     for(Index i=0;i<=steps;++i){report["phase"]="independent-check";report["window"]=i;
       write(output/"result.json",report);
-      const auto expected=reference.step(i);tide_bench::compare(actual[i].result,expected.result,true,dtype,{},dtype==at::kHalf?2e-2:-1.,dtype==at::kHalf?1e-3:-1.);
+      const auto expected=reference.step(i);
+      if(storage_reference)tide::device_online::weighted_precision_check::validate_storage(actual[i].result,dtype);
+      tide_bench::compare(actual[i].result,expected.result,true,dtype,{},dtype==at::kHalf?2e-2:-1.,dtype==at::kHalf?1e-3:-1.);
       if(std::abs(actual[i].loss-expected.loss)>(dtype==at::kDouble?1e-10:dtype==at::kHalf?1e-3:1e-6)+(dtype==at::kDouble?1e-8:dtype==at::kHalf?2e-2:1e-5)*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
     if(!parameters.empty())compare_tensors(parameters,reference.parameters(),dtype,"final parameter");
     if(checked_training){const auto expected=reference.training_state();
