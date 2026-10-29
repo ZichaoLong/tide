@@ -1,0 +1,233 @@
+{
+  "schema": "tide-core5-consumer-qualification-summary-v1",
+  "math_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "qualifications": [
+    {
+      "source": "372eb874245858de727376cb2d7981970a732631",
+      "kind": "cpu",
+      "stage": "v1",
+      "state": "passed",
+      "record_sha256": "8f77aafd4d2fdbc93b3558f6611fca97e238bca074e04d1c59e2aa018841f8ac",
+      "stages": [
+        {
+          "name": "cpu-gate",
+          "exit_code": 0,
+          "seconds": 202.37212793156505,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "client-build",
+          "exit_code": 0,
+          "seconds": 23.846593521535397,
+          "log_sha256": "3c0467bf93e42615078bf0092ce057e327c93dc0e774cecba981d3003ea2a07d"
+        },
+        {
+          "name": "client-checks",
+          "exit_code": 0,
+          "seconds": 10.675767421722412,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "binary_sha256": "94aaede41e59637d9a1b87cbed8bb27e54f5b11da7f7c4db23959e563ec05120",
+      "build_record_sha256": "1ef34e33b15e08a5ae33bbaf50f94fcdae547338d81d9ea02c5f9908402ca60f",
+      "backend": "cpu",
+      "torch": "2.12.0+cpu",
+      "binary_sources": {
+        "tools/weighted_benchmark/benchmark.h": "5140b49a8300e2eeeb218a807a626cc841df09f88d2175874b3f83737c0f7592",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4",
+        "tools/weighted_benchmark/CMakeLists.txt": "f0a382ecbf50055b78586efc31cce134adfcd14fc035595371a9e4a391189d21",
+        "tools/weighted_benchmark/records.cpp": "9175efbd031a3bb9faf425c12b25597b6a51bab9d1dc97d4031df1af198b2ff6",
+        "tools/weighted_benchmark/resident.cpp": "1f2d2bb2e6a7b7c6dfa87532381ab9a00aa181b3acf290be2c63e91ee8e7bf5b",
+        "tools/weighted_benchmark/eager.cpp": "f7275c3cd05b38ed2ebfcd9daac7a74b308bcb9a7fda08958d65ce9c833fadd6",
+        "tools/weighted_benchmark/main.cpp": "4b93a865ed4a91c40c5617effd5320c74706a58f8e4e18385d01e807f330556c",
+        "tools/weighted_benchmark/fixture.cpp": "487a734a09c186f5b36892c4b8a9d8d1412dc7fc84bbdf3cc7e1d418a2283982",
+        "tools/weighted_benchmark/tensors.cpp": "1aacd9de923f23cdb6c3cac6069c3d9fc4a20676a3128ad9bd7899c3199e1cc9",
+        "tools/weighted_benchmark/eager.h": "943a2dd474882898449af87d5f9e180227cf3910d7f1f4e9f848ece446ed4550",
+        "tools/weighted_benchmark/observation.h": "cd53dc357786bb9b80604dc09a1ab542d9187c82032e18dfbc93f924052955b6",
+        "tools/weighted_benchmark/allocation_failure.cpp": "26992bd681202ebb4febebf37291da235b85c04b755e5041963d1a02d73a1a37",
+        "tools/weighted_benchmark/observation.cpp": "b134bd9b6d230d8c559f7577087a03fc16ccdc87d173ccbb0c9aa3576c9e13a0",
+        "tools/weighted_benchmark/record_io.cpp": "677bdf52017a5c8f5769bbf7e9acc4fd63d82f606685eba7aeaad9d9fd0114c1",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "cpp/bench/compare.cpp": "a0b2f35b353a5237477bfbe3f10fb4557cefc95067d8aada9b5ba8a131618350",
+        "cpp/bench/streaming.h": "064e55bbb8deeceb6eae8397c5ed287c2f430fd382329f93a82e16a620e7119e"
+      }
+    },
+    {
+      "source": "372eb874245858de727376cb2d7981970a732631",
+      "kind": "sdk",
+      "stage": "v1",
+      "state": "passed",
+      "record_sha256": "e763b24df4e75d65a4161c82b7458d2bb9ae61b9d78c139f8a7072a056d63f88",
+      "stages": [
+        {
+          "name": "client-build",
+          "exit_code": 0,
+          "seconds": 27.011432893574238,
+          "log_sha256": "73e71a4c8912738270c43c2b8f19a625f92773feef198a58bfdba0ebfb797522"
+        },
+        {
+          "name": "client-checks",
+          "exit_code": 0,
+          "seconds": 114.91683186218143,
+          "log_sha256": "d6f2dcdca489db5cc78532131395aa670d67656a470c0f687fe9c59c0260af0a"
+        }
+      ],
+      "binary_sha256": "50572f23b0f6888f1362ca54b6ce4ba997575311512e30b737ac777b26991015",
+      "build_record_sha256": "d50a546d0b19d0edfbdcb83fe21fb2152b5e0dc1fd6091650516cd7321ed6c75",
+      "backend": "npu",
+      "torch": "2.10.0+cpu",
+      "binary_sources": {
+        "tools/weighted_benchmark/benchmark.h": "5140b49a8300e2eeeb218a807a626cc841df09f88d2175874b3f83737c0f7592",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4",
+        "tools/weighted_benchmark/CMakeLists.txt": "f0a382ecbf50055b78586efc31cce134adfcd14fc035595371a9e4a391189d21",
+        "tools/weighted_benchmark/records.cpp": "9175efbd031a3bb9faf425c12b25597b6a51bab9d1dc97d4031df1af198b2ff6",
+        "tools/weighted_benchmark/resident.cpp": "1f2d2bb2e6a7b7c6dfa87532381ab9a00aa181b3acf290be2c63e91ee8e7bf5b",
+        "tools/weighted_benchmark/eager.cpp": "f7275c3cd05b38ed2ebfcd9daac7a74b308bcb9a7fda08958d65ce9c833fadd6",
+        "tools/weighted_benchmark/main.cpp": "4b93a865ed4a91c40c5617effd5320c74706a58f8e4e18385d01e807f330556c",
+        "tools/weighted_benchmark/fixture.cpp": "487a734a09c186f5b36892c4b8a9d8d1412dc7fc84bbdf3cc7e1d418a2283982",
+        "tools/weighted_benchmark/tensors.cpp": "1aacd9de923f23cdb6c3cac6069c3d9fc4a20676a3128ad9bd7899c3199e1cc9",
+        "tools/weighted_benchmark/eager.h": "943a2dd474882898449af87d5f9e180227cf3910d7f1f4e9f848ece446ed4550",
+        "tools/weighted_benchmark/observation.h": "cd53dc357786bb9b80604dc09a1ab542d9187c82032e18dfbc93f924052955b6",
+        "tools/weighted_benchmark/allocation_failure.cpp": "26992bd681202ebb4febebf37291da235b85c04b755e5041963d1a02d73a1a37",
+        "tools/weighted_benchmark/observation.cpp": "b134bd9b6d230d8c559f7577087a03fc16ccdc87d173ccbb0c9aa3576c9e13a0",
+        "tools/weighted_benchmark/record_io.cpp": "677bdf52017a5c8f5769bbf7e9acc4fd63d82f606685eba7aeaad9d9fd0114c1",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "cpp/bench/compare.cpp": "a0b2f35b353a5237477bfbe3f10fb4557cefc95067d8aada9b5ba8a131618350",
+        "cpp/bench/streaming.h": "064e55bbb8deeceb6eae8397c5ed287c2f430fd382329f93a82e16a620e7119e"
+      }
+    },
+    {
+      "source": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "kind": "cpu",
+      "stage": "v2",
+      "state": "passed",
+      "record_sha256": "449af409b27769c3cfbaf311d22ec5092c3ed5196eafe4ff7e38ef7ecb2402e3",
+      "stages": [
+        {
+          "name": "cpu-tests",
+          "exit_code": 0,
+          "seconds": 36.20733466744423,
+          "log_sha256": "d772566f32a81136a4792f36200481c2e8d548335720aa6246feecddf83efb16"
+        },
+        {
+          "name": "client-build",
+          "exit_code": 0,
+          "seconds": 24.24288545176387,
+          "log_sha256": "0307361d0e472377a32fe9f90b43209d2d5a879d42efc7ade7e344a9eca24ef7"
+        },
+        {
+          "name": "client-checks",
+          "exit_code": 0,
+          "seconds": 10.776154555380344,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "binary_sha256": "470217f7cdaa297e7cc0a56cafd52202137acbffc34f9679c1b74383bba81dc0",
+      "build_record_sha256": "a9ba62e4e1b14e718dafbcbb338fafaafa5701a2985304c2a5793a7954885ba6",
+      "backend": "cpu",
+      "torch": "2.12.0+cpu",
+      "binary_sources": {
+        "tools/weighted_benchmark/benchmark.h": "5140b49a8300e2eeeb218a807a626cc841df09f88d2175874b3f83737c0f7592",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4",
+        "tools/weighted_benchmark/CMakeLists.txt": "2f10821cebcc867db36aba5bed5c246ee6a6c25cca6a9c511a8d567dd8ad2ce3",
+        "tools/weighted_benchmark/records.cpp": "9175efbd031a3bb9faf425c12b25597b6a51bab9d1dc97d4031df1af198b2ff6",
+        "tools/weighted_benchmark/resident.cpp": "1f2d2bb2e6a7b7c6dfa87532381ab9a00aa181b3acf290be2c63e91ee8e7bf5b",
+        "tools/weighted_benchmark/eager.cpp": "7f62053400efc083aec71cb351a47a3656b21a956b24f8ca7552bdac1e81d804",
+        "tools/weighted_benchmark/main.cpp": "0c413b62fa888e84b6fc959813539095c04087afc1da97ef7f71ea81f83b0cd0",
+        "tools/weighted_benchmark/fixture.cpp": "487a734a09c186f5b36892c4b8a9d8d1412dc7fc84bbdf3cc7e1d418a2283982",
+        "tools/weighted_benchmark/tensors.cpp": "1aacd9de923f23cdb6c3cac6069c3d9fc4a20676a3128ad9bd7899c3199e1cc9",
+        "tools/weighted_benchmark/eager.h": "fb40aab0582a2d6a2370044ca8db7cf14e04b703a28e1e8c74ba0e749c70805f",
+        "tools/weighted_benchmark/observation.h": "cd53dc357786bb9b80604dc09a1ab542d9187c82032e18dfbc93f924052955b6",
+        "tools/weighted_benchmark/allocation_failure.cpp": "26992bd681202ebb4febebf37291da235b85c04b755e5041963d1a02d73a1a37",
+        "tools/weighted_benchmark/observation.cpp": "b134bd9b6d230d8c559f7577087a03fc16ccdc87d173ccbb0c9aa3576c9e13a0",
+        "tools/weighted_benchmark/record_io.cpp": "677bdf52017a5c8f5769bbf7e9acc4fd63d82f606685eba7aeaad9d9fd0114c1",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "cpp/bench/compare.cpp": "a0b2f35b353a5237477bfbe3f10fb4557cefc95067d8aada9b5ba8a131618350",
+        "cpp/bench/streaming.h": "064e55bbb8deeceb6eae8397c5ed287c2f430fd382329f93a82e16a620e7119e",
+        "tools/device_online/weighted_precision_reference.cpp": "306bfcdd5beea2c2d8e3f9c2def322ba6bcedac7e7748b87dc7441186a32487b",
+        "tools/device_online/weighted_precision_reference.h": "f50e1bfdbc9287c42347137ac83687a1e1d23da8fc90c37ec4f992269919e039"
+      }
+    },
+    {
+      "source": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "kind": "sdk",
+      "stage": "v2",
+      "state": "passed",
+      "record_sha256": "bbeda5125346b27ef6506b9e0fe036d05b569aee2f02cefc9e2aec444e0e98a4",
+      "stages": [
+        {
+          "name": "client-build",
+          "exit_code": 0,
+          "seconds": 25.443921197205782,
+          "log_sha256": "a9f6b809b38c296dd68ad8340d8b918aea596512d0bcf0b03e8a9929be48285d"
+        },
+        {
+          "name": "client-checks",
+          "exit_code": 0,
+          "seconds": 111.99052273109555,
+          "log_sha256": "bdc4566950958ea125f763758081d60048012e4cf0b718d7e230681d7e4697aa"
+        }
+      ],
+      "binary_sha256": "2548d1d05248900a0e0fda913b02e842bb3f8600977fee6e1f520b4dc7500cb6",
+      "build_record_sha256": "57a7b25d1d4fbe3b923027533ff0ff23550a6af0874f0b07c35133d83296f880",
+      "backend": "npu",
+      "torch": "2.10.0+cpu",
+      "binary_sources": {
+        "tools/weighted_benchmark/benchmark.h": "5140b49a8300e2eeeb218a807a626cc841df09f88d2175874b3f83737c0f7592",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4",
+        "tools/weighted_benchmark/CMakeLists.txt": "2f10821cebcc867db36aba5bed5c246ee6a6c25cca6a9c511a8d567dd8ad2ce3",
+        "tools/weighted_benchmark/records.cpp": "9175efbd031a3bb9faf425c12b25597b6a51bab9d1dc97d4031df1af198b2ff6",
+        "tools/weighted_benchmark/resident.cpp": "1f2d2bb2e6a7b7c6dfa87532381ab9a00aa181b3acf290be2c63e91ee8e7bf5b",
+        "tools/weighted_benchmark/eager.cpp": "7f62053400efc083aec71cb351a47a3656b21a956b24f8ca7552bdac1e81d804",
+        "tools/weighted_benchmark/main.cpp": "0c413b62fa888e84b6fc959813539095c04087afc1da97ef7f71ea81f83b0cd0",
+        "tools/weighted_benchmark/fixture.cpp": "487a734a09c186f5b36892c4b8a9d8d1412dc7fc84bbdf3cc7e1d418a2283982",
+        "tools/weighted_benchmark/tensors.cpp": "1aacd9de923f23cdb6c3cac6069c3d9fc4a20676a3128ad9bd7899c3199e1cc9",
+        "tools/weighted_benchmark/eager.h": "fb40aab0582a2d6a2370044ca8db7cf14e04b703a28e1e8c74ba0e749c70805f",
+        "tools/weighted_benchmark/observation.h": "cd53dc357786bb9b80604dc09a1ab542d9187c82032e18dfbc93f924052955b6",
+        "tools/weighted_benchmark/allocation_failure.cpp": "26992bd681202ebb4febebf37291da235b85c04b755e5041963d1a02d73a1a37",
+        "tools/weighted_benchmark/observation.cpp": "b134bd9b6d230d8c559f7577087a03fc16ccdc87d173ccbb0c9aa3576c9e13a0",
+        "tools/weighted_benchmark/record_io.cpp": "677bdf52017a5c8f5769bbf7e9acc4fd63d82f606685eba7aeaad9d9fd0114c1",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "cpp/bench/compare.cpp": "a0b2f35b353a5237477bfbe3f10fb4557cefc95067d8aada9b5ba8a131618350",
+        "cpp/bench/streaming.h": "064e55bbb8deeceb6eae8397c5ed287c2f430fd382329f93a82e16a620e7119e",
+        "tools/device_online/weighted_precision_reference.cpp": "306bfcdd5beea2c2d8e3f9c2def322ba6bcedac7e7748b87dc7441186a32487b",
+        "tools/device_online/weighted_precision_reference.h": "f50e1bfdbc9287c42347137ac83687a1e1d23da8fc90c37ec4f992269919e039"
+      }
+    },
+    {
+      "source": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "kind": "python",
+      "stage": "v2",
+      "state": "passed",
+      "record_sha256": "db3e270ca6aa2f1d45dbd000211270cd0b4e2aee60c4dd60bd9b57ff2c486789",
+      "stages": [
+        {
+          "name": "device-checks",
+          "exit_code": 0,
+          "seconds": 48.12129930406809,
+          "log_sha256": "29c159df54fc92266369ad63713e1558b10ab37eeeaf80226a47587f4c58a4ec"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "initial_cpu": 365,
+    "final_related_cpu": 43,
+    "final_cpu_consumers": 6,
+    "final_sdk_consumers": 8,
+    "final_python_npu": 3
+  },
+  "scope": "Directed consumer/configuration/precision qualification; not all combinations, scales or performance. GPU/x86 not tested.",
+  "evidence_query": {
+    "source": "d6d2fa741db32c15993cbec80dd0fafaa8ff5ce3",
+    "dirty": "",
+    "state": "passed",
+    "tests": 5,
+    "seconds": 23.79,
+    "job": "artifacts/jobs/core5-evidence-query",
+    "status_sha256": "093b1deacdb7a661a18edd63f98f39768e5fd88602b00ba613df03d5a53f8dac",
+    "log_sha256": "1dddd7edcaa3ea4ccface9ff66e3a36bd86478cb1e38b4160dbcf4a41efa7a93",
+    "junit_sha256": "9dcaf3d129a899826c5c72d1961608229d8ac606458dc7e328b18f151dd9b197",
+    "scope": "reviewed JSON query and conservative result flags; no native/execution change"
+  }
+}
