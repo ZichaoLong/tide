@@ -1,4 +1,4 @@
-"""Explicit CPU precision for the same seeded FP32 benchmark material.
+"""Explicit execution precision for the same seeded FP32 benchmark material.
 
 This changes execution dtype, not the saved plan, parameter count or topology.
 Promotion happens before either schedule and preserves actual input aliases.
@@ -8,8 +8,8 @@ import torch
 
 
 def promote(binding, inputs, dtype):
-    if dtype not in (torch.float32, torch.float64):
-        raise ValueError("benchmark precision must be float32 or float64")
+    if dtype not in (torch.float16, torch.float32, torch.float64):
+        raise ValueError("benchmark precision must be float16, float32 or float64")
     binding.model.to(dtype=dtype)
     copies = {}
     for x in inputs:
@@ -19,7 +19,7 @@ def promote(binding, inputs, dtype):
 
 
 def tolerances(dtype):
-    return (1e-10, 1e-8) if dtype == torch.float64 else (1e-6, 1e-5)
+    return (1e-10, 1e-8) if dtype == torch.float64 else (1e-3, 2e-2) if dtype == torch.float16 else (1e-6, 1e-5)
 
 
 def validate(dtype, device, implementation):

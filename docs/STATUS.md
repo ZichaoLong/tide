@@ -1,52 +1,44 @@
 # 当前交接 — 2026-10-29
 
 授权分支 `graph-execution-foundation`；数学固定 `0770593838a37c790a568226930567ed60f99b83`。
-用户已授权实施新一轮候选配置、拓扑/规模、后端和有限性能设施；可提交与普通推送。
-不使用子代理。参考仓库与公共工具链只读，GPU真机延后。构建允许全部或一半可用CPU；
-测试可使用空闲CPU/NPU/内存，项目重型计时不与构建重叠。
+用户已授权候选配置、自然规模拓扑、CPU/NPU及混合/常驻有限测试；可提交并普通推送。
+不使用子代理；参考仓库与公共工具链只读；GPU真机延后。构建用全部或一半可用CPU，
+测试用空闲CPU/NPU/内存，项目重型计时与构建分开。
 
-## 当前工作
+## 当前实现与开发检查
 
-启动审计通过：实际路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`，
-起点 `86826fd09bb3546b5084a89b494b4bbdd53d8510`，工作区起初干净；固定快照19+5份通过。
-构建资源策略已提交推送 `d841450`（7项定向检查）。现有静态计划/参数清单/实际构造
-已移入公共 `tidegraph.planning`，旧脚本与v1身份兼容。新增展开默认值的模型/工作负载v2、
-执行/测量身份、FC/HB/LH启发自然维度与近似参数预算；[导航](core5-study.md)。
-本阶段定向检查123项、后续97项通过（有重叠，不累加为独立资格数）。其中新计划12项，
-覆盖五族/混合真实前后向、int64状态、教材HB计数和Torch-free规模CLI。
-一次新测试使用了不存在的State.time字段，修正为公开last_time/slots后通过；实现未据此改语义。
-下一步固定提交运行 `qualify_core5_study.py` 的独立CPU构建与定向门禁；同时在主工作区补齐
-三个client的benchmark配置/FP16/放置/线程/peer入口，并加入可重现有限study和结果索引。
+此前公共planning固定提交 `8f51ba6` 的CPU336项通过，见
+[evidence/core5-planning-20261029.md](evidence/core5-planning-20261029.md)。
+本轮新增有限case/execution目录、单次运行与结果查询；三个client的FP16/评分精度、
+线程/packing/peer入口、实际resident梯度/SGD/master导出及standalone磁盘恢复。
+导航：[core5-study](core5-study.md)。没有改数学定义、图或checkpoint公共版本。
 
-## 活跃任务：无（上一资格已终态）
+开发快照 `artifacts/worktrees/core5-benchmark-dev3`（4cf9469加冻结diff）完成：
+CPU/SDK各half=160线程重建、loader/help；CPU设施26项、实际standalone CPU6组与NPU8组通过，
+包括mixed-a/b/c、resident、FP16、完整参数/梯度/SGD及精确恢复。
+主工作区新增24个自然recipe的CPU FP64多步训练/独立调度/磁盘新owner检查通过。
+这些是开发证据；不冒充即将固定的新提交资格。Python resident half/peer新参数化待固定资格。
+开发v1缺头文件、v2 SDK环境入口、v2 FP16未启用runtime选项的原失败均保留在各job目录。
 
-固定源码 `8f51ba6` 在只读树 `artifacts/worktrees/core5-planning-v1` 完成新CPU构建，
-160线程、45.532s；定向336 passed/0 skipped，测试96.56s。
-[审阅证据](evidence/core5-planning-20261029.md)给出干净checkout复现。
-服务 `core5-planning-v1-cpu-20261029.service` terminal inactive/dead、exit0；
-`artifacts/jobs/core5-planning-v1-cpu/status.json` passed/0，qualification/result.json及日志完整。
-没有活跃重型任务，旧队列未恢复。
+## 活跃任务与下一动作
 
-主工作区有未提交的下一阶段benchmark修改：FP16+FP32master、线程/packing/scoring设置、
-Python resident peer、standalone eager设备放置和精确恢复；尚未构建/真机验收。
-相关Python精度/观测11项通过，含FP16实际完整训练和磁盘换owner恢复。
-后续继续完成standalone构建与有限study设施，不能将上一资格当成本阶段结果。
+开发v3两服务均passed/0，无活跃重型任务、无旧队列恢复。
+即将提交实现，然后冻结新checkout；运行相关CPU资格、CPU/SDK standalone重建与真实消费者、
+Python-owned NPU单卡/half/双卡consumer资格。源码与旧core/resident按内容hash核对，可复用相同库，
+不继承与之无关的测试结论。新日志在 `artifacts/jobs/core5-study-v1-*`。
+随后按有限计划串行比较主架构，结果包含严格失败、实际candidate/Full/消息及合批量。
 
-最近生产实现是
-`04b52153f9785e1489e31c7dd09a16849791d331`，其资格与结果见
-[紧凑纤维证据](evidence/core5-compact-fibers-20261029.md)；此前的两线程是真实历史记录。
-该证据包括CPU两环境各10、Python/NPU56、SDK7组件检查，以及medium完整窗
-2.794→2.470s、内存514.8→376.4MB的一次观察。D64 resident因CANN流资源失败。
-原始记录仍在 `artifacts/jobs/core5-compact-fiber-{v2-python,v2-sdk,study}`；
-两个资格passed/0，study failed/1；不把它们改为本轮资格。
+当前根路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`，固定教材19+5份校验通过。
+本机用`ascend/dev-workspace-9.1.0`及项目venv；SDK另用`libtorch-npu/2.10.0-cann9.0.0`和配套Python PATH。
+公共工具链未改。静态可移植性审计1746文件、265项启发式warning/0 error；新入口告警为
+测试逻辑设备常量和显式后端allocator adapter，未发现需要隐式fallback的实现。
 
-## 未解除限制与下一步
+## 未解除边界
 
 [ROADMAP](ROADMAP.md)保留D64/D2048/反馈FP32、FP16 GDN/AdamW、默认异步双NPU、
-晚注册NPU、resident流资源、容量/正支持及CUDA/x86待验的独立状态和重启条件。
-新规模选择不再保持core-3节点数或压缩FFN匹配参数量；旧对照和严格失败保留。
+晚注册NPU、resident流资源、容量/正支持及CUDA/x86待验的原始状态与重启条件。
+新拓扑/自然规模不是旧数值失败的修复。上一生产resident资格 `04b5215` 的medium测量与
+D64 CANN流资源失败见[紧凑纤维证据](evidence/core5-compact-fibers-20261029.md)。
 
-接续：`git status --short --branch`、`python scripts/status.py`、
-`python scripts/check_upstream.py`，再看本页及ROADMAP。
-当前下一步：冻结benchmark开发快照，构建standalone并定向核验，再固定提交/资格与有限性能。
-相关长期契约见 [execution-flows](execution-flows.md)，经验见 [performance-lessons](performance-lessons.md)。
+接续先 `git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+只维护本页当前交接、ROADMAP待办及相关契约/证据；长期经验见[performance-lessons](performance-lessons.md)。

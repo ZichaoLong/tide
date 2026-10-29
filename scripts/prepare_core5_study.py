@@ -34,7 +34,7 @@ def main():
         if a.target_parameters is not None:
             request["target_parameters"] = a.target_parameters
         else:
-            request["width"] = a.width or 512
+            request["width"] = 512 if a.width is None else a.width
     plan, inv = prepare(request, samples=a.samples, positions=a.positions, seed=a.seed)
     a.output_dir.mkdir(parents=True, exist_ok=False)
     write_json(a.output_dir/"workload.json", plan)

@@ -76,3 +76,44 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 拓扑与教材手算1408节点/22区域/3584边和独立公共生成器对照；五族及混合小图检查真实
 参数/梯度和int64元数据。全图独立调度、optimizer、磁盘换owner与设备资格由相应门禁负责，
 这些静态/小图检查不替代性能规模或真机结论。
+
+## 有限测试表与结果查询
+
+[core5-study-v1.json](../benchmarks/core5-study-v1.json)是可选用例目录，不是自动全排列任务。
+默认必须选一个case和一个execution；任何合法公共配置仍可经`resolve_model`接入，不限于此表。
+
+| 组 | 目的 | 有限覆盖 |
+| --- | --- | --- |
+| `check-fc/hb/lh` | 入口、配置和训练恢复设施 | 宽8、五记忆/混合，小图B2/P2；不作规模性能结论 |
+| `fc-medium-few/many`、`hb-medium` | 调度与矩阵成本、实际在线合批 | 少节点大模块/多节点小模块，显式scalar/packed、CPU/mixed/resident |
+| `fc/hb/lh-1b` | 主架构自然规模 | 约1B、五记忆可选；逐个选择有价值的组合运行 |
+| `hb-1b-rich/sparse32/zero/dense` | 关键局部组合和发送稀疏度 | qry/att/位置、异构、1/32、分数零温、稠密Attention |
+| `fc-1b-prefill` | 在线时间批 | B8/P32，保持原输入并记录容量/时限拒绝 |
+| `hb-8b/16b` | 较大参数规模 | KV/混合；先静态预算及同配置小检查，再决定有限实测 |
+
+执行目录保留PyTorch、Python→native、standalone LibTorch，以及CPU、mixed-a/b/c、resident；
+FP16/FP32、CPU FP64、线程、packing和peer各自显式选择。resident使用native客户端与公共设备库，
+生效算子记为`aten+device-control`，不称为纯PyTorch设备调度。NPU FP64 scoring只能显式放在CPU。
+
+```sh
+python -S scripts/run_core5_study.py --list
+python scripts/run_core5_study.py --case check-fc-kv --execution python-cpu --output-dir NEW_RUN
+python scripts/run_core5_study.py --case hb-1b-kv --execution cpp-npu-mixed-c \
+  --standalone-binary BUILD/client/weighted-benchmark --fixture MATCHED_FIXTURE \
+  --max-materialize-bytes EXPLICIT_BYTES --output-dir NEW_RUN
+python scripts/index_core5_study.py RUN_PARENT --format tsv
+python scripts/index_core5_study.py RUN_PARENT --client libtorch --state failed --format json
+```
+
+长运行仍由本机独立服务启动；runner只负责单次有限子进程、无重试和原子记录。
+`run.json`连接模型/工作负载/执行/测量身份、精确源码、命令、阶段退出码、日志hash；
+`workload.json`和`inventory.json`给出所有展开配置/尺寸/共享角色。
+`measurement/result.json`保留实际配置、完整计时、candidate/Full/消息和原始批统计、内存、
+严格核对与精确恢复。失败也能查询到已产生的时间，但`throughput_qualified=false`。
+standalone须提供本源码的构建记录与实际binary hash；CPU/Python-owned NPU/SDK分开验证。
+可以先用另一环境导出纯静态fixture，再让SDK进程消费；导出不执行参考轨迹。
+
+设施验证：`test_core5_study.py`覆盖全部目录的静态构造、显式命令、拒绝和证据门禁；
+`check_weighted_benchmark.py`在真实standalone进程中核对KV/SSD训练和恢复。
+CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八个小组合。
+这些检查与区域分配手算/独立根测试、性能测量的职责不同，不互相替代。

@@ -40,7 +40,7 @@ void runtime_probe(at::Device device,at::ScalarType dtype){
   const auto y=at::matmul(x,x);portable_torch::synchronize(device);
   std::cout<<"TIDE_WEIGHTED_RUNTIME_READY_V1\n"<<std::flush;
 }
-void capture_memory(Json& report,at::Device device,const std::string& phase,bool reset){
+void capture_memory(Json& report,at::Device device,const std::string& phase,bool reset,const std::vector<at::Device>& peers){
   rusage usage{};if(getrusage(RUSAGE_SELF,&usage))throw std::system_error(errno,std::generic_category(),"getrusage");
 #ifdef __APPLE__
   const auto rss=int64_t(usage.ru_maxrss);
@@ -53,6 +53,11 @@ void capture_memory(Json& report,at::Device device,const std::string& phase,bool
     {"sampling","outside step timers; peaks reset after runtime_ready, construction and warmup"},
     {"phases",Json::array()}};
   Json row{{"phase",phase},{"process_lifetime_peak_rss_bytes",rss}};device_memory(row,device,reset);
+  if(!peers.empty()){
+    row["devices"]=Json::array();
+    for(auto d:peers){Json p;if(d==device){p=row;p.erase("devices");p.erase("phase");p.erase("process_lifetime_peak_rss_bytes");}
+      else device_memory(p,d,reset);row["devices"].push_back(p);}
+  }
   report["memory"]["phases"].push_back(row);report["process_lifetime_peak_rss_bytes"]=rss;
 }
 }

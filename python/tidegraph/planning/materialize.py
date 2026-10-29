@@ -34,8 +34,8 @@ def load(path):
 def materialize(plan, *, max_bytes, dtype=None):
     import torch
     dtype = torch.float32 if dtype is None else dtype
-    if dtype not in (torch.float32, torch.float64):
-        raise ValueError("materialization requires float32 or float64")
+    if dtype not in (torch.float16, torch.float32, torch.float64):
+        raise ValueError("materialization requires float16, float32 or float64")
     inv = validate_plan(plan)
     positive("max materialization bytes", max_bytes, 2**63-1)
     floor = plan["memory_floor"]

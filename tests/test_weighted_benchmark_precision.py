@@ -107,3 +107,22 @@ def test_eager_benchmark_checks_actual_new_owner_next_window(tmp_path, monkeypat
     record = json.loads((out/"result.json").read_text())
     assert record["state"] == "passed" and record["exact_resume"]["exact"]
     assert record["exact_resume"]["next_window"] == 2 and record["optimizer_values_checked"]
+
+
+def test_half_benchmark_records_master_precision_threads_and_exact_restore(tmp_path, monkeypatch):
+    import benchmark_weighted
+    monkeypatch.setattr(torch, "set_num_interop_threads", lambda _: None)
+    monkeypatch.setattr(sys, "argv", ["benchmark_weighted.py", "--device", "cpu", "--implementation", "python",
+        "--dtype", "float16", "--scoring-dtype", "float32", "--steps", "1", "--intraop-threads", "2",
+        "--checkpoint-check", "--allow-dirty", "--output-dir", str(tmp_path/"half")])
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    try:
+        benchmark_weighted.main()
+    finally:
+        torch.set_num_threads(1)
+    record = json.loads((tmp_path/"half/result.json").read_text())
+    assert record["state"] == "passed" and record["exact_resume"]["exact"]
+    assert record["precision"]["master_dtype"] == "float32" and record["precision"]["loss_scale"] == 1
+    assert record["effective_threads"]["intraop"] == 2
+    assert record["execution"]["requested"]["dtype"] == "float16"
+    assert record["final_parameter_gradients_checked"] and record["optimizer_values_checked"]

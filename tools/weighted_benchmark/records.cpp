@@ -19,7 +19,8 @@ Result detached(Result r){
   return r;
 }
 Tensor loss(const Result& r){
-  std::vector<Tensor> parts;for(const auto& o:r.outputs)parts.push_back((o.value[0]*o.value.slice(0,1)).square().sum()*.001);
+  std::vector<Tensor> parts;for(const auto& o:r.outputs){auto x=o.value.scalar_type()==at::kHalf?o.value.to(at::kFloat):o.value;
+    parts.push_back((x[0]*x.slice(0,1)).square().sum()*.001);}
   if(parts.empty())throw std::runtime_error("benchmark produced no outputs");return at::stack(parts).sum();
 }
 Json work(const Result& r){
@@ -28,7 +29,7 @@ Json work(const Result& r){
     {"outputs",r.outputs.size()},{"pending",r.continuation.pending.size()},{"actual_stats",r.stats} };
 }
 void compare_tensors(const std::map<std::string,Tensor>& actual,const std::map<std::string,Tensor>& expected,
-                     at::ScalarType dtype,const std::string& label){
+                     at::ScalarType dtype,const std::string& label,bool exact){
   if(actual.size()!=expected.size())throw std::runtime_error(label+" owner count differs");
   for(const auto& [name,value]:expected){
     const auto found=actual.find(name);
@@ -36,7 +37,7 @@ void compare_tensors(const std::map<std::string,Tensor>& actual,const std::map<s
     const auto& got=found->second;
     if(got.defined()!=value.defined())throw std::runtime_error(label+" None/zero differs: "+name);
     if(value.defined()&&(got.sizes()!=value.sizes()||got.scalar_type()!=value.scalar_type()||
-        !at::allclose(got,value,dtype==at::kDouble?1e-8:1e-5,dtype==at::kDouble?1e-10:1e-6)))
+        !at::allclose(got,value,exact?0.:dtype==at::kDouble?1e-8:dtype==at::kHalf?2e-2:1e-5,exact?0.:dtype==at::kDouble?1e-10:dtype==at::kHalf?1e-3:1e-6)))
       throw std::runtime_error(label+" differs: "+name);
   }
 }
