@@ -4,7 +4,7 @@
 Config classes own applicability; inventory independently predicts real roles.
 """
 from copy import deepcopy
-from dataclasses import asdict
+from dataclasses import asdict, is_dataclass
 import hashlib
 import json
 from ..weighted.config import KVConfig, RegionalConfig, finite
@@ -71,7 +71,7 @@ def resolve_model(graph, memories, regions, *, classes=None, source_binding=None
         sizes[j] += 1
     for c, size in zip(region_configs, sizes):
         c.capacity(size)
-    source = SourceBinding(**(source_binding or {}))
+    source = SourceBinding(**(asdict(source_binding) if is_dataclass(source_binding) else source_binding or {}))
     finite("alpha_agg", alpha_agg, 0)
     classes = deepcopy(classes) if classes is not None else dict(
         edges=[a+1 for a, _, _ in graph["edges"]], inputs=[0]*len(graph["inputs"]))

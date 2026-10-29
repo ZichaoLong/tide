@@ -15,7 +15,7 @@ from durable_records import write_json
 from source_identity import source_state, digest
 
 TESTS = (
-    "test_build_resources", "test_core5_planning", "test_weighted_workload_plan",
+    "test_build_resources", "test_core5_planning", "test_core5_study", "test_core5_recipe_training", "test_weighted_workload_plan",
     "test_weighted_inventory", "test_weighted_source_binding", "test_weighted_allocation",
     "test_weighted_entropy_allocation", "test_flow_topology", "test_weighted_benchmark_precision",
     "test_library", "test_greedy_library", "test_weighted_source_execution", "test_weighted_workload_training",

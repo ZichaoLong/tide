@@ -14,7 +14,16 @@ class SGDLayout:
         self.trainable = {n for n, p in model.named_parameters() if p.requires_grad}
         canonical = {id(p): n for n, p in model.named_parameters()}
         self.aliases = {n: canonical[id(p)] for n, p in model.named_parameters(remove_duplicate=False)}
-        self.template = torch.optim.SGD(model.parameters(), lr=.001, momentum=.3, weight_decay=.01).state_dict()
+        self.dtype = next(model.parameters()).dtype
+        self.half = self.dtype == torch.float16
+        if self.half:
+            from tidegraph.precision import FP32MasterOptimizer
+            optimizer = FP32MasterOptimizer([p for p in model.parameters() if p.requires_grad],
+                optimizer="sgd", loss_scale=1., lr=.001, momentum=.3, weight_decay=.01)
+        else:
+            optimizer = torch.optim.SGD(model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
+        self.template = optimizer.state_dict()
+        self.optimizer_names = [n for n in self.names if n in self.trainable] if self.half else self.names
 
     def name(self, native):
         return self.aliases[native.replace(".extra.", ".")]
@@ -64,14 +73,19 @@ class SGDLayout:
         for unused in ("second", "maximum", "corrections"):
             if raw[unused].count_nonzero():
                 raise ValueError("unused SGD storage is nonzero: "+unused)
+        masters = {}
         for i, native in enumerate(owners):
             name = self.name(native);a, b = self.span(offsets, i, name, raw["values"])
             count = int(raw["steps"][i]);counts[name] = count
             # Master values must be the actual published parameters.
-            torch.testing.assert_close(raw["values"][a:b].reshape(self.shapes[name]),
+            masters[name] = raw["values"][a:b].reshape(self.shapes[name]).clone()
+            torch.testing.assert_close(masters[name].to(self.dtype),
                                        checkpoint["parameters"][native], rtol=0, atol=0)
             if count:
-                state[self.names.index(name)] = {"momentum_buffer": raw["first"][a:b].reshape(self.shapes[name]).clone()}
+                state[self.optimizer_names.index(name)] = {"momentum_buffer": raw["first"][a:b].reshape(self.shapes[name]).clone()}
             elif raw["first"][a:b].count_nonzero():
                 raise ValueError("unupdated SGD owner has momentum")
-        return dict(gradients=gradients, optimizer=dict(self.template, state=state), update_counts=counts)
+        optimizer = dict(self.template, state=state)
+        if self.half:
+            optimizer["precision"] = dict(self.template["precision"], masters=[masters[n] for n in self.optimizer_names])
+        return dict(gradients=gradients, optimizer=optimizer, update_counts=counts)

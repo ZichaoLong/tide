@@ -17,6 +17,7 @@ import platform
 import statistics
 import sys
 import time
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"python"))
 import torch
 from durable_records import write_json
 from source_identity import source_state
@@ -25,10 +26,15 @@ from source_identity import source_state
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
-    parser.add_argument("--peer-devices", nargs="+", help="explicit eager node placement by region; first must match --device")
-    parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
+    parser.add_argument("--peer-devices", nargs="+", help="explicit eager/resident node placement by region; first must match --device")
+    parser.add_argument("--dtype", choices=("float16", "float32", "float64"), default="float32")
+    parser.add_argument("--scoring-dtype", choices=("float32", "float64"))
+    parser.add_argument("--intraop-threads", type=int, default=1)
+    parser.add_argument("--interop-threads", type=int, default=1)
+    parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--packing", choices=("auto", "scalar", "packed"), default="auto")
     parser.add_argument("--implementation", choices=("python", "native", "resident"), required=True)
-    parser.add_argument("--placement", choices=("native", "mixed-a", "mixed-b", "mixed-c"), default="native")
+    parser.add_argument("--placement", choices=("native", "cpu", "mixed-a", "mixed-b", "mixed-c"), default="native")
     parser.add_argument("--schedule", choices=("streaming", "prefill"), default="prefill")
     parser.add_argument("--mode", choices=("inference", "training"), default="training")
     parser.add_argument("--topology", choices=("hb", "dag", "pdg"), default="hb")
@@ -46,6 +52,13 @@ def main():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--allow-dirty", action="store_true", help="entry-point development only, never controlled evidence")
     args = parser.parse_args()
+    args.scoring_dtype = args.scoring_dtype or ("float64" if args.dtype == "float64" else "float32")
+    from tidegraph.planning import ExecutionSpec
+    specification = ExecutionSpec(client="pytorch" if args.implementation == "python" else "python-native",
+        device=args.device, placement="resident" if args.implementation == "resident" else args.placement,
+        dtype=args.dtype, scoring_dtype=args.scoring_dtype, schedule=args.schedule,
+        intraop_threads=args.intraop_threads, interop_threads=args.interop_threads, workers=args.workers,
+        packing=args.packing, peer_devices=tuple(args.peer_devices or ())).record()
     args.resident_limit_values, limits_sha = None, None
     if args.resident_limits:
         if args.implementation != "resident":
@@ -77,7 +90,7 @@ def main():
         value = getattr(args, name)
         if value:
             setattr(args, name, str(Path(value).resolve()))
-    torch.set_num_threads(1); torch.set_num_interop_threads(1)
+    torch.set_num_threads(args.intraop_threads); torch.set_num_interop_threads(args.interop_threads)
     shape = dict(width=4, samples=1, positions=2) if args.size == "small" else dict(width=32, samples=4, positions=4)
     config = Workload(args.topology, args.family, seed=args.seed, **shape)
     plan = None
@@ -100,7 +113,11 @@ def main():
         load_average_before=list(os.getloadavg()), host_arch=platform.machine(),
         caveat="one process per configuration; evolving continuation; no statistical or universal speed claim",
         dispatch_environment={k: os.environ.get(k) for k in ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")})
-    record.update(resident_limit_overrides=args.resident_limit_values, resident_limits_sha256=limits_sha)
+    record.update(resident_limit_overrides=args.resident_limit_values, resident_limits_sha256=limits_sha,
+                  execution=specification, model_id=plan.get("model_id") if plan else None,
+                  workload_id=plan["sha256"] if plan else None,
+                  thread_environment={k: os.environ.get(k) for k in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")},
+                  effective_threads=dict(intraop=torch.get_num_threads(), interop=torch.get_num_interop_threads()))
     write_json(out/"result.json", record)
     candidate = None
     try:
@@ -108,15 +125,15 @@ def main():
         device, reason = resolve_device(args.device)
         if args.peer_devices:
             peers = tuple(resolve_device(d)[0] for d in args.peer_devices)
-            if (args.implementation == "resident" or len(peers) < 2 or len(set(peers)) != len(peers)
+            if (len(peers) < 2 or len(set(peers)) != len(peers)
                     or peers[0] != device or device.type == "cpu" or any(d.type != device.type for d in peers)):
-                raise ValueError("peer benchmark needs distinct eager accelerators, first equal to --device")
+                raise ValueError("peer benchmark needs distinct accelerators, first equal to --device")
             args.peer_devices = [str(d) for d in peers]
             record["peer_devices"] = args.peer_devices
         validate(args.dtype, device, args.implementation)
         dtype = getattr(torch, args.dtype)
         atol, rtol = tolerances(dtype)
-        if args.placement != "native" and device.type == "cpu":
+        if args.placement not in {"native", "cpu"} and device.type == "cpu":
             raise ValueError("mixed placement requires an accelerator")
         if args.implementation == "resident" and device.type == "cpu":
             raise ValueError("resident requires an accelerator")
@@ -124,7 +141,9 @@ def main():
         record["runtime_initialization_seconds"] = time.perf_counter()-start
         record["runtime"] = manifest(device, reason, dtype)
         record["precision"] = dict(effective_dtype=args.dtype, fixture_dtype="float32",
-            input_policy="same seeded FP32 material; explicit promotion before both schedules", atol=atol, rtol=rtol)
+            input_policy="same seeded FP32 material; explicit conversion before both schedules",
+            scoring_dtype=args.scoring_dtype, master_dtype="float32" if args.dtype == "float16" else args.dtype,
+            loss_scale=1., atol=atol, rtol=rtol)
         memory = Memory(device, args.peer_devices)
         record["memory"] = memory.capture("runtime_ready", reset=True)
         start = time.perf_counter()
@@ -141,7 +160,7 @@ def main():
             record["parameter_inventory"] = plan["inventory"]
             record["memory_floor"] = plan["memory_floor"]
             record["effective_static_tensor_bytes"] = (plan["memory_floor"]["logical_parameter_bytes"]+
-                plan["memory_floor"]["legacy_inert_buffer_bytes"])*(2 if dtype == torch.float64 else 1)
+                plan["memory_floor"]["legacy_inert_buffer_bytes"])*{torch.float16:.5, torch.float32:1, torch.float64:2}[dtype]
             record["parameter_match"] = plan.get("parameter_match")
         record["fixture_preparation_seconds"] = time.perf_counter()-start
         write_json(out/"result.json", record)
@@ -208,13 +227,13 @@ def main():
             record.update(phase="independent-check", window=step)
             write_json(out/"result.json", record)
             expected, expected_loss = reference.step(step)
-            finite(result); equivalent(result, expected, check_device=False)
+            finite(result); equivalent(result, expected, check_device=False, atol=atol, rtol=rtol)
             torch.testing.assert_close(torch.tensor(loss, dtype=dtype), torch.tensor(expected_loss, dtype=dtype), rtol=rtol, atol=atol)
         if parameters is not None:
             for name, value in reference.parameters().items():
                 torch.testing.assert_close(parameters[name], value, rtol=rtol, atol=atol)
         if training_state is not None:
-            equivalent(training_state, reference.training_state(), check_device=False)
+            equivalent(training_state, reference.training_state(), check_device=False, atol=atol, rtol=rtol)
         record.update(state="passed", post_measurement_complete_records=True,
                       parameter_values_checked=parameters is not None,
                       optimizer_values_checked=training_state is not None,

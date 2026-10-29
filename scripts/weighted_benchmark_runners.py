@@ -28,7 +28,8 @@ def snapshot(value):
 
 
 def loss_from_outputs(result):
-    terms = [(x[0]*x[1:]).square().sum()*.001 for *_, x in result.outputs]
+    values = [x.float() if x.dtype == torch.float16 else x for *_, x in result.outputs]
+    terms = [(x[0]*x[1:]).square().sum()*.001 for x in values]
     if not terms:
         raise ValueError("benchmark workload produced no differentiable output")
     return torch.stack([t.to(terms[0].device) for t in terms]).sum()
@@ -42,7 +43,7 @@ def work(result):
 
 class Eager:
     def __init__(self, binding, inputs, span, config, args, device, reference=False):
-        from weighted_device_checks import runner
+        from tidegraph.weighted.execution import eager_runner
         self.binding, self.inputs, self.span, self.config, self.args, self.device = binding, inputs, span, config, args, device
         self.devices = (device,) if reference else tuple(torch.device(d) for d in getattr(args, "peer_devices", None) or (device,))
         self.node_owners = None
@@ -51,15 +52,24 @@ class Eager:
             self.inputs, self.node_owners = locate(binding, inputs, self.devices)
         else:
             self.binding.model.to(device)
-        placement = ExecutionPlacement(preset=args.placement, scoring_dtype=getattr(args, "dtype", "float32"))
+        placement = ExecutionPlacement(preset=args.placement, scoring_dtype=getattr(args, "scoring_dtype", None) or ("float64" if getattr(args, "dtype", "float32") == "float64" else "float32"))
         if reference:
             from tidegraph.reference import run
-            self.execute = lambda *a, **kw: run(binding.graph, binding.model, *a, **kw)
+            from tidegraph.placement import place_model
+            view = place_model(binding.graph, binding.model, ExecutionPlacement(scoring_dtype=placement.scoring_dtype))
+            self.execute = lambda *a, **kw: run(binding.graph, view, *a, **kw)
         else:
-            self.execute = runner(binding, args.implementation, placement, args.native_library,
-                                  streaming=args.schedule == "streaming")
+            self.execute = eager_runner(binding, args.implementation, placement, args.native_library,
+                                  streaming=args.schedule == "streaming", workers=getattr(args, "workers", 1),
+                                  packing=getattr(args, "packing", "auto"))
         self.state = Continuation(binding.graph.identity, config.samples)
-        self.optimizer = torch.optim.SGD(binding.model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
+        self.half = next(binding.model.parameters()).dtype == torch.float16
+        if self.half:
+            from tidegraph.precision import FP32MasterOptimizer
+            self.optimizer = FP32MasterOptimizer([p for p in binding.model.parameters() if p.requires_grad],
+                optimizer="sgd", loss_scale=1., lr=.001, momentum=.3, weight_decay=.01)
+        else:
+            self.optimizer = torch.optim.SGD(binding.model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
         self.update_counts = dict.fromkeys(dict(binding.model.named_parameters()), 0)
 
     def step(self, index):
@@ -73,7 +83,7 @@ class Eager:
                 loss = loss_from_outputs(result)
             if self.args.mode == "training":
                 with phase(self.args, "backward_finite"):
-                    loss.backward()
+                    self.optimizer.backward(loss) if self.half else loss.backward()
                     checks = {}
                     for p in self.binding.model.parameters():
                         if p.grad is not None:
@@ -95,15 +105,20 @@ class Eager:
         return snapshot(dict(self.binding.model.named_parameters()))
 
     def training_state(self):
-        return snapshot(dict(gradients={n: p.grad for n, p in self.binding.model.named_parameters()},
+        return snapshot(dict(gradients={n: p.grad.float() if self.half and p.grad is not None else p.grad
+                                         for n, p in self.binding.model.named_parameters()},
                              optimizer=self.optimizer.state_dict(), update_counts=self.update_counts))
 
     def manifest(self):
         dtype = getattr(self.args, "dtype", "float32")
-        placement = ExecutionPlacement(preset=self.args.placement, scoring_dtype=dtype)
+        scoring = getattr(self.args, "scoring_dtype", None) or ("float64" if dtype == "float64" else "float32")
+        placement = ExecutionPlacement(preset=self.args.placement, scoring_dtype=scoring)
         result = dict(execution=self.args.placement, schedule=self.args.schedule, operator="aten",
                       effective_placement={k: str(v) for k, v in placement.resolve(self.device).items()},
-                      complete_cpu_records=True, precision=dtype, optimizer="sgd", gradient_boundary="detach per window")
+                      complete_cpu_records=True, precision=dtype, scoring_dtype=scoring, optimizer="sgd",
+                      master_dtype="float32" if self.half else dtype, loss_scale=1.,
+                      packing=getattr(self.args, "packing", "auto"), workers=getattr(self.args, "workers", 1),
+                      gradient_boundary="detach per window")
         result.update(devices=[str(d) for d in self.devices],
                       node_owners=None if self.node_owners is None else [str(d) for d in self.node_owners])
         if self.args.implementation == "native":
@@ -120,6 +135,7 @@ class Resident:
         from tidegraph.weighted import WeightedResident, WeightedResidentTraining
         self.inputs, self.span, self.config, self.args, self.device = inputs, span, config, args, device
         self.training = args.mode == "training"
+        self.devices = tuple(torch.device(d) for d in getattr(args, "peer_devices", None) or (device,))
         from weighted_training_observation import SGDLayout
         self.sgd_layout = SGDLayout(binding.model) if self.training else None
         spec = limits(binding, config, span); spec["prefill"] = args.schedule == "prefill"
@@ -128,6 +144,8 @@ class Resident:
             spec = {k: v for k, v in spec.items() if k not in {"windows", "retained_bytes", "backward_bytes", "optimizer_bytes", "total_bytes"}}
         kwargs = dict(device=str(device), native_library=args.native_library, resident_library=args.resident_library,
                       batch_size=config.samples, limits=spec)
+        if len(self.devices) > 1:
+            kwargs["node_devices"] = [str(self.devices[n.region % len(self.devices)]) for n in binding.graph.nodes]
         if checkpoint is not None:
             kwargs["checkpoint"] = checkpoint
         elif self.training:
@@ -173,7 +191,7 @@ class Resident:
             with phase(self.args, "detach_return_sync"):
                 actual = snapshot(actual)
                 value = float(loss.detach().cpu())
-                synchronize(self.device)
+                for device in self.devices:synchronize(device)
             return actual, value
 
     def parameters(self):

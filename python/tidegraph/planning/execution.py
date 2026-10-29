@@ -52,12 +52,18 @@ class ExecutionSpec:
             raise ValueError("Python streaming has scalar dispatch; use prefill for packed execution")
         if self.placement == "resident" and (self.packing == "scalar" or self.workers != 1):
             raise ValueError("resident controls its device batches; host workers/scalar override do not apply")
+        if self.placement == "resident" and self.scoring_dtype != "float32":
+            raise ValueError("resident scoring requires float32")
+        if self.device.startswith("npu:") and self.scoring_dtype == "float64" and self.placement != "mixed-a":
+            raise ValueError("NPU FP64 scoring requires explicit CPU Read/control (mixed-a)")
 
     def record(self):
         requested = asdict(self)
         effective = dict(requested)
         if self.packing == "auto":
             effective["packing"] = "scalar" if self.client == "pytorch" and self.schedule == "streaming" else "packed"
+        if self.placement == "resident":
+            effective["operator"] = "aten+device-control"
         body = dict(schema="tide-weighted-execution-v1", requested=requested, effective=effective,
                     qualification="implementation selection only; exact-device evidence is separate")
         return dict(body, execution_id=fingerprint(body))

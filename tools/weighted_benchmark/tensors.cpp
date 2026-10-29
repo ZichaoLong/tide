@@ -24,7 +24,7 @@ int64_t size(const Json& row){
 }
 }
 std::vector<Tensor> tensors(const Json& data,at::ScalarType dtype){
-  if(dtype!=at::kFloat&&dtype!=at::kDouble)throw std::invalid_argument("benchmark dtype requires float32 or float64");
+  if(dtype!=at::kHalf&&dtype!=at::kFloat&&dtype!=at::kDouble)throw std::invalid_argument("benchmark dtype requires float16, float32 or float64");
   const bool binary=data.at("schema")=="tide-weighted-benchmark-fixture-v2";
   std::ifstream file;int64_t offset=0,limit=0;
   if(binary){
@@ -44,7 +44,7 @@ std::vector<Tensor> tensors(const Json& data,at::ScalarType dtype){
   std::vector<Tensor> values;int64_t permanent=0;
   for(const auto& row:data.at("tensors")){
     if(row.at("dtype")!="float32")throw std::invalid_argument("benchmark requires explicit FP32 tensors");
-    const int64_t n=size(row),element_bytes=dtype==at::kDouble?8:4;
+    const int64_t n=size(row),element_bytes=dtype==at::kDouble?8:dtype==at::kHalf?2:4;
     if(n>std::numeric_limits<int64_t>::max()/element_bytes)throw std::invalid_argument("fixture precision allocation overflow");
     const int64_t bytes=n*element_bytes;
     if(permanent>std::numeric_limits<int64_t>::max()-bytes)throw std::invalid_argument("fixture allocation overflow");

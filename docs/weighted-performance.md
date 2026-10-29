@@ -43,8 +43,9 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 CPU eager/native另导出实际最终参数梯度与SGD动量槽，保留None/连接零，分别对照。
 Python还比较完整optimizer state_dict；standalone的本入口只有固定SGD组，比较所有owner的动量槽。
 最后导出在计时之外；它认证最后窗口梯度/更新槽，不声称逐窗全部梯度都已保存。
-resident本入口仍只比较最终参数，`optimizer_values_checked`及`final_parameter_gradients_checked`为false；
-其完整训练门禁仍由[训练资格](resident-weighted-training.md)给出。旧报告同名optimizer标志
+当前resident入口解码实际参数梯度、连接标志、SGD槽和FP32 master，并逐项独立核对；
+Python及standalone均可显式检查磁盘解码后的新owner下一窗口。其完整训练门禁仍由
+[训练资格](resident-weighted-training.md)给出。旧报告同名optimizer标志
 实际只核对了更新后的参数，不能据此推断当时已验证动量槽；历史报告保留原始记录。
 它不向候选提供选定序列、批次或容量。严格失败保留为失败，不能在该配置上宣称等价加速。
 此有限对照不代替局部手算VJP、独立根、共享参数、checkpoint及完整设备资格。
@@ -125,3 +126,10 @@ standalone消费者在fixture读取、模型构造、warmup、每个measurement�
 
 [单行VJP/字段packing/常驻因子KV对照](evidence/core5-boundary-performance-20261029.md)
 保留五项通过、D64两项严格数值失败和一项构造容量拒绝；自身精确恢复与独立正确性分别判定。
+
+自然参数规模、可配置局部候选及统一执行/结果目录从[core5-study](core5-study.md)进入。
+三个client均保留显式FP16、FP32 scoring/optimizer master、loss scale=1；半精度使用既有
+atol=1e-3/rtol=2e-2，整数/路由/连接关系与同配置恢复仍严格核对。
+请求和生效packing、线程、scoring、放置与peer分别记录。standalone内存表包含每个peer，
+不是只报coordinator；运行时允许half的声明与实际设备资格仍分开。
+CPU FP16先从相同FP32材料转换，materialize准入保守保留FP32初始化的存储下界。
