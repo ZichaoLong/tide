@@ -73,7 +73,8 @@ void WeightedWindowAdjoint::construct(int64_t budget){
   std::vector<WeightedFlowView> views(count);
   const auto values=append_weighted_ready_values(p,ready);
   for(int64_t v=0;v<count;++v){const auto prefix="node."+std::to_string(v)+".";
-    inputs.push_back(append_weighted_node_input(p,ready,classes[v],v,samples,s.graph.inputs.size(),error,values));
+    inputs.push_back(append_weighted_node_input(p,ready,classes[v],v,samples,s.graph.inputs.size(),
+      weighted_node_fiber_capacity(s.graph,v,capacity),error,values));
     old.push_back({journal.load(p,stage_,prefix+"old.float"),journal.load(p,stage_,prefix+"old.int")});}
   peers_->append_local_send(p,s.graph,nodes_,inputs,views,error,remaining,&old);
   for(int64_t v=0;v<count;++v)if(s.node_devices[v]==device){auto& n=*nodes_[v];auto& worker=services.begin();

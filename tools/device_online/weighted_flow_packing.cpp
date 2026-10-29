@@ -2,8 +2,20 @@
 #include "device_launch_tide_weighted_node_pack.h"
 #include "device_launch_tide_weighted_region_pack.h"
 #include "device_launch_tide_weighted_owner_adopt.h"
+#include <algorithm>
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
+int64_t weighted_node_fiber_capacity(const Graph& graph,int64_t node,int64_t queue){
+  if(node<0||node>=static_cast<int64_t>(graph.nodes.size())||queue<1)
+    throw std::invalid_argument("invalid weighted node fiber capacity domain");
+  // At fixed (sample,node,time), fixed-delay physical edges and input ports
+  // contribute at most once each. Count identities, never SrcClass values.
+  // Saturation avoids overflow and the global queue already bounds the fiber.
+  int64_t count=0;
+  for(auto target:graph.inputs)if(target==node&&count<queue)++count;
+  for(const auto& edge:graph.edges)if(edge.target==node&&count<queue)++count;
+  return std::max<int64_t>(1,count); // A safe absent row for source-free nodes.
+}
 at::Tensor weighted_columns(DeviceProgram& p,const at::Tensor& x,int64_t start,int64_t count){
   auto out=at::zeros({x.size(0),count},x.options());
   p.index_select(x,1,at::arange(start,start+count,x.options().dtype(at::kLong)),out);return out;
@@ -14,18 +26,19 @@ at::Tensor append_weighted_ready_values(DeviceProgram& p,const ReadyBatch& r){
   weighted_copy(p,joined.narrow(0,0,cap),r.atoms.values);return joined;
 }
 WeightedNodeInput append_weighted_node_input(DeviceProgram& p,const ReadyBatch& r,const at::Tensor& classes,
-    int64_t node,int64_t samples,int64_t inputs,const at::Tensor& error,const at::Tensor& joined){
+    int64_t node,int64_t samples,int64_t inputs,int64_t slots,const at::Tensor& error,const at::Tensor& joined){
   const auto cap=r.atoms.valid.numel(),width=r.atoms.values.size(1);auto longs=r.fibers.options();
+  if(slots<1||slots>cap)throw std::invalid_argument("weighted node fiber slots exceed ready capacity");
   if(joined.sizes()!=at::IntArrayRef({cap+1,width})||joined.options().dtype()!=r.atoms.values.options().dtype()||joined.device()!=r.atoms.values.device())
     throw std::invalid_argument("weighted shared ready values layout differs");
-  WeightedNodeInput x;x.payload=at::zeros({samples,cap,width},r.atoms.values.options());x.owners=at::full({samples,cap},-1,longs);
-  x.indices=at::full({samples,cap},cap,longs);x.lengths=at::zeros({samples},longs);x.times=at::zeros_like(x.lengths);
+  WeightedNodeInput x;x.payload=at::zeros({samples,slots,width},r.atoms.values.options());x.owners=at::full({samples,slots},-1,longs);
+  x.indices=at::full({samples,slots},cap,longs);x.lengths=at::zeros({samples},longs);x.times=at::zeros_like(x.lengths);
   x.present=at::zeros({samples},longs.dtype(at::kBool));x.bank=at::full({samples},-1,longs);
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_node_pack)(1,stream,
     ptr(r.fibers),ptr(r.fiber_offsets),ptr(r.atoms.coordinates),ptr(r.counts),ptr(classes),ptr(x.indices),ptr(x.owners),
-    ptr(x.lengths),ptr(x.times),ptr(x.present),ptr(x.bank),ptr(error),node,samples,cap,inputs,classes.size(0)),"weighted complete node fiber plan");},
+    ptr(x.lengths),ptr(x.times),ptr(x.present),ptr(x.bank),ptr(error),node,samples,cap,inputs,classes.size(0),slots),"weighted complete node fiber plan");},
     {r.fibers,r.fiber_offsets,r.atoms.coordinates,r.counts,classes,x.indices,x.owners,x.lengths,x.times,x.present,x.bank,error});
-  p.index_select(joined,0,x.indices.reshape({-1}),x.payload.reshape({samples*cap,width}));
+  p.index_select(joined,0,x.indices.reshape({-1}),x.payload.reshape({samples*slots,width}));
   if(x.payload.scalar_type()==at::kHalf){auto widened=at::empty(x.payload.sizes(),x.payload.options().dtype(at::kFloat));p.cast(x.payload,widened);x.payload=widened;}
   return x;
 }

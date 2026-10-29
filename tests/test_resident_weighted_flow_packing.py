@@ -22,7 +22,7 @@ def library(tmp_path_factory):
     subprocess.run(["g++","-std=c++17","-shared","-fPIC","-O2","-I"+str(root/"cuda"),
         "-I"+str(root/"ascendc"),"-I"+str(Path(torch.__file__).parent/"include"),str(source),"-o",str(binary)],check=True)
     lib=ctypes.CDLL(str(binary))
-    lib.tide_weighted_node_pack.argtypes=[ctypes.c_void_p]*12+[ctypes.c_int64]*5
+    lib.tide_weighted_node_pack.argtypes=[ctypes.c_void_p]*12+[ctypes.c_int64]*6
     lib.tide_weighted_region_pack.argtypes=[ctypes.c_void_p]*9+[ctypes.c_int64]*2
     lib.tide_weighted_owner_adopt.argtypes=[ctypes.c_void_p]*4+[ctypes.c_int64]*2
     return lib
@@ -42,7 +42,41 @@ def node_fixture():
 
 
 def call_node(library,fields):
-    library.tide_weighted_node_pack(*(x.data_ptr() for x in fields),2,2,4,2,3)
+    library.tide_weighted_node_pack(*(x.data_ptr() for x in fields),2,2,4,2,3,fields[5].shape[1])
+
+
+def test_compact_slots_preserve_global_indices_and_padding(library):
+    f=node_fixture()
+    # The actual fiber begins at global index 1; local slots are only two.
+    f[2][1:3]=f[2][:2].clone();f[1]=torch.tensor([1,3,4,4,4])
+    f[5]=torch.empty(2,2,dtype=torch.int64);f[6]=torch.empty_like(f[5])
+    call_node(library,f)
+    assert f[-1].item()==0
+    assert f[5].tolist()==[[1,2],[4,4]]  # Global sentinel stays 4, never 2.
+    assert f[6].tolist()==[[7,7],[-1,-1]] and f[7].tolist()==[2,0]
+    assert f[8].tolist()==[2**54+17,0]
+    f[4][2,1]=0;call_node(library,f)
+    assert f[-1].item()==2  # SrcClass multiplicity did not relax SourceDomain.
+
+
+def test_compact_overflow_refused_before_any_slot_write(library):
+    f=node_fixture()
+    index_storage=torch.full((4,),-997,dtype=torch.int64)
+    owner_storage=torch.full((4,),-998,dtype=torch.int64)
+    f[5]=index_storage[1:3].reshape(2,1);f[6]=owner_storage[1:3].reshape(2,1)
+    call_node(library,f)
+    assert f[-1].item()==2 and f[9].tolist()==[False,False]
+    assert index_storage.tolist()==[-997,4,4,-997]
+    assert owner_storage.tolist()==[-998,-1,-1,-998]
+
+
+@pytest.mark.parametrize("bad",["negative_offset","excess_fibers"])
+def test_malformed_ready_bounds_refused(library,bad):
+    f=node_fixture()
+    if bad=="negative_offset":f[1][0]=-1
+    else:f[3][1]=5
+    call_node(library,f)
+    assert f[-1].item()==2 and not f[9].any()
 
 
 def test_physical_atoms_int64_absence_and_source_domain(library):

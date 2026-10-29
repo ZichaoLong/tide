@@ -13,6 +13,14 @@
 namespace tide::device_online {
 namespace {
 void require(bool ok,const char* why){if(!ok)throw std::runtime_error(why);}
+void fiber_capacity(){
+  Graph g;g.nodes.resize(4);g.inputs={0,0,2};
+  g.edges={{0,1,1},{0,1,1},{1,1,2}}; // Parallel identities and feedback count separately.
+  require(weighted_node_fiber_capacity(g,0,4096)==2&&weighted_node_fiber_capacity(g,1,4096)==3&&
+    weighted_node_fiber_capacity(g,2,4096)==1&&weighted_node_fiber_capacity(g,3,4096)==1,
+    "physical fiber bound omitted a port/parallel edge or empty row");
+  require(weighted_node_fiber_capacity(g,1,2)==2,"global queue bound not retained");
+}
 void compare(const Result& a,const Result& b,at::ScalarType dtype,bool exact=false){tide_bench::compare(a,b,true,dtype,std::nullopt,exact?0.:dtype==at::kHalf?2e-2:-1.,exact?0.:dtype==at::kHalf?1e-3:-1.);}
 void half_payload(at::Device device){
   at::NoGradGuard no_grad;auto f=at::TensorOptions().device(device).dtype(at::kFloat);
@@ -77,6 +85,7 @@ void allocation_snapshot(at::Device device,at::ScalarType dtype){
 }
 }
 void check_weighted_flow_boundaries(at::Device device,at::ScalarType dtype,const std::filesystem::path& directory){
+  fiber_capacity();
   parameter_banks(device,dtype);
   allocation_snapshot(device,dtype);
   if(dtype==at::kHalf)half_payload(device);

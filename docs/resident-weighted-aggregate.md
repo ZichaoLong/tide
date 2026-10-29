@@ -22,7 +22,8 @@ region/node/source绑定及adapted的低秩矩阵合成/别名由参数owner层�
 设备先检查实际长度/载荷并归约质量，再为有实际源变换的行准备owner。
 vendor RMSNorm、[批量双仿射/SiLU](resident-weighted-head.md)执行来源函数；
 设备完整归约恢复每个纤维的实际(r,u)。同类共享参数，每原子输入/激活私有。
-数值batch覆盖容量行；缺席行使用无依赖的安全零操作数，不声称所有填充计算都已消失。
+数值batch覆盖容量行；完整图调用者按[物理入边/端口上界](resident-weighted-flow.md)确定每节点N，
+不再以全局队列长度作为每个节点的N。缺席行使用无依赖的安全零操作数，仍有填充计算。
 
 实际tape保存原始载荷、长度、有效owner、变换值、归一化输出/rstd、参数版本及(r,u)。
 `append_weighted_aggregate_vjp`接受每纤维完整(r,u) cotangent及独立root存在标志。
