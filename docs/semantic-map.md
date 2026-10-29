@@ -1,5 +1,7 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[有限性能与停止证据](evidence/core5-boundary-performance-20261029.md)连接单行VJP、异形字段packing、常驻因子KV、实际训练/恢复与分段成本；数值严格失败不冒充吞吐资格。
+
 [三项审查修复资格](evidence/core5-review-fixes-20261028.md)补验ClockedState带权VJP、quad正支持拒绝与resident参数bank分配前准入；数学/图/checkpoint版本保持。
 
 [公共性能消费者](weighted-performance.md)只使用静态参数/输入和候选实际结果，

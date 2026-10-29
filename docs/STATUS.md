@@ -21,7 +21,7 @@ resident D64在构造时报Aggregate scratch budget exceeded，尚无训练计�
 已定位resident按全局queue为每节点分配纤维，进而重复展开来源矩阵。
 新候选按物理入边+端口的静态上界压缩局部槽；全局indices/sentinel、SourceDomain和SrcClass分开，
 前向、VJP重放和peer请求一致，超界拒绝。CPU元数据9项通过；设备编译/资格待执行。
-当前源码/文档修改待固定提交；不复跑未变化的CPU/mixed数值失败或历史全矩阵。
+实现已固定为8c48f49；不复跑未变化的CPU/mixed数值失败或历史全矩阵。
 
 ## 接续命令与有限计划
 
@@ -37,3 +37,11 @@ resident D64在构造时报Aggregate scratch budget exceeded，尚无训练计�
 当前环境由`docs/development.md`定位/opt/software现行规范，旧home指南失效；不修改共享环境。
 新结果进入性能证据、ROADMAP逐项表、相关契约和performance-lessons，证据独立提交推送。
 停止/重启条件按ROADMAP保持：D64/D2048/反馈FP32、FP16 GDN、默认异步双NPU、晚注册NPU限制未解除。
+
+新资格已准备：`core5-compact-fiber-{python,sdk}-20261029.service`，
+工作树`artifacts/worktrees/core5-compact-fiber-qualified`固定8c48f49、tracked文件只读；
+启动器`.local/core5-compact-fiber-{python,sdk}.sh`与driver`.local/core5-compact-fiber-qualify.py`。
+输出`artifacts/jobs/core5-compact-fiber-{python,sdk}/{status,qualification}.json`及metadata/build/device.log；
+新构建在固定树`build/{python,sdk}`。每任务两个构建线程、单ATen线程、MemoryMax32G、RuntimeMaxSec4000，
+元数据90秒、构建1800秒、设备排队180秒+执行1800秒。启动后核对unit/state；尚无设备资格结果。
+先两套资格终态，再独立串行测量，不能与构建/资格重叠。

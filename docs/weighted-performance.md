@@ -122,3 +122,6 @@ standalone消费者在fixture读取、模型构造、warmup、每个measurement�
 在单步同步/计时之前执行，不放进完整训练计时。进程被强制终止时，最后结果可以仍为running；
 外层job的退出码决定终态，不能仅凭部分metrics认定通过。`test_weighted_benchmark_material.py`
 用阻塞FIFO与真实子进程中断验证最后阶段可读，另验五族完整训练及损坏材料的失败阶段。
+
+[单行VJP/字段packing/常驻因子KV对照](evidence/core5-boundary-performance-20261029.md)
+保留五项通过、D64两项严格数值失败和一项构造容量拒绝；自身精确恢复与独立正确性分别判定。

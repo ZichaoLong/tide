@@ -201,3 +201,6 @@ window_bridge_us/parameter_reduce_us`：当前调用的主机steady-clock微秒�
 
 上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
+
+[15c3e65有限成本证据](evidence/core5-boundary-performance-20261029.md)已取得实际构造/执行/归约分段；
+它不授权跨窗口复用绑定旧地址的adjoint。优化器canonical布局的1/16子分区和总预算须分别准入。
