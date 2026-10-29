@@ -14,7 +14,7 @@ extern "C" __global__ __aicore__ void tide_weighted_node_pack(GM_ADDR fibers,GM_
   for(I i=0;i<samples*slots;++i){ix[i]=capacity;owner[i]=-1;}
   auto f=(__gm__ I*)fibers,off=(__gm__ I*)offsets,c=(__gm__ I*)coordinates,labels=(__gm__ I*)classes;
   const I nf=((__gm__ I*)counts)[1];
-  if(nf<0||nf>capacity){status[0]=2;}
+  if(!status[0]&&(nf<0||nf>capacity)){status[0]=2;}
   if(!status[0])for(I k=0;k<nf;++k)if(f[k*4+1]==node){
     I b=f[k*4],a=off[k],end=off[k+1];
     if(b<0||b>=samples||live[b]||a<0||end<=a||end>capacity||end-a>slots){status[0]=2;break;}
