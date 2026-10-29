@@ -20,12 +20,12 @@ selection and any resource lease belong to the site launcher.
 export TORCH_DEVICE_BACKEND_AUTOLOAD=0
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 export PYTHONPATH="$PWD/python${PYTHONPATH:+:$PYTHONPATH}"
-python scripts/build.py --backend cuda --build-dir build/cuda --jobs 2
+python scripts/build.py --backend cuda --build-dir build/cuda --jobs all
 cmake --install build/cuda --prefix "$PWD/build/installed-cuda"
 cmake -S tools/online_bench -B build/online-cuda \
   -DCMAKE_PREFIX_PATH="$PWD/build/installed-cuda" -DBUILD_TESTING=ON \
   -DTorch_DIR="$(python -c 'from pathlib import Path; import torch; print(Path(torch.__file__).parent / "share/cmake/Torch")')"
-cmake --build build/online-cuda --parallel 2
+cmake --build build/online-cuda --parallel "$(python scripts/build_resources.py)"
 
 TIDE_BUILD_DIR="$PWD/build/cuda" \
 TIDE_ONLINE_BINARY="$PWD/build/online-cuda/tidegraph-online-bench" \

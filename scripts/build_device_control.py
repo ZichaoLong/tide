@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build the optional resident backend against a matching core/runtime owner."""
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 import json
 import os
@@ -27,7 +28,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--core-build", type=Path, required=True)
     parser.add_argument("--build-dir", type=Path, required=True)
-    parser.add_argument("--jobs", type=int, choices=(1, 2, 4), default=2)
+    add_build_jobs(parser)
     parser.add_argument("--ascendc-soc", help="Explicit target SoC; enable Ascend C closure")
     parser.add_argument("--runtime", choices=("standalone", "python"), help="CUDA runtime owner; NPU must match its core")
     parser.add_argument("--cuda-architectures", help="Explicit CMake CUDA architecture list, CC80 or newer")
@@ -127,7 +128,7 @@ def main():
         raise RuntimeError("control source changed during build")
     write_json(build / "control-build.json", dict(schema="tide-device-control-build-v1",
         source=before[0], dirty=before[1], component_sha256=identity, core=manifest,
-        backend=backend, runtime=runtime, npu_runtime=runtime if backend == "npu" else None,
+        build_jobs=args.jobs, backend=backend, runtime=runtime, npu_runtime=runtime if backend == "npu" else None,
         cuda_architectures=args.cuda_architectures,
         ascendc_soc=args.ascendc_soc,
         binary_sha256=binaries, loader_sha256=loaders,

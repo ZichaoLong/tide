@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Install separate core/backend packages and compile a public-header-only client."""
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -16,6 +17,7 @@ def main():
     parser.add_argument("--resident-build", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--component", choices=("resident", "weighted", "weighted-training"), default="resident")
+    add_build_jobs(parser)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     weighted = args.component.startswith("weighted")
@@ -58,7 +60,7 @@ def main():
              "-DCMAKE_BUILD_TYPE=Release", "-D"+package_name+"_DIR="+str(package),
              "-DTorch_DIR="+cache_values(core)["Torch_DIR"], "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
              *(["-DTIDE_WEIGHTED_TRAINING=ON"] if training else [])])
-        run(["cmake", "--build", build, "--parallel", "2"])
+        run(["cmake", "--build", build, "--parallel", str(args.jobs)])
         binary = build / binary_name
         loader = subprocess.check_output(["ldd", str(binary)], text=True)
         if any(x in loader.lower() for x in ("not found", "libtorch_python", "libpython", "/stub/", "/stubs/", "/simulator/")):

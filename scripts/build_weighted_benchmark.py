@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build a standalone public-API benchmark against verified installed packages."""
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ def main():
     parser.add_argument("--resident-build", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--allow-dirty", action="store_true", help="frozen development snapshot only, not qualification")
+    add_build_jobs(parser)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     source, dirty = source_state(root)
@@ -63,7 +65,7 @@ def main():
              "-DCMAKE_BUILD_TYPE=Release", "-DTorch_DIR="+cache_values(core)["Torch_DIR"],
              "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
              "-DTIDE_WEIGHTED_RESIDENT="+("ON" if backend else "OFF")])
-        run(["cmake", "--build", build, "--parallel", "2"])
+        run(["cmake", "--build", build, "--parallel", str(args.jobs)])
         binary = build/"weighted-benchmark"
         loader = subprocess.check_output(["ldd", str(binary)], text=True)
         if any(x in loader.lower() for x in ("not found", "libtorch_python", "libpython", "/stub/", "/stubs/", "/simulator/")):

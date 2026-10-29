@@ -34,7 +34,7 @@
 
 ```sh
 python scripts/build_device_control.py --core-build CORE --build-dir NEW_BUILD \
-  --checks weighted-reverse-route --ascendc-soc Ascend910_9392 --jobs 2
+  --checks weighted-reverse-route --ascendc-soc Ascend910_9392 --jobs all
 python scripts/verify_device_control.py --build-dir NEW_BUILD --output-dir NEW_CHECKS \
   --checks weighted-reverse-route --device npu:0
 ```

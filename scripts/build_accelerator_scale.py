@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build only the benchmark consumer against a verified, installed native core."""
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -16,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--core-build', type=Path, required=True)
     parser.add_argument('--build-dir', type=Path, required=True)
-    parser.add_argument('--jobs', type=int, choices=(1, 2, 4, 8), default=2)
+    add_build_jobs(parser)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     core, build = args.core_build.resolve(), args.build_dir.resolve()
@@ -48,7 +49,7 @@ def main():
     (build / 'loader.txt').write_text(closure)
     if client_hash(root) != identity or source_state(root) != (commit, dirty):
         raise RuntimeError('benchmark source changed during build')
-    write_json(build / 'client-manifest.json', dict(schema='tide-accelerator-scale-build-v1',
+    write_json(build / 'client-manifest.json', dict(schema='tide-accelerator-scale-build-v1', build_jobs=args.jobs,
         source=commit, dirty=dirty, client_source_sha256=identity, core=manifest,
         binary_sha256=digest(binary), loader_sha256=digest(build / 'loader.txt'),
         additional_binaries={name: digest(build / name) for name in ('tide-bounded-schedule-check','tide-bounded-scale')

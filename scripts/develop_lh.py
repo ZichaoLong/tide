@@ -5,6 +5,7 @@ Run under scripts/job.py in a durable service; its output directory must exist.
 The checkout and shared build caches must remain frozen until termination.
 """
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 from pathlib import Path
 import subprocess
@@ -15,7 +16,7 @@ parser.add_argument("--output-dir", required=True)
 parser.add_argument("--lh-snapshot", required=True)
 parser.add_argument("--component", required=True,
                     choices=("selector", "add", "full", "attention", "pronounce", "iocortex", "all"))
-parser.add_argument("--jobs", type=int, default=2)
+add_build_jobs(parser)
 parser.add_argument("--dtype", choices=("float32", "float64", "both"), default="both")
 parser.add_argument("--scope", choices=("full", "smoke"), default="full")
 args = parser.parse_args()

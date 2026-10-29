@@ -189,7 +189,7 @@ modules, execution policy, dtype or dependency version changes.
 
 Build the adapter from the same pinned source using the experiment's exact
 Torch/Python/ABI/architecture: `python scripts/build.py --build-dir /path/to/build
---jobs 2`. For native execution pass `native_library="/path/to/build"` to
+--jobs all`. For native execution pass `native_library="/path/to/build"` to
 GraphRuntime. The loader validates the adjacent build manifest, host/Torch/ABI
 and binary hash; it performs no compilation or sys.path mutation. A relocated
 adapter needs both `_tide_native.so` and `build-manifest.json`, and the matching
@@ -204,7 +204,7 @@ required:
 cmake -S /path/to/tide -B build/tide -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_PREFIX_PATH=/path/to/libtorch -DTIDE_PYTHON_BINDINGS=OFF \
   -DTIDE_BUILD_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/path/to/tide-prefix
-cmake --build build/tide --parallel 2
+cmake --build build/tide --parallel "$(python scripts/build_resources.py)"
 cmake --install build/tide
 ```
 

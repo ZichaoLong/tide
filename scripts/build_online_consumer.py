@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build installed eager/optional resident consumers with exact core identities."""
 import argparse
+from build_resources import add_build_jobs
 import json
 import os
 from pathlib import Path
@@ -16,7 +17,7 @@ def main():
     p.add_argument('--core-build', type=Path, required=True)
     p.add_argument('--resident-build', type=Path)
     p.add_argument('--output-dir', type=Path, required=True)
-    p.add_argument('--jobs', type=int, choices=(1, 2, 4, 8), default=2)
+    add_build_jobs(p)
     a = p.parse_args()
     root = Path(__file__).resolve().parents[1]
     core, out = a.core_build.resolve(), a.output_dir.resolve()

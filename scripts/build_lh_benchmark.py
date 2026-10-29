@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build the standalone benchmark against an immutable original-LH snapshot."""
 import argparse
+from build_resources import add_build_jobs
 import hashlib
 import json
 import os
@@ -22,10 +23,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--snapshot', required=True)
     parser.add_argument('--build-dir', required=True)
-    parser.add_argument('--jobs', type=int, default=2)
+    add_build_jobs(parser)
     args = parser.parse_args()
-    if not 1 <= args.jobs <= 4:
-        parser.error('build jobs must be in [1,4]')
     root = Path(__file__).resolve().parents[1]
     snapshot, build = Path(args.snapshot).resolve(), Path(args.build_dir).resolve()
     if snapshot == build or snapshot in build.parents or build in snapshot.parents:
@@ -51,7 +50,7 @@ def main():
     verify()
     if sources(root) != before:
         raise ValueError('benchmark source changed during build')
-    write_json(build/'build-manifest.json', dict(schema='lh-bench-build-v1', sources=before,
+    write_json(build/'build-manifest.json', dict(schema='lh-bench-build-v1', build_jobs=args.jobs, sources=before,
                 binary_sha256=digest(build/'tide-lh-bench'), lh_snapshot=manifest, torch=torch.__version__,
                 cxx11_abi=torch.compiled_with_cxx11_abi(), assertion_policy='Release; runtime assertions off',
                 parallel_policy='original ENABLE_PARALLEL_FOR with OpenMP'))

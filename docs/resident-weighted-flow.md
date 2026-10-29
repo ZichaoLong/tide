@@ -127,7 +127,7 @@ manifest另记raw/payload dtype、compute/scoring/adjoint FP32，不静默替换
 
 ```sh
 python scripts/build_device_control.py --core-build NPU_CORE --build-dir NEW_BUILD \
-  --python-component weighted --ascendc-soc Ascend910_9392 --jobs 2
+  --python-component weighted --ascendc-soc Ascend910_9392 --jobs all
 ```
 
 CUDA 架构须为显式计算能力代码（80及以上）；`native/all`、低于80和

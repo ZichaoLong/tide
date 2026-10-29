@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build then verify a frozen source checkout; suitable for scripts/job.py."""
 import argparse
+from build_resources import add_build_jobs
 import os
 from pathlib import Path
 import subprocess
@@ -8,14 +9,14 @@ import sys
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
-parser.add_argument("--jobs", type=int, default=2)
+add_build_jobs(parser)
 parser.add_argument("--lh-snapshot", help="also qualify original C++ LH components from this immutable snapshot")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(root / "scripts/build.py"), "--jobs", str(args.jobs)], check=True)
 online = Path(args.output_dir).resolve() / "online-build"
 subprocess.run([sys.executable, str(root / "scripts/build_online_consumer.py"), "--core-build", str(root / "build"),
-                "--output-dir", str(online), "--jobs", str(min(args.jobs, 8))], check=True)
+                "--output-dir", str(online), "--jobs", str(args.jobs)], check=True)
 os.environ["TIDE_ONLINE_BINARY"] = str(online / "consumer/tidegraph-online-bench")
 subprocess.run([sys.executable, str(root / "scripts/verify.py"), "--device", "cpu", "--dtype", "both",
                 "--output-dir", str(Path(args.output_dir).resolve() / "verification")], check=True)

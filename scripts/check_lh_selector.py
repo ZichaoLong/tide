@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build/run original LH component parity against a fingerprinted Tide CPU library."""
 import argparse
+from build_resources import add_build_jobs
 import datetime
 import hashlib
 import json
@@ -17,7 +18,7 @@ parser.add_argument("--snapshot", required=True)
 parser.add_argument("--core-build-dir", default="build")
 parser.add_argument("--oracle-build-dir", default="build/lh-oracle", help="reusable CMake cache; result/log directories remain unique")
 parser.add_argument("--output-dir", required=True)
-parser.add_argument("--jobs", type=int, default=2)
+add_build_jobs(parser)
 parser.add_argument("--component", choices=("selector", "add", "full", "attention", "pronounce", "iocortex", "all"), default="selector")
 parser.add_argument("--runtime-assertions", choices=("on", "off"), default="on",
                     help="original LH build policy; off requires a separate oracle cache")

@@ -32,9 +32,9 @@ load TorchNPU (`TORCH_DEVICE_BACKEND_AUTOLOAD=0` also disables Torch's automatic
 third-party plugin loading).
 
 ```sh
-python scripts/build.py --backend cpu --build-dir build/cpu --jobs 2
-python scripts/build.py --backend cuda --build-dir build/cuda --jobs 2
-python scripts/build.py --backend npu --npu-runtime python --build-dir build/npu-python --jobs 2
+python scripts/build.py --backend cpu --build-dir build/cpu --jobs all
+python scripts/build.py --backend cuda --build-dir build/cuda --jobs all
+python scripts/build.py --backend npu --npu-runtime python --build-dir build/npu-python --jobs all
 ```
 
 The installed-consumer verifier explicitly preserves the selected Torch when
@@ -65,7 +65,7 @@ keep them in separate build and launch environments.
 cmake -S . -B build/npu-sdk -G Ninja -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_PREFIX_PATH="/path/to/libtorch;/path/to/libtorch-npu-sdk" \
   -DTIDE_BACKEND=NPU -DTIDE_NPU_RUNTIME=standalone -DTIDE_PYTHON_BINDINGS=OFF
-cmake --build build/npu-sdk --parallel 2
+cmake --build build/npu-sdk --parallel "$(python scripts/build_resources.py)"
 ACL_OP_INIT_MODE=0 build/npu-sdk/tidegraph-accelerator-check --device npu:0 --dtype float32 \
   --output-dir artifacts/cpp-npu-001
 ```
