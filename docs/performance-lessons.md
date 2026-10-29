@@ -188,3 +188,23 @@ profiling开销不纳入吞吐，也不作为普通训练内存。后续更有�
 在没有公共整段算术/VJP方案前重复大图不能补充关键证据。
 FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更多精度”就认定修复。
 默认双卡CPU桥接通过小例后，完整图仍EE1017；必须把独立根、多步更新和恢复纳入替代方案验收。
+
+
+## 单行VJP、异形传输与常驻反向的实测边界
+
+[15c3e65有限对照](evidence/core5-boundary-performance-20261029.md)固定输入、原精度/容差、
+完整SGD边界和真实梯度/槽；新源码另有计时外磁盘换owner逐值恢复。每配置仅一次独立流程。
+
+| 经验 | 实际结果及下一步条件 |
+| --- | --- |
+| 消去私有VJP层次不等于减少数值调用 | 1270次SingletonVjp替代823Query+447Aggregate边界，但mm/bmm/copy/stack仍17697/236/69342/12325。CPU medium0.412→0.433s、D64 FP64 2.717→2.770s，均通过；没有端到端收益结论 |
+| 字段传输打包仍受适用域约束 | NPU mixed-c2.183→1.848s、mixed-a1.505→1.477s，完整核对通过，allocator峰值均未减少。不能把单次下降全归因packing；异形shape/offset解码和int64独立dtype需保留 |
+| 实际小调用需要profile，不能凭矩阵数估计 | mixed-a仍31302kernel、3265scalar、2016异步copy事件，kernel union132ms而forward inclusive1367ms；host span重叠，不是排他归因。下一候选须针对实际可合并索引/验证/提交域，不盲目扩大batch |
+| 常驻反向构造应单独计量 | medium构造928ms、执行/等待1094ms，完整窗2794ms；模板重绑有依据。完整adjoint绑定journal/根/参数地址/版本，shape缓存不安全；先做显式绑定边界及独立根/恢复验收 |
+| 公开解码必须遵循物理owner布局 | trainable含全部别名，offset/槽仅canonical物理owner且无尾哨兵；用名字列表长度推断槽数会错。fake布局测试后仍要真实消费者核对梯度、SGD、master和恢复 |
+| 总预算不能替代子分区准入 | D64master布局最低36.32MB，默认optimizer预算的1/16仅16MiB；显式1GiB optimizer预算只解决该子分区。旧resident仍在Aggregate scratch拒绝，不等于容量检查错误或可以静默加预算 |
+| 恢复精确不替代独立正确性 | D64单/双NPU显式blocking均自身恢复通过，但node89 keys同一坐标超原容差；15.685/16.840s为失败候选实际成本，不是合格吞吐或双卡加速 |
+| 纤维容量应由物理消息界定 | 旧每节点按全局queue展开来源矩阵，放大了scratch；合法固定时间每物理边/端口最多一个原子。按物理入度缩小局部槽是新候选，SrcClass不能用于合并/缩小，global indices与反向祖先必须保持；设备结果独立验收 |
+
+本次CPU profile约721.2MiB、219秒、RSS14.21GiB；NPU profile39.16秒。它们不是吞吐样本。
+保存负结果与未解除条件，后续不以更多配置扫描寻找有利结果，不声称低成本优化已经耗尽。

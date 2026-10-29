@@ -1,0 +1,1120 @@
+{
+  "schema": "tide-reviewed-performance-v1",
+  "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+  "baseline": "f03e9bee0f069d48f5f1544d3821b7781409a27f",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "policy": "One process/config, one warmup and one measured complete SGD window; separate profiling and exact disk/new-owner next-window check outside timers. CPU and NPU studies serialized. Outside contention not excluded.",
+  "qualification": "core5-resident-boundary-20261029.md",
+  "jobs": {
+    "cpu": {
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "started": "2026-10-29T02:07:53.047793+00:00",
+      "finished": "2026-10-29T02:13:05.094793+00:00",
+      "exit_code": 0,
+      "driver_sha256": "b95f0155bec8f9b4e5f82da435582a116cc7e4a04a05675ef7e0f93f323605ad",
+      "study_sha256": "723ebb852503179f95bb33765b12e1f683d8501d4d110cafb8d70cffce3abe1c",
+      "physical_devices": null,
+      "load_average_before": [
+        39.7,
+        47.17,
+        44.76
+      ],
+      "load_average_after": [
+        57.05,
+        55.65,
+        48.75
+      ],
+      "service": "core5-boundary-study-cpu-20261029.service",
+      "resources": {
+        "background_slice": true,
+        "threads": 1,
+        "memory_max_GiB": 32,
+        "runtime_max_s": 2100,
+        "hard_isolation_proven": false
+      }
+    },
+    "npu": {
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "failed",
+      "started": "2026-10-29T02:15:04.074817+00:00",
+      "finished": "2026-10-29T02:23:40.198575+00:00",
+      "exit_code": 1,
+      "driver_sha256": "1f91e0d243690ecfa7f23ba5e0921bae4c0e7ff7330d8f2525f9b64974bd871f",
+      "study_sha256": "3f245ee8d0ff3c14ff5b48fda31bd4622523538040aaf004226491c52fbe7441",
+      "physical_devices": "9,13",
+      "load_average_before": [
+        36.92,
+        48.24,
+        46.88
+      ],
+      "load_average_after": [
+        34.68,
+        38.17,
+        42.43
+      ],
+      "service": "core5-boundary-study-npu-20261029.service",
+      "resources": {
+        "background_slice": true,
+        "threads": 1,
+        "memory_max_GiB": 32,
+        "runtime_max_s": 3300,
+        "hard_isolation_proven": false
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "cpu/before-medium",
+      "source": "f03e9bee0f069d48f5f1544d3821b7781409a27f",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 6.674095042049885,
+      "process_timeout_s": 360,
+      "result_sha256": "566617dd63d1023dbaaffbd83745e82a9aa6bf49dfa92932e2dedcf36420777f",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "cpu",
+      "implementation": "native",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 0.8756646364927292,
+      "warmup_seconds": 0.41420959681272507,
+      "measured_seconds": 0.4124007001519203,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 32,
+        "max_state_private_projection_batch": 2,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "state_preparation_events": 96
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 362344448
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "cpu/before-ranked64",
+      "source": "f03e9bee0f069d48f5f1544d3821b7781409a27f",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 26.99795413017273,
+      "process_timeout_s": 360,
+      "result_sha256": "250469e2d038ebca64c41e08ed373d16006b3eaee571e2feb268801f8d82e119",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "07a775da9626754a12db7d2daaad4733b81afaa9bd64c71b72be4dd5300ff01c",
+      "dtype": "float64",
+      "device": "cpu",
+      "implementation": "native",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 2.3328819647431374,
+      "warmup_seconds": 2.7250697426497936,
+      "measured_seconds": 2.717119961977005,
+      "work": {
+        "candidate_updates": 479,
+        "full_calls": 344,
+        "messages": 1604,
+        "outputs": 19,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 24,
+        "max_state_private_projection_batch": 32,
+        "state_independent_projection_calls": 112,
+        "state_independent_projection_rows": 1780,
+        "state_preparation_events": 34
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 815222784
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "cpu/after-medium",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 7.825599681586027,
+      "process_timeout_s": 360,
+      "result_sha256": "685ee3ad56ac295aebd789164afcd3a9a9bbf25571744217525e491db4c38ae3",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "cpu",
+      "implementation": "native",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 0.8818808421492577,
+      "warmup_seconds": 0.41229961067438126,
+      "measured_seconds": 0.43251875415444374,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 32,
+        "max_state_private_projection_batch": 2,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "state_preparation_events": 96
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 362287104
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "cpu/after-ranked64",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 50.325801853090525,
+      "process_timeout_s": 360,
+      "result_sha256": "12fba42050556cd360b14348811debd2e06c6fcca23b3ba4aba67e5d7c0bad9a",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "07a775da9626754a12db7d2daaad4733b81afaa9bd64c71b72be4dd5300ff01c",
+      "dtype": "float64",
+      "device": "cpu",
+      "implementation": "native",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 2.4772688783705235,
+      "warmup_seconds": 2.749378062784672,
+      "measured_seconds": 2.7697386257350445,
+      "work": {
+        "candidate_updates": 479,
+        "full_calls": 344,
+        "messages": 1604,
+        "outputs": 19,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 24,
+        "max_state_private_projection_batch": 32,
+        "state_independent_projection_calls": 112,
+        "state_independent_projection_rows": 1780,
+        "state_preparation_events": 34
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 806641664
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "cpu/after-ranked64-profile",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 219.0333857163787,
+      "process_timeout_s": 360,
+      "result_sha256": "848d7e7a6e93554c7354613c3839d7b4d8e9c08fff74b867ab7d6a2b48cae022",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "07a775da9626754a12db7d2daaad4733b81afaa9bd64c71b72be4dd5300ff01c",
+      "dtype": "float64",
+      "device": "cpu",
+      "implementation": "native",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 2.403736390173435,
+      "warmup_seconds": 2.705662079155445,
+      "measured_seconds": null,
+      "work": {},
+      "actual_stats": {},
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 15254392832
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/before-mixed-c-medium",
+      "source": "f03e9bee0f069d48f5f1544d3821b7781409a27f",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 22.58984136208892,
+      "process_timeout_s": 300,
+      "result_sha256": "664df57fb40e452dbd9095ea7056a2424e588dc11e1e6d208bceda9e28777184",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "python",
+      "placement": "mixed-c",
+      "blocking": null,
+      "construction_seconds": 0.03405556455254555,
+      "warmup_seconds": 2.6596337221562862,
+      "measured_seconds": 2.1826774701476097,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_private_projection_batch": 2,
+        "state_preparation_events": 96,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "max_state_independent_projection_batch": 32
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2479431680,
+        "device": "npu:0",
+        "allocated_bytes": 1669120,
+        "reserved_bytes": 44040192,
+        "peak_allocated_bytes": 39651328,
+        "peak_reserved_bytes": 44040192
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-mixed-c-medium",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 26.94472399353981,
+      "process_timeout_s": 300,
+      "result_sha256": "9f99ab2a7a3af991678a896e091049db7b0917756285dd40309af234a1d6a941",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "python",
+      "placement": "mixed-c",
+      "blocking": null,
+      "construction_seconds": 0.03665933758020401,
+      "warmup_seconds": 2.6021596640348434,
+      "measured_seconds": 1.8484642542898655,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_private_projection_batch": 2,
+        "state_preparation_events": 96,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "max_state_independent_projection_batch": 32
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2473570304,
+        "device": "npu:0",
+        "allocated_bytes": 1673216,
+        "reserved_bytes": 44040192,
+        "peak_allocated_bytes": 39651328,
+        "peak_reserved_bytes": 44040192,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 1673216,
+            "reserved_bytes": 44040192,
+            "peak_allocated_bytes": 39651328,
+            "peak_reserved_bytes": 44040192
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/before-mixed-a-medium",
+      "source": "f03e9bee0f069d48f5f1544d3821b7781409a27f",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 22.891123663634062,
+      "process_timeout_s": 300,
+      "result_sha256": "fb34ea855dd4476c2edb01738cf2ca1aec90382f5a6be186785b912e94affae3",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "python",
+      "placement": "mixed-a",
+      "blocking": null,
+      "construction_seconds": 0.03544998914003372,
+      "warmup_seconds": 1.994311437010765,
+      "measured_seconds": 1.504512295126915,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_private_projection_batch": 2,
+        "state_preparation_events": 96,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "max_state_independent_projection_batch": 32
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2457784320,
+        "device": "npu:0",
+        "allocated_bytes": 1662976,
+        "reserved_bytes": 41943040,
+        "peak_allocated_bytes": 37918720,
+        "peak_reserved_bytes": 41943040
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-mixed-a-medium",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 23.841698486357927,
+      "process_timeout_s": 300,
+      "result_sha256": "5c773d86dec0020796bfe74919e9dfe992ec0111d9a13fc62df5b08415e76ba3",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "python",
+      "placement": "mixed-a",
+      "blocking": null,
+      "construction_seconds": 0.03982387110590935,
+      "warmup_seconds": 2.0374331288039684,
+      "measured_seconds": 1.4768713228404522,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_private_projection_batch": 2,
+        "state_preparation_events": 96,
+        "state_independent_projection_calls": 4,
+        "state_independent_projection_rows": 128,
+        "max_state_independent_projection_batch": 32
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2461974528,
+        "device": "npu:0",
+        "allocated_bytes": 1736704,
+        "reserved_bytes": 41943040,
+        "peak_allocated_bytes": 37918720,
+        "peak_reserved_bytes": 41943040,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 1736704,
+            "reserved_bytes": 41943040,
+            "peak_allocated_bytes": 37918720,
+            "peak_reserved_bytes": 41943040
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-mixed-a-profile",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 39.161647230386734,
+      "process_timeout_s": 300,
+      "result_sha256": "8a58b890bb6f56bd3a9fd024351a0af4f225544596c05aada70a6261175a9820",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "python",
+      "placement": "mixed-a",
+      "blocking": null,
+      "construction_seconds": 0.036784570664167404,
+      "warmup_seconds": 2.039508916437626,
+      "measured_seconds": null,
+      "work": {},
+      "actual_stats": {},
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": null,
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 3210637312,
+        "device": "npu:0",
+        "allocated_bytes": 1736704,
+        "reserved_bytes": 41943040,
+        "peak_allocated_bytes": 37918720,
+        "peak_reserved_bytes": 41943040,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 1736704,
+            "reserved_bytes": 41943040,
+            "peak_allocated_bytes": 37918720,
+            "peak_reserved_bytes": 41943040
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-resident-medium",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "exit_code": 0,
+      "process_seconds": 31.554969895631075,
+      "process_timeout_s": 360,
+      "result_sha256": "3566f61e99bc08132d841ff0dbf4a4281de3a4b100112a734678817d92765243",
+      "config": {
+        "topology": "hb",
+        "family": "kv",
+        "width": 32,
+        "samples": 4,
+        "positions": 4,
+        "seed": 7
+      },
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "resident",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": 0.8837273456156254,
+      "warmup_seconds": 2.997797627002001,
+      "measured_seconds": 2.7938673198223114,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 128,
+        "messages": 192,
+        "outputs": 32,
+        "pending": 0
+      },
+      "actual_stats": {
+        "parameter_role_bytes": 492848,
+        "physical_full_rows": 192,
+        "physical_local_rows": 192,
+        "ready_value_copy_bytes": 76032,
+        "resident_stages": 6,
+        "resident_tensor_bytes": 141287567,
+        "unique_parameter_bank_bytes": 410416
+      },
+      "checks": {
+        "post_measurement_complete_records": true,
+        "parameter_values_checked": true,
+        "optimizer_values_checked": true,
+        "final_parameter_gradients_checked": true
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": null,
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2731212800,
+        "device": "npu:0",
+        "allocated_bytes": 162687488,
+        "reserved_bytes": 532676608,
+        "peak_allocated_bytes": 514803200,
+        "peak_reserved_bytes": 532676608,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 162687488,
+            "reserved_bytes": 532676608,
+            "peak_allocated_bytes": 514803200,
+            "peak_reserved_bytes": 532676608
+          }
+        ]
+      },
+      "limits": {
+        "prefill": true,
+        "timeout_ms": 60000,
+        "tensor_bytes": 1073741824,
+        "queue": 96,
+        "cache": 42,
+        "operator_bytes": 134217728,
+        "stages": 80,
+        "retained_bytes": 1073741824,
+        "optimizer_bytes": 268435456,
+        "backward_bytes": 2147483648,
+        "total_bytes": 5368709120,
+        "windows": 8
+      },
+      "backward": {
+        "adjoint_construct_us": 927621,
+        "adjoint_peak_tensor_reservation": 275214029,
+        "adjoint_run_us": 1094390,
+        "backward_auxiliary_reservation": 311144416,
+        "parameter_reduce_us": 20064,
+        "retained_reservation": 230885776,
+        "root_seed_us": 6916,
+        "window_bridge_us": 0,
+        "windows": 1
+      }
+    },
+    {
+      "name": "npu/after-ranked64-single",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "failed",
+      "exit_code": 1,
+      "process_seconds": 122.16628875210881,
+      "process_timeout_s": 420,
+      "result_sha256": "3dce2ec0c1944d002344c54963a18249ef287ea5f74cd7874e63217180c66b20",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "native",
+      "placement": "mixed-c",
+      "blocking": "1",
+      "construction_seconds": 7.018028739839792,
+      "warmup_seconds": 15.447994571179152,
+      "measured_seconds": 15.684703137725592,
+      "work": {
+        "candidate_updates": 479,
+        "full_calls": 344,
+        "messages": 1604,
+        "outputs": 19,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 32,
+        "max_state_private_projection_batch": 32,
+        "state_independent_projection_calls": 56,
+        "state_independent_projection_rows": 1780,
+        "state_preparation_events": 34
+      },
+      "checks": {
+        "post_measurement_complete_records": false,
+        "parameter_values_checked": false,
+        "optimizer_values_checked": false,
+        "final_parameter_gradients_checked": false
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": "AssertionError('root.continuation.states[(0, 89)].slots[keys]: Tensor-likes are not close!\\n\\nMismatched elements: 1 / 64 (1.6%)\\nGreatest absolute difference: 1.4007091522216797e-06 at index (0, 45) (up to 1e-06 allowed)\\nGreatest relative difference: 3.815349919022992e-05 at index (0, 45) (up to 1e-05 allowed)')",
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2737324032,
+        "device": "npu:0",
+        "allocated_bytes": 119906304,
+        "reserved_bytes": 236978176,
+        "peak_allocated_bytes": 165433856,
+        "peak_reserved_bytes": 236978176,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 119906304,
+            "reserved_bytes": 236978176,
+            "peak_allocated_bytes": 165433856,
+            "peak_reserved_bytes": 236978176
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-ranked64-two",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "failed",
+      "exit_code": 1,
+      "process_seconds": 135.08145671710372,
+      "process_timeout_s": 420,
+      "result_sha256": "4d464256ca2e52c8732fcb67af671d42200cb41b3accf50a8d75c2b90b3b0e97",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "native",
+      "placement": "mixed-c",
+      "blocking": "1",
+      "construction_seconds": 8.114910140633583,
+      "warmup_seconds": 16.484194092452526,
+      "measured_seconds": 16.839708991348743,
+      "work": {
+        "candidate_updates": 479,
+        "full_calls": 344,
+        "messages": 1604,
+        "outputs": 19,
+        "pending": 0
+      },
+      "actual_stats": {
+        "max_state_independent_projection_batch": 32,
+        "max_state_private_projection_batch": 32,
+        "state_independent_projection_calls": 56,
+        "state_independent_projection_rows": 1788,
+        "state_preparation_events": 32
+      },
+      "checks": {
+        "post_measurement_complete_records": false,
+        "parameter_values_checked": false,
+        "optimizer_values_checked": false,
+        "final_parameter_gradients_checked": false
+      },
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "error": "AssertionError('root.continuation.states[(0, 89)].slots[keys]: Tensor-likes are not close!\\n\\nMismatched elements: 1 / 64 (1.6%)\\nGreatest absolute difference: 1.4007091522216797e-06 at index (0, 45) (up to 1e-06 allowed)\\nGreatest relative difference: 3.815349919022992e-05 at index (0, 45) (up to 1e-05 allowed)')",
+      "memory": {
+        "phase": "measurement",
+        "process_lifetime_peak_rss_bytes": 2842652672,
+        "device": "npu:0",
+        "allocated_bytes": 65008128,
+        "reserved_bytes": 161480704,
+        "peak_allocated_bytes": 103864832,
+        "peak_reserved_bytes": 161480704,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 65008128,
+            "reserved_bytes": 161480704,
+            "peak_allocated_bytes": 103864832,
+            "peak_reserved_bytes": 161480704
+          },
+          {
+            "device": "npu:1",
+            "allocated_bytes": 54897664,
+            "reserved_bytes": 148897792,
+            "peak_allocated_bytes": 95251456,
+            "peak_reserved_bytes": 148897792
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    },
+    {
+      "name": "npu/after-ranked64-resident",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "failed",
+      "exit_code": 1,
+      "process_seconds": 83.55941157415509,
+      "process_timeout_s": 420,
+      "result_sha256": "c5e0cf418153a580695457d69275d22ef4b70f341fc1afb094a71d8babecfe93",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 64,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+      },
+      "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+      "dtype": "float32",
+      "device": "npu:0",
+      "implementation": "resident",
+      "placement": "native",
+      "blocking": null,
+      "construction_seconds": null,
+      "warmup_seconds": null,
+      "measured_seconds": null,
+      "work": {},
+      "actual_stats": {},
+      "checks": {
+        "post_measurement_complete_records": false,
+        "parameter_values_checked": false,
+        "optimizer_values_checked": false,
+        "final_parameter_gradients_checked": false
+      },
+      "exact_resume": null,
+      "error": "ValueError('resident Aggregate scratch budget exceeded')",
+      "memory": {
+        "phase": "runtime_ready",
+        "process_lifetime_peak_rss_bytes": 2278285312,
+        "device": "npu:0",
+        "allocated_bytes": 0,
+        "reserved_bytes": 2097152,
+        "peak_allocated_bytes": 1024,
+        "peak_reserved_bytes": 2097152,
+        "devices": [
+          {
+            "device": "npu:0",
+            "allocated_bytes": 0,
+            "reserved_bytes": 2097152,
+            "peak_allocated_bytes": 1024,
+            "peak_reserved_bytes": 2097152
+          }
+        ]
+      },
+      "limits": null,
+      "backward": null
+    }
+  ],
+  "profiles": {
+    "cpu": {
+      "trace_sha256": "61620a925cd80dbfe5706672d34a50a40877bc0f6390d5ccc1d7684cae72603e",
+      "operators": [
+        {
+          "name": "aten::copy_",
+          "calls": 69342,
+          "self_cpu_us": 98421.16800004785
+        },
+        {
+          "name": "aten::stack",
+          "calls": 12325,
+          "self_cpu_us": 54272.63800000063
+        },
+        {
+          "name": "aten::mm",
+          "calls": 17697,
+          "self_cpu_us": 106979.26500005588
+        },
+        {
+          "name": "aten::bmm",
+          "calls": 236,
+          "self_cpu_us": 8263.650999996302
+        },
+        {
+          "name": "autograd::engine::evaluate_function: tide::weighted::SingletonVjp",
+          "calls": 1270,
+          "self_cpu_us": 15243.611000002129
+        },
+        {
+          "name": "tide::weighted::SingletonVjp",
+          "calls": 1270,
+          "self_cpu_us": 6649.429999994347
+        }
+      ],
+      "trace_bytes": 756219171,
+      "phases": [
+        {
+          "name": "tide.prepare",
+          "duration_us": 209.532
+        },
+        {
+          "name": "tide.forward",
+          "duration_us": 1717780.292
+        },
+        {
+          "name": "tide.backward_finite",
+          "duration_us": 2713849.041
+        },
+        {
+          "name": "tide.optimizer",
+          "duration_us": 181031.537
+        },
+        {
+          "name": "tide.detach_return_sync",
+          "duration_us": 305984.583
+        }
+      ],
+      "scope": "inclusive profile spans, not throughput samples"
+    },
+    "npu": {
+      "kernel_events": 31302,
+      "kernel_types": {
+        "KERNEL_AIVEC": 25570,
+        "KERNEL_MIX_AIV": 4638,
+        "KERNEL_AICORE": 902,
+        "KERNEL_AICPU": 192
+      },
+      "transfer_and_scalar_events": {
+        "aten::_local_scalar_dense": 3265,
+        "MEMCPY_ASYNC": 2016
+      },
+      "observed_host_fallback_events": [],
+      "kernel_union_us": 132150.0,
+      "phases_inclusive_us": {
+        "tide.forward": 1367410.76,
+        "tide.backward_finite": 813311.21,
+        "tide.detach_return_sync": 215804.01,
+        "tide.optimizer": 6186.15,
+        "tide.loss": 4465.48,
+        "tide.prepare": 3269.25
+      },
+      "transfer_and_scalar_inclusive_us": {
+        "aten::_local_scalar_dense": 103124.23999999974,
+        "MEMCPY_ASYNC": 1384.5039999999922
+      },
+      "duration_caveat": "inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution",
+      "trace_sha256": "a3bd8eeecbf192aaf490ed1cedd5592ac279b76d10eff31f376588775916484e",
+      "vendor_matmul_events": 606,
+      "vendor_bmm_events": 296
+    }
+  },
+  "capacity_preflight": {
+    "plan_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+    "parameters": {
+      "trainable": 9076975,
+      "frozen": 4480,
+      "role_elements": 31205935,
+      "unique": 9081455
+    },
+    "total_physical_atoms": 2272,
+    "region_position_upper": 15,
+    "max_cache_bound": 2,
+    "resident_overrides": {
+      "queue": 4096,
+      "stages": 32,
+      "cache": 4,
+      "optimizer_bytes": 1073741824
+    },
+    "optimizer_layout_min_bytes": 36320070,
+    "optimizer_layout_partition_bytes": 67108864,
+    "scope": "static Settle input/rank code and canonical parameter subpartition only; no real trajectory or active set; engine quotas remain authoritative"
+  },
+  "reproduction": {
+    "workload": [
+      "python",
+      "scripts/prepare_weighted_workload.py",
+      "--topology",
+      "ranked",
+      "--layers",
+      "15",
+      "--region-width",
+      "32",
+      "--width",
+      "64",
+      "--samples",
+      "1",
+      "--positions",
+      "1",
+      "--match-core3",
+      "add",
+      "--output-dir",
+      "NEW_PLAN"
+    ],
+    "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+    "medium": "benchmark_weighted.py --size medium; CPU additionally --topology hb (same fixture); one warmup + --steps 1",
+    "resident_limits": {
+      "queue": 4096,
+      "stages": 32,
+      "cache": 4,
+      "optimizer_bytes": 1073741824
+    },
+    "comparison": "Never rerun unchanged failed candidates automatically; requalification requires a concrete new implementation/runtime identity."
+  }
+}
