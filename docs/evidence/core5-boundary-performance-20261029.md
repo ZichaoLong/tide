@@ -8,6 +8,9 @@
 
 ## 完整训练对照
 
+本报告CPU/native和NPU/native通过Python调用LibTorch；resident也是Python-owned公共owner。
+standalone LibTorch正确性资格另记，没有用这些计时代替standalone客户端的性能。
+
 每配置一个独立进程、一个warmup窗和一个测量窗，SGD；新源码另做计时外磁盘save/load、
 换owner的下一窗精确恢复。计时含输入准备/上传、调度、packing、forward/loss、backward、
 finite checks、optimizer、通信、返回/清理和全设备同步；构造、warmup、核对与恢复单列。

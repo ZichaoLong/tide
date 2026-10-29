@@ -1,0 +1,790 @@
+{
+  "schema": "tide-reviewed-compact-fibers-v1",
+  "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+  "implementation_commits": [
+    "8c48f4965b5a8614e26cf2051dfc42cbb839d637",
+    "04b52153f9785e1489e31c7dd09a16849791d331"
+  ],
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "qualification_state": "passed",
+  "performance_state": "failed",
+  "scope": "Static physical incoming identities bound each node fiber. Global queue, schedule, logical int64 metadata, source classes, exact raw state and declared VJP are preserved.",
+  "qualifications": {
+    "python": {
+      "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+      "state": "passed",
+      "started": "2026-10-29T02:37:33.762623+00:00",
+      "finished": "2026-10-29T02:54:48.894514+00:00",
+      "exit_code": 0,
+      "driver_sha256": "327298703778a79f1ea43e8922be530fa552013f3cc0a4f335f76b4d94f48356",
+      "qualification_sha256": "c0ceda569e559a090a7b8716df733ae170fc886c7f1cd7dbfee58def45288180",
+      "physical_devices": [
+        1,
+        9
+      ],
+      "stages": [
+        {
+          "name": "metadata",
+          "exit_code": 0,
+          "seconds": 2.816906873136759,
+          "timeout": 90,
+          "log_sha256": "ffb292588b1d42d529ded48c74696ecbcf76aadd4f751569a755aeb16cd7242b"
+        },
+        {
+          "name": "build",
+          "exit_code": 0,
+          "seconds": 715.5157665498555,
+          "timeout": 1800,
+          "log_sha256": "6423df77b3087a44581c2b542e35f61640115106ececc97833867c73a36fad35"
+        },
+        {
+          "name": "device",
+          "exit_code": 0,
+          "seconds": 316.7135724052787,
+          "timeout": 2010,
+          "log_sha256": "4512d9d3a21253a4054d515157dc8cfb1b7c483750881e24528b28f47cc11cb1"
+        }
+      ],
+      "build": {
+        "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+        "dirty": "",
+        "component_sha256": "c64d22fa53c70df999a47cb216956245b6660d90728a63a1bb014564c2a40c24",
+        "backend": "npu",
+        "runtime": "python",
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "6959501e17a237606805ff433992d4bf66f036ae1cdf5cf407a4c07f2489ae3b",
+          "libtide-weighted-flow.so": "bd7d6c9e52883899ea53c4260bd1b29f45f2730bae35e96da57c25c4667e76af",
+          "libtide-weighted-training.so": "778b8b42895db96c825f0fa681a93dc810b5c5c3c78f01d16df9b0318552a44e"
+        }
+      },
+      "core": {
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post2",
+        "binary_sha256": {
+          "libtidegraph.a": "89da9e9db14a119ae9dd1d395753c5f3f3f35beb25308e3562ba6488a35b5642",
+          "libtidegraph_runtime.a": "79b780647c102d6873458c240f8df9ce389e63665d5fe21731a9b8abc38b021d",
+          "_tide_native.so": "dbda04d129ca01c32dafabba872fc99c83bd4147411b4df8f959f5df688b4b48"
+        }
+      },
+      "junit": {
+        "metadata": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 0.843,
+          "groups": {
+            "test_compact_slots_preserve_global_indices_and_padding": 1,
+            "test_compact_overflow_refused_before_any_slot_write": 1,
+            "test_malformed_ready_bounds_refused": 2,
+            "test_existing_error_is_sticky_even_with_invalid_counts": 1,
+            "test_physical_atoms_int64_absence_and_source_domain": 1,
+            "test_origin_order_and_two_times_of_one_private_owner_rejected": 1,
+            "test_complete_region_ids_and_missing_candidates": 1,
+            "test_commit_preserves_absence_and_obeys_shared_error": 2
+          },
+          "sha256": "f4a5d10166b56bee1f9d422002944ad44f025ae3fed8fbbc8a1619c3d34296de"
+        },
+        "device": {
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 287.593,
+          "groups": {
+            "test_public_full_records_raw_checkpoint_and_private_windows": 20,
+            "test_heterogeneous_formal_configurations_public_path": 4,
+            "test_boundary_retry_and_parameter_version_guards": 1,
+            "test_allocation_failure_preserves_actual_partial_row": 1,
+            "test_weighted_loader_verifies_independent_library": 1,
+            "test_general_settle_port_schedule_uses_same_compiled_graph": 2,
+            "test_python_owned_complete_cut_updates_and_disk_resume": 16,
+            "test_weighted_training_requires_explicit_no_grad_before_backend_access": 1,
+            "test_weighted_training_checkpoint_rejects_wrong_binding_before_native_access": 1,
+            "test_placed_updates_complete_gradients_and_relocated_disk_resume": 8,
+            "test_resident_actual_training_observation_and_resume": 1
+          },
+          "sha256": "1e5814145b06ad62f7dbd0a575729cf930e20a923b3ff1a736592012949ca274"
+        }
+      }
+    },
+    "sdk": {
+      "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+      "state": "passed",
+      "started": "2026-10-29T02:37:33.768642+00:00",
+      "finished": "2026-10-29T03:02:36.263682+00:00",
+      "exit_code": 0,
+      "driver_sha256": "327298703778a79f1ea43e8922be530fa552013f3cc0a4f335f76b4d94f48356",
+      "qualification_sha256": "c77bcbae8ecb90263392dfd54204fb1fc98d124a9b71f47a8d9d9006412fd843",
+      "physical_devices": [
+        3,
+        13
+      ],
+      "stages": [
+        {
+          "name": "metadata",
+          "exit_code": 0,
+          "seconds": 2.7171113565564156,
+          "timeout": 90,
+          "log_sha256": "b63f04dc969d387c33bcc46168647e0347e245bb73686e338ac9173fa174dcb1"
+        },
+        {
+          "name": "build",
+          "exit_code": 0,
+          "seconds": 840.4691070728004,
+          "timeout": 1800,
+          "log_sha256": "f0fb9b2704b2ffa850215f0571dab7a77ec0204c37b0b113d1d9cec67040daca"
+        },
+        {
+          "name": "device",
+          "exit_code": 0,
+          "seconds": 659.2247198075056,
+          "timeout": 2010,
+          "log_sha256": "a2cb87690ea00666ea7f5e7f54971742e6d0f99770ca2ec9a59bc1513a314074"
+        }
+      ],
+      "build": {
+        "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+        "dirty": "",
+        "component_sha256": "c64d22fa53c70df999a47cb216956245b6660d90728a63a1bb014564c2a40c24",
+        "backend": "npu",
+        "runtime": "standalone",
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-stage-check": "49ff98ad6992442f2e6f1096d05e4a391a6b76540ada470c97cefe823a841d62",
+          "tide-weighted-flow-check": "a8a37b4fca1b815e38249cefb14e6051ddc2db12e2e45ad67a789d0bc6b02287",
+          "tide-weighted-training-check": "9f1123ca1320d9be06f7206cbeb48fd607c1d7d957d3bb445cae935703ef872c",
+          "tide-weighted-node-training-check": "3d6c433d55ad459a5fac8915a789cc83a683e2dfb7b2321990e6859b1e347be7",
+          "libtide-weighted-flow.so": "1f3bc00192ee3e26f4546e25250e2e615af9b97992b521d0c0fc36b00a6fff64",
+          "libtide-weighted-training.so": "8efa8b2d19745132fc6518de4e0d5d5a510a1bc88f6866c2a8ac8b5809e26bed"
+        }
+      },
+      "core": {
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+        "torch": "2.10.0+cpu",
+        "torch_npu": null,
+        "binary_sha256": {
+          "libtidegraph.a": "09bb94c0bbc6168ac8fcf2353686f6ac30daa5158be32e8d48b6be7b7c3b4c6f",
+          "libtidegraph_runtime.a": "51484ba1680fec9343c929c276d9ff67371da967e211edcdb132eac99048e96b",
+          "tidegraph-smoke": "564138d88917fe6ac785ce13f96650236b19ed1ce1c419eabe97b26ecead2638",
+          "tidegraph-kernel-check": "27e21e75bb79a39970cb4db622d06fad4380fda949cead5ff921dd235ec9bae4",
+          "tidegraph-full-check": "16be6ce1b6eb186b66ed6a30cb308ecc02d0a0b271fd44dc7f2c3d11d7ffdae7",
+          "tidegraph-aggregate-check": "8f2e0c58ce0e9dfd766fcb53123f7c022876c9c1c50a114a876c6e9b5756e5ad",
+          "tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+          "tidegraph-checkpoint-check": "cb2a782b3d2510e5bc4588754ee7da1175eca18e314642fe6f3d5ed16013f138",
+          "tidegraph-weighted-training-check": "e149ca3d26374403cc43e22f375b49421d33c4fd63d773f61b24193dc5242e36",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "58212ecaffdd108376a4a38aac4fb0dfa9b3db159da0d6d5ac5c036e4f0d5822",
+          "tidegraph-scale-bench": "a6ecfe52abd029778659811b67101ecfdea770eafbca17bf04d5b8a445157485",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "82505fc8a4b2e7e65490aebde6b98d05572797ea5d0b6b8cd619eef82472fa08",
+          "tidegraph-greedy-check": "5fb5003293cfcb58aa013a4294db2401ac4d704a665ce37498dd5c3f25cad180",
+          "tidegraph-accelerator-check": "d698ec1b4192a9195c26d49d56d53e8542304f0506930ddf20e45135e409acff",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "6404ed8a128270f8627b0ba0b9c4a46799de2016c189485f8553603dae47568b",
+          "tidegraph-placement-check": "f1dcd7b506d9a59b4d83059a5f01c5740ab8637dbdabeb44ecb2a934dd5a06e0",
+          "tidegraph-payload-ownership-check": "b6a959967b8d3a888556b4da07f5262179660e2e3c092cce0d57063a75023081",
+          "tidegraph-weighted-binding-module-check": "1e32d2eada1e428f15705dfd2ebb8684cbac6d8f7d885f26af8eac234623b165",
+          "libtidegraph-weighted-binding-module.so": "fca6934a4634d28fe26189045f93c2255865e08f7c7c95249e7ad297489f13f0"
+        }
+      },
+      "junit": {
+        "metadata": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 0.816,
+          "groups": {
+            "test_compact_slots_preserve_global_indices_and_padding": 1,
+            "test_compact_overflow_refused_before_any_slot_write": 1,
+            "test_malformed_ready_bounds_refused": 2,
+            "test_existing_error_is_sticky_even_with_invalid_counts": 1,
+            "test_physical_atoms_int64_absence_and_source_domain": 1,
+            "test_origin_order_and_two_times_of_one_private_owner_rejected": 1,
+            "test_complete_region_ids_and_missing_candidates": 1,
+            "test_commit_preserves_absence_and_obeys_shared_error": 2
+          },
+          "sha256": "59637a3d76be01a06f5e417b3f8f4d8bcbcccb83903a1525cd59afc811118ba6"
+        }
+      },
+      "checks": [
+        {
+          "check": "weighted-stage",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "213b95af8cd7fb4298cdbd3435a43a122666297b152ebd4ec743a1835608b104",
+          "markers": [
+            "weighted-stage: passed configurations=24 independent_roots=true canonical_parameters=true raw_fields=true connected_nonfinite_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "f606b10e2ff2c74527f8d75721d2bf3f8cc62c1e982ea947d09e6f1fa92eedfc",
+          "markers": [
+            "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "e0bd536adfc7aa79b1472588fd444af69837551a76b51323ee0bbdae248f6270",
+          "markers": [
+            "weighted-flow: passed cases=21 complete_records=true exact_raw_checkpoint=true online_device_progress=true capacity_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "eea13ea80570ebb7e900bdd6cbed665017ca294696988fd725040379c8e951b7",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "0f36b4a8843532240805430074e860ceffbf6c8b02e3713096c96cce25367f8a",
+          "markers": [
+            "weighted-training: passed configurations=5 updates=20 windows=3 empty_window=true both_optimizers=true resume=true"
+          ]
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9162b699c8b09db01837c6a85497b3a057364a60ec44b7f527525e8d2fd5af8c",
+          "markers": [
+            "weighted-node-training: passed configurations=5 updates=20 windows=3 relocated_resume=true common_refusal=true"
+          ]
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "850370832191617a7a88f7cbb9158730a62a4d718a0bbd575c8411ba129b548f",
+          "markers": [
+            "weighted-node-training: passed configurations=5 updates=20 windows=3 relocated_resume=true common_refusal=true"
+          ]
+        }
+      ]
+    }
+  },
+  "superseded_builds": {
+    "python": {
+      "source": "8c48f4965b5a8614e26cf2051dfc42cbb839d637",
+      "state": "cancelled",
+      "started": "2026-10-29T02:33:19.454773+00:00",
+      "finished": "2026-10-29T02:36:59.903884+00:00",
+      "exit_code": 143
+    },
+    "sdk": {
+      "source": "8c48f4965b5a8614e26cf2051dfc42cbb839d637",
+      "state": "cancelled",
+      "started": "2026-10-29T02:33:19.481267+00:00",
+      "finished": "2026-10-29T02:36:59.904458+00:00",
+      "exit_code": 143
+    }
+  },
+  "runtime_limits": {
+    "build_threads": 2,
+    "aten_threads": 1,
+    "build_timeout_s": 1800,
+    "device_queue_timeout_s": 180,
+    "device_timeout_s": 1800,
+    "service_timeout_s": 4000,
+    "memory_max_GiB": 32,
+    "service_slice": "background.slice",
+    "hard_isolation_proven": false
+  },
+  "superseded_reason": "Code review found that the newly added malformed-count check could overwrite an existing sticky error; builds at 8c48f49 were cancelled, not failed device qualifications. A guard and an independent poison-count/sticky-error test were added at 04b5215. Old records are preserved.",
+  "performance": {
+    "job": {
+      "state": "failed",
+      "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+      "started": "2026-10-29T03:03:42.719905+00:00",
+      "finished": "2026-10-29T03:06:01.828484+00:00",
+      "exit_code": 1
+    },
+    "driver_sha256": "bef160d7159515edabd866717b100c0313fd68a7ba12a9dc78a661c4c88cf071",
+    "study_sha256": "0375b69acefefd7fb02fcfc20cd5a2388ae54341ca67ed3132cb912ee8fb19a1",
+    "physical_devices": "9",
+    "load_average_before": [
+      35.97,
+      37.68,
+      38.52
+    ],
+    "load_average_after": [
+      38.35,
+      37.81,
+      38.46
+    ],
+    "policy": "one process/config; one warmup plus one measured window; exact disk/new-owner restore outside timing; strict failures stop each candidate, no retries",
+    "contention": "project builds/qualification terminal and no other project measurement; outside contention not excluded",
+    "static_capacity": {
+      "plan_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+      "nodes": 480,
+      "physical_input_identities": 2240,
+      "max_node_fiber": 5,
+      "old_node_slots": 1966080,
+      "new_node_slots": 2240,
+      "resident_limits": {
+        "queue": 4096,
+        "stages": 32,
+        "cache": 4,
+        "optimizer_bytes": 1073741824
+      },
+      "scope": "static topology only; not a real trajectory or memory measurement"
+    },
+    "cases": [
+      {
+        "name": "medium",
+        "exit_code": 0,
+        "seconds": 33.20471869781613,
+        "limit_seconds": 300,
+        "log_sha256": "18526349615cc58d19af5556dfaaf75dd8511bd08fcfe75031bb1a26f9c177fe",
+        "result_sha256": "8aabe2f8bf599d4d1b3fe2eefbd110bd98dc4d561bcab2bdfb488a0a0890c999",
+        "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+        "state": "passed",
+        "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+        "requested_dtype": "float32",
+        "config": {
+          "topology": "hb",
+          "family": "kv",
+          "width": 32,
+          "samples": 4,
+          "positions": 4,
+          "seed": 7
+        },
+        "construction_seconds": 0.9600442424416542,
+        "warmup_seconds": 2.6930907294154167,
+        "metrics": [
+          {
+            "step": 1,
+            "seconds": 2.4697304628789425,
+            "loss": 0.0713919922709465,
+            "candidate_updates": 128,
+            "full_calls": 128,
+            "messages": 192,
+            "outputs": 32,
+            "pending": 0,
+            "actual_stats": {
+              "candidate_updates": 128,
+              "full_evaluations": 128,
+              "messages": 192,
+              "node_peer_devices": 0,
+              "node_peer_packet_bytes": 0,
+              "one_time_per_region": 1,
+              "operator_workspace_bytes": 16777728,
+              "parameter_role_bytes": 492848,
+              "physical_full_rows": 192,
+              "physical_local_rows": 192,
+              "ready_value_copy_bytes": 76032,
+              "received_atoms": 224,
+              "resident_stages": 6,
+              "resident_tensor_bytes": 87457999,
+              "unique_parameter_bank_bytes": 410416
+            }
+          }
+        ],
+        "exact_resume": {
+          "state": "passed",
+          "checkpoint": "resume.pt",
+          "next_window": 2,
+          "exact": true,
+          "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+        },
+        "checks": {
+          "post_measurement_complete_records": true,
+          "parameter_values_checked": true,
+          "optimizer_values_checked": true,
+          "final_parameter_gradients_checked": true
+        },
+        "error": null,
+        "memory": {
+          "schema": "tide-weighted-memory-v1",
+          "phases": [
+            {
+              "phase": "runtime_ready",
+              "process_lifetime_peak_rss_bytes": 2273476608,
+              "device": "npu:0",
+              "allocated_bytes": 0,
+              "reserved_bytes": 2097152,
+              "peak_allocated_bytes": 1024,
+              "peak_reserved_bytes": 2097152,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 1024,
+                  "peak_reserved_bytes": 2097152
+                }
+              ]
+            },
+            {
+              "phase": "construction",
+              "process_lifetime_peak_rss_bytes": 2430156800,
+              "device": "npu:0",
+              "allocated_bytes": 106909184,
+              "reserved_bytes": 123731968,
+              "peak_allocated_bytes": 107319808,
+              "peak_reserved_bytes": 123731968,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 106909184,
+                  "reserved_bytes": 123731968,
+                  "peak_allocated_bytes": 107319808,
+                  "peak_reserved_bytes": 123731968
+                }
+              ]
+            },
+            {
+              "phase": "warmup",
+              "process_lifetime_peak_rss_bytes": 2715140096,
+              "device": "npu:0",
+              "allocated_bytes": 107819520,
+              "reserved_bytes": 417333248,
+              "peak_allocated_bytes": 375494656,
+              "peak_reserved_bytes": 417333248,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 107819520,
+                  "reserved_bytes": 417333248,
+                  "peak_allocated_bytes": 375494656,
+                  "peak_reserved_bytes": 417333248
+                }
+              ]
+            },
+            {
+              "phase": "measurement",
+              "process_lifetime_peak_rss_bytes": 2725642240,
+              "device": "npu:0",
+              "allocated_bytes": 107819520,
+              "reserved_bytes": 419430400,
+              "peak_allocated_bytes": 376404992,
+              "peak_reserved_bytes": 419430400,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 107819520,
+                  "reserved_bytes": 419430400,
+                  "peak_allocated_bytes": 376404992,
+                  "peak_reserved_bytes": 419430400
+                }
+              ]
+            }
+          ],
+          "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+          "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+        },
+        "backward": {
+          "adjoint_construct_us": 1057073,
+          "adjoint_peak_tensor_reservation": 194327925,
+          "adjoint_run_us": 700072,
+          "backward_auxiliary_reservation": 311144416,
+          "parameter_reduce_us": 30917,
+          "retained_reservation": 230885776,
+          "root_seed_us": 7554,
+          "window_bridge_us": 0,
+          "windows": 1
+        },
+        "effective_limits": {
+          "cache": 42,
+          "prefill": true,
+          "timeout_ms": 60000,
+          "queue": 96,
+          "tensor_bytes": 1073741824,
+          "stages": 80,
+          "operator_bytes": 134217728,
+          "optimizer_bytes": 268435456,
+          "total_bytes": 5368709120,
+          "backward_bytes": 2147483648,
+          "retained_bytes": 1073741824,
+          "windows": 8
+        },
+        "requested_limits": null,
+        "precision": {
+          "effective_dtype": "float32",
+          "fixture_dtype": "float32",
+          "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "dispatch_environment": {
+          "ASCEND_LAUNCH_BLOCKING": null,
+          "CUDA_LAUNCH_BLOCKING": null,
+          "TASK_QUEUE_ENABLE": null
+        }
+      },
+      {
+        "name": "ranked64",
+        "exit_code": 1,
+        "seconds": 97.48135995492339,
+        "limit_seconds": 900,
+        "log_sha256": "488e104234b0766753e4e32537bfb854bf762c4e786ca8d7d15e66f39aa00e51",
+        "result_sha256": "ed15c20d4803a9ca31bcae5524ae09a34f0fe9df835e413e5afc3f2afa2a0217",
+        "source": "04b52153f9785e1489e31c7dd09a16849791d331",
+        "state": "failed",
+        "fixture_sha256": "ce3bf084cddc5ed7be7e9534e0138e25a5c74ee37e267adb482501263a64b12f",
+        "requested_dtype": "float32",
+        "config": {
+          "topology": "ranked-local",
+          "family": "kv",
+          "width": 64,
+          "samples": 1,
+          "positions": 1,
+          "seed": 7,
+          "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3"
+        },
+        "construction_seconds": null,
+        "warmup_seconds": null,
+        "metrics": [],
+        "exact_resume": null,
+        "checks": {
+          "post_measurement_complete_records": false,
+          "parameter_values_checked": false,
+          "optimizer_values_checked": false,
+          "final_parameter_gradients_checked": false
+        },
+        "error": "RuntimeError('create persistent control stream failed with CANN status 207005')",
+        "memory": {
+          "schema": "tide-weighted-memory-v1",
+          "phases": [
+            {
+              "phase": "runtime_ready",
+              "process_lifetime_peak_rss_bytes": 2273665024,
+              "device": "npu:0",
+              "allocated_bytes": 0,
+              "reserved_bytes": 2097152,
+              "peak_allocated_bytes": 1024,
+              "peak_reserved_bytes": 2097152,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 2097152,
+                  "peak_allocated_bytes": 1024,
+                  "peak_reserved_bytes": 2097152
+                }
+              ]
+            }
+          ],
+          "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+          "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+        },
+        "backward": null,
+        "effective_limits": null,
+        "requested_limits": {
+          "queue": 4096,
+          "stages": 32,
+          "cache": 4,
+          "optimizer_bytes": 1073741824
+        },
+        "precision": {
+          "effective_dtype": "float32",
+          "fixture_dtype": "float32",
+          "input_policy": "same seeded FP32 material; explicit promotion before both schedules",
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "dispatch_environment": {
+          "ASCEND_LAUNCH_BLOCKING": null,
+          "CUDA_LAUNCH_BLOCKING": null,
+          "TASK_QUEUE_ENABLE": null
+        }
+      }
+    ],
+    "resources": {
+      "service_timeout_s": 1560,
+      "queue_timeout_s": 180,
+      "device_timeout_s": 1260,
+      "memory_max_GiB": 32,
+      "threads": 1,
+      "medium_timeout_s": 300,
+      "ranked64_timeout_s": 900
+    },
+    "baseline_medium": {
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "state": "passed",
+      "fixture_sha256": "e6e7b7d9f3f12040bb34638de8cd4ffc0d152c5fb452d41f16dae3bd0e836f42",
+      "construction_seconds": 0.8837273456156254,
+      "warmup_seconds": 2.997797627002001,
+      "metrics": [
+        {
+          "step": 1,
+          "seconds": 2.7938673198223114,
+          "loss": 0.0713919922709465,
+          "candidate_updates": 128,
+          "full_calls": 128,
+          "messages": 192,
+          "outputs": 32,
+          "pending": 0,
+          "actual_stats": {
+            "candidate_updates": 128,
+            "full_evaluations": 128,
+            "messages": 192,
+            "node_peer_devices": 0,
+            "node_peer_packet_bytes": 0,
+            "one_time_per_region": 1,
+            "operator_workspace_bytes": 16777728,
+            "parameter_role_bytes": 492848,
+            "physical_full_rows": 192,
+            "physical_local_rows": 192,
+            "ready_value_copy_bytes": 76032,
+            "received_atoms": 224,
+            "resident_stages": 6,
+            "resident_tensor_bytes": 141287567,
+            "unique_parameter_bank_bytes": 410416
+          }
+        }
+      ],
+      "exact_resume": {
+        "state": "passed",
+        "checkpoint": "resume.pt",
+        "next_window": 2,
+        "exact": true,
+        "scope": "same schedule/placement, raw decode and new-window records/parameter gradients/SGD slots; outside timing"
+      },
+      "memory": {
+        "schema": "tide-weighted-memory-v1",
+        "phases": [
+          {
+            "phase": "runtime_ready",
+            "process_lifetime_peak_rss_bytes": 2277179392,
+            "device": "npu:0",
+            "allocated_bytes": 0,
+            "reserved_bytes": 2097152,
+            "peak_allocated_bytes": 1024,
+            "peak_reserved_bytes": 2097152,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "reserved_bytes": 2097152,
+                "peak_allocated_bytes": 1024,
+                "peak_reserved_bytes": 2097152
+              }
+            ]
+          },
+          {
+            "phase": "construction",
+            "process_lifetime_peak_rss_bytes": 2434555904,
+            "device": "npu:0",
+            "allocated_bytes": 161777152,
+            "reserved_bytes": 190840832,
+            "peak_allocated_bytes": 162187776,
+            "peak_reserved_bytes": 190840832,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 161777152,
+                "reserved_bytes": 190840832,
+                "peak_allocated_bytes": 162187776,
+                "peak_reserved_bytes": 190840832
+              }
+            ]
+          },
+          {
+            "phase": "warmup",
+            "process_lifetime_peak_rss_bytes": 2721202176,
+            "device": "npu:0",
+            "allocated_bytes": 162687488,
+            "reserved_bytes": 530579456,
+            "peak_allocated_bytes": 514412544,
+            "peak_reserved_bytes": 530579456,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 162687488,
+                "reserved_bytes": 530579456,
+                "peak_allocated_bytes": 514412544,
+                "peak_reserved_bytes": 530579456
+              }
+            ]
+          },
+          {
+            "phase": "measurement",
+            "process_lifetime_peak_rss_bytes": 2731212800,
+            "device": "npu:0",
+            "allocated_bytes": 162687488,
+            "reserved_bytes": 532676608,
+            "peak_allocated_bytes": 514803200,
+            "peak_reserved_bytes": 532676608,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 162687488,
+                "reserved_bytes": 532676608,
+                "peak_allocated_bytes": 514803200,
+                "peak_reserved_bytes": 532676608
+              }
+            ]
+          }
+        ],
+        "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+        "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+      },
+      "backward": {
+        "adjoint_construct_us": 927621,
+        "adjoint_peak_tensor_reservation": 275214029,
+        "adjoint_run_us": 1094390,
+        "backward_auxiliary_reservation": 311144416,
+        "parameter_reduce_us": 20064,
+        "retained_reservation": 230885776,
+        "root_seed_us": 6916,
+        "window_bridge_us": 0,
+        "windows": 1
+      },
+      "effective_limits": {
+        "prefill": true,
+        "timeout_ms": 60000,
+        "tensor_bytes": 1073741824,
+        "queue": 96,
+        "cache": 42,
+        "operator_bytes": 134217728,
+        "stages": 80,
+        "retained_bytes": 1073741824,
+        "optimizer_bytes": 268435456,
+        "backward_bytes": 2147483648,
+        "total_bytes": 5368709120,
+        "windows": 8
+      },
+      "report": "core5-boundary-performance-20261029.md"
+    }
+  },
+  "stream_failure": {
+    "result": "constructor refusal before warmup/training, no qualified throughput or resume result",
+    "api": "aclrtCreateStreamWithConfig, persistent control stream",
+    "code": 207005,
+    "header_definition": "#define  ACL_ERROR_RT_RESOURCE_ALLOC_FAIL        207005 // resource alloc fail",
+    "header_sha256": "5dcf3c1dce55f4e07a12fce04d69a41ac714cd94ad9a970933e2d98bf1e12ce0",
+    "vendor_log_sha256": "0194d18e748b6ece6fac628a2c21302969f19d3c93eed9c29e76b72e9eed444c",
+    "vendor_excerpt": [
+      "[ERROR] DRV(2671550,python):2026-10-29-11:04:54.425.933 [drv_share_log.c:238][ascend][curpid:2671550,2671550][drv][tsdrv][share_log_read_in_single_module]Alloc chan failed. (devid=9; tsid=0; type=0; cur_sq_num=1984; cur_cq_num=1984; ret=-28)",
+      "[ERROR] RUNTIME(2671550,python):2026-10-29-11:04:57.427.318 [stream.cc:732]2671550 Setup:Alloc Stream resource failed. Reason: Too many streams are created. ErrorCode=EE1023.",
+      "[ERROR] RUNTIME(2671550,python):2026-10-29-11:04:57.427.480 [api_c_stream.cc:83]2671550 rtStreamCreateWithFlags:ErrCode=207005, desc=[driver error:resource alloc fail], InnerCode=0x7020023"
+    ],
+    "source_explanation": "TaskServices::begin creates a DeviceProgram for each numerical service; DeviceProgram::Impl::initialize creates one persistent and one launch stream. Static service count grows with nodes; this is separate from tensor/operator byte budgets.",
+    "interpretation_limit": "1984 SQ/CQ and stream_id=1797 are observed local resource counts, not a universal hardware limit or a permitted configuration constant.",
+    "restart_condition": "A concrete bounded service-dispatch/pooling or node batching implementation with independent tests of nested calls, device online ordering, shared workspace ownership, complete gradients, peer ordering and exact restoration; do not rerun unchanged candidate or increase HBM budgets."
+  }
+}

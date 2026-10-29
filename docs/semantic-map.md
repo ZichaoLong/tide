@@ -44,6 +44,7 @@
 [常驻完整区域组合](resident-weighted-region.md)接完整描述、head、十种发送、实际支持/history及字段/参数VJP。
 
 [常驻完整Aggregate](resident-weighted-aggregate.md)对应物理原子/源参数bank、vendor归一化/变换和完整纤维VJP。
+按物理入边/端口压缩局部槽的[固定资格/实际成本](evidence/core5-compact-fibers-20261029.md)验证全局原子身份、前后向及peer布局；厂商流资源拒绝另列。
 
 [常驻来源低秩链](resident-weighted-source.md)对应有效A/B与真实基座/因子的一阶VJP及实际保存版本。
 

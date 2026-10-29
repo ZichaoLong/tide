@@ -66,6 +66,9 @@ Python 适配器额外拒绝模型参数版本变化。共享参数身份随快�
 全局队列cap、元数据、队列提交和缺席连接不变。节点局部payload改为
 `[samples,min(queue,max(1,入边数+输入端口数)),width]`：固定逻辑时间的每条物理边/端口最多贡献一次，
 平行边分别计数，SrcClass不参与容量合并；无入源节点保留一个安全缺席槽。
+上界依据[PDG §1.3–1.4](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)：
+端口时间严格递增、固定边延迟保持注入性，每次Full对每条物理边最多一条消息；
+`validate_external`继续检查端口历史。TimedDAG与Settle嵌入沿用这些性质。
 `weighted_node_fiber_capacity`只读静态拓扑；实际时间、长度、排序和选择仍在设备上计算。
 indices保存全局ready位置，padding sentinel仍为全局cap；超出局部槽数在写入前拒绝，不截断。
 前向、窗口VJP重放和peer请求使用同一布局，reverse-route消费真实局部长度和全局位置。
@@ -156,3 +159,9 @@ NEW_CLIENT/consumer/weighted-resident-consumer --device=npu:0 --dtype=float32
 它是安装/调用边界检查，完整图范围仍由上面的独立调度与公式证据承担。
 
 本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。
+
+局部槽压缩的[04b5215资格与性能](evidence/core5-compact-fibers-20261029.md)覆盖两套NPU完整图/训练/恢复。
+设备程序资源也有限：NPU `TaskServices::begin`每服务创建DeviceProgram，每程序有persistent/launch两条流。
+D64在字节布局压缩后先遇到CANN207005/EE1023（Too many streams），未完成构造；
+张量/算子字节预算不等于厂商流、通知或任务缓冲预算。当前保留构造失败，不提交部分图。
+有界服务复用或跨节点合批尚未实现；实际资源数量观测不能作为所有环境的固定上限。

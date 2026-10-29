@@ -20,7 +20,7 @@
 
 ## 逐项推进与停止条件
 
-| 项目 | 当前证据与本轮剩余动作 | 停止或重启条件 |
+| 项目 | 当前终态与证据 | 停止或重启条件 |
 | --- | --- | --- |
 | D64 FP32完整训练 | e0d6e27单行私有VJP消冗后原两步native/Python仍有记录、梯度、参数和SGD槽差异；两调度自身恢复精确。见[eager证据](evidence/core5-eager-boundary-20261029.md) | 本候选数值修复停止；不重复九项分段精度/外层汇合探针。重启须有覆盖局部算术、中间伴随与共享贡献的具体新方案及独立根证据 |
 | D2048 FP32 | [实际首写入](evidence/core5-boundary-isolation-20261029.md)：来源+私有批链194坐标失败；标量FP32对局部FP64也有289坐标失败，连续局部FP64后cast为0。原quad残差拒绝已修复，原全图keys失败未解除 | 没有公共整段算术/VJP方案前停止9B全图重跑；局部更准确不保证与旧标量FP32相同。显式全CPU FP64已有独立原窗通过证据 |
@@ -30,12 +30,14 @@
 | 默认异步双NPU eager VJP | CPU桥完整delta-pdg仍EE1017，未完成4更新/恢复；小桥接通过不足以认证。显式blocking是另一个配置 | 同环境同事件方案停止；重启须运行时修复或新的事件所有权方案，先反例再完整图/独立根/恢复 |
 | 单行私有VJP | Python/C++直接建图、轻量一阶/版本守卫已交付；固定e0d6e27 CPU517 passed/2原strict xfail。NPU相关开发已通过；[15c3e65 NPU固定资格](evidence/core5-resident-boundary-20261029.md)通过，[有限完整对照](evidence/core5-boundary-performance-20261029.md)已终态，CPU未见收益 | 以实际端到端成本决定下一步；不从减少私有图数直接推断收益 |
 | 异形字段packing与小提交 | 按device/dtype合并真实字段、8MiB分组、按shape/offset恢复；int64独立，None/零/版本守卫保留。mixed-a/c完整核对通过、单次1.505→1.477/2.183→1.848s，allocator峰值不变；小算子/scalar仍显著 | 若小算子/提交仍主导，须据新profile提出具体边界；无真实可合并域不盲目扩大batch |
-| resident组合矩阵/窗口反向 | KV改为B N(u)+U(V N(u))，保存实际B/V/U tapes；主机构造/seed/run/bridge/reduce分别计量，[固定资格](evidence/core5-resident-boundary-20261029.md)通过，medium构造928ms、执行/等待1094ms、完整窗2794ms，实际分段已取得 | 完整adjoint绑定journal/root/参数地址，不能按shape跨窗口缓存。下一候选为显式模板重绑，先独立验证绑定/版本/跨窗，不能缓存旧窗口对象；不跳过版本/独立根 |
-| 较大NPU训练/跨卡 | D64匹配9076975参数，单/双NPU显式blocking自身磁盘恢复精确，独立CPU均在node89 keys严格失败；resident在Aggregate scratch构造拒绝 | 本轮各一次已终态，不复跑同候选；新增8c48f49按物理入边/端口缩小resident局部槽，CPU9项通过，设备资格中；新候选仅重测受影响resident |
+| resident组合矩阵/窗口反向 | 因子KV与实际分段已交付并资格通过；[15c3e65](evidence/core5-boundary-performance-20261029.md)及[04b5215](evidence/core5-compact-fibers-20261029.md)两次有限观察，局部槽压缩后medium构造1057ms、执行/等待700ms；构造成本仍显著 | 当前测量终态；下一候选为显式模板重绑。完整adjoint绑定journal/root/参数地址，须先独立验证绑定/版本/跨窗，不能按shape缓存旧对象 |
+| 较大NPU训练/跨卡 | 已测停止。D64匹配9076975参数，native单/双NPU显式blocking自身磁盘恢复精确，独立CPU均在node89 keys严格失败；[有限证据](evidence/core5-boundary-performance-20261029.md)保留15.685/16.840s失败成本 | 原eager数值失败按首行重启条件处理；不重跑同候选。resident的新布局与新资源边界分列，不以参数量匹配或自身恢复替代独立正确性 |
+| resident局部纤维填充 | 已交付并[资格通过](evidence/core5-compact-fibers-20261029.md)：04b5215按物理入边/端口缩小槽；CPU两环境各10、公共NPU56、SDK7组件/dtype通过。medium完整窗2.794→2.470s，peak allocated514.8→376.4MB，完整核对/恢复通过 | 本候选实施、相关资格及一次对照闭环；单次观察不宣称普遍加速。跨节点数值批和减少物理缺席行仍需新的具体实现及独立根证据 |
+| NPU resident流资源 | 已定位并停止。相同D64/capacity的04b5215构造报207005；CANN日志明确Too many streams/EE1023，实际SQ/CQ=1984。未进入warmup，尚无完整训练、恢复或吞吐结果 | 重启须有界服务分派/复用或节点合批；先验证嵌套通知、在线顺序、共享workspace、独立VJP根、peer和恢复。该观测不是通用流上限；不靠加HBM预算或主机预选序列绕过 |
 | 诊断与训练观测设施 | scalar/native实际分配观察已通过；常驻20–22失败部分行、实际梯度/SGD槽/canonical共享owner解码及磁盘换owner检查[固定资格](evidence/core5-resident-boundary-20261029.md)通过 | 不补造未计算残差，不以参考重算结果。fake布局测试必须有真实公共owner消费者作独立检查 |
 | 容量/正支持 | 显式正int64容量选项、静态Settle上界与分区预算；原正支持下溢/区间塌缩仍拒绝 | 保留表示下界、同时在途容量与实际预算拒绝；无静默裁剪/截断/改活动集合。不以保守fixture预设作为引擎上限 |
 | CUDA/x86_64 | GPU依用户延后；本机aarch64无x86目标。当前新增resident/C++路径不继承旧CUDA构建报告 | GPU待用户恢复且取得硬件；x86待目标环境。新源码构建、前向、反向、optimizer、常驻、跨卡及恢复各自验收 |
 
-原失败记录和严格断言不变；新增错误与旧失败分别保留。本轮在构建/资格全部终态后串行执行有限性能，
+原失败记录和严格断言不变；新增错误与旧失败分别保留。本轮构建/资格与后续串行有限性能均已终态，
 不重复旧矩阵，不把参数量匹配等同函数、工作量或模型效果匹配，也不宣称低成本优化已经全部完成。
-当前具体作业和接续命令只见STATUS；新结果只更新本表、相关契约、证据和performance-lessons。
+未解除边界都有停止及重启条件；当前无活跃作业或自动重试队列。具体接续命令只见STATUS；新结果只更新本表、相关契约、证据和performance-lessons。
