@@ -66,13 +66,13 @@ class Candidate final:public Resident {
     }
     return out;
   }
-  void save(const std::filesystem::path& path)const override{
+  void save(const std::filesystem::path& path,int64_t limit)const override{
     at::NoGradGuard ng;if(!training)throw std::invalid_argument("benchmark checkpoint needs training");
-    save_resident(path,fixture(material,dtype),training->checkpoint());
+    save_resident(path,fixture(material,dtype),training->checkpoint(),limit);
   }
-  void restore(const std::filesystem::path& path)override{
+  void restore(const std::filesystem::path& path,int64_t limit)override{
     at::NoGradGuard ng;if(!training)throw std::invalid_argument("benchmark checkpoint needs training");
-    training->close();training.reset();auto c=load_resident(path,data);
+    training->close();training.reset();auto c=load_resident(path,data,limit);
     training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,c,device,limits,node_owners);
   }
   void close()override{at::NoGradGuard ng;if(training)training->close();if(inference)inference->close();}

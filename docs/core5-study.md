@@ -14,6 +14,9 @@
 
 模型身份不因设备或样本窗改变，工作负载身份会因输入改变；实际测量还须固定源码、材料与环境。
 身份是追溯键，**不是资格认证**。实现版本、构建、真机检查、数值失败与性能结果单独记录。
+运行记录另存materialization ceiling、resident limits文件hash及native checkpoint文件预算；
+这些资源准入设置不改变模型身份。standalone的`--checkpoint-max-bytes`默认4GiB，
+较大训练记录可显式提高，详见[原生checkpoint](native-graph-checkpoint.md)；不是峰值内存承诺。
 `resolve_model`直接复用公共`KVConfig/RecurrentConfig/RegionalConfig/SourceBinding`的适用性检查；
 支持逐节点记忆和逐区域配置列表，不将有限recipe集合当成合法候选全集。
 参数清单用独立shape公式，`materialize`再核对真实参数形状、trainability和所有共享别名。

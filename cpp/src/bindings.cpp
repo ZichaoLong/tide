@@ -24,6 +24,12 @@ void bind_metrics(py::module_&);
 void bind_placement(py::module_&);
 void bind_weighted(py::module_&);
 using namespace tide;
+namespace {
+int64_t checkpoint_limit(py::handle value) {
+  if (!PyLong_CheckExact(value.ptr())) throw py::type_error("max_file_bytes must be an int64 integer");
+  return py::cast<int64_t>(value);
+}
+}
 #define FIELD(T, name) .def_readwrite(#name, &T::name)
 PYBIND11_MODULE(_tide_native, m) {
   m.def("execution_backend", &execution_backend);
@@ -140,15 +146,15 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("groups", &AdamW::groups)
     .def("state", &AdamW::state);
   m.def("save_checkpoint", [](const std::string& path, const ParameterRegistry& registry,
-                               const NamedOptimizer* optimizer, const std::string& identity) {
-    Checkpoint::save(path, registry, optimizer, identity);
+                               const NamedOptimizer* optimizer, const std::string& identity, py::object max_file_bytes) {
+    Checkpoint::save(path, registry, optimizer, identity, checkpoint_limit(max_file_bytes));
   }, py::arg("path"), py::arg("registry"), py::arg("optimizer") = nullptr,
-     py::arg("identity") = "");
+     py::arg("identity") = "", py::arg("max_file_bytes") = kDefaultCheckpointMaxBytes);
   m.def("load_checkpoint", [](const std::string& path, ParameterRegistry& registry,
-                               NamedOptimizer* optimizer, const std::string& expected_identity) {
-    Checkpoint::load(path, registry, optimizer, expected_identity);
+                               NamedOptimizer* optimizer, const std::string& expected_identity, py::object max_file_bytes) {
+    Checkpoint::load(path, registry, optimizer, expected_identity, checkpoint_limit(max_file_bytes));
   }, py::arg("path"), py::arg("registry"), py::arg("optimizer") = nullptr,
-     py::arg("expected_identity") = "");
+     py::arg("expected_identity") = "", py::arg("max_file_bytes") = kDefaultCheckpointMaxBytes);
   py::class_<Event>(m, "Event")
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)

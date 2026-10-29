@@ -5,7 +5,8 @@ namespace tide {
 using namespace checkpoint_detail;
 
 void Checkpoint::save(const std::filesystem::path& path, const ParameterRegistry& registry,
-                      const NamedOptimizer* optimizer, const std::string& identity) {
+                      const NamedOptimizer* optimizer, const std::string& identity, int64_t max_file_bytes) {
+  file_limit(max_file_bytes);
   Decoded record;
   record.identity = identity;
   for (const auto& owner : registry.owners()) record.owners.push_back({owner.aliases, owner.value});
@@ -17,12 +18,12 @@ void Checkpoint::save(const std::filesystem::path& path, const ParameterRegistry
     record.precision = optimizer->precision(); record.masters = optimizer->masters();
   }
   validate_decoded(record, registry, optimizer, identity);
-  publish_exclusive(path, encode(record));
+  publish_exclusive(path, encode(record, max_file_bytes));
 }
 
 void Checkpoint::load(const std::filesystem::path& path, ParameterRegistry& registry,
-                      NamedOptimizer* optimizer, const std::string& expected_identity) {
-  auto decoded = decode(read_all(path));
+                      NamedOptimizer* optimizer, const std::string& expected_identity, int64_t max_file_bytes) {
+  auto decoded = decode(read_all(path, max_file_bytes));
   validate_decoded(decoded, registry, optimizer, expected_identity);
   // All allocation, metadata, destination layout and optimizer checks precede
   // mutation. Owners retain their TensorImpl, requires_grad and grad buffers.

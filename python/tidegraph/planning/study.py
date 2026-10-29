@@ -2,6 +2,7 @@
 from .execution import ExecutionSpec, MeasurementSpec
 from .model import fingerprint
 from .recipes import prepare
+from .legacy_topology import integer
 
 
 def expand(study):
@@ -44,10 +45,14 @@ def case(study, case_id, execution_id):
 
 def command(record, *, python, root, output, workload, native_library=None,
             resident_library=None, standalone_binary=None, fixture=None,
-            max_materialize_bytes=2*1024**3, resident_limits=None):
+            max_materialize_bytes=2*1024**3, resident_limits=None, checkpoint_max_bytes=None):
     """One configuration -> one process, with no omitted requested policies."""
     e, m = record["execution"]["requested"], record["measurement"]
     resident = e["placement"] == "resident"
+    if checkpoint_max_bytes is not None:
+        integer(checkpoint_max_bytes, "checkpoint max bytes")
+        if e["client"] != "libtorch" or not m["checkpoint_check"]:
+            raise ValueError("native checkpoint byte budget requires LibTorch checkpoint check")
     if e["client"] == "libtorch":
         if not standalone_binary or not fixture:
             raise ValueError("LibTorch needs an explicit binary and exported static fixture")
@@ -55,6 +60,8 @@ def command(record, *, python, root, output, workload, native_library=None,
                 "--checkpoint-check", str(m["checkpoint_check"]).lower()]
         for peer in e["peer_devices"]:
             argv += ["--peer-device", peer]
+        if checkpoint_max_bytes is not None:
+            argv += ["--checkpoint-max-bytes", str(checkpoint_max_bytes)]
     else:
         implementation = "resident" if resident else "python" if e["client"] == "pytorch" else "native"
         if implementation != "python" and not native_library:

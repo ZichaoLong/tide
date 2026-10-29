@@ -2,6 +2,7 @@
 #include <cerrno>
 #include <cstdlib>
 #include <fcntl.h>
+#include <limits>
 #include <sys/stat.h>
 #include <system_error>
 #include <unistd.h>
@@ -37,14 +38,21 @@ void write_all(int fd, const uint8_t* data, size_t size) {
 }
 }  // namespace
 
-std::vector<uint8_t> read_all(const std::filesystem::path& path) {
+uint64_t file_limit(int64_t limit) {
+  if (limit < 1 || static_cast<uint64_t>(limit) > std::numeric_limits<size_t>::max())
+    fail("max_file_bytes must be a positive representable int64");
+  return static_cast<uint64_t>(limit);
+}
+
+std::vector<uint8_t> read_all(const std::filesystem::path& path, int64_t max_file_bytes) {
+  const auto limit = file_limit(max_file_bytes);
   File file(::open(path.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK));
   if (file.get() < 0) io_error("open checkpoint");
   struct stat info;
   if (::fstat(file.get(), &info) != 0) io_error("stat checkpoint");
   if (!S_ISREG(info.st_mode)) fail("checkpoint must be a regular file");
-  if (info.st_size < 0 || static_cast<uint64_t>(info.st_size) > kMaxFileBytes)
-    fail("checkpoint is too large");
+  if (info.st_size < 0 || static_cast<uint64_t>(info.st_size) > limit)
+    fail("checkpoint is too large for max_file_bytes=" + std::to_string(limit));
   std::vector<uint8_t> result(static_cast<size_t>(info.st_size));
   size_t offset = 0;
   while (offset < result.size()) {

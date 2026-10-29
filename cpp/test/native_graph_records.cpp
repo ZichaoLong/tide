@@ -40,6 +40,18 @@ void check_native_graph_records(const std::filesystem::path& directory,at::Devic
     throw std::runtime_error("native graph checkpoint lost initial negative clock");
   auto result=Streaming(g,m,Options{}).run(q,{{0,0,0,1,at::ones({1},o)}},3,3);
   auto file=directory/"generic-history.tidegraph";GraphCheckpoint::save(file,g,m,result.continuation);
+  const auto size=static_cast<int64_t>(std::filesystem::file_size(file));
+  auto bounded=directory/"bounded-graph.tidegraph";
+  GraphCheckpoint::save(bounded,g,m,result.continuation,nullptr,size);
+  if(checkpoint_detail::read_all(bounded)!=checkpoint_detail::read_all(file))
+    throw std::runtime_error("checkpoint budget changed serialized values");
+  auto refused=directory/"refused-graph.tidegraph";bool over=false;
+  try{GraphCheckpoint::save(refused,g,m,result.continuation,nullptr,size-1);}catch(const std::invalid_argument&){over=true;}
+  if(!over||std::filesystem::exists(refused))throw std::runtime_error("graph save ignored file byte limit");
+  over=false;auto before=m.nodes[0].weight.clone();
+  try{GraphCheckpoint::load(file,g,m,nullptr,size-1);}catch(const std::invalid_argument&){over=true;}
+  if(!over||!at::equal(before,m.nodes[0].weight))throw std::runtime_error("graph load ignored budget or mutated owner");
+  GraphCheckpoint::load(file,g,m,nullptr,size);
   auto actual=GraphCheckpoint::load(file,g,m);const auto& a=actual.history.at({0,0});const auto& b=result.continuation.history.at({0,0});
   if(a.last_time!=b.last_time||a.scalars!=b.scalars||a.node_maps!=b.node_maps||!at::equal(a.tensors.at("memory"),b.tensors.at("memory")))
     throw std::runtime_error("native graph checkpoint lost signed/nonempty history");

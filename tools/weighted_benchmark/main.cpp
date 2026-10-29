@@ -5,6 +5,7 @@
 #include "tide/greedy.h"
 #include "tide/stream.h"
 #include "tide/optimizer.h"
+#include "tide/checkpoint.h"
 #include "../../cpp/bench/streaming.h"
 #include <ATen/Parallel.h>
 #include <cmath>
@@ -21,9 +22,10 @@ int main(int argc,char** argv){
   try{
     std::string input,device,implementation="native",mode="training",schedule="prefill",precision="float32",
       placement_name="native",scoring,packing="auto",limits_path;Index steps=3,threads=1,interop=1,workers=1;bool checkpoint=false;
+    int64_t checkpoint_bytes=kDefaultCheckpointMaxBytes;bool checkpoint_budget_requested=false;
     std::vector<std::string> peer_specs;
     for(int i=1;i<argc;++i){std::string key=argv[i];if(key=="--help"){
-        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float16|float32|float64 --scoring-dtype float32|float64 --placement native|mixed-a|mixed-b|mixed-c --intraop-threads N --interop-threads N --workers N --packing auto|packed|scalar --peer-device DEVICE (repeatable) --checkpoint-check true|false --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
+        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float16|float32|float64 --scoring-dtype float32|float64 --placement native|mixed-a|mixed-b|mixed-c --intraop-threads N --interop-threads N --workers N --packing auto|packed|scalar --peer-device DEVICE (repeatable) --checkpoint-check true|false --checkpoint-max-bytes N (native graph file) --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
       if(i+1==argc)throw std::invalid_argument("missing benchmark option value");std::string value=argv[++i];
       if(key=="--fixture")input=value;else if(key=="--device")device=value;else if(key=="--implementation")implementation=value;
       else if(key=="--mode")mode=value;else if(key=="--schedule")schedule=value;else if(key=="--steps")steps=std::stoll(value);
@@ -33,6 +35,9 @@ int main(int argc,char** argv){
       else if(key=="--workers")workers=std::stoll(value);else if(key=="--packing")packing=value;
       else if(key=="--peer-device")peer_specs.push_back(value);
       else if(key=="--resident-limits")limits_path=value;
+      else if(key=="--checkpoint-max-bytes"){
+        size_t consumed=0;checkpoint_bytes=std::stoll(value,&consumed);checkpoint_budget_requested=true;
+        if(consumed!=value.size()||checkpoint_bytes<1)throw std::invalid_argument("checkpoint byte budget must be a positive int64");}
       else if(key=="--checkpoint-check"){if(value!="true"&&value!="false")throw std::invalid_argument("checkpoint flag must be true/false");checkpoint=value=="true";}
       else if(key=="--output-dir")output=value;else throw std::invalid_argument("unknown benchmark option "+key);
     }
@@ -46,6 +51,7 @@ int main(int argc,char** argv){
     if(scoring!="float32"&&scoring!="float64")throw std::invalid_argument("invalid scoring dtype");
     if(packing!="auto"&&packing!="packed"&&packing!="scalar")throw std::invalid_argument("invalid packing");
     if(checkpoint&&mode!="training")throw std::invalid_argument("disk checkpoint check requires training");
+    if(checkpoint_budget_requested&&!checkpoint)throw std::invalid_argument("checkpoint byte budget requires checkpoint check");
     if(implementation=="resident"&&(placement_name!="native"||packing=="scalar"||workers!=1))throw std::invalid_argument("resident does not accept eager placement/scalar/host workers");
     if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
     input=std::filesystem::absolute(input);output=std::filesystem::absolute(output);
@@ -69,6 +75,7 @@ int main(int argc,char** argv){
       { "runtime_initialization_seconds",runtime_seconds},{"placement",placement_name},{"effective_placement",effective},
       {"scoring_dtype",scoring},{"intraop_threads",threads},{"interop_threads",interop},{"workers",workers},{"packing",packing},{"peer_devices",peer_specs},
       {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
+      {"checkpoint_max_bytes",checkpoint_bytes},
       {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
       {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter/gradient/optimizer export"},
       {"phase","fixture-preparation"},{"metrics",Json::array()}};write(output/"result.json",report);
@@ -137,14 +144,14 @@ int main(int argc,char** argv){
     if(checkpoint){
       const auto path=output/"resume.pt";Step a,b;TrainingState x,y;std::map<std::string,Tensor> px,py;
       if(eager){
-        eager->save(path);Eager restored(data,training,prefill,packing=="scalar",dtype,target,placement,workers,peers);restored.restore(path);
+        eager->save(path,checkpoint_bytes);Eager restored(data,training,prefill,packing=="scalar",dtype,target,placement,workers,peers);restored.restore(path,checkpoint_bytes);
         a=eager->step(steps+1);b=restored.step(steps+1);x=eager->training_state();y=restored.training_state();
         px=eager->parameters();py=restored.parameters();
       }else{
 #ifdef TIDE_WEIGHTED_RESIDENT
-        remote->save(path);a=remote->step(steps+1);x=remote->training_state();px=remote->parameters();
+        remote->save(path,checkpoint_bytes);a=remote->step(steps+1);x=remote->training_state();px=remote->parameters();
         remote->close();remote.reset();
-        auto restored=resident(data,target,training,prefill,dtype,peers);restored->restore(path);
+        auto restored=resident(data,target,training,prefill,dtype,peers);restored->restore(path,checkpoint_bytes);
         b=restored->step(steps+1);y=restored->training_state();py=restored->parameters();restored->close();
 #endif
       }

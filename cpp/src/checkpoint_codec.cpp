@@ -40,7 +40,7 @@ at::ScalarType scalar_type(uint8_t code) {
 uint64_t element_count(at::IntArrayRef shape) {
   uint64_t count = 1;
   for (const auto size : shape) {
-    if (size < 0 || static_cast<uint64_t>(size) > kMaxFileBytes) fail("invalid tensor shape");
+    if (size < 0 || static_cast<uint64_t>(size) > kMaxDimension) fail("invalid tensor shape");
     if (size != 0 && count > kMaxTensorElements / static_cast<uint64_t>(size)) fail("tensor is too large");
     count *= static_cast<uint64_t>(size);
   }
@@ -51,11 +51,12 @@ void Writer::tensor(const Tensor& value, bool metadata) {
   const bool integer=metadata && value.defined() && value.scalar_type()==at::kLong;
   if(!integer)validate_value(value, "save");
   else if(value.layout()!=at::kStrided)fail("unsupported integer tensor layout");
+  if (value.dim() > 64) fail("tensor has too many dimensions");
+  const auto count = element_count(value.sizes());
+  room(3 + 8*value.dim() + 8 + count*value.element_size());
   const auto contiguous = value.detach().to(at::kCPU).contiguous();
-  if (contiguous.dim() > 64) fail("tensor has too many dimensions");
   u8(kCpu); u8(integer ? 3 : dtype_code(contiguous.scalar_type())); u8(static_cast<uint8_t>(contiguous.dim()));
   for (const auto size : contiguous.sizes()) i64(size);
-  const auto count = element_count(contiguous.sizes());
   u64(count);
   raw(static_cast<const uint8_t*>(contiguous.const_data_ptr()), count * contiguous.element_size());
 }
@@ -103,10 +104,10 @@ OptimizerGroup read_group(Reader& reader) {
   return group;
 }
 
-std::vector<uint8_t> encode(const Decoded& record) {
+std::vector<uint8_t> encode(const Decoded& record, int64_t max_file_bytes) {
   if (!little_endian()) fail("big-endian hosts are unsupported");
-  Writer writer;
-  writer.bytes.insert(writer.bytes.end(), kMagic.begin(), kMagic.end());
+  Writer writer(max_file_bytes);
+  writer.raw(reinterpret_cast<const uint8_t*>(kMagic.data()), kMagic.size());
   writer.u32(kSchema); writer.u8(kLittleEndian); writer.string(record.identity);
   const auto& owners = record.owners;
   if (owners.size() > kMaxCollection) fail("too many parameter owners");

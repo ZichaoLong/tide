@@ -153,3 +153,50 @@ def test_native_checkpoint_weights_only_and_alias_mismatch(dtype, tmp_path):
     wrong_registry.add("graph.other", wrong_other)
     with pytest.raises(Exception):
         core.load_checkpoint(str(path), wrong_registry, None, "graph-v1")
+
+
+def test_explicit_file_budget_preserves_bytes_and_rejects_before_publication_or_mutation(dtype, tmp_path):
+    registry, shared, other = _fixture(dtype)
+    optimizer = _optimizer(registry, "adamw")
+    _train_two_steps(shared, other, optimizer)
+    path = tmp_path/"default"
+    core.save_checkpoint(str(path), registry, optimizer, "budget-v1")
+    expected = path.read_bytes()
+    bound = len(expected)
+    for limit in (bound, 2**34):
+        copy = tmp_path/str(limit)
+        core.save_checkpoint(str(copy), registry, optimizer, "budget-v1", max_file_bytes=limit)
+        assert copy.read_bytes() == expected  # No new format or precision.
+    failed = tmp_path/"refused"
+    with pytest.raises(ValueError, match="max_file_bytes"):
+        core.save_checkpoint(str(failed), registry, optimizer, "budget-v1", max_file_bytes=bound-1)
+    assert not failed.exists() and not list(tmp_path.glob(".*.tmp.*"))
+    target, x, y = _fixture(dtype, 10.)
+    opt = _optimizer(target, "adamw")
+    _train_two_steps(x, y, opt)
+    before, slots = x.detach().clone(), _state_snapshot(opt)
+    with pytest.raises(ValueError, match="max_file_bytes"):
+        core.load_checkpoint(str(path), target, opt, "budget-v1", max_file_bytes=bound-1)
+    torch.testing.assert_close(x, before, rtol=0, atol=0)
+    _assert_state(_state_snapshot(opt), slots)
+    core.load_checkpoint(str(path), target, opt, "budget-v1", max_file_bytes=bound)
+    torch.testing.assert_close(x, shared, rtol=0, atol=0)
+    _assert_state(_state_snapshot(opt), _state_snapshot(optimizer))
+
+
+def test_default_file_budget_rejects_sparse_oversize_without_reading_payload(tmp_path):
+    registry, shared, _ = _fixture(torch.float32)
+    path = tmp_path/"sparse"
+    with path.open("wb") as stream:
+        stream.truncate(2**32+1)
+    with pytest.raises(ValueError, match="max_file_bytes=4294967296"):
+        core.load_checkpoint(str(path), registry)
+    assert torch.equal(shared, torch.tensor([1., -2.]))
+
+
+@pytest.mark.parametrize("limit", [0, -1, True, 4.0, 2**63, torch.tensor(4)])
+def test_native_checkpoint_budget_requires_positive_exact_int64(tmp_path, limit):
+    registry, _, _ = _fixture(torch.float32)
+    with pytest.raises((ValueError, TypeError, RuntimeError)):
+        core.save_checkpoint(str(tmp_path/"invalid"), registry, max_file_bytes=limit)
+    assert not (tmp_path/"invalid").exists()

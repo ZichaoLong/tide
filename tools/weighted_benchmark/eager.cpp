@@ -75,6 +75,6 @@ TrainingState Eager::training_state()const{
   if(storage_reference)for(const auto& [name,x]:storage_masters)out.masters[name]=cpu(x);
   return out;
 }
-void Eager::save(const std::filesystem::path& p)const{GraphCheckpoint::save(p,data.graph,data.model,state,optimizer.get());}
-void Eager::restore(const std::filesystem::path& p){state=GraphCheckpoint::load(p,data.graph,data.model,optimizer.get());}
+void Eager::save(const std::filesystem::path& p,int64_t limit)const{GraphCheckpoint::save(p,data.graph,data.model,state,optimizer.get(),limit);}
+void Eager::restore(const std::filesystem::path& p,int64_t limit){state=GraphCheckpoint::load(p,data.graph,data.model,optimizer.get(),limit);}
 }

@@ -63,6 +63,22 @@ def test_no_silent_inapplicable_runtime_options():
         command(r, python="python", root=ROOT, output="out", workload="p", resident_limits="limits")
 
 
+def test_native_checkpoint_budget_is_explicit_and_cannot_be_silently_ignored():
+    common = dict(python="PYTHON", root=ROOT, output="OUT", workload="PLAN", standalone_binary="CPP", fixture="MATERIAL")
+    r = case(catalog(), "check-fc-kv", "cpp-cpu")
+    argv = command(r, **common, checkpoint_max_bytes=2**34)
+    assert argv[argv.index("--checkpoint-max-bytes")+1] == str(2**34)
+    for invalid in (0, -1, True, 4.0, 2**63):
+        with pytest.raises((ValueError, TypeError)):
+            command(r, **common, checkpoint_max_bytes=invalid)
+    r["measurement"]["checkpoint_check"] = False
+    with pytest.raises(ValueError, match="checkpoint check"):
+        command(r, **common, checkpoint_max_bytes=2**34)
+    r = case(catalog(), "check-fc-kv", "python-cpu")
+    with pytest.raises(ValueError, match="LibTorch"):
+        command(r, **common, checkpoint_max_bytes=2**34)
+
+
 def test_record_gate_requires_gradients_optimizer_identity_and_actual_resume(tmp_path):
     r = case(catalog(), "check-fc-kv", "python-cpu")
     good = dict(state="passed", post_measurement_complete_records=True, requested_dtype="float32",

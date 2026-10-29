@@ -30,17 +30,18 @@ void locate(Continuation& q,const Graph& g,const Model& m){
 }
 }
 void GraphCheckpoint::save(const std::filesystem::path& path,const Graph& g,const Model& m,
-    const Continuation& q,const NamedOptimizer* optimizer){
+    const Continuation& q,const NamedOptimizer* optimizer,int64_t max_file_bytes){
+  file_limit(max_file_bytes);
   validate_model(g,m);auto checked=q;validate_window(g,m,checked,{},q.cut,q.cut);
   auto registry=m.parameters(false);GraphRecord record;record.continuation=q;auto& p=record.parameters;p.identity=g.identity;
   for(const auto& o:registry.owners())p.owners.push_back({o.aliases,o.value});
   if(optimizer){p.has_optimizer=true;p.optimizer_class=optimizer->layout().class_name;
     p.groups=optimizer->groups();p.state=optimizer->state();p.precision=optimizer->precision();p.masters=optimizer->masters();}
   validate_decoded(p,registry,optimizer,g.identity);
-  publish_exclusive(path,encode_graph(record));
+  publish_exclusive(path,encode_graph(record,max_file_bytes));
 }
-Continuation GraphCheckpoint::load(const std::filesystem::path& path,const Graph& g,Model& m,NamedOptimizer* optimizer){
-  auto record=decode_graph(read_all(path));auto registry=m.parameters(false);auto& p=record.parameters;
+Continuation GraphCheckpoint::load(const std::filesystem::path& path,const Graph& g,Model& m,NamedOptimizer* optimizer,int64_t max_file_bytes){
+  auto record=decode_graph(read_all(path,max_file_bytes));auto registry=m.parameters(false);auto& p=record.parameters;
   validate_decoded(p,registry,optimizer,g.identity);
   // Allocate every transfer and validate candidate values, state, and ownership
   // before publishing any live parameter or optimizer change.
