@@ -9,11 +9,14 @@
 
 启动审计通过：实际路径 `/mi/data2T/zlong/home/llm/graph-execution-foundation`，
 起点 `86826fd09bb3546b5084a89b494b4bbdd53d8510`，工作区起初干净；固定快照19+5份通过。
-已统一所有构建入口的 `--jobs all|half|N`，删除历史两线程及1/2/4限制。
-定向检查 `tests/test_build_resources.py`：7 passed；包括无Torch帮助入口、CPU affinity、half与320显式线程。
-随后复用现有公共绑定和参数清单，建设数学配置/执行配置/测量计划的独立身份，
-生成遵循core-5的FC/HB/LH启发拓扑和约1B/8B/16B的自然维度用例，补齐比较入口与测试。
-每个合法候选可配置，单项与重要组合有检查；不要求遍历笛卡尔积。
+构建资源策略已提交推送 `d841450`（7项定向检查）。现有静态计划/参数清单/实际构造
+已移入公共 `tidegraph.planning`，旧脚本与v1身份兼容。新增展开默认值的模型/工作负载v2、
+执行/测量身份、FC/HB/LH启发自然维度与近似参数预算；[导航](core5-study.md)。
+本阶段定向检查123项、后续97项通过（有重叠，不累加为独立资格数）。其中新计划12项，
+覆盖五族/混合真实前后向、int64状态、教材HB计数和Torch-free规模CLI。
+一次新测试使用了不存在的State.time字段，修正为公开last_time/slots后通过；实现未据此改语义。
+下一步固定提交运行 `qualify_core5_study.py` 的独立CPU构建与定向门禁；同时在主工作区补齐
+三个client的benchmark配置/FP16/放置/线程/peer入口，并加入可重现有限study和结果索引。
 
 ## 活跃任务：无
 
@@ -33,5 +36,5 @@
 
 接续：`git status --short --branch`、`python scripts/status.py`、
 `python scripts/check_upstream.py`，再看本页及ROADMAP。
-当前下一步：实现公共配置与计划身份、core-5自然维度和拓扑生成。
+当前下一步：固定本阶段源码并启动CPU资格，随后扩展后端benchmark入口。
 相关长期契约见 [execution-flows](execution-flows.md)，经验见 [performance-lessons](performance-lessons.md)。

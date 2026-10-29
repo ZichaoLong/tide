@@ -5,7 +5,7 @@ fixed shape, not a learnable tensor. No activity threshold or near-zero clip.
 """
 from dataclasses import dataclass
 import torch
-from .config import finite
+from .config import validate_regularizer
 
 
 @dataclass(frozen=True)
@@ -14,14 +14,7 @@ class Regularizer:
     alpha: float | None = None
 
     def __post_init__(self):
-        if self.kind not in {"quad", "bern", "ent"}:
-            raise ValueError("regularizer must be quad/bern/ent")
-        if self.kind == "ent":
-            finite("ent_alpha", self.alpha, 1)
-            if self.alpha > 2:
-                raise ValueError("ent_alpha must lie in [1,2]")
-        elif self.alpha is not None:
-            raise ValueError("ent_alpha applies only to ent")
+        validate_regularizer(self.kind, self.alpha)
 
     def response(self, x, caps, temperature):
         z = x/temperature

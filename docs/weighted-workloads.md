@@ -1,8 +1,9 @@
 # 参数清单、匹配用例与二进制材料
 
 固定数学仍为0770593；本工具构造测试输入，不增加数学函数或代替配置合法性检查。
-入口：[参数形状](../scripts/weighted_shapes.py)、[共享清单](../scripts/weighted_inventory.py)、
-[静态计划](../scripts/weighted_workload_plan.py)、[实际构造](../scripts/weighted_plan_materialize.py)。
+公共入口：[参数形状](../python/tidegraph/planning/shapes.py)、[共享清单](../python/tidegraph/planning/inventory.py)、
+[静态计划](../python/tidegraph/planning/workload.py)、[实际构造](../python/tidegraph/planning/materialize.py)。
+原scripts入口保留兼容；新自然维度、模型/执行/测量身份见[core5-study](core5-study.md)。
 
 | 数学绑定 | 静态角色/形状 | 独立核验 |
 | --- | --- | --- |
