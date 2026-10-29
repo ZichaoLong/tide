@@ -18,9 +18,21 @@
 下一步固定提交运行 `qualify_core5_study.py` 的独立CPU构建与定向门禁；同时在主工作区补齐
 三个client的benchmark配置/FP16/放置/线程/peer入口，并加入可重现有限study和结果索引。
 
-## 活跃任务：无
+## 活跃任务：无（上一资格已终态）
 
-没有启动新长任务。旧任务均终态，未恢复旧队列。最近生产实现是
+固定源码 `8f51ba6` 在只读树 `artifacts/worktrees/core5-planning-v1` 完成新CPU构建，
+160线程、45.532s；定向336 passed/0 skipped，测试96.56s。
+[审阅证据](evidence/core5-planning-20261029.md)给出干净checkout复现。
+服务 `core5-planning-v1-cpu-20261029.service` terminal inactive/dead、exit0；
+`artifacts/jobs/core5-planning-v1-cpu/status.json` passed/0，qualification/result.json及日志完整。
+没有活跃重型任务，旧队列未恢复。
+
+主工作区有未提交的下一阶段benchmark修改：FP16+FP32master、线程/packing/scoring设置、
+Python resident peer、standalone eager设备放置和精确恢复；尚未构建/真机验收。
+相关Python精度/观测11项通过，含FP16实际完整训练和磁盘换owner恢复。
+后续继续完成standalone构建与有限study设施，不能将上一资格当成本阶段结果。
+
+最近生产实现是
 `04b52153f9785e1489e31c7dd09a16849791d331`，其资格与结果见
 [紧凑纤维证据](evidence/core5-compact-fibers-20261029.md)；此前的两线程是真实历史记录。
 该证据包括CPU两环境各10、Python/NPU56、SDK7组件检查，以及medium完整窗
@@ -36,5 +48,5 @@
 
 接续：`git status --short --branch`、`python scripts/status.py`、
 `python scripts/check_upstream.py`，再看本页及ROADMAP。
-当前下一步：固定本阶段源码并启动CPU资格，随后扩展后端benchmark入口。
+当前下一步：冻结benchmark开发快照，构建standalone并定向核验，再固定提交/资格与有限性能。
 相关长期契约见 [execution-flows](execution-flows.md)，经验见 [performance-lessons](performance-lessons.md)。

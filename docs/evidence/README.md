@@ -167,3 +167,5 @@
 [常驻半精度KV更新](core5-resident-half-kv-update-20261028.md)：69bf4f0，CPU26、NPU更新/raw两dtype及CUDA三架构构建。
 
 - [数值/异步失败隔离](core5-numerical-isolation-20261028.md)：固定b0321b9/62073dd；GDN首次梯度分歧与不经过图模块的双NPU反向反例。
+
+- [core-5公共配置/自然规模固定CPU资格](core5-planning-20261029.md)：8f51ba6新CPU构建、336通过；设备及后续benchmark扩展另验。
