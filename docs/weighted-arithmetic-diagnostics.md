@@ -96,3 +96,24 @@ python scripts/diagnose_weighted_joins.py --workload NEW_PLAN/workload.json --dt
 并覆盖int64、None/零报告、非有限值、版本、异常恢复、适用域拒绝和小图两步实际checkpoint。
 `test_weighted_workload_training.py`保持Python/native默认两dtype的完整训练/恢复检查。
 局部测试通过只认证诊断机制，D64和生产算术是否等价由各自实际报告决定。
+
+
+## 补充局部与运行时诊断
+
+`diagnose_weighted_first_write.py --fixture FILE --output-dir NEW`只读取已导出的v2材料中
+首个无入边区域所需的实际张量，逐张量校验hash；累计操作数上限512MiB，单次读取上限128MiB。
+必须各节点只有一个共同外部原子，A/B/embedding及base是实际共享身份。比较source变换、
+private BMM与组合误差，以及连贯FP64局部公式一次返回FP32的误差。不会分配完整模型、
+回放参考轨迹或认证下游状态/路由/反向；未读取的完整binary hash只记录声明值。
+
+`diagnose_weighted_precision.py --implementation python --normalization-vjp float64 --output-dir NEW`
+在原half GDN/default AdamW fixture上保持前向逐值不变，仅对三种归一化的解析VJP
+使用CPU FP64中间值，公开梯度仍回原dtype，optimizer/loss scale不变。
+`test_weighted_half_probe.py`用独立FP64 Jacobian验算干预、前向不变及hook恢复。
+这是诊断，不是设备FP64支持或新的默认精度策略。
+
+`diagnose_weighted_async.py --device npu:0 --peer-device npu:1 --copy-policy cpu_bridge --scope complete --output-dir NEW`
+评估显式CPU staging：逐字段原版本、None/零根、完整图与保留图、三步AdamW、
+实际checkpoint解码后第四步及CPU/换卡恢复。桥接提交数与字节另记；即使通过，
+也不认证默认直接peer异步。`test_weighted_peer_bridge.py`只检查CPU上的结构契约；
+真实事件和跨设备运行必须在对应设备另验，不修改公共环境或默认transport。

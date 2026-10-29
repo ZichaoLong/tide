@@ -27,8 +27,11 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--implementation", choices=("python","native"), required=True)
     p.add_argument("--native-library")
+    p.add_argument("--normalization-vjp", choices=("public", "float64"), default="public")
     p.add_argument("--output-dir",type=Path,required=True)
     a=p.parse_args()
+    if a.normalization_vjp == "float64" and a.implementation != "python":
+        p.error("diagnostic FP64 VJP requires Python CPU")
     root=Path(__file__).resolve().parents[1]
     sys.path[:0]=[str(root/"python"),str(root/"tests")]
     from tidegraph import Continuation
@@ -42,6 +45,8 @@ def main():
         from tidegraph.native_loader import load_native
         load_native(a.native_library,backend="cpu")
     torch.set_num_threads(1);torch.set_num_interop_threads(1)
+    from weighted_half_probe import HalfNormalizationProbe
+    probe = HalfNormalizationProbe(a.normalization_vjp == "float64")
     source,dirty=source_state(root)
     out=a.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
     report=dict(schema="tide-weighted-numerical-diagnostic-v1",source=source,dirty=dirty,
@@ -58,6 +63,7 @@ def main():
                 for b in (left,right)]
     torch.save(dict(weights=left.model.state_dict(),inputs=xl),out/"fixture.pt")
     report["fixture_sha256"]=hashlib.sha256((out/"fixture.pt").read_bytes()).hexdigest()
+    probe.__enter__()
     try:
         for step in range(3):
             for opt in optimizers: opt.zero_grad()
@@ -93,7 +99,10 @@ def main():
         else: report["state"]="passed"
     except BaseException as error:
         report.update(state="failed",error=repr(error));raise
-    finally: write_json(out/"result.json",report)
+    finally:
+        probe.__exit__(None, None, None)
+        report["arithmetic"] = probe.record()
+        write_json(out/"result.json",report)
     print(report["state"])
     return 2 if report["state"]=="strict_mismatch" else 0
 
