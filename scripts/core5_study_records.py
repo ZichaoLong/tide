@@ -65,3 +65,31 @@ def summarize(path):
         throughput_qualified=r["state"] == "passed" and bool(result.get("post_measurement_complete_records")),
         work=work, memory=result.get("memory"), construction_seconds=result.get("construction_seconds"),
         warmup_seconds=result.get("warmup_seconds"), fixture_sha256=result.get("fixture_sha256"))
+
+
+def query_records(path):
+    """Read live run records or reviewed repository evidence without old logs.
+
+    Evidence hashes identify the reviewed inputs; this does not authenticate or
+    re-run them. Preserve failure and check flags instead of trusting timings.
+    """
+    r = json.loads(Path(path).read_text())
+    if r.get("schema") == "tide-core5-run-v1":
+        return [summarize(path)]
+    if r.get("schema") != "tide-core5-finite-performance-evidence-v1":
+        raise ValueError("unknown study evidence schema")
+    records = []
+    for row in r["runs"]:
+        item = dict(row)
+        model = r["models"][item["case"]]
+        item.update(parameters=model["parameters"], graph_counts=model["counts"], recipe=model["recipe"],
+                    evidence_file=str(Path(path).resolve()))
+        checks, resume = item.get("checks", {}), item.get("exact_resume") or {}
+        complete = checks.get("post_measurement_complete_records") is True
+        if item["mode"] == "training":
+            complete = complete and all(checks.get(k) is True for k in (
+                "parameter_values_checked", "final_parameter_gradients_checked", "optimizer_values_checked"))
+            complete = complete and resume.get("state") == "passed" and resume.get("exact") is True
+        item["throughput_qualified"] = item["state"] == "passed" and complete
+        records.append(item)
+    return records

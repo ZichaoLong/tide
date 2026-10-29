@@ -3,7 +3,7 @@
 从本页可以独立找到模型配置、公共实现、运行入口、检查和证据。数学固定
 [0770593](upstream.json)；[当前进度](STATUS.md)和[待办](ROADMAP.md)分别维护。
 
-## 配置的三层身份
+## 配置与测量身份
 
 | 对象 | 公共入口 | 身份包含什么 |
 | --- | --- | --- |
@@ -106,6 +106,7 @@ python scripts/run_core5_study.py --case hb-1b-kv --execution cpp-npu-mixed-c \
   --max-materialize-bytes EXPLICIT_BYTES --output-dir NEW_RUN
 python scripts/index_core5_study.py RUN_PARENT --format tsv
 python scripts/index_core5_study.py RUN_PARENT --client libtorch --state failed --format json
+python -S scripts/index_core5_study.py REVIEWED_EVIDENCE.json --state passed --format tsv
 ```
 
 长运行仍由本机独立服务启动；runner只负责单次有限子进程、无重试和原子记录。
@@ -113,6 +114,9 @@ python scripts/index_core5_study.py RUN_PARENT --client libtorch --state failed 
 `workload.json`和`inventory.json`给出所有展开配置/尺寸/共享角色。
 `measurement/result.json`保留实际配置、完整计时、candidate/Full/消息和原始批统计、内存、
 严格核对与精确恢复。失败也能查询到已产生的时间，但`throughput_qualified=false`。
+同一查询入口接受仓库内`tide-core5-finite-performance-evidence-v1`审阅记录，
+按其中的模型表恢复参数/规模，按状态与完整核对标志判定资格，不要求旧日志或运行目录存在。
+审阅记录的hash用于定位证据；查询不会重新认证历史构建/运行。失败计时不能覆盖失败终态。
 standalone须提供本源码的构建记录与实际binary hash；CPU/Python-owned NPU/SDK分开验证。
 可以先用另一环境导出纯静态fixture，再让SDK进程消费；导出不执行参考轨迹。
 
