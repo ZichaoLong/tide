@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Query explicit study directories, including failed and incomplete runs.
 
-Print JSON or TSV. Inputs may be run.json, a run directory or its parent; only
-one child level is searched. Never scan all historical artifacts implicitly.
+Print JSON or TSV. Inputs may be run.json, reviewed finite-performance evidence,
+a run directory or its parent; only one child level is searched. Never scan all
+historical artifacts implicitly. Reviewed evidence needs no old run directory.
 """
 import argparse
 import json
 from pathlib import Path
-from core5_study_records import summarize
+from core5_study_records import query_records
 
 
 def main():
@@ -32,12 +33,12 @@ def main():
         p.error("no study run records in explicit paths")
     records = []
     for path in sorted(files):
-        r = summarize(path)
-        if any(getattr(a, key) and getattr(a, key) != r[key] for key in ("state", "case")):
-            continue
-        if any(getattr(a, key) and getattr(a, key) != r["requested"][key] for key in ("client", "device", "dtype")):
-            continue
-        records.append(r)
+        for r in query_records(path):
+            if any(getattr(a, key) and getattr(a, key) != r[key] for key in ("state", "case")):
+                continue
+            if any(getattr(a, key) and getattr(a, key) != r["requested"][key] for key in ("client", "device", "dtype")):
+                continue
+            records.append(r)
     if a.format == "json":
         print(json.dumps(records, indent=2, ensure_ascii=False, allow_nan=False))
     else:

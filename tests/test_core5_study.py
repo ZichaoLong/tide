@@ -11,7 +11,7 @@ from tidegraph.planning import ExecutionSpec
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/"scripts"))
-from core5_study_records import accept_result, summarize
+from core5_study_records import accept_result, summarize, query_records
 
 
 def catalog():
@@ -100,3 +100,16 @@ def test_record_gate_requires_gradients_optimizer_identity_and_actual_resume(tmp
     result = summarize(parent)
     assert result["measured_seconds"] == 3 and result["work"]["full_calls"] == 2
     assert result["state"] == "failed" and not result["throughput_qualified"]
+    assert query_records(parent) == [result]
+    # A reviewed record is queryable after its raw run directory is gone.
+    result["run"] = "/retired/not-a-live-dependency/run.json"
+    result["checks"] = good
+    result["throughput_qualified"] = True  # A metric cannot override failure.
+    evidence = tmp_path/"reviewed.json"
+    evidence.write_text(json.dumps(dict(schema="tide-core5-finite-performance-evidence-v1",
+        models={r["case_id"]:dict(parameters=record["parameters"], counts=record["graph_counts"], recipe=record["recipe"])},
+        runs=[result])))
+    assert query_records(evidence)[0]["throughput_qualified"] is False
+    child = subprocess.run([sys.executable, "-S", str(ROOT/"scripts/index_core5_study.py"), str(evidence),
+                            "--state", "failed", "--format", "json"], capture_output=True, text=True, check=True)
+    assert json.loads(child.stdout)[0]["parameters"] == record["parameters"]
