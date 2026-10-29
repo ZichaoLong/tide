@@ -45,3 +45,7 @@ resident D64在构造时报Aggregate scratch budget exceeded，尚无训练计�
 新构建在固定树`build/{python,sdk}`。每任务两个构建线程、单ATen线程、MemoryMax32G、RuntimeMaxSec4000，
 元数据90秒、构建1800秒、设备排队180秒+执行1800秒。启动后核对unit/state；尚无设备资格结果。
 先两套资格终态，再独立串行测量，不能与构建/资格重叠。
+
+审查新增的非法counts检查时发现它可覆盖已有sticky error；已加守卫和独立反例，CPU元数据10项通过。
+8c48f49两套构建主动终止，原status均保留cancelled；未有设备通过结论。
+修正版随后固定新提交，在新qualified-v2树和新build目录重新资格，旧输入不改写。

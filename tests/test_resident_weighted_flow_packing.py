@@ -79,6 +79,12 @@ def test_malformed_ready_bounds_refused(library,bad):
     assert f[-1].item()==2 and not f[9].any()
 
 
+def test_existing_error_is_sticky_even_with_invalid_counts(library):
+    f=node_fixture();f[3][1]=5;f[-1].fill_(21)
+    call_node(library,f)
+    assert f[-1].item()==21 and not f[9].any()
+
+
 def test_physical_atoms_int64_absence_and_source_domain(library):
     f=node_fixture();call_node(library,f)
     assert not f[-1].item()
