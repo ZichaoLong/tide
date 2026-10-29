@@ -1,5 +1,10 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[core-5候选/配置/拓扑/维护入口](core5-study.md)连接公共planning、真实材料化与有限目录。
+[自然维度有限测量](evidence/core5-natural-study-20261029.md)单列完整通过、严格失败和实际区域合批；
+[native文件预算](native-graph-checkpoint.md)与[固定资格](evidence/core5-checkpoint-budget-20261029.md)
+对应精确raw状态持久化，预算改变不改变数学或codec格式。查询历史审阅证据不执行参考补写。
+
 [有限性能与停止证据](evidence/core5-boundary-performance-20261029.md)连接单行VJP、异形字段packing、常驻因子KV、实际训练/恢复与分段成本；数值严格失败不冒充吞吐资格。
 
 [三项审查修复资格](evidence/core5-review-fixes-20261028.md)补验ClockedState带权VJP、quad正支持拒绝与resident参数bank分配前准入；数学/图/checkpoint版本保持。

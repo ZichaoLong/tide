@@ -128,6 +128,9 @@ standalone消费者在fixture读取、模型构造、warmup、每个measurement�
 保留五项通过、D64两项严格数值失败和一项构造容量拒绝；自身精确恢复与独立正确性分别判定。
 
 自然参数规模、可配置局部候选及统一执行/结果目录从[core5-study](core5-study.md)进入。
+[e50自然规模对照](evidence/core5-natural-study-20261029.md)给出实际拓扑、维度、稀疏预算、
+客户端/CPU/mixed/resident、真实packing及严格结果；[b255大文件复验](evidence/core5-checkpoint-budget-20261029.md)
+另验5.25GB保存/加载和下一窗数值失败。两者均不扩张未测配置或8B/16B的吞吐资格。
 三个client均保留显式FP16、FP32 scoring/optimizer master、loss scale=1；半精度使用既有
 atol=1e-3/rtol=2e-2，整数/路由/连接关系与同配置恢复仍严格核对。
 请求和生效packing、线程、scoring、放置与peer分别记录。standalone内存表包含每个peer，

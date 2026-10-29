@@ -1,0 +1,739 @@
+{
+  "schema": "tide-core5-finite-performance-evidence-v1",
+  "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "native explicit file-budget qualification and one unchanged FC1B checkpoint follow-up; no qualified throughput for the follow-up",
+  "qualification": [
+    {
+      "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "dirty": "",
+      "state": "passed",
+      "driver_sha256": "15c9b15cbb8bfec3090d799e3d03a2c2be7cd87a7f1af8194dca92f67318d775",
+      "stages": [
+        {
+          "name": "core-build",
+          "command": [
+            "REPOSITORY/.local/venv-core5/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/build.py",
+            "--build-dir",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu",
+            "--backend",
+            "cpu",
+            "--jobs",
+            "half"
+          ],
+          "exit_code": 0,
+          "seconds": 50.350278466939926,
+          "log_sha256": "2e060fd2154f447d36c1f662584caf5508361c93e50b01c245de860f09178d6c"
+        },
+        {
+          "name": "cpu-tests",
+          "command": [
+            "REPOSITORY/.local/venv-core5/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "--dtype",
+            "both",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/tests/test_cpp_checkpoint.py",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/tests/test_cpp_master_optimizer.py",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/tests/test_cpp_weighted_training.py",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/tests/test_core5_study.py",
+            "--junitxml=REPOSITORY/artifacts/jobs/core5-checkpoint-cpu/tests.xml"
+          ],
+          "exit_code": 0,
+          "seconds": 158.89159050956368,
+          "log_sha256": "114268ff583ec6237acdbc09a87f39006d39ed0e71eaddee94ba710901a5688b"
+        },
+        {
+          "name": "client-build",
+          "command": [
+            "REPOSITORY/.local/venv-core5/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/build_weighted_benchmark.py",
+            "--core-build",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu",
+            "--output-dir",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/client-cpu",
+            "--jobs",
+            "half"
+          ],
+          "exit_code": 0,
+          "seconds": 24.75208205729723,
+          "log_sha256": "7c620e1bcc2d440ee1be3689df37e2bd439f104a5b3499ecf2ef3b30a201f900"
+        },
+        {
+          "name": "client-checks",
+          "command": [
+            "REPOSITORY/.local/venv-core5/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/check_weighted_benchmark.py",
+            "--binary",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/client-cpu/client/weighted-benchmark",
+            "--output-dir",
+            "REPOSITORY/artifacts/jobs/core5-checkpoint-cpu/checks",
+            "--native-library",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu"
+          ],
+          "exit_code": 0,
+          "seconds": 11.027380887418985,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "job": "artifacts/jobs/core5-checkpoint-cpu",
+      "record_sha256": "c210af980abda4f3971315ab5f6fd5e70fbb7c84154305ecd066bf50370b499f",
+      "status_sha256": "0be73ff07750d12f09dc9bd68a917b6b7c53313bc83be4e086a33e34f28111ce",
+      "core": {
+        "record_sha256": "e4eafc971b9c7cbeffeb23666349f650c5949600ef0786a0818cfd9609c995ee",
+        "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+        "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+        "binary_sha256": {
+          "libtidegraph.a": "b5d1236f9742297ba3d6b013563a1831afdc38a345184aaa0eecc5fa78fbf920",
+          "libtidegraph_runtime.a": "91239f0a47b17e5a5ba67d4a12afe2b6de3a4f62294530a2dbd606f3bf58f2d9",
+          "_tide_native.so": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+          "tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+          "tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+          "tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+          "tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+          "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+          "tidegraph-checkpoint-check": "6ce01b71a90f752e2ad7df18ab34a4c6448e555d8345e3325361a9685d3d0dc2",
+          "tidegraph-weighted-training-check": "2b2a1ebafb230d5a25a0a5f60212cf731dff40277a24a2aae0789039110e3cc0",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+          "tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+          "tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+          "tidegraph-accelerator-check": "fa1850f152fc9bf62de54068e0ec8e5225d467179923c5d8ce0cf186100c363a",
+          "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+          "tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+          "tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+          "tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+          "tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+          "libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57"
+        },
+        "build_jobs": 160,
+        "backend": "cpu",
+        "torch": "2.12.0+cpu",
+        "python": "3.12.13",
+        "architecture": "aarch64"
+      },
+      "client": {
+        "record_sha256": "858d71a1035286d172572eb3a7b16a0cb757f857c5f4a26eb1c2f3f63f4abe20",
+        "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+        "binary_sha256": "a9f6b2a91451723367210996c8bcdbb15bc542c59ae2ceeff2577e3f6b533fa8"
+      },
+      "consumer_checks": {
+        "record_sha256": "6e1cda40ab926e37b4760502b834a00063bad437d87f5343a18a543f8c17a179",
+        "stages": [
+          {
+            "name": "export-kv",
+            "exit_code": 0,
+            "log_sha256": "cae41f77a9b1f585abd53e66ac22d8c1c776550f7e0c1aa7060735f410432c5a"
+          },
+          {
+            "name": "kv-float32-native",
+            "exit_code": 0,
+            "log_sha256": "848f4ef04c6b02f7eae651d6082279d64b6e6a0d92818000a270a52ff9624d25"
+          },
+          {
+            "name": "kv-float64-native",
+            "exit_code": 0,
+            "log_sha256": "ec0897bdc6357e1bf76b3e44fffc709da45c21f1f8ac1c5dd6f20f31d7cc66b8"
+          },
+          {
+            "name": "kv-float16-native",
+            "exit_code": 0,
+            "log_sha256": "7356099a60465dbeb7e12fa536ad2be55cbe928c21689b6888d8f80f210ad7fb"
+          },
+          {
+            "name": "export-ssd",
+            "exit_code": 0,
+            "log_sha256": "c47ef3e34b6e013cfda9e9db80d0408c7ee0bcfdecada7d7ab9e6f931e795f7a"
+          },
+          {
+            "name": "ssd-float32-native",
+            "exit_code": 0,
+            "log_sha256": "1c3cc2de3a3f0acf944f6743dd38fe80c72d60d48b2850aed3ec79719190fc23"
+          },
+          {
+            "name": "ssd-float64-native",
+            "exit_code": 0,
+            "log_sha256": "b34f26f22c11fe4ae5c97fa467bb731267406b57b767a5740f9a06b0f10c1282"
+          },
+          {
+            "name": "ssd-float16-native",
+            "exit_code": 0,
+            "log_sha256": "8cd7f5a747c11329b3bbe5819159158c9859fa9f000ac047092421c541c9d987"
+          }
+        ]
+      }
+    },
+    {
+      "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "dirty": "",
+      "state": "passed",
+      "driver_sha256": "59039171eb93d62ec91bf1fe8d3ce395cfce871199d00acd561c8afa6430a123",
+      "stages": [
+        {
+          "name": "core-build",
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/build.py",
+            "--build-dir",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-sdk",
+            "--backend",
+            "npu",
+            "--npu-runtime",
+            "standalone",
+            "--jobs",
+            "half"
+          ],
+          "exit_code": 0,
+          "seconds": 1.8664059340953827,
+          "log_sha256": "9de21e524e03f926e03b88f8f13b5bf7017a56648b3cd807cefaa4e511cf4d21"
+        },
+        {
+          "name": "resident-build",
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/build_device_control.py",
+            "--core-build",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-sdk",
+            "--build-dir",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/resident-sdk-v3",
+            "--ascendc-soc",
+            "Ascend910_9392",
+            "--checks",
+            "weighted-training",
+            "--jobs",
+            "half"
+          ],
+          "exit_code": 0,
+          "seconds": 121.14182352274656,
+          "log_sha256": "1a73786f178cc0dd44587b23a9af4ee071e3dbbefef74d1c423abe88b972863d"
+        },
+        {
+          "name": "client-build",
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/build_weighted_benchmark.py",
+            "--core-build",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/core-sdk",
+            "--output-dir",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/client-sdk",
+            "--jobs",
+            "half",
+            "--resident-build",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/resident-sdk-v3"
+          ],
+          "exit_code": 0,
+          "seconds": 25.653133790940046,
+          "log_sha256": "061c8bda216e9ef15024cdbeab3596f242873e146f6d58c928106c6317507dbf"
+        },
+        {
+          "name": "client-checks",
+          "command": [
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+            "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+            "--job-id",
+            "core5-checkpoint-sdk-v3-20261029",
+            "--project",
+            "graph-execution-foundation",
+            "--priority",
+            "0",
+            "--npu-count",
+            "1",
+            "--max-wait-seconds",
+            "180",
+            "--state-file",
+            "REPOSITORY/artifacts/jobs/core5-checkpoint-sdk-v3/queue.json",
+            "--",
+            "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/scripts/check_weighted_benchmark.py",
+            "--binary",
+            "REPOSITORY/artifacts/worktrees/core5-checkpoint-qualified/build/client-sdk/client/weighted-benchmark",
+            "--output-dir",
+            "REPOSITORY/artifacts/jobs/core5-checkpoint-sdk-v3/checks",
+            "--device",
+            "npu:0",
+            "--fixture-dir",
+            "REPOSITORY/artifacts/jobs/core5-study-v2-cpu/checks"
+          ],
+          "exit_code": 0,
+          "seconds": 114.51029069721699,
+          "log_sha256": "b9cfbed0cbee51e8d03d0aa73ea597ea96080c8d21ff185a20660b830c553dab"
+        }
+      ],
+      "job": "artifacts/jobs/core5-checkpoint-sdk-v3",
+      "record_sha256": "b70bb5adeb8f51534f8c1c94d64a3763efe9c7f69427cb0d6c7d411f8e880b46",
+      "status_sha256": "3ab65fac601aeeba16e409e2a208983f16fe9d22bba60e8c0d92a089758a9786",
+      "core": {
+        "record_sha256": "fff28e8c4cc2a39bf1349f345fa683ba5f4dd5ae301460aeeede8de8e7e15d4e",
+        "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+        "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+        "binary_sha256": {
+          "libtidegraph.a": "0126f7cf3ff94cf2e6346cefdaaa62a4b34eb39d3331cb80cf6da9e9c69bcae2",
+          "libtidegraph_runtime.a": "b64bbb604ef419a8845b15be05dfa0c226aa321ab51ecadd608b6f715fef1652",
+          "tidegraph-smoke": "564138d88917fe6ac785ce13f96650236b19ed1ce1c419eabe97b26ecead2638",
+          "tidegraph-kernel-check": "27e21e75bb79a39970cb4db622d06fad4380fda949cead5ff921dd235ec9bae4",
+          "tidegraph-full-check": "16be6ce1b6eb186b66ed6a30cb308ecc02d0a0b271fd44dc7f2c3d11d7ffdae7",
+          "tidegraph-aggregate-check": "8f2e0c58ce0e9dfd766fcb53123f7c022876c9c1c50a114a876c6e9b5756e5ad",
+          "tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+          "tidegraph-checkpoint-check": "7e528b5ad90da4384111f19f72477fd066bb22ee489af3b2157bba3968f723fc",
+          "tidegraph-weighted-training-check": "25131748cedcab949922cbdcee04626e249f857ebb6e55c1ad4ebfaf34da94ea",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "58212ecaffdd108376a4a38aac4fb0dfa9b3db159da0d6d5ac5c036e4f0d5822",
+          "tidegraph-scale-bench": "a6ecfe52abd029778659811b67101ecfdea770eafbca17bf04d5b8a445157485",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "82505fc8a4b2e7e65490aebde6b98d05572797ea5d0b6b8cd619eef82472fa08",
+          "tidegraph-greedy-check": "5fb5003293cfcb58aa013a4294db2401ac4d704a665ce37498dd5c3f25cad180",
+          "tidegraph-accelerator-check": "76ba201912e3a959d14e3e26726c2446f977c1525abc7d7679da19605dd7aa6f",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "6404ed8a128270f8627b0ba0b9c4a46799de2016c189485f8553603dae47568b",
+          "tidegraph-placement-check": "f1dcd7b506d9a59b4d83059a5f01c5740ab8637dbdabeb44ecb2a934dd5a06e0",
+          "tidegraph-payload-ownership-check": "b6a959967b8d3a888556b4da07f5262179660e2e3c092cce0d57063a75023081",
+          "tidegraph-weighted-binding-module-check": "1e32d2eada1e428f15705dfd2ebb8684cbac6d8f7d885f26af8eac234623b165",
+          "libtidegraph-weighted-binding-module.so": "fca6934a4634d28fe26189045f93c2255865e08f7c7c95249e7ad297489f13f0"
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "torch": "2.10.0+cpu",
+        "python": "3.11.15",
+        "architecture": "aarch64"
+      },
+      "client": {
+        "record_sha256": "8dc01f2fec7e9bee73a22fc3a5b4beae72f2eb0382d46a8fc655922fb2006e62",
+        "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+        "binary_sha256": "93b7ea2c14841aa31e4c6795cbfd336293bc187e9157d74c4ce70f804b39e359"
+      },
+      "consumer_checks": {
+        "record_sha256": "3b823bbeb3bdbeb022ebcf7b348216d8642e8d496d0d16eefe9c1ae51ea6277a",
+        "stages": [
+          {
+            "name": "kv-float32-mixed-a",
+            "exit_code": 0,
+            "log_sha256": "e3f3bc2fbe13ed3deacacd27a78d8aaeacf71ad1d748776d0cfaf349b884d672"
+          },
+          {
+            "name": "kv-float32-mixed-b",
+            "exit_code": 0,
+            "log_sha256": "f7929fef3a1b2fcaf543e7ce48e36ea1a107396066fa5a41798423ba05acede9"
+          },
+          {
+            "name": "kv-float32-mixed-c",
+            "exit_code": 0,
+            "log_sha256": "a1058102c0cb471a00198321f6078ecda02183533e5b9df4ef5c770c39e870d4"
+          },
+          {
+            "name": "kv-float32-resident",
+            "exit_code": 0,
+            "log_sha256": "7d5da09561536422214acbb178dfb7d680f12c427c872dabc8220bf4fddbc20f"
+          },
+          {
+            "name": "kv-float16-mixed-c",
+            "exit_code": 0,
+            "log_sha256": "13ef1f463fb1655afd31a34566ce1fd69ac4e8d3a772f2ae00fa08ab4d2e7ecf"
+          },
+          {
+            "name": "kv-float16-resident",
+            "exit_code": 0,
+            "log_sha256": "64ee2ead3166db06fbef66aa11ee203f6bbe3ba30e77d9fd64ecd988166f00d3"
+          },
+          {
+            "name": "ssd-float32-mixed-c",
+            "exit_code": 0,
+            "log_sha256": "beedec53b4cc2b26fc9eb73c4a48a78752b73ee88e5d77d812726ce410804b3f"
+          },
+          {
+            "name": "ssd-float32-resident",
+            "exit_code": 0,
+            "log_sha256": "6165f98987468beb46b2a7a00b7811673d2b63e041b08db331492dd4d2a769d5"
+          }
+        ]
+      }
+    }
+  ],
+  "models": {
+    "fc-1b-kv": {
+      "model_id": "fb418d23bdf8fbe482e9ee9690b374944cb97b185aad573d65b7d4db3ca281a1",
+      "workload_id": "e6e17939096782599610fc67298ea30894bc04214a4deb36c455c6d6e2f1daea",
+      "parameters": {
+        "trainable": 969962344,
+        "frozen": 912,
+        "role_elements": 1116776664,
+        "unique": 969963256
+      },
+      "width": 1024,
+      "nodes": 64,
+      "regions": 8,
+      "counts": {
+        "body_edges": 448,
+        "body_nodes": 64,
+        "encoded_edges": 464,
+        "encoded_nodes": 66,
+        "longest_body_delay": 7,
+        "output_reachable_nodes": 64,
+        "reachable_nodes": 64
+      },
+      "samples": 1,
+      "positions": 1,
+      "span": 10,
+      "recipe": {
+        "schema": "tide-core5-recipe-v1",
+        "requested": {
+          "topology": "fc",
+          "region_width": 8,
+          "sparse_denominator": 8,
+          "family": "kv"
+        },
+        "scale": {
+          "target_parameters": 1000000000,
+          "actual_parameters": 969962344,
+          "difference": -30037656,
+          "relative_difference": -0.030037656,
+          "method": "nearest_natural_width_multiple_128",
+          "width": 1024,
+          "ffn_ratio": 4,
+          "task_head_parameters": 0
+        },
+        "sparse_budget": {
+          "requested_fraction": 0.125,
+          "effective_k": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution"
+        }
+      },
+      "memory": {
+        "adapter_rank": 32,
+        "alpha_att": 1.0,
+        "alpha_ff": 1.0,
+        "beta_short": 0.06931471805599453,
+        "distance_slopes": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "epsilon": 1e-05,
+        "ffn_width": 4096,
+        "full_frequencies": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "heads": 16,
+        "memory_read": "sum",
+        "position_origin": 1,
+        "position_scale": 10,
+        "read_frequencies": [],
+        "summary_width": 32,
+        "width": 1024,
+        "window": 5120
+      },
+      "regional": {
+        "allocation_base": null,
+        "allocation_temperature": 1.0,
+        "alpha_loc": null,
+        "alpha_match": null,
+        "alpha_res": null,
+        "alpha_sel": null,
+        "ent_alpha": null,
+        "eta": null,
+        "fixed_gain": null,
+        "gain_logit": null,
+        "gamma_max": 2.0,
+        "hidden_width": 32,
+        "k": 1,
+        "local_score": "cat",
+        "query_weight": null,
+        "read_mode": "+",
+        "region_control_mode": "context",
+        "region_control_width": 32,
+        "region_evidence": "cat",
+        "region_key": null,
+        "region_score": "ind",
+        "regularizer": "quad",
+        "selection_mode": "regional_total",
+        "selection_width": null,
+        "send_gain": null,
+        "total_fraction": null
+      },
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "source_hidden_width": 32,
+      "alpha_agg": 1.0,
+      "native_fixture_sha256": "28c1fe3fa6b92c177b19d5d88fa0645b144243a6e6c79c0f18cf0a578d5fc9e9"
+    }
+  },
+  "runs": [
+    {
+      "run": "artifacts/jobs/core5-checkpoint-large/fc-1b-kv--cpp-npu-mixed-c/run.json",
+      "state": "failed",
+      "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "case": "fc-1b-kv",
+      "execution_name": "cpp-npu-mixed-c",
+      "model_id": "fb418d23bdf8fbe482e9ee9690b374944cb97b185aad573d65b7d4db3ca281a1",
+      "workload_id": "e6e17939096782599610fc67298ea30894bc04214a4deb36c455c6d6e2f1daea",
+      "execution_id": "00410489c6bb20dae3a35c9f6fefc87d7985b5e8d50ad2a521f5e84bf800ab98",
+      "measurement_id": "b50bfbd1b09523b744f96affd581d9808512000afcbcb1e1735af34afb78a0da",
+      "requested": {
+        "client": "libtorch",
+        "device": "npu:0",
+        "placement": "mixed-c",
+        "dtype": "float32",
+        "scoring_dtype": "float32",
+        "schedule": "prefill",
+        "operator": "aten",
+        "packing": "auto",
+        "workers": 1,
+        "intraop_threads": 8,
+        "interop_threads": 1,
+        "peer_devices": []
+      },
+      "mode": "training",
+      "phase": "validation-preparation",
+      "error": "nonfinite benchmark gradient",
+      "independent_complete": false,
+      "exact_resume": null,
+      "metrics": [
+        {
+          "actual_stats": {
+            "aggregate_calls": 8,
+            "aggregate_computed_events": 8,
+            "aggregate_reused_events": 56,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 64,
+            "batched_full_events": 9,
+            "batched_read_events": 64,
+            "batched_region_frames": 8,
+            "batched_state_events": 64,
+            "body_candidate_events": 64,
+            "body_selected_events": 9,
+            "candidate_events": 64,
+            "full_blocks": 9,
+            "full_calls": 9,
+            "greedy_relaxed_edges": 28,
+            "greedy_stages": 8,
+            "max_full_batch": 1,
+            "max_greedy_frames": 1,
+            "max_live_fibers": 8,
+            "max_region_batch": 1,
+            "max_state_batch": 1,
+            "max_state_private_projection_batch": 8,
+            "max_state_sequence": 1,
+            "next_steps": 64,
+            "read_calls": 64,
+            "region_batch_calls": 8,
+            "region_blocks": 8,
+            "region_steps": 8,
+            "selected_events": 9,
+            "source_rows": 72,
+            "state_blocks": 64,
+            "state_preparation_calls": 8,
+            "state_preparation_events": 64,
+            "state_preparation_reused_events": 56,
+            "state_private_projection_calls": 24,
+            "state_private_projection_rows": 192,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 64,
+            "visited_edges": 64
+          },
+          "candidate_updates": 64,
+          "full_calls": 9,
+          "loss": 703277184.0,
+          "messages": 64,
+          "outputs": 1,
+          "pending": 0,
+          "seconds": 1.2582031,
+          "step": 1
+        },
+        {
+          "actual_stats": {
+            "aggregate_calls": 8,
+            "aggregate_computed_events": 8,
+            "aggregate_reused_events": 56,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 64,
+            "batched_full_events": 9,
+            "batched_read_events": 64,
+            "batched_region_frames": 8,
+            "batched_state_events": 64,
+            "body_candidate_events": 64,
+            "body_selected_events": 9,
+            "candidate_events": 64,
+            "full_blocks": 9,
+            "full_calls": 9,
+            "greedy_relaxed_edges": 28,
+            "greedy_stages": 8,
+            "max_full_batch": 1,
+            "max_greedy_frames": 1,
+            "max_live_fibers": 8,
+            "max_region_batch": 1,
+            "max_state_batch": 1,
+            "max_state_private_projection_batch": 8,
+            "max_state_sequence": 1,
+            "next_steps": 64,
+            "read_calls": 64,
+            "region_batch_calls": 8,
+            "region_blocks": 8,
+            "region_steps": 8,
+            "selected_events": 9,
+            "source_rows": 72,
+            "state_blocks": 64,
+            "state_preparation_calls": 8,
+            "state_preparation_events": 64,
+            "state_preparation_reused_events": 56,
+            "state_private_projection_calls": 24,
+            "state_private_projection_rows": 192,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 64,
+            "visited_edges": 64
+          },
+          "candidate_updates": 64,
+          "full_calls": 9,
+          "loss": 3.680340208112286e+20,
+          "messages": 64,
+          "outputs": 1,
+          "pending": 0,
+          "seconds": 1.193136391,
+          "step": 2
+        }
+      ],
+      "measured_seconds": 2.4513394909999997,
+      "throughput_qualified": false,
+      "work": {
+        "candidate_updates": 128,
+        "full_calls": 18,
+        "messages": 128,
+        "outputs": 2
+      },
+      "memory": {
+        "phases": [
+          {
+            "allocated_bytes": 0,
+            "device": "npu:0",
+            "peak_allocated_bytes": 1024,
+            "peak_reserved_bytes": 2097152,
+            "phase": "runtime_ready",
+            "process_lifetime_peak_rss_bytes": 1988149248,
+            "reserved_bytes": 2097152
+          },
+          {
+            "allocated_bytes": 4150624768,
+            "device": "npu:0",
+            "peak_allocated_bytes": 4188375040,
+            "peak_reserved_bytes": 4842323968,
+            "phase": "construction",
+            "process_lifetime_peak_rss_bytes": 6728523776,
+            "reserved_bytes": 4842323968
+          },
+          {
+            "allocated_bytes": 5290979840,
+            "device": "npu:0",
+            "peak_allocated_bytes": 5303990272,
+            "peak_reserved_bytes": 6102712320,
+            "phase": "warmup",
+            "process_lifetime_peak_rss_bytes": 6875623424,
+            "reserved_bytes": 6102712320
+          },
+          {
+            "allocated_bytes": 5883202560,
+            "device": "npu:0",
+            "peak_allocated_bytes": 5901739520,
+            "peak_reserved_bytes": 6784286720,
+            "phase": "measurement",
+            "process_lifetime_peak_rss_bytes": 6875623424,
+            "reserved_bytes": 6784286720
+          }
+        ],
+        "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup",
+        "schema": "tide-weighted-memory-v1",
+        "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"
+      },
+      "construction_seconds": 8.061856267,
+      "warmup_seconds": 1.50888131,
+      "fixture_sha256": "28c1fe3fa6b92c177b19d5d88fa0645b144243a6e6c79c0f18cf0a578d5fc9e9",
+      "record_sha256": "6dd5d94382b8ce4460ac98e5c98cb58bdc822e96f60f97f047da8cb7d8275f8d",
+      "result_sha256": "5ef3790d39add1b8bd1cb8c2cddbcae6b3ff48475598dd8b338ebae07891e560",
+      "checks": {
+        "post_measurement_complete_records": false,
+        "parameter_values_checked": false,
+        "final_parameter_gradients_checked": false,
+        "optimizer_values_checked": false
+      },
+      "checkpoint_max_bytes": 17179869184
+    }
+  ],
+  "large_checkpoint": {
+    "bytes": 5253356896,
+    "sha256": "6ad4705db5a22140a8d797c5e47e7874d1ff26aa8aec305ba7e3057db70c6163",
+    "file_budget_bytes": 17179869184,
+    "save_and_load_returned": true,
+    "exact_next_window": false,
+    "boundary": "original owner first next-window gradient is nonfinite after save/load returned; restored next-window comparison and independent CPU check not reached"
+  },
+  "large_job": {
+    "path": "artifacts/jobs/core5-checkpoint-large",
+    "state": "completed_with_failure",
+    "exit_code": 1,
+    "seconds": 88.52066449820995,
+    "study_sha256": "e4324d7ae13960c2c0beb37f3c6d28b94cf86d4bafb45d8fb70fbaf484a18a7d",
+    "driver_sha256": "d331b9f1c1acb62000128ded62225d3aa95a9754186bd082b6ef3d69b5eb469b",
+    "load_average_before": [
+      36.95,
+      43.79,
+      44.77
+    ],
+    "load_average_after": [
+      40.18,
+      42.88,
+      44.34
+    ]
+  },
+  "retained_launcher_failures": [
+    {
+      "job": "core5-checkpoint-sdk",
+      "state": "cancelled",
+      "reason": "driver used wrong SoC 9391; interrupted incomplete resident compilation, no device acceptance"
+    },
+    {
+      "job": "core5-checkpoint-sdk-v2",
+      "state": "failed",
+      "reason": "new directory guard rejected the old incomplete resident build directory; v3 used a distinct directory and audited 9392 target"
+    }
+  ]
+}

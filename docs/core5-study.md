@@ -3,6 +3,14 @@
 从本页可以独立找到模型配置、公共实现、运行入口、检查和证据。数学固定
 [0770593](upstream.json)；[当前进度](STATUS.md)和[待办](ROADMAP.md)分别维护。
 
+| 要找的内容 | 直接入口 |
+| --- | --- |
+| 选模型/执行组合 | [有限目录](../benchmarks/core5-study-v1.json)、下方测试表；公共`resolve_model`可配置目录外合法组合 |
+| 当前实测设置与结果 | [自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
+| 已通过的功能门禁 | [三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |
+| 在新clone中筛选结果 | `python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --state passed --format tsv` |
+| 修改时同步维护什么 | 本页维护表；[实现分层](architecture.md)、[开发/资格](verification.md)、[历史与新经验](performance-lessons.md) |
+
 ## 配置与测量身份
 
 | 对象 | 公共入口 | 身份包含什么 |

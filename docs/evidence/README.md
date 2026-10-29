@@ -1,5 +1,13 @@
 # 历史验证与测量证据
 
+[core-5自然规模与三客户端有限性能](core5-natural-study-20261029.md)：e50b6d8，25配置中7项完整通过；中型FC三客户端CPU FP64及LH1.051B完整训练/精确恢复。真实区域批与独立NPU profile、FP32/FP64严格失败、resident在途任务/预算拒绝分列；8B/16B仅静态计划。
+
+[core-5目录与消费者资格](core5-study-clients-20261029.md)：372 CPU365；e50相关CPU43、standalone CPU6/NPU8、Python NPU单卡/half/双卡3项。独立存储精度参考和实际梯度/optimizer/磁盘恢复；计数有重叠，不能相加为一次全矩阵。
+
+[native显式文件预算与原1B复验](core5-checkpoint-budget-20261029.md)：b255，CPU32+6消费者/SDK8消费者；默认4GiB保护与原格式不变。5.25GB文件保存/加载成功，原owner下一窗非有限梯度导致严格失败，不宣称完整恢复通过。
+
+自然规模和checkpoint两份JSON可用`python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json docs/evidence/core5-checkpoint-budget-20261029.json --format tsv`直接查询，无需旧运行目录。
+
 [常驻局部纤维压缩资格与有限性能](core5-compact-fibers-20261029.md)：04b5215；CPU两环境各10、公共NPU56、SDK7组件/dtype通过。medium完整核对/恢复通过，单次2.794→2.470s、peak allocated约−26.9%；原D64新的首个构造拒绝为CANN流资源207005/EE1023，保留终态与重启条件。
 
 [单行VJP/字段packing与常驻因子KV有限性能](core5-boundary-performance-20261029.md)：15c3e65对照f03e9be；五项完整训练通过，CPU未见收益，mixed有单次下降；D64单/双NPU自身恢复精确但独立CPU核对失败，resident构造容量拒绝。独立profile、实际工作、分区与停止条件分别记录。
