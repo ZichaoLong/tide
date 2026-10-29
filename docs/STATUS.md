@@ -1,51 +1,60 @@
 # 当前交接 — 2026-10-29
 
-授权分支`graph-execution-foundation`；上游固定`0770593838a37c790a568226930567ed60f99b83`。
-逐项推进非GPU限制，GPU延后，无子代理；已授权修改、有限实验、提交与普通推送。
-参考仓库、公共工具链只读；原输入/容差/optimizer和严格失败保持。
+授权分支`graph-execution-foundation`，上游固定`0770593838a37c790a568226930567ed60f99b83`。
+用户授权逐项推进非GPU边界、有限实验、提交与普通推送；GPU延后，不用子代理。
+参考仓库与公共工具链只读。原材料、容差、optimizer、默认dtype和严格失败保持。
 
-## 已固定与终态
+## 当前完成范围
 
-实现15c3e65、固定资格证据46ecd5a已推送，见[资格](evidence/core5-resident-boundary-20261029.md)。
-CPU facility10、公共NPU14、两套eager各6组、SDK组件9项通过；生产eager继承e0d6e27的CPU517 passed/2原strict xfail。
-CPU study `core5-boundary-study-cpu-20261029.service` passed/0，
-NPU study `core5-boundary-study-npu-20261029.service` failed/1，均已终态，无旧活跃任务。
-原始记录`artifacts/jobs/core5-boundary-study-{cpu,npu}/{status,study}.json`及各result.json。
-CPU四项、NPU四项mixed对照及resident中型完整通过，新版各自磁盘换owner恢复精确。
-D64 native单/双NPU显式blocking自身恢复精确，CPU独立核对均在node89 keys一坐标严格失败。
-resident D64在构造时报Aggregate scratch budget exceeded，尚无训练计时/恢复结果。
-独立profile已终态；单次测量不宣称稳定收益，最终证据尚待整理。
+当前生产实现`04b52153f9785e1489e31c7dd09a16849791d331`（含8c48f49），已提交推送。
+resident按物理入边+输入端口界定每节点纤维，消除全局queue的逐节点填充；
+全局indices/sentinel、SrcClass多重原子、SourceDomain、int64时间、前向/窗口VJP/peer布局与精确恢复保持。
+非法counts和槽越界在写入前拒绝，已有sticky error不覆盖。
 
-## 当前推进
+[紧凑纤维固定资格/性能](evidence/core5-compact-fibers-20261029.md)：
+- CPU元数据两环境各10 passed；公共Python/NPU 56 passed/0 skipped；SDK7个组件/dtype检查全部通过。
+- SDK含24组合独立根、两dtype各21完整图、单/双卡两dtype各5组合/20更新/3窗，SGD/AdamW与迁移恢复。
+- 新resident均为干净04b5215完整构建；未改core按完整源码/binary/dependency hash复用，保留旧dirty-origin。
+- medium同输入/容量/工作量完整核对和磁盘换owner恢复通过；完整窗2.793867→2.469730s，
+  peak allocated514803200→376404992 bytes。一次观察、外部争用未隔离，不宣称普遍加速。
+- 原D64同参数量匹配/材料/容量在构造时拒绝CANN207005；实际厂商日志为Too many streams/EE1023，
+  SQ/CQ观测1984。未进入warmup，无完整训练/恢复/吞吐结果；不把该数值当通用流上限。
 
-已定位resident按全局queue为每节点分配纤维，进而重复展开来源矩阵。
-新候选按物理入边+端口的静态上界压缩局部槽；全局indices/sentinel、SourceDomain和SrcClass分开，
-前向、VJP重放和peer请求一致，超界拒绝。CPU元数据9项通过；设备编译/资格待执行。
-实现已固定为8c48f49；不复跑未变化的CPU/mixed数值失败或历史全矩阵。
+前序[15c3e65资格](evidence/core5-resident-boundary-20261029.md)、
+[CPU/NPU对照及profile](evidence/core5-boundary-performance-20261029.md)已作为46ecd5a/57250fe推送。
+单行VJP、异形字段packing、因子KV、实际分配错误/梯度/SGD槽与磁盘恢复设施已交付。
+CPU eager继承e0d6e27的517 passed/2原FP16 strict xfail，本次没有重复该全量。
+前序CPU两项完整对照未见收益；NPU mixed-a/c有单次下降但allocator峰值不变，原失败仍保留。
 
-## 接续命令与有限计划
+## 活跃任务：无
 
-先`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-固定紧凑纤维实现后新建`artifacts/worktrees/core5-compact-fiber-qualified`；
-单独background.slice构建新resident目录，不复用CANN合并对象；core仅以完整源码/二进制hash核验复用。
-先CPU元数据和公共NPU完整记录/训练/跨卡及SDK相关门禁；通过后串行一次中型和一次原D64 resident，
-同plan/输入/容差/容量，无真实轨迹预跑。容量/数值/运行时失败即停止该候选，记录精确边界。
-新unit、driver和输出在提交后、启动前补入本页；运行中不称通过。
+全部任务已终态，服务/cgroup和持久记录已核对；无自动恢复或等待队列。
+- `core5-compact-fiber-v2-python-20261029.service` passed/0；
+  `artifacts/jobs/core5-compact-fiber-v2-python/{status,qualification}.json`、metadata.xml/device.xml、build.log/device.log。
+- `core5-compact-fiber-v2-sdk-20261029.service` passed/0；
+  `artifacts/jobs/core5-compact-fiber-v2-sdk/{status,qualification}.json`与`device/result.json`、逐组件log。
+- `core5-compact-fiber-study-20261029.service` failed/1；prepare/medium passed，D64 failed/1，进程97.5秒。
+  `artifacts/jobs/core5-compact-fiber-study/{status,study}.json`、medium/ranked64的result.json和独立log。
+- 旧8c48f49的`core5-compact-fiber-{python,sdk}-20261029.service`主动取消，status为cancelled/143；
+  其内层构建记录未完成，没有设备资格。原记录保留，不改为通过。
 
-旧构建只读：`artifacts/worktrees/core5-independent-qualified/build/{npu-python,npu-core-v2}`；
-上轮resident对照`npu-python-resident-boundary`，其dirty-origin和hash不改写。
-当前环境由`docs/development.md`定位/opt/software现行规范，旧home指南失效；不修改共享环境。
-新结果进入性能证据、ROADMAP逐项表、相关契约和performance-lessons，证据独立提交推送。
-停止/重启条件按ROADMAP保持：D64/D2048/反馈FP32、FP16 GDN、默认异步双NPU、晚注册NPU限制未解除。
+固定树`artifacts/worktrees/core5-compact-fiber-qualified-v2`只读；新build/{python,sdk}分别属于Torch2.12/CANN9.1和SDK2.10/CANN9.0。
+启动器/driver为`.local/core5-compact-fiber-v2-{python,sdk}.sh`、`.local/core5-compact-fiber-v2-qualify.py`及
+`.local/core5-compact-fiber-study.{sh,py}`。它们与旧运行目录是保留证据；仓库报告给出可从干净源码复现的入口。
+资格两build线程、设备单线程；performance在全部构建/资格结束后串行。资源/时长和原始hash见报告。
+CUDA新构建/真机及x86未验；旧报告不替代本源码资格。
 
-新资格已准备：`core5-compact-fiber-{python,sdk}-20261029.service`，
-工作树`artifacts/worktrees/core5-compact-fiber-qualified`固定8c48f49、tracked文件只读；
-启动器`.local/core5-compact-fiber-{python,sdk}.sh`与driver`.local/core5-compact-fiber-qualify.py`。
-输出`artifacts/jobs/core5-compact-fiber-{python,sdk}/{status,qualification}.json`及metadata/build/device.log；
-新构建在固定树`build/{python,sdk}`。每任务两个构建线程、单ATen线程、MemoryMax32G、RuntimeMaxSec4000，
-元数据90秒、构建1800秒、设备排队180秒+执行1800秒。启动后核对unit/state；尚无设备资格结果。
-先两套资格终态，再独立串行测量，不能与构建/资格重叠。
+## 停止与重启条件
 
-审查新增的非法counts检查时发现它可覆盖已有sticky error；已加守卫和独立反例，CPU元数据10项通过。
-8c48f49两套构建主动终止，原status均保留cancelled；未有设备通过结论。
-修正版随后固定新提交，在新qualified-v2树和新build目录重新资格，旧输入不改写。
+逐项终态与下一条件统一在[ROADMAP](ROADMAP.md)；实现和测试经验统一在[performance-lessons](performance-lessons.md)。
+D64/D2048/反馈FP32、FP16 GDN/default AdamW、默认异步双NPU、晚注册NPU均未解除；
+正支持不可表示与真实有限容量继续显式拒绝。自身精确恢复不能替代独立正确性。
+
+新的有依据方向是有界常驻服务分派/复用及显式反向模板重绑；当前没有此候选实现。
+先建立嵌套调用/请求完成停止、共享workspace、独立根和跨卡恢复反例，再设计新实现与静态资源准入。
+仅增加HBM预算、重跑旧D64或按shape缓存旧adjoint都不能解除当前流资源边界。
+保持所有原数值失败的独立重启条件，不重新开启旧队列或9B全图实验。
+
+接续先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`，
+再读ROADMAP及上述两份新证据。本轮有限推进已经终态，不代表所有实现/数值/平台限制解除。
+当前提交仅收录审核后的证据/契约/交接，无未提交生产代码。

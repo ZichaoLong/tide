@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[常驻局部纤维压缩资格与有限性能](core5-compact-fibers-20261029.md)：04b5215；CPU两环境各10、公共NPU56、SDK7组件/dtype通过。medium完整核对/恢复通过，单次2.794→2.470s、peak allocated约−26.9%；原D64新的首个构造拒绝为CANN流资源207005/EE1023，保留终态与重启条件。
+
 [单行VJP/字段packing与常驻因子KV有限性能](core5-boundary-performance-20261029.md)：15c3e65对照f03e9be；五项完整训练通过，CPU未见收益，mixed有单次下降；D64单/双NPU自身恢复精确但独立CPU核对失败，resident构造容量拒绝。独立profile、实际工作、分区与停止条件分别记录。
 
 [常驻因子KV/实际训练观测/拒绝快照资格](core5-resident-boundary-20261029.md)：15c3e65；CPU设施10项、公共NPU14项、SDK组件9项及两套eager各6组通过。实际梯度/SGD物理owner/磁盘精确恢复独立核对；CPU反向后晚注册NPU的原失败及early规避探针分列。性能另验，原数值/异步和GPU边界保留。

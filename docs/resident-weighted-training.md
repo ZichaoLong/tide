@@ -204,3 +204,7 @@ window_bridge_us/parameter_reduce_us`：当前调用的主机steady-clock微秒�
 
 [15c3e65有限成本证据](evidence/core5-boundary-performance-20261029.md)已取得实际构造/执行/归约分段；
 它不授权跨窗口复用绑定旧地址的adjoint。优化器canonical布局的1/16子分区和总预算须分别准入。
+
+[紧凑纤维资格/成本](evidence/core5-compact-fibers-20261029.md)覆盖相同布局的窗口VJP与单/双卡恢复。
+medium实测反向构造仍约1.057秒，执行/等待约0.700秒；未缓存旧adjoint。
+较大D64在前向owner构造的CANN流资源边界失败，不能继承小图的完整训练/恢复资格。
