@@ -7,10 +7,12 @@ namespace tide {
 class GraphCheckpoint {
  public:
   static void save(const std::filesystem::path&,const Graph&,const Model&,
-                   const Continuation&,const NamedOptimizer* optimizer=nullptr);
+                   const Continuation&,const NamedOptimizer* optimizer=nullptr,
+                   int64_t max_file_bytes=kDefaultCheckpointMaxBytes);
   // Validate the whole record and allocate owner transfers before mutation.
   // Destinations retain parameter identity; returned state is detached.
   static Continuation load(const std::filesystem::path&,const Graph&,Model&,
-                           NamedOptimizer* optimizer=nullptr);
+                           NamedOptimizer* optimizer=nullptr,
+                           int64_t max_file_bytes=kDefaultCheckpointMaxBytes);
 };
 }

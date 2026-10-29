@@ -31,7 +31,7 @@ OptimizerGroup group(const Json& j){
   return g;
 }
 }
-void save_resident(const std::filesystem::path& path,Fixture data,const ResidentTrainingCheckpoint& c){
+void save_resident(const std::filesystem::path& path,Fixture data,const ResidentTrainingCheckpoint& c,int64_t limit){
   at::NoGradGuard guard;
   if(std::filesystem::exists(path))throw std::invalid_argument("resident checkpoint destination exists");
   const auto staging=path.string()+".partial";
@@ -40,7 +40,7 @@ void save_resident(const std::filesystem::path& path,Fixture data,const Resident
   const auto registry=data.model.parameters(false);
   if(registry.alias_partitions()!=c.aliases)throw std::invalid_argument("checkpoint aliases differ");
   for(const auto& [name,tensor]:c.parameters)registry.value(name).copy_(tensor);
-  GraphCheckpoint::save(std::filesystem::path(staging)/"graph.pt",data.graph,data.model,c.continuation);
+  GraphCheckpoint::save(std::filesystem::path(staging)/"graph.pt",data.graph,data.model,c.continuation,nullptr,limit);
   torch::serialize::OutputArchive archive;
 #define FIELD(name) archive.write(#name,c.state.name,false)
   FIELD(values);FIELD(first);FIELD(second);FIELD(maximum);FIELD(steps);FIELD(corrections);
@@ -53,7 +53,7 @@ void save_resident(const std::filesystem::path& path,Fixture data,const Resident
     {"optimizer",c.optimizer==ResidentOptimizerKind::sgd?"sgd":"adamw"},{"groups",groups},{"offsets",c.offsets}});
   sync_path(staging,true);std::filesystem::rename(staging,path);sync_path(path.parent_path(),true);
 }
-ResidentTrainingCheckpoint load_resident(const std::filesystem::path& path,Fixture& data){
+ResidentTrainingCheckpoint load_resident(const std::filesystem::path& path,Fixture& data,int64_t limit){
   at::NoGradGuard guard;std::ifstream stream(path/"metadata.json");if(!stream)throw std::invalid_argument("missing resident checkpoint metadata");
   auto j=Json::parse(stream);if(j.at("codec")!="tide-weighted-benchmark-resume-v1"||j.at("identity")!=data.graph.identity)
     throw std::invalid_argument("resident checkpoint codec/identity differs");
@@ -68,7 +68,7 @@ ResidentTrainingCheckpoint load_resident(const std::filesystem::path& path,Fixtu
 #define FIELD(name) archive.read(#name,c.state.name,false)
   FIELD(values);FIELD(first);FIELD(second);FIELD(maximum);FIELD(steps);FIELD(corrections);
 #undef FIELD
-  c.continuation=GraphCheckpoint::load(path/"graph.pt",data.graph,data.model);
+  c.continuation=GraphCheckpoint::load(path/"graph.pt",data.graph,data.model,nullptr,limit);
   for(const auto& p:data.model.parameters(false).owners())c.parameters[p.canonical]=p.value.detach().clone();
   if(data.model.parameters(false).alias_partitions()!=c.aliases)throw std::invalid_argument("restored aliases differ");
   return c;

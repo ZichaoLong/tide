@@ -9,9 +9,13 @@ bool little_endian();
 uint64_t checksum(const uint8_t*, size_t);
 struct Writer {
   std::vector<uint8_t> bytes;
+  uint64_t max_bytes;
+
+  explicit Writer(int64_t limit=kDefaultCheckpointMaxBytes) : max_bytes(file_limit(limit)) {}
 
   void room(uint64_t size) const {
-    if (size > kMaxFileBytes - bytes.size()) fail("checkpoint is too large");
+    if (bytes.size() > max_bytes || size > max_bytes - bytes.size())
+      fail("checkpoint is too large for max_file_bytes=" + std::to_string(max_bytes));
   }
   void raw(const uint8_t* data, size_t size) {
     room(size);

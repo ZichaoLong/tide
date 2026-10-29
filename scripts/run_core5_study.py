@@ -32,6 +32,7 @@ def main():
     p.add_argument("--standalone-binary", type=Path)
     p.add_argument("--fixture", type=Path, help="already exported exact matching workload; otherwise export it")
     p.add_argument("--resident-limits", type=Path)
+    p.add_argument("--checkpoint-max-bytes", type=int, help="explicit native graph file budget; LibTorch checkpoint check only")
     p.add_argument("--max-materialize-bytes", type=int, default=2*1024**3)
     a = p.parse_args()
     study = json.loads(a.study.read_text())
@@ -60,7 +61,8 @@ def main():
     argv = command(r, python=sys.executable, root=root, output=out/"measurement", workload=out/"workload.json",
                    native_library=a.native_library, resident_library=a.resident_library,
                    standalone_binary=a.standalone_binary, fixture=fixture,
-                   max_materialize_bytes=a.max_materialize_bytes, resident_limits=a.resident_limits)
+                   max_materialize_bytes=a.max_materialize_bytes, resident_limits=a.resident_limits,
+                   checkpoint_max_bytes=a.checkpoint_max_bytes)
     out.mkdir(parents=True, exist_ok=False)
     now = lambda: datetime.now(timezone.utc).isoformat()
     record = {k: v for k, v in r.items() if k not in {"plan", "inventory"}}
@@ -71,6 +73,7 @@ def main():
         standalone_build=binary, study_sha256=digest(a.study),
         resident_limits_sha256=digest(a.resident_limits) if a.resident_limits else None,
         materialization_ceiling_bytes=a.max_materialize_bytes,
+        checkpoint_max_bytes=a.checkpoint_max_bytes if a.checkpoint_max_bytes is not None else (2**32 if standalone else None),
         tracking="project JSON; execution-flows §1", load_average_before=list(os.getloadavg()))
     write_json(out/"workload.json", r["plan"]); write_json(out/"inventory.json", r["inventory"])
     write_json(out/"run.json", record)

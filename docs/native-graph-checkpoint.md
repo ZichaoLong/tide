@@ -24,6 +24,15 @@ KV 包括尚未清理的过期条目；卷积包括原始时间槽，不用有�
 域/格式/配置拒绝发生在参数变更之前；不承诺硬件故障中途 copy 的回滚。
 长度、集合数和 tensor 元素数有显式上限；损坏、重复字段、无效 pending、截断和尾随字节拒绝。
 
+`Checkpoint::save/load`、`GraphCheckpoint::save/load`的末尾参数`max_file_bytes`是调用者
+声明的正int64文件预算，默认4GiB；Python native参数/优化器适配器使用同名关键字。
+它同时约束保存的内外层记录和加载前的文件尺寸；改变预算不改变schema或任何数值。
+低于实际文件长度的保存不发布目标，加载在分配文件buffer和修改owner前拒绝。
+每张量最多2^28元素、维度/集合限制保持。codec仍整体驻留CPU，嵌套记录和目标暂存会增加
+峰值，文件预算不是内存峰值保证；调用者须另行保证内存与磁盘容量。尚未实现分片/流式codec。
+standalone benchmark用`--checkpoint-max-bytes`传入并记录预算；resident时只约束`graph.pt`，
+优化器的LibTorch archive是另一文件/格式。纯Python checkpoint不接收该native格式选项。
+
 保存不修改正在运行的状态；持久化/加载是显式 autograd 边界，恢复的状态 detached。
 模型参数保留目标对象及其 trainable 标志；已有参数 grad buffer 不属于 checkpoint。
 它不恢复 retained tape、数据游标、框架 RNG、下游 head/loss 或训练控制器。
@@ -36,6 +45,7 @@ KV 包括尚未清理的过期条目；卷积包括原始时间槽，不用有�
 | 全图训练/续接 | [独立 C++ 可执行文件](../cpp/test/weighted_graph_training.cpp)与[固定参数/拓扑](../cpp/test/weighted_graph_fixture.cpp)：FC、HB depth=1、非对齐 DAG、PDG 反馈/重复边；五种记忆及异构，三步 AdamW、保留图切点、含 pending 恢复后的下一更新 |
 | 独立数学与完整比较 | 各 weighted 公式 standalone 检查锚定函数；全图 Streaming 与 Greedy 独立调度，比较完整 Read fields、状态、控制、逐边/端口记录和全部具名梯度/优化器槽；整数 Tensor 严格相等 |
 | 原参数格式兼容 | [原生参数/optimizer 测试](../tests/test_cpp_checkpoint.py)，v1读取兼容、v2 typed值/master和排他发布 |
+| 显式文件预算与拒绝原子性 | 同一测试的精确边界/原字节/原状态检查与>4GiB稀疏文件默认拒绝；[完整图检查](../cpp/test/native_graph_records.cpp)独立覆盖外层大小 |
 
 复现入口为 `tidegraph-weighted-training-check --device=cpu --dtype=float64 --output-dir NEW`，
 FP32 另运行独立流程。Python 的 [启动测试](../tests/test_cpp_weighted_training.py)只检查进程/结果；

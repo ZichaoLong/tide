@@ -16,7 +16,7 @@ class Eager {
   Step step(Index);
   std::map<std::string,Tensor> parameters()const;
   TrainingState training_state()const;
-  void save(const std::filesystem::path&)const;
-  void restore(const std::filesystem::path&);
+  void save(const std::filesystem::path&,int64_t max_file_bytes)const;
+  void restore(const std::filesystem::path&,int64_t max_file_bytes);
 };
 }

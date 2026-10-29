@@ -28,8 +28,8 @@ class Resident {
   virtual Step step(Index)=0;
   virtual std::map<std::string,Tensor> parameters()const=0;
   virtual TrainingState training_state()const=0;
-  virtual void save(const std::filesystem::path&)const=0;
-  virtual void restore(const std::filesystem::path&)=0;
+  virtual void save(const std::filesystem::path&,int64_t max_file_bytes)const=0;
+  virtual void restore(const std::filesystem::path&,int64_t max_file_bytes)=0;
   virtual void close()=0;
 };
 #ifdef TIDE_WEIGHTED_RESIDENT

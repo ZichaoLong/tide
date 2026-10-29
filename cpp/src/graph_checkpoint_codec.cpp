@@ -55,10 +55,10 @@ Continuation continuation(Reader& r){
   return q;
 }
 }
-std::vector<uint8_t> encode_graph(const GraphRecord& record){
+std::vector<uint8_t> encode_graph(const GraphRecord& record,int64_t max_file_bytes){
   if(!little_endian())fail("big-endian graph checkpoints are unsupported");
-  Writer w;w.raw(reinterpret_cast<const uint8_t*>(magic.data()),magic.size());w.u32(2);w.u8(1);
-  auto parameters=encode(record.parameters);w.u64(parameters.size());w.raw(parameters.data(),parameters.size());
+  Writer w(max_file_bytes);w.raw(reinterpret_cast<const uint8_t*>(magic.data()),magic.size());w.u32(2);w.u8(1);
+  auto parameters=encode(record.parameters,max_file_bytes);w.u64(parameters.size());w.raw(parameters.data(),parameters.size());
   continuation(w,record.continuation);w.u64(checksum(w.bytes.data(),w.bytes.size()));return std::move(w.bytes);
 }
 GraphRecord decode_graph(const std::vector<uint8_t>& file){
