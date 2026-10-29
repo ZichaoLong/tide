@@ -1,0 +1,1292 @@
+{
+  "schema": "tide-core5-resident-boundary-evidence-v1",
+  "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "selected resident factorized KV, allocation failures, training observation/resume and related eager NPU qualification; no GPU or performance qualification here",
+  "jobs": [
+    {
+      "name": "core5-boundary-sdk-dev-v2",
+      "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "dirty": true,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-29T01:32:20.509205+00:00",
+      "finished": "2026-10-29T01:53:52.171830+00:00",
+      "record_sha256": "76d411735897fbbe2c10d6852a9fb1b75840125e8a4e1e44bdfd9637fb644e28",
+      "development.json": {
+        "sha256": "30d57bdc068dbdd24472eca43c458faeef0ec37ad5e9db20b3aef5b7718a5bf8",
+        "state": "passed",
+        "archive_sha256": "55b1a15647b8e3be182f1858977a523be452859ffcd1b6e2c33452e4a1f5c951",
+        "driver_sha256": "554521fe653101710cf96a182657fd23e846dbeefae4452f2103d6faf820a6f3",
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 0
+          },
+          {
+            "index": 2,
+            "exit_code": 0
+          }
+        ],
+        "physical_devices": null
+      },
+      "components": [
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "d9904817353cd66b358f7d6f15c73530f1a2b801528ee8a4a4985defab7dbb92"
+        },
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "577cc7d4cd8474596117480317114952fb0eed96629b2e2af7b44f7d96e88399"
+        },
+        {
+          "check": "weighted-allocation",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "561f96b930e25e043a9e6f949612bf452cc2fac32d7ebaae1a8d2585c674c9bb"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "8fce0ab792eb229acc1215fbeabacc51b39afe9696785918fec9c67550c8dae5"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "d661854c09e4a238795e94f59c9a3cb7176483265ba357f2cc044b0d5450df5e"
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2233978004e6b395d41fa1af83b0dd759a332d47995c9587cc2c7bc1c5f3f708"
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "66559bb38ae543e44e25c6fd301fb160f07dc1e2ad310f7201f11aa997dff5fd"
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float32",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "07055620e6abcf9cfbaf0191525c8501430d28b7a6e9fc7d6af9b82c19b26858"
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float16",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "fd9e8cdac3c13f987b3d74a043330f3d72edd09dcb6365e89b1ee1f76d37ae6a"
+        }
+      ],
+      "components_state": "passed"
+    },
+    {
+      "name": "core5-boundary-pynative-dev-v3",
+      "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "dirty": true,
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:33:39.505414+00:00",
+      "finished": "2026-10-29T01:48:42.044598+00:00",
+      "record_sha256": "10ad8adbb0dc144b6811a20a1b790e84abbeeafb3a2d9ba097bcafa110bc1c6b",
+      "resident-tests.xml": {
+        "tests": 13,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 12
+      },
+      "development.json": {
+        "sha256": "7e34248f7511cab144d29e8b9b9fca0edf0a7b069300e44e1394594c4b4b9a51",
+        "state": "failed",
+        "archive_sha256": "55b1a15647b8e3be182f1858977a523be452859ffcd1b6e2c33452e4a1f5c951",
+        "driver_sha256": "826fe2640d1f8dba11e97eaa331288bc3fc94298f9b34b669d11d5ade6bc055b",
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 0
+          },
+          {
+            "index": 2,
+            "exit_code": 1
+          }
+        ],
+        "physical_devices": null
+      },
+      "eager": [
+        {
+          "path": "float32/result.json",
+          "sha256": "d7c24c6ed4a0dddbf4c504918a8ae77104f76bd39b886a721b5a169bccc3f04d",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            },
+            {
+              "configuration": {
+                "name": "kv-hb",
+                "family": "kv",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              }
+            },
+            {
+              "configuration": {
+                "name": "ports-sparse",
+                "family": "kv",
+                "topology": "ports",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 12,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post2",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.1.0",
+            "matmul_allow_hf32": false
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          }
+        },
+        {
+          "path": "float16/result.json",
+          "sha256": "1450e55527ec66afe4e79c484b857ec8b409b9d4507f603189ca20084cab932c",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            },
+            {
+              "configuration": {
+                "name": "kv-hb",
+                "family": "kv",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              }
+            },
+            {
+              "configuration": {
+                "name": "ports-sparse",
+                "family": "kv",
+                "topology": "ports",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 12,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float16",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post2",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.1.0",
+            "matmul_allow_hf32": false
+          },
+          "precision": {
+            "payload_dtype": "torch.float16",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 16.0,
+            "master_dtype": "torch.float32",
+            "tolerances": {
+              "atol": 0.001,
+              "rtol": 0.02
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "core5-boundary-final-dev",
+      "source": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "dirty": false,
+      "state": "failed",
+      "exit_code": 1,
+      "started": null,
+      "finished": null,
+      "record_sha256": "2c28ce6286e3dc50c36df367dfeafdfc6c984720065da9563fc595a24e926cea"
+    },
+    {
+      "name": "core5-boundary-final-dev-v2",
+      "source": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "dirty": true,
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:49:27.740293+00:00",
+      "finished": "2026-10-29T01:50:02.194148+00:00",
+      "record_sha256": "8e785ec2ed74723d90c5c1bb4d93f5c3a5afb458e344c3697b24cb83db4576c2",
+      "facilities.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 10
+      },
+      "allocation.xml": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "development.json": {
+        "sha256": "07468a262ac7b18932c8052b5c40455f9ec1ce22bfaeed2ac370748d389e7620",
+        "state": "failed",
+        "archive_sha256": "7b0d7051f428c702ae665646ce3e27b3a3ae421138e883fac82a629fa31ce940",
+        "driver_sha256": null,
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 1
+          }
+        ],
+        "physical_devices": null
+      }
+    },
+    {
+      "name": "core5-boundary-final-dev-v3",
+      "source": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "dirty": true,
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:50:47.978047+00:00",
+      "finished": "2026-10-29T01:51:22.947199+00:00",
+      "record_sha256": "ef5187e52c68e6f4aa8ff6ad3996b5d527f1d908f35479c0c656c806cad8fa43",
+      "facilities.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 10
+      },
+      "allocation.xml": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "development.json": {
+        "sha256": "de805b46c74fc4837e48a9f930daab1cd95cd8ffd8b74eccb06e2e22efec7bce",
+        "state": "failed",
+        "archive_sha256": "1794afb123366c9729f708b9bf1d392814684302b3aa60e25ec4a083bed1a838",
+        "driver_sha256": null,
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 1
+          }
+        ],
+        "physical_devices": null
+      }
+    },
+    {
+      "name": "core5-boundary-final-dev-v4",
+      "source": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "dirty": true,
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:51:52.176305+00:00",
+      "finished": "2026-10-29T01:52:26.879813+00:00",
+      "record_sha256": "7aed09a42970077c56664f0ff4450b7d114c83040c16d198db1b3fe259100a0d",
+      "facilities.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 10
+      },
+      "allocation.xml": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 0
+      },
+      "development.json": {
+        "sha256": "5c145ebdbdb0880d14e1f77f9263e702945fa5e228391e390fbd94ff04b0effd",
+        "state": "failed",
+        "archive_sha256": "124b1eafe3e0759c19468ea4cb41e2274e27fe6f35b2be5ab503cde34ebea6a6",
+        "driver_sha256": null,
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 1
+          }
+        ],
+        "physical_devices": null
+      }
+    },
+    {
+      "name": "core5-boundary-final-dev-v5",
+      "source": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "dirty": true,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-29T01:53:09.830291+00:00",
+      "finished": "2026-10-29T01:53:48.156113+00:00",
+      "record_sha256": "62861fdfe74a94107e4e2c4a246b0c6952150e909d6b84f401aae3af275fdecb",
+      "facilities.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 10
+      },
+      "allocation.xml": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "development.json": {
+        "sha256": "a63f4757d83ce7dbdbc907d01dc477b3d361082cf5b5d25577270471716ce7bb",
+        "state": "passed",
+        "archive_sha256": "99c32df703ede6c9bac507bb72253e93ecc054b51ee4cdcbc47cfa37d5d4c643",
+        "driver_sha256": null,
+        "stages": [
+          {
+            "index": 0,
+            "exit_code": 0
+          },
+          {
+            "index": 1,
+            "exit_code": 0
+          }
+        ],
+        "physical_devices": null
+      }
+    },
+    {
+      "name": "core5-boundary-final-sdk-qualify",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-29T01:55:18.534330+00:00",
+      "finished": "2026-10-29T02:07:12.304319+00:00",
+      "record_sha256": "881d189828b3a3c271718adb1e125668eeb4175dcd9089c5c90354f6a754bc30",
+      "qualification.json": {
+        "sha256": "f437115ca41b17864709379b83edc570b818e60be17c2e75dd796b67ceb27564",
+        "state": "passed",
+        "archive_sha256": null,
+        "driver_sha256": "fdf63b5d8e841ad799464e4811a33a73218015a52a5fea6a51c6d1feab12fad8",
+        "stages": [
+          {
+            "command": [
+              "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python3.11",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/scripts/verify_device_control.py",
+              "--build-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2",
+              "--output-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-sdk-qualify/resident-checks",
+              "--device",
+              "npu:0",
+              "--checks",
+              "weighted-kv-update",
+              "weighted-allocation",
+              "weighted-flow",
+              "weighted-training",
+              "weighted-node-training"
+            ],
+            "exit_code": 0,
+            "timeout": 1250,
+            "log": "stage-0.log"
+          },
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-core-v2/tidegraph-weighted-training-check",
+              "--device",
+              "npu:0",
+              "--dtype",
+              "float32",
+              "--placement",
+              "mixed-c",
+              "--case",
+              "fc/kv",
+              "--case",
+              "hb/kv",
+              "--case",
+              "nonaligned/kv",
+              "--output-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-sdk-qualify/eager-float32"
+            ],
+            "exit_code": 0,
+            "timeout": 180,
+            "log": "stage-1.log"
+          },
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-core-v2/tidegraph-weighted-training-check",
+              "--device",
+              "npu:0",
+              "--dtype",
+              "float16",
+              "--placement",
+              "mixed-c",
+              "--case",
+              "fc/kv",
+              "--case",
+              "hb/kv",
+              "--case",
+              "nonaligned/kv",
+              "--scoring-dtype",
+              "float32",
+              "--output-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-sdk-qualify/eager-float16"
+            ],
+            "exit_code": 0,
+            "timeout": 180,
+            "log": "stage-2.log"
+          }
+        ],
+        "physical_devices": "1,13"
+      },
+      "components": [
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-kv-update-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-kv-update-float32.log",
+          "log_sha256": "6f36e4295831717778c6a1f09754fafbf32230368bd1f941b83b98e06f678d1e"
+        },
+        {
+          "check": "weighted-kv-update",
+          "dtype": "float16",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-kv-update-check",
+            "--device=npu:0",
+            "--dtype=float16"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-kv-update-float16.log",
+          "log_sha256": "b610cce3ef36c0ebeebbeff10526987cb30f58e7ebf9f7e926aaf9b137a9f6ec"
+        },
+        {
+          "check": "weighted-allocation",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-allocation-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-allocation-float32.log",
+          "log_sha256": "91ba876b5beb20eb0f772f1ca2586e313128283aad2b355bfbb6afef24b564e5"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-flow-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-float32.log",
+          "log_sha256": "895ca04434c8aeb4c167781b87db77435b28a80e6bdbe3409c518f16e1408ee0"
+        },
+        {
+          "check": "weighted-flow",
+          "dtype": "float16",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-flow-check",
+            "--device=npu:0",
+            "--dtype=float16"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-flow-float16.log",
+          "log_sha256": "61782cd6cbafc1bb2c1275bc1213d5d055d60a3b9824b498da7d4555f60dfa7a"
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-training-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-training-float32.log",
+          "log_sha256": "a059111ddef5512dabbb2ec5b4119e5374fe7b89e0be920072d02cfa781b5df9"
+        },
+        {
+          "check": "weighted-training",
+          "dtype": "float16",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-training-check",
+            "--device=npu:0",
+            "--dtype=float16"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-training-float16.log",
+          "log_sha256": "13220ad737f1c0c46d7bf706a10d00337c4e6d951e5b8f2e8782c7e27e591d4b"
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-node-training-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-node-training-float32.log",
+          "log_sha256": "cef47868610f50942d0e3f4a34948c2a2b86ee1f9fa1840a05e6501220ed9ba2"
+        },
+        {
+          "check": "weighted-node-training",
+          "dtype": "float16",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-resident-v2/tide-weighted-node-training-check",
+            "--device=npu:0",
+            "--dtype=float16"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "log": "weighted-node-training-float16.log",
+          "log_sha256": "62e441b015f80965357a2f467acec6468f43ae79305768bb76f31fcc4544f9ee"
+        }
+      ],
+      "components_state": "passed",
+      "standalone_summaries": [
+        {
+          "state": "passed",
+          "cases": 3,
+          "updates_per_case": 4,
+          "complete_native_checkpoint": true,
+          "cpu_reference": true,
+          "placement": "mixed-c",
+          "payload_dtype": "float32",
+          "scoring_dtype": "profile",
+          "optimizer": "adamw",
+          "loss_scale": 1,
+          "fp32_masters": false
+        },
+        {
+          "state": "passed",
+          "cases": 3,
+          "updates_per_case": 4,
+          "complete_native_checkpoint": true,
+          "cpu_reference": true,
+          "placement": "mixed-c",
+          "payload_dtype": "float16",
+          "scoring_dtype": "float32",
+          "optimizer": "adamw",
+          "loss_scale": 16,
+          "fp32_masters": true
+        }
+      ]
+    },
+    {
+      "name": "core5-boundary-final-pynative-qualify",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "dirty": false,
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:55:18.556611+00:00",
+      "finished": "2026-10-29T01:56:01.823814+00:00",
+      "record_sha256": "5726f4ce51de92a1f5557aadbd6eeb823fcb0c2888dfe7a10b7c3934d1fb021e",
+      "tests.xml": {
+        "tests": 24,
+        "failures": 9,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 15
+      },
+      "qualification.json": {
+        "sha256": "62af2627a961d5e3db40cf06e0bd04b0bf0773a87ced031771e6197a1c4cf7ac",
+        "state": "failed",
+        "archive_sha256": null,
+        "driver_sha256": "fdf63b5d8e841ad799464e4811a33a73218015a52a5fea6a51c6d1feab12fad8",
+        "stages": [
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+              "-m",
+              "pytest",
+              "-q",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_weighted_training_observation.py",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_weighted_benchmark_precision.py",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_flow.py::test_public_full_records_raw_checkpoint_and_private_windows",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_flow.py::test_allocation_failure_preserves_actual_partial_row",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_training.py::test_python_owned_complete_cut_updates_and_disk_resume",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_weighted_benchmark_resident.py",
+              "-k",
+              "not public_full_records_raw_checkpoint_and_private_windows and not python_owned_complete_cut_updates_and_disk_resume or kv",
+              "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-pynative-qualify/tests.xml"
+            ],
+            "exit_code": 1,
+            "timeout": 420,
+            "log": "stage-0.log"
+          }
+        ],
+        "physical_devices": "9"
+      },
+      "standalone_summaries": []
+    },
+    {
+      "name": "core5-boundary-final-pynative-qualify-v2",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-29T01:57:13.995438+00:00",
+      "finished": "2026-10-29T02:00:31.953886+00:00",
+      "record_sha256": "c6af5ebc3bd7cbcd13ca68520576d4455423a669c595d54f5543908f70afb2f7",
+      "tests.xml": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 14
+      },
+      "qualification.json": {
+        "sha256": "2798a29020e370d1c0deb850ceca42311d7b8938563c38c5f4bcffa1dfbb1c89",
+        "state": "passed",
+        "archive_sha256": null,
+        "driver_sha256": "f14730d962309b6309e559a708db916dcf539b7ecac58ae08cef60cb76fd3684",
+        "stages": [
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+              "-m",
+              "pytest",
+              "-q",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_flow.py::test_public_full_records_raw_checkpoint_and_private_windows",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_flow.py::test_allocation_failure_preserves_actual_partial_row",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_resident_weighted_training.py::test_python_owned_complete_cut_updates_and_disk_resume",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/tests/test_weighted_benchmark_resident.py",
+              "-k",
+              "not public_full_records_raw_checkpoint_and_private_windows and not python_owned_complete_cut_updates_and_disk_resume or kv",
+              "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-pynative-qualify-v2/tests.xml"
+            ],
+            "exit_code": 0,
+            "timeout": 420,
+            "log": "stage-0.log"
+          },
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/scripts/check_weighted_device.py",
+              "--device",
+              "npu:0",
+              "--implementation",
+              "native",
+              "--native-library",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-python",
+              "--placement",
+              "mixed-c",
+              "--dtype",
+              "float32",
+              "--scoring-dtype",
+              "float32",
+              "--case",
+              "kv-fc",
+              "--case",
+              "kv-hb",
+              "--case",
+              "ports-sparse",
+              "--output-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-pynative-qualify-v2/float32"
+            ],
+            "exit_code": 0,
+            "timeout": 180,
+            "log": "stage-1.log"
+          },
+          {
+            "command": [
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-final-qualified/scripts/check_weighted_device.py",
+              "--device",
+              "npu:0",
+              "--implementation",
+              "native",
+              "--native-library",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-independent-qualified/build/npu-python",
+              "--placement",
+              "mixed-c",
+              "--dtype",
+              "float16",
+              "--scoring-dtype",
+              "float32",
+              "--case",
+              "kv-fc",
+              "--case",
+              "kv-hb",
+              "--case",
+              "ports-sparse",
+              "--output-dir",
+              "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-final-pynative-qualify-v2/float16"
+            ],
+            "exit_code": 0,
+            "timeout": 180,
+            "log": "stage-2.log"
+          }
+        ],
+        "physical_devices": "9"
+      },
+      "eager": [
+        {
+          "path": "float32/result.json",
+          "sha256": "24072427983ce4f5e90a0c84f1790976792725e6d23a05b97afa7cc946d5a036",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            },
+            {
+              "configuration": {
+                "name": "kv-hb",
+                "family": "kv",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              }
+            },
+            {
+              "configuration": {
+                "name": "ports-sparse",
+                "family": "kv",
+                "topology": "ports",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 12,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post2",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.1.0",
+            "matmul_allow_hf32": false
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          }
+        },
+        {
+          "path": "float16/result.json",
+          "sha256": "af0dbb30dc381cdba23be993c2929e5fbbd92cd1a11914a3aedfbefa2ee321a9",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            },
+            {
+              "configuration": {
+                "name": "kv-hb",
+                "family": "kv",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              }
+            },
+            {
+              "configuration": {
+                "name": "ports-sparse",
+                "family": "kv",
+                "topology": "ports",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 12,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float16",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post2",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.1.0",
+            "matmul_allow_hf32": false
+          },
+          "precision": {
+            "payload_dtype": "torch.float16",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 16.0,
+            "master_dtype": "torch.float32",
+            "tolerances": {
+              "atol": 0.001,
+              "rtol": 0.02
+            }
+          }
+        }
+      ],
+      "standalone_summaries": []
+    },
+    {
+      "name": "core5-boundary-bootstrap",
+      "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "started": "2026-10-29T02:02:49.069825+00:00",
+      "finished": "2026-10-29T02:03:27.906413+00:00",
+      "record_sha256": "e302406dcfa1e8c85728f532e8796527a3a8c65cba7d362ffe737d0129544fad"
+    }
+  ],
+  "builds": {
+    "sdk": {
+      "core_build": {
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+        "torch": "2.10.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.0.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+          }
+        },
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "09bb94c0bbc6168ac8fcf2353686f6ac30daa5158be32e8d48b6be7b7c3b4c6f",
+          "libtidegraph_runtime.a": "51484ba1680fec9343c929c276d9ff67371da967e211edcdb132eac99048e96b",
+          "tidegraph-smoke": "564138d88917fe6ac785ce13f96650236b19ed1ce1c419eabe97b26ecead2638",
+          "tidegraph-kernel-check": "27e21e75bb79a39970cb4db622d06fad4380fda949cead5ff921dd235ec9bae4",
+          "tidegraph-full-check": "16be6ce1b6eb186b66ed6a30cb308ecc02d0a0b271fd44dc7f2c3d11d7ffdae7",
+          "tidegraph-aggregate-check": "8f2e0c58ce0e9dfd766fcb53123f7c022876c9c1c50a114a876c6e9b5756e5ad",
+          "tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+          "tidegraph-checkpoint-check": "cb2a782b3d2510e5bc4588754ee7da1175eca18e314642fe6f3d5ed16013f138",
+          "tidegraph-weighted-training-check": "e149ca3d26374403cc43e22f375b49421d33c4fd63d773f61b24193dc5242e36",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "58212ecaffdd108376a4a38aac4fb0dfa9b3db159da0d6d5ac5c036e4f0d5822",
+          "tidegraph-scale-bench": "a6ecfe52abd029778659811b67101ecfdea770eafbca17bf04d5b8a445157485",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "82505fc8a4b2e7e65490aebde6b98d05572797ea5d0b6b8cd619eef82472fa08",
+          "tidegraph-greedy-check": "5fb5003293cfcb58aa013a4294db2401ac4d704a665ce37498dd5c3f25cad180",
+          "tidegraph-accelerator-check": "d698ec1b4192a9195c26d49d56d53e8542304f0506930ddf20e45135e409acff",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "6404ed8a128270f8627b0ba0b9c4a46799de2016c189485f8553603dae47568b",
+          "tidegraph-placement-check": "f1dcd7b506d9a59b4d83059a5f01c5740ab8637dbdabeb44ecb2a934dd5a06e0",
+          "tidegraph-payload-ownership-check": "b6a959967b8d3a888556b4da07f5262179660e2e3c092cce0d57063a75023081",
+          "tidegraph-weighted-binding-module-check": "1e32d2eada1e428f15705dfd2ebb8684cbac6d8f7d885f26af8eac234623b165",
+          "libtidegraph-weighted-binding-module.so": "fca6934a4634d28fe26189045f93c2255865e08f7c7c95249e7ad297489f13f0"
+        }
+      },
+      "resident_build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "component_sha256": "c6c5adbfc13e21898f73f07122c083a64f037722dc7ba926a411b4af59b42858",
+        "backend": "npu",
+        "runtime": "standalone",
+        "npu_runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-weighted-kv-update-check": "fe0360e3509a44f608e4647889378df0f8d01c978dfbd884df5ea2e58c966a65",
+          "tide-weighted-allocation-check": "27db65063951ec4725d89006b4190f587b047d2fb23d1989e299c71dd56f9732",
+          "tide-weighted-flow-check": "9ef342dbeaa47682df2fccff151354b544529cf9724a4475fc4434803f78e4b9",
+          "tide-weighted-training-check": "bca7227d3b22be3c898af7ff9569b2e1ac24d8fab2bc2c955977d2d44394def3",
+          "tide-weighted-node-training-check": "749bf011866d605491890228c43817be8fbe38af9c89e3fe5c7472264c05888f",
+          "libtide-weighted-flow.so": "3ea082ff67c14c9df610c852dfe28900ef1ceec8e0cb6c5cddcb9986db5494c0",
+          "libtide-weighted-training.so": "bfb3e0ce582b9d4a32b4ac224c7ce90d2e908b53cd983a1a518dc3fd279ffbcb"
+        },
+        "requested_checks": [
+          "weighted-kv-update",
+          "weighted-allocation",
+          "weighted-flow",
+          "weighted-training",
+          "weighted-node-training"
+        ],
+        "python_component": null,
+        "scope": "build/loader/help only; device control check required separately",
+        "dirty": true
+      }
+    },
+    "pynative": {
+      "core_build": {
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+        "torch": "2.12.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.1.0"
+        },
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post2",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "89da9e9db14a119ae9dd1d395753c5f3f3f35beb25308e3562ba6488a35b5642",
+          "libtidegraph_runtime.a": "79b780647c102d6873458c240f8df9ce389e63665d5fe21731a9b8abc38b021d",
+          "_tide_native.so": "dbda04d129ca01c32dafabba872fc99c83bd4147411b4df8f959f5df688b4b48"
+        }
+      },
+      "resident_build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+        "component_sha256": "c6c5adbfc13e21898f73f07122c083a64f037722dc7ba926a411b4af59b42858",
+        "backend": "npu",
+        "runtime": "python",
+        "npu_runtime": "python",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "1e1912ce9be390eca02d8935c8b9aadc8ca44c3ddf2f1a795854cd4c7b0ad10d",
+          "libtide-weighted-flow.so": "481c573e104c7b59519e5f38d23d4cc4760454b90ebf991e94749f63ef997763",
+          "libtide-weighted-training.so": "82db4c28e97e2f6bda592d724f8c5fa76510bbe18a683f9e98e38ceec459fd19"
+        },
+        "requested_checks": null,
+        "python_component": "weighted",
+        "scope": "build/loader/help only; device control check required separately",
+        "dirty": true
+      }
+    }
+  },
+  "bootstrap": {
+    "source": "15c3e65fe3a737324c90bdf26b60c28a34ad2dcf",
+    "driver_sha256": "bcb35a0754bfa448575bd37f45721d1419db5e0061c853fb8696ae1e4a531439",
+    "program": "import torch,sys,json\nfrom tidegraph.runtime import resolve_device\nif sys.argv[1]=='early':resolve_device('npu:0')\nx=torch.ones(1,requires_grad=True);x.square().sum().backward();assert x.grad.item()==2\nif sys.argv[1]=='late':resolve_device('npu:0')\ny=torch.ones(1,device='npu:0',requires_grad=True);y.square().sum().backward();assert y.grad.cpu().item()==2\nprint(json.dumps(dict(state='passed',order=sys.argv[1],torch=torch.__version__)))\n",
+    "physical_devices": "9",
+    "state": "confirmed",
+    "cases": [
+      {
+        "order": "late",
+        "exit_code": 1,
+        "device_queue_assertion": true,
+        "log_sha256": "8b41fc16f734c5284017c1d1ec6f957d163c70cf17a2a6ae1bf09f9112f5ae36"
+      },
+      {
+        "order": "early",
+        "exit_code": 0,
+        "device_queue_assertion": false,
+        "log_sha256": "59ce18e036a1192530f0604365891f7a96a03a821a032ae5b01390d61249a834"
+      }
+    ]
+  }
+}

@@ -198,3 +198,6 @@ window_bridge_us/parameter_reduce_us`：当前调用的主机steady-clock微秒�
 当前adjoint绑定实际snapshot的journal、root、参数地址，生命周期结束后关闭。只按shape
 缓存整个对象会读旧窗口/参数或保留已经消费的根；可复用的程序模板需要显式重绑buffer与
 版本/连接检查，不能直接保存上次adjoint绕过构造。本轮用上述观测量判断其成本。
+
+上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。

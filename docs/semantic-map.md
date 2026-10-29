@@ -262,3 +262,6 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 由`weighted_flow_boundary_check`及`test_resident_weighted_flow`真实下溢反例检查。
 实际梯度/SGD槽/更新次数解码、磁盘换owner精确续接和主机反向阶段计量见
 [测量设施](weighted-workloads.md)与[常驻训练](resident-weighted-training.md)，不调用参考补写返回。
+
+上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。

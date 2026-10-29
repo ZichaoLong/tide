@@ -58,3 +58,6 @@ FP16 raw更新已有[69bf4f0固定资格](evidence/core5-resident-half-kv-update
 更多小projection提交也计入成本，因此不从乘法量减少直接推断加速。
 现有保守预算继续生效，不凭估算收益扩大准入；实际retained buffers、完整窗口/训练与
 checkpoint、单/双设备和两dtype由对应固定源码资格验收，旧报告不认证此增量。
+
+上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。

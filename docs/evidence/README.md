@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[常驻因子KV/实际训练观测/拒绝快照资格](core5-resident-boundary-20261029.md)：15c3e65；CPU设施10项、公共NPU14项、SDK组件9项及两套eager各6组通过。实际梯度/SGD物理owner/磁盘精确恢复独立核对；CPU反向后晚注册NPU的原失败及early规避探针分列。性能另验，原数值/异步和GPU边界保留。
+
 [单行反向/异形传输/分配观察资格](core5-eager-boundary-20261029.md)：e0d6e27；CPU517 passed/2原strict xfail，原D64及反馈FP32仍严格失败，各调度自身逐值恢复通过；native完整实际分配观察与预算有证据。性能和resident增量分别验收。
 
 [首写入/half反向/完整双卡桥接隔离](core5-boundary-isolation-20261029.md)：bdd7f6c；原D2048实际操作数分离来源与私有投影误差，局部连续FP64有改进但未认证全图；half归一化FP64 VJP仍失败，默认async完整CPU桥接仍EE1017。有限预算及停止/重启条件分别记录。
