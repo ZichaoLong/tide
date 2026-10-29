@@ -19,9 +19,9 @@ FP32正接收在存储时可成为零权重，但仍是已发生的接收：保�
 
 设备依据实际 r>0 决定是否求投影。缺席行、零或负接收不读取 u 或参数 owner，
 并保留完整旧 tuple；旧 tuple 本身仍必须有效。正接收计算
-(base+left@right)N_d(u) 与 summary N_d(u)，用 vendor BMM/RMS/index 操作完成数值，
+base N_d(u)+left(right N_d(u)) 与 summary N_d(u)，用 vendor BMM/RMS/index 操作完成数值，
 再经 raw 更新按原始 int64 时间过滤、追加未加权 K/V/p 和 min(1,r)。
-当前实现明确执行两个 RMS 投影，没有声称共享这次归一化计算。
+base、right、summary分别执行RMS投影，left接未归一化的低秩中间值；尚未共享这三次归一化计算。
 不存在主机读取实际轨迹、逐行接收分支或参考递归解码。
 
 VJP 先恢复 raw 独立字段根，再回传 K/V、summary 两个投影；低秩梯度使用保存的实际
@@ -48,3 +48,13 @@ left/right，按真实 bank 归约所有使用者。参数源或原内容后续�
 
 固定源码资格见[681a7e9运行证据](evidence/core5-resident-kv-update-20261027.md)。
 FP16 raw更新已有[69bf4f0固定资格](evidence/core5-resident-half-kv-update-20261028.md)；完整half图与训练由[公共训练owner](resident-weighted-training.md)独立验收。
+
+## 保留低秩因子的设备求值
+
+前向使用`B N(u) + U(V N(u))`，分别保存base、V、U的真实projection tape，
+不再先形成稠密`U V`。反向分别计算base、U、V贡献及两个归一化输入贡献后汇合；
+共享参数仍按所有实际行归约，独立K/V/summary与None根、原始时间、half最终store守卫不变。
+适配器前向及VJP中原有O(d²r)的稠密组合工作变为O(dr)，base的O(d²)仍在；
+更多小projection提交也计入成本，因此不从乘法量减少直接推断加速。
+现有保守预算继续生效，不凭估算收益扩大准入；实际retained buffers、完整窗口/训练与
+checkpoint、单/双设备和两dtype由对应固定源码资格验收，旧报告不认证此增量。

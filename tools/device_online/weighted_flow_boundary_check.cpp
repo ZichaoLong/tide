@@ -6,6 +6,7 @@
 #include "../../cpp/bench/streaming.h"
 #include "tide/graph_checkpoint.h"
 #include "tide/greedy.h"
+#include "tide/allocation_failure.h"
 #include "portable_torch/runtime.hpp"
 #include <cmath>
 #include <unistd.h>
@@ -51,9 +52,33 @@ void parameter_banks(at::Device device,at::ScalarType dtype){
     refused=std::string(e.what()).find("before allocation")!=std::string::npos;}
   require(refused&&!large.roles().count("full.gate"),"large bank materialized before admission");
 }
+void allocation_snapshot(at::Device device,at::ScalarType dtype){
+  at::NoGradGuard no_grad;
+  auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",at::kCPU,dtype);
+  auto r=weighted::region_binding(m.regions[0]);r.regularizer="bern";r.gamma_max=20;r.k=1;
+  for(auto& w:m.regions){w.extra.at("head.vector").zero_();w.extra.at("head.bias").zero_();weighted::configure_region(w,r);}
+  for(size_t i=0;i<m.nodes.size();++i){auto& w=m.nodes[i];auto b=weighted::node_binding(w);
+    w.extra.at("read_program.score.vector").zero_();w.extra.at("read_program.score.bias").fill_(i%2?-2000:2000);
+    weighted::configure_node(w,std::get<weighted::KVConfig>(b.memory),r,b.sources,b.aggregate_alpha);}
+  Continuation q;q.identity=g.identity;q.batch_size=2;auto xs=weighted_check::inputs(g,at::kCPU,dtype);
+  for(auto& x:xs)x.value[0]=.05;
+  WeightedFlowLimits limits;limits.cache=8;limits.stages=32;
+  WeightedFlow flow(g,m,q,device,limits);bool caught=false;
+  try{flow.advance(xs,10);}catch(const weighted::AllocationFailure& e){
+    caught=e.details.at("solver")=="resident-fp32"&&e.details.at("error_code")=="21"&&e.time==1;
+    require(e.nodes==std::vector<Index>({0,1}),"resident failure lost candidate node IDs");
+    require(e.tensors.at("scores").scalar_type()==at::kFloat&&e.tensors.at("partial_controls").numel()==2,
+      "resident failure did not capture actual row tensors");
+    require(!e.tensors.count("controls"),"early underflow exposed a complete successful control row");
+  }
+  require(caught,"resident allocation failure lacked typed snapshot");
+  bool rejected=false;try{flow.advance({},10);}catch(const std::logic_error&){rejected=true;}
+  require(rejected,"failed resident allocation owner reused without restore");flow.close();
+}
 }
 void check_weighted_flow_boundaries(at::Device device,at::ScalarType dtype,const std::filesystem::path& directory){
   parameter_banks(device,dtype);
+  allocation_snapshot(device,dtype);
   if(dtype==at::kHalf)half_payload(device);
   auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",at::kCPU,dtype);
   Continuation q;q.identity=g.identity;q.batch_size=2;auto xs=weighted_check::inputs(g,at::kCPU,dtype);

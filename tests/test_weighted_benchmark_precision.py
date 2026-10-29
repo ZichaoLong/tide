@@ -14,6 +14,17 @@ from weighted_topology import topology
 from weighted_workload_plan import make_plan
 
 
+def test_explicit_resident_capacities_do_not_accept_algorithm_or_lossy_integer_options(tmp_path):
+    from weighted_benchmark_limits import load
+    p = tmp_path/"limits.json"
+    p.write_text('{"queue": 4096, "stages": 32, "cache": 4}')
+    limits, sha = load(p)
+    assert limits == dict(queue=4096, stages=32, cache=4) and len(sha) == 64
+    for values in ({"prefill": True}, {"cache": 0}, {"cache": 1.5}, {"cache": True}, {"stages": 2**63}):
+        p.write_text(json.dumps(values))
+        with pytest.raises(ValueError):load(p)
+
+
 def test_explicit_promotion_preserves_material_and_parameter_input_aliases():
     b, xs, _ = fixture(Workload())
     original = {n:p.detach().double() for n,p in b.model.named_parameters()}
@@ -83,3 +94,16 @@ def test_python_benchmark_rejects_bad_training_state_with_unchanged_parameters(t
     assert result["state"] == "failed" and len(result["metrics"]) == 1
     assert result["precision"]["effective_dtype"] == "float64"
     assert not result.get("optimizer_values_checked", False)
+
+
+def test_eager_benchmark_checks_actual_new_owner_next_window(tmp_path, monkeypatch):
+    import benchmark_weighted
+    monkeypatch.setattr(torch, "set_num_interop_threads", lambda _: None)
+    out = tmp_path/"resume"
+    monkeypatch.setattr(sys, "argv", ["benchmark_weighted.py", "--device", "cpu", "--implementation", "python",
+        "--dtype", "float64", "--steps", "1", "--checkpoint-check", "--allow-dirty", "--output-dir", str(out)])
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    benchmark_weighted.main()
+    record = json.loads((out/"result.json").read_text())
+    assert record["state"] == "passed" and record["exact_resume"]["exact"]
+    assert record["exact_resume"]["next_window"] == 2 and record["optimizer_values_checked"]

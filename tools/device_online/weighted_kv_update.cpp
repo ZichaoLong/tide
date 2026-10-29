@@ -31,16 +31,20 @@ WeightedKVUpdateTape append_weighted_kv_update(DeviceProgram& p,const weighted::
     "KV positive reception and input plan");},{h,owners,present,u,mass,ids,indices,row_ids,positive,error});
   WeightedKVParameters saved{gather(p,w.base,indices,positive,error),gather(p,w.left,indices,positive,error),
     gather(p,w.right,indices,positive,error),gather(p,w.summary,indices,positive,error)};
-  auto effective=at::zeros_like(saved.base);p.batch_matmul(saved.left,saved.right,effective);p.add(effective,saved.base);
-  effective=guard(p,effective,positive,error);
-  auto kv=append_weighted_projection(p,u,row_ids,{effective,{}},c.epsilon,error,available);
+  // KV §1.2: B*N(u) + U*(V*N(u)). Keep both adapter factors; never form U*V.
+  // Each projection retains its actual operands for the independent VJP.
+  auto kv=append_weighted_projection(p,u,row_ids,{saved.base,{}},c.epsilon,error,available);
+  auto low=append_weighted_projection(p,u,row_ids,{saved.right,{}},c.epsilon,error,available);
+  auto up=append_weighted_projection(p,low.output,row_ids,{saved.left,{}},std::nullopt,error,available);
+  auto combined=at::zeros_like(kv.output);p.copy(combined,kv.output);p.add(combined,up.output);
+  combined=guard(p,combined,positive,error);
   auto summary=append_weighted_projection(p,u,row_ids,{saved.summary,{}},c.epsilon,error,available);
   std::vector<int64_t> kv_columns,summary_columns;
   for(const std::string name:{"keys","values"})for(int64_t j=0;j<d;++j)kv_columns.push_back(l.field(name).offset+j);
   for(int64_t j=0;j<ds;++j)summary_columns.push_back(l.field("summaries").offset+j);
   auto kv_indices=at::tensor(kv_columns,at::kLong).to(device),summary_indices=at::tensor(summary_columns,at::kLong).to(device),proposed=at::zeros_like(old.floating);
-  p.index_copy(proposed,1,kv_indices,kv.output);p.index_copy(proposed,1,summary_indices,summary.output);
+  p.index_copy(proposed,1,kv_indices,combined);p.index_copy(proposed,1,summary_indices,summary.output);
   auto raw=append_weighted_raw_update(p,l,old,time,mass,present,proposed,error,available);
-  return {c,raw,kv,summary,saved,ids,kv_indices,summary_indices,banks};
+  return {c,raw,kv,summary,low,up,saved,ids,kv_indices,summary_indices,banks};
 }
 }

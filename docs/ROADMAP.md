@@ -1,112 +1,40 @@
 # 当前路线图与验收范围
 
-固定采用 `0770593838a37c790a568226930567ed60f99b83` 的 core-5 与带权局部定义。
-既有主体交付及三项审查修复见[固定源码资格](evidence/core5-review-fixes-20261028.md)。
-用户进一步授权的限制调查、历史性能经验迁移、参数匹配设施及私有矩阵合批已交付实现和有限验证；
-数值修复、实际收益、负结果及未解除的限制分别列出，不等于所有数值域或全部低成本优化已经完成。
-[STATUS](STATUS.md)是唯一当前交接，[execution-flows](execution-flows.md)是持续契约。
-已完成阶段的逐次提交/原失败由Git与[证据索引](evidence/README.md)保留，不恢复旧任务。
+数学固定`0770593838a37c790a568226930567ed60f99b83`的core-5与带权局部定义。
+[STATUS](STATUS.md)是唯一当前交接；[execution-flows](execution-flows.md)是持续契约。
+用户授权逐项补齐非GPU边界，GPU延后；每项保留原输入、严格标准、有限预算和停止/重启条件。
+任务终态、相关资格通过和限制解除是不同结论。完成记录由Git与[证据索引](evidence/README.md)保存。
 
-| 阶段 | 本轮交付 | 独立证据入口 |
-| --- | --- | --- |
-| 0 路径、工具链与采用 | 当前模块/私有环境、最小CPU开发链路；19份core-5原文及旧5份独立锁定；本机aarch64，x86_64不外推 | [开发](development.md)、[来源](upstream.json)、[语义对应](semantic-map.md) |
-| 1 公共表示与一般图 | PositiveDelayGraph、非对齐TimedDAG、一般SettleGraph；同秩独立区域、端口日程/返回、原样嵌入；SrcClass、多字段Read、int64元数据/精确解码 | [Settle](settle-embedding.md)、[结构化表示](structured-records.md) |
-| 2 首个完整组合 | kv/sum/+、cat/ind、regional_total/context/cat/quad；FC/HB及反馈/非对齐/一般端口；完整前后向、多步optimizer、续接/checkpoint | [首组合](evidence/core5-weighted-kv-20261027.md)、[standalone训练](evidence/core5-native-training-20261027.md) |
-| 3 正式候选 | affine/delta/gated_delta/ssd、固定逻辑时间短卷积、异构绑定；十种发送、quad/bern/固定alpha ent、全部适用评分/证据/key及来源共享 | [循环](weighted-recurrent.md)、[分配](weighted-allocation.md)、[发送](weighted-sending.md)、[评分](weighted-scoring.md)、[来源](weighted-source-binding.md) |
-| 4 联合/packed/VJP | 在线greedy prefill；KV ragged投影、循环仿射扫描、原始时间卷积；Aggregate/State/Read/Full/Region实际数值批和批量VJP；独立根、参数共享、合法计算共享 | [packing](weighted-packed.md)、[区域批](weighted-region-batch.md)、[计算共享](weighted-compute-sharing.md)、[总对应](semantic-map.md) |
-| 5 执行位置与训练 | CPU、mixed、FP32/FP16 resident；完整窗口/保留图VJP、canonical master/SGD/AdamW、精确恢复；样本副本、单样本节点放置及共同发布 | [mixed](evidence/core5-device-20261027.md)、[half完整训练](evidence/core5-resident-half-training-20261028.md)、[样本副本](evidence/core5-resident-weighted-peers-20261028.md)、[放置前向](evidence/core5-weighted-node-placement-20261028.md)、[放置反向/训练](evidence/core5-weighted-node-training-20261028.md) |
-| 6 有限选型与追溯 | 24配置单次流程、完整调用/profile/工作量、四个新进程启动和分阶段内存；固定定义→配置/符号→独立测试→固定源码证据 | [有限性能](evidence/core5-weighted-performance-20261028.md)、[启动/内存](evidence/core5-weighted-observation-20261028.md)、[能力范围](execution-capabilities.md) |
+## 已有公共能力与入口
 
-每行是已实现能力与限定运行范围，不是所有拓扑/配置/尺度/平台的笛卡尔资格。
-完整返回等价、指定投影和不同函数性质各自有前提；精确解VJP、迭代导数与硬函数指定反向保持独立身份。
-当前图/checkpoint版本由[semantics](semantics.md)统一维护；下游拥有数据、任务头、loss和训练配方。
-
-## 本轮增量的交付状态
-
-| 增量 | 交付与验收 | 状态 |
-| --- | --- | --- |
-| A | 固定源码复现、首次分歧定位；LH/fractal/core-3经验索引 | 已交付；FP16 GDN及纯Torch异步小反例仍严格失败，D64梯度/参数见证保留；quad共同偏移已有独立闭式修复和后端资格 |
-| B | 五族/评分/来源共享参数清单、预算匹配、拓扑与二进制材料 | 已实现并通过相关固定CPU资格；实际92.62亿参数材料已完成有限推理窗，完整状态核对失败单列 |
-| C | ready复制、冻结bank、canonical发布去重及成本 | 完整CPU/NPU相关资格通过；NPU真实allocated小降，同材料单次端到端反而约慢8.5% |
-| D | 合法共享KV低秩投影、初始化消冗、共享组内同形私有投影真实 BMM/独立 VJP | 已交付；07e56ca CPU574项/2 strict xfail、NPU相关单/双卡训练恢复及CUDA构建通过；最大真实私有批32，单次CPU约持平、NPU mixed稍慢。跨不同输入/基座的合批随后在f03e9be完成并取得CPU/两套NPU资格；本次端到端未见明确收益，窗口反向构造仍有空间 |
-| E | 同拓扑/同主体参数有限CPU/mixed/resident对照、profile | 已执行并保留全部终态；小型通过用例倾向CPU，大D/部分D64严格失败，无法给出大型选型胜者 |
-
-[本轮固定证据](evidence/core5-performance-transfer-20261028.md)：实现2da3f2c、诊断/设施0503593；
-CPU376 passed/2 strict xfail、设施14项、native24图×4更新/精确恢复，NPU四组件×两dtype通过，CUDA同源构建/CPU核验。
-参数匹配、完整正确性失败、单次性能、实际存储与profile各自解释。没有放宽容差或用FP64通过替换FP32失败。
-[经验记录](performance-lessons.md)同时保存正、负结果；长期硬件待验不阻塞本机工作。
-[后续私有矩阵批/quad证据](evidence/core5-private-projection-20261028.md)固定07e56ca；
-07e56ca的原D2048材料仍严格残差拒绝；该历史报告保持原终态。474f9af后续已执行同一测量窗，
-但完整状态核对仍失败，仍无大型等价吞吐结论；后续结果不覆盖原报告。
-
-## 本次数值与低秩增量的闭环结果
-
-| 顺序 | 已交付及终态 | 尚未解除的边界 |
-| --- | --- | --- |
-| F1 实际失败 | 两份原D2048失败行提交到tests/data；120位Decimal定位局部相消；公开批量AllocationFailure/失败快照与独立诊断可复现 | scalar、前置域拒绝与常驻失败不承诺同一快照；捕获不是部分成功返回 |
-| F2 共同求解器 | cap质量分位局部根区间、约束分支共同阈值消去；固定474f9af CPU746 passed/2 strict xfail、NPU九项及CUDA构建通过 | 任意数值域不由有限检查认证；原正支持/残差/区间塌缩拒绝保持，GPU实机待验 |
-| F3 完整训练差异 | 所有eager KV行采用低秩式，独立dense/Jacobian与多步optimizer/恢复通过；30组实际分配局部误差≤8.33111e-8，进入求解器前评分已不同；显式FP64两步诊断通过 | D64 FP32完整返回/梯度/SGD仍严格不等价，D2048完整keys也失败；不能全部归因于求根，resident组合矩阵/tape未优化 |
-| F4 有限选型与设施 | 同材料CPU medium近持平、NPU mixed累计单次约−2%；完整核对均通过。匹配92.62亿参数B1推理窗已执行；medium profile独立完成。b62f2db阶段持久化固定6项通过 | 两个大图严格失败不计等价吞吐；单次小收益不证明稳定收益；没有大设备完整训练/跨卡性能结论 |
-
-[474f9af数值/低秩及b62f2db设施证据](evidence/core5-local-allocation-factorized-kv-20261028.md)保存
-精确来源、独立检查、终态、原失败和复现命令。CPU study总体failed（5项通过/2项严格失败），
-NPU study passed（2项通过）；各项不互相冒充。原材料拒绝解除与完整等价验收分开。
-本轮实施、定向资格和约定的有限测量已终态；总体大图严格正确性仍未通过。
-本阶段的提交/普通推送已获授权；不自动恢复旧队列或重复性能矩阵，当前交接见STATUS。
-
-## 已完成的审查修复
-
-实现`1d19c59`：ClockedState嵌套参数/独立VJP、quad正支持下溢拒绝、resident参数bank分配前准入及Full预留。
-CPU442项、NPU两dtype四组件（含单设备/双卡训练与恢复）、CUDA三架构构建/CPU31项通过。
-首次NPU环境初始化失败和早期取消保持原终态；[报告](evidence/core5-review-fixes-20261028.md)分列来源、独立反例及复现入口。
-旧任务全部终态；本轮按新问题建立新冻结源码与有限任务，不恢复历史队列。
-
-## 剩余验证与限制
-
-| 事项 | 当前状态与下一步条件 |
+| 范围 | 契约和证据入口 |
 | --- | --- |
-| CUDA真机（用户明确延后） | 2026-10-29用户要求延后GPU限制，本轮不排队真机资格；源码、aarch64构建、sm80/90/100常驻核及安装loader已交付；实际GPU前向、反向、optimizer、驻留、跨卡、容量/恢复与性能未验。有硬件后按[设备门禁](device-control.md)与各模块复现命令分层执行，不以CPU/编译替代 |
-| x86_64目标 | 源码保留可移植入口；本轮工具链与设备证据来自aarch64。新目标须独立构建及资格，不能继承本机结果 |
-| eager GDN默认AdamW数值边界 | ad6d1e7的FP32 normalized L2/scaled-RMS通过原两项失败及恢复；旧1f1ec57/1850434失败记录保留。FP16约.001984的两个strict xfail仍保留，其他数值域未由此认证；见[精度](weighted-precision.md)和[新固定资格](evidence/core5-fp32-normalization-20261028.md) |
-| 默认异步双NPU eager VJP | aadd3b4纯Torch stock/device guard仍EE1017；单线程/CPU桥仅通过小反例。ead6f34单线程完整图仍abort，不能解除；显式blocking原完整资格另列。见[本轮边界](evidence/core5-nongpu-boundaries-20261029.md) |
-| FP32反馈PDG性能严格对照 | aadd3b4原W32/B4四窗仍有记录/梯度/SGD槽差异，参数通过；各调度自身换owner精确恢复通过。显式FP64四窗完整训练与恢复通过，不替代原FP32。见[本轮边界](evidence/core5-nongpu-boundaries-20261029.md) |
-| 新D64 KV完整训练 | 480节点CPU两种调度、Python及HB64 CPU/resident/mixed存在严格浮点差异；两步CPU诊断还见参数梯度和SGD参数差异。1f1ec57的显式FP64两步完整记录/optimizer及换owner下一窗口精确恢复通过；四种接口/调度训练测量通过。d8f7132局部三组FP64首步事件逐值相同但4186梯度/1383参数有容差内差异，第二步状态/2个梯度/动量槽失败；两条各自精确恢复通过。原FP32资格未解除，见[算术隔离](evidence/core5-arithmetic-isolation-20261029.md) |
-| quad大D数值域 | 已捕获并修复两份原失败行的局部相消，原完整材料已越过残差拒绝并执行窗口；但keys严格核对失败。30组实际分配与独立Decimal已分离求解误差/输入差异；1f1ec57同材料D2048显式FP64推理完整核对通过，不能回填FP32；其他数值域未获资格，正支持下溢/区间塌缩继续明确拒绝 |
-| 后续性能优化 | f03e9be独立输入BMM已通过定向CPU/两套NPU资格；D64显式FP64的34次共享+445次独立准备覆盖479次写入，State最大批仍1。完整对照及精确恢复通过，CPU中型单次+4.35%、D64+0.16%、NPU中型+1.36%，未见明确加速。新D64 profile为17697次mm/236次bmm，反向/finite跨度最大；后续审查私有VJP/字段拆装、小批提交、resident组合矩阵与窗口反向复用，不能只增加BMM数。见[本轮证据](evidence/core5-independent-projection-20261029.md) |
-| 容量/数值定义域 | 有限在途队列、各分区预算和正支持下溢等公开拒绝继续生效；限制不能静默截断状态、改算法或改变活动集。约92.62亿主体参数CPU FP64推理在1f1ec57完整通过，151.416s/窗，候选测量后RSS峰值约90.35GiB；原FP32失败仍保留，大规模训练/设备容量及跨卡吞吐未获资格 |
+| PDG反馈、非对齐TimedDAG、一般SettleGraph，同秩区域/独立端口/原样嵌入 | [总对应](semantic-map.md)、[Settle](settle-embedding.md)、[结构化表示](structured-records.md) |
+| 五记忆、原始时间短卷积、十种发送、适用的评分/证据/key、来源分类与共享 | [KV](weighted-kv-sharing.md)、[循环](weighted-recurrent.md)、[分配](weighted-allocation.md)、[发送](weighted-sending.md)、[评分](weighted-scoring.md)、[来源](weighted-source-binding.md) |
+| 在线streaming/prefill、实际矩阵批与独立VJP根 | [packing](weighted-packed.md)、[区域批](weighted-region-batch.md)、[计算共享](weighted-compute-sharing.md)、[f03e9be资格](evidence/core5-independent-projection-20261029.md) |
+| CPU、混合、常驻FP32/FP16、单/双NPU训练和精确续接 | [能力矩阵](execution-capabilities.md)、[常驻训练](resident-weighted-training.md)、[节点训练](evidence/core5-weighted-node-training-20261028.md) |
+| 参数清单、core-3参数量匹配拓扑/同材料、有限完整训练计时和诊断 | [工作负载](weighted-workloads.md)、[精度](weighted-precision.md)、[历史经验](performance-lessons.md) |
 
-上述严格失败保持原记录。1f1ec57已完成共享准备稳定顺序、真实optimizer核对与精确恢复的定向资格，
-并取得五项显式FP64同材料/参数匹配测量。CPU扩大门禁为572通过/2个原FP32 GDN失败；
-NPU eager KV及CUDA构建通过，均见[本阶段证据](evidence/core5-stable-preparation-precision-20261028.md)。
+上述入口说明已实现能力和限定资格，不构成所有配置/拓扑/尺度/平台的笛卡尔资格。
+下游拥有数据、任务头、loss设计、训练配方和效果搜索；基座验证机制与数学对应。
 
-FP32 GDN后续增量已闭环：ad6d1e7 Python/C++ normalized VJP、独立Jacobian与原两项失败/恢复通过，
-CPU453 passed/2原FP16 strict xfail；NPU两套入口的相关训练、CUDA构建通过，
-见[本次证据](evidence/core5-fp32-normalization-20261028.md)。原历史失败及其他边界不改。
+## 逐项推进与停止条件
 
-后续优先顺序：
-1. D64/D2048 FP32的完整浮点一致性仍待改进；row/reduction/BMM/局部VJP及后续9种分段FP64探针
-   均未解决完整训练，未接入生产算术。d8f7132已交付仓库诊断和实际恢复；新证据把最佳局部方案的
-   首步剩余差异缩小到反向求值/汇总，尚未证明唯一的共享叶累加根因。aadd3b4外层汇合FP64诊断仍有首步2个、第二步9个
-   梯度张量及动量槽超容差，未接入生产；内层私有图仍原精度。新方案须覆盖局部贡献舍入
-   和独立根/跨步更新，不重复已失败探针，也不默认只改最终累加即可修复。
-   已验证的显式整条CPU FP64继续作为独立可用配置；原输入、容差和失败不改，不重复既定探针。
-2. 跨不同输入/基座的KV同形矩阵批已在f03e9be闭环：CPU273 passed/2原FP16 strict xfail、
-   纯Python及Python/native NPU各六组、公共常驻12项、SDK六项及eager六组通过。
-   三对完整计时未见明确加速；D64两步完整训练/逐值恢复和独立profile通过。
-   该有限测量不继续扩大或重复。后续先以新profile审查Read/Full/Aggregate私有VJP与字段拆装；
-   设备小批提交、resident组合矩阵和窗口反向构造仍未由本次优化，不宣称低成本优化全部完成。
-3. CUDA依用户要求延后；之后取得对应硬件再做CUDA真机和x86_64资格。异步双NPU原最小反例与显式blocking通过分列。
+| 项目 | 当前证据与本轮剩余动作 | 停止或重启条件 |
+| --- | --- | --- |
+| D64 FP32完整训练 | e0d6e27单行私有VJP消冗后原两步native/Python仍有记录、梯度、参数和SGD槽差异；两调度自身恢复精确。见[eager证据](evidence/core5-eager-boundary-20261029.md) | 本候选数值修复停止；不重复九项分段精度/外层汇合探针。重启须有覆盖局部算术、中间伴随与共享贡献的具体新方案及独立根证据 |
+| D2048 FP32 | [实际首写入](evidence/core5-boundary-isolation-20261029.md)：来源+私有批链194坐标失败；标量FP32对局部FP64也有289坐标失败，连续局部FP64后cast为0。原quad残差拒绝已修复，原全图keys失败未解除 | 没有公共整段算术/VJP方案前停止9B全图重跑；局部更准确不保证与旧标量FP32相同。显式全CPU FP64已有独立原窗通过证据 |
+| 反馈PDG FP32 | 原W32/B4四窗记录/梯度/SGD槽仍失败，参数通过；reference/streaming/prefill三者自身恢复均精确。显式FP64四窗独立通过 | 单行VJP方案到此停止；新方案须覆盖反馈递归与跨窗更新，不能仅核对最终参数 |
+| FP16 GDN/default AdamW | [归一化VJP内部FP64](evidence/core5-boundary-isolation-20261029.md)仍第二步差.00198364；两个原strict xfail保留。FP32对应见证已由ad6d1e7解除 | 不改epsilon/loss scale/输入或容差；仅提升归一化反向候选停止。重启需新的完整局部伴随/舍入方案 |
+| 默认异步双NPU eager VJP | CPU桥完整delta-pdg仍EE1017，未完成4更新/恢复；小桥接通过不足以认证。显式blocking是另一个配置 | 同环境同事件方案停止；重启须运行时修复或新的事件所有权方案，先反例再完整图/独立根/恢复 |
+| 单行私有VJP | Python/C++直接建图、轻量一阶/版本守卫已交付；固定e0d6e27 CPU517 passed/2原strict xfail。NPU相关开发已通过；本轮补固定资格和一次完整对照 | 以实际端到端成本决定下一步；不从减少私有图数直接推断收益 |
+| 异形字段packing与小提交 | 按device/dtype合并真实字段、8MiB分组、按shape/offset恢复；int64独立，None/零/版本守卫保留。本轮测mixed-a/c实际适用域 | 若小算子/提交仍主导，须据新profile提出具体边界；无真实可合并域不盲目扩大batch |
+| resident组合矩阵/窗口反向 | KV改为B N(u)+U(V N(u))，保存实际B/V/U tapes；主机构造/seed/run/bridge/reduce分别计量，相关开发资格通过，固定提交资格待执行 | 完整adjoint绑定journal/root/参数地址，不能按shape跨窗口缓存。先取得构造成本，再决定是否值得显式模板重绑；不跳过版本/独立根 |
+| 较大NPU训练/跨卡 | 本轮以core-3 Add匹配D64：480节点、9076975参数，同计划单卡/双卡显式blocking及resident，容量先静态预检 | 每配置一次有限完整训练/恢复；容量、数值或运行时拒绝即停。未过完整核对的时间不称合格训练吞吐 |
+| 诊断与训练观测设施 | scalar/native实际分配观察已通过；常驻20–22失败部分行、实际梯度/SGD槽/canonical共享owner解码及磁盘换owner检查开发通过，固定提交资格待执行 | 不补造未计算残差，不以参考重算结果。fake布局测试必须有真实公共owner消费者作独立检查 |
+| 容量/正支持 | 显式正int64容量选项、静态Settle上界与分区预算；原正支持下溢/区间塌缩仍拒绝 | 保留表示下界、同时在途容量与实际预算拒绝；无静默裁剪/截断/改活动集合。不以保守fixture预设作为引擎上限 |
+| CUDA/x86_64 | GPU依用户延后；本机aarch64无x86目标。当前新增resident/C++路径不继承旧CUDA构建报告 | GPU待用户恢复且取得硬件；x86待目标环境。新源码构建、前向、反向、optimizer、常驻、跨卡及恢复各自验收 |
 
-不自动恢复旧队列、不重跑所有开关矩阵，不以参数量匹配等同函数、模型效果或完整训练工作量匹配。
-公共任务头、loss配方和模型效果仍由下游负责。当前具体任务/源码/作业只见STATUS。
-
-## 非GPU边界的本轮定向闭环
-
-[固定诊断与边界证据](evidence/core5-nongpu-boundaries-20261029.md)：aadd3b4设施14项通过，
-同hash D64外层FP64汇合探针仍严格失败、原反馈FP32失败/显式FP64四窗通过，均逐值恢复通过。
-FP16 GDN原AdamW见证仍保留；默认异步双NPU是可独立复现的运行时阻塞。
-**原SDK fc/affine FP32 mixed-a及mixed-c已在ead6f34完整通过四次更新/恢复**，
-复用构建的C++和22个binary hash逐一核对；旧470ce06失败不改，不能推定全24图资格。
-后续f03e9be的[独立输入矩阵批资格与有限对照](evidence/core5-independent-projection-20261029.md)已终态：
-新增路径约定的正确性/恢复门禁通过（原两个FP16 strict xfail保留），CPU/NPU单次计时未见明确收益，负结果进入[经验记录](performance-lessons.md)。
-本轮有限任务已结束；没有解除上表数值/异步边界，也不重跑既定精度探针或历史矩阵。
+原失败记录和严格断言不变；新增错误与旧失败分别保留。本轮在构建/资格全部终态后串行执行有限性能，
+不重复旧矩阵，不把参数量匹配等同函数、工作量或模型效果匹配，也不宣称低成本优化已经全部完成。
+当前具体作业和接续命令只见STATUS；新结果只更新本表、相关契约、证据和performance-lessons。

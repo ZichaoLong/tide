@@ -150,3 +150,9 @@ multiplier/residual；达到任一预算只增加dropped，不改变计算或成
 
 标量quad在正支持下溢拒绝时尚未执行残差公式，失败codec不填入虚构的零残差；
 `test_scalar_underflow_does_not_invent_uncomputed_residual`保留最小subnormal见证。
+
+常驻前向已完成设备同步且有实际allocation行错误20–22时，读取该行保存的status、
+输入、int64时间/节点，并用同一codec抛失败，最大额外快照64MiB。早退的控制/统计明确命名
+`partial_controls/partial_statistics`且`output_valid=false`；仅残差22确认完整计算后附controls/residual。
+队列/其它算子或无法读取设备的运行时失败保留原错误，不能宣称拥有allocation见证。
+失败owner仍必须从旧checkpoint恢复；`weighted_flow_boundary_check`增加原生实际下溢反例。
