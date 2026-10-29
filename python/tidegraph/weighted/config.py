@@ -121,8 +121,7 @@ class RegionalConfig:
             self._absent("allocation_temperature")
         if self.selection_mode in ALLOCATED:
             self._default("regularizer", "quad")
-            from .regularizers import Regularizer
-            Regularizer(self.regularizer, self.ent_alpha)
+            validate_regularizer(self.regularizer, self.ent_alpha)
         else:
             self._absent("regularizer", "ent_alpha")
         if self.selection_mode not in ATTENTION:
@@ -252,3 +251,15 @@ GAIN = ATTENTION | {"constrained", "hard_selection", "proportional"}
 def region_profile(config):
     return identity("weighted-regional-total-v1" if config.selection_mode == "regional_total" else
                     "weighted-region-v1", config)
+
+
+def validate_regularizer(kind, alpha):
+    """Allocation §6/S.2, shared by static configuration and numeric responses."""
+    if kind not in {"quad", "bern", "ent"}:
+        raise ValueError("regularizer must be quad/bern/ent")
+    if kind == "ent":
+        finite("ent_alpha", alpha, 1)
+        if alpha > 2:
+            raise ValueError("ent_alpha must lie in [1,2]")
+    elif alpha is not None:
+        raise ValueError("ent_alpha applies only to ent")

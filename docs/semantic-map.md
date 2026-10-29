@@ -268,3 +268,7 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 
 上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
+
+公共配置/参数清单/自然规模与维护映射见 [core5-study](core5-study.md)。
+`planning.model.resolve_model`复用固定Config适用域；`planning.recipes`绑定FC/HB实例§4.2—4.4，
+`test_core5_planning`独立核对拓扑计数/边/时钟和实际五族/混合参数；不作为真机性能资格。

@@ -17,6 +17,7 @@
 | 源码分层和模块导航 | [架构](docs/architecture.md) |
 | 从干净源码开始构建、检查和开发 | [开发入口](docs/development.md) |
 | 作为 Python/LibTorch 依赖调用 | [公共库](docs/library.md)、[安装客户端](examples/consumer/README.md) |
+| core-5 配置/拓扑/规模、运行和维护导航 | [候选与测试入口](docs/core5-study.md) |
 | core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[节点放置](docs/resident-weighted-placement.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
 | CPU/CUDA/NPU 与常驻后端 | [加速器](docs/accelerators.md)、[设备控制与 GPU 验证](docs/device-control.md)、[常驻库](docs/resident-library.md) |
 | 旧实验结论及产物保留规则 | [历史证据](docs/evidence/README.md)、[产物退役](docs/artifact-retention.md) |
@@ -27,7 +28,8 @@
 Python 参考、LibTorch 核心和特化调度保留独立执行顺序；常驻后端拥有独立的
 CANN/CUDA 控制流实现。支持范围以配置能力、验证门禁及对应证据为准。
 
-CPU/NPU 已完成声明范围的本机验证。CUDA eager/常驻源码和本机构建已交付，
+CPU/NPU 已完成证据所列固定源码与声明范围的本机验证。CUDA eager/常驻源码已交付；
+历史构建仅认证其记录的提交，当前新增源码的CUDA构建仍待核验。
 **真实 GPU 正确性、常驻性、多卡、内存和性能仍待目标机验证**。
 自定义 Python 程序不会自动转换为 C++ 或常驻内核；不支持的请求明确失败。
 完整矩阵、精度和兼容性边界见 [执行契约](docs/execution-flows.md)。

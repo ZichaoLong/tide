@@ -13,20 +13,8 @@ from weighted_device_precision import Precision
 
 
 def runner(binding, implementation, placement, native_library=None, streaming=False):
-    options = dict(packed=True, aggregate_autograd="batched", full_autograd="batched")
-    if implementation == "native":
-        from tidegraph.native import Native
-        from tidegraph.native_loader import load_native
-        load_native(native_library, backend=binding.model.nodes[0].bias.device.type)
-        return Native(binding.graph, binding.model,
-                      algorithm="streaming" if streaming else "greedy", placement=placement, **options).run
-    from tidegraph.greedy import run as greedy
-    from tidegraph.streaming import run as stream
-    view = place_model(binding.graph, binding.model, placement)
-    schedule = stream if streaming else greedy
-    if streaming:
-        options = {}
-    return lambda *a, **kw: schedule(binding.graph, view, *a, **options, **kw)
+    from tidegraph.weighted.execution import eager_runner
+    return eager_runner(binding, implementation, placement, native_library, streaming=streaming)
 
 
 def check_live(result, placement, device):
