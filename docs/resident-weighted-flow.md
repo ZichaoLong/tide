@@ -63,8 +63,13 @@ Python 适配器额外拒绝模型参数版本变化。共享参数身份随快�
 
 每阶段只构造/复制一次带零填充行的ready values，各节点以独立indices gather实际纤维；
 反向journal重放使用同样的阶段级共享。共享仅限不可变输入缓冲，节点payload/状态/梯度仍私有；
-不改变cap、元数据、队列提交或缺席连接。逐节点`[samples,cap,width]`payload开销仍保留，
-这项减少队列副本，不能称为已完成紧凑纤维打包或跨节点局部GEMM。
+全局队列cap、元数据、队列提交和缺席连接不变。节点局部payload改为
+`[samples,min(queue,max(1,入边数+输入端口数)),width]`：固定逻辑时间的每条物理边/端口最多贡献一次，
+平行边分别计数，SrcClass不参与容量合并；无入源节点保留一个安全缺席槽。
+`weighted_node_fiber_capacity`只读静态拓扑；实际时间、长度、排序和选择仍在设备上计算。
+indices保存全局ready位置，padding sentinel仍为全局cap；超出局部槽数在写入前拒绝，不截断。
+前向、窗口VJP重放和peer请求使用同一布局，reverse-route消费真实局部长度和全局位置。
+这减少无用填充，尚不是跨节点ragged数值批/GEMM；各节点仍有独立局部程序。
 
 所有容量与数值检查在 queue/state/history 提交之前。`queue` 限制同时在途原子，
 `cache` 限制每私有状态的实际原始缓存，`stages` 限制单窗口作用轮数与诊断 journal，

@@ -13,9 +13,11 @@
 namespace tide::device_online {
 int64_t weighted_flow_preflight(const Graph&,const Model&,int64_t samples,const WeightedFlowLimits&);
 struct WeightedNodeInput {at::Tensor payload,owners,lengths,times,present,bank,indices;};
+int64_t weighted_node_fiber_capacity(const Graph&,int64_t node,int64_t queue);
 at::Tensor append_weighted_ready_values(DeviceProgram&,const ReadyBatch&);
 WeightedNodeInput append_weighted_node_input(DeviceProgram&,const ReadyBatch&,const at::Tensor& source_banks,
-  int64_t node,int64_t samples,int64_t input_ports,const at::Tensor& error,const at::Tensor& padded_values);
+  int64_t node,int64_t samples,int64_t input_ports,int64_t fiber_capacity,
+  const at::Tensor& error,const at::Tensor& padded_values);
 struct WeightedRegionInput {WeightedRegionFields fields;at::Tensor ids,times,lengths,inverse,order;};
 WeightedRegionInput append_weighted_region_input(DeviceProgram&,const at::Tensor& descriptors,const at::Tensor& present,
   const at::Tensor& times,const std::vector<int64_t>& nodes,const weighted::RegionalConfig&,const at::Tensor& error);

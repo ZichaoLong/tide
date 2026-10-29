@@ -14,7 +14,9 @@ void run(at::Device device,const std::string& family,const std::string& read){
     auto& worker=services.begin();n.source=bind_weighted_flow_source(worker,n.banks,f.graph,v,n.binding,error,remaining(worker));services.end(worker);}
   DeviceReady planner({0,0},1,{},rows,device,true,{1});auto ready=planner.append_stage(p,atoms(f,device),at::full({1},12,options.dtype(at::kLong)),error);
   const auto values=append_weighted_ready_values(p,ready);
-  for(int64_t v=0;v<2;++v){auto& n=*nodes[v];n.input=append_weighted_node_input(p,ready,n.source.classes,v,rows,f.graph.inputs.size(),error,values);
+  for(int64_t v=0;v<2;++v){auto& n=*nodes[v];n.input=append_weighted_node_input(p,ready,n.source.classes,v,rows,f.graph.inputs.size(),
+    weighted_node_fiber_capacity(f.graph,v,capacity),error,values);
+    if(n.input.payload.size(1)!=(v==0?2:1))throw std::runtime_error("node fiber retained global queue padding");
     append_weighted_node_local(p,services,n,read,error,remaining);}
   WeightedFlowRegion region(f.graph,f.model,0,f.initial,device);append_weighted_region_local(p,services,region,nodes,error,remaining);
   for(auto& n:nodes)append_weighted_node_full(services,*n,error,remaining);
