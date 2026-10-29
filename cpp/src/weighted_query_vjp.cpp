@@ -1,5 +1,6 @@
 // Architecture §3/4: actual query batches with independent row/field VJP roots.
 #include "weighted_query_vjp.h"
+#include "weighted_singleton_vjp.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
@@ -72,6 +73,21 @@ class QueryVjp final:public torch::autograd::Node {
 using Fields=std::vector<TensorFields>;
 template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,const Config& c,const RegionalConfig& region,
     bool is_full,Index slots,const Options& options){
+  if(rows.size()==1){
+    variable_list originals{w.bias};
+    const std::string prefix=is_full?"full_program.":"read_program.";
+    for(const auto& [name,t]:w.extra)if(name.find("kernel.")==0||name.find(prefix)==0)originals.push_back(t);
+    auto& row=rows[0];tensors(row,[&](Tensor& t){originals.push_back(t);});
+    Fields values;
+    if(is_full){
+      for(const auto& v:full(w,{{&*row.state,row.time,ContentView{row.content},row.control}},slots,options,c))
+        values.push_back({{"value",v.value}});
+    }else values=describe(w,{{row.state?&*row.state:nullptr,row.time,ContentView{row.content}}},c,region);
+    variable_list refs;for(const auto& [name,t]:values[0])refs.push_back(t);
+    auto outputs=singleton_boundary(originals,refs);size_t i=0;
+    for(auto& [name,t]:values[0])t=outputs[i++];
+    return values;
+  }
   auto node=std::make_shared<QueryVjp>();variable_list inputs,leaves;
   auto leaf=[&](Tensor& t){inputs.push_back(t);t=t.detach().set_requires_grad(t.requires_grad());leaves.push_back(t);};
   std::map<const c10::TensorImpl*,Tensor> aliases;

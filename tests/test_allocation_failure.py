@@ -12,6 +12,44 @@ from tidegraph.weighted.allocation_rows import allocate_batch
 
 
 @pytest.mark.parametrize("native", [False, True])
+def test_scalar_underflow_does_not_invent_uncomputed_residual(dtype, native):
+    from tidegraph.weighted.allocation import allocate_quad
+    s = torch.nextafter(torch.zeros(1, dtype=dtype), torch.ones(1, dtype=dtype))
+    caps, low, high, tau = torch.ones_like(s), s.new_tensor(0.), s.new_tensor(1.), s.new_tensor(2.)
+    with pytest.raises(AllocationFailure, match="support underflowed") as caught:
+        if native:
+            import _tide_native as core
+            core.weighted_allocate_quad(s, caps, low, high, tau)
+        else:
+            allocate_quad(s, caps, low, high, tau)
+    assert "residual" not in caught.value.tensors
+    assert caught.value.tensors["controls"].eq(0).all()
+
+
+@pytest.mark.parametrize("native", [False, True])
+def test_scalar_failure_actual_snapshot_and_validation_class(dtype, native):
+    from tidegraph.weighted.entropy_allocation import allocate
+    s = torch.tensor([2000., -2000.], dtype=dtype, requires_grad=True)
+    caps, bound, tau = torch.ones_like(s), s.new_tensor(.125), s.new_tensor(1.)
+    def run(scores, cap):
+        if native:
+            import _tide_native as core
+            return core.weighted_allocate(scores, cap, bound, bound, tau, "bern", None)
+        return allocate(scores, cap, bound, bound, tau, regularizer="bern")
+    with pytest.raises(AllocationFailure, match="positive.*support underflowed") as caught:
+        run(s, caps)
+    record = caught.value.record()
+    assert record["details"]["solver"] == ("native-scalar" if native else "python-scalar")
+    assert record["details"]["branch"] == "equality"
+    assert record["tensors"]["controls"]["values"][1] == 0
+    with torch.no_grad():s.zero_()
+    assert caught.value.tensors["scores"].tolist() == [2000., -2000.]
+    json.dumps(record, allow_nan=False)
+    with pytest.raises((ValueError, RuntimeError), match="invalid|infeasible"):
+        run(s, -caps)
+
+
+@pytest.mark.parametrize("native", [False, True])
 def test_failure_rows_snapshot_and_json(dtype, native):
     scores = [torch.zeros(n, dtype=dtype, requires_grad=True) for n in (3, 2, 1, 2)]
     with torch.no_grad():

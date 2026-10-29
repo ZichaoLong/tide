@@ -33,7 +33,12 @@ class _Copies(torch.autograd.Function):
     def forward(ctx, device, dtype, *rows):
         ctx.set_materialize_grads(False)
         ctx.save_for_backward(*rows)
-        outputs = tuple(torch.stack(rows).to(device=device, dtype=dtype).unbind())
+        packed = torch.cat([r.reshape(-1) for r in rows]).to(device=device, dtype=dtype)
+        outputs, offset = [], 0
+        for row in rows:
+            outputs.append(packed.narrow(0, offset, row.numel()).reshape(row.shape))
+            offset += row.numel()
+        outputs = tuple(outputs)
         ctx.mark_non_differentiable(*(v for v, r in zip(outputs, rows) if not r.requires_grad))
         return outputs
 
@@ -45,14 +50,16 @@ class _Copies(torch.autograd.Function):
         result = [None]*(len(rows)+2)
         ids = [i for i, bar in enumerate(bars) if bar is not None and ctx.needs_input_grad[i+2]]
         if ids:
-            copied = torch.stack([bars[i] for i in ids]).to(rows[0]).unbind()
-            for i, value in zip(ids, copied):
-                result[i+2] = value
+            copied = torch.cat([bars[i].reshape(-1) for i in ids]).to(rows[0])
+            offset = 0
+            for i in ids:
+                result[i+2] = copied.narrow(0, offset, rows[i].numel()).reshape(rows[i].shape)
+                offset += rows[i].numel()
         return tuple(result)
 
 
 def mapper(values, device, dtype):
-    """Bounded shape groups, with actual aliases copied once and private roots."""
+    """Bounded heterogeneous fields; actual aliases copied once, private roots."""
     unique = {id(t): t for t in values}
     groups, result = {}, {}
     for key, value in unique.items():
@@ -60,16 +67,25 @@ def mapper(values, device, dtype):
         if value.device == device and value.dtype == target:
             result[key] = value
         else:
-            signature = (value.device, value.dtype, target, tuple(value.shape))
+            signature = (value.device, value.dtype, target)
             groups.setdefault(signature, []).append(key)
-    for (_, _, target, _), keys in groups.items():
+    for (_, _, target), keys in groups.items():
         first = unique[keys[0]]
-        limit = max(1, PACK_BYTES//max(1, first.numel()*max(first.element_size(), torch.empty((), dtype=target).element_size())))
-        for start in range(0, len(keys), limit):
-            ids = keys[start:start+limit]
+        element = max(first.element_size(), torch.empty((), dtype=target).element_size())
+        start = 0
+        while start < len(keys):
+            end, nbytes = start, 0
+            while end < len(keys):
+                size = max(1, unique[keys[end]].numel())*element
+                if end > start and nbytes+size > PACK_BYTES:
+                    break
+                nbytes += size
+                end += 1
+            ids = keys[start:end]
             rows = [unique[key] for key in ids]
             copies = [move(rows[0], device, target)] if len(rows) == 1 else _Copies.apply(device, target, *rows)
             result.update(zip(ids, copies))
+            start = end
     return lambda t: result[id(t)]
 
 

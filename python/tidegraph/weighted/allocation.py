@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import torch
 from torch.autograd.function import once_differentiable
 from .quadratic_coordinates import coordinates
+from .allocation_failure import scalar_failure
 
 
 @dataclass(frozen=True)
@@ -128,11 +129,14 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
     lower, upper, temperature = _validate(scores, caps, lower, upper, temperature)
     score_shift = None if score_shift is None else _scalar(score_shift, scores, "score_shift")
     original_scores = scores
+    def failure(message, **actual):
+        return scalar_failure(message, original_scores, caps, lower, upper, temperature,
+                              score_shift=score_shift, **actual)
     with torch.no_grad():
         if score_shift is not None:
             scores = scores-score_shift
             if not torch.isfinite(scores).all():
-                raise ArithmeticError("shifted allocation scores exceed requested dtype range")
+                raise failure("shifted allocation scores exceed requested dtype range", stage="shift")
         mass = caps.sum()
         zero = scores.new_zeros(())
         response = scores
@@ -148,7 +152,10 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
             target = lower if branch in {"lower", "equality"} else upper
             lam = zero
             if branch != "slack":
-                c, lam, response = _solve(original_scores, caps, target, temperature)
+                try:
+                    c, lam, response = _solve(original_scores, caps, target, temperature)
+                except ArithmeticError as error:
+                    raise failure(str(error), stage="solve", branch=branch) from error
                 if score_shift is not None:
                     lam = lam-score_shift
         free = (c > 0) & (c < caps)
@@ -156,13 +163,15 @@ def allocate_quad(scores, caps, lower, upper, temperature=1.0, *, score_shift=No
             residual = zero
         else:
             if ((caps > 0) & (response > 0) & (c == 0)).any():
-                raise ArithmeticError("positive quadratic allocation support underflowed in requested dtype")
+                raise failure("positive quadratic allocation support underflowed in requested dtype",
+                              branch=branch, controls=c, multiplier=lam, response=response)
             response_error = (c-_response(response, caps, temperature, zero)).abs().max()
             residual = torch.stack((response_error, (lower-c.sum()).clamp_min(0),
                                     (c.sum()-upper).clamp_min(0))).max()
             tolerance = 64*torch.finfo(scores.dtype).eps*max(1, scores.numel())
             if not torch.isfinite(residual) or residual > tolerance:
-                raise ArithmeticError("quadratic allocation residual exceeds dtype tolerance")
+                raise failure("quadratic allocation residual exceeds dtype tolerance", branch=branch,
+                              controls=c, multiplier=lam, response=response, residual=residual, tolerance=tolerance)
     if branch == "zero":
         result = c  # Explicit all-zero boundary: no gradient roots.
     elif branch == "caps":

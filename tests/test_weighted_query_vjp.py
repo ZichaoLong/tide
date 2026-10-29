@@ -104,14 +104,17 @@ def test_query_independent_fields_states_inputs_and_zero_cotangents(dtype, famil
 
 @pytest.mark.parametrize("kind", ["read", "full"])
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_query_parameter_versions_and_first_order(kind, native):
+@pytest.mark.parametrize("singleton", [False, True])
+def test_query_parameter_versions_and_first_order(kind, native, singleton):
     w, requests, roots = independent(torch.float64, "gated_delta", "state")
     if kind == "full":
         requests = [FullInput(w.initial() if r.state is None else r.state, r.time, r.content, r.content.value.new_tensor(.3)) for r in requests]
     p = w.read_program if kind == "read" else w.full_program
     query = native_query if native else evaluate
+    if singleton:
+        requests = [requests[2]]
     def root():
-        row = query(p, w, requests, kind=kind, slots=2)[2]
+        row = query(p, w, requests, kind=kind, slots=2)[0 if singleton else 2]
         return row["score"] if kind == "read" else row.value
     with pytest.raises((ValueError, RuntimeError), match="first-order"):
         torch.autograd.grad(root().sum(), tuple(roots.values()), allow_unused=True, create_graph=True)

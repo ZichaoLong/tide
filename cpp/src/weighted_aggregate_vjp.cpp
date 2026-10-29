@@ -1,5 +1,6 @@
 // Architecture §2: batched numeric Aggregate with isolated first-order roots.
 #include "weighted_aggregate.h"
+#include "weighted_singleton_vjp.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
@@ -53,6 +54,17 @@ class AggregateVjp final:public torch::autograd::Node {
 };
 std::vector<AggregateResult> bind_group(NodeWeights w,std::vector<AggregateInput> requests,
     const SourceClasses& classes,double alpha,double epsilon,bool zero){
+  if(requests.size()==1){
+    variable_list originals;
+    for(const auto& [name,t]:w.extra)if(name.find("aggregate_program.transforms.")==0)originals.push_back(t);
+    variable_list atoms;for(const auto& s:requests[0].sources){originals.push_back(s.atom.value);atoms.push_back(s.atom.value);}
+    Tensor ref;
+    if(zero){
+      auto payload=at::stack(atoms);auto total=payload.select(1,0).clamp_min(0).sum();
+      ref=at::cat({total.reshape({1}),at::zeros({payload.size(1)-1},payload.options())});
+    }else ref=aggregate_batch(w,requests,classes,alpha,epsilon)[0].value;
+    return {{singleton_boundary(originals,{ref})[0],{}}};
+  }
   auto node=std::make_shared<AggregateVjp>();
   variable_list inputs,leaves;
   auto leaf=[&](Tensor& t){

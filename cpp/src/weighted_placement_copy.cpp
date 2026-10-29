@@ -20,7 +20,10 @@ class Copies final:public torch::autograd::Function<Copies>{
  public:
   static torch::autograd::variable_list forward(torch::autograd::AutogradContext* ctx,at::TensorList rows,at::Device device,at::ScalarType dtype){
     ctx->set_materialize_grads(false);ctx->save_for_backward(rows.vec());
-    auto outputs=at::stack(rows).to(rows[0].options().device(device).dtype(dtype)).unbind();
+    torch::autograd::variable_list flat,outputs;
+    for(const auto& t:rows)flat.push_back(t.reshape({-1}));
+    auto packed=at::cat(flat).to(rows[0].options().device(device).dtype(dtype));int64_t offset=0;
+    for(const auto& t:rows){outputs.push_back(packed.narrow(0,offset,t.numel()).reshape(t.sizes()));offset+=t.numel();}
     torch::autograd::variable_list frozen;
     for(size_t i=0;i<rows.size();++i)if(!rows[i].requires_grad())frozen.push_back(outputs[i]);
     ctx->mark_non_differentiable(frozen);return outputs;
@@ -30,8 +33,9 @@ class Copies final:public torch::autograd::Function<Copies>{
     auto rows=ctx->get_saved_variables();torch::autograd::variable_list result(rows.size()+2),used;std::vector<size_t> ids;
     for(size_t i=0;i<bars.size();++i)if(bars[i].defined()&&ctx->needs_input_grad(i)){ids.push_back(i);used.push_back(bars[i]);}
     if(!used.empty()){
-      auto copies=at::stack(used).to(rows[0].options()).unbind();
-      for(size_t j=0;j<ids.size();++j)result[ids[j]]=copies[j];
+      torch::autograd::variable_list flat;for(const auto& t:used)flat.push_back(t.reshape({-1}));
+      auto packed=at::cat(flat).to(rows[0].options());int64_t offset=0;
+      for(auto i:ids){result[i]=packed.narrow(0,offset,rows[i].numel()).reshape(rows[i].sizes());offset+=rows[i].numel();}
     }
     return result;
   }
@@ -50,17 +54,23 @@ void placement_tensors(const std::vector<Tensor*>& handles,at::Device device,at:
   for(const auto& [id,t]:unique){
     auto target=t.is_floating_point()?dtype:t.scalar_type();
     if(t.device()==device&&t.scalar_type()==target){mapped.emplace(id,t);continue;}
-    std::ostringstream key;key<<t.device()<<'/'<<int(t.scalar_type())<<'/'<<int(target)<<'/'<<t.sizes();groups[key.str()].push_back(id);
+    std::ostringstream key;key<<t.device()<<'/'<<int(t.scalar_type())<<'/'<<int(target);groups[key.str()].push_back(id);
   }
   for(const auto& [key,ids]:groups){
     const auto& first=unique.at(ids[0]);auto target=first.is_floating_point()?dtype:first.scalar_type();
-    auto bytes=first.numel()*std::max<int64_t>(first.element_size(),c10::elementSize(target));
-    const size_t limit=std::max<int64_t>(1,8*1024*1024/std::max<int64_t>(1,bytes));
-    for(size_t start=0;start<ids.size();start+=limit){
-      auto count=std::min(limit,ids.size()-start);std::vector<Tensor> rows;
+    const auto element=std::max<int64_t>(first.element_size(),c10::elementSize(target));
+    for(size_t start=0;start<ids.size();){
+      size_t end=start;int64_t bytes=0;
+      while(end<ids.size()){
+        auto size=std::max<int64_t>(1,unique.at(ids[end]).numel())*element;
+        if(end>start&&size>8*1024*1024-bytes)break;
+        bytes+=size;++end;
+      }
+      auto count=end-start;std::vector<Tensor> rows;
       for(size_t j=0;j<count;++j)rows.push_back(unique.at(ids[start+j]));
       auto values=count==1?std::vector<Tensor>{placement_copy(rows[0],device,target)}:Copies::apply(at::TensorList(rows),device,target);
       for(size_t j=0;j<count;++j)mapped.emplace(ids[start+j],values[j]);
+      start=end;
     }
   }
   std::vector<Tensor> replacements;replacements.reserve(handles.size());

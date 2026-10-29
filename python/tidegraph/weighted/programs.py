@@ -229,8 +229,13 @@ class RegionalTotal(RegionProgram):
         elif mode in HARD:
             result = hard_selection(scores-shift,mu,c.k,nodes)
         if result is None:
-            result = allocate(scores,mu,low,high,c.allocation_temperature,
-                              regularizer=c.regularizer,ent_alpha=c.ent_alpha,score_shift=shift).controls
+            from .allocation_failure import AllocationFailure
+            try:
+                result = allocate(scores,mu,low,high,c.allocation_temperature,
+                                  regularizer=c.regularizer,ent_alpha=c.ent_alpha,score_shift=shift).controls
+            except AllocationFailure as error:
+                error.time, error.nodes, error.members = r.time, list(nodes), list(r.layout.members)
+                raise
         controls = dict(zip(nodes,result.unbind()))
         return Selection({v for v,c in controls.items() if c.detach() > 0}, controls, History(last_time=r.time))
 

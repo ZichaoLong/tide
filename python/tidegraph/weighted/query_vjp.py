@@ -103,6 +103,24 @@ def evaluate(program, weights, requests, *, kind="read", slots=0, mode="hard", z
     for i, r in enumerate(requests):
         groups.setdefault(_signature(weights.kernel, weights, r, kind), []).append(i)
     for ids in groups.values():
+        if len(ids) == 1:
+            from .read_batch import evaluate as read
+            from .full_batch import evaluate as full
+            from .singleton_vjp import boundary
+            originals = list(bundle.parameters())
+            def keep(value):
+                originals.append(value)
+                return value
+            rows = _rows([requests[ids[0]]], kind, keep)
+            if kind == "read":
+                row = read(program, weights, rows)[0]
+                names = sorted(row)
+                results[ids[0]] = dict(zip(names, boundary(originals, [row[n] for n in names])))
+            else:
+                row = full(program, weights, rows, slots, mode, zeta)[0]
+                value, = boundary(originals, [row.value])
+                results[ids[0]] = FullResult(value, {slot: value for slot in range(slots)})
+            continue
         inputs = []
         def capture(value):
             inputs.append(value)

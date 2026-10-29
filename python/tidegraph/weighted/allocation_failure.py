@@ -4,6 +4,7 @@ Allocation §6/S.2. Float values use round-trippable JSON numbers, int64 metadat
 uses integers. Nonfinite diagnostics use explicit strings, never JSON null.
 """
 import math
+import torch
 
 
 class AllocationFailure(ArithmeticError):
@@ -23,3 +24,14 @@ class AllocationFailure(ArithmeticError):
         return dict(schema="tide-allocation-failure-v1", error=str(self), row=self.row,
                     tensors={k: tensor(v) for k, v in self.tensors.items()}, details=self.details,
                     time=self.time, nodes=self.nodes, members=self.members)
+
+
+def scalar_failure(message, scores, caps, lower, upper, temperature, *, regularizer="quad",
+                   ent_alpha=None, branch="unknown", stage="numeric", score_shift=None, **actual):
+    """Snapshot only values actually computed; malformed input stays ValueError."""
+    values = dict(scores=scores, caps=caps, lower=lower, upper=upper, temperature=temperature,
+                  shift=score_shift, **actual)
+    values = {k: v if isinstance(v, torch.Tensor) or v is None else scores.new_tensor(v)
+              for k, v in values.items()}
+    return AllocationFailure(message, 0, values, dict(regularizer=regularizer, alpha=str(ent_alpha),
+        branch=branch, solver="python-scalar", stage=stage))

@@ -1,3 +1,4 @@
+#include "tide/allocation_failure.h"
 // Allocation §2, §4: independent C++ complete region step, no scheduler policy.
 #include "weighted_detail.h"
 #include "weighted_scoring.h"
@@ -62,7 +63,10 @@ Selection region_step(const RegionWeights& w,const RegionInput& r,const Regional
     else if(c.attention())result=attention_send(s,mu,recv,c.selection_mode,*c.allocation_base,at::full({},*c.allocation_temperature,s.options()));
     else if(c.selection_mode=="proportional")result=proportional(mu,*c.k);
     else if(c.hard())result=hard_selection(s-shift,mu,*c.k,nodes);
-    if(!result.defined())result=allocate(s,mu,low,high,at::full({},*c.allocation_temperature,s.options()),*c.regularizer,c.ent_alpha,shift).controls;
+    if(!result.defined()){
+      try{result=allocate(s,mu,low,high,at::full({},*c.allocation_temperature,s.options()),*c.regularizer,c.ent_alpha,shift).controls;}
+      catch(AllocationFailure& e){e.time=r.time;e.nodes=nodes;e.members=r.layout.members.vec();throw;}
+    }
     Selection answer;answer.history.last_time=r.time;
     for(size_t i=0;i<nodes.size();++i){answer.controls[nodes[i]]=result[i];if(result[i].item<double>()>0)answer.active.insert(nodes[i]);}
     return answer;

@@ -132,3 +132,21 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 [474f9af固定资格及原材料复核](evidence/core5-local-allocation-factorized-kv-20261028.md)记录
 实际失败行的独立Decimal、局部坐标/阈值修复、CPU/NPU及CUDA构建。原大图已能执行测量窗，
 但完整KV状态/训练仍有严格差异；局部分配通过不能解除这些完整模型限制。
+
+## 有界实际调用诊断
+
+标量Python/C++数值拒绝也抛`AllocationFailure`并复制实际评分、caps、bounds、temperature、
+shift及已计算字段；尚未计算的controls/residual不伪造。区域调用补真实候选ID、members及int64时间。
+无效shape/dtype/输入定义域仍是原ValueError/invalid_argument；没有合法求解行时不虚构数值快照。
+
+C++ `begin_allocation_observation(max_rows,max_bytes)` / `end_allocation_observation()`
+提供线程局部、有界、禁止嵌套的诊断。scalar/batch实际成功返回同时记录branch/free/controls/
+multiplier/residual；达到任一预算只增加dropped，不改变计算或成功返回。C++核心没有Python
+回调或文件I/O。`observe_allocations(native=core)`退出时解码，默认4096行/64MiB；
+`diagnose_weighted_workload --capture-allocations`支持native完整调用，不能用于计时结果。
+`test_allocation_failure`和`test_weighted_allocation_observer`检验不可变快照、预算、梯度、hook
+释放及原生完整图逐值不变。
+
+
+标量quad在正支持下溢拒绝时尚未执行残差公式，失败codec不填入虚构的零残差；
+`test_scalar_underflow_does_not_invent_uncomputed_residual`保留最小subnormal见证。

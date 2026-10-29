@@ -1,5 +1,6 @@
 // Allocation §6/S.2: independent bracket solver + exact response-map VJP.
 #include "tide/weighted.h"
+#include "tide/allocation_observation.h"
 #include "weighted_quadratic_coordinates.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <limits>
@@ -49,6 +50,8 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
   if(shift.defined())check(shift.dim()==0&&shift.device()==t.device()&&shift.scalar_type()==t.scalar_type()
     &&at::isfinite(shift).item<bool>(),"invalid allocation score_shift");
   Allocation result;Tensor response_input;
+  const AllocationRow row{input,mu,lower,upper,tau,shift};
+  auto failure=[&](const std::string& message){return scalar_allocation_failure(message,row,result,response_input,"quad",std::nullopt);};
   {
     at::NoGradGuard guard;
     if(shift.defined()){t=input-shift;check(at::isfinite(t).all().item<bool>(),"shifted allocation scores exceed requested dtype range");}
@@ -65,7 +68,7 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
         auto target=(result.constraint=="lower"||result.constraint=="equality")?lower:upper;
         auto origin=detail::quad_pivot(input,mu,target),centered=input-origin;
         auto lo=-tau*mu.max(),hi=at::zeros_like(lo);
-        if(!(lo<0).item<bool>())throw std::runtime_error("quadratic transition interval underflowed in requested dtype");
+        if(!(lo<0).item<bool>())throw failure("quadratic transition interval underflowed in requested dtype");
         // Fixed bounded bisection is forward numerics only. The backward below
         // differentiates the exact map, independently of these iterations.
         for(int i=0;i<80;++i){
@@ -86,15 +89,16 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
       }
       result.controls=c;
     }
-    auto c=result.controls;result.free=(c>0)&(c<mu);result.residual=zero;
+    auto c=result.controls;result.free=(c>0)&(c<mu);
+    if(result.constraint=="zero"||result.constraint=="caps")result.residual=zero;
     if(result.constraint!="zero"&&result.constraint!="caps"){
       if(((mu>0)&(response_input>0)&(c==0)).any().item<bool>())
-        throw std::runtime_error("positive quadratic allocation support underflowed in requested dtype");
+        throw failure("positive quadratic allocation support underflowed in requested dtype");
       result.residual=at::stack({(c-response(response_input,mu,tau,zero)).abs().max(),
                                (lower-c.sum()).clamp_min(0),(c.sum()-upper).clamp_min(0)}).max();
       const double eps=t.scalar_type()==at::kDouble?std::numeric_limits<double>::epsilon():std::numeric_limits<float>::epsilon();
       if(!at::isfinite(result.residual).item<bool>()||result.residual.item<double>()>64*t.numel()*eps)
-        throw std::runtime_error("weighted quadratic allocation residual exceeds dtype tolerance");
+        throw failure("weighted quadratic allocation residual exceeds dtype tolerance");
     }
   }
   if(result.constraint=="caps")result.controls=mu;
@@ -105,6 +109,7 @@ Allocation allocate_quad(const Tensor& input,const Tensor& mu,const Tensor& lowe
     auto bound_shift=shift.defined()?shift:at::zeros({},input.options());
     result.controls=ExactQuad::apply(input,mu,target,tau,result.controls,result.multiplier,result.constraint!="slack",bound_shift,response_input);
   }
+  observe_allocation(row,result,"quad",std::nullopt,"native-scalar");
   return result;
 }
 }  // namespace tide::weighted

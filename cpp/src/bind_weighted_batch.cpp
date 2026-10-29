@@ -1,6 +1,7 @@
 // Testing/client adapters; all numerical computation is owned by LibTorch.
 #include "tide/weighted.h"
 #include "tide/allocation_failure.h"
+#include "tide/allocation_observation.h"
 #include "weighted_sending_batch.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
@@ -15,6 +16,10 @@ void bind_weighted_batch(py::module_& m){
       value.attr("time")=py::cast(e.time);value.attr("nodes")=py::cast(e.nodes);value.attr("members")=py::cast(e.members);
       PyErr_SetObject(type.ptr(),value.ptr());
     }
+  });
+  m.def("begin_allocation_observation",&begin_allocation_observation);
+  m.def("end_allocation_observation",[](){
+    auto out=end_allocation_observation();return std::make_tuple(out.rows,out.dropped,out.bytes);
   });
   using Row=std::tuple<Tensor,Tensor,Tensor,Tensor,Tensor,std::optional<Tensor>>;
   m.def("weighted_allocation_batch",[](const std::vector<Row>& rows,const std::string& regularizer,std::optional<double> alpha){
