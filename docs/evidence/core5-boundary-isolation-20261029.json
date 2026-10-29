@@ -1,0 +1,352 @@
+{
+  "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "raw_sha256": {
+    "first_write": "4df75a1a06cc0fc35beb03dc861b9042c5aee295dc0811aa1a8ba6134cd3e147",
+    "half": "118c8e45682ce1815a2e042d2f96f150906ca6f9a2bc88aa79f7bdf97c91e456",
+    "bridge": "05660b7a8ba42529eee9b204900eb8023ecb3e67b056300bb34e1e25f1a916d4"
+  },
+  "first_write": {
+    "schema": "tide-first-write-isolation-v1",
+    "source": [
+      "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      ""
+    ],
+    "fixture_sha256": "de26031cc637b6e0f126b5ae04d801baf5ff623a576ecccdcbd0eab67b3523b4",
+    "binary_declared_sha256": "8bcc36d0b76ee274d6dba1f2f5a0d4df8f773b8f426d943328cd6adcd206f90f",
+    "verified_tensor_sha256": {
+      "14": "97ed608da436bb9995e8f681ddc504deac200aca63122d26b1621a019c3c841f",
+      "12": "e30837f82e95479842f025f503c57c803bd346d651bb34f86614ae20f4b04ad0",
+      "13": "c54c34c83b819d634cc35c6ecefd91ed76da047c6c22fd402c531d777c51a823",
+      "15": "ea26c954ff346063289fad086ae6b94df4771cb8efcce57bbc3e1d19b68bb5b7",
+      "31": "d851a3a91d0af01bae01c078196691e358a25dd583033f8a3e606fdb2e4fff45",
+      "32": "d0cc1cb85dd1d2baf1c79654832fc4b49fa47af581f55b746a0e55871d8092a4",
+      "33": "c94fbbe2d99aa630399a52ad7e9b623d405d6b012ff465aabb46686bb2b719a2",
+      "49": "0a943ff97dc7e0a4434c6677fc6f744bdacdfe8e1955ddbcca499b05e8d5c210",
+      "50": "58c04b0b8b15cbd128a4683694bdb32f575ed6eca6e7be74c07fa2b3cec2787d",
+      "51": "20e7c4811df04ffffd5e089ce5bdcd23da3c555d9564af8942548b338901a902",
+      "67": "5671a3003afb86768206ebd890dff4139c72e8211ed6b9916f6cec938de98c71",
+      "68": "bb0092d56987660637d6857e260809656c2975a047b0fdab49dfdf7c18411caa",
+      "69": "3771e76be2aadd2565375a4c161816a204f01e4797714b202be86c41ca746c66",
+      "85": "3aa1d0f5345150c6e2df9cb7b11dcd47656771f1d30d9d70d5064c243322fa87",
+      "86": "f3965a51eea907f4f928cce63a1f39395f6a8c8c8a13f22ba31c30c8a53dbe65",
+      "87": "0122456e000bd844968ff7a44c81fd7f13c6ad1c6dc15c075b8c1290b0d40e55",
+      "103": "b844a6ca8d6b316f16350a14052c1385633b4a2db3ffa4af87675bc1165b6e21",
+      "104": "06cf5246ec3047d18a61b3816348969ad1082f586a54bf8dbaaf459f3a3b998e",
+      "105": "3d33fd843d48600a20d508959128307c0e871b849271b1282110b01d338eea8a",
+      "121": "adad0fb2b2db7e11a8f313eeb7482e5d22bed09e4d2ecf90ef13c00f6fa67884",
+      "122": "8d2e1b3abe8d1426024e28e686e7a0b788c5391b9fd8ecbd29da9e9f6268422b",
+      "123": "a00d0672155d046d95c5c26d28aba0251927eb2d61eee2ff1a1168163601a835",
+      "139": "fa4bcef1c85333b9e78dd29aa8d1f93696358a7ac082ddc9c1584e74f3a7d0e4",
+      "140": "bd5cdca3b3f97833efd2956a79f98f1f407f4609adb7354f341b5b8c9c23f9eb",
+      "141": "af83a35e31f65ef7de7c2b5fa250c1e674e67169fd762e12d54a5f72b64a691c",
+      "157": "b9af80458f3f0838e99af28136e8b9c62f19caa055472138af35ff34ae7031fd",
+      "158": "9b5c809b3aaf73d2459a37b1589ec2383a1c0861fb7cba7160b5b1cfb486e339",
+      "159": "f09d722871c681704511daf20142c50eec7f9292ca3ea38b9a67c6e9f2d401eb",
+      "175": "ea9a1e6e79873f53f12694d7a55b4d47a16186c1a17676fd1c2fbac43e712105",
+      "176": "05cfa38d716ca982c1ec58b8a64d7345eee4cf1b835632c5bf48d14bcff17233",
+      "177": "f47a43faaf4d888007b675ce605f532a735a46f92e31f6f9d578215929300941",
+      "193": "fd6e51acb195ae99b819147e621a18b95933593a3c0dc529d4f24e3090dc7a95",
+      "194": "09dba6efcfeb818458bce67c03acad06039c954300b77165fa1cfad96bcfc379",
+      "195": "b59ef52091a3276eb492812b706ac70d86dc2cc930e243e3380fd25259250d30",
+      "211": "234acc35aac8ff9cf8dfad3a8888d6c1263e888c72e6a0f820e1efd0dd04320c",
+      "212": "c2b07e35dc081961d548fb23ac91f540b179fb6d7fa38f993f2ce82e7b21a274",
+      "213": "4609c6edbc0950611de43d45e70b3085fb98882b67277282df7589d18c6be2c6",
+      "229": "bf0cc8d6da38609123cba2ba660f909a998b8a9951c0648bf30c3cf23f20f4e4",
+      "230": "6dff860ef359598f5225487c09bbd54cde011afff203abc17bd27c80319775fb",
+      "231": "742d3626b70c46ddf8f29a835d57fc59596b9beb0359f0e26948be6882042fad",
+      "247": "1702df0463a18e2474e01793b84a19827e80d86d62fdbc65cdb5271f94b24b59",
+      "248": "c98462e2d294e6657e7de99ca98deabd5b7be325150cd906b3c72e90e879c490",
+      "249": "143aea96dc209d89e7b7b913e62112369d904dc35ebf9622f1968e15fdba2425",
+      "265": "2d2f8357022e245202b07b0129261c11d838ed797639b7c2fcd45ebd8f8618d7",
+      "266": "d15bd584d5f05d393700e88cecf2e20bec520e6560764b465317a045dbf51a3e",
+      "267": "af9bf471b34774bd7e9f2e081c51438dedd0da4de5fb9b145aba8e2cf0190ad1",
+      "283": "79022f9544e56a00a0000e10348021b1001a018565ba47c0083b3bf941c60c0f",
+      "284": "4dcc59862f63308d36242ae15572a347e06059f34c9aea2a30c04397807f2e99",
+      "285": "4d074d53e15d0a00a35cd0ab180bd8940bd448fa165f076b6a8b97274f980e07",
+      "301": "d5fcec6fa6410d4830c50f17de413722e3b214840b80274cc6bd11d45d7abbea",
+      "302": "398be1fc60bb0951c1a77f64e891caa4f722d5b9cd28c9a833dd2bef87b2bed8",
+      "303": "8da60c30a8e2c584fcc21758277238177a9fefd5e08ad5cd00b1e3edfb27e61f",
+      "319": "3fdda9c13161672abe58f5f0f19dd6a4ed318fb40d230190c7bf64bfc0bde5ff",
+      "320": "dd0ac74cc1cb1b4ce414fe8cb51a419c5de82170e7878d545c6a7fa76cfe5bcf",
+      "321": "cbf79a21ffafe1e6048148f02796ffcbcae212b73cb364c5057c87f163d92ddf",
+      "337": "6091fa5efb3dfe90689c93a852d5d27a6cd87a3c25aba7e96549564bc37abd56",
+      "338": "9322780d17342f09285a1e38ed9ede67d1722dd28d0251520e7cfd6a75a0ec39",
+      "339": "86addb79c780b10248c3a2ad9fddd1daf432d482ab6f79a78c0dbc268c71b468",
+      "355": "40d0685b22a5270036043c76336b6b8dc19985dea233e8ccd053067f16273cfe",
+      "356": "595caac67af6a316281fa8e148826e5cf53e37a5e1efaa2772b27a5162789164",
+      "357": "2c691d5fbef9f196899c413b4ba5ee7bf062848bda7d0619273cfd5fd654a4f3",
+      "373": "fc648afb1abc266d259dcae97823b7fe7ba5ea62a180f17d8aab00dd0fb2c7c6",
+      "374": "8e23a4a87880a302e4998b49a6a697619aad130a14c9b6bd8b34dd8781cf157a",
+      "375": "2926780a83cd217764f83522bcc2266a560590499d99776984124820250d94d2",
+      "391": "958673a92e7735f9aef297210184abed3eeaca6e834925e54210971d39bc0f85",
+      "392": "b5a95b265add5506b25fe985618664da43b704f58b6d4b8a49a6eef7c3d27bf4",
+      "393": "f88f41ba9098fe86aaa5e8ec4cb149fd3e89bf8a5e26fe289076cff290d80b85",
+      "409": "a18bb22240702200e7655b1994c99a62b67d7ca8a46eab0ebf7f76a06b1281e2",
+      "410": "b7edc6b05b0f5ebe68e14436f3376851080d3c8031fbc7845548d1beed947b18",
+      "411": "ca20e5c0be38a977d46d0251a33c57a233328da2eef5fb65e5521f94e84b8d5b",
+      "427": "90847363e8998b4d04c77ffcd881dd09b06403b0ccb3e7c9529fa8fa5a7cd3c3",
+      "428": "78e32f5c65941ea769fd23609fab7445f1b234c6d8007a4ff2c707081f32e116",
+      "429": "0bee0d6fadbf6cedaea8ec5df8785e9d3db734faf75c54745c1901e8d52de993",
+      "445": "1193bd7984e0a75a838b5c5342bdb8779c732ed50691d1cb42cc465ce9a940cd",
+      "446": "9279f40ff08711f995ba81eb3bcc3ce85ee9e3d2a752649977b6499c84e920a9",
+      "447": "d8906c41dcfcd09f2c76acad79ca52bf440d8ea831d1e8dfb2ae570921b5861c",
+      "463": "7853a4894a2a3c34aec5a382828e03b21bf9c9b5952c4f975204ceafaf87d749",
+      "464": "b5a20195509c38970adef4f98961ede106868d7d7246bf8834de42320c0e4fd4",
+      "465": "ae998380e6c21e83c2505e6abf9557043a6164d710b4e851d3581c591a2390b1",
+      "481": "61f15b1ebdaac35cf12a343dbd28cde287f98ce9bbf14b2095cd215c77af323d",
+      "482": "f562fc96033e78604a3bf9d9944b0368bd3abf19d048adbed1d7aeb7f3792809",
+      "483": "e2a97a54de88dfb188b67d692ad010becf9e09bae154c48aead4deeca6202e47",
+      "499": "969250518e82462b12a6d3ac214f9afe25fa097dfb5e78498c5476bfcb88c2c1",
+      "500": "98fac1b0d4652f57df1b3a326cd185c50f3a386d15f7c3c844b3bf63bba0aa85",
+      "501": "2ca1a9cb3b3336574dddd70251262b9ac7b486da9b7641cbed197f2ba2539ed0",
+      "517": "8d7d16d57907f381820f7fea281c33d13ff7790c908f9b416f07069002403126",
+      "518": "955cf1565d6ecd021255f469f319ecac22417ca15872ca4605d7691acd2d3e94",
+      "519": "a7616a9605ea89f5c3f0d0012a6b3ca3e2837ca031a268c579ae367254226be1",
+      "535": "61c98381c3ed348f48c54620adc8280f3568dfa6062fb099b108d08193f28411",
+      "536": "16820376b978c8e24979077de6ecb6a8c03600fd997c8ead53306de2d2a4ff82",
+      "537": "bbb4cf4e6d42f3baa4035421796f4faa591f4d6661582f2ef9a7e65f009d4232",
+      "553": "8f5a6f4b15a65b45a83bce4668fa69f4af1a26ff6a1112c96510a96d3b4a45f6",
+      "554": "5d3c9b9e10d2f8114592223da8a1c06ec038629640cf67b5e40081a5bfdcd810",
+      "555": "107a42bd747fc847a5374f288a862b09b00fe8621dc010b557bff05c1bc6316c",
+      "571": "64a788ace447d1a58dce7bf7107af8673ae36a86607b382dc1d51f8e984a1cd5",
+      "572": "09acf7b63ec76154cd5632e1711494df31c245d8bb41150ec86c02649e718781",
+      "573": "a9077b545f17b7e80634c8209a167da63aafa405e0f54064325ccbaf5ef2dd57",
+      "14090": "769555a3e0e98bc55061f8637635b8d2a3d97f1c342d8327bd2ca1d2bd425537",
+      "4": "4ed73903592cdc223e671fe4fc5953c14b9436f4727966ca4989eb25359a9835",
+      "5": "ccff947aa567fe531407b0c0f0373dea9f3f3ae836bcaff757ec14588c43bfd2",
+      "6": "b10c26ec332161e96237b60305d6e7402862bc67b9e6ab573fb8534b2ad41edc"
+    },
+    "region": 0,
+    "nodes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "operand_bytes": 337133572,
+    "source_batch_vs_scalar": {
+      "max_abs": 8.58306884765625e-06,
+      "strict_close": false,
+      "failing_coordinates": 3
+    },
+    "private_batch_vs_scalar": {
+      "max_abs": 3.814697265625e-06,
+      "strict_close": false,
+      "failing_coordinates": 3
+    },
+    "source_and_private_batch_vs_scalar": {
+      "max_abs": 4.1961669921875e-05,
+      "strict_close": false,
+      "failing_coordinates": 194
+    },
+    "scalar_vs_exact": {
+      "max_abs": 3.846305981980436e-05,
+      "strict_close": false,
+      "failing_coordinates": 289
+    },
+    "private_vs_exact": {
+      "max_abs": 3.846305981980436e-05,
+      "strict_close": false,
+      "failing_coordinates": 284
+    },
+    "combined_vs_exact": {
+      "max_abs": 3.559148851461913e-05,
+      "strict_close": false,
+      "failing_coordinates": 234
+    },
+    "coherent_local64_vs_exact": {
+      "max_abs": 9.159327412078255e-07,
+      "strict_close": true,
+      "failing_coordinates": 0
+    },
+    "stats": {
+      "state_private_projection_calls": 3,
+      "state_private_projection_rows": 96,
+      "max_state_private_projection_batch": 32
+    },
+    "state": "diagnosed",
+    "scope": "first input-only region local maps; no full graph, routing, training or throughput qualification",
+    "witness_sha256": "347500307bd12807931b2bbb1d2288e7606f10feaddaca91d9cede2d7c0400a0"
+  },
+  "half": {
+    "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+    "dirty": "",
+    "fixture": "tests/test_weighted_precision.py::fixture(gated_delta)",
+    "fixture_sha256": "45d7ada2e6e313d75508c19e1db860bd795a52da82ad4e5e325c0515fa6ef0e4",
+    "witness_sha256": "b05d84f721ef3894c173bdb0b1f985c0bc590460afebd2e28341b6ee761590a7",
+    "precision": "eager half payload; explicit FP32 scoring; FP32 masters; AdamW lr=.001, loss_scale=16",
+    "tolerance": "unchanged public half tolerance; exact discrete/None",
+    "state": "strict_mismatch",
+    "arithmetic": {
+      "policy": "normalization-vjp-fp64",
+      "forward": "unchanged",
+      "output_and_gradient_dtype": "unchanged",
+      "counts": {
+        "rms": 404,
+        "scaled_rms": 48,
+        "l2": 112
+      },
+      "scope": "diagnostic only; CPU half, local VJP before half accumulation"
+    },
+    "steps": [
+      {
+        "step": 0,
+        "complete_forward": "passed",
+        "losses": [
+          7.608858585357666,
+          7.608860015869141
+        ],
+        "parameter_witnesses": []
+      },
+      {
+        "step": 1,
+        "complete_forward": "passed",
+        "losses": [
+          7.585606575012207,
+          7.585603713989258
+        ],
+        "parameter_witnesses": [
+          {
+            "name": "nodes.5.kernel.conv.weight",
+            "index": [
+              0,
+              2
+            ],
+            "reference": 0.0262603759765625,
+            "candidate": 0.0282440185546875,
+            "max_abs": 0.001983642578125,
+            "reference_gradient": 1.862645149230957e-08,
+            "candidate_gradient": 4.842877388000488e-08,
+            "strict_error": "root: Tensor-likes are not close!\n\nMismatched elements: 1 / 42 (2.4%)\nGreatest absolute difference: 0.001983642578125 at index (0, 2) (up to 0.001 allowed)\nGreatest relative difference: 0.07025146484375 at index (0, 2) (up to 0.02 allowed)"
+          }
+        ]
+      }
+    ]
+  },
+  "bridge": {
+    "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+    "dirty": "",
+    "runtime": {
+      "resolved_device": "npu:0",
+      "backend": "npu",
+      "logical_device_index": 0,
+      "resolution_reason": "explicit:npu",
+      "dtype": "float32",
+      "host_architecture": "aarch64",
+      "torch": "2.12.0+cpu",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "torch_npu": "2.12.0.post2",
+      "logical_device_count": 2,
+      "device_name": "Ascend910_9392",
+      "cann_version": "9.1.0",
+      "matmul_allow_hf32": false
+    },
+    "peer": "npu:1",
+    "copy_policy": "cpu_bridge",
+    "launch_blocking": null,
+    "phases": [
+      "before_complete_bridge"
+    ],
+    "scope": "full graph, independent roots, retained state, four AdamW updates, exact decode and remapped-peer/CPU restore",
+    "bridge_counts": {
+      "forward_calls": 20,
+      "backward_calls": 2,
+      "forward_bytes": 240,
+      "backward_bytes": 24
+    },
+    "state": "failed",
+    "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe882f9818.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-10-29-09:16:44 (PID:3295707, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 3295707] 2026-10-29-09:16:44.835.185 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')",
+    "physical_devices": [
+      1,
+      9
+    ]
+  },
+  "jobs": {
+    "core5-boundary-diagnostic-cpu": {
+      "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:16:26.192372+00:00",
+      "finished": "2026-10-29T01:16:36.124210+00:00",
+      "command": [
+        "timeout",
+        "390",
+        "python",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-boundary-diagnostic-cpu.py"
+      ]
+    },
+    "core5-boundary-bridge": {
+      "source": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "started": "2026-10-29T01:16:26.196100+00:00",
+      "finished": "2026-10-29T01:16:48.292137+00:00",
+      "command": [
+        "python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "core5-boundary-bridge-20261029",
+        "--project",
+        "graph-execution-foundation",
+        "--priority",
+        "0",
+        "--npu-count",
+        "2",
+        "--max-wait-seconds",
+        "180",
+        "--state-file",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-bridge/queue-state.json",
+        "--",
+        "timeout",
+        "480",
+        "python",
+        "scripts/diagnose_weighted_async.py",
+        "--device",
+        "npu:0",
+        "--peer-device",
+        "npu:1",
+        "--copy-policy",
+        "cpu_bridge",
+        "--scope",
+        "complete",
+        "--case",
+        "delta-pdg",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-bridge/check"
+      ]
+    }
+  }
+}
