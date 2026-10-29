@@ -23,7 +23,7 @@ CPU/SDK各half=160线程重建、loader/help；CPU设施26项、实际standalone
 ## 活跃任务与下一动作
 
 开发v3两服务均passed/0，无活跃重型任务、无旧队列恢复。
-即将提交实现，然后冻结新checkout；运行相关CPU资格、CPU/SDK standalone重建与真实消费者、
+实现已固定并提交 `372eb87`，只读checkout `artifacts/worktrees/core5-study-v1-qualified`。运行相关CPU资格、CPU/SDK standalone重建与真实消费者、
 Python-owned NPU单卡/half/双卡consumer资格。源码与旧core/resident按内容hash核对，可复用相同库，
 不继承与之无关的测试结论。新日志在 `artifacts/jobs/core5-study-v1-*`。
 随后按有限计划串行比较主架构，结果包含严格失败、实际candidate/Full/消息及合批量。
@@ -42,3 +42,28 @@ D64 CANN流资源失败见[紧凑纤维证据](evidence/core5-compact-fibers-202
 
 接续先 `git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
 只维护本页当前交接、ROADMAP待办及相关契约/证据；长期经验见[performance-lessons](performance-lessons.md)。
+
+固定资格服务 `core5-study-v1-{cpu,sdk,python}-20261029.service`，分别独立background.slice，
+CPU/SDK half=160构建，CPU16000%/内存256GiB，Python设备CPU1600%/内存64GiB，时限各2400s。
+Python请求2卡、SDK请求1卡，队列各最多180s。固定命令/阶段/log在对应job的qualification.json。
+计时实验等待这些资格终态，不与构建重叠。
+
+Python资格首轮在构建内容hash检查明确拒绝：旧resident源码hash含旧构建器（两线程默认），
+未进入设备检查。保留failed记录；新服务 `core5-study-v1-python-v2-20261029.service` 使用本次
+固定源码fresh resident build（half160、256GiB、2400s），再执行单卡/half/双卡消费者检查。
+
+372eb87固定CPU365、standalone CPU6/NPU8通过；Python FP32单/双卡通过，FP16因用旧eager半精度
+记录核对resident FP32中间算术而失败。正在接入已有独立storage参考，不放宽dtype检查。
+另将resident换owner检查串行关闭/重建，避免同时占用两份设备程序/参数bank。
+开发快照 `artifacts/worktrees/core5-storage-reference-dev`，固定patch/hash另存；CPU相关19项通过。
+开发服务 `core5-storage-reference-dev-{python,sdk}-20261029.service`：Python2卡检查/CPU800%/64GiB/600s，
+SDK半CPU160构建及1卡消费者/256GiB/1200s；新日志 `artifacts/jobs/core5-storage-reference-dev-*`。
+
+精度参考修正开发Python3项passed；SDK编译/loader完成但末尾source-state守卫失败，
+终态时源码与起始一致，疑为并发NPU检查在源码cwd创建的短暂scratch，不能冒充构建通过。
+后续设备检查统一在job cwd，新的SDK开发数值服务 `core5-storage-reference-dev-sdk-check-20261029.service`
+直接检查已编译binary（真实hash记录），正式资格仍须新的干净构建。
+
+精度参考修正开发终态：CPU19项、Python NPU3项、SDK NPU8项通过；包括FP16完整记录dtype、
+FP32真实梯度/SGD/master和串行关闭/重建后的精确恢复。即将单独提交该修正并固定资格，
+之后开始已声明有限性能。前轮372eb87 CPU365/CPU消费者6/SDK消费者8证据继续按原来源记账。

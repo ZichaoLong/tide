@@ -272,3 +272,7 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 公共配置/参数清单/自然规模与维护映射见 [core5-study](core5-study.md)。
 `planning.model.resolve_model`复用固定Config适用域；`planning.recipes`绑定FC/HB实例§4.2—4.4，
 `test_core5_planning`独立核对拓扑计数/边/时钟和实际五族/混合参数；不作为真机性能资格。
+
+有限候选目录、完整执行身份/结果门禁及自然recipe多步核对由[core5-study](core5-study.md)进入。
+resident半精度参考的显式存储/算术及串行换owner验收见[性能契约](weighted-performance.md)；
+独立参考不参与候选调度或补写解码结果。

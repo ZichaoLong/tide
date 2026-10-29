@@ -227,7 +227,12 @@ def main():
             record.update(phase="independent-check", window=step)
             write_json(out/"result.json", record)
             expected, expected_loss = reference.step(step)
-            finite(result); equivalent(result, expected, check_device=False, atol=atol, rtol=rtol)
+            finite(result)
+            if reference.storage_reference:
+                from tidegraph.qualification_weighted_precision import assert_records
+                assert_records(result, expected, dtype)
+            else:
+                equivalent(result, expected, check_device=False, atol=atol, rtol=rtol)
             torch.testing.assert_close(torch.tensor(loss, dtype=dtype), torch.tensor(expected_loss, dtype=dtype), rtol=rtol, atol=atol)
         if parameters is not None:
             for name, value in reference.parameters().items():
@@ -235,6 +240,7 @@ def main():
         if training_state is not None:
             equivalent(training_state, reference.training_state(), check_device=False, atol=atol, rtol=rtol)
         record.update(state="passed", post_measurement_complete_records=True,
+                      reference_precision="fp16-storage-fp32-arithmetic" if reference.storage_reference else "same-dtype-eager",
                       parameter_values_checked=parameters is not None,
                       optimizer_values_checked=training_state is not None,
                       final_parameter_gradients_checked=training_state is not None,

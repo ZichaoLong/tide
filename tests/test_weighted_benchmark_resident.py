@@ -35,7 +35,11 @@ def test_resident_actual_training_observation_and_resume(tmp_path, precision, ca
         rb, rx, _ = create()
         reference = Eager(rb, rx, span, config, args, torch.device("cpu"), reference=True)
         expected = reference.step(0)
-        equivalent(actual[0], expected[0], check_device=False, atol=atol, rtol=rtol)
+        if precision == "float16":
+            from tidegraph.qualification_weighted_precision import assert_records
+            assert_records(actual[0], expected[0], torch.float16)
+        else:
+            equivalent(actual[0], expected[0], check_device=False, atol=atol, rtol=rtol)
         # The consumer exports loss as a Python float; apply its existing
         # FP32 tensor tolerance, not the record codec's exact scalar identity.
         torch.testing.assert_close(torch.tensor(actual[1]), torch.tensor(expected[1]),

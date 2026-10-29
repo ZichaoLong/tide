@@ -45,7 +45,8 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     prefix, build = out/"installed", out/"client"
     files = list((root/"tools/weighted_benchmark").iterdir()) + [root/"cpp/bench/compare.cpp", root/"cpp/bench/streaming.h",
-             root/"tools/lh_repro/vendor/nlohmann/json.hpp"]
+             root/"tools/lh_repro/vendor/nlohmann/json.hpp", root/"tools/device_online/weighted_precision_reference.cpp",
+             root/"tools/device_online/weighted_precision_reference.h"]
     report = dict(schema="tide-weighted-benchmark-build-v1", state="running", source=source, dirty=dirty,
                   core=core_record, resident=builds[-1][1] if backend else None, commands=[],
                   sources={str(p.relative_to(root)): digest(p) for p in files if p.is_file()},
