@@ -42,7 +42,7 @@ WeightedAllocationTape append_weighted_allocation(DeviceProgram& p,const at::Ten
     throw std::invalid_argument("invalid/inapplicable resident allocation regularizer/alpha");
   WeightedAllocationTape out{at::zeros_like(scores),at::zeros({rows,width,SlopeFields},scores.options()),
     at::zeros({rows,2},scores.options()),at::full({rows},Absent,lengths.options()),at::empty_like(lengths),has_shift};
-  auto errors=at::zeros({rows},error.options());p.copy(out.lengths,lengths);
+  auto errors=at::zeros({rows},error.options());out.row_errors=errors;p.copy(out.lengths,lengths);
   // One scalar worker owns compact rows; different rows can share cache lines.
   // A parallel lowering must use padded scratch or vector GM publication.
   const uint32_t blocks=1;

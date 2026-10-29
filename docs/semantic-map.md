@@ -254,3 +254,11 @@ Architecture §1 RMS和各线性映射的[算术边界诊断](weighted-arithmeti
 `SingletonVjp`及Query/Aggregate独立根测试；异形字段copy见[packing](weighted-packed.md)。
 Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weighted-allocation.md)，
 诊断返回不构成部分成功，也不改变图v13/checkpoint v5。
+
+常驻KV §1.2低秩映射对应`append_weighted_kv_update`与其独立VJP，
+实际B/V/U tapes、域/尺寸/旧新raw解码见[KV接收](resident-weighted-kv-update.md)。
+`weighted_kv_update_check`使用独立逐行dense公式与独立字段根；公共训练/恢复另验。
+常驻Allocation §6/S.2错误20–22的实际部分行与无效owner见[分配](weighted-allocation.md)，
+由`weighted_flow_boundary_check`及`test_resident_weighted_flow`真实下溢反例检查。
+实际梯度/SGD槽/更新次数解码、磁盘换owner精确续接和主机反向阶段计量见
+[测量设施](weighted-workloads.md)与[常驻训练](resident-weighted-training.md)，不调用参考补写返回。

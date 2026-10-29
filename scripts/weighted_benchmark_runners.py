@@ -31,7 +31,7 @@ def loss_from_outputs(result):
     terms = [(x[0]*x[1:]).square().sum()*.001 for *_, x in result.outputs]
     if not terms:
         raise ValueError("benchmark workload produced no differentiable output")
-    return torch.stack(terms).sum()
+    return torch.stack([t.to(terms[0].device) for t in terms]).sum()
 
 
 def work(result):
@@ -44,7 +44,13 @@ class Eager:
     def __init__(self, binding, inputs, span, config, args, device, reference=False):
         from weighted_device_checks import runner
         self.binding, self.inputs, self.span, self.config, self.args, self.device = binding, inputs, span, config, args, device
-        self.binding.model.to(device)
+        self.devices = (device,) if reference else tuple(torch.device(d) for d in getattr(args, "peer_devices", None) or (device,))
+        self.node_owners = None
+        if len(self.devices) > 1:
+            from weighted_device_checks import locate
+            self.inputs, self.node_owners = locate(binding, inputs, self.devices)
+        else:
+            self.binding.model.to(device)
         placement = ExecutionPlacement(preset=args.placement, scoring_dtype=getattr(args, "dtype", "float32"))
         if reference:
             from tidegraph.reference import run
@@ -54,10 +60,11 @@ class Eager:
                                   streaming=args.schedule == "streaming")
         self.state = Continuation(binding.graph.identity, config.samples)
         self.optimizer = torch.optim.SGD(binding.model.parameters(), lr=.001, momentum=.3, weight_decay=.01)
+        self.update_counts = dict.fromkeys(dict(binding.model.named_parameters()), 0)
 
     def step(self, index):
         with phase(self.args, "prepare"):
-            xs = window(self.inputs, self.span, self.config.positions, index, self.device)
+            xs = window(self.inputs, self.span, self.config.positions, index, None if self.node_owners else self.device)
         with torch.set_grad_enabled(self.args.mode == "training"):
             self.optimizer.zero_grad(set_to_none=True)
             with phase(self.args, "forward"):
@@ -67,16 +74,21 @@ class Eager:
             if self.args.mode == "training":
                 with phase(self.args, "backward_finite"):
                     loss.backward()
-                    checks = [torch.isfinite(p.grad).all() for p in self.binding.model.parameters() if p.grad is not None]
-                    if not checks or not torch.stack(checks).all():
+                    checks = {}
+                    for p in self.binding.model.parameters():
+                        if p.grad is not None:
+                            checks.setdefault(p.grad.device, []).append(torch.isfinite(p.grad).all())
+                    if not checks or not all(bool(torch.stack(rows).all()) for rows in checks.values()):
                         raise FloatingPointError("nonfinite or absent benchmark parameter gradients")
                 with phase(self.args, "optimizer"):
+                    for name, p in self.binding.model.named_parameters():
+                        if p.grad is not None:self.update_counts[name] += 1
                     self.optimizer.step()
         with phase(self.args, "detach_return_sync"):
             self.state = result.continuation.detach()
             actual = snapshot(result)  # Complete CPU return is included for every candidate.
             value = float(loss.detach().cpu())
-            synchronize(self.device)
+            for device in self.devices:synchronize(device)
         return actual, value
 
     def parameters(self):
@@ -84,7 +96,7 @@ class Eager:
 
     def training_state(self):
         return snapshot(dict(gradients={n: p.grad for n, p in self.binding.model.named_parameters()},
-                             optimizer=self.optimizer.state_dict()))
+                             optimizer=self.optimizer.state_dict(), update_counts=self.update_counts))
 
     def manifest(self):
         dtype = getattr(self.args, "dtype", "float32")
@@ -92,6 +104,8 @@ class Eager:
         result = dict(execution=self.args.placement, schedule=self.args.schedule, operator="aten",
                       effective_placement={k: str(v) for k, v in placement.resolve(self.device).items()},
                       complete_cpu_records=True, precision=dtype, optimizer="sgd", gradient_boundary="detach per window")
+        result.update(devices=[str(d) for d in self.devices],
+                      node_owners=None if self.node_owners is None else [str(d) for d in self.node_owners])
         if self.args.implementation == "native":
             path = Path(self.args.native_library)
             result["build"] = json.loads(((path if path.is_dir() else path.parent)/"build-manifest.json").read_text())
@@ -102,16 +116,21 @@ class Eager:
 
 
 class Resident:
-    def __init__(self, binding, inputs, span, config, args, device):
+    def __init__(self, binding, inputs, span, config, args, device, *, checkpoint=None):
         from tidegraph.weighted import WeightedResident, WeightedResidentTraining
         self.inputs, self.span, self.config, self.args, self.device = inputs, span, config, args, device
         self.training = args.mode == "training"
+        from weighted_training_observation import SGDLayout
+        self.sgd_layout = SGDLayout(binding.model) if self.training else None
         spec = limits(binding, config, span); spec["prefill"] = args.schedule == "prefill"
+        spec.update(getattr(args, "resident_limit_values", None) or {})
         if not self.training:
-            spec = {k: v for k, v in spec.items() if k not in {"retained_bytes", "backward_bytes", "optimizer_bytes", "total_bytes"}}
+            spec = {k: v for k, v in spec.items() if k not in {"windows", "retained_bytes", "backward_bytes", "optimizer_bytes", "total_bytes"}}
         kwargs = dict(device=str(device), native_library=args.native_library, resident_library=args.resident_library,
                       batch_size=config.samples, limits=spec)
-        if self.training:
+        if checkpoint is not None:
+            kwargs["checkpoint"] = checkpoint
+        elif self.training:
             from tidegraph.native_loader import load_native
             from tidegraph.native_model import encode_model
             core = load_native(args.native_library, backend=device.type)
@@ -141,6 +160,8 @@ class Resident:
                     actual = self.owner.result()
                 with phase(self.args, "backward_finite"):
                     gradients = self.owner.backward([roots])
+                    self.last_backward_statistics = dict(gradients.statistics)
+                    self.last_parameter_gradients = gradients.parameters
                     if not torch.isfinite(gradients.parameters.values).all():
                         raise FloatingPointError("nonfinite resident parameter gradient")
                 with phase(self.args, "optimizer"):
@@ -159,16 +180,16 @@ class Resident:
         if not self.training:
             return None
         with torch.no_grad():
-            return {n.replace(".extra.", "."): x for n, x in self.owner.checkpoint()["parameters"].items()}
+            return self.sgd_layout.parameters(self.owner.checkpoint())
 
     def training_state(self):
-        # Resident gradients/slots have independent qualification gates. This
-        # benchmark currently exports final parameters only: do not claim more.
-        return None
+        if not self.training:return None
+        with torch.no_grad():
+            return self.sgd_layout.decode(self.last_parameter_gradients, self.owner.checkpoint())
 
     def manifest(self):
         with torch.no_grad():
-            return self.owner.manifest()
+            return dict(self.owner.manifest(), last_backward_statistics=getattr(self, "last_backward_statistics", None))
 
     def close(self):
         with torch.no_grad():

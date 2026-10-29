@@ -22,8 +22,9 @@ def initialize(args, device):
 
 
 class Memory:
-    def __init__(self, device):
+    def __init__(self, device, peers=None):
         self.device = device
+        self.devices = tuple(torch.device(d) for d in peers) if peers else (device,)
         self.allocator = getattr(torch, device.type) if device.type != "cpu" else None
         self.record = dict(schema="tide-weighted-memory-v1", phases=[],
             scope="process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
@@ -38,7 +39,10 @@ class Memory:
                        reserved_bytes=a.memory_reserved(d),
                        peak_allocated_bytes=a.max_memory_allocated(d),
                        peak_reserved_bytes=a.max_memory_reserved(d))
+            row["devices"] = [dict(device=str(peer), allocated_bytes=a.memory_allocated(peer),
+                reserved_bytes=a.memory_reserved(peer), peak_allocated_bytes=a.max_memory_allocated(peer),
+                peak_reserved_bytes=a.max_memory_reserved(peer)) for peer in self.devices]
             if reset:
-                a.reset_peak_memory_stats(d)
+                for peer in self.devices:a.reset_peak_memory_stats(peer)
         self.record["phases"].append(row)
         return self.record

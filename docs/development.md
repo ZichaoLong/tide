@@ -101,3 +101,9 @@ CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建�
 新一轮完整资格使用干净固定源码，先提交实现，再记录资格证据。
 性能问题先小中规模 profiling，再有限对照；不把模型效果训练加入基座必交付。
 每次交接只更新 STATUS/ROADMAP 和相关契约，避免生成多个相互竞争的任务清单。
+
+CANN生成的合并对象不按普通C++对象缓存复用：2026-10-29的任务私有增量包装器
+复用旧resident目录后，在CANN9.1链接阶段出现`ld.lld: unknown file type`，模型尚未运行。
+改用正式`build_device_control.py`和新的resident build目录后完成构建。旧失败保留；
+该例不要求改公共工具链，也不说明数学实现失败。core与resident分别核对源码/二进制hash，
+跨Torch/CANN环境仍不得混用。

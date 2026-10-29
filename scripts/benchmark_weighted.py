@@ -25,6 +25,7 @@ from source_identity import source_state
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
+    parser.add_argument("--peer-devices", nargs="+", help="explicit eager node placement by region; first must match --device")
     parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
     parser.add_argument("--implementation", choices=("python", "native", "resident"), required=True)
     parser.add_argument("--placement", choices=("native", "mixed-a", "mixed-b", "mixed-c"), default="native")
@@ -38,11 +39,23 @@ def main():
     parser.add_argument("--max-materialize-bytes", type=int, default=2*1024**3)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--profile", action="store_true")
+    parser.add_argument("--checkpoint-check", action="store_true", help="untimed exact new-owner next-window resume")
     parser.add_argument("--native-library")
     parser.add_argument("--resident-library")
+    parser.add_argument("--resident-limits", type=Path, help="JSON capacity overrides, no trace or algorithm override")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--allow-dirty", action="store_true", help="entry-point development only, never controlled evidence")
     args = parser.parse_args()
+    args.resident_limit_values, limits_sha = None, None
+    if args.resident_limits:
+        if args.implementation != "resident":
+            parser.error("resident limits require the resident implementation")
+        from weighted_benchmark_limits import load
+        args.resident_limit_values, limits_sha = load(args.resident_limits)
+        if args.mode != "training" and set(args.resident_limit_values) & {"windows", "retained_bytes", "backward_bytes", "optimizer_bytes", "total_bytes"}:
+            parser.error("training capacity override is inapplicable to inference")
+    if args.checkpoint_check and (args.mode != "training" or args.profile):
+        parser.error("checkpoint check requires training without profiling")
     if not 1 <= args.steps <= 8:
         parser.error("steps must be 1..8")
     if args.implementation != "python" and not args.native_library:
@@ -87,11 +100,19 @@ def main():
         load_average_before=list(os.getloadavg()), host_arch=platform.machine(),
         caveat="one process per configuration; evolving continuation; no statistical or universal speed claim",
         dispatch_environment={k: os.environ.get(k) for k in ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")})
+    record.update(resident_limit_overrides=args.resident_limit_values, resident_limits_sha256=limits_sha)
     write_json(out/"result.json", record)
     candidate = None
     try:
         start = time.perf_counter()
         device, reason = resolve_device(args.device)
+        if args.peer_devices:
+            peers = tuple(resolve_device(d)[0] for d in args.peer_devices)
+            if (args.implementation == "resident" or len(peers) < 2 or len(set(peers)) != len(peers)
+                    or peers[0] != device or device.type == "cpu" or any(d.type != device.type for d in peers)):
+                raise ValueError("peer benchmark needs distinct eager accelerators, first equal to --device")
+            args.peer_devices = [str(d) for d in peers]
+            record["peer_devices"] = args.peer_devices
         validate(args.dtype, device, args.implementation)
         dtype = getattr(torch, args.dtype)
         atol, rtol = tolerances(dtype)
@@ -104,7 +125,7 @@ def main():
         record["runtime"] = manifest(device, reason, dtype)
         record["precision"] = dict(effective_dtype=args.dtype, fixture_dtype="float32",
             input_policy="same seeded FP32 material; explicit promotion before both schedules", atol=atol, rtol=rtol)
-        memory = Memory(device)
+        memory = Memory(device, args.peer_devices)
         record["memory"] = memory.capture("runtime_ready", reset=True)
         start = time.perf_counter()
         def create():
@@ -169,8 +190,14 @@ def main():
                 event = dict(step=step, seconds=elapsed, loss=actual[-1][1], **work(actual[-1][0]))
                 metrics.append(event); write_json(out/"metrics.json", metrics)
         memory.capture("measurement")
+        record["effective"] = candidate.manifest()
         parameters = candidate.parameters() if args.mode == "training" else None
         training_state = candidate.training_state() if args.mode == "training" else None
+        if args.checkpoint_check:
+            from weighted_benchmark_resume import check
+            record["phase"] = "exact-resume"
+            write_json(out/"result.json", record)
+            record["exact_resume"] = check(candidate, create, config, args, device, out)
         candidate.close(); candidate = None
         del binding, inputs
         # Only after the measurement: independent scalar CPU schedule and

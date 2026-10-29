@@ -94,6 +94,37 @@ def test_boundary_retry_and_parameter_version_guards():
         flow.close()
 
 
+def test_allocation_failure_preserves_actual_partial_row():
+    from tidegraph.weighted import bind, fully_connected, KVConfig, RegionalConfig
+    from tidegraph.weighted.allocation_failure import AllocationFailure
+    target = target_device()
+    graph = fully_connected(1, 2).graph
+    b = bind(graph, memories=KVConfig(width=2, summary_width=2, adapter_rank=1,
+        heads=1, ffn_width=3), regions=RegionalConfig(k=1, gamma_max=20, regularizer="bern"), dtype=torch.float32)
+    with torch.no_grad():
+        for region in b.model.regions:
+            region.head.vector.zero_()
+            region.head.bias.zero_()
+        for i, node in enumerate(b.model.nodes):
+            node.read_program.score.vector.zero_()
+            node.read_program.score.bias.fill_(-2000 if i % 2 else 2000)
+        xs = [External(0, port, 0, 1, torch.tensor([.05, .3, -.4])) for port in range(2)]
+        flow = owner(b, target)
+        try:
+            with pytest.raises(AllocationFailure) as caught:
+                flow.advance(xs, stop=2, sealed_until=2)
+            error = caught.value
+            assert error.time == 1 and error.nodes == [0, 1] and error.members == [0, 1]
+            assert error.details["error_code"] == "21" and error.details["output_valid"] == "false"
+            assert "controls" not in error.tensors and "residual" not in error.tensors
+            assert error.tensors["partial_controls"].numel() == 2
+            assert error.record()["tensors"]["scores"]["values"] == [2000., -2000.]
+            with pytest.raises(RuntimeError):
+                flow.advance([], stop=2, sealed_until=2)
+        finally:
+            flow.close()
+
+
 def test_weighted_loader_verifies_independent_library(tmp_path):
     import hashlib
     import json

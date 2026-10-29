@@ -6,7 +6,7 @@ struct WeightedKVParameters {at::Tensor base,left,right,summary;};
 struct WeightedKVUpdateTape {
   weighted::KVConfig config;
   WeightedRawUpdateTape raw;
-  WeightedProjectionTape kv,summary;
+  WeightedProjectionTape kv,summary,adapter_low,adapter_up;
   WeightedKVParameters saved_rows;
   at::Tensor owners,kv_indices,summary_indices;
   int64_t banks=0;

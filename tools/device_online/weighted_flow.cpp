@@ -1,4 +1,5 @@
 #include "weighted_flow_internal.h"
+#include "tide/allocation_failure.h"
 #include "tide/kernel.h"
 #include "tide/next.h"
 #include <ATen/core/grad_mode.h>
@@ -23,6 +24,37 @@ void fill(const AtomBatch& target,const std::vector<Atom>& atoms){
   target.values.narrow(0,0,atoms.size()).copy_(at::stack(values));target.valid.narrow(0,0,atoms.size()).fill_(true);
 }
 void sync(at::Device d){c10::impl::VirtualGuardImpl(d.type()).synchronizeDevice(d.index());}
+void allocation_failure(const std::vector<std::unique_ptr<WeightedFlowRegion>>& regions,int code){
+  if(code<20||code>22)return;
+  for(const auto& region:regions){
+    if(!region->selection||!region->selection->allocation)continue;
+    const auto& t=*region->selection;const auto& a=*t.allocation;
+    auto errors=a.row_errors.cpu();
+    for(int64_t row=0;row<errors.numel();++row){
+      if(errors[row].item<int32_t>()!=code)continue;
+      const auto n=a.lengths[row].item<int64_t>();
+      if(n<1||n>t.scores.size(1))continue;
+      // Bound the exceptional copy independently of the ordinary tape quota.
+      if(static_cast<long double>(n)*32+128>64*1024*1024)
+        throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code)+"; allocation snapshot exceeds 64MiB");
+      auto bounds=t.bounds[row];
+      std::map<std::string,Tensor> fields{{"scores",t.scores[row].narrow(0,0,n)},
+        {"caps",t.fields.caps[row].narrow(0,0,n)},{"lower",bounds[0]},{"upper",bounds[1]},
+        {"temperature",bounds[2]},{"shift",bounds[3]},
+        {"partial_controls",a.controls[row].narrow(0,0,n)},{"partial_statistics",a.statistics[row]}};
+      if(code==22){fields["controls"]=fields["partial_controls"];fields["multiplier"]=a.statistics[row][0];fields["residual"]=a.statistics[row][1];}
+      weighted::AllocationFailure error("weighted resident transaction refused, device error="+std::to_string(code)+" (allocation row)",row,fields,
+        {{"solver","resident-fp32"},{"regularizer",*t.config.regularizer},
+         {"alpha",t.config.ent_alpha?std::to_string(*t.config.ent_alpha):"None"},
+         {"stage","numeric"},{"branch_code",std::to_string(a.branches[row].item<int64_t>())},
+         {"output_valid","false"},{"error_code",std::to_string(code)}});
+      error.time=t.times[row].item<int64_t>();error.members=region->nodes;
+      auto nodes=t.ids[row].narrow(0,0,n).cpu();
+      for(int64_t i=0;i<n;++i)error.nodes.push_back(nodes[i].item<int64_t>());
+      throw error;
+    }
+  }
+}
 }
 WeightedFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,WeightedFlowLimits l,std::vector<at::Device> placement)
   :graph(std::move(g)),model(std::move(m)),boundary(q),device(d),limits(l),node_devices(std::move(placement)){
@@ -120,7 +152,10 @@ void WeightedFlow::Impl::execute(const std::vector<External>& xs,Index until){
     fill(s.external,input.atoms);s.begin.fill_(s.boundary.cut);s.stop.fill_(until);s.stages.zero_();++s.generation;
     s.peers->synchronize_inputs();sync(s.device);s.peers->submit();s.services->submit();s.program->run(s.limits.timeout_ms);
     s.services->wait(s.limits.timeout_ms);s.peers->wait();
-    const auto code=s.error.item<int32_t>();if(code)throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code));
+    const auto code=s.error.item<int32_t>();if(code){
+      allocation_failure(s.regions,code);
+      throw std::runtime_error("weighted resident transaction refused, device error="+std::to_string(code));
+    }
     s.boundary.cut=until;for(const auto& [owner,last]:input.ledger_updates)s.boundary.ledger[owner]=last;s.ran=true;
   }catch(...){s.failed=true;throw;}
 }

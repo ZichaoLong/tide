@@ -20,18 +20,20 @@ WeightedKVUpdateGradient append_weighted_kv_update_vjp(DeviceProgram& p,const We
   auto kv_bar=at::zeros({rows,2*d},bar.options()),summary_bar=at::zeros({rows,ds},bar.options());
   p.index_select(raw.proposal,1,t.kv_indices,kv_bar);p.index_select(raw.proposal,1,t.summary_indices,summary_bar);
   auto kv=append_weighted_projection_vjp(p,t.kv,kv_bar,kv_roots,error,available);
+  auto up=append_weighted_projection_vjp(p,t.adapter_up,kv_bar,kv_roots,error,available);
+  auto low=append_weighted_projection_vjp(p,t.adapter_low,up.input,up.row_connected,error,available);
+  auto input=at::zeros_like(kv.input);p.copy(input,kv.input);p.add(input,low.input);
+  input=guard(p,input,kv.row_connected,error);
   auto summary=append_weighted_projection_vjp(p,t.summary,summary_bar,summary_roots,error,available);
-  auto left=at::zeros_like(t.saved_rows.left),right=at::zeros_like(t.saved_rows.right);
-  p.batch_matmul(kv.parameters.matrix,transpose(p,t.saved_rows.right),left);
-  p.batch_matmul(transpose(p,t.saved_rows.left),kv.parameters.matrix,right);
   WeightedKVUpdateGradient g{raw.old_values,raw.old_connected,at::zeros({rows,d+1},bar.options()),at::zeros_like(kv_roots),
     {at::zeros({banks,2*d,d},bar.options()),at::zeros({banks,2*d,rank},bar.options()),at::zeros({banks,rank,d},bar.options()),at::zeros({banks,ds,d},bar.options())},
     at::zeros({banks},roots.options()),at::zeros({banks},roots.options())};
-  reduce(p,t.owners,kv.row_connected,{kv.parameters.matrix,left,right},{g.parameters.base,g.parameters.left,g.parameters.right},g.kv_connected,error);
+  reduce(p,t.owners,kv.row_connected,{kv.parameters.matrix,up.parameters.matrix,low.parameters.matrix},
+    {g.parameters.base,g.parameters.left,g.parameters.right},g.kv_connected,error);
   reduce(p,t.owners,summary.row_connected,{summary.parameters.matrix,{},{}},{g.parameters.summary,{},{}},g.summary_connected,error);
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_kv_merge)(1,stream,
-    ptr(raw.mass),ptr(raw.mass_connected),ptr(kv.input),ptr(kv.row_connected),ptr(summary.input),ptr(summary.row_connected),ptr(g.content),ptr(g.content_connected),ptr(error),rows,d),
-    "KV complete aggregated-content adjoint");},{raw.mass,raw.mass_connected,kv.input,kv.row_connected,summary.input,summary.row_connected,g.content,g.content_connected,error});
+    ptr(raw.mass),ptr(raw.mass_connected),ptr(input),ptr(kv.row_connected),ptr(summary.input),ptr(summary.row_connected),ptr(g.content),ptr(g.content_connected),ptr(error),rows,d),
+    "KV complete aggregated-content adjoint");},{raw.mass,raw.mass_connected,input,kv.row_connected,summary.input,summary.row_connected,g.content,g.content_connected,error});
   return g;
 }
 }

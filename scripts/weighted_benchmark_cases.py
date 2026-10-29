@@ -70,7 +70,7 @@ def window(inputs, span, positions, step, device):
     copies = {}
     for x in inputs:
         if id(x.value) not in copies:
-            copies[id(x.value)] = x.value.detach().to(device).clone().requires_grad_()
+            copies[id(x.value)] = x.value.detach().to(x.value.device if device is None else device).clone().requires_grad_()
     return [replace(x, time=x.time+step*span, position=x.position+step*positions,
                     value=copies[id(x.value)]) for x in inputs]
 

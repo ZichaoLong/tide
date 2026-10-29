@@ -8,6 +8,7 @@ namespace tide::device_online {
 struct WeightedAllocationTape {
   at::Tensor controls,slopes,statistics,branches,lengths;
   bool has_shift=true;
+  at::Tensor row_errors; // actual last invocation; read only after completion
 };
 struct WeightedAllocationGradient {
   at::Tensor vectors;     // [rows,2,width]: score/cap cotangents

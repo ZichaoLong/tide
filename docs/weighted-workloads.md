@@ -88,7 +88,7 @@ CPU更高精度的完整通过不能回填到FP32失败；也不代表与旧core
 
 Python 诊断可加 `--capture-allocations` 保存两条调度实际调用的分配输入、分支、free掩码、
 控制和残差到 `allocations.json`；原函数和反向连接不变，观察不进入性能计时。
-记录明确标为成功调用的观察，不冒充抛出的失败。native 的此类全调用观察尚未实现。
+记录明确标为成功调用的观察，不冒充抛出的失败。native通过有界线程局部observer记录实际scalar/batch返回，默认4096行/64MiB，报告丢弃行数。
 `scripts/diagnose_weighted_projection.py --workload PLAN --output-dir NEW` 在实际标量 KV 操作数上
 比较展开矩阵与低秩投影，并显式用 FP64 算术诊断局部误差；不据局部误差推断完整训练通过。
 
@@ -107,3 +107,30 @@ Python 诊断可加 `--capture-allocations` 保存两条调度实际调用的分
 校验完整文件和逐张量哈希，原样保留张量表索引/共享身份及每个FP32值，只把冻结零编码展开。
 它让历史独立消费者读取同一实际材料，不运行参考、不重新初始化；旧消费者仍须自己验证
 其适用域。大模型继续使用v2，不能通过这个诊断入口无限展开JSON。
+
+## 完整训练和跨卡观测补齐
+
+`benchmark_weighted --peer-devices npu:0 npu:1`对eager按区域放置节点，原参数共享域必须
+同卡；输入遵循各自owner，计时包含传输、loss汇总和所有请求设备同步。各卡allocator峰值
+独立记录。不隐式开启blocking或CPU桥接，运行时环境仍随结果记录。原生resident节点放置
+另有资格，不由此eager选项认证。
+
+resident benchmark现在从实际梯度connection/offsets解码最终None/零根，读取checkpoint中
+真实SGD momentum、更新计数和master值；不用参考反算槽。未用SGD存储必须仍为零，参数
+别名映射到eager的canonical名字；实际SGD选项与trainable集合也必须一致。参数比较投影到
+模型的注册Parameter集合，native checkpoint另含的legacy buffers在完整checkpoint恢复比较中保留。
+完整参数/梯度/optimizer比较仍在计时后独立执行。
+`test_weighted_training_observation`覆盖别名、偏移、None/零及未更新槽，真机结果另验。
+
+`--checkpoint-check`为eager/resident训练额外执行一个不计时的新owner窗口：实际保存/载入raw状态、
+参数与SGD槽后，逐值比较下一窗记录、参数梯度、更新及槽。辅助观测counter按下一窗增量
+比较，它不是PyTorch SGD checkpoint的一部分。该检查与CPU独立参考的跨调度等价分别记录。
+
+resident恢复调用公共owner的磁盘checkpoint，逐值核对raw解码及下一窗口；
+`test_weighted_benchmark_resident`独立比较真实参数梯度/SGD槽，再验证同配置精确续接。
+
+`--resident-limits FILE.json`只覆盖显式正int64容量（queue/stages/cache及各内存/时长分区），
+不允许覆盖调度、精度或算法；请求JSON hash和实际owner limits都入记录。不适用的训练预算拒绝用于推理。
+默认预设不证明适合任意大拓扑，静态容量选择不得预跑实际轨迹。Settle编码中每节点/区域每位置至多一次，
+可据区域位置数、全部物理边/输入及原始逻辑时间KV窗口推导上界，实际是否满足仍由owner检查。
+同一前向含所有候选、完整归一化和同一个optimizer边界；容量调整不是截断或改变可见性。

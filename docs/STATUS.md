@@ -1,51 +1,52 @@
 # 当前交接 — 2026-10-29
 
-授权分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`，离线19份+旧5份校验通过。
-用户要求逐项推进非GPU限制，给出实际改进、严格验收、有限预算、停止/重启条件；GPU延后，不用子代理。
-已获修改、有限实验、提交和普通推送授权；参考仓库与公共工具链只读。
+授权分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`，19份+旧5份离线校验通过。
+本轮用户要求逐项推进非GPU限制，保留严格标准、有限预算与停止/重启条件。GPU延后，无子代理。
+已获修改、有限实验、阶段提交及普通推送授权；参考仓库与公共工具链只读。
 
-## 当前成果与未提交工作
+## 当前源码与结果
 
-起点121f5b1，生产基线f03e9be。诊断bdd7f6c、证据fe5e6e7均已提交推送；
-[固定隔离证据](evidence/core5-boundary-isolation-20261029.md)记录D2048实际操作数局部连续FP64改进、
-原half归一化FP64 VJP仍失败、默认async完整双NPU CPU桥接仍EE1017。未解除原限制，没有重跑9B原全图。
+起点121f5b1，生产对照f03e9be；固定诊断bdd7f6c/证据fe5e6e7、eager实现e0d6e27/证据9d1a54c已提交推送。
+[隔离证据](evidence/core5-boundary-isolation-20261029.md)和[eager资格](evidence/core5-eager-boundary-20261029.md)
+记录原D64/D2048/反馈FP32、FP16 GDN、默认async双NPU的失败/停止条件；未改原输入、容差或optimizer。
+固定e0d6e27 CPU资格517 passed/2原strict xfail，无需因本次resident/设施改动重跑这517项。
 
-eager单行Query/Aggregate VJP消冗、异形字段copy和标量/native分配观察完成开发检查，准备提交。
-未提交的resident因子KV/失败快照/反向阶段计量及benchmark实际槽、跨卡、精确恢复设施正在验证。
-没有更改原容差、optimizer、默认dtype、正支持或None/零语义。
+本提交包含resident KV因子链/完整VJP、实际分配拒绝部分行、反向构造阶段计量，
+以及benchmark实际梯度/SGD槽/共享owner解码、跨卡、磁盘恢复、显式静态容量。尚待固定提交资格及性能。
+开发记录均终态，原失败保留：
+- `core5-boundary-sdk-dev-v2` passed/0：9项SDK组件（两dtype，含单/双卡训练恢复）和6组eager完整训练。
+- `core5-boundary-pynative-dev-v3` failed/1：eager6组及原公共KV12项通过，新观测测试误用精确loss比较。
+- `core5-boundary-final-dev` failed/1：启动器预建输出目录，workload未启动，已记录systemd postmortem。
+- final-dev-v2/v3/v4各failed/1：真实consumer揭示canonical参数/旧buffer、无尾哨兵offset、trainable全别名而slot为物理owner；每次保留冻结快照与日志。
+- `core5-boundary-final-dev-v5` passed/0：10项设施及真实NPU梯度/SGD/精确恢复通过；公开实际allocation拒绝反例已在v2/v3通过。
+- 早先ArrayRef编译失败和CANN旧缓存unknown file type均保留；新resident目录正式构建通过，未改公共工具链。
 
-## 终态开发记录
+记录在`artifacts/jobs/NAME/{status.json,task.log,development.json}`，设备阶段另有device.json/JUnit及完整dirty源码归档。
+SDK与Python-owned属于不同Torch/CANN ABI，证据分别记录。
 
-所有记录在`artifacts/jobs/NAME/{status.json,task.log}`，完整dirty source archive/hash另存；旧失败不改。
-- core5-boundary-dev：passed/0，单行VJP CPU完整构建、177 passed/2原FP16 strict xfail。
-- core5-boundary-python-dev：passed/0，122+17项；core5-boundary-python-npu-dev因用例名错误failed/2，v2五图mixed-c完整训练恢复passed/0。
-- core5-boundary-native-dev、sdk-dev、pynative-dev：failed/1，新增诊断ArrayRef→vector编译错误；已显式复制修正。
-- core5-boundary-native-dev-v2：passed/0，329项（分配/observer/传输/设施），包含最小subnormal未算残差不得填零。
-- core5-boundary-pynative-dev-v2：failed/1，core构建完成，CANN9.1旧合并对象增量复用unknown file type；未执行模型。
-  v3改为新resident目录、正式builder，不修改公共工具链。
-- 固定诊断CPU job failed/1（两设施+首写入passed，half strict_mismatch/2）；bridge job failed/1（完整VJP EE1017）。
+## 活跃任务及下一步
 
-## 活跃任务与冻结输入
+本次开发服务均终态，没有live任务。正在固定上述实现提交，然后建立干净树
+`artifacts/worktrees/core5-boundary-final-qualified`，源码hash写入`.local/core5-boundary-final-source`。
+正式资格driver`.local/core5-boundary-final-qualify.py {sdk,pynative}`；各自background.slice、
+单线程ATen/BLAS、16GiB、有限排队180秒/执行上限，原CPU核心无变更不重跑历史全量。
 
-两个service在background.slice，build各2线程、ATen/BLAS各1线程、MemoryMax=16G、RuntimeMaxSec=3600；
-资源属性不保证cgroup硬隔离。设备排队180秒、执行1200秒；没有GPU排队，没有性能计时并行。
-两者只读同一任务专用树`artifacts/worktrees/core5-independent-qualified`：bdd7f6c+完整dirty快照，
-其旧f03e9be任务已终态，复用前保存原manifest。任何一个未终态都不得更新该树。
+可复用已完成构建（保留真实dirty-origin manifest）：
+- CPU：`artifacts/worktrees/core5-boundary-dev/build/cpu`。
+- SDK：`artifacts/worktrees/core5-independent-qualified/build/{npu-core-v2,npu-resident-v2}`。
+- Python-owned：同树`build/{npu-python,npu-python-resident-boundary}`。
+运行前逐一核对C++/resident source hash、所有binary hash及core依赖，不能把dirty build改记clean。
+该共享旧开发树已无live读者；正式任务仍只读新干净树与已冻结二进制。
 
-| unit（均后缀-20261029.service） | 入口 / 输出 | 目的 |
-| --- | --- | --- |
-| core5-boundary-sdk-dev-v2 | `.local/core5-boundary-sdk-dev-v2.sh` / `artifacts/jobs/core5-boundary-sdk-dev-v2` | LibTorch2.10/CANN9.0核+KV/allocation/flow/training/node-training两dtype、双卡相关检查；build/npu-core-v2及npu-resident-v2 |
-| core5-boundary-pynative-dev-v3 | `.local/core5-boundary-pynative-dev-v3.sh` / `artifacts/jobs/core5-boundary-pynative-dev-v3` | Torch2.12/CANN9.1核+新build/npu-python-resident-boundary；eager六组和公共resident/实际SGD解码恢复 |
+全部资格终态后运行`.local/core5-boundary-study.py {cpu,npu}`：CPU在先、NPU随后，
+一次独立进程/配置，完整训练计时、恢复在计时外，profile另进程。对照固定f03e9be。
+CPU中型/D64显式FP64，NPU中型mixed-a/c与resident；D64单/双卡显式blocking及resident。
+D64固定计划hash6c8cc36a…：480节点/15区域/2208边/9076975参数；resident仅显式容量queue4096/stages32/cache4，
+来自静态Settle上界，不预跑真实轨迹。容量/数值/运行时失败即停，不重复同候选寻找通过。
 
-## 精确接续
+## 接续与关闭
 
 先`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-查看上述两个status/task.log、development.json；不可把活跃任务写为通过。原CPU可复用缓存
-在`artifacts/worktrees/core5-boundary-dev/build/cpu`，与main当前cpp hash一致；正式资格前逐一验证binary hash。
-
-接着固定eager提交并在干净树跑原D64 FP32两步/精确恢复、反馈FP32四窗/恢复及必要相关资格。
-NPU开发通过后提交resident/设施，干净资格包括新公共失败codec测试、实际SGD/恢复。
-全部构建/资格终态后串行执行一次/配置有限性能：CPU中型和D64显式FP64、NPU中型mixed/resident；
-D64九百万参数单/双卡（显式blocking独立配置）有界训练/恢复，容量/数值/运行时失败即停。
-补窗口反向构造/执行成本、保留容量/表示下界和每项停止/重启判定；结果更新ROADMAP及performance-lessons。
-已冻结或失败的源码/记录不覆盖，最终源码与证据分开提交并普通推送，持续完成不在阶段提交后暂停。
+查看确切service、status与预期验收产物；live不能报passed。主项目可编辑，任务读冻结树。
+结果进入新固定证据、ROADMAP的逐项表、相关契约和performance-lessons；最后证据单独提交并普通推送。
+GPU延期、x86缺目标及所有严格失败继续分别列出。不恢复旧队列或重跑历史全矩阵。

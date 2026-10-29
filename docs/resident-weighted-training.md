@@ -187,3 +187,14 @@ None/空C++列表保持所有节点在coordinator；定义域和完整区域语�
 `weighted-node-replicas`把两个独立样本owner各自跨卡放置，核对共享梯度和、完整私有根、恢复及slot不一致拒绝。
 Python `test_resident_weighted_node_training.py`另检查四组合×两dtype、独立Python调度/autograd、
 三次更新、磁盘恢复到另一放置及KV/FC新进程续接。这些检查在上述固定源码报告中分别记录；不外推全部配置或GPU真机。
+
+## 反向构造与运行的观测
+
+`WeightedGradients.statistics`增加`adjoint_construct_us/root_seed_us/adjoint_run_us/
+window_bridge_us/parameter_reduce_us`：当前调用的主机steady-clock微秒，run包括该路径的等待。
+构造、实际执行、跨窗桥与参数归约分列；不把这些主机跨度称为设备kernel时间。
+数值/optimizer/checkpoint返回契约不变。
+
+当前adjoint绑定实际snapshot的journal、root、参数地址，生命周期结束后关闭。只按shape
+缓存整个对象会读旧窗口/参数或保留已经消费的根；可复用的程序模板需要显式重绑buffer与
+版本/连接检查，不能直接保存上次adjoint绕过构造。本轮用上述观测量判断其成本。
