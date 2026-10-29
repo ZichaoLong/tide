@@ -107,3 +107,10 @@ CANN生成的合并对象不按普通C++对象缓存复用：2026-10-29的任务
 改用正式`build_device_control.py`和新的resident build目录后完成构建。旧失败保留；
 该例不要求改公共工具链，也不说明数学实现失败。core与resident分别核对源码/二进制hash，
 跨Torch/CANN环境仍不得混用。
+
+本机Torch2.12/Torch-NPU2.12在同进程先运行CPU autograd、随后才注册NPU时，
+实际出现`device_ready_queues_`内部断言。首次固定资格的CPU设施10项与前向5项通过，
+随后9项设备反向在该初始化边界失败。当前门禁将CPU与NPU消费者放入独立进程；
+NPU应用应在第一次autograd之前调用`resolve_device("npu:0")`注册并选择设备。
+不要把进程初始化失败当作分配算法或数值容差问题；晚注册路径未获资格，旧失败保留。独立两个新进程的标量探针已复现late失败、early通过；
+具体程序和退出码随本次固定证据保存。
