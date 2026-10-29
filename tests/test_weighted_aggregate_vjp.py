@@ -101,8 +101,11 @@ def test_aggregate_transform_directional_difference():
     torch.testing.assert_close((gradient*direction).sum(), numeric, atol=1e-9, rtol=1e-7)
 
 
-def test_aggregate_versions_and_first_order(dtype):
+@pytest.mark.parametrize("singleton", [False, True])
+def test_aggregate_versions_and_first_order(dtype, singleton):
     w, requests, roots = fixture(dtype, .4)
+    if singleton:
+        requests = requests[:1]
     output = w.aggregate_program.batch_grad(w, requests)[0].value
     with pytest.raises((ValueError, RuntimeError), match="first-order"):
         torch.autograd.grad(output.sum(), roots["input.0.0"], create_graph=True)

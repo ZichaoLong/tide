@@ -63,3 +63,11 @@ checkpoint 与快照分离测试继续回归。
 用 `(0.2,1+3/sqrt(2))` 与 `(0.2,1)` 核对 Full 的有效窗口、载荷和广播别名。
 KV/循环的独立手算与 dense recurrence 仍在原公式测试中；这些检查与调度等价各有职责。
 开发/不可变资格的实际范围在 STATUS/evidence，源码实现不等于设备真机通过。
+
+## 单行反向边界
+
+一个实际分组只有一行时，Python/C++直接在原参数与该行输入上构造相同数值批图；
+`singleton_vjp.boundary` / `SingletonVjp`保留所有原值版本检查、独立字段None/连接零、
+返回副本与一阶限制。没有其它行需要隔离，因此不再detach/rebind参数并嵌套调用autograd.grad。
+多行仍使用原私有图隔离。`test_weighted_query_vjp`及`test_weighted_aggregate_vjp`
+覆盖singleton/多行版本、逐字段根、重复输入、参数别名和独立方向导数；固定资格另列。

@@ -7,6 +7,7 @@ import torch
 from torch.autograd.function import once_differentiable
 from .allocation import Allocation, _validate, _scalar, allocate_quad
 from .regularizers import Regularizer
+from .allocation_failure import scalar_failure
 
 
 def _solve(t, caps, target, temperature, rule):
@@ -74,11 +75,14 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
     lower, upper, temperature = _validate(scores, caps, lower, upper, temperature)
     score_shift = None if score_shift is None else _scalar(score_shift, scores, "score_shift")
     original_scores = scores
+    def failure(message, **actual):
+        return scalar_failure(message, original_scores, caps, lower, upper, temperature,
+            regularizer=regularizer, ent_alpha=ent_alpha, score_shift=score_shift, **actual)
     with torch.no_grad():
         if score_shift is not None:
             scores = scores-score_shift
             if not torch.isfinite(scores).all():
-                raise ArithmeticError("shifted allocation scores exceed requested dtype range")
+                raise failure("shifted allocation scores exceed requested dtype range", stage="shift")
         mass, zero = caps.sum(), scores.new_zeros(())
         if mass == 0 or upper == 0:
             c, lam, x, branch = torch.zeros_like(scores), zero, scores, "zero"
@@ -92,7 +96,10 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
             lam, x = zero, scores
             if branch != "slack":
                 target = lower if branch in {"lower", "equality"} else upper
-                c, lam, x = _solve(original_scores, caps, target, temperature, rule)
+                try:
+                    c, lam, x = _solve(original_scores, caps, target, temperature, rule)
+                except ArithmeticError as error:
+                    raise failure(str(error), stage="solve", branch=branch) from error
                 if score_shift is not None:
                     lam = lam-score_shift
         residual = zero
@@ -101,9 +108,11 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
                                     (lower-c.sum()).clamp_min(0), (c.sum()-upper).clamp_min(0))).max()
             tolerance = 64*torch.finfo(scores.dtype).eps*max(1, scores.numel())
             if not torch.isfinite(residual) or residual > tolerance:
-                raise ArithmeticError("entropy allocation residual exceeds dtype tolerance")
+                raise failure("entropy allocation residual exceeds dtype tolerance", branch=branch,
+                              controls=c, multiplier=lam, response=x, residual=residual, tolerance=tolerance)
             if (rule.positive_support(x, caps, temperature) & (c == 0)).any():
-                raise ArithmeticError("positive allocation support underflowed in the requested dtype")
+                raise failure("positive allocation support underflowed in the requested dtype", branch=branch,
+                              controls=c, multiplier=lam, response=x, residual=residual, tolerance=tolerance)
         free = (c > 0) & (c < caps)
     if branch == "zero":
         result = c

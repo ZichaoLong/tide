@@ -160,3 +160,17 @@ def test_packed_placement_copies_independent_roots_aliases_int64_and_capacity(mo
         xs[0].add_(1)
     with pytest.raises(RuntimeError, match="modified by an inplace"):
         loss.backward()
+
+
+def test_heterogeneous_field_copy_offsets_empty_noncontiguous_and_none(monkeypatch):
+    from tidegraph.weighted import placement_tensors as transfer
+    monkeypatch.setattr(transfer, "PACK_BYTES", 80)
+    xs = [torch.tensor(.7, requires_grad=True), torch.arange(6.).reshape(2, 3).t().requires_grad_(),
+          torch.empty((0, 2), requires_grad=True), torch.ones(2, requires_grad=True)]
+    copy = transfer.mapper([*xs, xs[1]], torch.device("cpu"), torch.float64)
+    for x in xs:
+        assert copy(x).shape == x.shape
+        torch.testing.assert_close(copy(x), x.double(), rtol=0, atol=0)
+    bars = torch.autograd.grad(3*copy(xs[0])+0*copy(xs[2]).sum(), xs, allow_unused=True)
+    assert bars[0].item() == 3 and bars[1] is None and bars[3] is None
+    assert bars[2] is not None and bars[2].shape == (0, 2)

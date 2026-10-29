@@ -1,5 +1,6 @@
 // Independent bounded bisection; backward differentiates the exact Alloc map.
 #include "weighted_regularizers.h"
+#include "tide/allocation_observation.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <limits>
 
@@ -36,6 +37,8 @@ Allocation allocate(const Tensor& input,const Tensor& mu,const Tensor& lower,con
   Regularizer rule(regularizer,alpha);
   if(regularizer=="quad")return allocate_quad(t,mu,lower,upper,tau,shift);
   validate(t,mu,lower,upper,tau);Allocation result;Tensor x,a,e,dtau;
+  const AllocationRow row{input,mu,lower,upper,tau,shift};
+  auto failure=[&](const std::string& message){return scalar_allocation_failure(message,row,result,x,regularizer,alpha);};
   if(shift.defined())require(shift.dim()==0&&shift.device()==t.device()&&shift.scalar_type()==t.scalar_type()
     &&at::isfinite(shift).item<bool>(),"invalid allocation score_shift");
   result.backward=regularizer+"-exact-map-v1";
@@ -71,8 +74,8 @@ Allocation allocate(const Tensor& input,const Tensor& mu,const Tensor& lower,con
       result.residual=at::stack({(c-rule.response(x,mu,tau)).abs().max(),(lower-c.sum()).clamp_min(0),(c.sum()-upper).clamp_min(0)}).max();
       const double eps=t.scalar_type()==at::kDouble?std::numeric_limits<double>::epsilon():std::numeric_limits<float>::epsilon();
       if(!at::isfinite(result.residual).item<bool>()||result.residual.item<double>()>64*t.numel()*eps)
-        throw std::runtime_error("entropy allocation residual exceeds dtype tolerance");
-      if((rule.support(x,mu,tau)&(c==0)).any().item<bool>())throw std::runtime_error("positive allocation support underflowed in requested dtype");
+        throw failure("entropy allocation residual exceeds dtype tolerance");
+      if((rule.support(x,mu,tau)&(c==0)).any().item<bool>())throw failure("positive allocation support underflowed in requested dtype");
       auto slopes=rule.slopes(x,mu,tau,c);a=slopes[0];e=slopes[1];dtau=slopes[2];
     }
   }
@@ -82,6 +85,7 @@ Allocation allocate(const Tensor& input,const Tensor& mu,const Tensor& lower,con
     auto bound_shift=shift.defined()?shift:at::zeros({},input.options());
     result.controls=ExactEntropy::apply(input,mu,target,tau,result.controls,a,e,dtau,result.constraint!="slack",bound_shift);
   }
+  observe_allocation(row,result,regularizer,alpha,"native-scalar");
   return result;
 }
 }

@@ -58,3 +58,12 @@ sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 
 [standalone KV](../cpp/test/weighted.cpp) 与 [循环](../cpp/test/weighted_recurrent.cpp)
 分别调用 C++ packed 接口并检查手算/所有 slots/原始时间。
 开发与固定源码资格在 STATUS 和 evidence 分开记录；没有实测的后端不自动通过。
+
+## 异形字段的传输打包
+
+`weighted/placement_tensors.mapper`与C++ `placement_tensors`按源设备、源dtype、
+目标dtype分组，按实际字节累计组成最多8MiB的扁平buffer，再按真实shape/offset解码。
+不要求各字段同形；超过预算的单个字段仍是不可拆分的单次copy。int64元数据独立分组，
+空字段也扣最小元素预算。原参数别名只复制一次，每个不同字段保留独立None/零根与版本检查；
+反向只打包实际给定的cotangent。`test_weighted_placement`覆盖异形、标量、空/noncontiguous、
+别名和分块边界。连续存储本身不证明快，完整计时和真机资格分别记录。

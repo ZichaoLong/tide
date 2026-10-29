@@ -1,6 +1,7 @@
 // Independent public row roots over the actual KKT solution, not iterations.
 #include "weighted_allocation_batch.h"
 #include "tide/allocation_failure.h"
+#include "tide/allocation_observation.h"
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
 #include <sstream>
@@ -84,6 +85,7 @@ std::vector<Allocation> allocate_batch(const std::vector<AllocationRow>& rows,co
       result[ids[j]]={controls,numeric.multiplier[j],numeric.free[j],numeric.residual[j],batch::branches[b],kind+"-exact-map-v1"};
     }
   }
+  for(size_t i=0;i<rows.size();++i)observe_allocation(rows[i],result[i],kind,alpha,"native-batch");
   return result;
 }
 }

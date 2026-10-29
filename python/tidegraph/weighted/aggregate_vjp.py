@@ -76,6 +76,14 @@ def evaluate(program, weights, requests):
             raise ValueError("weighted Aggregate requires nonempty fibers")
         groups.setdefault(_signature(program, request), []).append(i)
     for signature, ids in groups.items():
+        if len(ids) == 1:
+            from .singleton_vjp import boundary
+            rows = [requests[ids[0]]]
+            originals = list(program.parameters())+[s.atom.value for s in rows[0].sources]
+            result = _mass_only(rows) if signature[0] else numeric(program, rows)
+            value, = boundary(originals, [result[0].value])
+            results[ids[0]] = AggregateResult(value, {})
+            continue
         inputs = []
         def capture(value):
             inputs.append(value)

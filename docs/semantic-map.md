@@ -249,3 +249,8 @@ Architecture §1 RMS和各线性映射的[算术边界诊断](weighted-arithmeti
 由`weighted_arithmetic_probe`显式隔离CPU FP32乘加/归约/normalized VJP；
 `test_weighted_arithmetic_probe`以相消手算、literal Jacobian和实际checkpoint验证诊断机制。
 这不是新的公共数学绑定或生产精度策略，默认Python/C++函数和图/checkpoint版本不变。
+
+本次执行层增量：Architecture §2–4的单行一阶边界对应`singleton_vjp.boundary`/
+`SingletonVjp`及Query/Aggregate独立根测试；异形字段copy见[packing](weighted-packed.md)。
+Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weighted-allocation.md)，
+诊断返回不构成部分成功，也不改变图v13/checkpoint v5。

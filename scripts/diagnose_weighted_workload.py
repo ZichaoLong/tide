@@ -35,7 +35,7 @@ def main():
     p.add_argument("--native-library")
     p.add_argument("--steps", type=int, choices=(1, 2), default=2)
     p.add_argument("--output-dir", type=Path, required=True)
-    p.add_argument("--capture-allocations", action="store_true", help="Python only: actual scalar/batch operands and branch/free masks, outside performance timing")
+    p.add_argument("--capture-allocations", action="store_true", help="actual Python/native scalar/batch operands and returns, outside performance timing")
     p.add_argument("--checkpoint-check", action="store_true", help="two steps: save after first update; check restored next records/gradients/SGD exactly on both schedules")
     from weighted_arithmetic_probe import ArithmeticProbe, VARIANTS
     p.add_argument("--arithmetic", choices=VARIANTS, default="none",
@@ -45,8 +45,6 @@ def main():
     args = p.parse_args()
     if args.checkpoint_check and args.steps != 2:
         p.error("checkpoint check needs two steps")
-    if args.capture_allocations and args.implementation != "python":
-        p.error("allocation observation currently requires the independent Python schedules")
     if args.implementation == "native" and not args.native_library:
         p.error("native needs its explicit matching library")
     if args.native_library:
@@ -86,7 +84,11 @@ def main():
         return None
 
     from weighted_allocation_observer import observe_allocations
-    observer = observe_allocations() if args.capture_allocations else nullcontext(None)
+    core = None
+    if args.capture_allocations and args.implementation == "native":
+        from tidegraph.native_loader import load_native
+        core = load_native(args.native_library, backend="cpu")
+    observer = observe_allocations(native=core) if args.capture_allocations else nullcontext(None)
     allocation_records = observer.__enter__()
     try:
         bindings, data, resumes = [], [], []
