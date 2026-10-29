@@ -1,0 +1,662 @@
+{
+  "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "qualification": {
+    "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+    "dirty": "",
+    "verified_cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+    "verified_binaries": 23,
+    "core_build": {
+      "source": "121f5b19ec5fb67d6a94199a29f0fbeb4e61eab5",
+      "cpp_source_sha256": "24943f60edf861e1b7cb4dd2ce5f5cbc6d523afa8709b89e41a78c31100cee27",
+      "torch": "2.12.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.1.0"
+      },
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "68acc7813a64fe0ea46e6b7f646b7489af6a9e4e53f12d2f40fda70b659003ca",
+        "libtidegraph_runtime.a": "8caded47c9c7a2f6e1efbf7ee8514d3559b994a76ca965f180bdbedc5a3de15c",
+        "_tide_native.so": "34d493955aa8f290772482577a87218962450ecd689169c355f113c8ccc3eb6d",
+        "tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+        "tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+        "tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+        "tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+        "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+        "tidegraph-checkpoint-check": "90451a028bd3cacd7ad6d322ae074cd57e755caf005ec30eaf928249d8e810e8",
+        "tidegraph-weighted-training-check": "6d0c771f5bec5d51ffee644ab43d46c77a8f6cf15f4e6aa14ef9c2ca9c2ab3fa",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+        "tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+        "tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+        "tidegraph-accelerator-check": "5885f570e4592087419b99465ac0e9875d88189830faae5153e4af885464729a",
+        "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+        "tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+        "tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+        "tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+        "tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+        "libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57"
+      }
+    },
+    "driver_sha256": "e42bc1847de12e2fb6116c9b9f60d7bbc2f70b9941029560fdaaaf5ded3dd12b",
+    "state": "passed",
+    "stages": [
+      {
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/scripts/check_upstream.py"
+        ],
+        "timeout": 30,
+        "exit_code": 0,
+        "log": "stage-0.log"
+      },
+      {
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_query_vjp.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_aggregate_vjp.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_query_training.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_aggregate_training.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_execution.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_precision.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_cpp_weighted_training.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_allocation_failure.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_allocation_observer.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_allocation.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_allocation_batch.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_placement.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_entropy_allocation.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_allocation_shift.py",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-boundary-qualified/tests/test_weighted_kv_formulas.py",
+          "--dtype",
+          "both",
+          "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-boundary-cpu-qualify/tests.xml"
+        ],
+        "timeout": 720,
+        "exit_code": 0,
+        "log": "stage-1.log"
+      }
+    ]
+  },
+  "tests": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "2",
+    "tests": "519",
+    "time": "287.385",
+    "timestamp": "2026-10-29T09:37:38.871750+08:00",
+    "hostname": "liteserver-mi-dev-00001"
+  },
+  "jobs": {
+    "core5-boundary-cpu-qualify": {
+      "state": "passed",
+      "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+      "dirty": "",
+      "exit_code": 0,
+      "started": "2026-10-29T01:37:36.794845+00:00",
+      "finished": "2026-10-29T01:42:27.043485+00:00",
+      "command": [
+        "timeout",
+        "1170",
+        "python",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-boundary-cpu-qualified.py",
+        "qualify"
+      ]
+    },
+    "core5-boundary-cpu-diagnostics": {
+      "state": "failed",
+      "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+      "dirty": "",
+      "exit_code": 1,
+      "started": "2026-10-29T01:37:36.795988+00:00",
+      "finished": "2026-10-29T01:40:08.219518+00:00",
+      "command": [
+        "timeout",
+        "1170",
+        "python",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/core5-boundary-cpu-qualified.py",
+        "diagnostics"
+      ]
+    }
+  },
+  "diagnostics": {
+    "d64-native": {
+      "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+      "dirty": "",
+      "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+      "implementation": "native",
+      "dtype": "float32",
+      "scope": "CPU complete records, discrete structure, output-loss gradients, SGD values/slots; optional exact next-window resume; not throughput",
+      "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+      "state": "strict_mismatch",
+      "raw_sha256": "0768875a48336f9656ba195c26b9ec58e2bc3aed4b9eeedcce74986c6820a7e6",
+      "steps": [
+        {
+          "step": 0,
+          "discrete": null,
+          "complete_records": "root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 4 / 64 (6.2%)\nGreatest absolute difference: 2.8014183044433594e-06 at index (0, 63) (up to 1e-06 allowed)\nGreatest relative difference: 9.013452654471621e-05 at index (0, 37) (up to 1e-05 allowed)",
+          "first_exact_trace_difference": {
+            "left_event": [
+              1,
+              0,
+              0
+            ],
+            "right_event": [
+              1,
+              0,
+              0
+            ],
+            "error": "root[proposal_slots][keys]: Tensor-likes are not equal!\n\nMismatched elements: 21 / 64 (32.8%)\nGreatest absolute difference: 2.9802322387695312e-08 at index (0, 56)\nGreatest relative difference: 2.82253063232929e-06 at index (0, 53)"
+          },
+          "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3837 / 8192 (46.8%)\nGreatest absolute difference: 0.0007171630859375 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.007413411047309637 at index (74, 25) (up to 1e-05 allowed)",
+          "parameters": "root[nodes.39.read_program.score.vector]: Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 2.066604793071747e-06 at index (22,) (up to 1e-06 allowed)\nGreatest relative difference: 0.0006150163244456053 at index (22,) (up to 1e-05 allowed)",
+          "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 3839 / 8192 (46.9%)\nGreatest absolute difference: 0.0007171630859375 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.04303308203816414 at index (74, 0) (up to 1e-05 allowed)",
+          "gradient_detail": {
+            "examined_tensors": 6381,
+            "nonidentical_tensors": 4798,
+            "failing_tensors": 2322,
+            "first_witness": [
+              {
+                "name": "nodes.259.read_program.score.vector",
+                "scaled_error": 513.6005178805223,
+                "maxabs": 0.0009183883666992188,
+                "flat_index": 13,
+                "left": 0.07973214238882065,
+                "right": 0.07881375402212143
+              }
+            ]
+          },
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 3854,
+            "failing_tensors": 2,
+            "first_witness": [
+              {
+                "name": "nodes.39.read_program.score.vector",
+                "scaled_error": 1.9994194268059795,
+                "maxabs": 2.3692846298217773e-06,
+                "flat_index": 22,
+                "left": -0.0033581771422177553,
+                "right": -0.003360243747010827
+              }
+            ]
+          }
+        },
+        {
+          "step": 1,
+          "discrete": null,
+          "complete_records": "root.continuation.states[(0, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 128 (0.8%)\nGreatest absolute difference: 1.5757977962493896e-06 at index (1, 13) (up to 1e-06 allowed)\nGreatest relative difference: 5.8200344938086346e-05 at index (1, 13) (up to 1e-05 allowed)",
+          "first_exact_trace_difference": {
+            "left_event": [
+              18,
+              0,
+              0
+            ],
+            "right_event": [
+              18,
+              0,
+              0
+            ],
+            "error": "root[content]: Tensor-likes are not equal!\n\nMismatched elements: 63 / 65 (96.9%)\nGreatest absolute difference: 9.462237358093262e-07 at index (15,)\nGreatest relative difference: 0.0003232975141145289 at index (18,)"
+          },
+          "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3281 / 8192 (40.1%)\nGreatest absolute difference: 4.555657505989075e-05 at index (111, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.09974648058414459 at index (94, 47) (up to 1e-05 allowed)",
+          "parameters": "root[nodes.7.read_program.score.bias]: Scalars are not close!\n\nExpected 0.008182973600924015 but got 0.008181821554899216.\nAbsolute difference: 1.152046024799347e-06 (up to 1e-06 allowed)\nRelative difference: 0.00014078574378747339 (up to 1e-05 allowed)",
+          "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 3798 / 8192 (46.4%)\nGreatest absolute difference: 0.0002357959747314453 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 7.574158668518066 at index (74, 57) (up to 1e-05 allowed)",
+          "exact_resume": [
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            },
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            }
+          ],
+          "gradient_detail": {
+            "examined_tensors": 6496,
+            "nonidentical_tensors": 5260,
+            "failing_tensors": 2712,
+            "first_witness": [
+              {
+                "name": "nodes.304.read_program.score.vector",
+                "scaled_error": 250.02347589414444,
+                "maxabs": 0.0002528448821976781,
+                "flat_index": 13,
+                "left": 0.0013813014375045896,
+                "right": 0.0011284565553069115
+              }
+            ]
+          },
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 4823,
+            "failing_tensors": 6,
+            "first_witness": [
+              {
+                "name": "nodes.39.read_program.score.vector",
+                "scaled_error": 2.641795808071537,
+                "maxabs": 3.084540367126465e-06,
+                "flat_index": 22,
+                "left": -0.0016945296665653586,
+                "right": -0.0016972162993624806
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "d64-python": {
+      "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+      "dirty": "",
+      "workload_sha256": "6c8cc36ae97287133d40e67ccc8e137574b80e2df420feff6adfef3395397bb3",
+      "implementation": "python",
+      "dtype": "float32",
+      "scope": "CPU complete records, discrete structure, output-loss gradients, SGD values/slots; optional exact next-window resume; not throughput",
+      "tolerances": "unchanged public compare: FP32 atol1e-6/rtol1e-5; FP64 atol1e-10/rtol1e-8",
+      "state": "strict_mismatch",
+      "raw_sha256": "7e1f19d34e32552799920d83429795108bc068ca838ce2983a7da8c82c5e4814",
+      "steps": [
+        {
+          "step": 0,
+          "discrete": null,
+          "complete_records": "root.continuation.states[(0, 84)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 8 / 64 (12.5%)\nGreatest absolute difference: 3.859400749206543e-06 at index (0, 56) (up to 1e-06 allowed)\nGreatest relative difference: 0.0003183112421538681 at index (0, 10) (up to 1e-05 allowed)",
+          "first_exact_trace_difference": {
+            "left_event": [
+              1,
+              0,
+              0
+            ],
+            "right_event": [
+              1,
+              0,
+              0
+            ],
+            "error": "root[proposal_slots][keys]: Tensor-likes are not equal!\n\nMismatched elements: 21 / 64 (32.8%)\nGreatest absolute difference: 2.9802322387695312e-08 at index (0, 56)\nGreatest relative difference: 2.82253063232929e-06 at index (0, 53)"
+          },
+          "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 3818 / 8192 (46.6%)\nGreatest absolute difference: 0.0004534721374511719 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.005715504754334688 at index (74, 25) (up to 1e-05 allowed)",
+          "parameters": "root[nodes.39.read_program.score.vector]: Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 1.3890676200389862e-06 at index (22,) (up to 1e-06 allowed)\nGreatest relative difference: 0.0004134663613513112 at index (22,) (up to 1e-05 allowed)",
+          "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 3819 / 8192 (46.6%)\nGreatest absolute difference: 0.0004534721374511719 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.03290882334113121 at index (74, 0) (up to 1e-05 allowed)",
+          "gradient_detail": {
+            "examined_tensors": 6381,
+            "nonidentical_tensors": 4798,
+            "failing_tensors": 2273,
+            "first_witness": [
+              {
+                "name": "nodes.259.read_program.score.vector",
+                "scaled_error": 286.7599952703599,
+                "maxabs": 0.0005139261484146118,
+                "flat_index": 13,
+                "left": 0.07973214238882065,
+                "right": 0.07921821624040604
+              }
+            ]
+          },
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 3841,
+            "failing_tensors": 2,
+            "first_witness": [
+              {
+                "name": "nodes.39.read_program.score.vector",
+                "scaled_error": 1.3439178113605263,
+                "maxabs": 1.5944242477416992e-06,
+                "flat_index": 22,
+                "left": -0.0033581771422177553,
+                "right": -0.0033595662098377943
+              }
+            ]
+          }
+        },
+        {
+          "step": 1,
+          "discrete": null,
+          "complete_records": "root.continuation.states[(0, 0)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 15 / 128 (11.7%)\nGreatest absolute difference: 4.645437002182007e-06 at index (1, 34) (up to 1e-06 allowed)\nGreatest relative difference: 0.0009128930396400392 at index (1, 34) (up to 1e-05 allowed)",
+          "first_exact_trace_difference": {
+            "left_event": [
+              18,
+              0,
+              0
+            ],
+            "right_event": [
+              18,
+              0,
+              0
+            ],
+            "error": "root[content]: Tensor-likes are not equal!\n\nMismatched elements: 59 / 65 (90.8%)\nGreatest absolute difference: 6.183981895446777e-07 at index (15,)\nGreatest relative difference: 0.00018537743017077446 at index (32,)"
+          },
+          "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 2997 / 8192 (36.6%)\nGreatest absolute difference: 3.469735383987427e-05 at index (111, 40) (up to 1e-06 allowed)\nGreatest relative difference: 0.05195290222764015 at index (94, 47) (up to 1e-05 allowed)",
+          "parameters": "root[nodes.39.read_program.score.vector]: Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 1.805718056857586e-06 at index (22,) (up to 1e-06 allowed)\nGreatest relative difference: 0.0010644817957654595 at index (22,) (up to 1e-05 allowed)",
+          "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 3594 / 8192 (43.9%)\nGreatest absolute difference: 0.00015091896057128906 at index (98, 40) (up to 1e-06 allowed)\nGreatest relative difference: 2.2109196186065674 at index (74, 57) (up to 1e-05 allowed)",
+          "exact_resume": [
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            },
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            }
+          ],
+          "gradient_detail": {
+            "examined_tensors": 6496,
+            "nonidentical_tensors": 5260,
+            "failing_tensors": 2375,
+            "first_witness": [
+              {
+                "name": "nodes.304.read_program.score.vector",
+                "scaled_error": 205.70435969215862,
+                "maxabs": 0.00020811764989048243,
+                "flat_index": 13,
+                "left": 0.0013813014375045896,
+                "right": 0.0011731837876141071
+              }
+            ]
+          },
+          "parameter_detail": {
+            "examined_tensors": 12170,
+            "nonidentical_tensors": 4783,
+            "failing_tensors": 2,
+            "first_witness": [
+              {
+                "name": "nodes.39.read_program.score.vector",
+                "scaled_error": 1.7755979603672463,
+                "maxabs": 2.0712614059448242e-06,
+                "flat_index": 22,
+                "left": -0.0016945296665653586,
+                "right": -0.0016963353846222162
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "feedback": {
+      "source": "e0d6e27fb62756ccf8a1b5d6cc91f0c838944604",
+      "dirty": "",
+      "dtype": "float32",
+      "state": "strict_mismatch",
+      "scope": "original feedback workload, complete records/gradients/SGD slots and per-schedule exact resume; no throughput",
+      "fixture_sha256": "9cfb40b0cc1c64a70088ee0e61ab76d5efc5e06ccaae8b45ef6f60227a736cd7",
+      "raw_sha256": "10434412113d1e70ffc6b1d73f735437f1d81f75030e3d57f33bd90b9d732464",
+      "steps": [
+        {
+          "step": 0,
+          "candidates": [
+            {
+              "schedule": "streaming",
+              "records": "root.continuation.states[(0, 1)].slots[summaries]: Tensor-likes are not close!\n\nMismatched elements: 1 / 304 (0.3%)\nGreatest absolute difference: 1.210719347000122e-06 at index (14, 8) (up to 1e-06 allowed)\nGreatest relative difference: 7.592612382723019e-05 at index (14, 8) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 4 / 2048 (0.2%)\nGreatest absolute difference: 3.719702363014221e-06 at index (59, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.006670698989182711 at index (43, 11) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 4 / 2048 (0.2%)\nGreatest absolute difference: 3.719702363014221e-06 at index (59, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.0037796678952872753 at index (59, 11) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  0,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  0,
+                  0,
+                  0
+                ],
+                "error": "root[content]: Tensor-likes are not equal!\n\nMismatched elements: 19 / 33 (57.6%)\nGreatest absolute difference: 2.9802322387695312e-08 at index (30,)\nGreatest relative difference: 5.663291631208267e-07 at index (1,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 54,
+                "failing_tensors": 6
+              }
+            },
+            {
+              "schedule": "prefill",
+              "records": "root.continuation.states[(1, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 576 (0.2%)\nGreatest absolute difference: 1.0654330253601074e-06 at index (16, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.0004139561206102371 at index (16, 11) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.kernel.base]: Tensor-likes are not close!\n\nMismatched elements: 13 / 2048 (0.6%)\nGreatest absolute difference: 4.351139068603516e-06 at index (59, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.009566890075802803 at index (43, 11) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 13 / 2048 (0.6%)\nGreatest absolute difference: 4.351139068603516e-06 at index (59, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.004424122627824545 at index (59, 11) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  0,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  0,
+                  0,
+                  0
+                ],
+                "error": "root[content]: Tensor-likes are not equal!\n\nMismatched elements: 19 / 33 (57.6%)\nGreatest absolute difference: 2.9802322387695312e-08 at index (30,)\nGreatest relative difference: 5.663291631208267e-07 at index (1,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 54,
+                "failing_tensors": 10
+              }
+            }
+          ]
+        },
+        {
+          "step": 1,
+          "candidates": [
+            {
+              "schedule": "streaming",
+              "records": "root.continuation.states[(0, 1)].slots[summaries]: Tensor-likes are not close!\n\nMismatched elements: 1 / 624 (0.2%)\nGreatest absolute difference: 1.210719347000122e-06 at index (14, 8) (up to 1e-06 allowed)\nGreatest relative difference: 7.592612382723019e-05 at index (14, 8) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.kernel.summary]: Tensor-likes are not close!\n\nMismatched elements: 11 / 512 (2.1%)\nGreatest absolute difference: 6.16908073425293e-06 at index (5, 30) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013048964319750667 at index (5, 8) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][3][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 15 / 512 (2.9%)\nGreatest absolute difference: 6.258487701416016e-06 at index (5, 30) (up to 1e-06 allowed)\nGreatest relative difference: 0.003085630713030696 at index (5, 12) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  20,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  20,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 32 / 33 (97.0%)\nGreatest absolute difference: 3.769993782043457e-06 at index (8,)\nGreatest relative difference: 3.273384572821669e-05 at index (8,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 53,
+                "failing_tensors": 10
+              }
+            },
+            {
+              "schedule": "prefill",
+              "records": "root.continuation.states[(1, 0)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 6 / 1216 (0.5%)\nGreatest absolute difference: 1.7583370208740234e-06 at index (24, 11) (up to 1e-06 allowed)\nGreatest relative difference: 0.0004139561206102371 at index (16, 11) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.kernel.summary]: Tensor-likes are not close!\n\nMismatched elements: 8 / 512 (1.6%)\nGreatest absolute difference: 4.857778549194336e-06 at index (5, 30) (up to 1e-06 allowed)\nGreatest relative difference: 6.290995952440426e-05 at index (5, 14) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][3][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 10 / 512 (2.0%)\nGreatest absolute difference: 4.976987838745117e-06 at index (5, 30) (up to 1e-06 allowed)\nGreatest relative difference: 0.0025460689794272184 at index (5, 12) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  20,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  20,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 31 / 33 (93.9%)\nGreatest absolute difference: 2.384185791015625e-06 at index (32,)\nGreatest relative difference: 1.7208178178407252e-05 at index (8,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 53,
+                "failing_tensors": 11
+              }
+            }
+          ]
+        },
+        {
+          "step": 2,
+          "exact_checkpoint_decode": true,
+          "candidates": [
+            {
+              "schedule": "streaming",
+              "records": "root.continuation.states[(0, 1)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1280 (0.1%)\nGreatest absolute difference: 1.1622905731201172e-06 at index (26, 21) (up to 1e-06 allowed)\nGreatest relative difference: 9.073502587853e-05 at index (26, 21) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.full_program.content.gate]: Tensor-likes are not close!\n\nMismatched elements: 1 / 2048 (0.0%)\nGreatest absolute difference: 1.1846423149108887e-06 at index (49, 5) (up to 1e-06 allowed)\nGreatest relative difference: 6.59261568216607e-05 at index (49, 5) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][3][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 2 / 512 (0.4%)\nGreatest absolute difference: 1.387670636177063e-06 at index (5, 31) (up to 1e-06 allowed)\nGreatest relative difference: 0.00010715983080444857 at index (5, 14) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  40,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  40,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 30 / 33 (90.9%)\nGreatest absolute difference: 4.291534423828125e-06 at index (3,)\nGreatest relative difference: 1.3535185644286685e-05 at index (6,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 46,
+                "failing_tensors": 5
+              }
+            },
+            {
+              "schedule": "prefill",
+              "records": "root.continuation.states[(0, 1)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1280 (0.1%)\nGreatest absolute difference: 1.1920928955078125e-06 at index (26, 21) (up to 1e-06 allowed)\nGreatest relative difference: 9.306178253609687e-05 at index (26, 21) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.full_program.content.out]: Tensor-likes are not close!\n\nMismatched elements: 2 / 1024 (0.2%)\nGreatest absolute difference: 2.0563602447509766e-06 at index (8, 15) (up to 1e-06 allowed)\nGreatest relative difference: 8.172267553163692e-05 at index (8, 28) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][0][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 1 / 2048 (0.0%)\nGreatest absolute difference: 1.1324882507324219e-06 at index (56, 22) (up to 1e-06 allowed)\nGreatest relative difference: 0.0029148368630558252 at index (56, 22) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  40,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  40,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 31 / 33 (93.9%)\nGreatest absolute difference: 4.76837158203125e-06 at index (3,)\nGreatest relative difference: 9.093912012758665e-06 at index (6,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 46,
+                "failing_tensors": 10
+              }
+            }
+          ]
+        },
+        {
+          "step": 3,
+          "exact_resume": [
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            },
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            },
+            {
+              "records": null,
+              "gradients": null,
+              "parameters": null,
+              "optimizer": null
+            }
+          ],
+          "candidates": [
+            {
+              "schedule": "streaming",
+              "records": "root.continuation.states[(0, 0)].slots[values]: Tensor-likes are not close!\n\nMismatched elements: 2 / 1280 (0.2%)\nGreatest absolute difference: 1.1101365089416504e-06 at index (31, 23) (up to 1e-06 allowed)\nGreatest relative difference: 0.0002040756808128208 at index (33, 23) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.full_program.content.gate]: Tensor-likes are not close!\n\nMismatched elements: 1 / 2048 (0.0%)\nGreatest absolute difference: 1.5869736671447754e-06 at index (6, 30) (up to 1e-06 allowed)\nGreatest relative difference: 3.557781019480899e-05 at index (6, 30) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][11][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1024 (0.1%)\nGreatest absolute difference: 1.6391277313232422e-06 at index (26, 17) (up to 1e-06 allowed)\nGreatest relative difference: 0.0013922288781031966 at index (26, 17) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  60,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  60,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 27 / 33 (81.8%)\nGreatest absolute difference: 7.62939453125e-06 at index (16,)\nGreatest relative difference: 3.587880564737134e-05 at index (5,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 46,
+                "failing_tensors": 8
+              }
+            },
+            {
+              "schedule": "prefill",
+              "records": "root.continuation.states[(0, 1)].slots[keys]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1280 (0.1%)\nGreatest absolute difference: 1.1920928955078125e-06 at index (6, 21) (up to 1e-06 allowed)\nGreatest relative difference: 9.306178253609687e-05 at index (6, 21) (up to 1e-05 allowed)",
+              "gradients": "root[nodes.0.full_program.content.out]: Tensor-likes are not close!\n\nMismatched elements: 1 / 1024 (0.1%)\nGreatest absolute difference: 2.000480890274048e-06 at index (1, 17) (up to 1e-06 allowed)\nGreatest relative difference: 3.897889473591931e-05 at index (1, 17) (up to 1e-05 allowed)",
+              "parameters": null,
+              "optimizer": "root[state][11][momentum_buffer]: Tensor-likes are not close!\n\nMismatched elements: 6 / 1024 (0.6%)\nGreatest absolute difference: 1.996755599975586e-06 at index (26, 17) (up to 1e-06 allowed)\nGreatest relative difference: 0.0016954728635028005 at index (26, 17) (up to 1e-05 allowed)",
+              "first_exact_trace_difference": {
+                "left_event": [
+                  60,
+                  0,
+                  0
+                ],
+                "right_event": [
+                  60,
+                  0,
+                  0
+                ],
+                "error": "root[fiber][1].value: Tensor-likes are not equal!\n\nMismatched elements: 31 / 33 (93.9%)\nGreatest absolute difference: 8.58306884765625e-06 at index (25,)\nGreatest relative difference: 2.8079282856197096e-05 at index (5,)"
+              },
+              "gradient_detail": {
+                "examined_tensors": 58,
+                "nonidentical_tensors": 46,
+                "failing_tensors": 10
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "allocation_observation": {
+    "python_scalar": 45,
+    "native": 45,
+    "native_limits": {
+      "max_rows": 4096,
+      "max_bytes": 67108864,
+      "dropped": 0,
+      "captured_bytes": 19581
+    },
+    "raw_sha256": "d0d16083e5fc2772db764fc73838a289f48aed62279ea2c076d7a248c0912e11"
+  }
+}

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[单行反向/异形传输/分配观察资格](core5-eager-boundary-20261029.md)：e0d6e27；CPU517 passed/2原strict xfail，原D64及反馈FP32仍严格失败，各调度自身逐值恢复通过；native完整实际分配观察与预算有证据。性能和resident增量分别验收。
+
 [首写入/half反向/完整双卡桥接隔离](core5-boundary-isolation-20261029.md)：bdd7f6c；原D2048实际操作数分离来源与私有投影误差，局部连续FP64有改进但未认证全图；half归一化FP64 VJP仍失败，默认async完整CPU桥接仍EE1017。有限预算及停止/重启条件分别记录。
 
 [独立输入KV矩阵批资格与有限对照](core5-independent-projection-20261029.md)：f03e9be；CPU273 passed/2原FP16 strict xfail，纯Python与Python/native NPU各六组、公共常驻12项、新SDK两dtype六项及eager六组通过。D64显式FP64两步训练/逐值恢复通过；479次写入投影全部覆盖，但CPU中型单次+4.35%、D64+0.16%、NPU中型+1.36%，未见明确加速。独立profile与全部原失败保留；GPU延后，原数值/异步边界不改。
