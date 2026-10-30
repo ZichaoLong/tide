@@ -14,6 +14,23 @@
 5. Preserve user changes and work only on the authorized branch. Reference
    repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only.
 
+## Downstream collaboration
+
+- For experiment-repository requests, read `docs/downstream-contract.md` at the
+  adopted protocol revision. Check the request's fixed source, dependency lock,
+  actual configuration, evidence and acceptance conditions before changing code.
+- Keep the request in its originating repository; link accepted foundation work
+  from ROADMAP and current activity from STATUS. Deliver implementation/evidence
+  commits and a downstream reproduction command. Upstream delivery and each
+  downstream acceptance are separate facts, never inferred from one another.
+- Use `templates/downstream/` for portable requests/replies/acceptance and
+  `examples/consumer_core5/` for installed public-API consumption. Repository
+  access and request text do not grant cross-repository write/push authority;
+  existing user authorization still applies without repeated permission checks.
+- Freeze dependencies used by active experiments. Keep application-specific
+  training in the consumer; contribute general modules/optimizations here with
+  independent tests, explicit scope and recorded positive/negative lessons.
+
 ## Execution and checkpoints
 
 - Continue implementation autonomously in reviewable, tested increments.

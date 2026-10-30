@@ -16,6 +16,7 @@
 | 当前采用的教材原文 | [版本锁定](docs/upstream.json)、[固定快照](docs/upstream/README.md) |
 | 源码分层和模块导航 | [架构](docs/architecture.md) |
 | 从干净源码开始构建、检查和开发 | [开发入口](docs/development.md) |
+| 实验仓库接入、反馈、交付与升级 | [协作规范](docs/downstream-contract.md)、[core-5起步示例](examples/consumer_core5/README.md) |
 | 作为 Python/LibTorch 依赖调用 | [公共库](docs/library.md)、[安装客户端](examples/consumer/README.md) |
 | core-5 配置/拓扑/规模、运行和维护导航 | [候选与测试入口](docs/core5-study.md) |
 | 按配置查询正确性/性能覆盖 | [统一查询入口](docs/core5-study.md)、[逐配置索引](docs/evidence/core5-index.json)、[覆盖修正资格](docs/evidence/core5-coverage-correction-20261030.md) |

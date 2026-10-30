@@ -5,6 +5,7 @@
 
 | 要找的内容 | 直接入口 |
 | --- | --- |
+| 实验接入与需求反馈 | [协作规范](downstream-contract.md)、[可复制的core-5消费者](../examples/consumer_core5/README.md)；依赖锁/请求/交付/验收模板由规范导航 |
 | 选模型/执行组合 | [有限目录](../benchmarks/core5-study-v1.json)、下方测试表；公共`resolve_model`可配置目录外合法组合 |
 | 当前实测设置与结果 | [自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
 | 已通过的功能门禁 | [实际26模型/52训练检查](evidence/core5-coverage-correction-20261030.md)、[三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |

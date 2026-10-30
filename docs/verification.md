@@ -10,6 +10,7 @@ source, unit, output paths and exact next commands belong in `STATUS.md`.
 
 | Entry point | Scope |
 | --- | --- |
+| `check_downstream_consumer.py --build-dir MATCHING_CPU_BUILD --output-dir NEW` | Fixed-source directed CPU installed core-5 consumer: lock/checkpoint rejection, independent records/gradients/optimizer and fresh-process application resume; not a full backend gate |
 | `develop.py TESTS...` | Archive dirty source, build, run explicitly selected pytest paths |
 | `develop_lh.py --component iocortex --scope smoke` | Archive source, run six IOCortex configurations per dtype with original assertions on and off; no exports |
 | `develop_lh.py --component iocortex` | Full IOCortex matrix, both assertion variants, complete fixtures and independent Python comparison |

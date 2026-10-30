@@ -1,5 +1,9 @@
 # Independent experiment starter
 
+This example uses the generic module catalog. For current core-5 weighted modules,
+whole-application resume and dependency locks, use [consumer_core5](../consumer_core5/README.md)
+and the [downstream collaboration contract](../../docs/downstream-contract.md).
+
 Copy this directory outside the Tide checkout. In an environment that already
 has the intended Torch stack, install a pinned Tide wheel with
 `python -m pip install --no-deps /path/to/tidegraph-0.2.0-py3-none-any.whl`.

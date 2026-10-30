@@ -97,6 +97,14 @@ CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建�
 也可显式指定正整数；实际资源约束造成的降低须说明原因。测试使用空闲 CPU/NPU/内存，
 计时前固定并记录 ATen/BLAS/调度线程，项目重型构建与性能计时分开。实际任务见 STATUS。
 
+## 下游接入与反馈
+
+多实验仓库遵守[协作规范](downstream-contract.md)，模板和core-5安装消费者从该页导航。
+修改示例时运行`tests/test_downstream_consumer.py`，再在固定源码的独立服务中运行
+`python scripts/check_downstream_consumer.py --build-dir MATCHING_CPU_BUILD --output-dir NEW_OUTPUT`。
+此入口复用并核验CPU构建、构建wheel安装到私有环境、复制消费者到源码外，验证实际公共调用与应用恢复。
+它是定向安装检查，不是全仓库或设备资格。修改规范时同步模板、AGENTS与导航；正式资格仍先提交实现。
+
 ## 实现与验证次序
 
 先声明语义差异/特例定义域，建立独立参考和小反例，随后实现、跑相关回归。
