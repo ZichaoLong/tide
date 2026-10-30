@@ -1,56 +1,52 @@
 # 当前交接 — 2026-10-30
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-第一轮磁盘清理已完成，基线cc89ca89e10c149fd6b658b2c5bd314a1c7e5f6b。无子代理、无活跃作业。
-未修改数学/运行实现、参考仓库或公共环境；没有重跑历史实验或扩大设备资格。
-用户要求清理后解释worktree、大参数材料及失败checkpoint；说明已归入[退役证据](evidence/artifact-cleanup-20261030.md)。
+第二轮磁盘清理完成，执行基线12d3e16f1513d0a6f8be7de2720f0096f68b44d7；无子代理、无活跃作业。
+仅修改交接、保留规则、开发导航与证据；未改数学/运行代码、参考仓库、公共环境或旧失败结论。
 
-## 实际清理与保留
+## 本轮交付
 
-84项全部移除，删除前分配块合计58.875679GiB；仓库从约147.24GiB降至88.36GiB。
-范围为51个干净祖先worktree、18处旧build、14份已记录hash的trace、LH已通过的11.12GiB checkpoint。
-本轮临时runner在任务结束后另行移除，Git登记已同步。
+35项全部退役65.852535GiB：30份历史源码副本约1.928GiB，2份静态材料38.117GiB，3份旧checkpoint25.807GiB。
+仓库约88.36→22.50GiB；两轮累计清单退役124.73GiB，初始约147.24GiB。
+原81个历史worktree和本轮临时runner均已移除；Git目前只登记主工作区。
+未提交差异不宣称已全部合并；28份脏树已与完整归档逐项核对后按用户明确授权退役。
 
-原81个worktree HEAD全在基线历史中；28个未提交源码副本原位保留，不能据此称全部实验差异已合入。
-另保留core5-checkpoint-qualified及core5-compact-fiber-qualified-v2两个承载构建的干净worktree。
-当前共31个工作区（主工作区+30历史副本）。完整清单与身份在证据JSON。
+28份源码的归档仍在artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz，约1.61MiB。
+518份旧作业记录、66份相邻配置/结果、失败日志、小型反例及原失败结论保持。
+大checkpoint的旧精确状态已不在线，诊断重启须重新生成；ROADMAP已同步这一保留边界。
+证据入口：[第二轮清理](evidence/artifact-cleanup-round2-20261030.md)及[机器凭据](evidence/artifact-cleanup-round2-20261030.json)。
+第一轮历史结果仍见[原报告](evidence/artifact-cleanup-20261030.md)。
 
-开发入口保持：
+## 当前开发入口
 
-- artifacts/worktrees/core5-checkpoint-qualified/build/：b255 CPU及standalone NPU SDK链。
-- artifacts/worktrees/core5-compact-fiber-qualified-v2/build/：04b常驻基线。
-- artifacts/worktrees/core5-independent-qualified/build/npu-python/：原Torch2.12 NPU core基线。
-- .local/venv-core5及主源码。旧NPU二进制不能冒称当前C++全范围资格；按版本/hash及development选用或重新构建。
+预编译库约3.28GiB，已分离到artifacts/retained-builds/，详情见[保留构建](artifact-retention.md#本机保留构建)：
 
-87项保留构建文件/manifest hash一致，28个脏树内容/差异保持，原515份作业记录hash不变。
-747份元数据/未跟踪源码及56份补丁另外存入artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz；逐字节核验。
-清理后原生CPU smoke及6项CPU接入检查通过；这是开发链复核，不是新全矩阵资格。
+- core5-checkpoint-qualified/build/：b255 CPU core/client及standalone NPU SDK链。
+- core5-compact-fiber-qualified-v2/build/：04b Python/SDK常驻基线。
+- core5-independent-qualified/build/npu-python/：bdd7f6c旧Torch2.12 NPU core基线。
 
-## 作业终态
+旧artifacts/worktrees/<名称>/build仅为兼容链接，没有对应源码或Git登记；不在旧CMake缓存中增量重建。
+新构建按[development](development.md)使用固定源码和新build目录，核对manifest及环境；不混用版本。
+.local/venv-core5、主源码、公共工具链保持。搬迁后CPU原生smoke、显式公共加载及6项接入检查通过。
+这只是开发链复核；没有新增NPU/GPU或全矩阵资格，也没有重跑历史实验。
 
-- cleanup-round1-plan-20261030：passed/0，清单与归档；独立background.slice。
-- cleanup-round1-apply-20261030：failed/1，预检路径拼接TypeError，未开始删除；失败和原清单保留。
-- cleanup-round1-apply-v2-20261030：修正后同84目标passed/0，约104.57秒；Nice10/CPUQuota200%/MemoryMax2GiB/1800秒。
+## 作业终态与接续
 
-各服务已结束；status.json/task.log位于artifacts/jobs/<名称>/。
-逐项result、plan、归档、程序副本、smoke.json/XML/log及finalization在artifacts/cleanup-round1-20261030-v2。
-审阅报告与小型机器凭据在docs/evidence/artifact-cleanup-20261030.{md,json}。
-本轮仅提交文档/证据；实际提交和远端状态用git status核对，普通推送沿用已有授权。
+- cleanup-round2-plan-20261030：passed/0，04:58:17—04:59:32 UTC。
+- cleanup-round2-apply-20261030：passed/0，04:59:56—05:01:38 UTC；35项全部完成。
 
-## 接续与剩余范围
-
-34.50GiB静态参数材料及FC/HB/NPU三个大失败checkpoint（25.81GiB）未删；配套FC静态材料3.61GiB、其他小反例也保留。
-它们不是新实验的运行依赖或竞争性训练成果。可在保存配置/种子/版本/环境/错误及小反例后退役，
-代价是失去旧精确状态并需按固定条件重新生成；本轮不自动启动第二轮删除。
-未提交源码也可先保存完整补丁/新文件再退役整个副本，不要求把所有旧实验补丁合并到公共实现。
+独立background.slice，Nice10/CPUQuota200%/MemoryMax2GiB，900/1800秒上限；只读runner已在终态后移除。
+状态/日志在artifacts/jobs/<任务名>/；plan/result、程序副本、launch、smoke及finalization在artifacts/cleanup-round2-20261030/。
+归档、构建文件身份/87项内容hash、历史作业记录与相邻记录核对通过。第一轮预检failed/1记录仍保留。
+本轮提交内容仅上述文档与凭据；提交/远端是否同步以git状态核对，不把文档当作推送完成证明。
 
 ```sh
 git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
+git worktree list
 ```
 
-后续按用户新任务执行；无待启动历史队列。多实验协作从[协作规范](downstream-contract.md)和
-[安装示例](../examples/consumer_core5/README.md)进入。原[安装资格](evidence/downstream-contract-20261030.md)、
-[配置资格](evidence/core5-coverage-correction-20261030.md)、[有限性能](evidence/core5-natural-study-20261029.md)保持。
-数值/异步/资源/硬件边界仍由唯一待办[ROADMAP](ROADMAP.md)维护。
+无待恢复历史队列；按用户后续任务接续。详细失败经验治理另行安排；现有约束和停止/重启条件仅由[ROADMAP](ROADMAP.md)维护。
+多实验仓库协作从[协作规范](downstream-contract.md)和[安装示例](../examples/consumer_core5/README.md)进入；
+既有安装资格、配置覆盖、性能和硬件边界不因清理改变。

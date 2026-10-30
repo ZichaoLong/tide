@@ -1,0 +1,1343 @@
+{
+  "schema": "tide-artifact-cleanup-round2-evidence-v1",
+  "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "authorization": "User explicitly authorized large material/checkpoint and archived dirty historical worktree retirement; no reference-repository or shared-toolchain cleanup.",
+  "state": "passed",
+  "targets": [
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-arithmetic-dev",
+      "head": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+      "ancestor": true,
+      "bytes": 68546560,
+      "stat": {
+        "device": 64768,
+        "inode": 152966200,
+        "size": 4096,
+        "mtime_ns": 1793205912776786378
+      },
+      "retire_bytes": 68546560
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-benchmark-dev1",
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "ancestor": true,
+      "bytes": 69427200,
+      "stat": {
+        "device": 64768,
+        "inode": 172097546,
+        "size": 4096,
+        "mtime_ns": 1793335436526824758
+      },
+      "retire_bytes": 69427200
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-benchmark-dev2",
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "ancestor": true,
+      "bytes": 69464064,
+      "stat": {
+        "device": 64768,
+        "inode": 172100253,
+        "size": 4096,
+        "mtime_ns": 1793335438206840387
+      },
+      "retire_bytes": 69464064
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-benchmark-dev3",
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "ancestor": true,
+      "bytes": 69529600,
+      "stat": {
+        "device": 64768,
+        "inode": 172243949,
+        "size": 4096,
+        "mtime_ns": 1793335438314841392
+      },
+      "retire_bytes": 69529600
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-benchmark-precision-dev",
+      "head": "1850434d842227994fd11aa2f8b65ed1d503638d",
+      "ancestor": true,
+      "bytes": 68329472,
+      "stat": {
+        "device": 64768,
+        "inode": 149947607,
+        "size": 4096,
+        "mtime_ns": 1793191616541106461
+      },
+      "retire_bytes": 68329472
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-benchmark-progress-dev",
+      "head": "474f9af32d35ca7d8bc7bf6359dbddb3ec91dfb3",
+      "ancestor": true,
+      "bytes": 68075520,
+      "stat": {
+        "device": 64768,
+        "inode": 146276382,
+        "size": 4096,
+        "mtime_ns": 1793189284995853911
+      },
+      "retire_bytes": 68075520
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-dev",
+      "head": "121f5b19ec5fb67d6a94199a29f0fbeb4e61eab5",
+      "ancestor": true,
+      "bytes": 69120000,
+      "stat": {
+        "device": 64768,
+        "inode": 153371376,
+        "size": 4096,
+        "mtime_ns": 1793335438834846229
+      },
+      "retire_bytes": 69120000
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-final-dev",
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "ancestor": true,
+      "bytes": 69115904,
+      "stat": {
+        "device": 64768,
+        "inode": 153635112,
+        "size": 4096,
+        "mtime_ns": 1793238511707251931
+      },
+      "retire_bytes": 69115904
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-final-dev-v2",
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "ancestor": true,
+      "bytes": 69148672,
+      "stat": {
+        "device": 64768,
+        "inode": 153635081,
+        "size": 4096,
+        "mtime_ns": 1793238575087859532
+      },
+      "retire_bytes": 69148672
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-final-dev-v3",
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "ancestor": true,
+      "bytes": 69148672,
+      "stat": {
+        "device": 64768,
+        "inode": 153640253,
+        "size": 4096,
+        "mtime_ns": 1793238655708632408
+      },
+      "retire_bytes": 69148672
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-final-dev-v4",
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "ancestor": true,
+      "bytes": 69148672,
+      "stat": {
+        "device": 64768,
+        "inode": 153642834,
+        "size": 4096,
+        "mtime_ns": 1793238719537244306
+      },
+      "retire_bytes": 69148672
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-final-dev-v5",
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "ancestor": true,
+      "bytes": 69148672,
+      "stat": {
+        "device": 64768,
+        "inode": 153645426,
+        "size": 4096,
+        "mtime_ns": 1793238797709993717
+      },
+      "retire_bytes": 69148672
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-boundary-python-dev",
+      "head": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "ancestor": true,
+      "bytes": 69070848,
+      "stat": {
+        "device": 64768,
+        "inode": 153376796,
+        "size": 4096,
+        "mtime_ns": 1793237218662856379
+      },
+      "retire_bytes": 69070848
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-capture-dev",
+      "head": "56631eb9c48fc006d0df00b3a259aee10e04314b",
+      "ancestor": true,
+      "bytes": 68141056,
+      "stat": {
+        "device": 64768,
+        "inode": 141427081,
+        "size": 4096,
+        "mtime_ns": 1793335439290850471
+      },
+      "retire_bytes": 68141056
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-checkpoint-dev",
+      "head": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "ancestor": true,
+      "bytes": 69562368,
+      "stat": {
+        "device": 64768,
+        "inode": 174981128,
+        "size": 4096,
+        "mtime_ns": 1793335439370851215
+      },
+      "retire_bytes": 69562368
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-checkpoint-qualified",
+      "head": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "ancestor": true,
+      "bytes": 1440325632,
+      "stat": {
+        "device": 64768,
+        "inode": 174984057,
+        "size": 4096,
+        "mtime_ns": 1793281930826104184
+      },
+      "retire_bytes": 69562368
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-compact-fiber-qualified-v2",
+      "head": "04b52153f9785e1489e31c7dd09a16849791d331",
+      "ancestor": true,
+      "bytes": 2177572864,
+      "stat": {
+        "device": 64768,
+        "inode": 154144158,
+        "size": 4096,
+        "mtime_ns": 1793241456663235098
+      },
+      "retire_bytes": 69259264
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-coverage-dev",
+      "head": "0a250fa905d316eff7afe6781ec7183172cc9c78",
+      "ancestor": true,
+      "bytes": 69906432,
+      "stat": {
+        "device": 64768,
+        "inode": 176816131,
+        "size": 4096,
+        "mtime_ns": 1793322323168847875
+      },
+      "retire_bytes": 69906432
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-coverage-dev-v2",
+      "head": "0a250fa905d316eff7afe6781ec7183172cc9c78",
+      "ancestor": true,
+      "bytes": 69894144,
+      "stat": {
+        "device": 64768,
+        "inode": 176818751,
+        "size": 4096,
+        "mtime_ns": 1793322490938458121
+      },
+      "retire_bytes": 69894144
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-independent-dev",
+      "head": "ead6f347fa91d8d20b5ad3e5ed742bccfe8936e2",
+      "ancestor": true,
+      "bytes": 68644864,
+      "stat": {
+        "device": 64768,
+        "inode": 152973814,
+        "size": 4096,
+        "mtime_ns": 1793335453902986405
+      },
+      "retire_bytes": 68644864
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-independent-qualified",
+      "head": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "ancestor": true,
+      "bytes": 108781568,
+      "stat": {
+        "device": 64768,
+        "inode": 152981765,
+        "size": 4096,
+        "mtime_ns": 1793222687916425508
+      },
+      "retire_bytes": 69099520
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-performance-dev",
+      "head": "58de04b1bfd64704616f55f4f9ea84a404775ded",
+      "ancestor": true,
+      "bytes": 67420160,
+      "stat": {
+        "device": 64768,
+        "inode": 131615663,
+        "size": 4096,
+        "mtime_ns": 1793335460831050856
+      },
+      "retire_bytes": 67420160
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-performance-dev2",
+      "head": "b0321b99ba3c4c7cffa091fceb09e8a3a3d50bc9",
+      "ancestor": true,
+      "bytes": 67424256,
+      "stat": {
+        "device": 64768,
+        "inode": 131624004,
+        "size": 4096,
+        "mtime_ns": 1793335462563066969
+      },
+      "retire_bytes": 67424256
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-quad-dev",
+      "head": "b7c5173c3672d02307164b0b88382d28766e256b",
+      "ancestor": true,
+      "bytes": 67883008,
+      "stat": {
+        "device": 64768,
+        "inode": 134775929,
+        "size": 4096,
+        "mtime_ns": 1793335465671095883
+      },
+      "retire_bytes": 67883008
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-review-fixes-dev",
+      "head": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "ancestor": true,
+      "bytes": 67301376,
+      "stat": {
+        "device": 64768,
+        "inode": 131354529,
+        "size": 4096,
+        "mtime_ns": 1793335485443279824
+      },
+      "retire_bytes": 67301376
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-stable-preparation-dev",
+      "head": "1850434d842227994fd11aa2f8b65ed1d503638d",
+      "ancestor": true,
+      "bytes": 68505600,
+      "stat": {
+        "device": 64768,
+        "inode": 150078496,
+        "size": 4096,
+        "mtime_ns": 1793335490863330247
+      },
+      "retire_bytes": 68505600
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/core5-storage-reference-dev",
+      "head": "372eb874245858de727376cb2d7981970a732631",
+      "ancestor": true,
+      "bytes": 69541888,
+      "stat": {
+        "device": 64768,
+        "inode": 172252389,
+        "size": 4096,
+        "mtime_ns": 1793335491171333113
+      },
+      "retire_bytes": 69541888
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/downstream-dev",
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "ancestor": true,
+      "bytes": 70254592,
+      "stat": {
+        "device": 64768,
+        "inode": 176823989,
+        "size": 4096,
+        "mtime_ns": 1793332631476757717
+      },
+      "retire_bytes": 70254592
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/downstream-dev-v2",
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "ancestor": true,
+      "bytes": 70254592,
+      "stat": {
+        "device": 64768,
+        "inode": 176826630,
+        "size": 4096,
+        "mtime_ns": 1793332753813893019
+      },
+      "retire_bytes": 70254592
+    },
+    {
+      "kind": "worktree",
+      "path": "artifacts/worktrees/downstream-dev-v3",
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "ancestor": true,
+      "bytes": 70258688,
+      "stat": {
+        "device": 64768,
+        "inode": 176829271,
+        "size": 4096,
+        "mtime_ns": 1793332849702783008
+      },
+      "retire_bytes": 70258688
+    },
+    {
+      "kind": "binary",
+      "path": "artifacts/jobs/core5-performance-study-cpu/runs/matched2048.tensors.bin",
+      "sha256": "8bcc36d0b76ee274d6dba1f2f5a0d4df8f773b8f426d943328cd6adcd206f90f",
+      "bytes": 37048061952,
+      "stat": {
+        "device": 64768,
+        "inode": 131878879,
+        "size": 37048052160,
+        "mtime_ns": 1793169361446306861
+      },
+      "retire_bytes": 37048061952
+    },
+    {
+      "kind": "binary",
+      "path": "artifacts/jobs/core5-study-v2-performance/materials/fc-1b-kv/fixture.tensors.bin",
+      "sha256": "9bfa366abd4ed634d7b881f1d8f6d9942959384b00964621b5ab8378ebce5286",
+      "bytes": 3879862272,
+      "stat": {
+        "device": 64768,
+        "inode": 61744744,
+        "size": 3879857124,
+        "mtime_ns": 1793280491404339843
+      },
+      "retire_bytes": 3879862272
+    },
+    {
+      "kind": "checkpoint",
+      "path": "artifacts/jobs/core5-checkpoint-large/fc-1b-kv--cpp-npu-mixed-c/measurement/resume.pt",
+      "sha256": "6ad4705db5a22140a8d797c5e47e7874d1ff26aa8aec305ba7e3057db70c6163",
+      "bytes": 5253361664,
+      "stat": {
+        "device": 64768,
+        "inode": 61745262,
+        "size": 5253356896,
+        "mtime_ns": 1793282291445540615
+      },
+      "retire_bytes": 5253361664
+    },
+    {
+      "kind": "checkpoint",
+      "path": "artifacts/jobs/core5-study-v2-performance/fc-1b-kv--native-cpu64/measurement/resume.pt",
+      "sha256": "3f6ae49b9e168a1bd7c5ac5b72894c4f994d79e5651ee2bc15a055700438c4a8",
+      "bytes": 10507345920,
+      "stat": {
+        "device": 64768,
+        "inode": 61744720,
+        "size": 10507341695,
+        "mtime_ns": 1793280129860887094
+      },
+      "retire_bytes": 10507345920
+    },
+    {
+      "kind": "checkpoint",
+      "path": "artifacts/jobs/core5-study-v2-performance/hb-1b-kv--native-cpu64/measurement/resume.pt",
+      "sha256": "175d3e7b9984699d65d23d0cc2594fccb006c9742dd95c8544c141a6388a153f",
+      "bytes": 11949801472,
+      "stat": {
+        "device": 64768,
+        "inode": 61744730,
+        "size": 11949794180,
+        "mtime_ns": 1793280264078168309
+      },
+      "retire_bytes": 11949801472
+    }
+  ],
+  "retired_source_records": {
+    "artifacts/worktrees/core5-arithmetic-dev": {
+      "head": "e75e1f5bca347b45301990689d8d7d088dd6e16b",
+      "status": " M docs/STATUS.md\n M docs/weighted-precision.md\n M scripts/diagnose_weighted_workload.py\n?? docs/weighted-arithmetic-diagnostics.md\n?? scripts/weighted_arithmetic_probe.py\n?? scripts/weighted_numeric_differences.py\n?? tests/test_weighted_arithmetic_probe.py\n",
+      "patch_sha256": "70e1e582ac6c1ac39f057cd86d791403564ffe8bd78cc67723b7f4a04159a239",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/weighted-arithmetic-diagnostics.md": "6540f2f7176f56e6e0515cd36409a73a8226d69100d73e93d309adcd2758d2d5",
+        "scripts/weighted_arithmetic_probe.py": "54ef8e7fb8eecd6e8117406eb683432e89f1f24f2d24c3d38cc77a6600281ec1",
+        "scripts/weighted_numeric_differences.py": "376bddb60cff585b4a93a272012ec511db00a0d9c8f8328e615eabe5fd3d3328",
+        "tests/test_weighted_arithmetic_probe.py": "02adca59a2190fdfa0db99a3d4d7c1e40471852d459a0807f6aef40a83c5f9c5"
+      }
+    },
+    "artifacts/worktrees/core5-benchmark-dev1": {
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "status": " M docs/STATUS.md\n M python/tidegraph/planning/materialize.py\n M python/tidegraph/planning/precision.py\n M scripts/benchmark_weighted.py\n M scripts/prepare_core5_study.py\n M scripts/weighted_benchmark_runners.py\n M scripts/weighted_training_observation.py\n M tests/test_weighted_benchmark_precision.py\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/records.cpp\n M tools/weighted_benchmark/resident.cpp\n M tools/weighted_benchmark/tensors.cpp\n?? scripts/check_weighted_benchmark.py\n?? tools/weighted_benchmark/eager.cpp\n?? tools/weighted_benchmark/eager.h\n",
+      "patch_sha256": "e3837484e3729cff30d633613232852936106bd8d7635e02bdf8812cb0c6b429",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/check_weighted_benchmark.py": "692bd662aad9d30d1c24195012bb4baa9729466168bb513cb40763e684964a97",
+        "tools/weighted_benchmark/eager.cpp": "8dbac7a24287f8909943b31ad14c20466893f9b6aa6cd59f63caed1ff8b65f8d",
+        "tools/weighted_benchmark/eager.h": "943a2dd474882898449af87d5f9e180227cf3910d7f1f4e9f848ece446ed4550"
+      }
+    },
+    "artifacts/worktrees/core5-benchmark-dev2": {
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "status": " M docs/STATUS.md\n M python/tidegraph/planning/materialize.py\n M python/tidegraph/planning/model.py\n M python/tidegraph/planning/precision.py\n M scripts/benchmark_weighted.py\n M scripts/prepare_core5_study.py\n M scripts/weighted_benchmark_runners.py\n M scripts/weighted_training_observation.py\n M tests/test_weighted_benchmark_precision.py\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/records.cpp\n M tools/weighted_benchmark/resident.cpp\n M tools/weighted_benchmark/tensors.cpp\n?? benchmarks/core5-study-v1.json\n?? python/tidegraph/planning/study.py\n?? scripts/check_weighted_benchmark.py\n?? scripts/run_core5_study.py\n?? tools/weighted_benchmark/eager.cpp\n?? tools/weighted_benchmark/eager.h\n?? tools/weighted_benchmark/resident_checkpoint.cpp\n?? tools/weighted_benchmark/resident_checkpoint.h\n",
+      "patch_sha256": "0120895829af57d9b58018245c502b25e179037e790dfda3298dbf10a2313b00",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "benchmarks/core5-study-v1.json": "6dbe377abb21060a0ec7dd88569e0bd4dec195c663ca7ec394322e55896a4568",
+        "python/tidegraph/planning/study.py": "f31c0a8a7de309229e0c1a4c8dd56033dcb2b33b7156289c57802fee0df1ae4b",
+        "scripts/check_weighted_benchmark.py": "692bd662aad9d30d1c24195012bb4baa9729466168bb513cb40763e684964a97",
+        "scripts/run_core5_study.py": "6997699c3176f175c86b2b61c91b06f2cc356acbf5696af506691b40f5f08dfb",
+        "tools/weighted_benchmark/eager.cpp": "f7275c3cd05b38ed2ebfcd9daac7a74b308bcb9a7fda08958d65ce9c833fadd6",
+        "tools/weighted_benchmark/eager.h": "943a2dd474882898449af87d5f9e180227cf3910d7f1f4e9f848ece446ed4550",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4"
+      }
+    },
+    "artifacts/worktrees/core5-benchmark-dev3": {
+      "head": "4cf9469a590d2160a4cd2266cbe66b6050ee072f",
+      "status": " M docs/STATUS.md\n M docs/core5-study.md\n M docs/weighted-performance.md\n M python/tidegraph/planning/execution.py\n M python/tidegraph/planning/materialize.py\n M python/tidegraph/planning/model.py\n M python/tidegraph/planning/precision.py\n M scripts/benchmark_weighted.py\n M scripts/prepare_core5_study.py\n M scripts/qualify_core5_study.py\n M scripts/weighted_benchmark_runners.py\n M scripts/weighted_training_observation.py\n M tests/test_weighted_benchmark_precision.py\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/observation.cpp\n M tools/weighted_benchmark/observation.h\n M tools/weighted_benchmark/records.cpp\n M tools/weighted_benchmark/resident.cpp\n M tools/weighted_benchmark/tensors.cpp\n?? benchmarks/core5-study-v1.json\n?? python/tidegraph/planning/study.py\n?? scripts/check_weighted_benchmark.py\n?? scripts/core5_study_records.py\n?? scripts/index_core5_study.py\n?? scripts/run_core5_study.py\n?? tests/test_core5_study.py\n?? tools/weighted_benchmark/eager.cpp\n?? tools/weighted_benchmark/eager.h\n?? tools/weighted_benchmark/resident_checkpoint.cpp\n?? tools/weighted_benchmark/resident_checkpoint.h\n",
+      "patch_sha256": "77eb51b14d334fc109d718fbff04ca5798dd1d0d9ba8b9daa1667cccbe57b426",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "benchmarks/core5-study-v1.json": "41f036c4ba645a3bf57befb3eb645e2098ec413ab125cafa804c6b63f4e48ccf",
+        "python/tidegraph/planning/study.py": "6abe47fb0cb5eacc33c11bea72aa3644e2c19bda4920d47cf89966c7cc84b7f3",
+        "scripts/check_weighted_benchmark.py": "4684b4a7dbbb7ee89a5a1bf8db216ce3f776a04fec2a5e30a456280e315e3798",
+        "scripts/core5_study_records.py": "e45ca3a15544fefb4f7a10f687a00c30ac27470f9b9abcf8b4e81ecc89ef8f77",
+        "scripts/index_core5_study.py": "069be43b7e33a49ba30486a739bd9a13385e05a550c1879ebddc387bf12687b8",
+        "scripts/run_core5_study.py": "4f619504259da5a35858ab11e0888ffb4d72d0dd9dd2ea487dced0995b03b671",
+        "tests/test_core5_study.py": "53ddd93ffba3e11159b8a7bb56cdcdb40ea07217539f6c266f4af31c1ed96269",
+        "tools/weighted_benchmark/eager.cpp": "f7275c3cd05b38ed2ebfcd9daac7a74b308bcb9a7fda08958d65ce9c833fadd6",
+        "tools/weighted_benchmark/eager.h": "943a2dd474882898449af87d5f9e180227cf3910d7f1f4e9f848ece446ed4550",
+        "tools/weighted_benchmark/resident_checkpoint.cpp": "83ae2cf05df1560a62c952aa81bafcbdb027d4b40abfbf87b0176c54212f57cd",
+        "tools/weighted_benchmark/resident_checkpoint.h": "62b8d3970a24ae5137b7f4adc6a396a1ebf372d2c7373ca91bbcbc988f7f12c4"
+      }
+    },
+    "artifacts/worktrees/core5-benchmark-precision-dev": {
+      "head": "1850434d842227994fd11aa2f8b65ed1d503638d",
+      "status": " M docs/STATUS.md\n M docs/weighted-performance.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/diagnose_weighted_workload.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M scripts/weighted_plan_materialize.py\n M tests/test_weighted_benchmark_material.py\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/fixture.cpp\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/observation.cpp\n M tools/weighted_benchmark/observation.h\n M tools/weighted_benchmark/records.cpp\n M tools/weighted_benchmark/tensors.cpp\n?? scripts/weighted_benchmark_precision.py\n?? tests/test_weighted_benchmark_precision.py\n?? tests/test_weighted_workload_training.py\n",
+      "patch_sha256": "61919b4f109a552cb7f3eaf9c9312a5a5ae7210b4ef1823bffb20ee973c78453",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_precision.py": "f0b203e6e0ebe82b242105f121ffab0c2f337f8b4506a74982d5250a3275cd9e",
+        "tests/test_weighted_benchmark_precision.py": "06ed45a15d5942140f46d0e9dea37a881f128db8a76c2544ab21dc8d32b8520e",
+        "tests/test_weighted_workload_training.py": "b87fe1502026d0bddcccf2d6f2e3ed2399807e49808066128d4efdb5ff9180bf"
+      }
+    },
+    "artifacts/worktrees/core5-benchmark-progress-dev": {
+      "head": "474f9af32d35ca7d8bc7bf6359dbddb3ec91dfb3",
+      "status": " M docs/weighted-performance.md\n M tests/test_weighted_benchmark_material.py\n M tools/weighted_benchmark/main.cpp\n",
+      "patch_sha256": "0a24be59b13c81e78821d79d15ce5432265226e237656d49e0945a470e1c35a2",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-boundary-dev": {
+      "head": "121f5b19ec5fb67d6a94199a29f0fbeb4e61eab5",
+      "status": " M cpp/src/bind_weighted_batch.cpp\n M cpp/src/weighted_aggregate_vjp.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_entropy.cpp\n M cpp/src/weighted_placement_copy.cpp\n M cpp/src/weighted_query_vjp.cpp\n M cpp/src/weighted_region.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-arithmetic-diagnostics.md\n M docs/weighted-packed.md\n M docs/weighted-query-batch.md\n M docs/weighted-workloads.md\n M python/tidegraph/weighted/aggregate_vjp.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_failure.py\n M python/tidegraph/weighted/entropy_allocation.py\n M python/tidegraph/weighted/placement_tensors.py\n M python/tidegraph/weighted/programs.py\n M python/tidegraph/weighted/query_vjp.py\n M scripts/benchmark_weighted.py\n M scripts/diagnose_weighted_async.py\n M scripts/diagnose_weighted_precision.py\n M scripts/diagnose_weighted_workload.py\n M scripts/weighted_allocation_observer.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_allocation_failure.py\n M tests/test_weighted_aggregate_vjp.py\n M tests/test_weighted_allocation_observer.py\n M tests/test_weighted_benchmark_precision.py\n M tests/test_weighted_placement.py\n M tests/test_weighted_query_vjp.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? cpp/include/tide/allocation_observation.h\n?? cpp/src/weighted_singleton_vjp.h\n?? python/tidegraph/weighted/singleton_vjp.py\n?? scripts/diagnose_weighted_first_write.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_half_probe.py\n?? scripts/weighted_peer_bridge.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_half_probe.py\n?? tests/test_weighted_peer_bridge.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "707511f43dcf4f7009924c61e1dab3cb4d766b3f157da7762851ce280b1f29e9",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "cpp/include/tide/allocation_observation.h": "9273c47aa67cc347488ebfecbcd055fd209af04ca5bdc8db9e810ff87f9e3345",
+        "cpp/src/weighted_singleton_vjp.h": "d7618abce023d036184ffe60d5cd6f85ce87fd658a6fef64dbb8c581fa13b2bd",
+        "python/tidegraph/weighted/singleton_vjp.py": "75c90bd9a56936783d5769d7ef582726c96fa9f021b242035be360ebd0f39d90",
+        "scripts/diagnose_weighted_first_write.py": "9ba1c028c1c9643022b53d7735091b6792afcf2db7f724a4a958765dcadd1c43",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_half_probe.py": "b8f670cf88997ef94d97dc85bdcfed324f11d8c124563e466ba97a33920de4ce",
+        "scripts/weighted_peer_bridge.py": "61e99d3b3c04efe90f766b4ecce75acb8c27aac5fc669c148570ce36578b8557",
+        "scripts/weighted_training_observation.py": "ea8ce1eac964bca2aca55c6b4c84776710e08931d3c03506e7c1577484e25554",
+        "tests/test_weighted_benchmark_resident.py": "fa619eaeb7e24d308dd7b81a88bfa873b2e68042d08fd71c3b12e1ccf96b095f",
+        "tests/test_weighted_half_probe.py": "f902a062ce4897affebe80801eb5c71c12a56194f2bc6b8a0e04873bb90be553",
+        "tests/test_weighted_peer_bridge.py": "3c1fbd54c7f13ca85e2a03ba13969da3d27db998eca30dddef838481ae62b83d",
+        "tests/test_weighted_training_observation.py": "d3526dd3be2f6c9930f30bfe7e50bfaca7850899496194a8da20e73ccbac4a63"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-final-dev": {
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_resident_weighted_flow.py\n M tests/test_weighted_benchmark_precision.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? scripts/weighted_benchmark_limits.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "903c23cea9c0771ba8018b36bc32bdee1d47b8b10674d0592cb87a029e0f5cfa",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_limits.py": "4fc1fbd18c6133ea7396c85a82a54c081f2a9ef5ae90654bd2e4689f71991ca2",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "ea8ce1eac964bca2aca55c6b4c84776710e08931d3c03506e7c1577484e25554",
+        "tests/test_weighted_benchmark_resident.py": "fa619eaeb7e24d308dd7b81a88bfa873b2e68042d08fd71c3b12e1ccf96b095f",
+        "tests/test_weighted_training_observation.py": "d3526dd3be2f6c9930f30bfe7e50bfaca7850899496194a8da20e73ccbac4a63"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-final-dev-v2": {
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/development.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_resident_weighted_flow.py\n M tests/test_weighted_benchmark_precision.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? scripts/weighted_benchmark_limits.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "cb67a89238dd197dc76db54c4fbe96829dff180aa70d5fb08e6271410c847230",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_limits.py": "4fc1fbd18c6133ea7396c85a82a54c081f2a9ef5ae90654bd2e4689f71991ca2",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "ea8ce1eac964bca2aca55c6b4c84776710e08931d3c03506e7c1577484e25554",
+        "tests/test_weighted_benchmark_resident.py": "665ddc6ea25c9713550ce105d0e0e4fae5917b9bf0cfc46787a4c836a0cc005c",
+        "tests/test_weighted_training_observation.py": "d3526dd3be2f6c9930f30bfe7e50bfaca7850899496194a8da20e73ccbac4a63"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-final-dev-v3": {
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/development.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_resident_weighted_flow.py\n M tests/test_weighted_benchmark_precision.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? scripts/weighted_benchmark_limits.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "748216f97f77226853244bb0d2e53ce4bf8a419f3ffc43b518b87df9c015d52c",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_limits.py": "4fc1fbd18c6133ea7396c85a82a54c081f2a9ef5ae90654bd2e4689f71991ca2",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "c18e0fa0783f98943030f41186452113db2669e22da0fbecd0af52a9819fba76",
+        "tests/test_weighted_benchmark_resident.py": "665ddc6ea25c9713550ce105d0e0e4fae5917b9bf0cfc46787a4c836a0cc005c",
+        "tests/test_weighted_training_observation.py": "d39438306536f6770ac94eb5646513bcb0e3aab6d1a591f35723de3a1c57d362"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-final-dev-v4": {
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/development.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_resident_weighted_flow.py\n M tests/test_weighted_benchmark_precision.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? scripts/weighted_benchmark_limits.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "392c0fdd8ec970c2c3fecbd24bc017edfe7ee4b3c6ffdd80b27d0b32c6c36f41",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_limits.py": "4fc1fbd18c6133ea7396c85a82a54c081f2a9ef5ae90654bd2e4689f71991ca2",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "e34f64bf4bb320e77b1d6e556a78c63f78fb8af36496bc503c043b19dbd2f86a",
+        "tests/test_weighted_benchmark_resident.py": "665ddc6ea25c9713550ce105d0e0e4fae5917b9bf0cfc46787a4c836a0cc005c",
+        "tests/test_weighted_training_observation.py": "4c67df00f6c8949cce9beccb622a8f8fd3a5abc515dd5d37d2b22be41a7794ef"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-final-dev-v5": {
+      "head": "9d1a54cdcfe09e3880ad9f776ab4b1a565b93081",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/development.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-workloads.md\n M scripts/benchmark_weighted.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_resident_weighted_flow.py\n M tests/test_weighted_benchmark_precision.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? scripts/weighted_benchmark_limits.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "393578963219c550b216bee85f62a0e3d7bcb18f8607a5a21f7eab4cdc98e8ca",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "scripts/weighted_benchmark_limits.py": "4fc1fbd18c6133ea7396c85a82a54c081f2a9ef5ae90654bd2e4689f71991ca2",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "14a07cc4313867a4fe89c86d10c10847e35b2c720a59849d28193a47c667ef80",
+        "tests/test_weighted_benchmark_resident.py": "665ddc6ea25c9713550ce105d0e0e4fae5917b9bf0cfc46787a4c836a0cc005c",
+        "tests/test_weighted_training_observation.py": "b9001475d4e2b14a2501286cd359124e631930b5fe4f598dc119c2639fc523d3"
+      }
+    },
+    "artifacts/worktrees/core5-boundary-python-dev": {
+      "head": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "status": " M cpp/src/bind_weighted_batch.cpp\n M cpp/src/weighted_aggregate_vjp.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_entropy.cpp\n M cpp/src/weighted_placement_copy.cpp\n M cpp/src/weighted_query_vjp.cpp\n M cpp/src/weighted_region.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-packed.md\n M docs/weighted-query-batch.md\n M docs/weighted-workloads.md\n M python/tidegraph/weighted/aggregate_vjp.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_failure.py\n M python/tidegraph/weighted/entropy_allocation.py\n M python/tidegraph/weighted/placement_tensors.py\n M python/tidegraph/weighted/programs.py\n M python/tidegraph/weighted/query_vjp.py\n M scripts/benchmark_weighted.py\n M scripts/diagnose_weighted_workload.py\n M scripts/weighted_allocation_observer.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_allocation_failure.py\n M tests/test_weighted_aggregate_vjp.py\n M tests/test_weighted_allocation_observer.py\n M tests/test_weighted_benchmark_precision.py\n M tests/test_weighted_placement.py\n M tests/test_weighted_query_vjp.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? cpp/include/tide/allocation_observation.h\n?? cpp/src/weighted_singleton_vjp.h\n?? python/tidegraph/weighted/singleton_vjp.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "88c68d30a8c205461e2b824fb280b3219997ba4b263441a5ba5a15fe312c0999",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "cpp/include/tide/allocation_observation.h": "9273c47aa67cc347488ebfecbcd055fd209af04ca5bdc8db9e810ff87f9e3345",
+        "cpp/src/weighted_singleton_vjp.h": "d7618abce023d036184ffe60d5cd6f85ce87fd658a6fef64dbb8c581fa13b2bd",
+        "python/tidegraph/weighted/singleton_vjp.py": "75c90bd9a56936783d5769d7ef582726c96fa9f021b242035be360ebd0f39d90",
+        "scripts/weighted_benchmark_resume.py": "6410959eee081217cf3d396ef008882133aadb56fcdebbac454565a45e6846ba",
+        "scripts/weighted_training_observation.py": "ea8ce1eac964bca2aca55c6b4c84776710e08931d3c03506e7c1577484e25554",
+        "tests/test_weighted_training_observation.py": "d3526dd3be2f6c9930f30bfe7e50bfaca7850899496194a8da20e73ccbac4a63"
+      }
+    },
+    "artifacts/worktrees/core5-capture-dev": {
+      "head": "56631eb9c48fc006d0df00b3a259aee10e04314b",
+      "status": " M cpp/src/weighted_kv.cpp\n M cpp/src/weighted_kv_projection.cpp\n M docs/STATUS.md\n M docs/weighted-kv-sharing.md\n M python/tidegraph/weighted/kv.py\n M python/tidegraph/weighted/kv_projection.py\n M tests/test_weighted_kv_sharing.py\n",
+      "patch_sha256": "2b2f81d24b224a79bb853dbf03db746a8e5265f1f953ebf34be919b44142f784",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-checkpoint-dev": {
+      "head": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "status": " M cpp/include/tide/checkpoint.h\n M cpp/include/tide/graph_checkpoint.h\n M cpp/src/bindings.cpp\n M cpp/src/checkpoint.cpp\n M cpp/src/checkpoint_binary.h\n M cpp/src/checkpoint_codec.cpp\n M cpp/src/checkpoint_internal.h\n M cpp/src/checkpoint_io.cpp\n M cpp/src/graph_checkpoint.cpp\n M cpp/src/graph_checkpoint_codec.cpp\n M cpp/src/graph_checkpoint_internal.h\n M cpp/test/native_graph_records.cpp\n M docs/STATUS.md\n M docs/core5-study.md\n M docs/native-graph-checkpoint.md\n M python/tidegraph/planning/study.py\n M scripts/run_core5_study.py\n M tests/test_core5_study.py\n M tests/test_cpp_checkpoint.py\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/eager.cpp\n M tools/weighted_benchmark/eager.h\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/resident.cpp\n M tools/weighted_benchmark/resident_checkpoint.cpp\n M tools/weighted_benchmark/resident_checkpoint.h\n",
+      "patch_sha256": "8bd102e0813af696535d6315614898084d659d5f10496a8ad2252811e0cd1746",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-checkpoint-qualified": {
+      "head": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "status": "",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-compact-fiber-qualified-v2": {
+      "head": "04b52153f9785e1489e31c7dd09a16849791d331",
+      "status": "",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-coverage-dev": {
+      "head": "0a250fa905d316eff7afe6781ec7183172cc9c78",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/architecture.md\n M docs/core5-study.md\n M docs/evidence/core5-natural-study-20261029.md\n M docs/evidence/core5-study-clients-20261029.md\n M docs/execution-capabilities.md\n M docs/semantic-map.md\n M scripts/core5_study_records.py\n M scripts/index_core5_study.py\n M scripts/run_core5_study.py\n M tests/test_core5_recipe_training.py\n?? python/tidegraph/planning/facts.py\n?? scripts/core5_coverage.py\n?? scripts/record_core5_checks.py\n?? tests/test_core5_coverage.py\n",
+      "patch_sha256": "6b538221c94dbade0daeec7b3772b6d62362d8b656b4117ddd2b093844a08c4a",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "python/tidegraph/planning/facts.py": "c37f62911ff9be96f12bb83caf6bcfb669ef63609239c11225efdf30d29cd88e",
+        "scripts/core5_coverage.py": "dc746c97cb98d8b9266369bec6b4c5a3c31eee17b5f6f5d6eb37ecbbbb74257f",
+        "scripts/record_core5_checks.py": "884b8952e8f32bfa665d77fdd686fd22d46b082b4d937f90731da6eca05e98be",
+        "tests/test_core5_coverage.py": "327b5f9dc046c35c7f1b91502db62f7e3bc72ba4e0f61aa11e36c27d3262d1f2"
+      }
+    },
+    "artifacts/worktrees/core5-coverage-dev-v2": {
+      "head": "0a250fa905d316eff7afe6781ec7183172cc9c78",
+      "status": " M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/architecture.md\n M docs/core5-study.md\n M docs/evidence/core5-natural-study-20261029.md\n M docs/evidence/core5-study-clients-20261029.md\n M docs/execution-capabilities.md\n M docs/semantic-map.md\n M scripts/core5_study_records.py\n M scripts/index_core5_study.py\n M scripts/run_core5_study.py\n M tests/test_core5_recipe_training.py\n?? python/tidegraph/planning/facts.py\n?? scripts/core5_coverage.py\n?? scripts/record_core5_checks.py\n?? tests/test_core5_coverage.py\n",
+      "patch_sha256": "5c4eb326c251c540b08eccc4c8618b06af9b70616dbec483d9c248ec8ecef043",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "python/tidegraph/planning/facts.py": "c37f62911ff9be96f12bb83caf6bcfb669ef63609239c11225efdf30d29cd88e",
+        "scripts/core5_coverage.py": "dc746c97cb98d8b9266369bec6b4c5a3c31eee17b5f6f5d6eb37ecbbbb74257f",
+        "scripts/record_core5_checks.py": "884b8952e8f32bfa665d77fdd686fd22d46b082b4d937f90731da6eca05e98be",
+        "tests/test_core5_coverage.py": "327b5f9dc046c35c7f1b91502db62f7e3bc72ba4e0f61aa11e36c27d3262d1f2"
+      }
+    },
+    "artifacts/worktrees/core5-independent-dev": {
+      "head": "ead6f347fa91d8d20b5ad3e5ed742bccfe8936e2",
+      "status": "M  cpp/include/tide/kernel.h\nM  cpp/src/state_preparation.cpp\nM  cpp/src/weighted_kv.cpp\nM  cpp/src/weighted_kv_preparation.cpp\nM  cpp/src/weighted_kv_preparation.h\n M cpp/test/weighted_kv_sharing.cpp\nM  cpp/test/weighted_sharing.cpp\nM  docs/ROADMAP.md\nM  docs/STATUS.md\nM  docs/semantic-map.md\nM  docs/semantics.md\nM  docs/weighted-kv-sharing.md\nMM python/tidegraph/state_preparation.py\nM  python/tidegraph/weighted/kv.py\nA  python/tidegraph/weighted/kv_independent_batch.py\n M scripts/weighted_device_checks.py\n M tests/test_weighted_compute_sharing.py\nA  tests/test_weighted_independent_preparation.py\nM  tests/test_weighted_kv_sharing.py\n",
+      "patch_sha256": "765239e07845ed32f2df7dac328ae7c89b3de65b4dc5cee0b7c30bc75b0c57d5",
+      "staged_sha256": "ea68ca14efbb42793dcf6cbf1450a7404c378309c80f0cf491b0a51272c51549",
+      "untracked": {}
+    },
+    "artifacts/worktrees/core5-independent-qualified": {
+      "head": "bdd7f6c6621a641e41b9fdf07d55c4749b5c5e86",
+      "status": " M cpp/src/bind_weighted_batch.cpp\n M cpp/src/weighted_aggregate_vjp.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_entropy.cpp\n M cpp/src/weighted_placement_copy.cpp\n M cpp/src/weighted_query_vjp.cpp\n M cpp/src/weighted_region.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-kv-update.md\n M docs/resident-weighted-training.md\n M docs/semantic-map.md\n M docs/weighted-allocation.md\n M docs/weighted-packed.md\n M docs/weighted-query-batch.md\n M docs/weighted-workloads.md\n M python/tidegraph/weighted/aggregate_vjp.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_failure.py\n M python/tidegraph/weighted/entropy_allocation.py\n M python/tidegraph/weighted/placement_tensors.py\n M python/tidegraph/weighted/programs.py\n M python/tidegraph/weighted/query_vjp.py\n M scripts/benchmark_weighted.py\n M scripts/diagnose_weighted_workload.py\n M scripts/weighted_allocation_observer.py\n M scripts/weighted_benchmark_cases.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_allocation_failure.py\n M tests/test_weighted_aggregate_vjp.py\n M tests/test_weighted_allocation_observer.py\n M tests/test_weighted_benchmark_precision.py\n M tests/test_weighted_placement.py\n M tests/test_weighted_query_vjp.py\n M tools/device_online/weighted_allocation.cpp\n M tools/device_online/weighted_allocation.h\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_kv_update.cpp\n M tools/device_online/weighted_kv_update.h\n M tools/device_online/weighted_kv_update_vjp.cpp\n M tools/device_online/weighted_training_backward.cpp\n?? cpp/include/tide/allocation_observation.h\n?? cpp/src/weighted_singleton_vjp.h\n?? python/tidegraph/weighted/singleton_vjp.py\n?? scripts/weighted_benchmark_resume.py\n?? scripts/weighted_training_observation.py\n?? tests/test_weighted_benchmark_resident.py\n?? tests/test_weighted_training_observation.py\n",
+      "patch_sha256": "581d1de26323363ce1340d8633401cc23a74f5cb60214397e1956518943e2962",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "cpp/include/tide/allocation_observation.h": "9273c47aa67cc347488ebfecbcd055fd209af04ca5bdc8db9e810ff87f9e3345",
+        "cpp/src/weighted_singleton_vjp.h": "d7618abce023d036184ffe60d5cd6f85ce87fd658a6fef64dbb8c581fa13b2bd",
+        "python/tidegraph/weighted/singleton_vjp.py": "75c90bd9a56936783d5769d7ef582726c96fa9f021b242035be360ebd0f39d90",
+        "scripts/weighted_benchmark_resume.py": "a2290b13b13de527f3b7c45dd895056de9d5f6414d823f35aa859d9999d7dee0",
+        "scripts/weighted_training_observation.py": "ea8ce1eac964bca2aca55c6b4c84776710e08931d3c03506e7c1577484e25554",
+        "tests/test_weighted_benchmark_resident.py": "fa619eaeb7e24d308dd7b81a88bfa873b2e68042d08fd71c3b12e1ccf96b095f",
+        "tests/test_weighted_training_observation.py": "d3526dd3be2f6c9930f30bfe7e50bfaca7850899496194a8da20e73ccbac4a63"
+      }
+    },
+    "artifacts/worktrees/core5-performance-dev": {
+      "head": "58de04b1bfd64704616f55f4f9ea84a404775ded",
+      "status": " M cpp/src/weighted_kv_projection.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-flow.md\n M docs/semantic-map.md\n M docs/weighted-kv-sharing.md\n M docs/weighted-performance.md\n M docs/weighted-recurrent.md\n M python/tidegraph/ops.py\n M python/tidegraph/weighted/binding.py\n M python/tidegraph/weighted/kv_projection.py\n M scripts/benchmark_weighted.py\n M scripts/build_weighted_benchmark.py\n M scripts/export_weighted_benchmark.py\n M tools/device_online/weighted_flow_internal.h\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_packing.cpp\n M tools/device_online/weighted_stage_check.cpp\n M tools/device_online/weighted_window_vjp.cpp\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/fixture.cpp\n M tools/weighted_benchmark/main.cpp\n?? docs/performance-lessons.md\n?? docs/weighted-workloads.md\n?? scripts/prepare_weighted_workload.py\n?? scripts/weighted_fixture_binary.py\n?? scripts/weighted_inventory.py\n?? scripts/weighted_plan_materialize.py\n?? scripts/weighted_shapes.py\n?? scripts/weighted_topology.py\n?? scripts/weighted_workload_plan.py\n?? tests/test_weighted_benchmark_material.py\n?? tests/test_weighted_fixture_binary.py\n?? tests/test_weighted_inventory.py\n?? tests/test_weighted_workload_plan.py\n?? tools/weighted_benchmark/tensors.cpp\n",
+      "patch_sha256": "c76af26e26339289d5f787967bb2aee0af86951db0eecb6a6729095626fbb83d",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/performance-lessons.md": "ac455eb83667f976943ed72d1d74da4899d7894222e030b02a4ee88ce78dadcc",
+        "docs/weighted-workloads.md": "ee51542889af16116071d739cc80c70b25ba67e8bea0832c0b9c62b0aec2d152",
+        "scripts/prepare_weighted_workload.py": "7fccda0d5e3391df6bedbcaf243b7cbf2c02ab9698f90074268158b4717bf467",
+        "scripts/weighted_fixture_binary.py": "d2dbb92b91011b9a50bb1c9966a6aa238a0679cc56d7d05deddc40e1bde130da",
+        "scripts/weighted_inventory.py": "12fef5a703a93eb566b859d7271951c97d5e522315bdd44d252bf41cf49df61a",
+        "scripts/weighted_plan_materialize.py": "51bf5c2d8089ff2898497e5a3bc8a458d867f64fb677f3bf007891ab782d441f",
+        "scripts/weighted_shapes.py": "a871946d0988139891982babc2ffe7d4d098aba373a5fde54e30c22941d1d658",
+        "scripts/weighted_topology.py": "740094b1f6cb655097927d20f06fab0a2d0db1e24eff39ae4daf291a87c4a8fe",
+        "scripts/weighted_workload_plan.py": "5e54f74b184d13b220393021a432baf2bd254dc32b96adde6427b5e5a5a71786",
+        "tests/test_weighted_benchmark_material.py": "64e4c0b572d9d96fafd237876946c81ed9b7d0b63dcac42f37e2527be895bed2",
+        "tests/test_weighted_fixture_binary.py": "15cfeae4f25a0d6ea4bd2779ff8dbb105372d52e65ead56213c8c03c7e769b1c",
+        "tests/test_weighted_inventory.py": "c01f5b299ca4b2619d48b04ad96a204071fa8bd292a9626c98d6f0b390ef9873",
+        "tests/test_weighted_workload_plan.py": "c4d0cc2f154b70b2ff2f98d89f58aaa12c43b9403f1d708756710b456e3c6b75",
+        "tools/weighted_benchmark/tensors.cpp": "4fb51d241643106862f115191fef935b088a7f0edc90d84378cd8717bdd1b6d4"
+      }
+    },
+    "artifacts/worktrees/core5-performance-dev2": {
+      "head": "b0321b99ba3c4c7cffa091fceb09e8a3a3d50bc9",
+      "status": " M cpp/bench/compare.cpp\n M cpp/include/tide/parameter_bank.h\n M cpp/src/parameter_bank.cpp\n M cpp/src/weighted_kv_projection.cpp\n M cpp/test/parameter_bank.cpp\n M cpp/test/weighted_graph_training.cpp\n M docs/STATUS.md\n M docs/resident-weighted-flow.md\n M docs/resident-weighted-parameters.md\n M docs/semantic-map.md\n M docs/weighted-kv-sharing.md\n M docs/weighted-performance.md\n M python/tidegraph/ops.py\n M python/tidegraph/weighted/binding.py\n M python/tidegraph/weighted/kv_projection.py\n M scripts/benchmark_weighted.py\n M scripts/build_weighted_benchmark.py\n M scripts/export_weighted_benchmark.py\n M tools/device_online/weighted_flow.cpp\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_internal.h\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_packing.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_records.cpp\n M tools/device_online/weighted_flow_state.cpp\n M tools/device_online/weighted_stage_check.cpp\n M tools/device_online/weighted_training_failures.cpp\n M tools/device_online/weighted_training_parameters.cpp\n M tools/device_online/weighted_window_snapshot.cpp\n M tools/device_online/weighted_window_vjp.cpp\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/fixture.cpp\n M tools/weighted_benchmark/main.cpp\n?? docs/weighted-workloads.md\n?? scripts/prepare_weighted_workload.py\n?? scripts/weighted_fixture_binary.py\n?? scripts/weighted_inventory.py\n?? scripts/weighted_plan_materialize.py\n?? scripts/weighted_shapes.py\n?? scripts/weighted_topology.py\n?? scripts/weighted_workload_plan.py\n?? tests/test_weighted_benchmark_material.py\n?? tests/test_weighted_fixture_binary.py\n?? tests/test_weighted_inventory.py\n?? tests/test_weighted_workload_plan.py\n?? tools/weighted_benchmark/tensors.cpp\n",
+      "patch_sha256": "22b4f38da4f20df8127574cbae5d42c621269b278d06eb14b18b0ded9c49df78",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/weighted-workloads.md": "ee51542889af16116071d739cc80c70b25ba67e8bea0832c0b9c62b0aec2d152",
+        "scripts/prepare_weighted_workload.py": "e334596947381f16dda0f869c389a3fedea4dba62a14b5ba48e1b360a50bdf6a",
+        "scripts/weighted_fixture_binary.py": "d2dbb92b91011b9a50bb1c9966a6aa238a0679cc56d7d05deddc40e1bde130da",
+        "scripts/weighted_inventory.py": "45f99dcbe27e27042c58a0b4562405ee886a700acee5bfca71984867a6a365ac",
+        "scripts/weighted_plan_materialize.py": "51bf5c2d8089ff2898497e5a3bc8a458d867f64fb677f3bf007891ab782d441f",
+        "scripts/weighted_shapes.py": "a871946d0988139891982babc2ffe7d4d098aba373a5fde54e30c22941d1d658",
+        "scripts/weighted_topology.py": "740094b1f6cb655097927d20f06fab0a2d0db1e24eff39ae4daf291a87c4a8fe",
+        "scripts/weighted_workload_plan.py": "aa1df433800087b3956851bc4d04a922a44d0455603c346a1f2d368a5f17e2e1",
+        "tests/test_weighted_benchmark_material.py": "64e4c0b572d9d96fafd237876946c81ed9b7d0b63dcac42f37e2527be895bed2",
+        "tests/test_weighted_fixture_binary.py": "15cfeae4f25a0d6ea4bd2779ff8dbb105372d52e65ead56213c8c03c7e769b1c",
+        "tests/test_weighted_inventory.py": "16837fc38b1eb1cb0d368a234bcdc73d15b4253918cad85243a7370c9c3ab40b",
+        "tests/test_weighted_workload_plan.py": "f71f55be5765f5cb73f967687696b149a97c698b9a64a980f8f1e38a3a9ef547",
+        "tools/weighted_benchmark/tensors.cpp": "4fb51d241643106862f115191fef935b088a7f0edc90d84378cd8717bdd1b6d4"
+      }
+    },
+    "artifacts/worktrees/core5-quad-dev": {
+      "head": "b7c5173c3672d02307164b0b88382d28766e256b",
+      "status": " M CMakeLists.txt\n M cpp/include/tide/kernel.h\n M cpp/src/state_preparation.cpp\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/src/weighted_allocation_rows.cpp\n M cpp/src/weighted_kv.cpp\n M cpp/src/weighted_kv_projection.cpp\n M cpp/test/weighted.cpp\n M cpp/test/weighted_kv_sharing.cpp\n M cpp/test/weighted_sharing.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/resident-weighted-allocation.md\n M docs/semantic-map.md\n M docs/semantics.md\n M docs/weighted-allocation.md\n M docs/weighted-kv-sharing.md\n M python/tidegraph/state_preparation.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/allocation_rows.py\n M python/tidegraph/weighted/kv.py\n M python/tidegraph/weighted/kv_projection.py\n M tests/test_resident_weighted_allocation.py\n M tests/test_weighted_kv_sharing.py\n M tools/device_online/ascendc/tide_weighted_allocate.cpp\n M tools/device_online/weighted_allocation_check.cpp\n?? cpp/src/weighted_kv_preparation.cpp\n?? cpp/src/weighted_kv_preparation.h\n?? cpp/src/weighted_row_linear.cpp\n?? cpp/src/weighted_row_linear.h\n?? python/tidegraph/weighted/kv_projection_batch.py\n?? python/tidegraph/weighted/row_linear.py\n?? tests/test_weighted_private_projection.py\n?? tests/test_weighted_quad_offset.py\n",
+      "patch_sha256": "c3393856accf7066bfb36f7dd36f45bd2200e8722c6890c5c4f184418314882c",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "cpp/src/weighted_kv_preparation.cpp": "891473fbc86cd5fcf5db627f7e0c62ee09eac5831e5246bd9c2587141ced4722",
+        "cpp/src/weighted_kv_preparation.h": "6f3bcc47460ebacb8e6662da1352ab2b8e66c0d8110a492740a47b2a4fafd1a1",
+        "cpp/src/weighted_row_linear.cpp": "0908c6d8bdf9d2803512219c86836e53d724592f62c679f26eb352de437afe90",
+        "cpp/src/weighted_row_linear.h": "aa6866f0fc85784795bbc87a664ebc7235a9672491ad017fb19a503b29a72f77",
+        "python/tidegraph/weighted/kv_projection_batch.py": "0ca47078129173d815eded4f0456a9ed0304583209cf6de369bbe0dd4b2149ef",
+        "python/tidegraph/weighted/row_linear.py": "649ca98e7428e8c23f4458e789e4e28dfe2e68e134b630aa5afc58a202451c23",
+        "tests/test_weighted_private_projection.py": "f856dcf77a8b6ffe4aa59f11bb6915110a194b6ede00b99d337b383a4fe0be74",
+        "tests/test_weighted_quad_offset.py": "ded3d0fe8746411bc5141e5d291f3416191d1c5d55c9ec51cfafd3eafe5ac9b6"
+      }
+    },
+    "artifacts/worktrees/core5-review-fixes-dev": {
+      "head": "2c46aa7d0b77afe7a7b82ed428466e36f5162de4",
+      "status": " M CMakeLists.txt\n M cpp/src/weighted_allocation.cpp\n M cpp/src/weighted_allocation_batch.cpp\n M cpp/test/custom_kernel.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M python/tidegraph/clocked_state.py\n M python/tidegraph/state_batch.py\n M python/tidegraph/weighted/allocation.py\n M python/tidegraph/weighted/allocation_batch.py\n M python/tidegraph/weighted/parameter_tree.py\n M tools/device_online/weighted_flow_boundary_check.cpp\n M tools/device_online/weighted_flow_budget.cpp\n M tools/device_online/weighted_flow_describe_parameters.cpp\n M tools/device_online/weighted_flow_local.cpp\n M tools/device_online/weighted_flow_parameters.cpp\n M tools/device_online/weighted_flow_parameters.h\n M tools/device_online/weighted_flow_region.cpp\n M tools/device_online/weighted_flow_source.cpp\n M tools/device_online/weighted_window_owner.cpp\n?? cpp/include/tide/parameter_bank.h\n?? cpp/src/parameter_bank.cpp\n?? cpp/test/parameter_bank.cpp\n?? tests/test_weighted_clocked_vjp.py\n?? tests/test_weighted_quad_support.py\n",
+      "patch_sha256": "96048abb9ff5cebf1f87d5058f8888acb1e586907c0a5e605a62bfad8a964fc3",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "cpp/include/tide/parameter_bank.h": "30fde8a2804c1bc2da324c2bb5f422ef91e87099a51ef6c17178ad73a67d0536",
+        "cpp/src/parameter_bank.cpp": "378948385a897a20bbea5077b487131c88b8d3e7487dac6b80058232655c0458",
+        "cpp/test/parameter_bank.cpp": "a1acac92641c1bade021686c9e37b103842e26881921fbbf8b27dc01b1cb71c7",
+        "tests/test_weighted_clocked_vjp.py": "eb1de75c5782d5d8dc3547b67c8208ff234e1460a58a3c9d7cee1ee7e29f2687",
+        "tests/test_weighted_quad_support.py": "7ea03d59b8ac0cc56f68829962433ffdfe90721818672c502a694dfe919b9b7e"
+      }
+    },
+    "artifacts/worktrees/core5-stable-preparation-dev": {
+      "head": "1850434d842227994fd11aa2f8b65ed1d503638d",
+      "status": " M cpp/src/state_preparation.cpp\n M cpp/src/weighted_normalization.cpp\n M cpp/test/weighted_kv_sharing.cpp\n M cpp/test/weighted_normalization.cpp\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/evidence/README.md\n M docs/performance-lessons.md\n M docs/semantic-map.md\n M docs/weighted-kv-sharing.md\n M docs/weighted-performance.md\n M docs/weighted-precision.md\n M docs/weighted-recurrent.md\n M docs/weighted-workloads.md\n M python/tidegraph/weighted/normalization.py\n M scripts/benchmark_weighted.py\n M scripts/diagnose_weighted_workload.py\n M scripts/weighted_benchmark_observation.py\n M scripts/weighted_benchmark_runners.py\n M scripts/weighted_plan_materialize.py\n M tests/test_weighted_benchmark_material.py\n M tests/test_weighted_half_normalization.py\n M tools/weighted_benchmark/benchmark.h\n M tools/weighted_benchmark/fixture.cpp\n M tools/weighted_benchmark/main.cpp\n M tools/weighted_benchmark/observation.cpp\n M tools/weighted_benchmark/observation.h\n M tools/weighted_benchmark/records.cpp\n M tools/weighted_benchmark/tensors.cpp\n?? docs/evidence/core5-stable-preparation-precision-20261028.json\n?? docs/evidence/core5-stable-preparation-precision-20261028.md\n?? scripts/weighted_benchmark_precision.py\n?? tests/test_weighted_benchmark_precision.py\n?? tests/test_weighted_workload_training.py\n",
+      "patch_sha256": "e8c7f8fb64d09e5056cbab6f66f25abe258dede4dbe599dce7bdc3cdaa4655e5",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/evidence/core5-stable-preparation-precision-20261028.json": "87c273f6c80338aca85bec75f924c654dc5bbbb8629997ae69345107d23f0035",
+        "docs/evidence/core5-stable-preparation-precision-20261028.md": "2977e7eef185e6743b3a8cb6cd45afc8998c10bcd016eb8f56799cf8408d2692",
+        "scripts/weighted_benchmark_precision.py": "f0b203e6e0ebe82b242105f121ffab0c2f337f8b4506a74982d5250a3275cd9e",
+        "tests/test_weighted_benchmark_precision.py": "06ed45a15d5942140f46d0e9dea37a881f128db8a76c2544ab21dc8d32b8520e",
+        "tests/test_weighted_workload_training.py": "b87fe1502026d0bddcccf2d6f2e3ed2399807e49808066128d4efdb5ff9180bf"
+      }
+    },
+    "artifacts/worktrees/core5-storage-reference-dev": {
+      "head": "372eb874245858de727376cb2d7981970a732631",
+      "status": " M docs/STATUS.md\n M scripts/benchmark_weighted.py\n M scripts/build_weighted_benchmark.py\n M scripts/weighted_benchmark_resume.py\n M scripts/weighted_benchmark_runners.py\n M tests/test_weighted_benchmark_resident.py\n M tests/weighted_precision_reference.py\n M tools/weighted_benchmark/CMakeLists.txt\n M tools/weighted_benchmark/eager.cpp\n M tools/weighted_benchmark/eager.h\n M tools/weighted_benchmark/main.cpp\n?? python/tidegraph/qualification_weighted_precision.py\n?? scripts/weighted_storage_optimizer.py\n",
+      "patch_sha256": "4f7e58f12238de666c033594796260797345c9387d14cc538f6d9cd82f009ae4",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "python/tidegraph/qualification_weighted_precision.py": "d35ac7ad8d2fbd38836edd0e5dd8c5d92fdf244578a62d70fbcf5b0deb1d7d9f",
+        "scripts/weighted_storage_optimizer.py": "341dbed85070028bf68d5af868e8696ec7c67083f53fd971be3c1f7c83a5f1db"
+      }
+    },
+    "artifacts/worktrees/downstream-dev": {
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "status": " M AGENTS.md\n M README.md\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/architecture.md\n M docs/core5-study.md\n M docs/development.md\n M docs/library.md\n M docs/verification.md\n M examples/consumer/README.md\n?? docs/downstream-contract.md\n?? examples/consumer_core5/README.md\n?? examples/consumer_core5/check.py\n?? examples/consumer_core5/checkpoint.py\n?? examples/consumer_core5/dependency.py\n?? examples/consumer_core5/recipe.json\n?? examples/consumer_core5/recording.py\n?? examples/consumer_core5/task.py\n?? examples/consumer_core5/train.py\n?? scripts/check_downstream_consumer.py\n?? templates/downstream/AGENTS.fragment.md\n?? templates/downstream/acceptance.md\n?? templates/downstream/delivery.md\n?? templates/downstream/foundation.lock.example.json\n?? templates/downstream/request.md\n?? tests/test_downstream_consumer.py\n",
+      "patch_sha256": "7e5e91cb19c9790d07bad015206eab8ca4d1d0f638ec72c435ae3edbb1fee80d",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/downstream-contract.md": "4e7da50cc76b15032f35151c8ceba9edf84bf3745ff6fa9f27a0cca3b37fad42",
+        "examples/consumer_core5/README.md": "a0863980452be4625203c65b73cd5ca872b95ce34152550fa5c28e24016095d9",
+        "examples/consumer_core5/check.py": "4411a472f544ed954e0a044f2e48c396c1f18ff7b295d14a4f615029d001cf8d",
+        "examples/consumer_core5/checkpoint.py": "dfa7955092ac2302b36be1bff6baffa1499792c21a6a74cd0a3fb608701253e9",
+        "examples/consumer_core5/dependency.py": "2210822cb0497e82e4d2150b6af0749ba3b26de8820caa9773bb26545254bb71",
+        "examples/consumer_core5/recipe.json": "b956cb5f6d931ec0040cbf933d68df5dbb4182e81073a678a83f37465d915dd2",
+        "examples/consumer_core5/recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6",
+        "examples/consumer_core5/task.py": "f54f9a907a30f5fa58b561602a0e085c00de58697bfce098c19a9932bde3e175",
+        "examples/consumer_core5/train.py": "c6358fcf106276fc0a1ba206bb2297c7ef882716515374238773a21bc44df6e4",
+        "scripts/check_downstream_consumer.py": "1586787740282d176fd1ff684d4de92a16196f54e3866c6f7f8457375142a169",
+        "templates/downstream/AGENTS.fragment.md": "2b3604b46c130cb7bcdc0d3511648d25118877fd67b660726d74c76b957566c7",
+        "templates/downstream/acceptance.md": "c420801380bd3582350e9814914ff1b5185a7414c9d1e5d3d7421121d9519128",
+        "templates/downstream/delivery.md": "0610a3c523ce87cd6f98635da7db119c6b13563578beaee9a7ba53b3721c4bfc",
+        "templates/downstream/foundation.lock.example.json": "7874b4020f7fffc9a5040f2fb806a5eca619665e9b7ebc5444810ff7c30b143d",
+        "templates/downstream/request.md": "465c6a8cc702edbea30b1c3041eded4cc50d9a556acfb8e77ea1cc4e8ffb83f1",
+        "tests/test_downstream_consumer.py": "f00ee565a818f889e16737e67471d469ad5809ee34c63e98790d641f19710ba9"
+      }
+    },
+    "artifacts/worktrees/downstream-dev-v2": {
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "status": " M AGENTS.md\n M README.md\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/architecture.md\n M docs/core5-study.md\n M docs/development.md\n M docs/library.md\n M docs/verification.md\n M examples/consumer/README.md\n?? docs/downstream-contract.md\n?? examples/consumer_core5/README.md\n?? examples/consumer_core5/check.py\n?? examples/consumer_core5/checkpoint.py\n?? examples/consumer_core5/dependency.py\n?? examples/consumer_core5/recipe.json\n?? examples/consumer_core5/recording.py\n?? examples/consumer_core5/task.py\n?? examples/consumer_core5/train.py\n?? scripts/check_downstream_consumer.py\n?? templates/downstream/AGENTS.fragment.md\n?? templates/downstream/acceptance.md\n?? templates/downstream/delivery.md\n?? templates/downstream/foundation.lock.example.json\n?? templates/downstream/request.md\n?? tests/test_downstream_consumer.py\n",
+      "patch_sha256": "d2dd409c64d95b0f004f83185faab0fe6145a2ffb9349d00c6e0787dddee97c9",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/downstream-contract.md": "4e7da50cc76b15032f35151c8ceba9edf84bf3745ff6fa9f27a0cca3b37fad42",
+        "examples/consumer_core5/README.md": "985be371c9c02152f9f1f4de95422af3a365ab84f4fe8db8bf160c1328cc0c5d",
+        "examples/consumer_core5/check.py": "4411a472f544ed954e0a044f2e48c396c1f18ff7b295d14a4f615029d001cf8d",
+        "examples/consumer_core5/checkpoint.py": "5ed0380a616619d613fc905178b63c9ec08f58c65da65fff8a03527c1cb684fc",
+        "examples/consumer_core5/dependency.py": "2210822cb0497e82e4d2150b6af0749ba3b26de8820caa9773bb26545254bb71",
+        "examples/consumer_core5/recipe.json": "b956cb5f6d931ec0040cbf933d68df5dbb4182e81073a678a83f37465d915dd2",
+        "examples/consumer_core5/recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6",
+        "examples/consumer_core5/task.py": "4893db4fbacb46560b29013bccb805398508ad780a7c0ac70f75c76e8b194066",
+        "examples/consumer_core5/train.py": "c6358fcf106276fc0a1ba206bb2297c7ef882716515374238773a21bc44df6e4",
+        "scripts/check_downstream_consumer.py": "1586787740282d176fd1ff684d4de92a16196f54e3866c6f7f8457375142a169",
+        "templates/downstream/AGENTS.fragment.md": "2b3604b46c130cb7bcdc0d3511648d25118877fd67b660726d74c76b957566c7",
+        "templates/downstream/acceptance.md": "c420801380bd3582350e9814914ff1b5185a7414c9d1e5d3d7421121d9519128",
+        "templates/downstream/delivery.md": "0610a3c523ce87cd6f98635da7db119c6b13563578beaee9a7ba53b3721c4bfc",
+        "templates/downstream/foundation.lock.example.json": "7874b4020f7fffc9a5040f2fb806a5eca619665e9b7ebc5444810ff7c30b143d",
+        "templates/downstream/request.md": "465c6a8cc702edbea30b1c3041eded4cc50d9a556acfb8e77ea1cc4e8ffb83f1",
+        "tests/test_downstream_consumer.py": "f00ee565a818f889e16737e67471d469ad5809ee34c63e98790d641f19710ba9"
+      }
+    },
+    "artifacts/worktrees/downstream-dev-v3": {
+      "head": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "status": " M AGENTS.md\n M README.md\n M docs/ROADMAP.md\n M docs/STATUS.md\n M docs/architecture.md\n M docs/core5-study.md\n M docs/development.md\n M docs/library.md\n M docs/verification.md\n M examples/consumer/README.md\n?? docs/downstream-contract.md\n?? examples/consumer_core5/README.md\n?? examples/consumer_core5/check.py\n?? examples/consumer_core5/checkpoint.py\n?? examples/consumer_core5/dependency.py\n?? examples/consumer_core5/recipe.json\n?? examples/consumer_core5/recording.py\n?? examples/consumer_core5/task.py\n?? examples/consumer_core5/train.py\n?? scripts/check_downstream_consumer.py\n?? templates/downstream/AGENTS.fragment.md\n?? templates/downstream/acceptance.md\n?? templates/downstream/delivery.md\n?? templates/downstream/foundation.lock.example.json\n?? templates/downstream/request.md\n?? tests/test_downstream_consumer.py\n",
+      "patch_sha256": "65a2e3205b205468fbba4339f8698847499918f140efd764dcd2ed3e3af85e9e",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": {
+        "docs/downstream-contract.md": "fc5a5032426520d601d0e4cff48316c13485039981fef0eaf965a7f1363a371b",
+        "examples/consumer_core5/README.md": "cfce7c69f126ee5e09642ae7cad58499f93940e8af367900b6d231e2e0beaf38",
+        "examples/consumer_core5/check.py": "c5722081013c36974bb0b33f049a923d9b407fa4d36480ba228e9cc627adc9bc",
+        "examples/consumer_core5/checkpoint.py": "5ed0380a616619d613fc905178b63c9ec08f58c65da65fff8a03527c1cb684fc",
+        "examples/consumer_core5/dependency.py": "2210822cb0497e82e4d2150b6af0749ba3b26de8820caa9773bb26545254bb71",
+        "examples/consumer_core5/recipe.json": "b956cb5f6d931ec0040cbf933d68df5dbb4182e81073a678a83f37465d915dd2",
+        "examples/consumer_core5/recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6",
+        "examples/consumer_core5/task.py": "eac24330b64d96634019f912727665981f36ddfe2909730c0afd9f84b2e5fe3a",
+        "examples/consumer_core5/train.py": "1275573840ff33f5edc0aedc4ad91072996310fa06fe3d8906b8950bca22dd3a",
+        "scripts/check_downstream_consumer.py": "1586787740282d176fd1ff684d4de92a16196f54e3866c6f7f8457375142a169",
+        "templates/downstream/AGENTS.fragment.md": "2b3604b46c130cb7bcdc0d3511648d25118877fd67b660726d74c76b957566c7",
+        "templates/downstream/acceptance.md": "c420801380bd3582350e9814914ff1b5185a7414c9d1e5d3d7421121d9519128",
+        "templates/downstream/delivery.md": "0610a3c523ce87cd6f98635da7db119c6b13563578beaee9a7ba53b3721c4bfc",
+        "templates/downstream/foundation.lock.example.json": "7874b4020f7fffc9a5040f2fb806a5eca619665e9b7ebc5444810ff7c30b143d",
+        "templates/downstream/request.md": "465c6a8cc702edbea30b1c3041eded4cc50d9a556acfb8e77ea1cc4e8ffb83f1",
+        "tests/test_downstream_consumer.py": "f00ee565a818f889e16737e67471d469ad5809ee34c63e98790d641f19710ba9"
+      }
+    }
+  },
+  "archive": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz",
+    "sha256": "1ebb2d173889de3a7d3399620f745e9badc91df4c54deefeee4c5c83deaf5dcd",
+    "files": 747,
+    "patches": 56,
+    "dirty_worktrees_checked": 28,
+    "source_members_checked": 238
+  },
+  "relocations": [
+    {
+      "source_tree": "artifacts/worktrees/core5-checkpoint-qualified",
+      "from": "artifacts/worktrees/core5-checkpoint-qualified/build",
+      "to": "artifacts/retained-builds/core5-checkpoint-qualified/build",
+      "identity": {
+        "entries": 72445,
+        "metadata_sha256": "fd689d6ff18f5f52722dc6d8c5ceefb3206ffb7e04e238118e02ababeeea83bd"
+      },
+      "bytes": 1370763264
+    },
+    {
+      "source_tree": "artifacts/worktrees/core5-compact-fiber-qualified-v2",
+      "from": "artifacts/worktrees/core5-compact-fiber-qualified-v2/build",
+      "to": "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build",
+      "identity": {
+        "entries": 93915,
+        "metadata_sha256": "6869eb74e9aca4cac5272eb63b503b426db413a1f04f3f9e9e3cf7cb8d422859"
+      },
+      "bytes": 2108313600
+    },
+    {
+      "source_tree": "artifacts/worktrees/core5-independent-qualified",
+      "from": "artifacts/worktrees/core5-independent-qualified/build",
+      "to": "artifacts/retained-builds/core5-independent-qualified/build",
+      "identity": {
+        "entries": 171,
+        "metadata_sha256": "06304580d821e67d5b0d22aa2a96b8bdb0d336185061afbae1e4c8c6a6e17892"
+      },
+      "bytes": 39682048
+    }
+  ],
+  "retained_build_file_sha256": {
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/client-sdk/client/CMakeCache.txt": "93454ce79225b7c07ee5131f2b55881776d18c74be811792dfda81cf485417a7",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/client-cpu/client/CMakeCache.txt": "f84cf227eac9e29a2edc9b2783306522d86ba45661681721e1bfb0e02ba3ebdb",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk/CMakeCache.txt": "ea730630b2894efbcfc86567b73949f0cbad0ac736fbbf18e81181807118700e",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/CMakeCache.txt": "ac476163725f94ba99cc1845186e28771ff732d14ca11ddd30c7221d9c29c05b",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/build-manifest.json": "e4eafc971b9c7cbeffeb23666349f650c5949600ef0786a0818cfd9609c995ee",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/libtidegraph.a": "b5d1236f9742297ba3d6b013563a1831afdc38a345184aaa0eecc5fa78fbf920",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/libtidegraph_runtime.a": "91239f0a47b17e5a5ba67d4a12afe2b6de3a4f62294530a2dbd606f3bf58f2d9",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/_tide_native.so": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-checkpoint-check": "6ce01b71a90f752e2ad7df18ab34a4c6448e555d8345e3325361a9685d3d0dc2",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-weighted-training-check": "2b2a1ebafb230d5a25a0a5f60212cf731dff40277a24a2aae0789039110e3cc0",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-accelerator-check": "fa1850f152fc9bf62de54068e0ec8e5225d467179923c5d8ce0cf186100c363a",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/tide-weighted-training-check-loader.txt": "34f86d1f06de8468633dc87c9188bdba46273830e01692efe0bc61ca0626e00b",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/libtide-weighted-training.so-loader.txt": "d188e1b7364ca6abe1d0d4e8254b22c968e49dc326e53c6cee449ceeb529f870",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/CMakeCache.txt": "09fe8c6da70138981a25de205d4d35bb6ac82cff20b1a576ba385b99deb56393",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/control-build.json": "d653eae670d9071666fdb155ff8dbd53e44a43ad76103a36ed006f8c6bfcfec9",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/tide-weighted-training-check": "687bf8f9179335391d15b3752c1a73cc6459e4d430036e2c6fc81444dd1c4bd6",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/libtide-weighted-flow.so": "1f3bc00192ee3e26f4546e25250e2e615af9b97992b521d0c0fc36b00a6fff64",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/libtide-weighted-training.so": "308410db10a9b0f58e9be25995ad3f8a9e59cdf8377d9df45a569f32e4bc5255",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/resident-sdk-v3/libtide-weighted-flow.so-loader.txt": "16e1c3d5ae2f61293e314e90c0bcd413851f8e7da36661f6d926ae7971be2a71",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/CMakeCache.txt": "2fb8f92873ae2f87bc5d682179c0a6733004699d932b78d4e1621fc6e3449977",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/build-manifest.json": "fff28e8c4cc2a39bf1349f345fa683ba5f4dd5ae301460aeeede8de8e7e15d4e",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/libtidegraph.a": "0126f7cf3ff94cf2e6346cefdaaa62a4b34eb39d3331cb80cf6da9e9c69bcae2",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/libtidegraph_runtime.a": "b64bbb604ef419a8845b15be05dfa0c226aa321ab51ecadd608b6f715fef1652",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-smoke": "564138d88917fe6ac785ce13f96650236b19ed1ce1c419eabe97b26ecead2638",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-kernel-check": "27e21e75bb79a39970cb4db622d06fad4380fda949cead5ff921dd235ec9bae4",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-full-check": "16be6ce1b6eb186b66ed6a30cb308ecc02d0a0b271fd44dc7f2c3d11d7ffdae7",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-aggregate-check": "8f2e0c58ce0e9dfd766fcb53123f7c022876c9c1c50a114a876c6e9b5756e5ad",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-optimizer-check": "dae5c92613bc28db856ea6a93f27b82f0acaffa234cb8058e7b75fcfb4b49adc",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-checkpoint-check": "7e528b5ad90da4384111f19f72477fd066bb22ee489af3b2157bba3968f723fc",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-weighted-training-check": "25131748cedcab949922cbdcee04626e249f857ebb6e55c1ad4ebfaf34da94ea",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-streaming-bench": "58212ecaffdd108376a4a38aac4fb0dfa9b3db159da0d6d5ac5c036e4f0d5822",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-scale-bench": "a6ecfe52abd029778659811b67101ecfdea770eafbca17bf04d5b8a445157485",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-settle-check": "82505fc8a4b2e7e65490aebde6b98d05572797ea5d0b6b8cd619eef82472fa08",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-greedy-check": "5fb5003293cfcb58aa013a4294db2401ac4d704a665ce37498dd5c3f25cad180",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-accelerator-check": "76ba201912e3a959d14e3e26726c2446f977c1525abc7d7679da19605dd7aa6f",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-read-precision-check": "6404ed8a128270f8627b0ba0b9c4a46799de2016c189485f8553603dae47568b",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-placement-check": "f1dcd7b506d9a59b4d83059a5f01c5740ab8637dbdabeb44ecb2a934dd5a06e0",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-payload-ownership-check": "b6a959967b8d3a888556b4da07f5262179660e2e3c092cce0d57063a75023081",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/tidegraph-weighted-binding-module-check": "1e32d2eada1e428f15705dfd2ebb8684cbac6d8f7d885f26af8eac234623b165",
+    "artifacts/retained-builds/core5-checkpoint-qualified/build/core-sdk/libtidegraph-weighted-binding-module.so": "fca6934a4634d28fe26189045f93c2255865e08f7c7c95249e7ad297489f13f0",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-stage-check-loader.txt": "5fe277098a2123d71a4983974f9c24098c52b9f859e5588a91b589b796caa3c0",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-training-check-loader.txt": "714f88e2993044525f9b22f3f1fb9accdb4f7c7a06e55dbea0622f94e527bce5",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-node-training-check-loader.txt": "1c61f495129a474a8cb66fa8f9c3828aaaed21e644e3717823491bc6a0741e32",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/libtide-weighted-training.so-loader.txt": "3c7b72a3e4472aa067548ebeb1e44956f7ef27ea16cbfc2e755b3a9a8af818e0",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/CMakeCache.txt": "3369b31af5eef80a86d7de534fe6b940f24a1d12ed401da4aec3223dff2d0551",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-flow-check-loader.txt": "7b14789ce9f5993bb7089b2bdd06e4d67df17ca7e99f206a6c6e4c1754dffa4d",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/control-build.json": "622887e01314e8cb671bb61e310e2bea6e78bd7af5b58d37db1a93822e3a48fa",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-stage-check": "49ff98ad6992442f2e6f1096d05e4a391a6b76540ada470c97cefe823a841d62",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-flow-check": "a8a37b4fca1b815e38249cefb14e6051ddc2db12e2e45ad67a789d0bc6b02287",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-training-check": "9f1123ca1320d9be06f7206cbeb48fd607c1d7d957d3bb445cae935703ef872c",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/tide-weighted-node-training-check": "3d6c433d55ad459a5fac8915a789cc83a683e2dfb7b2321990e6859b1e347be7",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/libtide-weighted-flow.so": "1f3bc00192ee3e26f4546e25250e2e615af9b97992b521d0c0fc36b00a6fff64",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/libtide-weighted-training.so": "8efa8b2d19745132fc6518de4e0d5d5a510a1bc88f6866c2a8ac8b5809e26bed",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/sdk/libtide-weighted-flow.so-loader.txt": "ade957d306617772d8971a9cf461c9fe9cee9b9cc2b1aff92a56cfc1ce2991d9",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/_tide_weighted_resident.so-loader.txt": "60b6199ab58c22bb04a98f2da4fb669f2320ec65098dfcb271a65b1a85aba87a",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/libtide-weighted-training.so-loader.txt": "e166430bdf23d2dfe52a3a6f4fd9ab8b4261354619acf79948017f7a71188f6b",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/CMakeCache.txt": "9e4c87445d9dcd0b038dc51093a975ce03a3bc900d8a9c426f40dac266eb971f",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/control-build.json": "7688144d98d2f78602a660bedb0cafacb9403b44005ef3303efd5a7335835723",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/_tide_weighted_resident.so": "6959501e17a237606805ff433992d4bf66f036ae1cdf5cf407a4c07f2489ae3b",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/libtide-weighted-flow.so": "bd7d6c9e52883899ea53c4260bd1b29f45f2730bae35e96da57c25c4667e76af",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/libtide-weighted-training.so": "778b8b42895db96c825f0fa681a93dc810b5c5c3c78f01d16df9b0318552a44e",
+    "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/python/libtide-weighted-flow.so-loader.txt": "554e3b0a1a1861b6b8df32c65cc61a66ec728563c622e602dde178e4695aa764",
+    "artifacts/retained-builds/core5-independent-qualified/build/npu-python/CMakeCache.txt": "8cfb7e323bb79a1652b4d30f971542c3fe35a1707cd1559b0947d37d79abd59c",
+    "artifacts/retained-builds/core5-independent-qualified/build/npu-python/build-manifest.json": "048fb73f55e1d4f267e6d2105389a4b821f37fb8c5829f30d1a41e164a861715",
+    "artifacts/retained-builds/core5-independent-qualified/build/npu-python/libtidegraph.a": "89da9e9db14a119ae9dd1d395753c5f3f3f35beb25308e3562ba6488a35b5642",
+    "artifacts/retained-builds/core5-independent-qualified/build/npu-python/libtidegraph_runtime.a": "79b780647c102d6873458c240f8df9ce389e63665d5fe21731a9b8abc38b021d",
+    "artifacts/retained-builds/core5-independent-qualified/build/npu-python/_tide_native.so": "dbda04d129ca01c32dafabba872fc99c83bd4147411b4df8f959f5df688b4b48"
+  },
+  "preservation": {
+    "historical_job_records": 518,
+    "historical_job_records_equal": true,
+    "job_record_inventory_sha256": "7de93fa67f065622ba35ac2a72ff5fdc46cdccd29fcec7829d2e416390a372b8",
+    "neighboring_records": 66,
+    "neighboring_records_equal": true,
+    "neighbor_record_inventory_sha256": "72b3768628e86ea37a3b6962d00315fa7d5e5c4393a94f5daae3882478e8dd5c",
+    "dirty_worktrees": 28,
+    "source_members_checked": 238,
+    "archived_patches": 56,
+    "archived_untracked_sources": 182
+  },
+  "fixtures": [
+    {
+      "path": "artifacts/jobs/core5-performance-study-cpu/runs/matched2048.json",
+      "sha256": "de26031cc637b6e0f126b5ae04d801baf5ff623a576ecccdcbd0eab67b3523b4",
+      "source": "2da3f2c76c13cff0c41af45fddb5f24f2e99421f",
+      "schema": "tide-weighted-benchmark-fixture-v2",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 2048,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "b833df0ae02a4fdd35ff36211b9c1434ff921eceaab119a44becfbc851d75fee"
+      },
+      "binary": {
+        "file": "matched2048.tensors.bin",
+        "nbytes": 37048052160,
+        "sha256": "8bcc36d0b76ee274d6dba1f2f5a0d4df8f773b8f426d943328cd6adcd206f90f",
+        "byte_order": "little"
+      },
+      "fixture_sha256": "9cb74b353fcbcddef1171988a3c34509cebf4758ca77e041ced2d86ed85d0bd9",
+      "max_materialize_bytes": 68719476736
+    },
+    {
+      "path": "artifacts/jobs/core5-study-v2-performance/materials/fc-1b-kv/fixture.json",
+      "sha256": "03711ac3d76f86052ff765fe01f669a66a517848f543dc08264d4e31ba6033d7",
+      "source": "e50b6d8e90fd71879e860250baa81d294b10ee95",
+      "schema": "tide-weighted-benchmark-fixture-v2",
+      "config": {
+        "topology": "ranked-local",
+        "family": "kv",
+        "width": 1024,
+        "samples": 1,
+        "positions": 1,
+        "seed": 7,
+        "workload_sha256": "e6e17939096782599610fc67298ea30894bc04214a4deb36c455c6d6e2f1daea"
+      },
+      "binary": {
+        "file": "fixture.tensors.bin",
+        "nbytes": 3879857124,
+        "sha256": "9bfa366abd4ed634d7b881f1d8f6d9942959384b00964621b5ab8378ebce5286",
+        "byte_order": "little"
+      },
+      "fixture_sha256": "28c1fe3fa6b92c177b19d5d88fa0645b144243a6e6c79c0f18cf0a578d5fc9e9",
+      "max_materialize_bytes": 34359738368
+    }
+  ],
+  "jobs": {
+    "plan": {
+      "command": [
+        "/usr/bin/python3",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cleanup-round2-20261030/inventory.py",
+        "--records",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/cleanup-round2-runner",
+      "state": "passed",
+      "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+      "dirty": "",
+      "started": "2026-10-30T04:58:17.877556+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-30T04:59:32.511130+00:00"
+    },
+    "apply": {
+      "command": [
+        "/usr/bin/python3",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cleanup-round2-20261030/execute.py",
+        "--records",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030",
+        "--plan-sha256",
+        "add883804a6dcd4779992d9ee7f4c1cd0c84c0c1ad624d54c473d023b4900e90"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/cleanup-round2-runner",
+      "state": "passed",
+      "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+      "dirty": "",
+      "started": "2026-10-30T04:59:56.173504+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-30T05:01:38.715148+00:00"
+    }
+  },
+  "launch": {
+    "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+    "runner": "artifacts/worktrees/cleanup-round2-runner",
+    "helper_sha256": {
+      "common.py": "3b383dfd39ca54d30382945d45a13cc0d3e7ced1e8f625dd85ff20f00e1f65dd",
+      "execute.py": "448bae8730dbf790cb5c8f902f351b46a05b4deee5c7383cd9e89e3b4d79e0a0",
+      "inventory.py": "0b9f718d8bfa0892cda20efa9fdca833f859cad419c303ea6bcae739536fc24f"
+    },
+    "plan_sha256": "add883804a6dcd4779992d9ee7f4c1cd0c84c0c1ad624d54c473d023b4900e90",
+    "units": [
+      "cleanup-round2-plan-20261030",
+      "cleanup-round2-apply-20261030"
+    ],
+    "resource_properties": {
+      "Slice": "background.slice",
+      "Nice": 10,
+      "CPUQuota": "200%",
+      "MemoryMax": "2G",
+      "plan_RuntimeMaxSec": 900,
+      "apply_RuntimeMaxSec": 1800
+    },
+    "verified_plan_live": {
+      "Slice": "background.slice",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/cleanup-round2-plan-20261030.service",
+      "Transient": "yes",
+      "MainPID": 2772120
+    },
+    "verified_apply_live": {
+      "Slice": "background.slice",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/cleanup-round2-apply-20261030.service",
+      "Transient": "yes",
+      "MainPID": 2776894
+    }
+  },
+  "result": {
+    "schema": "tide-artifact-cleanup-round2-result-v1",
+    "state": "passed",
+    "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+    "plan_sha256": "add883804a6dcd4779992d9ee7f4c1cd0c84c0c1ad624d54c473d023b4900e90",
+    "moved": [
+      {
+        "source_tree": "artifacts/worktrees/core5-checkpoint-qualified",
+        "from": "artifacts/worktrees/core5-checkpoint-qualified/build",
+        "to": "artifacts/retained-builds/core5-checkpoint-qualified/build",
+        "identity": {
+          "entries": 72445,
+          "metadata_sha256": "fd689d6ff18f5f52722dc6d8c5ceefb3206ffb7e04e238118e02ababeeea83bd"
+        },
+        "bytes": 1370763264
+      },
+      {
+        "source_tree": "artifacts/worktrees/core5-compact-fiber-qualified-v2",
+        "from": "artifacts/worktrees/core5-compact-fiber-qualified-v2/build",
+        "to": "artifacts/retained-builds/core5-compact-fiber-qualified-v2/build",
+        "identity": {
+          "entries": 93915,
+          "metadata_sha256": "6869eb74e9aca4cac5272eb63b503b426db413a1f04f3f9e9e3cf7cb8d422859"
+        },
+        "bytes": 2108313600
+      },
+      {
+        "source_tree": "artifacts/worktrees/core5-independent-qualified",
+        "from": "artifacts/worktrees/core5-independent-qualified/build",
+        "to": "artifacts/retained-builds/core5-independent-qualified/build",
+        "identity": {
+          "entries": 171,
+          "metadata_sha256": "06304580d821e67d5b0d22aa2a96b8bdb0d336185061afbae1e4c8c6a6e17892"
+        },
+        "bytes": 39682048
+      }
+    ],
+    "removed": [
+      "artifacts/worktrees/core5-arithmetic-dev",
+      "artifacts/worktrees/core5-benchmark-dev1",
+      "artifacts/worktrees/core5-benchmark-dev2",
+      "artifacts/worktrees/core5-benchmark-dev3",
+      "artifacts/worktrees/core5-benchmark-precision-dev",
+      "artifacts/worktrees/core5-benchmark-progress-dev",
+      "artifacts/worktrees/core5-boundary-dev",
+      "artifacts/worktrees/core5-boundary-final-dev",
+      "artifacts/worktrees/core5-boundary-final-dev-v2",
+      "artifacts/worktrees/core5-boundary-final-dev-v3",
+      "artifacts/worktrees/core5-boundary-final-dev-v4",
+      "artifacts/worktrees/core5-boundary-final-dev-v5",
+      "artifacts/worktrees/core5-boundary-python-dev",
+      "artifacts/worktrees/core5-capture-dev",
+      "artifacts/worktrees/core5-checkpoint-dev",
+      "artifacts/worktrees/core5-checkpoint-qualified",
+      "artifacts/worktrees/core5-compact-fiber-qualified-v2",
+      "artifacts/worktrees/core5-coverage-dev",
+      "artifacts/worktrees/core5-coverage-dev-v2",
+      "artifacts/worktrees/core5-independent-dev",
+      "artifacts/worktrees/core5-independent-qualified",
+      "artifacts/worktrees/core5-performance-dev",
+      "artifacts/worktrees/core5-performance-dev2",
+      "artifacts/worktrees/core5-quad-dev",
+      "artifacts/worktrees/core5-review-fixes-dev",
+      "artifacts/worktrees/core5-stable-preparation-dev",
+      "artifacts/worktrees/core5-storage-reference-dev",
+      "artifacts/worktrees/downstream-dev",
+      "artifacts/worktrees/downstream-dev-v2",
+      "artifacts/worktrees/downstream-dev-v3",
+      "artifacts/jobs/core5-performance-study-cpu/runs/matched2048.tensors.bin",
+      "artifacts/jobs/core5-study-v2-performance/materials/fc-1b-kv/fixture.tensors.bin",
+      "artifacts/jobs/core5-checkpoint-large/fc-1b-kv--cpp-npu-mixed-c/measurement/resume.pt",
+      "artifacts/jobs/core5-study-v2-performance/fc-1b-kv--native-cpu64/measurement/resume.pt",
+      "artifacts/jobs/core5-study-v2-performance/hb-1b-kv--native-cpu64/measurement/resume.pt"
+    ],
+    "compatibility_links": [
+      {
+        "path": "artifacts/worktrees/core5-checkpoint-qualified/build",
+        "target": "../../retained-builds/core5-checkpoint-qualified/build"
+      },
+      {
+        "path": "artifacts/worktrees/core5-compact-fiber-qualified-v2/build",
+        "target": "../../retained-builds/core5-compact-fiber-qualified-v2/build"
+      },
+      {
+        "path": "artifacts/worktrees/core5-independent-qualified/build",
+        "target": "../../retained-builds/core5-independent-qualified/build"
+      }
+    ],
+    "repository_bytes_before": 94947663872,
+    "deleted_allocated_bytes": 70708621312,
+    "repository_bytes_after": 24230207488,
+    "archive_equal": true,
+    "neighboring_records_equal": true,
+    "historical_job_records_equal": true,
+    "retained_build_metadata_and_binary_hashes_equal": true,
+    "elapsed_apply_seconds": 28.09994614124298
+  },
+  "finalization": {
+    "state": "passed",
+    "runner_removed": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/cleanup-round2-runner",
+    "runner_allocated_bytes": 70533120,
+    "worktree_count_including_main": 1,
+    "historical_worktrees_remaining": 0,
+    "repository_bytes_after": 24160776192,
+    "all_targets_retired": true,
+    "build_compatibility_links_only": true,
+    "historical_job_records_equal": true,
+    "filesystem_free_bytes": 2907808399360
+  },
+  "smoke": {
+    "source": "12d3e16f1513d0a6f8be7de2720f0096f68b44d7",
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/cleanup-round2-runner",
+    "state": "passed",
+    "commands": [
+      {
+        "name": "native-smoke",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu/tidegraph-smoke"
+        ],
+        "exit_code": 0,
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030/native-smoke.log",
+        "log_sha256": "fe0037065b53d5458c45ba0cc80d36fa07777c0531b240b0d615220b0a2a73d3"
+      },
+      {
+        "name": "native-manifest-load",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+          "-c",
+          "from tidegraph.native_loader import load_native; from pathlib import Path; m=load_native('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu', backend='cpu'); print(str(Path(m.__file__).resolve()), m.execution_backend())"
+        ],
+        "exit_code": 0,
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030/native-manifest-load.log",
+        "log_sha256": "5a119031f230f4f1b770290014d3cddd5b472f41d9a75e654bbc447c869a9c5f"
+      },
+      {
+        "name": "cpu-consumer-tests",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "tests/test_native_settle.py::test_native_encoding_ports_parallel_edges_source_domains_and_aliases",
+          "tests/test_downstream_consumer.py",
+          "--dtype",
+          "both",
+          "--basetemp",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030/smoke-tmp",
+          "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030/smoke.xml"
+        ],
+        "exit_code": 0,
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cleanup-round2-20261030/cpu-consumer-tests.log",
+        "log_sha256": "05da2a302a4316151cfb6f4b3dfac2a36fae324ccf61cea030b2bf31916bb56a"
+      }
+    ],
+    "environment": {
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TIDE_BUILD_DIR": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retained-builds/core5-checkpoint-qualified/build/core-cpu",
+      "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/cleanup-round2-runner/python"
+    }
+  },
+  "raw_records": {
+    "artifacts/cleanup-round2-20261030/plan.json": "add883804a6dcd4779992d9ee7f4c1cd0c84c0c1ad624d54c473d023b4900e90",
+    "artifacts/cleanup-round2-20261030/result.json": "d95e4093198b980a5b7e1ebadd22c95a858a1d168ffad43ec0320a3e060555c1",
+    "artifacts/cleanup-round2-20261030/launch.json": "b49f2cda1680aef6f0778c12e0f9f07267d8372a73ff622239fdcb2ce0eb876c",
+    "artifacts/cleanup-round2-20261030/finalization.json": "ae5f75569fce664308f8e8b03afbea8eb2a205f3e58175cca96b52f27783630c",
+    "artifacts/cleanup-round2-20261030/smoke.json": "dff26b709bd42159c047acdac9560d3c2cea7930efb8ffaa4edc7f403314b8c3",
+    "artifacts/cleanup-round2-20261030/smoke.xml": "319d942aeece06f18d05ff8cc978278b18707ca74d2a617333bb1ac801bff82d"
+  },
+  "scope": "Disk retirement and relocated CPU development-chain checks only. Historical failure conclusions unchanged; no new NPU/GPU/full-matrix qualification.",
+  "source_archive_bytes": 1692495
+}
