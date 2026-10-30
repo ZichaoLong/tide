@@ -52,8 +52,8 @@ python scripts/read_retired_record.py \
 ## 当前保留原则
 
 2026-10-30用户授权将本仓库收束为`.git`与Git跟踪文件；环境、构建、原始运行材料均按需重建。
-本轮执行和最终空间见[证据索引](evidence/README.md)及[STATUS](STATUS.md)。
-此前两轮保留的构建、28份未采用差异的本地归档、任务源码快照和原始见证也属于本轮退役范围。
+本轮实际删除22.379GiB及新CPU开发链见[清理凭据](evidence/artifact-cleanup-tracked-only-20261030.md)；当前接续见[STATUS](STATUS.md)。
+此前两轮保留的构建、28份未采用差异的本地归档、任务源码快照和原始见证均已在本轮退役。
 28份差异不宣称均已合并；其路径/基线/hash仍见[第二轮凭据](evidence/artifact-cleanup-round2-20261030.json)，
 归档字节不再保证可恢复。不另存一份22GiB副本到其他目录。
 
@@ -75,7 +75,7 @@ python scripts/read_retired_record.py \
 
 ## 从源码恢复开发链
 
-旧“本机保留构建”链接指向本节；此前保留的本机库已列入本轮退役范围。
+旧“本机保留构建”链接指向本节；此前保留的本机库已在本轮退役。
 
 新clone或清理后的目录没有`.local/venv-core5`、预编译库和旧jobs是正常状态。
 按[development](development.md)重建所需环境/库，按[verification](verification.md)执行必要检查；

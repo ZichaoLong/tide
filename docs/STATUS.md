@@ -1,29 +1,23 @@
 # 当前交接 — 2026-10-30
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-用户授权补齐失败经验治理后，将仓库收束为`.git`和Git跟踪文件。无子代理，不改公共工具链或参考仓库。
-起始提交15b67f0e3e0d2b52c8e5cd2e20f5ee043c9a39a2；现有原始任务均已终态。
+实现e99733ddb0ff885cc05e287b8b28ccc15f105458；本轮全部本地产物清理已执行通过。
+[清理/新开发链证据](evidence/artifact-cleanup-tracked-only-20261030.md)为正式入口；当前限制仍仅见[ROADMAP](ROADMAP.md)。
 
-## 正在实施
+## 本轮终态
 
-新增复现导航、520份旧任务终态摘要、两份实际分配失败行及独立Decimal/当前局部回归。
-空jobs接续将指向Git内证据，不把缺少原始材料解释为未测试或通过。
-同步AGENTS、保留规则、开发/架构导航及经验；当前限制与停止条件仍仅见[ROADMAP](ROADMAP.md)。
+- tracked-checkout-verify-20261030：passed/exit0；新环境/160线程CPU新构建、两dtype smoke、132项相关检查，4项单元/8组安装训练恢复/4项拒绝通过。无新增设备/全矩阵资格。
+- tracked-checkout-retire-plan-20261030与plan-v2：failed/exit1，只读预检分别拒绝历史FIFO和身份进程proc权限；未删除，原失败入证据。
+- tracked-checkout-retire-plan-v3-20261030及tracked-checkout-retire-20261030：passed/exit0；删除22.379GiB，2,584个跟踪文件和Git metadata删除前后不变，git clean预览为空。
+- 520份旧任务终态/身份摘要、两份真实失败行、正式诊断/生成入口及复现导航已进入Git；原数值/异步/硬件失败和容差保持。
 
-本轮临时控制目录：/tmp/gef-tracked-retirement-20261030；任务结束且小型凭据进入Git后也会移除，不作为新产物仓库。
-待提交实现后建立固定source工作树，计划独立background.slice服务：
-tracked-checkout-verify-20261030（新私有环境、全新CPU构建、相关回归及安装消费者），
-tracked-checkout-retire-20261030（审阅dry run后精确清理ignored产物）。目前这些服务尚未提交。
-日志/status/result写入上述临时目录records；每次启动前补充固定提交、实际命令和资源。
+## 最后收尾
 
-接续：先运行相关短检查、提交实现；再从固定Git源码验证全新CPU开发链。
-CPU构建使用至少一半可用CPU（当前320可用），无NPU/GPU任务；不重跑历史性能矩阵。
-清理前审阅保留项、路径/符号链接、活动进程与Git源变化；完成后核对只剩Git跟踪文件和.git。
-28份未采用实验差异归档按本轮授权退役，不宣称全部已合并；必要诊断由Git内入口和少量实际输入承接。
-最终记录原失败保持、重建成本及精确状态退役边界，再提交证据并普通推送。
+本轮临时根/tmp/gef-tracked-retirement-20261030还在，所有服务已终态；source工作树为固定e99733d。
+原始记录在records/各job/status.json及task.log，已审阅的必要字段已进入上述Git证据，不依赖旧路径重建。
+下一步先提交当前证据，再`git worktree remove /tmp/gef-tracked-retirement-20261030/source`，
+删除整个临时根的新环境/build/控制记录，核对空dry run和仅主工作区，更新最终交接并普通推送。
+没有运行中的实验，不重启旧队列，不使用子代理，不改公共工具链或参考仓库。
 
-```sh
-git status --short --branch
-python scripts/status.py
-python scripts/check_upstream.py
-```
+后续开发按[development](development.md)重建环境/库；问题到代码/输入/证据从[reproduction](reproduction.md)进入。
+原始精确状态退役后不能由hash恢复；当前保留边界见[artifact-retention](artifact-retention.md)。

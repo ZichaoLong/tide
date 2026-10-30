@@ -82,6 +82,7 @@ python -m pip install -c "$ASCEND_CONSTRAINTS_FILE" pytest ninja
 python -m pip install --no-build-isolation --no-deps -e .
 ```
 
+2026-10-30已从固定源码验证新私有环境、CPU构建及仓库外安装消费者，见[清理与重建证据](evidence/artifact-cleanup-tracked-only-20261030.md)。
 新环境的最小 CPU 链路与后续各设备证据分开；环境存在不代表完整矩阵通过。
 旧独立 LibTorch-NPU 2.10/CANN9.0 与私有 CUDA2.10/cu128 是不同工具链，不能混用二进制。
 使用独立 SDK 时，CANN 还需配套 Python 的运行时入口：把该 SDK 配套 Python 的 `bin`
