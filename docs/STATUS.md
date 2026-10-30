@@ -1,43 +1,49 @@
 # 当前交接 — 2026-10-30
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-用户批准多实验仓库协作规范、模板、core-5安装起步示例、定向检查、分阶段提交和普通推送。
-无子代理；参考仓库/公共工具链只读；GPU延后。本轮不改基座数学/执行器/容差，不新增性能测量。
+本轮多实验仓库协作规范、模板、core-5安装起步示例及定向资格已完成。无子代理；参考仓库/公共工具链只读；GPU延后。
+未修改基座数学/执行器/容差，未新增性能测量，也没有改动任何尚未提供的实验仓库。
 
-## 实现与开发结果
+## 本轮交付
 
-起点ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8。
-[协作规范](downstream-contract.md)及模板已完成：固定依赖→请求→基座交付→下游验收/升级，唯一状态及已有授权边界保持。
-[core-5示例](../examples/consumer_core5/README.md)已完成：实际公共配置/模块，应用数据/head/loss/SGD/StepLR，
-依赖锁字节核验、完整应用原子checkpoint、新进程恢复与独立参考；只示范小型CPU接入。
-AGENTS、README、library、development、core5-study和架构导航已接入。
+实现提交36113ce70553d847d0a255dedb182e906645816c，起点ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8。
+[协作规范](downstream-contract.md)建立固定依赖→请求→基座交付→下游验收/显式升级；
+[模板](../templates/downstream/AGENTS.fragment.md)连接接续规则、依赖锁及请求/交付/验收。
+[core-5示例](../examples/consumer_core5/README.md)可复制到实验仓库，消费已安装公共接口，
+示范应用数据/head/loss/SGD/StepLR、依赖身份、原子应用checkpoint和新进程恢复。
 
-开发第三轮通过：4项定向单元测试、8组仓库外安装消费者、4项错误请求拒绝。
-八组为FC PyTorch/native×FP32/FP64，HB mixed PyTorch/native FP64，FC scalar streaming PyTorch/native FP64。
-native workers1、autograd多线程true，完整独立两步核对+连续三步对两步保存/新进程恢复一步精确比较通过。
-尚未固定实现提交资格，开发通过不称正式资格。
+[固定源码证据](evidence/downstream-contract-20261030.md)及其JSON已整理，与实现分开提交：
+4项单元、8组仓库外安装消费者、4项错误请求拒绝通过。
+八组为FC PyTorch/native×FP32/FP64、HB混合PyTorch/native FP64、FC scalar streaming PyTorch/native FP64。
+共同worker1、ATen/BLAS1、autograd多线程true；独立两步核对及连续三步对两步保存/新进程恢复一步逐值比较通过。
+这是小型CPU接入资格；真实实验仍需自行验收，不新增大模型、NPU/CUDA、resident或standalone资格。
 
-原开发downstream-dev和downstream-dev-v2均failed/1：native workers2 FC/KV FP32独立两步核对通过，
-新进程精确恢复梯度/SGD槽不等；仅关闭autograd多线程不足。原输入、归档和失败保留。
-单worker是显式不同执行配置，不称双worker问题已解除；没有扩大成基座数值修复任务。
+## 作业终态与保留失败
 
-## 作业与下一动作
+没有活跃作业。downstream-qualified在只读artifacts/worktrees/downstream-qualified的36113ce运行，passed/0。
+2026-10-30 04:04:03–04:06:16 UTC；服务downstream-qualified-20261030.service已结束并回收。
+启动时核对PID2538045和独立background.slice，提交Nice10/CPUQuota3200%/MemoryMax32GiB/900秒。
+本机module ascend/dev-workspace-9.1.0与.local/venv-core5；未重建native，复用b255 CPU构建并前后核验全部源码/二进制身份。
 
-上述三个任务位于artifacts/jobs/<名称>/，status.json/task.log为外层状态，checks/result.json及各日志为实际检查；
-源码归档checks/source.tar.gz保留。服务为<名称>-20261030.service；均已终态，无活跃作业。
-downstream-dev-v3 passed/0；其固定开发树artifacts/worktrees/downstream-dev-v3保持只读。
+作业位于artifacts/jobs/downstream-qualified/：status.json/task.log、checks/result.json、checks/tests.xml、
+逐项日志和checks/source.tar.gz。审阅证据保存来源/hash/实际配置；新clone可用报告命令重新构建，不依赖旧目录。
 
-下一步提交本轮实现；再创建artifacts/worktrees/downstream-qualified于该提交，标记源码只读。
-资格服务downstream-qualified-20261030.service，独立background.slice、Nice10、CPUQuota3200%、MemoryMax32GiB、900s。
-无native构建，复用b255 CPU库前后核验源码和全部binary hash；ATen/BLAS1线程。本机module ascend/dev-workspace-9.1.0及.local/venv-core5。
+开发downstream-dev和downstream-dev-v2保留failed/1：native workers2 FC/KV FP32独立两步通过，
+新进程精确恢复仍有45个梯度/SGD张量字段不等；仅关闭autograd多线程不足。
+downstream-dev-v3显式worker1开发通过；三轮各自源码归档、原输入/观察和checkpoint均保留。
+worker1是另一执行配置，未解除workers2边界；重启条件见[ROADMAP](ROADMAP.md)。
+
+## 接续入口
+
+本轮仅有单独的证据/导航/交接变更，基座源码未再修改。分阶段提交和普通推送已获授权；实际提交/远端状态用下列命令核对。
 
 ```sh
-python scripts/job.py --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified -- python scripts/check_downstream_consumer.py --build-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks
-systemctl --user show downstream-qualified-20261030.service -p ActiveState -p Result -p ExecMainStatus -p MainPID -p Slice -p ControlGroup
+git status --short --branch
+python scripts/status.py
+python scripts/check_upstream.py
 ```
-停止：systemctl --user stop downstream-qualified-20261030.service。当前尚未启动资格；完成后单独提交证据、导航与终态并普通推送。
 
-## 既有边界
-
-上轮[73项资格](evidence/core5-coverage-correction-20261030.md)和[25配置7通过的性能](evidence/core5-natural-study-20261029.md)保持。
-其余数值、异步、resident资源与硬件待验由[ROADMAP](ROADMAP.md)维护；不自动恢复旧队列。
+接到实际实验仓库请求时，读固定版本的协作规范与请求，核对依赖锁/配置/证据/验收条件，在已有授权内执行。
+新实验从示例README安装、锁定、运行check.py开始；上游交付和每个实验的验收保持分开。
+没有待启动的历史队列。已有[73项资格](evidence/core5-coverage-correction-20261030.md)、
+[25配置7通过的性能](evidence/core5-natural-study-20261029.md)及数值/异步/资源/硬件边界保持，待办只见ROADMAP。

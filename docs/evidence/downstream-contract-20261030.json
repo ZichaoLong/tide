@@ -1,0 +1,1428 @@
+{
+  "schema": "tide-downstream-contract-reviewed-v1",
+  "source": "36113ce70553d847d0a255dedb182e906645816c",
+  "mathematics": {
+    "version": "tide-core-5",
+    "commit": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "protocol": {
+    "version": "tide-downstream-contract-v1",
+    "commit": "36113ce70553d847d0a255dedb182e906645816c",
+    "path": "docs/downstream-contract.md"
+  },
+  "state": "passed",
+  "scope": "installed CPU starter + lock/checkpoint rejection; no accelerator, standalone or performance qualification",
+  "qualification": {
+    "job": "downstream-qualified",
+    "unit": "downstream-qualified-20261030.service",
+    "started": "2026-10-30T04:04:03.781323+00:00",
+    "finished": "2026-10-30T04:06:16.165049+00:00",
+    "exit_code": 0,
+    "elapsed_seconds": 132.383726,
+    "submitted_resources": {
+      "slice": "background.slice",
+      "nice": 10,
+      "cpu_quota_percent": 3200,
+      "memory_max_gib": 32,
+      "runtime_max_seconds": 900,
+      "note": "launch settings; live PID/slice/control group observed, no exclusive machine reservation"
+    },
+    "observed_live_pid": 2538045,
+    "terminal_basis": "job passed/0 plus all result/log checks; transient unit later collected, no retained journal",
+    "source_clean": true,
+    "source_files_sha256": "a767eaf7fe5adcc773ecb68401ab736b646d01602230d681e7a26e0cb59f83c9",
+    "source_archive_sha256": "e34a062f3fcc2b68993c6440f3a018558ac15f1b7b9c09ac7e79fa60f380eeb8",
+    "source_and_build_inventory_unchanged": true,
+    "command": [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-core5/bin/python",
+      "scripts/check_downstream_consumer.py",
+      "--build-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu",
+      "--output-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks"
+    ],
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/downstream-qualified",
+    "status_sha256": "37b79c387d493db067f57f7e682db179895313ab62054d402df421c2053f1450",
+    "task_log_sha256": "b5fd0db46ac681ac2454a916d42622ef3da4f86598cc5e9396d8ca2d2479d6e9",
+    "raw_result_sha256": "9900d49bea36fd864decd5390699e0f706005a8df8df6ceb59708e1e2e9fd406",
+    "artifact_directory_hint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks",
+    "module": "ascend/dev-workspace-9.1.0",
+    "environment": {
+      "python": "3.12.13",
+      "torch": "2.12.0+cpu",
+      "architecture": "aarch64",
+      "cxx11_abi": true,
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+      "PYTHONNOUSERSITE": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "unit_tests": {
+      "tests": 4,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.81,
+      "names": [
+        "test_lock_checks_installed_bytes_runtime_and_native_identity",
+        "test_native_lock_checks_actual_bytes_and_build_environment",
+        "test_atomic_application_record_preserves_existing_and_failed_publication",
+        "test_checkpoint_rejects_changed_workload_lock_and_progress_before_reuse"
+      ],
+      "junit_sha256": "dbf06061d8246f039fa9be838bebe5f2b5ac4c1af3551f0b5bedeba72e7a5ddb"
+    },
+    "commands": [
+      {
+        "name": "unit-tests",
+        "exit_code": 0,
+        "log_sha256": "67e5fe44c0272a4e085f8308ad26bf9536d8bffe23972dc73e0aeab3a7eb1acf"
+      },
+      {
+        "name": "wheel",
+        "exit_code": 0,
+        "log_sha256": "aa9dfcfaf7a15e7b03be4f7aa4dc6d260a3453a48f003b4b22e117aff10fbd17"
+      },
+      {
+        "name": "install",
+        "exit_code": 0,
+        "log_sha256": "8624a0fc70e0d4e2fabf5a4d4ddc2e73821e2f82f333d5828f9aeed96b87a4b9"
+      },
+      {
+        "name": "capture-lock",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "fc-pytorch-float32",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-pytorch-float64",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-python-native-float32",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-python-native-float64",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "hb-mixed-pytorch",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "hb-mixed-python-native",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-streaming-pytorch",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-streaming-python-native",
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "bad-resume",
+        "exit_code": 1,
+        "log_sha256": "1984adb0738c84628e6d9d8668ff34fa2a803674e851e6d498b9656b3765d377"
+      },
+      {
+        "name": "missing-native",
+        "exit_code": 1,
+        "log_sha256": "9849b58ec32a32fdbaf17b8a5752d6bff118a977b39846ca32b2082219fe3e7b"
+      },
+      {
+        "name": "unsupported-packing",
+        "exit_code": 1,
+        "log_sha256": "d5780055c64d8b69a007b1f740fc8943f8a349e400a14958ccc152e0d87dd309"
+      },
+      {
+        "name": "bad-lock",
+        "exit_code": 1,
+        "log_sha256": "7e266b9bb0c79a62ad9642262ebb412967a8ad3e87c185bbc2ae268f39d5f5e3"
+      }
+    ]
+  },
+  "native_build": {
+    "manifest_sha256": "e4eafc971b9c7cbeffeb23666349f650c5949600ef0786a0818cfd9609c995ee",
+    "source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+    "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+    "torch": "2.12.0+cpu",
+    "environment": {
+      "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+      "compiler": "c++ (GCC) 10.3.1",
+      "cxx_standard": 17,
+      "build_type": "Release",
+      "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+      "cann_version": "9.1.0"
+    },
+    "build_jobs": 160,
+    "backend": "cpu",
+    "npu_runtime": null,
+    "torch_npu": null,
+    "cuda": null,
+    "architecture": "aarch64",
+    "python": "3.12.13",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "b5d1236f9742297ba3d6b013563a1831afdc38a345184aaa0eecc5fa78fbf920",
+      "libtidegraph_runtime.a": "91239f0a47b17e5a5ba67d4a12afe2b6de3a4f62294530a2dbd606f3bf58f2d9",
+      "_tide_native.so": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+      "tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+      "tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+      "tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+      "tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+      "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+      "tidegraph-checkpoint-check": "6ce01b71a90f752e2ad7df18ab34a4c6448e555d8345e3325361a9685d3d0dc2",
+      "tidegraph-weighted-training-check": "2b2a1ebafb230d5a25a0a5f60212cf731dff40277a24a2aae0789039110e3cc0",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+      "tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+      "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+      "tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+      "tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+      "tidegraph-accelerator-check": "fa1850f152fc9bf62de54068e0ec8e5225d467179923c5d8ce0cf186100c363a",
+      "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+      "tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+      "tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+      "tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+      "tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+      "libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57"
+    }
+  },
+  "foundation_lock": {
+    "schema": "tide-foundation-lock-v1",
+    "foundation": {
+      "repository": "https://github.com/ZichaoLong/tide",
+      "commit": "36113ce70553d847d0a255dedb182e906645816c",
+      "dirty": false,
+      "package_version": "0.2.0",
+      "wheel": {
+        "name": "tidegraph-0.2.0-py3-none-any.whl",
+        "sha256": "6ea77148ecf85d5d321f79b867fbcafa35d7a4479d6459181d45710242eb3d98"
+      },
+      "installed_files_sha256": "50d2d0c6371b3e4f2d9fc0b7d1f577fded94654f94bf51a71eb9db0e6b7f436f"
+    },
+    "mathematics": {
+      "version": "tide-core-5",
+      "commit": "0770593838a37c790a568226930567ed60f99b83"
+    },
+    "protocol": {
+      "version": "tide-downstream-contract-v1",
+      "commit": "36113ce70553d847d0a255dedb182e906645816c",
+      "path": "docs/downstream-contract.md"
+    },
+    "native": {
+      "manifest_sha256": "e4eafc971b9c7cbeffeb23666349f650c5949600ef0786a0818cfd9609c995ee",
+      "binary_name": "_tide_native.so",
+      "binary_sha256": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+      "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+      "build_source": "b255e270eab38faa9c4348e19ed435ce02bbc4b4",
+      "backend": "cpu"
+    },
+    "environment": {
+      "python": "3.12.13",
+      "torch": "2.12.0+cpu",
+      "architecture": "aarch64",
+      "cxx11_abi": true
+    }
+  },
+  "models": {
+    "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b": {
+      "schema": "tide-core5-configuration-facts-v1",
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+      "recipe": {
+        "schema": "tide-core5-recipe-v1",
+        "requested": {
+          "topology": "fc",
+          "family": "kv",
+          "width": 8,
+          "region_width": 2,
+          "depth": 2,
+          "profile": "baseline",
+          "source_mode": "region"
+        },
+        "scale": null,
+        "sparse_budget": {
+          "requested_fraction": 0.125,
+          "effective_k": [
+            1,
+            1
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution"
+        }
+      },
+      "nodes": 4,
+      "regions": 2,
+      "edges": 4,
+      "ranks": [
+        1,
+        2
+      ],
+      "graph_counts": {
+        "body_edges": 4,
+        "body_nodes": 4,
+        "encoded_edges": 8,
+        "encoded_nodes": 6,
+        "longest_body_delay": 1,
+        "output_reachable_nodes": 4,
+        "reachable_nodes": 4
+      },
+      "parameters": {
+        "trainable": 8190,
+        "frozen": 12,
+        "role_elements": 8994,
+        "unique": 8202
+      },
+      "samples": 2,
+      "positions": 2,
+      "stride": 4,
+      "seed": 7,
+      "families": {
+        "kv": 4
+      },
+      "widths": [
+        8
+      ],
+      "heads": [
+        1
+      ],
+      "ffn_widths": [
+        32
+      ],
+      "kv_windows": [
+        2048
+      ],
+      "source_classification": "source-node; external=0",
+      "source_class_count": 3,
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "memories": [
+        {
+          "config": {
+            "adapter_rank": 8,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.17328679513998632,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 1,
+            "position_scale": 4,
+            "read_frequencies": [],
+            "summary_width": 8,
+            "width": 8,
+            "window": 2048
+          },
+          "owners": [
+            0,
+            1
+          ]
+        },
+        {
+          "config": {
+            "adapter_rank": 8,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.17328679513998632,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 2,
+            "position_scale": 4,
+            "read_frequencies": [],
+            "summary_width": 8,
+            "width": 8,
+            "window": 2048
+          },
+          "owners": [
+            2,
+            3
+          ]
+        }
+      ],
+      "regional": [
+        {
+          "config": {
+            "allocation_base": null,
+            "allocation_temperature": 1.0,
+            "alpha_loc": null,
+            "alpha_match": null,
+            "alpha_res": null,
+            "alpha_sel": null,
+            "ent_alpha": null,
+            "eta": null,
+            "fixed_gain": null,
+            "gain_logit": null,
+            "gamma_max": 2.0,
+            "hidden_width": 8,
+            "k": 1,
+            "local_score": "cat",
+            "query_weight": null,
+            "read_mode": "+",
+            "region_control_mode": "context",
+            "region_control_width": 8,
+            "region_evidence": "cat",
+            "region_key": null,
+            "region_score": "ind",
+            "regularizer": "quad",
+            "selection_mode": "regional_total",
+            "selection_width": null,
+            "send_gain": null,
+            "total_fraction": null
+          },
+          "owners": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd": {
+      "schema": "tide-core5-configuration-facts-v1",
+      "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+      "workload_id": "249c1db985e3722ee5a03b27c5bf2ab28f669576157ba8858dea2643c46f14b9",
+      "recipe": {
+        "schema": "tide-core5-recipe-v1",
+        "requested": {
+          "topology": "hb",
+          "family": "mixed",
+          "width": 8,
+          "region_width": 2,
+          "depth": 1
+        },
+        "scale": null,
+        "sparse_budget": {
+          "requested_fraction": 0.125,
+          "effective_k": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution"
+        }
+      },
+      "nodes": 8,
+      "regions": 4,
+      "edges": 16,
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "graph_counts": {
+        "body_edges": 16,
+        "body_nodes": 8,
+        "encoded_edges": 20,
+        "encoded_nodes": 10,
+        "longest_body_delay": 2,
+        "output_reachable_nodes": 8,
+        "reachable_nodes": 8
+      },
+      "parameters": {
+        "trainable": 16976,
+        "frozen": 36,
+        "role_elements": 19132,
+        "unique": 17012
+      },
+      "samples": 2,
+      "positions": 2,
+      "stride": 5,
+      "seed": 7,
+      "families": {
+        "gated_delta": 2,
+        "kv": 4,
+        "ssd": 2
+      },
+      "widths": [
+        8
+      ],
+      "heads": [
+        1
+      ],
+      "ffn_widths": [
+        32
+      ],
+      "kv_windows": [
+        2560
+      ],
+      "source_classification": "source-node; external=0",
+      "source_class_count": 7,
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "memories": [
+        {
+          "config": {
+            "adapter_rank": 8,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.13862943611198905,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 1,
+            "position_scale": 5,
+            "read_frequencies": [],
+            "summary_width": 8,
+            "width": 8,
+            "window": 2560
+          },
+          "owners": [
+            0,
+            1
+          ]
+        },
+        {
+          "config": {
+            "alpha_ff": 1.0,
+            "alpha_mem": 1.0,
+            "conv_size": 4,
+            "conv_stride": 5,
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "groups": 1,
+            "heads": 1,
+            "key_width": 8,
+            "lambda_short": 0.13862943611198905,
+            "matrix_rates": [
+              0.0
+            ],
+            "memory_family": "gated_delta",
+            "memory_read": "state",
+            "output_epsilon": 1e-05,
+            "qk_epsilon": 1e-06,
+            "summary_width": 8,
+            "value_width": 8,
+            "width": 8
+          },
+          "owners": [
+            2,
+            3
+          ]
+        },
+        {
+          "config": {
+            "alpha_ff": 1.0,
+            "alpha_mem": 1.0,
+            "conv_size": 4,
+            "conv_stride": 5,
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "groups": 1,
+            "heads": 1,
+            "key_width": 8,
+            "lambda_short": 0.13862943611198905,
+            "matrix_rates": [
+              0.0
+            ],
+            "memory_family": "ssd",
+            "memory_read": "state",
+            "output_epsilon": 1e-05,
+            "qk_epsilon": 1e-06,
+            "summary_width": 8,
+            "value_width": 8,
+            "width": 8
+          },
+          "owners": [
+            4,
+            5
+          ]
+        },
+        {
+          "config": {
+            "adapter_rank": 8,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.13862943611198905,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 32,
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 3,
+            "position_scale": 5,
+            "read_frequencies": [],
+            "summary_width": 8,
+            "width": 8,
+            "window": 2560
+          },
+          "owners": [
+            6,
+            7
+          ]
+        }
+      ],
+      "regional": [
+        {
+          "config": {
+            "allocation_base": null,
+            "allocation_temperature": 1.0,
+            "alpha_loc": null,
+            "alpha_match": null,
+            "alpha_res": null,
+            "alpha_sel": null,
+            "ent_alpha": null,
+            "eta": null,
+            "fixed_gain": null,
+            "gain_logit": null,
+            "gamma_max": 2.0,
+            "hidden_width": 8,
+            "k": 1,
+            "local_score": "cat",
+            "query_weight": null,
+            "read_mode": "+",
+            "region_control_mode": "context",
+            "region_control_width": 8,
+            "region_evidence": "cat",
+            "region_key": null,
+            "region_score": "ind",
+            "regularizer": "quad",
+            "selection_mode": "regional_total",
+            "selection_width": null,
+            "send_gain": null,
+            "total_fraction": null
+          },
+          "owners": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  },
+  "workloads": {
+    "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b": {
+      "schema": "core5-consumer-task-v1",
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "seed": 7,
+      "batch": 2,
+      "positions": 2,
+      "input": "cpu-generator normal*.2",
+      "target": "python-generator uniform(-.1,.1)",
+      "head": "linear(width,1), dropout=.1",
+      "loss": "mean squared error of numeric cG per present output",
+      "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+      "scheduler": "StepLR step=1 gamma=.9",
+      "gradient_boundary": "detach graph state after each backward before optimizer"
+    },
+    "55222bed1fdbd8b22040a6e28497586e0368af8857a21b8d6dacfb79042cfb26": {
+      "schema": "core5-consumer-task-v1",
+      "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+      "seed": 7,
+      "batch": 2,
+      "positions": 2,
+      "input": "cpu-generator normal*.2",
+      "target": "python-generator uniform(-.1,.1)",
+      "head": "linear(width,1), dropout=.1",
+      "loss": "mean squared error of numeric cG per present output",
+      "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+      "scheduler": "StepLR step=1 gamma=.9",
+      "gradient_boundary": "detach graph state after each backward before optimizer"
+    }
+  },
+  "executions": {
+    "939dbcd8a6d1ca85a94463e2e64c1e86718bf08e42a486adf662b311fa4fb06e": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "f7d8ac6d99b0e10b5af762709d90b57f787ac534ff8044ceeb9af95fb67a088a"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "f7d8ac6d99b0e10b5af762709d90b57f787ac534ff8044ceeb9af95fb67a088a",
+        "autograd_multithreading": true
+      }
+    },
+    "258512224a059e1fbf32d6bc1b73378a5ebc7404a82f8a54f2e366abd49eb75a": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205",
+        "autograd_multithreading": true
+      }
+    },
+    "3cbc5d920b502028fc34e9f3a9958d328838643c95de9de10bbe2afcc11bcffc": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "2f6ee0c7ca62391d5c7cbd67d12e2da0980d03711b653f8e26520848762768fd"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "2f6ee0c7ca62391d5c7cbd67d12e2da0980d03711b653f8e26520848762768fd",
+        "autograd_multithreading": true
+      }
+    },
+    "e4df328ef678f5f8ec3dcefee0a03f7c5df0c733fa65895bb9d1723f5db53597": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280",
+        "autograd_multithreading": true
+      }
+    },
+    "32007d795c3c28b30b3b3fd98ab1fda62bd7dd8416cdd38f2a0d6e92eeefbd65": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "streaming",
+          "operator": "aten",
+          "packing": "scalar",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "streaming",
+          "operator": "aten",
+          "packing": "scalar",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "7f5b74a1378db7d665a747387f1dfd6a8f335b5500e131e17a3cd5e99fee0122"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "7f5b74a1378db7d665a747387f1dfd6a8f335b5500e131e17a3cd5e99fee0122",
+        "autograd_multithreading": true
+      }
+    },
+    "4e22c703a106ca6edb87ccdf05305e5aec7482cb1a981981270c19b6f0f4a454": {
+      "foundation": {
+        "schema": "tide-weighted-execution-v1",
+        "requested": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "streaming",
+          "operator": "aten",
+          "packing": "scalar",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "effective": {
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "native",
+          "dtype": "float64",
+          "scoring_dtype": "float64",
+          "schedule": "streaming",
+          "operator": "aten",
+          "packing": "scalar",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "peer_devices": []
+        },
+        "qualification": "implementation selection only; exact-device evidence is separate",
+        "execution_id": "4d36022ba42c5a9167692d2c76357a6326d6b81ba0e7f1a61673b6c78ea395fb"
+      },
+      "application": {
+        "schema": "example-core5-execution-v1",
+        "foundation_execution_id": "4d36022ba42c5a9167692d2c76357a6326d6b81ba0e7f1a61673b6c78ea395fb",
+        "autograd_multithreading": true
+      }
+    }
+  },
+  "checks": [
+    {
+      "name": "fc-pytorch-float32",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "939dbcd8a6d1ca85a94463e2e64c1e86718bf08e42a486adf662b311fa4fb06e",
+      "result_sha256": "1911f4ba381b7c1c3820a3b010e0c50dc6d0591aaf24a1bdb267588c7f52f8d0",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "5364d6b040f79b7d21716df1a99dd9e583f9745d96032e432de0871cf472a7a2",
+          "observation_sha256": "dd839c05bb7e878276f07a130f4f32f5d5ce389bbe7175bd75679b753208e4a8",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "3abe6cf909f15791eb9385eeb4d9f196192332ed1a6972a009ef96d3681d11e9",
+          "observation_sha256": "e19dec0b03fdce83bf2a450d4a8f413a725fd75dd0848cd274452a88043f597c",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "5364d6b040f79b7d21716df1a99dd9e583f9745d96032e432de0871cf472a7a2",
+          "observation_sha256": "dd839c05bb7e878276f07a130f4f32f5d5ce389bbe7175bd75679b753208e4a8",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "fc-pytorch-float64",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "258512224a059e1fbf32d6bc1b73378a5ebc7404a82f8a54f2e366abd49eb75a",
+      "result_sha256": "c69514f4f92ffd6163722c9d684bbca263c9900314eba5a05b883dc178b1f722",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "b676c04e3209c6ac36d065435ca590bff4c32cbfecf78213050a3f5ae71bcb8c",
+          "observation_sha256": "8a50fe4c3081cea045e1eec99bd8afccf18a188ded547889235ac137997085b1",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "a3a4d41ca3c55810fa2bd1e493fcd86cf577cda85addbacbd825c26f53604c4a",
+          "observation_sha256": "9bef0f340c87ff22ed28d87f51adeb9d9f3f000393714fc00251f88407770607",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "b676c04e3209c6ac36d065435ca590bff4c32cbfecf78213050a3f5ae71bcb8c",
+          "observation_sha256": "8a50fe4c3081cea045e1eec99bd8afccf18a188ded547889235ac137997085b1",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "fc-python-native-float32",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "3cbc5d920b502028fc34e9f3a9958d328838643c95de9de10bbe2afcc11bcffc",
+      "result_sha256": "899e39ff9caacb2c42fa1c560cd085c79a5beb04a24f8eaa9951a1af12e72a62",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "d9acc234d90e29563c3c469605c5f46b44044de1d5aabd34ee5c24a955c526c8",
+          "observation_sha256": "364ca3d1e36d8bf484c9db1b0111f13075ba0898c27819cc24caab1b034e078f",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "5a0bd13b2c931aee44bf835ce7457122ee84475206769d6efee9d89aea6cb945",
+          "observation_sha256": "f71a82c0bedbad96e0acfd1d56f3e585e4950850fedc1e4a1d229d43a70abc3c",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "d9acc234d90e29563c3c469605c5f46b44044de1d5aabd34ee5c24a955c526c8",
+          "observation_sha256": "364ca3d1e36d8bf484c9db1b0111f13075ba0898c27819cc24caab1b034e078f",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "fc-python-native-float64",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "e4df328ef678f5f8ec3dcefee0a03f7c5df0c733fa65895bb9d1723f5db53597",
+      "result_sha256": "7359b232e4377719e9b2557959cd54c976435ab195cbbe9c1164803ec5199bfc",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "64e96f5909fbfdd91c8c97dcaf8cc84af0c77c21116770b1fc67f2dade8bff20",
+          "observation_sha256": "9a78c5f1c1ff02d67ee67d6dec1e74f0eeacd207ac043c36f00e40ceacf3788d",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "ddbabc653697c9bc72f0097a6b1cb94ea840e0585b537d83bcb43f5ce44fc292",
+          "observation_sha256": "cfc59a7877596cb5c31cae292e0fc313df7c11deb381bce1cfbcfcc21e611da1",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "64e96f5909fbfdd91c8c97dcaf8cc84af0c77c21116770b1fc67f2dade8bff20",
+          "observation_sha256": "9a78c5f1c1ff02d67ee67d6dec1e74f0eeacd207ac043c36f00e40ceacf3788d",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "hb-mixed-pytorch",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+      "workload_id": "55222bed1fdbd8b22040a6e28497586e0368af8857a21b8d6dacfb79042cfb26",
+      "application_execution_id": "258512224a059e1fbf32d6bc1b73378a5ebc7404a82f8a54f2e366abd49eb75a",
+      "result_sha256": "ad59034f02a817b766b8e4cdc1d56fa2ec56b02e964f8e210cb5f41b7c473083",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "ae1b1dcba136dfce24c14b884f16a090be3484b5c269f613b16f81bb9ab0cd93",
+          "observation_sha256": "3b097b51f07f4481e54e0e304bf8619768a781e15c45ba02b600a7be9959a949",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "60c10dfbcfc81688ca79daa22045b6584908b85a8fff895b3b015dc0e4d3e5f5",
+          "observation_sha256": "2435ada32d75b0350c31356f50e9a92822edf8dea363572fa4da21dba1c72b62",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "ae1b1dcba136dfce24c14b884f16a090be3484b5c269f613b16f81bb9ab0cd93",
+          "observation_sha256": "3b097b51f07f4481e54e0e304bf8619768a781e15c45ba02b600a7be9959a949",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "hb-mixed-python-native",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+      "workload_id": "55222bed1fdbd8b22040a6e28497586e0368af8857a21b8d6dacfb79042cfb26",
+      "application_execution_id": "e4df328ef678f5f8ec3dcefee0a03f7c5df0c733fa65895bb9d1723f5db53597",
+      "result_sha256": "6313486352c507cd97e5ae31674bcda2e871cc677b4f3ddd6a0798cb22bfcda3",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "6b421f0a3ef2ac110ee503397a20ac4eef5a64cfc1932c751d249532fe765722",
+          "observation_sha256": "766b312e05798bd0d24a46d3d23ad9adfeb56c004270f3f58d191e84cfb6633e",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "97732a19a392434936be2e98c43597431d6558db0565b7d614d830b1cc20352a",
+          "observation_sha256": "0bd2766e3d9a2525f0cfae68b24825dec9b6d0d59f6b5641d3ce6b94494a8d3a",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "6b421f0a3ef2ac110ee503397a20ac4eef5a64cfc1932c751d249532fe765722",
+          "observation_sha256": "766b312e05798bd0d24a46d3d23ad9adfeb56c004270f3f58d191e84cfb6633e",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "fc-streaming-pytorch",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "32007d795c3c28b30b3b3fd98ab1fda62bd7dd8416cdd38f2a0d6e92eeefbd65",
+      "result_sha256": "6d33be10bc13473659db3bbcf160caede3a0a0379be9b680d1a48590a640b55f",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "30b750e62e8427ca744bfac11bb1829ced6df9d226464c89bdcb3271e1c62d50",
+          "observation_sha256": "ac602429c73bb2d9403a32037f4a0cce009d2b59668d6f16c7fe61e54442a68b",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "e8d9c6ec3583eb13ea914db8c3132180a0ad218bcdc51c9e5b37784c0cca96b2",
+          "observation_sha256": "9da2a0eb9f028fb40bb222c149c3f174f344dee1817ca2189f0d687ee9181301",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "30b750e62e8427ca744bfac11bb1829ced6df9d226464c89bdcb3271e1c62d50",
+          "observation_sha256": "ac602429c73bb2d9403a32037f4a0cce009d2b59668d6f16c7fe61e54442a68b",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "fc-streaming-python-native",
+      "state": "passed",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+        "fresh_process_application_resume_exact": true,
+        "inference": true
+      },
+      "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+      "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+      "application_execution_id": "4e22c703a106ca6edb87ccdf05305e5aec7482cb1a981981270c19b6f0f4a454",
+      "result_sha256": "50b6b9d8086ad079305226437e7f3fa432bc14116291a72d901db93a4eb467fd",
+      "lock_sha256": "14ef4748c2b0efd5ff38e4ea807be778270517e1a1eba0ff81f1ffb216e7252d",
+      "installed_library_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/downstream-qualified/checks/env/lib/python3.12/site-packages/tidegraph",
+      "products": {
+        "whole": {
+          "initial_step": 0,
+          "final_step": 3,
+          "checkpoint_sha256": "fe547a24d1fefd5d3a508e25f5be2bdae21a0254a4533c1552d66e3d30f7200f",
+          "observation_sha256": "297fa0a7d57796859186e61a124508bb957f68e71063a46f421edb667c53100b",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "prefix": {
+          "initial_step": 0,
+          "final_step": 2,
+          "checkpoint_sha256": "72802b50fcaee581effe87175cb1110ba115d7a0a5d3786c739dfbc2e0597742",
+          "observation_sha256": "3fe6ecc8a3d3f1767241ee1a67905e1c71d5a7f0eda5318ea3c20706b4131145",
+          "inference_shape": [
+            8,
+            1
+          ]
+        },
+        "resumed": {
+          "initial_step": 2,
+          "final_step": 3,
+          "checkpoint_sha256": "fe547a24d1fefd5d3a508e25f5be2bdae21a0254a4533c1552d66e3d30f7200f",
+          "observation_sha256": "297fa0a7d57796859186e61a124508bb957f68e71063a46f421edb667c53100b",
+          "inference_shape": [
+            8,
+            1
+          ]
+        }
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "name": "bad-resume",
+      "exit_code": 1,
+      "final_directory_absent": true,
+      "error": "ValueError: application checkpoint identity mismatch",
+      "log_sha256": "1984adb0738c84628e6d9d8668ff34fa2a803674e851e6d498b9656b3765d377"
+    },
+    {
+      "name": "missing-native",
+      "exit_code": 1,
+      "final_directory_absent": true,
+      "error": "ValueError: python-native requires an explicit matching native library; pytorch uses none",
+      "log_sha256": "9849b58ec32a32fdbaf17b8a5752d6bff118a977b39846ca32b2082219fe3e7b"
+    },
+    {
+      "name": "unsupported-packing",
+      "exit_code": 1,
+      "final_directory_absent": true,
+      "error": "ValueError: Python streaming has scalar dispatch; use prefill for packed execution",
+      "log_sha256": "d5780055c64d8b69a007b1f740fc8943f8a349e400a14958ccc152e0d87dd309"
+    },
+    {
+      "name": "bad-lock",
+      "exit_code": 1,
+      "final_directory_absent": true,
+      "error": "ValueError: installed dependency does not match lock",
+      "log_sha256": "7e266b9bb0c79a62ad9642262ebb412967a8ad3e87c185bbc2ae268f39d5f5e3"
+    }
+  ],
+  "development": [
+    {
+      "job": "downstream-dev",
+      "source": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "dirty": true,
+      "source_files_sha256": "7f3eb0c5d5a334bc33d6b989583c94719da5f73c225b2af5dfd893cd5d89ebc3",
+      "source_archive_sha256": "a5161cf437933b65c8615ee70d543362d03d7e2de914a96da8432a9ca45f2b47",
+      "state": "failed",
+      "exit_code": 1,
+      "workers": 2,
+      "autograd_multithreading": "Torch default (true)",
+      "result_sha256": "92fa464c5ef236986caf8371dbb4ef746304a73a50bda689d84da8b4e9064915",
+      "status_sha256": "f026c3268ccc003ced790eb02a283886dcb554798af43bb75d2569946043b72e",
+      "completed_cases": [
+        "fc-pytorch-float32",
+        "fc-pytorch-float64"
+      ],
+      "failing_case": "fc-python-native-float32",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true
+      },
+      "error": "AssertionError('Tensor-likes are not equal!\\n\\nMismatched elements: 11 / 32 (34.4%)\\nGreatest absolute difference: 4.656612873077393e-10 at index (1, 0, 3)\\nGreatest relative difference: 1.0160360943700653e-06 at index (1, 0, 0)')",
+      "case_result_sha256": "80081d3f787d44a5b99fdb81ee0c1e6bda21a0202de0a16b0f282095ffd239f6",
+      "failure_log_sha256": "9eb301b44e909278a86f03c928efd37ac6faa348d1e11dbdf8f700033c3e07ce",
+      "unequal_observation": {
+        "tensor_fields": 45,
+        "categories": [
+          "input_gradient",
+          "training.gradients",
+          "training.optimizer"
+        ],
+        "first_field": "input_gradient",
+        "unequal_elements": 11,
+        "elements": 32,
+        "max_abs_difference": 4.656612873077393e-10,
+        "whole_sha256": "877cca9c99305d308520ac670514382c1fd4a5148b702766348cfb126b53b808",
+        "resumed_sha256": "7591a41395863129a800be972dc9e7af0e55e4e51e5b8cd57c271e461ecb8c3d"
+      }
+    },
+    {
+      "job": "downstream-dev-v2",
+      "source": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "dirty": true,
+      "source_files_sha256": "de57eb5d875d24720fe7ddf288b6943ff6199bb5382e8e69142ba847be6dea49",
+      "source_archive_sha256": "6b4180febb25040618a2417a15055b106762bb3b2c596a5624409ce098a58df9",
+      "state": "failed",
+      "exit_code": 1,
+      "workers": 2,
+      "autograd_multithreading": false,
+      "result_sha256": "e6bd691020cfd4c95c7f0dc03763f0087a7e041a833364472c2a5634a065b7c4",
+      "status_sha256": "6924009bafcff1b4a3b03c06e8a774cb6f9fbd1a666c250648ddd975fade08d9",
+      "completed_cases": [
+        "fc-pytorch-float32",
+        "fc-pytorch-float64"
+      ],
+      "failing_case": "fc-python-native-float32",
+      "checks": {
+        "independent_two_step_complete_records_gradients_sgd_scheduler": true
+      },
+      "error": "AssertionError('Tensor-likes are not equal!\\n\\nMismatched elements: 11 / 32 (34.4%)\\nGreatest absolute difference: 4.656612873077393e-10 at index (1, 0, 3)\\nGreatest relative difference: 1.0160360943700653e-06 at index (1, 0, 0)')",
+      "case_result_sha256": "05fc761d881d04ec6bc0f19b9fd65285228bba1939e1c5d82a0639b9b9faacf3",
+      "failure_log_sha256": "cfcd56940381c5e91c2f78bf4d61f7792cd3df47127c1dae2387428c1439aad9",
+      "unequal_observation": {
+        "tensor_fields": 45,
+        "categories": [
+          "input_gradient",
+          "training.gradients",
+          "training.optimizer"
+        ],
+        "first_field": "input_gradient",
+        "unequal_elements": 11,
+        "elements": 32,
+        "max_abs_difference": 4.656612873077393e-10,
+        "whole_sha256": "877cca9c99305d308520ac670514382c1fd4a5148b702766348cfb126b53b808",
+        "resumed_sha256": "7591a41395863129a800be972dc9e7af0e55e4e51e5b8cd57c271e461ecb8c3d"
+      }
+    },
+    {
+      "job": "downstream-dev-v3",
+      "source": "ad684b7507e8cc3c9941e419c4bd5ea0c36de8a8",
+      "dirty": true,
+      "source_files_sha256": "1c12edd5df67e30079c45d46cdb780163eba3a4a56a69ad8ebbc0d78fb5a2a25",
+      "source_archive_sha256": "5e0dd452e2999cc051985ef5aa72306360173b4ff68d1cf884669de1aecbc2af",
+      "state": "passed",
+      "exit_code": 0,
+      "workers": 1,
+      "autograd_multithreading": true,
+      "result_sha256": "21c2eaeb2f453b202afe0edbcf1c28d52da4735cdba44be1fc1f7b3bdd69d5f0",
+      "status_sha256": "57f425887df0e29f9bcb4a9ee86a3a969cefb76257089d8ef289193e0629bc67",
+      "completed_cases": [
+        "fc-pytorch-float32",
+        "fc-pytorch-float64",
+        "fc-python-native-float32",
+        "fc-python-native-float64",
+        "hb-mixed-pytorch",
+        "hb-mixed-python-native",
+        "fc-streaming-pytorch",
+        "fc-streaming-python-native"
+      ]
+    }
+  ],
+  "limitations": [
+    "workers2 FP32 fresh-process exact resume failed twice; default workers1 is a different explicit setting, not a fix",
+    "CPU aarch64 small FC/HB starter only; no standalone, mixed/resident, accelerator, large-model or performance qualification",
+    "independent time-major scheduling check shares local functions; formula/VJP-root qualification remains in semantic-map",
+    "inference invokes actual no-grad forward with finite/shape checks; no independent standalone inference gate here",
+    "atomic small application bundle uses whole CPU copies and does not preserve consumed autograd graphs or previous grad caches",
+    "upstream delivery is not acceptance by an actual experiment repository; none supplied"
+  ]
+}

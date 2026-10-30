@@ -92,6 +92,7 @@ API兼容、配置身份、图/checkpoint格式及同栈精确恢复分别判断
 
 首次接入可复制[core-5起步目录](../examples/consumer_core5/README.md)。它示范小型CPU PyTorch/native训练、
 独立参考、原子应用checkpoint和新进程精确恢复；不替代NPU/resident/standalone或实验真实规模资格。
+[固定源码资格](evidence/downstream-contract-20261030.md)列出8组实际安装配置及保留的workers2恢复失败，不能由示例默认配置外推全部执行设置。
 [验证契约](verification.md)说明长任务和固定源码资格；修改本规范同步模板/示例、相关检查和[导航](core5-study.md)。
 
 ## 协议演进

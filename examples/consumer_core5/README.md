@@ -9,6 +9,7 @@
 并先在小规模验收。本例的16MiB静态材料预算及1..8步上限是示例资源边界，不是基座模型能力上限。
 它提供CPU PyTorch/Python-native、FP32/FP64、streaming/prefill和scalar/packed显式配置，拒绝不适用组合。
 NPU/CUDA、resident和standalone使用基座对应入口及独立验收；本目录不宣称覆盖这些消费者。
+[固定源码检查报告](../../docs/evidence/downstream-contract-20261030.md)给出8组实际通过配置、拒绝检查及原失败；上游交付后仍须做本实验自己的验收。
 
 ## 固定安装及锁
 
