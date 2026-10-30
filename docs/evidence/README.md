@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[第一轮磁盘清理](artifact-cleanup-20261030.md)：cc89ca8基线，51个干净祖先worktree、18处旧build、14份已记录trace及LH通过checkpoint退役，回收58.876GiB；28份未提交源码、当前构建和失败材料保持。CPU smoke及6项接入检查通过，预检原失败单列。
+
 [多实验仓库协作规范与安装消费者](downstream-contract-20261030.md)：36113ce，4项单元、8组CPU仓库外安装/独立训练/新进程精确恢复、4项错误请求拒绝通过。交付依赖锁/请求/交付/验收模板；native worker1资格与workers2原失败分列，无新增设备/性能资格。
 
 [core-5实际配置覆盖与导航修正](core5-coverage-correction-20261030.md)：0f4506d，CPU相关73项通过，含26个真实FC/HB/LH配置×PyTorch/native的52项两步训练和新owner精确恢复。修正旧FC单层/伪混合覆盖、窗口与来源分类说明；不增加性能或设备资格。
