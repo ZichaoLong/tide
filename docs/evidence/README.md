@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[多实验仓库协作规范与安装消费者](downstream-contract-20261030.md)：36113ce，4项单元、8组CPU仓库外安装/独立训练/新进程精确恢复、4项错误请求拒绝通过。交付依赖锁/请求/交付/验收模板；native worker1资格与workers2原失败分列，无新增设备/性能资格。
+
 [core-5实际配置覆盖与导航修正](core5-coverage-correction-20261030.md)：0f4506d，CPU相关73项通过，含26个真实FC/HB/LH配置×PyTorch/native的52项两步训练和新owner精确恢复。修正旧FC单层/伪混合覆盖、窗口与来源分类说明；不增加性能或设备资格。
 
 [逐配置机器索引](core5-index.json)集中52项正确性记录与26项性能记录（25原测量+1失败后续），源码和资格分列。查询例：`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --kind correctness --format tsv`。仅含已有逐配置记录，其他历史汇总/模块证据继续从下方进入。
