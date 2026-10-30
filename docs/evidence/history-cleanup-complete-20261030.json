@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "state": "passed",
+  "evidence_commit": "7ef05504db7d236e2167a3ca23dae63fb10c6cc2",
+  "started": "2026-10-30T14:14:41.033947+00:00",
+  "units": {
+    "gef-history-prepare-20261030": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    },
+    "gef-history-qualify-20261030": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    },
+    "gef-history-publish-20261030": {
+      "MainPID": "0",
+      "Result": "exit-code",
+      "ExecMainStatus": "1",
+      "ActiveState": "failed"
+    },
+    "gef-history-publish02-20261030": {
+      "MainPID": "0",
+      "Result": "exit-code",
+      "ExecMainStatus": "1",
+      "ActiveState": "failed"
+    },
+    "gef-history-publish03-20261030": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    },
+    "gef-history-clone-20261030": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive"
+    }
+  },
+  "original_snapshot_sha256": "06e889490f3a4e9cd84f1b63f7de45392298791c9b8aa6c1c734c1ac281525b0",
+  "all_original_files_and_refs_rechecked": true,
+  "roots": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation.retire-20261030",
+      "allocated_bytes": 132173824
+    },
+    {
+      "path": "/tmp/gef-history-migration-20261030",
+      "allocated_bytes": 407506944
+    }
+  ],
+  "policy": "Only verified task directories and the guarded retired original checkout; do not follow symlinks. Evidence already committed. Proxy helper contains no credentials and is temporarily retained solely for final normal push.",
+  "finished": "2026-10-30T14:14:41.462408+00:00",
+  "removed_allocated_bytes": 539680768,
+  "roots_absent": true,
+  "checkout_after_cleanup": {
+    "allocated_bytes": 41148416,
+    "git_allocated_bytes": 10407936,
+    "only_tracked_working_files": true,
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD 7ef05504db7d236e2167a3ca23dae63fb10c6cc2\nbranch refs/heads/graph-execution-foundation\n\n",
+    "fetch_refspec": "+refs/heads/graph-execution-foundation:refs/remotes/origin/graph-execution-foundation"
+  },
+  "publication_evidence": "history-publication-20261030.json",
+  "measurement_note": "Measured after retiring the old checkout and validation task root, before adding this small final receipt. Later Git bookkeeping slightly changes allocated size."
+}
