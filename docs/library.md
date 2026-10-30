@@ -1,5 +1,9 @@
 # Using Tide from an experiment repository
 
+For fixed dependency locks, cross-repository requests/deliveries/acceptance and upgrades,
+use the [downstream contract](downstream-contract.md). The [core-5 installed starter](../examples/consumer_core5/README.md)
+shows weighted modules and a complete application-owned resume boundary; the generic example below remains separate.
+
 Tide 0.2 is a graph execution dependency. The experiment owns its dataset,
 task head, loss, optimizer, training loop, metrics and artifacts. Tide owns the
 graph/module configuration, execution policy and graph continuation. CPU

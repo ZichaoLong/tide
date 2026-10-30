@@ -1,0 +1,15 @@
+{
+  "schema": "tide-foundation-lock-v1",
+  "foundation": {
+    "repository": "https://github.com/ZichaoLong/tide",
+    "commit": null,
+    "dirty": false,
+    "package_version": "0.2.0",
+    "wheel": {"name": null, "sha256": null},
+    "installed_files_sha256": null
+  },
+  "mathematics": {"version": "tide-core-5", "commit": "0770593838a37c790a568226930567ed60f99b83"},
+  "protocol": {"version": "tide-downstream-contract-v1", "commit": null, "path": "docs/downstream-contract.md"},
+  "native": null,
+  "environment": {"python": null, "torch": null, "architecture": null, "cxx11_abi": null}
+}

@@ -1,0 +1,9 @@
+{
+  "topology": "fc",
+  "family": "kv",
+  "width": 8,
+  "region_width": 2,
+  "depth": 2,
+  "profile": "baseline",
+  "source_mode": "region"
+}
