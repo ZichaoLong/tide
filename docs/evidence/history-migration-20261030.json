@@ -1,0 +1,712 @@
+{
+  "schema_version": 1,
+  "state": "passed",
+  "date": "2026-10-30",
+  "scope": "Archive-only history migration, independent Git-object comparison and directed fresh CPU build/install/restore. No numerical/API change or accelerator/performance rerun. Remote publication is recorded separately after it happens.",
+  "implementation_source": "b0969fc9819e30b9e36fad52bd2d4484dff16206",
+  "math_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "history": {
+    "state": "passed",
+    "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+    "filtered_head": "0cc8811af02e43ef1365b4f5a4cc797575196438",
+    "commits": 716,
+    "rewritten": 181,
+    "archive_present_old_commits": 181,
+    "archive_reachable_in_new_history": false,
+    "all_other_paths_modes_blobs_equal": true,
+    "parents_metadata_messages_equal": true,
+    "comparison_sha256": "42260028e72e2d0b0b36a4b604e561c390b77d0d12d0a17a3e7da390863db6f6",
+    "map_sha256": "94725a1a6f897a846d08d65f64a8f25acc699553ff8945fb001ec34e0d466bfc"
+  },
+  "preparation": {
+    "unit": "gef-history-prepare-20261030.service",
+    "job": {
+      "command": [
+        "/bin/bash",
+        "/tmp/gef-history-migration-20261030/control/prepare.sh"
+      ],
+      "cwd": "/tmp/gef-history-migration-20261030/old-source",
+      "state": "passed",
+      "source": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+      "dirty": "",
+      "started": "2026-10-30T07:24:12.131986+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-30T07:24:49.296704+00:00"
+    },
+    "launcher_sha256": "c566ae196cd73694731216f83a4f0cab7858ea00f726f4cda6c1ce5cf66786b0",
+    "command_script": "#!/bin/bash\nset -eo pipefail\nsource /etc/profile.d/modules.sh\nmodule purge\nmodule load ascend/dev-workspace-9.1.0\nexport PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1\nexport TMPDIR=/tmp/gef-history-migration-20261030/tmp\nexport XDG_CACHE_HOME=/tmp/gef-history-migration-20261030/cache\nexport PIP_CACHE_DIR=/tmp/gef-history-migration-20261030/cache/pip\npython -m venv --system-site-packages /tmp/gef-history-migration-20261030/env\nsource /tmp/gef-history-migration-20261030/env/bin/activate\npython -m pip install -c \"$ASCEND_CONSTRAINTS_FILE\" git-filter-repo==2.47.0 pytest==9.1.1 ninja==1.13.2\ngit clone --no-local --single-branch --branch graph-execution-foundation /tmp/gef-history-migration-20261030/old-source /tmp/gef-history-migration-20261030/work\ncd /tmp/gef-history-migration-20261030/work\ngit filter-repo --path docs/evidence/archive/retired-records-20261012.jsonl.gz --invert-paths --prune-empty never --prune-degenerate never --preserve-commit-hashes --replace-refs delete-no-add\ngit status --short --branch\ngit count-objects -vH\n"
+  },
+  "qualification": {
+    "unit": "gef-history-qualify-20261030.service",
+    "job": {
+      "command": [
+        "/bin/bash",
+        "/tmp/gef-history-migration-20261030/control/qualify.sh"
+      ],
+      "cwd": "/tmp/gef-history-migration-20261030/qualified",
+      "state": "passed",
+      "source": "b0969fc9819e30b9e36fad52bd2d4484dff16206",
+      "dirty": "",
+      "started": "2026-10-30T13:54:37.992975+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-30T13:59:32.626437+00:00"
+    },
+    "limits": {
+      "slice": "background.slice",
+      "nice": 10,
+      "runtime_max_seconds": 2700,
+      "cpu_quota_percent": 16000,
+      "memory_max_bytes": 549755813888,
+      "affinity_cpus": 320,
+      "build_jobs": 160,
+      "test_math_threads": 1
+    },
+    "command_script": "#!/bin/bash\nset -eo pipefail\nsource /etc/profile.d/modules.sh\nmodule purge\nmodule load ascend/dev-workspace-9.1.0\nsource /tmp/gef-history-migration-20261030/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1\nexport TMPDIR=/tmp/gef-history-migration-20261030/tmp\nexport XDG_CACHE_HOME=/tmp/gef-history-migration-20261030/cache\nexport PIP_CACHE_DIR=/tmp/gef-history-migration-20261030/cache/pip\nexport TIDE_BUILD_DIR=/tmp/gef-history-migration-20261030/build/cpu\npython scripts/verify_history_mapping.py --old-repo /tmp/gef-history-migration-20261030/old-source --output /tmp/gef-history-migration-20261030/records/history-verification.json\npython scripts/check_upstream.py\npython /mi/data2T/zlong/home/.agents/skills/develop-portable-torch/scripts/doctor.py --backend cpu --probe operator --format json > /tmp/gef-history-migration-20261030/records/doctor.json\npython scripts/build.py --backend cpu --build-dir \"$TIDE_BUILD_DIR\" --jobs half\nctest --test-dir \"$TIDE_BUILD_DIR\" --parallel 4 --output-on-failure\n\"$TIDE_BUILD_DIR/tidegraph-smoke\" --device=cpu --dtype=float32 --output-dir=/tmp/gef-history-migration-20261030/records/smoke-float32\n\"$TIDE_BUILD_DIR/tidegraph-smoke\" --device=cpu --dtype=float64 --output-dir=/tmp/gef-history-migration-20261030/records/smoke-float64\npython -m pytest -q tests/test_history_mapping.py tests/test_retired_record_reader.py tests/test_durable_records.py tests/test_semantics.py tests/test_native_settle.py tests/test_core5_recipe_training.py --dtype both -p no:cacheprovider --basetemp /tmp/gef-history-migration-20261030/tmp/qualified-tests --junitxml=/tmp/gef-history-migration-20261030/records/qualified-tests.xml\npython scripts/check_downstream_consumer.py --build-dir \"$TIDE_BUILD_DIR\" --output-dir /tmp/gef-history-migration-20261030/records/consumer\npython scripts/resolve_history_commit.py 83d384a --json\ngit diff --exit-code\ngit fsck --full --no-reflogs\n",
+    "launcher_sha256": "166a416231bd97492fee36a3431c5a7adb36a7e524c04c8d8e3996ba770a91de",
+    "task_log_sha256": "9aed9ab00cdde4f4d8f9bb15987d1755d4174187a97e006c4ba1e7f06ac0c464",
+    "doctor": {
+      "backend_probe": {
+        "available": true,
+        "backend": "cpu",
+        "compiled_arch_list": null,
+        "device_count": 1,
+        "device_index": 0,
+        "devices": [
+          {
+            "architecture": "aarch64",
+            "logical_index": 0,
+            "model": "aarch64"
+          }
+        ],
+        "errors": [],
+        "host": {
+          "libc": {
+            "name": "glibc",
+            "version": "2.34"
+          },
+          "machine": "aarch64",
+          "os_release": {
+            "id": "hce",
+            "pretty_name": "Huawei Cloud EulerOS 2.0 (aarch64)",
+            "version_id": "2.0"
+          },
+          "release": "5.10.0-182.0.0.95.r1941_123.hce2.aarch64",
+          "system": "Linux"
+        },
+        "ok": true,
+        "operator": {
+          "actual": 152.0,
+          "expected": 152.0,
+          "name": "float32_matmul_relu_sum",
+          "shape": [
+            4,
+            4
+          ],
+          "synchronize_call": "not_required"
+        },
+        "probe": "operator",
+        "python": {
+          "implementation": "CPython",
+          "version": "3.12.13",
+          "version_info": [
+            3,
+            12,
+            13
+          ]
+        },
+        "versions": {
+          "torch": "2.12.0+cpu",
+          "torch_cuda_compile": null,
+          "torch_hip_compile": null
+        },
+        "visibility": {
+          "ASCEND_DEVICE_ID": null,
+          "ASCEND_RT_VISIBLE_DEVICES": null,
+          "CUDA_VISIBLE_DEVICES": null,
+          "DEVICE_ID": null,
+          "NPU_VISIBLE_DEVICES": null,
+          "NVIDIA_VISIBLE_DEVICES": null
+        },
+        "worker_returncode": 0
+      },
+      "candidate_probes": {},
+      "errors": [],
+      "exit_code": 0,
+      "host": {
+        "libc": {
+          "name": "glibc",
+          "version": "2.34"
+        },
+        "machine": "aarch64",
+        "os_release": {
+          "id": "hce",
+          "pretty_name": "Huawei Cloud EulerOS 2.0 (aarch64)",
+          "version_id": "2.0"
+        },
+        "release": "5.10.0-182.0.0.95.r1941_123.hce2.aarch64",
+        "system": "Linux"
+      },
+      "ok": true,
+      "python": {
+        "implementation": "CPython",
+        "version": "3.12.13",
+        "version_info": [
+          3,
+          12,
+          13
+        ]
+      },
+      "request": {
+        "backend": "cpu",
+        "device_index": 0,
+        "probe": "operator"
+      },
+      "resolved_backend": "cpu",
+      "schema_version": 1,
+      "visibility": {
+        "ASCEND_DEVICE_ID": null,
+        "ASCEND_RT_VISIBLE_DEVICES": null,
+        "CUDA_VISIBLE_DEVICES": null,
+        "DEVICE_ID": null,
+        "NPU_VISIBLE_DEVICES": null,
+        "NVIDIA_VISIBLE_DEVICES": null
+      }
+    },
+    "build_manifest": {
+      "source": "b0969fc9819e30b9e36fad52bd2d4484dff16206",
+      "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+      "torch": "2.12.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.1.0"
+      },
+      "build_jobs": 160,
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "9ddab45f60011a0a3d46307026a8d186b91f79189852d8ca3cdd7686fc33dec9",
+        "libtidegraph_runtime.a": "0d57c52d86442682d41bad4bde3c701a5190407c6f7c4bfd8cc6948386f038ba",
+        "_tide_native.so": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+        "tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+        "tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+        "tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+        "tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+        "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+        "tidegraph-checkpoint-check": "6ce01b71a90f752e2ad7df18ab34a4c6448e555d8345e3325361a9685d3d0dc2",
+        "tidegraph-weighted-training-check": "2b2a1ebafb230d5a25a0a5f60212cf731dff40277a24a2aae0789039110e3cc0",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+        "tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+        "tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+        "tidegraph-accelerator-check": "fa1850f152fc9bf62de54068e0ec8e5225d467179923c5d8ce0cf186100c363a",
+        "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+        "tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+        "tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+        "tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+        "tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+        "libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57"
+      }
+    },
+    "ctest": {
+      "tests": 13,
+      "failures": 0,
+      "last_test_log_sha256": "2f5efe5a5fd080c7e5e8575665b28d75df50e5458d0d94015b6481d4238d7ec9"
+    },
+    "smokes": {
+      "float32": {
+        "device": "cpu",
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float32",
+        "outputs": 3,
+        "loss": 18.05487823486328,
+        "gradient_sum": 17.539073944091797
+      },
+      "float64": {
+        "device": "cpu",
+        "resolution_reason": "explicit:cpu",
+        "dtype": "float64",
+        "outputs": 3,
+        "loss": 18.054878141361314,
+        "gradient_sum": 17.539072689451565
+      }
+    },
+    "pytest": {
+      "tests": 177,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_sha256": "8be07eb2ae64fe5c262fa0678d6c0093eeee53d548a944b9b8289a433cce3868",
+      "warnings": 52,
+      "warning_scope": "Existing recipe record_property annotations with junit_family=xunit2; no failed or skipped tests."
+    },
+    "consumer": {
+      "state": "passed",
+      "source": "b0969fc9819e30b9e36fad52bd2d4484dff16206",
+      "dirty": "",
+      "scope": "installed CPU starter + lock/checkpoint rejection; no accelerator, standalone or performance qualification",
+      "unit_tests": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "unit_junit_sha256": "65ab537f542fda11d556a85b62c2de585da443d2b06fc26c0dc78756e5883a00",
+      "wheel_sha256": "971bcf45aac3ef0ceb01c6a6cbefec3b77b1dd3d1a8522078aadb443a055c906",
+      "source_files_sha256": "7c105250468465b0f49a253734582233a37851ebb5e95bf622e75f5de7570103",
+      "result_sha256": "1ae42260c1bd790966d554151fc11a48e0fa1e56087b91daeea763aea1db00cb",
+      "cases": [
+        {
+          "name": "fc-pytorch-float32",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "0a6174581964754ec06dcaad647d6ee966ce8ef03e8de0d1dc1924df7322d3cf"
+        },
+        {
+          "name": "fc-pytorch-float64",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "c35f60f82c475529e9625c652939cb01905036c2fa7c22913dddfe81df3089bb"
+        },
+        {
+          "name": "fc-python-native-float32",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "7bc13cc729715a4717b4ed382514ba25e7e1aca3e540b987da82f1d38f4cbbe8"
+        },
+        {
+          "name": "fc-python-native-float64",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "c6a1302f7f33acfffe726d8eb4c6048fe50f4234327a1d3f2101d49f2dd5349e"
+        },
+        {
+          "name": "hb-mixed-pytorch",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "67f55b22e022e3ac3c7be52e2600b3e67fbdceeca0efd65b5c4abfe68c8365c8"
+        },
+        {
+          "name": "hb-mixed-python-native",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "cb0b75fee69f5b190c0afd914f5ad37b610cd758848f6cb976ba78a9a560d9b0"
+        },
+        {
+          "name": "fc-streaming-pytorch",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "518a5de671fa164488363a140b091d299ef8495b8be6941dab0efc44ea2d7c63"
+        },
+        {
+          "name": "fc-streaming-python-native",
+          "state": "passed",
+          "checks": {
+            "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+            "fresh_process_application_resume_exact": true,
+            "inference": true
+          },
+          "result_sha256": "e8be30bed3c6d2a79bdc29418806c8cfe12d6074999be331ac5820a4fb18e1bb"
+        }
+      ],
+      "rejections": [
+        "bad-resume",
+        "missing-native",
+        "unsupported-packing",
+        "bad-lock"
+      ],
+      "commands": [
+        {
+          "name": "unit-tests",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/env/bin/python",
+            "-m",
+            "pytest",
+            "/tmp/gef-history-migration-20261030/qualified/tests/test_downstream_consumer.py",
+            "-q",
+            "--junitxml=/tmp/gef-history-migration-20261030/records/consumer/tests.xml"
+          ],
+          "exit_code": 0,
+          "log_sha256": "50b027a51efd2571ad9c171d98a5ccef20afaedbdcce9b2ed22bed18d22b292e"
+        },
+        {
+          "name": "wheel",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/env/bin/python",
+            "-m",
+            "pip",
+            "wheel",
+            "--no-index",
+            "--no-deps",
+            "--no-build-isolation",
+            "/tmp/gef-history-migration-20261030/records/consumer/package",
+            "-w",
+            "/tmp/gef-history-migration-20261030/records/consumer/wheels"
+          ],
+          "exit_code": 0,
+          "log_sha256": "ca7fda8b1008231702f8a0ab75f86ad967a00569b54e63fa1c6a5d4ca591c7c3"
+        },
+        {
+          "name": "install",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "-m",
+            "pip",
+            "install",
+            "--no-index",
+            "--no-deps",
+            "/tmp/gef-history-migration-20261030/records/consumer/wheels/tidegraph-0.2.0-py3-none-any.whl"
+          ],
+          "exit_code": 0,
+          "log_sha256": "4770400935be50ebe1dc9a2f9f64446fa5b09f30b2cad673087fe59f01e9891d"
+        },
+        {
+          "name": "capture-lock",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/dependency.py",
+            "--wheel",
+            "/tmp/gef-history-migration-20261030/records/consumer/wheels/tidegraph-0.2.0-py3-none-any.whl",
+            "--source-commit",
+            "b0969fc9819e30b9e36fad52bd2d4484dff16206",
+            "--math-commit",
+            "0770593838a37c790a568226930567ed60f99b83",
+            "--native-library",
+            "/tmp/gef-history-migration-20261030/records/consumer/native",
+            "--output",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json"
+          ],
+          "exit_code": 0,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "fc-pytorch-float32",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "pytorch",
+            "--dtype",
+            "float32",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-pytorch-float32"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "fc-pytorch-float64",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "pytorch",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-pytorch-float64"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "fc-python-native-float32",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "python-native",
+            "--dtype",
+            "float32",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-python-native-float32",
+            "--native-library",
+            "/tmp/gef-history-migration-20261030/records/consumer/native"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "fc-python-native-float64",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "python-native",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-python-native-float64",
+            "--native-library",
+            "/tmp/gef-history-migration-20261030/records/consumer/native"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "hb-mixed-pytorch",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/hb-mixed.json",
+            "--client",
+            "pytorch",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/hb-mixed-pytorch"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "hb-mixed-python-native",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/hb-mixed.json",
+            "--client",
+            "python-native",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "prefill",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/hb-mixed-python-native",
+            "--native-library",
+            "/tmp/gef-history-migration-20261030/records/consumer/native"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "fc-streaming-pytorch",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "pytorch",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "streaming",
+            "--packing",
+            "scalar",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-streaming-pytorch"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "fc-streaming-python-native",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/check.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--recipe",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/recipe.json",
+            "--client",
+            "python-native",
+            "--dtype",
+            "float64",
+            "--schedule",
+            "streaming",
+            "--packing",
+            "scalar",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/fc-streaming-python-native",
+            "--native-library",
+            "/tmp/gef-history-migration-20261030/records/consumer/native"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+        },
+        {
+          "name": "bad-resume",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/train.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--resume",
+            "/tmp/gef-history-migration-20261030/records/consumer/bad-checkpoint.pt",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/bad-resume"
+          ],
+          "exit_code": 1,
+          "log_sha256": "50b97c4f5575285f9ecf8b63067eef58112064cf2663a066bd746bc62580ee5c"
+        },
+        {
+          "name": "missing-native",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/train.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--client",
+            "python-native",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/missing-native"
+          ],
+          "exit_code": 1,
+          "log_sha256": "55150eeb6b04b5ee080086fe362240a3c4bb297728407e7c68f6802be9140fd1"
+        },
+        {
+          "name": "unsupported-packing",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/train.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/foundation.lock.json",
+            "--schedule",
+            "streaming",
+            "--packing",
+            "packed",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/unsupported-packing"
+          ],
+          "exit_code": 1,
+          "log_sha256": "a136ad816b6709f16fa22ddcc2be83d11d01784354cea054b802cd8684267a6d"
+        },
+        {
+          "name": "bad-lock",
+          "argv": [
+            "/tmp/gef-history-migration-20261030/records/consumer/env/bin/python",
+            "/tmp/gef-history-migration-20261030/records/consumer/application/train.py",
+            "--device",
+            "cpu",
+            "--foundation-lock",
+            "/tmp/gef-history-migration-20261030/records/consumer/bad-lock.json",
+            "--output-dir",
+            "/tmp/gef-history-migration-20261030/records/consumer/bad-lock"
+          ],
+          "exit_code": 1,
+          "log_sha256": "3e5224d7dc4c7f07f35d0e2b7ac3a877aa66edeb01d5603b02e1dbc66ae15c8a"
+        }
+      ]
+    }
+  },
+  "navigation": {
+    "updated_current_reference_policy": "Current navigation maps to new code identities; historical evidence and binary/lock identities are preserved. Archive report changed only its link and added a dated migration note.",
+    "local_links_checked_before_evidence": 1441,
+    "current_documents_checked": 151,
+    "missing_links": 0
+  },
+  "static_portability_audit": {
+    "errors": 0,
+    "advisory_warnings": 265,
+    "review": "Existing adapter/device checks and dependency boundaries; runtime/C++/Python model source was not changed. No new backend claims.",
+    "support_matrix_schema": "valid; existing evidence identities preserved"
+  },
+  "retention": "This reviewed receipt is tracked. Temporary clones, environment, build, raw logs and checkpoints are retired only after publication/clean-checkout verification. Hashes identify those bytes but do not promise future availability."
+}

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[历史迁移与新CPU接入](history-migration-20261030.md)：716提交独立核对、映射与固定源码定向验证；发布另记。
+
 2026-10-30历史清理：本目录历史报告和JSON保留当时实际源码/二进制身份与结果；
 旧提交号用`python scripts/resolve_history_commit.py OLD_SHA`定位等价代码。
 [迁移规则](../history-migration.md)说明单分支clone与旧归档取回；映射不表示重新运行历史资格。
