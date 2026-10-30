@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[core-5实际配置覆盖与导航修正](core5-coverage-correction-20261030.md)：0f4506d，CPU相关73项通过，含26个真实FC/HB/LH配置×PyTorch/native的52项两步训练和新owner精确恢复。修正旧FC单层/伪混合覆盖、窗口与来源分类说明；不增加性能或设备资格。
+
+[逐配置机器索引](core5-index.json)集中52项正确性记录与26项性能记录（25原测量+1失败后续），源码和资格分列。查询例：`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --kind correctness --format tsv`。仅含已有逐配置记录，其他历史汇总/模块证据继续从下方进入。
+
 [core-5自然规模与三客户端有限性能](core5-natural-study-20261029.md)：e50b6d8，25配置中7项完整通过；中型FC三客户端CPU FP64及LH1.051B完整训练/精确恢复。真实区域批与独立NPU profile、FP32/FP64严格失败、resident在途任务/预算拒绝分列；8B/16B仅静态计划。
 
 [core-5目录与消费者资格](core5-study-clients-20261029.md)：372 CPU365；e50相关CPU43、standalone CPU6/NPU8、Python NPU单卡/half/双卡3项。独立存储精度参考和实际梯度/optimizer/磁盘恢复；计数有重叠，不能相加为一次全矩阵。

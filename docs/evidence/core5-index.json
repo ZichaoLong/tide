@@ -1,0 +1,9 @@
+{
+  "schema": "tide-core5-evidence-index-v1",
+  "scope": "Reviewed per-configuration reports only. Aggregate-only historical qualifications remain in README.md and the semantic map; absent cells are unqualified here, not unsupported.",
+  "reports": [
+    "core5-natural-study-20261029.json",
+    "core5-checkpoint-budget-20261029.json",
+    "core5-coverage-correction-20261030.json"
+  ]
+}

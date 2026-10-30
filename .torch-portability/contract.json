@@ -412,7 +412,7 @@
         {
           "date": "2026-10-29",
           "commit": "e50b6d8e90fd71879e860250baa81d294b10ee95",
-          "scope": "372 CPU365 and e50 related43 directed checks, including 24 natural-recipe training/resume combinations. Counts overlap, not a full Cartesian gate.",
+          "scope": "372 CPU365 and e50 related43 directed checks, including 24 natural-recipe training/resume combinations. Counts overlap, not a full Cartesian gate. Coverage correction 2026-10-30: the original FC cases had depth=1 and FC mixed contained only KV; they do not certify multilayer or heterogeneous FC. See the report addendum.",
           "tiers": [
             "build",
             "parity",
@@ -423,6 +423,22 @@
           "test_command": "Exact directed tests, client configurations and fresh-checkout commands in the cited report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-study-clients-20261029.md"
+        },
+        {
+          "date": "2026-10-30",
+          "commit": "0f4506d097cbae88d4cd7f1c9d31319a2e0a1f4a",
+          "semantic_version": "tide-core-5",
+          "scope": "73 directed CPU checks, including 26 actual FC/HB/LH recipes x PyTorch/Python-native = 52 CPU FP64 packed-prefill training cases. Two independent SGD updates and exact new-owner third-window resume. No new standalone, FP32/half, accelerator, scale or performance qualification; unchanged C++ build reused with source/binary hash audit.",
+          "tiers": [
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "test_command": "Exact four-test-file pytest invocation with JUnit properties and matching CPU library in the report and JSON.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-coverage-correction-20261030.md"
         }
       ]
     },
