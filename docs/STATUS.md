@@ -1,52 +1,29 @@
 # 当前交接 — 2026-10-30
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-第二轮磁盘清理完成，执行基线12d3e16f1513d0a6f8be7de2720f0096f68b44d7；无子代理、无活跃作业。
-仅修改交接、保留规则、开发导航与证据；未改数学/运行代码、参考仓库、公共环境或旧失败结论。
+用户授权补齐失败经验治理后，将仓库收束为`.git`和Git跟踪文件。无子代理，不改公共工具链或参考仓库。
+起始提交15b67f0e3e0d2b52c8e5cd2e20f5ee043c9a39a2；现有原始任务均已终态。
 
-## 本轮交付
+## 正在实施
 
-35项全部退役65.852535GiB：30份历史源码副本约1.928GiB，2份静态材料38.117GiB，3份旧checkpoint25.807GiB。
-仓库约88.36→22.50GiB；两轮累计清单退役124.73GiB，初始约147.24GiB。
-原81个历史worktree和本轮临时runner均已移除；Git目前只登记主工作区。
-未提交差异不宣称已全部合并；28份脏树已与完整归档逐项核对后按用户明确授权退役。
+新增复现导航、520份旧任务终态摘要、两份实际分配失败行及独立Decimal/当前局部回归。
+空jobs接续将指向Git内证据，不把缺少原始材料解释为未测试或通过。
+同步AGENTS、保留规则、开发/架构导航及经验；当前限制与停止条件仍仅见[ROADMAP](ROADMAP.md)。
 
-28份源码的归档仍在artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz，约1.61MiB。
-518份旧作业记录、66份相邻配置/结果、失败日志、小型反例及原失败结论保持。
-大checkpoint的旧精确状态已不在线，诊断重启须重新生成；ROADMAP已同步这一保留边界。
-证据入口：[第二轮清理](evidence/artifact-cleanup-round2-20261030.md)及[机器凭据](evidence/artifact-cleanup-round2-20261030.json)。
-第一轮历史结果仍见[原报告](evidence/artifact-cleanup-20261030.md)。
+本轮临时控制目录：/tmp/gef-tracked-retirement-20261030；任务结束且小型凭据进入Git后也会移除，不作为新产物仓库。
+待提交实现后建立固定source工作树，计划独立background.slice服务：
+tracked-checkout-verify-20261030（新私有环境、全新CPU构建、相关回归及安装消费者），
+tracked-checkout-retire-20261030（审阅dry run后精确清理ignored产物）。目前这些服务尚未提交。
+日志/status/result写入上述临时目录records；每次启动前补充固定提交、实际命令和资源。
 
-## 当前开发入口
-
-预编译库约3.28GiB，已分离到artifacts/retained-builds/，详情见[保留构建](artifact-retention.md#本机保留构建)：
-
-- core5-checkpoint-qualified/build/：b255 CPU core/client及standalone NPU SDK链。
-- core5-compact-fiber-qualified-v2/build/：04b Python/SDK常驻基线。
-- core5-independent-qualified/build/npu-python/：bdd7f6c旧Torch2.12 NPU core基线。
-
-旧artifacts/worktrees/<名称>/build仅为兼容链接，没有对应源码或Git登记；不在旧CMake缓存中增量重建。
-新构建按[development](development.md)使用固定源码和新build目录，核对manifest及环境；不混用版本。
-.local/venv-core5、主源码、公共工具链保持。搬迁后CPU原生smoke、显式公共加载及6项接入检查通过。
-这只是开发链复核；没有新增NPU/GPU或全矩阵资格，也没有重跑历史实验。
-
-## 作业终态与接续
-
-- cleanup-round2-plan-20261030：passed/0，04:58:17—04:59:32 UTC。
-- cleanup-round2-apply-20261030：passed/0，04:59:56—05:01:38 UTC；35项全部完成。
-
-独立background.slice，Nice10/CPUQuota200%/MemoryMax2GiB，900/1800秒上限；只读runner已在终态后移除。
-状态/日志在artifacts/jobs/<任务名>/；plan/result、程序副本、launch、smoke及finalization在artifacts/cleanup-round2-20261030/。
-归档、构建文件身份/87项内容hash、历史作业记录与相邻记录核对通过。第一轮预检failed/1记录仍保留。
-本轮提交内容仅上述文档与凭据；提交/远端是否同步以git状态核对，不把文档当作推送完成证明。
+接续：先运行相关短检查、提交实现；再从固定Git源码验证全新CPU开发链。
+CPU构建使用至少一半可用CPU（当前320可用），无NPU/GPU任务；不重跑历史性能矩阵。
+清理前审阅保留项、路径/符号链接、活动进程与Git源变化；完成后核对只剩Git跟踪文件和.git。
+28份未采用实验差异归档按本轮授权退役，不宣称全部已合并；必要诊断由Git内入口和少量实际输入承接。
+最终记录原失败保持、重建成本及精确状态退役边界，再提交证据并普通推送。
 
 ```sh
 git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
-git worktree list
 ```
-
-无待恢复历史队列；按用户后续任务接续。详细失败经验治理另行安排；现有约束和停止/重启条件仅由[ROADMAP](ROADMAP.md)维护。
-多实验仓库协作从[协作规范](downstream-contract.md)和[安装示例](../examples/consumer_core5/README.md)进入；
-既有安装资格、配置覆盖、性能和硬件边界不因清理改变。
