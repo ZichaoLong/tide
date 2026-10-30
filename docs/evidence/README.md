@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+2026-10-30历史清理：本目录历史报告和JSON保留当时实际源码/二进制身份与结果；
+旧提交号用`python scripts/resolve_history_commit.py OLD_SHA`定位等价代码。
+[迁移规则](../history-migration.md)说明单分支clone与旧归档取回；映射不表示重新运行历史资格。
+
 [仅保留Git内容的清理与重建](artifact-cleanup-tracked-only-20261030.md)：e99733d全新CPU构建/132项定向检查及8组安装消费者通过；删除全部ignored本地产物22.379GiB，仅保留Git内容；520份终态摘要和两份实际失败行承接复现。本轮临时验证环境/工作树亦已删除，目录约126MiB（含Git）。
 
 [第二轮磁盘清理](artifact-cleanup-round2-20261030.md)：12d3e16基线，30份历史源码副本及5个大文件退役65.853GiB；仓库约22.50GiB，仅主工作区。28份未提交差异归档、失败记录和小型反例保持，三组构建独立保留；搬迁后CPU加载/smoke及6项接入检查通过。

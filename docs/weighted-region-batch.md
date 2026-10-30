@@ -56,7 +56,7 @@ Python 在全部 Read 已就绪且 history_independent 时可合批跨时间帧�
 `batched_region_frames` 记录使用 VJP 能力的帧，`region_scalar_calls` 记录逐帧后备。
 这些计数不等同硬件 kernel 数，也不承诺加速。CPU eager 实现不构成常驻就绪/调度证明。
 
-[e50自然HB medium测量/profile](evidence/core5-natural-study-20261029.md)在NPU mixed-c实际
+[878a5a4自然HB medium测量/profile](evidence/core5-natural-study-20261029.md)在NPU mixed-c实际
 64个region frame使用16次调用，最大batch4；profile有厂商BatchMatMul、sort/分配及实际VJP。
 全图仍在KV记录严格核对失败，这只证明该路径确实运行了区域批，不是合格吞吐结论。
 profile的Query VJP/索引和提交成本明显，不能仅凭“分配是优化问题”认定其主导端到端成本。

@@ -17,6 +17,9 @@ root = Path(__file__).resolve().parents[1]
 subprocess.run(["git", "status", "--short", "--branch"], cwd=root, check=True)
 subprocess.run(["git", "log", "-3", "--oneline"], cwd=root, check=True)
 print((root / "docs/STATUS.md").read_text())
+if (root / "docs/history/migration-20261030.json").is_file():
+    print("Historical source IDs: python scripts/resolve_history_commit.py OLD_SHA; "
+          "migration/clone policy: docs/history-migration.md")
 records, errors = read_jobs(root / "artifacts")
 live = [(p, d) for p, d in records if d.get("state") in {"starting", "running"}]
 terminal = [(p, d) for p, d in records if d.get("state") not in {"starting", "running"}]

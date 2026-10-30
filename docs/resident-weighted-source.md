@@ -35,4 +35,4 @@
 检查入口 `verify_device_control.py --checks weighted-source --device npu:0`。
 CPU guard、NPU完整组合、CUDA构建和真机证据分列；本项不单独认证canonical别名owner或图生命周期。
 
-固定6f709f8的[CPU/NPU/CUDA构建资格](evidence/core5-resident-source-20261027.md)已记录；canonical owner和完整图生命周期另验收。
+固定1b16765的[CPU/NPU/CUDA构建资格](evidence/core5-resident-source-20261027.md)已记录；canonical owner和完整图生命周期另验收。

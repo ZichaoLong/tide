@@ -62,6 +62,6 @@ CPU与目标都采用同一量化初态；CPU FP32是另一个精度基准，不
 算子在任何形状都不会回退。NPU 的设备 AiCPU 算子与主机 CPU fallback 分开记录。
 
 [2026-10-29定向核对](evidence/core5-nongpu-boundaries-20261029.md)将原standalone SDK
-fc/affine FP32 mixed-a/c两项在ead6f34分别验收通过（原AdamW、四次更新和恢复）。
-旧470ce06失败保持原记录，不外推全24图。新纯Torch四政策小反例仍保留stock/guard失败，
+fc/affine FP32 mixed-a/c两项在fca6b05分别验收通过（原AdamW、四次更新和恢复）。
+旧d1283f4失败保持原记录，不外推全24图。新纯Torch四政策小反例仍保留stock/guard失败，
 单线程小反例通过而完整图失败；默认异步资格未解除，公共环境与生产传输未改。

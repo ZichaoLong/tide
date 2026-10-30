@@ -7,6 +7,8 @@
 机器可读凭据见 [artifact-retirement-20261012.json](artifact-retirement-20261012.json)。
 没有重新运行历史实验，也没有把已知失败改成通过。
 
+2026-10-30导航注：下述历史事实不变，归档已移至冻结旧分支；见[迁移规则](../history-migration.md)。
+
 ## 仓库内保留的内容
 
 - 简化 README、STATUS、ROADMAP 与执行契约；增加 [开发入口](../development.md)
@@ -16,7 +18,7 @@
   共 355,041 字节。`check_upstream.py` 可离线核验，也可与原 Git 对象对照；
   不读取或采用上游工作区的新草稿。
 - 原有已审阅报告和失败见证保留。历史来源的必要记录存入
-  [单一压缩档](archive/retired-records-20261012.jsonl.gz)，40,407,191 字节（38.5 MiB），
+  [单一压缩档](https://github.com/ZichaoLong/tide/blob/83d384a4a5efb9df38ce77c395c2d9c5222b4e0e/docs/evidence/archive/retired-records-20261012.jsonl.gz)，40,407,191 字节（38.5 MiB），
   SHA256 由机器凭据锁定。正常接续不要求读取该档。
 
 归档覆盖 635 个旧工作副本、317 个不同基线提交；基线全部是当前分支祖先。

@@ -21,6 +21,7 @@ def main():
     group.add_argument("--path", help="exact original path label, including any :suffix")
     group.add_argument("--list-prefix", help="list at most 50 original path labels")
     parser.add_argument("--output", type=Path, help="write this record to a new file")
+    parser.add_argument("--archive", type=Path, help="explicit archive downloaded from the frozen old history")
     args = parser.parse_args()
     if args.output and not args.path:
         parser.error("--output requires --path")
@@ -28,7 +29,10 @@ def main():
         parser.error("output already exists")
     root = Path(__file__).resolve().parents[1]
     receipt = json.loads((root / "docs/evidence/artifact-retirement-20261012.json").read_text())
-    archive = root / receipt["archive"]["path"]
+    archive = args.archive or root / receipt["archive"]["path"]
+    if not archive.is_file():
+        parser.error("archive is retained on graph-execution-foundation-old only; "
+                     "see docs/history-migration.md and supply --archive PATH (no automatic download)")
     digest = hashlib.sha256()
     with archive.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):

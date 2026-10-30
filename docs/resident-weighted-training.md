@@ -1,8 +1,8 @@
 # Weighted 公共训练 owner
 
 本页定义公共层契约；单设备FP32的session、完整字段视图、共享参数、两优化器与精确恢复
-已取得[343429d固定资格](evidence/core5-resident-weighted-training-20261028.md)。FP32/FP16公共完整图、
-训练及精确恢复另取得[21ed86d固定资格](evidence/core5-resident-half-training-20261028.md)；peer和性能分别验收。
+已取得[269ec4d固定资格](evidence/core5-resident-weighted-training-20261028.md)。FP32/FP16公共完整图、
+训练及精确恢复另取得[3416567固定资格](evidence/core5-resident-half-training-20261028.md)；peer和性能分别验收。
 [样本副本与共同更新](resident-weighted-peers.md)定义新增跨卡归约、精确optimizer一致性和全体提交边界；其资格另记。
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。
@@ -199,10 +199,10 @@ window_bridge_us/parameter_reduce_us`：当前调用的主机steady-clock微秒�
 缓存整个对象会读旧窗口/参数或保留已经消费的根；可复用的程序模板需要显式重绑buffer与
 版本/连接检查，不能直接保存上次adjoint绕过构造。本轮用上述观测量判断其成本。
 
-上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+上述resident增量与实际消费者的[57308e7固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
 
-[15c3e65有限成本证据](evidence/core5-boundary-performance-20261029.md)已取得实际构造/执行/归约分段；
+[57308e7有限成本证据](evidence/core5-boundary-performance-20261029.md)已取得实际构造/执行/归约分段；
 它不授权跨窗口复用绑定旧地址的adjoint。优化器canonical布局的1/16子分区和总预算须分别准入。
 
 [紧凑纤维资格/成本](evidence/core5-compact-fibers-20261029.md)覆盖相同布局的窗口VJP与单/双卡恢复。

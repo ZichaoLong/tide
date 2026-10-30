@@ -87,4 +87,4 @@ profiling. Mixed placement, resident lowering and weighted builtin factory entri
 need their own implementations and evidence. Live jobs/qualification status remain
 in STATUS, and the complete remaining function/backend scope remains in ROADMAP.
 
-Immutable CPU qualification: [714d5f9, 212 checks](evidence/core5-structured-20261027.md).
+Immutable CPU qualification: [e5c044d, 212 checks](evidence/core5-structured-20261027.md).

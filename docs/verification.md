@@ -86,3 +86,10 @@ clean-source [evidence](evidence/durable-records.md).
 These dependency-free control tools do not change graph execution or checkpoint
 value semantics. Qualification for this later control change is recorded
 separately from earlier frozen CPU worktrees in STATUS.
+
+## 历史清理的定向验证
+
+[迁移契约](history-migration.md)和`verify_history_mapping.py`核验完整旧/新Git对象，
+`tests/test_history_mapping.py`用独立构造的分叉/合并历史注入错误；
+`tests/test_retired_record_reader.py`核验显式外部归档和校验/覆盖拒绝。
+该门禁不认证数学/设备新功能。新CPU构建与安装消费者只记录实际定向范围。

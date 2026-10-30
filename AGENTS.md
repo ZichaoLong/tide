@@ -13,6 +13,10 @@
    an upstream working-tree draft or a new semantic version without the user's task.
 5. Preserve user changes and work only on the authorized branch. Reference
    repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only.
+6. Old evidence uses original commit IDs. Resolve them with
+   `python scripts/resolve_history_commit.py OLD_SHA`; see `docs/history-migration.md`.
+   Clone/fetch only `graph-execution-foundation` for the small development base.
+   Do not merge or fetch `graph-execution-foundation-old` into that checkout.
 
 ## Downstream collaboration
 
@@ -87,8 +91,9 @@
 - `docs/evidence/` contains small reviewed reports tied to exact source commits.
   Build products, raw logs, snapshots and checkpoints belong under ignored
   `artifacts/` or `build/`, never alongside source.
-  The single retired-record archive documented in `docs/artifact-retention.md` is
-  an explicit preservation exception, not a destination for new raw runs.
+  The retired-record archive is preserved only on the frozen old branch;
+  `docs/history-migration.md` documents explicit retrieval outside this checkout.
+  Preserve actual historical evidence identities; use the map to find equivalent code.
 - Preserve active-job inputs, unsaved changes and minimal reproducers for new
   unresolved issues. The user authorized retirement of historical experiment
   artifacts on 2026-10-12; old reports need not be re-audited by default. Follow

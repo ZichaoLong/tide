@@ -40,4 +40,4 @@ half raw经设备Cast精确拓宽，VJP声明identity；这是实际量化原始
 CPU逻辑时间距离/选择使用检查在 `test_resident_weighted_kv_full.py`；
 入口 `scripts/{build,verify}_device_control.py --checks weighted-residual weighted-kv-full`。
 
-固定源码资格见[386970a运行证据](evidence/core5-resident-kv-full-20261027.md)。
+固定源码资格见[7d86d9e运行证据](evidence/core5-resident-kv-full-20261027.md)。

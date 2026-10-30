@@ -160,7 +160,7 @@ NEW_CLIENT/consumer/weighted-resident-consumer --device=npu:0 --dtype=float32
 
 本轮审查修复的固定源码、独立反例与后端范围见[审查修复资格](evidence/core5-review-fixes-20261028.md)。
 
-局部槽压缩的[04b5215资格与性能](evidence/core5-compact-fibers-20261029.md)覆盖两套NPU完整图/训练/恢复。
+局部槽压缩的[b7e0a29资格与性能](evidence/core5-compact-fibers-20261029.md)覆盖两套NPU完整图/训练/恢复。
 设备程序资源也有限：NPU `TaskServices::begin`每服务创建DeviceProgram，每程序有persistent/launch两条流。
 D64在字节布局压缩后先遇到CANN207005/EE1023（Too many streams），未完成构造；
 张量/算子字节预算不等于厂商流、通知或任务缓冲预算。当前保留构造失败，不提交部分图。

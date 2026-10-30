@@ -23,6 +23,7 @@
 | 当前core-5性能设置、合格结果与严格失败 | [自然规模对照](docs/evidence/core5-natural-study-20261029.md)、[大文件与下一窗边界](docs/evidence/core5-checkpoint-budget-20261029.md) |
 | core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[节点放置](docs/resident-weighted-placement.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
 | CPU/CUDA/NPU 与常驻后端 | [加速器](docs/accelerators.md)、[设备控制与 GPU 验证](docs/device-control.md)、[常驻库](docs/resident-library.md) |
+| 历史清理、旧提交号、新检出 | [迁移与映射](docs/history-migration.md) |
 | 旧实验结论及产物保留规则 | [历史证据](docs/evidence/README.md)、[产物退役](docs/artifact-retention.md) |
 
 ## 支持边界

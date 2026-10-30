@@ -115,7 +115,7 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 
 ## 共同偏移下的实际响应
 
-`2da3f2c`/`0503593` 对 `[10000,9999]`、caps=`[1,1]`、lower=upper=`0.7`、tau=`1`
+`749276c`/`d1787e8` 对 `[10000,9999]`、caps=`[1,1]`、lower=upper=`0.7`、tau=`1`
 的手算解 `[0.7,0]` 曾在 FP32/FP64 都残差拒绝，原失败见
 [固定报告](evidence/core5-performance-transfer-20261028.md)。原因是从原坐标舍入乘子重建响应。
 
@@ -126,10 +126,10 @@ regional_threshold/constrained 通过该入口传入共同阈值。总量约束�
 [闭式反例](../tests/test_weighted_quad_offset.py)独立验收单个/多个内部响应、饱和/零坐标、
 评分/上限/总量/温度/共同阈值根及版本；resident checker 直接使用手算解与梯度，
 不借用 eager 求解器。这项修复不证明其他 D2048 或 D64 的严格差异都已解除。
-[07e56ca固定资格](evidence/core5-private-projection-20261028.md)记录CPU、NPU实机和CUDA构建分别通过的范围，
+[6612ed3固定资格](evidence/core5-private-projection-20261028.md)记录CPU、NPU实机和CUDA构建分别通过的范围，
 并保存原大型材料的残差拒绝；不得把手算共同偏移例的修复扩展成任意分数范围的数值保证。
 
-[474f9af固定资格及原材料复核](evidence/core5-local-allocation-factorized-kv-20261028.md)记录
+[137f530固定资格及原材料复核](evidence/core5-local-allocation-factorized-kv-20261028.md)记录
 实际失败行的独立Decimal、局部坐标/阈值修复、CPU/NPU及CUDA构建。原大图已能执行测量窗，
 但完整KV状态/训练仍有严格差异；局部分配通过不能解除这些完整模型限制。
 

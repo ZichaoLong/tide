@@ -43,5 +43,5 @@ FP32数值/FP32或FP16 raw存储的局部常驻域，设备窗口错误31、窗�
 入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-sum`。
 CPU helper、实际NPU与CUDA构建/GPU实机分别记录；局部Mem不认证完整图或retained训练。
 
-固定源码资格见[fea6fa7运行证据](evidence/core5-resident-kv-sum-20261027.md)。
-FP16 raw读取已有[db85db6固定资格](evidence/core5-resident-half-kv-read-20261028.md)；完整图、Upd与训练的资格沿各自契约记录。
+固定源码资格见[eb1a7af运行证据](evidence/core5-resident-kv-sum-20261027.md)。
+FP16 raw读取已有[e1b3cb9固定资格](evidence/core5-resident-half-kv-read-20261028.md)；完整图、Upd与训练的资格沿各自契约记录。

@@ -50,4 +50,4 @@ FP32 accelerator；局部tensor预算与vendor workspace独立准入，失败不
 全部参数与输入VJP、固定证据常值、零match尺度、保存版本和容量/非法输入拒绝。
 入口 `scripts/{build,verify}_device_control.py --checks weighted-describe`。
 
-固定源码资格见[cd576d2运行证据](evidence/core5-resident-describe-20261027.md)。
+固定源码资格见[c822c05运行证据](evidence/core5-resident-describe-20261027.md)。

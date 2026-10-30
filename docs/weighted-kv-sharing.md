@@ -48,7 +48,7 @@ State 批量 VJP 把准备张量作为显式独立操作数，保存原始版本
 实际合批的是私有线性映射，私有缓存写入并未合并。不同键的补充批见下节。
 候选写入、私有 KV 长度、选择、Full 和消息数量均不因本项减少。
 本项是 eager packed 路径，mixed/resident 与真实设备资格单独验收；
-[07e56ca资格和有限对照](evidence/core5-private-projection-20261028.md)给出CPU、mixed-c与独立后端证据，
+[6612ed3资格和有限对照](evidence/core5-private-projection-20261028.md)给出CPU、mixed-c与独立后端证据，
 包括未改善的性能和严格数值失败；当前交接见 [STATUS](STATUS.md)。
 
 ## 独立私有行的一阶边界
@@ -71,7 +71,7 @@ KV 的 `linear_rows` 接受各行向量及各自矩阵，实际前向为 BMM；�
 没有参考重算或状态补写。该接口本身不跨共享键合批。
 对应性能与后端资格必须由固定源码运行单独给出，单元测试不构成提速证据。
 
-[474f9af资格](evidence/core5-local-allocation-factorized-kv-20261028.md)另核对所有eager行的低秩形式、
+[137f530资格](evidence/core5-local-allocation-factorized-kv-20261028.md)另核对所有eager行的低秩形式、
 独立dense公式/完整Jacobian和训练恢复；中型单次收益有限，大图严格失败保留。
 这不扩展共享判据，也不等于resident已采用同一算术组织。
 
@@ -96,7 +96,7 @@ KV §1.2 的独立正接收行可使用 `prepare_independent_batch`：先保留�
 独立手算/Jacobian、不同epsilon、别名贡献、None/零、异形、预算和版本见
 [Python tests](../tests/test_weighted_independent_preparation.py)及 C++ `weighted_sharing.cpp`；
 完整图与恢复由既有KV/计算共享/训练检查继续验收。
-[f03e9be固定资格与有限对照](evidence/core5-independent-projection-20261029.md)记录CPU、纯PyTorch、
+[8d97020固定资格与有限对照](evidence/core5-independent-projection-20261029.md)记录CPU、纯PyTorch、
 Python/native及standalone NPU的独立结果，D64完整训练/逐值恢复及实际投影覆盖。
 本次三对完整计时未见明确加速；合批覆盖扩大不等于性能资格提升。
 

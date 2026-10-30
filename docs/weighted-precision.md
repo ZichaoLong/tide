@@ -52,8 +52,8 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 
 ## FP32 GDN 的补充严格见证
 
-固定1f1ec57扩大CPU资格时，原`test_recurrent_multistep_optimizer_and_restore`
-的HB/GDN FP32、默认AdamW在Python/native两条候选均失败；改动前1850434同样复现，
+固定0f22ebc扩大CPU资格时，原`test_recurrent_multistep_optimizer_and_restore`
+的HB/GDN FP32、默认AdamW在Python/native两条候选均失败；改动前16b2d12同样复现，
 并非本次共享准备顺序修复引入。前向记录及梯度通过原容差，第三次更新
 `nodes.5.kernel.conv.weight[0,2]`相差1.411885e-6，超过原参数容差。
 第一步两侧梯度约−2.00200247e-8和−2.00375894e-8；默认AdamW的epsilon为1e-8，
@@ -66,16 +66,16 @@ Python `weighted/normalization.py` 与独立 C++ `weighted_normalization.cpp` �
 `test_weighted_half_normalization.py`与C++ literal Jacobian同时覆盖FP16/FP32、零/小量、
 scale广播、None/连接零、版本和一阶边界，并要求FP32前向逐值不变。
 这是同一实值函数的一阶导数重排，不是有限迭代导数、HST或二阶承诺；
-原GDN完整AdamW/恢复用例仍使用原参数、输入及容差。[ad6d1e7固定资格](evidence/core5-fp32-normalization-20261028.md)
+原GDN完整AdamW/恢复用例仍使用原参数、输入及容差。[9e6dc52固定资格](evidence/core5-fp32-normalization-20261028.md)
 为CPU453 passed/2个原FP16 strict xfail，原两项FP32 GDN完整AdamW/恢复通过；
 standalone NPU四组及纯Python NPU两组相关训练/恢复通过，CUDA构建通过。
-旧1f1ec57失败记录不改；该修复不解除FP16、其他图/数值域或双卡异步边界。
+旧0f22ebc失败记录不改；该修复不解除FP16、其他图/数值域或双卡异步边界。
 
 [算术边界诊断](weighted-arithmetic-diagnostics.md)提供显式CPU分段FP64探针、
 逐步梯度/参数误差和精确续接检查。探针不是公共精度策略；部分误差改善不解除D64原FP32失败。
 整条显式FP64、局部算子干预与原FP32分别记录，不静默替换默认执行。
 
-[非GPU边界补充](evidence/core5-nongpu-boundaries-20261029.md)以固定aadd3b4诊断确认：
+[非GPU边界补充](evidence/core5-nongpu-boundaries-20261029.md)以固定e959067诊断确认：
 外层FP64反向汇合并不足以解除D64；原FP32反馈图的梯度/动量槽仍有严格差异，
 各调度自身逐值恢复通过。同材料显式CPU FP64四窗完整训练通过，FP16 GDN原AdamW失败保持。
 这些是有限数值域的证据，没有采用新的生产dtype或改变optimizer。

@@ -31,4 +31,4 @@ NPU对应aclnnSin/aclnnCos。此路径不在主机计算真实时间相位。
 
 入口 `scripts/{build,verify}_device_control.py --checks weighted-rotary`。
 
-固定源码资格见[1eb4b72运行证据](evidence/core5-resident-rotary-20261027.md)。
+固定源码资格见[09a2518运行证据](evidence/core5-resident-rotary-20261027.md)。

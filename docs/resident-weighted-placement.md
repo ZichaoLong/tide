@@ -76,5 +76,5 @@ CANN任务缓冲区，不改变区域可见性、梯度归约或窗口边界；C
 覆盖五记忆、同秩HB、非对齐图、反馈/重复边、Read初态/旧态/候选态、全区域Attention、
 来源变换、跨owner共享参数、全部节点远端放置和原前向关闭后的反向。检查真实反向节点的
 raw/Full/参数bank设备。独立CPU Greedy/autograd提供完整字段和梯度对照，不能替代局部公式锚点。
-上述窗口检查已在0155b0f固定运行库通过；FP16反向、公共训练、optimizer与跨放置训练checkpoint
+上述窗口检查已在0ae9b84固定运行库通过；FP16反向、公共训练、optimizer与跨放置训练checkpoint
 由[公共训练放置契约](resident-weighted-training.md#单样本节点放置与发布)独立验收，结果见[固定窗口反向/公共训练资格](evidence/core5-weighted-node-training-20261028.md)。

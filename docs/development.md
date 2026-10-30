@@ -4,6 +4,9 @@
 先读 [AGENTS](../AGENTS.md)、[STATUS](STATUS.md)、[执行契约](execution-flows.md)。
 当前采用的教材与实现域从 [语义索引](semantic-map.md) 进入。
 
+新检出使用`git clone --single-branch --branch graph-execution-foundation git@github.com:ZichaoLong/tide.git`。
+旧工作区迁移、旧提交号查询和归档按需读取见[历史迁移](history-migration.md)；不要将旧分支合回新基座。
+
 ## 无设备的接续检查
 
 在仓库根目录：

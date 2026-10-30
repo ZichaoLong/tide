@@ -3,7 +3,7 @@
 [固定源码有限对照](evidence/core5-weighted-performance-20261028.md)记录24配置22通过、两项FP32反馈严格失败，
 分别给出CPU、Python/native NPU与standalone结果、profile及测量缺口。它不认证所有模型/规模或CUDA真机。
 
-[f72a6cc启动/内存补充](evidence/core5-weighted-observation-20261028.md)另验四个新进程和SDK allocator，不改写原24项测量。
+[50a1bd3启动/内存补充](evidence/core5-weighted-observation-20261028.md)另验四个新进程和SDK allocator，不改写原24项测量。
 
 [参数匹配及经验迁移](evidence/core5-performance-transfer-20261028.md)补五族预算、实际D2048材料、
 共享存储/复制改动、同材料前后对照和新严格失败。参数数量相近不代表函数或实际工作量相同。
@@ -49,7 +49,7 @@ Python及standalone均可显式检查磁盘解码后的新owner下一窗口。�
 实际只核对了更新后的参数，不能据此推断当时已验证动量槽；历史报告保留原始记录。
 它不向候选提供选定序列、批次或容量。严格失败保留为失败，不能在该配置上宣称等价加速。
 此有限对照不代替局部手算VJP、独立根、共享参数、checkpoint及完整设备资格。
-验证失败时也保留已完成的`metrics.json`；0503593起同时保留在最终`result.json`。
+验证失败时也保留已完成的`metrics.json`；d1787e8起同时保留在最终`result.json`。
 这些时间是失败候选的成本观察，不能用来宣称等价加速。
 
 示例（干净固定源码，匹配本机环境与持久任务规范）：
@@ -128,8 +128,8 @@ standalone消费者在fixture读取、模型构造、warmup、每个measurement�
 保留五项通过、D64两项严格数值失败和一项构造容量拒绝；自身精确恢复与独立正确性分别判定。
 
 自然参数规模、可配置局部候选及统一执行/结果目录从[core5-study](core5-study.md)进入。
-[e50自然规模对照](evidence/core5-natural-study-20261029.md)给出实际拓扑、维度、稀疏预算、
-客户端/CPU/mixed/resident、真实packing及严格结果；[b255大文件复验](evidence/core5-checkpoint-budget-20261029.md)
+[878a5a4自然规模对照](evidence/core5-natural-study-20261029.md)给出实际拓扑、维度、稀疏预算、
+客户端/CPU/mixed/resident、真实packing及严格结果；[9bfabbb大文件复验](evidence/core5-checkpoint-budget-20261029.md)
 另验5.25GB保存/加载和下一窗数值失败。两者均不扩张未测配置或8B/16B的吞吐资格。
 三个client均保留显式FP16、FP32 scoring/optimizer master、loss scale=1；半精度使用既有
 atol=1e-3/rtol=2e-2，整数/路由/连接关系与同配置恢复仍严格核对。

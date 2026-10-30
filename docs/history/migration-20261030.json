@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-30",
+  "repository": "git@github.com:ZichaoLong/tide.git",
+  "branch": "graph-execution-foundation",
+  "old_branch": "graph-execution-foundation-old",
+  "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+  "filtered_head": "0cc8811af02e43ef1365b4f5a4cc797575196438",
+  "map": {
+    "file": "commit-map-20261030.tsv",
+    "sha256": "94725a1a6f897a846d08d65f64a8f25acc699553ff8945fb001ec34e0d466bfc",
+    "commits": 716,
+    "rewritten": 181
+  },
+  "removed": {
+    "path": "docs/evidence/archive/retired-records-20261012.jsonl.gz",
+    "blob": "e50ba281c4bf7f1617b9115c161079f3450c9ae9",
+    "bytes": 40407191,
+    "sha256": "8d5a564fcc6cbb80dada6f978585931284ed3972020bde6f9eb393ea6c4d7194"
+  },
+  "filter": {
+    "tool": "git-filter-repo",
+    "version": "2.47.0",
+    "arguments": [
+      "--path",
+      "docs/evidence/archive/retired-records-20261012.jsonl.gz",
+      "--invert-paths",
+      "--prune-empty",
+      "never",
+      "--prune-degenerate",
+      "never",
+      "--preserve-commit-hashes",
+      "--replace-refs",
+      "delete-no-add"
+    ]
+  },
+  "scope": "Remove this archive only, preserving code, commit count, parent topology, author/committer metadata and original messages. Historical evidence keeps actual old identities."
+}

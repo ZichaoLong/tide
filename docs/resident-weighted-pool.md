@@ -35,4 +35,4 @@ max/min在W=1处分别使用既有clamp的导数1；全零Attention为显式常�
 入口 `scripts/{build,verify}_device_control.py --checks weighted-pool`。当前为FP32局部组件；
 NPU实测、CUDA构建、GPU真机及完整图分别记录。
 
-固定源码资格见[afe7b5e运行证据](evidence/core5-resident-pool-20261027.md)。
+固定源码资格见[bfb3def运行证据](evidence/core5-resident-pool-20261027.md)。

@@ -113,4 +113,4 @@ standalone `cpp/test/weighted.cpp` 有自己的手算、共享根导数、大时
 原生定向开发检查已通过；不可变资格与证据状态见 STATUS。
 缓存初态 roots、不同内容/描述宽度、多头及每头独立部分 RoPE 有专门 native 检查。
 
-安装配置检查接口固定资格见 [ce21a83 证据](evidence/core5-weighted-binding-20261028.md)。
+安装配置检查接口固定资格见 [8ce4195 证据](evidence/core5-weighted-binding-20261028.md)。

@@ -46,8 +46,8 @@ left/right，按真实 bank 归约所有使用者。参数源或原内容后续�
 构建/运行入口 `scripts/{build,verify}_device_control.py --checks weighted-kv-update`。
 当前数值域为FP32，raw存储为FP32/FP16。CPU helper、NPU 实际执行、CUDA 构建与 GPU 真机分别记录。
 
-固定源码资格见[681a7e9运行证据](evidence/core5-resident-kv-update-20261027.md)。
-FP16 raw更新已有[69bf4f0固定资格](evidence/core5-resident-half-kv-update-20261028.md)；完整half图与训练由[公共训练owner](resident-weighted-training.md)独立验收。
+固定源码资格见[d9ccc98运行证据](evidence/core5-resident-kv-update-20261027.md)。
+FP16 raw更新已有[eb231a1固定资格](evidence/core5-resident-half-kv-update-20261028.md)；完整half图与训练由[公共训练owner](resident-weighted-training.md)独立验收。
 
 ## 保留低秩因子的设备求值
 
@@ -59,5 +59,5 @@ FP16 raw更新已有[69bf4f0固定资格](evidence/core5-resident-half-kv-update
 现有保守预算继续生效，不凭估算收益扩大准入；实际retained buffers、完整窗口/训练与
 checkpoint、单/双设备和两dtype由对应固定源码资格验收，旧报告不认证此增量。
 
-上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+上述resident增量与实际消费者的[57308e7固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。

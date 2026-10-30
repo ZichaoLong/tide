@@ -56,4 +56,4 @@ FP16旧态精确拓宽到FP32，完整Update完成后只在最终raw存储处舍
 
 这部分仍是局部数值组件；全图在线就绪/选择/推进、retained训练、精确图checkpoint、peer与性能另行验收。
 
-固定源码资格见[6e2ecb7运行证据](evidence/core5-resident-recurrent-20261028.md)。
+固定源码资格见[ace2132运行证据](evidence/core5-resident-recurrent-20261028.md)。

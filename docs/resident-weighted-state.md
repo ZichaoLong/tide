@@ -66,4 +66,4 @@ w>1 的导数为零但仍连接。此 VJP 只反向结构/缓存作用；数值 
 
 当前开发结果及固定资格按 STATUS/证据索引记录。该层不是整个记忆数值函数，也不构成完整图训练/checkpoint或常驻性能证据。
 
-FP32固定源码资格见[cb68d91运行证据](evidence/core5-resident-raw-20261027.md)。FP32/FP16组件扩展见[2e4d445固定资格](evidence/core5-resident-half-primitives-20261028.md)。
+FP32固定源码资格见[1c436c5运行证据](evidence/core5-resident-raw-20261027.md)。FP32/FP16组件扩展见[122202f固定资格](evidence/core5-resident-half-primitives-20261028.md)。

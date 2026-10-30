@@ -22,6 +22,7 @@
 | 常驻硬件后端 | `tools/device_online/control_flow.*`, `program.*`, `ascendc/`, `cuda/` | CANN 与 CUDA 独立控制流、算子/内核提交、完成通知及 P2P；共享语义不等于共享驱动实现 |
 | 参数与持久化 | `checkpoint*.py`, `token_checkpoint.py`; `cpp/src/parameters.cpp`, `optimizer.cpp`, `checkpoint*.cpp` | 别名归属、值保存/恢复、显式梯度边界；格式版本见 semantics |
 | 下游协作 | [协作契约](downstream-contract.md)、`templates/downstream/`、`examples/consumer_core5/` | 固定依赖、请求/交付/验收互链；应用训练/checkpoint在实验侧，基座公共接口不依赖模板 |
+| 历史迁移与源码身份 | [迁移规则](history-migration.md)、`scripts/history_map.py`、`verify_history_mapping.py` | 旧→新提交映射、独立逐提交验证、单分支检出；保留历史实测身份 |
 | 诊断与产物生命周期 | [复现导航](reproduction.md)、[保留规则](artifact-retention.md) | 原问题→生成器/小输入→诊断代码→独立检查→证据；原始运行目录不是开发依赖 |
 | 消费者与验证 | `examples/`, `tools/online_bench/`, `tests/`, `cpp/test/`, `scripts/` | 独立调用、公式/差分测试、构建、资格、有限性能入口 |
 

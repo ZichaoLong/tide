@@ -1,5 +1,7 @@
 # 性能经验与适用条件
 
+本页源码定位使用清理后的提交号；历史实测身份仍在原报告中，见[迁移与映射](history-migration.md)。
+
 本页保存可复用的经验，当前工作安排只在[ROADMAP](ROADMAP.md)。每条经验须给出
 固定源码、输入/计时条件、独立正确性证据和实际结果；源码推断、profile假设、容量估算、
 实测内存与吞吐结论分别记录。后续实现产生的正、负结果均更新此页并链接小型固定证据。
@@ -33,7 +35,7 @@ fractal-latcarf 固定 `4883483dcd3f4e73bfceecb4cba877d87063cefd` 的
 
 ## Core-5 已有观察
 
-[ceae7bf有限测量](evidence/core5-weighted-performance-20261028.md)只覆盖宽4/32、3/8节点、
+[c84556d有限测量](evidence/core5-weighted-performance-20261028.md)只覆盖宽4/32、3/8节点、
 单卡FP32全活动发送；HB/KV medium有102604个可训练参数，SSD为116220。
 参数按真实别名去重；这不是旧core-3的94.68亿/175.21亿规模。
 resident存在逐节点队列填充、物理行多于实际作用、窗口反向程序构造及head/归约开销。
@@ -45,7 +47,7 @@ resident存在逐节点队列填充、物理行多于实际作用、窗口反向
 
 ## 本轮迁移与负结果
 
-实现`2da3f2c`、诊断/设施`0503593`的固定证据在
+实现`749276c`、诊断/设施`d1787e8`的固定证据在
 [参数匹配与迁移报告](evidence/core5-performance-transfer-20261028.md)。数学版本没有变化。
 
 | 经验 | 本次实施、证据与适用条件 |
@@ -57,19 +59,19 @@ resident存在逐节点队列填充、物理行多于实际作用、窗口反向
 | 初始化和材料成本需要独立观察 | 移除随后废弃的旧随机权重初始化；v2不展开大型JSON。92.62亿参数真实材料可构造，导出约366s、C++构造约184s、RSS约46.93GiB；仍不是训练峰值或吞吐资格 |
 | 匹配参数必须匹配口径 | 旧core-3减去embedding/head后匹配主体，通过真实FFN宽度而非无用权重；同参数数量不意味着同函数、同激活量或同训练成本。五族的key/value/FFN尺寸和误差都保留 |
 | 稀疏发送不等于所有计算消失 | HB64的实际候选/Full由32/32变为20/16；ranked64即使k=区域大小也只有344/479 Full。局部候选、消息、物理行、反向和optimizer各自计数，严格失败候选不参与等价加速声明 |
-| 打包接口不保证形成大矩阵批 | 2da3f2c的ranked64 profile仍有479次State、最大State batch=1，22905次mm；调度/Query/装配/反向成本显著。后续07e56ca形成真实私有BMM，但适用组只覆盖部分节点，见下节；不能仅合并buffer或按内核数猜瓶颈 |
-| 验证失败也应保存测量事实 | 原ranked64 Python的result未附metrics，但独立metrics.json已持久保存；0503593让最终失败记录也保留同一metrics列表。失败时间可以解释成本，不能认证正确性或胜出 |
+| 打包接口不保证形成大矩阵批 | 749276c的ranked64 profile仍有479次State、最大State batch=1，22905次mm；调度/Query/装配/反向成本显著。后续6612ed3形成真实私有BMM，但适用组只覆盖部分节点，见下节；不能仅合并buffer或按内核数猜瓶颈 |
+| 验证失败也应保存测量事实 | 原ranked64 Python的result未附metrics，但独立metrics.json已持久保存；d1787e8让最终失败记录也保留同一metrics列表。失败时间可以解释成本，不能认证正确性或胜出 |
 | 大profile本身可能昂贵 | 单个ranked64 trace约818MiB、profile RSS约16.25GiB；应优先较小代表案例，采集/解析预算与真实训练峰值分开。profile独立进程不进入吞吐对照 |
-| 数值规模必须独立检验 | 旧/新同材料D64都严格失败；新FP32梯度和更新参数也有差异，显式FP64两步诊断通过。当时quad大共同偏移的手算反例在FP64也拒绝，随后07e56ca修复这个机制；大D原材料仍拒绝，不能归结为dtype不够或删除残差守卫 |
-| 验证子进程也要隔离scratch | NPU产生kernel_meta令并行CUDA构建最终源码身份检查拒绝。0503593把设备子进程cwd设为输出目录，保留原失败并独立核验同内容构建；不放宽源码洁净检查或掩盖新文件 |
+| 数值规模必须独立检验 | 旧/新同材料D64都严格失败；新FP32梯度和更新参数也有差异，显式FP64两步诊断通过。当时quad大共同偏移的手算反例在FP64也拒绝，随后6612ed3修复这个机制；大D原材料仍拒绝，不能归结为dtype不够或删除残差守卫 |
+| 验证子进程也要隔离scratch | NPU产生kernel_meta令并行CUDA构建最终源码身份检查拒绝。d1787e8把设备子进程cwd设为输出目录，保留原失败并独立核验同内容构建；不放宽源码洁净检查或掩盖新文件 |
 
 这些改动处理了可证明的复制、冻结存储、共享低秩和初始化冗余；当时未共享KV的稠密组合矩阵
-随后由474f9af消除，见下节。逐节点物理行与窗口反向程序构造仍有余地。当前证据不支持“低垂果实已经基本耗尽”；后续改进
+随后由137f530消除，见下节。逐节点物理行与窗口反向程序构造仍有余地。当前证据不支持“低垂果实已经基本耗尽”；后续改进
 继续以独立数值资格、实际工作量和完整调用结果决定保留与否。
 
 ## 实际私有矩阵批与数值修复后的观察
 
-固定实现07e56ca的[独立资格和有限对照](evidence/core5-private-projection-20261028.md)
+固定实现6612ed3的[独立资格和有限对照](evidence/core5-private-projection-20261028.md)
 承接上述profile，仍未扩展数学版本、容差或默认算法。
 
 | 经验 | 本次实施和验收边界 |
@@ -86,8 +88,8 @@ resident存在逐节点队列填充、物理行多于实际作用、窗口反向
 
 ## 局部数值修复与全部 eager 低秩
 
-固定[474f9af报告](evidence/core5-local-allocation-factorized-kv-20261028.md)把实际失败、局部独立解、
-完整模型与有限性能分开。b62f2db的阶段记录修正有自己的固定资格，不混入上述测量。
+固定[137f530报告](evidence/core5-local-allocation-factorized-kv-20261028.md)把实际失败、局部独立解、
+完整模型与有限性能分开。25d535f的阶段记录修正有自己的固定资格，不混入上述测量。
 
 | 经验 | 本次实施和证据 |
 | --- | --- |
@@ -97,7 +99,7 @@ resident存在逐节点队列填充、物理行多于实际作用、窗口反向
 | 低秩消冗应覆盖所有实际路径 | 标量、独立packed和共享eager行都用base@x+U@(V@x)，独立dense公式/Jacobian维持数学锚点。resident的组合矩阵/tape仍另有实现；没有借共享参数许可共享不同输入的计算 |
 | 单次小收益与低成本优化尚存可以同时成立 | CPU中型366.831→363.974ms，NPU mixed累计2189.634→2145.125ms；均完整通过但不足以证明稳定加速。mixed峰值allocated反增372736字节，不能把结束时live略降解释成峰值改善 |
 | 原拒绝解除后仍须完整验证 | 约92.62亿参数B1推理完成130.351s窗口，随后keys严格失败；D64训练同样失败。运行到计时结束、局部正确、完整等价及大型吞吐是不同验收结论 |
-| 进度要在昂贵阶段开始前持久化 | standalone此前只在窗口结束时写结果，外部中断无法准确定位阶段。b62f2db在计时外落盘phase/window，FIFO中断与五族材料共6项固定检查通过；最后running记录仍须配合外层job终态 |
+| 进度要在昂贵阶段开始前持久化 | standalone此前只在窗口结束时写结果，外部中断无法准确定位阶段。25d535f在计时外落盘phase/window，FIFO中断与五族材料共6项固定检查通过；最后running记录仍须配合外层job终态 |
 | profile范围应服从问题与预算 | medium独立profile约115.43MiB、RSS约2.55GiB并完整核对通过；1394次mm/288次bmm只是该图工作量，不与旧大图次数直接算收益。采集/分析不进入吞吐样本 |
 
 CPU746项相关资格、NPU九项加eager训练恢复及CUDA构建已验；CUDA真机、大图严格正确性、
@@ -106,7 +108,7 @@ CPU746项相关资格、NPU九项加eager训练恢复及CUDA构建已验；CUDA�
 
 ## 共享准备顺序、训练观测和显式精度
 
-固定实现1f1ec57的[资格与同材料对照](evidence/core5-stable-preparation-precision-20261028.md)
+固定实现0f22ebc的[资格与同材料对照](evidence/core5-stable-preparation-precision-20261028.md)
 保留CPU扩大门禁的572 passed/2 failed，失败没有改成通过。
 
 | 经验 | 本轮实现、验证与适用条件 |
@@ -123,7 +125,7 @@ resident组合矩阵及窗口反向构造仍可继续改善；没有低成本优
 
 ## 近零梯度与归一化反向的工程经验
 
-[ad6d1e7资格](evidence/core5-fp32-normalization-20261028.md)将GDN/SSD的FP32一阶收缩改为
+[9e6dc52资格](evidence/core5-fp32-normalization-20261028.md)将GDN/SSD的FP32一阶收缩改为
 先用归一化向量收缩再除分母，前向逐值不变。独立实数Jacobian、完整调度、原AdamW见证和恢复
 一起通过；仅观察局部梯度容差不足以判断默认AdamW的更新误差。该改动没有提高dtype或改变epsilon，
 也没有宣称任意接近零的梯度都获得相同保障。FP16原严格失败继续保留。
@@ -134,7 +136,7 @@ resident组合矩阵及窗口反向构造仍可继续改善；没有低成本优
 
 ## D64算术边界与跨步误差
 
-[e75e1f5探索/d8f7132固定复现](evidence/core5-arithmetic-isolation-20261029.md)提供新的负结果：
+[5fa9dd6探索/15ac11c固定复现](evidence/core5-arithmetic-isolation-20261029.md)提供新的负结果：
 
 | 经验 | 实际观察及适用条件 |
 | --- | --- |
@@ -149,7 +151,7 @@ resident组合矩阵及窗口反向构造仍可继续改善；没有低成本优
 
 ## 外层汇合精度和默认异步的有限退出证据
 
-[aadd3b4定向证据](evidence/core5-nongpu-boundaries-20261029.md)中，保持局部VJP原dtype、
+[e959067定向证据](evidence/core5-nongpu-boundaries-20261029.md)中，保持局部VJP原dtype、
 仅在外层汇合用FP64累加，D64仍有首步2个/第二步9个梯度张量和动量槽超容差。
 这不证明所有宽精度反向都无效；它证明该具体外层修改不足，不能作为生产修复或性能优化。
 内部私有VJP图仍原引擎，逐值恢复通过与跨调度一致性分别检验。
@@ -163,7 +165,7 @@ SDK旧affine见证则在当前相同C++/binary身份核对后通过，说明旧�
 
 ## 独立输入矩阵批的覆盖与完整成本
 
-[f03e9be固定资格/有限对照](evidence/core5-independent-projection-20261029.md)把相同函数/输入的
+[8d97020固定资格/有限对照](evidence/core5-independent-projection-20261029.md)把相同函数/输入的
 计算复用与不同输入的真实BMM分开。局部8MiB预算、每行epsilon/参数和None/零根均有独立锚点；
 CPU、两套NPU ABI及训练恢复分别通过，不能用旧共享组的资格代替新增路径。
 
@@ -182,7 +184,7 @@ profiling开销不纳入吞吐，也不作为普通训练内存。后续更有�
 
 ## 连续局部算术与完整桥接的停止依据
 
-[bdd7f6c固定隔离](evidence/core5-boundary-isolation-20261029.md)保存原D2048真实来源/私有参数：
+[1ec975b固定隔离](evidence/core5-boundary-isolation-20261029.md)保存原D2048真实来源/私有参数：
 分别改变source与private批量化只有3坐标失败，组合链有194坐标失败；误差必须沿实际算术链观察。
 标量FP32与局部FP64也有289坐标失败。连续局部FP64再cast改善局部，不等于全图FP32与旧标量一致；
 在没有公共整段算术/VJP方案前重复大图不能补充关键证据。
@@ -192,7 +194,7 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 
 ## 单行VJP、异形传输与常驻反向的实测边界
 
-[15c3e65有限对照](evidence/core5-boundary-performance-20261029.md)固定输入、原精度/容差、
+[57308e7有限对照](evidence/core5-boundary-performance-20261029.md)固定输入、原精度/容差、
 完整SGD边界和真实梯度/槽；新源码另有计时外磁盘换owner逐值恢复。每配置仅一次独立流程。
 
 | 经验 | 实际结果及下一步条件 |
@@ -204,7 +206,7 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 | 公开解码必须遵循物理owner布局 | trainable含全部别名，offset/槽仅canonical物理owner且无尾哨兵；用名字列表长度推断槽数会错。fake布局测试后仍要真实消费者核对梯度、SGD、master和恢复 |
 | 总预算不能替代子分区准入 | D64master布局最低36.32MB，默认optimizer预算的1/16仅16MiB；显式1GiB optimizer预算只解决该子分区。旧resident仍在Aggregate scratch拒绝，不等于容量检查错误或可以静默加预算 |
 | 恢复精确不替代独立正确性 | D64单/双NPU显式blocking均自身恢复通过，但node89 keys同一坐标超原容差；15.685/16.840s为失败候选实际成本，不是合格吞吐或双卡加速 |
-| 纤维容量应由物理消息界定 | 旧每节点按全局queue展开来源矩阵，放大了scratch；合法固定时间每物理边/端口最多一个原子。[04b5215](evidence/core5-compact-fibers-20261029.md)已按物理入度缩小局部槽，SrcClass不用于合并/缩小，global indices与反向祖先保持；两套NPU完整资格通过 |
+| 纤维容量应由物理消息界定 | 旧每节点按全局queue展开来源矩阵，放大了scratch；合法固定时间每物理边/端口最多一个原子。[b7e0a29](evidence/core5-compact-fibers-20261029.md)已按物理入度缩小局部槽，SrcClass不用于合并/缩小，global indices与反向祖先保持；两套NPU完整资格通过 |
 
 本次CPU profile约721.2MiB、219秒、RSS14.21GiB；NPU profile39.16秒。它们不是吞吐样本。
 保存负结果与未解除条件，后续不以更多配置扫描寻找有利结果，不声称低成本优化已经耗尽。
@@ -212,7 +214,7 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 
 ## 紧凑局部纤维与执行资源数量
 
-[04b5215固定证据](evidence/core5-compact-fibers-20261029.md)在相同medium材料、容量、
+[b7e0a29固定证据](evidence/core5-compact-fibers-20261029.md)在相同medium材料、容量、
 工作量与SGD边界下通过完整记录/梯度/槽和磁盘恢复；D64保留新的构造失败。
 
 | 经验 | 实测及可复用结论 |
@@ -227,16 +229,16 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 
 ## 自然维度、区域合批和大文件
 
-[372/e50消费者资格](evidence/core5-study-clients-20261029.md)、
-[e50有限测量](evidence/core5-natural-study-20261029.md)和
-[b255文件预算复验](evidence/core5-checkpoint-budget-20261029.md)保留本轮正、负结果。
+[372/878a5a4消费者资格](evidence/core5-study-clients-20261029.md)、
+[878a5a4有限测量](evidence/core5-natural-study-20261029.md)和
+[9bfabbb文件预算复验](evidence/core5-checkpoint-budget-20261029.md)保留本轮正、负结果。
 
 | 经验 | 本轮结果及可复用条件 |
 | --- | --- |
 | 相近参数量不代表相同工作 | 两个约4.2M FC在B2/P2下，候选16→64而Full均8；三客户端的同模型CPU FP64均完整通过，native约.086/.177s，Python约.120/.331s。跨模型改变了维度/图/实际稀疏性，不能称等价加速或只归因于节点遍历 |
 | 有批量能力不等于大batch吞吐 | LH1.051B B1/P1两窗通过，1.439/1.193s；region/state最大批1，私有投影批8。必须同时记录候选115/114、Full27/22、消息155/133，不将参数规模或发送稀疏等同计算减少 |
 | 优化问题未必是当前主耗时 | HB medium NPU实际region64帧/16调用、batch4；profile AllocationBatchVjp inclusive约21ms，Query VJP约696ms，大量索引、标量/传输和小提交。完整数值失败保留，profile只能定位该失败候选；先改善测到的边界，不凭公式复杂度决定重核优先级 |
-| 精度参考必须匹配存储/算术边界 | resident half存储仍有FP32中间算术/伴随/master；复用独立storage参考并先核对dtype，不能把中间值转half或放宽容差。e50 Python half/单卡/双卡和SDK实际消费者分别通过 |
+| 精度参考必须匹配存储/算术边界 | resident half存储仍有FP32中间算术/伴随/master；复用独立storage参考并先核对dtype，不能把中间值转half或放宽容差。878a5a4 Python half/单卡/双卡和SDK实际消费者分别通过 |
 | 验收也要管理owner生命周期 | resident恢复检查先保存实际CPU状态与下一窗，再关闭旧owner并恢复新owner，避免无意义的双份设备程序/参数bank；精确解码和完整下一窗比较保持，成本在计时外 |
 | 大尺度完整训练比前向更敏感 | FC/HB 1B CPU FP64仍在少量SGD槽/梯度坐标超原容差，自身恢复不代表调度之间等价。保持原严格结果，不能由前向、参数或局部公式通过外推多步训练 |
 | 文件预算不是模型上限或内存峰值 | native原4GiB限制在1B+SGD槽时触发；显式预算后5.25GB文件存/读成功。格式不变，仍需承担整体CPU buffer和嵌套副本；后续原owner梯度非有限是另一边界，不能归因于解码或称完整续接通过 |
@@ -248,7 +250,7 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 
 ## 配置覆盖与证据的校验
 
-[0f4506d修正资格](evidence/core5-coverage-correction-20261030.md)没有新性能数据，记录以下可复用的设施经验：
+[f456160修正资格](evidence/core5-coverage-correction-20261030.md)没有新性能数据，记录以下可复用的设施经验：
 
 - 用例名称不能证明结构覆盖。原FC depth=1没有层间边，mixed也没有中间模块；新增断言检查实际边、rank、模块族与执行事件，再验证完整训练和恢复。
 - 全图配置不能取第一节点代替。KV窗口可能同时含0和非零，来源分类也不同于参数共享；从所有节点/区域生成分组事实，并用独立预期值校验关键配置。
@@ -257,7 +259,7 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 
 ## 下游安装与恢复的验证边界
 
-[36113ce安装消费者资格](evidence/downstream-contract-20261030.md)是工程/正确性证据，没有性能增益结论：
+[e17f9ea安装消费者资格](evidence/downstream-contract-20261030.md)是工程/正确性证据，没有性能增益结论：
 
 - 同进程新owner恢复不等于新进程恢复。小型FC/KV FP32的native workers2在独立两步对照后，跨进程仍有输入/参数梯度与SGD槽逐值差异；只关闭autograd多线程没有解决。worker1是另一显式配置，不称原问题修复。
 - 线程与反向引擎策略也属于执行身份。修改packing、共享计算或并行构图后，除完整梯度核对外还需验证真实应用的跨进程恢复，不能只看最终参数或loss。

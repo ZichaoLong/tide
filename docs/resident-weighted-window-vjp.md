@@ -68,4 +68,4 @@ NPU的`weighted_copy`对已校验、不重叠的静态bool目标视图使用连�
 `weighted_copy_check.cpp`以独立CPU索引验证18个owner、每个3次提交的布局复制，
 包括大于2^54的int64、非连续源/目标、循环字段连接位、false覆盖true和浮点字段；完整窗口矩阵仍需单独通过。
 
-固定2622e60的NPU/CPU/CUDA构建资格与保留失败见[证据](evidence/core5-resident-weighted-window-20261028.md)；后续保留训练不由此推断完成。
+固定e028323的NPU/CPU/CUDA构建资格与保留失败见[证据](evidence/core5-resident-weighted-window-20261028.md)；后续保留训练不由此推断完成。

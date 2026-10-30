@@ -1,8 +1,10 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+本页源码定位使用清理后的提交号；历史实测身份仍在原报告中，见[迁移与映射](history-migration.md)。
+
 [core-5候选/配置/拓扑/维护入口](core5-study.md)连接公共planning、真实材料化与有限目录。
 [配置事实](../python/tidegraph/planning/facts.py)从全部节点/区域配置生成窗口、尺寸、来源分类与共享摘要；
-[覆盖检查](../tests/test_core5_coverage.py)与[代表训练](../tests/test_core5_recipe_training.py)核验实际结构和模块，测试数量不替代定义域覆盖。[0f4506d资格](evidence/core5-coverage-correction-20261030.md)及[逐配置索引](evidence/core5-index.json)给出实际小图范围。
+[覆盖检查](../tests/test_core5_coverage.py)与[代表训练](../tests/test_core5_recipe_training.py)核验实际结构和模块，测试数量不替代定义域覆盖。[f456160资格](evidence/core5-coverage-correction-20261030.md)及[逐配置索引](evidence/core5-index.json)给出实际小图范围。
 [自然维度有限测量](evidence/core5-natural-study-20261029.md)单列完整通过、严格失败和实际区域合批；
 [native文件预算](native-graph-checkpoint.md)与[固定资格](evidence/core5-checkpoint-budget-20261029.md)
 对应精确raw状态持久化，预算改变不改变数学或codec格式。查询历史审阅证据不执行参考补写。
@@ -126,7 +128,7 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [不同输入矩阵批](weighted-kv-sharing.md#不同输入与基座的矩阵批)保持KV §1.2逐行参数/epsilon与独立根，
 由 `kv_independent_batch` / `prepare_independent_kv` 和 `test_weighted_independent_preparation` 对应，
 不是扩大计算复用判据；预算、完整图与实际运行资格分列。
-[f03e9be独立资格/有限对照](evidence/core5-independent-projection-20261029.md)记录CPU与两套NPU ABI、
+[8d97020独立资格/有限对照](evidence/core5-independent-projection-20261029.md)记录CPU与两套NPU ABI、
 D64 FP64完整梯度/optimizer/精确恢复及未见明确加速的单次测量；原FP32边界不改。
 [带权执行位置](weighted-placement.md)对应结构化 Read 临时快照、control/selection 分置、精度与独立转移 VJP。
 [带权设备检查](weighted-device-validation.md)对应实际 mixed 执行、精确 int64 排序、独立状态根、跨 owner 续接及候选 profile。
@@ -228,12 +230,12 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 exact-map VJP和拒绝阈值不变；`test_weighted_quad_scale`保留两份实际D2048失败行并独立手算，
 `test_weighted_large_shift`核对共同阈值消去，`diagnose_allocation_failure.py`使用独立Decimal。
 失败快照的公开结构、行号/节点/int64时间和编码由[分配](weighted-allocation.md)与
-[测量设施](weighted-workloads.md)说明；开发检查、固定资格和完整模型的严格失败由[474f9af报告](evidence/core5-local-allocation-factorized-kv-20261028.md)分别列出。
-早期[07e56ca资格/有限对照](evidence/core5-private-projection-20261028.md)覆盖共同偏移响应与私有矩阵批，
-原D64训练和D2048残差失败仍保留在该历史报告；新的局部根区间资格对应474f9af，不能回填到早期来源。
+[测量设施](weighted-workloads.md)说明；开发检查、固定资格和完整模型的严格失败由[137f530报告](evidence/core5-local-allocation-factorized-kv-20261028.md)分别列出。
+早期[6612ed3资格/有限对照](evidence/core5-private-projection-20261028.md)覆盖共同偏移响应与私有矩阵批，
+原D64训练和D2048残差失败仍保留在该历史报告；新的局部根区间资格对应137f530，不能回填到早期来源。
 
 全部eager KV行的低秩式及独立dense公式/Jacobian由[KV契约](weighted-kv-sharing.md)定位；
-[474f9af固定资格](evidence/core5-local-allocation-factorized-kv-20261028.md)覆盖该改动与局部分配修复。
+[137f530固定资格](evidence/core5-local-allocation-factorized-kv-20261028.md)覆盖该改动与局部分配修复。
 大图已越过原残差拒绝但完整状态/训练仍严格不一致，不把局部解准确或FP64诊断扩展为FP32通过。
 
 FC §6.2的共享准备仍由相同输入/参数身份许可；`prepare_shared_state`按首个事件稳定求值，
@@ -244,7 +246,7 @@ opaque key只作相等判断，不能以内存地址决定反向图创建次序�
 CPU显式FP64测量、最终梯度/SGD槽验证及同材料精度/预算边界见[性能契约](weighted-performance.md)
 与[工作负载设施](weighted-workloads.md)；它们不解除既有FP32严格失败。
 
-[1f1ec57固定证据](evidence/core5-stable-preparation-precision-20261028.md)覆盖共享准备稳定顺序、
+[0f22ebc固定证据](evidence/core5-stable-preparation-precision-20261028.md)覆盖共享准备稳定顺序、
 精确续接和真实optimizer观测；CPU整体572通过/2原FP32 GDN失败保持分列。
 D64/D2048显式FP64通过不解除原FP32边界；新增GDN近零梯度见证由[精度契约](weighted-precision.md)追溯。
 
@@ -252,7 +254,7 @@ GDN §1 epsilon-L2、GDN/SSD §3 scaled-RMS的FP32一阶收缩由Python/C++
 `weighted_normalization`实现；FP32前向不变、FP64路径不变，独立实数Jacobian及广播/零根由
 `test_weighted_half_normalization.py`和C++ `weighted_normalization.cpp`验证。
 原GDN完整AdamW/checkpoint测试保持输入和容差，局部通过不替代整图资格。
-[ad6d1e7固定资格](evidence/core5-fp32-normalization-20261028.md)记录原FP32见证通过、
+[9e6dc52固定资格](evidence/core5-fp32-normalization-20261028.md)记录原FP32见证通过、
 FP16严格失败保留，以及CPU/纯Python NPU/standalone NPU/CUDA构建的不同验证范围。
 
 Architecture §1 RMS和各线性映射的[算术边界诊断](weighted-arithmetic-diagnostics.md)
@@ -273,7 +275,7 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 实际梯度/SGD槽/更新次数解码、磁盘换owner精确续接和主机反向阶段计量见
 [测量设施](weighted-workloads.md)与[常驻训练](resident-weighted-training.md)，不调用参考补写返回。
 
-上述resident增量与实际消费者的[15c3e65固定资格](evidence/core5-resident-boundary-20261029.md)
+上述resident增量与实际消费者的[57308e7固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
 
 公共配置/参数清单/自然规模与维护映射见 [core5-study](core5-study.md)。

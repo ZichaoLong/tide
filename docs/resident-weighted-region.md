@@ -48,4 +48,4 @@ ScalarHead和Query使用[已声明的vendor批量算子](resident-weighted-head.
 独立公式验证局部数学；标量RegionKernel使用独立执行与autograd，但复用已单独验收的
 公共发送数学接口。目标设备证据才证明组合算子实际执行；固定源码资格另行记录。
 
-固定ce63aef的[CPU/NPU/CUDA构建资格](evidence/core5-resident-region-20261027.md)已记录；完整图生命周期和GPU真机分开验收。
+固定bc935fe的[CPU/NPU/CUDA构建资格](evidence/core5-resident-region-20261027.md)已记录；完整图生命周期和GPU真机分开验收。

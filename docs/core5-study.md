@@ -159,4 +159,4 @@ CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八
 `test_core5_recipe_training.py`另验五族/混合及关键评分/分配小组合的完整CPU FP64多步训练、
 独立调度与磁盘新owner；不是全排列，也不解除原较大FP32边界。
 当前测试区分纯PyTorch/native，FC至少两层，FC mixed使用八层以实际包含rank4/8的GDN/SSD；
-FC/HB各有textbook KV与异构组合；[0f4506d固定资格](evidence/core5-coverage-correction-20261030.md)73项通过，包含26模型×2客户端的52项训练。仅认证该小型CPU FP64范围。
+FC/HB各有textbook KV与异构组合；[f456160固定资格](evidence/core5-coverage-correction-20261030.md)73项通过，包含26模型×2客户端的52项训练。仅认证该小型CPU FP64范围。

@@ -11,9 +11,10 @@ Git 保留源码、测试、构建/验证/测量入口、固定教材快照，�
 可用的失败诊断。历史绝对路径作为来源标签保留，不是新线程的依赖路径。
 必要记录应可由仓库取得；大型原始 trace、缓存、二进制和重复源码副本无需常驻。
 
-2026-10-12的退役归档直接随 Git 保存，约 38.5 MiB；索引、SHA256 与数量见
-[退役凭据](evidence/artifact-retirement-20261012.json)。635 个旧工作副本的基线
-提交都在当前分支历史中，431 份相对 HEAD 的补丁和 5,049 个未跟踪源码文件
+2026-10-12的退役归档约38.5MiB，2026-10-30起仅在冻结的`graph-execution-foundation-old`保存，
+不再随新基座检出；[迁移规则](history-migration.md)给出固定取回地址和旧→新提交映射。
+索引、SHA256与数量见[退役凭据](evidence/artifact-retirement-20261012.json)。635个旧工作副本的基线
+代码仍由映射定位，431份相对HEAD的补丁和5,049个未跟踪源码文件在旧分支归档中
 按原字节保留（包括构建模板），不必保留重复 checkout。
 配置/结果小记录保留原文，大结果保存明确标记的摘要及原文件哈希，日志只保留尾部。
 原始张量、完整 profiler 时间线和构建二进制不在归档保证范围；旧报告中的
@@ -25,11 +26,12 @@ Git 保留源码、测试、构建/验证/测量入口、固定教材快照，�
 
 ## 按需读取旧记录
 
-正常接续无需读取归档。需要定位某条历史来源时，在仓库根目录执行：
+正常接续无需读取归档。按[迁移规则](history-migration.md)另存原归档到仓库外后，在仓库根目录执行：
 
 ```sh
-python scripts/read_retired_record.py --list-prefix /mi/data2T/zlong/tide-accelerator/sources/native-dev01
-python scripts/read_retired_record.py \
+python scripts/read_retired_record.py --archive /path/to/retired-records-20261012.jsonl.gz \
+  --list-prefix /mi/data2T/zlong/tide-accelerator/sources/native-dev01
+python scripts/read_retired_record.py --archive /path/to/retired-records-20261012.jsonl.gz \
   --path /mi/data2T/zlong/tide-accelerator/sources/native-dev01:git-diff-HEAD \
   --output /tmp/gef-retired-native-dev01.patch
 ```
@@ -84,5 +86,5 @@ CPU从干净源码通过不能认证NPU/GPU，硬件和数值边界仍由ROADMAP
 
 [第一轮](evidence/artifact-cleanup-20261030.md)和[第二轮](evidence/artifact-cleanup-round2-20261030.md)
 记载的是当时完成与当时保留，不代表今天原始路径仍存在。
-2026-10-12随Git保存的[历史记录归档](evidence/artifact-retirement-20261012.md)继续保留；
-这是既有明确例外，不把新的完整运行归档追加进去。
+2026-10-12的[历史记录归档](evidence/artifact-retirement-20261012.md)在冻结旧分支保留；
+新分支不含该大文件及其历史对象，不把新的完整运行归档追加进去。

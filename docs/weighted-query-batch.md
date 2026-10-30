@@ -49,7 +49,7 @@ Read/Full 的 `joint_batch` 声明数值合批，记录中 `read_scalar_batch_st
 实际私有批量图及可选 `full_autograd="batched"`；Full 默认仍为显式 semantic replay，
 统计保留 `semantic_full_replays`。逐字段/状态槽/Full 槽根的 None/零契约不变。
 参数共享身份和私有状态保留；复用参数不意味着不同输入/快照可以复用计算。
-数值资格 7b8b469 使用当时的 Read/Full replay，不能冒用为后续批量反向资格。
+数值资格 0925539 使用当时的 Read/Full replay，不能冒用为后续批量反向资格。
 
 ## 验证与资格
 

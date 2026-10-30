@@ -29,7 +29,7 @@ feedback and default asynchronous peer failures. CUDA hardware is deferred by
 the user; earlier build/CPU evidence does not certify new GPU execution.
 
 [Independent-input KV batches](evidence/core5-independent-projection-20261029.md)
-qualify f03e9be on CPU (273 passed, two original FP16 strict xfails), pure
+qualify 8d97020 on CPU (273 passed, two original FP16 strict xfails), pure
 PyTorch and Python/native NPU, and freshly rebuilt standalone SDK core/resident
 consumers. Public resident KV has 12 checks; SDK flow/training/placed-node
 training passes both dtypes. The added optional virtual capability requires

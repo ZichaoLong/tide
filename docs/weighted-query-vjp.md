@@ -49,7 +49,7 @@ value 导数为 `p_i*bar`。这是精确映射的等价导数表达，不微分�
 避免独立形成逆幂项。实现 [Python](../python/tidegraph/weighted/normalization.py) /
 [C++](../cpp/src/weighted_normalization.cpp)；[解析 Jacobian/方向差分](../tests/test_weighted_normalization.py)
 及 [standalone](../cpp/test/weighted_normalization.cpp) 单独验证。
-扩展回归在此前 5391017 复现的 FP32 混合记忆评分梯度差异由这一等价表达修正；
+扩展回归在此前 169bf67 复现的 FP32 混合记忆评分梯度差异由这一等价表达修正；
 原失败与后续资格分别记录，不修改比较容差。
 
 ## 梯度与所有权
