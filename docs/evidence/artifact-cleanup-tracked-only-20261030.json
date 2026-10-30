@@ -1,0 +1,3120 @@
+{
+  "schema": "tide-tracked-only-cleanup-evidence-v1",
+  "state": "repository-retired-temporary-validation-material-pending",
+  "implementation_source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+  "math_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Source-only checkout rebuild/installation and authorized artifact retirement. No numerical algorithm, tolerance, full matrix, NPU or CUDA claim changed.",
+  "verification": {
+    "schema": "tide-source-only-verification-v1",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "scope": "Fresh CPU source/build and installed consumer; not full matrix or accelerator qualification",
+    "state": "passed",
+    "started": "2026-10-30T06:23:59.223456+00:00",
+    "commands": [
+      {
+        "name": "audit",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "${PORTABLE_TORCH_SKILL}/scripts/audit_repo.py",
+          "${TASK}/source",
+          "--format",
+          "json"
+        ],
+        "exit_code": 0,
+        "seconds": 3.1175192333757877,
+        "log_sha256": "964d28c27272b4a9a78793eb1056dc76f008bf1b046a9c0ac7e65085960e3c8b"
+      },
+      {
+        "name": "doctor",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "${PORTABLE_TORCH_SKILL}/scripts/doctor.py",
+          "--backend",
+          "cpu",
+          "--probe",
+          "operator",
+          "--format",
+          "json"
+        ],
+        "exit_code": 0,
+        "seconds": 1.7659230418503284,
+        "log_sha256": "b0e975bed165214e4a5199a5f3c360d7a0146ce8715fae6caf5986c7db7435ce"
+      },
+      {
+        "name": "upstream",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "${TASK}/source/scripts/check_upstream.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.06384804844856262,
+        "log_sha256": "92dbca55f5fcd453735748ae3623fac14ca22657abdc54fc32935cf6729a93f0"
+      },
+      {
+        "name": "build",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "${TASK}/source/scripts/build.py",
+          "--backend",
+          "cpu",
+          "--build-dir",
+          "${TASK}/build/cpu",
+          "--jobs",
+          "half"
+        ],
+        "exit_code": 0,
+        "seconds": 46.08473886176944,
+        "log_sha256": "2d9007256c54a4e1dfa4326bd776876139853e38835efe39f18c095398c094dd"
+      },
+      {
+        "name": "smoke-float32",
+        "argv": [
+          "${TASK}/build/cpu/tidegraph-smoke",
+          "--device=cpu",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "seconds": 0.4645436070859432,
+        "log_sha256": "eaf0e6147c17fd39057c4b9cd1be5ee4bb87c3af62717855b626326505589892"
+      },
+      {
+        "name": "smoke-float64",
+        "argv": [
+          "${TASK}/build/cpu/tidegraph-smoke",
+          "--device=cpu",
+          "--dtype=float64"
+        ],
+        "exit_code": 0,
+        "seconds": 0.46441349014639854,
+        "log_sha256": "636dc8c818f897d10bf8b11049008d94392a4e4e42cfa1cb19fbc852010e5f42"
+      },
+      {
+        "name": "directed-tests",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "tests/test_retired_allocation_witnesses.py",
+          "tests/test_allocation_decimal_diagnostic.py",
+          "tests/test_durable_records.py",
+          "tests/test_semantics.py",
+          "tests/test_native_settle.py",
+          "--basetemp",
+          "${TASK}/qualification-tests",
+          "--junitxml=${TASK}/records/qualification.xml"
+        ],
+        "exit_code": 0,
+        "seconds": 12.428783472627401,
+        "log_sha256": "999339fd308bfee5b7bf0e0509748e2e3778d291bd8ebe4fc666b017b3100130"
+      },
+      {
+        "name": "installed-consumer",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "${TASK}/source/scripts/check_downstream_consumer.py",
+          "--build-dir",
+          "${TASK}/build/cpu",
+          "--output-dir",
+          "${TASK}/consumer"
+        ],
+        "exit_code": 0,
+        "seconds": 133.73617972061038,
+        "log_sha256": "b5fd0db46ac681ac2454a916d42622ef3da4f86598cc5e9396d8ca2d2479d6e9"
+      }
+    ],
+    "environment": {
+      "python": "3.12.13",
+      "architecture": "aarch64",
+      "executable": "${TASK}/env/bin/python",
+      "torch": "2.12.0+cpu",
+      "torch_path": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/__init__.py",
+      "pytest": "9.1.1",
+      "ninja": "1.13.2",
+      "setuptools": "84.2.1",
+      "wheel": "0.48.0",
+      "affinity_cpus": 320,
+      "build_jobs_request": "half",
+      "aten_blas_threads": 1,
+      "module": "ascend/dev-workspace-9.1.0",
+      "constraints_sha256": "5837f3e25fed6667ce2d1fc30cd35a8af1459f2af838c9ce6a1af6b046ee80b8"
+    },
+    "build_manifest": {
+      "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+      "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+      "torch": "2.12.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.1.0"
+      },
+      "build_jobs": 160,
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "6f58084292ec22fbef0178fe5c454b2483e1b34b1699bd6976cc80ff76e2e4ef",
+        "libtidegraph_runtime.a": "2268ad07afb21e6624a23addc802baf23de9c47042f27d20c34f21f0a9c8b202",
+        "_tide_native.so": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+        "tidegraph-smoke": "8f89223bab51ecbdb66b884ed7f84fc3ddc734a716f06d1a91f17c139009130c",
+        "tidegraph-kernel-check": "3fe8ca28470fbee1fdae4cc978a687a12bb60d455d1968fe5c1f22cf76a970b0",
+        "tidegraph-full-check": "51f6606798ec0f3352cd6c41cb991fdb833bedad8f82f68498bf4c23de409b0d",
+        "tidegraph-aggregate-check": "fe13d68cab98aa15fb8c42c5e0ab82c8c23a0cb0551189254cbb2d5c8859a8e3",
+        "tidegraph-optimizer-check": "99fe4969c9d911c10dfa0fbe04fab68904d158b6e1dc840951d8d0b9cdf61a90",
+        "tidegraph-checkpoint-check": "6ce01b71a90f752e2ad7df18ab34a4c6448e555d8345e3325361a9685d3d0dc2",
+        "tidegraph-weighted-training-check": "2b2a1ebafb230d5a25a0a5f60212cf731dff40277a24a2aae0789039110e3cc0",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "571b36ee70e95be5ae568554cd6ff76a130bc260de043b6f0e10d2772323ccaa",
+        "tidegraph-scale-bench": "3b554962faf1899527d07f21f595aed573807c17664f65d55130f7279ef9f0fa",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "7c825f77585b774853a8a916580300fd24a8a602fe8f3f562c8fca37fd910613",
+        "tidegraph-greedy-check": "10340fe0add28e55ae69d9962637336e7407bc40d57029e768332e78fa9d7f97",
+        "tidegraph-accelerator-check": "fa1850f152fc9bf62de54068e0ec8e5225d467179923c5d8ce0cf186100c363a",
+        "tidegraph-runtime-check": "9a745d97514614a724eabae13069f5fb01eecd491e97a13d491e80be58f1a917",
+        "tidegraph-read-precision-check": "c9715624f04135a53d37fcbbae9158d28039673bfef17db3ec5e090273f2ae2d",
+        "tidegraph-placement-check": "86e3ce299cc0885762a00bdc1f3699aaccaeeb3cbdc9da6628d77eda3dfb0cfa",
+        "tidegraph-payload-ownership-check": "8a159e040be4ce77d356ec8cfe9c1bfdc1d04456a0108b69e61133e07407f8f4",
+        "tidegraph-weighted-binding-module-check": "bfc870e5263df3169f7ad9e4aca42624159e1e942cfa2d3596f7a544ff249bbc",
+        "libtidegraph-weighted-binding-module.so": "bbfcbdffec8563569581057530146d9542ee50b45e73f45c71fdb95e5a160e57"
+      }
+    },
+    "finished": "2026-10-30T06:27:18.579035+00:00"
+  },
+  "verification_job": {
+    "command": [
+      "/bin/bash",
+      "${TASK}/control/verify.sh"
+    ],
+    "cwd": "${TASK}/source",
+    "state": "passed",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "dirty": "",
+    "started": "2026-10-30T06:23:47.132605+00:00",
+    "exit_code": 0,
+    "finished": "2026-10-30T06:27:18.922420+00:00"
+  },
+  "development": {
+    "scope": "39 targeted checks reuse the unchanged historical CPU binary; not fresh qualification",
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sha256": "ce7ee244c8761a1fa1b0691cbb5dd41cce622e2ce8834c2e5b3b3553a4524561"
+  },
+  "qualification_tests": {
+    "tests": 132,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sha256": "a076513285f6c089655a8ead636f37cf6de40d29fd1be946dffd14a59a2721d9"
+  },
+  "consumer_unit_tests": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sha256": "b80defe816885b19e493032c2a91fff0ad9153521b886d1285f37f676abde197"
+  },
+  "cpu_smoke": {
+    "float32": {
+      "device": "cpu",
+      "resolution_reason": "explicit:cpu",
+      "dtype": "float32",
+      "outputs": 3,
+      "loss": 18.05487823486328,
+      "gradient_sum": 17.539073944091797
+    },
+    "float64": {
+      "device": "cpu",
+      "resolution_reason": "explicit:cpu",
+      "dtype": "float64",
+      "outputs": 3,
+      "loss": 18.054878141361314,
+      "gradient_sum": 17.539072689451565
+    }
+  },
+  "doctor": {
+    "backend_probe": {
+      "available": true,
+      "backend": "cpu",
+      "compiled_arch_list": null,
+      "device_count": 1,
+      "device_index": 0,
+      "devices": [
+        {
+          "architecture": "aarch64",
+          "logical_index": 0,
+          "model": "aarch64"
+        }
+      ],
+      "errors": [],
+      "host": {
+        "libc": {
+          "name": "glibc",
+          "version": "2.34"
+        },
+        "machine": "aarch64",
+        "os_release": {
+          "id": "hce",
+          "pretty_name": "Huawei Cloud EulerOS 2.0 (aarch64)",
+          "version_id": "2.0"
+        },
+        "release": "5.10.0-182.0.0.95.r1941_123.hce2.aarch64",
+        "system": "Linux"
+      },
+      "ok": true,
+      "operator": {
+        "actual": 152.0,
+        "expected": 152.0,
+        "name": "float32_matmul_relu_sum",
+        "shape": [
+          4,
+          4
+        ],
+        "synchronize_call": "not_required"
+      },
+      "probe": "operator",
+      "python": {
+        "implementation": "CPython",
+        "version": "3.12.13",
+        "version_info": [
+          3,
+          12,
+          13
+        ]
+      },
+      "versions": {
+        "torch": "2.12.0+cpu",
+        "torch_cuda_compile": null,
+        "torch_hip_compile": null
+      },
+      "visibility": {
+        "ASCEND_DEVICE_ID": null,
+        "ASCEND_RT_VISIBLE_DEVICES": null,
+        "CUDA_VISIBLE_DEVICES": null,
+        "DEVICE_ID": null,
+        "NPU_VISIBLE_DEVICES": null,
+        "NVIDIA_VISIBLE_DEVICES": null
+      },
+      "worker_returncode": 0
+    },
+    "candidate_probes": {},
+    "errors": [],
+    "exit_code": 0,
+    "host": {
+      "libc": {
+        "name": "glibc",
+        "version": "2.34"
+      },
+      "machine": "aarch64",
+      "os_release": {
+        "id": "hce",
+        "pretty_name": "Huawei Cloud EulerOS 2.0 (aarch64)",
+        "version_id": "2.0"
+      },
+      "release": "5.10.0-182.0.0.95.r1941_123.hce2.aarch64",
+      "system": "Linux"
+    },
+    "ok": true,
+    "python": {
+      "implementation": "CPython",
+      "version": "3.12.13",
+      "version_info": [
+        3,
+        12,
+        13
+      ]
+    },
+    "request": {
+      "backend": "cpu",
+      "device_index": 0,
+      "probe": "operator"
+    },
+    "resolved_backend": "cpu",
+    "schema_version": 1,
+    "visibility": {
+      "ASCEND_DEVICE_ID": null,
+      "ASCEND_RT_VISIBLE_DEVICES": null,
+      "CUDA_VISIBLE_DEVICES": null,
+      "DEVICE_ID": null,
+      "NPU_VISIBLE_DEVICES": null,
+      "NVIDIA_VISIBLE_DEVICES": null
+    }
+  },
+  "static_audit": {
+    "summary": {
+      "files_scanned": 1762,
+      "files_skipped_large": 0,
+      "files_skipped_binary": 1,
+      "files_skipped_unsupported": 820,
+      "symlinks_skipped": 0,
+      "findings": 265,
+      "by_severity": {
+        "warning": 265,
+        "error": 0
+      }
+    },
+    "by_code": {
+      "CPP_NPU_NAMESPACE": 22,
+      "CPP_CUDA_NAMESPACE": 21,
+      "CPP_BACKEND_SYNC": 2,
+      "DEP_TORCH_STACK_CONSTRAINT": 1,
+      "PY_HARDCODED_DEVICE": 201,
+      "PY_BACKEND_API": 14,
+      "PY_BACKEND_SYNC": 1,
+      "PY_SITE_SETUP_COMMAND": 1,
+      "CMAKE_UNCONDITIONAL_CUDA": 1,
+      "CPP_HARDCODED_DEVICE": 1
+    },
+    "log_sha256": "964d28c27272b4a9a78793eb1056dc76f008bf1b046a9c0ac7e65085960e3c8b",
+    "review": "Static matches are review leads. Production Python matches are explicit device gates/runtime adapters; CUDA/NPU namespaces belong to runtime/backend implementations. CUDA enable_language is guarded by the backend branch. The source-changed exception is a false site-setup match. Test/probe literals do not qualify any backend; torch>=2.4 is a broad declared dependency, not a tested-version matrix."
+  },
+  "installed_consumer": {
+    "schema": "tide-downstream-consumer-evidence-v1",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "dirty": "",
+    "state": "passed",
+    "scope": "installed CPU starter + lock/checkpoint rejection; no accelerator, standalone or performance qualification",
+    "commands": [
+      {
+        "name": "unit-tests",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "-m",
+          "pytest",
+          "${TASK}/source/tests/test_downstream_consumer.py",
+          "-q",
+          "--junitxml=${TASK}/consumer/tests.xml"
+        ],
+        "exit_code": 0,
+        "log_sha256": "7ec9fab53848fd95a7e960567314658e52f1dc709b8855178b8c093865299071"
+      },
+      {
+        "name": "wheel",
+        "argv": [
+          "${TASK}/env/bin/python",
+          "-m",
+          "pip",
+          "wheel",
+          "--no-index",
+          "--no-deps",
+          "--no-build-isolation",
+          "${TASK}/consumer/package",
+          "-w",
+          "${TASK}/consumer/wheels"
+        ],
+        "exit_code": 0,
+        "log_sha256": "fa92244dc3b37afacb5b7fa215fb430ee5e2a7ba0042f74a302afcc6ee9a88cb"
+      },
+      {
+        "name": "install",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "-m",
+          "pip",
+          "install",
+          "--no-index",
+          "--no-deps",
+          "${TASK}/consumer/wheels/tidegraph-0.2.0-py3-none-any.whl"
+        ],
+        "exit_code": 0,
+        "log_sha256": "4770400935be50ebe1dc9a2f9f64446fa5b09f30b2cad673087fe59f01e9891d"
+      },
+      {
+        "name": "capture-lock",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/dependency.py",
+          "--wheel",
+          "${TASK}/consumer/wheels/tidegraph-0.2.0-py3-none-any.whl",
+          "--source-commit",
+          "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+          "--math-commit",
+          "0770593838a37c790a568226930567ed60f99b83",
+          "--native-library",
+          "${TASK}/consumer/native",
+          "--output",
+          "${TASK}/consumer/application/foundation.lock.json"
+        ],
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "fc-pytorch-float32",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "pytorch",
+          "--dtype",
+          "float32",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/fc-pytorch-float32"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-pytorch-float64",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "pytorch",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/fc-pytorch-float64"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-python-native-float32",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "python-native",
+          "--dtype",
+          "float32",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/fc-python-native-float32",
+          "--native-library",
+          "${TASK}/consumer/native"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-python-native-float64",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "python-native",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/fc-python-native-float64",
+          "--native-library",
+          "${TASK}/consumer/native"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "hb-mixed-pytorch",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/hb-mixed.json",
+          "--client",
+          "pytorch",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/hb-mixed-pytorch"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "hb-mixed-python-native",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/hb-mixed.json",
+          "--client",
+          "python-native",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "prefill",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/hb-mixed-python-native",
+          "--native-library",
+          "${TASK}/consumer/native"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-streaming-pytorch",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "pytorch",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "streaming",
+          "--packing",
+          "scalar",
+          "--output-dir",
+          "${TASK}/consumer/fc-streaming-pytorch"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "fc-streaming-python-native",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/check.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--recipe",
+          "${TASK}/consumer/application/recipe.json",
+          "--client",
+          "python-native",
+          "--dtype",
+          "float64",
+          "--schedule",
+          "streaming",
+          "--packing",
+          "scalar",
+          "--output-dir",
+          "${TASK}/consumer/fc-streaming-python-native",
+          "--native-library",
+          "${TASK}/consumer/native"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1039ef4643222174c1e4710a4acf1bcc281127f81d0eb3302aa95122624b0877"
+      },
+      {
+        "name": "bad-resume",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/train.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--resume",
+          "${TASK}/consumer/bad-checkpoint.pt",
+          "--output-dir",
+          "${TASK}/consumer/bad-resume"
+        ],
+        "exit_code": 1,
+        "log_sha256": "c0ae26b4a9b4d5e8b4a23dba81b0f64be105860fa6e6a1fb0f0e4337aa9f4797"
+      },
+      {
+        "name": "missing-native",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/train.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--client",
+          "python-native",
+          "--output-dir",
+          "${TASK}/consumer/missing-native"
+        ],
+        "exit_code": 1,
+        "log_sha256": "8426a31c9353c41b9519ab8f80c9469c957605679ceb07e3c9a926bbf593e7d0"
+      },
+      {
+        "name": "unsupported-packing",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/train.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/application/foundation.lock.json",
+          "--schedule",
+          "streaming",
+          "--packing",
+          "packed",
+          "--output-dir",
+          "${TASK}/consumer/unsupported-packing"
+        ],
+        "exit_code": 1,
+        "log_sha256": "e4a6a89157c0f0e2c0d00f85e67ea60e3e9de560b2267a5fe603681a2ce9524a"
+      },
+      {
+        "name": "bad-lock",
+        "argv": [
+          "${TASK}/consumer/env/bin/python",
+          "${TASK}/consumer/application/train.py",
+          "--device",
+          "cpu",
+          "--foundation-lock",
+          "${TASK}/consumer/bad-lock.json",
+          "--output-dir",
+          "${TASK}/consumer/bad-lock"
+        ],
+        "exit_code": 1,
+        "log_sha256": "cfdc635edcd19726125012e202277c44633d6cbb07288482d218c03b2bb7f9f6"
+      }
+    ],
+    "checks": [
+      {
+        "name": "fc-pytorch-float32",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float32",
+              "scoring_dtype": "float32",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float32",
+              "scoring_dtype": "float32",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "f7d8ac6d99b0e10b5af762709d90b57f787ac534ff8044ceeb9af95fb67a088a"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "f7d8ac6d99b0e10b5af762709d90b57f787ac534ff8044ceeb9af95fb67a088a",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "939dbcd8a6d1ca85a94463e2e64c1e86718bf08e42a486adf662b311fa4fb06e"
+        },
+        "result_sha256": "098a5a74ab8dc2495cce3eec65f375e9b277246e55df8860e1d6118700418420"
+      },
+      {
+        "name": "fc-pytorch-float64",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "258512224a059e1fbf32d6bc1b73378a5ebc7404a82f8a54f2e366abd49eb75a"
+        },
+        "result_sha256": "d729a015c45bf34e95c6c0aee759baad104ff5be1e15940317d73d054a2b1d8d"
+      },
+      {
+        "name": "fc-python-native-float32",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float32",
+              "scoring_dtype": "float32",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float32",
+              "scoring_dtype": "float32",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "2f6ee0c7ca62391d5c7cbd67d12e2da0980d03711b653f8e26520848762768fd"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "2f6ee0c7ca62391d5c7cbd67d12e2da0980d03711b653f8e26520848762768fd",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "3cbc5d920b502028fc34e9f3a9958d328838643c95de9de10bbe2afcc11bcffc"
+        },
+        "result_sha256": "9ea5b4582d41343138e9f7e0fa0da8948069a232c30d2016dcf34470a5ff8cc7"
+      },
+      {
+        "name": "fc-python-native-float64",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "e4df328ef678f5f8ec3dcefee0a03f7c5df0c733fa65895bb9d1723f5db53597"
+        },
+        "result_sha256": "0e019f97a2356c9b98d7e00fd7612d656f2572fbb3cdcb11493c8f01dee8b497"
+      },
+      {
+        "name": "hb-mixed-pytorch",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+            "workload_id": "249c1db985e3722ee5a03b27c5bf2ab28f669576157ba8858dea2643c46f14b9",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "hb",
+                "family": "mixed",
+                "width": 8,
+                "region_width": 2,
+                "depth": 1
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 8,
+            "regions": 4,
+            "edges": 16,
+            "ranks": [
+              1,
+              2,
+              3
+            ],
+            "graph_counts": {
+              "body_edges": 16,
+              "body_nodes": 8,
+              "encoded_edges": 20,
+              "encoded_nodes": 10,
+              "longest_body_delay": 2,
+              "output_reachable_nodes": 8,
+              "reachable_nodes": 8
+            },
+            "parameters": {
+              "trainable": 16976,
+              "frozen": 36,
+              "role_elements": 19132,
+              "unique": 17012
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 5,
+            "seed": 7,
+            "families": {
+              "gated_delta": 2,
+              "kv": 4,
+              "ssd": 2
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2560
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 7,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.13862943611198905,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 5,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2560
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "alpha_ff": 1.0,
+                  "alpha_mem": 1.0,
+                  "conv_size": 4,
+                  "conv_stride": 5,
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "groups": 1,
+                  "heads": 1,
+                  "key_width": 8,
+                  "lambda_short": 0.13862943611198905,
+                  "matrix_rates": [
+                    0.0
+                  ],
+                  "memory_family": "gated_delta",
+                  "memory_read": "state",
+                  "output_epsilon": 1e-05,
+                  "qk_epsilon": 1e-06,
+                  "summary_width": 8,
+                  "value_width": 8,
+                  "width": 8
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              },
+              {
+                "config": {
+                  "alpha_ff": 1.0,
+                  "alpha_mem": 1.0,
+                  "conv_size": 4,
+                  "conv_stride": 5,
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "groups": 1,
+                  "heads": 1,
+                  "key_width": 8,
+                  "lambda_short": 0.13862943611198905,
+                  "matrix_rates": [
+                    0.0
+                  ],
+                  "memory_family": "ssd",
+                  "memory_read": "state",
+                  "output_epsilon": 1e-05,
+                  "qk_epsilon": 1e-06,
+                  "summary_width": 8,
+                  "value_width": 8,
+                  "width": 8
+                },
+                "owners": [
+                  4,
+                  5
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.13862943611198905,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 3,
+                  "position_scale": 5,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2560
+                },
+                "owners": [
+                  6,
+                  7
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "55222bed1fdbd8b22040a6e28497586e0368af8857a21b8d6dacfb79042cfb26",
+          "materialization_plan_id": "249c1db985e3722ee5a03b27c5bf2ab28f669576157ba8858dea2643c46f14b9",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "f80c2a07067610a13fc38f1c66fb1d25df582d7b4e2f79ef9ae5f04e31849205",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "258512224a059e1fbf32d6bc1b73378a5ebc7404a82f8a54f2e366abd49eb75a"
+        },
+        "result_sha256": "ca596d7236ab5004133189fed6961cf0ec935bd576a618a6321673a75f81246a"
+      },
+      {
+        "name": "hb-mixed-python-native",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+            "workload_id": "249c1db985e3722ee5a03b27c5bf2ab28f669576157ba8858dea2643c46f14b9",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "hb",
+                "family": "mixed",
+                "width": 8,
+                "region_width": 2,
+                "depth": 1
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 8,
+            "regions": 4,
+            "edges": 16,
+            "ranks": [
+              1,
+              2,
+              3
+            ],
+            "graph_counts": {
+              "body_edges": 16,
+              "body_nodes": 8,
+              "encoded_edges": 20,
+              "encoded_nodes": 10,
+              "longest_body_delay": 2,
+              "output_reachable_nodes": 8,
+              "reachable_nodes": 8
+            },
+            "parameters": {
+              "trainable": 16976,
+              "frozen": 36,
+              "role_elements": 19132,
+              "unique": 17012
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 5,
+            "seed": 7,
+            "families": {
+              "gated_delta": 2,
+              "kv": 4,
+              "ssd": 2
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2560
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 7,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.13862943611198905,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 5,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2560
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "alpha_ff": 1.0,
+                  "alpha_mem": 1.0,
+                  "conv_size": 4,
+                  "conv_stride": 5,
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "groups": 1,
+                  "heads": 1,
+                  "key_width": 8,
+                  "lambda_short": 0.13862943611198905,
+                  "matrix_rates": [
+                    0.0
+                  ],
+                  "memory_family": "gated_delta",
+                  "memory_read": "state",
+                  "output_epsilon": 1e-05,
+                  "qk_epsilon": 1e-06,
+                  "summary_width": 8,
+                  "value_width": 8,
+                  "width": 8
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              },
+              {
+                "config": {
+                  "alpha_ff": 1.0,
+                  "alpha_mem": 1.0,
+                  "conv_size": 4,
+                  "conv_stride": 5,
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "groups": 1,
+                  "heads": 1,
+                  "key_width": 8,
+                  "lambda_short": 0.13862943611198905,
+                  "matrix_rates": [
+                    0.0
+                  ],
+                  "memory_family": "ssd",
+                  "memory_read": "state",
+                  "output_epsilon": 1e-05,
+                  "qk_epsilon": 1e-06,
+                  "summary_width": 8,
+                  "value_width": 8,
+                  "width": 8
+                },
+                "owners": [
+                  4,
+                  5
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.13862943611198905,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 3,
+                  "position_scale": 5,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2560
+                },
+                "owners": [
+                  6,
+                  7
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "4108dd99235523fc0b3ca4cabd1bd09e2be35ccdbc713897269853775dafc9fd",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "55222bed1fdbd8b22040a6e28497586e0368af8857a21b8d6dacfb79042cfb26",
+          "materialization_plan_id": "249c1db985e3722ee5a03b27c5bf2ab28f669576157ba8858dea2643c46f14b9",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "prefill",
+              "operator": "aten",
+              "packing": "packed",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "ef6113a0ab3dedb4a50014a2be5b575c5e9919c0d0646754ab35185bf7565280",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "e4df328ef678f5f8ec3dcefee0a03f7c5df0c733fa65895bb9d1723f5db53597"
+        },
+        "result_sha256": "d9c95cc36e1ff767143b00dbac6253b8d8371bb1b3c3bd483c5116ce14033243"
+      },
+      {
+        "name": "fc-streaming-pytorch",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "streaming",
+              "operator": "aten",
+              "packing": "scalar",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "pytorch",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "streaming",
+              "operator": "aten",
+              "packing": "scalar",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "7f5b74a1378db7d665a747387f1dfd6a8f335b5500e131e17a3cd5e99fee0122"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "7f5b74a1378db7d665a747387f1dfd6a8f335b5500e131e17a3cd5e99fee0122",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "32007d795c3c28b30b3b3fd98ab1fda62bd7dd8416cdd38f2a0d6e92eeefbd65"
+        },
+        "result_sha256": "c9a5a388e951c0a4da41f38b9f2c78a2d23a45a3973d9eba5f551e413053ac4d"
+      },
+      {
+        "name": "fc-streaming-python-native",
+        "state": "passed",
+        "checks": {
+          "independent_two_step_complete_records_gradients_sgd_scheduler": true,
+          "fresh_process_application_resume_exact": true,
+          "inference": true
+        },
+        "facts": {
+          "configuration": {
+            "schema": "tide-core5-configuration-facts-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "workload_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+            "recipe": {
+              "schema": "tide-core5-recipe-v1",
+              "requested": {
+                "topology": "fc",
+                "family": "kv",
+                "width": 8,
+                "region_width": 2,
+                "depth": 2,
+                "profile": "baseline",
+                "source_mode": "region"
+              },
+              "scale": null,
+              "sparse_budget": {
+                "requested_fraction": 0.125,
+                "effective_k": [
+                  1,
+                  1
+                ],
+                "note": "k is sending strength; actual support and Full counts require execution"
+              }
+            },
+            "nodes": 4,
+            "regions": 2,
+            "edges": 4,
+            "ranks": [
+              1,
+              2
+            ],
+            "graph_counts": {
+              "body_edges": 4,
+              "body_nodes": 4,
+              "encoded_edges": 8,
+              "encoded_nodes": 6,
+              "longest_body_delay": 1,
+              "output_reachable_nodes": 4,
+              "reachable_nodes": 4
+            },
+            "parameters": {
+              "trainable": 8190,
+              "frozen": 12,
+              "role_elements": 8994,
+              "unique": 8202
+            },
+            "samples": 2,
+            "positions": 2,
+            "stride": 4,
+            "seed": 7,
+            "families": {
+              "kv": 4
+            },
+            "widths": [
+              8
+            ],
+            "heads": [
+              1
+            ],
+            "ffn_widths": [
+              32
+            ],
+            "kv_windows": [
+              2048
+            ],
+            "source_classification": "source-node; external=0",
+            "source_class_count": 3,
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "memories": [
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 1,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "config": {
+                  "adapter_rank": 8,
+                  "alpha_att": 1.0,
+                  "alpha_ff": 1.0,
+                  "beta_short": 0.17328679513998632,
+                  "distance_slopes": [
+                    0.0
+                  ],
+                  "epsilon": 1e-05,
+                  "ffn_width": 32,
+                  "full_frequencies": [
+                    []
+                  ],
+                  "heads": 1,
+                  "memory_read": "sum",
+                  "position_origin": 2,
+                  "position_scale": 4,
+                  "read_frequencies": [],
+                  "summary_width": 8,
+                  "width": 8,
+                  "window": 2048
+                },
+                "owners": [
+                  2,
+                  3
+                ]
+              }
+            ],
+            "regional": [
+              {
+                "config": {
+                  "allocation_base": null,
+                  "allocation_temperature": 1.0,
+                  "alpha_loc": null,
+                  "alpha_match": null,
+                  "alpha_res": null,
+                  "alpha_sel": null,
+                  "ent_alpha": null,
+                  "eta": null,
+                  "fixed_gain": null,
+                  "gain_logit": null,
+                  "gamma_max": 2.0,
+                  "hidden_width": 8,
+                  "k": 1,
+                  "local_score": "cat",
+                  "query_weight": null,
+                  "read_mode": "+",
+                  "region_control_mode": "context",
+                  "region_control_width": 8,
+                  "region_evidence": "cat",
+                  "region_key": null,
+                  "region_score": "ind",
+                  "regularizer": "quad",
+                  "selection_mode": "regional_total",
+                  "selection_width": null,
+                  "send_gain": null,
+                  "total_fraction": null
+                },
+                "owners": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "workload": {
+            "schema": "core5-consumer-task-v1",
+            "model_id": "2f7a1c4ab33392d9626bfe85c1ac54b9784f64d13065052a9db2da4e6c07e21b",
+            "seed": 7,
+            "batch": 2,
+            "positions": 2,
+            "input": "cpu-generator normal*.2",
+            "target": "python-generator uniform(-.1,.1)",
+            "head": "linear(width,1), dropout=.1",
+            "loss": "mean squared error of numeric cG per present output",
+            "optimizer": "SGD lr=.0001 momentum=.3 weight_decay=.01",
+            "scheduler": "StepLR step=1 gamma=.9",
+            "gradient_boundary": "detach graph state after each backward before optimizer"
+          },
+          "workload_id": "4e33613fa30757ed1cf2bb71ca2ab0f45468b3ed7fb73952fed402d64f539b6b",
+          "materialization_plan_id": "9436879919d94b3610520a84d4ae2e9d30c83922d0617b392fbf6ea99ee5bb6f",
+          "execution": {
+            "schema": "tide-weighted-execution-v1",
+            "requested": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "streaming",
+              "operator": "aten",
+              "packing": "scalar",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "effective": {
+              "client": "python-native",
+              "device": "cpu",
+              "placement": "native",
+              "dtype": "float64",
+              "scoring_dtype": "float64",
+              "schedule": "streaming",
+              "operator": "aten",
+              "packing": "scalar",
+              "workers": 1,
+              "intraop_threads": 1,
+              "interop_threads": 1,
+              "peer_devices": []
+            },
+            "qualification": "implementation selection only; exact-device evidence is separate",
+            "execution_id": "4d36022ba42c5a9167692d2c76357a6326d6b81ba0e7f1a61673b6c78ea395fb"
+          },
+          "application_execution": {
+            "schema": "example-core5-execution-v1",
+            "foundation_execution_id": "4d36022ba42c5a9167692d2c76357a6326d6b81ba0e7f1a61673b6c78ea395fb",
+            "autograd_multithreading": true
+          },
+          "application_execution_id": "4e22c703a106ca6edb87ccdf05305e5aec7482cb1a981981270c19b6f0f4a454"
+        },
+        "result_sha256": "403d0752fa118f2418eefb8e621166f0349f5fd3c5da2179df7672586ee31e5c"
+      }
+    ],
+    "source_files_sha256": "b732f1cbb8b2df52c951b635dbe217dfb8cf37accf870af866bab1edebc45ad0",
+    "source_archive_sha256": "13f5fb94ec8b5d05e0387eff4c51f1f9152c883ea15d3080a2e41dc76dff90a0",
+    "native_build_manifest_sha256": "8f3d57c2ce8e0cc3b44f2a2a0bbe338dd59f6530cef08e0827422aa6d1392847",
+    "wheel_sha256": "4474569e8c59c2a0a20e058790a4426473001fe228e25f4f8a5148a652b29010",
+    "foundation_lock": {
+      "schema": "tide-foundation-lock-v1",
+      "foundation": {
+        "repository": "https://github.com/ZichaoLong/tide",
+        "commit": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+        "dirty": false,
+        "package_version": "0.2.0",
+        "wheel": {
+          "name": "tidegraph-0.2.0-py3-none-any.whl",
+          "sha256": "4474569e8c59c2a0a20e058790a4426473001fe228e25f4f8a5148a652b29010"
+        },
+        "installed_files_sha256": "50d2d0c6371b3e4f2d9fc0b7d1f577fded94654f94bf51a71eb9db0e6b7f436f"
+      },
+      "mathematics": {
+        "version": "tide-core-5",
+        "commit": "0770593838a37c790a568226930567ed60f99b83"
+      },
+      "protocol": {
+        "version": "tide-downstream-contract-v1",
+        "commit": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+        "path": "docs/downstream-contract.md"
+      },
+      "native": {
+        "manifest_sha256": "8f3d57c2ce8e0cc3b44f2a2a0bbe338dd59f6530cef08e0827422aa6d1392847",
+        "binary_name": "_tide_native.so",
+        "binary_sha256": "95fbda055690bc78e43e64f4d4adf2a536f3a11dabd6ad8df754875a602251c8",
+        "cpp_source_sha256": "d6640489b1351a9a4970f19bd57eed78a851afa8bc60cbc488d785126f8ffb42",
+        "build_source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+        "backend": "cpu"
+      },
+      "environment": {
+        "python": "3.12.13",
+        "torch": "2.12.0+cpu",
+        "architecture": "aarch64",
+        "cxx11_abi": true
+      }
+    },
+    "torch": "2.12.0+cpu",
+    "rejections": [
+      "bad-resume",
+      "missing-native",
+      "unsupported-packing",
+      "bad-lock"
+    ],
+    "junit_sha256": "b80defe816885b19e493032c2a91fff0ad9153521b886d1285f37f676abde197"
+  },
+  "service": {
+    "unit": "tracked-checkout-verify-20261030.service",
+    "slice": "background.slice",
+    "transient": true,
+    "limits": {
+      "RuntimeMaxSec": 2700,
+      "CPUQuota": "16000%",
+      "MemoryMax": "512G",
+      "Nice": 10
+    },
+    "note": "Legacy cgroup v1: requested limits/slice do not assert exclusive resources; observed build_jobs=160/320 affinity CPUs."
+  },
+  "setup": [
+    "source /etc/profile.d/modules.sh",
+    "module purge",
+    "module load ascend/dev-workspace-9.1.0",
+    "python -m venv --system-site-packages ${TASK}/env",
+    "source ${TASK}/env/bin/activate",
+    "python -m pip install -c \"$ASCEND_CONSTRAINTS_FILE\" pytest==9.1.1 ninja==1.13.2"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "PYTEST_ADDOPTS": "-p no:cacheprovider"
+  },
+  "controls": {
+    "retire.py": "e785fd9d5c8c1cc1983f4ca97a26474d6fe875fa44ff38a255fc957586badf28",
+    "verify.py": "5c465277bb73ddfd9257b274d1a952fc9821c9f8cea4205f84089ad47ab83f24",
+    "verify.sh": "56abf0aec6f7a04239219fbc5348b9a634e86a47c5688433a760d95561617958",
+    "retire-v2.py": "ea53b59bfc72300d71f1d833710d1505d2010eac026ac0b42eddc2ed0e59be05",
+    "retire-v3.py": "590c6c746c5ec386dd32d5528398bf68d388f46950f25318c834c66f68843411"
+  },
+  "preservation": {
+    "terminal_jobs": "retired-jobs-20261030.json",
+    "terminal_counts": {
+      "passed": 317,
+      "failed": 192,
+      "cancelled": 11
+    },
+    "status_hashes_rechecked": 520,
+    "curated_allocation_fixture": "../../tests/fixtures/allocation/provenance.json",
+    "discarded_unadopted_differences": 28,
+    "archive_bytes_retired": 1692495,
+    "archive_sha256": "1ebb2d173889de3a7d3399620f745e9badc91df4c54deefeee4c5c83deaf5dcd",
+    "note": "Discarded differences are not claimed merged. Large original state/log/profile bytes are retired; hashes cannot recover them. Existing tracked 20261012 archive remains.",
+    "terminal_summary_sha256": "57e3f39c7b7610515666812fc02a751e7ccbff8aa3e52caef5a1d553f6d5f1f8"
+  },
+  "retirement_preflight_failures": [
+    {
+      "unit": "tracked-checkout-retire-plan-20261030.service",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+      "record_sha256": "0c9fd6d2a3325cbc4ac9143119e2e8fead0c11089fd1a02528eddd23ba3e34ae",
+      "log_sha256": "dcfe31b327c90f85bef300c8d005e2caf5520fea6a28d96cb41cff114ab47b41",
+      "reason": "The conservative inventory rejected a historical FIFO before deletion; four such entries were verified as test_standalone_persists_phase_before_blocking_fixture_read fixtures.",
+      "action": "v2 permits only the four inspected FIFO paths, without opening/traversing them, while retaining activity checks and rejection of other special files.",
+      "deleted": false
+    },
+    {
+      "unit": "tracked-checkout-retire-plan-v2-20261030.service",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+      "record_sha256": "743cebd340ee3e51a7a79ed838cc4f52eda8333d09dc49453014ef6e05e20256",
+      "log_sha256": "1cd81444d4888229896bc6d45f60401d0927ef5377f236d4ac850a57c3fcb6bd",
+      "reason": "Same-user /proc fd/maps are not readable for four SSH session daemons, one PAM helper and one zombie.",
+      "action": "Read-only status/cmdline/cgroup review identified those roles. v3 records their visibility limitation and pins live daemon PID/start time/cmdline; all accessible descendants are inspected independently. No privilege or process change.",
+      "deleted": false
+    }
+  ],
+  "retirement": {
+    "schema": "tide-tracked-only-retirement-result-v1",
+    "state": "passed",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "plan_sha256": "2ffe31e224d60d5faff30a10527ac7d4ffaf99c3a448b9a6a129ac18edf6361f",
+    "started": "2026-10-30T06:31:41.009532+00:00",
+    "before": {
+      "groups": [
+        {
+          "path": ".local",
+          "entries": 2833,
+          "allocated_bytes": 508153856,
+          "directories": 152,
+          "files": 2677,
+          "apparent_file_bytes": 500452155,
+          "symlinks": 4
+        },
+        {
+          "path": ".pytest_cache",
+          "entries": 8,
+          "allocated_bytes": 241664,
+          "directories": 3,
+          "files": 5,
+          "apparent_file_bytes": 215886
+        },
+        {
+          "path": "artifacts",
+          "entries": 204360,
+          "allocated_bytes": 23516815360,
+          "directories": 60825,
+          "files": 143055,
+          "apparent_file_bytes": 27290416156,
+          "symlinks": 476,
+          "fifos": 4
+        },
+        {
+          "path": "python/tidegraph/__pycache__",
+          "entries": 84,
+          "allocated_bytes": 761856,
+          "directories": 1,
+          "files": 83,
+          "apparent_file_bytes": 606812
+        },
+        {
+          "path": "python/tidegraph/planning/__pycache__",
+          "entries": 21,
+          "allocated_bytes": 208896,
+          "directories": 1,
+          "files": 20,
+          "apparent_file_bytes": 159568
+        },
+        {
+          "path": "python/tidegraph/weighted/__pycache__",
+          "entries": 63,
+          "allocated_bytes": 602112,
+          "directories": 1,
+          "files": 62,
+          "apparent_file_bytes": 465748
+        },
+        {
+          "path": "scripts/__pycache__",
+          "entries": 73,
+          "allocated_bytes": 622592,
+          "directories": 1,
+          "files": 72,
+          "apparent_file_bytes": 446069
+        },
+        {
+          "path": "tests/__pycache__",
+          "entries": 123,
+          "allocated_bytes": 2179072,
+          "directories": 1,
+          "files": 122,
+          "apparent_file_bytes": 1939178
+        },
+        {
+          "path": "tools/device_online/cuda/__pycache__",
+          "entries": 1,
+          "allocated_bytes": 4096,
+          "directories": 1
+        },
+        {
+          "path": "tools/online_bench/__pycache__",
+          "entries": 7,
+          "allocated_bytes": 65536,
+          "directories": 1,
+          "files": 6,
+          "apparent_file_bytes": 43617
+        }
+      ],
+      "fifos": [
+        "artifacts/jobs/core5-benchmark-precision-dev/test-tmp/test_standalone_persists_phase0/blocked.json",
+        "artifacts/jobs/core5-benchmark-progress-dev/test-tmp/test_standalone_persists_phase0/blocked.json",
+        "artifacts/jobs/core5-benchmark-progress-qualify/test-tmp/test_standalone_persists_phase0/blocked.json",
+        "artifacts/jobs/core5-stable-preparation-dev/test-tmp/test_standalone_persists_phase0/blocked.json"
+      ],
+      "tree_metadata_sha256": "cb126559e67bfe34a31b9e21521749ca32e0d1c09719f4606646b6bf11fd7b2c",
+      "total_allocated_bytes": 24029655040,
+      "symlink_count": 480,
+      "symlink_manifest_sha256": "b035f524f6bd67a00c2da0592fcf47b4cf4229d8a9c2b25c86b53a3f407639e0"
+    },
+    "activity": {
+      "same_user_processes_inspected": 26,
+      "busy": [],
+      "limited_visibility": [
+        {
+          "pid": 1534158,
+          "role": "reviewed SSH/PAM session daemon; children scanned independently",
+          "start_ticks": "2091597168",
+          "cmdline": "sshd-session: zlong@pts/6",
+          "state": "S"
+        },
+        {
+          "pid": 2370077,
+          "role": "reviewed SSH/PAM session daemon; children scanned independently",
+          "start_ticks": "2091830921",
+          "cmdline": "sshd-session: zlong@pts/13",
+          "state": "S"
+        },
+        {
+          "pid": 2536605,
+          "role": "zombie; no live descriptors",
+          "start_ticks": "2091920175",
+          "cmdline": "",
+          "state": "Z"
+        },
+        {
+          "pid": 2907799,
+          "role": "reviewed SSH/PAM session daemon; children scanned independently",
+          "start_ticks": "2061019838",
+          "cmdline": "(sd-pam)",
+          "state": "S"
+        },
+        {
+          "pid": 2908938,
+          "role": "reviewed SSH/PAM session daemon; children scanned independently",
+          "start_ticks": "2061020328",
+          "cmdline": "sshd-session: zlong",
+          "state": "S"
+        },
+        {
+          "pid": 2908943,
+          "role": "reviewed SSH/PAM session daemon; children scanned independently",
+          "start_ticks": "2061020349",
+          "cmdline": "sshd-session: zlong",
+          "state": "S"
+        }
+      ],
+      "terminal_job_records": 520,
+      "record_errors": []
+    },
+    "protected_file_count": 2584,
+    "command": [
+      "git",
+      "clean",
+      "-fdx",
+      "--",
+      ".local",
+      ".pytest_cache",
+      "artifacts",
+      "python/tidegraph/__pycache__",
+      "python/tidegraph/planning/__pycache__",
+      "python/tidegraph/weighted/__pycache__",
+      "scripts/__pycache__",
+      "tests/__pycache__",
+      "tools/device_online/cuda/__pycache__",
+      "tools/online_bench/__pycache__"
+    ],
+    "exit_code": 0,
+    "protected_files_unchanged": true,
+    "git_metadata_unchanged": true,
+    "git_connectivity": "passed",
+    "remaining_dry_run": "",
+    "after_allocated_bytes": 132288512,
+    "after_git_allocated_bytes": 61321216,
+    "seconds": 11.556752812117338,
+    "finished": "2026-10-30T06:31:52.568606+00:00"
+  },
+  "retirement_job": {
+    "command": [
+      "/usr/bin/python3",
+      "${TASK}/control/retire-v3.py",
+      "apply",
+      "--plan-sha256",
+      "2ffe31e224d60d5faff30a10527ac7d4ffaf99c3a448b9a6a129ac18edf6361f"
+    ],
+    "cwd": "${TASK}/source",
+    "state": "passed",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "dirty": "",
+    "started": "2026-10-30T06:31:33.998733+00:00",
+    "exit_code": 0,
+    "finished": "2026-10-30T06:31:52.582450+00:00"
+  },
+  "retirement_plan_job": {
+    "command": [
+      "/usr/bin/python3",
+      "${TASK}/control/retire-v3.py",
+      "plan"
+    ],
+    "cwd": "${TASK}/source",
+    "state": "passed",
+    "source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
+    "dirty": "",
+    "started": "2026-10-30T06:30:53.518159+00:00",
+    "exit_code": 0,
+    "finished": "2026-10-30T06:31:02.526743+00:00"
+  },
+  "retirement_review": {
+    "state": "reviewed",
+    "plan_sha256": "2ffe31e224d60d5faff30a10527ac7d4ffaf99c3a448b9a6a129ac18edf6361f",
+    "paths": [
+      ".local",
+      ".pytest_cache",
+      "artifacts",
+      "python/tidegraph/__pycache__",
+      "python/tidegraph/planning/__pycache__",
+      "python/tidegraph/weighted/__pycache__",
+      "scripts/__pycache__",
+      "tests/__pycache__",
+      "tools/device_online/cuda/__pycache__",
+      "tools/online_bench/__pycache__"
+    ],
+    "allocated_bytes": 24029655040,
+    "external_symlinks": [
+      {
+        "path": ".local/venv-core5/bin/python",
+        "resolved": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12"
+      },
+      {
+        "path": ".local/venv-core5/bin/python3",
+        "resolved": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12"
+      },
+      {
+        "path": ".local/venv-core5/bin/python3.12",
+        "resolved": "/opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12"
+      }
+    ],
+    "method": "exact git-clean path list; no link traversal; protected tracked bytes and git HEAD/index/config hashes; identity-pinned proc visibility exceptions recorded"
+  },
+  "retirement_plan": {
+    "sha256": "2ffe31e224d60d5faff30a10527ac7d4ffaf99c3a448b9a6a129ac18edf6361f",
+    "dry_run": "Would remove .local/\nWould remove .pytest_cache/\nWould remove artifacts/\nWould remove python/tidegraph/__pycache__/\nWould remove python/tidegraph/planning/__pycache__/\nWould remove python/tidegraph/weighted/__pycache__/\nWould remove scripts/__pycache__/\nWould remove tests/__pycache__/\nWould remove tools/device_online/cuda/__pycache__/\nWould remove tools/online_bench/__pycache__/\n",
+    "root": "${REPO}",
+    "git_status": "M  docs/STATUS.md\nM  docs/evidence/README.md\nA  docs/evidence/artifact-cleanup-tracked-only-20261030.json\nA  docs/evidence/artifact-cleanup-tracked-only-20261030.md\n",
+    "protected_file_count": 2584,
+    "protected_manifest_sha256": "6635a61cb6aa6f8c556a76118d528d3ff70547193effc996028a69c068641dc6",
+    "git_identity": {
+      "HEAD": "0a239cea6f2a9061fe8704ff4bf6090b1d1e03c10f4af19de7ccd774f0fcca85",
+      "index": "9df3d28a53f1292f06ebbfead5763c1583a9f3bebf3c266a7acb81ffcca77b92",
+      "config": "fe729d7e4c72c552923c55e45c12e038034bd27ca6b02cd73dd71982e417ab6a"
+    },
+    "git_files_verified": "all tracked file modes and SHA256; no deletion-time changes",
+    "note": "Evidence/STATUS were staged before this plan; mathematical runtime code remained e99733d. Protected equality concerns the deletion interval, not later documented commits."
+  },
+  "retirement_service": {
+    "unit": "tracked-checkout-retire-20261030.service",
+    "slice": "background.slice",
+    "transient": true,
+    "limits": {
+      "RuntimeMaxSec": 900,
+      "CPUQuota": "400%",
+      "MemoryMax": "8G",
+      "Nice": 10
+    }
+  },
+  "temporary_material": {
+    "path": "${TASK}",
+    "state": "pending-retirement-after-evidence-commit",
+    "note": "Fresh validation build/environment/source only, not a copy of the old 22GiB; all jobs terminal. This root will also be removed."
+  }
+}
