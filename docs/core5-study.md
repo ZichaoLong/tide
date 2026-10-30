@@ -7,15 +7,16 @@
 | --- | --- |
 | 选模型/执行组合 | [有限目录](../benchmarks/core5-study-v1.json)、下方测试表；公共`resolve_model`可配置目录外合法组合 |
 | 当前实测设置与结果 | [自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
-| 已通过的功能门禁 | [三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |
-| 在新clone中筛选结果 | `python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --state passed --format tsv` |
+| 已通过的功能门禁 | [实际26模型/52训练检查](evidence/core5-coverage-correction-20261030.md)、[三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |
+| 在新clone中筛选结果 | [逐配置证据索引](evidence/core5-index.json)；`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --kind correctness --format tsv` |
 | 修改时同步维护什么 | 本页维护表；[实现分层](architecture.md)、[开发/资格](verification.md)、[历史与新经验](performance-lessons.md) |
 
 配置摘要与覆盖可从同一入口查询（Python≥3.10，`-S`不加载Torch）：
 
 ```sh
 python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --view models --format markdown
-python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --view coverage --family kv --device npu:0 --format tsv
+python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --family ssd --kind correctness --format tsv
+python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --kind performance --device npu:0 --format tsv
 ```
 
 `models`展示全部节点/区域配置的分组、实际窗口及来源分类/参数共享；历史recipe须先匹配model_id。
@@ -98,7 +99,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | 新拓扑/输入时钟 | planning/topology、recipes、端口/延迟/可达性检查；完整返回/续接；recipe身份 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
 | 新设备/放置/dtype | ExecutionSpec、公共能力门禁、各client入口；构建、真机、训练/恢复证据分别记录 |
-| 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[经验](performance-lessons.md) |
+| 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[逐配置索引](evidence/core5-index.json)、[经验](performance-lessons.md)；JUnit提取实际检查，历史汇总不伪造拆分 |
 | 移动文件/入口 | 本页、architecture、semantic-map、README相关链接；STATUS当前动作/ROADMAP待办，不新增第二份交接 |
 
 新增代表用例同时断言生成后的层间边、实际记忆族、教材读/位置/评分设置及运行中事件；
@@ -157,4 +158,4 @@ CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八
 `test_core5_recipe_training.py`另验五族/混合及关键评分/分配小组合的完整CPU FP64多步训练、
 独立调度与磁盘新owner；不是全排列，也不解除原较大FP32边界。
 当前测试区分纯PyTorch/native，FC至少两层，FC mixed使用八层以实际包含rank4/8的GDN/SSD；
-FC/HB各有textbook KV与异构组合。新增测试存在不等于固定资格通过，具体来源见对应证据。
+FC/HB各有textbook KV与异构组合；[0f4506d固定资格](evidence/core5-coverage-correction-20261030.md)73项通过，包含26模型×2客户端的52项训练。仅认证该小型CPU FP64范围。

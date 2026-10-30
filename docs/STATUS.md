@@ -1,40 +1,56 @@
 # 当前交接 — 2026-10-30
 
 授权分支 `graph-execution-foundation`；数学固定 `0770593838a37c790a568226930567ed60f99b83`。
-用户已授权本轮审视后的修正、分阶段提交和普通推送；不使用子代理。
-参考仓库和公共工具链只读，GPU延后。本轮仅修正测试覆盖、配置事实和证据导航，不启动新性能实验。
+本轮覆盖/配置/证据导航修正及分阶段提交、普通推送已授权。无子代理；参考仓库和公共工具链只读；GPU延后。
+构建默认全部可用CPU或half，测试使用空闲资源。本轮未新增长性能实验。
 
-## 当前工作
+## 当前结果
 
-起点 `0a250fa905d316eff7afe6781ec7183172cc9c78`；未提交变更均为本轮修正。
-已补真实FC层间边、FC混合KV/GDN/SSD以及教材配置断言，计划26种recipe分别用PyTorch与Python-native训练。
-已实现完整节点/区域配置摘要、按源码/模型/工作负载/执行身份查询，以及JUnit实际检查提取。
-已更正旧报告的KV逻辑时间窗口与来源分类/参数共享说明；旧25性能配置中7通过及原失败不变。
-短检查9通过。首轮开发作业52失败/21通过：新增模块集合断言被同名参考结果覆盖；未改执行器/容差，已修正变量。原失败和源码归档保留。修正后开发检查73通过，其中52项为真实recipe训练；尚未固定提交资格。
+实现固定 `0f4506d097cbae88d4cd7f1c9d31319a2e0a1f4a`，固定提交相关资格已终态：
+**73 passed，0 failed，0 skipped**。本页与证据一起提交；无未提交执行器变更、活跃作业或自动重试队列。
 
-## 提交与下一资格
+- [覆盖修正资格](evidence/core5-coverage-correction-20261030.md)：26种真实FC/HB/LH配置×PyTorch/native，共52项CPU FP64 packed prefill训练；两步独立完整核对和第三窗磁盘换owner精确恢复。其余21项为planning/目录/配置事实/查询检查，不是仓库全矩阵。
+- 旧FC测试的depth=1、mixed实际只有KV已更正；新FC至少两层、mixed八层含KV/GDN/SSD，实际拓扑、配置和执行模块都有断言。旧24项通过数保留并缩小解释范围。
+- 自然规模窗口与SrcClass/SourceBinding说明已更正；从所有节点/区域配置生成事实，不取首节点代替全图。
+- [逐配置机器索引](evidence/core5-index.json)连接52个正确性和26个性能记录（25原测量+1失败checkpoint后续），保留各自源码/模型/工作负载/执行身份；不合并成一次门禁。正确性测试不产生吞吐。
+- 已验证无Git/build/artifacts的源码导出可用`python -S`查询全部78条记录，且不改变失败或资格标志。
+- 新checkout入口与修改维护映射见[core5-study](core5-study.md)；LH/core-3及本轮正负经验统一在[performance-lessons](performance-lessons.md)。历史仅有汇总的资格仍从[证据目录](evidence/README.md)进入。
 
-开发作业已终态：`core5-coverage-dev` failed/1（52失败/21通过，测试变量重名）；
-`core5-coverage-dev-v2` passed/0（73通过）。各自位于`artifacts/jobs/<名称>/`，保留task.log、status.json、development.json、tests.xml及source.tar.gz/hash；旧失败不改写。
-实现与相关契约准备提交；下一步在此实现提交的全新只读checkout进行同范围资格，不改变数学、dtype或容差。
+## 原结果与未解除边界
 
-计划固定树`artifacts/worktrees/core5-coverage-qualified`，新任务`artifacts/jobs/core5-coverage-qualified`，
-服务`core5-coverage-qualified-20261030.service`（尚未启动）。独立background.slice，1200s、CPUQuota=3200%、MemoryMax=128G、Nice=10；
-ATen/BLAS线程1、native workers2。无C++改动；再次核验匹配源码和全部binary hash后复用b255 CPU构建。
+[自然规模测量](evidence/core5-natural-study-20261029.md)仍为25配置7项完整通过；
+NPU数值/资源失败、FC/HB1B训练尾部严格失败保持，8B/16B仅静态计划。
+[大文件checkpoint](evidence/core5-checkpoint-budget-20261029.md)保留实际5.25GB保存/加载通过、原1B下一窗非有限梯度失败。
+本次未增加standalone、mixed/resident、NPU/CUDA、FP32/FP16或大尺度/性能资格。
+全部数值、异步、resident服务/在途资源、分项预算及目标硬件停止/重启条件由[ROADMAP](ROADMAP.md)维护；
+没有具体新方案时，不重跑已停止的同配置大型任务。本轮修正已完成，没有待恢复队列。
+
+## 固定作业与本地产物
+
+| 任务 | 源码身份 | 终态 |
+| --- | --- | --- |
+| core5-coverage-dev | 0a250fa+归档补丁 | failed/1，52失败/21通过；新增测试变量覆盖错误，未改数学/容差 |
+| core5-coverage-dev-v2 | 0a250fa+修正补丁 | passed/0，73项开发检查 |
+| core5-coverage-qualified | 0f4506d，clean | passed/0，固定提交73项，119.591s |
+
+目录为`artifacts/jobs/<任务>/`，含status.json、task.log、development.json、tests.xml与源码归档。
+服务为`<任务>-20261030.service`；均已终态，成功瞬态服务可被回收，不能用不存在的unit推断通过。
+固定树`artifacts/worktrees/core5-coverage-qualified`保持只读；b255的CPU native构建复用前后核验全部源码/二进制hash。
+环境为`ascend/dev-workspace-9.1.0`、项目`.local/venv-core5`，Python3.12/Torch2.12；未调用NPU。
+服务独立background.slice、Nice10、CPUQuota3200%、MemoryMax128GiB、1200s，ATen/BLAS1线程、native workers2。
+原失败归档和日志保留；新checkout复现不依赖这些本地目录，命令和hash在报告及机器记录。
+
+## 接续与查询
 
 ```sh
-git worktree add --detach artifacts/worktrees/core5-coverage-qualified HEAD
-# 标记固定树源码只读，再经module与项目Python在独立服务中运行：
-python scripts/job.py --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-coverage-qualified -- python scripts/develop.py --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-coverage-qualified --reuse-build --build-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/core5-checkpoint-qualified/build/core-cpu -- tests/test_core5_recipe_training.py tests/test_core5_coverage.py tests/test_core5_study.py tests/test_core5_planning.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/core5-coverage-qualified/tests.xml -o junit_family=legacy
-systemctl --user show core5-coverage-qualified-20261030.service -p ActiveState -p Result -p ExecMainStatus -p MainPID -p Slice -p ControlGroup
+git status --short --branch
+python scripts/status.py
+python scripts/check_upstream.py
+# 以下在Python>=3.10环境，无需Torch或旧运行目录：
+python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --family ssd --kind correctness --format tsv
+python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --kind performance --state failed --format tsv
+python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view models --case fc-1b-kv --format json
 ```
-停止命令`systemctl --user stop core5-coverage-qualified-20261030.service`。
-固定资格通过后从JUnit提取实际52项证据，补索引/导航和经验，单独提交证据并普通推送；不恢复旧队列。
 
-## 既有结果与边界
-
-- [自然规模有限测量](evidence/core5-natural-study-20261029.md)：25配置7完整通过，8B/16B仅静态计划。
-- [客户端资格](evidence/core5-study-clients-20261029.md)：保留原计数，附旧FC覆盖退化的纠正说明。
-- [checkpoint预算](evidence/core5-checkpoint-budget-20261029.md)：大文件保存/加载通过，原1B下一窗非有限梯度未解决。
-- [ROADMAP](ROADMAP.md)保留数值、异步、resident资源与设备待验的停止/重启条件；本轮不扩大这些资格。
-- 代码/配置/修改维护映射见[core5-study](core5-study.md)，经验见[performance-lessons](performance-lessons.md)。
+查询按实际配置过滤；未出现的组合没有本索引资格，不自动解释为不支持。后续修改先看维护表和对应模块独立测试，
+再按新方案做相关资格与有限测量，不将本轮小图资格外推为所有组合已验或低成本优化已耗尽。

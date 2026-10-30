@@ -2,7 +2,7 @@
 
 [core-5候选/配置/拓扑/维护入口](core5-study.md)连接公共planning、真实材料化与有限目录。
 [配置事实](../python/tidegraph/planning/facts.py)从全部节点/区域配置生成窗口、尺寸、来源分类与共享摘要；
-[覆盖检查](../tests/test_core5_coverage.py)与[代表训练](../tests/test_core5_recipe_training.py)核验实际结构和模块，测试数量不替代定义域覆盖。
+[覆盖检查](../tests/test_core5_coverage.py)与[代表训练](../tests/test_core5_recipe_training.py)核验实际结构和模块，测试数量不替代定义域覆盖。[0f4506d资格](evidence/core5-coverage-correction-20261030.md)及[逐配置索引](evidence/core5-index.json)给出实际小图范围。
 [自然维度有限测量](evidence/core5-natural-study-20261029.md)单列完整通过、严格失败和实际区域合批；
 [native文件预算](native-graph-checkpoint.md)与[固定资格](evidence/core5-checkpoint-budget-20261029.md)
 对应精确raw状态持久化，预算改变不改变数学或codec格式。查询历史审阅证据不执行参考补写。

@@ -5,21 +5,17 @@
 用户授权逐项补齐非GPU边界，GPU延后；每项保留原输入、严格标准、有限预算和停止/重启条件。
 任务终态、相关资格通过和限制解除是不同结论。完成记录由Git与[证据索引](evidence/README.md)保存。
 
-## 当前修正待办
-
-- 修正FC训练测试退化：建立真实层间边及KV/GDN/SSD组合；分别验证PyTorch与Python-native完整记录、两步优化器和新owner精确恢复。
-- 从完整配置生成窗口/来源分类/共享事实；增加按配置、源码、客户端区分正确性与性能的查询，保留旧失败和历史资格范围。
-- 固定实现提交后相关资格，单独提交可脱离旧运行目录读取的证据索引及维护导航。此轮不新增性能实验。
-
 ## 本轮已交付
 
 1. 已交付构建资源入口（d841450）：默认全部可用CPU，可选half/正整数；测试资源与性能线程独立声明。
 2. 公共planning与配置默认展开、模型/工作负载/执行/测量身份、公共eager分派已实现并定向检查；固定CPU资格8f51ba6/336通过。保持旧材料可复现。
 3. core-5 FC/HB/LH启发拓扑、自然维度与约1B/8B/16B生成器、有限目录/运行/查询已交付；[固定设施资格](evidence/core5-study-clients-20261029.md)与[自然规模测量](evidence/core5-natural-study-20261029.md)分列。
-4. 三客户端精度/线程/packing/peer、standalone mixed和resident实际梯度/SGD/master/磁盘恢复已验；372 CPU365，e50相关CPU43、CPU6/NPU8消费者、Python NPU3配置。24个recipe完整训练包含于前述检查，不重复累计。
+4. 三客户端精度/线程/packing/peer、standalone mixed和resident实际梯度/SGD/master/磁盘恢复已验；372 CPU365，e50相关CPU43、CPU6/NPU8消费者、Python NPU3配置。旧24个recipe完整训练包含于前述检查，不重复累计；其中FC单层/混合退化范围已在原报告更正。
 5. 25个有限配置中7项完整通过：两种中型FC×三个CPU FP64客户端及LH约1.051B CPU FP64。区域批B4实际生效，另有独立NPU profile；FP32/资源失败不作吞吐，8B/16B仅静态计划。
 6. [导航与修改维护映射](core5-study.md)、可直接查询仓库审阅证据的入口已交付；LH/core-3与本轮经验集中于[performance-lessons](performance-lessons.md)。
 7. [显式native checkpoint预算](evidence/core5-checkpoint-budget-20261029.md)已交付并相关资格通过：默认4GiB保留，5.25GB实际文件保存/加载成功；该1B后续窗口非有限梯度另列，未通过完整续接。
+
+8. [实际覆盖与导航修正](evidence/core5-coverage-correction-20261030.md)：0f4506d相关73项通过，含26个真实配置×PyTorch/native的52项CPU FP64训练/恢复；自动配置事实与逐配置正确性/性能索引已交付，旧性能和设备边界不变。
 
 阶段提交后继续。旧边界的停止条件仍有效；有新方案和证据才重启，GPU延后。
 不以不支持声明代替约定功能，不把小规模通过称为全部平台/尺度通过。

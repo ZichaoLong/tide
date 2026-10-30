@@ -11,7 +11,8 @@ Cartesian qualification of every option.
 
 Current natural-scale settings and failures are in the [25-configuration study](evidence/core5-natural-study-20261029.md)
 and [large checkpoint follow-up](evidence/core5-checkpoint-budget-20261029.md).
-The [configuration/coverage query](core5-study.md) separates exact small correctness cases from
+The [corrected recipe qualification](evidence/core5-coverage-correction-20261030.md) covers 26 small models through PyTorch and Python/native on CPU FP64 (52 training cases, 73 related checks total). It adds no standalone, accelerator, or performance qualification.
+The [configuration/coverage query](core5-study.md), backed by the [per-configuration index](evidence/core5-index.json), separates exact small correctness cases from
 performance runs; it never extends a passing small case to another size, dtype, client or source.
 The [consumer report's coverage correction](evidence/core5-study-clients-20261029.md) narrows its original
 single-layer FC checks. Historical passing counts remain unchanged.
