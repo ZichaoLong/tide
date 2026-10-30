@@ -10,21 +10,26 @@
 
 所有本报告实测模型使用core-5 baseline KV：sum、Read⁺、local cat、region ind、
 regional_total/context/cat、quad；epsilon=1e-5，发送温度1、gamma_max=2。
-FFN=4d，summary/adapter/source/head隐层宽32，KV每头宽64；窗口2048，
+FFN=4d，summary/adapter/source/head隐层宽32，KV每头宽64；实际窗口按区域配置列在下表，
 无RoPE/距离偏置，短衰减半寿命为一个Settle位置步长，按原始逻辑时间计算。
-SrcClass按来源区域绑定，完整描述/状态与真实共享角色由workload/inventory给出。
+SrcClass按来源节点标记（内部边为source+1，外部输入为0）；SourceBinding=region另行规定目标区域内共享A/B，embedding按(region,class)保留。完整描述/状态与真实共享角色由workload/inventory给出。
 各节点私有状态不共享；无任务头、填充参数或真实轨迹预跑。
 
-| case | 主体节点/区域/边 | d / heads / FFN | 去重可训练参数 | B / P | k/区域宽度 |
-| --- | --- | --- | --- | --- | --- |
-| FC medium few | 4 / 2 / 4 | 256 / 4 / 1024 | 4,197,862 | 2 / 2 | 1/2 |
-| FC medium many | 16 / 2 / 64 | 128 / 2 / 512 | 4,283,442 | 2 / 2 | 1/8 |
-| HB medium | 16 / 4 / 32 | 64 / 1 / 256 | 1,304,116 | 4 / 4 | 1/4 |
-| FC 1B | 64 / 8 / 448 | 1024 / 16 / 4096 | 969,962,344 | 1 / 1 | 1/8 |
-| HB 1B | 176 / 22 / 448 | 640 / 10 / 2560 | 1,051,330,022 | 1 / 1 | 1/8 |
-| LH-inspired 1B | 176 / 22 / 1058 | 640 / 10 / 2560 | 1,051,335,206 | 1 / 1 | 1/8 |
+<!-- core5-models:start -->
+| case | nodes/regions/edges | d/heads/FFN | parameters | B/P | KV windows (logical time) | source classes / sharing |
+| --- | --- | --- | --- | --- | --- | --- |
+| fc-1b-kv | 64/8/448 | 1024/16/4096 | 969962344 | 1/1 | 0,5120 | source-node; external=0 / region |
+| fc-medium-few-kv | 4/2/4 | 256/4/1024 | 4197862 | 2/2 | 2048 | source-node; external=0 / region |
+| fc-medium-many-kv | 16/2/64 | 128/2/512 | 4283442 | 2/2 | 2048 | source-node; external=0 / region |
+| hb-1b-kv | 176/22/448 | 640/10/2560 | 1051330022 | 1/1 | 0,4608 | source-node; external=0 / region |
+| hb-medium-kv | 16/4/32 | 64/1/256 | 1304116 | 4/4 | 0,2560 | source-node; external=0 / region |
+| lh-1b-kv | 176/22/1058 | 640/10/2560 | 1051335206 | 1/1 | 0,4608 | source-node; external=0 / region |
+<!-- core5-models:end -->
 
-这里是主体计数；公共broadcast输入/汇总输出绑定另有2个adapter节点与相应边，机器记录分列。
+表中的nodes/regions/edges是主体计数，B/P是样本数/每窗位置数；KV窗口采用原始逻辑时间，0表示不裁剪。
+非中心区域的窗口为512×位置步长；FC 1B步长10、HB/LH 1B步长9，并非统一2048。
+历史清单另列broadcast/sum编码的2个adapter节点计数；本次实际材料使用ports绑定的主体图。
+本表由完整recipe解析生成并回归核对，源码仍为e50；2026-10-30仅更正窗口和来源绑定说明，不改原始测量或状态。
 HB depth=3、branches=2，扩散/收拢区域数1,2,4,8,4,2,1；相邻偏移{0,1}。
 LH-inspired增加局部偏移、跨区域与跳层连接，仍使用core-5局部函数与完整区域分配。
 两个medium FC的参数量接近，节点数/维度/连接/实际工作量不同；不能跨模型称函数等价。

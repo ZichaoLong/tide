@@ -4,6 +4,15 @@ from pathlib import Path
 from source_identity import digest
 
 
+def complete_checks(state, mode, checks, resume):
+    complete = state == "passed" and checks.get("post_measurement_complete_records") is True
+    if mode == "training":
+        complete = complete and all(checks.get(k) is True for k in (
+            "parameter_values_checked", "final_parameter_gradients_checked", "optimizer_values_checked"))
+        complete = complete and (resume or {}).get("state") == "passed" and (resume or {}).get("exact") is True
+    return complete
+
+
 def standalone_identity(binary, root):
     """A binary must have the exact benchmark sources and successful build record."""
     path = binary.parent.parent/"result.json"
@@ -54,6 +63,9 @@ def summarize(path):
     total = sum(x["seconds"] for x in metrics)
     work = {key: sum(x.get(key, 0) for x in metrics)
             for key in ("candidate_updates", "full_calls", "messages", "outputs")}
+    checks = {k: result.get(k, False) for k in ("post_measurement_complete_records", "parameter_values_checked",
+              "final_parameter_gradients_checked", "optimizer_values_checked")}
+    complete = complete_checks(r["state"], measurement["mode"], checks, result.get("exact_resume"))
     return dict(run=str(Path(path).resolve()), state=r["state"], source=r["source"],
         case=r["case_id"], execution_name=r["execution_name"], model_id=r["model_id"], workload_id=r["workload_id"],
         execution_id=execution["execution_id"], measurement_id=measurement["measurement_id"],
@@ -62,18 +74,47 @@ def summarize(path):
         mode=measurement["mode"], phase=result.get("phase"), error=result.get("error", r.get("error")),
         independent_complete=result.get("post_measurement_complete_records", False),
         exact_resume=result.get("exact_resume"), metrics=metrics, measured_seconds=total or None,
-        throughput_qualified=r["state"] == "passed" and bool(result.get("post_measurement_complete_records")),
+        kind="performance", checks=checks, correctness_qualified=complete, throughput_qualified=complete,
+        configuration_facts=r.get("configuration_facts"),
         work=work, memory=result.get("memory"), construction_seconds=result.get("construction_seconds"),
         warmup_seconds=result.get("warmup_seconds"), fixture_sha256=result.get("fixture_sha256"))
 
 
-def query_records(path):
+def query_records(path, _ancestors=frozenset()):
     """Read live run records or reviewed repository evidence without old logs.
 
     Evidence hashes identify the reviewed inputs; this does not authenticate or
     re-run them. Preserve failure and check flags instead of trusting timings.
     """
-    r = json.loads(Path(path).read_text())
+    path = Path(path).resolve()
+    if path in _ancestors:
+        raise ValueError("cyclic evidence index")
+    r = json.loads(path.read_text())
+    if r.get("schema") == "tide-core5-evidence-index-v1":
+        records = []
+        for name in r["reports"]:
+            relative = Path(name)
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError("evidence index requires local relative report paths")
+            records.extend(query_records(path.parent/relative, _ancestors | {path}))
+        return records
+    if r.get("schema") == "tide-core5-correctness-evidence-v1":
+        records = []
+        for row in r["cases"]:
+            facts, execution = r["models"][row["workload_id"]], row["execution"]
+            checks = row.get("checks", {})
+            resume = checks.get("exact_resume")
+            complete = complete_checks(row["state"], row["mode"], checks, resume)
+            records.append(dict(row, source=r["source"], kind="correctness", run=row["test"],
+                evidence_file=str(path), execution_name=execution["requested"]["client"],
+                requested=execution["requested"], effective=execution["effective"],
+                execution_id=execution["execution_id"], configuration_facts=facts,
+                model_id=facts["model_id"], workload_id=facts["workload_id"], recipe=facts["recipe"],
+                parameters=facts["parameters"], graph_counts=facts["graph_counts"],
+                independent_complete=checks.get("post_measurement_complete_records", False),
+                correctness_qualified=complete, throughput_qualified=False,
+                exact_resume=resume, metrics=[], measured_seconds=None, phase="correctness-check"))
+        return records
     if r.get("schema") == "tide-core5-run-v1":
         return [summarize(path)]
     if r.get("schema") != "tide-core5-finite-performance-evidence-v1":
@@ -83,13 +124,9 @@ def query_records(path):
         item = dict(row)
         model = r["models"][item["case"]]
         item.update(parameters=model["parameters"], graph_counts=model["counts"], recipe=model["recipe"],
-                    evidence_file=str(Path(path).resolve()))
+                    evidence_file=str(path), reviewed_model=model, kind="performance")
         checks, resume = item.get("checks", {}), item.get("exact_resume") or {}
-        complete = checks.get("post_measurement_complete_records") is True
-        if item["mode"] == "training":
-            complete = complete and all(checks.get(k) is True for k in (
-                "parameter_values_checked", "final_parameter_gradients_checked", "optimizer_values_checked"))
-            complete = complete and resume.get("state") == "passed" and resume.get("exact") is True
-        item["throughput_qualified"] = item["state"] == "passed" and complete
+        complete = complete_checks(item["state"], item["mode"], checks, resume)
+        item["correctness_qualified"] = item["throughput_qualified"] = complete
         records.append(item)
     return records
