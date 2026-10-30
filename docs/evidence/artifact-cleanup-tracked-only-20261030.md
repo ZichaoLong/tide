@@ -70,4 +70,7 @@ python scripts/check_downstream_consumer.py --build-dir NEW_BUILD --output-dir N
 只读核实其身份并记录限制后，继续独立检查可见的普通进程/子进程及520份终态jobs；
 没有观察到候选文件使用者，不宣称读取了不可见的fd/maps，没有改变权限或终止无关进程。
 
-本轮临时验证根仍待在本报告提交后移除；它仅包含新验证环境、库和记录，不保存旧22GiB副本。
+本报告先以`ef8de6135770f14477a9ee4beafee33b1ec13fd1`提交，随后移除临时工作树及整个验证根。
+本轮新建环境/build/source/原始控制记录共292,491,264 bytes也已删除，没有另存旧22GiB副本。
+最终只登记主工作区，ignored/untracked预览为空；目录约126MiB（含Git），Git跟踪文件逻辑总大小约62.16MiB。
+精确测量时点见JSON；提交会使`.git`占用有小幅变化。当前开发不依赖这些退役目录。

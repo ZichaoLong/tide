@@ -1,6 +1,6 @@
 {
   "schema": "tide-tracked-only-cleanup-evidence-v1",
-  "state": "repository-retired-temporary-validation-material-pending",
+  "state": "passed",
   "implementation_source": "e99733ddb0ff885cc05e287b8b28ccc15f105458",
   "math_revision": "0770593838a37c790a568226930567ed60f99b83",
   "scope": "Source-only checkout rebuild/installation and authorized artifact retirement. No numerical algorithm, tolerance, full matrix, NPU or CUDA claim changed.",
@@ -3114,7 +3114,55 @@
   },
   "temporary_material": {
     "path": "${TASK}",
-    "state": "pending-retirement-after-evidence-commit",
-    "note": "Fresh validation build/environment/source only, not a copy of the old 22GiB; all jobs terminal. This root will also be removed."
+    "state": "removed",
+    "allocated_bytes_before_removal": 292491264,
+    "review_evidence_committed_before_removal": "ef8de6135770f14477a9ee4beafee33b1ec13fd1",
+    "removed_at": "2026-10-30T06:34:33.317729+00:00",
+    "commands": [
+      "git worktree remove ${TASK}/source",
+      "shutil.rmtree(${TASK})"
+    ],
+    "worktrees_remaining": 1,
+    "no_external_archive_created": true,
+    "note": "Fresh build/environment/source and raw controls/logs removed after reviewed evidence commit; no old 22GiB copy was made."
+  },
+  "terminal_unit_observations": {
+    "tracked-checkout-verify-20261030.service": {
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "tracked-checkout-retire-plan-20261030.service": {
+      "Result": "exit-code",
+      "ExecMainStatus": "1",
+      "ActiveState": "failed",
+      "SubState": "failed"
+    },
+    "tracked-checkout-retire-plan-v2-20261030.service": {
+      "Result": "exit-code",
+      "ExecMainStatus": "1",
+      "ActiveState": "failed",
+      "SubState": "failed"
+    },
+    "tracked-checkout-retire-plan-v3-20261030.service": {
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "tracked-checkout-retire-20261030.service": {
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "post_temporary_retirement": {
+    "git_clean_dry_run": "",
+    "repository_allocated_bytes": 132083712,
+    "git_allocated_bytes": 61100032,
+    "tracked_file_bytes": 65176839,
+    "note": "Measured before this final small evidence update and commit; .git sizes change slightly with commits."
   }
 }
