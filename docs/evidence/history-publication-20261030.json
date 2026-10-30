@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "state": "passed",
+  "scope": "Authorized atomic publication, independent remote ref verification, fresh single-branch clone and guarded local directory switch. Temporary cleanup recorded separately.",
+  "qualification": "history-migration-20261030.json",
+  "publication": {
+    "state": "passed",
+    "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+    "new_head": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+    "unit": "gef-history-publish03-20261030.service",
+    "job": {
+      "command": [
+        "/usr/bin/timeout",
+        "-k",
+        "5",
+        "120",
+        "/usr/bin/git",
+        "push",
+        "--atomic",
+        "--porcelain",
+        "--force-with-lease=refs/heads/graph-execution-foundation:83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "--force-with-lease=refs/heads/graph-execution-foundation-old:",
+        "ssh://git@ssh.github.com:443/ZichaoLong/tide.git",
+        "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e:refs/heads/graph-execution-foundation-old",
+        "f1372987d10f1a96dee2170382f5025b96f6d44a:refs/heads/graph-execution-foundation"
+      ],
+      "cwd": "/tmp/gef-history-migration-20261030/old-source",
+      "state": "passed",
+      "source": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+      "dirty": "",
+      "started": "2026-10-30T14:08:18.190836+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-30T14:08:51.350981+00:00"
+    },
+    "push_output": "To ssh://ssh.github.com:443/ZichaoLong/tide.git\n+\tf1372987d10f1a96dee2170382f5025b96f6d44a:refs/heads/graph-execution-foundation\t83d384a4...f1372987 (forced update)\n*\t83d384a4a5efb9df38ce77c395c2d9c5222b4e0e:refs/heads/graph-execution-foundation-old\t[new branch]\nDone\n",
+    "verification": {
+      "transport": "https://github.com/ZichaoLong/tide.git",
+      "command": [
+        "git",
+        "ls-remote",
+        "--heads",
+        "https://github.com/ZichaoLong/tide.git"
+      ],
+      "exit_code": 0,
+      "observed_refs": {
+        "refs/heads/archive/restricted-flow-20260930": "964bf628c67270200dabe55b1bca026bd403cd37",
+        "refs/heads/fractal-latcarf": "4883483dcd3f4e73bfceecb4cba877d87063cefd",
+        "refs/heads/graph-execution-foundation": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+        "refs/heads/graph-execution-foundation-old": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "refs/heads/main": "b93b63aa15e958ecb7534567d0eb432b3ade1332"
+      },
+      "unrelated_refs_unchanged": true
+    },
+    "observed": "2026-10-30T14:10:55.813803+00:00"
+  },
+  "failed_attempts_preserved": [
+    {
+      "unit": "gef-history-publish-20261030.service",
+      "job": {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/tmp/gef-history-migration-20261030/control/publish.py",
+          "f1372987d10f1a96dee2170382f5025b96f6d44a"
+        ],
+        "cwd": "/tmp/gef-history-migration-20261030/old-source",
+        "state": "failed",
+        "source": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "dirty": "",
+        "started": "2026-10-30T14:00:43.484676+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-30T14:00:58.652960+00:00"
+      },
+      "record": {
+        "state": "failed",
+        "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "new_head": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+        "transport": "ssh://git@ssh.github.com:443/ZichaoLong/tide.git",
+        "started": "2026-10-30T14:00:43.519122+00:00",
+        "commands": [
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "f1372987d10f1a96dee2170382f5025b96f6d44a^{commit}"
+            ],
+            "exit_code": 0,
+            "stdout": "f1372987d10f1a96dee2170382f5025b96f6d44a\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "git",
+              "ls-remote",
+              "--heads",
+              "ssh://git@ssh.github.com:443/ZichaoLong/tide.git"
+            ],
+            "exit_code": 128,
+            "stdout": "",
+            "stderr": "ssh: connect to host ssh.github.com port 443: Connection timed out\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n"
+          }
+        ],
+        "error": "RuntimeError('git operation failed with exit 128')",
+        "finished": "2026-10-30T14:00:58.646840+00:00"
+      }
+    },
+    {
+      "unit": "gef-history-publish02-20261030.service",
+      "job": {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/tmp/gef-history-migration-20261030/control/publish02.py",
+          "f1372987d10f1a96dee2170382f5025b96f6d44a"
+        ],
+        "cwd": "/tmp/gef-history-migration-20261030/old-source",
+        "state": "failed",
+        "source": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "dirty": "",
+        "started": "2026-10-30T14:05:49.868598+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-30T14:06:24.613013+00:00"
+      },
+      "record": {
+        "state": "failed",
+        "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+        "new_head": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+        "transport": "ssh://git@ssh.github.com:443/ZichaoLong/tide.git",
+        "started": "2026-10-30T14:05:49.902461+00:00",
+        "commands": [
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "f1372987d10f1a96dee2170382f5025b96f6d44a^{commit}"
+            ],
+            "exit_code": 0,
+            "stdout": "f1372987d10f1a96dee2170382f5025b96f6d44a\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "git",
+              "ls-remote",
+              "--heads",
+              "ssh://git@ssh.github.com:443/ZichaoLong/tide.git"
+            ],
+            "exit_code": 128,
+            "stdout": "",
+            "stderr": "Connection to 20.205.243.160 port 443 timed out\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n"
+          }
+        ],
+        "error": "RuntimeError('git operation failed with exit 128')",
+        "finished": "2026-10-30T14:06:24.606599+00:00"
+      }
+    }
+  ],
+  "clone_unit": "gef-history-clone-20261030.service",
+  "clone_job": {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/tmp/gef-history-migration-20261030/control/clone.py",
+      "f1372987d10f1a96dee2170382f5025b96f6d44a",
+      "ssh://git@ssh.github.com:443/ZichaoLong/tide.git"
+    ],
+    "cwd": "/tmp/gef-history-migration-20261030/old-source",
+    "state": "passed",
+    "source": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+    "dirty": "",
+    "started": "2026-10-30T14:10:56.118277+00:00",
+    "exit_code": 0,
+    "finished": "2026-10-30T14:11:25.212160+00:00"
+  },
+  "clone": {
+    "state": "passed",
+    "expected": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+    "transport": "ssh://git@ssh.github.com:443/ZichaoLong/tide.git",
+    "checkout": "/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030",
+    "commands": [
+      {
+        "argv": [
+          "git",
+          "clone",
+          "--single-branch",
+          "--branch",
+          "graph-execution-foundation",
+          "ssh://git@ssh.github.com:443/ZichaoLong/tide.git",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "Cloning into '/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030'...\n"
+      },
+      {
+        "argv": [
+          "git",
+          "remote",
+          "set-url",
+          "origin",
+          "git@github.com:ZichaoLong/tide.git"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exit_code": 0,
+        "stdout": "f1372987d10f1a96dee2170382f5025b96f6d44a\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "status",
+          "--porcelain"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "for-each-ref",
+          "--format=%(refname)"
+        ],
+        "exit_code": 0,
+        "stdout": "refs/heads/graph-execution-foundation\nrefs/remotes/origin/graph-execution-foundation\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "config",
+          "--get-all",
+          "remote.origin.fetch"
+        ],
+        "exit_code": 0,
+        "stdout": "+refs/heads/graph-execution-foundation:refs/remotes/origin/graph-execution-foundation\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "fsck",
+          "--full",
+          "--no-reflogs"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "cat-file",
+          "-e",
+          "e50ba281c4bf7f1617b9115c161079f3450c9ae9"
+        ],
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "log",
+          "--all",
+          "--oneline",
+          "--",
+          "docs/evidence/archive/retired-records-20261012.jsonl.gz"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "scripts/resolve_history_commit.py",
+          "83d384a",
+          "--json"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"input\": \"83d384a\", \"commit\": \"0cc8811af02e43ef1365b4f5a4cc797575196438\", \"original_matches\": [\"83d384a4a5efb9df38ce77c395c2d9c5222b4e0e\"], \"rewritten\": true}\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "scripts/resolve_history_commit.py",
+          "35d6358",
+          "--json"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"input\": \"35d6358\", \"commit\": \"7c3f9ae008f2cb48bfda00c76c0b68736d1ff1a6\", \"original_matches\": [\"35d63588f3a967e4b65da9c55be05a47f4d964f8\"], \"rewritten\": true}\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/usr/bin/python3",
+          "-B",
+          "scripts/check_upstream.py"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"state\": \"passed\", \"semantic_version\": \"tide-core-5\", \"revision\": \"0770593838a37c790a568226930567ed60f99b83\", \"files\": 19, \"compared_with_upstream_git\": false, \"legacy\": [{\"state\": \"passed\", \"semantic_version\": \"tide-core-3\", \"revision\": \"bd7483b927e047bf17fd4ba52278d20bc67f999e\", \"files\": 5, \"compared_with_upstream_git\": false}]}\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "ls-files",
+          "-z"
+        ],
+        "exit_code": 0,
+        "stdout": "<tracked path listing omitted; count/bytes below>",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "du",
+          "-s",
+          "-B1",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030"
+        ],
+        "exit_code": 0,
+        "stdout": "41017344\t/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "du",
+          "-s",
+          "-B1",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030/.git"
+        ],
+        "exit_code": 0,
+        "stdout": "10301440\t/mi/data2T/zlong/home/llm/graph-execution-foundation.clean-20261030/.git\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "count-objects",
+          "-vH"
+        ],
+        "exit_code": 0,
+        "stdout": "count: 0\nsize: 0 bytes\nin-pack: 12853\npacks: 1\nsize-pack: 9.41 MiB\nprune-packable: 0\ngarbage: 0\nsize-garbage: 0 bytes\n",
+        "stderr": ""
+      }
+    ],
+    "started": "2026-10-30T14:10:56.155589+00:00",
+    "tracked_files": 2593,
+    "tracked_logical_bytes": 24892337,
+    "checkout_allocated_bytes": 41017344,
+    "git_allocated_bytes": 10301440,
+    "count_objects": "count: 0\nsize: 0 bytes\nin-pack: 12853\npacks: 1\nsize-pack: 9.41 MiB\nprune-packable: 0\ngarbage: 0\nsize-garbage: 0 bytes\n",
+    "archive_blob_physically_absent": true,
+    "branch_only": true,
+    "refs": [
+      "refs/heads/graph-execution-foundation",
+      "refs/remotes/origin/graph-execution-foundation"
+    ],
+    "fetch_refspec": "+refs/heads/graph-execution-foundation:refs/remotes/origin/graph-execution-foundation",
+    "finished": "2026-10-30T14:11:25.201613+00:00"
+  },
+  "local_switch": {
+    "state": "passed",
+    "original": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+    "retired": "/mi/data2T/zlong/home/llm/graph-execution-foundation.retire-20261030",
+    "old_head": "83d384a4a5efb9df38ce77c395c2d9c5222b4e0e",
+    "new_head": "f1372987d10f1a96dee2170382f5025b96f6d44a",
+    "all_original_tracked_files_unchanged_except_owned_handoff": true,
+    "owned_handoff_sha256": "1aaba32c40ac37bcb85183950a15b0f87d2a2c1bbb9729569426f0dd2b1615a9",
+    "started": "2026-10-30T14:12:50.190467+00:00",
+    "finished": "2026-10-30T14:12:50.198479+00:00"
+  },
+  "network": {
+    "direct_attempts": "Two publication services failed at ls-remote before push; the third atomic push passed and independent HTTPS refs matched.",
+    "https_push_dry_run": "No credential helper/login; rejected without mutation.",
+    "unauthenticated_http_proxy": "407; current netpath README requires auth.",
+    "current_proxy_document": "/mi/data2T/zlong/home/.local/share/netpath/app/README.md",
+    "proxy_authorization": "User explicitly requested SSH through HTTP proxy after direct connection failures.",
+    "scope": "Task-local authenticated CONNECT to GitHub SSH, host keys verified. No credential values in commands/reports, no public config/route changes.",
+    "authenticated_connect_git_ls_remote": "passed; same new/old/unrelated refs as independently observed via HTTPS",
+    "clone_over_authenticated_connect": "passed",
+    "connect_helper_source": "\"\"\"Per-command CONNECT relay. Credentials stay in memory; no config changes.\"\"\"\nimport base64\nimport configparser\nimport os\nfrom pathlib import Path\nimport select\nimport socket\nimport sys\n\nhost, port = sys.argv[1:]\nif host not in {\"github.com\", \"ssh.github.com\"} or port not in {\"22\", \"443\"}:\n    raise SystemExit(\"proxy helper is restricted to GitHub SSH\")\nconfig = configparser.ConfigParser(interpolation=None)\nif not config.read(Path.home()/\".config/netpath/config.ini\"):\n    raise SystemExit(\"current netpath credential configuration is unavailable\")\nusername, password = config[\"auth\"][\"username\"], config[\"auth\"][\"password\"]\ntoken = base64.b64encode((username+\":\"+password).encode()).decode(\"ascii\")\npeer = socket.create_connection((\"127.0.0.1\",1952),timeout=20)\nrequest = (f\"CONNECT {host}:{port} HTTP/1.1\\r\\nHost: {host}:{port}\\r\\n\"\n           f\"Proxy-Authorization: Basic {token}\\r\\n\\r\\n\")\npeer.sendall(request.encode(\"ascii\"))\nheader = bytearray()\nwhile not header.endswith(b\"\\r\\n\\r\\n\"):\n    part = peer.recv(1)\n    if not part or len(header)>=16384:raise SystemExit(\"invalid CONNECT proxy response\")\n    header.extend(part)\nstatus = bytes(header).split(b\"\\r\\n\",1)[0].split()\nif len(status)<2 or status[1]!=b\"200\":\n    raise SystemExit(\"CONNECT proxy did not accept the request (credentials omitted)\")\ndel request, token, username, password, config\npeer.settimeout(None)\ninputs = [0,peer]\nwhile inputs:\n    readable,_,_ = select.select(inputs,[],[])\n    for item in readable:\n        if item==0:\n            data=os.read(0,65536)\n            if data:peer.sendall(data)\n            else:\n                peer.shutdown(socket.SHUT_WR)\n                inputs.remove(0)\n        else:\n            data=peer.recv(65536)\n            if not data:raise SystemExit(0)\n            sys.stdout.buffer.write(data)\n            sys.stdout.buffer.flush()\n"
+  },
+  "limits": {
+    "publication_unit_runtime_seconds": 180,
+    "push_command_timeout_seconds": 120,
+    "clone_runtime_seconds": 360,
+    "cpu_quota_percent": 200,
+    "memory_max_bytes": 2147483648,
+    "slice": "background.slice",
+    "nice": 10
+  },
+  "note": "The archive survives on the remote old branch; total remote repository storage is not reduced by retaining that branch. The daily checkout tracks only the filtered branch. Later commits add these reviewed receipts and the final handoff without runtime changes."
+}

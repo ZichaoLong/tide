@@ -8,7 +8,8 @@
 716个代码提交及父链全部保留，其中181个提交号改变；作者、提交时间、消息和其他文件原样保留。
 过滤后的原HEAD为`0cc8811af02e43ef1365b4f5a4cc797575196438`；其后的提交交付本页、工具和证据。
 完整参数、原归档hash及映射hash见[迁移清单](history/migration-20261030.json)。
-逐提交核对与固定源码CPU验证见[独立证据](evidence/history-migration-20261030.md)。
+逐提交核对与固定源码CPU验证见[独立证据](evidence/history-migration-20261030.md)，
+远端原子发布、干净新检出与本地切换见[发布证据](evidence/history-publication-20261030.md)。
 这不是丢弃代码历史的单提交基座，也不修改固定数学上游。
 
 ## 新检出与旧工作区
