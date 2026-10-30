@@ -11,7 +11,7 @@ Git 保留源码、测试、构建/验证/测量入口、固定教材快照，�
 可用的失败诊断。历史绝对路径作为来源标签保留，不是新线程的依赖路径。
 必要记录应可由仓库取得；大型原始 trace、缓存、二进制和重复源码副本无需常驻。
 
-本次归档直接随 Git 保存，约 38.5 MiB；索引、SHA256 与数量见
+2026-10-12的退役归档直接随 Git 保存，约 38.5 MiB；索引、SHA256 与数量见
 [退役凭据](evidence/artifact-retirement-20261012.json)。635 个旧工作副本的基线
 提交都在当前分支历史中，431 份相对 HEAD 的补丁和 5,049 个未跟踪源码文件
 按原字节保留（包括构建模板），不必保留重复 checkout。
@@ -63,9 +63,33 @@ python scripts/read_retired_record.py \
 运行任务的外层passed可能只表示调查流程完成，内部用例仍可失败；不能仅按外层状态批量丢弃失败材料。
 `scripts/clean_artifacts.py`只覆盖旧平铺作业布局，不扫描当前jobs/worktrees，不能作为完整退役清单。
 
-2026-10-30第一轮[清理凭据](evidence/artifact-cleanup-20261030.md)记录58.876GiB实际退役及保留项。
-当前28份未提交工作树源码、其本地归档、既有开发构建和大材料/失败checkpoint继续保留；
-后续是否退役依用户范围与必要复现记录决定，不自动从本次清理推导新的删除任务。
+2026-10-30第一轮[清理凭据](evidence/artifact-cleanup-20261030.md)记录58.876GiB退役及当时的保留项。
+用户随后明确授权退役未提交的历史临时副本及大材料；[第二轮凭据](evidence/artifact-cleanup-round2-20261030.md)
+记录30份源码副本和5个大文件的移除，约65.853GiB。全部历史worktree的已提交HEAD在授权分支历史中；
+28份未提交差异与完整补丁/新文件归档再次核对后退役，不宣称这些差异均已合并，也不把脏树一律解释为失败。
+
+本地源码归档仍为`artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz`，约1.61MiB；
+身份、成员核对及恢复边界见第二轮证据。它属于受保留的本地材料，未新增原始归档到Git。
+配套配置、种子、结果、错误日志、小型反例和作业终态保持。失败现场无需永久整目录保存；
+删除大checkpoint意味着旧精确状态不再在线，重启诊断须重新生成，跨环境不承诺逐位恢复。
+失败经验的进一步整理另行安排，不因清理改写已有结论或重新开启旧任务。
+
+## 本机保留构建
+
+当前只有主工作区被Git登记。仍可用的构建已与历史源码副本分离，共约3.28GiB：
+
+| 相对仓库根目录的路径 | 原身份与用途 |
+| --- | --- |
+| `artifacts/retained-builds/core5-checkpoint-qualified/build/` | b255e27；CPU core/client与standalone NPU SDK链，实际有效resident为resident-sdk-v3 |
+| `artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/` | 04b5215；Python-owned与SDK常驻基线 |
+| `artifacts/retained-builds/core5-independent-qualified/build/npu-python/` | bdd7f6c；Torch2.12/Torch-NPU2.12原core基线 |
+
+原`artifacts/worktrees/<上述名称>/build`只剩指向这些构建的兼容链接，用于旧RPATH及路径引用；
+父目录没有旧源码或`.git`登记。新任务使用retained-builds路径并核对manifest/二进制hash与环境。
+迁移保留文件身份与运行库hash，CPU接入另复核；不新增NPU/GPU资格，也不把旧NPU库冒称当前全源码构建。
+这些是预编译产物，CMake缓存仍记录历史源码路径，不能直接在搬迁目录增量重建。
+需要修改或重建时按[development](development.md)从固定源码在新的build目录构建；旧工作树无需恢复。
+`.local/venv-core5`、主源码和公共环境保持。
 
 2026-10-12退役的具体目录、必要记录位置、校验值和实际回收量记录在
 [evidence/artifact-retirement-20261012.md](evidence/artifact-retirement-20261012.md)。
