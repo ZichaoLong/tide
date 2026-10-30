@@ -9,6 +9,13 @@ The table below describes execution layers; each linked report retains its own
 source, dtype, topology, configuration and acceptance scope. It is not one
 Cartesian qualification of every option.
 
+Current natural-scale settings and failures are in the [25-configuration study](evidence/core5-natural-study-20261029.md)
+and [large checkpoint follow-up](evidence/core5-checkpoint-budget-20261029.md).
+The [configuration/coverage query](core5-study.md) separates exact small correctness cases from
+performance runs; it never extends a passing small case to another size, dtype, client or source.
+The [consumer report's coverage correction](evidence/core5-study-clients-20261029.md) narrows its original
+single-layer FC checks. Historical passing counts remain unchanged.
+
 [Parameter-matched workload evidence](evidence/core5-performance-transfer-20261028.md)
 adds fixed CPU/NPU gates, storage/copy changes and actual large material. D64
 FP32 complete records, gradients and optimizer values can fail strict checks;
@@ -40,7 +47,7 @@ exact next-window resume pass; original FP32 and asynchronous failures remain.
 | Resident sample replicas | Private graph states, canonical gradient sum and one optimizer boundary; [two-device qualification](evidence/core5-resident-weighted-peers-20261028.md) |
 | Resident node placement | One sample split by node, complete regional selection and exact cuts; [forward qualification](evidence/core5-weighted-node-placement-20261028.md). Placed window VJP, canonical optimizer publication, FP32/FP16 training and relocated restore have [independent qualification](evidence/core5-weighted-node-training-20261028.md) |
 | CUDA | Source and aarch64 build/loader evidence, including sm80/90/100 resident kernels. Actual GPU correctness, training, residency, peers, capacity and performance remain unverified; x86_64 also needs its own build |
-| Performance | [Finite small/medium comparison](evidence/core5-weighted-performance-20261028.md) and [startup/memory observations](evidence/core5-weighted-observation-20261028.md); no large-model or cross-card throughput claim |
+| Performance | [Natural-scale settings/results](evidence/core5-natural-study-20261029.md): 25 configurations, 7 fully checked CPU FP64 results including short-window LH-inspired 1.051B. NPU numerical/resource failures remain; 8B/16B are static plans. Earlier [small/medium comparison](evidence/core5-weighted-performance-20261028.md) and [startup observations](evidence/core5-weighted-observation-20261028.md) retain their own scope; no general large-batch or cross-card throughput claim |
 
 CPU FP64/FP32 remain the reference. NPU reports distinguish Torch2.12/CANN9.1
 Python-owned code from Torch2.10/CANN9.0 standalone SDK code. Resident FP16 has

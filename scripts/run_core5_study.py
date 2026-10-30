@@ -66,6 +66,8 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     now = lambda: datetime.now(timezone.utc).isoformat()
     record = {k: v for k, v in r.items() if k not in {"plan", "inventory"}}
+    from tidegraph.planning.facts import describe
+    record["configuration_facts"] = describe(r["plan"])
     record.update(schema="tide-core5-run-v1", source=source, dirty=dirty, state="running", started=now(),
         model_id=r["plan"]["model_id"], workload_id=r["plan"]["sha256"],
         parameters=r["inventory"]["totals"], recipe=r["plan"]["recipe"],

@@ -11,6 +11,24 @@
 | 在新clone中筛选结果 | `python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --state passed --format tsv` |
 | 修改时同步维护什么 | 本页维护表；[实现分层](architecture.md)、[开发/资格](verification.md)、[历史与新经验](performance-lessons.md) |
 
+配置摘要与覆盖可从同一入口查询（Python≥3.10，`-S`不加载Torch）：
+
+```sh
+python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --view models --format markdown
+python -S scripts/index_core5_study.py docs/evidence/core5-natural-study-20261029.json --view coverage --family kv --device npu:0 --format tsv
+```
+
+`models`展示全部节点/区域配置的分组、实际窗口及来源分类/参数共享；历史recipe须先匹配model_id。
+`coverage`按实际model_id/workload_id/execution_id及源码展示，不按用例名称继承资格；可筛选
+topology、profile、实际family、client、device、placement、dtype、kind和终态。正确性检查与性能
+记录分别显示；没有测量窗的测试不产生吞吐资格。未出现的配置是未被本索引认证，不解释为不支持。
+索引只引用明确的仓库报告，不扫描旧运行目录；历史仅有汇总计数的报告继续从证据文档进入，
+不自动拆成未经记录的逐配置通过项。
+
+静态事实由`planning/facts.py`生成；新run自动保存，JUnit中的实际recipe/执行/检查记录可由
+`record_core5_checks.py --junit FILE --source EXACT_COMMIT --output NEW_JSON`提取。
+失败、跳过和缺少梯度/恢复断言分别保留；测试耗时不能变成性能时间。
+
 ## 配置与测量身份
 
 | 对象 | 公共入口 | 身份包含什么 |
@@ -83,6 +101,10 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[经验](performance-lessons.md) |
 | 移动文件/入口 | 本页、architecture、semantic-map、README相关链接；STATUS当前动作/ROADMAP待办，不新增第二份交接 |
 
+新增代表用例同时断言生成后的层间边、实际记忆族、教材读/位置/评分设置及运行中事件；
+不要仅凭`fc`、`mixed`或`textbook`名称计覆盖。修改配置摘要时运行`test_core5_coverage`，
+其独立窗口/分类检查和生成表核对可防止把第一节点配置写成全图配置。
+
 定向验证入口是`test_core5_planning`、`test_weighted_inventory`、`test_weighted_workload_plan`。
 拓扑与教材手算1408节点/22区域/3584边和独立公共生成器对照；五族及混合小图检查真实
 参数/梯度和int64元数据。全图独立调度、optimizer、磁盘换owner与设备资格由相应门禁负责，
@@ -134,3 +156,5 @@ CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八
 这些检查与区域分配手算/独立根测试、性能测量的职责不同，不互相替代。
 `test_core5_recipe_training.py`另验五族/混合及关键评分/分配小组合的完整CPU FP64多步训练、
 独立调度与磁盘新owner；不是全排列，也不解除原较大FP32边界。
+当前测试区分纯PyTorch/native，FC至少两层，FC mixed使用八层以实际包含rank4/8的GDN/SSD；
+FC/HB各有textbook KV与异构组合。新增测试存在不等于固定资格通过，具体来源见对应证据。
