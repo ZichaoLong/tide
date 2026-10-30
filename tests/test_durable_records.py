@@ -112,3 +112,19 @@ def test_explicit_terminal_postmortem_has_no_invented_start_time(tmp_path):
     actual, errors = records.read_jobs(tmp_path)
     assert not errors and actual == [(folder/"status.json", record)]
     assert "started" not in actual[0][1]
+
+
+def test_reentry_without_artifacts_points_to_reviewed_history_without_creating_jobs(tmp_path):
+    root = tmp_path/"checkout"; (root/"scripts").mkdir(parents=True); (root/"docs").mkdir()
+    for name in ("status.py", "durable_records.py"):
+        shutil.copyfile(ROOT/"scripts"/name, root/"scripts"/name)
+    (root/"docs/STATUS.md").write_text("Current handoff\n")
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run(["git", "-c", "user.name=Record Test", "-c", "user.email=record@example.invalid",
+                    "-c", "commit.gpgsign=false", "commit", "--allow-empty", "-qm", "fixture"], cwd=root, check=True)
+    result = subprocess.run([sys.executable, str(root/"scripts/status.py"), "--all-jobs"],
+                            cwd=root, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    assert "No local job records" in result.stdout and "docs/reproduction.md" in result.stdout
+    assert "Missing raw runs do not imply passed or untested" in result.stdout
+    assert not (root/"artifacts").exists()

@@ -49,47 +49,40 @@ python scripts/read_retired_record.py \
 - 原始 LH 对照是额外门禁，需按 [LH selector](lh-selector.md) 从原仓库建立固定快照；
   普通 Tide 开发不需要原始 LH。只读参考仓库不在本次清理范围。
 
-## 后续清理
+## 当前保留原则
 
-先检查任务状态、实际目录、待保留记录与 dry run，再删除明确的项目产物。
-保留活动任务输入、未保存的用户修改、不可再生输入和新发现问题的最小复现。
-清理失败时如实保留部分完成状态，不把计划当成已回收空间。
-清理产生的记录不重新开启历史队列，也不要求重跑历史全矩阵。
+2026-10-30用户授权将本仓库收束为`.git`与Git跟踪文件；环境、构建、原始运行材料均按需重建。
+本轮执行和最终空间见[证据索引](evidence/README.md)及[STATUS](STATUS.md)。
+此前两轮保留的构建、28份未采用差异的本地归档、任务源码快照和原始见证也属于本轮退役范围。
+28份差异不宣称均已合并；其路径/基线/hash仍见[第二轮凭据](evidence/artifact-cleanup-round2-20261030.json)，
+归档字节不再保证可恢复。不另存一份22GiB副本到其他目录。
 
-工作树干净只表示无未提交的非忽略修改；另外检查HEAD是否在授权分支历史中、忽略目录中的实际数据及使用依赖。
-已提交基线在历史中不表示未提交实验差异已合并，也不表示所有问题已解决。需要保留差异时可归档完整补丁与未跟踪源码，
-不要求永久保留整个checkout。删除工作树使用Git管理登记；历史报告引用不是永久在线依赖。
+主要失败结论与重启条件已在Git中；本轮以[复现导航](reproduction.md)连接正式脚本、输入生成器和证据，
+两份实际分配失败行作为小型测试输入保留，未解决问题的原严格断言保持。
+[旧任务摘要](evidence/retired-jobs-20261030.json)保留520份终态和身份；原始日志、完整profile和精确checkpoint不永久在线。
+必要的复现入口与输入应能从Git取得或按声明生成；大型才出现的问题可保留有预算的生成方案，不承诺低成本重演。
 
-运行任务的外层passed可能只表示调查流程完成，内部用例仍可失败；不能仅按外层状态批量丢弃失败材料。
-`scripts/clean_artifacts.py`只覆盖旧平铺作业布局，不扫描当前jobs/worktrees，不能作为完整退役清单。
+先检查任务状态、实际目录、用户修改、输入依赖和dry run，再删除明确的项目产物。
+保留活动任务输入；正在调查的新问题先保存必要记录，终态后按授权退役。
+不能用外层passed推断所有内部case通过，也不能把删除原始材料称为修复失败。
+`scripts/clean_artifacts.py`仅覆盖旧平铺作业布局，不作为当前整仓清理入口。
 
-2026-10-30第一轮[清理凭据](evidence/artifact-cleanup-20261030.md)记录58.876GiB退役及当时的保留项。
-用户随后明确授权退役未提交的历史临时副本及大材料；[第二轮凭据](evidence/artifact-cleanup-round2-20261030.md)
-记录30份源码副本和5个大文件的移除，约65.853GiB。全部历史worktree的已提交HEAD在授权分支历史中；
-28份未提交差异与完整补丁/新文件归档再次核对后退役，不宣称这些差异均已合并，也不把脏树一律解释为失败。
+工作树干净不证明忽略目录没有有价值数据。另核对提交归属、未提交实验改动及使用中的文件/进程。
+工作树用Git管理登记；历史引用是来源标签，不是永久在线依赖。清理不得跟随符号链接删除公共工具链或参考仓库。
+`.git`、跟踪文件和下游自己的安装物不属于原始实验产物。
 
-本地源码归档仍为`artifacts/cleanup-round1-20261030-v2/preserved-records.tar.gz`，约1.61MiB；
-身份、成员核对及恢复边界见第二轮证据。它属于受保留的本地材料，未新增原始归档到Git。
-配套配置、种子、结果、错误日志、小型反例和作业终态保持。失败现场无需永久整目录保存；
-删除大checkpoint意味着旧精确状态不再在线，重启诊断须重新生成，跨环境不承诺逐位恢复。
-失败经验的进一步整理另行安排，不因清理改写已有结论或重新开启旧任务。
+<a id="本机保留构建"></a>
 
-## 本机保留构建
+## 从源码恢复开发链
 
-当前只有主工作区被Git登记。仍可用的构建已与历史源码副本分离，共约3.28GiB：
+旧“本机保留构建”链接指向本节；此前保留的本机库已列入本轮退役范围。
 
-| 相对仓库根目录的路径 | 原身份与用途 |
-| --- | --- |
-| `artifacts/retained-builds/core5-checkpoint-qualified/build/` | b255e27；CPU core/client与standalone NPU SDK链，实际有效resident为resident-sdk-v3 |
-| `artifacts/retained-builds/core5-compact-fiber-qualified-v2/build/` | 04b5215；Python-owned与SDK常驻基线 |
-| `artifacts/retained-builds/core5-independent-qualified/build/npu-python/` | bdd7f6c；Torch2.12/Torch-NPU2.12原core基线 |
+新clone或清理后的目录没有`.local/venv-core5`、预编译库和旧jobs是正常状态。
+按[development](development.md)重建所需环境/库，按[verification](verification.md)执行必要检查；
+使用新构建manifest及二进制身份，不冒用退役构建的资格。不同Torch/CANN/架构分别构建。
+CPU从干净源码通过不能认证NPU/GPU，硬件和数值边界仍由ROADMAP管理。
 
-原`artifacts/worktrees/<上述名称>/build`只剩指向这些构建的兼容链接，用于旧RPATH及路径引用；
-父目录没有旧源码或`.git`登记。新任务使用retained-builds路径并核对manifest/二进制hash与环境。
-迁移保留文件身份与运行库hash，CPU接入另复核；不新增NPU/GPU资格，也不把旧NPU库冒称当前全源码构建。
-这些是预编译产物，CMake缓存仍记录历史源码路径，不能直接在搬迁目录增量重建。
-需要修改或重建时按[development](development.md)从固定源码在新的build目录构建；旧工作树无需恢复。
-`.local/venv-core5`、主源码和公共环境保持。
-
-2026-10-12退役的具体目录、必要记录位置、校验值和实际回收量记录在
-[evidence/artifact-retirement-20261012.md](evidence/artifact-retirement-20261012.md)。
+[第一轮](evidence/artifact-cleanup-20261030.md)和[第二轮](evidence/artifact-cleanup-round2-20261030.md)
+记载的是当时完成与当时保留，不代表今天原始路径仍存在。
+2026-10-12随Git保存的[历史记录归档](evidence/artifact-retirement-20261012.md)继续保留；
+这是既有明确例外，不把新的完整运行归档追加进去。

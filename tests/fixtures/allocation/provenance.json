@@ -1,0 +1,23 @@
+{
+  "schema": "tide-curated-allocation-witness-v1",
+  "scope": "Two exact captured local rows; not full model/checkpoint evidence. Original response was rejected; independent Decimal and current local solver are checked separately.",
+  "evidence": "docs/evidence/core5-local-allocation-factorized-kv-20261028.md",
+  "fixtures": [
+    {
+      "file": "wide2048.json",
+      "sha256": "c55de8791cbab57c1f855ff4580359cda27ca6c243e718ebb21eca95f6c4aed1",
+      "original_path": "artifacts/jobs/core5-capture-dev/wide2048/allocation-failure.json",
+      "producer_source": "a7d6ecfdc99dd7f06acdd2e833faa8d784f06f7b",
+      "producer_dirty": true,
+      "producer_status_sha256": "6036f4551a851511d09f9fc254345122fb41e90997babda8d1924de9ed259505"
+    },
+    {
+      "file": "matched2048.json",
+      "sha256": "bde909d583f8ecdf14397212356094b5a3f98bcb4bf40fae3d885cd1db8f8266",
+      "original_path": "artifacts/jobs/core5-capture-dev/matched2048/allocation-failure.json",
+      "producer_source": "a7d6ecfdc99dd7f06acdd2e833faa8d784f06f7b",
+      "producer_dirty": true,
+      "producer_status_sha256": "6036f4551a851511d09f9fc254345122fb41e90997babda8d1924de9ed259505"
+    }
+  ]
+}

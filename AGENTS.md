@@ -95,6 +95,13 @@
   `docs/artifact-retention.md`: keep necessary records, inspect the dry run,
   and distinguish historical citations from live dependencies. Never clean
   reference repositories or shared toolchains as experiment artifacts.
+- Use `docs/reproduction.md` to connect unresolved issues to tracked generators,
+  small fixtures, diagnostics and reviewed evidence. A clean checkout must not
+  depend on retired run directories. Keep current limitations only in ROADMAP.
+  At authorized retirement, curate necessary lessons/inputs first, then remove
+  raw runs and temporary environments/builds; never promote an outer job status
+  into a claim that every inner check passed. Retired byte hashes are identities,
+  not a guarantee that the original bytes remain available.
 - Git history retains superseded plans/evidence; do not keep renamed copies of
   old handoffs. Fix broken navigation when moving files.
 - Report implemented/verified/planned separately. A small formula profile does

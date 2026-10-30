@@ -18,8 +18,8 @@ python scripts/check_upstream.py
 如需对比原 Git 对象，加 `--upstream-repo /path/to/ObsidianVault`。
 新 clone 没有本地 job 记录是正常状态，不代表旧实验未运行，也不要求找回它们。
 
-本机已保留的预编译库位置及身份见[产物保留规则](artifact-retention.md#本机保留构建)；
-它们不属于新clone的依赖，旧CMake缓存不能代替下面的新构建流程。
+默认接续只依赖Git源码/文档和声明的外部工具链；本地环境、预编译库和旧运行目录不保证存在。
+按下面的步骤重建，已知问题从[复现导航](reproduction.md)进入；[产物规则](artifact-retention.md)说明历史材料边界。
 
 ## Python CPU 起步
 

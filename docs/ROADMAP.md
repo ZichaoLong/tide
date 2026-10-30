@@ -4,6 +4,7 @@
 [STATUS](STATUS.md)是唯一当前交接；[execution-flows](execution-flows.md)是持续契约。
 用户授权逐项补齐非GPU边界，GPU延后；每项固定原输入配置、严格标准、有限预算和停止/重启条件。
 原始大文件的在线保留按[产物规则](artifact-retention.md)；退役后复查旧失败须重新生成材料。
+问题到代码、输入和证据的入口集中于[复现导航](reproduction.md)；下表仍是唯一状态与停止/重启条件。
 任务终态、相关资格通过和限制解除是不同结论。完成记录由Git与[证据索引](evidence/README.md)保存。
 
 ## 本轮已交付

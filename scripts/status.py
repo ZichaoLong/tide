@@ -23,6 +23,10 @@ terminal = [(p, d) for p, d in records if d.get("state") not in {"starting", "ru
 selected = records if args.all_jobs else live + terminal[:args.recent]
 print("Durable records: all history" if args.all_jobs else
       f"Durable records: all live and {args.recent} recent terminal jobs (--all-jobs for history)")
+if not records and not errors:
+    print("No local job records. Historical results: docs/evidence/README.md; "
+          "retention: docs/artifact-retention.md; reproduction: docs/reproduction.md. "
+          "Missing raw runs do not imply passed or untested.")
 for status, data in selected:
     # Raw failures are retained, without repeatedly flooding re-entry with old
     # dirty-file lists or implying that every historical failure is still open.
