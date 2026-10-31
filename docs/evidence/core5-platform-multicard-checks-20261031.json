@@ -501,7 +501,7 @@
     }
   ],
   "reproduction": "Select each cuda-train-two-{ordinary,blocking,cpu_bridge} case from configs/matrices/cuda-multicard.json; tidegraph check case.json --site site.json --scope full --output-dir new-check-dir",
-  "untested": "NPU successor pending; no multi-device resident or large-model root qualification inferred",
+  "untested": "NPU independent-root/full-training checks did not complete: all three transports raised EE1017 after complete independent inference/exact resume passed; first failing root/call is not recorded by the old checker. No multi-device resident or large-model root qualification inferred.",
   "followups": [
     {
       "source": "36baeb719361d5e5e39c0f05533f9e5cc53c04f7",
@@ -560,5 +560,387 @@
       },
       "raw_projection_sha256": "792c8a40d8e06ca8fb982403c0a0ad793e8a92d916549b1c8af5387d041823bc"
     }
-  ]
+  ],
+  "npu_cases": [
+    {
+      "name": "npu-train-two-blocking",
+      "result_sha256": "dd4b7866f04cf3e67ccf20959bde2d81aeb31449e7d9339a023dd1b57ebb6fcd",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-train-two-blocking",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "blocking",
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "19f83bbaf7ef9ba9d949e4e11210891c027851e6badf25853c3b1aa48a866980",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "0ba3b6f4d44ca349b1337b1993a2ca6418a133e95dc35b10e0d7e722ca6ac7dd",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "failed",
+        "started": "2026-10-31T09:56:07.078653+00:00",
+        "scope": "full",
+        "config_id": "19f83bbaf7ef9ba9d949e4e11210891c027851e6badf25853c3b1aa48a866980",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "error": {
+          "type": "RuntimeError",
+          "message": "The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffea001e598.\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\n[ERROR] 2026-10-31-17:56:16 (PID:2041473, Device:0, RankID:-1) ERR00100 PTA call acl api failed.\n[PID: 2041473] 2026-10-31-17:56:16.050.263 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\nTraceBack (most recent call last):\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\n"
+        },
+        "finished": "2026-10-31T09:56:16.069448+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+            "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+            "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+            "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+            "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "failed",
+        "exit_code": 1,
+        "started": "2026-10-31T09:56:05.658872+00:00",
+        "finished": "2026-10-31T09:56:20.760838+00:00",
+        "remaining_live_pids": []
+      },
+      "observed_live_workload_pids": []
+    },
+    {
+      "name": "npu-train-two-cpu_bridge",
+      "result_sha256": "d27c1a41bb35c8961dcf45af95212fa630f9d3ccfb3498885a66eedd4517bdad",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-train-two-cpu_bridge",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "cpu_bridge",
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "6a3a572dbbcdb276af0710a90efc9c3efcdd3da7162a0ef2ab7bc9ebb8616cef",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "f7540299f6421aecd9b4f7844fe5c21df1ee0c3a14cfa5676e6c8a7ed814685d",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "failed",
+        "started": "2026-10-31T09:56:22.349541+00:00",
+        "scope": "full",
+        "config_id": "6a3a572dbbcdb276af0710a90efc9c3efcdd3da7162a0ef2ab7bc9ebb8616cef",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "error": {
+          "type": "RuntimeError",
+          "message": "The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe9c01e598.\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\n[ERROR] 2026-10-31-17:56:31 (PID:2042001, Device:0, RankID:-1) ERR00100 PTA call acl api failed.\n[PID: 2042001] 2026-10-31-17:56:31.350.944 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\nTraceBack (most recent call last):\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\n"
+        },
+        "finished": "2026-10-31T09:56:31.353136+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+            "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+            "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+            "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+            "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "failed",
+        "exit_code": 1,
+        "started": "2026-10-31T09:56:20.930994+00:00",
+        "finished": "2026-10-31T09:56:35.185652+00:00",
+        "remaining_live_pids": []
+      },
+      "observed_live_workload_pids": []
+    },
+    {
+      "name": "npu-train-two-ordinary",
+      "result_sha256": "6a0fd5ded20c813ff9772083cb0a7b859240c3bb3859aa1ebeb4226e2aa9f145",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-train-two-ordinary",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "5a44143cd58cd4f4bc5a0c7e6f0fea1fdc126f5a59996e76c97a793fea9eb35f",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "be7ce9dd51a1e2c7c957adee61b6a5297b70655facc29cfec4186dad15b1c747",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "failed",
+        "started": "2026-10-31T09:55:51.710113+00:00",
+        "scope": "full",
+        "config_id": "5a44143cd58cd4f4bc5a0c7e6f0fea1fdc126f5a59996e76c97a793fea9eb35f",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "error": {
+          "type": "RuntimeError",
+          "message": "The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe9401e598.\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\n[ERROR] 2026-10-31-17:56:00 (PID:2040516, Device:0, RankID:-1) ERR00100 PTA call acl api failed.\n[PID: 2040516] 2026-10-31-17:56:00.812.556 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\nTraceBack (most recent call last):\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\n"
+        },
+        "finished": "2026-10-31T09:56:00.818945+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+            "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+            "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+            "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+            "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "failed",
+        "exit_code": 1,
+        "started": "2026-10-31T09:55:50.331021+00:00",
+        "finished": "2026-10-31T09:56:05.493587+00:00",
+        "remaining_live_pids": []
+      },
+      "observed_live_workload_pids": []
+    }
+  ],
+  "npu_input_sha256": "af8086dc266a76be3ed6f84d17d24af3fcb01262bb55b4285a2e06f0dcc9027c",
+  "npu_launcher_script_sha256": "2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c"
 }

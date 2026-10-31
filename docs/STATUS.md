@@ -4,7 +4,7 @@
 依最新用户指令优先计算，使用固定源码收齐训练与必要恢复诊断；额外大文件存储测量不作为门槛，不重跑已审阅矩阵。
 本机/远端tmpfs仅作经主存联合准入的易失周转，活动作业的路径与输入不改变。
 
-授权分支`graph-execution-foundation`；本次重入HEAD为6b529fd、工作区干净且已推送。
+授权分支`graph-execution-foundation`；本次重入HEAD为03292c3、工作区干净且已推送。
 数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
 实际当前提交用`git status --short --branch`和`python scripts/status.py`核对，不回退后续源码。
 旧账户指南已不存在，依用户确认、项目site和`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`继续；
@@ -47,17 +47,17 @@ GPU新配方双卡1.014B训练的执行/离散/精确恢复完成，独立数值
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:52Z：38.406B三卡原1800秒到限，监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。监督终态时仍有不可中断I/O进程1908740，09:52Z核对该进程已消失且原控制组已空；原监督残留记录仍保留。七卡任务等待241秒后完成，完整离散/恢复通过、数值探索，中位0.804秒；blocking单次诊断完整通过但未复现原SIGSEGV，不称修复；三通信full独立根检查正在执行，其余链等待。
+09:52Z：38.406B三卡原1800秒到限，监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。监督终态时仍有不可中断I/O进程1908740，09:52Z核对该进程已消失且原控制组已空；原监督残留记录仍保留。七卡任务等待241秒后完成，完整离散/恢复通过、数值探索，中位0.804秒；blocking单次诊断完整通过但未复现原SIGSEGV，不称修复；三通信full独立根09:56:35Z全部终态/exit1：完整独立推理和精确恢复通过，随后均EE1017；首根/具体调用点待定位。B512恢复诊断正在执行，其余链等待。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 
 | unit短名 | 待完成工作/停止条件 | 输出目录或progress |
 | --- | --- | --- |
 | platform-final-1e33b4a | 已终态；12.802B单/双/三卡已审阅，八卡等待超时未运行 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
-| platform-sharded-3e4f6b2 | 单/双卡拒绝；三卡超时124，正在核对I/O进程实际退出与控制组清理 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
+| platform-sharded-3e4f6b2 | 单/双卡拒绝；三卡超时124；原不可中断I/O进程已退出、控制组空 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
 | platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
 | blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
-| multicard-roots-844eb9b | 两NPU ordinary/blocking/cpu_bridge各一次full独立根/训练/恢复，300秒/case | `npu-multicard-roots-bd2ff2e` |
+| multicard-roots-844eb9b | 已终态exit1；两NPU三通信full均EE1017，根与后续训练未完成，保留原失败 | `npu-multicard-roots-bd2ff2e` |
 | resume-layout-61571c4 | 原1B/B512 raw边界/下一窗及布局诊断，900秒；原1b3e39f安装和checkpoint只读，不改布局或算术 | `npu-resume-layout-61571c4` |
 | checkpoint-check-compute-6c6eaa2 | 等resume-layout终态及空控制组；固定36baeb7返回存储6项及单NPU小full，180/300秒 | `npu-checkpoint-check-36baeb7` |
 | scaled-training-compute-6c6eaa2 | 等前项；新loss先两卡小full，通过后1.014B单/双NPU各一次1800秒；包36baeb7、配置1a6b08f | `npu-scaled-training-36baeb7/progress.json` |
