@@ -153,3 +153,8 @@ API兼容、配置身份、图/checkpoint格式及同栈精确恢复分别判断
 checkpoint成本观测与`resources.storage_medium`是dba2a5e起的兼容可选扩展，旧配置默认不变；
 `measurement.observation="checkpoint"`与tmpfs准入要求锁定含该能力的实际包内容，不能只看`0.3.0`版本号。
 模板采用者需要时同步更新依赖锁并单独复验；tmpfs完整文件与磁盘跨重启耐久是两个事实，见[人类手册](human-workflow.md)。
+
+36baeb7起的`measurement.checkpoint_interval`同样是兼容可选配置，默认1保持旧行为；
+显式N只改变已发布恢复边界，不改变训练/optimizer窗口，最终窗仍发布。standalone明确拒绝非1值。
+采用者在交付/验收模板的配置变化和恢复条件中记录N、丢失未发布窗口的取舍及实际安装锁；
+旧协议/锁schema仍为v1，不能由包版本号推断已具有这个选项，详见[人类手册](human-workflow.md)。
