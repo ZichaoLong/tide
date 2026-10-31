@@ -100,3 +100,8 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 新私有安装`install-checkpoint-36baeb7`，固定返回测试6项及小型单NPU `check --scope full`，
 显式interval2、原loss/训练配方不变。输出`npu-checkpoint-check-36baeb7`，NPU合作队列仍priority0/4–11/600秒；
 不与已有容量计时重叠。提交/等待不代表通过。
+
+下一GPU固定任务：`jobs/platform-capacity-periodic-36baeb7`，
+`configs/checkpoint-cost/cuda-capacity-periodic.json`两个case串行、每项1800秒；单卡预期bank准入拒绝，
+双卡通过live准入后完整warmup1+2窗、独立CPU参考与精确恢复，FP32探索、interval3最终一次保存。
+不是修改原两代磁盘拒绝。活动配置/安装均来自36baeb7冻结输入，执行期间不改。
