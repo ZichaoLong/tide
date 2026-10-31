@@ -208,3 +208,17 @@ NPU38.406B三卡的`npu-capacity-periodic.json`仅在原1800秒流程已完成�
 每项warmup1+2更新窗、完整梯度/optimizer/独立CPU检查与exact-next，仍1800秒；
 不继续搜索其他系数/学习率，任一非有限、通信、容量或精确恢复错误保持失败。
 默认每窗checkpoint和原严格阈值不变；全部候选使用36baeb7固定包，实际资格各自记录。
+
+
+### NPU计算收尾的依赖范围
+
+双卡公共`check full`的all独立根发生EE1017/SIGSEGV，单卡同类根有原FP32数值超差；
+它们保留为严格失败，不能扩大为通过。独立的实际训练入口仍按原loss/梯度/optimizer/恢复
+分别验收。新loss候选单/双卡各先运行FC8/d8/B2/P3的小型三更新完整训练，保持原阈值；
+对应小训练的执行、有限值、离散、原loss梯度/槽与精确续接成立后，才运行
+`capacity-training/npu-scaled-loss.json`中对应1B项（1800秒/项、一次流程）。
+小型多卡独立根未通过会限制通用VJP资格，不能被大模型探索结果覆盖；单卡计算不依赖双卡根成功。
+仅为定位双卡all根，允许原ordinary配置显式设置`site.environment.ASCEND_LAUNCH_BLOCKING=1`
+一次有界诊断；同步提交不称默认运行时修复或性能结果，不改精度/输入/容差。
+原B512旧checkpoint重放在raw边界已有分歧；另一次同进程新建checkpoint与即时解码/下一窗
+可区分重放与恢复。该必要诊断使用联合主存准入后的tmpfs，不做大文件成本对照。

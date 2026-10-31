@@ -106,3 +106,9 @@ ASCEND_LAUNCH_BLOCKING一次诊断，不作性能。补齐私有pytest后重做�
 再决定原已声明1B单/双卡探索任务，保留完整独立根失败，不把它们写成合格训练。
 B512下一方案须区分同次运行即时解码与跨进程重放；必要checkpoint可用联合预算后的tmpfs，
 不开展已取消的大文件成本实验。
+
+准备4485697固定CPU27项服务`gef-root-progress-cpu-4485697`及NPU服务`gef-npu-root-progress-4485697`（background.slice；CPU27通过后提交NPU）。NPU仅原未执行返回6项、原ordinary双卡full和单卡periodic full阶段定位；每项180/300秒，queue物理4–11/2卡/max-wait600。输出`artifacts/platform-matrix/npu-root-progress-4485697`；不作性能复测。
+
+4485697固定CPU27项通过；NPU返回6项通过（4项明确deselected），ordinary双卡full在
+candidate-vjp/all发生SIGSEGV/-11并取得faulthandler调用栈；单卡在compare-vjp/all重现原输入根数值差异。
+后继仅上述一次显式同步提交诊断；新loss实际单/双卡小训练独立准入后继续原1B配置。
