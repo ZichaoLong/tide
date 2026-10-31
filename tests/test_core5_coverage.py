@@ -58,6 +58,24 @@ def test_runtime_and_reviewed_flags_do_not_promote_partial_or_failed_training():
     assert not complete_checks("passed", "training", checks, None)
 
 
+def test_embedded_reviewed_configuration_facts_keep_workload_identity():
+    # This published report carries complete static facts inside each model,
+    # without the legacy samples/positions reconstruction fields at its top.
+    report = ROOT/"docs/evidence/core5-cuda-finite-20261031.json"
+    records = query_records(report)
+    row = next(r for r in records if r["case"] == "fc-small-kv")
+    assert "samples" not in row["reviewed_model"]
+    result = view(row)
+    assert (result["topology"], result["samples"], result["positions"], result["widths"]) == ("fc", 1, 2, [8])
+    assert len(models(records)) == 6
+    for key, wrong in (("model_id", "0"*64), ("workload_id", "0"*64),
+                       ("parameters", dict(row["parameters"], trainable=0))):
+        bad = deepcopy(row)
+        bad["reviewed_model"]["configuration_facts"][key] = wrong
+        with pytest.raises(ValueError, match="identity mismatch"):
+            view(bad)
+
+
 def junit_case(parent, name, payload, checks=None, state="passed"):
     case = ET.SubElement(parent, "testcase", name=name, classname="test_core5_recipe_training")
     properties = ET.SubElement(case, "properties")

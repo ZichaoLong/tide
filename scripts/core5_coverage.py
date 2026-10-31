@@ -6,13 +6,16 @@ import sys
 def facts_for(row):
     if row.get("configuration_facts"):
         facts = row["configuration_facts"]
+    elif (row.get("reviewed_model") or {}).get("configuration_facts"):
+        facts = row["reviewed_model"]["configuration_facts"]
     elif row.get("reviewed_model"):
         sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"python"))
         from tidegraph.planning.facts import from_reviewed_model
         facts = from_reviewed_model(row["reviewed_model"])
     else:
         raise ValueError("configuration facts unavailable; supply reviewed model metadata or a new run record")
-    if facts["model_id"] != row["model_id"] or facts["parameters"] != row["parameters"]:
+    if (facts["model_id"] != row["model_id"] or facts["workload_id"] != row["workload_id"]
+            or facts["parameters"] != row["parameters"]):
         raise ValueError("configuration facts/record identity mismatch")
     return facts
 
