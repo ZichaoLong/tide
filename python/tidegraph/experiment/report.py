@@ -1,11 +1,12 @@
 """Dependency-free query, CSV and self-contained HTML for experiment records."""
 import csv
+import gzip
 import html
 import io
 import json
 from pathlib import Path
 import statistics
-from .records import read_json, digest, fingerprint
+from .records import read_json, digest, fingerprint, replace_bytes, replace_text
 from .evidence import details
 
 
@@ -117,7 +118,7 @@ def load(paths):
             if path in seen:
                 continue
             seen.add(path)
-            record = read_json(path)
+            record = json.loads(gzip.decompress(path.read_bytes())) if path.suffix == ".gz" else read_json(path)
             if not isinstance(record, dict):
                 raise ValueError(f"{path}: expected a result object")
             if record.get("schema") in {"tide-experiment-evidence-v1", "tide-experiment-evidence-v2"}:
@@ -167,6 +168,21 @@ def _cell(value):
     return str(value)
 
 
+def save(path, content):
+    """A .gz suffix compresses the same report, with deterministic gzip metadata."""
+    if Path(path).suffix == ".gz":
+        replace_bytes(path, gzip.compress(content.encode(), mtime=0))
+    else:
+        replace_text(path, content)
+
+
+def _html_cell(value):
+    escaped = html.escape(_cell(value))
+    if isinstance(value, (dict, list)):
+        return '<details><summary>Details</summary><pre>'+escaped+'</pre></details>'
+    return escaped
+
+
 def render(rows, *, format="table"):
     if format == "archive":
         return json.dumps(dict(schema="tide-experiment-evidence-v2", results=rows,
@@ -184,12 +200,13 @@ def render(rows, *, format="table"):
         return stream.getvalue()
     if format == "html":
         headings = "".join(f"<th>{html.escape(k)}</th>" for k in COLUMNS)
-        body = "".join("<tr>"+"".join(f"<td>{html.escape(_cell(row.get(k)))}</td>" for k in COLUMNS)+"</tr>"
+        body = "".join("<tr>"+"".join(f"<td>{_html_cell(row.get(k))}</td>" for k in COLUMNS)+"</tr>"
                        for row in rows)
         return ('<!doctype html><html lang="en"><meta charset="utf-8"><title>Tidegraph results</title>'
                 '<style>body{font:14px sans-serif;margin:2em}table{border-collapse:collapse}'
                 'th,td{border:1px solid #ccc;padding:.45em;text-align:left}th{position:sticky;top:0;background:#eee}'
-                'td{max-width:32em;overflow-wrap:anywhere}</style><h1>Tidegraph results</h1>'
+                'td{max-width:32em;overflow-wrap:anywhere}pre{white-space:pre-wrap;max-height:32em;overflow:auto}'
+                '</style><h1>Tidegraph results</h1>'
                 '<p>Execution, independent checks and exact resume are separate. Unmeasured is never passed. '
                 'Compare timings only for matching return and workload contracts; exploration is explicitly marked.</p>'
                 f'<p>{len(rows)} records</p><table><thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></html>\n')

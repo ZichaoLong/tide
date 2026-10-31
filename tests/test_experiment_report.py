@@ -4,7 +4,7 @@ import io
 import json
 import pytest
 from tidegraph.experiment.config import resolve
-from tidegraph.experiment.report import load, render, select, summarize
+from tidegraph.experiment.report import load, render, select, summarize, save
 from tidegraph.experiment.records import fingerprint
 
 
@@ -105,3 +105,13 @@ def test_old_archive_remains_queryable_without_inventing_missing_details(tmp_pat
     loaded = load([path])[0]
     assert loaded["details"] == {"scope": "unrecorded in v1 archive"}
     assert loaded["median_seconds"] == row["median_seconds"]
+
+
+def test_compressed_archive_remains_queryable_and_html_folds_large_diagnostics(tmp_path):
+    rows = [summarize(result(), tmp_path/"result.json")]
+    path = tmp_path/"reviewed.json.gz"
+    save(path, render(rows, format="archive"))
+    assert path.read_bytes()[:2] == b"\x1f\x8b"
+    assert load([path]) == json.loads(json.dumps(rows))
+    report = render(load([path]), format="html")
+    assert '<details><summary>Details</summary>' in report

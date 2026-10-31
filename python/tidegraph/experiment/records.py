@@ -26,11 +26,16 @@ def digest(path):
 
 def replace_text(path, text):
     """Fsync a same-directory staging file before replacing a complete record."""
+    replace_bytes(path, text.encode("utf-8"))
+
+
+def replace_bytes(path, data):
+    """Atomic binary publication, also used for compressed reviewed records."""
     path = Path(path)
     fd, temporary = tempfile.mkstemp(prefix="."+path.name+".", suffix=".tmp", dir=path.parent)
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as stream:
-            stream.write(text)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(data)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, path)

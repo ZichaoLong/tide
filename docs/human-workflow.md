@@ -206,9 +206,12 @@ tidegraph results runs jobs --format html --output results.html
 tidegraph results runs --exploratory true --format json
 tidegraph results runs --format archive --output reviewed-results.json
 tidegraph results reviewed-results.json --batch 512 --format html --output batch512.html
+tidegraph results runs --format archive --output reviewed-results.json.gz
+tidegraph results reviewed-results.json.gz --batch 512 --format table
 ```
 
 HTML 自包含，可直接用浏览器打开；没有服务、账号或外部CDN。
+大诊断字段默认折叠，点击Details展开；`.json.gz`归档保留相同内容并可直接查询，避免重复配置膨胀长期证据。
 archive v2保留各项身份、严格/探索/恢复结论、资源拒绝、计时、工作量及内存的可查询投影，
 并在details保留完整展开配置、原逐窗/warmup成本、构造/检查成本、严格差异与安装/构建来源。
 重复的逐文件哈希表压缩为表的摘要和文件数，包/构建的整体哈希和来源不变。

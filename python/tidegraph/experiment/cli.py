@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 import sys
 from .config import resolve
-from .records import replace_text
 
 
 def _emit(value):
@@ -201,14 +200,14 @@ def main(argv=None):
                 return _terminal(jobs.resume(args.run_dir, args.output_dir, checkpoint=args.checkpoint))
             return _terminal((jobs.stop if args.action == "stop" else jobs.status)(args.run_dir), cancelled=args.action == "stop")
         if args.command == "results":
-            from .report import load, select, render
+            from .report import load, select, render, save
             filters = {key: value for key, value in vars(args).items()
                        if key not in {"command", "paths", "format", "output"} and value is not None}
             if "exploratory" in filters:
                 filters["exploratory"] = filters["exploratory"] == "true"
             content = render(select(load(args.paths), **filters), format=args.format)
             if args.output:
-                replace_text(args.output, content)
+                save(args.output, content)
             else:
                 print(content, end="")
             return 0
