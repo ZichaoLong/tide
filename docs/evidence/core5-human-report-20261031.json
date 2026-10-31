@@ -1,0 +1,35 @@
+{
+  "schema": "tide-report-qualification-v1",
+  "source": "1b46dc5c20ae74e2a219893302cfdae621c2e482",
+  "wheel_sha256": "a2aecd11e03a15c28aaeb0fab174620c74543bbe2f815d59487cc7d11f36efa6",
+  "tests": {
+    "passed": 10,
+    "scope": "fixed-source report/archive/HTML tests, actual Node predicate including integer values above 2^53",
+    "junit_sha256": "a8f17e518d9c6af145c84c11897eddbbc98160be47255353a5e35c75c0ffca4f"
+  },
+  "installed_report_generation": {
+    "local": [
+      "cpu HTML",
+      "cpu CSV",
+      "npu HTML",
+      "npu CSV"
+    ],
+    "cuda": [
+      "training archive HTML"
+    ],
+    "scope": "report generation only; no new device execution"
+  },
+  "browser": {
+    "name": "Firefox headless",
+    "status": "passed",
+    "scope": "render installed HTML, select B128/packed/packed/ATen4 => one strict-failure row; set min parameters 2000000 => zero; reset boundary => one",
+    "screenshot_sha256": "967c539aabdaf785c40e5665d24980969c4a2f5f52410f0e8ffcb2044575f8c5"
+  },
+  "artifacts": {
+    "npu.csv": "73421f9efdb35fc22478ba2bfe72e5932a3f60cee8b853d06d51715863d15472",
+    "cpu.csv": "87c74f1aa82dd0cd1719210ea4f05295b70e57eff0f1b5075f222f3a09b8612e",
+    "cpu.html": "a955cb1bb47ab01a4b107dbe06aeed01425f2c3dc634c3a9cf34acdcb649f8de",
+    "npu.html": "c89f622a42c70571d3a4014bd660dcacd524f01188a8f8968275af1fa38f28c2",
+    "browser-check.html": "b4514a21ce6b424290fac454176438ea55efca72c6971d7dd6f97450f6460fe3"
+  }
+}
