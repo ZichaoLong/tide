@@ -115,6 +115,8 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 ## 有限测试表与结果查询
 
 [core5-study-v1.json](../benchmarks/core5-study-v1.json)是可选用例目录，不是自动全排列任务。
+[CUDA小中规模目录](../benchmarks/core5-cuda-finite-v1.json)显式列出宽8/64的FC/HB/LH启发KV、三客户端及CPU/mixed-c/resident/scalar设置，逐项选择，未运行项不获资格。
+最大配置约345万参数；先查生成的memory_floor，另保留默认resident的5GiB总预算、2GiB材料化上限和4GiB文件上限。静态下界不包含完整训练峰值，实际状态/journal/反向/workspace和checkpoint分别记录。
 默认必须选一个case和一个execution；任何合法公共配置仍可经`resolve_model`接入，不限于此表。
 
 | 组 | 目的 | 有限覆盖 |

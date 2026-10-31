@@ -1,0 +1,214 @@
+{
+  "schema": "tide-core5-study-v1",
+  "window": {
+    "samples": 1,
+    "positions": 2,
+    "seed": 7
+  },
+  "measurement": {
+    "mode": "training",
+    "steps": 3,
+    "warmup": 1,
+    "checkpoint_check": true,
+    "timeout_seconds": 600
+  },
+  "models": [
+    {
+      "id": "fc-small",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    },
+    {
+      "id": "fc-medium",
+      "recipe": {
+        "topology": "fc",
+        "width": 64,
+        "region_width": 4,
+        "depth": 2,
+        "profile": "baseline"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    },
+    {
+      "id": "hb-small",
+      "recipe": {
+        "topology": "hb",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    },
+    {
+      "id": "hb-medium",
+      "recipe": {
+        "topology": "hb",
+        "width": 64,
+        "region_width": 4,
+        "depth": 2,
+        "profile": "textbook"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    },
+    {
+      "id": "lh-small",
+      "recipe": {
+        "topology": "lh",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    },
+    {
+      "id": "lh-medium",
+      "recipe": {
+        "topology": "lh",
+        "width": 64,
+        "region_width": 4,
+        "depth": 2,
+        "profile": "textbook"
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "Finite complete-training cost and actual batching at this topology/size; no all-scale claim."
+    }
+  ],
+  "executions": {
+    "python-cpu": {
+      "client": "pytorch",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "python-cuda": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "native-cpu": {
+      "client": "python-native",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "native-cuda": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "native-resident": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "resident",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "native-cuda-scalar": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "scalar",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "cpp-cpu": {
+      "client": "libtorch",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "cpp-cuda": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "cpp-resident": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "resident",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    },
+    "cpp-cuda-scalar": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "scalar",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1
+    }
+  },
+  "policy": "Select cases/executions explicitly; no automatic Cartesian sweep. IEEE FP32, strict full records/gradients/SGD/exact checkpoint checks, serial timing after builds/qualification, project JSON tracking. Default resident 5 GiB total budget and 2 GiB materialization ceiling; inspect static floors and actual free resources first."
+}
