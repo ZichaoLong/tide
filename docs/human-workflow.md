@@ -255,3 +255,31 @@ resident 训练另需明确的 output-field VJP 入口。checkpoint 必须保存
 显式构建标准ATen eager客户端后，按 CPU→单卡→双卡→实际七卡、推理→训练→恢复逐项验收。
 当前 CUDA resident 协议要求 CC>=8.0，T4 的 sm_75 不满足这一静态门禁；更换协议需另行具体设计和验证。
 未接触 T4 的构建、运行、峰值、通信和性能均为待验，模板或预算不是资格。
+
+迁移时在**新T4站点**按以下顺序操作，所有输出存入新的项目目录：
+
+1. 查看`nvidia-smi`中的实际driver、设备/进程/空闲内存，另运行`nvcc --version`和
+   `nvcc --list-gpu-code`。driver显示的CUDA能力、Torch自带runtime和本地Toolkit分别记录。
+   在选定私有环境执行下列查询；Torch必须包含实际T4可用的代码，环境变量不能补出缺失架构。
+2. 选择相互兼容的driver/runtime/Toolkit/Torch或LibTorch后锁定版本。仅在该新站点安装或选择，
+   不因此更改当前3090/NPU公共环境。CUDA扩展以7.5为目标；本仓库eager核心使用ATen，
+   resident自己的条件控制核仍拒绝sm75，不能用移除架构检查取得资格。
+3. 从固定源码构建eager核心及独立客户端，安装包、填写T4 site的实际路径，再执行doctor/lock。
+   以下命令是长构建的workload，须由该站点持久服务启动；不与正式计时重叠。
+
+```sh
+python -c 'import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_arch_list()); print([(i,torch.cuda.get_device_name(i),torch.cuda.get_device_capability(i)) for i in range(torch.cuda.device_count())])'
+TORCH_CUDA_ARCH_LIST=7.5 python scripts/build.py --backend cuda --build-dir build/t4-eager --jobs all
+python scripts/build_weighted_benchmark.py --core-build build/t4-eager --output-dir build/t4-client --jobs all
+tidegraph doctor --site t4-site.json --device cuda:0 --probe operator --dtype float32
+tidegraph lock create --site t4-site.json --wheel /path/to/t4-install.whl --output t4-installation.lock.json
+```
+
+4. 先用小模型分别验三客户端的完整推理、声明一阶训练、独立根、optimizer和新进程恢复。
+   FP16另配，不从3090的FP16通过外推；大规模前保存逐卡预算和实际峰值。
+5. 同一16节点/8共享组模型从1→2→3→7卡逐次准入，显式写
+   `peer_devices=["cuda:0",...,"cuda:6"]`、`placement_strategy="balanced-shared-groups"`。
+   每对方向的实际复制、反向及请求通信方式独立核验；P2P查询和普通复制分别记录。
+   任一不可拆共享组超过单卡安全容量时停止该放置，提出张量切分方案后再扩展。
+6. 按下游锁定流程复验应用任务，只有实际接受后才更新依赖；提交T4自己的结果/失败、
+   build manifest、安装锁与配置。跨设备加载与同栈精确恢复分别检查，模板不预填通过。

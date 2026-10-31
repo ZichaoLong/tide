@@ -2,7 +2,7 @@
 
 [CPU/NPU约1B大batch算子观察](core5-platform-profile-20261031.md)：固定bd2ff2e两项独立profile；168行大MM、864次两行私有BMM与288次共享base GEMV并存。c59688c修正CANN matmul漏计，13项固定解析检查通过；保留原trace hash，不重跑或新增数学资格。
 
-[CUDA4.561B安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。资源与恢复成本分列，多卡结果另待实际。
+[CUDA4.561B单/双卡安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。双卡逐卡峰值10.299GB、精确恢复通过且数值探索；更多卡结果待实际。
 
 [人类安装消费者、停止/恢复与离线报告](core5-human-workflow-20261031.md)：GPU公开流程实际演练；原base独立根严格失败与下游任务通过分列。1b46dc5固定10项与双机新安装报告生成、浏览器筛选通过；CPU/NPU完整人类流程待实际结果。
 
@@ -10,11 +10,11 @@
 
 [CUDA单卡resident大batch与布局](core5-platform-resident-20261031.md)：默认B128/B512静态拒绝保留；结构界定queue/stages后两项实际完成、离散/恢复通过、数值探索，实际行/填充/资源分列；B1及小型训练严格通过。
 
-[CUDA同模型2/3/4卡与三通信训练](core5-platform-multicard-20261031.md)：bd2ff2e固定6项，1.014B推理执行/离散/恢复通过、数值探索；小型双卡三通信严格训练通过。逐卡参数/状态/消息与计算统计、共享组、物理传输及恢复峰值单列，不认证P2P或多卡resident。
+[CUDA/NPU同模型多卡与三通信训练](core5-platform-multicard-20261031.md)：CUDA bd2ff2e固定6项，1.014B推理执行/离散/恢复通过、数值探索；小型双卡三通信严格训练通过。逐卡参数/状态/消息与计算统计、共享组、物理传输及恢复峰值单列，不认证P2P或多卡resident。NPU2/3卡推理探索、ordinary/cpu_bridge小训练严格通过，blocking恢复SIGSEGV；8卡资源等待超时未执行。
 
 [三平台有限值诊断packing](core5-finite-packing-20261031.md)：bd2ff2e固定18项，默认/原阈值保留；B128同材料成本降低、6小训练严格通过，两策略既有完整checkpoint/输出精确相同。CUDA减少小kernel但显式同步未减少，收益和停止边界分列。
 
-[CPU/GPU约1B B128/B512与三拓扑阶段](core5-platform-scale-20261031.md)：原FP32超差探索、完整离散与磁盘续接分别记录；B512恢复峰值5.505GB，CPU七项与GPU五项规模均保留数值超差；GPU另有独立1B/B128实际MM/BMM/profile，不作吞吐，不认证约1B训练。
+[CPU/NPU/GPU约1B B128/B512与三拓扑阶段](core5-platform-scale-20261031.md)：原FP32超差探索、完整离散与磁盘续接分别记录；B512恢复峰值5.505GB，CPU七项与GPU五项规模均保留数值超差，NPU六项探索及1B/B512下一窗精确恢复失败；GPU另有独立1B/B128实际MM/BMM/profile，不作吞吐，不认证约1B训练。
 
 [三平台首组矩阵与B128/B512基线](core5-platform-baseline-20261031.md)：98项正式流程、4项独立观察；43严格通过、38数值探索、17严格失败。CPU/NPU/GPU同材料A/B/C、实际矩阵批/峰值/控制放置与完整诊断归档分别记录。
 
