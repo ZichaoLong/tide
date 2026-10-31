@@ -48,8 +48,12 @@ void check(at::Device device,at::ScalarType dtype,const std::string& family,cons
   auto raw=copy_weighted_raw_state(packed,device);auto options=raw.floating.options().dtype(at::kFloat);auto times=at::zeros({R},raw.integer.options()),mass=at::zeros({R},options),u=at::zeros({R,c.width},options);
   auto owners=at::zeros({R},raw.integer.options()),present=at::zeros({R},options.dtype(at::kBool)),error=at::zeros({1},options.dtype(at::kInt));WeightedRecurrentParameters weights;
   for(const auto& [name,shape]:weighted_recurrent_parameter_shapes(B,c))weights[name]=at::zeros(shape,options);
-  DeviceProgram p(device);p.limit_workspace(192*1024*1024);auto t=append_weighted_recurrent(p,c,action,raw,times,mass,u,owners,present,weights,error);
-  const auto forward_bytes=p.retained_tensor_bytes();
+  DeviceProgram p(device);p.limit_workspace(192*1024*1024);
+  const auto initial_bytes=p.retained_tensor_bytes();
+  auto t=append_weighted_recurrent(p,c,action,raw,times,mass,u,owners,present,weights,error);
+  // The component budget is its increment, excluding the program's existing
+  // backend control storage (CUDA already owns an error flag at construction).
+  const auto forward_bytes=p.retained_tensor_bytes()-initial_bytes;
   std::map<std::string,WeightedRowAdjoint> roots;for(const auto& [name,value]:t.fields)roots[name]={at::zeros(value.sizes(),options),at::zeros_like(present)};
   auto g=append_weighted_recurrent_vjp(p,t,roots,error);p.finish();
   for(int pass=0;pass<2;++pass){auto input=values({R,c.width},.3+pass*.1);input[5].fill_(NAN);if(!pass)input[4].fill_(NAN);

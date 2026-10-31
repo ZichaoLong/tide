@@ -69,8 +69,21 @@ int64_t check(at::Device device) {
   run(large+10, 2, 3, large+6, 3, 1);
   run(large+10, 2, 3, large+10, 2, 0);
   const auto bytes = program.workspace_bytes();
-  require(bytes > 0, "control workspace owners were not retained");
+  if constexpr(TIDE_RESIDENT_CUDA) {
+    // These custom elementwise kernels need no cuBLAS scratch. Their operands,
+    // branch maps and error flag still have to survive every asynchronous run.
+    require(bytes == 0, "elementwise CUDA control unexpectedly reserved BLAS workspace");
+    const std::vector<Tensor> operands{count,stop,step,iterations,capacity,one,
+      unfinished,room,ready,index,again,exhausted};
+    const auto retained=program.retained_tensor_bytes();
+    int64_t operand_bytes=0;for(const auto& tensor:operands)operand_bytes+=tensor.nbytes();
+    require(retained>operand_bytes,"CUDA control metadata owners were not retained");
+    require(program.retained_tensor_bytes(operands)==retained,"CUDA control operand ownership is incomplete");
+  }else{
+    require(bytes > 0, "control workspace owners were not retained");
+  }
   program.close(); program.close();
+  require(program.workspace_bytes()==0&&program.retained_tensor_bytes()==0,"closed control retained storage");
   rejects([&] { program.run(); });
   std::cout << "device-control: passed cases=" << cases << " exact_int64=true continuation=true"
             << " zero_iterations=true capacity_status=true host_decisions_per_iteration=0"
