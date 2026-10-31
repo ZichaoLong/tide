@@ -513,5 +513,39 @@
       "subsequent_fixture_error": "single card incorrectly declared a one-member peer_devices list",
       "resolution": "new test fixture corrected; production rejection and numerical assertions retained"
     }
+  },
+  "save_progress_6c6eaa2": {
+    "source": "6c6eaa206deb004580b2ae48bd8ff58c1a6646e9",
+    "scope": "Python/native orchestration status only; no new device execution or C++ build qualification",
+    "fixed_tests": {
+      "tests": 30,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.956,
+      "junit_sha256": "6a6f3903db0c3534bd49120254d748a5b19b81155de4c4314f838185ad0b18cf",
+      "log_sha256": "75420f9ae8aef074cfe5ffbe40212aa5c1e1eb83f8e3ef5c08f247dff5189398",
+      "paths": [
+        "tests/test_checkpoint_save_progress.py",
+        "tests/test_checkpoint_policy.py",
+        "tests/test_experiment_engine.py",
+        "tests/test_experiment_jobs.py"
+      ]
+    },
+    "execution": {
+      "unit": "gef-save-progress-6c6eaa2.service",
+      "state": "passed",
+      "exit_code": 0,
+      "control_group_empty": true,
+      "started": "2026-10-31T09:32:09.890865+00:00",
+      "finished": "2026-10-31T09:32:25.995998+00:00",
+      "temporary_checkpoints": "local tmpfs; persistent log and JUnit on data disk"
+    },
+    "contracts": [
+      "completed warmup/measurement visible before checkpoint save",
+      "public job status shows checkpoint-save; checkpoint retains last successfully published boundary",
+      "save failure retains strict failure and does not certify current-window recovery",
+      "complete independent inference/training and exact resume retained"
+    ]
   }
 }
