@@ -4,7 +4,7 @@
 使用已提交的固定源码串行任务收齐容量、训练及恢复诊断，不重跑已审阅矩阵。
 本机/远端tmpfs仅作经主存联合准入的易失周转，活动作业的路径与输入不改变。
 
-授权分支`graph-execution-foundation`；本次重入HEAD为b061404、工作区干净且已推送。
+授权分支`graph-execution-foundation`；本次重入HEAD为6b529fd、工作区干净且已推送。
 数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
 实际当前提交用`git status --short --branch`和`python scripts/status.py`核对，不回退后续源码。
 旧账户指南已不存在，依用户确认、项目site和`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`继续；
@@ -52,14 +52,14 @@ artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoin
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:18Z：final已终态exit1、控制组为空；12.802B单/双/三卡均已审阅，八卡等待607.801秒退出3、未运行。38.406B单/双卡bank超容量现场拒绝；三卡通过live准入，正在构造。其后依赖尚未取得结果。
+09:32Z：final已终态exit1、控制组为空；12.802B单/双/三卡均已审阅，八卡等待607.801秒退出3、未运行。38.406B单/双卡bank超容量现场拒绝；三卡构造405.326秒，已发布第0窗输出，正在首个大checkpoint保存，整个流程/恢复尚未通过。其后依赖尚未取得结果。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 
 | unit短名 | 待完成工作/停止条件 | 输出目录或progress |
 | --- | --- | --- |
 | platform-final-1e33b4a | 已终态；12.802B单/双/三卡已审阅，八卡等待超时未运行 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
-| platform-sharded-3e4f6b2 | 单/双卡已拒绝；三卡已通过校准条件及live准入并构造，原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
+| platform-sharded-3e4f6b2 | 单/双卡已拒绝；三卡构造后正在首保存，原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
 | platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
 | blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
 | multicard-roots-844eb9b | 两NPU ordinary/blocking/cpu_bridge各一次full独立根/训练/恢复，300秒/case | `npu-multicard-roots-bd2ff2e` |
@@ -96,7 +96,7 @@ NPU38.406B三卡各58.566GB并另留6GiB，host766.974GB；原两代disk349.567G
 本机shm约1.034TB空、MemAvailable约1.8TB，cgroup v1各层无限额已人工核验；不宣称代码自动支持所有v1限额。
 这些是近期观察，下一次新作业仍现场准入；disk.estimated_new_bytes已含reserve，不加两遍。
 
-下一步：6095c6a训练主存预算52.585GB及45项固定定向检查已闭环；沿本机链逐项收终态，
+下一步：6095c6a训练主存预算52.585GB及45项固定定向检查已闭环。公共Python/native入口补充`checkpoint-save`可见阶段，开发30项通过；实现提交后在独立固定源码中检查，不修改活动包。沿本机链逐项收终态，
 将容量、训练、恢复诊断分别补入既有证据，依据首个见证决定有界修复或明确停止。
 最终核对189原目录的运行/拒绝/替代项和目录外后继，更新ROADMAP/六项经验/可查询结果；全部作业终态后交付。
 不重跑旧矩阵，不自动延长原超时。当前总体任务尚未完成。

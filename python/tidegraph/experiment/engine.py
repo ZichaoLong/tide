@@ -99,7 +99,8 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         from ..checkpoint_metrics import capture as checkpoint_cost
         for offset in range(total):
             index = start+offset
-            record.update(phase="warmup" if offset < measurement["warmup"] else "measurement", window=index)
+            window_phase = "warmup" if offset < measurement["warmup"] else "measurement"
+            record.update(phase=window_phase, window=index)
             write_json(output/"result.json", record)
             began = time.perf_counter()
             if observation_mode in {"packing", "profile"} and offset >= measurement["warmup"]:
@@ -127,6 +128,10 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
             # Durable boundaries are outside timing and individually costed.
             row["checkpoint_scheduled"] = due(publication, index+1)
             if row["checkpoint_scheduled"]:
+                # Publish the completed window before an expensive save. The
+                # checkpoint field still names only the last durable boundary.
+                record["phase"] = "checkpoint-save"
+                write_json(output/"result.json", record)
                 began = time.perf_counter()
                 with checkpoint_cost() as costs:
                     row["checkpoint_cost"] = costs
@@ -134,7 +139,8 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
                 row["checkpoint_seconds"] = time.perf_counter()-began
                 record["checkpoint"] = dict(state="saved", next_window=index+1, bytes=checkpoint["bytes"],
                                             path=str(checkpoint_path), exact_resume="not_checked")
-            memory.capture(record["phase"], reset=offset == measurement["warmup"]-1)
+            record["phase"] = window_phase
+            memory.capture(window_phase, reset=offset == measurement["warmup"]-1)
             write_json(output/"result.json", record)
         record["execution_status"] = "completed"
         record["effective"] = owner.manifest()
