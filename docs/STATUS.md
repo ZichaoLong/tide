@@ -83,7 +83,20 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 基于dba2a5e磁盘实测：完整恢复约289.6秒，其中CPU完整比较约164.8秒；首保存57.7秒中hash22.3秒。
 新候选增加显式`checkpoint_interval`（默认每窗、最终窗必保存），减少重复CPU快照，并为完全相等的CPU张量保留原严格比较的正向快捷路径。
 原容差/非有限/结构拒绝和完整字段不变；候选只在提交、固定安装及相关回归后运行。
-[基线成本证据](evidence/core5-checkpoint-cost-20261031.md)已审阅：disk/tmpfs保存57.7/47.4与63.0/48.0秒，恢复289.6/289.3秒；两份大checkpoint尚待dry run退役，小记录已入库。
+[基线成本证据](evidence/core5-checkpoint-cost-20261031.md)已审阅：disk/tmpfs保存57.7/47.4与63.0/48.0秒，恢复289.6/289.3秒；两份各20.698GB大checkpoint已核对dry run后退役；远端凭据`retirement-checkpoint-cost-dba2a5e.json`，小记录已入库。
 36baeb7固定CPU相关110项通过、1项standalone明确deselected，unit终态且控制组空；新GPU私有安装已完成，6项实际返回存储测试通过，full两卡推理/根/三步训练/恢复已通过，`jobs/platform-checkpoint-check-36baeb7`终态exit0、无后代。计划4.561B一次同材料成本观察、9.123B同模型单卡拒绝/双卡一次流程；新配置在`configs/checkpoint-cost`。
 原9.123B每窗磁盘拒绝保留；单代预算是明确持久化取舍，不称原拒绝修复或窗口算子加速。
 开发35项调用中2项因漏设TIDE_BUILD_DIR缺少既有native模块失败，已保存调用错误，纠正环境后二项通过；不作为数值失败或放宽条件。相关开发检查17项、70项及35项分组通过，范围重叠不相加。
+
+## 当前新提交作业
+
+36baeb7 CUDA返回6项和两卡full检查均通过、终态无后代。接着仅启动一次4.561B优化后成本观察：
+`jobs/platform-checkpoint-periodic-36baeb7`，固定私有安装`install-checkpoint-36baeb7`、
+配置`configs/checkpoint-cost/cuda-disk-periodic.json`，1200秒，warmup1+1窗、interval2最终保存、完整exact-next。
+须独立核对终态；基线两份checkpoint经fb9ff3c审阅后按dry run退役，小记录保留。
+该点完成审阅前不启动9.123B新容量点。
+
+本机36baeb7相关实际回归安排在既有tmpfs观察后：`gef-checkpoint-check-36baeb7.service`，
+新私有安装`install-checkpoint-36baeb7`，固定返回测试6项及小型单NPU `check --scope full`，
+显式interval2、原loss/训练配方不变。输出`npu-checkpoint-check-36baeb7`，NPU合作队列仍priority0/4–11/600秒；
+不与已有容量计时重叠。提交/等待不代表通过。
