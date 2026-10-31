@@ -99,4 +99,11 @@ NPU Python环境为Torch2.12.0+cpu/TorchNPU2.12.0.post2、CANN9.1；core源eca07
 复现：先`plan configs/capacity-training/cuda-scaled-loss.json --matrix --site site.json`，
 再用已安装`tidegraph matrix`与新输出目录；来源/安装身份和数学阈值必须显式保留。
 
+## 训练主存准入的定向修正
+
+6095c6a根据本次恢复快照生命周期补齐主存保留，1.014B训练预算35.261→52.585GB；逐卡张量/磁盘估算不变，
+189目录仅28个Python训练项host值更新。固定源码45项检查全部通过，含实测RSS下界、36GB主存拒绝、
+half/master/SGD/AdamW、多卡不分摊主存、tmpfs联合准入及原checkpoint间隔，见[检查记录](core5-checkpoint-cost-checks-20261031.json)。
+没有分配大模型或重新认证设备；旧36baeb7运行保留原预算/身份，活动安装不更新。
+
 归档SHA256：`be7223569aa1b77e843739f862e129bc9145610d40d39d20ee719e24929b1f7a`。

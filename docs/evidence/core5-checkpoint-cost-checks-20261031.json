@@ -479,5 +479,39 @@
       "observed_live_workload_pids": []
     },
     "npu": "queued separately; no NPU qualification from CPU or CUDA"
+  },
+  "host_budget_6095c6a": {
+    "source": "6095c6a4cf0a45425a0698d320605d10581bca65",
+    "scope": "allocation-free host admission only; no new device execution or math qualification",
+    "fixed_tests": {
+      "passed": 45,
+      "failed": 0,
+      "skipped": 0,
+      "junit_sha256": "b1e459c76176f0948676d0691d99b19b11887ffb137802557c9f65621133b85c",
+      "log_sha256": "d98f74c0ed4aedb391e9a61f89e35e6d93e03ebdbb695915f0fdddc82d5022cf",
+      "paths": [
+        "tests/test_training_host_capacity.py",
+        "tests/test_experiment_placement.py",
+        "tests/test_experiment_storage.py",
+        "tests/test_checkpoint_policy.py",
+        "tests/test_platform_matrix.py"
+      ]
+    },
+    "observed_lower_bound": {
+      "result_sha256": "01c4f8dfa963725236d2abb2a96a53b444c00cc99e9caf0227fdd36c3d306523",
+      "rss_bytes": 40264876032,
+      "old_host_reservation_bytes": 35261194368,
+      "new_host_reservation_bytes": 52585214688
+    },
+    "catalog": {
+      "cases": 189,
+      "host_budget_updates": 28,
+      "device_or_disk_estimate_changes": 0
+    },
+    "development": {
+      "initial_collection_error": "test parameter dtype conflicted with repository-wide parametrization",
+      "subsequent_fixture_error": "single card incorrectly declared a one-member peer_devices list",
+      "resolution": "new test fixture corrected; production rejection and numerical assertions retained"
+    }
   }
 }
