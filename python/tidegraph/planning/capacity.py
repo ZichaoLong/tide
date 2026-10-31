@@ -267,6 +267,15 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     disk_reserve = _bytes(resources.get("disk_reserve_bytes", GIB), "resources.disk_reserve_bytes")
     host = (4*max(materialize, checkpoint_weights)+2*optimizer_bytes+continuation+
             sum(v["complete_record_estimate"] for v in components.values())*host_results//results+host_reserve)
+    # Python exact-next keeps the caller's final parameters/training values
+    # while retaining saved-boundary and next-window values. Comparing a new
+    # owner temporarily adds its decoded values too: four parameter snapshots,
+    # two gradient snapshots and four optimizer snapshots can coexist. The
+    # original 4-bank/2-optimizer estimate omitted two of each. Use the FP32
+    # construction floor for half masters/gradient snapshots as well.
+    training_snapshots = (2*max(materialize, checkpoint_weights)+2*optimizer_bytes
+                          if train and checkpoint and spec.client != "libtorch" else 0)
+    host += training_snapshots
     if spec.finite_check_packing == "packed":
         host += 32*1024**2
     if "cpu" in per_device:
@@ -292,6 +301,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
                           candidate_count_method=count_method, candidate_upper=batch*sum(totals),
                           node_cache_rows=[row["cache_rows"] for row in states]),
         host=dict(estimated_tensor_reservation_bytes=host, reserve_bytes=host_reserve,
+                  training_snapshot_extra_bytes=training_snapshots,
                   construction_bank_floor_bytes=materialize, free_bytes=resources.get("host_free_bytes")),
         disk=dict(estimated_new_bytes=disk, checkpoint_generations=checkpoint_generations if checkpoint else 0, reserve_bytes=disk_reserve, free_bytes=resources.get("disk_free_bytes")),
         checkpoint_policy=dict(weight_tensor_bytes=checkpoint_weights, estimated_file_tensor_bytes=checkpoint_estimate,

@@ -107,6 +107,10 @@ PDG的Python运行仍是独立正确性参考；正式PDG成本候选选择nativ
 | d16 resident B128 / B512 默认布局 | 16.87 / 269.61 GiB | 默认tensor_bytes仅1GiB，两项已静态拒绝；这是容量布局/默认stages条件，不是NPU/GPU不支持该逻辑batch |
 
 Python eager推理的checkpoint权重先解码到CPU，再复制进入既有设备bank，故不再虚计第二份完整设备权重；主存解码/副本和设备continuation预留保持。C++事务恢复、resident及训练仍保留各自预算。这只是对实际分配位置的预算修正，未改变运行或恢复实现；新容量点仍须用实际峰值校准。旧测量保留其原预算与源码身份。
+Python训练host预算补齐exact-next期间同时存在的四份参数、两份梯度、四份optimizer值快照，
+使用FP32构造floor覆盖half快照；完整记录、workspace及主存余量另计，不按卡数平摊。
+1.014B训练静态host由35.261GB修正为52.585GB；原36baeb7实测恢复RSS40.265GB仍按旧来源记录。
+这是由实际欠估触发的准入修正，不重新执行原训练，不改变逐卡张量/磁盘预算或数学身份。
 
 经实际1B单卡构造/恢复峰值约4.788GB校准，约2B FP32只作为原初始候选保留，不能称24GiB近界。
 新增CUDA `capacity-calibrated` 同一FC16/d4352/B1/P2，4,561,319,928可训练参数、8个不可拆共享组。

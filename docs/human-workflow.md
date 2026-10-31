@@ -97,6 +97,9 @@ HB 的 `region_width=1` 需要显式 `offsets:[0]`；默认 `[0,1]` 需要至少
 `plan` 列出逐节点/区域/共享参数到设备映射、不可拆共享组及逐卡参数/状态/KV/梯度/optimizer/
 返回/恢复预留。未知 workspace、journal 和运行时峰值保持未知；`automatic_admission=false`。
 默认累计窗口数包括 warmup、计时窗和一次恢复检查，不能拿单窗预算当完整实验预算。
+Python训练的host预算另含调用者、边界和下一窗同时保留的参数/梯度/optimizer快照；
+`training_snapshot_extra_bytes`明确列出原四份bank/两份optimizer估算之外的保留量。
+这部分在主存，不随卡数分摊；不是额外设备参数，也不改变数值、窗口或checkpoint字节。
 现场还须检查当前显存、主存、磁盘与其他任务，经过有限实测校准后才能做容量点；不能反复 OOM 找边界。
 
 `check` 是独立的基座验收入口：smoke 只做小型所选路径检查；related 做声明的相关检查；
