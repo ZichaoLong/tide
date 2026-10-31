@@ -8,6 +8,7 @@
 #include "tide/checkpoint.h"
 #include "../../cpp/bench/streaming.h"
 #include <ATen/Parallel.h>
+#include <ATen/Context.h>
 #include <cmath>
 #include <torch/csrc/autograd/autograd.h>
 #include <filesystem>
@@ -63,6 +64,10 @@ int main(int argc,char** argv){
     portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=dtype;
     runtime_options.allow_npu_float16=true;
     const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(threads);at::set_num_interop_threads(interop);
+    if(target.is_cuda()){
+      at::globalContext().setAllowTF32CuBLAS(false);
+      at::globalContext().setAllowTF32CuDNN(false);
+    }
     ExecutionPlacement placement;placement.preset=implementation=="resident"?"resident":placement_name;placement.scoring_dtype=scoring;
     auto effective=resolve_placement(placement,target).record();
     std::vector<at::Device> peers;for(const auto& spec:peer_specs){auto opt=runtime_options;opt.device_spec=spec;peers.push_back(portable_torch::resolve_device(opt));}
@@ -78,7 +83,10 @@ int main(int argc,char** argv){
       {"checkpoint_max_bytes",checkpoint_bytes},
       {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
       {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter/gradient/optimizer export"},
-      {"phase","fixture-preparation"},{"metrics",Json::array()}};write(output/"result.json",report);
+      {"phase","fixture-preparation"},{"metrics",Json::array()}};
+    if(target.is_cuda())report["cuda_precision"]={{"matmul_allow_tf32",at::globalContext().allowTF32CuBLAS()},
+      {"cudnn_allow_tf32",at::globalContext().allowTF32CuDNN()}};
+    write(output/"result.json",report);
     capture_memory(report,target,"runtime_ready",true,peers);
     auto fixture_start=tide_bench::Clock::now();
     std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");Json data=Json::parse(file);

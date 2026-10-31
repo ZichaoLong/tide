@@ -68,6 +68,9 @@ ctest --test-dir build/cpu-standalone --output-on-failure
 按 [accelerators](accelerators.md) 和 [device-control](device-control.md) 选择
 CPU、CUDA、Python-owned NPU 或 standalone NPU 构建；它们不能混用二进制。
 常驻库另建，并核验与 core 对应的 manifest。缺少显式后端、库或 dtype 必须失败。
+standalone weighted benchmark另需nlohmann JSON头文件；不再依赖退役的LH快照内vendor目录。
+在项目私有环境安装`nlohmann_json==3.11.2`，或给`build_weighted_benchmark.py --json-include INCLUDE_DIR`。
+构建记录实际版本、完整头文件树hash及CMake include目录；公共C++运行时不依赖这个Python包。
 CUDA 实机门禁仍未完成；不要将本机编译结果写成 GPU 运行通过。
 
 本机截至 2026-10-27 的实际规范来源是

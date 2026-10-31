@@ -16,10 +16,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--core-build", type=Path, required=True)
     parser.add_argument("--resident-build", type=Path)
+    parser.add_argument("--json-include", type=Path, help="directory containing nlohmann/json.hpp; defaults to installed nlohmann_json or system headers")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--allow-dirty", action="store_true", help="frozen development snapshot only, not qualification")
     add_build_jobs(parser)
     args = parser.parse_args()
+    from json_headers import resolve
+    json_include, json_record = resolve(args.json_include)
     root = Path(__file__).resolve().parents[1]
     source, dirty = source_state(root)
     if dirty and not args.allow_dirty:
@@ -45,10 +48,10 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     prefix, build = out/"installed", out/"client"
     files = list((root/"tools/weighted_benchmark").iterdir()) + [root/"cpp/bench/compare.cpp", root/"cpp/bench/streaming.h",
-             root/"tools/lh_repro/vendor/nlohmann/json.hpp", root/"tools/device_online/weighted_precision_reference.cpp",
+             root/"tools/device_online/weighted_precision_reference.cpp",
              root/"tools/device_online/weighted_precision_reference.h"]
     report = dict(schema="tide-weighted-benchmark-build-v1", state="running", source=source, dirty=dirty,
-                  core=core_record, resident=builds[-1][1] if backend else None, commands=[],
+                  core=core_record, resident=builds[-1][1] if backend else None, json_headers=json_record, commands=[],
                   sources={str(p.relative_to(root)): digest(p) for p in files if p.is_file()},
                   scope="standalone build/loader/help only; numerical execution separately required")
 
@@ -64,6 +67,7 @@ def main():
         prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
         run(["cmake", "-S", root/"tools/weighted_benchmark", "-B", build, "-G", "Ninja",
              "-DCMAKE_BUILD_TYPE=Release", "-DTorch_DIR="+cache_values(core)["Torch_DIR"],
+             "-DTIDE_JSON_INCLUDE_DIR="+str(json_include),
              "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
              "-DTIDE_WEIGHTED_RESIDENT="+("ON" if backend else "OFF")])
         run(["cmake", "--build", build, "--parallel", str(args.jobs)])
