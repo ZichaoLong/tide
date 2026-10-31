@@ -47,7 +47,9 @@ profile作业已终态：control与两个完整resident消费者Nsight node trac
 resident消费者profile内完整核对/精确恢复通过；不是吞吐样本。
 当前新增 `scripts/inspect_cuda_timeline.py`：只读SQLite、进程/设备域、kernel覆盖并集、host launch分列，
 保留缺失correlation且不猜launch归属；7项独立SQLite见证测试通过。
-下一步先提交observer，再用固定observer分析已终态trace；收齐finite终态、逐配置严格失败与可用时间，单独提交审阅证据并普通推送。
+observer c96ff85已提交推送。首次真实SQLite分析55秒超时，相关EXISTS在无索引导出上重复扫描；已停止远端reader。
+改为同进程correlation ID集合，保持原计数/只读边界，7项见证再通过；先提交修订后重做离线分析，不重跑GPU profile。
+收齐finite终态、逐配置严格失败与可用时间，单独提交审阅证据并普通推送。
 不得扩展为大规模扫描或重复相同失败候选；依据实际profile决定有无值得实施的新优化。
 
 ```sh

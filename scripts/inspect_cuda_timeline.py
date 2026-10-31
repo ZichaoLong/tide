@@ -64,11 +64,14 @@ def inspect(path):
             "group by s.value order by s.value", (processes[0],)))
         # Do not guess a launch from the nearest timestamp: concurrent streams
         # and conditional graph activities make that attribution ambiguous.
-        joined = db.execute(
-            "select count(*) from CUPTI_ACTIVITY_KIND_KERNEL k where k.graphNodeId>0 "
-            "and exists(select 1 from CUPTI_ACTIVITY_KIND_RUNTIME r "
-            "where r.correlationId=k.correlationId and "
-            "(r.globalTid & -16777216)=k.globalPid)").fetchone()[0]
+        # Nsight exports need not index correlationId. A correlated EXISTS
+        # rescans the runtime table for every graph activity; a bounded ID set
+        # gives linear work without modifying the read-only database.
+        correlations = {row[0] for row in db.execute(
+            "select correlationId from CUPTI_ACTIVITY_KIND_RUNTIME "
+            "where (globalTid & -16777216)=? and correlationId is not null", (processes[0],))}
+        joined = sum(correlation in correlations for correlation, in db.execute(
+            "select correlationId from CUPTI_ACTIVITY_KIND_KERNEL where graphNodeId>0"))
         intervals = db.execute(
             "select start,end from CUPTI_ACTIVITY_KIND_KERNEL where graphNodeId>0 order by start")
         end, union = None, 0
