@@ -111,3 +111,11 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 其他情况在`npu-capacity-periodic-36baeb7/gate.json`明确not-run，不重复已完成的原配置；
 新输入固定beaf34e、运行包36baeb7、同模型interval3、仍1800秒。预算每卡58.566GB另留6GiB、
 host766.974GB、单代disk175.320GB；状态/脚本/输入hash在独立项目产物，未完成不称通过。
+
+显式新训练工作负载（非原失败修复）：1a6b08f的`configs/capacity-training`，
+同一FC16/1.014B/B1/P2/原SGD，loss系数0.001→1e-9，task身份独立、默认每窗保存不变。
+每平台先小型两卡full检查；GPU仅双卡，NPU单/双卡，每项1800秒、原阈值/完整梯度/optimizer/恢复。
+NPU服务`gef-scaled-training-1a6b08f.service`等待条件化容量后继；输入`inputs-scaled-training-1a6b08f`、
+输出`npu-scaled-training-36baeb7`，实际运行包36baeb7；逐卡33.025/16.513GB、host35.261GB、disk18.406GB。
+CUDA输入已传到独立目录，须等待9.123B终态审阅并退役其可重建checkpoint后才启动，不与容量计时重叠。
+此单一系数无继续搜索计划；失败依原规则停止，旧配方第三窗非有限保持。
