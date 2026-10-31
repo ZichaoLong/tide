@@ -71,7 +71,9 @@ CPU、CUDA、Python-owned NPU 或 standalone NPU 构建；它们不能混用二�
 standalone weighted benchmark另需nlohmann JSON头文件；不再依赖退役的LH快照内vendor目录。
 在项目私有环境安装`nlohmann_json==3.11.2`，或给`build_weighted_benchmark.py --json-include INCLUDE_DIR`。
 构建记录实际版本、完整头文件树hash及CMake include目录；公共C++运行时不依赖这个Python包。
-CUDA 实机门禁仍未完成；不要将本机编译结果写成 GPU 运行通过。
+CUDA已取得[RTX3090单卡eager及有限双卡实测](evidence/core5-cuda-eager-20261031.md)；三客户端分别验收，standalone原数值失败及native双卡精确恢复失败保留。
+单卡resident用`verify_core5_resident_single.py`的明确库存和零跳过门禁；完整三卡门禁仍独立保留。
+同源码构建、单卡正确性、设备时间线、跨卡和性能均是不同证据，不由编译成功推断。
 
 本机截至 2026-10-27 的实际规范来源是
 `/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 和对应 `/etc/modulefiles`。

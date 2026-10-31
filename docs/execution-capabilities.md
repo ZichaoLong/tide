@@ -25,8 +25,9 @@ FP32 complete records still fail; explicit CPU FP64 has bounded complete-record
 qualification in the [precision report](evidence/core5-stable-preparation-precision-20261028.md).
 The [new boundary checks](evidence/core5-nongpu-boundaries-20261029.md) clear the
 original SDK fc/affine mixed-a/c witnesses while retaining FP16 GDN, FP32
-feedback and default asynchronous peer failures. CUDA hardware is deferred by
-the user; earlier build/CPU evidence does not certify new GPU execution.
+feedback and default asynchronous NPU peer failures. These historical boundaries
+do not imply a CUDA result. The [RTX3090 eager report](evidence/core5-cuda-eager-20261031.md)
+adds separately scoped actual x86_64 CUDA evidence and preserves its new strict failures.
 
 [Independent-input KV batches](evidence/core5-independent-projection-20261029.md)
 qualify 8d97020 on CPU (273 passed, two original FP16 strict xfails), pure
@@ -47,7 +48,7 @@ exact next-window resume pass; original FP32 and asynchronous failures remain.
 | Resident single device | Independent device readiness/selection/progress, complete fields and raw cuts, retained first-order training, canonical FP32 masters and SGD/AdamW; [FP32/FP16 qualification](evidence/core5-resident-half-training-20261028.md) and [master assertion correction](evidence/core5-resident-weighted-peers-20261028.md) |
 | Resident sample replicas | Private graph states, canonical gradient sum and one optimizer boundary; [two-device qualification](evidence/core5-resident-weighted-peers-20261028.md) |
 | Resident node placement | One sample split by node, complete regional selection and exact cuts; [forward qualification](evidence/core5-weighted-node-placement-20261028.md). Placed window VJP, canonical optimizer publication, FP32/FP16 training and relocated restore have [independent qualification](evidence/core5-weighted-node-training-20261028.md) |
-| CUDA | Source and aarch64 build/loader evidence, including sm80/90/100 resident kernels. Actual GPU correctness, training, residency, peers, capacity and performance remain unverified; x86_64 also needs its own build |
+| CUDA | [x86_64 RTX3090/SM86 eager evidence](evidence/core5-cuda-eager-20261031.md): PyTorch/native FP32 and FP16 each19/19, standalone23/24 and22/24; complete update/resume checks. Ordinary peer copies/explicit Python CPU bridge have scoped evidence; native peer GDN exact resume fails. Resident build is verified separately; correctness/timeline and performance remain separate gates. aarch64 still has build/loader evidence only |
 | Performance | [Natural-scale settings/results](evidence/core5-natural-study-20261029.md): 25 configurations, 7 fully checked CPU FP64 results including short-window LH-inspired 1.051B. NPU numerical/resource failures remain; 8B/16B are static plans. Earlier [small/medium comparison](evidence/core5-weighted-performance-20261028.md) and [startup observations](evidence/core5-weighted-observation-20261028.md) retain their own scope; no general large-batch or cross-card throughput claim |
 
 CPU FP64/FP32 remain the reference. NPU reports distinguish Torch2.12/CANN9.1

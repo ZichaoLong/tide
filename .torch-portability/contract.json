@@ -448,11 +448,46 @@
       "backend": "cuda",
       "host_arch": "x86_64",
       "policy": "optional",
-      "status": "implemented",
+      "status": "verified",
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
+      "reason": "Verified only for the exact scoped x86_64 RTX3090/Torch2.12.1+cu130/SM86 evidence below. No all-profile, all-scale, resident, direct-P2P or performance qualification; strict failures remain explicit. aarch64 evidence is independent.",
+      "evidence": [
+        {
+          "date": "2026-10-31",
+          "commit": "c96296150e005363346eae46fcfed8613b3956d2",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261031.md",
+          "scope": "Independent PyTorch and Python/native each pass all 19 mixed-c cases in each of FP32/FP16, plus KV mixed-a/b FP32; complete records, independent roots, four AdamW updates, exact same-stack continuation and CPU checkpoint handoff.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/check_cuda_eager.py --device cuda:0 --clients pytorch python-native --core-build MATCHING_CORE --dtype float32|float16 --output-dir NEW; exact commands and cells in report JSON"
+        }
+      ],
+      "attempts": [
+        {
+          "date": "2026-10-31",
+          "commit": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261031.md",
+          "scope": "Two-device ordinary-copy native gated-hb fails exact resumed gradients at 3/4 coordinates (max4.44e-16); all six PyTorch cases and five native cases pass. Explicit Python CPU bridge delta-pdg passes full updates/resume. No direct-P2P/NCCL/capture claim.",
+          "tiers": [
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "failed",
+          "test_command": "Exact original commands and retained failure diagnostics in report JSON",
+          "reason": "Original strict numerical/exact-resume assertions retained; no tolerance, inputs or precision policy changed to force acceptance."
+        }
+      ]
     },
     {
       "id": "python-npu-aarch64",
@@ -1104,12 +1139,47 @@
       "backend": "cuda",
       "host_arch": "x86_64",
       "policy": "optional",
-      "status": "implemented",
+      "status": "verified",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Source is implemented for the declared generic and core-5 weighted profiles. No new x86_64 build or device qualification is inferred from aarch64 evidence; exact target build and semantic gates remain required."
+      "reason": "Verified only for the exact scoped x86_64 RTX3090/Torch2.12.1+cu130/SM86 evidence below. No all-profile, all-scale, resident, direct-P2P or performance qualification; strict failures remain explicit. aarch64 evidence is independent.",
+      "evidence": [
+        {
+          "date": "2026-10-31",
+          "commit": "c96296150e005363346eae46fcfed8613b3956d2",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261031.md",
+          "scope": "Standalone core build/loader and exact passing mixed-c fixtures: 23 of 24 FP32 and 22 of 24 FP16, plus KV mixed-a/b FP32; complete records, gradients, AdamW slots and exact same-stack continuation/CPU checkpoint handoff. Failed cells are excluded; independent single-field roots were added later and are not certified by this evidence.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/check_cuda_eager.py --device cuda:0 --clients libtorch --core-build MATCHING_CORE --dtype float32|float16 --output-dir NEW; exact commands and cells in report JSON"
+        }
+      ],
+      "attempts": [
+        {
+          "date": "2026-10-31",
+          "commit": "c96296150e005363346eae46fcfed8613b3956d2",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-eager-20261031.md",
+          "scope": "Original standalone gates fail: FP32 fc/ssd AdamW bias exceeds original tolerance; FP16 feedback/affine and feedback/ssd tensor comparisons fail. Other passing cells do not clear these failures.",
+          "tiers": [
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "failed",
+          "test_command": "Exact original commands and retained failure diagnostics in report JSON",
+          "reason": "Original strict numerical/exact-resume assertions retained; no tolerance, inputs or precision policy changed to force acceptance."
+        }
+      ]
     },
     {
       "id": "cpp-npu-aarch64",

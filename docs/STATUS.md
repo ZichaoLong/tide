@@ -29,21 +29,25 @@ CUDA13 API修复 `1fe1e37`、peer/IEEE记录 `31d0afd`、独立失败继续门�
 - `jobs/multicard-31d0afd` failed：传输根测试、standalone generic36案例/72更新/144连接窗口通过；五记忆+异构PyTorch6/6、native5/6；显式Python CPU桥delta-pdg完整通过。native gated-hb在同栈第四步梯度3/4坐标逐值不等，最大4.44e-16。不称直接P2P/NCCL/resident资格。
 - 最初两次resident构建86-real配置/CUDA13 API失败及`resident-single-1fe1e37` control末尾workspace断言失败均保留。
 
-当前 `jobs/resident-inventory-c368b45` running，物理3、10800秒，复用源码hash匹配1fe1e37库，
+`jobs/resident-inventory-c368b45` 已failed/exit1且无存活后代；56组件中54通过，物理3、10800秒上限，复用源码hash匹配1fe1e37库，
 `runs/c368b45-resident-inventory` 会保留全部组件及公共文件的独立失败；完整门禁不允许跳过。
-目前control workspace和recurrent FP32 one-byte预算测试失败。开发已修复：CUDA纯控制用实际retained operands/metadata核验，
+旧公共Python53项通过且零跳过；整体因组件失败仍failed。control workspace和recurrent FP32 one-byte预算测试失败。开发已修复：CUDA纯控制用实际retained operands/metadata核验，
 CANN原workspace断言保留；组件预算改为扣除既有CUDA error flag后的增量，原one-byte不足拒绝保持。
 修订control8轮、recurrent FP32/FP16各24配置目标开发通过；待固定提交重建/资格。
 
-工作树另有native稳定传输顺序修复：TensorImpl只识别别名，packing依字段首次出现顺序，避免新owner地址决定VJP边顺序。
+6cacad0已交付native稳定传输顺序修复：TensorImpl只识别别名，packing依字段首次出现顺序，避免新owner地址决定VJP边顺序。
 反例在旧实现失败，修复后C++ CPU FP32/FP64和相关placement 110项通过；原双卡gated-hb精确恢复仍以相同3坐标/4.44e-16失败，不能称已修复该边界。稳定字段次序修复单独交付；停止重复相同恢复候选。
 新增standalone独立根、scalar/peer资格及原参数梯度诊断已定向CPU FP64、双卡CUDA KV通过。
 standalone benchmark发现干净检出缺失已退役LH vendor JSON目录；改为显式外部nlohmann头依赖和完整hash，私有环境补3.11.2及importlib_resources7.1.0，不恢复旧目录；C++ IEEE政策显式记录。
 
-下一步：提交已定向验证的稳定顺序/资格/资源检查/外部头依赖修复；冻结新commit，重建core→resident→standalone benchmark（56线程）。
+修复实现已分三次提交推送：6cacad0（稳定顺序/独立根/peer/scalar），8a34f66（控制与增量预算），32edb0f（外部JSON头/IEEE）。
+`jobs/build-all-32edb0f` 已passed/exit0且无存活后代：冻结32edb0f，core→resident standalone/Python→standalone benchmark，56线程/3600秒；新目录 `builds/32edb0f-*`。
+四阶段构建均通过，56线程、显式sm86；source/binary/外部JSON头hash各由manifest记录。
+当前 `jobs/resident-single-32edb0f` running：冻结32edb0f、物理3、10800秒，使用三个32edb0f匹配构建，输出`runs/32edb0f-resident-single`。
+当前 `jobs/eager-regression-32edb0f` running：同固定来源、物理0/1、7200秒，相关CPU回归、两dtype standalone独立根/严格恢复、scalar及双卡各族；输出`runs/32edb0f-eager-regression`。性能暂不启动。
 再对固定提交运行相关单/双卡严格恢复、单卡resident及timeline；无关已通过范围不重复全矩阵。
 全部正确性/重型构建终态后再开始有界profile与小中规模FC/HB/LH对照，失败案例不报告合格吞吐。
-审阅证据单独提交；旧CPU/NPU严格失败不自动解除。未提交文件见git status，均属于上述修复与入口。
+审阅证据单独提交；旧CPU/NPU严格失败不自动解除。未提交文件见git status；首轮eager审阅证据与能力声明独立于新来源资格。
 
 所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，从未覆盖旧运行。
 活动源码只读；`dev` 为dirty开发，不能作为正式来源。无本机长作业。

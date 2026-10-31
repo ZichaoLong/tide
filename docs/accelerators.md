@@ -172,7 +172,13 @@ claims live in `.torch-portability/contract.json` and the cited evidence.
 
 Portable two-device eager owner/copy/actual-consumer and automatic-capacity
 commands are in [eager target validation](eager-target-validation.md). Local NPU
-evidence remains distinct from CUDA target-machine-pending status.
+evidence remains distinct from [scoped RTX3090 CUDA results](evidence/core5-cuda-eager-20261031.md).
+On x86_64/Torch2.12.1+cu130/SM86, the single-card PyTorch and Python/native
+core-5 inventories pass FP32 and FP16. Standalone has explicit strict failures;
+ordinary peer copies and the explicit Python CPU bridge have separate results.
+All twelve peer directions lack direct access and native cross-device atomics
+in this container, so the current multi-device resident protocol is unavailable.
+Single-device resident correctness and a reviewed device timeline remain separate gates.
 
 
 Additional [standalone TorchNPU2.9 qualification](evidence/standalone-sdk29-20260928.md)

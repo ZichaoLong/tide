@@ -1,0 +1,3346 @@
+{
+  "schema": "tide-core5-cuda-bringup-evidence-v1",
+  "date": "2026-10-31",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "first x86_64 RTX3090 core-5 CUDA eager and explicit transfer qualification; no performance or resident correctness claim",
+  "builds": [
+    {
+      "path": "builds/c962961-core/build-manifest.json",
+      "manifest_sha256": "5901df6e20794d1677c32a3b843796483be3f78a268e0f0d1aa3e7e7122a4441",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "cpp_source_sha256": "d9792e7d6f1f955e14fc3686c3eeaa8956163fb940080e21db69afdcf2df2989",
+      "backend": "cuda",
+      "architecture": "x86_64",
+      "python": "3.12.3",
+      "torch": "2.12.1+cu130",
+      "cuda": "13.0",
+      "cxx11_abi": true,
+      "build_jobs": 56,
+      "binary_sha256": {
+        "libtidegraph.a": "80bde1e1000d3ef0916dbd0e961f9634c83b957916fdc3bbf273ff09f4202d54",
+        "libtidegraph_runtime.a": "88625cf5d352a9014cd2843f9db36c4c7a24e1d9f4520ed63850db441378526a",
+        "_tide_native.so": "eb9da466695aa0aec35d1226c5f15940a1df3dcc6f5d6d208f971ef5262980dd",
+        "tidegraph-smoke": "1da463c7168c8609d157c8a212de1e8c68c869066e51b5f4264088c3e7236e48",
+        "tidegraph-kernel-check": "d4c5511569036f734d9ee03c60cb824ecbde98ab1dccbf95c333e24907b6b41d",
+        "tidegraph-full-check": "21f78a8c660ca13e57aaa6f63e014da8de77ded89b10a6c48b03b22c18646551",
+        "tidegraph-aggregate-check": "e3314532809ea7250c98bb7de47f9421b53711efcfa0e51aa7cb40fbc8730005",
+        "tidegraph-optimizer-check": "382800b48b2e73811e093aaf296dacd515ff6d6c58649a270e9537c20b08a8bd",
+        "tidegraph-checkpoint-check": "6d7b15080c136aa4a03f3ddf84fc731f03994d7a617e738056deb07f0766bd07",
+        "tidegraph-weighted-training-check": "27c0875314f241f46b00a570456fa1f720bd480113e9f8ea7b4e6e23d32c31e3",
+        "tidegraph-lh-scope-check": "b49f1eb8bb3dff0c6bb8d3d33fc4c945153d9c6353d3fa9801dc8a7f9bdbac89",
+        "tidegraph-streaming-bench": "b470b896dba91e47b13e148f1d1f237bbde9856dfcb66ac713cb7796aae42b58",
+        "tidegraph-scale-bench": "0b083a199b06cee142848b20cf0bbdc3f4f680660d3053891fe3cbb001722e6f",
+        "tidegraph-profile-check": "df3d29fa997677c12b539f78c397a6b1c58c7453dddf5576276c0a36c203ffc2",
+        "tidegraph-settle-check": "134715d0dfb7f0c69cf0d76368192fcb21dae8ed10541f5398e2dbdf074c6175",
+        "tidegraph-greedy-check": "a39657b96e34073e819c4be2ff40bd93a94c93adb9f64d77fe8cd25d74d7072a",
+        "tidegraph-accelerator-check": "5220d64d2b276348bd5b78a7652060266ea1d6f6e96ba934950b58ec8c3e4ca8",
+        "tidegraph-runtime-check": "97a4b5cb7e8c96014942d31c7fbaedb18301ce55e7e3f1c0b902ffc1c2c2615a",
+        "tidegraph-read-precision-check": "8ee465b4d57bdd21b071b83a0afa0dec2f576cbdf027884591b47f7387350edc",
+        "tidegraph-placement-check": "47cb3a9ba1c865373afaedc4f4b24bdfc10e395dc7553a70bf98de549e37dde4",
+        "tidegraph-payload-ownership-check": "5ea93840f5c4b59b5baf231c53455f8f27f65770a048a7864d9e5e5615e339dc",
+        "tidegraph-weighted-binding-module-check": "f963db4e1771386ebb579def4f6121496002809938e7aa18e2b549cf2989554d",
+        "libtidegraph-weighted-binding-module.so": "46d30dcd046e87302974ce5d1d280ab8a9dc23e6d0fae9111eb00b8cada77eda"
+      }
+    },
+    {
+      "path": "builds/1fe1e37-resident-cpp86/control-build.json",
+      "manifest_sha256": "5fb4453a74440039c7cb61efed5ada05144977939f578c633ee809c262802e12",
+      "source": "1fe1e379bec0d0d28e40be1dbfdfbe647add4171",
+      "dirty": "",
+      "component_sha256": "ab46e92a781072c1ef6a0e6e003ba64c1f342703327e96aa87e33cd8e90ebb97",
+      "backend": "cuda",
+      "runtime": "standalone",
+      "build_jobs": 56,
+      "binary_sha256": {
+        "tide-device-control-check": "e5875a85c22b4a2e8aa348a0c88edce7942c3df1fd20c61b8322f0aace45bf80",
+        "tide-device-numerical-check": "883097ef5d0cea8fa7cb5f3625220d10d19ff7382fb83b6fc93130f8ade16e50",
+        "tide-packed-queue-check": "7a5f11059ca8d3df46d371ef2c58c0a30272871cfbe75a25533761210dd4ced8",
+        "tide-device-closure-check": "5259a7fd899f28fe24eee9e991aff9b0845f77e07ae9041f7a2413b49a36499e",
+        "tide-device-queue-check": "c6951ce97fbdff2479e9504f4132b0b7fbe64c70a857742499af77aac78a5fce",
+        "tide-device-broadcast-check": "6c319d4e2a01faa09df26942ca4f068e6c7858b1223eef5ebd5af79269a11974",
+        "tide-device-ready-check": "ebf65bcfd0faed327cf11637b548cd54c7c185745012a23a3adf4bec5bc62928",
+        "tide-device-selector-check": "b7541bc90dbc6c1b60a45db806598b7c36d873b356df77c2013cf7351caecac9",
+        "tide-weighted-allocation-check": "94b5290087b58adcc015d407f2f8e7ac461d0e3b6c806ea05aa7511358cab36a",
+        "tide-weighted-sending-check": "ec5f310ef523f971811b656f65862906c45635f0048e7b62ba6e792567cf17c7",
+        "tide-weighted-head-check": "cc5a94407ac3ff2e4a1f695b4a76b67a5ecf8aaa4c9524b655d5f4a783290f5d",
+        "tide-weighted-region-check": "252e57ae69f8371a03b73f1f4f824ed1c7f4735bd6c15cba2140ac9447813afb",
+        "tide-weighted-aggregate-check": "192d529ac586e1df431ea2fa07137ec654a50ccc3a0e5d4484ef1b5742efcebe",
+        "tide-weighted-source-check": "809225120a75dd031d6759663636ff2840839640c2f844b79b2fd8271e91d19a",
+        "tide-weighted-parameters-check": "7f82ad08e54dc69501c6ce0cb39c16df124d9913a780861ae176ee06344d08f8",
+        "tide-weighted-raw-check": "66f0dedfc9db683e324d8329ba108b967aa6c62aeff0bdb1591ca4df87c203e2",
+        "tide-weighted-convolution-check": "3c199357b3254735deeb2eed1de09e2072bab680bb3d51157b4a86d6c77e3432",
+        "tide-weighted-projection-check": "d0827bd1cd2061c20e6b93abd00ae54d740ae58a8a2cf96ce8683423e454aa6d",
+        "tide-weighted-kv-update-check": "5abdea546f964685b92cd87eeec6ca0f871496131e056e7ffc8f938fa3d45da8",
+        "tide-weighted-pool-check": "1ce85ce6d9582afa4b39f446cd51600b4198a37c10a1804442f2b9e28d562c42",
+        "tide-weighted-kv-sum-check": "598b515ca2bc7b577b945fb944479ae5c98656afa3f8d6cc922e53e9124d8a2a",
+        "tide-weighted-rotary-check": "521ab261d811b54038c52d584879c6bf40ebacdd73b5e344040be8b23b341c65",
+        "tide-weighted-kv-query-check": "4e2f651421ae960ec9ce90375acfe4bff9611c1ec95710996c700051eb46317a",
+        "tide-weighted-residual-check": "b60ec66b752e6370356bd256400848a6e03b870f4e6173eeb916dc8b8f95d10a",
+        "tide-weighted-kv-full-check": "d5c4514b7499dafe748a606baf5118189c3d83488922081f7e0b90caee3e2c78",
+        "tide-weighted-describe-check": "bd1cb93790e94a85c23d5210729f1d4dfcadb4ec3000558180c3170d98f48d33",
+        "tide-weighted-recurrent-check": "e2522619959700f054ef72d498314ed8fa36bf0f9f4d04ffc5b8a728ce11f32a",
+        "tide-weighted-flow-check": "4377e4358e9b1df3179f8a1eecdfca14206bed745c16c4424e3539cc8b0bc811",
+        "tide-weighted-flow-config-check": "cc9cbd372aaae679a704f8063e2887d8496c08b99b290678810c58c8c15c9ca4",
+        "tide-weighted-stage-check": "7d56106efa6acd5e92371104342e93b503d5e4a029de5d9cb9446f1296f23b4c",
+        "tide-weighted-reverse-route-check": "8aaf82f4117740c2e459b904b9193756adf828a17e1749b71f6842b10c6b8288",
+        "tide-weighted-window-check": "6ed6652bc19053057b58693c22299906b5bec00810d608c6b31f301abbb0143f",
+        "tide-weighted-window-config-check": "a6fc8a5dbb648834ef526b8dee9fd9ffbc556ceb9cfd09dfca330a5883d5cba6",
+        "tide-weighted-copy-check": "fb528df8abced411aa640e73e84e95bdc18080941cf10d5cd71e54904a6a9918",
+        "tide-weighted-retained-check": "e37600acaa773f0da4cbf85e4d4d2c1062700ddf87250ab24eb861019b73a695",
+        "tide-weighted-training-check": "ff9c025a07dfc4b39168279bb12a10bec1d3c713296e412d5f4db2b95e54a72b",
+        "tide-device-optimizer-check": "3849f563d1e2db50d6bbc6db9c955613a4687d2e0b5da2a7c5cf9b9c5b272f24",
+        "tide-master-publication-check": "2dff80875b99927cb1aa7946e02877c3736581e94023b080ef60591d927173cc",
+        "libtide-weighted-flow.so": "f717e138f420d0dd62f88cee7eb7861d1d2ef4cc1518e96a035a6e56c10bd2a7",
+        "libtide-weighted-training.so": "b825b8ba1a29de65b0174d2c0e52129e1fbd7f29b591a21503e57f3e4ab3c2d7"
+      },
+      "cuda_architectures": "86",
+      "scope": "build/loader/help only; device control check required separately"
+    },
+    {
+      "path": "builds/1fe1e37-resident-python86/control-build.json",
+      "manifest_sha256": "5320d8d06646667f9b7c87b84fcb83557991ff00b5704c7e64a3aa0f9048473f",
+      "source": "1fe1e379bec0d0d28e40be1dbfdfbe647add4171",
+      "dirty": "",
+      "component_sha256": "ab46e92a781072c1ef6a0e6e003ba64c1f342703327e96aa87e33cd8e90ebb97",
+      "backend": "cuda",
+      "runtime": "python",
+      "build_jobs": 56,
+      "binary_sha256": {
+        "_tide_weighted_resident.so": "44eb61f16957d63aaff3a143278aeac16fcdf544c7aebdc2c30d9bac74f373e0",
+        "libtide-weighted-flow.so": "dd9da10b204097a3a8bb62de735cd3f563e2b5ab3a41e48d547d79c917b3fbfd",
+        "libtide-weighted-training.so": "27869b51cc942029e7adeaf6a7617feb6edb80850cc481fb182ecaf72f8f8aa6"
+      },
+      "cuda_architectures": "86",
+      "scope": "build/loader/help only; device control check required separately"
+    }
+  ],
+  "eager": [
+    {
+      "name": "c962961-pytorch-fp32",
+      "result_sha256": "f76feb69fe8ae88e6e1a59630cbef0482e061785fab189a7457a9b8ea9de832c",
+      "state": "passed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "runtime": {
+        "resolved_device": "cuda:0",
+        "backend": "cuda",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:cuda",
+        "dtype": "float32",
+        "host_architecture": "x86_64",
+        "torch": "2.12.1+cu130",
+        "torch_git": "7269437d655783a26cba32aa88195b741ff496aa",
+        "python": "3.12.3",
+        "cxx11_abi": true,
+        "logical_device_count": 4,
+        "cuda_runtime": "13.0",
+        "cudnn": 92000,
+        "device_name": "NVIDIA GeForce RTX 3090",
+        "capability": [
+          8,
+          6
+        ],
+        "compiled_architectures": [
+          "sm_75",
+          "sm_80",
+          "sm_86",
+          "sm_90",
+          "sm_100",
+          "sm_120"
+        ],
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false
+      },
+      "cuda_precision": {
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false,
+        "float32_matmul_precision": "highest",
+        "fp16_reduced_precision_reduction": true,
+        "bf16_reduced_precision_reduction": true,
+        "nvidia_tf32_override": null,
+        "deterministic_algorithms": false
+      },
+      "threads": {
+        "intraop": 1,
+        "interop": 1,
+        "workers": 1
+      },
+      "packing": "packed",
+      "scope": "selected single-device core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+      "argv": [
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "--placements",
+        "mixed-c",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-pytorch-fp32"
+      ],
+      "cases": [
+        {
+          "client": "pytorch",
+          "case": "kv-fc",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "48e036efe34943020c5f285a24f9cb73993d2b844ff0e2060238aa668483346d"
+        },
+        {
+          "client": "pytorch",
+          "case": "kv-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "bdae51c33b01435fac55116dcae7fe887317d5533aa5899d11b1e1bf40e834e6",
+          "result_sha256": "4c20d7a2ad7cbe80e330ae41568ef452f16083b8e5fae035a1a82bbe13e4a231"
+        },
+        {
+          "client": "pytorch",
+          "case": "kv-pdg-initial",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b131488316846d14ec92cdc71daa02e646d980d4418972f98d118b6086a9171a",
+          "result_sha256": "59112786636166b3a04e0be830611d6b85a83c761cb118a8ea68c08d30b109ce"
+        },
+        {
+          "client": "pytorch",
+          "case": "affine-dag-old",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+          "result_sha256": "1b8490c96ca4032ee9f2818a9381f003ee48611ea8774d576575ba4f99b42d99"
+        },
+        {
+          "client": "pytorch",
+          "case": "delta-pdg",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+          "result_sha256": "9567cae2933a2705cd335e4c9b30ebb15bb6e240c7d11217ffb02b47fbd9f194"
+        },
+        {
+          "client": "pytorch",
+          "case": "gated-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "cad650487e10b95903b20b78dd20f2e4f6f21b8c262869b561408abdd628f1c0",
+          "result_sha256": "1580e65241a38485ffd342993c6c49f4c14ccdf0b9ac25c42bef57c16749a97e"
+        },
+        {
+          "client": "pytorch",
+          "case": "ssd-dag",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+          "result_sha256": "b562d8a550a4ad27e5c3416b84643b1d924b9dc233ebcdf98b2c320d6ebc40e7"
+        },
+        {
+          "client": "pytorch",
+          "case": "heterogeneous-attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+          "result_sha256": "659c9d5f375f22e040ada655334ea038fc66fec2e827664869293cfd398a9e74"
+        },
+        {
+          "client": "pytorch",
+          "case": "ports-sparse",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "677cf7bb90ef88de33a61f34a360f1356defc19a6e48b434cf6e203ff4b20104",
+          "result_sha256": "eca3445c027a273bb7e7590c7c81eb2450deeb2365750ee68cae6f601974486a"
+        },
+        {
+          "client": "pytorch",
+          "case": "entropy-shannon",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "07700f6c656efd11437f93816260b21a046de1c6f0a186d1dc1d276bf22668cb",
+          "result_sha256": "fe31f23c1a700be5aa847bcfe74bc2520c8f9ee1da485e02965a0c54a98a0843"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_threshold",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "29b259a2891dd5b0258386cd1783a8afc5b0d29c40c460b6eb42461ea7989460",
+          "result_sha256": "1cbdb90bfc25309ba642d7e30c5437e9faa77cd98f7ca313599bdc5a7a7b46a5"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_total_zero",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "558b0daf1509aa717b51a8c5df4d14e8a98361256cdc60d8c268ccbc004ccf43",
+          "result_sha256": "8a7cd5ddc5cd90b60a3164da03fba7cca8a2b6061f5b98dddc14f9eca481b4f4"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_threshold_hard",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "87b70ad4adb7aef832b9318c666ffe691ce93a6a97866b9a0da066811ebe4928",
+          "result_sha256": "89ebe6ae3a1d937711d3568fef2e9ef7792016f65f9d7956cdbd0ecf4358b346"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-hard_selection",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c48b739c6e5804f973e7bfc5fedfa7b97760c92b4418089ac5591b75977db38e",
+          "result_sha256": "d797e39dab141d557b50071afc065c94abeab440af76c1255b858d0da60b89b4"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-constrained",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "023be271e84aa9ad0ab8a240e81b6d7d88f3642765bde1749611742b9dd55ad5",
+          "result_sha256": "64716682f3a02cc065d33af9fb827867f7c9964fab97362b1b87335e27d17188"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-proportional",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ae34c847682520eea36de4d43adeafc424c45995940b9a6b2593e28ab361f55f",
+          "result_sha256": "7e783858586b5e3e6749bc2d6a495e59c377ad069e031e0559ac368573b514f2"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-unit_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "422bed69074c44632bd0043413719dc492c919c54c269e285c740bc5bff619f6",
+          "result_sha256": "59057985c8bfd41c733f43fc0e64608f6f33774844f76f130c9204b06a17d7fe"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-direct_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "3911c1a99fe94da25fb408b8a7e9bc7607ae381b9b3849f620baeb706d3e2aeb",
+          "result_sha256": "3aef714544084c301a352a7b6aa1d17d3bdf1c68dd113e68f57391edfcaee9d1"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-pooled_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ea7f0e5e8ca93c2593708a290f10172b405cb6386e2b21dbb6c9362a21068ab3",
+          "result_sha256": "9a1742593a8518c142c6db651bf1ee37d8610893e3ca52a68e83adc9c8649cab"
+        }
+      ]
+    },
+    {
+      "name": "c962961-native-cpp-fp32",
+      "result_sha256": "9eff1165b8b348bef1a9c6c6de2fb2374fc847103227bca35fa8e733e82245d6",
+      "state": "failed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "runtime": {
+        "resolved_device": "cuda:0",
+        "backend": "cuda",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:cuda",
+        "dtype": "float32",
+        "host_architecture": "x86_64",
+        "torch": "2.12.1+cu130",
+        "torch_git": "7269437d655783a26cba32aa88195b741ff496aa",
+        "python": "3.12.3",
+        "cxx11_abi": true,
+        "logical_device_count": 1,
+        "cuda_runtime": "13.0",
+        "cudnn": 92000,
+        "device_name": "NVIDIA GeForce RTX 3090",
+        "capability": [
+          8,
+          6
+        ],
+        "compiled_architectures": [
+          "sm_75",
+          "sm_80",
+          "sm_86",
+          "sm_90",
+          "sm_100",
+          "sm_120"
+        ],
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false
+      },
+      "cuda_precision": {
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false,
+        "float32_matmul_precision": "highest",
+        "fp16_reduced_precision_reduction": true,
+        "bf16_reduced_precision_reduction": true,
+        "nvidia_tf32_override": null,
+        "deterministic_algorithms": false
+      },
+      "threads": {
+        "intraop": 1,
+        "interop": 1,
+        "workers": 1
+      },
+      "packing": "packed",
+      "scope": "selected single-device core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+      "argv": [
+        "--device",
+        "cuda:0",
+        "--clients",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--placements",
+        "mixed-c",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-native-cpp-fp32"
+      ],
+      "cases": [
+        {
+          "client": "python-native",
+          "case": "kv-fc",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "8e46ae759fcca309852dd8e73ce8a64fd79ae6b240533701411a70a4df2d3d3e"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "bdae51c33b01435fac55116dcae7fe887317d5533aa5899d11b1e1bf40e834e6",
+          "result_sha256": "b4d0d35266bda2cbc7ded17eb97a516f501b2fba269a0cd1689af16216148181"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-pdg-initial",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b131488316846d14ec92cdc71daa02e646d980d4418972f98d118b6086a9171a",
+          "result_sha256": "64b07f50a4a1cae968e334d34841044736e3a9dcc1a350868239424fda720663"
+        },
+        {
+          "client": "python-native",
+          "case": "affine-dag-old",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+          "result_sha256": "dd2c71b34d3147641d268e0585d43b7237b48d14b4cb00721f98f50c2dcf212a"
+        },
+        {
+          "client": "python-native",
+          "case": "delta-pdg",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+          "result_sha256": "f6f58fdbcf331abf722109ac0656fd1ed2a7ef79a7fd7bf52e2bf17b17e07bc3"
+        },
+        {
+          "client": "python-native",
+          "case": "gated-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "cad650487e10b95903b20b78dd20f2e4f6f21b8c262869b561408abdd628f1c0",
+          "result_sha256": "7abd1daf9d372ce6a1a5678fbbbbe7e06a47b0007463fc88d54105ad346e2947"
+        },
+        {
+          "client": "python-native",
+          "case": "ssd-dag",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+          "result_sha256": "8ffafc24eba5ad79645b429bd75522e73bfded39b4ee23af62d04876e437be4f"
+        },
+        {
+          "client": "python-native",
+          "case": "heterogeneous-attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+          "result_sha256": "5e16f6f97c895a2d6c277a654e71f3ddaf799cbc280851c73cd4682a8bef8ec6"
+        },
+        {
+          "client": "python-native",
+          "case": "ports-sparse",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "677cf7bb90ef88de33a61f34a360f1356defc19a6e48b434cf6e203ff4b20104",
+          "result_sha256": "e8f73733bef5913eb12f5f75698a1c405366c3a1d1199f1bd454a62d259fc0a1"
+        },
+        {
+          "client": "python-native",
+          "case": "entropy-shannon",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "07700f6c656efd11437f93816260b21a046de1c6f0a186d1dc1d276bf22668cb",
+          "result_sha256": "97c562f314bcc23d3eefa8f6350d80095cec0fdb0ed98a39be7f1421cbfe4738"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_threshold",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "29b259a2891dd5b0258386cd1783a8afc5b0d29c40c460b6eb42461ea7989460",
+          "result_sha256": "07234fad73ab0ffa61e378a6a0bd24a155d07a17c9a4a09dccddfed70fb17826"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_total_zero",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "558b0daf1509aa717b51a8c5df4d14e8a98361256cdc60d8c268ccbc004ccf43",
+          "result_sha256": "846b6068d5a3838164daf9c2cff30ff6bf2d517cf7b9bd410c17b5a943da0bb6"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_threshold_hard",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "87b70ad4adb7aef832b9318c666ffe691ce93a6a97866b9a0da066811ebe4928",
+          "result_sha256": "63fab2a3bf8de01b638ceed07eca6d39d50f90f2fee5784c2542e0b89e24fbed"
+        },
+        {
+          "client": "python-native",
+          "case": "send-hard_selection",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c48b739c6e5804f973e7bfc5fedfa7b97760c92b4418089ac5591b75977db38e",
+          "result_sha256": "36ae62b6bbc6e824519dfd18c7dbff86133438e2dfdcfe02a979b330d814bcbc"
+        },
+        {
+          "client": "python-native",
+          "case": "send-constrained",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "023be271e84aa9ad0ab8a240e81b6d7d88f3642765bde1749611742b9dd55ad5",
+          "result_sha256": "07ce3aa55d37ec6f85eeb0d782ad92810e380683450063a2e9372f29d2a06944"
+        },
+        {
+          "client": "python-native",
+          "case": "send-proportional",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ae34c847682520eea36de4d43adeafc424c45995940b9a6b2593e28ab361f55f",
+          "result_sha256": "b1a5f4bb013adee836fb29a1c4e498ecddad6cbcc7e0546f3b734357fb5cd10b"
+        },
+        {
+          "client": "python-native",
+          "case": "send-unit_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "422bed69074c44632bd0043413719dc492c919c54c269e285c740bc5bff619f6",
+          "result_sha256": "d732dfef458f7c626136c136aba3d0dd6bc3b095be55bde0c72ce5834fe95cfb"
+        },
+        {
+          "client": "python-native",
+          "case": "send-direct_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "3911c1a99fe94da25fb408b8a7e9bc7607ae381b9b3849f620baeb706d3e2aeb",
+          "result_sha256": "54e4482623d9e346f9e293d86b13f74173c0c51ea7125346880142846ecc7bfb"
+        },
+        {
+          "client": "python-native",
+          "case": "send-pooled_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ea7f0e5e8ca93c2593708a290f10172b405cb6386e2b21dbb6c9362a21068ab3",
+          "result_sha256": "c17a468a92cccfd54009bbb94108b1adb64fa61d1473be2483934bca3cd1ff23"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/ssd",
+          "placement": "mixed-c",
+          "state": "failed",
+          "exit_code": 1,
+          "log_sha256": "7ec4ce773755f0134c34d5fd657ae9491a7646d4debb96b1e693f0045cdc48ab",
+          "failure_log": "fc/ssd: native training tensor mismatch\n"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "9c03d8fae2365d6d9b6103c3b737faeaa6212130d2d16ea3ebd21106b148ed41"
+        }
+      ]
+    },
+    {
+      "name": "c962961-eager-mixed-ab-fp32",
+      "result_sha256": "cdb10bcb5bddaba5e271b958413d849cadd11ab9638c3b69662deb3b7c9ce3da",
+      "state": "passed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "runtime": {
+        "resolved_device": "cuda:0",
+        "backend": "cuda",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:cuda",
+        "dtype": "float32",
+        "host_architecture": "x86_64",
+        "torch": "2.12.1+cu130",
+        "torch_git": "7269437d655783a26cba32aa88195b741ff496aa",
+        "python": "3.12.3",
+        "cxx11_abi": true,
+        "logical_device_count": 1,
+        "cuda_runtime": "13.0",
+        "cudnn": 92000,
+        "device_name": "NVIDIA GeForce RTX 3090",
+        "capability": [
+          8,
+          6
+        ],
+        "compiled_architectures": [
+          "sm_75",
+          "sm_80",
+          "sm_86",
+          "sm_90",
+          "sm_100",
+          "sm_120"
+        ],
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false
+      },
+      "cuda_precision": {
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false,
+        "float32_matmul_precision": "highest",
+        "fp16_reduced_precision_reduction": true,
+        "bf16_reduced_precision_reduction": true,
+        "nvidia_tf32_override": null,
+        "deterministic_algorithms": false
+      },
+      "threads": {
+        "intraop": 1,
+        "interop": 1,
+        "workers": 1
+      },
+      "packing": "packed",
+      "scope": "selected single-device core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+      "argv": [
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-eager-mixed-ab-fp32",
+        "--placements",
+        "mixed-a",
+        "mixed-b",
+        "--case",
+        "kv-fc",
+        "--cpp-case",
+        "fc/kv"
+      ],
+      "cases": [
+        {
+          "client": "pytorch",
+          "case": "kv-fc",
+          "placement": "mixed-a",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "25eeb5c8c5c4d633fb1b50b01b17dfe877026a4ac63407daa9d480c75d1d3512"
+        },
+        {
+          "client": "pytorch",
+          "case": "kv-fc",
+          "placement": "mixed-b",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "c3864a40cbf8a42869a2ec53cb40759e877e411639ae12e1af0a54e1e353db18"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-fc",
+          "placement": "mixed-a",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "bcf7ba5538ef51e11f14a905f63f13b096c79d7e8f2c7888b82db549b05f1d35"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-fc",
+          "placement": "mixed-b",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "c39464d443df3a4cc459ad652a95a6f24a46ce47f2064d60a856ea3e46261d1d"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/kv",
+          "placement": "mixed-a",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c91ffc993e9522f7ebf8936e49b156d616c1117b33e7d9ca3f058f338d6efcdf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/kv",
+          "placement": "mixed-b",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "09752e329002c0913a3f090c150d44b34fadebaf04de394b79af54ae4d613b8a"
+        }
+      ]
+    },
+    {
+      "name": "c962961-eager-fp16",
+      "result_sha256": "4c04a5cd45b88b02162c4e54eea8671387c2c0839bd191b3dfe4d75a75e9d5b3",
+      "state": "failed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "runtime": {
+        "resolved_device": "cuda:0",
+        "backend": "cuda",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:cuda",
+        "dtype": "float16",
+        "host_architecture": "x86_64",
+        "torch": "2.12.1+cu130",
+        "torch_git": "7269437d655783a26cba32aa88195b741ff496aa",
+        "python": "3.12.3",
+        "cxx11_abi": true,
+        "logical_device_count": 1,
+        "cuda_runtime": "13.0",
+        "cudnn": 92000,
+        "device_name": "NVIDIA GeForce RTX 3090",
+        "capability": [
+          8,
+          6
+        ],
+        "compiled_architectures": [
+          "sm_75",
+          "sm_80",
+          "sm_86",
+          "sm_90",
+          "sm_100",
+          "sm_120"
+        ],
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false
+      },
+      "cuda_precision": {
+        "matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false,
+        "float32_matmul_precision": "highest",
+        "fp16_reduced_precision_reduction": true,
+        "bf16_reduced_precision_reduction": true,
+        "nvidia_tf32_override": null,
+        "deterministic_algorithms": false
+      },
+      "threads": {
+        "intraop": 1,
+        "interop": 1,
+        "workers": 1
+      },
+      "packing": "packed",
+      "scope": "selected single-device core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+      "argv": [
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-eager-fp16",
+        "--dtype",
+        "float16"
+      ],
+      "cases": [
+        {
+          "client": "pytorch",
+          "case": "kv-fc",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "943955bf7c75bbd7879d1c363309e0e0a9400d72398712d4b0131396bb65f265"
+        },
+        {
+          "client": "pytorch",
+          "case": "kv-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "bdae51c33b01435fac55116dcae7fe887317d5533aa5899d11b1e1bf40e834e6",
+          "result_sha256": "18fb0243482acb9b5b86491cb4f32a9c4e9fb077ac3249d1b078a33c7dcf5d83"
+        },
+        {
+          "client": "pytorch",
+          "case": "kv-pdg-initial",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b131488316846d14ec92cdc71daa02e646d980d4418972f98d118b6086a9171a",
+          "result_sha256": "d7786b4c94a7921567d0c32ce1e642f46aae6ff03aea434cf8656960494d92dc"
+        },
+        {
+          "client": "pytorch",
+          "case": "affine-dag-old",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+          "result_sha256": "b58287622f10be6825c092a72a5ec9c7b4b0506a91d524f2a63580da102be0ae"
+        },
+        {
+          "client": "pytorch",
+          "case": "delta-pdg",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+          "result_sha256": "db81c1f3925370dbf41e0c37c98345a27e9d6d41e07cdaca553a0d3793c01bbd"
+        },
+        {
+          "client": "pytorch",
+          "case": "gated-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "cad650487e10b95903b20b78dd20f2e4f6f21b8c262869b561408abdd628f1c0",
+          "result_sha256": "e18be7c99cf8b69715e2cfe6c3451e770a08fe15061b6d073dc7ce862f2d1ee3"
+        },
+        {
+          "client": "pytorch",
+          "case": "ssd-dag",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+          "result_sha256": "7cd642f7d0374ca6232dd6701b91c840dcd87901a05f923d7e6ae93c509f577c"
+        },
+        {
+          "client": "pytorch",
+          "case": "heterogeneous-attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+          "result_sha256": "f7a69ed1455e28272324ce34ba4ea3dbc72a5546b1e87bba4097cec9500fd605"
+        },
+        {
+          "client": "pytorch",
+          "case": "ports-sparse",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "677cf7bb90ef88de33a61f34a360f1356defc19a6e48b434cf6e203ff4b20104",
+          "result_sha256": "566b8462413380dad1a656e526b35852c02779e263eb288d46381f1776a04b35"
+        },
+        {
+          "client": "pytorch",
+          "case": "entropy-shannon",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "07700f6c656efd11437f93816260b21a046de1c6f0a186d1dc1d276bf22668cb",
+          "result_sha256": "5a4809d6d93b893f0eff0960c66243ea999980bb12e309487d499dc59a677b8e"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_threshold",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "29b259a2891dd5b0258386cd1783a8afc5b0d29c40c460b6eb42461ea7989460",
+          "result_sha256": "b6a9f58296f0ad9772a8f20bf92e7f23f8e749301464fcea9b274cd72ab5a36f"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_total_zero",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "558b0daf1509aa717b51a8c5df4d14e8a98361256cdc60d8c268ccbc004ccf43",
+          "result_sha256": "fe3402f811b8b976e998e71090de92ebd48756c57f38bcdeb14ee172543b562e"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-regional_threshold_hard",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "87b70ad4adb7aef832b9318c666ffe691ce93a6a97866b9a0da066811ebe4928",
+          "result_sha256": "edba6731f8f2bba5fc7be5cde2571d7489493dc6dad1d58e60e8fd7943207c34"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-hard_selection",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c48b739c6e5804f973e7bfc5fedfa7b97760c92b4418089ac5591b75977db38e",
+          "result_sha256": "f6ee4086b1271eed3ad07888a49bf066409975fa2051c21c5dac5273b146b3db"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-constrained",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "023be271e84aa9ad0ab8a240e81b6d7d88f3642765bde1749611742b9dd55ad5",
+          "result_sha256": "47533c995189b8753fb812782791f32ac9974f73ba6c63e3d780ea7ff170deeb"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-proportional",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ae34c847682520eea36de4d43adeafc424c45995940b9a6b2593e28ab361f55f",
+          "result_sha256": "e02c7ffc4eae83a62ea0500b225c94df2e4a36051da6b24eb9a60d27ffc4bd93"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-unit_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "422bed69074c44632bd0043413719dc492c919c54c269e285c740bc5bff619f6",
+          "result_sha256": "9ab509bccb89576c132dc5382dc2d4d981e0d8f4d337764145f3ae04bf0008aa"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-direct_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "3911c1a99fe94da25fb408b8a7e9bc7607ae381b9b3849f620baeb706d3e2aeb",
+          "result_sha256": "be4b559b0b3be35648ee0bb611ea1cb2ce0a84cffc44bbec2e7748e1228607e3"
+        },
+        {
+          "client": "pytorch",
+          "case": "send-pooled_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ea7f0e5e8ca93c2593708a290f10172b405cb6386e2b21dbb6c9362a21068ab3",
+          "result_sha256": "e463a0f0c50f4fcbdeaed85ac725fec9ff90005eabde503108c5a36eead68a58"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-fc",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+          "result_sha256": "ebda06d7ebcde8c3d078d023971ffd1180bb9aaaaa755d33c139576ecd330cb1"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "bdae51c33b01435fac55116dcae7fe887317d5533aa5899d11b1e1bf40e834e6",
+          "result_sha256": "1d54054dd3eb07e44af241e8fec464acdaf811f93f9f64a8d05800adf9bb4904"
+        },
+        {
+          "client": "python-native",
+          "case": "kv-pdg-initial",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "b131488316846d14ec92cdc71daa02e646d980d4418972f98d118b6086a9171a",
+          "result_sha256": "1faec13952241a70324dc2c14773935c88e57677f80b29441cf19a8e2a8d65af"
+        },
+        {
+          "client": "python-native",
+          "case": "affine-dag-old",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+          "result_sha256": "09e8e4799af1b3b39d66abde1ae6776d114bc6d3effbbd1b35f1217e52936b9a"
+        },
+        {
+          "client": "python-native",
+          "case": "delta-pdg",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+          "result_sha256": "ae880340eb2836b0beb44491a9abcae57b8464202beaf85e795fe8a56a05e3c4"
+        },
+        {
+          "client": "python-native",
+          "case": "gated-hb",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "cad650487e10b95903b20b78dd20f2e4f6f21b8c262869b561408abdd628f1c0",
+          "result_sha256": "5c689e2e56c29daa56f1c6e71f1dcfe11a3429f13bb28ef191911b4d33392b38"
+        },
+        {
+          "client": "python-native",
+          "case": "ssd-dag",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+          "result_sha256": "344b0f11a816519afc5c448804c81f238e9445d8cbbecb4baaa9878cb2be0b29"
+        },
+        {
+          "client": "python-native",
+          "case": "heterogeneous-attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+          "result_sha256": "f3ec642c78c5dfd66d84e41fedb60de635e43e4d52446164f7549fb5d4dab68c"
+        },
+        {
+          "client": "python-native",
+          "case": "ports-sparse",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "677cf7bb90ef88de33a61f34a360f1356defc19a6e48b434cf6e203ff4b20104",
+          "result_sha256": "da43815129f96a55db9eafcc4daaf61b48fd8516f1ba4eb79751c7f8949d0848"
+        },
+        {
+          "client": "python-native",
+          "case": "entropy-shannon",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "07700f6c656efd11437f93816260b21a046de1c6f0a186d1dc1d276bf22668cb",
+          "result_sha256": "f6ffbaab9f68703f64884cb01d418ed3bf16f373761933b1cd070e3f71e0ae20"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_threshold",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "29b259a2891dd5b0258386cd1783a8afc5b0d29c40c460b6eb42461ea7989460",
+          "result_sha256": "610643b33c505eb11d4a098c7150aa865e2afc6563bd7ccc1f97cf0224c33af2"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_total_zero",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "558b0daf1509aa717b51a8c5df4d14e8a98361256cdc60d8c268ccbc004ccf43",
+          "result_sha256": "cdbd98ba6846e0abc025b97d91b09769efbeecbb46904ec26e4a68df06c6ef8d"
+        },
+        {
+          "client": "python-native",
+          "case": "send-regional_threshold_hard",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "87b70ad4adb7aef832b9318c666ffe691ce93a6a97866b9a0da066811ebe4928",
+          "result_sha256": "013c2667883dd1628ed479bfe8181ded3fa32aaa8f1b34701b3ce0bd6d2879e8"
+        },
+        {
+          "client": "python-native",
+          "case": "send-hard_selection",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "c48b739c6e5804f973e7bfc5fedfa7b97760c92b4418089ac5591b75977db38e",
+          "result_sha256": "87f077618252abb556c1e5a8f824afd4ec62a68be7d3fd75f6e3803f4a94ffd1"
+        },
+        {
+          "client": "python-native",
+          "case": "send-constrained",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "023be271e84aa9ad0ab8a240e81b6d7d88f3642765bde1749611742b9dd55ad5",
+          "result_sha256": "587e0fb74041347d1b0ee2e9187c55ecc8ab3049d3341bd3f258ec1ce5bf0c31"
+        },
+        {
+          "client": "python-native",
+          "case": "send-proportional",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ae34c847682520eea36de4d43adeafc424c45995940b9a6b2593e28ab361f55f",
+          "result_sha256": "ed5fa19bcf90a6e7d298894e74ea1442abb6a8ed0337d52613024f565dcc2781"
+        },
+        {
+          "client": "python-native",
+          "case": "send-unit_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "422bed69074c44632bd0043413719dc492c919c54c269e285c740bc5bff619f6",
+          "result_sha256": "7845924428be3f660a10750e044fdb18c7691fbe5850a4f8b05785202fd3a4b7"
+        },
+        {
+          "client": "python-native",
+          "case": "send-direct_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "3911c1a99fe94da25fb408b8a7e9bc7607ae381b9b3849f620baeb706d3e2aeb",
+          "result_sha256": "3e2717b2635e94b768e1c4067179a64190f85b11188d57ff0b686a2093a4ac7a"
+        },
+        {
+          "client": "python-native",
+          "case": "send-pooled_attention",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "ea7f0e5e8ca93c2593708a290f10172b405cb6386e2b21dbb6c9362a21068ab3",
+          "result_sha256": "593f52fea8025cfd1fb17d98a11eae3e91c7923221c23d38cbd040f13df7143f"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "fc/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "hb/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/affine",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/ssd",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "nonaligned/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/kv",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/affine",
+          "placement": "mixed-c",
+          "state": "failed",
+          "exit_code": 1,
+          "log_sha256": "dc55643c3400b952c4574330efe538236a755494fb53f947f551cc7b686b9e30",
+          "failure_log": "feedback/affine: native training tensor mismatch\n"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/gated_delta",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/ssd",
+          "placement": "mixed-c",
+          "state": "failed",
+          "exit_code": 1,
+          "log_sha256": "c0c1aacdd3ef54be6c7a1ac404bf7e02e5b8ccc0e2612cbd021301b0a6332cd9",
+          "failure_log": "feedback/ssd: native training tensor mismatch\n"
+        },
+        {
+          "client": "libtorch",
+          "case": "feedback/heterogeneous",
+          "placement": "mixed-c",
+          "state": "passed",
+          "exit_code": 0,
+          "log_sha256": "2c1a45feb100aaa0910fbb6dc2133d75671b9bf94521589e9a1ae6568d91dbaf"
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "name": "setup",
+      "status_sha256": "3fa608105b1afa4ae375e9490691b47416f6247e864664f3ee504e3c3c982dc3",
+      "state": "passed",
+      "source": "cc6b45f84dbce99d98e6ed0f0bff458f851d263a",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/bootstrap.sh"
+      ],
+      "started": "2026-10-31T01:44:07.095629+00:00",
+      "finished": "2026-10-31T01:44:20.075593+00:00",
+      "timeout_seconds": 300.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "282c4efe0fb83d8482fb87103658e80bad9fae968b9938088469be8846eb71f7"
+    },
+    {
+      "name": "disconnect-probe",
+      "status_sha256": "fd0efe2c0eeca1df43f38f528bbd99f20978039d5d047545e129bb9b3cf50e70",
+      "state": "cancelled",
+      "source": "cc6b45f84dbce99d98e6ed0f0bff458f851d263a",
+      "dirty": "",
+      "command": [
+        "/root/miniconda3/bin/python",
+        "-c",
+        "import subprocess,sys,time; subprocess.Popen([sys.executable,\"-c\",\"import time; time.sleep(80)\"]); print(\"running through SSH disconnect\",flush=True); time.sleep(80)"
+      ],
+      "started": "2026-10-31T01:43:55.611059+00:00",
+      "finished": "2026-10-31T01:44:06.782503+00:00",
+      "timeout_seconds": 90.0,
+      "exit_code": 143,
+      "termination_reason": "signal",
+      "remaining_live_pids": [],
+      "task_log_sha256": "64d46fb41dd4317bbc5abbd083fde6ce8be0cd93b61d2258f614c2f20d085c76"
+    },
+    {
+      "name": "core-build",
+      "status_sha256": "8b0e9761a39adcfc5674715462a8e63572ec180bcb3c25f97096857c7b5e14c0",
+      "state": "passed",
+      "source": "cc6b45f84dbce99d98e6ed0f0bff458f851d263a",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/core-build.sh"
+      ],
+      "started": "2026-10-31T01:44:44.692185+00:00",
+      "finished": "2026-10-31T01:45:57.509968+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "af2cdc9dd11967484b9db3ebc15862b2d7c67fac74b252e222053fed31058420"
+    },
+    {
+      "name": "core-build-c962961",
+      "status_sha256": "01448e2b07841262a310b6376e19d202dc2efda67b7bd8d8136189da29bb8fb8",
+      "state": "passed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/core-build-c962961.sh"
+      ],
+      "started": "2026-10-31T01:49:22.197834+00:00",
+      "finished": "2026-10-31T01:50:35.178629+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "295659e2b15c29f4d526caafeef45e09d8988e78e4c72517db40ca5eeb3162c3"
+    },
+    {
+      "name": "eager-pytorch-fp32",
+      "status_sha256": "c7cea6c4eb7bbb4791d4dfafb3092003a7ef9da666d3dff0e364f725935a13a6",
+      "state": "passed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "command": [
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/check_cuda_eager.py",
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "--placements",
+        "mixed-c",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-pytorch-fp32"
+      ],
+      "started": "2026-10-31T01:49:32.839718+00:00",
+      "finished": "2026-10-31T01:53:06.249676+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "933d1514f8ab4584ba687d8b4662e8ef2067c698527213d558db280fc3dfdabc"
+    },
+    {
+      "name": "eager-native-cpp-fp32",
+      "status_sha256": "e6d16a0d4b4841394eb205fdadcccbd67cc8dc8f7171e0a47f84df4e18b0c481",
+      "state": "failed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "command": [
+        "env",
+        "CUDA_VISIBLE_DEVICES=1",
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/check_cuda_eager.py",
+        "--device",
+        "cuda:0",
+        "--clients",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--placements",
+        "mixed-c",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-native-cpp-fp32"
+      ],
+      "started": "2026-10-31T01:51:41.477325+00:00",
+      "finished": "2026-10-31T01:57:10.254932+00:00",
+      "timeout_seconds": 7200.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "0dee0d8fcda45b6eaa4245dd22c90928b09ba48eab8817ad08bfa1f8a17e8031"
+    },
+    {
+      "name": "eager-mixed-ab-fp32",
+      "status_sha256": "ee3200f7c883e89ef537db3d9c4f5dc964b9ddcd73be46150b7216cd77242995",
+      "state": "passed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "command": [
+        "env",
+        "CUDA_VISIBLE_DEVICES=0",
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/check_cuda_eager.py",
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-eager-mixed-ab-fp32",
+        "--placements",
+        "mixed-a",
+        "mixed-b",
+        "--case",
+        "kv-fc",
+        "--cpp-case",
+        "fc/kv"
+      ],
+      "started": "2026-10-31T01:56:47.295714+00:00",
+      "finished": "2026-10-31T01:57:46.911622+00:00",
+      "timeout_seconds": 1800.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "d007b30a3282692a95cee52bd381bca77ae38376214147e9165f846838765054"
+    },
+    {
+      "name": "eager-fp16",
+      "status_sha256": "e1a131a3652f8fea33e719b537661299677cb504b2664e13e82d238565c4c09a",
+      "state": "failed",
+      "source": "c96296150e005363346eae46fcfed8613b3956d2",
+      "dirty": "",
+      "command": [
+        "env",
+        "CUDA_VISIBLE_DEVICES=2",
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/check_cuda_eager.py",
+        "--device",
+        "cuda:0",
+        "--clients",
+        "pytorch",
+        "python-native",
+        "libtorch",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/c962961-eager-fp16",
+        "--dtype",
+        "float16"
+      ],
+      "started": "2026-10-31T01:56:47.480058+00:00",
+      "finished": "2026-10-31T02:06:53.545081+00:00",
+      "timeout_seconds": 7200.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "a6e1b0e37affe476f6d371c321453b0b08df527e48886fd8ce24f610c4b17a02"
+    },
+    {
+      "name": "peer-31d0afd",
+      "status_sha256": "9377ddca365c98bab37b5bf08136541887295a56636eb582f2c6e3860db9ee23",
+      "state": "passed",
+      "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+      "dirty": "",
+      "command": [
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/check_cuda_peer.py",
+        "--devices",
+        "0",
+        "1",
+        "2",
+        "3",
+        "--native-library",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-peer"
+      ],
+      "started": "2026-10-31T01:59:27.489395+00:00",
+      "finished": "2026-10-31T01:59:32.374596+00:00",
+      "timeout_seconds": 300.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "5e186178eaee723a490a5095326d4e2e9a4de59641d961bb96f650878e8d83e7"
+    },
+    {
+      "name": "multicard-31d0afd",
+      "status_sha256": "592a78a788df7df9bcf58ea304beb2ca0562c32f413aae4a8a15dcd995ce7b5e",
+      "state": "failed",
+      "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+      "dirty": "",
+      "command": [
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "/root/autodl-tmp/gef-cuda3090/multicard.py"
+      ],
+      "started": "2026-10-31T02:01:43.203396+00:00",
+      "finished": "2026-10-31T02:05:06.783561+00:00",
+      "timeout_seconds": 7200.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "69e8d2da8a5a35a95f6be72c7580cc14c3a95d056a1c84c822d9e57343ee4967"
+    },
+    {
+      "name": "resident-build-7fd0576",
+      "status_sha256": "8c6519295329e43923cb5d19f8f9e071695ea9133446f247aa51b588104f7a31",
+      "state": "failed",
+      "source": "7fd0576a40186bf9bf97b1d9db25ba4edabf6e85",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/resident-build.sh"
+      ],
+      "started": "2026-10-31T01:51:41.815325+00:00",
+      "finished": "2026-10-31T01:51:42.585966+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "71a291497bf17559998d5d13dfd33bd4bd37277ab584c4fa61039e2bd9aff1aa"
+    },
+    {
+      "name": "resident-build86-7fd0576",
+      "status_sha256": "a974a3bb9ddb0a4be337ac973574c134e9076aa8e850ec78fc915112fc847346",
+      "state": "failed",
+      "source": "7fd0576a40186bf9bf97b1d9db25ba4edabf6e85",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/resident-build86.sh"
+      ],
+      "started": "2026-10-31T01:53:00.303634+00:00",
+      "finished": "2026-10-31T01:53:28.904212+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "e6bdd138a4c356b314973410ee4bfde899ee9240868d071868987c0d8477cc6c"
+    },
+    {
+      "name": "resident-build-1fe1e37",
+      "status_sha256": "4880230d2e8a0374e38e28038f4545b30eb2cdc642c02583b4347d478b6697d6",
+      "state": "passed",
+      "source": "1fe1e379bec0d0d28e40be1dbfdfbe647add4171",
+      "dirty": "",
+      "command": [
+        "bash",
+        "/root/autodl-tmp/gef-cuda3090/resident-build-1fe1e37.sh"
+      ],
+      "started": "2026-10-31T01:57:08.705735+00:00",
+      "finished": "2026-10-31T01:59:06.842938+00:00",
+      "timeout_seconds": 3600.0,
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "8336886fc5f50f346c86c0825b20a83dba4b1b622b64679c8ff89b6cdb890acd"
+    },
+    {
+      "name": "resident-single-1fe1e37",
+      "status_sha256": "05e2f96460777a0a2dea157b21319880d05931c66d8623f23b73e25a163f0514",
+      "state": "failed",
+      "source": "1fe1e379bec0d0d28e40be1dbfdfbe647add4171",
+      "dirty": "",
+      "command": [
+        "env",
+        "CUDA_VISIBLE_DEVICES=3",
+        "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+        "scripts/verify_core5_resident_single.py",
+        "--device",
+        "cuda:0",
+        "--core-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+        "--python-resident-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/1fe1e37-resident-python86",
+        "--standalone-resident-build",
+        "/root/autodl-tmp/gef-cuda3090/builds/1fe1e37-resident-cpp86",
+        "--output-dir",
+        "/root/autodl-tmp/gef-cuda3090/runs/1fe1e37-resident-single"
+      ],
+      "started": "2026-10-31T01:59:27.684178+00:00",
+      "finished": "2026-10-31T01:59:32.260158+00:00",
+      "timeout_seconds": 10800.0,
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "task_log_sha256": "3b5dc3ce74747f61f8a44318575b251487b426bf601751f373fb4f42228d2db6"
+    }
+  ],
+  "multicard": {
+    "result_sha256": "66ac58f4b2efccc1f7a3dcb687d4bc27a52f63bd496aa5e4df4ed6a906da76e6",
+    "state": "failed",
+    "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+    "driver_sha256": "818a22bb1c251b99195a369e90c220b9e293a40efb420e12f68d60e01b4db32b",
+    "physical_devices": [
+      0,
+      1
+    ],
+    "stages": [
+      {
+        "name": "transfer-roots",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "-m",
+          "pytest",
+          "tests/test_transfer.py",
+          "-q",
+          "--dtype",
+          "float32",
+          "--junitxml",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/transfer.xml",
+          "--basetemp",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/tmp"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "12c35f9276f557449ef8841f22a9f2ef3ea5a2e84e01b3372b69b6543d09d063",
+        "acceptance_log_tail": "................................                                         [100%]\n- generated xml file: /root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/transfer.xml -\n32 passed in 2.31s\n"
+      },
+      {
+        "name": "standalone-generic",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core/tidegraph-payload-ownership-check",
+          "--device",
+          "cuda:0",
+          "--dtype",
+          "float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "59f217c8302f55a969e11d31d4d6a7bf8b164b0c06c886ca3743589759cebe4a",
+        "acceptance_log_tail": "[W1031 10:01:49.491626484 input_buffer.cpp:240] Warning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (function operator())\npayload-ownership: passed cases=36 updates=72 connected_windows=144 scope=full\n"
+      },
+      {
+        "name": "python-kv-fc",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "kv-fc",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-kv-fc"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "fd8cf634e313647fe3ea7af7f8a5802379ee2859a804c75a74475ed7277e0abc",
+              "pending_at_cut": 0,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 40,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 1,
+                "cross_device_rows": 14,
+                "cross_device_bytes": 168,
+                "max_cross_device_batch": 14
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "7212bb10ab6e8de89ae6fa5ec9df9879c5d321c381cc146291f7293b0320f32d"
+      },
+      {
+        "name": "python-affine-dag-old",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "affine-dag-old",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-affine-dag-old"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "affine-dag-old",
+                "family": "affine",
+                "topology": "dag",
+                "read": "-",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "5dd5d6858ec65dd7f0cf86e7d5de95915afd8dcfb873252b548b57fc92715949",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "cross_device_bytes": 108,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "b5e021b9f51ade8e1836316a6a1efd27fcef4f5f12e74c5a3f3cece3e11b92aa"
+      },
+      {
+        "name": "python-delta-pdg",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "delta-pdg",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-delta-pdg"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "delta-pdg",
+                "family": "delta",
+                "topology": "pdg",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "8a794c15a75dbd6e71dc87d6e9dd7d503ab17bc79f2aa8f0989040b9585fd3e8",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "cross_device_bytes": 240,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "9fdc3d343e84aaa90e967772a0c06d9621ee25ee2de130db1cabd1be686001e9"
+      },
+      {
+        "name": "python-gated-hb",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "gated-hb",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-gated-hb"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "cad650487e10b95903b20b78dd20f2e4f6f21b8c262869b561408abdd628f1c0",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "gated-hb",
+                "family": "gated_delta",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "fb635c10a1936d1ff7b6d59935d9d8d4bfb7456b2946bb09e6981e2d85e498c9",
+              "pending_at_cut": 8,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 60,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1",
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 2,
+                "cross_device_rows": 22,
+                "cross_device_bytes": 264,
+                "max_cross_device_batch": 14
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "b56be17473e146570167907dca490d0d7e708d838b396bc4ac5e3cba631a6d88"
+      },
+      {
+        "name": "python-ssd-dag",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "ssd-dag",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-ssd-dag"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "ssd-dag",
+                "family": "ssd",
+                "topology": "dag",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "44c80be8e64ae095b4bebaa247d5a86b395e4d934efc03dbeaa1d3e865e441e5",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "cross_device_bytes": 108,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "04d4d69631b872dc5ac6e0c5ea2f87f5dc2c58bcbaaa9e039f46dba5907d931c"
+      },
+      {
+        "name": "python-heterogeneous-attention",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "python",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "heterogeneous-attention",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-heterogeneous-attention"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "heterogeneous-attention",
+                "family": "heterogeneous",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "bern",
+                "attention": true
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-descriptor-x",
+                "first-descriptor-key",
+                "first-control"
+              ],
+              "fixture_sha256": "193daf818fe8f49efeed50d3ba5b9d04c43c504f231e031cc26fa31f52c54073",
+              "pending_at_cut": 8,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 56,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1",
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 2,
+                "cross_device_rows": 22,
+                "cross_device_bytes": 264,
+                "max_cross_device_batch": 14
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "d46bc9ecee3d3b77af45cfd06f844a3f54291e3767b3654d8460f4e17e6c6c86"
+      },
+      {
+        "name": "native-kv-fc",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "kv-fc",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-kv-fc",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "63f8077452a25e3311a476e12e8cabe937ac5b327c81e15ca84f76f37e280cd2",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-fc",
+                "family": "kv",
+                "topology": "fc",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 4,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 4,
+                "unobserved_nodes": 0,
+                "events": 16,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 8,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "fd8cf634e313647fe3ea7af7f8a5802379ee2859a804c75a74475ed7277e0abc",
+              "pending_at_cut": 0,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 40,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 168,
+                "cross_device_copy_groups": 1,
+                "cross_device_rows": 14,
+                "max_cross_device_batch": 14
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "233f08e7568a97cc6af2d75d15ecbfad9b437a60c60f832f0c80d7614294012d"
+      },
+      {
+        "name": "native-affine-dag-old",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "affine-dag-old",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-affine-dag-old",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "675e947306f407516c44beb7556b70e2c338c553471d4dcf23d518f761a1c77f",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "affine-dag-old",
+                "family": "affine",
+                "topology": "dag",
+                "read": "-",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "5dd5d6858ec65dd7f0cf86e7d5de95915afd8dcfb873252b548b57fc92715949",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 108,
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "c08eb4a2a8d0824bf046f9a4521898b8b5cc12b31ad30c75bb16295ae0b3d48e"
+      },
+      {
+        "name": "native-delta-pdg",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "delta-pdg",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-delta-pdg",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "671268db1165863df1ea52aae1aaeda7bb5688f0d283236c533eb9cbeeb0a010",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "delta-pdg",
+                "family": "delta",
+                "topology": "pdg",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "8a794c15a75dbd6e71dc87d6e9dd7d503ab17bc79f2aa8f0989040b9585fd3e8",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 240,
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "f093013c4874d202d55c57daac18920f7f99bbaabc1f31725e6ae34cd0c91575"
+      },
+      {
+        "name": "native-gated-hb",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "gated-hb",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-gated-hb",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "failed",
+        "exit_code": 1,
+        "log_sha256": "28dd90b7a8f3ffa2f1e884d7fad5ff561629430ba8c1b115bb5dd1f859f68817",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "failed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "gated-hb",
+                "family": "gated_delta",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "failed",
+              "error": "AssertionError('same-device.fourth-complete[1][nodes.0.kernel.read_out]: Tensor-likes are not equal!\\n\\nMismatched elements: 3 / 4 (75.0%)\\nGreatest absolute difference: 4.440892098500626e-16 at index (0, 1)\\nGreatest relative difference: 1.193726433257325e-07 at index (1, 0)')"
+            }
+          ],
+          "error": "AssertionError('same-device.fourth-complete[1][nodes.0.kernel.read_out]: Tensor-likes are not equal!\\n\\nMismatched elements: 3 / 4 (75.0%)\\nGreatest absolute difference: 4.440892098500626e-16 at index (0, 1)\\nGreatest relative difference: 1.193726433257325e-07 at index (1, 0)')"
+        },
+        "result_sha256": "da0169cd6e2e34d9444956e148947d8a39e426d3331a9b4ae93db96c4a19527e"
+      },
+      {
+        "name": "native-ssd-dag",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "ssd-dag",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-ssd-dag",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "925b12ae3a15dc490f3278a7c97923384a9c5247b81bbaab82f83ce710d56a4b",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "ssd-dag",
+                "family": "ssd",
+                "topology": "dag",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "44c80be8e64ae095b4bebaa247d5a86b395e4d934efc03dbeaa1d3e865e441e5",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 108,
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "max_cross_device_batch": 2
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "41c869b551a45d95d421a8b59e1bc756766d217bd42570c2fd2eac40cf41c578"
+      },
+      {
+        "name": "native-heterogeneous-attention",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/check_weighted_device.py",
+          "--device",
+          "cuda:0",
+          "--peer-devices",
+          "cuda:0",
+          "cuda:1",
+          "--implementation",
+          "native",
+          "--placement",
+          "mixed-c",
+          "--scoring-dtype",
+          "float32",
+          "--dtype",
+          "float32",
+          "--packing",
+          "packed",
+          "--workers",
+          "1",
+          "--case",
+          "heterogeneous-attention",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/native-heterogeneous-attention",
+          "--native-library",
+          "/root/autodl-tmp/gef-cuda3090/builds/c962961-core"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "a494852aed4c38e542632a52430c2db42064cfe1a22d5b01f086163e4fa366c6",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "cases": [
+            {
+              "configuration": {
+                "name": "heterogeneous-attention",
+                "family": "heterogeneous",
+                "topology": "hb",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "bern",
+                "attention": true
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 8,
+                "edges": 12,
+                "regions": 4,
+                "observed_nodes": 8,
+                "unobserved_nodes": 0,
+                "events": 32,
+                "outputs": 8,
+                "pending": 0,
+                "state_owners": 16,
+                "history_owners": 8
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-descriptor-x",
+                "first-descriptor-key",
+                "first-control"
+              ],
+              "fixture_sha256": "193daf818fe8f49efeed50d3ba5b9d04c43c504f231e031cc26fa31f52c54073",
+              "pending_at_cut": 8,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 56,
+              "node_owners": [
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1",
+                "cuda:0",
+                "cuda:0",
+                "cuda:1",
+                "cuda:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 264,
+                "cross_device_copy_groups": 2,
+                "cross_device_rows": 22,
+                "max_cross_device_batch": 14
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ]
+        },
+        "result_sha256": "b928b346a1e53bb87f12b70a85a830642798fd68dfeb5532a9f27e7984a7674a"
+      },
+      {
+        "name": "python-cpu-bridge-delta-pdg",
+        "command": [
+          "/root/autodl-tmp/gef-cuda3090/venv/bin/python",
+          "scripts/diagnose_weighted_async.py",
+          "--device",
+          "cuda:0",
+          "--peer-device",
+          "cuda:1",
+          "--copy-policy",
+          "cpu_bridge",
+          "--scope",
+          "complete",
+          "--case",
+          "delta-pdg",
+          "--output-dir",
+          "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-multicard/python-cpu-bridge-delta-pdg"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log_sha256": "df8dd8c2486711a673b7ff4c3562228b50a7dad8cb41ce6cb7623fdfa54656e9",
+        "result": {
+          "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+          "dirty": "",
+          "state": "passed",
+          "checks": {
+            "coverage": {
+              "nodes": 3,
+              "edges": 5,
+              "regions": 2,
+              "observed_nodes": 3,
+              "unobserved_nodes": 0,
+              "events": 29,
+              "outputs": 20,
+              "pending": 13,
+              "state_owners": 6,
+              "history_owners": 4
+            },
+            "roots": [
+              "all",
+              "first-output",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-control"
+            ],
+            "fixture_sha256": "8a794c15a75dbd6e71dc87d6e9dd7d503ab17bc79f2aa8f0989040b9585fd3e8",
+            "pending_at_cut": 4,
+            "retained_cut": 3,
+            "streaming": true,
+            "prefill": true,
+            "inference": true,
+            "training_updates": 4,
+            "independent_raw_state_roots": 24,
+            "node_owners": [
+              "cuda:0",
+              "cuda:0",
+              "cuda:1"
+            ],
+            "transport_stats": {
+              "cross_device_copy_groups": 12,
+              "cross_device_rows": 20,
+              "cross_device_bytes": 240,
+              "max_cross_device_batch": 2
+            },
+            "preparation_stats": {},
+            "same_device_resume": true,
+            "same_device_resume_exact": true,
+            "cpu_checkpoint_handoff": true
+          },
+          "bridge_counts": {
+            "forward_calls": 235,
+            "backward_calls": 210,
+            "forward_bytes": 2820,
+            "backward_bytes": 2520
+          }
+        },
+        "result_sha256": "68799d91ed22880f620588d437a5c8b7ecb55879f27128994026061672da417d"
+      }
+    ],
+    "scope": "separate transport, generic standalone and selected core-5 eager ordinary-copy/explicit Python CPU-bridge checks; no P2P or resident claim"
+  },
+  "development": [
+    {
+      "name": "cpu-reference.xml",
+      "junit_sha256": "534a0dd8c40cf5edb09ef2a90b7fcf20029eac6a4de4ed113df2aab45873fe6e",
+      "cases": 92,
+      "failures": 0,
+      "skipped": 0,
+      "scope": "directed development check, not a complete CPU qualification"
+    },
+    {
+      "name": "target-launcher.xml",
+      "junit_sha256": "70ed2e97d3112a78702d8694ee8f810ce1fc5e2863688507e2284ab115e74029",
+      "cases": 14,
+      "failures": 0,
+      "skipped": 0,
+      "scope": "directed development check, not a complete CPU qualification"
+    },
+    {
+      "name": "dev-checker.xml",
+      "junit_sha256": "3e0068e20858161551e7d57d9a336658633f768647116992b1f411f44d84e3d2",
+      "cases": 9,
+      "failures": 0,
+      "skipped": 0,
+      "scope": "directed development check, not a complete CPU qualification"
+    },
+    {
+      "path": "builds/dev-cpp-parameter/ssd-diagnostic.log",
+      "log_sha256": "c7e166c8fcfda3d99c7ac630a2808195b8612a318fa3c04bb498d609bbba2aa8",
+      "log_tail": "parameter-diagnostic step=0 name=regions.0.head.bias expected=0.11352156847715378 actual=0.11352156847715378 expected_grad=-1.4785938446948421e-06 actual_grad=-1.4786047586312634e-06\nparameter-diagnostic step=1 name=regions.0.head.bias expected=0.11451371014118195 actual=0.11451371014118195 expected_grad=-8.0524029044681811e-07 actual_grad=-8.0525836665401584e-07\nparameter-diagnostic step=2 name=regions.0.head.bias expected=0.11544911563396454 actual=0.11544912308454514 expected_grad=-1.4730905206761236e-07 actual_grad=-1.5774422479353234e-07\nfc/ssd: train step=2: parameter regions.0.head.bias: native training tensor mismatch shape=[] failing=1/1 first_flat=0 expected=0.11622299998998642 actual=0.11622648686170578 max_abs=3.4868717193603516e-06 rtol=1.0000000000000001e-05 atol=9.9999999999999995e-07"
+    },
+    {
+      "path": "builds/dev-cpp-peer/ssd-scalar.log",
+      "log_sha256": "0c5e2115a0e009f830d6fa5fc6d51efd51af86b9d65f19c74a4ca1f572f5de89",
+      "log_tail": "fc/ssd: train step=2: parameter regions.0.head.bias: native training tensor mismatch shape=[] failing=1/1 first_flat=0 expected=0.11622299998998642 actual=0.11622633785009384 max_abs=3.337860107421875e-06 rtol=1.0000000000000001e-05 atol=9.9999999999999995e-07"
+    },
+    {
+      "path": "builds/dev-cpp-peer/ssd-control-cpu.log",
+      "log_sha256": "403b620230d93d4b19502d21eefc921dfd6166869aaf0add1a040d004f889735",
+      "log_tail": "fc/ssd: gradient nodes.2.extra.kernel.conv.bias: native checkpoint exact tensor mismatch shape=[8] failing=2/8 first_flat=1 expected=-0.00049258465878665447 actual=-0.00049258471699431539 max_abs=5.8207660913467407e-11 rtol=0 atol=0"
+    },
+    {
+      "path": "builds/dev-stable-placement/gated-hb.log",
+      "log_sha256": "28dd90b7a8f3ffa2f1e884d7fad5ff561629430ba8c1b115bb5dd1f859f68817",
+      "log_tail": "AssertionError: same-device.fourth-complete[1][nodes.0.kernel.read_out]: Tensor-likes are not equal!\nMismatched elements: 3 / 4 (75.0%)\nGreatest absolute difference: 4.440892098500626e-16 at index (0, 1)\nGreatest relative difference: 1.193726433257325e-07 at index (1, 0)"
+    },
+    {
+      "path": "builds/dev-stable-placement/placement-tests.log",
+      "log_sha256": "8d012832fb257731cf7af107e9b23b7239bf9d93f0811f99a2a3e2ecd8f14c5c",
+      "log_tail": "110 passed in 48.80s"
+    }
+  ],
+  "peer": {
+    "result_sha256": "ca0f325abdbf18691691b3aa02d87823fb94b23f08b10de27e6c4d9e1fdd31e5",
+    "state": "passed",
+    "source": "31d0afde0eda537c90286ba3e27f955eabd74aed",
+    "dirty": "",
+    "argv": [
+      "--devices",
+      "0",
+      "1",
+      "2",
+      "3",
+      "--native-library",
+      "/root/autodl-tmp/gef-cuda3090/builds/c962961-core",
+      "--output-dir",
+      "/root/autodl-tmp/gef-cuda3090/runs/31d0afd-peer"
+    ],
+    "cuda_precision": {
+      "matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "float32_matmul_precision": "highest",
+      "fp16_reduced_precision_reduction": true,
+      "bf16_reduced_precision_reduction": true,
+      "nvidia_tf32_override": null,
+      "deterministic_algorithms": false
+    },
+    "capabilities": {
+      "runtime_library": "/root/miniconda3/lib/python3.12/site-packages/nvidia/cu13/lib/libcudart.so.13",
+      "directions": [
+        {
+          "source": 0,
+          "target": 1,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 0,
+          "target": 2,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 0,
+          "target": 3,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 1,
+          "target": 0,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 1,
+          "target": 2,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 1,
+          "target": 3,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 2,
+          "target": 0,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 2,
+          "target": 1,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 3,
+          "target": 0,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 3,
+          "target": 1,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        },
+        {
+          "source": 3,
+          "target": 2,
+          "torch_access": false,
+          "access_supported": 0,
+          "native_atomic_supported": 0,
+          "enable_peer_access_code": 217
+        }
+      ]
+    },
+    "scope": "capability queries and exact FP32 copy/independent VJP probes; no NCCL, model, resident or performance qualification",
+    "cases": 72,
+    "implementations": [
+      "native-ordinary",
+      "python-cpu-staged",
+      "python-ordinary"
+    ],
+    "streams": [
+      "default",
+      "nondefault"
+    ],
+    "elements_per_case": 4096,
+    "all_exact": true,
+    "warning": "AccumulateGrad stream mismatch observed; no CUDA Graph capture guarantee"
+  },
+  "environment": {
+    "machine": "x86_64",
+    "pid1": "bash",
+    "affinity": 112,
+    "/sys/fs/cgroup/cpu.max": "5600000 100000",
+    "/sys/fs/cgroup/memory.max": "257698037760",
+    "disk:/root/autodl-tmp": [
+      53687091200,
+      57344,
+      53687033856
+    ],
+    "torch": {
+      "version": "2.12.1+cu130",
+      "file": "/root/miniconda3/lib/python3.12/site-packages/torch/__init__.py",
+      "cuda": "13.0",
+      "archs": [
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_90",
+        "sm_100",
+        "sm_120"
+      ],
+      "devices": 4,
+      "abi": true,
+      "python": "3.12.3"
+    },
+    "device_caps": [
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        6
+      ]
+    ],
+    "os": "Ubuntu 22.04",
+    "gpus": "4 RTX3090, 24 GiB, SM86",
+    "driver": "595.71.05",
+    "toolkit": "13.0.88",
+    "gcc": "11.4.0",
+    "cmake": "3.22.1",
+    "nsight": "2025.3.1",
+    "private_packages": {
+      "pytest": "8.4.2",
+      "ninja": "1.13.0"
+    },
+    "public_environment_modified": false
+  },
+  "development_note": "Development binaries are not frozen qualification builds; listed diagnostics identify original failures and separately tested fixes. Stable copy order at 6cacad0 does not clear the original native peer exact-resume failure."
+}
