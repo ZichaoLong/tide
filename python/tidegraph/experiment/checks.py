@@ -33,19 +33,37 @@ def _vjp(loss, leaves):
     return snapshot(dict(zip(leaves, gradients)))
 
 
-def eager_roots(resolved, *, full):
+def eager_roots(resolved, *, full, progress=None):
     from .eager import Eager
     from ..compare import objective, equivalent
     from ..planning.precision import tolerances
     dtype = getattr(torch, resolved["execution"]["effective"]["dtype"])
     atol, rtol = tolerances(dtype)
     check = lambda a, b: equivalent(a, b, check_device=False, atol=atol, rtol=rtol)
-    left, right = Eager(resolved, reference=True), Eager(resolved)
     checked = []
+    def report(stage, root=None):
+        if progress is not None:
+            progress(dict(stage=stage, root=root, completed_roots=list(checked)))
+    def compare_vjp(name, x, y, a, b):
+        report("reference-vjp", name)
+        expected = _vjp(x, a)
+        report("candidate-vjp", name)
+        actual = _vjp(y, b)
+        report("compare-vjp", name)
+        check(expected, actual)
+        checked.append(name)
+        report("root-passed", name)
+    report("construction")
+    left, right = Eager(resolved, reference=True), Eager(resolved)
     try:
-        expected, actual = left.forward(0), right.forward(0)
+        report("reference-forward")
+        expected = left.forward(0)
+        report("candidate-forward")
+        actual = right.forward(0)
+        report("compare-forward")
         check(expected, actual)
         a, b = _leaves(left), _leaves(right)
+        report("construct-roots")
         roots = [("all", objective(expected), objective(actual))]
         if getattr(left.task, "module", None) is not None:
             roots.append(("downstream-task-loss", left.task.loss(expected, training=True), right.task.loss(actual, training=True)))
@@ -59,14 +77,14 @@ def eager_roots(resolved, *, full):
         if full and expected.messages:
             roots.append(("first-physical-message", expected.messages[0].value.sum(), actual.messages[0].value.sum()))
         for name, x, y in roots:
-            check(_vjp(x, a), _vjp(y, b))
-            checked.append(name)
+            compare_vjp(name, x, y, a, b)
         if full:
             from .. import Continuation
             cut = max(1, min(left.span-1, resolved["plan"]["stride"]-1))
             q = Continuation(left.binding.graph.identity, resolved["plan"]["samples"])
             states, raw = [], []
             for owner in (left, right):
+                report("reference-private-state" if owner is left else "candidate-private-state")
                 placed = owner.place_inputs(owner.last_inputs)
                 head = [x for x in placed if x.time < cut]
                 first = owner.execute(q, head, cut, sealed_until=cut)
@@ -82,12 +100,14 @@ def eager_roots(resolved, *, full):
                 tail = [x for x in placed if x.time >= cut]
                 states.append(owner.execute(state, tail, owner.span, sealed_until=owner.span))
                 raw.append(leaves)
+            report("compare-private-state")
             check(*states)
             if raw[0]:
-                check(_vjp(objective(states[0]), raw[0]), _vjp(objective(states[1]), raw[1]))
-                checked.append("private-raw-state-roots-after-nonposition-cut")
+                compare_vjp("private-raw-state-roots-after-nonposition-cut",
+                            objective(states[0]), objective(states[1]), raw[0], raw[1])
             else:
                 checked.append("private-raw-state-roots-empty-at-selected-cut")
+        report("complete")
     finally:
         left.close()
         right.close()
@@ -140,9 +160,16 @@ def check(configuration, output, scope):
         coverage="selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
         untested=["all-configuration backend matrix", "higher-order gradients", "multi-card resident without hardware capability"])
     write_json(out/"result.json", record)
+    def phase(name):
+        record["phase"] = name
+        write_json(out/"result.json", record)
+    def root_progress(detail):
+        record["root_progress"] = detail
+        write_json(out/"result.json", record)
     try:
         from .engine import run, _configure
         inference = _selected(original, mode="inference", steps=1 if scope == "smoke" else 2, warmup=0, checkpoint_check=True)
+        phase("inference")
         result = run(inference, out/"inference")
         record["checks"].append(dict(name="complete-independent-inference-and-exact-resume", state=result["state"], result="inference/result.json"))
         if result["state"] != "passed":
@@ -152,11 +179,13 @@ def check(configuration, output, scope):
             e = training["execution"]["effective"]
             _configure(training)
             if e["client"] != "libtorch":
-                roots = resident_roots(training) if e["placement"] == "resident" else eager_roots(training, full=scope == "full")
+                phase("independent-roots")
+                roots = resident_roots(training) if e["placement"] == "resident" else eager_roots(training, full=scope == "full", progress=root_progress)
                 record["checks"].append(dict(name="independent-roots", **roots))
             cpp_roots = e["client"] == "libtorch" and e["placement"] != "resident"
             if e["client"] == "libtorch" and not cpp_roots:
                 record["untested"].append("standalone resident independent roots use the separate installed device component gates")
+            phase("training")
             result = run(training, out/"training", check_roots=cpp_roots)
             if cpp_roots:
                 roots = result.get("independent_roots", {})
@@ -167,6 +196,7 @@ def check(configuration, output, scope):
             if result["state"] != "passed":
                 raise AssertionError("selected training strict qualification failed")
         record["state"] = "passed"
+        phase("complete")
     except BaseException as error:
         record.update(state="failed", error=dict(type=type(error).__name__, message=str(error)))
         raise

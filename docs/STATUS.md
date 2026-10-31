@@ -47,7 +47,7 @@ GPU新配方双卡1.014B训练的执行/离散/精确恢复完成，独立数值
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:52Z：38.406B三卡原1800秒到限，监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。监督终态时仍有不可中断I/O进程1908740，09:52Z核对该进程已消失且原控制组已空；原监督残留记录仍保留。七卡任务等待241秒后完成，完整离散/恢复通过、数值探索，中位0.804秒；blocking单次诊断完整通过但未复现原SIGSEGV，不称修复；三通信full独立根09:56:35Z全部终态/exit1：完整独立推理和精确恢复通过，随后均EE1017；首根/具体调用点待定位。B512恢复诊断正在执行，其余链等待。
+09:52Z：38.406B三卡原1800秒到限，监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。监督终态时仍有不可中断I/O进程1908740，09:52Z核对该进程已消失且原控制组已空；原监督残留记录仍保留。七卡任务等待241秒后完成，完整离散/恢复通过、数值探索，中位0.804秒；blocking单次诊断完整通过但未复现原SIGSEGV，不称修复；三通信full独立根09:56:35Z全部终态/exit1：完整独立推理和精确恢复通过，随后均EE1017；首根/具体调用点待定位。B512恢复诊断09:59:40Z终态：重放到旧checkpoint边界已逐位不同，采样布局与参数布局相同；不能归因序列化。后继返回测试因私有环境缺pytest未执行；单卡full独立输入根数值超差；新loss双卡small-full又EE1017，1B单/双卡未运行。三项unit现全部终态且控制组为空。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 
@@ -58,9 +58,9 @@ GPU新配方双卡1.014B训练的执行/离散/精确恢复完成，独立数值
 | platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
 | blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
 | multicard-roots-844eb9b | 已终态exit1；两NPU三通信full均EE1017，根与后续训练未完成，保留原失败 | `npu-multicard-roots-bd2ff2e` |
-| resume-layout-61571c4 | 原1B/B512 raw边界/下一窗及布局诊断，900秒；原1b3e39f安装和checkpoint只读，不改布局或算术 | `npu-resume-layout-61571c4` |
-| checkpoint-check-compute-6c6eaa2 | 等resume-layout终态及空控制组；固定36baeb7返回存储6项及单NPU小full，180/300秒 | `npu-checkpoint-check-36baeb7` |
-| scaled-training-compute-6c6eaa2 | 等前项；新loss先两卡小full，通过后1.014B单/双NPU各一次1800秒；包36baeb7、配置1a6b08f | `npu-scaled-training-36baeb7/progress.json` |
+| resume-layout-61571c4 | 已严格失败/exit1：新进程重放与旧checkpoint在raw边界不同，旧checkpoint保留 | `npu-resume-layout-61571c4` |
+| checkpoint-check-compute-6c6eaa2 | 已终态/exit1：返回测试缺pytest未执行，单NPU full独立输入根数值失败 | `npu-checkpoint-check-36baeb7` |
+| scaled-training-compute-6c6eaa2 | 已终态/exit1：新loss双卡small-full报EE1017，单/双卡1B依赖未运行 | `npu-scaled-training-36baeb7/progress.json` |
 
 用户调整计算优先级后，未开始的12.802B tmpfs成本对照及38.406B interval3重跑已取消，不作为完成门槛。
 为保持串行依赖，原checkpoint-check/scaled-training两个仅等待的启动器亦取消并按上表重排；四个原外层cancelled/143且控制组空，无实际case开始，不算数值失败。新启动器外层14400秒，其余原外层86400秒含依赖等待。合作队列priority0、候选物理4–11、max-wait600秒；最新队列只见6张候选卡空闲，其他项目占用不干预。
@@ -98,3 +98,11 @@ NPU38.406B三卡各58.566GB并另留6GiB，host766.974GB；原两代disk349.567G
 干净仓库从[development](development.md)、[人类手册](human-workflow.md)、[有限配置](platform-matrix.md)进入。
 查询：`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`。
 旧源码ID用`python scripts/resolve_history_commit.py OLD_SHA`定位，映射不等于重新验证。
+
+当前开发增量：公共check新增可持久化独立根阶段（不改变算术、容差或调度），CPU定向27项通过。
+提交后在固定源码复验同27项；有界NPU定位仅取原ordinary双卡full一次，若需同步栈再显式
+ASCEND_LAUNCH_BLOCKING一次诊断，不作性能。补齐私有pytest后重做原未执行的6项返回测试。
+单卡新loss的计算不由双卡根错误自动阻塞：先按实际执行/独立记录/恢复的小配置准入，
+再决定原已声明1B单/双卡探索任务，保留完整独立根失败，不把它们写成合格训练。
+B512下一方案须区分同次运行即时解码与跨进程重放；必要checkpoint可用联合预算后的tmpfs，
+不开展已取消的大文件成本实验。
