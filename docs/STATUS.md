@@ -1,14 +1,35 @@
-# 当前交接 — 三平台有限阶段已收尾（2026-10-31）
+# 当前交接 — 产物退役准备就绪（2026-10-31）
 
 本轮CPU/NPU/GPU有限矩阵、同模型多卡、人类CLI及下游流程已完成可闭环的授权范围。
 没有活动项目作业，不需继续等待或重新排队；GPU已释放审阅，后续不依赖gpu3090。
 原严格失败、探索成本、硬件/运行时限制继续保留；后续问题及重启条件只维护在[ROADMAP](ROADMAP.md)。
 用户最新优先计算，未启动的大文件成本对照取消，不扩盘、不重启、不重跑已审阅矩阵。
 
-授权分支`graph-execution-foundation`；本次重入650a062干净且已同步远端。
-固定launcher/配置d3de18f，实际Python安装4485697、NPU库eca070f分别记账；本次只审阅并提交证据，
+授权分支`graph-execution-foundation`；本次清理重入49cf37a干净且已同步远端。
+固定launcher/配置d3de18f，实际Python安装4485697、NPU库eca070f分别记账；本次只清理已终态产物并保全小记录，
 未重新构建或运行实验。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
 参考仓库只读。实际当前HEAD及工作区以`git status --short --branch`为准。
+
+## 当前清理操作
+
+用户已授权仓库仅保留`.git`与Git跟踪内容，远端未提交源码稍后分析。
+已审阅26个干净祖先worktree、10个无额外差异的源码快照、144个终态项目unit；
+原始checkpoint、构建、环境和6个明确项目tmpfs目录纳入本次退役。
+必要结果仍在Git；[41份任务终态归档](evidence/retired-jobs-20261031.json.gz)不改变内部失败。
+[清理记录](evidence/artifact-cleanup-tracked-only-20261031.md)列出保全与核验范围。
+
+当前为已保全、待执行删除，尚不声称释放完成。先提交本准备记录，再生成/审阅固定删除清单。
+清理脚本及状态在仓库外`~/.local/state/graph-execution-foundation/cleanup-20261031/`，
+使用`gef-artifact-cleanup-49cf37a-20261031.service`，`background.slice`、1核/1GiB、1800秒超时。
+执行期间不编辑被核验的源码；终态须验证跟踪文件字节/权限、worktree登记和全部删除目标。
+
+```sh
+python -B ~/.local/state/graph-execution-foundation/cleanup-20261031/cleanup.py plan
+systemctl --user show gef-artifact-cleanup-49cf37a-20261031.service -p ActiveState -p MainPID -p ControlGroup -p Result
+cat ~/.local/state/graph-execution-foundation/cleanup-20261031/status.json
+# 如需停止已启动清理，停止整个控制组，再检查终态与剩余目标：
+systemctl --user stop gef-artifact-cleanup-49cf37a-20261031.service
+```
 
 ## 最后八卡任务已审阅
 
@@ -25,7 +46,8 @@
 物理4–11中物理9按明确PID/启动身份、HBM/利用率预算共用；不称独占性能。
 每卡2节点，8个共享组完整放置。大推理每卡allocated峰值约0.591GB；大训练各卡约1.356–2.063GB，
 主存峰值45.140GB。多卡降低设备存储并不将host快照按卡数等分，也不证明达到八卡容量上限。
-大checkpoint留在已准入tmpfs；实际文件解码/新owner恢复通过，不认证机器重启耐久性。
+当时大checkpoint位于已准入tmpfs；实际文件解码/新owner恢复通过，不认证机器重启耐久性。
+这些终态原始材料现已获授权退役，原身份/结果保留。
 原八卡三项排队超时保留，新后继不是原失败改写；任意根和原loss边界不解除。
 
 ## 已交付与实际证据
@@ -55,8 +77,8 @@
 - [独立检查](evidence/core5-platform-multicard-checks-20261031.json)：CUDA三通信full通过；NPU三通信完整推理/恢复先通过，任意根均EE1017。4485697定位ordinary双卡all根候选autograd SIGSEGV；单卡为输入梯度超差。显式ASCEND_LAUNCH_BLOCKING=1双卡越过崩溃，参数梯度仍1/64坐标超差1.31130e-6；不称默认异步修复。
 - [B512诊断](evidence/core5-platform-resume-diagnostics-20261031.json)：旧边界重放已逐位不同；同进程新checkpoint raw边界精确，下一完整窗keys仍3766/32768坐标逐位不同、最大2.09808e-5。采样布局相同，不归因磁盘损坏，不重复相同候选。
 - 原blocking小训练恢复SIGSEGV的一次诊断未复现且完整通过，旧失败不抹除；旧CPU/NPU/CUDA严格失败和strict xfail继续按ROADMAP限定。
-- 原B512失败checkpoint在`artifacts/platform-matrix/npu-scale-run-1b3e39f/npu-scale-fc-few-1b-b512/run/checkpoints`。即时诊断和八卡tmpfs材料分别在`/dev/shm/gef-npu-resume-immediate-61571c4`、`/dev/shm/gef-npu-eight-d3de18f`；小记录已持久保存，未在本次审阅中删除。
-- GPU原dirty-dev保全包`artifacts/cuda3090/retirement-dev-20261031.tar.gz`（5,452,397 bytes，SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`）保留16项跟踪修改+4项未跟踪源码，不能当普通实验产物删除。
+- 原B512失败checkpoint、即时诊断及八卡tmpfs原始材料已列入本次清理。原配置、失败字段和文件hash保留；以后按[复现入口](reproduction.md)生成新见证，不承诺恢复原字节。
+- GPU原dirty-dev包已移动到`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/retirement-dev-20261031.tar.gz`，5,452,397 bytes，SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`；保留16项跟踪修改+4项未跟踪源码。两份早期开发patch另存同目录`additional-source-deltas.tar.gz`。目录权限0700，均待后续分析，不是已合并或已验证源码。
 
 ## 资源与接续
 
@@ -80,7 +102,7 @@ tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/
 tidegraph plan configs/capacity-training/npu-eight-followup.json --matrix --site site.json
 ```
 
-原始任务终态：八卡`artifacts/platform-matrix/npu-eight-d3de18f/progress.json`及`review.json`，
-日志`artifacts/jobs/npu-eight-d3de18f/task.log`。其他三个监督`gef-npu-compute-followup-4485697`、
-`gef-npu-resume-immediate-61571c4`、`gef-closure-4485697`均已终态且无后代；原失败不改为通过。
+原始任务终态及八卡progress/review已收入[小型归档](evidence/retired-jobs-20261031.json.gz)，
+原绝对路径仅为历史来源；其他三个监督`gef-npu-compute-followup-4485697`、
+`gef-npu-resume-immediate-61571c4`、`gef-closure-4485697`均已终态且无后代，原失败不改为通过。
 历史源码ID用`python scripts/resolve_history_commit.py OLD_SHA`定位；映射不等于重新验证。

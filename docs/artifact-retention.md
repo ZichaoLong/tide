@@ -53,6 +53,10 @@ python scripts/read_retired_record.py --archive /path/to/retired-records-2026101
 
 ## 当前保留原则
 
+2026-10-31用户再次授权彻底收束到`.git`和Git跟踪内容；[本次记录](evidence/artifact-cleanup-tracked-only-20261031.md)
+保留三平台小型证据、41份任务终态及未提交源码保全身份，退役新一轮环境/构建/原始checkpoint/项目tmpfs。
+远端dirty-dev与两份早期patch移到仓库外受保护目录待分析，不随原始运行删除；旧报告的保留路径不再是在线承诺。
+
 2026-10-30用户授权将本仓库收束为`.git`与Git跟踪文件；环境、构建、原始运行材料均按需重建。
 本轮实际删除22.379GiB及新CPU开发链见[清理凭据](evidence/artifact-cleanup-tracked-only-20261030.md)；当前接续见[STATUS](STATUS.md)。
 此前两轮保留的构建、28份未采用差异的本地归档、任务源码快照和原始见证均已在本轮退役。

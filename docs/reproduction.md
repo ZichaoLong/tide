@@ -66,6 +66,8 @@ TIDE_BUILD_DIR=CPU_CORE python -m pytest -q tests/test_retired_allocation_witnes
 
 [退役任务摘要](evidence/retired-jobs-20261030.json)保留520份旧任务的终态/来源/原记录hash，
 外层passed不表示每个内部case通过。原始日志不再在线；判断具体语义/性能结论仍需相应审阅报告。
+2026-10-31新增[41份任务终态及补充记录](evidence/retired-jobs-20261031.json.gz)，三平台204条查询结果仍在各原审阅归档；
+[彻底清理记录](evidence/artifact-cleanup-tracked-only-20261031.md)声明本轮原始文件退役和未提交源码保全位置。
 
 
 ## CUDA 真机分层入口
@@ -86,7 +88,7 @@ CPU桥仍是显式一阶诊断路径，不改变公共通信协议。CUDA检查/
 [RTX3090固定有限证据](evidence/core5-cuda-finite-20261031.md)给出从干净源码构建、实际配置/逐项查询及
 Nsight SQLite分析命令。Git内`benchmarks/core5-cuda-finite-v1.json`与`run_core5_study.py`可重新生成
 FC/HB/LH small/medium输入，不需要旧fixture或私有driver。HB small resident、medium keys/values和
-LH queue64拒绝均保留原材料；显式`--resident-limits`只改变资源，不更改数学或原失败结论。
+LH queue64拒绝均保留配置/结果，原始材料须重新生成；显式`--resident-limits`只改变资源，不更改数学或原失败结论。
 `inspect_cuda_timeline.py`只读单进程/单设备Nsight导出；实际GPU trace须重新采集，hash不能恢复退役的字节。
 
 ## GPU规模推理、批次与返回打包
@@ -123,7 +125,9 @@ NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment
 从干净仓库重新生成的checkpoint是新的见证，不能冒称复验了原文件字节；原结果/hash与失败仍保留。
 
 ```sh
-/path/to/fixed-install/bin/python scripts/diagnose_experiment_resume.py resolved.json --checkpoint jobs/original/run/checkpoints --windows 3 --output-dir diagnostics/new-resume
+# 旧checkpoint已获授权退役；从相同配置生成一个新的有界见证：
+/path/to/fixed-install/bin/python scripts/diagnose_experiment_resume.py resolved.json --windows 3 --output-dir diagnostics/new-resume
+# 仅在另有待检查文件时增加 --checkpoint /path/to/checkpoints。
 ```
 
 此诊断不改布局、算术或精度，不让CPU轨迹指导候选；raw边界已不同须先区分新进程重放与序列化，

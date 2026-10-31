@@ -1,0 +1,121 @@
+{
+  "schema": "tide-artifact-retirement-v1",
+  "state": "prepared",
+  "source_before": "49cf37aedc144f611b3ec7847fba94e197b238ea",
+  "authorized_scope": "Keep .git and tracked files; retire project artifacts/worktrees and six named tmpfs directories; preserve uncommitted source outside repository for later analysis.",
+  "preserved_source": {
+    "schema": "tide-preserved-uncommitted-source-v1",
+    "status": "preserved-awaiting-analysis",
+    "original_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cuda3090/retirement-dev-20261031.tar.gz",
+    "path": "/mi/data2T/zlong/home/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/retirement-dev-20261031.tar.gz",
+    "bytes": 5452397,
+    "sha256": "6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e",
+    "scope": "Remote CUDA dev uncommitted source backup; 16 tracked modifications and 4 untracked source files as previously reviewed. Do not delete as an experiment artifact. Analysis deferred by user."
+  },
+  "retired_job_records": {
+    "file": "docs/evidence/retired-jobs-20261031.json.gz",
+    "bytes": 41289,
+    "sha256": "6711bbd1bda40d9ff5f772d0be75d75b3fe1001007fe959a56f9d4756775d7c9",
+    "jobs": 41,
+    "selected_records": 5,
+    "units": 144
+  },
+  "snapshot_audit": {
+    "schema": "tide-retired-source-delta-v1",
+    "scope": "Preservation of differences before authorized artifact retirement. Comparison base does not claim a changed snapshot was tested or merged. No automatic execution or integration.",
+    "snapshots": [
+      {
+        "path": "artifacts/platform-matrix/source-seven",
+        "comparison_base": "25622639f9ca182394fead59e3591440afeb4bcd",
+        "tracked_count": 2804,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/source-c59688c",
+        "comparison_base": "c59688caf0047e536e6d9d974c95dbbd31991422",
+        "tracked_count": 2800,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/package-stage-972032f",
+        "comparison_base": "972032fe96cc2ac38044ea6dadcfbfbcc40b6f87",
+        "tracked_count": 2764,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/package-stage-de93246",
+        "comparison_base": "de932461fc43c074e01c9e3b9c3d87ea479bdf27",
+        "tracked_count": 2765,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/package-stage-b3dc53c",
+        "comparison_base": "b3dc53c0ae0c0087da49ae8a86443b46552970d5",
+        "tracked_count": 2804,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/package-stage-1b3e39f",
+        "comparison_base": "1b3e39f4f58378272d5afe41f970c92dd0e4fed7",
+        "tracked_count": 2764,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/source-host-budget-6095c6a",
+        "comparison_base": "6095c6a4cf0a45425a0698d320605d10581bca65",
+        "tracked_count": 2824,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/package-stage-bd2ff2e",
+        "comparison_base": "bd2ff2ed6786c57f492b6ac8b83b4b3a4b0d821e",
+        "tracked_count": 2770,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/source-1b46dc5",
+        "comparison_base": "1b46dc5c20ae74e2a219893302cfdae621c2e482",
+        "tracked_count": 2793,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      },
+      {
+        "path": "artifacts/platform-matrix/source-sharded-capacity",
+        "comparison_base": "3e4f6b2e2edbfc03b48a8b06b337c3fb1fc6456d",
+        "tracked_count": 2804,
+        "changed": [],
+        "missing": [],
+        "extra_source": []
+      }
+    ],
+    "files": {
+      "artifacts/cuda3090/development.patch": {
+        "bytes": 8482,
+        "sha256": "a006c1decbb5b274cbb0f0c2e00dc603abbda084698d0f5b5b9495755330d10c"
+      },
+      "artifacts/cuda3090/cpp-development.patch": {
+        "bytes": 2332,
+        "sha256": "6defcb6f2b9d52dcf8fb28b9ce276738f8e7e1c007fd9d5b3e67cd5f417f4243"
+      }
+    }
+  },
+  "operation_directory": "/mi/data2T/zlong/home/.local/state/graph-execution-foundation/cleanup-20261031",
+  "new_compute_qualification": false
+}
