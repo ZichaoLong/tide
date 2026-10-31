@@ -174,3 +174,5 @@ CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八
 FC/HB各有textbook KV与异构组合；[f456160固定资格](evidence/core5-coverage-correction-20261030.md)73项通过，包含26模型×2客户端的52项训练。仅认证该小型CPU FP64范围。
 
 [GPU规模推理目录](../benchmarks/core5-cuda-inference-v1.json)显式定义不齐输入、B1/8/32、FC约1B及有条件近界点，另含HB/LH和少量qry/循环代表。仅逐项选择；配置存在不授予资格，近界须依据实际资源再准入，结果从STATUS/证据索引进入。
+
+目录的[实际GPU推理证据](evidence/core5-cuda-inference-20261031.md)分列三客户端、CPU/mixed/resident、FP32严格失败、显式FP64规模与资源边界；从审阅JSON直接查询，不依赖旧运行目录。

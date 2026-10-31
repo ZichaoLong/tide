@@ -87,3 +87,12 @@ Nsight SQLite分析命令。Git内`benchmarks/core5-cuda-finite-v1.json`与`run_
 FC/HB/LH small/medium输入，不需要旧fixture或私有driver。HB small resident、medium keys/values和
 LH queue64拒绝均保留原材料；显式`--resident-limits`只改变资源，不更改数学或原失败结论。
 `inspect_cuda_timeline.py`只读单进程/单设备Nsight导出；实际GPU trace须重新采集，hash不能恢复退役的字节。
+
+## GPU规模推理、批次与返回打包
+
+[固定报告与完整命令](evidence/core5-cuda-inference-20261031.md)连接
+`benchmarks/core5-cuda-inference-v1.json`、`run_core5_study.py`、`planning.inference_budget`、
+`diagnose_core5_inference.py`及`test_weighted_return_packing.py`。原d256 FP32差异保留原输入/容差；
+FP64是独立配置。先重建匹配core/standalone，按实际1B构造/窗口/恢复峰值准入近界，
+不需要旧fixture/checkpoint。`--observe-work`只记实际桶/矩阵行，`--profile`另起有界进程，均不作吞吐。
+实际证据从`core5-index.json`查询；六项后续停止/重启条件仍集中于ROADMAP和performance-lessons。

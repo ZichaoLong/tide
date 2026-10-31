@@ -502,6 +502,36 @@
           ],
           "result": "passed",
           "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-finite-v1.json with explicit case/execution and matching fixed builds; exact selections, commands, checks and separate Nsight traces in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "9acc7aa42638d4fe574772ca81378b09c78a28a9",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-inference-20261031.md",
+          "scope": "PyTorch and Python/native FC/KV d4096 B1 explicit FP64 payload/scoring inference; Python/native B8 also passes. Complete independent CPU records and exact disk new-owner continuation pass, with complete-return packing. 1,010,339,302 unique trainable parameters; inference only, not large-scale training. Native core build source4960b6c and standalone consumer build fd3c72b remain distinct from run/catalog source9acc7aa; source hashes checked; matching prior builds reused, no new core build at this catalog-only commit. Original FP32 strict failures and multi-card resident hardware limits remain. One measurement flow per selected configuration is not a stable speedup claim.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-inference-v1.json --case fc-1b-b1-kv with explicitly selected *-cuda-fp64-return-packed execution and matching core/standalone build; exact argv, checks and limits in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "f738692ce4c06ac0530851c0198552eea01aa459",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-inference-20261031.md",
+          "scope": "Python/native only: FC/KV d5888, B1/P4/span16, explicit FP64 payload/scoring mixed-c, packed local operations and complete returns. 2,085,424,614 unique trainable parameters. Three complete independent CPU records and disk new-owner exact next-window continuation pass; lightweight work observation separate. Highest allocator reserved18.541GiB after conservative admission and 4GiB device reserve; driver/vendor allocations excluded. Reuses source-hash-matched core4960b6c; no new core build or large-scale training qualification. d6144, standalone near-boundary and resident FP64 are not qualified.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-inference-v1.json --case fc-safe-boundary-fp64-b1-kv --execution native-cuda-fp64-return-packed --native-library MATCHING_CORE --max-materialize-bytes 21474836480 --output-dir NEW; require actual device/host/disk admission first; exact argv and results in report JSON"
         }
       ],
       "attempts": [
@@ -806,6 +836,22 @@
           "test_command": "Exact directed tests, client configurations and fresh-checkout commands in the cited report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-study-clients-20261029.md"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "2f17c24ed2bae429f1419af4365177da36eb352f",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-inference-20261031.md",
+          "scope": "Pure PyTorch only: five actual NPU return-packing byte/layout/independent-leaf checks, small HB/KV FP32 SGD training with complete records/final gradients/optimizer/exact restore, and FC/KV d8 B8 P4 inference/restore. Same-card packed-return median576.500ms versus scalar527.660ms is a negative single-flow cost result. No standalone NPU, FP64 or scale qualification.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "TIDE_RETURN_TEST_DEVICE=npu:0 pytest tests/test_weighted_return_packing.py -k \"(literal or full_snapshot) and not fp64\"; benchmark_weighted.py --device npu:0 --implementation python --return-packing packed with separate explicit inference and training selections; argv in report"
         }
       ]
     },
@@ -1243,6 +1289,22 @@
           ],
           "result": "passed",
           "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-finite-v1.json with explicit case/execution and matching fixed builds; exact selections, commands, checks and separate Nsight traces in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "9acc7aa42638d4fe574772ca81378b09c78a28a9",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-inference-20261031.md",
+          "scope": "Standalone LibTorch FC/KV d4096 B1 explicit FP64 payload/scoring inference. Complete independent CPU records and exact disk new-owner continuation pass, with complete-return packing. 1,010,339,302 unique trainable parameters; inference only, not large-scale training. Native core build source4960b6c and standalone consumer build fd3c72b remain distinct from run/catalog source9acc7aa; source hashes checked; matching prior builds reused, no new core build at this catalog-only commit. Original FP32 strict failures and multi-card resident hardware limits remain. One measurement flow per selected configuration is not a stable speedup claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-inference-v1.json --case fc-1b-b1-kv with explicitly selected *-cuda-fp64-return-packed execution and matching core/standalone build; exact argv, checks and limits in report JSON"
         }
       ],
       "attempts": [

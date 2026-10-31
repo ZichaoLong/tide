@@ -28,6 +28,7 @@ original SDK fc/affine mixed-a/c witnesses while retaining FP16 GDN, FP32
 feedback and default asynchronous NPU peer failures. These historical boundaries
 do not imply a CUDA result. The [RTX3090 eager report](evidence/core5-cuda-eager-20261031.md)
 adds separately scoped actual x86_64 CUDA evidence and preserves its new strict failures.
+The [GPU inference study](evidence/core5-cuda-inference-20261031.md) adds independently checked ragged batches, explicit FP64 scale configurations, complete-return packing and client-specific memory boundaries; inference does not qualify large-scale training.
 
 [Independent-input KV batches](evidence/core5-independent-projection-20261029.md)
 qualify 8d97020 on CPU (273 passed, two original FP16 strict xfails), pure

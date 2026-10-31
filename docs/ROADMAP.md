@@ -39,7 +39,7 @@
 上述入口说明已实现能力和限定资格，不构成所有配置/拓扑/尺度/平台的笛卡尔资格。
 下游拥有数据、任务头、loss设计、训练配方和效果搜索；基座验证机制与数学对应。
 
-本轮新增授权：GPU有限大batch、约1B及接近安全显存边界的推理，三客户端/单卡mixed与resident优先；旧训练停止条件不自动限制独立推理资格。允许子代理，主代理统一设备与提交。
+本轮GPU有限推理的结果与六项处置见[规模推理报告](evidence/core5-cuda-inference-20261031.md)；三客户端、显式精度、单卡mixed/resident各自有实际范围。旧训练停止条件不自动否定独立推理资格，也不因推理通过而解除。
 
 ## 逐项推进与停止条件
 
@@ -70,6 +70,10 @@
 | CUDA native双卡精确恢复 | gated-hb第四步nodes.0.kernel.read_out梯度3/4坐标逐值不等，最大4.44e-16；前3步完整通过。稳定字段packing修复自身反例但未解除该失败 | 停止重复地址排序候选；须有具体累加/构图顺序新方案，再验独立根/共享owner/optimizer/原精确恢复。普通复制成功不认证直接P2P、NCCL或capture |
 | CUDA有限图完整状态/容量 | [32edb0f有限对照](evidence/core5-cuda-finite-20261031.md)：首轮37项18通过，18项keys/values/content/output严格差异，1项LH medium resident queue64容量拒绝；FC medium显式scalar亦失败。HB small resident两客户端同一values坐标差1.11759e-6。LH queue452越过容量且磁盘精确续接通过，但独立第0窗keys差2.26498e-6 | 相同数值候选停止扩大吞吐；下一步须沿实际首个差异的投影/归一化/共享伴随定位，提出有独立根锚点的新算术方案。容量按静态物理边/端口预算，原queue64失败保留；不以自身恢复或更大容量替代独立参考 |
 | CUDA resident后续性能 | [同一时间线/有限成本](evidence/core5-cuda-finite-20261031.md)：大量indexing/逐行累加/guard，完整训练有多次graph实例化；小型LH物理局部行120对实际40。边界、反向构造和解码仍有成本 | 下一候选先验证实际局部行合批或显式反向模板重绑；需保留独立根/journal/版本/跨窗/optimizer及精确恢复。不按shape缓存旧owner，不由减少kernel数推断端到端加速 |
+| CUDA d256 FP32推理 | [本轮推理证据](evidence/core5-cuda-inference-20261031.md)：B1/8/32原keys3/768坐标严格失败，自身磁盘续接精确；两客户端首差诊断保留，显式FP64另配通过 | 相同FP32候选停止扩大；重启需覆盖上游fiber/Full/KV传播的具体算术方案与完整独立记录，不能仅提升KV写或放宽容差 |
+| GPU规模推理与客户端选择 | [本轮有限目录/结果](evidence/core5-cuda-inference-20261031.md)独立验推理、完整返回及续接：1.010B FP64三客户端B1、native B8和2.085B native B1通过；CPU小图、mixed/resident各有范围，原训练失败不解除 | 仅按已通过的配置选型；新的长窗口、FP16规模、其他拓扑/共享或大尺度训练重新预算并独立验证，不扩成8B/16B扫描 |
+| 元数据/完整返回packing | detach bool合并减少取回但无稳定整窗收益；显式return-packed在部分CUDA配置降低成本，NPU同材料反增；默认scalar与原路径保持，见[六项经验](performance-lessons.md#gpu-推理批次与完整返回) | 本轮两个有界候选闭环，不再扩统一搬运层；实际重复packing主导时才比较一个summary复用方案，异步/跨窗缓存/最小返回需新契约 |
+| 大宽度批量与resident布局 | 1B实际独立投影8MiB预算回退，私有BMM仍2行；小图长度桶随B增大得到填充，resident44–47%缺席行不等于耗时浪费；Full保守守卫及FP64域拒绝保留 | 更广节点/多head ATen批或设备活动行须有占时/资源依据；不盲目增预算、不用主机轨迹冒充常驻；反向模板须独立journal/root/版本重绑方案 |
 
 原失败记录和严格断言不变；新增错误与旧失败分别保留。前轮构建/资格与串行有限性能均已终态，
 不重复旧矩阵，不把参数量匹配等同函数、工作量或模型效果匹配，也不宣称低成本优化已经全部完成。

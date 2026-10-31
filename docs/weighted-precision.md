@@ -9,7 +9,7 @@
 GPU规模推理的有限数值配置可显式选择单卡CUDA eager `dtype=float64`、
 `scoring_dtype=float64`，三客户端从相同seeded FP32材料提升参数/输入，完整浮点状态与
 消息保持FP64，逻辑元数据仍int64。它有独立execution身份、原FP64容差和资源成本，
-不替换或解除FP32严格失败；模型/输入身份不变。CUDA resident、NPU及多卡FP64仍拒绝。
+不替换或解除FP32严格失败；模型/输入身份不变。[RTX3090独立推理证据](evidence/core5-cuda-inference-20261031.md)记录实际三客户端与规模边界。CUDA resident、NPU及多卡FP64仍拒绝。
 这项入口声明不是实际设备资格；完整记录、独立CPU比较及同栈精确续接须逐配置验证。
 
 `bind(..., dtype=torch.float16)` 用同一 seeded FP32 参数量化初始化。

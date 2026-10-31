@@ -24,6 +24,7 @@
 | 下游协作 | [协作契约](downstream-contract.md)、`templates/downstream/`、`examples/consumer_core5/` | 固定依赖、请求/交付/验收互链；应用训练/checkpoint在实验侧，基座公共接口不依赖模板 |
 | 历史迁移与源码身份 | [迁移规则](history-migration.md)、`scripts/history_map.py`、`verify_history_mapping.py` | 旧→新提交映射、独立逐提交验证、单分支检出；保留历史实测身份 |
 | 诊断与产物生命周期 | [复现导航](reproduction.md)、[保留规则](artifact-retention.md) | 原问题→生成器/小输入→诊断代码→独立检查→证据；原始运行目录不是开发依赖 |
+| 完整返回/推理观察 | `scripts/weighted_benchmark_return.py`、`tools/weighted_benchmark/return_packing.cpp`、`scripts/weighted_benchmark_work.py` | [显式返回packing](complete-return-packing.md)、独立推理/新owner续接、实际桶/MM/BMM；不提供调度轨迹 |
 | 消费者与验证 | `examples/`, `tools/online_bench/`, `tests/`, `cpp/test/`, `scripts/` | 独立调用、公式/差分测试、构建、资格、有限性能入口 |
 
 局部算子可以在同一语言的多个调度中共享；特化必须拥有独立循环/依赖次序。

@@ -179,7 +179,7 @@ Python 入口要求精确 int64 范围整数，拒绝 bool/float 冒充坐标。
 | TimedDAG ⊂ PDG | [TD §2](upstream/tide-core-5/timed-dag-region-selector-learning-note.md#2-固定结构时间节点图端口与区域划分)、[PDG §1](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md#1-正时延图与共同局部函数)：固定节点图无环；包含关系不改变时间、标签、状态或值；region 商图不必无环 | [frontier 契约](frontier-contract.md)、[跨类策略](cross-family-policies.md)、[native Frontier](../cpp/src/frontier.cpp) |
 | SettleGraph → TimedDAG | [Settle §10](upstream/tide-core-5/settlegraph-learning-note.md#10-嵌入-timeddag)：一般端口绑定原样嵌入；同秩独立区域、任意合法端口日程；旧广播/汇总另列绑定 | [逐观察量映射](settle-embedding.md)、[Python encoding](../python/tidegraph/settle.py)、[C++ frontend](../cpp/src/settle.cpp)、[C++ projection](../cpp/src/settle_projection.cpp)、[独立 recurrence](../cpp/test/settle.cpp) |
 | 独立特化 | 定义域内固定结构的独立依赖顺序；共享局部公式不等于共享调度 | [Python specializations](../python/tidegraph/specialized.py)、[C++](../cpp/src/specialized.cpp)、[适用域](settle-embedding.md)、[拓扑测试](../tests/test_specialized_topologies.py) |
-| streaming / prefill | [Batch §2](upstream/tide-core-5/timed-dag-chunk-prefill-learning-note.md#2-作用块外部边界与精确联合求值)–5，[PDG §10](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md#10-有限-cut-上的因果作用块与最大前沿)：streaming 是合法单作用进展；prefill 是当前实际信息下的契约相对贪心批 | [online greedy](greedy-scheduler.md)、[Greedy](../cpp/src/greedy.cpp)、[就绪计划](../cpp/src/greedy_plan.cpp)、[测试](../tests/test_greedy.py) |
+| streaming / prefill | [Batch §2](upstream/tide-core-5/timed-dag-chunk-prefill-learning-note.md#2-作用块外部边界与精确联合求值)–5，[PDG §10](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md#10-有限切面上的因果作用块与最大前沿)：streaming 是合法单作用进展；prefill 是当前实际信息下的契约相对贪心批 | [online greedy](greedy-scheduler.md)、[Greedy](../cpp/src/greedy.cpp)、[就绪计划](../cpp/src/greedy_plan.cpp)、[测试](../tests/test_greedy.py) |
 | continuation | [TD §11](upstream/tide-core-5/timed-dag-region-selector-learning-note.md#11-在逻辑时间切面停止与继续)，[PDG §6](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md#6-在完整逻辑时间切面停止)–7，[Batch §8](upstream/tide-core-5/timed-dag-chunk-prefill-learning-note.md#8-切面组合因果性与分段继续)：cut、节点状态、history、在途消息和输入 ledger；窗口必须正确组合 | [cursor](streaming-cursor.md)、[checkpoint](checkpoint-ownership.md)、[坐标测试](../tests/test_coordinate_checkpoints.py) |
 
 Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_sum` 的旧边界投影
@@ -288,3 +288,5 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 有限候选目录、完整执行身份/结果门禁及自然recipe多步核对由[core5-study](core5-study.md)进入。
 resident半精度参考的显式存储/算术及串行换owner验收见[性能契约](weighted-performance.md)；
 独立参考不参与候选调度或补写解码结果。
+
+[GPU规模推理](evidence/core5-cuda-inference-20261031.md)连接不齐输入生成器、显式FP64、完整前向/精确恢复、实际packing观察与[完整返回传输策略](complete-return-packing.md)；原数学/图/checkpoint版本不变，规模推理不认证训练。

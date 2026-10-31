@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[RTX3090规模推理与有限优化](core5-cuda-inference-20261031.md)：FC/HB/LH启发、真实不齐batch、三客户端、mixed/resident的完整前向与磁盘恢复分列；显式FP64约1B及安全近界、严格FP32失败、实际矩阵批/预算回退和两项packing优化均保留原身份。六项处置与NPU负性能结果分别记录，不认证大尺度训练或多卡resident。
+
 [RTX3090时间线与有限完整训练](core5-cuda-finite-20261031.md)：固定32edb0f，两个完整resident客户端观察到设备就绪/打包/选择/推进；首轮37项18通过/19失败，两个小型FC scalar补充通过。容量452让LH中型精确续接通过，但独立keys仍失败；中型无合格吞吐，小图GPU未见对CPU收益。原严格标准和硬件限制保持。
 
 [RTX3090单卡resident与eager补验](core5-cuda-resident-20261031.md)：32edb0f四阶段新构建/sm86，单卡56组件/dtype+53公共检查零跳过通过；scalar三客户端18项、standalone双卡6项、native半精度6项及相关CPU通过。原FP32/双卡精确恢复失败保持；FP16反馈两例在CPU复现同值，SSD显式scalar通过仍不解除packed失败。时间线/性能分列。
@@ -22,7 +24,7 @@
 
 [core-5实际配置覆盖与导航修正](core5-coverage-correction-20261030.md)：0f4506d，CPU相关73项通过，含26个真实FC/HB/LH配置×PyTorch/native的52项两步训练和新owner精确恢复。修正旧FC单层/伪混合覆盖、窗口与来源分类说明；不增加性能或设备资格。
 
-[逐配置机器索引](core5-index.json)集中52项正确性记录与26项性能记录（25原测量+1失败后续），源码和资格分列。查询例：`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --kind correctness --format tsv`。仅含已有逐配置记录，其他历史汇总/模块证据继续从下方进入。
+[逐配置机器索引](core5-index.json)集中已审阅的逐配置正确性和性能记录，各报告保留原库存、来源与资格，不能将不同源码的检查数相加。查询例：`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --kind correctness --format tsv`。仅含已有逐配置记录，其他历史汇总/模块证据继续从下方进入。
 
 [core-5自然规模与三客户端有限性能](core5-natural-study-20261029.md)：e50b6d8，25配置中7项完整通过；中型FC三客户端CPU FP64及LH1.051B完整训练/精确恢复。真实区域批与独立NPU profile、FP32/FP64严格失败、resident在途任务/预算拒绝分列；8B/16B仅静态计划。
 
