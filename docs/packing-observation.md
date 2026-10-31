@@ -60,6 +60,12 @@ python scripts/weighted_profile_sync.py TRACE_JSON
 
 命令只输出JSON与输入`trace_sha256`，不修改原始trace。
 
+公共profile的`matrix_shapes`保留实际`aten::mm/bmm/addmm/matmul`接口与输入形状。
+CANN 9.1的二维乘法可直接记录为`aten::matmul`，并不出现`aten::mm`子事件；
+仅统计mm会漏掉真实大矩阵批。原始`Input Dims`字符串与`Input Shapes`数组均原样保留。
+不同后端可能同时记录matmul及其嵌套mm/bmm，按接口分列，不能相加冒充独立kernel数。
+离线重解析只补观测，不重新授予数值、恢复或吞吐资格；保留原trace hash与测量源码身份。
+
 只统计完整`X`事件中`cuda_runtime`/`cuda_driver`类别的stream/event/device/context
 显式同步API（含deprecated `cudaThreadSynchronize`、版本和每线程流后缀）。
 `profile.duration_us`分母是所有完整事件的最早开始到最晚结束，包含采集开销，

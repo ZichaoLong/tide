@@ -1,6 +1,6 @@
 # 当前交接 — 三平台矩阵、多卡与人类入口（2026-10-31）
 
-授权分支`graph-execution-foundation`；接续起点`1e33b4a`；报告实现已固定`1b46dc5`，前序证据已推送`ad93848`（已含后续实现，不回退交接提交），仅STATUS已有未提交交接更新，现已合并进本页。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。旧账户指南确实不存在，依用户确认、项目实测site和合作队列继续。远端脏dev已核对并保留，不作资格源码。
+授权分支`graph-execution-foundation`；本次接续审计HEAD=`528025c`、工作区干净；报告实现固定`1b46dc5`，前序证据已推送`528025c`，不回退后续提交。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。旧账户指南确实不存在，依用户确认、项目实测site和合作队列继续。远端脏dev已核对并保留，不作资格源码。
 
 ## 已审阅结果
 
@@ -19,13 +19,13 @@
 | unit | 当前工作/固定来源 | 输出与预算 |
 | --- | --- | --- |
 | `gef-platform-npu-scale-1b3e39f.service` | 06:52:02Z终态failed/1，控制组空；六项完成、B512下一窗恢复失败 | `artifacts/platform-matrix/npu-scale-run-1b3e39f`；7项各1800秒；外层36000秒含等待 |
-| `gef-platform-next-stages-bd2ff2e.service` | 已进入后继；CPU profile已完成、NPU 1B/B128独立profile正在运行、NPU2/3/8卡及三通信小训练、1B训练1/2/8卡、resident默认/有界，共17项 | `inputs-b495f10-next`、`next-stages-bd2ff2e.py/.sh`；配置b495f10，安装bd2ff2e；43200秒 |
+| `gef-platform-next-stages-bd2ff2e.service` | 已进入后继；CPU与NPU 1B/B128独立profile已完成、NPU2卡已终态exit0，当前3卡，随后8卡及三通信小训练、1B训练1/2/8卡、resident默认/有界，共17项 | `inputs-b495f10-next`、`next-stages-bd2ff2e.py/.sh`；配置b495f10，安装bd2ff2e；43200秒 |
 | `gef-human-local-de93246.service` | 等next-stages；CPU及NPU公共安装/consumer人类流程 | `human-{cpu,npu}-de93246`；安装de93246；57600秒 |
 | `gef-platform-final-1e33b4a.service` | 等human-local；CPU/NPU resident同材料eager、小训练诊断回归、有条件一次原NPU非有限定位、NPU12.802B单/2/3/8卡容量 | `inputs-1e33b4a-final`、`capacity-human-followup-1e33b4a.py/.sh`；性能bd2ff2e/诊断31a3b32；86400秒 |
 
 每个本机unit的持久状态/log位于`artifacts/jobs/`下去掉`gef-`和`.service`的同名目录（final目录为`platform-final-1e33b4a`）；next/final内部另有progress.json与逐项log。NPU后继逐case合作队列priority0，候选物理4–11、申请1/2/3/8卡、等待600秒，完成后释放。尚未执行的项没有结果。
 
-GPU单卡容量任务已终态，准备同模型双卡。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。四份已审阅终态checkpoint已退役28.505GB，凭据`checkpoint-retirement-reviewed-ad93848.json`；回收稳定后free43.978GB，超过两代checkpoint42.482GB+1GiB余量。下一任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`使用冻结bd2ff2e安装及`inputs-ad93848-capacity/cuda-capacity-4561m-cards-1.json`，1800秒、GPU0、ATen1/interop1/worker1；单卡已于06:53:40Z终态passed、无后代；执行/离散/恢复通过，数值探索，[容量报告](evidence/core5-platform-capacity-20261031.md)保留20.058GB实际峰值及314.967秒恢复成本。随后退役其20.699GB checkpoint并启动`jobs/platform-cuda-capacity4561m-c2-bd2ff2e`（对应同目录cards-2.json、1800秒、GPU0/1）；然后做3/4卡，每点后独立审阅再退役checkpoint，不将旧产物占盘称模型硬件不足。
+GPU单卡容量任务已终态，准备同模型双卡。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。四份已审阅终态checkpoint已退役28.505GB，凭据`checkpoint-retirement-reviewed-ad93848.json`；回收稳定后free43.978GB，超过两代checkpoint42.482GB+1GiB余量。下一任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`使用冻结bd2ff2e安装及`inputs-ad93848-capacity/cuda-capacity-4561m-cards-1.json`，1800秒、GPU0、ATen1/interop1/worker1；单卡已于06:53:40Z终态passed、无后代；执行/离散/恢复通过，数值探索，[容量报告](evidence/core5-platform-capacity-20261031.md)保留20.058GB实际峰值及314.967秒恢复成本。07:02Z重核四卡空闲、单卡任务终态无后代；已审阅dry-run `checkpoint-retirement-capacity4561m-c1-528025c.json`，已退役其20.699GB可再生checkpoint；free43.953GB，07:01:12Z已启动`jobs/platform-cuda-capacity4561m-c2-bd2ff2e`（对应同目录cards-2.json、1800秒、GPU0/1）；然后做3/4卡，每点后独立审阅再退役checkpoint，不将旧产物占盘称模型硬件不足。
 
 ```sh
 systemctl --user show gef-platform-npu-scale-1b3e39f.service gef-platform-next-stages-bd2ff2e.service gef-human-local-de93246.service gef-platform-final-1e33b4a.service -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
@@ -53,3 +53,5 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[184有限配置](platform-matrix.md)与site模板可重建材料，审阅gzip可直接查询，无需旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。
 
 公共HTML结果浏览补齐离线筛选、可比较的关键列与完整Details；报告/逃逸/JS过滤与int64大参数边界10项开发通过，已用私有Firefox无头实际渲染。只改报告，不改变活动安装、模型或实验结果。固定源码10项通过，双机新安装报告生成与浏览器实际过滤通过；无需重复训练/推理。
+
+当前开发：补齐CANN trace实际`aten::matmul`形状（原摘要仅有mm/bmm/addmm）；13项离线解析开发检查通过。活动安装不修改；提交后以冻结源码解析已有CPU/NPU trace，补观测不重跑数学/性能。

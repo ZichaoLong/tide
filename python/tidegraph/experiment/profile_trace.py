@@ -22,7 +22,7 @@ def inspect_trace(path):
                         for x in ("memcpy", "mem_copy", "_local_scalar_dense")))
     matrices = Counter()
     for event in events:
-        if event.get("ph") == "X" and event.get("name") in {"aten::mm", "aten::bmm", "aten::addmm"}:
+        if event.get("ph") == "X" and event.get("name") in {"aten::mm", "aten::bmm", "aten::addmm", "aten::matmul"}:
             args = event.get("args", {})
             shapes = args.get("Input Dims", args.get("Input Shapes", "unrecorded"))
             matrices[(event["name"], json.dumps(shapes, sort_keys=True))] += 1
@@ -38,6 +38,7 @@ def inspect_trace(path):
         union += max(0., stop-max(start, end)); end = max(end, stop)
     return dict(matrix_shapes=[dict(operator=name, input_shapes=json.loads(shape), calls=count)
                                for (name, shape), count in sorted(matrices.items())],
+                matrix_scope="recorded ATen interfaces; matmul and its nested mm/bmm may overlap; do not sum as kernel calls",
                 kernel_events=len(kernels), kernel_names=dict(Counter(e["name"] for e in kernels)),
                 kernel_types=dict(Counter(e.get("args", {}).get("Task Type", "cuda") for e in kernels)),
                 transfer_and_scalar_events=dict(transfers), observed_host_fallback_events=fallback,
