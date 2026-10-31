@@ -96,9 +96,9 @@ separately from earlier frozen CPU worktrees in STATUS.
 
 ## 无用户systemd的目标容器
 
-仅在明确授权的无服务管理器容器使用 `scripts/container_job.py`。命令后代必须留在其进程组，
-不得自行daemonize；此机制不保证跨容器/宿主重启。启动器拒绝dirty源码和已有输出，
-独立session的监督进程将日志/状态持久化，超时或stop先TERM再KILL整个工作组，检查无存活成员后记终态。
+仅在明确授权的无服务管理器容器使用 `scripts/container_job.py`。Linux subreaper收养孤儿后代，
+同时覆盖Ninja自行创建的子进程组；此机制不保证跨容器/宿主重启。启动器拒绝dirty源码和已有输出，
+独立session的监督进程将日志/状态持久化，超时或stop先TERM再KILL全部工作后代，核对PID开始时间、回收孤儿并检查无存活成员后记终态。
 Linux zombie不是仍在运行的工作负载。监督进程丢失或PID身份不符时明确失败，不能从缺失推断通过。
 
 ```sh

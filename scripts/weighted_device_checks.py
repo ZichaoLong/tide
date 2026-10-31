@@ -12,9 +12,10 @@ from weighted_device_cases import fixture, inputs_to, leaves
 from weighted_device_precision import Precision
 
 
-def runner(binding, implementation, placement, native_library=None, streaming=False):
+def runner(binding, implementation, placement, native_library=None, streaming=False, *, workers=1, packing="auto"):
     from tidegraph.weighted.execution import eager_runner
-    return eager_runner(binding, implementation, placement, native_library, streaming=streaming)
+    return eager_runner(binding, implementation, placement, native_library, streaming=streaming,
+                        workers=workers, packing="auto" if streaming and implementation == "python" else packing)
 
 
 def check_live(result, placement, device):
@@ -62,7 +63,7 @@ def check_owners(binding, result, placement):
 
 
 def check_case(case, device, implementation, placement, out, native_library=None, training=True, peers=None,
-               precision=Precision()):
+               precision=Precision(), workers=1, packing="auto"):
     compare = precision.compare
     a, xa, stop = fixture(case, precision.dtype)
     b, _, _ = fixture(case, precision.dtype)
@@ -74,7 +75,7 @@ def check_case(case, device, implementation, placement, out, native_library=None
     q = Continuation(a.graph.identity, 2)
     ref_view = place_model(a.graph, a.model, ExecutionPlacement(scoring_dtype=placement.scoring_dtype))
     ref = lambda state, xs, end, **kw: reference(a.graph, ref_view, state, xs, end, **kw)
-    execute = runner(b, implementation, placement, native_library)
+    execute = runner(b, implementation, placement, native_library, workers=workers, packing=packing)
     expected = ref(q, xa, stop, sealed_until=stop)
     actual = execute(q, xb, stop, sealed_until=stop)
     check_owners(b, actual, placement)
@@ -90,7 +91,8 @@ def check_case(case, device, implementation, placement, out, native_library=None
         compare(vjp(x, left), vjp(y, right), "vjp."+name)
     with torch.no_grad():
         inference = execute(q, xb, stop, sealed_until=stop)
-        scalar = runner(b, implementation, placement, native_library, streaming=True)(q, xb, stop, sealed_until=stop)
+        scalar = runner(b, implementation, placement, native_library, streaming=True,
+                        workers=workers, packing=packing)(q, xb, stop, sealed_until=stop)
     compare(expected, inference, "inference")
     compare(expected, scalar, "streaming")
     cut = 3
@@ -168,11 +170,17 @@ def check_case(case, device, implementation, placement, out, native_library=None
         od = precision.make_optimizer(d.model)
         ds = load(path, d.graph, d.model, od)
         cp = placement if target[0].type != "cpu" else ExecutionPlacement(scoring_dtype=placement.scoring_dtype)
+        resumed = []
         for owner, xs, opt, state, location in ((c, xc, oc, restored, cp), (d, xd, od, ds, placement)):
             opt.zero_grad(set_to_none=True)
-            r = runner(owner, implementation, location, native_library)(state, [x for x in xs if x.time >= cut], stop, sealed_until=stop)
+            r = runner(owner, implementation, location, native_library, workers=workers, packing=packing)(
+                state, [x for x in xs if x.time >= cut], stop, sealed_until=stop)
             precision.backward(opt, objective(r)); opt.step()
-        compare(c.model.state_dict(), d.model.state_dict(), label+".fourth-update")
-        compare(oc.state_dict(), od.state_dict(), label+".fourth-optimizer")
-    report.update(training_updates=4, same_device_resume=True, cpu_checkpoint_handoff=True)
+            resumed.append((r, precision.gradients(owner.model), owner.model.state_dict(), opt.state_dict()))
+        if label == "same-device":
+            compare_finite(*resumed, label+".fourth-complete", atol=0, rtol=0)
+        else:
+            compare(*resumed, label+".fourth-complete")
+    report.update(training_updates=4, same_device_resume=True, same_device_resume_exact=True,
+                  cpu_checkpoint_handoff=True)
     return report

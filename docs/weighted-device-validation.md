@@ -65,3 +65,21 @@ CPU与目标都采用同一量化初态；CPU FP32是另一个精度基准，不
 fc/affine FP32 mixed-a/c两项在fca6b05分别验收通过（原AdamW、四次更新和恢复）。
 旧d1283f4失败保持原记录，不外推全24图。新纯Torch四政策小反例仍保留stock/guard失败，
 单线程小反例通过而完整图失败；默认异步资格未解除，公共环境与生产传输未改。
+
+CUDA资格入口显式关闭matmul/cuDNN TF32，记录reduced-precision reduction原值、线程、workers及packing；
+不改变生产库的默认精度策略。`--workers`和`--packing`直接传入公共eager入口，默认保持1/auto。
+同设备恢复要求完整第四窗返回、参数梯度、参数及optimizer槽逐值相等；CPU/跨卡handoff仍使用原跨设备容差。
+CUDA实际资格与原NPU/CPU结果分别记录，不从小图通过推断全尺度或常驻资格。
+
+固定源码的CUDA分客户端入口（每配置独立进程，原断言，保留所有失败）：
+
+```sh
+python scripts/check_cuda_eager.py --device cuda:0 --clients pytorch python-native libtorch \
+  --core-build CUDA_CORE --placements mixed-c --output-dir NEW_EAGER
+python scripts/check_cuda_eager.py --device cuda:0 --clients pytorch python-native libtorch \
+  --core-build CUDA_CORE --placements mixed-a mixed-b --case kv-fc --cpp-case fc/kv --output-dir NEW_MIXED
+```
+
+默认FP32/AdamW、scoring FP32、packed、workers1、ATen/BLAS单线程；FP16须显式传入。
+standalone训练检查同样关闭TF32并要求同栈恢复的完整第四窗/梯度/参数/槽精确相等。
+原完整跨设备容差不变；测试耗时用于预算，不是性能结果。原多卡resident完整门禁不由此替代。

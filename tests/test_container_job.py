@@ -73,6 +73,23 @@ class ContainerJobTests(unittest.TestCase):
         self.assertEqual(record["observed_live_workload_pids"], [])
         self.call("stop")
 
+    def test_stop_also_reaps_independent_groups_and_orphans(self):
+        pidfile = self.root / "grandchild.pid"
+        orphan = ("import os,signal,time,pathlib; os.setsid(); "
+                  "signal.signal(signal.SIGTERM,signal.SIG_IGN); "
+                  f"pathlib.Path({str(pidfile)!r}).write_text(str(os.getpid())); time.sleep(30)")
+        middle = f"import subprocess,sys; subprocess.Popen([sys.executable,'-c',{orphan!r}])"
+        self.start(f"import subprocess,sys,time; subprocess.Popen([sys.executable,'-c',{middle!r}]); time.sleep(30)")
+        deadline = time.monotonic() + 5
+        while not pidfile.exists() and time.monotonic() < deadline:
+            time.sleep(.05)
+        pid = int(pidfile.read_text())
+        self.assertIn(pid, json.loads(self.call("status").stdout)["observed_live_workload_pids"])
+        record = json.loads(self.call("stop").stdout)
+        self.assertEqual(record["state"], "cancelled")
+        self.assertEqual(record["observed_live_workload_pids"], [])
+        self.assertFalse(Path(f"/proc/{pid}").exists())
+
     def test_no_output_reuse_or_dirty_source(self):
         self.start("print('first')")
         self.terminal()

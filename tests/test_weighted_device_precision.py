@@ -26,6 +26,7 @@ def test_target_entry_full_records_roots_and_four_master_updates(payload, optimi
                         os.environ.get("TIDE_BUILD_DIR", str(ROOT/"build")),
                         precision=Precision(payload, optimizer))
     assert result["training_updates"] == 4 and result["cpu_checkpoint_handoff"]
+    assert result["same_device_resume_exact"]
 
 
 @pytest.mark.parametrize("extra,message", [

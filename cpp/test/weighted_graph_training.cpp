@@ -6,6 +6,7 @@
 #include "../bench/streaming.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
+#include <ATen/Context.h>
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -100,8 +101,9 @@ void case_check(const std::string& topology,const std::string& family,at::Device
   auto gb=torch::autograd::grad({loss(joined)},params,{},false,false,true);
   for(size_t i=0;i<ga.size();++i)close(ga[i],gb[i]);
   Greedy resume(g,place_model(g,restored,placement),options);ob.zero_grad();restored_opt.zero_grad();
-  auto expected=candidate.run(detach(first.continuation),tail,stop,stop),actual=resume.run(state,tail,stop,stop);compare(expected,actual,dtype);
-  ob.backward(loss(expected));restored_opt.backward(loss(actual));owners(pb,pr,true,precision.loss_scale);ob.step();restored_opt.step();owners(pb,pr,false);optimizer(ob,restored_opt);
+  auto expected=candidate.run(detach(first.continuation),tail,stop,stop),actual=resume.run(state,tail,stop,stop);compare(expected,actual,dtype,true);
+  ob.backward(loss(expected));restored_opt.backward(loss(actual));owners(pb,pr,true,precision.loss_scale,true);
+  ob.step();restored_opt.step();owners(pb,pr,false,1.,true);optimizer(ob,restored_opt,true);
   if(!device.is_cpu()){
     // A portable handoff starts from the actual serialized third-step record,
     // with a second device owner to avoid comparing different optimizer steps.
@@ -170,6 +172,10 @@ int main(int argc,char** argv){
     OptimizerPrecision precision{args.dtype==at::kHalf,args.dtype==at::kHalf?loss_scale:1.};
     args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
+    if(device.is_cuda()){
+      at::globalContext().setAllowTF32CuBLAS(false);
+      at::globalContext().setAllowTF32CuDNN(false);
+    }
     auto resolved=tide::resolve_placement(placement,device);tide::Index checked=0;
     if(args.output_dir.empty()||std::filesystem::exists(args.output_dir))throw std::invalid_argument("new output directory required");
     std::filesystem::create_directories(args.output_dir);at::set_num_threads(1);at::set_num_interop_threads(1);

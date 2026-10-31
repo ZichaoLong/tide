@@ -17,10 +17,16 @@
 
 ## 当前作业与下一步
 
-无活动长作业。正在提交容器无systemd时的有界进程组启动器及独立生命周期测试。
-目标工作根计划 `/root/autodl-tmp/gef-cuda3090`，私有venv复用匹配Torch，补pytest/Ninja；仅传新分支bundle。
-源码冻结在独立checkout后启动，环境/构建/日志放该根下；不编辑活跃任务的输入。
-原始启动审计暂存本机 `artifacts/cuda3090/startup-system.json`，最终审阅证据另行提交。
+容器启动器实现已提交/推送 `cc6b45f`，本机5项实际生命周期测试通过。
+目标源码 `/root/autodl-tmp/gef-cuda3090/sources/cc6b45f` 已只读冻结；新分支bundle克隆，不含old引用。
+目标 `jobs/disconnect-probe` 已在断连后确认父子进程存活，停止后cancelled/无存活组成员；`jobs/setup` 已passed，pytest8.4.2/Ninja1.13.0安装在私有venv，Torch保持2.12.1+cu130。
+工作根 `/root/autodl-tmp/gef-cuda3090`；环境 `venv` 复用现有Torch。构建将用56线程/sm86。
+原始审计本机 `artifacts/cuda3090/startup-system.json`；目标状态/日志为各 `jobs/NAME/status.json`、`task.log`。
+`jobs/core-build` 已passed（209目标，实际约73秒；上限3600秒，56线程）；工作命令 `bash /root/autodl-tmp/gef-cuda3090/core-build.sh`，cwd为上述固定源码，构建目录 `builds/cc6b45f-core`。
+开发检查：目标CPU公式92通过，纯PyTorch CUDA mixed-c/KV完整检查通过，检查器CPU回归9通过；均不是完整矩阵。
+构建现场发现Ninja子进程组；subreaper修复及6项进程测试通过，覆盖另建session、孤儿与忽略TERM。
+Python/native/standalone首个CUDA KV四更新通过；C++新增精确续接已通过小型CPU FP64/FP32，CUDA定向正在完成。
+本机未提交：上述启动器修复、CUDA检查显式IEEE策略、workers/packing记录、完整同设备恢复精确检查及本交接；活跃源码快照未修改。
 
 ```sh
 git status --short --branch

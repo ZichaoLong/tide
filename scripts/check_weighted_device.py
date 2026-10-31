@@ -22,6 +22,8 @@ def main():
     parser.add_argument("--peer-devices", nargs="+", help="Explicit logical devices; first must match --device")
     parser.add_argument("--implementation", choices=("python", "native"), required=True)
     parser.add_argument("--native-library")
+    parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--packing", choices=("auto", "packed", "scalar"), default="auto")
     parser.add_argument("--placement", choices=("cpu", "mixed-a", "mixed-b", "mixed-c"), required=True)
     parser.add_argument("--scoring-dtype", choices=("profile", "float32", "float64"), default="profile")
     parser.add_argument("--dtype", choices=("float32", "float16"), default="float32")
@@ -50,7 +52,11 @@ def main():
         parser.error("unknown case; available: "+", ".join(sorted(names)))
     if args.implementation == "native" and not args.native_library:
         parser.error("native requires --native-library with a matching build manifest")
+    if args.workers < 1 or args.implementation == "python" and args.workers != 1:
+        parser.error("workers must be positive; Python requires one host worker")
     device, reason = resolve_device(args.device)
+    from cuda_precision import ieee_policy
+    cuda_policy = ieee_policy(device)
     peers = None
     if args.peer_devices:
         peers = tuple(resolve_device(spec)[0] for spec in args.peer_devices)
@@ -66,6 +72,9 @@ def main():
                       ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")},
                   runtime=manifest(device, reason, precision.dtype), requested_placement=placement.to_dict(),
                   precision=precision.record(),
+                  cuda_precision=cuda_policy, workers=args.workers, packing=args.packing,
+                  operator_policy="standard ATen; batched VJPs when packed, replay when scalar",
+                  threads=dict(intraop=torch.get_num_threads(), interop=torch.get_num_interop_threads()),
                   peer_devices=None if peers is None else [str(d) for d in peers],
                   resolved_placement={k: str(v) for k, v in resolved.items()}, cases=[],
                   scope="eager host schedule; actual device transfers; not resident",
@@ -82,7 +91,7 @@ def main():
             path = out/case.name; path.mkdir()
             entry.update(check_case(case, device, args.implementation, placement, path,
                                     args.native_library, training=not args.skip_training, peers=peers,
-                                    precision=precision), state="passed")
+                                    precision=precision, workers=args.workers, packing=args.packing), state="passed")
             for target in peers or (device,):
                 synchronize(target)
             write_json(out/"result.json", record)

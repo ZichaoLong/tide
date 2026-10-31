@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Bounded detached jobs for Linux containers without a user service manager.
 
-Commands must keep descendants in their process group (no daemonization).
+Linux subreaping retains descendants even when tools create their own groups.
 This is not a reboot-recovery service or a replacement for systemd on hosts.
 """
 import argparse
+import ctypes
 from datetime import datetime, timezone
 import json
 import os
@@ -28,42 +29,59 @@ def now():
 def process(pid):
     try:
         fields = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()
-        return dict(state=fields[0], pgid=int(fields[2]), start_ticks=int(fields[19]))
+        return dict(state=fields[0], ppid=int(fields[1]), pgid=int(fields[2]), start_ticks=int(fields[19]))
     except (FileNotFoundError, ProcessLookupError):
         return None
 
 
-def live_group(pgid):
-    result = []
+def descendants(parent):
+    processes = {}
     for path in Path("/proc").iterdir():
         if path.name.isdigit():
             info = process(int(path.name))
-            if info and info["pgid"] == pgid and info["state"] not in {"Z", "X"}:
-                result.append(int(path.name))
-    return sorted(result)
+            if info:
+                processes[int(path.name)] = info
+    owned = {parent}
+    while True:
+        more = {pid for pid, info in processes.items() if info["ppid"] in owned} - owned
+        if not more:
+            return {pid: processes[pid] for pid in owned - {parent}
+                    if processes[pid]["state"] not in {"Z", "X"}}
+        owned.update(more)
 
 
-def signal_group(pgid, sig):
-    try:
-        os.killpg(pgid, sig)
-    except ProcessLookupError:
-        pass
+def signal_workload(sig):
+    # Signal only owned PIDs, including leaders/members of Ninja-created groups.
+    # Never signal a shared external group to which a descendant might attach.
+    for pid, observed in descendants(os.getpid()).items():
+        current = process(pid)
+        if current and current["start_ticks"] == observed["start_ticks"]:
+            try:
+                os.kill(pid, sig)
+            except ProcessLookupError:
+                pass
 
 
 def drain(child, grace):
     """Return only after termination and checking all non-zombie group members."""
-    signal_group(child.pid, signal.SIGTERM)
+    signal_workload(signal.SIGTERM)
     deadline = time.monotonic() + grace
-    while live_group(child.pid) and time.monotonic() < deadline:
+    while descendants(os.getpid()) and time.monotonic() < deadline:
         child.poll()
         time.sleep(.05)
-    if live_group(child.pid):
-        signal_group(child.pid, signal.SIGKILL)
-    child.wait(timeout=10)
     deadline = time.monotonic() + 10
-    while live_group(child.pid) and time.monotonic() < deadline:
+    while descendants(os.getpid()) and time.monotonic() < deadline:
+        signal_workload(signal.SIGKILL)
         time.sleep(.05)
-    return live_group(child.pid)
+    child.wait(timeout=10)
+    # Reap orphaned grandchildren; Popen retains its own child's real exit code.
+    while True:
+        try:
+            if os.waitpid(-1, os.WNOHANG)[0] == 0:
+                break
+        except ChildProcessError:
+            break
+    return sorted(descendants(os.getpid()))
 
 
 def supervise(out):
@@ -75,6 +93,9 @@ def supervise(out):
                   supervisor_start_ticks=process(os.getpid())["start_ticks"])
     child = None
     try:
+        libc = ctypes.CDLL(None, use_errno=True)
+        if libc.prctl(36, 1, 0, 0, 0) != 0:  # PR_SET_CHILD_SUBREAPER
+            raise OSError(ctypes.get_errno(), "cannot become a child subreaper")
         os.nice(10)
         with (out / "task.log").open("ab", buffering=0) as log:
             child = subprocess.Popen(record["command"], cwd=record["cwd"],
@@ -88,7 +109,7 @@ def supervise(out):
                 time.sleep(.1)
             code = child.poll()
             reason = ("signal" if cancelled else "timeout" if code is None else
-                      "descendants_after_exit" if live_group(child.pid) else "exit")
+                      "descendants_after_exit" if descendants(os.getpid()) else "exit")
             remaining = drain(child, record["grace_seconds"])
             code = child.returncode
             exit_code = (128 + cancelled[0] if cancelled else 124 if reason == "timeout"
@@ -120,7 +141,7 @@ def start(args):
     record = dict(state="starting", source=source, dirty=dirty, started=now(),
                   cwd=str(cwd), command=command, timeout_seconds=args.timeout,
                   grace_seconds=args.grace, launcher=str(Path(__file__).resolve()),
-                  scope="Linux process group; no daemonization or reboot recovery")
+                  scope="Linux subreaper and all descendant process groups; no reboot recovery")
     write_json(out / "status.json", record)
     with (out / "supervisor.log").open("ab", buffering=0) as log:
         child = subprocess.Popen([sys.executable, str(Path(__file__).resolve()),
@@ -144,7 +165,7 @@ def inspect(out):
     current = process(record.get("supervisor_pid", -1))
     record["observed_supervisor_alive"] = bool(current and current["state"] not in {"Z", "X"}
         and current["start_ticks"] == record.get("supervisor_start_ticks"))
-    record["observed_live_workload_pids"] = live_group(record["pgid"]) if "pgid" in record else []
+    record["observed_live_workload_pids"] = sorted(descendants(record["supervisor_pid"])) if record["observed_supervisor_alive"] else []
     return record
 
 
