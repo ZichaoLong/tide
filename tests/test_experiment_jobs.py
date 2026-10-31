@@ -106,3 +106,20 @@ def test_matrix_logs_show_current_child_without_hiding_its_failure(tmp_path):
     write_json(out/"run"/"result.json", dict(schema="tide-experiment-matrix-result-v1", current_case="../other"))
     with pytest.raises(ValueError, match="current_case"):
         jobs.logs(out)
+
+
+def test_status_retains_strict_failure_and_first_difference_without_dumping_every_report(tmp_path):
+    from tidegraph.experiment.records import write_json
+    out = tmp_path/"job"
+    container_job.prepare(out, command=[sys.executable, "-V"], cwd=tmp_path, timeout=5)
+    (out/"run").mkdir()
+    first = dict(kind="numeric", path="state.keys", atol=1e-6)
+    validation = dict(numeric="failed", discrete="passed", strict_passed=False,
+        reports=[dict(mismatch_counts=dict(numeric=2, discrete=0), differences=[first]),
+                 dict(mismatch_counts=dict(numeric=3, discrete=0), differences=[])])
+    write_json(out/"run"/"result.json", dict(state="completed", execution_status="completed", validation=validation))
+    summary = jobs.status(out)["experiment"]["validation"]
+    assert summary["numeric"] == "failed" and summary["strict_passed"] is False
+    assert summary["mismatch_counts"] == dict(numeric=5, discrete=0)
+    assert summary["first_difference"] == first and "reports" not in summary
+    assert read_json(out/"run"/"result.json")["validation"] == validation

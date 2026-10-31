@@ -130,6 +130,24 @@ def worker(out):
     return 0 if result.get("state") in {"passed", "completed"} else 1
 
 
+def _result_summary(result):
+    summary = {key: result.get(key, "unchecked") for key in (
+        "state", "execution_status", "validation", "checkpoint", "config_id", "phase", "window", "error")}
+    validation = result.get("validation")
+    if isinstance(validation, dict) and "reports" in validation:
+        compact = {key: value for key, value in validation.items() if key != "reports"}
+        reports = validation["reports"]
+        compact["report_count"] = len(reports)
+        compact["mismatch_counts"] = {kind: sum(row.get("mismatch_counts", {}).get(kind, 0)
+                                              for row in reports) for kind in ("numeric", "discrete")}
+        first = next((item for row in reports for item in row.get("differences", [])), None)
+        if first is not None:
+            compact["first_difference"] = first
+        compact["diagnostics"] = "full reports remain in result.json and the v2 result archive"
+        summary["validation"] = compact
+    return summary
+
+
 def status(output_dir):
     out = Path(output_dir).resolve()
     record = container_job.inspect(out)
@@ -144,15 +162,13 @@ def status(output_dir):
     result_file = out/"run"/"result.json"
     if result_file.is_file():
         result = read_json(result_file)
-        record["experiment"] = {key: result.get(key, "unchecked") for key in (
-            "state", "execution_status", "validation", "checkpoint", "config_id", "phase", "window")}
+        record["experiment"] = _result_summary(result)
         if result.get("schema") == "tide-experiment-matrix-result-v1":
             record["experiment"].update(completed_cases=len(result["cases"]), current_case=result.get("current_case"))
             current = _case_path(out, result)
             if current is not None and (current/"run"/"result.json").is_file():
                 child = read_json(current/"run"/"result.json")
-                record["experiment"]["current_result"] = {key: child.get(key, "unchecked") for key in (
-                    "state", "execution_status", "phase", "window", "validation", "checkpoint", "error")}
+                record["experiment"]["current_result"] = _result_summary(child)
     return record
 
 
