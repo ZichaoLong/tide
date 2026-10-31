@@ -331,3 +331,11 @@ B8也完整通过，但MM平均仅8.04行，私有BMM117次全为2行，独立�
 近界2.085B B1同样只有36次MM/64行、18次2行BMM，预算退回1组/2行；92头产生736次attention桶调用，尚无其占时证据，未追加第三优化。
 本机同卡相关NPU检查通过，FC B8返回packed中位576.500ms高于scalar的527.660ms，未获益；保持默认scalar。
 具体客户端、精度、参数、近界准入与资源以本轮报告为准，不由推理通过推断训练。
+
+## 三平台B128/B512与诊断开销
+
+[首组固定证据](evidence/core5-platform-baseline-20261031.md)包含真实不齐B128/B512。三平台同材料A/B/C完成，原数值超差保持；本次NPU B128返回packed降低成本不推翻旧B8反增。CPU ATen1/4/16未见随线程增长而获益，不能拿单线程结果作普遍比较。
+
+大逻辑batch已使State/Full行增大，但private BMM仍多为2行。GPU B128可见桶无单行、Full最小6行，当前没有padding重写依据。同权重MM与私有矩阵BMM分别计数；不把连续缓冲或packed标签当算子利用率。
+
+GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按device只取回一个bool，新`finite_check_packing`目标是合并小诊断kernel，而不是宣称减少原本不存在的逐tensor主机取回。默认不改；按device/dtype最多8MiB，特殊/大张量保持原检查，另预留32MiB空间。固定bd2ff2e相关78项通过，实际端到端收益须分CPU/NPU/GPU测量；无收益即保留scalar。不可将inclusive耗时或kernel数量减少等同加速。
