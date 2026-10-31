@@ -35,6 +35,11 @@ for status, data in selected:
     # dirty-file lists or implying that every historical failure is still open.
     summary = {key: data[key] for key in ("state", "source", "started", "finished", "observed", "record_kind", "exit_code") if key in data}
     summary["dirty"] = bool(data.get("dirty"))
+    if "source" not in data:
+        summary.pop("dirty")
+        summary["installed_package_sha256"] = data["metadata"]["install_identity"]["package"]["installed_files_sha256"]
+        summary["task_kind"] = data["metadata"].get("task_kind", "unknown")
+        summary["scope"] = "launcher state only; inspect individual run/check results"
     summary["log"] = str((status.parent / "task.log").relative_to(root))
     print(f"{status.relative_to(root)}: {json.dumps(summary)}")
 for path, error in errors:

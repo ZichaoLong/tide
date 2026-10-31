@@ -103,6 +103,22 @@ def test_mixed_job_layouts_keep_live_records_without_scanning_worktrees(tmp_path
     assert actual == [(tmp_path/"jobs/live/status.json", live), (tmp_path/"old/status.json", old)]
 
 
+def test_installed_job_identity_is_distinct_from_a_git_source(tmp_path):
+    folder = tmp_path/"jobs/installed"; folder.mkdir(parents=True)
+    record = {"schema": "tide-durable-job-v1", "state": "running",
+              "started": "2026-10-31T00:00:00Z", "metadata": {
+                  "task_kind": "matrix", "install_identity": {"package": {
+                      "installed_files_sha256": "ab"*32}}}}
+    records.write_json(folder/"status.json", record)
+    actual, errors = records.read_jobs(tmp_path)
+    assert not errors and actual == [(folder/"status.json", record)]
+    assert "source" not in actual[0][1]
+    record["metadata"]["install_identity"]["package"]["installed_files_sha256"] = "missing"
+    records.write_json(folder/"status.json", record)
+    actual, errors = records.read_jobs(tmp_path)
+    assert not actual and len(errors) == 1
+
+
 def test_explicit_terminal_postmortem_has_no_invented_start_time(tmp_path):
     folder = tmp_path/"failed-launcher"; folder.mkdir()
     record = {"state": "failed", "exit_code": 1, "source": "observed-source",

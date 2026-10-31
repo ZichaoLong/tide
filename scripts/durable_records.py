@@ -42,7 +42,7 @@ def read_jobs(directory):
             data = json.loads(path.read_text())
             if not isinstance(data, dict) or data.get("state") not in {"starting", "running", "passed", "failed", "cancelled"}:
                 raise ValueError("unknown job record/state")
-            if not isinstance(_record_time(data), str) or not isinstance(data.get("source"), str):
+            if not isinstance(_record_time(data), str) or not _source_identity(data):
                 raise ValueError("invalid job source/start metadata")
             if data["state"] in {"passed", "failed", "cancelled"}:
                 code = data.get("exit_code")
@@ -53,6 +53,21 @@ def read_jobs(directory):
             errors.append((path, str(error)))
     records.sort(key=lambda item: _record_time(item[1]), reverse=True)
     return records, errors
+
+
+def _source_identity(data):
+    if isinstance(data.get("source"), str):
+        return True
+    # Installed public jobs freeze package/build identities instead of reading
+    # an ambient checkout. Do not invent a Git revision for an installed wheel.
+    if data.get("schema") != "tide-durable-job-v1":
+        return False
+    metadata = data.get("metadata")
+    identity = metadata.get("install_identity") if isinstance(metadata, dict) else None
+    package = identity.get("package") if isinstance(identity, dict) else None
+    digest = package.get("installed_files_sha256") if isinstance(package, dict) else None
+    return (isinstance(digest, str) and len(digest) == 64
+            and all(c in "0123456789abcdef" for c in digest))
 
 
 def _record_time(data):
