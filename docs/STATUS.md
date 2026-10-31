@@ -54,4 +54,4 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 
 公共HTML结果浏览补齐离线筛选、可比较的关键列与完整Details；报告/逃逸/JS过滤与int64大参数边界10项开发通过，已用私有Firefox无头实际渲染。只改报告，不改变活动安装、模型或实验结果。固定源码10项通过，双机新安装报告生成与浏览器实际过滤通过；无需重复训练/推理。
 
-当前开发：补齐CANN trace实际`aten::matmul`形状（原摘要仅有mm/bmm/addmm）；13项离线解析开发检查通过。活动安装不修改；提交后以冻结源码解析已有CPU/NPU trace，补观测不重跑数学/性能。
+观测修正固定`c59688c`：补齐CANN实际`aten::matmul`形状，13项冻结解析检查通过；`gef-profile-reanalysis-c59688c.service`于07:04:11Z exit0、控制组空。[CPU/NPU profile证据](evidence/core5-platform-profile-20261031.md)保留旧trace hash和运行来源，未重跑数学/性能。

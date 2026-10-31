@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[CPU/NPU约1B大batch算子观察](core5-platform-profile-20261031.md)：固定bd2ff2e两项独立profile；168行大MM、864次两行私有BMM与288次共享base GEMV并存。c59688c修正CANN matmul漏计，13项固定解析检查通过；保留原trace hash，不重跑或新增数学资格。
+
 [CUDA4.561B安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。资源与恢复成本分列，多卡结果另待实际。
 
 [人类安装消费者、停止/恢复与离线报告](core5-human-workflow-20261031.md)：GPU公开流程实际演练；原base独立根严格失败与下游任务通过分列。1b46dc5固定10项与双机新安装报告生成、浏览器筛选通过；CPU/NPU完整人类流程待实际结果。

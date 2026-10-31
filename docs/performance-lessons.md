@@ -355,3 +355,5 @@ GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按dev
 [1B/B128 GPU实际形状](evidence/core5-platform-scale-20261031.md)同时出现168时间行的FFN矩阵批、1344个单行描述/评分MM和864个2行私有BMM。Read/Full均12桶且无单行桶，当前不做统一padding重写；独立投影8MiB预算退回96行，继续保留原后备。显式CUDA同步占捕获跨度2.861%，不代表全部主机等待；nonzero/index/isfinite与拆装仍有成本，但单次profile不足以认定整图融合收益。
 
 同栈原始解码精确不保证下一窗精确。[NPU 1B/B512](evidence/core5-platform-scale-20261031.md)完成测量并越过raw解码比较，随后新owner下一窗node1 KV keys逐位不同；B128及同模型CPU/GPU B512恢复通过不能解除它。B512成本34.114秒，独立CPU对照未执行，不能标数值/离散通过。先保存原checkpoint和第一字段见证，重启需要恢复前后布局/算子或同栈非确定性的具体诊断，不能以容差比较替换exact检查。
+
+[CPU/NPU 1B/B128独立profile](evidence/core5-platform-profile-20261031.md)确认两平台也形成168行FFN矩阵，Read/Full各12桶且无单行桶。CPU共享base仍有288次大GEMV、profile self累计1.733秒；这与864次两行私有BMM是不同问题。跨不同输入的同base准备应优先考虑共享W矩阵批，不应简单增大独立BMM的8MiB预算而复制大权重。NPU的二维乘法实际记录为aten::matmul；只搜mm会误判没有形成矩阵批。API累计同步、设备区间并集和端到端时间要分开，不能用嵌套API和推断墙钟收益。
