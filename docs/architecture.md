@@ -22,7 +22,7 @@
 | 带权常驻图 | `python/tidegraph/weighted/resident.py`; `tools/device_online/weighted_flow*` | 五记忆与正式配置的独立在线组合、typed raw state、逐边/端口和精确续接；[资格范围](resident-weighted-flow.md) |
 | 带权常驻训练与物理放置 | `tools/device_online/include/tide/resident_weighted_training.h`, `python/tidegraph/weighted/resident_training.py`; `tools/device_online/weighted_window*`, `weighted_training*`, `weighted_flow_peers*` | 保留窗口、独立字段根、原owner局部VJP、canonical master/槽、节点bank发布与样本副本共同更新；[训练](resident-weighted-training.md)、[节点放置](resident-weighted-placement.md) |
 | 常驻硬件后端 | `tools/device_online/control_flow.*`, `program.*`, `ascendc/`, `cuda/` | CANN 与 CUDA 独立控制流、算子/内核提交、完成通知及 P2P；共享语义不等于共享驱动实现 |
-| 参数与持久化 | `checkpoint*.py`, `token_checkpoint.py`; `cpp/src/parameters.cpp`, `optimizer.cpp`, `checkpoint*.cpp` | 别名归属、值保存/恢复、显式梯度边界；格式版本见 semantics |
+| 参数与持久化 | `checkpoint*.py`（含`checkpoint_metrics.py`分阶段观测）, `token_checkpoint.py`; `cpp/src/parameters.cpp`, `optimizer.cpp`, `checkpoint*.cpp` | 别名归属、值保存/恢复、显式梯度边界；格式版本见 semantics |
 | 下游协作 | [协作契约](downstream-contract.md)、`templates/downstream/`、`examples/consumer_core5/` | 固定依赖、请求/交付/验收互链；应用训练/checkpoint在实验侧，基座公共接口不依赖模板 |
 | 历史迁移与源码身份 | [迁移规则](history-migration.md)、`scripts/history_map.py`、`verify_history_mapping.py` | 旧→新提交映射、独立逐提交验证、单分支检出；保留历史实测身份 |
 | 诊断与产物生命周期 | [复现导航](reproduction.md)、[保留规则](artifact-retention.md) | 原问题→生成器/小输入→诊断代码→独立检查→证据；原始运行目录不是开发依赖 |

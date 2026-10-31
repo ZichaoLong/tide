@@ -1,27 +1,24 @@
 """Live resource preflight, distinct from static allocation-free planning."""
-from pathlib import Path
 import os
-import shutil
 import torch
 from ..planning.capacity import capacity_budget
+from .storage import filesystem, host_memory
 
 
 def host_available():
-    available = next(int(row.split()[1])*1024 for row in Path("/proc/meminfo").read_text().splitlines()
-                     if row.startswith("MemAvailable:"))
-    limit = Path("/sys/fs/cgroup/memory.max")
-    used = Path("/sys/fs/cgroup/memory.current")
-    if limit.exists() and used.exists() and limit.read_text().strip() != "max":
-        available = min(available, int(limit.read_text())-int(used.read_text()))
-    return available
+    return host_memory()["available_bytes"]
 
 
 def preflight(resolved, output_parent, *, start_window=0):
     resources = dict(resolved["resources"])
     m = resolved["measurement"]
     resources["logical_windows"] = max(resources["logical_windows"], start_window+m["warmup"]+m["steps"]+int(m["checkpoint_check"]))
-    resources["host_free_bytes"] = host_available()
-    resources["disk_free_bytes"] = shutil.disk_usage(output_parent).free
+    host, storage = host_memory(), filesystem(output_parent)
+    resources["host_free_bytes"] = host["available_bytes"]
+    resources["disk_free_bytes"] = storage["free_bytes"]
+    requested_medium = resources.get("storage_medium")
+    effective_medium = "tmpfs" if storage["memory_backed"] else "disk"
+    resources["storage_medium"] = effective_medium
     resources["devices"] = {key: dict(row) for key, row in resources.get("devices", {}).items()}
     e = resolved["execution"]["effective"]
     for name in e["peer_devices"] or (e["device"],):
@@ -35,6 +32,10 @@ def preflight(resolved, output_parent, *, start_window=0):
     budget = capacity_budget(resolved["plan"], resolved["execution"], placement=resolved["payload_placement"],
                 mode=m["mode"], optimizer=resolved["task"]["optimizer"]["kind"], checkpoint=True, resources=resources)
     problems = list(budget["static_rejections"])
+    if storage["memory_backed"] is None:
+        problems.append("output filesystem: could not establish disk/tmpfs type; inspect the output mount before running")
+    if requested_medium is not None and requested_medium != effective_medium:
+        problems.append(f"resources.storage_medium: requested {requested_medium}, output mount is {effective_medium}; correct the destination or declared preview")
     for name, row in budget["per_device"].items():
         if row["reservation_exceeds_available"]:
             problems.append(f"{name}: estimated peak {row['estimated_peak_bytes']} exceeds current usable {row['usable_bytes']}")
@@ -42,6 +43,9 @@ def preflight(resolved, output_parent, *, start_window=0):
         if budget[name].get("reservation_exceeds_available"):
             problems.append(name+": planned reservation exceeds live free memory/storage")
     budget.update(actual_preflight=True, load_average=list(os.getloadavg()),
+                  storage=dict(storage, requested_medium=requested_medium, effective_medium=effective_medium,
+                      durability="volatile; lost at container/host restart" if storage["memory_backed"] else "filesystem fsync publication; durability depends on storage"),
+                  host_memory_snapshot=host,
                   cpu_affinity=len(os.sched_getaffinity(0)), refused=problems,
                   caveat="resource snapshots and conservative estimates; no runtime or correctness guarantee")
     return budget

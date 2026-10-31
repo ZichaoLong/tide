@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import tempfile
 from .records import digest, read_json, write_json
+from ..checkpoint_metrics import phase
 
 SCHEMA = "tide-experiment-checkpoint-v1"
 KEYS = ("model_id", "workload_id", "task_id", "execution_id")
@@ -51,8 +52,10 @@ def save(owner, output, resolved, identity, next_window):
     temporary = Path(tempfile.mkdtemp(prefix=".staging-", dir=root))
     old = read_json(root/"latest.json") if (root/"latest.json").exists() else None
     try:
-        owner.save(temporary)
-        files = {p.name: digest(p) for p in sorted(temporary.iterdir()) if p.is_file()}
+        with phase("generation.owner_save"):
+            owner.save(temporary)
+        with phase("generation.hash_files"):
+            files = {p.name: digest(p) for p in sorted(temporary.iterdir()) if p.is_file()}
         size = sum(p.stat().st_size for p in temporary.iterdir() if p.is_file())
         if size > resolved["resources"]["checkpoint_max_bytes"]:
             raise ValueError(f"resources.checkpoint_max_bytes: actual checkpoint {size} exceeds the declared budget")
@@ -60,16 +63,18 @@ def save(owner, output, resolved, identity, next_window):
                       package_sha256=identity["package"]["installed_files_sha256"],
                       builds={k: v["binary_sha256"] for k, v in identity["builds"].items()},
                       next_window=next_window, span=resolved["plan"]["span"], files=files, bytes=size)
-        write_json(temporary/"metadata.json", record)
-        os.rename(temporary, final)
-        write_json(root/"latest.json", dict(directory=name, next_window=next_window))
+        with phase("generation.publish_metadata_pointer"):
+            write_json(temporary/"metadata.json", record)
+            os.rename(temporary, final)
+            write_json(root/"latest.json", dict(directory=name, next_window=next_window))
         # Only our previous, published generation is retired, after the new
         # fsynced pointer is durable. A stopped run always has its last boundary.
         if old is not None and old["directory"] != name:
             old_name = old["directory"]
             if Path(old_name).name != old_name or not old_name.startswith("window-"):
                 raise ValueError("invalid previous checkpoint generation")
-            shutil.rmtree(root/old_name)
+            with phase("generation.retire_previous"):
+                shutil.rmtree(root/old_name)
         return final, record
     finally:
         if temporary.exists():
@@ -79,17 +84,26 @@ def save(owner, output, resolved, identity, next_window):
 def exact_next(owner, create, path, index):
     """Serial new owner; raw decode and next full window, outside timers."""
     from ..compare import equivalent
-    saved = owner.decoded_state()
-    actual, _ = owner.step(index, return_mode="complete")
-    params, training = owner.parameters(), owner.training_state()
-    owner.close()
-    restored = create(checkpoint=path)
+    with phase("resume.snapshot_saved_values"):
+        saved = owner.decoded_state()
+    with phase("resume.original_next_window"):
+        actual, _ = owner.step(index, return_mode="complete")
+    with phase("resume.snapshot_next_parameters"):
+        params, training = owner.parameters(), owner.training_state()
+    with phase("resume.close_original"):
+        owner.close()
+    with phase("resume.construct_and_load"):
+        restored = create(checkpoint=path)
     try:
-        equivalent(saved, restored.decoded_state(), atol=0, rtol=0)
-        expected, _ = restored.step(index, return_mode="complete")
-        equivalent(actual, expected, atol=0, rtol=0)
-        equivalent(params, restored.parameters(), atol=0, rtol=0)
-        equivalent(training, restored.training_state(), atol=0, rtol=0)
+        with phase("resume.compare_decoded_values"):
+            equivalent(saved, restored.decoded_state(), atol=0, rtol=0)
+        with phase("resume.restored_next_window"):
+            expected, _ = restored.step(index, return_mode="complete")
+        with phase("resume.compare_next_window"):
+            equivalent(actual, expected, atol=0, rtol=0)
+        with phase("resume.compare_next_parameters_optimizer"):
+            equivalent(params, restored.parameters(), atol=0, rtol=0)
+            equivalent(training, restored.training_state(), atol=0, rtol=0)
     finally:
         restored.close()
     return dict(state="passed", exact=True, next_window=index,

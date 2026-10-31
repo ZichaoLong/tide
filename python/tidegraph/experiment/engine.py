@@ -94,12 +94,13 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         actual = []
         total = measurement["warmup"]+measurement["steps"]
         from .checkpoint import save, exact_next
+        from ..checkpoint_metrics import capture as checkpoint_cost
         for offset in range(total):
             index = start+offset
             record.update(phase="warmup" if offset < measurement["warmup"] else "measurement", window=index)
             write_json(output/"result.json", record)
             began = time.perf_counter()
-            if observation_mode != "none" and offset >= measurement["warmup"]:
+            if observation_mode in {"packing", "profile"} and offset >= measurement["warmup"]:
                 from .profiling import step as observed_step
                 (observation, loss), detail = observed_step(owner, index, observation_mode, output)
                 record["observation"] = detail
@@ -123,7 +124,9 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
             del observation
             # Durable boundaries are outside timing and individually costed.
             began = time.perf_counter()
-            checkpoint_path, checkpoint = save(owner, output, resolved, identity, index+1)
+            with checkpoint_cost() as costs:
+                row["checkpoint_cost"] = costs
+                checkpoint_path, checkpoint = save(owner, output, resolved, identity, index+1)
             row["checkpoint_seconds"] = time.perf_counter()-began
             record["checkpoint"] = dict(state="saved", next_window=index+1, bytes=checkpoint["bytes"],
                                         path=str(checkpoint_path), exact_resume="not_checked")
@@ -138,8 +141,10 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
             record["phase"] = "exact-resume"
             write_json(output/"result.json", record)
             began = time.perf_counter()
-            record["checkpoint"].update(state="passed", exact_resume=True,
-                resume_check=exact_next(owner, lambda **kw: create(resolved, **kw), checkpoint_path, start+total))
+            with checkpoint_cost() as costs:
+                record["checkpoint"]["cost"] = costs
+                record["checkpoint"].update(state="passed", exact_resume=True,
+                    resume_check=exact_next(owner, lambda **kw: create(resolved, **kw), checkpoint_path, start+total))
             record["checkpoint"]["check_seconds"] = time.perf_counter()-began
             memory.capture("exact-resume")
         owner.close()

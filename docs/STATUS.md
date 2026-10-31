@@ -45,7 +45,7 @@ artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-platform-
 ```
 
 如用户要求停止后台作业，只停止准确unit并核对控制组/后代；当前没有收到该停止指令。
-GPU9.123B现场磁盘准入已拒绝、无后代；三通信full独立根已持久启动。
+GPU9.123B现场磁盘准入已拒绝、无后代；三通信full独立根07:50:49Z全部通过、外层exit0且无后代，待单独归档。
 作业名`platform-cuda-admission9123m-87655fc`、`platform-cuda-roots-87655fc`；未见终态前不称通过。
 83.896GB磁盘预算已含1GiB reserve；现场拒绝独立记录，不冒称构造或设备执行。
 
@@ -65,8 +65,8 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 ## 当前接续
 
 1. 先重核上述既有任务的实际终态，审阅内层结果，再补多卡/训练/resident/容量证据；不重跑已完成矩阵。
-2. 保留GPU C4 checkpoint用于成本拆分；先执行9.123B现场准入和三通信独立根full检查。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
-3. 补tmpfs与主存联合准入、分阶段checkpoint观测的最小实现；相关测试、提交、固定安装后做一次磁盘/tmpfs有界对照。当前盘空闲23.248GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
+2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint在审阅与dry-run后可退役以准入同模型两代磁盘文件，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
+3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。本提交后固定安装，重验相关测试并串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。当前盘空闲23.248GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
 4. 收齐有限矩阵与拒绝/未测项，更新最终选型、六项处置和唯一ROADMAP；全部终态与无后代后交付。当前总体任务尚未完成。
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料。

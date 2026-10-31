@@ -4,6 +4,7 @@ from .checkpoint_io import publish
 from .checkpoint_values import encode, decode, validate_weights
 from .validation import validate_window
 from .checkpoint_ownership import parameter_aliases, optimizer_record, preflight_optimizer
+from .checkpoint_metrics import phase
 
 
 def _place_optimizer_state(optimizer):
@@ -17,27 +18,36 @@ def _place_optimizer_state(optimizer):
 
 def save(path, graph, model, continuation, optimizer=None):
     q = continuation
-    validate_window(graph, model, q, [], q.cut, q.cut)
-    layout, optimizer_state = optimizer_record(model, optimizer)
-    weights = {name: value.detach().cpu() for name, value in model.state_dict().items()}
-    record = {
-        "schema": "tide-continuation-v5", "aliases": parameter_aliases(model),
-        "weights": weights, "optimizer": optimizer_state, "optimizer_layout": layout,
-        **encode(q),
-    }
+    with phase("save.validate_window"):
+        validate_window(graph, model, q, [], q.cut, q.cut)
+    with phase("save.optimizer_snapshot"):
+        layout, optimizer_state = optimizer_record(model, optimizer)
+    with phase("save.weights_to_host"):
+        weights = {name: value.detach().cpu() for name, value in model.state_dict().items()}
+    with phase("save.encode_values"):
+        record = {
+            "schema": "tide-continuation-v5", "aliases": parameter_aliases(model),
+            "weights": weights, "optimizer": optimizer_state, "optimizer_layout": layout,
+            **encode(q),
+        }
     publish(path, record)
 
 
 def load(path, graph, model, optimizer=None):
-    record = torch.load(path, map_location="cpu", weights_only=True)
+    with phase("load.deserialize_to_host"):
+        record = torch.load(path, map_location="cpu", weights_only=True)
     if record["schema"] != "tide-continuation-v5" or record["identity"] != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
     actual = record["weights"]
-    validate_weights(model, actual, record["aliases"])
-    q = decode(record, graph=graph, model=model)
-    validate_window(graph, model, q, [], q.cut, q.cut)
-    preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"], actual)
-    model.load_state_dict(actual)
+    with phase("load.validate_weights"):
+        validate_weights(model, actual, record["aliases"])
+    with phase("load.decode_values"):
+        q = decode(record, graph=graph, model=model)
+        validate_window(graph, model, q, [], q.cut, q.cut)
+    with phase("load.optimizer_preflight"):
+        preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"], actual)
+    with phase("load.copy_weights"):
+        model.load_state_dict(actual)
     if optimizer is not None:
         optimizer.load_state_dict(record["optimizer"])
         _place_optimizer_state(optimizer)

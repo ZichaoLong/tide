@@ -24,6 +24,10 @@ def test_complete_independent_and_serial_exact_checkpoint(tmp_path, mode):
     assert result["checkpoint"]["exact_resume"] is True
     assert result["execution_status"] == "completed"
     assert len(result["metrics"]) == 1 and result["warmup"] == []
+    saved_cost = result["metrics"][0]["checkpoint_cost"]
+    assert saved_cost["spans"]["io.serialize"]["calls"] == 2
+    assert saved_cost["spans"]["save.weights_to_host"]["calls"] == 1
+    assert result["checkpoint"]["cost"]["spans"]["load.copy_weights"]["calls"] == 1
     path, metadata = locate(tmp_path/"run")
     assert metadata["next_window"] == 1 and (path/"state.pt").is_file()
 
@@ -111,6 +115,15 @@ def test_separate_packing_observation_preserves_records_but_is_not_throughput(tm
     assert len(report["metrics"][0]["boundary_activity"]["samples"]) == 2
     from tidegraph.experiment.report import summarize
     assert summarize(report, tmp_path/"observed"/"result.json")["samples_per_second"] is None
+
+
+def test_checkpoint_observation_keeps_full_independent_check_and_not_throughput(tmp_path):
+    c = config()
+    c["measurement"]["observation"] = "checkpoint"
+    report = run(c, tmp_path/"checkpoint-cost")
+    assert report["kind"] == "checkpoint-observation" and not report["throughput_sample"]
+    assert report["validation"]["strict_passed"] and report["checkpoint"]["exact_resume"]
+    assert report["metrics"][0]["checkpoint_cost"]["spans"]["generation.hash_files"]["calls"] == 1
 
 
 def test_host_snapshots_and_atomic_checkpoint_generations_are_budgeted():

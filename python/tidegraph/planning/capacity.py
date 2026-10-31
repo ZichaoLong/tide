@@ -270,6 +270,13 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     if "cpu" in per_device:
         host = max(host, per_device["cpu"]["estimated_peak_bytes"]+2*materialize+host_reserve)
     disk = 2*checkpoint_estimate+disk_reserve+(4*inv["totals"]["unique"] if spec.client == "libtorch" else 0)
+    medium = resources.get("storage_medium", "disk")
+    if medium not in {"disk", "tmpfs"}:
+        raise ValueError("resources.storage_medium: choose disk or tmpfs")
+    # Existing tmpfs files are already charged to live host free memory. Add
+    # only the future files; disk reserve is unallocated headroom, not RAM.
+    tmpfs_bytes = disk-disk_reserve if medium == "tmpfs" else 0
+    host += tmpfs_bytes
     body = dict(schema="tide-experiment-capacity-v1", automatic_admission=False, workload_id=plan["sha256"],
         execution_id=spec.record()["execution_id"], placement_id=placement["placement_id"], mode=mode,
         optimizer=optimizer, checkpoint=checkpoint, per_device=per_device,
@@ -309,4 +316,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         free = resources.get(name+"_free_bytes")
         if free is not None and estimate > _bytes(free, "resources."+name+"_free_bytes"):
             body[name]["reservation_exceeds_available"] = True
+    if medium == "tmpfs":
+        body["host"]["future_tmpfs_file_bytes"] = tmpfs_bytes
+        body["host"]["tmpfs_accounting"] = "added to tensor reservation; existing files already reduce live host free; no extra physical memory"
     return dict(body, capacity_id=fingerprint(body))

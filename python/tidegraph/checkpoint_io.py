@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import tempfile
 import torch
+from .checkpoint_metrics import phase
 
 
 def publish(path, record):
@@ -13,16 +14,20 @@ def publish(path, record):
     descriptor, staging = tempfile.mkstemp(dir=target.parent, prefix=f".{target.name}.", suffix=".tmp")
     try:
         with os.fdopen(descriptor, "wb") as output:
-            torch.save(record, output)
-            output.flush()
-            os.fsync(output.fileno())
+            with phase("io.serialize"):
+                torch.save(record, output)
+            with phase("io.flush_fsync_file"):
+                output.flush()
+                os.fsync(output.fileno())
         # Same-directory hard link provides atomic, no-overwrite publication,
         # including when another writer wins after the initial existence check.
-        os.link(staging, target)
+        with phase("io.publish_link"):
+            os.link(staging, target)
     finally:
         os.unlink(staging)
     directory = os.open(target.parent, os.O_RDONLY | os.O_DIRECTORY)
     try:
-        os.fsync(directory)
+        with phase("io.fsync_directory"):
+            os.fsync(directory)
     finally:
         os.close(directory)

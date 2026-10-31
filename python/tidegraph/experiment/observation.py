@@ -31,8 +31,10 @@ class Memory:
             sampling="outside step timers; peaks reset after runtime_ready, construction and warmup")
 
     def capture(self, phase, *, reset=False):
+        from .storage import host_memory
         row = dict(phase=phase, process_lifetime_peak_rss_bytes=
-                   resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1 if sys.platform == "darwin" else 1024))
+                   resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1 if sys.platform == "darwin" else 1024),
+                   host_memory=host_memory())
         if self.allocator is not None:
             a, d = self.allocator, self.device
             row.update(device=str(d), allocated_bytes=a.memory_allocated(d),

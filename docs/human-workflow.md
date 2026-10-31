@@ -120,6 +120,23 @@ Python/native 路径每个完整窗口保存一次持久 checkpoint，只有新�
 standalone 也在每个完成窗口原子发布原生 checkpoint 和 latest 指针。
 `checkpoint_check=false` 只关闭额外 exact-next 验证，不关闭保存，所以 plan 始终预算持久 checkpoint。
 保存时间在每窗 `checkpoint_seconds` 或 standalone 对应字段单列，不混入窗口算子计时。
+Python/native与resident公共运行现在记录`checkpoint_cost`，拆分权重搬到主存、编码、序列化、
+文件fsync、hash、原子发布与旧代清理；`checkpoint.cost`拆分精确恢复的快照、重建/读取、复制和比较。
+这些是嵌套的墙钟span，不能相加，也不增加设备同步；未被对应客户端插桩的内部成本不臆测。
+固定安装内容hash改变后仍须使用原安装恢复旧实验，观测字段不放宽依赖身份检查。
+
+内存文件系统可作为**易失的实验存储**：配置`resources.storage_medium="tmpfs"`后，
+`tidegraph plan`把两代checkpoint/原生材料的未来文件字节同时计入主存；磁盘reserve只算空闲余量。
+`run`自动检测实际输出挂载并联合准入，显式请求与挂载不符会拒绝；已有shm文件已减少现场主存，不重复计费。
+`/dev/shm`额度与容器RAM不能相加。fsync/原子发布只保证完整文件可见，tmpfs在容器或宿主重启后丢失，
+需要跨重启保留的checkpoint必须另经校验复制到持久存储。结果记录挂载类型和cgroup使用量，
+不把tmpfs恢复通过称为磁盘耐久资格。默认每窗保存及完整检查不变。
+`measurement.observation="checkpoint"`声明单独成本观察（1计时窗，warmup另列），不计入合格吞吐。
+同材料例子为[磁盘](../configs/checkpoint-cost/cuda-disk.json)和[tmpfs](../configs/checkpoint-cost/cuda-tmpfs.json)：
+先分别`plan`核对预算，再串行`job start --output-dir`到实际磁盘或`/dev/shm`的新目录。
+两者保留完整返回与exact-next，但`validation=none`表示不重复独立CPU参考，不能新增数学资格。
+保存和恢复成本查询`results --format json`中的`details.metrics[].checkpoint_cost`和`details.checkpoint.cost`。
+
 
 CPU 配置明确区分 ATen/BLAS 的 `intraop_threads`、interop 和调度 `workers`。
 已安装Python eager客户端可显式选择`execution.finite_check_packing=packed`，

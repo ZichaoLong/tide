@@ -19,7 +19,7 @@ RESOURCE_FIELDS = {"max_materialize_bytes", "checkpoint_max_bytes", "devices", "
                    "journal_bytes", "activation_bytes", "communication_bytes", "logical_windows",
                    "live_results", "host_results", "retained_windows", "host_capacity_bytes", "host_free_bytes",
                    "host_reserve_bytes", "disk_free_bytes", "disk_reserve_bytes", "device_reserve_bytes",
-                   "resident_limits"}
+                   "resident_limits", "storage_medium"}
 
 
 def _object(value, allowed, name):
@@ -121,8 +121,8 @@ def _measurement(value):
         raise ValueError("measurement.checkpoint_check: expected true or false")
     for key in ("steps", "warmup", "timeout_seconds"):
         positive(result[key], "measurement."+key, 0 if key == "warmup" else 1)
-    if result["observation"] not in {"none", "packing", "profile"}:
-        raise ValueError("measurement.observation: choose none, packing or profile")
+    if result["observation"] not in {"none", "packing", "profile", "checkpoint"}:
+        raise ValueError("measurement.observation: choose none, packing, profile or checkpoint")
     if result["observation"] != "none" and result["steps"] != 1:
         raise ValueError("measurement.steps: observation uses one measured window in a separate process")
     return result
@@ -146,7 +146,10 @@ def _resources(value, site, measurement):
     result.setdefault("retained_windows", 1)
     mappings = {"devices", "workspace_bytes", "journal_bytes", "activation_bytes", "communication_bytes", "resident_limits"}
     for key, val in result.items():
-        if key not in mappings:
+        if key == "storage_medium":
+            if val not in {"disk", "tmpfs"}:
+                raise ValueError("resources.storage_medium: choose disk or tmpfs; live output mount is verified")
+        elif key not in mappings:
             positive(val, "resources."+key, 0 if key.endswith("reserve_bytes") else 1)
         elif not isinstance(val, dict):
             raise ValueError(f"resources.{key}: expected per-device mappings")
