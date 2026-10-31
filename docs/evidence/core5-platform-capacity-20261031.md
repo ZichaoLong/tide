@@ -1,6 +1,6 @@
 # 同模型安全容量代表点（2026-10-31）
 
-本报告包括CUDA4.561B同模型单/双/三/四卡与NPU12.802B单卡实际点；其他NPU卡数待各自实际结果，不由已测点推断。
+本报告包括CUDA4.561B同模型单/双/三/四卡与NPU12.802B单/双卡实际点；其他NPU卡数待各自实际结果，不由已测点推断。
 固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
 RTX3090/sm86、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭，native mixed-c、ordinary复制、packed/scalar完整返回；ATen/interop/worker1。
 FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个不可拆共享组；B1/P2/span20，staggered-v1，warmup1+连续2窗+精确恢复窗，1800秒上限。
@@ -116,3 +116,17 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 子监督于08:13:51Z终态exit0，重新核对supervisor与后代均为空；父任务继续其他卡数，二者不混算。
 原结果SHA256 `7ae9a7e9ba87cf1c3cd5228680b9488b45661b5959798e13a54fbaaab13669f6`。
 其条件化后继可以使用本单卡有限执行和精确恢复事实，但仍须各自逐卡/live准入与独立检查。
+
+## NPU12.802B同模型双卡
+
+同一model/workload/task，8个共享组在两卡交替放置，每卡8节点；沿用bd2ff2e安装与原每窗保存。
+执行完成、完整离散检查和精确下一窗通过，FP32数值仍超差探索。
+两窗1.850058/2.052191 s，中位1.951125 s；各窗candidate31/Full16/消息28，与单卡一致。
+每卡峰值allocated27.579406 GB、reserved27.814527/27.816624 GB，RSS232.777716 GB。
+原生ordinary各窗7组/817264 bytes，实际参数、私有状态、消息目标及计算位置符合映射；
+没有把共享参数复制成独立参数，也不由普通复制推断P2P或resident资格。
+
+构造148.978 s、参考155.350 s、精确恢复422.883 s、整流程1573.816 s，单代checkpoint仍58,070,735,884 bytes。
+该单次同模型双卡降低每卡存储，但窗口成本高于单卡1.447716 s；恢复差值不能单独归因于卡数。
+子监督终态exit0、无后代；父任务继续三卡。结果SHA256
+`46782a73551d5de21cc3fe65bed4e572836d9a5404d1beb021a78f50c39fb4d8`。

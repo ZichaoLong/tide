@@ -23,7 +23,7 @@
 
 ## 既有本机任务与新增GPU工作
 
-观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡已终态exit0、无后代；离散/精确恢复通过，数值探索，中位1.447716秒、峰值allocated54.911GB。双卡仍在执行。其后依赖链保持。
+观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡已终态exit0、无后代；离散/精确恢复通过，数值探索，中位1.447716秒、峰值allocated54.911GB。双卡也已终态exit0、无后代：完整离散/精确恢复通过、数值探索，中位1.951125秒、每卡allocated27.579GB；三卡正在执行。其后依赖链保持。
 所有服务在`background.slice`，固定源码/安装/输入不编辑；外层running/终态不覆盖内层资格。
 
 | unit | 已提交工作与依赖 | 输入/产物 |
