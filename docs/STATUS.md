@@ -33,6 +33,9 @@
 | `gef-platform-seven-2562263.service` | 等sharded；同一1B/16节点/8共享组明确七卡推理，4/2/2/2/2/2/2节点 | `inputs-2562263-seven`、`npu-model-1b-cards-7-bd2ff2e` |
 | `gef-blocking-diagnostic-bd2ff2e.service` | 等seven；原blocking小训练仅一次faulthandler诊断，不计新性能、不重试抹旧失败 | 原`inputs-b495f10-next/npu-train-two-blocking.json`、`npu-blocking-diagnostic-bd2ff2e` |
 | `gef-multicard-roots-844eb9b.service` | 等blocking诊断；两NPU三通信各一次公共`check --scope full`，独立根及三步训练/恢复 | `inputs-844eb9b-roots/npu.json`、`npu-multicard-roots-bd2ff2e`；bd2ff2e |
+| `gef-resume-layout-61571c4.service` | 等roots；原NPU1B/B512一次精确raw/next与布局诊断，原安装1b3e39f、原checkpoint只读；内层900秒 | `npu-resume-layout-61571c4`、`resume-layout-61571c4-queue.json` |
+| `gef-checkpoint-npu-0f9254a.service` | 等layout诊断；dba2a5e小型原训练回归；仅在12.802B单卡原有限执行/精确恢复与小回归通过后，跑一项tmpfs成本观察 | `inputs-checkpoint-npu-0f9254a`、`npu-checkpoint-cost-dba2a5e/progress.json`；原始tmpfs输出`/dev/shm/gef-checkpoint-npu-dba2a5e/run`，终态小记录复制到持久盘 |
+
 
 外层上限86400秒包括依赖等待；各case小型900秒、容量1800秒、独立根300秒。
 NPU合作队列priority0、候选物理4–11、每次等待600秒。原八卡推理607.440秒、训练607.503秒等待超时退出3，未执行；第八张物理9为其他项目，不干预。
@@ -67,8 +70,8 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 1. 先重核上述既有任务的实际终态，审阅内层结果，再补多卡/训练/resident/容量证据；不重跑已完成矩阵。
 2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint已审阅、dry-run并退役，配置/结果/hash保留；为同模型两代磁盘文件重新live准入，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
 3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。dba2a5e固定源码67项相关检查通过、unit终态且控制组空；新GPU私有wheel安装完成，小型CUDA native full检查（推理/独立根/训练/恢复）全部通过。已提交持久任务`jobs/platform-checkpoint-cost-dba2a5e`（当前disk，产物`checkpoint-cost-dba2a5e/progress.json`），外层2700秒、内层每项1200秒，串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。C4退役后盘空闲43.918GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
-4. 新增有界`diagnose_experiment_resume.py`，先核raw-boundary，再核下一完整窗并记录布局/实际工作量；不改算术或参考调度。CPU小流程通过；原NPU1B/B512仅在既有链之后安排一次诊断，使用原1b3e39f安装及checkpoint，不复跑全矩阵。
-5. 用户允许本机内存文件系统按需周转；当前shm可用1,034,887,401,472 bytes、MemAvailable约1.88TB，cgroup v1各层无限额。既有作业路径不变；必要时在链末安排一项12.802B单卡tmpfs成本观察，先联合预算，非吞吐资格。
+4. 新增有界`diagnose_experiment_resume.py`，先核raw-boundary，再核下一完整窗并记录布局/实际工作量；不改算术或参考调度。CPU固定61571c4脚本+原1b3e39f安装小流程通过；原NPU1B/B512已在既有链之后安排一次诊断，使用原1b3e39f安装及checkpoint，不复跑全矩阵。
+5. 用户允许本机内存文件系统按需周转；当前shm可用1,034,887,401,472 bytes、MemAvailable约1.88TB，cgroup v1各层无限额。既有作业路径不变；已在链末有条件提交一项12.802B单卡tmpfs成本观察，逐卡预算不变、联合host357,167,764,928 bytes（含未来tmpfs文件116,151,198,688），另核tmpfs117,224,940,512 bytes含1GiB保留；非吞吐资格，不加总shm和物理内存。
 6. 收齐有限矩阵与拒绝/未测项，更新最终选型、六项处置和唯一ROADMAP；全部终态与无后代后交付。当前总体任务尚未完成。
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料。

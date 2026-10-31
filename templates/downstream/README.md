@@ -11,3 +11,5 @@
 - AGENTS.fragment可并入下游规则；人类执行步骤写进README，不能只给AI接续提示。
 
 这些是`tide-downstream-contract-v1`的兼容说明/可选字段，采用方仍固定文档提交；数学、图和checkpoint版本未因模板改变。
+
+使用checkpoint分阶段观测/tmpfs联合预算时，显式锁定dba2a5e或含该能力的后续实现；旧锁不自动升级。按[人类手册](../../docs/human-workflow.md)声明易失存储与精确恢复范围，模板协议仍为兼容v1。
