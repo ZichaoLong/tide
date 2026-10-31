@@ -1,7 +1,7 @@
 # 同模型安全容量代表点（2026-10-31）
 
-本报告包括CUDA4.561B同模型单/双/三/四卡与NPU12.802B单/双卡实际点；其他NPU卡数待各自实际结果，不由已测点推断。
-固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
+本报告包括CUDA4.561B同模型单/双/三/四卡与NPU12.802B单/双卡，以及CUDA9.123B单卡拒绝/双卡实际点；其他NPU卡数待各自实际结果，不由已测点推断。
+4.561B组固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
 RTX3090/sm86、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭，native mixed-c、ordinary复制、packed/scalar完整返回；ATen/interop/worker1。
 FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个不可拆共享组；B1/P2/span20，staggered-v1，warmup1+连续2窗+精确恢复窗，1800秒上限。
 
@@ -130,3 +130,35 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 该单次同模型双卡降低每卡存储，但窗口成本高于单卡1.447716 s；恢复差值不能单独归因于卡数。
 子监督终态exit0、无后代；父任务继续三卡。结果SHA256
 `46782a73551d5de21cc3fe65bed4e572836d9a5404d1beb021a78f50c39fb4d8`。
+
+## CUDA9.123B：同一模型跨越单卡容量
+
+固定Python包36baeb7、配置`configs/checkpoint-cost/cuda-capacity-periodic.json`；CUDA核心仍是已核对的de999c2。
+FC32/16区域、d4352、KV、9,122,639,888去重参数、16个不可拆共享组，B1/P2/span36；
+FP32 payload/scoring、TF32关闭、native mixed-c、ordinary、packed/scalar完整返回、线程1。
+interval3只发布本次最终窗，warmup1+连续2测量窗+精确下一窗及独立CPU对照；与原两代磁盘请求是不同持久化配置。
+
+单卡实际准入在模型分配前拒绝：bank38,917,653,552 bytes、估计峰值40,474,596,032，
+均超过保留3GiB后的21,798,912,000 bytes。双卡同一model/workload/task通过独立live准入；
+每卡16节点/8共享组，静态峰值20.941/20.942GB，host174.740GB；磁盘单代预算42,484,843,824 bytes，
+含1GiB保留，现场free43,878,969,344。没有扩盘、重启、缩小batch/cache或改变共享绑定。
+
+| 双卡实际结果 | 数值 |
+| --- | --- |
+| 执行 / 独立数值 / 离散 / 精确下一窗 | 完成 / 超差探索 / 通过 / 通过 |
+| 两计时窗 / 中位 | 1.115031 / 1.125218 s；1.120125 s |
+| 每窗candidate / Full / 消息 | 63 / 32 / 60 |
+| 每卡allocated / reserved峰值 | 20.058312 / 20.245905 GB |
+| 原生ordinary通信 | 每窗15组、1,044,720 bytes；请求与生效一致 |
+| RSS高水位 | 116,935,979,008 bytes |
+| 构造 / 唯一保存 / 恢复 / 独立参考 | 74.833 / 112.787 / 582.984 / 85.927 s |
+| 整流程 / 最后单代checkpoint | 863.134 s / 41,400,830,286 bytes |
+
+这是真实同模型双卡容量点：单卡不能容纳bank，双卡分别接近有余量的容量，完整状态/消息/计算位置符合映射；
+不是多个独立模型，也没有将共享权重拆成独立参数。FP32数值仍超原阈值，不能称严格合格吞吐或认证该规模训练。
+旧每窗两代83.896GB磁盘拒绝保持；显式保存间隔是公开耐久性取舍。
+恢复582.984秒远高于1.120秒窗口成本，不把4.561B的恢复比例线性外推到更大规模。
+
+外层矩阵08:45:38Z终态failed/exit1，原因是预期的单卡拒绝；双卡子任务exit0，所有监督者/后代均终态。
+单/双卡原结果SHA256分别为`9c64ae8aa2e0abe754481f375aa058d53f45b4a4c84022082619dfccf0e416ea`、
+`8ff07ffa1141beaf39f5ce1c45cd89bbca9278865b999a6971f4be7a76875f30`。

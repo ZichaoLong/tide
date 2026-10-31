@@ -119,3 +119,8 @@ NPU服务`gef-scaled-training-1a6b08f.service`等待条件化容量后继；输�
 输出`npu-scaled-training-36baeb7`，实际运行包36baeb7；逐卡33.025/16.513GB、host35.261GB、disk18.406GB。
 CUDA输入已传到独立目录，须等待9.123B终态审阅并退役其可重建checkpoint后才启动，不与容量计时重叠。
 此单一系数无继续搜索计划；失败依原规则停止，旧配方第三窗非有限保持。
+
+GPU9.123B新持久化配置已终态：单卡bank38.918GB在分配前拒绝；双卡完整执行、离散及精确续接通过、数值探索，
+中位1.120125秒、各卡allocated20.058GB、RSS116.936GB，整流程863.134秒。外层因单卡拒绝failed/1，
+双卡子任务exit0，所有后代为空。结果已补容量证据；41.401GB可重建checkpoint审阅/dry run后退役，
+随后启动`jobs/platform-scaled-training-1a6b08f`，固定包36baeb7、配置1a6b08f、先小full后双卡单个新训练流程。
