@@ -164,6 +164,16 @@ def requests():
                 question="Same approximately1B training model over1/2/maximum cards; gradients/slots/journal/restore budget. Refusal is recorded, not called hardware unsupported.")
         add(platform, "capacity", "capacity-fc-near-2b", recipe(target=2_000_000_000), batch=1, positions=2,
             validation="explore", resources=LARGE, question="One bounded approximately2B FP32 capacity candidate after1B calibration; any changed scale is a new explicit reviewed model.")
+        if platform == "cuda":
+            for count in (1, 2, 3, 4):
+                add(platform, "capacity-calibrated", f"capacity-4561m-cards-{count}",
+                    recipe(width=4352, depth=8), batch=1, positions=2,
+                    peers=None if count == 1 else count, validation="explore",
+                    resources=LARGE | dict(checkpoint_max_bytes=32*GIB, device_reserve_bytes=3*GIB,
+                        workspace_bytes={f"cuda:{i}":GIB for i in range(count)},
+                        activation_bytes={f"cuda:{i}":256*1024**2 for i in range(count)},
+                        communication_bytes={f"cuda:{i}":64*1024**2 for i in range(count)}),
+                    question="One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.")
     return groups
 
 

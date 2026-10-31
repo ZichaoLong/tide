@@ -14,7 +14,7 @@
 | GPU scale pilot2 | 1b3e39f；99.49M/1.010B B1执行/离散/恢复通过、数值探索；无存活后代 |
 | GPU观察4 | 1b3e39f；A/B/C packing及独立profile，不作吞吐；小isfinite/all及private BMM热区记录在证据 |
 
-固定bd2ff2e相关78项检查通过，日志`artifacts/platform-matrix/qualification-bd2ff2e.log`。新增显式finite-check packing和逐节点活动样例观察，原149项身份不变，新增18项有界对照；总167个跟踪选点。默认scalar、严格容差、独立调度不变。尚未实测的配置不称通过。
+固定bd2ff2e相关78项检查通过，日志`artifacts/platform-matrix/qualification-bd2ff2e.log`。新增显式finite-check packing和逐节点活动样例观察，原149项身份不变，新增18项有界对照；总171个跟踪选点（新增CUDA4.561B单/双/三/四卡校准点先静态准入）。默认scalar、严格容差、独立调度不变。尚未实测的配置不称通过。
 
 公共`tidegraph`0.3.0已实现plan/预算/共享约束放置、check/run、持久job/status/logs/stop/resume和CSV/HTML/gzip归档，见[人类手册](human-workflow.md)、[有限矩阵](platform-matrix.md)。报告v2保留原逐窗、配置、身份、严格诊断，已固定源码相关验证；旧C++库保持原来源。
 
@@ -30,6 +30,8 @@ artifacts/platform-matrix/install-bd2ff2e/venv/bin/tidegraph job status artifact
 # 上述job status可换job logs或job stop；停止后核实无后代/ControlGroup空
 artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/install-platform-bd2ff2e/venv/bin/tidegraph job status /root/autodl-tmp/gef-cuda3090/jobs/platform-cuda-scale-large-batch-1b3e39f'
 ```
+
+本机NPU finite准备提交`gef-platform-npu-finite-bd2ff2e.service`，固定bd2ff2e，先等待CPU finite终态，再经合作队列选择物理4–11之一，逻辑npu:0。六项每项900秒、外层7200秒；队列`artifacts/platform-matrix/npu-finite-queue-bd2ff2e.json`，输出`npu-finite-run-bd2ff2e`，日志/status在`artifacts/jobs/platform-npu-finite-bd2ff2e`。尚无结果。
 
 ## 环境与预算
 
@@ -48,3 +50,9 @@ CPU core de999c2/standalone eca070f；NPU core/resident/standalone eca070f；GPU
 6. 同步唯一ROADMAP、契约/索引/经验，阶段提交证据并普通推送，继续到本轮授权范围闭环。
 
 从干净仓库按development/human-workflow安装，用configs/matrices跟踪材料和site生成新运行；审阅gzip无需旧运行目录。历史身份通过`resolve_history_commit.py`定位等价源码，不当成重新验证。STATUS唯一交接，ROADMAP唯一待办。
+
+新增后继作业：GPU原1B B128/B512已经终态passed且无后代；两项都数值超差探索、离散/精确恢复通过。GPU现在提交`jobs/platform-cuda-finite-scale-bd2ff2e`，新安装bd2ff2e，六个finite对照后接FC多节点/HB/LH约1B共9项，每项900/1800秒，未完成项不计通过。CPU scale准备`gef-platform-cpu-scale-1b3e39f.service`：有意等待NPU finite结束再执行7个原跟踪规模点，ATen4/worker1，单项1800秒，含约1B B128/B512；日志/status在`artifacts/jobs/platform-cpu-scale-1b3e39f`，结果`artifacts/platform-matrix/cpu-scale-run-1b3e39f`。
+
+NPU scale后继`gef-platform-npu-scale-1b3e39f.service`：等待CPU scale终态后再经队列选1张物理4–11候选卡，固定1b3e39f的7个规模点（每项1800秒）。总时限36000秒包括有界前序等待；状态/log在`artifacts/jobs/platform-npu-scale-1b3e39f`，结果`artifacts/platform-matrix/npu-scale-run-1b3e39f`，队列同父目录`npu-scale-queue-1b3e39f.json`。当前未运行/无结果，不能称通过。
+
+CPU finite六项已passed/无后代，2个小训练严格通过、推理及profile原数值超差探索接纳、全部精确恢复通过。B128诊断scalar/packed中位1.018292/0.853316秒，B512 packed3.589865秒，仅一次同材料成本；默认未改。NPU finite已物理11→npu:0运行至B512，GPU finite六项已终态并继续FC多节点规模。

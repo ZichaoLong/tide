@@ -6,7 +6,7 @@
   "counts": {
     "cpu": 45,
     "npu": 61,
-    "cuda": 61
+    "cuda": 65
   },
   "cases": [
     {
@@ -2908,6 +2908,218 @@
       },
       "host_estimated_bytes": 44890478624,
       "disk_estimated_bytes": 19181274128
+    },
+    {
+      "case": "cuda-capacity-4561m-cards-1",
+      "matrix": "cuda-capacity-calibrated.json",
+      "status": "planned",
+      "question": "One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.",
+      "model_id": "935e2f56e98d548ab5bfed9b1d7afa71210ffa5e9f7d5c41d417cc296224a169",
+      "workload_id": "d0581f1864572f9fe3771756f357068cadcaaa31f92f2ee03a9f3263ecbbe3ed",
+      "task_id": "8d0bae3b3703c5528606a4061ff90ae6edfd9912080ef468304061689cf11031",
+      "execution_id": "a1089228a9609aa014f602b383be56cef958f407dfa1ee2d56c87958d2ba6344",
+      "parameters": 4561319928,
+      "unique_parameters": 4561319988,
+      "nodes": 16,
+      "regions": 8,
+      "physical_edges": 28,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4352,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 10,
+      "span": 20,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 16
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 20941417120
+      },
+      "unknown_components": {
+        "cuda:0": []
+      },
+      "host_estimated_bytes": 91660099776,
+      "disk_estimated_bytes": 42482056608
+    },
+    {
+      "case": "cuda-capacity-4561m-cards-2",
+      "matrix": "cuda-capacity-calibrated.json",
+      "status": "planned",
+      "question": "One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.",
+      "model_id": "935e2f56e98d548ab5bfed9b1d7afa71210ffa5e9f7d5c41d417cc296224a169",
+      "workload_id": "d0581f1864572f9fe3771756f357068cadcaaa31f92f2ee03a9f3263ecbbe3ed",
+      "task_id": "8d0bae3b3703c5528606a4061ff90ae6edfd9912080ef468304061689cf11031",
+      "execution_id": "cdd4eee4eb70ecae178b80d9af5c8eb40e12da9b1b7640d669ba26fe7ba7c8e6",
+      "parameters": 4561319928,
+      "unique_parameters": 4561319988,
+      "nodes": 16,
+      "regions": 8,
+      "physical_edges": 28,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4352,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 10,
+      "span": 20,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0",
+        "cuda:1"
+      ],
+      "node_owners": {
+        "cuda:0": 8,
+        "cuda:1": 8
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 11174827672,
+        "cuda:1": 11175875592
+      },
+      "unknown_components": {
+        "cuda:0": [],
+        "cuda:1": []
+      },
+      "host_estimated_bytes": 91660099776,
+      "disk_estimated_bytes": 42482056608
+    },
+    {
+      "case": "cuda-capacity-4561m-cards-3",
+      "matrix": "cuda-capacity-calibrated.json",
+      "status": "planned",
+      "question": "One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.",
+      "model_id": "935e2f56e98d548ab5bfed9b1d7afa71210ffa5e9f7d5c41d417cc296224a169",
+      "workload_id": "d0581f1864572f9fe3771756f357068cadcaaa31f92f2ee03a9f3263ecbbe3ed",
+      "task_id": "8d0bae3b3703c5528606a4061ff90ae6edfd9912080ef468304061689cf11031",
+      "execution_id": "aede75cfbf137752a91f57674113becf1571b6e168d62a622978456dc405adda",
+      "parameters": 4561319928,
+      "unique_parameters": 4561319988,
+      "nodes": 16,
+      "regions": 8,
+      "physical_edges": 28,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4352,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 10,
+      "span": 20,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0",
+        "cuda:1",
+        "cuda:2"
+      ],
+      "node_owners": {
+        "cuda:0": 6,
+        "cuda:1": 6,
+        "cuda:2": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 8733180308,
+        "cuda:1": 8734228228,
+        "cuda:2": 6292580872
+      },
+      "unknown_components": {
+        "cuda:0": [],
+        "cuda:1": [],
+        "cuda:2": []
+      },
+      "host_estimated_bytes": 91660099776,
+      "disk_estimated_bytes": 42482056608
+    },
+    {
+      "case": "cuda-capacity-4561m-cards-4",
+      "matrix": "cuda-capacity-calibrated.json",
+      "status": "planned",
+      "question": "One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.",
+      "model_id": "935e2f56e98d548ab5bfed9b1d7afa71210ffa5e9f7d5c41d417cc296224a169",
+      "workload_id": "d0581f1864572f9fe3771756f357068cadcaaa31f92f2ee03a9f3263ecbbe3ed",
+      "task_id": "8d0bae3b3703c5528606a4061ff90ae6edfd9912080ef468304061689cf11031",
+      "execution_id": "67b2b2f62a2f883584905516e302493fc96eb1b0f7f6feecd9f3f8a7d3ab3e3d",
+      "parameters": 4561319928,
+      "unique_parameters": 4561319988,
+      "nodes": 16,
+      "regions": 8,
+      "physical_edges": 28,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4352,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 10,
+      "span": 20,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0",
+        "cuda:1",
+        "cuda:2",
+        "cuda:3"
+      ],
+      "node_owners": {
+        "cuda:0": 4,
+        "cuda:1": 4,
+        "cuda:2": 4,
+        "cuda:3": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 6291532944,
+        "cuda:1": 6292580872,
+        "cuda:2": 6292580872,
+        "cuda:3": 6292580864
+      },
+      "unknown_components": {
+        "cuda:0": [],
+        "cuda:1": [],
+        "cuda:2": [],
+        "cuda:3": []
+      },
+      "host_estimated_bytes": 91660099776,
+      "disk_estimated_bytes": 42482056608
     },
     {
       "case": "cuda-common-pytorch",

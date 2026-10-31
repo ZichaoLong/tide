@@ -12,7 +12,7 @@
 
 ## 有限列表与执行顺序
 
-总计167个明确case：CPU45、NPU61、CUDA61，按34个独立阶段文件组织。
+总计171个明确case：CPU45、NPU61、CUDA65，按35个独立阶段文件组织。
 每个case各一次独立测量流程，warmup1窗、正式2窗、完整返回、额外一窗精确恢复；
 小型/批次配置超时900秒，scale/capacity配置1800秒。
 这些是单case上限，不是承诺运行全部case的总耗时；应分组执行并检查终态、争用和准入。
@@ -34,6 +34,7 @@
 | resident-bounded | — | 2 | 2 | 同一FC4/P2的B128/B512，静态物理原子上界12B、stages32；保留默认拒绝 |
 | multicard | — | 6 | 6 | 同一1B模型2/3/最多卡放置；同一小训练模型的ordinary/blocking/cpu_bridge |
 | capacity | — | 4 | 4 | 同一1B训练模型单/双/最多卡；1B校准后一个约2B单卡推理候选 |
+| capacity-calibrated | — | — | 4 | 依据1B实际峰值新增同一4.561B模型的单/双/三/四卡推理；42.49GB两代checkpoint预算先准入 |
 
 先运行coverage/clients及必要基座检查，再进入batch、packing、modules和放置；
 中等规模通过或得到明确可解释的探索结果后，再逐项进入scale、multicard、capacity。
@@ -103,6 +104,16 @@ PDG的Python运行仍是独立正确性参考；正式PDG成本候选选择nativ
 | d16 resident B128 / B512 默认布局 | 16.87 / 269.61 GiB | 默认tensor_bytes仅1GiB，两项已静态拒绝；这是容量布局/默认stages条件，不是NPU/GPU不支持该逻辑batch |
 
 Python eager推理的checkpoint权重先解码到CPU，再复制进入既有设备bank，故不再虚计第二份完整设备权重；主存解码/副本和设备continuation预留保持。C++事务恢复、resident及训练仍保留各自预算。这只是对实际分配位置的预算修正，未改变运行或恢复实现；新容量点仍须用实际峰值校准。旧测量保留其原预算与源码身份。
+
+经实际1B单卡构造/恢复峰值约4.788GB校准，约2B FP32只作为原初始候选保留，不能称24GiB近界。
+新增CUDA `capacity-calibrated` 同一FC16/d4352/B1/P2，4,561,319,928可训练参数、8个不可拆共享组。
+显式每卡1GiB workspace、256MiB activation、64MiB通信预留，并额外保留3GiB空闲显存；
+单卡已计峰值约20.94GB，host约91.66GB，两代checkpoint需42.49GB可用磁盘，checkpoint上限显式32GiB。
+这不是将多卡显存相加；1/2/3/4卡都核对自己的bank、实际位置和峰值。1B多卡先验后才运行这些点。
+4.788GB来自4节点d4096的总峰值，不能按节点数直接线性乘其临时空间；预算保留上述额外工作区而非只计bank。
+下一自然宽度d4608的bank21.81GB、两代磁盘47.48GB，在50GiB盘保留环境/证据和余量后可能先被磁盘拒绝；
+不分配此静态候选，不为找边界反复OOM。运行前须审阅并退役终态大checkpoint，若live准入仍拒绝则记录具体差额。
+NPU近界点需自身1B实际峰值校准后选择，不能照搬3090字节或把64GiB卡上的2B称近界。
 
 这些值来自index的当前静态计算，**不是实测峰值或安全可用上限**。
 CPU返回快照与设备端存储分开预算，避免重复把所有CPU验收快照算入HBM。
