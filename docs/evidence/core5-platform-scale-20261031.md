@@ -1,7 +1,7 @@
-# 三平台规模阶段：已审阅的GPU约1B大batch（2026-10-31）
+# 三平台规模阶段：已审阅的GPU约1B大batch与三拓扑（2026-10-31）
 
-本提交仅包含两项新增GPU正式流程；CPU/NPU规模、其他拓扑、多卡与容量点尚不在此证据中。
-两项均完成执行、独立完整记录和离散检查、磁盘精确续接；原FP32数值超差在explore下被显式接纳。
+本报告包含五项GPU正式流程：1B大batch两项及FC多节点/HB/LH各一项；CPU/NPU规模与容量尚不在此归档。多卡见[独立报告](core5-platform-multicard-20261031.md)。
+这些配置均完成执行、独立完整记录和离散检查、磁盘精确续接；原FP32数值超差在explore下被显式接纳。
 **没有严格合格吞吐。** 不是将原FP64资格改写为FP32通过，也不认证训练。
 
 源码`1b3e39f4f58378272d5afe41f970c92dd0e4fed7`，Python安装内容hash
@@ -44,4 +44,16 @@ tidegraph job start selected.json --site site.json --output-dir jobs/1b-b512-new
 tidegraph results docs/evidence/core5-platform-scale-20261031.json.gz --batch 512 --format table
 ```
 
-归档SHA256：`6deb79c5ae365295c558081d5b9ab412ab8af808211269e0af78031ada07e29d`。
+## 更多节点与HB/LH的约1B实测
+
+这三项固定bd2ff2e（安装内容hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`），相同FP32/TF32关闭、mixed-c/native、packed/scalar完整返回与一流程口径。B1/P2，FC16的span20，HB/LH20的span14；不同物理模型不能互称等价加速。均完成独立完整记录/离散及精确恢复，数值超差仍保留。
+
+| 拓扑 | 节点/区域 | 参数量 | 中位秒 | candidate | Full两窗 | 消息两窗 |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| FC/d2048 | 16/8 | 1,014,118,392 | 0.437248 | 31 | 16/16 | 28/28 |
+| HB/d1792 | 20/10 | 971,589,310 | 0.498007 | 39 | 20/22 | 48/50 |
+| LH/d1792 | 20/10 | 971,589,822 | 0.418530 | 39 | 21/21 | 69/69 |
+
+相较4节点大模块的同量级参数B1/0.162938秒，更多节点/边增加调度、组装与局部调用成本；本证据不能仅由参数量预测速度，不能将FC4的结果外推到三拓扑。全参数owner、来源hash、实际批长、分桶观察和恢复峰值在归档。任务platform-cuda-finite-scale-bd2ff2e于06:08:29Z终态exit0且无后代；其finite六项在另一证据中，本归档不重复累计。
+
+归档SHA256：`fdf3615e02f4cc10166f9b233934aa3e0221b062ccfd1729df720e4c086b16f7`。

@@ -341,3 +341,9 @@ B8也完整通过，但MM平均仅8.04行，私有BMM117次全为2行，独立�
 GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按device只取回一个bool，新`finite_check_packing`目标是合并小诊断kernel，而不是宣称减少原本不存在的逐tensor主机取回。默认不改；按device/dtype最多8MiB，特殊/大张量保持原检查，另预留32MiB空间。固定bd2ff2e相关78项通过，实际端到端收益须分CPU/NPU/GPU测量；无收益即保留scalar。不可将inclusive耗时或kernel数量减少等同加速。
 
 [bd2ff2e三平台实际对照](evidence/core5-finite-packing-20261031.md)已终态：B128 scalar/packed成本CPU1.018/0.853秒、NPU4.044/3.375秒、GPU2.317/2.067秒，原数值超差保留，默认不改。六小训练严格通过，两策略checkpoint/输出精确相同。CUDA kernel147380→111268，但显式同步39868→39869、比例2.202%→2.265%；不能称同步优化。BMM仅约19–23ms inclusive对几秒完整窗，当前不据2行标签扩大跨节点改造。新index/nonzero仍显著，但需因果归属和端到端方案，停止无方向的继续融合。
+
+## 同模型放置与通信的实际边界
+
+[bd2ff2e CUDA六项](evidence/core5-platform-multicard-20261031.md)保持共享参数同卡约束，1.014B/16节点在2/3/4卡的实测全程allocator峰值由约2.289GB/卡降至约1.207GB/卡；3卡是真实6+6+4节点。逐卡状态、消息、参数与计算统计验证放置，不以仅暴露设备证明模型分布。原FP32数值超差未解除；单次成本约0.417/0.417/0.370秒不等于可推广加速。
+
+同一小训练的ordinary/blocking/cpu_bridge均严格通过；CPU桥native物理传输字节由4176增为8352，端点同步24次，约0.583/0.593/0.669秒。普通复制无需当前机器不具备的直接P2P，但不能由此认证NCCL、capture、其他图的异步所有权或resident协议。参数组、临时空间、主存与持久checkpoint磁盘共同限制大容量，不直接相加空闲显存。
