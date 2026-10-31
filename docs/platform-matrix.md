@@ -222,3 +222,33 @@ NPU38.406B三卡的`npu-capacity-periodic.json`仅在原1800秒流程已完成�
 一次有界诊断；同步提交不称默认运行时修复或性能结果，不改精度/输入/容差。
 原B512旧checkpoint重放在raw边界已有分歧；另一次同进程新建checkpoint与即时解码/下一窗
 可区分重放与恢复。该必要诊断使用联合主存准入后的tmpfs，不做大文件成本对照。
+
+## 八卡共享资源的有界后继
+
+`configs/capacity-training/npu-eight-followup.json`复用原FC16约1.014B模型的八卡推理，
+并列出FC16/d8小训练及loss1e-9的八卡约1B训练。大训练只有小训练完整独立数值/离散/精确续接
+通过才进入；这是新增任务，不重试原0.001非有限配方。
+所有项B1/P2（小门禁B2/P3）、KV、FP32、native mixed-c、ordinary、packed/scalar完整返回；
+共享参数组不可拆，实际各卡owner由公共plan/run记录。每项只运行一次，推理1800秒以内、
+小门禁300秒、大训练1800秒以内；不恢复12.8B/38.4B额外大文件流程。
+
+可在原队列之外显式授权共用低占用卡，但仍须遵守原队列。可选站点适配器
+`scripts/run_shared_npu.py --help`读取调用方指定并校验SHA256的站点helper，仅在本进程替换
+设备可用性谓词：PID/启动ticks/UID绑定、到期时间、健康、利用率、HBM使用和剩余预算全部校验。
+其余priority/FIFO、两次采样、整组锁、子进程生命周期由原helper执行；不修改共享helper、
+不绕过锁、不终止其他任务。适配器不是安装后tidegraph的依赖，也不增加新的mixed类别。
+共用状态必须保存在policy/audit，成本不宣称独占或统计稳定。
+
+固定提交后，在站点队列分配内运行安装环境的：
+
+```sh
+python scripts/run_npu_eight_followup.py configs/capacity-training/npu-eight-followup.json \
+  --site site.json --source FIXED_COMMIT \
+  --scratch /dev/shm/NEW_GEF_EIGHT_RUN --output artifacts/NEW_GEF_EIGHT_RECORDS
+```
+
+该计算驱动仅调用已安装公共`tidegraph run`和现有监督/报告；读取同一展开配置，不导入benchmark。
+它要求tmpfs余量48GiB、可用主存128GiB（含约53GB训练host和保留checkpoint代数），
+持久盘低于软配额且距硬限至少150GiB。每项还执行公共逐卡/主存/输出预算；
+不因临时盘可用而忽略主存。逐项终态复制小记录到持久盘，checkpoint留tmpfs供审阅；
+中断后根据准确unit/子监督核对，不能只看外层状态。

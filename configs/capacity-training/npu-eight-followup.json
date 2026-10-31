@@ -1,0 +1,238 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "npu-eight-bounded-followup",
+  "description": "Same 1.014B model on eight cards. Ordered inference, strict small loss training, then separate 1e-9 loss 1B training only if small strict/exact checks pass. Original 0.001 failure retained; shared-resource timing is observational. Use the bounded follow-up driver for the dependency.",
+  "cases": [
+    {
+      "name": "npu-model-1b-cards-8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-model-1b-cards-8",
+        "description": "Same16-node model as scale/fc-many-1b, without parameter de-sharing. Verify all cards' parameter/state/compute owners.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "npu-scaled-loss-small-cards-8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-scaled-loss-small-cards-8",
+        "description": "FC16/d8, eight indivisible shared groups on eight devices. Strict actual loss training and exact-next gate for the separate 1B scaled-loss workload; not arbitrary-root qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-09
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 300
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "npu-train-1b-scale1e-9-cards-8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-train-1b-scale1e-9-cards-8",
+        "description": "Separate workload, not a repair of the original scale0.001 loss failure. Same FC16 model and optimizer; explicit objective multiplier 1e-9, one bounded three-update workflow plus exact-next and independent gradients/slots. No further search if this candidate fails.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-09
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}
