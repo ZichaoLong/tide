@@ -50,8 +50,10 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 3. 汇总三平台算子形状、桶、实际活动、通信与六类packing问题；更新ROADMAP、performance-lessons及可查询证据。
 4. 统一三平台人类演练证据、下游模板/任务接口/T4待验与最终矩阵；阶段提交并普通推送后继续。
 
-从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[184有限配置](platform-matrix.md)与site模板可重建材料，审阅gzip可直接查询，无需旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。
+从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[188有限配置](platform-matrix.md)与site模板可重建材料，审阅gzip可直接查询，无需旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。
 
 公共HTML结果浏览补齐离线筛选、可比较的关键列与完整Details；报告/逃逸/JS过滤与int64大参数边界10项开发通过，已用私有Firefox无头实际渲染。只改报告，不改变活动安装、模型或实验结果。固定源码10项通过，双机新安装报告生成与浏览器实际过滤通过；无需重复训练/推理。
 
 观测修正固定`c59688c`：补齐CANN实际`aten::matmul`形状，13项冻结解析检查通过；`gef-profile-reanalysis-c59688c.service`于07:04:11Z exit0、控制组空。[CPU/NPU profile证据](evidence/core5-platform-profile-20261031.md)保留旧trace hash和运行来源，未重跑数学/性能。
+
+新静态补充待提交：`capacity-sharded`固定NPU38.406B的1/2/3卡及CUDA9.123B双卡，区别分散单卡可容纳模型和真正多卡容量。NPU三卡依赖12.802B实际校准；CUDA两代checkpoint83.896GB超过整个50GiB盘，预期准入拒绝。当前NPU8卡队列因物理9存在其他任务而等待（实际可空闲7卡）；不停止或改写活动任务，按原600秒等待上限处理。

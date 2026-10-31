@@ -193,6 +193,25 @@ def requests():
                         activation_bytes={f"npu:{i}":512*1024**2 for i in range(count)},
                         communication_bytes={f"npu:{i}":64*1024**2 for i in range(count)}),
                     question="One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.")
+            for count in (1, 2, 3):
+                add(platform, "capacity-sharded", f"capacity-38406m-cards-{count}",
+                    recipe(width=7296, depth=24), batch=1, positions=2,
+                    peers=None if count == 1 else count, validation="explore",
+                    resources=LARGE | dict(max_materialize_bytes=256*GIB, checkpoint_max_bytes=256*GIB,
+                        device_reserve_bytes=6*GIB, host_reserve_bytes=64*GIB,
+                        workspace_bytes={f"npu:{i}":3*GIB for i in range(count)},
+                        activation_bytes={f"npu:{i}":512*1024**2 for i in range(count)},
+                        communication_bytes={f"npu:{i}":64*1024**2 for i in range(count)}),
+                    question="One same FC48/d7296 model beyond single-card memory:24 indivisible shared groups, not a parameter sweep.1/2 cards must fail live memory admission;3 cards have the same per-card bank as FC16/d7296. Only execute3 cards after the12.802B calibration establishes finite execution and exact resume. Preserve complete return, original loss and2-generation checkpoint budget;1800s, no retry or OOM search.")
+        if platform == "cuda":
+            add(platform, "capacity-sharded", "capacity-9123m-cards-2",
+                recipe(width=4352, depth=16), batch=1, positions=2, peers=2, validation="explore",
+                resources=LARGE | dict(max_materialize_bytes=64*GIB, checkpoint_max_bytes=64*GIB,
+                    device_reserve_bytes=3*GIB,
+                    workspace_bytes={f"cuda:{i}":GIB for i in range(2)},
+                    activation_bytes={f"cuda:{i}":256*1024**2 for i in range(2)},
+                    communication_bytes={f"cuda:{i}":64*1024**2 for i in range(2)}),
+                question="One FC32/d4352 model exceeding single-card memory, distributed over2 cards. Per-card bank matches measured4.561B single-card; two checkpoint generations exceed the entire50GiB data disk before any old artifacts. Record live admission refusal without allocating; no silent return/checkpoint changes or storage protocol expansion.")
     return groups
 
 

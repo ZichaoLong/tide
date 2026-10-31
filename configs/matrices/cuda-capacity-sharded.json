@@ -1,0 +1,92 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cuda-capacity-sharded",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/gpu3090.json",
+  "cases": [
+    {
+      "name": "cuda-capacity-9123m-cards-2",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-capacity-9123m-cards-2",
+        "description": "One FC32/d4352 model exceeding single-card memory, distributed over2 cards. Per-card bank matches measured4.561B single-card; two checkpoint generations exceed the entire50GiB data disk before any old artifacts. Record live admission refusal without allocating; no silent return/checkpoint changes or storage protocol expansion.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 16,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 4352
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 68719476736,
+          "checkpoint_max_bytes": 68719476736,
+          "live_results": 1,
+          "device_reserve_bytes": 3221225472,
+          "workspace_bytes": {
+            "cuda:0": 1073741824,
+            "cuda:1": 1073741824
+          },
+          "activation_bytes": {
+            "cuda:0": 268435456,
+            "cuda:1": 268435456
+          },
+          "communication_bytes": {
+            "cuda:0": 67108864,
+            "cuda:1": 67108864
+          }
+        }
+      }
+    }
+  ]
+}

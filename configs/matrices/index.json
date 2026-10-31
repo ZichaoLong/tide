@@ -5,8 +5,8 @@
   "site_paths": "templates; actual builds/current free resources are independent run inputs",
   "counts": {
     "cpu": 48,
-    "npu": 68,
-    "cuda": 68
+    "npu": 71,
+    "cuda": 69
   },
   "cases": [
     {
@@ -3273,6 +3273,57 @@
       },
       "host_estimated_bytes": 91660099776,
       "disk_estimated_bytes": 42482056608
+    },
+    {
+      "case": "cuda-capacity-9123m-cards-2",
+      "matrix": "cuda-capacity-sharded.json",
+      "status": "planned",
+      "question": "One FC32/d4352 model exceeding single-card memory, distributed over2 cards. Per-card bank matches measured4.561B single-card; two checkpoint generations exceed the entire50GiB data disk before any old artifacts. Record live admission refusal without allocating; no silent return/checkpoint changes or storage protocol expansion.",
+      "model_id": "36a92b2822befbddff60b069c49cb5d3b4ab3346d1be0b2fecd1f3cf7aa9e10f",
+      "workload_id": "24ae8a01591bba82df2772f9264261ba6aa8782d90f23e68776aebe280982173",
+      "task_id": "85d9a4ad4a20b72048cb5f7061117e6f8b4882521ff593be2b70258081e1e501",
+      "execution_id": "b99650fb3a3e48a4597a345638d4ef297e24fce3155b19e9825555f90c50faca",
+      "parameters": 9122639888,
+      "unique_parameters": 9122640012,
+      "nodes": 32,
+      "regions": 16,
+      "physical_edges": 60,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4352,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 18,
+      "span": 36,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0",
+        "cuda:1"
+      ],
+      "node_owners": {
+        "cuda:0": 16,
+        "cuda:1": 16
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 20941417128,
+        "cuda:1": 20942465048
+      },
+      "unknown_components": {
+        "cuda:0": [],
+        "cuda:1": []
+      },
+      "host_estimated_bytes": 174739737664,
+      "disk_estimated_bytes": 83895945824
     },
     {
       "case": "cuda-common-pytorch",
@@ -6935,6 +6986,159 @@
       },
       "host_estimated_bytes": 241330798784,
       "disk_estimated_bytes": 117231959456
+    },
+    {
+      "case": "npu-capacity-38406m-cards-1",
+      "matrix": "npu-capacity-sharded.json",
+      "status": "planned",
+      "question": "One same FC48/d7296 model beyond single-card memory:24 indivisible shared groups, not a parameter sweep.1/2 cards must fail live memory admission;3 cards have the same per-card bank as FC16/d7296. Only execute3 cards after the12.802B calibration establishes finite execution and exact resume. Preserve complete return, original loss and2-generation checkpoint budget;1800s, no retry or OOM search.",
+      "model_id": "7fced92d129e59e2eede3051a568f3a53baa23100ed1d78f083cfeddc790f541",
+      "workload_id": "4a20a64ccee0cf65730133cab8c9a3bca76c2ae4c75c7ee900699691e0a358e5",
+      "task_id": "4e8f44c11681749e12a643b143216d393e74e015fc72f5cf9a1d23a5356a6ae1",
+      "execution_id": "a29444d35507ecedbfacd41302c5a2e16357c09ede4757f8942c7306d2596691",
+      "parameters": 38405646376,
+      "unique_parameters": 38405646564,
+      "nodes": 48,
+      "regions": 24,
+      "physical_edges": 92,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 7296,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 26,
+      "span": 52,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 48
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 168046924512
+      },
+      "unknown_components": {
+        "npu:0": []
+      },
+      "host_estimated_bytes": 766973827008,
+      "disk_estimated_bytes": 349567080224
+    },
+    {
+      "case": "npu-capacity-38406m-cards-2",
+      "matrix": "npu-capacity-sharded.json",
+      "status": "planned",
+      "question": "One same FC48/d7296 model beyond single-card memory:24 indivisible shared groups, not a parameter sweep.1/2 cards must fail live memory admission;3 cards have the same per-card bank as FC16/d7296. Only execute3 cards after the12.802B calibration establishes finite execution and exact resume. Preserve complete return, original loss and2-generation checkpoint budget;1800s, no retry or OOM search.",
+      "model_id": "7fced92d129e59e2eede3051a568f3a53baa23100ed1d78f083cfeddc790f541",
+      "workload_id": "4a20a64ccee0cf65730133cab8c9a3bca76c2ae4c75c7ee900699691e0a358e5",
+      "task_id": "4e8f44c11681749e12a643b143216d393e74e015fc72f5cf9a1d23a5356a6ae1",
+      "execution_id": "381434367008d9157928b37ab57d6fecc4f4b7a65b4655a0bf7cb1c7d0c5f93f",
+      "parameters": 38405646376,
+      "unique_parameters": 38405646564,
+      "nodes": 48,
+      "regions": 24,
+      "physical_edges": 92,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 7296,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 26,
+      "span": 52,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0",
+        "npu:1"
+      ],
+      "node_owners": {
+        "npu:0": 24,
+        "npu:1": 24
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 85935187640,
+        "npu:1": 85936942120
+      },
+      "unknown_components": {
+        "npu:0": [],
+        "npu:1": []
+      },
+      "host_estimated_bytes": 766973827008,
+      "disk_estimated_bytes": 349567080224
+    },
+    {
+      "case": "npu-capacity-38406m-cards-3",
+      "matrix": "npu-capacity-sharded.json",
+      "status": "planned",
+      "question": "One same FC48/d7296 model beyond single-card memory:24 indivisible shared groups, not a parameter sweep.1/2 cards must fail live memory admission;3 cards have the same per-card bank as FC16/d7296. Only execute3 cards after the12.802B calibration establishes finite execution and exact resume. Preserve complete return, original loss and2-generation checkpoint budget;1800s, no retry or OOM search.",
+      "model_id": "7fced92d129e59e2eede3051a568f3a53baa23100ed1d78f083cfeddc790f541",
+      "workload_id": "4a20a64ccee0cf65730133cab8c9a3bca76c2ae4c75c7ee900699691e0a358e5",
+      "task_id": "4e8f44c11681749e12a643b143216d393e74e015fc72f5cf9a1d23a5356a6ae1",
+      "execution_id": "5c4769ada51e51eef44a27908cbf8df50d9871cf65218f15c2bcc03aec84dfd6",
+      "parameters": 38405646376,
+      "unique_parameters": 38405646564,
+      "nodes": 48,
+      "regions": 24,
+      "physical_edges": 92,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 7296,
+      "logical_batch": 1,
+      "positions": 2,
+      "stride": 26,
+      "span": 52,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2"
+      ],
+      "node_owners": {
+        "npu:0": 16,
+        "npu:1": 16,
+        "npu:2": 16
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 58564608680,
+        "npu:1": 58566363168,
+        "npu:2": 58566363160
+      },
+      "unknown_components": {
+        "npu:0": [],
+        "npu:1": [],
+        "npu:2": []
+      },
+      "host_estimated_bytes": 766973827008,
+      "disk_estimated_bytes": 349567080224
     },
     {
       "case": "npu-common-pytorch",
