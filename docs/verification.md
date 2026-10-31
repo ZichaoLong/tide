@@ -93,3 +93,19 @@ separately from earlier frozen CPU worktrees in STATUS.
 `tests/test_history_mapping.py`用独立构造的分叉/合并历史注入错误；
 `tests/test_retired_record_reader.py`核验显式外部归档和校验/覆盖拒绝。
 该门禁不认证数学/设备新功能。新CPU构建与安装消费者只记录实际定向范围。
+
+## 无用户systemd的目标容器
+
+仅在明确授权的无服务管理器容器使用 `scripts/container_job.py`。命令后代必须留在其进程组，
+不得自行daemonize；此机制不保证跨容器/宿主重启。启动器拒绝dirty源码和已有输出，
+独立session的监督进程将日志/状态持久化，超时或stop先TERM再KILL整个工作组，检查无存活成员后记终态。
+Linux zombie不是仍在运行的工作负载。监督进程丢失或PID身份不符时明确失败，不能从缺失推断通过。
+
+```sh
+python scripts/container_job.py start --cwd FROZEN_CHECKOUT --output-dir NEW_JOB --timeout 3600 -- COMMAND ARGUMENTS
+python scripts/container_job.py status --output-dir NEW_JOB
+python scripts/container_job.py stop --output-dir NEW_JOB
+```
+
+启动后断开SSH，再以新连接核对running记录及实际PID；停止探针再核对整个组为空。
+正式资格仍检查每个内部结果，外层exit0不扩大验收范围。本机长任务仍使用background.slice。
