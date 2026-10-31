@@ -91,6 +91,28 @@ def test_missing_supervisor_is_unconfirmed_not_passed(tmp_path):
         container_job.stop(out)
 
 
+@pytest.mark.parametrize("observed_ticks", [1234, 5678, None])
+def test_terminal_supervisor_still_observes_a_delayed_workload_exit(tmp_path, monkeypatch, observed_ticks):
+    from tidegraph.experiment.records import write_json
+    out = tmp_path/"terminal"
+    container_job.prepare(out, command=[sys.executable, "-V"], cwd=tmp_path, timeout=5)
+    record = read_json(out/"status.json")
+    record.update(state="failed", exit_code=124, supervisor_pid=40, supervisor_start_ticks=1000,
+                  workload_pid=41, workload_start_ticks=1234, remaining_live_pids=[41])
+    write_json(out/"status.json", record)
+    def process(pid):
+        return dict(state="D", start_ticks=observed_ticks) if pid == 41 and observed_ticks is not None else None
+    def children(pid):
+        assert pid == 41 and observed_ticks == 1234
+        return {42: dict(state="S", start_ticks=1240)}
+    monkeypatch.setattr(container_job, "process", process)
+    monkeypatch.setattr(container_job, "descendants", children)
+    status = jobs.status(out)
+    assert not status["observed_supervisor_alive"] and status["state"] == "failed"
+    assert status["observed_live_workload_pids"] == ([41, 42] if observed_ticks == 1234 else [])
+    assert read_json(out/"status.json") == record  # Historical cleanup failure is never rewritten.
+
+
 def test_matrix_logs_show_current_child_without_hiding_its_failure(tmp_path):
     from tidegraph.experiment.records import write_json
     out = tmp_path/"job"

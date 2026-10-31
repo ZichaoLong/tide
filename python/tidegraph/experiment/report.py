@@ -87,6 +87,8 @@ def summarize(record, path):
     qualified = qualified and not process_failed
     if process_failed:
         qualification = "process-failure"
+        if state in {"running", "starting", "not_started"}:
+            state = "failed"  # An interrupted snapshot is no longer live work.
     elif qualified:
         qualification = "strict-checks-passed"
     elif any(value in {"failed", "mismatch", "numerical-mismatch", "discrete-mismatch"} for value in states.values()):

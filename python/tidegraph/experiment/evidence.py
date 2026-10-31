@@ -4,7 +4,7 @@ from .records import fingerprint
 
 
 DETAIL_FIELDS = (
-    "schema", "state", "started", "finished", "start_window", "window", "phase",
+    "schema", "state", "execution_status", "started", "finished", "start_window", "window", "phase",
     "identity", "runtime", "effective", "validation", "checkpoint", "checkpoint_publication", "admission",
     "metrics", "warmup", "observation", "construction_seconds", "validation_seconds",
     "total_wall_seconds", "timing_summary", "load_average_after", "error",

@@ -161,3 +161,24 @@ def test_supervisor_never_promotes_checks_or_conflates_another_case(tmp_path):
     status.update(state="failed", exit_code=-11, metadata=dict(config_id="another-case"))
     (tmp_path/"status.json").write_text(json.dumps(status))
     assert "process_exit" not in summarize(result(), path)["details"]
+
+
+def test_timed_out_incomplete_execution_is_not_reported_as_still_running(tmp_path):
+    data = result()
+    data.update(state="running", execution_status="running", phase="checkpoint-save", metrics=[])
+    data["validation"] = dict(numeric="not_checked", discrete="not_checked", complete="not_checked")
+    data["checkpoint"] = dict(state="saved", next_window=1, exact_resume="not_checked")
+    (tmp_path/"run").mkdir()
+    path = tmp_path/"run/result.json"
+    path.write_text(json.dumps(data))
+    (tmp_path/"status.json").write_text(json.dumps(dict(schema="tide-durable-job-v1", state="failed",
+        exit_code=124, termination_reason="timeout", remaining_live_pids=[41],
+        metadata=dict(config_id=data["config_id"]))))
+    original = path.read_bytes()
+    row = load([path])[0]
+    assert row["execution_status"] == "failed" and row["qualification"] == "process-failure"
+    assert row["median_seconds"] is None and not row["throughput_qualified"]
+    assert row["exact_resume"] == "not_checked" and row["checkpoint"] == "saved"
+    assert row["details"]["execution_status"] == "running"
+    assert row["details"]["process_exit"]["remaining_live_pids"] == [41]
+    assert path.read_bytes() == original

@@ -230,6 +230,10 @@ tidegraph job resume jobs/example --checkpoint /path/to/complete/checkpoint --ou
 无 systemd 的目标容器用同一已安装 subreaper：有限超时、PID启动身份、所有后代追踪和 TERM/KILL 清理。
 SSH/提交进程退出不终止任务；这不是跨重启服务。`stop` 必须观察终态和无存活后代。
 监督器丢失时标为 unconfirmed，不能仅凭进程消失推断通过。
+终态监督记录也不保证内核已释放进程：不可中断I/O可能延迟响应停止信号。
+`job status`按PID及启动身份继续核对原workload；`remaining_live_pids`保留停止当时的事实。
+历史结果查询若发现未完成执行已被其自身监督器中止，执行列显示failed，原running快照保留在Details；
+已完成计算后才发生恢复崩溃的条目仍保留completed计算事实，并单列process-failure与未完成检查。
 任务目录保存只读 resolved.json、安装/构建身份、status.json、task.log、supervisor.log 和 run/结果。
 `job status`显示矩阵已完成项数、当前case及其构造/测量/保存/精确恢复/独立检查阶段；`job logs`读取当前case的原日志，结束后读最后一项。外层作业状态不覆盖这些独立验收结果。
 Python/Python-native入口的`phase=checkpoint-save`表示当前窗口计算及输出发布已完成、checkpoint仍在保存；

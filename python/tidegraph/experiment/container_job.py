@@ -164,11 +164,12 @@ def inspect(out):
     record["observed_supervisor_alive"] = bool(current and current["state"] not in {"Z", "X"}
         and current["start_ticks"] == record.get("supervisor_start_ticks"))
     record["observed_live_workload_pids"] = sorted(descendants(record["supervisor_pid"])) if record["observed_supervisor_alive"] else []
-    if not record["observed_supervisor_alive"] and record["state"] not in TERMINAL:
+    if not record["observed_supervisor_alive"]:
         child = process(record.get("workload_pid", -1))
         if child and child["state"] not in {"Z", "X"} and child["start_ticks"] == record.get("workload_start_ticks"):
             record["observed_live_workload_pids"] = [record["workload_pid"], *sorted(descendants(record["workload_pid"]))]
-        record["observation"] = "supervisor absent; descendant cleanup and completion unconfirmed"
+        if record["state"] not in TERMINAL or record["observed_live_workload_pids"]:
+            record["observation"] = "supervisor absent; descendant cleanup and completion unconfirmed"
     return record
 
 
