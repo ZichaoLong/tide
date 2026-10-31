@@ -347,3 +347,7 @@ GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按dev
 [bd2ff2e CUDA六项](evidence/core5-platform-multicard-20261031.md)保持共享参数同卡约束，1.014B/16节点在2/3/4卡的实测全程allocator峰值由约2.289GB/卡降至约1.207GB/卡；3卡是真实6+6+4节点。逐卡状态、消息、参数与计算统计验证放置，不以仅暴露设备证明模型分布。原FP32数值超差未解除；单次成本约0.417/0.417/0.370秒不等于可推广加速。
 
 同一小训练的ordinary/blocking/cpu_bridge均严格通过；CPU桥native物理传输字节由4176增为8352，端点同步24次，约0.583/0.593/0.669秒。普通复制无需当前机器不具备的直接P2P，但不能由此认证NCCL、capture、其他图的异步所有权或resident协议。参数组、临时空间、主存与持久checkpoint磁盘共同限制大容量，不直接相加空闲显存。
+
+[新CUDA resident布局证据](evidence/core5-platform-resident-20261031.md)说明默认B² journal/stage预算不是逻辑B128/B512硬件上限。固定FC4/P2按结构给queue=12B/stages32后实际完成，峰值约0.340/1.342GB，原数值超差保留。两项实际3阶段、物理行1536/6144对候选672/2688，56.25%缺席行；不能按该比例推断耗时收益。先补同材料eager，设备服务/Full工作区与总HBM继续分别验收。
+
+[1B/B128 GPU实际形状](evidence/core5-platform-scale-20261031.md)同时出现168时间行的FFN矩阵批、1344个单行描述/评分MM和864个2行私有BMM。Read/Full均12桶且无单行桶，当前不做统一padding重写；独立投影8MiB预算退回96行，继续保留原后备。显式CUDA同步占捕获跨度2.861%，不代表全部主机等待；nonzero/index/isfinite与拆装仍有成本，但单次profile不足以认定整图融合收益。

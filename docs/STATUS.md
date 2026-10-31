@@ -15,9 +15,9 @@
 
 | 位置/任务 | 固定输入、状态与资源 |
 | --- | --- |
-| CPU `gef-platform-cpu-scale-1b3e39f.service` | background.slice，固定1b3e39f，ATen4/interop1/worker1；7项各1800秒。前5个B1规模点已完成（数值探索）；B128独立检查中，随后B512。结果`artifacts/platform-matrix/cpu-scale-run-1b3e39f`；status/log在`artifacts/jobs/platform-cpu-scale-1b3e39f`。仍运行，未终态不计通过。 |
-| NPU `gef-platform-npu-scale-1b3e39f.service` | 有意等待CPU scale终态，随后合作队列1卡、物理候选4–11→逻辑npu:0、priority0。固定1b3e39f/7项各1800秒；外层36000秒含等待。结果`npu-scale-run-1b3e39f`、queue `npu-scale-queue-1b3e39f.json`；status/log在对应artifacts/jobs目录。 |
-| GPU下一组 `jobs/platform-cuda-resident-observe-bd2ff2e` | 准备启动：默认resident4项、有界resident2项、1B/B128独立profile1项。冻结bd2ff2e安装；配置来自已提交cb4af7f。每case有限超时，正式计时与profile分开进程。已于06:20Z提交并确认SSH返回后仍运行；无最终结果。 |
+| CPU `gef-platform-cpu-scale-1b3e39f.service` | 已于06:29:06Z终态passed、控制组空。七项执行/离散/精确恢复通过，原数值探索，已并入规模证据。固定1b3e39f，ATen4/interop1/worker1；7项各1800秒。结果`artifacts/platform-matrix/cpu-scale-run-1b3e39f`；status/log在`artifacts/jobs/platform-cpu-scale-1b3e39f`。已终态，数值超差不称严格通过。 |
+| NPU `gef-platform-npu-scale-1b3e39f.service` | CPU scale终态后于06:29:23Z已获物理11→npu:0，合作队列1卡、物理候选4–11→逻辑npu:0、priority0。固定1b3e39f/7项各1800秒；外层36000秒含等待。结果`npu-scale-run-1b3e39f`、queue `npu-scale-queue-1b3e39f.json`；status/log在对应artifacts/jobs目录。 |
+| GPU下一组 `jobs/platform-cuda-resident-observe-bd2ff2e` | 已终态failed/exit1，无后代：默认resident4项、有界resident2项、1B/B128独立profile1项。冻结bd2ff2e安装；配置来自已提交cb4af7f。每case有限超时，正式计时与profile分开进程。六项resident审阅另见[报告](evidence/core5-platform-resident-20261031.md)；profile已并入规模归档，明确未做独立验收、不作吞吐。 |
 
 ```sh
 systemctl --user show gef-platform-cpu-scale-1b3e39f.service gef-platform-npu-scale-1b3e39f.service -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
@@ -52,3 +52,5 @@ GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、
 新增六个同材料resident-match配置已开发核验：三平台d16 FC4、B128/B512/P2 eager对应有界resident原模型/输入/task；补齐此前d128不能直接比较的空缺。原174项身份逐项保持。正式运行尚未提交，不计通过。
 
 失败诊断实现开发30项通过（finite/engine/task-module）；只在已有非有限拒绝后遍历字段定位，正常判定/数值/阈值不变。正式资格待固定提交；新安装与活跃旧安装分离，旧失败不改写。
+
+固定31a3b32相关40项通过，wheel SHA674c4f3038ed916508c80a0ca57819253498492f80fd83dbecabcbf1159acdce，双机新私有安装install[-platform]-31a3b32不覆盖旧安装。GPU诊断作业`jobs/platform-cuda-finite-localization-31a3b32`准备在空闲设备启动：两小型finite策略训练回归、原1B双卡三窗失败材料原样复现定位，仍保留原bd2ff2e失败。每项原900/1800秒上限，非有限仍失败不恢复到通过。
