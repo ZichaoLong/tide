@@ -93,8 +93,8 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 36baeb7 CUDA返回6项和两卡full检查均通过、终态无后代。接着仅启动一次4.561B优化后成本观察：
 `jobs/platform-checkpoint-periodic-36baeb7`，固定私有安装`install-checkpoint-36baeb7`、
 配置`configs/checkpoint-cost/cuda-disk-periodic.json`，1200秒，warmup1+1窗、interval2最终保存、完整exact-next。
-须独立核对终态；基线两份checkpoint经fb9ff3c审阅后按dry run退役，小记录保留。
-该点完成审阅前不启动9.123B新容量点。
+08:28:55Z已终态exit0、无后代，完整恢复223.215秒/整流程324.107秒、RSS59.716GB；原数值未检查。
+基线两份checkpoint经fb9ff3c审阅后按dry run退役，小记录保留；本优化点审阅后退役其checkpoint，再启动9.123B单/双卡明确新持久化配置。
 
 本机36baeb7相关实际回归安排在既有tmpfs观察后：`gef-checkpoint-check-36baeb7.service`，
 新私有安装`install-checkpoint-36baeb7`，固定返回测试6项及小型单NPU `check --scope full`，
