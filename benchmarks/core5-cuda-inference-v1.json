@@ -224,6 +224,25 @@
       "question": "Conditional FP64 Python/Python-native eager point: 2.270B trainable, about 18.04GiB unique parameters plus inert buffers. Admit only after 1B peak calibration, complete host/checkpoint/return budgets and at least 4GiB device reserve. Current standalone transactional restore needs two device banks and is not admitted here. Otherwise retain not-run; do not search by OOM."
     },
     {
+      "id": "fc-safe-boundary-fp64-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 5888,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Explicit d5888 single-card near-boundary inference candidate after d4096 construction/window/restore calibration; separate identity from conditional d6144. Actual free GPU/host/disk admission remains required, retain 4GiB device reserve, never OOM search."
+    },
+    {
       "id": "hb-small-b8",
       "recipe": {
         "topology": "hb",

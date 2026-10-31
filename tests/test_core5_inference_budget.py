@@ -38,6 +38,7 @@ def test_fp64_cells_keep_client_and_model_identity_without_inventing_resident_su
 @pytest.mark.parametrize("name,execution,trainable,bank", [
     ("fc-1b-b1-kv", "native-cuda-fp64", 1010339302, 8620240912),
     ("fc-boundary-fp64-b1-kv", "native-cuda-fp64", 2270465510, 19372666896),
+    ("fc-safe-boundary-fp64-b1-kv", "native-cuda-fp64", 2085424614, 17793732624),
     ("fc-boundary-b1-kv", "native-cuda", 4033908198, 17210030088)])
 def test_static_parameter_banks_keep_frozen_scales_separate(name, execution, trainable, bank):
     budget = fc_inference_budget(case(catalog(), name, execution))
