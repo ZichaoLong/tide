@@ -229,3 +229,5 @@
 [大模型checkpoint磁盘/tmpfs成本](core5-checkpoint-cost-20261031.md)：dba2a5e固定67项CPU回归、CUDA小型full检查通过；4.561B两项完整恢复成本观察，独立数学未检查，不计吞吐资格。
 
 [NPU B512恢复诊断](core5-platform-resume-diagnostics-20261031.json)：固定旧包跨进程重放到旧raw边界即逐位不同；同进程新checkpoint raw精确、下一完整窗仍失败。采样布局相同，不归因磁盘，不新增性能或独立数值资格。
+
+八卡共享队列/配额适配固定d3de18f：17项CPU策略检查与真实八卡锁/映射探针通过，记录在[多卡检查](core5-platform-multicard-checks-20261031.json)；计算资格独立待终态，不能由队列探针推断。

@@ -1132,5 +1132,54 @@
       },
       "interpretation": "Once-only diagnostic; VJP completed, strict all-root parameter comparison failed. No default async fix or throughput qualification."
     }
+  },
+  "shared_queue_qualification": {
+    "source": "d3de18fb1ee5b849ed88d5de82be938972808833",
+    "scope": "site queue/quota adapter only; no new numerical backend qualification",
+    "fixed_cpu_tests": {
+      "passed": 17,
+      "command": "python -m pytest -q tests/test_shared_npu_policy.py tests/test_npu_followup_quota.py",
+      "log_sha256": "8bd5d922ccb5897c6f2def8cc4af1333ef4e9d545d278c2d3b2ed97cdec2a9df"
+    },
+    "queue_probe": {
+      "state": "passed",
+      "return_code": 0,
+      "physical_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "logical_ids": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "npu:4",
+        "npu:5",
+        "npu:6",
+        "npu:7"
+      ],
+      "all_eight_allocation_locks_held_during_child": true,
+      "no_torch_or_device_runtime_initialized": true,
+      "shared_card": {
+        "physical_id": 9,
+        "preexisting_process_identity_bound": true,
+        "max_hbm_mib": 8192,
+        "max_aicore_percent": 5,
+        "required_free_mib": 24576
+      },
+      "selection": "original priority0 FIFO, all-or-nothing advisory locks, two snapshots 3s apart",
+      "queue_sha256": "edcf71d317cdb9ea03ed9886efed3d7d2e598597db74fece6aeefe72ab2c2ff0",
+      "audit_sha256": "e3bbedf37402c8cc14d6f4c07e6ea82a379b355d3091d2c8d2f2d9bec2c7a8aa",
+      "helper_sha256": "38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76"
+    },
+    "requested_compute": "three finite cases in configs/capacity-training/npu-eight-followup.json; separately supervised, currently running, no acceptance inferred",
+    "persistent_quota": "observed312GiB of400GiB soft/800GiB hard; require below soft and150GiB hard headroom before new compute",
+    "scratch": "tmpfs; required48GiB free plus joint128GiB host allowance; public per-case admission remains mandatory"
   }
 }

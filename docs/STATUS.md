@@ -4,7 +4,7 @@
 本机优先计算与必要正确性/恢复，额外大文件成本实验已取消。
 不扩盘、不重启GPU、不重跑已审阅矩阵；tmpfs仅在联合主存准入后周转。活动输入和源码不编辑。
 授权分支`graph-execution-foundation`，本次重入59c36a2干净且已同步远端；实际HEAD以`git status --short --branch`为准。
-实现4485697及既有证据/交接均已普通推送；本次终态审阅和配额退役已提交8e180b0，待本阶段普通推送。
+实现4485697及既有证据/交接均已普通推送；本次终态审阅/配额退役8e180b0，站点适配/配置d3de18f；本次固定资格与活动交接单独提交后普通推送。
 数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。参考仓库只读。
 旧账户指南已不存在，按用户确认、项目site及`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`操作。
 
@@ -72,12 +72,19 @@ SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`。
 物理9有其他账户进程、HBM约5656MiB/65536、AICore0%。不停止或更改该任务。
 准备项目站点适配器：保留原队列priority/FIFO、两次采样及八锁整组获取，只对显式PID/启动身份、
 利用率和HBM预算许可共用；记录争用，不称独占性能。共享账户helper/全局配置保持只读。
-站点适配器、`scripts/run_npu_eight_followup.py`、三项配置及相关测试本阶段提交；尚未启动八卡作业。
+站点适配器、`scripts/run_npu_eight_followup.py`、三项配置及相关测试本阶段提交；固定实现/配置d3de18f，冻结副本`artifacts/platform-matrix/source-eight-followup`；固定CPU17项及真实八卡锁/映射探针通过。
+当前unit为`gef-npu-eight-d3de18f.service`，已于15:02Z启动，实际取得物理4–11，当前`npu-model-1b-cards-8`运行中；尚无终态计算结果。
 驱动将大checkpoint留tmpfs、小结果写持久盘，并在启动前要求低于软配额且距硬限150GiB余量。
 
 有限后继：原目录约1B八卡推理；FC16/d8八卡小训练；仅小训练严格通过才进入新loss1e-9约1B八卡训练。
 保留原三个八卡排队超时，不重跑原0.001已知非有限配方。额外12.8B八卡存储流程不作收尾门槛。
-先提交站点适配/配置，再对固定源码做队列与相关检查，串接持久任务，一次交接后无需在线等待。
+该组由一次background.slice服务串接，RuntimeMaxSec5400/排队600秒；停止任意一步须停止准确unit并核对全控制组。
+冻结launcher/config源d3de18f、实际安装包4485697、NPU库eca070f。临时大数据`/dev/shm/gef-npu-eight-d3de18f`；
+持久结果`artifacts/platform-matrix/npu-eight-d3de18f`、日志`artifacts/jobs/npu-eight-d3de18f/task.log`；
+队列、共享policy/audit和launch argv在`artifacts/platform-matrix/inputs-eight-d3de18f`。
+一次交接后无需在线等待；用户唤醒后先核对unit/progress及每个监督，不重新排同一任务。
+任务输出直接生成`results.json.gz`，每项小记录在持久结果目录；大checkpoint仅在tmpfs。
+如用户要求停止：`systemctl --user stop gef-npu-eight-d3de18f.service`，再核对ControlGroup/实际后代；不只改状态。
 
 审阅189目录：此前184个名称有结果，两个2B预选点被更贴近容量的实际点替代，三个8卡队列超时。
 后继须分别计数；替代不认证原case、诊断不计吞吐。六项经验与最终可查询选型表随八卡终态收尾。
@@ -86,7 +93,9 @@ GPU不再访问；T4真机待验。普通推送可用现有项目私有Git SSH�
 ```sh
 python scripts/status.py
 quota -vs
-systemctl --user show gef-npu-compute-followup-4485697.service gef-npu-resume-immediate-61571c4.service gef-closure-4485697.service -p Id -p ActiveState -p ExecMainStatus -p MainPID -p ControlGroup
+systemctl --user show gef-npu-eight-d3de18f.service -p Id -p ActiveState -p ExecMainStatus -p MainPID -p ControlGroup
+cat artifacts/platform-matrix/npu-eight-d3de18f/progress.json
+tail -30 artifacts/jobs/npu-eight-d3de18f/task.log
 ```
 
 本机aarch64、320 affinity CPU、约1.8TiB可用内存；16张64GiB级NPU，Python Torch/TorchNPU2.12/CANN9.1，独立SDK LibTorch2.10/CANN9.0另ABI。
