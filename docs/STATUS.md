@@ -14,7 +14,7 @@
 - [同模型多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B的2/3/4卡、NPU2/3卡推理执行/离散/恢复通过、数值探索；CUDA三通信小训练严格通过，NPUordinary/cpu_bridge严格通过，blocking恢复阶段SIGSEGV/-11、独立检查未执行。原小checkpoint保留。
 - [CUDA resident](evidence/core5-platform-resident-20261031.md)：默认B128/B512布局拒绝；结构界定queue=12B/stages32后实际完成、数值探索。d16同材料eager成本2.154/8.680秒对resident2.324/9.473秒，当前未见优势。NPU待当前链。
 - [训练容量](evidence/core5-platform-training-capacity-20261031.md)：CUDA1B单卡静态拒绝，双/四卡第三窗原平方loss非有限；31a3b32仅补拒绝后字段定位，小训练回归通过。NPU1/2卡原流程也第三窗非有限，待归档及条件定位，不改loss/input/初始化。
-- [CUDA4.561B容量](evidence/core5-platform-capacity-20261031.md)：单/双卡执行/离散/精确恢复通过、数值探索；单卡allocated20.058GB，双卡10.299GB/卡，中位0.675/0.755秒，恢复约315/321秒。三/四卡待当前任务。
+- [CUDA4.561B容量](evidence/core5-platform-capacity-20261031.md)：单/双卡执行/离散/精确恢复通过、数值探索；单卡allocated20.058GB，双卡10.299GB/卡，中位0.675/0.755秒，恢复约315/321秒。三卡也已入库：7.859/7.859/5.419GB、中位0.779秒、恢复316.800秒，数值探索；四卡待下一任务。
 - [人类流程](evidence/core5-human-workflow-20261031.md)：GPU安装/doctor/lock/consumer/推理训练/新进程恢复/stop/resume/报告完成；原base related独立根失败保留。1b46dc5报告10项及双机新安装、浏览器实际筛选通过。CPU/NPU完整演练待当前链。
 - b3dc53c报告补同config_id子监督状态关联；冻结12项通过，真实NPUblocking记录已显示process-failure、-11、exact-resume。原实验快照、已完成窗和未检查状态保留，未声称修复崩溃。
 
@@ -36,7 +36,7 @@ NPU合作队列priority0、候选物理4–11、等待600秒；当前7卡空闲�
 原1B八卡推理已等待607.440秒退出3，未执行。每case小型900秒、scale/capacity1800秒；外层上限包含依赖等待。
 七卡配置开发/冻结各10项通过，只是配置证据，未执行；新38.406B配置同样10项冻结检查通过。
 
-GPU：`jobs/platform-cuda-capacity4561m-c3-bd2ff2e`于07:14:08Z启动，当前执行完成、精确恢复检查中，不能称通过。
+GPU：`jobs/platform-cuda-capacity4561m-c3-bd2ff2e`于07:14:08Z启动，07:23:53Z终态exit0且无后代，执行/离散/精确恢复通过、数值探索。
 固定`inputs-ad93848-capacity/cuda-capacity-4561m-cards-3.json`及`install-platform-bd2ff2e`，1800秒、GPU0/1/2、ATen/interop/worker1。
 C1/C2已终态且无后代，证据528025c/94754ac审阅后退役各20.699GB checkpoint；凭据`checkpoint-retirement-capacity4561m-c{1,2}-*.json`，结果/config/log保留。
 C3启动前free43.951GB满足两代checkpoint42.482GB+1GiB；终态审阅/退役后再做同目录cards-4。
@@ -69,4 +69,4 @@ CUDA直接P2P与原生跨卡原子限制未解除；普通复制与多卡residen
 3. 完成三平台六项packing处置、统一查询矩阵/未测与拒绝、下游流程/T4待验说明；全部终态后更新唯一STATUS/ROADMAP并普通推送。
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料，审阅gzip直接查询，不依赖旧运行目录。
-当前未提交为本STATUS、证据索引校正及T4具体操作说明；其余实现/证据已固定。阶段完成后继续，不暂停。
+T4具体操作说明和六项新证据处置已提交；当前新增三卡证据。阶段完成后继续，不暂停。
