@@ -96,7 +96,7 @@ def validate_model(model):
     return inv
 
 
-def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None):
+def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None, input_pattern=None):
     """Bind input windows, never a reference trajectory, to a resolved model."""
     inv = validate_model(model)
     for value, name in ((samples, "samples"), (positions, "positions")):
@@ -106,14 +106,18 @@ def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None)
     default_stride = (max(g["ranks"])+2 if g["kind"] == "ranked-local" else
                       g["counts"].get("longest_body_delay", g["counts"].get("feedforward_delay"))+3)
     stride = default_stride if stride is None else integer(stride, "stride")
+    from .input_pattern import policy
+    input_policy = policy(input_pattern)
     plan = {k: deepcopy(model[k]) for k in ("graph", "memories", "regions", "classes",
                                            "source_binding", "source_hidden_width", "alpha_agg")}
     plan.update(schema="tide-weighted-workload-v2", upstream=UPSTREAM, model_id=model["model_id"],
                 width=plan["memories"][0]["width"], samples=samples, positions=positions, seed=seed,
                 stride=stride, span=positions*stride, recipe=deepcopy(recipe),
-                input_policy="unit-strength; shared tensor per sample/position; sin content; physical ports separate",
+                input_policy=input_policy,
                 head=dict(kind="none", trainable_parameters=0),
                 state_boundary="connected windows; detach at optimizer boundary")
+    if input_pattern is not None:
+        plan["input_pattern"] = input_pattern
     plan["inventory"] = dict(sha256=inv["sha256"], totals=inv["totals"], owners=len(inv["owners"]))
     plan["memory_floor"] = memory_floor(plan, inv)
     plan["sha256"] = fingerprint(plan)

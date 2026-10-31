@@ -27,10 +27,12 @@ def snapshot(value):
     return value
 
 
-def loss_from_outputs(result):
+def loss_from_outputs(result, *, allow_empty=False):
     values = [x.float() if x.dtype == torch.float16 else x for *_, x in result.outputs]
     terms = [(x[0]*x[1:]).square().sum()*.001 for x in values]
     if not terms:
+        if allow_empty:
+            return torch.zeros(())
         raise ValueError("benchmark workload produced no differentiable output")
     return torch.stack([t.to(terms[0].device) for t in terms]).sum()
 
@@ -70,7 +72,10 @@ class Eager:
                                   packing=getattr(args, "packing", "auto"))
         self.state = Continuation(binding.graph.identity, config.samples)
         self.half = next(binding.model.parameters()).dtype == torch.float16
-        if self.storage_reference:
+        if args.mode != "training":
+            # Inference has no optimizer, master bank or parameter-gradient scan.
+            self.optimizer = None
+        elif self.storage_reference:
             from weighted_storage_optimizer import StorageSGD
             self.optimizer = StorageSGD(p for p in binding.model.parameters() if p.requires_grad)
         elif self.half:
@@ -85,11 +90,12 @@ class Eager:
         with phase(self.args, "prepare"):
             xs = window(self.inputs, self.span, self.config.positions, index, None if self.node_owners else self.device)
         with torch.set_grad_enabled(self.args.mode == "training"):
-            self.optimizer.zero_grad(set_to_none=True)
+            if self.optimizer is not None:
+                self.optimizer.zero_grad(set_to_none=True)
             with phase(self.args, "forward"):
                 result = self.execute(self.state, xs, (index+1)*self.span, sealed_until=(index+1)*self.span)
             with phase(self.args, "loss"):
-                loss = loss_from_outputs(result)
+                loss = loss_from_outputs(result, allow_empty=self.args.mode == "inference")
             if self.args.mode == "training":
                 with phase(self.args, "backward_finite"):
                     self.optimizer.backward(loss) if self.half or self.storage_reference else loss.backward()
@@ -116,6 +122,8 @@ class Eager:
         return snapshot(dict(self.binding.model.named_parameters()))
 
     def training_state(self):
+        if self.optimizer is None:
+            return None
         return snapshot(dict(gradients={n: p.grad.float() if self.half and p.grad is not None else p.grad
                                          for n, p in self.binding.model.named_parameters()},
                              optimizer=self.optimizer.state_dict(), update_counts=self.update_counts))
@@ -126,8 +134,9 @@ class Eager:
         placement = ExecutionPlacement(preset=self.args.placement, scoring_dtype=scoring)
         result = dict(execution=self.args.placement, schedule=self.args.schedule, operator="aten",
                       effective_placement={k: str(v) for k, v in placement.resolve(self.device).items()},
-                      complete_cpu_records=True, precision=dtype, scoring_dtype=scoring, optimizer="sgd",
-                      master_dtype="float32" if self.half else dtype, loss_scale=1.,
+                      complete_cpu_records=True, precision=dtype, scoring_dtype=scoring,
+                      optimizer="sgd" if self.optimizer is not None else None,
+                      master_dtype=("float32" if self.half else dtype) if self.optimizer is not None else None, loss_scale=1.,
                       packing=getattr(self.args, "packing", "auto"), workers=getattr(self.args, "workers", 1),
                       gradient_boundary="detach per window")
         result.update(devices=[str(d) for d in self.devices],
@@ -138,7 +147,7 @@ class Eager:
         return result
 
     def close(self):
-        pass
+        self.execute = self.binding = self.inputs = self.state = self.optimizer = None
 
 
 class Resident:
@@ -158,7 +167,11 @@ class Resident:
         if len(self.devices) > 1:
             kwargs["node_devices"] = [str(self.devices[n.region % len(self.devices)]) for n in binding.graph.nodes]
         if checkpoint is not None:
-            kwargs["checkpoint"] = checkpoint
+            if self.training:
+                kwargs["checkpoint"] = checkpoint
+            else:
+                from tidegraph.checkpoint import load
+                kwargs["continuation"] = load(checkpoint, binding.graph, binding.model)
         elif self.training:
             from tidegraph.native_loader import load_native
             from tidegraph.native_model import encode_model
@@ -198,7 +211,7 @@ class Resident:
                     if not step.applied:
                         raise RuntimeError("resident optimizer refused: "+str(step.refusal_code))
             else:
-                actual = result; loss = loss_from_outputs(actual)
+                actual = result; loss = loss_from_outputs(actual, allow_empty=True)
             with phase(self.args, "detach_return_sync"):
                 actual = snapshot(actual)
                 value = float(loss.detach().cpu())
@@ -222,5 +235,6 @@ class Resident:
 
     def close(self):
         with torch.no_grad():
-            self.owner.close()
-            self.last_parameter_gradients = None
+            if self.owner is not None:
+                self.owner.close()
+            self.owner = self.inputs = self.sgd_layout = self.last_parameter_gradients = None

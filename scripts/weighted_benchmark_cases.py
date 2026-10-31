@@ -5,6 +5,7 @@ the same physical input records and parameters. Logical windows do not reset
 memory; training explicitly detaches only at the optimizer boundary.
 """
 from dataclasses import asdict, dataclass, replace
+from collections import Counter
 import hashlib
 import json
 import torch
@@ -67,11 +68,14 @@ def fixture(config):
 
 
 def window(inputs, span, positions, step, device):
+    # Positions are contiguous occurrence counters per physical sample/port;
+    # sparse global logical positions determine times, not these counters.
+    occurrences = Counter((x.batch, x.port) for x in inputs)
     copies = {}
     for x in inputs:
         if id(x.value) not in copies:
             copies[id(x.value)] = x.value.detach().to(x.value.device if device is None else device).clone().requires_grad_()
-    return [replace(x, time=x.time+step*span, position=x.position+step*positions,
+    return [replace(x, time=x.time+step*span, position=x.position+step*occurrences[x.batch, x.port],
                     value=copies[id(x.value)]) for x in inputs]
 
 

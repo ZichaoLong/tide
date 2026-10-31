@@ -42,6 +42,15 @@ topology、profile、实际family、client、device、placement、dtype、kind�
 
 模型身份不因设备或样本窗改变，工作负载身份会因输入改变；实际测量还须固定源码、材料与环境。
 身份是追溯键，**不是资格认证**。实现版本、构建、真机检查、数值失败与性能结果单独记录。
+输入默认保留原密集材料和hash。显式`window.input_pattern="staggered-v1"`（公共
+`workload/prepare`或`prepare_core5_study.py --input-pattern staggered-v1`）按样本提供
+`P-(sample%min(3,P))`个原始逻辑位置；多端口时省略满足
+`(sample+global_position+port)%4==0`的输入。未出现的物理输入保持缺席，不补数值零。
+时间仍为`rank+stride*global_position`，每样本/端口的occurrence单独连续编号，跨窗按
+该端口实际出现次数推进。内容随样本/原始位置改变，同一位置的真实广播共享张量；
+三客户端消费同一静态输入，无参考轨迹预跑。B/P仍是逻辑上界，memory_floor保持原B/P容量口径，
+仍只是所列存储分区的下界，不是完整运行峰值准入；
+实际消息、活动和缓存差异须用完整运行记录检查，不能由输入策略名推断。
 运行记录另存materialization ceiling、resident limits文件hash及native checkpoint文件预算；
 这些资源准入设置不改变模型身份。standalone的`--checkpoint-max-bytes`默认4GiB，
 较大训练记录可显式提高，详见[原生checkpoint](native-graph-checkpoint.md)；不是峰值内存承诺。
@@ -162,3 +171,5 @@ CPU默认六个有区别的dtype/schedule/packing/worker组合；显式NPU是八
 独立调度与磁盘新owner；不是全排列，也不解除原较大FP32边界。
 当前测试区分纯PyTorch/native，FC至少两层，FC mixed使用八层以实际包含rank4/8的GDN/SSD；
 FC/HB各有textbook KV与异构组合；[f456160固定资格](evidence/core5-coverage-correction-20261030.md)73项通过，包含26模型×2客户端的52项训练。仅认证该小型CPU FP64范围。
+
+[GPU规模推理目录](../benchmarks/core5-cuda-inference-v1.json)显式定义不齐输入、B1/8/32、FC约1B及有条件近界点，另含HB/LH和少量qry/循环代表。仅逐项选择；配置存在不授予资格，近界须依据实际资源再准入，结果从STATUS/证据索引进入。

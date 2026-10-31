@@ -82,8 +82,8 @@ class MeasurementSpec:
             raise ValueError("unknown mode or unsupported warmup policy")
         integer(self.steps, "steps", maximum=8)
         integer(self.timeout_seconds, "timeout seconds")
-        if type(self.checkpoint_check) is not bool or self.checkpoint_check and self.mode != "training":
-            raise ValueError("checkpoint check requires training")
+        if type(self.checkpoint_check) is not bool:
+            raise ValueError("checkpoint check must be bool")
         body = dict(schema="tide-weighted-measurement-v1", workload_id=workload_id,
                     execution_id=execution_id, **asdict(self))
         return dict(body, measurement_id=fingerprint(body))

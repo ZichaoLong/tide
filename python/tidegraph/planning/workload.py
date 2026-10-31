@@ -179,6 +179,10 @@ def validate_plan(plan):
     if hashlib.sha256(canonical(data)).hexdigest() != plan.get("sha256"):
         raise ValueError("weighted workload hash mismatch")
     v2 = plan["schema"] == "tide-weighted-workload-v2"
+    if "input_pattern" in plan:
+        from .input_pattern import policy
+        if not v2 or plan["input_pattern"] is None or plan["input_policy"] != policy(plan["input_pattern"]):
+            raise ValueError("input pattern policy mismatch")
     for key, limit in (("width", 1000000), ("samples", 2**63-1 if v2 else 512), ("positions", 2**63-1 if v2 else 128),
                        ("span", 2**63-1), ("stride", 2**63-1)):
         positive(key, plan[key], limit)

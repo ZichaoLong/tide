@@ -13,7 +13,7 @@ std::vector<Tensor> tensors(const Json&,at::ScalarType dtype=at::kFloat);
 std::vector<External> inputs(const Fixture&,Index step);
 Continuation detached(Continuation);
 Result detached(Result);
-Tensor loss(const Result&);
+Tensor loss(const Result&,bool allow_empty=false);
 Json work(const Result&);
 void write(const std::filesystem::path&,const Json&);
 Json allocation_failure(const tide::weighted::AllocationFailure&);
@@ -28,6 +28,7 @@ class Resident {
   virtual Step step(Index)=0;
   virtual std::map<std::string,Tensor> parameters()const=0;
   virtual TrainingState training_state()const=0;
+  virtual Continuation checkpoint()const=0;
   virtual void save(const std::filesystem::path&,int64_t max_file_bytes)const=0;
   virtual void restore(const std::filesystem::path&,int64_t max_file_bytes)=0;
   virtual void close()=0;

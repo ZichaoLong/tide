@@ -43,6 +43,18 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 CPU eager/native另导出实际最终参数梯度与SGD动量槽，保留None/连接零，分别对照。
 Python还比较完整optimizer state_dict；standalone的本入口只有固定SGD组，比较所有owner的动量槽。
 最后导出在计时之外；它认证最后窗口梯度/更新槽，不声称逐窗全部梯度都已保存。
+
+显式`--mode inference --checkpoint-check`对Python消费者，或standalone的
+`--mode inference --checkpoint-check true`，执行推理专用资格。推理关闭autograd，
+不构造optimizer或FP16 master bank；仍保留完整返回与输出数值投影，计时包含准备/传输、
+在线调度、packing、前向、完整CPU返回、detach及同步。训练/推理的资格不能互相替代。
+合法空输出推理窗口的输出投影为零；训练仍拒绝缺少可微输出的本benchmark材料。
+计时外使用既有公共checkpoint保存参数共享关系和完整continuation，逐值检查磁盘解码、
+新owner下一窗的完整记录及输出投影；旧设备owner先释放，再构造恢复owner。
+resident推理复用WeightedFlow/WeightedResident的continuation恢复及通用checkpoint，
+不引入训练会话或更换checkpoint协议。随后独立CPU调度仍核对warmup和全部测量窗口；
+精确续接通过不替代独立参考，完整返回通过也不自动证明磁盘续接。
+推理FP16 resident的独立参考继续采用FP16存储/FP32算术契约。
 当前resident入口解码实际参数梯度、连接标志、SGD槽和FP32 master，并逐项独立核对；
 Python及standalone均可显式检查磁盘解码后的新owner下一窗口。其完整训练门禁仍由
 [训练资格](resident-weighted-training.md)给出。旧报告同名optimizer标志

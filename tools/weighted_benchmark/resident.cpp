@@ -2,6 +2,7 @@
 #include "resident_checkpoint.h"
 #include "tide/resident_weighted_training.h"
 #include "tide/parameters.h"
+#include "tide/graph_checkpoint.h"
 #include "portable_torch/runtime.hpp"
 #include <torch/csrc/autograd/autograd.h>
 #include <set>
@@ -39,7 +40,7 @@ class Candidate final:public Resident {
       WeightedCotangents roots;roots.token=w.token;roots.fields["outputs"]={bar,f.present};r=training->result();
       auto gradients=training->backward({roots});last_gradient=gradients.parameters;if(!at::isfinite(gradients.parameters.values).all().item<bool>())throw std::runtime_error("nonfinite resident gradient");
       if(!training->step().applied)throw std::runtime_error("resident benchmark optimizer refused");
-    }else {r=inference->advance(xs,(index+1)*data.span);value=loss(r);}
+    }else {r=inference->advance(xs,(index+1)*data.span);value=loss(r,true);}
     auto actual=detached(r);const auto number=value.cpu().item<double>();portable_torch::synchronize(device);return {std::move(actual),number};
   }
   std::map<std::string,Tensor> parameters()const override{
@@ -67,13 +68,22 @@ class Candidate final:public Resident {
     return out;
   }
   void save(const std::filesystem::path& path,int64_t limit)const override{
-    at::NoGradGuard ng;if(!training)throw std::invalid_argument("benchmark checkpoint needs training");
-    save_resident(path,fixture(material,dtype),training->checkpoint(),limit);
+    at::NoGradGuard ng;
+    if(training)save_resident(path,fixture(material,dtype),training->checkpoint(),limit);
+    else GraphCheckpoint::save(path,data.graph,data.model,inference->checkpoint(),nullptr,limit);
   }
   void restore(const std::filesystem::path& path,int64_t limit)override{
-    at::NoGradGuard ng;if(!training)throw std::invalid_argument("benchmark checkpoint needs training");
-    training->close();training.reset();auto c=load_resident(path,data,limit);
-    training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,c,device,limits,node_owners);
+    at::NoGradGuard ng;
+    if(training){
+      training->close();training.reset();auto c=load_resident(path,data,limit);
+      training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,c,device,limits,node_owners);
+    }else{
+      inference->close();inference.reset();auto q=GraphCheckpoint::load(path,data.graph,data.model,nullptr,limit);
+      inference=std::make_unique<WeightedFlow>(data.graph,data.model,q,device,limits.forward,node_owners);
+    }
+  }
+  Continuation checkpoint()const override{
+    at::NoGradGuard ng;return training?training->checkpoint().continuation:inference->checkpoint();
   }
   void close()override{at::NoGradGuard ng;if(training)training->close();if(inference)inference->close();}
 };

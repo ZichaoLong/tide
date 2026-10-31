@@ -1,0 +1,401 @@
+{
+  "schema": "tide-core5-study-v1",
+  "window": {
+    "samples": 3,
+    "positions": 4,
+    "seed": 7,
+    "input_pattern": "staggered-v1"
+  },
+  "measurement": {
+    "mode": "inference",
+    "steps": 3,
+    "warmup": 1,
+    "checkpoint_check": true,
+    "timeout_seconds": 1200
+  },
+  "models": [
+    {
+      "id": "fc-small-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-small-b8",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-small-b32",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 32,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-matrix-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 256,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-matrix-b8",
+      "recipe": {
+        "topology": "fc",
+        "width": 256,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-matrix-b32",
+      "recipe": {
+        "topology": "fc",
+        "width": 256,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 32,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-64m-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 1024,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-1b-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 4096,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-boundary-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 8192,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Conditional capacity point: admit only after measured 1B memory, host/disk budget and at least 4GiB device headroom; otherwise retain explicit not-run decision."
+    },
+    {
+      "id": "hb-small-b8",
+      "recipe": {
+        "topology": "hb",
+        "width": 8,
+        "region_width": 4,
+        "depth": 1,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "lh-small-b8",
+      "recipe": {
+        "topology": "lh",
+        "width": 8,
+        "region_width": 4,
+        "depth": 1,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "hb-rich-b8",
+      "recipe": {
+        "topology": "hb",
+        "width": 8,
+        "region_width": 4,
+        "depth": 1,
+        "profile": "textbook",
+        "history": 4
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    },
+    {
+      "id": "fc-recurrent-b8",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "gated_delta",
+        "ssd"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
+    }
+  ],
+  "executions": {
+    "python-cpu": {
+      "client": "pytorch",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "python-cuda": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-cpu": {
+      "client": "python-native",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-cuda": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "cpp-cuda": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-resident": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "resident",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "cpp-resident": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "resident",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-mixed-a": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-a",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-mixed-b": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-b",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-streaming": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "streaming"
+    },
+    "python-streaming": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "scalar",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "streaming"
+    }
+  },
+  "policy": "Explicit selected cells only, not a Cartesian sweep. FP32 payload/scoring IEEE, complete returns and independent full records, disk new-owner exact continuation. Profile separate. Near-boundary conditional on measured admission; no OOM search. Current failures retained."
+}

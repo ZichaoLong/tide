@@ -32,7 +32,8 @@ def describe(plan):
         nodes=graph["nodes"], regions=graph["regions"], edges=len(graph["edges"]),
         ranks=sorted(set(graph["ranks"])), graph_counts=deepcopy(graph["counts"]),
         parameters=inventory["totals"], samples=plan["samples"], positions=plan["positions"],
-        stride=plan["stride"], seed=plan["seed"],
+        stride=plan["stride"], seed=plan["seed"], input_pattern=plan.get("input_pattern"),
+        input_policy=plan["input_policy"],
         families=dict(sorted(Counter(c.get("memory_family", "kv") for c in memories).items())),
         widths=sorted({c["width"] for c in memories}),
         heads=sorted({c["heads"] for c in memories}),
@@ -55,7 +56,7 @@ def from_reviewed_model(model):
     if recipe.get("scale"):
         request["target_parameters"] = recipe["scale"]["target_parameters"]
     plan, _ = prepare(request, samples=model["samples"], positions=model["positions"],
-                      seed=model.get("seed", 7))
+                      seed=model.get("seed", 7), input_pattern=model.get("input_pattern"))
     if plan["model_id"] != model["model_id"]:
         raise ValueError("reviewed model identity differs from current recipe; use its fixed source")
     facts = describe(plan)

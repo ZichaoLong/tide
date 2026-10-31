@@ -67,8 +67,8 @@ def main():
         args.resident_limit_values, limits_sha = load(args.resident_limits)
         if args.mode != "training" and set(args.resident_limit_values) & {"windows", "retained_bytes", "backward_bytes", "optimizer_bytes", "total_bytes"}:
             parser.error("training capacity override is inapplicable to inference")
-    if args.checkpoint_check and (args.mode != "training" or args.profile):
-        parser.error("checkpoint check requires training without profiling")
+    if args.checkpoint_check and args.profile:
+        parser.error("checkpoint check requires a measurement without profiling")
     if not 1 <= args.steps <= 8:
         parser.error("steps must be 1..8")
     if args.implementation != "python" and not args.native_library:
@@ -106,9 +106,11 @@ def main():
         started=now(), argv=sys.argv[1:], config=asdict(config),
         requested_device=args.device, requested_dtype=args.dtype, implementation=args.implementation,
         mode=args.mode, schedule=args.schedule, placement=args.placement,
+        autograd_enabled=args.mode == "training", optimizer_constructed=args.mode == "training",
         warmup_windows=1, measured_windows=1 if args.profile else args.steps,
         kind="profile" if args.profile else "benchmark", tracking="project JSON; execution-flows §1",
-        timing="complete CPU return; input prepare/upload, packing, schedule, forward/loss, backward, finite check, SGD, detach, sync",
+        timing="complete CPU return; input prepare/upload, packing, schedule, forward, output projection, detach, sync"+
+               ("; backward, finite check, SGD" if args.mode == "training" else ""),
         excluded="fixture/model/owner/optimizer construction, warmup, validation, final parameter/gradient/optimizer export, profiler parsing",
         load_average_before=list(os.getloadavg()), host_arch=platform.machine(),
         caveat="one process per configuration; evolving continuation; no statistical or universal speed claim",
@@ -144,7 +146,7 @@ def main():
         record["runtime"] = manifest(device, reason, dtype)
         record["precision"] = dict(effective_dtype=args.dtype, fixture_dtype="float32",
             input_policy="same seeded FP32 material; explicit conversion before both schedules",
-            scoring_dtype=args.scoring_dtype, master_dtype="float32" if args.dtype == "float16" else args.dtype,
+            scoring_dtype=args.scoring_dtype, master_dtype=("float32" if args.dtype == "float16" else args.dtype) if args.mode == "training" else None,
             loss_scale=1., atol=atol, rtol=rtol)
         memory = Memory(device, args.peer_devices)
         record["memory"] = memory.capture("runtime_ready", reset=True)
@@ -169,6 +171,9 @@ def main():
         start = time.perf_counter()
         cls = Resident if args.implementation == "resident" else Eager
         candidate = cls(binding, inputs, span, config, args, device)
+        # The runner owns the candidate material. Releasing these aliases lets
+        # serial disk/new-owner inference checks retire its complete device bank.
+        del binding, inputs
         synchronize(device); record["construction_seconds"] = time.perf_counter()-start
         memory.capture("construction", reset=True)
         record["effective"] = candidate.manifest()
@@ -220,7 +225,6 @@ def main():
             write_json(out/"result.json", record)
             record["exact_resume"] = check(candidate, create, config, args, device, out)
         candidate.close(); candidate = None
-        del binding, inputs
         # Only after the measurement: independent scalar CPU schedule and
         # full-record/optimizer check. It supplies no execution hints.
         expected_binding, expected_inputs, _ = create()

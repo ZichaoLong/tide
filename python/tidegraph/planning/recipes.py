@@ -127,7 +127,7 @@ def scaled_recipe(target, **options):
     return model, inv, scale
 
 
-def prepare(request, *, samples=1, positions=1, seed=7):
+def prepare(request, *, samples=1, positions=1, seed=7, input_pattern=None):
     """One JSON request produces a portable resolved workload and inventory."""
     request = deepcopy(request)
     target = request.pop("target_parameters", None)
@@ -140,5 +140,6 @@ def prepare(request, *, samples=1, positions=1, seed=7):
                 sparse_budget=dict(requested_fraction=1/request.get("sparse_denominator", 8),
                     effective_k=[c["k"] for c in model["regions"]],
                     note="k is sending strength; actual support and Full counts require execution"))
-    plan, inv = workload(model, samples=samples, positions=positions, seed=seed, recipe=spec)
+    plan, inv = workload(model, samples=samples, positions=positions, seed=seed, recipe=spec,
+                         input_pattern=input_pattern)
     return plan, inv

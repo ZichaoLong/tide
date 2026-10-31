@@ -77,13 +77,15 @@ def materialize(plan, *, max_bytes, dtype=None):
         groups.setdefault(id(x), set()).add(name)
     if {frozenset(g) for g in groups.values()} != {frozenset(o["aliases"]) for o in inv["owners"].values()}:
         raise ValueError("materialized parameter alias mismatch")
-    xs = []
-    for sample in range(plan["samples"]):
-        for position in range(plan["positions"]):
-            value = torch.cat((torch.ones(1), .2*torch.sin(torch.arange(plan["width"])*.19+.3*position+.1*sample)))
-            for port, v in enumerate(graph.inputs):
-                origin = g["ranks"][g["node_regions"][v]] if g["kind"] == "ranked-local" else 0
-                xs.append(External(sample, port, position, origin+plan["stride"]*position, value))
+    from .input_pattern import coordinates
+    xs, values = [], {}
+    for sample, position, port, occurrence in coordinates(plan):
+        key = sample, position
+        if key not in values:
+            values[key] = torch.cat((torch.ones(1), .2*torch.sin(torch.arange(plan["width"])*.19+.3*position+.1*sample)))
+        v = graph.inputs[port]
+        origin = g["ranks"][g["node_regions"][v]] if g["kind"] == "ranked-local" else 0
+        xs.append(External(sample, port, occurrence, origin+plan["stride"]*position, values[key]))
     from .precision import promote
     bound, xs = promote(bound, xs, dtype)
     return bound, xs, plan["span"]

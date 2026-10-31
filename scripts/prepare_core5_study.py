@@ -23,6 +23,7 @@ def main():
     p.add_argument("--samples", type=int, default=1)
     p.add_argument("--positions", type=int, default=1)
     p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--input-pattern", choices=("staggered-v1",), help="explicit static unequal sample/port activity")
     p.add_argument("--output-dir", type=Path, required=True)
     a = p.parse_args()
     if a.recipe:
@@ -35,7 +36,7 @@ def main():
             request["target_parameters"] = a.target_parameters
         else:
             request["width"] = 512 if a.width is None else a.width
-    plan, inv = prepare(request, samples=a.samples, positions=a.positions, seed=a.seed)
+    plan, inv = prepare(request, samples=a.samples, positions=a.positions, seed=a.seed, input_pattern=a.input_pattern)
     a.output_dir.mkdir(parents=True, exist_ok=False)
     write_json(a.output_dir/"workload.json", plan)
     write_json(a.output_dir/"inventory.json", inv)

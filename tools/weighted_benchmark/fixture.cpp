@@ -93,9 +93,11 @@ Fixture fixture(const Json& data,at::ScalarType dtype){
 }
 std::vector<External> inputs(const Fixture& f,Index step){
   std::vector<External> out;std::map<const void*,Tensor> copies;
+  std::map<std::pair<Index,Index>,Index> occurrences;
+  for(const auto& x:f.inputs)++occurrences[{x.batch,x.port}];
   for(auto x:f.inputs){const auto id=x.value.unsafeGetTensorImpl();
     if(!copies.count(id))copies[id]=x.value.detach().clone().set_requires_grad(true);
-    x.value=copies.at(id);x.time+=step*f.span;x.position+=step*f.positions;out.push_back(x);}
+    x.value=copies.at(id);x.time+=step*f.span;x.position+=step*occurrences.at({x.batch,x.port});out.push_back(x);}
   return out;
 }
 }

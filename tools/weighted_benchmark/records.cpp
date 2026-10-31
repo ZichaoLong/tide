@@ -18,10 +18,14 @@ Result detached(Result r){
     if(e.source_batch){auto b=std::make_shared<SourceBatch>(*e.source_batch);tensor(b->values);e.source_batch=std::move(b);}}
   return r;
 }
-Tensor loss(const Result& r){
+Tensor loss(const Result& r,bool allow_empty){
   std::vector<Tensor> parts;for(const auto& o:r.outputs){auto x=o.value.scalar_type()==at::kHalf?o.value.to(at::kFloat):o.value;
     parts.push_back((x[0]*x.slice(0,1)).square().sum()*.001);}
-  if(parts.empty())throw std::runtime_error("benchmark produced no outputs");return at::stack(parts).sum();
+  if(parts.empty()){
+    if(allow_empty)return at::zeros({});
+    throw std::runtime_error("benchmark produced no outputs");
+  }
+  return at::stack(parts).sum();
 }
 Json work(const Result& r){
   Index full=0;for(const auto& e:r.trace)full+=e.active;

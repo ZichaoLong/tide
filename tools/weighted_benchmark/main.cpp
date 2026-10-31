@@ -51,7 +51,6 @@ int main(int argc,char** argv){
     if(implementation=="resident"&&scoring!="float32")throw std::invalid_argument("resident scoring requires float32");
     if(scoring!="float32"&&scoring!="float64")throw std::invalid_argument("invalid scoring dtype");
     if(packing!="auto"&&packing!="packed"&&packing!="scalar")throw std::invalid_argument("invalid packing");
-    if(checkpoint&&mode!="training")throw std::invalid_argument("disk checkpoint check requires training");
     if(checkpoint_budget_requested&&!checkpoint)throw std::invalid_argument("checkpoint byte budget requires checkpoint check");
     if(implementation=="resident"&&(placement_name!="native"||packing=="scalar"||workers!=1))throw std::invalid_argument("resident does not accept eager placement/scalar/host workers");
     if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
@@ -81,7 +80,9 @@ int main(int argc,char** argv){
       {"scoring_dtype",scoring},{"intraop_threads",threads},{"interop_threads",interop},{"workers",workers},{"packing",packing},{"peer_devices",peer_specs},
       {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
       {"checkpoint_max_bytes",checkpoint_bytes},
-      {"timing","input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync"},
+      {"timing",mode=="training"?"input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync":
+        "input clone, schedule/packing, complete CPU return, output projection, detach, sync"},
+      {"autograd_enabled",mode=="training"},{"optimizer_constructed",mode=="training"},
       {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter/gradient/optimizer export"},
       {"phase","fixture-preparation"},{"metrics",Json::array()}};
     if(target.is_cuda())report["cuda_precision"]={{"matmul_allow_tf32",at::globalContext().allowTF32CuBLAS()},
@@ -150,8 +151,28 @@ int main(int argc,char** argv){
     const bool checked_training=training;
     const auto trained=training?(eager?eager->training_state():remote->training_state()):TrainingState{};
     if(checkpoint){
+      report["phase"]="exact-resume";report["window"]=steps+1;write(output/"result.json",report);
       const auto path=output/"resume.pt";Step a,b;TrainingState x,y;std::map<std::string,Tensor> px,py;
-      if(eager){
+      if(!training){
+        // The public inference checkpoint carries model aliases and every
+        // continuation field. Retire the first bank before the new device owner.
+        Continuation saved;
+        if(eager){
+          saved=eager->checkpoint();eager->save(path,checkpoint_bytes);a=eager->step(steps+1);eager.reset();
+          Eager restored(data,false,prefill,packing=="scalar",dtype,target,placement,workers,peers);
+          restored.restore(path,checkpoint_bytes);
+          tide_bench::compare(Result{saved},Result{restored.checkpoint()},true,dtype,{},0.,0.);
+          b=restored.step(steps+1);
+        }else{
+#ifdef TIDE_WEIGHTED_RESIDENT
+          saved=remote->checkpoint();remote->save(path,checkpoint_bytes);a=remote->step(steps+1);
+          remote->close();remote.reset();auto restored=resident(data,target,false,prefill,dtype,peers);
+          restored->restore(path,checkpoint_bytes);
+          tide_bench::compare(Result{saved},Result{restored->checkpoint()},true,dtype,{},0.,0.);
+          b=restored->step(steps+1);restored->close();
+#endif
+        }
+      }else if(eager){
         eager->save(path,checkpoint_bytes);Eager restored(data,training,prefill,packing=="scalar",dtype,target,placement,workers,peers);restored.restore(path,checkpoint_bytes);
         a=eager->step(steps+1);b=restored.step(steps+1);x=eager->training_state();y=restored.training_state();
         px=eager->parameters();py=restored.parameters();
@@ -169,7 +190,8 @@ int main(int argc,char** argv){
       compare_tensors(x.gradients,y.gradients,dtype,"restored gradient",true);
       compare_tensors(x.momentum,y.momentum,dtype,"restored momentum",true);
       compare_tensors(x.masters,y.masters,dtype,"restored master",true);
-      report["exact_resume"]={{"state","passed"},{"checkpoint","resume.pt"},{"next_window",steps+1},{"exact",true}};
+      report["exact_resume"]={{"state","passed"},{"checkpoint","resume.pt"},{"next_window",steps+1},{"exact",true},
+        {"scope",training?"complete next-window, parameters, gradients, SGD/master":"inference raw decode and complete next-window; serial new owner"}};
     }
     if(remote)remote->close();eager.reset();remote.reset();
     // A separate scalar schedule runs only after timing and never guides the candidate.

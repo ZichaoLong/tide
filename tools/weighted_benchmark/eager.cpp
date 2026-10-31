@@ -35,11 +35,11 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   options.full_autograd=options.aggregate_autograd=scalar?"replay":"batched";
   OptimizerGroup group;for(const auto& p:registry.owners())group.parameters.push_back(p.canonical);
   group.lr=.001;group.momentum=.3;group.weight_decay=.01;
-  optimizer=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group},OptimizerPrecision{dtype==at::kHalf&&!storage,1.});
-  if(storage)for(const auto& p:registry.owners())storage_masters[p.canonical]=p.value.detach().clone();
+  if(training)optimizer=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group},OptimizerPrecision{dtype==at::kHalf&&!storage,1.});
+  if(training&&storage)for(const auto& p:registry.owners())storage_masters[p.canonical]=p.value.detach().clone();
 }
 Step Eager::step(Index index){
-  at::AutoGradMode grad(training);optimizer->zero_grad();auto xs=inputs(data,index);
+  at::AutoGradMode grad(training);if(optimizer)optimizer->zero_grad();auto xs=inputs(data,index);
   std::map<std::pair<const void*,std::string>,Tensor> copies;
   for(auto& x:xs){const auto device=data.model.nodes[data.graph.inputs[x.port]].bias.device();
     const auto key=std::make_pair(x.value.unsafeGetTensorImpl(),device.str());
@@ -47,7 +47,7 @@ Step Eager::step(Index index){
     x.value=copies.at(key);}
   auto r=prefill?Greedy(data.graph,placed,options).run(state,xs,(index+1)*data.span,(index+1)*data.span)
                 :Streaming(data.graph,placed,options).run(state,xs,(index+1)*data.span,(index+1)*data.span);
-  auto value=loss(r);
+  auto value=loss(r,!training);
   if(training){optimizer->backward(value);bool connected=false;
     for(const auto& p:registry.owners())if(p.value.grad().defined()){
       connected=true;if(!at::isfinite(p.value.grad()).all().item<bool>())throw std::runtime_error("nonfinite benchmark gradient");}
@@ -65,7 +65,7 @@ std::map<std::string,Tensor> Eager::parameters()const{
   std::map<std::string,Tensor> out;for(const auto& p:registry.owners())out[p.canonical]=cpu(storage_reference?p.value.to(at::kHalf):p.value);return out;
 }
 TrainingState Eager::training_state()const{
-  TrainingState out;
+  TrainingState out;if(!training)return out;
   for(const auto& p:registry.owners()){
     const auto g=p.value.grad();out.gradients[p.canonical]=cpu(g.defined()&&g.scalar_type()==at::kHalf?g.to(at::kFloat):g);
     const auto found=optimizer->state().find(p.canonical);
@@ -75,6 +75,7 @@ TrainingState Eager::training_state()const{
   if(storage_reference)for(const auto& [name,x]:storage_masters)out.masters[name]=cpu(x);
   return out;
 }
+Continuation Eager::checkpoint()const{return detached(state);}
 void Eager::save(const std::filesystem::path& p,int64_t limit)const{GraphCheckpoint::save(p,data.graph,data.model,state,optimizer.get(),limit);}
 void Eager::restore(const std::filesystem::path& p,int64_t limit){state=GraphCheckpoint::load(p,data.graph,data.model,optimizer.get(),limit);}
 }
