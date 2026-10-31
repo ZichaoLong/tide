@@ -63,6 +63,8 @@ sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 
 
 `weighted/placement_tensors.mapper`与C++ `placement_tensors`按源设备、源dtype、
 目标dtype分组，按实际字节累计组成最多8MiB的扁平buffer，再按真实shape/offset解码。
+组内保持字段首次出现顺序；TensorImpl地址仅识别别名，不能决定packing/VJP边顺序。
+新owner的分配地址不能改变这一顺序；同栈精确续接仍须用完整图/梯度/optimizer逐项验证。
 不要求各字段同形；超过预算的单个字段仍是不可拆分的单次copy。int64元数据独立分组，
 空字段也扣最小元素预算。原参数别名只复制一次，每个不同字段保留独立None/零根与版本检查；
 反向只打包实际给定的cotangent。`test_weighted_placement`覆盖异形、标量、空/noncontiguous、

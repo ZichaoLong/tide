@@ -50,8 +50,15 @@ Tensor placement_copy(const Tensor& value,at::Device device,at::ScalarType dtype
 }
 void placement_tensors(const std::vector<Tensor*>& handles,at::Device device,at::ScalarType dtype){
   std::map<const void*,Tensor> unique,mapped;std::map<std::string,std::vector<const void*>> groups;
-  for(auto t:handles)if(t->defined())unique.emplace(t->unsafeGetTensorImpl(),*t);
-  for(const auto& [id,t]:unique){
+  // Allocation addresses identify aliases; they must not choose copy/VJP edge
+  // order. Restored owners have new addresses but the same ordered fields.
+  std::vector<const void*> order;
+  for(auto t:handles)if(t->defined()){
+    const auto id=t->unsafeGetTensorImpl();
+    if(unique.emplace(id,*t).second)order.push_back(id);
+  }
+  for(const auto id:order){
+    const auto& t=unique.at(id);
     auto target=t.is_floating_point()?dtype:t.scalar_type();
     if(t.device()==device&&t.scalar_type()==target){mapped.emplace(id,t);continue;}
     std::ostringstream key;key<<t.device()<<'/'<<int(t.scalar_type())<<'/'<<int(target);groups[key.str()].push_back(id);

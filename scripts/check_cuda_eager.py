@@ -21,6 +21,7 @@ from source_identity import source_state, digest
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
+    parser.add_argument("--peer-devices", nargs="+", help="distinct logical CUDA owners, first equal to --device; ordinary copies")
     parser.add_argument("--clients", nargs="+", choices=("pytorch", "python-native", "libtorch"), required=True)
     parser.add_argument("--core-build", type=Path)
     parser.add_argument("--placements", nargs="+", choices=("mixed-a", "mixed-b", "mixed-c"), default=["mixed-c"])
@@ -43,6 +44,12 @@ def main():
     device, reason = resolve_device(args.device)
     if device.type != "cuda":
         parser.error("CUDA device required")
+    peers = [resolve_device(d)[0] for d in args.peer_devices or []]
+    if peers and (len(peers) < 2 or len(set(peers)) != len(peers) or peers[0] != device
+                  or any(d.type != "cuda" for d in peers)):
+        parser.error("distinct CUDA owners required, first equal to --device")
+    if peers and "libtorch" in args.clients and len(peers) != 2:
+        parser.error("standalone checker declares exactly two peer owners")
     policy = ieee_policy(device)
     names = args.case or [c.name for c in CASES]
     if set(names) - {c.name for c in CASES}:
@@ -63,8 +70,6 @@ def main():
         for name, expected in core_record["binary_sha256"].items():
             if digest(args.core_build / name) != expected:
                 parser.error("core binary differs: " + name)
-        if args.packing != "packed" and "libtorch" in args.clients:
-            parser.error("standalone training checker declares packed execution")
     probe = torch.arange(4, device=device, dtype=torch.float32, requires_grad=True)
     probe.square().sum().backward()
     torch.testing.assert_close(probe.grad.cpu(), torch.arange(4) * 2, check_dtype=False, atol=0, rtol=0)
@@ -75,7 +80,8 @@ def main():
     report = dict(schema="tide-core5-cuda-eager-v1", state="running", source=source, dirty=dirty,
                   runtime=manifest(device, reason, getattr(torch, args.dtype)), cuda_precision=policy,
                   core_build=core_record, cases=[], argv=sys.argv[1:],
-                  scope="selected single-device core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+                  scope="selected core-5 eager cases; independent CPU schedules; no resident, P2P or performance claim",
+                  peer_devices=list(map(str, peers)), communication="ordinary copy; underlying transport not inferred",
                   threads=dict(intraop=1, interop=1, workers=1), packing=args.packing,
                   standalone_tf32_override=env["NVIDIA_TF32_OVERRIDE"])
     write_json(out / "result.json", report)
@@ -87,8 +93,10 @@ def main():
                 if client == "libtorch":
                     command = [str(args.core_build / "tidegraph-weighted-training-check"),
                         "--device", str(device), "--dtype", args.dtype, "--optimizer", args.optimizer,
-                        "--placement", placement, "--scoring-dtype", "float32", "--case", case,
+                        "--placement", placement, "--scoring-dtype", "float32", "--case", case, "--packing", args.packing,
                         "--output-dir", str(dest)]
+                    if peers:
+                        command += ["--peer-device", str(peers[1])]
                 else:
                     command = [sys.executable, str(root / "scripts/check_weighted_device.py"),
                         "--device", str(device), "--dtype", args.dtype, "--optimizer", args.optimizer,
@@ -97,6 +105,8 @@ def main():
                         "--workers", "1", "--packing", args.packing, "--output-dir", str(dest)]
                     if client == "python-native":
                         command += ["--native-library", str(args.core_build)]
+                    if peers:
+                        command += ["--peer-devices", *map(str, peers)]
                 row = dict(client=client, case=case, placement=placement, state="running",
                            command=command, timeout_seconds=180)
                 report["cases"].append(row)

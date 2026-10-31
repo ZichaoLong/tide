@@ -15,35 +15,42 @@
 - GPU是主线，先单卡FP32完整训练/推理/恢复，三客户端分别验；CPU仅小型公式与相关回归。
   resident/FP16/可用多卡及有限性能随后；不提高原容差，不把复制成功称直接P2P。
 
-## 当前作业与下一步
+## 当前状态与下一步
 
-目标根 `/root/autodl-tmp/gef-cuda3090`；私有 `venv` 使用原Torch2.12.1+cu130，另装pytest8.4.2/Ninja1.13.0。
-固定源码 `sources/c962961` 的CUDA core `builds/c962961-core`：209目标/56线程/sm86通过。
-小型CPU公式92、检查器CPU9通过；目标容器/架构14通过。断连/stop探针已确认无残留进程；无systemd，使用subreaper启动器。
-数学快照本次接续再次校验通过。无本机长作业。
+目标根 `/root/autodl-tmp/gef-cuda3090`；私有 `venv` 使用原Torch2.12.1+cu130，pytest8.4.2/Ninja1.13.0。
+CUDA13 API修复 `1fe1e37`、peer/IEEE记录 `31d0afd`、独立失败继续门禁 `c368b45` 均已提交推送。
+固定c962961 core构建209目标通过；1fe1e37 resident standalone630/Python255目标通过，56线程/sm86。
 
-- `jobs/eager-pytorch-fp32` 已passed，`runs/c962961-pytorch-fp32` 全19例mixed-c通过。
-- `jobs/eager-native-cpp-fp32` failed：native19/19、standalone23/24；仅fc/ssd原严格tensor比较失败。原日志保留，定位为第3步更新后regions.0.head.bias，CPU .11622299999/GPU .11622648686，差3.4869e-6超原容差；相同输入CPU FP32/FP64开发通过。待进一步隔离packing/控制位置。
-- `jobs/resident-build-7fd0576` failed：86-real被既有整数架构守卫拒绝，未编译。
-- `jobs/resident-build86-7fd0576` failed：CUDA13的cudaGraphAddNode增加edge-data参数。旧两次失败均保留。工作树已作版本兼容修复，零依赖WHILE/SWITCH图语义不变；目标dev两源文件定向编译及8项架构检查通过。
-- `jobs/eager-mixed-ab-fp32` passed：固定c962961、三客户端KV mixed-a/b全部6例通过。
-- 已提交 `jobs/eager-fp16`：固定c962961、物理卡2、三客户端完整mixed-c、7200秒；保持AdamW/原容差/输入，失败逐配置记录。
+已终态：
+- FP32：PyTorch19/19、Python native19/19；standalone23/24。KV mixed-a/b三客户端6/6。
+- standalone fc/ssd FP32在第3步AdamW后regions.0.head.bias失败，差3.4869e-6超原容差；第3步梯度CPU -1.47309e-7/GPU -1.57744e-7。GPU scalar仍失败，CPU FP32/FP64通过；mixed-a另见恢复后gradient单ulp不等。无容差/输入变化。
+- FP16：PyTorch19/19、native19/19、standalone22/24；feedback/affine、feedback/ssd严格tensor失败待字段诊断。
+- `jobs/peer-31d0afd` 72单元通过；12方向P2P/原子均不支持、enable217。AccumulateGrad流警告保留。
+- `jobs/multicard-31d0afd` failed：传输根测试、standalone generic36案例/72更新/144连接窗口通过；五记忆+异构PyTorch6/6、native5/6；显式Python CPU桥delta-pdg完整通过。native gated-hb在同栈第四步梯度3/4坐标逐值不等，最大4.44e-16。不称直接P2P/NCCL/resident资格。
+- 最初两次resident构建86-real配置/CUDA13 API失败及`resident-single-1fe1e37` control末尾workspace断言失败均保留。
 
-CUDA13兼容提交 `1fe1e37` 已推送；`jobs/resident-build-1fe1e37` 正在冻结源码构建（56线程/86，standalone39组件和weighted Python适配，3600秒）。
-下一步：核对构建终态，
-再独立执行单卡门禁及时间线。原三卡/P2P完整门禁保持。C++ fc/ssd失败单独定位，不阻塞其他通过域。
-peer/精度记录已提交 `31d0afd`；开发12单元通过，AccumulateGrad流警告保留。`jobs/peer-31d0afd` 全四卡72单元已passed；12方向P2P/原子均不支持/enable217，警告保留。
-`jobs/resident-single-1fe1e37` failed于control末尾的CANN专用workspace>0断言；此前8轮int64/分支/容量/续接数值均完成。CUDA纯控制核实际无BLAS scratch，开发修订改核验完整操作数/元数据retained ownership及释放，保留CANN原断言。
-准备 `jobs/multicard-31d0afd`：物理0/1、传输根/standalone generic36例，然后五记忆+异构的Python/native完整普通复制和delta-pdg显式CPU桥，7200秒。
-正式资格之后另提交审阅证据。CPU/NPU旧严格失败保持ROADMAP停止条件。
+当前 `jobs/resident-inventory-c368b45` running，物理3、10800秒，复用源码hash匹配1fe1e37库，
+`runs/c368b45-resident-inventory` 会保留全部组件及公共文件的独立失败；完整门禁不允许跳过。
+目前control workspace和recurrent FP32 one-byte预算测试失败。开发已修复：CUDA纯控制用实际retained operands/metadata核验，
+CANN原workspace断言保留；组件预算改为扣除既有CUDA error flag后的增量，原one-byte不足拒绝保持。
+修订control8轮、recurrent FP32/FP16各24配置目标开发通过；待固定提交重建/资格。
 
-所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，不会覆盖旧运行。
-活动源码只读；`dev` 为dirty开发，不能作为正式来源。未提交内容：standalone训练失败字段/数值诊断、peer探针及本交接。
+工作树另有native稳定传输顺序修复：TensorImpl只识别别名，packing依字段首次出现顺序，避免新owner地址决定VJP边顺序。
+反例在旧实现失败，修复后C++ CPU FP32/FP64和相关placement 110项通过；原双卡gated-hb精确恢复仍以相同3坐标/4.44e-16失败，不能称已修复该边界。稳定字段次序修复单独交付；停止重复相同恢复候选。
+新增standalone独立根、scalar/peer资格及原参数梯度诊断已定向CPU FP64、双卡CUDA KV通过。
+standalone benchmark发现干净检出缺失已退役LH vendor JSON目录；改为显式外部nlohmann头依赖和完整hash，私有环境补3.11.2及importlib_resources7.1.0，不恢复旧目录；C++ IEEE政策显式记录。
+
+下一步：提交已定向验证的稳定顺序/资格/资源检查/外部头依赖修复；冻结新commit，重建core→resident→standalone benchmark（56线程）。
+再对固定提交运行相关单/双卡严格恢复、单卡resident及timeline；无关已通过范围不重复全矩阵。
+全部正确性/重型构建终态后再开始有界profile与小中规模FC/HB/LH对照，失败案例不报告合格吞吐。
+审阅证据单独提交；旧CPU/NPU严格失败不自动解除。未提交文件见git status，均属于上述修复与入口。
+
+所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，从未覆盖旧运行。
+活动源码只读；`dev` 为dirty开发，不能作为正式来源。无本机长作业。
 
 ```sh
 git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
-# 本机任务私有SSH包装（认证只在内存；不修改全局配置）
-artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/c962961/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/eager-native-cpp-fp32'
+artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/c368b45/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/resident-inventory-c368b45'
 ```
