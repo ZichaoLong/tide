@@ -132,8 +132,9 @@ class Eager:
                         self.update_counts[name] += 1
                 self.optimizer.step()
                 finite_tensors(list(self.parameter_owner.parameters()))
+            finite_tensors(self.task.state_dict())
             if self.module_manifest is not None:
-                finite_tensors((self.task.module.state_dict(), self.task.state_dict(),
+                finite_tensors((self.task.module.state_dict(),
                                 None if self.optimizer is None else self.optimizer.state_dict()))
         self.verify_task(check_code=False)
         self.state = result.continuation.detach()

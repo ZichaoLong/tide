@@ -94,6 +94,7 @@ class Resident:
                         loss = None
             if loss is not None:
                 finite_tensors(loss)
+            finite_tensors(self.task.state_dict())
             value = None if loss is None else float(loss.detach().cpu())
             for device in self.devices:
                 synchronize(device)

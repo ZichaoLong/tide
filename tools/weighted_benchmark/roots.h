@@ -1,5 +1,6 @@
 #pragma once
 #include "cli.h"
+#include "tide/placement.h"
 #include "../../cpp/bench/comparison.h"
 namespace weighted_benchmark {
 void validate_root_budget(const Json&);

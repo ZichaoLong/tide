@@ -18,6 +18,8 @@
 按实际节点所有者可微复制。训练在该窗 loss、VJP、有限梯度检查与一次统一 optimizer 后 detach。
 固定默认平方输出诊断 loss、SGD 与 FP16 master 策略不变；新任务配方拥有新的 task 身份。
 推理不创建 optimizer 或扫描参数梯度。
+每窗也检查任务自身的张量状态是否有限，不要求任务带有 `task.module`；
+`validation=none` 和按需返回都不能绕过该运行检查。
 
 CPU 线程区分 ATen/BLAS intraop、interop 与调度 workers。
 CUDA 运行显式关闭 TF32；NPU 显式关闭矩阵/卷积 HF32，并记录生效值。

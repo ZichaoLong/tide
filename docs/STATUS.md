@@ -14,7 +14,7 @@
 先提交本阶段实现，再从该不可变提交分别构建本机CPU/Python-owned NPU/SDK NPU与目标CUDA；完成构建后进行已安装入口演练、有限矩阵及六项热点对照，证据单独提交。
 
 本机项目私有环境已补齐nlohmann_json3.11.2；公共栈未修改。本次预算核对修正：checkpoint新旧两代同时占盘；CPU多窗比较记录以host_results计费，设备当前完整记录以live_results计费，实际峰值仍须校准。
-正式矩阵尚未启动；待提交后启动的构建driver为 `artifacts/platform-matrix/build-local.sh` 和 `build-cuda.sh`，只包装仓库公开构建命令。
+实现已固定 `de999c2fb344fcc40d3c4f39311cadd37d730bca`。正式矩阵尚未启动；构建driver为 `artifacts/platform-matrix/build-local.sh` 和 `build-cuda.sh`，只包装仓库公开构建命令。
 
 ## 可复用结果与未解除范围
 
@@ -25,7 +25,11 @@
 
 ## 环境、源码和活动作业
 
-没有新活动 GPU/NPU/构建作业。远端 35 条旧作业均终态且 remaining_live_pids 为空；本机旧 NPU 作业均终态。
+当前构建：本机首个 `gef-platform-build-local-de999c2` 在CMake配置前因私有Ninja未加入PATH而失败，exit1，ControlGroup为空；已保留原日志。仅修私有启动器PATH，使用新输出/服务 `gef-platform-build-local-de999c2-r1`，源码不变。目标CUDA构建用 `/root/autodl-tmp/gef-cuda3090/jobs/platform-build-de999c2`，新只读源码 `sources/platform-de999c2`。远端仍在编译不能称通过。本机r1已在standalone编译终态失败：`run_check.cpp`的Owner歧义和`roots.h`缺失ExecutionPlacement声明。保留日志且ControlGroup为空。当前修复这两处及无module任务非有限状态检查；21项CPU定向测试通过。
+
+本机日志 `artifacts/jobs/platform-build-local-de999c2-r1/task.log`，状态同目录status.json；输出 `artifacts/platform-matrix/builds-de999c2-r1`。查看/停止：`systemctl --user status/stop gef-platform-build-local-de999c2-r1`。远端查看/停止：私有SSH入口调用固定检出的 `scripts/container_job.py status/stop --output-dir /root/autodl-tmp/gef-cuda3090/jobs/platform-build-de999c2`。
+
+远端 35 条旧作业均终态且 remaining_live_pids 为空；本机旧 NPU 作业均终态。
 本轮只读审计：`artifacts/platform-matrix/{local-audit,remote-audit}.json`。
 
 - 本机 aarch64，affinity 320 CPU，可用主存约 1.8 TiB、磁盘约 2.55 TB；NPU 4–11 审计时无进程，0–3/12–15 被其他项目占用，不停止或占用它们。每次运行仍须队列重新准入。
@@ -45,5 +49,5 @@ python scripts/check_upstream.py
 python -S scripts/index_core5_study.py docs/evidence/core5-cuda-inference-20261031.json --view models --format tsv
 ```
 
-下一步：提交当前实现，创建只读固定检出，启动两机构建；构建终态后安装wheel并用tidegraph公开入口验收。独立构建身份和作业路径将写回本页。
+下一步：提交编译/任务状态检查修复，创建新固定检出并构建CPU消费者；远端de999c2原作业继续，不编辑其源码。NPU技能所需账户指南 `/home/zlong/ASCEND_CODING_AGENT_GUIDE.md` 缺失，已询问迁移路径；新NPU作业暂未启动，CPU/GPU继续。构建终态后安装wheel并用tidegraph公开入口逐组验收。
 STATUS 是唯一当前交接，ROADMAP 是唯一待办；完整终态、命令、构建身份与新证据在后续提交补齐，不能将本页实施说明当作通过。

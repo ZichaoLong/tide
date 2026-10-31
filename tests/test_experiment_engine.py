@@ -107,3 +107,30 @@ def test_host_snapshots_and_atomic_checkpoint_generations_are_budgeted():
     assert r["resources"]["live_results"] == 1
     assert r["resources"]["host_results"] == 6
     assert r["capacity_budget"]["disk"]["checkpoint_generations"] == 2
+
+
+def test_unchecked_run_rejects_nonfinite_task_state_without_module(tmp_path, monkeypatch):
+    from tidegraph.experiment.tasks import WeightedOutputTask
+    from tidegraph.comparison import NonFiniteMismatch
+    monkeypatch.setattr(WeightedOutputTask, "state_dict", lambda self: {"progress": torch.tensor(float("nan"))})
+    c = config(return_mode="metrics")
+    c["measurement"].update(validation="none", checkpoint_check=False)
+    with pytest.raises(NonFiniteMismatch):
+        run(c, tmp_path/"nonfinite-task")
+    record = json.loads((tmp_path/"nonfinite-task"/"result.json").read_text())
+    assert record["execution_status"] == "failed"
+    assert record["checkpoint"]["state"] == "not_checked"
+
+
+def test_resident_task_state_is_checked_even_without_returned_tensors():
+    from types import SimpleNamespace
+    from tidegraph.experiment.resident import Resident
+    from tidegraph.comparison import NonFiniteMismatch
+    owner = Resident.__new__(Resident)
+    owner.spec = {"return_mode": "metrics"}
+    owner.training, owner.inputs, owner.span, owner.devices = False, [], 1, ()
+    owner.task = SimpleNamespace(inputs=lambda *a, **kw: [],
+        state_dict=lambda: {"progress": torch.tensor(float("inf"))})
+    owner.owner = SimpleNamespace(advance=lambda *a, **kw: {"stats": {}})
+    with pytest.raises(NonFiniteMismatch):
+        owner.step(0)

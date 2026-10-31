@@ -13,7 +13,7 @@ Request parse(std::vector<std::string> arguments) {
   arguments.insert(arguments.begin(),"weighted-benchmark");std::vector<char*> argv;
   for(auto& value:arguments)argv.push_back(value.data());return parse_request(argv.size(),argv.data());
 }
-class Owner : public Resident {
+class CheckpointOwner : public Resident {
  public:
   Index value=30;
   Step step(Index)override{throw std::logic_error("not a scheduler test");}
@@ -41,7 +41,7 @@ int main() {
     rejects([&]{auto a=base;a.insert(a.end(),{"--loss-scale","nan"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--node-devices","cuda:0,"});parse(a);});
     if(!std::filesystem::create_directory(root))throw std::runtime_error("test directory already exists");
-    Owner owner;const Json identity={{"fixture_sha256","one"},{"span",10},{"mode","training"}};
+    CheckpointOwner owner;const Json identity={{"fixture_sha256","one"},{"span",10},{"mode","training"}};
     save_run_checkpoint(root/"checkpoint",owner,identity,3,1000);owner.value=0;
     require(restore_run_checkpoint(root/"checkpoint",owner,identity,1000)==3&&owner.value==30,"external resume cut/index mismatch");
     rejects([&]{auto other=identity;other["fixture_sha256"]="two";checkpoint_manifest(root/"checkpoint",other);});
