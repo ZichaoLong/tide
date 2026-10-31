@@ -1,6 +1,6 @@
 # 人类安装消费者、生命周期与离线报告（2026-10-31）
 
-本报告当前含gpu3090完整人类流程；本机CPU/NPU完整流程仍在依赖链后等待，不能由CUDA流程推断通过。
+本报告含gpu3090和本机CPU/NPU各自完成的公开人类流程；每个独立检查与停止状态分别记录。
 公共运行器固定de93246，独立安装的`tidegraph_consumer_core5`示例拥有任务head/loss和数据进度。
 报告界面单独固定1b46dc5；它只生成/筛选旧结果，不重跑或重新认证数学与设备。
 数学固定0770593838a37c790a568226930567ed60f99b83；基础公共core/resident来源de999c2、standalone来源eca070f，各自实际hash保留于归档。
@@ -40,6 +40,32 @@ b3dc53c另补异常退出显示：固定源码12项检查通过，新私有wheel
 同config_id子监督记录才可关联，正常严格失败不改类；此次新安装只验证报告，不重跑原GPU/CPU/NPU数学任务。
 来源、wheel/安装锁、JUnit及HTML hash补在同一[报告资格JSON](core5-human-report-20261031.json)。
 
+## 本机CPU/NPU完整实操
+
+同一de93246私有安装及已安装消费者包；CPU/原生库来源de999c2，NPU/core/resident来源eca070f。
+CPU使用aarch64 Torch2.12；NPU使用TorchNPU2.12/CANN9.1，合作队列物理11→逻辑npu:0。
+各平台26个公开命令完成，doctor operator、安装锁create/verify、消费者公式、三配置/预算、
+任务related检查、训练/推理first、新进程resumed、持久日志/停止/恢复、CSV/HTML/archive均有实际记录。
+
+| 验收边界 | CPU | NPU |
+| --- | --- | --- |
+| base related推理及精确恢复 | 通过 | 通过 |
+| base related独立根 | 通过列出的八组根 | 严格失败：input.0.1.0.1的1/9坐标，最大2.86102e-6，原atol1e-6/rtol1e-5 |
+| 下游task related | 九组根（含任务loss）、两步训练、optimizer及恢复通过 | 同范围通过 |
+| 任务训练first / 新进程resumed | 完整独立记录/梯度/optimizer/精确下一窗均通过 | 同范围通过 |
+| 任务推理first / 新进程resumed | 完整独立记录与精确下一窗均通过 | 同范围通过 |
+| 停止 / 恢复 | cancelled/143，随后新job exit0 | cancelled/143，随后新job exit0 |
+
+停止前均已有完整checkpoint指针，停止后持久supervisor的remaining_live_pids为空；四个systemd unit的控制组也分别核对为空。
+CPU停止/恢复终态07:32:42Z/07:32:51Z，NPU为07:34:50Z/07:35:12Z。
+该生命周期演示采用metrics返回与validation=none，保留未检查，不把恢复到终态称严格数值资格；
+独立推理/训练的完整返回验收来自上表另外的first/resumed流程。不同返回范围不计算加速比。
+`job-after-stop`两次exit1如实表达cancelled；NPU base严格失败exit1保留，没有被walkthrough completed覆盖。
+
+同名lifecycle gzip补local_platforms，保存26命令/退出码/日志hash、安装锁hash、原base错误、task根列表、
+停止/恢复原状态和独立systemd观察。可查询结果新增CPU12/NPU11条（含嵌套检查/取消快照），连同GPU11条共34条，
+这些不是34项独立性能测量。下游小任务通过不解除基座原独立根失败，也不认证真实应用数据或大规模任务效果。
+
 ## 从干净安装操作
 
 完整安装、site、依赖锁、配置与任务扩展见[人类手册](../human-workflow.md)和[消费者说明](../../examples/consumer_core5/configured/README.md)。下游拥有数据/head/loss/配方；按[协作契约](../downstream-contract.md)固定依赖、基座检查、小型接入、配置运行、提交需求、接收交付、下游复验后显式升级。
@@ -58,3 +84,5 @@ tidegraph results docs/evidence/core5-human-workflow-20261031.json.gz --format h
 ```
 
 CPU/NPU替换显式device及site，不能继承CUDA资格。7×T4模板仍待真机：分别探测driver/runtime/Toolkit/Torch/LibTorch/sm75、算子/精度和互联，不复用sm86产物；当前CC>=8.0 resident协议不满足T4，需要另行设计才能改变。
+
+查询归档SHA256：`9cfc672424f23008d3efea05858c8f739a34901a1013f03be555451b41e419ae`；生命周期归档SHA256：`bbbab6ef0dc4192c9355fc483ce9cdb0676bfce378b6017f49cb3356c7c0235c`。

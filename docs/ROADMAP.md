@@ -45,11 +45,11 @@
 
 ## 当前授权待办
 
-- 完成已安装公共CLI配置/预算、独立检查、运行/恢复、持久状态/日志/停止及CSV/HTML比较，并在本机和gpu3090从干净安装演练。
+- 公共CLI与CPU/NPU/GPU人类流程已分别[实际演练](evidence/core5-human-workflow-20261031.md)；原NPU/GPU基座独立根失败保留。等待既有任务终态后汇总最终矩阵，不能将下游任务通过作为基座失败修复。
 - [有限选点](platform-matrix.md)189项已固定；三平台小中覆盖、B1/8/32/128/512及A/B/C已实际完成。CPU七项规模已入库；继续NPU约1B规模与训练容量；GPU三拓扑约1B、大batch已入库，原数值探索与严格失败分列。
-- 确定性共享约束放置和逐卡预算已实现；[GPU2/3/4卡实际推理及三通信小训练](evidence/core5-platform-multicard-20261031.md)已审阅。继续NPU2/3/8卡、两平台训练容量及校准近界，独立根/恢复分验。
-- 据三平台及多卡profile逐项重审六类packing问题；每个热点少量方案，保留无收益和有依据的停止条件。
-- 更新下游固定依赖、公共任务扩展、请求/交付/复验/升级流程；提供7×T4站点与sm75实际迁移待验清单。
+- 确定性共享约束放置和逐卡预算已实现；[GPU2/3/4卡实际推理及三通信小训练](evidence/core5-platform-multicard-20261031.md)已审阅。NPU2/3卡已有推理和小训练，八卡等待超时未执行；继续已提交的七卡与校准近界任务，独立根/恢复分验。
+- 六类packing已按三平台profile重审并补NPU B512服务任务容量边界；待后继诊断结果后完成最终选型汇总，保留有依据的停止条件。
+- 下游人类流程、模板和7×T4站点/迁移步骤已交付；T4实际构建、算子/精度、通信及训练/恢复资格等待真机，不由模板认证。
 
 ## 逐项推进与停止条件
 
@@ -72,6 +72,7 @@
 | 较大NPU训练/跨卡 | 已测停止。D64匹配9076975参数，native单/双NPU显式blocking自身磁盘恢复精确，独立CPU均在node89 keys严格失败；[有限证据](evidence/core5-boundary-performance-20261029.md)保留15.685/16.840s失败成本 | 原eager数值失败按首行重启条件处理；不重跑同候选。resident的新布局与新资源边界分列，不以参数量匹配或自身恢复替代独立正确性 |
 | resident局部纤维填充 | 已交付并[资格通过](evidence/core5-compact-fibers-20261029.md)：b7e0a29按物理入边/端口缩小槽；CPU两环境各10、公共NPU56、SDK7组件/dtype通过。medium完整窗2.794→2.470s，peak allocated514.8→376.4MB，完整核对/恢复通过 | 本候选实施、相关资格及一次对照闭环；单次观察不宣称普遍加速。跨节点数值批和减少物理缺席行仍需新的具体实现及独立根证据 |
 | NPU resident流资源 | 已定位并停止。相同D64/capacity的b7e0a29构造报207005；CANN日志明确Too many streams/EE1023，实际SQ/CQ=1984。未进入warmup，尚无完整训练、恢复或吞吐结果 | 重启须有界服务分派/复用或节点合批；先验证嵌套通知、在线顺序、共享workspace、独立VJP根、peer和恢复。该观测不是通用流上限；不靠加HBM预算或主机预选序列绕过 |
+| 本轮NPU resident B512构造 | [新增证据](evidence/core5-platform-resident-20261031.md)：有界布局已通过HBM准入，aclnnInplaceCopy/361001，厂商日志EE1019/507002 stream task buffer full；未进入warmup。B128完成/恢复通过、数值探索 | 相同配置停止；先定位静态bool搬运调用者/段数，再独立验有界整型暂存还原或设备服务拆分。须保持其他字段、int64、重复owner、独立根、窗口/恢复和暂存预算；不靠主机逐事件flush或增加HBM预算 |
 | NPU resident在途任务资源 | [自然HB medium](evidence/core5-natural-study-20261029.md)：Python/SDK均在warmup反向服务提交报507002；短日志已复制并固定hash，明确stream task buffer full/EE1019。不同于流数量207005，也无HBM耗尽证据 | 相同原配置停止；下一候选为有界提交/服务复用，先验证通知的嵌套与所有权、窗口顺序、独立根及恢复。不缩减原输入或改成主机逐事件推进冒充修复 |
 | FC1B resident局部预算 | tensor12GiB、total48GiB时构造触发KV Full guard；B1/d1024/cache32前置估算需要当前剩余约3.499GB，失败节点剩余额度未导出。不是总内存OOM结论 | 本轮容量调查终态；需局部预算/实际保留量诊断、workspace生命周期或有界节点批方案后重启，不盲目提高所有分区。8B/16B无实测吞吐 |
 | native大文件checkpoint | 9bfabbb默认4GiB及显式正int64预算、原字节、拒绝原子性与实际>4GiB保存/加载已验证；CPU32+6消费者/SDK8消费者通过 | 文件硬上限已解除；整体CPU codec副本、每张量2^28元素与集合上限仍明确存在。分片/流式codec需新方案；不能将文件预算当峰值内存保证 |

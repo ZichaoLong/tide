@@ -2,13 +2,13 @@
 
 [CPU/NPU约1B大batch算子观察](core5-platform-profile-20261031.md)：固定bd2ff2e两项独立profile；168行大MM、864次两行私有BMM与288次共享base GEMV并存。c59688c修正CANN matmul漏计，13项固定解析检查通过；保留原trace hash，不重跑或新增数学资格。
 
-[CUDA4.561B单/双卡安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。双卡逐卡峰值10.299GB、精确恢复通过且数值探索；更多卡结果待实际。
+[CUDA4.561B单至四卡安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。双/三/四卡逐卡最大峰值10.299/7.859/5.419GB，完整离散和精确恢复通过、数值探索；同模型放置不等于多卡容量上限。
 
-[人类安装消费者、停止/恢复与离线报告](core5-human-workflow-20261031.md)：GPU公开流程实际演练；原base独立根严格失败与下游任务通过分列。1b46dc5固定10项与双机新安装报告生成、浏览器筛选通过；CPU/NPU完整人类流程待实际结果。
+[人类安装消费者、停止/恢复与离线报告](core5-human-workflow-20261031.md)：CPU/NPU/GPU各自公开流程实际演练；原NPU/GPU base独立根严格失败与下游任务通过分列。1b46dc5固定10项与双机新安装报告生成、浏览器筛选通过；CPU/NPU各26命令终态，停止及恢复控制组分别为空，完整独立数值验收与生命周期未检查分列。
 
 [CUDA/NPU约1B训练容量与非有限字段](core5-platform-training-capacity-20261031.md)：单卡静态拒绝、双/四卡第三窗loss非有限；原配方不变，检查/恢复未完成。31a3b32两小训练严格回归通过，失败成本与资格分列；NPU单/双卡原第三窗非有限，独立参考与恢复未执行。
 
-[CUDA单卡resident大batch与布局](core5-platform-resident-20261031.md)：默认B128/B512静态拒绝保留；结构界定queue/stages后两项实际完成、离散/恢复通过、数值探索，实际行/填充/资源分列；B1及小型训练严格通过。
+[CUDA/NPU单卡resident大batch与布局](core5-platform-resident-20261031.md)：默认B128/B512静态拒绝保留；结构界定queue/stages后两项实际完成、离散/恢复通过、数值探索，实际行/填充/资源分列；两平台B1及小型训练严格通过；NPU有界B128完成、数值探索，B512构造EE1019流任务容量失败。
 
 [CUDA/NPU同模型多卡与三通信训练](core5-platform-multicard-20261031.md)：CUDA bd2ff2e固定6项，1.014B推理执行/离散/恢复通过、数值探索；小型双卡三通信严格训练通过。逐卡参数/状态/消息与计算统计、共享组、物理传输及恢复峰值单列，不认证P2P或多卡resident。NPU2/3卡推理探索、ordinary/cpu_bridge小训练严格通过，blocking恢复SIGSEGV；8卡资源等待超时未执行。
 

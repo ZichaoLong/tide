@@ -1,6 +1,6 @@
 # 同模型安全容量代表点（2026-10-31）
 
-本报告目前包括CUDA4.561B单/双/三卡实际点；同模型四卡与NPU校准点待各自实际结果，不由已测点推断。
+本报告包括CUDA4.561B同模型单/双/三/四卡实际点；NPU校准点待各自实际结果，不由已测点推断。
 固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
 RTX3090/sm86、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭，native mixed-c、ordinary复制、packed/scalar完整返回；ATen/interop/worker1。
 FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个不可拆共享组；B1/P2/span20，staggered-v1，warmup1+连续2窗+精确恢复窗，1800秒上限。
@@ -70,4 +70,16 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 
 多卡同一模型继续保持共享组同卡、全区域函数与实际位置；普通复制不认证直接P2P/原子或resident协议。下一尺度仍需逐卡、主存、两代checkpoint共同准入，不把空闲GPU显存直接相加。
 
-归档SHA256：`27f0f79b7958e940e82ba3cff4d5e6f09121a5ecfb6a0df82068c8d9c8da3ffe`。
+## 同模型四卡实际点
+
+同一4.561B模型/任务/输入与完整返回，四卡各4节点，实际参数/私有state/消息目标/pending与放置映射核对相符。
+两测量窗0.721320/0.847173秒，中位0.784246秒；每窗31 candidate，Full18/16、消息32/28。
+执行、完整离散检查和精确下一窗恢复通过；1517数值差异、0离散差异，首差仍为原keys，保持FP32探索。
+四卡allocated峰值5.419491/5.419492/5.419492/5.419491GB，reserved各5.540676GB，RSS74.944528GB。
+构造39.900秒、独立参考42.857秒、精确恢复281.042秒；复制每窗7组、557184/487536 bytes，ordinary生效。
+同模型1→4卡降低逐卡存储，本次成本0.675→0.784秒，没有速度优势；不是四卡总容量极限。
+任务07:34:04Z终态exit0，独立SSH检查无supervisor/workload/remaining后代。
+结果原字节SHA256 `1794416ad9ce21ed4b60a8a22fe4bd90f1b88da6509684ad8ca5dcbfc2093ba3`。
+本次提交后按用户要求暂停新增工作，四卡checkpoint仍保留；9.123B现场准入尚未执行，不由静态预算写成现场拒绝。
+
+归档SHA256：`6a0d1271e0ba66b44ed4648442f5da61e7675b3aaac8ac3b1c1d2112127e7e1c`。
