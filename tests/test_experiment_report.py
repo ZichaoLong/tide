@@ -115,3 +115,49 @@ def test_compressed_archive_remains_queryable_and_html_folds_large_diagnostics(t
     assert load([path]) == json.loads(json.dumps(rows))
     report = render(load([path]), format="html")
     assert '<details><summary>Details</summary>' in report
+
+
+def test_abrupt_exit_keeps_completed_windows_but_never_infers_remaining_checks(tmp_path):
+    data = result()
+    data.update(state="running", phase="exact-resume")
+    data["validation"] = dict(numeric="not_checked", discrete="not_checked", complete="not_checked")
+    data["checkpoint"] = dict(state="saved", exact_resume="not_checked")
+    directory = tmp_path/"case"
+    (directory/"run").mkdir(parents=True)
+    path = directory/"run/result.json"
+    path.write_text(json.dumps(data))
+    status = dict(schema="tide-durable-job-v1", state="failed", exit_code=-11, workload_exit_code=-11,
+                  termination_reason="exit", remaining_live_pids=[], metadata=dict(config_id=data["config_id"]))
+    (directory/"status.json").write_text(json.dumps(status))
+    original = path.read_bytes()
+    row = load([path])[0]
+    assert row["execution_status"] == "completed" and row["median_seconds"] == pytest.approx(.3)
+    assert row["qualification"] == "process-failure" and row["throughput_qualified"] is False
+    assert row["numerical"] == "not_checked" and row["exact_resume"] == "not_checked"
+    assert row["error"]["exit_code"] == -11 and row["error"]["last_recorded_phase"] == "exact-resume"
+    assert row["details"]["state"] == "running" and row["details"]["process_exit"]["state"] == "failed"
+    assert path.read_bytes() == original
+    archive = tmp_path/"reviewed.json.gz"
+    save(archive, render([row], format="archive"))
+    path.unlink()
+    (directory/"status.json").unlink()
+    assert load([archive]) == [row]
+
+
+def test_supervisor_never_promotes_checks_or_conflates_another_case(tmp_path):
+    data = result()
+    data.update(state="failed", error=dict(type="NumericMismatch"))
+    data["validation"].update(numeric="failed", strict_passed=False)
+    (tmp_path/"run").mkdir()
+    path = tmp_path/"run/result.json"
+    status = dict(schema="tide-durable-job-v1", state="failed", exit_code=1,
+                  metadata=dict(config_id=data["config_id"]))
+    (tmp_path/"status.json").write_text(json.dumps(status))
+    row = summarize(data, path)
+    assert row["qualification"] == "strict-failure" and row["error"] == data["error"]
+    status.update(state="passed", exit_code=0)
+    (tmp_path/"status.json").write_text(json.dumps(status))
+    assert summarize(data, path)["qualification"] == "strict-failure"
+    status.update(state="failed", exit_code=-11, metadata=dict(config_id="another-case"))
+    (tmp_path/"status.json").write_text(json.dumps(status))
+    assert "process_exit" not in summarize(result(), path)["details"]

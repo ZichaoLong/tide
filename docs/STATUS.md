@@ -59,3 +59,7 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 新静态补充固定`3e4f6b2`，10项冻结配置检查通过：`capacity-sharded`固定NPU38.406B的1/2/3卡及CUDA9.123B双卡，区别分散单卡可容纳模型和真正多卡容量。NPU三卡依赖12.802B实际校准；CUDA两代checkpoint83.896GB超过整个50GiB盘，预期准入拒绝。当前NPU8卡队列因物理9存在其他任务而等待（实际可空闲7卡）；不停止或改写活动任务，按原600秒等待上限处理。
 
 后继准备：`gef-platform-sharded-3e4f6b2.service`将等待final终态，再运行冻结`inputs-3e4f6b2-sharded`，安装仍bd2ff2e；1/2卡仅预期准入拒绝，3卡须原12.802B单卡完成有限推理及精确恢复才运行。各case1800秒、队列600秒，外层86400秒含等待；日志/状态在`artifacts/jobs/platform-sharded-3e4f6b2`，逐项记录在`artifacts/platform-matrix/sharded-capacity-3e4f6b2`。未提交仅本STATUS接续更新。
+
+七卡配置固定`2562263`，开发和冻结配置检查各10项通过；`gef-platform-seven-2562263.service`等待sharded终态，使用冻结`inputs-2562263-seven`及原bd2ff2e安装，仅一个1B推理配置、900秒、队列600秒、外层86400秒含等待。状态/log在`artifacts/jobs/platform-seven-2562263`，结果`artifacts/platform-matrix/npu-model-1b-cards-7-bd2ff2e`；此项不是八卡失败重命名，尚无结果。
+
+新发现：NPU小训练ordinary/cpu_bridge严格通过；blocking计算完成后在exact-resume阶段SIGSEGV/-11，剩余检查未执行、无后代，checkpoint与日志保留。公共结果报告补同config_id的supervisor状态关联，显示process-failure而保留原快照和已完成窗口成本；开发12项通过，尚待冻结验证。

@@ -1,6 +1,7 @@
 """Dependency-free query, CSV and self-contained HTML for experiment records."""
 import csv
 import gzip
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -41,6 +42,22 @@ def _time_rows(metrics):
     return result
 
 
+def _process_exit(record, path):
+    """Correlate only this run's durable supervisor, never a whole matrix status."""
+    status_path = path.parent.parent/"status.json"
+    if path.parent.name != "run" or not status_path.is_file():
+        return None
+    data = status_path.read_bytes()
+    status = json.loads(data)
+    config_id = record.get("config_id", record.get("resolved_config", {}).get("config_id"))
+    if (status.get("schema") != "tide-durable-job-v1" or not config_id
+            or status.get("metadata", {}).get("config_id") != config_id):
+        return None
+    return dict(path=str(status_path), sha256=hashlib.sha256(data).hexdigest(),
+                **{key: status.get(key) for key in ("state", "exit_code", "workload_exit_code",
+                    "termination_reason", "finished", "remaining_live_pids")})
+
+
 def summarize(record, path):
     """Execution, independent correctness and resume stay separate columns."""
     path = Path(path)
@@ -64,7 +81,13 @@ def summarize(record, path):
                  and states["discrete"] == "passed" and states["complete"] in {"passed", "checked"})
     if measurement.get("checkpoint_check", False):
         qualified = qualified and _state(checkpoint.get("state")) == "passed" and checkpoint.get("exact_resume") is True
-    if qualified:
+    process_exit = _process_exit(record, path)
+    process_failed = (process_exit is not None and process_exit["state"] in {"failed", "cancelled"}
+                      and record.get("state") not in {"failed", "cancelled"})
+    qualified = qualified and not process_failed
+    if process_failed:
+        qualification = "process-failure"
+    elif qualified:
         qualification = "strict-checks-passed"
     elif any(value in {"failed", "mismatch", "numerical-mismatch", "discrete-mismatch"} for value in states.values()):
         qualification = "strict-failure"
@@ -76,6 +99,14 @@ def summarize(record, path):
     effective = record.get("work", {})
     sample_count = effective.get("samples", plan.get("samples"))
     recipe = (plan.get("recipe") or {}).get("requested", {})
+    detail = details(record, resolved)
+    error = record.get("error")
+    if process_exit is not None:
+        detail["process_exit"] = process_exit
+    if process_failed and error is None:
+        error = dict(type="ProcessExit", message="durable supervisor observed abnormal termination",
+                     exit_code=process_exit["exit_code"], last_recorded_phase=record.get("phase"),
+                     scope="last experiment snapshot is preserved; missing checks are not inferred")
     row = dict(run=str(path.parent), config_id=record.get("config_id", resolved.get("config_id")),
         **{key: record.get(key, resolved.get(key)) for key in ("model_id", "workload_id", "task_id", "execution_id")},
         result_sha256=digest(path) if path.is_file() else None,
@@ -94,14 +125,14 @@ def summarize(record, path):
         exact_resume=checkpoint.get("exact_resume", "unchecked"), exploratory=explored,
         qualification=qualification, kind=record.get("kind", "benchmark"),
         throughput_sample=record.get("throughput_sample", observed == "none"),
-        throughput_qualified=record.get("throughput_qualified", qualified and observed == "none"), median_seconds=seconds,
+        throughput_qualified=not process_failed and record.get("throughput_qualified", qualified and observed == "none"), median_seconds=seconds,
         samples_per_second=sample_count/seconds if seconds and sample_count else None,
         timing_contract=record.get("timing_contract", "unrecorded"),
         work=record.get("work", [{k: v for k, v in row.items() if k not in {
             "seconds", "elapsed_seconds", "elapsed_ms", "milliseconds", "loss", "checkpoint_seconds"}}
             for row in record.get("metrics", []) if isinstance(row, dict)]),
-        memory=record.get("memory", "unmeasured"), error=record.get("error"),
-        admission_refusals=record.get("admission", {}).get("refused", []), details=details(record, resolved))
+        memory=record.get("memory", "unmeasured"), error=error,
+        admission_refusals=record.get("admission", {}).get("refused", []), details=detail)
     return row
 
 
