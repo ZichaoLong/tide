@@ -86,7 +86,8 @@ def parser():
     resume.add_argument("--checkpoint")
     results = commands.add_parser("results", help="filter result records; render terminal, CSV or standalone HTML")
     results.add_argument("paths", nargs="+")
-    results.add_argument("--format", choices=("table", "json", "csv", "html"), default="table")
+    results.add_argument("--format", choices=("table", "json", "csv", "html", "archive"), default="table",
+                         help="archive is a self-contained, queryable result projection for reviewed evidence")
     results.add_argument("--output")
     for key in ("platform", "graph", "topology", "dtype", "scoring-dtype", "client", "placement", "status",
                 "qualification", "mode", "communication", "return-mode"):

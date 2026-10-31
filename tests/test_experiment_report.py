@@ -2,6 +2,7 @@ from copy import deepcopy
 import csv
 import io
 import json
+import pytest
 from tidegraph.experiment.config import resolve
 from tidegraph.experiment.report import load, render, select, summarize
 
@@ -54,3 +55,20 @@ def test_load_filter_csv_and_html_escape_without_importing_runtime(tmp_path):
     assert "&lt;script&gt;" in html
     assert list(csv.DictReader(io.StringIO(render(rows, format="csv"))))[0]["qualification"] == "strict-checks-passed"
     assert "unchecked" not in render(rows, format="table")
+
+
+def test_archived_results_remain_queryable_without_original_run_directory(tmp_path):
+    source = tmp_path/"result.json"
+    source.write_text(json.dumps(result()))
+    rows = load([source])
+    assert len(rows[0]["result_sha256"]) == 64
+    archived = tmp_path/"reviewed.json"
+    archived.write_text(render(rows, format="archive"))
+    source.unlink()
+    assert load([archived]) == rows
+    assert len(select(load([archived]), topology="hb", platform="cpu")) == 1
+    record = json.loads(archived.read_text())
+    record["results"][0]["qualification"] = "changed"
+    archived.write_text(json.dumps(record))
+    with pytest.raises(ValueError, match="content digest"):
+        load([archived])

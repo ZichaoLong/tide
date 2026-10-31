@@ -49,7 +49,17 @@ python scripts/check_upstream.py
 python -S scripts/index_core5_study.py docs/evidence/core5-cuda-inference-20261031.json --view models --format tsv
 ```
 
-下一步：提交编译/任务状态检查修复，创建新固定检出并构建CPU消费者；远端de999c2原作业继续，不编辑其源码。NPU技能所需账户指南 `/home/zlong/ASCEND_CODING_AGENT_GUIDE.md` 缺失，已询问迁移路径；新NPU作业暂未启动，CPU/GPU继续。构建终态后安装wheel并用tidegraph公开入口逐组验收。
+下一步：提交编译/任务状态检查修复，创建新固定检出并构建CPU消费者；远端de999c2原作业继续，不编辑其源码。用户确认旧账户指南已不存在。已核对当前模块定义、驱动/16逻辑设备及空闲4–11；继续按现有私有栈、队列与background.slice规范操作，不重建旧指南或改公共环境。构建终态后安装wheel并用tidegraph公开入口逐组验收。
 STATUS 是唯一当前交接，ROADMAP 是唯一待办；完整终态、命令、构建身份与新证据在后续提交补齐，不能将本页实施说明当作通过。
 
 14ce784 CPU standalone构建/3项CTest和已安装smoke通过；源码不变的de999c2公共core复用，身份分别保留。远端de999c2的core及两个resident库已完成，standalone同两处编译错误失败，remaining_live_pids为空。接续修复相对site入口和standalone resident推理limits解码，增加显式静态FC B128/B512配置；默认拒绝配置保持。
+
+当前固定实现eca070f；40项配置/CLI/矩阵定向检查通过。下一构建：本机 `gef-platform-cpu-build-eca070f`，远端 `jobs/platform-client-eca070f`，均仅重建消费者，复用源码hash核对通过的de999c2公共core/resident库；正式计时等待两机构建终态。
+
+本机NPU构建服务 `gef-platform-npu-build-eca070f`：固定source-eca070f，输出builds-eca070f，Python2.12/CANN9.1与SDK2.10/CANN9.0分开构建；320 affinity线程，超时7200s；日志artifacts/jobs/platform-npu-build-eca070f/task.log。正式计时等待其终态。
+
+GPU eca070f standalone构建及3项CTest通过，container作业终态passed/无遗留；本机对应亦通过。GPU安装入口的doctor/lock准备完毕。接着运行三客户端公开check/full（独立检查，不作为性能）：远端jobs/platform-checks-eca070f，最长1800s，日志同目录task.log。CPU d16 PyTorch full已在独立根比较严格失败（1/256坐标最大3.9339e-6），完整推理/精确恢复部分通过；不放宽阈值，clients组仍分别验小训练。
+
+本机NPU构建终态失败：编译/链接和loader完成后，固定源码脏状态守卫拒绝。原因是同时wheel打包配置化下游示例时，setuptools在该检出生成未跟踪examples/consumer_core5/configured/build；没有已跟踪源码diff，但本次不能认证。保留日志，清点生成目录后移出源码；从干净同提交以新resident输出重建，后续wheel从独立打包副本构造。SDK阶段尚未开始。
+
+NPU新构建服务为gef-platform-npu-build-eca070f-r1，独立完整新resident目录npu-resident-python-r1，重用已完成eca070f core。并行轻量独立检查（非正式性能）服务gef-platform-npu-checks-eca070f，通过空闲队列申请1张4–11内设备，状态artifacts/platform-matrix/npu-check-queue.json；日志artifacts/jobs/platform-npu-checks-eca070f/task.log。

@@ -2,7 +2,11 @@
 import argparse
 import io
 import json
+import os
 from types import SimpleNamespace
+# Register only the explicitly selected backend below. The CPU command also
+# works in a TorchNPU installation before any CANN module is activated.
+os.environ["TORCH_DEVICE_BACKEND_AUTOLOAD"] = "0"
 import torch
 from tidegraph import External
 from tidegraph.runtime import resolve_device

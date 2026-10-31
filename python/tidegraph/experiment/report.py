@@ -5,14 +5,15 @@ import io
 import json
 from pathlib import Path
 import statistics
-from .records import read_json
+from .records import read_json, digest, fingerprint
 
 
 COLUMNS = ("run", "platform", "graph", "topology", "parameters", "logical_batch", "positions", "span",
            "mode", "observation", "dtype", "scoring_dtype", "client", "placement", "devices", "communication",
            "return_mode", "packing", "return_packing", "schedule", "threads", "workers", "execution_status", "numerical", "discrete",
            "complete", "checkpoint", "exact_resume", "exploratory", "qualification", "kind", "throughput_sample", "throughput_qualified",
-           "median_seconds", "samples_per_second", "config_id", "timing_contract", "work", "memory")
+           "median_seconds", "samples_per_second", "config_id", "model_id", "workload_id", "task_id", "execution_id",
+           "result_sha256", "timing_contract", "work", "memory", "error", "admission_refusals")
 
 
 def _state(value):
@@ -73,6 +74,8 @@ def summarize(record, path):
     sample_count = effective.get("samples", plan.get("samples"))
     recipe = (plan.get("recipe") or {}).get("requested", {})
     row = dict(run=str(path.parent), config_id=record.get("config_id", resolved.get("config_id")),
+        **{key: record.get(key, resolved.get(key)) for key in ("model_id", "workload_id", "task_id", "execution_id")},
+        result_sha256=digest(path) if path.is_file() else None,
         platform=execution.get("device", "unknown").split(":")[0],
         graph=resolved.get("graph_view", {}).get("family", plan.get("graph", {}).get("kind")),
         topology=recipe.get("topology", "custom"),
@@ -94,7 +97,8 @@ def summarize(record, path):
         work=record.get("work", [{k: v for k, v in row.items() if k not in {
             "seconds", "elapsed_seconds", "elapsed_ms", "milliseconds", "loss", "checkpoint_seconds"}}
             for row in record.get("metrics", []) if isinstance(row, dict)]),
-        memory=record.get("memory", "unmeasured"))
+        memory=record.get("memory", "unmeasured"), error=record.get("error"),
+        admission_refusals=record.get("admission", {}).get("refused", []))
     return row
 
 
@@ -113,6 +117,13 @@ def load(paths):
             record = read_json(path)
             if not isinstance(record, dict):
                 raise ValueError(f"{path}: expected a result object")
+            if record.get("schema") == "tide-experiment-evidence-v1":
+                rows = record.get("results")
+                if (not isinstance(rows, list) or any(not isinstance(row, dict) or set(row) != set(COLUMNS) for row in rows)
+                        or fingerprint(rows) != record.get("results_sha256")):
+                    raise ValueError(f"{path}: invalid evidence rows or content digest")
+                records.extend(rows)
+                continue
             # Build/job status records do not become experiment qualifications.
             if not ("resolved_config" in record or "config_id" in record or (path.parent/"resolved.json").is_file()):
                 continue
@@ -152,6 +163,11 @@ def _cell(value):
 
 
 def render(rows, *, format="table"):
+    if format == "archive":
+        return json.dumps(dict(schema="tide-experiment-evidence-v1", results=rows,
+            results_sha256=fingerprint(rows),
+            scope="Portable result projection; source hashes identify original records, not retained checkpoint bytes or revalidation"),
+            indent=2, ensure_ascii=False, allow_nan=False)+"\n"
     if format == "json":
         return json.dumps(rows, indent=2, ensure_ascii=False, allow_nan=False)+"\n"
     if format == "csv":
@@ -173,7 +189,7 @@ def render(rows, *, format="table"):
                 'Compare timings only for matching return and workload contracts; exploration is explicitly marked.</p>'
                 f'<p>{len(rows)} records</p><table><thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></html>\n')
     if format != "table":
-        raise ValueError("report format must be table, csv, html or json")
+        raise ValueError("report format must be table, csv, html, json or archive")
     columns = ("platform", "graph", "topology", "parameters", "logical_batch", "dtype", "client", "placement",
                "execution_status", "qualification", "checkpoint", "median_seconds")
     cells = [[_cell(row.get(k)) for k in columns] for row in rows]

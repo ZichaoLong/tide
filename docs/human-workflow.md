@@ -117,7 +117,7 @@ tidegraph results runs --format table
 恢复会校验完整 checkpoint、配置、任务进度及安装身份；始终写入新目录，失败作业不被覆盖。
 同栈精确续接与跨设备 checkpoint 可移植性分别验收。
 Python/native 路径每个完整窗口保存一次持久 checkpoint，只有新指针 fsync 后才退役上一个 generation；
-standalone 当前在本次调用结束时保存原生 checkpoint，尚无逐窗磁盘边界。
+standalone 也在每个完成窗口原子发布原生 checkpoint 和 latest 指针。
 `checkpoint_check=false` 只关闭额外 exact-next 验证，不关闭保存，所以 plan 始终预算持久 checkpoint。
 保存时间在每窗 `checkpoint_seconds` 或 standalone 对应字段单列，不混入窗口算子计时。
 
@@ -203,9 +203,13 @@ tidegraph results runs jobs --platform cuda --client python-native --dtype float
 tidegraph results runs --graph timed-dag --topology hb --params-min 1000000 --format csv --output results.csv
 tidegraph results runs jobs --format html --output results.html
 tidegraph results runs --exploratory true --format json
+tidegraph results runs --format archive --output reviewed-results.json
+tidegraph results reviewed-results.json --batch 512 --format html --output batch512.html
 ```
 
 HTML 自包含，可直接用浏览器打开；没有服务、账号或外部CDN。
+archive保留各项身份、严格/探索/恢复结论、资源拒绝、计时、工作量及内存的可查询投影，
+不再依赖原运行目录；记录原result的hash和投影内容hash。它不是重新验收，也不保证原checkpoint仍在线。
 支持平台、图、拓扑、参数范围、batch、dtype、客户端、放置、通信、返回方式和执行/资格状态筛选。
 每秒样例是每测量窗的逻辑batch/耗时，不是 token/s；真正候选、Full、消息、时间批和内存保留在记录中。
 计时图表或速度结论必须先核对返回、工作量、精度、控制和资源争用是否可比。
