@@ -12,7 +12,7 @@
 
 ## 已审阅结果
 
-截至本次重入，八份platform/finite-packing归档含192条唯一run，包含观察、拒绝与失败，不是192项性能通过。
+截至本次重入，八份platform/finite-packing归档含194条唯一run，包含观察、拒绝与失败，不是194项性能通过。
 完整配置、来源、逐窗结果、峰值与原严格诊断在各gzip；旧二进制不冒称按最新Python提交重建。
 
 | 范围 | 当前事实与证据 |
@@ -52,14 +52,14 @@ artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoin
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:07Z：final的12.802B三卡已终态exit0、无后代，独立离散/精确恢复通过、数值探索；八卡开始等待资源。后继尚未取得结果。
+09:18Z：final已终态exit1、控制组为空；12.802B单/双/三卡均已审阅，八卡等待607.801秒退出3、未运行。38.406B单/双卡bank超容量现场拒绝；三卡通过live准入，正在构造。其后依赖尚未取得结果。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 
 | unit短名 | 待完成工作/停止条件 | 输出目录或progress |
 | --- | --- | --- |
-| platform-final-1e33b4a | 12.802B单/双/三卡已审阅；当前八卡只等600秒，不干预其他项目 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
-| platform-sharded-3e4f6b2 | 38.406B单/双卡现场准入，三卡以已通过的12.802B单卡有限/恢复校准为条件；原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
+| platform-final-1e33b4a | 已终态；12.802B单/双/三卡已审阅，八卡等待超时未运行 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
+| platform-sharded-3e4f6b2 | 单/双卡已拒绝；三卡已通过校准条件及live准入并构造，原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
 | platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
 | blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
 | multicard-roots-844eb9b | 两NPU ordinary/blocking/cpu_bridge各一次full独立根/训练/恢复，300秒/case | `npu-multicard-roots-bd2ff2e` |
