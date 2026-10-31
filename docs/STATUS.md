@@ -105,3 +105,9 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 `configs/checkpoint-cost/cuda-capacity-periodic.json`两个case串行、每项1800秒；单卡预期bank准入拒绝，
 双卡通过live准入后完整warmup1+2窗、独立CPU参考与精确恢复，FP32探索、interval3最终一次保存。
 不是修改原两代磁盘拒绝。活动配置/安装均来自36baeb7冻结输入，执行期间不改。
+
+条件化NPU后继`gef-capacity-periodic-beaf34e.service`等待36baeb7实际NPU回归，随后检查原38.406B三卡终态；
+只有记录已有限完成窗口、原监督因保存/恢复超时exit124、且新返回/full检查全部通过才取三张空闲卡。
+其他情况在`npu-capacity-periodic-36baeb7/gate.json`明确not-run，不重复已完成的原配置；
+新输入固定beaf34e、运行包36baeb7、同模型interval3、仍1800秒。预算每卡58.566GB另留6GiB、
+host766.974GB、单代disk175.320GB；状态/脚本/输入hash在独立项目产物，未完成不称通过。
