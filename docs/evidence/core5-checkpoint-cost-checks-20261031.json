@@ -547,5 +547,27 @@
       "save failure retains strict failure and does not certify current-window recovery",
       "complete independent inference/training and exact resume retained"
     ]
+  },
+  "terminal_status_122a1ed": {
+    "source": "122a1edcc95898655205c1120065c8aa58b64e5d",
+    "scope": "read-only job/process/report interpretation; no numerical execution or checkpoint-format change",
+    "fixed_tests": {
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 4.891,
+      "junit_sha256": "c214035cda9f16bf5029d22a6201920f6c00dd301ad0a84c63943239d8a83bbf",
+      "log_sha256": "247e4e416671f42d37854ca9b4383c8fe58b828971d29fe828afaa27cb4d02e1",
+      "paths": [
+        "tests/test_experiment_jobs.py",
+        "tests/test_experiment_report.py"
+      ]
+    },
+    "terminal": {
+      "state": "passed",
+      "exit_code": 0,
+      "control_group_empty": true
+    },
+    "development": "Initial new-test fixture errors: prepare returns a Path, and JSON roundtrip changes tuples to lists. Fixtures corrected to read the record and assert original byte preservation; production failure assertions unchanged."
   }
 }

@@ -47,7 +47,7 @@ FP32 payload/scoring、ATen/interop/worker1、mixed-c/packed/scalar完整返回�
 两实际推理点每窗31 candidate/16 Full/28消息，native普通复制7组/229488 bytes。
 参数owner、逐节点state及消息目标与有效映射核对一致；不能由普通复制推断resident多卡资格。
 8卡于07:13:54Z等待607.440秒后超时（队列exit3），只有7卡可用，物理9为其他项目所用；没有执行模型、不称硬件不支持。
-明确七卡新增配置2562263保留与八卡的不同请求，等待当前依赖链后运行；此处尚无七卡结果。
+明确七卡新增配置2562263保留与八卡的不同请求；实际完成结果见下节，原八卡超时不改写。
 
 同一小型FC8/d8双卡训练的三种通信均完成三个更新窗，随后分别接受独立检查与恢复：
 
@@ -78,7 +78,7 @@ tidegraph results docs/evidence/core5-platform-multicard-20261031.json.gz --form
 
 安装/实际site见[公共手册](../human-workflow.md)。约1B三卡并不代表靠近多卡总容量；后续容量准入分别核对逐卡峰值、host和checkpoint磁盘，不直接加总空闲显存。
 
-归档SHA256：`7e711fab31bb4ef17aeb976358cd65d14e2badab2126e57602918f1d243e3e31`。
+归档SHA256：`716c706b796d677b4ee2f50f7de5e7c861462677c6d49a0dda3543d01e831912`。
 
 独立根补查入口：从同一三通信小配置运行`tidegraph check selected.json --site site.json --scope full --output-dir checks/new`。该检查包含输出/connected-zero/控制/描述量/物理消息以及非位置切点的私有状态根，随后完整三步训练与恢复。它是独立资格而非本表性能复测；尚未运行的根不填写通过。
 
@@ -92,3 +92,33 @@ bd2ff2e固定安装分别对ordinary、blocking和cpu_bridge的小型双卡训�
 逐项输入、实现/hash和结果见[独立检查记录](core5-platform-multicard-checks-20261031.json)。
 复现：从`cuda-multicard.json`取相应case作为case.json，再执行
 `tidegraph check case.json --site site.json --scope full --output-dir new-check-dir`。
+
+
+## 同一1.014B模型的七卡实际点
+
+固定包bd2ff2e、配置2562263，其他环境/精度/输入/完整返回与上表同模型相同。
+七卡4/2/2/2/2/2/2节点，8个共享组完整放置；队列等待241.254秒后选择物理4/5/6/7/8/10/11，
+映射逻辑npu:0–6。模型、workload、task身份与单/双/三卡相同，不复制共享参数成独立owner。
+
+执行、完整离散与磁盘精确下一窗通过；FP32独立数值仍超原阈值，明确探索，不是合格吞吐。
+两测量窗0.809713/0.798220秒，中位0.803966秒；每窗candidate31/Full16/消息28，
+ordinary原生复制7组/229488 bytes。请求/实际参数、私有状态、消息目标及计算位置与七卡映射相符。
+全流程allocated峰值为逻辑卡0约1.131770GB、其余每卡0.591053GB；reserved分别1.210057/0.641729GB；
+RSS20.939211GB，构造10.599秒、恢复29.843秒、独立参考13.323秒、整流程140.059秒。
+最后checkpoint4,607,424,708 bytes。更多卡降低逐卡存储，不能由此称计算加速或认证多卡resident。
+
+子监督09:54:56Z exit0，外层exit0，控制组和存活后代为空。
+原结果SHA256 `6f01b95c199d54f1c371fc35a7fd07c886fb3a2ee5a85746f40d0519d28609fb`。
+干净复现选择`configs/matrices/npu-multicard.json`的`npu-model-1b-cards-7`，
+按人类手册plan后运行；这证明本接口可实际使用非二次幂卡数，不认证未来7×T4。
+
+
+## 原blocking崩溃的一次有界诊断
+
+固定相同bd2ff2e安装、原配置19f83bbaf7ef9ba9d949e4e11210891c027851e6badf25853c3b1aa48a866980，
+只开启PYTHONFAULTHANDLER；未修改数值实现、输入或精度。本次三个更新、八份独立比较及
+磁盘精确恢复全部通过，09:55:32Z内外监督exit0且无后代，因此没有取得新的崩溃栈。
+两窗0.917730/0.910114秒只是诊断过程成本，归档标diagnostic，不重复计入正式吞吐。
+原07:14:41Z的SIGSEGV/-11记录、checkpoint和未执行检查全部保留；这次未复现不称修复，
+也不能证明其发生概率或归因。停止相同重试；重启须新的可重现触发、native栈或流/owner生命周期证据。
+本次原结果SHA256 `c1dfdabaa11314bd795ea7e0140bbe22eff541fc9c85c3f6235b24cfd973e0a1`。
