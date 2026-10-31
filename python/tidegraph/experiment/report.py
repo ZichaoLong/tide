@@ -1,7 +1,6 @@
 """Dependency-free query, CSV and self-contained HTML for experiment records."""
 import csv
 import gzip
-import html
 import io
 import json
 from pathlib import Path
@@ -176,13 +175,6 @@ def save(path, content):
         replace_text(path, content)
 
 
-def _html_cell(value):
-    escaped = html.escape(_cell(value))
-    if isinstance(value, (dict, list)):
-        return '<details><summary>Details</summary><pre>'+escaped+'</pre></details>'
-    return escaped
-
-
 def render(rows, *, format="table"):
     if format == "archive":
         return json.dumps(dict(schema="tide-experiment-evidence-v2", results=rows,
@@ -199,17 +191,8 @@ def render(rows, *, format="table"):
             writer.writerow([_cell(row.get(k)) for k in COLUMNS])
         return stream.getvalue()
     if format == "html":
-        headings = "".join(f"<th>{html.escape(k)}</th>" for k in COLUMNS)
-        body = "".join("<tr>"+"".join(f"<td>{_html_cell(row.get(k))}</td>" for k in COLUMNS)+"</tr>"
-                       for row in rows)
-        return ('<!doctype html><html lang="en"><meta charset="utf-8"><title>Tidegraph results</title>'
-                '<style>body{font:14px sans-serif;margin:2em}table{border-collapse:collapse}'
-                'th,td{border:1px solid #ccc;padding:.45em;text-align:left}th{position:sticky;top:0;background:#eee}'
-                'td{max-width:32em;overflow-wrap:anywhere}pre{white-space:pre-wrap;max-height:32em;overflow:auto}'
-                '</style><h1>Tidegraph results</h1>'
-                '<p>Execution, independent checks and exact resume are separate. Unmeasured is never passed. '
-                'Compare timings only for matching return and workload contracts; exploration is explicitly marked.</p>'
-                f'<p>{len(rows)} records</p><table><thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></html>\n')
+        from .html_report import render_html
+        return render_html(rows)
     if format != "table":
         raise ValueError("report format must be table, csv, html, json or archive")
     columns = ("platform", "graph", "topology", "parameters", "logical_batch", "dtype", "client", "placement",

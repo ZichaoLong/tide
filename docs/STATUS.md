@@ -18,14 +18,14 @@
 
 | unit | 当前工作/固定来源 | 输出与预算 |
 | --- | --- | --- |
-| `gef-platform-npu-scale-1b3e39f.service` | 运行中，物理11→npu:0；前五项已终态，当前1B/B128，随后B512 | `artifacts/platform-matrix/npu-scale-run-1b3e39f`；7项各1800秒；外层36000秒含等待 |
+| `gef-platform-npu-scale-1b3e39f.service` | 运行中，物理11→npu:0；前五项已终态，当前1B/B512，B128已终态 | `artifacts/platform-matrix/npu-scale-run-1b3e39f`；7项各1800秒；外层36000秒含等待 |
 | `gef-platform-next-stages-bd2ff2e.service` | 等NPU scale；CPU/NPU各1B/B128独立profile、NPU2/3/8卡及三通信小训练、1B训练1/2/8卡、resident默认/有界，共17项 | `inputs-b495f10-next`、`next-stages-bd2ff2e.py/.sh`；配置b495f10，安装bd2ff2e；43200秒 |
 | `gef-human-local-de93246.service` | 等next-stages；CPU及NPU公共安装/consumer人类流程 | `human-{cpu,npu}-de93246`；安装de93246；57600秒 |
 | `gef-platform-final-1e33b4a.service` | 等human-local；CPU/NPU resident同材料eager、小训练诊断回归、有条件一次原NPU非有限定位、NPU12.802B单/2/3/8卡容量 | `inputs-1e33b4a-final`、`capacity-human-followup-1e33b4a.py/.sh`；性能bd2ff2e/诊断31a3b32；86400秒 |
 
 每个本机unit的持久状态/log位于`artifacts/jobs/`下去掉`gef-`和`.service`的同名目录（final目录为`platform-final-1e33b4a`）；next/final内部另有progress.json与逐项log。NPU后继逐case合作队列priority0，候选物理4–11、申请1/2/3/8卡、等待600秒，完成后释放。尚未执行的项没有结果。
 
-GPU当前无活动任务，四卡空闲。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。下一步审阅退役约28.5GB终态checkpoint后，运行已入库4.561B同模型单/2/3/4卡推理；每点后独立审阅再退役checkpoint，不能将旧产物占盘称模型硬件不足。
+GPU单卡容量任务已在GPU0运行。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。四份已审阅终态checkpoint已退役28.505GB，凭据`checkpoint-retirement-reviewed-ad93848.json`；回收稳定后free43.978GB，超过两代checkpoint42.482GB+1GiB余量。下一任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`使用冻结bd2ff2e安装及`inputs-ad93848-capacity/cuda-capacity-4561m-cards-1.json`，1800秒、GPU0、ATen1/interop1/worker1；已完成warmup与两窗执行，正在精确续接，独立比较未完成。其后按已入库计划做同模型2/3/4卡，每点后独立审阅再退役checkpoint，不将旧产物占盘称模型硬件不足。
 
 ```sh
 systemctl --user show gef-platform-npu-scale-1b3e39f.service gef-platform-next-stages-bd2ff2e.service gef-human-local-de93246.service gef-platform-final-1e33b4a.service -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
@@ -51,3 +51,5 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 4. 统一三平台人类演练证据、下游模板/任务接口/T4待验与最终矩阵；阶段提交并普通推送后继续。
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[184有限配置](platform-matrix.md)与site模板可重建材料，审阅gzip可直接查询，无需旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。
+
+公共HTML结果浏览补齐离线筛选、可比较的关键列与完整Details；报告/逃逸/JS过滤与int64大参数边界10项开发通过，已用私有Firefox无头实际渲染。只改报告，不改变活动安装、模型或实验结果。实现先提交后做固定源码资格及两机新安装报告生成；无需重复训练/推理。

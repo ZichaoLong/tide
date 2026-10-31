@@ -11,6 +11,7 @@
 | core-5配置与实验身份 | `python/tidegraph/planning/`；[候选入口](core5-study.md) | allocation-free配置/shape/共享清单，数学/工作负载/执行/测量身份；公共构造器，CLI仅适配 |
 | 配置事实与覆盖证据 | `planning/facts.py`、`scripts/core5_coverage.py`、`record_core5_checks.py` | 全部局部配置分组、逐用例JUnit记录、正确性/性能独立资格与来源查询；不执行参考或补造历史结果 |
 | 人类实验入口 | `python/tidegraph/experiment/`；[操作手册](human-workflow.md) | 安装身份、无分配plan、同模型放置预算、独立check、run/matrix/job、完整及按需返回、CSV/HTML查询；不依赖内部benchmark导入 |
+| 离线结果浏览 | `experiment/report.py`、`html_report.py` | 审阅归档校验、独立状态分列、CSV与带本地筛选的HTML；页面筛选不改变原记录 |
 | 公共接口 | `python/tidegraph/config.py`, `runtime.py`, `session.py`; `cpp/include/tide/` | 配置、图/模型所有权、执行策略、结果与状态续接 |
 | 数学对象与记录 | `python/tidegraph/graph.py`, `records.py`, `history.py`, `coordinates.py`; `cpp/include/tide/types.h`, `cpp/src/graph.cpp` | 图、物理边、逻辑来源、时间、状态、history、消息与输入完整性 |
 | 局部计算 | `aggregate.py`, `state_program.py`, `readout.py`, `region.py`, `next.py`, `full.py`; 对应 C++ Kernel 接口 | Agg/Upd/Read/SelStep/Next/Full/Emit，批量能力和局部 VJP |
