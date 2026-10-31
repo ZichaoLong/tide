@@ -1,126 +1,106 @@
-# 当前交接 — 已获用户授权继续（2026-10-31）
+# 当前交接 — 三平台矩阵收尾（2026-10-31）
 
-用户“同意，请你继续”解除87655fc提交后的暂停。继续收齐既有任务、独立根和恢复诊断；
-不扩盘、不重启GPU。先用4.561B做有界checkpoint成本拆分，tmpfs须与主存联合准入。
+用户已授权继续，不再执行旧“提交后暂停”。当前策略：不扩盘、不重启GPU；
+使用已提交的固定源码串行任务收齐容量、训练及恢复诊断，不重跑已审阅矩阵。
+本机/远端tmpfs仅作经主存联合准入的易失周转，活动作业的路径与输入不改变。
 
-授权分支`graph-execution-foundation`；本次接续审计HEAD87655fc、工作区干净。
+授权分支`graph-execution-foundation`；本次重入HEAD为b061404、工作区干净且已推送。
 数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
-实际当前提交用`git status --short --branch`和`python scripts/status.py`核对；不回退后续源码。
-旧账户指南已不存在，依用户确认、项目site和当前Ascend模块文档继续；远端脏dev保留。
+实际当前提交用`git status --short --branch`和`python scripts/status.py`核对，不回退后续源码。
+旧账户指南已不存在，依用户确认、项目site和`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`继续；
+远端脏dev保持原样，不作资格源码。参考仓库只读。
 
-## 已审阅与本次提交
+## 已审阅结果
 
-- [首组矩阵](evidence/core5-platform-baseline-20261031.md)：98正式+4观察，三平台中等B1/8/32/128/512、A/B/C、三图层级/拓扑、三客户端小训练；原严格失败保留。
-- [规模](evidence/core5-platform-scale-20261031.md)：19正式，CPU7/GPU5/NPU7，约1B大batch及FC16/HB20/LH20。18项完整离散/恢复通过、数值探索；NPU1B/B512下一窗KV keys精确恢复失败，独立CPU未检查，原checkpoint保留。
-- [有限诊断packing](evidence/core5-finite-packing-20261031.md)：三平台18记录、六小训练严格通过；B128成本降低但数值失败保持，默认scalar不改。相关独立根回归与各运行loss梯度范围分列。
-- [profile](evidence/core5-platform-profile-20261031.md)：三平台1B/B128形成168行FFN，也有864次两行私有BMM、288次共享base GEMV。c59688c修正CANN matmul解析，13项冻结检查通过，不算设备重验。
-- [多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B的2/3/4卡、NPU2/3卡推理完整离散/恢复通过、数值探索。CUDA三通信小训练、NPUordinary/cpu_bridge原loss梯度/optimizer/恢复严格通过；NPUblocking在exact-resume SIGSEGV/-11，独立检查未执行。任意独立根补查另列为后继作业。
-- [resident](evidence/core5-platform-resident-20261031.md)：CUDA有界B128/B512完成、数值探索。同材料eager更便宜。新增NPU六项：B1和小训练严格通过，有界B128中位1.653417秒、离散/精确恢复通过、数值超差；有界B512通过HBM准入后构造EE1019/507002流任务缓冲满，未进入计时。原默认预算拒绝保留，短厂商日志/hash已审阅。
-- [训练容量](evidence/core5-platform-training-capacity-20261031.md)：CUDA单卡1B静态拒绝、双/四卡第三窗原平方loss非有限；NPU单/双卡原第三窗非有限已入库，参考/恢复未执行。31a3b32只补失败字段定位，不改配方或接受条件。NPU31a3b32小训练严格通过；双卡原训练准确拒绝字段runtime.forward_and_loss[loss]，恢复和独立参考未执行。
-- [4.561B容量](evidence/core5-platform-capacity-20261031.md)：CUDA同模型1/2/3/4卡执行/离散/精确恢复通过、FP32数值探索；中位0.675/0.755/0.779/0.784秒，逐卡最大allocated20.058/10.299/7.859/5.419GB。不是多卡总容量极限。四卡07:34:04Z终态exit0、SSH检查无后代；20.699GB checkpoint已在恢复授权后审阅退役，用跟踪配置重建新的成本观察。
-- [人类流程](evidence/core5-human-workflow-20261031.md)：CPU/NPU/GPU各自公开安装锁/配置/检查/训练推理/新进程恢复/日志/停止/恢复/报告完成；本机各26命令。CPU base通过，NPU/GPU base独立根严格失败与下游小任务通过分列。四个本机停止/恢复unit均控制组空。按需返回生命周期演示保持validation=none，不冒称数学资格。
-- b3dc53c新私有安装与冻结12项报告检查通过；原blocking崩溃显示process-failure/-11/exact-resume，原快照不改。新报告只查询，不重新认证设备。两轮报告来源/hash在[报告资格](evidence/core5-human-report-20261031.json)。
+截至本次重入，八份platform/finite-packing归档含190条唯一run，包含观察、拒绝与失败，不是190项性能通过。
+完整配置、来源、逐窗结果、峰值与原严格诊断在各gzip；旧二进制不冒称按最新Python提交重建。
 
-## 既有本机任务与新增GPU工作
+| 范围 | 当前事实与证据 |
+| --- | --- |
+| 三平台有限矩阵与大batch | [首组](evidence/core5-platform-baseline-20261031.md)：98正式+4观察，三平台中等B1/8/32/128/512、B128 A/B/C、三图层级/拓扑/客户端、小训练；43正式严格通过，原数值失败保留 |
+| 约1B与FC/HB/LH | [规模](evidence/core5-platform-scale-20261031.md)：19正式，CPU7/GPU5/NPU7；18完整离散/精确恢复通过、数值探索。NPU1B/B512下一窗KV keys精确恢复失败、独立CPU未检查，原checkpoint保留 |
+| 有限优化与六项packing | [诊断packing](evidence/core5-finite-packing-20261031.md)：三平台18记录，6小训练严格通过；B128成本下降但数值失败不解除。[profile](evidence/core5-platform-profile-20261031.md)及[六项处置](performance-lessons.md#本轮三平台六项打包处置)分别记录大MM、小BMM、分桶、同步与停止条件 |
+| 同模型多卡 | [多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B两/三/四卡、NPU两/三卡推理离散/恢复通过、数值探索。小训练CUDA三通信及NPUordinary/cpu_bridge严格通过；NPUblocking在exact-resume SIGSEGV。CUDA三通信full独立根另已通过 |
+| 单卡resident | [resident](evidence/core5-platform-resident-20261031.md)：两平台B1/小训练严格通过；有界CUDA B128/B512、NPU B128完成且恢复通过、数值探索。同材料eager较便宜；NPU B512构造EE1019/507002，未进入计时；原默认布局拒绝保留 |
+| 原1B训练 | [训练容量](evidence/core5-platform-training-capacity-20261031.md)：CUDA单卡静态拒绝；CUDA双/四卡与NPU单/双卡原配方第三窗loss非有限。31a3b32准确定位`runtime.forward_and_loss[loss]`，原失败和未执行的检查/恢复保持 |
+| 实际容量 | [容量](evidence/core5-platform-capacity-20261031.md)：CUDA4.561B单/2/3/4卡、NPU12.802B单/双卡均完整执行/离散/精确恢复通过、FP32数值探索。CUDA9.123B单卡bank超容量拒绝、双卡实际allocated20.058GB/卡、完整离散/恢复通过；不是多卡resident资格 |
+| checkpoint成本 | [成本](evidence/core5-checkpoint-cost-20261031.md)：4.561B磁盘/tmpfs整流程453.560/427.310s；36baeb7磁盘interval2为324.107s，恢复289.587→223.215s、RSS74.880→59.716GB。少保存一次是耐久性取舍，不称算子加速；三条均exact-next通过、独立数学未检查 |
+| 人类与下游入口 | [实际演练](evidence/core5-human-workflow-20261031.md)：CPU/NPU/GPU公开安装/配置/检查/推理训练/停止恢复/CSV HTML完成；各自base严格失败与下游小任务通过分列。[手册](human-workflow.md)、[下游模板](downstream-contract.md)、T4配置/迁移步骤已交付；T4真机未验 |
 
-观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡已终态exit0、无后代；离散/精确恢复通过，数值探索，中位1.447716秒、峰值allocated54.911GB。双卡也已终态exit0、无后代：完整离散/精确恢复通过、数值探索，中位1.951125秒、每卡allocated27.579GB；三卡正在执行。其后依赖链保持。
-所有服务在`background.slice`，固定源码/安装/输入不编辑；外层running/终态不覆盖内层资格。
+36baeb7 checkpoint优化已通过固定CPU110项（1 standalone明确deselected）、CUDA返回存储6项及双卡full推理/独立根/三步训练/optimizer/恢复。
+NPU同实现回归仍在下列队列，不由CUDA或旧NPU通过认证。旧CPU/NPU/GPU失败不因新安装或外层exit0改为通过。
 
-| unit | 已提交工作与依赖 | 输入/产物 |
+## 当前GPU作业
+
+目标`gpu3090`，私有入口`artifacts/cuda3090/ssh.sh`，根`/root/autodl-tmp/gef-cuda3090`。
+`jobs/platform-scaled-training-1a6b08f`于08:49:44Z启动；08:53Z观察仍running，
+小型两卡full检查exit0，1.014B双卡三个有限窗口已完成，正在exact-resume，独立验收尚未完成。
+配置`configs/capacity-training/cuda-scaled-loss.json`来自1a6b08f，运行包固定36baeb7；
+同FC16/B1/P2/原SGD，仅loss系数0.001→1e-9，task身份独立，是新工作负载，不是原失败修复。
+只选择这一系数，不继续搜索。外层2400秒、小full300秒、大点1800秒，默认每窗保存、完整返回和原阈值保持。
+产物`cuda-scaled-training-36baeb7/progress.json`；每个子项有独立`*-supervisor/status.json`。
+
+9.123B原两代磁盘83.896GB拒绝保留；新interval3仅最终保存，单代41.401GB，双卡08:45:38Z前已完成。
+外层因单卡拒绝failed/1、双卡子项exit0，均无后代。经b061404审阅/dry-run后退役其可重建checkpoint，
+凭据`retirement-capacity-periodic-36baeb7.json`；先前dba2a5e及36baeb7的4.561B checkpoint亦已审阅退役。
+全部小结果/config/log保留，不跨机搬运这些大文件。
+
+```sh
+artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoint-36baeb7/venv/bin/tidegraph job status jobs/platform-scaled-training-1a6b08f'
+```
+
+## 本机串行依赖链
+
+所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
+08:53Z：final的12.802B三卡已保存到next_window2，第三窗流程仍在执行；后继均未取得结果。
+每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
+目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
+
+| unit短名 | 待完成工作/停止条件 | 输出目录或progress |
 | --- | --- | --- |
-| `gef-platform-final-1e33b4a.service` | CPU/NPU同材料eager、31a3b32小训练回归、有条件一次NPU非有限定位、NPU12.802B单/2/3/8卡 | `inputs-1e33b4a-final`、`capacity-human-followup-1e33b4a`；性能安装bd2ff2e/诊断31a3b32 |
-| `gef-platform-sharded-3e4f6b2.service` | 等final；NPU38.406B单/双卡现场准入；三卡仅在12.802B单卡有限执行及精确恢复通过后准入 | `inputs-3e4f6b2-sharded`、`sharded-capacity-3e4f6b2`；bd2ff2e |
-| `gef-platform-seven-2562263.service` | 等sharded；同一1B/16节点/8共享组明确七卡推理，4/2/2/2/2/2/2节点 | `inputs-2562263-seven`、`npu-model-1b-cards-7-bd2ff2e` |
-| `gef-blocking-diagnostic-bd2ff2e.service` | 等seven；原blocking小训练仅一次faulthandler诊断，不计新性能、不重试抹旧失败 | 原`inputs-b495f10-next/npu-train-two-blocking.json`、`npu-blocking-diagnostic-bd2ff2e` |
-| `gef-multicard-roots-844eb9b.service` | 等blocking诊断；两NPU三通信各一次公共`check --scope full`，独立根及三步训练/恢复 | `inputs-844eb9b-roots/npu.json`、`npu-multicard-roots-bd2ff2e`；bd2ff2e |
-| `gef-resume-layout-61571c4.service` | 等roots；原NPU1B/B512一次精确raw/next与布局诊断，原安装1b3e39f、原checkpoint只读；内层900秒 | `npu-resume-layout-61571c4`、`resume-layout-61571c4-queue.json` |
-| `gef-checkpoint-npu-0f9254a.service` | 等layout诊断；dba2a5e小型原训练回归；仅在12.802B单卡原有限执行/精确恢复与小回归通过后，跑一项tmpfs成本观察 | `inputs-checkpoint-npu-0f9254a`、`npu-checkpoint-cost-dba2a5e/progress.json`；原始tmpfs输出`/dev/shm/gef-checkpoint-npu-dba2a5e/run`，终态小记录复制到持久盘 |
+| platform-final-1e33b4a | 12.802B三卡后八卡；原单/双卡已审阅。八卡只等600秒，不干预其他项目 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
+| platform-sharded-3e4f6b2 | 38.406B单/双卡现场准入，三卡以已通过的12.802B单卡有限/恢复校准为条件；原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
+| platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
+| blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
+| multicard-roots-844eb9b | 两NPU ordinary/blocking/cpu_bridge各一次full独立根/训练/恢复，300秒/case | `npu-multicard-roots-bd2ff2e` |
+| resume-layout-61571c4 | 原1B/B512 raw边界/下一窗及布局诊断，900秒；原1b3e39f安装和checkpoint只读，不改布局或算术 | `npu-resume-layout-61571c4` |
+| checkpoint-npu-0f9254a | dba2a5e小训练先验，再有条件12.802B单卡tmpfs成本观察1200秒；不认证36baeb7 | `npu-checkpoint-cost-dba2a5e/progress.json`；大输出`/dev/shm/gef-checkpoint-npu-dba2a5e/run` |
+| checkpoint-check-36baeb7 | 新安装返回存储6项及单NPU小full、interval2；180/300秒 | `npu-checkpoint-check-36baeb7` |
+| capacity-periodic-beaf34e | 仅原38.406B三卡已完成有限窗且在保存/恢复被监督超时124、新回归通过时，跑interval3一次1800秒；其他情况明确not-run | `npu-capacity-periodic-36baeb7/gate.json` |
+| scaled-training-1a6b08f | 新loss先两卡小full，通过后1.014B单/双NPU各一次1800秒；包36baeb7、配置1a6b08f | `npu-scaled-training-36baeb7/progress.json` |
 
-
-外层上限86400秒包括依赖等待；各case小型900秒、容量1800秒、独立根300秒。
-NPU合作队列priority0、候选物理4–11、每次等待600秒。原八卡推理607.440秒、训练607.503秒等待超时退出3，未执行；第八张物理9为其他项目，不干预。
-作业状态/log在`artifacts/jobs/`下去掉`gef-`和`.service`的同名目录；final/sharded及根任务各有progress.json。
+外层上限86400秒含依赖等待。合作队列priority0、候选物理4–11、max-wait600秒；物理9为其他项目，不干预。
+原八卡1B推理/训练各等待约607秒退出3，未运行。普通复制通过不解除直接P2P/原生跨卡原子及多卡resident门禁。
+本机原NPU1B/B512失败checkpoint在`npu-scale-run-1b3e39f/npu-scale-fc-few-1b-b512/run/checkpoints`，
+诊断使用原安装`install-1b3e39f/venv`，包hash`6af9b3981aa512982618b31b02ad69db5efd20c31438b6cb273038d877c68d29`。
+原始raw边界若已不等，不能把新进程重放差异直接归咎序列化。
 
 ```sh
 python scripts/status.py
-systemctl --user show gef-platform-final-1e33b4a.service gef-platform-sharded-3e4f6b2.service gef-platform-seven-2562263.service gef-blocking-diagnostic-bd2ff2e.service gef-multicard-roots-844eb9b.service -p Id -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
-artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-platform-bd2ff2e/venv/bin/tidegraph job status jobs/platform-cuda-capacity4561m-c4-bd2ff2e'
+systemctl --user show gef-platform-final-1e33b4a.service gef-platform-sharded-3e4f6b2.service gef-scaled-training-1a6b08f.service -p Id -p ActiveState -p SubState -p ExecMainStatus -p MainPID -p ControlGroup
 ```
 
-如用户要求停止后台作业，只停止准确unit并核对控制组/后代；当前没有收到该停止指令。
-GPU9.123B现场磁盘准入已拒绝、无后代；三通信full独立根07:50:49Z全部通过、外层exit0且无后代，已归档[独立检查](evidence/core5-platform-multicard-checks-20261031.json)。
-作业名`platform-cuda-admission9123m-87655fc`、`platform-cuda-roots-87655fc`；未见终态前不称通过。
-83.896GB磁盘预算已含1GiB reserve；现场拒绝独立记录，不冒称构造或设备执行。
+本机job记录/log在`artifacts/jobs/`去掉`gef-`和`.service`的目录；只有终态、退出码及无活跃后代共同核对后才能归档。
+没有收到停止作业指令；如后续收到，停止准确unit并核对控制组，不停止其他项目。
 
-## 固定来源与资源
+## 固定环境与接续
 
-本机aarch64/320 affinity CPU、约1.8TiB可用主存/2.2TiB空盘，16张64GiB级NPU；Python Torch/TorchNPU2.12/CANN9.1，独立SDK LibTorch2.10/CANN9.0另ABI。
-GPU四张3090/sm86、Torch2.12.1+cu130/Toolkit13，56核配额、240GiB主存、50GiB数据盘。
-CPU core de999c2/standalone eca070f；NPU core/resident/standalone eca070f；GPU core/resident de999c2、standalone eca070f。
-旧二进制保留实际hash与来源，不冒称在最新Python提交重建；三平台旧3 CTest不重复累计。
-bd2ff2e安装内容hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`；活动安装均冻结。
+本机aarch64、320 affinity CPU、约1.8TiB可用主存；16张64GiB级NPU，Python Torch/TorchNPU2.12/CANN9.1；
+独立SDK LibTorch2.10/CANN9.0另ABI。GPU四张3090/sm86、Torch2.12.1+cu130/Toolkit13，56核配额、240GiB主存、50GiB盘。
+CPU core de999c2/standalone eca070f；NPU core/resident/standalone eca070f；CUDA core/resident de999c2、standalone eca070f。
+36baeb7 wheel SHA256 `7b5f71c545568b2389f0eeb97914787b16c4ab5378c220c71826ffea534e12d9`；
+GPU安装内容hash`5c99b421a7e0ba7a9c09a0943f82b5f67cc1a5aa874e98a2f19d8167db243d1e`。
 
-NPU12.802B预算58.565GB/卡另留6GiB、host241.331GB、两代checkpoint117.232GB。
-38.406B三卡预算每卡58.566GB另留6GiB、host766.974GB、disk349.567GB；其实际运行取决于校准，不由预算认证。
-CUDA C1/C2/C3/C4 checkpoint已在各自证据审阅后退役，凭据位于远端根，结果/config/log始终保留。
-CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡resident。
+NPU12.802B原host241.331GB、两代disk117.232GB；tmpfs联合host357.168GB含未来文件116.151GB。
+NPU38.406B三卡各58.566GB并另留6GiB，host766.974GB；原两代disk349.567GB，后继单代175.320GB。
+本机shm约1.034TB空、MemAvailable约1.8TB，cgroup v1各层无限额已人工核验；不宣称代码自动支持所有v1限额。
+这些是近期观察，下一次新作业仍现场准入；disk.estimated_new_bytes已含reserve，不加两遍。
 
-## 当前接续
+下一步：先收GPU新训练终态，审阅完整梯度/槽/恢复与独立检查；沿本机链逐项收终态，
+将容量、训练、恢复诊断分别补入既有证据，依据首个见证决定有界修复或明确停止。
+最终核对189原目录的运行/拒绝/替代项和目录外后继，更新ROADMAP/六项经验/可查询结果；全部作业终态后交付。
+不重跑旧矩阵，不自动延长原超时。当前总体任务尚未完成。
 
-1. 先重核上述既有任务的实际终态，审阅内层结果，再补多卡/训练/resident/容量证据；不重跑已完成矩阵。
-2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint已审阅、dry-run并退役，配置/结果/hash保留；为同模型两代磁盘文件重新live准入，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
-3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。dba2a5e固定源码67项相关检查通过、unit终态且控制组空；新GPU私有wheel安装完成，小型CUDA native full检查（推理/独立根/训练/恢复）全部通过。已提交持久任务`jobs/platform-checkpoint-cost-dba2a5e`（已终态exit0、无后代，产物`checkpoint-cost-dba2a5e/progress.json`），外层2700秒、内层每项1200秒，串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。C4退役后盘空闲43.918GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
-4. 新增有界`diagnose_experiment_resume.py`，先核raw-boundary，再核下一完整窗并记录布局/实际工作量；不改算术或参考调度。CPU固定61571c4脚本+原1b3e39f安装小流程通过；原NPU1B/B512已在既有链之后安排一次诊断，使用原1b3e39f安装及checkpoint，不复跑全矩阵。
-5. 用户允许本机内存文件系统按需周转；当前shm可用1,034,887,401,472 bytes、MemAvailable约1.88TB，cgroup v1各层无限额。既有作业路径不变；已在链末有条件提交一项12.802B单卡tmpfs成本观察，逐卡预算不变、联合host357,167,764,928 bytes（含未来tmpfs文件116,151,198,688），另核tmpfs117,224,940,512 bytes含1GiB保留；非吞吐资格，不加总shm和物理内存。
-6. 收齐有限矩阵与拒绝/未测项，更新最终选型、六项处置和唯一ROADMAP；全部终态与无后代后交付。当前总体任务尚未完成。
-
-从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料。
-审阅gzip用`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`查询，不依赖旧运行目录。
-下游模板/人类流程及T4迁移清单已交付；T4真机资格未获得。
-
-## 当前实现候选（本提交后固定资格）
-
-基于dba2a5e磁盘实测：完整恢复约289.6秒，其中CPU完整比较约164.8秒；首保存57.7秒中hash22.3秒。
-新候选增加显式`checkpoint_interval`（默认每窗、最终窗必保存），减少重复CPU快照，并为完全相等的CPU张量保留原严格比较的正向快捷路径。
-原容差/非有限/结构拒绝和完整字段不变；候选只在提交、固定安装及相关回归后运行。
-[基线成本证据](evidence/core5-checkpoint-cost-20261031.md)已审阅：disk/tmpfs保存57.7/47.4与63.0/48.0秒，恢复289.6/289.3秒；两份各20.698GB大checkpoint已核对dry run后退役；远端凭据`retirement-checkpoint-cost-dba2a5e.json`，小记录已入库。
-36baeb7固定CPU相关110项通过、1项standalone明确deselected，unit终态且控制组空；新GPU私有安装已完成，6项实际返回存储测试通过，full两卡推理/根/三步训练/恢复已通过，`jobs/platform-checkpoint-check-36baeb7`终态exit0、无后代。计划4.561B一次同材料成本观察、9.123B同模型单卡拒绝/双卡一次流程；新配置在`configs/checkpoint-cost`。
-原9.123B每窗磁盘拒绝保留；单代预算是明确持久化取舍，不称原拒绝修复或窗口算子加速。
-开发35项调用中2项因漏设TIDE_BUILD_DIR缺少既有native模块失败，已保存调用错误，纠正环境后二项通过；不作为数值失败或放宽条件。相关开发检查17项、70项及35项分组通过，范围重叠不相加。
-
-## 当前新提交作业
-
-36baeb7 CUDA返回6项和两卡full检查均通过、终态无后代。接着仅启动一次4.561B优化后成本观察：
-`jobs/platform-checkpoint-periodic-36baeb7`，固定私有安装`install-checkpoint-36baeb7`、
-配置`configs/checkpoint-cost/cuda-disk-periodic.json`，1200秒，warmup1+1窗、interval2最终保存、完整exact-next。
-08:28:55Z已终态exit0、无后代，完整恢复223.215秒/整流程324.107秒、RSS59.716GB；原数值未检查。
-基线两份checkpoint经fb9ff3c审阅后按dry run退役，小记录保留；本优化点审阅后退役其checkpoint，再启动9.123B单/双卡明确新持久化配置。
-
-本机36baeb7相关实际回归安排在既有tmpfs观察后：`gef-checkpoint-check-36baeb7.service`，
-新私有安装`install-checkpoint-36baeb7`，固定返回测试6项及小型单NPU `check --scope full`，
-显式interval2、原loss/训练配方不变。输出`npu-checkpoint-check-36baeb7`，NPU合作队列仍priority0/4–11/600秒；
-不与已有容量计时重叠。提交/等待不代表通过。
-
-下一GPU固定任务：`jobs/platform-capacity-periodic-36baeb7`，
-`configs/checkpoint-cost/cuda-capacity-periodic.json`两个case串行、每项1800秒；单卡预期bank准入拒绝，
-双卡通过live准入后完整warmup1+2窗、独立CPU参考与精确恢复，FP32探索、interval3最终一次保存。
-不是修改原两代磁盘拒绝。活动配置/安装均来自36baeb7冻结输入，执行期间不改。
-
-条件化NPU后继`gef-capacity-periodic-beaf34e.service`等待36baeb7实际NPU回归，随后检查原38.406B三卡终态；
-只有记录已有限完成窗口、原监督因保存/恢复超时exit124、且新返回/full检查全部通过才取三张空闲卡。
-其他情况在`npu-capacity-periodic-36baeb7/gate.json`明确not-run，不重复已完成的原配置；
-新输入固定beaf34e、运行包36baeb7、同模型interval3、仍1800秒。预算每卡58.566GB另留6GiB、
-host766.974GB、单代disk175.320GB；状态/脚本/输入hash在独立项目产物，未完成不称通过。
-
-显式新训练工作负载（非原失败修复）：1a6b08f的`configs/capacity-training`，
-同一FC16/1.014B/B1/P2/原SGD，loss系数0.001→1e-9，task身份独立、默认每窗保存不变。
-每平台先小型两卡full检查；GPU仅双卡，NPU单/双卡，每项1800秒、原阈值/完整梯度/optimizer/恢复。
-NPU服务`gef-scaled-training-1a6b08f.service`等待条件化容量后继；输入`inputs-scaled-training-1a6b08f`、
-输出`npu-scaled-training-36baeb7`，实际运行包36baeb7；逐卡33.025/16.513GB、host35.261GB、disk18.406GB。
-CUDA输入已传到独立目录，须等待9.123B终态审阅并退役其可重建checkpoint后才启动，不与容量计时重叠。
-此单一系数无继续搜索计划；失败依原规则停止，旧配方第三窗非有限保持。
-
-GPU9.123B新持久化配置已终态：单卡bank38.918GB在分配前拒绝；双卡完整执行、离散及精确续接通过、数值探索，
-中位1.120125秒、各卡allocated20.058GB、RSS116.936GB，整流程863.134秒。外层因单卡拒绝failed/1，
-双卡子任务exit0，所有后代为空。结果已补容量证据；41.401GB可重建checkpoint审阅/dry run后退役，
-随后启动`jobs/platform-scaled-training-1a6b08f`，固定包36baeb7、配置1a6b08f、先小full后双卡单个新训练流程。
+干净仓库从[development](development.md)、[人类手册](human-workflow.md)、[有限配置](platform-matrix.md)进入。
+查询：`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`。
+旧源码ID用`python scripts/resolve_history_commit.py OLD_SHA`定位，映射不等于重新验证。
