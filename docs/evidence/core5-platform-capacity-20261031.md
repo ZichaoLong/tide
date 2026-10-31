@@ -1,6 +1,6 @@
 # 同模型安全容量代表点（2026-10-31）
 
-本报告包括CUDA4.561B同模型单/双/三/四卡实际点；NPU校准点待各自实际结果，不由已测点推断。
+本报告包括CUDA4.561B同模型单/双/三/四卡与NPU12.802B单卡实际点；其他NPU卡数待各自实际结果，不由已测点推断。
 固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
 RTX3090/sm86、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭，native mixed-c、ordinary复制、packed/scalar完整返回；ATen/interop/worker1。
 FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个不可拆共享组；B1/P2/span20，staggered-v1，warmup1+连续2窗+精确恢复窗，1800秒上限。
@@ -93,3 +93,26 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 下一步只对既有4.561B做有界保存/恢复分阶段磁盘/tmpfs成本对照；tmpfs未来文件必须同时计入容器内存。
 
 归档SHA256：`20937b2dbfa154657bac148483e13b4c8851e6fe67b8c4aa360072c958548e7d`。
+
+## NPU12.802B单卡校准
+
+固定Python实现bd2ff2e、NPU core/resident eca070f；同一FC16/8区域、KV、d7296、
+12,801,882,104去重参数、B1/P2，native mixed-c、FP32 payload/scoring、ordinary、packed/scalar完整返回，线程1。
+参数、bank、状态、workspace、通信逐卡预算58.565GB，另保留6GiB；host241.331GB、两代checkpoint117.232GB。
+这是独立于CUDA模型的NPU近界代表，不能把不同参数量作同模型跨平台加速比。
+
+| 结果 | 实际值 |
+| --- | --- |
+| 执行 / 独立数值 / 离散 / 精确下一窗 | 完成 / 超差探索 / 通过 / 通过 |
+| 两测量窗 / 中位 | 1.577240 / 1.318192 s；1.447716 s |
+| 每测量窗 candidate / Full / 消息 | 31 / 16 / 28 |
+| allocated / reserved峰值 | 54,911,347,200 / 55,194,943,488 bytes |
+| RSS高水位 | 231,085,862,912 bytes |
+| 构造 / 独立参考 / 恢复检查 | 158.557 / 156.683 / 502.872 s |
+| 三次保存 | 269.215 / 357.505 / 281.708 s |
+| 整流程 / 单代checkpoint | 1737.708 s / 58,070,735,884 bytes |
+
+原1800秒内完成，没有延长超时；单窗成本不包括单列的资格/保存过程，不能称严格合格吞吐。
+子监督于08:13:51Z终态exit0，重新核对supervisor与后代均为空；父任务继续其他卡数，二者不混算。
+原结果SHA256 `7ae9a7e9ba87cf1c3cd5228680b9488b45661b5959798e13a54fbaaab13669f6`。
+其条件化后继可以使用本单卡有限执行和精确恢复事实，但仍须各自逐卡/live准入与独立检查。

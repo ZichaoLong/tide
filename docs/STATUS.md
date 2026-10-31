@@ -23,7 +23,7 @@
 
 ## 既有本机任务与新增GPU工作
 
-观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡三窗已完成、精确恢复通过（502.9秒），正在独立参考检查。其后依赖链保持。
+观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡已终态exit0、无后代；离散/精确恢复通过，数值探索，中位1.447716秒、峰值allocated54.911GB。双卡仍在执行。其后依赖链保持。
 所有服务在`background.slice`，固定源码/安装/输入不编辑；外层running/终态不覆盖内层资格。
 
 | unit | 已提交工作与依赖 | 输入/产物 |
@@ -69,7 +69,7 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 
 1. 先重核上述既有任务的实际终态，审阅内层结果，再补多卡/训练/resident/容量证据；不重跑已完成矩阵。
 2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint已审阅、dry-run并退役，配置/结果/hash保留；为同模型两代磁盘文件重新live准入，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
-3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。dba2a5e固定源码67项相关检查通过、unit终态且控制组空；新GPU私有wheel安装完成，小型CUDA native full检查（推理/独立根/训练/恢复）全部通过。已提交持久任务`jobs/platform-checkpoint-cost-dba2a5e`（当前disk，产物`checkpoint-cost-dba2a5e/progress.json`），外层2700秒、内层每项1200秒，串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。C4退役后盘空闲43.918GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
+3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。dba2a5e固定源码67项相关检查通过、unit终态且控制组空；新GPU私有wheel安装完成，小型CUDA native full检查（推理/独立根/训练/恢复）全部通过。已提交持久任务`jobs/platform-checkpoint-cost-dba2a5e`（已终态exit0、无后代，产物`checkpoint-cost-dba2a5e/progress.json`），外层2700秒、内层每项1200秒，串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。C4退役后盘空闲43.918GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
 4. 新增有界`diagnose_experiment_resume.py`，先核raw-boundary，再核下一完整窗并记录布局/实际工作量；不改算术或参考调度。CPU固定61571c4脚本+原1b3e39f安装小流程通过；原NPU1B/B512已在既有链之后安排一次诊断，使用原1b3e39f安装及checkpoint，不复跑全矩阵。
 5. 用户允许本机内存文件系统按需周转；当前shm可用1,034,887,401,472 bytes、MemAvailable约1.88TB，cgroup v1各层无限额。既有作业路径不变；已在链末有条件提交一项12.802B单卡tmpfs成本观察，逐卡预算不变、联合host357,167,764,928 bytes（含未来tmpfs文件116,151,198,688），另核tmpfs117,224,940,512 bytes含1GiB保留；非吞吐资格，不加总shm和物理内存。
 6. 收齐有限矩阵与拒绝/未测项，更新最终选型、六项处置和唯一ROADMAP；全部终态与无后代后交付。当前总体任务尚未完成。
@@ -83,6 +83,7 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 基于dba2a5e磁盘实测：完整恢复约289.6秒，其中CPU完整比较约164.8秒；首保存57.7秒中hash22.3秒。
 新候选增加显式`checkpoint_interval`（默认每窗、最终窗必保存），减少重复CPU快照，并为完全相等的CPU张量保留原严格比较的正向快捷路径。
 原容差/非有限/结构拒绝和完整字段不变；候选只在提交、固定安装及相关回归后运行。
-计划4.561B一次同材料成本观察、9.123B同模型单卡拒绝/双卡一次流程；新配置在`configs/checkpoint-cost`。
+[基线成本证据](evidence/core5-checkpoint-cost-20261031.md)已审阅：disk/tmpfs保存57.7/47.4与63.0/48.0秒，恢复289.6/289.3秒；两份大checkpoint尚待dry run退役，小记录已入库。
+36baeb7固定CPU相关110项通过、1项standalone明确deselected，unit终态且控制组空；新GPU私有安装已完成，6项实际返回存储测试通过，full两卡推理/根/三步训练/恢复已通过，`jobs/platform-checkpoint-check-36baeb7`终态exit0、无后代。计划4.561B一次同材料成本观察、9.123B同模型单卡拒绝/双卡一次流程；新配置在`configs/checkpoint-cost`。
 原9.123B每窗磁盘拒绝保留；单代预算是明确持久化取舍，不称原拒绝修复或窗口算子加速。
 开发35项调用中2项因漏设TIDE_BUILD_DIR缺少既有native模块失败，已保存调用错误，纠正环境后二项通过；不作为数值失败或放宽条件。相关开发检查17项、70项及35项分组通过，范围重叠不相加。

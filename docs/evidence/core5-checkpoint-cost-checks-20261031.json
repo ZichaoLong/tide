@@ -1,0 +1,196 @@
+{
+  "schema": "tide-checkpoint-cost-evidence-v1",
+  "source": "supply a reviewed source commit/build record with the wheel; no Git provenance inferred from cwd",
+  "wheel": {
+    "path": "/root/autodl-tmp/gef-cuda3090/inputs-checkpoint-dba2a5e/tidegraph-0.3.0-py3-none-any.whl",
+    "sha256": "4d588155c8eea1b393a5890917875e3bf20b9ecba6768e55a31e7a700a715c33",
+    "installed_files_verified": true
+  },
+  "lock_id": "077aaa7b443762ba64018b90156455268eaaab28e2a9273a912e9e4aa8aa3a07",
+  "installed_identity": {
+    "schema": "tide-installed-identity-v1",
+    "package": {
+      "package": "tidegraph",
+      "version": "0.3.0",
+      "path": "/root/autodl-tmp/gef-cuda3090/install-checkpoint-dba2a5e/venv/lib/python3.12/site-packages/tidegraph",
+      "installed_files_sha256": "be8469805a3a43760007977f99dc6ecd394bb6d5ea5316290a9f3401d1646bc0",
+      "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+    },
+    "python": "3.12.3",
+    "executable": "/root/autodl-tmp/gef-cuda3090/install-checkpoint-dba2a5e/venv/bin/python",
+    "architecture": "x86_64",
+    "dependencies": {
+      "torch": {
+        "version": "2.12.1+cu130",
+        "record_sha256": "54a9afdb25145dad2fdcac8558883f6621e4fa9deec6539a40406b8b33816ee6",
+        "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+      },
+      "torch-npu": null,
+      "numpy": {
+        "version": "2.4.6",
+        "record_sha256": "fd08c3faf75e9966dbc27af81894bd853d57ef9080ec8f07e88e4aaa4d48a3dc",
+        "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+      }
+    },
+    "builds": {
+      "native_library": {
+        "kind": "native",
+        "path": "/root/autodl-tmp/gef-cuda3090/builds/platform-de999c2/core",
+        "source": "de999c2fb344fcc40d3c4f39311cadd37d730bca",
+        "manifest_sha256": "f0e99687e7f966c9894c3cd049003e248354c55a3f008da6445afc4af0e4d6d9",
+        "binary_sha256": {
+          "libtidegraph.a": "45e8856edf2528414e52737534b3121cb4db1b7647f42a2bf29dae818c5341c3",
+          "libtidegraph_runtime.a": "88625cf5d352a9014cd2843f9db36c4c7a24e1d9f4520ed63850db441378526a",
+          "_tide_native.so": "79d3022582be20b5f6c8e995fdf1b8538a55164962230ee2e1afc547456fcd43",
+          "tidegraph-smoke": "8547c56d8a0118b99cfed3079a2f9c2b28a8b20bceb0132adb1444ffd0e80f4a",
+          "tidegraph-kernel-check": "0f167c019f00489e9e98383a40a23f2a1ac4e52582e9b10e17c2ae503b3bcaf9",
+          "tidegraph-full-check": "46974c14c76eb6f70d1202c8cae8e711d9e963e70c135e7254e764e29012c6fc",
+          "tidegraph-aggregate-check": "2b92095cce113052bc064abfff4b778e7036f13d042fc7d1d218703628c3973f",
+          "tidegraph-optimizer-check": "382800b48b2e73811e093aaf296dacd515ff6d6c58649a270e9537c20b08a8bd",
+          "tidegraph-checkpoint-check": "6d7b15080c136aa4a03f3ddf84fc731f03994d7a617e738056deb07f0766bd07",
+          "tidegraph-weighted-training-check": "f720bcf69dfb641a561945d35caa7104258ae932ef5c5a66731f5f8688b5e13c",
+          "tidegraph-lh-scope-check": "b49f1eb8bb3dff0c6bb8d3d33fc4c945153d9c6353d3fa9801dc8a7f9bdbac89",
+          "tidegraph-streaming-bench": "1104748bfc36c9c1a0efd1be93fad99f7352588ecd23bd2f7fb4b022302f9df4",
+          "tidegraph-scale-bench": "a11974c799de7f2be862e73ba9926902679d28dfb35f227c540aafd011450b23",
+          "tidegraph-profile-check": "df3d29fa997677c12b539f78c397a6b1c58c7453dddf5576276c0a36c203ffc2",
+          "tidegraph-settle-check": "d0b469b921b22c56b06d5b3efc362c904a384ba76a23378383f1cdbdc661b630",
+          "tidegraph-greedy-check": "5cb75438d151a02d0a4e95bc92c70a7aee4b7669846ce86e3781f6e661d0c638",
+          "tidegraph-accelerator-check": "d47e1167b5530face4cd6ac22ee78efbdf982e1682528da3376c1eaa8fafa7ea",
+          "tidegraph-runtime-check": "97a4b5cb7e8c96014942d31c7fbaedb18301ce55e7e3f1c0b902ffc1c2c2615a",
+          "tidegraph-read-precision-check": "6cbbd5891476f086c678ac0fb50cb85faf0cffdacd28ea61c1e7432ca2e79359",
+          "tidegraph-placement-check": "2c93a9687441d7ff49edaad31ff3cb137a8e85ab20ce313b633f7fe36ee957c8",
+          "tidegraph-payload-ownership-check": "b3a826099d8e1aefe9adf1e3b7589ae6cfbe590bef9a72ffafbc5a844c2445a0",
+          "tidegraph-weighted-binding-module-check": "da6583fcd041d98ddd385b3774912b3f62d2ba81f704c6f2ac8c2aaad3204919",
+          "libtidegraph-weighted-binding-module.so": "806ef97c624fa3f85a5ffabea94963de931320a5680f4728318895f69ef58098"
+        },
+        "backend": "cuda",
+        "architecture": "x86_64",
+        "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+        "component_sha256": null,
+        "loader_sha256": null,
+        "dependency_scope": "build manifest provenance; external loader libraries require the selected site lock"
+      },
+      "resident_library": {
+        "kind": "resident",
+        "path": "/root/autodl-tmp/gef-cuda3090/builds/platform-de999c2/resident-python",
+        "source": "de999c2fb344fcc40d3c4f39311cadd37d730bca",
+        "manifest_sha256": "857d4519ef19681312eac39ebf8815510bf0ca53d408e6d412f9617c2ce2122d",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "e472241638a185992cf75551ef62b1e3abfedaf4d82979d31cb9766c785e6e7e",
+          "libtide-weighted-flow.so": "a96208d7826c89c20384c7c2f114e017996e0893a058847a3944860827491418",
+          "libtide-weighted-training.so": "df99bf4898ea13c6bcc57648a923d472fd7555ed10a1c721fe06912d4a1b0fe1"
+        },
+        "backend": "cuda",
+        "architecture": "x86_64",
+        "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+        "component_sha256": "a91e5f70b6a7ce9a4297f91c7e5e0e84665b401f85f9dd6b1bfcc431d08183d7",
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "01e9fdba891592dc1453e454a12018e084bb42e35cf2953b3866b676e8d1d5ec",
+          "libtide-weighted-flow.so": "7fd79e2876c89c1c6a2e057c70fa1ab6a4c8443a0192c7d3b3aa6422a6a5829a",
+          "libtide-weighted-training.so": "abcc7cb3ee08e691652baf0f32ea14d8d671cb418d8df4f0776d294aefad4395"
+        },
+        "dependency_scope": "build manifest provenance; external loader libraries require the selected site lock"
+      },
+      "standalone_binary": {
+        "kind": "standalone",
+        "path": "/root/autodl-tmp/gef-cuda3090/builds/platform-eca070f/benchmark/client/weighted-benchmark",
+        "source": "eca070f73c760bf159bbe5c8e3b6c1bf1a9060c3",
+        "manifest_sha256": "a5dd5f91dbe143bee243ecfa8b6d63e0ecbd96cf5fb44d645cff93cb4301f64f",
+        "binary_sha256": {
+          "weighted-benchmark": "3c6188d404e59ce0d1b207aa0de4c8725dea84b2c12d7372c62c54df2faa46d1"
+        },
+        "backend": "cuda",
+        "architecture": "x86_64",
+        "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+        "component_sha256": null,
+        "loader_sha256": "1ccc314e022c00f07799b5661ad27ef5c54ed1849b8a5eb21b4879a6147a0e03",
+        "dependency_scope": "build manifest provenance; external loader libraries require the selected site lock"
+      }
+    }
+  },
+  "outer": {
+    "state": "passed",
+    "exit_code": 0,
+    "started": "2026-10-31T07:57:02.396037+00:00",
+    "finished": "2026-10-31T08:11:48.099457+00:00",
+    "remaining_live_pids": []
+  },
+  "progress": {
+    "state": "completed",
+    "rows": [
+      {
+        "medium": "disk",
+        "exit_code": 0,
+        "result_state": "completed",
+        "exact_resume": true,
+        "result": "/root/autodl-tmp/gef-cuda3090/checkpoint-cost-dba2a5e/disk/run/result.json",
+        "retained_result": "/root/autodl-tmp/gef-cuda3090/checkpoint-cost-dba2a5e/disk/retained-result.json",
+        "status": "/root/autodl-tmp/gef-cuda3090/checkpoint-cost-dba2a5e/disk/status.json"
+      },
+      {
+        "medium": "tmpfs",
+        "exit_code": 0,
+        "result_state": "completed",
+        "exact_resume": true,
+        "result": "/dev/shm/gef-checkpoint-dba2a5e/run/result.json",
+        "retained_result": "/root/autodl-tmp/gef-cuda3090/checkpoint-cost-dba2a5e/tmpfs/retained-result.json",
+        "status": "/root/autodl-tmp/gef-cuda3090/checkpoint-cost-dba2a5e/tmpfs/status.json"
+      }
+    ],
+    "finished": "2026-10-31T08:11:47.975163+00:00",
+    "script_sha256": "34de479d1b3c42b68cb16dca3ff4052e54994011bd3ef26cbd38f53d605c1a45"
+  },
+  "small_cuda_check": {
+    "schema": "tide-base-check-v1",
+    "state": "passed",
+    "started": "2026-10-31T07:55:50.242932+00:00",
+    "scope": "full",
+    "config_id": "7460e534732ef16dc731a42af796ded068cf8618da7f8ef5b496487acfbfe797",
+    "checks": [
+      {
+        "name": "complete-independent-inference-and-exact-resume",
+        "state": "passed",
+        "result": "inference/result.json"
+      },
+      {
+        "name": "independent-roots",
+        "state": "passed",
+        "roots": [
+          "all",
+          "first-output",
+          "connected-zero",
+          "first-control",
+          "first-descriptor-w",
+          "first-descriptor-mu",
+          "first-descriptor-score",
+          "first-descriptor-evidence",
+          "first-physical-message",
+          "private-raw-state-roots-after-nonposition-cut"
+        ],
+        "parameters_and_external_roots": true,
+        "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+      },
+      {
+        "name": "complete-independent-training-and-exact-resume",
+        "state": "passed",
+        "result": "training/result.json"
+      }
+    ],
+    "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+    "untested": [
+      "all-configuration backend matrix",
+      "higher-order gradients",
+      "multi-card resident without hardware capability"
+    ],
+    "finished": "2026-10-31T07:56:02.084217+00:00"
+  },
+  "small_cuda_result_sha256": "099c49ae97ffa282a69d217f0d9ff90736bce6fab2df145c117cd04aea60ded0",
+  "fixed_cpu_tests": {
+    "count": 67,
+    "state": "passed",
+    "source": "dba2a5ed45d79f17c93a72f5285c36b60b29bb9d",
+    "exit_code": 0,
+    "junit_sha256": "eb9adca4d2320cc9424350ba8a750ca9b769774a4fc923ceda698e9982a3c0fe",
+    "unit": "gef-checkpoint-cost-tests-dba2a5e.service"
+  }
+}

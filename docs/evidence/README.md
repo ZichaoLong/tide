@@ -223,3 +223,5 @@
 - [core-5公共配置/自然规模固定CPU资格](core5-planning-20261029.md)：8f51ba6新CPU构建、336通过；设备及后续benchmark扩展另验。
 
 [三通信CUDA双卡独立根补查](core5-platform-multicard-checks-20261031.json)：固定bd2ff2e三项full检查通过，与原性能结果分列；NPU后继仍待实际终态。
+
+[大模型checkpoint磁盘/tmpfs成本](core5-checkpoint-cost-20261031.md)：dba2a5e固定67项CPU回归、CUDA小型full检查通过；4.561B两项完整恢复成本观察，独立数学未检查，不计吞吐资格。
