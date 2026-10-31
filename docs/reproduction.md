@@ -25,6 +25,7 @@
 | 默认异步双NPU | [纯Torch小图](../scripts/diagnose_torch_peer.py)、[完整图诊断](../scripts/diagnose_weighted_async.py)、[桥接独立根检查](../tests/test_weighted_peer_bridge.py) | [数值/异步隔离](evidence/core5-numerical-isolation-20261028.md)、[完整CPU桥接失败](evidence/core5-boundary-isolation-20261029.md)；12轮小图不能认证完整图 |
 | CPU autograd之后晚注册NPU | [完整小程序和退出码](evidence/core5-resident-boundary-20261029.json)的bootstrap.program/相关结果 | [初始化边界](evidence/core5-resident-boundary-20261029.md)；early/late必须两个新进程，原程序已在Git中，无需旧私有启动器 |
 | native workers2跨进程恢复 | [安装消费者](../examples/consumer_core5/README.md)的check.py，显式FP32/native/workers2 | [原失败与命令](evidence/downstream-contract-20261030.md)；默认worker1不代表workers2修复，单次通过也不证明并发顺序确定 |
+| 本轮NPU1B/B512精确下一窗 | [有界恢复诊断](../scripts/diagnose_experiment_resume.py)：原安装运行`CONFIG --checkpoint OLD --windows 3 --output-dir NEW`；无旧目录时省略checkpoint，由相同固定配置重建新见证 | [规模原失败](evidence/core5-platform-scale-20261031.md)；先分开raw-boundary与next-complete，再比较状态/参数stride、offset、对齐与NPU format及工作量。布局差异不自动证明因果，不运行CPU参考轨迹或改变算术/布局 |
 | D2048首次写入的真实局部算术 | [有界读取诊断](../scripts/diagnose_weighted_first_write.py)、[参数匹配及导出](weighted-workloads.md) | [首次写入隔离](evidence/core5-boundary-isolation-20261029.md)；原输入binary及witness已退役，需重建相同种子/配置材料；约37GB静态材料的成本仍存在 |
 | 较大FC/HB数值、NPU流/任务资源及局部预算 | [有限目录](../benchmarks/core5-study-v1.json)、[单配置入口](../scripts/run_core5_study.py)、[配置/证据查询](core5-study.md) | [自然规模测量](evidence/core5-natural-study-20261029.md)、[流资源](evidence/core5-compact-fibers-20261029.md)、[文件预算](evidence/core5-checkpoint-budget-20261029.md)；停止条件保持，8B/16B仍无实测吞吐 |
 
