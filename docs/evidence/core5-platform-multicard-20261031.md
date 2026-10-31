@@ -134,3 +134,12 @@ RSS20.939211GB，构造10.599秒、恢复29.843秒、独立参考13.323秒、整
 推导任意根通过。原ordinary/cpu_bridge小训练通过、blocking旧SIGSEGV和单次未复现分别保留。
 逐项完整错误、输入与安装/库hash已补入[独立检查记录](core5-platform-multicard-checks-20261031.json)。
 下一步仅针对首个失败阶段补充可持久化进度、做有界定位，不重复正式性能矩阵。
+
+
+后继4485697仅增加检查阶段持久记录，固定CPU27项通过；私有环境补pytest9.2后，
+NPU实际返回存储6项通过（4项明确deselected，原缺pytest的失败仍保留）。
+同配置ordinary双卡第一次all根在候选`torch.autograd.grad`/`_engine_run_backward`发生SIGSEGV/-11，
+取得faulthandler栈；此前参考VJP和完整前向比较已返回。raw结果保留running最后快照，
+实际终态按监督failed/-11和空后代记录，不能称还在运行或通过。
+单卡periodic配置同样定位到all根比较：外部输入`input.0.1.0.1`的1/9坐标超差，
+绝对2.83122e-6、相对3.95708e-5；原atol1e-6/rtol1e-5保持。不是checkpoint存储值改变。

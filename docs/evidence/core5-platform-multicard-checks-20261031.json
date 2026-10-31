@@ -942,5 +942,151 @@
     }
   ],
   "npu_input_sha256": "af8086dc266a76be3ed6f84d17d24af3fcb01262bb55b4285a2e06f0dcc9027c",
-  "npu_launcher_script_sha256": "2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c"
+  "npu_launcher_script_sha256": "2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c",
+  "progress_qualification": {
+    "source": "4485697c254062301a9401781c9e03954256f33f",
+    "change": "persist first root and reference/candidate/compare stage; no arithmetic, tolerance or scheduling change",
+    "cpu": {
+      "tests": 27,
+      "failures": 0,
+      "skipped": 0,
+      "source_clean": true,
+      "tests_paths": [
+        "tests/test_experiment_check_progress.py",
+        "tests/test_experiment_engine.py",
+        "tests/test_experiment_task_module.py"
+      ]
+    },
+    "npu_return_storage": {
+      "tests": 6,
+      "deselected": 4,
+      "failures": 0,
+      "scope": "FP16/FP32/FP64/int64/bool literal byte copies plus full snapshot; not arithmetic qualification",
+      "prior_attempt": "36baeb7 private env lacked pytest; no tests ran in that attempt",
+      "log_sha256": "38024e45005c4389d53105eb10e67023eb9d7a6669c43356c3fbc41738c57454"
+    },
+    "npu_full": [
+      {
+        "name": "ordinary-full",
+        "actual_terminal_state": "failed",
+        "result": {
+          "schema": "tide-base-check-v1",
+          "state": "running",
+          "started": "2026-10-31T10:03:06.931300+00:00",
+          "scope": "full",
+          "config_id": "5a44143cd58cd4f4bc5a0c7e6f0fea1fdc126f5a59996e76c97a793fea9eb35f",
+          "checks": [
+            {
+              "name": "complete-independent-inference-and-exact-resume",
+              "state": "passed",
+              "result": "inference/result.json"
+            }
+          ],
+          "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+          "untested": [
+            "all-configuration backend matrix",
+            "higher-order gradients",
+            "multi-card resident without hardware capability"
+          ],
+          "phase": "independent-roots",
+          "root_progress": {
+            "stage": "candidate-vjp",
+            "root": "all",
+            "completed_roots": []
+          }
+        },
+        "result_sha256": "bca54db1fddf41b5b78f0e49ddb00254f1b94cbc53d41d9441ef4d83a394e59f",
+        "log_sha256": "cee2b155e6e8522f4fa7c9fecd3b98217566dade60de191b48a87b971774877b",
+        "identity": {
+          "package_sha256": "0312c34e47639eb4d7c6287f9b4263ed2d5cca128f31952b5e48b7f40eb8cb84",
+          "builds": {
+            "native_library": {
+              "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+              "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+              "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+            },
+            "resident_library": {
+              "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+              "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+              "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+            },
+            "standalone_binary": {
+              "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+            }
+          }
+        },
+        "supervisor": {
+          "state": "failed",
+          "exit_code": -11,
+          "started": "2026-10-31T10:03:05.541396+00:00",
+          "finished": "2026-10-31T10:03:17.372013+00:00",
+          "remaining_live_pids": []
+        },
+        "error_boundary": "candidate torch.autograd.grad(all) / _engine_run_backward"
+      },
+      {
+        "name": "single-full",
+        "actual_terminal_state": "failed",
+        "result": {
+          "schema": "tide-base-check-v1",
+          "state": "failed",
+          "started": "2026-10-31T10:03:19.031083+00:00",
+          "scope": "full",
+          "config_id": "d463788fc41fcc312be978bde8efa158b9dd0c968d07e397bfd939a9f1ff8e09",
+          "checks": [
+            {
+              "name": "complete-independent-inference-and-exact-resume",
+              "state": "passed",
+              "result": "inference/result.json"
+            }
+          ],
+          "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+          "untested": [
+            "all-configuration backend matrix",
+            "higher-order gradients",
+            "multi-card resident without hardware capability"
+          ],
+          "phase": "independent-roots",
+          "root_progress": {
+            "stage": "compare-vjp",
+            "root": "all",
+            "completed_roots": []
+          },
+          "error": {
+            "type": "NumericMismatch",
+            "message": "root[input.0.1.0.1]: Tensor-likes are not close!\n\nMismatched elements: 1 / 9 (11.1%)\nGreatest absolute difference: 2.8312206268310547e-06 at index (4,) (up to 1e-06 allowed)\nGreatest relative difference: 3.957078661187552e-05 at index (4,) (up to 1e-05 allowed)"
+          },
+          "finished": "2026-10-31T10:03:25.410367+00:00"
+        },
+        "result_sha256": "9d188fc3440b3f46dd34cd098107f93928beb63531bb38e3237488317388f0c3",
+        "log_sha256": "5d80f9464ba1b42747ac1b79b7e42d9109ad9e2c24dbf1d3ffe7548ca833b1e8",
+        "identity": {
+          "package_sha256": "0312c34e47639eb4d7c6287f9b4263ed2d5cca128f31952b5e48b7f40eb8cb84",
+          "builds": {
+            "native_library": {
+              "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+              "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+              "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+            },
+            "resident_library": {
+              "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+              "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+              "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+            },
+            "standalone_binary": {
+              "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+            }
+          }
+        },
+        "supervisor": {
+          "state": "failed",
+          "exit_code": 1,
+          "started": "2026-10-31T10:03:17.619234+00:00",
+          "finished": "2026-10-31T10:03:29.494242+00:00",
+          "remaining_live_pids": []
+        },
+        "error_boundary": "strict independent input gradient comparison for all root"
+      }
+    ]
+  }
 }

@@ -112,3 +112,7 @@ B512下一方案须区分同次运行即时解码与跨进程重放；必要chec
 4485697固定CPU27项通过；NPU返回6项通过（4项明确deselected），ordinary双卡full在
 candidate-vjp/all发生SIGSEGV/-11并取得faulthandler调用栈；单卡在compare-vjp/all重现原输入根数值差异。
 后继仅上述一次显式同步提交诊断；新loss实际单/双卡小训练独立准入后继续原1B配置。
+
+已准备计算后继`gef-npu-compute-followup-4485697`，包4485697、原库eca070f，冻结输入`inputs-npu-compute-4485697`。同步栈诊断→单卡小loss训练→对应1B→双卡小loss训练→对应1B，各自300/1800秒，队列600秒；只有对应卡数的小训练实际严格/恢复通过才准入大点。总上限10800秒，日志`artifacts/jobs/npu-compute-followup-4485697/task.log`，逐项记录`artifacts/platform-matrix/npu-compute-followup-4485697/progress.json`。
+
+必要B512同进程诊断后继`gef-npu-resume-immediate-61571c4`等待计算后继控制组清空；仍用原包1b3e39f和脚本61571c4，3原窗+同次新checkpoint+下一窗，各900秒/queue600秒，外层14400秒含依赖。tmpfs路径`/dev/shm/gef-npu-resume-immediate-61571c4`，原checkpoint只读。先联合host61.446GB+未来文件10.850GB准入；持久结果/日志在`artifacts/platform-matrix/npu-resume-immediate-61571c4`及`artifacts/jobs/npu-resume-immediate-61571c4`。不做存储速度实验。
