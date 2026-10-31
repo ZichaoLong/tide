@@ -1,6 +1,6 @@
 # 当前交接 — 三平台矩阵、多卡与人类入口（2026-10-31）
 
-授权分支`graph-execution-foundation`，当前已推送`b495f10`，工作区启动时干净。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。Python实现bd2ff2e；活动任务分别使用冻结的1b3e39f/bd2ff2e安装，未修改。远端脏dev保持。旧账户指南已不存在，依用户确认与实际模块/合作队列继续。
+授权分支`graph-execution-foundation`，当前已推送`616fe0e`，工作区启动时干净。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。Python实现bd2ff2e；活动任务分别使用冻结的1b3e39f/bd2ff2e安装，未修改。远端脏dev保持。旧账户指南已不存在，依用户确认与实际模块/合作队列继续。
 
 ## 已完成与审阅证据
 
@@ -27,13 +27,17 @@ artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/install-platform-bd2ff2
 
 本机后继准备`gef-platform-next-stages-bd2ff2e.service`，有意等待NPU scale终态：CPU/NPU各一个1B/B128独立profile，NPU同模型2/3/8卡及三通信小训练、1B训练单/2/8卡、resident默认/有界共17个已跟踪case。每项独立公共CLI进程；NPU逐项申请实际所需卡数并释放，priority0/物理候选4–11/等待600秒。配置来自b495f10、安装bd2ff2e；输入`artifacts/platform-matrix/inputs-b495f10-next`，编排`next-stages-bd2ff2e.py/.sh`；外层status/log在`artifacts/jobs/platform-next-stages-bd2ff2e`，内部progress/log在`artifacts/platform-matrix/next-stages-bd2ff2e`。外层总时限43200秒含前序等待；尚未启动测量。
 
+本机人类流程后继`gef-human-local-de93246.service`有意等待next-stages终态，之后CPU全流程、NPU合作队列1卡全流程。固定安装de93246、已准备的public CLI编排，不改活动安装。外层时限57600秒含前序等待，状态/log在`artifacts/jobs/human-local-de93246`；输出`artifacts/platform-matrix/human-{cpu,npu}-de93246`。目前仅等待，未验收。
+
+GPU后继准备`jobs/platform-cuda-training-capacity-first-bd2ff2e`，resident/profile完全终态后运行已提交的1B训练单卡/双卡两个配置；各1800秒，逐卡/主存/磁盘live准入。单卡预计静态拒绝仍实际记录。四卡训练待这两项审阅及磁盘余量核验后接续，避免将checkpoint累积误称硬件限制。
+
 ## 环境、来源与资源边界
 
 本机aarch64/320 affinity CPU、约1.8TiB可用主存/2.3TiB空盘；16×64GiB NPU，选择物理4–11前重新经合作队列检查。Torch/TorchNPU2.12/CANN9.1；独立LibTorch2.10/CANN9.0另ABI。CPU core de999c2/standalone eca070f；NPU core/resident/standalone eca070f；GPU core/resident de999c2、standalone eca070f。三平台standalone各3 CTest通过；本阶段不改C++，不重复构建，旧库来源/hash保持。
 
-GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、数据盘50GiB。最新四卡各空闲24126MiB、0%利用；盘仅17.920GB空闲。校准4.561B点需要两代checkpoint42.482GB，必须先审阅/退役终态可再生checkpoint再准入；不因旧产物占盘误称模型硬件不支持。已退役pilot和1B大batch四项14.576GB，原结果/输入/log保留，凭据`checkpoint-retirement-reviewed-1b3e39f.json`。12方向无直接P2P/原生跨卡原子边界未解除。
+GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、数据盘50GiB。GPU新组启动前四卡各空闲24126MiB、0%利用；随后resident/profile正在用GPU0。校准4.561B点需要两代checkpoint42.482GB，必须先审阅/退役终态可再生checkpoint再准入；不因旧产物占盘误称模型硬件不支持。已退役并入库的三拓扑/多卡六个checkpoint27.280GB，凭据`checkpoint-retirement-reviewed-bd2ff2e.json`，清理后free41.735GB（profile仍活动）；此前已退役pilot和1B大batch四项14.576GB，原结果/输入/log保留，凭据`checkpoint-retirement-reviewed-1b3e39f.json`。12方向无直接P2P/原生跨卡原子边界未解除。
 
-安装：本机`artifacts/platform-matrix/install-{1b3e39f,de93246,bd2ff2e}`；远端`install-platform-*`。bd2ff2e包hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`，wheel、site、锁与构建manifest各自保存。活动安装/源码保持不可变。公共CLI/配置入口见[人类手册](human-workflow.md)、[174个有限选点](platform-matrix.md)。
+安装：本机`artifacts/platform-matrix/install-{1b3e39f,de93246,bd2ff2e}`；远端`install-platform-*`。bd2ff2e包hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`，wheel、site、锁与构建manifest各自保存。活动安装/源码保持不可变。公共CLI/配置入口见[人类手册](human-workflow.md)、[180个有限选点](platform-matrix.md)。
 
 ## 下一动作
 
@@ -44,3 +48,5 @@ GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、
 5. 综合新增规模/多卡/resident证据处置六项问题，更新唯一ROADMAP、索引、performance-lessons与最终可查询矩阵；阶段提交后普通推送并继续。
 
 从干净仓库按development/human-workflow安装，使用configs/matrices和实测site；审阅gzip可以独立查询，不依赖旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。STATUS唯一交接，ROADMAP唯一待办。
+
+新增六个同材料resident-match配置已开发核验：三平台d16 FC4、B128/B512/P2 eager对应有界resident原模型/输入/task；补齐此前d128不能直接比较的空缺。原174项身份逐项保持。正式运行尚未提交，不计通过。

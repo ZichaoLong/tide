@@ -4,9 +4,9 @@
   "status": "planned-not-runtime-evidence",
   "site_paths": "templates; actual builds/current free resources are independent run inputs",
   "counts": {
-    "cpu": 46,
-    "npu": 62,
-    "cuda": 66
+    "cpu": 48,
+    "npu": 64,
+    "cuda": 68
   },
   "cases": [
     {
@@ -1798,6 +1798,108 @@
       },
       "host_estimated_bytes": 8910700576,
       "disk_estimated_bytes": 1098072080
+    },
+    {
+      "case": "cpu-resident-match-b128",
+      "matrix": "cpu-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c90599662f9c1189846f5329763f0adbb8d27856eec83c6eb44b35ac7ad14202",
+      "task_id": "1f4fdc889751acfe0cad414e205c89edb7bdf0279d57b70f64814e91efd6254a",
+      "execution_id": "e3047a0b6f39f5e8d7a7eef91f1d96d65b3c270e9d4ccb1826094cb90111921b",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 13748552
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8646141216,
+      "disk_estimated_bytes": 1076728464
+    },
+    {
+      "case": "cpu-resident-match-b512",
+      "matrix": "cpu-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c75e346965e9fd1e55eac700186a93be3a92c0c7fe476520f1e9ba32b1e3924a",
+      "task_id": "1d0241f7f5827ea54085b3732c471e4f466804959e1a0af451932514ef10168a",
+      "execution_id": "ce99fb7b90b58207fbfef9f2dcaa1287d1d248a638f2e32a21fed35b1b1496e0",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 54593864
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8813159712,
+      "disk_estimated_bytes": 1084887696
     },
     {
       "case": "cpu-scale-fc-100m",
@@ -5461,6 +5563,108 @@
       "disk_estimated_bytes": 1161819152
     },
     {
+      "case": "cuda-resident-match-b128",
+      "matrix": "cuda-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c90599662f9c1189846f5329763f0adbb8d27856eec83c6eb44b35ac7ad14202",
+      "task_id": "1f4fdc889751acfe0cad414e205c89edb7bdf0279d57b70f64814e91efd6254a",
+      "execution_id": "f35880411034810791114eae46e99e5156830296e64788775e1d2fc50839df64",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 13748552
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8646191136,
+      "disk_estimated_bytes": 1076753424
+    },
+    {
+      "case": "cuda-resident-match-b512",
+      "matrix": "cuda-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c75e346965e9fd1e55eac700186a93be3a92c0c7fe476520f1e9ba32b1e3924a",
+      "task_id": "1d0241f7f5827ea54085b3732c471e4f466804959e1a0af451932514ef10168a",
+      "execution_id": "b6a4dcbf5fbeb26f0609c9a03f251f735f2c7f132e980d0571db41ed9fcb2b00",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 54593864
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8813209632,
+      "disk_estimated_bytes": 1084912656
+    },
+    {
       "case": "cuda-scale-fc-100m",
       "matrix": "cuda-scale.json",
       "status": "planned",
@@ -8823,6 +9027,108 @@
       },
       "host_estimated_bytes": 8851662880,
       "disk_estimated_bytes": 1161819152
+    },
+    {
+      "case": "npu-resident-match-b128",
+      "matrix": "npu-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c90599662f9c1189846f5329763f0adbb8d27856eec83c6eb44b35ac7ad14202",
+      "task_id": "1f4fdc889751acfe0cad414e205c89edb7bdf0279d57b70f64814e91efd6254a",
+      "execution_id": "756e3360e5243c1e2aaf6dac09a37b4546ae9bad180cd07adb6c5a472ea9e889",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 13748552
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8646191136,
+      "disk_estimated_bytes": 1076753424
+    },
+    {
+      "case": "npu-resident-match-b512",
+      "matrix": "npu-resident-match.json",
+      "status": "planned",
+      "question": "Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c75e346965e9fd1e55eac700186a93be3a92c0c7fe476520f1e9ba32b1e3924a",
+      "task_id": "1d0241f7f5827ea54085b3732c471e4f466804959e1a0af451932514ef10168a",
+      "execution_id": "8af584a4af078ab7a9a3a72a8deab70aa85a63b3781f0be57762a3ffe7c39f06",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 54593864
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8813209632,
+      "disk_estimated_bytes": 1084912656
     },
     {
       "case": "npu-scale-fc-100m",

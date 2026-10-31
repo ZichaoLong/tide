@@ -83,7 +83,7 @@ def test_plan_index_is_not_runtime_evidence_and_counts_are_finite():
     assert index["status"] == "planned-not-runtime-evidence"
     observed = {platform:sum(len(cases(platform, path.stem[len(platform)+1:]))
                            for path in ROOT.glob(platform+"-*.json")) for platform in ("cpu","npu","cuda")}
-    assert observed == index["counts"] == dict(cpu=46,npu=62,cuda=66)
+    assert observed == index["counts"] == dict(cpu=48,npu=64,cuda=68)
     assert all(row["status"] == "planned" and row["timeout_seconds"] in (900,1800) for row in index["cases"])
 
 
@@ -96,6 +96,11 @@ def test_bounded_resident_keeps_default_refusal_and_same_workload(platform):
         assert old["capacity_budget"]["static_rejections"]
         assert old["workload_id"] == new["workload_id"]
         assert old["model_id"] == new["model_id"]
+        for eager_platform in (platform, "cpu"):
+            eager = resolve(cases(eager_platform, "resident-match")[f"{eager_platform}-resident-match-b{batch}"])
+            assert eager["model_id"] == new["model_id"]
+            assert eager["workload_id"] == new["workload_id"]
+            assert eager["task_id"] == new["task_id"]
         limits = new["resources"]["resident_limits"]
         assert limits["queue"] == 12*batch and limits["stages"] == 32
         assert new["plan"]["samples"] == batch

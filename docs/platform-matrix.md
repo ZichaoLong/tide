@@ -12,7 +12,7 @@
 
 ## 有限列表与执行顺序
 
-总计174个明确case：CPU46、NPU62、CUDA66，按38个独立阶段文件组织。
+总计180个明确case：CPU48、NPU64、CUDA68，按41个独立阶段文件组织。
 每个case各一次独立测量流程，warmup1窗、正式2窗、完整返回、额外一窗精确恢复；
 小型/批次配置超时900秒，scale/capacity配置1800秒。
 这些是单case上限，不是承诺运行全部case的总耗时；应分组执行并检查终态、争用和准入。
@@ -27,6 +27,7 @@
 | packing | 2 | 2 | 2 | A/C与batch组已有B构成同材料A/B/C；B不重复测量 |
 | finite | 6 | 6 | 6 | 根据GPU诊断热点新增B128 scalar/packed有限值检查、小型训练两策略、B512 packed及独立profile；默认检查与数学不变 |
 | scale | 7 | 7 | 7 | B1增参数；FC少/多节点、HB/LH各约1B；固定1B的B128/B512 |
+| resident-match | 2 | 2 | 2 | 与resident有界B128/B512严格同材料的d16 eager；不把d128 batch组混入布局比较 |
 | scale-observation | 1 | 1 | 1 | 对已实际完成正式流程的1B/B128另采实际MM/BMM形状与桶；不重复独立参考、不作吞吐或新增数值资格 |
 | threads | 3 | — | — | ATen/BLAS1/4/16线程；独立调度workers1/2 |
 | placement | — | 2 | 2 | 同一B128材料mixed-a/b，复用batch组mixed-c |
@@ -177,3 +178,5 @@ python configs/matrices/generate.py --output-dir artifacts/reviewed-matrix-previ
 覆盖与预算测试是开发检查，不是本矩阵的设备资格。
 后续新的资源校准、profile和六项打包处置应链接当轮证据与
 [performance-lessons](performance-lessons.md)，待办只写入 [ROADMAP](ROADMAP.md)。
+
+CUDA有界resident的B128/B512已完成实际流程，但它们的d16模型与原batch组d128不同。`*-resident-match.json`补各平台d16/FC4/B128或B512/P2的packed/scalar完整返回；模型、输入、task身份与resident一致，单独独立验收后再比较成本。原B128/B512默认resident布局拒绝继续保留，不能拿容量修正称数值修复。

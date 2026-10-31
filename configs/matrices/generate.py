@@ -126,6 +126,10 @@ def requests():
             recipe(target=1_000_000_000), batch=128, positions=2, validation="none", resources=LARGE,
             question="Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.")
         observed["measurement"].update(observation="profile", steps=1, checkpoint_check=False)
+        for batch in (128, 512):
+            add(platform, "resident-match", f"resident-match-b{batch}", recipe(width=16),
+                batch=batch, positions=2, validation="explore",
+                question="Same d16 FC4 model, staggered samples and P2 as resident-bounded; eager packed/scalar complete return. Separately qualify CPU/mixed-c before comparing device layout costs; d128 batch rows are not this workload.")
         if platform == "cpu":
             for threads in (1, 16):
                 add(platform, "threads", f"threads-{threads}", medium, batch=128, positions=2,
