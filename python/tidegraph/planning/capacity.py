@@ -140,6 +140,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     one_window, _ = _counts(plan, 1)
     states = [_state(c, total, scalar) for c, total in zip(plan["memories"], totals)]
     components = {}
+    python_inference = not resident and not train and spec.client != "libtorch"
     for device, owner in placement["per_device"].items():
         learned = owner["trainable_elements"]
         master = 4*learned if train and spec.dtype == "float16" else 0
@@ -194,6 +195,11 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         if checkpoint:
             values["checkpoint_restore_staging"] = (values["parameters"]+values["inert_buffers"]+
                 values["fp32_masters"]+values["optimizer_slots"]+values["private_state"]+values["pending_messages"])
+            if python_inference:
+                # checkpoint.load decodes weights on CPU and load_state_dict
+                # copies into the existing device bank. There is no second
+                # full device bank. Host decode/copy budgets below remain.
+                values["checkpoint_restore_staging"] -= values["parameters"]+values["inert_buffers"]
             if train and spec.client != "libtorch" and not resident:
                 values["checkpoint_optimizer_preflight"] = (placement["per_device"][device]["trainable_elements"]*scalar+
                     values["fp32_masters"]+values["optimizer_slots"])
@@ -276,7 +282,8 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         disk=dict(estimated_new_bytes=disk, checkpoint_generations=2 if checkpoint else 0, reserve_bytes=disk_reserve, free_bytes=resources.get("disk_free_bytes")),
         checkpoint_policy=dict(weight_tensor_bytes=checkpoint_weights, estimated_file_tensor_bytes=checkpoint_estimate,
             max_file_bytes=checkpoint_limit, largest_tensor_elements=largest,
-            restoration="reserve full staged bank/state; Python training also reserves optimizer deepcopy preflight"),
+            restoration="CPU-decoded weights copied into existing bank; device continuation staged separately" if python_inference else
+                "reserve full staged bank/state; Python training also reserves optimizer deepcopy preflight"),
         communication=dict(requested=spec.communication, effective=None,
             status="requires actual runtime evidence", counted="forward physical message payload upper only; excludes VJP, descriptors and transport overhead"),
         resident_peer_protocol="runtime capability gate required; ordinary request is not a peer fallback" if resident else None,
@@ -286,7 +293,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
             "one SGD momentum slot or two AdamW slots reserved for every trainable canonical leaf",
             "private states include int64 timestamps; no cache is truncated",
             "complete internal records reserved even for requested outputs/metrics",
-            "checkpoint staging is conservatively simultaneous; per-client measured peaks may refine it"],
+            "checkpoint staging follows the selected client; remaining counted partitions are conservatively simultaneous"],
         unknown=["allocator/context and packing peaks", "regional Attention temporary matrices and vendor workspace",
             "resident physical role-bank replicas and service/SQ/CQ/task resources" if resident else "transient parameter/scoring copies",
             "training autograd/retained graph and journal peaks" if train else "runtime object overhead"],

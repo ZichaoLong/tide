@@ -89,3 +89,20 @@ def test_missing_supervisor_is_unconfirmed_not_passed(tmp_path):
     assert record["observed_state"] == "unconfirmed"
     with pytest.raises(RuntimeError, match="supervisor identity missing"):
         container_job.stop(out)
+
+
+def test_matrix_logs_show_current_child_without_hiding_its_failure(tmp_path):
+    from tidegraph.experiment.records import write_json
+    out = tmp_path/"job"
+    current = out/"run"/"case-b"
+    current.mkdir(parents=True)
+    (out/"task.log").write_text("")
+    (current/"task.log").write_text("started\nNumericMismatch: original threshold\n")
+    write_json(out/"run"/"result.json", dict(schema="tide-experiment-matrix-result-v1",
+        state="running", current_case="case-b", cases=[dict(name="case-a", state="passed")]))
+    text = jobs.logs(out, lines=1)
+    assert str(current/"task.log") in text
+    assert "NumericMismatch" in text and "started" not in text
+    write_json(out/"run"/"result.json", dict(schema="tide-experiment-matrix-result-v1", current_case="../other"))
+    with pytest.raises(ValueError, match="current_case"):
+        jobs.logs(out)

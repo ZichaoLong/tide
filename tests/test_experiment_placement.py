@@ -176,6 +176,24 @@ def test_resource_refusal_and_tampered_placement_are_distinct_from_qualification
         capacity_budget(plan, spec, resources=dict(logical_windows=2**62))
 
 
+def test_inference_restore_capacity_distinguishes_cpu_decoded_and_native_staged_banks():
+    # A 4.03B FP32 bank fits a 24GiB device with 4GiB reserved. C++ restores
+    # a second complete device bank transactionally; Python copies CPU weights
+    # into its existing bank. Both still need host/disk and runtime admission.
+    plan, _ = prepare(dict(topology="fc", depth=2, region_width=2, width=8192),
+                      samples=1, positions=2)
+    budgets = {}
+    for client in ("pytorch", "python-native", "libtorch"):
+        spec = ExecutionSpec(client=client, device="cuda:0", placement="mixed-c")
+        budgets[client] = capacity_budget(plan, spec, resources=dict(logical_windows=4,
+            devices={"cuda:0": dict(capacity_bytes=24*1024**3, reserve_bytes=4*1024**3)}))
+    for client in ("pytorch", "python-native"):
+        assert not budgets[client]["per_device"]["cuda:0"]["reservation_exceeds_available"]
+        assert budgets[client]["host"]["estimated_tensor_reservation_bytes"] > 4*16*1024**3
+        assert not budgets[client]["automatic_admission"]
+    assert budgets["libtorch"]["per_device"]["cuda:0"]["reservation_exceeds_available"]
+
+
 def test_plan_and_capacity_work_without_torch_or_device_plugins():
     root = Path(__file__).resolve().parents[1]
     code = """

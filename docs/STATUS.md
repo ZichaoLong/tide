@@ -38,7 +38,7 @@ CUDA四张3090/sm86，Torch2.12.1+cu130/Toolkit13.0，CPU配额56、主存240GiB
 
 ## 下一动作与公开命令
 
-两机重型构建均已终态。准备通过公开CLI启动GPU首组 `gpu3090:jobs/platform-cuda-coverage-972032f`（12项小型层级/拓扑覆盖），固定安装972032f与eca070f/de999c2真实库身份，单case900s上限。其后顺序执行各平台coverage/clients、batch/packing等组，审阅结果后逐项放行scale/multicard/capacity，profile独立进程。大点每项结束后审阅小记录并按保留规则处理生成文件，避免填满GPU数据盘。
+两机重型构建均已终态。GPU首组 `gpu3090:jobs/platform-cuda-coverage-972032f` 已终态（12项小型层级/拓扑覆盖，严格失败保持）。下一活动组 `gpu3090:jobs/platform-cuda-eager-972032f` 为20项clients/batch/packing/modules/placement/precision的显式合并，包含B128/B512与A/B/C，固定安装972032f与eca070f/de999c2真实库身份，单case900s上限。其后顺序执行各平台coverage/clients、batch/packing等组，审阅结果后逐项放行scale/multicard/capacity，profile独立进程。大点每项结束后审阅小记录并按保留规则处理生成文件，避免填满GPU数据盘。
 
 ```sh
 git status --short --branch
@@ -54,3 +54,5 @@ tidegraph results NEW_REVIEWED.json --format html --output NEW_REPORT.html
 ```
 
 gpu3090通过私有 `artifacts/cuda3090/ssh.sh`，无systemd时使用已安装container_job；本机独立background.slice，NPU等待放在服务内部。原始绝对路径仅定位当前材料，干净检出按[人类入口](human-workflow.md)/[开发文档](development.md)重新生成。STATUS唯一当前交接，ROADMAP唯一待办；当前阶段资格证据尚未提交，不能把实施或running写成通过。
+
+接续开发修正：已安装矩阵显示当前case/log和长独立检查阶段；Python eager推理预算排除不存在的第二份设备权重bank（主存/C++/训练预算保留）。47项运行/放置/作业定向检查通过，待提交后安装新版本用于后续容量准入；正在运行的972032f安装未改动。

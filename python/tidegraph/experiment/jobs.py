@@ -145,7 +145,14 @@ def status(output_dir):
     if result_file.is_file():
         result = read_json(result_file)
         record["experiment"] = {key: result.get(key, "unchecked") for key in (
-            "state", "execution_status", "validation", "checkpoint", "config_id")}
+            "state", "execution_status", "validation", "checkpoint", "config_id", "phase", "window")}
+        if result.get("schema") == "tide-experiment-matrix-result-v1":
+            record["experiment"].update(completed_cases=len(result["cases"]), current_case=result.get("current_case"))
+            current = _case_path(out, result)
+            if current is not None and (current/"run"/"result.json").is_file():
+                child = read_json(current/"run"/"result.json")
+                record["experiment"]["current_result"] = {key: child.get(key, "unchecked") for key in (
+                    "state", "execution_status", "phase", "window", "validation", "checkpoint", "error")}
     return record
 
 
@@ -171,9 +178,29 @@ def logs(output_dir, *, lines=80):
     if type(lines) is not int or lines < 1:
         raise ValueError("log line count must be positive")
     from collections import deque
-    path = Path(output_dir)/"task.log"
+    out = Path(output_dir)
+    path = out/"task.log"
+    result_file = out/"run"/"result.json"
+    if result_file.is_file():
+        current = _case_path(out, read_json(result_file))
+        if current is not None and (current/"task.log").is_file():
+            path = current/"task.log"
     with path.open(errors="replace") as stream:
-        return "".join(deque(stream, maxlen=lines))
+        return f"Log: {path}\n"+"".join(deque(stream, maxlen=lines))
+
+
+def _case_path(out, result):
+    """Matrix logs stay in their original per-case files, without a relay."""
+    if result.get("schema") != "tide-experiment-matrix-result-v1":
+        return None
+    current = result.get("current_case")
+    if current is None and result.get("cases"):
+        current = result["cases"][-1]["name"]
+    if current is None:
+        return None
+    if not isinstance(current, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,79}", current):
+        raise ValueError("matrix.current_case: invalid case identity")
+    return Path(out)/"run"/current
 
 
 def resume(output_dir, new_output_dir, *, checkpoint=None):

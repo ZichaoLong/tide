@@ -83,6 +83,8 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         import torch
         memory = Memory(torch.device(e["device"]), e["peer_devices"])
         record["memory"] = memory.capture("runtime_ready", reset=True)
+        record["phase"] = "construction"
+        write_json(output/"result.json", record)
         began = time.perf_counter()
         owner = create(resolved, checkpoint=checkpoint_path)
         record["construction_seconds"] = time.perf_counter()-began
@@ -133,6 +135,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         task_state = owner.task_state() if policy != "none" and hasattr(owner, "task_state") else None
         if measurement["checkpoint_check"]:
             record["phase"] = "exact-resume"
+            write_json(output/"result.json", record)
             began = time.perf_counter()
             record["checkpoint"].update(state="passed", exact_resume=True,
                 resume_check=exact_next(owner, lambda **kw: create(resolved, **kw), checkpoint_path, start+total))
@@ -142,6 +145,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         owner = None
         if policy != "none":
             record["phase"] = "independent-check"
+            write_json(output/"result.json", record)
             from .validation import independent, outcome
             began = time.perf_counter()
             validation = independent(resolved, actual, parameters, training, start, task_state=task_state)
@@ -157,6 +161,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
             interpretation="strict qualified complete-return" if state == "passed" else
                 "exploratory finite cost; original strict comparison failed" if state == "exploratory_accepted" else "unchecked or failed cost")
         verify(identity, resolved["site"]["paths"])
+        record["phase"] = "complete"
     except BaseException as error:
         record.update(state="failed", error=dict(type=type(error).__name__, message=str(error)))
         if record.get("phase") == "exact-resume":

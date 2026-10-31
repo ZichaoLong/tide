@@ -90,7 +90,7 @@ optimizer="sgd"|"adamw", checkpoint=True, resources=...)` 只返回预览。
 | 私有状态/KV/卷积 | 五种记忆的真实浮点字段与 int64 元数据；有限窗最大写入次数，保留未被零接收清除的原始过期项。resident 预留 initial/current/old 三份；训练保留窗另列快照。 |
 | 消息/输入/返回 | 全候选均发送的结构上界；物理重复边和端口分开。完整返回采用保守字段模板估计，动态区域 Attention 矩阵仍是未知 workspace。 |
 | 梯度/master/optimizer | 全 canonical trainable 参数的 payload 梯度；FP16 另计 FP32 master 和 master grad；SGD预留一 momentum 槽，AdamW 两槽，实际是否出现梯度由运行核对。 |
-| checkpoint/恢复 | 独立 staged bank、状态及槽；Python 训练另预留 optimizer deepcopy preflight，FP16 保存时的 master/槽临时副本单列；原生 codec 的单 Tensor `2^28` 元素上限继续检查。 |
+| checkpoint/恢复 | 独立 C++/resident staged bank、状态及槽；Python eager推理从CPU解码权重并复制到既有bank，不重复预留设备权重，主存副本仍计费；Python 训练另预留 optimizer deepcopy preflight，FP16 保存时的 master/槽临时副本单列；原生 codec 的单 Tensor `2^28` 元素上限继续检查。 |
 | workspace/activation/communication/journal | 未给具体预算时 `null` 并列入 `unknown_components`；显式保留量不等于实测峰值。字段/评分复制、allocator、对象、vendor 和服务资源仍需观测。 |
 
 `resources.logical_windows` 默认 **1**，调用者应计入 warmup、测量与恢复后窗口。

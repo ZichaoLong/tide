@@ -75,6 +75,8 @@ def run_matrix(value, output_dir):
     write_json(out/"result.json", result)
     try:
         for case, identity, task in zip(matrix["cases"], identities, task_identities):
+            result["current_case"] = case["name"]
+            write_json(out/"result.json", result)
             config = case["config"]
             verify(identity, config["site"]["paths"])
             verify_task(config["task"], task)

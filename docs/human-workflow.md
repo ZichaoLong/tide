@@ -194,6 +194,7 @@ tidegraph job resume jobs/example --checkpoint /path/to/complete/checkpoint --ou
 SSH/提交进程退出不终止任务；这不是跨重启服务。`stop` 必须观察终态和无存活后代。
 监督器丢失时标为 unconfirmed，不能仅凭进程消失推断通过。
 任务目录保存只读 resolved.json、安装/构建身份、status.json、task.log、supervisor.log 和 run/结果。
+`job status`显示矩阵已完成项数、当前case及其构造/测量/精确恢复/独立检查阶段；`job logs`读取当前case的原日志，结束后读最后一项。外层作业状态不覆盖这些独立验收结果。
 后台启动前后都核验所读安装内容，运行期间必须保持这些路径不变。
 
 ## 6. 查询、导出与下游协作

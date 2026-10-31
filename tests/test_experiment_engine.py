@@ -88,6 +88,19 @@ def test_capacity_refusal_is_recorded_before_model_allocation(tmp_path):
     assert "construction_seconds" not in record
 
 
+def test_long_independent_check_phase_is_visible_before_it_returns(tmp_path, monkeypatch):
+    from tidegraph.experiment import validation
+    original = validation.independent
+    def inspect(*args, **kwargs):
+        saved = json.loads((tmp_path/"visible"/"result.json").read_text())
+        assert saved["phase"] == "independent-check"
+        assert saved["execution_status"] == "completed"
+        assert saved["validation"]["numeric"] == "not_checked"
+        return original(*args, **kwargs)
+    monkeypatch.setattr(validation, "independent", inspect)
+    assert run(config(), tmp_path/"visible")["phase"] == "complete"
+
+
 def test_separate_packing_observation_preserves_records_but_is_not_throughput(tmp_path):
     c = config(packing="packed")
     c["measurement"]["observation"] = "packing"
