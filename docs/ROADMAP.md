@@ -46,9 +46,9 @@
 ## 当前授权待办
 
 - 三平台小中矩阵、B1/8/32/128/512及A/B/C、FC/HB/LH约1B均已入库；NPU1B/B512精确下一窗失败的有界布局诊断仍待执行。不重跑原矩阵，最终汇总189目录的已测/拒绝/替代范围及目录外后继。
-- [同模型容量](evidence/core5-platform-capacity-20261031.md)：CUDA4.561B单/2/3/4卡、9.123B单卡拒绝/双卡实际点，NPU12.802B单/双/三卡已审阅。继续已提交的NPU八卡、38.406B单/双/三卡准入、1B七卡；原八卡队列超时保持。
+- [同模型容量](evidence/core5-platform-capacity-20261031.md)：CUDA4.561B单/2/3/4卡、9.123B单卡拒绝/双卡实际点，NPU12.802B单/双/三卡已审阅。NPU八卡队列超时、38.406B单/双卡拒绝均保留；三卡已构造并保存首个有限窗口，第二次保存时1800秒超时，待核对I/O进程排空。1B七卡继续；按用户计算优先指令不强求38.406B完整存储流程重跑。
 - [训练与通信](evidence/core5-platform-training-capacity-20261031.md)：原1B配方非有限保留，新loss系数1e-9的CUDA双卡完整训练/离散/精确恢复完成、独立数值超差；NPU同一新任务排队。6095c6a已补齐训练CPU快照主存预算、固定45项检查通过。NPU原blocking崩溃诊断及三通信full独立根仍按已提交依赖执行。
-- [checkpoint成本](evidence/core5-checkpoint-cost-20261031.md)：磁盘/tmpfs及36baeb7优化后CUDA对照已完成，少保存不称算子加速。CPU固定110项、CUDA返回6项及两卡full通过；等待NPU tmpfs观察、新实现回归及严格条件化的38.406B后继。暂不扩盘/重启，tmpfs与主存联合准入。
+- [checkpoint成本](evidence/core5-checkpoint-cost-20261031.md)：磁盘/tmpfs及36baeb7优化后CUDA对照已完成，少保存不称算子加速。CPU固定110项、CUDA返回6项及两卡full通过；NPU新实现小型回归继续；用户最新优先计算，未开始的NPU大tmpfs对照及38.406B周期保存后继取消，不作为完成门槛。暂不扩盘/重启，任何tmpfs仍与主存联合准入。
 - 公共CLI、下游模板与CPU/NPU/GPU[人类完整流程](evidence/core5-human-workflow-20261031.md)均已实际演练；原base独立根失败不由下游通过解除。六项packing已按新范围重审，待上述结果后完成最终选型；当前停止条件不盲目扩成融合工程。
 - 7×T4站点/迁移步骤已交付；实际driver/runtime/Toolkit/LibTorch、sm75算子、通信和训练/恢复待真机，不由模板认证，也不移除当前resident能力门禁。
 

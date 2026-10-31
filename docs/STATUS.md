@@ -1,7 +1,7 @@
 # 当前交接 — 三平台矩阵收尾（2026-10-31）
 
 用户已授权继续，不再执行旧“提交后暂停”。当前策略：不扩盘、不重启GPU；
-使用已提交的固定源码串行任务收齐容量、训练及恢复诊断，不重跑已审阅矩阵。
+依最新用户指令优先计算，使用固定源码收齐训练与必要恢复诊断；额外大文件存储测量不作为门槛，不重跑已审阅矩阵。
 本机/远端tmpfs仅作经主存联合准入的易失周转，活动作业的路径与输入不改变。
 
 授权分支`graph-execution-foundation`；本次重入HEAD为6b529fd、工作区干净且已推送。
@@ -53,24 +53,23 @@ artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoin
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:32Z：final已终态exit1、控制组为空；12.802B单/双/三卡均已审阅，八卡等待607.801秒退出3、未运行。38.406B单/双卡bank超容量现场拒绝；三卡构造405.326秒，已发布第0窗输出，正在首个大checkpoint保存，整个流程/恢复尚未通过。其后依赖尚未取得结果。
+09:50Z：38.406B三卡原1800秒到限，子监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。停止时PID1908740处于不可中断I/O，原监督记录remaining_live_pids非空；systemd仍deactivating，不能称已清理，也不删除其文件。七卡已进入队列，当前仅4张空闲；其余既有诊断链继续等待。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 
 | unit短名 | 待完成工作/停止条件 | 输出目录或progress |
 | --- | --- | --- |
 | platform-final-1e33b4a | 已终态；12.802B单/双/三卡已审阅，八卡等待超时未运行 | `capacity-human-followup-1e33b4a/progress.json`；`npu-capacity-12802m-cards-N-final-bd2ff2e` |
-| platform-sharded-3e4f6b2 | 单/双卡已拒绝；三卡构造后正在首保存，原1800秒 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
+| platform-sharded-3e4f6b2 | 单/双卡拒绝；三卡超时124，正在核对I/O进程实际退出与控制组清理 | `sharded-capacity-3e4f6b2/progress.json`；`npu-capacity-38406m-cards-N-sharded-bd2ff2e` |
 | platform-seven-2562263 | 同一1.014B七卡推理，4/2/2/2/2/2/2节点；原八卡等待超时保持 | `npu-model-1b-cards-7-bd2ff2e` |
 | blocking-diagnostic-bd2ff2e | 原两NPU blocking小训练一次faulthandler诊断；不重试抹旧SIGSEGV | `npu-blocking-diagnostic-bd2ff2e` |
 | multicard-roots-844eb9b | 两NPU ordinary/blocking/cpu_bridge各一次full独立根/训练/恢复，300秒/case | `npu-multicard-roots-bd2ff2e` |
 | resume-layout-61571c4 | 原1B/B512 raw边界/下一窗及布局诊断，900秒；原1b3e39f安装和checkpoint只读，不改布局或算术 | `npu-resume-layout-61571c4` |
-| checkpoint-npu-0f9254a | dba2a5e小训练先验，再有条件12.802B单卡tmpfs成本观察1200秒；不认证36baeb7 | `npu-checkpoint-cost-dba2a5e/progress.json`；大输出`/dev/shm/gef-checkpoint-npu-dba2a5e/run` |
-| checkpoint-check-36baeb7 | 新安装返回存储6项及单NPU小full、interval2；180/300秒 | `npu-checkpoint-check-36baeb7` |
-| capacity-periodic-beaf34e | 仅原38.406B三卡已完成有限窗且在保存/恢复被监督超时124、新回归通过时，跑interval3一次1800秒；其他情况明确not-run | `npu-capacity-periodic-36baeb7/gate.json` |
-| scaled-training-1a6b08f | 新loss先两卡小full，通过后1.014B单/双NPU各一次1800秒；包36baeb7、配置1a6b08f | `npu-scaled-training-36baeb7/progress.json` |
+| checkpoint-check-compute-6c6eaa2 | 等resume-layout终态及空控制组；固定36baeb7返回存储6项及单NPU小full，180/300秒 | `npu-checkpoint-check-36baeb7` |
+| scaled-training-compute-6c6eaa2 | 等前项；新loss先两卡小full，通过后1.014B单/双NPU各一次1800秒；包36baeb7、配置1a6b08f | `npu-scaled-training-36baeb7/progress.json` |
 
-外层上限86400秒含依赖等待。合作队列priority0、候选物理4–11、max-wait600秒；最新队列只见6张候选卡空闲，其他项目占用不干预。
+用户调整计算优先级后，未开始的12.802B tmpfs成本对照及38.406B interval3重跑已取消，不作为完成门槛。
+为保持串行依赖，原checkpoint-check/scaled-training两个仅等待的启动器亦取消并按上表重排；四个原外层cancelled/143且控制组空，无实际case开始，不算数值失败。新启动器外层14400秒，其余原外层86400秒含依赖等待。合作队列priority0、候选物理4–11、max-wait600秒；最新队列只见6张候选卡空闲，其他项目占用不干预。
 原八卡1B推理/训练各等待约607秒退出3，未运行。普通复制通过不解除直接P2P/原生跨卡原子及多卡resident门禁。
 本机原NPU1B/B512失败checkpoint在`npu-scale-run-1b3e39f/npu-scale-fc-few-1b-b512/run/checkpoints`，
 诊断使用原安装`install-1b3e39f/venv`，包hash`6af9b3981aa512982618b31b02ad69db5efd20c31438b6cb273038d877c68d29`。
@@ -100,7 +99,7 @@ NPU38.406B三卡各58.566GB并另留6GiB，host766.974GB；原两代disk349.567G
 下一步：6095c6a训练主存预算52.585GB及45项固定定向检查已闭环。公共Python/native入口补充`checkpoint-save`可见阶段，开发30项及固定6c6eaa2的30项均通过（tmpfs临时文件、持久日志）；unit已终态无后代，不修改活动包。沿本机链逐项收终态，
 将容量、训练、恢复诊断分别补入既有证据，依据首个见证决定有界修复或明确停止。
 最终核对189原目录的运行/拒绝/替代项和目录外后继，更新ROADMAP/六项经验/可查询结果；全部作业终态后交付。
-不重跑旧矩阵，不自动延长原超时。当前总体任务尚未完成。
+不重跑旧矩阵，不自动延长原超时。当前总体任务尚未完成；大规模完整落盘/恢复的额外成本实验按最新用户指令有界停止，必要小型恢复及训练检查继续。
 
 干净仓库从[development](development.md)、[人类手册](human-workflow.md)、[有限配置](platform-matrix.md)进入。
 查询：`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`。
