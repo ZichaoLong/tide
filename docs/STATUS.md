@@ -39,7 +39,7 @@ NPU合作队列priority0、候选物理4–11、等待600秒；当前7卡空闲�
 GPU：`jobs/platform-cuda-capacity4561m-c3-bd2ff2e`于07:14:08Z启动，07:23:53Z终态exit0且无后代，执行/离散/精确恢复通过、数值探索。
 固定`inputs-ad93848-capacity/cuda-capacity-4561m-cards-3.json`及`install-platform-bd2ff2e`，1800秒、GPU0/1/2、ATen/interop/worker1。
 C1/C2已终态且无后代，证据528025c/94754ac审阅后退役各20.699GB checkpoint；凭据`checkpoint-retirement-capacity4561m-c{1,2}-*.json`，结果/config/log保留。
-C3启动前free43.951GB满足两代checkpoint42.482GB+1GiB；终态审阅/退役后再做同目录cards-4。
+C3启动前free43.951GB满足两代checkpoint42.482GB+1GiB；C3已审阅并按07cb7f0退役checkpoint，接着核对资源启动`jobs/platform-cuda-capacity4561m-c4-bd2ff2e`，同目录cards-4、GPU0–3、1800秒及相同线程；尚无四卡结果。
 CUDA9.123B双卡新配置仅待现场准入：两代checkpoint83.896GB超过整块50GiB盘，不分配、不改协议绕过。
 
 ```sh
@@ -70,3 +70,5 @@ CUDA直接P2P与原生跨卡原子限制未解除；普通复制与多卡residen
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料，审阅gzip直接查询，不依赖旧运行目录。
 T4具体操作说明和六项新证据处置已提交；当前新增三卡证据。阶段完成后继续，不暂停。
+
+验收补齐：两平台各三种小型双卡通信追加公共`check --scope full`，单独验任意输出/控制/物理消息/私有state根；原run已比较loss参数梯度，不冒称所有独立根。GPU待C4及9.123B准入后；NPU后继等待blocking诊断终态，每项300秒、一次、两卡；不重复性能矩阵。

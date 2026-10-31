@@ -14,7 +14,7 @@ FC16节点/8区域、KV、d2048、FFN4d，1,014,118,392个去重可训练参数�
 | 3 | 6/6/4 | 0.416816 | 1748088320 / 1748088832 / 1207379968 | 超差 / 通过 / 精确 |
 | 4 | 4/4/4/4 | 0.370152 | 1207378432 / 1207379968 / 1207379968 / 1207378944 | 超差 / 通过 / 精确 |
 
-相同单卡模型在规模组中位0.437248秒；多卡2/3/4分别0.416659/0.416816/0.370152秒，仅为有限成本观察，未严格等价，不称可推广加速。逐节点参数owner、实际计算回调统计、state slots与逐目标消息位置都记录并审阅，与请求映射相符；空pending明确为空，不据空集合推断其他窗口。节点分配2卡为8+8，3卡6+6+4，4卡4+4+4+4。完整共享梯度贡献另由小训练验收。
+相同单卡模型在规模组中位0.437248秒；多卡2/3/4分别0.416659/0.416816/0.370152秒，仅为有限成本观察，未严格等价，不称可推广加速。逐节点参数owner、实际计算回调统计、state slots与逐目标消息位置都记录并审阅，与请求映射相符；空pending明确为空，不据空集合推断其他窗口。节点分配2卡为8+8，3卡6+6+4，4卡4+4+4+4。原loss下共享参数梯度贡献另由小训练验收；任意独立VJP根由单独公共full检查验收，不能从loss反向推断。
 
 三个推理点每测量窗的native跨卡传输均7个copy group/28行/229488 logical bytes，普通复制记录同量tensor-leg bytes；Python边界另2次/16392 bytes。该计数不包含厂商隐藏复制或返回packing全部流量，也不是完整传输带宽。当前12方向直接P2P及原生跨卡原子仍不可用，ordinary不认证P2P/NCCL/capture或resident协议。
 
@@ -22,7 +22,7 @@ FC16节点/8区域、KV、d2048、FFN4d，1,014,118,392个去重可训练参数�
 
 ## 三种明确通信的小型训练
 
-同一FC8节点/4区域KV模型、16,388参数、B2/P3/span18，2卡各4节点，原weighted-output-square×0.001、SGD lr0.001/momentum0.3/weight_decay0.01。三个通信配置的model/workload/task身份一致。每窗39 candidate、39 Full、58消息；独立记录、输入/参数根、梯度、参数、optimizer槽及精确续接分别验收，8份比较报告各自零差异。
+同一FC8节点/4区域KV模型、16,388参数、B2/P3/span18，2卡各4节点，原weighted-output-square×0.001、SGD lr0.001/momentum0.3/weight_decay0.01。三个通信配置的model/workload/task身份一致。每窗39 candidate、39 Full、58消息；独立记录、原loss参数梯度、参数、optimizer槽及精确续接分别验收，8份比较报告各自零差异。
 
 | 通信 | 中位秒 | native逻辑/物理传输bytes | native端点同步 | Python边界复制/同步 |
 | --- | ---: | --- | ---: | --- |
@@ -79,3 +79,5 @@ tidegraph results docs/evidence/core5-platform-multicard-20261031.json.gz --form
 安装/实际site见[公共手册](../human-workflow.md)。约1B三卡并不代表靠近多卡总容量；后续容量准入分别核对逐卡峰值、host和checkpoint磁盘，不直接加总空闲显存。
 
 归档SHA256：`7e711fab31bb4ef17aeb976358cd65d14e2badab2126e57602918f1d243e3e31`。
+
+独立根补查入口：从同一三通信小配置运行`tidegraph check selected.json --site site.json --scope full --output-dir checks/new`。该检查包含输出/connected-zero/控制/描述量/物理消息以及非位置切点的私有状态根，随后完整三步训练与恢复。它是独立资格而非本表性能复测；尚未运行的根不填写通过。
