@@ -29,13 +29,14 @@
 - 已提交 `jobs/eager-mixed-ab-fp32`：固定c962961、物理卡0、三客户端KV mixed-a/b、1800秒。
 - 已提交 `jobs/eager-fp16`：固定c962961、物理卡2、三客户端完整mixed-c、7200秒；保持AdamW/原容差/输入，失败逐配置记录。
 
-下一步：兼容修复定向编译通过后提交，以新只读源码运行单卡resident构建（56线程/86，standalone39组件和weighted Python适配），
+CUDA13兼容提交 `1fe1e37` 已推送；`jobs/resident-build-1fe1e37` 正在冻结源码构建（56线程/86，standalone39组件和weighted Python适配，3600秒）。
+下一步：核对构建终态，
 再独立执行单卡门禁及时间线。原三卡/P2P完整门禁保持。C++ fc/ssd失败单独定位，不阻塞其他通过域。
 新peer探针开发已在物理2/3验证12个传输/流/根单元；尚未提交或正式资格，不是完整多卡模型通过。
 正式资格之后另提交审阅证据。CPU/NPU旧严格失败保持ROADMAP停止条件。
 
 所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，不会覆盖旧运行。
-活动源码只读；`dev` 为dirty开发，不能作为正式来源。未提交内容：CUDA13兼容修复、架构文档、peer探针及本交接。
+活动源码只读；`dev` 为dirty开发，不能作为正式来源。未提交内容：standalone训练失败字段/数值诊断、peer探针及本交接。
 
 ```sh
 git status --short --branch

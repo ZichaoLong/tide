@@ -65,3 +65,19 @@ TIDE_BUILD_DIR=CPU_CORE python -m pytest -q tests/test_retired_allocation_witnes
 
 [退役任务摘要](evidence/retired-jobs-20261030.json)保留520份旧任务的终态/来源/原记录hash，
 外层passed不表示每个内部case通过。原始日志不再在线；判断具体语义/性能结论仍需相应审阅报告。
+
+
+## CUDA 真机分层入口
+
+`check_cuda_eager.py`按客户端/配置保留原严格断言与独立失败，包含四次更新、完整返回、独立根与同栈精确恢复；
+CPU/remapped handoff另用原容差，不从首个KV或一次构建推断全部资格。
+`check_cuda_peer.py`查询所有指定方向的P2P/原子能力与enable返回码，比较普通Python/native复制和显式Python CPU桥，
+覆盖默认/非默认流及独立None/零/别名根。复制通过不证明直接P2P、NCCL、完整模型或resident。
+
+```sh
+python scripts/check_cuda_peer.py --devices 0 1 --native-library CUDA_CORE --output-dir NEW_PEER
+python scripts/diagnose_weighted_async.py --device cuda:0 --peer-device cuda:1 --copy-policy cpu_bridge --scope complete --case delta-pdg --output-dir NEW_BRIDGE
+```
+
+CPU桥仍是显式一阶诊断路径，不改变公共通信协议。CUDA检查/诊断/测量入口显式关闭TF32并记录IEEE策略；
+库消费者仍拥有自己的精度政策。真机资格与当前失败见STATUS及后续审阅证据，不继承CPU/NPU结论。

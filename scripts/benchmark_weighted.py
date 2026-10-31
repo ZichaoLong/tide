@@ -123,6 +123,8 @@ def main():
     try:
         start = time.perf_counter()
         device, reason = resolve_device(args.device)
+        from cuda_precision import ieee_policy
+        record["cuda_precision"] = ieee_policy(device)
         if args.peer_devices:
             peers = tuple(resolve_device(d)[0] for d in args.peer_devices)
             if (len(peers) < 2 or len(set(peers)) != len(peers)

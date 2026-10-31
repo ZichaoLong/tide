@@ -38,6 +38,8 @@ def main():
     from weighted_device_checks import locate, runner, check_case
     from weighted_peer_bridge import cpu_bridge
     device,reason=resolve_device(a.device);peer,_=resolve_device(a.peer_device)
+    from cuda_precision import ieee_policy
+    cuda_policy=ieee_policy(device)
     if peer==device or peer.type!=device.type or device.type=="cpu":p.error("two distinct accelerators required")
     torch.set_num_threads(1);torch.set_num_interop_threads(1)
     case=next(c for c in CASES if c.name==a.case)
@@ -45,7 +47,7 @@ def main():
     os.chdir(out)
     source,dirty=source_state(root)
     report=dict(schema="tide-weighted-async-diagnostic-v1",state="running",source=source,dirty=dirty,
-        argv=sys.argv[1:],runtime=manifest(device,reason,torch.float32),peer=str(peer),copy_policy=a.copy_policy,
+        argv=sys.argv[1:],runtime=manifest(device,reason,torch.float32),cuda_precision=cuda_policy,peer=str(peer),copy_policy=a.copy_policy,
         launch_blocking=os.environ.get("ASCEND_LAUNCH_BLOCKING"),phases=[],
         scope="first complete forward and all-root VJP only; stock copies do not certify independent None/zero roots")
     def phase(name):

@@ -93,6 +93,8 @@ def main():
     if args.native_library:
         args.native_library = str(Path(args.native_library).resolve())
     device, reason = resolve_device(args.device)
+    from cuda_precision import ieee_policy
+    cuda_policy = ieee_policy(device)
     if device.type not in {"cuda", "npu"}:
         parser.error("profile requires an explicit accelerator")
     torch.set_num_threads(1); torch.set_num_interop_threads(1)
@@ -102,7 +104,7 @@ def main():
     record = dict(state="running", schema="tide-weighted-device-profile-v1", source=source, dirty=dirty,
                   argv=sys.argv[1:], case=asdict(cases[args.case]), implementation=args.implementation,
                   runtime=manifest(device, reason, precision.dtype), requested_placement=placement.to_dict(),
-                  precision=precision.record(),
+                  precision=precision.record(), cuda_precision=cuda_policy,
                   dispatch_environment={name: os.environ.get(name) for name in
                       ("ASCEND_LAUNCH_BLOCKING", "CUDA_LAUNCH_BLOCKING", "TASK_QUEUE_ENABLE")},
                   resolved_placement={k: str(v) for k, v in placement.resolve(device).items()},
