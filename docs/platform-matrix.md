@@ -194,3 +194,13 @@ NPU38.406B三卡的`npu-capacity-periodic.json`仅在原1800秒流程已完成�
 且36baeb7相关NPU检查通过时，运行一次同模型/输入/返回/精度的interval3候选，仍1800秒。
 若原配置完整结束则不重复；若非有限、通信、求解器或容量失败则不启用此后继。
 减少保存次数是显式耐久性取舍，精确最终恢复和独立参考仍完整执行，不算原失败修复或窗口算子加速。
+
+训练另选一个明确新工作负载：`configs/capacity-training/{cuda,npu}-scaled-loss.json`，
+原1.014B FC16/8共享组、B1/P2、FP32、packed/scalar完整返回、原SGD/momentum/decay，
+仅将内置平方loss系数从0.001改为1e-9；task/config身份改变，模型/输入身份不变。
+原配方warmup约6.33e6、第二窗约7.50e14、第三窗非有限的失败继续保留；
+这个单一系数用于训练存储/恢复机制观察，不是调优模型效果，也不是原失败修复。
+每平台先在d8小模型上`check --scope full`通过再运行：CUDA双卡、NPU单/双卡，
+每项warmup1+2更新窗、完整梯度/optimizer/独立CPU检查与exact-next，仍1800秒；
+不继续搜索其他系数/学习率，任一非有限、通信、容量或精确恢复错误保持失败。
+默认每窗checkpoint和原严格阈值不变；全部候选使用36baeb7固定包，实际资格各自记录。
