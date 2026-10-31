@@ -25,7 +25,10 @@ int main(int argc,char** argv){
       auto a=at::arange(4,at::TensorOptions().dtype(at::kLong)).to(o),b=at::ones({2,2},o);
       if(dtype==at::kLong)a=at::tensor({(int64_t(1)<<54)+7,int64_t(-1),int64_t(0),(int64_t(1)<<54)+8},o);
       if(dtype==at::kFloat||dtype==at::kHalf||dtype==at::kDouble){
-        a=at::tensor({0.,-0.,std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::infinity()},o);
+        // ATen's literal-array constructor has no CPU Half dispatch. Build the
+        // declared literal values in double, then explicitly select storage.
+        a=at::tensor({0.,-0.,std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::infinity()},
+                     at::TensorOptions().dtype(at::kDouble)).to(o);
         a.set_requires_grad(true);
       }
       at::Tensor x,y,z;

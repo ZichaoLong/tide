@@ -15,10 +15,10 @@
 | 4960b6c | 首差/独立CPU FP64局部KV诊断、显式单卡CUDA eager FP64、修复standalone限定名。新core/standalone构建通过，相关66项、三客户端GPU选定训练/独立根/共享/optimizer/恢复9项通过；有限测量已终态passed；FP32诊断strict_mismatch作为预期观察保留 |
 | 9fce486 | 显式FP64目录与1B/近界静态预算、离线CUDA同步API区间并集；规划15项、观察器11项通过。自动准入恒false，近界须实际1B峰值校准 |
 
-以上提交已普通推送。当前未提交变动由 `inference_audit` 实施第二且最后有限优化：
+以上提交已普通推送。第二且最后有限优化已提交/推送 `2f17c24`：
 eager显式 `return_packing=scalar|packed`，默认scalar；完整返回8MiB组、逐字段独立CPU clone，
 不改数学/调度/live continuation/checkpoint，resident packed拒绝。参考仍独立scalar。
-还补恢复后的allocator峰值观察。`git status --short`是准确文件清单；尚未提交/构建/真机验收。
+还补恢复后的allocator峰值观察。CPU定向检查通过；GPU/standalone构建及实际资格待下一固定作业。
 
 ## 现场、活跃作业和日志
 
@@ -57,3 +57,9 @@ A/B审阅输入：`artifacts/cuda3090-inference/stage-{a,b}-raw.json`；六项�
 它们是当前整合材料，最终干净仓库复现不能依赖这些目录。命令和配置源已入库。
 
 当前本机下一服务 `gef-inference-npu-d-4960b6c`，固定sources4960b6c纯PyTorch同材料，物理9队列、timeout600；job artifacts/jobs/inference-npu-d-4960b6c，日志与输出artifacts/cuda3090-inference/npu-d*。终态后再启动extra GPU作业；不与构建/正式计时重叠。
+
+extra作业已运行，GPU literal和两客户端zero-support训练检查通过，仍在离线解析8份trace。终态后启动F：来源2f17c24，job inference-f-2f17c24、timeout5400，driver inference-f-2f17c24.py；仅重建standalone benchmark/返回复制检查器，core复用4960b6c且核对hash。随后真实GPU完整返回literal/反馈两窗、三客户端小型训练恢复、FP32同材料前后和FP64曲线至64M。输出runs/2f17c24-inference。
+
+NPU D服务已success/exit0、ControlGroup为空；同卡9同材料独立推理/续接通过，中位527.660ms（A为559.661ms，单次观察）。F本机后续只做相关literal、FP32小图与同材料推理，不复制GPU矩阵。
+
+F原job终态failed：standalone build通过，GPU定向33项和C++FP32/FP64字面复制通过；FP16在test fixture的ATen literal构造报tensor_cpu Half未实现，尚未进入复制。修复只使字面double显式转到目标storage，不改返回/数学；随后新固定提交重新构建checker和benchmark，复验literal并接续剩余训练/测量，原失败保留。
