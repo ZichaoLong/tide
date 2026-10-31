@@ -85,4 +85,19 @@ int64索引、重复owner、完整解码、独立根/窗口/恢复及暂存预�
 三个失败保留原配置、结果和log；厂商短日志摘要及原hash保存在本归档最后一项details.post_run_diagnostic。
 原plog SHA256 `cd81603b9377d9cedd8a2381726d4301e50e73c4d19c3531deb5f3e57e7f1462`。
 
-归档SHA256：`84a5943dc5aa8707aa1bead9dd6bfff810302e67f0edfa9ebad8fe564d6750c8`。
+## CPU/NPU同材料eager补齐
+
+固定bd2ff2e、native eager、d16/FC4/KV/B128或B512/P2，packed/scalar完整返回，ATen/interop/worker1。
+原目录resident-match与resident模型/任务身份逐项对应；这里CPU表示CPU候选，不将其当resident实现。
+
+| 平台/执行 | B128中位秒 | B512中位秒 | 独立数值 / 离散 / 精确恢复 |
+| --- | ---: | ---: | --- |
+| CPU/eager | 1.023296 | 3.724563 | B128全部通过；B512数值超差、离散与恢复通过 |
+| NPU/mixed-c | 3.641601 | 21.963012 | 两项全部严格通过 |
+
+每窗B128有672 candidate/672 Full/576消息，B512为2688/2688/2304；逻辑样例数与时间/跨节点行数分列。
+NPU resident B128观测1.653417秒，小于同材料eager的3.641601秒，但resident数值超差，不能称严格等价加速。
+NPU resident B512构造任务资源失败，而eager B512完成；选型必须同时看数值、服务容量和成本。
+这四个子任务均终态exit0、remaining_live_pids为空；父链仍运行其他容量项不改变其验收范围。
+
+归档SHA256：`336986f8557fcc542fc5cfaec53810b378a6e107cb7dedf1abe9909d4bbc5a25`。

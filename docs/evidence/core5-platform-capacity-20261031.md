@@ -9,7 +9,7 @@ FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个
 
 实际参数+冻结bank19,458,826,704 bytes；逐卡另预留1GiB workspace、256MiB activation、64MiB通信及3GiB不用。
 静态峰值20,941,417,120 bytes；现场扣除3GiB后的usable21,798,912,000 bytes，预算剩余857,494,880 bytes。
-主存预算91,660,099,776 bytes；两代checkpoint磁盘预算42,482,056,608 bytes，另留1GiB空盘。
+主存预算91,660,099,776 bytes；两代checkpoint磁盘预算42,482,056,608 bytes，其中已含1GiB空盘保留。
 先审阅并退役28.505GB终态可再生checkpoint，保留结果/配置/log，再以live free43,976,364,032 bytes准入。不是反复OOM搜索，也没有缩小batch/cache或改变精度。
 
 | 结果 | 实际值 |
@@ -80,6 +80,16 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 同模型1→4卡降低逐卡存储，本次成本0.675→0.784秒，没有速度优势；不是四卡总容量极限。
 任务07:34:04Z终态exit0，独立SSH检查无supervisor/workload/remaining后代。
 结果原字节SHA256 `1794416ad9ce21ed4b60a8a22fe4bd90f1b88da6509684ad8ca5dcbfc2093ba3`。
-本次提交后按用户要求暂停新增工作，四卡checkpoint仍保留；9.123B现场准入尚未执行，不由静态预算写成现场拒绝。
+该四卡证据提交时checkpoint保留；随后用户授权继续，9.123B现场准入见后节。
 
-归档SHA256：`6a0d1271e0ba66b44ed4648442f5da61e7675b3aaac8ac3b1c1d2112127e7e1c`。
+## CUDA9.123B双卡现场准入
+
+固定bd2ff2e，`cuda-capacity-sharded.json`对应9.123B双卡配置现场运行公共准入，未构造模型。
+逐卡估计20.942GB、host174,739,737,664 bytes，现场host可用228,634,873,856 bytes；磁盘需83,895,945,824 bytes而现场只有23,246,536,704 bytes。
+错误明确为`disk: planned reservation exceeds live free memory/storage`，子任务exit1、无剩余后代；不是GPU OOM或数值失败。
+**磁盘估计已包含1GiB reserve**；4.561B原表中42,482,056,608 bytes也已含该reserve，不能再加一遍。
+83.896GB是两代checkpoint和保留空间的总预算，超过整个50GiB盘；当前C4 checkpoint占盘不是唯一限制。
+即便扩30GiB仍须扣掉环境、保留证据和余量；不因此重启机器，也不直接将所有shm当额外物理内存。
+下一步只对既有4.561B做有界保存/恢复分阶段磁盘/tmpfs成本对照；tmpfs未来文件必须同时计入容器内存。
+
+归档SHA256：`20937b2dbfa154657bac148483e13b4c8851e6fe67b8c4aa360072c958548e7d`。
