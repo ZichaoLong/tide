@@ -125,7 +125,7 @@ NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment
 从干净仓库重新生成的checkpoint是新的见证，不能冒称复验了原文件字节；原结果/hash与失败仍保留。
 
 ```sh
-# 旧checkpoint已获授权退役；从相同配置生成一个新的有界见证：
+# 旧checkpoint已按授权退役；从相同配置生成一个新的有界见证：
 /path/to/fixed-install/bin/python scripts/diagnose_experiment_resume.py resolved.json --windows 3 --output-dir diagnostics/new-resume
 # 仅在另有待检查文件时增加 --checkpoint /path/to/checkpoints。
 ```

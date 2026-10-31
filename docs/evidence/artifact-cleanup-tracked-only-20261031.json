@@ -1,6 +1,6 @@
 {
   "schema": "tide-artifact-retirement-v1",
-  "state": "prepared",
+  "state": "completed",
   "source_before": "49cf37aedc144f611b3ec7847fba94e197b238ea",
   "authorized_scope": "Keep .git and tracked files; retire project artifacts/worktrees and six named tmpfs directories; preserve uncommitted source outside repository for later analysis.",
   "preserved_source": {
@@ -117,5 +117,358 @@
     }
   },
   "operation_directory": "/mi/data2T/zlong/home/.local/state/graph-execution-foundation/cleanup-20261031",
-  "new_compute_qualification": false
+  "new_compute_qualification": false,
+  "source_cleaned": "0b07e7212a6303901de5b9c673901cde60370286",
+  "cleanup_script_sha256": "b7be28819b41e81bf4711268fbd4a7e93a6324e978bd587b486cd639afc3fdcc",
+  "plan_sha256": "ba756d8907a2d735d8e33d2265dfdd034b3e52ec78ad749d86d07257de5f5234",
+  "cleanup": {
+    "unit": "gef-artifact-cleanup-49cf37a-20261031.service",
+    "slice": "background.slice",
+    "cpu_quota_percent": 100,
+    "memory_max_bytes": 1073741824,
+    "timeout_seconds": 1800,
+    "kill_mode": "control-group",
+    "started": "2026-10-31T15:57:32.428709+00:00",
+    "finished": "2026-10-31T15:58:25.346383+00:00",
+    "exit_code": 0,
+    "verification": "tracked bytes/modes unchanged; only main worktree; no untracked entries or selected tmpfs targets",
+    "completed_steps": 44,
+    "control_group_absent": true,
+    "terminal_unit_note": "Transient unit was unloaded after successful execution; LoadState=not-found is not used as exit-code evidence. Persistent status/log and absent PID/cgroup establish terminal cleanup."
+  },
+  "storage": {
+    "repository_before_allocated_bytes": 300211847168,
+    "repository_after_allocated_bytes": 80121856,
+    "repository_reduction_allocated_bytes": 300131725312,
+    "tmpfs_reduction_allocated_bytes": 17223258112,
+    "measurement_phase": "After deletion, before final evidence commit; du allocated blocks, not logical file lengths.",
+    "quota_before": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   312G    400G    800G            567k       0       0        \n",
+    "quota_after": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 32422M    400G    800G            295k       0       0        \n"
+  },
+  "retired_targets": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local",
+      "device": 64768,
+      "inode": 62029041,
+      "logical_bytes": 16817022,
+      "allocated_bytes": 19566592,
+      "entries": 1396
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.pytest_cache",
+      "device": 64768,
+      "inode": 62030406,
+      "logical_bytes": 63994,
+      "allocated_bytes": 81920,
+      "entries": 8
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts",
+      "device": 64768,
+      "inode": 62028630,
+      "logical_bytes": 299681698358,
+      "allocated_bytes": 300099272704,
+      "entries": 270377
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/configs/matrices/__pycache__",
+      "device": 64768,
+      "inode": 62148962,
+      "logical_bytes": 22250,
+      "allocated_bytes": 24576,
+      "entries": 2
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/examples/consumer_core5/__pycache__",
+      "device": 64768,
+      "inode": 62148985,
+      "logical_bytes": 35724,
+      "allocated_bytes": 45056,
+      "entries": 5
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/examples/consumer_core5/configured/src/tidegraph_consumer_core5/__pycache__",
+      "device": 64768,
+      "inode": 62149047,
+      "logical_bytes": 27189,
+      "allocated_bytes": 36864,
+      "entries": 5
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python/tidegraph/__pycache__",
+      "device": 64768,
+      "inode": 62028842,
+      "logical_bytes": 569832,
+      "allocated_bytes": 729088,
+      "entries": 81
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python/tidegraph/experiment/__pycache__",
+      "device": 64768,
+      "inode": 62148939,
+      "logical_bytes": 316101,
+      "allocated_bytes": 397312,
+      "entries": 37
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python/tidegraph/planning/__pycache__",
+      "device": 64768,
+      "inode": 62028893,
+      "logical_bytes": 338905,
+      "allocated_bytes": 425984,
+      "entries": 39
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python/tidegraph/weighted/__pycache__",
+      "device": 64768,
+      "inode": 62028901,
+      "logical_bytes": 495951,
+      "allocated_bytes": 634880,
+      "entries": 66
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/scripts/__pycache__",
+      "device": 64768,
+      "inode": 62028605,
+      "logical_bytes": 431950,
+      "allocated_bytes": 602112,
+      "entries": 71
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/tests/__pycache__",
+      "device": 64768,
+      "inode": 62028638,
+      "logical_bytes": 1331842,
+      "allocated_bytes": 1466368,
+      "entries": 71
+    },
+    {
+      "path": "/dev/shm/gef-npu-eight-d3de18f",
+      "device": 25,
+      "inode": 45886343,
+      "logical_bytes": 12333714302,
+      "allocated_bytes": 12333789184,
+      "entries": 55
+    },
+    {
+      "path": "/dev/shm/gef-npu-resume-immediate-61571c4",
+      "device": 25,
+      "inode": 45378205,
+      "logical_bytes": 4883362056,
+      "allocated_bytes": 4883378176,
+      "entries": 8
+    },
+    {
+      "path": "/dev/shm/gef-root-progress-cpu-4485697",
+      "device": 25,
+      "inode": 45356319,
+      "logical_bytes": 4500141,
+      "allocated_bytes": 4861952,
+      "entries": 257
+    },
+    {
+      "path": "/dev/shm/gef-terminal-status-122a1ed",
+      "device": 25,
+      "inode": 45342392,
+      "logical_bytes": 350547,
+      "allocated_bytes": 409600,
+      "entries": 83
+    },
+    {
+      "path": "/dev/shm/gef-terminal-progress-dev-fixed",
+      "device": 25,
+      "inode": 45340950,
+      "logical_bytes": 350669,
+      "allocated_bytes": 409600,
+      "entries": 83
+    },
+    {
+      "path": "/dev/shm/gef-terminal-progress-dev",
+      "device": 25,
+      "inode": 45340407,
+      "logical_bytes": 349975,
+      "allocated_bytes": 409600,
+      "entries": 83
+    }
+  ],
+  "retired_worktrees": [
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/inference-sources/2f17c24",
+      "HEAD": "2f17c24ed2bae429f1419af4365177da36eb352f"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/inference-sources/4960b6c",
+      "HEAD": "4960b6c69066acbf84b7b2da880ee61be60a194a"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/inference-sources/eee68c4",
+      "HEAD": "eee68c44ec0fd6d9789b1d9329c89f3ce8de9be2"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/qual-multicard-roots",
+      "HEAD": "844eb9be08484d4c02945ca236591ce45a6a77d8"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/qual-process-report",
+      "HEAD": "b3dc53c0ae0c0087da49ae8a86443b46552970d5"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/qual-seven-2562263",
+      "HEAD": "25622639f9ca182394fead59e3591440afeb4bcd"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-14ce784",
+      "HEAD": "14ce78427ea7c5f4804cad295922ba08eab38363"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-1b3e39f",
+      "HEAD": "1b3e39f4f58378272d5afe41f970c92dd0e4fed7"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-31afefb",
+      "HEAD": "31afefb4059a34e97ea1232c0ace2ccde604b9f9"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-6013e4c",
+      "HEAD": "6013e4cc6b0345fa6feef37716bdecaa5a082d02"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-972032f",
+      "HEAD": "972032fe96cc2ac38044ea6dadcfbfbcc40b6f87"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-bd2ff2e",
+      "HEAD": "bd2ff2ed6786c57f492b6ac8b83b4b3a4b0d821e"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-cb4af7f",
+      "HEAD": "cb4af7fea07b37b881c8385cd1d465a8c38024aa"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-checkpoint-cost",
+      "HEAD": "dba2a5ed45d79f17c93a72f5285c36b60b29bb9d"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-checkpoint-optimized",
+      "HEAD": "36baeb719361d5e5e39c0f05533f9e5cc53c04f7"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-de93246",
+      "HEAD": "de932461fc43c074e01c9e3b9c3d87ea479bdf27"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-de999c2",
+      "HEAD": "de999c2fb344fcc40d3c4f39311cadd37d730bca"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-eca070f",
+      "HEAD": "eca070f73c760bf159bbe5c8e3b6c1bf1a9060c3"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-eight-followup",
+      "HEAD": "d3de18fb1ee5b849ed88d5de82be938972808833"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-finite-localization",
+      "HEAD": "31a3b32f2632efb3c9f2472e7cb3b5c91a0021cd"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-npu-capacity",
+      "HEAD": "1e33b4a74cdd9440d53414a59c96a17843a36b96"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-resume-61571c4",
+      "HEAD": "61571c4b531e74b252a155e375bbb37116c275b4"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-root-progress-4485697",
+      "HEAD": "4485697c254062301a9401781c9e03954256f33f"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-save-progress-6c6eaa2",
+      "HEAD": "6c6eaa206deb004580b2ae48bd8ff58c1a6646e9"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-terminal-status",
+      "HEAD": "122a1edcc95898655205c1120065c8aa58b64e5d"
+    },
+    {
+      "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/evidence-index-909a322",
+      "HEAD": "909a322f058b7e897e6185334d6915dccca0d06a"
+    }
+  ],
+  "tracked_files_verified": 2838,
+  "process_observation": {
+    "accessible_owned_process_hits": [],
+    "inaccessible_fields_or_exited_processes": 1555,
+    "scope": "owned process paths/maps plus project unit control groups; not a cross-account fd census"
+  },
+  "verification": {
+    "git_status": {
+      "exit_code": 0,
+      "stdout": "## graph-execution-foundation...origin/graph-execution-foundation\n",
+      "stderr": ""
+    },
+    "git_clean_preview": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "worktrees": {
+      "exit_code": 0,
+      "stdout": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD 0b07e7212a6303901de5b9c673901cde60370286\nbranch refs/heads/graph-execution-foundation\n\n",
+      "stderr": ""
+    },
+    "repository_allocated": {
+      "exit_code": 0,
+      "stdout": "80121856\t.\n",
+      "stderr": ""
+    },
+    "git_allocated": {
+      "exit_code": 0,
+      "stdout": "35905536\t.git\n",
+      "stderr": ""
+    },
+    "quota": {
+      "exit_code": 0,
+      "stdout": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 32422M    400G    800G            295k       0       0        \n",
+      "stderr": ""
+    },
+    "unit": {
+      "exit_code": 0,
+      "stdout": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nLoadState=not-found\nActiveState=inactive\nSubState=dead\n",
+      "stderr": ""
+    },
+    "targets_absent": true,
+    "preserved_source_hash": "6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e",
+    "preserved_additional_source_hash": "bfb957c5e319a5e3071f6871fe1675d4cd5e2de40c0dfe75ae0aa02f312ed125",
+    "cleanup_pid_absent": true
+  },
+  "results_query": {
+    "archive_files": 9,
+    "rows": 204,
+    "unique_runs": 204,
+    "platforms": {
+      "cpu": 48,
+      "npu": 78,
+      "cuda": 78
+    },
+    "qualifications": {
+      "strict-checks-passed": 69,
+      "strict-failure": 113,
+      "not-established": 20,
+      "process-failure": 2
+    },
+    "torch_imported": false,
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+    "query_exit_code": 0,
+    "table_bytes": 35638,
+    "table_sha256": "3273434a074f27e7e79ec5ee56dd12a9815e6cc19c0d7f170d9fa525e4fba348"
+  },
+  "preserved_additional_source": {
+    "path": "/mi/data2T/zlong/home/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/additional-source-deltas.tar.gz",
+    "bytes": 4435,
+    "sha256": "bfb957c5e319a5e3071f6871fe1675d4cd5e2de40c0dfe75ae0aa02f312ed125",
+    "state": "preserved-awaiting-analysis"
+  }
 }

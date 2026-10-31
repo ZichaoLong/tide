@@ -1,4 +1,4 @@
-# 当前交接 — 产物退役准备就绪（2026-10-31）
+# 当前交接 — 三平台收尾、产物清理完成（2026-10-31）
 
 本轮CPU/NPU/GPU有限矩阵、同模型多卡、人类CLI及下游流程已完成可闭环的授权范围。
 没有活动项目作业，不需继续等待或重新排队；GPU已释放审阅，后续不依赖gpu3090。
@@ -10,26 +10,23 @@
 未重新构建或运行实验。数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
 参考仓库只读。实际当前HEAD及工作区以`git status --short --branch`为准。
 
-## 当前清理操作
+## 当前清理终态
 
-用户已授权仓库仅保留`.git`与Git跟踪内容，远端未提交源码稍后分析。
-已审阅26个干净祖先worktree、10个无额外差异的源码快照、144个终态项目unit；
-原始checkpoint、构建、环境和6个明确项目tmpfs目录纳入本次退役。
-必要结果仍在Git；[41份任务终态归档](evidence/retired-jobs-20261031.json.gz)不改变内部失败。
-[清理记录](evidence/artifact-cleanup-tracked-only-20261031.md)列出保全与核验范围。
+已按用户授权收束为`.git`与2,838个Git跟踪文件。固定清理来源`0b07e72`；
+26个干净祖先worktree、10个无额外差异的源码快照、环境/构建/原始checkpoint及6个项目tmpfs目录均已退役。
+仓库allocated占用279.594GiB→76.410MiB，释放磁盘279.519GiB、tmpfs16.040GiB；
+这是删除后、最终证据提交前的实测，后续Git元数据有少量增长。
+[清理证据](evidence/artifact-cleanup-tracked-only-20261031.md)保留精确字节、清单和核验范围。
 
-当前为已保全、待执行删除，尚不声称释放完成。先提交本准备记录，再生成/审阅固定删除清单。
-清理脚本及状态在仓库外`~/.local/state/graph-execution-foundation/cleanup-20261031/`，
-使用`gef-artifact-cleanup-49cf37a-20261031.service`，`background.slice`、1核/1GiB、1800秒超时。
-执行期间不编辑被核验的源码；终态须验证跟踪文件字节/权限、worktree登记和全部删除目标。
+`gef-artifact-cleanup-49cf37a-20261031.service`在`background.slice`于15:58:25Z完成，
+持久status为passed/exit0；原PID和控制组已消失，瞬态unit已卸载。
+跟踪字节/权限未变，`git clean -ndx`为空，只剩主工作树。
+固定数学校验通过；从清理后源码直接查询9份归档得到原204条唯一run，无需Torch或旧安装。
+[41份外层任务终态](evidence/retired-jobs-20261031.json.gz)及5份补充记录保留，不将内部失败改为通过。
 
-```sh
-python -B ~/.local/state/graph-execution-foundation/cleanup-20261031/cleanup.py plan
-systemctl --user show gef-artifact-cleanup-49cf37a-20261031.service -p ActiveState -p MainPID -p ControlGroup -p Result
-cat ~/.local/state/graph-execution-foundation/cleanup-20261031/status.json
-# 如需停止已启动清理，停止整个控制组，再检查终态与剩余目标：
-systemctl --user stop gef-artifact-cleanup-49cf37a-20261031.service
-```
+没有下一项默认计算或清理作业。远端未提交源码及两份早期patch已在仓库外保全，按用户要求稍后分析。
+操作状态/日志位于`~/.local/state/graph-execution-foundation/cleanup-20261031/`；
+新clone查看结果与重建开发链不依赖此目录。公共软件与参考仓库未修改。
 
 ## 最后八卡任务已审阅
 
@@ -47,7 +44,7 @@ systemctl --user stop gef-artifact-cleanup-49cf37a-20261031.service
 每卡2节点，8个共享组完整放置。大推理每卡allocated峰值约0.591GB；大训练各卡约1.356–2.063GB，
 主存峰值45.140GB。多卡降低设备存储并不将host快照按卡数等分，也不证明达到八卡容量上限。
 当时大checkpoint位于已准入tmpfs；实际文件解码/新owner恢复通过，不认证机器重启耐久性。
-这些终态原始材料现已获授权退役，原身份/结果保留。
+这些终态原始材料现已按授权退役，原身份/结果保留。
 原八卡三项排队超时保留，新后继不是原失败改写；任意根和原loss边界不解除。
 
 ## 已交付与实际证据
@@ -77,12 +74,12 @@ systemctl --user stop gef-artifact-cleanup-49cf37a-20261031.service
 - [独立检查](evidence/core5-platform-multicard-checks-20261031.json)：CUDA三通信full通过；NPU三通信完整推理/恢复先通过，任意根均EE1017。4485697定位ordinary双卡all根候选autograd SIGSEGV；单卡为输入梯度超差。显式ASCEND_LAUNCH_BLOCKING=1双卡越过崩溃，参数梯度仍1/64坐标超差1.31130e-6；不称默认异步修复。
 - [B512诊断](evidence/core5-platform-resume-diagnostics-20261031.json)：旧边界重放已逐位不同；同进程新checkpoint raw边界精确，下一完整窗keys仍3766/32768坐标逐位不同、最大2.09808e-5。采样布局相同，不归因磁盘损坏，不重复相同候选。
 - 原blocking小训练恢复SIGSEGV的一次诊断未复现且完整通过，旧失败不抹除；旧CPU/NPU/CUDA严格失败和strict xfail继续按ROADMAP限定。
-- 原B512失败checkpoint、即时诊断及八卡tmpfs原始材料已列入本次清理。原配置、失败字段和文件hash保留；以后按[复现入口](reproduction.md)生成新见证，不承诺恢复原字节。
+- 原B512失败checkpoint、即时诊断及八卡tmpfs原始材料已删除。原配置、失败字段和文件hash保留；以后按[复现入口](reproduction.md)生成新见证，不承诺恢复原字节。
 - GPU原dirty-dev包已移动到`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/retirement-dev-20261031.tar.gz`，5,452,397 bytes，SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`；保留16项跟踪修改+4项未跟踪源码。两份早期开发patch另存同目录`additional-source-deltas.tar.gz`。目录权限0700，均待后续分析，不是已合并或已验证源码。
 
 ## 资源与接续
 
-本机实际配额400GiB软限、800GiB硬限；已审阅38.406B终态checkpoint/暂存退役约324.5GiB后占用约312GiB。
+本机实际配额400GiB软限、800GiB硬限；本次清理后账户占用32422MiB（约31.7GiB），远低于硬限。
 以`quota -vs`核对，不用整盘df替代。tmpfs仍与主存、快照和恢复峰值联合准入。
 GPU释放事实见[审阅](evidence/core5-cuda-release-20261031.json)，没有新GPU依赖或作业。
 旧账户指南已退役，环境以项目site和公共`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`为准；
@@ -94,12 +91,11 @@ Python Torch/TorchNPU2.12/CANN9.1与独立SDK LibTorch2.10/CANN9.0分别激活�
 
 ```sh
 git status --short --branch
-python scripts/status.py
-python scripts/check_upstream.py
+python -B scripts/status.py
+python -B scripts/check_upstream.py
 quota -vs
-tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table
-tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format html --output results.html
-tidegraph plan configs/capacity-training/npu-eight-followup.json --matrix --site site.json
+# 清理后无需重建库即可查看原结果；使用Python>=3.10，本机公共3.12路径如下：
+PYTHONPATH=python /opt/miniconda/envs/ascend910-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python -B -m tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table
 ```
 
 原始任务终态及八卡progress/review已收入[小型归档](evidence/retired-jobs-20261031.json.gz)，
