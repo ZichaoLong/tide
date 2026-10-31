@@ -12,7 +12,7 @@
 
 ## 有限列表与执行顺序
 
-总计171个明确case：CPU45、NPU61、CUDA65，按35个独立阶段文件组织。
+总计174个明确case：CPU46、NPU62、CUDA66，按38个独立阶段文件组织。
 每个case各一次独立测量流程，warmup1窗、正式2窗、完整返回、额外一窗精确恢复；
 小型/批次配置超时900秒，scale/capacity配置1800秒。
 这些是单case上限，不是承诺运行全部case的总耗时；应分组执行并检查终态、争用和准入。
@@ -27,6 +27,7 @@
 | packing | 2 | 2 | 2 | A/C与batch组已有B构成同材料A/B/C；B不重复测量 |
 | finite | 6 | 6 | 6 | 根据GPU诊断热点新增B128 scalar/packed有限值检查、小型训练两策略、B512 packed及独立profile；默认检查与数学不变 |
 | scale | 7 | 7 | 7 | B1增参数；FC少/多节点、HB/LH各约1B；固定1B的B128/B512 |
+| scale-observation | 1 | 1 | 1 | 对已实际完成正式流程的1B/B128另采实际MM/BMM形状与桶；不重复独立参考、不作吞吐或新增数值资格 |
 | threads | 3 | — | — | ATen/BLAS1/4/16线程；独立调度workers1/2 |
 | placement | — | 2 | 2 | 同一B128材料mixed-a/b，复用batch组mixed-c |
 | precision | — | 2 | 2 | FP16 B128推理及小型FP16一阶训练，明确FP32 scoring/master |
@@ -161,6 +162,9 @@ tidegraph job start selected.json --site /path/to/cuda-site.json --output-dir jo
 同时 `measurement.steps=1`；另开进程、输出目录与正式计时分开。该配置明确标为观察，不是正式吞吐样本。
 优先查看FC B128的A/B/C，再按实际热点选择一个1B或B512点；不展开全部平台/模型的profile矩阵。
 packing观察记录可用行/桶、调用形状与真实边界活动；完整设备resident推进仍需设备时间线，不能用主机计数代替。
+`scale-observation`固定1B/B128的原模型/输入和前两窗，warmup1后观察1窗；只在对应正式流程完成后运行。
+显式validation=none/checkpoint_check=false避免重复昂贵参考/恢复，仍完整返回和发布checkpoint；
+该观察自身未独立验收，结果只能结合原正式证据解释形状、调用、分桶与资源，不成为新的合格吞吐。
 
 所有材料已经写入JSON，不依赖生成器或旧运行目录。
 需要审查再生成时，固定安装和源码后运行一次有限静态生成器；只能写新目录：

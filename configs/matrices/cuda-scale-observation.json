@@ -1,0 +1,75 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cuda-scale-observation",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/gpu3090.json",
+  "cases": [
+    {
+      "name": "cuda-scale-profile-fc-few-1b-b128",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-scale-profile-fc-few-1b-b128",
+        "description": "Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 128,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 1,
+          "validation": "none",
+          "checkpoint_check": false,
+          "timeout_seconds": 1800,
+          "observation": "profile"
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}

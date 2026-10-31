@@ -4,9 +4,9 @@
   "status": "planned-not-runtime-evidence",
   "site_paths": "templates; actual builds/current free resources are independent run inputs",
   "counts": {
-    "cpu": 45,
-    "npu": 61,
-    "cuda": 65
+    "cpu": 46,
+    "npu": 62,
+    "cuda": 66
   },
   "cases": [
     {
@@ -2155,6 +2155,57 @@
       },
       "host_estimated_bytes": 60355043360,
       "disk_estimated_bytes": 11378126864
+    },
+    {
+      "case": "cpu-scale-profile-fc-few-1b-b128",
+      "matrix": "cpu-scale-observation.json",
+      "status": "planned",
+      "question": "Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.",
+      "model_id": "7a2016520950c6211ee0e5583bf1a6ad8c3a0dbddbc1baa3428d09682d2931ad",
+      "workload_id": "9675da1d4fed9dcfd90ab71e527dd10d4769a822c60e2823c827e44fed3456e9",
+      "task_id": "d8171eea0fc1c7f44df9adeba80105cf0fb0303f76c348b84b338ac62524f17f",
+      "execution_id": "30d51fa33104a97732925d33f2cfa246fd4c1f42731f046f1f608051e4104739",
+      "parameters": 1010339302,
+      "unique_parameters": 1010339314,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4096,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "none",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 5682395144
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 27084840992,
+      "disk_estimated_bytes": 9912905744
     },
     {
       "case": "cpu-threads-1",
@@ -5767,6 +5818,57 @@
       "disk_estimated_bytes": 11923387152
     },
     {
+      "case": "cuda-scale-profile-fc-few-1b-b128",
+      "matrix": "cuda-scale-observation.json",
+      "status": "planned",
+      "question": "Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.",
+      "model_id": "7a2016520950c6211ee0e5583bf1a6ad8c3a0dbddbc1baa3428d09682d2931ad",
+      "workload_id": "9675da1d4fed9dcfd90ab71e527dd10d4769a822c60e2823c827e44fed3456e9",
+      "task_id": "d8171eea0fc1c7f44df9adeba80105cf0fb0303f76c348b84b338ac62524f17f",
+      "execution_id": "597b735c6418a9becb32676e31ce8327fcfdd54290909cfcfd9b1e4eed0138db",
+      "parameters": 1010339302,
+      "unique_parameters": 1010339314,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4096,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "none",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 5682395144
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 28175361568,
+      "disk_estimated_bytes": 10458166032
+    },
+    {
       "case": "npu-fc-b1",
       "matrix": "npu-batch.json",
       "status": "planned",
@@ -9078,6 +9180,57 @@
       },
       "host_estimated_bytes": 61445563936,
       "disk_estimated_bytes": 11923387152
+    },
+    {
+      "case": "npu-scale-profile-fc-few-1b-b128",
+      "matrix": "npu-scale-observation.json",
+      "status": "planned",
+      "question": "Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.",
+      "model_id": "7a2016520950c6211ee0e5583bf1a6ad8c3a0dbddbc1baa3428d09682d2931ad",
+      "workload_id": "9675da1d4fed9dcfd90ab71e527dd10d4769a822c60e2823c827e44fed3456e9",
+      "task_id": "d8171eea0fc1c7f44df9adeba80105cf0fb0303f76c348b84b338ac62524f17f",
+      "execution_id": "beeb76478355f84119806220c943217cdab02dc97573cf8a2c19e77829f4be92",
+      "parameters": 1010339302,
+      "unique_parameters": 1010339314,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 4096,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 1800,
+      "validation_policy": "none",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 5682395144
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 28175361568,
+      "disk_estimated_bytes": 10458166032
     }
   ]
 }

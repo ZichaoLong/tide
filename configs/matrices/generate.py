@@ -122,6 +122,10 @@ def requests():
             add(platform, "scale", f"scale-fc-few-1b-b{batch}", recipe(target=1_000_000_000), batch=batch, positions=2,
                 validation="explore", resources=LARGE,
                 question="Explicit mandatory approximately1B large-batch admission candidate. Current per-card/host/disk budget and finite calibration first; persist refusal rather than OOM-search or shrinking batch.")
+        observed = add(platform, "scale-observation", "scale-profile-fc-few-1b-b128",
+            recipe(target=1_000_000_000), batch=128, positions=2, validation="none", resources=LARGE,
+            question="Separate actual1B/B128 operator-shape, bucket and packing observation after the matching formal process; no throughput or new independent qualification. Same seed/model/first two windows, no reference prepass.")
+        observed["measurement"].update(observation="profile", steps=1, checkpoint_check=False)
         if platform == "cpu":
             for threads in (1, 16):
                 add(platform, "threads", f"threads-{threads}", medium, batch=128, positions=2,

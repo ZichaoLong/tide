@@ -14,7 +14,7 @@
 | GPU scale pilot2 | 1b3e39f；99.49M/1.010B B1执行/离散/恢复通过、数值探索；无存活后代 |
 | GPU观察4 | 1b3e39f；A/B/C packing及独立profile，不作吞吐；小isfinite/all及private BMM热区记录在证据 |
 
-固定bd2ff2e相关78项检查通过，日志`artifacts/platform-matrix/qualification-bd2ff2e.log`。新增显式finite-check packing和逐节点活动样例观察，原149项身份不变，新增18项有界对照；总171个跟踪选点（新增CUDA4.561B单/双/三/四卡校准点先静态准入）。默认scalar、严格容差、独立调度不变。尚未实测的配置不称通过。
+固定bd2ff2e相关78项检查通过，日志`artifacts/platform-matrix/qualification-bd2ff2e.log`。新增显式finite-check packing和逐节点活动样例观察，原149项身份不变，新增18项有界对照；总174个跟踪选点（新增CUDA4.561B单/双/三/四卡校准点先静态准入）。默认scalar、严格容差、独立调度不变。尚未实测的配置不称通过。
 
 公共`tidegraph`0.3.0已实现plan/预算/共享约束放置、check/run、持久job/status/logs/stop/resume和CSV/HTML/gzip归档，见[人类手册](human-workflow.md)、[有限矩阵](platform-matrix.md)。报告v2保留原逐窗、配置、身份、严格诊断，已固定源码相关验证；旧C++库保持原来源。
 
@@ -56,3 +56,5 @@ CPU core de999c2/standalone eca070f；NPU core/resident/standalone eca070f；GPU
 NPU scale后继`gef-platform-npu-scale-1b3e39f.service`：等待CPU scale终态后再经队列选1张物理4–11候选卡，固定1b3e39f的7个规模点（每项1800秒）。总时限36000秒包括有界前序等待；状态/log在`artifacts/jobs/platform-npu-scale-1b3e39f`，结果`artifacts/platform-matrix/npu-scale-run-1b3e39f`，队列同父目录`npu-scale-queue-1b3e39f.json`。当前未运行/无结果，不能称通过。
 
 CPU finite六项已passed/无后代，2个小训练严格通过、推理及profile原数值超差探索接纳、全部精确恢复通过。B128诊断scalar/packed中位1.018292/0.853316秒，B512 packed3.589865秒，仅一次同材料成本；默认未改。NPU finite已物理11→npu:0运行至B512，GPU finite六项已终态并继续FC多节点规模。
+
+规模观察补充：三平台各一个1B/B128 `scale-observation`，固定原模型/前两窗，在对应正式流程之后采实际MM/BMM/桶；validation=none及checkpoint_check=false显式不重复参考/恢复，不作吞吐或新增资格。配置相关10项通过。GPU finite B128 scalar/packed2.317225/2.066858秒，小训练两策略严格通过；NPU同材料4.043991/3.374952秒，小训练两策略严格通过，profile仍在运行；实际原严格差异均保留。
