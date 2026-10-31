@@ -178,7 +178,9 @@ core-5 inventories pass FP32 and FP16. Standalone has explicit strict failures;
 ordinary peer copies and the explicit Python CPU bridge have separate results.
 All twelve peer directions lack direct access and native cross-device atomics
 in this container, so the current multi-device resident protocol is unavailable.
-Single-device resident correctness and a reviewed device timeline remain separate gates.
+[Single-device resident correctness](evidence/core5-cuda-resident-20261031.md)
+passes its explicit component/public inventory. A reviewed device timeline and
+performance remain separate gates.
 
 
 Additional [standalone TorchNPU2.9 qualification](evidence/standalone-sdk29-20260928.md)

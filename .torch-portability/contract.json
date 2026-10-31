@@ -452,7 +452,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Verified only for the exact scoped x86_64 RTX3090/Torch2.12.1+cu130/SM86 evidence below. No all-profile, all-scale, resident, direct-P2P or performance qualification; strict failures remain explicit. aarch64 evidence is independent.",
+      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 resident numerical gates pass; timeline, performance and multi-owner hardware are separate. Eager strict failures remain; no all-profile or all-scale qualification.",
       "evidence": [
         {
           "date": "2026-10-31",
@@ -469,6 +469,22 @@
           ],
           "result": "passed",
           "test_command": "scripts/check_cuda_eager.py --device cuda:0 --clients pytorch python-native --core-build MATCHING_CORE --dtype float32|float16 --output-dir NEW; exact commands and cells in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-cuda-resident-20261031.md",
+          "scope": "Python-owned single-card resident53 public checks (including API refusal tests): FP32/FP16 complete fields, literal storage roots, gradients, SGD/AdamW, cross-window, checkpoint and KV/FC fresh-process resume. Directed eager scalar6, ordinary peer5 passing cells and half6 also pass; peer GDN exact resume still fails.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "test_command": "verify_core5_resident_single.py --device cuda:0 with exact matching NEW_CORE/NEW_RESIDENT_CPP/NEW_RESIDENT_PY; directed eager commands and inventories in report JSON"
         }
       ],
       "attempts": [
@@ -1144,7 +1160,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Verified only for the exact scoped x86_64 RTX3090/Torch2.12.1+cu130/SM86 evidence below. No all-profile, all-scale, resident, direct-P2P or performance qualification; strict failures remain explicit. aarch64 evidence is independent.",
+      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 resident numerical gates pass; timeline, performance and multi-owner hardware are separate. Eager strict failures remain; no all-profile or all-scale qualification.",
       "evidence": [
         {
           "date": "2026-10-31",
@@ -1161,6 +1177,22 @@
           ],
           "result": "passed",
           "test_command": "scripts/check_cuda_eager.py --device cuda:0 --clients libtorch --core-build MATCHING_CORE --dtype float32|float16 --output-dir NEW; exact commands and cells in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/core5-cuda-resident-20261031.md",
+          "scope": "Standalone single-card resident56 component/dtype cells, including control/queues, five memories, full graph/VJP/optimizer/retained/checkpoint; zero skips. New core/resident/installed benchmark builds and sm86 cubins audited. Eager scalar6 and ordinary peer6 pass independent roots and full training/resume; original three packed numerical failures remain.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "test_command": "verify_core5_resident_single.py --device cuda:0 with exact matching NEW_CORE/NEW_RESIDENT_CPP/NEW_RESIDENT_PY; directed eager commands and inventories in report JSON"
         }
       ],
       "attempts": [

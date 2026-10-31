@@ -18,8 +18,11 @@ source scope is the same declared resident module/profile set, including
 positive-delay PDG feedback, TimedDAG, Settle, streaming/online greedy prefill,
 FP32/FP16, inference and complete first-order training, continuation, checkpoint,
 capacity handling, multi-owner/locality placement, SGD/AdamW and accumulation.
-GPU execution is **target-pending**; local compilation/CPU contracts certify no
-CUDA correctness, residency, multi-card behavior, memory calibration or speed.
+[RTX3090 single-device core-5 qualification](evidence/core5-cuda-resident-20261031.md)
+passes the explicit56 component/dtype cells and53 public Python checks on
+x86_64/Torch2.12.1+cu130/SM86. This does not certify the full registered module
+matrix, peers, calibrated capacities or speed. A reviewed target timeline is
+separate from numerical acceptance; aarch64 CUDA still has build/host evidence only.
 
 Requirements: CUDA toolkit and driver support for12.8 conditional SWITCH graphs,
 CC8.0+, matching CUDA LibTorch/Torch build and explicit architectures. Peer

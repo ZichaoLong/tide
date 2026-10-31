@@ -43,8 +43,13 @@ standalone benchmark发现干净检出缺失已退役LH vendor JSON目录；改�
 修复实现已分三次提交推送：6cacad0（稳定顺序/独立根/peer/scalar），8a34f66（控制与增量预算），32edb0f（外部JSON头/IEEE）。
 `jobs/build-all-32edb0f` 已passed/exit0且无存活后代：冻结32edb0f，core→resident standalone/Python→standalone benchmark，56线程/3600秒；新目录 `builds/32edb0f-*`。
 四阶段构建均通过，56线程、显式sm86；source/binary/外部JSON头hash各由manifest记录。
-当前 `jobs/resident-single-32edb0f` running：冻结32edb0f、物理3、10800秒，使用三个32edb0f匹配构建，输出`runs/32edb0f-resident-single`。
-当前 `jobs/eager-regression-32edb0f` running：同固定来源、物理0/1、7200秒，相关CPU回归、两dtype standalone独立根/严格恢复、scalar及双卡各族；输出`runs/32edb0f-eager-regression`。性能暂不启动。
+`jobs/resident-single-32edb0f` 已passed/exit0：冻结32edb0f、物理3、10800秒，使用三个32edb0f匹配构建，56组件/dtype与53公共项零跳过通过，输出`runs/32edb0f-resident-single`。
+`jobs/eager-regression-32edb0f` 已failed/exit1且无存活后代：同固定来源、物理0/1、7200秒，相关CPU回归、两dtype standalone独立根/严格恢复、scalar及双卡各族；输出`runs/32edb0f-eager-regression`。CPP两dtype原3例及native peer GDN失败保留；CPU110+两dtype核、scalar18、CPP双卡6均通过。
+`jobs/profiles-32edb0f` 已passed/exit0，物理0、3600秒上限，输出`runs/32edb0f-profiles`：控制与两resident客户端Nsight node时间线、两eager客户端Torch profile。全部资格/构建已终态，profile不作为吞吐。两个resident消费者profile内完整核对/精确恢复通过，图内kernels与host graph launches分列。
+当前 `jobs/finite-32edb0f` running，物理0、10800秒，串行37个显式选择，输出`runs/32edb0f-finite`；3个测量窗+1warmup/配置，完整记录/梯度/SGD/精确恢复决定吞吐资格。
+`jobs/half-boundary-32edb0f` 已failed：两项原FP16 feedback失败在CPU复现完全相同参数/值，不能归因为CUDA专有缺陷。
+`jobs/half-packing-32edb0f` 已failed且无存活后代：显式scalar SSD在CPU/CUDA各通过，affine仍相同失败；原packed两例均保留。无生产精度/容差变化。
+有限目录a864fef已提交推送；6个模型静态展开/执行命令校验通过，最大约345万参数。所有资格终态后运行`profile-32edb0f.py`和显式37项`finite-32edb0f.py`，均在目标根，source32edb0f。
 再对固定提交运行相关单/双卡严格恢复、单卡resident及timeline；无关已通过范围不重复全矩阵。
 全部正确性/重型构建终态后再开始有界profile与小中规模FC/HB/LH对照，失败案例不报告合格吞吐。
 审阅证据单独提交；旧CPU/NPU严格失败不自动解除。未提交文件见git status；首轮eager审阅证据与能力声明独立于新来源资格。

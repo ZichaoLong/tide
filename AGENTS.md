@@ -83,8 +83,8 @@
 - CPU FP64/FP32 remain the reference. Eager and resident CPU/CUDA/NPU scopes
   are declared separately in the execution contract and module capability gates.
   Explicit unavailable devices/dtypes must fail; never silently substitute an
-  algorithm. CUDA hardware validation remains pending; keep source/build and
-  actual-device evidence separate. User alignment overrides generic experiment skills.
+  algorithm. CUDA qualification is source/device/profile scoped; keep source/build
+  and actual-device evidence separate. User alignment overrides generic experiment skills.
 
 ## Evidence and housekeeping
 

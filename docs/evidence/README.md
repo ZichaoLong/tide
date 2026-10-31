@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[RTX3090单卡resident与eager补验](core5-cuda-resident-20261031.md)：32edb0f四阶段新构建/sm86，单卡56组件/dtype+53公共检查零跳过通过；scalar三客户端18项、standalone双卡6项、native半精度6项及相关CPU通过。原FP32/双卡精确恢复失败保持；FP16反馈两例在CPU复现同值，SSD显式scalar通过仍不解除packed失败。时间线/性能分列。
+
 [RTX3090 core-5 eager与跨卡首轮资格](core5-cuda-eager-20261031.md)：x86_64/Torch2.12.1+cu130/sm86；PyTorch/native单卡FP32和FP16各19/19，standalone分别23/24和22/24；完整训练、同栈精确恢复与CPU交接分列。72方向/实现/流传输单元通过，完整双卡native GDN精确恢复失败；原严格失败、流警告和resident硬件限制保留。无性能声明。
 
 [历史迁移与新CPU接入](history-migration-20261030.md)：716提交独立核对、映射与固定源码定向验证；发布及临时材料退役见[原子发布与新检出](history-publication-20261030.md)。

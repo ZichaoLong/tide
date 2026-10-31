@@ -69,3 +69,7 @@ sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 
 空字段也扣最小元素预算。原参数别名只复制一次，每个不同字段保留独立None/零根与版本检查；
 反向只打包实际给定的cotangent。`test_weighted_placement`覆盖异形、标量、空/noncontiguous、
 别名和分块边界。连续存储本身不证明快，完整计时和真机资格分别记录。
+
+传输字段按首次遍历顺序分组，TensorImpl只负责别名去重；重建owner保持字段顺序。
+[RTX3090相关回归](evidence/core5-cuda-resident-20261031.md)检查逆地址反例、None/零根与原owner版本。
+跨设备整体反向的累加顺序仍须单独精确恢复验收，局部顺序修复不解除已有双卡边界。
