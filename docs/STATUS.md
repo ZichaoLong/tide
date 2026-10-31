@@ -43,7 +43,8 @@ NPU同实现回归仍在下列队列，不由CUDA或旧NPU通过认证。旧CPU/
 9.123B原两代磁盘83.896GB拒绝保留；新interval3仅最终保存，单代41.401GB，双卡08:45:38Z前已完成。
 外层因单卡拒绝failed/1、双卡子项exit0，均无后代。经b061404审阅/dry-run后退役其可重建checkpoint，
 凭据`retirement-capacity-periodic-36baeb7.json`；先前dba2a5e及36baeb7的4.561B checkpoint亦已审阅退役。
-全部小结果/config/log保留，不跨机搬运这些大文件。
+全部小结果/config/log保留，不跨机搬运这些大文件。09:37Z追加核对终态/无后代后，
+退役新配方CUDA1.014B的7.721GB checkpoint，凭据`retirement-scaled-training-36baeb7.json`。
 
 ```sh
 artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoint-36baeb7/venv/bin/tidegraph job status jobs/platform-scaled-training-1a6b08f'

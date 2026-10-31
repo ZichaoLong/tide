@@ -99,6 +99,10 @@ NPU Python环境为Torch2.12.0+cpu/TorchNPU2.12.0.post2、CANN9.1；core源eca07
 复现：先`plan configs/capacity-training/cuda-scaled-loss.json --matrix --site site.json`，
 再用已安装`tidegraph matrix`与新输出目录；来源/安装身份和数学阈值必须显式保留。
 
+09:37Z重新核对外层及两子监督均终态且无存活进程后，按已审阅dry-run退役CUDA大点checkpoint目录
+（4文件、7,721,327,203 bytes含元数据）；原结果hash、完整小归档、输入、日志和严格失败保留。
+不跨机搬运该大文件；新线程通过跟踪配置重建，不依赖旧checkpoint在线。
+
 ## 训练主存准入的定向修正
 
 6095c6a根据本次恢复快照生命周期补齐主存保留，1.014B训练预算35.261→52.585GB；逐卡张量/磁盘估算不变，
