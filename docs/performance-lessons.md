@@ -350,4 +350,6 @@ GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按dev
 
 [新CUDA resident布局证据](evidence/core5-platform-resident-20261031.md)说明默认B² journal/stage预算不是逻辑B128/B512硬件上限。固定FC4/P2按结构给queue=12B/stages32后实际完成，峰值约0.340/1.342GB，原数值超差保留。两项实际3阶段、物理行1536/6144对候选672/2688，56.25%缺席行；不能按该比例推断耗时收益。先补同材料eager，设备服务/Full工作区与总HBM继续分别验收。
 
+同材料d16 eager补验后，B128/512成本2.154/8.680秒，resident为2.324/9.473秒，尚无resident优势；仅eager B128严格通过，其余数值超差。设备行数与容量改善不能替代端到端收益。约1B双/四CUDA训练第三窗首先在原平方loss非有限，前向记录检查有限；增加设备没有解除数值放大。失败定位应先给出公开阶段/字段，未执行的独立核对与恢复不能标通过；改变loss/lr是新工作负载。
+
 [1B/B128 GPU实际形状](evidence/core5-platform-scale-20261031.md)同时出现168时间行的FFN矩阵批、1344个单行描述/评分MM和864个2行私有BMM。Read/Full均12桶且无单行桶，当前不做统一padding重写；独立投影8MiB预算退回96行，继续保留原后备。显式CUDA同步占捕获跨度2.861%，不代表全部主机等待；nonzero/index/isfinite与拆装仍有成本，但单次profile不足以认定整图融合收益。

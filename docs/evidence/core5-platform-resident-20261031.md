@@ -1,6 +1,6 @@
 # 单卡resident大batch与布局边界（2026-10-31）
 
-本报告目前只含CUDA六项；NPU与同材料eager补充仍待实际验收。固定Python bd2ff2e、公共设备库源de999c2；RTX3090/sm86、Torch2.12.1+cu130，FP32/FP32评分、TF32关闭、ATen/interop/worker1。resident通过公共设备库执行，不称纯PyTorch设备调度。设备就绪/选择/合批/推进协议未修改，实际CUDA时间线证明引用[固定完整流程](core5-cuda-finite-20261031.md)；本轮新增的是大batch实测计数与完整检查，不将主机提交称设备进度。
+本报告目前含CUDA六项resident及两项同材料eager；NPU仍待实际验收。固定Python bd2ff2e、公共设备库源de999c2；RTX3090/sm86、Torch2.12.1+cu130，FP32/FP32评分、TF32关闭、ATen/interop/worker1。resident通过公共设备库执行，不称纯PyTorch设备调度。设备就绪/选择/合批/推进协议未修改，实际CUDA时间线证明引用[固定完整流程](core5-cuda-finite-20261031.md)；本轮新增的是大batch实测计数与完整检查，不将主机提交称设备进度。
 
 ## 默认与显式有界布局
 
@@ -33,4 +33,18 @@ tidegraph results docs/evidence/core5-platform-resident-20261031.json.gz --forma
 
 同组独立1B eager profile放在[规模报告](core5-platform-scale-20261031.md)，不计resident或吞吐。外层任务platform-cuda-resident-observe-bd2ff2e终态exit1，无后代；两个预期容量拒绝导致整体failed，不覆盖其他项的分别验收。多卡resident仍受P2P/原子协议门禁，未获此单卡资格。
 
-归档SHA256：`ab6f9901180dbf4a4e7a26ccf06bb18816c418178de30345a1490383a020dfaf`。
+## 同材料eager对照
+
+固定bd2ff2e，配置9a1cd96；d16/FC4/B128或B512/P2的模型、输入、任务、FP32、完整返回、线程与resident逐项身份核对一致。
+eager的B128严格通过、B512数值超差；两项执行/离散/完整检查/精确续接均通过。不能以自身恢复称B512严格等价。
+
+| B | eager mixed-c中位秒 | resident中位秒 | eager / resident全程allocator峰值bytes |
+| ---: | ---: | ---: | --- |
+| 128 | 2.154304 | 2.324339 | 18,004,992 / 340,269,568 |
+| 512 | 8.680192 | 9.472509 | 45,964,800 / 1,342,168,576 |
+
+相同材料下resident当前没有成本优势；这是一次有限流程的成本观察，不是严格等价加速比。
+两者candidate/Full/消息相同；resident保留缺席行和设备服务成本，不能从56.25%填充直接推断可优化的时间。
+任务platform-cuda-resident-match-bd2ff2e于06:38:06Z终态exit0，无supervisor/workload/remaining后代。
+
+归档SHA256：`4fd0bee5de7bc458cd99157989ae102a0461cf2f8fbf860e8844498eaffb3648`。
