@@ -135,6 +135,7 @@ Python/native与resident公共运行现在记录`checkpoint_cost`，拆分权重
 同材料例子为[磁盘](../configs/checkpoint-cost/cuda-disk.json)和[tmpfs](../configs/checkpoint-cost/cuda-tmpfs.json)：
 先分别`plan`核对预算，再串行`job start --output-dir`到实际磁盘或`/dev/shm`的新目录。
 两者保留完整返回与exact-next，但`validation=none`表示不重复独立CPU参考，不能新增数学资格。
+本机大文件周转示例为[NPU12.802B tmpfs](../configs/checkpoint-cost/npu-tmpfs.json)，须在既有任务终态、相同单卡原流程完成并精确恢复后单独准入；不移动正在运行的作业。其原磁盘结果是不同Python观测版本，跨版本成本仅作观察，并说明相同窗口0/1和线程/返回口径。
 保存和恢复成本查询`results --format json`中的`details.metrics[].checkpoint_cost`和`details.checkpoint.cost`。
 
 
