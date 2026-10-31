@@ -96,11 +96,11 @@ void DeviceProgram::finish() {
     check(cudaGraphConditionalHandleCreate(&pc,p.graph,0,cudaGraphCondAssignDefault),"create block selector");
     cudaGraphNodeParams param{};param.type=cudaGraphNodeTypeConditional;
     param.conditional.handle=loop;param.conditional.type=cudaGraphCondTypeWhile;param.conditional.size=1;
-    cudaGraphNode_t while_node;check(cudaGraphAddNode(&while_node,p.graph,nullptr,0,&param),"add device WHILE");
+    cudaGraphNode_t while_node;check(cuda_backend::add_root_node(&while_node,p.graph,&param),"add device WHILE");
     auto body=param.conditional.phGraph_out[0];
     param={};param.type=cudaGraphNodeTypeConditional;param.conditional.handle=pc;
     param.conditional.type=cudaGraphCondTypeSwitch;param.conditional.size=blocks.size();
-    cudaGraphNode_t switch_node;check(cudaGraphAddNode(&switch_node,body,nullptr,0,&param),"add device SWITCH");
+    cudaGraphNode_t switch_node;check(cuda_backend::add_root_node(&switch_node,body,&param),"add device SWITCH");
     auto cases=param.conditional.phGraph_out;
     for(size_t i=0;i<blocks.size();++i) {
       const auto& b=blocks[i];auto map=at::tensor(b.targets,at::kInt).to(p.device);p.owners.push_back(map);

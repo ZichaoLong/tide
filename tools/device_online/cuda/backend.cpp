@@ -10,6 +10,15 @@ void check(cudaError_t status,const char* operation) {
 void check_blas(cublasStatus_t status,const char* operation) {
   if(status!=CUBLAS_STATUS_SUCCESS)throw std::runtime_error(std::string(operation)+": cuBLAS status "+std::to_string(status));
 }
+cudaError_t add_root_node(cudaGraphNode_t* node,cudaGraph_t graph,cudaGraphNodeParams* params) {
+  // CUDA 13 added edge metadata to the generic graph-node API. These roots
+  // have no dependencies, so both signatures describe the same graph.
+#if CUDART_VERSION >= 13000
+  return cudaGraphAddNode(node,graph,nullptr,nullptr,0,params);
+#else
+  return cudaGraphAddNode(node,graph,nullptr,0,params);
+#endif
+}
 Type type(at::ScalarType type) {
   switch(type){case at::kFloat:return F32;case at::kHalf:return F16;case at::kLong:return I64;
     case at::kInt:return I32;case at::kByte:return U8;case at::kBool:return BOOL;

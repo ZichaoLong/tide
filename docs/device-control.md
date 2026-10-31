@@ -31,7 +31,7 @@ scatter scans remain optimization work, without a claimed speed advantage.
 
 On a fixed clean checkout, after activating the target's own CUDA toolchain,
 choose new output directories outside the source and an explicit architecture
-list (`80-real;90-real;100` is the local compile profile):
+list (`80;90;100` was the local compile profile; RTX3090 uses `86`):
 
 ```bash
 python scripts/build.py --backend cuda --build-dir "$CORE" --jobs 4

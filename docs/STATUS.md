@@ -17,26 +17,30 @@
 
 ## 当前作业与下一步
 
-实现提交 `c962961`：CUDA eager IEEE政策、分配置三客户端门禁、完整同栈精确恢复；容器subreaper清理独立组与孤儿。
-开发检查：CPU公式92、检查器CPU9、容器6通过；三个客户端CUDA首个KV通过；C++新增精确恢复CPU FP64/FP32、CUDA FP32通过。
-初始CUDA core `cc6b45f` 构建209目标成功，56线程实际约73秒。开发检查不冒充完整GPU资格。
+目标根 `/root/autodl-tmp/gef-cuda3090`；私有 `venv` 使用原Torch2.12.1+cu130，另装pytest8.4.2/Ninja1.13.0。
+固定源码 `sources/c962961` 的CUDA core `builds/c962961-core`：209目标/56线程/sm86通过。
+小型CPU公式92、检查器CPU9通过；目标容器/架构14通过。断连/stop探针已确认无残留进程；无systemd，使用subreaper启动器。
+数学快照本次接续再次校验通过。无本机长作业。
 
-目标工作根 `/root/autodl-tmp/gef-cuda3090`。准备冻结 `sources/c962961`，以该提交重新构建 `builds/c962961-core`，
-作业 `jobs/core-build-c962961`，超时3600秒/56线程/sm86。构建期间先启动独立 `jobs/eager-pytorch-fp32`：全19例mixed-c，3600秒，结果 `runs/c962961-pytorch-fp32`。
-构建通过后启动native/standalone的固定全例，并单列KV mixed-a/b；正确性与构建可重叠，正式性能不重叠。
-私有环境 `venv` 使用Torch2.12.1+cu130，额外pytest8.4.2/Ninja1.13.0；原setup作业passed。
-原始日志/持久状态位于 `jobs/NAME/task.log`、`status.json`，结果目录 `runs/`；没有覆盖原运行。
-断连探针实际重连确认父子存活，stop后cancelled/无存活成员；后续subreaper的独立session/孤儿探针还须目标复验。
-本机新增单卡core-5 resident入口：39组件+3公共测试文件，注册/无peer清单与CLI校验通过，真机尚待运行；原三卡完整门禁保持。
-活动源码只读，独立开发目录 `dev` 保留已验证补丁，不能当正式来源。
+- `jobs/eager-pytorch-fp32` 已passed，`runs/c962961-pytorch-fp32` 全19例mixed-c通过。
+- `jobs/eager-native-cpp-fp32` 仍running（物理卡1，7200秒）：native19例全通过；standalone目前fc/ssd原严格tensor比较失败，其余继续。原日志保留，待定位字段/阶段，不能称整体通过。
+- `jobs/resident-build-7fd0576` failed：86-real被既有整数架构守卫拒绝，未编译。
+- `jobs/resident-build86-7fd0576` failed：CUDA13的cudaGraphAddNode增加edge-data参数。旧两次失败均保留。工作树已作版本兼容修复，零依赖WHILE/SWITCH图语义不变；目标dev两源文件定向编译及8项架构检查通过。
+- 已提交 `jobs/eager-mixed-ab-fp32`：固定c962961、物理卡0、三客户端KV mixed-a/b、1800秒。
+- 已提交 `jobs/eager-fp16`：固定c962961、物理卡2、三客户端完整mixed-c、7200秒；保持AdamW/原容差/输入，失败逐配置记录。
+
+下一步：兼容修复定向编译通过后提交，以新只读源码运行单卡resident构建（56线程/86，standalone39组件和weighted Python适配），
+再独立执行单卡门禁及时间线。原三卡/P2P完整门禁保持。C++ fc/ssd失败单独定位，不阻塞其他通过域。
+新peer探针开发已在物理2/3验证12个传输/流/根单元；尚未提交或正式资格，不是完整多卡模型通过。
+正式资格之后另提交审阅证据。CPU/NPU旧严格失败保持ROADMAP停止条件。
+
+所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，不会覆盖旧运行。
+活动源码只读；`dev` 为dirty开发，不能作为正式来源。未提交内容：CUDA13兼容修复、架构文档、peer探针及本交接。
 
 ```sh
 git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
-# 目标机（通过本机认证CONNECT，凭据不进仓库）：
-/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/c962961/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/core-build-c962961
+# 本机任务私有SSH包装（认证只在内存；不修改全局配置）
+artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/c962961/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/eager-native-cpp-fp32'
 ```
-
-正式CUDA资格后单独提交证据；首个KV不代表全部五记忆/配置/拓扑通过。接着建立单卡core-5 resident明确门禁并构建，
-不修改现有完整多卡门禁的三卡/P2P要求。旧CPU/NPU严格失败保持 [ROADMAP](ROADMAP.md) 的停止条件。

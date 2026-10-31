@@ -37,6 +37,7 @@ struct DeviceProgram::Impl {
 namespace cuda_backend {
 void check(cudaError_t,const char*);
 void check_blas(cublasStatus_t,const char*);
+cudaError_t add_root_node(cudaGraphNode_t*,cudaGraph_t,cudaGraphNodeParams*);
 Type type(at::ScalarType);
 void wait_event(cudaEvent_t,int32_t milliseconds);
 void wait_stream(cudaStream_t,int32_t milliseconds);
