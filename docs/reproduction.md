@@ -81,3 +81,9 @@ python scripts/diagnose_weighted_async.py --device cuda:0 --peer-device cuda:1 -
 
 CPU桥仍是显式一阶诊断路径，不改变公共通信协议。CUDA检查/诊断/测量入口显式关闭TF32并记录IEEE策略；
 库消费者仍拥有自己的精度政策。真机资格与当前失败见STATUS及后续审阅证据，不继承CPU/NPU结论。
+
+[RTX3090固定有限证据](evidence/core5-cuda-finite-20261031.md)给出从干净源码构建、实际配置/逐项查询及
+Nsight SQLite分析命令。Git内`benchmarks/core5-cuda-finite-v1.json`与`run_core5_study.py`可重新生成
+FC/HB/LH small/medium输入，不需要旧fixture或私有driver。HB small resident、medium keys/values和
+LH queue64拒绝均保留原材料；显式`--resident-limits`只改变资源，不更改数学或原失败结论。
+`inspect_cuda_timeline.py`只读单进程/单设备Nsight导出；实际GPU trace须重新采集，hash不能恢复退役的字节。

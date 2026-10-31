@@ -284,3 +284,12 @@ FP16解析归一化VJP内部FP64仍保留原AdamW见证，不能因“用了更�
 - TensorImpl地址只用于识别别名，不能决定打包/VJP边顺序。按字段首次出现顺序修复了独立反例，却没有解除双卡GDN精确恢复差异；不能把局部确定性修复当作全局反向顺序证明。
 - 复制与微型梯度通过不等于完整训练/恢复通过。当前容器12方向无直接P2P/原子，普通复制和显式CPU桥的完整消费者须分别检查；流警告也不能因数值通过而删掉。
 - 清理能暴露隐含构建依赖。standalone benchmark改为显式nlohmann JSON头和完整树hash，不恢复已退役的LH vendor目录；C++运行时不因此依赖Python。
+
+[32edb0f时间线与有限完整训练](evidence/core5-cuda-finite-20261031.md)补充实际CUDA观察：
+
+- 时间线须与完整消费者一起验。两resident客户端FC small完整梯度/槽/恢复通过，真实graph-node序列包含ready、选择、路由与提交循环；控制组件或launch计数单独都不足以认证全图。条件节点缺失host correlation时保留缺口，不按最近时间猜归属。
+- GPU常驻不是速度承诺。小型FC/HB/LH中可接受的GPU配置慢于同材料单线程CPU；resident的物理局部行与反向图构造成本仍在。中型严格失败不得拿已完成计时计算等价加速。
+- 小图packing也要实际比较。FC small两个native客户端的显式scalar完整通过，本次中位约133.6/133.5ms，原packed约138.8/168.5ms；仅一次非交错流程，默认策略未改，中型scalar严格失败不因这个结果解除。
+- 成本定位先看实际工作。eager有大量小kernel、显式复制和host scalar；resident的indexing、逐行累加/guard远多于closure。inclusive事件重叠、profile覆盖与关键路径不同，不能仅凭计数就实施融合或扩大尺度。
+- 队列默认值不是任意拓扑上界。LH medium queue64在更新后新窗口拒绝；静态Settle物理边/端口推导queue452后精确续接通过，但独立keys仍失败。容量、恢复和数值三个验收事实必须分开，不能盲目增大所有内存分区。
+- 离线观察器也需要资源界限。无索引SQLite相关查询55秒超时；只读ID集合改为线性工作后约6秒分析原三份trace，7个独立导出见证保持。此修复不产生新的GPU吞吐样本。

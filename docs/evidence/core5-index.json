@@ -4,6 +4,7 @@
   "reports": [
     "core5-natural-study-20261029.json",
     "core5-checkpoint-budget-20261029.json",
-    "core5-coverage-correction-20261030.json"
+    "core5-coverage-correction-20261030.json",
+    "core5-cuda-finite-20261031.json"
   ]
 }

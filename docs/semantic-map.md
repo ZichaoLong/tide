@@ -205,7 +205,8 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
   [控制接口](../tools/device_online/control_flow.h) 由 CANN/CUDA 独立实现。
   自定义 Python/C++ 程序不会自动被降到设备；前向、VJP、容量/续接分别补齐。
 - CUDA 共享语义源码不等于已真机认证；[device-control](device-control.md)
-  记录独立后端、构建要求及尚待真机门禁。
+  记录独立后端、构建要求和分层门禁；[RTX3090单卡资格](evidence/core5-cuda-resident-20261031.md)
+  与[实际时间线/有限对照](evidence/core5-cuda-finite-20261031.md)限定各自已测配置，不能认证全部GPU范围。
 
 ## 新定义或新特例的最小变更检查
 
@@ -276,7 +277,9 @@ Allocation §6/S.2的标量拒绝/原生实际调用观察见[分配契约](weig
 [测量设施](weighted-workloads.md)与[常驻训练](resident-weighted-training.md)，不调用参考补写返回。
 
 上述resident增量与实际消费者的[57308e7固定资格](evidence/core5-resident-boundary-20261029.md)
-分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
+分别记录SDK、Python-owned、原失败和初始化边界；该历史来源没有CUDA真机资格。
+后续[RTX3090单卡资格](evidence/core5-cuda-resident-20261031.md)及[时间线/有限对照](evidence/core5-cuda-finite-20261031.md)
+使用各自固定来源和显式库存，不追溯提升旧证据。
 
 公共配置/参数清单/自然规模与维护映射见 [core5-study](core5-study.md)。
 `planning.model.resolve_model`复用固定Config适用域；`planning.recipes`绑定FC/HB实例§4.2—4.4，

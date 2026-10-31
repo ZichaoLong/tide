@@ -21,8 +21,10 @@ capacity handling, multi-owner/locality placement, SGD/AdamW and accumulation.
 [RTX3090 single-device core-5 qualification](evidence/core5-cuda-resident-20261031.md)
 passes the explicit56 component/dtype cells and53 public Python checks on
 x86_64/Torch2.12.1+cu130/SM86. This does not certify the full registered module
-matrix, peers, calibrated capacities or speed. A reviewed target timeline is
-separate from numerical acceptance; aarch64 CUDA still has build/host evidence only.
+matrix, peers, calibrated capacities or speed. The separately reviewed
+[FC-small target timeline](evidence/core5-cuda-finite-20261031.md) observes online
+graph-node progression in both complete resident clients. Its numerical gate
+and finite cost remain separate; aarch64 CUDA still has build/host evidence only.
 
 Requirements: CUDA toolkit and driver support for12.8 conditional SWITCH graphs,
 CC8.0+, matching CUDA LibTorch/Torch build and explicit architectures. Peer

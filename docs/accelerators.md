@@ -179,8 +179,11 @@ ordinary peer copies and the explicit Python CPU bridge have separate results.
 All twelve peer directions lack direct access and native cross-device atomics
 in this container, so the current multi-device resident protocol is unavailable.
 [Single-device resident correctness](evidence/core5-cuda-resident-20261031.md)
-passes its explicit component/public inventory. A reviewed device timeline and
-performance remain separate gates.
+passes its explicit component/public inventory. The separate
+[FC-small device timeline and finite comparisons](evidence/core5-cuda-finite-20261031.md)
+record actual conditional-graph progression and scoped small-model complete
+updates. Medium strict failures and HB-small resident differences remain;
+neither the timeline nor a passing small case certifies all configurations.
 
 
 Additional [standalone TorchNPU2.9 qualification](evidence/standalone-sdk29-20260928.md)

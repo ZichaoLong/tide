@@ -63,9 +63,11 @@
 | native大文件checkpoint | 9bfabbb默认4GiB及显式正int64预算、原字节、拒绝原子性与实际>4GiB保存/加载已验证；CPU32+6消费者/SDK8消费者通过 | 文件硬上限已解除；整体CPU codec副本、每张量2^28元素与集合上限仍明确存在。分片/流式codec需新方案；不能将文件预算当峰值内存保证 |
 | 诊断与训练观测设施 | scalar/native实际分配观察已通过；常驻20–22失败部分行、实际梯度/SGD槽/canonical共享owner解码及磁盘换owner检查[固定资格](evidence/core5-resident-boundary-20261029.md)通过 | 不补造未计算残差，不以参考重算结果。fake布局测试必须有真实公共owner消费者作独立检查 |
 | 容量/正支持 | 显式正int64容量选项、静态Settle上界与分区预算；原正支持下溢/区间塌缩仍拒绝 | 保留表示下界、同时在途容量与实际预算拒绝；无静默裁剪/截断/改活动集合。不以保守fixture预设作为引擎上限 |
-| CUDA/x86_64 | [RTX3090首轮证据](evidence/core5-cuda-eager-20261031.md)：三客户端构建/加载，PyTorch及native单卡两dtype各19/19完整通过，standalone FP32 23/24、FP16 22/24；普通复制72单元与显式Python CPU桥完整delta-pdg通过。[单卡resident固定资格](evidence/core5-cuda-resident-20261031.md)56组件/dtype+53公共项通过，timeline与有限性能继续 | GPU主线，CPU仅相关参考。12方向无直接P2P/原子，多卡resident硬件限制不阻塞其他路径；完整三卡门禁不放宽，不改通信协议 |
+| CUDA/x86_64 | [RTX3090首轮证据](evidence/core5-cuda-eager-20261031.md)：三客户端构建/加载，PyTorch及native单卡两dtype各19/19完整通过，standalone FP32 23/24、FP16 22/24；普通复制72单元与显式Python CPU桥完整delta-pdg通过。[单卡resident固定资格](evidence/core5-cuda-resident-20261031.md)56组件/dtype+53公共项通过；[FC-small设备时间线与有限对照](evidence/core5-cuda-finite-20261031.md)将实际常驻、完整正确性和成本分列 | 本轮小图GPU未见对CPU收益，不外推规模。12方向无直接P2P/原子，多卡resident硬件限制不解除；完整三卡门禁不放宽，不改通信协议 |
 | CUDA standalone数值/恢复 | 原FP32 fc/ssd第3步AdamW后bias差3.49e-6超原容差；scalar同样失败，CPU FP32/FP64通过。mixed-a另在恢复梯度2坐标逐值不等。FP16 feedback/affine read_out与feedback/ssd evidence_weight第三步失败在CPU复现同值；SSD显式scalar在CPU/CUDA通过，affine两种packing仍失败 | 不重跑相同候选充当修复；先定位局部算术/伴随和更新放大，保留原输入/epsilon/容差。新增独立根已随原矩阵验收，scalar通过不冒充packed修复；不继承旧CPU/NPU GDN失败 |
 | CUDA native双卡精确恢复 | gated-hb第四步nodes.0.kernel.read_out梯度3/4坐标逐值不等，最大4.44e-16；前3步完整通过。稳定字段packing修复自身反例但未解除该失败 | 停止重复地址排序候选；须有具体累加/构图顺序新方案，再验独立根/共享owner/optimizer/原精确恢复。普通复制成功不认证直接P2P、NCCL或capture |
+| CUDA有限图完整状态/容量 | [32edb0f有限对照](evidence/core5-cuda-finite-20261031.md)：首轮37项18通过，18项keys/values/content/output严格差异，1项LH medium resident queue64容量拒绝；FC medium显式scalar亦失败。HB small resident两客户端同一values坐标差1.11759e-6。LH queue452越过容量且磁盘精确续接通过，但独立第0窗keys差2.26498e-6 | 相同数值候选停止扩大吞吐；下一步须沿实际首个差异的投影/归一化/共享伴随定位，提出有独立根锚点的新算术方案。容量按静态物理边/端口预算，原queue64失败保留；不以自身恢复或更大容量替代独立参考 |
+| CUDA resident后续性能 | [同一时间线/有限成本](evidence/core5-cuda-finite-20261031.md)：大量indexing/逐行累加/guard，完整训练有多次graph实例化；小型LH物理局部行120对实际40。边界、反向构造和解码仍有成本 | 下一候选先验证实际局部行合批或显式反向模板重绑；需保留独立根/journal/版本/跨窗/optimizer及精确恢复。不按shape缓存旧owner，不由减少kernel数推断端到端加速 |
 
 原失败记录和严格断言不变；新增错误与旧失败分别保留。前轮构建/资格与串行有限性能均已终态，
 不重复旧矩阵，不把参数量匹配等同函数、工作量或模型效果匹配，也不宣称低成本优化已经全部完成。

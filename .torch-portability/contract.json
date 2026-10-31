@@ -452,7 +452,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 resident numerical gates pass; timeline, performance and multi-owner hardware are separate. Eager strict failures remain; no all-profile or all-scale qualification.",
+      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 numerical gates and FC-small resident device timeline have actual evidence; finite small-model training/resume/costs are separately recorded. Medium numerical failures, existing eager strict failures and unavailable multi-owner resident hardware remain; no all-profile/all-scale qualification.",
       "evidence": [
         {
           "date": "2026-10-31",
@@ -485,6 +485,23 @@
             "checkpoint-handoff"
           ],
           "test_command": "verify_core5_resident_single.py --device cuda:0 with exact matching NEW_CORE/NEW_RESIDENT_CPP/NEW_RESIDENT_PY; directed eager commands and inventories in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-finite-20261031.md",
+          "scope": "Independent PyTorch and Python/native FP32 FC/HB/LH-small eager complete records, final gradients/SGD slots and exact disk resume pass. Python-owned resident FC/LH-small pass; FC-small conditional-graph timeline is observed separately. Python/native FC-small scalar also passes. One process and three continued timing windows per configuration, no stable speedup claim; larger and HB-small resident failures remain.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-finite-v1.json with explicit case/execution and matching fixed builds; exact selections, commands, checks and separate Nsight traces in report JSON"
         }
       ],
       "attempts": [
@@ -502,6 +519,22 @@
           "result": "failed",
           "test_command": "Exact original commands and retained failure diagnostics in report JSON",
           "reason": "Original strict numerical/exact-resume assertions retained; no tolerance, inputs or precision policy changed to force acceptance."
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-finite-20261031.md",
+          "result": "failed",
+          "tiers": [
+            "parity",
+            "short-train",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "scope": "Original medium FC/HB/LH strict complete-record differences and HB-small resident values mismatch. Standalone LH-medium queue64 refused a post-checkpoint window; explicit static queue452 passes same-stack exact resume but still fails independent keys. No qualified throughput for these configurations.",
+          "test_command": "Original finite catalog plus separately declared {queue:452} resource override; exact commands in report JSON",
+          "reason": "Original inputs, IEEE precision, integer/route/connectivity checks and floating tolerances retained. Capacity and same-stack resume cannot replace independent correctness."
         }
       ]
     },
@@ -1160,7 +1193,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 resident numerical gates pass; timeline, performance and multi-owner hardware are separate. Eager strict failures remain; no all-profile or all-scale qualification.",
+      "reason": "Verified only for exact x86_64 RTX3090/Torch2.12.1+cu130/SM86 scoped entries. Single-device core-5 numerical gates and FC-small resident device timeline have actual evidence; finite small-model training/resume/costs are separately recorded. Medium numerical failures, existing eager strict failures and unavailable multi-owner resident hardware remain; no all-profile/all-scale qualification.",
       "evidence": [
         {
           "date": "2026-10-31",
@@ -1193,6 +1226,23 @@
             "checkpoint-handoff"
           ],
           "test_command": "verify_core5_resident_single.py --device cuda:0 with exact matching NEW_CORE/NEW_RESIDENT_CPP/NEW_RESIDENT_PY; directed eager commands and inventories in report JSON"
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-finite-20261031.md",
+          "scope": "Standalone FP32 FC/HB/LH-small eager complete records, final gradients/SGD slots and exact disk resume pass. Standalone resident FC/LH-small pass; FC-small conditional-graph timeline is observed separately. Standalone FC-small scalar also passes. One process and three continued timing windows per configuration, no stable speedup claim; larger and HB-small resident failures remain.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "short-train",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "result": "passed",
+          "test_command": "scripts/run_core5_study.py --study benchmarks/core5-cuda-finite-v1.json with explicit case/execution and matching fixed builds; exact selections, commands, checks and separate Nsight traces in report JSON"
         }
       ],
       "attempts": [
@@ -1210,6 +1260,22 @@
           "result": "failed",
           "test_command": "Exact original commands and retained failure diagnostics in report JSON",
           "reason": "Original strict numerical/exact-resume assertions retained; no tolerance, inputs or precision policy changed to force acceptance."
+        },
+        {
+          "date": "2026-10-31",
+          "commit": "32edb0f2b035ef2b732b6f27cf577f9e98058eb6",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/core5-cuda-finite-20261031.md",
+          "result": "failed",
+          "tiers": [
+            "parity",
+            "short-train",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "scope": "Original medium FC/HB/LH strict complete-record differences and HB-small resident values mismatch. Standalone LH-medium queue64 refused a post-checkpoint window; explicit static queue452 passes same-stack exact resume but still fails independent keys. No qualified throughput for these configurations.",
+          "test_command": "Original finite catalog plus separately declared {queue:452} resource override; exact commands in report JSON",
+          "reason": "Original inputs, IEEE precision, integer/route/connectivity checks and floating tolerances retained. Capacity and same-stack resume cannot replace independent correctness."
         }
       ]
     },
