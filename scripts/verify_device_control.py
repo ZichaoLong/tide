@@ -22,6 +22,7 @@ def main():
                                  {"resident-sharded-training", "weighted-peer", "weighted-node-peer", "weighted-node-window", "weighted-node-training", "weighted-node-replicas"}],
                         help="Single-device checks by default; peer requires visible devices with the declared backend capabilities")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
+    parser.add_argument("--keep-going", action="store_true", help="retain independent failures and finish the requested inventory; any failure still fails the gate")
     args = parser.parse_args()
     backend = args.device.split(":")[0]
     if backend not in {"npu", "cuda"}:
@@ -91,8 +92,11 @@ def main():
                     # Vendor initialization can write kernel_meta/ before the
                     # first operator. Keep runtime scratch out of frozen source,
                     # including when another backend is being built there.
-                    result = subprocess.run(command, cwd=out, stdout=log, stderr=subprocess.STDOUT,
+                    try:
+                        result = subprocess.run(command, cwd=out, stdout=log, stderr=subprocess.STDOUT,
                                             timeout=600 if check in ("weighted-stage", "weighted-training", "weighted-peer", "weighted-node-window", "weighted-node-training", "weighted-node-replicas") else 360 if check in ("weighted-node-peer", "weighted-retained", "weighted-saved-window", "weighted-window", "weighted-window-config", "weighted-flow", "weighted-flow-config", "peer-resident-compact-projections", "peer-resident-compact-journals", "peer-resident-compact-contexts", "peer-resident-contexts", "peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                    except subprocess.TimeoutExpired:
+                        result = subprocess.CompletedProcess(command, 124)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:
@@ -102,10 +106,12 @@ def main():
                     log=log_path.name, log_sha256=digest(log_path)))
                 write_json(out / "result.json", report)
                 print(check, dtype, report["cases"][-1]["state"], flush=True)
-                if not passed:
+                if not passed and not args.keep_going:
                     raise RuntimeError("device gate failed: " + str(log_path))
         if source_state(root) != (source, dirty):
             raise RuntimeError("source changed during device gate")
+        if any(case["state"] != "passed" for case in report["cases"]):
+            raise RuntimeError("requested component inventory contains failures; all original logs retained")
         report["state"] = "passed"
     except BaseException as error:
         report.update(state="failed", error=repr(error))

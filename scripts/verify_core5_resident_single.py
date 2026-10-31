@@ -61,31 +61,38 @@ def main():
         write_json(out / "result.json", report)
         logpath = out / (name + ".log")
         with logpath.open("x") as log:
-            result = subprocess.run(row["command"], cwd=out, env=env, stdout=log,
-                                    stderr=subprocess.STDOUT, timeout=seconds)
+            try:
+                result = subprocess.run(row["command"], cwd=out, env=env, stdout=log,
+                                        stderr=subprocess.STDOUT, timeout=seconds)
+            except subprocess.TimeoutExpired:
+                result = subprocess.CompletedProcess(row["command"], 124)
         row.update(exit_code=result.returncode, state="passed" if result.returncode == 0 else "failed",
                    log_sha256=digest(logpath))
         write_json(out / "result.json", report)
-        if result.returncode:
-            raise RuntimeError(name + " failed; original log retained")
+        return result.returncode == 0
 
     try:
-        run("preflight", [sys.executable, "-c", "import torch;from tidegraph.runtime import resolve_device;"
-            f"d,_=resolve_device({a.device!r});x=torch.arange(3,device=d);assert x.cpu().tolist()==[0,1,2]"], 60)
+        if not run("preflight", [sys.executable, "-c", "import torch;from tidegraph.runtime import resolve_device;"
+            f"d,_=resolve_device({a.device!r});x=torch.arange(3,device=d);assert x.cpu().tolist()==[0,1,2]"], 60):
+            raise RuntimeError("requested accelerator preflight failed")
         run("components", [sys.executable, root / "scripts/verify_device_control.py", "--device", a.device,
-            "--build-dir", cpp, "--output-dir", out / "components", "--checks", *COMPONENTS], 7200)
+            "--build-dir", cpp, "--output-dir", out / "components", "--keep-going", "--checks", *COMPONENTS], 7200)
         total = 0
         for name in PUBLIC_TESTS:
             stage = name.removesuffix(".py")
             run(stage, [sys.executable, "-m", "pytest", root / "tests" / name, "-q", "--dtype", "both",
                         "--junitxml", out / (stage + ".xml"), "--basetemp", out / (stage + "-tmp")], 1200)
-            cases = ET.parse(out / (stage + ".xml")).findall(".//testcase")
+            path = out / (stage + ".xml")
+            cases = ET.parse(path).findall(".//testcase") if path.exists() else []
             if not cases or any(c.find("skipped") is not None for c in cases):
-                raise RuntimeError("one-device inventory requires nonempty tests and zero skips")
+                report["stages"][-1].update(state="failed", inventory_error="nonempty tests and zero skips required")
             total += len(cases)
         if source_state(root) != (source, dirty):
             raise RuntimeError("source changed during checks")
-        report.update(state="passed", public_cases=total, skipped=0)
+        report["public_cases"] = total
+        if any(stage["state"] != "passed" for stage in report["stages"]):
+            raise RuntimeError("one-device inventory contains failures; independent stages completed with original assertions")
+        report.update(state="passed", skipped=0)
     except BaseException as error:
         report.update(state="failed", error=repr(error))
         raise

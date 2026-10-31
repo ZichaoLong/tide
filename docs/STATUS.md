@@ -23,16 +23,18 @@
 数学快照本次接续再次校验通过。无本机长作业。
 
 - `jobs/eager-pytorch-fp32` 已passed，`runs/c962961-pytorch-fp32` 全19例mixed-c通过。
-- `jobs/eager-native-cpp-fp32` 仍running（物理卡1，7200秒）：native19例全通过；standalone目前fc/ssd原严格tensor比较失败，其余继续。原日志保留，待定位字段/阶段，不能称整体通过。
+- `jobs/eager-native-cpp-fp32` failed：native19/19、standalone23/24；仅fc/ssd原严格tensor比较失败。原日志保留，定位为第3步更新后regions.0.head.bias，CPU .11622299999/GPU .11622648686，差3.4869e-6超原容差；相同输入CPU FP32/FP64开发通过。待进一步隔离packing/控制位置。
 - `jobs/resident-build-7fd0576` failed：86-real被既有整数架构守卫拒绝，未编译。
 - `jobs/resident-build86-7fd0576` failed：CUDA13的cudaGraphAddNode增加edge-data参数。旧两次失败均保留。工作树已作版本兼容修复，零依赖WHILE/SWITCH图语义不变；目标dev两源文件定向编译及8项架构检查通过。
-- 已提交 `jobs/eager-mixed-ab-fp32`：固定c962961、物理卡0、三客户端KV mixed-a/b、1800秒。
+- `jobs/eager-mixed-ab-fp32` passed：固定c962961、三客户端KV mixed-a/b全部6例通过。
 - 已提交 `jobs/eager-fp16`：固定c962961、物理卡2、三客户端完整mixed-c、7200秒；保持AdamW/原容差/输入，失败逐配置记录。
 
 CUDA13兼容提交 `1fe1e37` 已推送；`jobs/resident-build-1fe1e37` 正在冻结源码构建（56线程/86，standalone39组件和weighted Python适配，3600秒）。
 下一步：核对构建终态，
 再独立执行单卡门禁及时间线。原三卡/P2P完整门禁保持。C++ fc/ssd失败单独定位，不阻塞其他通过域。
-新peer探针开发已在物理2/3验证12个传输/流/根单元；尚未提交或正式资格，不是完整多卡模型通过。
+peer/精度记录已提交 `31d0afd`；开发12单元通过，AccumulateGrad流警告保留。`jobs/peer-31d0afd` 全四卡72单元已passed；12方向P2P/原子均不支持/enable217，警告保留。
+`jobs/resident-single-1fe1e37` failed于control末尾的CANN专用workspace>0断言；此前8轮int64/分支/容量/续接数值均完成。CUDA纯控制核实际无BLAS scratch，开发修订改核验完整操作数/元数据retained ownership及释放，保留CANN原断言。
+准备 `jobs/multicard-31d0afd`：物理0/1、传输根/standalone generic36例，然后五记忆+异构的Python/native完整普通复制和delta-pdg显式CPU桥，7200秒。
 正式资格之后另提交审阅证据。CPU/NPU旧严格失败保持ROADMAP停止条件。
 
 所有目标日志为 `jobs/NAME/task.log`、`status.json`；输出为 `runs/NAME`，不会覆盖旧运行。
