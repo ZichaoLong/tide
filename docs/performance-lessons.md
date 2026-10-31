@@ -359,3 +359,23 @@ GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按dev
 [CPU/NPU 1B/B128独立profile](evidence/core5-platform-profile-20261031.md)确认两平台也形成168行FFN矩阵，Read/Full各12桶且无单行桶。CPU共享base仍有288次大GEMV、profile self累计1.733秒；这与864次两行私有BMM是不同问题。跨不同输入的同base准备应优先考虑共享W矩阵批，不应简单增大独立BMM的8MiB预算而复制大权重。NPU的二维乘法实际记录为aten::matmul；只搜mm会误判没有形成矩阵批。API累计同步、设备区间并集和端到端时间要分开，不能用嵌套API和推断墙钟收益。
 
 NPU同模型2/3卡实际峰值2.213/1.672GB每主卡、成本0.763/0.888秒，通信7组/229488 bytes；分布放置不保证加速。小训练ordinary/cpu_bridge严格通过，blocking在exact-resume阶段SIGSEGV，不能因显式同步就推断更可靠。报告需关联同config_id的子监督状态，同时保留原实验快照、未执行检查和非零退出码；外层记录及最后已完成窗口均不能替代整个流程通过。见[多卡证据](evidence/core5-platform-multicard-20261031.md)。
+
+## 本轮三平台六项打包处置
+
+这是在新增大batch/约1B/多卡证据上的重新判断，旧GPU表保留其当时范围。
+[首组A/B/C](evidence/core5-platform-baseline-20261031.md)、[有限诊断优化](evidence/core5-finite-packing-20261031.md)、
+[CPU/NPU实际形状](evidence/core5-platform-profile-20261031.md)、[GPU实际形状](evidence/core5-platform-scale-20261031.md)
+分别保留源码/输入/工作量，profile不进入正式曲线。
+
+| 问题与源码 | 新增代表事实与已有能力 | 本轮处理、停止与重启条件 |
+| --- | --- | --- |
+| 1. 相同长度分桶：`weighted/query_batch.py`、`cpp/src/weighted_query_kv.cpp` | 三平台1B/B128的Read/Full均12桶，单行桶0，最小Full5行；中等B128最小6行。正写行合并与可见query桶分别记录 | 保留分桶。当前分布没有支持统一padding替换的依据；新长缓存/异构材料出现大量单行桶且占时主导时，才比较一个保留可见性/正支持的有界方案 |
+| 2. 长度/mask/选择回传：`region_metadata.py`、`cpp/src/region_metadata.h`、`experiment/finite.py` | 已形成批的bool元数据批读；非零索引及逐owner长度仍有成本。1B/B128 GPU显式同步union占捕获2.861%；NPU同步API累计不能当同口径并集 | 保留已实现批读；新增有限值合批减少小kernel，显式同步次数没有减少。默认scalar不改。不据inclusive相加继续统一搬运；重启须确定某个输入/输出边界的实际等待与完整窗占时 |
+| 3. 拆装与返回：`weighted/placement_tensors.py`、`experiment/returns.py`、`tools/weighted_benchmark/return_packing.cpp` | A/B局部packing成本比CPU/NPU/GPU为1.600/1.612/1.673；B/C完整返回为1.017/1.110/1.360。原数值超差、相同离散工作量。返回和局部packing独立 | 显式C可用于本材料的成本探索，CPU近持平；不推翻旧NPU B8负收益。有限诊断packed另有三平台1.12–1.20成本比及小训练回归；特殊/大张量后备保留。内部summary复用须先证明重复拆装是排他热点及owner生存期 |
+| 4. 兼容节点/多head：`cpp/src/state_preparation.cpp`、`weighted_kv_preparation.cpp`、`weighted_kv_projection.cpp`；Python `kv_projection_batch.py`/`kv_independent_batch.py` | 大FFN已168时间行；共享W投影44次/3084行，私有BMM864次均2行；独立预算后备1组/96行。CPU共享base另288次大GEMV/self1.733秒；64head产生768桶调用，但没有逐head排他成本 | 两行BMM在已测GPU/NPU仅约19–23/13ms对几秒窗口，不先改跨节点调度。CPU同base多输入是具体后续候选；当前共享准备接口按同输入身份复用，跨输入矩阵批需扩展准备契约/独立根及稳定累加顺序，不能只抬8MiB而复制大base。取得这一方案和目标平台profile后重启 |
+| 5. resident填充/布局：`tools/device_online/weighted_flow.cpp`、`weighted_flow_records.cpp`、`planning/capacity.py` | 默认B² stage/journal拒绝不是逻辑batch上限；结构界定12B队列/stages32后CUDA B128/B512实际完成。56.25%缺席行，约0.340/1.342GB，实际3阶段 | 本轮已补显式有界配置，原默认拒绝保留。CUDA同材料eager更便宜，填充比例不能直接预测消除时间；NPU当前链须另验服务/流/任务资源。后续活动行/多时间方案须保持设备就绪、选择、推进、完整解码与journal，不能主机预跑 |
+| 6. 反向图/根绑定：`tools/device_online/weighted_training_backward.cpp`、`weighted_window_vjp.cpp`、`experiment/checkpoint.py` | 三平台六小训练及诊断策略完整根/共享/槽/跨窗恢复回归通过；CUDA/NPU大训练原配方先非有限，不能用未执行的后续VJP判断其热点。NPUblocking恢复另有SIGSEGV | 本轮不缓存旧owner/journal/参数根，也不按shape复用。训练模板先要能重新绑定真实地址/generation/版本并保留None/零；在目标有效训练profile显示构造主导后才做一个候选。崩溃/数值失败独立定位，不用改配方称修复 |
+
+采用LH/core-3的批量厂商算子、明确原始逻辑时间、同材料核对和完整成本口径；未采用活动计数时间替代core-5逻辑时间，
+未因CSR表示强制稀疏矩阵，未由大batch标签增加专用核。各表的成本比是有限观察，严格失败仍不能称等价加速。
+下一步不是默认全部融合：先针对新的工作负载和已定位边界建立可反驳假设，再进行一到两个有界候选。
