@@ -546,6 +546,32 @@
       "interop_threads": 1,
       "schedule": "prefill",
       "return_packing": "packed"
+    },
+    "python-cuda-fp64-return-packed": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
+    },
+    "cpp-cuda-fp64-return-packed": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
     }
   },
   "policy": "Explicit selected cells only, not a Cartesian sweep. FP32 payload/scoring IEEE is primary; explicit single-CUDA eager FP64 payload/scoring is separate and does not clear FP32 failures. Complete returns, independent full records and disk new-owner exact continuation; no FP64 resident/peer entry. Profile separate. Near-boundary conditional on measured admission and client-specific restore copies; no OOM search. Current failures retained."

@@ -63,3 +63,7 @@ extra作业已运行，GPU literal和两客户端zero-support训练检查通过�
 NPU D服务已success/exit0、ControlGroup为空；同卡9同材料独立推理/续接通过，中位527.660ms（A为559.661ms，单次观察）。F本机后续只做相关literal、FP32小图与同材料推理，不复制GPU矩阵。
 
 F原job终态failed：standalone build通过，GPU定向33项和C++FP32/FP64字面复制通过；FP16在test fixture的ATen literal构造报tensor_cpu Half未实现，尚未进入复制。修复只使字面double显式转到目标storage，不改返回/数学；随后新固定提交重新构建checker和benchmark，复验literal并接续剩余训练/测量，原失败保留。
+
+下一固定接续H：fd3c72b（只修复FP16检查材料构造），job inference-h-fd3c72b，timeout5400，driver inference-h-fd3c72b.py；新builds/fd3c72b-benchmark，输出runs/fd3c72b-inference。F33项生产路径GPU检查不重复；新C++literal三dtype及剩余三客户端训练/有限测量在H运行。
+
+大规模有限选点扩为约1B B1三客户端共同材料，加native B8；最大近界仍仅native。显式FP64 payload/scoring和return_packing=packed，原FP32失败不解除。每配置一次正式流程，另仅native B1/B8做无profiler的1窗工作计数。先核对new-owner恢复峰值、磁盘/主存及>=4GiB设备余量；完成后先审阅大checkpoint/fixture哈希和退役dry-run，再生成近界，避免50GiB盘长期堆积。
