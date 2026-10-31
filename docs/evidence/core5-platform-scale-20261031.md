@@ -107,3 +107,15 @@ B512原错误为`NumericMismatch`、`root.continuation.states[(0, 1)].slots[keys
 作业于06:52:02Z exit1且systemd控制组为空；后继CPU/NPU profile、多卡与resident按独立依赖继续。每case原1800秒、无自动重试/延长。GPU与CPU的1B/B512恢复通过不解除本NPU失败。可从`configs/matrices/npu-scale.json`选择此case重建完整材料；原始绝对路径仅是来源标签。
 
 归档SHA256：`3783c70650bf1cca3ef9ab0b9e02867f2261b86b1058250ffe77566c3936e069`。
+
+
+## B512旧边界的一次重放诊断
+
+脚本61571c4、原1b3e39f安装和库hash不变，原checkpoint只读；重算三个原窗口后，
+在`exact-raw-boundary`即与旧checkpoint不同：sample0/node1 keys为6×4096，11082坐标逐位不同，
+最大绝对差1.90735e-5。此次不是原8×4096下一窗失败的同一字段尺寸，不能混写见证。
+1920个state的计数相同；所有参数布局及首三个样例采样state的shape/stride/offset/NPU format等相同，
+但没有观测全部中间算子。09:59:40Z严格失败/exit1，实际控制组空。
+这表明直接拿新进程重算轨迹与旧checkpoint相比不足以归因序列化；尚未区分分配历史、
+实际算子选择或运行时非确定性。原独立CPU数值/离散仍未检查，不因聚合工作计数相同称通过。
+小记录见[恢复诊断](core5-platform-resume-diagnostics-20261031.json)。

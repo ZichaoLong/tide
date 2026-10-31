@@ -374,7 +374,7 @@ NPU同模型2/3卡实际峰值2.213/1.672GB每主卡、成本0.763/0.888秒，�
 | 3. 拆装与返回：`weighted/placement_tensors.py`、`experiment/returns.py`、`tools/weighted_benchmark/return_packing.cpp` | A/B局部packing成本比CPU/NPU/GPU为1.600/1.612/1.673；B/C完整返回为1.017/1.110/1.360。原数值超差、相同离散工作量。返回和局部packing独立 | 显式C可用于本材料的成本探索，CPU近持平；不推翻旧NPU B8负收益。有限诊断packed另有三平台1.12–1.20成本比及小训练回归；特殊/大张量后备保留。内部summary复用须先证明重复拆装是排他热点及owner生存期 |
 | 4. 兼容节点/多head：`cpp/src/state_preparation.cpp`、`weighted_kv_preparation.cpp`、`weighted_kv_projection.cpp`；Python `kv_projection_batch.py`/`kv_independent_batch.py` | 大FFN已168时间行；共享W投影44次/3084行，私有BMM864次均2行；独立预算后备1组/96行。CPU共享base另288次大GEMV/self1.733秒；64head产生768桶调用，但没有逐head排他成本 | 两行BMM在已测GPU/NPU仅约19–23/13ms对几秒窗口，不先改跨节点调度。CPU同base多输入是具体后续候选；当前共享准备接口按同输入身份复用，跨输入矩阵批需扩展准备契约/独立根及稳定累加顺序，不能只抬8MiB而复制大base。取得这一方案和目标平台profile后重启 |
 | 5. resident填充/布局：`tools/device_online/weighted_flow.cpp`、`weighted_flow_records.cpp`、`planning/capacity.py` | 默认B² stage/journal拒绝不是逻辑batch上限；结构界定12B队列/stages32后CUDA B128/B512实际完成。56.25%缺席行，约0.340/1.342GB，实际3阶段 | 本轮已补显式有界配置，原默认拒绝保留。CUDA同材料eager更便宜，填充比例不能直接预测消除时间；NPU有界B128完成、数值探索；B512通过HBM准入后构造EE1019/507002，流任务缓冲满。静态bool连续段copy可能贡献小任务，先定位调用者/段数，不用加HBM预算掩盖。后续活动行/多时间方案须保持设备就绪、选择、推进、完整解码与journal，不能主机预跑 |
-| 6. 反向图/根绑定：`tools/device_online/weighted_training_backward.cpp`、`weighted_window_vjp.cpp`、`experiment/checkpoint.py` | 三平台六小训练及诊断策略完整根/共享/槽/跨窗恢复回归通过；CUDA/NPU大训练原配方先非有限，不能用未执行的后续VJP判断其热点。NPUblocking恢复另有SIGSEGV | 本轮不缓存旧owner/journal/参数根，也不按shape复用。训练模板先要能重新绑定真实地址/generation/版本并保留None/零；在目标有效训练profile显示构造主导后才做一个候选。崩溃/数值失败独立定位，不用改配方称修复 |
+| 6. 反向图/根绑定：`tools/device_online/weighted_training_backward.cpp`、`weighted_window_vjp.cpp`、`experiment/checkpoint.py` | 三平台六小训练的原loss梯度/共享/槽/跨窗恢复通过；任意独立根单列，NPU新all根失败；CUDA/NPU大训练原配方先非有限，不能用未执行的后续VJP判断其热点。NPUblocking恢复另有SIGSEGV | 本轮不缓存旧owner/journal/参数根，也不按shape复用。训练模板先要能重新绑定真实地址/generation/版本并保留None/零；在目标有效训练profile显示构造主导后才做一个候选。崩溃/数值失败独立定位，不用改配方称修复 |
 
 采用LH/core-3的批量厂商算子、明确原始逻辑时间、同材料核对和完整成本口径；未采用活动计数时间替代core-5逻辑时间，
 未因CSR表示强制稀疏矩阵，未由大batch标签增加专用核。各表的成本比是有限观察，严格失败仍不能称等价加速。
@@ -406,3 +406,14 @@ I/O状态可能延迟TERM/KILL；122a1ed按启动身份继续查询原workload�
 同一1.014B模型在七NPU实际完成，验证了非二次幂节点放置与完整离散/精确恢复，FP32数值仍探索；
 0.804秒不是普遍多卡加速。原blocking恢复SIGSEGV的单次faulthandler诊断未复现并完整通过，
 它没有证明故障被修复；不以偶然成功覆盖旧进程失败或继续无假设地重复。
+
+
+任意cotangent的独立根资格不能由普通loss训练推断。当前双NPU三通信full在原包均EE1017；
+4485697将故障定位到首个all根的候选autograd，并取得SIGSEGV栈。显式同步提交的一次诊断
+越过运行时错误，仍在原阈值下参数梯度比较失败；这不是默认异步协议修复。单卡all根另有输入梯度
+超差，不把运行时异常当数值探索接纳。公共check应先持久记录根/步骤，崩溃后的最后running快照
+必须与监督终态合读，不能据缺少Python异常推断通过。
+
+NPU1B/B512跨进程重放到旧raw边界已经不同，而采样布局相同；这不是序列化损坏的证明。
+需要同次运行新建checkpoint的即时raw解码/下一窗见证才能继续区分；CPU/GPU精确恢复通过
+以及其他batch成功均不能解除该配置的逐位失败。严格检查、执行有限、探索和未检查继续分别记录。

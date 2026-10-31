@@ -227,3 +227,5 @@
 [三通信CUDA双卡独立根补查](core5-platform-multicard-checks-20261031.json)：固定bd2ff2e三项full检查通过，与原性能结果分列；NPU三通信完整推理/恢复先通过，独立根阶段均EE1017，原严格失败保留。
 
 [大模型checkpoint磁盘/tmpfs成本](core5-checkpoint-cost-20261031.md)：dba2a5e固定67项CPU回归、CUDA小型full检查通过；4.561B两项完整恢复成本观察，独立数学未检查，不计吞吐资格。
+
+[NPU B512恢复诊断](core5-platform-resume-diagnostics-20261031.json)：固定旧包重放到旧raw边界即逐位不同、采样布局相同；不归因序列化，不新增性能或独立数值资格。
