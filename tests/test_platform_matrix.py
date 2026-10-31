@@ -83,5 +83,19 @@ def test_plan_index_is_not_runtime_evidence_and_counts_are_finite():
     assert index["status"] == "planned-not-runtime-evidence"
     observed = {platform:sum(len(cases(platform, path.stem[len(platform)+1:]))
                            for path in ROOT.glob(platform+"-*.json")) for platform in ("cpu","npu","cuda")}
-    assert observed == index["counts"] == dict(cpu=39,npu=53,cuda=53)
+    assert observed == index["counts"] == dict(cpu=39,npu=55,cuda=55)
     assert all(row["status"] == "planned" and row["timeout_seconds"] in (900,1800) for row in index["cases"])
+
+
+@pytest.mark.parametrize("platform", ["cuda", "npu"])
+def test_bounded_resident_keeps_default_refusal_and_same_workload(platform):
+    default, bounded = cases(platform, "resident"), cases(platform, "resident-bounded")
+    for batch in (128, 512):
+        old = resolve(default[f"{platform}-resident-b{batch}"])
+        new = resolve(bounded[f"{platform}-resident-bounded-b{batch}"])
+        assert old["capacity_budget"]["static_rejections"]
+        assert old["workload_id"] == new["workload_id"]
+        assert old["model_id"] == new["model_id"]
+        limits = new["resources"]["resident_limits"]
+        assert limits["queue"] == 12*batch and limits["stages"] == 32
+        assert new["plan"]["samples"] == batch

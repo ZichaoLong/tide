@@ -5,8 +5,8 @@
   "site_paths": "templates; actual builds/current free resources are independent run inputs",
   "counts": {
     "cpu": 39,
-    "npu": 53,
-    "cuda": 53
+    "npu": 55,
+    "cuda": 55
   },
   "cases": [
     {
@@ -4478,6 +4478,110 @@
       "disk_estimated_bytes": 1074221808
     },
     {
+      "case": "cuda-resident-bounded-b128",
+      "matrix": "cuda-resident-bounded.json",
+      "status": "planned",
+      "question": "Aligned FC4/P2 static atom bound: (2 input ports+4 physical edges)*P2*B=12B. Positive delays and sealed independent samples bound stages without multiplying B. Preserve default-layout refusal; no reference trajectory or logical microbatch change.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c90599662f9c1189846f5329763f0adbb8d27856eec83c6eb44b35ac7ad14202",
+      "task_id": "1f4fdc889751acfe0cad414e205c89edb7bdf0279d57b70f64814e91efd6254a",
+      "execution_id": "7a22c11ab49ea7b477ab0aa7f532cec477a1819fe6e80a8ce143e95f493e32cf",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "resident",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 275869892
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "resident_physical_role_banks",
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8655804448,
+      "disk_estimated_bytes": 1095980048
+    },
+    {
+      "case": "cuda-resident-bounded-b512",
+      "matrix": "cuda-resident-bounded.json",
+      "status": "planned",
+      "question": "Aligned FC4/P2 static atom bound: (2 input ports+4 physical edges)*P2*B=12B. Positive delays and sealed independent samples bound stages without multiplying B. Preserve default-layout refusal; no reference trajectory or logical microbatch change.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c75e346965e9fd1e55eac700186a93be3a92c0c7fe476520f1e9ba32b1e3924a",
+      "task_id": "1d0241f7f5827ea54085b3732c471e4f466804959e1a0af451932514ef10168a",
+      "execution_id": "cd18fff934607822ae800a63a510865f893f301e95d8a1a14685964e213dd2bb",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "resident",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 1102675652
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "resident_physical_role_banks",
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8851662880,
+      "disk_estimated_bytes": 1161819152
+    },
+    {
       "case": "cuda-scale-fc-100m",
       "matrix": "cuda-scale.json",
       "status": "planned",
@@ -7377,6 +7481,110 @@
       },
       "host_estimated_bytes": 8591326656,
       "disk_estimated_bytes": 1074221808
+    },
+    {
+      "case": "npu-resident-bounded-b128",
+      "matrix": "npu-resident-bounded.json",
+      "status": "planned",
+      "question": "Aligned FC4/P2 static atom bound: (2 input ports+4 physical edges)*P2*B=12B. Positive delays and sealed independent samples bound stages without multiplying B. Preserve default-layout refusal; no reference trajectory or logical microbatch change.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c90599662f9c1189846f5329763f0adbb8d27856eec83c6eb44b35ac7ad14202",
+      "task_id": "1f4fdc889751acfe0cad414e205c89edb7bdf0279d57b70f64814e91efd6254a",
+      "execution_id": "a29567695d872db3ad8ac67a1ed40050d4e0ada191bdac82ce2f2ad7684c16ad",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "resident",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 275869892
+      },
+      "unknown_components": {
+        "npu:0": [
+          "resident_physical_role_banks",
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8655804448,
+      "disk_estimated_bytes": 1095980048
+    },
+    {
+      "case": "npu-resident-bounded-b512",
+      "matrix": "npu-resident-bounded.json",
+      "status": "planned",
+      "question": "Aligned FC4/P2 static atom bound: (2 input ports+4 physical edges)*P2*B=12B. Positive delays and sealed independent samples bound stages without multiplying B. Preserve default-layout refusal; no reference trajectory or logical microbatch change.",
+      "model_id": "aeab040ad4da8f5962e7cd00d603fbd5daef807d86198a4170bec9c6f009e6e6",
+      "workload_id": "c75e346965e9fd1e55eac700186a93be3a92c0c7fe476520f1e9ba32b1e3924a",
+      "task_id": "1d0241f7f5827ea54085b3732c471e4f466804959e1a0af451932514ef10168a",
+      "execution_id": "8f7d7e6305400a6dfb719cecdb212077888570861954354041803a51b701da35",
+      "parameters": 31990,
+      "unique_parameters": 32002,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 16,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "resident",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 1102675652
+      },
+      "unknown_components": {
+        "npu:0": [
+          "resident_physical_role_banks",
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8851662880,
+      "disk_estimated_bytes": 1161819152
     },
     {
       "case": "npu-scale-fc-100m",

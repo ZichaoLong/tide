@@ -25,7 +25,7 @@ def _runtime_environment(resolved, argv):
 
 def _common(parser, *, output=False):
     parser.add_argument("config", help="experiment JSON (public model/recipe, task, execution, measurement)")
-    parser.add_argument("--site", help="tide-site-v1 JSON; overrides config.site")
+    parser.add_argument("--site", help="tide-site-v1 JSON, relative to the current directory; overrides config.site")
     if output:
         parser.add_argument("--output-dir", required=True, help="new directory; existing results are never overwritten")
 
@@ -142,6 +142,8 @@ def main(argv=None):
         return legacy_main(argv)
     root = parser()
     args = root.parse_args(argv)
+    if getattr(args, "site", None) is not None:
+        args.site = str(Path(args.site).resolve())
     try:
         if args.command == "doctor":
             if args.probe == "operator":

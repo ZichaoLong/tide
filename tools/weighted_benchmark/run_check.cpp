@@ -40,6 +40,14 @@ int main() {
     rejects([&]{auto a=base;a.insert(a.end(),{"--steps","2garbage"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--loss-scale","nan"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--node-devices","cuda:0,"});parse(a);});
+    Json limits={{"queue",64},{"prefill",true},{"retained_bytes",100}};
+    apply_resident_limits(limits,{{"queue",128},{"prefill",true}},false,true);
+    require(limits.at("queue")==128,"resident integer override lost");
+    rejects([&]{apply_resident_limits(limits,{{"prefill",false}},false,true);});
+    rejects([&]{apply_resident_limits(limits,{{"queue",true}},false,true);});
+    rejects([&]{apply_resident_limits(limits,{{"retained_bytes",200}},false,true);});
+    rejects([&]{apply_resident_limits(limits,{{"unknown",3}},true,true);});
+    require(limits.at("queue")==128&&limits.at("retained_bytes")==100,"rejected limits mutated target");
     if(!std::filesystem::create_directory(root))throw std::runtime_error("test directory already exists");
     CheckpointOwner owner;const Json identity={{"fixture_sha256","one"},{"span",10},{"mode","training"}};
     save_run_checkpoint(root/"checkpoint",owner,identity,3,1000);owner.value=0;

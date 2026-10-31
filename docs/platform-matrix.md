@@ -12,7 +12,7 @@
 
 ## 有限列表与执行顺序
 
-总计145个明确case：CPU39、NPU53、CUDA53，按29个独立阶段文件组织。
+总计149个明确case：CPU39、NPU55、CUDA55，按31个独立阶段文件组织。
 每个case各一次独立测量流程，warmup1窗、正式2窗、完整返回、额外一窗精确恢复；
 小型/批次配置超时900秒，scale/capacity配置1800秒。
 这些是单case上限，不是承诺运行全部case的总耗时；应分组执行并检查终态、争用和准入。
@@ -30,6 +30,7 @@
 | placement | — | 2 | 2 | 同一B128材料mixed-a/b，复用batch组mixed-c |
 | precision | — | 2 | 2 | FP16 B128推理及小型FP16一阶训练，明确FP32 scoring/master |
 | resident | — | 4 | 4 | 单卡B1/128/512静态布局入口和小型一阶训练；默认布局拒绝单列 |
+| resident-bounded | — | 2 | 2 | 同一FC4/P2的B128/B512，静态物理原子上界12B、stages32；保留默认拒绝 |
 | multicard | — | 6 | 6 | 同一1B模型2/3/最多卡放置；同一小训练模型的ordinary/blocking/cpu_bridge |
 | capacity | — | 4 | 4 | 同一1B训练模型单/双/最多卡；1B校准后一个约2B单卡推理候选 |
 
@@ -107,7 +108,7 @@ CPU返回快照与设备端存储分开预算，避免重复把所有CPU验收�
 resident默认 `stages=span×regions×B`，journal还乘B，形成显式B²预算。
 重启需要实际stage计数/设备timeline及完整语义证明，采用有依据的显式limit或有限实现修改；
 保留原拒绝配置，任何修改都有新配置身份，不减少逻辑batch、不CPU预跑真实轨迹。
-局部Full临时矩阵、服务队列/流/任务和物理role副本也须单独检查，不能只抬高tensor_bytes。
+对齐FC4/P2另有 `*-resident-bounded.json`：外部原子≤2×P×B、物理消息≤4×P×B，故queue=12B覆盖整窗全部原子。正延迟、无跨样例路由及封窗保证每活跃样例的最早时间逐阶段递增，阶段上界无需乘B；显式stages32保守覆盖span8。B128/B512的tensor_bytes分别2/4GiB，保留旧queue×B构造守卫。此配置不改默认、不用参考轨迹，不能套到反馈/非对齐图。局部Full临时矩阵、服务队列/流/任务和物理role副本也须单独检查，不能只抬高tensor_bytes。
 
 初始checkpoint上限：小中配置2GiB；规模/容量配置16GiB，构造参数上限32GiB。
 大点每次处理后先审阅/保留必要证据，按保留规则退役可重新生成的大材料；不在50GiB GPU数据盘累积整组checkpoint。

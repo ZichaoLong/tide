@@ -16,5 +16,6 @@ struct Request {
   Json task() const;
 };
 Request parse_request(int,char**);
+void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill);
 void help();
 }  // namespace weighted_benchmark

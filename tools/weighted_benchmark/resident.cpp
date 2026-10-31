@@ -25,7 +25,7 @@ class Candidate final:public Resident {
     FIELD(queue);FIELD(stages);FIELD(cache);FIELD(tensor_bytes);FIELD(operator_bytes);FIELD(timeout_ms);
 #undef FIELD
 #define FIELD(name) l.name=x.at(#name).get<decltype(l.name)>()
-    FIELD(retained_bytes);FIELD(backward_bytes);FIELD(optimizer_bytes);FIELD(total_bytes);
+    if(train){FIELD(retained_bytes);FIELD(backward_bytes);FIELD(optimizer_bytes);FIELD(total_bytes);}
 #undef FIELD
     l.forward.prefill=prefill;
     if(owners.empty())for(const auto& node:data.graph.nodes)owners.push_back(peers.empty()?d:peers[node.region%peers.size()]);

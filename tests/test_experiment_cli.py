@@ -69,3 +69,14 @@ def test_foreground_library_environment_reexecs_before_runtime_import(monkeypatc
     assert command[1:4] == ["-m", "tidegraph", "run"]
     assert environment["LD_LIBRARY_PATH"] == "/chosen/python-stack"
     assert "/different/cpp-sdk" not in environment["LD_LIBRARY_PATH"]
+
+
+@pytest.mark.parametrize("matrix", [False, True])
+def test_explicit_site_is_relative_to_invocation_directory(tmp_path, monkeypatch, capsys, matrix):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path/"configs").mkdir()
+    (tmp_path/"site.json").write_text(json.dumps(dict(name="invocation-site")))
+    value = dict(schema="tide-experiment-matrix-v1", cases=[dict(name="one", config=example())]) if matrix else example()
+    (tmp_path/"configs/run.json").write_text(json.dumps(value))
+    assert main(["plan", "configs/run.json", "--site", "site.json", "--format", "json", *(["--matrix"] if matrix else [])]) == 0
+    assert json.loads(capsys.readouterr().out)["site"]["name"] == "invocation-site"

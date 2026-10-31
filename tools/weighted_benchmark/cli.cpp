@@ -29,6 +29,24 @@ Json Request::task() const {
   return {{"loss","physical-output-squared-v1"},{"loss_scale",loss_scale},{"optimizer","sgd"},
           {"lr",lr},{"momentum",momentum},{"weight_decay",weight_decay}};
 }
+void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill) {
+  if(!values.is_object())throw std::invalid_argument("limits must be an object");
+  auto next=target;
+  for(const auto& [key,value]:values.items()) {
+    if(!target.contains(key))throw std::invalid_argument("unknown capacity override: "+key);
+    if(key=="prefill") {
+      if(!value.is_boolean()||value.get<bool>()!=prefill)
+        throw std::invalid_argument("resident prefill limit must match schedule");
+    }else {
+      if(!value.is_number_integer()||value.is_boolean()||value.get<int64_t>()<1)
+        throw std::invalid_argument("invalid capacity override: "+key);
+      if(!training&&(key=="windows"||key=="retained_bytes"||key=="backward_bytes"||key=="optimizer_bytes"||key=="total_bytes"))
+        throw std::invalid_argument("training limit on inference");
+    }
+    next[key]=value;
+  }
+  target=std::move(next);
+}
 void help() {
   std::cout<<"Standalone core-5 LibTorch experiment (no Python runtime scheduler).\n"
     "--fixture JSON --device cpu|npu:N|cuda:N --output-dir NEW\n"

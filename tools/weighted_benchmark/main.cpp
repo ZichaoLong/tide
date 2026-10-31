@@ -25,13 +25,8 @@ Json read_json(const std::filesystem::path& path) {
 void limits(Json& data,const Request& request,Json& report) {
   if(request.limits.empty())return;
   if(request.implementation!="resident")throw std::invalid_argument("capacity overrides require resident");
-  const auto values=read_json(request.limits);if(!values.is_object())throw std::invalid_argument("limits must be an object");
-  for(const auto& [key,value]:values.items()) {
-    if(!data.at("limits").contains(key)||!value.is_number_integer()||value.is_boolean()||value.get<int64_t>()<1)
-      throw std::invalid_argument("invalid capacity override: "+key);
-    if(request.mode!="training"&&(key=="retained_bytes"||key=="backward_bytes"||key=="optimizer_bytes"||key=="total_bytes"))
-      throw std::invalid_argument("training limit on inference");data["limits"][key]=value;
-  }
+  const auto values=read_json(request.limits);
+  apply_resident_limits(data.at("limits"),values,request.mode=="training",request.schedule=="prefill");
   report["resident_limit_overrides"]=values;
 }
 }

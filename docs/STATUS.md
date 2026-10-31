@@ -8,7 +8,7 @@
 ## 当前实施
 
 公共 `tidegraph` 0.3.0 已实现配置/无分配plan、逐卡预算与共享放置、独立check、三客户端run、持久job、外部恢复及CSV/HTML查询；新增普通/blocking/显式CPU桥、严格/探索/未检查分类、完整/按需返回、独立packing/profile观测。下游可安装task.module例子保留真实参数/梯度/统一optimizer/checkpoint与插件源码锁。
-本阶段实施范围与145项有限选点见 [platform-matrix](platform-matrix.md)，CPU39/NPU53/CUDA53；B128/B512、约1B、A/B/C同材料对照、真实反馈/非齐延迟/一般端口已明确。它们仍是计划，不能当作运行通过。
+本阶段实施范围与149项有限选点见 [platform-matrix](platform-matrix.md)，CPU39/NPU55/CUDA55；B128/B512、约1B、A/B/C同材料对照、真实反馈/非齐延迟/一般端口已明确。它们仍是计划，不能当作运行通过。
 
 开发检查：142项联合CPU/静态测试通过；随后插件配置副本与参数归属加固的19项定向检查通过。新C++比较/独立根/通信及resident返回源码尚未构建，不冒称真机资格。
 先提交本阶段实现，再从该不可变提交分别构建本机CPU/Python-owned NPU/SDK NPU与目标CUDA；完成构建后进行已安装入口演练、有限矩阵及六项热点对照，证据单独提交。
@@ -25,7 +25,7 @@
 
 ## 环境、源码和活动作业
 
-当前构建：本机首个 `gef-platform-build-local-de999c2` 在CMake配置前因私有Ninja未加入PATH而失败，exit1，ControlGroup为空；已保留原日志。仅修私有启动器PATH，使用新输出/服务 `gef-platform-build-local-de999c2-r1`，源码不变。目标CUDA构建用 `/root/autodl-tmp/gef-cuda3090/jobs/platform-build-de999c2`，新只读源码 `sources/platform-de999c2`。远端仍在编译不能称通过。本机r1已在standalone编译终态失败：`run_check.cpp`的Owner歧义和`roots.h`缺失ExecutionPlacement声明。保留日志且ControlGroup为空。当前修复这两处及无module任务非有限状态检查；21项CPU定向测试通过。
+当前构建：本机首个 `gef-platform-build-local-de999c2` 在CMake配置前因私有Ninja未加入PATH而失败，exit1，ControlGroup为空；已保留原日志。仅修私有启动器PATH，使用新输出/服务 `gef-platform-build-local-de999c2-r1`，源码不变。目标CUDA构建用 `/root/autodl-tmp/gef-cuda3090/jobs/platform-build-de999c2`，新只读源码 `sources/platform-de999c2`。远端仍在编译不能称通过。本机r1已在standalone编译终态失败：`run_check.cpp`的Owner歧义和`roots.h`缺失ExecutionPlacement声明。保留日志且ControlGroup为空。修复已提交14ce784（两处编译错误及无module任务非有限状态检查）；21项CPU定向测试通过。准备启动独立background.slice服务 `gef-platform-cpu-build-14ce784`，固定检出 `artifacts/platform-matrix/source-14ce784`，重建standalone消费者，公共CPU core复用de999c2且由构建器核对源码hash。日志 `artifacts/jobs/platform-cpu-build-14ce784/task.log`；尚无新构建结果。
 
 本机日志 `artifacts/jobs/platform-build-local-de999c2-r1/task.log`，状态同目录status.json；输出 `artifacts/platform-matrix/builds-de999c2-r1`。查看/停止：`systemctl --user status/stop gef-platform-build-local-de999c2-r1`。远端查看/停止：私有SSH入口调用固定检出的 `scripts/container_job.py status/stop --output-dir /root/autodl-tmp/gef-cuda3090/jobs/platform-build-de999c2`。
 
@@ -51,3 +51,5 @@ python -S scripts/index_core5_study.py docs/evidence/core5-cuda-inference-202610
 
 下一步：提交编译/任务状态检查修复，创建新固定检出并构建CPU消费者；远端de999c2原作业继续，不编辑其源码。NPU技能所需账户指南 `/home/zlong/ASCEND_CODING_AGENT_GUIDE.md` 缺失，已询问迁移路径；新NPU作业暂未启动，CPU/GPU继续。构建终态后安装wheel并用tidegraph公开入口逐组验收。
 STATUS 是唯一当前交接，ROADMAP 是唯一待办；完整终态、命令、构建身份与新证据在后续提交补齐，不能将本页实施说明当作通过。
+
+14ce784 CPU standalone构建/3项CTest和已安装smoke通过；源码不变的de999c2公共core复用，身份分别保留。远端de999c2的core及两个resident库已完成，standalone同两处编译错误失败，remaining_live_pids为空。接续修复相对site入口和standalone resident推理limits解码，增加显式静态FC B128/B512配置；默认拒绝配置保持。

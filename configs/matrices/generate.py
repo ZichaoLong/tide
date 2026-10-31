@@ -124,6 +124,13 @@ def requests():
         for batch in (1, 128, 512):
             add(platform, "resident", f"resident-b{batch}", batch=batch, positions=2, placement="resident", validation="explore",
                 question="Device-owned row/time batching; static layout refusal is a resource fact. Reopen only with explicit reviewed limits/profile, never silently alter batch.")
+        for batch in (128, 512):
+            add(platform, "resident-bounded", f"resident-bounded-b{batch}", batch=batch, positions=2,
+                placement="resident", validation="explore",
+                resources=dict(resident_limits=dict(queue=12*batch, stages=32, cache=33,
+                    tensor_bytes=(2 if batch == 128 else 4)*GIB, operator_bytes=128*1024**2,
+                    timeout_ms=60000, prefill=True)),
+                question="Aligned FC4/P2 static atom bound: (2 input ports+4 physical edges)*P2*B=12B. Positive delays and sealed independent samples bound stages without multiplying B. Preserve default-layout refusal; no reference trajectory or logical microbatch change.")
         add(platform, "resident", "resident-training", recipe(width=8), placement="resident", mode="training",
             question="Single-device resident first-order SGD/root/checkpoint boundary; inference cannot certify training.")
         add(platform, "precision", "fp16-inference-b128", medium, batch=128, positions=2, dtype="float16", validation="explore",
