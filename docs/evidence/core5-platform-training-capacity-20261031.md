@@ -1,8 +1,8 @@
 # 约1B训练容量与首个非有限字段（2026-10-31）
 
-本报告当前覆盖CUDA，NPU结果另待审阅。固定数学与原loss、初始化、输入、SGD不变。
+本报告包括CUDA及NPU原约1B单/双卡训练，后继字段定位单独记录。固定数学与原loss、初始化、输入、SGD不变。
 原实现bd2ff2e；失败定位实现31a3b32只在非有限拒绝后检查字段，正常接受条件不变。
-固定31a3b32相关40项开发检查通过；本组两个小训练均在真机严格通过完整记录、独立根、梯度、参数、optimizer及磁盘精确续接。
+固定31a3b32相关40项开发检查通过；本组两个小训练均在真机严格通过完整记录、原loss参数梯度、参数、optimizer及磁盘精确续接。
 真实core/resident库来源de999c2，未冒称按新Python提交重新构建。
 
 RTX3090×4、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭；native mixed-c、packed/scalar完整返回，ATen/interop/worker均1。
@@ -36,4 +36,20 @@ tidegraph matrix configs/matrices/cuda-capacity.json --site site.json --output-d
 tidegraph results docs/evidence/core5-platform-training-capacity-20261031.json.gz --format table
 ```
 
-归档SHA256：`aaab502262dc165ce0e99338a303b5f5556a9dea3259754b21172fd7758f1116`。
+## NPU原流程的独立失败
+
+NPU Python环境为Torch2.12.0+cpu/TorchNPU2.12.0.post2、CANN9.1；core源eca070f，Python安装bd2ff2e。
+相同FC16/d2048/1.014B、B1/P2/span20、FP32、HF32关闭、mixed-c、packed/scalar完整返回及原loss/SGD，ATen/interop/worker1。
+单卡和双卡都通过现场资源准入，第三窗被NonFiniteMismatch拒绝；原错误只定位到runtime。
+
+| NPU卡数 | 已完成计时窗秒 | 已观察allocated峰值bytes | 前两窗loss | 精确恢复/独立参考 |
+| ---: | ---: | --- | --- | --- |
+| 1 | 1.397913 | 13,674,444,288 | 6,330,527 / 749,830,020,268,032 | 均未执行 |
+| 2 | 1.999131 | 6,127,611,392 / 7,541,734,912 | 6,330,527 / 749,830,221,594,624 | 均未执行 |
+
+两项只完成两个窗口的checkpoint发布（next_window=2），每代7,956,480,794 bytes。发布不代表精确恢复通过。
+结果及各自supervisor终态failed、无剩余后代已核对；父任务仍执行其他独立case不改变这两个失败。
+不将训练失败归因于通信或容量，也不由相同设备上的推理通过解除；后继仅一次31a3b32字段诊断，原失败保留。
+原配方保持，停止同配方的大规模训练扩展；它们不提供合格训练吞吐或完整训练峰值。
+
+归档SHA256：`9067192c12bab6888cc5b94b27ee115c763163ef4d6694b4cccd84c99050a730`。

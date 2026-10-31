@@ -35,6 +35,11 @@ Firefox无头实际加载新安装输出并触发change/input事件：筛选B128
 页面不使用外部服务/CDN；关闭JavaScript仍可读全部记录。筛选只改变可见行，不改状态、精度、归档或性能口径。
 详细固定身份、wheel和产物hash见[报告资格JSON](core5-human-report-20261031.json)。浏览器及报告生成不是新的CPU/NPU/GPU数学资格。
 
+b3dc53c另补异常退出显示：固定源码12项检查通过，新私有wheel实际重读原NPU blocking恢复SIGSEGV，
+输出process-failure、退出码−11和exact-resume阶段。原实验快照与已完成窗保留，未执行检查不标通过。
+同config_id子监督记录才可关联，正常严格失败不改类；此次新安装只验证报告，不重跑原GPU/CPU/NPU数学任务。
+来源、wheel/安装锁、JUnit及HTML hash补在同一[报告资格JSON](core5-human-report-20261031.json)。
+
 ## 从干净安装操作
 
 完整安装、site、依赖锁、配置与任务扩展见[人类手册](../human-workflow.md)和[消费者说明](../../examples/consumer_core5/configured/README.md)。下游拥有数据/head/loss/配方；按[协作契约](../downstream-contract.md)固定依赖、基座检查、小型接入、配置运行、提交需求、接收交付、下游复验后显式升级。
