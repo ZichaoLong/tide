@@ -1,0 +1,137 @@
+{
+  "source": "bd2ff2ed6786c57f492b6ac8b83b4b3a4b0d821e",
+  "rows": [
+    {
+      "platform": "cpu",
+      "material": "b128",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload (including aliases/weights/optimizer/state/history/pending/ledger),task state and all3 windows outputs; scalar vs packed diagnostic policy, atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "a70ddfdb5f08ed7b7b1e566df6f8eb6c79258ef6ff7e9f59c3fb3b80e418f561",
+            "a70ddfdb5f08ed7b7b1e566df6f8eb6c79258ef6ff7e9f59c3fb3b80e418f561"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310",
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "cpu",
+      "material": "training",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload (including aliases/weights/optimizer/state/history/pending/ledger),task state and all3 windows outputs; scalar vs packed diagnostic policy, atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "0fa4676b7cd86efa69e26a399a8cbfdd2786d72dddb0ca0a8c797cd54b58975b",
+            "0fa4676b7cd86efa69e26a399a8cbfdd2786d72dddb0ca0a8c797cd54b58975b"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8",
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "npu",
+      "material": "b128",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload (including aliases/weights/optimizer/state/history/pending/ledger),task state and all3 windows outputs; scalar vs packed diagnostic policy, atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "ae7dc1e2b14268e81f68fecfadfd97523469afbe9dc019d73b8c349381df2654",
+            "ae7dc1e2b14268e81f68fecfadfd97523469afbe9dc019d73b8c349381df2654"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310",
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "npu",
+      "material": "training",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload (including aliases/weights/optimizer/state/history/pending/ledger),task state and all3 windows outputs; scalar vs packed diagnostic policy, atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "a87f5490ab0bde42dd2c4b31f03e41d0d1b9b5cb9fdd08a141ca7231856d28cf",
+            "a87f5490ab0bde42dd2c4b31f03e41d0d1b9b5cb9fdd08a141ca7231856d28cf"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8",
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "cuda",
+      "material": "b128",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload,task state and all3 windows outputs; scalar vs packed diagnostic policy,atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "74a47e3a8e8717bc78735db64c2f314d111f5b1e2248dea682fcc796e5136d67",
+            "74a47e3a8e8717bc78735db64c2f314d111f5b1e2248dea682fcc796e5136d67"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310",
+            "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "cuda",
+      "material": "training",
+      "state": "passed",
+      "scope": "Existing complete checkpoint payload,task state and all3 windows outputs; scalar vs packed diagnostic policy,atol=rtol=0; no new execution or independent reference",
+      "files": [
+        {
+          "name": "state.pt",
+          "sha256": [
+            "2ff4c4351c498be056f5ef55255b2a14e598ba5fb8a7bd5cbcb07be5ad0ce9dc",
+            "2ff4c4351c498be056f5ef55255b2a14e598ba5fb8a7bd5cbcb07be5ad0ce9dc"
+          ]
+        },
+        {
+          "name": "task.pt",
+          "sha256": [
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8",
+            "804479c06442c721686d8fb38812f8788e81e341ba624d873a309f6c326328e8"
+          ]
+        }
+      ]
+    }
+  ]
+}

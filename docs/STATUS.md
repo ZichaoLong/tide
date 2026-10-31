@@ -58,3 +58,5 @@ NPU scale后继`gef-platform-npu-scale-1b3e39f.service`：等待CPU scale终态�
 CPU finite六项已passed/无后代，2个小训练严格通过、推理及profile原数值超差探索接纳、全部精确恢复通过。B128诊断scalar/packed中位1.018292/0.853316秒，B512 packed3.589865秒，仅一次同材料成本；默认未改。NPU finite已物理11→npu:0运行至B512，GPU finite六项已终态并继续FC多节点规模。
 
 规模观察补充：三平台各一个1B/B128 `scale-observation`，固定原模型/前两窗，在对应正式流程之后采实际MM/BMM/桶；validation=none及checkpoint_check=false显式不重复参考/恢复，不作吞吐或新增资格。配置相关10项通过。GPU finite B128 scalar/packed2.317225/2.066858秒，小训练两策略严格通过；NPU同材料4.043991/3.374952秒，小训练两策略严格通过，profile仍在运行；实际原严格差异均保留。
+
+GPU finite+三拓扑规模9项已终态passed且无后代；六项finite与FC多节点/HB/LH均完成检查/恢复，各大FP32点保留数值超差。即将提交`jobs/platform-cuda-multicard-bd2ff2e`：同模型16节点1B在2/3/4卡、同一小训练的ordinary/blocking/cpu_bridge共6项，各900秒，固定bd2ff2e安装/跟踪输入。前一组pilot与1B大batch的4个终态checkpoint已审阅入aaed533/e2b4d70后退役14,576,583,333 bytes，原配置/结果/log保留；当前盘free30.154GB。退役凭据在`artifacts/platform-matrix/checkpoint-retirement-reviewed-1b3e39f.json`。新多卡尚无结果。

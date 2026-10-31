@@ -339,3 +339,5 @@ B8也完整通过，但MM平均仅8.04行，私有BMM117次全为2行，独立�
 大逻辑batch已使State/Full行增大，但private BMM仍多为2行。GPU B128可见桶无单行、Full最小6行，当前没有padding重写依据。同权重MM与私有矩阵BMM分别计数；不把连续缓冲或packed标签当算子利用率。
 
 GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按device只取回一个bool，新`finite_check_packing`目标是合并小诊断kernel，而不是宣称减少原本不存在的逐tensor主机取回。默认不改；按device/dtype最多8MiB，特殊/大张量保持原检查，另预留32MiB空间。固定bd2ff2e相关78项通过，实际端到端收益须分CPU/NPU/GPU测量；无收益即保留scalar。不可将inclusive耗时或kernel数量减少等同加速。
+
+[bd2ff2e三平台实际对照](evidence/core5-finite-packing-20261031.md)已终态：B128 scalar/packed成本CPU1.018/0.853秒、NPU4.044/3.375秒、GPU2.317/2.067秒，原数值超差保留，默认不改。六小训练严格通过，两策略checkpoint/输出精确相同。CUDA kernel147380→111268，但显式同步39868→39869、比例2.202%→2.265%；不能称同步优化。BMM仅约19–23ms inclusive对几秒完整窗，当前不据2行标签扩大跨节点改造。新index/nonzero仍显著，但需因果归属和端到端方案，停止无方向的继续融合。
