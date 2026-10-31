@@ -1,4 +1,4 @@
-"""Actual complete-return activity and profile-only observer lifecycle."""
+"""Actual complete-return activity and optional observer lifecycle."""
 import json
 from pathlib import Path
 import sys
@@ -71,3 +71,47 @@ def test_python_profile_publishes_buckets_outside_throughput(tmp_path, monkeypat
     assert result["packing_work"]["completed"] and not result["packing_work"]["throughput_sample"]
     assert result["packing_work"]["metrics"]["packing/projection/weighted_mm/calls"] > 0
     assert result["profile_work"]["boundary_activity"]["samples"][0]["candidates"] > 0
+
+
+def test_python_work_observation_has_no_profiler_and_checks_resume(tmp_path, monkeypatch):
+    import benchmark_weighted
+    from core5_study_records import accept_result, timing_sample
+    from tidegraph.weighted.packing_observation import enabled
+    from weighted_benchmark_runners import Eager
+    calls, original = [], Eager.step
+    def step(self, index):
+        calls.append((index, enabled()))
+        return original(self, index)
+    monkeypatch.setattr(Eager, "step", step)
+    monkeypatch.setattr(torch.profiler, "profile", lambda **_: pytest.fail("work observation entered profiler"))
+    monkeypatch.setattr(torch, "set_num_interop_threads", lambda _: None)
+    monkeypatch.chdir(ROOT)
+    out = tmp_path/"observation"
+    monkeypatch.setattr(sys, "argv", ["benchmark_weighted.py", "--device", "cpu",
+        "--implementation", "python", "--mode", "inference", "--topology", "dag",
+        "--dtype", "float64", "--observe-work", "--checkpoint-check", "--allow-dirty", "--output-dir", str(out)])
+    benchmark_weighted.main()
+    result = json.loads((out/"result.json").read_text())
+    assert result["state"] == "passed" and result["post_measurement_complete_records"]
+    assert result["kind"] == "work-observation" and not result["throughput_sample"]
+    assert result["measured_windows"] == 1 and result["metrics"] == []
+    assert result["exact_resume"]["exact"] and result["exact_resume"]["next_window"] == 2
+    assert calls == [(0, False), (1, True), (2, False), (2, False), (0, False), (1, False)]
+    assert result["packing_work"]["completed"] and not result["packing_work"]["throughput_sample"]
+    assert result["packing_work"]["metrics"]["packing/projection/weighted_mm/calls"] > 0
+    assert result["observed_work"]["boundary_activity"]["samples"][0]["candidates"] > 0
+    assert result["observation_seconds"] > 0 and "timing_summary" not in result
+    assert not (out/"trace.json").exists() and not timing_sample(result)
+    with pytest.raises(ValueError, match="not a throughput"):
+        accept_result({}, result)
+
+
+@pytest.mark.parametrize("extra", [["--profile"], ["--steps", "2"], ["--implementation", "resident"]])
+def test_work_observation_rejects_conflicting_scope(tmp_path, monkeypatch, extra):
+    import benchmark_weighted
+    out = tmp_path/"rejected"
+    monkeypatch.setattr(sys, "argv", ["benchmark_weighted.py", "--device", "cpu",
+        "--implementation", "python", "--observe-work", "--output-dir", str(out), *extra])
+    with pytest.raises(SystemExit) as error:
+        benchmark_weighted.main()
+    assert error.value.code == 2 and not out.exists()

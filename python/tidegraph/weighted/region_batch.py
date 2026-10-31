@@ -80,7 +80,13 @@ def evaluate(program, requests, *, dependencies=None):
         elif dependencies is not None:
             for i in rows:
                 dependencies[i] = mode
-        for i, controls in zip(rows, values):
-            mapping = {v: value for (v, _), value in zip(requests[i].candidates, controls.unbind())}
-            result[i] = Selection({v for v, value in mapping.items() if value.detach() > 0}, mapping, History(last_time=requests[i].time))
+        mappings = [{v: value for (v, _), value in zip(requests[i].candidates, controls.unbind())}
+                    for i, controls in zip(rows, values)]
+        flags = None
+        if len(rows) > 1 and next(iter(mappings[0].values())).device.type != "cpu":
+            from ..region_metadata import positive
+            flags = iter(positive([value for mapping in mappings for value in mapping.values()]))
+        for i, mapping in zip(rows, mappings):
+            active = {v for v, value in mapping.items() if (next(flags) if flags is not None else value.detach() > 0)}
+            result[i] = Selection(active, mapping, History(last_time=requests[i].time))
     return result

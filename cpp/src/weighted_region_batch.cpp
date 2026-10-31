@@ -4,6 +4,7 @@
 #include "weighted_detail.h"
 #include "weighted_placement.h"
 #include "tide/allocation_failure.h"
+#include "region_metadata.h"
 #include <sstream>
 
 namespace tide::weighted::batch {
@@ -67,10 +68,17 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
     }else{
       rows=values.unbind();if(dependencies)for(auto i:ids)(*dependencies)[i]=c.selection_mode;
     }
+    const bool grouped=ids.size()>1&&!rows[0].device().is_cpu();
+    std::vector<bool> support;size_t offset=0;
+    if(grouped){
+      std::vector<Tensor> controls;for(const auto& row:rows)for(const auto& value:row.unbind())controls.push_back(value);
+      support=region_metadata::flags(controls,true);
+    }
     for(size_t j=0;j<ids.size();++j){
       auto i=ids[j];auto& out=result[i];out.history.last_time=requests[i].time;
       for(size_t k=0;k<requests[i].candidates.size();++k){
-        auto node=requests[i].candidates[k].node;out.controls[node]=rows[j][k];if(rows[j][k].item<double>()>0)out.active.insert(node);
+        auto node=requests[i].candidates[k].node;out.controls[node]=rows[j][k];
+        if(grouped?support[offset++]:rows[j][k].item<double>()>0)out.active.insert(node);
       }
     }
   }

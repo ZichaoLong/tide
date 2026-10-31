@@ -2,9 +2,14 @@
 
 这是一项可选的主机整数计数，不改变固定数学、数值表达式、调度、返回、状态或checkpoint。
 Python `benchmark_weighted.py --profile` 在一个独立采集窗口启用；native通过现有
-`reset_work`/`work_metrics`取得相同字段。standalone显式使用 `--observe-work true`，
-输出 `kind=work-observation`、`throughput_sample=false`；它仍执行独立完整核对，
-计时只是带观测开销的成本，不授予吞吐资格。warmup、独立参考和磁盘恢复不进入计数。
+`reset_work`/`work_metrics`取得相同字段。无需时间线时，Python入口显式使用
+`--observe-work`，仅适用eager Python/native，与`--profile`互斥；默认并且只允许
+一个采集窗口（可写`--steps 1`）。不进入torch.profiler、不开启record_shapes，
+避免profiler延长大张量生命周期影响容量判断。standalone显式使用 `--observe-work true`。
+两者输出 `kind=work-observation`、`throughput_sample=false`；仍执行独立完整核对，
+可另加`--checkpoint-check`验证精确续接。Python的`packing_work`保存实际桶/矩阵行数，
+`observed_work`保存完整返回活动；`observation_seconds`只是带观测开销的成本，
+不生成吞吐metrics/timing_summary。warmup、独立参考和磁盘恢复不进入计数。
 普通测量关闭计数。resident不使用这些eager桶：其实际/物理行和stages仍从`actual_stats`读取。
 
 三个客户端在计时外从完整CPU结果生成`boundary_activity`：每sample的候选、Full、

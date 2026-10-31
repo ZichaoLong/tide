@@ -178,7 +178,7 @@ def prepare_request(graph, model, q, batch, region, time, candidates):
     return RegionInput(old, time, tuple(candidates), layout, reference.dtype, reference.device)
 
 
-def validate_selection(graph, model, region, request, result):
+def validate_selection(graph, model, region, request, result, *, control_finite=None):
     from .ownership import region_reference
     layout, p = request.layout, model.regions[region]
     reference = region_reference(graph, model, region)
@@ -193,7 +193,7 @@ def validate_selection(graph, model, region, request, result):
     for control in result.controls.values():
         if not isinstance(control, torch.Tensor) or (control.dtype, control.device) != (reference.dtype, reference.device):
             raise ValueError("region selector returned incompatible control dtype/device")
-        if not torch.isfinite(control).all():
+        if not (control_finite[id(control)] if control_finite is not None else torch.isfinite(control).all()):
             raise ValueError("region selector returned nonfinite control")
     validate_history(result.history, layout, reference, request.time)
     p.validate_history(result.history, layout)
@@ -232,6 +232,15 @@ def evaluate_batch(graph, model, q, frames):
             values = p.batch(requests)
         if len(values) != len(requests):
             raise ValueError("region batch returned the wrong number of frames")
+        control_finite = None
+        if len(values) > 1 and requests[0].payload_device.type != "cpu":
+            from .region_metadata import finite
+            # Malformed controls still fail through the existing validation in
+            # frame order. Only compatible tensors participate in the read.
+            controls = [c for value in values if isinstance(value, Selection) and isinstance(value.controls, dict)
+                        for c in value.controls.values() if isinstance(c, torch.Tensor)
+                        and (c.dtype, c.device) == (requests[0].payload_dtype, requests[0].payload_device)]
+            control_finite = dict(zip(map(id, controls), finite(controls)))
         for i, request, value in zip(ids, requests, values):
-            results[i] = validate_selection(graph, model, region, request, value)
+            results[i] = validate_selection(graph, model, region, request, value, control_finite=control_finite)
     return results

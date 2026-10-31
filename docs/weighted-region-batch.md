@@ -22,6 +22,15 @@
 分配接口还返回实际乘子、KKT 分支、free 掩码和残差。解码仅解绑候选真实计算的张量，
 不调用参考递归，不以有效状态投影补写记录。完整消息载荷仍由后续 Full 生成 `(c,G)`。
 
+已有多帧组的加速器正支持、显式payload cast后的支持，以及公共批结果有限性检查，
+按原device/dtype将detached bool元数据合并取回；浮点controls仍是原Tensor与原VJP根。
+CPU与单帧入口保留原逐项路径，单个元数据项也直接读取。该实现不改变数值算术、
+分桶、精度、稳定平票、选择域、control传输或任何mixed放置含义。
+通用vector/empty controls仍按每control全元素有限性验证；原正支持cast下溢、
+非有限值、dtype/device及history拒绝继续生效，全部结果验证后才采用history。
+独立literal bool/None与连接零见`test_region_metadata`和standalone `weighted_region_batch`；
+完整参数别名、独立控制根、版本与跨窗训练仍由下表既有检查验收。设备收益须另测。
+
 ## 数值函数与反向身份
 
 | 定义 | Python 符号 | 独立 C++ 符号 | 验证入口 |

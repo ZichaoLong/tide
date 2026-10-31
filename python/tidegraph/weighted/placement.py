@@ -112,8 +112,10 @@ class PlacedSending(RegionProgram):
         for ids in groups.values():
             program, rows = self._mapped([requests[i] for i in ids])
             values = program.batch_grad(rows) if grad else program.batch(rows)
+            from .placement_tensors import controls_batch
+            values = controls_batch(values, [requests[i] for i in ids])
             for i, value in zip(ids, values):
-                result[i] = controls(value, requests[i])
+                result[i] = value
         return result
 
     def batch(self, requests):

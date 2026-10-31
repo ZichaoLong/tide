@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One finite complete-return core-5 measurement or separate profiler process.
+"""One finite complete-return core-5 measurement or separate observation process.
 
 Measure whether CPU streaming/prefill, eager placement or resident execution
 fits the requested small/medium workload. Every timed window includes input
@@ -43,8 +43,10 @@ def main():
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--workload", type=Path, help="static parameter-accounted plan; replaces legacy fixture options")
     parser.add_argument("--max-materialize-bytes", type=int, default=2*1024**3)
-    parser.add_argument("--steps", type=int, default=3)
-    parser.add_argument("--profile", action="store_true")
+    parser.add_argument("--steps", type=int, help="1..8 measured windows; default 3, or 1 for --observe-work")
+    observation = parser.add_mutually_exclusive_group()
+    observation.add_argument("--profile", action="store_true")
+    observation.add_argument("--observe-work", action="store_true", help="one eager window of host counters without a profiler; not throughput")
     parser.add_argument("--checkpoint-check", action="store_true", help="untimed exact new-owner next-window resume")
     parser.add_argument("--native-library")
     parser.add_argument("--resident-library")
@@ -52,6 +54,10 @@ def main():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--allow-dirty", action="store_true", help="entry-point development only, never controlled evidence")
     args = parser.parse_args()
+    if args.steps is None:
+        args.steps = 1 if args.observe_work else 3
+    if args.observe_work and (args.steps != 1 or args.implementation == "resident"):
+        parser.error("work observation requires one window (--steps 1) and an eager implementation")
     args.scoring_dtype = args.scoring_dtype or ("float64" if args.dtype == "float64" else "float32")
     from tidegraph.planning import ExecutionSpec
     specification = ExecutionSpec(client="pytorch" if args.implementation == "python" else "python-native",
@@ -108,7 +114,8 @@ def main():
         mode=args.mode, schedule=args.schedule, placement=args.placement,
         autograd_enabled=args.mode == "training", optimizer_constructed=args.mode == "training",
         warmup_windows=1, measured_windows=1 if args.profile else args.steps,
-        kind="profile" if args.profile else "benchmark", tracking="project JSON; execution-flows §1",
+        kind="profile" if args.profile else "work-observation" if args.observe_work else "benchmark",
+        throughput_sample=not (args.profile or args.observe_work), tracking="project JSON; execution-flows §1",
         timing="complete CPU return; input prepare/upload, packing, schedule, forward, output projection, detach, sync"+
                ("; backward, finite check, SGD" if args.mode == "training" else ""),
         excluded="fixture/model/owner/optimizer construction, warmup, validation, final parameter/gradient/optimizer export, profiler parsing",
@@ -213,6 +220,14 @@ def main():
                     record["profile"] = dict(trace_sha256=digest(out/"trace.json"),
                         operators=[dict(name=x.key, calls=x.count, self_cpu_us=x.self_cpu_time_total)
                                    for x in prof.key_averages()])
+            elif args.observe_work:
+                from weighted_benchmark_work import observe_work
+                synchronize(device); start = time.perf_counter()
+                with observe_work(args.implementation) as packing_work:
+                    record["packing_work"] = packing_work
+                    actual.append(candidate.step(step))
+                record["observation_seconds"] = time.perf_counter()-start
+                record["observed_work"] = work(actual[-1][0])
             else:
                 synchronize(device); start = time.perf_counter()
                 actual.append(candidate.step(step))

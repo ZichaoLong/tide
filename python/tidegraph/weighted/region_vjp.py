@@ -79,7 +79,12 @@ def evaluate(program, requests):
         weights = len(inputs)
         rows = fields([requests[i] for i in ids], capture)
         values = iter(_Region.apply(bound, rows, weights, *inputs))
-        for i in ids:
-            controls = {v: next(values) for v, _ in requests[i].candidates}
-            results[i] = Selection({v for v, c in controls.items() if c.detach() > 0}, controls, History(last_time=requests[i].time))
+        mappings = [{v: next(values) for v, _ in requests[i].candidates} for i in ids]
+        flags = None
+        if len(ids) > 1 and next(iter(mappings[0].values())).device.type != "cpu":
+            from ..region_metadata import positive
+            flags = iter(positive([value for controls in mappings for value in controls.values()]))
+        for i, controls in zip(ids, mappings):
+            active = {v for v, c in controls.items() if (next(flags) if flags is not None else c.detach() > 0)}
+            results[i] = Selection(active, controls, History(last_time=requests[i].time))
     return results

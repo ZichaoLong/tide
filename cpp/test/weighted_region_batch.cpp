@@ -2,7 +2,9 @@
 #include "tide/weighted.h"
 #include "../src/weighted_sending_batch.h"
 #include "../src/weighted_mean.h"
+#include "../src/region_metadata.h"
 #include <torch/csrc/autograd/autograd.h>
+#include <limits>
 #include <stdexcept>
 namespace {
 using namespace tide;
@@ -13,6 +15,20 @@ void close(const Tensor& a,const Tensor& b){
 }
 void check_weighted_region_batch(const at::TensorOptions& o){
   using namespace tide;using namespace tide::weighted;
+  // Literal metadata witnesses exercise the grouped reader even on CPU.
+  std::vector<Tensor> controls;
+  for(double value:{0.,1.,-1.,std::numeric_limits<double>::quiet_NaN(),
+                    std::numeric_limits<double>::infinity(),-std::numeric_limits<double>::infinity()})
+    controls.push_back(at::full({},value,o).set_requires_grad(true));
+  if(region_metadata::group_flags(controls,true)!=std::vector<bool>{false,true,false,false,true,false}
+    ||region_metadata::group_flags(controls,false)!=std::vector<bool>{true,true,true,false,false,false})
+    throw std::runtime_error("grouped region metadata differs from literal support/finite flags");
+  if(region_metadata::group_flags({at::empty({0},o),at::ones({2},o),at::full({2},std::numeric_limits<double>::infinity(),o)},false)
+      !=std::vector<bool>{true,true,false})throw std::runtime_error("vector/empty region finite metadata differs");
+  auto metadata_roots=torch::autograd::grad({3*controls[0]+0*controls[1]},
+      {controls[0],controls[1],controls[2]},{},true,false,true);
+  close(metadata_roots[0],at::full({},3.,o));close(metadata_roots[1],at::zeros({},o));
+  if(metadata_roots[2].defined())throw std::runtime_error("metadata connected an unused control root");
   auto singleton=at::tensor({.35},o).set_requires_grad(true),content=at::tensor({.7,-.4},o).reshape({1,2}).set_requires_grad(true);
   auto mean=weighted_mean(singleton,content);auto bar=at::tensor({1.e5,-2.e5},o);
   auto mean_grad=torch::autograd::grad({mean},{singleton,content},{bar});

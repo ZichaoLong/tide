@@ -1,14 +1,16 @@
 #include "tide/region.h"
 #include "tide/ownership.h"
+#include "region_metadata.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
+#include <optional>
 #include <stdexcept>
 
 namespace tide {
 namespace {
-void check_tensor(const Tensor& value,const Tensor& ref,const char* message){
+void check_tensor(const Tensor& value,const Tensor& ref,const char* message,std::optional<bool> finite={}){
   if(!value.defined()||value.device()!=ref.device()||value.scalar_type()!=ref.scalar_type()
-    ||!at::isfinite(value).all().item<bool>())throw std::invalid_argument(message);
+    ||!(finite?*finite:at::isfinite(value).all().item<bool>()))throw std::invalid_argument(message);
 }
 // Owning boundary keeps request references stable through one numeric batch.
 struct Frame {
@@ -31,14 +33,18 @@ struct Frame {
     }
   }
   RegionInput request() const{return {old,time,candidates,layout,reference.options()};}
-  Selection validate(const Model& m,Selection result) const{
+  Selection validate(const Model& m,Selection result,const std::map<const void*,bool>* finite=nullptr) const{
     if(static_cast<Index>(result.active.size())>layout.spec.budget
       ||!std::includes(nodes.begin(),nodes.end(),result.active.begin(),result.active.end()))
       throw std::invalid_argument("region selector returned invalid active subset/capacity");
     if(result.controls.size()!=nodes.size())throw std::invalid_argument("region selector returned invalid control domain");
     for(const auto& [node,control]:result.controls){
       if(!nodes.count(node))throw std::invalid_argument("region selector returned invalid control domain");
-      check_tensor(control,reference,"region selector returned incompatible or nonfinite control");
+      std::optional<bool> known;
+      if(finite&&control.defined()){
+        const auto found=finite->find(control.unsafeGetTensorImpl());if(found!=finite->end())known=found->second;
+      }
+      check_tensor(control,reference,"region selector returned incompatible or nonfinite control",known);
     }
     validate_history(result.history,layout,reference,time);m.regions[owner.second].kernel->validate_history(result.history,layout);
     for(auto& [node,control]:result.controls)control=control.to(m.nodes[node].bias.device());return result;
@@ -89,8 +95,17 @@ void select_event_batches(const Graph& g,const Model& m,Continuation& q,std::vec
     std::vector<RegionInput> requests;for(const auto& f:frames)requests.push_back(f.request());
     auto results=at::GradMode::is_enabled()?w.kernel->batch_grad(w,requests):w.kernel->batch(w,requests);
     if(results.size()!=frames.size())throw std::invalid_argument("region batch returned wrong frame count");
+    std::map<const void*,bool> finite;
+    const bool grouped=frames.size()>1&&!frames[0].reference.device().is_cpu();
+    if(grouped){
+      std::vector<Tensor> controls;
+      for(size_t i=0;i<frames.size();++i)for(const auto& [node,c]:results[i].controls)
+        if(c.defined()&&c.device()==frames[i].reference.device()&&c.scalar_type()==frames[i].reference.scalar_type())controls.push_back(c);
+      const auto flags=region_metadata::flags(controls,false);
+      for(size_t i=0;i<controls.size();++i)finite[controls[i].unsafeGetTensorImpl()]=flags[i];
+    }
     // Validate every actual result before committing any owner in this batch.
-    for(size_t i=0;i<frames.size();++i)results[i]=frames[i].validate(m,std::move(results[i]));
+    for(size_t i=0;i<frames.size();++i)results[i]=frames[i].validate(m,std::move(results[i]),grouped?&finite:nullptr);
     for(size_t i=0;i<frames.size();++i)commit_selection(q,used[i],std::move(results[i]),events,owners.at(used[i]),trace);
     ++stats["region_batch_calls"];stats["max_region_batch"]=std::max<Index>(stats["max_region_batch"],used.size());
     if(at::GradMode::is_enabled())stats["batched_region_frames"]+=used.size();

@@ -1,6 +1,7 @@
 // Control/query and allocation locations are independent of payload owners.
 #include "weighted_placement.h"
 #include "weighted_region_batch.h"
+#include "region_metadata.h"
 namespace tide::weighted {
 namespace {
 struct Mapped {
@@ -29,6 +30,25 @@ Selection finish(Selection result,const RegionInput& r){
   if(positive!=result.active)throw std::invalid_argument("weighted control cast changes positive support");
   return result;
 }
+std::vector<Selection> finish_batch(std::vector<Selection> results,const std::vector<RegionInput>& requests){
+  bool cpu=true;for(const auto& r:requests)cpu=cpu&&r.payload_options.device().is_cpu();
+  if(results.size()<2||cpu){
+    for(size_t i=0;i<results.size();++i)results[i]=finish(std::move(results[i]),requests[i]);
+    return results;
+  }
+  std::vector<Tensor> controls;
+  for(size_t i=0;i<results.size();++i){const auto& r=requests[i];
+    for(auto& [node,c]:results[i].controls){
+      c=placement_copy(c,r.payload_options.device(),r.payload_options.dtype().toScalarType());controls.push_back(c);
+    }
+  }
+  const auto support=region_metadata::flags(controls,true);size_t offset=0;
+  for(const auto& result:results){std::set<Index> positive;
+    for(const auto& [node,c]:result.controls)if(support[offset++])positive.insert(node);
+    if(positive!=result.active)throw std::invalid_argument("weighted control cast changes positive support");
+  }
+  return results;
+}
 class PlacedSending final:public RegionKernel {
  public:
   PlacedSending(std::shared_ptr<const RegionKernel> original,RegionalConfig c,ResolvedPlacement p)
@@ -55,7 +75,8 @@ class PlacedSending final:public RegionKernel {
       Mapped mapped(w,requests,placement_.control);
       auto values=grad?batch::region_vjp(mapped.weights,mapped.requests,config_,placement_.selection)
         :batch::regions(mapped.weights,mapped.requests,config_,nullptr,placement_.selection);
-      for(size_t j=0;j<ids.size();++j)result[ids[j]]=finish(std::move(values[j]),rows[ids[j]]);
+      values=finish_batch(std::move(values),requests);
+      for(size_t j=0;j<ids.size();++j)result[ids[j]]=std::move(values[j]);
     }
     return result;
   }

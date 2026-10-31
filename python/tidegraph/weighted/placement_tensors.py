@@ -98,3 +98,18 @@ def controls(result, request):
         raise ValueError("weighted control cast changes positive support")
     result.controls = values
     return result
+
+
+def controls_batch(results, requests):
+    if len(results) < 2 or all(r.payload_device.type == "cpu" for r in requests):
+        return [controls(result, request) for result, request in zip(results, requests)]
+    from ..region_metadata import positive
+    values = [{v: move(c, request.payload_device, request.payload_dtype) for v, c in result.controls.items()}
+              for result, request in zip(results, requests)]
+    flags = iter(positive([c for row in values for c in row.values()]))
+    for result, row in zip(results, values):
+        active = {v for v in row if next(flags)}
+        if active != result.active:
+            raise ValueError("weighted control cast changes positive support")
+        result.controls = row
+    return results
