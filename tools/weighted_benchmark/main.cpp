@@ -1,238 +1,229 @@
-// Standalone LibTorch timing. Python is an optional static-fixture author,
-// never a runtime scheduler, loss callback or source of selected actions.
-#include "benchmark.h"
+// Standalone LibTorch experiment. Static fixture authors never schedule a run.
+#include "cli.h"
+#include "eager.h"
 #include "observation.h"
 #include "work_observation.h"
-#include "tide/greedy.h"
-#include "tide/stream.h"
-#include "tide/optimizer.h"
-#include "tide/checkpoint.h"
+#include "run_checkpoint.h"
+#include "validation.h"
+#include "roots.h"
+#include "tide/communication.h"
 #include "../../cpp/bench/streaming.h"
+#include "../device_online/weighted_precision_reference.h"
 #include <ATen/Parallel.h>
 #include <ATen/Context.h>
-#include <cmath>
-#include <torch/csrc/autograd/autograd.h>
-#include <filesystem>
+#include <algorithm>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <set>
-#include "eager.h"
-#include "../device_online/weighted_precision_reference.h"
 using namespace weighted_benchmark;
-int main(int argc,char** argv){
+namespace {
+Json read_json(const std::filesystem::path& path) {
+  std::ifstream stream(path);if(!stream)throw std::invalid_argument("cannot read "+path.string());return Json::parse(stream);
+}
+void limits(Json& data,const Request& request,Json& report) {
+  if(request.limits.empty())return;
+  if(request.implementation!="resident")throw std::invalid_argument("capacity overrides require resident");
+  const auto values=read_json(request.limits);if(!values.is_object())throw std::invalid_argument("limits must be an object");
+  for(const auto& [key,value]:values.items()) {
+    if(!data.at("limits").contains(key)||!value.is_number_integer()||value.is_boolean()||value.get<int64_t>()<1)
+      throw std::invalid_argument("invalid capacity override: "+key);
+    if(request.mode!="training"&&(key=="retained_bytes"||key=="backward_bytes"||key=="optimizer_bytes"||key=="total_bytes"))
+      throw std::invalid_argument("training limit on inference");data["limits"][key]=value;
+  }
+  report["resident_limit_overrides"]=values;
+}
+}
+int main(int argc,char** argv) {
   Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
-  try{
-    std::string input,device,implementation="native",mode="training",schedule="prefill",precision="float32",
-      placement_name="native",scoring,packing="auto",return_packing="scalar",limits_path;Index steps=3,threads=1,interop=1,workers=1;bool checkpoint=false,observe_work=false;
-    int64_t checkpoint_bytes=kDefaultCheckpointMaxBytes;bool checkpoint_budget_requested=false;
-    std::vector<std::string> peer_specs;
-    for(int i=1;i<argc;++i){std::string key=argv[i];if(key=="--help"){
-        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float16|float32|float64 --scoring-dtype float32|float64 --placement native|mixed-a|mixed-b|mixed-c --intraop-threads N --interop-threads N --workers N --packing auto|packed|scalar --return-packing scalar|packed (eager complete CPU return) --peer-device DEVICE (repeatable) --checkpoint-check true|false --checkpoint-max-bytes N (native graph file) --observe-work true|false (eager observation only, no throughput qualification) --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
-      if(i+1==argc)throw std::invalid_argument("missing benchmark option value");std::string value=argv[++i];
-      if(key=="--fixture")input=value;else if(key=="--device")device=value;else if(key=="--implementation")implementation=value;
-      else if(key=="--mode")mode=value;else if(key=="--schedule")schedule=value;else if(key=="--steps")steps=std::stoll(value);
-      else if(key=="--dtype")precision=value;
-      else if(key=="--placement")placement_name=value;else if(key=="--scoring-dtype")scoring=value;
-      else if(key=="--intraop-threads")threads=std::stoll(value);else if(key=="--interop-threads")interop=std::stoll(value);
-      else if(key=="--workers")workers=std::stoll(value);else if(key=="--packing")packing=value;
-      else if(key=="--return-packing")return_packing=value;
-      else if(key=="--peer-device")peer_specs.push_back(value);
-      else if(key=="--resident-limits")limits_path=value;
-      else if(key=="--checkpoint-max-bytes"){
-        size_t consumed=0;checkpoint_bytes=std::stoll(value,&consumed);checkpoint_budget_requested=true;
-        if(consumed!=value.size()||checkpoint_bytes<1)throw std::invalid_argument("checkpoint byte budget must be a positive int64");}
-      else if(key=="--checkpoint-check"){if(value!="true"&&value!="false")throw std::invalid_argument("checkpoint flag must be true/false");checkpoint=value=="true";}
-      else if(key=="--observe-work"){if(value!="true"&&value!="false")throw std::invalid_argument("observation flag must be true/false");observe_work=value=="true";}
-      else if(key=="--output-dir")output=value;else throw std::invalid_argument("unknown benchmark option "+key);
-    }
-    if(input.empty()||device.empty()||output.empty()||steps<1||steps>8||(implementation!="native"&&implementation!="resident")
-        ||(mode!="inference"&&mode!="training")||(schedule!="streaming"&&schedule!="prefill")
-        ||(precision!="float16"&&precision!="float32"&&precision!="float64")||threads<1||interop<1||workers<1)throw std::invalid_argument("invalid bounded benchmark request");
-    if(precision=="float64"&&((device!="cpu"&&device.rfind("cuda:",0)!=0)||implementation!="native"||!peer_specs.empty()))
-      throw std::invalid_argument("FP64 benchmark requires CPU or single-card CUDA eager execution; no implicit substitution");
-    const auto dtype=precision=="float64"?at::kDouble:precision=="float16"?at::kHalf:at::kFloat;
-    if(scoring.empty())scoring=dtype==at::kDouble?"float64":"float32";
-    if(dtype==at::kDouble&&device.rfind("cuda:",0)==0&&scoring!="float64")
-      throw std::invalid_argument("CUDA FP64 benchmark requires explicit float64 scoring");
-    if(implementation=="resident"&&scoring!="float32")throw std::invalid_argument("resident scoring requires float32");
-    if(scoring!="float32"&&scoring!="float64")throw std::invalid_argument("invalid scoring dtype");
-    if(packing!="auto"&&packing!="packed"&&packing!="scalar")throw std::invalid_argument("invalid packing");
-    if(return_packing!="scalar"&&return_packing!="packed")throw std::invalid_argument("invalid complete-return packing");
-    if(implementation=="resident"&&return_packing!="scalar")throw std::invalid_argument("packed complete return applies only to eager execution");
-    if(checkpoint_budget_requested&&!checkpoint)throw std::invalid_argument("checkpoint byte budget requires checkpoint check");
-    if(implementation=="resident"&&(placement_name!="native"||packing=="scalar"||workers!=1))throw std::invalid_argument("resident does not accept eager placement/scalar/host workers");
-    if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
-    if(observe_work&&implementation!="native")throw std::invalid_argument("packing work observation applies only to eager native; resident exposes physical rows/stages");
-    input=std::filesystem::absolute(input);output=std::filesystem::absolute(output);
-    if(!limits_path.empty())limits_path=std::filesystem::absolute(limits_path);
-    if(!std::filesystem::create_directory(output))throw std::invalid_argument("benchmark output directory must be new");
-    created=true;
+  try {
+    const auto request=parse_request(argc,argv);if(request.help){help();return 0;}
+    const auto& r=request;output=r.output;const auto dtype=r.dtype();
+    const bool training=r.mode=="training",prefill=r.schedule=="prefill",validate=r.validation!="none";
+    const Index windows=r.warmup+r.steps;
+    // Scope the explicit copy policy to this process before any model transfer.
+    if(setenv("TIDE_COMMUNICATION_POLICY",r.communication.c_str(),1))throw std::runtime_error("cannot set process communication policy");
+    const auto fixture_start=tide_bench::Clock::now();
+    auto data=read_json(r.input);data["__fixture_root"]=r.input.parent_path().string();data["__task"]=r.task();
+    if(r.check_roots)validate_root_budget(data);
+    const auto fixture_seconds=tide_bench::seconds(fixture_start);
+    const Json identity={{"fixture_sha256",data.at("fixture_sha256")},{"mode",r.mode},{"dtype",r.precision},
+      {"scoring_dtype",r.scoring},{"implementation",r.implementation},{"span",data.at("span")},{"task",r.task()}};
+    if(!r.resume.empty())checkpoint_manifest(r.resume,identity); // Reject mismatched input before allocating a model.
+    if(!std::filesystem::create_directory(output))throw std::invalid_argument("output directory must be new");created=true;
     std::filesystem::current_path(output);
-    auto runtime_start=tide_bench::Clock::now();portable_torch::RuntimeSession runtime;
-    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=device;runtime_options.dtype=dtype;
-    runtime_options.allow_npu_float16=true;
-    const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(threads);at::set_num_interop_threads(interop);
-    if(target.is_cuda()){
-      at::globalContext().setAllowTF32CuBLAS(false);
-      at::globalContext().setAllowTF32CuDNN(false);
-    }
-    ExecutionPlacement placement;placement.preset=implementation=="resident"?"resident":placement_name;placement.scoring_dtype=scoring;
-    auto effective=resolve_placement(placement,target).record();
-    std::vector<at::Device> peers;for(const auto& spec:peer_specs){auto opt=runtime_options;opt.device_spec=spec;peers.push_back(portable_torch::resolve_device(opt));}
-    if(!peers.empty()){std::set<std::string> names;for(auto d:peers){names.insert(d.str());if(d.type()!=target.type())throw std::invalid_argument("peer backend mismatch");}
+    auto begin=tide_bench::Clock::now();portable_torch::RuntimeSession runtime;
+    portable_torch::RuntimeOptions runtime_options;runtime_options.device_spec=r.device;runtime_options.dtype=dtype;runtime_options.allow_npu_float16=true;
+    const auto target=portable_torch::resolve_device(runtime_options);at::set_num_threads(r.threads);at::set_num_interop_threads(r.interop);
+    if(target.is_cuda()){at::globalContext().setAllowTF32CuBLAS(false);at::globalContext().setAllowTF32CuDNN(false);}
+    ExecutionPlacement placement;placement.preset=r.implementation=="resident"?"resident":r.placement;placement.scoring_dtype=r.scoring;
+    const auto effective=resolve_placement(placement,target).record();
+    std::vector<at::Device> peers,nodes,devices{target};
+    auto resolve=[&](const std::string& name){auto opt=runtime_options;opt.device_spec=name;auto d=portable_torch::resolve_device(opt);
+      if(d.type()!=target.type()||(!d.is_cpu()&&d.index()<0))throw std::invalid_argument("node/peer devices require one indexed backend");
+      if(std::find(devices.begin(),devices.end(),d)==devices.end())devices.push_back(d);return d;};
+    for(const auto& name:r.peers)peers.push_back(resolve(name));for(const auto& name:r.nodes)nodes.push_back(resolve(name));
+    if(!peers.empty()){std::set<std::string> names;for(auto d:peers)names.insert(d.str());
       if(target.is_cpu()||peers.size()<2||peers.front()!=target||names.size()!=peers.size())throw std::invalid_argument("invalid distinct peers/coordinator");}
-    runtime_probe(target,dtype);for(auto d:peers)if(d!=target)runtime_probe(d,dtype);const auto runtime_seconds=tide_bench::seconds(runtime_start);
-    report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v1"},
-      {"kind",observe_work?"work-observation":"benchmark"},{"throughput_sample",!observe_work},
-      {"device",device},{"backend",portable_torch::compiled_backend()},{"dtype",precision},{"requested_dtype",precision},
+    if(!nodes.empty()&&nodes.size()!=data.at("graph").at("nodes").size())throw std::invalid_argument("node-devices must cover every physical node");
+    if(nodes.empty())for(const auto& node:data.at("graph").at("nodes"))
+      nodes.push_back(peers.empty()?target:peers.at(node.at("region").get<size_t>()%peers.size()));
+    if(dtype==at::kDouble&&devices.size()>1)throw std::invalid_argument("FP64 multi-device qualification is not declared");
+    portable_torch::resolve_device(runtime_options);for(auto d:devices)runtime_probe(d,dtype);
+    auto synchronize=[&]{for(auto d:devices)portable_torch::synchronize(d);};
+    std::vector<std::string> synchronized;for(auto d:devices)synchronized.push_back(d.str());
+    std::vector<std::string> effective_nodes;for(auto d:nodes)effective_nodes.push_back(d.str());
+    report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v2"},
+      {"kind",r.observe_work?"work-observation":"benchmark"},{"throughput_sample",!r.observe_work},{"throughput_qualified",false},
+      {"device",r.device},{"backend",portable_torch::compiled_backend()},{"dtype",r.precision},{"requested_dtype",r.precision},
       {"fixture_dtype","float32"},{"input_policy","same hashed FP32 material; explicit promotion before both schedules"},
-      { "runtime_initialization_seconds",runtime_seconds},{"placement",placement_name},{"effective_placement",effective},
-      {"scoring_dtype",scoring},{"intraop_threads",threads},{"interop_threads",interop},{"workers",workers},{"packing",packing},{"peer_devices",peer_specs},
-      {"return_packing",return_packing},
-      {"implementation",implementation},{"mode",mode},{"schedule",schedule},{"warmup_windows",1},{"measured_windows",steps},
-      {"checkpoint_max_bytes",checkpoint_bytes},
-      {"timing",mode=="training"?"input clone, schedule/packing, complete CPU return, loss, backward, finite checks, SGD, detach, sync":
-        "input clone, schedule/packing, complete CPU return, output projection, detach, sync"},
-      {"autograd_enabled",mode=="training"},{"optimizer_constructed",mode=="training"},
-      {"excluded","static fixture/owner/optimizer construction, warmup, post-measurement independent check, final parameter/gradient/optimizer export"},
-      {"phase","fixture-preparation"},{"metrics",Json::array()}};
+      {"runtime_initialization_seconds",tide_bench::seconds(begin)},{"placement",r.placement},{"effective_placement",effective},
+      {"fixture_preparation_seconds",fixture_seconds},
+      {"scoring_dtype",r.scoring},{"intraop_threads",r.threads},{"interop_threads",r.interop},{"workers",r.workers},
+      {"packing",r.packing},{"peer_devices",r.peers},{"node_devices",r.nodes},{"effective_node_devices",effective_nodes},
+      {"placement_rule",r.nodes.empty()?"region modulo ordered peers, or single coordinator":"explicit node map"},{"synchronized_devices",synchronized},
+      {"communication",{{"requested",r.communication},{"effective",tide::communication_policy()}}},
+      {"communication_counter_scope","instrumented explicit tensor copies; tensor endpoint bytes, not PCIe traffic or proof of P2P; resident internal decode/protocol traffic is separate"},
+      {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"task",r.task()},
+      {"validation_mode",r.validation},{"exploratory_enabled",r.validation=="explore"},{"exploratory_accepted",false},
+      {"execution_completed",false},{"execution_finite","not_checked"},
+      {"independent_comparison",{{"numeric","not_checked"},{"discrete","not_checked"},{"strict_passed",false}}},
+      {"exact_resume",{{"state","not_checked"}}},{"implementation",r.implementation},{"mode",r.mode},{"schedule",r.schedule},
+      {"independent_roots",{{"state","not_checked"},{"requested",r.check_roots}}},
+      {"warmup_windows",r.warmup},{"measured_windows",r.steps},{"checkpoint_max_bytes",r.checkpoint_bytes},
+      {"timing_contract",r.return_mode=="complete"?"complete-diagnostic-v2":"selected-return-v1"},
+      {"timing","input clone/transfer, scheduling, packing, requested return, finite guards, task loss when requested, backward/SGD when training, detach and synchronization"},
+      {"autograd_enabled",training},{"optimizer_constructed",training},
+      {"excluded","fixture/owner construction, warmup, checkpoint I/O, independent reference and prefix replay, final parameter/optimizer export"},
+      {"phase","fixture-preparation"},{"metrics",Json::array()},{"warmup_metrics",Json::array()},{"warmup_seconds",0.0},
+      {"checkpoint_total_seconds",0.0}};
     if(target.is_cuda())report["cuda_precision"]={{"matmul_allow_tf32",at::globalContext().allowTF32CuBLAS()},
       {"cudnn_allow_tf32",at::globalContext().allowTF32CuDNN()}};
-    write(output/"result.json",report);
-    capture_memory(report,target,"runtime_ready",true,peers);
-    auto fixture_start=tide_bench::Clock::now();
-    std::ifstream file(input);if(!file)throw std::invalid_argument("missing static fixture");Json data=Json::parse(file);
-    if(!limits_path.empty()){
-      if(implementation!="resident")throw std::invalid_argument("capacity overrides require resident");
-      std::ifstream limits_file(limits_path);if(!limits_file)throw std::invalid_argument("missing limits file");
-      auto limits=Json::parse(limits_file);if(!limits.is_object())throw std::invalid_argument("limits must be object");
-      for(const auto& [key,value]:limits.items()){
-        if(!data.at("limits").contains(key)||!value.is_number_integer()||value.is_boolean()||value.get<int64_t>()<1)
-          throw std::invalid_argument("invalid capacity override: "+key);
-        if(mode!="training"&&(key=="retained_bytes"||key=="backward_bytes"||key=="optimizer_bytes"||key=="total_bytes"))
-          throw std::invalid_argument("training limit on inference");
-        data["limits"][key]=value;
-      }
-      report["resident_limit_overrides"]=limits;
-    }
-    report["resident_limits"]=data.at("limits");
-    data["__fixture_root"]=std::filesystem::path(input).parent_path().string();
+    report["finite_guard"]=r.implementation=="resident"?"public device transaction guards, task/gradient/optimizer checks; returned fields scanned":"all actual result fields, gradients, updated parameter/master/optimizer owners";
+    limits(data,r,report);report["resident_limits"]=data.at("limits");
     report["fixture_sha256"]=data.at("fixture_sha256");report["config"]=data.at("config");
-    if(data.contains("workload")){
-      report["model_id"]=data["workload"].value("model_id","");report["workload_id"]=data["workload"]["sha256"];
-      report["parameter_inventory"]=data["workload"]["inventory"];report["memory_floor"]=data["workload"]["memory_floor"];
-      const auto& floor=data["workload"]["memory_floor"];
-      report["effective_static_tensor_bytes"]=(floor["logical_parameter_bytes"].get<int64_t>()+
-        floor["legacy_inert_buffer_bytes"].get<int64_t>())*(dtype==at::kDouble?2.:dtype==at::kHalf?.5:1.);
-      if(data["workload"].contains("parameter_match"))report["parameter_match"]=data["workload"]["parameter_match"];
+    if(data.contains("workload")) {
+      const auto& w=data.at("workload");report["model_id"]=w.value("model_id","");report["workload_id"]=w.at("sha256");
+      report["parameter_inventory"]=w.at("inventory");report["memory_floor"]=w.at("memory_floor");
+      const auto& floor=w.at("memory_floor");report["effective_static_tensor_bytes"]=(floor.at("logical_parameter_bytes").get<int64_t>()+
+        floor.at("legacy_inert_buffer_bytes").get<int64_t>())*(dtype==at::kDouble?2.:dtype==at::kHalf?.5:1.);
+      if(w.contains("parameter_match"))report["parameter_match"]=w.at("parameter_match");
     }
-    report["fixture_preparation_seconds"]=tide_bench::seconds(fixture_start);
-    std::unique_ptr<Eager> eager;std::unique_ptr<Resident> remote;
-    const bool training=mode=="training",prefill=schedule=="prefill";
-    report["phase"]="construction";write(output/"result.json",report);
-    auto start=tide_bench::Clock::now();
-    if(implementation=="native")eager=std::make_unique<Eager>(data,training,prefill,packing=="scalar",dtype,target,placement,workers,peers,false,return_packing=="packed");
-    else {
+    write(output/"result.json",report);capture_memory(report,target,"runtime_ready",true,devices);
+    auto make_owner=[&]()->std::unique_ptr<Resident> {
+      if(r.implementation=="native")return std::make_unique<Eager>(data,training,prefill,r.packing=="scalar",dtype,target,
+        placement,r.workers,peers,false,r.return_packing=="packed",nodes,r.return_mode);
 #ifdef TIDE_WEIGHTED_RESIDENT
-      remote=resident(data,target,training,prefill,dtype,peers);
+      return resident(data,target,training,prefill,dtype,peers,nodes,r.return_mode);
 #else
       throw std::invalid_argument("this standalone build has no resident consumer");
 #endif
+    };
+    report["phase"]="construction";write(output/"result.json",report);begin=tide_bench::Clock::now();
+    auto owner=make_owner();Index first=0;
+    if(!r.resume.empty())first=restore_run_checkpoint(r.resume,*owner,identity,r.checkpoint_bytes);
+    const auto span=data.at("span").get<Index>();
+    if(windows+2>std::numeric_limits<Index>::max()/span||first>std::numeric_limits<Index>::max()/span-windows-2)
+      throw std::invalid_argument("resumed window exceeds int64 time domain");
+    report["start_window"]=first;report["resume_source"]=r.resume.empty()?Json(nullptr):Json(r.resume.string());
+    synchronize();report["construction_seconds"]=tide_bench::seconds(begin);capture_memory(report,target,"construction",true,devices);
+    std::vector<Step> actual;
+    auto execute=[&](Index window,bool warmup) {
+      report["phase"]=warmup?"warmup":"measurement";report["window"]=window;write(output/"result.json",report);
+      if(r.observe_work&&!warmup)tide::work::reset(true);synchronize();tide::communication_statistics(true);
+      begin=tide_bench::Clock::now();auto step=owner->step(window);
+      synchronize();const auto seconds=tide_bench::seconds(begin);
+      if(window==first+windows-1){report["execution_completed"]=true;report["execution_finite"]="passed";}
+      const auto communication=tide::communication_statistics();
+      capture_memory(report,target,"window-"+std::to_string(window)+"-compute",true,devices);
+      auto event=step.observation.is_null()?weighted_benchmark::work(step.result):step.observation;
+      event["step"]=window;event["seconds"]=seconds;event["loss"]=!training&&r.return_mode=="metrics"?Json(nullptr):Json(step.loss);
+      event["comm"]=communication;
+      if(r.observe_work&&!warmup){event["packing_work"]=packing_work();tide::work::reset(false);}
+      report[warmup?"warmup_metrics":"metrics"].push_back(event);
+      if(warmup)report["warmup_seconds"]=report["warmup_seconds"].get<double>()+seconds;
+      report["phase"]="checkpoint-save";report["checkpoint_write_state"]="running";report["checkpoint_requested_window"]=window+1;
+      write(output/"result.json",report);begin=tide_bench::Clock::now();
+      save_run_checkpoint(output/"checkpoint",*owner,identity,window+1,r.checkpoint_bytes);
+      const auto checkpoint_seconds=tide_bench::seconds(begin);
+      report[warmup?"warmup_metrics":"metrics"].back()["checkpoint_seconds"]=checkpoint_seconds;
+      report["checkpoint_total_seconds"]=report["checkpoint_total_seconds"].get<double>()+checkpoint_seconds;
+      report["checkpoint"]={{"state","saved"},{"path","checkpoint"},{"next_window",window+1},
+        {"generation","window-"+std::to_string(window+1)},{"seconds",checkpoint_seconds}};
+      report["checkpoint_write_state"]="passed";
+      capture_memory(report,target,"window-"+std::to_string(window)+"-checkpoint",true,devices);
+      if(validate)actual.push_back(std::move(step));
+      write(output/"result.json",report);std::cout<<(warmup?"warmup=":"step=")<<window<<" seconds="<<seconds<<'\n'<<std::flush;
+    };
+    for(Index i=0;i<r.warmup;++i)execute(first+i,true);
+    capture_memory(report,target,"warmup",true,devices);
+    for(Index i=0;i<r.steps;++i)execute(first+r.warmup+i,false);
+    report["execution_completed"]=true;capture_memory(report,target,"measurement",false,devices);
+    const Index next=first+windows;
+    const auto parameters=training&&validate?owner->parameters():std::map<std::string,Tensor>{};
+    const auto trained=training&&validate?owner->training_state():TrainingState{};
+    if(r.checkpoint) {
+      report["phase"]="exact-resume";report["window"]=next;write(output/"result.json",report);
+      const auto saved=owner->checkpoint();const auto a=owner->step(next);
+      const auto x=training?owner->training_state():TrainingState{};
+      const auto px=training?owner->parameters():std::map<std::string,Tensor>{};
+      owner->close();owner.reset();auto restored=make_owner();restore_run_checkpoint(output/"checkpoint",*restored,identity,r.checkpoint_bytes);
+      tide_bench::compare(Result{saved},Result{restored->checkpoint()},true,dtype,{},0.,0.);
+      const auto b=restored->step(next);tide_bench::compare(a.result,b.result,true,dtype,{},0.,0.);
+      if(a.loss!=b.loss)throw tide_bench::ComparisonFailure({tide_bench::DifferenceKind::numeric,"restored objective","exact objective differs"});
+      const auto y=training?restored->training_state():TrainingState{};
+      compare_tensors(px,training?restored->parameters():std::map<std::string,Tensor>{},dtype,"restored parameters",true);
+      compare_tensors(x.gradients,y.gradients,dtype,"restored gradient",true);compare_tensors(x.momentum,y.momentum,dtype,"restored momentum",true);
+      compare_tensors(x.masters,y.masters,dtype,"restored master",true);restored->close();
+      report["exact_resume"]={{"state","passed"},{"checkpoint","checkpoint"},{"next_window",next},{"exact",true},
+        {"scope",training?"raw decode, complete next-window, parameters, gradients, SGD/master; serial new owner":"raw decode and complete next-window; serial new owner"}};
+      capture_memory(report,target,"exact_resume",false,devices);
     }
-    portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);report["construction_seconds"]=tide_bench::seconds(start);
-    capture_memory(report,target,"construction",true,peers);
-    std::vector<Step> actual;auto execute=[&](Index i){report["phase"]=i?"measurement":"warmup";report["window"]=i;
-      return eager?eager->step(i):remote->step(i);};
-    report["phase"]="warmup";report["window"]=0;write(output/"result.json",report);
-    start=tide_bench::Clock::now();actual.push_back(execute(0));portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);report["warmup_seconds"]=tide_bench::seconds(start);
-    capture_memory(report,target,"warmup",true,peers);
-    for(Index step=1;step<=steps;++step){
-      // Persist progress before synchronization/timing, never inside a step.
-      report["phase"]="measurement";report["window"]=step;write(output/"result.json",report);
-      if(observe_work)tide::work::reset(true);
-      portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);start=tide_bench::Clock::now();actual.push_back(execute(step));
-      portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);const auto seconds=tide_bench::seconds(start);
-      auto event=weighted_benchmark::work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
-      if(observe_work){event["packing_work"]=packing_work();tide::work::reset(false);}
-      report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
-    }
-    capture_memory(report,target,"measurement",false,peers);
-    report["phase"]="validation-preparation";write(output/"result.json",report);
-    // Inference does not update parameters. Avoid exporting a second complete
-    // bank, and release the candidate before constructing the independent run.
-    const auto parameters=training?(eager?eager->parameters():remote->parameters()):std::map<std::string,Tensor>{};
-    const bool checked_training=training;
-    const auto trained=training?(eager?eager->training_state():remote->training_state()):TrainingState{};
-    if(checkpoint){
-      report["phase"]="exact-resume";report["window"]=steps+1;write(output/"result.json",report);
-      const auto path=output/"resume.pt";Step a,b;TrainingState x,y;std::map<std::string,Tensor> px,py;
-      if(!training){
-        // The public inference checkpoint carries model aliases and every
-        // continuation field. Retire the first bank before the new device owner.
-        Continuation saved;
-        if(eager){
-          saved=eager->checkpoint();eager->save(path,checkpoint_bytes);a=eager->step(steps+1);eager.reset();
-          Eager restored(data,false,prefill,packing=="scalar",dtype,target,placement,workers,peers,false,return_packing=="packed");
-          restored.restore(path,checkpoint_bytes);
-          tide_bench::compare(Result{saved},Result{restored.checkpoint()},true,dtype,{},0.,0.);
-          b=restored.step(steps+1);
-        }else{
-#ifdef TIDE_WEIGHTED_RESIDENT
-          saved=remote->checkpoint();remote->save(path,checkpoint_bytes);a=remote->step(steps+1);
-          remote->close();remote.reset();auto restored=resident(data,target,false,prefill,dtype,peers);
-          restored->restore(path,checkpoint_bytes);
-          tide_bench::compare(Result{saved},Result{restored->checkpoint()},true,dtype,{},0.,0.);
-          b=restored->step(steps+1);restored->close();
-#endif
-        }
-      }else if(eager){
-        eager->save(path,checkpoint_bytes);Eager restored(data,training,prefill,packing=="scalar",dtype,target,placement,workers,peers,false,return_packing=="packed");restored.restore(path,checkpoint_bytes);
-        a=eager->step(steps+1);b=restored.step(steps+1);x=eager->training_state();y=restored.training_state();
-        px=eager->parameters();py=restored.parameters();
-      }else{
-#ifdef TIDE_WEIGHTED_RESIDENT
-        remote->save(path,checkpoint_bytes);a=remote->step(steps+1);x=remote->training_state();px=remote->parameters();
-        remote->close();remote.reset();
-        auto restored=resident(data,target,training,prefill,dtype,peers);restored->restore(path,checkpoint_bytes);
-        b=restored->step(steps+1);y=restored->training_state();py=restored->parameters();restored->close();
-#endif
+    if(owner){owner->close();owner.reset();}
+    tide_bench::ComparisonReport comparison;
+    if(validate) {
+      // Replay from original material after measurement. The candidate's
+      // checkpoint is never the independent reference's initial state.
+      ExecutionPlacement cpu;cpu.scoring_dtype=r.scoring;const bool storage=r.implementation=="resident"&&dtype==at::kHalf;
+      Eager reference(data,training,!prefill,true,dtype,at::Device(at::kCPU),cpu,1,{},storage);
+      report["reference_precision"]=storage?"fp16-storage-fp32-arithmetic":"same-dtype-eager";
+      report["reference_origin"]="original fixture; independent prefix replay";
+      for(Index i=0;i<first;++i){report["phase"]="reference-prefix";report["window"]=i;write(output/"result.json",report);reference.step(i);}
+      for(Index i=0;i<windows;++i) {
+        report["phase"]="independent-check";report["window"]=first+i;write(output/"result.json",report);
+        const auto expected=reference.step(first+i);
+        if(storage)tide::device_online::weighted_precision_check::validate_storage(actual[i].result,dtype);
+        compare_step(comparison,actual[i],expected,dtype,first+i);report["independent_comparison"]=comparison_json(comparison);
       }
-      tide_bench::compare(a.result,b.result,true,dtype,{},0.,0.);
-      if(a.loss!=b.loss)throw std::runtime_error("restored objective differs");
-      compare_tensors(px,py,dtype,"restored parameters",true);
-      compare_tensors(x.gradients,y.gradients,dtype,"restored gradient",true);
-      compare_tensors(x.momentum,y.momentum,dtype,"restored momentum",true);
-      compare_tensors(x.masters,y.masters,dtype,"restored master",true);
-      report["exact_resume"]={{"state","passed"},{"checkpoint","resume.pt"},{"next_window",steps+1},{"exact",true},
-        {"scope",training?"complete next-window, parameters, gradients, SGD/master":"inference raw decode and complete next-window; serial new owner"}};
-      capture_memory(report,target,"exact_resume",false,peers);
+      if(training){compare_parameters(comparison,parameters,reference.parameters(),dtype,"final parameter");compare_training(comparison,trained,reference.training_state(),dtype);}
+      report["independent_comparison"]=comparison_json(comparison);
     }
-    if(remote)remote->close();eager.reset();remote.reset();
-    // A separate scalar schedule runs only after timing and never guides the candidate.
-    ExecutionPlacement cpu;cpu.scoring_dtype=scoring;
-    const bool storage_reference=implementation=="resident"&&dtype==at::kHalf;
-    Eager reference(data,training,!prefill,true,dtype,at::Device(at::kCPU),cpu,1,{},storage_reference);
-    report["reference_precision"]=storage_reference?"fp16-storage-fp32-arithmetic":"same-dtype-eager";
-    for(Index i=0;i<=steps;++i){report["phase"]="independent-check";report["window"]=i;
-      write(output/"result.json",report);
-      const auto expected=reference.step(i);
-      if(storage_reference)tide::device_online::weighted_precision_check::validate_storage(actual[i].result,dtype);
-      tide_bench::compare(actual[i].result,expected.result,true,dtype,{},dtype==at::kHalf?2e-2:-1.,dtype==at::kHalf?1e-3:-1.);
-      if(std::abs(actual[i].loss-expected.loss)>(dtype==at::kDouble?1e-10:dtype==at::kHalf?1e-3:1e-6)+(dtype==at::kDouble?1e-8:dtype==at::kHalf?2e-2:1e-5)*std::abs(expected.loss))throw std::runtime_error("benchmark objective differs");}
-    if(!parameters.empty())compare_tensors(parameters,reference.parameters(),dtype,"final parameter");
-    if(checked_training){const auto expected=reference.training_state();
-      compare_tensors(trained.gradients,expected.gradients,dtype,"final parameter gradient");
-      compare_tensors(trained.momentum,expected.momentum,dtype,"final SGD momentum");
-      compare_tensors(trained.masters,expected.masters,dtype,"final FP32 master");}
-    report["state"]="passed";report["phase"]="complete";report["post_measurement_complete_records"]=true;
-    report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=checked_training;
-    report["final_parameter_gradients_checked"]=checked_training;write(output/"result.json",report);return 0;
-  }catch(const std::exception& e){report["state"]="failed";report["error"]=e.what();
+    if(r.check_roots){
+      report["phase"]="independent-roots";write(output/"result.json",report);begin=tide_bench::Clock::now();
+      report["independent_roots"]=check_roots(data,r,target,placement,peers,nodes,comparison);
+      synchronize();report["independent_roots_seconds"]=tide_bench::seconds(begin);
+      report["independent_comparison"]=comparison_json(comparison);
+    }
+    const bool strict=validate&&comparison.passed();
+    const bool exploratory=r.validation=="explore"&&comparison.numeric>0&&comparison.discrete==0;
+    report["exploratory_accepted"]=exploratory;report["state"]=strict?"passed":exploratory?"exploratory":validate?"failed":"completed";
+    report["phase"]="complete";report["post_measurement_complete_records"]=strict;
+    report["independent_complete_records_checked"]=validate;report["parameter_values_checked"]=training&&validate;
+    report["optimizer_values_checked"]=training&&validate;report["final_parameter_gradients_checked"]=training&&validate;
+    report["throughput_qualified"]=strict&&r.checkpoint&&!r.observe_work;write(output/"result.json",report);
+    return validate&&!strict&&!exploratory?2:0;
+  }catch(const std::exception& e) {
+    report["state"]="failed";report["error"]=e.what();
+    if(report.value("phase","")=="checkpoint-save")report["checkpoint_write_state"]="failed";
+    if(const auto* mismatch=dynamic_cast<const tide_bench::ComparisonFailure*>(&e))report["comparison_failure"]={
+      {"kind",tide_bench::difference_name(mismatch->difference.kind)},{"path",mismatch->difference.path},{"message",mismatch->difference.message}};
     if(tide::work::packing::enabled()){report["partial_packing_work"]=packing_work();tide::work::reset(false);}
-    if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try{
+    if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try {
       auto record=allocation_failure(*failure);record["execution"]={{"phase",report.value("phase","")},{"window",report.value("window",Index(-1))}};
       write(output/"allocation-failure.json",record);report["allocation_failure"]="allocation-failure.json";
-    }catch(const std::exception& write_error){report["allocation_failure_write_error"]=write_error.what();}
-    if(created)try{write(output/"result.json",report);}catch(const std::exception& write_error){std::cerr<<write_error.what()<<'\n';}
-    std::cerr<<e.what()<<'\n';return 2;}
+    }catch(const std::exception& error){report["allocation_failure_write_error"]=error.what();}
+    if(created)try{write(output/"result.json",report);}catch(const std::exception& error){std::cerr<<error.what()<<'\n';}
+    std::cerr<<e.what()<<'\n';return 2;
+  }
 }

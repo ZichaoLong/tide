@@ -1,10 +1,9 @@
 """Installed-library CLI. No source-tree or benchmark-script dependency."""
 import argparse
 import json
-from .config import GraphConfig
 
 
-def main():
+def legacy_main(argv=None):
     parser = argparse.ArgumentParser(prog="tidegraph", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     inspect = commands.add_parser("inspect", help="normalize and identify a graph configuration")
@@ -25,8 +24,11 @@ def main():
     qualify.add_argument("--threads", type=int, default=1)
     qualify.add_argument("--atol", type=float, help="explicit tensor tolerance, recorded in the report")
     qualify.add_argument("--rtol", type=float, help="explicit tensor tolerance, recorded in the report")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
+        import os
+        os.environ["TORCH_DEVICE_BACKEND_AUTOLOAD"] = "0"
+        from .config import GraphConfig
         config = GraphConfig.load(args.config)
         if args.command == "inspect":
             print(json.dumps(dict(config=config.to_dict(), sha256=config.identity), indent=2))
@@ -47,5 +49,10 @@ def main():
         parser.exit(1, f"{type(error).__name__}: {error}\n")
 
 
+def main(argv=None):
+    from .experiment.cli import main as run
+    return run(argv)
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

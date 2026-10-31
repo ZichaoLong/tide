@@ -1,0 +1,470 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cpu-batch",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/local-cpu.json",
+  "cases": [
+    {
+      "name": "cpu-fc-b1",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-b1",
+        "description": "Fixed d128/4-node model, real staggered samples. Record strict FP32 comparison even when numerical exploration is accepted.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-b8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-b8",
+        "description": "Fixed d128/4-node model, real staggered samples. Record strict FP32 comparison even when numerical exploration is accepted.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 8,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-b32",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-b32",
+        "description": "Fixed d128/4-node model, real staggered samples. Record strict FP32 comparison even when numerical exploration is accepted.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 32,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-b128",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-b128",
+        "description": "Fixed d128/4-node model, real staggered samples. Record strict FP32 comparison even when numerical exploration is accepted.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 128,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-b512",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-b512",
+        "description": "Fixed d128/4-node model, real staggered samples. Record strict FP32 comparison even when numerical exploration is accepted.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 512,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-stream-b8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-stream-b8",
+        "description": "Same model/input as prefill B8; compare online control and actual time-batch sizes.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 8,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "streaming",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-prefill-p8-b8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-prefill-p8-b8",
+        "description": "Longer online prefill/cache at unchanged original logical times; new workload identity.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 8,
+          "positions": 8,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}

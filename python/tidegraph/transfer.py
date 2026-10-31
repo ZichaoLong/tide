@@ -1,30 +1,32 @@
 """Bounded tensor transport with independent public output cotangents."""
 import torch
+from .communication import copy as copy_tensor, policy
 
 PACK_BYTES = 8 * 1024**2
 
 
 class _Rows(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, destination, *rows):
+    def forward(ctx, destination, selected, *rows):
         ctx.set_materialize_grads(False)
         ctx.source = rows[0].device
-        result = tuple(torch.stack(rows).to(destination).unbind())
+        ctx.policy = selected
+        result = tuple(copy_tensor(torch.stack(rows), destination, selected=selected).unbind())
         ctx.mark_non_differentiable(*(v for v, r in zip(result, rows) if not r.requires_grad))
         return result
 
     @staticmethod
     def backward(ctx, *bars):
-        result = [None] * (len(bars) + 1)
-        used = [i for i, g in enumerate(bars) if g is not None and ctx.needs_input_grad[i+1]]
+        result = [None] * (len(bars) + 2)
+        used = [i for i, g in enumerate(bars) if g is not None and ctx.needs_input_grad[i+2]]
         if used:
-            values = copy_rows([bars[i] for i in used], ctx.source)
+            values = copy_rows([bars[i] for i in used], ctx.source, selected=ctx.policy)
             for i, value in zip(used, values):
-                result[i+1] = value
+                result[i+2] = value
         return tuple(result)
 
 
-def copy_rows(rows, destination, budget=PACK_BYTES):
+def copy_rows(rows, destination, budget=PACK_BYTES, *, selected=None):
     """Copy equal vector rows in bounded groups, retaining None versus zero VJPs.
 
     Same-device calls are useful independent anchors; scheduling only invokes
@@ -36,6 +38,7 @@ def copy_rows(rows, destination, budget=PACK_BYTES):
     if not rows:
         return []
     first = rows[0]
+    selected = policy() if selected is None else selected
     if (first.ndim != 1 or first.numel() == 0 or first.layout != torch.strided
             or first.dtype not in (torch.float16, torch.float32, torch.float64)):
         raise ValueError("transfer requires nonempty FP16/FP32/FP64 vector rows")
@@ -46,7 +49,8 @@ def copy_rows(rows, destination, budget=PACK_BYTES):
     result = []
     for start in range(0, len(rows), limit):
         group = rows[start:start+limit]
-        result.extend(_Rows.apply(destination, *group) if len(group) > 1 else [group[0].to(destination)])
+        result.extend(_Rows.apply(destination, selected, *group) if len(group) > 1 or selected != "ordinary"
+                      else [copy_tensor(group[0], destination, selected=selected)])
     return result
 
 

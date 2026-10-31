@@ -47,7 +47,7 @@ def main():
                 parser.error("changed build artifact: "+name)
     out.mkdir(parents=True, exist_ok=False)
     prefix, build = out/"installed", out/"client"
-    files = list((root/"tools/weighted_benchmark").iterdir()) + [root/"cpp/bench/compare.cpp", root/"cpp/bench/streaming.h",
+    files = list((root/"tools/weighted_benchmark").iterdir()) + [root/"cpp/bench/compare.cpp", root/"cpp/bench/comparison.h", root/"cpp/bench/streaming.h",
              root/"tools/device_online/weighted_precision_reference.cpp",
              root/"tools/device_online/weighted_precision_reference.h"]
     report = dict(schema="tide-weighted-benchmark-build-v1", state="running", source=source, dirty=dirty,
@@ -82,6 +82,9 @@ def main():
             raise RuntimeError("source changed during standalone benchmark build")
         report.update(state="passed", binary_sha256=digest(binary), loader_sha256=digest(out/"loader.txt"),
                       help_sha256=digest(out/"help.txt"),
+                      comparison_check_binary_sha256=digest(build/"weighted-comparison-check"),
+                      run_check_binary_sha256=digest(build/"weighted-run-check"),
+                      roots_check_binary_sha256=digest(build/"weighted-roots-check"),
                       return_check_binary_sha256=digest(build/"weighted-return-check"))
     except BaseException as error:
         report.update(state="failed", error=repr(error)); raise

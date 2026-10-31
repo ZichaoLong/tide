@@ -5,6 +5,8 @@
 复制后这些相对文档链接应改为依赖锁中仓库+固定提交的地址；运行代码不使用它们。
 
 本例依赖已安装的`tidegraph`，不读基座源码、tests或scripts；使用公共planning、weighted、checkpoint接口。
+希望通过统一命令使用CPU/CUDA/NPU推理、训练、恢复及HTML结果时，从新增的
+[配置驱动任务示例](configured/README.md)进入；它有独立任务包和实际验证范围。下述旧示例继续演示应用自行组合checkpoint。
 当前起点为FC两层、区域宽2、内容宽8、baseline KV、region共享、B2/P2。可用`--recipe`换成公共recipe合法配置，
 并先在小规模验收。本例的16MiB静态材料预算及1..8步上限是示例资源边界，不是基座模型能力上限。
 它提供CPU PyTorch/Python-native、FP32/FP64、streaming/prefill和scalar/packed显式配置，拒绝不适用组合。

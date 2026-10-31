@@ -1,15 +1,16 @@
 #include "return_packing.h"
+#include "tide/communication.h"
 #include <map>
 #include <tuple>
 namespace weighted_benchmark::return_copy {
 namespace {
-at::Tensor scalar(const at::Tensor& x){return x.detach().cpu().clone();}
+at::Tensor scalar(const at::Tensor& x){return tide::communication_copy(x.detach(),at::Device(at::kCPU),x.scalar_type()).clone();}
 }
 void group(const std::vector<Row>& rows){
   if(rows.empty())return;
   if(rows.size()==1){for(auto* output:rows[0].outputs)*output=scalar(rows[0].value);return;}
   std::vector<at::Tensor> inputs;for(const auto& row:rows)inputs.push_back(row.value.detach().reshape({-1}));
-  const auto flat=at::cat(inputs).cpu();int64_t offset=0;
+  const auto source=at::cat(inputs);const auto flat=tide::communication_copy(source,at::Device(at::kCPU),source.scalar_type());int64_t offset=0;
   for(const auto& row:rows){
     const auto decoded=flat.narrow(0,offset,row.value.numel()).reshape(row.value.sizes());
     for(auto* output:row.outputs)*output=decoded.clone();

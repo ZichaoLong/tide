@@ -8,4 +8,6 @@ constexpr Index transfer_pack_bytes = 8*1024*1024;
 // larger than the packing budget uses one ordinary, indivisible tensor copy.
 std::vector<Tensor> copy_rows(const std::vector<Tensor>& rows, at::Device destination,
                               Index budget = transfer_pack_bytes);
+std::vector<Tensor> copy_rows_with_policy(const std::vector<Tensor>& rows, at::Device destination,
+                                         Index budget, const std::string& policy);
 } // namespace tide

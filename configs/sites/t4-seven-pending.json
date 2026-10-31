@@ -1,0 +1,12 @@
+{
+  "schema": "tide-site-v1",
+  "name": "future-seven-t4-pending",
+  "description": "Unverified migration template for seven T4 cards. It is not evidence of build, execution, communication or performance.",
+  "launcher": "container",
+  "paths": {},
+  "threads": {"workers": 1, "intraop_threads": 1, "interop_threads": 1},
+  "environment": {"TORCH_DEVICE_BACKEND_AUTOLOAD": "0", "NVIDIA_TF32_OVERRIDE": "0"},
+  "resources": {"device_reserve_bytes": 3221225472, "host_reserve_bytes": 8589934592, "disk_reserve_bytes": 1073741824},
+  "requirements": {"backend": "cuda", "device_count": 7, "compute_capability": [7, 5], "qualification": "pending actual target", "resident_protocol": "current conditional CUDA resident implementation requires CC >= 8.0; current sm_75 does not meet that static requirement"},
+  "notes": ["Select a mutually compatible driver, CUDA runtime, Toolkit, Torch/LibTorch and sm_75 operator stack on the new site; do not copy sm_86 binaries.", "Check every intended device and actual directional transfer/gradient behavior; seven is a legal placement count without a power-of-two assumption.", "Add measured free/capacity bytes per logical device before capacity admission. Do not add the nominal 7 x 16 GiB into one budget.", "The launcher may be changed to systemd when the future site has a user manager; no target has been accessed by this template."]
+}

@@ -1,5 +1,6 @@
 // Cast/transfer is an explicit first-order edge and preserves original versions.
 #include "weighted_placement.h"
+#include "tide/communication.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <sstream>
 namespace tide::weighted {
@@ -8,12 +9,13 @@ class Copy final:public torch::autograd::Function<Copy>{
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx,Tensor value,at::Device device,at::ScalarType dtype){
     ctx->set_materialize_grads(false);ctx->save_for_backward({value});
-    return value.to(value.options().device(device).dtype(dtype));
+    auto policy=communication_policy();ctx->saved_data["copy_policy"]=policy;
+    return communication_copy(value,device,dtype,policy);
   }
   static torch::autograd::variable_list backward(torch::autograd::AutogradContext* ctx,torch::autograd::variable_list bars){
     if(at::GradMode::is_enabled())throw std::invalid_argument("weighted placement supports first-order VJP only");
     auto value=ctx->get_saved_variables()[0];
-    return {bars[0].defined()?bars[0].to(value.options()):Tensor{},Tensor{},Tensor{}};
+    return {bars[0].defined()?communication_copy(bars[0],value.device(),value.scalar_type(),ctx->saved_data["copy_policy"].toStringRef()):Tensor{},Tensor{},Tensor{}};
   }
 };
 class Copies final:public torch::autograd::Function<Copies>{
@@ -22,7 +24,8 @@ class Copies final:public torch::autograd::Function<Copies>{
     ctx->set_materialize_grads(false);ctx->save_for_backward(rows.vec());
     torch::autograd::variable_list flat,outputs;
     for(const auto& t:rows)flat.push_back(t.reshape({-1}));
-    auto packed=at::cat(flat).to(rows[0].options().device(device).dtype(dtype));int64_t offset=0;
+    auto policy=communication_policy();ctx->saved_data["copy_policy"]=policy;
+    auto packed=communication_copy(at::cat(flat),device,dtype,policy);int64_t offset=0;
     for(const auto& t:rows){outputs.push_back(packed.narrow(0,offset,t.numel()).reshape(t.sizes()));offset+=t.numel();}
     torch::autograd::variable_list frozen;
     for(size_t i=0;i<rows.size();++i)if(!rows[i].requires_grad())frozen.push_back(outputs[i]);
@@ -34,7 +37,7 @@ class Copies final:public torch::autograd::Function<Copies>{
     for(size_t i=0;i<bars.size();++i)if(bars[i].defined()&&ctx->needs_input_grad(i)){ids.push_back(i);used.push_back(bars[i]);}
     if(!used.empty()){
       torch::autograd::variable_list flat;for(const auto& t:used)flat.push_back(t.reshape({-1}));
-      auto packed=at::cat(flat).to(rows[0].options());int64_t offset=0;
+      auto packed=communication_copy(at::cat(flat),rows[0].device(),rows[0].scalar_type(),ctx->saved_data["copy_policy"].toStringRef());int64_t offset=0;
       for(auto i:ids){result[i]=packed.narrow(0,offset,rows[i].numel()).reshape(rows[i].sizes());offset+=rows[i].numel();}
     }
     return result;
@@ -46,7 +49,7 @@ Tensor placement_copy(const Tensor& value,at::Device device,at::ScalarType dtype
   if(!value.is_floating_point())dtype=value.scalar_type();
   if(value.device()==device&&value.scalar_type()==dtype)return value;
   if(value.requires_grad()&&at::GradMode::is_enabled())return Copy::apply(value,device,dtype);
-  return value.to(value.options().device(device).dtype(dtype));
+  return communication_copy(value,device,dtype);
 }
 void placement_tensors(const std::vector<Tensor*>& handles,at::Device device,at::ScalarType dtype){
   std::map<const void*,Tensor> unique,mapped;std::map<std::string,std::vector<const void*>> groups;

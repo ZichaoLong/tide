@@ -140,8 +140,23 @@ WeightedFlow::WeightedFlow(Graph g,Model m,const Continuation& q,at::Device d,We
   :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,std::move(placement))){}
 WeightedFlow::~WeightedFlow()=default;
 Result WeightedFlow::advance(const std::vector<External>& xs,Index until){
+  advance_device(xs,until);return result();
+}
+void WeightedFlow::advance_device(const std::vector<External>& xs,Index until){
   if(!impl_||impl_->failed)throw std::logic_error("weighted flow closed/failed; restore an earlier checkpoint into a new owner");
-  impl_->execute(xs,until);return impl_->decode();
+  impl_->execute(xs,until);
+}
+Result WeightedFlow::result()const{
+  if(!impl_||impl_->failed||!impl_->ran||at::GradMode::is_enabled())throw std::logic_error("weighted result requires a live no-grad owner and completed window");
+  return impl_->decode();
+}
+std::vector<Output> WeightedFlow::outputs()const{
+  if(!impl_||impl_->failed||!impl_->ran||at::GradMode::is_enabled())throw std::logic_error("weighted outputs require a live no-grad owner and completed window");
+  return impl_->outputs();
+}
+std::map<std::string,Index> WeightedFlow::metrics()const{
+  if(!impl_||impl_->failed||!impl_->ran||at::GradMode::is_enabled())throw std::logic_error("weighted metrics require a live no-grad owner and completed window");
+  return impl_->metrics();
 }
 void WeightedFlow::Impl::execute(const std::vector<External>& xs,Index until){
   if(failed)throw std::logic_error("weighted flow failed; restore an earlier checkpoint into a new owner");

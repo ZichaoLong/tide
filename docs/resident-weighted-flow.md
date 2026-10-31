@@ -99,6 +99,47 @@ NPU通知握手保证coordinator与所有局部数值阶段互斥使用算子wor
 `checkpoint()` 恢复所有实际 raw 字段、时间戳、presence、history、pending、ledger。
 使用既有 Continuation/图身份，图 v13 与 checkpoint v5 不变；磁盘序列化使用现有契约。
 
+## 按需返回与完整诊断
+
+公共 C++ `WeightedFlow::advance_device(inputs, stop)` 执行与 `advance` 相同的设备窗口，
+只保留设备状态和实际 journal；不解码完整 CPU Result。`result()` 显式解码最近已完成窗口，
+`outputs()` 只返回按原 `(time,batch,node,port)` 顺序排列的 CPU 输出，`metrics()` 返回实际
+工作计数。原 `advance()` 仍等于执行后完整 `result()`，默认诊断契约不变。
+新接口要求匹配构建，不能用旧库存在 `advance` 推断它支持按需返回。
+
+Python `WeightedResident.advance(..., return_mode="complete")` 默认仍返回完整 Result。
+`return_mode="outputs"|"metrics"` 返回独立字典：
+
+```python
+{
+    "schema": "tide-resident-return-v1",
+    "return_mode": "outputs",  # metrics 模式的 outputs 为 None
+    "start": 0, "stop": 10,
+    "outputs": [(sample, original_time, physical_port, payload)],
+    "stats": {"candidate_updates": 0, "full_calls": 0, "received_atoms": 0,
+              "messages": 0, "outputs": 0, "stages": 0, "pending": 0},
+}
+```
+
+这里的字段形式示例不是运行结果；stats 还包含原有 `resident_stages`、
+`full_evaluations` 和物理 bank/workspace/行数等资源统计。所有工作计数取自实际设备
+journal/queue，按当前阶段 mask 去除前窗残留行，再将 int64 汇总一次取回。
+`outputs()` 仅压紧实际 presence/active 输出行，保留 payload dtype、物理重复端口，
+每个返回 Tensor 独立 clone；零值不代表缺席。ATen 临时 packing 以 8 MiB 分组，
+单个超宽行不可拆分；额外瞬时分配与同步须计入实际峰值和计时。
+
+`advance_device()`、`result()`、`outputs()`、`metrics()` 也可单独调用。
+轻量字典没有伪造的 Continuation、trace、消息或完整正确性结论；需要完整检查时显式
+调用 `result()`/`checkpoint()`。它们读取实际保存张量，不重跑模型、参考或轨迹。
+失败/关闭 owner、尚未完成窗口及开启 autograd 的调用继续拒绝。
+
+此路径避免未请求的 CPU 解码/传输，**仍然分配并写入完整设备 journal**，
+不声称减少窗口内调度、数值计算或 journal 容量。完整与按需返回采用不同配置身份和
+计时口径；不得用其耗时直接替换旧完整返回加速比。
+对应检查在 `weighted_flow_check.cpp`、`test_resident_weighted_flow.py`：
+输出逐值、实际计数、长窗后空窗的旧行排除、完整独立记录、checkpoint 与状态续接。
+`test_resident_return_contract.py` 仅检查 Python 选择/旧库拒绝，不是设备资格。
+
 ## 独立核验与范围
 
 `cpp/test/parameter_bank.cpp` 用手算字节数、精确边界、共享角色的独立存储、half拓宽与

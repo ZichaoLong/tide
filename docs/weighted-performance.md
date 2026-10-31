@@ -46,7 +46,8 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 
 测量结束后才执行独立CPU时间递归，核对全部窗口记录、loss和最终参数值。
 CPU eager/native另导出实际最终参数梯度与SGD动量槽，保留None/连接零，分别对照。
-Python还比较完整optimizer state_dict；standalone的本入口只有固定SGD组，比较所有owner的动量槽。
+Python还比较完整optimizer state_dict；standalone本入口采用SGD组，比较所有owner的动量槽。
+其默认loss/学习率/动量/weight decay保留原值；公共实验可显式配置这些量并作为新task身份记录。
 最后导出在计时之外；它认证最后窗口梯度/更新槽，不声称逐窗全部梯度都已保存。
 
 显式`--mode inference --checkpoint-check`对Python消费者，或standalone的
@@ -112,6 +113,9 @@ NEW_BUILD/client/weighted-benchmark --fixture NEW_FIXTURE_JSON --device cpu \
 C++计时后使用另一个独立scalar调度核对全部记录、loss、最终SGD参数及上述最后梯度/动量，局部函数锚点沿语义索引追溯。
 训练计时包含新建独立输入、完整CPU返回、loss、VJP、finite checks、SGD和同步；
 结果文件采用fsynced staging及原子替换，存在的运行目录直接拒绝。
+公共运行增加严格/探索/未检查分类、最小返回、逐窗持久checkpoint及外部恢复，
+其参数、独立参考起点和不同计时口径见[实验验收](experiment-validation.md#独立-libtorch-入口)。
+每窗checkpoint写盘计时单列，不能混入或隐去计算/通信测量；写入时须给新旧两份文件预算。
 
 ## 启动与内存观测
 

@@ -1,0 +1,12 @@
+{
+  "schema": "tide-site-v1",
+  "name": "gpu3090-container",
+  "description": "RTX3090 container template; reuse its selected private CUDA/Torch environment after doctor checks it.",
+  "launcher": "container",
+  "paths": {},
+  "threads": {"workers": 1, "intraop_threads": 1, "interop_threads": 1},
+  "environment": {"TORCH_DEVICE_BACKEND_AUTOLOAD": "0", "NVIDIA_TF32_OVERRIDE": "0"},
+  "resources": {"device_reserve_bytes": 4294967296, "host_reserve_bytes": 8589934592, "disk_reserve_bytes": 1073741824},
+  "requirements": {"backend": "cuda", "architecture": "x86_64", "compute_capability": [8, 6], "selected_stack_history": "Torch 2.12.1+cu130 / CUDA Toolkit 13.0; recheck actual installation"},
+  "notes": ["Fill native_library/resident_library/standalone_binary with the actual separately built manifests; no old binary is relabelled as rebuilt.", "Last peer observation had no direct P2P/native cross-device atomics. Ordinary, blocking and cpu_bridge are separate eager requests; copy success is not multi-device resident qualification.", "Free memory and resource contention must be measured before each capacity run."]
+}

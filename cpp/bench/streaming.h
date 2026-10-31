@@ -1,6 +1,7 @@
 #pragma once
 #include "portable_torch/runtime.hpp"
 #include "tide/cursor.h"
+#include "comparison.h"
 #include <chrono>
 
 namespace tide_bench {

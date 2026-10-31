@@ -1,0 +1,140 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cuda-precision",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/gpu3090.json",
+  "cases": [
+    {
+      "name": "cuda-fp16-inference-b128",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-fp16-inference-b128",
+        "description": "Explicit FP16 payload/FP32 scoring, independent dtype tolerance and strict discrete checks.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 128
+          }
+        },
+        "task": {
+          "samples": 128,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float16",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cuda-fp16-training",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-fp16-training",
+        "description": "Small FP16 training with FP32 master/slot policy and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float16",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}

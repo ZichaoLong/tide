@@ -1,8 +1,10 @@
 #include "benchmark.h"
 #include "return_packing.h"
+#include "../../cpp/bench/comparison.h"
+#include "tide/communication.h"
 namespace weighted_benchmark {
 namespace {
-void scalar(Tensor& x){if(x.defined())x=x.detach().cpu().clone();}
+void scalar(Tensor& x){if(x.defined())x=communication_copy(x.detach(),at::Device(at::kCPU),x.scalar_type()).clone();}
 template<class Copy> void state(State& s,Copy copy){copy(s.value);for(auto& [_,x]:s.slots)copy(x);}
 template<class Copy> void history(History& h,Copy copy){for(auto& [_,x]:h.tensors)copy(x);}
 template<class Copy> void continuation(Continuation& q,Copy copy){
@@ -28,15 +30,15 @@ Json activity(const Result& r){
   for(const auto& o:r.outputs)++rows.at(o.batch).outputs;
   for(const auto& [owner,state]:r.continuation.states){auto found=state.slots.find("times");if(found==state.slots.end())continue;
     const auto& times=found->second;
-    if(!times.device().is_cpu()||times.scalar_type()!=at::kLong||times.dim()!=1)
-      throw std::invalid_argument("activity observation requires decoded CPU int64 KV timestamps");
+    if(times.scalar_type()!=at::kLong||times.dim()!=1)
+      throw std::invalid_argument("activity observation requires int64 KV timestamps");
     auto& row=rows.at(owner.first);++row.owners;++row.cache[times.numel()];++total[times.numel()];}
   auto histogram=[](const std::map<Index,Index>& counts){Json out=Json::object();for(const auto& [length,n]:counts)out[std::to_string(length)]=n;return out;};
   Json samples=Json::array();
   for(size_t b=0;b<rows.size();++b){const auto& row=rows[b];samples.push_back({{"sample",b},{"candidates",row.candidates},
     {"full",row.full},{"received_atoms",row.received},{"messages",row.messages},{"outputs",row.outputs},{"pending",row.pending},
     {"stored_kv_owners",row.owners},{"raw_kv_cache_lengths",histogram(row.cache)}});}
-  return {{"scope","decoded complete return; raw stored KV lengths, not visible query buckets; outside window timing"},
+  return {{"scope","actual record metadata; raw stored KV lengths, not visible query buckets; no timestamp value copies"},
     {"samples",samples},{"raw_kv_cache_lengths",histogram(total)}};
 }
 }
@@ -49,9 +51,19 @@ Result detached(Result r,bool packed){
   return_copy::tensors(fields,packed);
   return r;
 }
-Tensor loss(const Result& r,bool allow_empty){
+Result projected(Result r,const std::string& mode,bool packed){
+  if(mode=="complete")return detached(std::move(r),packed);
+  Result out;out.continuation.identity=r.continuation.identity;out.continuation.cut=r.continuation.cut;
+  out.continuation.batch_size=r.continuation.batch_size;
+  if(mode=="outputs"){
+    out.outputs=std::move(r.outputs);std::vector<Tensor*> fields;
+    for(auto& o:out.outputs)fields.push_back(&o.value);return_copy::tensors(fields,packed);
+  }else if(mode!="metrics")throw std::invalid_argument("unknown return mode");
+  return out;
+}
+Tensor loss(const Result& r,bool allow_empty,double scale){
   std::vector<Tensor> parts;for(const auto& o:r.outputs){auto x=o.value.scalar_type()==at::kHalf?o.value.to(at::kFloat):o.value;
-    parts.push_back((x[0]*x.slice(0,1)).square().sum()*.001);}
+    parts.push_back((x[0]*x.slice(0,1)).square().sum()*scale);}
   if(parts.empty()){
     if(allow_empty)return at::zeros({});
     throw std::runtime_error("benchmark produced no outputs");
@@ -66,15 +78,9 @@ Json work(const Result& r){
 }
 void compare_tensors(const std::map<std::string,Tensor>& actual,const std::map<std::string,Tensor>& expected,
                      at::ScalarType dtype,const std::string& label,bool exact){
-  if(actual.size()!=expected.size())throw std::runtime_error(label+" owner count differs");
-  for(const auto& [name,value]:expected){
-    const auto found=actual.find(name);
-    if(found==actual.end())throw std::runtime_error(label+" owner missing: "+name);
-    const auto& got=found->second;
-    if(got.defined()!=value.defined())throw std::runtime_error(label+" None/zero differs: "+name);
-    if(value.defined()&&(got.sizes()!=value.sizes()||got.scalar_type()!=value.scalar_type()||
-        !at::allclose(got,value,exact?0.:dtype==at::kDouble?1e-8:dtype==at::kHalf?2e-2:1e-5,exact?0.:dtype==at::kDouble?1e-10:dtype==at::kHalf?1e-3:1e-6)))
-      throw std::runtime_error(label+" differs: "+name);
-  }
+  const auto report=tide_bench::collect_tensors(actual,expected,dtype,label,
+    exact?0.:dtype==at::kDouble?1e-8:dtype==at::kHalf?2e-2:1e-5,
+    exact?0.:dtype==at::kDouble?1e-10:dtype==at::kHalf?1e-3:1e-6);
+  if(!report.passed())throw tide_bench::ComparisonFailure(report.differences.front());
 }
 }

@@ -96,7 +96,8 @@ def validate_model(model):
     return inv
 
 
-def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None, input_pattern=None):
+def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None,
+             input_pattern=None, input_origins=None):
     """Bind input windows, never a reference trajectory, to a resolved model."""
     inv = validate_model(model)
     for value, name in ((samples, "samples"), (positions, "positions")):
@@ -118,6 +119,13 @@ def workload(model, *, samples=1, positions=1, seed=7, stride=None, recipe=None,
                 state_boundary="connected windows; detach at optimizer boundary")
     if input_pattern is not None:
         plan["input_pattern"] = input_pattern
+    if input_origins is not None:
+        plan["input_origins"] = deepcopy(input_origins)
+        plan["schema"] = "tide-weighted-workload-v3"
+    from .hierarchy import input_origins as resolve_origins
+    origins = resolve_origins(plan)
+    if input_origins is not None:
+        plan["input_origins"] = list(origins)
     plan["inventory"] = dict(sha256=inv["sha256"], totals=inv["totals"], owners=len(inv["owners"]))
     plan["memory_floor"] = memory_floor(plan, inv)
     plan["sha256"] = fingerprint(plan)

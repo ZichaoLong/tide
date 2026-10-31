@@ -42,6 +42,8 @@ void bind_weighted_training(py::module_& m){
     .def("optimizer_groups",&WeightedTrainingSession::optimizer_groups)
     .def("node_devices",&WeightedTrainingSession::node_devices)
     .def("result",&WeightedTrainingSession::result,py::call_guard<py::gil_scoped_release>())
+    .def("outputs",&WeightedTrainingSession::outputs,py::call_guard<py::gil_scoped_release>())
+    .def("metrics",&WeightedTrainingSession::metrics,py::call_guard<py::gil_scoped_release>())
     .def("close",&WeightedTrainingSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&WeightedTrainingSession::cut).def_property_readonly("generation",&WeightedTrainingSession::generation);
 }

@@ -1,5 +1,6 @@
 #include "tide/transfer.h"
 #include "tide/device.h"
+#include "tide/communication.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <algorithm>
 #include <stdexcept>
@@ -10,23 +11,24 @@ using torch::autograd::AutogradContext;
 using torch::autograd::variable_list;
 class CopyRows final : public torch::autograd::Function<CopyRows> {
  public:
-  static variable_list forward(AutogradContext* ctx, at::TensorList rows, at::Device destination) {
+  static variable_list forward(AutogradContext* ctx, at::TensorList rows, at::Device destination, std::string policy) {
     ctx->set_materialize_grads(false);
     ctx->saved_data["source"]=rows[0].device().str();
-    auto outputs=at::stack(rows).to(destination).unbind(0);
+    ctx->saved_data["copy_policy"]=policy;
+    auto outputs=communication_copy(at::stack(rows),destination,rows[0].scalar_type(),policy).unbind(0);
     variable_list frozen;
     for(size_t i=0;i<rows.size();++i)if(!rows[i].requires_grad())frozen.push_back(outputs[i]);
     ctx->mark_non_differentiable(frozen);
     return outputs;
   }
   static variable_list backward(AutogradContext* ctx, variable_list grads) {
-    variable_list result(grads.size()+1),used;
+    variable_list result(grads.size()+2),used;
     std::vector<size_t> ids;
     for(size_t i=0;i<grads.size();++i)if(grads[i].defined()&&ctx->needs_input_grad(i)) {
       ids.push_back(i);used.push_back(grads[i]);
     }
     if(!used.empty()) {
-      auto values=copy_rows(used,at::Device(ctx->saved_data["source"].toStringRef()));
+      auto values=copy_rows_with_policy(used,at::Device(ctx->saved_data["source"].toStringRef()),transfer_pack_bytes,ctx->saved_data["copy_policy"].toStringRef());
       for(size_t i=0;i<ids.size();++i)result[ids[i]]=values[i];
     }
     return result;
@@ -34,6 +36,9 @@ class CopyRows final : public torch::autograd::Function<CopyRows> {
 };
 }
 std::vector<Tensor> copy_rows(const std::vector<Tensor>& rows,at::Device destination,Index budget) {
+  return copy_rows_with_policy(rows,destination,budget,communication_policy());
+}
+std::vector<Tensor> copy_rows_with_policy(const std::vector<Tensor>& rows,at::Device destination,Index budget,const std::string& policy) {
   if(budget<1)throw std::invalid_argument("transfer packing budget must be positive");
   if(rows.empty())return {};
   const auto& first=rows[0];
@@ -47,9 +52,9 @@ std::vector<Tensor> copy_rows(const std::vector<Tensor>& rows,at::Device destina
   std::vector<Tensor> result;result.reserve(rows.size());
   for(size_t start=0;start<rows.size();) {
     const auto count=std::min<size_t>(limit,rows.size()-start);
-    if(count==1)result.push_back(rows[start].to(destination));
+    if(count==1&&policy=="ordinary")result.push_back(communication_copy(rows[start],destination,rows[start].scalar_type(),policy));
     else {
-      auto values=CopyRows::apply(at::TensorList(rows.data()+start,count),destination);
+      auto values=CopyRows::apply(at::TensorList(rows.data()+start,count),destination,policy);
       result.insert(result.end(),values.begin(),values.end());
     }
     start+=count;

@@ -66,17 +66,20 @@ Result WeightedFlow::Impl::decode()const{
   std::sort(result.trace.begin(),result.trace.end(),[](const Event& a,const Event& b){return std::tie(a.time,a.batch,a.node)<std::tie(b.time,b.batch,b.node);});
   std::sort(result.messages.begin(),result.messages.end(),[&](const Atom& a,const Atom& b){return std::tie(a.position,a.batch,graph.edges[a.source].source,a.source)<std::tie(b.position,b.batch,graph.edges[b.source].source,b.source);});
   std::sort(result.outputs.begin(),result.outputs.end(),[&](const Output& a,const Output& b){return std::tie(a.time,a.batch,graph.outputs[a.port],a.port)<std::tie(b.time,b.batch,graph.outputs[b.port],b.port);});
+  result.stats=statistics(count,received,fibers,fulls,result.messages.size());return result;
+}
+std::map<std::string,Index> WeightedFlow::Impl::statistics(Index count,Index received,Index fibers,Index fulls,Index messages)const{
   int64_t bank_roles=0,bank_storage=0;std::set<const void*> storage;
   auto banks=[&](const WeightedBanks& b){for(const auto& [_,role]:b.roles()){
     bank_roles+=role.bank.nbytes();if(storage.insert(role.bank.storage().unsafeGetStorageImpl()).second)bank_storage+=role.bank.storage().nbytes();}};
   for(const auto& n:nodes)banks(n->banks);for(const auto& r:regions)banks(r->banks);
-  result.stats={{"resident_stages",count},{"candidate_updates",fibers},{"full_evaluations",fulls},{"received_atoms",received},
-    {"messages",static_cast<int64_t>(result.messages.size())},{"one_time_per_region",1},{"resident_tensor_bytes",bytes},
+  return {{"resident_stages",count},{"candidate_updates",fibers},{"full_evaluations",fulls},{"received_atoms",received},
+    {"messages",messages},{"one_time_per_region",1},{"resident_tensor_bytes",bytes},
     {"physical_local_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
     {"physical_full_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
     {"operator_workspace_bytes",services->workspace_bytes()+peers->workspace_bytes()},
     {"node_peer_devices",peers->size()},{"node_peer_packet_bytes",peers->packet_bytes()},
     {"parameter_role_bytes",bank_roles},{"unique_parameter_bank_bytes",bank_storage},
-    {"ready_value_copy_bytes",count*limits.queue*model.width()*model.nodes[0].bias.element_size()}};return result;
+    {"ready_value_copy_bytes",count*limits.queue*model.width()*model.nodes[0].bias.element_size()}};
 }
 }

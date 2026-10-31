@@ -591,3 +591,16 @@ KV 共享准备可在同一合法块中进一步批量求值同形私有适配/s
 [core-5计划](core5-study.md)将静态配置/清单及实际构造公开到`tidegraph.planning`。
 模型配置在分配张量前按原Config展开并校验；数学模型身份与工作负载/执行/测量身份分开。
 公共包改为按需导入，静态配置不载入Torch。原图/checkpoint版本、旧计划v1及已有函数身份不变。
+
+显式逐物理输入端口时间原点使用 `tide-weighted-workload-v3`；v1/v2 不接受
+`input_origins`，防止旧读取器忽略该字段。无显式原点仍生成原 v2 身份，
+ranked 图默认端口 rank、其他图默认 0。`tide-graph-execution-view-v1` 描述
+同实例的 Settle/TimedDAG/PDG 身份嵌入，不能改变图、时钟、参数或记录；
+改变延迟、增加反馈必须创建新模型。图/checkpoint 和固定数学版本均不改变。
+`tide-comparison-v1` 将有限数值超差与精确离散差异分列；探索不改变严格阈值，
+结构和非有限值仍失败。接口、版本与独立检查见[实验验收](experiment-validation.md)。
+
+standalone 消费者结果 `tide-weighted-standalone-benchmark-v2` 分列执行、严格/探索比较、
+返回口径和恢复。消费者持久任务边界使用 `tide-weighted-run-checkpoint-v1` manifest
+及 `tide-weighted-checkpoint-pointer-v1` 原子 generation 指针；内层公共图/参数/optimizer
+checkpoint 编码不变。该运行包装不改变图、数学或设备常驻协议。

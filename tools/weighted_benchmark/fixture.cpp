@@ -41,7 +41,8 @@ Fixture fixture(const Json& data,at::ScalarType dtype){
     throw std::invalid_argument("unknown benchmark fixture schema");
   const auto& config=data.at("config");Fixture f;auto& g=f.graph;auto& m=f.model;
   f.span=data.at("span");f.samples=config.at("samples");f.positions=config.at("positions");
-  if(f.samples<1||f.samples>512||f.positions<1||f.positions>128||f.span<1||f.span>(int64_t(1)<<59))
+  const bool legacy=data.at("schema")=="tide-weighted-benchmark-fixture-v1";
+  if(f.samples<1||f.positions<1||(legacy&&(f.samples>512||f.positions>128))||f.span<1||f.span>(int64_t(1)<<59))
     throw std::invalid_argument("benchmark fixture exceeds bounded windows");
   const auto& graph=data.at("graph");
   for(const auto& x:graph.at("nodes")){

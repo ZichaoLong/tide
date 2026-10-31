@@ -50,9 +50,9 @@ void capture_memory(Json& report,at::Device device,const std::string& phase,bool
   if(!report.contains("memory"))report["memory"]={
     {"schema","tide-weighted-memory-v1"},
     {"scope","process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak"},
-    {"sampling","outside step timers; peaks reset after runtime_ready, construction and warmup"},
+    {"sampling","outside step timers; each phase records whether peaks reset after sampling"},
     {"phases",Json::array()}};
-  Json row{{"phase",phase},{"process_lifetime_peak_rss_bytes",rss}};device_memory(row,device,reset);
+  Json row{{"phase",phase},{"process_lifetime_peak_rss_bytes",rss},{"peaks_reset_after",reset}};device_memory(row,device,reset);
   if(!peers.empty()){
     row["devices"]=Json::array();
     for(auto d:peers){Json p;if(d==device){p=row;p.erase("devices");p.erase("phase");p.erase("process_lifetime_peak_rss_bytes");}

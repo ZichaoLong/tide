@@ -11,3 +11,8 @@ from .model import resolve_model, validate_model, workload
 from .execution import ExecutionSpec, MeasurementSpec
 
 __all__ += ["resolve_model", "validate_model", "workload", "ExecutionSpec", "MeasurementSpec"]
+
+from .placement import plan_payload_placement
+from .capacity import capacity_budget
+
+__all__ += ["plan_payload_placement", "capacity_budget"]

@@ -37,11 +37,15 @@ topology、profile、实际family、client、device、placement、dtype、kind�
 | --- | --- | --- |
 | 数学模型 | [resolve_model](../python/tidegraph/planning/model.py) | 物理图/端口、全部展开的局部配置、SrcClass、共享绑定、聚合尺度；独立角色清单 |
 | 工作负载 | 同文件的 `workload` | 模型身份、输入策略、样本/原始时间窗、初值种子；不含参考轨迹 |
+| 图层级视图 | [execution_view](../python/tidegraph/planning/hierarchy.py) | 同模型和原输入时钟的 Settle/TimedDAG/PDG 视图；反馈/变延迟另建新模型 |
 | 执行 | [ExecutionSpec](../python/tidegraph/planning/execution.py) | 三种client、设备/peer、放置、dtype、scoring dtype、streaming/prefill、算子/packing、线程；请求和生效设置分列 |
 | 测量 | 同文件的 `MeasurementSpec` | 工作负载/执行身份、推理或完整训练、warmup/步数、恢复检查、超时 |
 
 模型身份不因设备或样本窗改变，工作负载身份会因输入改变；实际测量还须固定源码、材料与环境。
 身份是追溯键，**不是资格认证**。实现版本、构建、真机检查、数值失败与性能结果单独记录。
+显式物理端口原点使用 workload v3，旧 v1/v2 与无显式原点的现有身份保留。
+一般 Settle 端口/同秩区域材料、有限三平台选点和严格/探索结果边界见
+[实验验收](experiment-validation.md)；视图记录本身不能替代实际调度证据。
 输入默认保留原密集材料和hash。显式`window.input_pattern="staggered-v1"`（公共
 `workload/prepare`或`prepare_core5_study.py --input-pattern staggered-v1`）按样本提供
 `P-(sample%min(3,P))`个原始逻辑位置；多端口时省略满足

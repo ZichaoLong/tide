@@ -1,0 +1,272 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cuda-resident",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/gpu3090.json",
+  "cases": [
+    {
+      "name": "cuda-resident-b1",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-resident-b1",
+        "description": "Device-owned row/time batching; static layout refusal is a resource fact. Reopen only with explicit reviewed limits/profile, never silently alter batch.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cuda-resident-b128",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-resident-b128",
+        "description": "Device-owned row/time batching; static layout refusal is a resource fact. Reopen only with explicit reviewed limits/profile, never silently alter batch.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 128,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cuda-resident-b512",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-resident-b512",
+        "description": "Device-owned row/time batching; static layout refusal is a resource fact. Reopen only with explicit reviewed limits/profile, never silently alter batch.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 512,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cuda-resident-training",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-resident-training",
+        "description": "Single-device resident first-order SGD/root/checkpoint boundary; inference cannot certify training.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}

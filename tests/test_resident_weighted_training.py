@@ -92,7 +92,17 @@ def check_cut_updates_and_disk_resume(family, topology, kind, storage_dtype, tmp
                     expected = reference(cpu.graph, cpu.model, q, ref_part, stop, sealed_until=stop)
                     q = expected.continuation
                     losses.extend(x[-1].sum()*(.07 if mode == "outputs" else 0.) for x in expected.outputs)
-                assert_records(session.result(), expected, storage_dtype)
+                complete = session.result()
+                assert_records(complete, expected, storage_dtype)
+                outputs = session.outputs()
+                assert len(outputs) == len(complete.outputs)
+                for actual_output, full_output in zip(outputs, complete.outputs):
+                    assert actual_output[:3] == full_output[:3]
+                    assert torch.equal(actual_output[3], full_output[3])
+                metrics = session.metrics()
+                assert all(metrics[key] == value for key, value in complete.stats.items())
+                assert metrics["outputs"] == len(complete.outputs)
+                assert metrics["pending"] == len(complete.continuation.pending)
                 for name, value in w.metadata.items():
                     if not name.endswith("present"): assert value.dtype == torch.int64
             with torch.enable_grad():

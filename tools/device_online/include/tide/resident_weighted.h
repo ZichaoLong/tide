@@ -20,6 +20,12 @@ class WeightedFlow {
   // Seals the complete input interval [current cut, until). All recursive
   // readiness, selection and progress within this interval remain on device.
   Result advance(const std::vector<External>&,Index until);
+  // Execute the same window without copying its full journal/raw state to CPU.
+  // The current device journal remains allocated and is overwritten next call.
+  void advance_device(const std::vector<External>&,Index until);
+  Result result()const; // Explicit complete decode of the latest actual window.
+  std::vector<Output> outputs()const; // Detached CPU output values only, canonical order.
+  std::map<std::string,Index> metrics()const; // Actual counts; no numerical replay.
   Continuation checkpoint()const; // Detached exact raw state, ledger and pending.
   int64_t reserved_bytes()const;
   std::vector<at::Device> node_devices()const;

@@ -20,6 +20,9 @@ class ExecutionSpec:
     intraop_threads: int = 1
     interop_threads: int = 1
     peer_devices: tuple[str, ...] = ()
+    node_devices: tuple[str, ...] = ()
+    communication: str = "ordinary"
+    return_mode: str = "complete"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
@@ -45,6 +48,19 @@ class ExecutionSpec:
                       or any(not re.fullmatch(self.device.split(":")[0]+r":[0-9]+", p) for p in peers)):
             raise ValueError("peer devices must be distinct same-backend accelerators, first equal to device")
         object.__setattr__(self, "peer_devices", peers)
+        owners = tuple(self.node_devices)
+        available = peers or (self.device,)
+        if any(d not in available for d in owners):
+            raise ValueError("node_devices must use device/peer_devices; provide one owner for every node")
+        if owners and self.placement != "resident" and owners[0] != self.device:
+            raise ValueError("eager node_devices[0] must equal device")
+        object.__setattr__(self, "node_devices", owners)
+        if self.communication not in {"ordinary", "blocking", "cpu_bridge"}:
+            raise ValueError("communication must be ordinary, blocking or cpu_bridge")
+        if self.return_mode not in {"complete", "outputs", "metrics"}:
+            raise ValueError("return_mode must be complete, outputs or metrics")
+        if self.placement == "resident" and self.communication != "ordinary":
+            raise ValueError("resident requires its device peer protocol; eager communication policies do not apply")
         if self.device == "cpu" and self.placement not in {"native", "cpu"}:
             raise ValueError("accelerator placement requires an accelerator")
         if self.device != "cpu" and self.placement == "cpu":
@@ -67,12 +83,19 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
+        extended = bool(self.node_devices) or self.communication != "ordinary" or self.return_mode != "complete"
+        if not extended:
+            # Historical v1 identities remain byte-for-byte reproducible. These
+            # default values introduce no new selection into an old record.
+            for key in ("node_devices", "communication", "return_mode"):
+                requested.pop(key)
         effective = dict(requested)
         if self.packing == "auto":
             effective["packing"] = "scalar" if self.client == "pytorch" and self.schedule == "streaming" else "packed"
         if self.placement == "resident":
             effective["operator"] = "aten+device-control"
-        body = dict(schema="tide-weighted-execution-v1", requested=requested, effective=effective,
+        body = dict(schema="tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
+                    requested=requested, effective=effective,
                     qualification="implementation selection only; exact-device evidence is separate")
         return dict(body, execution_id=fingerprint(body))
 

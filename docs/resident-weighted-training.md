@@ -49,6 +49,13 @@ Raw字段保持自身shape，ragged字段加capacity轴。metadata中的`node.v.
 公共Python入口为`WeightedResidentTraining`，原生为`tide::device_online::WeightedTrainingSession`，
 安装目标`tide::weighted_training`。所有方法要求no-grad；任务loss在独立autograd上下文计算。
 advance只执行设备窗口并导出实际字段，不强制CPU完整解码；`result()`显式解码，更新后旧journal失效。
+`outputs()` 和 `metrics()` 提供最近窗口的只读按需返回，契约见
+[resident返回](resident-weighted-flow.md#按需返回与完整诊断)。前者是独立CPU输出副本，
+后者从实际journal/queue汇总int64工作量，不建立替代VJP或新owner。
+任务head/loss仍消费 `advance().fields` 的设备张量及原metadata来绑定独立根；
+不能对这些CPU诊断副本调用backward来冒充resident声明VJP。
+这些读取须在成功 `step()` 之前完成；更新发布会使旧journal失效，随后调用继续拒绝。
+它们不解除完整记录、独立梯度根、共享贡献、跨窗、optimizer槽及checkpoint的严格验收。
 `backward`消费同一generation的全部窗口；`accumulate`保留参数梯度并切断状态梯度，最后一批也须显式累积；
 `step`按canonical owner更新，再发布每个实际角色bank及CPU参数镜像。None不触发权衰减/step计数，连接零参与更新。
 所有冻结/部分冻结参数保持身份。调用者改写原参数、已保存视图（含mask/int64元数据）或待消费梯度均拒绝。

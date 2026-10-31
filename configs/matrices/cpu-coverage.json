@@ -1,0 +1,1062 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cpu-coverage",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/local-cpu.json",
+  "cases": [
+    {
+      "name": "cpu-fc-settle",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-settle",
+        "description": "Aligned physical topology; complete control/state/ports and exact continuation.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-nonaligned",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-nonaligned",
+        "description": "New model with an actual changed physical delay, not a renamed layered instance.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "non-aligned",
+              "edge_index": 0,
+              "extra_delay": 1
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "timed-dag",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-feedback",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-feedback",
+        "description": "Actual positive-delay feedback cycle, pending feedback and original logical time.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "feedback",
+              "delay": 2
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "pdg",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-hb-settle",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-hb-settle",
+        "description": "Aligned physical topology; complete control/state/ports and exact continuation.",
+        "model": {
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "depth": 1,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-hb-nonaligned",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-hb-nonaligned",
+        "description": "New model with an actual changed physical delay, not a renamed layered instance.",
+        "model": {
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "depth": 1,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "non-aligned",
+              "edge_index": 0,
+              "extra_delay": 1
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "timed-dag",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-hb-feedback",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-hb-feedback",
+        "description": "Actual positive-delay feedback cycle, pending feedback and original logical time.",
+        "model": {
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "depth": 1,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "feedback",
+              "delay": 2
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "pdg",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-lh-settle",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-lh-settle",
+        "description": "Aligned physical topology; complete control/state/ports and exact continuation.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-lh-nonaligned",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-lh-nonaligned",
+        "description": "New model with an actual changed physical delay, not a renamed layered instance.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "non-aligned",
+              "edge_index": 0,
+              "extra_delay": 1
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "timed-dag",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-lh-feedback",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-lh-feedback",
+        "description": "Actual positive-delay feedback cycle, pending feedback and original logical time.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          },
+          "transforms": [
+            {
+              "kind": "feedback",
+              "delay": 2
+            }
+          ]
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "pdg",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-view-timed-dag",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-view-timed-dag",
+        "description": "Same physical/model/workload identity as fc-settle, embedded in another legal level.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "timed-dag",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-fc-view-pdg",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-fc-view-pdg",
+        "description": "Same physical/model/workload identity as fc-settle, embedded in another legal level.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 16
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "pdg",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-general-settle",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-general-settle",
+        "description": "Same-rank independent regions, parallel edges, interior and repeated physical ports.",
+        "model": {
+          "definition": {
+            "graph": {
+              "counts": {
+                "body_edges": 3,
+                "body_nodes": 3,
+                "encoded_edges": 10,
+                "encoded_nodes": 5,
+                "longest_body_delay": 2,
+                "output_reachable_nodes": 3,
+                "reachable_nodes": 3
+              },
+              "edges": [
+                [
+                  0,
+                  2,
+                  2
+                ],
+                [
+                  0,
+                  2,
+                  2
+                ],
+                [
+                  1,
+                  2,
+                  2
+                ]
+              ],
+              "inputs": [
+                0,
+                1,
+                2,
+                2
+              ],
+              "kind": "ranked-local",
+              "node_regions": [
+                0,
+                1,
+                2
+              ],
+              "nodes": 3,
+              "outputs": [
+                0,
+                2,
+                2
+              ],
+              "ranks": [
+                1,
+                1,
+                3
+              ],
+              "regions": 3
+            },
+            "memories": [
+              {
+                "adapter_rank": 8,
+                "alpha_att": 1.0,
+                "alpha_ff": 1.0,
+                "beta_short": 0.13862943611198905,
+                "distance_slopes": [
+                  0.0
+                ],
+                "epsilon": 1e-05,
+                "ffn_width": 32,
+                "full_frequencies": [
+                  []
+                ],
+                "heads": 1,
+                "memory_read": "sum",
+                "position_origin": 1,
+                "position_scale": 5,
+                "read_frequencies": [],
+                "summary_width": 8,
+                "width": 8,
+                "window": 20
+              },
+              {
+                "adapter_rank": 8,
+                "alpha_att": 1.0,
+                "alpha_ff": 1.0,
+                "beta_short": 0.13862943611198905,
+                "distance_slopes": [
+                  0.0
+                ],
+                "epsilon": 1e-05,
+                "ffn_width": 32,
+                "full_frequencies": [
+                  []
+                ],
+                "heads": 1,
+                "memory_read": "sum",
+                "position_origin": 1,
+                "position_scale": 5,
+                "read_frequencies": [],
+                "summary_width": 8,
+                "width": 8,
+                "window": 20
+              },
+              {
+                "adapter_rank": 8,
+                "alpha_att": 1.0,
+                "alpha_ff": 1.0,
+                "beta_short": 0.13862943611198905,
+                "distance_slopes": [
+                  0.0
+                ],
+                "epsilon": 1e-05,
+                "ffn_width": 32,
+                "full_frequencies": [
+                  []
+                ],
+                "heads": 1,
+                "memory_read": "sum",
+                "position_origin": 3,
+                "position_scale": 5,
+                "read_frequencies": [],
+                "summary_width": 8,
+                "width": 8,
+                "window": 20
+              }
+            ],
+            "regions": [
+              {
+                "allocation_base": null,
+                "allocation_temperature": 1.0,
+                "alpha_loc": null,
+                "alpha_match": null,
+                "alpha_res": null,
+                "alpha_sel": null,
+                "ent_alpha": null,
+                "eta": null,
+                "fixed_gain": null,
+                "gain_logit": null,
+                "gamma_max": 1.0,
+                "hidden_width": 8,
+                "k": 1,
+                "local_score": "cat",
+                "query_weight": null,
+                "read_mode": "+",
+                "region_control_mode": "context",
+                "region_control_width": 8,
+                "region_evidence": "cat",
+                "region_key": null,
+                "region_score": "ind",
+                "regularizer": "quad",
+                "selection_mode": "regional_total",
+                "selection_width": null,
+                "send_gain": null,
+                "total_fraction": null
+              },
+              {
+                "allocation_base": null,
+                "allocation_temperature": 1.0,
+                "alpha_loc": null,
+                "alpha_match": null,
+                "alpha_res": null,
+                "alpha_sel": null,
+                "ent_alpha": null,
+                "eta": null,
+                "fixed_gain": null,
+                "gain_logit": null,
+                "gamma_max": 1.0,
+                "hidden_width": 8,
+                "k": 1,
+                "local_score": "cat",
+                "query_weight": null,
+                "read_mode": "+",
+                "region_control_mode": "context",
+                "region_control_width": 8,
+                "region_evidence": "cat",
+                "region_key": null,
+                "region_score": "ind",
+                "regularizer": "quad",
+                "selection_mode": "regional_total",
+                "selection_width": null,
+                "send_gain": null,
+                "total_fraction": null
+              },
+              {
+                "allocation_base": null,
+                "allocation_temperature": 1.0,
+                "alpha_loc": null,
+                "alpha_match": null,
+                "alpha_res": null,
+                "alpha_sel": null,
+                "ent_alpha": null,
+                "eta": null,
+                "fixed_gain": null,
+                "gain_logit": null,
+                "gamma_max": 1.0,
+                "hidden_width": 8,
+                "k": 1,
+                "local_score": "cat",
+                "query_weight": null,
+                "read_mode": "+",
+                "region_control_mode": "context",
+                "region_control_width": 8,
+                "region_evidence": "cat",
+                "region_key": null,
+                "region_score": "ind",
+                "regularizer": "quad",
+                "selection_mode": "regional_total",
+                "selection_width": null,
+                "send_gain": null,
+                "total_fraction": null
+              }
+            ],
+            "classes": {
+              "edges": [
+                1,
+                1,
+                2
+              ],
+              "inputs": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "source_binding": {
+              "mode": "region",
+              "rank": null
+            },
+            "source_hidden_width": 8,
+            "alpha_agg": 1.0
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          },
+          "input_origins": [
+            1,
+            1,
+            3,
+            3
+          ]
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}

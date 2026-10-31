@@ -1,0 +1,12 @@
+{
+  "schema": "tide-site-v1",
+  "name": "local-cpu-background",
+  "description": "Local Linux CPU runs in an independent background.slice service; the active interpreter is the private installation.",
+  "launcher": "systemd",
+  "paths": {},
+  "threads": {"workers": 1, "intraop_threads": 4, "interop_threads": 1},
+  "environment": {"TORCH_DEVICE_BACKEND_AUTOLOAD": "0"},
+  "resources": {"host_reserve_bytes": 8589934592, "disk_reserve_bytes": 1073741824},
+  "requirements": {"user_manager": "systemd", "slice": "background.slice"},
+  "notes": ["Explicit execution thread settings override these defaults.", "Add matching build paths only for Python/native or standalone clients; Python Torch needs none."]
+}

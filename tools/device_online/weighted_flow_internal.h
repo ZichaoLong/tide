@@ -106,5 +106,8 @@ struct WeightedFlow::Impl {
   void save_stage(DeviceProgram&,const ReadyBatch&,const AtomBatch&);
   Continuation checkpoint()const;
   Result decode()const;
+  std::vector<Output> outputs()const;
+  std::map<std::string,Index> metrics()const;
+  std::map<std::string,Index> statistics(Index count,Index received,Index fibers,Index fulls,Index messages)const;
 };
 }

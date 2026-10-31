@@ -173,12 +173,15 @@ def make_plan(graph, *, family="kv", width=32, samples=4, positions=4, seed=7,
 
 
 def validate_plan(plan):
-    if plan.get("schema") not in {"tide-weighted-workload-v1", "tide-weighted-workload-v2"} or plan.get("upstream") != UPSTREAM:
+    if plan.get("schema") not in {"tide-weighted-workload-v1", "tide-weighted-workload-v2",
+                                  "tide-weighted-workload-v3"} or plan.get("upstream") != UPSTREAM:
         raise ValueError("unknown weighted workload schema/upstream")
     data = {k: v for k, v in plan.items() if k != "sha256"}
     if hashlib.sha256(canonical(data)).hexdigest() != plan.get("sha256"):
         raise ValueError("weighted workload hash mismatch")
-    v2 = plan["schema"] == "tide-weighted-workload-v2"
+    v2 = plan["schema"] != "tide-weighted-workload-v1"
+    if (plan["schema"] == "tide-weighted-workload-v3") != ("input_origins" in plan):
+        raise ValueError("explicit input_origins requires weighted workload schema v3")
     if "input_pattern" in plan:
         from .input_pattern import policy
         if not v2 or plan["input_pattern"] is None or plan["input_policy"] != policy(plan["input_pattern"]):
@@ -189,6 +192,8 @@ def validate_plan(plan):
     integer(plan["seed"], "seed", 0, 2**31-1)
     if plan["span"] != plan["positions"]*plan["stride"] or 9*plan["span"] >= 2**63:
         raise ValueError("window/time domain mismatch")
+    from .hierarchy import input_origins
+    input_origins(plan)
     if any(c.get("width", 4) != plan["width"] for c in plan["memories"]):
         raise ValueError("workload/memory width mismatch")
     graph = plan["graph"]

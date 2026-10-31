@@ -4,6 +4,8 @@
 #include "tide/parameters.h"
 #include "tide/graph_checkpoint.h"
 #include "portable_torch/runtime.hpp"
+#include "../../cpp/bench/comparison.h"
+#include <cmath>
 #include <torch/csrc/autograd/autograd.h>
 #include <set>
 namespace weighted_benchmark {
@@ -12,8 +14,11 @@ namespace {
 class Candidate final:public Resident {
   Json material;Fixture data;at::Device device;ResidentParameterGradient last_gradient;
   WeightedTrainingLimits limits;std::vector<at::Device> node_owners;at::ScalarType dtype;std::unique_ptr<WeightedFlow> inference;std::unique_ptr<WeightedTrainingSession> training;
+  std::string return_mode;double loss_scale;Index current_cut=0;
  public:
-  Candidate(const Json& j,at::Device d,bool train,bool prefill,at::ScalarType dtype,const std::vector<at::Device>& peers):material(j),data(fixture(j,dtype)),device(d),dtype(dtype){
+  Candidate(const Json& j,at::Device d,bool train,bool prefill,at::ScalarType dtype,const std::vector<at::Device>& peers,
+            std::vector<at::Device> owners,const std::string& returns):material(j),data(fixture(j,dtype)),device(d),dtype(dtype),
+            return_mode(returns),loss_scale(j.value("__task",Json::object()).value("loss_scale",.001)){
     at::NoGradGuard ng;Continuation q;q.identity=data.graph.identity;q.batch_size=data.samples;
     WeightedTrainingLimits l;const auto& x=j.at("limits");
 #define FIELD(name) l.forward.name=x.at(#name).get<decltype(l.forward.name)>()
@@ -23,25 +28,44 @@ class Candidate final:public Resident {
     FIELD(retained_bytes);FIELD(backward_bytes);FIELD(optimizer_bytes);FIELD(total_bytes);
 #undef FIELD
     l.forward.prefill=prefill;
-    std::vector<at::Device> owners;for(const auto& node:data.graph.nodes)owners.push_back(peers.empty()?d:peers[node.region%peers.size()]);
+    if(owners.empty())for(const auto& node:data.graph.nodes)owners.push_back(peers.empty()?d:peers[node.region%peers.size()]);
     limits=l;node_owners=owners;
     if(train){OptimizerGroup group;for(const auto& p:data.model.parameters().owners())group.parameters.push_back(p.canonical);
-      group.lr=.001;group.momentum=.3;group.weight_decay=.01;
+      const auto task=j.value("__task",Json::object());
+      group.lr=task.value("lr",.001);group.momentum=task.value("momentum",.3);group.weight_decay=task.value("weight_decay",.01);
       training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,q,d,ResidentOptimizerKind::sgd,std::vector<OptimizerGroup>{group},l,owners);
     }else inference=std::make_unique<WeightedFlow>(data.graph,data.model,q,d,l.forward,owners);
   }
   Step step(Index index)override{
-    at::NoGradGuard ng;auto xs=inputs(data,index);Result r;Tensor value;
+    if(index<0||index!=current_cut/data.span||current_cut%data.span)throw std::invalid_argument("window index disagrees with resident cut");
+    at::NoGradGuard ng;auto xs=inputs(data,index);Result r;Tensor value;Json observation;
     if(training){auto w=training->advance(xs,(index+1)*data.span);const auto& f=w.fields.at("outputs");Tensor bar;
       {at::AutoGradMode grad(true);auto x=f.values.detach().to(at::kFloat).clone().set_requires_grad(true);
         auto numeric=x.narrow(-1,0,1)*x.narrow(-1,1,x.size(-1)-1);
-        value=at::where(f.present.unsqueeze(-1),numeric.square(),at::zeros_like(numeric)).sum()*.001;
+        value=at::where(f.present.unsqueeze(-1),numeric.square(),at::zeros_like(numeric)).sum()*loss_scale;
         bar=torch::autograd::grad({value},{x})[0];}
-      WeightedCotangents roots;roots.token=w.token;roots.fields["outputs"]={bar,f.present};r=training->result();
+      WeightedCotangents roots;roots.token=w.token;roots.fields["outputs"]={bar,f.present};
+      if(return_mode=="complete")r=training->result();
+      else if(return_mode=="outputs")r.outputs=training->outputs();
       auto gradients=training->backward({roots});last_gradient=gradients.parameters;if(!at::isfinite(gradients.parameters.values).all().item<bool>())throw std::runtime_error("nonfinite resident gradient");
       if(!training->step().applied)throw std::runtime_error("resident benchmark optimizer refused");
-    }else {r=inference->advance(xs,(index+1)*data.span);value=loss(r,true);}
-    auto actual=detached(r);const auto number=value.cpu().item<double>();portable_torch::synchronize(device);return {std::move(actual),number};
+    }else {
+      if(return_mode=="complete")r=inference->advance(xs,(index+1)*data.span);
+      else {inference->advance_device(xs,(index+1)*data.span);if(return_mode=="outputs")r.outputs=inference->outputs();}
+      value=return_mode=="metrics"?at::zeros({}):loss(r,true,loss_scale);
+    }
+    current_cut=(index+1)*data.span;
+    if(return_mode!="complete"){
+      r.continuation.identity=data.graph.identity;r.continuation.cut=current_cut;r.continuation.batch_size=data.samples;
+      const auto stats=training?training->metrics():inference->metrics();
+      observation={{"candidate_updates",stats.at("candidate_updates")},{"full_calls",stats.at("full_calls")},
+        {"messages",stats.at("messages")},{"outputs",stats.at("outputs")},{"pending",stats.at("pending")},
+        {"actual_stats",stats},{"boundary_activity",{{"state","not_checked"},{"reason","minimal device return; no complete state decode"}}}};
+    }
+    auto actual=detached(r);tide_bench::check_finite(actual);
+    const auto number=value.cpu().item<double>();
+    if(!std::isfinite(number))throw tide_bench::ComparisonFailure({tide_bench::DifferenceKind::nonfinite,"loss","nonfinite resident objective"});
+    portable_torch::synchronize(device);return {std::move(actual),number,std::move(observation)};
   }
   std::map<std::string,Tensor> parameters()const override{
     at::NoGradGuard ng;std::map<std::string,Tensor> out;if(!training)return out;
@@ -76,20 +100,24 @@ class Candidate final:public Resident {
     at::NoGradGuard ng;
     if(training){
       training->close();training.reset();auto c=load_resident(path,data,limit);
+      current_cut=c.continuation.cut;
       training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,c,device,limits,node_owners);
     }else{
       inference->close();inference.reset();auto q=GraphCheckpoint::load(path,data.graph,data.model,nullptr,limit);
+      current_cut=q.cut;
       inference=std::make_unique<WeightedFlow>(data.graph,data.model,q,device,limits.forward,node_owners);
     }
   }
   Continuation checkpoint()const override{
     at::NoGradGuard ng;return training?training->checkpoint().continuation:inference->checkpoint();
   }
+  Index cut()const override{return current_cut;}
   void close()override{at::NoGradGuard ng;if(training)training->close();if(inference)inference->close();}
 };
 }
 std::unique_ptr<Resident> resident(const Json& data,at::Device device,bool training,bool prefill,at::ScalarType dtype,
-                                   const std::vector<at::Device>& peers){
-  return std::make_unique<Candidate>(data,device,training,prefill,dtype,peers);
+                                   const std::vector<at::Device>& peers,const std::vector<at::Device>& nodes,
+                                   const std::string& returns){
+  return std::make_unique<Candidate>(data,device,training,prefill,dtype,peers,nodes,returns);
 }
 }

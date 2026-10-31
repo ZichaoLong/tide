@@ -10,6 +10,7 @@
 | --- | --- | --- |
 | core-5配置与实验身份 | `python/tidegraph/planning/`；[候选入口](core5-study.md) | allocation-free配置/shape/共享清单，数学/工作负载/执行/测量身份；公共构造器，CLI仅适配 |
 | 配置事实与覆盖证据 | `planning/facts.py`、`scripts/core5_coverage.py`、`record_core5_checks.py` | 全部局部配置分组、逐用例JUnit记录、正确性/性能独立资格与来源查询；不执行参考或补造历史结果 |
+| 人类实验入口 | `python/tidegraph/experiment/`；[操作手册](human-workflow.md) | 安装身份、无分配plan、同模型放置预算、独立check、run/matrix/job、完整及按需返回、CSV/HTML查询；不依赖内部benchmark导入 |
 | 公共接口 | `python/tidegraph/config.py`, `runtime.py`, `session.py`; `cpp/include/tide/` | 配置、图/模型所有权、执行策略、结果与状态续接 |
 | 数学对象与记录 | `python/tidegraph/graph.py`, `records.py`, `history.py`, `coordinates.py`; `cpp/include/tide/types.h`, `cpp/src/graph.cpp` | 图、物理边、逻辑来源、时间、状态、history、消息与输入完整性 |
 | 局部计算 | `aggregate.py`, `state_program.py`, `readout.py`, `region.py`, `next.py`, `full.py`; 对应 C++ Kernel 接口 | Agg/Upd/Read/SelStep/Next/Full/Emit，批量能力和局部 VJP |
@@ -24,7 +25,7 @@
 | 下游协作 | [协作契约](downstream-contract.md)、`templates/downstream/`、`examples/consumer_core5/` | 固定依赖、请求/交付/验收互链；应用训练/checkpoint在实验侧，基座公共接口不依赖模板 |
 | 历史迁移与源码身份 | [迁移规则](history-migration.md)、`scripts/history_map.py`、`verify_history_mapping.py` | 旧→新提交映射、独立逐提交验证、单分支检出；保留历史实测身份 |
 | 诊断与产物生命周期 | [复现导航](reproduction.md)、[保留规则](artifact-retention.md) | 原问题→生成器/小输入→诊断代码→独立检查→证据；原始运行目录不是开发依赖 |
-| 完整返回/推理观察 | `scripts/weighted_benchmark_return.py`、`tools/weighted_benchmark/return_packing.cpp`、`scripts/weighted_benchmark_work.py` | [显式返回packing](complete-return-packing.md)、独立推理/新owner续接、实际桶/MM/BMM；不提供调度轨迹 |
+| 完整返回/推理观察 | `python/tidegraph/experiment/returns.py`、`tools/weighted_benchmark/return_packing.cpp`、`scripts/weighted_benchmark_work.py` | [显式返回packing](complete-return-packing.md)、独立推理/新owner续接、实际桶/MM/BMM；不提供调度轨迹 |
 | 消费者与验证 | `examples/`, `tools/online_bench/`, `tests/`, `cpp/test/`, `scripts/` | 独立调用、公式/差分测试、构建、资格、有限性能入口 |
 
 局部算子可以在同一语言的多个调度中共享；特化必须拥有独立循环/依赖次序。

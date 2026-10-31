@@ -64,7 +64,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_recurrent.cpp cpp/src/weighted_basic.cpp cpp/src/weighted_gated_delta.cpp
   cpp/src/weighted_ssd.cpp cpp/src/weighted_convolution.cpp
   cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp cpp/src/ownership.cpp
-  cpp/src/transfer.cpp cpp/src/delivery.cpp
+  cpp/src/transfer.cpp cpp/src/delivery.cpp cpp/src/communication.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp

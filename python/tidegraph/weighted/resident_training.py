@@ -165,6 +165,20 @@ class WeightedResidentTraining:
         trace, outputs, messages, stats = window_records(actual)
         return Result(from_continuation(self.graph, actual.continuation), trace, outputs, messages, stats)
 
+    def outputs(self):
+        """Detached CPU outputs; use advance().fields for task-head VJP roots."""
+        self._check()
+        if not hasattr(self.owner, "outputs"):
+            raise ValueError("resident build lacks outputs; rebuild the matching resident library")
+        return [(o.batch, o.time, o.port, o.value) for o in self.owner.outputs()]
+
+    def metrics(self):
+        """Actual latest-window counts without decoding state/trace/gradients."""
+        self._check()
+        if not hasattr(self.owner, "metrics"):
+            raise ValueError("resident build lacks metrics; rebuild the matching resident library")
+        return dict(self.owner.metrics())
+
     def checkpoint(self):
         self._check()
         from .resident_training_checkpoint import export

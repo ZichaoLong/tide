@@ -106,6 +106,8 @@ WeightedTrainingWindow WeightedTrainingSession::advance(const std::vector<Extern
 }
 void WeightedTrainingSession::detach(){auto& s=*impl_;s.check();s.discard();}
 Result WeightedTrainingSession::result()const{impl_->check();if(!impl_->flow->impl_->ran)throw std::logic_error("weighted session has no latest window");return impl_->flow->impl_->decode();}
+std::vector<Output> WeightedTrainingSession::outputs()const{impl_->check();return impl_->flow->outputs();}
+std::map<std::string,Index> WeightedTrainingSession::metrics()const{impl_->check();return impl_->flow->metrics();}
 Index WeightedTrainingSession::cut()const{impl_->check();return impl_->flow->impl_->boundary.cut;}
 Index WeightedTrainingSession::generation()const{impl_->check();return impl_->generation;}
 std::vector<at::Device> WeightedTrainingSession::node_devices()const{impl_->check();return impl_->flow->node_devices();}

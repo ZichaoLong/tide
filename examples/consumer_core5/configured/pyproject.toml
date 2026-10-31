@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tidegraph-consumer-core5-example"
+version = "0.1.0"
+description = "Downstream-owned data, regression head and recipe for the public tidegraph CLI"
+requires-python = ">=3.10"
+dependencies = ["tidegraph>=0.2.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

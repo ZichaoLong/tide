@@ -1,5 +1,6 @@
 """Explicit placement copies preserve raw int64 and original VJP versions."""
 import torch
+from ..communication import copy as copy_tensor, policy
 
 PACK_BYTES = 8*1024**2
 
@@ -9,14 +10,15 @@ class _Copy(torch.autograd.Function):
     def forward(ctx, value, device, dtype):
         ctx.set_materialize_grads(False)
         ctx.save_for_backward(value)
-        return value.to(device=device, dtype=dtype)
+        ctx.policy = policy()
+        return copy_tensor(value, device, dtype, selected=ctx.policy)
 
     @staticmethod
     def backward(ctx, bar):
         if torch.is_grad_enabled():
             raise ValueError("weighted placement supports first-order VJP only")
         value, = ctx.saved_tensors
-        return (None if bar is None else bar.to(value)), None, None
+        return (None if bar is None else copy_tensor(bar, value.device, value.dtype, selected=ctx.policy)), None, None
 
 
 def move(value, device, dtype=None):
@@ -25,7 +27,7 @@ def move(value, device, dtype=None):
     dtype = (dtype or value.dtype) if value.is_floating_point() else value.dtype
     if value.device == device and value.dtype == dtype:
         return value
-    return _Copy.apply(value, device, dtype) if value.requires_grad else value.to(device=device, dtype=dtype)
+    return _Copy.apply(value, device, dtype) if value.requires_grad else copy_tensor(value, device, dtype)
 
 
 class _Copies(torch.autograd.Function):
@@ -33,7 +35,8 @@ class _Copies(torch.autograd.Function):
     def forward(ctx, device, dtype, *rows):
         ctx.set_materialize_grads(False)
         ctx.save_for_backward(*rows)
-        packed = torch.cat([r.reshape(-1) for r in rows]).to(device=device, dtype=dtype)
+        ctx.policy = policy()
+        packed = copy_tensor(torch.cat([r.reshape(-1) for r in rows]), device, dtype, selected=ctx.policy)
         outputs, offset = [], 0
         for row in rows:
             outputs.append(packed.narrow(0, offset, row.numel()).reshape(row.shape))
@@ -50,7 +53,7 @@ class _Copies(torch.autograd.Function):
         result = [None]*(len(rows)+2)
         ids = [i for i, bar in enumerate(bars) if bar is not None and ctx.needs_input_grad[i+2]]
         if ids:
-            copied = torch.cat([bars[i].reshape(-1) for i in ids]).to(rows[0])
+            copied = copy_tensor(torch.cat([bars[i].reshape(-1) for i in ids]), rows[0].device, rows[0].dtype, selected=ctx.policy)
             offset = 0
             for i in ids:
                 result[i+2] = copied.narrow(0, offset, rows[i].numel()).reshape(rows[i].shape)

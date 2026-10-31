@@ -1,64 +1,49 @@
-# 当前交接 — GPU规模推理与有限优化（2026-10-31）
+# 当前交接 — 三平台矩阵、多卡放置与人类入口（2026-10-31）
 
-授权分支 `graph-execution-foundation`；最后GPU资格来源 `f738692ce4c06ac0530851c0198552eea01aa459`。
-数学固定 `0770593838a37c790a568226930567ed60f99b83`，快照校验通过。
-最新实现 `909a322f058b7e897e6185334d6915dccca0d06a` 仅修证据查询对内嵌configuration facts的读取与身份校验；固定源码5项及完整索引查询通过。
-参考仓库只读；远端dev原有未提交修改保留，从未作为本轮资格源码。
+授权分支 `graph-execution-foundation`；本轮起点实查 `3ddeff17df1a7d99014a275f52c47f069181306f`。
+数学固定 `0770593838a37c790a568226930567ed60f99b83`，本轮 `check_upstream.py` 通过。
+新任务覆盖 CPU/NPU/GPU 有限矩阵、同模型多卡容量和已安装 CLI 人类流程；允许有限数值超差的显式探索观察，原严格断言与失败不变。
+参考仓库只读，允许阶段提交并普通推送。旧“不扩 FP32 / CPU-NPU 仅回归 / 两项优化”任务边界已由本轮授权替代；8B/16B 全扫描仍不在范围。
 
-## 本轮实际结果
+## 当前实施
 
-完整来源、逐配置命令/工作/精度/构建、回归与原失败见[审阅报告](evidence/core5-cuda-inference-20261031.md)及同名JSON。
-50项正式测量中47项通过完整独立前向和磁盘新owner精确续接，3项d256 FP32严格失败仍只作成本观察。
-另20项profile/工作/诊断/相关检查观察独立记录，包含两项strict_mismatch；外层任务passed不覆盖内部失败。
+公共 `tidegraph` 0.3.0 已实现配置/无分配plan、逐卡预算与共享放置、独立check、三客户端run、持久job、外部恢复及CSV/HTML查询；新增普通/blocking/显式CPU桥、严格/探索/未检查分类、完整/按需返回、独立packing/profile观测。下游可安装task.module例子保留真实参数/梯度/统一optimizer/checkpoint与插件源码锁。
+本阶段实施范围与145项有限选点见 [platform-matrix](platform-matrix.md)，CPU39/NPU53/CUDA53；B128/B512、约1B、A/B/C同材料对照、真实反馈/非齐延迟/一般端口已明确。它们仍是计划，不能当作运行通过。
 
-| 来源/范围 | 已实现、已构建与实际通过 |
-| --- | --- |
-| eee68c4 | 独立完整推理、无optimizer、staggered-v1真实不齐输入；A21测量18通过/3严格失败；CPU23、resident相关4项通过 |
-| 1c903ae / 4960b6c | 桶/MM/BMM/活动观测、批量bool元数据、首差诊断与显式CUDA eager FP64；修复standalone命名编译失败。core/standalone新构建，相关66项与三客户端选定训练9项通过 |
-| 9fce486 | 规模静态预算、离线同步API区间并集；GPU literal与两客户端零支持完整训练/恢复通过 |
-| 2f17c24 / fd3c72b | 显式完整返回packing，默认scalar。F33目标环境检查（9直接CUDA）通过；H只修Half检查材料，三dtype字节、三客户端小型FP64 SGD训练恢复和10正式项通过 |
-| 9acc7aa | FC/KV 1,010,339,302 trainable，显式FP64：三客户端B1和native B8全部通过。B1 PyTorch/native/standalone中位239.231/223.885/330.295ms；native B8 771.993ms |
-| f738692 | FC/KV 2,085,424,614 trainable，native mixed-c FP64 B1/P4/span16：384.317ms中位、最高reserved18.541GiB、完整独立记录与第4窗精确恢复通过；另1项轻量工作观察通过 |
+开发检查：142项联合CPU/静态测试通过；随后插件配置副本与参数归属加固的19项定向检查通过。新C++比较/独立根/通信及resident返回源码尚未构建，不冒称真机资格。
+先提交本阶段实现，再从该不可变提交分别构建本机CPU/Python-owned NPU/SDK NPU与目标CUDA；完成构建后进行已安装入口演练、有限矩阵及六项热点对照，证据单独提交。
 
-本机NPU物理9的A/D/F纯PyTorch完整推理/恢复均通过，中位559.661/527.660/576.500ms。
-F另5个NPU字节/根检查及小型HB FP32训练/恢复通过。返回packing同材料成本上升9.26%，保持默认scalar；无standalone NPU新资格。
-六项问题均有处置/重启条件，见[performance-lessons](performance-lessons.md#gpu-推理批次与完整返回)和唯一待办[ROADMAP](ROADMAP.md)。
+本机项目私有环境已补齐nlohmann_json3.11.2；公共栈未修改。本次预算核对修正：checkpoint新旧两代同时占盘；CPU多窗比较记录以host_results计费，设备当前完整记录以live_results计费，实际峰值仍须校准。
+正式矩阵尚未启动；待提交后启动的构建driver为 `artifacts/platform-matrix/build-local.sh` 和 `build-cuda.sh`，只包装仓库公开构建命令。
 
-## 终态、环境与资源
+## 可复用结果与未解除范围
 
-没有活动GPU/NPU资格作业。目标机现存35份作业记录均终态、实际监督器/工作进程均不存活；原失败和cancelled探针保持原状态。
-最后作业 `inference-near-f738692` 于04:18:50 UTC passed/exit0，remaining_live_pids为空；固定源码sources/f738692，日志jobs/inference-near-f738692/task.log。
-本机三个NPU独立background.slice服务均success/exit0、ControlGroup为空。
-最终现场04:20:37 UTC：四卡均无计算进程，每卡free24126MiB；数据盘free47,268,839,424字节。
+上一轮 [CUDA 推理证据](evidence/core5-cuda-inference-20261031.md)及同名 JSON 保留：50 项正式中 47 项完整独立推理及磁盘精确续接通过，3 项 FP32 严格失败。
+1.010B FP64 三客户端 B1/native B8、2.085B FP64 native 单卡容量点直接复用，不重跑整轮。
+原训练、workers2、跨卡精确恢复、NPU resident 服务资源失败均保留；新探索结果不能改写旧严格资格。
+12 方向 CUDA 直接 P2P/原生原子限制不解除；普通复制可用于新的 mixed 实验，多卡 resident 仍需原协议硬件门禁。
 
-目标入口 `artifacts/cuda3090/ssh.sh`，根 `/root/autodl-tmp/gef-cuda3090`，Python用绝对`venv/bin/python`。
-已选栈Torch2.12.1+cu130/CUDA13.0.88、4×RTX3090/24GiB/sm86；affinity112/CPU配额56、内存240GiB、数据盘50GiB。
-构建56线程；正式计时GPU0、ATen/BLAS/interop/workers1、TF32关闭。重型构建与计时串行，外部CPU争用未隔离。
-core构建4960b6c、最新standalone构建fd3c72b、A的匹配resident库32edb0f分别保留真实身份；不能称所有库在f738692重新构建。
-远端dev仍为cc6b45f上的独立脏目录，最终diff哈希在JSON；不要覆盖或用于资格。
-当前Ascend站点入口是development列出的dev-workspace-9.1.0 module；旧home指南已退役。
+## 环境、源码和活动作业
 
-大文件在终态完整审阅、流式SHA256与dry-run后共退役59,095,122,182字节，只含本轮生成checkpoint/standalone fixture。
-小结果、配置、命令与哈希保留；无需旧运行目录即可生成新材料，哈希不保证退役字节可恢复。
-忽略目录的私有环境、匹配构建和小记录可复用但不是Git复现的隐含依赖，不清理参考仓库或公共工具链。
+没有新活动 GPU/NPU/构建作业。远端 35 条旧作业均终态且 remaining_live_pids 为空；本机旧 NPU 作业均终态。
+本轮只读审计：`artifacts/platform-matrix/{local-audit,remote-audit}.json`。
 
-## 未解除边界与接续
+- 本机 aarch64，affinity 320 CPU，可用主存约 1.8 TiB、磁盘约 2.55 TB；NPU 4–11 审计时无进程，0–3/12–15 被其他项目占用，不停止或占用它们。每次运行仍须队列重新准入。
+- 当前 Python 入口：`module load ascend/dev-workspace-9.1.0`，私有 `.local/venv-core5-inference`，Torch 2.12.0 / torch_npu 2.12.0.post2。现有 SDK 2.10/CANN9.0 必须独立环境构建运行，不能与 2.12/9.1 二进制混用。
+- GPU 入口 `artifacts/cuda3090/ssh.sh`，根 `/root/autodl-tmp/gef-cuda3090`；四张 RTX3090/sm86，驱动595.71.05、CUDA13.0.88、Torch2.12.1+cu130，affinity112/配额56，内存240GiB，盘free47,268,773,888字节。四卡审计时各free24126MiB、无计算进程。
+- 远端 dev 仍是 cc6b45f 上的独立脏目录，diff SHA256 `3619187d4319ba22ad6a6f6ae0c18451521c3a26b10452d9bbc91c35c05f31a5`；保持原状，不作为资格源码。
+- 现存旧 core4960b6c、standalone fd3c72b、resident32edb0f 只保留真实构建身份，不能称为本轮当前源码的新构建。
 
-- d256 FP32 B1/8/32首窗keys3/768坐标严格差异、原训练失败/strict xfail均保持；显式FP64通过不解除它们。
-- d6144近界预测超过4GiB预留，未运行；standalone d5888事务恢复双bank约33.14GiB拒绝；resident FP64域拒绝，大宽度FP32 Full守卫亦超24GiB。
-- 当前12方向P2P仍false，原跨卡原子硬件限制保持。无多卡resident、新通信协议、FP16规模、大尺度训练或8B/16B扫描资格。
-- 1B B8的MM平均8.04行、私有BMM全2行；参数规模没有证明充分矩阵利用。六项后置内容只在ROADMAP的具体重启条件满足时继续。
+本机长作业用独立 background.slice 服务及 NPU 队列；远端复用 container_job。固定源码后运行，不编辑活跃输入；重型构建和正式计时不重叠。
 
-本轮有限范围已完成；实现先提交并固定资格，本页所在后续提交仅记录审阅证据、支持范围与交接。
-没有自动续跑队列或未提交实现。后续无需重跑旧矩阵，新的运行须新目录、固定源码和现场准入。
-在Python3.10+的匹配私有环境中，从干净检出查询：
+## 接续入口
 
 ```sh
+git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
 python -S scripts/index_core5_study.py docs/evidence/core5-cuda-inference-20261031.json --view models --format tsv
-python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --topology fc --kind performance --format tsv
 ```
 
-[报告的干净复现命令](evidence/core5-cuda-inference-20261031.md#从干净检出复现)包含重新构建、三客户端1B、小型resident及失败重建；
-只clone/fetch授权新分支，旧身份用`resolve_history_commit.py`定位，不把映射当重新验证。
+下一步：提交当前实现，创建只读固定检出，启动两机构建；构建终态后安装wheel并用tidegraph公开入口验收。独立构建身份和作业路径将写回本页。
+STATUS 是唯一当前交接，ROADMAP 是唯一待办；完整终态、命令、构建身份与新证据在后续提交补齐，不能将本页实施说明当作通过。

@@ -30,7 +30,14 @@ void run(at::Device device,at::ScalarType dtype,const std::string& family,const 
   auto ref_inputs=weighted_precision_check::reference_inputs(inputs);
   Options options;options.packed=false;Greedy reference(g,ref_model,options);WeightedFlowLimits limits;limits.prefill=prefill;limits.cache=16;limits.stages=64;
   at::NoGradGuard no_grad;
-  WeightedFlow flow(g,m,q,device,limits);auto actual=flow.advance(inputs,10);auto expected=reference.run(q,ref_inputs,10,10);compare(actual,expected,dtype);
+  WeightedFlow flow(g,m,q,device,limits);flow.advance_device(inputs,10);
+  const auto output_only=flow.outputs();const auto metrics=flow.metrics();auto actual=flow.result();
+  auto expected=reference.run(q,ref_inputs,10,10);compare(actual,expected,dtype);
+  require(output_only.size()==actual.outputs.size(),"weighted output-only count differs");
+  for(size_t i=0;i<output_only.size();++i){const auto& a=output_only[i];const auto& b=actual.outputs[i];
+    require(std::tie(a.batch,a.time,a.port)==std::tie(b.batch,b.time,b.port)&&at::equal(a.value,b.value),"weighted output-only decode differs");}
+  for(const auto& [key,value]:actual.stats)require(metrics.at(key)==value,"weighted metric differs from complete decode");
+  require(metrics.at("outputs")==static_cast<Index>(actual.outputs.size())&&metrics.at("pending")==static_cast<Index>(actual.continuation.pending.size()),"weighted boundary counts differ");
   for(const auto& out:actual.outputs)require(out.value.scalar_type()==dtype,"weighted output storage dtype differs");
   for(const auto& atom:actual.messages)require(atom.value.scalar_type()==dtype,"weighted message storage dtype differs");
   for(const auto& [key,state]:actual.continuation.states){require(state.value.scalar_type()==dtype,"weighted raw state dtype differs");
@@ -47,6 +54,10 @@ void run(at::Device device,at::ScalarType dtype,const std::string& family,const 
   // Empty later windows retain expired raw tuples, and are independent of the
   // bounded stage journal used for the preceding call.
   auto empty=restored.advance({},10);require(empty.trace.empty(),"empty weighted window fabricated events");
+  const auto empty_metrics=restored.metrics();
+  for(const auto* key:{"stages","candidate_updates","full_calls","received_atoms","messages","outputs"})
+    require(empty_metrics.at(key)==0,"weighted metrics counted stale journal rows");
+  require(restored.outputs().empty(),"weighted output-only decode counted stale journal rows");
   compare(Result{empty.continuation},Result{continued.continuation},dtype);restored.close();
   std::cout<<"weighted-flow case "<<family<<' '<<topology<<' '<<read<<' '<<(prefill?"prefill":"streaming")<<" passed stages="
     <<actual.stats.at("resident_stages")<<" candidates="<<actual.trace.size()<<" full="<<actual.stats.at("full_evaluations")<<'\n'<<std::flush;

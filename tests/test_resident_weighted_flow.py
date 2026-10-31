@@ -151,3 +151,36 @@ def test_general_settle_port_schedule_uses_same_compiled_graph(topology):
         actual=flow.advance(xs,stop=stop,sealed_until=stop)
         expected=reference(b.graph,b.model,Continuation(b.graph.identity,1),xs,stop,sealed_until=stop)
         equivalent(actual,expected);flow.close()
+
+
+@pytest.mark.parametrize("storage_dtype", [torch.float32, torch.float16])
+def test_requested_outputs_metrics_and_device_only_advance_preserve_full_records(storage_dtype):
+    target=target_device();b,_,xs,stop=setup(storage_dtype,"pdg")
+    model=reference_model(b.model) if storage_dtype==torch.float16 else b.model
+    with torch.no_grad():
+        flow=owner(b,target)
+        try:
+            for method in (flow.result,flow.outputs,flow.metrics):
+                with pytest.raises(RuntimeError,match="completed window"):method()
+            small=flow.advance(xs,stop=stop,sealed_until=stop,return_mode="outputs")
+            actual=flow.result()
+            expected=reference(b.graph,model,Continuation(b.graph.identity,1),widen(xs),stop,sealed_until=stop)
+            assert_records(actual,expected,storage_dtype)
+            assert small["start"]==0 and small["stop"]==stop and small["return_mode"]=="outputs"
+            equivalent(small["outputs"],actual.outputs,rtol=0,atol=0)
+            for key,value in actual.stats.items():assert small["stats"][key]==value
+            assert small["stats"]["outputs"]==len(actual.outputs)
+            assert small["stats"]["pending"]==len(actual.continuation.pending)
+            if small["outputs"]:
+                small["outputs"][0][-1].fill_(float("nan"))
+                equivalent(flow.outputs(),actual.outputs,rtol=0,atol=0)
+            saved=flow.checkpoint()
+            metrics=flow.advance([],stop=stop,sealed_until=stop,return_mode="metrics")
+            assert metrics["outputs"] is None and metrics["return_mode"]=="metrics"
+            assert all(metrics["stats"][key]==0 for key in ("stages","candidate_updates","full_calls","received_atoms","messages","outputs"))
+            equivalent(flow.checkpoint(),saved,rtol=0,atol=0)
+            flow.advance_device([],stop=stop,sealed_until=stop)
+            assert flow.outputs()==[]
+            equivalent(flow.result().continuation,saved,rtol=0,atol=0)
+        finally:
+            flow.close()

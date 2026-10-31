@@ -11,5 +11,16 @@
   "mathematics": {"version": "tide-core-5", "commit": "0770593838a37c790a568226930567ed60f99b83"},
   "protocol": {"version": "tide-downstream-contract-v1", "commit": null, "path": "docs/downstream-contract.md"},
   "native": null,
-  "environment": {"python": null, "torch": null, "architecture": null, "cxx11_abi": null}
+  "environment": {"python": null, "torch": null, "architecture": null, "cxx11_abi": null},
+  "installation_lock": {
+    "schema": "tide-experiment-lock-v1",
+    "path": "installation.lock.json",
+    "sha256": null
+  },
+  "consumer": {
+    "repository": null,
+    "commit": null,
+    "task_distribution": {"name": null, "version": null, "wheel_sha256": null},
+    "task_source_sha256": null
+  }
 }

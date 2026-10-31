@@ -59,6 +59,12 @@ void trajectory(at::Device device,const std::string& topology,const std::string&
     for(size_t i=0;i<windows.size();++i){const auto stop=10*update+(i<2?4:10);
       std::cout<<"  window="<<i<<" stop="<<stop<<" forward\n"<<std::flush;
       auto actual=session->advance(windows[i],stop);auto direct=session->result();
+      const auto output_only=session->outputs();const auto metrics=session->metrics();
+      require(output_only.size()==direct.outputs.size(),"training output-only count differs");
+      for(size_t j=0;j<output_only.size();++j){const auto& a=output_only[j];const auto& b=direct.outputs[j];
+        require(std::tie(a.batch,a.time,a.port)==std::tie(b.batch,b.time,b.port)&&at::equal(a.value,b.value),"training output-only value differs");}
+      for(const auto& [key,value]:direct.stats)require(metrics.at(key)==value,"training work metric differs");
+      require(metrics.at("pending")==static_cast<Index>(direct.continuation.pending.size()),"training pending metric differs");
       weighted_precision_check::validate_storage(direct,dtype);
       Result reference;{at::AutoGradMode grad(true);Options options;options.packed=false;reference=Greedy(graph,model,options).run(q,reference_windows[i],stop,stop);q=reference.continuation;}
       tide_bench::compare(direct,reference,true,dtype,std::nullopt,dtype==at::kHalf?2e-2:-1.,dtype==at::kHalf?1e-3:-1.);roots.push_back(seed(actual,modes[update]));

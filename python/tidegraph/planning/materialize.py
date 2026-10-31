@@ -37,6 +37,8 @@ def materialize(plan, *, max_bytes, dtype=None):
     if dtype not in (torch.float16, torch.float32, torch.float64):
         raise ValueError("materialization requires float16, float32 or float64")
     inv = validate_plan(plan)
+    from .hierarchy import input_origins
+    origins = input_origins(plan)
     positive("max materialization bytes", max_bytes, 2**63-1)
     floor = plan["memory_floor"]
     required = (floor["logical_parameter_bytes"]+floor["legacy_inert_buffer_bytes"])*(2 if dtype == torch.float64 else 1)
@@ -83,9 +85,7 @@ def materialize(plan, *, max_bytes, dtype=None):
         key = sample, position
         if key not in values:
             values[key] = torch.cat((torch.ones(1), .2*torch.sin(torch.arange(plan["width"])*.19+.3*position+.1*sample)))
-        v = graph.inputs[port]
-        origin = g["ranks"][g["node_regions"][v]] if g["kind"] == "ranked-local" else 0
-        xs.append(External(sample, port, occurrence, origin+plan["stride"]*position, values[key]))
+        xs.append(External(sample, port, occurrence, origins[port]+plan["stride"]*position, values[key]))
     from .precision import promote
     bound, xs = promote(bound, xs, dtype)
     return bound, xs, plan["span"]

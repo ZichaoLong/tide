@@ -67,6 +67,8 @@ class WeightedTrainingSession {
   void detach();
   ResidentTrainingCheckpoint checkpoint()const; // No outstanding tapes/gradients.
   Result result()const; // Explicit diagnostic decode of the latest actual window.
+  std::vector<Output> outputs()const; // Latest output-only CPU decode, no raw-state copy.
+  std::map<std::string,Index> metrics()const; // Latest actual work counts, no full decode.
   Index cut()const;
   Index generation()const;
   ResidentOptimizerKind optimizer_kind()const;

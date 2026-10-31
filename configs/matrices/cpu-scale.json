@@ -1,0 +1,470 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "cpu-scale",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/local-cpu.json",
+  "cases": [
+    {
+      "name": "cpu-scale-fc-100m",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-fc-100m",
+        "description": "Fixed B1 curve: d128 -> natural 100M -> approximately1B. FFN remains4d.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 100000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-fc-few-1b",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-fc-few-1b",
+        "description": "Natural approximately1B:4 large-local FC nodes,16 smaller-local FC nodes,20-node HB/LH. Distinct models/workloads; no equivalent-speedup claim.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-fc-many-1b",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-fc-many-1b",
+        "description": "Natural approximately1B:4 large-local FC nodes,16 smaller-local FC nodes,20-node HB/LH. Distinct models/workloads; no equivalent-speedup claim.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-hb-1b",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-hb-1b",
+        "description": "Natural approximately1B:4 large-local FC nodes,16 smaller-local FC nodes,20-node HB/LH. Distinct models/workloads; no equivalent-speedup claim.",
+        "model": {
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-lh-1b",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-lh-1b",
+        "description": "Natural approximately1B:4 large-local FC nodes,16 smaller-local FC nodes,20-node HB/LH. Distinct models/workloads; no equivalent-speedup claim.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-fc-few-1b-b128",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-fc-few-1b-b128",
+        "description": "Explicit mandatory approximately1B large-batch admission candidate. Current per-card/host/disk budget and finite calibration first; persist refusal rather than OOM-search or shrinking batch.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 128,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    },
+    {
+      "name": "cpu-scale-fc-few-1b-b512",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "cpu-scale-fc-few-1b-b512",
+        "description": "Explicit mandatory approximately1B large-batch admission candidate. Current per-card/host/disk budget and finite calibration first; persist refusal rather than OOM-search or shrinking batch.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "target_parameters": 1000000000
+          }
+        },
+        "task": {
+          "samples": 512,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 4,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 34359738368,
+          "checkpoint_max_bytes": 17179869184,
+          "live_results": 1
+        }
+      }
+    }
+  ]
+}
