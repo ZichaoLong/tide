@@ -122,6 +122,12 @@ standalone 也在每个完成窗口原子发布原生 checkpoint 和 latest 指�
 保存时间在每窗 `checkpoint_seconds` 或 standalone 对应字段单列，不混入窗口算子计时。
 
 CPU 配置明确区分 ATen/BLAS 的 `intraop_threads`、interop 和调度 `workers`。
+已安装Python eager客户端可显式选择`execution.finite_check_packing=packed`，
+把兼容的有限值诊断输入按device/dtype合为最多8MiB组；默认`scalar`保留逐张量检查。
+它独立于数值算子packing和完整返回packing，不改精度、阈值、求导连接或非有限值拒绝。
+大/非连续/特殊张量保留逐张量检查，plan另预留每卡及主机32MiB临时空间。
+该策略不改变C++核心；standalone/resident及旧study脚本仍用其原检查入口，明确拒绝此新覆盖项。
+启用前后使用同材料独立比较与训练/恢复回归；profile中的`isfinite`累计时间不是排他归因或收益保证。
 GPU/NPU 将 `device` 改为显式 `cuda:N`/`npu:N`，`placement` 选 `mixed-a/b/c` 或合法 resident；
 不要把 CPU placement 留在 accelerator payload 上。纯 PyTorch 保持独立主机调度，resident 使用实际公共设备库。
 standalone 将 `client` 设为 `libtorch` 并提供真实 C++ 程序路径，Python 只负责配置与启动。

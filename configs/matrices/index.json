@@ -4,9 +4,9 @@
   "status": "planned-not-runtime-evidence",
   "site_paths": "templates; actual builds/current free resources are independent run inputs",
   "counts": {
-    "cpu": 39,
-    "npu": 55,
-    "cuda": 55
+    "cpu": 45,
+    "npu": 61,
+    "cuda": 61
   },
   "cases": [
     {
@@ -1286,6 +1286,314 @@
       },
       "host_estimated_bytes": 8590791400,
       "disk_estimated_bytes": 1073826536
+    },
+    {
+      "case": "cpu-finite-b128-scalar",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "44fb4e2e38557ef8720d346ec4901953227b36dae194929f1b2845efc7180580",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 78618632
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8910700576,
+      "disk_estimated_bytes": 1098072080
+    },
+    {
+      "case": "cpu-finite-training-scalar",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "453c5ca0106aa85663ef43baae48eff5c6406aeaca502192a107e350c9030d9b",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 498608
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8591130640,
+      "disk_estimated_bytes": 1073914304
+    },
+    {
+      "case": "cpu-finite-b128-packed",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "9359571f997d3e97778625e026b4ee0c427820ce2129446e99e0f7e3fae05b02",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 112173064
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8944255008,
+      "disk_estimated_bytes": 1098072080
+    },
+    {
+      "case": "cpu-finite-training-packed",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "fb66f63d0bab0dd5c177ab8316bd901bd2346f9b874f5a5328716bf414bc99f8",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 34053040
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8624685072,
+      "disk_estimated_bytes": 1073914304
+    },
+    {
+      "case": "cpu-finite-b512-packed",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Actual B512 after bounded diagnostic packing; report per-node unique active samples and real operator batch, without changing logical batch.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "5af2e4d8eb7edf577e7577d881b34bcc6a67b5c47b3d4bc9371d767b70dbe68f",
+      "task_id": "1b9df7fc37414c7ac7a544330ef814916d22c61531a4d61b226d066b74a5b320",
+      "execution_id": "9b5b7b10478b54520cb33454d3d3fab34194f0a5be463de1db855309b7e4b090",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 333602824
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 9848848416,
+      "disk_estimated_bytes": 1142210576
+    },
+    {
+      "case": "cpu-finite-b128-profile",
+      "matrix": "cpu-finite.json",
+      "status": "planned",
+      "question": "Separate observed window, not throughput. Attribute runtime finite-check region and actual kernels without inferring exclusive critical path from inclusive time.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "9359571f997d3e97778625e026b4ee0c427820ce2129446e99e0f7e3fae05b02",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "cpu",
+      "devices": [
+        "cpu"
+      ],
+      "node_owners": {
+        "cpu": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cpu": 99098632
+      },
+      "unknown_components": {
+        "cpu": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8845508640,
+      "disk_estimated_bytes": 1094533136
     },
     {
       "case": "cpu-hb-qry-position-att",
@@ -3470,6 +3778,314 @@
       },
       "host_estimated_bytes": 8590795496,
       "disk_estimated_bytes": 1073828584
+    },
+    {
+      "case": "cuda-finite-b128-scalar",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "f4a65a5f8cdfe760e7ef4cca8485166eadfdb6b1890cf70d523ac32208594001",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 78618632
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8912274976,
+      "disk_estimated_bytes": 1098859280
+    },
+    {
+      "case": "cuda-finite-training-scalar",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "bb09326d942b1408aadf6dd38cbe4f10426776458cc233f7ec34d1083f9b41ee",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 498608
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8591143312,
+      "disk_estimated_bytes": 1073920640
+    },
+    {
+      "case": "cuda-finite-b128-packed",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "61c645e2302ea91a1672a7878f2cdf9d0adc912cffd03b5ff7dc048ed07999b0",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 112173064
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8945829408,
+      "disk_estimated_bytes": 1098859280
+    },
+    {
+      "case": "cuda-finite-training-packed",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "1483a20c7dbe8d52c8fadd4f1f76d1285e6356c246845e18fba1dda46b692e73",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 34053040
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8624697744,
+      "disk_estimated_bytes": 1073920640
+    },
+    {
+      "case": "cuda-finite-b512-packed",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Actual B512 after bounded diagnostic packing; report per-node unique active samples and real operator batch, without changing logical batch.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "5af2e4d8eb7edf577e7577d881b34bcc6a67b5c47b3d4bc9371d767b70dbe68f",
+      "task_id": "1b9df7fc37414c7ac7a544330ef814916d22c61531a4d61b226d066b74a5b320",
+      "execution_id": "3d3c6deed9290e8bb9e540324dab19d382596e6d8a44c012187c27180314f895",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 333602824
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 9850422816,
+      "disk_estimated_bytes": 1142997776
+    },
+    {
+      "case": "cuda-finite-b128-profile",
+      "matrix": "cuda-finite.json",
+      "status": "planned",
+      "question": "Separate observed window, not throughput. Attribute runtime finite-check region and actual kernels without inferring exclusive critical path from inclusive time.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "61c645e2302ea91a1672a7878f2cdf9d0adc912cffd03b5ff7dc048ed07999b0",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "cuda:0"
+      ],
+      "node_owners": {
+        "cuda:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "cuda:0": 99098632
+      },
+      "unknown_components": {
+        "cuda:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8847083040,
+      "disk_estimated_bytes": 1095320336
     },
     {
       "case": "cuda-hb-qry-position-att",
@@ -6443,6 +7059,314 @@
       },
       "host_estimated_bytes": 8590795496,
       "disk_estimated_bytes": 1073828584
+    },
+    {
+      "case": "npu-finite-b128-scalar",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "5e2433a780a6b625ace2bae9de063aa803afaf8ab38a72ab65de2a4557efa07b",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 78618632
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8912274976,
+      "disk_estimated_bytes": 1098859280
+    },
+    {
+      "case": "npu-finite-training-scalar",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "90d1fb97fa2ddebb8b36776fd28448c2b9bcaa9114839599ab0a5e38c88b6615",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 498608
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8591143312,
+      "disk_estimated_bytes": 1073920640
+    },
+    {
+      "case": "npu-finite-b128-packed",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "cef4a7ff2d684d36181250aedd2d884dba02d782ab9c6a817bf0de842a894c81",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 112173064
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8945829408,
+      "disk_estimated_bytes": 1098859280
+    },
+    {
+      "case": "npu-finite-training-packed",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.",
+      "model_id": "25e77ce78a7569232409132879eb098331b8266d9b1ae0d4700902b1b768eba7",
+      "workload_id": "a4246bc78638358469c619b962a15bda97e0a38a45a06b4d50ba156c819a0a5f",
+      "task_id": "334d08d19145e90d066558f67c0638e2877596bd937c8b62003da6ceffe5a0d5",
+      "execution_id": "af0457818df0ed68cb3509d1ddff5dad1edce8fe85ef2b77282f9dd136459460",
+      "parameters": 8190,
+      "unique_parameters": 8202,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 8,
+      "logical_batch": 2,
+      "positions": 3,
+      "stride": 4,
+      "span": 12,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "training",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "strict",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 34053040
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication",
+          "journal"
+        ]
+      },
+      "host_estimated_bytes": 8624697744,
+      "disk_estimated_bytes": 1073920640
+    },
+    {
+      "case": "npu-finite-b512-packed",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Actual B512 after bounded diagnostic packing; report per-node unique active samples and real operator batch, without changing logical batch.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "5af2e4d8eb7edf577e7577d881b34bcc6a67b5c47b3d4bc9371d767b70dbe68f",
+      "task_id": "1b9df7fc37414c7ac7a544330ef814916d22c61531a4d61b226d066b74a5b320",
+      "execution_id": "87562f7674f20c71e68c1e3a52465e92ad2794086da802d96aed85d45da10818",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 512,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 333602824
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 9850422816,
+      "disk_estimated_bytes": 1142997776
+    },
+    {
+      "case": "npu-finite-b128-profile",
+      "matrix": "npu-finite.json",
+      "status": "planned",
+      "question": "Separate observed window, not throughput. Attribute runtime finite-check region and actual kernels without inferring exclusive critical path from inclusive time.",
+      "model_id": "04ac449c72a9e6de27506b4b4de10515ae50e9655fc39a31f3d88849137358b0",
+      "workload_id": "b990069749b22c90e50605bd7db415c75bd19c69de616ad5063fd472ccbcf059",
+      "task_id": "773b7999cacca342b13d787761e023f1c0a89312a3b9bbf7637f9464d95c8358",
+      "execution_id": "cef4a7ff2d684d36181250aedd2d884dba02d782ab9c6a817bf0de842a894c81",
+      "parameters": 1134054,
+      "unique_parameters": 1134066,
+      "nodes": 4,
+      "regions": 2,
+      "physical_edges": 4,
+      "topology": "fc",
+      "graph": "settle",
+      "width": 128,
+      "logical_batch": 128,
+      "positions": 2,
+      "stride": 4,
+      "span": 8,
+      "client": "python-native",
+      "placement": "mixed-c",
+      "devices": [
+        "npu:0"
+      ],
+      "node_owners": {
+        "npu:0": 4
+      },
+      "mode": "inference",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "return_packing": "scalar",
+      "timeout_seconds": 900,
+      "validation_policy": "explore",
+      "static_budget_status": "requires-measurement",
+      "static_rejections": [],
+      "estimated_peak_bytes": {
+        "npu:0": 99098632
+      },
+      "unknown_components": {
+        "npu:0": [
+          "workspace",
+          "activation",
+          "communication"
+        ]
+      },
+      "host_estimated_bytes": 8847083040,
+      "disk_estimated_bytes": 1095320336
     },
     {
       "case": "npu-hb-qry-position-att",

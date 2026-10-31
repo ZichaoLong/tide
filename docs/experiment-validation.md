@@ -40,6 +40,17 @@ report = collect_comparison(candidate_records, reference_records,
 性能报告分列严格合格吞吐、探索成本、不同工作量成本和执行失败。
 旧 [study records](../scripts/core5_study_records.py) 的严格完整记录门禁不因此放宽。
 
+已安装eager运行器的`execution.finite_check_packing`只选择运行时有限值诊断的装配方式。
+默认scalar保持原执行身份；显式packed生成新的执行身份，按device/dtype拼接最多8MiB的连续张量，
+逐组计算isfinite/all后仍逐设备检查全部标志。大张量、非连续和特殊视图保留原检查。
+没有算术精度、阈值、样例、梯度连接或异常接纳变化；参考仍独立使用scalar。
+实现见[finite.py](../python/tidegraph/experiment/finite.py)，
+[独立拒绝/梯度/共享参数/三窗与磁盘恢复测试](../tests/test_experiment_finite.py)约束其等价性。
+当前策略限定Python/Python-native eager，C++核心不依赖它，standalone/resident不静默替换自身检查。
+每卡及主机另预算32MiB保守临时空间，实际收益按平台同材料测量；不因profile少调用就改默认。
+完整返回的`boundary_activity.nodes`另记录逐节点候选/Full次数及独立候选/活动样例数，
+计数来自实际已解码trace、位于计时外；没有逐事件设备取回，不作为候选调度输入。
+
 ## 独立 LibTorch 入口
 
 现有 `weighted-benchmark` 同时供公共启动器调度，不新增第二套 C++ 执行实现。

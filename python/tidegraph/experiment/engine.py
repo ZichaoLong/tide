@@ -88,6 +88,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         began = time.perf_counter()
         owner = create(resolved, checkpoint=checkpoint_path)
         record["construction_seconds"] = time.perf_counter()-began
+        record["execution_status"] = "running"
         memory.capture("constructed", reset=True)
         record["effective"] = owner.manifest()
         actual = []

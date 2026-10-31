@@ -83,7 +83,7 @@ def test_plan_index_is_not_runtime_evidence_and_counts_are_finite():
     assert index["status"] == "planned-not-runtime-evidence"
     observed = {platform:sum(len(cases(platform, path.stem[len(platform)+1:]))
                            for path in ROOT.glob(platform+"-*.json")) for platform in ("cpu","npu","cuda")}
-    assert observed == index["counts"] == dict(cpu=39,npu=55,cuda=55)
+    assert observed == index["counts"] == dict(cpu=45,npu=61,cuda=61)
     assert all(row["status"] == "planned" and row["timeout_seconds"] in (900,1800) for row in index["cases"])
 
 

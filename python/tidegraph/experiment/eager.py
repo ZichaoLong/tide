@@ -6,20 +6,7 @@ from ..placement import ExecutionPlacement, place_model
 from ..runtime import synchronize
 from .returns import snapshot
 from .tasks import create
-
-
-def finite_tensors(value):
-    """One finite flag per device, without changing mathematical leaves."""
-    from .returns import _tensors
-    from ..comparison import NonFiniteMismatch
-    groups = {}
-    seen = set()
-    for x in _tensors(value):
-        if id(x) not in seen and (x.is_floating_point() or x.is_complex()):
-            seen.add(id(x))
-            groups.setdefault(x.device, []).append(torch.isfinite(x.detach()).all())
-    if any(not bool(torch.stack(rows).all()) for rows in groups.values()):
-        raise NonFiniteMismatch("runtime", "nonfinite mathematical tensor")
+from .finite import finite_tensors
 
 
 def work(result):
@@ -33,6 +20,8 @@ class Eager:
         from ..planning.materialize import materialize
         spec = resolved["execution"]["effective"]
         self.resolved, self.spec, self.reference = resolved, spec, reference
+        self.check_finite = lambda value: finite_tensors(value, packing=
+            "scalar" if reference else spec.get("finite_check_packing", "scalar"))
         self.training = resolved["measurement"]["mode"] == "training"
         self.device = torch.device("cpu" if reference else spec["device"])
         self.devices = (self.device,) if reference else tuple(torch.device(x) for x in spec["peer_devices"] or (spec["device"],))
@@ -119,22 +108,22 @@ class Eager:
                 self.optimizer.zero_grad(set_to_none=True)
             result = self.forward(index)
             loss = self.task.loss(result, training=self.training)
-            finite_tensors((result, loss))
+            self.check_finite((result, loss))
             if self.training:
                 backward = getattr(self.optimizer, "backward", None)
                 backward(loss) if backward else loss.backward()
                 gradients = [p.grad for p in self.parameter_owner.parameters() if p.grad is not None]
                 if not gradients:
                     raise ValueError("task.objective: no connected parameter gradients")
-                finite_tensors(gradients)
+                self.check_finite(gradients)
                 for name, p in self.parameter_owner.named_parameters():
                     if p.grad is not None:
                         self.update_counts[name] += 1
                 self.optimizer.step()
-                finite_tensors(list(self.parameter_owner.parameters()))
-            finite_tensors(self.task.state_dict())
+                self.check_finite(list(self.parameter_owner.parameters()))
+            self.check_finite(self.task.state_dict())
             if self.module_manifest is not None:
-                finite_tensors((self.task.module.state_dict(),
+                self.check_finite((self.task.module.state_dict(),
                                 None if self.optimizer is None else self.optimizer.state_dict()))
         self.verify_task(check_code=False)
         self.state = result.continuation.detach()
@@ -219,13 +208,14 @@ class Eager:
         self.state = load(directory/"state.pt", self.binding.graph, self.parameter_owner, self.optimizer)
         self.update_counts = extra["update_counts"]
         self.task.load_state_dict(extra["task"])
-        finite_tensors(self.task.state_dict())
+        self.check_finite(self.task.state_dict())
         self.verify_task()
 
     def manifest(self):
         from ..ownership import region_reference
         model, graph = self.binding.model, self.binding.graph
         return dict(client="independent-reference" if self.reference else self.spec["client"],
+            finite_check_packing="scalar" if self.reference else self.spec.get("finite_check_packing", "scalar"),
             scheduler=self.scheduler, graph_view=self.resolved["graph_view"]["family"],
             requested_placement=self.spec["placement"], effective_placement={k: str(v) for k, v in self.placement.resolve(self.device).items()},
             node_devices=[str(x) for x in self.node_devices],

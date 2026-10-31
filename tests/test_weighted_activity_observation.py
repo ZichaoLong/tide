@@ -23,8 +23,8 @@ def test_boundary_activity_is_hand_counted_without_tensor_operations():
         states={(0, 0): state(2), (0, 1): state(0), (1, 0): state(1),
                 (1, 1): State(value, slots={"H": torch.zeros(1)})}, pending=[second])
     result = Result(continuation,
-        [dict(batch=0, active=True, fiber=[first]), dict(batch=0, active=False, fiber=[first, first]),
-         dict(batch=1, active=True, fiber=[second])], [(0, 2, 0, value)], [first, first, second], {})
+        [dict(node=0, batch=0, active=True, fiber=[first]), dict(node=1, batch=0, active=False, fiber=[first, first]),
+         dict(node=0, batch=1, active=True, fiber=[second])], [(0, 2, 0, value)], [first, first, second], {})
     with DispatchCounts() as operations:
         observed = activity(result)
     assert not operations.counts
@@ -33,6 +33,8 @@ def test_boundary_activity_is_hand_counted_without_tensor_operations():
     assert rows[0]["raw_kv_cache_lengths"] == {"0": 1, "2": 1}
     assert rows[1]["pending"] == 1 and rows[2]["stored_kv_owners"] == 0
     assert observed["raw_kv_cache_lengths"] == {"0": 1, "1": 1, "2": 1}
+    assert observed["nodes"] == {"0": dict(candidates=2, full=2, candidate_samples=2, active_samples=2),
+                                 "1": dict(candidates=1, full=0, candidate_samples=1, active_samples=0)}
     continuation.states[(0, 0)].slots["times"] = torch.empty(2, dtype=torch.int64, device="meta")
     with pytest.raises(ValueError, match="decoded CPU"):
         activity(result)

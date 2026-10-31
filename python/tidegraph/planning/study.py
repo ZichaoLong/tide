@@ -48,6 +48,8 @@ def command(record, *, python, root, output, workload, native_library=None,
             max_materialize_bytes=2*1024**3, resident_limits=None, checkpoint_max_bytes=None):
     """One configuration -> one process, with no omitted requested policies."""
     e, m = record["execution"]["requested"], record["measurement"]
+    if e.get("finite_check_packing", "scalar") != "scalar":
+        raise ValueError("finite_check_packing is an installed tidegraph run policy; the legacy study runner does not apply it")
     resident = e["placement"] == "resident"
     if checkpoint_max_bytes is not None:
         integer(checkpoint_max_bytes, "checkpoint max bytes")

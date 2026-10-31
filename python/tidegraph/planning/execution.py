@@ -23,6 +23,7 @@ class ExecutionSpec:
     node_devices: tuple[str, ...] = ()
     communication: str = "ordinary"
     return_mode: str = "complete"
+    finite_check_packing: str = "scalar"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
@@ -39,6 +40,10 @@ class ExecutionSpec:
             raise ValueError("unknown operator/packing implementation; no implicit substitution")
         if self.return_packing not in {"scalar", "packed"}:
             raise ValueError("unknown complete-return packing")
+        if self.finite_check_packing not in {"scalar", "packed"}:
+            raise ValueError("finite_check_packing must be scalar or packed")
+        if self.finite_check_packing != "scalar" and (self.client == "libtorch" or self.placement == "resident"):
+            raise ValueError("finite_check_packing=packed applies to installed Python eager clients; standalone/resident keep their existing checks")
         if self.placement == "resident" and self.return_packing != "scalar":
             raise ValueError("packed complete return applies only to eager execution")
         for k in ("workers", "intraop_threads", "interop_threads"):
@@ -83,7 +88,10 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
-        extended = bool(self.node_devices) or self.communication != "ordinary" or self.return_mode != "complete"
+        if self.finite_check_packing == "scalar":
+            requested.pop("finite_check_packing")
+        extended = (bool(self.node_devices) or self.communication != "ordinary" or self.return_mode != "complete"
+                    or self.finite_check_packing != "scalar")
         if not extended:
             # Historical v1 identities remain byte-for-byte reproducible. These
             # default values introduce no new selection into an old record.

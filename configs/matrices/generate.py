@@ -87,6 +87,20 @@ def requests():
             add(platform, "packing", "packing-"+label+"-b128", medium, batch=128, positions=2,
                 packing=packing, return_packing=returns, validation="explore",
                 question="A scalar/scalar or C packed/packed. B is the existing batch/fc-b128 packed/scalar case; no duplicate measurement or third auto algorithm.")
+        for policy in ("scalar", "packed"):
+            config = add(platform, "finite", "finite-b128-"+policy, medium, batch=128, positions=2,
+                validation="explore", question="Same B128 material and full return; only bounded runtime finite diagnostic packing differs. Original numerical tolerance and nonfinite refusal remain.")
+            config["execution"]["finite_check_packing"] = policy
+            config = add(platform, "finite", "finite-training-"+policy, recipe(width=8), mode="training",
+                question="Same small shared-parameter training, complete gradients/slots and exact resume; finite diagnostics do not change mathematical leaves.")
+            config["execution"]["finite_check_packing"] = policy
+        config = add(platform, "finite", "finite-b512-packed", medium, batch=512, positions=2,
+            validation="explore", question="Actual B512 after bounded diagnostic packing; report per-node unique active samples and real operator batch, without changing logical batch.")
+        config["execution"]["finite_check_packing"] = "packed"
+        config = add(platform, "finite", "finite-b128-profile", medium, batch=128, positions=2,
+            validation="explore", question="Separate observed window, not throughput. Attribute runtime finite-check region and actual kernels without inferring exclusive critical path from inclusive time.")
+        config["execution"]["finite_check_packing"] = "packed"
+        config["measurement"].update(observation="profile", steps=1)
         for client in ("pytorch", "libtorch"):
             add(platform, "clients", "common-"+client, client=client,
                 question="Common complete-return material; native baseline is coverage/fc-settle. Client/build identities remain separate.")

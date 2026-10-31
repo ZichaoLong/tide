@@ -4,7 +4,7 @@
 
 ## 已交付与本轮终态
 
-公共`tidegraph` 0.3.0提供plan/共享约束逐卡预算、三客户端run/check、持久job、恢复和CSV/HTML/归档。人类入口见[操作手册](human-workflow.md)，配置及149个有限选点见[矩阵](platform-matrix.md)。安装包、共享核心和standalone各保存真实身份。尚未运行的case不称通过。
+公共`tidegraph` 0.3.0提供plan/共享约束逐卡预算、三客户端run/check、持久job、恢复和CSV/HTML/归档。人类入口见[操作手册](human-workflow.md)，配置及167个有限选点见[矩阵](platform-matrix.md)。安装包、共享核心和standalone各保存真实身份。尚未运行的case不称通过。
 
 | 本轮固定任务 | 实际结果 |
 | --- | --- |
@@ -22,8 +22,8 @@ GPU B128/B512成本中位2.504/8.605秒，A/B/C为4.191/2.504/1.841秒。CPU B12
 
 ## 活动作业
 
-- 本机 `gef-platform-npu-eager-1b3e39f.service`：background.slice、KillMode=control-group、RuntimeMaxSec=37800。已等CPU终态后经队列分配**物理11→逻辑npu:0**，32项coverage/clients/batch/packing/modules/placement/precision正在运行，每项900秒上限。固定source/install-1b3e39f。外层`artifacts/jobs/platform-npu-eager-1b3e39f/{status.json,task.log}`；逐项`artifacts/platform-matrix/npu-eager-run-1b3e39f`；队列状态同父目录`npu-eager-queue-1b3e39f.json`。
-- gpu3090 `jobs/platform-cuda-observations-1b3e39f`：4项已终态，完整/离散/恢复均检查，数值超差explore接纳；profile实际kernel已记录，不作正式吞吐。下一提交 `jobs/platform-cuda-scale-large-batch-1b3e39f`，1.010B B128/B512，每项1800秒、固定install-platform-1b3e39f，完整返回。静态设备6.424/12.764GB、主存35.552/61.446GB、磁盘10.660/11.923GB，运行前live准入；窗口不拆逻辑batch、不改缓存或容差。
+- 本机 `gef-platform-npu-eager-1b3e39f.service`：background.slice、KillMode=control-group、RuntimeMaxSec=37800。已等CPU终态后经队列分配**物理11→逻辑npu:0**，32项coverage/clients/batch/packing/modules/placement/precision正在运行，最近已完成30项并进入FP16推理；B128/B512已完成与精确续接，原数值严格差异保留，每项900秒上限。固定source/install-1b3e39f。外层`artifacts/jobs/platform-npu-eager-1b3e39f/{status.json,task.log}`；逐项`artifacts/platform-matrix/npu-eager-run-1b3e39f`；队列状态同父目录`npu-eager-queue-1b3e39f.json`。
+- gpu3090 `jobs/platform-cuda-observations-1b3e39f`：4项已终态，完整/离散/恢复均检查，数值超差explore接纳；profile实际kernel已记录，不作正式吞吐。正在运行 `jobs/platform-cuda-scale-large-batch-1b3e39f`，1.010B B128/B512，每项1800秒、固定install-platform-1b3e39f，完整返回。静态设备6.424/12.764GB、主存35.552/61.446GB、磁盘10.660/11.923GB，运行前live准入；窗口不拆逻辑batch、不改缓存或容差。B128执行/离散/精确续接通过、数值超差；B512计时与精确续接已完成，正在独立检查，仍不称通过。
 
 ```sh
 systemctl --user show gef-platform-npu-eager-1b3e39f -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
@@ -47,10 +47,14 @@ CPU core来自de999c2、CPU standalone来自eca070f；NPU Python/SDK core/reside
 1. 审阅NPU32与GPU4观察终态，保存完整配置、实际实现身份、首差、工作量和逐卡峰值。
 2. 继续GPU FC多节点/HB/LH约1B、1B B128/B512、单/2/3/4卡mixed、训练及resident默认/有界配置；每个大点先live准入，按保留规则审阅后退役大checkpoint，避免累积填满50GiB盘。
 3. NPU当前组结束后继续CPU独立packing/profile与CPU7规模点、NPU规模/1/2/3/8卡/训练/resident；不得将构造、外层完成或自恢复当独立资格。
-4. 按[人类入口](human-workflow.md)完成三平台已安装consumer的base/task check、run、外部新进程恢复、status/log/stop/resume和HTML/CSV演练。九份配置已由安装包生成在`artifacts/platform-matrix/human-configs-1b3e39f`，GPU同名目录已复制，尚不能写成演练通过。
+4. 按[人类入口](human-workflow.md)完成三平台已安装consumer的base/task check、run、外部新进程恢复、status/log/stop/resume和HTML/CSV演练。九份配置已由安装包生成在`artifacts/platform-matrix/human-configs-1b3e39f`，GPU同名目录已复制，CPU/NPU尚未演练；GPU逐项结论见下。
 5. 依据新profile处置六项热点、校准真正近界点并记录硬限制；原约2B FP32并非24/64GiB显存近界。单卡/多卡预算含恢复/两代磁盘，不能只加空闲显存。
 6. 分阶段提交审阅证据、同步ROADMAP/索引/经验并普通推送，继续至授权范围闭环。
 
 干净检出从开发文档重建环境/库、从跟踪JSON选case；不依赖上述原运行目录。历史身份用`python scripts/resolve_history_commit.py OLD_SHA`定位等价源码，不能当重新资格。STATUS唯一交接，ROADMAP唯一待办。
 
 归档体积审阅：CPU32项展开v2约12MB，新增可直接查询的gzip归档与HTML折叠诊断，保留相同内容和内容摘要；24项相关回归通过。23项前版本检查已在固定de93246检出通过；两机de93246另装报告CLI，未改活动1b3e39f安装。
+
+GPU人类演练已终态，无存活后代：`jobs/human-cuda-de93246`，固定de93246安装和只读流程脚本，物理/逻辑CUDA1（GPU0规模作业独立）。完整命令逐条写入`runs/human-cuda-de93246/walkthrough.json`和各命令日志：doctor、安装锁、consumer公式、base/task related check、推理/训练新进程恢复、job停止/恢复、CSV/HTML。外层限2400秒，每条限600秒；演练命令完成不覆盖内层数学失败，不作性能样本。source6013e4c固定检出报告/CLI/持久作业24项通过。
+
+当前实现增量：显式`finite_check_packing=packed`按device/dtype分组≤8MiB诊断张量，默认scalar、原阈值和非有限拒绝保留；独立参考仍scalar。新增三平台18个同材料推理/训练/独立profile选点，原149项配置及身份逐项未变。逐节点独立活动样例数计数位于计时外；运行状态构造后明确为running。78项相关开发检查通过；实际收益及设备回归尚待固定提交测量。

@@ -154,6 +154,9 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
             payload_gradients=learned*scalar if train else 0, fp32_masters=master,
             master_gradients=master, optimizer_slots=slots, checkpoint_restore_staging=0,
             checkpoint_optimizer_preflight=0, checkpoint_snapshot_staging=master+slots if checkpoint and train else 0)
+        if spec.finite_check_packing == "packed":
+            # One <=8MiB cat plus conservative finite-predicate temporaries.
+            components[device]["finite_check_workspace"] = 32*1024**2
     if resident:
         for device, values in components.items():
             values["private_state"] = resident_layout["node_private_preflight_bytes"][device]
@@ -262,6 +265,8 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     disk_reserve = _bytes(resources.get("disk_reserve_bytes", GIB), "resources.disk_reserve_bytes")
     host = (4*max(materialize, checkpoint_weights)+2*optimizer_bytes+continuation+
             sum(v["complete_record_estimate"] for v in components.values())*host_results//results+host_reserve)
+    if spec.finite_check_packing == "packed":
+        host += 32*1024**2
     if "cpu" in per_device:
         host = max(host, per_device["cpu"]["estimated_peak_bytes"]+2*materialize+host_reserve)
     disk = 2*checkpoint_estimate+disk_reserve+(4*inv["totals"]["unique"] if spec.client == "libtorch" else 0)
