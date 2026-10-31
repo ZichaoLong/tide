@@ -62,4 +62,4 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 
 七卡配置固定`2562263`，开发和冻结配置检查各10项通过；`gef-platform-seven-2562263.service`等待sharded终态，使用冻结`inputs-2562263-seven`及原bd2ff2e安装，仅一个1B推理配置、900秒、队列600秒、外层86400秒含等待。状态/log在`artifacts/jobs/platform-seven-2562263`，结果`artifacts/platform-matrix/npu-model-1b-cards-7-bd2ff2e`；此项不是八卡失败重命名，尚无结果。
 
-新发现：NPU小训练ordinary/cpu_bridge严格通过；blocking计算完成后在exact-resume阶段SIGSEGV/-11，剩余检查未执行、无后代，checkpoint与日志保留。公共结果报告补同config_id的supervisor状态关联，显示process-failure而保留原快照和已完成窗口成本；开发12项通过，尚待冻结验证。
+新发现：NPU小训练ordinary/cpu_bridge严格通过；blocking计算完成后在exact-resume阶段SIGSEGV/-11，剩余检查未执行、无后代，checkpoint与日志保留。公共结果报告补同config_id的supervisor状态关联，显示process-failure而保留原快照和已完成窗口成本；固定b3dc53c开发及冻结12项均通过，五条NPU实际结果重新投影已入多卡归档（不重跑）。

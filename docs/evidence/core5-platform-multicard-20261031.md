@@ -1,8 +1,8 @@
-# 同模型多卡：CUDA实际放置、通信与训练（2026-10-31）
+# 同模型多卡：CUDA/NPU实际放置、通信与训练（2026-10-31）
 
 固定Python实现`bd2ff2ed6786c57f492b6ac8b83b4b3a4b0d821e`；core/resident构建源de999c2，standalone源eca070f，本组仅实际运行Python/native eager。旧库来源/hash与安装内容分开保存在归档，不声称重新构建。RTX3090×4、Torch2.12.1+cu130，FP32/FP32 scoring、TF32关闭、ATen/interop/worker均1、mixed-c/packed/scalar完整返回。每配置warmup1窗、连续2窗、独立参考与磁盘精确续接。一次有限流程，不宣称统计稳定性。
 
-六项全部执行完成、离散/完整记录检查及精确续接通过。三个1B推理点保留数值超差探索结果；三个小型训练严格通过。原严格阈值、旧gated-HB多卡恢复失败及异步边界不因此解除。
+CUDA六项全部执行完成、离散/完整记录检查及精确续接通过。三个1B推理点保留数值超差探索结果；三个小型训练严格通过。原严格阈值、旧gated-HB多卡恢复失败及异步边界不因此解除。
 
 ## 同一模型的推理放置
 
@@ -32,6 +32,40 @@ FC16节点/8区域、KV、d2048、FFN4d，1,014,118,392个去重可训练参数�
 
 Native三种请求均为6组跨卡复制；cpu_bridge的6组明确经主机、物理字节翻倍。Python边界360 bytes是设备到主机输出/目标准备，因此其cpu_bridge_copies=0不代表native未中转。计数含声明路径的前后向同步边界；不能外推为所有ATen/driver流量。所有卡共享一个optimizer窗口边界，未将共享参数拆成副本绕开约束。
 
+## NPU同模型与三通信实际点
+
+固定Python实现仍bd2ff2e，NPU公共core/resident构建eca070f；Torch2.12.0+cpu、TorchNPU2.12.0.post2/CANN9.1，HF32关闭。
+FP32 payload/scoring、ATen/interop/worker1、mixed-c/packed/scalar完整返回。配置b495f10冻结；不是重跑GPU或旧NPU矩阵。
+相同FC16/d2048模型的2/3卡运行已完成，离散及精确恢复通过、独立FP32超差；原atol1e-6/rtol1e-5保持。
+
+| NPU卡数 | 节点分配 | 中位秒 | 逐卡全程allocated峰值GB | 恢复检查秒 |
+| ---: | --- | ---: | --- | ---: |
+| 2 | 8/8 | 0.762563 | 2.213210 / 2.213211 | 36.492 |
+| 3 | 6/6/4 | 0.887916 | 1.672490 / 1.672491 / 1.131772 | 29.783 |
+| 8 | 未分配 | 未测 | 未测 | 未测 |
+
+两实际推理点每窗31 candidate/16 Full/28消息，native普通复制7组/229488 bytes。
+参数owner、逐节点state及消息目标与有效映射核对一致；不能由普通复制推断resident多卡资格。
+8卡于07:13:54Z等待607.440秒后超时（队列exit3），只有7卡可用，物理9为其他项目所用；没有执行模型、不称硬件不支持。
+明确七卡新增配置2562263保留与八卡的不同请求，等待当前依赖链后运行；此处尚无七卡结果。
+
+同一小型FC8/d8双卡训练的三种通信均完成三个更新窗，随后分别接受独立检查与恢复：
+
+| NPU通信 | 中位成本秒 | 完整独立训练 / 恢复 | native复制bytes / 同步 |
+| --- | ---: | --- | --- |
+| ordinary | 0.786530 | 严格通过 / 精确 | 4176 / 0 |
+| blocking | 0.907716 | 未执行独立检查 / 恢复中SIGSEGV | 4176 / 24 |
+| cpu_bridge | 0.835494 | 严格通过 / 精确 | 8352物理（4176逻辑）/ 24 |
+
+ordinary/cpu_bridge各8份独立比较零差异；两者不能解除其他旧异步图失败。
+blocking于07:14:41Z进程exit -11，无存活后代；最后实验快照phase=exact-resume，checkpoint已保存但exact检查未完成。
+该成本仅说明已完成窗，不是合格训练吞吐；不能把未执行的CPU参考或恢复写成通过。保留其小checkpoint/log/config以定位。
+
+此实际崩溃还暴露报告遗漏监督器退出码：b3dc53c按同一config_id关联子任务status，保留原result字节/hash、
+已完成窗口与未检查字段，明确显示process-failure和最后阶段。正常严格数值失败仍显示strict-failure，外层passed不能提升子项。
+开发与冻结源码12项报告/HTML/归档检查通过；用冻结公开results命令重新投影这5条终态，blocking实际显示-11/exact-resume，
+归档无需旧目录仍可读取。该修正不改变运行、梯度或活跃安装，不冒充修复了SIGSEGV。
+
 ## 来源、生命周期与复现
 
 任务`jobs/platform-cuda-multicard-bd2ff2e`于06:17:00Z exit0，SSH独立检查supervisor/workload/remaining后代全部为空；外层passed不覆盖三项strict-failure。没有项目重型构建重叠，其他系统负载未隔离。allocator范围不含驱动/厂商隐藏内存；详细构造/计时/恢复峰值和RSS高水位在归档。
@@ -44,4 +78,4 @@ tidegraph results docs/evidence/core5-platform-multicard-20261031.json.gz --form
 
 安装/实际site见[公共手册](../human-workflow.md)。约1B三卡并不代表靠近多卡总容量；后续容量准入分别核对逐卡峰值、host和checkpoint磁盘，不直接加总空闲显存。
 
-归档SHA256：`4dbc8fc617ab3bfe01ad3d58fee479d658353a993fbc860bdd4af833985ef439`。
+归档SHA256：`7e711fab31bb4ef17aeb976358cd65d14e2badab2126e57602918f1d243e3e31`。
