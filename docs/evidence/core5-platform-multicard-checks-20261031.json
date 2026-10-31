@@ -1,0 +1,505 @@
+{
+  "schema": "tide-platform-selected-checks-v1",
+  "source": "bd2ff2ed6786c57f492b6ac8b83b4b3a4b0d821e",
+  "purpose": "independent roots plus complete inference and three-step original training/exact resume; no new performance measurements",
+  "fixed_math": "0770593838a37c790a568226930567ed60f99b83",
+  "input_sha256": "89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8",
+  "launcher_script_sha256": "2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c",
+  "raw_projection_sha256": "f6c00eb7ceba63f7b64730ee66a52d5c89197b6887b7ce4e413e6709fa7ce092",
+  "cases": [
+    {
+      "name": "cuda-train-two-blocking",
+      "result_sha256": "21ce52f67eb130bd04487bf8a8b9d4a3f5e2660f57beacab111be2b399130d57",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-train-two-blocking",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "blocking",
+          "peer_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "1fd5a6380f1172177825a92f62d3f88dfd26bdcd55d6516db708ce231fa4fa82",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "8a9eb0083a80596855c6542f3affa4a97aad412579677cb84d639c46afc6e4bb",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-10-31T07:50:18.427711+00:00",
+        "scope": "full",
+        "config_id": "1fd5a6380f1172177825a92f62d3f88dfd26bdcd55d6516db708ce231fa4fa82",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "all",
+              "first-output",
+              "connected-zero",
+              "first-control",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-physical-message",
+              "private-raw-state-roots-after-nonposition-cut"
+            ],
+            "parameters_and_external_roots": true,
+            "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "finished": "2026-10-31T07:50:31.431041+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "45e8856edf2528414e52737534b3121cb4db1b7647f42a2bf29dae818c5341c3",
+            "libtidegraph_runtime.a": "88625cf5d352a9014cd2843f9db36c4c7a24e1d9f4520ed63850db441378526a",
+            "_tide_native.so": "79d3022582be20b5f6c8e995fdf1b8538a55164962230ee2e1afc547456fcd43",
+            "tidegraph-smoke": "8547c56d8a0118b99cfed3079a2f9c2b28a8b20bceb0132adb1444ffd0e80f4a",
+            "tidegraph-kernel-check": "0f167c019f00489e9e98383a40a23f2a1ac4e52582e9b10e17c2ae503b3bcaf9",
+            "tidegraph-full-check": "46974c14c76eb6f70d1202c8cae8e711d9e963e70c135e7254e764e29012c6fc",
+            "tidegraph-aggregate-check": "2b92095cce113052bc064abfff4b778e7036f13d042fc7d1d218703628c3973f",
+            "tidegraph-optimizer-check": "382800b48b2e73811e093aaf296dacd515ff6d6c58649a270e9537c20b08a8bd",
+            "tidegraph-checkpoint-check": "6d7b15080c136aa4a03f3ddf84fc731f03994d7a617e738056deb07f0766bd07",
+            "tidegraph-weighted-training-check": "f720bcf69dfb641a561945d35caa7104258ae932ef5c5a66731f5f8688b5e13c",
+            "tidegraph-lh-scope-check": "b49f1eb8bb3dff0c6bb8d3d33fc4c945153d9c6353d3fa9801dc8a7f9bdbac89",
+            "tidegraph-streaming-bench": "1104748bfc36c9c1a0efd1be93fad99f7352588ecd23bd2f7fb4b022302f9df4",
+            "tidegraph-scale-bench": "a11974c799de7f2be862e73ba9926902679d28dfb35f227c540aafd011450b23",
+            "tidegraph-profile-check": "df3d29fa997677c12b539f78c397a6b1c58c7453dddf5576276c0a36c203ffc2",
+            "tidegraph-settle-check": "d0b469b921b22c56b06d5b3efc362c904a384ba76a23378383f1cdbdc661b630",
+            "tidegraph-greedy-check": "5cb75438d151a02d0a4e95bc92c70a7aee4b7669846ce86e3781f6e661d0c638",
+            "tidegraph-accelerator-check": "d47e1167b5530face4cd6ac22ee78efbdf982e1682528da3376c1eaa8fafa7ea",
+            "tidegraph-runtime-check": "97a4b5cb7e8c96014942d31c7fbaedb18301ce55e7e3f1c0b902ffc1c2c2615a",
+            "tidegraph-read-precision-check": "6cbbd5891476f086c678ac0fb50cb85faf0cffdacd28ea61c1e7432ca2e79359",
+            "tidegraph-placement-check": "2c93a9687441d7ff49edaad31ff3cb137a8e85ab20ce313b633f7fe36ee957c8",
+            "tidegraph-payload-ownership-check": "b3a826099d8e1aefe9adf1e3b7589ae6cfbe590bef9a72ffafbc5a844c2445a0",
+            "tidegraph-weighted-binding-module-check": "da6583fcd041d98ddd385b3774912b3f62d2ba81f704c6f2ac8c2aaad3204919",
+            "libtidegraph-weighted-binding-module.so": "806ef97c624fa3f85a5ffabea94963de931320a5680f4728318895f69ef58098"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "e472241638a185992cf75551ef62b1e3abfedaf4d82979d31cb9766c785e6e7e",
+            "libtide-weighted-flow.so": "a96208d7826c89c20384c7c2f114e017996e0893a058847a3944860827491418",
+            "libtide-weighted-training.so": "df99bf4898ea13c6bcc57648a923d472fd7555ed10a1c721fe06912d4a1b0fe1"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "3c6188d404e59ce0d1b207aa0de4c8725dea84b2c12d7372c62c54df2faa46d1"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-31T07:50:16.658983+00:00",
+        "finished": "2026-10-31T07:50:32.399603+00:00",
+        "remaining_live_pids": []
+      }
+    },
+    {
+      "name": "cuda-train-two-cpu_bridge",
+      "result_sha256": "208540e34f15f7355591235209364a8d35b268e5d2e52e42a23f2ca711bb490e",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-train-two-cpu_bridge",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "cpu_bridge",
+          "peer_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "ade86c01bc1e73bc7213b65fcf7805dd2e0caaa2823652e93abcbc6258c03713",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "0da1ab2d4446f7c6c1435b4a454694313de0030197fe8147c14955ee53662160",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-10-31T07:50:34.566189+00:00",
+        "scope": "full",
+        "config_id": "ade86c01bc1e73bc7213b65fcf7805dd2e0caaa2823652e93abcbc6258c03713",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "all",
+              "first-output",
+              "connected-zero",
+              "first-control",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-physical-message",
+              "private-raw-state-roots-after-nonposition-cut"
+            ],
+            "parameters_and_external_roots": true,
+            "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "finished": "2026-10-31T07:50:48.593415+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "45e8856edf2528414e52737534b3121cb4db1b7647f42a2bf29dae818c5341c3",
+            "libtidegraph_runtime.a": "88625cf5d352a9014cd2843f9db36c4c7a24e1d9f4520ed63850db441378526a",
+            "_tide_native.so": "79d3022582be20b5f6c8e995fdf1b8538a55164962230ee2e1afc547456fcd43",
+            "tidegraph-smoke": "8547c56d8a0118b99cfed3079a2f9c2b28a8b20bceb0132adb1444ffd0e80f4a",
+            "tidegraph-kernel-check": "0f167c019f00489e9e98383a40a23f2a1ac4e52582e9b10e17c2ae503b3bcaf9",
+            "tidegraph-full-check": "46974c14c76eb6f70d1202c8cae8e711d9e963e70c135e7254e764e29012c6fc",
+            "tidegraph-aggregate-check": "2b92095cce113052bc064abfff4b778e7036f13d042fc7d1d218703628c3973f",
+            "tidegraph-optimizer-check": "382800b48b2e73811e093aaf296dacd515ff6d6c58649a270e9537c20b08a8bd",
+            "tidegraph-checkpoint-check": "6d7b15080c136aa4a03f3ddf84fc731f03994d7a617e738056deb07f0766bd07",
+            "tidegraph-weighted-training-check": "f720bcf69dfb641a561945d35caa7104258ae932ef5c5a66731f5f8688b5e13c",
+            "tidegraph-lh-scope-check": "b49f1eb8bb3dff0c6bb8d3d33fc4c945153d9c6353d3fa9801dc8a7f9bdbac89",
+            "tidegraph-streaming-bench": "1104748bfc36c9c1a0efd1be93fad99f7352588ecd23bd2f7fb4b022302f9df4",
+            "tidegraph-scale-bench": "a11974c799de7f2be862e73ba9926902679d28dfb35f227c540aafd011450b23",
+            "tidegraph-profile-check": "df3d29fa997677c12b539f78c397a6b1c58c7453dddf5576276c0a36c203ffc2",
+            "tidegraph-settle-check": "d0b469b921b22c56b06d5b3efc362c904a384ba76a23378383f1cdbdc661b630",
+            "tidegraph-greedy-check": "5cb75438d151a02d0a4e95bc92c70a7aee4b7669846ce86e3781f6e661d0c638",
+            "tidegraph-accelerator-check": "d47e1167b5530face4cd6ac22ee78efbdf982e1682528da3376c1eaa8fafa7ea",
+            "tidegraph-runtime-check": "97a4b5cb7e8c96014942d31c7fbaedb18301ce55e7e3f1c0b902ffc1c2c2615a",
+            "tidegraph-read-precision-check": "6cbbd5891476f086c678ac0fb50cb85faf0cffdacd28ea61c1e7432ca2e79359",
+            "tidegraph-placement-check": "2c93a9687441d7ff49edaad31ff3cb137a8e85ab20ce313b633f7fe36ee957c8",
+            "tidegraph-payload-ownership-check": "b3a826099d8e1aefe9adf1e3b7589ae6cfbe590bef9a72ffafbc5a844c2445a0",
+            "tidegraph-weighted-binding-module-check": "da6583fcd041d98ddd385b3774912b3f62d2ba81f704c6f2ac8c2aaad3204919",
+            "libtidegraph-weighted-binding-module.so": "806ef97c624fa3f85a5ffabea94963de931320a5680f4728318895f69ef58098"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "e472241638a185992cf75551ef62b1e3abfedaf4d82979d31cb9766c785e6e7e",
+            "libtide-weighted-flow.so": "a96208d7826c89c20384c7c2f114e017996e0893a058847a3944860827491418",
+            "libtide-weighted-training.so": "df99bf4898ea13c6bcc57648a923d472fd7555ed10a1c721fe06912d4a1b0fe1"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "3c6188d404e59ce0d1b207aa0de4c8725dea84b2c12d7372c62c54df2faa46d1"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-31T07:50:32.806151+00:00",
+        "finished": "2026-10-31T07:50:49.644976+00:00",
+        "remaining_live_pids": []
+      }
+    },
+    {
+      "name": "cuda-train-two-ordinary",
+      "result_sha256": "c715c15fe7cdb35f7762c3d65b2d8589b82addf122f606adf727c0fe7a907489",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "cuda-train-two-ordinary",
+        "description": "Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 4,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 8
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "cuda:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "training",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 900
+        },
+        "resources": {
+          "max_materialize_bytes": 2147483648,
+          "checkpoint_max_bytes": 2147483648,
+          "live_results": 1
+        }
+      },
+      "config_id": "7460e534732ef16dc731a42af796ded068cf8618da7f8ef5b496487acfbfe797",
+      "model_id": "77e583615348524d2bd58055579d2342ad9ef47d8e989f329cb049cd8fff8ef9",
+      "execution_id": "8e26e9d2f4e67f52875b00b07b3bf383f7d5348442740ea07fde937f4a6e4c8d",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-10-31T07:50:03.002329+00:00",
+        "scope": "full",
+        "config_id": "7460e534732ef16dc731a42af796ded068cf8618da7f8ef5b496487acfbfe797",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "all",
+              "first-output",
+              "connected-zero",
+              "first-control",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-physical-message",
+              "private-raw-state-roots-after-nonposition-cut"
+            ],
+            "parameters_and_external_roots": true,
+            "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "finished": "2026-10-31T07:50:15.371968+00:00"
+      },
+      "identity": {
+        "package_sha256": "afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "45e8856edf2528414e52737534b3121cb4db1b7647f42a2bf29dae818c5341c3",
+            "libtidegraph_runtime.a": "88625cf5d352a9014cd2843f9db36c4c7a24e1d9f4520ed63850db441378526a",
+            "_tide_native.so": "79d3022582be20b5f6c8e995fdf1b8538a55164962230ee2e1afc547456fcd43",
+            "tidegraph-smoke": "8547c56d8a0118b99cfed3079a2f9c2b28a8b20bceb0132adb1444ffd0e80f4a",
+            "tidegraph-kernel-check": "0f167c019f00489e9e98383a40a23f2a1ac4e52582e9b10e17c2ae503b3bcaf9",
+            "tidegraph-full-check": "46974c14c76eb6f70d1202c8cae8e711d9e963e70c135e7254e764e29012c6fc",
+            "tidegraph-aggregate-check": "2b92095cce113052bc064abfff4b778e7036f13d042fc7d1d218703628c3973f",
+            "tidegraph-optimizer-check": "382800b48b2e73811e093aaf296dacd515ff6d6c58649a270e9537c20b08a8bd",
+            "tidegraph-checkpoint-check": "6d7b15080c136aa4a03f3ddf84fc731f03994d7a617e738056deb07f0766bd07",
+            "tidegraph-weighted-training-check": "f720bcf69dfb641a561945d35caa7104258ae932ef5c5a66731f5f8688b5e13c",
+            "tidegraph-lh-scope-check": "b49f1eb8bb3dff0c6bb8d3d33fc4c945153d9c6353d3fa9801dc8a7f9bdbac89",
+            "tidegraph-streaming-bench": "1104748bfc36c9c1a0efd1be93fad99f7352588ecd23bd2f7fb4b022302f9df4",
+            "tidegraph-scale-bench": "a11974c799de7f2be862e73ba9926902679d28dfb35f227c540aafd011450b23",
+            "tidegraph-profile-check": "df3d29fa997677c12b539f78c397a6b1c58c7453dddf5576276c0a36c203ffc2",
+            "tidegraph-settle-check": "d0b469b921b22c56b06d5b3efc362c904a384ba76a23378383f1cdbdc661b630",
+            "tidegraph-greedy-check": "5cb75438d151a02d0a4e95bc92c70a7aee4b7669846ce86e3781f6e661d0c638",
+            "tidegraph-accelerator-check": "d47e1167b5530face4cd6ac22ee78efbdf982e1682528da3376c1eaa8fafa7ea",
+            "tidegraph-runtime-check": "97a4b5cb7e8c96014942d31c7fbaedb18301ce55e7e3f1c0b902ffc1c2c2615a",
+            "tidegraph-read-precision-check": "6cbbd5891476f086c678ac0fb50cb85faf0cffdacd28ea61c1e7432ca2e79359",
+            "tidegraph-placement-check": "2c93a9687441d7ff49edaad31ff3cb137a8e85ab20ce313b633f7fe36ee957c8",
+            "tidegraph-payload-ownership-check": "b3a826099d8e1aefe9adf1e3b7589ae6cfbe590bef9a72ffafbc5a844c2445a0",
+            "tidegraph-weighted-binding-module-check": "da6583fcd041d98ddd385b3774912b3f62d2ba81f704c6f2ac8c2aaad3204919",
+            "libtidegraph-weighted-binding-module.so": "806ef97c624fa3f85a5ffabea94963de931320a5680f4728318895f69ef58098"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "e472241638a185992cf75551ef62b1e3abfedaf4d82979d31cb9766c785e6e7e",
+            "libtide-weighted-flow.so": "a96208d7826c89c20384c7c2f114e017996e0893a058847a3944860827491418",
+            "libtide-weighted-training.so": "df99bf4898ea13c6bcc57648a923d472fd7555ed10a1c721fe06912d4a1b0fe1"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "3c6188d404e59ce0d1b207aa0de4c8725dea84b2c12d7372c62c54df2faa46d1"
+          }
+        }
+      },
+      "supervisor": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-10-31T07:50:01.312509+00:00",
+        "finished": "2026-10-31T07:50:16.252785+00:00",
+        "remaining_live_pids": []
+      }
+    }
+  ],
+  "reproduction": "Select each cuda-train-two-{ordinary,blocking,cpu_bridge} case from configs/matrices/cuda-multicard.json; tidegraph check case.json --site site.json --scope full --output-dir new-check-dir",
+  "untested": "NPU successor pending; no multi-device resident or large-model root qualification inferred"
+}

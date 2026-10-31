@@ -81,3 +81,14 @@ tidegraph results docs/evidence/core5-platform-multicard-20261031.json.gz --form
 归档SHA256：`7e711fab31bb4ef17aeb976358cd65d14e2badab2126e57602918f1d243e3e31`。
 
 独立根补查入口：从同一三通信小配置运行`tidegraph check selected.json --site site.json --scope full --output-dir checks/new`。该检查包含输出/connected-zero/控制/描述量/物理消息以及非位置切点的私有状态根，随后完整三步训练与恢复。它是独立资格而非本表性能复测；尚未运行的根不填写通过。
+
+## CUDA三通信独立根补查
+
+bd2ff2e固定安装分别对ordinary、blocking和cpu_bridge的小型双卡训练配置执行公共`check --scope full`。
+三项均通过：完整独立推理+精确恢复、全部/首输出/connected-zero/首控制/四类descriptor/首物理消息，
+以及非位置切面私有raw-state独立根，含参数及外部根；最后原任务三步训练/共享梯度/optimizer与精确恢复通过。
+不能由原loss梯度推断任意根；此次是独立的实际补查，也不外推大规模或跨卡resident。
+07:50:49Z外层exit0，三子进程终态且无剩余后代；主动断开SSH后重新读取状态确认。
+逐项输入、实现/hash和结果见[独立检查记录](core5-platform-multicard-checks-20261031.json)。
+复现：从`cuda-multicard.json`取相应case作为case.json，再执行
+`tidegraph check case.json --site site.json --scope full --output-dir new-check-dir`。

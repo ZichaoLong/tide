@@ -17,7 +17,7 @@
 - [多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B的2/3/4卡、NPU2/3卡推理完整离散/恢复通过、数值探索。CUDA三通信小训练、NPUordinary/cpu_bridge原loss梯度/optimizer/恢复严格通过；NPUblocking在exact-resume SIGSEGV/-11，独立检查未执行。任意独立根补查另列为后继作业。
 - [resident](evidence/core5-platform-resident-20261031.md)：CUDA有界B128/B512完成、数值探索。同材料eager更便宜。新增NPU六项：B1和小训练严格通过，有界B128中位1.653417秒、离散/精确恢复通过、数值超差；有界B512通过HBM准入后构造EE1019/507002流任务缓冲满，未进入计时。原默认预算拒绝保留，短厂商日志/hash已审阅。
 - [训练容量](evidence/core5-platform-training-capacity-20261031.md)：CUDA单卡1B静态拒绝、双/四卡第三窗原平方loss非有限；NPU单/双卡原第三窗非有限已入库，参考/恢复未执行。31a3b32只补失败字段定位，不改配方或接受条件。NPU31a3b32小训练严格通过；双卡原训练准确拒绝字段runtime.forward_and_loss[loss]，恢复和独立参考未执行。
-- [4.561B容量](evidence/core5-platform-capacity-20261031.md)：CUDA同模型1/2/3/4卡执行/离散/精确恢复通过、FP32数值探索；中位0.675/0.755/0.779/0.784秒，逐卡最大allocated20.058/10.299/7.859/5.419GB。不是多卡总容量极限。四卡07:34:04Z终态exit0、SSH检查无后代；20.699GB checkpoint仍保留，未启动下一GPU任务。
+- [4.561B容量](evidence/core5-platform-capacity-20261031.md)：CUDA同模型1/2/3/4卡执行/离散/精确恢复通过、FP32数值探索；中位0.675/0.755/0.779/0.784秒，逐卡最大allocated20.058/10.299/7.859/5.419GB。不是多卡总容量极限。四卡07:34:04Z终态exit0、SSH检查无后代；20.699GB checkpoint已在恢复授权后审阅退役，用跟踪配置重建新的成本观察。
 - [人类流程](evidence/core5-human-workflow-20261031.md)：CPU/NPU/GPU各自公开安装锁/配置/检查/训练推理/新进程恢复/日志/停止/恢复/报告完成；本机各26命令。CPU base通过，NPU/GPU base独立根严格失败与下游小任务通过分列。四个本机停止/恢复unit均控制组空。按需返回生命周期演示保持validation=none，不冒称数学资格。
 - b3dc53c新私有安装与冻结12项报告检查通过；原blocking崩溃显示process-failure/-11/exact-resume，原快照不改。新报告只查询，不重新认证设备。两轮报告来源/hash在[报告资格](evidence/core5-human-report-20261031.json)。
 
@@ -45,7 +45,7 @@ artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-platform-
 ```
 
 如用户要求停止后台作业，只停止准确unit并核对控制组/后代；当前没有收到该停止指令。
-GPU9.123B现场磁盘准入已拒绝、无后代；三通信full独立根07:50:49Z全部通过、外层exit0且无后代，待单独归档。
+GPU9.123B现场磁盘准入已拒绝、无后代；三通信full独立根07:50:49Z全部通过、外层exit0且无后代，已归档[独立检查](evidence/core5-platform-multicard-checks-20261031.json)。
 作业名`platform-cuda-admission9123m-87655fc`、`platform-cuda-roots-87655fc`；未见终态前不称通过。
 83.896GB磁盘预算已含1GiB reserve；现场拒绝独立记录，不冒称构造或设备执行。
 
@@ -59,14 +59,14 @@ bd2ff2e安装内容hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee
 
 NPU12.802B预算58.565GB/卡另留6GiB、host241.331GB、两代checkpoint117.232GB。
 38.406B三卡预算每卡58.566GB另留6GiB、host766.974GB、disk349.567GB；其实际运行取决于校准，不由预算认证。
-CUDA C1/C2/C3 checkpoint已在各自证据审阅后退役，凭据位于远端根；C4保留，结果/config/log始终保留。
+CUDA C1/C2/C3/C4 checkpoint已在各自证据审阅后退役，凭据位于远端根，结果/config/log始终保留。
 CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡resident。
 
 ## 当前接续
 
 1. 先重核上述既有任务的实际终态，审阅内层结果，再补多卡/训练/resident/容量证据；不重跑已完成矩阵。
-2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint在审阅与dry-run后可退役以准入同模型两代磁盘文件，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
-3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。本提交后固定安装，重验相关测试并串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。当前盘空闲23.248GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
+2. GPU9.123B现场准入和三通信独立根full检查已完成。成本对照从跟踪配置重新生成；原C4checkpoint已审阅、dry-run并退役，配置/结果/hash保留；为同模型两代磁盘文件重新live准入，不把新安装当旧包精确恢复。远端独立根脚本hash `2f06b44ef74d25e62f0523fbd8a916825f29306fde90e10a00ac7aa257e1142c`、输入hash `89f191eb1e0d892e803f86da5111e90d9cce8a36ddf19edea8ae23bbe24a6dd8`，安装bd2ff2e；外层1200秒/每case300秒。
+3. tmpfs与主存联合准入、分阶段checkpoint观测已实现；28项checkpoint/完整训练恢复和44项配置/容量等定向开发检查通过（范围重叠不相加）。dba2a5e固定源码67项相关检查通过、unit终态且控制组空；新GPU私有wheel安装完成，小型CUDA native full检查（推理/独立根/训练/恢复）全部通过。已提交持久任务`jobs/platform-checkpoint-cost-dba2a5e`（当前disk，产物`checkpoint-cost-dba2a5e/progress.json`），外层2700秒、内层每项1200秒，串行执行`configs/checkpoint-cost/cuda-{disk,tmpfs}.json`。每项1200秒、warmup1+1窗+完整exact-next、validation=none，不重复数学矩阵或计入吞吐。C4退役后盘空闲43.918GB、shm128.849GB空，容器内存上限257.698GB；不把shm当额外物理内存。
 4. 收齐有限矩阵与拒绝/未测项，更新最终选型、六项处置和唯一ROADMAP；全部终态与无后代后交付。当前总体任务尚未完成。
 
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料。

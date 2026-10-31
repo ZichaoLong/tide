@@ -221,3 +221,5 @@
 - [数值/异步失败隔离](core5-numerical-isolation-20261028.md)：固定b0321b9/62073dd；GDN首次梯度分歧与不经过图模块的双NPU反向反例。
 
 - [core-5公共配置/自然规模固定CPU资格](core5-planning-20261029.md)：8f51ba6新CPU构建、336通过；设备及后续benchmark扩展另验。
+
+[三通信CUDA双卡独立根补查](core5-platform-multicard-checks-20261031.json)：固定bd2ff2e三项full检查通过，与原性能结果分列；NPU后继仍待实际终态。
