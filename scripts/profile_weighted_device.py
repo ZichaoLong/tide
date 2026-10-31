@@ -20,6 +20,7 @@ from source_identity import source_state
 
 
 def inspect_trace(path):
+    from weighted_profile_sync import summarize_cuda_sync
     document = json.loads(path.read_text())
     events = document if isinstance(document, list) else document["traceEvents"]
     hardware = {e["pid"] for e in events if e.get("name") == "process_name"
@@ -52,6 +53,7 @@ def inspect_trace(path):
                 phases_inclusive_us=durations(e for e in events if str(e.get("name", "")).startswith("tide.")),
                 transfer_and_scalar_inclusive_us=durations(e for e in events if e.get("name") in transfers),
                 host_operators_inclusive_us=durations(e for e in events if e.get("cat") == "cpu_op"),
+                cuda_host_synchronization=summarize_cuda_sync(events),
                 duration_caveat="inclusive host events overlap; kernel union is covered device time, not exclusive critical-path attribution",
                 trace_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 

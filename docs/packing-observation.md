@@ -46,3 +46,25 @@ Python作用域由`weighted/packing_observation.py`管理，嵌套计数独立�
 研究索引保留profile/观察的完整核对及成本，但不将其标为合格吞吐。
 本轮推理若声明`checkpoint_check=true`，还须有实际精确恢复结果；历史未声明的前向证据
 保持原范围，不补造恢复资格。运行约定见[完整返回测量](weighted-performance.md)，结果与下一步见[STATUS](STATUS.md)。
+
+CUDA trace的离线同步观察由`profile_weighted_device.inspect_trace`输出
+`cuda_host_synchronization`，也可用无Torch依赖的命令重新分析现有原始trace：
+
+```sh
+python scripts/weighted_profile_sync.py TRACE_JSON
+```
+
+命令只输出JSON与输入`trace_sha256`，不修改原始trace。
+
+只统计完整`X`事件中`cuda_runtime`/`cuda_driver`类别的stream/event/device/context
+显式同步API（含deprecated `cudaThreadSynchronize`、版本和每线程流后缀）。
+`profile.duration_us`分母是所有完整事件的最早开始到最晚结束，包含采集开销，
+不冒充无profile的完整返回耗时。`synchronization`给出调用数、`inclusive_us`累计、
+`union_us`时间区间并集及两者除以该分母的fraction。累计值可因跨线程或嵌套重叠超过分母。
+`apis`按原始API名拆分；`phases`按`tide.*`名汇总，分母为该阶段所有区间的并集，
+同步分子仅取与阶段区间相交部分。同一调用跨多个不相交阶段区间只计一次。
+`phase_union`合并所有阶段，`outside_phases_sync_union_us`保留未落在阶段内的同步覆盖。
+这些阶段交集跨捕获线程，只表达墙钟重合，不证明父子调用、关键路径、CPU利用率或全部主机空闲。
+`WaitEvent`的设备依赖、Query轮询、隐式copy等待、缺失事件与未采集时间都不补推；
+无有效分母时fraction为null。copy字节不从调用数推断。合成区间验证见
+`tests/test_weighted_profile_sync.py`；离线统计本身不授予设备或吞吐资格。

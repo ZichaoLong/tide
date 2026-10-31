@@ -167,6 +167,25 @@
       "question": "Inference full-return, independent complete records, exact continuation and actual batching; one process per selected execution."
     },
     {
+      "id": "fc-1b-b8",
+      "recipe": {
+        "topology": "fc",
+        "width": 4096,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 8,
+        "positions": 4
+      },
+      "question": "Fixed 1.010B trainable model, B1 versus real staggered B8; compare complete inference records and exact disk continuation before throughput. FP64 is a separate execution identity."
+    },
+    {
       "id": "fc-boundary-b1",
       "recipe": {
         "topology": "fc",
@@ -183,7 +202,26 @@
         "samples": 1,
         "positions": 4
       },
-      "question": "Conditional capacity point: admit only after measured 1B memory, host/disk budget and at least 4GiB device headroom; otherwise retain explicit not-run decision."
+      "question": "Conditional FP32 capacity point: admit only after measured 1B memory, host/checkpoint/disk budget and at least 4GiB device reserve. Current standalone restore needs two device banks; otherwise retain explicit not-run decision."
+    },
+    {
+      "id": "fc-boundary-fp64-b1",
+      "recipe": {
+        "topology": "fc",
+        "width": 6144,
+        "region_width": 2,
+        "depth": 2,
+        "profile": "baseline",
+        "history": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 1,
+        "positions": 4
+      },
+      "question": "Conditional FP64 Python/Python-native eager point: 2.270B trainable, about 18.04GiB unique parameters plus inert buffers. Admit only after 1B peak calibration, complete host/checkpoint/return budgets and at least 4GiB device reserve. Current standalone transactional restore needs two device banks and is not admitted here. Otherwise retain not-run; do not search by OOM."
     },
     {
       "id": "hb-small-b8",
@@ -395,7 +433,55 @@
       "intraop_threads": 1,
       "interop_threads": 1,
       "schedule": "streaming"
+    },
+    "python-cuda-fp64": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-cuda-fp64": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "cpp-cuda-fp64": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
+    },
+    "native-cpu-fp64": {
+      "client": "python-native",
+      "device": "cpu",
+      "placement": "native",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill"
     }
   },
-  "policy": "Explicit selected cells only, not a Cartesian sweep. FP32 payload/scoring IEEE, complete returns and independent full records, disk new-owner exact continuation. Profile separate. Near-boundary conditional on measured admission; no OOM search. Current failures retained."
+  "policy": "Explicit selected cells only, not a Cartesian sweep. FP32 payload/scoring IEEE is primary; explicit single-CUDA eager FP64 payload/scoring is separate and does not clear FP32 failures. Complete returns, independent full records and disk new-owner exact continuation; no FP64 resident/peer entry. Profile separate. Near-boundary conditional on measured admission and client-specific restore copies; no OOM search. Current failures retained."
 }

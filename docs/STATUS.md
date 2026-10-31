@@ -62,3 +62,9 @@ C已提交5f9bff1：仅批量正支持/有限性bool元数据取回，CPU与单�
 接续B观察作业 `inference-b-observe-1c903ae` 只读同源码与已通过core，四个独立profile及两Python客户端before测量，timeout1800，无构建。运行 `venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-observe-1c903ae --timeout 1800 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-observe-1c903ae.py`。原B编译失败保留；standalone before使用A已通过的同材料测量。
 
 D诊断与单卡CUDA eager显式FP64入口已审阅，43项CPU相关检查通过，GPU资格待构建；原FP32失败未解除。C+D拟合并一次新core/standalone构建，原resident库不因此冒充新资格。
+
+下一固定作业D：`inference-d-4960b6c`，来源4960b6c（C+D），56线程构建core和eager standalone，相关回归、三客户端小型训练检查、优化后对照/profile、原FP32诊断及单独FP64小型/64M资格。整体timeout7200，细项runs/4960b6c-inference；只有B观察与本机NPU before均终态后启动。命令 `venv/bin/python sources/4960b6c/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/4960b6c --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-d-4960b6c --timeout 7200 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-d-4960b6c.py`。
+
+本机NPU before：固定eee68c4、纯PyTorch同FC d8/B8/P4材料，独立完整推理与磁盘续接，单设备4–15空闲队列选取；服务gef-inference-npu-a-eee68c4，RuntimeMaxSec=600、background.slice、KillMode=control-group，脚本artifacts/cuda3090-inference/local-npu-a.sh。持久job artifacts/jobs/inference-npu-a-eee68c4，输出artifacts/cuda3090-inference/npu-a；待B终态启动，不与重型构建/计时重叠。
+
+B观察终态passed/exit0、无存活后代：4个profile及两客户端before均通过完整独立前向。两before完整推理/磁盘续接通过，PyTorch/native中位308.299/242.668ms。NPU before服务终态success/exit0、ControlGroup为空，物理9/logical0完整推理/续接通过。现在提交D固定长作业；运行时不修改sources/4960b6c。

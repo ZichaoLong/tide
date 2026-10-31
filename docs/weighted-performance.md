@@ -161,3 +161,63 @@ FP32算术/梯度，实际raw/payload边界显式half store，SGD独立FP32 mast
 报告`reference_precision`区分该契约与eager同dtype参考；这不是放宽容差或修复原FP16 GDN/AdamW边界。
 resident恢复检查先保存实际CPU checkpoint及下一窗口结果，关闭旧owner后再建新owner，
 避免仅为验收同时保留两套设备程序/参数bank；磁盘raw解码和完整下一窗核对仍精确，且在计时外。
+
+## GPU规模推理的静态预算
+
+[有限目录](../benchmarks/core5-cuda-inference-v1.json)新增FC d4096/B8和有条件d6144/B1，
+保留d8192/FP32点；FP64三客户端与native CPU有独立执行条目，不自动交叉运行。
+以下为四节点、两区域、P4、原时间窗16、history8、staggered-v1的**静态预算**，没有设备通过含义。
+全部参数计数含真实共享绑定；每个模型另有12个冻结传输标量，不能把unique总数叫作trainable数。
+推理不分配训练的梯度、master或optimizer槽。GiB采用2^30字节。
+
+| 配置 | trainable / unique参数 | 单份参数+旧零buffer | CUDA Python checkpoint权重 | 保留完整返回张量预留 |
+| --- | --- | --- | --- | --- |
+| d4096/B1/FP64 | 1,010,339,302 / 1,010,339,314 | 8.03 GiB | 8.54 GiB | 0.62 GiB |
+| d4096/B8/FP64 | 同上；模型身份不变 | 8.03 GiB | 8.54 GiB | 5.00 GiB |
+| d6144/B1/FP64 | 2,270,465,510 / 2,270,465,522 | 18.04 GiB | 19.18 GiB | 0.94 GiB |
+| d8192/B1/FP32 | 4,033,908,198 / 4,033,908,210 | 16.03 GiB | 17.04 GiB | 0.62 GiB |
+
+`planning.inference_budget.fc_inference_budget`复用inventory与`memory_floor`，不分配张量、不跑轨迹，
+且只接受上述四节点baseline FC/KV eager范围。它分别记录trainable/frozen/unique、85个owner和98个角色。
+B1/B8实际静态输入分别6/39个物理原子、4/25个独立输入根；candidate上界16/128不预测实际Full或消息数。
+返回预算忽略KV淘汰，按最多5窗×P4=20行、每事件四份状态、32个payload大小字段及额外标量/int64字段，
+为warmup+3测量结果及两个续接/参考结果保留六份；这有意高估共享张量，未把完整记录缩为输出向量。
+主存另保留编码/解码副本与8GiB余量；Python d4096/B8约47.14GiB、d6144约85.65GiB。
+这不是对象、allocator或厂商workspace的峰值保证；profile单独预算。
+
+物理副本由客户端决定：Python CUDA `checkpoint.save`逐state_dict角色调用`.cpu()`，
+共享角色产生独立主机副本，故文件按role-expanded参数+旧零buffer预算；CPU保存保留共享storage。
+standalone codec按canonical owner写盘，d4096/FP64权重约8.03GiB，建议显式9GiB文件预算。
+其`GraphCheckpoint::load`事务验证会让目标设备模型与完整future参数同时存活；
+d4096两份约16.06GiB，d6144两份约36.08GiB。因此d6144仅保留Python/native Python的条件测量，
+当前standalone近界恢复不准入；销毁旧runner不消除此临时副本，不改恢复协议冒充通过。
+native codec单张量2^28元素限制仍保留：d6144最大150,994,944，d8192最大268,435,456，均未越界。
+
+按24GiB设备、至少4GiB安全预留，d6144扣单份模型及一窗完整记录预留后仅余约1.80GiB
+给尚未覆盖的算子/allocator成本，须用约1B构造、执行和恢复的**实际峰值**校准后决定；
+不足则记录not-run，不能反复OOM寻边界。d5632另一个配置约1.908B trainable、单份15.16GiB，
+只作为有明确预算依据时的后续选点，不静默替换d6144。FP32严格失败不因FP64通过而解除。
+
+Python/native本轮每个1B配置建议另备10GiB磁盘、d6144另备21GiB；standalone 1B约13.76GiB，
+含约3.76GiB唯一FP32材料、9GiB checkpoint预算及1GiB日志余量。原子hard-link发布不额外复制整个文件。
+这些是**新增**空间预算，旧checkpoint/fixture/build必须另计，不能同时累积所有大配置后才检查50GiB数据盘。
+先固化必要结果/失败复现与哈希，再按产物规则退役已无活跃依赖的大文件。生成材料前显式给足
+`--max-materialize-bytes`（1B/FP64至少8,620,240,912字节加输入；d6144至少19,372,666,896字节加输入），
+默认2GiB及standalone默认4GiB checkpoint都不是这些配置的准入值。
+
+干净仓库可在匹配的Python3.12环境重算任一显式条目，不依赖GPU或旧运行目录：
+
+```sh
+PYTHONPATH=python python -S - <<'PY'
+import json, sys
+sys.path.insert(0, "python")
+from tidegraph.planning.study import case
+from tidegraph.planning.inference_budget import fc_inference_budget
+study = json.load(open("benchmarks/core5-cuda-inference-v1.json"))
+record = case(study, "fc-boundary-fp64-b1-kv", "native-cuda-fp64")
+print(json.dumps(fc_inference_budget(record), indent=2))
+PY
+```
+
+预算返回`automatic_admission=false`；负的CUDA余量明确拒绝当前客户端，正值仍须现场准入。
+同配置完整独立记录与磁盘精确续接在一次有界测量流程中验收，失败成本不计合格吞吐。
