@@ -15,6 +15,7 @@ class ExecutionSpec:
     schedule: str = "prefill"
     operator: str = "aten"
     packing: str = "auto"
+    return_packing: str = "scalar"
     workers: int = 1
     intraop_threads: int = 1
     interop_threads: int = 1
@@ -33,6 +34,10 @@ class ExecutionSpec:
             raise ValueError("unknown explicit precision")
         if self.operator != "aten" or self.packing not in {"auto", "scalar", "packed"}:
             raise ValueError("unknown operator/packing implementation; no implicit substitution")
+        if self.return_packing not in {"scalar", "packed"}:
+            raise ValueError("unknown complete-return packing")
+        if self.placement == "resident" and self.return_packing != "scalar":
+            raise ValueError("packed complete return applies only to eager execution")
         for k in ("workers", "intraop_threads", "interop_threads"):
             integer(getattr(self, k), k)
         peers = tuple(self.peer_devices)

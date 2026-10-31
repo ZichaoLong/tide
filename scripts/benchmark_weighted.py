@@ -33,6 +33,8 @@ def main():
     parser.add_argument("--interop-threads", type=int, default=1)
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--packing", choices=("auto", "scalar", "packed"), default="auto")
+    parser.add_argument("--return-packing", choices=("scalar", "packed"), default="scalar",
+                        help="eager complete CPU return transfer strategy, independent of operator packing")
     parser.add_argument("--implementation", choices=("python", "native", "resident"), required=True)
     parser.add_argument("--placement", choices=("native", "cpu", "mixed-a", "mixed-b", "mixed-c"), default="native")
     parser.add_argument("--schedule", choices=("streaming", "prefill"), default="prefill")
@@ -64,7 +66,7 @@ def main():
         device=args.device, placement="resident" if args.implementation == "resident" else args.placement,
         dtype=args.dtype, scoring_dtype=args.scoring_dtype, schedule=args.schedule,
         intraop_threads=args.intraop_threads, interop_threads=args.interop_threads, workers=args.workers,
-        packing=args.packing, peer_devices=tuple(args.peer_devices or ())).record()
+        packing=args.packing, return_packing=args.return_packing, peer_devices=tuple(args.peer_devices or ())).record()
     args.resident_limit_values, limits_sha = None, None
     if args.resident_limits:
         if args.implementation != "resident":
@@ -112,6 +114,7 @@ def main():
         started=now(), argv=sys.argv[1:], config=asdict(config),
         requested_device=args.device, requested_dtype=args.dtype, implementation=args.implementation,
         mode=args.mode, schedule=args.schedule, placement=args.placement,
+        return_packing=args.return_packing,
         autograd_enabled=args.mode == "training", optimizer_constructed=args.mode == "training",
         warmup_windows=1, measured_windows=1 if args.profile else args.steps,
         kind="profile" if args.profile else "work-observation" if args.observe_work else "benchmark",
@@ -243,6 +246,7 @@ def main():
             record["phase"] = "exact-resume"
             write_json(out/"result.json", record)
             record["exact_resume"] = check(candidate, create, config, args, device, out)
+            memory.capture("exact_resume")
         candidate.close(); candidate = None
         # Only after the measurement: independent scalar CPU schedule and
         # full-record/optimizer check. It supplies no execution hints.

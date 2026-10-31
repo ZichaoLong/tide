@@ -481,6 +481,71 @@
       "intraop_threads": 1,
       "interop_threads": 1,
       "schedule": "prefill"
+    },
+    "python-cuda-return-packed": {
+      "client": "pytorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
+    },
+    "native-cuda-return-packed": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
+    },
+    "cpp-cuda-return-packed": {
+      "client": "libtorch",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
+    },
+    "native-cuda-fp64-return-packed": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "packing": "packed",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
+    },
+    "native-cuda-scalar-ops-return-packed": {
+      "client": "python-native",
+      "device": "cuda:0",
+      "placement": "mixed-c",
+      "dtype": "float32",
+      "scoring_dtype": "float32",
+      "packing": "scalar",
+      "workers": 1,
+      "intraop_threads": 1,
+      "interop_threads": 1,
+      "schedule": "prefill",
+      "return_packing": "packed"
     }
   },
   "policy": "Explicit selected cells only, not a Cartesian sweep. FP32 payload/scoring IEEE is primary; explicit single-CUDA eager FP64 payload/scoring is separate and does not clear FP32 failures. Complete returns, independent full records and disk new-owner exact continuation; no FP64 resident/peer entry. Profile separate. Near-boundary conditional on measured admission and client-specific restore copies; no OOM search. Current failures retained."

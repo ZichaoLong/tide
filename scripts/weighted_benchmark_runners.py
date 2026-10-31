@@ -1,5 +1,5 @@
 """Public candidates and a separately invoked scalar reference consumer."""
-from dataclasses import fields, is_dataclass, replace
+from dataclasses import replace
 from contextlib import nullcontext
 import json
 from pathlib import Path
@@ -8,23 +8,11 @@ from tidegraph import Continuation
 from tidegraph.placement import ExecutionPlacement
 from tidegraph.runtime import synchronize
 from weighted_benchmark_cases import window, limits
+from weighted_benchmark_return import snapshot
 
 
 def phase(args, name):
     return torch.profiler.record_function("tide."+name) if args.profile else nullcontext()
-
-
-def snapshot(value):
-    """Decode only actual computed fields, preserving the complete record type."""
-    if isinstance(value, torch.Tensor):
-        return value.detach().cpu().clone()
-    if is_dataclass(value):
-        return replace(value, **{f.name: snapshot(getattr(value, f.name)) for f in fields(value)})
-    if isinstance(value, dict):
-        return {key: snapshot(x) for key, x in value.items()}
-    if isinstance(value, (tuple, list)):
-        return type(value)(snapshot(x) for x in value)
-    return value
 
 
 def loss_from_outputs(result, *, allow_empty=False):
@@ -55,6 +43,9 @@ class Eager:
             binding = replace(binding, model=reference_model(binding.model))
             inputs = widen(inputs)
         self.binding, self.inputs, self.span, self.config, self.args, self.device = binding, inputs, span, config, args, device
+        self.return_packing = "scalar" if reference else getattr(args, "return_packing", "scalar")
+        if self.return_packing not in {"scalar", "packed"}:
+            raise ValueError("unknown complete-return packing")
         self.devices = (device,) if reference else tuple(torch.device(d) for d in getattr(args, "peer_devices", None) or (device,))
         self.node_owners = None
         if len(self.devices) > 1:
@@ -113,7 +104,7 @@ class Eager:
                     self.optimizer.step()
         with phase(self.args, "detach_return_sync"):
             self.state = result.continuation.detach()
-            actual = snapshot(result)  # Complete CPU return is included for every candidate.
+            actual = snapshot(result, packing=self.return_packing)
             value = float(loss.detach().cpu())
             for device in self.devices:synchronize(device)
         return actual, value
@@ -137,6 +128,7 @@ class Eager:
         result = dict(execution=self.args.placement, schedule=self.args.schedule, operator="aten",
                       effective_placement={k: str(v) for k, v in placement.resolve(self.device).items()},
                       complete_cpu_records=True, precision=dtype, scoring_dtype=scoring,
+                      return_packing=self.return_packing,
                       optimizer="sgd" if self.optimizer is not None else None,
                       master_dtype=("float32" if self.half else dtype) if self.optimizer is not None else None, loss_scale=1.,
                       packing=getattr(self.args, "packing", "auto"), workers=getattr(self.args, "workers", 1),
@@ -154,6 +146,8 @@ class Eager:
 
 class Resident:
     def __init__(self, binding, inputs, span, config, args, device, *, checkpoint=None):
+        if getattr(args, "return_packing", "scalar") != "scalar":
+            raise ValueError("packed complete return applies only to eager execution")
         from tidegraph.weighted import WeightedResident, WeightedResidentTraining
         self.inputs, self.span, self.config, self.args, self.device = inputs, span, config, args, device
         self.training = args.mode == "training"

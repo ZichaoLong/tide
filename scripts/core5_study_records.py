@@ -51,6 +51,8 @@ def accept_result(record, result):
         raise ValueError("measured workload identity differs")
     if result.get("requested_dtype") != record["execution"]["requested"]["dtype"]:
         raise ValueError("measured precision differs")
+    if result.get("return_packing", "scalar") != record["execution"]["requested"].get("return_packing", "scalar"):
+        raise ValueError("measured complete-return packing differs")
     if record["measurement"]["mode"] == "training":
         for key in ("parameter_values_checked", "final_parameter_gradients_checked", "optimizer_values_checked"):
             if result.get(key) is not True:

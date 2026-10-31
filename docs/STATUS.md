@@ -1,70 +1,59 @@
-# 当前交接 — GPU 规模推理轮（2026-10-31）
+# 当前交接 — GPU 规模推理与有限优化（2026-10-31）
 
-授权分支 `graph-execution-foundation`；本轮起点 `cbb0964124ea7b708e19ee4f388579528cddbce3`，启动干净。
-数学固定 `0770593838a37c790a568226930567ed60f99b83`；19份core-5与旧快照校验通过。
-用户本轮明确授权大batch、约1B及接近安全显存边界的有限推理；旧“不扩1B”和禁止子代理安排由本轮指令覆盖。
-不重跑旧训练矩阵、不开展8B/16B全扫描；旧严格失败和多卡resident硬件边界保留于[ROADMAP](ROADMAP.md)。
-阶段实现先提交，再对固定源码资格，证据另提交；普通推送已授权，参考仓库只读。
+授权分支 `graph-execution-foundation`，起点 `cbb0964`；固定数学
+`0770593838a37c790a568226930567ed60f99b83`，快照校验通过。本轮允许约1B和安全近显存边界推理，
+不重跑旧训练矩阵或8B/16B扫描。用户允许子代理；主代理统一设备、构建、集成和普通推送。
+参考仓库只读，远端 `dev` 原cc6b45f未提交修改完整保留。旧失败与多卡resident硬件限制不解除。
 
-## 当前工作
+## 固定实现与已完成事实
 
-启动审计完成，补齐推理资格与不齐输入，随后取得baseline、有限规模测量和至多少数具体packing优化。
-三个协作子任务分别负责推理checkpoint入口、真实不齐输入与静态预算、六类packing代码审计；主代理统一集成和资源。
-当前未提交源码见 `git status --short`；不编辑远端活跃作业读取的固定源码。
-六项问题：相同长度桶、控制元数据同步、重复packing、兼容节点合批、resident填充/容量、反向模板；均须记录证据和处置。
+| 源码 | 内容与实际状态 |
+| --- | --- |
+| eee68c4 | 推理完整独立前向/磁盘新owner精确续接、不构造optimizer；staggered-v1真实不齐输入。GPU有限21项18通过、3项d256 FP32完整keys严格失败；resident推理/训练两dtype四项通过。原core/resident库源码hash匹配并保留32edb0f构建身份 |
+| 1c903ae | 实际桶/MM/BMM计数、活动/缓存摘要、观察不能成为吞吐。新core构建通过，standalone编译因work命名歧义失败；失败保留。接续4个profile和两客户端before均通过完整前向；两个正式before还通过磁盘精确续接 |
+| 5f9bff1 | 已有批次的detach bool支持/有限性元数据合并取回，CPU/单例保留；CPU相关57项通过 |
+| 4960b6c | 首差/独立CPU FP64局部KV诊断、显式单卡CUDA eager FP64、修复standalone限定名。新core/standalone构建通过，相关66项、三客户端GPU选定训练/独立根/共享/optimizer/恢复9项通过；有限测量已终态passed；FP32诊断strict_mismatch作为预期观察保留 |
+| 9fce486 | 显式FP64目录与1B/近界静态预算、离线CUDA同步API区间并集；规划15项、观察器11项通过。自动准入恒false，近界须实际1B峰值校准 |
 
-## 已审阅历史
+以上提交已普通推送。当前未提交变动由 `inference_audit` 实施第二且最后有限优化：
+eager显式 `return_packing=scalar|packed`，默认scalar；完整返回8MiB组、逐字段独立CPU clone，
+不改数学/调度/live continuation/checkpoint，resident packed拒绝。参考仍独立scalar。
+还补恢复后的allocator峰值观察。`git status --short`是准确文件清单；尚未提交/构建/真机验收。
 
-上轮[eager](evidence/core5-cuda-eager-20261031.md)、[resident](evidence/core5-cuda-resident-20261031.md)、
-[finite](evidence/core5-cuda-finite-20261031.md)保留原源码、严格失败及适用范围。
-本轮推理须独立比较完整返回/状态/控制/消息/history/pending，磁盘新owner精确续接另验；训练失败不替代推理结论。
-当前benchmark缺少推理checkpoint许可，默认输入活动/缓存长度相同；正在最小补齐，不另建测量框架。
+## 现场、活跃作业和日志
 
-## 现场和作业
+GPU入口 `artifacts/cuda3090/ssh.sh`，根 `/root/autodl-tmp/gef-cuda3090`，私有 `venv/bin/python`。
+四张RTX3090/sm86；Torch2.12.1+cu130、CUDA13.0.88、GCC11.4；affinity112、CPU配额56、内存240GiB。
+启动数据盘约48.2GiB空闲，后续每个大材料前复核。实际12方向直接P2P仍false，不改协议/驱动。
+GPU正式计时固定物理0/logical0、intraop/interop/workers=1、FP32 IEEE/关闭TF32；与项目重型构建串行。
 
-目标 `gpu3090`，SSH入口 `artifacts/cuda3090/ssh.sh`；根 `/root/autodl-tmp/gef-cuda3090`。
-重新核对四张RTX3090/24GiB/SM86、驱动595.71.05、Torch2.12.1+cu130/Python3.12.3、Toolkit13.0.88、GCC11.4、CMake3.22.1、Nsight2025.3.1。
-私有环境 `venv` 的pytest8.4.2/Ninja1.13.0/JSON3.11.2可复用；实际IEEE FP32矩阵探针通过，12方向P2P查询仍false。
-affinity112、配额56核、内存240GiB；启动主存约3.6GiB，数据盘空闲48.2GiB，四卡1MiB/0%，无项目进程。
-远端 `dev` 保持cc6b45f的原未提交修改，不作为资格源码；检查命令 `git -C /root/autodl-tmp/gef-cuda3090/dev status --short`。
-当前只读源码 `sources/cbb0964`；旧32edb0f库仅在实际源码hash匹配时用于初始profile，并记录其原构建身份。
-
-计划首个作业 `inference-baseline-cbb0964`：在固定cbb0964运行FC/KV width8、B1/B8、P8的Python/native独立profile，各一次，180秒/项，整体900秒。
-这是现有实现的同步/批次基线，旧入口没有推理checkpoint，不把profile当完整吞吐资格。
-提交命令：`venv/bin/python sources/cbb0964/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/cbb0964 --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-baseline-cbb0964 --timeout 900 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-baseline-cbb0964.py`。
-日志/status位于该job目录，输出 `runs/cbb0964-inference-baseline`。当前状态：passed/exit0，2026-10-31T03:13:25Z终止，remaining_live_pids为空。四个profile完整前向核对通过；PyTorch B1/B8 scalar取回515/3623，native657/2981；不授予吞吐/推理磁盘资格。
-检查/停止使用同一 `container_job.py status|stop --output-dir JOB`；完成后核对无存活后代。
-本机私有 `.local/venv-core5-inference` 继承现行Ascend9.1开发栈，仅补pytest/Ninja；本机尚无长作业。
-
-## 下一命令
+已终态容器作业 `inference-d-4960b6c`，来源只读 `sources/4960b6c`，timeout7200，
+监督PID43272已退出，exit0、remaining_live_pids为空；进度/内部终态在 `runs/4960b6c-inference/stages.json`。
+状态/日志 `jobs/inference-d-4960b6c/{status.json,task.log}`；新构建 `builds/4960b6c-{core,benchmark}`。
+不得编辑活跃源码或把running称为通过。检查/停止：
 
 ```sh
-git status --short --branch
-python scripts/status.py
-python scripts/check_upstream.py
+artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/4960b6c/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-d-4960b6c'
+# 同一入口以 stop 替换 status；终态须核对remaining_live_pids为空。
 ```
 
-推理/输入设施已提交并推送 `eee68c4`。下一作业 `inference-a-eee68c4`：固定 `sources/eee68c4`，新建 `builds/eee68c4-benchmark`；core/resident复用实际源码hash匹配的32edb0f库，保留原身份。先56线程build，再小型相关CPU/GPU推理与训练回归，再21个显式小型/4.2M推理测量；每项1200秒，整体7200秒，无并发重型构建/计时。
-作业命令：`venv/bin/python sources/eee68c4/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/eee68c4 --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-a-eee68c4 --timeout 7200 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-a-eee68c4.py`。
-状态/日志 `jobs/inference-a-eee68c4/{status.json,task.log}`，细分日志/结果 `runs/eee68c4-inference`。已终态failed/exit1、remaining_live_pids为空。新standalone构建通过，目标相关CPU23项、GPU resident推理/训练FP32/FP16四项通过；21个测量18通过/3严格失败。d256 FC B1/8/32均第0窗node0 keys 3/768坐标失败，最大2.0265579e-6；磁盘精确恢复均通过，不将失败成本认证为吞吐。
-新显式目录 `benchmarks/core5-cuda-inference-v1.json` 包含staggered-v1输入、14个静态模型/窗组和11个执行选择；不自动全排列。正式逐项选择，近界d8192仅在约1B实测峰值和完整预算允许后运行。
-大运行先静态预算参数/状态/KV/workspace/物理副本/返回、主存和磁盘；计时与重型构建不重叠。
-规模、精度、算子、packing、线程、执行位置和完整返回口径均需进入运行身份。不得以自身恢复替代独立正确性。
+已终态：`inference-baseline-cbb0964` passed；`inference-a-eee68c4` failed（18/21单元通过）；
+`inference-b-1c903ae` failed（core通过/standalone编译失败）；`inference-b-observe-1c903ae` passed，均无存活后代。
+本机 `gef-inference-npu-a-eee68c4` background.slice服务success/exit0、ControlGroup为空，队列分配物理9/logical0；
+同FC d8/B8/P4纯PyTorch推理/续接通过，中位559.661ms。私有环境 `.local/venv-core5-inference`，
+模块 `ascend/dev-workspace-9.1.0`；不碰其他项目设备0–3。记录 `artifacts/jobs/inference-npu-a-eee68c4`、
+输出 `artifacts/cuda3090-inference/npu-a`。
 
-## 当前下一阶段
+## 下一步
 
-观察设施B已提交 `1c903ae`，纯host整数直方图/计时外活动摘要及profile吞吐门禁25项开发检查通过。
-下一目标作业 `inference-b-1c903ae` 在只读 `sources/1c903ae`，新建 `builds/1c903ae-{core,benchmark}`；56线程core+eager standalone构建，随后相关检查、四个独立profile、三客户端同一FC小图正式before测量和standalone纯计数观察。
-命令：`venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-1c903ae --timeout 5400 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-1c903ae.py`。状态/日志在job目录，细项在 `runs/1c903ae-inference`；终态failed/exit1，无存活后代。core构建通过；standalone main.cpp的work函数与新命名空间歧义，未开始后续检查/profile。限定函数名修复随下一实现提交。
-C已提交5f9bff1：仅批量正支持/有限性bool元数据取回，CPU与单帧原路径保留，57项CPU开发回归通过，尚无GPU资格或收益。
-数值诊断待固定：沿原FP32首个trace/局部KV写分歧定位；单卡CUDA eager显式FP64作为独立配置试验，resident不新增FP64，不继承/解除原FP32失败。
+1. 等待并审阅D：FP32首差诊断、FP64三客户端及d64M、同材料优化前后。原FP32失败不因FP64通过解除。
+2. 运行已准备 `inference-extra-9fce486.py`：GPU literal kernel、零支持两客户端训练回归，离线解析原8份trace；无重型构建。用container_job新目录 `inference-extra-9fce486`、timeout1200，来源sources/9fce486。
+3. 集成完整返回packing，先提交后构建standalone（core hash相同时复用D并记录身份），小型完整推理/训练/恢复及同材料对照；本机NPU少量前后与相关正确性检查串行。
+4. 小型FP64通过后按 `planning.inference_budget.fc_inference_budget` 与实际显存/主存/磁盘准入约1B B1/B8，再决定d6144近界。保留至少4GiB GPU、8GiB磁盘余量；不OOM搜索。
+   Python/native近界单bank条件点；standalone事务恢复需两bank，近界静态拒绝。resident大width KV Full guard独立拒绝，不盲目调预算。
+5. 六项处置、完整实测范围、严格失败与有限收益写入单独审阅证据、索引、performance-lessons，替换本STATUS、更新ROADMAP并普通推送。
 
-接续B观察作业 `inference-b-observe-1c903ae` 只读同源码与已通过core，四个独立profile及两Python客户端before测量，timeout1800，无构建。运行 `venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-observe-1c903ae --timeout 1800 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-observe-1c903ae.py`。原B编译失败保留；standalone before使用A已通过的同材料测量。
+A/B审阅输入：`artifacts/cuda3090-inference/stage-{a,b}-raw.json`；六项草稿 `packing-review.md`。
+它们是当前整合材料，最终干净仓库复现不能依赖这些目录。命令和配置源已入库。
 
-D诊断与单卡CUDA eager显式FP64入口已审阅，43项CPU相关检查通过，GPU资格待构建；原FP32失败未解除。C+D拟合并一次新core/standalone构建，原resident库不因此冒充新资格。
-
-下一固定作业D：`inference-d-4960b6c`，来源4960b6c（C+D），56线程构建core和eager standalone，相关回归、三客户端小型训练检查、优化后对照/profile、原FP32诊断及单独FP64小型/64M资格。整体timeout7200，细项runs/4960b6c-inference；只有B观察与本机NPU before均终态后启动。命令 `venv/bin/python sources/4960b6c/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/4960b6c --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-d-4960b6c --timeout 7200 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-d-4960b6c.py`。
-
-本机NPU before：固定eee68c4、纯PyTorch同FC d8/B8/P4材料，独立完整推理与磁盘续接，单设备4–15空闲队列选取；服务gef-inference-npu-a-eee68c4，RuntimeMaxSec=600、background.slice、KillMode=control-group，脚本artifacts/cuda3090-inference/local-npu-a.sh。持久job artifacts/jobs/inference-npu-a-eee68c4，输出artifacts/cuda3090-inference/npu-a；待B终态启动，不与重型构建/计时重叠。
-
-B观察终态passed/exit0、无存活后代：4个profile及两客户端before均通过完整独立前向。两before完整推理/磁盘续接通过，PyTorch/native中位308.299/242.668ms。NPU before服务终态success/exit0、ControlGroup为空，物理9/logical0完整推理/续接通过。现在提交D固定长作业；运行时不修改sources/4960b6c。
+当前本机下一服务 `gef-inference-npu-d-4960b6c`，固定sources4960b6c纯PyTorch同材料，物理9队列、timeout600；job artifacts/jobs/inference-npu-d-4960b6c，日志与输出artifacts/cuda3090-inference/npu-d*。终态后再启动extra GPU作业；不与构建/正式计时重叠。

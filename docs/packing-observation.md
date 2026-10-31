@@ -1,5 +1,9 @@
 # Eager packing 的独立观测
 
+完整CPU返回另有独立显式[传输打包策略](complete-return-packing.md)：
+`--return-packing scalar|packed`不改变本页的局部算子packing或placement。
+两种策略均计入完整窗口成本；独立profile与正式计时分别记录。
+
 这是一项可选的主机整数计数，不改变固定数学、数值表达式、调度、返回、状态或checkpoint。
 Python `benchmark_weighted.py --profile` 在一个独立采集窗口启用；native通过现有
 `reset_work`/`work_metrics`取得相同字段。无需时间线时，Python入口显式使用

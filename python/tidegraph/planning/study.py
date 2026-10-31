@@ -85,6 +85,7 @@ def command(record, *, python, root, output, workload, native_library=None,
     argv += ["--device", e["device"], "--dtype", e["dtype"], "--scoring-dtype", e["scoring_dtype"],
              "--schedule", e["schedule"], "--placement", "native" if resident else e["placement"],
              "--packing", e["packing"], "--workers", str(e["workers"]),
+             "--return-packing", e.get("return_packing", "scalar"),
              "--intraop-threads", str(e["intraop_threads"]), "--interop-threads", str(e["interop_threads"]),
              "--mode", m["mode"], "--steps", str(m["steps"]), "--output-dir", output]
     return list(map(str, argv))

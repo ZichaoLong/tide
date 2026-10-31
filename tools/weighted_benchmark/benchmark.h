@@ -12,7 +12,7 @@ Fixture fixture(const Json&,at::ScalarType dtype=at::kFloat);
 std::vector<Tensor> tensors(const Json&,at::ScalarType dtype=at::kFloat);
 std::vector<External> inputs(const Fixture&,Index step);
 Continuation detached(Continuation);
-Result detached(Result);
+Result detached(Result,bool packed=false);
 Tensor loss(const Result&,bool allow_empty=false);
 Json work(const Result&);
 void write(const std::filesystem::path&,const Json&);

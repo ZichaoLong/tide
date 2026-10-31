@@ -16,8 +16,8 @@ Continuation detach_live(Continuation q){
 Tensor cpu(const Tensor& x){return x.defined()?x.detach().cpu().clone():Tensor{};}
 }
 Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtype,at::Device device,
-             ExecutionPlacement placement,Index workers,std::vector<at::Device> peers,bool storage)
-  :data(fixture(j,dtype)),training(train),prefill(batch),storage_reference(storage){
+             ExecutionPlacement placement,Index workers,std::vector<at::Device> peers,bool storage,bool return_packed)
+  :data(fixture(j,dtype)),training(train),prefill(batch),storage_reference(storage),return_packed(return_packed){
   if(workers<1)throw std::invalid_argument("workers must be positive");
   if(storage){
     if(dtype!=at::kHalf||!device.is_cpu()||!scalar)throw std::invalid_argument("half storage reference requires CPU scalar execution");
@@ -59,7 +59,7 @@ Step Eager::step(Index index){
       for(const auto& p:registry.owners()){
         storage_masters.at(p.canonical).copy_(p.value);p.value.copy_(p.value.to(at::kHalf).to(at::kFloat));}
     }else optimizer->step();}
-  state=detach_live(r.continuation);return {detached(r),value.cpu().item<double>()};
+  state=detach_live(r.continuation);return {detached(r,return_packed),value.cpu().item<double>()};
 }
 std::map<std::string,Tensor> Eager::parameters()const{
   std::map<std::string,Tensor> out;for(const auto& p:registry.owners())out[p.canonical]=cpu(storage_reference?p.value.to(at::kHalf):p.value);return out;

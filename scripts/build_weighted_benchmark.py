@@ -81,7 +81,8 @@ def main():
         if source_state(root) != (source, dirty):
             raise RuntimeError("source changed during standalone benchmark build")
         report.update(state="passed", binary_sha256=digest(binary), loader_sha256=digest(out/"loader.txt"),
-                      help_sha256=digest(out/"help.txt"))
+                      help_sha256=digest(out/"help.txt"),
+                      return_check_binary_sha256=digest(build/"weighted-return-check"))
     except BaseException as error:
         report.update(state="failed", error=repr(error)); raise
     finally:

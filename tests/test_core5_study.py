@@ -42,7 +42,7 @@ def test_each_launch_carries_requested_precision_placement_workers_and_peers():
         args = command(r, python="PYTHON", root=ROOT, output="OUT", workload="PLAN", native_library="CORE",
                        resident_library="RESIDENT", standalone_binary="CPP", fixture="MATERIAL")
         e = r["execution"]["requested"]
-        for key in ("device", "dtype", "scoring_dtype", "workers", "intraop_threads", "interop_threads", "packing", "schedule"):
+        for key in ("device", "dtype", "scoring_dtype", "workers", "intraop_threads", "interop_threads", "packing", "return_packing", "schedule"):
             assert args[args.index("--"+key.replace("_", "-"))+1] == str(e[key])
         assert args[args.index("--placement")+1] == ("native" if e["placement"] == "resident" else e["placement"])
         if e["peer_devices"]:

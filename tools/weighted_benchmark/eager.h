@@ -8,11 +8,11 @@ namespace weighted_benchmark {
 class Eager {
   Fixture data;Model placed;Continuation state;ParameterRegistry registry;
   std::unique_ptr<SGD> optimizer;bool training,prefill;Options options;
-  bool storage_reference;std::map<std::string,Tensor> storage_masters;
+  bool storage_reference,return_packed;std::map<std::string,Tensor> storage_masters;
  public:
   Eager(const Json&,bool training,bool prefill,bool scalar=false,at::ScalarType=at::kFloat,
         at::Device=at::Device(at::kCPU),ExecutionPlacement={},Index workers=1,
-        std::vector<at::Device> peers={},bool storage_reference=false);
+        std::vector<at::Device> peers={},bool storage_reference=false,bool return_packed=false);
   Step step(Index);
   std::map<std::string,Tensor> parameters()const;
   TrainingState training_state()const;

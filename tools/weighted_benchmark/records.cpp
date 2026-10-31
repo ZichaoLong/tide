@@ -1,9 +1,24 @@
 #include "benchmark.h"
+#include "return_packing.h"
 namespace weighted_benchmark {
 namespace {
-void tensor(Tensor& x){if(x.defined())x=x.detach().cpu().clone();}
-void state(State& s){tensor(s.value);for(auto& [_,x]:s.slots)tensor(x);}
-void history(History& h){for(auto& [_,x]:h.tensors)tensor(x);}
+void scalar(Tensor& x){if(x.defined())x=x.detach().cpu().clone();}
+template<class Copy> void state(State& s,Copy copy){copy(s.value);for(auto& [_,x]:s.slots)copy(x);}
+template<class Copy> void history(History& h,Copy copy){for(auto& [_,x]:h.tensors)copy(x);}
+template<class Copy> void continuation(Continuation& q,Copy copy){
+  for(auto& [_,s]:q.states)state(s,copy);for(auto& [_,h]:q.history)history(h,copy);
+  for(auto& a:q.pending)copy(a.value);
+}
+template<class Copy> void result_fields(Result& r,Copy copy){
+  continuation(r.continuation,copy);
+  for(auto& x:r.outputs)copy(x.value);for(auto& a:r.messages)copy(a.value);
+  for(auto& e:r.trace){for(auto x:{&e.content,&e.proposal,&e.descriptor,&e.control,&e.comparison,&e.next,&e.full})copy(*x);
+    for(auto& [_,x]:e.descriptor_fields)copy(x);for(auto& [_,x]:e.state_prepared)copy(x);
+    for(auto x:{&e.old,&e.proposed_state,&e.comparison_state,&e.next_state})state(*x,copy);history(e.history,copy);
+    for(auto& a:e.fiber)copy(a.value);for(auto& x:e.emitted)copy(x.value);for(auto& x:e.contributions)copy(x.value);
+    for(auto& x:e.sources){copy(x.atom.value);copy(x.scale);}
+    if(e.source_batch){auto b=std::make_shared<SourceBatch>(*e.source_batch);copy(b->values);e.source_batch=std::move(b);}}
+}
 Json activity(const Result& r){
   struct Sample {Index candidates=0,full=0,received=0,messages=0,outputs=0,pending=0,owners=0;std::map<Index,Index> cache;};
   std::vector<Sample> rows(r.continuation.batch_size);std::map<Index,Index> total;
@@ -26,16 +41,12 @@ Json activity(const Result& r){
 }
 }
 Continuation detached(Continuation q){
-  for(auto& [_,s]:q.states)state(s);for(auto& [_,h]:q.history)history(h);for(auto& a:q.pending)tensor(a.value);return q;
+  continuation(q,scalar);return q;
 }
-Result detached(Result r){
-  r.continuation=detached(r.continuation);for(auto& x:r.outputs)tensor(x.value);for(auto& a:r.messages)tensor(a.value);
-  for(auto& e:r.trace){for(auto x:{&e.content,&e.proposal,&e.descriptor,&e.control,&e.comparison,&e.next,&e.full})tensor(*x);
-    for(auto& [_,x]:e.descriptor_fields)tensor(x);for(auto& [_,x]:e.state_prepared)tensor(x);
-    for(auto x:{&e.old,&e.proposed_state,&e.comparison_state,&e.next_state})state(*x);history(e.history);
-    for(auto& a:e.fiber)tensor(a.value);for(auto& x:e.emitted)tensor(x.value);for(auto& x:e.contributions)tensor(x.value);
-    for(auto& x:e.sources){tensor(x.atom.value);tensor(x.scale);}
-    if(e.source_batch){auto b=std::make_shared<SourceBatch>(*e.source_batch);tensor(b->values);e.source_batch=std::move(b);}}
+Result detached(Result r,bool packed){
+  if(!packed){result_fields(r,scalar);return r;}
+  std::vector<Tensor*> fields;result_fields(r,[&](Tensor& x){fields.push_back(&x);});
+  return_copy::tensors(fields,packed);
   return r;
 }
 Tensor loss(const Result& r,bool allow_empty){

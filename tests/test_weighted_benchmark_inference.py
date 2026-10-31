@@ -153,6 +153,7 @@ def test_inference_entry_checks_all_windows_and_disk_resume(tmp_path, monkeypatc
     assert not result["autograd_enabled"] and not result["optimizer_constructed"]
     assert not result["parameter_values_checked"] and not result["optimizer_values_checked"]
     assert len(result["metrics"]) == 1 and result["metrics"][0]["pending"]
+    assert any(row["phase"] == "exact_resume" for row in result["memory"]["phases"])
 
 
 def test_standalone_inference_checks_disk_and_complete_forward(tmp_path):
