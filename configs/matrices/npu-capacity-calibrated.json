@@ -1,0 +1,364 @@
+{
+  "schema": "tide-experiment-matrix-v1",
+  "name": "npu-capacity-calibrated",
+  "description": "Finite named stage; preview/current resource admission before execution. No implicit Cartesian run or qualification.",
+  "site": "../sites/local-npu.json",
+  "cases": [
+    {
+      "name": "npu-capacity-12802m-cards-1",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-capacity-12802m-cards-1",
+        "description": "One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 7296
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 103079215104,
+          "checkpoint_max_bytes": 103079215104,
+          "live_results": 1,
+          "device_reserve_bytes": 6442450944,
+          "workspace_bytes": {
+            "npu:0": 3221225472
+          },
+          "activation_bytes": {
+            "npu:0": 536870912
+          },
+          "communication_bytes": {
+            "npu:0": 67108864
+          }
+        }
+      }
+    },
+    {
+      "name": "npu-capacity-12802m-cards-2",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-capacity-12802m-cards-2",
+        "description": "One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 7296
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 103079215104,
+          "checkpoint_max_bytes": 103079215104,
+          "live_results": 1,
+          "device_reserve_bytes": 6442450944,
+          "workspace_bytes": {
+            "npu:0": 3221225472,
+            "npu:1": 3221225472
+          },
+          "activation_bytes": {
+            "npu:0": 536870912,
+            "npu:1": 536870912
+          },
+          "communication_bytes": {
+            "npu:0": 67108864,
+            "npu:1": 67108864
+          }
+        }
+      }
+    },
+    {
+      "name": "npu-capacity-12802m-cards-3",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-capacity-12802m-cards-3",
+        "description": "One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 7296
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 103079215104,
+          "checkpoint_max_bytes": 103079215104,
+          "live_results": 1,
+          "device_reserve_bytes": 6442450944,
+          "workspace_bytes": {
+            "npu:0": 3221225472,
+            "npu:1": 3221225472,
+            "npu:2": 3221225472
+          },
+          "activation_bytes": {
+            "npu:0": 536870912,
+            "npu:1": 536870912,
+            "npu:2": 536870912
+          },
+          "communication_bytes": {
+            "npu:0": 67108864,
+            "npu:1": 67108864,
+            "npu:2": 67108864
+          }
+        }
+      }
+    },
+    {
+      "name": "npu-capacity-12802m-cards-8",
+      "config": {
+        "schema": "tide-experiment-v1",
+        "name": "npu-capacity-12802m-cards-8",
+        "description": "One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 8,
+            "region_width": 2,
+            "profile": "baseline",
+            "history": 8,
+            "sparse_denominator": 8,
+            "width": 7296
+          }
+        },
+        "task": {
+          "samples": 1,
+          "positions": 2,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 0.001
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "operator": "aten",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1,
+          "communication": "ordinary",
+          "peer_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "placement_strategy": "balanced-shared-groups"
+        },
+        "measurement": {
+          "mode": "inference",
+          "warmup": 1,
+          "steps": 2,
+          "validation": "explore",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 103079215104,
+          "checkpoint_max_bytes": 103079215104,
+          "live_results": 1,
+          "device_reserve_bytes": 6442450944,
+          "workspace_bytes": {
+            "npu:0": 3221225472,
+            "npu:1": 3221225472,
+            "npu:2": 3221225472,
+            "npu:3": 3221225472,
+            "npu:4": 3221225472,
+            "npu:5": 3221225472,
+            "npu:6": 3221225472,
+            "npu:7": 3221225472
+          },
+          "activation_bytes": {
+            "npu:0": 536870912,
+            "npu:1": 536870912,
+            "npu:2": 536870912,
+            "npu:3": 536870912,
+            "npu:4": 536870912,
+            "npu:5": 536870912,
+            "npu:6": 536870912,
+            "npu:7": 536870912
+          },
+          "communication_bytes": {
+            "npu:0": 67108864,
+            "npu:1": 67108864,
+            "npu:2": 67108864,
+            "npu:3": 67108864,
+            "npu:4": 67108864,
+            "npu:5": 67108864,
+            "npu:6": 67108864,
+            "npu:7": 67108864
+          }
+        }
+      }
+    }
+  ]
+}

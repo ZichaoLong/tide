@@ -37,7 +37,7 @@ GPU `jobs/platform-cuda-training-capacity-first-bd2ff2e`已终态failed，无后
 
 GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、数据盘50GiB。GPU新组启动前四卡各空闲24126MiB、0%利用；随后resident/profile正在用GPU0。校准4.561B点需要两代checkpoint42.482GB，必须先审阅/退役终态可再生checkpoint再准入；不因旧产物占盘误称模型硬件不支持。已退役并入库的三拓扑/多卡六个checkpoint27.280GB，凭据`checkpoint-retirement-reviewed-bd2ff2e.json`，清理后free41.735GB（profile仍活动）；此前已退役pilot和1B大batch四项14.576GB，原结果/输入/log保留，凭据`checkpoint-retirement-reviewed-1b3e39f.json`。12方向无直接P2P/原生跨卡原子边界未解除。
 
-安装：本机`artifacts/platform-matrix/install-{1b3e39f,de93246,bd2ff2e}`；远端`install-platform-*`。bd2ff2e包hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`，wheel、site、锁与构建manifest各自保存。活动安装/源码保持不可变。公共CLI/配置入口见[人类手册](human-workflow.md)、[180个有限选点](platform-matrix.md)。
+安装：本机`artifacts/platform-matrix/install-{1b3e39f,de93246,bd2ff2e}`；远端`install-platform-*`。bd2ff2e包hash`afc35286eae8dca7744134dcc966cde82ddf5b30e07720cd0ef491ee30783ff8`，wheel、site、锁与构建manifest各自保存。活动安装/源码保持不可变。公共CLI/配置入口见[人类手册](human-workflow.md)、[184个有限选点](platform-matrix.md)。
 
 ## 下一动作
 
@@ -54,3 +54,7 @@ GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、
 失败诊断实现开发30项通过（finite/engine/task-module）；只在已有非有限拒绝后遍历字段定位，正常判定/数值/阈值不变。正式资格待固定提交；新安装与活跃旧安装分离，旧失败不改写。
 
 固定31a3b32相关40项通过，wheel SHA674c4f3038ed916508c80a0ca57819253498492f80fd83dbecabcbf1159acdce，双机新私有安装install[-platform]-31a3b32不覆盖旧安装。GPU诊断作业`jobs/platform-cuda-finite-localization-31a3b32`准备在空闲设备启动：两小型finite策略训练回归、原1B双卡三窗失败材料原样复现定位，仍保留原bd2ff2e失败。每项原900/1800秒上限，非有限仍失败不恢复到通过。
+
+GPU31a3b32诊断组已终态failed/exit1、无后代。两策略小训练严格通过；原1B双卡在window2定位为`runtime.forward_and_loss[loss]`非有限，之前两个loss为6330525及749825591083008，所有已检查前向记录有限，尚未进入该窗反向。原loss/初始化/输入不改。继续已跟踪四卡同模型训练容量点`jobs/platform-cuda-training-four-31a3b32`，1800秒；盘23.443GB可用对两代预算18.406GB，另留1GiB。它不受双卡停止扩大结论冒充通过，推理独立继续。
+
+依据已终态NPU FC4约1B及FC16实际构造/窗口峰值，新增同一FC16/d7296/12.802B、单/2/3/8卡推理容量配置；逐卡3GiB workspace+512MiB activation+64MiB通信+6GiB空余，单卡58.565GB/host241.331GB/disk117.232GB。原180项身份保持，新点尚未执行；下一宽度静态拒绝、不分配。该单个模型用于近界容量，不展开8B/16B扫描。

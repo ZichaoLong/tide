@@ -182,6 +182,17 @@ def requests():
                         activation_bytes={f"cuda:{i}":256*1024**2 for i in range(count)},
                         communication_bytes={f"cuda:{i}":64*1024**2 for i in range(count)}),
                     question="One calibrated FC16 model:4.561B trainable,8 indivisible groups. Same model on1/2/3/4 cards.1B construction measured4.788GB; reserve1GiB workspace+256MiB activation+64MiB communication per card plus3GiB unused. Two checkpoint generations require42.49GB free disk; review/retire completed inputs first, never add nominal card memory or OOM-search.")
+        if platform == "npu":
+            for count in (1, 2, 3, 8):
+                add(platform, "capacity-calibrated", f"capacity-12802m-cards-{count}",
+                    recipe(width=7296, depth=8), batch=1, positions=2,
+                    peers=None if count == 1 else count, validation="explore",
+                    resources=LARGE | dict(max_materialize_bytes=96*GIB, checkpoint_max_bytes=96*GIB,
+                        device_reserve_bytes=6*GIB,
+                        workspace_bytes={f"npu:{i}":3*GIB for i in range(count)},
+                        activation_bytes={f"npu:{i}":512*1024**2 for i in range(count)},
+                        communication_bytes={f"npu:{i}":64*1024**2 for i in range(count)}),
+                    question="One calibrated NPU capacity model, not an8B/16B sweep:FC16/d7296/12.802B with8 indivisible shared groups on1/2/3/8 cards. Actual1B NPU bank4.326GB/allocator-reserved4.620GB calibrates the54.617GB bank; explicit3GiB workspace+512MiB activation+64MiB communication per card and6GiB unused. Single-card58.565GB, host241.331GB, two checkpoint generations117.232GB require live admission; next width7424 is not allocated. Original FP32 failures remain.")
     return groups
 
 

@@ -12,7 +12,7 @@
 
 ## 有限列表与执行顺序
 
-总计180个明确case：CPU48、NPU64、CUDA68，按41个独立阶段文件组织。
+总计184个明确case：CPU48、NPU68、CUDA68，按42个独立阶段文件组织。
 每个case各一次独立测量流程，warmup1窗、正式2窗、完整返回、额外一窗精确恢复；
 小型/批次配置超时900秒，scale/capacity配置1800秒。
 这些是单case上限，不是承诺运行全部case的总耗时；应分组执行并检查终态、争用和准入。
@@ -36,7 +36,7 @@
 | resident-bounded | — | 2 | 2 | 同一FC4/P2的B128/B512，静态物理原子上界12B、stages32；保留默认拒绝 |
 | multicard | — | 6 | 6 | 同一1B模型2/3/最多卡放置；同一小训练模型的ordinary/blocking/cpu_bridge |
 | capacity | — | 4 | 4 | 同一1B训练模型单/双/最多卡；1B校准后一个约2B单卡推理候选 |
-| capacity-calibrated | — | — | 4 | 依据1B实际峰值新增同一4.561B模型的单/双/三/四卡推理；42.49GB两代checkpoint预算先准入 |
+| capacity-calibrated | — | 4 | 4 | 依据各平台1B实际峰值新增CUDA4.561B单/双/三/四卡与NPU12.802B单/双/三/八卡；各自逐卡、主存和两代checkpoint先准入 |
 
 先运行coverage/clients及必要基座检查，再进入batch、packing、modules和放置；
 中等规模通过或得到明确可解释的探索结果后，再逐项进入scale、multicard、capacity。
@@ -180,3 +180,5 @@ python configs/matrices/generate.py --output-dir artifacts/reviewed-matrix-previ
 [performance-lessons](performance-lessons.md)，待办只写入 [ROADMAP](ROADMAP.md)。
 
 CUDA有界resident的B128/B512已完成实际流程，但它们的d16模型与原batch组d128不同。`*-resident-match.json`补各平台d16/FC4/B128或B512/P2的packed/scalar完整返回；模型、输入、task身份与resident一致，单独独立验收后再比较成本。原B128/B512默认resident布局拒绝继续保留，不能拿容量修正称数值修复。
+
+NPU校准来自本轮1b3e39f的实际约1B推理：FC4全程allocator reserved4.505GB，FC16已观察4.620GB，真实bank4.326GB。Torch报告总量65.796GB、当时free65.643GB，不能直接使用营销64GiB数值。新增单一自然宽度d7296、FC16/B1/P2、12,801,882,104可训练参数、8个不可拆共享组；这是满足64GiB级卡近界目标的单个模型，不是8B/16B全扫描。bank54.617GB，沿同拓扑1B reserved/bank比例估计约58.335GB；显式3GiB workspace、512MiB activation、64MiB通信给出58.565GB静态峰值，另留6GiB不用。实际仍须逐卡live准入及有限实测；不会由静态预算称通过。host241.331GB，两代checkpoint117.232GB，私有构造/checkpoint上限显式96GiB。最大FFN矩阵212,926,464元素低于原生单tensor2^28边界。下一宽度7424静态峰值60.498GB已超过该现场扣除6GiB后的约59.200GB，不分配、不用OOM搜索。1/2/3/8卡保留完全同一模型和输入，共享组不拆成独立参数。
