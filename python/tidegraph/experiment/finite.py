@@ -5,7 +5,7 @@ from .returns import _tensors
 PACK_BYTES = 8*1024**2
 
 
-def finite_tensors(value, *, packing="scalar"):
+def finite_tensors(value, *, packing="scalar", path="runtime"):
     """Check every floating/complex leaf without changing any mathematical value.
 
     Packing only joins compatible contiguous diagnostic inputs. Large/special
@@ -14,7 +14,7 @@ def finite_tensors(value, *, packing="scalar"):
     """
     if packing not in {"scalar", "packed"}:
         raise ValueError("finite_check_packing: choose scalar or packed")
-    from ..comparison import NonFiniteMismatch
+    from ..comparison import NonFiniteMismatch, finite
     flags, groups, seen = {}, {}, set()
 
     def check(tensor):
@@ -47,4 +47,7 @@ def finite_tensors(value, *, packing="scalar"):
         for rows, _ in groups.values():
             flush(rows)
         if any(not bool(torch.stack(rows).all()) for rows in flags.values()):
-            raise NonFiniteMismatch("runtime", "nonfinite mathematical tensor")
+            # Only a rejected run pays for per-leaf localization. This walk is
+            # diagnostic, never an alternate acceptance test or a retry.
+            finite(value, path)
+            raise NonFiniteMismatch(path, "nonfinite mathematical tensor")

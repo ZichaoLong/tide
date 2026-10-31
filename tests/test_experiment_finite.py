@@ -22,6 +22,16 @@ def test_packed_finite_rejects_late_chunk_and_noncontiguous_values(monkeypatch, 
                                   torch.tensor([complex(0, bad)])], packing=packing)
 
 
+def test_failure_localization_keeps_parameter_name_and_stage():
+    for packing in ("scalar", "packed"):
+        with pytest.raises(NonFiniteMismatch) as error:
+            finite.finite_tensors({"shared.weight": torch.ones(4),
+                                  "private.bias": torch.tensor([float("inf")])},
+                                 packing=packing, path="runtime.gradients")
+        assert error.value.path == "runtime.gradients[private.bias]"
+        assert error.value.record()["kind"] == "nonfinite"
+
+
 def test_finite_packing_preserves_values_aliases_and_independent_gradients(monkeypatch):
     monkeypatch.setattr(finite, "PACK_BYTES", 32)
     x = torch.arange(12., requires_grad=True)
@@ -41,6 +51,22 @@ def request(packing):
         depth=2, region_width=2, history=4)), task=dict(samples=2, positions=3, input_pattern="staggered-v1"),
         execution=dict(device="cpu", client="pytorch", placement="cpu", packing="packed",
                        finite_check_packing=packing), measurement=dict(mode="training"))
+
+
+def test_nonfinite_gradient_names_the_root_and_prevents_optimizer_publication():
+    owner = Eager(resolve(request("packed")))
+    name, parameter = next(owner.parameter_owner.named_parameters())
+    before = owner.parameters()
+    hook = parameter.register_hook(lambda grad: torch.full_like(grad, float("nan")))
+    try:
+        with pytest.raises(NonFiniteMismatch) as error:
+            owner.step(0)
+        assert error.value.path == f"runtime.gradients[{name}]"
+        equivalent(before, owner.parameters(), atol=0, rtol=0)
+        assert not owner.optimizer.state
+    finally:
+        hook.remove()
+        owner.close()
 
 
 def test_policy_identity_budget_and_unsupported_client_are_explicit():

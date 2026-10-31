@@ -138,6 +138,8 @@ NPU 站点中 `site.environment` 对应 Python 导出适配器；不同 SDK 的�
 结果将执行状态、数值、离散控制/路由、完整记录、checkpoint 和精确续接分列。
 `validation=strict` 保留严格阈值；`explore` 仅接纳已完成、有限且离散语义相同的数值超差，
 仍记录严格失败。非有限、非法配置、求解器/通信/容量错误均不能被探索模式吞掉。
+非有限检查仅在拒绝后逐字段定位，错误包含forward/loss、gradient、updated parameter或task阶段及字段/参数名；
+这个额外诊断成本属于失败流程，不改变正常接受条件、精度或数值容差。
 `none` 表示未做独立验收，不能显示为通过；普通训练不要求每一步都运行 CPU 参考。
 
 `return_mode=complete` 保留完整诊断返回，适合独立状态/控制/消息/pending 检查。

@@ -20,7 +20,7 @@ class Eager:
         from ..planning.materialize import materialize
         spec = resolved["execution"]["effective"]
         self.resolved, self.spec, self.reference = resolved, spec, reference
-        self.check_finite = lambda value: finite_tensors(value, packing=
+        self.check_finite = lambda value, path="runtime": finite_tensors(value, path=path, packing=
             "scalar" if reference else spec.get("finite_check_packing", "scalar"))
         self.training = resolved["measurement"]["mode"] == "training"
         self.device = torch.device("cpu" if reference else spec["device"])
@@ -108,23 +108,24 @@ class Eager:
                 self.optimizer.zero_grad(set_to_none=True)
             result = self.forward(index)
             loss = self.task.loss(result, training=self.training)
-            self.check_finite((result, loss))
+            self.check_finite(dict(result=result, loss=loss), "runtime.forward_and_loss")
             if self.training:
                 backward = getattr(self.optimizer, "backward", None)
                 backward(loss) if backward else loss.backward()
-                gradients = [p.grad for p in self.parameter_owner.parameters() if p.grad is not None]
+                gradients = {n: p.grad for n, p in self.parameter_owner.named_parameters() if p.grad is not None}
                 if not gradients:
                     raise ValueError("task.objective: no connected parameter gradients")
-                self.check_finite(gradients)
+                self.check_finite(gradients, "runtime.gradients")
                 for name, p in self.parameter_owner.named_parameters():
                     if p.grad is not None:
                         self.update_counts[name] += 1
                 self.optimizer.step()
-                self.check_finite(list(self.parameter_owner.parameters()))
-            self.check_finite(self.task.state_dict())
+                self.check_finite(dict(self.parameter_owner.named_parameters()), "runtime.updated_parameters")
+            self.check_finite(self.task.state_dict(), "runtime.task_state")
             if self.module_manifest is not None:
                 self.check_finite((self.task.module.state_dict(),
-                                None if self.optimizer is None else self.optimizer.state_dict()))
+                                None if self.optimizer is None else self.optimizer.state_dict()),
+                                  "runtime.task_module_and_optimizer")
         self.verify_task(check_code=False)
         self.state = result.continuation.detach()
         self.last_work = work(result)

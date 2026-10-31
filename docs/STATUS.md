@@ -29,7 +29,7 @@ artifacts/cuda3090/ssh.sh '/root/autodl-tmp/gef-cuda3090/install-platform-bd2ff2
 
 本机人类流程后继`gef-human-local-de93246.service`有意等待next-stages终态，之后CPU全流程、NPU合作队列1卡全流程。固定安装de93246、已准备的public CLI编排，不改活动安装。外层时限57600秒含前序等待，状态/log在`artifacts/jobs/human-local-de93246`；输出`artifacts/platform-matrix/human-{cpu,npu}-de93246`。目前仅等待，未验收。
 
-GPU后继准备`jobs/platform-cuda-training-capacity-first-bd2ff2e`，resident/profile完全终态后运行已提交的1B训练单卡/双卡两个配置；各1800秒，逐卡/主存/磁盘live准入。单卡预计静态拒绝仍实际记录。四卡训练待这两项审阅及磁盘余量核验后接续，避免将checkpoint累积误称硬件限制。
+GPU `jobs/platform-cuda-training-capacity-first-bd2ff2e`已终态failed，无后代；单卡显存静态拒绝，双卡window2非有限值失败，checkpoint next_window2已保存但未验恢复。固定原loss/初始化/输入不改。原错误只有runtime，正在补失败后字段/阶段定位；各1800秒，逐卡/主存/磁盘live准入。单卡预计静态拒绝仍实际记录。四卡训练待这两项审阅及磁盘余量核验后接续，避免将checkpoint累积误称硬件限制。
 
 ## 环境、来源与资源边界
 
@@ -50,3 +50,5 @@ GPU四张3090/sm86，Torch2.12.1+cu130/Toolkit13；CPU配额56、内存240GiB、
 从干净仓库按development/human-workflow安装，使用configs/matrices和实测site；审阅gzip可以独立查询，不依赖旧运行目录。历史提交用`resolve_history_commit.py`定位等价源码，不视为重新验证。STATUS唯一交接，ROADMAP唯一待办。
 
 新增六个同材料resident-match配置已开发核验：三平台d16 FC4、B128/B512/P2 eager对应有界resident原模型/输入/task；补齐此前d128不能直接比较的空缺。原174项身份逐项保持。正式运行尚未提交，不计通过。
+
+失败诊断实现开发30项通过（finite/engine/task-module）；只在已有非有限拒绝后遍历字段定位，正常判定/数值/阈值不变。正式资格待固定提交；新安装与活跃旧安装分离，旧失败不改写。
