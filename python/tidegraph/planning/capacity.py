@@ -83,7 +83,7 @@ def _reservation(resources, name, device):
 
 
 def capacity_budget(plan, execution, *, placement=None, mode="inference", optimizer="sgd",
-                    checkpoint=True, resources=None):
+                    checkpoint=True, resources=None, checkpoint_generations=2):
     """Return a preview for declared finite windows, not automatic admission.
 
     ``resources`` accepts logical_windows/live_results/retained_windows;
@@ -98,6 +98,8 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         raise ValueError("execution identity mismatch")
     if mode not in {"inference", "training"} or optimizer not in {"sgd", "adamw"} or type(checkpoint) is not bool:
         raise ValueError("capacity mode/optimizer/checkpoint must be explicit supported values")
+    if type(checkpoint_generations) is not int or checkpoint_generations not in {1, 2}:
+        raise ValueError("checkpoint_generations must be 1 or 2; derive it from the declared publication policy")
     resources = dict(resources or {})
     windows = integer(resources.get("logical_windows", 1), "resources.logical_windows")
     results = integer(resources.get("live_results", 1), "resources.live_results")
@@ -269,7 +271,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         host += 32*1024**2
     if "cpu" in per_device:
         host = max(host, per_device["cpu"]["estimated_peak_bytes"]+2*materialize+host_reserve)
-    disk = 2*checkpoint_estimate+disk_reserve+(4*inv["totals"]["unique"] if spec.client == "libtorch" else 0)
+    disk = checkpoint_generations*checkpoint_estimate+disk_reserve+(4*inv["totals"]["unique"] if spec.client == "libtorch" else 0)
     medium = resources.get("storage_medium", "disk")
     if medium not in {"disk", "tmpfs"}:
         raise ValueError("resources.storage_medium: choose disk or tmpfs")
@@ -291,7 +293,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
                           node_cache_rows=[row["cache_rows"] for row in states]),
         host=dict(estimated_tensor_reservation_bytes=host, reserve_bytes=host_reserve,
                   construction_bank_floor_bytes=materialize, free_bytes=resources.get("host_free_bytes")),
-        disk=dict(estimated_new_bytes=disk, checkpoint_generations=2 if checkpoint else 0, reserve_bytes=disk_reserve, free_bytes=resources.get("disk_free_bytes")),
+        disk=dict(estimated_new_bytes=disk, checkpoint_generations=checkpoint_generations if checkpoint else 0, reserve_bytes=disk_reserve, free_bytes=resources.get("disk_free_bytes")),
         checkpoint_policy=dict(weight_tensor_bytes=checkpoint_weights, estimated_file_tensor_bytes=checkpoint_estimate,
             max_file_bytes=checkpoint_limit, largest_tensor_elements=largest,
             restoration="CPU-decoded weights copied into existing bank; device continuation staged separately" if python_inference else

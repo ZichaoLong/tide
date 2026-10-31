@@ -109,7 +109,7 @@ def _finite(value, where, minimum=0):
 
 
 def _measurement(value):
-    fields(value, {"mode", "steps", "warmup", "checkpoint_check", "validation", "timeout_seconds", "observation"}, "measurement")
+    fields(value, {"mode", "steps", "warmup", "checkpoint_check", "validation", "timeout_seconds", "observation", "checkpoint_interval"}, "measurement")
     result = dict(mode="inference", steps=2, warmup=1, checkpoint_check=True,
                   validation="strict", timeout_seconds=1800, observation="none")
     result.update(deepcopy(value))
@@ -121,6 +121,8 @@ def _measurement(value):
         raise ValueError("measurement.checkpoint_check: expected true or false")
     for key in ("steps", "warmup", "timeout_seconds"):
         positive(result[key], "measurement."+key, 0 if key == "warmup" else 1)
+    if "checkpoint_interval" in result:
+        positive(result["checkpoint_interval"], "measurement.checkpoint_interval")
     if result["observation"] not in {"none", "packing", "profile", "checkpoint"}:
         raise ValueError("measurement.observation: choose none, packing, profile or checkpoint")
     if result["observation"] != "none" and result["steps"] != 1:
@@ -235,6 +237,8 @@ def resolve(value, *, site=None, base_dir=None):
         requested.setdefault(key, val)
     try:
         spec = ExecutionSpec(**requested)
+        if spec.client == "libtorch" and measurement.get("checkpoint_interval", 1) != 1:
+            raise ValueError("measurement.checkpoint_interval: standalone currently requires 1; periodic publication is a Python/native runtime policy")
         if spec.return_mode != "complete" and measurement["validation"] != "none":
             raise ValueError("execution.return_mode: independent validation requires complete return; "
                              "run check separately, then explicitly set measurement.validation=none for outputs/metrics")
@@ -263,8 +267,10 @@ def resolve(value, *, site=None, base_dir=None):
             spec = ExecutionSpec(**dict(requested, node_devices=tuple(mapping["node_devices"])))
         execution = spec.record()
         from ..planning.capacity import capacity_budget
+        from .checkpoint_policy import publication_plan
         budget = capacity_budget(plan, execution, placement=mapping, mode=measurement["mode"],
-                    optimizer=task["optimizer"]["kind"], checkpoint=True, resources=resources)
+                    optimizer=task["optimizer"]["kind"], checkpoint=True, resources=resources,
+                    checkpoint_generations=publication_plan(measurement)["simultaneous_generations"])
     except (TypeError, KeyError, ValueError) as error:
         raise ValueError(f"execution/resources: {error}; inspect device mapping, module support and explicit strategy") from error
     task["stride"] = plan["stride"]

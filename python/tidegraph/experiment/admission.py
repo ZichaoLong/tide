@@ -3,6 +3,7 @@ import os
 import torch
 from ..planning.capacity import capacity_budget
 from .storage import filesystem, host_memory
+from .checkpoint_policy import publication_plan
 
 
 def host_available():
@@ -30,7 +31,8 @@ def preflight(resolved, output_parent, *, start_window=0):
         row = resources["devices"].setdefault(name, {})
         row.update(free_bytes=int(free), capacity_bytes=int(total))
     budget = capacity_budget(resolved["plan"], resolved["execution"], placement=resolved["payload_placement"],
-                mode=m["mode"], optimizer=resolved["task"]["optimizer"]["kind"], checkpoint=True, resources=resources)
+                mode=m["mode"], optimizer=resolved["task"]["optimizer"]["kind"], checkpoint=True, resources=resources,
+                checkpoint_generations=publication_plan(m, start_window)["simultaneous_generations"])
     problems = list(budget["static_rejections"])
     if storage["memory_backed"] is None:
         problems.append("output filesystem: could not establish disk/tmpfs type; inspect the output mount before running")
@@ -46,6 +48,7 @@ def preflight(resolved, output_parent, *, start_window=0):
                   storage=dict(storage, requested_medium=requested_medium, effective_medium=effective_medium,
                       durability="volatile; lost at container/host restart" if storage["memory_backed"] else "filesystem fsync publication; durability depends on storage"),
                   host_memory_snapshot=host,
+                  checkpoint_publication=publication_plan(m, start_window),
                   cpu_affinity=len(os.sched_getaffinity(0)), refused=problems,
                   caveat="resource snapshots and conservative estimates; no runtime or correctness guarantee")
     return budget

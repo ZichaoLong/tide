@@ -5,6 +5,7 @@ import statistics
 import time
 from .config import resolve
 from .records import now, write_json
+from .checkpoint_policy import publication_plan, due
 
 
 def create(resolved, *, checkpoint=None):
@@ -55,6 +56,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         from .checkpoint import validate
         checkpoint_path, saved = validate(resume, resolved, identity)
         start = saved["next_window"]
+    publication = publication_plan(measurement, start)
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     write_json(output/"resolved.json", resolved)
@@ -65,7 +67,7 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
         kind="benchmark" if observation_mode == "none" else observation_mode+"-observation",
         throughput_sample=observation_mode == "none", throughput_qualified=False,
         validation=dict(policy=policy, numeric="not_checked", discrete="not_checked", complete="not_checked", outcome="not_checked", strict_passed=False),
-        checkpoint=dict(state="not_checked"), metrics=[], warmup=[],
+        checkpoint=dict(state="not_checked"), checkpoint_publication=publication, metrics=[], warmup=[],
         timing_contract=dict(return_mode=e.get("return_mode", "complete"),
             included="input preparation, transfer, host/device scheduling, packing, forward, finite checks, requested return and synchronization; training includes loss, VJP and optimizer",
             excluded="runtime/model construction, durable checkpoint publication, independent validation and recovery checks",
@@ -123,13 +125,15 @@ def run(configuration, output, resume=None, validation_override=None, *, check_r
                 actual.append((observation, loss))
             del observation
             # Durable boundaries are outside timing and individually costed.
-            began = time.perf_counter()
-            with checkpoint_cost() as costs:
-                row["checkpoint_cost"] = costs
-                checkpoint_path, checkpoint = save(owner, output, resolved, identity, index+1)
-            row["checkpoint_seconds"] = time.perf_counter()-began
-            record["checkpoint"] = dict(state="saved", next_window=index+1, bytes=checkpoint["bytes"],
-                                        path=str(checkpoint_path), exact_resume="not_checked")
+            row["checkpoint_scheduled"] = due(publication, index+1)
+            if row["checkpoint_scheduled"]:
+                began = time.perf_counter()
+                with checkpoint_cost() as costs:
+                    row["checkpoint_cost"] = costs
+                    checkpoint_path, checkpoint = save(owner, output, resolved, identity, index+1)
+                row["checkpoint_seconds"] = time.perf_counter()-began
+                record["checkpoint"] = dict(state="saved", next_window=index+1, bytes=checkpoint["bytes"],
+                                            path=str(checkpoint_path), exact_resume="not_checked")
             memory.capture(record["phase"], reset=offset == measurement["warmup"]-1)
             write_json(output/"result.json", record)
         record["execution_status"] = "completed"

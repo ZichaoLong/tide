@@ -148,9 +148,11 @@ class Eager:
             self.last_work["native_communication_observation"] = self.core.communication_statistics()
         return actual, value
 
+    def _parameter_values(self):
+        return {n: p.half() if self.storage_reference else p for n, p in self.parameter_owner.named_parameters()}
+
     def parameters(self):
-        values = {n: p.half() if self.storage_reference else p for n, p in self.parameter_owner.named_parameters()}
-        return snapshot(values)
+        return snapshot(self._parameter_values())
 
     def training_state(self):
         if self.optimizer is None:
@@ -164,7 +166,7 @@ class Eager:
         return snapshot(result)
 
     def decoded_state(self):
-        value = dict(continuation=self.state, parameters=self.parameters(),
+        value = dict(continuation=self.state, parameters=self._parameter_values(),
                      optimizer=None if self.optimizer is None else self.optimizer.state_dict(),
                      update_counts=self.update_counts, task=self.task.state_dict())
         if self.module_manifest is not None:

@@ -18,7 +18,10 @@ def _map(value, tensor):
 
 
 def _scalar(value):
-    return value.detach().cpu().clone()
+    # An accelerator-to-CPU transfer already owns new storage. CPU inputs
+    # still need a clone, including repeated occurrences and overlapping views.
+    value = value.detach()
+    return value.clone() if value.device.type == "cpu" else value.cpu()
 
 
 def _tensors(value):

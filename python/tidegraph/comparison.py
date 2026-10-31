@@ -84,6 +84,13 @@ def _tensor(a, b, path, emit, atol, rtol, check_device, counts):
         tensor_rtol = tol[1] if rtol is None else rtol
     else:
         tensor_atol = tensor_rtol = 0
+    # Exact CPU recovery often compares multi-GB identical banks. Equality is
+    # sufficient after metadata and finite validation; mismatches still use
+    # the original strict assertion and diagnostics below. No tolerance path
+    # or accelerator operator is changed by this positive-only shortcut.
+    if (tensor_atol == 0 and tensor_rtol == 0 and a.device.type == b.device.type == "cpu"
+            and a.layout == torch.strided and not a.is_quantized and torch.equal(a, b)):
+        return
     try:
         torch.testing.assert_close(a, b, atol=tensor_atol, rtol=tensor_rtol,
                                    check_device=check_device)

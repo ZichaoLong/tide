@@ -1,0 +1,92 @@
+{
+  "schema": "tide-experiment-v1",
+  "name": "cuda-checkpoint-4561m-periodic",
+  "description": "Same 4.561B disk checkpoint cost material; explicitly publish only final window2. Compare phase costs, full next-window recovery and total workflow; unsaved warmup boundary is not durable.",
+  "model": {
+    "recipe": {
+      "topology": "fc",
+      "family": "kv",
+      "depth": 8,
+      "region_width": 2,
+      "profile": "baseline",
+      "history": 8,
+      "sparse_denominator": 8,
+      "width": 4352
+    }
+  },
+  "task": {
+    "samples": 1,
+    "positions": 2,
+    "seed": 7,
+    "input_pattern": "staggered-v1",
+    "objective": {
+      "kind": "weighted-output-square",
+      "scale": 0.001
+    },
+    "optimizer": {
+      "kind": "sgd",
+      "lr": 0.001,
+      "momentum": 0.3,
+      "weight_decay": 0.01
+    }
+  },
+  "execution": {
+    "family": "auto",
+    "client": "python-native",
+    "device": "cuda:0",
+    "placement": "mixed-c",
+    "dtype": "float32",
+    "scoring_dtype": "float32",
+    "schedule": "prefill",
+    "operator": "aten",
+    "packing": "packed",
+    "return_packing": "scalar",
+    "return_mode": "complete",
+    "workers": 1,
+    "intraop_threads": 1,
+    "interop_threads": 1,
+    "communication": "ordinary",
+    "peer_devices": [
+      "cuda:0",
+      "cuda:1",
+      "cuda:2",
+      "cuda:3"
+    ],
+    "placement_strategy": "balanced-shared-groups"
+  },
+  "measurement": {
+    "mode": "inference",
+    "warmup": 1,
+    "steps": 1,
+    "validation": "none",
+    "checkpoint_check": true,
+    "timeout_seconds": 1200,
+    "observation": "checkpoint",
+    "checkpoint_interval": 2
+  },
+  "resources": {
+    "max_materialize_bytes": 34359738368,
+    "checkpoint_max_bytes": 34359738368,
+    "live_results": 1,
+    "device_reserve_bytes": 3221225472,
+    "workspace_bytes": {
+      "cuda:0": 1073741824,
+      "cuda:1": 1073741824,
+      "cuda:2": 1073741824,
+      "cuda:3": 1073741824
+    },
+    "activation_bytes": {
+      "cuda:0": 268435456,
+      "cuda:1": 268435456,
+      "cuda:2": 268435456,
+      "cuda:3": 268435456
+    },
+    "communication_bytes": {
+      "cuda:0": 67108864,
+      "cuda:1": 67108864,
+      "cuda:2": 67108864,
+      "cuda:3": 67108864
+    },
+    "storage_medium": "disk"
+  }
+}

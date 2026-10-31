@@ -23,7 +23,7 @@
 
 ## 既有本机任务与新增GPU工作
 
-观测07:49Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，当前NPU12.802B单卡构造。其后依赖链保持。
+观测08:13Z：next-stages和human-local已终态且控制组空；final已完成CPU/NPU同材料B128/B512、31a3b32小训练与原loss定位，NPU12.802B单卡三窗已完成、精确恢复通过（502.9秒），正在独立参考检查。其后依赖链保持。
 所有服务在`background.slice`，固定源码/安装/输入不编辑；外层running/终态不覆盖内层资格。
 
 | unit | 已提交工作与依赖 | 输入/产物 |
@@ -77,3 +77,12 @@ CUDA直接P2P/原生跨卡原子限制未解除，普通复制不认证多卡res
 从干净仓库按[development](development.md)/[人类手册](human-workflow.md)安装；[189有限配置](platform-matrix.md)可重建材料。
 审阅gzip用`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`查询，不依赖旧运行目录。
 下游模板/人类流程及T4迁移清单已交付；T4真机资格未获得。
+
+## 当前实现候选（本提交后固定资格）
+
+基于dba2a5e磁盘实测：完整恢复约289.6秒，其中CPU完整比较约164.8秒；首保存57.7秒中hash22.3秒。
+新候选增加显式`checkpoint_interval`（默认每窗、最终窗必保存），减少重复CPU快照，并为完全相等的CPU张量保留原严格比较的正向快捷路径。
+原容差/非有限/结构拒绝和完整字段不变；候选只在提交、固定安装及相关回归后运行。
+计划4.561B一次同材料成本观察、9.123B同模型单卡拒绝/双卡一次流程；新配置在`configs/checkpoint-cost`。
+原9.123B每窗磁盘拒绝保留；单代预算是明确持久化取舍，不称原拒绝修复或窗口算子加速。
+开发35项调用中2项因漏设TIDE_BUILD_DIR缺少既有native模块失败，已保存调用错误，纠正环境后二项通过；不作为数值失败或放宽条件。相关开发检查17项、70项及35项分组通过，范围重叠不相加。

@@ -119,6 +119,14 @@ tidegraph results runs --format table
 Python/native 路径每个完整窗口保存一次持久 checkpoint，只有新指针 fsync 后才退役上一个 generation；
 standalone 也在每个完成窗口原子发布原生 checkpoint 和 latest 指针。
 `checkpoint_check=false` 只关闭额外 exact-next 验证，不关闭保存，所以 plan 始终预算持久 checkpoint。
+Python/native运行可显式设置`measurement.checkpoint_interval=N`（正整数，省略仍每窗1）；
+按绝对`next_window`的N倍数发布，并始终发布本次最终窗口。它不合并计算/训练窗口，不改变loss或optimizer边界。
+中断时只能恢复最近已发布边界，尚未保存的窗口需重算；严格检查与最终exact-next保持。
+plan按本次将发布的次数预算1或2代；resume在现场按起始窗口重新计算，不能沿用不适用的单代预算。
+默认原两代保守预算保留；standalone当前每窗发布，此新增间隔选项会明确拒绝非1值。
+[4.561B间隔对照](../configs/checkpoint-cost/cuda-disk-periodic.json)与[9.123B单/双卡](../configs/checkpoint-cost/cuda-capacity-periodic.json)
+明确使用不同持久化策略，不撤销旧每窗准入拒绝，不将少保存的工作流成本当窗口算子加速。
+
 保存时间在每窗 `checkpoint_seconds` 或 standalone 对应字段单列，不混入窗口算子计时。
 Python/native与resident公共运行现在记录`checkpoint_cost`，拆分权重搬到主存、编码、序列化、
 文件fsync、hash、原子发布与旧代清理；`checkpoint.cost`拆分精确恢复的快照、重建/读取、复制和比较。
@@ -301,3 +309,6 @@ tidegraph lock create --site t4-site.json --wheel /path/to/t4-install.whl --outp
    任一不可拆共享组超过单卡安全容量时停止该放置，提出张量切分方案后再扩展。
 6. 按下游锁定流程复验应用任务，只有实际接受后才更新依赖；提交T4自己的结果/失败、
    build manifest、安装锁与配置。跨设备加载与同栈精确恢复分别检查，模板不预填通过。
+
+checkpoint恢复的精确CPU值比较可先使用`torch.equal`确认完全相等；不相等时仍执行原严格断言并保留首差诊断。
+有限值、dtype/shape/设备、None/零和int64检查保持，跨设备容差比较不进入该捷径；它不是跳过独立验证或改用hash验数值。
