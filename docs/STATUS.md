@@ -72,3 +72,5 @@ CUDA直接P2P与原生跨卡原子限制未解除；普通复制与多卡residen
 T4具体操作说明和六项新证据处置已提交；当前新增三卡证据。阶段完成后继续，不暂停。
 
 验收补齐：两平台各三种小型双卡通信追加公共`check --scope full`，单独验任意输出/控制/物理消息/私有state根；原run已比较loss参数梯度，不冒称所有独立根。GPU待C4及9.123B准入后；NPU后继等待blocking诊断终态，每项300秒、一次、两卡；不重复性能矩阵。
+
+独立根后继`gef-multicard-roots-844eb9b.service`等待blocking诊断终态，原bd2ff2e安装，固定`inputs-844eb9b-roots/npu.json`；三通信每项300秒、统一两卡队列600秒、外层86400秒，状态/log在`artifacts/jobs/multicard-roots-844eb9b`，结果在`artifacts/platform-matrix/npu-multicard-roots-bd2ff2e`。
