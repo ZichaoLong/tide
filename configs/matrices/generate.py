@@ -160,9 +160,11 @@ def requests():
         add(platform, "precision", "fp16-training", recipe(width=8), mode="training", dtype="float16",
             question="Small FP16 training with FP32 master/slot policy and exact resume.")
         maximum = 4 if platform == "cuda" else 8
-        for count in (2, 3, maximum):
+        for count in ((2, 3, 7, maximum) if platform == "npu" else (2, 3, maximum)):
             add(platform, "multicard", f"model-1b-cards-{count}", many, batch=1, positions=2, peers=count,
-                validation="explore", resources=LARGE, question="Same16-node model as scale/fc-many-1b, without parameter de-sharing. Verify all cards' parameter/state/compute owners.")
+                validation="explore", resources=LARGE,
+                question="Same16-node model as scale/fc-many-1b, without parameter de-sharing. Verify all cards' parameter/state/compute owners."+
+                    (" Explicit7-card point is separate from a queued8-card refusal, not a silent remapping." if platform == "npu" and count == 7 else ""))
         for communication in ("ordinary", "blocking", "cpu_bridge"):
             add(platform, "multicard", "train-two-"+communication, recipe(width=8, depth=4), mode="training", peers=2,
                 communication=communication, question="Same small two-card training model; actual transport, shared gradients, stream ownership and exact resume.")

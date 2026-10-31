@@ -55,7 +55,7 @@ def test_graph_level_embeddings_and_actual_changed_models_are_distinct():
 def test_multicard_is_one_shared_model_and_every_requested_card_owns_nodes(platform, maximum):
     single = resolve(cases(platform,"scale")[f"{platform}-scale-fc-many-1b"])
     group = cases(platform,"multicard")
-    for count in (2,3,maximum):
+    for count in ((2,3,7,maximum) if platform == "npu" else (2,3,maximum)):
         current = resolve(group[f"{platform}-model-1b-cards-{count}"])
         assert current["model_id"] == single["model_id"]
         assert current["workload_id"] == single["workload_id"]
@@ -83,7 +83,7 @@ def test_plan_index_is_not_runtime_evidence_and_counts_are_finite():
     assert index["status"] == "planned-not-runtime-evidence"
     observed = {platform:sum(len(cases(platform, path.stem[len(platform)+1:]))
                            for path in ROOT.glob(platform+"-*.json")) for platform in ("cpu","npu","cuda")}
-    assert observed == index["counts"] == dict(cpu=48,npu=71,cuda=69)
+    assert observed == index["counts"] == dict(cpu=48,npu=72,cuda=69)
     assert all(row["status"] == "planned" and row["timeout_seconds"] in (900,1800) for row in index["cases"])
 
 
