@@ -7,10 +7,12 @@ import torch
 from ..history import increment
 from ..records import State
 from .tensors import Received
+from . import packing_observation as observation
 
 
 def project(x, weight):
     """Batch the textbook column-vector projections without reorienting them."""
+    observation.projection("weighted_mm", x.shape[0])
     return (weight@x.t()).t()
 
 
@@ -47,6 +49,10 @@ class Writes:
                 increment(state.observations, n)
                 self.groups.setdefault(n, []).append(i)
             self.offsets.append(self.offsets[-1]+n)
+        if observation.enabled():
+            for length, owners in self.groups.items():
+                observation.bucket("positive_write_segments", length, len(owners))
+            observation.skipped("zero_write_owners", len(old)-sum(map(len, self.groups.values())))
 
     def decode(self, old, batch, slots):
         """Publish computed positive states; zero receives retain the raw tuple."""

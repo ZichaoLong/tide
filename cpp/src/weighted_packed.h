@@ -1,6 +1,7 @@
 #pragma once
 // Batch §2 / recurrent §4: certified drivers, not a numerical prepass.
 #include "weighted_detail.h"
+#include "tide/packing_work.h"
 
 namespace tide::weighted::packed {
 struct Writes {
@@ -16,7 +17,8 @@ struct Writes {
 };
 PackedSequence independent(const std::vector<State>&,const Tensor&,const std::vector<Index>&,const ContentViews&);
 Tensor matrix_scan(Tensor a,Tensor b,const Tensor& initial);
-inline Tensor project(const Tensor& x,const Tensor& weight){return at::matmul(weight,x.t()).t();}
+inline Tensor project(const Tensor& x,const Tensor& weight){
+  work::packing::projection("weighted_mm",x.size(0));return at::matmul(weight,x.t()).t();}
 struct Coefficients {
   Tensor a,b;
   bool matrix=false;

@@ -1,6 +1,7 @@
 #include "weighted_kv_preparation.h"
 #include "weighted_row_linear.h"
 #include "weighted_detail.h"
+#include "tide/packing_work.h"
 #include <algorithm>
 #include <sstream>
 namespace tide::weighted {
@@ -53,10 +54,10 @@ std::vector<std::map<std::string,Tensor>> prepare_independent_kv(
       const auto& p=detail::weight(*rows[ids[0]],name);row_bytes+=4*p.numel()*p.element_size();
     }
     const auto limit=budget/std::max<Index>(1,row_bytes);
-    if(limit<2)continue;
+    if(limit<2){work::packing::skipped("independent_projection_budget",ids.size());continue;}
     for(size_t start=0;start<ids.size();start+=limit){
       const auto count=std::min<size_t>(limit,ids.size()-start);
-      if(count<2)continue;
+      if(count<2){work::packing::skipped("independent_projection_singleton",count);continue;}
       std::vector<Tensor> normal,bs,vs,us,ss;
       for(size_t j=0;j<count;++j){
         auto i=ids[start+j];normal.push_back(normalize(contents[i].slice(0,1),eps[i]));

@@ -13,6 +13,7 @@ from .tensors import norm, rotate_relative
 from .attention_mean import attention_mean
 from .normalization import epsilon_l2
 from .numeric_time import passive_decay, time_values
+from . import packing_observation as observation
 
 
 def weighted_read(logits, values, weights, totals):
@@ -22,6 +23,7 @@ def weighted_read(logits, values, weights, totals):
         groups[ids[-1].numel()].append(i)
     result = [None]*len(weights)
     for length, rows in groups.items():
+        observation.bucket("attention_positive", length, len(rows))
         if length == 0:
             for i in rows:
                 result[i] = values.new_zeros(values.shape[-1])
@@ -45,6 +47,7 @@ def kv(memory, states, times, u):
         groups[int(mask.sum())].append(i)
     result = [None]*len(states)
     for length, rows in groups.items():
+        observation.bucket("kv_visible_read", length, len(rows))
         s = {k: torch.stack([visible[i][0][k] for i in rows]) for k in visible[rows[0]][0]}
         age = torch.stack([visible[i][1] for i in rows])
         weights = (s["weights"]*passive_decay(age, c.beta_short, u), s["weights"])

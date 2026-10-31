@@ -38,9 +38,11 @@ def loss_from_outputs(result, *, allow_empty=False):
 
 
 def work(result):
+    from weighted_benchmark_activity import activity
     return dict(candidate_updates=len(result.trace), full_calls=sum(e["active"] for e in result.trace),
                 messages=len(result.messages), outputs=len(result.outputs),
-                pending=len(result.continuation.pending), actual_stats=result.stats)
+                pending=len(result.continuation.pending), actual_stats=result.stats,
+                boundary_activity=activity(result))
 
 
 class Eager:

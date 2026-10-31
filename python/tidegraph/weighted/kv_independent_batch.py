@@ -2,6 +2,7 @@
 from collections import defaultdict
 from .row_linear import linear_rows
 from .tensors import norm
+from . import packing_observation as observation
 
 PACK_BYTES = 8 * 1024**2
 
@@ -25,10 +26,12 @@ def prepare(memories, contents, stats, budget=PACK_BYTES):
                             (m.base, m.adapter_v, m.adapter_u, m.summary))
         limit = budget // max(1, row_bytes)
         if limit < 2:
+            observation.skipped("independent_projection_budget", len(ids))
             continue
         for start in range(0, len(ids), limit):
             group = ids[start:start+limit]
             if len(group) < 2:
+                observation.skipped("independent_projection_singleton", len(group))
                 continue
             normal = [norm(contents[i][1:], memories[i].config.epsilon) for i in group]
             base = linear_rows(normal, [memories[i].base for i in group])

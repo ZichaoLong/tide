@@ -113,3 +113,47 @@ def test_record_gate_requires_gradients_optimizer_identity_and_actual_resume(tmp
     child = subprocess.run([sys.executable, "-S", str(ROOT/"scripts/index_core5_study.py"), str(evidence),
                             "--state", "failed", "--format", "json"], capture_output=True, text=True, check=True)
     assert json.loads(child.stdout)[0]["parameters"] == record["parameters"]
+
+
+@pytest.mark.parametrize("kind", ["profile", "work-observation"])
+def test_observation_costs_never_gain_throughput_qualification(tmp_path, kind):
+    r = case(catalog(), "check-fc-kv", "python-cpu")
+    r["measurement"].update(mode="inference", checkpoint_check=False)
+    good = dict(state="passed", kind=kind, post_measurement_complete_records=True,
+                requested_dtype="float32", workload_id=r["plan"]["sha256"], metrics=[dict(seconds=1.)])
+    with pytest.raises(ValueError, match="observation"):
+        accept_result(r, good)
+    record = {k: v for k, v in r.items() if k not in {"plan", "inventory"}}
+    record.update(schema="tide-core5-run-v1", source="commit", state="passed", model_id=r["plan"]["model_id"],
+                  workload_id=r["plan"]["sha256"], parameters=r["inventory"]["totals"],
+                  recipe=r["plan"]["recipe"], graph_counts=r["plan"]["graph"]["counts"])
+    path = tmp_path/"run.json"
+    path.write_text(json.dumps(record))
+    (tmp_path/"measurement").mkdir()
+    (tmp_path/"measurement/result.json").write_text(json.dumps(good))
+    summary = summarize(path)
+    assert summary["correctness_qualified"] and not summary["throughput_qualified"]
+    assert summary["measured_seconds"] == 1. and summary["kind"] == "observation"
+    reviewed = tmp_path/"reviewed.json"
+    reviewed.write_text(json.dumps(dict(schema="tide-core5-finite-performance-evidence-v1",
+        models={r["case_id"]: dict(parameters=record["parameters"], counts=record["graph_counts"], recipe=record["recipe"])},
+        runs=[summary])))
+    assert not query_records(reviewed)[0]["throughput_qualified"]
+
+
+def test_inference_review_honors_declared_resume_without_rewriting_old_scope(tmp_path):
+    from core5_study_records import complete_checks
+    checks = {"post_measurement_complete_records": True}
+    assert complete_checks("passed", "inference", checks, None)
+    assert not complete_checks("passed", "inference", checks, None, checkpoint_required=True)
+    assert complete_checks("passed", "inference", checks, {"state": "passed", "exact": True}, checkpoint_required=True)
+    row = dict(case="case", state="passed", mode="inference", checks=checks, checkpoint_check=True)
+    evidence = dict(schema="tide-core5-finite-performance-evidence-v1",
+                    models={"case": dict(parameters={}, counts={}, recipe={})}, runs=[row])
+    path = tmp_path/"reviewed.json"
+    path.write_text(json.dumps(evidence))
+    assert not query_records(path)[0]["correctness_qualified"]
+    row.pop("checkpoint_check")
+    path.write_text(json.dumps(evidence))
+    old = query_records(path)[0]
+    assert old["correctness_qualified"] and "exact_resume" not in old

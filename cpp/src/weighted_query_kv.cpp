@@ -21,6 +21,7 @@ Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& wei
   std::vector<Tensor> selected,result(weights.size(0));std::map<Index,std::vector<Index>> groups;
   for(Index i=0;i<weights.size(0);++i){selected.push_back(at::nonzero(weights[i]>0).flatten());groups[selected.back().numel()].push_back(i);}
   for(const auto& [length,rows]:groups){
+    work::packing::bucket("attention_positive",length,rows.size());
     if(!length){for(auto i:rows)result[i]=at::zeros({values.size(-1)},values.options());continue;}
     std::vector<Tensor> columns;for(auto i:rows)columns.push_back(selected[i]);
     auto ids=at::tensor(rows,weights.options().dtype(at::kLong)),cols=at::stack(columns);
@@ -34,6 +35,7 @@ Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& wei
 std::array<Tensor,4> memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c){
   Visible visible(states,times,c);std::vector<std::array<Tensor,4>> result(states.size());
   for(const auto& [length,rows]:visible.groups){
+    work::packing::bucket("kv_visible_read",length,rows.size());
     const Index n=rows.size();auto age=visible.age(rows);
     auto writes=visible.slot(states,rows,"weights");
     std::array<Tensor,2> weights{writes*passive_decay(age,c.beta_short,u),writes};

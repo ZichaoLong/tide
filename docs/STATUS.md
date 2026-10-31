@@ -44,7 +44,9 @@ python scripts/status.py
 python scripts/check_upstream.py
 ```
 
-当前没有活动目标作业。推理/输入设施相关短回归已通过；下一步提交该设施，建立新只读源码并构建匹配standalone benchmark。core/resident复用须核对实际源码hash，保留原构建身份。
+推理/输入设施已提交并推送 `eee68c4`。下一作业 `inference-a-eee68c4`：固定 `sources/eee68c4`，新建 `builds/eee68c4-benchmark`；core/resident复用实际源码hash匹配的32edb0f库，保留原身份。先56线程build，再小型相关CPU/GPU推理与训练回归，再21个显式小型/4.2M推理测量；每项1200秒，整体7200秒，无并发重型构建/计时。
+作业命令：`venv/bin/python sources/eee68c4/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/eee68c4 --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-a-eee68c4 --timeout 7200 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-a-eee68c4.py`。
+状态/日志 `jobs/inference-a-eee68c4/{status.json,task.log}`，细分日志/结果 `runs/eee68c4-inference`。当前running，监督PID40051；新standalone构建已通过，目标相关CPU23项、GPU resident推理/训练FP32/FP16四项通过，21个测量配置正在串行运行。活跃配置仍不称通过。
 新显式目录 `benchmarks/core5-cuda-inference-v1.json` 包含staggered-v1输入、14个静态模型/窗组和11个执行选择；不自动全排列。正式逐项选择，近界d8192仅在约1B实测峰值和完整预算允许后运行。
 大运行先静态预算参数/状态/KV/workspace/物理副本/返回、主存和磁盘；计时与重型构建不重叠。
 规模、精度、算子、packing、线程、执行位置和完整返回口径均需进入运行身份。不得以自身恢复替代独立正确性。

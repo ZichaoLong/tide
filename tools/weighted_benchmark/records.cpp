@@ -4,6 +4,26 @@ namespace {
 void tensor(Tensor& x){if(x.defined())x=x.detach().cpu().clone();}
 void state(State& s){tensor(s.value);for(auto& [_,x]:s.slots)tensor(x);}
 void history(History& h){for(auto& [_,x]:h.tensors)tensor(x);}
+Json activity(const Result& r){
+  struct Sample {Index candidates=0,full=0,received=0,messages=0,outputs=0,pending=0,owners=0;std::map<Index,Index> cache;};
+  std::vector<Sample> rows(r.continuation.batch_size);std::map<Index,Index> total;
+  for(const auto& e:r.trace){auto& row=rows.at(e.batch);++row.candidates;row.full+=e.active;row.received+=e.fiber.size();}
+  for(const auto& a:r.messages)++rows.at(a.batch).messages;
+  for(const auto& a:r.continuation.pending)++rows.at(a.batch).pending;
+  for(const auto& o:r.outputs)++rows.at(o.batch).outputs;
+  for(const auto& [owner,state]:r.continuation.states){auto found=state.slots.find("times");if(found==state.slots.end())continue;
+    const auto& times=found->second;
+    if(!times.device().is_cpu()||times.scalar_type()!=at::kLong||times.dim()!=1)
+      throw std::invalid_argument("activity observation requires decoded CPU int64 KV timestamps");
+    auto& row=rows.at(owner.first);++row.owners;++row.cache[times.numel()];++total[times.numel()];}
+  auto histogram=[](const std::map<Index,Index>& counts){Json out=Json::object();for(const auto& [length,n]:counts)out[std::to_string(length)]=n;return out;};
+  Json samples=Json::array();
+  for(size_t b=0;b<rows.size();++b){const auto& row=rows[b];samples.push_back({{"sample",b},{"candidates",row.candidates},
+    {"full",row.full},{"received_atoms",row.received},{"messages",row.messages},{"outputs",row.outputs},{"pending",row.pending},
+    {"stored_kv_owners",row.owners},{"raw_kv_cache_lengths",histogram(row.cache)}});}
+  return {{"scope","decoded complete return; raw stored KV lengths, not visible query buckets; outside window timing"},
+    {"samples",samples},{"raw_kv_cache_lengths",histogram(total)}};
+}
 }
 Continuation detached(Continuation q){
   for(auto& [_,s]:q.states)state(s);for(auto& [_,h]:q.history)history(h);for(auto& a:q.pending)tensor(a.value);return q;
@@ -30,7 +50,8 @@ Tensor loss(const Result& r,bool allow_empty){
 Json work(const Result& r){
   Index full=0;for(const auto& e:r.trace)full+=e.active;
   return { {"candidate_updates",r.trace.size()},{"full_calls",full},{"messages",r.messages.size()},
-    {"outputs",r.outputs.size()},{"pending",r.continuation.pending.size()},{"actual_stats",r.stats} };
+    {"outputs",r.outputs.size()},{"pending",r.continuation.pending.size()},{"actual_stats",r.stats},
+    {"boundary_activity",activity(r)} };
 }
 void compare_tensors(const std::map<std::string,Tensor>& actual,const std::map<std::string,Tensor>& expected,
                      at::ScalarType dtype,const std::string& label,bool exact){

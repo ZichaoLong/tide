@@ -9,6 +9,7 @@
 #include <chrono>
 #include <map>
 #include <string>
+#include "tide/packing_work.h"
 
 namespace tide::work {
 using Count = std::int64_t;
@@ -35,6 +36,7 @@ inline bool enabled() { return active.load(std::memory_order_relaxed); }
 inline void reset(bool on) {
   active.store(false, std::memory_order_relaxed);
   for (auto& n : counts) n.store(0, std::memory_order_relaxed);
+  packing::reset(on);
   active.store(on, std::memory_order_relaxed);
 }
 inline void add(Field field, Count n) { counts[field].fetch_add(n, std::memory_order_relaxed); }
@@ -73,6 +75,8 @@ inline std::map<std::string, double> metrics() {
     result["op/emit_flops"]+result["op/head_flops"];
   result["op/executed_matmul_flops"] = result["op/linear_flops"]+result["op/executed_attention_flops"];
   result["op/executed_matmul_flops"] += result["op/state_matmul_flops"]+result["op/full_matmul_flops"];
+  const auto packing_metrics = packing::metrics();
+  result.insert(packing_metrics.begin(), packing_metrics.end());
   return result;
 }
 } // namespace tide::work

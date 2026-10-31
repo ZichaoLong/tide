@@ -1,4 +1,5 @@
 #include "weighted_row_linear.h"
+#include "tide/packing_work.h"
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
 #include <stdexcept>
@@ -43,6 +44,7 @@ std::vector<Tensor> linear_rows(const std::vector<Tensor>& xs,const std::vector<
     inputs.push_back(x);inputs.push_back(w);
   }
   Tensor x,w,values;
+  work::packing::projection("private_bmm",xs.size());
   {at::NoGradGuard guard;x=at::stack(xs);w=at::stack(weights);values=at::bmm(w,x.unsqueeze(-1)).squeeze(-1);}
   auto node=std::make_shared<LinearVjp>();node->set_next_edges(torch::autograd::collect_next_edges(inputs));
   for(const auto& t:inputs)node->originals.emplace_back(t,false);

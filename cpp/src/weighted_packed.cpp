@@ -20,6 +20,11 @@ Writes::Writes(const std::vector<State>& old,const PackedSequence& batch){
     require(n<=std::numeric_limits<Index>::max()-old[i].observations,"packed observation overflow");
     if(n)groups[n].push_back(i);offsets.push_back(offsets.back()+n);
   }
+  if(work::packing::enabled()){
+    Index positive_owners=0;
+    for(const auto& [length,owners]:groups){work::packing::bucket("positive_write_segments",length,owners.size());positive_owners+=owners.size();}
+    work::packing::skipped("zero_write_owners",old.size()-positive_owners);
+  }
 }
 Tensor Writes::group_index(Index length,const std::vector<size_t>& owners) const{
   std::vector<Index> rows;

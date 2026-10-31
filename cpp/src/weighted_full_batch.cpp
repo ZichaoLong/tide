@@ -10,6 +10,7 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   auto queries=project(normalize(u,c.epsilon),weight(w,"full_program.content.query")).reshape({-1,c.heads,c.width/c.heads});
   const std::vector<double> empty;
   for(const auto& [length,rows]:visible.groups){
+    work::packing::bucket("kv_visible_full",length,rows.size());
     const Index n=rows.size(),d=c.width/c.heads;auto ids=at::tensor(rows,u.options().dtype(at::kLong));
     auto keys=visible.slot(states,rows,"keys").reshape({n,length,c.heads,d});
     auto values=visible.slot(states,rows,"values").reshape_as(keys);

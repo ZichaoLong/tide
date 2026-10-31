@@ -2,6 +2,7 @@
 // never a runtime scheduler, loss callback or source of selected actions.
 #include "benchmark.h"
 #include "observation.h"
+#include "work_observation.h"
 #include "tide/greedy.h"
 #include "tide/stream.h"
 #include "tide/optimizer.h"
@@ -22,11 +23,11 @@ int main(int argc,char** argv){
   Json report{{"state","starting"}};std::filesystem::path output;bool created=false;
   try{
     std::string input,device,implementation="native",mode="training",schedule="prefill",precision="float32",
-      placement_name="native",scoring,packing="auto",limits_path;Index steps=3,threads=1,interop=1,workers=1;bool checkpoint=false;
+      placement_name="native",scoring,packing="auto",limits_path;Index steps=3,threads=1,interop=1,workers=1;bool checkpoint=false,observe_work=false;
     int64_t checkpoint_bytes=kDefaultCheckpointMaxBytes;bool checkpoint_budget_requested=false;
     std::vector<std::string> peer_specs;
     for(int i=1;i<argc;++i){std::string key=argv[i];if(key=="--help"){
-        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float16|float32|float64 --scoring-dtype float32|float64 --placement native|mixed-a|mixed-b|mixed-c --intraop-threads N --interop-threads N --workers N --packing auto|packed|scalar --peer-device DEVICE (repeatable) --checkpoint-check true|false --checkpoint-max-bytes N (native graph file) --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
+        std::cout<<"--fixture JSON --device cpu|npu:N|cuda:N --dtype float16|float32|float64 --scoring-dtype float32|float64 --placement native|mixed-a|mixed-b|mixed-c --intraop-threads N --interop-threads N --workers N --packing auto|packed|scalar --peer-device DEVICE (repeatable) --checkpoint-check true|false --checkpoint-max-bytes N (native graph file) --observe-work true|false (eager observation only, no throughput qualification) --implementation native|resident --mode inference|training --schedule streaming|prefill --steps 1..8 --output-dir NEW\n";return 0;}
       if(i+1==argc)throw std::invalid_argument("missing benchmark option value");std::string value=argv[++i];
       if(key=="--fixture")input=value;else if(key=="--device")device=value;else if(key=="--implementation")implementation=value;
       else if(key=="--mode")mode=value;else if(key=="--schedule")schedule=value;else if(key=="--steps")steps=std::stoll(value);
@@ -40,6 +41,7 @@ int main(int argc,char** argv){
         size_t consumed=0;checkpoint_bytes=std::stoll(value,&consumed);checkpoint_budget_requested=true;
         if(consumed!=value.size()||checkpoint_bytes<1)throw std::invalid_argument("checkpoint byte budget must be a positive int64");}
       else if(key=="--checkpoint-check"){if(value!="true"&&value!="false")throw std::invalid_argument("checkpoint flag must be true/false");checkpoint=value=="true";}
+      else if(key=="--observe-work"){if(value!="true"&&value!="false")throw std::invalid_argument("observation flag must be true/false");observe_work=value=="true";}
       else if(key=="--output-dir")output=value;else throw std::invalid_argument("unknown benchmark option "+key);
     }
     if(input.empty()||device.empty()||output.empty()||steps<1||steps>8||(implementation!="native"&&implementation!="resident")
@@ -54,6 +56,7 @@ int main(int argc,char** argv){
     if(checkpoint_budget_requested&&!checkpoint)throw std::invalid_argument("checkpoint byte budget requires checkpoint check");
     if(implementation=="resident"&&(placement_name!="native"||packing=="scalar"||workers!=1))throw std::invalid_argument("resident does not accept eager placement/scalar/host workers");
     if(implementation=="resident"&&(device=="cpu"||device=="auto"))throw std::invalid_argument("resident measurement requires an indexed accelerator");
+    if(observe_work&&implementation!="native")throw std::invalid_argument("packing work observation applies only to eager native; resident exposes physical rows/stages");
     input=std::filesystem::absolute(input);output=std::filesystem::absolute(output);
     if(!limits_path.empty())limits_path=std::filesystem::absolute(limits_path);
     if(!std::filesystem::create_directory(output))throw std::invalid_argument("benchmark output directory must be new");
@@ -74,6 +77,7 @@ int main(int argc,char** argv){
       if(target.is_cpu()||peers.size()<2||peers.front()!=target||names.size()!=peers.size())throw std::invalid_argument("invalid distinct peers/coordinator");}
     runtime_probe(target,dtype);for(auto d:peers)if(d!=target)runtime_probe(d,dtype);const auto runtime_seconds=tide_bench::seconds(runtime_start);
     report={{"state","running"},{"schema","tide-weighted-standalone-benchmark-v1"},
+      {"kind",observe_work?"work-observation":"benchmark"},{"throughput_sample",!observe_work},
       {"device",device},{"backend",portable_torch::compiled_backend()},{"dtype",precision},{"requested_dtype",precision},
       {"fixture_dtype","float32"},{"input_policy","same hashed FP32 material; explicit promotion before both schedules"},
       { "runtime_initialization_seconds",runtime_seconds},{"placement",placement_name},{"effective_placement",effective},
@@ -138,9 +142,11 @@ int main(int argc,char** argv){
     for(Index step=1;step<=steps;++step){
       // Persist progress before synchronization/timing, never inside a step.
       report["phase"]="measurement";report["window"]=step;write(output/"result.json",report);
+      if(observe_work)tide::work::reset(true);
       portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);start=tide_bench::Clock::now();actual.push_back(execute(step));
       portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);const auto seconds=tide_bench::seconds(start);
       auto event=work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
+      if(observe_work){event["packing_work"]=packing_work();tide::work::reset(false);}
       report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
     }
     capture_memory(report,target,"measurement",false,peers);
@@ -214,6 +220,7 @@ int main(int argc,char** argv){
     report["parameter_values_checked"]=!parameters.empty();report["optimizer_values_checked"]=checked_training;
     report["final_parameter_gradients_checked"]=checked_training;write(output/"result.json",report);return 0;
   }catch(const std::exception& e){report["state"]="failed";report["error"]=e.what();
+    if(tide::work::packing::enabled()){report["partial_packing_work"]=packing_work();tide::work::reset(false);}
     if(created)if(const auto* failure=dynamic_cast<const tide::weighted::AllocationFailure*>(&e))try{
       auto record=allocation_failure(*failure);record["execution"]={{"phase",report.value("phase","")},{"window",report.value("window",Index(-1))}};
       write(output/"allocation-failure.json",record);report["allocation_failure"]="allocation-failure.json";

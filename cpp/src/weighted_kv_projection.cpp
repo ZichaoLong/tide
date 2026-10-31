@@ -17,10 +17,12 @@ std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,con
   }
   const auto& left=detail::weight(w,"kernel.adapter_u");const auto& right=detail::weight(w,"kernel.adapter_v");
   if(independent.size()==p.ids.size()){
+    work::packing::projection("kv_write_unprepared_rows",independent.size());
     auto x=normalize(p.input,c.epsilon);
     return {project(x,detail::weight(w,"kernel.base"))+project(project(x,right),left),project(x,detail::weight(w,"kernel.summary"))};
   }
   if(!independent.empty()){
+    work::packing::projection("kv_write_unprepared_rows",independent.size());
     auto ids=at::tensor(independent,p.input.options().dtype(at::kLong));
     auto input=p.input.index_select(0,ids),x=normalize(input,c.epsilon);
     auto v=project(x,detail::weight(w,"kernel.base"))+project(project(x,right),left);
@@ -28,6 +30,7 @@ std::pair<Tensor,Tensor> kv_projections(const NodeWeights& w,const Writes& p,con
     for(size_t i=0;i<independent.size();++i){values[independent[i]]=v[i];summaries[independent[i]]=s[i];}
   }
   if(!shared.empty()){
+    work::packing::projection("kv_write_shared_base_rows",shared.size());
     std::vector<Tensor> xs,bases;
     for(auto k:shared){
       const auto& row=batch.prepared[p.ids[k]];

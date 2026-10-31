@@ -9,6 +9,7 @@ from .query_batch import effective, features, weighted_read
 from .tensors import norm, rotate_relative
 from .normalization import scaled_rms
 from .numeric_time import time_values
+from . import packing_observation as observation
 
 
 def kv(program, memory, states, times, u):
@@ -20,6 +21,7 @@ def kv(program, memory, states, times, u):
     result = [None]*len(states)
     queries = project(norm(u, c.epsilon), program.query).reshape(-1, c.heads, c.width//c.heads)
     for length, rows in groups.items():
+        observation.bucket("kv_visible_full", length, len(rows))
         s = {k: torch.stack([states[i].slots[k][visible[i][0]] for i in rows]) for k in ("keys", "values", "weights")}
         keys = s["keys"].reshape(len(rows), length, c.heads, c.width//c.heads)
         values = s["values"].reshape_as(keys)

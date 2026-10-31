@@ -4,6 +4,7 @@ Stacking alone connects unused rows to zero gradients. This first-order boundary
 returns None for unused rows, including independent equal-valued inputs/weights.
 """
 import torch
+from . import packing_observation as observation
 
 
 class _Rows(torch.autograd.Function):
@@ -12,6 +13,7 @@ class _Rows(torch.autograd.Function):
         ctx.set_materialize_grads(False)
         xs, ws = inputs[::2], inputs[1::2]
         x, w = torch.stack(xs), torch.stack(ws)
+        observation.projection("private_bmm", len(xs))
         values = torch.bmm(w, x.unsqueeze(-1)).squeeze(-1)
         outputs = tuple(values.unbind())
         ctx.count = len(inputs)

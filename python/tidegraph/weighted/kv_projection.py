@@ -6,6 +6,7 @@ the low-rank factors; literal dense/FP64 formulas remain independent test anchor
 import torch
 from .tensors import norm
 from .packing import project
+from . import packing_observation as observation
 
 
 def key(memory, content):
@@ -37,10 +38,12 @@ def projections(memory, plan, batch):
         else:
             (common if row else independent).append((k, j))
     if len(independent) == len(plan.ids):
+        observation.projection("kv_write_unprepared_rows", len(independent))
         x = norm(plan.content, memory.config.epsilon)
         return (project(x, memory.base)+project(project(x, memory.adapter_v), memory.adapter_u),
                 project(x, memory.summary))
     if independent:
+        observation.projection("kv_write_unprepared_rows", len(independent))
         ids = [k for k, _ in independent]
         x = norm(plan.content[ids], memory.config.epsilon)
         values = project(x, memory.base)+project(project(x, memory.adapter_v), memory.adapter_u)
@@ -48,6 +51,7 @@ def projections(memory, plan, batch):
         for r, (k, _) in enumerate(independent):
             results[k], summaries[k] = values[r], local[r]
     if common:
+        observation.projection("kv_write_shared_base_rows", len(common))
         if any(set(prepared[j]) != {"normal", "base"} for _, j in common):
             raise ValueError("invalid KV preparation fields")
         if any((v.dtype, v.device) != (plan.content.dtype, plan.content.device)

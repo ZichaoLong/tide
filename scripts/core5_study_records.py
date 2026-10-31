@@ -4,13 +4,21 @@ from pathlib import Path
 from source_identity import digest
 
 
-def complete_checks(state, mode, checks, resume):
+def complete_checks(state, mode, checks, resume, *, checkpoint_required=False):
     complete = state == "passed" and checks.get("post_measurement_complete_records") is True
     if mode == "training":
         complete = complete and all(checks.get(k) is True for k in (
             "parameter_values_checked", "final_parameter_gradients_checked", "optimizer_values_checked"))
+    if mode == "training" or checkpoint_required:
         complete = complete and (resume or {}).get("state") == "passed" and (resume or {}).get("exact") is True
     return complete
+
+
+def timing_sample(result):
+    """Instrumentation costs remain queryable but never become throughput."""
+    return (result.get("throughput_sample") is not False and
+            result.get("kind") not in {"profile", "work-observation", "observation"} and
+            result.get("measurement_kind") not in {"profile", "work-observation", "observation"})
 
 
 def standalone_identity(binary, root):
@@ -35,6 +43,8 @@ def standalone_identity(binary, root):
 
 
 def accept_result(record, result):
+    if not timing_sample(result):
+        raise ValueError("profile/work observation is not a throughput measurement")
     if result.get("state") != "passed" or not result.get("post_measurement_complete_records"):
         raise ValueError("measurement did not establish complete independent equivalence")
     if result.get("workload_id") != record["plan"]["sha256"]:
@@ -65,7 +75,10 @@ def summarize(path):
             for key in ("candidate_updates", "full_calls", "messages", "outputs")}
     checks = {k: result.get(k, False) for k in ("post_measurement_complete_records", "parameter_values_checked",
               "final_parameter_gradients_checked", "optimizer_values_checked")}
-    complete = complete_checks(r["state"], measurement["mode"], checks, result.get("exact_resume"))
+    checkpoint_required = measurement.get("checkpoint_check", False)
+    complete = complete_checks(r["state"], measurement["mode"], checks, result.get("exact_resume"),
+                               checkpoint_required=checkpoint_required)
+    sample = timing_sample(result)
     return dict(run=str(Path(path).resolve()), state=r["state"], source=r["source"],
         case=r["case_id"], execution_name=r["execution_name"], model_id=r["model_id"], workload_id=r["workload_id"],
         execution_id=execution["execution_id"], measurement_id=measurement["measurement_id"],
@@ -74,7 +87,9 @@ def summarize(path):
         mode=measurement["mode"], phase=result.get("phase"), error=result.get("error", r.get("error")),
         independent_complete=result.get("post_measurement_complete_records", False),
         exact_resume=result.get("exact_resume"), metrics=metrics, measured_seconds=total or None,
-        kind="performance", checks=checks, correctness_qualified=complete, throughput_qualified=complete,
+        kind="performance" if sample else "observation", measurement_kind=result.get("kind", "benchmark"),
+        throughput_sample=sample, checkpoint_check=checkpoint_required,
+        checks=checks, correctness_qualified=complete, throughput_qualified=complete and sample,
         configuration_facts=r.get("configuration_facts"),
         work=work, memory=result.get("memory"), construction_seconds=result.get("construction_seconds"),
         warmup_seconds=result.get("warmup_seconds"), fixture_sha256=result.get("fixture_sha256"))
@@ -104,7 +119,8 @@ def query_records(path, _ancestors=frozenset()):
             facts, execution = r["models"][row["workload_id"]], row["execution"]
             checks = row.get("checks", {})
             resume = checks.get("exact_resume")
-            complete = complete_checks(row["state"], row["mode"], checks, resume)
+            complete = complete_checks(row["state"], row["mode"], checks, resume,
+                                       checkpoint_required=row.get("checkpoint_check", False))
             records.append(dict(row, source=r["source"], kind="correctness", run=row["test"],
                 evidence_file=str(path), execution_name=execution["requested"]["client"],
                 requested=execution["requested"], effective=execution["effective"],
@@ -122,11 +138,15 @@ def query_records(path, _ancestors=frozenset()):
     records = []
     for row in r["runs"]:
         item = dict(row)
+        sample = timing_sample(item)
         model = r["models"][item["case"]]
         item.update(parameters=model["parameters"], graph_counts=model["counts"], recipe=model["recipe"],
-                    evidence_file=str(path), reviewed_model=model, kind="performance")
+                    evidence_file=str(path), reviewed_model=model, kind="performance" if sample else "observation")
         checks, resume = item.get("checks", {}), item.get("exact_resume") or {}
-        complete = complete_checks(item["state"], item["mode"], checks, resume)
-        item["correctness_qualified"] = item["throughput_qualified"] = complete
+        checkpoint_required = item.get("checkpoint_check", item.get("measurement", {}).get("checkpoint_check", False))
+        complete = complete_checks(item["state"], item["mode"], checks, resume,
+                                   checkpoint_required=checkpoint_required)
+        item["correctness_qualified"] = complete
+        item["throughput_qualified"] = complete and sample
         records.append(item)
     return records

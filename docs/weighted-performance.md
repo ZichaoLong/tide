@@ -39,6 +39,10 @@ fixture、模型/owner/optimizer构造、warmup、资格对照及最后参数导
 不把调用裸kernel或只计forward当完整训练。记录实际配置、源码与输入hash、栈、分配器峰值、
 进程生命周期RSS峰值、负载均值和已知争用；不据单次流程声称统计稳定或普遍最快。
 
+计时外的`boundary_activity`只读取已完整CPU解码的实际结果，按sample记录候选、Full、
+消息、输出、pending及存储KV长度；原始缓存长度不是query可见桶。独立profile另记录
+[实际packing桶和矩阵行数](packing-observation.md)，不新增设备读值/同步，不纳入合格吞吐。
+
 测量结束后才执行独立CPU时间递归，核对全部窗口记录、loss和最终参数值。
 CPU eager/native另导出实际最终参数梯度与SGD动量槽，保留None/连接零，分别对照。
 Python还比较完整optimizer state_dict；standalone的本入口只有固定SGD组，比较所有owner的动量槽。
