@@ -1,6 +1,6 @@
 # 同模型安全容量代表点（2026-10-31）
 
-本报告目前是CUDA4.561B单卡实际点；同模型2/3/4卡与NPU校准点待各自实际结果，不由单卡推断。
+本报告目前包括CUDA4.561B单/双卡实际点；同模型3/4卡与NPU校准点待各自实际结果，不由已测点推断。
 固定Python实现bd2ff2e，core/resident构建de999c2；配置31afefb，实际冻结输入由ad93848导出。
 RTX3090/sm86、Torch2.12.1+cu130、FP32 payload/scoring、TF32关闭，native mixed-c、ordinary复制、packed/scalar完整返回；ATen/interop/worker1。
 FC16/8区域、KV、d4352、FFN4d，4,561,319,928个去重可训练参数，8个不可拆共享组；B1/P2/span20，staggered-v1，warmup1+连续2窗+精确恢复窗，1800秒上限。
@@ -30,6 +30,24 @@ allocated峰值约占扣除余量后usable的92.0%；reserved约92.9%，属于�
 任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`于06:53:40Z exit0，独立SSH检查supervisor/workload/remaining全部为空。
 保存配置、结果、来源与hash后才退役可重建checkpoint，为同模型下一点释放盘；活动输入不退役。
 
+## 同模型双卡实际点
+
+双卡沿用完全相同model_id/workload_id、B1/P2/span20与完整返回，8共享组交替放在GPU0/1，每卡8节点。
+执行完成、离散语义和磁盘精确续接通过；1517数值差异、0离散差异，首差仍为原keys坐标，保持FP32探索。
+
+| 指标 | 双卡实际值 |
+| --- | --- |
+| 两测量窗 / 中位 | 0.683779 / 0.825447秒；0.754613秒 |
+| 每卡峰值 allocated / reserved | 10.299098 / 10.441720GB；两卡近似相同 |
+| 主存RSS峰值 / 恢复检查 | 74.808754GB / 320.717秒 |
+| 原生跨卡复制 | 各窗7组；557184 / 487536 bytes；ordinary生效 |
+| 实际位置 | 参数、私有状态、消息目标和计算与共享组映射相符；无参数独立复制替代共享 |
+
+候选/Full/消息与单卡相同，31/(18,16)/(32,28)。相同模型双卡降低逐卡存储但本次单窗成本高于单卡；
+不将两卡空闲显存之和称容量，也不由ordinary复制推断直接P2P或resident协议。
+任务`jobs/platform-cuda-capacity4561m-c2-bd2ff2e`于07:11:16Z exit0，独立SSH核对supervisor/workload/remaining全空。
+结果原字节SHA256 `3bb5e0ac7fe851677fd47329472fd31aeb656de1cb96c829a84384b6089054d6`。
+
 ## 干净安装复现
 
 ```sh
@@ -42,4 +60,4 @@ tidegraph results docs/evidence/core5-platform-capacity-20261031.json.gz --forma
 
 多卡同一模型继续保持共享组同卡、全区域函数与实际位置；普通复制不认证直接P2P/原子或resident协议。下一尺度仍需逐卡、主存、两代checkpoint共同准入，不把空闲GPU显存直接相加。
 
-归档SHA256：`8163c1d31f6adfba216ed114ca006720b6302c8cd7362ef6ecfe19a74422590d`。
+归档SHA256：`4fdd389b558a6c5a640ae33bcbe2f16974c7b494967f0e095353f77e7f496742`。

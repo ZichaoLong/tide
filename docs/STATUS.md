@@ -25,7 +25,7 @@
 
 每个本机unit的持久状态/log位于`artifacts/jobs/`下去掉`gef-`和`.service`的同名目录（final目录为`platform-final-1e33b4a`）；next/final内部另有progress.json与逐项log。NPU后继逐case合作队列priority0，候选物理4–11、申请1/2/3/8卡、等待600秒，完成后释放。尚未执行的项没有结果。
 
-GPU单卡容量任务已终态，准备同模型双卡。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。四份已审阅终态checkpoint已退役28.505GB，凭据`checkpoint-retirement-reviewed-ad93848.json`；回收稳定后free43.978GB，超过两代checkpoint42.482GB+1GiB余量。下一任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`使用冻结bd2ff2e安装及`inputs-ad93848-capacity/cuda-capacity-4561m-cards-1.json`，1800秒、GPU0、ATen1/interop1/worker1；单卡已于06:53:40Z终态passed、无后代；执行/离散/恢复通过，数值探索，[容量报告](evidence/core5-platform-capacity-20261031.md)保留20.058GB实际峰值及314.967秒恢复成本。07:02Z重核四卡空闲、单卡任务终态无后代；已审阅dry-run `checkpoint-retirement-capacity4561m-c1-528025c.json`，已退役其20.699GB可再生checkpoint；free43.953GB，07:01:12Z已启动`jobs/platform-cuda-capacity4561m-c2-bd2ff2e`（对应同目录cards-2.json、1800秒、GPU0/1）；然后做3/4卡，每点后独立审阅再退役checkpoint，不将旧产物占盘称模型硬件不足。
+GPU单卡容量任务已终态，准备同模型双卡。最新`jobs/platform-cuda-resident-match-bd2ff2e`于06:38:06Z exit0，supervisor/workload/remaining均空。训练三组终态failed且无后代；原始结果/配置/log与失败归档保留。四份已审阅终态checkpoint已退役28.505GB，凭据`checkpoint-retirement-reviewed-ad93848.json`；回收稳定后free43.978GB，超过两代checkpoint42.482GB+1GiB余量。下一任务`jobs/platform-cuda-capacity4561m-c1-bd2ff2e`使用冻结bd2ff2e安装及`inputs-ad93848-capacity/cuda-capacity-4561m-cards-1.json`，1800秒、GPU0、ATen1/interop1/worker1；单卡已于06:53:40Z终态passed、无后代；执行/离散/恢复通过，数值探索，[容量报告](evidence/core5-platform-capacity-20261031.md)保留20.058GB实际峰值及314.967秒恢复成本。07:02Z重核四卡空闲、单卡任务终态无后代；已审阅dry-run `checkpoint-retirement-capacity4561m-c1-528025c.json`，已退役其20.699GB可再生checkpoint；free43.953GB，07:01:12Z启动的`jobs/platform-cuda-capacity4561m-c2-bd2ff2e`已于07:11:16Z exit0且无后代，执行/离散/精确恢复通过、数值探索；逐卡allocated峰值10.299GB，中位0.754613秒；证据已追加容量报告。审阅退役其checkpoint后做3/4卡，每点后独立审阅再退役checkpoint，不将旧产物占盘称模型硬件不足。
 
 ```sh
 systemctl --user show gef-platform-npu-scale-1b3e39f.service gef-platform-next-stages-bd2ff2e.service gef-human-local-de93246.service gef-platform-final-1e33b4a.service -p ActiveState -p SubState -p ExecMainStatus -p ControlGroup
@@ -56,4 +56,6 @@ CUDA12方向无直接P2P/原生跨卡原子边界未解除。4.561B点两代chec
 
 观测修正固定`c59688c`：补齐CANN实际`aten::matmul`形状，13项冻结解析检查通过；`gef-profile-reanalysis-c59688c.service`于07:04:11Z exit0、控制组空。[CPU/NPU profile证据](evidence/core5-platform-profile-20261031.md)保留旧trace hash和运行来源，未重跑数学/性能。
 
-新静态补充待提交：`capacity-sharded`固定NPU38.406B的1/2/3卡及CUDA9.123B双卡，区别分散单卡可容纳模型和真正多卡容量。NPU三卡依赖12.802B实际校准；CUDA两代checkpoint83.896GB超过整个50GiB盘，预期准入拒绝。当前NPU8卡队列因物理9存在其他任务而等待（实际可空闲7卡）；不停止或改写活动任务，按原600秒等待上限处理。
+新静态补充固定`3e4f6b2`，10项冻结配置检查通过：`capacity-sharded`固定NPU38.406B的1/2/3卡及CUDA9.123B双卡，区别分散单卡可容纳模型和真正多卡容量。NPU三卡依赖12.802B实际校准；CUDA两代checkpoint83.896GB超过整个50GiB盘，预期准入拒绝。当前NPU8卡队列因物理9存在其他任务而等待（实际可空闲7卡）；不停止或改写活动任务，按原600秒等待上限处理。
+
+后继准备：`gef-platform-sharded-3e4f6b2.service`将等待final终态，再运行冻结`inputs-3e4f6b2-sharded`，安装仍bd2ff2e；1/2卡仅预期准入拒绝，3卡须原12.802B单卡完成有限推理及精确恢复才运行。各case1800秒、队列600秒，外层86400秒含等待；日志/状态在`artifacts/jobs/platform-sharded-3e4f6b2`，逐项记录在`artifacts/platform-matrix/sharded-capacity-3e4f6b2`。未提交仅本STATUS接续更新。
