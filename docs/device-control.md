@@ -88,7 +88,17 @@ checks, retain the `.nsys-rep` and export its CUDA API/kernel timeline:
 nsys profile --trace=cuda,nvtx --cuda-graph-trace=node --output="$TRACE/control" "$STANDALONE/tide-device-control-check" --device=cuda:0 --dtype=float32
 nsys profile --trace=cuda,nvtx --cuda-graph-trace=node --output="$TRACE/peer" "$STANDALONE/tide-device-peer-check" --device=cuda:0 --dtype=float32
 nsys stats --report cuda_api_sum,cuda_gpu_kern_sum "$TRACE/control.nsys-rep"
+nsys export --type sqlite --output "$TRACE/control.sqlite" "$TRACE/control.nsys-rep"
+python scripts/inspect_cuda_timeline.py --database "$TRACE/control.sqlite" --output "$TRACE/control-observation.json"
 ```
+
+The read-only SQLite observer records graph-node kernel activity, host graph
+launch counts, overlapping device-time coverage and a bounded schedule-kernel
+sample. It accepts one process/device per export and does not assign orphan
+conditional-node activities to the nearest host launch. Counts alone establish
+neither correctness nor residency; review the actual kernel roles and consumer
+result. The independent synthetic export checks need no Torch or GPU:
+`python -m unittest discover -s tests -p test_cuda_timeline.py -v`.
 
 Review device branch kernels and loop execution between boundary graph launch
 and completion, and peer packet ordering on both devices. Component traces
