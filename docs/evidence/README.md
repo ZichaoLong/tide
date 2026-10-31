@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[八卡共享资源终态](core5-platform-eight-followup-20261031.md)：固定d3de18f配置/launcher、4485697安装、eca070f库；三项全部执行/离散/精确续接通过，小训练严格通过，两项约1B数值探索。无存活后代，不改写原排队超时，不认证任意根、多卡resident或八卡容量上限。
+
 [GPU释放前审阅](core5-cuda-release-20261031.json)：本轮GPU任务全部终态、无计算进程；正式小证据已回收，原远端dev的20项未提交源码已在本机保留并校验。后续本机任务不依赖GPU实例；此审阅不增加数学或性能资格。
 
 [CPU/NPU约1B大batch算子观察](core5-platform-profile-20261031.md)：固定bd2ff2e两项独立profile；168行大MM、864次两行私有BMM与288次共享base GEMV并存。c59688c修正CANN matmul漏计，13项固定解析检查通过；保留原trace hash，不重跑或新增数学资格。
@@ -12,7 +14,7 @@
 
 [CUDA/NPU单卡resident大batch与布局](core5-platform-resident-20261031.md)：默认B128/B512静态拒绝保留；结构界定queue/stages后两项实际完成、离散/恢复通过、数值探索，实际行/填充/资源分列；两平台B1及小型训练严格通过；NPU有界B128完成、数值探索，B512构造EE1019流任务容量失败。
 
-[CUDA/NPU同模型多卡与三通信训练](core5-platform-multicard-20261031.md)：CUDA bd2ff2e固定6项，1.014B推理执行/离散/恢复通过、数值探索；小型双卡三通信严格训练通过。逐卡参数/状态/消息与计算统计、共享组、物理传输及恢复峰值单列，不认证P2P或多卡resident。NPU2/3卡推理探索、ordinary/cpu_bridge小训练严格通过，blocking恢复SIGSEGV；8卡资源等待超时未执行。
+[CUDA/NPU同模型多卡与三通信训练](core5-platform-multicard-20261031.md)：CUDA bd2ff2e固定6项，1.014B推理执行/离散/恢复通过、数值探索；小型双卡三通信严格训练通过。逐卡参数/状态/消息与计算统计、共享组、物理传输及恢复峰值单列，不认证P2P或多卡resident。NPU2/3卡推理探索、ordinary/cpu_bridge小训练严格通过，blocking恢复SIGSEGV；原8卡资源等待超时未执行；明确共享资源后继见本页八卡终态报告。
 
 [三平台有限值诊断packing](core5-finite-packing-20261031.md)：bd2ff2e固定18项，默认/原阈值保留；B128同材料成本降低、6小训练严格通过，两策略既有完整checkpoint/输出精确相同。CUDA减少小kernel但显式同步未减少，收益和停止边界分列。
 

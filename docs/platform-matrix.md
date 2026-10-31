@@ -252,3 +252,9 @@ python scripts/run_npu_eight_followup.py configs/capacity-training/npu-eight-fol
 持久盘低于软配额且距硬限至少150GiB。每项还执行公共逐卡/主存/输出预算；
 不因临时盘可用而忽略主存。逐项终态复制小记录到持久盘，checkpoint留tmpfs供审阅；
 中断后根据准确unit/子监督核对，不能只看外层状态。
+
+
+本组已实际完成并审阅，见[八卡终态证据](evidence/core5-platform-eight-followup-20261031.md)。
+小训练严格通过，约1B推理/新loss训练为数值探索且完整离散/精确续接通过；物理4–11中一张
+为明确授权共享，不能当独占计时。原三个八卡排队超时与未执行12.8B八卡点保留；本组不认证
+安全八卡容量上限。全部原配置与后继共九份压缩归档204条唯一run，可由公共results直接查询。
