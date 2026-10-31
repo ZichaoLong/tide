@@ -44,8 +44,8 @@ inherits the base interpreter's environment; confirm `torch.__version__` and
 
 Each command is run in its matching environment. CUDA CMake discovery may also
 need a matching CUDA toolkit; on a host without a GPU set a target-specific
-`TORCH_CUDA_ARCH_LIST` supported by that toolkit. Tide uses standard ATen and
-ships no custom CUDA kernel. That setting does not add missing architectures to
+`TORCH_CUDA_ARCH_LIST` supported by that toolkit. The eager core uses standard ATen; the separate resident backend also builds
+its own CUDA kernels and conditional graphs. That setting does not add missing architectures to
 the selected prebuilt Torch wheel.
 
 Native model, input, continuation and gradient tensors must agree on device and
@@ -96,7 +96,9 @@ Cross-vendor portable handoff is numerical equivalence, not bitwise RNG resume.
 
 ## Target-machine acceptance
 
-First run the full CPU baseline using a matching CPU build. Then use a new
+For a new GPU target, first run small independent CPU formula/reference checks
+in the matched environment, then prioritize complete GPU training, inference and
+resume. Full CPU qualification remains a separate later gate. Use a new
 output directory for each requested backend, implementation, dtype and stack:
 
 ```sh

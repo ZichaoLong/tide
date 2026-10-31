@@ -17,24 +17,26 @@
 
 ## 当前作业与下一步
 
-容器启动器实现已提交/推送 `cc6b45f`，本机5项实际生命周期测试通过。
-目标源码 `/root/autodl-tmp/gef-cuda3090/sources/cc6b45f` 已只读冻结；新分支bundle克隆，不含old引用。
-目标 `jobs/disconnect-probe` 已在断连后确认父子进程存活，停止后cancelled/无存活组成员；`jobs/setup` 已passed，pytest8.4.2/Ninja1.13.0安装在私有venv，Torch保持2.12.1+cu130。
-工作根 `/root/autodl-tmp/gef-cuda3090`；环境 `venv` 复用现有Torch。构建将用56线程/sm86。
-原始审计本机 `artifacts/cuda3090/startup-system.json`；目标状态/日志为各 `jobs/NAME/status.json`、`task.log`。
-`jobs/core-build` 已passed（209目标，实际约73秒；上限3600秒，56线程）；工作命令 `bash /root/autodl-tmp/gef-cuda3090/core-build.sh`，cwd为上述固定源码，构建目录 `builds/cc6b45f-core`。
-开发检查：目标CPU公式92通过，纯PyTorch CUDA mixed-c/KV完整检查通过，检查器CPU回归9通过；均不是完整矩阵。
-构建现场发现Ninja子进程组；subreaper修复及6项进程测试通过，覆盖另建session、孤儿与忽略TERM。
-Python/native/standalone首个CUDA KV四更新通过；C++新增精确续接已通过小型CPU FP64/FP32，CUDA定向正在完成。
-本机未提交：上述启动器修复、CUDA检查显式IEEE策略、workers/packing记录、完整同设备恢复精确检查及本交接；活跃源码快照未修改。
+实现提交 `c962961`：CUDA eager IEEE政策、分配置三客户端门禁、完整同栈精确恢复；容器subreaper清理独立组与孤儿。
+开发检查：CPU公式92、检查器CPU9、容器6通过；三个客户端CUDA首个KV通过；C++新增精确恢复CPU FP64/FP32、CUDA FP32通过。
+初始CUDA core `cc6b45f` 构建209目标成功，56线程实际约73秒。开发检查不冒充完整GPU资格。
+
+目标工作根 `/root/autodl-tmp/gef-cuda3090`。准备冻结 `sources/c962961`，以该提交重新构建 `builds/c962961-core`，
+作业 `jobs/core-build-c962961`，超时3600秒/56线程/sm86。构建期间先启动独立 `jobs/eager-pytorch-fp32`：全19例mixed-c，3600秒，结果 `runs/c962961-pytorch-fp32`。
+构建通过后启动native/standalone的固定全例，并单列KV mixed-a/b；正确性与构建可重叠，正式性能不重叠。
+私有环境 `venv` 使用Torch2.12.1+cu130，额外pytest8.4.2/Ninja1.13.0；原setup作业passed。
+原始日志/持久状态位于 `jobs/NAME/task.log`、`status.json`，结果目录 `runs/`；没有覆盖原运行。
+断连探针实际重连确认父子存活，stop后cancelled/无存活成员；后续subreaper的独立session/孤儿探针还须目标复验。
+本机新增单卡core-5 resident入口：39组件+3公共测试文件，注册/无peer清单与CLI校验通过，真机尚待运行；原三卡完整门禁保持。
+活动源码只读，独立开发目录 `dev` 保留已验证补丁，不能当正式来源。
 
 ```sh
 git status --short --branch
 python scripts/status.py
 python scripts/check_upstream.py
-python -m unittest discover -s tests -p test_container_job.py -v
+# 目标机（通过本机认证CONNECT，凭据不进仓库）：
+/root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/sources/c962961/scripts/container_job.py status --output-dir /root/autodl-tmp/gef-cuda3090/jobs/core-build-c962961
 ```
 
-接着在目标机建立私有环境、固定源码，验证 `scripts/container_job.py start/status/stop` 的断连存活与组清理，
-再以56线程构建CUDA core。已有完整多卡resident门禁保留，单卡入口需要独立建立，不能跳过得到完整通过。
-旧CPU/NPU严格失败及停止条件保留于 [ROADMAP](ROADMAP.md)，不自动重跑旧矩阵。
+正式CUDA资格后单独提交证据；首个KV不代表全部五记忆/配置/拓扑通过。接着建立单卡core-5 resident明确门禁并构建，
+不修改现有完整多卡门禁的三卡/P2P要求。旧CPU/NPU严格失败保持 [ROADMAP](ROADMAP.md) 的停止条件。

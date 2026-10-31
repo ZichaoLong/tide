@@ -58,6 +58,25 @@ the standalone full-training checker. The result records that narrower policy;
 it never selects it automatically or changes discrete comparisons, and it does
 not certify the original strict control tolerance. Retain raw strict failures.
 
+A separate **one-owner core-5** gate is available on a single device. Its
+39-component inventory is explicit in `scripts/core5_resident_scope.py`, followed
+by the public weighted inference, independent storage roots and complete training
+clients (FP32/FP16, windows and checkpoint). It requires zero skipped public
+checks and matching source/binary identities. It does not qualify the legacy
+module Cartesian set, peers, the full three-owner gate, or residency by itself.
+
+```sh
+python scripts/verify_core5_resident_single.py --device cuda:0 \
+  --core-build "$CORE" --python-resident-build "$PYTHON_RESIDENT" \
+  --standalone-resident-build "$STANDALONE" --output-dir "$SINGLE_GATE"
+```
+
+The matching standalone build may request exactly that inventory with
+`build_device_control.py --checks ...`; the Python build may use
+`--python-component weighted`. Neither changes `verify_resident_target.py` or
+its original three-device/P2P requirements. The RTX3090 target's lack of P2P
+prevents that full peer qualification, independently of single-device results.
+
 Actual residency requires a separate target trace. For a finite initial trace,
 use Nsight Systems node-level CUDA Graph tracing on the warmed control/peer
 checks, retain the `.nsys-rep` and export its CUDA API/kernel timeline:
