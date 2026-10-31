@@ -5,6 +5,7 @@ import json
 import pytest
 from tidegraph.experiment.config import resolve
 from tidegraph.experiment.report import load, render, select, summarize
+from tidegraph.experiment.records import fingerprint
 
 
 def result():
@@ -72,3 +73,35 @@ def test_archived_results_remain_queryable_without_original_run_directory(tmp_pa
     archived.write_text(json.dumps(record))
     with pytest.raises(ValueError, match="content digest"):
         load([archived])
+
+
+def test_archive_preserves_provenance_window_costs_and_strict_diagnostics(tmp_path):
+    data = result()
+    data.update(construction_seconds=1.25, warmup=[dict(seconds=9)],
+        identity=dict(package=dict(installed_files_sha256="package-hash", source_provenance="fixed-source",
+                                   files_sha256={"a.py": "hash-a"})))
+    data["validation"].update(reports=[dict(differences=[dict(path="state.keys", max_abs=2e-6)])])
+    row = summarize(data, tmp_path/"result.json")
+    archive = tmp_path/"archive.json"
+    archive.write_text(render([row], format="archive"))
+    detail = load([archive])[0]["details"]
+    assert detail["resolved_config"] == json.loads(json.dumps(data["resolved_config"]))
+    assert detail["metrics"] == data["metrics"]
+    assert detail["construction_seconds"] == 1.25 and detail["warmup"] == [{"seconds": 9}]
+    assert detail["validation"]["reports"] == data["validation"]["reports"]
+    package = detail["identity"]["package"]
+    assert package["installed_files_sha256"] == "package-hash"
+    assert package["source_provenance"] == "fixed-source"
+    assert package["files_sha256"]["sha256"] == fingerprint({"a.py": "hash-a"})
+    assert data["identity"]["package"]["files_sha256"] == {"a.py": "hash-a"}
+
+
+def test_old_archive_remains_queryable_without_inventing_missing_details(tmp_path):
+    row = summarize(result(), tmp_path/"result.json")
+    del row["details"]
+    path = tmp_path/"v1.json"
+    path.write_text(json.dumps(dict(schema="tide-experiment-evidence-v1", results=[row],
+                                   results_sha256=fingerprint([row]))))
+    loaded = load([path])[0]
+    assert loaded["details"] == {"scope": "unrecorded in v1 archive"}
+    assert loaded["median_seconds"] == row["median_seconds"]

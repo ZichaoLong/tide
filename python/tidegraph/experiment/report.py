@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import statistics
 from .records import read_json, digest, fingerprint
+from .evidence import details
 
 
 COLUMNS = ("run", "platform", "graph", "topology", "parameters", "logical_batch", "positions", "span",
@@ -13,7 +14,9 @@ COLUMNS = ("run", "platform", "graph", "topology", "parameters", "logical_batch"
            "return_mode", "packing", "return_packing", "schedule", "threads", "workers", "execution_status", "numerical", "discrete",
            "complete", "checkpoint", "exact_resume", "exploratory", "qualification", "kind", "throughput_sample", "throughput_qualified",
            "median_seconds", "samples_per_second", "config_id", "model_id", "workload_id", "task_id", "execution_id",
-           "result_sha256", "timing_contract", "work", "memory", "error", "admission_refusals")
+           "result_sha256", "timing_contract", "work", "memory", "error", "admission_refusals", "details")
+
+V1_COLUMNS = COLUMNS[:-1]
 
 
 def _state(value):
@@ -98,7 +101,7 @@ def summarize(record, path):
             "seconds", "elapsed_seconds", "elapsed_ms", "milliseconds", "loss", "checkpoint_seconds"}}
             for row in record.get("metrics", []) if isinstance(row, dict)]),
         memory=record.get("memory", "unmeasured"), error=record.get("error"),
-        admission_refusals=record.get("admission", {}).get("refused", []))
+        admission_refusals=record.get("admission", {}).get("refused", []), details=details(record, resolved))
     return row
 
 
@@ -117,12 +120,14 @@ def load(paths):
             record = read_json(path)
             if not isinstance(record, dict):
                 raise ValueError(f"{path}: expected a result object")
-            if record.get("schema") == "tide-experiment-evidence-v1":
+            if record.get("schema") in {"tide-experiment-evidence-v1", "tide-experiment-evidence-v2"}:
                 rows = record.get("results")
-                if (not isinstance(rows, list) or any(not isinstance(row, dict) or set(row) != set(COLUMNS) for row in rows)
+                columns = V1_COLUMNS if record["schema"].endswith("v1") else COLUMNS
+                if (not isinstance(rows, list) or any(not isinstance(row, dict) or set(row) != set(columns) for row in rows)
                         or fingerprint(rows) != record.get("results_sha256")):
                     raise ValueError(f"{path}: invalid evidence rows or content digest")
-                records.extend(rows)
+                records.extend(dict(row, details={"scope": "unrecorded in v1 archive"})
+                               if columns == V1_COLUMNS else row for row in rows)
                 continue
             # Build/job status records do not become experiment qualifications.
             if not ("resolved_config" in record or "config_id" in record or (path.parent/"resolved.json").is_file()):
@@ -164,7 +169,7 @@ def _cell(value):
 
 def render(rows, *, format="table"):
     if format == "archive":
-        return json.dumps(dict(schema="tide-experiment-evidence-v1", results=rows,
+        return json.dumps(dict(schema="tide-experiment-evidence-v2", results=rows,
             results_sha256=fingerprint(rows),
             scope="Portable result projection; source hashes identify original records, not retained checkpoint bytes or revalidation"),
             indent=2, ensure_ascii=False, allow_nan=False)+"\n"

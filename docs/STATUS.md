@@ -1,6 +1,6 @@
 # 当前交接 — 三平台矩阵、多卡放置与人类入口（2026-10-31）
 
-授权分支 `graph-execution-foundation`。当前实施固定 `972032fe96cc2ac38044ea6dadcfbfbcc40b6f87`，数学固定 `0770593838a37c790a568226930567ed60f99b83`；本次启动快照校验通过。用户确认旧账户指南文件已不存在；以当前模块/设备探测、项目私有环境、NPU队列和background.slice操作，公共栈与参考仓库保持只读。
+授权分支 `graph-execution-foundation`。当前运行实现固定 `1b3e39f`（GPU首组仍为独立安装972032f），数学固定 `0770593838a37c790a568226930567ed60f99b83`；本次启动快照校验通过。用户确认旧账户指南文件已不存在；以当前模块/设备探测、项目私有环境、NPU队列和background.slice操作，公共栈与参考仓库保持只读。
 
 ## 实施与可复用证据
 
@@ -38,7 +38,7 @@ CUDA四张3090/sm86，Torch2.12.1+cu130/Toolkit13.0，CPU配额56、主存240GiB
 
 ## 下一动作与公开命令
 
-两机重型构建均已终态。GPU首组 `gpu3090:jobs/platform-cuda-coverage-972032f` 已终态（12项小型层级/拓扑覆盖，严格失败保持）。下一活动组 `gpu3090:jobs/platform-cuda-eager-972032f` 为20项clients/batch/packing/modules/placement/precision的显式合并，包含B128/B512与A/B/C，固定安装972032f与eca070f/de999c2真实库身份，单case900s上限。其后顺序执行各平台coverage/clients、batch/packing等组，审阅结果后逐项放行scale/multicard/capacity，profile独立进程。大点每项结束后审阅小记录并按保留规则处理生成文件，避免填满GPU数据盘。
+两机重型构建均已终态。GPU首组 `gpu3090:jobs/platform-cuda-coverage-972032f` 已终态（12项小型层级/拓扑覆盖，严格失败保持）。`gpu3090:jobs/platform-cuda-eager-972032f` 的20项也已终态、无后代。它是clients/batch/packing/modules/placement/precision的显式合并，包含B128/B512与A/B/C，固定安装972032f与eca070f/de999c2真实库身份，单case900s上限。其后顺序执行各平台coverage/clients、batch/packing等组，审阅结果后逐项放行scale/multicard/capacity，profile独立进程。大点每项结束后审阅小记录并按保留规则处理生成文件，避免填满GPU数据盘。
 
 ```sh
 git status --short --branch
@@ -55,4 +55,8 @@ tidegraph results NEW_REVIEWED.json --format html --output NEW_REPORT.html
 
 gpu3090通过私有 `artifacts/cuda3090/ssh.sh`，无systemd时使用已安装container_job；本机独立background.slice，NPU等待放在服务内部。原始绝对路径仅定位当前材料，干净检出按[人类入口](human-workflow.md)/[开发文档](development.md)重新生成。STATUS唯一当前交接，ROADMAP唯一待办；当前阶段资格证据尚未提交，不能把实施或running写成通过。
 
-接续开发修正：已安装矩阵显示当前case/log和长独立检查阶段；Python eager推理预算排除不存在的第二份设备权重bank（主存/C++/训练预算保留）。47项运行/放置/作业定向检查通过，待提交后安装新版本用于后续容量准入；正在运行的972032f安装未改动。
+接续开发修正：已安装矩阵显示当前case/log和长独立检查阶段；Python eager推理预算排除不存在的第二份设备权重bank（主存/C++/训练预算保留）。实现已提交1b3e39f，47项运行/放置/作业定向检查通过；两机独立安装install-1b3e39f，既有972032f安装未改动。当前本机作业 `artifacts/jobs/platform-cpu-eager-1b3e39f`，32项coverage/clients/batch/packing/modules/threads逐case运行，全部来自原跟踪配置；GPU正式计时已终态，不与本机重叠。
+
+本机CPU32项仍running，unit `tidegraph-45df5b5ac73f449c.service`，当前B512恢复检查。GPU12+20项已终态：两组全部执行完成/离散通过/精确续接通过；coverage7严格通过5数值失败，eager6严格通过14数值失败（13显式探索接纳、LH异构strict失败）。三客户端小训练严格通过，不解除旧独立根失败。GPU B128/B512及A/B/C成本已取回，原始小记录 `artifacts/platform-matrix/cuda-initial-raw-records.json`。
+
+归档v2修复保留展开配置、实现/构建身份、原逐窗与准备/检查成本和严格诊断；16项报告/CLI回归通过，v1保持可查询且缺失信息明示。下一GPU作业 `jobs/platform-cuda-scale-pilot-1b3e39f`，先99M/1.010B B1校准；单case1800秒、完整返回/独立检查/精确续接。GPU单独主机与本机CPU无共享计算资源；两机没有重型构建，正式计时可各自独立推进。NPU32项待CPU组终态后经空闲队列启动。
