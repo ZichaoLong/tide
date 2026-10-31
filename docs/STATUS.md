@@ -12,7 +12,7 @@
 
 ## 已审阅结果
 
-截至本次重入，八份platform/finite-packing归档含190条唯一run，包含观察、拒绝与失败，不是190项性能通过。
+截至本次重入，八份platform/finite-packing归档含191条唯一run，包含观察、拒绝与失败，不是191项性能通过。
 完整配置、来源、逐窗结果、峰值与原严格诊断在各gzip；旧二进制不冒称按最新Python提交重建。
 
 | 范围 | 当前事实与证据 |
@@ -33,12 +33,12 @@ NPU同实现回归仍在下列队列，不由CUDA或旧NPU通过认证。旧CPU/
 ## 当前GPU作业
 
 目标`gpu3090`，私有入口`artifacts/cuda3090/ssh.sh`，根`/root/autodl-tmp/gef-cuda3090`。
-`jobs/platform-scaled-training-1a6b08f`于08:49:44Z启动；08:53Z观察仍running，
-小型两卡full检查exit0，1.014B双卡三个有限窗口已完成，正在exact-resume，独立验收尚未完成。
-配置`configs/capacity-training/cuda-scaled-loss.json`来自1a6b08f，运行包固定36baeb7；
-同FC16/B1/P2/原SGD，仅loss系数0.001→1e-9，task身份独立，是新工作负载，不是原失败修复。
-只选择这一系数，不继续搜索。外层2400秒、小full300秒、大点1800秒，默认每窗保存、完整返回和原阈值保持。
-产物`cuda-scaled-training-36baeb7/progress.json`；每个子项有独立`*-supervisor/status.json`。
+`jobs/platform-scaled-training-1a6b08f`已于08:55:33Z终态exit0，两个子监督及外层均无后代。
+小型两卡full通过；1.014B双卡新loss流程完整执行、离散/精确恢复通过、独立数值仍超差探索。
+两测量窗1.260/1.398s，三个loss约6.33/6.21/6.06；最终参数通过，梯度/optimizer整体超差，见训练容量证据。
+配置来自1a6b08f，实际包36baeb7；只将loss系数0.001→1e-9，是新任务，不是原失败修复，不继续搜索。
+主存恢复RSS40.265GB超过原静态估算35.261GB，下一实现补齐CPU训练快照预算；现场余量充分，原结果不改写。
+产物`cuda-scaled-training-36baeb7/progress.json`与各`*-supervisor/status.json`保留；GPU现无本项目活动作业。
 
 9.123B原两代磁盘83.896GB拒绝保留；新interval3仅最终保存，单代41.401GB，双卡08:45:38Z前已完成。
 外层因单卡拒绝failed/1、双卡子项exit0，均无后代。经b061404审阅/dry-run后退役其可重建checkpoint，
@@ -96,7 +96,7 @@ NPU38.406B三卡各58.566GB并另留6GiB，host766.974GB；原两代disk349.567G
 本机shm约1.034TB空、MemAvailable约1.8TB，cgroup v1各层无限额已人工核验；不宣称代码自动支持所有v1限额。
 这些是近期观察，下一次新作业仍现场准入；disk.estimated_new_bytes已含reserve，不加两遍。
 
-下一步：先收GPU新训练终态，审阅完整梯度/槽/恢复与独立检查；沿本机链逐项收终态，
+下一步：补齐新发现的训练主存快照预算并定向验证；沿本机链逐项收终态，
 将容量、训练、恢复诊断分别补入既有证据，依据首个见证决定有界修复或明确停止。
 最终核对189原目录的运行/拒绝/替代项和目录外后继，更新ROADMAP/六项经验/可查询结果；全部作业终态后交付。
 不重跑旧矩阵，不自动延长原超时。当前总体任务尚未完成。

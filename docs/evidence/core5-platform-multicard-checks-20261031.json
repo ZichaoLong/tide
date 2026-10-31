@@ -501,5 +501,64 @@
     }
   ],
   "reproduction": "Select each cuda-train-two-{ordinary,blocking,cpu_bridge} case from configs/matrices/cuda-multicard.json; tidegraph check case.json --site site.json --scope full --output-dir new-check-dir",
-  "untested": "NPU successor pending; no multi-device resident or large-model root qualification inferred"
+  "untested": "NPU successor pending; no multi-device resident or large-model root qualification inferred",
+  "followups": [
+    {
+      "source": "36baeb719361d5e5e39c0f05533f9e5cc53c04f7",
+      "configuration_source": "1a6b08f",
+      "platform": "cuda",
+      "purpose": "distinct scaled-loss workload small full check; not a repair of original loss",
+      "result_sha256": "1df6ddb5cd6b8c84f46016d326273aefbfe2752dd1b4474fc456360d1971b8fc",
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-10-31T08:49:46.486385+00:00",
+        "scope": "full",
+        "config_id": "16e8ae728b60dd73d8fd1a0bfb229355126c3ad6205ed121dbcd0d3d52eda285",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "all",
+              "first-output",
+              "connected-zero",
+              "first-control",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence",
+              "first-physical-message",
+              "private-raw-state-roots-after-nonposition-cut"
+            ],
+            "parameters_and_external_roots": true,
+            "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "finished": "2026-10-31T08:49:58.749464+00:00"
+      },
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "remaining_live_pids": []
+      },
+      "raw_projection_sha256": "792c8a40d8e06ca8fb982403c0a0ad793e8a92d916549b1c8af5387d041823bc"
+    }
+  ]
 }

@@ -60,4 +60,43 @@ NPU Python环境为Torch2.12.0+cpu/TorchNPU2.12.0.post2、CANN9.1；core源eca07
 不改loss、初始化、SGD或阈值；停止该原配方进一步训练规模扩展，推理结果独立保留。
 两子任务终态、无剩余后代。固定输入来自`npu-finite.json`的小训练及`npu-capacity.json`的双卡原训练；31a3b32只在拒绝后定位字段。
 
-归档SHA256：`3e30b6ec6c208560952b1820727e8a534c60710853e0c332e37f6c005524bfd6`。
+## 明确不同的新配方：CUDA双卡1.014B
+
+配置`configs/capacity-training/cuda-scaled-loss.json`固定于1a6b08f，实际Python包36baeb7；
+模型/workload/execution身份与原配方相同，task/config身份不同。只将loss系数0.001改为1e-9，
+原SGD、初始化、输入、共享组、B1/P2/span20、FP32/TF32关闭、ordinary、packed/scalar完整返回及线程1保持。
+这是独立工作负载，不是修复原第三窗非有限；本轮只试这一系数，不继续搜索。
+
+先行小型双卡`check --scope full`通过完整推理、十组独立参数/外部根、三步训练及精确恢复；
+结果SHA256 `1df6ddb5cd6b8c84f46016d326273aefbfe2752dd1b4474fc456360d1971b8fc`。
+其有限范围与完整check记录在[同一检查归档](core5-platform-multicard-checks-20261031.json)的明确后继，不能认证1B独立根的全部组合。
+
+| 新配方实际结果 | 数值 |
+| --- | --- |
+| 执行 / 独立数值 / 离散 / 磁盘精确下一窗 | 完成 / 超差探索 / 通过 / 通过 |
+| warmup及两测量窗loss | 6.330525 / 6.210245 / 6.059679 |
+| 两测量窗 / 中位 | 1.260121 / 1.397670 s；1.328896 s |
+| 每测量窗candidate / Full / 消息 | 31 / 16 / 28 |
+| 每卡全流程已采allocated峰值 | 6.146766 / 7.558613 GB |
+| 每卡reserved峰值 | 6.188696 / 7.602176 GB |
+| RSS高水位 | 40.264876 GB |
+| 构造 / 精确恢复 / 独立参考 / 整流程 | 10.512 / 90.164 / 127.379 / 330.288 s |
+| 每窗保存 / 最后单代checkpoint | 31.031 / 29.233 / 29.180 s；7,721,323,530 bytes |
+
+三窗完整记录均有原阈值下数值差异，第一处仍为window0/sample0/node0 KV keys（35/2048坐标超差）；
+三个loss及最终355个参数张量的独立比较通过。最终梯度/optimizer整体检查有97个数值差异、0离散差异，
+第一见证为`training[gradients][nodes.0.kernel.base]`，最大绝对差4.84893e-6；已截断差异清单不能单独认证所有optimizer槽。
+完整离散/None结构检查通过、任意数值超差未改为通过，不提供严格合格训练吞吐。
+自身exact-next逐值核对完整解码、下一窗、参数、梯度、optimizer和任务状态，不能替代独立数值检查。
+
+原生通信两测量窗各14组/458976 bytes，包含已插桩前后向transport；Python边界另4次/32784 bytes。
+与前向静态7组不同，不能混作同一口径；ordinary请求/生效相符，参数/私有状态/消息目标和计算符合两卡映射。
+原主存静态估算35.261GB低于本次恢复RSS40.265GB（尚不含全部文件页），说明训练保留的参数/梯度/槽CPU快照须补预算；
+现场可用主存约249GB，因此本次未触发容量失败，但旧估算不能当近界保证。后续预算修正不会改写本次来源。
+
+外层于08:55:33Z exit0，两个子监督exit0，重连检查所有后代均为空。没有重型构建与计时重叠。
+原始结果SHA256 `01c4f8dfa963725236d2abb2a96a53b444c00cc99e9caf0227fdd36c3d306523`。
+复现：先`plan configs/capacity-training/cuda-scaled-loss.json --matrix --site site.json`，
+再用已安装`tidegraph matrix`与新输出目录；来源/安装身份和数学阈值必须显式保留。
+
+归档SHA256：`be7223569aa1b77e843739f862e129bc9145610d40d39d20ee719e24929b1f7a`。
