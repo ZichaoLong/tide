@@ -59,9 +59,9 @@ def test_fp64_materialization_charges_requested_storage_before_allocation():
     assert all(x.value.dtype == torch.float64 for x in xs)
 
 
-@pytest.mark.parametrize("device,implementation", [("npu", "python"), ("cuda", "native"), ("cpu", "resident")])
+@pytest.mark.parametrize("device,implementation", [("npu", "python"), ("cuda", "resident"), ("cpu", "resident")])
 def test_fp64_benchmark_refuses_an_undeclared_path(device, implementation):
-    with pytest.raises(ValueError, match="CPU eager"):
+    with pytest.raises(ValueError, match="FP64 benchmark requires CPU or single-card CUDA eager"):
         validate("float64", SimpleNamespace(type=device), implementation)
 
 

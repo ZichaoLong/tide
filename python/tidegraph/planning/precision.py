@@ -23,5 +23,5 @@ def tolerances(dtype):
 
 
 def validate(dtype, device, implementation):
-    if dtype == "float64" and (device.type != "cpu" or implementation == "resident"):
-        raise ValueError("FP64 benchmark requires CPU eager execution; no implicit substitution")
+    if dtype == "float64" and (device.type not in {"cpu", "cuda"} or implementation == "resident"):
+        raise ValueError("FP64 benchmark requires CPU or single-card CUDA eager execution; no implicit substitution")

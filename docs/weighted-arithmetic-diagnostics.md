@@ -100,6 +100,19 @@ python scripts/diagnose_weighted_joins.py --workload NEW_PLAN/workload.json --dt
 
 ## 补充局部与运行时诊断
 
+`diagnose_core5_inference.py --workload PLAN --device cuda:0 --implementation python|native
+--placement mixed-c --dtype float32 --packing packed --output-dir NEW`保留原完整推理配置，
+先完成候选，再由独立CPU时间递归比较；native另给匹配的`--native-library`。
+默认仅第0窗，可显式两窗；不包含吞吐采样或checkpoint资格。
+报告完整/离散首差、按原始`(time,batch,node)`排序的首个精确与严格事件差异，
+以及最早严格新KV写的来源/归一化/低秩投影局部FP64锚点。
+锚点仅消费双方已经返回的实际fiber/content和原参数；候选从未收到参考轨迹。
+分别量化输入content差异的传播、各自局部写误差及连贯source→KV锚点；
+CPU FP64只是明确的数值锚点，不称精确实数，也不由局部改善推断全图修复。
+原FP32/FP64容差、int64及结构比较不变，严格不等返回exit2。
+显式全CUDA eager FP64使用`--dtype float64 --scoring-dtype float64`，
+它是另一个执行身份，须另验完整记录/同栈恢复；不解除原FP32失败。
+
 `diagnose_weighted_first_write.py --fixture FILE --output-dir NEW`只读取已导出的v2材料中
 首个无入边区域所需的实际张量，逐张量校验hash；累计操作数上限512MiB，单次读取上限128MiB。
 必须各节点只有一个共同外部原子，A/B/embedding及base是实际共享身份。比较source变换、

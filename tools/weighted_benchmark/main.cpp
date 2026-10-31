@@ -47,9 +47,12 @@ int main(int argc,char** argv){
     if(input.empty()||device.empty()||output.empty()||steps<1||steps>8||(implementation!="native"&&implementation!="resident")
         ||(mode!="inference"&&mode!="training")||(schedule!="streaming"&&schedule!="prefill")
         ||(precision!="float16"&&precision!="float32"&&precision!="float64")||threads<1||interop<1||workers<1)throw std::invalid_argument("invalid bounded benchmark request");
-    if(precision=="float64"&&(device!="cpu"||implementation!="native"))throw std::invalid_argument("FP64 benchmark requires CPU eager execution; no implicit substitution");
+    if(precision=="float64"&&((device!="cpu"&&device.rfind("cuda:",0)!=0)||implementation!="native"||!peer_specs.empty()))
+      throw std::invalid_argument("FP64 benchmark requires CPU or single-card CUDA eager execution; no implicit substitution");
     const auto dtype=precision=="float64"?at::kDouble:precision=="float16"?at::kHalf:at::kFloat;
     if(scoring.empty())scoring=dtype==at::kDouble?"float64":"float32";
+    if(dtype==at::kDouble&&device.rfind("cuda:",0)==0&&scoring!="float64")
+      throw std::invalid_argument("CUDA FP64 benchmark requires explicit float64 scoring");
     if(implementation=="resident"&&scoring!="float32")throw std::invalid_argument("resident scoring requires float32");
     if(scoring!="float32"&&scoring!="float64")throw std::invalid_argument("invalid scoring dtype");
     if(packing!="auto"&&packing!="packed"&&packing!="scalar")throw std::invalid_argument("invalid packing");
@@ -145,7 +148,7 @@ int main(int argc,char** argv){
       if(observe_work)tide::work::reset(true);
       portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);start=tide_bench::Clock::now();actual.push_back(execute(step));
       portable_torch::synchronize(target);for(auto d:peers)if(d!=target)portable_torch::synchronize(d);const auto seconds=tide_bench::seconds(start);
-      auto event=work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
+      auto event=weighted_benchmark::work(actual.back().result);event["step"]=step;event["seconds"]=seconds;event["loss"]=actual.back().loss;
       if(observe_work){event["packing_work"]=packing_work();tide::work::reset(false);}
       report["metrics"].push_back(event);write(output/"result.json",report);std::cout<<"step="<<step<<" seconds="<<seconds<<'\n'<<std::flush;
     }

@@ -44,8 +44,11 @@ class ExecutionSpec:
             raise ValueError("accelerator placement requires an accelerator")
         if self.device != "cpu" and self.placement == "cpu":
             raise ValueError("CPU placement requires CPU payload")
-        if self.dtype == "float64" and (self.device != "cpu" or peers):
-            raise ValueError("FP64 benchmark requires CPU eager execution")
+        if self.dtype == "float64":
+            if self.placement == "resident" or peers or self.device.startswith("npu:"):
+                raise ValueError("FP64 benchmark requires CPU or single-card CUDA eager execution")
+            if self.device.startswith("cuda:") and self.scoring_dtype != "float64":
+                raise ValueError("CUDA FP64 benchmark requires explicit float64 scoring")
         if self.client == "pytorch" and (self.workers != 1 or self.placement == "resident"):
             raise ValueError("pure PyTorch owns an independent host scheduler; resident uses a native client")
         if self.client == "pytorch" and self.schedule == "streaming" and self.packing == "packed":

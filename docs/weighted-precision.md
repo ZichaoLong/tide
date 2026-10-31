@@ -6,6 +6,12 @@
 [有限NPU资格](evidence/core5-half-device-20261027.md)分别记录通过范围及严格失败。
 这些结果不表示全部FP16配置都通过，也不替代不同算术边界的[常驻精度契约](resident-weighted-training.md)。
 
+GPU规模推理的有限数值配置可显式选择单卡CUDA eager `dtype=float64`、
+`scoring_dtype=float64`，三客户端从相同seeded FP32材料提升参数/输入，完整浮点状态与
+消息保持FP64，逻辑元数据仍int64。它有独立execution身份、原FP64容差和资源成本，
+不替换或解除FP32严格失败；模型/输入身份不变。CUDA resident、NPU及多卡FP64仍拒绝。
+这项入口声明不是实际设备资格；完整记录、独立CPU比较及同栈精确续接须逐配置验证。
+
 `bind(..., dtype=torch.float16)` 用同一 seeded FP32 参数量化初始化。
 payload、参数和浮点原始状态保持 FP16；时间、计数、KV 与卷积戳保持 int64。
 区域求解器要求显式 `ExecutionPlacement(scoring_dtype="float32")`（CPU 也可 FP64）；

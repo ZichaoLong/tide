@@ -17,10 +17,11 @@
 `scripts/benchmark_weighted.py`消费公共Python、Python调用native或resident接口。
 `weighted_benchmark_cases.py`只构造固定输入、参数和拓扑，不执行参考轨迹。
 配置包括非对齐TimedDAG、同秩HB SettleGraph与反馈PDG；KV/sum首组合或完整SSD，
-默认FP32、SGD动量、原始时间窗口与短卷积。CPU eager另支持显式`--dtype float64`；
+默认FP32、SGD动量、原始时间窗口与短卷积。CPU eager与单卡CUDA eager另支持显式`--dtype float64`；
 Python、调用native与standalone均从同一FP32种子/哈希材料在执行前提升，不重新随机初始化。
 请求与生效dtype、输入精度及容差分别记录；FP64使用既有atol1e-10/rtol1e-8，不能替代原FP32资格。
-此benchmark的FP64设备/resident请求提前拒绝，不静默替换。HB保留真实同秩区域，重复边逐条发送。
+CUDA FP64还要求`--scoring-dtype float64`，是独立执行配置，实际设备资格另验；
+FP64 resident/NPU/多卡请求提前拒绝，不静默替换。HB保留真实同秩区域，重复边逐条发送。
 small为内容宽4、1样本、每窗2位置；medium为宽32、4样本、每窗4位置。
 这两个有限尺寸用于判断调度与接口成本，不代表大型模型。
 

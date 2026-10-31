@@ -138,7 +138,8 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | `hb-8b/16b` | 较大参数规模 | KV/混合；先静态预算及同配置小检查，再决定有限实测 |
 
 执行目录保留PyTorch、Python→native、standalone LibTorch，以及CPU、mixed-a/b/c、resident；
-FP16/FP32、CPU FP64、线程、packing和peer各自显式选择。resident使用native客户端与公共设备库，
+FP16/FP32、CPU或单卡CUDA eager FP64、线程、packing和peer各自显式选择；
+CUDA FP64 payload/scoring同时为64位，设备资格独立验证。resident使用native客户端与公共设备库，
 生效算子记为`aten+device-control`，不称为纯PyTorch设备调度。NPU FP64 scoring只能显式放在CPU。
 
 ```sh

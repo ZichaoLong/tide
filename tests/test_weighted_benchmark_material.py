@@ -93,3 +93,16 @@ def test_standalone_persists_phase_before_blocking_fixture_read(tmp_path):
             process.terminate()
             process.wait(timeout=10)
     assert json.loads((out/"result.json").read_text()) == record
+
+
+@pytest.mark.parametrize("options", [
+    ["--device", "cuda:0", "--implementation", "resident"],
+    ["--device", "cuda:0", "--peer-device", "cuda:0", "--peer-device", "cuda:1"],
+    ["--device", "cuda:0", "--scoring-dtype", "float32"],
+    ["--device", "npu:0"]])
+def test_standalone_fp64_refusals_precede_device_and_fixture_allocation(tmp_path, options):
+    executable = binary()
+    refused = command(executable, "--fixture", tmp_path/"absent.json", "--dtype", "float64",
+                      "--output-dir", tmp_path/"run", *options)
+    assert refused.returncode and "FP64" in refused.stderr
+    assert not (tmp_path/"run").exists()

@@ -55,6 +55,10 @@ python scripts/check_upstream.py
 
 观察设施B已提交 `1c903ae`，纯host整数直方图/计时外活动摘要及profile吞吐门禁25项开发检查通过。
 下一目标作业 `inference-b-1c903ae` 在只读 `sources/1c903ae`，新建 `builds/1c903ae-{core,benchmark}`；56线程core+eager standalone构建，随后相关检查、四个独立profile、三客户端同一FC小图正式before测量和standalone纯计数观察。
-命令：`venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-1c903ae --timeout 5400 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-1c903ae.py`。状态/日志在job目录，细项在 `runs/1c903ae-inference`；当前running，监督PID41399，独立SSH连接已核对；仍处于core构建，未进入计时，不能称通过。
-未提交C：仅批量正支持/有限性bool元数据取回，CPU与单帧原路径保留，57项CPU开发回归通过，尚无GPU资格或收益。
+命令：`venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-1c903ae --timeout 5400 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-1c903ae.py`。状态/日志在job目录，细项在 `runs/1c903ae-inference`；终态failed/exit1，无存活后代。core构建通过；standalone main.cpp的work函数与新命名空间歧义，未开始后续检查/profile。限定函数名修复随下一实现提交。
+C已提交5f9bff1：仅批量正支持/有限性bool元数据取回，CPU与单帧原路径保留，57项CPU开发回归通过，尚无GPU资格或收益。
 数值诊断待固定：沿原FP32首个trace/局部KV写分歧定位；单卡CUDA eager显式FP64作为独立配置试验，resident不新增FP64，不继承/解除原FP32失败。
+
+接续B观察作业 `inference-b-observe-1c903ae` 只读同源码与已通过core，四个独立profile及两Python客户端before测量，timeout1800，无构建。运行 `venv/bin/python sources/1c903ae/scripts/container_job.py start --cwd /root/autodl-tmp/gef-cuda3090/sources/1c903ae --output-dir /root/autodl-tmp/gef-cuda3090/jobs/inference-b-observe-1c903ae --timeout 1800 -- /root/autodl-tmp/gef-cuda3090/venv/bin/python /root/autodl-tmp/gef-cuda3090/inference-b-observe-1c903ae.py`。原B编译失败保留；standalone before使用A已通过的同材料测量。
+
+D诊断与单卡CUDA eager显式FP64入口已审阅，43项CPU相关检查通过，GPU资格待构建；原FP32失败未解除。C+D拟合并一次新core/standalone构建，原resident库不因此冒充新资格。
