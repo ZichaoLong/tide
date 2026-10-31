@@ -1087,6 +1087,50 @@
         },
         "error_boundary": "strict independent input gradient comparison for all root"
       }
-    ]
+    ],
+    "explicit_sync_diagnostic": {
+      "source": "4485697c254062301a9401781c9e03954256f33f",
+      "environment": {
+        "ASCEND_LAUNCH_BLOCKING": "1"
+      },
+      "result": {
+        "schema": "tide-base-check-v1",
+        "state": "failed",
+        "started": "2026-10-31T10:04:31.427412+00:00",
+        "scope": "full",
+        "config_id": "541806c3cb3cbc26cd763fe0ab84d34793b411a31058ebda9c1d52d4f8e9ba7d",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "phase": "independent-roots",
+        "root_progress": {
+          "stage": "compare-vjp",
+          "root": "all",
+          "completed_roots": []
+        },
+        "error": {
+          "type": "NumericMismatch",
+          "message": "root[parameter.nodes.0.aggregate_program.transforms.0.b]: Tensor-likes are not close!\n\nMismatched elements: 1 / 64 (1.6%)\nGreatest absolute difference: 1.3113021850585938e-06 at index (6, 6) (up to 1e-06 allowed)\nGreatest relative difference: 9.197709005093202e-05 at index (6, 6) (up to 1e-05 allowed)"
+        },
+        "finished": "2026-10-31T10:04:42.438188+00:00"
+      },
+      "result_sha256": "3cdbd3d8daada6a8a09713e22241bfcd629381d9437fd96a1b71d81846e1b5f4",
+      "supervisor": {
+        "state": "failed",
+        "exit_code": 1,
+        "remaining_live_pids": []
+      },
+      "interpretation": "Once-only diagnostic; VJP completed, strict all-root parameter comparison failed. No default async fix or throughput qualification."
+    }
   }
 }

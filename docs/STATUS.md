@@ -3,8 +3,8 @@
 用户已授权后台继续，最新要求一次安排完后不必在线等待，之后由用户唤醒审阅；GPU可释放。
 本机优先计算与必要正确性/恢复，额外大文件成本实验已取消。
 不扩盘、不重启GPU、不重跑已审阅矩阵；tmpfs仅在联合主存准入后周转。活动输入和源码不编辑。
-授权分支`graph-execution-foundation`，本次重入03292c3干净；实际HEAD以`git status --short --branch`为准。
-实现4485697及其首批资格697cafe已普通推送；827cb2c为后续恢复诊断证据，最终还需推送。
+授权分支`graph-execution-foundation`，本次重入59c36a2干净且已同步远端；实际HEAD以`git status --short --branch`为准。
+实现4485697及既有证据/交接均已普通推送；本次新增终态审阅待单独提交。
 数学固定`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。参考仓库只读。
 旧账户指南已不存在，按用户确认、项目site及`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md`操作。
 
@@ -19,17 +19,17 @@ SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`。
 
 ## 已审阅范围
 
-八份platform/finite-packing压缩归档现含197条唯一run（包括观察、拒绝、严格失败），不是197项性能通过。
+八份platform/finite-packing压缩归档现含201条唯一run（包括观察、拒绝、严格失败），不是197项性能通过。
 完整配置、实际来源/hash、工作量、逐窗及峰值均在归档；旧C++库没有冒称随较新Python提交重建。
 
 | 范围 | 事实与证据 |
 | --- | --- |
 | 三平台/大batch | [首组](evidence/core5-platform-baseline-20261031.md)：98正式+4观察；三平台B1/8/32/128/512及B128 A/B/C、三层级/拓扑/客户端、小训练；43正式严格通过 |
-| 约1B/更多节点 | [规模](evidence/core5-platform-scale-20261031.md)：CPU7/GPU5/NPU7正式点，FC/HB/LH；18完整离散/精确恢复通过、数值探索；NPU1B/B512原下一窗逐位失败、独立CPU未检查 |
+| 约1B/更多节点 | [规模](evidence/core5-platform-scale-20261031.md)：CPU7/GPU5/NPU7正式点，FC/HB/LH；18完整离散/精确恢复通过、数值探索；NPU1B/B512原下一窗逐位失败；同进程新checkpoint原边界精确、下一窗仍失败，独立CPU未检查 |
 | 六项packing/优化 | [finite](evidence/core5-finite-packing-20261031.md)：18记录、6小训练严格通过；[profile](evidence/core5-platform-profile-20261031.md)及[六项决定](performance-lessons.md#本轮三平台六项打包处置)保留收益、无收益与停止条件 |
-| 同模型多卡 | [多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B 2/3/4卡、NPU2/3/7卡推理离散/恢复通过、数值探索；7卡是真实4/2/2/2/2/2/2节点。8卡原队列超时未运行 |
+| 同模型多卡 | [多卡](evidence/core5-platform-multicard-20261031.md)：CUDA1B 2/3/4卡、NPU2/3/7卡推理离散/恢复通过、数值探索；7卡是真实4/2/2/2/2/2/2节点。8卡原队列超时未运行；用户现授权低占用卡共用，后继准备中 |
 | resident | [resident](evidence/core5-platform-resident-20261031.md)：两设备小点/小训练严格通过；CUDA B128/B512、NPU B128完成/恢复通过、数值探索；NPU B512构造EE1019/507002。多卡resident门禁不变 |
-| 原1B训练 | [训练](evidence/core5-platform-training-capacity-20261031.md)：原loss单/多卡第三窗首先在loss非有限；新loss 1e-9是新工作负载，CUDA双卡执行/离散/精确恢复通过、独立数值超差 |
+| 原1B训练 | [训练](evidence/core5-platform-training-capacity-20261031.md)：原loss单/多卡第三窗首先在loss非有限；新loss 1e-9为新工作负载，CUDA双卡及NPU单/双卡执行/离散/精确恢复通过、独立数值超差 |
 | 容量 | [容量](evidence/core5-platform-capacity-20261031.md)：CUDA4.561B单/2/3/4卡、9.123B单拒绝/双卡实际，NPU12.802B单/双/三卡均完成/离散/恢复通过、数值探索。38.406B三卡有限计算窗5.442s，第二次保存1800s超时，完整恢复/独立参考未验；原I/O进程已退出、控制组空 |
 | checkpoint | [成本](evidence/core5-checkpoint-cost-20261031.md)：36baeb7实际减少重复快照/CPU精确正例比较，CUDA同材料恢复289.587→223.215s；interval2少保存是耐久取舍，不称算子加速。固定CPU110项及CUDA返回6项/双卡full通过 |
 | 人类/下游 | [演练](evidence/core5-human-workflow-20261031.md)：CPU/NPU/GPU安装、配置、检查、运行、停止/恢复及CSV/HTML完成；base失败与下游小任务通过分列。[手册](human-workflow.md)/[下游](downstream-contract.md)/T4迁移配置已交付；T4真机待验 |
@@ -43,53 +43,53 @@ SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`。
 - 4485697只增加check的根/参考VJP/候选VJP/比较阶段记录，CPU固定27项通过。原未执行的返回测试补齐私有pytest后在NPU实际6项通过（4项明确deselected）。
 - 4485697 ordinary双NPU在第一个all根的候选autograd发生SIGSEGV/-11；faulthandler栈已保留。单NPUperiodic在all根比较有输入梯度超差，最大2.83122e-6，原阈值不改。原36baeb7环境缺pytest/单卡数值失败不抹除。
 - 显式ASCEND_LAUNCH_BLOCKING=1一次ordinary双卡诊断越过候选VJP，在all根参数梯度比较仍失败（1/64坐标、1.31130e-6）。不是默认异步修复、不是合格吞吐；不继续重复相同事件方案。
-- [B512诊断](evidence/core5-platform-resume-diagnostics-20261031.json)：原包1b3e39f重算三窗与旧checkpoint在raw边界即不同，首三个样例state及所有参数布局相同。不能归因序列化；同次新建checkpoint后继用于进一步区分。
+- [B512诊断](evidence/core5-platform-resume-diagnostics-20261031.json)：原包1b3e39f重算三窗与旧checkpoint在raw边界即不同，首三个样例state及所有参数布局相同。同进程后继已结束：新checkpoint raw边界精确，下一完整窗keys有3766/32768坐标逐位不同，最大2.09808e-5。采样布局仍相同；不归因磁盘损坏，不再重复相同候选。
 
-## 当前持久任务
+## 当前终态与资源
 
-均在background.slice，冻结源码/安装；第二项等待第一项终态且控制组清空，不编辑其输入。
-原resume-layout、checkpoint-check-compute、scaled-training-compute均终态/exit1且无后代；原新loss的1B单/双卡未执行。
-新的实际loss训练与任意独立根资格分开：仅对应卡数的小训练执行/严格数值/离散/槽/精确恢复通过后进入1B。
+上一条后台链全部结束；三个unit均MainPID0/ControlGroup空：
 
-| unit（加`.service`） | 当前与界限 | 输出 |
+| unit（加`.service`） | 终态事实 | 结果 |
 | --- | --- | --- |
-| `gef-npu-compute-followup-4485697` | 已启动：同步all根诊断失败；新loss单卡小训练严格通过，单卡1B执行/离散/精确恢复完成、数值探索；双卡小训练严格通过，双卡1B三个更新已完成，当前恢复/独立检查尚待终态。小项300秒、大项1800秒，队列600秒，总10800秒 | `artifacts/platform-matrix/npu-compute-followup-4485697/progress.json` |
-| `gef-npu-resume-immediate-61571c4` | 等前项；原包1b3e39f/脚本61571c4，3原窗+同次新checkpoint+下一窗，900秒/queue600秒；总14400秒含依赖 | `artifacts/platform-matrix/npu-resume-immediate-61571c4`；易失输入输出`/dev/shm/gef-npu-resume-immediate-61571c4` |
+| `gef-npu-compute-followup-4485697` | exit1来自显式同步all根诊断；四个loss训练子任务均exit0，无后代 | `artifacts/platform-matrix/npu-compute-followup-4485697/progress.json` |
+| `gef-npu-resume-immediate-61571c4` | exit1，raw解码精确、下一完整窗严格逐位失败，无后代 | `artifacts/platform-matrix/npu-resume-immediate-61571c4/result.json` |
+| `gef-closure-4485697` | exit0收集201条，review_required；收集不等于资格 | `artifacts/platform-matrix/closure-4485697/status.json` |
 
-第一项包4485697、原NPU库eca070f；输入`artifacts/platform-matrix/inputs-npu-compute-4485697`，包和脚本只读。
-第二项保持原1B/B512安装内容hash `6af9b3981aa512982618b31b02ad69db5efd20c31438b6cb273038d877c68d29`；
-原失败checkpoint仍在`artifacts/platform-matrix/npu-scale-run-1b3e39f/npu-scale-fc-few-1b-b512/run/checkpoints`，只读。
-临时文件先联合host61.446GB+未来tmpfs10.850GB与现场MemAvailable准入，并独立检查shm；不是额外存储成本测量。
-合作队列priority0，候选物理4–11；不占用/停止其他项目。日志在`artifacts/jobs/`对应去掉`gef-`的目录。
+四项训练：小型单/双NPU严格通过；新loss1e-9的1.014B单/双NPU执行、离散、完整精确续接通过，独立数值失败，
+中位1.614337/1.867778s，只作探索成本。任意根运行时/数值失败不解除。包4485697、NPU库eca070f分别记录。
+原1B/B512失败checkpoint仍在`artifacts/platform-matrix/npu-scale-run-1b3e39f/npu-scale-fc-few-1b-b512/run/checkpoints`；
+同进程诊断临时checkpoint在`/dev/shm/gef-npu-resume-immediate-61571c4`，结果/log已经持久保存。
+
+用户新提醒本机硬配额800GiB。实际`quota -vs`为400GiB软限、800GiB硬限；原占用636GiB/宽限6天，
+不能把整盘df余量视作用户额度。按既有授权审阅并退役已终止38.406B的首代checkpoint和第二次保存暂存，
+共348,423,359,268 bytes；当前约312GiB、已低于软限。配置、结果、元数据和发布时hash保留，
+详见现有[容量证据](evidence/core5-platform-capacity-20261031.md)。未动B512复现、环境、活动输入或原GPU dev保全包。
+后续大输出优先tmpfs，联合主存准入；持久盘仅保存小记录，不恢复已取消的12.8B/38.4B存储成本实验。
+
+## 下一步与八卡后继
+
+用户已授权七空闲卡加一低占用卡共用，不再机械等待八张无进程卡。当前观察物理4/5/6/7/8/10/11空闲，
+物理9有其他账户进程、HBM约5656MiB/65536、AICore0%。不停止或更改该任务。
+准备项目站点适配器：保留原队列priority/FIFO、两次采样及八锁整组获取，只对显式PID/启动身份、
+利用率和HBM预算许可共用；记录争用，不称独占性能。共享账户helper/全局配置保持只读。
+新增未提交文件为`scripts/run_shared_npu.py`与相关测试；尚未提交八卡作业，不把准备中称running。
+
+有限后继：原目录约1B八卡推理；FC16/d8八卡小训练；仅小训练严格通过才进入新loss1e-9约1B八卡训练。
+保留原三个八卡排队超时，不重跑原0.001已知非有限配方。额外12.8B八卡存储流程不作收尾门槛。
+先提交站点适配/配置，再对固定源码做队列与相关检查，串接持久任务，一次交接后无需在线等待。
+
+审阅189目录：此前184个名称有结果，两个2B预选点被更贴近容量的实际点替代，三个8卡队列超时。
+后继须分别计数；替代不认证原case、诊断不计吞吐。六项经验与最终可查询选型表随八卡终态收尾。
+GPU不再访问；T4真机待验。普通推送可用现有项目私有Git SSH配置，不改全局网络。
 
 ```sh
 python scripts/status.py
-systemctl --user show gef-npu-compute-followup-4485697.service gef-npu-resume-immediate-61571c4.service -p Id -p ActiveState -p SubState -p ExecMainStatus -p MainPID -p ControlGroup
+quota -vs
+systemctl --user show gef-npu-compute-followup-4485697.service gef-npu-resume-immediate-61571c4.service gef-closure-4485697.service -p Id -p ActiveState -p ExecMainStatus -p MainPID -p ControlGroup
 ```
-
-没有停止作业指令。若用户要求停止，停止准确unit并核对原控制组/后代；不能只改状态文件。
-GPU后续不再需要访问。普通Git直连22/443超时，已用项目私有proxy helper和任务专用SSH配置普通推送，未改全局网络/SSH配置、未输出凭据。
-
-## 用户唤醒后的审阅工作
-
-1. 后台已自行串接到终态收集，不需要在线agent逐项批准或启动。用户唤醒后先读`artifacts/platform-matrix/closure-4485697/status.json`及三个准确unit；按实际执行、独立数值/离散、恢复分别归档。未终态不重新排队；若有新分歧，只在声明界限内处理。
-2. 不重试原NPU事件方案、不放宽阈值、不重复大模型原loss。已取消12.802B tmpfs成本及38.406B interval3重跑保持取消。
-3. 审阅189目录：当前184个名称有结果，两个2B预选点由更贴近容量的4.561B/12.802B选点替代，三个8卡项队列超时未运行。最终须列清替代不等于原case通过、目录外后继和诊断不计吞吐。
-4. 更新现有训练/规模证据、六项经验、ROADMAP与可查询CSV/HTML；全部任务终态后做最终选型汇总、普通推送。不得将running或监督成功算资格。
 
 本机aarch64、320 affinity CPU、约1.8TiB可用内存；16张64GiB级NPU，Python Torch/TorchNPU2.12/CANN9.1，独立SDK LibTorch2.10/CANN9.0另ABI。
 以上是近期观察，新任务仍现场准入；主存快照不按卡数相除，tmpfs与主存同一资源。
 干净接续从[development](development.md)、[人类手册](human-workflow.md)、[有限配置](platform-matrix.md)进入。
 查询：`tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format table`。
 旧源码ID用`python scripts/resolve_history_commit.py OLD_SHA`定位；映射不等于重新验证。
-
-
-终态汇总已准备一次性服务`gef-closure-4485697.service`，等待上面两个unit终态且控制组为空后，
-核对每个子监督无后代，只调用已有公共report投影到`artifacts/platform-matrix/closure-4485697/results.{json.gz,csv,html}`。
-其`status.json`明确`review_required=true`，收集成功不等于数值资格；中断的running快照单列，不自动变成通过。
-源4485697冻结证据197条+本次实际训练结果；不写仓库证据、不自动提交、不启动新实验。
-后台最长18000秒含依赖等待，background.slice/KillMode=control-group；日志在`artifacts/jobs/closure-4485697/task.log`。
-用户稍后唤醒时继续人工审阅/更新证据、最终覆盖表与正常推送。在线跟进按用户要求结束，后台任务继续。
-停止整条剩余链（仅在用户要求时）：
-`systemctl --user stop gef-closure-4485697.service gef-npu-resume-immediate-61571c4.service gef-npu-compute-followup-4485697.service`，
-随后核对三个ControlGroup为空及原workload无存活后代；不要仅停止汇总器而声称计算已停止。

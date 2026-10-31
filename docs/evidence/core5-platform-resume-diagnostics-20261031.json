@@ -91,11 +91,101 @@
       "independent_reference": "not_run",
       "performance_qualification": false,
       "conclusion": "Fresh replay differs already at the old raw boundary. This cannot attribute the original next-window failure to serialization; equal sampled layouts do not establish equal kernel choice or whole-process repeatability."
+    },
+    {
+      "name": "same-process-immediate-checkpoint",
+      "script_source": "61571c4b531e74b252a155e375bbb37116c275b4",
+      "package_source": "1b3e39f4f58378272d5afe41f970c92dd0e4fed7",
+      "package_sha256": "6af9b3981aa512982618b31b02ad69db5efd20c31438b6cb273038d877c68d29",
+      "builds": {
+        "native_library": {
+          "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+          "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+          "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+        },
+        "resident_library": {
+          "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+          "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+          "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+        },
+        "standalone_binary": {
+          "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+        }
+      },
+      "model_id": "7a2016520950c6211ee0e5583bf1a6ad8c3a0dbddbc1baa3428d09682d2931ad",
+      "workload_id": "d6f9c426394c0118a01406a99d7337641cd0180cd1cb5ce233228a7ad2efa084",
+      "execution_id": "b27880eff7e1a39b9b2d216ff5622a0b0b017fd62f075c4ad7366e8e52cc36a6",
+      "config_id": "67efe47febccd610283b8feecd22d686a378e02ffd326debb09e017680deab23",
+      "state": "strict-failure",
+      "phase": "exact-next-complete",
+      "mismatch": {
+        "kind": "numeric",
+        "path": "root.continuation.states[(0, 1)].slots[keys]",
+        "message": "Tensor-likes are not equal!\n\nMismatched elements: 3766 / 32768 (11.5%)\nGreatest absolute difference: 2.09808349609375e-05 at index (6, 359)\nGreatest relative difference: 0.010593220591545105 at index (6, 973)",
+        "dtype": "torch.float32",
+        "shape": [
+          8,
+          4096
+        ],
+        "atol": 0,
+        "rtol": 0,
+        "max_abs_error": 2.09808349609375e-05,
+        "reference_max_abs": 58.15801239013672
+      },
+      "started": "2026-10-31T10:16:40.784334+00:00",
+      "finished": "2026-10-31T10:20:15.781876+00:00",
+      "replay_windows": 3,
+      "raw_result_sha256": "73291ac2ddb6c0ded088173ec69378cd92da883bdd4983ccd738af8322ec96a3",
+      "checkpoint_metadata": {
+        "schema": "tide-experiment-checkpoint-v1",
+        "model_id": "7a2016520950c6211ee0e5583bf1a6ad8c3a0dbddbc1baa3428d09682d2931ad",
+        "workload_id": "d6f9c426394c0118a01406a99d7337641cd0180cd1cb5ce233228a7ad2efa084",
+        "task_id": "0cd9f25c989093fdeee8767c72154a3d5c0cfddd51df05aa18afba72b0cdc144",
+        "execution_id": "b27880eff7e1a39b9b2d216ff5622a0b0b017fd62f075c4ad7366e8e52cc36a6",
+        "mode": "inference",
+        "package_sha256": "6af9b3981aa512982618b31b02ad69db5efd20c31438b6cb273038d877c68d29",
+        "builds": {
+          "native_library": {
+            "libtidegraph.a": "408eced46aedc1bf213e44bc17bc657d52a37b253ec53654441726fb145a5e7a",
+            "libtidegraph_runtime.a": "39308842c6d7e5c26f0663f918088f22837d91ec8d89387eba541bb4072f1c9f",
+            "_tide_native.so": "8e0e5c145449fcd2020722e713c814e821ded0d9c734bd46fb8dc7d5bc96857c"
+          },
+          "resident_library": {
+            "_tide_weighted_resident.so": "2e4269264e362adf4b7a3284c7bece2bb3975de44e5d40b5635fff5411b5b0dc",
+            "libtide-weighted-flow.so": "a5e7d016f6d7552d554df1eb174b494d12cafd316b8f7cdb4d3efcacbb540eb8",
+            "libtide-weighted-training.so": "9451b1f689f8dc1c90d9a14b1a41c1807ca68738f59f5d439b1c6646e4f99f35"
+          },
+          "standalone_binary": {
+            "weighted-benchmark": "84dc3b5586c0e9253937f22e640db2c82f5fcdd66d45991b49ada01172114488"
+          }
+        },
+        "next_window": 3,
+        "span": 8,
+        "files": {
+          "state.pt": "1dc46c97b82d202c1e16093f53a72f256d820337196b1ad951f23cf6f34cac38",
+          "task.pt": "4264bdf0c36ae54065fbfb36612530b654d9891f6e2ff4fcc5861ea320bc2310"
+        },
+        "bytes": 4883068824
+      },
+      "layouts": {
+        "state_count": 1920,
+        "batch": 512,
+        "sampled_state_count": 12,
+        "all_parameter_layouts_equal": true,
+        "sampled_state_layouts_equal": true,
+        "fields": "shape, stride, offset, contiguous, dtype, device, pointer mod512, NPU format; first three samples only, not all intermediate operators"
+      },
+      "raw_boundary_exact": true,
+      "next_window_exact": false,
+      "independent_reference": "not_run",
+      "performance_qualification": false,
+      "conclusion": "Same-process new checkpoint decodes exactly, but the restored next complete window differs. Cross-process replay mismatch is not the sole explanation. Equal sampled layouts do not prove equal operator/accumulation behavior. No independent CPU comparison or qualified throughput."
     }
   ],
   "reproduction": [
     "Select npu-scale-fc-few-1b-b512 from configs/matrices/npu-scale.json and install the fixed source with matching site/build hashes.",
     "Run the public configuration to create a checkpoint; retain original strict failures.",
-    "python scripts/diagnose_experiment_resume.py selected.json --site site.json --checkpoint old-run/checkpoints --windows 3 --output-dir new-diagnostic"
+    "python scripts/diagnose_experiment_resume.py selected.json --site site.json --checkpoint old-run/checkpoints --windows 3 --output-dir new-diagnostic",
+    "Same-process diagnostic: omit --checkpoint and use --windows 3; the script saves a fresh checkpoint after the original prefix. Keep original package/config/build identities."
   ]
 }
