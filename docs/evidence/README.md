@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[GPU释放前审阅](core5-cuda-release-20261031.json)：本轮GPU任务全部终态、无计算进程；正式小证据已回收，原远端dev的20项未提交源码已在本机保留并校验。后续本机任务不依赖GPU实例；此审阅不增加数学或性能资格。
+
 [CPU/NPU约1B大batch算子观察](core5-platform-profile-20261031.md)：固定bd2ff2e两项独立profile；168行大MM、864次两行私有BMM与288次共享base GEMV并存。c59688c修正CANN matmul漏计，13项固定解析检查通过；保留原trace hash，不重跑或新增数学资格。
 
 [CUDA4.561B单至四卡安全容量代表](core5-platform-capacity-20261031.md)：单卡allocated20.058GB、reserved20.246GB；执行/离散/精确恢复通过，原FP32数值超差探索。双/三/四卡逐卡最大峰值10.299/7.859/5.419GB，完整离散和精确恢复通过、数值探索；同模型放置不等于多卡容量上限；NPU12.802B单/双/三卡已完成，CUDA9.123B单卡拒绝/双卡实际近界、离散/精确恢复通过，FP32数值探索。

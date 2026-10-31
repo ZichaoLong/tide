@@ -30,30 +30,24 @@
 36baeb7 checkpoint优化已通过固定CPU110项（1 standalone明确deselected）、CUDA返回存储6项及双卡full推理/独立根/三步训练/optimizer/恢复。
 NPU同实现回归仍在下列队列，不由CUDA或旧NPU通过认证。旧CPU/NPU/GPU失败不因新安装或外层exit0改为通过。
 
-## 当前GPU作业
+## GPU工作已结束，可释放实例
 
-目标`gpu3090`，私有入口`artifacts/cuda3090/ssh.sh`，根`/root/autodl-tmp/gef-cuda3090`。
-`jobs/platform-scaled-training-1a6b08f`已于08:55:33Z终态exit0，两个子监督及外层均无后代。
-小型两卡full通过；1.014B双卡新loss流程完整执行、离散/精确恢复通过、独立数值仍超差探索。
-两测量窗1.260/1.398s，三个loss约6.33/6.21/6.06；最终参数通过，梯度/optimizer整体超差，见训练容量证据。
-配置来自1a6b08f，实际包36baeb7；只将loss系数0.001→1e-9，是新任务，不是原失败修复，不继续搜索。
-主存恢复RSS40.265GB超过原静态估算35.261GB，6095c6a已补齐CPU训练快照预算并通过固定45项检查；现场余量充分，原结果不改写。
-产物`cuda-scaled-training-36baeb7/progress.json`与各`*-supervisor/status.json`保留；GPU现无本项目活动作业。
+09:52Z已向用户确认本轮不再需要gpu3090：四卡无计算进程，全部项目监督终态且无存活后代，
+结果、身份、配置和必要小记录均已回收。后续本机任务不依赖SSH或GPU运行目录。
+GPU新配方双卡1.014B训练的执行/离散/精确恢复完成，独立数值超差保留；
+其7.721GB可重建checkpoint及此前9.123B/4.561B大文件已审阅退役，不跨机搬运。
 
-9.123B原两代磁盘83.896GB拒绝保留；新interval3仅最终保存，单代41.401GB，双卡08:45:38Z前已完成。
-外层因单卡拒绝failed/1、双卡子项exit0，均无后代。经b061404审阅/dry-run后退役其可重建checkpoint，
-凭据`retirement-capacity-periodic-36baeb7.json`；先前dba2a5e及36baeb7的4.561B checkpoint亦已审阅退役。
-全部小结果/config/log保留，不跨机搬运这些大文件。09:37Z追加核对终态/无后代后，
-退役新配方CUDA1.014B的7.721GB checkpoint，凭据`retirement-scaled-training-36baeb7.json`。
-
-```sh
-artifacts/cuda3090/ssh.sh 'cd /root/autodl-tmp/gef-cuda3090 && install-checkpoint-36baeb7/venv/bin/tidegraph job status jobs/platform-scaled-training-1a6b08f'
-```
+**必须保留原远端dev修改备份**：`artifacts/cuda3090/retirement-dev-20261031.tar.gz`，
+5,452,397 bytes，SHA256 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`。
+基线cc6b45f，16项已跟踪修改+4项未跟踪源码，含基线archive、working/index二进制patch与逐文件hash；
+已本机解包读取校验，未修改远端dev，也不把这些原有修改称资格实现。此备份不是可随意删除的实验产物。
+释放审阅在[小记录](evidence/core5-cuda-release-20261031.json)，私有完整记录在`artifacts/cuda3090/release-review-20261031.json`。
+用户自行释放实例；没有执行宿主环境/驱动变更。
 
 ## 本机串行依赖链
 
 所有unit在`background.slice`，表中从上到下依赖，waiting不等于实际占卡执行。
-09:50Z：38.406B三卡原1800秒到限，子监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。停止时PID1908740处于不可中断I/O，原监督记录remaining_live_pids非空；systemd仍deactivating，不能称已清理，也不删除其文件。七卡已进入队列，当前仅4张空闲；其余既有诊断链继续等待。
+09:52Z：38.406B三卡原1800秒到限，监督failed/124；第一次保存957.250秒、warmup5.442秒、next_window1已发布。监督终态时仍有不可中断I/O进程1908740，09:52Z核对该进程已消失且原控制组已空；原监督残留记录仍保留。七卡任务等待241秒后已取得物理4/5/6/7/8/10/11并执行，其余诊断链尚在等待。
 每项使用冻结安装/输入，不编辑任务脚本；sharded提交记录中只有`M docs/STATUS.md`的冻结交接差异，不能改称clean。
 目录前缀均为`artifacts/platform-matrix/`，服务名统一加`gef-`及`.service`。
 

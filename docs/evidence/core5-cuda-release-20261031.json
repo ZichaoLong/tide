@@ -1,0 +1,31 @@
+{
+  "schema": "tide-site-release-review-v1",
+  "observed": "2026-10-31T09:53:01.845664+00:00",
+  "site": "gpu3090",
+  "gpu_work_complete": true,
+  "remaining_gpu_jobs": false,
+  "compute_processes_observed": [],
+  "scope": "project GPU workload closure and source preservation; user releases the instance separately",
+  "preserved_dev": {
+    "base": "cc6b45f84dbce99d98e6ed0f0bff458f851d263a",
+    "path": "artifacts/cuda3090/retirement-dev-20261031.tar.gz",
+    "sha256": "6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e",
+    "bytes": 5452397,
+    "modified_tracked_files": 16,
+    "untracked_files": 4,
+    "verified": "base archive, binary working/index patches and 20 working files with individual SHA256",
+    "retention": "preserve original uncommitted edits; not qualified source and not disposable experiment output"
+  },
+  "reviewed_archives": {
+    "docs/evidence/core5-platform-baseline-20261031.json.gz": "9aa83565849e7bcdb56191e04554ec79963da426cadc2ace4136f2a990202976",
+    "docs/evidence/core5-platform-capacity-20261031.json.gz": "e9a97842e5a24c9a3eb0a99768a127bc18aaf6007b7c55148c46abfd0a0f221a",
+    "docs/evidence/core5-platform-multicard-20261031.json.gz": "7e711fab31bb4ef17aeb976358cd65d14e2badab2126e57602918f1d243e3e31",
+    "docs/evidence/core5-platform-profile-20261031.json.gz": "cc16a3a51900a937ae8aa1d8c707afee016f68442895c16917c7cd89162b9bbf",
+    "docs/evidence/core5-platform-resident-20261031.json.gz": "336986f8557fcc542fc5cfaec53810b378a6e107cb7dedf1abe9909d4bbc5a25",
+    "docs/evidence/core5-platform-scale-20261031.json.gz": "3783c70650bf1cca3ef9ab0b9e02867f2261b86b1058250ffe77566c3936e069",
+    "docs/evidence/core5-platform-training-capacity-20261031.json.gz": "be7223569aa1b77e843739f862e129bc9145610d40d39d20ee719e24929b1f7a",
+    "docs/evidence/core5-finite-packing-20261031.json.gz": "b7ab91cc09730a02f2173983311f51bd18e1c753270c43eb94645f8cab5eb796",
+    "docs/evidence/core5-checkpoint-cost-20261031.json.gz": "1d116720e14a888e39f9447b79134a67566575d43f37fd70ad6e5778af58bec2"
+  },
+  "reproduction": "docs/human-workflow.md and tracked configs; no further access to the released GPU required"
+}
