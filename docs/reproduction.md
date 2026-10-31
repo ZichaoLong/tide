@@ -97,3 +97,34 @@ LH queue64拒绝均保留原材料；显式`--resident-limits`只改变资源，
 FP64是独立配置。先重建匹配core/standalone，按实际1B构造/窗口/恢复峰值准入近界，
 不需要旧fixture/checkpoint。`--observe-work`只记实际桶/矩阵行，`--profile`另起有界进程，均不作吞吐。
 实际证据从`core5-index.json`查询；六项后续停止/重启条件仍集中于ROADMAP和performance-lessons。
+
+## 三平台大batch、同模型多卡与公开实验入口
+
+本轮材料在[189有限配置](platform-matrix.md)及`configs/matrices/`，包括B128/B512、A/B/C、三图层级、
+真实反馈/非对齐/一般端口、三客户端和同模型任意卡数放置。按[人类手册](human-workflow.md)从固定源码安装，
+填写自己的site与构建来源；生成输入及调度不读取参考轨迹，不依赖旧运行目录或内部benchmark导入。
+
+```sh
+tidegraph plan configs/matrices/npu-batch.json --matrix --site site.json
+tidegraph matrix configs/matrices/npu-batch.json --site site.json --output-dir jobs/new-npu-batch --detach
+tidegraph job status jobs/new-npu-batch
+tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --batch 512 --format table
+tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/core5-finite-packing-20261031.json.gz --format html --output matrix.html
+```
+
+选择单项可按[规模报告](evidence/core5-platform-scale-20261031.md)的JSON提取命令，随后公开`plan`/`job start`；
+配置名称不代表通过，数值、离散、执行、恢复和性能资格分别查询。未准入/资源排队与实际执行不混为一类。
+`configs/checkpoint-cost/`显式改变保存间隔或存储介质；磁盘/tmpfs与完整返回成本分列。
+`configs/capacity-training/`的1e-9 loss是独立任务配方，不解除原0.001配方非有限。
+主存准入6095c6a的实际欠估见证与固定45项检查在[训练容量](evidence/core5-platform-training-capacity-20261031.md)。
+
+NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment_resume.py`：
+使用待检查checkpoint所对应的固定安装与相同配置，先重放原三窗，再比较raw边界和下一完整窗，记录stride/offset/格式。
+从干净仓库重新生成的checkpoint是新的见证，不能冒称复验了原文件字节；原结果/hash与失败仍保留。
+
+```sh
+/path/to/fixed-install/bin/python scripts/diagnose_experiment_resume.py resolved.json --checkpoint jobs/original/run/checkpoints --windows 3 --output-dir diagnostics/new-resume
+```
+
+此诊断不改布局、算术或精度，不让CPU轨迹指导候选；raw边界已不同须先区分新进程重放与序列化，
+不能直接将后续差异归因于checkpoint。NPU blocking崩溃、resident服务资源和其他停止/重启条件仍只在ROADMAP维护。

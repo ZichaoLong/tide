@@ -113,6 +113,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | 新拓扑/输入时钟 | planning/topology、recipes、端口/延迟/可达性检查；完整返回/续接；recipe身份 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
 | 新设备/放置/dtype | ExecutionSpec、公共能力门禁、各client入口；构建、真机、训练/恢复证据分别记录 |
+| 实验准入/持久化 | `planning/capacity.py`、`experiment/admission.py`、`checkpoint_policy.py`；人类手册和矩阵静态预算同步。`test_training_host_capacity`保留实际恢复RSS下界，`test_experiment_storage`/`test_checkpoint_policy`核对tmpfs与发布代数；新预算不改写旧运行身份 |
 | 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[逐配置索引](evidence/core5-index.json)、[经验](performance-lessons.md)；JUnit提取实际检查，历史汇总不伪造拆分 |
 | 移动文件/入口 | 本页、architecture、semantic-map、README相关链接；STATUS当前动作/ROADMAP待办，不新增第二份交接 |
 
