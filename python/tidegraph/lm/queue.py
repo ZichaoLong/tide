@@ -2,6 +2,7 @@
 from copy import deepcopy
 import fcntl
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -66,22 +67,24 @@ def worker(case_path, root, case_dir):
         return code
 
 
-def selected_threads(root):
+def selected_threads(root, attempt='a'):
     samples=[]
-    for path in (Path(root)/'runs'/'cpu').glob('threads-*/run/result.json'):
+    for path in (Path(root)/'runs'/('cpu-'+attempt)).glob('threads-*/run/result.json'):
         record=read_json(path)
         if record.get('execution_status')=='completed' and record.get('measurements'):
             samples.append((record['measurements'][0]['total_seconds'],record['configuration']['execution']['threads']))
     return min(samples)[1] if samples else 16
 
 
-def execute(root, backend, *, npu_helper=None, hours=24, phase='first'):
-    root=Path(root).resolve(); base=root/'runs'/(backend if phase=='first' else backend+'-stage2')
+def execute(root, backend, *, npu_helper=None, hours=24, phase='first', attempt='a'):
+    if not re.fullmatch(r'[a-z0-9-]+',attempt):
+        raise ValueError('attempt: lowercase letters/digits/hyphens required')
+    root=Path(root).resolve(); base=root/'runs'/((backend if phase=='first' else backend+'-stage2')+'-'+attempt)
     base.mkdir(parents=True,exist_ok=False)
     plan=manifest(); cases=[x for x in plan['cases'] if x['config']['execution']['backend']==backend
                            and ((x['kind']=='stage2') == (phase=='second'))]
-    write_json(base/'manifest.json',dict(**plan,cases=cases))
-    started=time.monotonic();pending=list(cases);results=[]
+    write_json(base/'manifest.json',{**plan,'cases':cases})
+    started=time.monotonic();pending=deepcopy(cases);results=[]
     record=dict(schema='tide-lm-queue-v1',backend=backend,started=now(),state='running',results=results)
     def save():
         record['pending']=[x['name'] for x in pending];write_json(base/'queue.json',record)
@@ -97,7 +100,7 @@ def execute(root, backend, *, npu_helper=None, hours=24, phase='first'):
             case_dir=base/case['name'];case_dir.mkdir()
             case['requested_config']=deepcopy(case['config'])
             if backend=='cpu' and case['kind'] not in {'threads','check','traincheck'}:
-                case['config']['execution']['threads']=selected_threads(root)
+                case['config']['execution']['threads']=selected_threads(root,attempt)
                 case['thread_selection']='fastest completed 4/16/64 calibration, else explicit default16'
             write_json(case_dir/'case.json',case)
             if status=='failed':
@@ -110,7 +113,7 @@ def execute(root, backend, *, npu_helper=None, hours=24, phase='first'):
                     command=[sys.executable,'-B',str(npu_helper),'--job-id',f'gef-lm-{os.getpid()}-{len(results)}',
                         '--project','gef-lm','--priority','0','--npu-count',str(case['config']['execution']['devices']),
                         '--max-wait-seconds','21600','--state-file',str(case_dir/'allocation.json'),'--',*command]
-                write_json(base/'queue.json',dict(**record,current=case['name'],pending=[x['name'] for x in pending]))
+                write_json(base/'queue.json',{**record,'current':case['name'],'pending':[x['name'] for x in pending]})
                 # Outer service owns all descendants. Worker owns separate per-compute deadlines.
                 with (case_dir/'queue.log').open('ab',buffering=0) as log:
                     child=subprocess.run(command,stdout=log,stderr=log)

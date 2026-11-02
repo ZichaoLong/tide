@@ -16,7 +16,13 @@
 - `gef-lm-assets1-20261102-a.service`正在下载首批模型。qwen05首次连接URLError保留；qwen15权重传输中，OLMoE随后独立尝试。
 - `gef-lm-env-20261102-a.service`已exit0且无遗留后代：私有Transformers4.57.1环境及依赖检查完成，仅证明安装，不证明算子或模型。
 - 日志/状态在外部根的`jobs/assets1-a/`和`jobs/env-a/`；仓库`artifacts/jobs/`仅链接这两个记录。
-LM推理/训练/独立检查/新进程恢复/CSV和HTML入口已实现；开发检查已覆盖在线缓存、全参累积/恢复、两种MoE缓存、配置与报告及子进程生命周期，固定提交资格与计算矩阵尚待启动。优化引擎配套、TP/EP仍未实现，不冒充排队。
+LM运行实现已提交`9cdf7d9265d96a2446da99e09de13483cf290a54`，固定检出`source/runner-9cdf7d9`。
+`gef-lm-qualify-20261102-a.service`已exit0、无遗留后代：非editable wheel安装、无Torch plan/matrix与79项相关检查通过；这些是设施/随机tiny模型检查，不是预训练模型资格。
+首批CPU/NPU `*-a` 启动在清单写入处TypeError终止，尚未执行模型；原终态和日志保留。
+后批 `assets2-a` 尚在条件等待，已停止并确认无遗留后代，避免以后提交旧实现。
+已修复重复dict字段，增加完整队列路径及内层失败保留测试；17项相关开发检查通过。
+下一步提交修复后，以新固定检出重新资格并启动 `*-b` 队列；不编辑活跃的bootstrap下载源码。
+Qwen1.5B全部资产已校验完成，OLMoE正在下载。优化引擎配套、TP/EP的10点仍未实现，不冒充排队。
 用户已撤回另机下载安排，本机将获取Qwen MoE；它仍属于后批，不提前绕过资源校准。
 
 ## 接续与协作边界
