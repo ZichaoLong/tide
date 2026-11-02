@@ -1,5 +1,6 @@
 # 历史验证与测量证据
 
+[Dense/MoE后台入口与启动（2026-11-02）](llm-background-execution-20261102.md)：固定6bbc7e2设施81项、15dfabe队列19项；真实下载/CPU/NPU队列，首次FP32独立超差和原启动失败分列。运行中不代表通过。
 [Dense/MoE实测准备（2026-11-02）](llm-experiment-preparation-20261102.md)：只读环境审计、9次有界网络样本、MoE容量与待授权有限表；c28完成约1.06MiB/s样本，优化引擎配套差异明确保留。未下载权重、安装引擎或启动模型/后台任务。
 
 [Qwen公开吞吐调查（2026-11-02）](qwen-throughput-survey-20261102.md)：83条外部记录（CPU15/NPU13/CUDA55）、30份来源及JSON/CSV；区分总/输出token、逻辑batch/动态服务、dummy权重、全参训练与条件未明项。固定config的容量下界和待授权实测表已准备；没有下载权重或新增本机模型资格。

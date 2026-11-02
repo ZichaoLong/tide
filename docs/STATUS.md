@@ -1,43 +1,84 @@
-# 当前交接 — Dense/MoE已授权，实施与后台准备（2026-11-02）
+# 当前交接 — Dense/MoE后台实测（2026-11-02）
 
-用户已授权按[有限计划](evidence/llm-experiment-preparation-20261102.md)执行，并要求后台提交后以后唤醒检查。
-所有长下载、环境准备、构建和模型任务使用独立background.slice；短代码检查可以前台完成。
-主工作区可继续开发，活跃任务只读仓库外固定提交；不自动采用后续提交或修改公共软件。
+用户已授权[有限计划](evidence/llm-experiment-preparation-20261102.md)，要求提交后台后稍后唤醒检查。
+长下载/安装/实测使用独立background.slice；不连接或重租gpu3090。
+主工作区可继续开发，活跃任务不读取其后续修改。本文是当前交接，待办只见ROADMAP。
 
-## 当前实施
+## 固定身份与已验证范围
 
-- 新增`tidegraph lm catalog/fetch`，固定六模型revision、文件大小与SHA256/Git blob身份，断点读取拒绝错误Range，失败保留partial，完成后原子发布。入口不导入Torch。
-- 项目/账户/文件系统三层写入准入，默认首批80GiB、账户300GiB停止线；复用原持久记录和子进程监督器。
-- 下载、环境和运行源码将分别冻结在`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/`。
-- 共享资产、私有环境、日志位于同一仓库外根的`models/`、`env/`、`jobs/`。这些活动目录不得清理、编辑或升级。
-- 开发检查：Python3.12下资产续传/错误Range/哈希拒绝/固定目录4项通过；无Torch导入检查通过。系统Python3.9不满足项目>=3.10，原开发启动失败已定位，任务显式选公共Python3.12。
+- 数学固定`0770593838a37c790a568226930567ed60f99b83`，校验通过，未改core-5语义。
+- 资产bootstrap：`3360eafd3f5f94dc993d5d8cefdc428186d50b02`。
+- 运行实现、已安装非editable wheel及CPU/条件后批：`6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4`，固定81项相关检查通过。
+- NPU队列后继：`15dfabe55ea8f0608cf6fc795513c6487eb664c4`，改计算锁为有界内核等待，固定19项队列/清单检查通过。未升级活跃环境或重建wheel；通过固定PYTHONPATH读取自身源码，实际包内容身份分别记录。
+- 私有增量：Transformers4.57.1、Accelerate1.11.0、PEFT0.17.1；公共Python3.12/Torch2.12/TorchNPU2.12/CANN9.1保持只读。
+- [启动证据](evidence/llm-background-execution-20261102.md)区分设施、独立小检查与原失败；随机tiny检查不替代预训练模型/NPU资格。
 
-固定bootstrap源码`3360eafd3f5f94dc993d5d8cefdc428186d50b02`已启动后台准备：
-- `gef-lm-assets1-20261102-a.service`正在下载首批模型。qwen05首次连接URLError保留；qwen15权重传输中，OLMoE随后独立尝试。
-- `gef-lm-env-20261102-a.service`已exit0且无遗留后代：私有Transformers4.57.1环境及依赖检查完成，仅证明安装，不证明算子或模型。
-- 日志/状态在外部根的`jobs/assets1-a/`和`jobs/env-a/`；仓库`artifacts/jobs/`仅链接这两个记录。
-LM运行实现已提交`9cdf7d9265d96a2446da99e09de13483cf290a54`，固定检出`source/runner-9cdf7d9`。
-`gef-lm-qualify-20261102-a.service`已exit0、无遗留后代：非editable wheel安装、无Torch plan/matrix与79项相关检查通过；这些是设施/随机tiny模型检查，不是预训练模型资格。
-首批CPU/NPU `*-a` 启动在清单写入处TypeError终止，尚未执行模型；原终态和日志保留。
-后批 `assets2-a` 尚在条件等待，已停止并确认无遗留后代，避免以后提交旧实现。
-已修复重复dict字段，增加完整队列路径及内层失败保留测试；17项相关开发检查通过。
-下一步提交修复后，以新固定检出重新资格并启动 `*-b` 队列；不编辑活跃的bootstrap下载源码。
-Qwen1.5B全部资产已校验完成，OLMoE正在下载。优化引擎配套、TP/EP的10点仍未实现，不冒充排队。
-用户已撤回另机下载安排，本机将获取Qwen MoE；它仍属于后批，不提前绕过资源校准。
+## 活动作业与材料
 
-## 接续与协作边界
+统一外部根：`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`。
+固定源码在`source/bootstrap-3360eaf`、`source/runner-6bbc7e2`、`source/runner-15dfabe`；
+环境`env/transformers`，模型`models`，输出`runs`，作业`jobs`。这些目录不得清理、编辑或升级。
+仓库`artifacts/jobs/lm-*`仅链接外部状态；短审计/代码检查仍可前台完成。
 
-授权分支`graph-execution-foundation`，启动HEAD `58b68b11aa394749805f3121299edf5e9ae5f638`；固定数学校验通过。
-每次提交后以固定检出运行，再单独提交小型证据；普通推送已授权。
-用户可编辑/提交主工作区。不要删除活动worktree、修改其环境或清理模型partial；正式计时避免同时进行本项目重型构建。
-其他工作不停止。后台提交不承诺自动通知，未知错误保留终态与日志，不能把外层完成当模型通过。
+| unit | 当前事实 | 状态/日志相对外部根 |
+| --- | --- | --- |
+| gef-lm-cpu-20261102-b.service | 运行中；Qwen1.5B线程校准后选16线程，继续batch/长度/训练 | jobs/cpu-b；runs/cpu-b/queue.json |
+| gef-lm-npu-20261102-c.service | 已重新提交，从小检查进入首批；实际设备由协作队列分配 | jobs/npu-c；runs/npu-c/queue.json |
+| gef-lm-qwen05-recovery-20261102-b.service | 已exit0，全部Qwen0.5B资产验证完成，无遗留后代 | jobs/qwen05-recovery-b |
+| gef-lm-olmoe-recovery-20261102-b.service | Qwen0.5B完成后显式续传OLMoE，原断流记录保留；无循环重试 | jobs/olmoe-recovery-b |
+| gef-lm-assets2-20261102-b.service | 首批终态/有效Qwen1.5B B1校准为条件；获取3B/7B/30B MoE后提交后批 | jobs/assets2-b；stage2-download-b.json |
+
+后批自动提交的unit是`gef-lm-cpu-stage2-20261102-b.service`与`gef-lm-npu-stage2-20261102-b.service`，
+源码仍为6bbc7e2；不存在该unit时不写成已运行。首批68流程、条件后批12流程，
+其中71测量/观察及9小检查。10个优化引擎/TP、EP点尚未排队，需配套适配，不能冒充完成。
+
+Qwen0.5B/1.5B全部资产hash通过。OLMoE首分片在1,045,278,078/4,997,744,872 bytes处提前断流；
+`jobs/assets1-a`终态exit1，partial和原失败保留。已提交一次显式OLMoE续传；如果再次失败，保留终态并只影响其依赖点。
+Qwen0.5B恢复完成后，OLMoE续传与后批Qwen3B下载最多两路，不修改共享网络路线。
+
+## 已观察的检查、成本与失败
+
+Qwen1.5B CPU FP32 B2/L16/输出4：token一致，严格logits/KV有55项超差，最大1.83105e-4；
+阈值atol1e-5/rtol1e-4不改。参考eager完整前缀，候选SDPA在线缓存；其他大点仍not_checked，
+执行/自身恢复/数值/路由分别记录。CPU B1的同栈新进程精确续接通过，不代替独立正确性。
+CPU BF16 B8/L512/输出128线程校准单次完整窗：4线程161.754s、16线程67.664s、64线程184.702s；
+这是校准成本，不是全部CPU模型/尺度结论。
+
+原9cdf7d9的CPU/NPU `*-a` 清单初始化TypeError失败，未执行模型；assets2-a仅等待，已停止且无遗留后代。
+6bbc7e2修复并保留原失败。npu-b因轮询计算锁饥饿，确认还未创建计算子进程后取消，MainPID=0、
+ControlGroup为空、remaining_live_pids=[]；后继npu-c使用内核等待。活跃CPU任务和原下载源码未改动。
+
+## 下一次检查与继续开发
 
 ```sh
 git status --short --branch
 python -B scripts/status.py
+systemctl --user list-units 'gef-lm-*' --all
 quota -vs
-systemctl --user status gef-lm-assets1-20261102-a.service gef-lm-env-20261102-a.service
+# 这些查询不导入Torch、不启动模型：
+/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python -I -m tidegraph lm results /mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs
+# 持久日志例：
+tail -n 50 /mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs/cpu-b/task.log
 ```
+
+先审阅各run/check/resume和队列内层状态，不把外层完成当全部通过。优先检查NPU首个小例、
+B128/B512、训练与精确续接，以及OLMoE/后批分片下载。下载失败应显式续传原固定资产，
+只对依赖失败/未跑点安排新run，不重复已完成测量。
+安装、预算、单点、独立检查/恢复、报告与示例命令见[外部LM手册](external-lm.md)。
+
+可以编辑/提交主仓库。正式计时期间，本项目重型构建应等待同一锁：
+`flock /mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/compute.lock YOUR_BUILD_COMMAND`。
+不修改共享工具链，不删活跃worktree、partial和环境；不自动停止其他项目任务。
+停止某个明确unit用`systemctl --user stop UNIT`，随后核对status.json和实际ControlGroup/后代。
+取消全部实验时先停止assets2条件服务，防止以后再提交后批。后台不承诺自动唤醒AI或跨主机重启续跑。
+
+## 资源事实
+
+账户最近约36GiB，硬配额800GiB；项目首批80GiB/全阶段160GiB、账户300GiB停止新增大写入。
+每计算/恢复1200秒，设备/计算锁等待6小时，计算service24小时，下载service30小时；Qwen0.5B恢复3小时。
+主存静态准入384GiB；systemd也请求MemoryMax=384GiB，但本机v1 memory controller仍落在共同user service，
+MemoryCurrent未设置，不能声称每unit已硬隔离。实际生命周期控制组在background.slice、与focus.service分离；
+计时串行并记录RSS/设备峰值。tmpfs未作为当前必需依赖，不修改公共控制器配置。
 
 ## 原core-5终态继续保留
 
@@ -53,22 +94,3 @@ GPU释放见[审阅](evidence/core5-cuda-release-20261031.json)，不默认重�
 `~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/`。
 `retirement-dev-20261031.tar.gz`为5,452,397 bytes，SHA256
 `6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`；本次未打开、修改或运行。
-
-## 资源与干净检出接续
-
-本次准备观察账户占用32438MiB，配额400GiB软限/800GiB硬限；用`quota -vs`核对，不能用整盘df代替。
-未来tmpfs必须联合主存预算。公共TorchNPU2.12/CANN9.1和独立LibTorch2.10/CANN9.0 SDK分开，均未修改。
-私有增量环境安装与pip check已通过；模型、算子和设备兼容性仍待实际检查。
-
-```sh
-git status --short --branch
-python -B scripts/status.py
-python -B scripts/check_upstream.py
-quota -vs
-# 无需Torch、联网或原运行目录即可查看新调查：
-python -B -m json.tool docs/evidence/qwen-throughput-survey-20261102.json > /dev/null
-# 具体按平台/指标查询命令见调查报告；CSV可直接在表格软件筛选。
-```
-
-需要重建core-5时按[development](development.md)、[人类手册](human-workflow.md)和[复现入口](reproduction.md)。
-无应自动恢复的core-5历史作业。Dense/MoE已获执行授权，准备服务状态见上；计算矩阵仍在实施，尚未排队。
