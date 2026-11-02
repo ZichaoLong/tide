@@ -1,8 +1,10 @@
 """Bounded, cancellable model dependencies and serialized CPU/NPU case workers."""
 from copy import deepcopy
+from contextlib import contextmanager
 import fcntl
 import os
 import re
+import signal
 from pathlib import Path
 import subprocess
 import sys
@@ -42,19 +44,30 @@ def bounded(command, output, seconds):
     return code
 
 
+@contextmanager
+def compute_lock(path, seconds):
+    """Use the kernel waiter queue; repeated nonblocking probes may starve a waiter."""
+    def expired(number, frame):
+        raise TimeoutError('project compute lock wait exceeded declared budget')
+    with Path(path).open('a') as lock:
+        previous=signal.signal(signal.SIGALRM,expired)
+        signal.setitimer(signal.ITIMER_REAL,seconds)
+        try:
+            fcntl.flock(lock,fcntl.LOCK_EX)
+        finally:
+            signal.setitimer(signal.ITIMER_REAL,0)
+            signal.signal(signal.SIGALRM,previous)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock,fcntl.LOCK_UN)
+
+
 def worker(case_path, root, case_dir):
     """Runs after device admission. A fresh supervisor enforces each compute timeout."""
     root=Path(root); case_dir=Path(case_dir); case=read_json(case_path); c=case['config']
-    begin=time.monotonic()
-    with (root/'compute.lock').open('a') as lock:
-        while True:
-            try:
-                fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);break
-            except BlockingIOError:
-                write_json(case_dir/'phase.json',dict(phase='waiting_project_compute_lock',since=now()))
-                if time.monotonic()-begin>21600:
-                    raise TimeoutError('project compute lock wait exceeded six hours')
-                time.sleep(10)
+    write_json(case_dir/'phase.json',dict(phase='waiting_project_compute_lock',since=now()))
+    with compute_lock(root/'compute.lock',21600):
         write_json(case_dir/'phase.json',dict(phase='computing',started=now(),
             physical_devices=os.environ.get('ASCEND_RT_VISIBLE_DEVICES'),source_directory=str(Path.cwd())))
         cmd=[sys.executable,'-B','-m','tidegraph','lm',case['action'],str(case_path),

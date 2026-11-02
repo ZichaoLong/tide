@@ -51,3 +51,32 @@ def test_worker_failure_is_visible_even_when_outer_manifest_finishes(tmp_path,mo
     assert result['results'][0]['exit_code']==7
     row=load(tmp_path)[0]
     assert row['execution_status']=='process_failed' and row['output_tokens_per_s'] is None
+
+
+def test_compute_lock_timeout_is_bounded_and_does_not_steal_lock(tmp_path):
+    import fcntl
+    import pytest
+    from tidegraph.lm.queue import compute_lock
+    path=tmp_path/'compute.lock'
+    with path.open('a') as owner:
+        fcntl.flock(owner,fcntl.LOCK_EX)
+        with pytest.raises(TimeoutError):
+            with compute_lock(path,.05):
+                pytest.fail('stole held lock')
+    with compute_lock(path,.1):
+        pass
+
+
+def test_kernel_waiter_receives_released_lock(tmp_path):
+    import fcntl
+    import threading
+    import time
+    from tidegraph.lm.queue import compute_lock
+    path=tmp_path/'compute.lock'
+    with path.open('a') as owner:
+        fcntl.flock(owner,fcntl.LOCK_EX)
+        release=threading.Timer(.05,lambda:fcntl.flock(owner,fcntl.LOCK_UN));release.start()
+        begin=time.monotonic()
+        with compute_lock(path,1):
+            assert time.monotonic()-begin>=.04
+        release.join()
