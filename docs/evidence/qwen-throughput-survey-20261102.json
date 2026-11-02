@@ -1,0 +1,3526 @@
+{
+  "schema": "gef-external-throughput-survey-v1",
+  "as_of": "2026-11-02",
+  "foundation_review_base": "37b567da553e988a35c65a9746a2c466aaa5ace0",
+  "scope": {
+    "model_family": "Qwen2.5/Qwen3 dense selected public records; historical generations intentionally kept separate",
+    "model_execution_here": false,
+    "weight_download_here": false,
+    "software_install_here": false,
+    "local_correctness": "not_checked",
+    "local_checkpoint_resume": "not_checked",
+    "interpretation": "External reported numbers are not foundation run records or qualification. Missing is null, not zero."
+  },
+  "sources": {
+    "qwen3-source": {
+      "title": "Qwen3 official speed benchmark",
+      "url": "https://qwen.readthedocs.io/en/latest/_sources/getting_started/speed_benchmark.md.txt",
+      "accessed_utc": "2026-11-02T06:59:14.759992+00:00",
+      "document_sha256": "36c5c4d7ed8ae5d5e1efc3e81c2dd966e69fc0988955f363aca6df07c0823ae6",
+      "document_bytes": 31173,
+      "publisher_kind": "model_author",
+      "version_identity": "ReadTheDocs latest snapshot; Transformers 4.51.3 / SGLang 0.4.6.post1",
+      "caveat": "B1 only; speed numerator includes prompt and generated tokens; no local remeasurement."
+    },
+    "qwen25-speed": {
+      "title": "Qwen2.5 official speed benchmark",
+      "url": "https://qwen.readthedocs.io/en/v2.5/_sources/benchmark/speed_benchmark.rst.txt",
+      "accessed_utc": "2026-11-02T06:58:43.516238+00:00",
+      "document_sha256": "89137220930afcb984a7a83eeb359ce6b5c5a0a81a3e8a3c85d6141ee1dbaaef",
+      "document_bytes": 73882,
+      "publisher_kind": "model_author",
+      "version_identity": "ReadTheDocs v2.5; Transformers 4.46.0 / vLLM 0.6.3",
+      "caveat": "The page does not explicitly define the speed numerator or timing boundary; do not label it pure decode."
+    },
+    "llamacpp-arm": {
+      "title": "llama.cpp Arm CPU discussion #30069",
+      "url": "https://github.com/ggml-org/llama.cpp/discussions/30069",
+      "accessed_utc": "2026-11-02T07:03:11.688664+00:00",
+      "document_sha256": "fde7877b9eef2b1ef9a01cfabd7d7dbaf0a3bc77b0954bb14a5cfbca60f5dd51",
+      "document_bytes": 244632,
+      "publisher_kind": "community",
+      "version_identity": "2026-10-06 post; reported build 836d571",
+      "caveat": "Filename says Qwen2.5-0.5B-Instruct; displayed model label is qwen2 1B and params 630.17 M. Preserve this discrepancy; no GGUF fetched."
+    },
+    "llamacpp-phone": {
+      "title": "Qwen3-4B on Kirin 980 discussion #30549",
+      "url": "https://github.com/ggml-org/llama.cpp/discussions/30549",
+      "accessed_utc": "2026-11-02T07:03:06.466677+00:00",
+      "document_sha256": "852e829cd2a328e3c791c5a33000789dc4a1f5baef1436f6385e3f5d4718f9b1",
+      "document_bytes": 227968,
+      "publisher_kind": "community",
+      "version_identity": "2026-10-14 post; llama.cpp 45451c3",
+      "caveat": "Reply time is a constructed TTFT+128/decode statistic, not an independently measured HTTP latency; prompt lengths are not published."
+    },
+    "llamacpp-cpu-amx": {
+      "title": "AMX Q4_K optimization PR #30429",
+      "url": "https://github.com/ggml-org/llama.cpp/pull/30429",
+      "accessed_utc": "2026-11-02T07:04:11.430267+00:00",
+      "document_sha256": "5cccc4bf2a163ea9d4843d2f9e24295650cd0828b5cea113da2e15fbdda17b28",
+      "document_bytes": 263818,
+      "publisher_kind": "community_development_benchmark",
+      "version_identity": "Base 23b0202a189c44a54625aadcb37a946dd1d6278d plus proposed patch",
+      "caveat": "Single Xeon host and four pinned threads; candidate is not a generic CPU qualification."
+    },
+    "cpu-amx-raw": {
+      "title": "Five-pair AMX Qwen3-8B benchmark record",
+      "url": "https://gist.githubusercontent.com/ToukoUrsin/339887c6fec9b5dce8b01811ef654e51/raw",
+      "accessed_utc": "2026-11-02T07:07:11.408052+00:00",
+      "document_sha256": "fbb6992fc815729536a3106c043427bf6aa43e82f2a2a4d348986854339e0a9b",
+      "document_bytes": 4711,
+      "publisher_kind": "community_development_benchmark",
+      "version_identity": "Gist snapshot; base 23b0202a189c44a54625aadcb37a946dd1d6278d",
+      "caveat": "Candidate source identity is the named patch, not a fixed full commit in the record. Preserve noisy prefill observations."
+    },
+    "llama-bench-readme": {
+      "title": "llama-bench measurement definitions",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/master/tools/llama-bench/README.md",
+      "accessed_utc": "2026-11-02T07:03:11.714531+00:00",
+      "document_sha256": "147d63dc5a1b257dd776a62f1da56dd85da5ae6556616de4e94b2dc0b7fdb49b",
+      "document_bytes": 22289,
+      "publisher_kind": "framework_documentation",
+      "version_identity": "master snapshot",
+      "caveat": "pp/tg are separate tests; tokenization and sampling are excluded."
+    },
+    "ascend-release073": {
+      "title": "vLLM-Ascend v0.7.3 release benchmark #776",
+      "url": "https://github.com/vllm-project/vllm-ascend/issues/776",
+      "accessed_utc": "2026-11-02T07:03:05.444700+00:00",
+      "document_sha256": "b4856070d51fb1648bf30132db3b74eeeafa228fe17d1a3bfeebcc0b8d4d3c3c",
+      "document_bytes": 461079,
+      "publisher_kind": "framework_release_report",
+      "version_identity": "v0.7.3; May 2025 issue and comments",
+      "caveat": "Text-only Qwen commands use load_format=dummy. Author later identifies hardware as 910B3(64); dtype is not explicitly resolved."
+    },
+    "ascend-release090": {
+      "title": "vLLM-Ascend v0.9.0rc2 benchmark #1167",
+      "url": "https://github.com/vllm-project/vllm-ascend/issues/1167",
+      "accessed_utc": "2026-11-02T07:03:05.446627+00:00",
+      "document_sha256": "df21eae456345b1e37f0bf16c9f03aae2eede5ee13cc4c3afa8898e247a7fe36",
+      "document_bytes": 278473,
+      "publisher_kind": "framework_release_report",
+      "version_identity": "v0.9.0rc2; 2025-06-11",
+      "caveat": "Uses dummy weights, request rate 1/s, 200 requests; this is not B200 or saturation throughput."
+    },
+    "ascend-3112": {
+      "title": "Qwen3-8B high-TTFT report and follow-up #3112",
+      "url": "https://github.com/vllm-project/vllm-ascend/issues/3112",
+      "accessed_utc": "2026-11-02T07:04:50.982870+00:00",
+      "document_sha256": "24b3e0635ece30d908647b7cf45ebdeb1bd60cd02c804db56592354adabf8272",
+      "document_bytes": 347175,
+      "publisher_kind": "community_problem_report",
+      "version_identity": "2025-09-23 original / 2026-03-07 follow-up",
+      "caveat": "Different software and actual token totals; not an isolated optimization or strict equivalent-speed comparison. Prefix caching enabled."
+    },
+    "swift-megatron": {
+      "title": "Megatron-SWIFT full training benchmark",
+      "url": "https://swift.readthedocs.io/en/latest/Megatron-SWIFT/Quick-start.html",
+      "accessed_utc": "2026-11-02T06:59:55.870458+00:00",
+      "document_sha256": "30e83b368bdefe3be27cd9216b597bd6cf9a4e96821ef149dfd933de7b3cb9c3",
+      "document_bytes": 50782,
+      "publisher_kind": "framework_documentation",
+      "version_identity": "ReadTheDocs latest snapshot, page reports swift 4.7.0.dev0",
+      "caveat": "Original benchmark run lock, warmup and exact timing boundary are missing. Current linked scripts are recipe evidence, not the original run identity."
+    },
+    "swift-megatron-source": {
+      "title": "Megatron-SWIFT benchmark documentation source",
+      "url": "https://swift.readthedocs.io/en/latest/_sources/Megatron-SWIFT/Quick-start.md.txt",
+      "accessed_utc": "2026-11-02T07:07:11.432055+00:00",
+      "document_sha256": "69a293d20fd5569ee01645655cdf2e4b4f14f0bcecddba789f1d3d73a7586f41",
+      "document_bytes": 14529,
+      "publisher_kind": "framework_documentation",
+      "version_identity": "ReadTheDocs latest snapshot",
+      "caveat": ""
+    },
+    "swift-ds-pinned": {
+      "title": "Linked DeepSpeed Qwen2.5-14B recipe",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/680df5c670d7e8add906ac49381d603869410612/examples/megatron/benchmark/deepspeed.sh",
+      "accessed_utc": "2026-11-02T07:07:11.407519+00:00",
+      "document_sha256": "e8435a9dcbd9e651ca3f0eddeb937255485c68013c40cbe5ce3af27d8f6827fa",
+      "document_bytes": 998,
+      "publisher_kind": "framework_source",
+      "version_identity": "680df5c670d7e8add906ac49381d603869410612",
+      "caveat": "Current linked recipe has microbatch 1, GA2, 8 ranks, length8192, packing, BF16. It does not prove the old benchmark used exactly this revision."
+    },
+    "swift-mega-script": {
+      "title": "Linked Megatron Qwen2.5-14B recipe",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/680df5c670d7e8add906ac49381d603869410612/examples/megatron/base_to_chat.sh",
+      "accessed_utc": "2026-11-02T07:01:50.249421+00:00",
+      "document_sha256": "489a8d3928f890d6f045e26229db9511b02759ea37957a5260a402c4ea077d4b",
+      "document_bytes": 954,
+      "publisher_kind": "framework_source",
+      "version_identity": "680df5c670d7e8add906ac49381d603869410612",
+      "caveat": "Current recipe has TP4, microbatch1, global batch16, length8192, packing and selective recompute; no original run lock."
+    },
+    "ascend-benchmark": {
+      "title": "vLLM-Ascend benchmark method and example outputs",
+      "url": "https://docs.vllm.ai/projects/ascend/en/latest/developer_guide/performance_and_debug/performance_benchmark.html",
+      "accessed_utc": "2026-11-02T06:59:14.761467+00:00",
+      "document_sha256": "81133475b38808ffcce6246f2d1376df710112ec584520e5bc3f6250a38235c2",
+      "document_bytes": 139265,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "ascend-qwen3": {
+      "title": "vLLM-Ascend Qwen3 dense deployment tutorial",
+      "url": "https://docs.vllm.ai/projects/ascend/en/latest/tutorials/models/Qwen3-Dense.html",
+      "accessed_utc": "2026-11-02T06:59:56.960460+00:00",
+      "document_sha256": "6245188536830aadf63c91ee204e56598a1d6e322de91a06b130b73056485ee9",
+      "document_bytes": 193851,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "swift-npu": {
+      "title": "Megatron-SWIFT Ascend integration",
+      "url": "https://swift.readthedocs.io/en/latest/Megatron-SWIFT/Ascend.html",
+      "accessed_utc": "2026-11-02T06:59:55.871828+00:00",
+      "document_sha256": "8aa5333e36ffa72877f92cf1b36f15e8ead6c3db3f4820ec7acf479b614f18ac",
+      "document_bytes": 41452,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "mindspeed-v22-readme": {
+      "title": "MindSpeed-LLM v2.2.0 readme",
+      "url": "https://raw.githubusercontent.com/Ascend/MindSpeed-LLM/v2.2.0/README.md",
+      "accessed_utc": "2026-11-02T07:03:41.642801+00:00",
+      "document_sha256": "7b4893c93e8884d18eb0ff5eee5291bd93eced52dd91572d6a2566c4a7b12f99",
+      "document_bytes": 24222,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "v2.2.0",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "mindspeed-v22-dense": {
+      "title": "MindSpeed-LLM v2.2.0 dense model support",
+      "url": "https://raw.githubusercontent.com/Ascend/MindSpeed-LLM/v2.2.0/docs/pytorch/models/dense_model.md",
+      "accessed_utc": "2026-11-02T07:04:11.432165+00:00",
+      "document_sha256": "96f0e0fc921de3bf5499116d1f5fd184ffebfe823641b2603ce9e2a9f1913a0f",
+      "document_bytes": 32666,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "v2.2.0",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "mindspeed-models": {
+      "title": "MindSpeed-LLM current model support",
+      "url": "https://raw.githubusercontent.com/Ascend/MindSpeed-LLM/master/docs/zh/pytorch/models/supported_models.md",
+      "accessed_utc": "2026-11-02T06:59:55.872325+00:00",
+      "document_sha256": "fbf0a6da4c9f8842a4bac51bd77367ca107da182ef6358c3fb5f0db91444cefe",
+      "document_bytes": 61110,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "mindspeed-qwen3-script": {
+      "title": "MindSpeed Qwen3-8B training recipe",
+      "url": "https://raw.githubusercontent.com/Ascend/MindSpeed-LLM/4db0f8c793fa7fc89e19355fdee242cf60e79937/examples/mcore/qwen3/pretrain_qwen3_8b_4K_ptd.sh",
+      "accessed_utc": "2026-11-02T07:07:12.541193+00:00",
+      "document_sha256": "9a9264aa46f485d93139dba8c3d3400553b288ec858cba1125f4892a5e9d0653",
+      "document_bytes": 3201,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "4db0f8c793fa7fc89e19355fdee242cf60e79937",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "llamafactory-readme": {
+      "title": "LLaMA-Factory supported models and NPU setup",
+      "url": "https://raw.githubusercontent.com/hiyouga/LLaMA-Factory/main/README.md",
+      "accessed_utc": "2026-11-02T07:04:49.014232+00:00",
+      "document_sha256": "47a1c04a91391720afcf00280e7453783191af0b5f421a54a3397349f28e3e5e",
+      "document_bytes": 70593,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "unsloth-qwen3": {
+      "title": "Unsloth Qwen3 fine-tuning claims",
+      "url": "https://unsloth.ai/blog/qwen3",
+      "accessed_utc": "2026-11-02T07:04:49.040164+00:00",
+      "document_sha256": "c12fc1b1078191423791b14707181b58890cd9cc97d87e96ad7bad163b9efed6",
+      "document_bytes": 209289,
+      "publisher_kind": "capability_or_method_not_throughput_qualification",
+      "version_identity": "access-date snapshot",
+      "caveat": "Read only; no model run or environment installation. Support and relative claims do not supply a complete Qwen throughput point."
+    },
+    "hf-config15-pinned": {
+      "title": "Qwen2.5-1.5B-Instruct config",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/raw/989aa7980e4cf806f80c7fef2b1adb7bc71aa306/config.json",
+      "accessed_utc": "2026-11-02T07:07:11.406121+00:00",
+      "document_sha256": "98d2ff8cc47488d08a2b0b3acf4eb99ef210779b42bd48605f6b8e36acdbf670",
+      "document_bytes": 660,
+      "publisher_kind": "model_author_metadata",
+      "version_identity": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "caveat": "Only small metadata/config/model-card documents fetched; no tensor/weight files."
+    },
+    "hf-config17-pinned": {
+      "title": "Qwen3-1.7B config",
+      "url": "https://huggingface.co/Qwen/Qwen3-1.7B/raw/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/config.json",
+      "accessed_utc": "2026-11-02T07:03:11.690567+00:00",
+      "document_sha256": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+      "document_bytes": 726,
+      "publisher_kind": "model_author_metadata",
+      "version_identity": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "caveat": "Only small metadata/config/model-card documents fetched; no tensor/weight files."
+    },
+    "hf-card17": {
+      "title": "Qwen3-1.7B model card",
+      "url": "https://huggingface.co/Qwen/Qwen3-1.7B/raw/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e/README.md",
+      "accessed_utc": "2026-11-02T07:00:38.826196+00:00",
+      "document_sha256": "257e52c419dac2258852643f18af6c974f21f8c6c1b6f371b6cca6201cf29091",
+      "document_bytes": 13963,
+      "publisher_kind": "model_author_metadata",
+      "version_identity": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "caveat": "Only small metadata/config/model-card documents fetched; no tensor/weight files."
+    },
+    "hf-qwen15": {
+      "title": "Qwen2.5-1.5B repository metadata",
+      "url": "https://huggingface.co/api/models/Qwen/Qwen2.5-1.5B-Instruct?blobs=false",
+      "accessed_utc": "2026-11-02T07:02:16.184802+00:00",
+      "document_sha256": "174e75d2cbde03cd92939f78daaa8d5f79ba5156ca94e8d4cdce99ef91098a10",
+      "document_bytes": 8327,
+      "publisher_kind": "model_author_metadata",
+      "version_identity": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "caveat": "Only small metadata/config/model-card documents fetched; no tensor/weight files."
+    },
+    "hf-qwen17": {
+      "title": "Qwen3-1.7B repository metadata",
+      "url": "https://huggingface.co/api/models/Qwen/Qwen3-1.7B?blobs=false",
+      "accessed_utc": "2026-11-02T06:59:58.649473+00:00",
+      "document_sha256": "e41790941c5ee5c42e98045b5bbce03e1f43579e34e20211f9d7a815131f8180",
+      "document_bytes": 10314,
+      "publisher_kind": "model_author_metadata",
+      "version_identity": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "caveat": "Only small metadata/config/model-card documents fetched; no tensor/weight files."
+    },
+    "hf-qwen2-code": {
+      "title": "Transformers architecture source for analytic parameter counts",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.51.3/src/transformers/models/qwen2/modeling_qwen2.py",
+      "accessed_utc": "2026-11-02T07:10:11.140880+00:00",
+      "document_sha256": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff",
+      "document_bytes": 50670,
+      "publisher_kind": "framework_source",
+      "version_identity": "Transformers v4.51.3",
+      "caveat": "Read as text only; not imported or executed."
+    },
+    "hf-qwen3-code": {
+      "title": "Transformers architecture source for analytic parameter counts",
+      "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.51.3/src/transformers/models/qwen3/modeling_qwen3.py",
+      "accessed_utc": "2026-11-02T07:10:11.142185+00:00",
+      "document_sha256": "704c914530530a1acb0b443add1f520404e3ac2c28c0ab7e16f80f86cfe8ccb2",
+      "document_bytes": 51968,
+      "publisher_kind": "framework_source",
+      "version_identity": "Transformers v4.51.3",
+      "caveat": "Read as text only; not imported or executed."
+    }
+  },
+  "profiles": {
+    "h20-sglang": {
+      "platform": "CUDA",
+      "hardware": "1 x NVIDIA H20 96GB",
+      "implementation": "SGLang 0.4.6.post1",
+      "software": "Torch 2.6.0+cu124; Transformers 4.51.3; sgl-kernel 0.1.0",
+      "policies": "mem_fraction_static=0.85; context_length=140000; enable_mixed_chunk=True; skip_tokenizer_init=True",
+      "missing": [
+        "actual prompt batch/chunk histogram",
+        "warmup/repetition counts",
+        "checkpoint/accuracy qualification",
+        "model revision"
+      ]
+    },
+    "h20-transformers": {
+      "platform": "CUDA",
+      "hardware": "1 x NVIDIA H20 96GB",
+      "implementation": "Transformers 4.51.3",
+      "software": "Torch 2.6.0; Flash Attention 2.7.4",
+      "policies": "Official non-AutoAWQ stack",
+      "missing": [
+        "exact timing boundary",
+        "warmup/repetition counts",
+        "checkpoint/accuracy qualification",
+        "model revision"
+      ]
+    },
+    "a100-vllm": {
+      "platform": "CUDA",
+      "hardware": "1 x NVIDIA A100 80GB",
+      "implementation": "vLLM 0.6.3",
+      "software": "CUDA12.1; Torch2.4.0; FlashAttention2.6.3; Transformers4.46.0",
+      "policies": "gpu_memory_utilization=0.9; max_model_len=32768; enforce_eager=False",
+      "missing": [
+        "speed numerator definition",
+        "exact timing boundary",
+        "model revision",
+        "actual operator batch histogram"
+      ]
+    },
+    "a100-transformers": {
+      "platform": "CUDA",
+      "hardware": "1 x NVIDIA A100 80GB",
+      "implementation": "Transformers 4.46.0",
+      "software": "CUDA12.1; Torch2.3.1; FlashAttention2.5.8",
+      "policies": "Official BF16 rows only",
+      "missing": [
+        "speed numerator definition",
+        "exact timing boundary",
+        "model revision"
+      ]
+    },
+    "pi5-llama": {
+      "platform": "CPU",
+      "hardware": "Raspberry Pi5 BCM2712; 4 x Cortex-A76 2.4GHz; 2GB LPDDR4X",
+      "implementation": "llama.cpp build836d571",
+      "software": "Debian12; GCC12.2; Release; KleidiAI off",
+      "policies": "CPU only; -p512 -n128 -r5; governor ondemand; reported throttled=0x0",
+      "missing": [
+        "verified model/GGUF identity",
+        "token batch defaults at tested revision",
+        "server-class Arm representativeness"
+      ]
+    },
+    "kirin-llama": {
+      "platform": "CPU",
+      "hardware": "Huawei P30 Pro Kirin980; 4 x A76 + 4 x A55; 8GB",
+      "implementation": "llama.cpp 45451c3",
+      "software": "Android10; NDK; armv8.2-a+dotprod+fp16; OpenMP off",
+      "policies": "CPU only; greedy; thinking off; context2048; np1; cache_prompt=false; interleaved3 rounds; 4 prompts",
+      "missing": [
+        "exact input lengths",
+        "raw independent server latency samples",
+        "server-class Arm representativeness"
+      ]
+    },
+    "xeon-amx": {
+      "platform": "CPU",
+      "hardware": "AWS Intel Xeon Platinum8488C; 4 pinned CPUs12-15; 16GB cap",
+      "implementation": "llama.cpp base23b0202a189c44a54625aadcb37a946dd1d6278d / proposed AMX patch",
+      "software": "Release; GGML_NATIVE=ON; OpenMP",
+      "policies": "-t4 -p512 -n128 -r1 -C0xf000 --cpu-strict1; 5 alternating pairs",
+      "missing": [
+        "full candidate commit",
+        "aarch64 applicability",
+        "whole-pipeline serving throughput"
+      ]
+    },
+    "npu073": {
+      "platform": "NPU",
+      "hardware": "1 x Ascend910B3 64GB (author comment; earlier reply said A2 280T)",
+      "implementation": "vLLM-Ascend0.7.3",
+      "software": "Release image; exact Torch/CANN lock not supplied in report",
+      "policies": "TP1; text-only commands load_format=dummy; 200 ShareGPT requests; fixed sampling seed",
+      "missing": [
+        "effective dtype",
+        "actual dynamic batch distribution",
+        "model revision",
+        "real-weight correctness"
+      ]
+    },
+    "npu073-turbo": {
+      "platform": "NPU",
+      "hardware": "1 x Ascend910B3 64GB (author comment)",
+      "implementation": "vLLM-Ascend0.7.3 + MindIE Turbo",
+      "software": "Exact component versions not supplied",
+      "policies": "Same release report; dummy weights; TP1; 200 ShareGPT requests",
+      "missing": [
+        "effective dtype",
+        "actual dynamic batch distribution",
+        "real-weight correctness"
+      ]
+    },
+    "npu090": {
+      "platform": "NPU",
+      "hardware": "1 x Atlas A2 313T 64GB (source wording)",
+      "implementation": "vLLM-Ascend0.9.0rc2",
+      "software": "v0.9.0rc2 container",
+      "policies": "VLLM_USE_V1=1; TP1; dummy weights; random inputs; rate1/s",
+      "missing": [
+        "effective dtype",
+        "actual dynamic batch distribution",
+        "real-weight correctness"
+      ]
+    },
+    "npu3112-original": {
+      "platform": "NPU",
+      "hardware": "Ascend910B4; one visible device in report",
+      "implementation": "vLLM0.10.2 / vLLM-Ascend0.10.2rc1",
+      "software": "Torch2.7.1; TorchNPU2.7.1.dev20250724; CANN8.2.RC1",
+      "policies": "Qwen3-8B normal model loading; prefix cache enabled; random inputs; rate10/s",
+      "missing": [
+        "effective dtype",
+        "actual compute batch histogram",
+        "model revision",
+        "independent correctness"
+      ]
+    },
+    "npu3112-followup": {
+      "platform": "NPU",
+      "hardware": "Ascend910B4; one visible device in follow-up",
+      "implementation": "vLLM0.16.1rc1.dev140+g4034c3d32 / Ascend0.15.0rc2.dev79+g01d3515dc",
+      "software": "Torch2.9.0; TorchNPU2.9.0",
+      "policies": "Same requested lengths/rate; prefix caching enabled; actual tokens differ from original",
+      "missing": [
+        "effective dtype",
+        "actual compute batch histogram",
+        "model revision",
+        "independent correctness"
+      ]
+    },
+    "a800-training": {
+      "platform": "CUDA",
+      "hardware": "8 x NVIDIA A800 (single node)",
+      "implementation": "Megatron-SWIFT / Swift+DeepSpeed",
+      "software": "Original measured engine versions not locked in table",
+      "policies": "Full-parameter SFT; context8192; linked current recipes use packing; BF16 explicitly present in DeepSpeed script",
+      "missing": [
+        "original run source/config lock",
+        "actual non-padding and loss-bearing tokens",
+        "warmup and timing boundary",
+        "optimizer/checkpoint coverage"
+      ]
+    }
+  },
+  "measurements": [
+    {
+      "id": "q3-0.6B-sglang-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table0/data_row1 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 414.17
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "1",
+        "BF16",
+        "1",
+        "414.17",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-0.6B-sglang-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table0/data_row4 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 1426.46
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "6144",
+        "BF16",
+        "1",
+        "1426.46",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-0.6B-sglang-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table0/data_row10 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 3577.42
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "30720",
+        "BF16",
+        "1",
+        "3577.42",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-0.6B-transformers-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table1/data_row1 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 58.57,
+        "reported_gpu_memory_MB": 1394
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "1",
+        "BF16",
+        "1",
+        "58.57",
+        "1394"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-0.6B-transformers-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table1/data_row4 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 154.82,
+        "reported_gpu_memory_MB": 2066
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "6144",
+        "BF16",
+        "1",
+        "154.82",
+        "2066"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-0.6B-transformers-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table1/data_row10 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-0.6B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 175.93,
+        "reported_gpu_memory_MB": 4755
+      },
+      "source_row": [
+        "Qwen3-0.6B",
+        "30720",
+        "BF16",
+        "1",
+        "175.93",
+        "4755"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-sglang-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table2/data_row1 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 227.8
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "1",
+        "BF16",
+        "1",
+        "227.80",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-sglang-FP8-L1",
+      "source_id": "qwen3-source",
+      "locator": "table2/data_row2 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "FP8",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 333.9
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "1",
+        "FP8",
+        "1",
+        "333.90",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-sglang-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table2/data_row4 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 838.28
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "6144",
+        "BF16",
+        "1",
+        "838.28",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-sglang-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table2/data_row10 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 2439.03
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "30720",
+        "BF16",
+        "1",
+        "2439.03",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-transformers-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table3/data_row1 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 59.83,
+        "reported_gpu_memory_MB": 3412
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "1",
+        "BF16",
+        "1",
+        "59.83",
+        "3412"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-transformers-FP8-L1",
+      "source_id": "qwen3-source",
+      "locator": "table3/data_row2 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "FP8",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 23.83,
+        "reported_gpu_memory_MB": 2726
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "1",
+        "FP8",
+        "1",
+        "23.83",
+        "2726"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-transformers-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table3/data_row4 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 238.53,
+        "reported_gpu_memory_MB": 4213
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "6144",
+        "BF16",
+        "1",
+        "238.53",
+        "4213"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-1.7B-transformers-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table3/data_row10 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-1.7B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 418.13,
+        "reported_gpu_memory_MB": 6902
+      },
+      "source_row": [
+        "Qwen3-1.7B",
+        "30720",
+        "BF16",
+        "1",
+        "418.13",
+        "6902"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-sglang-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table4/data_row1 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 133.13
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "1",
+        "BF16",
+        "1",
+        "133.13",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-sglang-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table4/data_row4 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 466.19
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "6144",
+        "BF16",
+        "1",
+        "466.19",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-sglang-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table4/data_row10 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 1165.75
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "30720",
+        "BF16",
+        "1",
+        "1165.75",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-transformers-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table5/data_row1 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 45.94,
+        "reported_gpu_memory_MB": 7973
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "1",
+        "BF16",
+        "1",
+        "45.94",
+        "7973"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-transformers-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table5/data_row4 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 159.95,
+        "reported_gpu_memory_MB": 8860
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "6144",
+        "BF16",
+        "1",
+        "159.95",
+        "8860"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-4B-transformers-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table5/data_row10 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-4B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 217.97,
+        "reported_gpu_memory_MB": 12317
+      },
+      "source_row": [
+        "Qwen3-4B",
+        "30720",
+        "BF16",
+        "1",
+        "217.97",
+        "12317"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-sglang-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table6/data_row1 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 81.73
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "1",
+        "BF16",
+        "1",
+        "81.73",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-sglang-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table6/data_row4 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 296.25
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "6144",
+        "BF16",
+        "1",
+        "296.25",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-sglang-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table6/data_row10 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 832.67
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "30720",
+        "BF16",
+        "1",
+        "832.67",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-transformers-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table7/data_row1 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 45.32,
+        "reported_gpu_memory_MB": 15947
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "1",
+        "BF16",
+        "1",
+        "45.32",
+        "15947"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-transformers-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table7/data_row4 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 146.12,
+        "reported_gpu_memory_MB": 16811
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "6144",
+        "BF16",
+        "1",
+        "146.12",
+        "16811"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-8B-transformers-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table7/data_row10 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-8B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 208.98,
+        "reported_gpu_memory_MB": 20267
+      },
+      "source_row": [
+        "Qwen3-8B",
+        "30720",
+        "BF16",
+        "1",
+        "208.98",
+        "20267"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-sglang-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table8/data_row1 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 47.1
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "1",
+        "BF16",
+        "1",
+        "47.10",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-sglang-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table8/data_row4 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 174.85
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "6144",
+        "BF16",
+        "1",
+        "174.85",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-sglang-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table8/data_row10 (zero-based table)",
+      "profile": "h20-sglang",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 525.8
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "30720",
+        "BF16",
+        "1",
+        "525.80",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-transformers-BF16-L1",
+      "source_id": "qwen3-source",
+      "locator": "table9/data_row1 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 40.66,
+        "reported_gpu_memory_MB": 28402
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "1",
+        "BF16",
+        "1",
+        "40.66",
+        "28402"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-transformers-BF16-L6144",
+      "source_id": "qwen3-source",
+      "locator": "table9/data_row4 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 108.52,
+        "reported_gpu_memory_MB": 29495
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "6144",
+        "BF16",
+        "1",
+        "108.52",
+        "29495"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q3-14B-transformers-BF16-L30720",
+      "source_id": "qwen3-source",
+      "locator": "table9/data_row10 (zero-based table)",
+      "profile": "h20-transformers",
+      "model": "Qwen3-14B",
+      "task": "inference_combined",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 30720,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "prompt_plus_generated_tokens_per_s": 155.38,
+        "reported_gpu_memory_MB": 33336
+      },
+      "source_row": [
+        "Qwen3-14B",
+        "30720",
+        "BF16",
+        "1",
+        "155.38",
+        "33336"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "(prompt tokens + generated tokens) / measured generation time; tokenizer skipped for SGLang"
+    },
+    {
+      "id": "q25-0.5B-transformers-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line49",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-0.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 47.4,
+        "reported_gpu_memory_GB": 0.97
+      },
+      "source_row": [
+        "Qwen2.5-0.5B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "47.40",
+        "0.97",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-0.5B-transformers-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line57",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-0.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 47.45,
+        "reported_gpu_memory_GB": 1.23
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "47.45",
+        "1.23",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-0.5B-vllm-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line88",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-0.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 311.55
+      },
+      "source_row": [
+        "Qwen2.5-0.5B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "311.55"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-0.5B-vllm-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line96",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-0.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 304.79
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "304.79"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-1.5B-transformers-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line128",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-1.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 39.68,
+        "reported_gpu_memory_GB": 2.95
+      },
+      "source_row": [
+        "Qwen2.5-1.5B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "39.68",
+        "2.95",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-1.5B-transformers-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line136",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-1.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 40.88,
+        "reported_gpu_memory_GB": 3.43
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "40.88",
+        "3.43",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-1.5B-vllm-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line167",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-1.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 183.33
+      },
+      "source_row": [
+        "Qwen2.5-1.5B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "183.33"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-1.5B-vllm-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line175",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-1.5B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 176.68
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "176.68"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-3B-transformers-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line207",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-3B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 30.8,
+        "reported_gpu_memory_GB": 5.95
+      },
+      "source_row": [
+        "Qwen2.5-3B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "30.80",
+        "5.95",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-3B-transformers-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line215",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-3B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 32.2,
+        "reported_gpu_memory_GB": 6.59
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "32.20",
+        "6.59",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-3B-vllm-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line246",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-3B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 127.61
+      },
+      "source_row": [
+        "Qwen2.5-3B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "127.61"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-3B-vllm-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line254",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-3B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 123.15
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "123.15"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-7B-transformers-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line286",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 40.38,
+        "reported_gpu_memory_GB": 14.38
+      },
+      "source_row": [
+        "Qwen2.5-7B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "40.38",
+        "14.38",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-7B-transformers-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line294",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 38.76,
+        "reported_gpu_memory_GB": 15.38
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "38.76",
+        "15.38",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-7B-vllm-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line326",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 84.28
+      },
+      "source_row": [
+        "Qwen2.5-7B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "84.28",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-7B-vllm-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line334",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 80.7
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "80.70",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-14B-transformers-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line383",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-14B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 24.74,
+        "reported_gpu_memory_GB": 28.08
+      },
+      "source_row": [
+        "Qwen2.5-14B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "24.74",
+        "28.08",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-14B-transformers-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line391",
+      "profile": "a100-transformers",
+      "model": "Qwen2.5-14B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 20.51,
+        "reported_gpu_memory_GB": 29.5
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "20.51",
+        "29.50",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-14B-vllm-L1",
+      "source_id": "qwen25-speed",
+      "locator": "line422",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-14B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 1,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 46.3
+      },
+      "source_row": [
+        "Qwen2.5-14B-Instruct",
+        "1",
+        "BF16",
+        "1",
+        "46.30",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "q25-14B-vllm-L6144",
+      "source_id": "qwen25-speed",
+      "locator": "line430",
+      "profile": "a100-vllm",
+      "model": "Qwen2.5-14B-Instruct",
+      "task": "inference_reported_speed",
+      "precision": "BF16",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 6144,
+        "output_tokens": 2048
+      },
+      "metrics": {
+        "reported_speed_tokens_per_s_definition_unspecified": 43.83
+      },
+      "source_row": [
+        "",
+        "6144",
+        "BF16",
+        "1",
+        "43.83",
+        ""
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "Speed(tokens/s) as published; numerator and exact start/stop events not explicit on this page"
+    },
+    {
+      "id": "cpu-pi5-t1-pp512",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row1",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "prefill",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 1
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 93.49,
+        "reported_spread_tokens_per_s": 0.2
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "1",
+        "pp512",
+        "93.49 \u00b1 0.20"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t1-tg128",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row2",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "decode",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 1
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "decode_tokens_per_s": 32.42,
+        "reported_spread_tokens_per_s": 0.14
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "1",
+        "tg128",
+        "32.42 \u00b1 0.14"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t2-pp512",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row3",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "prefill",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 2
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 173.68,
+        "reported_spread_tokens_per_s": 0.08
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "2",
+        "pp512",
+        "173.68 \u00b1 0.08"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t2-tg128",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row4",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "decode",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 2
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "decode_tokens_per_s": 33.84,
+        "reported_spread_tokens_per_s": 0.05
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "2",
+        "tg128",
+        "33.84 \u00b1 0.05"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t3-pp512",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row5",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "prefill",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 3
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 233.22,
+        "reported_spread_tokens_per_s": 0.94
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "3",
+        "pp512",
+        "233.22 \u00b1 0.94"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t3-tg128",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row6",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "decode",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 3
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "decode_tokens_per_s": 29.37,
+        "reported_spread_tokens_per_s": 0.05
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "3",
+        "tg128",
+        "29.37 \u00b1 0.05"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t4-pp512",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row7",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "prefill",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 289.92,
+        "reported_spread_tokens_per_s": 0.11
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "4",
+        "pp512",
+        "289.92 \u00b1 0.11"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-pi5-t4-tg128",
+      "source_id": "llamacpp-arm",
+      "locator": "table0/data_row8",
+      "profile": "pi5-llama",
+      "model": "Qwen2.5-0.5B-Instruct (filename; displayed count discrepant)",
+      "task": "decode",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128,
+        "note": "pp512 and tg128 are separate tests; do not combine them into an end-to-end 512+128 request"
+      },
+      "metrics": {
+        "decode_tokens_per_s": 27.28,
+        "reported_spread_tokens_per_s": 0.02
+      },
+      "source_row": [
+        "qwen2 1B Q4_0",
+        "403.20 MiB",
+        "630.17 M",
+        "CPU",
+        "4",
+        "tg128",
+        "27.28 \u00b1 0.02"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "timing": "llama-bench; tokenization and sampling excluded; r5",
+      "repetitions": 5
+    },
+    {
+      "id": "cpu-kirin-4b-1",
+      "source_id": "llamacpp-phone",
+      "locator": "results/table0/data_row1",
+      "profile": "kirin-llama",
+      "model": "Qwen3-4B",
+      "task": "inference_estimated_reply",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_request",
+        "cpu_threads": 8
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens_in_reply_estimate": 128,
+        "max_context_tokens": 2048
+      },
+      "metrics": {
+        "estimated_reply_s": 23.7,
+        "ttft_s": 2.4,
+        "decode_tokens_per_s": 6.0
+      },
+      "source_row": [
+        "Default",
+        "23.7s",
+        "2.4s",
+        "6.0 tok/s",
+        "n/a"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "Default",
+      "timing": "Reported median TTFT + 128 / decode throughput; 4 held-out prompts; 3 interleaved rounds",
+      "strategy": "default",
+      "correctness_as_reported": "n/a"
+    },
+    {
+      "id": "cpu-kirin-4b-2",
+      "source_id": "llamacpp-phone",
+      "locator": "results/table0/data_row2",
+      "profile": "kirin-llama",
+      "model": "Qwen3-4B",
+      "task": "inference_estimated_reply",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_request",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens_in_reply_estimate": 128,
+        "max_context_tokens": 2048
+      },
+      "metrics": {
+        "estimated_reply_s": 17.7,
+        "ttft_s": 2.2,
+        "decode_tokens_per_s": 8.2
+      },
+      "source_row": [
+        "Tuned",
+        "17.7s (1.34\u00d7)",
+        "2.2s",
+        "8.2 tok/s",
+        "identical, 4/4"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "Tuned",
+      "timing": "Reported median TTFT + 128 / decode throughput; 4 held-out prompts; 3 interleaved rounds",
+      "strategy": "big-core affinity + ngram-mod speculation + ub128",
+      "correctness_as_reported": "identical, 4/4"
+    },
+    {
+      "id": "cpu-kirin-4b-3",
+      "source_id": "llamacpp-phone",
+      "locator": "results/table0/data_row3",
+      "profile": "kirin-llama",
+      "model": "Qwen3-4B",
+      "task": "inference_estimated_reply",
+      "precision": "Q4_0",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_request",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens_in_reply_estimate": 128,
+        "max_context_tokens": 2048
+      },
+      "metrics": {
+        "estimated_reply_s": 15.7,
+        "ttft_s": 1.4,
+        "decode_tokens_per_s": 9.0
+      },
+      "source_row": [
+        "Q4_0, 4 big cores (common ARM advice)",
+        "15.7s (1.51\u00d7)",
+        "1.4s",
+        "9.0 tok/s",
+        "different, lower quality (see below)"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "Q4_0, 4 big cores (common ARM advice)",
+      "timing": "Reported median TTFT + 128 / decode throughput; 4 held-out prompts; 3 interleaved rounds",
+      "strategy": "Q4_0 + four big cores; quantization differs",
+      "correctness_as_reported": "different, lower quality (see below)"
+    },
+    {
+      "id": "cpu-xeon-baseline-pp512",
+      "source_id": "cpu-amx-raw",
+      "locator": "measurement.pp512.baseline_median",
+      "profile": "xeon-amx",
+      "model": "Qwen3-8B",
+      "task": "prefill",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 64.7596,
+        "mean_prompt_processing_tokens_per_s": 64.51464
+      },
+      "source_row": {
+        "baseline_median": 64.7596,
+        "baseline_mean": 64.51464
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "baseline",
+      "timing": "Median/mean of five alternating pairs; separate pp and tg tests; tokenization/sampling excluded",
+      "raw_samples": [
+        63.106,
+        65.2047,
+        64.1506,
+        64.7596,
+        65.3523
+      ],
+      "correctness_as_reported": "two WikiText2 chunks, PPL9.5987, byte-equal logits; not independently verified here"
+    },
+    {
+      "id": "cpu-xeon-candidate-pp512",
+      "source_id": "cpu-amx-raw",
+      "locator": "measurement.pp512.candidate_median",
+      "profile": "xeon-amx",
+      "model": "Qwen3-8B",
+      "task": "prefill",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": 512,
+        "generated_tokens": null
+      },
+      "metrics": {
+        "prompt_processing_tokens_per_s": 62.8325,
+        "mean_prompt_processing_tokens_per_s": 54.90692
+      },
+      "source_row": {
+        "candidate_median": 62.8325,
+        "candidate_mean": 54.90692
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "candidate",
+      "timing": "Median/mean of five alternating pairs; separate pp and tg tests; tokenization/sampling excluded",
+      "raw_samples": [
+        37.9241,
+        46.1192,
+        64.4618,
+        62.8325,
+        63.197
+      ],
+      "correctness_as_reported": "two WikiText2 chunks, PPL9.5987, byte-equal logits; not independently verified here"
+    },
+    {
+      "id": "cpu-xeon-baseline-tg128",
+      "source_id": "cpu-amx-raw",
+      "locator": "measurement.tg128.baseline_median",
+      "profile": "xeon-amx",
+      "model": "Qwen3-8B",
+      "task": "decode",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128
+      },
+      "metrics": {
+        "decode_tokens_per_s": 6.09527,
+        "mean_decode_tokens_per_s": 5.8067
+      },
+      "source_row": {
+        "baseline_median": 6.09527,
+        "baseline_mean": 5.8067
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "baseline",
+      "timing": "Median/mean of five alternating pairs; separate pp and tg tests; tokenization/sampling excluded",
+      "raw_samples": [
+        4.62355,
+        6.11696,
+        6.09215,
+        6.09527,
+        6.10557
+      ],
+      "correctness_as_reported": "two WikiText2 chunks, PPL9.5987, byte-equal logits; not independently verified here"
+    },
+    {
+      "id": "cpu-xeon-candidate-tg128",
+      "source_id": "cpu-amx-raw",
+      "locator": "measurement.tg128.candidate_median",
+      "profile": "xeon-amx",
+      "model": "Qwen3-8B",
+      "task": "decode",
+      "precision": "Q4_K_M",
+      "batch": {
+        "logical_examples": 1,
+        "kind": "single_sequence_microbenchmark",
+        "cpu_threads": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "generated_tokens": 128
+      },
+      "metrics": {
+        "decode_tokens_per_s": 6.90782,
+        "mean_decode_tokens_per_s": 6.558816
+      },
+      "source_row": {
+        "candidate_median": 6.90782,
+        "candidate_mean": 6.558816
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "candidate",
+      "timing": "Median/mean of five alternating pairs; separate pp and tg tests; tokenization/sampling excluded",
+      "raw_samples": [
+        5.16014,
+        6.88648,
+        6.91459,
+        6.92505,
+        6.90782
+      ],
+      "correctness_as_reported": "two WikiText2 chunks, PPL9.5987, byte-equal logits; not independently verified here"
+    },
+    {
+      "id": "npu073-turbo-rate1",
+      "source_id": "ascend-release073",
+      "locator": "table0/data_row1",
+      "profile": "npu073-turbo",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 1
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 0.95543,
+        "output_tokens_per_s": 213.524,
+        "median_ttft_ms": 69.5214,
+        "median_tpot_ms": 23.351,
+        "median_itl_ms": 22.5373
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_1",
+        "1",
+        "0.95543",
+        "213.524",
+        "69.5214",
+        "23.351",
+        "22.5373"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-turbo-rate4",
+      "source_id": "ascend-release073",
+      "locator": "table0/data_row2",
+      "profile": "npu073-turbo",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 3.15729,
+        "output_tokens_per_s": 705.608,
+        "median_ttft_ms": 72.2935,
+        "median_tpot_ms": 30.3927,
+        "median_itl_ms": 26.7608
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_4",
+        "4",
+        "3.15729",
+        "705.608",
+        "72.2935",
+        "30.3927",
+        "26.7608"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-turbo-rate16",
+      "source_id": "ascend-release073",
+      "locator": "table0/data_row3",
+      "profile": "npu073-turbo",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 16
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 5.64525,
+        "output_tokens_per_s": 1261.63,
+        "median_ttft_ms": 85.6201,
+        "median_tpot_ms": 55.3979,
+        "median_itl_ms": 36.701
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_16",
+        "16",
+        "5.64525",
+        "1261.63",
+        "85.6201",
+        "55.3979",
+        "36.701"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-turbo-rateinf",
+      "source_id": "ascend-release073",
+      "locator": "table0/data_row4",
+      "profile": "npu073-turbo",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": "inf"
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 6.647,
+        "output_tokens_per_s": 1485.51,
+        "median_ttft_ms": 3198.48,
+        "median_tpot_ms": 50.8949,
+        "median_itl_ms": 40.9818
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_inf",
+        "inf",
+        "6.647",
+        "1485.51",
+        "3198.48",
+        "50.8949",
+        "40.9818"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-rate1",
+      "source_id": "ascend-release073",
+      "locator": "table2/data_row1",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 1
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 0.922267,
+        "output_tokens_per_s": 206.113,
+        "median_ttft_ms": 97.8581,
+        "median_tpot_ms": 36.5128,
+        "median_itl_ms": 35.3481
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_1",
+        "1",
+        "0.922267",
+        "206.113",
+        "97.8581",
+        "36.5128",
+        "35.3481"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-rate4",
+      "source_id": "ascend-release073",
+      "locator": "table2/data_row2",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 4
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 2.79137,
+        "output_tokens_per_s": 623.829,
+        "median_ttft_ms": 104.405,
+        "median_tpot_ms": 48.9373,
+        "median_itl_ms": 41.9421
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_4",
+        "4",
+        "2.79137",
+        "623.829",
+        "104.405",
+        "48.9373",
+        "41.9421"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-rate16",
+      "source_id": "ascend-release073",
+      "locator": "table2/data_row3",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 16
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 4.37615,
+        "output_tokens_per_s": 978.005,
+        "median_ttft_ms": 114.836,
+        "median_tpot_ms": 75.88,
+        "median_itl_ms": 51.2339
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_16",
+        "16",
+        "4.37615",
+        "978.005",
+        "114.836",
+        "75.88",
+        "51.2339"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-rateinf",
+      "source_id": "ascend-release073",
+      "locator": "table2/data_row4",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": "inf"
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "workload": "200 variable-length ShareGPT pairs; fixed random seed"
+      },
+      "metrics": {
+        "requests_per_s": 5.06881,
+        "output_tokens_per_s": 1132.8,
+        "median_ttft_ms": 2845.75,
+        "median_tpot_ms": 62.8063,
+        "median_itl_ms": 53.0942
+      },
+      "source_row": [
+        "serving_qwen2_5_7B_tp1_qps_inf",
+        "inf",
+        "5.06881",
+        "1132.8",
+        "2845.75",
+        "62.8063",
+        "53.0942"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Online serving over all requests, including arrival pattern and queueing; QPS is not batch"
+    },
+    {
+      "id": "npu073-latency-B8",
+      "source_id": "ascend-release073",
+      "locator": "table4/data_row2",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "inference_batch_latency",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": 8,
+        "kind": "fixed"
+      },
+      "sequence": {
+        "input_tokens": 32,
+        "output_tokens": 128
+      },
+      "metrics": {
+        "mean_latency_ms": 4274.96,
+        "median_latency_ms": 4284.9,
+        "p99_latency_ms": 4335.71
+      },
+      "source_row": [
+        "latency_qwen2_5_7B_tp1",
+        "4274.96",
+        "4284.9",
+        "4335.71"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "End-to-end batch latency; 5 warmup and 15 measured iterations",
+      "repetitions": 15
+    },
+    {
+      "id": "npu073-offline",
+      "source_id": "ascend-release073",
+      "locator": "table5/data_row1",
+      "profile": "npu073",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "offline_throughput",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200
+      },
+      "sequence": {
+        "input_tokens": null,
+        "output_tokens": null,
+        "actual_total_tokens": 88257,
+        "workload": "ShareGPT"
+      },
+      "metrics": {
+        "elapsed_s": 40.8233,
+        "requests_per_s": 4.89917,
+        "total_tokens_per_s": 2161.93
+      },
+      "source_row": [
+        "throughput_qwen2_5_7B_tp1",
+        "200",
+        "88257",
+        "40.8233",
+        "4.89917",
+        "2161.93"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Offline processing of all requests; actual scheduler batch not published"
+    },
+    {
+      "id": "npu090-rate1",
+      "source_id": "ascend-release090",
+      "locator": "issue body / Test results",
+      "profile": "npu090",
+      "model": "Qwen2.5-7B-Instruct",
+      "task": "online_serving",
+      "precision": "auto; effective dtype not published",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 1
+      },
+      "sequence": {
+        "input_tokens": 200,
+        "output_tokens": 128,
+        "actual_input_tokens": 40000,
+        "actual_output_tokens": 25600
+      },
+      "metrics": {
+        "output_tokens_per_s": 136.62,
+        "total_tokens_per_s": 350.09,
+        "duration_s": 187.38,
+        "mean_ttft_ms": 49.75,
+        "mean_tpot_ms": 22.07
+      },
+      "source_row": "Benchmark duration (s):187.38; Output token throughput (tok/s):136.62; Total Token throughput (tok/s):350.09",
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "dummy",
+      "timing": "Rate-limited online serving; not saturation throughput"
+    },
+    {
+      "id": "npu3112-original",
+      "source_id": "ascend-3112",
+      "locator": "issue body Observed Result",
+      "profile": "npu3112-original",
+      "model": "Qwen3-8B",
+      "task": "online_serving_problem_report",
+      "precision": "not explicitly resolved in source",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 10
+      },
+      "sequence": {
+        "requested_input_tokens": 1024,
+        "requested_output_tokens": 2048,
+        "actual_input_tokens": 204065,
+        "actual_output_tokens": 369494
+      },
+      "metrics": {
+        "output_tokens_per_s": 45.03,
+        "total_tokens_per_s": 69.89,
+        "duration_s": 8206.37,
+        "mean_ttft_ms": 3754758.86,
+        "mean_tpot_ms": 596.96
+      },
+      "source_row": {
+        "actual_input_tokens": 204065,
+        "actual_output_tokens": 369494,
+        "duration_s": 8206.37,
+        "output_tokens_per_s": 45.03
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "normal model loader in published command; revision unspecified",
+      "timing": "Includes queueing under rate10/s; original and follow-up process different token totals",
+      "execution_as_reported": "200 completed requests; severe latency in original",
+      "correctness_as_reported": "not independently checked"
+    },
+    {
+      "id": "npu3112-followup",
+      "source_id": "ascend-3112",
+      "locator": "2026-03-07 Verification Results comment",
+      "profile": "npu3112-followup",
+      "model": "Qwen3-8B",
+      "task": "online_serving_problem_report",
+      "precision": "not explicitly resolved in source",
+      "batch": {
+        "logical_examples": null,
+        "kind": "dynamic",
+        "requests": 200,
+        "offered_requests_per_s": 10
+      },
+      "sequence": {
+        "requested_input_tokens": 1024,
+        "requested_output_tokens": 2048,
+        "actual_input_tokens": 204800,
+        "actual_output_tokens": 409600
+      },
+      "metrics": {
+        "output_tokens_per_s": 631.76,
+        "total_tokens_per_s": 947.64,
+        "duration_s": 648.35,
+        "mean_ttft_ms": 209863.79,
+        "mean_tpot_ms": 72.79
+      },
+      "source_row": {
+        "actual_input_tokens": 204800,
+        "actual_output_tokens": 409600,
+        "duration_s": 648.35,
+        "output_tokens_per_s": 631.76
+      },
+      "evidence_status": "external_report_not_locally_validated",
+      "weights": "normal model loader in published command; revision unspecified",
+      "timing": "Includes queueing under rate10/s; original and follow-up process different token totals",
+      "execution_as_reported": "200 completed requests; severe latency in original",
+      "correctness_as_reported": "not independently checked"
+    },
+    {
+      "id": "train14b-megatron-lm",
+      "source_id": "swift-megatron",
+      "locator": "Benchmark / Dense Qwen2.5-14B / column1",
+      "profile": "a800-training",
+      "model": "Qwen2.5-14B",
+      "task": "full_parameter_sft",
+      "precision": "BF16 in linked DeepSpeed recipe; original effective dtype not locked",
+      "batch": {
+        "logical_examples": null,
+        "kind": "training_original_batch_not_locked",
+        "linked_recipe_global_batch": 16,
+        "linked_recipe_microbatch": 1,
+        "linked_recipe_gradient_accumulation": 8,
+        "linked_recipe_dp": 2,
+        "linked_recipe_tp": 4
+      },
+      "sequence": {
+        "context_tokens": 8192
+      },
+      "metrics": {
+        "iteration_s": 9.04,
+        "reported_memory_per_device_GB": 64
+      },
+      "source_row": [
+        "Megatron-LM",
+        "9.04s/it",
+        "8*64GB"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "Megatron-LM",
+      "timing": "Published s/it; no original timing boundary. Do not replace with measured effective tokens/s.",
+      "recipe_sources": [
+        "swift-mega-script"
+      ],
+      "recipe_caveat": "ZeRO3 variant timing is published; the linked DeepSpeed script explicitly selects zero2. Original benchmark configuration is not locked."
+    },
+    {
+      "id": "train14b-deepspeed-zero2",
+      "source_id": "swift-megatron",
+      "locator": "Benchmark / Dense Qwen2.5-14B / column2",
+      "profile": "a800-training",
+      "model": "Qwen2.5-14B",
+      "task": "full_parameter_sft",
+      "precision": "BF16 in linked DeepSpeed recipe; original effective dtype not locked",
+      "batch": {
+        "logical_examples": null,
+        "kind": "training_original_batch_not_locked",
+        "linked_recipe_global_batch": 16,
+        "linked_recipe_microbatch": 1,
+        "linked_recipe_gradient_accumulation": 2,
+        "linked_recipe_dp": 8,
+        "linked_recipe_tp": 1
+      },
+      "sequence": {
+        "context_tokens": 8192
+      },
+      "metrics": {
+        "iteration_s": 10.32,
+        "reported_memory_per_device_GB": 80
+      },
+      "source_row": [
+        "Deepspeed-ZeRO2",
+        "10.32s/it",
+        "8*80GB"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "DeepSpeed-ZeRO2",
+      "timing": "Published s/it; no original timing boundary. Do not replace with measured effective tokens/s.",
+      "recipe_sources": [
+        "swift-ds-pinned"
+      ],
+      "recipe_caveat": "ZeRO3 variant timing is published; the linked DeepSpeed script explicitly selects zero2. Original benchmark configuration is not locked."
+    },
+    {
+      "id": "train14b-deepspeed-zero3",
+      "source_id": "swift-megatron",
+      "locator": "Benchmark / Dense Qwen2.5-14B / column3",
+      "profile": "a800-training",
+      "model": "Qwen2.5-14B",
+      "task": "full_parameter_sft",
+      "precision": "BF16 in linked DeepSpeed recipe; original effective dtype not locked",
+      "batch": {
+        "logical_examples": null,
+        "kind": "training_original_batch_not_locked",
+        "linked_recipe_global_batch": 16,
+        "linked_recipe_microbatch": 1,
+        "linked_recipe_gradient_accumulation": 2,
+        "linked_recipe_dp": 8,
+        "linked_recipe_tp": 1
+      },
+      "sequence": {
+        "context_tokens": 8192
+      },
+      "metrics": {
+        "iteration_s": 10.56,
+        "reported_memory_per_device_GB": 58
+      },
+      "source_row": [
+        "Deepspeed-ZeRO3",
+        "10.56s/it",
+        "8*58GB"
+      ],
+      "evidence_status": "external_report_not_locally_validated",
+      "variant": "DeepSpeed-ZeRO3",
+      "timing": "Published s/it; no original timing boundary. Do not replace with measured effective tokens/s.",
+      "recipe_sources": [
+        "swift-ds-pinned"
+      ],
+      "recipe_caveat": "ZeRO3 variant timing is published; the linked DeepSpeed script explicitly selects zero2. Original benchmark configuration is not locked."
+    }
+  ],
+  "model_config_audit": [
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "config_source": "hf-config15-pinned",
+      "architecture_source": "hf-qwen2-code",
+      "config": {
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151645,
+        "hidden_act": "silu",
+        "hidden_size": 1536,
+        "initializer_range": 0.02,
+        "intermediate_size": 8960,
+        "max_position_embeddings": 32768,
+        "max_window_layers": 21,
+        "model_type": "qwen2",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 2,
+        "rms_norm_eps": 1e-06,
+        "rope_theta": 1000000.0,
+        "sliding_window": 32768,
+        "tie_word_embeddings": true,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.43.1",
+        "use_cache": true,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "analytic_logical_parameter_count": 1543714304,
+      "count_basis": "architecture formula; tied input/output embedding counted once; no tensors loaded",
+      "hub_safetensors_parameter_entry_count": 1543714304,
+      "kv_bytes_per_sequence_token_bf16": 28672
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "config_source": "hf-config17-pinned",
+      "architecture_source": "hf-qwen3-code",
+      "config": {
+        "architectures": [
+          "Qwen3ForCausalLM"
+        ],
+        "attention_bias": false,
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "eos_token_id": 151645,
+        "head_dim": 128,
+        "hidden_act": "silu",
+        "hidden_size": 2048,
+        "initializer_range": 0.02,
+        "intermediate_size": 6144,
+        "max_position_embeddings": 40960,
+        "max_window_layers": 28,
+        "model_type": "qwen3",
+        "num_attention_heads": 16,
+        "num_hidden_layers": 28,
+        "num_key_value_heads": 8,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": null,
+        "rope_theta": 1000000,
+        "sliding_window": null,
+        "tie_word_embeddings": true,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.51.0",
+        "use_cache": true,
+        "use_sliding_window": false,
+        "vocab_size": 151936
+      },
+      "analytic_logical_parameter_count": 1720574976,
+      "count_basis": "architecture formula; tied input/output embedding counted once; no tensors loaded",
+      "hub_safetensors_parameter_entry_count": 2031739904,
+      "kv_bytes_per_sequence_token_bf16": 114688,
+      "count_discrepancy": "Hub entry count exceeds analytic logical count by exactly one embedding matrix (311164928). Do not interpret hub entries as independently verified unique runtime parameters; weights were not fetched."
+    }
+  ],
+  "analytic_memory_lower_bounds": [
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 1,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 18350080,
+      "weight_plus_kv_GiB": 2.892481803894043,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 8,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 146800640,
+      "weight_plus_kv_GiB": 3.012110710144043,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 32,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 587202560,
+      "weight_plus_kv_GiB": 3.422266960144043,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 128,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 2348810240,
+      "weight_plus_kv_GiB": 5.062891960144043,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 512,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 9395240960,
+      "weight_plus_kv_GiB": 11.625391960144043,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 512,
+      "input_tokens": 2048,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 31943819264,
+      "weight_plus_kv_GiB": 32.62539196014404,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen2.5-1.5B-Instruct",
+      "logical_batch": 512,
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3087428608,
+      "kv_bytes_bf16": 122138132480,
+      "weight_plus_kv_GiB": 116.62539196014404,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 1,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 73400320,
+      "weight_plus_kv_GiB": 3.2731800079345703,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 8,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 587202560,
+      "weight_plus_kv_GiB": 3.7516956329345703,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 32,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 2348810240,
+      "weight_plus_kv_GiB": 5.39232063293457,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 128,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 9395240960,
+      "weight_plus_kv_GiB": 11.95482063293457,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 512,
+      "input_tokens": 512,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 37580963840,
+      "weight_plus_kv_GiB": 38.20482063293457,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 512,
+      "input_tokens": 2048,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 127775277056,
+      "weight_plus_kv_GiB": 122.20482063293457,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    },
+    {
+      "model": "Qwen3-1.7B",
+      "logical_batch": 512,
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "weight_bytes_bf16": 3441149952,
+      "kv_bytes_bf16": 488552529920,
+      "weight_plus_kv_GiB": 458.20482063293457,
+      "status": "analytic_lower_bound_not_admission_or_measurement",
+      "excludes": "activations, logits, padding/block rounding, workspace, graph pools, runtime, replicas, host copies and checkpoint peaks"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "id": "local-cpu-npu",
+      "scope": "This HiSilicon aarch64 server / Ascend910_93 A3",
+      "conclusion": "No same-machine Qwen measurements. Other Arm/mobile/Xeon/910B results cannot be scaled into local throughput."
+    },
+    {
+      "id": "large-logical-batch",
+      "scope": "Independent B128/B512 examples",
+      "conclusion": "Selected public data do not establish fixed logical B128/B512 throughput or actual MM batch shapes. Service request counts, QPS and llama-bench -b do not fill this gap."
+    },
+    {
+      "id": "npu-training",
+      "scope": "Qwen full training and LoRA/QLoRA",
+      "source_ids": [
+        "mindspeed-v22-readme",
+        "mindspeed-v22-dense",
+        "mindspeed-models",
+        "mindspeed-qwen3-script",
+        "swift-npu",
+        "llamafactory-readme"
+      ],
+      "conclusion": "Model support and Qwen recipes found, but no sufficiently specified absolute Qwen training-throughput row in these inspected sources. MindSpeed v2.2 README speed/MFU rows concern Llama/Mixtral, not Qwen."
+    },
+    {
+      "id": "cpu-training",
+      "scope": "Qwen CPU full/adapter training",
+      "conclusion": "No sufficiently specified absolute throughput row located in this finite survey. Training support is not a throughput measurement."
+    },
+    {
+      "id": "adapter-training",
+      "scope": "Qwen LoRA/QLoRA across sizes",
+      "source_ids": [
+        "unsloth-qwen3",
+        "llamafactory-readme",
+        "swift-npu"
+      ],
+      "conclusion": "Unsloth publishes relative speed/VRAM claims and B2/GA4/rank32, but lacks a complete absolute tokens/s + sequence/hardware tuple; do not convert a 2x claim into throughput."
+    },
+    {
+      "id": "production-contract",
+      "scope": "Correctness / optimizer / checkpoint / resume",
+      "conclusion": "Public speed reports are not local numerical, task-quality or restart acceptance. None supplied the core-5 complete-return contract."
+    }
+  ],
+  "excluded_examples": [
+    {
+      "source_id": "ascend-benchmark",
+      "reason": "Tutorial 133.67/349.97 output tok/s examples lack a full hardware/run lock; not entered as hardware performance records."
+    },
+    {
+      "url": "https://github.com/vllm-project/vllm-ascend/issues/13573",
+      "reason": "Proposed command says 3500/1500, concurrency20, 80 requests; actual printed run says1024/128, concurrency unbounded,1000 requests. Not adopted as same-material evidence."
+    },
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/discussions/18385",
+      "reason": "CPU hardware missing and performance-regression title versus original numbers/comment are inconsistent; not adopted as a comparison row."
+    },
+    {
+      "source_id": "unsloth-qwen3",
+      "reason": "Relative-only QLoRA claim and a 30B MoE table; not a measured dense-model absolute-throughput point."
+    }
+  ],
+  "review": {
+    "kind": "document_and_data_consistency_only",
+    "measurement_count": 83,
+    "csv_metric_rows": 178,
+    "source_count": 30,
+    "checks": [
+      "source document hashes and row locators",
+      "JSON/CSV metric equality and unique identities",
+      "dynamic request counts never assigned to logical batch",
+      "five-pair medians and means recomputed",
+      "published token totals/durations checked against rounded throughput",
+      "14 analytic weight/KV lower bounds recomputed",
+      "fixed foundation upstream check passed"
+    ],
+    "model_correctness_tested_here": false
+  },
+  "analytic_parameter_formula": "vocab*h + layers*(h*head_dim*(2*attention_heads+2*kv_heads) + 3*h*intermediate + 2*h + extra) + h; tied input/output embedding counted once; Qwen2 extra=head_dim*(attention_heads+2*kv_heads) for QKV biases; Qwen3 extra=2*head_dim for Q/K norms"
+}

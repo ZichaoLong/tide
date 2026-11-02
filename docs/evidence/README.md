@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[Qwen公开吞吐调查（2026-11-02）](qwen-throughput-survey-20261102.md)：83条外部记录（CPU15/NPU13/CUDA55）、30份来源及JSON/CSV；区分总/输出token、逻辑batch/动态服务、dummy权重、全参训练与条件未明项。固定config的容量下界和待授权实测表已准备；没有下载权重或新增本机模型资格。
+
 [2026-10-31跟踪内容清理](artifact-cleanup-tracked-only-20261031.md)：固定0b07e72执行完成，释放磁盘279.519GiB及tmpfs16.040GiB，仓库降至76.410MiB；仅主worktree和Git跟踪内容，原204条结果仍可查询。41份任务终态已归档，未提交源码在仓库外保全待分析；不新增计算资格。
 
 [八卡共享资源终态](core5-platform-eight-followup-20261031.md)：固定d3de18f配置/launcher、4485697安装、eca070f库；三项全部执行/离散/精确续接通过，小训练严格通过，两项约1B数值探索。无存活后代，不改写原排队超时，不认证任意根、多卡resident或八卡容量上限。
