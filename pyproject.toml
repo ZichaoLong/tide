@@ -18,6 +18,9 @@ test = ["pytest>=8"]
 [tool.setuptools.packages.find]
 where = ["python"]
 
+[tool.setuptools.package-data]
+"tidegraph.lm" = ["catalog.json"]
+
 [tool.pytest.ini_options]
 pythonpath = ["python"]
 testpaths = ["tests"]

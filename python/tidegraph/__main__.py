@@ -50,6 +50,11 @@ def legacy_main(argv=None):
 
 
 def main(argv=None):
+    import sys
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ["lm"]:
+        from .lm.cli import main as run_lm
+        return run_lm(argv[1:])
     from .experiment.cli import main as run
     return run(argv)
 

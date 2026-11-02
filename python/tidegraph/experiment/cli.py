@@ -35,6 +35,7 @@ def parser():
     from ..version import __version__
     root.add_argument("--version", action="version", version="tidegraph "+__version__)
     commands = root.add_subparsers(dest="command", required=True)
+    commands.add_parser("lm", help="external pretrained language-model assets and experiments")
     doctor = commands.add_parser("doctor", help="inspect the installation; optionally run one explicit device operator")
     doctor.add_argument("--site")
     doctor.add_argument("--device", default="cpu", help="explicit cpu, cuda:N or npu:N (default cpu)")
