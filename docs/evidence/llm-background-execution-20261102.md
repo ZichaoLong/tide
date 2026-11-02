@@ -37,3 +37,9 @@ CPU BF16 Qwen1.5B B8/L512/输出128线程校准：4/16/64线程完整窗分别16
 每配置计算/恢复1200秒、设备/计算锁等待6小时、计算service24小时、下载service30小时。
 本机v1 memory controller仍共用user service，MemoryCurrent未设置；不把MemoryMax属性当已证明的逐unit硬隔离。
 公共Torch/CANN未改，gpu3090未连接。没有自动唤醒AI或跨重启续跑承诺；终态后按配置与记录审阅再决定后继。
+
+
+固定15dfabe的首个真实NPU检查随后完成：Qwen0.5B、BF16、B2/L16/输出4，
+逻辑npu:0/物理7，494,032,768参数实际位于NPU；独立CPU FP32输出token相同，
+严格logits/KV比较超差，最大绝对1.10617。配置/版本/参数位置/原记录hash见JSON，
+这项精度对照不认证其他大点、训练、并行放置或严格数值等价。

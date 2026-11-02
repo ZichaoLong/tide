@@ -2445,5 +2445,109 @@
     "other_stream": "stage2 qwen3",
     "project_gib": 160,
     "scope": "full-stage ceiling now active; preserve partial and stop on a new error; no retry loop"
+  },
+  "first_npu_check": {
+    "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+    "configuration": {
+      "schema": "tide-lm-experiment-v1",
+      "name": "check-qwen05-npu-b2-l16-bfloat16",
+      "model": "qwen05",
+      "task": {
+        "mode": "inference",
+        "batch": 2,
+        "input_tokens": 16,
+        "output_tokens": 4,
+        "seed": 19,
+        "input_kind": "synthetic_tokens",
+        "microbatch": 1,
+        "global_batch": 4
+      },
+      "execution": {
+        "backend": "npu",
+        "dtype": "bfloat16",
+        "engine": "transformers",
+        "threads": 16,
+        "devices": 1,
+        "placement": "single",
+        "attention": "sdpa",
+        "prefill_chunk": 64
+      },
+      "measurement": {
+        "warmup": 0,
+        "steps": 1,
+        "timeout_seconds": 1200,
+        "checkpoint": false,
+        "profile": false
+      },
+      "resources": {
+        "host_gib": 384,
+        "device_reserve_gib": 6.4,
+        "workspace_gib": 4,
+        "checkpoint_gib": 24,
+        "project_gib": 160,
+        "account_gib": 300
+      }
+    },
+    "state": "completed",
+    "numeric": "failed",
+    "discrete": "passed",
+    "seconds": 3.388810247182846,
+    "finished": "2026-11-02T10:23:56.601585+00:00",
+    "generated_token_mismatches": 0,
+    "tolerance": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    },
+    "runtime": {
+      "packages": {
+        "torch": "2.12.0+cpu",
+        "transformers": "4.57.1",
+        "accelerate": "1.11.0",
+        "peft": "0.17.1",
+        "torch-npu": "2.12.0.post2"
+      },
+      "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "parameter_locations": {
+        "npu:0": {
+          "parameters": 494032768,
+          "bytes": 988065536,
+          "trainable": 494032768
+        }
+      },
+      "host_free_before_allocation": 1877752799232,
+      "actual_parameters": 494032768,
+      "precision": {
+        "parameter_dtype": "torch.bfloat16",
+        "compute_dtype": "bfloat16",
+        "tf32": false,
+        "trainable": {}
+      },
+      "visible_physical_devices": "7",
+      "placement": "single",
+      "communication": "none",
+      "attention_requested": "sdpa",
+      "attention_effective": "sdpa",
+      "construction_seconds": 1.244699940085411,
+      "admission": [
+        {
+          "device": 0,
+          "free": 65633058816,
+          "total": 65796046848,
+          "reserve": 6871947673.6
+        }
+      ],
+      "threads": {
+        "aten": 16,
+        "interop": 1,
+        "environment": {
+          "OMP_NUM_THREADS": "16",
+          "MKL_NUM_THREADS": "16",
+          "OPENBLAS_NUM_THREADS": "16"
+        }
+      }
+    },
+    "max_absolute": 1.1061735153198242,
+    "record_sha256": "fec081099639f5cbc5c9961a9651ded732ca63577e37920a3a0726a25776fb19",
+    "scope": "real NPU BF16 vs independent CPU FP32; small scope only; not numerical qualification"
   }
 }

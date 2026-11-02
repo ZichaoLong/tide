@@ -23,7 +23,7 @@
 | unit | 当前事实 | 状态/日志相对外部根 |
 | --- | --- | --- |
 | gef-lm-cpu-20261102-b.service | 运行中；Qwen1.5B线程校准后选16线程，继续batch/长度/训练 | jobs/cpu-b；runs/cpu-b/queue.json |
-| gef-lm-npu-20261102-c.service | 已重新提交，从小检查进入首批；实际设备由协作队列分配 | jobs/npu-c；runs/npu-c/queue.json |
+| gef-lm-npu-20261102-c.service | 首个真实NPU小检查已完成（数值超差、token一致），继续首批；协作队列分配设备 | jobs/npu-c；runs/npu-c/queue.json |
 | gef-lm-qwen05-recovery-20261102-b.service | 已exit0，全部Qwen0.5B资产验证完成，无遗留后代 | jobs/qwen05-recovery-b |
 | gef-lm-olmoe-recovery-20261102-b.service | Qwen0.5B完成后显式续传OLMoE，原断流记录保留；无循环重试 | jobs/olmoe-recovery-b |
 | gef-lm-assets2-20261102-b.service | 首批终态/有效Qwen1.5B B1校准为条件；获取3B/7B/30B MoE后提交后批 | jobs/assets2-b；stage2-download-b.json |
@@ -41,6 +41,8 @@ Qwen0.5B恢复完成后，OLMoE续传与后批Qwen3B下载最多两路，不修�
 Qwen1.5B CPU FP32 B2/L16/输出4：token一致，严格logits/KV有55项超差，最大1.83105e-4；
 阈值atol1e-5/rtol1e-4不改。参考eager完整前缀，候选SDPA在线缓存；其他大点仍not_checked，
 执行/自身恢复/数值/路由分别记录。CPU B1的同栈新进程精确续接通过，不代替独立正确性。
+NPU-c已实际执行Qwen0.5B BF16 B2/L16/输出4：逻辑npu:0映射物理7，494,032,768参数位于NPU；
+输出token一致，与独立CPU FP32的严格数值比较超差（最大绝对1.10617），保留精度差异，不写成数值通过。
 CPU BF16 B8/L512/输出128线程校准单次完整窗：4线程161.754s、16线程67.664s、64线程184.702s；
 这是校准成本，不是全部CPU模型/尺度结论。
 
