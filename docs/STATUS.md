@@ -1,11 +1,22 @@
-# 当前交接 — Qwen公开调查完成，实测待授权（2026-11-02）
+# 当前交接 — Dense/MoE实测准备完成，待用户授权（2026-11-02）
 
-本轮按用户授权完成Qwen吞吐公开资料调查和小型结果入库。
-没有下载模型权重、导入模型、安装引擎或执行训练/推理；没有活动项目作业或默认待排队任务。
-下一步等待用户统一授权真实模型实测，按[调查报告的有限表](evidence/qwen-throughput-survey-20261102.md#待统一授权的有限实测方案)逐项准入。
+本轮按用户最新要求完成环境只读检查、三路线有界测速，以及Dense/MoE具体有限计划。
+没有下载模型权重、导入Torch/模型、安装引擎、执行训练/推理或提交后台任务；没有活动项目作业。
+用户要求先审阅计划再授权执行。下一步按[准备报告与待授权有限表](evidence/llm-experiment-preparation-20261102.md)等待统一授权。
 不恢复上一轮core-5矩阵，不依赖已释放的gpu3090。
 
-## 本次交付
+## 本次准备
+
+准备审阅基点`5d0e99e37cddf9db982fc9ad5aae13cd33ed0b54`；本次仅修改文档/数据。
+[报告](evidence/llm-experiment-preparation-20261102.md)和[JSON](evidence/llm-experiment-preparation-20261102.json)记录：
+
+- 9次顺序网络样本，共约31.33MiB公开非模型payload，读取后丢弃。直连/relay失败或超时；c28两类完整样本约1.06MiB/s。wheel SHA256与PyPI相同。一次权重HEAD成功、body为0，不是权重下载资格。
+- 实际公共Torch/TorchNPU2.12/CANN9.1未改；Transformers等增量依赖尚未安装。vLLM-Ascend0.30声明2.10，普通vLLM0.30声明2.13；需专用配套与私有环境，未强装或升级公共栈。
+- 首批dense/OLMoE 32个CPU/NPU主推理点，后批3B/7B和Qwen MoE 12点；B128/B512明确保留。另设真实变长、实现/放置、训练、校准/profile上限，总计最多81个流程，不是已运行配置。
+- 首批项目磁盘80GiB、全部阶段160GiB；账户300GiB暂停新大写入，保留400GiB软限/800GiB硬限余量。临时tmpfs32GiB与每任务主存384GiB联合预算。大模型不是仅按激活参数预算。
+- background.slice在线，尚未创建任何新unit。将按依赖分开下载/环境/CPU/NPU任务，单配置20分钟、设备等待6小时、计算unit24小时、大资产下载unit30小时；具体实现与任务名均待授权后生成。
+
+## 既有公开调查
 
 授权分支`graph-execution-foundation`，调查重入源码`37b567da553e988a35c65a9746a2c466aaa5ace0`；
 此次只改文档/数据，无运行实现或数学变更。固定数学仍为`0770593838a37c790a568226930567ed60f99b83`，离线校验通过。
@@ -22,8 +33,9 @@
 
 ## 下一步边界
 
-实测需用户统一授权：先CPU/NPU Qwen2.5-0.5/1.5B，增加B128/B512、序列长度与参数规模，
-以及小型全参/LoRA训练；实现/量化/输出契约分开。原公开资料不认证本机HiSilicon/910_93 A3。
+实测需用户对本次具体计划统一授权：先CPU/NPU Qwen2.5-0.5/1.5B和OLMoE，再进入3B/7B及双芯片Qwen MoE。
+新增外部LM入口尚未实现；公共`tidegraph`不能直接把现有core-5配置替换成Qwen模型名。
+实现/量化/输出契约分开；原公开资料和网络准备都不认证本机模型正确性、恢复或吞吐。
 缺少本机结果、训练绝对吞吐和真实大batch曲线的事项只维护在[ROADMAP](ROADMAP.md)。
 不能直接将core-5样例窗/s与Qwen token/s相除，不以相近参数量推断同函数、工作量或质量。
 
@@ -44,7 +56,7 @@ GPU释放见[审阅](evidence/core5-cuda-release-20261031.json)，不默认重�
 
 ## 资源与干净检出接续
 
-本轮启动账户占用32430MiB，配额400GiB软限/800GiB硬限；用`quota -vs`核对，不能用整盘df代替。
+本次准备观察账户占用32438MiB，配额400GiB软限/800GiB硬限；用`quota -vs`核对，不能用整盘df代替。
 未来tmpfs必须联合主存预算。公共TorchNPU2.12/CANN9.1和独立LibTorch2.10/CANN9.0 SDK分开，均未修改。
 模型实验环境兼容性尚未验证；不要把资料中的安装命令当本机已部署事实。
 
@@ -59,4 +71,4 @@ python -B -m json.tool docs/evidence/qwen-throughput-survey-20261102.json > /dev
 ```
 
 需要重建core-5时按[development](development.md)、[人类手册](human-workflow.md)和[复现入口](reproduction.md)。
-此时无应自动恢复的历史作业；外部Qwen实测是下一项待授权工作。
+此时无应自动恢复的历史作业；Dense/MoE实测仍停在用户授权前，不自动下载或排队。
