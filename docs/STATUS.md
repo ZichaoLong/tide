@@ -12,9 +12,11 @@
 - 共享资产、私有环境、日志位于同一仓库外根的`models/`、`env/`、`jobs/`。这些活动目录不得清理、编辑或升级。
 - 开发检查：Python3.12下资产续传/错误Range/哈希拒绝/固定目录4项通过；无Torch导入检查通过。系统Python3.9不满足项目>=3.10，原开发启动失败已定位，任务显式选公共Python3.12。
 
-当前源码尚在提交边界；首批下载和环境服务待本实现提交后启动，不能写成运行或通过。
-计划unit：`gef-lm-assets1-20261102-a.service`、`gef-lm-env-20261102-a.service`。
-LM推理/训练/检查/报告适配继续实施，尚未排计算矩阵。优化引擎配套、TP/EP仍按计划分别验证。
+固定bootstrap源码`3360eafd3f5f94dc993d5d8cefdc428186d50b02`已启动后台准备：
+- `gef-lm-assets1-20261102-a.service`正在下载首批模型。qwen05首次连接URLError保留；qwen15权重传输中，OLMoE随后独立尝试。
+- `gef-lm-env-20261102-a.service`已exit0且无遗留后代：私有Transformers4.57.1环境及依赖检查完成，仅证明安装，不证明算子或模型。
+- 日志/状态在外部根的`jobs/assets1-a/`和`jobs/env-a/`；仓库`artifacts/jobs/`仅链接这两个记录。
+LM推理/训练/独立检查/新进程恢复/CSV和HTML入口已实现；开发检查已覆盖在线缓存、全参累积/恢复、两种MoE缓存、配置与报告及子进程生命周期，固定提交资格与计算矩阵尚待启动。优化引擎配套、TP/EP仍未实现，不冒充排队。
 用户已撤回另机下载安排，本机将获取Qwen MoE；它仍属于后批，不提前绕过资源校准。
 
 ## 接续与协作边界
@@ -50,7 +52,7 @@ GPU释放见[审阅](evidence/core5-cuda-release-20261031.json)，不默认重�
 
 本次准备观察账户占用32438MiB，配额400GiB软限/800GiB硬限；用`quota -vs`核对，不能用整盘df代替。
 未来tmpfs必须联合主存预算。公共TorchNPU2.12/CANN9.1和独立LibTorch2.10/CANN9.0 SDK分开，均未修改。
-模型实验环境兼容性尚未验证；不要把资料中的安装命令当本机已部署事实。
+私有增量环境安装与pip check已通过；模型、算子和设备兼容性仍待实际检查。
 
 ```sh
 git status --short --branch
@@ -63,4 +65,4 @@ python -B -m json.tool docs/evidence/qwen-throughput-survey-20261102.json > /dev
 ```
 
 需要重建core-5时按[development](development.md)、[人类手册](human-workflow.md)和[复现入口](reproduction.md)。
-此时无应自动恢复的历史作业；Dense/MoE实测仍停在用户授权前，不自动下载或排队。
+无应自动恢复的core-5历史作业。Dense/MoE已获执行授权，准备服务状态见上；计算矩阵仍在实施，尚未排队。

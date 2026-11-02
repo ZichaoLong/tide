@@ -70,9 +70,10 @@ applyFilters();
 """
 
 
-def render_html(rows):
+def render_html(rows, *, filters=FILTERS, groups=None, title="Tidegraph results"):
+    title = _escape(title)
     controls = []
-    for key, label in FILTERS:
+    for key, label in filters:
         values = sorted({_text(row.get(key)) for row in rows} - {""})
         options = '<option value="">All</option>' + "".join(
             f'<option value="{_escape(value)}">{_escape(value)}</option>' for value in values)
@@ -82,7 +83,7 @@ def render_html(rows):
         '<label>Maximum parameters<input id="params-max" inputmode="numeric" pattern="[0-9]*"></label>',
         '<button type="reset">Reset filters</button>',
     ]
-    groups = (
+    groups = groups or (
         ("Model", (("topology", "topology"), ("graph", "graph"), ("parameters", "parameters"))),
         ("Workload", (("logical_batch", "B"), ("positions", "positions"), ("span", "span"),
                       ("mode", "task"), ("dtype", "payload"), ("scoring_dtype", "scoring"),
@@ -102,14 +103,14 @@ def render_html(rows):
     body = []
     for row in rows:
         attrs = " ".join(f'data-{key}="{_escape(row.get(key))}"' for key in
-                         [key for key, _ in FILTERS] + ["parameters"])
+                         [key for key, _ in filters] + ["parameters"])
         cells = "".join("<td>"+_lines(row, fields)+"</td>" for _, fields in groups)
         detail = html.escape(json.dumps(row, ensure_ascii=False, indent=2, allow_nan=False))
         cells += '<td><details><summary>Details</summary><pre>'+detail+'</pre></details></td>'
         body.append(f'<tr {attrs}>{cells}</tr>')
     headings = "".join(f'<th scope="col">{title}</th>' for title, _ in groups)
     return ('''<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Tidegraph results</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>REPORT_TITLE</title>
 <style>body{font:14px system-ui,sans-serif;margin:1.5em;color:#17212b;background:#fafbfc}
 h1{margin-bottom:.3em}p{max-width:90em;line-height:1.5}form{display:flex;flex-wrap:wrap;gap:.7em;
 padding:1em;background:#edf1f5;border-radius:6px}label{display:flex;flex-direction:column;gap:.3em}
@@ -119,7 +120,7 @@ table{border-collapse:collapse;width:100%;background:white}th,td{border:1px soli
 text-align:left;vertical-align:top}th{position:sticky;top:0;background:#e8edf3;z-index:1}
 td{min-width:8em;line-height:1.5}.label{color:#526578}pre{white-space:pre-wrap;min-width:24em;
 max-width:70em;max-height:35em;overflow:auto;overflow-wrap:anywhere}summary{cursor:pointer}
-tr[hidden]{display:none}</style></head><body><h1>Tidegraph results</h1>
+tr[hidden]{display:none}</style></head><body><h1>REPORT_TITLE</h1>
 <p>Execution, independent checks and exact resume are separate. Unmeasured is never passed.
 Compare timings only for matching models, inputs, work, precision, return contracts and resources.
 Exploratory costs are not qualified throughput. Expand Details for complete configuration,
@@ -129,4 +130,4 @@ work counts, memory, failures and source identities.</p>
             f'<p id="filter-error" role="alert"></p><p id="count" role="status">{len(rows)} records</p><div class="table-scroll"><table><thead><tr>'
             + headings + '<th scope="col">Full record</th></tr></thead><tbody id="records">'
             + "".join(body) + '</tbody></table></div><script type="text/javascript">'
-            + FILTER_SCRIPT + '</script></body></html>\n')
+            + FILTER_SCRIPT + '</script></body></html>\n').replace('REPORT_TITLE', title)

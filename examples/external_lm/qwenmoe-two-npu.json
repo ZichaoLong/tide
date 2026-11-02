@@ -1,0 +1,8 @@
+{
+  "schema": "tide-lm-experiment-v1",
+  "name": "qwenmoe-two-npu-b32-l512",
+  "model": "qwenmoe",
+  "task": {"mode": "inference", "batch": 32, "input_tokens": 512, "output_tokens": 128},
+  "execution": {"backend": "npu", "devices": 2, "placement": "layer_split", "dtype": "bfloat16", "threads": 16},
+  "measurement": {"warmup": 1, "steps": 1}
+}

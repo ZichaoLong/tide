@@ -1,0 +1,8 @@
+{
+  "schema": "tide-lm-experiment-v1",
+  "name": "qwen15-lora-npu",
+  "model": "qwen15",
+  "task": {"mode": "lora", "batch": 4, "global_batch": 4, "microbatch": 1, "input_tokens": 512},
+  "execution": {"backend": "npu", "dtype": "bfloat16", "threads": 16},
+  "measurement": {"warmup": 1, "steps": 3, "checkpoint": true}
+}
