@@ -1,0 +1,6188 @@
+{
+  "schema": "tide-lm-terminal-evidence-v1",
+  "observed": "2026-11-03T01:55:29.762662+00:00",
+  "scope": "read-only terminal audit; no new model execution or download; completion is not strict qualification",
+  "expected_flows": 80,
+  "counts": {
+    "dependency_failed": 32,
+    "completed": 43,
+    "process_failed": 4,
+    "failed": 1
+  },
+  "measurement_counts": {
+    "dependency_failed": 30,
+    "completed": 36,
+    "process_failed": 4,
+    "failed": 1
+  },
+  "check_counts": {
+    "dependency_failed": 2,
+    "completed": 7
+  },
+  "completed_training": 9,
+  "exact_resumes_passed": 6,
+  "all_supervisors_and_recorded_workloads_observed_absent": true,
+  "jobs": {
+    "qwen05-recovery-b": {
+      "state": "passed",
+      "source": "3360eafd3f5f94dc993d5d8cefdc428186d50b02",
+      "started": "2026-11-02T09:53:37.776112+00:00",
+      "finished": "2026-11-02T10:12:24.458462+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "npu-b": {
+      "state": "cancelled",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T09:54:03.011228+00:00",
+      "finished": "2026-11-02T10:11:18.612568+00:00",
+      "exit_code": 143,
+      "termination_reason": "signal",
+      "remaining_live_pids": []
+    },
+    "qualify-c": {
+      "state": "passed",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "started": "2026-11-02T10:11:17.588950+00:00",
+      "finished": "2026-11-02T10:11:22.919145+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "cpu-b": {
+      "state": "passed",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T09:54:02.820022+00:00",
+      "finished": "2026-11-02T12:33:03.958868+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "env-a": {
+      "state": "passed",
+      "source": "3360eafd3f5f94dc993d5d8cefdc428186d50b02",
+      "started": "2026-11-02T09:00:49.588465+00:00",
+      "finished": "2026-11-02T09:02:46.241405+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "qualify-a": {
+      "state": "passed",
+      "source": "9cdf7d9265d96a2446da99e09de13483cf290a54",
+      "started": "2026-11-02T09:45:13.843703+00:00",
+      "finished": "2026-11-02T09:45:48.977032+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "npu-stage2-b": {
+      "state": "passed",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T12:02:48.880829+00:00",
+      "finished": "2026-11-02T12:15:51.259127+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "olmoe-recovery-b": {
+      "state": "failed",
+      "source": "3360eafd3f5f94dc993d5d8cefdc428186d50b02",
+      "started": "2026-11-02T10:20:34.121937+00:00",
+      "finished": "2026-11-02T10:29:10.604939+00:00",
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "assets2-a": {
+      "state": "cancelled",
+      "source": "9cdf7d9265d96a2446da99e09de13483cf290a54",
+      "started": "2026-11-02T09:46:55.287198+00:00",
+      "finished": "2026-11-02T09:49:03.589582+00:00",
+      "exit_code": 143,
+      "termination_reason": "signal",
+      "remaining_live_pids": []
+    },
+    "npu-a": {
+      "state": "failed",
+      "source": "9cdf7d9265d96a2446da99e09de13483cf290a54",
+      "started": "2026-11-02T09:46:55.084011+00:00",
+      "finished": "2026-11-02T09:46:56.641437+00:00",
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "assets1-a": {
+      "state": "failed",
+      "source": "3360eafd3f5f94dc993d5d8cefdc428186d50b02",
+      "started": "2026-11-02T09:00:49.317610+00:00",
+      "finished": "2026-11-02T09:57:41.792811+00:00",
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "assets2-b": {
+      "state": "failed",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T09:54:03.205608+00:00",
+      "finished": "2026-11-02T12:02:50.153763+00:00",
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "cpu-a": {
+      "state": "failed",
+      "source": "9cdf7d9265d96a2446da99e09de13483cf290a54",
+      "started": "2026-11-02T09:46:54.887216+00:00",
+      "finished": "2026-11-02T09:46:56.388338+00:00",
+      "exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "qualify-b": {
+      "state": "passed",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T09:52:01.251547+00:00",
+      "finished": "2026-11-02T09:52:32.739489+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "npu-c": {
+      "state": "passed",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "started": "2026-11-02T10:13:06.337085+00:00",
+      "finished": "2026-11-02T12:33:26.608301+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    },
+    "cpu-stage2-b": {
+      "state": "passed",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "started": "2026-11-02T12:02:48.730264+00:00",
+      "finished": "2026-11-02T12:29:45.837489+00:00",
+      "exit_code": 0,
+      "termination_reason": "exit",
+      "remaining_live_pids": []
+    }
+  },
+  "assets": {
+    "qwen15": {
+      "state": "complete",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "current_file": "vocab.json",
+      "current_total": 2776833,
+      "current_bytes": 2776833,
+      "finished": "2026-11-02T09:42:09.969275+00:00",
+      "verified_bytes": 3098973447,
+      "partial_bytes": 0
+    },
+    "qwen05": {
+      "state": "complete",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "current_file": "vocab.json",
+      "current_total": 2776833,
+      "current_bytes": 2776833,
+      "finished": "2026-11-02T10:12:23.353673+00:00",
+      "verified_bytes": 999604126,
+      "partial_bytes": 0
+    },
+    "qwen7": {
+      "state": "failed",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "current_file": "model-00001-of-00004.safetensors",
+      "current_total": 3945441440,
+      "current_bytes": 469762048,
+      "error": "asset ended before its published size",
+      "finished": "2026-11-02T11:40:28.328723+00:00",
+      "verified_bytes": 1691847,
+      "partial_bytes": 486008721
+    },
+    "qwenmoe": {
+      "state": "failed",
+      "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "current_file": "model-00001-of-00016.safetensors",
+      "current_total": 3998893112,
+      "current_bytes": 1571815424,
+      "error": "asset ended before its published size",
+      "finished": "2026-11-02T12:02:48.609844+00:00",
+      "verified_bytes": 1778685,
+      "partial_bytes": 1575926554
+    },
+    "qwen3": {
+      "state": "complete",
+      "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "current_file": "vocab.json",
+      "current_total": 2776833,
+      "current_bytes": 2776833,
+      "finished": "2026-11-02T11:33:05.562616+00:00",
+      "verified_bytes": 6183464935,
+      "partial_bytes": 0
+    },
+    "olmoe": {
+      "state": "failed",
+      "revision": "b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "current_file": "model-00001-of-00003.safetensors",
+      "current_total": 4997744872,
+      "current_bytes": 1362996606,
+      "error": "asset ended before its published size",
+      "finished": "2026-11-02T10:29:09.428438+00:00",
+      "verified_bytes": 11288,
+      "partial_bytes": 1370613967
+    }
+  },
+  "results": [
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b1-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "468bd679bb63ab071e3eedc75edfbb58d4e33ddcf3a60dbcae604586790825f3",
+      "config_id": "32846f50b757aba0160869fdf42e325a6668070f836fd2ec3b054c3fd6ca72d0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b128-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "5abbea2e935d0ba607c6d3529be07d85759c6a90418f988bcc9185a5bce33cb1",
+      "config_id": "5ded04ee15882f4ebf59568818e77aad41898c98a5745fba1fa673f67b1a0a4f",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b32-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b32-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "dd9395a3f6ea4ff476c6de32a7c4e173e4d7d8b4b61f780a9aa73b77c1622ec5",
+      "config_id": "6d3fb219de8ab3aa7a98a20e6f82f35d7d64f73e8eb0199671aa257dd46f5d9f",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b512-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b512-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 512,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "ef3dac232fb9c91e0b9ab990dbc9657e2068fb9687374c0aa2c817a6f61e6a26",
+      "config_id": "2532f7c15ffaf62df653973649f5f9c95ec10c425e87c02c7f75315c8b2752a1",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b8-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b8-l128",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "0915e926fb9e366dd0d50ba8020a8f406baba5885bccda115e3c1c2de7fcb135",
+      "config_id": "13dc53a5a35fbedba8a0c1dd64191779feca0e38bab5a03b0402d768ba5268dc",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b8-l2048",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b8-l2048",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "0d17391e5a7f373517fba0fc313d02cbc04c2f57d072593a68889b81b5cf25d6",
+      "config_id": "950190d0d338cafb1f7ae9d65163cbda2f830a3fabb1d4e04830acf90a91e13b",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-olmoe-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-cpu-b8-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "c213262865b981c65424606d5f61eff1efa50f55e615bedf5e510976c09eb48f",
+      "config_id": "7e7c6bd43ce49a3f7fcef7b8dce0583dc6a38b9785541ef8767780bec79d635c",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen05-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen05-cpu-b8-l512",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 27.115526523441076,
+          "prefill_seconds": 5.165544778108597,
+          "decode_seconds": 21.94998174533248,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 37.764341367841894,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 792.9463737026748,
+          "decode_tokens_per_s": 46.287054439853726,
+          "mean_tpot_seconds": 0.17283450193175182
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 2729357312,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "a3fb7f44a252f4cc43414374335c32acd088e39282096cbb6775c3e02f621160",
+      "config_id": "d557506d014899df95bb6fce31c375cbb17602b833bbf3acee1331d2ba794b6a",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b1-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 81.45816391706467,
+          "prefill_seconds": 4.1726168021559715,
+          "decode_seconds": 77.2855471149087,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 1.5713587668182794,
+          "input_tokens": 512,
+          "prefill_tokens_per_s": 122.70477359326455,
+          "decode_tokens_per_s": 1.6432567891532877,
+          "mean_tpot_seconds": 0.6085476150780212
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 4974243840,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "98fc02e875ef364fa5877c178c5606eda2da3b0bd5d2c6a16cbdec890499fae0",
+      "config_id": "6a020954465f20d3bdbc5c40945969c2d636d793eef2a55c0ecf7fc7a700ed1e",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b128-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 580.32768086344,
+          "prefill_seconds": 184.4113865122199,
+          "decode_seconds": 395.91629435122013,
+          "output_tokens": 16384,
+          "physical_output_rows": 16384,
+          "output_tokens_per_s": 28.23232552964401,
+          "input_tokens": 65536,
+          "prefill_tokens_per_s": 355.3793572050243,
+          "decode_tokens_per_s": 41.05918405464562,
+          "mean_tpot_seconds": 3.1174511366237807
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 9013383168,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "f53f401c53cae0c4551d43190581c94d235584c71ee458809b85711d069a896c",
+      "config_id": "e0195d6a1bcc488aa0abac0c8dc2c7044d1aa1cd894788328999b8bcedf4fd14",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b32-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b32-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 172.65335972607136,
+          "prefill_seconds": 49.81113217771053,
+          "decode_seconds": 122.84222754836082,
+          "output_tokens": 4096,
+          "physical_output_rows": 4096,
+          "output_tokens_per_s": 23.723836052183625,
+          "input_tokens": 16384,
+          "prefill_tokens_per_s": 328.92245736449064,
+          "decode_tokens_per_s": 33.08308617572141,
+          "mean_tpot_seconds": 0.9672616342390616
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5807259648,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "0a6462329f305f7a069d8ab11837bbb9287e2bf3f970086c33a6511738575f7a",
+      "config_id": "0ffda1986122e7b147f189de3d5de9887e5c93ab7fdf656c7aee9dbf78ac87eb",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b512-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b512-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 512,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "process_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "bounded child exited 124; inspect process/status.json",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "failed",
+        "exit_code": 124,
+        "termination_reason": "timeout",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "87f368cd90d7d9b4f02a20de46eef7904f76bbfb0d1e4f9300c207a05cec7821",
+      "config_id": "e4f86e5afed2591cf187733d4dad8c0cd0ad5d2889a971c2ca04a93028b32acf",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b8-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b8-l128",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 42.372981797903776,
+          "prefill_seconds": 3.1891535855829716,
+          "decode_seconds": 39.183828212320805,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 24.16634271536345,
+          "input_tokens": 1024,
+          "prefill_tokens_per_s": 321.08833034230133,
+          "decode_tokens_per_s": 25.92906426842013,
+          "mean_tpot_seconds": 0.30853408041197483
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5065134080,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "9779d0e0cb4807fb5f0ddd6dd6fac34006654f2966325f96cd21c5f9f4417142",
+      "config_id": "caccf82b77c1a8c2b740a37d6d596bf9da8b48bd77e4ac9e06dcecdfc62d2a92",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b8-l2048",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b8-l2048",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 205.9635797664523,
+          "prefill_seconds": 98.16567644104362,
+          "decode_seconds": 107.7979033254087,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 4.9717527786278595,
+          "input_tokens": 16384,
+          "prefill_tokens_per_s": 166.9015137876619,
+          "decode_tokens_per_s": 9.425044167445527,
+          "mean_tpot_seconds": 0.8488023883890449
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5703671808,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "a74db45a7337d3245c8e4e4320292f8aea7f5ce99fa71e8e71a15cd4b4448997",
+      "config_id": "7d17d20e63de2a89208307399f5a0406f07f0f36eff1e585cbc79e22f7967d78",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b8-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 64.5692361779511,
+          "prefill_seconds": 15.597079262137413,
+          "decode_seconds": 48.972156915813684,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 15.85894553836572,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 262.61327080277255,
+          "decode_tokens_per_s": 20.74648257267022,
+          "mean_tpot_seconds": 0.3856075347701865
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5166231552,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d250717ea66461f492ca3d60563d0ed3a5b543616eadff919ad65f10a38f9675",
+      "config_id": "bd8992a627d6bd1600e33827125dd32e4733c9e29d6eb89cab00fd72f577f11f",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "main-qwen15-cpu-b8-l8192",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-cpu-b8-l8192",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 8192,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "process_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "bounded child exited 124; inspect process/status.json",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "failed",
+        "exit_code": 124,
+        "termination_reason": "timeout",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "41e2e7eadd6fe73456bf50626f047f8091184bd78f4a8dd33d5e8b2e67573afb",
+      "config_id": "ed7f4ebf159bbed0c0e36b49785af7712cf20846fb4cbdafaec7e36f375d4148",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "precision-qwen15-cpu-b1-l128-float32",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "precision-qwen15-cpu-b1-l128-float32",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 27.880941316485405,
+          "prefill_seconds": 0.6402658149600029,
+          "decode_seconds": 27.240675501525402,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 4.590949729674885,
+          "input_tokens": 128,
+          "prefill_tokens_per_s": 199.91696731145345,
+          "decode_tokens_per_s": 4.662145767746778,
+          "mean_tpot_seconds": 0.21449350788602678
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 10710532096,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "21abe4ee4ffcf8c1c110714536db0ce1d8ddb2ff33396bb7a6f2d9a61018a55c",
+      "config_id": "0e033616d438a1d6f17b04a7ad1e35f741ccf6eb4080469af43caf98a3b3b1b7",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "profile-olmoe-cpu-b32-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "profile-olmoe-cpu-b32-l128",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 128,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": true
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "967915868d456ab2276f75336c58e90de2e94462e8c25d8ff49afe66f97b15dd",
+      "config_id": "f93cdfad71d48eaecc86c1b03640cd8ed3dd4d00451a21653630775e2242c74c",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "profile-qwen15-cpu-b32-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "profile-qwen15-cpu-b32-l128",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 128,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": true
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 11.429137401282787,
+          "prefill_seconds": 9.971167039126158,
+          "decode_seconds": 1.4579703621566296,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 11.199445374209386,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 410.7844130910238,
+          "decode_tokens_per_s": 65.8449598783317,
+          "mean_tpot_seconds": 0.48599012071887654
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5438418944,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "1122f9e2478cd8adc245314eb4be8bc6138754bd614bd7e7751a64c428589bae",
+      "config_id": "1f64adf0448cf0c2573547e155fb474923a49b3b9ddbfec061e4365b1a7f08e8",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "threads-qwen15-cpu-b8-l512-t16",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "threads-qwen15-cpu-b8-l512-t16",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 67.66449207812548,
+          "prefill_seconds": 16.07633039727807,
+          "decode_seconds": 51.588161680847406,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 15.133491267734469,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 254.78451230969387,
+          "decode_tokens_per_s": 19.69444087357739,
+          "mean_tpot_seconds": 0.40620599748698744
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5163528192,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "f54b47b92eb3c208e077750bb1e9a06ab830d015e6a202a086f6ef07970d2ca6",
+      "config_id": "facef5c8040ffa90e20b9b7582ba3ceae6d7a86bb5c32009c6b4352623cf5fa8",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "threads-qwen15-cpu-b8-l512-t4",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "threads-qwen15-cpu-b8-l512-t4",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 4,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 161.7538579851389,
+          "prefill_seconds": 28.800516039133072,
+          "decode_seconds": 132.95334194600582,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 6.3306063469229885,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 142.21967392648477,
+          "decode_tokens_per_s": 7.641778575318638,
+          "mean_tpot_seconds": 1.0468767082362662
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5136392192,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "5c94f9caf2c315075adf62b0c762300788a890445a3513f42501d7fe4949899f",
+      "config_id": "a6fd52535e9776f403b1e7c4621edd3d2afde035ba17f7ea314968173d2ea2a0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "threads-qwen15-cpu-b8-l512-t64",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "threads-qwen15-cpu-b8-l512-t64",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 64,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 184.70208913460374,
+          "prefill_seconds": 25.376478627324104,
+          "decode_seconds": 159.32561050727963,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 5.54406290041337,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 161.4093137252556,
+          "decode_tokens_per_s": 6.376878122513634,
+          "mean_tpot_seconds": 1.2545323661990522
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 5294120960,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "56888552fc3936eed8dbb03a3e350876f21c475359c7ac7b46aee709ba8d7ce4",
+      "config_id": "784584ff2d428b0ac57732ed3f019d79a08b2e167666e343575b2c4c5e396ab0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-olmoe-cpu-b4-l512-lora-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-olmoe-cpu-b4-l512-lora-m1",
+        "model": "olmoe",
+        "task": {
+          "mode": "lora",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "c25bd20d8c78d258638b122fb71f719f89a9f0f22047ad9f8c1d25801d129ddc",
+      "config_id": "d1228299287261a714c45350bf98a8b19f771e6705be58eba21dd61ff343ef94",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen05-cpu-b4-l2048-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-cpu-b4-l2048-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "process_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "bounded child exited 124; inspect process/status.json",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "failed",
+        "exit_code": 124,
+        "termination_reason": "timeout",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d3cfdc2c52bda7a12afee7d28d57e4961705405ef817d08d6b33f20c0d262626",
+      "config_id": "2010adfdf301a44695a09c8df1f4dc48e50dc8f41a480c21c4438a4596e3dd94",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen05-cpu-b4-l2048-full-m4",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-cpu-b4-l2048-full-m4",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 4,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "process_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "bounded child exited 124; inspect process/status.json",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "failed",
+        "exit_code": 124,
+        "termination_reason": "timeout",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "a6bc529322567acf7dc3299ffa1bb153ae7cc5f23eef4262c1b8c8b6925b2701",
+      "config_id": "18884ff809ceb9783c6fc16e2630727bba307c65738810ec134fd9faa1ab4011",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen05-cpu-b4-l512-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-cpu-b4-l512-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 23.269471637904644,
+          "loss": 13.321596145629883,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 87.84041304446468,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 23.596016228199005,
+          "loss": 12.479411125183105,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 86.6247920933902,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 23.029287938028574,
+          "loss": 12.098407745361328,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 88.75654364565546,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 21733728256,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "bf4661f427dbc091666af59a14d658a330ebfba4923a5853570257836d23bec1",
+      "config_id": "a10a27a3d56503b29d77a85461a99c522e7f6de7bc128f7043617f8b4de417b3",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen05-cpu-b4-l512-full-m4",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-cpu-b4-l512-full-m4",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 4,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 19.991099786013365,
+          "loss": 13.320910453796387,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 102.24550034161055,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 20.237446703016758,
+          "loss": 12.482415199279785,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 101.00088365867344,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 20.06939009204507,
+          "loss": 12.098197937011719,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 101.84664260475873,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 18255998976,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "c9e2ae53c1d870ffca7699b45b8162406cbce7a9cbbb620f7c4d0615541ab3bf",
+      "config_id": "312b8a020599cbfed0c165cf69b04a502956e48928ba1debc31c8c9cd1824706",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen15-cpu-b4-l512-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen15-cpu-b4-l512-full-m1",
+        "model": "qwen15",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 54.15932543948293,
+          "loss": 13.690793991088867,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 37.74049959842917,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 56.12200531363487,
+          "loss": 13.11237907409668,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 36.42065155329382,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 60.443431697785854,
+          "loss": 12.04831314086914,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 33.81674307011386,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 35797889024,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d838843b62b99f37cb2a7597c0b6cf4b5c96bfc5fbe6adf74268d8f29c7e350f",
+      "config_id": "f65e58ae369ebbc6221de05dda57d2c7c5f4b455132744323c5f90a47b531a16",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "train-qwen15-cpu-b4-l512-lora-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen15-cpu-b4-l512-lora-m1",
+        "model": "qwen15",
+        "task": {
+          "mode": "lora",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 48.88707731664181,
+          "loss": 13.594435691833496,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 41.81064019763348,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 48.58447165414691,
+          "loss": 13.579851150512695,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 42.07105543002309,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 48.002794697880745,
+          "loss": 13.558090209960938,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 42.58085415369034,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 7152721920,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "f82544d2a0b328fff662be034066922c33bd890a561fe23175983b308cb4ea1b",
+      "config_id": "28170cab42e84c495230cb0c1871ab909185b1dd0b6629c99844ad8d9e408740",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "varied-olmoe-cpu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "varied-olmoe-cpu-b128-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "varied_text",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "09b0dd1e5fa854cae00e7e0dd9d2b4088619e2681d1385d93640c6863820c0ed",
+      "config_id": "27efc0ee97b5836e5ff5294cab8c246dad818ec111ab870f1852669260d9c1bb",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "varied-qwen15-cpu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "varied-qwen15-cpu-b128-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "varied_text",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 586.5374169461429,
+          "prefill_seconds": 184.59961860254407,
+          "decode_seconds": 401.93779834359884,
+          "output_tokens": 16384,
+          "physical_output_rows": 16384,
+          "output_tokens_per_s": 27.933426797057027,
+          "input_tokens": 38016,
+          "prefill_tokens_per_s": 205.93758691263125,
+          "decode_tokens_per_s": 40.444068875810146,
+          "mean_tpot_seconds": 3.164864553886605
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 9070837760,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "942b072de13750fe8d4c84cab2d0084a69dfcb0deeb15c1175152cb6dd0182ea",
+      "config_id": "bcd552a7274fa2388d961bfe6bcaf02d48fe9ec0d71e8c4abc8c9f263519b94a",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "check-olmoe-cpu-b2-l16-float32",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-olmoe-cpu-b2-l16-float32",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "15c2aa8bccb32338ecf4b88b477f5593b8dfa1e33e8d28ec2943ecb82f628cb6",
+      "config_id": null,
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "check-qwen05-cpu-b2-l16-float32",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-qwen05-cpu-b2-l16-float32",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "passed",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d672abca455af09a3e5ffa0331e44fc551f1ac93e112f51196784da7033160b1",
+      "config_id": null,
+      "generated_token_mismatches": 0
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "check-qwen15-cpu-b2-l16-float32",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-qwen15-cpu-b2-l16-float32",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "passed",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d1e25305d1f023acf482e79a6a85cf8f17f212ae947aa2d9720d1c081b8029e8",
+      "config_id": null,
+      "generated_token_mismatches": 0
+    },
+    {
+      "queue": "cpu-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "traincheck-qwen05-cpu-b1-l16-full-m1",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "traincheck-qwen05-cpu-b1-l16-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 1,
+          "input_tokens": 16,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 1
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "not_checked",
+        "optimizer": "failed"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "a7acd7f692c189979d44f5ace8abf99b50ebb12b3c449232d69f6208b701811b",
+      "config_id": null,
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b1-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "654f0421d50905ed48052e86dc2db2f98bd00d26027c72875131aac0ffe12c94",
+      "config_id": "73fad89a831b53db0324a7e70387d2b9bee60161ab8ef1091c222be4f52ee4b4",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b128-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "1d16ef1f9741b60c2e484945e2d5b5b68bc8a3a122ed743a5dd4e545cc867d60",
+      "config_id": "e0026bd4aa33fe4605a1146ba7974a9e259441832e7865fe57a7fc25475cd3ed",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b32-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b32-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "19ac94b1130f3b2592b9f5a8fcc8fb1c5876ff0b7d0230402ba1dac633a63ccb",
+      "config_id": "dce7a1781396d47bd145704159a62ec953f550aa6d98526c8c8cf42fb3f25302",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b512-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b512-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 512,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "e4bbb09307fdd9af05bed3ead5cc1e225ef5352f6dd9444bf21750d4d3f5a2bd",
+      "config_id": "256e50724133d2c56a9e3efdc2f6964b6f35118452fef426b85eba1a981cd5e0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b8-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b8-l128",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "ff65411f5ddec74a9a96410adc518129bb5a87b012236bff857eaead671c2b87",
+      "config_id": "ef424e4445f061b0b271e7cb9b0b070487e61eab296bbeb9ab0dcf81d7439e7c",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b8-l2048",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b8-l2048",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "cc82f1eba49f8e7e990d8401c79e9de83a5f361cc2c97f6049048e4c1acb897e",
+      "config_id": "97665f767ff18de8dac32f37b73421a805ed5bd1da89cb9b8d47192f8434b150",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-olmoe-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-olmoe-npu-b8-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "f1c17978d6cca6b6c71787e53b9272ad870f08d906eb5c41daf3706d8c56fe48",
+      "config_id": "6e542074e76bec1bedc175f396a20a6119b9547785acb2b2d941532247e761a6",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen05-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen05-npu-b8-l512",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.140219885855913,
+          "prefill_seconds": 0.2623370476067066,
+          "decode_seconds": 2.8778828382492065,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 326.09181433831145,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 15613.50193336279,
+          "decode_tokens_per_s": 353.03730454089487,
+          "mean_tpot_seconds": 0.02266049478936383
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 1113725952,
+          "reserved": 1207959552
+        }
+      ],
+      "host_peak_rss_bytes": 2842017792,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "a15eac1c20f0839b0df36799651bc157b59d0d071ae5d8c7739236c8bf91c94c",
+      "config_id": "462ca4ef683e1a097eb0be11d8b11267dca12511d4d7a373ffc00539741549ce",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b1-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.4647980742156506,
+          "prefill_seconds": 0.24235611036419868,
+          "decode_seconds": 3.222441963851452,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 36.94298982458775,
+          "input_tokens": 512,
+          "prefill_tokens_per_s": 2112.593733372747,
+          "decode_tokens_per_s": 39.41110543639086,
+          "mean_tpot_seconds": 0.025373558770483872
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3177621504,
+          "reserved": 3416260608
+        }
+      ],
+      "host_peak_rss_bytes": 4945481728,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "ad341edd1bc103d5611edce0aaa3b74aa00ff4cda70e79e377edefe9c4a16d1a",
+      "config_id": "9b57e466f3cf91e0fbe6b383ffa1dd27cb835c0fc9ca47b12cde930114c655f0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b128-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 6.339432887732983,
+          "prefill_seconds": 1.0379287004470825,
+          "decode_seconds": 5.3015041872859,
+          "output_tokens": 16384,
+          "physical_output_rows": 16384,
+          "output_tokens_per_s": 2584.4583088344693,
+          "input_tokens": 65536,
+          "prefill_tokens_per_s": 63141.138665662394,
+          "decode_tokens_per_s": 3066.299568146195,
+          "mean_tpot_seconds": 0.0417441274589441
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 6003466240,
+          "reserved": 17098080256
+        }
+      ],
+      "host_peak_rss_bytes": 4940488704,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "31c4ac5751fc7eb6e12c113a5e4d8aeaf88d4425fc366bb5cfbee0750547b49d",
+      "config_id": "b8d6c8fade7b3c3480b6849faa17ea4526d70b57d9ac57c8b96c5a25bc0c8794",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b32-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b32-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.7015961296856403,
+          "prefill_seconds": 0.3310100585222244,
+          "decode_seconds": 3.370586071163416,
+          "output_tokens": 4096,
+          "physical_output_rows": 4096,
+          "output_tokens_per_s": 1106.5496765439548,
+          "input_tokens": 16384,
+          "prefill_tokens_per_s": 49496.98529750255,
+          "decode_tokens_per_s": 1205.7250324413878,
+          "mean_tpot_seconds": 0.026540047804436345
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3835801600,
+          "reserved": 4599054336
+        }
+      ],
+      "host_peak_rss_bytes": 4941344768,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "495db2092a5b7ab81c59d8f6202d3ae019b377a36cdc9deb2ba2bc090eb7e1d1",
+      "config_id": "6132bc8e198358dc58893a859a64864c38b390b915f7dc3b389b4231a71cb66e",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b512-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b512-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 512,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 24.923875719308853,
+          "prefill_seconds": 4.324717082083225,
+          "decode_seconds": 20.599158637225628,
+          "output_tokens": 65536,
+          "physical_output_rows": 65536,
+          "output_tokens_per_s": 2629.4465892087724,
+          "input_tokens": 262144,
+          "prefill_tokens_per_s": 60615.294601820446,
+          "decode_tokens_per_s": 3156.6337802987896,
+          "mean_tpot_seconds": 0.1621980995057136
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 14675576320,
+          "reserved": 65185775616
+        }
+      ],
+      "host_peak_rss_bytes": 4947619840,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "001b87df5c50beb5cafd0606a0e79ca1477503207c84f407abaa7349c1ceafdf",
+      "config_id": "537c5217de57550dca4a97361895f7b13755820979086d004f4be43b543f92af",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b8-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b8-l128",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.5061413757503033,
+          "prefill_seconds": 0.0689583458006382,
+          "decode_seconds": 3.437183029949665,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 292.05895891202255,
+          "input_tokens": 1024,
+          "prefill_tokens_per_s": 14849.54414307489,
+          "decode_tokens_per_s": 295.59089264294386,
+          "mean_tpot_seconds": 0.027064433306690276
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3185025536,
+          "reserved": 3437232128
+        }
+      ],
+      "host_peak_rss_bytes": 4944101376,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "029ab22cff132d96687ac9ad93a5082a02862f976de9555c0ff6c169c376ce63",
+      "config_id": "b17e61a9f2e6b9d963b58946e849b150e71874a2b124f8558007a7e4ad512224",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b8-l2048",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b8-l2048",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 4.297795370221138,
+          "prefill_seconds": 0.9914070703089237,
+          "decode_seconds": 3.3063882999122143,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 238.26169274953435,
+          "input_tokens": 16384,
+          "prefill_tokens_per_s": 16526.006814632383,
+          "decode_tokens_per_s": 307.2839327513272,
+          "mean_tpot_seconds": 0.02603455354261586
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3726288384,
+          "reserved": 4154458112
+        }
+      ],
+      "host_peak_rss_bytes": 4945317888,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "ae72cd51e055b19b2fba84a7d33b067b64c6a80be0d5fb4159dcbc7a984745af",
+      "config_id": "0c17c4cf3731d3b31fcf4c1727cec04bf90d5e8603d4c9b97ca57806baa94387",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b8-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.5815500989556313,
+          "prefill_seconds": 0.255625382065773,
+          "decode_seconds": 3.3259247168898582,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 285.90972392054357,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 16023.447933453219,
+          "decode_tokens_per_s": 305.47895291811744,
+          "mean_tpot_seconds": 0.02618838359755794
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3293117952,
+          "reserved": 3594518528
+        }
+      ],
+      "host_peak_rss_bytes": 4943122432,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "616b1896f99fa0a8c4ad4121defa3a1f39bf3409b6c73682e115df2e0524ba25",
+      "config_id": "c98f53d78ee40151fa6e484cd28f79bb5d4e34598e86f838b73abd6f618d01bc",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "main-qwen15-npu-b8-l8192",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "main-qwen15-npu-b8-l8192",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 8192,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 9.135781791061163,
+          "prefill_seconds": 4.593741022050381,
+          "decode_seconds": 4.542040769010782,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 112.0867401848329,
+          "input_tokens": 65536,
+          "prefill_tokens_per_s": 14266.368018009973,
+          "decode_tokens_per_s": 223.68799657896426,
+          "mean_tpot_seconds": 0.035764100543391984
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 5441163264,
+          "reserved": 22907191296
+        }
+      ],
+      "host_peak_rss_bytes": 4948267008,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "e6d937b9559d690e9b87b1b1c62e7b10b2f4c1a42feafcab848cb53ccbbf6b22",
+      "config_id": "9c1916c2865b8395802c3e70f4762ccee3f19e32ebc745d32095380fd43ecaab",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "precision-qwen15-npu-b1-l128-float32",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "precision-qwen15-npu-b1-l128-float32",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 128,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 3.2099334076046944,
+          "prefill_seconds": 0.05596300959587097,
+          "decode_seconds": 3.1539703980088234,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 39.87621665195719,
+          "input_tokens": 128,
+          "prefill_tokens_per_s": 2287.225096082824,
+          "decode_tokens_per_s": 40.266706396540094,
+          "mean_tpot_seconds": 0.02483441258274664
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 6239545856,
+          "reserved": 6417285120
+        }
+      ],
+      "host_peak_rss_bytes": 11313762304,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "409a577a470bf89769360c4b4c9f35eb124d732386f2c1948068e35d8a7f84dd",
+      "config_id": "3314849027774610babfee8d083d356378cab8be2ae6ad51db5aaad39d5f420b",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "profile-olmoe-npu-b32-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "profile-olmoe-npu-b32-l128",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 128,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": true
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "e3b2c1f48151d681694983a6d484b261d8d4f4b5c416aa99057c8245feaf5ade",
+      "config_id": "5efd74f1d1e9147c1828169da079e239f83fbb5cc04a51c9210aa63d3587156c",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "profile-qwen15-npu-b32-l128",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "profile-qwen15-npu-b32-l128",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 128,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": true
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.9400980211794376,
+          "prefill_seconds": 0.7702719867229462,
+          "decode_seconds": 0.16982603445649147,
+          "output_tokens": 128,
+          "physical_output_rows": 128,
+          "output_tokens_per_s": 136.1560147094156,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 5317.602185464473,
+          "decode_tokens_per_s": 565.2843529393881,
+          "mean_tpot_seconds": 0.056608678152163826
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 3355252224,
+          "reserved": 3653238784
+        }
+      ],
+      "host_peak_rss_bytes": 4949499904,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "5b9abfd2d419b0fd9f489ecd381016b54497deae3779c1fd2ba42af77066c950",
+      "config_id": "e9461901fb5cfa46c44126c23cd74e6adad597d7a35e91f3d391a4db8b122454",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-olmoe-npu-b4-l512-lora-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-olmoe-npu-b4-l512-lora-m1",
+        "model": "olmoe",
+        "task": {
+          "mode": "lora",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "1daff3f16f18126f4e24824eb67a4ddb0fc266dd50b103a7ccd326b0a7f37f8e",
+      "config_id": "f07897852362de91d77dd55d301022cd309b2042edde2b96ccc48fef2ecb412d",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen05-npu-b4-l2048-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-npu-b4-l2048-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.7259635552763939,
+          "loss": 13.836085319519043,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 8188,
+          "target_tokens_per_s": 11278.80310311529,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.6379004754126072,
+          "loss": 12.197282791137695,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 8188,
+          "target_tokens_per_s": 12835.858124582574,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.6347015611827374,
+          "loss": 11.944442749023438,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 8188,
+          "target_tokens_per_s": 12900.551220863608,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 17021768192,
+          "reserved": 19010682880
+        }
+      ],
+      "host_peak_rss_bytes": 4927717376,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "767895b3d981e98af1b103233af7eb70c075d89b2f535de0f9585c96d09e5271",
+      "config_id": "717bda26c4f59ef8ce42481b5152d54e6cb620406b7e0606226e52ed5f5b56af",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen05-npu-b4-l2048-full-m4",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-npu-b4-l2048-full-m4",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 4,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "capacity rejected before model allocation: device 0, estimate=78628878336.0, free=65640468480, reserve=6871947673.6",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "failed",
+        "exit_code": 1,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "7280667f500880c014e0e2776bd71d106831b80da5a5d23a701d82746c05d84d",
+      "config_id": "9de3194d9f36b4152b3b16f91ab47796a3be9c7baef38536644856a6ef43040f",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen05-npu-b4-l512-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-npu-b4-l512-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.562465213239193,
+          "loss": 13.277616500854492,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 3634.002515868963,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.4800768084824085,
+          "loss": 12.439380645751953,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 4257.652033768048,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.48247408494353294,
+          "loss": 11.824094772338867,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 4236.496972141463,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 11452395520,
+          "reserved": 13954449408
+        }
+      ],
+      "host_peak_rss_bytes": 9872015360,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "8371ef7a43ade98bfc695c008793b594ed0f057c032d7572f5992ff7a62567dd",
+      "config_id": "2fecb018725170df4507a8c1f5cf6e68dba92879950df2898f95823b79bf7685",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen05-npu-b4-l512-full-m4",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen05-npu-b4-l512-full-m4",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 4,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.2994009852409363,
+          "loss": 13.27527904510498,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 6826.96484233389,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.21982106193900108,
+          "loss": 12.43707275390625,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 9298.472047993275,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.22071275487542152,
+          "loss": 11.823772430419922,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 9260.905656103607,
+          "global_batch": 4,
+          "microbatch": 4,
+          "accumulation_steps": 1,
+          "gradients": {
+            "present": 290,
+            "none": 0,
+            "elements": 494032768
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 15028846592,
+          "reserved": 15890120704
+        }
+      ],
+      "host_peak_rss_bytes": 4925796352,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "c68d0d0732c9315766af7c4fbc74f496c98504c0964eff197e75c93db0fa0aaf",
+      "config_id": "26fbebe073447a027c94728e09fc95ba55984933bc3da5b4491c52e56e773411",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen15-npu-b4-l512-full-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen15-npu-b4-l512-full-m1",
+        "model": "qwen15",
+        "task": {
+          "mode": "full",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.8178947158157825,
+          "loss": 14.695899963378906,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 2499.0991633455883,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.7545343078672886,
+          "loss": 12.631547927856445,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 2708.955681256457,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.7513017021119595,
+          "loss": 12.060809135437012,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 2720.6114324700434,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 338,
+            "none": 0,
+            "elements": 1543714304
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 32369414144,
+          "reserved": 35355885568
+        }
+      ],
+      "host_peak_rss_bytes": 11312836608,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "0f30eba3ea54a9d2ad5699a6ea30dcf5dd47589b86d7617cb4c0498bb5d3f097",
+      "config_id": "7508f995bd4146cbd00177b0f16d11639b98a01e5cd00fe893b7615136e6fcab",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "train-qwen15-npu-b4-l512-lora-m1",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "train-qwen15-npu-b4-l512-lora-m1",
+        "model": "qwen15",
+        "task": {
+          "mode": "lora",
+          "batch": 4,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 3,
+          "timeout_seconds": 1200,
+          "checkpoint": true,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "passed",
+        "checkpoint_scope": "exact next step with newly loaded owner in another process"
+      },
+      "measurements": [
+        {
+          "total_seconds": 0.44583654031157494,
+          "loss": 13.590246200561523,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 4584.639918862507,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.45129984989762306,
+          "loss": 13.574477195739746,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 4529.139552037696,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        },
+        {
+          "total_seconds": 0.48623233288526535,
+          "loss": 13.550068855285645,
+          "auxiliary_loss": 0.0,
+          "target_tokens": 2044,
+          "target_tokens_per_s": 4203.751708305906,
+          "global_batch": 4,
+          "microbatch": 1,
+          "accumulation_steps": 4,
+          "gradients": {
+            "present": 112,
+            "none": 0,
+            "elements": 1089536
+          },
+          "optimizer_steps": 1
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 5953210368,
+          "reserved": 6371147776
+        }
+      ],
+      "host_peak_rss_bytes": 4940886016,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "c634599ba6679b9ac9896e49005a8935eb242677a77af84c9ed953e30d5fe290",
+      "config_id": "728d3ff47126bd3e8e7b68daca39a8428fa438d73d64521b6e0b48c7f421952a",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "varied-olmoe-npu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "varied-olmoe-npu-b128-l512",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "varied_text",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "c16b2a99a42928c5a0a34d1af83b7b5f552a564016d65cacdff9d3429203425b",
+      "config_id": "4a1cae12d56ad87e469ab25d57b0142f5b0a17d54f983713e4b5f38ecf9334fa",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "varied-qwen15-npu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "varied-qwen15-npu-b128-l512",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "varied_text",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 7.061217233538628,
+          "prefill_seconds": 1.0417932532727718,
+          "decode_seconds": 6.019423980265856,
+          "output_tokens": 16384,
+          "physical_output_rows": 16384,
+          "output_tokens_per_s": 2320.279841013954,
+          "input_tokens": 38016,
+          "prefill_tokens_per_s": 36490.925508082844,
+          "decode_tokens_per_s": 2700.5906301489717,
+          "mean_tpot_seconds": 0.04739703921469178
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 6003630080,
+          "reserved": 17095983104
+        }
+      ],
+      "host_peak_rss_bytes": 4941144064,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "56c801b318dfd71fa13d34f57852cd214c46fd86d476cc9f9111f89f6d62ce78",
+      "config_id": "8b194b768e326a6885e6e145eb65ee7ab7b4dfd6594181241dfa1b094668535e",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "check-olmoe-npu-b2-l16-bfloat16",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-olmoe-npu-b2-l16-bfloat16",
+        "model": "olmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "22d76c2238e56767f35d9190c5fe95f757852ede13e8a04489d5b37b1fb8e4be",
+      "config_id": null,
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "check-qwen05-npu-b2-l16-bfloat16",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-qwen05-npu-b2-l16-bfloat16",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "passed",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "fec081099639f5cbc5c9961a9651ded732ca63577e37920a3a0726a25776fb19",
+      "config_id": null,
+      "generated_token_mismatches": 0
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "check-qwen15-npu-b2-l16-bfloat16",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "check-qwen15-npu-b2-l16-bfloat16",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "failed",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "9a971fb8bff2b42847b1478d513f9995fb7b1efb8552f287528daaff29d96c8f",
+      "config_id": null,
+      "generated_token_mismatches": 2
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "placement-check-qwen15-npu-b2-l16",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "placement-check-qwen15-npu-b2-l16",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "failed",
+        "optimizer": "not_checked"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "945a868cffbe081f6bd5a32442080a24fe6ddff4632719fd0ec26e1252934142",
+      "config_id": null,
+      "generated_token_mismatches": 2
+    },
+    {
+      "queue": "npu-c",
+      "source": "15dfabe55ea8f0608cf6fc795513c6487eb664c4",
+      "name": "traincheck-qwen05-npu-b1-l16-full-m1",
+      "kind": "check",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "traincheck-qwen05-npu-b1-l16-full-m1",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 1,
+          "input_tokens": 16,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 1
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "failed",
+        "discrete": "not_checked",
+        "optimizer": "failed"
+      },
+      "measurements": [],
+      "error": null,
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "6188b1a29c3a8be59346641e4b119ece03f3c25bade96cbc163aded3b2e0ad75",
+      "config_id": null,
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwen3-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwen3-cpu-b8-l512",
+        "model": "qwen3",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 126.80285415425897,
+          "prefill_seconds": 30.400089625269175,
+          "decode_seconds": 96.40276452898979,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 8.075528006288229,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 134.73644487532437,
+          "decode_tokens_per_s": 10.539116849646705,
+          "mean_tpot_seconds": 0.7590768860550378
+        }
+      ],
+      "error": null,
+      "device_peak": [],
+      "host_peak_rss_bytes": 8472678400,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "d83c829e84beeac12763f8ccc1b64cb1c71a4fe3512eb6c355d10cdb126afa80",
+      "config_id": "ae2bc9a4bd5a2d257893817a9b5e520d70061acd92e0f42e2ab06cb740339f89",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwen7-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwen7-cpu-b8-l512",
+        "model": "qwen7",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "a29f042edf6f69eb562c150c2a274f51421d171c8a48b5ed6421b12c87e6d67a",
+      "config_id": "79ad8ef6bc1f59a769a9720aaa68a0f57215717d5fc41ba52ab846281bcf98a0",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-cpu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-cpu-b1-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "7900b3af45084ad71644e207b638db814f95c200d84ff7148e0083d5ea5932bb",
+      "config_id": "6a9a170b0f4e137700500ef3b8cc804dc6d25bbe8bd2eb6831978d894a07341d",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "cpu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-cpu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-cpu-b8-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "3b05b33387c3a6a6c3ff28c82e2deacc24f858d41aff328b5f3fa7e3905a07f0",
+      "config_id": "c56475c1c9e0244788dbafd12d44d2cf07f9d69202b87e5dc627162679bd7d3b",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwen3-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwen3-npu-b8-l512",
+        "model": "qwen3",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "completed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [
+        {
+          "total_seconds": 4.417915433645248,
+          "prefill_seconds": 0.3204510621726513,
+          "decode_seconds": 4.097464371472597,
+          "output_tokens": 1024,
+          "physical_output_rows": 1024,
+          "output_tokens_per_s": 231.78352220180264,
+          "input_tokens": 4096,
+          "prefill_tokens_per_s": 12781.982909431501,
+          "decode_tokens_per_s": 247.95822681793263,
+          "mean_tpot_seconds": 0.032263498987973205
+        }
+      ],
+      "error": null,
+      "device_peak": [
+        {
+          "device": 0,
+          "allocated": 6568483840,
+          "reserved": 6721372160
+        }
+      ],
+      "host_peak_rss_bytes": 5876051968,
+      "process": {
+        "state": "passed",
+        "exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": []
+      },
+      "record_sha256": "5e1ed14ac9045626d89d651fbd535fba4bd0efd42794162c6d4485fe8e7d5cf2",
+      "config_id": "5c22948711049c0ddde35c098ca1e23c9bee8dd5b212e1f86bd845a974df49b7",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwen7-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwen7-npu-b8-l512",
+        "model": "qwen7",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "eabe17795c0fe8066078fe1ba15f6dee9d78369a63ce0bf6b60ce916e7c54f66",
+      "config_id": "7612ecd4fa3556f61612a4c5b3524eff732402bd516b55e305b2bf84961427b8",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b1-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b1-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 1,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "e5cd5722e65a51af63bf2aadb7c5589c7b5aec06b316c2b26a49147b592116e0",
+      "config_id": "45f035752219ceb4c8aed2abda672612263c5cbbfc46b6542d6784a62ee274e9",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b128-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b128-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 128,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "1fe9e9aed39e82bf2f4fe08329ef1e02c1addbbfaeeb89574c863788bbf58cc9",
+      "config_id": "739f4e4e8da6a8e1b7607bb55df54c7405423abddec902fa3a66fe46d283d460",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b32-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b32-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 32,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "3eca25da9740811576bcfaa197907174f029d3fd9012fb66c05e8eca8046fad9",
+      "config_id": "53c69c062a27041e473986e9a68ad0cade1fcea51baa9921de542e7376cbf5fc",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b512-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b512-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 512,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "248ae90f9200a2f03070e35f428a475e3dcd43ad6f7f320102c44f368a80383a",
+      "config_id": "9d3637ed49802f48d584ef426c428f0110ffb3d285c9bd01f0f66c8a13a41534",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b8-l2048",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b8-l2048",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 2048,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "478f4432362c02f0ecf1870672db0e1f64407aa4ce08bf6360482d90163e786d",
+      "config_id": "4d402f7017729e038e9c2f9817c7ad54872963a86800fd712f9a151e25fce59b",
+      "generated_token_mismatches": null
+    },
+    {
+      "queue": "npu-stage2-b",
+      "source": "6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4",
+      "name": "stage2-qwenmoe-npu-b8-l512",
+      "kind": "measurement",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "stage2-qwenmoe-npu-b8-l512",
+        "model": "qwenmoe",
+        "task": {
+          "mode": "inference",
+          "batch": 8,
+          "input_tokens": 512,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 2,
+          "placement": "layer_split",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 1,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "execution_status": "dependency_failed",
+      "validation": {
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "checkpoint": "not_checked"
+      },
+      "measurements": [],
+      "error": "pinned asset download failed; no model execution or retry",
+      "device_peak": null,
+      "host_peak_rss_bytes": null,
+      "process": {},
+      "record_sha256": "e268618c3d04fc5d30384c8b379b8296cfe03591a62bdf35e0a2735b89612599",
+      "config_id": "07c4c5778d409b96b0f177400cbda6d9380e3a6d472990ac12e8faea67811b7c",
+      "generated_token_mismatches": null
+    }
+  ],
+  "account_usage_mib": 61280,
+  "account_hard_gib": 800,
+  "project_disk_du_human": "25G",
+  "pending_engine_points": 10
+}
