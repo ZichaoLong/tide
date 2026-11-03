@@ -1,87 +1,84 @@
-# 当前交接 — Dense/MoE剩余任务后台续接（2026-11-03）
+# 当前交接 — Dense/MoE剩余任务已放后台（2026-11-03）
 
-用户已授权完成剩余事项并放到后台。重入确认2f49caa干净、数学hash通过，原作业全部终态无后代。
-下载固定`8b45cb42325224e38f945405988f5efe0bd83e3e`，27项固定检查通过。
-两路30小时service实际running、ControlGroup在background.slice；见[恢复证据](evidence/llm-ranged-recovery-20261103.md)。
-- `gef-lm-assets-small-20261103-d.service` → `jobs/assets-small-d`（OLMoE后接7B）。
-- `gef-lm-assets-moe-20261103-d.service` → `jobs/assets-moe-d`（30B MoE）。
-- 固定源码`source/recovery-d`；记录status.json/task.log。首组c目录准备失败、后代已退出，原记录保留。
-后继固定`472d94ffdcb23f6dc270626cd7089945d2a3b833`，安装wheel与固定设施94项通过。
-`gef-lm-dispatch-20261103-e.service`（jobs/dispatch-e，source/runner-e）等待small/moe资产；
-已实际提交CPU/NPU ready组各24小时service：`gef-lm-cpu-ready-20261103-e` / `gef-lm-npu-ready-20261103-e`。
-43项清单=32下载依赖恢复+4 CPU显式7200秒后继+7诊断，已完成旧曲线不重跑。
-CPU B512后继计算中；NPU显存诊断等项目锁。6个数值诊断终态：CPU FP32/eager训练小锚点通过，
-NPU对应仍失败；eager缓存与完整前缀的logits.1开始超差但token相同，完整/最后logit投影对照通过。
-这些小诊断不改变旧矩阵失败。完整逐字段原始记录位于runs/*-ready-20261103-e。
+用户授权完成剩余事项并放到后台。当前7个服务都实际active，生命周期独立于本会话；
+[后继证据](evidence/llm-continuation-20261103.md)/[JSON](evidence/llm-continuation-20261103.json)保存本次观测。
+主工作区可继续编辑。活动输入/固定源码/环境位于仓库外，不得编辑或清理；未使用gpu3090。
 
-第二实现及放置后备已实现，40项相关开发检查和固定llama头文件的C++语法检查通过；尚未完整构建或提交引擎job。
-四CPU llama.cpp点、六NPU显式跨层后备及四小检查见`lm engine-matrix`。
-vLLM-Ascend A3官方需要另配NNAL/Torch2.10源构建，当前NNAL缺失；本轮有限后备不称TP/EP。
-project160GiB/account300GiB停止线保持。主工作区可开发，不能编辑活动外部源码。
-[终态审阅](evidence/llm-terminal-audit-20261103.md)/[80项JSON](evidence/llm-terminal-audit-20261103.json)是本轮结果入口。
-旧[启动证据](evidence/llm-background-execution-20261102.md)保持原观测身份，不能把当时running当当前状态。
+## 作业、源码与剩余动作
 
-## 已完成与严格边界
+外部根`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`，下表路径均相对该根。
+所有日志在job目录的`task.log`，持久状态`status.json`；外层完成不代表内部通过。
 
-- 80项清单均已处理：43项执行完成、32项下载依赖失败未执行、4项CPU超时、1项NPU静态预算拒绝。
-  其中71测量/观察为36完成、30依赖失败、4超时、1拒绝；9独立小检查为7完成、2依赖失败。
-  四个计算队列exit0只表示清单处理结束，不代表内部全部通过。
-- 7项已执行独立小检查的严格数值均未通过；Qwen1.5B单/双NPU各有2个token不同。
-  CPU FP32、NPU BF16及不同attention/缓存日程的比较范围保留；大点未逐项独立检查，吞吐属于探索性观察。
-- Qwen0.5B/1.5B/3B已有CPU/NPU真实推理；1.5B的NPU B1/8/32/128/512均完成。
-  BF16、输入512/输出128下，NPU B128整批6.339s、2584.46输出token/s；B512为24.924s、2629.45 token/s，
-  allocated峰值分别5.591/13.668GiB。CPU B128为580.328s；CPU B512在1200秒流程上限终止。
-- CPU4、NPU5个训练配置各完成3次计时更新；覆盖0.5B全参、1.5B全参与LoRA。
-  两平台各3项新进程精确恢复共6项全部通过（1.5B推理、0.5B全参、1.5B LoRA）；不是独立数值通过或训练效果资格。
-- 4个CPU超时：1.5B B512/L512与B8/L8192推理、0.5B全参L2048的micro1/4训练。
-  NPU0.5B全参L2048/micro4估算约73.23GiB，超过当时安全可用约54.73GiB，分配前拒绝；
-  不是实际OOM或已经证明的硬件上限。micro1已运行，峰值15.853GiB，可供后续预算校准。
+| service（省略.service） | 固定源码 | 记录与当前阶段 |
+| --- | --- | --- |
+| gef-lm-assets-small-20261103-d | 8b45cb4 / source/recovery-d | jobs/assets-small-d；OLMoE下载，随后7B |
+| gef-lm-assets-moe-20261103-d | 8b45cb4 / source/recovery-d | jobs/assets-moe-d；30B MoE下载 |
+| gef-lm-dispatch-20261103-e | 472d94f / source/runner-e | jobs/dispatch-e；recovery/20261103-e/dispatch.json，等待small/moe后继提交 |
+| gef-lm-cpu-ready-20261103-e | 472d94f | jobs/cpu-ready-20261103-e；CPU B512后继计算中 |
+| gef-lm-npu-ready-20261103-e | 472d94f | jobs/npu-ready-20261103-e；micro1显存诊断等compute.lock |
+| gef-lm-llama-20261103-f | 983da72 / source/engines-f | jobs/llama-f；等待small下载终态后自动构建、转换、CPU检查与测量 |
+| gef-lm-placement-20261103-f | 983da72 | jobs/placement-f；Qwen1.5B双NPU点已进入协作/项目锁队列 |
 
-## 下载与剩余事项
+- 43项明确后继：32下载依赖点原配置、4个CPU原超时点的新7200秒上限、7个小诊断。已完成旧曲线不重跑。
+  ready计算组已提交；small/moe资产齐备或下载失败终态后，dispatcher分别自动提交各24小时CPU/NPU服务。
+- 引擎/放置后备另含4个CPU llama.cpp点、6个NPU跨层点和4小检查。后备是实际Transformers/Accelerate复制，
+  不称vLLM或TP/EP。官方A3路径需NNAL和另配Torch2.10原生栈，本机NNAL缺失；本次有界停止及重启条件见报告。
+- 32MiB分段/每文件6次临时重试已实际推进并恢复一次连接错误；完整模型hash尚待完成。无无限重试。
+- 下载各30小时；计算队列各24小时；引擎服务42小时（含依赖），构建2小时/转换1小时，设备/锁等待6小时。
+  所有重型构建、转换和正式CPU/NPU计时共用`compute.lock`，小型设施检查不计入性能。
+- llama完整构建/链接、BF16 KV实际支持、GGUF及模型结果仍待后台；仅固定头文件C++语法检查已通过。
 
-Qwen0.5B、1.5B、3B全部hash通过。OLMoE、Qwen7B、Qwen30B-A3B均因响应body提前结束而失败；
-分别保留约1.276/0.453/1.468GiB partial。OLMoE一次显式恢复仍失败。**MoE尚未实际运行模型**。
-这些失败只影响依赖项；此前完整资产和实测不重跑。10个优化引擎/TP、EP对照仍未适配和排队。
+源码资格：8b45cb4固定相关27项；472d94f私有wheel安装和固定94项；983da72固定48项及C++语法检查。
+94/48有重叠，不累计成模型资格。当前安装wheel为472d94f；引擎服务通过固定983da72 PYTHONPATH运行，
+未把旧wheel冒称最新安装。公共Torch2.12/TorchNPU2.12/CANN9.1只读，Transformers4.57.1等原增量不升级；
+llama转换另用私有overlay。数学固定0770593838a37c790a568226930567ed60f99b83，重入/交付校验通过。
 
-下一步启动已实现的固定Range分段及有界续传；完成资产后只补依赖失败/未跑case。
-再审阅数值/token差异、校准保守训练预算和CPU时限覆盖，继续有价值的引擎对照。
-使用整份queue加新attempt会重跑已完成项；后继应先提供case筛选或从原case.json提取单点配置。
-唯一待办在[ROADMAP](ROADMAP.md)，不把本次终态称为全部实测计划完成。
+## 已有结果与严格边界
 
-## 固定源码、环境和材料
+[首次80项终态](evidence/llm-terminal-audit-20261103.md)原样保留：43执行完成、32依赖失败、4CPU超时、1预算拒绝。
+36完成测量/观察不都是正式吞吐；7已执行独立小检查全部超差，6个选择的新进程精确恢复通过。
+CPU4/NPU5训练配置各3次计时更新；不是模型效果资格。
+Qwen1.5B BF16 NPU B128/B512分别6.339/24.924秒、2584.46/2629.45输出token/s，峰值5.591/13.668GiB。
+CPU B128为580.328秒，原B512 1200秒超时；新后继不覆盖原失败。Qwen0.5B/1.5B/3B资产完整hash通过。
 
-数学固定`0770593838a37c790a568226930567ed60f99b83`，本次校验通过。
-资产bootstrap为`3360eafd3f5f94dc993d5d8cefdc428186d50b02`；
-CPU/后批/已安装wheel为`6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4`（固定设施81项通过）；
-首批NPU为`15dfabe55ea8f0608cf6fc795513c6487eb664c4`（锁等待后继，固定相关19项通过）。
-这些资格不因主分支后续文档提交更换身份。公共Torch2.12/TorchNPU2.12/CANN9.1只读，
-私有Transformers4.57.1/Accelerate1.11.0/PEFT0.17.1未升级；gpu3090未连接。
+6个新数值诊断已完成：两平台两模型的同eager缓存/完整前缀从logits.1超差但token相同；
+完整/最后logit投影对照通过。CPU同cached eager/SDPA超差、token相同；NPU两者数值/token均不同。
+CPU FP32/eager完整梯度/第一步Adam小检查通过，NPU对应仍失败；不修饰旧BF16检查。
+逐字段记录在`runs/*-ready-20261103-e/*/run/check.json`，小诊断不外推大点。
+NPU0.5B L2048/micro4的73.23GiB保守准入拒绝保持，micro1诊断不是豁免。
+MoE尚无完成的真实模型结果；自身恢复不能代替独立数值比较。
 
-外部根：`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`。
-`source/`固定检出、`env/transformers`私有环境、`models/`资产、`runs/`逐项结果、`jobs/`状态/日志。
-四份有效队列为`runs/cpu-b`、`runs/npu-c`、`runs/cpu-stage2-b`、`runs/npu-stage2-b`。
-旧启动失败、取消、下载失败保留原终态，不改写。仓库`artifacts/jobs/lm-*`是外部记录链接。
-原始文件尚未退役；模型partial和必要复现不得因外层队列完成而擅自清理。
+## 后续检查命令
 
 ```sh
 git status --short --branch
 python -B scripts/status.py --all-jobs
 systemctl --user list-units 'gef-lm-*' --all
 quota -vs
-# 不导入Torch、不启动模型：
-/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python -I -m tidegraph lm results /mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs
+lm_root=/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102
+cat "$lm_root/recovery/20261103-e/dispatch.json"
+cat "$lm_root/recovery/llama-20261103-f/status.json"
+cat "$lm_root/recovery/placement-20261103-f/status.json"
+# 只读现有结果，不启动模型（旧/新尝试分行，不能只数outer passed）：
+"$lm_root/env/transformers/bin/python" -I -m tidegraph lm results "$lm_root/runs" --format html --output "$lm_root/recovery/results.html"
+"$lm_root/env/transformers/bin/python" -I -m tidegraph lm results "$lm_root/runs" --format csv --output "$lm_root/recovery/results.csv"
+# 最新引擎清单/预算入口：
+PYTHONPATH="$lm_root/source/engines-f/python" "$lm_root/env/transformers/bin/python" -B -m tidegraph lm engine-matrix
+# 停止时选定实际unit，随后核对ControlGroup、status.json及remaining_live_pids：
+# systemctl --user stop gef-lm-llama-20261103-f.service
 ```
 
-完整CLI、配置/预算、检查/运行/恢复与报告见[external-lm](external-lm.md)。
-主仓库可继续编辑开发；后续作业仍须新固定源码和独立输出，不自动采用主工作区变更。
+dispatcher只负责提交后继：停止dispatcher不会停止已提交的独立计算服务；如需全停须逐个停止上述unit及其已提交后继。
+同一attempt不可重用，失败恢复先审阅逐case原因再生成选择性清单。后台不会自动唤醒AI，用户下次唤醒后审阅终态与证据。
+从干净仓库重新生成材料、安装/单次运行见[external-lm](external-lm.md)；原始矩阵与后继清单均由跟踪代码生成。
+旧失败、原始必要复现和partial尚未获准退役。首组分段c服务目录准备失败已修，原失败记录保留且无遗留后代。
 
 ## 资源事实
 
-2026-11-03账户61,280MiB，约59.8GiB；实验根du约25GiB，硬配额800GiB。
-项目80/160GiB、账户300GiB停止线保持；当前缺口不是磁盘容量。
-静态主存预算384GiB；systemd MemoryMax虽请求同值，但v1 memory controller仍共用user service，
-不能声称逐unit硬隔离。生命周期background.slice与focus.service隔离、超时及后代停止已有实际证据。
-本次没有重新分配NPU或修改公共环境。
+2026-11-03本次账户63,166MiB（约61.7GiB），实验根du约27GiB，硬配额800GiB。
+项目160GiB、账户300GiB停止新增大写入；当前瓶颈是下载和CPU计算，无扩盘或tmpfs需求。
+静态主存384GiB；systemd MemoryMax虽请求该值，v1 controller仍共用user service，不称逐unit硬隔离。
+NPU按两次采样/无其他进程/整组锁分配，实际映射在case allocation.json；不停止其他项目任务。
 
 ## 原core-5终态继续保留
 

@@ -479,3 +479,24 @@ CPU B512触及1200秒流程上限，没有完整窗口吞吐；不从B128外推�
 并非OOM；micro1实测峰值可供后继校准，但不直接把两者按倍数替代正式准入。
 OLMoE/7B/30B MoE的多次长响应提前结束阻断了32项依赖点，优先完善可验证的分段续传；
 下载失败、未检查、严格超差和自身精确恢复分别保留，队列exit0不等于模型全部通过。
+
+## Dense/MoE后继的有限诊断（2026-11-03）
+
+[后继证据](evidence/llm-continuation-20261103.md)将两个容易混淆的事实拆开：
+CPU FP32/eager手写CE与完整梯度/第一步Adam新配置通过，并不修复旧BF16候选；
+同eager完整前缀/缓存从第二个输出有严格数值差异，CPU/NPU小点token仍相同。
+同前缀全部/最后logit投影本次通过，而eager/SDPA可在首logit不同；NPU还改变token。
+因此先定位日程、算子和精度因素，不能把所有超差笼统归为设备或降低阈值。
+
+NPU SDPA开关在此版本只设置全局变量；不能据开关标签删掉显存预算中的math后备。
+micro1峰值可指导新诊断，不证明micro4的最坏情况安全。原73.23GiB预算拒绝保持。
+
+大文件长连接失败后，严格32MiB Range及每文件有限重试可在实际URLError后继续偏移；
+仍须完整publisher hash才算资产通过。原失败应归档，不能覆盖成running丢失证据。
+续跑需要显式case清单和原配置身份；只换attempt重跑全矩阵既浪费资源又混淆结果。
+
+第二实现要记录实际算术与库：GGUF MOSTLY_BF16含FP32 1D张量；n_ubatch只是容量，不是MM观察。
+A3不能从普通A2 wheel或其他Torch栈推断可用；有界跨层后备是另一放置配置，不冒充TP/EP。
+新引擎构建、实际执行和独立/精确恢复仍应逐项验收，不能由适配器单元测试推断模型通过。
+
+在含torch_npu的公共Python基线中，Transformers导入检查也可能加载NPU库；`TORCH_DEVICE_BACKEND_AUTOLOAD=0`不替代CANN激活。此次未加载module的CPU机制测试报libhccl缺失，正确加载只读公共module后通过；不是模型或数学失败。

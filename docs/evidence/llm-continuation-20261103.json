@@ -1,0 +1,870 @@
+{
+  "schema": "tide-lm-background-continuation-v1",
+  "observed": "2026-11-03T02:32:08.624745+00:00",
+  "scope": "fixed implementation checks, actual launch and completed small diagnostics; all other running work remains unqualified",
+  "sources": {
+    "download": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+    "runner": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+    "engines": "983da722038814d24c03659c7187ec769b28b263"
+  },
+  "qualification": {
+    "runner_installed_tests": 94,
+    "engine_fixed_tests": 48,
+    "llama": "syntax only; full linking/real model pending",
+    "llama_header_hashes": {
+      "gguf.h": "e56714aab702e5ce62ee587a409643c08f7e93e8fbb77f48ef7cc85075f96fa4",
+      "ggml.h": "1aef7a5f465b1c19de305dd6f9a0c303f88e485133a94b9a0ee1cce6345c9101",
+      "ggml-cpu.h": "316279e004cdeb8e6ef78599acb602bf79a8abdf897fed9fd1914808c1518c6e",
+      "ggml-opt.h": "3586de1bc8a934b5c72339e2b6937b0641e8f149b512231e666f67de0736eea2",
+      "ggml-backend.h": "6926bee0487ed349cce290466bbd4b24e2f9af2758f6fac3cd77adef3a421799",
+      "llama.h": "f07ffbabd3fbe9ef21d97b4d4ce8328d9c2a123ccbf5266f04a3146d70ce4f91",
+      "ggml-alloc.h": "d114067f9099c4a0e2bbc0625c676d4894d9cf0ea27168ee072c7de0e71bb51d"
+    }
+  },
+  "jobs": {
+    "assets-small-d": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:05:34.399835+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "dense-moe-small"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-small-20261103-d.service",
+        "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+      "dirty": "",
+      "supervisor_pid": 1953491,
+      "supervisor_start_ticks": 2125770512,
+      "workload_pid": 1955032,
+      "pgid": 1955032,
+      "workload_start_ticks": 2125770522
+    },
+    "assets-moe-d": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:05:34.601504+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "qwen-moe"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-moe-20261103-d.service",
+        "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+      "dirty": "",
+      "supervisor_pid": 1957004,
+      "supervisor_start_ticks": 2125770531,
+      "workload_pid": 1958138,
+      "pgid": 1958138,
+      "workload_start_ticks": 2125770542
+    },
+    "dispatch-e": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:12:40.482612+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e",
+      "command": [
+        "/bin/bash",
+        "scripts/start_lm_remaining.sh",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "20261103-e"
+      ],
+      "timeout_seconds": 109800,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-dispatch-20261103-e.service",
+        "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+      "dirty": "",
+      "supervisor_pid": 3546804,
+      "supervisor_start_ticks": 2125813120,
+      "workload_pid": 3548395,
+      "pgid": 3548395,
+      "workload_start_ticks": 2125813130
+    },
+    "cpu-ready-20261103-e": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:13:13.114428+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e",
+      "command": [
+        "/bin/bash",
+        "scripts/run_lm_local.sh",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "queue",
+        "--root",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--backend",
+        "cpu",
+        "--manifest",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/20261103-e/ready.json",
+        "--attempt",
+        "ready-20261103-e",
+        "--hours",
+        "23.5"
+      ],
+      "timeout_seconds": 86400,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-cpu-ready-20261103-e.service",
+        "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+      "dirty": "",
+      "supervisor_pid": 3980238,
+      "supervisor_start_ticks": 2125816383,
+      "workload_pid": 3981205,
+      "pgid": 3981205,
+      "workload_start_ticks": 2125816393
+    },
+    "npu-ready-20261103-e": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:13:13.249043+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e",
+      "command": [
+        "/bin/bash",
+        "scripts/run_lm_local.sh",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "queue",
+        "--root",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--backend",
+        "npu",
+        "--manifest",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/20261103-e/ready.json",
+        "--attempt",
+        "ready-20261103-e",
+        "--hours",
+        "23.5",
+        "--npu-helper",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/site/run_on_free_npu.py"
+      ],
+      "timeout_seconds": 86400,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-npu-ready-20261103-e.service",
+        "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/runner-e"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "472d94ffdcb23f6dc270626cd7089945d2a3b833",
+      "dirty": "",
+      "supervisor_pid": 3981464,
+      "supervisor_start_ticks": 2125816396,
+      "workload_pid": 3982547,
+      "pgid": 3982547,
+      "workload_start_ticks": 2125816406
+    },
+    "llama-f": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:27:25.018326+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/engines-f",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/bin/bash",
+        "scripts/run_lm_engine_followup.sh",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--kind",
+        "llama",
+        "--attempt",
+        "llama-20261103-f"
+      ],
+      "timeout_seconds": 151200,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-llama-20261103-f.service",
+        "source": "983da722038814d24c03659c7187ec769b28b263",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/engines-f"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "983da722038814d24c03659c7187ec769b28b263",
+      "dirty": "",
+      "supervisor_pid": 3524351,
+      "supervisor_start_ticks": 2125901605,
+      "workload_pid": 3525159,
+      "pgid": 3525159,
+      "workload_start_ticks": 2125901615
+    },
+    "placement-f": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:27:26.336112+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/engines-f",
+      "command": [
+        "/bin/bash",
+        "scripts/run_lm_engine_followup.sh",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--kind",
+        "placement",
+        "--attempt",
+        "placement-20261103-f"
+      ],
+      "timeout_seconds": 151200,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-placement-20261103-f.service",
+        "source": "983da722038814d24c03659c7187ec769b28b263",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/engines-f"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "983da722038814d24c03659c7187ec769b28b263",
+      "dirty": "",
+      "supervisor_pid": 3534179,
+      "supervisor_start_ticks": 2125901707,
+      "workload_pid": 3535161,
+      "pgid": 3535161,
+      "workload_start_ticks": 2125901718
+    }
+  },
+  "assets": {
+    "qwen7": {
+      "state": "failed",
+      "current_file": "model-00001-of-00004.safetensors",
+      "current_bytes": 469762048,
+      "current_total": 3945441440,
+      "events": null,
+      "error": "asset ended before its published size"
+    },
+    "qwenmoe": {
+      "state": "running",
+      "current_file": "model-00001-of-00016.safetensors",
+      "current_bytes": 2616113946,
+      "current_total": 3998893112,
+      "events": [],
+      "error": null
+    },
+    "olmoe": {
+      "state": "running",
+      "current_file": "model-00001-of-00003.safetensors",
+      "current_bytes": 2343692495,
+      "current_total": 4997744872,
+      "events": [
+        {
+          "file": "model-00001-of-00003.safetensors",
+          "time": "2026-11-03T02:14:04.196983+00:00",
+          "kind": "transient_read",
+          "failure": 1,
+          "offset": 1639049423,
+          "reason": "URLError",
+          "retries_allowed": 6
+        }
+      ],
+      "error": null
+    }
+  },
+  "completed_small_checks": {
+    "diagnostic-qwen05-cpu-b2-l16-float32": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/cpu-ready-20261103-e/diagnostic-qwen05-cpu-b2-l16-float32/run/check.json",
+      "sha256": "5b7114e5999b0fe854286f9f5595647d7eb5e0d4ec68dbd489271ea6ddd4e91f",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "diagnostic-qwen05-cpu-b2-l16-float32",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "see_pairs",
+      "discrete": "see_pairs",
+      "optimizer": null,
+      "pairs": {
+        "same_dtype_device_eager_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              135
+            ],
+            "reference": -0.14996346831321716,
+            "candidate": -0.14999261498451233
+          }
+        },
+        "same_eager_prefix_all_vs_last_logits": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        },
+        "same_eager_last_logits_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              135
+            ],
+            "reference": -0.14996346831321716,
+            "candidate": -0.14999261498451233
+          }
+        },
+        "same_dtype_device_eager_vs_sdpa_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              853
+            ],
+            "reference": -0.03449364751577377,
+            "candidate": -0.034479428082704544
+          }
+        },
+        "cpu_fp32_prefix_vs_candidate_eager_prefix": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        }
+      },
+      "failed_fields": 0,
+      "checked_fields": 0
+    },
+    "diagnostic-qwen15-cpu-b2-l16-float32": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/cpu-ready-20261103-e/diagnostic-qwen15-cpu-b2-l16-float32/run/check.json",
+      "sha256": "074e6146dbdb665eec3ee257755c276838bfe19f455d37ce517fd0e53c535514",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "diagnostic-qwen15-cpu-b2-l16-float32",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "see_pairs",
+      "discrete": "see_pairs",
+      "optimizer": null,
+      "pairs": {
+        "same_dtype_device_eager_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              1413
+            ],
+            "reference": -0.01266321912407875,
+            "candidate": -0.01265040598809719
+          }
+        },
+        "same_eager_prefix_all_vs_last_logits": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        },
+        "same_eager_last_logits_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              1413
+            ],
+            "reference": -0.01266321912407875,
+            "candidate": -0.01265040598809719
+          }
+        },
+        "same_dtype_device_eager_vs_sdpa_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              995
+            ],
+            "reference": 0.06677060574293137,
+            "candidate": 0.06675169616937637
+          }
+        },
+        "cpu_fp32_prefix_vs_candidate_eager_prefix": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        }
+      },
+      "failed_fields": 0,
+      "checked_fields": 0
+    },
+    "fp32-traincheck-qwen05-cpu-b1-l16-full-m1-float32": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/cpu-ready-20261103-e/fp32-traincheck-qwen05-cpu-b1-l16-full-m1-float32/run/check.json",
+      "sha256": "7726d512149d468b4d347ffc20f850b35674944dcd3e4c6dd08331108fed50bc",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "fp32-traincheck-qwen05-cpu-b1-l16-full-m1-float32",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 1,
+          "input_tokens": 16,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 1
+        },
+        "execution": {
+          "backend": "cpu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "eager",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "passed",
+      "discrete": null,
+      "optimizer": "passed",
+      "pairs": {},
+      "failed_fields": 0,
+      "checked_fields": 1160
+    },
+    "diagnostic-qwen05-npu-b2-l16-bfloat16": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/npu-ready-20261103-e/diagnostic-qwen05-npu-b2-l16-bfloat16/run/check.json",
+      "sha256": "f2991a305976682d7de72f968828a131240d1248d48f0f2028024a0b26a717b8",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "diagnostic-qwen05-npu-b2-l16-bfloat16",
+        "model": "qwen05",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "see_pairs",
+      "discrete": "see_pairs",
+      "optimizer": null,
+      "pairs": {
+        "same_dtype_device_eager_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 1.3359375,
+            "candidate": 1.3046875
+          }
+        },
+        "same_eager_prefix_all_vs_last_logits": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        },
+        "same_eager_last_logits_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 1.3359375,
+            "candidate": 1.3046875
+          }
+        },
+        "same_dtype_device_eager_vs_sdpa_cached": {
+          "numeric": "failed",
+          "discrete": "failed",
+          "token_mismatches": 4,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 5.40625,
+            "candidate": 5.4375
+          }
+        },
+        "cpu_fp32_prefix_vs_candidate_eager_prefix": {
+          "numeric": "failed",
+          "discrete": "failed",
+          "token_mismatches": 4,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 5.407900333404541,
+            "candidate": 5.40625
+          }
+        }
+      },
+      "failed_fields": 0,
+      "checked_fields": 0
+    },
+    "diagnostic-qwen15-npu-b2-l16-bfloat16": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/npu-ready-20261103-e/diagnostic-qwen15-npu-b2-l16-bfloat16/run/check.json",
+      "sha256": "94940cfe881b34b4bb4ca53f6d795790a2eedef5d3e850df75e73e6466c41ed3",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "diagnostic-qwen15-npu-b2-l16-bfloat16",
+        "model": "qwen15",
+        "task": {
+          "mode": "inference",
+          "batch": 2,
+          "input_tokens": 16,
+          "output_tokens": 4,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 4
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "bfloat16",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "sdpa",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "see_pairs",
+      "discrete": "see_pairs",
+      "optimizer": null,
+      "pairs": {
+        "same_dtype_device_eager_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 6.125,
+            "candidate": 6.15625
+          }
+        },
+        "same_eager_prefix_all_vs_last_logits": {
+          "numeric": "passed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": null
+        },
+        "same_eager_last_logits_prefix_vs_cached": {
+          "numeric": "failed",
+          "discrete": "passed",
+          "token_mismatches": 0,
+          "first_numeric_difference": {
+            "field": "logits.1",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 6.125,
+            "candidate": 6.15625
+          }
+        },
+        "same_dtype_device_eager_vs_sdpa_cached": {
+          "numeric": "failed",
+          "discrete": "failed",
+          "token_mismatches": 2,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 5.09375,
+            "candidate": 5.28125
+          }
+        },
+        "cpu_fp32_prefix_vs_candidate_eager_prefix": {
+          "numeric": "failed",
+          "discrete": "failed",
+          "token_mismatches": 2,
+          "first_numeric_difference": {
+            "field": "logits.0",
+            "index": [
+              0,
+              0
+            ],
+            "reference": 5.291272163391113,
+            "candidate": 5.09375
+          }
+        }
+      },
+      "failed_fields": 0,
+      "checked_fields": 0
+    },
+    "fp32-traincheck-qwen05-npu-b1-l16-full-m1-float32": {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/npu-ready-20261103-e/fp32-traincheck-qwen05-npu-b1-l16-full-m1-float32/run/check.json",
+      "sha256": "ffef88cfd5471c3d2dc771486649db2c0e3c01373f58500d891e92ab0a8cea7e",
+      "configuration": {
+        "schema": "tide-lm-experiment-v1",
+        "name": "fp32-traincheck-qwen05-npu-b1-l16-full-m1-float32",
+        "model": "qwen05",
+        "task": {
+          "mode": "full",
+          "batch": 1,
+          "input_tokens": 16,
+          "output_tokens": 128,
+          "seed": 19,
+          "input_kind": "synthetic_tokens",
+          "microbatch": 1,
+          "global_batch": 1
+        },
+        "execution": {
+          "backend": "npu",
+          "dtype": "float32",
+          "engine": "transformers",
+          "threads": 16,
+          "devices": 1,
+          "placement": "single",
+          "attention": "eager",
+          "prefill_chunk": 64
+        },
+        "measurement": {
+          "warmup": 0,
+          "steps": 1,
+          "timeout_seconds": 1200,
+          "checkpoint": false,
+          "profile": false
+        },
+        "resources": {
+          "host_gib": 384,
+          "device_reserve_gib": 6.4,
+          "workspace_gib": 4,
+          "checkpoint_gib": 24,
+          "project_gib": 160,
+          "account_gib": 300
+        }
+      },
+      "state": "completed",
+      "numeric": "failed",
+      "discrete": null,
+      "optimizer": "failed",
+      "pairs": {},
+      "failed_fields": 307,
+      "checked_fields": 1160
+    }
+  },
+  "optional_engine_decision": {
+    "revision": "c09d3e20b9c45c80b34ae3781440d90904a44023",
+    "hardware": "A3",
+    "selected_official_path": "A3 source + CANN9.1 / Torch2.10 / TorchNPU2.10.post7 / NNAL",
+    "public_baseline": "Torch2.12/TorchNPU2.12/CANN9.1; published NNAL not installed",
+    "known_nnal_paths": {
+      "/usr/local/Ascend/nnal/atb/set_env.sh": false,
+      "/opt/ascend/nnal/atb/set_env.sh": false
+    },
+    "decision": "bounded alternative uses existing matched Transformers; no public changes, no claim vLLM/TP/EP unsupported on hardware",
+    "restart": "separate validated A3 NNAL/source-build environment; not ordinary A2 PyPI wheel"
+  },
+  "official_doc_sha256": {
+    "docs_source_getting_started_installation_base_environment.inc.md.txt": "b5679a2dfd09325097bacfb81779e0f90d3590769030ac66841c5c1fcfdf3193",
+    "docs_source_getting_started_installation_install_vllm_ascend.inc.md.txt": "477a3fdd5f8509698314d3f16fcef9b3b8b2a9182c2b94d9ea3f1e771ace0257",
+    "docs_source_getting_started_installation_existing_cann_environment.inc.md.txt": "2d6bb3a408891f68f02e8d8d1100a508aadb17acd3206a8398e76e14b2192380"
+  },
+  "limits": {
+    "account_stop_gib": 300,
+    "account_hard_gib": 800,
+    "project_stop_gib": 160,
+    "downloads_hours": 30,
+    "compute_queue_hours": 24,
+    "engine_service_hours": 42,
+    "original_case_seconds": 1200,
+    "extended_cpu_case_seconds": 7200,
+    "compute_serialization": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/compute.lock"
+  }
+}
