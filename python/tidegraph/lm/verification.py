@@ -39,6 +39,9 @@ def independent_prefix(owner, ids, mask, count):
 
 
 def check(config, asset_root, output):
+    if resolve(config)['request']['execution']['engine']=='llama_cpp':
+        from .llama_adapter import check as execute
+        return execute(config,asset_root,output)
     import torch
     from transformers import AutoModelForCausalLM
     resolved=resolve(config);c=resolved['request']

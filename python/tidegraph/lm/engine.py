@@ -14,6 +14,9 @@ from ..experiment.identity import package_identity
 
 def run(config, asset_root, output):
     resolved = resolve(config); c = resolved['request']; e = c['execution']; m = c['measurement']
+    if e['engine']=='llama_cpp':
+        from .llama_adapter import run as execute
+        return execute(c,asset_root,output)
     out = Path(output); out.mkdir(parents=True, exist_ok=False)
     write_json(out/'resolved.json', resolved)
     record = dict(schema='tide-lm-result-v1', config_id=resolved['config_id'], name=c['name'], model=c['model'],

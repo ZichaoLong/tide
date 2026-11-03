@@ -122,6 +122,9 @@ def prepare_training(owner, optimizer, ids, mask, c, out, device, backend):
 
 
 def resume(run_dir, asset_root):
+    if read_json(Path(run_dir)/'resolved.json')['request']['execution']['engine']=='llama_cpp':
+        from .llama_adapter import resume as execute
+        return execute(run_dir,asset_root)
     import torch
     from .training import optimizer_for, update
     out = Path(run_dir); resolved = read_json(out/'resolved.json'); c = resolved['request']

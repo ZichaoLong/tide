@@ -1,0 +1,7 @@
+{
+  "schema": "tide-lm-experiment-v1",
+  "name": "qwen15-llama-cpu-b32",
+  "model": "qwen15",
+  "task": {"batch": 32, "input_tokens": 512, "output_tokens": 128},
+  "execution": {"engine": "llama_cpp", "backend": "cpu", "dtype": "bfloat16", "attention": "eager", "threads": 16}
+}

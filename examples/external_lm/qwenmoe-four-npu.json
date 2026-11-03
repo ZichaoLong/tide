@@ -1,0 +1,7 @@
+{
+  "schema": "tide-lm-experiment-v1",
+  "name": "qwenmoe-four-npu-b128",
+  "model": "qwenmoe",
+  "task": {"batch": 128, "input_tokens": 512, "output_tokens": 128},
+  "execution": {"engine": "transformers", "backend": "npu", "devices": 4, "placement": "layer_split", "dtype": "bfloat16", "threads": 16}
+}

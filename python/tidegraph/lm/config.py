@@ -46,7 +46,7 @@ def resolve(value):
                (t, 'input_kind', {'synthetic_tokens', 'varied_text'}),
                (e, 'backend', {'cpu', 'npu', 'cuda'}),
                (e, 'dtype', {'float32', 'bfloat16', 'float16'}),
-               (e, 'engine', {'transformers'}), (e, 'attention', {'eager', 'sdpa'}),
+               (e, 'engine', {'transformers', 'llama_cpp'}), (e, 'attention', {'eager', 'sdpa'}),
                (e, 'placement', {'single', 'layer_split'})]
     for section, key, valid in choices:
         if section[key] not in valid:
@@ -73,6 +73,10 @@ def resolve(value):
         raise ValueError('measurement.checkpoint: this continuation check requires fixed-output synthetic_tokens')
     if m['profile'] and (t['mode'] != 'inference' or m['steps'] != 1):
         raise ValueError('measurement.profile: one independent inference observation required')
+    if e['engine']=='llama_cpp' and (e['backend']!='cpu' or e['dtype']!='bfloat16' or
+          e['attention']!='eager' or t['mode']!='inference' or t['input_kind']!='synthetic_tokens' or
+          e['devices']!=1 or m['profile'] or m['steps']!=1 or m['warmup']>1):
+        raise ValueError('execution.engine llama_cpp: CPU BF16 weights/KV, eager, single-device synthetic inference, one step, warmup<=1 required')
     for key, x in r.items():
         if type(x) not in (int, float) or not 0 < x < float('inf'):
             raise ValueError(f'resources.{key}: finite positive value required')

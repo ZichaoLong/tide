@@ -6,9 +6,17 @@
 - `gef-lm-assets-small-20261103-d.service` → `jobs/assets-small-d`（OLMoE后接7B）。
 - `gef-lm-assets-moe-20261103-d.service` → `jobs/assets-moe-d`（30B MoE）。
 - 固定源码`source/recovery-d`；记录status.json/task.log。首组c目录准备失败、后代已退出，原记录保留。
-未完成项筛选与43项后继清单已实现，42项相关开发检查通过：32依赖恢复、4 CPU显式7200秒后继、7诊断。
-即将固定实现、独立安装资格后提交dispatcher；ready组先运行，small/moe组等各自下载终态后独立提交24小时CPU/NPU服务。
-原NPU micro4保守拒绝不豁免；新增micro1保存张量/实际dispatch诊断。引擎适配仍在推进。
+后继固定`472d94ffdcb23f6dc270626cd7089945d2a3b833`，安装wheel与固定设施94项通过。
+`gef-lm-dispatch-20261103-e.service`（jobs/dispatch-e，source/runner-e）等待small/moe资产；
+已实际提交CPU/NPU ready组各24小时service：`gef-lm-cpu-ready-20261103-e` / `gef-lm-npu-ready-20261103-e`。
+43项清单=32下载依赖恢复+4 CPU显式7200秒后继+7诊断，已完成旧曲线不重跑。
+CPU B512后继计算中；NPU显存诊断等项目锁。6个数值诊断终态：CPU FP32/eager训练小锚点通过，
+NPU对应仍失败；eager缓存与完整前缀的logits.1开始超差但token相同，完整/最后logit投影对照通过。
+这些小诊断不改变旧矩阵失败。完整逐字段原始记录位于runs/*-ready-20261103-e。
+
+第二实现及放置后备已实现，40项相关开发检查和固定llama头文件的C++语法检查通过；尚未完整构建或提交引擎job。
+四CPU llama.cpp点、六NPU显式跨层后备及四小检查见`lm engine-matrix`。
+vLLM-Ascend A3官方需要另配NNAL/Torch2.10源构建，当前NNAL缺失；本轮有限后备不称TP/EP。
 project160GiB/account300GiB停止线保持。主工作区可开发，不能编辑活动外部源码。
 [终态审阅](evidence/llm-terminal-audit-20261103.md)/[80项JSON](evidence/llm-terminal-audit-20261103.json)是本轮结果入口。
 旧[启动证据](evidence/llm-background-execution-20261102.md)保持原观测身份，不能把当时running当当前状态。
