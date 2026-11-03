@@ -11,10 +11,11 @@ def main(argv=None):
     commands=parser.add_subparsers(dest='command',required=True)
     commands.add_parser('catalog',help='fixed model revisions and asset sizes; no model allocation')
     commands.add_parser('matrix',help='print the finite authorized manifest and unqueued engine points')
-    fetch=commands.add_parser('fetch',help='one download attempt; explicit rerun resumes partial files')
+    fetch=commands.add_parser('fetch',help='bounded ranged download; retains failed attempts and partial bytes')
     fetch.add_argument('model',choices=tuple(catalog()))
     fetch.add_argument('--root',required=True);fetch.add_argument('--project-root',required=True)
     fetch.add_argument('--project-gib',type=int,default=80);fetch.add_argument('--account-gib',type=int,default=300)
+    fetch.add_argument('--chunk-mib',type=int,default=32);fetch.add_argument('--retries',type=int,default=6)
     plan=commands.add_parser('plan',help='validate, expand and budget JSON without allocating a model')
     plan.add_argument('config')
     for name in ('run','check','training-check'):
@@ -40,7 +41,10 @@ def main(argv=None):
                             bytes=sum(f['bytes'] for f in value['files'])) for key,value in catalog().items()}
         elif args.command=='fetch':
             from .assets import fetch as run
-            result=run(args.model,args.root,args.project_root,project_gib=args.project_gib,account_gib=args.account_gib)
+            if not 1<=args.chunk_mib<=64 or not 0<=args.retries<=10:
+                raise ValueError('--chunk-mib: 1..64; --retries: 0..10 per file')
+            result=run(args.model,args.root,args.project_root,project_gib=args.project_gib,account_gib=args.account_gib,
+                       chunk_mib=args.chunk_mib,retries=args.retries)
         elif args.command=='plan':
             from .config import resolve
             result=resolve(args.config)

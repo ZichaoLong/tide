@@ -17,7 +17,7 @@ tidegraph lm --help
 tidegraph lm catalog
 tidegraph lm matrix > finite-matrix.json
 tidegraph lm plan examples/external_lm/qwen15-cpu.json
-# 单模型、单次网络尝试；root为共享模型缓存，project-root计入所有环境/模型/结果。
+# 单模型、有界分段尝试；root为共享模型缓存，project-root计入所有环境/模型/结果。
 tidegraph lm fetch qwen15 --root /absolute/experiment/models --project-root /absolute/experiment
 # 前台单次入口；长任务须放持久服务，由队列实施配置的timeout_seconds。
 tidegraph lm run examples/external_lm/qwen15-cpu.json --assets /absolute/experiment/models --output /absolute/experiment/one-run
@@ -92,7 +92,12 @@ systemctl --user stop gef-lm-cpu-20261102-a.service
 
 用户可继续修改/提交主仓库；不要编辑/删除活动固定worktree、模型partial或私有环境。
 正式测量期间不要并行启动本项目重型构建。停止条件后不会自动唤醒AI；之后按STATUS检查持久记录。
-下载按公开SHA256/Git blob验证，断点请求拒绝错误Range；失败保留partial，明确重启才续传。
+下载按公开SHA256/Git blob验证。默认32MiB Range分段，严格核对起止/总长、Content-Length、
+identity编码；小型整文件可接受200。每文件最多6次临时连接/EOF/408、429、5xx重试（有限退避），
+错误Range、hash、权限或预算直接失败；不能将重试变成完整性豁免。可显式设`--chunk-mib 1..64`
+及`--retries 0..10`；原asset-state按内容身份保留于attempts，当前状态记录偏移和重试原因，不保存认证URL。
+失败保留partial，服务终态后须明确重启才开启下一次预算。`scripts/fetch_lm_remaining.py`
+分别处理OLMoE+7B及30B MoE两组，不重复已完成模型，一组内失败不阻止其他独立模型。
 不输出netpath认证环境，不修改共享网络路线。项目首批80GiB/全阶段160GiB，账户300GiB停止新增大写入，
 远低于800GiB硬限；tmpfs未作为必需依赖。
 

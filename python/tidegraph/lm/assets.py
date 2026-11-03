@@ -7,9 +7,7 @@ import fcntl
 import hashlib
 import os
 from pathlib import Path
-import time
-import urllib.error
-import urllib.request
+from .asset_transport import receive
 from .catalog import local_path, model, safe_relative
 from .resources import disk_admission
 from ..experiment.records import fingerprint, now, read_json, write_json
@@ -35,8 +33,9 @@ def verify_file(path, spec):
     return digest.hexdigest() == expected
 
 
-def download_file(url, path, spec, progress, *, opener=None, check_budget=lambda _: None):
-    """One attempt. Keep an incomplete file for an explicitly resumed command."""
+def download_file(url, path, spec, progress, *, opener=None, check_budget=lambda _: None,
+                  chunk_bytes=32*1024**2, retries=6, event=lambda _: None, **transport):
+    """One bounded attempt. Publish only after exact size and publisher hash."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
@@ -55,43 +54,8 @@ def download_file(url, path, spec, progress, *, opener=None, check_budget=lambda
         with partial.open("rb") as stream:
             for block in iter(lambda: stream.read(4*1024**2), b""):
                 digest.update(block)
-    if offset < spec["bytes"]:
-        headers = {"User-Agent": "tidegraph-lm-assets/1", "Accept-Encoding": "identity"}
-        if offset:
-            headers["Range"] = f"bytes={offset}-"
-        opener = opener or urllib.request.build_opener()
-        try:
-            response = opener.open(urllib.request.Request(url, headers=headers), timeout=60)
-        except urllib.error.HTTPError as error:
-            raise RuntimeError(f"asset HTTP {error.code}: {path.name}") from None
-        except Exception as error:
-            raise RuntimeError(f"asset connection {type(error).__name__}: {path.name}") from None
-        with response, partial.open("ab") as stream:
-            if offset and (response.status != 206 or not response.headers.get("Content-Range", "").startswith(f"bytes {offset}-")):
-                raise RuntimeError("server did not honor the requested resume offset")
-            length = response.headers.get("Content-Length")
-            if length is not None and int(length) != spec["bytes"]-offset:
-                raise RuntimeError("asset Content-Length differs from pinned manifest")
-            last = 0.
-            while offset < spec["bytes"]:
-                try:
-                    block = response.read(min(1024**2, spec["bytes"]-offset))
-                except Exception as error:
-                    stream.flush()
-                    os.fsync(stream.fileno())
-                    raise RuntimeError(f"asset body {type(error).__name__}: {path.name}") from None
-                if not block:
-                    raise RuntimeError("asset ended before its published size")
-                stream.write(block)
-                digest.update(block)
-                offset += len(block)
-                if time.monotonic()-last >= 30:
-                    stream.flush()
-                    check_budget(0)
-                    progress(offset)
-                    last = time.monotonic()
-            stream.flush()
-            os.fsync(stream.fileno())
+    offset = receive(url, partial, spec['bytes'], digest, progress, check_budget,
+                     opener=opener, chunk_bytes=chunk_bytes, retries=retries, event=event, **transport)
     if digest.hexdigest() != expected:
         raise RuntimeError(f"publisher hash mismatch: {path.name}; partial retained")
     os.replace(partial, path)
@@ -104,14 +68,19 @@ def download_file(url, path, spec, progress, *, opener=None, check_budget=lambda
     return "downloaded_verified"
 
 
-def fetch(key, root, project_root, *, project_gib=80, account_gib=300):
+def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib=32, retries=6):
     spec = model(key)
     destination = local_path(root, key)
     destination.mkdir(parents=True, exist_ok=True)
     with (destination/".fetch.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        previous = destination/'asset-state.json'
+        if previous.exists():
+            old = read_json(previous)
+            write_json(destination/'attempts'/(fingerprint(old)+'.json'), old)
         record = dict(schema="tide-lm-asset-state-v1", model=key, revision=spec["revision"],
-                      manifest_id=fingerprint(spec), started=now(), state="running", files={})
+                      manifest_id=fingerprint(spec), started=now(), state="running", files={},
+                      transport=dict(chunk_mib=chunk_mib, retries_per_file=retries), events=[])
         def save():
             write_json(destination/"asset-state.json", record)
         def budget(additional):
@@ -127,8 +96,11 @@ def fetch(key, root, project_root, *, project_gib=80, account_gib=300):
                 def progress(count):
                     record.update(current_bytes=count, updated=now())
                     save()
+                def event(value):
+                    record['events'].append(dict(file=entry['path'], time=now(), **value)); save()
                 url = f"https://huggingface.co/{spec['id']}/resolve/{spec['revision']}/{entry['path']}"
-                state = download_file(url, path, entry, progress, check_budget=budget)
+                state = download_file(url, path, entry, progress, check_budget=budget,
+                                      chunk_bytes=chunk_mib*1024**2, retries=retries, event=event)
                 record["files"][entry["path"]] = dict(state=state, bytes=entry["bytes"], mtime_ns=path.stat().st_mtime_ns)
                 print(f"{key}: {entry['path']} {state}", flush=True)
             record.update(state="complete", finished=now())

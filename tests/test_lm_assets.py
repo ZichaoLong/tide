@@ -36,16 +36,51 @@ class AssetTests(unittest.TestCase):
         self.path.with_name("weights.bin.part").write_bytes(self.data[:91])
         opener = Opener(Response(self.data[91:],206,**{"Content-Range":f"bytes 91-{len(self.data)-1}/{len(self.data)}"}))
         download_file("https://example.test/asset",self.path,self.spec,lambda n:None,opener=opener)
-        self.assertEqual(opener.request.get_header("Range"),"bytes=91-")
+        self.assertEqual(opener.request.get_header("Range"),f"bytes=91-{len(self.data)-1}")
         self.assertTrue(verify_file(self.path,self.spec))
         self.assertFalse(self.path.with_name("weights.bin.part").exists())
 
     def test_server_ignores_resume(self):
         self.path.with_name("weights.bin.part").write_bytes(self.data[:91])
-        with self.assertRaisesRegex(RuntimeError,"resume offset"):
+        with self.assertRaisesRegex(RuntimeError,"requested Range"):
             download_file("https://example.test/asset",self.path,self.spec,lambda n:None,opener=Opener(Response(self.data)))
         self.assertFalse(self.path.exists())
         self.assertEqual(self.path.with_name("weights.bin.part").stat().st_size,91)
+
+    def test_segmented_read_resumes_after_early_eof(self):
+        requests=[]; events=[]; data=self.data
+        class Ranges:
+            def open(self,request,timeout):
+                start,end=map(int,request.get_header('Range')[6:].split('-'))
+                requests.append((start,end))
+                body=data[start:end+1]
+                if len(requests)==2:body=body[:17]
+                return Response(body,206,**{'Content-Range':f'bytes {start}-{end}/{len(data)}',
+                                            'Content-Length':str(end-start+1)})
+        download_file('https://example.test/file',self.path,self.spec,lambda n:None,
+                      opener=Ranges(),chunk_bytes=128,retries=1,event=events.append,sleep=lambda _:None)
+        self.assertTrue(verify_file(self.path,self.spec))
+        self.assertEqual(requests[:3],[(0,127),(128,255),(145,272)])
+        self.assertEqual(events[0]['offset'],145)
+
+    def test_wrong_range_total_is_not_retried(self):
+        response=Response(self.data[:128],206,**{'Content-Range':f'bytes 0-127/{len(self.data)+1}'})
+        with self.assertRaisesRegex(RuntimeError,'requested Range'):
+            download_file('https://example.test/file',self.path,self.spec,lambda n:None,
+                          opener=Opener(response),chunk_bytes=128)
+        self.assertFalse(self.path.exists())
+
+    def test_retries_exhaust_and_keep_prefix(self):
+        class Empty:
+            def open(inner,request,timeout):
+                return Response(b'',206,**{'Content-Range':f'bytes 0-127/{len(self.data)}','Content-Length':'128'})
+        events=[]
+        with self.assertRaisesRegex(RuntimeError,'budget exhausted'):
+            download_file('https://example.test/file',self.path,self.spec,lambda n:None,
+                          opener=Empty(),chunk_bytes=128,retries=1,event=events.append,sleep=lambda _:None)
+        self.assertEqual(len(events),2)
+        self.assertFalse(self.path.exists())
+        self.assertEqual(self.path.with_name("weights.bin.part").stat().st_size,0)
 
     def test_hash_failure_never_publishes(self):
         bad = b"x"*len(self.data)
