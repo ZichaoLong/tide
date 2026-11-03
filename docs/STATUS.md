@@ -6,7 +6,9 @@
 - `gef-lm-assets-small-20261103-d.service` → `jobs/assets-small-d`（OLMoE后接7B）。
 - `gef-lm-assets-moe-20261103-d.service` → `jobs/assets-moe-d`（30B MoE）。
 - 固定源码`source/recovery-d`；记录status.json/task.log。首组c目录准备失败、后代已退出，原记录保留。
-未完成项筛选、数值消融、时限/预算诊断与引擎适配正在实施；尚未提交新计算队列。
+未完成项筛选与43项后继清单已实现，42项相关开发检查通过：32依赖恢复、4 CPU显式7200秒后继、7诊断。
+即将固定实现、独立安装资格后提交dispatcher；ready组先运行，small/moe组等各自下载终态后独立提交24小时CPU/NPU服务。
+原NPU micro4保守拒绝不豁免；新增micro1保存张量/实际dispatch诊断。引擎适配仍在推进。
 project160GiB/account300GiB停止线保持。主工作区可开发，不能编辑活动外部源码。
 [终态审阅](evidence/llm-terminal-audit-20261103.md)/[80项JSON](evidence/llm-terminal-audit-20261103.json)是本轮结果入口。
 旧[启动证据](evidence/llm-background-execution-20261102.md)保持原观测身份，不能把当时running当当前状态。

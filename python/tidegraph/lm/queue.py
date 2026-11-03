@@ -89,13 +89,19 @@ def selected_threads(root, attempt='a'):
     return min(samples)[1] if samples else 16
 
 
-def execute(root, backend, *, npu_helper=None, hours=24, phase='first', attempt='a'):
+def execute(root, backend, *, npu_helper=None, hours=24, phase='first', attempt='a', selection=None):
     if not re.fullmatch(r'[a-z0-9-]+',attempt):
         raise ValueError('attempt: lowercase letters/digits/hyphens required')
     root=Path(root).resolve(); base=root/'runs'/((backend if phase=='first' else backend+'-stage2')+'-'+attempt)
     base.mkdir(parents=True,exist_ok=False)
-    plan=manifest(); cases=[x for x in plan['cases'] if x['config']['execution']['backend']==backend
-                           and ((x['kind']=='stage2') == (phase=='second'))]
+    if selection:
+        from .selection import validate
+        plan=validate(selection)
+    else:
+        plan=manifest()
+    cases=[x for x in plan['cases'] if x['config']['execution']['backend']==backend
+           and (selection or ((x['kind']=='stage2') == (phase=='second')))]
+    if not cases:raise ValueError('queue: no cases selected for requested backend')
     write_json(base/'manifest.json',{**plan,'cases':cases})
     started=time.monotonic();pending=deepcopy(cases);results=[]
     record=dict(schema='tide-lm-queue-v1',backend=backend,started=now(),state='running',results=results)
@@ -112,7 +118,7 @@ def execute(root, backend, *, npu_helper=None, hours=24, phase='first', attempt=
                 continue
             case_dir=base/case['name'];case_dir.mkdir()
             case['requested_config']=deepcopy(case['config'])
-            if backend=='cpu' and case['kind'] not in {'threads','check','traincheck'}:
+            if not selection and backend=='cpu' and case['kind'] not in {'threads','check','traincheck'}:
                 case['config']['execution']['threads']=selected_threads(root,attempt)
                 case['thread_selection']='fastest completed 4/16/64 calibration, else explicit default16'
             write_json(case_dir/'case.json',case)

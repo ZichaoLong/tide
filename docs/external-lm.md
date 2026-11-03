@@ -82,6 +82,20 @@ CPU/NPU正式计算共用项目flock；队列等待模型时不占NPU，设备�
 每个计算/恢复过程1200秒，设备/项目锁等待最多6小时，计算service24小时，下载service30小时。
 用`queue --attempt NEW`选择新输出身份；依赖失败和超时原样保留，不自动重跑配置。外层队列完成只代表清单处理完，不代表全部内部通过。
 
+11-03授权后继由`lm recovery-matrix --group ready|small|moe|all`生成明确的剩余清单：
+32个下载依赖点保持原配置，4个CPU超时点只将整流程上限显式扩为7200秒、输入/配方不变；
+另加4个小推理因素诊断、2个FP32/eager训练检查及1个NPU micro1显存诊断。
+`queue --manifest FILE --attempt NEW`验证完整展开配置、独特安全名称和清单hash，
+严格使用选择的case和线程，不重新加入旧矩阵或隐式覆盖旧输出。
+`scripts/dispatch_lm_remaining.py`依赖等待最多30小时；各组资产完成或下载终态后，分别提交
+新的24小时CPU/NPU服务。ready组不等下载。下载失败项仍写dependency_failed，外层提交成功不代表计算通过。
+
+`lm diagnose`只接受小推理配置，分别比较同dtype/设备eager完整前缀与缓存、完整/最后logit投影、
+eager/SDPA及CPU FP32锚点。每条greedy轨迹独立，不把参考token喂给候选；记录首数值分歧与top2边距。
+`lm memory-check`只对原NPU Qwen0.5B L2048/micro1单更新记录实际dispatch、保存张量和峰值。
+它不撤销原micro4的73.23GiB保守准入拒绝，也不把micro1线性外推当安全证明。
+诊断不计入吞吐；原atol/rtol、原失败及精确恢复身份保持。
+
 ```sh
 # 具体unit与固定目录在STATUS；所有活跃目录都在主工作区之外。
 systemctl --user list-units 'gef-lm-*' --all
