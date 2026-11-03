@@ -9,6 +9,7 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('root',type=Path)
 p.add_argument('--group',choices=('dense-moe-small','qwen-moe'),required=True)
 args=p.parse_args()
+(args.root/'recovery').mkdir(exist_ok=True)
 keys=('olmoe','qwen7') if args.group=='dense-moe-small' else ('qwenmoe',)
 results=[]
 for key in keys:
@@ -19,5 +20,6 @@ for key in keys:
         results.append(dict(model=key,state='complete'))
     except Exception as error:
         results.append(dict(model=key,state='failed',error=str(error)[:1000]))
+        print(f'{key}: failed: {error}',flush=True)
     write_json(args.root/'recovery'/('assets-'+args.group+'.json'),dict(finished=now(),results=results))
 raise SystemExit(1 if any(x['state']=='failed' for x in results) else 0)

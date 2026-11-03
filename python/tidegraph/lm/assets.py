@@ -77,6 +77,7 @@ def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib
         previous = destination/'asset-state.json'
         if previous.exists():
             old = read_json(previous)
+            (destination/'attempts').mkdir(exist_ok=True)
             write_json(destination/'attempts'/(fingerprint(old)+'.json'), old)
         record = dict(schema="tide-lm-asset-state-v1", model=key, revision=spec["revision"],
                       manifest_id=fingerprint(spec), started=now(), state="running", files={},

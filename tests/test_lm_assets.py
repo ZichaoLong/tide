@@ -103,3 +103,20 @@ class AssetTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+def test_fetch_retains_previous_failure_in_new_attempt_directory(tmp_path, monkeypatch):
+    from tidegraph.lm import assets
+    from tidegraph.experiment.records import write_json, read_json, fingerprint
+    destination=tmp_path/'model';destination.mkdir()
+    previous=dict(state='failed',error='early EOF',files={})
+    write_json(destination/'asset-state.json',previous)
+    spec=dict(id='test/model',revision='a'*40,files=[dict(path='weights.bin',bytes=3,sha256=hashlib.sha256(b'abc').hexdigest())])
+    monkeypatch.setattr(assets,'model',lambda _:spec)
+    monkeypatch.setattr(assets,'local_path',lambda *_:destination)
+    def download(url,path,*args,**kwargs):
+        path.write_bytes(b'abc');return 'downloaded_verified'
+    monkeypatch.setattr(assets,'download_file',download)
+    result=assets.fetch('test',tmp_path,tmp_path)
+    assert result['state']=='complete'
+    assert read_json(destination/'attempts'/(fingerprint(previous)+'.json'))==previous
