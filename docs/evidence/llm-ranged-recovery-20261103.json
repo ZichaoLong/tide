@@ -1,0 +1,176 @@
+{
+  "schema": "tide-lm-recovery-evidence-v1",
+  "observed": "2026-11-03T02:07:10.745654+00:00",
+  "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+  "qualification": {
+    "tests": 27,
+    "passed": 27
+  },
+  "jobs": {
+    "assets-small-c": {
+      "schema": "tide-durable-job-v1",
+      "state": "failed",
+      "started": "2026-11-03T02:04:47.358577+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-9a69180",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "dense-moe-small"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-small-20261103-c.service",
+        "source": "9a69180c339fa23cb1c074bd3250c62a967a989e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-9a69180"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "9a69180c339fa23cb1c074bd3250c62a967a989e",
+      "dirty": "",
+      "supervisor_pid": 1302240,
+      "supervisor_start_ticks": 2125765807,
+      "workload_pid": 1303471,
+      "pgid": 1303471,
+      "workload_start_ticks": 2125765818,
+      "exit_code": 1,
+      "workload_exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "finished": "2026-11-03T02:04:48.918800+00:00"
+    },
+    "assets-moe-c": {
+      "schema": "tide-durable-job-v1",
+      "state": "failed",
+      "started": "2026-11-03T02:04:47.555945+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-9a69180",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "qwen-moe"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-moe-20261103-c.service",
+        "source": "9a69180c339fa23cb1c074bd3250c62a967a989e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-9a69180"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "9a69180c339fa23cb1c074bd3250c62a967a989e",
+      "dirty": "",
+      "supervisor_pid": 1304303,
+      "supervisor_start_ticks": 2125765827,
+      "workload_pid": 1305308,
+      "pgid": 1305308,
+      "workload_start_ticks": 2125765837,
+      "exit_code": 1,
+      "workload_exit_code": 1,
+      "termination_reason": "exit",
+      "remaining_live_pids": [],
+      "finished": "2026-11-03T02:04:49.051148+00:00"
+    },
+    "assets-small-d": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:05:34.399835+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "dense-moe-small"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-small-20261103-d.service",
+        "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+      "dirty": "",
+      "supervisor_pid": 1953491,
+      "supervisor_start_ticks": 2125770512,
+      "workload_pid": 1955032,
+      "pgid": 1955032,
+      "workload_start_ticks": 2125770522
+    },
+    "assets-moe-d": {
+      "schema": "tide-durable-job-v1",
+      "state": "running",
+      "started": "2026-11-03T02:05:34.601504+00:00",
+      "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d",
+      "command": [
+        "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+        "exec",
+        "--entry",
+        "c28",
+        "--",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+        "-B",
+        "scripts/fetch_lm_remaining.py",
+        "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+        "--group",
+        "qwen-moe"
+      ],
+      "timeout_seconds": 108000,
+      "grace_seconds": 10,
+      "metadata": {
+        "unit": "gef-lm-assets-moe-20261103-d.service",
+        "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+        "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/recovery-d"
+      },
+      "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+      "source": "8b45cb42325224e38f945405988f5efe0bd83e3e",
+      "dirty": "",
+      "supervisor_pid": 1957004,
+      "supervisor_start_ticks": 2125770531,
+      "workload_pid": 1958138,
+      "pgid": 1958138,
+      "workload_start_ticks": 2125770542
+    }
+  },
+  "range_probe": {
+    "model": "olmoe",
+    "ranges": [
+      [
+        0,
+        1048575
+      ],
+      [
+        1048576,
+        2097151
+      ]
+    ],
+    "status": [
+      206,
+      206
+    ],
+    "bytes_each": 1048576
+  },
+  "scope": "transport qualification and live launch only; model assets not yet complete"
+}

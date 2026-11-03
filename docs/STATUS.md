@@ -1,11 +1,13 @@
 # 当前交接 — Dense/MoE剩余任务后台续接（2026-11-03）
 
 用户已授权完成剩余事项并放到后台。重入确认2f49caa干净、数学hash通过，原作业全部终态无后代。
-当前先实现32MiB严格分段下载与每文件6次临时错误重试，26项相关开发检查通过。
-实现提交后创建外部固定worktree，重新检查同组26项，再提交两个30小时下载service；
-OLMoE+7B与30B MoE最多两路，不重复完整资产，旧失败保留。**此提交时尚未启动新作业**。
-后继待补未完成case筛选、数值消融、时限/预算诊断和有限引擎对照，不重新提交整轮矩阵。
-项目160GiB、账户300GiB新增写入停止线不变；账户当前约59.8GiB。
+下载固定`8b45cb42325224e38f945405988f5efe0bd83e3e`，27项固定检查通过。
+两路30小时service实际running、ControlGroup在background.slice；见[恢复证据](evidence/llm-ranged-recovery-20261103.md)。
+- `gef-lm-assets-small-20261103-d.service` → `jobs/assets-small-d`（OLMoE后接7B）。
+- `gef-lm-assets-moe-20261103-d.service` → `jobs/assets-moe-d`（30B MoE）。
+- 固定源码`source/recovery-d`；记录status.json/task.log。首组c目录准备失败、后代已退出，原记录保留。
+未完成项筛选、数值消融、时限/预算诊断与引擎适配正在实施；尚未提交新计算队列。
+project160GiB/account300GiB停止线保持。主工作区可开发，不能编辑活动外部源码。
 [终态审阅](evidence/llm-terminal-audit-20261103.md)/[80项JSON](evidence/llm-terminal-audit-20261103.json)是本轮结果入口。
 旧[启动证据](evidence/llm-background-execution-20261102.md)保持原观测身份，不能把当时running当当前状态。
 
