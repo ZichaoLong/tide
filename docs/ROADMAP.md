@@ -45,7 +45,7 @@
 
 ## 当前待办与重启条件
 
-- **Dense/MoE目录隔离修复与15项选择性后继**：用户已批准继续。模型cwd与固定源码分离、严格clean guard保留，实现694eb60、固定安装设施125项通过；15项后台后继已提交依赖队列，实际终态待审阅。`lm retry-matrix --round isolation`保留13个未执行原配置，只对两个llama B32超时点显式延长至7200秒并加阶段日志；旧/新二进制完整输出/状态/恢复检查已通过，B32待实际测量终态。MoE单流32MiB、I/O120秒、每文件24次临时重试，30小时外层预算。只补缺口，不重跑完成的B1/B512和原数值失败。实际作业/身份只见STATUS；[原21项终态](evidence/llm-restart-terminal-20261104.md)保持不变，vLLM/TP/EP配套边界仍保留。
+- **Dense/MoE目录隔离修复与15项选择性后继**：用户已批准继续。模型cwd与固定源码分离、严格clean guard保留，实现694eb60、固定安装设施125项通过；15项后台后继中4项执行完成（Qwen7B CPU/NPU B8、两个llama CPU B32），这些规模的numeric/discrete/checkpoint均not_checked；11项仍等待MoE下载。`lm retry-matrix --round isolation`保留13个未执行原配置，只对两个llama B32超时点显式延长至7200秒并加阶段日志；旧/新二进制完整输出/状态/恢复小检查已通过，B32实际成本已落盘，不替代独立数值资格。MoE单流32MiB、I/O120秒、每文件24次临时重试，30小时外层预算。只补缺口，不重跑完成的B1/B512和原数值失败。实际作业/身份只见STATUS；[原21项终态](evidence/llm-restart-terminal-20261104.md)保持不变，vLLM/TP/EP配套边界仍保留。
 
 本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，

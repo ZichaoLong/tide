@@ -1,9 +1,10 @@
-# 当前交接 — LM隔离后继已在后台运行（2026-11-04）
+# 当前交接 — LM后继4项完成，11项等待MoE下载（2026-11-04）
 
 实现固定`694eb605b6769f8d3f208710a920dbfbf504abf4`，检出`source/isolation-h`。
 非editable wheel已安装，固定设施资格**125项通过**（含目录隔离、超时后代清理、原二进制恢复）；
 开发38项为重叠范围，不累计成模型资格。数学0770593838a37c790a568226930567ed60f99b83校验通过。
-用户已授权的15项后继已建立后台依赖队列；当前运行/等待状态不表示模型通过。
+截至2026-11-04 20:53 CST，用户授权的15项后继中4项执行完成、11项等待MoE下载。
+当前3个服务活动（下载、分派等待、四卡放置等待），没有本批模型计算在运行；运行/等待不表示模型通过。
 [本次启动证据](evidence/llm-isolation-launch-20261104.md)/[JSON](evidence/llm-isolation-launch-20261104.json)保留固定观测。
 
 ## 活动作业与下一步
@@ -15,18 +16,20 @@
 | job目录 | systemd unit（加.service） | 工作和有限边界 |
 | --- | --- | --- |
 | jobs/qualify-h | gef-lm-qualify-20261104-h | 已通过、后代为空；1800秒 |
-| jobs/assets-moe-h | gef-lm-assets-moe-20261104-h | 续传Qwen MoE；30小时 |
-| jobs/llama-h | gef-lm-llama-20261104-h | 构建/小回归已通过，两个B32等待计算锁；24小时 |
-| jobs/dispatch-h | gef-lm-dispatch-20261104-h | Qwen7B已提交，等待MoE后另提交CPU/NPU；依赖30小时 |
+| jobs/assets-moe-h | gef-lm-assets-moe-20261104-h | 已验8/16片，下载第9片；30小时 |
+| jobs/llama-h | gef-lm-llama-20261104-h | 构建/小回归及两个B32执行完成，17:26 CST终态、无后代 |
+| jobs/dispatch-h | gef-lm-dispatch-20261104-h | Qwen7B两项完成，等待MoE后另提交CPU/NPU；依赖30小时 |
 | jobs/placement-h | gef-lm-placement-20261104-h | 等待MoE，四NPU小检查及B32/B128；42小时 |
-| jobs/cpu-small-20261104-h | gef-lm-cpu-small-20261104-h | Qwen7B CPU B8，已提交；24小时 |
-| jobs/npu-small-20261104-h | gef-lm-npu-small-20261104-h | Qwen7B NPU B8，已提交；24小时 |
+| jobs/cpu-small-20261104-h | gef-lm-cpu-small-20261104-h | Qwen7B CPU B8执行完成，16:15 CST终态、无后代 |
+| jobs/npu-small-20261104-h | gef-lm-npu-small-20261104-h | Qwen7B NPU B8执行完成，16:15 CST终态、无后代 |
 
 MoE就绪或下载失败终态后，dispatcher将自动另建`jobs/{cpu,npu}-moe-20261104-h`；
 unit为`gef-lm-{cpu,npu}-moe-20261104-h.service`。失败资产只生成依赖失败，不运行残缺模型。
 勿再提交相同清单，勿修改/删除固定源码、私有环境、活动partial、GGUF或build。
 主工作区可继续开发；所有重型构建和正式计时共用`compute.lock`，下载可同时进行。
 
+剩余11项为QwenMoE CPU2项、双NPU6项，以及四NPU小检查/B32/B128共3项。
+下载就绪后自动接续，无需再次提交；下载30小时预算约在11月5日22:10 CST到期。
 下一步仅读取进度与终态：检查每case执行、数值/离散、恢复和成本，单独归档。
 任务结束前不自动重启或延长预算；保留旧[21项终态](evidence/llm-restart-terminal-20261104.md)及原严格失败。
 
@@ -46,6 +49,25 @@ tail -n 25 "$lm_root/jobs/assets-moe-h/task.log"
 quota -vs
 ```
 
+## 已完成的四项模型测量
+
+均为输入512、输出128、16线程、一次正式生成；吞吐分母含prefill+decode，不含warmup。
+四项execution均completed，numeric/discrete/checkpoint均为not_checked，独立资格not_established；
+只记录探索性成本，不能把进程exit0或小回归精确恢复升级为这些规模的严格通过。
+
+| 模型/客户端 | batch | 正式秒数 | 输出token/s |
+| --- | --- | --- | --- |
+| Qwen2.5-7B Transformers CPU | 8 | 176.617 | 5.798 |
+| Qwen2.5-7B Transformers NPU | 8 | 3.736 | 274.072 |
+| Qwen1.5B llama.cpp CPU | 32 | 1332.666 | 3.074 |
+| OLMoE llama.cpp CPU | 32 | 1042.777 | 3.928 |
+
+原结果位于`lm_root/runs`下的`cpu-small-20261104-h`、`npu-small-20261104-h`、
+`cpu-llama-qwen15-run-llama-20261104-h`、`cpu-llama-olmoe-run-llama-20261104-h`，
+各case的`run/result.json`与`process/status.json`已核对；四case无存活后代。
+四个终态service（含资格）的MainPID=0、ControlGroup为空；活动固定检出仍干净。
+原严格数值失败和旧超时记录不改写；此次状态检查未新增、重启或延长任何作业。
+
 ## 范围、资源与保留事实
 
 `lm retry-matrix --round isolation`可从干净仓库重建15项：compute10（Qwen7B2、QwenMoE8）、
@@ -57,9 +79,10 @@ quota -vs
 保持源码clean guard。旧`source/restart-g/fusion_result.json`保留，新源码当前干净。
 旧binary/shared libraries及GGUF保留；checkpoint使用原build记录，不随新ready指针切换。
 
-下载仅MoE，c28单流、32MiB Range、I/O120秒、每文件24次临时重试。已验4/16片及第5片partial
-原地续传，Range/hash错误仍失败。NPU用普通空闲卡两次采样/整组锁，未续签旧共享策略。
-主存可用约1.7TiB、账户约136GiB；项目160/账户300GiB停止新增大写入、800GiB硬限保持。
+下载仅MoE，c28单流、32MiB Range、I/O120秒、每文件24次临时重试。上述观测时已验8/16片，
+第9片partial约1.53GiB，总字节进度约55%；partial仍在增长。两次临时读超时已在预算内恢复，
+当前无终态下载失败；Range/hash错误仍失败。NPU用普通空闲卡两次采样/整组锁，未续签旧共享策略。
+账户quota实查150GiB；项目160/账户300GiB停止新增大写入、800GiB硬限保持。
 实际name=systemd cgroup已验证位于background.slice；v1 memory控制器仍是共享user service，
 MemoryMax是请求，不当作已证明逐job硬隔离。无需扩盘/tmpfs，不连接已释放gpu3090。
 
