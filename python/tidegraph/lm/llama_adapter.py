@@ -1,5 +1,6 @@
 """Public process adapter for an independent, fixed-source CPU llama.cpp client."""
 from pathlib import Path
+import json
 from types import SimpleNamespace
 import subprocess
 import time
@@ -10,9 +11,24 @@ from .resources import disk_admission
 from ..experiment.records import read_json, write_json, replace_text, digest, now, fingerprint
 
 
-def artifacts(c,assets):
+def progress_events(path):
+    path=Path(path)
+    if not path.exists():return []
+    events=[]
+    for number,line in enumerate(path.read_text().splitlines(keepends=True),1):
+        if not line.startswith('tide-lm-progress '):continue
+        try:events.append(json.loads(line.removeprefix('tide-lm-progress ')))
+        except json.JSONDecodeError:
+            # A timeout can interrupt the final write. Retain the diagnostic
+            # without preventing the queue from recording the actual failure.
+            events.append(dict(phase='log',stage='malformed' if line.endswith('\n') else 'incomplete',line=number))
+    return events
+
+
+def artifacts(c,assets,recorded=None):
     root=Path(assets).parent;engine=root/'engines/llama'
-    build=read_json(engine/'ready.json');conversion=read_json(engine/c['model']/'conversion.json')
+    build=recorded['build'] if recorded else read_json(engine/'ready.json')
+    conversion=recorded['conversion'] if recorded else read_json(engine/c['model']/'conversion.json')
     binary=Path(build['binary']);weights=Path(conversion['gguf'])
     if digest(binary)!=build['binary_sha256'] or build['state']!='passed':raise ValueError('llama binary identity changed')
     for name,expected in build['shared_libraries'].items():
@@ -33,11 +49,13 @@ def material(c,out):
     return ids,mask,identity
 
 
-def invoke(c,assets,out,action):
-    binary,weights,runtime=artifacts(c,assets)
+def invoke(c,assets,out,action,recorded=None):
+    out=Path(out).resolve()
+    binary,weights,runtime=artifacts(c,assets,recorded)
+    work=out/'engine-work';work.mkdir(exist_ok=True)
     with (out/(action+'.log')).open('ab') as log:
         subprocess.run([str(binary),str(weights),str(out/'input.txt'),str(out),action],stdout=log,stderr=log,
-                       check=True,timeout=c['measurement']['timeout_seconds'])
+                       cwd=work,check=True,timeout=c['measurement']['timeout_seconds'])
     return runtime
 
 
@@ -73,6 +91,8 @@ def run(config,assets,output):
                       decode_rows_per_call=t['batch'],n_batch=metrics['n_batch'],n_ubatch=metrics['n_ubatch'],n_ctx=metrics['n_ctx'],
                       physical_split='GGML graph backend may split kernels; n_ubatch is capacity, not measured MM shape',
                       return_contract='all generated token IDs; model state remains in C++ context during generation'))
+        record['progress']=progress_events(out/'run.log')
+        record['timing_scope']+='; bounded stage-progress log writes included'
         if c['measurement']['checkpoint']:
             record['validation']['checkpoint']='awaiting_fresh_process'
             record['checkpoint_hashes']={n:digest(out/n) for n in ['state.bin','tokens.bin','expected-state.bin','expected-logits.bin']}
@@ -87,7 +107,7 @@ def resume(run_dir,assets):
     try:
         for name,expected in previous['checkpoint_hashes'].items():
             if digest(out/name)!=expected:raise ValueError('saved checkpoint identity changed')
-        runtime=invoke(c,assets,out,'restore')
+        runtime=invoke(c,assets,out,'restore',previous['runtime'])
         if runtime['build']!=previous['runtime']['build'] or runtime['conversion']!=previous['runtime']['conversion']:
             raise ValueError('exact restore requires original C++ binary and GGUF identity')
         checks={kind:digest(out/('restored-'+kind+'.bin'))==digest(out/('expected-'+kind+'.bin')) for kind in ['state','logits']}

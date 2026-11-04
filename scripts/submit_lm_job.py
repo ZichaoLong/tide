@@ -8,6 +8,7 @@ import subprocess
 import sys
 from tidegraph.experiment.container_job import prepare
 from tidegraph.experiment.records import read_json, write_json
+from tidegraph.lm.job_source import source_identity
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--unit", required=True)
@@ -21,10 +22,10 @@ if not re.fullmatch(r"gef-lm-[a-z0-9-]+", args.unit):
 if args.seconds <= 0 or not 0 < args.memory_gib <= 384:
     parser.error("positive timeout and memory limit <=384 GiB required")
 source = Path(__file__).resolve().parents[1]
-dirty = subprocess.check_output(["git","status","--porcelain"],cwd=source,text=True).strip()
-if dirty:
-    parser.error("qualification source must be a clean fixed checkout")
-commit = subprocess.check_output(["git","rev-parse","HEAD"],cwd=source,text=True).strip()
+try:
+    commit=source_identity(source)
+except ValueError as error:
+    parser.error(str(error))
 command = args.command[1:] if args.command[:1] == ["--"] else args.command
 out = prepare(args.output,command=command,cwd=source,timeout=args.seconds,grace=10,
               metadata=dict(unit=args.unit+".service", source=commit, source_directory=str(source)))

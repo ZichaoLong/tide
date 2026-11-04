@@ -11,10 +11,12 @@ p.add_argument('root',type=Path)
 p.add_argument('--group',choices=('dense-moe-small','qwen-moe'),required=True)
 p.add_argument('--chunk-mib',type=int,default=32)
 p.add_argument('--retries',type=int,default=6)
+p.add_argument('--io-timeout',type=int,default=60)
 p.add_argument('--wait-for-job',help='serialize model downloads after this durable job is terminal')
 p.add_argument('--attempt',default='',help='distinct summary identity; asset history is also retained')
 args=p.parse_args()
-if not 1<=args.chunk_mib<=64 or not 0<=args.retries<=10:p.error('chunk-mib 1..64 and retries 0..10 required')
+if not 1<=args.chunk_mib<=64 or not 0<=args.retries<=32 or not 1<=args.io_timeout<=180:
+    p.error('chunk-mib 1..64, retries 0..32 and io-timeout 1..180 required')
 (args.root/'recovery').mkdir(exist_ok=True)
 summary=args.root/'recovery'/('assets-'+args.group+('-'+args.attempt if args.attempt else '')+'.json')
 if args.wait_for_job:
@@ -32,7 +34,7 @@ for key in keys:
         results.append(dict(model=key,state='already_complete'));continue
     try:
         fetch(key,args.root/'models',args.root,project_gib=160,account_gib=300,
-              chunk_mib=args.chunk_mib,retries=args.retries)
+              chunk_mib=args.chunk_mib,retries=args.retries,timeout_seconds=args.io_timeout)
         results.append(dict(model=key,state='complete'))
     except Exception as error:
         results.append(dict(model=key,state='failed',error=str(error)[:1000]))

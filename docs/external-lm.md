@@ -76,6 +76,8 @@ CPU FP32参考每步完整前缀重算，候选独立online cached，比较全�
 本机使用固定干净worktree、非editable wheel、仓库外环境与模型资产。
 `scripts/submit_lm_job.py`复用公共子进程监督器，在background.slice提交独立service：
 首批下载、环境准备、CPU队列、NPU队列、条件后批下载分别有状态与日志。
+模型/恢复子进程的cwd固定为各case的`process/work`或`restore-process/work`，输入、输出与资产
+使用绝对路径。厂商相对诊断留在工作目录；延迟提交继续严格要求源码干净，不忽略或删除污染文件。
 CPU/NPU正式计算共用项目flock；队列等待模型时不占NPU，设备准入沿用两次采样、整组锁、无其他进程。
 第一阶段与后批分开；后批下载只在首批下载终态且Qwen1.5B有完成的B1校准后启动。
 后批资产完成后自动提交独立第二阶段CPU/NPU服务，不让前一队列的24小时时限覆盖长下载之后的计算。
@@ -109,7 +111,7 @@ systemctl --user stop gef-lm-cpu-20261102-a.service
 下载按公开SHA256/Git blob验证。默认32MiB Range分段，严格核对起止/总长、Content-Length、
 identity编码；小型整文件可接受200。每文件最多6次临时连接/EOF/408、429、5xx重试（有限退避），
 错误Range、hash、权限或预算直接失败；不能将重试变成完整性豁免。可显式设`--chunk-mib 1..64`
-及`--retries 0..10`；原asset-state按内容身份保留于attempts，当前状态记录偏移和重试原因，不保存认证URL。
+及`--retries 0..32`、`--io-timeout 1..180`秒（默认60）；原asset-state按内容身份保留于attempts，当前状态记录偏移和重试原因，不保存认证URL。
 失败保留partial，服务终态后须明确重启才开启下一次预算。`scripts/fetch_lm_remaining.py`
 分别处理OLMoE+7B及30B MoE两组，不重复已完成模型，一组内失败不阻止其他独立模型。
 不输出netpath认证环境，不修改共享网络路线。项目首批80GiB/全阶段160GiB，账户300GiB停止新增大写入，
@@ -176,3 +178,32 @@ llama加`--network-job ''`允许经独立试测可用的直连源码下载，仍
 `scripts/make_lm_npu_adapter.py --policy POLICY --helper SITE_HELPER --output NEW_ADAPTER`
 生成`--npu-helper`入口。策略与helper都按hash固定；新增占用进程、超过预算或过期均拒绝，
 每case保存sharing-audit.jsonl。未列入共享策略的卡仍要求无进程；不称共享观察为独占计时。
+
+
+## cwd隔离修复后的选择性后继
+
+`lm retry-matrix --round isolation --group all|compute|llama|placement`生成15项：
+Qwen7B CPU/NPU两项、Qwen30B-A3B CPU/双NPU八项、四NPU小检查及两个成本点，
+和两个llama B32后继。前13项完整配置不变；两个B32仅将整流程上限1200→7200秒并改名，
+不重跑已完成的OLMoE B512、llama B1及原独立数值失败。原始21项仍可用`--round initial`重建。
+
+本轮下载只续传Qwen MoE，c28单流、32MiB Range、每次连接/读取120秒、每文件24次临时重试；
+外层服务30小时，项目160GiB/账户300GiB停止线保持。具体入口：
+
+```sh
+tidegraph lm retry-matrix --round isolation --group compute > compute.json
+tidegraph lm retry-matrix --round isolation --group llama > llama.json
+tidegraph lm retry-matrix --round isolation --group placement > placement.json
+# 在固定源码的持久服务中执行，ROOT和输出路径须为绝对路径：
+python -B scripts/fetch_lm_remaining.py ROOT --group qwen-moe --chunk-mib 32 --retries 24 --io-timeout 120 --attempt UNIQUE
+python -B scripts/dispatch_lm_remaining.py ROOT --attempt UNIQUE --manifest /absolute/compute.json --small-job assets-small-g --moe-job NEW_MOE_JOB
+# 启动前将现有engines/llama/ready.json作为只读小文件保存至PREVIOUS_BUILD_JSON。
+bash scripts/run_lm_engine_followup.sh ROOT --kind llama --attempt UNIQUE --manifest /absolute/llama.json --small-job assets-small-g --moe-job NEW_MOE_JOB --network-job '' --previous-build PREVIOUS_BUILD_JSON
+```
+
+llama新增construction/warmup/measurement/prefill/decode/checkpoint阶段日志；有限频率的日志写入
+包括在各阶段时间内。即使超时，完整阶段记录及截断末行仍保留，不从部分进度估计完整吞吐。
+构建以C++客户端文件hash区分目录，旧binary/shared libraries及build record继续保留；
+已有checkpoint恢复使用原记录的binary/GGUF身份，不随新的ready指针切换。
+`--previous-build`在成本点之前用B2/L16/O4对旧/新二进制检查tokens、logits、完整序列化状态及
+各自新进程恢复；失败阻止该后继。此检查只验证阶段记录改动，不解除旧独立数值失败。

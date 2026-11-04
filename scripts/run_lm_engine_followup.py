@@ -22,6 +22,7 @@ def main():
     p.add_argument('--small-job',default='assets-small-d');p.add_argument('--moe-job',default='assets-moe-d')
     p.add_argument('--network-job',default='assets-small-d',help='empty string allows independent direct source download')
     p.add_argument('--npu-helper',type=Path)
+    p.add_argument('--previous-build',type=Path,help='require exact tiny C++/state regression against this build before costs')
     args=p.parse_args();root=args.root.resolve();out=root/'recovery'/args.attempt;out.mkdir(exist_ok=False)
     value=validate(args.manifest) if args.manifest else manifest(args.kind)
     if any((x['config']['execution']['engine']=='llama_cpp') != (args.kind=='llama') for x in value['cases']):
@@ -48,7 +49,11 @@ def main():
             with compute_lock(root/'compute.lock',21600):
                 state['phase']='building';save()
                 # Network proxy environment comes from the service's netpath wrapper.
-                subprocess.run([sys.executable,'-B','scripts/prepare_lm_llama.py',str(root)],check=True,timeout=7200)
+                subprocess.run([sys.executable,'-B',str(Path(__file__).with_name('prepare_lm_llama.py')),str(root)],check=True,timeout=7200)
+                if args.previous_build:
+                    state['phase']='progress_regression';save()
+                    subprocess.run([sys.executable,'-B',str(Path(__file__).with_name('verify_lm_llama_progress.py')),str(root),
+                        '--previous-build',str(args.previous_build.resolve()),'--output',str(out/'progress-regression')],check=True,timeout=1200)
         else:
             state['vllm_audit']=dict(revision=ASCEND_REVISION,hardware='A3',
                 selected_official_path='A3 source + CANN9.1 / Torch2.10 / TorchNPU2.10.post7 / NNAL',
@@ -71,7 +76,7 @@ def main():
                 try:
                     with compute_lock(root/'compute.lock',21600):
                         state['phase']='converting';save()
-                        subprocess.run([sys.executable,'-B','scripts/prepare_lm_llama.py',str(root),'--convert',key],check=True,timeout=3600)
+                        subprocess.run([sys.executable,'-B',str(Path(__file__).with_name('prepare_lm_llama.py')),str(root),'--convert',key],check=True,timeout=3600)
                 except Exception as error:
                     reject(cases,key,'conversion failed: '+str(error)[:1000]);state['models'][key]='conversion_failed';save();continue
             # Checks first. A finite numerical disagreement may proceed; runtime/nonfinite failures may not.
@@ -95,7 +100,7 @@ def main():
         state.update(state='completed',phase='terminal',finished=now());save()
     except BaseException as error:
         state.update(state='failed',error=str(error)[:2000],finished=now());save()
-        if args.kind=='llama' and state.get('phase') in {'building','waiting_compute_lock_for_build','waiting_network_slot_after_small_asset_service'}:
+        if args.kind=='llama' and state.get('phase') in {'building','progress_regression','waiting_compute_lock_for_build','waiting_network_slot_after_small_asset_service'}:
             for key in keys:reject([x for x in value['cases'] if x['config']['model']==key],key,'engine preparation failed: '+str(error)[:1000])
         raise
 

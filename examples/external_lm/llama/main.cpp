@@ -15,6 +15,12 @@
 
 using Clock = std::chrono::steady_clock;
 static double seconds(Clock::time_point start) { return std::chrono::duration<double>(Clock::now()-start).count(); }
+static void progress(const char * phase,const char * stage,int completed=0,int total=0) {
+    static const auto start=Clock::now();
+    std::cerr<<"tide-lm-progress {\"phase\":\""<<phase<<"\",\"stage\":\""<<stage
+        <<"\",\"completed\":"<<completed<<",\"total\":"<<total
+        <<",\"elapsed_seconds\":"<<seconds(start)<<"}"<<std::endl;
+}
 static void require(bool ok, const char * message) { if (!ok) throw std::runtime_error(message); }
 template<class T> static void save(const std::string & path, const std::vector<T> & values) {
     std::ofstream out(path, std::ios::binary);
@@ -58,7 +64,7 @@ static llama_token greedy(float * logits,int vocab){
     for(int i=0;i<vocab;++i){require(std::isfinite(logits[i]),"nonfinite output logits");if(logits[i]>logits[best])best=i;}
     return best;
 }
-static Result generate(llama_context * ctx,const Material & m,int vocab,int outputs,const std::string & diagnostic){
+static Result generate(llama_context * ctx,const Material & m,int vocab,int outputs,const std::string & diagnostic,const char * phase){
     auto begin=Clock::now();Batch batch(m.batch*m.chunk);std::vector<llama_token> next(m.batch),tokens(m.batch*outputs);
     std::ofstream logits_file;
     if(!diagnostic.empty())logits_file.open(diagnostic,std::ios::binary);
@@ -66,6 +72,7 @@ static Result generate(llama_context * ctx,const Material & m,int vocab,int outp
         for(int b=0;b<m.batch;++b){float * values=llama_get_logits_ith(ctx,indices[b]);next[b]=greedy(values,vocab);
             if(record && logits_file.is_open())logits_file.write(reinterpret_cast<char*>(values),vocab*sizeof(float));}
     };
+    progress(phase,"prefill",0,m.length);
     for(int start=0;start<m.length;start+=m.chunk){
         int end=std::min(m.length,start+m.chunk);batch.clear();std::vector<int> indices;
         for(int b=0;b<m.batch;++b){
@@ -74,14 +81,17 @@ static Result generate(llama_context * ctx,const Material & m,int vocab,int outp
         }
         require(llama_decode(ctx,batch.value)==0,"prefill decode rejected");
         collect(indices,end==m.length);
+        progress(phase,"prefill",end,m.length);
     }
     for(int b=0;b<m.batch;++b)tokens[b*outputs]=next[b];
     llama_synchronize(ctx);double prefill=seconds(begin);auto decoding=Clock::now();
+    progress(phase,"decode",0,outputs-1);
     for(int step=1;step<outputs;++step){
         batch.clear();std::vector<int> indices;
         for(int b=0;b<m.batch;++b){batch.add(next[b],b,m.length+step-1,true);indices.push_back(b);}
         require(llama_decode(ctx,batch.value)==0,"token decode rejected");collect(indices,true);
         for(int b=0;b<m.batch;++b)tokens[b*outputs+step]=next[b];
+        if(step%16==0 || step==outputs-1)progress(phase,"decode",step,outputs-1);
     }
     llama_synchronize(ctx);
     if(logits_file.is_open()){logits_file.close();require(bool(logits_file),"logit write failed");}
@@ -99,8 +109,10 @@ int main(int argc,char ** argv){
         require(argc==5,"usage: tide-lm-llama MODEL.gguf INPUT.txt OUTPUT_DIR run|restore");
         Material m(argv[2]);std::string out=argv[3];bool restore=std::string(argv[4])=="restore";
         require(restore || std::string(argv[4])=="run","unknown action");
+        progress("construction","begin");
         auto construction=Clock::now();llama_backend_init();auto mp=llama_model_default_params();mp.n_gpu_layers=0;
         auto model=llama_model_load_from_file(argv[1],mp);require(model,"model load failed");
+        progress("construction","model_loaded");
         int vocab=llama_vocab_n_tokens(llama_model_get_vocab(model));
         for(auto id:m.ids)require(id>=0 && id<vocab,"input token outside vocabulary");
         auto cp=llama_context_default_params();cp.n_seq_max=m.batch;cp.n_ctx=(m.length+m.outputs+32)*m.batch;
@@ -109,16 +121,19 @@ int main(int argc,char ** argv){
         cp.offload_kqv=false;cp.op_offload=false;cp.kv_unified=false;cp.no_perf=false;
         auto ctx=llama_init_from_model(model,cp);require(ctx,"context creation rejected (BF16 KV requested; no fallback)");
         double built=seconds(construction);
+        progress("construction","context_ready");
         if(restore){
+            progress("restore","begin");
             auto bytes=load<uint8_t>(out+"/state.bin");
             require(llama_state_set_data(ctx,bytes.data(),bytes.size())==bytes.size(),"incomplete state restoration");
             next_state(ctx,m,vocab,load<llama_token>(out+"/tokens.bin"),out+"/restored");
+            progress("restore","complete");
         }else{
             double warm=0;
-            if(m.warmup){warm=generate(ctx,m,vocab,std::min(8,m.outputs),"").total;llama_memory_clear(llama_get_memory(ctx),true);}
-            auto r=generate(ctx,m,vocab,m.outputs,m.diagnostic?out+"/logits.bin":"");save(out+"/tokens.bin",r.tokens);
+            if(m.warmup){warm=generate(ctx,m,vocab,std::min(8,m.outputs),"","warmup").total;llama_memory_clear(llama_get_memory(ctx),true);}
+            auto r=generate(ctx,m,vocab,m.outputs,m.diagnostic?out+"/logits.bin":"","measurement");save(out+"/tokens.bin",r.tokens);
             double checkpoint=0;
-            if(m.checkpoint){auto start=Clock::now();save(out+"/state.bin",state(ctx));
+            if(m.checkpoint){progress("checkpoint","begin");auto start=Clock::now();save(out+"/state.bin",state(ctx));
                 next_state(ctx,m,vocab,r.tokens,out+"/expected");checkpoint=seconds(start);}
             struct rusage usage{};getrusage(RUSAGE_SELF,&usage);
             std::ofstream metrics(out+"/metrics.json");metrics<<std::setprecision(17)
@@ -127,6 +142,7 @@ int main(int argc,char ** argv){
                 <<",\"host_peak_rss_bytes\":"<<usage.ru_maxrss*1024LL<<",\"vocab\":"<<vocab
                 <<",\"n_batch\":"<<llama_n_batch(ctx)<<",\"n_ubatch\":"<<llama_n_ubatch(ctx)<<",\"n_ctx\":"<<llama_n_ctx(ctx)<<"}\n";
             metrics.close();require(bool(metrics),"metrics write failed");
+            progress("run","complete");
         }
         llama_perf_context_print(ctx);llama_free(ctx);llama_model_free(model);llama_backend_free();return 0;
     }catch(const std::exception & e){std::cerr<<e.what()<<'\n';return 1;}

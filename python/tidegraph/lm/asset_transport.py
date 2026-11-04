@@ -10,10 +10,19 @@ class TransientRead(Exception):
     """A retryable read failure, with no URL or authentication in its message."""
 
 
+def network_error(error):
+    """Describe connection failure without leaking a signed URL or proxy auth."""
+    reason=error.reason if isinstance(error,urllib.error.URLError) else error
+    number=getattr(reason,'errno',None)
+    return type(error).__name__+'/'+type(reason).__name__+(f'/errno={number}' if isinstance(number,int) else '')
+
+
 def receive(url, partial, total, digest, progress, budget, *, opener=None,
-            chunk_bytes=32*1024**2, retries=6, event=lambda _: None, sleep=time.sleep):
+            chunk_bytes=32*1024**2, retries=6, timeout_seconds=60, event=lambda _: None, sleep=time.sleep):
     if type(chunk_bytes) is not int or chunk_bytes <= 0 or type(retries) is not int or retries < 0:
         raise ValueError('download chunk_bytes must be positive; retries must be nonnegative')
+    if type(timeout_seconds) not in (int,float) or not 0<timeout_seconds<=180:
+        raise ValueError('download timeout_seconds must be positive and at most 180')
     opener = opener or urllib.request.build_opener()
     offset = partial.stat().st_size if partial.exists() else 0
     failures = 0
@@ -24,13 +33,13 @@ def receive(url, partial, total, digest, progress, budget, *, opener=None,
                    'Range': f'bytes={start}-{end}'}
         try:
             try:
-                response = opener.open(urllib.request.Request(url, headers=headers), timeout=60)
+                response = opener.open(urllib.request.Request(url, headers=headers), timeout=timeout_seconds)
             except urllib.error.HTTPError as error:
                 if error.code in {408, 429, 500, 502, 503, 504}:
                     raise TransientRead(f'HTTP {error.code}') from None
                 raise RuntimeError(f'asset HTTP {error.code}') from None
             except (OSError, http.client.HTTPException) as error:
-                raise TransientRead(type(error).__name__) from None
+                raise TransientRead(network_error(error)) from None
             with response:
                 # A small whole-file response may legitimately ignore Range.
                 whole = start == 0 and end == total-1 and response.status == 200
@@ -47,7 +56,7 @@ def receive(url, partial, total, digest, progress, budget, *, opener=None,
                             try:
                                 block = response.read(min(1024**2, end-offset+1))
                             except (OSError, http.client.HTTPException) as error:
-                                raise TransientRead(type(error).__name__) from None
+                                raise TransientRead(network_error(error)) from None
                             if not block:
                                 raise TransientRead('early EOF')
                             if len(block) > end-offset+1:

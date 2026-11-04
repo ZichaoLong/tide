@@ -41,3 +41,42 @@ def test_llama_material_uses_exact_existing_distinct_token_generator(tmp_path):
     lines=(tmp_path/'input.txt').read_text().splitlines()
     assert list(map(int,lines[0].split()))==[2,16,4,16,16,0,1,0]
     assert list(map(int,lines[1].split()))==ids[0].tolist()
+
+
+def test_resume_uses_original_binary_after_default_build_changes(tmp_path,monkeypatch):
+    from tidegraph.lm import llama_adapter as adapter
+    from tidegraph.lm.catalog import model
+    from tidegraph.experiment.records import write_json,digest,fingerprint
+    c=manifest('llama')['cases'][0]['config']
+    root=tmp_path/'experiment';root.mkdir();out=root/'run';out.mkdir()
+    binary=root/'old-binary';binary.write_bytes(b'original executable')
+    library=root/'old-library';library.write_bytes(b'original shared library')
+    weights=root/'weights';weights.write_bytes(b'fixed model')
+    build=dict(state='passed',binary=str(binary),binary_sha256=digest(binary),shared_libraries={str(library):digest(library)})
+    conversion=dict(gguf=str(weights),bytes=weights.stat().st_size,mtime_ns=weights.stat().st_mtime_ns,
+                    model_manifest_id=fingerprint(model(c['model'])))
+    recorded=dict(build=build,conversion=conversion)
+    engine=root/'engines/llama';engine.mkdir(parents=True)
+    write_json(engine/'ready.json',{'state':'failed','binary':str(root/'different-default-binary')})
+    for name in ('state.bin','tokens.bin','expected-state.bin','expected-logits.bin'):(out/name).write_bytes(name.encode())
+    write_json(out/'result.json',dict(configuration=c,runtime=recorded,validation={'checkpoint':'awaiting_fresh_process'},
+        checkpoint_hashes={p.name:digest(p) for p in out.glob('*.bin')}))
+    def invoke(command,**kwargs):
+        assert command[0]==str(binary) and command[-1]=='restore'
+        assert kwargs['cwd']==out/'engine-work'
+        for field in ('state','logits'):(out/('restored-'+field+'.bin')).write_bytes((out/('expected-'+field+'.bin')).read_bytes())
+    monkeypatch.setattr(adapter.subprocess,'run',invoke)
+    assert adapter.resume(out,root/'models')['state']=='passed'
+    library.write_bytes(b'changed')
+    assert adapter.resume(out,root/'models')['state']=='failed'
+    with pytest.raises(ValueError,match='library identity changed'):adapter.artifacts(c,root/'models',recorded)
+
+
+def test_progress_keeps_completed_stages_when_timeout_interrupts_log(tmp_path):
+    from tidegraph.lm.llama_adapter import progress_events
+    path=tmp_path/'run.log'
+    path.write_text('ordinary engine log\ntide-lm-progress {"phase":"warmup","stage":"prefill","completed":64}\n'
+                    'tide-lm-progress {"phase":"measurement"')
+    events=progress_events(path)
+    assert events[0]['completed']==64 and events[0]['phase']=='warmup'
+    assert events[1]==dict(phase='log',stage='incomplete',line=3)

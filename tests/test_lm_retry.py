@@ -1,7 +1,7 @@
 """Restart only unfinished work; retain strict failures and workload identity."""
 import json
 from pathlib import Path
-from tidegraph.lm.retry import manifest
+from tidegraph.lm.retry import manifest,isolation_manifest
 from tidegraph.lm.selection import validate
 from tidegraph.lm.config import resolve
 
@@ -77,3 +77,24 @@ def test_site_adapter_pins_policy_before_invoking_scheduler(tmp_path):
     result=subprocess.run([sys.executable,str(output),'--state-file',str(tmp_path/'allocation.json')],
                           capture_output=True,text=True)
     assert result.returncode!=0 and 'active sharing policy changed' in result.stderr
+
+
+def test_isolation_round_only_unexecuted_and_two_timed_out_successors():
+    path=Path(__file__).resolve().parents[1]/'docs/evidence/llm-restart-terminal-20261104.json'
+    old={x['name']:x for x in json.loads(path.read_text())['cases']}
+    value=validate(isolation_manifest())
+    assert len(value['cases'])==15
+    assert {k:len(isolation_manifest(k)['cases']) for k in ('compute','llama','placement')}==dict(compute=10,llama=2,placement=3)
+    for item in value['cases']:
+        c=item['config']
+        if c['model'] in {'qwen7','qwenmoe'}:
+            assert c==old[item['name']]['configuration']
+            assert old[item['name']]['audit_state'] in {'not_submitted','dependency_failed'}
+        else:
+            previous=old[item['name'].removeprefix('extended-')]
+            assert previous['audit_state']=='timeout'
+            prior=previous['configuration']
+            assert c['execution']['engine']=='llama_cpp' and c['task']['batch']==32
+            for field in ('task','execution','resources'):assert c[field]==prior[field]
+            assert c['measurement']=={**prior['measurement'],'timeout_seconds':7200}
+            assert item['restart']['original_config_id']==resolve(prior)['config_id']

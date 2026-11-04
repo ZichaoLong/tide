@@ -68,7 +68,7 @@ def download_file(url, path, spec, progress, *, opener=None, check_budget=lambda
     return "downloaded_verified"
 
 
-def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib=32, retries=6):
+def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib=32, retries=6, timeout_seconds=60):
     spec = model(key)
     destination = local_path(root, key)
     destination.mkdir(parents=True, exist_ok=True)
@@ -81,7 +81,7 @@ def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib
             write_json(destination/'attempts'/(fingerprint(old)+'.json'), old)
         record = dict(schema="tide-lm-asset-state-v1", model=key, revision=spec["revision"],
                       manifest_id=fingerprint(spec), started=now(), state="running", files={},
-                      transport=dict(chunk_mib=chunk_mib, retries_per_file=retries), events=[])
+                      transport=dict(chunk_mib=chunk_mib, retries_per_file=retries,timeout_seconds=timeout_seconds), events=[])
         def save():
             write_json(destination/"asset-state.json", record)
         def budget(additional):
@@ -101,7 +101,7 @@ def fetch(key, root, project_root, *, project_gib=80, account_gib=300, chunk_mib
                     record['events'].append(dict(file=entry['path'], time=now(), **value)); save()
                 url = f"https://huggingface.co/{spec['id']}/resolve/{spec['revision']}/{entry['path']}"
                 state = download_file(url, path, entry, progress, check_budget=budget,
-                                      chunk_bytes=chunk_mib*1024**2, retries=retries, event=event)
+                                      chunk_bytes=chunk_mib*1024**2, retries=retries, timeout_seconds=timeout_seconds,event=event)
                 record["files"][entry["path"]] = dict(state=state, bytes=entry["bytes"], mtime_ns=path.stat().st_mtime_ns)
                 print(f"{key}: {entry['path']} {state}", flush=True)
             record.update(state="complete", finished=now())

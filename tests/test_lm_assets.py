@@ -120,3 +120,20 @@ def test_fetch_retains_previous_failure_in_new_attempt_directory(tmp_path, monke
     result=assets.fetch('test',tmp_path,tmp_path)
     assert result['state']=='complete'
     assert read_json(destination/'attempts'/(fingerprint(previous)+'.json'))==previous
+
+
+def test_connection_timeout_is_explicit_and_error_does_not_leak_urls(tmp_path):
+    import urllib.error
+    import pytest
+    from tidegraph.lm.asset_transport import network_error
+    class Failing:
+        def open(self,request,timeout):
+            assert timeout==120
+            raise urllib.error.URLError(OSError(101,'private signed URL'))
+    events=[]
+    with pytest.raises(RuntimeError,match='retry budget exhausted'):
+        download_file('https://example.test/private',tmp_path/'file',dict(bytes=2,sha256='unused'),
+                      lambda _:None,opener=Failing(),retries=0,timeout_seconds=120,event=events.append)
+    assert events[0]['reason']=='URLError/OSError/errno=101'
+    assert 'private' not in network_error(urllib.error.URLError('private credentials'))
+    assert 'private' not in repr(events)

@@ -17,11 +17,13 @@ def main(argv=None):
     p.add_argument('--kind',choices=('all','llama','placement'),default='all')
     p=commands.add_parser('retry-matrix',help='2026-11-04 authorized failures/dependencies only; explicit capacity alternative')
     p.add_argument('--group',choices=('all','compute','llama','placement'),default='all')
+    p.add_argument('--round',choices=('initial','isolation'),default='initial',help='initial 21 cases or remaining 15 after cwd isolation fix')
     fetch=commands.add_parser('fetch',help='bounded ranged download; retains failed attempts and partial bytes')
     fetch.add_argument('model',choices=tuple(catalog()))
     fetch.add_argument('--root',required=True);fetch.add_argument('--project-root',required=True)
     fetch.add_argument('--project-gib',type=int,default=80);fetch.add_argument('--account-gib',type=int,default=300)
     fetch.add_argument('--chunk-mib',type=int,default=32);fetch.add_argument('--retries',type=int,default=6)
+    fetch.add_argument('--io-timeout',type=int,default=60,help='per connection/read timeout, 1..180 seconds')
     plan=commands.add_parser('plan',help='validate, expand and budget JSON without allocating a model')
     plan.add_argument('config')
     for name in ('run','check','training-check','diagnose','memory-check'):
@@ -48,10 +50,10 @@ def main(argv=None):
                             bytes=sum(f['bytes'] for f in value['files'])) for key,value in catalog().items()}
         elif args.command=='fetch':
             from .assets import fetch as run
-            if not 1<=args.chunk_mib<=64 or not 0<=args.retries<=10:
-                raise ValueError('--chunk-mib: 1..64; --retries: 0..10 per file')
+            if not 1<=args.chunk_mib<=64 or not 0<=args.retries<=32 or not 1<=args.io_timeout<=180:
+                raise ValueError('--chunk-mib: 1..64; --retries: 0..32 per file; --io-timeout: 1..180 seconds')
             result=run(args.model,args.root,args.project_root,project_gib=args.project_gib,account_gib=args.account_gib,
-                       chunk_mib=args.chunk_mib,retries=args.retries)
+                       chunk_mib=args.chunk_mib,retries=args.retries,timeout_seconds=args.io_timeout)
         elif args.command=='plan':
             from .config import resolve
             result=resolve(args.config)
@@ -65,8 +67,8 @@ def main(argv=None):
             from .engine_matrix import manifest
             result=manifest(args.kind)
         elif args.command=='retry-matrix':
-            from .retry import manifest
-            result=manifest(args.group)
+            from .retry import manifest,isolation_manifest
+            result=(isolation_manifest if args.round=='isolation' else manifest)(args.group)
         elif args.command in {'run','check','training-check','diagnose','memory-check'}:
             from .config import resolve
             config=read_json(args.config)

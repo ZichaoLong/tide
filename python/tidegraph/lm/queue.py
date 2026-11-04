@@ -38,8 +38,13 @@ def placeholder(case, out, state, reason):
 
 
 def bounded(command, output, seconds):
-    container_job.prepare(output,command=command,cwd=Path.cwd(),timeout=seconds,grace=10,
-                          metadata=dict(task_kind='external-lm-case'))
+    # Vendor runtimes may write relative diagnostics at shutdown. Keep those
+    # bytes beside the process record, never in a shared fixed source checkout.
+    output=Path(output).resolve()
+    work=output/'work'
+    container_job.prepare(output,command=command,cwd=work,timeout=seconds,grace=10,
+                          metadata=dict(task_kind='external-lm-case',launcher_cwd=str(Path.cwd())))
+    work.mkdir()
     code=container_job.supervise(output)
     return code
 
@@ -65,7 +70,8 @@ def compute_lock(path, seconds):
 
 def worker(case_path, root, case_dir):
     """Runs after device admission. A fresh supervisor enforces each compute timeout."""
-    root=Path(root); case_dir=Path(case_dir); case=read_json(case_path); c=case['config']
+    root=Path(root).resolve(); case_dir=Path(case_dir).resolve(); case_path=Path(case_path).resolve()
+    case=read_json(case_path); c=case['config']
     write_json(case_dir/'phase.json',dict(phase='waiting_project_compute_lock',since=now()))
     with compute_lock(root/'compute.lock',21600):
         write_json(case_dir/'phase.json',dict(phase='computing',started=now(),
@@ -142,6 +148,11 @@ def execute(root, backend, *, npu_helper=None, hours=24, phase='first', attempt=
                 elif child.returncode and read_json(result_path).get('state')=='running':
                     value=read_json(result_path);value.update(state='process_failed',execution_status='process_failed',
                         error=f'bounded child exited {child.returncode}; inspect process/status.json',finished=now())
+                    write_json(result_path,value)
+                if case['config']['execution']['engine']=='llama_cpp' and result_path.exists():
+                    from .llama_adapter import progress_events
+                    value=read_json(result_path)
+                    value['progress']=progress_events(case_dir/'run/run.log')
                     write_json(result_path,value)
                 results.append(dict(name=case['name'],state='finished',exit_code=child.returncode))
             pending.remove(case);progressed=True;save();save_all(base)

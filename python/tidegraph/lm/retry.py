@@ -39,3 +39,23 @@ def manifest(group='all'):
         scope='19 unexecuted dependencies + CPU B512 timeout extension + explicit dual-NPU B512 alternative',
         prior_evidence='docs/evidence/llm-terminal-audit-20261104.json',
         preserved='completed checks/curves and all strict failures; no retry of completed numerical disagreements')
+
+
+def isolation_manifest(group='all'):
+    """13 unexecuted cases and two bounded llama B32 successors; no B1/B512 reruns."""
+    previous=manifest(group);cases=[]
+    for item in previous['cases']:
+        c=item['config']
+        if c['model'] in {'qwen7','qwenmoe'}:
+            cases.append(deepcopy(item))
+        elif c['execution']['engine']=='llama_cpp' and c['task']['batch']==32:
+            x=deepcopy(item)
+            x['name']=x['config']['name']='extended-'+item['name']
+            x['config']['measurement']['timeout_seconds']=7200
+            x['restart']=dict(original_config_id=resolve(c)['config_id'],
+                reason='1200s whole-process timeout; 7200s successor with stage progress; unchanged math/material/precision')
+            cases.append(x)
+    return dict(schema='tide-lm-matrix-v1',identity=fingerprint(cases),cases=cases,
+        scope='13 unexecuted dependency/submission cases + 2 explicit llama B32 timeout successors',
+        prior_evidence='docs/evidence/llm-restart-terminal-20261104.json',
+        preserved='all completed B1/B512 costs, checks and exact resumes retain their original identities')
