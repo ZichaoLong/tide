@@ -45,7 +45,7 @@
 
 ## 当前待办与重启条件
 
-- **Dense/MoE失败重启已后台提交**：见[重启证据](evidence/llm-restart-20261104.md)。固定79197ad安装/118项设施通过，llama完整C++构建已过；21项选择性清单（19个未执行依赖点、CPU B512 7200秒、NPU B512双卡容量替代）正在运行/等待。待审阅资产hash、内部case、GGUF、数值/离散及精确恢复，不能将active或outer exit0当通过。保留[旧57项终态](evidence/llm-terminal-audit-20261104.md)和严格失败，不重跑完成曲线。活跃身份、资源/停止命令只见STATUS；vLLM/TP/EP原NNAL边界未解除。
+- **Dense/MoE重启后全部终态，仍有明确缺口**：见[终态21项](evidence/llm-restart-terminal-20261104.md)：6执行完成（4成本/2检查）、2llama B32超时、3依赖失败、10调度失败未提交。OLMoE CPU/双NPU B512已得探索成本；llama两个B1精确恢复通过但小检查严格数值失败。Qwen7B已完整，MoE第5片partial2.875GiB。优先修复模型cwd未隔离：fusion_result.json落入固定源码，触发下一提交clean guard；用绝对源码入口和每case输出cwd回归，保留保护及原失败。再新attempt只补未执行项；MoE有界网络方案、llama B32分阶段观察另列，不自动整轮重跑。当前无活动作业，身份/命令只见STATUS；vLLM/TP/EP配套边界不变。
 
 本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，

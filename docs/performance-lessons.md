@@ -526,3 +526,11 @@ llama实际停在源码归档5MiB的网络读取，下一步应修准备层而�
 随后完整C++构建通过。模型权重与源码站点应分别试测，不能由一个域名的代理经验推广其他来源；
 首块可达性与持续带宽也不同。OLMoE B512静态KV本身40GiB，prefill64→32/16只将总估算
 63.08→60.08/58.58GiB；减小时间批不能消除常驻KV，需另列显式多设备配置，不降低安全余量冒充单卡通过。
+
+
+[11-04重启终态](evidence/llm-restart-terminal-20261104.md)进一步显示：固定Git源码不应同时作为
+模型运行cwd。NPU graph_fusion产物fusion_result.json落入检出后，下一次延迟提交的clean guard
+正确拒绝；需要隔离每case运行目录，而不是放宽干净源码要求或把所有输出加入ignore。
+OLMoE B512 CPU/双NPU确实完成，后者allocated约31GiB但reserved约56GiB，两种峰值仍须保留。
+llama两个B1的完整状态精确恢复不能代替独立数值，两B32整流程超时不能从B1外推吞吐。
+Qwen7B用8MiB/单模型流完成，Qwen MoE同策略仍连接失败，分段和串行不是网络稳定性保证。
