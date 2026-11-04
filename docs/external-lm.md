@@ -207,3 +207,7 @@ llama新增construction/warmup/measurement/prefill/decode/checkpoint阶段日志
 已有checkpoint恢复使用原记录的binary/GGUF身份，不随新的ready指针切换。
 `--previous-build`在成本点之前用B2/L16/O4对旧/新二进制检查tokens、logits、完整序列化状态及
 各自新进程恢复；失败阻止该后继。此检查只验证阶段记录改动，不解除旧独立数值失败。
+
+若旧运行目录已退役，从79197ad固定检出按本页安装/构建流程重建原客户端，保留其ready.json，
+再从当前固定检出在同一新实验根准备后继；无需找回历史checkpoint或性能输出。
+输入由固定生成器重建，模型资产仍必须校验发布hash。新独立重建不能冒称原机器二进制或旧测量。
