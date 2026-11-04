@@ -1,0 +1,1795 @@
+{
+  "schema": "tide-lm-restart-evidence-v1",
+  "observed": "2026-11-04T02:10:20.190997+00:00",
+  "source": "79197ad557b33bfa82c1914a02038f8944351247",
+  "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+  "prior": "docs/evidence/llm-terminal-audit-20261104.json",
+  "scope": "Authorized restart submission and fixed runner tests; running is not model qualification",
+  "qualification": {
+    "state": "passed",
+    "tests_passed": 118,
+    "wheel_sha256": "874ccb6394d4831d782dd41f4339bd255dd907f2d910664da18caaa51957f666",
+    "installed_files_sha256": "0b7dd5248f5570a8dfcea220bf052fc2632c6a12b7641acbf9e5ebded31feb4c",
+    "scope": "runner/CLI/random-tiny mechanisms only; no pretrained model or NPU execution inferred"
+  },
+  "manifest": {
+    "schema": "tide-lm-matrix-v1",
+    "identity": "9542d663fd523380340667ef467399968fb3b946aa64ab6818a8267755b3d076",
+    "cases": [
+      {
+        "name": "extended-main-olmoe-cpu-b512-l512",
+        "kind": "main",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "extended-main-olmoe-cpu-b512-l512",
+          "model": "olmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 512,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 7200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "2532f7c15ffaf62df653973649f5f9c95ec10c425e87c02c7f75315c8b2752a1"
+        },
+        "restart": {
+          "original_config_id": "2532f7c15ffaf62df653973649f5f9c95ec10c425e87c02c7f75315c8b2752a1",
+          "reason": "1200s whole-process timeout; explicit 7200s limit, unchanged workload"
+        }
+      },
+      {
+        "name": "stage2-qwen7-cpu-b8-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwen7-cpu-b8-l512",
+          "model": "qwen7",
+          "task": {
+            "mode": "inference",
+            "batch": 8,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "79ad8ef6bc1f59a769a9720aaa68a0f57215717d5fc41ba52ab846281bcf98a0"
+        }
+      },
+      {
+        "name": "stage2-qwen7-npu-b8-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwen7-npu-b8-l512",
+          "model": "qwen7",
+          "task": {
+            "mode": "inference",
+            "batch": 8,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "7612ecd4fa3556f61612a4c5b3524eff732402bd516b55e305b2bf84961427b8"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-cpu-b1-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-cpu-b1-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 1,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "6a9a170b0f4e137700500ef3b8cc804dc6d25bbe8bd2eb6831978d894a07341d"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-cpu-b8-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-cpu-b8-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 8,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "c56475c1c9e0244788dbafd12d44d2cf07f9d69202b87e5dc627162679bd7d3b"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b1-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b1-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 1,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "45f035752219ceb4c8aed2abda672612263c5cbbfc46b6542d6784a62ee274e9"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b8-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b8-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 8,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "07c4c5778d409b96b0f177400cbda6d9380e3a6d472990ac12e8faea67811b7c"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b32-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b32-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 32,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "53c69c062a27041e473986e9a68ad0cade1fcea51baa9921de542e7376cbf5fc"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b128-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b128-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 128,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "739f4e4e8da6a8e1b7607bb55df54c7405423abddec902fa3a66fe46d283d460"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b512-l512",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b512-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 512,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "9d3637ed49802f48d584ef426c428f0110ffb3d285c9bd01f0f66c8a13a41534"
+        }
+      },
+      {
+        "name": "stage2-qwenmoe-npu-b8-l2048",
+        "kind": "stage2",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "stage2-qwenmoe-npu-b8-l2048",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 8,
+            "input_tokens": 2048,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "4d402f7017729e038e9c2f9817c7ad54872963a86800fd712f9a151e25fce59b"
+        }
+      },
+      {
+        "name": "llama-check-qwen15-cpu-b2-l16",
+        "kind": "llama-check",
+        "action": "check",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-check-qwen15-cpu-b2-l16",
+          "model": "qwen15",
+          "task": {
+            "mode": "inference",
+            "batch": 2,
+            "input_tokens": 16,
+            "output_tokens": 4,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 0,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "llama-cost-qwen15-cpu-b1-l512",
+        "kind": "llama-cost",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-cost-qwen15-cpu-b1-l512",
+          "model": "qwen15",
+          "task": {
+            "mode": "inference",
+            "batch": 1,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": true,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "llama-cost-qwen15-cpu-b32-l512",
+        "kind": "llama-cost",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-cost-qwen15-cpu-b32-l512",
+          "model": "qwen15",
+          "task": {
+            "mode": "inference",
+            "batch": 32,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "llama-check-olmoe-cpu-b2-l16",
+        "kind": "llama-check",
+        "action": "check",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-check-olmoe-cpu-b2-l16",
+          "model": "olmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 2,
+            "input_tokens": 16,
+            "output_tokens": 4,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 0,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "llama-cost-olmoe-cpu-b1-l512",
+        "kind": "llama-cost",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-cost-olmoe-cpu-b1-l512",
+          "model": "olmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 1,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": true,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "llama-cost-olmoe-cpu-b32-l512",
+        "kind": "llama-cost",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "llama-cost-olmoe-cpu-b32-l512",
+          "model": "olmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 32,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "cpu",
+            "dtype": "bfloat16",
+            "engine": "llama_cpp",
+            "threads": 16,
+            "devices": 1,
+            "placement": "single",
+            "attention": "eager",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "capacity-2-olmoe-npu-b512-l512",
+        "kind": "main",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "capacity-2-olmoe-npu-b512-l512",
+          "model": "olmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 512,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 2,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "recovery": {
+          "reason": "previous dependency_failed; same workload",
+          "original_config_id": "256e50724133d2c56a9e3efdc2f6964b6f35118452fef426b85eba1a981cd5e0"
+        },
+        "restart": {
+          "original_config_id": "256e50724133d2c56a9e3efdc2f6964b6f35118452fef426b85eba1a981cd5e0",
+          "reason": "single-device 63.08GiB rejected; explicit two-device alternative, not a single-device pass",
+          "prior_small_check": "OLMoE two-device B2 executed with strict numeric/token failure; B1 exact resume passed"
+        }
+      },
+      {
+        "name": "placement-4-check-qwenmoe-npu-b2-l16",
+        "kind": "placement-4-check",
+        "action": "check",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "placement-4-check-qwenmoe-npu-b2-l16",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 2,
+            "input_tokens": 16,
+            "output_tokens": 4,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 4,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 0,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        }
+      },
+      {
+        "name": "placement-4-alternative-qwenmoe-npu-b32-l512",
+        "kind": "placement-4-alternative",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "placement-4-alternative-qwenmoe-npu-b32-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 32,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 4,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "alternative": "Transformers/Accelerate explicit layer copies; not vLLM or TP/EP"
+      },
+      {
+        "name": "placement-4-alternative-qwenmoe-npu-b128-l512",
+        "kind": "placement-4-alternative",
+        "action": "run",
+        "config": {
+          "schema": "tide-lm-experiment-v1",
+          "name": "placement-4-alternative-qwenmoe-npu-b128-l512",
+          "model": "qwenmoe",
+          "task": {
+            "mode": "inference",
+            "batch": 128,
+            "input_tokens": 512,
+            "output_tokens": 128,
+            "seed": 19,
+            "input_kind": "synthetic_tokens",
+            "microbatch": 1,
+            "global_batch": 4
+          },
+          "execution": {
+            "backend": "npu",
+            "dtype": "bfloat16",
+            "engine": "transformers",
+            "threads": 16,
+            "devices": 4,
+            "placement": "layer_split",
+            "attention": "sdpa",
+            "prefill_chunk": 64
+          },
+          "measurement": {
+            "warmup": 1,
+            "steps": 1,
+            "timeout_seconds": 1200,
+            "checkpoint": false,
+            "profile": false
+          },
+          "resources": {
+            "host_gib": 384,
+            "device_reserve_gib": 6.4,
+            "workspace_gib": 4,
+            "checkpoint_gib": 24,
+            "project_gib": 160,
+            "account_gib": 300
+          }
+        },
+        "alternative": "Transformers/Accelerate explicit layer copies; not vLLM or TP/EP"
+      }
+    ],
+    "scope": "19 unexecuted dependencies + CPU B512 timeout extension + explicit dual-NPU B512 alternative",
+    "prior_evidence": "docs/evidence/llm-terminal-audit-20261104.json",
+    "preserved": "completed checks/curves and all strict failures; no retry of completed numerical disagreements"
+  },
+  "network_probes": [
+    {
+      "entry": "direct",
+      "kind": "weight",
+      "bytes": 0,
+      "seconds": 15.037,
+      "error": "URLError"
+    },
+    {
+      "entry": "c28",
+      "kind": "weight",
+      "bytes": 1048576,
+      "seconds": 3.681,
+      "status": 206
+    },
+    {
+      "entry": "proxy-current-route",
+      "kind": "weight",
+      "bytes": 0,
+      "seconds": 15.027,
+      "error": "URLError"
+    },
+    {
+      "entry": "direct",
+      "kind": "llama-source",
+      "bytes": 1048576,
+      "seconds": 1.125,
+      "status": 200
+    },
+    {
+      "entry": "c28",
+      "kind": "llama-source",
+      "bytes": 1048576,
+      "seconds": 2.21,
+      "status": 200
+    },
+    {
+      "entry": "proxy-current-route",
+      "kind": "llama-source",
+      "bytes": 1048576,
+      "seconds": 6.572,
+      "status": 200
+    }
+  ],
+  "network_scope": "first 1MiB includes connection cost, not a sustained bandwidth measurement; no shared route change",
+  "preserved_prior_source_partial": {
+    "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/2cbca389f515df455412dafa07e2b1359cc72a6d.tar.part",
+    "bytes": 5242880,
+    "sha256": "6807c128d054602eb7f34807022e50040b5e608c58a32664f5f12ebbc57c36b0",
+    "preserved_as": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/2cbca389f515df455412dafa07e2b1359cc72a6d.tar.part.failed-20261103-f"
+  },
+  "sharing_policy": {
+    "schema": "tide-npu-sharing-v1",
+    "reason": "User explicitly authorized one lightly occupied NPU; preserve other projects and record shared contention",
+    "expires_unix": 1793930590.8933756,
+    "cards": {
+      "9": {
+        "max_hbm_mib": 8192,
+        "max_aicore_percent": 5,
+        "required_free_mib": 53248,
+        "processes": [
+          {
+            "pid": 3334312,
+            "start_ticks": 2131067677,
+            "uid": 1010
+          }
+        ]
+      }
+    }
+  },
+  "jobs": {
+    "qualify-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "passed",
+        "started": "2026-11-04T02:02:48.337851+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/bin/bash",
+          "scripts/qualify_lm_runner.sh",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102"
+        ],
+        "timeout_seconds": 1800,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-qualify-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 964604,
+        "supervisor_start_ticks": 2134393905,
+        "workload_pid": 966185,
+        "pgid": 966185,
+        "workload_start_ticks": 2134393916,
+        "exit_code": 0,
+        "workload_exit_code": 0,
+        "termination_reason": "exit",
+        "remaining_live_pids": [],
+        "finished": "2026-11-04T02:03:22.275836+00:00"
+      },
+      "record_sha256": "853a884b63c94da3b786aa1965419749a85f8d99fdc0df8f0cc9f2968d0b8542",
+      "unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    "assets-small-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:22.098813+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+          "exec",
+          "--entry",
+          "c28",
+          "--",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+          "-B",
+          "scripts/fetch_lm_remaining.py",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--chunk-mib",
+          "8",
+          "--retries",
+          "10",
+          "--attempt",
+          "20261104-g",
+          "--group",
+          "dense-moe-small"
+        ],
+        "timeout_seconds": 108000,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-assets-small-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 1981938,
+        "supervisor_start_ticks": 2134403281,
+        "workload_pid": 1982623,
+        "pgid": 1982623,
+        "workload_start_ticks": 2134403292
+      },
+      "record_sha256": "9f38f52875bf8d3cdf8a6cecaf4483b2c5a8464c7417dd325dfcce6f057b25e0",
+      "unit": {
+        "MainPID": "1981938",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-assets-small-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-assets-small-20261104-g.service\n"
+    },
+    "assets-moe-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:22.247438+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+          "exec",
+          "--entry",
+          "c28",
+          "--",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+          "-B",
+          "scripts/fetch_lm_remaining.py",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--chunk-mib",
+          "8",
+          "--retries",
+          "10",
+          "--attempt",
+          "20261104-g",
+          "--group",
+          "qwen-moe",
+          "--wait-for-job",
+          "assets-small-g"
+        ],
+        "timeout_seconds": 151200,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-assets-moe-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 1983143,
+        "supervisor_start_ticks": 2134403296,
+        "workload_pid": 1984644,
+        "pgid": 1984644,
+        "workload_start_ticks": 2134403306
+      },
+      "record_sha256": "0e50ca611f1d1cd18f3d858477f04d372f816770891a9880d93168d4a33cd731",
+      "unit": {
+        "MainPID": "1983143",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-assets-moe-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-assets-moe-20261104-g.service\n"
+    },
+    "llama-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:22.396936+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/usr/bin/env",
+          "-u",
+          "HTTP_PROXY",
+          "-u",
+          "HTTPS_PROXY",
+          "-u",
+          "ALL_PROXY",
+          "-u",
+          "http_proxy",
+          "-u",
+          "https_proxy",
+          "-u",
+          "all_proxy",
+          "/bin/bash",
+          "scripts/run_lm_engine_followup.sh",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--kind",
+          "llama",
+          "--attempt",
+          "llama-20261104-g",
+          "--manifest",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/plans-20261104-g/llama.json",
+          "--network-job",
+          "",
+          "--small-job",
+          "assets-small-g",
+          "--moe-job",
+          "assets-moe-g"
+        ],
+        "timeout_seconds": 151200,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-llama-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 1985261,
+        "supervisor_start_ticks": 2134403311,
+        "workload_pid": 1987015,
+        "pgid": 1987015,
+        "workload_start_ticks": 2134403321
+      },
+      "record_sha256": "ef994bd735acf2dfc15b78bbc37130f5dcb1a52935a30194ecce0840d7da69f7",
+      "unit": {
+        "MainPID": "1985261",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-llama-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-llama-20261104-g.service\n"
+    },
+    "placement-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:48.857739+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/bin/bash",
+          "scripts/run_lm_engine_followup.sh",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--kind",
+          "placement",
+          "--attempt",
+          "placement-20261104-g",
+          "--manifest",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/plans-20261104-g/placement.json",
+          "--small-job",
+          "assets-small-g",
+          "--moe-job",
+          "assets-moe-g",
+          "--npu-helper",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/site/npu-20261104-g.py"
+        ],
+        "timeout_seconds": 151200,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-placement-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 2227974,
+        "supervisor_start_ticks": 2134405957,
+        "workload_pid": 2228812,
+        "pgid": 2228812,
+        "workload_start_ticks": 2134405968
+      },
+      "record_sha256": "a7d686b7aba038eaae9dd93134e5675f57e94d508078d3f727c9496dcae18906",
+      "unit": {
+        "MainPID": "2227974",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-placement-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-placement-20261104-g.service\n"
+    },
+    "dispatch-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:49.010536+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/bin/python",
+          "-B",
+          "scripts/dispatch_lm_remaining.py",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--attempt",
+          "20261104-g",
+          "--small-job",
+          "assets-small-g",
+          "--moe-job",
+          "assets-moe-g",
+          "--manifest",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/plans-20261104-g/compute.json",
+          "--npu-helper",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/site/npu-20261104-g.py",
+          "--wait-hours",
+          "30"
+        ],
+        "timeout_seconds": 108060,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-dispatch-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 2229267,
+        "supervisor_start_ticks": 2134405972,
+        "workload_pid": 2230196,
+        "pgid": 2230196,
+        "workload_start_ticks": 2134405983
+      },
+      "record_sha256": "2b3e49e1f844ede14946f5ac9fa5d7b81f3dff5e8895952654f87a8087a86c70",
+      "unit": {
+        "MainPID": "2229267",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-dispatch-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-dispatch-20261104-g.service\n"
+    },
+    "cpu-ready-20261104-g": {
+      "record": {
+        "schema": "tide-durable-job-v1",
+        "state": "running",
+        "started": "2026-11-04T02:04:49.564613+00:00",
+        "cwd": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g",
+        "command": [
+          "/bin/bash",
+          "scripts/run_lm_local.sh",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "queue",
+          "--root",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102",
+          "--backend",
+          "cpu",
+          "--manifest",
+          "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery/20261104-g/ready.json",
+          "--attempt",
+          "ready-20261104-g",
+          "--hours",
+          "23.5"
+        ],
+        "timeout_seconds": 86400,
+        "grace_seconds": 10,
+        "metadata": {
+          "unit": "gef-lm-cpu-ready-20261104-g.service",
+          "source": "79197ad557b33bfa82c1914a02038f8944351247",
+          "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+        },
+        "scope": "Linux subreaper and all owned descendants; no reboot recovery",
+        "source": "79197ad557b33bfa82c1914a02038f8944351247",
+        "dirty": "",
+        "supervisor_pid": 2234990,
+        "supervisor_start_ticks": 2134406028,
+        "workload_pid": 2236234,
+        "pgid": 2236234,
+        "workload_start_ticks": 2134406038
+      },
+      "record_sha256": "3c735ab7f4c3106e9e20410332683dd6529c875981b1603a99a6288371c8fadf",
+      "unit": {
+        "MainPID": "2234990",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-cpu-ready-20261104-g.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "actual_supervisor_cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/user.slice\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/user.slice\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/gef-lm-cpu-ready-20261104-g.service\n"
+    },
+    "cpu-small-20261104-g": {
+      "state": "not_submitted_pending_dependency"
+    },
+    "npu-small-20261104-g": {
+      "state": "not_submitted_pending_dependency"
+    },
+    "cpu-moe-20261104-g": {
+      "state": "not_submitted_pending_dependency"
+    },
+    "npu-moe-20261104-g": {
+      "state": "not_submitted_pending_dependency"
+    }
+  },
+  "assets": {
+    "qwen7": {
+      "state": "running",
+      "started": "2026-11-04T02:04:22.462484+00:00",
+      "updated": "2026-11-04T02:10:12.675730+00:00",
+      "current_file": "model-00001-of-00004.safetensors",
+      "current_bytes": 3396526562,
+      "current_total": 3945441440,
+      "transport": {
+        "chunk_mib": 8,
+        "retries_per_file": 10
+      },
+      "events": [
+        {
+          "file": "model-00001-of-00004.safetensors",
+          "time": "2026-11-04T02:08:15.602053+00:00",
+          "kind": "transient_read",
+          "failure": 1,
+          "offset": 3287474658,
+          "reason": "early EOF",
+          "retries_allowed": 10
+        }
+      ],
+      "files": {
+        ".gitattributes": {
+          "state": "verified_existing",
+          "bytes": 1519,
+          "mtime_ns": 1793619188216840890
+        },
+        "LICENSE": {
+          "state": "verified_existing",
+          "bytes": 11343,
+          "mtime_ns": 1793619189700854923
+        },
+        "README.md": {
+          "state": "verified_existing",
+          "bytes": 6240,
+          "mtime_ns": 1793619191216869259
+        },
+        "config.json": {
+          "state": "verified_existing",
+          "bytes": 663,
+          "mtime_ns": 1793619192500881400
+        },
+        "generation_config.json": {
+          "state": "verified_existing",
+          "bytes": 243,
+          "mtime_ns": 1793619193700892748
+        },
+        "merges.txt": {
+          "state": "verified_existing",
+          "bytes": 1671839,
+          "mtime_ns": 1793619195660911282
+        }
+      }
+    },
+    "qwenmoe": {
+      "state": "failed",
+      "started": "2026-11-03T02:05:34.953616+00:00",
+      "updated": "2026-11-03T10:04:54.284577+00:00",
+      "current_file": "model-00005-of-00016.safetensors",
+      "current_bytes": 1694498816,
+      "current_total": 3999975400,
+      "transport": {
+        "chunk_mib": 32,
+        "retries_per_file": 6
+      },
+      "events": [
+        {
+          "file": "model-00004-of-00016.safetensors",
+          "time": "2026-11-03T07:33:56.297170+00:00",
+          "kind": "transient_read",
+          "failure": 1,
+          "offset": 1993342976,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T09:15:57.057135+00:00",
+          "kind": "transient_read",
+          "failure": 1,
+          "offset": 1670381568,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T09:22:39.377831+00:00",
+          "kind": "transient_read",
+          "failure": 2,
+          "offset": 1674575872,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T09:28:06.096962+00:00",
+          "kind": "transient_read",
+          "failure": 3,
+          "offset": 1680867328,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T09:42:07.273040+00:00",
+          "kind": "transient_read",
+          "failure": 4,
+          "offset": 1686110208,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T09:52:23.016878+00:00",
+          "kind": "transient_read",
+          "failure": 5,
+          "offset": 1690304512,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T10:01:34.086020+00:00",
+          "kind": "transient_read",
+          "failure": 6,
+          "offset": 1692401664,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        },
+        {
+          "file": "model-00005-of-00016.safetensors",
+          "time": "2026-11-03T10:04:54.280913+00:00",
+          "kind": "transient_read",
+          "failure": 7,
+          "offset": 1694498816,
+          "reason": "TimeoutError",
+          "retries_allowed": 6
+        }
+      ],
+      "files": {
+        ".gitattributes": {
+          "state": "verified_existing",
+          "bytes": 1570,
+          "mtime_ns": 1793619630641022523
+        },
+        "LICENSE": {
+          "state": "verified_existing",
+          "bytes": 11343,
+          "mtime_ns": 1793619632237037601
+        },
+        "README.md": {
+          "state": "verified_existing",
+          "bytes": 15418,
+          "mtime_ns": 1793619635657069910
+        },
+        "config.json": {
+          "state": "verified_existing",
+          "bytes": 963,
+          "mtime_ns": 1793619638041092432
+        },
+        "config_1m.json": {
+          "state": "verified_existing",
+          "bytes": 77313,
+          "mtime_ns": 1793619639877109777
+        },
+        "generation_config.json": {
+          "state": "verified_existing",
+          "bytes": 239,
+          "mtime_ns": 1793619641573125800
+        },
+        "merges.txt": {
+          "state": "verified_existing",
+          "bytes": 1671839,
+          "mtime_ns": 1793619643729146167
+        },
+        "model-00001-of-00016.safetensors": {
+          "state": "downloaded_verified",
+          "bytes": 3998893112,
+          "mtime_ns": 1793675446869494068
+        },
+        "model-00002-of-00016.safetensors": {
+          "state": "downloaded_verified",
+          "bytes": 3999974192,
+          "mtime_ns": 1793681642427318981
+        },
+        "model-00003-of-00016.safetensors": {
+          "state": "downloaded_verified",
+          "bytes": 3997360832,
+          "mtime_ns": 1793688099276222034
+        },
+        "model-00004-of-00016.safetensors": {
+          "state": "downloaded_verified",
+          "bytes": 3999975056,
+          "mtime_ns": 1793694038734561574
+        }
+      }
+    }
+  },
+  "ongoing_cases": {
+    "runs/cpu-ready-20261104-g/extended-main-olmoe-cpu-b512-l512/phase.json": {
+      "phase": "computing",
+      "started": "2026-11-04T02:09:15.815947+00:00",
+      "physical_devices": null,
+      "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/restart-g"
+    },
+    "runs/npu-placement-olmoe-run-placement-20261104-g/capacity-2-olmoe-npu-b512-l512/allocation.json": {
+      "elapsed_seconds": 324.02172702923417,
+      "free_but_locked_physical_ids": [],
+      "free_physical_ids": [],
+      "head_job_id": "gef-lm-2228812-0",
+      "head_priority": 0,
+      "job_id": "gef-lm-2228812-0",
+      "npu_count": 2,
+      "priority": 0,
+      "project": "gef-lm",
+      "queue_position": 1,
+      "reason": "insufficient_free_devices",
+      "schema_version": 1,
+      "status": "queued",
+      "timestamp": "2026-11-04T02:10:13.933668+00:00"
+    }
+  },
+  "dispatcher": {
+    "schema": "tide-lm-dispatch-v1",
+    "started": "2026-11-04T02:04:49.438428+00:00",
+    "state": "waiting",
+    "submitted": [
+      {
+        "group": "ready",
+        "backend": "cpu",
+        "unit": "gef-lm-cpu-ready-20261104-g.service",
+        "job": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs/cpu-ready-20261104-g",
+        "time": "2026-11-04T02:04:49.590071+00:00"
+      }
+    ],
+    "pending": [
+      "small",
+      "moe"
+    ]
+  },
+  "llama": {
+    "state": "running",
+    "kind": "llama",
+    "started": "2026-11-04T02:04:22.718620+00:00",
+    "models": {},
+    "phase": "waiting_compute_lock_for_conversion",
+    "current": "qwen15"
+  },
+  "placement": {
+    "state": "running",
+    "kind": "placement",
+    "started": "2026-11-04T02:04:49.198032+00:00",
+    "models": {},
+    "phase": "run",
+    "vllm_audit": {
+      "revision": "c09d3e20b9c45c80b34ae3781440d90904a44023",
+      "hardware": "A3",
+      "selected_official_path": "A3 source + CANN9.1 / Torch2.10 / TorchNPU2.10.post7 / NNAL",
+      "public_baseline": "Torch2.12/TorchNPU2.12/CANN9.1; published NNAL not installed",
+      "known_nnal_paths": {
+        "/usr/local/Ascend/nnal/atb/set_env.sh": false,
+        "/opt/ascend/nnal/atb/set_env.sh": false
+      },
+      "decision": "bounded alternative uses existing matched Transformers; no public changes, no claim vLLM/TP/EP unsupported on hardware",
+      "restart": "separate validated A3 NNAL/source-build environment; not ordinary A2 PyPI wheel"
+    },
+    "current": "olmoe"
+  },
+  "resources": {
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   106G    400G    800G           1102k       0       0        \n",
+    "project_stop_gib": 160,
+    "account_stop_gib": 300,
+    "hard_quota_gib": 800,
+    "compute_threads": 16,
+    "build_affinity_cpus": 320,
+    "memory_limit_note": "MemoryMax requested; v1 controller shared at user service, not proven per-unit hard limit"
+  },
+  "source_artifacts": {
+    "2cbca389f515df455412dafa07e2b1359cc72a6d.tar.part.failed-20261103-f": {
+      "bytes": 5242880
+    },
+    "2cbca389f515df455412dafa07e2b1359cc72a6d.tar.gz": {
+      "bytes": 38909915
+    }
+  },
+  "engine_build": {
+    "state": "passed",
+    "finished": "2026-11-04T02:09:15.704123+00:00",
+    "revision": "2cbca389f515df455412dafa07e2b1359cc72a6d",
+    "archive_sha256": "5ae980bfae6e215e4e953cf06d97f7849d8227c6bf80f28f360749ca018a519c",
+    "binary": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/tide-lm-llama",
+    "binary_sha256": "818dc14af81b059a48523691d2f183c5e0121616605428073f1aadd72018c119",
+    "build_jobs": 320,
+    "shared_libraries": {
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libllama.so": "d777135b344927c68ad0eeef1b8a5f4da0e042eefbb0755f12e80c650dd2f80c",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-base.so": "80f44d6e0fe52b6c59c52f4ce822bdf3c107ff90a02a4e1cd5a12c45cfc26df1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml.so": "8a8398025ddbaf75c45955457dacbc6bb090f7192a734ce7e2c564a72afa1235",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-cpu.so.0.28.0": "e3d2da4da2dc7292c76d65f5db8e2dd09823121611155b593833c14266e063f1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-base.so.0": "80f44d6e0fe52b6c59c52f4ce822bdf3c107ff90a02a4e1cd5a12c45cfc26df1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libllama.so.0.8.0": "d777135b344927c68ad0eeef1b8a5f4da0e042eefbb0755f12e80c650dd2f80c",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml.so.0.28.0": "8a8398025ddbaf75c45955457dacbc6bb090f7192a734ce7e2c564a72afa1235",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml.so.0": "8a8398025ddbaf75c45955457dacbc6bb090f7192a734ce7e2c564a72afa1235",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-cpu.so": "e3d2da4da2dc7292c76d65f5db8e2dd09823121611155b593833c14266e063f1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-base.so.0.28.0": "80f44d6e0fe52b6c59c52f4ce822bdf3c107ff90a02a4e1cd5a12c45cfc26df1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libllama.so.0": "d777135b344927c68ad0eeef1b8a5f4da0e042eefbb0755f12e80c650dd2f80c",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/build/bin/libggml-cpu.so.0": "e3d2da4da2dc7292c76d65f5db8e2dd09823121611155b593833c14266e063f1"
+    },
+    "compiler": "c++ (GCC) 10.3.1",
+    "foundation_source": "79197ad557b33bfa82c1914a02038f8944351247",
+    "cmake_flags": "Release; CPU native ARM/OpenMP; GGML_BLAS OFF; no GPU",
+    "conversion_python": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/llama-convert/bin/python",
+    "source_directory": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines/llama/llama.cpp-2cbca389f515df455412dafa07e2b1359cc72a6d"
+  }
+}
