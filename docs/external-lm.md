@@ -211,3 +211,6 @@ llama新增construction/warmup/measurement/prefill/decode/checkpoint阶段日志
 若旧运行目录已退役，从79197ad固定检出按本页安装/构建流程重建原客户端，保留其ready.json，
 再从当前固定检出在同一新实验根准备后继；无需找回历史checkpoint或性能输出。
 输入由固定生成器重建，模型资产仍必须校验发布hash。新独立重建不能冒称原机器二进制或旧测量。
+
+本轮15项的实际终态与成本见[11-05审阅](evidence/llm-isolation-terminal-20261105.md)：
+13项成本完成、1项严格数值/token失败、1项双NPU B512容量拒绝；配置生成入口不表示全部资格通过。

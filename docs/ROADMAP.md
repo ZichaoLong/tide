@@ -45,7 +45,7 @@
 
 ## 当前待办与重启条件
 
-- **Dense/MoE目录隔离修复与15项选择性后继**：用户已批准继续。模型cwd与固定源码分离、严格clean guard保留，实现694eb60、固定安装设施125项通过；15项后台后继中4项执行完成（Qwen7B CPU/NPU B8、两个llama CPU B32），这些规模的numeric/discrete/checkpoint均not_checked；11项仍等待MoE下载。`lm retry-matrix --round isolation`保留13个未执行原配置，只对两个llama B32超时点显式延长至7200秒并加阶段日志；旧/新二进制完整输出/状态/恢复小检查已通过，B32实际成本已落盘，不替代独立数值资格。MoE单流32MiB、I/O120秒、每文件24次临时重试，30小时外层预算。只补缺口，不重跑完成的B1/B512和原数值失败。实际作业/身份只见STATUS；[原21项终态](evidence/llm-restart-terminal-20261104.md)保持不变，vLLM/TP/EP配套边界仍保留。
+- **Dense/MoE选择性后继已终态，数值/容量边界保留**：[15项审阅](evidence/llm-isolation-terminal-20261105.md)记录13项推理成本完成、1项四NPU独立检查数值/token失败、1项双NPU B512静态容量拒绝；无中断或未提交项，当前不需重启。实现694eb60/固定设施125项资格与模型资格分列。Qwen MoE下载完整，真实NPU输出已隔离，延迟提交成功；旧下载/cwd/超时失败不改写。小检查的100组logits/KV超原容差、生成2/8 token不同，重启修复须先定位首差；13个成本点独立数值/离散/恢复均not_checked。B512需56.719GiB而当前保留余量后54.737GiB；先校准KV/激活/workspace及reserved，再考虑显式小prefill或更多设备，不减少逻辑B或安全余量、不原样盲重试。四NPU B128 reserved仍约60.9GiB，不能按allocated外推B512。vLLM/TP/EP须另建匹配A3 NNAL的软件环境，不修改公共基线。完整原配置由`lm retry-matrix --round isolation`重建；新实验先明确配置和预算，不重复已完成曲线与原严格失败。
 
 本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，
