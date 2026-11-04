@@ -15,6 +15,8 @@ def main(argv=None):
     p.add_argument('--group',choices=('ready','small','moe','all'),default='all')
     p=commands.add_parser('engine-matrix',help='standalone CPU and explicitly named multi-NPU placement alternatives')
     p.add_argument('--kind',choices=('all','llama','placement'),default='all')
+    p=commands.add_parser('retry-matrix',help='2026-11-04 authorized failures/dependencies only; explicit capacity alternative')
+    p.add_argument('--group',choices=('all','compute','llama','placement'),default='all')
     fetch=commands.add_parser('fetch',help='bounded ranged download; retains failed attempts and partial bytes')
     fetch.add_argument('model',choices=tuple(catalog()))
     fetch.add_argument('--root',required=True);fetch.add_argument('--project-root',required=True)
@@ -62,6 +64,9 @@ def main(argv=None):
         elif args.command=='engine-matrix':
             from .engine_matrix import manifest
             result=manifest(args.kind)
+        elif args.command=='retry-matrix':
+            from .retry import manifest
+            result=manifest(args.group)
         elif args.command in {'run','check','training-check','diagnose','memory-check'}:
             from .config import resolve
             config=read_json(args.config)

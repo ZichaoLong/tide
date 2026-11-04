@@ -7,6 +7,7 @@ import sys
 import time
 from tidegraph.lm.assets import ready
 from tidegraph.lm.engine_matrix import manifest,ASCEND_REVISION
+from tidegraph.lm.selection import validate
 from tidegraph.lm.queue import compute_lock,execute,placeholder
 from tidegraph.lm.report import save_all
 from tidegraph.experiment.records import write_json,read_json,fingerprint,now
@@ -17,8 +18,16 @@ TERMINAL={'passed','failed','cancelled','timeout','timed_out'}
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('root',type=Path)
     p.add_argument('--kind',choices=('llama','placement'),required=True);p.add_argument('--attempt',required=True)
+    p.add_argument('--manifest',type=Path,help='explicit subset; does not add old completed cases')
+    p.add_argument('--small-job',default='assets-small-d');p.add_argument('--moe-job',default='assets-moe-d')
+    p.add_argument('--network-job',default='assets-small-d',help='empty string allows independent direct source download')
+    p.add_argument('--npu-helper',type=Path)
     args=p.parse_args();root=args.root.resolve();out=root/'recovery'/args.attempt;out.mkdir(exist_ok=False)
-    value=manifest(args.kind);state=dict(state='running',kind=args.kind,started=now(),models={},phase='preparing')
+    value=validate(args.manifest) if args.manifest else manifest(args.kind)
+    if any((x['config']['execution']['engine']=='llama_cpp') != (args.kind=='llama') for x in value['cases']):
+        p.error('manifest engine differs from selected continuation kind')
+    keys=list(dict.fromkeys(x['config']['model'] for x in value['cases']))
+    state=dict(state='running',kind=args.kind,started=now(),models={},phase='preparing')
     def save():write_json(out/'status.json',state)
     def terminal(job):
         path=root/'jobs'/job/'status.json'
@@ -33,8 +42,8 @@ def main():
         if args.kind=='llama':
             state['phase']='waiting_network_slot_after_small_asset_service';save()
             # No third large download stream alongside the two model services.
-            while not terminal('assets-small-d') and time.monotonic()-begin<30*3600:time.sleep(30)
-            if not terminal('assets-small-d'):raise TimeoutError('30h network-slot dependency limit')
+            while args.network_job and not terminal(args.network_job) and time.monotonic()-begin<30*3600:time.sleep(30)
+            if args.network_job and not terminal(args.network_job):raise TimeoutError('30h network-slot dependency limit')
             state['phase']='waiting_compute_lock_for_build';save()
             with compute_lock(root/'compute.lock',21600):
                 state['phase']='building';save()
@@ -49,11 +58,10 @@ def main():
                 decision='bounded alternative uses existing matched Transformers; no public changes, no claim vLLM/TP/EP unsupported on hardware',
                 restart='separate validated A3 NNAL/source-build environment; not ordinary A2 PyPI wheel')
             save()
-        keys=['qwen15','olmoe'] if args.kind=='llama' else ['qwen15','olmoe','qwenmoe']
         for key in keys:
             cases=[x for x in value['cases'] if x['config']['model']==key]
             state.update(phase='waiting_asset',current=key);save()
-            job='assets-moe-d' if key=='qwenmoe' else 'assets-small-d'
+            job=args.moe_job if key=='qwenmoe' else args.small_job
             while not ready(key,root/'models') and not terminal(job) and time.monotonic()-begin<30*3600:time.sleep(30)
             if not ready(key,root/'models'):
                 reject(cases,key,'asset failed or finite dependency deadline; no model execution')
@@ -75,7 +83,7 @@ def main():
                 state['phase']=phase;save()
                 backend='cpu' if args.kind=='llama' else 'npu';attempt=f'{args.kind}-{key}-{phase}-{args.attempt}'
                 result=execute(root,backend,selection=path,attempt=attempt,hours=6,
-                               npu_helper=str(root/'site/run_on_free_npu.py') if backend=='npu' else None)
+                               npu_helper=str(args.npu_helper or root/'site/run_on_free_npu.py') if backend=='npu' else None)
                 if phase=='check':
                     base=root/'runs'/(backend+'-'+attempt)
                     complete=all((base/x['name']/'run/check.json').exists() and
@@ -88,7 +96,7 @@ def main():
     except BaseException as error:
         state.update(state='failed',error=str(error)[:2000],finished=now());save()
         if args.kind=='llama' and state.get('phase') in {'building','waiting_compute_lock_for_build','waiting_network_slot_after_small_asset_service'}:
-            for key in ('qwen15','olmoe'):reject([x for x in value['cases'] if x['config']['model']==key],key,'engine preparation failed: '+str(error)[:1000])
+            for key in keys:reject([x for x in value['cases'] if x['config']['model']==key],key,'engine preparation failed: '+str(error)[:1000])
         raise
 
 

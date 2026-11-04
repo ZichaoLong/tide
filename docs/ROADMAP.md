@@ -45,7 +45,7 @@
 
 ## 当前待办与重启条件
 
-- **Dense/MoE后继已全部终态，有限计划仍有缺口**：见[11-04审阅](evidence/llm-terminal-audit-20261104.md)。57项36执行完成（含2 profile与10检查/诊断）、19依赖未跑、1CPU超时、1NPU预算拒绝；4次新增精确续接通过，独立严格失败保持。原4 CPU超时后继均完成，OLMoE首次实际CPU/NPU/LoRA/双NPU闭环；双NPU在已测B1/B32更慢。继续项：Qwen7B/30B MoE下载耗尽有限重试，保留partial/前4个MoE分片；llama源码下载超时、未进入编译；OLMoE B512 CPU1200秒超时、NPU估算63.08GiB超安全54.73GiB，后继另列时限/多设备或预算方案。micro1实际融合Attention已观察，不自动撤销原micro4拒绝。vLLM/TP/EP需另配A3 NNAL/原生栈；不将跨层结果冒充。当前无活动任务，源码/环境/命令只见STATUS；不自动重启整份旧矩阵。
+- **Dense/MoE失败重启已获授权、正在固定实施**：保留[57项终态](evidence/llm-terminal-audit-20261104.md)与严格失败；`lm retry-matrix`只选19个未执行依赖点及2个明确后继（CPU B512 7200秒、NPU B512双卡容量替代），不重跑完成曲线。下载保留hash/partial并改8MiB单模型流；llama源码使用新探测通过的直连。按新固定源码先资格后后台提交；活跃身份、具体命令和资源只见STATUS。vLLM/TP/EP原NNAL配套边界及所有数值失败不解除。
 
 本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，

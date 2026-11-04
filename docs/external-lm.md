@@ -150,3 +150,29 @@ n_batch/n_ubatch是实际配置容量，不冒充MM形状或证明内部没有�
 llama等待small资产服务终态后才占第二个网络流，构建/转换分别最多2小时/1小时并持有compute.lock，
 转换后才逐模型提交小检查和有限点。依赖等待30小时，服务42小时；单配置仍1200秒、锁/设备等待6小时。
 placement分组不等构建；有独立CPU/NPU队列资源协调。运行用户可继续编辑主仓库，固定检出与转换产物不得修改。
+
+## 11-04明确授权的失败重启
+
+`tidegraph lm retry-matrix --group all|compute|llama|placement`从跟踪生成器重建21项，
+不依赖旧运行目录：19个未执行依赖点保持完整原配置；OLMoE CPU B512将整流程上限由1200秒
+显式改为7200秒；原单NPU B512估算63.080GiB仍拒绝，新增双NPU显式跨层配置每卡约36.8GiB。
+后者保持B512、输入512/输出128、BF16和prefill_chunk64，是新放置配置，不称原单卡通过。
+已完成的曲线、检查和数值失败不重新排队；原OLMoE双NPU小检查/精确恢复按原身份复用。
+
+`scripts/dispatch_lm_remaining.py --manifest COMPUTE_JSON --small-job NEW --moe-job NEW`
+按资产分别提交11项选择性队列；`scripts/run_lm_engine_followup.sh ROOT --kind llama|placement
+--manifest SELECTED_JSON --attempt NEW --small-job NEW --moe-job NEW`运行其余6/4项。
+二者均可用`--npu-helper`指定已审阅的站点调度入口，保持整组锁和两次资源采样。
+llama加`--network-job ''`允许经独立试测可用的直连源码下载，仍由compute.lock隔离构建和计时。
+
+模型下载复用原hash/断点，`fetch_lm_remaining.py --chunk-mib 8 --retries 10 --attempt NEW`
+明确缩短Range并给每文件10次临时错误重试预算；第二个模型服务以`--wait-for-job FIRST_JOB`
+等待第一个终态，避免两个大型模型争用同一路代理。依赖等待最多30小时、服务总时限由提交记录约束。
+源码归档较小且不支持Range，直连重新取得完整固定归档；旧失败日志和partial保留。
+下载网络不改变共享路由、认证或公共软件，错误hash/Range/非有限/通信/精确恢复失败仍不可豁免。
+
+若用户已明确允许低占用卡共享，先用`scripts/run_shared_npu.py`的`tide-npu-sharing-v1`
+策略绑定实际PID/start/UID、HBM/利用率/空闲余量和失效时间，然后用
+`scripts/make_lm_npu_adapter.py --policy POLICY --helper SITE_HELPER --output NEW_ADAPTER`
+生成`--npu-helper`入口。策略与helper都按hash固定；新增占用进程、超过预算或过期均拒绝，
+每case保存sharing-audit.jsonl。未列入共享策略的卡仍要求无进程；不称共享观察为独占计时。
