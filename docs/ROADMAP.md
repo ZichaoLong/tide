@@ -45,7 +45,7 @@
 
 ## 当前待办与重启条件
 
-- **Dense/MoE后继已在后台**：见[后继提交/诊断](evidence/llm-continuation-20261103.md)。8b45cb4分段恢复；472d94f固定94项并启动43项选择性后继；983da72固定48项、C++语法及4个llama CPU点/6个NPU跨层后备/4小检查服务。待审阅资产hash、各内部case/恢复及完整构建，不能把running或外层exit0当通过。6个新小数值诊断完成：CPU FP32/eager训练新配置通过，其余日程/设备超差见证保留。原NPU micro4预算拒绝未豁免；micro1诊断待运行。vLLM-Ascend A3另需NNAL/匹配原生栈，本轮采用明确跨层后备，不称TP/EP；重启须配套环境与小collective/模型检查。旧[80项终态](evidence/llm-terminal-audit-20261103.md)不覆盖。活跃身份/资源/命令只见STATUS。
+- **Dense/MoE后继已全部终态，有限计划仍有缺口**：见[11-04审阅](evidence/llm-terminal-audit-20261104.md)。57项36执行完成（含2 profile与10检查/诊断）、19依赖未跑、1CPU超时、1NPU预算拒绝；4次新增精确续接通过，独立严格失败保持。原4 CPU超时后继均完成，OLMoE首次实际CPU/NPU/LoRA/双NPU闭环；双NPU在已测B1/B32更慢。继续项：Qwen7B/30B MoE下载耗尽有限重试，保留partial/前4个MoE分片；llama源码下载超时、未进入编译；OLMoE B512 CPU1200秒超时、NPU估算63.08GiB超安全54.73GiB，后继另列时限/多设备或预算方案。micro1实际融合Attention已观察，不自动撤销原micro4拒绝。vLLM/TP/EP需另配A3 NNAL/原生栈；不将跨层结果冒充。当前无活动任务，源码/环境/命令只见STATUS；不自动重启整份旧矩阵。
 
 本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，

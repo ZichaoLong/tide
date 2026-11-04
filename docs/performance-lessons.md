@@ -500,3 +500,23 @@ A3不能从普通A2 wheel或其他Torch栈推断可用；有界跨层后备是�
 新引擎构建、实际执行和独立/精确恢复仍应逐项验收，不能由适配器单元测试推断模型通过。
 
 在含torch_npu的公共Python基线中，Transformers导入检查也可能加载NPU库；`TORCH_DEVICE_BACKEND_AUTOLOAD=0`不替代CANN激活。此次未加载module的CPU机制测试报libhccl缺失，正确加载只读公共module后通过；不是模型或数学失败。
+
+## Dense/MoE后继终态的正负经验（2026-11-04）
+
+[57项审阅](evidence/llm-terminal-audit-20261104.md)确认：原1200秒限制包含构造/warmup/测量。
+Qwen1.5B CPU B512正式生成2344.5秒之外还有837.7秒warmup，B8/L8192也有957.7秒warmup；
+超时不能当作该配置不可执行。明确7200秒的新后继完成，原超时记录仍保留。
+相同globalB4的CPU Qwen0.5B全参L2048，micro1/4三更新中位155.5/535.0秒；
+更大micro并不保证更快，不能从减少累加次数推断整体收益。
+
+OLMoE CPU/NPU首次真实推理和LoRA均完成，双NPU跨层B1/B32比单NPU更慢；
+复制后的容量收益与小点速度是不同问题。独立CPU数值失败、NPU token改变，不能把成本倍率称严格等价加速。
+OLMoE B128 NPU allocated23.205GiB而reserved60.910GiB，两种峰值都需报告；
+B512静态估算63.080GiB被拒绝，不是已发生OOM，也不能直接从allocated线性推到安全容量。
+
+NPU L2048/micro1实际dispatch有96次融合Attention及96次对应反向，这是算子证据，
+强于仅检查SDPA flags。单instrumented更新的12.151GiB峰值仍不认证更大batch或连续更新峰值。
+
+32MiB分段帮助OLMoE完整下载并最终hash通过，但Qwen7B/30B MoE仍因读超时耗尽预算；
+分段不是网络稳定性保证，需保留partial及已核对分片。引擎phase=building也不证明开始编译：
+llama实际停在源码归档5MiB的网络读取，下一步应修准备层而非猜测C++编译问题。
