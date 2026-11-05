@@ -1,4 +1,4 @@
-# 当前交接 — LM选择性后继全部终态（2026-11-05）
+# 当前交接 — 双NPU B512试跑入口就绪，由用户启动（2026-11-05）
 
 截至2026-11-05 07:51 CST，本轮15项后继全部终态：13项推理成本测量完成，
 1项独立小检查执行完成但数值/生成token失败，1项双NPU B512在模型分配前容量拒绝。
@@ -18,8 +18,18 @@
 `execution.device_memory_admission=observe`及`lm queue --config`，默认strict和旧配置身份保持。
 公开配置为`examples/external_lm/qwenmoe-two-npu-b512-observe.json`；7200秒计算上限、外层9小时，
 保持原模型、BF16、B512/L512/O128、prefill64及16线程。超限预算先记录，OOM/其他异常仍失败。
-当前仅准备和检查入口，没有替用户提交该模型作业；固定源码/设施资格接续记录将在提交后补全。
-本次开发相关37项通过，尚不表示该B512已实际分配或执行。具体人类命令见[external-lm](external-lm.md#显式容量试跑与单配置后台运行)。
+实现已提交`59e9acad6c5c3c7b106c5882acc6e3e8bd58c678`，固定检出`source/capacity-trial-i`仍干净。
+非editable wheel已更新到现有项目私有环境，固定安装设施135项通过（0失败/0跳过），
+开发37项为重叠范围；安装后的plan/queue --config已验，旧15项清单/身份逐项相同。
+资格service `gef-lm-qualify-20261105-i.service`已passed，job `jobs/qualify-i`、后代为空，
+MainPID=0/ControlGroup为空。没有替用户提交B512模型作业，也没有新的NPU/大模型实测。
+[入口资格证据](evidence/llm-capacity-entry-20261105.md)/[JSON](evidence/llm-capacity-entry-20261105.json)。
+启动时令`lm_root=/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`、
+`lm_src=$lm_root/source/capacity-trial-i`，站点helper为
+`/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py`；
+按[external-lm](external-lm.md#显式容量试跑与单配置后台运行)用唯一attempt提交单配置，
+自动选择两张空闲卡。用户启动后读取对应`jobs/ATTEMPT/status.json`与`runs/npu-ATTEMPT`，
+不要把原15项清单重新入队；主工作区可继续修改，固定检出/环境/活动输入保持不变。
 
 ## 终态、结论与下一步
 

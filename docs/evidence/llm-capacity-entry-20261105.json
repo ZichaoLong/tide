@@ -1,0 +1,136 @@
+{
+  "schema": "tide-lm-capacity-entry-evidence-v1",
+  "observed": "2026-11-05T02:26:17.084440+00:00",
+  "source": "59e9acad6c5c3c7b106c5882acc6e3e8bd58c678",
+  "fixed_source": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source/capacity-trial-i",
+  "fixed_source_clean": true,
+  "scope": "Installed CLI/configuration/resource-policy and random tiny CPU mechanisms only; no pretrained B512 or real NPU trial submitted.",
+  "qualification": {
+    "tests": 135,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "job": {
+    "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs/qualify-i",
+    "record_sha256": "f56ec51286325bcdd5547d8a798bf47798043fb804d39743a7e01493890d5ed5",
+    "state": "passed",
+    "finished": "2026-11-05T02:24:30.062600+00:00",
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "pid_checks": [
+      {
+        "role": "supervisor",
+        "pid": 408555,
+        "start_ticks": 2143160496,
+        "matching_live": false
+      },
+      {
+        "role": "workload",
+        "pid": 408563,
+        "start_ticks": 2143160506,
+        "matching_live": false
+      }
+    ]
+  },
+  "install": {
+    "state": "passed",
+    "finished": "2026-11-05T02:24:28.917323+00:00",
+    "source": "59e9acad6c5c3c7b106c5882acc6e3e8bd58c678",
+    "package": {
+      "package": "tidegraph",
+      "version": "0.3.0",
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/lib/python3.12/site-packages/tidegraph",
+      "installed_files_sha256": "4fd8507130535d44b1e52d3b7b2c83d32eed3ca9a256cdfb2bea9c12366f04a3",
+      "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+    },
+    "wheel_sha256": "c14a23af392c804230c848e2d06f286c98d6b9eee7c63ee34b188fc77634796a",
+    "scope": "runner/CLI/random-tiny mechanisms only; no pretrained model or NPU execution inferred"
+  },
+  "junit_sha256": "ebf2b19b6b407a378db547cd0815d7dc331dbbdbc50e609ff0846b85bdc2ace8",
+  "trial_configuration": {
+    "request": {
+      "schema": "tide-lm-experiment-v1",
+      "name": "manual-qwenmoe-npu2-b512-l512-observe",
+      "model": "qwenmoe",
+      "task": {
+        "mode": "inference",
+        "batch": 512,
+        "input_tokens": 512,
+        "output_tokens": 128,
+        "seed": 19,
+        "input_kind": "synthetic_tokens",
+        "microbatch": 1,
+        "global_batch": 4
+      },
+      "execution": {
+        "backend": "npu",
+        "dtype": "bfloat16",
+        "engine": "transformers",
+        "threads": 16,
+        "devices": 2,
+        "placement": "layer_split",
+        "attention": "sdpa",
+        "prefill_chunk": 64,
+        "device_memory_admission": "observe"
+      },
+      "measurement": {
+        "warmup": 1,
+        "steps": 1,
+        "timeout_seconds": 7200,
+        "checkpoint": false,
+        "profile": false
+      },
+      "resources": {
+        "host_gib": 384,
+        "device_reserve_gib": 6.4,
+        "workspace_gib": 4,
+        "checkpoint_gib": 24,
+        "project_gib": 160,
+        "account_gib": 300
+      }
+    },
+    "config_id": "be83db482b3ee3e182ad5832c0c491d94dddf7e7a06613686055ddab736e45a8",
+    "model_revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+    "budget": {
+      "weight_bytes": 61064245248,
+      "kv_bytes": 32212254720,
+      "activation_estimate_bytes": 3355443200,
+      "attention_estimate_bytes": 5368709120,
+      "logits_bytes": 622329856,
+      "optimizer_gradient_estimate_bytes": 0,
+      "workspace_bytes": 4294967296,
+      "host_estimate_bytes": 159709454336.0,
+      "per_device": [
+        {
+          "device": 0,
+          "layers": 24,
+          "estimated_bytes": 60902029312.0
+        },
+        {
+          "device": 1,
+          "layers": 24,
+          "estimated_bytes": 59657369600.0
+        }
+      ],
+      "per_device_estimate_bytes": 60902029312.0,
+      "checkpoint_estimate_bytes": 35433480192.0,
+      "device_count": 2,
+      "automatic_admission": false,
+      "note": "Static conservative estimates, not measured peaks. Actual free memory is checked before allocation."
+    },
+    "device_memory_admission": "observe"
+  },
+  "trial_submitted": false,
+  "legacy_manifest_identity": "2cc08215e60ed74f2df2770af79c32e6773ad24b0ec5bf525d394ab6a663076e",
+  "legacy_15_cases_unchanged": true,
+  "public_queue_config_help_verified": true,
+  "npu_helper": {
+    "path": "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "sha256": "38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76"
+  }
+}
