@@ -32,10 +32,56 @@ tidegraph lm results /absolute/experiment/runs --model qwen15 --backend npu --fo
 [CPU推理](../examples/external_lm/qwen15-cpu.json)、[双NPU MoE](../examples/external_lm/qwenmoe-two-npu.json)、
 [LoRA训练/恢复](../examples/external_lm/qwen15-lora-npu.json)可复制修改。
 plan不分配模型，输出完整配置身份、固定revision、权重/KV/激活/Attention/workspace及逐设备预算。
-加载前检查实际空闲HBM，预留至少max(6.4GiB,10%)，CPU也检查主存；没有自动OOM搜索、降精度或缩batch。
+默认加载前检查实际空闲HBM，预留max(resources.device_reserve_gib,总量10%)（默认6.4GiB），CPU也检查主存；没有自动OOM搜索、降精度或缩batch。
 预算是保守估算，不是实测峰值。layer_split按层连续分配、embedding/head在逻辑设备0，
 最后归一化在末设备；不整除卡数也可用。它使用Accelerate普通跨层复制，**不是TP/EP/HCCL资格**。
 公共接口可描述CUDA，但当前有限计划仅CPU/NPU，未恢复已释放的gpu3090。
+
+## 显式容量试跑与单配置后台运行
+
+`execution.device_memory_admission`省略时为`strict`，旧配置内容和身份保持不变。
+显式`observe`适用于CUDA/NPU的Transformers推理：仍计算原逐卡预算、读取实际free/total，
+保留原reserve，超限时打印警告并尝试分配。它只放行静态设备内存估算；主存、磁盘、设备数量、
+模型资产、空闲卡队列、超时、非有限、OOM和其他运行异常均保持原处理。
+它不把设备空闲内存改成另一个值，不改变dtype、batch、输入、缓存长度或算子。
+
+[双NPU B512显式试跑](../examples/external_lm/qwenmoe-two-npu-b512-observe.json)保持原
+Qwen3-30B-A3B-Instruct-2507、BF16、L512/O128、prefill_chunk64、16线程、一次warmup和一次正式生成，
+只增加observe身份，并将整流程计算上限明确设为7200秒。原准入失败及所有数值失败仍保留。
+`lm plan`输出生效策略；`result.json`在模型分配前落盘`device_admission`，包括逐卡estimate/free/reserve、
+within_budget及decision。即使随后分配失败，这些准入观察仍可查；若尚未构造成功，实际峰值可能尚未采集。
+终端/CSV/HTML均显示memory admission，成功完成也只代表容量探索执行，独立数值/恢复另验。
+
+`lm queue --config CONFIG`把一个JSON配置展开为单项、有身份的清单，使用原队列和进程监督，
+与`--manifest`互斥。它保持配置线程，不加入旧矩阵、不自动重试。公共前台`lm run`不会自行提供
+持久服务或实施配置中的时限；本机长试跑按下例提交。先按上文准备环境/资产，在固定干净检出中
+完成安装和相关资格；`FIXED_SOURCE`必须指向该固定检出，不能是继续编辑的工作区。
+
+```sh
+lm_root=/absolute/experiment-root
+lm_src=/absolute/fixed-source
+lm_attempt=qwenmoe-b512-$(date +%Y%m%d-%H%M%S)
+lm_helper=/absolute/use-local-ascend/scripts/run_on_free_npu.py
+PYTHONPATH="$lm_src/python" "$lm_root/env/transformers/bin/python" -B "$lm_src/scripts/submit_lm_job.py" \
+  --unit "gef-lm-$lm_attempt" --output "$lm_root/jobs/$lm_attempt" --seconds 32400 --memory-gib 384 -- \
+  bash "$lm_src/scripts/run_lm_local.sh" "$lm_root" queue --root "$lm_root" --backend npu \
+  --config "$lm_src/examples/external_lm/qwenmoe-two-npu-b512-observe.json" \
+  --npu-helper "$lm_helper" --attempt "$lm_attempt" --hours 9
+
+# 调度状态；模型分配后，尾随日志中的warning、OOM及完整traceback：
+cat "$lm_root/runs/npu-$lm_attempt/queue.json"
+tail -F "$lm_root/runs/npu-$lm_attempt/manual-qwenmoe-npu2-b512-l512-observe/process/task.log"
+# 结果（只有内部execution_status=completed才算执行完成）：
+tidegraph lm results "$lm_root/runs/npu-$lm_attempt" --format table
+# 停止后检查完整服务进程组及持久状态：
+systemctl --user stop "gef-lm-$lm_attempt.service"
+systemctl --user show "gef-lm-$lm_attempt.service" -p MainPID -p ControlGroup
+cat "$lm_root/jobs/$lm_attempt/status.json"
+```
+
+空闲卡选择及项目计算锁等待各自有6小时时限；每个计算过程上限2小时，整个服务先到9小时则停止。
+该队列自动选择两张无其他进程的卡，物理/逻辑映射记录在case的allocation.json；不手填已占用卡号。
+`observe`代表用户有意进行的容量探索，不能从静态估算56.72GiB推断B512实际峰值或成功率。
 
 ## 计时、输入和检查契约
 

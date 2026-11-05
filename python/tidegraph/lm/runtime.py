@@ -7,7 +7,7 @@ from .catalog import local_path,model
 from .assets import ready
 
 
-def setup(resolved, asset_root):
+def setup(resolved, asset_root, *, on_admission=None):
     c=resolved['request'];e=c['execution'];t=c['task'];r=c['resources']
     if not ready(c['model'],asset_root):raise RuntimeError('model assets are missing, incomplete or changed')
     import torch
@@ -27,14 +27,8 @@ def setup(resolved, asset_root):
     host_free = int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
     if b['host_estimate_bytes']>min(r['host_gib']*1024**3, host_free*.8):
         raise RuntimeError('host static budget exceeds declared job limit')
-    admission=[]
-    for i in range(e['devices'] if backend else 0):
-        free,total=backend.mem_get_info(i)
-        reserve=max(r['device_reserve_gib']*1024**3,total*.10)
-        admission.append(dict(device=i,free=free,total=total,reserve=reserve))
-        estimate=b['per_device'][i]['estimated_bytes']
-        if estimate>free-reserve:
-            raise RuntimeError(f"capacity rejected before model allocation: device {i}, estimate={estimate}, free={free}, reserve={reserve}")
+    from .admission import assess
+    admission=assess(c,b,backend,observer=on_admission)
     from transformers import AutoModelForCausalLM,AutoTokenizer
     path=local_path(asset_root,c['model']);cfg=model(c['model'])['config']
     dtype=torch.float32 if t['mode']=='full' else getattr(torch,e['dtype'])

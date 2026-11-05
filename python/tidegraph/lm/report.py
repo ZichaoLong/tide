@@ -8,7 +8,7 @@ from .catalog import model
 from ..experiment.records import read_json, replace_text
 
 COLUMNS = ('name','model','parameters','platform','mode','logical_batch','positions','output_tokens',
-           'dtype','client','placement','devices','threads','execution_status','numerical','discrete',
+           'dtype','client','placement','devices','threads','device_memory_admission','execution_status','numerical','discrete',
            'checkpoint','median_seconds','output_tokens_per_s','decode_tokens_per_s','target_tokens_per_s',
            'host_peak_bytes','device_peak_bytes','record')
 
@@ -28,6 +28,7 @@ def load(root):
             platform=e['backend'],mode=t['mode'],logical_batch=t['batch'],positions=t['input_tokens'],
             output_tokens=t['output_tokens'] if t['mode']=='inference' else None,dtype=e['dtype'],client=e['engine'],
             placement=e['placement'],devices=e['devices'],threads=e['threads'],execution_status=value['execution_status'],
+            device_memory_admission=e.get('device_memory_admission','strict'),
             numerical=v['numeric'],discrete=v['discrete'],checkpoint=v['checkpoint'],
             median_seconds=median('total_seconds'),output_tokens_per_s=median('output_tokens_per_s'),
             decode_tokens_per_s=median('decode_tokens_per_s'),target_tokens_per_s=median('target_tokens_per_s'),
@@ -45,10 +46,10 @@ def render(rows, format='table'):
         groups=(('Model',(('model','model'),('parameters','parameters'))),
                 ('Work',(('mode','task'),('logical_batch','batch'),('positions','input tokens'),('output_tokens','output cap'))),
                 ('Execution',(('platform','platform'),('client','engine'),('dtype','dtype'),('devices','devices'),('threads','threads'))),
-                ('Facts',(('execution_status','execution'),('numerical','numeric'),('discrete','tokens'),('checkpoint','resume'))),
+                ('Facts',(('device_memory_admission','memory admission'),('execution_status','execution'),('numerical','numeric'),('discrete','tokens'),('checkpoint','resume'))),
                 ('Cost',(('median_seconds','seconds'),('output_tokens_per_s','output tokens/s'),('decode_tokens_per_s','decode tokens/s'),('target_tokens_per_s','train target tokens/s'))))
         return render_html(rows,filters=filters,groups=groups,title='External dense / MoE language models')
-    columns=COLUMNS if format=='csv' else ('name','execution_status','median_seconds','output_tokens_per_s','target_tokens_per_s','checkpoint')
+    columns=COLUMNS if format=='csv' else ('name','device_memory_admission','execution_status','median_seconds','output_tokens_per_s','target_tokens_per_s','checkpoint')
     if format not in {'table','csv'}:
         raise ValueError('format: table/csv/html/json required')
     stream=io.StringIO();writer=csv.writer(stream,delimiter=',' if format=='csv' else '\t')

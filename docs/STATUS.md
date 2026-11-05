@@ -12,6 +12,15 @@
 [本轮15项终态](evidence/llm-isolation-terminal-20261105.md)/[JSON](evidence/llm-isolation-terminal-20261105.json)
 保存逐项配置、原结果hash、耗时、真实工作量、物理放置和失败；[启动证据](evidence/llm-isolation-launch-20261104.md)不改写。
 
+## 当前新增：供用户自行启动的B512试跑入口
+
+用户希望直接尝试原双NPU B512并索取运行命令。本次补充显式
+`execution.device_memory_admission=observe`及`lm queue --config`，默认strict和旧配置身份保持。
+公开配置为`examples/external_lm/qwenmoe-two-npu-b512-observe.json`；7200秒计算上限、外层9小时，
+保持原模型、BF16、B512/L512/O128、prefill64及16线程。超限预算先记录，OOM/其他异常仍失败。
+当前仅准备和检查入口，没有替用户提交该模型作业；固定源码/设施资格接续记录将在提交后补全。
+本次开发相关37项通过，尚不表示该B512已实际分配或执行。具体人类命令见[external-lm](external-lm.md#显式容量试跑与单配置后台运行)。
+
 ## 终态、结论与下一步
 
 | 范围 | 已核对事实 |

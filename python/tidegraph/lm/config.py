@@ -26,7 +26,8 @@ def resolve(value):
                           checkpoint_gib=24, project_gib=160, account_gib=300)}
     for section, values in defaults.items():
         supplied = value.setdefault(section, {})
-        if not isinstance(supplied, dict) or set(supplied)-set(values):
+        optional = {'device_memory_admission'} if section == 'execution' else set()
+        if not isinstance(supplied, dict) or set(supplied)-set(values)-optional:
             raise ValueError(f'{section}: invalid or unknown fields')
         value[section] = {**values, **supplied}
     t, e, m, r = [value[k] for k in defaults]
@@ -51,6 +52,12 @@ def resolve(value):
     for section, key, valid in choices:
         if section[key] not in valid:
             raise ValueError(f'{"task" if section is t else "execution"}.{key}: choose {sorted(valid)}')
+    # Absent legacy requests retain their configuration identities.
+    admission = e.get('device_memory_admission', 'strict')
+    if admission not in ('strict', 'observe'):
+        raise ValueError('execution.device_memory_admission: choose strict or observe')
+    if admission == 'observe' and (e['backend'] == 'cpu' or e['engine'] != 'transformers' or t['mode'] != 'inference'):
+        raise ValueError('execution.device_memory_admission: observe requires accelerator Transformers inference')
     if (e['devices'] == 1) != (e['placement'] == 'single'):
         raise ValueError('execution.placement/devices: single needs one; layer_split needs multiple')
     if e['devices'] > 1 and (e['backend'] == 'cpu' or t['mode'] != 'inference'):
@@ -83,7 +90,8 @@ def resolve(value):
     value.setdefault('name', f"{value['model']}-{e['backend']}-b{t['batch']}")
     if not isinstance(value['name'], str) or not value['name']:
         raise ValueError('name: nonempty string required')
-    return dict(request=value, config_id=fingerprint(value), model_revision=spec['revision'], budget=budget(value))
+    return dict(request=value, config_id=fingerprint(value), model_revision=spec['revision'], budget=budget(value),
+                device_memory_admission=admission)
 
 
 def budget(c):

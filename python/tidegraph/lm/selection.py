@@ -7,6 +7,13 @@ from ..experiment.records import fingerprint, read_json
 ACTIONS = {'run', 'check', 'training-check', 'diagnose', 'memory-check'}
 
 
+def single(config):
+    """A public single configuration uses the same bounded queue as a matrix."""
+    c = resolve(config)['request']
+    cases = [dict(name=c['name'], kind='single', action='run', config=c)]
+    return validate(dict(schema='tide-lm-matrix-v1', identity=fingerprint(cases), cases=cases))
+
+
 def validate(value):
     value = read_json(value) if not isinstance(value, dict) else deepcopy(value)
     if value.get('schema') != 'tide-lm-matrix-v1' or not isinstance(value.get('cases'), list):

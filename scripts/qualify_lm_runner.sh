@@ -14,10 +14,11 @@ mkdir -p "$install_root"
 "$lm_python" -m pip install --no-deps --force-reinstall "$install_root/tidegraph-0.3.0-py3-none-any.whl"
 "$lm_python" -I -m tidegraph lm matrix > "$install_root/matrix.json"
 "$lm_python" -I -m tidegraph lm plan examples/external_lm/qwenmoe-two-npu.json > "$install_root/plan.json"
+"$lm_python" -I -m tidegraph lm plan examples/external_lm/qwenmoe-two-npu-b512-observe.json > "$install_root/capacity-trial-plan.json"
 "$lm_python" -B -m pytest -q tests/test_lm_assets.py tests/test_lm_matrix.py tests/test_lm_runtime.py \
   tests/test_lm_queue.py tests/test_lm_recovery.py tests/test_experiment_cli.py tests/test_experiment_html.py \
   tests/test_lm_retry.py tests/test_lm_engines.py tests/test_lm_isolation.py tests/test_shared_npu_policy.py \
-  tests/test_experiment_report.py tests/test_container_job.py tests/test_durable_records.py \
+  tests/test_experiment_report.py tests/test_container_job.py tests/test_durable_records.py tests/test_lm_admission.py \
   --junitxml="$install_root/tests.xml"
 "$lm_python" -I - "$install_root" <<'PY'
 import subprocess,sys

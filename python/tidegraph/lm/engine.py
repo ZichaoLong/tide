@@ -21,6 +21,8 @@ def run(config, asset_root, output):
     write_json(out/'resolved.json', resolved)
     record = dict(schema='tide-lm-result-v1', config_id=resolved['config_id'], name=c['name'], model=c['model'],
         model_revision=resolved['model_revision'], configuration=c, started=now(), state='running',
+        device_memory_admission=resolved['device_memory_admission'],
+        exploratory_capacity=resolved['device_memory_admission']=='observe',
         execution_status='running', validation=dict(numeric='not_checked', discrete='not_checked', checkpoint='not_checked'),
         package_identity=package_identity(), process_id=os.getpid(),
         performance_scope='external LM token/s; never divided by core-5 sample-windows/s',
@@ -29,13 +31,16 @@ def run(config, asset_root, output):
         timing_scope='input upload, online scheduling, kernels, finite checks, token/statistic return and synchronization; training also backward and optimizer')
     def save():
         write_json(out/'result.json', record)
+    def observe_admission(rows):
+        record['device_admission']=rows
+        save()
     save()
     try:
         from .resources import disk_admission
         additional = resolved['budget']['checkpoint_estimate_bytes']*1.1 if m['checkpoint'] else 16*1024**2
         disk_admission(Path(asset_root).parent, additional, project_gib=c['resources']['project_gib'],
                        account_gib=c['resources']['account_gib'])
-        owner, tokenizer, device, backend, identity = setup(resolved, asset_root)
+        owner, tokenizer, device, backend, identity = setup(resolved, asset_root, on_admission=observe_admission)
         record['runtime'] = identity; save()
         host_ids, host_mask, input_id = create(c['task'], model(c['model'])['config'], tokenizer)
         record.update(input=input_id, warmup=[], measurements=[]); save()

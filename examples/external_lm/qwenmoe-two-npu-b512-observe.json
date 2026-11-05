@@ -1,0 +1,41 @@
+{
+  "schema": "tide-lm-experiment-v1",
+  "name": "manual-qwenmoe-npu2-b512-l512-observe",
+  "model": "qwenmoe",
+  "task": {
+    "mode": "inference",
+    "batch": 512,
+    "input_tokens": 512,
+    "output_tokens": 128,
+    "seed": 19,
+    "input_kind": "synthetic_tokens",
+    "microbatch": 1,
+    "global_batch": 4
+  },
+  "execution": {
+    "backend": "npu",
+    "dtype": "bfloat16",
+    "engine": "transformers",
+    "threads": 16,
+    "devices": 2,
+    "placement": "layer_split",
+    "attention": "sdpa",
+    "prefill_chunk": 64,
+    "device_memory_admission": "observe"
+  },
+  "measurement": {
+    "warmup": 1,
+    "steps": 1,
+    "timeout_seconds": 7200,
+    "checkpoint": false,
+    "profile": false
+  },
+  "resources": {
+    "host_gib": 384,
+    "device_reserve_gib": 6.4,
+    "workspace_gib": 4,
+    "checkpoint_gib": 24,
+    "project_gib": 160,
+    "account_gib": 300
+  }
+}

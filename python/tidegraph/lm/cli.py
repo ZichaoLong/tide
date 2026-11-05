@@ -40,7 +40,9 @@ def main(argv=None):
     p.add_argument('--npu-helper');p.add_argument('--hours',type=float,default=23.5)
     p.add_argument('--phase',choices=('first','second'),default='first')
     p.add_argument('--attempt',default='a',help='unique immutable attempt suffix; failures are never overwritten')
-    p.add_argument('--manifest',help='complete identity-checked finite selection; preserves declared threads and ignores phase filter')
+    selection=p.add_mutually_exclusive_group()
+    selection.add_argument('--manifest',help='complete identity-checked finite selection; preserves declared threads and ignores phase filter')
+    selection.add_argument('--config',help='one JSON configuration; expands and freezes a one-case manifest')
     p=commands.add_parser('_worker',help=argparse.SUPPRESS)
     p.add_argument('case');p.add_argument('--root',required=True);p.add_argument('--case-dir',required=True)
     args=parser.parse_args(argv)
@@ -105,8 +107,12 @@ def main(argv=None):
         else:
             from .queue import execute
             if not 0<args.hours<=24:raise ValueError('--hours must be in (0,24]')
+            selected=args.manifest
+            if args.config:
+                from .selection import single
+                selected=single(args.config)
             result=execute(args.root,args.backend,npu_helper=args.npu_helper,hours=args.hours,phase=args.phase,
-                           attempt=args.attempt,selection=args.manifest)
+                           attempt=args.attempt,selection=selected)
         print(json.dumps(result,indent=2,ensure_ascii=False));return 0
     except (ValueError, RuntimeError, OSError) as error:
         parser.exit(1,f'{type(error).__name__}: {error}\n')
