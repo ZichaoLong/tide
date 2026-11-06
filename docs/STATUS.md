@@ -1,7 +1,7 @@
 # 当前交接 — 日常入口已迁至 CANN 9.2.0（2026-11-06）
 
 本轮已完成，当前无排队/运行作业。公共工具链和旧9.1环境未修改，GPU仍已释放。
-日常开发使用`ascend/dev-workspace-9.2.0` + `.local/venv-cann9.2.0`；
+日常开发使用`ascend/dev-workspace-9.2.0`与调用者选择的私有venv，下面以`TIDE_VENV`传入位置；
 新LM环境默认`EXPERIMENT_ROOT/env/transformers-cann9.2.0`，旧环境不会自动迁移。
 新venv/旧环境误用拒绝、CLI配置预览及安装检查已实际验证。
 
@@ -29,14 +29,18 @@ resident、多卡、FP16、大batch、规模性能和公开权重没有重新验
 ControlGroup为空、无匹配后代；a为已修复哈希入口失败，b/c保留综合根失败和原身份拒绝。
 源码分别固定于`.local/cann92-source-{a,b,c}`，均干净；job记录在`artifacts/jobs/`。
 主要结果/资格wheel环境/实际两套构建在`artifacts/cann92-20261106-b`，恢复补验在`...-c`。
-日常venv独立于资格wheel环境；`.local/site-cann9.2.0.json`指向本机实际构建。
+日常venv独立于资格wheel环境；实际环境/构建位置保存在迁移证据，本机site文件不作为固定接口。
+只读核对显示日常venv增量为pip25.0.1和editable tidegraph0.3.0（约13MiB），Torch/TorchNPU继承公共基线。
+该环境绑定当前检出，不推荐给其他项目共用；下游按各自锁安装固定wheel。此次仅澄清文档路径，不改环境或资格。
 账户约180GiB（软300/硬800），本轮材料约0.4GiB，无需tmpfs。
 
 ```sh
+: "${TIDE_VENV:?请选择与该基线匹配的私有环境目录}"
 module load ascend/dev-workspace-9.2.0
-source .local/venv-cann9.2.0/bin/activate
+source "$TIDE_VENV/bin/activate"
 python scripts/ascend_environment.py --require-venv
-tidegraph plan configs/checks/ascend-migration.json --site .local/site-cann9.2.0.json
+tidegraph plan configs/checks/ascend-migration.json
+# 需要指定本机构建时追加：--site "$TIDE_SITE"
 python scripts/status.py
 ```
 

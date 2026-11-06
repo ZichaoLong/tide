@@ -76,16 +76,20 @@ CUDA已取得[RTX3090单卡eager及有限双卡实测](evidence/core5-cuda-eager
 同源码构建、单卡正确性、设备时间线、跨卡和性能均是不同证据，不由编译成功推断。
 
 本机新开发入口采用 CANN 9.2.0：`ascend/dev-workspace-9.2.0`，
-Python3.12、Torch2.12.0+cpu、TorchNPU2.12.0.post3；公共规范为
-`/opt/software/ascend-locks/dev-workspace-9.2.0/README.md`。公共环境只读。
+Python3.12、Torch2.12.0+cpu、TorchNPU2.12.0.post3；公共规范及其实际位置由
+`module help ascend/dev-workspace-9.2.0`查询。公共环境只读。
 旧实验继续使用自己的固定源码、9.1模块和venv，不能只换module后沿用旧venv/二进制。
 
+私有环境目录由调用者选择，可在仓库外；下例用`TIDE_VENV`传入位置，不要求特定目录名。
+先初始化站点的module命令，再执行：
+
 ```sh
-bash scripts/prepare_local_ascend.sh .local/venv-cann9.2.0
-source /usr/share/Modules/init/bash
+: "${TIDE_VENV:?请先设置你选择的私有环境目录}"
+export TIDE_ASCEND_MODULE=ascend/dev-workspace-9.2.0
+bash scripts/prepare_local_ascend.sh "$TIDE_VENV"
 module purge
-module load ascend/dev-workspace-9.2.0
-source .local/venv-cann9.2.0/bin/activate
+module load "$TIDE_ASCEND_MODULE"
+source "$TIDE_VENV/bin/activate"
 python scripts/ascend_environment.py --require-venv
 python -m pip install --no-build-isolation --no-deps -e .
 python scripts/build.py --backend npu --npu-runtime python --build-dir build/cann92-python --jobs all
@@ -93,6 +97,11 @@ python scripts/build.py --backend npu --npu-runtime python --build-dir build/can
 
 `prepare_local_ascend.sh`核对venv的真实base prefix、Torch/TorchNPU版本和模块约束身份，
 拒绝把旧环境或公共prefix当作新私有环境。增量包用`-c "$ASCEND_CONSTRAINTS_FILE"`安装。
+venv通过`--system-site-packages`复用公共Python依赖；激活仅选择私有安装入口，CANN路径仍由module提供。
+editable安装指向当前检出，源码修改立即影响使用者，适合本项目开发；下游应按自己的依赖锁安装固定wheel。
+运行接口通过环境参数及site配置接收路径，不从本账户skills或本次实测目录推导依赖。
+账号通用增量的发现/选择规则由站点文档或`use-local-ascend`维护；仓库仍提供完整的无AI安装说明。
+历史证据中的实测路径用于溯源，不作为下一次安装的固定位置。
 NPU Python-owned构建也可执行CPU张量；这不等于另做了一套CPU standalone资格。
 
 独立C++使用另一个shell和已发布SDK，不加载Python TorchNPU库：
