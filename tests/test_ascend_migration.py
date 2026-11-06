@@ -49,7 +49,10 @@ def test_same_libtorch_version_cannot_reuse_other_cann_or_sdk(tmp_path, monkeypa
         check_reuse(tmp_path, 'npu', 'standalone', torch_dir='/torch', torch_version='2.12.0')
 
 
-def test_standalone_identity_hashes_actual_distribution_and_checks_abi(tmp_path):
+def test_standalone_identity_hashes_actual_distribution_and_checks_abi(tmp_path, monkeypatch):
+    import hashlib
+    # The independent build driver also runs under the site's Python 3.9.9.
+    monkeypatch.delattr(hashlib, 'file_digest', raising=False)
     config = tmp_path/'share/cmake/Torch'
     config.mkdir(parents=True)
     (config/'TorchConfigVersion.cmake').write_text('set(PACKAGE_VERSION "2.12.0")\n')

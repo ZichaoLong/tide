@@ -12,9 +12,26 @@
 
 ## 当前实现与下一步
 
-未提交修改为开发文档、新9.2环境身份守卫/版本隔离路径、独立SDK前缀构建和定向迁移入口。
-开发设施25项通过；尚未建立本项目9.2 native/standalone构建或新的真机资格。
-先提交实现，然后对该提交建固定检出，运行`scripts/qualify_ascend_migration.sh`。
+实现已提交`f1480a002284a3c5fb5cae56b85f0b469492b5cd`，开发设施25项通过。
+固定检出`.local/cann92-source-a`（跟踪文件只读），已终态failed
+`gef-cann92-migration-a.service`；总时限10800秒，构建jobs=all（affinity320）、测试ATen/BLAS=1。
+结果`artifacts/cann92-20261106-a`，job记录`artifacts/jobs/cann92-migration-a`；
+监督日志`artifacts/cann92-migration-a-supervisor.log`，任务日志为job目录下`task.log`。
+
+```sh
+systemctl --user show gef-cann92-migration-a.service -p ActiveState -p Result -p MainPID -p ControlGroup
+cat artifacts/jobs/cann92-migration-a/status.json
+tail -60 artifacts/jobs/cann92-migration-a/task.log
+# 停止完整控制组，随后核实MainPID/ControlGroup及后代为空：
+systemctl --user stop gef-cann92-migration-a.service
+# 从任意干净固定检出重新验证，必须选择全新的输出目录：
+# bash scripts/qualify_ascend_migration.sh NEW_OUTPUT /absolute/use-local-ascend/scripts/run_on_free_npu.py all
+```
+
+a作业于08:40:39 UTC退出1，MainPID=0/ControlGroup为空。Python/native129项构建完成，
+SDK元数据在系统Python3.9.9因hashlib.file_digest不可用而失败，尚未编译SDK或执行设备检查。
+已修为分块SHA256，7项回归及实际系统Python读取SDK身份/不导入Torch通过；准备新固定提交后继。
+旧失败保留，不改公共Python。正式证据须读取所有内部结果，外层passed不能替代它们。
 门禁通过公共check/run对三客户端分别执行CPU/NPU小型SettleGraph/FC/KV、B2、T3、d8、FP32，
 含完整状态/控制/消息/pending、独立根、两步训练/SGD槽、换owner和新进程精确续接。
 另跑有限CPU FP64/FP32公式/native回归和独立新LM环境随机小模型设施。
