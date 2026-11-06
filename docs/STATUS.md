@@ -1,84 +1,53 @@
-# 当前交接 — CANN 9.2.0项目迁移（2026-11-06）
+# 当前交接 — 日常入口已迁至 CANN 9.2.0（2026-11-06）
 
-用户已授权把日常开发与新实验入口迁到公共CANN9.2.0，并重建本项目native/standalone，
-仅做小型CPU/NPU完整推理、训练、独立梯度根与恢复检查。GPU已释放，不连接。
-公共9.2.1 vLLM为独立服务栈，本次不采用，不修改公共工具链。
+本轮已完成，当前无排队/运行作业。公共工具链和旧9.1环境未修改，GPU仍已释放。
+日常开发使用`ascend/dev-workspace-9.2.0` + `.local/venv-cann9.2.0`；
+新LM环境默认`EXPERIMENT_ROOT/env/transformers-cann9.2.0`，旧环境不会自动迁移。
+新venv/旧环境误用拒绝、CLI配置预览及安装检查已实际验证。
 
-启动HEAD `b221fda4f07c3dd3ad5b9ade9107adedd7e02139`，授权分支
-`graph-execution-foundation`，启动工作区干净、无本项目活动服务。
-固定数学 `0770593838a37c790a568226930567ed60f99b83`及19份快照核验通过。
-截至启动账户约179GiB（软300GiB、硬800GiB），磁盘空闲1.3TiB、主存可用1.8TiB、CPU affinity320。
-本轮新增环境/构建预算10GiB，保留旧LM资产/环境；不需要tmpfs或新权重下载。
+## 已实现、已构建、实际通过及严格失败
 
-## 当前实现与下一步
+入口实现`f1480a0`；实际wheel、Python/native、独立LibTorch-NPU core/客户端构建
+`9df0ecf8a5f8a98e4144f45161cffd5054b04002`；恢复驱动修复
+`60e19755b04f09d676f0636dd32a5cabc19e6560`。后者复用经身份核对的构建，没有声称重新编译。
+数学仍为`0770593838a37c790a568226930567ed60f99b83`，固定快照通过。
 
-实现已提交`f1480a002284a3c5fb5cae56b85f0b469492b5cd`，开发设施25项通过。
-固定检出`.local/cann92-source-a`（跟踪文件只读），已终态failed
-`gef-cann92-migration-a.service`；总时限10800秒，构建jobs=all（affinity320）、测试ATen/BLAS=1。
-结果`artifacts/cann92-20261106-a`，job记录`artifacts/jobs/cann92-migration-a`；
-监督日志`artifacts/cann92-migration-a-supervisor.log`，任务日志为job目录下`task.log`。
+[迁移报告](evidence/cann92-project-migration-20261106.md)/[JSON](evidence/cann92-project-migration-20261106.json)：
+SettleGraph/FC/KV四节点、8190可训练参数、B2/P3/窗12、FP32、prefill、packed完整返回，
+三客户端CPU/NPU mixed-c完整推理、声明loss训练/梯度/SGD槽和新进程精确续接全部通过。
+CPU设施52项、随机小型LM CPU设施22项、固定驱动设施9项通过，部分重叠不合计成数学配置。
 
-```sh
-systemctl --user show gef-cann92-migration-a.service -p ActiveState -p Result -p MainPID -p ControlGroup
-cat artifacts/jobs/cann92-migration-a/status.json
-tail -60 artifacts/jobs/cann92-migration-a/task.log
-# 停止完整控制组，随后核实MainPID/ControlGroup及后代为空：
-systemctl --user stop gef-cann92-migration-a.service
-# 从任意干净固定检出重新验证，必须选择全新的输出目录：
-# bash scripts/qualify_ascend_migration.sh NEW_OUTPUT /absolute/use-local-ascend/scripts/run_on_free_npu.py all
-```
+独立综合all根仍有三项严格失败：CPU/native、NPU PyTorch/native，input.0.1.0.1第4坐标。
+NPU PyTorch差2.86102e-6与20261031历史同值。原容差/失败保持；完整门禁仍failed。
+CPU PyTorch八组根及CPU/NPU standalone所列16个根案例通过，各客户端目标不能互相替代。
+本轮不扩展数值工程；重启条件和其他未解除边界只见[ROADMAP](ROADMAP.md)。
+resident、多卡、FP16、大batch、规模性能和公开权重没有重新验证，旧资格不自动升级。
 
-a作业于08:40:39 UTC退出1，MainPID=0/ControlGroup为空。Python/native129项构建完成，
-SDK元数据在系统Python3.9.9因hashlib.file_digest不可用而失败，尚未编译SDK或执行设备检查。
-已修为分块SHA256，7项回归及实际系统Python读取SDK身份/不导入Torch通过；准备新固定提交后继。
-旧失败保留，不改公共Python。正式证据须读取所有内部结果，外层passed不能替代它们。
-门禁通过公共check/run对三客户端分别执行CPU/NPU小型SettleGraph/FC/KV、B2、T3、d8、FP32，
-含完整状态/控制/消息/pending、独立根、两步训练/SGD槽、换owner和新进程精确续接。
-另跑有限CPU FP64/FP32公式/native回归和独立新LM环境随机小模型设施。
-不把这次迁移认证成resident、多卡、FP16、大batch、规模模型或性能资格。
+## 作业、环境与接续命令
 
-长任务使用独立background.slice、固定源码、完整日志、有限时长；NPU合作队列一张空闲卡，
-逻辑设备npu:0。CPU/memory控制器未细分到用户unit，不将systemd预算宣称为实际强制限额。
-本项目重型构建不与性能计时重叠，本轮无性能计时。
+三服务`gef-cann92-migration-{a,b}`、`gef-cann92-recovery-c`全部终态exit1、MainPID=0、
+ControlGroup为空、无匹配后代；a为已修复哈希入口失败，b/c保留综合根失败和原身份拒绝。
+源码分别固定于`.local/cann92-source-{a,b,c}`，均干净；job记录在`artifacts/jobs/`。
+主要结果/资格wheel环境/实际两套构建在`artifacts/cann92-20261106-b`，恢复补验在`...-c`。
+日常venv独立于资格wheel环境；`.local/site-cann9.2.0.json`指向本机实际构建。
+账户约180GiB（软300/硬800），本轮材料约0.4GiB，无需tmpfs。
 
 ```sh
-git status --short --branch
+module load ascend/dev-workspace-9.2.0
+source .local/venv-cann9.2.0/bin/activate
+python scripts/ascend_environment.py --require-venv
+tidegraph plan configs/checks/ascend-migration.json --site .local/site-cann9.2.0.json
 python scripts/status.py
-python scripts/check_upstream.py
-systemctl --user list-units 'gef-*' --state=running --no-pager
-quota -vs
 ```
 
-## 当前后继作业
+从干净仓库按[development](development.md)重建环境/客户端。固定源码下通过有界background.slice运行
+`bash scripts/qualify_ascend_migration.sh NEW_OUTPUT /absolute/use-local-ascend/scripts/run_on_free_npu.py all`，
+材料全部来自跟踪配置；已知综合根仍预期严格失败。无需旧运行目录或权重下载。
 
-`9df0ecf8a5f8a98e4144f45161cffd5054b04002`固定于`.local/cann92-source-b`。
-`gef-cann92-migration-b.service`已failed/exit1，08:47:29 UTC终态、MainPID=0/ControlGroup为空。
-结果`artifacts/cann92-20261106-b`；job `artifacts/jobs/cann92-migration-b`。
-两套core/standalone客户端构建通过，CPU定向52项、独立LM随机设施22项通过。
-三客户端CPU/NPU六项完整推理及换owner精确恢复全部通过。
-CPU/native与NPU PyTorch/native独立all根在input.0.1.0.1的一坐标严格超差；
-NPU PyTorch最大2.86102e-6与原20261031人类入口证据相同，不放宽原阈值。
-CPU PyTorch及CPU/NPU standalone的related完整门禁通过，原始结果保留。
+## 原任务保留范围
 
-本轮新进程测试驱动误将check内部展开配置的checkpoint用于原recipe配置，
-现有workload_id守卫正确拒绝；已改成同一run配置的prefix/whole/resumed。
-正在提交驱动修复，随后复用已核对身份的旧检查和whole结果，只补训练/新进程恢复。
-新流程明确保留旧数值失败，不能把外层完成或自身恢复写成独立根通过。
-
-```sh
-cat artifacts/jobs/cann92-migration-b/status.json
-cat artifacts/cann92-20261106-b/cpu/result.json
-cat artifacts/cann92-20261106-b/npu/result.json
-```
-
-## 保留的旧范围
-
-[LM15项终态](evidence/llm-isolation-terminal-20261105.md)与
-[B512手动入口资格](evidence/llm-capacity-entry-20261105.md)保持原版本/环境身份；不自动重启。
-旧根`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`，
-`env/transformers`继承9.1、TorchNPU post2；固定source及材料不修改。
-此前公共维护中b221fda的纯PyTorch小型9.2消费者通过，不是本项目native或standalone重建证据。
-
-原core-5九份归档204条结果及严格失败从[证据索引](evidence/README.md)、[ROADMAP](ROADMAP.md)进入。
-[GPU释放](evidence/core5-cuda-release-20261031.json)及[清理](evidence/artifact-cleanup-tracked-only-20261031.md)继续有效。
-远端未提交源码保全包仍在仓库外`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/`，本次不分析或运行。
+旧LM根`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`的9.1环境、固定源码与材料保持。
+[15项旧终态](evidence/llm-isolation-terminal-20261105.md)、[B512入口](evidence/llm-capacity-entry-20261105.md)
+及原core-5 204条结果继续按原身份解释；不自动重新入队。
+远端未提交源码包仍在仓库外`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/`，本次未分析。
+旧历史身份按`python scripts/resolve_history_commit.py OLD_SHA`定位，不把映射当作验证。

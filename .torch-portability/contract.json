@@ -439,6 +439,37 @@
           "test_command": "Exact four-test-file pytest invocation with JUnit properties and matching CPU library in the report and JSON.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-coverage-correction-20261030.md"
+        },
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "PyTorch and Python-owned native Torch2.12/TorchNPU post3/CANN9.2 aarch64 CPU: Settle/FC/KV W8/B2/P3/span12 FP32 complete inference, declared weighted-output-square SGD training/slots, and fresh-process exact checkpoint continuation. Python comprehensive all-objective roots are separately scoped; do not infer them from training or restore. No resident, multicard, FP16, scale or throughput qualification.",
+          "tiers": [
+            "build",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
+        }
+      ],
+      "attempts": [
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "CPU Python/native all-objective independent input VJP: coordinate input.0.1.0.1[4] exceeds unchanged FP32 tolerance. Full inference/declared training/fresh-process restore pass separately. NPU PyTorch witness matches 20261031 history; not established as a new CANN regression.",
+          "tiers": [
+            "parity"
+          ],
+          "result": "failed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
         }
       ]
     },
@@ -752,6 +783,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-composite-20261011.md",
           "reason": "Composite qualified sources; original failed receipt retained. Existing Full conditioned policy and strict discrete checks unchanged."
+        },
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "NPU PyTorch/native all-objective independent input VJP: coordinate input.0.1.0.1[4] exceeds unchanged FP32 tolerance. Full inference/declared training/fresh-process restore pass separately. NPU PyTorch witness matches 20261031 history; not established as a new CANN regression.",
+          "tiers": [
+            "parity"
+          ],
+          "result": "failed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
         }
       ],
       "evidence": [
@@ -852,6 +896,22 @@
           ],
           "result": "passed",
           "test_command": "TIDE_RETURN_TEST_DEVICE=npu:0 pytest tests/test_weighted_return_packing.py -k \"(literal or full_snapshot) and not fp64\"; benchmark_weighted.py --device npu:0 --implementation python --return-packing packed with separate explicit inference and training selections; argv in report"
+        },
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "PyTorch and Python-owned native Torch2.12/TorchNPU post3/CANN9.2 mixed-c NPU physical1/logical0: Settle/FC/KV W8/B2/P3/span12 FP32 complete inference, declared weighted-output-square SGD training/slots, and fresh-process exact checkpoint continuation. Python comprehensive all-objective roots are separately scoped; do not infer them from training or restore. No resident, multicard, FP16, scale or throughput qualification.",
+          "tiers": [
+            "build",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
         }
       ]
     },
@@ -1197,6 +1257,22 @@
           "test_command": "Exact directed tests, client configurations and fresh-checkout commands in the cited report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-checkpoint-budget-20261029.md"
+        },
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "Standalone LibTorch2.12/CANN9.2 aarch64 CPU: Settle/FC/KV W8/B2/P3/span12 FP32 complete inference, declared weighted-output-square SGD training/slots, and fresh-process exact checkpoint continuation. 16 declared standalone independent-root cases pass. No resident, multicard, FP16, scale or throughput qualification.",
+          "tiers": [
+            "build",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
         }
       ],
       "attempts": [
@@ -1851,6 +1927,22 @@
           "test_command": "Exact directed tests, client configurations and fresh-checkout commands in the cited report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/core5-checkpoint-budget-20261029.md"
+        },
+        {
+          "date": "2026-11-06",
+          "commit": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+          "semantic_version": "tide-core-5",
+          "environment_manifest": "docs/evidence/cann92-project-migration-20261106.md",
+          "driver_commit": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+          "scope": "Standalone LibTorch2.12/CANN9.2 mixed-c NPU physical1/logical0: Settle/FC/KV W8/B2/P3/span12 FP32 complete inference, declared weighted-output-square SGD training/slots, and fresh-process exact checkpoint continuation. 16 declared standalone independent-root cases pass. No resident, multicard, FP16, scale or throughput qualification.",
+          "tiers": [
+            "build",
+            "parity",
+            "short-train",
+            "checkpoint-handoff"
+          ],
+          "result": "passed",
+          "test_command": "scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER all; exact config, commands, source/build identities and retained failures in evidence JSON"
         }
       ]
     },

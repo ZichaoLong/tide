@@ -9,13 +9,6 @@
 问题到代码、输入和证据的入口集中于[复现导航](reproduction.md)；下表仍是唯一状态与停止/重启条件。
 任务终态、相关资格通过和限制解除是不同结论。完成记录由Git与[证据索引](evidence/README.md)保存。
 
-## 当前迁移
-
-- CANN9.2.0日常开发/新实验入口：已补环境身份拒绝、版本隔离路径和独立SDK构建入口，
-  正在准备固定源码的小型三客户端CPU/NPU验证；尚未认证新构建或设备执行。
-  旧9.1环境/实验及严格失败保持；本轮不重跑性能、resident、多卡或公开权重矩阵。
-  实际job与命令仅见STATUS。失败按首个构建/运行边界定位，不放宽数学断言。
-
 ## 本轮已交付
 
 1. 已交付构建资源入口（2ccae1a）：默认全部可用CPU，可选half/正整数；测试资源与性能线程独立声明。
@@ -29,6 +22,8 @@
 8. [实际覆盖与导航修正](evidence/core5-coverage-correction-20261030.md)：f456160相关73项通过，含26个真实配置×PyTorch/native的52项CPU FP64训练/恢复；自动配置事实与逐配置正确性/性能索引已交付，旧性能和设备边界不变。
 
 9. [多实验仓库协作与安装消费者](evidence/downstream-contract-20261030.md)：e17f9ea交付依赖锁、请求/交付/验收及AGENTS模板；4项单元、8组CPU安装/独立训练/新进程精确恢复、4项CLI拒绝通过。下游自行验收再升级；workers2原失败另列。
+
+10. [CANN9.2日常入口迁移](evidence/cann92-project-migration-20261106.md)：版本隔离venv、基线身份拒绝、独立SDK前缀构建及安装入口完成；9df0ecf真实构建，60e1975补同配置新进程恢复。三客户端CPU/NPU小型完整推理/声明训练/恢复通过，独立综合根失败保留如下；不重跑历史性能或公开权重。
 
 阶段提交后继续。旧边界的停止条件仍有效；有新方案和证据才重启。CUDA新任务不继承旧CPU/NPU失败或通过。
 不以不支持声明代替约定功能，不把小规模通过称为全部平台/尺度通过。
@@ -80,6 +75,7 @@ resident边界、人类及下游流程均有实际结果、拒绝或有依据的
 | FC1B NPU FP32下一窗 | [9bfabbb复验](evidence/core5-checkpoint-budget-20261029.md)已越过旧4GiB文件限制，5.25GB文件保存/新owner加载返回；原owner下一窗出现非有限梯度，恢复分支与CPU独立核对未执行 | 原输入配置/平方loss/SGD及结果保留；大文件已按用户授权退役，重启须重新生成。没有首个非有限伴随定位或明确新数值方案前停止重跑；修改下游loss/训练配方是另一个配置，不称原失败修复 |
 | 反馈PDG FP32 | 原W32/B4四窗记录/梯度/SGD槽仍失败，参数通过；reference/streaming/prefill三者自身恢复均精确。显式FP64四窗独立通过 | 单行VJP方案到此停止；新方案须覆盖反馈递归与跨窗更新，不能仅核对最终参数 |
 | FP16 GDN/default AdamW | [归一化VJP内部FP64](evidence/core5-boundary-isolation-20261029.md)仍第二步差.00198364；两个原strict xfail保留。FP32对应见证已由9e6dc52解除 | 不改epsilon/loss scale/输入或容差；仅提升归一化反向候选停止。重启需新的完整局部伴随/舍入方案 |
+| CANN9.2迁移独立综合根 | [小型迁移证据](evidence/cann92-project-migration-20261106.md)：Settle/FC/KV B2/W8 FP32，CPU native、NPU PyTorch/native在all根的input.0.1.0.1第4坐标分别差1.78814/2.86102/2.83122e-6，超原atol1e-6/rtol1e-5。NPU PyTorch与20261031旧记录同值；六项完整推理、声明loss训练/optimizer与新进程恢复均通过 | 迁移任务已终态，原综合根失败不解除；同配置不盲重跑，不从C++另一根目标或自身恢复外推。需要该根完整资格时，先沿compare.objective、归一化VJP和累加顺序定位首差，保持原材料/阈值；没有新依据不展开数值工程。新CANN版本的resident、多卡/尺度另验 |
 | NPU运行时初始化顺序 | 固定资格暴露CPU autograd后才注册NPU触发device_ready_queues_断言；独立标量进程已确认late失败/early通过，独立NPU资格14项+eager6组通过 | 应用先resolve_device再首次autograd；已启动CPU引擎的晚注册路径保留限制，等待运行时修复。当前门禁分进程，不改数学实现 |
 | 下游native workers2跨进程恢复 | 本轮FC/KV FP32小型安装消费者独立两步通过，但连续三步与两步保存/新进程恢复一步的梯度、SGD槽逐值不等；关闭autograd多线程仍失败。示例显式workers1固定资格通过，见[证据](evidence/downstream-contract-20261030.md) | 原workers2失败保留；停止重复相同候选。须先定位并行构图/反向累加顺序的具体差异，再用原材料/独立根/跨进程恢复验证；本轮只交付协作规范和单worker示例 |
 | 本轮NPU blocking小训练恢复 | [多卡证据](evidence/core5-platform-multicard-20261031.md)：原FC8/d8三更新完成，换owner精确恢复阶段SIGSEGV/-11；ordinary/cpu_bridge同材料严格通过，不能互相替代。报告b3dc53c补监督状态，未修数值执行 | 保留配置与原结果，小checkpoint已按授权退役；一次有界faulthandler诊断未复现且完整检查通过，旧SIGSEGV仍未定位；不再重复相同试验，重启修复须有流/owner生命周期新依据及原完整训练/恢复检查 |

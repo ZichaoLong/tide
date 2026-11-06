@@ -116,7 +116,8 @@ ABI必须与SDK发布记录匹配，链接及实际设备执行另行核验。CA
 独立根、SGD/槽、换owner恢复及新进程续接；另做CPU公式/梯度回归和私有LM小型随机模型检查。
 队列最多等30分钟、每个客户端流程最多15分钟；构建并行由实测CPU/内存决定。
 不下载权重、不重跑历史矩阵；resident、多卡、FP16、大batch和性能不在迁移小门禁范围。
-实际构建/检查状态见STATUS和对应证据，不能由入口存在推断通过。
+[2026-11-06迁移证据](evidence/cann92-project-migration-20261106.md)记录三客户端CPU/NPU小型完整推理、
+声明训练与新进程恢复通过，以及仍存在的三处独立综合根严格失败。当前状态见STATUS，不能由入口存在推断通过。
 若已完成构建但迁移测试驱动需修复，`check_ascend_migration.py --build-root BUILD_ROOT
 --output-dir NEW --device cpu|npu:0 --continue-from PREVIOUS_CHECKS`显式核对旧配置、已安装包及二进制身份后，
 复用原related/whole结果，只补缺失训练续接；原NumericMismatch仍使整组严格失败。

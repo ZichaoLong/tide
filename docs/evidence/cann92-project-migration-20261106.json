@@ -1,0 +1,3179 @@
+{
+  "schema": "tide-cann92-migration-evidence-v1",
+  "date": "2026-11-06",
+  "state": "completed-with-retained-strict-failures",
+  "reviewed_at": "2026-11-06T08:59:34.183763+00:00",
+  "math_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "implementation": "f1480a002284a3c5fb5cae56b85f0b469492b5cd",
+  "build_and_package_source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+  "continuation_driver_source": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+  "environment": {
+    "schema": "tide-local-ascend-environment-v1",
+    "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+    "base_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1",
+    "prefix": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env",
+    "cann": "9.2.0",
+    "packages": {
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3"
+    },
+    "module": "ascend/dev-workspace-9.2.0",
+    "constraints": "/opt/software/ascend-locks/dev-workspace-9.2.0/constraints-core.txt",
+    "constraints_sha256": "f26494e8a7fbb557a802efd0e7546a448e2501bf5019d98618a1852707dc0254",
+    "scope": "environment identity only; build and device checks are separate"
+  },
+  "developer_environment": {
+    "state": "passed",
+    "environment": {
+      "schema": "tide-local-ascend-environment-v1",
+      "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-cann9.2.0/bin/python",
+      "base_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1",
+      "prefix": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/venv-cann9.2.0",
+      "cann": "9.2.0",
+      "packages": {
+        "torch": "2.12.0+cpu",
+        "torch-npu": "2.12.0.post3"
+      },
+      "module": "ascend/dev-workspace-9.2.0",
+      "constraints": "/opt/software/ascend-locks/dev-workspace-9.2.0/constraints-core.txt",
+      "constraints_sha256": "f26494e8a7fbb557a802efd0e7546a448e2501bf5019d98618a1852707dc0254",
+      "scope": "environment identity only; build and device checks are separate"
+    },
+    "source_package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python/tidegraph",
+    "installed_files_sha256": "4fd8507130535d44b1e52d3b7b2c83d32eed3ca9a256cdfb2bea9c12366f04a3",
+    "matches_qualified_package_bytes": true,
+    "old_environment_rejected_exit": 1,
+    "old_environment_unchanged": {
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/transformers/pyvenv.cfg": "4891504a16a2084c4f93a5e4d25412cf12c3c38e504dc9fb6588d3862f825f9f",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env/ready.json": "3e26969bc665b5cf9979c131121c826fbaf000605dccee38b68526ff64dee6cd"
+    },
+    "note": "editable daily environment is separate from immutable qualified wheel environment; no model execution inferred"
+  },
+  "python_build": {
+    "source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+    "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+    "torch": "2.12.0+cpu",
+    "distribution": {
+      "torch": "2.12.0+cpu",
+      "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+      "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+      "cuda": null,
+      "cxx11_abi": true,
+      "discovery": "python-torch"
+    },
+    "environment": {
+      "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+      "compiler": "c++ (GCC) 10.3.1",
+      "cxx_standard": 17,
+      "build_type": "Release",
+      "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+      "cann_version": "9.2.0"
+    },
+    "build_jobs": 320,
+    "backend": "npu",
+    "npu_runtime": "python",
+    "torch_npu": "2.12.0.post3",
+    "cuda": null,
+    "architecture": "aarch64",
+    "python": "3.12.13",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "c660efaba40378fd1c5ab8026ec6138cdedfa703df708fb961260132e53e24fb",
+      "libtidegraph_runtime.a": "39275c4d9b9ae6177fedd1fcbb9d3d6ee8b06523bbbf7f7c0f1081465534c6c6",
+      "_tide_native.so": "27ecaa1315d250d9ab2de2a42f2a2487dc4d8225d739c61ffb333b7d66b08289"
+    }
+  },
+  "standalone_build": {
+    "source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+    "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+    "torch": "2.12.0",
+    "distribution": {
+      "torch": "2.12.0",
+      "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+      "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+      "cxx11_abi": true,
+      "cuda": null,
+      "discovery": "standalone-prefix",
+      "distribution_sha256": {
+        "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+        "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+        "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+        "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+        "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+      }
+    },
+    "environment": {
+      "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+      "compiler": "c++ (GCC) 10.3.1",
+      "cxx_standard": 17,
+      "build_type": "Release",
+      "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+      "cann_version": "9.2.0",
+      "npu_sdk": {
+        "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+        "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+        "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+      }
+    },
+    "build_jobs": 320,
+    "backend": "npu",
+    "npu_runtime": "standalone",
+    "torch_npu": null,
+    "cuda": null,
+    "architecture": "aarch64",
+    "python": "3.9.9",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "4fb22a902733e9e0653b98eebbdb484eba783ec96395ee46dc408ff6c8c63f2d",
+      "libtidegraph_runtime.a": "1967970129064ccaae363ce99badc5d7bb92580656ec13c4f7183b75a341b50a",
+      "tidegraph-smoke": "884c68fb8acf64cc47312267a4f1862e6dd9fd9addf3a1d8ca93f5e0d688b512",
+      "tidegraph-kernel-check": "d146736779636381057c3295c4a6a4e76dda40c2bc4aa4120b83fd6d40d90d37",
+      "tidegraph-full-check": "f013e95c650d512d1ce538bd0475e1e20a42c1ae96861baf621c5f9b35f43479",
+      "tidegraph-aggregate-check": "06a57da9127af89b6ead2f4252da9a7d0a8d0d63aff410cddcc47b187f7a4303",
+      "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+      "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+      "tidegraph-weighted-training-check": "3d033aba10105afe449a174208e9d44834b78636995e579121467a2e18dd818b",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "89c7f16cb3624df8e8bd77129fa2e6952958c6b17852175722287cf81a6540f0",
+      "tidegraph-scale-bench": "ebdebfc149060676cf8dbed097a990f4c444d1e5075d1e602c19ae83c513b314",
+      "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+      "tidegraph-settle-check": "f2fcae97572d4e56f432d9ea45d5e9064bba31bb6100d50e3b694a3eb1035c96",
+      "tidegraph-greedy-check": "b911d62c55ac7da6917e7c53549b39a2c1508215c4e1076fc0da63b3ac6b895b",
+      "tidegraph-accelerator-check": "053fdce5696f193a48381ec3169567a001d4006d47f3a1ab2f21e41a76de443d",
+      "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+      "tidegraph-read-precision-check": "030367083e080fdb1a9e325e58dc936866ce118b9d0e688c612d8513e69785df",
+      "tidegraph-placement-check": "3026f92a546ba5fe0b4c4b68d86938227b6d900927704ec4d82f81331a21312c",
+      "tidegraph-payload-ownership-check": "52ea754933f37c1d598fe596aa4201720903b186696175380e74e4e66bae52ba",
+      "tidegraph-weighted-binding-module-check": "e7788edce552f5551cb67734a62c84ccb6f4944b87ad1a611a7d06a022666bda",
+      "libtidegraph-weighted-binding-module.so": "e2033fc651243fd8abed778781aed184ac8f3877bb0f3d5509a16430f2af8f42"
+    }
+  },
+  "standalone_consumer": {
+    "schema": "tide-weighted-benchmark-build-v1",
+    "state": "passed",
+    "source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+    "dirty": "",
+    "core": {
+      "source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+      "cpp_source_sha256": "483ae76c9e5ef20de6b71b9842d6d47203df5551b1eefdad42003a6d6c285e8a",
+      "torch": "2.12.0",
+      "distribution": {
+        "torch": "2.12.0",
+        "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+        "cxx11_abi": true,
+        "cuda": null,
+        "discovery": "standalone-prefix",
+        "distribution_sha256": {
+          "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+          "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+          "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+          "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+          "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+        }
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "cann_version": "9.2.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+        }
+      },
+      "build_jobs": 320,
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.9.9",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "4fb22a902733e9e0653b98eebbdb484eba783ec96395ee46dc408ff6c8c63f2d",
+        "libtidegraph_runtime.a": "1967970129064ccaae363ce99badc5d7bb92580656ec13c4f7183b75a341b50a",
+        "tidegraph-smoke": "884c68fb8acf64cc47312267a4f1862e6dd9fd9addf3a1d8ca93f5e0d688b512",
+        "tidegraph-kernel-check": "d146736779636381057c3295c4a6a4e76dda40c2bc4aa4120b83fd6d40d90d37",
+        "tidegraph-full-check": "f013e95c650d512d1ce538bd0475e1e20a42c1ae96861baf621c5f9b35f43479",
+        "tidegraph-aggregate-check": "06a57da9127af89b6ead2f4252da9a7d0a8d0d63aff410cddcc47b187f7a4303",
+        "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+        "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+        "tidegraph-weighted-training-check": "3d033aba10105afe449a174208e9d44834b78636995e579121467a2e18dd818b",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "89c7f16cb3624df8e8bd77129fa2e6952958c6b17852175722287cf81a6540f0",
+        "tidegraph-scale-bench": "ebdebfc149060676cf8dbed097a990f4c444d1e5075d1e602c19ae83c513b314",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "f2fcae97572d4e56f432d9ea45d5e9064bba31bb6100d50e3b694a3eb1035c96",
+        "tidegraph-greedy-check": "b911d62c55ac7da6917e7c53549b39a2c1508215c4e1076fc0da63b3ac6b895b",
+        "tidegraph-accelerator-check": "053fdce5696f193a48381ec3169567a001d4006d47f3a1ab2f21e41a76de443d",
+        "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+        "tidegraph-read-precision-check": "030367083e080fdb1a9e325e58dc936866ce118b9d0e688c612d8513e69785df",
+        "tidegraph-placement-check": "3026f92a546ba5fe0b4c4b68d86938227b6d900927704ec4d82f81331a21312c",
+        "tidegraph-payload-ownership-check": "52ea754933f37c1d598fe596aa4201720903b186696175380e74e4e66bae52ba",
+        "tidegraph-weighted-binding-module-check": "e7788edce552f5551cb67734a62c84ccb6f4944b87ad1a611a7d06a022666bda",
+        "libtidegraph-weighted-binding-module.so": "e2033fc651243fd8abed778781aed184ac8f3877bb0f3d5509a16430f2af8f42"
+      }
+    },
+    "resident": null,
+    "json_headers": {
+      "provider": "explicit include directory",
+      "version": "3.11.2",
+      "header_count": 44,
+      "sha256": "bd976a412fde243decb465a94d498bcc254bb5ad79be63a8f201ec9ba298ff34"
+    },
+    "commands": [
+      [
+        "cmake",
+        "--install",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-sdk",
+        "--prefix",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/installed"
+      ],
+      [
+        "cmake",
+        "-S",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-b/tools/weighted_benchmark",
+        "-B",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DTorch_DIR=/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "-DTIDE_JSON_INCLUDE_DIR=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/lib/python3.12/site-packages/nlohmann_json/include",
+        "-DCMAKE_PREFIX_PATH=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/installed;/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk;/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake;/opt/ascend/cann/9.2.0/cann-9.2.0/toolkit/tools/tikicpulib/lib/cmake;/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/cmake",
+        "-DTIDE_WEIGHTED_RESIDENT=OFF"
+      ],
+      [
+        "cmake",
+        "--build",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client",
+        "--parallel",
+        "320"
+      ]
+    ],
+    "sources": {
+      "tools/weighted_benchmark/cli.cpp": "df60ddc52eae727f9a47d1bd685e2a175695d32145f3fea6a8294d1ae86ae085",
+      "tools/weighted_benchmark/return_packing_check.cpp": "377d9ee4078ce450ff40431d678353891afe752ed437940b5449677de98692c2",
+      "tools/weighted_benchmark/benchmark.h": "779381b728f5d5e1e93281e3731a34f65764810914b77e0e3ac1c139bec61444",
+      "tools/weighted_benchmark/run_checkpoint.h": "5f9f16f866811fe6f9c8c07d8c84cb6ba7cb416a14599a70b9ee560812519838",
+      "tools/weighted_benchmark/root_values.h": "a56dd15cbccb172b74b58a6e486c1c63807aae258decd2e4a1def080e110c601",
+      "tools/weighted_benchmark/resident_checkpoint.h": "27f25547fd5994b527a19e22f3b7709925eb19bbd3e0902fd2c1e4b1abf28221",
+      "tools/weighted_benchmark/CMakeLists.txt": "1775ffdf3800f45c07334a0e7d1cc6f0414537233a887a581c43ac0ada7b23ad",
+      "tools/weighted_benchmark/records.cpp": "cacbb1c95477c8bcfdebe683b92ce38b4b69516ec71e3312eaf01dba02e1e99f",
+      "tools/weighted_benchmark/validation.h": "a7dbd8b13cc7ce22b4f15066c1a6c972ca9408ce535ff1c4ab1fd8e29a8c2c73",
+      "tools/weighted_benchmark/resident.cpp": "af5c5ab8db9cb2fff07e4110b481ffd4b8029e103bdfa331d20aee5ec0ddd294",
+      "tools/weighted_benchmark/eager.cpp": "7792a232f47d55d9be70a8d71e53ba93498d6eaf8cef115e1191f0410174051e",
+      "tools/weighted_benchmark/root_values.cpp": "b69fd2a7d20aeecfd5afb13d080746ea54ca8b18a8e5ae249b88bff68bc120ea",
+      "tools/weighted_benchmark/roots_check.cpp": "3df933fab3e9dfcc094cc3bab98a1c645dfeabe1b4d7a80228a0a98fb56c8236",
+      "tools/weighted_benchmark/comparison_check.cpp": "7f1362dfb3c1c4bbc261375ff42710aff10f1d75ecf4b8f12d9c83d3ac1f88b4",
+      "tools/weighted_benchmark/main.cpp": "ed444dbdf895878ddd9fb290abfdd12dd4156fa02dcfacbe07fa09606761482c",
+      "tools/weighted_benchmark/fixture.cpp": "4a79d1494c76dccf7b0d12d70aebde40c24f4a15a10afc56988ac402118449ba",
+      "tools/weighted_benchmark/tensors.cpp": "1aacd9de923f23cdb6c3cac6069c3d9fc4a20676a3128ad9bd7899c3199e1cc9",
+      "tools/weighted_benchmark/eager.h": "6bb8e7fa56e317c0d04b24e408f12ea5bbe8428d2c14328b4c0dd14054a9c88d",
+      "tools/weighted_benchmark/validation.cpp": "282bf0d2dc4a5e6c0b41a985cc2a000f259fc3af5b75322e948516bd3bd5a66f",
+      "tools/weighted_benchmark/roots.cpp": "290d693f143b88af54a3a4e8a36aa8923d9fcee6eee3b5020df3cea1b616788b",
+      "tools/weighted_benchmark/return_packing.h": "70fe67ece541217092f0295124cf9dbf4f8df409d20aed14effed24859832506",
+      "tools/weighted_benchmark/observation.h": "cd53dc357786bb9b80604dc09a1ab542d9187c82032e18dfbc93f924052955b6",
+      "tools/weighted_benchmark/allocation_failure.cpp": "26992bd681202ebb4febebf37291da235b85c04b755e5041963d1a02d73a1a37",
+      "tools/weighted_benchmark/observation.cpp": "e6ca11655f0d133c2479f55c210f4df4a613082035053111fe63ece0c5493dae",
+      "tools/weighted_benchmark/run_check.cpp": "bf90dfbf06876673aa7d8100c5940d891f4afd46d8c9c98845d1c2098c81f365",
+      "tools/weighted_benchmark/record_io.cpp": "677bdf52017a5c8f5769bbf7e9acc4fd63d82f606685eba7aeaad9d9fd0114c1",
+      "tools/weighted_benchmark/roots.h": "92df99fb89cd6cf671bf87db5e767a183f6832c5307d749a573136cc5f0f0941",
+      "tools/weighted_benchmark/resident_checkpoint.cpp": "9cf1bdc473a7b7a75fa6a36eee3934a8cd01575e33cd1017640fd2ab2cc6d3da",
+      "tools/weighted_benchmark/eager_roots.cpp": "125127db255097625a29e35af63cf67c19c3f758150a53c47d983dd4e252843d",
+      "tools/weighted_benchmark/work_observation.h": "4fb880d1375af01d0dfd237520375e84d9bb81638037a5f9dac9fe98a780785b",
+      "tools/weighted_benchmark/run_checkpoint.cpp": "3b8f23eea862eb542e0eea305bcb18eee0c3f08eed84e89e8d30c894de5e773b",
+      "tools/weighted_benchmark/cli.h": "971041cd3cfba1a3c55b7e85d494ca64354d5bf30dea7d08a30c8008548f7ca6",
+      "tools/weighted_benchmark/return_packing.cpp": "ca393e2b6ac8103d291bf8022ef096cbb79b66ad5592599a10a04201b91dfaff",
+      "cpp/bench/compare.cpp": "5e7e3c10225489533957dd8f7e479e1ea3ba53b374b1124aaad0623e245beff6",
+      "cpp/bench/comparison.h": "84f5bfdb109b144abf2c965bc7fc187b14c90314d45226667e17ff84440bdf4d",
+      "cpp/bench/streaming.h": "90bd9919cad937baa8bc8d13e5dd5e5dafd443d6ecf9a22f3945a42e6dc1d748",
+      "tools/device_online/weighted_precision_reference.cpp": "306bfcdd5beea2c2d8e3f9c2def322ba6bcedac7e7748b87dc7441186a32487b",
+      "tools/device_online/weighted_precision_reference.h": "f50e1bfdbc9287c42347137ac83687a1e1d23da8fc90c37ec4f992269919e039"
+    },
+    "scope": "standalone build/loader/help only; numerical execution separately required",
+    "binary_sha256": "02415cbfc157e1b8d0e44ad876b2f9dd7d11d09fb1ac4b6518adffee0469c9b8",
+    "loader_sha256": "023fb57b057d43268b6c2db7f30c5aebf619dca657e16b2117dc917c5c808f11",
+    "help_sha256": "b03e604717c329afff692e2216d296da048c5a37e9ebcfe772c7c59e115726ef",
+    "comparison_check_binary_sha256": "9589f5bab059144cf17b44906d7dbaac366cdf5beddaf62deb9acf9eea238bc4",
+    "run_check_binary_sha256": "fa7ff73edf25999914028b78605e874edc74450434ac9000efdb8628ed739b72",
+    "roots_check_binary_sha256": "0335938cca5321af9ac6afbc2a6c80a03203c4715f6f61dc5f1c5dc678c17ee9",
+    "return_check_binary_sha256": "819fa8240c55b1ac567d20e0665b0bcda071598be44be08798a0ed37d0378556"
+  },
+  "wheel": {
+    "path": "artifacts/cann92-20261106-b/wheels/tidegraph-0.3.0-py3-none-any.whl",
+    "sha256": "42841a29162a88d432643648b79534f662a3d61577d906c11736700746574987"
+  },
+  "tests": {
+    "cpu": {
+      "path": "artifacts/cann92-20261106-b/cpu-tests.xml",
+      "sha256": "e45f13733aeb9418094f6a10db42385b25911202824eb751432e407be586c6ac",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "52",
+          "time": "24.258",
+          "timestamp": "2026-11-06T16:44:18.169448+08:00",
+          "hostname": "liteserver-mi-dev-00001"
+        }
+      ]
+    },
+    "lm": {
+      "path": "artifacts/cann92-20261106-b/lm-tests.xml",
+      "sha256": "6ea0690d1cc4c0ea2ba6994447cc1754b01ff8ddb945066b8923e023f85312bf",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "22",
+          "time": "5.946",
+          "timestamp": "2026-11-06T16:47:22.541922+08:00",
+          "hostname": "liteserver-mi-dev-00001"
+        }
+      ]
+    },
+    "fixed_driver": {
+      "path": "artifacts/cann92-20261106-c/fixed-tools-tests.xml",
+      "sha256": "b356d99c6c4f00773725160d9b06c52bc68c2b033cc3df05808391f2b92b211e",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "9",
+          "time": "0.391",
+          "timestamp": "2026-11-06T16:55:25.424049+08:00",
+          "hostname": "liteserver-mi-dev-00001"
+        }
+      ]
+    }
+  },
+  "lm_environment": {
+    "state": "ready",
+    "environment": {
+      "schema": "tide-local-ascend-environment-v1",
+      "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/lm/env/transformers-cann9.2.0/bin/python",
+      "base_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1",
+      "prefix": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/lm/env/transformers-cann9.2.0",
+      "cann": "9.2.0",
+      "packages": {
+        "torch": "2.12.0+cpu",
+        "torch-npu": "2.12.0.post3"
+      },
+      "module": "ascend/dev-workspace-9.2.0",
+      "constraints": "/opt/software/ascend-locks/dev-workspace-9.2.0/constraints-core.txt",
+      "constraints_sha256": "f26494e8a7fbb557a802efd0e7546a448e2501bf5019d98618a1852707dc0254",
+      "scope": "environment identity only; build and device checks are separate"
+    },
+    "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/lm/env/transformers-cann9.2.0/bin/python",
+    "packages": {
+      "torch": "2.12.0+cpu",
+      "torch-npu": "2.12.0.post3",
+      "transformers": "4.57.1",
+      "huggingface-hub": "0.36.0",
+      "tokenizers": "0.22.1",
+      "accelerate": "1.11.0",
+      "peft": "0.17.1",
+      "safetensors": "0.8.0"
+    },
+    "scope": "dependency installation only; operators and models not yet checked"
+  },
+  "lm_scope": "22 CPU random-small-model/cache/optimizer/recovery/queue checks; no pretrained weights or new LM NPU claim",
+  "cases": [
+    {
+      "platform": "cpu",
+      "client": "pytorch",
+      "related_state": "passed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "pytorch",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/cpu/pytorch/related/result.json",
+        "sha256": "30fe7b60017fd35eeba8c753ae51d9227739766d09e362c34dc726c844c61d87"
+      },
+      "independent_roots": {
+        "name": "independent-roots",
+        "state": "passed",
+        "roots": [
+          "all",
+          "first-output",
+          "connected-zero",
+          "first-control",
+          "first-descriptor-w",
+          "first-descriptor-mu",
+          "first-descriptor-score",
+          "first-descriptor-evidence"
+        ],
+        "parameters_and_external_roots": true,
+        "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/cpu/pytorch/related/inference/result.json",
+        "sha256": "79061c7b2a74f6ff3a342e3e59aa86a4acf6ec75adac67f21669b000732ade37",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "state": "passed",
+            "exact": true,
+            "next_window": 2,
+            "scope": "serial new owner: full decoded values and next complete window/parameters/gradients/optimizer/task"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "674a067d53e9082161019e47558b330fb1c42e4b8755151b70426eb543d9615b",
+          "config_id": "846fe0b75475b07897f314627a241d5f0c0a737b0b61273de425a09253abb39b"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/cpu/pytorch/prefix/result.json",
+        "sha256": "b98112d1a90a40795426b419dae1d27e321b0e0c25a43e249480e3ece42b5431",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "e1146a8757e869930f96e680449db0f806e02c7419e7544fe3a7f61138e476c1",
+          "config_id": "414c9160dbc133360b61504363b8bae2042e2e0e9ff4a51a1c1e48e273603d49"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-b/cpu/pytorch/whole/result.json",
+        "sha256": "7867fe3f9e9f62604eff0a0ed12e8a120346e047a3618c2340c8e76b8be65393",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "e1146a8757e869930f96e680449db0f806e02c7419e7544fe3a7f61138e476c1",
+          "config_id": "598947dc84e4ba6ec5bf601fabcfbac871cce77394a9862ebb536304a3a85ef6"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/cpu/pytorch/resumed/result.json",
+        "sha256": "e0f8c26f1885eb9f57716cc02652beeefdaffe241704e3b40c7e39e7118a6a84",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "e1146a8757e869930f96e680449db0f806e02c7419e7544fe3a7f61138e476c1",
+          "config_id": "c4e19f61ac1ee0cc043fc982a340b655ba749e39baf13656ac7efa1676ced2f2"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh Python process: complete checkpoint/task values and next output exact"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/cpu/result.json",
+        "sha256": "c2f261acab141b05c1563877c1217fa65bc45e631b39c7e840c5e93c84df7879"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/pytorch/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/pytorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1c069a64fb7534747c8de639db7bd8c6189c7dee2eedcdd4d945bc2f0e510b92"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/pytorch/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/pytorch/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/pytorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "90042606acc765469a2c158f50051e753bcc0757553ec3ba200136d954063ad2"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/cpu/pytorch/related",
+        "result_sha256": "30fe7b60017fd35eeba8c753ae51d9227739766d09e362c34dc726c844c61d87"
+      },
+      "reused_whole": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/cpu/pytorch/whole",
+        "result_sha256": "7867fe3f9e9f62604eff0a0ed12e8a120346e047a3618c2340c8e76b8be65393"
+      }
+    },
+    {
+      "platform": "cpu",
+      "client": "python-native",
+      "related_state": "failed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/cpu/python-native/related/result.json",
+        "sha256": "9317d6e59afc55d55cbc546c6b500656653e2c0530c0aa0b4f532b674a035770"
+      },
+      "independent_roots": {
+        "state": "failed",
+        "first_error": {
+          "type": "NumericMismatch",
+          "message": "root[input.0.1.0.1]: Tensor-likes are not close!\n\nMismatched elements: 1 / 9 (11.1%)\nGreatest absolute difference: 1.7881393432617188e-06 at index (4,) (up to 1e-06 allowed)\nGreatest relative difference: 2.4992439648485743e-05 at index (4,) (up to 1e-05 allowed)"
+        },
+        "progress": {
+          "stage": "compare-vjp",
+          "root": "all",
+          "completed_roots": []
+        }
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/cpu/python-native/related/inference/result.json",
+        "sha256": "dbf1d27a8f7b11bf54b888bf1651795e6c0f0c22efb6a38c6c690eafd17bf669",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "state": "passed",
+            "exact": true,
+            "next_window": 2,
+            "scope": "serial new owner: full decoded values and next complete window/parameters/gradients/optimizer/task"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "1d3adf5d68dbbc89b855c81b4d604f110d3e8d355b17e5729b069c371ce6dc8d",
+          "config_id": "4573d8fae6fa007b5110fa49737e94cd8de0a4cc1a87311edfeee54e8c42c264"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/cpu/python-native/prefix/result.json",
+        "sha256": "a8d05ef05b52dccc1abdee55accbefa3803df905a419230a4d741a2ef4d92f69",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "278ec50b93cad1dfb194fad117bcf1f1bf5b34463957b0d0e869815a798ed210",
+          "config_id": "6ce0bab06e921839e24375dc09e754ca04cc27ce66051ad541cf64c658305705"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-c/cpu/python-native/whole/result.json",
+        "sha256": "da0b57068b80d40807bd00972979d7bbbf2c28a9c02bb9fdb87b5c99f255e94b",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "278ec50b93cad1dfb194fad117bcf1f1bf5b34463957b0d0e869815a798ed210",
+          "config_id": "4ffa8f03b62f2a70d8a89c76b8017c4f34ff32695c035aecb5cae26dd00cee7a"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/cpu/python-native/resumed/result.json",
+        "sha256": "f39145aaf8a8f7f2d49c3455b056eda3189f69e807c761bc9063fbff9fd015a3",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "278ec50b93cad1dfb194fad117bcf1f1bf5b34463957b0d0e869815a798ed210",
+          "config_id": "c6dd40d9617a32ba83a59033732b2ff5a7f36c801c2baebba49a74939e6dd805"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh Python process: complete checkpoint/task values and next output exact"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/cpu/result.json",
+        "sha256": "c2f261acab141b05c1563877c1217fa65bc45e631b39c7e840c5e93c84df7879"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "86867e71ef9cd0f29cceba2f130c5378d5977cf78111b03f56ef718d1efec4c6"
+        },
+        {
+          "label": "whole",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/whole.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/whole"
+          ],
+          "exit_code": 0,
+          "log_sha256": "906d853e30a6d54b8a73d5446d610865977bb0639081ffa3068460543b072810"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/python-native/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "b969c4e8c0f0014c6c6a458e867a80b5675e6f401cbb56af2261de963de873bb"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/cpu/python-native/related",
+        "result_sha256": "9317d6e59afc55d55cbc546c6b500656653e2c0530c0aa0b4f532b674a035770"
+      },
+      "reused_whole": null
+    },
+    {
+      "platform": "cpu",
+      "client": "libtorch",
+      "related_state": "passed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "libtorch",
+          "device": "cpu",
+          "placement": "cpu",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/cpu/libtorch/related/result.json",
+        "sha256": "9a55d9c755a35b1a0a9129c98592478c34402409a6a6dc71bc129e6679c2de9d"
+      },
+      "independent_roots": {
+        "name": "independent-roots",
+        "cases": [
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 8,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 8,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "all",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "all",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 63,
+              "connected_zero": 16,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 63,
+              "connected_zero": 16,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "root": "control",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 63,
+              "connected_zero": 63,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 63,
+              "connected_zero": 63,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "root": "control",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 59,
+              "connected_zero": 4,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 59,
+              "connected_zero": 4,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "root": "descriptor",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 59,
+              "connected_zero": 59,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 59,
+              "connected_zero": 59,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "root": "descriptor",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "output",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "output",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 122,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 122,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "root": "all",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 122,
+              "connected_zero": 122,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 122,
+              "connected_zero": 122,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "root": "all",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 83,
+              "connected_zero": 16,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 83,
+              "connected_zero": 16,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "root": "control",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 83,
+              "connected_zero": 83,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 83,
+              "connected_zero": 83,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "root": "control",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 79,
+              "connected_zero": 4,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 79,
+              "connected_zero": 4,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "root": "descriptor",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 79,
+              "connected_zero": 79,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 79,
+              "connected_zero": 79,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "root": "descriptor",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 106,
+              "connected_zero": 16,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 106,
+              "connected_zero": 16,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "root": "output",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 106,
+              "connected_zero": 106,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 106,
+              "connected_zero": 106,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "root": "output",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          }
+        ],
+        "differences": [],
+        "differences_truncated": false,
+        "discrete": "passed",
+        "finite": "passed",
+        "leaves": "canonical shared parameters, canonical external aliases; split independently cloned floating state/slots/history/physical pending",
+        "mismatch_counts": {
+          "discrete": 0,
+          "numeric": 0
+        },
+        "numeric": "passed",
+        "objective": "sum of per-field mean squares; FP16 fields promoted to FP32; distinct all/output/control/descriptor objectives",
+        "parameter_limit": 5000000,
+        "schema": "tide-weighted-independent-roots-v1",
+        "scope": "standalone eager selected device/placement/schedule against independent scalar CPU opposite schedule; original fixture, no optimizer update",
+        "state": "passed",
+        "strict_passed": true
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/cpu/libtorch/related/inference/result.json",
+        "sha256": "38af7cfbc60c34a1101d72862de89c7c68f8b0a027ee4ab94ea5f4b0fe671e31",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "checkpoint": "checkpoint",
+            "exact": true,
+            "next_window": 2,
+            "scope": "raw decode and complete next-window; serial new owner",
+            "state": "passed"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "2136ca95fc1e10bee954c8bef8d7543e8326081bba49275e777946813ce719ea",
+          "config_id": "892bdc0acf3a295f551a98d7c334debfe50563e436c50296b9c639a6a4feb974"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/cpu/libtorch/prefix/result.json",
+        "sha256": "5745e8133aaa8ed50f7ab92fbee6abba4f2c6baf945003ab111df1f0bb25cc93",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "791423148db7765d71ec2c6776b5c0cdf8d2fa6a7da0531b9af64f940e94a6b6",
+          "config_id": "db5d599cb85a7c8f078a06199545f4d57e88cb958d85d4c9c28a5b3e0d5d6e32"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-b/cpu/libtorch/whole/result.json",
+        "sha256": "fb5634c927ae988bfb7d8df898b0ec1340737c6202ca6a4d5607b405f89dcadc",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "791423148db7765d71ec2c6776b5c0cdf8d2fa6a7da0531b9af64f940e94a6b6",
+          "config_id": "518712e4d5f1713720ef599641e9b322efd8ff14b67d1fbe0f1d8d460295b206"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/cpu/libtorch/resumed/result.json",
+        "sha256": "b96ebd2873ee552fef9c8ba8c150eb2b7b005c51b3d8aca3819e320002f96e8a",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "791423148db7765d71ec2c6776b5c0cdf8d2fa6a7da0531b9af64f940e94a6b6",
+          "config_id": "504cbad15af460ebe5e4aa815168e975f7b270608d23dbc61e05736991fc502f"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh C++ process: identical complete native checkpoint bytes after next update"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/cpu/result.json",
+        "sha256": "c2f261acab141b05c1563877c1217fa65bc45e631b39c7e840c5e93c84df7879"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/libtorch/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/libtorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "cd54fedc4a35b7848bf39d8358be90ad6ab61c34b98256021854b3f29f051349"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/libtorch/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/libtorch/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/cpu/libtorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "b4fba778f19628ff113d08b1b7dae5fd7045b52ab9b23bbf2301cbcb5e5e1405"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/cpu/libtorch/related",
+        "result_sha256": "9a55d9c755a35b1a0a9129c98592478c34402409a6a6dc71bc129e6679c2de9d"
+      },
+      "reused_whole": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/cpu/libtorch/whole",
+        "result_sha256": "fb5634c927ae988bfb7d8df898b0ec1340737c6202ca6a4d5607b405f89dcadc"
+      }
+    },
+    {
+      "platform": "npu",
+      "client": "pytorch",
+      "related_state": "failed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "pytorch",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/npu/pytorch/related/result.json",
+        "sha256": "5fff0daf874500e4ee16405ddd0afc8afe43388ecc7648f014c5e2a758fdcc56"
+      },
+      "independent_roots": {
+        "state": "failed",
+        "first_error": {
+          "type": "NumericMismatch",
+          "message": "root[input.0.1.0.1]: Tensor-likes are not close!\n\nMismatched elements: 1 / 9 (11.1%)\nGreatest absolute difference: 2.86102294921875e-06 at index (4,) (up to 1e-06 allowed)\nGreatest relative difference: 3.9987302443478256e-05 at index (4,) (up to 1e-05 allowed)"
+        },
+        "progress": {
+          "stage": "compare-vjp",
+          "root": "all",
+          "completed_roots": []
+        }
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/npu/pytorch/related/inference/result.json",
+        "sha256": "2544b5ea32e2732a2b54278b4b1944ebcb9959dd8f7b15bbd791b1d8fa3b3e11",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "state": "passed",
+            "exact": true,
+            "next_window": 2,
+            "scope": "serial new owner: full decoded values and next complete window/parameters/gradients/optimizer/task"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "6a0e492fbf4b33a3fc87e7b02a5645bd46e87c3221cd4fe42d3aa06a766c3a07",
+          "config_id": "2625c21c91b30981d79f3cc1c849105ccf52476fc446149dfa840f1c2e7db64a"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/npu/pytorch/prefix/result.json",
+        "sha256": "fd965d5afc474c3e8c9b666ce7f0ce2b3bc22b8a27c55cd8e89b3dacc837424c",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "8e396faccf45722cb503261f057c22d6bb29dc071e3de319e87e4c3c0c289dd9",
+          "config_id": "1a6af40f96ca2bb81addc737c0b7cc7cb56b609bf152a2d55531adce81324831"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-c/npu/pytorch/whole/result.json",
+        "sha256": "4ff608dc220ebd87c20ebf3d8a9f88a28913a2ef74b7fdbf5f4adb0640b962bf",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "8e396faccf45722cb503261f057c22d6bb29dc071e3de319e87e4c3c0c289dd9",
+          "config_id": "fba4e3c1906d20958e5d9e6092cd8b4009cf132f0da30d17180e42256638b25b"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/npu/pytorch/resumed/result.json",
+        "sha256": "787c3f6b8e2e8585e9e4dacbf7f5722716f81bf1b2851c5fc2c985a0e9a1dddd",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "8e396faccf45722cb503261f057c22d6bb29dc071e3de319e87e4c3c0c289dd9",
+          "config_id": "5e58ff4b3d25d3538ba4deec6e975841435fdc53ab91f82ca2bbb65f1fbcd6e7"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh Python process: complete checkpoint/task values and next output exact"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/npu/result.json",
+        "sha256": "2424c88ed91b8b31fd0b22af081b49c93307208c0411b668575cdd0add97e51c"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "ba73afe19032a67b46cd7fa0ca58ef62db7f62b6f7f23d5de2be9455489a0123"
+        },
+        {
+          "label": "whole",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/whole.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/whole"
+          ],
+          "exit_code": 0,
+          "log_sha256": "0b984b7e25f97d2672928b70ca1808ce700281f577e85b81de2b78d81e73a9ab"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/pytorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "3d4710815eda0af6e232535b26f1147ae555bea568e321ab791a57f2059d8508"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/npu/pytorch/related",
+        "result_sha256": "5fff0daf874500e4ee16405ddd0afc8afe43388ecc7648f014c5e2a758fdcc56"
+      },
+      "reused_whole": null
+    },
+    {
+      "platform": "npu",
+      "client": "python-native",
+      "related_state": "failed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/npu/python-native/related/result.json",
+        "sha256": "7addc4b9e1f2c4b62860320a74888e13fbbf414133f2fdf65af577bd7655bc00"
+      },
+      "independent_roots": {
+        "state": "failed",
+        "first_error": {
+          "type": "NumericMismatch",
+          "message": "root[input.0.1.0.1]: Tensor-likes are not close!\n\nMismatched elements: 1 / 9 (11.1%)\nGreatest absolute difference: 2.8312206268310547e-06 at index (4,) (up to 1e-06 allowed)\nGreatest relative difference: 3.957078661187552e-05 at index (4,) (up to 1e-05 allowed)"
+        },
+        "progress": {
+          "stage": "compare-vjp",
+          "root": "all",
+          "completed_roots": []
+        }
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/npu/python-native/related/inference/result.json",
+        "sha256": "a947f9e1cbec4d4b14efb9c5b23cd0ee76540e444968a4a359a61a76f7f479a2",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "state": "passed",
+            "exact": true,
+            "next_window": 2,
+            "scope": "serial new owner: full decoded values and next complete window/parameters/gradients/optimizer/task"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "1677bd334cc9bd26069a28cd86130ef40245a5088baabb4c280b19094a0b525e",
+          "config_id": "9970f146d7fd88fb7d4584b526815baff73ef1bad75ace67dc69a7a23d80bf4f"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/npu/python-native/prefix/result.json",
+        "sha256": "b4f5e707bdeaeb6cd8223d9c9000863f30af7deb5be95a37861f03b469b7c3e1",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "564f637cc5a9779e9bcebc561fc42f82bfa27b7232075d82a48e6becb4bb6e23",
+          "config_id": "57cbb1f7335f08e4a8b8c5a6e6da764375b181d4b2332c030956a18e38b55919"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-c/npu/python-native/whole/result.json",
+        "sha256": "ed186d601eb9519d9da026b012c1d78cd86f96cf05ced6766ad5040a25e11ae4",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "564f637cc5a9779e9bcebc561fc42f82bfa27b7232075d82a48e6becb4bb6e23",
+          "config_id": "c739747008c5b400aae0ba9ca13087a5bc4d8921f1e348c8f135ecffbb80bc6d"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/npu/python-native/resumed/result.json",
+        "sha256": "f6188ffeb807ed0d523f2f6747b51636bc0af81929cefac1bdea0145f579f067",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed",
+          "reference": "independent Python scalar CPU schedule; seeded prefix replay"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "exact_resume": "not_checked",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "564f637cc5a9779e9bcebc561fc42f82bfa27b7232075d82a48e6becb4bb6e23",
+          "config_id": "be7d47c28ba70bc4e6589614aa6475ae6c411d090bef963cc77da30f88a1bd58"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh Python process: complete checkpoint/task values and next output exact"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/npu/result.json",
+        "sha256": "2424c88ed91b8b31fd0b22af081b49c93307208c0411b668575cdd0add97e51c"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "ed44276a132bb77ba9c413eb120bf33ffc6882c0cd8f43fe542dc7b517d2aeb8"
+        },
+        {
+          "label": "whole",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/whole.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/whole"
+          ],
+          "exit_code": 0,
+          "log_sha256": "e1d52a1c07dc86aeaf7aaa34ec80b856a9375426b3ff642853c47ffd85628e6b"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/python-native/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "16961c27ac3456dcdcc2e5eb4e1b5ac6eb2f67109a9c62880eb94a0a812065b4"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/npu/python-native/related",
+        "result_sha256": "7addc4b9e1f2c4b62860320a74888e13fbbf414133f2fdf65af577bd7655bc00"
+      },
+      "reused_whole": null
+    },
+    {
+      "platform": "npu",
+      "client": "libtorch",
+      "related_state": "passed",
+      "original_config": {
+        "schema": "tide-experiment-v1",
+        "name": "ascend-migration-fc-kv",
+        "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "depth": 2,
+            "region_width": 2,
+            "width": 8,
+            "history": 4
+          }
+        },
+        "task": {
+          "samples": 2,
+          "positions": 3,
+          "seed": 7,
+          "input_pattern": "staggered-v1"
+        },
+        "execution": {
+          "family": "settle",
+          "client": "libtorch",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "packing": "packed",
+          "return_packing": "packed",
+          "return_mode": "complete",
+          "workers": 1,
+          "intraop_threads": 1,
+          "interop_threads": 1
+        },
+        "measurement": {
+          "mode": "inference",
+          "steps": 2,
+          "warmup": 0,
+          "validation": "strict",
+          "checkpoint_check": true,
+          "timeout_seconds": 600
+        },
+        "resources": {
+          "max_materialize_bytes": 1073741824,
+          "checkpoint_max_bytes": 268435456
+        },
+        "site": {
+          "schema": "tide-site-v1",
+          "name": "cann92-migration",
+          "launcher": "foreground",
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/build-python",
+            "standalone_binary": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/weighted/client/weighted-benchmark"
+          },
+          "environment": {
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe"
+          },
+          "standalone_environment": {
+            "PATH": "/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+            "LD_LIBRARY_PATH": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib:/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+            "PYTHONPATH": "/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+            "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+            "ASCEND_AICPU_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "ASCEND_TOOLKIT_HOME": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+            "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+          }
+        }
+      },
+      "related_result": {
+        "path": "artifacts/cann92-20261106-b/npu/libtorch/related/result.json",
+        "sha256": "f77ce807e750975df5812dbef9a0d7c70869ba560c8b7bae8dfb7c1815aaf917"
+      },
+      "independent_roots": {
+        "name": "independent-roots",
+        "cases": [
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 8,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 8,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "all",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "all",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 63,
+              "connected_zero": 16,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 63,
+              "connected_zero": 16,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "root": "control",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 63,
+              "connected_zero": 63,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 63,
+              "connected_zero": 63,
+              "disconnected": 15,
+              "leaves": 78
+            },
+            "root": "control",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 59,
+              "connected_zero": 4,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 59,
+              "connected_zero": 4,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "root": "descriptor",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 59,
+              "connected_zero": 59,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 59,
+              "connected_zero": 59,
+              "disconnected": 19,
+              "leaves": 78
+            },
+            "root": "descriptor",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "output",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 78,
+              "connected_zero": 78,
+              "disconnected": 0,
+              "leaves": 78
+            },
+            "root": "output",
+            "scope": "whole-first-window",
+            "start": 0,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 122,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 122,
+              "connected_zero": 16,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "root": "all",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 122,
+              "connected_zero": 122,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 122,
+              "connected_zero": 122,
+              "disconnected": 0,
+              "leaves": 122
+            },
+            "root": "all",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 83,
+              "connected_zero": 16,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 83,
+              "connected_zero": 16,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "root": "control",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 83,
+              "connected_zero": 83,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 83,
+              "connected_zero": 83,
+              "disconnected": 39,
+              "leaves": 122
+            },
+            "root": "control",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 79,
+              "connected_zero": 4,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 79,
+              "connected_zero": 4,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "root": "descriptor",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 79,
+              "connected_zero": 79,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 79,
+              "connected_zero": 79,
+              "disconnected": 43,
+              "leaves": 122
+            },
+            "root": "descriptor",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 106,
+              "connected_zero": 16,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.7,
+            "reference": {
+              "connected": 106,
+              "connected_zero": 16,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "root": "output",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          },
+          {
+            "candidate": {
+              "connected": 106,
+              "connected_zero": 106,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "cotangent": 0.0,
+            "reference": {
+              "connected": 106,
+              "connected_zero": 106,
+              "disconnected": 16,
+              "leaves": 122
+            },
+            "root": "output",
+            "scope": "split-continuation",
+            "start": 6,
+            "stop": 12
+          }
+        ],
+        "differences": [],
+        "differences_truncated": false,
+        "discrete": "passed",
+        "finite": "passed",
+        "leaves": "canonical shared parameters, canonical external aliases; split independently cloned floating state/slots/history/physical pending",
+        "mismatch_counts": {
+          "discrete": 0,
+          "numeric": 0
+        },
+        "numeric": "passed",
+        "objective": "sum of per-field mean squares; FP16 fields promoted to FP32; distinct all/output/control/descriptor objectives",
+        "parameter_limit": 5000000,
+        "schema": "tide-weighted-independent-roots-v1",
+        "scope": "standalone eager selected device/placement/schedule against independent scalar CPU opposite schedule; original fixture, no optimizer update",
+        "state": "passed",
+        "strict_passed": true
+      },
+      "inference": {
+        "path": "artifacts/cann92-20261106-b/npu/libtorch/related/inference/result.json",
+        "sha256": "25bda2d77323579a9aa8611cb2005ecc5a1e8a77c9c4780c3ae821f6f17839fa",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "passed",
+          "exact_resume": true,
+          "next_window": 2,
+          "resume_check": {
+            "checkpoint": "checkpoint",
+            "exact": true,
+            "next_window": 2,
+            "scope": "raw decode and complete next-window; serial new owner",
+            "state": "passed"
+          }
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "ec6ed67db89b5f88ffd51aa419132c41c3ab322bf3e28ec192f1e1480a31bcb3",
+          "task_id": "cf2d09d4a07200cb70058932eec6411016b7da39c1efe3f2291f07eedcbc44b9",
+          "execution_id": "f9d13b3e8720a4a5f3fb7635bbe6742cb75c44c93a9b3b1f30c0cb3518864948",
+          "config_id": "4830f50f86b9b4715de5aae3fd3623ec54bc5f0870750051416e6df1bf4d781d"
+        }
+      },
+      "training_prefix": {
+        "path": "artifacts/cann92-20261106-c/npu/libtorch/prefix/result.json",
+        "sha256": "83bdd6bd875251263c8abd7e0bf2c0158dbadfce57fa4491760e0870d54109cc",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 2
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "bba9af51fdc5f5301a86bd7604ae1940e5d54552d771553a14914cd3a5cd49f7",
+          "config_id": "8dadf1bafd49d209f7fe5a9d583297eb15448392917b607a8c4735a3fcc86a75"
+        }
+      },
+      "training_whole": {
+        "path": "artifacts/cann92-20261106-b/npu/libtorch/whole/result.json",
+        "sha256": "f1ba23d6bb80d2dc21c9c05e786b58d8c267b5ff6cae5ed2e8972bccd18f4126",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "bba9af51fdc5f5301a86bd7604ae1940e5d54552d771553a14914cd3a5cd49f7",
+          "config_id": "1a9896cbbe1a999d9529df2ed331fda0b9b9480498f941abc00ae4779575f0c8"
+        }
+      },
+      "training_resumed": {
+        "path": "artifacts/cann92-20261106-c/npu/libtorch/resumed/result.json",
+        "sha256": "5ed30c4c9c840bfd5f77dd67e808ffa6e6ab46baf733727c38acf665cf9500e7",
+        "state": "passed",
+        "execution_status": "completed",
+        "validation": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "complete": "checked",
+          "strict_passed": true,
+          "policy": "strict",
+          "outcome": "passed"
+        },
+        "checkpoint": {
+          "state": "saved",
+          "next_window": 3
+        },
+        "config_ids": {
+          "model_id": "b3e5e4c8c1f07cd9963acc4bca82011fe97192781be911858788f9233e24fd3e",
+          "workload_id": "010da4c27f69b4e53a053417741938273a5ff9d17bc66bcb76f00425b005c924",
+          "task_id": "d325ab3ae7cad55b0857d58a98979099102623a7e59fc0c814ffa8ffed0d840d",
+          "execution_id": "bba9af51fdc5f5301a86bd7604ae1940e5d54552d771553a14914cd3a5cd49f7",
+          "config_id": "e179617d214980a7bf6b8c454d537736fdde565a1b615723b9bb5238a2cd59bb"
+        }
+      },
+      "fresh_process_resume": {
+        "state": "passed",
+        "scope": "fresh C++ process: identical complete native checkpoint bytes after next update"
+      },
+      "continuation_result": {
+        "path": "artifacts/cann92-20261106-c/npu/result.json",
+        "sha256": "2424c88ed91b8b31fd0b22af081b49c93307208c0411b668575cdd0add97e51c"
+      },
+      "commands": [
+        {
+          "label": "prefix",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/libtorch/prefix.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/libtorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "211f915080ad9a10d6af0beb0aa6d6019e520bbe5be8b1872a3e786a149e394a"
+        },
+        {
+          "label": "resumed",
+          "argv": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/env/bin/python",
+            "-B",
+            "-m",
+            "tidegraph",
+            "run",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/libtorch/resumed.json",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/libtorch/resumed",
+            "--resume",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/npu/libtorch/prefix"
+          ],
+          "exit_code": 0,
+          "log_sha256": "04a8d4b8be31f96ac847ce01821e812f204c8baaec227ee548031b214451699b"
+        }
+      ],
+      "reused_related": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/npu/libtorch/related",
+        "result_sha256": "f77ce807e750975df5812dbef9a0d7c70869ba560c8b7bae8dfb7c1815aaf917"
+      },
+      "reused_whole": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b/npu/libtorch/whole",
+        "result_sha256": "f1ba23d6bb80d2dc21c9c05e786b58d8c267b5ff6cae5ed2e8972bccd18f4126"
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "unit": "gef-cann92-migration-a.service",
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-a/scripts/qualify_ascend_migration.sh",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-a",
+          "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "all"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-a",
+        "state": "failed",
+        "source": "f1480a002284a3c5fb5cae56b85f0b469492b5cd",
+        "dirty": "",
+        "started": "2026-11-06T08:39:45.158277+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-06T08:40:39.906890+00:00"
+      },
+      "record_sha256": "6184839ad4e416ccac4071c63a16039565186b6bac13eb5ea36455dbe96f9899",
+      "log": {
+        "path": "artifacts/jobs/cann92-migration-a/task.log",
+        "sha256": "d36475786b248f140482dd5c4e21480ff24c507c8e21f778052cf1163e4a8b1b"
+      },
+      "systemd": "MainPID=0\nExecMainStatus=1\nControlGroup=\nActiveState=failed\nSubState=failed\n"
+    },
+    {
+      "unit": "gef-cann92-migration-b.service",
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-b/scripts/qualify_ascend_migration.sh",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-b",
+          "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "all"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-b",
+        "state": "failed",
+        "source": "9df0ecf8a5f8a98e4144f45161cffd5054b04002",
+        "dirty": "",
+        "started": "2026-11-06T08:42:24.503017+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-06T08:47:29.840333+00:00"
+      },
+      "record_sha256": "40cb0e6915f554baf60d604b970d5c5f93d76360723face823eb56b8779852b9",
+      "log": {
+        "path": "artifacts/jobs/cann92-migration-b/task.log",
+        "sha256": "8b5972aaf99ba5c84741e046d541fe398f10eb8f8f2e353d19ba5c16300671f5"
+      },
+      "systemd": "MainPID=0\nExecMainStatus=1\nControlGroup=\nActiveState=failed\nSubState=failed\n"
+    },
+    {
+      "unit": "gef-cann92-recovery-c.service",
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cann92-20261106-c/run.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local/cann92-source-c",
+        "state": "failed",
+        "source": "60e19755b04f09d676f0636dd32a5cabc19e6560",
+        "dirty": "",
+        "started": "2026-11-06T08:51:32.805297+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-06T08:53:39.094710+00:00"
+      },
+      "record_sha256": "fce5729effa2d2c74f649d2ecdfac33e4074268961ef34a25ca76815399f8c3e",
+      "log": {
+        "path": "artifacts/jobs/cann92-recovery-c/task.log",
+        "sha256": "1590dfe6b673f34e5d92e84bedca888be382aaed0c454ee7f5b1b2a9dd805e31"
+      },
+      "systemd": "MainPID=0\nExecMainStatus=1\nControlGroup=\nActiveState=failed\nSubState=failed\n"
+    }
+  ],
+  "queue_records": [
+    {
+      "elapsed_seconds": 73.88461010530591,
+      "job_id": "gef-cann92-cann92-20261106-b",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 1,
+      "schema_version": 1,
+      "status": "failed",
+      "timestamp": "2026-11-06T08:46:39.750908+00:00"
+    },
+    {
+      "elapsed_seconds": 95.26404226198792,
+      "job_id": "gef-cann92-recovery-c",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 1,
+      "schema_version": 1,
+      "status": "failed",
+      "timestamp": "2026-11-06T08:53:39.077551+00:00"
+    }
+  ],
+  "frozen_worktrees_clean": {
+    ".local/cann92-source-a": "",
+    ".local/cann92-source-b": "",
+    ".local/cann92-source-c": ""
+  },
+  "remaining_job_processes": [],
+  "resources": {
+    "affinity_cpus": 320,
+    "build_jobs": 320,
+    "threads_per_test": 1,
+    "npu_physical": 1,
+    "npu_logical": "npu:0",
+    "account_gib_approx": 180,
+    "soft_quota_gib": 300,
+    "hard_quota_gib": 800,
+    "outputs_mib": {
+      "initial": 58,
+      "build_and_checks": 330,
+      "recovery": 7.5
+    },
+    "systemd": "background.slice lifetime/timeouts/control-group; CPU/memory controllers not per-user-unit enforced"
+  },
+  "repairs": [
+    {
+      "problem": "pre-3.11 system interpreter lacks hashlib.file_digest",
+      "resolution": "bounded streaming SHA256, SDK discovery without Torch import",
+      "original_job": "gef-cann92-migration-a.service"
+    },
+    {
+      "problem": "recovery driver crossed check-expanded workload identity and original recipe",
+      "resolution": "same run request for prefix/whole/resume; preserve identity rejection",
+      "original_job": "gef-cann92-migration-b.service"
+    }
+  ],
+  "limitations": [
+    "CPU/native and NPU Python/native all-objective independent input VJP strict failures remain; original tolerances unchanged",
+    "NPU PyTorch 2.86102294921875e-6 witness matches docs/evidence/core5-human-workflow-20261031.md",
+    "No resident build or qualification, multicard, FP16, large batch, scale throughput, public pretrained weight or GPU rerun",
+    "No full per-operator placement profile; mixed-c actual runtime/parameter placement, correctness and synchronization only",
+    "Old 9.1 environments and experiment evidence are not migrated or relabeled; shared baselines unchanged"
+  ],
+  "lm_wrapper_plan": {
+    "path": "artifacts/cann92-20261106-c/lm-wrapper-plan.json",
+    "sha256": "1c556816f26f309356231ba5e1fbf651aed993e39f20a789c481535ccbc5159a",
+    "state": "passed",
+    "scope": "installed launcher and allocation-free plan only"
+  }
+}

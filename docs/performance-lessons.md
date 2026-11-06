@@ -552,3 +552,16 @@ reserved仍约60.9GiB，不能由参数分摊或allocated外推安全batch。
 再考虑显式时间分块/更多设备，不靠降低安全余量或重复原配置。逻辑B与prefill时间块仍分列。
 llama B32两个完整流程在显式7200秒预算下结束：正式1332.666/1042.777秒，warmup另计；
 原1200秒失败没有消失，较大B在当前ARM/BF16/无BLAS构建上没有形成可观吞吐，不能推广到量化/BLAS版本。
+
+## 公共基线迁移与资格边界
+
+[9.2迁移](evidence/cann92-project-migration-20261106.md)表明换module不能替代换venv和重建。
+同时检查真实base prefix与Torch/TorchNPU版本；新环境按CANN命名，旧固定实验不动。
+独立SDK构建驱动可以只读取CMake/库身份，不导入Python Torch；系统解释器可能比开发Python旧，
+文件hash等控制工具也要核验实际版本，本次修复了pre-3.11缺少file_digest的入口失败。
+
+独立check的展开材料身份与原recipe不应混作checkpoint来源；新进程恢复使用同一run配置的前缀，
+不能通过放松workload_id守卫使测试通过。三客户端CPU/NPU的完整推理、声明loss训练和精确恢复均通过，
+仍不意味着Python综合all根通过：NPU PyTorch原2.86102e-6差异在9.2保持同值。
+迁移复用仍有效的构建/结果时先核对源码、包、配置和二进制，并分别记录实际构建提交与测试驱动提交。
+本轮没有性能计时，不能据构建更新或小检查推断加速、容量改善或resident已迁移。
