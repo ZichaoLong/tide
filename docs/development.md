@@ -75,32 +75,49 @@ CUDA已取得[RTX3090单卡eager及有限双卡实测](evidence/core5-cuda-eager
 单卡resident用`verify_core5_resident_single.py`的明确库存和零跳过门禁；完整三卡门禁仍独立保留。
 同源码构建、单卡正确性、设备时间线、跨卡和性能均是不同证据，不由编译成功推断。
 
-本机截至 2026-10-27 的实际规范来源是
-`/opt/software/ascend-locks/dev-workspace-9.1.0/README.md` 和对应 `/etc/modulefiles`。
-旧 `/home/zlong/ASCEND_CODING_AGENT_GUIDE.md` 已不存在，不按失效路径加载环境。
-当前公共入口为 `ascend/dev-workspace-9.1.0`（CANN 9.1、Torch 2.12、Python 3.12）。
-项目私有增量使用模块提供的 constraints，不修改公共环境：
+本机新开发入口采用 CANN 9.2.0：`ascend/dev-workspace-9.2.0`，
+Python3.12、Torch2.12.0+cpu、TorchNPU2.12.0.post3；公共规范为
+`/opt/software/ascend-locks/dev-workspace-9.2.0/README.md`。公共环境只读。
+旧实验继续使用自己的固定源码、9.1模块和venv，不能只换module后沿用旧venv/二进制。
+
+```sh
+bash scripts/prepare_local_ascend.sh .local/venv-cann9.2.0
+source /usr/share/Modules/init/bash
+module purge
+module load ascend/dev-workspace-9.2.0
+source .local/venv-cann9.2.0/bin/activate
+python scripts/ascend_environment.py --require-venv
+python -m pip install --no-build-isolation --no-deps -e .
+python scripts/build.py --backend npu --npu-runtime python --build-dir build/cann92-python --jobs all
+```
+
+`prepare_local_ascend.sh`核对venv的真实base prefix、Torch/TorchNPU版本和模块约束身份，
+拒绝把旧环境或公共prefix当作新私有环境。增量包用`-c "$ASCEND_CONSTRAINTS_FILE"`安装。
+NPU Python-owned构建也可执行CPU张量；这不等于另做了一套CPU standalone资格。
+
+独立C++使用另一个shell和已发布SDK，不加载Python TorchNPU库：
 
 ```sh
 module purge
-module load ascend/dev-workspace-9.1.0
-python -m venv --system-site-packages .local/venv-core5  # 首次
-source .local/venv-core5/bin/activate
-python -m pip install -c "$ASCEND_CONSTRAINTS_FILE" pytest ninja
-python -m pip install --no-build-isolation --no-deps -e .
+module load libtorch-npu/2.12.0-cann9.2.0
+# Ninja须在PATH；可以只提供已安装工具的bin，不加载另一套NPU运行库。
+python3 scripts/build.py --backend npu --npu-runtime standalone \
+  --libtorch-prefix "$LIBTORCH_ROOT" --cxx11-abi 1 --build-dir build/cann92-sdk --jobs all
 ```
 
-2026-10-30已从固定源码验证新私有环境、CPU构建及仓库外安装消费者，见[清理与重建证据](evidence/artifact-cleanup-tracked-only-20261030.md)。
-新环境的最小 CPU 链路与后续各设备证据分开；环境存在不代表完整矩阵通过。
-旧独立 LibTorch-NPU 2.10/CANN9.0 与私有 CUDA2.10/cu128 是不同工具链，不能混用二进制。
-使用独立 SDK 时，CANN 还需配套 Python 的运行时入口：把该 SDK 配套 Python 的 `bin`
-置于任务 `PATH` 首位，并核对 `python3-config --prefix` 与该 Python 的 `sys.prefix` 一致。
-本机 `libtorch-npu/2.10.0-cann9.0.0` 模块本身不设置 Python PATH；不能让 9.1 私有 venv
-或系统 `python3-config` 混入该任务。只调整任务环境，不修改公共 module 或软件栈。
-该 SDK 任务还须能找到 Ninja；`build.py` 明确选择 Ninja，缺少它会在配置阶段失败。
-可以从项目私有工具目录提供 Ninja，但 SDK 配套 Python/bin 必须在 PATH 最前，
-且不激活另一套 Python 环境。分别核对 `command -v ninja`、`python3-config --prefix`
-和实际 SDK Python；构建工具可复用不表示 Torch/CANN 二进制可混用。
+显式`--libtorch-prefix`从SDK的CMake元数据读取版本、hash实际库，构建驱动不导入Python Torch。
+ABI必须与SDK发布记录匹配，链接及实际设备执行另行核验。CANN算子编译可能使用其Python运行时；
+这不使C++核心依赖Python调度。旧2.10/CANN9.0及9.1证据继续按原身份保留，不自动升级。
+
+迁移的固定源码小门禁为`scripts/qualify_ascend_migration.sh NEW_OUTPUT NPU_QUEUE_HELPER [all|half|N]`，
+在干净固定检出通过`job.py`和有界background.slice服务运行。
+它新建私有环境和两个独立构建，安装wheel，使用
+[小配置](../configs/checks/ascend-migration.json)核验三客户端CPU/NPU的FP32完整推理、
+独立根、SGD/槽、换owner恢复及新进程续接；另做CPU公式/梯度回归和私有LM小型随机模型检查。
+队列最多等30分钟、每个客户端流程最多15分钟；构建并行由实测CPU/内存决定。
+不下载权重、不重跑历史矩阵；resident、多卡、FP16、大batch和性能不在迁移小门禁范围。
+实际构建/检查状态见STATUS和对应证据，不能由入口存在推断通过。
+
 NPU 验证启动器添加项目 `PYTHONPATH` 时须保留 module 已提供的路径；直接覆盖会使
 CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建已通过。
 这是任务环境错误，应修正私有启动器并保留原失败；不要据此改数学实现或安装另一套公共包。

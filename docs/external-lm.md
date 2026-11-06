@@ -8,8 +8,13 @@ core-5样例窗/s与LM token/s不直接相除；参数量相近也不表示相�
 ## 安装、配置与单次操作
 
 Python>=3.10。项目私有环境安装固定tidegraph wheel；Transformers4.57.1、Accelerate1.11.0、
-PEFT0.17.1、tokenizers0.22.1。本机复用只读公共Torch2.12/TorchNPU2.12/CANN9.1，
+PEFT0.17.1、tokenizers0.22.1。本机新实验复用只读公共Torch2.12/TorchNPU2.12.post3/CANN9.2.0，
 用`scripts/prepare_lm_environment.sh`配置增量；不要把普通PyPI vLLM强装到公共基线。
+新环境默认`EXPERIMENT_ROOT/env/transformers-cann9.2.0`，ready/install记录也保存在该venv内。
+每个启动器先检查venv真实基线和后端包身份；不会修改旧`env/transformers`或旧ready记录。
+已有9.1实验继续使用其固定源码。需要当前启动器显式选择旧环境时，同时设置
+`TIDE_ASCEND_MODULE=ascend/dev-workspace-9.1.0`和`TIDE_LM_ENV=/absolute/old/env/transformers`；
+服务也须显式传入这两个值，不能只依赖交互shell。不同基线的结果分别验收。
 在另一平台选择该平台匹配的Torch，而非复制本机NPU环境。
 
 ```sh
@@ -62,7 +67,7 @@ lm_root=/absolute/experiment-root
 lm_src=/absolute/fixed-source
 lm_attempt=qwenmoe-b512-$(date +%Y%m%d-%H%M%S)
 lm_helper=/absolute/use-local-ascend/scripts/run_on_free_npu.py
-PYTHONPATH="$lm_src/python" "$lm_root/env/transformers/bin/python" -B "$lm_src/scripts/submit_lm_job.py" \
+PYTHONPATH="$lm_src/python" "$lm_root/env/transformers-cann9.2.0/bin/python" -B "$lm_src/scripts/submit_lm_job.py" \
   --unit "gef-lm-$lm_attempt" --output "$lm_root/jobs/$lm_attempt" --seconds 32400 --memory-gib 384 -- \
   bash "$lm_src/scripts/run_lm_local.sh" "$lm_root" queue --root "$lm_root" --backend npu \
   --config "$lm_src/examples/external_lm/qwenmoe-two-npu-b512-observe.json" \

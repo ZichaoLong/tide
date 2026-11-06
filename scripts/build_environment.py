@@ -24,17 +24,26 @@ def cache_values(target):
     return result
 
 
-def check_reuse(target, backend, npu_runtime, torch):
+def check_reuse(target, backend, npu_runtime, torch=None, *, torch_dir=None, torch_version=None):
     values = cache_values(target)
-    expected = {"TIDE_BACKEND":backend.upper(), "Torch_DIR":str(Path(torch.__file__).parent / "share/cmake/Torch")}
+    if torch is not None:
+        torch_dir = str(Path(torch.__file__).parent / 'share/cmake/Torch')
+        torch_version = torch.__version__
+    expected = {"TIDE_BACKEND":backend.upper(), "Torch_DIR":torch_dir}
     if backend == "npu":
         expected["TIDE_NPU_RUNTIME"] = npu_runtime
+        if npu_runtime == 'standalone' and os.environ.get('Torch_npu_DIR'):
+            expected['Torch_npu_DIR'] = os.environ['Torch_npu_DIR']
     for key, value in expected.items():
         if key in values and values[key] != value:
             raise ValueError(f"{key} differs from existing build; use a separate build directory")
     manifest = target / "build-manifest.json"
-    if manifest.exists() and json.loads(manifest.read_text()).get("torch") != torch.__version__:
-        raise ValueError("Torch distribution differs from existing build; use a separate build directory")
+    if manifest.exists():
+        previous = json.loads(manifest.read_text())
+        if previous.get('torch') != torch_version:
+            raise ValueError("Torch distribution differs from existing build; use a separate build directory")
+        if backend == 'npu' and previous.get('environment', {}).get('cann_version') != os.environ.get('ASCEND_CANN_VERSION'):
+            raise ValueError('CANN differs from existing build; use a separate build directory')
 
 
 def environment(target):

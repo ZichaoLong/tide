@@ -55,13 +55,11 @@ def main():
                     subprocess.run([sys.executable,'-B',str(Path(__file__).with_name('verify_lm_llama_progress.py')),str(root),
                         '--previous-build',str(args.previous_build.resolve()),'--output',str(out/'progress-regression')],check=True,timeout=1200)
         else:
-            state['vllm_audit']=dict(revision=ASCEND_REVISION,hardware='A3',
-                selected_official_path='A3 source + CANN9.1 / Torch2.10 / TorchNPU2.10.post7 / NNAL',
-                public_baseline='Torch2.12/TorchNPU2.12/CANN9.1; published NNAL not installed',
-                known_nnal_paths={str(x):x.is_file() for x in [Path('/usr/local/Ascend/nnal/atb/set_env.sh'),
-                                     Path('/opt/ascend/nnal/atb/set_env.sh')]},
-                decision='bounded alternative uses existing matched Transformers; no public changes, no claim vLLM/TP/EP unsupported on hardware',
-                restart='separate validated A3 NNAL/source-build environment; not ordinary A2 PyPI wheel')
+            from ascend_environment import inspect
+            state['vllm_audit']=dict(historical_engine_revision=ASCEND_REVISION,hardware='A3',
+                public_baseline=inspect(require_venv=True),
+                decision='this continuation measures Transformers only; a separately published vLLM service stack is not selected or qualified here',
+                restart='explicit separate engine configuration and acceptance; do not mix vLLM dependencies into this environment')
             save()
         for key in keys:
             cases=[x for x in value['cases'] if x['config']['model']==key]

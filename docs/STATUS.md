@@ -1,103 +1,45 @@
-# 当前交接 — 双NPU B512试跑入口就绪，由用户启动（2026-11-05）
+# 当前交接 — CANN 9.2.0项目迁移（2026-11-06）
 
-截至2026-11-05 07:51 CST，本轮15项后继全部终态：13项推理成本测量完成，
-1项独立小检查执行完成但数值/生成token失败，1项双NPU B512在模型分配前容量拒绝。
-没有中断、待下载、排队或运行的本批作业；最后一个服务于11月5日05:43 CST结束。
-9个外层service均inactive、MainPID=0、ControlGroup为空，24份job/case记录无遗留后代，
-48个PID/start身份实查无匹配存活进程。外层passed不等于每项严格通过。
+用户已授权把日常开发与新实验入口迁到公共CANN9.2.0，并重建本项目native/standalone，
+仅做小型CPU/NPU完整推理、训练、独立梯度根与恢复检查。GPU已释放，不连接。
+公共9.2.1 vLLM为独立服务栈，本次不采用，不修改公共工具链。
 
-实现固定`694eb605b6769f8d3f208710a920dbfbf504abf4`，检出`source/isolation-h`仍干净。
-固定设施125项通过、小型旧/新llama输出/状态及恢复回归保留原范围；本次没有重做这些检查。
-数学`0770593838a37c790a568226930567ed60f99b83`本次校验通过。
-[本轮15项终态](evidence/llm-isolation-terminal-20261105.md)/[JSON](evidence/llm-isolation-terminal-20261105.json)
-保存逐项配置、原结果hash、耗时、真实工作量、物理放置和失败；[启动证据](evidence/llm-isolation-launch-20261104.md)不改写。
+启动HEAD `b221fda4f07c3dd3ad5b9ade9107adedd7e02139`，授权分支
+`graph-execution-foundation`，启动工作区干净、无本项目活动服务。
+固定数学 `0770593838a37c790a568226930567ed60f99b83`及19份快照核验通过。
+截至启动账户约179GiB（软300GiB、硬800GiB），磁盘空闲1.3TiB、主存可用1.8TiB、CPU affinity320。
+本轮新增环境/构建预算10GiB，保留旧LM资产/环境；不需要tmpfs或新权重下载。
 
-## 当前新增：供用户自行启动的B512试跑入口
+## 当前实现与下一步
 
-用户希望直接尝试原双NPU B512并索取运行命令。本次补充显式
-`execution.device_memory_admission=observe`及`lm queue --config`，默认strict和旧配置身份保持。
-公开配置为`examples/external_lm/qwenmoe-two-npu-b512-observe.json`；7200秒计算上限、外层9小时，
-保持原模型、BF16、B512/L512/O128、prefill64及16线程。超限预算先记录，OOM/其他异常仍失败。
-实现已提交`59e9acad6c5c3c7b106c5882acc6e3e8bd58c678`，固定检出`source/capacity-trial-i`仍干净。
-非editable wheel已更新到现有项目私有环境，固定安装设施135项通过（0失败/0跳过），
-开发37项为重叠范围；安装后的plan/queue --config已验，旧15项清单/身份逐项相同。
-资格service `gef-lm-qualify-20261105-i.service`已passed，job `jobs/qualify-i`、后代为空，
-MainPID=0/ControlGroup为空。没有替用户提交B512模型作业，也没有新的NPU/大模型实测。
-[入口资格证据](evidence/llm-capacity-entry-20261105.md)/[JSON](evidence/llm-capacity-entry-20261105.json)。
-启动时令`lm_root=/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`、
-`lm_src=$lm_root/source/capacity-trial-i`，站点helper为
-`/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py`；
-按[external-lm](external-lm.md#显式容量试跑与单配置后台运行)用唯一attempt提交单配置，
-自动选择两张空闲卡。用户启动后读取对应`jobs/ATTEMPT/status.json`与`runs/npu-ATTEMPT`，
-不要把原15项清单重新入队；主工作区可继续修改，固定检出/环境/活动输入保持不变。
+未提交修改为开发文档、新9.2环境身份守卫/版本隔离路径、独立SDK前缀构建和定向迁移入口。
+开发设施25项通过；尚未建立本项目9.2 native/standalone构建或新的真机资格。
+先提交实现，然后对该提交建固定检出，运行`scripts/qualify_ascend_migration.sh`。
+门禁通过公共check/run对三客户端分别执行CPU/NPU小型SettleGraph/FC/KV、B2、T3、d8、FP32，
+含完整状态/控制/消息/pending、独立根、两步训练/SGD槽、换owner和新进程精确续接。
+另跑有限CPU FP64/FP32公式/native回归和独立新LM环境随机小模型设施。
+不把这次迁移认证成resident、多卡、FP16、大batch、规模模型或性能资格。
 
-## 终态、结论与下一步
-
-| 范围 | 已核对事实 |
-| --- | --- |
-| Qwen7B CPU/NPU B8 | 两项成本完成；输出吞吐5.798/274.072 token/s |
-| Qwen MoE CPU B1/B8 | 两项成本完成；0.544/2.778 token/s |
-| Qwen MoE双NPU B1/B8/B32/B128，L512 | 四项成本完成；2.059/9.704/23.912/53.138 token/s |
-| Qwen MoE双NPU B8/L2048 | 成本完成；6.274 token/s |
-| Qwen MoE四NPU B32/B128 | 两项成本完成；21.312/43.458 token/s，实际跨层显式复制 |
-| llama CPU Qwen1.5B/OLMoE B32 | 两项成本完成；3.074/3.928 token/s，原1200秒超时另存 |
-| Qwen MoE四NPU B2/L16/O4检查 | 100组logits/KV比较均超原容差，生成8个token中2个不同 |
-| Qwen MoE双NPU B512 | 静态估算56.719GiB，空闲61.137GiB减6.4GiB余量后54.737GiB，分配前拒绝 |
-
-成本点均为16线程、输入512（另标2048）/输出128，吞吐分母含prefill+decode，构造/warmup另计。
-13项成本的numeric/discrete/checkpoint均not_checked；小检查没有选择checkpoint。
-本轮没有新增完整恢复资格，旧精确恢复不能替代独立数值或当前规模检查。
-用户要求有中断则修复；实查无中断，无需重启。容量拒绝和严格比较失败保留，不以相同配置重跑解决。
-后续数值修复先定位首差；容量后继先校准KV/激活/workspace及reserved，再声明新配置。
-未追加实验、修改固定源码/环境或清理材料；具体停止/重启条件只见[ROADMAP](ROADMAP.md)。
-
-## 接续位置与只读命令
-
-外部根`lm_root=/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`。
-计划`recovery/plans-20261104-h/{all,compute,llama,placement,budgets,launch}.json`；
-`lm retry-matrix --round isolation`可从干净仓库重建15项配置，不依赖旧目录。
-终态job为`jobs/{qualify,assets-moe,llama,dispatch,placement}-h`及
-`jobs/{cpu,npu}-{small,moe}-20261104-h`；各目录保留status.json/task.log/supervisor.log。
-case结果位于`runs/*20261104-h/*/run/`，每项进程记录在对应`process/status.json`。
+长任务使用独立background.slice、固定源码、完整日志、有限时长；NPU合作队列一张空闲卡，
+逻辑设备npu:0。CPU/memory控制器未细分到用户unit，不将systemd预算宣称为实际强制限额。
+本项目重型构建不与性能计时重叠，本轮无性能计时。
 
 ```sh
 git status --short --branch
-python -B scripts/status.py
-lm_root=/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102
-systemctl --user list-units 'gef-lm-*' --state=running --no-pager
-cat "$lm_root/recovery/20261104-h/dispatch.json"
-cat "$lm_root/recovery/placement-20261104-h/status.json"
-# 先按docs/external-lm.md激活现有公共软件基线与项目私有环境，再仅查询：
-tidegraph lm results "$lm_root/runs" --model qwenmoe --format csv
+python scripts/status.py
+python scripts/check_upstream.py
+systemctl --user list-units 'gef-*' --state=running --no-pager
 quota -vs
 ```
 
-## 环境、资源与保留
+## 保留的旧范围
 
-Qwen MoE16/16片及全部配套资产已于04:46:51完成发布hash校验，共61,084,262,963 bytes；
-本次复查记录和size/mtime一致，未重复大文件hash扫描。两次临时读超时已自动恢复，旧失败不改写。
-固定检出保持clean，NPU厂商相对输出实际进入各case的process/work，后继延迟提交成功。
-旧`source/restart-g/fusion_result.json`与旧llama binary/shared libraries/GGUF仍保留；
-checkpoint恢复固定原build身份，不随ready指针切换。
+[LM15项终态](evidence/llm-isolation-terminal-20261105.md)与
+[B512手动入口资格](evidence/llm-capacity-entry-20261105.md)保持原版本/环境身份；不自动重启。
+旧根`/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102`，
+`env/transformers`继承9.1、TorchNPU post2；固定source及材料不修改。
+此前公共维护中b221fda的纯PyTorch小型9.2消费者通过，不是本项目native或standalone重建证据。
 
-账户quota约176GiB、实验根du约122.54GiB；项目160/账户300GiB停止新增大写入，800GiB硬限不变。
-无需扩盘/tmpfs，不连接已释放gpu3090。公共Torch2.12/TorchNPU2.12/CANN9.1只读；
-私有Transformers4.57.1/Accelerate1.11.0/PEFT0.17.1，vLLM/TP/EP未由跨层放置认证。
-新llama binary SHA256 `87377b5274eb8f93e2dc949dcfdb8ce6819afd6b13bf704a22bedb3db9922027`，
-上游`2cbca389f515df455412dafa07e2b1359cc72a6d`；旧源码/构建资格不升级为当前复验。
-原始材料继续保留，本次未进行大规模清理或重跑。公共入口见[external-lm](external-lm.md)。
-
-## 原core-5终态继续保留
-
-上一轮三平台/多卡/人类入口已收尾。九份归档204条唯一run：CPU48/NPU78/CUDA78，
-69 strict-checks-passed、113 strict-failure、20 not-established、2 process-failure；不是全部性能通过。
-按[证据索引](evidence/README.md)、[原八卡终态](evidence/core5-platform-eight-followup-20261031.md)及[ROADMAP](ROADMAP.md)定位原失败与重启条件。
-固定launcher/配置d3de18f、实际Python安装4485697和NPU库eca070f的旧身份不因本次调查升级。
-GPU释放见[审阅](evidence/core5-cuda-release-20261031.json)，不默认重租或连接旧实例。
-
-[彻底清理](evidence/artifact-cleanup-tracked-only-20261031.md)已移除旧环境/构建/原始checkpoint和26个附属worktree，
-原204条小型结果、原失败和41份终态记录仍在Git；旧材料不作为接续依赖。
-远端dirty-dev源码包及早期patch仍待用户后续安排分析，位于仓库外：
-`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/`。
-`retirement-dev-20261031.tar.gz`为5,452,397 bytes，SHA256
-`6b89b411611378a619149d69870c35e3f587db0baf1ed70fd2a21a005e2fe31e`；本次未打开、修改或运行。
+原core-5九份归档204条结果及严格失败从[证据索引](evidence/README.md)、[ROADMAP](ROADMAP.md)进入。
+[GPU释放](evidence/core5-cuda-release-20261031.json)及[清理](evidence/artifact-cleanup-tracked-only-20261031.md)继续有效。
+远端未提交源码保全包仍在仓库外`~/.local/state/graph-execution-foundation/preserved-source/20261031-cuda3090/`，本次不分析或运行。

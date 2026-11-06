@@ -70,9 +70,10 @@ ACL_OP_INIT_MODE=0 build/npu-sdk/tidegraph-accelerator-check --device npu:0 --dt
   --output-dir artifacts/cpp-npu-001
 ```
 
-Alternatively `scripts/build.py --backend npu --npu-runtime standalone` uses
-the selected interpreter only to discover its matching Torch and orchestrate
-CMake. The resulting executable does not link CPython or `libtorch_python`;
+`scripts/build.py --backend npu --npu-runtime standalone --libtorch-prefix PREFIX --cxx11-abi 1`
+reads the selected SDK directly without importing Python Torch (choose its actual ABI).
+Without `--libtorch-prefix`, the legacy path discovers Torch from the selected Python.
+The current local 9.2.0 module and bounded migration commands are in [development](development.md). The resulting executable does not link CPython or `libtorch_python`;
 the CANN operator compiler may dynamically initialize its own Python runtime.
 For the tested standalone TorchNPU2.10/CANN9.0 stack, set `ACL_OP_INIT_MODE=0`
 before starting the process. Eager compiler initialization avoids a reproduced

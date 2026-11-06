@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 experiment_root=$1
-source /usr/share/Modules/init/bash
-module purge
-module load ascend/dev-workspace-9.1.0
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source "$script_dir/local_ascend.sh"
+tide_load_ascend
+tide_lm_environment "$experiment_root"
 export TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1
 export OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2
-lm_python="$experiment_root/env/transformers/bin/python"
 implementation_commit=$(git rev-parse HEAD)
 install_root="$experiment_root/install/$implementation_commit"
 mkdir -p "$install_root"
