@@ -117,6 +117,11 @@ ABI必须与SDK发布记录匹配，链接及实际设备执行另行核验。CA
 队列最多等30分钟、每个客户端流程最多15分钟；构建并行由实测CPU/内存决定。
 不下载权重、不重跑历史矩阵；resident、多卡、FP16、大batch和性能不在迁移小门禁范围。
 实际构建/检查状态见STATUS和对应证据，不能由入口存在推断通过。
+若已完成构建但迁移测试驱动需修复，`check_ascend_migration.py --build-root BUILD_ROOT
+--output-dir NEW --device cpu|npu:0 --continue-from PREVIOUS_CHECKS`显式核对旧配置、已安装包及二进制身份后，
+复用原related/whole结果，只补缺失训练续接；原NumericMismatch仍使整组严格失败。
+check内部展开材料与原recipe可能具有不同workload_id；外部恢复须使用同一run配置保存的前缀，
+不能放松checkpoint身份守卫。
 
 NPU 验证启动器添加项目 `PYTHONPATH` 时须保留 module 已提供的路径；直接覆盖会使
 CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建已通过。

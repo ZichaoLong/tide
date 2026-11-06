@@ -53,6 +53,7 @@ def main():
     parser.add_argument('--build-root', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--device', choices=('cpu', 'npu:0'), required=True)
+    parser.add_argument('--continue-from', type=Path, help='reuse immutable prior checks/whole run after auditing exact config and installed identities')
     args = parser.parse_args()
     root, build, out = Path(__file__).resolve().parents[1], args.build_root.resolve(), args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -69,31 +70,52 @@ def main():
         case.mkdir()
         config = configuration(root, build, sdk, args.device, client)
         write_json(case/'config.json', config)
-        def run(label, command):
+        def run(label, command, *, required=True):
             command = list(map(str, command))
             with (case/(label+'.log')).open('x') as log:
                 process = subprocess.run(command, cwd=case, stdout=log, stderr=subprocess.STDOUT, timeout=900)
             row['commands'].append(dict(label=label, argv=command, exit_code=process.returncode,
                                         log_sha256=digest(case/(label+'.log'))))
             save()
-            if process.returncode:
+            if required and process.returncode:
                 raise RuntimeError(f'{client}/{label} exit {process.returncode}; see {case/(label+".log")}')
         command = [sys.executable, '-B', '-m', 'tidegraph']
         try:
-            run('related', [*command, 'check', case/'config.json', '--scope', 'related', '--output-dir', case/'related'])
-            checked = json.loads((case/'related/result.json').read_text())
-            assert checked['state'] == 'passed'
+            previous = args.continue_from.resolve()/client if args.continue_from else None
+            if previous:
+                from tidegraph.experiment.identity import capture
+                assert json.loads((previous/'config.json').read_text()) == config, 'reused configuration differs'
+                assert capture(config['site']['paths']) == json.loads((previous/'related/inference/identity.json').read_text()), 'reused installation/build identity differs'
+                related = previous/'related'
+                row['reused_related'] = dict(path=str(related), result_sha256=digest(related/'result.json'))
+            else:
+                related = case/'related'
+                run('related', [*command, 'check', case/'config.json', '--scope', 'related', '--output-dir', related], required=False)
+            checked = json.loads((related/'result.json').read_text())
             row['related'] = checked
-            for label, steps in (('whole', 3), ('resumed', 1)):
+            if checked['state'] != 'passed' and checked.get('error', {}).get('type') != 'NumericMismatch':
+                raise RuntimeError('base check execution failed; inspect original result before continuing')
+            # check() intentionally publishes its expanded material identity.
+            # External resume must use a prefix from the *same* run request.
+            whole = case/'whole'
+            for label, steps in (('prefix', 2), ('whole', 3), ('resumed', 1)):
                 selected = deepcopy(config)
                 selected['measurement'].update(mode='training', steps=steps, checkpoint_check=False)
+                if label == 'whole' and previous and (previous/'whole/result.json').exists():
+                    old = json.loads((previous/'whole/result.json').read_text())
+                    old_config = json.loads((previous/'whole.json').read_text())
+                    old_identity = json.loads((previous/'whole/identity.json').read_text())
+                    if old['state'] == 'passed' and old_config == selected and old_identity == capture(config['site']['paths']):
+                        whole = previous/'whole'
+                        row['reused_whole'] = dict(path=str(whole), result_sha256=digest(whole/'result.json'))
+                        continue
                 write_json(case/(label+'.json'), selected)
-                extra = ['--resume', case/'related/training'] if label == 'resumed' else []
+                extra = ['--resume', case/'prefix'] if label == 'resumed' else []
                 run(label, [*command, 'run', case/(label+'.json'), '--output-dir', case/label, *extra])
                 result = json.loads((case/label/'result.json').read_text())
                 assert result['state'] == 'passed', result.get('validation')
-            row['fresh_process_resume'] = compare_checkpoints(case/'resumed', case/'whole', client)
-            row['state'] = 'passed'
+            row['fresh_process_resume'] = compare_checkpoints(case/'resumed', whole, client)
+            row['state'] = checked['state']
         except Exception as error:
             row.update(state='failed', error=repr(error))
         save()

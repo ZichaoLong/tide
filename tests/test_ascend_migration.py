@@ -67,3 +67,29 @@ def test_standalone_identity_hashes_actual_distribution_and_checks_abi(tmp_path,
     assert before['distribution_sha256'] != after['distribution_sha256']
     with pytest.raises(ValueError, match='ABI differs'):
         standalone(tmp_path, 0)
+
+
+@pytest.mark.parametrize('mismatch', ['config', 'identity'])
+def test_continuation_refuses_stale_configuration_or_installation(tmp_path, monkeypatch, mismatch):
+    import check_ascend_migration as entry
+    from tidegraph.experiment import identity
+    root = Path(__file__).resolve().parents[1]
+    build, previous = tmp_path/'build', tmp_path/'previous'
+    build.mkdir()
+    (build/'sdk-environment.json').write_text('{}')
+    monkeypatch.setattr(identity, 'capture', lambda paths: {'current':'identity'})
+    monkeypatch.setattr(entry.subprocess, 'run', lambda *a, **kw: pytest.fail('stale check executed a workload'))
+    for client in ('pytorch', 'python-native', 'libtorch'):
+        case = previous/client
+        (case/'related/inference').mkdir(parents=True)
+        config = entry.configuration(root, build, {}, 'cpu', client)
+        if mismatch == 'config':
+            config['task']['seed'] += 1
+        (case/'config.json').write_text(json.dumps(config))
+        (case/'related/inference/identity.json').write_text('{"old":"identity"}')
+    out = tmp_path/'out'
+    monkeypatch.setattr(sys, 'argv', ['gate', '--build-root', str(build), '--output-dir', str(out),
+                                    '--device', 'cpu', '--continue-from', str(previous)])
+    assert entry.main() == 1
+    rows = json.loads((out/'result.json').read_text())['clients']
+    assert len(rows) == 3 and all(r['state'] == 'failed' and not r['commands'] for r in rows)

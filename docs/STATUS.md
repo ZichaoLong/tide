@@ -49,6 +49,28 @@ systemctl --user list-units 'gef-*' --state=running --no-pager
 quota -vs
 ```
 
+## 当前后继作业
+
+`9df0ecf8a5f8a98e4144f45161cffd5054b04002`固定于`.local/cann92-source-b`。
+`gef-cann92-migration-b.service`已failed/exit1，08:47:29 UTC终态、MainPID=0/ControlGroup为空。
+结果`artifacts/cann92-20261106-b`；job `artifacts/jobs/cann92-migration-b`。
+两套core/standalone客户端构建通过，CPU定向52项、独立LM随机设施22项通过。
+三客户端CPU/NPU六项完整推理及换owner精确恢复全部通过。
+CPU/native与NPU PyTorch/native独立all根在input.0.1.0.1的一坐标严格超差；
+NPU PyTorch最大2.86102e-6与原20261031人类入口证据相同，不放宽原阈值。
+CPU PyTorch及CPU/NPU standalone的related完整门禁通过，原始结果保留。
+
+本轮新进程测试驱动误将check内部展开配置的checkpoint用于原recipe配置，
+现有workload_id守卫正确拒绝；已改成同一run配置的prefix/whole/resumed。
+正在提交驱动修复，随后复用已核对身份的旧检查和whole结果，只补训练/新进程恢复。
+新流程明确保留旧数值失败，不能把外层完成或自身恢复写成独立根通过。
+
+```sh
+cat artifacts/jobs/cann92-migration-b/status.json
+cat artifacts/cann92-20261106-b/cpu/result.json
+cat artifacts/cann92-20261106-b/npu/result.json
+```
+
 ## 保留的旧范围
 
 [LM15项终态](evidence/llm-isolation-terminal-20261105.md)与
