@@ -80,6 +80,8 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", default="cpu")
     p.add_argument("--dtype", choices=("float32", "float64"), default="float64")
+    p.add_argument("--width", type=int, default=8)
+    p.add_argument("--task-config", type=Path, help="Task object or run JSON; retains the tiny B2 acceptance batch")
     p.add_argument("--send", choices=("dense", "sparse"), default="dense")
     p.add_argument("--topology", choices=("fc", "hb"), default="fc")
     p.add_argument("--temperature", type=float, default=1.0)
@@ -100,8 +102,12 @@ def main():
     a.output_dir.mkdir(parents=True, exist_ok=False)
     dtype = getattr(torch, a.dtype)
     atol, rtol = (1e-10, 1e-8) if dtype == torch.float64 else (1e-6, 1e-5)
-    task = RetrievalTask(dict(n_keys=4, n_values=4, pairs=2, delay=0))
-    options = dict(width=8, topology=a.topology, depth=2 if a.topology == "fc" else 1,
+    task_options = dict(n_keys=4, n_values=4, pairs=2, delay=0)
+    if a.task_config:
+        task_options = json.loads(a.task_config.read_text())
+        task_options = task_options.get("task", task_options)
+    task = RetrievalTask(task_options)
+    options = dict(width=a.width, topology=a.topology, depth=2 if a.topology == "fc" else 1,
                    region_width=4, send=a.send, temperature=a.temperature, seed=7, dtype=dtype)
     model = Core5Classifier(task.vocab_size, task.value_vocab_size, **options).to(a.device)
     oracle = Core5Classifier(task.vocab_size, task.value_vocab_size, **options)

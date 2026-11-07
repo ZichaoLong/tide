@@ -27,7 +27,8 @@
     "torch_npu": "2.12.0.post3",
     "architecture": "aarch64",
     "cann": "9.2.0",
-    "baseline": "ascend/dev-workspace-9.2.0 r1"
+    "baseline": "ascend/dev-workspace-9.2.0 r1",
+    "cxx11_abi": true
   },
   "installation_lock": {
     "schema": "tide-experiment-lock-v1",

@@ -9,7 +9,7 @@
 - [打开研究图](web/index.html)：离线HTML，节点/关系点击查看、搜索、分类、邻接聚焦和缩放。
 - [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
 - [研究设计对齐稿](docs/research-design.md)
-- [当前交接](docs/STATUS.md) / [待办](docs/ROADMAP.md)
+- [当前交接](docs/STATUS.md) / [后台操作与恢复](docs/RUNNING.md) / [待办](docs/ROADMAP.md)
 - [基座来源](dependencies/foundation-source.json) / [实际安装锁](dependencies/foundation.lock.json) / [环境身份](dependencies/environment.lock.json)
 
 直接用浏览器打开`web/index.html`，不需要安装Python包、网络/CDN或运行模型。
@@ -18,12 +18,11 @@ GitHub文件页只展示源码；可下载本分支后本地打开。重新生�
 ```sh
 python scripts/render_map.py
 python scripts/render_map.py --check
-python -m unittest discover -s tests -v
+python -m unittest discover -s tests -p test_research_map.py -v
 ```
 
 图的数据是`research/map.json`。实验/结果节点的状态由记录显式给出；
-“待运行”“待填结果”不会被呈现为通过。图中仅有一项已引用的基座小型证据，
-其严格失败和未覆盖范围一同保留，它不认证本分支的训练效果。
+“待运行”“待填结果”不会被呈现为通过。已有基座证据、独立接入检查和经审阅的先导结果分别限定范围；严格失败和未覆盖项一同保留。
 
 用户已授权首批实施、私有环境和普通推送；下一批由用户验收后决定。
 

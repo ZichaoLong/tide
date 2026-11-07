@@ -1,22 +1,46 @@
 """Render a small, offline research graph; no model/runtime dependencies."""
 import argparse
+import ipaddress
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import tempfile
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 KINDS = {'goal', 'baseline', 'experiment', 'result', 'evidence'}
-STATUSES = {'target', 'unselected', 'documented', 'planned', 'awaiting', 'scoped'}
+RUN_STATUSES = {'planned', 'queued', 'running', 'completed', 'failed', 'unchecked'}
+STATUSES = {'target', 'unselected', 'documented', 'awaiting', 'scoped'} | RUN_STATUSES
 RELATIONS = {'decomposes', 'precondition', 'variant', 'produces', 'comparison',
              'transfer', 'informs', 'evaluates', 'supports', 'challenges'}
+
+
+def relative_reference(value, location):
+    """Repository-relative links never contain instance URLs or credentials."""
+    if not isinstance(value, str) or not value or '\\' in value:
+        raise ValueError(f'{location}: expected repository-relative path')
+    parsed = urlparse(value)
+    path = PurePosixPath(value)
+    if parsed.scheme or parsed.netloc or parsed.query or parsed.fragment or path.is_absolute() or '..' in path.parts:
+        raise ValueError(f'{location}: expected repository-relative path')
+
+
+def public_source(value, location):
+    parsed = urlparse(value)
+    host = parsed.hostname or ''
+    local = host == 'localhost' or host.endswith(('.localhost', '.local', '.internal'))
+    try:
+        local = local or not ipaddress.ip_address(host).is_global
+    except ValueError:
+        pass
+    if parsed.scheme != 'https' or not host or parsed.username or parsed.password or parsed.query or local:
+        raise ValueError(f'{location}: expected public HTTPS source without private instance details')
 
 
 def validate(data):
     if data.get('schema') != 'tide-research-map-prototype-v1':
         raise ValueError('schema: unsupported research map')
-    nodes = {}
+    nodes, studies, runs = {}, set(), {}
     for node in data['nodes']:
         key = node['id']
         if not key or key in nodes:
@@ -30,14 +54,32 @@ def validate(data):
         for field, limit in [('x', data['width'] - 250), ('y', data['height'] - 118)]:
             if type(node[field]) is not int or not 0 <= node[field] <= limit:
                 raise ValueError(f'nodes.{key}.{field}: outside canvas')
-        if node['status'] == 'scoped' and (not node.get('sources') or not node.get('scope')):
+        if node['status'] == 'scoped' and (not node.get('sources') or not isinstance(node.get('scope'), str) or not node['scope'].strip()):
             raise ValueError(f'nodes.{key}: actual evidence needs sources and scope')
         if node['kind'] == 'result' and node['status'] not in {'awaiting', 'scoped'}:
             raise ValueError(f'nodes.{key}: result must be awaiting or scoped')
+        if node['kind'] == 'result' and node['status'] == 'scoped':
+            for field in ('comparisons', 'counterevidence', 'unresolved', 'transfer_conditions'):
+                if not isinstance(node.get(field), str) or not node[field].strip():
+                    raise ValueError(f'nodes.{key}: reviewed result needs {field}')
+        if node.get('study_id'):
+            if node['study_id'] in studies:
+                raise ValueError(f'nodes.{key}: duplicate study_id')
+            studies.add(node['study_id'])
         for source in node.get('sources', []):
-            parsed = urlparse(source['url'])
-            if parsed.scheme != 'https' or not parsed.netloc or parsed.username or parsed.password:
-                raise ValueError(f'nodes.{key}.sources: expected public HTTPS source')
+            public_source(source['url'], f'nodes.{key}.sources')
+        for reference in node.get('references', []):
+            relative_reference(reference['path'], f'nodes.{key}.references')
+        for run in node.get('runs', []):
+            if not isinstance(run.get('id'), str) or not run['id'].strip() or run.get('status') not in RUN_STATUSES:
+                raise ValueError(f'nodes.{key}.runs: expected run ID and explicit lifecycle status')
+            if run['id'] in runs and runs[run['id']] != run:
+                raise ValueError(f'nodes.{key}.runs: inconsistent shared run identity')
+            runs[run['id']] = run
+            for field in ('config', 'record'):
+                relative_reference(run[field], f'nodes.{key}.runs.{field}')
+            if run.get('lens_record'):
+                relative_reference(run['lens_record'], f'nodes.{key}.runs.lens_record')
     seen = set()
     for edge in data['edges']:
         if edge['id'] in seen:
@@ -47,10 +89,10 @@ def validate(data):
             raise ValueError(f'edges.{edge["id"]}: unknown endpoint')
         if edge['kind'] not in RELATIONS or edge['status'] not in {'planned', 'documented'}:
             raise ValueError(f'edges.{edge["id"]}: unknown kind/status')
-        if edge['kind'] in {'supports', 'challenges'}:
+        if edge['kind'] in {'supports', 'challenges'} or (edge['kind'] == 'transfer' and edge['status'] == 'documented'):
             origin = nodes[edge['source']]
             if origin['kind'] not in {'result', 'evidence'} or origin['status'] != 'scoped':
-                raise ValueError(f'edges.{edge["id"]}: support/refutation requires actual scoped evidence')
+                raise ValueError(f'edges.{edge["id"]}: support/refutation/reviewed transfer requires actual scoped evidence')
     # Only the prerequisite relation is a DAG. Comparisons/transfer are not ancestry.
     active, done = set(), set()
     children = {key: [] for key in nodes}

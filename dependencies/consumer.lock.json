@@ -1,0 +1,10 @@
+{
+  "schema": "tide-lab-consumer-install-v1",
+  "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+  "distribution": "tide-learning-lab",
+  "version": "0.1.0",
+  "wheel": "tide_learning_lab-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "983c0005c0d8598270347b381b227d189ed06905c808b064b230edf9a9a96a10",
+  "source_snapshot": ".local/source-first-a",
+  "execution": "frozen source modules match wheel source; public tidegraph imported from fixed installed wheel"
+}

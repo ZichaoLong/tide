@@ -1,0 +1,20 @@
+{
+  "schema": "tide-lab-matrix-v1",
+  "study_id": "TL-B1",
+  "max_seconds": 3000,
+  "stop_on_failure": true,
+  "runs": [
+    {
+      "config": "configs/studies/b1-none-pilot.json",
+      "run_id": "tl-b1-none-s11-pilot"
+    },
+    {
+      "config": "configs/studies/b1-tide-pilot.json",
+      "run_id": "tl-b1-tide-s11-pilot"
+    },
+    {
+      "config": "configs/studies/b1-mlp-pilot.json",
+      "run_id": "tl-b1-mlp-s11-pilot"
+    }
+  ]
+}

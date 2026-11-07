@@ -1,0 +1,16 @@
+{
+  "schema": "tide-lab-matrix-v1",
+  "study_id": "TL-A1",
+  "max_seconds": 4500,
+  "stop_on_failure": true,
+  "runs": [
+    {
+      "config": "configs/studies/a1-query-s11.json",
+      "run_id": "tl-a1-query-s11-confirm"
+    },
+    {
+      "config": "configs/studies/a1-fc-dense-s11.json",
+      "run_id": "tl-a1-fc-dense-s11-confirm"
+    }
+  ]
+}

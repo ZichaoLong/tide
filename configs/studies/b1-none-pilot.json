@@ -1,0 +1,43 @@
+{
+  "schema": "tide-lab-run-v1",
+  "study_id": "TL-B1",
+  "seed": 11,
+  "device": "npu:0",
+  "dtype": "float32",
+  "threads": 4,
+  "task": {
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4,
+    "delay": 2
+  },
+  "model": {
+    "kind": "growth",
+    "branch": "none",
+    "width": 16,
+    "depth": 2,
+    "region_width": 4
+  },
+  "training": {
+    "steps": 40,
+    "batch_size": 32,
+    "lr": 0.01,
+    "eps": 1e-06,
+    "weight_decay": 0,
+    "log_every": 5,
+    "eval_every": 20,
+    "checkpoint_every": 20,
+    "max_seconds": 1800,
+    "data_seed": 1011,
+    "optimizer": "sgd",
+    "retain_checkpoint": false
+  },
+  "evaluation": {
+    "samples": 128,
+    "batch_size": 16,
+    "seed": 20261107,
+    "test": false
+  },
+  "numerical_policy": "explore finite FP32 discrepancies; strict failures retained in startup audit; finite/discrete/resume checks required",
+  "learning_gate": 0.25
+}

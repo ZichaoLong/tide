@@ -1,0 +1,2756 @@
+{
+  "schema": "tide-lab-startup-audit-v1",
+  "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+  "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+  "checks": [
+    {
+      "path": "artifacts/checks/core5-hb-fp32-dense-eps6/result.json",
+      "sha256": "0b54f1e59bc0bd3adcfc1d62cd2f79dd9422d8d9df026ea0b62d5f0609328481",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "failed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "d752f8c6931d7c0a93b93c7118e521346aa8649389565780fb19616869add536",
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "width": 8,
+            "depth": 1,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 16,
+          "regions": 4,
+          "edges": 32,
+          "graph_parameters": 34460,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 34736,
+          "trainable_parameters": 34664
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "failed",
+            "error": "step 0 parameters: parameters.encoder.graph_model.nodes.12.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.8998980522155762e-06 at index (1, 4) (up to 1e-06 allowed)\nGreatest relative difference: 2.4645043595228344e-05 at index (1, 4) (up to 1e-05 allowed)",
+            "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 117, in record\n    detail = fn()\n             ^^^^\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 165, in independent_training\n    raise AssertionError(\"\\n\".join(failures))\nAssertionError: step 0 parameters: parameters.encoder.graph_model.nodes.12.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.8998980522155762e-06 at index (1, 4) (up to 1e-06 allowed)\nGreatest relative difference: 2.4645043595228344e-05 at index (1, 4) (up to 1e-05 allowed)\n"
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 29,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 96,
+              "work/full": 96,
+              "work/messages": 192,
+              "work/source_rows": 216,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 4,
+              "activity/send_strength": 35.43448257446289,
+              "activity/nonpositive_fraction": 0.0,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "failed",
+              "error": "parameters.encoder.graph_model.nodes.12.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.8998980522155762e-06 at index (1, 4) (up to 1e-06 allowed)\nGreatest relative difference: 2.4645043595228344e-05 at index (1, 4) (up to 1e-05 allowed)"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-development-sparse/result.json",
+      "sha256": "d38fc9d154d9adaf2015799bbb118ba57b8eecd7a1ce618f1535c05901f06a24",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "failed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "3c27d2ad2b73d451d52cd50fba07b61605494da670fb4411bfb3acaaa70e9019",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "quad",
+            "ent_alpha": null,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "failed",
+            "error": "root.parameters.encoder.graph_model.nodes.4.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 2 / 344 (0.6%)\nGreatest absolute difference: 2.1085143089294434e-06 at index (2, 24) (up to 1e-06 allowed)\nGreatest relative difference: 0.00017695453425403684 at index (4, 24) (up to 1e-05 allowed)",
+            "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 112, in record\n    detail = fn()\n             ^^^^\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 147, in independent_training\n    equivalent(observed, expected, atol, rtol)\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 53, in equivalent\n    equivalent(a[k], b[k], atol, rtol, f\"{path}.{k}\")\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 53, in equivalent\n    equivalent(a[k], b[k], atol, rtol, f\"{path}.{k}\")\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 46, in equivalent\n    torch.testing.assert_close(a, b, atol=atol if a.is_floating_point() else 0,\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/testing/_comparison.py\", line 1631, in assert_close\n    raise error_metas[0].to_error(msg)\nAssertionError: root.parameters.encoder.graph_model.nodes.4.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 2 / 344 (0.6%)\nGreatest absolute difference: 2.1085143089294434e-06 at index (2, 24) (up to 1e-06 allowed)\nGreatest relative difference: 0.00017695453425403684 at index (4, 24) (up to 1e-05 allowed)\n"
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 36,
+              "work/messages": 64,
+              "work/source_rows": 88,
+              "activity/full_fraction": 0.75,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.695484161376953,
+              "activity/nonpositive_fraction": 0.25,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-development-sparse64/result.json",
+      "sha256": "28673619ccdef2413502eb9b1264cd831796bdebb61a71717cd737d7f13400a2",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float64",
+        "strict_tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "model": {
+          "model_id": "3c27d2ad2b73d451d52cd50fba07b61605494da670fb4411bfb3acaaa70e9019",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "quad",
+            "ent_alpha": null,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 2,
+              "nonzero_gradient_parameters": 139,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 33,
+              "work/messages": 56,
+              "work/source_rows": 80,
+              "activity/full_fraction": 0.6875,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.80648958941052,
+              "activity/nonpositive_fraction": 0.3125,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-development-a/result.json",
+      "sha256": "0c08d91b1e31ba1e133a03c7537ed62af4b6dc64499cfc1dd4646fd5462212ec",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float64",
+        "strict_tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "model": {
+          "model_id": "971fcec0e30435312667d28fbe274fba5d85afad0e58703fee599664063045f7",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 1.0
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 2,
+              "nonzero_gradient_parameters": 158,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 48,
+              "work/messages": 96,
+              "work/source_rows": 120,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.79524262310271,
+              "activity/nonpositive_fraction": 0.0,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-hb-fp32-sparse-eps6/result.json",
+      "sha256": "bc13d675917f55c240fa279be08bf26e3bf5ddeacd38020263619e150c24a9a0",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "3fa6144131abd254c05f651df883a1cd3eeea56e885e6072f5ff45968505a106",
+          "recipe": {
+            "topology": "hb",
+            "family": "kv",
+            "width": 8,
+            "depth": 1,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "quad",
+            "ent_alpha": null,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 16,
+          "regions": 4,
+          "edges": 32,
+          "graph_parameters": 34460,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 34736,
+          "trainable_parameters": 34664
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 1,
+              "nonzero_gradient_parameters": 284,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 29,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 92,
+              "work/full": 66,
+              "work/messages": 128,
+              "work/source_rows": 152,
+              "activity/full_fraction": 0.717391304347826,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 4,
+              "activity/send_strength": 35.42011642456055,
+              "activity/nonpositive_fraction": 0.28260868787765503,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-fp32-dense-eps6/result.json",
+      "sha256": "1c87efe5bf36d2cb69f1ae432d16105d93628fb1da0b088da786e4fc74a3dfe0",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "failed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "1782016a7cc5c81a2d6b158a0538b436b2089c157726d14814268a5fce1e46a6",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "failed",
+            "error": "step 0 parameters: parameters.encoder.graph_model.regions.1.head.matrix: Tensor-likes are not close!\n\nMismatched elements: 18 / 80 (22.5%)\nGreatest absolute difference: 4.868954420089722e-06 at index (5, 9) (up to 1e-06 allowed)\nGreatest relative difference: 0.0043297563679516315 at index (7, 5) (up to 1e-05 allowed)\nstep 1 result: result.trace[8].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 6.6533684730529785e-06 at index (2,) (up to 1e-06 allowed)\nGreatest relative difference: 8.473853813484311e-05 at index (2,) (up to 1e-05 allowed)\nstep 1 parameters: parameters.encoder.graph_model.nodes.5.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.2293457984924316e-06 at index (2, 0) (up to 1e-06 allowed)\nGreatest relative difference: 6.185287929838523e-05 at index (2, 0) (up to 1e-05 allowed)",
+            "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 117, in record\n    detail = fn()\n             ^^^^\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 165, in independent_training\n    raise AssertionError(\"\\n\".join(failures))\nAssertionError: step 0 parameters: parameters.encoder.graph_model.regions.1.head.matrix: Tensor-likes are not close!\n\nMismatched elements: 18 / 80 (22.5%)\nGreatest absolute difference: 4.868954420089722e-06 at index (5, 9) (up to 1e-06 allowed)\nGreatest relative difference: 0.0043297563679516315 at index (7, 5) (up to 1e-05 allowed)\nstep 1 result: result.trace[8].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 6.6533684730529785e-06 at index (2,) (up to 1e-06 allowed)\nGreatest relative difference: 8.473853813484311e-05 at index (2,) (up to 1e-05 allowed)\nstep 1 parameters: parameters.encoder.graph_model.nodes.5.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.2293457984924316e-06 at index (2, 0) (up to 1e-06 allowed)\nGreatest relative difference: 6.185287929838523e-05 at index (2, 0) (up to 1e-05 allowed)\n"
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 48,
+              "work/messages": 96,
+              "work/source_rows": 120,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.725576400756836,
+              "activity/nonpositive_fraction": 0.0,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "failed",
+              "error": "parameters.encoder.graph_model.regions.1.head.matrix: Tensor-likes are not close!\n\nMismatched elements: 18 / 80 (22.5%)\nGreatest absolute difference: 4.868954420089722e-06 at index (5, 9) (up to 1e-06 allowed)\nGreatest relative difference: 0.0043297563679516315 at index (7, 5) (up to 1e-05 allowed)"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          },
+          {
+            "step": 1,
+            "result": {
+              "state": "failed",
+              "error": "result.trace[8].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 6.6533684730529785e-06 at index (2,) (up to 1e-06 allowed)\nGreatest relative difference: 8.473853813484311e-05 at index (2,) (up to 1e-05 allowed)"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "failed",
+              "error": "parameters.encoder.graph_model.nodes.5.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 1 / 344 (0.3%)\nGreatest absolute difference: 1.2293457984924316e-06 at index (2, 0) (up to 1e-06 allowed)\nGreatest relative difference: 6.185287929838523e-05 at index (2, 0) (up to 1e-05 allowed)"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-fp32-sparse-eps6/result.json",
+      "sha256": "7a0451bfce43539a849fa1e988ec5f719a349dc527e45fb3c114afbca55c95c0",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "3c27d2ad2b73d451d52cd50fba07b61605494da670fb4411bfb3acaaa70e9019",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "quad",
+            "ent_alpha": null,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 2,
+              "nonzero_gradient_parameters": 139,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 36,
+              "work/messages": 64,
+              "work/source_rows": 88,
+              "activity/full_fraction": 0.75,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.683134078979492,
+              "activity/nonpositive_fraction": 0.25,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          },
+          {
+            "step": 1,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/core5-development-dense32/result.json",
+      "sha256": "b767a641eb7ee51795ba1e5e07bc5983298896f448cb96284e7b78c71ab5111d",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "failed",
+        "device": "cpu",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "1782016a7cc5c81a2d6b158a0538b436b2089c157726d14814268a5fce1e46a6",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "failed",
+            "error": "root.parameters.encoder.graph_model.nodes.4.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 123 / 344 (35.8%)\nGreatest absolute difference: 0.00010311603546142578 at index (2, 4) (up to 1e-06 allowed)\nGreatest relative difference: 0.005259892903268337 at index (3, 6) (up to 1e-05 allowed)",
+            "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 112, in record\n    detail = fn()\n             ^^^^\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 147, in independent_training\n    equivalent(observed, expected, atol, rtol)\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 53, in equivalent\n    equivalent(a[k], b[k], atol, rtol, f\"{path}.{k}\")\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 53, in equivalent\n    equivalent(a[k], b[k], atol, rtol, f\"{path}.{k}\")\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/scripts/check_core5.py\", line 46, in equivalent\n    torch.testing.assert_close(a, b, atol=atol if a.is_floating_point() else 0,\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/testing/_comparison.py\", line 1631, in assert_close\n    raise error_metas[0].to_error(msg)\nAssertionError: root.parameters.encoder.graph_model.nodes.4.read_program.evidence_weight: Tensor-likes are not close!\n\nMismatched elements: 123 / 344 (35.8%)\nGreatest absolute difference: 0.00010311603546142578 at index (2, 4) (up to 1e-06 allowed)\nGreatest relative difference: 0.005259892903268337 at index (3, 6) (up to 1e-05 allowed)\n"
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 48,
+              "work/messages": 96,
+              "work/source_rows": 120,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.7276668548584,
+              "activity/nonpositive_fraction": 0.0,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/checks/base-cpu-a/result.json",
+      "sha256": "3ad860a9964249e04493b34b9e3805451f75ffbaf14b9c7b2dcccbece6c1b56a",
+      "record": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-11-07T14:58:10.369330+00:00",
+        "scope": "related",
+        "config_id": "85ecf34655160566d0682509629db41cee06a1ec7f324f88eb20ced86a16dd52",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "all",
+              "first-output",
+              "connected-zero",
+              "first-control",
+              "first-descriptor-w",
+              "first-descriptor-mu",
+              "first-descriptor-score",
+              "first-descriptor-evidence"
+            ],
+            "parameters_and_external_roots": true,
+            "scope": "actual selected Python/native eager schedule; independent scalar CPU schedule"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "phase": "complete",
+        "root_progress": {
+          "stage": "complete",
+          "root": null,
+          "completed_roots": [
+            "all",
+            "first-output",
+            "connected-zero",
+            "first-control",
+            "first-descriptor-w",
+            "first-descriptor-mu",
+            "first-descriptor-score",
+            "first-descriptor-evidence"
+          ]
+        },
+        "finished": "2026-11-07T14:58:14.190813+00:00"
+      }
+    },
+    {
+      "path": "artifacts/audit-first-a/core5-cpu64/result.json",
+      "sha256": "53afd4a9fe45b285e98f7aaf962c503d13507f830503fba78c99a0049ab0d272",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float64",
+        "strict_tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "model": {
+          "model_id": "1782016a7cc5c81a2d6b158a0538b436b2089c157726d14814268a5fce1e46a6",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 2,
+              "nonzero_gradient_parameters": 158,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 48,
+              "work/state_updates": 48,
+              "work/read_events": 48,
+              "work/messages": 96,
+              "work/source_rows": 120,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/max_region_batch": 6,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.797485751399996,
+              "activity/nonpositive_fraction": 0.0,
+              "region/0/candidates": 24,
+              "region/0/full": 24,
+              "region/1/candidates": 24,
+              "region/1/full": 24,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          },
+          {
+            "step": 1,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/audit-first-a/resume-a/result.json",
+      "sha256": "63e3caeb0b4c39e7c6e1d0c066bdfdd41586c44ad0f22e80f31a0f919ccb71b5",
+      "record": {
+        "checkpoint_sha256": {
+          "full/checkpoint.pt": "0f03927159cd1a1112a3416b624f0e82ce9a36e35c2a2a2c6e07ae82d68fe06a",
+          "full/previous.pt": "412cdabf2a5a41ef8230b20baff14f6ee49e9af359e05c1e50e6fca3104fe03d",
+          "resumed/checkpoint.pt": "0cee2addeec9f0c26dce092e9386157818c4d4815a80654cfa0e3a872074d10b",
+          "split/checkpoint.pt": "412cdabf2a5a41ef8230b20baff14f6ee49e9af359e05c1e50e6fca3104fe03d"
+        },
+        "checks": {
+          "accelerator_rng": "exact",
+          "config_sha256": "exact",
+          "identity": "exact",
+          "model": "exact",
+          "optimizer": "exact",
+          "python_rng": "exact",
+          "rng": "exact",
+          "sequence_state": "exact",
+          "step": "exact"
+        },
+        "config_sha256": "c1b649181ea1ccab572b89b7bc9b5159cc6eb71ecf8b3cdfcb45aab4b0753782",
+        "finished_at": "2026-11-07T15:04:59.795564+00:00",
+        "schema": "tide-lab-exact-resume-v1",
+        "started_at": "2026-11-07T15:04:45.069508+00:00",
+        "state": "passed"
+      }
+    },
+    {
+      "path": "artifacts/audit-first-a/growth-cpu.json",
+      "sha256": "8b4ca73647b11e85d455c8afe14abdf756a5d68b909c4353c34a8b43d8e0ff26",
+      "record": {
+        "schema": "tide-growth-admission-v1",
+        "state": "failed",
+        "device": "cpu",
+        "seed": 7,
+        "numerical_policy": {
+          "atol": 1e-05,
+          "rtol": 0.0001
+        },
+        "checks": {
+          "task_initial_exact": true,
+          "language_initial_exact": true,
+          "original_lm_cache_max_abs": 4.38690185546875e-05,
+          "original_lm_cache_close": false
+        },
+        "scope": "selected checkpoint, tiny synthetic episodes, eager FP32; two SGD ingress steps",
+        "application_resume": "not checked here; runner-owned full application test",
+        "core5_correctness": "separate independent core5 admission required",
+        "model": {
+          "backbone_parameters": 494032768,
+          "task_head_parameters": 7176,
+          "branch_parameters": 96130,
+          "total_parameters": 494136074,
+          "trainable_parameters": 494136034,
+          "tied_input_output_embeddings": true,
+          "checkpoint_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+          "checkpoint_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+          "checkpoint_files": {
+            "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+            "config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+            "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+            "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+          },
+          "branch": "tide",
+          "backbone_training": "all parameters",
+          "symbolic_mapping": {
+            "ids": [
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87,
+              88,
+              89,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "symbols": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J",
+              "K",
+              "L",
+              "M",
+              "N",
+              "O",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "U",
+              "V",
+              "W",
+              "X",
+              "Y",
+              "Z",
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "w",
+              "x",
+              "y",
+              "z",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "!",
+              "\"",
+              "#",
+              "$",
+              "%",
+              "&",
+              "'",
+              "(",
+              ")",
+              "*",
+              "+"
+            ],
+            "semantics": "arbitrary atomic task symbol to original single-token codebook"
+          },
+          "initial_neutrality": "zero trainable output projection; inner gradients start at zero",
+          "branch_input": "final backbone hidden sequence, linear projection and tanh",
+          "branch_readout": "last position residual before task classification head",
+          "continuation": "cached backbone plus full hidden-prefix replay for branch",
+          "training_state": "fresh per episode; full episode BPTT; no cache across updates",
+          "lm_attention": "eager",
+          "dtype": "float32",
+          "core5": {
+            "model_id": "0247185996b882037e0a579c70d025ba87258c364b850fcc3dfb97163fc6e13b",
+            "recipe": {
+              "topology": "fc",
+              "family": "kv",
+              "width": 16,
+              "depth": 2,
+              "region_width": 4,
+              "branches": 2,
+              "offsets": [
+                0,
+                1
+              ],
+              "profile": "baseline",
+              "source_mode": "region",
+              "sparse_denominator": 2,
+              "selection": "regional_total",
+              "regularizer": "ent",
+              "ent_alpha": 1.0,
+              "memory_overrides": {
+                "memory_read": "qry"
+              },
+              "region_overrides": {
+                "allocation_temperature": 1.0
+              }
+            },
+            "nodes": 8,
+            "regions": 2,
+            "edges": 16,
+            "graph_parameters": 67418,
+            "state_reset": "fresh sequence",
+            "bptt": "full episode",
+            "execution": "public eager Python packed; one host scheduler worker"
+          }
+        },
+        "error": "AssertionError('original LM cache numerical check failed strict tolerance')",
+        "elapsed_seconds": 5.800581391900778
+      }
+    },
+    {
+      "path": "artifacts/audit-npu-a/base/result.json",
+      "sha256": "5b0c28d02be6470a08ca7beb65b5acc1d11dc67c0152d559a1ff7b25b5ae4c46",
+      "record": {
+        "schema": "tide-base-check-v1",
+        "state": "failed",
+        "started": "2026-11-07T15:03:57.900970+00:00",
+        "scope": "related",
+        "config_id": "0a762e69ef7bb8d790fcd63189a9a13de1a6af80b79b2be18e3552a854652eed",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "phase": "independent-roots",
+        "root_progress": {
+          "stage": "compare-vjp",
+          "root": "all",
+          "completed_roots": []
+        },
+        "error": {
+          "type": "NumericMismatch",
+          "message": "root[input.0.1.0.1]: Tensor-likes are not close!\n\nMismatched elements: 1 / 9 (11.1%)\nGreatest absolute difference: 2.86102294921875e-06 at index (4,) (up to 1e-06 allowed)\nGreatest relative difference: 3.9987302443478256e-05 at index (4,) (up to 1e-05 allowed)"
+        },
+        "finished": "2026-11-07T15:04:08.611087+00:00"
+      }
+    },
+    {
+      "path": "artifacts/audit-npu-a/core5/result.json",
+      "sha256": "10488741d8f909b2ecfdcf9ef002559a639c6004f5d29e54e5b41167374a6a84",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "failed",
+        "device": "npu:0",
+        "dtype": "float32",
+        "strict_tolerance": {
+          "atol": 1e-06,
+          "rtol": 1e-05
+        },
+        "model": {
+          "model_id": "1782016a7cc5c81a2d6b158a0538b436b2089c157726d14814268a5fce1e46a6",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 8,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 17202,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 17446,
+          "trainable_parameters": 17406
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 4,
+          "n_values": 4,
+          "pairs": 2,
+          "delay": 0,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 21,
+          "value_vocab_size": 4,
+          "sequence_length": 3,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "failed",
+            "error": "step 0 parameters: parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952289640903473 but got -0.16951756179332733.\nAbsolute difference: 5.334615707397461e-06 (up to 1e-06 allowed)\nRelative difference: 3.146840822331037e-05 (up to 1e-05 allowed)\nstep 1 result: result.trace[3].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 1.359032467007637e-06 at index (5,) (up to 1e-06 allowed)\nGreatest relative difference: 0.003201272338628769 at index (5,) (up to 1e-05 allowed)\nstep 1 parameters: parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952015459537506 but got -0.1695174127817154.\nAbsolute difference: 2.7418136596679688e-06 (up to 1e-06 allowed)\nRelative difference: 1.6173968612831672e-05 (up to 1e-05 allowed)",
+            "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-first-a/scripts/check_core5.py\", line 117, in record\n    detail = fn()\n             ^^^^\n  File \"/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-first-a/scripts/check_core5.py\", line 165, in independent_training\n    raise AssertionError(\"\\n\".join(failures))\nAssertionError: step 0 parameters: parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952289640903473 but got -0.16951756179332733.\nAbsolute difference: 5.334615707397461e-06 (up to 1e-06 allowed)\nRelative difference: 3.146840822331037e-05 (up to 1e-05 allowed)\nstep 1 result: result.trace[3].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 1.359032467007637e-06 at index (5,) (up to 1e-06 allowed)\nGreatest relative difference: 0.003201272338628769 at index (5,) (up to 1e-05 allowed)\nstep 1 parameters: parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952015459537506 but got -0.1695174127817154.\nAbsolute difference: 2.7418136596679688e-06 (up to 1e-06 allowed)\nRelative difference: 1.6173968612831672e-05 (up to 1e-05 allowed)\n"
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                8
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 48,
+              "work/full": 48,
+              "work/state_updates": 48,
+              "work/read_events": 48,
+              "work/messages": 96,
+              "work/source_rows": 120,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 6,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 3,
+              "work/max_region_batch": 6,
+              "work/region_blocks": 2,
+              "activity/send_strength": 17.725494384765625,
+              "activity/nonpositive_fraction": 0.0,
+              "region/0/candidates": 24,
+              "region/0/full": 24,
+              "region/1/candidates": 24,
+              "region/1/full": 24,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "failed",
+              "error": "parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952289640903473 but got -0.16951756179332733.\nAbsolute difference: 5.334615707397461e-06 (up to 1e-06 allowed)\nRelative difference: 3.146840822331037e-05 (up to 1e-05 allowed)"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          },
+          {
+            "step": 1,
+            "result": {
+              "state": "failed",
+              "error": "result.trace[3].descriptor.evidence: Tensor-likes are not close!\n\nMismatched elements: 1 / 8 (12.5%)\nGreatest absolute difference: 1.359032467007637e-06 at index (5,) (up to 1e-06 allowed)\nGreatest relative difference: 0.003201272338628769 at index (5,) (up to 1e-05 allowed)"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "failed",
+              "error": "parameters.encoder.graph_model.regions.1.head.bias: Scalars are not close!\n\nExpected -0.16952015459537506 but got -0.1695174127817154.\nAbsolute difference: 2.7418136596679688e-06 (up to 1e-06 allowed)\nRelative difference: 1.6173968612831672e-05 (up to 1e-05 allowed)"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/audit-npu-a/growth.json",
+      "sha256": "567434d7b2e94065f1b4bd42ce68e11dfecb6e4176e8f521a50137aafb816ee8",
+      "record": {
+        "schema": "tide-growth-admission-v1",
+        "state": "passed",
+        "device": "npu:0",
+        "seed": 7,
+        "numerical_policy": {
+          "atol": 1e-05,
+          "rtol": 0.0001
+        },
+        "checks": {
+          "task_initial_exact": true,
+          "language_initial_exact": true,
+          "original_lm_cache_max_abs": 0.0,
+          "original_lm_cache_close": true,
+          "original_lm_finite": true,
+          "original_lm_next_token": " Paris",
+          "original_lm_greedy_continuation": " Paris. It was founded in 7",
+          "all_prefix_continuation_close": true,
+          "initial_task_loss": 6.7821245193481445,
+          "optimizer_unique_parameters": true,
+          "gradient_ingress": [
+            {
+              "step": 0,
+              "loss": 6.7821245193481445,
+              "inner_gradient_max_abs": 0.0,
+              "output_gradient_max_abs": 0.07617583125829697
+            },
+            {
+              "step": 1,
+              "loss": 9.556795120239258,
+              "inner_gradient_max_abs": 0.0028566536493599415,
+              "output_gradient_max_abs": 0.06540632992982864
+            }
+          ],
+          "post_update_ablation_max_abs": 0.0022687911987304688,
+          "post_update_continuation_max_abs": 0.0,
+          "post_update_continuation_close": true
+        },
+        "scope": "selected checkpoint, tiny synthetic episodes, eager FP32; two SGD ingress steps",
+        "application_resume": "not checked here; runner-owned full application test",
+        "core5_correctness": "separate independent core5 admission required",
+        "model": {
+          "backbone_parameters": 494032768,
+          "task_head_parameters": 7176,
+          "branch_parameters": 96130,
+          "total_parameters": 494136074,
+          "trainable_parameters": 494136034,
+          "tied_input_output_embeddings": true,
+          "checkpoint_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+          "checkpoint_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+          "checkpoint_files": {
+            "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+            "config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+            "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+            "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+          },
+          "branch": "tide",
+          "backbone_training": "all parameters",
+          "symbolic_mapping": {
+            "ids": [
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87,
+              88,
+              89,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "symbols": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J",
+              "K",
+              "L",
+              "M",
+              "N",
+              "O",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "U",
+              "V",
+              "W",
+              "X",
+              "Y",
+              "Z",
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "w",
+              "x",
+              "y",
+              "z",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "!",
+              "\"",
+              "#",
+              "$",
+              "%",
+              "&",
+              "'",
+              "(",
+              ")",
+              "*",
+              "+"
+            ],
+            "semantics": "arbitrary atomic task symbol to original single-token codebook"
+          },
+          "initial_neutrality": "zero trainable output projection; inner gradients start at zero",
+          "branch_input": "final backbone hidden sequence, linear projection and tanh",
+          "branch_readout": "last position residual before task classification head",
+          "continuation": "cached backbone plus full hidden-prefix replay for branch",
+          "training_state": "fresh per episode; full episode BPTT; no cache across updates",
+          "lm_attention": "eager",
+          "dtype": "float32",
+          "core5": {
+            "model_id": "0247185996b882037e0a579c70d025ba87258c364b850fcc3dfb97163fc6e13b",
+            "recipe": {
+              "topology": "fc",
+              "family": "kv",
+              "width": 16,
+              "depth": 2,
+              "region_width": 4,
+              "branches": 2,
+              "offsets": [
+                0,
+                1
+              ],
+              "profile": "baseline",
+              "source_mode": "region",
+              "sparse_denominator": 2,
+              "selection": "regional_total",
+              "regularizer": "ent",
+              "ent_alpha": 1.0,
+              "memory_overrides": {
+                "memory_read": "qry"
+              },
+              "region_overrides": {
+                "allocation_temperature": 1.0
+              }
+            },
+            "nodes": 8,
+            "regions": 2,
+            "edges": 16,
+            "graph_parameters": 67418,
+            "state_reset": "fresh sequence",
+            "bptt": "full episode",
+            "execution": "public eager Python packed; one host scheduler worker"
+          }
+        },
+        "elapsed_seconds": 19.74103430658579
+      }
+    },
+    {
+      "path": "artifacts/audit-npu-a/resume-b/result.json",
+      "sha256": "9905acd807fa40a5513c9c310af19fe03d8967c543f6573cfe07745137260519",
+      "record": {
+        "checkpoint_sha256": {
+          "full/checkpoint.pt": "70dfb1da0bd6e5c35c97ab55a2a3bdaffbb712bde1d62f487b431279985ca326",
+          "full/previous.pt": "40c7efc2a646a42d3a27211b4915fe3953e0b5dc66ce8d50eff1a7a27a89124f",
+          "resumed/checkpoint.pt": "70dfb1da0bd6e5c35c97ab55a2a3bdaffbb712bde1d62f487b431279985ca326",
+          "split/checkpoint.pt": "40c7efc2a646a42d3a27211b4915fe3953e0b5dc66ce8d50eff1a7a27a89124f"
+        },
+        "checks": {
+          "accelerator_rng": "exact",
+          "config_sha256": "exact",
+          "identity": "exact",
+          "model": "exact",
+          "optimizer": "exact",
+          "python_rng": "exact",
+          "rng": "exact",
+          "sequence_state": "exact",
+          "step": "exact"
+        },
+        "config_sha256": "441076a71270ca524d5b7c76594efdc3382ac27c3e23cbd60ffc3d915331988b",
+        "finished_at": "2026-11-07T15:06:53.823539+00:00",
+        "retention": "checkpoints retired after exact comparison; hashes/logs/results retained; rerun reproduces",
+        "schema": "tide-lab-exact-resume-v1",
+        "started_at": "2026-11-07T15:04:55.913652+00:00",
+        "state": "passed"
+      }
+    },
+    {
+      "path": "artifacts/lens-admission/projection.json",
+      "sha256": "77a620d8f0783edf106615c5251e61361e80cc53e48c2340a23d03eaf7845f1a",
+      "record": {
+        "source_run_id": "tl-lens-admission-20261107-a",
+        "project": "tide-learning-lab",
+        "destination_name": "tl-lens-admission-20261107-a-projection-10d2ca0a62af",
+        "status": "verified",
+        "event_count": 1,
+        "last_sequence": 0,
+        "source_timestamps_preserved": false,
+        "steps_preserved": true,
+        "exactly_once": false,
+        "workload_status": "not-determined-by-recorder",
+        "sdk_version": "0.44.0",
+        "destination_run_id": "a26bc610f9864e3ea983affa5318a5e9",
+        "warning_count": 0,
+        "readback_matches": true
+      }
+    },
+    {
+      "path": "artifacts/growth-cpu-explore-b.json",
+      "sha256": "40841309e0b46e66b950cc5b8d3d82cfcb9be2999d5b9542a242eb730b9f6f85",
+      "record": {
+        "schema": "tide-growth-admission-v1",
+        "state": "completed_with_strict_failures",
+        "device": "cpu",
+        "execution": "completed",
+        "strict_numeric": "failed",
+        "strict_numeric_failures": [
+          "original_lm_cache",
+          "task_prefix_5"
+        ],
+        "numerical_checks": {
+          "original_lm_cache": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "failed",
+            "max_abs": 4.38690185546875e-05,
+            "max_tolerance_ratio": 2.678679943084717,
+            "values_exceeding_tolerance": 257
+          },
+          "task_prefix_1": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 0.0,
+            "max_tolerance_ratio": 0.0,
+            "values_exceeding_tolerance": 0
+          },
+          "task_prefix_2": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 0.0001201629638671875,
+            "max_tolerance_ratio": 0.6150407791137695,
+            "values_exceeding_tolerance": 0
+          },
+          "task_prefix_3": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 6.29425048828125e-05,
+            "max_tolerance_ratio": 0.6792565584182739,
+            "values_exceeding_tolerance": 0
+          },
+          "task_prefix_4": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 5.4955482482910156e-05,
+            "max_tolerance_ratio": 0.8224129676818848,
+            "values_exceeding_tolerance": 0
+          },
+          "task_prefix_5": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "failed",
+            "max_abs": 3.2007694244384766e-05,
+            "max_tolerance_ratio": 1.2418477535247803,
+            "values_exceeding_tolerance": 1
+          },
+          "task_prefix_6": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 3.695487976074219e-05,
+            "max_tolerance_ratio": 0.400446355342865,
+            "values_exceeding_tolerance": 0
+          },
+          "task_prefix_7": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 3.6716461181640625e-05,
+            "max_tolerance_ratio": 0.11329575628042221,
+            "values_exceeding_tolerance": 0
+          },
+          "post_update_continuation": {
+            "finite": true,
+            "atol": 1e-05,
+            "rtol": 0.0001,
+            "strict": "passed",
+            "max_abs": 1.239776611328125e-05,
+            "max_tolerance_ratio": 0.05140330269932747,
+            "values_exceeding_tolerance": 0
+          }
+        },
+        "seed": 7,
+        "numerical_policy": {
+          "atol": 1e-05,
+          "rtol": 0.0001,
+          "mode": "explore_finite"
+        },
+        "checks": {
+          "task_initial_finite": true,
+          "task_initial_exact": true,
+          "original_lm_finite": true,
+          "language_initial_exact": true,
+          "cached_lm_finite": true,
+          "original_lm_cache_max_abs": 4.38690185546875e-05,
+          "original_lm_cache_close": false,
+          "original_lm_next_token": " Paris",
+          "original_lm_greedy_continuation": " Paris. It was founded in 7",
+          "prefix_continuation": [
+            {
+              "length": 1,
+              "strict_close": true
+            },
+            {
+              "length": 2,
+              "strict_close": true
+            },
+            {
+              "length": 3,
+              "strict_close": true
+            },
+            {
+              "length": 4,
+              "strict_close": true
+            },
+            {
+              "length": 5,
+              "strict_close": false
+            },
+            {
+              "length": 6,
+              "strict_close": true
+            },
+            {
+              "length": 7,
+              "strict_close": true
+            }
+          ],
+          "all_prefix_continuation_close": false,
+          "initial_task_loss": 6.782066822052002,
+          "optimizer_unique_parameters": true,
+          "gradient_ingress": [
+            {
+              "step": 0,
+              "loss": 6.782066822052002,
+              "inner_gradient_max_abs": 0.0,
+              "output_gradient_max_abs": 0.0761747881770134
+            },
+            {
+              "step": 1,
+              "loss": 9.558427810668945,
+              "inner_gradient_max_abs": 0.0028619752265512943,
+              "output_gradient_max_abs": 0.06540394574403763
+            }
+          ],
+          "post_update_ablation_max_abs": 0.0022573471069335938,
+          "post_update_continuation_max_abs": 1.239776611328125e-05,
+          "post_update_continuation_close": true
+        },
+        "scope": "selected checkpoint, tiny synthetic episodes, eager FP32; two SGD ingress steps",
+        "application_resume": "not checked here; runner-owned full application test",
+        "core5_correctness": "separate independent core5 admission required",
+        "model": {
+          "backbone_parameters": 494032768,
+          "task_head_parameters": 7176,
+          "branch_parameters": 96130,
+          "total_parameters": 494136074,
+          "trainable_parameters": 494136034,
+          "tied_input_output_embeddings": true,
+          "checkpoint_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+          "checkpoint_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+          "checkpoint_files": {
+            "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+            "config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+            "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+            "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+            "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+          },
+          "branch": "tide",
+          "backbone_training": "all parameters",
+          "symbolic_mapping": {
+            "ids": [
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87,
+              88,
+              89,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "symbols": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J",
+              "K",
+              "L",
+              "M",
+              "N",
+              "O",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "U",
+              "V",
+              "W",
+              "X",
+              "Y",
+              "Z",
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "w",
+              "x",
+              "y",
+              "z",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "!",
+              "\"",
+              "#",
+              "$",
+              "%",
+              "&",
+              "'",
+              "(",
+              ")",
+              "*",
+              "+"
+            ],
+            "semantics": "arbitrary atomic task symbol to original single-token codebook"
+          },
+          "initial_neutrality": "zero trainable output projection; inner gradients start at zero",
+          "branch_input": "final backbone hidden sequence, linear projection and tanh",
+          "branch_readout": "last position residual before task classification head",
+          "continuation": "cached backbone plus full hidden-prefix replay for branch",
+          "training_state": "fresh per episode; full episode BPTT; no cache across updates",
+          "lm_attention": "eager",
+          "dtype": "float32",
+          "core5": {
+            "model_id": "0247185996b882037e0a579c70d025ba87258c364b850fcc3dfb97163fc6e13b",
+            "recipe": {
+              "topology": "fc",
+              "family": "kv",
+              "width": 16,
+              "depth": 2,
+              "region_width": 4,
+              "branches": 2,
+              "offsets": [
+                0,
+                1
+              ],
+              "profile": "baseline",
+              "source_mode": "region",
+              "sparse_denominator": 2,
+              "selection": "regional_total",
+              "regularizer": "ent",
+              "ent_alpha": 1.0,
+              "memory_overrides": {
+                "memory_read": "qry"
+              },
+              "region_overrides": {
+                "allocation_temperature": 1.0
+              }
+            },
+            "nodes": 8,
+            "regions": 2,
+            "edges": 16,
+            "graph_parameters": 67418,
+            "state_reset": "fresh sequence",
+            "bptt": "full episode",
+            "execution": "public eager Python packed; one host scheduler worker"
+          }
+        },
+        "fixture": {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/growth-cpu-fixture-b.pt",
+          "sha256": "534381c1acdcdc527992b996069fec561db7dcb591d3ac2386f9bef536d2f549",
+          "shapes": {
+            "task_tokens": [
+              2,
+              7
+            ],
+            "task_targets": [
+              2
+            ],
+            "ordinary_token_ids": [
+              1,
+              5
+            ],
+            "initial_task_logits": [
+              2,
+              8
+            ],
+            "original_lm_last_logits": [
+              1,
+              151936
+            ],
+            "cached_lm_last_logits": [
+              1,
+              151936
+            ]
+          },
+          "scope": "untrained logits, same inputs; no gradient or optimizer fixture"
+        },
+        "elapsed_seconds": 20.513526279479265
+      }
+    },
+    {
+      "path": "artifacts/core5-actual-a/result.json",
+      "sha256": "c2c2bb095090bf99cc0901e621465fdc50236050f29a4415d9e0c790054fb0ff",
+      "record": {
+        "schema": "tide-lab-core5-acceptance-v1",
+        "state": "passed",
+        "device": "cpu",
+        "dtype": "float64",
+        "strict_tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "model": {
+          "model_id": "9095ba4e237f1796ad96cf58253469a252de6261eb26493434efaf5671d6ca24",
+          "recipe": {
+            "topology": "fc",
+            "family": "kv",
+            "width": 16,
+            "depth": 2,
+            "region_width": 4,
+            "branches": 2,
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "selection": "regional_total",
+            "regularizer": "ent",
+            "ent_alpha": 1.0,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            }
+          },
+          "nodes": 8,
+          "regions": 2,
+          "edges": 16,
+          "graph_parameters": 67418,
+          "state_reset": "fresh sequence",
+          "bptt": "full episode",
+          "execution": "public eager Python packed; one host scheduler worker",
+          "total_parameters": 68762,
+          "trainable_parameters": 68722
+        },
+        "task": {
+          "schema": "tide-delayed-associative-retrieval-v1",
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4,
+          "delay": 2,
+          "split_salt": "tide-associative-retrieval-v1",
+          "vocab_size": 73,
+          "value_vocab_size": 8,
+          "sequence_length": 7,
+          "split_policy": "sha256(sorted association map,salt) modulo 100: train<80,val<90,test",
+          "reset_policy": "one fresh graph/LM state per sequence; full episode BPTT"
+        },
+        "checks": {
+          "independent_complete_training_adamw": {
+            "state": "passed",
+            "detail": {
+              "steps": 2,
+              "nonzero_gradient_parameters": 158,
+              "optimizer": "AdamW",
+              "complete_state": true,
+              "output_routes": true,
+              "input_roots": true
+            }
+          },
+          "shared_parameter_and_sample_gradient_sum": {
+            "state": "passed",
+            "detail": {
+              "shared_parameter_groups": 11,
+              "samples": 2,
+              "comparison": "one batched loss versus accumulated independent sample losses"
+            }
+          },
+          "inference_causality_prefill_streaming": {
+            "state": "passed",
+            "detail": {
+              "prefill_streaming": true,
+              "chunked_continuation": true,
+              "causality": "position zero invariant to future inputs",
+              "inference_shape": [
+                2,
+                16
+              ]
+            }
+          },
+          "sending_support_observation": {
+            "state": "passed",
+            "detail": {
+              "work/candidates": 112,
+              "work/full": 112,
+              "work/state_updates": 112,
+              "work/read_events": 112,
+              "work/messages": 224,
+              "work/source_rows": 280,
+              "activity/full_fraction": 1.0,
+              "work/max_full_batch": 14,
+              "work/max_state_batch": 2,
+              "work/max_state_sequence": 7,
+              "work/max_region_batch": 14,
+              "work/region_blocks": 2,
+              "activity/send_strength": 41.626374906357015,
+              "activity/nonpositive_fraction": 0.0,
+              "region/0/candidates": 56,
+              "region/0/full": 56,
+              "region/1/candidates": 56,
+              "region/1/full": 56,
+              "scope": "observed support for this fixture; sparse is not required to sparsify every input"
+            }
+          }
+        },
+        "optimizer": {
+          "kind": "AdamW",
+          "lr": 0.001,
+          "eps": 1e-06,
+          "weight_decay": 0.01
+        },
+        "independent_training_steps": [
+          {
+            "step": 0,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          },
+          {
+            "step": 1,
+            "result": {
+              "state": "passed"
+            },
+            "logits": {
+              "state": "passed"
+            },
+            "loss": {
+              "state": "passed"
+            },
+            "input_gradient": {
+              "state": "passed"
+            },
+            "gradients": {
+              "state": "passed"
+            },
+            "parameters": {
+              "state": "passed"
+            },
+            "optimizer": {
+              "state": "passed"
+            }
+          }
+        ],
+        "scope": "tiny task integration only; not model learning, scale, native or resident qualification"
+      }
+    },
+    {
+      "path": "artifacts/jobs/stop-check-a/state.json",
+      "sha256": "34df54ad2c42fb646dedba1f34548568ebbfb75b52f7760b1df1b3a9d9bd9797",
+      "record": {
+        "child_process_group": 135134,
+        "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-stop-check-a.service",
+        "descendants": [
+          {
+            "parent_pid": 134876,
+            "pid": 135134,
+            "process_group": 135134,
+            "start_ticks": 2165052162,
+            "state": "S"
+          },
+          {
+            "parent_pid": 135134,
+            "pid": 135933,
+            "process_group": 135134,
+            "start_ticks": 2165052174,
+            "state": "S"
+          },
+          {
+            "parent_pid": 135933,
+            "pid": 136138,
+            "process_group": 135134,
+            "start_ticks": 2165052176,
+            "state": "S"
+          }
+        ],
+        "elapsed_seconds": 1.1629383154213428,
+        "ended_at": "2026-11-07T15:12:32.078364+00:00",
+        "finalized_at": "2026-11-07T15:12:32.131183+00:00",
+        "job_id": "stop-check-a",
+        "known_descendants_alive": [],
+        "launcher": {
+          "parent_pid": 134876,
+          "pid": 135134,
+          "process_group": 135134,
+          "start_ticks": 2165052162,
+          "state": "R"
+        },
+        "launcher_exit_code": 143,
+        "leaked_descendants": false,
+        "queue_state": null,
+        "remaining_descendants": [],
+        "schema": "tide-job-lifecycle-v1",
+        "signal": 15,
+        "started_at": "2026-11-07T15:12:30.915449+00:00",
+        "state": "stopped",
+        "supervisor": {
+          "parent_pid": 2907797,
+          "pid": 134876,
+          "process_group": 134876,
+          "start_ticks": 2165052158,
+          "state": "R"
+        },
+        "systemd": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "143",
+          "SERVICE_RESULT": "exit-code"
+        },
+        "termination_verified": true,
+        "updated_at": "2026-11-07T15:12:31.326801+00:00",
+        "workload_exit_code": -15
+      }
+    }
+  ]
+}
