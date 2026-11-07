@@ -1,5 +1,7 @@
 # 首批后台作业与恢复
 
+2026-11-08终态复核：表中全部训练已完成，当前无活动或排队作业；以下保留原固定输入、预算与历史操作方法。新的训练/恢复须另用新ID，不能把本页示例当作正在执行的任务。结论见[首批总报告](studies/first-batch-results.md)。
+
 项目根目录执行下列命令。旧CPU确认作业固定`.local/source-first-a`中的`0d7ec5bdaa34556df9c93886e95f55fa5c9876ab`；新增NPU阶段固定`.local/source-a-npu`中的`0494d208e2a561ac66da9d1fa3d72672af6809e8`（树SHA256 `adc5f9eabc01e106b36055b017f3d1391f19d4a1079ee9b213cb3420c24a34fe`）。不要改这些快照、`.venv`、`.local/configs-*`或NPU输出内的resolved配置；普通工作区修改用于下一快照。模型/任务/训练包源码与原固定wheel相同，新阶段仅增加驱动、检查、配置与记录。安装身份见dependencies，站点私有查看说明见`.local/LENS.md`。
 
 | 作业ID | 实际内容 | 固定配置 | 时间上限与资源预算 |
@@ -9,7 +11,7 @@
 | confirm-a-s33 | 同上，seed33 | configs/studies/confirm-a-s33.json | 同上 |
 | a1-npu-explore | 独立NPU数值/离散/机制、精确恢复→batch校准→同预算query/FC探索 | configs/studies/a1-npu-stage.json；实际选择另存runs/a1-npu-explore/resolved-*.json | 1NPU/CPU4线程/24GiB；设备≤3h、等待≤30min、服务≤3.5h；校准≤20min，学习≤2h/各80步 |
 | a2-hb-prepare（已完成） | HB配对初值、各自数值/离散/机制/恢复，共同B32/B128校准 | configs/studies/a2-hb-prepare.json；源码aff03ee | CPU1线程/RAM预算8GiB；准备20min/服务22min |
-| a2-hb-dense-pilot / a2-hb-sparse-pilot | 已满足依赖，B32各80步，两个CPU作业并行 | runs/a2-hb-prepare/resolved-hb-{dense,sparse}.json；生成后只读 | 各CPU1线程/RAM预算8GiB，训练40min、等待20min、服务70min |
+| a2-hb-dense-pilot / a2-hb-sparse-pilot | 已完成，B32各80步，两个CPU作业曾并行 | runs/a2-hb-prepare/resolved-hb-{dense,sparse}.json；生成后只读 | 各CPU1线程/RAM预算8GiB，训练40min、等待20min、服务70min |
 | pilot-b（已完成） | 原模型、TIDE、MLP均终态；不启动B正式重复 | configs/studies/pilot-b.json | 各40步/B32，单NPU+CPU4线程/32GiB，组内50min；等待≤15min，服务70min |
 
 新NPU阶段已确认进入background.slice，并通过共享队列取得物理1→逻辑npu:0；后续运行仍由队列选择，不能把当前物理ID写入模型。与三个CPU确认并行时，上限为1NPU/CPU配额7线程/RAM48GiB，低于首批64GiB。已完成B先导期间历史请求峰值为56GiB；这些均不是实际内存峰值或独占CPU承诺。B校准allocated峰值约3.8GiB，不等于驱动及其他HBM占用的完整峰值。最新状态以STATUS及job记录为准。
@@ -53,7 +55,7 @@ python scripts/job.py submit \
 
 上例直接写权威记录；需要Lens时使用同样声明的独立`trackio-lens record --follow`查看新run，不追加旧projection。B恢复同理，需队列helper和固定asset路径（原job.json中完整记录）。现有严格恢复要求runtime identity相同，包括物理可见映射；不同映射会明确拒绝，不假称逐值续训。新进程CPU/NPU同栈恢复已有通过证据，跨设备映射恢复未检查。`--init-from`仅恢复模型权重、重新开始optimizer/数据进度，是不同实验。
 
-首批终态后唤醒接续：先查表中服务及batch/stage记录，审阅完整结果、精确恢复/数值边界、Lens投影；再更新每组结论和研究图。HB仍依赖A确认结果；B先导未过预设门槛，本轮不启动B正式重复，不因外层exit0自动扩展。下一批规模/任务/候选待用户验收决定。
+首批终态已审阅：HB两者未达50%，B未达25%，均不启动本批正式重复；执行完成不解除严格失败。下一批规模/任务/候选待用户验收决定。当前没有需要恢复的中断训练。
 
 新增NPU阶段不自动从半途重跑。若学习中断，停止并核对无后代后，使用同一`.local/source-a-npu`、原只读`resolved-fc-dense.json`和该run的`checkpoint.pt`提交新NPU作业，命令仍是`python -m tide_lab.train --config ABS_CONFIG --resume ABS_CHECKPOINT --output NEW_OUTPUT`，另设新run ID和剩余有界预算；保留原stage失败/中断。NPU checkpoint每20步发布。该B2恢复检查覆盖同栈完整AdamW/model/数据步/RNG，不覆盖不同物理映射或新增batch的逐值资格；当前恢复代码仍严格核对身份，不因探索而绕过。
 

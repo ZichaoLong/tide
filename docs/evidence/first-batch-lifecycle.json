@@ -1,0 +1,168 @@
+{
+  "active_jobs": 0,
+  "jobs": [
+    {
+      "device": "npu",
+      "exit_code": 0,
+      "id": "a1-npu-explore",
+      "source": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+      "state": "completed",
+      "state_record": "artifacts/jobs/a1-npu-explore/state.json",
+      "state_sha256": "ece446ddbb70f12a84db6fe41f4b2108d48f0d99fba1eb7bf81d8db037125cca",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "a2-hb-dense-pilot",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "state_record": "artifacts/jobs/a2-hb-dense-pilot/state.json",
+      "state_sha256": "aba9594a7214242742fe3e8d9f4a482e73cb03821233a6e981879ef7c77c3d7b",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "a2-hb-prepare",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "state_record": "artifacts/jobs/a2-hb-prepare/state.json",
+      "state_sha256": "e39e7fb540cfd2b45401a4e4207b4c3a279b4b97e5ff6d9186fd91ab0042a526",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "a2-hb-sparse-pilot",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "state_record": "artifacts/jobs/a2-hb-sparse-pilot/state.json",
+      "state_sha256": "d04c5aff8eefe05a3a80e3f24a4bcfa8f4a04447bed5c16a5f148ebcf15c303a",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 1,
+      "id": "audit-cpu-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "failed",
+      "state_record": "artifacts/jobs/audit-cpu-a/state.json",
+      "state_sha256": "63ce8a1ddbd8bd89e53c166c025bfccbb8863bdd36b874330a7190298fba05ea",
+      "termination_verified": true
+    },
+    {
+      "device": "npu",
+      "exit_code": 1,
+      "id": "audit-npu-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "failed",
+      "state_record": "artifacts/jobs/audit-npu-a/state.json",
+      "state_sha256": "20d21c3cd3e83f840601f546365ca5a71b239f833a2da2c9c78479d3d3ad61b5",
+      "termination_verified": true
+    },
+    {
+      "device": "npu",
+      "exit_code": 0,
+      "id": "calibrate-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/calibrate-b/state.json",
+      "state_sha256": "7135598efdd10044ed7739ed5f290741dca0172a034ccb2d12cd2e1676a38cbc",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "confirm-a-s11",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/confirm-a-s11/state.json",
+      "state_sha256": "a27440fa50b34f4c79ed168a2adf7591e643972344f546cff57df3ed6efc81e2",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "confirm-a-s22",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/confirm-a-s22/state.json",
+      "state_sha256": "209484701134fe79fb14a59dd19678e6047c2821aabbb114be1c3a34e9e5546a",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "confirm-a-s33",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/confirm-a-s33/state.json",
+      "state_sha256": "28d335e9eb41468803f106dce0425c51715dc9ea489598f2b582fe8dfd8b2e5d",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "core5-actual-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/core5-actual-a/state.json",
+      "state_sha256": "9dbc5b13223ae79c5e650c3879ba6d461da9aa96c8f40b24d459eb07a264e562",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "growth-cpu-explore-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/growth-cpu-explore-b/state.json",
+      "state_sha256": "312be3b555dc58184a9139f78daf78d4da557488dbb5ea74dabaedbfc9a980e0",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "lifecycle-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/lifecycle-a/state.json",
+      "state_sha256": "16ea65bed45c281c4aad185579e8c91a122d87373dac0d7299234e62aa8c48f3",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": 0,
+      "id": "pilot-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/pilot-a/state.json",
+      "state_sha256": "425b97d2a8b97080acd90b464dddb0a83aaf987707e05d1ac44c67f676c4924a",
+      "termination_verified": true
+    },
+    {
+      "device": "npu",
+      "exit_code": 0,
+      "id": "pilot-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "state_record": "artifacts/jobs/pilot-b/state.json",
+      "state_sha256": "6d7e8b6fa68b9e9cec5eb747d1880fe539849568f570ef687b8e156fcfb91e99",
+      "termination_verified": true
+    },
+    {
+      "device": "cpu",
+      "exit_code": -15,
+      "id": "stop-check-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "stopped",
+      "state_record": "artifacts/jobs/stop-check-a/state.json",
+      "state_sha256": "34df54ad2c42fb646dedba1f34548568ebbfb75b52f7760b1df1b3a9d9bd9797",
+      "termination_verified": true
+    }
+  ],
+  "note": "Includes retained failed numerical audits and an intentional stop test; terminal does not mean passed",
+  "reviewed_at": "2026-11-07T18:37:38.700956+00:00",
+  "schema": "tide-lab-lifecycle-review-v1"
+}

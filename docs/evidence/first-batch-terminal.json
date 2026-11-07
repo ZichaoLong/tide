@@ -1,0 +1,778 @@
+{
+  "decision": "Do not launch formal HB or B repeats: declared learning gates were not met; all follow-ups are proposals for user review",
+  "fc_aggregate_comparison": [
+    {
+      "cpu64_accuracy": 0.1171875,
+      "npu32_accuracy": 0.1171875,
+      "npu32_minus_cpu64_ce": 1.2420007244884346e-08,
+      "step": 0
+    },
+    {
+      "cpu64_accuracy": 0.171875,
+      "npu32_accuracy": 0.171875,
+      "npu32_minus_cpu64_ce": 7.623528386346834e-08,
+      "step": 20
+    },
+    {
+      "cpu64_accuracy": 0.171875,
+      "npu32_accuracy": 0.171875,
+      "npu32_minus_cpu64_ce": 2.8033954269091055e-08,
+      "step": 40
+    },
+    {
+      "cpu64_accuracy": 0.234375,
+      "npu32_accuracy": 0.234375,
+      "npu32_minus_cpu64_ce": 3.8520171941058834e-07,
+      "step": 60
+    },
+    {
+      "cpu64_accuracy": 0.2421875,
+      "npu32_accuracy": 0.2421875,
+      "npu32_minus_cpu64_ce": 1.1070607002228172e-06,
+      "step": 80
+    }
+  ],
+  "hb_sparse_reductions": {
+    "complete_process_seconds": 0.035510509730458883,
+    "time/step_seconds": 0.03291746413928587,
+    "work/candidates": 0.02066824776785714,
+    "work/full": 0.37630440848214286,
+    "work/messages": 0.3975062779017857,
+    "work/read_events": 0.02066824776785714,
+    "work/source_rows": 0.3533389136904762,
+    "work/state_updates": 0.02066824776785714
+  },
+  "records": {
+    "hb-dense": {
+      "actual_observation": "all 80 updates; index==step in the frozen loop makes the first-step clause true each iteration",
+      "configuration_identity": "b2d29901881da3d1d67b5c1d7b44061052ffa5833d5809c8cbc9c7d910b7dc43",
+      "configured_log_every": 5,
+      "evaluation": {
+        "batch_size": 16,
+        "samples": 128,
+        "seed": 20261107,
+        "test": false
+      },
+      "gradient_connected_min": 1.0,
+      "lens": {
+        "destination_name": "tl-a2-hb-dense-s11-pilot-projection-0a38961cf775",
+        "destination_run_id": "3a21823c63584f4aa9f22a114ab6ae79",
+        "event_count": 85,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a2-hb-dense-s11-pilot",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "median_step_seconds": 13.278427045792341,
+      "model": {
+        "branches": 2,
+        "depth": 1,
+        "kind": "core5",
+        "offsets": [
+          0,
+          1
+        ],
+        "region_width": 4,
+        "send": "dense",
+        "temperature": 0.25,
+        "topology": "hb",
+        "width": 16
+      },
+      "observed_training_steps": 80,
+      "peak_process_rss_mib": 941.1953125,
+      "records": [
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/config.json",
+          "sha256": "b2d29901881da3d1d67b5c1d7b44061052ffa5833d5809c8cbc9c7d910b7dc43"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/manifest.json",
+          "sha256": "674992c3372f45e6ea533f450f14387da4c1cf23f46c3a9d65a1b9d2ce4229ba"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/result.json",
+          "sha256": "277a01c57b91c050eafb129f1e00d08d8a78426c216c997003120691e679dde6"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/metrics.jsonl",
+          "sha256": "10ec3f630c2e01af530dfda14e5f930619eefd78c7319380e594a678658cd17d"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/projection.json",
+          "sha256": "ba46dd801eecc456a1648062ef910c0ab4f8ea3477bb05519b51d49428167191"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/checkpoint.json",
+          "sha256": "8653f4db27b5cb523f4a821a17593a7bff49e99f56fbaca1306b8eb05314edba"
+        },
+        {
+          "path": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/checkpoint.pt",
+          "sha256": "8a6489b0cbb3873ac6bee19ad80ac19110065d8b76d8492fb659e0dc7930201a"
+        }
+      ],
+      "region_aggregate_minima": {
+        "0": {
+          "full": 896.0,
+          "full_fraction": 1.0
+        },
+        "1": {
+          "full": 896.0,
+          "full_fraction": 1.0
+        },
+        "2": {
+          "full": 896.0,
+          "full_fraction": 1.0
+        },
+        "3": {
+          "full": 896.0,
+          "full_fraction": 1.0
+        }
+      },
+      "result": {
+        "config_sha256": "b2d29901881da3d1d67b5c1d7b44061052ffa5833d5809c8cbc9c7d910b7dc43",
+        "elapsed_seconds": 1183.5327789522707,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T16:34:31.407115+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 128
+        },
+        "initial_validation": {
+          "accuracy": 0.1171875,
+          "loss": 2.288869321346283,
+          "samples": 128,
+          "seconds": 19.448870107531548,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.3125,
+          "loss": 1.8857146352529526,
+          "samples": 128,
+          "seconds": 19.91817034035921,
+          "step": 80
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a2-hb-dense-s11-pilot",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T16:14:47.874354+00:00",
+        "state": "completed",
+        "steps": 80,
+        "study_id": "TL-A2",
+        "trained_examples": 2560,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.3125
+        },
+        "without_history": {
+          "accuracy": 0.1015625,
+          "loss": 2.3296432495117188,
+          "samples": 128,
+          "seconds": 20.04803190380335
+        }
+      },
+      "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "terminal_checkpoint": {
+        "integrity": "hash matched; not a new continuation test",
+        "sha256": "8a6489b0cbb3873ac6bee19ad80ac19110065d8b76d8492fb659e0dc7930201a",
+        "step": 80
+      },
+      "totals": {
+        "time/step_seconds": 1062.6389366872609,
+        "work/candidates": 286720.0,
+        "work/full": 286720.0,
+        "work/messages": 573440.0,
+        "work/read_events": 286720.0,
+        "work/source_rows": 645120.0,
+        "work/state_updates": 286720.0
+      },
+      "training": {
+        "batch_size": 32,
+        "checkpoint_every": 20,
+        "data_seed": 1011,
+        "eps": 1e-06,
+        "eval_every": 20,
+        "log_every": 5,
+        "lr": 0.001,
+        "max_seconds": 2400,
+        "retain_checkpoint": true,
+        "steps": 80,
+        "weight_decay": 0.01
+      },
+      "validation_curve": [
+        {
+          "elapsed_seconds": 19.64210832491517,
+          "step": 0,
+          "validation/accuracy": 0.1171875,
+          "validation/loss": 2.288869321346283
+        },
+        {
+          "elapsed_seconds": 305.53479278087616,
+          "step": 20,
+          "time/validation_seconds": 20.15075144916773,
+          "validation/accuracy": 0.15625,
+          "validation/loss": 2.1093924939632416
+        },
+        {
+          "elapsed_seconds": 591.3228525258601,
+          "step": 40,
+          "time/validation_seconds": 20.15333804860711,
+          "validation/accuracy": 0.1484375,
+          "validation/loss": 2.056535929441452
+        },
+        {
+          "elapsed_seconds": 877.3518381565809,
+          "step": 60,
+          "time/validation_seconds": 20.172932729125023,
+          "validation/accuracy": 0.25,
+          "validation/loss": 1.9600417912006378
+        },
+        {
+          "elapsed_seconds": 1163.3973238393664,
+          "step": 80,
+          "time/validation_seconds": 19.91817034035921,
+          "validation/accuracy": 0.3125,
+          "validation/loss": 1.8857146352529526
+        }
+      ]
+    },
+    "hb-sparse": {
+      "actual_observation": "all 80 updates; index==step in the frozen loop makes the first-step clause true each iteration",
+      "configuration_identity": "bc06d126d09b9ffff17a742011e3b7a80518f8f43ac010b8b49576af9feb9ace",
+      "configured_log_every": 5,
+      "evaluation": {
+        "batch_size": 16,
+        "samples": 128,
+        "seed": 20261107,
+        "test": false
+      },
+      "gradient_connected_min": 1.0,
+      "lens": {
+        "destination_name": "tl-a2-hb-sparse-s11-pilot-projection-7de3b15af1af",
+        "destination_run_id": "9b0409aed1434cfaa3725c3fc9d6de86",
+        "event_count": 85,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a2-hb-sparse-s11-pilot",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "median_step_seconds": 12.846063440665603,
+      "model": {
+        "branches": 2,
+        "depth": 1,
+        "kind": "core5",
+        "offsets": [
+          0,
+          1
+        ],
+        "region_width": 4,
+        "send": "sparse",
+        "temperature": 0.25,
+        "topology": "hb",
+        "width": 16
+      },
+      "observed_training_steps": 80,
+      "peak_process_rss_mib": 923.4609375,
+      "records": [
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/config.json",
+          "sha256": "bc06d126d09b9ffff17a742011e3b7a80518f8f43ac010b8b49576af9feb9ace"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/manifest.json",
+          "sha256": "6d302ee4711ec259aad2a1a302b86e0346e09ac289c15c6f817d47f7aa2d99d9"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/result.json",
+          "sha256": "82dc9d41e4102198838f296d0abeb9e3f1b301c3e4cf46a3cff61f5804470b58"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/metrics.jsonl",
+          "sha256": "9dc4556c4eaf890cc3da59751d947f3983919e191a9eb21233c5ae2f1c7b436a"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/projection.json",
+          "sha256": "2a0a273d79425377fe2b256e73949d1b0f82ba48928a73e588b4bbf5c6ea9da8"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/checkpoint.json",
+          "sha256": "e288b133db16adf998e407b09fc31189a3126bc263fb0ba608e8130ad15ac2c5"
+        },
+        {
+          "path": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/checkpoint.pt",
+          "sha256": "9609a807d697353b0ccf5751f15cebb325a555a86884e942fce3533d843ac47d"
+        }
+      ],
+      "region_aggregate_minima": {
+        "0": {
+          "full": 487.0,
+          "full_fraction": 0.5435267857142857
+        },
+        "1": {
+          "full": 531.0,
+          "full_fraction": 0.6061643835616438
+        },
+        "2": {
+          "full": 510.0,
+          "full_fraction": 0.5960419091967404
+        },
+        "3": {
+          "full": 517.0,
+          "full_fraction": 0.5782997762863534
+        }
+      },
+      "result": {
+        "config_sha256": "bc06d126d09b9ffff17a742011e3b7a80518f8f43ac010b8b49576af9feb9ace",
+        "elapsed_seconds": 1141.5049266889691,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T16:33:49.348487+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 128
+        },
+        "initial_validation": {
+          "accuracy": 0.09375,
+          "loss": 2.3016878962516785,
+          "samples": 128,
+          "seconds": 18.33870280906558,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.3515625,
+          "loss": 1.8160508573055267,
+          "samples": 128,
+          "seconds": 18.937743112444878,
+          "step": 80
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a2-hb-sparse-s11-pilot",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T16:14:47.843576+00:00",
+        "state": "completed",
+        "steps": 80,
+        "study_id": "TL-A2",
+        "trained_examples": 2560,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.3515625
+        },
+        "without_history": {
+          "accuracy": 0.0625,
+          "loss": 2.2207582592964172,
+          "samples": 128,
+          "seconds": 18.918258499354124
+        }
+      },
+      "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "terminal_checkpoint": {
+        "integrity": "hash matched; not a new continuation test",
+        "sha256": "9609a807d697353b0ccf5751f15cebb325a555a86884e942fce3533d843ac47d",
+        "step": 80
+      },
+      "totals": {
+        "time/step_seconds": 1027.659557595849,
+        "work/candidates": 280794.0,
+        "work/full": 178826.0,
+        "work/messages": 345494.0,
+        "work/read_events": 280794.0,
+        "work/source_rows": 417174.0,
+        "work/state_updates": 280794.0
+      },
+      "training": {
+        "batch_size": 32,
+        "checkpoint_every": 20,
+        "data_seed": 1011,
+        "eps": 1e-06,
+        "eval_every": 20,
+        "log_every": 5,
+        "lr": 0.001,
+        "max_seconds": 2400,
+        "retain_checkpoint": true,
+        "steps": 80,
+        "weight_decay": 0.01
+      },
+      "validation_curve": [
+        {
+          "elapsed_seconds": 18.523269027471542,
+          "step": 0,
+          "validation/accuracy": 0.09375,
+          "validation/loss": 2.3016878962516785
+        },
+        {
+          "elapsed_seconds": 292.4908841699362,
+          "step": 20,
+          "time/validation_seconds": 18.72491067275405,
+          "validation/accuracy": 0.1328125,
+          "validation/loss": 2.1181316524744034
+        },
+        {
+          "elapsed_seconds": 567.8232231810689,
+          "step": 40,
+          "time/validation_seconds": 19.01633433625102,
+          "validation/accuracy": 0.1875,
+          "validation/loss": 2.03097203373909
+        },
+        {
+          "elapsed_seconds": 845.4275884255767,
+          "step": 60,
+          "time/validation_seconds": 18.912439674139023,
+          "validation/accuracy": 0.2734375,
+          "validation/loss": 1.9295889139175415
+        },
+        {
+          "elapsed_seconds": 1122.4906709380448,
+          "step": 80,
+          "time/validation_seconds": 18.937743112444878,
+          "validation/accuracy": 0.3515625,
+          "validation/loss": 1.8160508573055267
+        }
+      ]
+    },
+    "npu-fc": {
+      "actual_observation": "all 80 updates; index==step in the frozen loop makes the first-step clause true each iteration",
+      "configuration_identity": "869bab5819cb83c28550d7edaa6b38fef100c255efa7c31b80d04aabe79070fe",
+      "configured_log_every": 5,
+      "evaluation": {
+        "batch_size": 16,
+        "samples": 128,
+        "seed": 20261107,
+        "test": false
+      },
+      "lens": {
+        "destination_name": "tl-a1-npu-fc-dense-s11-explore-projection-344977540a74",
+        "destination_run_id": "28e19f6c575341a59ee23bf198dd66a6",
+        "event_count": 85,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-npu-fc-dense-s11-explore",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "median_step_seconds": 18.597444778308272,
+      "model": {
+        "depth": 2,
+        "kind": "core5",
+        "region_width": 4,
+        "send": "dense",
+        "temperature": 0.25,
+        "width": 16
+      },
+      "observed_training_steps": 80,
+      "peak_process_rss_mib": 2288.8671875,
+      "records": [
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/config.json",
+          "sha256": "869bab5819cb83c28550d7edaa6b38fef100c255efa7c31b80d04aabe79070fe"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/manifest.json",
+          "sha256": "e25bbb88c4db59c5406a928e145b1f8357a474dbbd72f1e236ea5efd991d70e6"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/result.json",
+          "sha256": "9bc6edd346994ffd5362e1e0a038519c3b5b947fa18519bfbc18b7579056c8fb"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/metrics.jsonl",
+          "sha256": "cec73f17da78f6880c3fee4729eaec330881db1d6e37171ff74a64c5215b2e96"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/projection.json",
+          "sha256": "18f96c4300907b300748603e917912119bcb2bf49be3237392bc22895059c9d5"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/checkpoint.json",
+          "sha256": "5606751764c9caaccc1998d012338776a08a954d257e917bd9f4444d11a23c60"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/checkpoint.pt",
+          "sha256": "9fab93db70209b1dffaa38e68187173f5f84e8e0cdf3a3f7bd1b1dc7d38437c6"
+        }
+      ],
+      "result": {
+        "config_sha256": "869bab5819cb83c28550d7edaa6b38fef100c255efa7c31b80d04aabe79070fe",
+        "elapsed_seconds": 1672.0875423513353,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T16:33:32.601056+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 128
+        },
+        "initial_validation": {
+          "accuracy": 0.1171875,
+          "loss": 2.2381206899881363,
+          "samples": 128,
+          "seconds": 31.744573168456554,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.2421875,
+          "loss": 1.9847991615533829,
+          "samples": 128,
+          "seconds": 30.05494912713766,
+          "step": 80
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-npu-fc-dense-s11-explore",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T16:05:40.513534+00:00",
+        "state": "completed",
+        "steps": 80,
+        "study_id": "TL-A1",
+        "trained_examples": 2560,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.2421875
+        },
+        "without_history": {
+          "accuracy": 0.1015625,
+          "loss": 2.217679977416992,
+          "samples": 128,
+          "seconds": 30.048267539590597
+        }
+      },
+      "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+      "terminal_checkpoint": {
+        "integrity": "hash matched; not a new continuation test",
+        "sha256": "9fab93db70209b1dffaa38e68187173f5f84e8e0cdf3a3f7bd1b1dc7d38437c6",
+        "step": 80
+      },
+      "totals": {
+        "time/step_seconds": 1488.9337922222912,
+        "work/candidates": 143360.0,
+        "work/full": 143360.0,
+        "work/messages": 286720.0,
+        "work/read_events": 143360.0,
+        "work/source_rows": 358400.0,
+        "work/state_updates": 143360.0
+      },
+      "training": {
+        "batch_size": 32,
+        "checkpoint_every": 20,
+        "data_seed": 1011,
+        "eps": 1e-06,
+        "eval_every": 20,
+        "log_every": 5,
+        "lr": 0.001,
+        "max_seconds": 7200,
+        "retain_checkpoint": true,
+        "steps": 80,
+        "weight_decay": 0.01
+      },
+      "validation_curve": [
+        {
+          "elapsed_seconds": 31.91233381256461,
+          "step": 0,
+          "validation/accuracy": 0.1171875,
+          "validation/loss": 2.2381206899881363
+        },
+        {
+          "elapsed_seconds": 434.2363843135536,
+          "step": 20,
+          "time/validation_seconds": 30.0219121016562,
+          "validation/accuracy": 0.171875,
+          "validation/loss": 2.1142004877328873
+        },
+        {
+          "elapsed_seconds": 836.4035261645913,
+          "step": 40,
+          "time/validation_seconds": 30.15804709121585,
+          "validation/accuracy": 0.171875,
+          "validation/loss": 2.083803564310074
+        },
+        {
+          "elapsed_seconds": 1239.5914382189512,
+          "step": 60,
+          "time/validation_seconds": 30.19672044739127,
+          "validation/accuracy": 0.234375,
+          "validation/loss": 2.037139058113098
+        },
+        {
+          "elapsed_seconds": 1641.9667536504567,
+          "step": 80,
+          "time/validation_seconds": 30.05494912713766,
+          "validation/accuracy": 0.2421875,
+          "validation/loss": 1.9847991615533829
+        }
+      ]
+    },
+    "npu-query": {
+      "actual_observation": "all 80 updates; index==step in the frozen loop makes the first-step clause true each iteration",
+      "configuration_identity": "3e9bd43ed29d3fda8950830b36c99a598b52409298c0f5dcc08245a83de99184",
+      "configured_log_every": 5,
+      "evaluation": {
+        "batch_size": 16,
+        "samples": 128,
+        "seed": 20261107,
+        "test": false
+      },
+      "lens": {
+        "destination_name": "tl-a1-npu-query-s11-explore-projection-230fa3b08fb6",
+        "destination_run_id": "81555934c7534ad6bdc3d77715b395be",
+        "event_count": 85,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-npu-query-s11-explore",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "median_step_seconds": 0.0019998885691165924,
+      "model": {
+        "kind": "no_memory",
+        "width": 16
+      },
+      "observed_training_steps": 80,
+      "peak_process_rss_mib": 1823.15234375,
+      "records": [
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/config.json",
+          "sha256": "3e9bd43ed29d3fda8950830b36c99a598b52409298c0f5dcc08245a83de99184"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/manifest.json",
+          "sha256": "8e73ac7a28d7a99f28e77a5e034da4c8848d06dcd0c07f88a69718d9b0ec115a"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/result.json",
+          "sha256": "23e0ed6a89aad9caf4c418bb97cd9ac33f836ce3c4c57c928dcc3434a333a97d"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/metrics.jsonl",
+          "sha256": "221e4be2b1e36f6ec6cf1cd1f85f3c72026f2345535a4faac6d60641f5549a41"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/projection.json",
+          "sha256": "36e579d7daf00aad193a94ac1ba884816bb6bb97fb3d460a70c3b60f34c86896"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/checkpoint.json",
+          "sha256": "82f96b02731f9740a23900c2eb76d1795216e5d9dcce9f3890a08bf7380034af"
+        },
+        {
+          "path": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/checkpoint.pt",
+          "sha256": "966c76760d4250d8cb7bac0c0dfcc65b2e1711dbbabd02ce89f773a0dbe89187"
+        }
+      ],
+      "result": {
+        "config_sha256": "3e9bd43ed29d3fda8950830b36c99a598b52409298c0f5dcc08245a83de99184",
+        "elapsed_seconds": 1.0555109679698944,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T16:05:34.240778+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 128
+        },
+        "initial_validation": {
+          "accuracy": 0.109375,
+          "loss": 2.259655714035034,
+          "samples": 128,
+          "seconds": 0.4109652265906334,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.109375,
+          "loss": 2.1461797058582306,
+          "samples": 128,
+          "seconds": 0.02095608040690422,
+          "step": 80
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-npu-query-s11-explore",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T16:05:33.185278+00:00",
+        "state": "completed",
+        "steps": 80,
+        "study_id": "TL-A1",
+        "trained_examples": 2560,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.109375
+        }
+      },
+      "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+      "terminal_checkpoint": {
+        "integrity": "hash matched; not a new continuation test",
+        "sha256": "966c76760d4250d8cb7bac0c0dfcc65b2e1711dbbabd02ce89f773a0dbe89187",
+        "step": 80
+      },
+      "totals": {
+        "time/step_seconds": 0.2323075570166111
+      },
+      "training": {
+        "batch_size": 32,
+        "checkpoint_every": 20,
+        "data_seed": 1011,
+        "eps": 1e-06,
+        "eval_every": 20,
+        "log_every": 5,
+        "lr": 0.001,
+        "max_seconds": 7200,
+        "retain_checkpoint": true,
+        "steps": 80,
+        "weight_decay": 0.01
+      },
+      "validation_curve": [
+        {
+          "elapsed_seconds": 0.48216502740979195,
+          "step": 0,
+          "validation/accuracy": 0.109375,
+          "validation/loss": 2.259655714035034
+        },
+        {
+          "elapsed_seconds": 0.6811872124671936,
+          "step": 20,
+          "time/validation_seconds": 0.020860496908426285,
+          "validation/accuracy": 0.109375,
+          "validation/loss": 2.2206860333681107
+        },
+        {
+          "elapsed_seconds": 0.8118785098195076,
+          "step": 40,
+          "time/validation_seconds": 0.020861458033323288,
+          "validation/accuracy": 0.1171875,
+          "validation/loss": 2.1892385482788086
+        },
+        {
+          "elapsed_seconds": 0.9306894727051258,
+          "step": 60,
+          "time/validation_seconds": 0.02079436555504799,
+          "validation/accuracy": 0.1171875,
+          "validation/loss": 2.163913294672966
+        },
+        {
+          "elapsed_seconds": 1.0498168915510178,
+          "step": 80,
+          "time/validation_seconds": 0.02095608040690422,
+          "validation/accuracy": 0.109375,
+          "validation/loss": 2.1461797058582306
+        }
+      ]
+    }
+  },
+  "reviewed_at": "2026-11-07T18:37:38.592378+00:00",
+  "reviewer": "Codex primary agent",
+  "schema": "tide-lab-reviewed-terminal-v1",
+  "scope": "Final 80-step seed11 pilots, validation128 only; CPU64 400-step test results remain in a1-confirmation.json; numerical checks are separate",
+  "user_acceptance": "pending"
+}
