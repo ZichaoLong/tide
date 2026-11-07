@@ -130,8 +130,13 @@ def current_cgroup():
 def cgroup_processes(group):
     if not group:
         return []
-    # This host uses cgroup v2. A missing retired group is empty, not a running job.
-    root = Path("/sys/fs/cgroup") / group.lstrip("/")
+    # Inspect the hierarchy that owns lifecycle. This host currently exposes
+    # v1 name=systemd; resource controllers may remain at shared ancestors.
+    # A missing retired group is empty, not a running job.
+    mount = Path("/sys/fs/cgroup")
+    if not (mount / "cgroup.controllers").exists():
+        mount = mount / "systemd"
+    root = mount / group.lstrip("/")
     pids = set()
     try:
         paths = [root / "cgroup.procs", *root.rglob("cgroup.procs")]

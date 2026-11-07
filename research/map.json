@@ -317,9 +317,45 @@
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
           "config": "configs/studies/a1-npu-stage.json",
           "record": "runs/a1-npu-explore/stage.json"
+        },
+        {
+          "id": "tl-a1-npu-cal-b32-s11",
+          "status": "completed",
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "config": "configs/checks/calibrate-a-npu-b32.json",
+          "record": "runs/a1-npu-explore/calibrate-b32/tl-a1-npu-cal-b32-s11/result.json",
+          "lens_record": "runs/a1-npu-explore/calibrate-b32/tl-a1-npu-cal-b32-s11/projection.json"
+        },
+        {
+          "id": "tl-a1-npu-cal-b128-s11",
+          "status": "completed",
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "config": "configs/checks/calibrate-a-npu-b128.json",
+          "record": "runs/a1-npu-explore/calibrate-b128/tl-a1-npu-cal-b128-s11/result.json",
+          "lens_record": "runs/a1-npu-explore/calibrate-b128/tl-a1-npu-cal-b128-s11/projection.json"
+        },
+        {
+          "id": "tl-a1-npu-query-s11-explore",
+          "status": "completed",
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "config": "runs/a1-npu-explore/resolved-query.json",
+          "record": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/result.json",
+          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/projection.json"
+        },
+        {
+          "id": "tl-a1-npu-fc-dense-s11-explore",
+          "status": "running",
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "config": "runs/a1-npu-explore/resolved-fc-dense.json",
+          "record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/manifest.json",
+          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/projection.json"
         }
       ],
-      "execution_note": "CPU64三seed400步均完成，无记忆对照约机会水平，历史干预消除收益。NPU FP32 actual-width16离散/机制与AdamW恢复通过，严格数值失败保留；batch32实测1.674例/秒，batch128为1.579例/秒，后者80步预计超2h，因此选32。运行仍非学习结论。",
+      "execution_note": "CPU64三seed400步均完成，无记忆对照约机会水平，历史干预消除收益。NPU FP32 actual-width16离散/机制与AdamW恢复通过，严格数值失败保留；batch32实测1.674例/秒，batch128为1.579例/秒，后者80步预计超2h，因此选32。运行仍非学习结论。 有界profile超时并确认后代清理，记观察失败；未追加profile。query完成、FC学习已开始，保留未知算子耗时来源。",
       "observed_at": "2026-11-07T15:12:19+00:00"
     },
     {
@@ -472,7 +508,7 @@
       "kind": "experiment",
       "status": "running",
       "title": "HB 多区域稀疏",
-      "summary": "HB准入通过；共同batch正在校准",
+      "summary": "HB两候选B32/80步先导运行",
       "x": 620,
       "y": 360,
       "question": "在同一 HB、参数初值、总量 k 和数据预算下，可学习稀疏发送能否保留质量并减少实际 Full、消息与候选工作？",
@@ -501,19 +537,45 @@
         {
           "label": "HB准备状态与batch选择",
           "path": "runs/a2-hb-prepare/preparation.json"
+        },
+        {
+          "label": "HB共同batch校准与只读配置身份",
+          "path": "docs/evidence/a2-hb-calibration.json"
+        },
+        {
+          "label": "HB一页问题、当前证据与边界",
+          "path": "docs/studies/TL-A2.md"
         }
       ],
       "runs": [
         {
           "id": "a2-hb-prepare",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
           "config": "configs/studies/a2-hb-prepare.json",
           "record": "runs/a2-hb-prepare/preparation.json"
+        },
+        {
+          "id": "tl-a2-hb-dense-s11-pilot",
+          "status": "running",
+          "seed": 11,
+          "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "config": "runs/a2-hb-prepare/resolved-hb-dense.json",
+          "record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/manifest.json",
+          "lens_record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/projection.json"
+        },
+        {
+          "id": "tl-a2-hb-sparse-s11-pilot",
+          "status": "running",
+          "seed": 11,
+          "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "config": "runs/a2-hb-prepare/resolved-hb-sparse.json",
+          "record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/manifest.json",
+          "lens_record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/projection.json"
         }
       ],
-      "execution_note": "a2-hb-prepare实际运行，源码aff03ee。16节点/4区域、136252可训练参数，稠密/quad初始参数逐值相同。CPU FP32两候选离散/机制及完整AdamW恢复通过；dense严格数值passed，sparse有限严格失败保留。共同B32/B128校准尚未完成，无HB学习结论。"
+      "execution_note": "准备aff03ee已completed且后代释放。16节点/4区域、136252可训练参数、稠密/quad初始参数逐值相同；CPU FP32离散/机制和完整AdamW恢复均passed，dense严格数值passed，sparse有限严格失败保留。共同batch32计时step12.72/12.69秒，128合计吞吐仅提高约1%且不满足各40分钟预算，因此选32。两个80步先导现已实际训练，暂无效果结论，不自动正式重复。"
     },
     {
       "id": "E2",
@@ -884,5 +946,5 @@
       "detail": "FC在原任务的学习门槛成立，允许原批次小HB先导。仅迁移KV/任务/BPTT配方启示；HB图邻域与支持改变，必须重新检查候选历史、离散路由、共享梯度、恢复及质量，当前不是HB收益支持。"
     }
   ],
-  "updated_at": "2026-11-07T16:08:44.612010+00:00"
+  "updated_at": "2026-11-07T16:17:37.820455+00:00"
 }

@@ -1,0 +1,401 @@
+{
+  "calibration": [
+    {
+      "batch": 32,
+      "eligible": true,
+      "paired_examples_per_second": 2.51888851524733,
+      "scope": "common independent batch; microbatch=global batch, accumulation1; post-warmup forward/backward/clip/gradient observation/optimizer, excludes data/validation/checkpoint/writer",
+      "variants": {
+        "dense": {
+          "measured_seconds": [
+            12.64341651275754,
+            12.79437417164445
+          ],
+          "median_step_seconds": 12.718895342200994,
+          "observed_work": {
+            "activity/full_fraction": 1.0,
+            "activity/nonpositive_fraction": 0.0,
+            "activity/send_strength": 1341.1512451171875,
+            "gradient/head_connected_fraction": 1.0,
+            "gradient/head_norm": 0.8060823678970337,
+            "gradient/other_connected_fraction": 1.0,
+            "gradient/other_norm": 0.12105421721935272,
+            "gradient/tide_connected_fraction": 1.0,
+            "gradient/tide_norm": 0.579288899898529,
+            "region/0/candidates": 896.0,
+            "region/0/full": 896.0,
+            "region/1/candidates": 896.0,
+            "region/1/full": 896.0,
+            "region/2/candidates": 896.0,
+            "region/2/full": 896.0,
+            "region/3/candidates": 896.0,
+            "region/3/full": 896.0,
+            "resource/cpu_maxrss_mib": 940.31640625,
+            "time/step_seconds": 12.79437417164445,
+            "train/accuracy": 0.15625,
+            "train/gradient_norm": 1.1511904001235962,
+            "train/loss": 2.421657085418701,
+            "work/candidates": 3584.0,
+            "work/full": 3584.0,
+            "work/max_full_batch": 224.0,
+            "work/max_region_batch": 224.0,
+            "work/max_state_batch": 32.0,
+            "work/max_state_sequence": 7.0,
+            "work/messages": 7168.0,
+            "work/read_events": 3584.0,
+            "work/region_blocks": 4.0,
+            "work/source_rows": 8064.0,
+            "work/state_updates": 3584.0,
+            "work/train_examples": 96.0,
+            "work/train_tokens": 672.0
+          },
+          "predicted_learning_seconds": 1456.0217295885086,
+          "process_seconds": 45.557066828012466
+        },
+        "sparse": {
+          "measured_seconds": [
+            12.502993281930685,
+            12.875280033797026
+          ],
+          "median_step_seconds": 12.689136657863855,
+          "observed_work": {
+            "activity/full_fraction": 0.6200676437429538,
+            "activity/nonpositive_fraction": 0.37993234395980835,
+            "activity/send_strength": 1339.9683837890625,
+            "gradient/head_connected_fraction": 1.0,
+            "gradient/head_norm": 0.7122817039489746,
+            "gradient/other_connected_fraction": 1.0,
+            "gradient/other_norm": 0.11431732773780823,
+            "gradient/tide_connected_fraction": 1.0,
+            "gradient/tide_norm": 0.6925207376480103,
+            "region/0/candidates": 896.0,
+            "region/0/full": 527.0,
+            "region/1/candidates": 878.0,
+            "region/1/full": 567.0,
+            "region/2/candidates": 878.0,
+            "region/2/full": 552.0,
+            "region/3/candidates": 896.0,
+            "region/3/full": 554.0,
+            "resource/cpu_maxrss_mib": 903.2109375,
+            "time/step_seconds": 12.875280033797026,
+            "train/accuracy": 0.125,
+            "train/gradient_norm": 1.304636001586914,
+            "train/loss": 2.41481876373291,
+            "work/candidates": 3548.0,
+            "work/full": 2200.0,
+            "work/max_full_batch": 223.0,
+            "work/max_region_batch": 224.0,
+            "work/max_state_batch": 32.0,
+            "work/max_state_sequence": 7.0,
+            "work/messages": 4346.0,
+            "work/read_events": 3548.0,
+            "work/region_blocks": 4.0,
+            "work/source_rows": 5242.0,
+            "work/state_updates": 3548.0,
+            "work/train_examples": 96.0,
+            "work/train_tokens": 672.0
+          },
+          "predicted_learning_seconds": 1448.9574995040894,
+          "process_seconds": 45.300585482269526
+        }
+      }
+    },
+    {
+      "batch": 128,
+      "eligible": false,
+      "paired_examples_per_second": 2.5444450010396498,
+      "scope": "common independent batch; microbatch=global batch, accumulation1; post-warmup forward/backward/clip/gradient observation/optimizer, excludes data/validation/checkpoint/writer",
+      "variants": {
+        "dense": {
+          "measured_seconds": [
+            51.67864661291242,
+            52.75626776739955
+          ],
+          "median_step_seconds": 52.21745719015598,
+          "observed_work": {
+            "activity/full_fraction": 1.0,
+            "activity/nonpositive_fraction": 0.0,
+            "activity/send_strength": 5361.7734375,
+            "gradient/head_connected_fraction": 1.0,
+            "gradient/head_norm": 0.687037467956543,
+            "gradient/other_connected_fraction": 1.0,
+            "gradient/other_norm": 0.10489986091852188,
+            "gradient/tide_connected_fraction": 1.0,
+            "gradient/tide_norm": 0.45869743824005127,
+            "region/0/candidates": 3584.0,
+            "region/0/full": 3584.0,
+            "region/1/candidates": 3584.0,
+            "region/1/full": 3584.0,
+            "region/2/candidates": 3584.0,
+            "region/2/full": 3584.0,
+            "region/3/candidates": 3584.0,
+            "region/3/full": 3584.0,
+            "resource/cpu_maxrss_mib": 2731.8125,
+            "time/step_seconds": 52.75626776739955,
+            "train/accuracy": 0.140625,
+            "train/gradient_norm": 0.8327231407165527,
+            "train/loss": 2.3593432903289795,
+            "work/candidates": 14336.0,
+            "work/full": 14336.0,
+            "work/max_full_batch": 896.0,
+            "work/max_region_batch": 896.0,
+            "work/max_state_batch": 128.0,
+            "work/max_state_sequence": 7.0,
+            "work/messages": 28672.0,
+            "work/read_events": 14336.0,
+            "work/region_blocks": 4.0,
+            "work/source_rows": 32256.0,
+            "work/state_updates": 14336.0,
+            "work/train_examples": 384.0,
+            "work/train_tokens": 2688.0
+          },
+          "predicted_learning_seconds": 5255.7090257406235,
+          "process_seconds": 162.86784492060542
+        },
+        "sparse": {
+          "measured_seconds": [
+            48.16000269725919,
+            48.62774632871151
+          ],
+          "median_step_seconds": 48.39387451298535,
+          "observed_work": {
+            "activity/full_fraction": 0.6440557955108688,
+            "activity/nonpositive_fraction": 0.3559442162513733,
+            "activity/send_strength": 5352.86474609375,
+            "gradient/head_connected_fraction": 1.0,
+            "gradient/head_norm": 0.6818621754646301,
+            "gradient/other_connected_fraction": 1.0,
+            "gradient/other_norm": 0.11215193569660187,
+            "gradient/tide_connected_fraction": 1.0,
+            "gradient/tide_norm": 0.6122889518737793,
+            "region/0/candidates": 3584.0,
+            "region/0/full": 2118.0,
+            "region/1/candidates": 3478.0,
+            "region/1/full": 2291.0,
+            "region/2/candidates": 3478.0,
+            "region/2/full": 2354.0,
+            "region/3/candidates": 3583.0,
+            "region/3/full": 2333.0,
+            "resource/cpu_maxrss_mib": 2563.390625,
+            "time/step_seconds": 48.62774632871151,
+            "train/accuracy": 0.1328125,
+            "train/gradient_norm": 0.9232615232467651,
+            "train/loss": 2.363851547241211,
+            "work/candidates": 14123.0,
+            "work/full": 9096.0,
+            "work/max_full_batch": 888.0,
+            "work/max_region_batch": 896.0,
+            "work/max_state_batch": 128.0,
+            "work/max_state_sequence": 7.0,
+            "work/messages": 17762.0,
+            "work/read_events": 14123.0,
+            "work/region_blocks": 4.0,
+            "work/source_rows": 21346.0,
+            "work/state_updates": 14123.0,
+            "work/train_examples": 384.0,
+            "work/train_tokens": 2688.0
+          },
+          "predicted_learning_seconds": 4883.053516566753,
+          "process_seconds": 150.71470830589533
+        }
+      }
+    }
+  ],
+  "paired_initialization": {
+    "model_facts": [
+      {
+        "bptt": "full episode",
+        "edges": 32,
+        "execution": "public eager Python packed; one host scheduler worker",
+        "graph_parameters": 134948,
+        "model_id": "7f54f8e07e363d6e5a378d244c28a0ba7e90540fb846c9f0ad4ba0e52d6529dd",
+        "nodes": 16,
+        "recipe": {
+          "branches": 2,
+          "depth": 1,
+          "ent_alpha": 1.0,
+          "family": "kv",
+          "memory_overrides": {
+            "memory_read": "qry"
+          },
+          "offsets": [
+            0,
+            1
+          ],
+          "profile": "baseline",
+          "region_overrides": {
+            "allocation_temperature": 0.25
+          },
+          "region_width": 4,
+          "regularizer": "ent",
+          "selection": "regional_total",
+          "source_mode": "region",
+          "sparse_denominator": 2,
+          "topology": "hb",
+          "width": 16
+        },
+        "regions": 4,
+        "state_reset": "fresh sequence",
+        "total_parameters": 136324,
+        "trainable_parameters": 136252
+      },
+      {
+        "bptt": "full episode",
+        "edges": 32,
+        "execution": "public eager Python packed; one host scheduler worker",
+        "graph_parameters": 134948,
+        "model_id": "99ad044cb316009dd08c30b008e24ea810b27922d8dfa7bc8a792f8804a74aaa",
+        "nodes": 16,
+        "recipe": {
+          "branches": 2,
+          "depth": 1,
+          "ent_alpha": null,
+          "family": "kv",
+          "memory_overrides": {
+            "memory_read": "qry"
+          },
+          "offsets": [
+            0,
+            1
+          ],
+          "profile": "baseline",
+          "region_overrides": {
+            "allocation_temperature": 0.25
+          },
+          "region_width": 4,
+          "regularizer": "quad",
+          "selection": "regional_total",
+          "source_mode": "region",
+          "sparse_denominator": 2,
+          "topology": "hb",
+          "width": 16
+        },
+        "regions": 4,
+        "state_reset": "fresh sequence",
+        "total_parameters": 136324,
+        "trainable_parameters": 136252
+      }
+    ],
+    "scope": "identical CPU FP32 parameter values/keys; sending regularizer differs",
+    "state": "passed"
+  },
+  "record_path": "runs/a2-hb-prepare/preparation.json",
+  "record_sha256": "1c35073452f6cf393bd47441ff04e399029ca7bf806e093798f32033505ba142",
+  "resolved": [
+    {
+      "config": "runs/a2-hb-prepare/resolved-hb-dense.json",
+      "send": "dense",
+      "sha256": "b2d29901881da3d1d67b5c1d7b44061052ffa5833d5809c8cbc9c7d910b7dc43"
+    },
+    {
+      "config": "runs/a2-hb-prepare/resolved-hb-sparse.json",
+      "send": "sparse",
+      "sha256": "bc06d126d09b9ffff17a742011e3b7a80518f8f43ac010b8b49576af9feb9ace"
+    }
+  ],
+  "reviewed_at": "2026-11-07T16:17:37.814075+00:00",
+  "schema": "tide-lab-reviewed-calibration-v1",
+  "scope": "common batch selection for one paired pilot; no learning or architecture-speedup conclusion",
+  "selection": {
+    "batch": 32,
+    "eligible": true,
+    "paired_examples_per_second": 2.51888851524733,
+    "reason": "common batch, within 10% of best paired throughput; each 80-step pilot fits time budget",
+    "scope": "common independent batch; microbatch=global batch, accumulation1; post-warmup forward/backward/clip/gradient observation/optimizer, excludes data/validation/checkpoint/writer",
+    "variants": {
+      "dense": {
+        "measured_seconds": [
+          12.64341651275754,
+          12.79437417164445
+        ],
+        "median_step_seconds": 12.718895342200994,
+        "observed_work": {
+          "activity/full_fraction": 1.0,
+          "activity/nonpositive_fraction": 0.0,
+          "activity/send_strength": 1341.1512451171875,
+          "gradient/head_connected_fraction": 1.0,
+          "gradient/head_norm": 0.8060823678970337,
+          "gradient/other_connected_fraction": 1.0,
+          "gradient/other_norm": 0.12105421721935272,
+          "gradient/tide_connected_fraction": 1.0,
+          "gradient/tide_norm": 0.579288899898529,
+          "region/0/candidates": 896.0,
+          "region/0/full": 896.0,
+          "region/1/candidates": 896.0,
+          "region/1/full": 896.0,
+          "region/2/candidates": 896.0,
+          "region/2/full": 896.0,
+          "region/3/candidates": 896.0,
+          "region/3/full": 896.0,
+          "resource/cpu_maxrss_mib": 940.31640625,
+          "time/step_seconds": 12.79437417164445,
+          "train/accuracy": 0.15625,
+          "train/gradient_norm": 1.1511904001235962,
+          "train/loss": 2.421657085418701,
+          "work/candidates": 3584.0,
+          "work/full": 3584.0,
+          "work/max_full_batch": 224.0,
+          "work/max_region_batch": 224.0,
+          "work/max_state_batch": 32.0,
+          "work/max_state_sequence": 7.0,
+          "work/messages": 7168.0,
+          "work/read_events": 3584.0,
+          "work/region_blocks": 4.0,
+          "work/source_rows": 8064.0,
+          "work/state_updates": 3584.0,
+          "work/train_examples": 96.0,
+          "work/train_tokens": 672.0
+        },
+        "predicted_learning_seconds": 1456.0217295885086,
+        "process_seconds": 45.557066828012466
+      },
+      "sparse": {
+        "measured_seconds": [
+          12.502993281930685,
+          12.875280033797026
+        ],
+        "median_step_seconds": 12.689136657863855,
+        "observed_work": {
+          "activity/full_fraction": 0.6200676437429538,
+          "activity/nonpositive_fraction": 0.37993234395980835,
+          "activity/send_strength": 1339.9683837890625,
+          "gradient/head_connected_fraction": 1.0,
+          "gradient/head_norm": 0.7122817039489746,
+          "gradient/other_connected_fraction": 1.0,
+          "gradient/other_norm": 0.11431732773780823,
+          "gradient/tide_connected_fraction": 1.0,
+          "gradient/tide_norm": 0.6925207376480103,
+          "region/0/candidates": 896.0,
+          "region/0/full": 527.0,
+          "region/1/candidates": 878.0,
+          "region/1/full": 567.0,
+          "region/2/candidates": 878.0,
+          "region/2/full": 552.0,
+          "region/3/candidates": 896.0,
+          "region/3/full": 554.0,
+          "resource/cpu_maxrss_mib": 903.2109375,
+          "time/step_seconds": 12.875280033797026,
+          "train/accuracy": 0.125,
+          "train/gradient_norm": 1.304636001586914,
+          "train/loss": 2.41481876373291,
+          "work/candidates": 3548.0,
+          "work/full": 2200.0,
+          "work/max_full_batch": 223.0,
+          "work/max_region_batch": 224.0,
+          "work/max_state_batch": 32.0,
+          "work/max_state_sequence": 7.0,
+          "work/messages": 4346.0,
+          "work/read_events": 3548.0,
+          "work/region_blocks": 4.0,
+          "work/source_rows": 5242.0,
+          "work/state_updates": 3548.0,
+          "work/train_examples": 96.0,
+          "work/train_tokens": 672.0
+        },
+        "predicted_learning_seconds": 1448.9574995040894,
+        "process_seconds": 45.300585482269526
+      }
+    }
+  },
+  "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434"
+}

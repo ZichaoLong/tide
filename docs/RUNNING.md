@@ -8,6 +8,8 @@
 | confirm-a-s22 | 同上，seed22 | configs/studies/confirm-a-s22.json | 同上 |
 | confirm-a-s33 | 同上，seed33 | configs/studies/confirm-a-s33.json | 同上 |
 | a1-npu-explore | 独立NPU数值/离散/机制、精确恢复→batch校准→同预算query/FC探索 | configs/studies/a1-npu-stage.json；实际选择另存runs/a1-npu-explore/resolved-*.json | 1NPU/CPU4线程/24GiB；设备≤3h、等待≤30min、服务≤3.5h；校准≤20min，学习≤2h/各80步 |
+| a2-hb-prepare（已完成） | HB配对初值、各自数值/离散/机制/恢复，共同B32/B128校准 | configs/studies/a2-hb-prepare.json；源码aff03ee | CPU1线程/RAM预算8GiB；准备20min/服务22min |
+| a2-hb-dense-pilot / a2-hb-sparse-pilot | 已满足依赖，B32各80步，两个CPU作业并行 | runs/a2-hb-prepare/resolved-hb-{dense,sparse}.json；生成后只读 | 各CPU1线程/RAM预算8GiB，训练40min、等待20min、服务70min |
 | pilot-b（已完成） | 原模型、TIDE、MLP均终态；不启动B正式重复 | configs/studies/pilot-b.json | 各40步/B32，单NPU+CPU4线程/32GiB，组内50min；等待≤15min，服务70min |
 
 新NPU阶段已确认进入background.slice，并通过共享队列取得物理1→逻辑npu:0；后续运行仍由队列选择，不能把当前物理ID写入模型。与三个CPU确认并行时，上限为1NPU/CPU配额7线程/RAM48GiB，低于首批64GiB。已完成B先导期间历史请求峰值为56GiB；这些均不是实际内存峰值或独占CPU承诺。B校准allocated峰值约3.8GiB，不等于驱动及其他HBM占用的完整峰值。最新状态以STATUS及job记录为准。
@@ -56,3 +58,20 @@ python scripts/job.py submit \
 新增NPU阶段不自动从半途重跑。若学习中断，停止并核对无后代后，使用同一`.local/source-a-npu`、原只读`resolved-fc-dense.json`和该run的`checkpoint.pt`提交新NPU作业，命令仍是`python -m tide_lab.train --config ABS_CONFIG --resume ABS_CHECKPOINT --output NEW_OUTPUT`，另设新run ID和剩余有界预算；保留原stage失败/中断。NPU checkpoint每20步发布。该B2恢复检查覆盖同栈完整AdamW/model/数据步/RNG，不覆盖不同物理映射或新增batch的逐值资格；当前恢复代码仍严格核对身份，不因探索而绕过。
 
 本机实际资源控制与请求不同：cgroup v1未为用户服务委派CPU/内存控制器，CPUQuota/MemoryMax字段仅为请求；应用线程数和服务超时有效。详见STATUS及`artifacts/jobs/a1-npu-explore/resource-policy-observation.json`，不能把配置值当已生效的RAM硬限制。
+
+
+## HB依赖等待与固定输入
+
+HB模型与训练包固定`aff03eee27960113694c7c3d3b7a5c4cc82f8434`，只读`.local/source-hb-pilot`（树SHA256 `73e4a05c941dd2eb071ea816931765958df750f006fa106e90e8e92b26d710e4`）；等待驱动是只读`.local/source-hb-dependent/scripts/run_hb_after_preparation.py`，源码`e712831bd65c54cd8b361baac2cc8c47e7b2d5f7`，文件hash另列在各job.json的inputs。两个服务的cwd/PYTHONPATH仍指向aff03ee的训练源码，没有修改准备作业的活动输入。
+
+```sh
+python scripts/job.py status artifacts/jobs/a2-hb-prepare
+python scripts/job.py status artifacts/jobs/a2-hb-dense-pilot
+python scripts/job.py logs artifacts/jobs/a2-hb-dense-pilot --lines 60
+# 如需取消一个先导，整个等待/训练/记录器一同停止并检查后代
+python scripts/job.py stop artifacts/jobs/a2-hb-dense-pilot
+```
+
+sparse替换dense即可。准备状态在`runs/a2-hb-prepare/preparation.json`，每个先导的`runs/a2-hb-{dense,sparse}-pilot/dependency.json`区分waiting_dependency/admitted/failed。systemd的active不表示已经训练。准入后实际结果位于`learning/tl-a2-hb-{dense,sparse}-s11-pilot/`，Lens同此前缀查找，projection.json核对目标身份；尚未生成的run不当作已有结果。
+
+HB恢复使用新job/output，保留`.local/source-hb-pilot`、原resolved配置及该run的checkpoint，按上文直接`python -m tide_lab.train --config ABS_CONFIG --resume ABS_CHECKPOINT --output NEW_OUTPUT`，限定剩余原预算；原等待驱动不会自动续训或再开正式重复。当前工作区的status/stop查看器支持实际cgroup v1全服务后代检查，活动作业仍保持旧冻结源码；正常子阶段退出另有自己的进程组清理记录。
