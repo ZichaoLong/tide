@@ -2,29 +2,29 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "首批训练全部终态，当前无活动作业，待用户验收。FC三seed检索学习成立；HB减少Full/消息但未达质量门槛；预训练旁路收益未证实。严格数值失败独立保留。",
+  "notice": "首批结论已审阅，用户授权第二批有限跟进：FC机制评估、HB400步配对、NPU轻量采样、冻结骨干旁路。新结果待检查；旧严格失败和学习门槛保留。",
   "width": 1490,
-  "height": 1010,
+  "height": 1480,
   "columns": [
     {
-      "x": 30,
-      "title": "起点与已有依据"
+      "title": "起点与已有依据",
+      "x": 30
     },
     {
-      "x": 325,
-      "title": "最小校准与接入"
+      "title": "最小校准与接入",
+      "x": 325
     },
     {
-      "x": 620,
-      "title": "学习与结构改造"
+      "title": "学习与结构改造",
+      "x": 620
     },
     {
-      "x": 915,
-      "title": "结果与迁移判断"
+      "title": "结果与迁移判断",
+      "x": 915
     },
     {
-      "x": 1210,
-      "title": "目标"
+      "title": "目标",
+      "x": 1210
     }
   ],
   "nodes": [
@@ -152,22 +152,22 @@
       ],
       "runs": [
         {
+          "config": "configs/checks/calibrate-b-b8.json",
           "id": "tl-b0-calibrate-b8-s11",
-          "status": "completed",
+          "lens_record": "runs/calibrate-b/tl-b0-calibrate-b8-s11/projection.json",
+          "record": "runs/calibrate-b/tl-b0-calibrate-b8-s11/result.json",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
-          "config": "configs/checks/calibrate-b-b8.json",
-          "record": "runs/calibrate-b/tl-b0-calibrate-b8-s11/result.json",
-          "lens_record": "runs/calibrate-b/tl-b0-calibrate-b8-s11/projection.json"
+          "status": "completed"
         },
         {
+          "config": "configs/checks/calibrate-b-b32.json",
           "id": "tl-b0-calibrate-b32-s11",
-          "status": "completed",
+          "lens_record": "runs/calibrate-b/tl-b0-calibrate-b32-s11/projection.json",
+          "record": "runs/calibrate-b/tl-b0-calibrate-b32-s11/result.json",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
-          "config": "configs/checks/calibrate-b-b32.json",
-          "record": "runs/calibrate-b/tl-b0-calibrate-b32-s11/result.json",
-          "lens_record": "runs/calibrate-b/tl-b0-calibrate-b32-s11/projection.json"
+          "status": "completed"
         }
       ],
       "observed_at": "2026-11-07T15:12:19+00:00",
@@ -251,120 +251,120 @@
       ],
       "runs": [
         {
-          "id": "tl-a1-query-s11-pilot",
-          "status": "completed",
-          "seed": 11,
-          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-query-pilot.json",
+          "id": "tl-a1-query-s11-pilot",
+          "lens_record": "runs/pilot-a/tl-a1-query-s11-pilot/projection.json",
           "record": "runs/pilot-a/tl-a1-query-s11-pilot/result.json",
-          "lens_record": "runs/pilot-a/tl-a1-query-s11-pilot/projection.json"
-        },
-        {
-          "id": "tl-a1-fc-dense-s11-pilot",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/a1-fc-dense-pilot.json",
+          "id": "tl-a1-fc-dense-s11-pilot",
+          "lens_record": "runs/pilot-a/tl-a1-fc-dense-s11-pilot/projection.json",
           "record": "runs/pilot-a/tl-a1-fc-dense-s11-pilot/result.json",
-          "lens_record": "runs/pilot-a/tl-a1-fc-dense-s11-pilot/projection.json"
-        },
-        {
-          "id": "tl-a1-query-s11-confirm",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/a1-query-s11.json",
+          "id": "tl-a1-query-s11-confirm",
+          "lens_record": "runs/confirm-a-s11/tl-a1-query-s11-confirm/projection.json",
           "record": "runs/confirm-a-s11/tl-a1-query-s11-confirm/result.json",
-          "lens_record": "runs/confirm-a-s11/tl-a1-query-s11-confirm/projection.json"
-        },
-        {
-          "id": "tl-a1-fc-dense-s11-confirm",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/a1-fc-dense-s11.json",
+          "id": "tl-a1-fc-dense-s11-confirm",
+          "lens_record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/projection.json",
           "record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/result.json",
-          "lens_record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/projection.json"
+          "seed": 11,
+          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
         },
         {
-          "id": "tl-a1-query-s22-confirm",
-          "status": "completed",
-          "seed": 22,
-          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-query-s22.json",
+          "id": "tl-a1-query-s22-confirm",
+          "lens_record": "runs/confirm-a-s22/tl-a1-query-s22-confirm/projection.json",
           "record": "runs/confirm-a-s22/tl-a1-query-s22-confirm/result.json",
-          "lens_record": "runs/confirm-a-s22/tl-a1-query-s22-confirm/projection.json"
-        },
-        {
-          "id": "tl-a1-fc-dense-s22-confirm",
-          "status": "completed",
           "seed": 22,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/a1-fc-dense-s22.json",
+          "id": "tl-a1-fc-dense-s22-confirm",
+          "lens_record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/projection.json",
           "record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/result.json",
-          "lens_record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/projection.json"
+          "seed": 22,
+          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
         },
         {
-          "id": "tl-a1-query-s33-confirm",
-          "status": "completed",
-          "seed": 33,
-          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-query-s33.json",
+          "id": "tl-a1-query-s33-confirm",
+          "lens_record": "runs/confirm-a-s33/tl-a1-query-s33-confirm/projection.json",
           "record": "runs/confirm-a-s33/tl-a1-query-s33-confirm/result.json",
-          "lens_record": "runs/confirm-a-s33/tl-a1-query-s33-confirm/projection.json"
-        },
-        {
-          "id": "tl-a1-fc-dense-s33-confirm",
-          "status": "completed",
           "seed": 33,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/a1-fc-dense-s33.json",
+          "id": "tl-a1-fc-dense-s33-confirm",
+          "lens_record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/projection.json",
           "record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/result.json",
-          "lens_record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/projection.json"
+          "seed": 33,
+          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
         },
         {
-          "id": "a1-npu-explore",
-          "status": "completed",
-          "seed": 11,
-          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
           "config": "configs/studies/a1-npu-stage.json",
-          "record": "runs/a1-npu-explore/stage.json"
-        },
-        {
-          "id": "tl-a1-npu-cal-b32-s11",
-          "status": "completed",
+          "id": "a1-npu-explore",
+          "record": "runs/a1-npu-explore/stage.json",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "status": "completed"
+        },
+        {
           "config": "configs/checks/calibrate-a-npu-b32.json",
+          "id": "tl-a1-npu-cal-b32-s11",
+          "lens_record": "runs/a1-npu-explore/calibrate-b32/tl-a1-npu-cal-b32-s11/projection.json",
           "record": "runs/a1-npu-explore/calibrate-b32/tl-a1-npu-cal-b32-s11/result.json",
-          "lens_record": "runs/a1-npu-explore/calibrate-b32/tl-a1-npu-cal-b32-s11/projection.json"
-        },
-        {
-          "id": "tl-a1-npu-cal-b128-s11",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "status": "completed"
+        },
+        {
           "config": "configs/checks/calibrate-a-npu-b128.json",
+          "id": "tl-a1-npu-cal-b128-s11",
+          "lens_record": "runs/a1-npu-explore/calibrate-b128/tl-a1-npu-cal-b128-s11/projection.json",
           "record": "runs/a1-npu-explore/calibrate-b128/tl-a1-npu-cal-b128-s11/result.json",
-          "lens_record": "runs/a1-npu-explore/calibrate-b128/tl-a1-npu-cal-b128-s11/projection.json"
-        },
-        {
-          "id": "tl-a1-npu-query-s11-explore",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "status": "completed"
+        },
+        {
           "config": "runs/a1-npu-explore/resolved-query.json",
+          "id": "tl-a1-npu-query-s11-explore",
+          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/projection.json",
           "record": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/result.json",
-          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-query-s11-explore/projection.json"
-        },
-        {
-          "id": "tl-a1-npu-fc-dense-s11-explore",
-          "status": "completed",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "status": "completed"
+        },
+        {
           "config": "runs/a1-npu-explore/resolved-fc-dense.json",
+          "id": "tl-a1-npu-fc-dense-s11-explore",
+          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/projection.json",
           "record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/result.json",
-          "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/projection.json"
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "status": "completed"
         }
       ],
       "execution_note": "CPU64三seed400步test97.27%/99.22%/99.61%。NPU FP32/80步val24.22%，query10.94%，移除历史10.16%，与CPU64旧80步五个accuracy点一致；严格数值仍failed，离散/机制/恢复按小型范围passed。全部终态、Lens verified，profile超时独立保留；当前实际每步观测，耗时包含该开销。",
@@ -439,13 +439,13 @@
       ],
       "runs": [
         {
+          "config": "artifacts/lens-admission/manifest.json",
           "id": "tl-lens-admission-20261107-a",
-          "status": "completed",
+          "lens_record": "artifacts/lens-admission/projection.json",
+          "record": "artifacts/lens-admission/projection.json",
           "seed": 0,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
-          "config": "artifacts/lens-admission/manifest.json",
-          "record": "artifacts/lens-admission/projection.json",
-          "lens_record": "artifacts/lens-admission/projection.json"
+          "status": "completed"
         }
       ],
       "observed_at": "2026-11-07T15:12:19+00:00"
@@ -492,28 +492,28 @@
       ],
       "runs": [
         {
-          "id": "tl-b1-none-s11-pilot",
-          "status": "completed",
-          "seed": 11,
-          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/b1-none-pilot.json",
-          "record": "runs/pilot-b/tl-b1-none-s11-pilot/result.json"
-        },
-        {
-          "id": "tl-b1-tide-s11-pilot",
-          "status": "completed",
+          "id": "tl-b1-none-s11-pilot",
+          "record": "runs/pilot-b/tl-b1-none-s11-pilot/result.json",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/b1-tide-pilot.json",
-          "record": "runs/pilot-b/tl-b1-tide-s11-pilot/result.json"
-        },
-        {
-          "id": "tl-b1-mlp-s11-pilot",
-          "status": "completed",
+          "id": "tl-b1-tide-s11-pilot",
+          "record": "runs/pilot-b/tl-b1-tide-s11-pilot/result.json",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
+        },
+        {
           "config": "configs/studies/b1-mlp-pilot.json",
-          "record": "runs/pilot-b/tl-b1-mlp-s11-pilot/result.json"
+          "id": "tl-b1-mlp-s11-pilot",
+          "record": "runs/pilot-b/tl-b1-mlp-s11-pilot/result.json",
+          "seed": 11,
+          "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+          "status": "completed"
         }
       ],
       "execution_note": "三候选均已完成FP32/B32/seed11/40步先导，原模型/TIDE/MLP validation12.50%/17.97%/12.50%，关闭TIDE分支accuracy不变。按有限数值探索记录，严格失败独立保留；初态、梯度与小型恢复通过不代表预测收益。没有活动或等待的B作业。",
@@ -565,30 +565,30 @@
       ],
       "runs": [
         {
-          "id": "a2-hb-prepare",
-          "status": "completed",
-          "seed": 11,
-          "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
           "config": "configs/studies/a2-hb-prepare.json",
-          "record": "runs/a2-hb-prepare/preparation.json"
-        },
-        {
-          "id": "tl-a2-hb-dense-s11-pilot",
-          "status": "completed",
+          "id": "a2-hb-prepare",
+          "record": "runs/a2-hb-prepare/preparation.json",
           "seed": 11,
           "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "status": "completed"
+        },
+        {
           "config": "runs/a2-hb-prepare/resolved-hb-dense.json",
+          "id": "tl-a2-hb-dense-s11-pilot",
+          "lens_record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/projection.json",
           "record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/result.json",
-          "lens_record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/projection.json"
-        },
-        {
-          "id": "tl-a2-hb-sparse-s11-pilot",
-          "status": "completed",
           "seed": 11,
           "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "status": "completed"
+        },
+        {
           "config": "runs/a2-hb-prepare/resolved-hb-sparse.json",
+          "id": "tl-a2-hb-sparse-s11-pilot",
+          "lens_record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/projection.json",
           "record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/result.json",
-          "lens_record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/projection.json"
+          "seed": 11,
+          "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "status": "completed"
         }
       ],
       "execution_note": "HB CPU FP32/B32/seed11/80步，dense/quad val31.25%/35.16%，移除历史10.16%/6.25%。全80步Full减少37.63%、消息39.75%、候选/状态更新2.07%；进程用时少3.55%。一对并行非独占CPU，含每步观测，未证明稳定速度或质量优势。两个训练及Lens终态验证完成，稀疏严格失败保留。",
@@ -806,6 +806,236 @@
           "path": "docs/studies/TL-A1.md"
         }
       ]
+    },
+    {
+      "id": "E7",
+      "kind": "experiment",
+      "status": "planned",
+      "title": "FC 查询与延迟评估",
+      "summary": "固定三个checkpoint，配对干预",
+      "x": 30,
+      "y": 1080,
+      "question": "原FC是否随查询改变预测，delay2到4/8是否保持效果？",
+      "decision": "固定validation128映射；同一历史换query及延长空档；不重训、不新增长度。",
+      "budget": "CPU1线程/4GiB，准备加评估≤30min。",
+      "track": "tide",
+      "references": [
+        {
+          "label": "第二批已授权研究表",
+          "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "固定配置",
+          "path": "configs/studies/second/fc-mechanisms.json"
+        },
+        {
+          "label": "后台作业记录",
+          "path": "artifacts/jobs/s2-fc-mechanisms/job.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/second/fc-mechanisms.json",
+          "id": "s2-fc-mechanisms",
+          "record": "artifacts/jobs/s2-fc-mechanisms/state.json",
+          "status": "planned"
+        }
+      ],
+      "study_id": "TL-A1-MECH"
+    },
+    {
+      "id": "R7",
+      "kind": "result",
+      "status": "awaiting",
+      "title": "FC 查询与延迟评估：待审阅",
+      "summary": "尚未形成结果，失败不抹去",
+      "x": 30,
+      "y": 1310,
+      "question": "原FC是否随查询改变预测，delay2到4/8是否保持效果？",
+      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "budget": "CPU1线程/4GiB，准备加评估≤30min。",
+      "track": "tide",
+      "references": [
+        {
+          "label": "问题与停止条件",
+          "path": "docs/studies/second-batch.md"
+        }
+      ]
+    },
+    {
+      "id": "E8",
+      "kind": "experiment",
+      "status": "planned",
+      "title": "HB 较长训练配对",
+      "summary": "相同初态，400步/seed11",
+      "x": 325,
+      "y": 1080,
+      "question": "首批80步未达50%，增加训练时限能否学会并保留稀疏工作收益？",
+      "decision": "同B32/任务/架构/学习率；不承接80步配置的精确resume。仍用50%门槛；无自动多seed。",
+      "budget": "CPU2线程/16GiB，两作业并行≤2h。",
+      "track": "tide",
+      "references": [
+        {
+          "label": "第二批已授权研究表",
+          "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "固定配置",
+          "path": "configs/studies/second/hb-dense.json"
+        },
+        {
+          "label": "后台作业记录",
+          "path": "artifacts/jobs/s2-hb-dense/job.json"
+        },
+        {
+          "label": "稀疏候选配置",
+          "path": "configs/studies/second/hb-sparse.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/second/hb-dense.json",
+          "id": "s2-hb-dense",
+          "record": "artifacts/jobs/s2-hb-dense/state.json",
+          "status": "planned"
+        },
+        {
+          "config": "configs/studies/second/hb-sparse.json",
+          "id": "s2-hb-sparse",
+          "record": "artifacts/jobs/s2-hb-sparse/state.json",
+          "status": "planned"
+        }
+      ],
+      "study_id": "TL-A2-LONG"
+    },
+    {
+      "id": "R8",
+      "kind": "result",
+      "status": "awaiting",
+      "title": "HB 较长训练配对：待审阅",
+      "summary": "尚未形成结果，失败不抹去",
+      "x": 325,
+      "y": 1310,
+      "question": "首批80步未达50%，增加训练时限能否学会并保留稀疏工作收益？",
+      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "budget": "CPU2线程/16GiB，两作业并行≤2h。",
+      "track": "tide",
+      "references": [
+        {
+          "label": "问题与停止条件",
+          "path": "docs/studies/second-batch.md"
+        }
+      ]
+    },
+    {
+      "id": "E9",
+      "kind": "experiment",
+      "status": "planned",
+      "title": "NPU 轻量运行采样",
+      "summary": "一次有界观察，排队准入",
+      "x": 620,
+      "y": 1080,
+      "question": "主线程采样及公共工作计数能否缩小耗时解释，观测开关是否改变状态？",
+      "decision": "同模型/初态/数据的观测开关配对；栈样本含等待及GIL偏差，不是NPU kernel时间。",
+      "budget": "1NPU/CPU4线程/8GiB，总≤15min，排队≤5min。",
+      "track": "shared",
+      "references": [
+        {
+          "label": "第二批已授权研究表",
+          "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "固定配置",
+          "path": "configs/studies/second/npu-sampling.json"
+        },
+        {
+          "label": "后台作业记录",
+          "path": "artifacts/jobs/s2-npu-sampling/job.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/second/npu-sampling.json",
+          "id": "s2-npu-sampling",
+          "record": "artifacts/jobs/s2-npu-sampling/state.json",
+          "status": "planned"
+        }
+      ],
+      "study_id": "TL-S1"
+    },
+    {
+      "id": "R9",
+      "kind": "result",
+      "status": "awaiting",
+      "title": "NPU 轻量运行采样：待审阅",
+      "summary": "尚未形成结果，失败不抹去",
+      "x": 620,
+      "y": 1310,
+      "question": "主线程采样及公共工作计数能否缩小耗时解释，观测开关是否改变状态？",
+      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "budget": "1NPU/CPU4线程/8GiB，总≤15min，排队≤5min。",
+      "track": "shared",
+      "references": [
+        {
+          "label": "问题与停止条件",
+          "path": "docs/studies/second-batch.md"
+        }
+      ]
+    },
+    {
+      "id": "E10",
+      "kind": "experiment",
+      "status": "planned",
+      "title": "冻结骨干的旁路比较",
+      "summary": "head-only / TIDE / MLP",
+      "x": 915,
+      "y": 1080,
+      "question": "冻结骨干后分支能否实际贡献，而非只得到梯度？",
+      "decision": "保持首批B32/40步/SGD/任务；冻结骨干另做梯度及同栈恢复，按原25%门槛及配对分支干预审阅。",
+      "budget": "1NPU/CPU4线程/24GiB，总≤1h，排队≤10min。",
+      "track": "baseline",
+      "references": [
+        {
+          "label": "第二批已授权研究表",
+          "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "固定配置",
+          "path": "configs/studies/second/b-stage.json"
+        },
+        {
+          "label": "后台作业记录",
+          "path": "artifacts/jobs/s2-frozen-growth/job.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/second/b-stage.json",
+          "id": "s2-frozen-growth",
+          "record": "artifacts/jobs/s2-frozen-growth/state.json",
+          "status": "planned"
+        }
+      ],
+      "study_id": "TL-B2"
+    },
+    {
+      "id": "R10",
+      "kind": "result",
+      "status": "awaiting",
+      "title": "冻结骨干的旁路比较：待审阅",
+      "summary": "尚未形成结果，失败不抹去",
+      "x": 915,
+      "y": 1310,
+      "question": "冻结骨干后分支能否实际贡献，而非只得到梯度？",
+      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "budget": "1NPU/CPU4线程/24GiB，总≤1h，排队≤10min。",
+      "track": "baseline",
+      "references": [
+        {
+          "label": "问题与停止条件",
+          "path": "docs/studies/second-batch.md"
+        }
+      ]
     }
   ],
   "edges": [
@@ -990,7 +1220,73 @@
       "label": "有条件进入HB",
       "via_y": 990,
       "detail": "FC原任务的学习门槛成立后，小HB已重新准入并完成80步先导；得到了历史利用和工作减少信号，但未达50%质量门槛，原条件经验不保证HB学习或效率成功。"
+    },
+    {
+      "id": "second-E7",
+      "source": "E7",
+      "target": "R7",
+      "kind": "produces",
+      "label": "待审阅结果",
+      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "status": "planned"
+    },
+    {
+      "id": "second-E8",
+      "source": "E8",
+      "target": "R8",
+      "kind": "produces",
+      "label": "待审阅结果",
+      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "status": "planned"
+    },
+    {
+      "id": "second-E9",
+      "source": "E9",
+      "target": "R9",
+      "kind": "produces",
+      "label": "待审阅结果",
+      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "status": "planned"
+    },
+    {
+      "id": "second-E10",
+      "source": "E10",
+      "target": "R10",
+      "kind": "produces",
+      "label": "待审阅结果",
+      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "status": "planned"
+    },
+    {
+      "id": "followup-E7",
+      "source": "RA1",
+      "target": "E7",
+      "kind": "informs",
+      "label": "后续检验",
+      "detail": "已学会原短程任务，现用固定checkpoint检验query机制和更长空档，不改变原结论范围。",
+      "status": "documented",
+      "via_y": 1040
+    },
+    {
+      "id": "followup-E8",
+      "source": "R2",
+      "target": "E8",
+      "kind": "informs",
+      "label": "后续检验",
+      "detail": "80步未达门槛、工作减少已有观测；用户批准只检验延长训练这一有限假设。",
+      "status": "documented",
+      "via_y": 1040
+    },
+    {
+      "id": "followup-E10",
+      "source": "R1",
+      "target": "E10",
+      "kind": "informs",
+      "label": "后续检验",
+      "detail": "原旁路预测收益未证实，冻结骨干是下一受限比较，不是已成立的迁移收益。",
+      "status": "documented",
+      "via_y": 1040
     }
   ],
-  "updated_at": "2026-11-07T18:46:19.834558+00:00"
+  "updated_at": "2026-11-07T18:59:51.010312+00:00"
 }

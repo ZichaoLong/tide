@@ -1,0 +1,12 @@
+{
+  "schema": "tide-lab-matrix-v1",
+  "study_id": "TL-A2-LONG",
+  "max_seconds": 7000,
+  "stop_on_failure": true,
+  "runs": [
+    {
+      "config": "configs/studies/second/hb-dense.json",
+      "run_id": "tl-a2-long-dense-s11"
+    }
+  ]
+}

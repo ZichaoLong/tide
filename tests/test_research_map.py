@@ -109,7 +109,7 @@ class ResearchEvidenceTests(unittest.TestCase):
 
     def test_first_batch_studies_have_explicit_two_routes(self):
         studies = {n.get('study_id') for n in self.data['nodes'] if n.get('study_id')}
-        self.assertEqual(studies, {'TL-A0','TL-A1','TL-A2','TL-B0','TL-B1','TL-C'})
+        self.assertTrue({'TL-A0','TL-A1','TL-A2','TL-B0','TL-B1','TL-C'} <= studies)
         titles = {n['title'] for n in self.data['nodes']}
         self.assertTrue({'从零训练完整 TIDE','预训练模型生长'} <= titles)
 

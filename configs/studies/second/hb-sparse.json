@@ -1,0 +1,863 @@
+{
+  "device": "cpu",
+  "dtype": "float32",
+  "evaluation": {
+    "batch_size": 16,
+    "samples": 128,
+    "seed": 20261107,
+    "test": true,
+    "test_if_learning_gate": true,
+    "test_samples": 256
+  },
+  "evidence_axes": {
+    "discrete_semantics": {
+      "compared_leaves": 41150,
+      "coverage": "full result/state structure, clocks, integer slots, routes, active flags, emitted keys, control>0 masks, gradient connectivity and optimizer metadata",
+      "state": "passed"
+    },
+    "execution": {
+      "state": "see separate training result"
+    },
+    "learning": {
+      "state": "not_checked"
+    },
+    "mechanisms": {
+      "parameter_alias_topology": "passed",
+      "reused_evidence": [
+        {
+          "check": "shared_parameter_and_sample_gradient_sum",
+          "path": "artifacts/audit-npu-a/core5/result.json",
+          "scope": "historical NPU FP32 width8 B2; same public mechanisms, not qualification of width16",
+          "sha256": "10488741d8f909b2ecfdcf9ef002559a639c6004f5d29e54e5b41167374a6a84",
+          "state": "passed"
+        },
+        {
+          "check": "shared_parameter_and_sample_gradient_sum",
+          "path": "artifacts/core5-actual-a/result.json",
+          "scope": "historical CPU FP64 width16 actual task B2; not NPU numerical equivalence",
+          "sha256": "c2c2bb095090bf99cc0901e621465fdc50236050f29a4415d9e0c790054fb0ff",
+          "state": "passed"
+        }
+      ],
+      "shared_parameter_groups": 29,
+      "state": "passed",
+      "steps": [
+        {
+          "candidate": {
+            "gradient_l2": {
+              "embedding": 0.5604414290810109,
+              "graph": 3.7025421971778596,
+              "head": 3.531330980077251
+            },
+            "roots": {
+              "independent_roots": 14,
+              "physical_input_records": 56,
+              "scope": "actual public input constructor used by the unchanged encoder"
+            },
+            "workload": {
+              "candidates": 224,
+              "executor_stats": {
+                "aggregate_calls": 13,
+                "aggregate_computed_events": 154,
+                "aggregate_reused_events": 70,
+                "batched_aggregate_events": 224,
+                "batched_full_events": 146,
+                "batched_read_events": 224,
+                "batched_region_frames": 56,
+                "batched_state_events": 224,
+                "candidate_events": 224,
+                "full_blocks": 15,
+                "full_calls": 15,
+                "full_scalar_fallback_steps": 0,
+                "greedy_relaxed_edges": 12,
+                "greedy_stages": 3,
+                "max_full_batch": 14,
+                "max_greedy_frames": 14,
+                "max_live_fibers": 112,
+                "max_region_batch": 14,
+                "max_state_batch": 2,
+                "max_state_independent_projection_batch": 56,
+                "max_state_private_projection_batch": 4,
+                "max_state_sequence": 7,
+                "next_steps": 224,
+                "read_calls": 16,
+                "region_batch_calls": 4,
+                "region_blocks": 4,
+                "region_steps": 56,
+                "selected_events": 146,
+                "semantic_full_replays": 0,
+                "semantic_state_replays": 0,
+                "source_rows": 348,
+                "state_blocks": 32,
+                "state_independent_projection_calls": 12,
+                "state_independent_projection_rows": 448,
+                "state_preparation_calls": 42,
+                "state_preparation_events": 112,
+                "state_preparation_reused_events": 70,
+                "state_private_projection_calls": 126,
+                "state_private_projection_rows": 336,
+                "state_sequence_calls": 16,
+                "state_steps": 0,
+                "visited_edges": 292
+              },
+              "full": 146,
+              "messages": 292,
+              "outputs": 35
+            }
+          },
+          "reference": {
+            "gradient_l2": {
+              "embedding": 0.5604414469620732,
+              "graph": 3.7025415966505357,
+              "head": 3.5313312687185587
+            },
+            "roots": {
+              "independent_roots": 14,
+              "physical_input_records": 56,
+              "scope": "actual public input constructor used by the unchanged encoder"
+            },
+            "workload": {
+              "candidates": 224,
+              "executor_stats": {
+                "candidate_events": 224
+              },
+              "full": 146,
+              "messages": 292,
+              "outputs": 35
+            }
+          },
+          "step": 0
+        },
+        {
+          "candidate": {
+            "gradient_l2": {
+              "embedding": 0.44037171510555295,
+              "graph": 2.922322805100894,
+              "head": 3.1195605653365392
+            },
+            "roots": {
+              "independent_roots": 14,
+              "physical_input_records": 56,
+              "scope": "actual public input constructor used by the unchanged encoder"
+            },
+            "workload": {
+              "candidates": 224,
+              "executor_stats": {
+                "aggregate_calls": 13,
+                "aggregate_computed_events": 146,
+                "aggregate_reused_events": 78,
+                "batched_aggregate_events": 224,
+                "batched_full_events": 135,
+                "batched_read_events": 224,
+                "batched_region_frames": 56,
+                "batched_state_events": 224,
+                "candidate_events": 224,
+                "full_blocks": 15,
+                "full_calls": 15,
+                "full_scalar_fallback_steps": 0,
+                "greedy_relaxed_edges": 12,
+                "greedy_stages": 3,
+                "max_full_batch": 14,
+                "max_greedy_frames": 14,
+                "max_live_fibers": 112,
+                "max_region_batch": 14,
+                "max_state_batch": 2,
+                "max_state_independent_projection_batch": 56,
+                "max_state_private_projection_batch": 4,
+                "max_state_sequence": 7,
+                "next_steps": 224,
+                "read_calls": 16,
+                "region_batch_calls": 4,
+                "region_blocks": 4,
+                "region_steps": 56,
+                "selected_events": 135,
+                "semantic_full_replays": 0,
+                "semantic_state_replays": 0,
+                "source_rows": 326,
+                "state_blocks": 32,
+                "state_independent_projection_calls": 12,
+                "state_independent_projection_rows": 384,
+                "state_preparation_calls": 50,
+                "state_preparation_events": 128,
+                "state_preparation_reused_events": 78,
+                "state_private_projection_calls": 150,
+                "state_private_projection_rows": 384,
+                "state_sequence_calls": 16,
+                "state_steps": 0,
+                "visited_edges": 270
+              },
+              "full": 135,
+              "messages": 270,
+              "outputs": 33
+            }
+          },
+          "reference": {
+            "gradient_l2": {
+              "embedding": 0.4403716859664933,
+              "graph": 2.922322730418075,
+              "head": 3.1195603448775664
+            },
+            "roots": {
+              "independent_roots": 14,
+              "physical_input_records": 56,
+              "scope": "actual public input constructor used by the unchanged encoder"
+            },
+            "workload": {
+              "candidates": 224,
+              "executor_stats": {
+                "candidate_events": 224
+              },
+              "full": 135,
+              "messages": 270,
+              "outputs": 33
+            }
+          },
+          "step": 1
+        }
+      ],
+      "unique_optimizer_coverage": "passed"
+    },
+    "recovery": {
+      "source": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/a2-hb-prepare/sparse-resume/result.json",
+      "state": "passed"
+    },
+    "strict_numerical": {
+      "atol": 1e-06,
+      "comparisons": [
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 552,
+            "mismatches": 0
+          },
+          "name": "initial_parameters",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.995054006576538,
+            "elements": 164596,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 69.27037246926848,
+            "reference_max_abs": 2.995054006576538,
+            "relative_l2_error": 0.0,
+            "tensor_leaves": 551,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step0.gradient_connectivity",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.0,
+            "elements": 0,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 0.0,
+            "reference_max_abs": 0.0,
+            "relative_l2_error": null,
+            "tensor_leaves": 0,
+            "zero_reference_scale": true
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 15270,
+            "mismatches": 0
+          },
+          "name": "step0.result",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 3.8396623134613037,
+            "elements": 182460,
+            "error_l2": 5.019011591158035e-05,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 1.430511474609375e-06,
+            "reference_l2": 314.36466734273006,
+            "reference_max_abs": 3.839662551879883,
+            "relative_l2_error": 1.5965571556062163e-07,
+            "tensor_leaves": 6012,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1121,
+            "mismatches": 0
+          },
+          "name": "step0.positive_support",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.0,
+            "elements": 0,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 0.0,
+            "reference_max_abs": 0.0,
+            "relative_l2_error": null,
+            "tensor_leaves": 0,
+            "zero_reference_scale": true
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step0.logits",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 1.8529020547866821,
+            "elements": 16,
+            "error_l2": 4.808367133218811e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 2.384185791015625e-07,
+            "reference_l2": 3.010367267954007,
+            "reference_max_abs": 1.8529019355773926,
+            "relative_l2_error": 1.5972692715619424e-07,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step0.loss",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.6262598037719727,
+            "elements": 1,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 2.6262598037719727,
+            "reference_max_abs": 2.6262598037719727,
+            "relative_l2_error": 0.0,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step0.input_gradient",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.18967404961585999,
+            "elements": 224,
+            "error_l2": 1.538893182605827e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 5.960464477539063e-08,
+            "reference_l2": 0.5583319242489372,
+            "reference_max_abs": 0.18967410922050476,
+            "relative_l2_error": 2.7562335517101793e-07,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step0.gradients",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 1.4869425296783447,
+            "elements": 129052,
+            "error_l2": 2.134490242299973e-06,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 5.364418029785156e-07,
+            "reference_l2": 5.147155468783692,
+            "reference_max_abs": 1.486943006515503,
+            "relative_l2_error": 4.146931747535436e-07,
+            "tensor_leaves": 308,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step0.gradient_norm",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 5.14715576171875,
+            "elements": 1,
+            "error_l2": 4.76837158203125e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 4.76837158203125e-07,
+            "reference_l2": 5.147155284881592,
+            "reference_max_abs": 5.147155284881592,
+            "relative_l2_error": 9.264091169032886e-08,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 552,
+            "mismatches": 0
+          },
+          "name": "step0.parameters",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.9950239658355713,
+            "elements": 164596,
+            "error_l2": 2.3110564860824147e-06,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 1.7285346984863281e-06,
+            "reference_l2": 69.27127496638342,
+            "reference_max_abs": 2.9950239658355713,
+            "relative_l2_error": 3.3362407248949076e-08,
+            "tensor_leaves": 551,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1570,
+            "mismatches": 0
+          },
+          "name": "step0.optimizer",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 1.0,
+            "elements": 258412,
+            "error_l2": 4.0983144824574514e-08,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 9.778887033462524e-09,
+            "reference_l2": 17.550213674314392,
+            "reference_max_abs": 1.0,
+            "relative_l2_error": 2.3351934959376237e-09,
+            "tensor_leaves": 924,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step0.parameter_updates",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.001026153564453125,
+            "elements": 136252,
+            "error_l2": 2.2756792570472256e-06,
+            "failed_elements": 1,
+            "failed_leaves": 1,
+            "first_failures": [
+              {
+                "abs_error": 1.7285346984863281e-06,
+                "candidate": -0.0002028048038482666,
+                "index": [
+                  3,
+                  6
+                ],
+                "leaf_max_abs_error": 1.7285346984863281e-06,
+                "leaf_reference_max_abs": 0.001001805067062378,
+                "path": "step0.parameter_updates.encoder.graph_model.nodes.4.read_program.score.matrix",
+                "reference": -0.00020107626914978027,
+                "strict_limit": 1.0020107626914978e-06
+              }
+            ],
+            "max_abs_error": 1.7285346984863281e-06,
+            "reference_l2": 0.32520617874399127,
+            "reference_max_abs": 0.001026153564453125,
+            "relative_l2_error": 6.997650739098304e-06,
+            "tensor_leaves": 320,
+            "zero_reference_scale": false
+          },
+          "strict_error": "step0.parameter_updates.encoder.graph_model.nodes.4.read_program.score.matrix: Tensor-likes are not close!\n\nMismatched elements: 1 / 1328 (0.1%)\nGreatest absolute difference: 1.7285346984863281e-06 at index (3, 6) (up to 1e-06 allowed)\nGreatest relative difference: 0.00859641283750534 at index (3, 6) (up to 1e-05 allowed)",
+          "strict_state": "failed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step1.gradient_connectivity",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.0,
+            "elements": 0,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 0.0,
+            "reference_max_abs": 0.0,
+            "relative_l2_error": null,
+            "tensor_leaves": 0,
+            "zero_reference_scale": true
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 14862,
+            "mismatches": 0
+          },
+          "name": "step1.result",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 4.7096734046936035,
+            "elements": 181083,
+            "error_l2": 4.782008618007419e-05,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 1.5497207641601562e-06,
+            "reference_l2": 316.81910260410586,
+            "reference_max_abs": 4.7096734046936035,
+            "relative_l2_error": 1.5093814036784807e-07,
+            "tensor_leaves": 5931,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1121,
+            "mismatches": 0
+          },
+          "name": "step1.positive_support",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.0,
+            "elements": 0,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 0.0,
+            "reference_max_abs": 0.0,
+            "relative_l2_error": null,
+            "tensor_leaves": 0,
+            "zero_reference_scale": true
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step1.logits",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 1.6859431266784668,
+            "elements": 16,
+            "error_l2": 4.142951600092007e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 2.384185791015625e-07,
+            "reference_l2": 2.8466743542986626,
+            "reference_max_abs": 1.6859430074691772,
+            "relative_l2_error": 1.4553654842310578e-07,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step1.loss",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.0195565223693848,
+            "elements": 1,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 2.0195565223693848,
+            "reference_max_abs": 2.0195565223693848,
+            "relative_l2_error": 0.0,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step1.input_gradient",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.16564445197582245,
+            "elements": 224,
+            "error_l2": 1.0379269905397039e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 4.470348358154297e-08,
+            "reference_l2": 0.43838581903509627,
+            "reference_max_abs": 0.16564440727233887,
+            "relative_l2_error": 2.3676107790717782e-07,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step1.gradients",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 1.0114250183105469,
+            "elements": 129052,
+            "error_l2": 1.2034087314408908e-06,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 2.384185791015625e-07,
+            "reference_l2": 4.297156514237265,
+            "reference_max_abs": 1.0114250183105469,
+            "relative_l2_error": 2.800476844289422e-07,
+            "tensor_leaves": 308,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1,
+            "mismatches": 0
+          },
+          "name": "step1.gradient_norm",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 4.297156810760498,
+            "elements": 1,
+            "error_l2": 0.0,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 0.0,
+            "reference_l2": 4.297156810760498,
+            "reference_max_abs": 4.297156810760498,
+            "relative_l2_error": 0.0,
+            "tensor_leaves": 1,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 552,
+            "mismatches": 0
+          },
+          "name": "step1.parameters",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.9949939250946045,
+            "elements": 164596,
+            "error_l2": 2.5096367660010743e-06,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 1.7285346984863281e-06,
+            "reference_l2": 69.27331108374105,
+            "reference_max_abs": 2.9949939250946045,
+            "relative_l2_error": 3.622804694534234e-08,
+            "tensor_leaves": 551,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 1590,
+            "mismatches": 0
+          },
+          "name": "step1.optimizer",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 2.0,
+            "elements": 265585,
+            "error_l2": 4.51859182836654e-08,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 9.313225746154785e-09,
+            "reference_l2": 34.95748682798292,
+            "reference_max_abs": 2.0,
+            "relative_l2_error": 1.2925963043628977e-09,
+            "tensor_leaves": 939,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 321,
+            "mismatches": 0
+          },
+          "name": "step1.parameter_updates",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 0.0010180473327636719,
+            "elements": 136252,
+            "error_l2": 7.091239383754013e-07,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 1.1920928955078125e-07,
+            "reference_l2": 0.2528369635611384,
+            "reference_max_abs": 0.0010180473327636719,
+            "relative_l2_error": 2.804668780970898e-06,
+            "tensor_leaves": 320,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        },
+        {
+          "discrete": {
+            "first_errors": [],
+            "leaves": 2026,
+            "mismatches": 0
+          },
+          "name": "future_perturbation_causality",
+          "nonfinite": [],
+          "numerical": {
+            "candidate_max_abs": 3.2501797676086426,
+            "elements": 9787,
+            "error_l2": 1.4252339462101658e-06,
+            "failed_elements": 0,
+            "failed_leaves": 0,
+            "first_failures": [],
+            "max_abs_error": 4.76837158203125e-07,
+            "reference_l2": 77.66141839662754,
+            "reference_max_abs": 3.2501797676086426,
+            "relative_l2_error": 1.8351891784042627e-08,
+            "tensor_leaves": 791,
+            "zero_reference_scale": false
+          },
+          "strict_state": "passed"
+        }
+      ],
+      "rtol": 1e-05,
+      "state": "failed"
+    }
+  },
+  "learning_gate": 0.5,
+  "model": {
+    "branches": 2,
+    "depth": 1,
+    "kind": "core5",
+    "offsets": [
+      0,
+      1
+    ],
+    "region_width": 4,
+    "send": "sparse",
+    "temperature": 0.25,
+    "topology": "hb",
+    "width": 16
+  },
+  "numerical_policy": "explore: finite strict failures retained; independent discrete/mechanism and exact resume gates required",
+  "phase": "second-batch-fixed-horizon",
+  "schema": "tide-lab-run-v1",
+  "seed": 11,
+  "study_id": "TL-A2-LONG",
+  "task": {
+    "delay": 2,
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4
+  },
+  "threads": 1,
+  "training": {
+    "batch_size": 32,
+    "checkpoint_every": 40,
+    "data_seed": 1011,
+    "eps": 1e-06,
+    "eval_every": 40,
+    "log_every": 5,
+    "lr": 0.001,
+    "max_seconds": 6600,
+    "retain_checkpoint": true,
+    "steps": 400,
+    "weight_decay": 0.01
+  }
+}

@@ -69,6 +69,7 @@ def main():
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--branch", choices=("tide", "mlp"), default="tide")
     parser.add_argument("--skip-generation", action="store_true")
+    parser.add_argument("--freeze-backbone", action="store_true")
     parser.add_argument("--explore-numerics", action="store_true",
         help="continue finite cache/prefix differences, preserving every strict failure")
     parser.add_argument("--fixture-output", type=Path,
@@ -102,7 +103,8 @@ def main():
     try:
         task = RetrievalTask()
         model = GrowthClassifier(args.checkpoint_path, task.vocab_size, task.value_vocab_size,
-                                 branch=args.branch, seed=args.seed).to(args.device)
+                                 branch=args.branch, seed=args.seed,
+                                 freeze_backbone=args.freeze_backbone).to(args.device)
         model.eval()
         report["model"] = model.facts()
         tokens, target = task.batch("train", 2, 0, args.seed, args.device)
@@ -166,6 +168,11 @@ def main():
             raise AssertionError("optimizer contains duplicate shared parameters")
         checks["optimizer_unique_parameters"] = True
         optimizer = torch.optim.SGD(params, lr=1e-3)
+        frozen_versions = {name:p._version for name,p in model.lm.named_parameters()}
+        if args.freeze_backbone:
+            if any(p.requires_grad or id(p) in {id(q) for q in params} for p in model.lm.parameters()):
+                raise AssertionError('frozen backbone entered optimizer')
+            checks['backbone_excluded_from_optimizer'] = True
         records = []
         checks["gradient_ingress"] = records
         model.train()
@@ -188,6 +195,11 @@ def main():
             if step == 1 and maximum <= 0:
                 raise AssertionError("task gradient did not enter branch after output projection update")
             optimizer.step()
+            if args.freeze_backbone:
+                if any(p.grad is not None or p.requires_grad or p._version!=frozen_versions[name]
+                       for name,p in model.lm.named_parameters()):
+                    raise AssertionError('frozen backbone acquired a gradient or in-place parameter mutation')
+                checks['backbone_no_grad_or_parameter_mutation'] = True
         model.eval()
         with torch.no_grad():
             on, off = model(tokens), model(tokens, branch_enabled=False)

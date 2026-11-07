@@ -5,8 +5,10 @@
   `docs/research-design.md`, `docs/research-map.md` and `dependencies/foundation-source.json`.
 - The 2026-11-07 user instruction authorizes the first bounded CPU/NPU experiment batch,
   private environments, small public model/data acquisition, builds, checks, phased commits
-  and ordinary pushes. Follow `docs/studies/first-batch.md`; do not expand the next batch
-  before user review. Shared environments and other projects remain read-only.
+  and ordinary pushes. On 2026-11-08 the user accepted the reviewed recommendations
+  and authorized the bounded follow-up in `docs/studies/second-batch.md`.
+  Do not expand beyond that table without another review. Shared environments and
+  other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

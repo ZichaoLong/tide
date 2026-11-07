@@ -1,0 +1,20 @@
+{
+  "schema": "tide-lab-matrix-v1",
+  "study_id": "TL-B2",
+  "max_seconds": 1650,
+  "stop_on_failure": true,
+  "runs": [
+    {
+      "config": "configs/studies/second/b-none.json",
+      "run_id": "tl-b2-none-s11-frozen"
+    },
+    {
+      "config": "configs/studies/second/b-tide.json",
+      "run_id": "tl-b2-tide-s11-frozen"
+    },
+    {
+      "config": "configs/studies/second/b-mlp.json",
+      "run_id": "tl-b2-mlp-s11-frozen"
+    }
+  ]
+}

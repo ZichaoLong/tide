@@ -1,6 +1,6 @@
 # 首批终态与下一批候选（待用户验收）
 
-2026-11-08审阅。所有首批训练作业已于本地00:34左右结束，退出0并确认无存活后代，当前无排队或活动训练；两项历史严格审计失败及一次主动停止测试仍保留。新四个训练run的Lens记录全部verified，终态step80 checkpoint hash一致。[生命周期](../evidence/first-batch-lifecycle.json)、[新终态证据](../evidence/first-batch-terminal.json)。本次仅检查和整理，没有新增实验。
+2026-11-08审阅。用户随后认可上述建议并授权[第二批有限跟进](second-batch.md)；下文保留首批终态及当时建议。所有首批训练作业已于本地00:34左右结束，退出0并确认无存活后代，当前无排队或活动训练；两项历史严格审计失败及一次主动停止测试仍保留。新四个训练run的Lens记录全部verified，终态step80 checkpoint hash一致。[生命周期](../evidence/first-batch-lifecycle.json)、[新终态证据](../evidence/first-batch-terminal.json)。本次仅检查和整理，没有新增实验。
 
 | 研究 | 当前可支持的结论 | 不能推出的结论 |
 | --- | --- | --- |

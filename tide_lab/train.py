@@ -128,6 +128,9 @@ def checkpoint_save(path, *, model, optimizer, step, config_hash, identity, devi
 
 def evaluate(model, task, split, config, device, intervention=None):
     model.eval()
+    for module in model.modules():
+        if hasattr(module, 'observe'):
+            module.observe = False
     count = config['evaluation']['samples']
     batch = config['evaluation']['batch_size']
     correct, ce, n = 0, 0., 0
@@ -147,6 +150,32 @@ def evaluate(model, task, split, config, device, intervention=None):
     synchronize(device)
     return dict(accuracy=correct/n, loss=ce/n, samples=n,
                 seconds=time.monotonic()-start)
+
+
+def paired_branch_effect(model, task, config, device):
+    """Same examples and trained parameters; ablation is not a retrained control."""
+    model.eval()
+    count, batch = config['evaluation']['samples'], config['evaluation']['batch_size']
+    x, y = task.batch('val', count, 0, config['evaluation']['seed'], 'cpu')
+    records = []
+    with torch.no_grad():
+        for offset in range(0, count, batch):
+            inputs, target = x[offset:offset+batch].to(device), y[offset:offset+batch].to(device)
+            on, off = model(inputs), model(inputs, branch_enabled=False)
+            if not torch.isfinite(on).all() or not torch.isfinite(off).all():
+                raise FloatingPointError('Non-finite branch intervention')
+            on_loss = torch.nn.functional.cross_entropy(on, target, reduction='none').cpu().tolist()
+            off_loss = torch.nn.functional.cross_entropy(off, target, reduction='none').cpu().tolist()
+            for j, (label, a, b, la, lb) in enumerate(zip(target.cpu().tolist(),
+                    on.argmax(-1).cpu().tolist(), off.argmax(-1).cpu().tolist(), on_loss, off_loss)):
+                records.append(dict(index=offset+j, target=label, on=a, off=b, on_loss=la, off_loss=lb))
+    gains = sum(r['on']==r['target'] and r['off']!=r['target'] for r in records)
+    losses = sum(r['on']!=r['target'] and r['off']==r['target'] for r in records)
+    return dict(samples=count, gained_correct=gains, lost_correct=losses,
+                prediction_changes=sum(r['on']!=r['off'] for r in records),
+                on_minus_off_accuracy=(gains-losses)/count,
+                off_minus_on_ce=sum(r['off_loss']-r['on_loss'] for r in records)/count,
+                per_example=records, scope='paired validation intervention; not causal attribution versus retraining')
 
 
 def gradient_metrics(model):
@@ -182,6 +211,8 @@ def execute(args):
     config_hash = hashlib.sha256(config_bytes).hexdigest()
     if not (0 < config['training']['steps'] <= 400 and 0 < config['training']['max_seconds'] <= 14400):
         raise ValueError('Out of first-batch finite step/time budget')
+    if type(config['training']['log_every']) is not int or config['training']['log_every'] < 1:
+        raise ValueError('log_every must be a positive integer')
     output = Path(args.output).resolve()
     if output.exists():
         raise FileExistsError('Use a new output directory; --resume is a new attempt')
@@ -207,6 +238,12 @@ def execute(args):
                   config_sha256=config_hash, state='running', numerical_check='not_checked_by_training',
                   exact_resume='not_checked_by_training', independent_correctness='see separate checks',
                   started_at=now(), steps=0)
+    measurement = dict(start_step=0, steps_counted=0, observed_steps=0, unobserved_steps=0,
+        observed_step_seconds=0., unobserved_step_seconds=0., total_step_seconds=0., work_totals={},
+        cadence='attempt first step, every log_every updates, and attempt last step',
+        scope='new attempt only; all successful optimizer steps; input preparation excluded; forward/backward/clip/optimizer/sync and enabled observation included; JSONL/evaluation/checkpoint excluded',
+        activity_scope='public integer work counters accumulated every step; region/gradient/trace samples only at logging steps')
+    result['measurement'] = measurement
     atomic_json(output/'state.json',result)
     def interrupted(signum,frame):
         raise InterruptedError(f'Signal {signum}; latest published checkpoint is the resume boundary')
@@ -251,13 +288,16 @@ def execute(args):
                          'validation/loss':result['initial_validation']['loss']})
         limit = min(config['training']['steps'],args.stop_after or config['training']['steps'])
         last_validation = result['initial_validation']
+        first_index = step
+        measurement['start_step'] = step
         for index in range(step,limit):
             if time.monotonic()-start > config['training']['max_seconds']:
                 result['state']='budget_exhausted'
                 break
             model.train()
             optimizer.zero_grad(set_to_none=True)
-            log = (index+1)%config['training']['log_every']==0 or index==step
+            log = ((index+1)%config['training']['log_every']==0 or index==first_index
+                   or index+1==limit)
             for module in model.modules():
                 if hasattr(module,'observe'):
                     module.observe = log
@@ -277,11 +317,24 @@ def execute(args):
             synchronize(device)
             elapsed = time.monotonic()-tick
             step = index+1
+            measurement['steps_counted'] += 1
+            measurement['total_step_seconds'] += elapsed
+            measurement['observed_steps' if log else 'unobserved_steps'] += 1
+            measurement['observed_step_seconds' if log else 'unobserved_step_seconds'] += elapsed
+            for key in ('candidates', 'full', 'state_updates', 'read_events', 'messages',
+                        'source_rows', 'region_blocks', 'branch_tokens', 'query_tokens'):
+                value = model.last_metrics.get('work/'+key)
+                if value is not None:
+                    if type(value) is not int or value < 0:
+                        raise ValueError(f'Expected nonnegative public integer work counter: {key}')
+                    measurement['work_totals'][key] = measurement['work_totals'].get(key, 0)+value
             if log:
                 values = dict(extra,**model.last_metrics)
+                values.update({'work_total/'+k:v for k,v in measurement['work_totals'].items()})
                 values.update({'train/loss':float(loss.detach().item()),
                                'train/accuracy':float((logits.argmax(-1)==y).float().mean().item()),
                                'train/gradient_norm':float(norm.item()), 'time/step_seconds':elapsed,
+                               'time/total_step_seconds':measurement['total_step_seconds'],
                                'work/train_examples':step*config['training']['batch_size'],
                                'work/train_tokens':step*config['training']['batch_size']*task.sequence_length,
                                'resource/cpu_maxrss_mib':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024})
@@ -302,15 +355,24 @@ def execute(args):
             result['state']='completed' if step==config['training']['steps'] else 'bounded_stop'
         result.update(steps=step,last_validation=last_validation,
                       trained_examples=step*config['training']['batch_size'])
+        gate_met = (result['state']=='completed' and last_validation['step']==step
+                    and last_validation['accuracy']>=config.get('learning_gate',0.5))
         if config['evaluation'].get('test',False) and result['state']=='completed':
-            result['test']=evaluate(model,task,'test',config,device)
+            if not config['evaluation'].get('test_if_learning_gate',False) or gate_met:
+                test_config = copy.deepcopy(config)
+                test_config['evaluation']['samples'] = config['evaluation'].get('test_samples',config['evaluation']['samples'])
+                result['test']=evaluate(model,task,'test',test_config,device)
+            else:
+                result['test_status']='not_checked: predeclared validation gate unmet'
         intervention = 'without_branch' if config['model']['kind']=='growth' and config['model'].get('branch','none')!='none' else (
                        'without_history' if config['model']['kind']=='core5' else None)
         if intervention and result['state']=='completed':
             result[intervention]=evaluate(model,task,'val',config,device,intervention)
+            if intervention=='without_branch' and config['evaluation'].get('paired_branch',False):
+                result['paired_branch']=paired_branch_effect(model,task,config,device)
         result['training_acceptance'] = dict(finite=True,completed_budget=result['state']=='completed',
             validation_accuracy=last_validation['accuracy'],chance=1/task.value_vocab_size,
-            learning_gate_met=result['state']=='completed' and last_validation['step']==step and last_validation['accuracy']>=config.get('learning_gate',0.5))
+            learning_gate_met=gate_met)
         result['inference_acceptance'] = dict(finite_validation_logits=True,
                                              samples=last_validation['samples'], independent_check='separate record')
         if result['state']=='completed' and not config['training'].get('retain_checkpoint',True):

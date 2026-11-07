@@ -1,0 +1,7 @@
+{
+  "schema": "tide-lab-frozen-growth-stage-v1",
+  "study_id": "TL-B2",
+  "max_seconds": 2700,
+  "resume_config": "configs/studies/second/b-resume.json",
+  "matrix": "configs/studies/second/b-matrix.json"
+}

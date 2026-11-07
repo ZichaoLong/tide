@@ -1,0 +1,71 @@
+{
+  "axes": {
+    "discrete_semantics": "previous model admission reused; paired task invariants checked",
+    "execution": "checks completed",
+    "learning": "new experiments not yet run",
+    "recovery": "changed cadence fresh-process tiny CPU checks passed; frozen B checks scheduled inside its job",
+    "strict_numerical": "original foundation/NPU/HB finite failures unchanged"
+  },
+  "checked_at": "2026-11-07T19:01:43.993870+00:00",
+  "checks": {
+    "cadence_fc_and_hb_sparse": {
+      "log": "artifacts/checks/second-preflight/cadence.log",
+      "log_sha256": "8a93f572e525460657762fd3cebf323415d197961ea8636da3fd3f8924f369c2",
+      "passed": 3,
+      "scope": "CPU FP32 tiny FC dense and HB quad; exact model/AdamW/RNG for observation cadence and fresh-process resume; finite guard on an unobserved step",
+      "seconds": 61.788
+    },
+    "graph": "12 evidence checks and offline Firefox smoke passed",
+    "initial_unit_suite": {
+      "passed": 29,
+      "seconds": 32.557
+    },
+    "lens": {
+      "project": "tide-learning-lab",
+      "projection_sha256": "f72192d97d355a8d274df155566ff74915f57f7ad932230c7f21fe78bec73bf2",
+      "readback_matches": true,
+      "run_id": "tl-second-recording-check",
+      "status": "verified"
+    },
+    "task_interventions": "mapping, target, split and paired delay invariants passed"
+  },
+  "dependencies": {
+    "installed_consumer": "historical wheel unchanged; new frozen experiment source explicitly overrides via PYTHONPATH",
+    "metadata": {
+      "numpy": {
+        "record_sha256": "79acc5eb79dcafa8281f3bb4aefb0f7621231e9fbee8a42e67d566524f8471d9",
+        "version": "2.5.2"
+      },
+      "torch": {
+        "record_sha256": "d8c1ebcc0c0414b78a8a645941b98d37a9bcf8fdb9d51cb0700c5da9e3919fe6",
+        "version": "2.12.0+cpu"
+      },
+      "torch-npu": {
+        "record_sha256": "4a6b805fb2ce2fc232b8be71fd8d787ebcf4c6fb6ee8940c2152d50a0d33cb9d",
+        "version": "2.12.0.post3"
+      }
+    },
+    "public_foundation_files": "all locked Python source hashes match"
+  },
+  "resources": {
+    "cgroup": "v1; service lifecycle isolation available; per-service CPU/memory controllers not delegated",
+    "filesystem_available_gib_approx": 929,
+    "new_disk_budget_gib": 20,
+    "npu_admission": "all 16 physical devices had processes at inspection; cooperative exclusive queue required",
+    "quota_hard_gib": 800,
+    "quota_used_gib_approx": 165
+  },
+  "schema": "tide-second-batch-preflight-v1",
+  "source_sha256": {
+    "scripts/check_growth.py": "23da920ca899fbba181a4bf6d7b93c667c9f5146e1730951d25ecd674df9603a",
+    "scripts/evaluate_fc_mechanisms.py": "ab345acf61eba2600f4d69629c458477ed1d406fa42096f1a9270980c85bc66d",
+    "scripts/run_frozen_growth.py": "4930173c45002c4c854c3949f7a097b32632b4234ad5bb78a42c9ff3669e608f",
+    "scripts/sample_core5_runtime.py": "2da585a3bfaedeb984a36fc593565325c72096456a229a608bc92e3fe59f20b5",
+    "tests/test_tasks.py": "30969ccd5c938086063bb4a431854581eb91efbe505d9084503ac22288f6f15f",
+    "tests/test_training_cadence.py": "ae77db07e3065017879076421d78159c6496df847ff7500d140163f03855d485",
+    "tide_lab/diagnostics.py": "661fd7ca16956ae6a9c1ff9d38dafeb2a3eca0655c6dcdfe5b22e8c6a00a6a39",
+    "tide_lab/records.py": "ccda7e73ee8e5e05c701f4b5bdb08dcd8daf93209d3f746a5e19907df48af17b",
+    "tide_lab/train.py": "451f10c1aaf34b7015bf7d6ba7a12f2c515584fee19ac2d3293a58b236417bbf"
+  },
+  "state": "passed"
+}

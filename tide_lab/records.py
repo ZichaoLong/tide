@@ -53,3 +53,21 @@ class Metrics:
         self.stream.flush()
         os.fsync(self.stream.fileno())
         self.stream.close()
+
+
+def project_to_lens(directory, cli):
+    """Project finished JSONL with the installed recorder; preserve failures separately."""
+    import subprocess
+    directory = Path(directory)
+    command = [cli, 'record', '--events', str(directory/'metrics.jsonl'),
+               '--manifest', str(directory/'manifest.json'), '--report', str(directory/'projection.json')]
+    try:
+        with (directory/'recording.log').open('x') as log:
+            process = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=60,
+                env={k:v for k,v in os.environ.items() if k not in ('PYTHONPATH','VIRTUAL_ENV')})
+        if process.returncode:
+            raise RuntimeError(f'recorder exit {process.returncode}')
+    except (OSError, subprocess.TimeoutExpired, RuntimeError) as error:
+        atomic_json(directory/'recording-failure.json', dict(state='failed', error=repr(error), at=now()))
+        return False
+    return True

@@ -1,0 +1,34 @@
+{
+  "schema": "tide-lab-fc-mechanisms-v1",
+  "study_id": "TL-A1-MECH",
+  "checkpoints": [
+    {
+      "run": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm",
+      "checkpoint_sha256": "bb5c7b31a254d90ef00d64c811f27353c268801b209e654622772dfcaf552d49",
+      "config_sha256": "6694260da1558bded07b86227f326adecef86287d9e807b0477673db3a9621f0"
+    },
+    {
+      "run": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm",
+      "checkpoint_sha256": "6a250c33b80e2669ceb1007e556858bb528ee8ef4339baec734f2ab2c2b9e29f",
+      "config_sha256": "0e980422e68c6addd5e5ef7a7d8d554c2990d26aa6d88beccbf1b3be95aa38f8"
+    },
+    {
+      "run": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm",
+      "checkpoint_sha256": "120c282cb794aa3ea9742aca5969e8046de9fe36e5dbf02bda5be1ae60bfe4e5",
+      "config_sha256": "655d1e709f0100c106738e700e02ded46f7189763b9022f093d151f049c4935c"
+    }
+  ],
+  "samples": 128,
+  "batch_size": 16,
+  "data_seed": 20261107,
+  "delays": [
+    2,
+    4,
+    8
+  ],
+  "max_seconds": 1120,
+  "model_source_sha256": {
+    "tide_lab/core5.py": "c50c5d442becf9e9a9a5ca1083cad14c2985d9fb3a8c3c81d15fe7846e4c9986",
+    "tide_lab/tasks.py": "b58e7250edc46d01aae0db5a37ad6999b6e2895f010b54704076893111936d0b"
+  }
+}
