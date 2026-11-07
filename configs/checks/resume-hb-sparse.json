@@ -1,0 +1,57 @@
+{
+  "device": "cpu",
+  "dtype": "float32",
+  "evaluation": {
+    "batch_size": 2,
+    "samples": 4,
+    "seed": 20261107,
+    "test": false
+  },
+  "evidence_axes": {
+    "discrete_semantics": "separate structural/support check; formal work observations, not per-step CPU oracle",
+    "execution": "per-run result",
+    "learning": "validation and history intervention; agent review pending",
+    "recovery": "fresh-process same-stack full AdamW resume before longer exploration",
+    "strict_numerical": "separate independent check; original failure retained"
+  },
+  "learning_gate": 0.5,
+  "model": {
+    "branches": 2,
+    "depth": 1,
+    "kind": "core5",
+    "offsets": [
+      0,
+      1
+    ],
+    "region_width": 4,
+    "send": "sparse",
+    "temperature": 0.25,
+    "topology": "hb",
+    "width": 16
+  },
+  "numerical_policy": "explore: finite strict failures retained; independent discrete/mechanism and exact resume gates required",
+  "phase": "hb-pilot",
+  "schema": "tide-lab-run-v1",
+  "seed": 11,
+  "study_id": "TL-A2",
+  "task": {
+    "delay": 2,
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4
+  },
+  "threads": 1,
+  "training": {
+    "batch_size": 2,
+    "checkpoint_every": 3,
+    "data_seed": 1011,
+    "eps": 1e-06,
+    "eval_every": 3,
+    "log_every": 1,
+    "lr": 0.001,
+    "max_seconds": 300,
+    "retain_checkpoint": true,
+    "steps": 3,
+    "weight_decay": 0.01
+  }
+}

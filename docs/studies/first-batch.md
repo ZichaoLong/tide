@@ -59,3 +59,14 @@ B采用全骨干SGD、无momentum（与两步梯度接入检查同一optimizer�
 各轴分别给出passed/failed/not_checked及对应来源和范围；执行完成与loss下降都不自动改写严格数值或科学支持。新的判断只适用于后续配置和新运行身份，不重标旧CPU/NPU记录。
 
 可执行阶段计划为`configs/studies/a1-npu-stage.json`，驱动为`scripts/npu_learning_stage.py`。阶段将固定计划、每个子命令退出/超时/后代清理、原始检查及选batch理由写入`stage.json`；实际训练配置生成到新输出目录并只读冻结。校准的step窗口含forward/backward/clip/梯度观测/optimizer与同步，不含数据生成/传输、验证、checkpoint或Lens；另留完整进程墙钟。80步时限估算加入128例验证的成本及余量。最多一份profile有独立开销和超时；计算/非有限错误不因profile是观察项而放行。
+
+
+## FC确认后的原批次HB先导（2026-11-08，本地）
+
+三个CPU64种子的原validation门槛全部满足，独立test为97.27%/99.22%/99.61%；经主代理审阅，启动原已授权TL-A2的最小接入与配对先导，尚无HB效果结论。配置固定HB depth1/branches2/offsets[0,1]，16节点/4区域、width16、原任务与温度0.25；唯一架构改变量为Shannon稠密与quad发送，不增加固定稀疏或其他局部组合。
+
+准备计划为`configs/studies/a2-hb-prepare.json`：CPU FP32（允许有限数值超差），验证参数初值相同；各B2两步独立检查与三步精确恢复；两候选共同校准B32/B128，每case一warmup+两计时步。选择两者合计样本吞吐在最好结果10%内的最小共同batch，且各80步预计在40分钟内完成。总准备≤20分钟，校准≤15分钟；机制/离散/恢复失败只阻塞该候选，配对比较需两者均可接入。
+
+CPU选择依据是当前小图主机调度配方的实测周转：FC旧CPU64/B32约5.9秒，新的NPU32/B32约19.1秒，后者batch128仍在独立评估。这两个不同精度/观测配方不能用于等价后端速度声明；HB仍须自己的batch校准。准备完成并审阅后，两个独立CPU先导可并行，各1线程、RAM预算8GiB、80updates/训练≤40分钟/服务≤50分钟；共同validation128和历史干预，不用test筛选，无自动正式重复。与现有NPU阶段合计RAM预算40GiB、CPU线程预算6，仍在原批次边界内，不增加NPU卡时。
+
+现场核实为cgroup v1且用户CPU/内存控制器未按服务委派：systemd记录的CPUQuota/MemoryMax是请求，不能当作已生效的每服务硬限制。线程数由应用及环境设置，服务超时有效，RSS/HBM另记录并按小型校准准入；不修改公共控制器或已有作业。账号磁盘硬配额仍为800GiB，当前约165GiB。

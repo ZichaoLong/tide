@@ -2,7 +2,7 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "首批有界研究已实施：A的CPU64三seed确认运行；B三候选先导完成但未建立旁路预测收益。CPU/NPU严格数值失败保留，执行、独立正确性、恢复与学习效果分列。",
+  "notice": "CPU64三seed确认完成：独立test 97.27%–99.61%。后续NPU FP32探索正在运行，严格数值失败仍保留；B先导未建立旁路预测收益。小HB按原批次准备准入。",
   "width": 1490,
   "height": 1010,
   "columns": [
@@ -174,11 +174,11 @@
       "kind": "experiment",
       "status": "running",
       "title": "从零训练完整 TIDE",
-      "summary": "80步先导出现历史利用信号（24.22% vs query-only10.94%），尚未达HB门槛；原任务三seed400步确认运行。",
+      "summary": "CPU三seed独立test97.27%–99.61%；NPU有限数值探索继续。",
       "x": 325,
       "y": 360,
       "question": "从合法小 FC/KV 绑定开始，完整 TIDE 能否学会独立样本的延迟关联检索，并实际使用历史记忆？",
-      "decision": "等待三个seed的validation/test与历史干预；先导不区分query检索与value汇聚，不自动启动HB或声明架构收益。",
+      "decision": "经主代理审阅，CPU确认达到原validation门槛，允许小HB自身准入与配对先导；不继承HB/NPU效果或严格等价。",
       "budget": "单种子先导 ≤80 updates；最多一次预先声明的小任务降阶。正式 ≤400 updates，至多种子 11/22/33。",
       "track": "tide",
       "study_id": "TL-A1",
@@ -219,6 +219,22 @@
         {
           "label": "TL-A1 已审阅先导结论",
           "path": "docs/studies/TL-A1.md"
+        },
+        {
+          "label": "NPU后续阶段固定计划",
+          "path": "configs/studies/a1-npu-stage.json"
+        },
+        {
+          "label": "NPU阶段与分轴记录",
+          "path": "runs/a1-npu-explore/stage.json"
+        },
+        {
+          "label": "NPU机制/恢复与原严格失败",
+          "path": "docs/evidence/a1-npu-admission.json"
+        },
+        {
+          "label": "CPU三seed确认与独立test证据",
+          "path": "docs/evidence/a1-confirmation.json"
         }
       ],
       "runs": [
@@ -251,11 +267,11 @@
         },
         {
           "id": "tl-a1-fc-dense-s11-confirm",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-fc-dense-s11.json",
-          "record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/manifest.json",
+          "record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/result.json",
           "lens_record": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/projection.json"
         },
         {
@@ -269,11 +285,11 @@
         },
         {
           "id": "tl-a1-fc-dense-s22-confirm",
-          "status": "running",
+          "status": "completed",
           "seed": 22,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-fc-dense-s22.json",
-          "record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/manifest.json",
+          "record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/result.json",
           "lens_record": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/projection.json"
         },
         {
@@ -287,15 +303,23 @@
         },
         {
           "id": "tl-a1-fc-dense-s33-confirm",
-          "status": "running",
+          "status": "completed",
           "seed": 33,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/a1-fc-dense-s33.json",
-          "record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/manifest.json",
+          "record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/result.json",
           "lens_record": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/projection.json"
+        },
+        {
+          "id": "a1-npu-explore",
+          "status": "running",
+          "seed": 11,
+          "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+          "config": "configs/studies/a1-npu-stage.json",
+          "record": "runs/a1-npu-explore/stage.json"
         }
       ],
-      "execution_note": "后台 pilot-a：无记忆 query 对照已完成，CPU64 / B32 / 80 steps 的 FC 稠密先导已启动。这里只记录执行状态，学习门槛和科学结论仍待审阅。",
+      "execution_note": "CPU64三seed400步均完成，无记忆对照约机会水平，历史干预消除收益。NPU FP32 actual-width16离散/机制与AdamW恢复通过，严格数值失败保留；batch32实测1.674例/秒，batch128为1.579例/秒，后者80步预计超2h，因此选32。运行仍非学习结论。",
       "observed_at": "2026-11-07T15:12:19+00:00"
     },
     {
@@ -307,11 +331,11 @@
       "x": 325,
       "y": 600,
       "question": "输入、图参数、共享参数、读出、loss、统一 optimizer 及完整应用恢复是否可信，分别在哪些精度和设备上成立？",
-      "decision": "保留 FP32 稠密严格失败；CPU FP64 微型检查、完整恢复和 Lens 准入各按实际范围解释。失败仅阻塞依赖路径，不认证模型学习。",
+      "decision": "原严格失败继续保留；后续A不再限CPU64。有界机制/离散检查及同栈精确恢复成立时，可进行明确标记的NPU有限误差学习探索；不由学习效果解除数值失败。",
       "budget": "微型检查每项 ≤10 min；先校准正确性，再决定 CPU/NPU 训练与有限数值探索。",
       "track": "shared",
       "study_id": "TL-A0",
-      "execution_note": "CPU FP64 微型独立检查、CPU 完整恢复及 Lens 单事件写入读回通过。CPU FP32 dense 参数更新严格超差仍在；本批 NPU foundation 根差 2.8610e-6、core5 dense Adam 参数差 5.3346e-6 的严格失败继续保留。组状态“失败”指未解除的严格项，不否定已经成立的 CPU64 路径，也不能概括全部客户端或训练效果。",
+      "execution_note": "CPU FP64 微型独立检查、CPU 完整恢复及 Lens 单事件写入读回通过。CPU FP32 dense 参数更新严格超差仍在；本批 NPU foundation 根差 2.8610e-6、core5 dense Adam 参数差 5.3346e-6 的严格失败继续保留。组状态“失败”指未解除的严格项，不否定已经成立的 CPU64 路径，也不能概括全部客户端或训练效果。 追加actual-width16 NPU FP32两步：严格数值failed，离散24920项与机制passed；三步完整AdamW新进程恢复passed。未知数值原因保留，learning不由这些检查认定。",
       "scope": "本组是执行/数值/共享梯度/optimizer/应用状态检查，不是训练效果证据；无每步 CPU 参考要求。基座原综合根失败也未解除。",
       "sources": [
         {
@@ -355,6 +379,10 @@
         {
           "label": "公共数值差异需求 TL-REQ-001",
           "path": "docs/requests/TL-REQ-001.md"
+        },
+        {
+          "label": "后续NPU实际尺寸分轴验收",
+          "path": "docs/evidence/a1-npu-admission.json"
         }
       ],
       "runs": [

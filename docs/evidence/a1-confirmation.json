@@ -1,0 +1,731 @@
+{
+  "domain": "TL-A1 CPU FP64 3 seeds, B32/400updates, validation256 and independent test256; shared fixed evaluation set across seeds",
+  "mean_test_accuracy": 0.9869791666666666,
+  "records": [
+    {
+      "path": "runs/confirm-a-s11/tl-a1-query-s11-confirm/result.json",
+      "record": {
+        "config_sha256": "f3385f49d68359770233ad18ddb256fcec63e78585ce0c0a8246da4d08565d76",
+        "elapsed_seconds": 1.9048199318349361,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:17:32.410990+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.125,
+          "loss": 2.2283580064281447,
+          "samples": 256,
+          "seconds": 0.04280531406402588,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.14453125,
+          "loss": 2.0792384389706755,
+          "samples": 256,
+          "seconds": 0.03745352849364281,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-query-s11-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:30.506184+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.12890625,
+          "loss": 2.0865916826715676,
+          "samples": 256,
+          "seconds": 0.03639715164899826
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.14453125
+        }
+      },
+      "sha256": "f01ea7649bec308689d52c4be14f22a5026216fd80278aa4313c82638dd1bf6c"
+    },
+    {
+      "path": "runs/confirm-a-s11/tl-a1-query-s11-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "kind": "no_memory",
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 11,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1011,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "f3385f49d68359770233ad18ddb256fcec63e78585ce0c0a8246da4d08565d76"
+    },
+    {
+      "path": "runs/confirm-a-s11/tl-a1-query-s11-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-query-s11-confirm-projection-cea39a28dfa3",
+        "destination_run_id": "3e8cb43b38e64306bfbcb02ec444eba1",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-query-s11-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "55e385086bff5cee46c858c07ec06b14ebe8da695c5de47c2dca0ed8b5da23fe"
+    },
+    {
+      "path": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/result.json",
+      "record": {
+        "config_sha256": "6694260da1558bded07b86227f326adecef86287d9e807b0477673db3a9621f0",
+        "elapsed_seconds": 2500.4574959389865,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:59:15.652323+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.15234375,
+          "loss": 2.212496299922164,
+          "samples": 256,
+          "seconds": 16.716129429638386,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.9921875,
+          "loss": 0.052868732377450045,
+          "samples": 256,
+          "seconds": 16.975964527577162,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-fc-dense-s11-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:35.194846+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.97265625,
+          "loss": 0.06827148107254875,
+          "samples": 256,
+          "seconds": 16.877315051853657
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": true,
+          "validation_accuracy": 0.9921875
+        },
+        "without_history": {
+          "accuracy": 0.10546875,
+          "loss": 7.611116810958671,
+          "samples": 256,
+          "seconds": 17.033318299800158
+        }
+      },
+      "sha256": "04ac80fd995f3b237ace87bc31a12307bede7d32534f8e62aa243a4f375702ea"
+    },
+    {
+      "path": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "depth": 2,
+          "kind": "core5",
+          "region_width": 4,
+          "send": "dense",
+          "temperature": 0.25,
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 11,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1011,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "6694260da1558bded07b86227f326adecef86287d9e807b0477673db3a9621f0"
+    },
+    {
+      "path": "runs/confirm-a-s11/tl-a1-fc-dense-s11-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-fc-dense-s11-confirm-projection-badf931fe473",
+        "destination_run_id": "5a4f242e0ba54fd1ab2c5d653a70901c",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-fc-dense-s11-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "0e0b089b72e98c97fc54c9b1c29983f165965d9d8d605597b72d840ffaa821e4"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-query-s22-confirm/result.json",
+      "record": {
+        "config_sha256": "a5adfad92479d66b1d21f22268d1f6aaae38e7fc736e5f1a7fc4f78254251156",
+        "elapsed_seconds": 1.9553528502583504,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:17:32.604779+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.109375,
+          "loss": 2.195818229600805,
+          "samples": 256,
+          "seconds": 0.04039432108402252,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.1171875,
+          "loss": 2.0954165929924655,
+          "samples": 256,
+          "seconds": 0.04638957604765892,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-query-s22-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:30.649445+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.13671875,
+          "loss": 2.0806921791491564,
+          "samples": 256,
+          "seconds": 0.046380072832107544
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.1171875
+        }
+      },
+      "sha256": "56b422c5226e57e7308bf962b01ff074400eda94006be7a855d74fa3bd45ed5f"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-query-s22-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "kind": "no_memory",
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 22,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1022,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "a5adfad92479d66b1d21f22268d1f6aaae38e7fc736e5f1a7fc4f78254251156"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-query-s22-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-query-s22-confirm-projection-132ba584fef8",
+        "destination_run_id": "69ef271df8e343e1bf3be5201c2747bc",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-query-s22-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "3c56c92f05c380fd0801830cd943328398707b1122e9432ce1ef4d82a697cd18"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/result.json",
+      "record": {
+        "config_sha256": "0e980422e68c6addd5e5ef7a7d8d554c2990d26aa6d88beccbf1b3be95aa38f8",
+        "elapsed_seconds": 2496.075301684439,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:59:11.956572+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.1171875,
+          "loss": 2.204679852907641,
+          "samples": 256,
+          "seconds": 16.426637589931488,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 1.0,
+          "loss": 0.015464605597119742,
+          "samples": 256,
+          "seconds": 16.942402862012386,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-fc-dense-s22-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:35.881290+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.9921875,
+          "loss": 0.023995045787534558,
+          "samples": 256,
+          "seconds": 16.786981482058764
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": true,
+          "validation_accuracy": 1.0
+        },
+        "without_history": {
+          "accuracy": 0.0859375,
+          "loss": 5.64389242054802,
+          "samples": 256,
+          "seconds": 16.74394267424941
+        }
+      },
+      "sha256": "91b873ae04b9eccc24b84ea4f15a5c14b74b2e9bc8ea65ef852dc286309361c8"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "depth": 2,
+          "kind": "core5",
+          "region_width": 4,
+          "send": "dense",
+          "temperature": 0.25,
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 22,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1022,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "0e980422e68c6addd5e5ef7a7d8d554c2990d26aa6d88beccbf1b3be95aa38f8"
+    },
+    {
+      "path": "runs/confirm-a-s22/tl-a1-fc-dense-s22-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-fc-dense-s22-confirm-projection-0ca28067d8b3",
+        "destination_run_id": "ad3ee72222724d3899f9ebea5d3d57f7",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-fc-dense-s22-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "8328a3cd58e595a21f61f5e442e694076c86421c3f2eadb22b7378909faa9d1b"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-query-s33-confirm/result.json",
+      "record": {
+        "config_sha256": "b08fe462b2fa303ae093187c8468c27b1ec8597a18320e49a3273df56b656e57",
+        "elapsed_seconds": 1.9152656607329845,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:17:32.653116+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.125,
+          "loss": 2.195930819401491,
+          "samples": 256,
+          "seconds": 0.03897497430443764,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 0.11328125,
+          "loss": 2.0911313420332265,
+          "samples": 256,
+          "seconds": 0.03818837180733681,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-query-s33-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:30.737880+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.140625,
+          "loss": 2.0829894677359,
+          "samples": 256,
+          "seconds": 0.04247651994228363
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": false,
+          "validation_accuracy": 0.11328125
+        }
+      },
+      "sha256": "dae77550f1953824b41aad1cf997f86c2ecf809a2f2741a2a9907ff7e8ddfea2"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-query-s33-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "kind": "no_memory",
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 33,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1033,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "b08fe462b2fa303ae093187c8468c27b1ec8597a18320e49a3273df56b656e57"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-query-s33-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-query-s33-confirm-projection-ec5807e10970",
+        "destination_run_id": "a7155161efcd4b53993abb312d31d302",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-query-s33-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "088320aaece0efc4d5ba228542a572a8ab054c119d6391594a8e88f87908b248"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/result.json",
+      "record": {
+        "config_sha256": "655d1e709f0100c106738e700e02ded46f7189763b9022f093d151f049c4935c",
+        "elapsed_seconds": 2519.7144043296576,
+        "exact_resume": "not_checked_by_training",
+        "finished_at": "2026-11-07T15:59:35.405854+00:00",
+        "independent_correctness": "see separate checks",
+        "inference_acceptance": {
+          "finite_validation_logits": true,
+          "independent_check": "separate record",
+          "samples": 256
+        },
+        "initial_validation": {
+          "accuracy": 0.125,
+          "loss": 2.2290557966123075,
+          "samples": 256,
+          "seconds": 16.80340550839901,
+          "step": 0
+        },
+        "last_validation": {
+          "accuracy": 1.0,
+          "loss": 0.02045332283191329,
+          "samples": 256,
+          "seconds": 17.091830279678106,
+          "step": 400
+        },
+        "numerical_check": "not_checked_by_training",
+        "run_id": "tl-a1-fc-dense-s33-confirm",
+        "schema": "tide-lab-result-v1",
+        "started_at": "2026-11-07T15:17:35.691471+00:00",
+        "state": "completed",
+        "steps": 400,
+        "study_id": "TL-A1",
+        "test": {
+          "accuracy": 0.99609375,
+          "loss": 0.021268830435482958,
+          "samples": 256,
+          "seconds": 17.003361456096172
+        },
+        "trained_examples": 12800,
+        "training_acceptance": {
+          "chance": 0.125,
+          "completed_budget": true,
+          "finite": true,
+          "learning_gate_met": true,
+          "validation_accuracy": 1.0
+        },
+        "without_history": {
+          "accuracy": 0.14453125,
+          "loss": 6.50476972152287,
+          "samples": 256,
+          "seconds": 17.003110945224762
+        }
+      },
+      "sha256": "b90e338ec4b07e8cc56056d3133daae4e42d7b8b4a0a15ea8a6ebe6b47db75c0"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/config.json",
+      "record": {
+        "device": "cpu",
+        "dtype": "float64",
+        "evaluation": {
+          "batch_size": 16,
+          "samples": 256,
+          "seed": 20261107,
+          "test": true
+        },
+        "learning_gate": 0.5,
+        "model": {
+          "depth": 2,
+          "kind": "core5",
+          "region_width": 4,
+          "send": "dense",
+          "temperature": 0.25,
+          "width": 16
+        },
+        "numerical_policy": "strict CPU float64 admission; finite runtime checks",
+        "phase": "finite-confirmation",
+        "schema": "tide-lab-run-v1",
+        "seed": 33,
+        "study_id": "TL-A1",
+        "task": {
+          "delay": 2,
+          "n_keys": 8,
+          "n_values": 8,
+          "pairs": 4
+        },
+        "threads": 1,
+        "training": {
+          "batch_size": 32,
+          "checkpoint_every": 40,
+          "data_seed": 1033,
+          "eps": 1e-06,
+          "eval_every": 40,
+          "log_every": 5,
+          "lr": 0.001,
+          "max_seconds": 4000,
+          "steps": 400,
+          "weight_decay": 0.01
+        }
+      },
+      "sha256": "655d1e709f0100c106738e700e02ded46f7189763b9022f093d151f049c4935c"
+    },
+    {
+      "path": "runs/confirm-a-s33/tl-a1-fc-dense-s33-confirm/projection.json",
+      "record": {
+        "destination_name": "tl-a1-fc-dense-s33-confirm-projection-aff63f274945",
+        "destination_run_id": "bcfa761d4bf04e69adea5d775306b96f",
+        "event_count": 411,
+        "last_sequence": 410,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-a1-fc-dense-s33-confirm",
+        "status": "verified",
+        "warning_count": 0
+      },
+      "sha256": "9c936dc21765b8655b33d9871f5e94be7e6fd6d4c38f1f8b58e8f5755625caf2"
+    }
+  ],
+  "reviewed_at": "2026-11-07T16:02:00.389951+00:00",
+  "reviewed_decision": "A1 validation gate met in all three seeds; allow predeclared small HB admission and paired pilot only; no inherited HB/NPU/sparsity or general architecture claim",
+  "reviewer": "Codex primary agent",
+  "rows": [
+    {
+      "elapsed_seconds": 2500.4574959389865,
+      "query_test_accuracy": 0.12890625,
+      "query_validation_accuracy": 0.14453125,
+      "seed": 11,
+      "test_accuracy": 0.97265625,
+      "test_loss": 0.06827148107254875,
+      "trained_examples": 12800,
+      "validation_accuracy": 0.9921875,
+      "without_history_validation_accuracy": 0.10546875
+    },
+    {
+      "elapsed_seconds": 2496.075301684439,
+      "query_test_accuracy": 0.13671875,
+      "query_validation_accuracy": 0.1171875,
+      "seed": 22,
+      "test_accuracy": 0.9921875,
+      "test_loss": 0.023995045787534558,
+      "trained_examples": 12800,
+      "validation_accuracy": 1.0,
+      "without_history_validation_accuracy": 0.0859375
+    },
+    {
+      "elapsed_seconds": 2519.7144043296576,
+      "query_test_accuracy": 0.140625,
+      "query_validation_accuracy": 0.11328125,
+      "seed": 33,
+      "test_accuracy": 0.99609375,
+      "test_loss": 0.021268830435482958,
+      "trained_examples": 12800,
+      "validation_accuracy": 1.0,
+      "without_history_validation_accuracy": 0.14453125
+    }
+  ],
+  "sample_std_across_seeds": 0.012556836928376244,
+  "schema": "tide-lab-reviewed-confirmation-v1",
+  "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab"
+}

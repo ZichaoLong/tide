@@ -1,0 +1,19 @@
+{
+  "batches": [
+    32,
+    128
+  ],
+  "calibration_max_seconds": 900,
+  "learning_max_seconds": 2400,
+  "learning_steps": 80,
+  "max_seconds": 1200,
+  "minimum_throughput_gain": 0.1,
+  "prerequisite_evidence": "docs/evidence/a1-confirmation.json",
+  "schema": "tide-lab-hb-prepare-v1",
+  "scope": "predeclared 16-node/4-region HB pair; CPU FP32 selected for measured CPU host-scheduled throughput, not to erase numerical failures; no learning runs auto-launched",
+  "sends": [
+    "dense",
+    "sparse"
+  ],
+  "study_id": "TL-A2"
+}
