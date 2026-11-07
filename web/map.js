@@ -2,7 +2,7 @@
 const data = JSON.parse(document.getElementById('research-data').textContent);
 const $ = id => document.getElementById(id);
 const svg = $('map'), NS = 'http://www.w3.org/2000/svg', W = 250, H = 118;
-const kinds = {goal:'目标',baseline:'起点',experiment:'实验',result:'结果位置',evidence:'已有证据'};
+const kinds = {goal:'目标',baseline:'起点',experiment:'实验',result:'结果',evidence:'已有证据'};
 const statuses = {target:'研究目标',unselected:'待选定',documented:'已固定',planned:'计划',queued:'排队',running:'运行中',completed:'执行完成',failed:'失败',unchecked:'未检查',awaiting:'结论待填',scoped:'已审阅 · 限定'};
 const lifecycle = ['planned','queued','running','completed','failed','unchecked'];
 const edgeNames = {decomposes:'分解',precondition:'前提',variant:'改造',produces:'产出',comparison:'对照',transfer:'迁移待验',informs:'参考',evaluates:'检验目标',supports:'支持',challenges:'反证'};

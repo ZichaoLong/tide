@@ -15,13 +15,13 @@ class ResearchEvidenceTests(unittest.TestCase):
         self.data = json.loads((ROOT/'research/map.json').read_text())
 
     def test_pending_result_cannot_support_a_claim(self):
-        edge = next(e for e in self.data['edges'] if e['source'] == 'R1')
+        edge = next(e for e in self.data['edges'] if e['source'] == 'R2')
         edge['kind'] = 'supports'
         with self.assertRaisesRegex(ValueError, 'actual scoped evidence'):
             validate(self.data)
 
     def test_actual_evidence_needs_scope_and_source(self):
-        result = next(n for n in self.data['nodes'] if n['id'] == 'R1')
+        result = next(n for n in self.data['nodes'] if n['id'] == 'R2')
         result['status'] = 'scoped'
         with self.assertRaisesRegex(ValueError, 'sources and scope'):
             validate(self.data)
@@ -57,23 +57,24 @@ class ResearchEvidenceTests(unittest.TestCase):
             validate(self.data)
 
     def test_completed_run_does_not_fill_pending_result(self):
-        node = next(n for n in self.data['nodes'] if n['id'] == 'R1')
+        node = next(n for n in self.data['nodes'] if n['id'] == 'R2')
         node['runs'] = [{'id':'example-completed', 'status':'completed',
                          'config':'configs/example.json', 'record':'runs/example/result.json'}]
         validate(self.data)
         self.assertEqual(node['status'], 'awaiting')
-        next(e for e in self.data['edges'] if e['source'] == 'R1')['kind'] = 'supports'
+        next(e for e in self.data['edges'] if e['source'] == 'R2')['kind'] = 'supports'
         with self.assertRaisesRegex(ValueError, 'actual scoped evidence'):
             validate(self.data)
 
     def test_pending_result_cannot_be_reviewed_transfer_advice(self):
-        edge = next(e for e in self.data['edges'] if e['source'] == 'R1' and e['kind'] == 'transfer')
+        edge = next(e for e in self.data['edges'] if e['source'] == 'R2')
+        edge['kind'] = 'transfer'
         edge['status'] = 'documented'
         with self.assertRaisesRegex(ValueError, 'actual scoped evidence'):
             validate(self.data)
 
     def test_reviewed_result_requires_explanatory_limits(self):
-        node = next(n for n in self.data['nodes'] if n['id'] == 'R1')
+        node = next(n for n in self.data['nodes'] if n['id'] == 'R2')
         node.update(status='scoped', scope='Small task, one seed only.',
                     sources=copy.deepcopy(next(n for n in self.data['nodes'] if n['id']=='F0')['sources']))
         with self.assertRaisesRegex(ValueError, 'reviewed result needs comparisons'):

@@ -1,0 +1,51 @@
+{
+  "schema": "tide-lab-run-v1",
+  "study_id": "TL-A1",
+  "seed": 11,
+  "device": "npu:0",
+  "dtype": "float32",
+  "threads": 4,
+  "task": {
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4,
+    "delay": 2
+  },
+  "model": {
+    "kind": "core5",
+    "width": 16,
+    "depth": 2,
+    "region_width": 4,
+    "send": "dense",
+    "temperature": 0.25
+  },
+  "training": {
+    "steps": 80,
+    "batch_size": 32,
+    "lr": 0.001,
+    "eps": 1e-06,
+    "weight_decay": 0.01,
+    "log_every": 5,
+    "eval_every": 20,
+    "checkpoint_every": 20,
+    "max_seconds": 7200,
+    "data_seed": 1011,
+    "retain_checkpoint": true
+  },
+  "evaluation": {
+    "samples": 128,
+    "batch_size": 16,
+    "seed": 20261107,
+    "test": false
+  },
+  "numerical_policy": "explore: original finite tolerance failures retained; causal/shared/discrete/nonfinite/recovery errors are not waived",
+  "learning_gate": 0.5,
+  "phase": "npu-learning-exploration",
+  "evidence_axes": {
+    "execution": "per-run result",
+    "strict_numerical": "separate independent check; original failure retained",
+    "discrete_semantics": "separate structural/support check; formal work observations, not per-step CPU oracle",
+    "recovery": "fresh-process same-stack full AdamW resume before longer exploration",
+    "learning": "validation and history intervention; agent review pending"
+  }
+}

@@ -80,3 +80,5 @@ python scripts/render_map.py
 python scripts/render_map.py --check
 python -m unittest discover -s tests -p test_research_map.py -v
 ```
+
+当前两份经主代理审阅、待用户验收的先导结果已填入图中：RA1为FC历史利用信号，R1为旁路接入成立但预测收益未证实。R2的HB结果仍待填；没有因这些结果自动增加广泛支持关系。来源链接固定到产生一页结论与原始记录的提交。

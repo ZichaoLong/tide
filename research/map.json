@@ -488,19 +488,38 @@
     {
       "id": "R1",
       "kind": "result",
-      "status": "awaiting",
-      "title": "旁路结果位置",
-      "summary": "结论待填 · 不从退出码生成",
+      "status": "scoped",
+      "title": "旁路接入成立，收益未证实",
+      "summary": "40步：关分支不改变accuracy",
       "x": 915,
       "y": 120,
       "question": "收益是否来自Tide机制、额外容量或训练暴露？",
-      "decision": "审阅原模型、TIDE 旁路、MLP 旁路及关闭分支干预；保留反证、未区分解释与迁移条件。当前尚无学习结论。",
-      "budget": "由产出该结果的实验记录实际资源；当前未运行。",
+      "decision": "B本轮停止于已完成先导，不启动正式重复；用户验收后可选择冻结骨干对照或性能profile。",
+      "budget": "同B32/40updates/1280训练例；全流程约34.60/888.32/34.35秒，三模型实际工作不同；非等价加速比。",
       "track": "baseline",
       "references": [
         {
           "label": "TL-B1 研究问题与预算",
           "path": "docs/studies/first-batch.md"
+        },
+        {
+          "label": "项目内B结论",
+          "path": "docs/studies/TL-B1.md"
+        }
+      ],
+      "scope": "TL-B1 Qwen2.5-0.5B-Instruct，符号关联检索、NPU FP32、SGD、seed11/B32/40步、validation128。主代理审阅，待用户验收；不是完整TIDE或其他任务资格。",
+      "comparisons": "原模型/TIDE/MLP accuracy 12.50%/17.97%/12.50%；TIDE CE更差，关闭分支accuracy不变，CE差仅1.97e-5。",
+      "counterevidence": "所有候选未达25%先导门槛；TIDE关闭分支不影响当前准确率，当前证据不支持实际预测收益；严格数值失败保留。",
+      "unresolved": "单seed仅多答对7/128例；优化路径、clip归一化变化、额外参数和采样差异未区分。未评估适配后的原语言能力保留。",
+      "transfer_conditions": "可条件复用初态中性、梯度与同栈恢复接入方法；不得推出质量收益、HB、稀疏速度或完整TIDE从零训练成功。",
+      "sources": [
+        {
+          "label": "已审阅B先导结论（6e988d6）",
+          "url": "https://github.com/ZichaoLong/tide/blob/6e988d67f15b4dbf26e4b73375afe63992d17a3c/docs/studies/TL-B1.md"
+        },
+        {
+          "label": "固定原始结果与hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/6e988d67f15b4dbf26e4b73375afe63992d17a3c/docs/evidence/b1-pilot.json"
         }
       ]
     },

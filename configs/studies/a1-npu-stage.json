@@ -1,0 +1,30 @@
+{
+  "schema": "tide-lab-npu-learning-stage-v1",
+  "study_id": "TL-A1",
+  "stage_id": "a1-npu-explore",
+  "seed": 11,
+  "max_seconds": 10800,
+  "calibration_max_seconds": 1200,
+  "minimum_throughput_gain": 0.1,
+  "learning_steps": 80,
+  "learning_max_seconds": 7200,
+  "admission_config": "configs/checks/calibrate-a-npu-b32.json",
+  "resume_config": "configs/checks/resume-a-npu.json",
+  "learning_template": "configs/studies/a1-npu-explore-template.json",
+  "batches": [
+    {
+      "batch": 32,
+      "config": "configs/checks/calibrate-a-npu-b32.json"
+    },
+    {
+      "batch": 128,
+      "config": "configs/checks/calibrate-a-npu-b128.json"
+    },
+    {
+      "batch": 256,
+      "config": "configs/checks/calibrate-a-npu-b256.json"
+    }
+  ],
+  "profile_max_seconds": 180,
+  "scope": "one-device finite-error learning exploration; no strict-equivalence or architecture-speedup claim"
+}
