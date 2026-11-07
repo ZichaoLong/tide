@@ -2,7 +2,7 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "首批结论已审阅，用户授权第二批有限跟进：FC机制评估、HB400步配对、NPU轻量采样、冻结骨干旁路。新结果待检查；旧严格失败和学习门槛保留。",
+  "notice": "第二批已启动：FC机制评估与HB400步两候选在CPU运行；NPU采样和冻结骨干旁路已排队。结果待审阅，原严格失败与质量门槛保留。",
   "width": 1490,
   "height": 1480,
   "columns": [
@@ -810,7 +810,7 @@
     {
       "id": "E7",
       "kind": "experiment",
-      "status": "planned",
+      "status": "running",
       "title": "FC 查询与延迟评估",
       "summary": "固定三个checkpoint，配对干预",
       "x": 30,
@@ -838,10 +838,13 @@
           "config": "configs/studies/second/fc-mechanisms.json",
           "id": "s2-fc-mechanisms",
           "record": "artifacts/jobs/s2-fc-mechanisms/state.json",
-          "status": "planned"
+          "status": "running",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         }
       ],
-      "study_id": "TL-A1-MECH"
+      "study_id": "TL-A1-MECH",
+      "observed_at": "2026-11-07T19:04:27.942130+00:00",
+      "execution_note": "已核对实际background.slice成员与固定源码；已运行，执行与学习验收仍待终态审阅。"
     },
     {
       "id": "R7",
@@ -865,7 +868,7 @@
     {
       "id": "E8",
       "kind": "experiment",
-      "status": "planned",
+      "status": "running",
       "title": "HB 较长训练配对",
       "summary": "相同初态，400步/seed11",
       "x": 325,
@@ -897,16 +900,20 @@
           "config": "configs/studies/second/hb-dense.json",
           "id": "s2-hb-dense",
           "record": "artifacts/jobs/s2-hb-dense/state.json",
-          "status": "planned"
+          "status": "running",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         },
         {
           "config": "configs/studies/second/hb-sparse.json",
           "id": "s2-hb-sparse",
           "record": "artifacts/jobs/s2-hb-sparse/state.json",
-          "status": "planned"
+          "status": "running",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         }
       ],
-      "study_id": "TL-A2-LONG"
+      "study_id": "TL-A2-LONG",
+      "observed_at": "2026-11-07T19:04:27.942130+00:00",
+      "execution_note": "已核对实际background.slice成员与固定源码；已运行，执行与学习验收仍待终态审阅。"
     },
     {
       "id": "R8",
@@ -930,7 +937,7 @@
     {
       "id": "E9",
       "kind": "experiment",
-      "status": "planned",
+      "status": "queued",
       "title": "NPU 轻量运行采样",
       "summary": "一次有界观察，排队准入",
       "x": 620,
@@ -958,10 +965,13 @@
           "config": "configs/studies/second/npu-sampling.json",
           "id": "s2-npu-sampling",
           "record": "artifacts/jobs/s2-npu-sampling/state.json",
-          "status": "planned"
+          "status": "queued",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         }
       ],
-      "study_id": "TL-S1"
+      "study_id": "TL-S1",
+      "observed_at": "2026-11-07T19:04:27.942130+00:00",
+      "execution_note": "已核对实际background.slice成员与固定源码；共享队列已接受，尚未取得设备。"
     },
     {
       "id": "R9",
@@ -985,7 +995,7 @@
     {
       "id": "E10",
       "kind": "experiment",
-      "status": "planned",
+      "status": "queued",
       "title": "冻结骨干的旁路比较",
       "summary": "head-only / TIDE / MLP",
       "x": 915,
@@ -1013,10 +1023,13 @@
           "config": "configs/studies/second/b-stage.json",
           "id": "s2-frozen-growth",
           "record": "artifacts/jobs/s2-frozen-growth/state.json",
-          "status": "planned"
+          "status": "queued",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         }
       ],
-      "study_id": "TL-B2"
+      "study_id": "TL-B2",
+      "observed_at": "2026-11-07T19:04:27.942130+00:00",
+      "execution_note": "已核对实际background.slice成员与固定源码；共享队列已接受，尚未取得设备。"
     },
     {
       "id": "R10",
@@ -1288,5 +1301,5 @@
       "via_y": 1040
     }
   ],
-  "updated_at": "2026-11-07T18:59:51.010312+00:00"
+  "updated_at": "2026-11-07T19:04:27.942130+00:00"
 }

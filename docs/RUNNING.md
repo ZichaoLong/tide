@@ -1,3 +1,56 @@
+# 第二批后台作业与恢复
+
+2026-11-08用户授权后的五个作业已提交。启动核对：三个CPU作业运行，两个NPU作业已被队列接受，分别等待空闲卡/队列顺序。状态会变化，以`job.py status`和项目记录为准；不是终态或学习结论。原首批操作说明保留在本页后部。
+
+固定源码：`94bf712f8bd2e4007f0f56d1fea4799c99833dcd`，只读目录`.local/source-second-batch`，树SHA256 `e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0`。数学/公共基座及`.venv`不变；旧consumer wheel原样保留，新实验包显式从冻结目录导入，实际身份见各manifest。不要修改快照、环境或被锁定的原FC checkpoint/config。工作区文档更新不影响这些作业。
+
+| 作业ID | 内容/固定配置（快照内） | 预算与停止 |
+| --- | --- | --- |
+| s2-fc-mechanisms | 三个旧step400 checkpoint；`configs/studies/second/fc-mechanisms.json` | CPU1线程/4GiB；服务19.5min+最多30s清理；无训练 |
+| s2-hb-dense | seed11/B32/400步；`configs/studies/second/hb-dense-matrix.json`及`hb-dense.json` | CPU1线程/8GiB；服务119.5min+最多30s清理；训练110min |
+| s2-hb-sparse | 与dense配对；`configs/studies/second/hb-sparse-matrix.json`及`hb-sparse.json` | 同上；两组并行，总CPU2线程/16GiB |
+| s2-npu-sampling | 原FC/B32；`configs/studies/second/npu-sampling.json` | 单NPU/CPU4线程/8GiB；等卡≤5min，命令≤9min；服务14.5min+最多30s清理 |
+| s2-frozen-growth | 冻结准入→完整恢复→三候选各40步；`configs/studies/second/b-stage.json`及引用配置 | 单NPU/CPU4线程/24GiB；等卡≤10min，阶段≤45min；服务59.5min+最多30s清理 |
+
+CPU/内存控制器未逐服务委派，表中为请求预算，不能称硬隔离。应用线程和服务超时生效。NPU只由共享队列选择真实空闲卡，随后逻辑`npu:0`；没有共享其他作业占用的卡，没有自动重试。峰值请求11 CPU线程/52GiB/最多2张独立NPU，新增磁盘≤20GiB。
+
+在项目根目录执行，其他任务替换ID：
+
+```sh
+python scripts/job.py status artifacts/jobs/s2-hb-dense
+python scripts/job.py logs artifacts/jobs/s2-hb-dense --lines 60
+python scripts/job.py stop artifacts/jobs/s2-hb-dense
+```
+
+stop停止整个服务、队列等待和所有后代，并核对终止。单元名为`tide-lab-ID.service`；实际启动命令、输入hash、资源、来源、cgroup和终态保存在`artifacts/jobs/ID/{job,state,submission}.json`，无需重启计算查看。
+
+权威结果位置：
+
+- FC：`runs/s2-fc-mechanisms/result.json`，含配对逐例预测及输入hash；`metrics.jsonl`提供各seed/条件的指标。
+- HB：`runs/s2-hb-{dense,sparse}/tl-a2-long-{dense,sparse}-s11/`中的state/result/checkpoint/metrics。日志步为1、5、10…400，工作总量每步累计；阶段batch.json记录内层退出。
+- NPU采样：`runs/s2-npu-sampling/result.json`。若还在队列，目录尚未生成，以`artifacts/jobs/s2-npu-sampling/queue-state.json`为准。
+- B：`runs/s2-frozen-growth/stage.json`及ingress/resume/learning记录；学习run名为`tl-b2-{none,tide,mlp}-s11-frozen`。队列中未生成stage不是失败。
+
+Lens沿既有项目`tide-learning-lab`；新的小记录`tl-second-recording-check`已读回verified。训练通过独立记录器跟随JSONL；FC评估与采样完成后投影。各目录projection.json给出具体destination_name/run_id，私有入口及SSH转发见`.local/LENS.md`。记录器失败与执行、学习分开，不更改既有服务。
+
+恢复仅针对已发布checkpoint的中断训练，须先确认旧服务与后代终止。HB每40步发布，检查点包含model/AdamW/RNG/数据游标。保持原配置和源码，使用新作业ID与输出，例如：
+
+```sh
+python scripts/job.py submit \
+  --name s2-hb-dense-resume-01 --source .local/source-second-batch \
+  --output artifacts/jobs/s2-hb-dense-resume-01 \
+  --env-script "$PWD/.local/source-second-batch/scripts/env.sh" \
+  --env TIDE_LAB_VENV="$PWD/.venv" --device cpu \
+  --timeout 7170 --wait-seconds 0 --threads 1 --memory-gib 8 \
+  --input runs/s2-hb-dense/tl-a2-long-dense-s11/checkpoint.pt \
+  -- python -m tide_lab.train \
+  --config "$PWD/.local/source-second-batch/configs/studies/second/hb-dense.json" \
+  --resume "$PWD/runs/s2-hb-dense/tl-a2-long-dense-s11/checkpoint.pt" \
+  --output "$PWD/runs/s2-hb-dense-resume-01"
+```
+
+这是恢复方法，不是已额外授权的一份完整训练预算。已用时间计入本批，恢复前确定剩余上限；没有checkpoint不能声称续训。直接train入口写权威JSONL，新的Lens投影须用独立record命令并保持同一项目。B成功后按计划退役大checkpoint保留hash；中断保留。NPU精确恢复要求同一实际映射及完整identity，跨映射迁移未认证。FC评估/采样是有限一次任务，无optimizer恢复，不自动重试。
+
 # 首批后台作业与恢复
 
 2026-11-08终态复核：表中全部训练已完成，当前无活动或排队作业；以下保留原固定输入、预算与历史操作方法。新的训练/恢复须另用新ID，不能把本页示例当作正在执行的任务。结论见[首批总报告](studies/first-batch-results.md)。

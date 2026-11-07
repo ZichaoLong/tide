@@ -1,0 +1,161 @@
+{
+  "evidence_scope": "observed execution and queue/lifecycle only; training or scientific acceptance pending",
+  "jobs": [
+    {
+      "actual_cgroup_membership_verified": true,
+      "job_id": "s2-fc-mechanisms",
+      "job_record_sha256": "6cab93ed56d35e9ce45b63beb17bcedc3b4ad3bfab231de86e4c4b27a3bdb52c",
+      "live_process_count": 3,
+      "observed_at": "2026-11-07T19:04:27.917126+00:00",
+      "queue": {
+        "position": null,
+        "reason": null,
+        "status": null
+      },
+      "record": "artifacts/jobs/s2-fc-mechanisms/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 4294967296,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 1170,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+      "state": "running",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s2-fc-mechanisms.service",
+      "workload_exit_code": null
+    },
+    {
+      "actual_cgroup_membership_verified": true,
+      "job_id": "s2-frozen-growth",
+      "job_record_sha256": "36bc9deeedc97c1aa893c368f2b92591284f869821a0d2fffad8bccafbf326be",
+      "live_process_count": 2,
+      "observed_at": "2026-11-07T19:04:27.923917+00:00",
+      "queue": {
+        "position": 2,
+        "reason": "waiting_turn",
+        "status": "queued"
+      },
+      "record": "artifacts/jobs/s2-frozen-growth/job.json",
+      "resources": {
+        "cpu_quota_percent": 400,
+        "memory_bytes": 25769803776,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 4,
+        "timeout_seconds": 3570,
+        "wait_seconds": 600
+      },
+      "slice": "background.slice",
+      "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+      "state": "queued",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s2-frozen-growth.service",
+      "workload_exit_code": null
+    },
+    {
+      "actual_cgroup_membership_verified": true,
+      "job_id": "s2-hb-dense",
+      "job_record_sha256": "d2cf78352ae97bad51c52fd4d8c04be8966bbff831fa8e65cf51f5a1889fc783",
+      "live_process_count": 5,
+      "observed_at": "2026-11-07T19:04:27.930211+00:00",
+      "queue": {
+        "position": null,
+        "reason": null,
+        "status": null
+      },
+      "record": "artifacts/jobs/s2-hb-dense/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 7170,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+      "state": "running",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s2-hb-dense.service",
+      "workload_exit_code": null
+    },
+    {
+      "actual_cgroup_membership_verified": true,
+      "job_id": "s2-hb-sparse",
+      "job_record_sha256": "443b8d2e24c0b2d0ee159848cbcd421e435175024fe9ad7cd3f959e76e0b5d3a",
+      "live_process_count": 5,
+      "observed_at": "2026-11-07T19:04:27.936335+00:00",
+      "queue": {
+        "position": null,
+        "reason": null,
+        "status": null
+      },
+      "record": "artifacts/jobs/s2-hb-sparse/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 7170,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+      "state": "running",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s2-hb-sparse.service",
+      "workload_exit_code": null
+    },
+    {
+      "actual_cgroup_membership_verified": true,
+      "job_id": "s2-npu-sampling",
+      "job_record_sha256": "1453a865533ffe3082953b54e0e7f5f78bea049e75196212bcad9ad8ea2ede1b",
+      "live_process_count": 2,
+      "observed_at": "2026-11-07T19:04:27.942078+00:00",
+      "queue": {
+        "position": 1,
+        "reason": "insufficient_free_devices",
+        "status": "queued"
+      },
+      "record": "artifacts/jobs/s2-npu-sampling/job.json",
+      "resources": {
+        "cpu_quota_percent": 400,
+        "memory_bytes": 8589934592,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 4,
+        "timeout_seconds": 870,
+        "wait_seconds": 300
+      },
+      "slice": "background.slice",
+      "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+      "state": "queued",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s2-npu-sampling.service",
+      "workload_exit_code": null
+    }
+  ],
+  "lens": {
+    "project": "tide-learning-lab",
+    "small_admission": "verified with readback",
+    "training_projection": "terminal verification pending"
+  },
+  "observed_at": "2026-11-07T19:04:27.942130+00:00",
+  "resource_scope": "application threads and service timeout; CPU/memory cgroup controllers not delegated per service",
+  "schema": "tide-second-batch-submission-review-v1",
+  "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+  "source_tree_sha256": "e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0",
+  "source_verified": true
+}
