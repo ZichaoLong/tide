@@ -36,6 +36,10 @@ for (const col of data.columns) {
 }
 function geometry(edge) {
   const a=nodes.get(edge.source),b=nodes.get(edge.target);
+  if(edge.via_y!==undefined){
+    const sx=a.x+W,sy=a.y+H/2,tx=b.x,ty=b.y+H/2,v=edge.via_y;
+    return {path:`M${sx},${sy} C${sx+20},${sy} ${sx+20},${v} ${sx+40},${v} L${tx-40},${v} C${tx-20},${v} ${tx-20},${ty} ${tx},${ty}`,x:(sx+tx)/2,y:v-7,anchor:'middle',rotation:0};
+  }
   if(a.y===b.y&&b.x-a.x>W+100){
     const sx=a.x+W,sy=a.y+H/2,tx=b.x,via=a.y-20;
     return {path:`M${sx},${sy} C${sx+20},${sy} ${sx+20},${via} ${sx+40},${via} L${tx-40},${via} C${tx-20},${via} ${tx-20},${sy} ${tx},${sy}`,
@@ -66,6 +70,9 @@ for (const node of data.nodes) {
            element('text',{x:14,y:57,class:'title'},node.title),
            element('text',{x:14,y:88,class:'summary'},node.summary));
   interactive(g,()=>showNode(node));svg.append(g);nodeElements.set(node.id,g);
+  const summary=g.querySelector('.summary');
+  let label=node.summary;
+  while(summary.getComputedTextLength()>W-28&&label.length>1){label=label.slice(0,-1);summary.textContent=label+'…';}
 }
 function section(parent, title, value) {
   if(!value)return;
@@ -76,6 +83,7 @@ function showNode(node) {
   const body=$('detail-body');body.replaceChildren();
   body.append(html('div',`${node.study_id||node.id} · ${kinds[node.kind]} · ${statuses[node.status]}`,'meta'));
   const heading=html('h2',node.title);heading.id='detail-title';body.append(heading);
+  section(body,'观察摘要',node.summary);
   section(body,'这一步要回答',node.question);
   section(body,'据此作什么决定',node.decision);
   section(body,'执行与检查',node.execution_note);

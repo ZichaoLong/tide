@@ -2,9 +2,9 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "首批有界研究已实施：CPU64 从零训练与单 NPU 预训练模型生长先导运行，B0 校准已完成。CPU/NPU 严格数值失败保留；执行、独立正确性、恢复与学习效果分列，两处科学结论仍待审阅。",
+  "notice": "首批有界研究已实施：A的CPU64三seed确认运行；B三候选先导完成但未建立旁路预测收益。CPU/NPU严格数值失败保留，执行、独立正确性、恢复与学习效果分列。",
   "width": 1490,
-  "height": 790,
+  "height": 1010,
   "columns": [
     {
       "x": 30,
@@ -33,7 +33,7 @@
       "kind": "baseline",
       "status": "documented",
       "title": "Qwen2.5 小型 checkpoint",
-      "summary": "0.5B-Instruct · 已缓存 · 待校准",
+      "summary": "0.5B-Instruct · 固定来源与校准",
       "x": 30,
       "y": 120,
       "question": "固定公开 checkpoint、原 tokenizer 和指令后训练背景后，当前 CPU/NPU 栈能否可靠加载与继续训练？",
@@ -373,13 +373,13 @@
     {
       "id": "E1",
       "kind": "experiment",
-      "status": "running",
+      "status": "completed",
       "title": "预训练模型生长",
-      "summary": "原模型、TIDE及MLP旁路按共同B32/40步预算开展先导；原模型已完成，TIDE运行，MLP待顺序执行。未形成架构效果结论。",
+      "summary": "三组40步先导均完成；旁路梯度接入成立，预测收益未证实，本轮不做B正式重复。",
       "x": 620,
       "y": 120,
       "question": "小 TIDE 残差旁路能否保持初态、得到内部梯度，并在训练后对共同任务作出实际贡献？",
-      "decision": "保留原模型同预算继续训练和简单 MLP 旁路对照；关闭分支只检验依赖，不能独自证明架构优势。",
+      "decision": "保留全部结果；TIDE移除分支后accuracy不变且门槛未达，不能把候选差异归因为旁路收益。后续方案待用户验收。",
       "budget": "pilot-b 队列等待 ≤15 min，服务总时限 70 min，组内计算 50 min；三候选各 40 updates。后续重复仍须研究表中的学习与梯度门槛。",
       "track": "baseline",
       "study_id": "TL-B1",
@@ -404,6 +404,10 @@
         {
           "label": "实际接入审计与数值边界",
           "path": "docs/startup-audit.md"
+        },
+        {
+          "label": "TL-B1 已审阅先导结论",
+          "path": "docs/studies/TL-B1.md"
         }
       ],
       "runs": [
@@ -417,19 +421,19 @@
         },
         {
           "id": "tl-b1-tide-s11-pilot",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/b1-tide-pilot.json",
-          "record": "runs/pilot-b/tl-b1-tide-s11-pilot/manifest.json"
+          "record": "runs/pilot-b/tl-b1-tide-s11-pilot/result.json"
         },
         {
           "id": "tl-b1-mlp-s11-pilot",
-          "status": "queued",
+          "status": "completed",
           "seed": 11,
           "source_commit": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
           "config": "configs/studies/b1-mlp-pilot.json",
-          "record": "runs/pilot-b/tl-b1-mlp-s11-pilot/manifest.json"
+          "record": "runs/pilot-b/tl-b1-mlp-s11-pilot/result.json"
         }
       ],
       "execution_note": "后台 pilot-b 已获单 NPU：原模型 none 已完成 40 updates，TIDE 旁路先导已启动，MLP 对照在同一组内按顺序等待。均为 FP32/B32/seed11/40 updates，按有限数值探索记录；执行完成不表示学习或架构价值成立。",
@@ -587,6 +591,40 @@
       "decision": "发送总量、支持数、真实算术与设备时间分别报告。",
       "budget": "通过关联研究申请资源，目标本身不是独立作业。",
       "track": "shared"
+    },
+    {
+      "id": "RA1",
+      "kind": "result",
+      "status": "scoped",
+      "title": "FC先导：历史利用信号",
+      "summary": "24.2% / query-only 10.9%",
+      "x": 915,
+      "y": 840,
+      "track": "core",
+      "question": "80步完整TIDE先导是否出现超出无记忆对照的历史利用？",
+      "decision": "保留原任务，开展三seed400步确认；HB门槛50%未达，不启动HB效果比较。",
+      "budget": "seed11，B32，80updates/2560例；CPU64全流程约485秒；固定验证128例，未使用test。",
+      "scope": "仅TL-A1的FC/KV、width16/depth2/8节点、Shannon/k2/温度0.25、CPU64、seed11、80步先导。主代理审阅结果和历史干预，待用户验收；不是架构或跨后端资格。",
+      "comparisons": "初态11.72%→训练后24.22%；同预算query-only10.94%；同一训练模型移除历史10.16%。",
+      "counterevidence": "仍未达到预设50%门槛，原任务尚未解决；FP32严格失败见启动审计，不能由质量改善解除。",
+      "unresolved": "查询无关的value汇聚、有限验证采样和优化不足仍未区分；同一轨迹不是多个重复。",
+      "transfer_conditions": "只支持继续原FC任务的有限确认；迁往HB须重新验证候选接收历史、区域饥饿及质量门槛，不能推出预训练旁路成功。",
+      "sources": [
+        {
+          "label": "已审阅一页先导结论（d07ffa0）",
+          "url": "https://github.com/ZichaoLong/tide/blob/d07ffa0511a32b4cdcfe082826bf722e7151a27b/docs/studies/TL-A1.md"
+        },
+        {
+          "label": "固定原始指标与结果hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/d07ffa0511a32b4cdcfe082826bf722e7151a27b/docs/evidence/a1-pilot.json"
+        }
+      ],
+      "references": [
+        {
+          "label": "项目内结论",
+          "path": "docs/studies/TL-A1.md"
+        }
+      ]
     }
   ],
   "edges": [
@@ -751,7 +789,17 @@
       "label": "目标分解",
       "detail": "任务质量与稀疏的实际收益共同评价。",
       "status": "documented"
+    },
+    {
+      "id": "a1-pilot-result",
+      "source": "E3",
+      "target": "RA1",
+      "kind": "produces",
+      "status": "documented",
+      "label": "先导结果",
+      "via_y": 780,
+      "detail": "固定先导记录经主代理审阅，结论仅为当前小模型出现历史利用信号；未把完成退出或该信号提升成HB/架构支持。"
     }
   ],
-  "updated_at": "2026-11-07T15:20:00Z"
+  "updated_at": "2026-11-07T15:26:00Z"
 }

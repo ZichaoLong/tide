@@ -7,13 +7,15 @@
 | 作业 | 已确认状态 | 内容与预算 |
 | --- | --- | --- |
 | confirm-a-s11 / confirm-a-s22 / confirm-a-s33 | 三个background.slice服务实际running | CPU FP64，各seed query-only+完整FC，B32各400步；每服务CPU1线程、RAM8GiB、硬限80分钟 |
-| pilot-b | background.slice实际running，物理1→逻辑npu:0 | Qwen原模型已完成40步，TIDE运行，MLP按顺序等待；各B32/40步，NPU1+CPU4线程、RAM32GiB、硬限70分钟（含≤15分钟等待） |
+| pilot-b | 已completed，exit0，NPU与后代已释放 | 原模型/TIDE/MLP各40步均完成，Lens读回verified；本轮不启动B正式重复 |
 
-最多同时1 NPU、CPU配额7线程、RAM上限56GiB。首批新增磁盘上限20GiB；账号启动约165GiB/软300/硬800，当前余量充分。CPU并非独占，不能把并行期间计时解释成独占基准。
+当前只有三个CPU确认服务，合计CPU配额3线程、RAM上限24GiB，无本项目活动NPU作业。此前峰值请求为1 NPU、CPU配额7线程、RAM上限56GiB。首批新增磁盘上限20GiB；账号启动约165GiB/软300/硬800，当前余量充分。CPU并非独占，不能把并行期间计时解释成独占基准。
 
 完整固定配置、状态/日志/停止/恢复命令见[RUNNING](RUNNING.md)。所有作业终态、原始JSONL与checkpoint均保存在项目目录；缺失结果不是通过。NPU整组锁、双采样与排队发生在服务内；停止方法已用真实含孙进程的CPU服务验证，检查无存活后代。
 
 ## 已有结论与正确性边界
+
+[TL-B1先导结论](studies/TL-B1.md)：原模型/TIDE/MLP验证accuracy为12.50%/17.97%/12.50%，TIDE关闭分支后accuracy不变、CE仅变化1.97e-5。梯度接入成立但实际预测收益未证实，未达25%重复门槛；不扩大本轮B训练。
 
 [TL-A1先导结论](studies/TL-A1.md)：seed11/80步，验证accuracy 11.72%→24.22%，query-only10.94%，移除历史10.16%。只支持当前小模型开始使用历史；不证明已解决关联检索，也未到50% HB门槛。原任务的三个种子400步确认已启动；HB效果比较仍依赖确认结果，不自动扩组合。
 

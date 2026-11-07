@@ -7,9 +7,9 @@
 | confirm-a-s11 | query-only + FC/KV，seed11 | configs/studies/confirm-a-s11.json | 各400步/B32，CPU1线程/8GiB，组内75min，服务80min |
 | confirm-a-s22 | 同上，seed22 | configs/studies/confirm-a-s22.json | 同上 |
 | confirm-a-s33 | 同上，seed33 | configs/studies/confirm-a-s33.json | 同上 |
-| pilot-b | 原模型、TIDE、MLP依次运行 | configs/studies/pilot-b.json | 各40步/B32，单NPU+CPU4线程/32GiB，组内50min；等待≤15min，服务70min |
+| pilot-b（已完成） | 原模型、TIDE、MLP均终态；不启动B正式重复 | configs/studies/pilot-b.json | 各40步/B32，单NPU+CPU4线程/32GiB，组内50min；等待≤15min，服务70min |
 
-当前最大同时占用为1张NPU、7个CPU线程配额、56GiB RAM上限；不是实际内存峰值或独占CPU承诺。B校准allocated峰值约3.8GiB，不等于驱动及其他HBM占用的完整峰值。队列记录每次真实物理→逻辑映射；程序只使用npu:0。训练输出、日志和记录位于不同目录；不写入固定源码。
+当前活动仅三个CPU确认服务（3线程/24GiB上限）。已完成B先导阶段的最大同时请求为1张NPU、7个CPU线程配额、56GiB RAM上限；不是实际内存峰值或独占CPU承诺。B校准allocated峰值约3.8GiB，不等于驱动及其他HBM占用的完整峰值。队列记录每次真实物理→逻辑映射；程序只使用npu:0。训练输出、日志和记录位于不同目录；不写入固定源码。
 
 ```sh
 python scripts/job.py status artifacts/jobs/confirm-a-s11
@@ -46,4 +46,4 @@ python scripts/job.py submit \
 
 上例直接写权威记录；需要Lens时使用同样声明的独立`trackio-lens record --follow`查看新run，不追加旧projection。B恢复同理，需队列helper和固定asset路径（原job.json中完整记录）。现有严格恢复要求runtime identity相同，包括物理可见映射；不同映射会明确拒绝，不假称逐值续训。新进程CPU/NPU同栈恢复已有通过证据，跨设备映射恢复未检查。`--init-from`仅恢复模型权重、重新开始optimizer/数据进度，是不同实验。
 
-首批终态后唤醒接续：先查这四个服务及batch记录，审阅完整结果、精确恢复/数值边界、Lens投影；再更新每组结论和研究图。HB与B正式重复仍依赖这些结果，不因外层exit0自动启动。下一批规模/任务/候选待用户验收决定。
+首批终态后唤醒接续：先查这四个服务及batch记录，审阅完整结果、精确恢复/数值边界、Lens投影；再更新每组结论和研究图。HB仍依赖A确认结果；B先导未过预设门槛，本轮不启动B正式重复，不因外层exit0自动扩展。下一批规模/任务/候选待用户验收决定。

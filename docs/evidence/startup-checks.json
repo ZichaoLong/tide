@@ -2752,5 +2752,13 @@
         "workload_exit_code": -15
       }
     }
-  ]
+  ],
+  "supplemental_checkers": {
+    "revision": "d07ffa0511a32b4cdcfe082826bf722e7151a27b",
+    "scripts": {
+      "scripts/check_core5.py": "a67db3d4df7f5ac2d62d53cd13eeb3912224a5cb8dfeb408abfcafbb3513f9b1",
+      "scripts/check_growth.py": "f9a307582ee6b5b2df47f33a7ab2d93c7bacf1f82a8dbd0e4b9ace6e93a0f8f8"
+    },
+    "scope": "Supplemental script inputs were separately frozen and hashed in job records; runtime model source stays 0d7ec5b."
+  }
 }

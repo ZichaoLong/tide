@@ -1,7 +1,7 @@
 // Optional real-browser check: node --experimental-websocket tests/browser_smoke.mjs
 // Uses only Node built-ins and an installed Firefox. No package/browser download.
 import {spawn} from 'node:child_process';
-import {mkdtemp, mkdir, writeFile, rm} from 'node:fs/promises';
+import {mkdtemp, mkdir, writeFile, readFile, rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
@@ -42,19 +42,20 @@ async function run(){
     if(r.type!=='success')throw new Error(JSON.stringify(r));
     return r.result.value;
   }
-  assert.equal(await evaluate('document.querySelectorAll(".node").length'),15);
-  assert.equal(await evaluate('document.querySelectorAll(".edge").length'),18);
-  assert.match(await evaluate('document.getElementById("count").textContent'),/已录入研究结果 0 项/);
+  const graph=JSON.parse(await readFile(path.join(root,'research/map.json'),'utf8'));
+  assert.equal(await evaluate('document.querySelectorAll(".node").length'),graph.nodes.length);
+  assert.equal(await evaluate('document.querySelectorAll(".edge").length'),graph.edges.length);
+  assert.match(await evaluate('document.getElementById("count").textContent'),new RegExp(`已录入研究结果 ${graph.nodes.filter(n=>n.kind==='result'&&n.status==='scoped').length} 项`));
   await evaluate('document.getElementById("kind").value="result";document.getElementById("kind").dispatchEvent(new Event("change",{bubbles:true}));');
-  assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),2);
-  await evaluate('document.querySelector(".node.result").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
+  assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),graph.nodes.filter(n=>n.kind==='result').length);
+  await evaluate('document.querySelector(".node.result.awaiting").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
   assert.equal(await evaluate('document.getElementById("details").hidden'),false);
   assert.match(await evaluate('document.getElementById("detail-body").textContent'),/尚无结果/);
   await evaluate('document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape"}));document.getElementById("reset").click();');
   assert.equal(await evaluate('document.getElementById("details").hidden'),true);
   await evaluate('document.getElementById("search").value="HB";document.getElementById("search").dispatchEvent(new Event("input",{bubbles:true}));');
   const visible=await evaluate('document.querySelectorAll(".node:not(.hidden)").length');
-  assert.ok(visible>0&&visible<15);
+  assert.ok(visible>0&&visible<graph.nodes.length);
   await evaluate('document.getElementById("reset").click();document.querySelector(".edge").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
   assert.match(await evaluate('document.getElementById("detail-body").textContent'),/含义与边界/);
   await evaluate('document.getElementById("reset").click();');
@@ -64,6 +65,10 @@ async function run(){
   assert.ok(parseFloat(after)>parseFloat(before));
   await evaluate('document.getElementById("fit").click();');
   assert.deepEqual(errors,[],'Browser console errors');
+  await evaluate('document.querySelector(".node.result.scoped").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
+  assert.match(await evaluate('document.getElementById("detail-body").textContent'),/尚未区分的解释/);
+  assert.equal(await evaluate('Array.from(document.querySelectorAll(".node .summary")).every(e=>e.getComputedTextLength()<=222)'),true);
+  await evaluate('document.getElementById("reset").click();');
   const screenshot=await send('browsingContext.captureScreenshot',{context,origin:'document',format:{type:'image/png'}});
   await mkdir(path.join(root,'artifacts'),{recursive:true});
   await writeFile(path.join(root,'artifacts/research-map.png'),Buffer.from(screenshot.data,'base64'));

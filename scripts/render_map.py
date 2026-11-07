@@ -85,6 +85,8 @@ def validate(data):
         if edge['id'] in seen:
             raise ValueError('edges: duplicate id')
         seen.add(edge['id'])
+        if 'via_y' in edge and (type(edge['via_y']) is not int or not 0 <= edge['via_y'] < data['height']):
+            raise ValueError('edge via_y must be a finite in-canvas integer')
         if edge['source'] not in nodes or edge['target'] not in nodes:
             raise ValueError(f'edges.{edge["id"]}: unknown endpoint')
         if edge['kind'] not in RELATIONS or edge['status'] not in {'planned', 'documented'}:
