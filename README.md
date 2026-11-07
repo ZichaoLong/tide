@@ -7,7 +7,7 @@
 当前阶段：研究对齐与可浏览图形原型。新实验均未运行，可靠模型基线尚未选定。
 
 - [打开研究图](web/index.html)：离线HTML，节点/关系点击查看、搜索、分类、邻接聚焦和缩放。
-- [图的读法与维护](docs/research-map.md)
+- [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
 - [研究设计对齐稿](docs/research-design.md)
 - [当前交接](docs/STATUS.md) / [待办](docs/ROADMAP.md)
 - [基座来源选择](dependencies/foundation-source.json)：尚非安装锁。
