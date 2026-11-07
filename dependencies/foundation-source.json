@@ -7,6 +7,6 @@
   "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
   "protocol": "tide-downstream-contract-v1",
   "protocol_url": "https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/downstream-contract.md",
-  "installation_status": "not_installed",
-  "note": "来源选择不是安装锁或下游资格；实际wheel、环境、SDK和接入验收在授权后补充。"
+  "installation_status": "fixed_wheel_installed",
+  "note": "来源选择由foundation.lock.json、安装内容锁与下游检查补足；安装身份不等于科学/设备验收。"
 }

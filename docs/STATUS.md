@@ -1,25 +1,13 @@
-# 当前交接 — 分支与研究图原型（2026-11-07）
+# 当前交接 — 首批实验接入与先导（2026-11-07）
 
-用户授权将研究稿从基座移至同一tide仓库的`tide-learning-lab`独立分支，并以图形继续对齐。
-基座误放的未推送提交`0510e0d`已撤销，`graph-execution-foundation`恢复为`85d161d`；
-该分支文件树没有研究稿、没有新增实验待办。数学仍固定`0770593…`。
+用户已明确授权本机CPU/NPU首批研究；启动时HEAD 942c329、工作区干净，没有回退或覆盖已有修改。首批范围与停止规则见[研究表](studies/first-batch.md)。基座只读固定85d161d，数学固定0770593。
 
-本分支建立研究稿、来源选择和可离线浏览的研究图。图中实验均拟议，两个结果位置均待填，
-可靠checkpoint尚未选定；唯一已有证据链接基座有限验收，保留综合根失败。
-未安装实验环境、下载模型、申请设备或启动训练。当前没有本分支活动作业。
+私有venv继承CANN9.2.0公共基线，安装固定tidegraph wheel与Transformers4.57.1。来源、wheel、实际安装内容和环境身份见dependencies。原基座综合根三项严格失败保留。
 
-原型实现`902b81a`的[设施验证](verification.md)：5项证据边界检查与真实Firefox交互通过，
-生成文件/语法/文档链接通过，浏览器已停止且无遗留；不属于模型实验资格。
-研究分支普通推送到同一tide仓库，基座分支不需要推送或强推。
+已完成CPU64小型FC独立参考/梯度/共享参数/AdamW/因果/续接检查，项目完整checkpoint新进程恢复逐值通过。CPU32稠密发送出现参数更新有限超差，显式eps1e-6配方仍未全部通过；原记录保留，A路线先采用CPU64。NPU仍待本项目检查。具体证据将汇总到启动审计。
 
-下一步与用户对齐图示结构、初始基线、首组问题、比较和资源档位；训练/推理待统一授权。
-本分支不继承基座已有任务的运行授权，不恢复旧矩阵。
+B路线选已有只读缓存Qwen2.5-0.5B-Instruct，完整revision与hash见[选择说明](checkpoint-selection.md)，未下载权重。原模型与旁路完整检查尚待执行。
 
-```sh
-git status --short --branch
-python scripts/render_map.py --check
-python -m unittest discover -s tests -v
-```
+Lens独立记录器已在tide-learning-lab项目完成单事件写入读回（status=verified，readback_matches=true）。训练环境与记录器依赖隔离；私有入口留在.local，项目记录仍为权威。
 
-浏览`web/index.html`。设计见`docs/research-design.md`，图示见`docs/research-map.md`，
-待办仅在ROADMAP；来源声明不是安装锁，实际环境与下游验收后续再建立。
+当前无正式训练服务。下一步冻结本实现，运行CPU/NPU短检查与batch校准，按研究表门槛提交有限先导和比较。活动源码只读冻结归档，作业状态/log/stop/resume入口为scripts/job.py。

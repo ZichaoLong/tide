@@ -1,0 +1,42 @@
+{
+  "schema": "tide-foundation-lock-v1",
+  "foundation": {
+    "repository": "https://github.com/ZichaoLong/tide",
+    "commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "dirty": false,
+    "package_version": "0.3.0",
+    "wheel": {
+      "name": "tidegraph-0.3.0-py3-none-any.whl",
+      "sha256": "c40ba439d036f8b9d4149153aea8b89358fcebc2ac019c23b5c1e5b09587e075"
+    },
+    "installed_files_sha256": "4fd8507130535d44b1e52d3b7b2c83d32eed3ca9a256cdfb2bea9c12366f04a3"
+  },
+  "mathematics": {
+    "version": "tide-core-5",
+    "commit": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "protocol": {
+    "version": "tide-downstream-contract-v1",
+    "commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "path": "docs/downstream-contract.md"
+  },
+  "native": null,
+  "environment": {
+    "python": "3.12.13",
+    "torch": "2.12.0+cpu",
+    "torch_npu": "2.12.0.post3",
+    "architecture": "aarch64",
+    "cann": "9.2.0",
+    "baseline": "ascend/dev-workspace-9.2.0 r1"
+  },
+  "installation_lock": {
+    "schema": "tide-experiment-lock-v1",
+    "path": "dependencies/installation.lock.json",
+    "sha256": "01b9066ee15c1a1d43dc0f1274cde195e9c24c36fd18258971ac0c0a66615e2b"
+  },
+  "build": {
+    "method": "git archive fixed commit into private source; pip wheel --no-deps --no-build-isolation; no shared checkout writes",
+    "log": "artifacts/setup/foundation-build.log"
+  },
+  "consumer_identity": "each run records immutable full source inventory and installed task wheel separately"
+}

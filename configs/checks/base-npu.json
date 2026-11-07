@@ -1,0 +1,48 @@
+{
+  "schema": "tide-experiment-v1",
+  "name": "tide-lab-base-npu",
+  "description": "Small baseline migration anchor, not a performance or all-backend qualification.",
+  "model": {
+    "recipe": {
+      "topology": "fc",
+      "family": "kv",
+      "depth": 2,
+      "region_width": 2,
+      "width": 8,
+      "history": 4
+    }
+  },
+  "task": {
+    "samples": 2,
+    "positions": 3,
+    "seed": 7,
+    "input_pattern": "staggered-v1"
+  },
+  "execution": {
+    "family": "settle",
+    "client": "pytorch",
+    "device": "npu:0",
+    "placement": "mixed-c",
+    "dtype": "float32",
+    "scoring_dtype": "float32",
+    "schedule": "prefill",
+    "packing": "packed",
+    "return_packing": "packed",
+    "return_mode": "complete",
+    "workers": 1,
+    "intraop_threads": 1,
+    "interop_threads": 1
+  },
+  "measurement": {
+    "mode": "training",
+    "steps": 2,
+    "warmup": 0,
+    "validation": "strict",
+    "checkpoint_check": true,
+    "timeout_seconds": 600
+  },
+  "resources": {
+    "max_materialize_bytes": 1073741824,
+    "checkpoint_max_bytes": 268435456
+  }
+}

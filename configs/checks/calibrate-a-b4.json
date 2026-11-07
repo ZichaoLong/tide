@@ -1,0 +1,40 @@
+{
+  "schema": "tide-lab-run-v1",
+  "study_id": "TL-A0",
+  "seed": 11,
+  "device": "cpu",
+  "dtype": "float64",
+  "threads": 1,
+  "task": {
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4,
+    "delay": 2
+  },
+  "model": {
+    "kind": "core5",
+    "width": 16,
+    "depth": 2,
+    "region_width": 4,
+    "send": "dense",
+    "temperature": 0.25
+  },
+  "training": {
+    "steps": 2,
+    "batch_size": 4,
+    "lr": 0.001,
+    "eps": 1e-06,
+    "weight_decay": 0.01,
+    "log_every": 1,
+    "eval_every": 2,
+    "checkpoint_every": 2,
+    "max_seconds": 600,
+    "data_seed": 1011
+  },
+  "evaluation": {
+    "samples": 16,
+    "batch_size": 4,
+    "seed": 20261107,
+    "test": false
+  }
+}
