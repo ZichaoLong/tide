@@ -1,0 +1,106 @@
+{
+  "calibration": [
+    {
+      "batch": 32,
+      "calibration_process_seconds": 71.74140872061253,
+      "config": "configs/checks/calibrate-a-npu-b32.json",
+      "examples_per_second": 1.673785526935592,
+      "global_batch_per_update": 32,
+      "gradient_accumulation": 1,
+      "independent_sample_batch": 32,
+      "measured_seconds": [
+        19.11446639895439,
+        19.122212655842304
+      ],
+      "median_step_seconds": 19.118339527398348,
+      "observed_shapes": {
+        "resource/cpu_maxrss_mib": 2284.90625,
+        "resource/npu_peak_allocated_mib": 96.48974609375,
+        "work/max_full_batch": 224.0,
+        "work/max_region_batch": 224.0,
+        "work/max_state_batch": 32.0,
+        "work/max_state_sequence": 7.0
+      },
+      "per_device_microbatch": 32,
+      "predicted_evaluation_seconds": 235.3924105167389,
+      "predicted_learning_seconds": 2250.7530051469803,
+      "scope": "two post-warmup forward/backward/clip/gradient-observation/optimizer steps with device synchronization; excludes data construction/transfers, validation/checkpoint and Lens; not a global batch optimum"
+    },
+    {
+      "batch": 128,
+      "calibration_process_seconds": 256.3637949451804,
+      "config": "configs/checks/calibrate-a-npu-b128.json",
+      "examples_per_second": 1.5788335793034174,
+      "global_batch_per_update": 128,
+      "gradient_accumulation": 1,
+      "independent_sample_batch": 128,
+      "measured_seconds": [
+        81.61442463472486,
+        80.5305939130485
+      ],
+      "median_step_seconds": 81.07250927388668,
+      "observed_shapes": {
+        "resource/cpu_maxrss_mib": 3225.83984375,
+        "resource/npu_peak_allocated_mib": 228.76025390625,
+        "work/max_full_batch": 896.0,
+        "work/max_region_batch": 896.0,
+        "work/max_state_batch": 128.0,
+        "work/max_state_sequence": 7.0
+      },
+      "per_device_microbatch": 128,
+      "predicted_evaluation_seconds": 221.89008110761642,
+      "predicted_learning_seconds": 8184.850971400738,
+      "scope": "two post-warmup forward/backward/clip/gradient-observation/optimizer steps with device synchronization; excludes data construction/transfers, validation/checkpoint and Lens; not a global batch optimum"
+    }
+  ],
+  "profile": {
+    "error": "phase exceeded 170.000s execution window",
+    "impact": "observation incomplete; not a numerical or learning pass",
+    "state": "failed"
+  },
+  "profile_command": {
+    "cleanup_reserve_seconds": 10,
+    "elapsed_seconds": 172.3877443522215,
+    "error": "ChildTimeout('phase exceeded 170.000s execution window')",
+    "exit_code": -15,
+    "finished_at": "2026-11-07T16:05:29.499108+00:00",
+    "label": "profile",
+    "process_group": 231012,
+    "remaining_descendants": [],
+    "started_at": "2026-11-07T16:02:37.112851+00:00",
+    "state": "failed",
+    "termination_verified": true,
+    "wall_budget_seconds": 180
+  },
+  "reviewed_at": "2026-11-07T16:08:44.620184+00:00",
+  "schema": "tide-lab-reviewed-calibration-v1",
+  "scope": "turnaround-based batch selection; no same-model backend speedup or learning conclusion",
+  "selection": {
+    "batch": 32,
+    "calibration_process_seconds": 71.74140872061253,
+    "config": "configs/checks/calibrate-a-npu-b32.json",
+    "examples_per_second": 1.673785526935592,
+    "global_batch_per_update": 32,
+    "gradient_accumulation": 1,
+    "independent_sample_batch": 32,
+    "measured_seconds": [
+      19.11446639895439,
+      19.122212655842304
+    ],
+    "median_step_seconds": 19.118339527398348,
+    "observed_shapes": {
+      "resource/cpu_maxrss_mib": 2284.90625,
+      "resource/npu_peak_allocated_mib": 96.48974609375,
+      "work/max_full_batch": 224.0,
+      "work/max_region_batch": 224.0,
+      "work/max_state_batch": 32.0,
+      "work/max_state_sequence": 7.0
+    },
+    "per_device_microbatch": 32,
+    "predicted_evaluation_seconds": 235.3924105167389,
+    "predicted_learning_seconds": 2250.7530051469803,
+    "reason": "smallest admissible batch within 10% of best observed throughput; fixed 80-update/time budget retained",
+    "scope": "two post-warmup forward/backward/clip/gradient-observation/optimizer steps with device synchronization; excludes data construction/transfers, validation/checkpoint and Lens; not a global batch optimum"
+  },
+  "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8"
+}

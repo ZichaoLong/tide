@@ -470,13 +470,13 @@
     {
       "id": "E4",
       "kind": "experiment",
-      "status": "planned",
+      "status": "running",
       "title": "HB 多区域稀疏",
-      "summary": "Shannon 稠密 / quad 稀疏",
+      "summary": "HB准入通过；共同batch正在校准",
       "x": 620,
       "y": 360,
       "question": "在同一 HB、参数初值、总量 k 和数据预算下，可学习稀疏发送能否保留质量并减少实际 Full、消息与候选工作？",
-      "decision": "仅在 A1 学习门槛和 HB 接入均满足后启动；记录梯度覆盖、区域饥饿和端到端成本，必要时才加固定稀疏对照。",
+      "decision": "按已审阅FC validation门槛进入自身准入；只有共同batch和资源校准成立后才并行两个80步CPU先导，不自动启动正式重复。",
       "budget": "单种子先导 ≤80 updates；通过筛选后成对种子 11/22/33，每配置 ≤400 updates。",
       "track": "tide",
       "study_id": "TL-A2",
@@ -489,9 +489,31 @@
         {
           "label": "完整 TIDE 公共 API 接入",
           "path": "tide_lab/core5.py"
+        },
+        {
+          "label": "HB准备计划",
+          "path": "configs/studies/a2-hb-prepare.json"
+        },
+        {
+          "label": "HB分轴接入与恢复",
+          "path": "docs/evidence/a2-hb-admission.json"
+        },
+        {
+          "label": "HB准备状态与batch选择",
+          "path": "runs/a2-hb-prepare/preparation.json"
         }
       ],
-      "runs": []
+      "runs": [
+        {
+          "id": "a2-hb-prepare",
+          "status": "running",
+          "seed": 11,
+          "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+          "config": "configs/studies/a2-hb-prepare.json",
+          "record": "runs/a2-hb-prepare/preparation.json"
+        }
+      ],
+      "execution_note": "a2-hb-prepare实际运行，源码aff03ee。16节点/4区域、136252可训练参数，稠密/quad初始参数逐值相同。CPU FP32两候选离散/机制及完整AdamW恢复通过；dense严格数值passed，sparse有限严格失败保留。共同B32/B128校准尚未完成，无HB学习结论。"
     },
     {
       "id": "E2",
@@ -643,26 +665,30 @@
       "id": "RA1",
       "kind": "result",
       "status": "scoped",
-      "title": "FC先导：历史利用信号",
-      "summary": "24.2% / query-only 10.9%",
+      "title": "FC三seed：检索学习成立",
+      "summary": "独立test 97.27%–99.61%",
       "x": 915,
       "y": 840,
-      "track": "core",
-      "question": "80步完整TIDE先导是否出现超出无记忆对照的历史利用？",
-      "decision": "保留原任务，开展三seed400步确认；HB门槛50%未达，不启动HB效果比较。",
-      "budget": "seed11，B32，80updates/2560例；CPU64全流程约485秒；固定验证128例，未使用test。",
-      "scope": "仅TL-A1的FC/KV、width16/depth2/8节点、Shannon/k2/温度0.25、CPU64、seed11、80步先导。主代理审阅结果和历史干预，待用户验收；不是架构或跨后端资格。",
-      "comparisons": "初态11.72%→训练后24.22%；同预算query-only10.94%；同一训练模型移除历史10.16%。",
-      "counterevidence": "仍未达到预设50%门槛，原任务尚未解决；FP32严格失败见启动审计，不能由质量改善解除。",
-      "unresolved": "查询无关的value汇聚、有限验证采样和优化不足仍未区分；同一轨迹不是多个重复。",
-      "transfer_conditions": "只支持继续原FC任务的有限确认；迁往HB须重新验证候选接收历史、区域饥饿及质量门槛，不能推出预训练旁路成功。",
+      "track": "tide",
+      "question": "完整TIDE能否在独立映射上按query检索历史value？",
+      "decision": "三seed均达到原validation门槛；只启动原计划的小HB准入与配对先导，NPU效果仍另测。",
+      "budget": "各B32/400updates/12800训练例；CPU64各约42min，validation256/test256；机会水平12.5%。",
+      "scope": "TL-A1固定FC/KV、width16/depth2/8节点、Shannon/k2/温度0.25、CPU64、seed11/22/33。主代理审阅，待用户验收；限定任务与配方，不是通用架构或跨后端资格。",
+      "comparisons": "FC test 97.27%/99.22%/99.61%；query-only test 12.89%/13.67%/14.06%；同模型移除历史validation 10.55%/8.59%/14.45%。",
+      "counterevidence": "旧80步先导只有24.22%且未达门槛；FP32严格失败保留，学习成功不解除数值失败。B旁路也未建立预测收益。",
+      "unresolved": "长延迟、分布外组合、查询交换干预与其他图尚未检查；三seed共用同一测试集，不合并成768个独立样本。",
+      "transfer_conditions": "仅在保留任务、局部语义、完整BPTT/状态边界时，支持优先尝试小HB。HB仍须独立候选历史/稀疏支持/梯度/恢复与区域饥饿及效果检查；不推出预训练旁路成功。",
       "sources": [
         {
-          "label": "已审阅一页先导结论（d07ffa0）",
-          "url": "https://github.com/ZichaoLong/tide/blob/d07ffa0511a32b4cdcfe082826bf722e7151a27b/docs/studies/TL-A1.md"
+          "label": "已审阅三seed一页结论（aff03ee）",
+          "url": "https://github.com/ZichaoLong/tide/blob/aff03eee27960113694c7c3d3b7a5c4cc82f8434/docs/studies/TL-A1.md"
         },
         {
-          "label": "固定原始指标与结果hash",
+          "label": "固定确认记录、配置与hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/aff03eee27960113694c7c3d3b7a5c4cc82f8434/docs/evidence/a1-confirmation.json"
+        },
+        {
+          "label": "保留80步先导记录",
           "url": "https://github.com/ZichaoLong/tide/blob/d07ffa0511a32b4cdcfe082826bf722e7151a27b/docs/evidence/a1-pilot.json"
         }
       ],
@@ -780,7 +806,7 @@
       "target": "E6",
       "kind": "transfer",
       "label": "迁移待验",
-      "detail": "只有结果产生且条件可比时才能提出迁移依据；当前仅拟议。",
+      "detail": "旁路中性初始化、梯度进入和同栈恢复可作为条件接入经验；未建立学习收益，跨路线桥接仍待验证。",
       "status": "planned"
     },
     {
@@ -806,9 +832,9 @@
       "source": "R1",
       "target": "G1",
       "kind": "evaluates",
-      "label": "拟提供证据",
-      "detail": "结果未产生；须区分局部部件与完整架构。",
-      "status": "planned"
+      "label": "有限证据",
+      "detail": "已审阅B先导只成立旁路接入与梯度，未建立预测收益；不能支持完整TIDE局部化或成本目标。",
+      "status": "documented"
     },
     {
       "id": "L16",
@@ -843,10 +869,20 @@
       "target": "RA1",
       "kind": "produces",
       "status": "documented",
-      "label": "先导结果",
+      "label": "经审阅结果",
       "via_y": 780,
-      "detail": "固定先导记录经主代理审阅，结论仅为当前小模型出现历史利用信号；未把完成退出或该信号提升成HB/架构支持。"
+      "detail": "原80步先导与三seed400步确认都保留；终态、对照、独立test和历史干预经主代理审阅，限定支持当前FC检索学习。"
+    },
+    {
+      "id": "a1-conditional-hb",
+      "source": "RA1",
+      "target": "E4",
+      "kind": "transfer",
+      "status": "documented",
+      "label": "有条件进入HB",
+      "via_y": 990,
+      "detail": "FC在原任务的学习门槛成立，允许原批次小HB先导。仅迁移KV/任务/BPTT配方启示；HB图邻域与支持改变，必须重新检查候选历史、离散路由、共享梯度、恢复及质量，当前不是HB收益支持。"
     }
   ],
-  "updated_at": "2026-11-07T15:26:00Z"
+  "updated_at": "2026-11-07T16:08:44.612010+00:00"
 }
