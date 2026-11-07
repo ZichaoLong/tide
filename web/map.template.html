@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TIDE 研究图 · 对齐原型</title>
+<style>__STYLE__</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">TIDE LEARNING LAB · 研究设计 / 2026-11-07</div>
+  <h1>TIDE 研究图</h1>
+  <p class="lead">从目标与可靠基线双向推进，用比较和证据连接每一步。</p>
+  <p class="notice" id="notice"></p>
+</header>
+<main>
+  <form id="filters" class="toolbar" onsubmit="return false">
+    <label>关系视图<select id="view"><option value="all">全部关系</option><option value="route">模型演进与结果</option><option value="evidence">证据与迁移</option></select></label>
+    <label>节点类型<select id="kind"><option value="all">全部</option><option value="goal">目标</option><option value="baseline">起点</option><option value="experiment">实验</option><option value="result">结果位置</option><option value="evidence">已有证据</option></select></label>
+    <label class="search">搜索<input id="search" type="search" placeholder="例如：HB、记忆、旁路、恢复" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" id="neighbors">聚焦所选节点的直接联系</label>
+    <button type="button" id="reset">显示全部</button>
+  </form>
+  <div class="map-tools"><p id="count" role="status"></p><div><button id="minus" title="缩小">−</button><button id="fit">适配</button><button id="plus" title="放大">＋</button></div></div>
+  <div id="canvas" class="canvas"><svg id="map" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="TIDE研究关系图，Tab选择节点，Enter查看详情"></svg></div>
+  <div class="legend">
+    <span class="key goal">目标</span><span class="key baseline">起点</span><span class="key experiment">拟议实验</span><span class="key result">结果待填</span><span class="key evidence">已有证据（限定）</span>
+    <span>实线：已定义关系</span><span>虚线：拟议路径 / 待验迁移</span>
+  </div>
+  <p class="help">点击节点或连线查看依据、边界与下一判断，交叉线的标签在悬停时显示。Tab / Enter 可操作，Esc 关闭详情；放大后可滚动图面。关系的标签说明含义，连线本身不代表实验成功。</p>
+</main>
+<aside id="details" hidden aria-labelledby="detail-title"><button id="close" aria-label="关闭详情">×</button><div id="detail-body"></div></aside>
+<footer><a href="../docs/research-map.md">图的读法</a><a href="../docs/research-design.md">完整研究设计</a><span>自包含离线原型 · 无外部脚本 · 未启动实验</span></footer>
+<noscript><p>交互图需要浏览器启用JavaScript；文字设计见上方链接。</p></noscript>
+<script id="research-data" type="application/json">__DATA__</script>
+<script>__SCRIPT__</script>
+</body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TIDE 研究图 · 对齐原型</title>
+<style>:root{color-scheme:light;--ink:#142d38;--muted:#536a76;--line:#d8e1e5;--paper:#f5f8fa;--accent:#096e74}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 system-ui,-apple-system,"Noto Sans CJK SC",sans-serif}
+header,main,footer{max-width:1560px;margin:auto;padding:20px 30px}header{padding-bottom:10px}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.15em;font-weight:700}h1{font-size:30px;line-height:1.2;margin:10px 0}.lead{margin:0;color:var(--muted);font-size:16px}.notice{padding:10px 14px;background:#fff6e5;border-left:3px solid #d89826;color:#6f521c;margin:16px 0 0}
+main{padding-top:8px}.toolbar{display:flex;gap:14px;align-items:end;flex-wrap:wrap}.toolbar label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}.toolbar .search{min-width:180px;flex:1}.toolbar .check{flex-direction:row;align-items:center;padding:8px 0}.check input{width:15px;height:15px}
+select,input,button{font:inherit}select,input[type=search]{padding:7px 10px;border:1px solid #bdccd3;border-radius:6px;background:white;color:var(--ink);min-height:36px}button{border:1px solid #b9cbd2;border-radius:6px;background:white;color:var(--ink);padding:7px 12px;cursor:pointer}button:hover{background:#eaf2f4}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #54aeb8;outline-offset:2px}
+.map-tools{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-top:8px}.map-tools button{padding:2px 12px}.canvas{height:min(70vh,820px);min-height:390px;overflow:auto;background:white;border:1px solid var(--line);border-radius:10px}svg{display:block;min-width:650px}.column{font-size:13px;font-weight:600;fill:#69828e;letter-spacing:.04em}.column-line{stroke:#edf1f4;stroke-dasharray:4 6}
+.node{cursor:pointer;--color:#177a86;--fill:#f1fafb}.node rect{fill:var(--fill);stroke:var(--color);stroke-width:1.4}.node.planned rect,.node.awaiting rect{stroke-dasharray:5 3}.node.goal{--color:#0b7560;--fill:#edf8f3}.node.baseline{--color:#50627b;--fill:#f5f7fa}.node.result{--color:#8996a1;--fill:#f7f8fa}.node.evidence{--color:#b37f2d;--fill:#fff8eb}.node.selected rect{stroke-width:3.5}.node:focus{outline:none}.node:focus rect{stroke-width:3.5}.node:hover rect{filter:drop-shadow(0 2px 3px #19313d22)}.node .kind{font-size:11px;fill:var(--color);font-weight:600}.node .status{font-size:10px;fill:#5f707b}.node .title{font-size:16px;font-weight:650;fill:#183541}.node .summary{font-size:11px;fill:#647680}.dim{opacity:.16}.node.hidden,.edge.hidden{display:none}
+.edge{cursor:pointer}.edge .wire{fill:none;stroke:#82959e;stroke-width:1.6;marker-end:url(#arrow)}.edge.planned .wire{stroke-dasharray:5 4}.edge.transfer .wire{stroke:#a17a35;stroke-dasharray:2 4}.edge.informs .wire{stroke:#a17a35}.edge .hit{fill:none;stroke:transparent;stroke-width:15}.edge text{font-size:10px;fill:#5b707b;paint-order:stroke;stroke:white;stroke-width:5px;stroke-linejoin:round}.edge:hover .wire,.edge:focus .wire{stroke-width:3}.edge:focus{outline:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:12px}.key:before{content:"";display:inline-block;width:12px;height:12px;border:2px solid #177a86;border-radius:3px;vertical-align:-2px;margin-right:5px}.key.goal:before{border-color:#0b7560}.key.baseline:before{border-color:#50627b}.key.experiment:before{border-style:dashed}.key.result:before{border-color:#8996a1;border-style:dashed}.key.evidence:before{border-color:#b37f2d}.help{font-size:12px;color:var(--muted);margin-bottom:0}
+aside{position:fixed;right:24px;bottom:24px;width:min(420px,calc(100vw - 32px));max-height:78vh;overflow:auto;z-index:5;padding:25px;background:#fff;border:1px solid #c8d5dc;box-shadow:0 10px 45px #19313d35;border-radius:12px}aside[hidden]{display:none}#close{position:absolute;right:12px;top:10px;border:0;font-size:22px;padding:0 7px}aside h2{font-size:20px;margin:8px 24px 10px 0}aside h3{font-size:12px;color:var(--muted);margin:18px 0 5px}aside p{margin:0}aside .meta{font-size:11px;color:var(--accent)}aside ul{padding-left:19px}aside a{word-break:break-word}.neighbor-link{display:block;text-align:left;margin:5px 0;width:100%;font-size:12px}footer{display:flex;gap:20px;flex-wrap:wrap;padding-top:0;font-size:12px;color:var(--muted)}a{color:#116e87}
+@media(max-width:700px){header,main,footer{padding-left:14px;padding-right:14px}.toolbar{gap:8px}.toolbar .check{width:100%}h1{font-size:26px}.canvas{height:62vh}aside{right:16px;bottom:16px}}
+
+svg{margin:0 auto}.edge.cross text{opacity:0}.edge.cross:hover text,.edge.cross:focus text{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">TIDE LEARNING LAB · 研究设计 / 2026-11-07</div>
+  <h1>TIDE 研究图</h1>
+  <p class="lead">从目标与可靠基线双向推进，用比较和证据连接每一步。</p>
+  <p class="notice" id="notice"></p>
+</header>
+<main>
+  <form id="filters" class="toolbar" onsubmit="return false">
+    <label>关系视图<select id="view"><option value="all">全部关系</option><option value="route">模型演进与结果</option><option value="evidence">证据与迁移</option></select></label>
+    <label>节点类型<select id="kind"><option value="all">全部</option><option value="goal">目标</option><option value="baseline">起点</option><option value="experiment">实验</option><option value="result">结果位置</option><option value="evidence">已有证据</option></select></label>
+    <label class="search">搜索<input id="search" type="search" placeholder="例如：HB、记忆、旁路、恢复" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" id="neighbors">聚焦所选节点的直接联系</label>
+    <button type="button" id="reset">显示全部</button>
+  </form>
+  <div class="map-tools"><p id="count" role="status"></p><div><button id="minus" title="缩小">−</button><button id="fit">适配</button><button id="plus" title="放大">＋</button></div></div>
+  <div id="canvas" class="canvas"><svg id="map" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="TIDE研究关系图，Tab选择节点，Enter查看详情"></svg></div>
+  <div class="legend">
+    <span class="key goal">目标</span><span class="key baseline">起点</span><span class="key experiment">拟议实验</span><span class="key result">结果待填</span><span class="key evidence">已有证据（限定）</span>
+    <span>实线：已定义关系</span><span>虚线：拟议路径 / 待验迁移</span>
+  </div>
+  <p class="help">点击节点或连线查看依据、边界与下一判断，交叉线的标签在悬停时显示。Tab / Enter 可操作，Esc 关闭详情；放大后可滚动图面。关系的标签说明含义，连线本身不代表实验成功。</p>
+</main>
+<aside id="details" hidden aria-labelledby="detail-title"><button id="close" aria-label="关闭详情">×</button><div id="detail-body"></div></aside>
+<footer><a href="../docs/research-map.md">图的读法</a><a href="../docs/research-design.md">完整研究设计</a><span>自包含离线原型 · 无外部脚本 · 未启动实验</span></footer>
+<noscript><p>交互图需要浏览器启用JavaScript；文字设计见上方链接。</p></noscript>
+<script id="research-data" type="application/json">{"schema": "tide-research-map-prototype-v1", "title": "TIDE 研究图", "subtitle": "从目标与可靠基线双向推进，用比较和证据连接每一步", "notice": "对齐原型：新实验均未运行，两个结果节点仅为待填位置。已有基座证据限定范围，不认证新模型效果。", "width": 1490, "height": 790, "columns": [{"x": 30, "title": "起点与已有依据"}, {"x": 325, "title": "最小校准与接入"}, {"x": 620, "title": "学习与结构改造"}, {"x": 915, "title": "结果与迁移判断"}, {"x": 1210, "title": "目标"}], "nodes": [{"id": "B0", "kind": "baseline", "status": "unselected", "title": "可靠小模型", "summary": "待选择 checkpoint 与任务", "x": 30, "y": 120, "question": "选择一个能在当前栈稳定推理和继续训练的小模型，作为学习效果锚点。", "decision": "先记录数据/tokenizer/权重来源与原有训练背景，再校准。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "baseline"}, {"id": "M0", "kind": "baseline", "status": "documented", "title": "固定 core-5 数学", "summary": "局部状态 · 区域选择 · 消息", "x": 30, "y": 360, "question": "哪些局部化与稀疏性质来自定义，哪些效果需要实测？", "decision": "从明确合法绑定构造小型模型，保留理论前提。", "budget": "固定来源，无新计算或下载。", "track": "tide", "sources": [{"label": "固定上游与快照", "url": "https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/upstream.json"}], "scope": "固定数学定义与有前提的理论结论，独立于模型训练效果。"}, {"id": "F0", "kind": "evidence", "status": "scoped", "title": "基座已有小型验收", "summary": "有限通过；严格根失败保留", "x": 30, "y": 600, "question": "当前公共执行能力能够支持哪些小型接入？", "decision": "复用对应能力；新loss、任务、规模和设备仍需自己的接入验收。", "budget": "复用固定历史证据；当前不重新运行。", "track": "shared", "scope": "CANN9.2三客户端CPU/NPU的小型推理、声明训练与恢复；综合all根三项严格失败。没有模型学习效果结论。", "sources": [{"label": "固定迁移证据（含失败）", "url": "https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/evidence/cann92-project-migration-20261106.md"}]}, {"id": "E0", "kind": "experiment", "status": "planned", "title": "基线校准与对照", "summary": "原模型继续训练 · 同数据", "x": 325, "y": 120, "question": "基线在选定任务、数据与预算下表现如何？", "decision": "确认有可靠起点；保留后续改造所需的共同对照。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "baseline"}, {"id": "E3", "kind": "experiment", "status": "planned", "title": "小型完整 core-5", "summary": "FC/KV · 记忆与可学习性", "x": 325, "y": 360, "question": "完整Tide能否学会延迟检索或条件序列任务？", "decision": "先确认任务学会、私有记忆有用，再研究多区域稀疏。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "tide"}, {"id": "E5", "kind": "experiment", "status": "planned", "title": "任务接入与独立检查", "summary": "因果 · 梯度 · 状态 · 续接", "x": 325, "y": 600, "question": "任务是否正确连接输入、图参数、读出、loss和恢复？", "decision": "按实际客户端验收；运行、数值、离散语义、效果分别记录。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "shared"}, {"id": "E1", "kind": "experiment", "status": "planned", "title": "Tide 旁路学习", "summary": "中性接入 → 实际贡献", "x": 620, "y": 120, "question": "新增分支能否保持初始行为并获得有用学习信号？", "decision": "与原模型继续训练及简单分支比较；明确旧骨干依赖。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "baseline"}, {"id": "E4", "kind": "experiment", "status": "planned", "title": "HB 多区域稀疏", "summary": "稠密 / 固定 / 可学习稀疏", "x": 620, "y": 360, "question": "区域局部选择能否在保留质量时减少Full、消息及下游候选？", "decision": "记录质量—工作量折衷、梯度覆盖和状态使用。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "tide"}, {"id": "E2", "kind": "experiment", "status": "planned", "title": "局部块替换", "summary": "替换范围与状态映射显式", "x": 620, "y": 600, "question": "Tide部件能够承担原模块的功能吗？", "decision": "控制配方并扩大替换范围；不从旁路收益直接继承结论。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "baseline"}, {"id": "R1", "kind": "result", "status": "awaiting", "title": "旁路结果位置", "summary": "待运行 · 无实验数值", "x": 915, "y": 120, "question": "收益是否来自Tide机制、额外容量或训练暴露？", "decision": "保存比较、正负结果和迁移条件；目前没有结论。", "budget": "由产出该结果的实验记录实际资源；当前未运行。", "track": "baseline"}, {"id": "R2", "kind": "result", "status": "awaiting", "title": "稀疏结果位置", "summary": "待运行 · 无实验数值", "x": 915, "y": 360, "question": "实际稀疏与质量、内存、时间之间有什么关系？", "decision": "区分机制有效和端到端加速；目前没有结论。", "budget": "由产出该结果的实验记录实际资源；当前未运行。", "track": "tide"}, {"id": "E6", "kind": "experiment", "status": "planned", "title": "共同任务与桥接比较", "summary": "检查迁移与组合中的新风险", "x": 915, "y": 600, "question": "相近结果能否迁到新拓扑、组合或替换范围？", "decision": "以最小桥接比较决定保留、修正、暂缓或扩大。", "budget": "尚未预算；需先固定任务与最小比较。", "track": "shared"}, {"id": "G1", "kind": "goal", "status": "target", "title": "局部化 / 去中心化", "summary": "私有状态 · 区域决策", "x": 1210, "y": 120, "question": "每次决策需要多大范围的信息？仍依赖哪些全局机制？", "decision": "模型局部性、多设备执行、局部学习规则分别验收。", "budget": "通过关联研究申请资源，目标本身不是独立作业。", "track": "shared"}, {"id": "G0", "kind": "goal", "status": "target", "title": "最终研究目标", "summary": "学会任务，减少实际成本", "x": 1210, "y": 360, "question": "局部化且稀疏的有状态模型，能否在保留任务质量时减少实际计算与通信？", "decision": "综合限定范围内的正反证据，决定下一次研究投入。", "budget": "通过关联研究申请资源，目标本身不是独立作业。", "track": "shared"}, {"id": "G2", "kind": "goal", "status": "target", "title": "有效稀疏与效率", "summary": "candidate / Full / 消息 / 时间", "x": 1210, "y": 600, "question": "稀疏发生在哪里，省下的工作能否超过控制和准备成本？", "decision": "发送总量、支持数、真实算术与设备时间分别报告。", "budget": "通过关联研究申请资源，目标本身不是独立作业。", "track": "shared"}], "edges": [{"id": "L01", "source": "B0", "target": "E0", "kind": "precondition", "label": "先校准", "detail": "“可靠”须以所选任务和栈的实际结果建立。", "status": "planned"}, {"id": "L02", "source": "E0", "target": "E1", "kind": "variant", "label": "旁路改造", "detail": "保留原模型同预算继续训练对照；中性接入与学习有效性分开。", "status": "planned"}, {"id": "L03", "source": "E1", "target": "R1", "kind": "produces", "label": "待产出", "detail": "这里是结果记录位置，尚无实测。", "status": "planned"}, {"id": "L04", "source": "E1", "target": "E2", "kind": "variant", "label": "再检验替换", "detail": "旁路不等于替代；状态、位置和输出边界需明确。", "status": "planned"}, {"id": "L05", "source": "M0", "target": "E3", "kind": "precondition", "label": "固定定义", "detail": "采用同一固定数学版本，完整绑定在实验前确定。", "status": "documented"}, {"id": "L06", "source": "E3", "target": "E4", "kind": "variant", "label": "HB 与稀疏", "detail": "从小型完整模型进入多区域，对新增耦合单独检验。", "status": "planned"}, {"id": "L07", "source": "E4", "target": "R2", "kind": "produces", "label": "待产出", "detail": "保存任务质量与真实candidate/Full/消息；尚无实测。", "status": "planned"}, {"id": "L08", "source": "F0", "target": "E5", "kind": "informs", "label": "范围有限", "detail": "已有执行证据提供入口，不替代下游任务验收。", "status": "documented"}, {"id": "L09", "source": "E5", "target": "E3", "kind": "precondition", "label": "先验接入", "detail": "检查前向、梯度与完整应用状态，不要求每步运行CPU参考。", "status": "planned"}, {"id": "L10", "source": "E0", "target": "E2", "kind": "comparison", "label": "共同对照", "detail": "原模型同预算继续训练，用于判断替换的质量与成本。", "status": "planned"}, {"id": "L11", "source": "E2", "target": "E6", "kind": "comparison", "label": "共同任务", "detail": "在共同任务与资源口径下连接两条路线。", "status": "planned"}, {"id": "L12", "source": "R1", "target": "E6", "kind": "transfer", "label": "迁移待验", "detail": "只有结果产生且条件可比时才能提出迁移依据；当前仅拟议。", "status": "planned"}, {"id": "L13", "source": "R2", "target": "E6", "kind": "transfer", "label": "迁移待验", "detail": "组合成功不能由局部成功自动推导，需桥接比较。", "status": "planned"}, {"id": "L14", "source": "E6", "target": "G0", "kind": "evaluates", "label": "拟检验", "detail": "关联最终目标，不表示当前已有支持证据。", "status": "planned"}, {"id": "L15", "source": "R1", "target": "G1", "kind": "evaluates", "label": "拟提供证据", "detail": "结果未产生；须区分局部部件与完整架构。", "status": "planned"}, {"id": "L16", "source": "R2", "target": "G2", "kind": "evaluates", "label": "拟提供证据", "detail": "结果未产生；稀疏标签不代替实际成本。", "status": "planned"}, {"id": "L17", "source": "G0", "target": "G1", "kind": "decomposes", "label": "目标分解", "detail": "信息与决策局部化是最终目标的一部分。", "status": "documented"}, {"id": "L18", "source": "G0", "target": "G2", "kind": "decomposes", "label": "目标分解", "detail": "任务质量与稀疏的实际收益共同评价。", "status": "documented"}]}</script>
+<script>'use strict';
+const data = JSON.parse(document.getElementById('research-data').textContent);
+const $ = id => document.getElementById(id);
+const svg = $('map'), NS = 'http://www.w3.org/2000/svg', W = 250, H = 118;
+const kinds = {goal:'目标',baseline:'起点',experiment:'实验',result:'结果位置',evidence:'已有证据'};
+const statuses = {target:'待研究',unselected:'待选定',documented:'固定定义',planned:'未运行',awaiting:'待填 · 未运行',scoped:'范围限定'};
+const edgeNames = {decomposes:'分解',precondition:'前提',variant:'改造',produces:'产出',comparison:'对照',transfer:'迁移待验',informs:'参考',evaluates:'检验目标',supports:'支持',challenges:'反证'};
+const nodes = new Map(data.nodes.map(n => [n.id,n]));
+const nodeElements = new Map(), edgeElements = new Map();
+let selected = null, scale = 1;
+function element(tag, attrs = {}, text = null) {
+  const el = document.createElementNS(NS,tag);
+  for (const [key,value] of Object.entries(attrs)) el.setAttribute(key,value);
+  if (text !== null) el.textContent = text;
+  return el;
+}
+function html(tag, text, cls) {
+  const el = document.createElement(tag);
+  if (text !== undefined) el.textContent = text;
+  if (cls) el.className = cls;
+  return el;
+}
+function interactive(el, action) {
+  el.addEventListener('click', action);
+  el.addEventListener('keydown', e => {if (e.key === 'Enter' || e.key === ' ') {e.preventDefault();action();}});
+}
+svg.setAttribute('viewBox',`0 0 ${data.width} ${data.height}`);
+$('notice').textContent = data.notice;
+const defs=element('defs'),marker=element('marker',{id:'arrow',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto'});
+marker.append(element('path',{d:'M 0 1 L 7 4 L 0 7',fill:'none',stroke:'#82959e'}));defs.append(marker);svg.append(defs);
+for (const col of data.columns) {
+  svg.append(element('text',{x:col.x+8,y:55,class:'column'},col.title));
+  svg.append(element('line',{x1:col.x-12,x2:col.x-12,y1:80,y2:data.height-25,class:'column-line'}));
+}
+function geometry(edge) {
+  const a=nodes.get(edge.source),b=nodes.get(edge.target);
+  if(a.x===b.x){
+    const sx=a.x+W,sy=a.y+H/2,ty=b.y+H/2,via=sx+16;
+    return {path:`M${sx},${sy} C${via},${sy} ${via},${sy} ${via},${(sy+ty)/2} S${via},${ty} ${sx},${ty}`,
+            x:via-8,y:(sy+ty)/2,anchor:'middle',rotation:-90};
+  }
+  const sx=a.x+W,sy=a.y+H/2,tx=b.x,ty=b.y+H/2,mid=(sx+tx)/2;
+  return {path:`M${sx},${sy} C${mid},${sy} ${mid},${ty} ${tx},${ty}`,
+          x:mid+(Math.abs(ty-sy)>H?12:0),y:(sy+ty)/2-(Math.abs(ty-sy)>H?0:7),anchor:'middle',rotation:Math.abs(ty-sy)>H?-90:0};
+}
+for (const edge of data.edges) {
+  const g=element('g',{class:`edge ${edge.kind} ${edge.status}`,tabindex:0,role:'button','aria-label':`${edge.label}：${nodes.get(edge.source).title} → ${nodes.get(edge.target).title}`});
+  const p=geometry(edge);
+  if(p.rotation)g.classList.add('cross');
+  g.append(element('path',{d:p.path,class:'hit'}),element('path',{d:p.path,class:'wire'}),
+           element('text',{x:p.x,y:p.y,'text-anchor':p.anchor,transform:`rotate(${p.rotation||0} ${p.x} ${p.y})`},edge.label));
+  interactive(g,()=>showEdge(edge));svg.append(g);edgeElements.set(edge.id,g);
+}
+for (const node of data.nodes) {
+  const g=element('g',{class:`node ${node.kind} ${node.status}`,transform:`translate(${node.x},${node.y})`,tabindex:0,role:'button','aria-label':`${node.title}，${statuses[node.status]}`});
+  g.append(element('rect',{width:W,height:H,rx:9}),
+           element('text',{x:14,y:23,class:'kind'},`${node.id} / ${kinds[node.kind]}`),
+           element('text',{x:W-14,y:23,class:'status','text-anchor':'end'},statuses[node.status]),
+           element('text',{x:14,y:57,class:'title'},node.title),
+           element('text',{x:14,y:88,class:'summary'},node.summary));
+  interactive(g,()=>showNode(node));svg.append(g);nodeElements.set(node.id,g);
+}
+function section(parent, title, value) {
+  if(!value)return;
+  parent.append(html('h3',title),html('p',value));
+}
+function showNode(node) {
+  selected=node.id;
+  const body=$('detail-body');body.replaceChildren();
+  body.append(html('div',`${node.id} · ${kinds[node.kind]} · ${statuses[node.status]}`,'meta'));
+  const heading=html('h2',node.title);heading.id='detail-title';body.append(heading);
+  section(body,'这一步要回答',node.question);
+  section(body,'据此作什么决定',node.decision);
+  section(body,'证据范围',node.scope || (node.kind==='result'?'尚无结果。这是待填位置，不计入已完成实验。':'拟议研究关系；不是已通过结论。'));
+  section(body,'资源',node.budget);
+  if(node.sources){
+    body.append(html('h3','固定来源'));
+    for(const source of node.sources){const a=html('a',source.label);a.href=source.url;a.target='_blank';a.rel='noopener noreferrer';body.append(a,html('br'));}
+  }
+  body.append(html('h3','直接关联'));
+  for(const edge of data.edges.filter(e=>e.source===node.id||e.target===node.id)){
+    const other=nodes.get(edge.source===node.id?edge.target:edge.source);
+    const b=html('button',`${edge.source===node.id?'→':'←'} ${edgeNames[edge.kind]} · ${other.title}`,'neighbor-link');
+    b.addEventListener('click',()=>showNode(other));body.append(b);
+  }
+  $('details').hidden=false;update();
+}
+function showEdge(edge) {
+  const body=$('detail-body');body.replaceChildren();
+  body.append(html('div',`${edge.id} · ${edge.status==='planned'?'拟议 / 待验证':'关系已定义，效力按来源解释'}`,'meta'));
+  const h=html('h2',edgeNames[edge.kind]);h.id='detail-title';body.append(h);
+  section(body,'连接',`${nodes.get(edge.source).title} → ${nodes.get(edge.target).title}`);
+  section(body,'含义与边界',edge.detail);
+  $('details').hidden=false;
+}
+function update(){
+  const query=$('search').value.trim().toLowerCase(),kind=$('kind').value,view=$('view').value;
+  const visible=new Set(data.nodes.filter(n=>(kind==='all'||n.kind===kind)&&JSON.stringify(n).toLowerCase().includes(query)).map(n=>n.id));
+  const focus=$('neighbors').checked&&selected;
+  const near=new Set([selected]);
+  for(const e of data.edges)if(e.source===selected||e.target===selected){near.add(e.source);near.add(e.target);}
+  for(const [id,el] of nodeElements){
+    el.classList.toggle('hidden',!visible.has(id));el.classList.toggle('selected',id===selected);
+    el.classList.toggle('dim',!!focus&&!near.has(id));
+    el.setAttribute('tabindex',visible.has(id)?'0':'-1');
+  }
+  let edgeCount=0;
+  for(const e of data.edges){
+    const allowed=view==='all'||(view==='route'?['variant','produces','comparison','decomposes'].includes(e.kind):['informs','transfer','evaluates','precondition','supports','challenges'].includes(e.kind));
+    const shown=allowed&&visible.has(e.source)&&visible.has(e.target),el=edgeElements.get(e.id);
+    el.classList.toggle('hidden',!shown);el.classList.toggle('dim',!!focus&&e.source!==selected&&e.target!==selected);
+    el.setAttribute('tabindex',shown?'0':'-1');if(shown)edgeCount++;
+  }
+  const measured=data.nodes.filter(n=>n.kind==='result'&&n.status==='scoped').length;
+  const awaiting=data.nodes.filter(n=>n.kind==='result'&&n.status==='awaiting').length;
+  $('count').textContent=`显示 ${visible.size}/${data.nodes.length} 个节点，${edgeCount} 条关系 · 已录入研究结果 ${measured} 项，待填 ${awaiting} 项`;
+}
+function zoom(value){scale=Math.max(.45,Math.min(2.5,value));svg.style.width=`${data.width*scale}px`;svg.style.height=`${data.height*scale}px`;}
+function fit(){zoom(Math.min(($('canvas').clientWidth-3)/data.width,($('canvas').clientHeight-3)/data.height));}
+$('filters').addEventListener('input',update);$('filters').addEventListener('change',update);
+$('reset').addEventListener('click',()=>{HTMLFormElement.prototype.reset.call($('filters'));selected=null;$('details').hidden=true;update();});
+$('close').addEventListener('click',()=>{$('details').hidden=true;});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('details').hidden=true;});
+$('plus').addEventListener('click',()=>zoom(scale*1.2));$('minus').addEventListener('click',()=>zoom(scale/1.2));$('fit').addEventListener('click',fit);
+update();fit();
+</script>
+</body></html>
