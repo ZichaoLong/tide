@@ -2,7 +2,7 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "CPU64三seed确认完成：独立test 97.27%–99.61%。后续NPU FP32探索正在运行，严格数值失败仍保留；B先导未建立旁路预测收益。小HB按原批次准备准入。",
+  "notice": "首批训练全部终态，当前无活动作业，待用户验收。FC三seed检索学习成立；HB减少Full/消息但未达质量门槛；预训练旁路收益未证实。严格数值失败独立保留。",
   "width": 1490,
   "height": 1010,
   "columns": [
@@ -144,6 +144,10 @@
         {
           "label": "带原记录 hash 的检查证据",
           "path": "docs/evidence/startup-checks.json"
+        },
+        {
+          "label": "预训练校准的一页结论",
+          "path": "docs/studies/TL-B0.md"
         }
       ],
       "runs": [
@@ -172,13 +176,13 @@
     {
       "id": "E3",
       "kind": "experiment",
-      "status": "running",
+      "status": "completed",
       "title": "从零训练完整 TIDE",
-      "summary": "CPU三seed独立test97.27%–99.61%；NPU有限数值探索继续。",
+      "summary": "CPU三seed检索成立；NPU短程信号",
       "x": 325,
       "y": 360,
       "question": "从合法小 FC/KV 绑定开始，完整 TIDE 能否学会独立样本的延迟关联检索，并实际使用历史记忆？",
-      "decision": "经主代理审阅，CPU确认达到原validation门槛，允许小HB自身准入与配对先导；不继承HB/NPU效果或严格等价。",
+      "decision": "CPU三seed正式test已审阅；NPU80步仅验证历史利用信号。新实验待首批验收，不由汇总曲线接近推导严格等价。",
       "budget": "单种子先导 ≤80 updates；最多一次预先声明的小任务降阶。正式 ≤400 updates，至多种子 11/22/33。",
       "track": "tide",
       "study_id": "TL-A1",
@@ -235,6 +239,14 @@
         {
           "label": "CPU三seed确认与独立test证据",
           "path": "docs/evidence/a1-confirmation.json"
+        },
+        {
+          "label": "NPU终态一页结论",
+          "path": "docs/studies/TL-A1-NPU.md"
+        },
+        {
+          "label": "新终态结果与曲线hash",
+          "path": "docs/evidence/first-batch-terminal.json"
         }
       ],
       "runs": [
@@ -312,7 +324,7 @@
         },
         {
           "id": "a1-npu-explore",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
           "config": "configs/studies/a1-npu-stage.json",
@@ -347,16 +359,16 @@
         },
         {
           "id": "tl-a1-npu-fc-dense-s11-explore",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
           "config": "runs/a1-npu-explore/resolved-fc-dense.json",
-          "record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/manifest.json",
+          "record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/result.json",
           "lens_record": "runs/a1-npu-explore/learning/tl-a1-npu-fc-dense-s11-explore/projection.json"
         }
       ],
-      "execution_note": "CPU64三seed400步均完成，无记忆对照约机会水平，历史干预消除收益。NPU FP32 actual-width16离散/机制与AdamW恢复通过，严格数值失败保留；batch32实测1.674例/秒，batch128为1.579例/秒，后者80步预计超2h，因此选32。运行仍非学习结论。 有界profile超时并确认后代清理，记观察失败；未追加profile。query完成、FC学习已开始，保留未知算子耗时来源。",
-      "observed_at": "2026-11-07T15:12:19+00:00"
+      "execution_note": "CPU64三seed400步test97.27%/99.22%/99.61%。NPU FP32/80步val24.22%，query10.94%，移除历史10.16%，与CPU64旧80步五个accuracy点一致；严格数值仍failed，离散/机制/恢复按小型范围passed。全部终态、Lens verified，profile超时独立保留；当前实际每步观测，耗时包含该开销。",
+      "observed_at": "2026-11-07T18:46:19.834558+00:00"
     },
     {
       "id": "E5",
@@ -419,6 +431,10 @@
         {
           "label": "后续NPU实际尺寸分轴验收",
           "path": "docs/evidence/a1-npu-admission.json"
+        },
+        {
+          "label": "分轴接入的终态结论",
+          "path": "docs/studies/TL-A0.md"
         }
       ],
       "runs": [
@@ -500,23 +516,23 @@
           "record": "runs/pilot-b/tl-b1-mlp-s11-pilot/result.json"
         }
       ],
-      "execution_note": "后台 pilot-b 已获单 NPU：原模型 none 已完成 40 updates，TIDE 旁路先导已启动，MLP 对照在同一组内按顺序等待。均为 FP32/B32/seed11/40 updates，按有限数值探索记录；执行完成不表示学习或架构价值成立。",
-      "observed_at": "2026-11-07T15:12:19+00:00"
+      "execution_note": "三候选均已完成FP32/B32/seed11/40步先导，原模型/TIDE/MLP validation12.50%/17.97%/12.50%，关闭TIDE分支accuracy不变。按有限数值探索记录，严格失败独立保留；初态、梯度与小型恢复通过不代表预测收益。没有活动或等待的B作业。",
+      "observed_at": "2026-11-07T18:46:19.834558+00:00"
     },
     {
       "id": "E4",
       "kind": "experiment",
-      "status": "running",
+      "status": "completed",
       "title": "HB 多区域稀疏",
-      "summary": "HB两候选B32/80步先导运行",
+      "summary": "Full少37.6%；质量门槛未达",
       "x": 620,
       "y": 360,
       "question": "在同一 HB、参数初值、总量 k 和数据预算下，可学习稀疏发送能否保留质量并减少实际 Full、消息与候选工作？",
-      "decision": "按已审阅FC validation门槛进入自身准入；只有共同batch和资源校准成立后才并行两个80步CPU先导，不自动启动正式重复。",
+      "decision": "两者val31.25%/35.16%均未达50%，不启动本批正式重复。首批验收后可考虑原HB一对较长训练，不能修改原门槛换成功标签。",
       "budget": "单种子先导 ≤80 updates；通过筛选后成对种子 11/22/33，每配置 ≤400 updates。",
       "track": "tide",
       "study_id": "TL-A2",
-      "scope": "首批固定局部语义与小型 HB；发送总量、正支持、Full、消息和运行时间分别解释。条件未满足时保持未运行。",
+      "scope": "首批固定局部语义与小型HB，两个80步先导已终态；发送总量、正支持、Full、消息和运行时间分别解释。质量门槛未达，正式重复未启动。",
       "references": [
         {
           "label": "比较、依赖与预算",
@@ -558,24 +574,25 @@
         },
         {
           "id": "tl-a2-hb-dense-s11-pilot",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
           "config": "runs/a2-hb-prepare/resolved-hb-dense.json",
-          "record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/manifest.json",
+          "record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/result.json",
           "lens_record": "runs/a2-hb-dense-pilot/learning/tl-a2-hb-dense-s11-pilot/projection.json"
         },
         {
           "id": "tl-a2-hb-sparse-s11-pilot",
-          "status": "running",
+          "status": "completed",
           "seed": 11,
           "source_commit": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
           "config": "runs/a2-hb-prepare/resolved-hb-sparse.json",
-          "record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/manifest.json",
+          "record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/result.json",
           "lens_record": "runs/a2-hb-sparse-pilot/learning/tl-a2-hb-sparse-s11-pilot/projection.json"
         }
       ],
-      "execution_note": "准备aff03ee已completed且后代释放。16节点/4区域、136252可训练参数、稠密/quad初始参数逐值相同；CPU FP32离散/机制和完整AdamW恢复均passed，dense严格数值passed，sparse有限严格失败保留。共同batch32计时step12.72/12.69秒，128合计吞吐仅提高约1%且不满足各40分钟预算，因此选32。两个80步先导现已实际训练，暂无效果结论，不自动正式重复。"
+      "execution_note": "HB CPU FP32/B32/seed11/80步，dense/quad val31.25%/35.16%，移除历史10.16%/6.25%。全80步Full减少37.63%、消息39.75%、候选/状态更新2.07%；进程用时少3.55%。一对并行非独占CPU，含每步观测，未证明稳定速度或质量优势。两个训练及Lens终态验证完成，稀疏严格失败保留。",
+      "observed_at": "2026-11-07T18:46:19.834558+00:00"
     },
     {
       "id": "E2",
@@ -626,8 +643,8 @@
       "transfer_conditions": "可条件复用初态中性、梯度与同栈恢复接入方法；不得推出质量收益、HB、稀疏速度或完整TIDE从零训练成功。",
       "sources": [
         {
-          "label": "已审阅B先导结论（6e988d6）",
-          "url": "https://github.com/ZichaoLong/tide/blob/6e988d67f15b4dbf26e4b73375afe63992d17a3c/docs/studies/TL-B1.md"
+          "label": "已审阅终态一页结论",
+          "url": "https://github.com/ZichaoLong/tide/blob/a2e2ea6a405ac8124c08905a7de4162728f4087e/docs/studies/TL-B1.md"
         },
         {
           "label": "固定原始结果与hash",
@@ -638,32 +655,55 @@
     {
       "id": "R2",
       "kind": "result",
-      "status": "awaiting",
-      "title": "稀疏结果位置",
-      "summary": "结论待填 · 条件未满足不运行",
+      "status": "scoped",
+      "title": "HB：工作减少，价值待定",
+      "summary": "31.25% / 35.16%；未达50%",
       "x": 915,
       "y": 360,
-      "question": "实际稀疏与质量、内存、时间之间有什么关系？",
-      "decision": "审阅同 HB 的质量—实际工作量比较，区分机制作用和端到端收益；保留失败和未检查。目前没有结论。",
-      "budget": "由产出该结果的实验记录实际资源；当前未运行。",
+      "question": "可学习稀疏能否在达到质量门槛时减少实际成本？",
+      "decision": "本批停止于80步先导。原HB较长训练是待验收提案，未启动；不因执行完成而晋级正式重复。",
+      "budget": "CPU32/B32，各80updates/2560例，validation128、未用test；总进程1183.53/1141.50秒。",
       "track": "tide",
       "references": [
         {
           "label": "TL-A2 前提与比较口径",
           "path": "docs/studies/first-batch.md"
+        },
+        {
+          "label": "HB结论与解释边界",
+          "path": "docs/studies/TL-A2.md"
+        },
+        {
+          "label": "实际观测开销与待修复项",
+          "path": "docs/measurement-notes.md"
+        }
+      ],
+      "scope": "TL-A2固定16节点/4区域HB、width16、KV/qry、regional_total/k2/温度0.25，seed11，CPU FP32，Shannon对quad，初始参数相同。主代理审阅，待用户验收；quad严格有限失败仍在。",
+      "comparisons": "dense/quad val31.25%/35.16%，CE1.885715/1.816051；去历史10.16%/6.25%。Full少37.63%、消息少39.75%、候选/Upd少2.07%，完整进程用时少3.55%。",
+      "counterevidence": "两者均未达预设50%；稀疏只多答对5/128例，无多seed或独立test。大量Full减少没有转化为同等墙钟下降，不能声称架构价值或可靠速度收益。",
+      "unresolved": "训练不足、发送正则化与学习到的支持分布、固定稀疏对照、seed/采样波动尚未区分。候选/状态开销、主机调度和每步观测的时间贡献未知；聚合无整区停工不排除单样本/节点饥饿。",
+      "transfer_conditions": "仅作为在相同任务/局部语义/BPTT边界下优先检验更长HB训练的依据；仍保留数值失败与质量门槛。不能推出其他图、NPU速度、预训练旁路或多层替换成功。",
+      "sources": [
+        {
+          "label": "已审阅HB终态结论",
+          "url": "https://github.com/ZichaoLong/tide/blob/a2e2ea6a405ac8124c08905a7de4162728f4087e/docs/studies/TL-A2.md"
+        },
+        {
+          "label": "原始终态指标、工作总计与hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/a2e2ea6a405ac8124c08905a7de4162728f4087e/docs/evidence/first-batch-terminal.json"
         }
       ]
     },
     {
       "id": "E6",
       "kind": "experiment",
-      "status": "planned",
+      "status": "completed",
       "title": "共同任务与条件迁移",
-      "summary": "共享评估；不自动传递结论",
+      "summary": "共同口径已落实；桥接未检查",
       "x": 915,
       "y": 600,
       "question": "两条路线在共同任务和划分下，哪些模块或配方经验可有条件迁移，哪些差别仍妨碍比较？",
-      "decision": "单列预训练、参数来源、可训练参数与额外计算；只把已审阅范围内的结果作为启示，前提不足时不做新的桥接运行。",
+      "decision": "本批只总结共同任务与有条件接入经验，没有新增权重迁移、蒸馏或替换桥接。下一批待验收后择项。",
       "budget": "本批复用共同任务评估，不自动增加新任务、替换或候选组合。",
       "track": "shared",
       "study_id": "TL-C",
@@ -680,9 +720,15 @@
         {
           "label": "独立任务检查",
           "path": "tests/test_tasks.py"
+        },
+        {
+          "label": "两路线联系的一页结论",
+          "path": "docs/studies/TL-C.md"
         }
       ],
-      "runs": []
+      "runs": [],
+      "execution_note": "已审阅参数来源、训练参数、暴露/优化器及实际计算差异，完成TL-C总结；两路线不能公平排名，跨任务或组合迁移效果未检查。",
+      "observed_at": "2026-11-07T18:46:19.834558+00:00"
     },
     {
       "id": "G1",
@@ -733,17 +779,17 @@
       "y": 840,
       "track": "tide",
       "question": "完整TIDE能否在独立映射上按query检索历史value？",
-      "decision": "三seed均达到原validation门槛；只启动原计划的小HB准入与配对先导，NPU效果仍另测。",
+      "decision": "三seed均达到原validation门槛，原计划的小HB准入与配对先导已完成；HB效果不继承FC结论。NPU80步有短程信号，400步效果仍未检查。",
       "budget": "各B32/400updates/12800训练例；CPU64各约42min，validation256/test256；机会水平12.5%。",
       "scope": "TL-A1固定FC/KV、width16/depth2/8节点、Shannon/k2/温度0.25、CPU64、seed11/22/33。主代理审阅，待用户验收；限定任务与配方，不是通用架构或跨后端资格。",
       "comparisons": "FC test 97.27%/99.22%/99.61%；query-only test 12.89%/13.67%/14.06%；同模型移除历史validation 10.55%/8.59%/14.45%。",
       "counterevidence": "旧80步先导只有24.22%且未达门槛；FP32严格失败保留，学习成功不解除数值失败。B旁路也未建立预测收益。",
-      "unresolved": "长延迟、分布外组合、查询交换干预与其他图尚未检查；三seed共用同一测试集，不合并成768个独立样本。",
+      "unresolved": "长延迟、分布外组合与查询交换干预尚未检查；小HB先导未达自身质量门槛，不继承FC效果。三seed共用同一测试集，不合并成768个独立样本。",
       "transfer_conditions": "仅在保留任务、局部语义、完整BPTT/状态边界时，支持优先尝试小HB。HB仍须独立候选历史/稀疏支持/梯度/恢复与区域饥饿及效果检查；不推出预训练旁路成功。",
       "sources": [
         {
-          "label": "已审阅三seed一页结论（aff03ee）",
-          "url": "https://github.com/ZichaoLong/tide/blob/aff03eee27960113694c7c3d3b7a5c4cc82f8434/docs/studies/TL-A1.md"
+          "label": "已审阅终态一页结论",
+          "url": "https://github.com/ZichaoLong/tide/blob/a2e2ea6a405ac8124c08905a7de4162728f4087e/docs/studies/TL-A1.md"
         },
         {
           "label": "固定确认记录、配置与hash",
@@ -768,9 +814,9 @@
       "source": "B0",
       "target": "E0",
       "kind": "precondition",
-      "label": "先校准",
-      "detail": "“可靠”须以所选任务和栈的实际结果建立。",
-      "status": "planned"
+      "label": "已校准",
+      "detail": "固定checkpoint已完成本栈小型校准；CPU cache严格失败独立保留，不继承外部模型或环境资格。",
+      "status": "documented"
     },
     {
       "id": "L02",
@@ -778,17 +824,17 @@
       "target": "E1",
       "kind": "variant",
       "label": "残差生长",
-      "detail": "沿固定预训练 checkpoint 新增小型旁路；这是模型/参数来源关系，不是科学支持。",
-      "status": "planned"
+      "detail": "实际从固定预训练checkpoint初始化并新增小型旁路；这是模型/参数来源关系，不是收益支持。",
+      "status": "documented"
     },
     {
       "id": "L03",
       "source": "E1",
       "target": "R1",
       "kind": "produces",
-      "label": "待产出",
-      "detail": "这里是结果记录位置，尚无实测。",
-      "status": "planned"
+      "label": "经审阅结果",
+      "detail": "B三候选终态、分支干预和接入检查经审阅：旁路预测收益未证实，保留原失败及未检查项。",
+      "status": "documented"
     },
     {
       "id": "L04",
@@ -814,17 +860,17 @@
       "target": "E4",
       "kind": "precondition",
       "label": "学习门槛",
-      "detail": "A1 达到预设 validation 与无记忆差距门槛且 HB 接入通过，才允许 A2 效果比较；并不表示 HB 继承 FC checkpoint。",
-      "status": "planned"
+      "detail": "A1达到预设validation与无记忆差距门槛后，A2完成自身分轴准入和80步比较；HB不继承FC checkpoint或学习效果。",
+      "status": "documented"
     },
     {
       "id": "L07",
       "source": "E4",
       "target": "R2",
       "kind": "produces",
-      "label": "待产出",
-      "detail": "保存任务质量与真实candidate/Full/消息；尚无实测。",
-      "status": "planned"
+      "label": "经审阅结果",
+      "detail": "HB两候选的任务质量、实际candidate/Full/消息及时间已审阅；质量门槛未达，减少工作不等于可靠速度收益。",
+      "status": "documented"
     },
     {
       "id": "L08",
@@ -840,9 +886,9 @@
       "source": "E5",
       "target": "E3",
       "kind": "precondition",
-      "label": "先验接入",
-      "detail": "检查前向、梯度与完整应用状态，不要求每步运行CPU参考。",
-      "status": "planned"
+      "label": "分轴准入",
+      "detail": "执行、离散、梯度及小型完整恢复按对应范围检查；严格数值有限失败保留。授权有限误差学习不要求每步CPU参考。",
+      "status": "documented"
     },
     {
       "id": "L10",
@@ -850,8 +896,8 @@
       "target": "E1",
       "kind": "precondition",
       "label": "先行校准",
-      "detail": "B0 对原 checkpoint 及当前任务的接入检查，是 B1 继续训练和旁路比较的执行前提。",
-      "status": "planned"
+      "detail": "B0对原checkpoint和当前任务完成小型接入检查后进入B1；相应严格失败保留，不从校准通过推出学习效果。",
+      "status": "documented"
     },
     {
       "id": "L11",
@@ -859,35 +905,35 @@
       "target": "E6",
       "kind": "comparison",
       "label": "共同口径",
-      "detail": "两条路线共用任务、数据划分和质量指标；预训练背景、参数与计算差异另列，不声称同资源架构胜负。",
-      "status": "planned"
+      "detail": "两条路线已共用任务、数据划分和质量指标；预训练背景、参数与计算差异另列，不声称同资源架构胜负。",
+      "status": "documented"
     },
     {
       "id": "L12",
       "source": "R1",
       "target": "E6",
       "kind": "transfer",
-      "label": "迁移待验",
+      "label": "条件经验",
       "detail": "旁路中性初始化、梯度进入和同栈恢复可作为条件接入经验；未建立学习收益，跨路线桥接仍待验证。",
-      "status": "planned"
+      "status": "documented"
     },
     {
       "id": "L13",
       "source": "R2",
       "target": "E6",
       "kind": "transfer",
-      "label": "迁移待验",
-      "detail": "组合成功不能由局部成功自动推导，需桥接比较。",
-      "status": "planned"
+      "label": "条件经验",
+      "detail": "仅迁移“需要把Full、候选/状态和墙钟分开测量”的条件经验；没有跨路线桥接效果，局部结果不推出组合成功。",
+      "status": "documented"
     },
     {
       "id": "L14",
       "source": "E6",
       "target": "G0",
       "kind": "evaluates",
-      "label": "拟检验",
-      "detail": "关联最终目标，不表示当前已有支持证据。",
-      "status": "planned"
+      "label": "共同口径",
+      "detail": "共同评价口径已完成，预训练背景和资源差异分列；跨路线架构价值与迁移仍未认证。",
+      "status": "documented"
     },
     {
       "id": "L15",
@@ -903,9 +949,9 @@
       "source": "R2",
       "target": "G2",
       "kind": "evaluates",
-      "label": "拟提供证据",
-      "detail": "结果未产生；稀疏标签不代替实际成本。",
-      "status": "planned"
+      "label": "工作/时间分列",
+      "detail": "HB实测Full和消息减少，但质量未达门槛且只有一对非独占计时；不将减少的工作自动认定为可靠速度或质量收益。",
+      "status": "documented"
     },
     {
       "id": "L17",
@@ -943,8 +989,8 @@
       "status": "documented",
       "label": "有条件进入HB",
       "via_y": 990,
-      "detail": "FC在原任务的学习门槛成立，允许原批次小HB先导。仅迁移KV/任务/BPTT配方启示；HB图邻域与支持改变，必须重新检查候选历史、离散路由、共享梯度、恢复及质量，当前不是HB收益支持。"
+      "detail": "FC原任务的学习门槛成立后，小HB已重新准入并完成80步先导；得到了历史利用和工作减少信号，但未达50%质量门槛，原条件经验不保证HB学习或效率成功。"
     }
   ],
-  "updated_at": "2026-11-07T16:17:37.820455+00:00"
+  "updated_at": "2026-11-07T18:46:19.834558+00:00"
 }

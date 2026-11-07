@@ -48,9 +48,14 @@ async function run(){
   assert.match(await evaluate('document.getElementById("count").textContent'),new RegExp(`已录入研究结果 ${graph.nodes.filter(n=>n.kind==='result'&&n.status==='scoped').length} 项`));
   await evaluate('document.getElementById("kind").value="result";document.getElementById("kind").dispatchEvent(new Event("change",{bubbles:true}));');
   assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),graph.nodes.filter(n=>n.kind==='result').length);
-  await evaluate('document.querySelector(".node.result.awaiting").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
-  assert.equal(await evaluate('document.getElementById("details").hidden'),false);
-  assert.match(await evaluate('document.getElementById("detail-body").textContent'),/尚无结果/);
+  const awaiting=graph.nodes.filter(n=>n.kind==='result'&&n.status==='awaiting').length;
+  assert.equal(await evaluate('document.querySelectorAll(".node.result.awaiting").length'),awaiting);
+  assert.match(await evaluate('document.getElementById("count").textContent'),new RegExp(`待填 ${awaiting} 项`));
+  if(awaiting){
+    await evaluate('document.querySelector(".node.result.awaiting").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
+    assert.equal(await evaluate('document.getElementById("details").hidden'),false);
+    assert.match(await evaluate('document.getElementById("detail-body").textContent'),/尚无结果/);
+  }
   await evaluate('document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape"}));document.getElementById("reset").click();');
   assert.equal(await evaluate('document.getElementById("details").hidden'),true);
   await evaluate('document.getElementById("search").value="HB";document.getElementById("search").dispatchEvent(new Event("input",{bubbles:true}));');
