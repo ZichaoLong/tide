@@ -1,0 +1,247 @@
+{
+  "attempts": [
+    {
+      "candidates": {
+        "tide-dense": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "735e8322ce3031787539d511237f36f411bbeeddd6e946daa3b2c067d961ce40",
+            "resumed_sha256": "1ad3cc1fee6463f0f8ec009ee0f54f09d19973af69983b2167da0dc139b8992d",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "tide-sparse": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "88e796d35df8145a0ed634ca881c1fc86896886c6d06e54c07a52628b8e3124b",
+            "resumed_sha256": "9e1057d3ee6746ebc2b19a743dd56dce3660a2110acbf5f6d584b8b6370e48a7",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "transformer": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "0fca59b0bedad60175779b9662e74324075baa2df93bc5782d2354f83e40c5db",
+            "resumed_sha256": "9707d65fa5257c1363dcb172ee58654d6ee85ff6716a6c7a1b62b9c1580e8e6b",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        }
+      },
+      "chain_error": "TypeError(\"dict() got multiple values for keyword argument 'batch'\")",
+      "conservative_allocated_charge_seconds": 520.5153935700655,
+      "job": "lm-a-language-v1",
+      "physical_devices": [
+        1
+      ],
+      "record": "runs/lm-a-language-v1/stage.json",
+      "record_sha256": "4559765e069e08bd105930ccee9de9176c7ac75a2511963a93a0050fb580faf0",
+      "source_commit": "64493f6c996e7b6dd47d03a4b59cb524dbf44215",
+      "stages": [
+        {
+          "elapsed_seconds": 24.810519237071276,
+          "name": "check-tide-dense",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 16.018936533480883,
+          "name": "resume-d1-tide-dense-full",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 11.488797023892403,
+          "name": "resume-d1-tide-dense-split",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.294021043926477,
+          "name": "resume-d1-tide-dense-continued",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 19.041936866939068,
+          "name": "check-tide-sparse",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.918981306254864,
+          "name": "resume-d1-tide-sparse-full",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 11.463716488331556,
+          "name": "resume-d1-tide-sparse-split",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.322398100048304,
+          "name": "resume-d1-tide-sparse-continued",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 8.341979462653399,
+          "name": "check-transformer",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 8.350781552493572,
+          "name": "resume-d1-transformer-full",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 9.301307369023561,
+          "name": "resume-d1-transformer-split",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 8.146082133054733,
+          "name": "resume-d1-transformer-continued",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 171.2554420977831,
+          "name": "cal-d1-tide-dense-L32-B8",
+          "state": "failed"
+        },
+        {
+          "elapsed_seconds": 171.36658620089293,
+          "name": "cal-d1-tide-sparse-L32-B8",
+          "state": "failed"
+        },
+        {
+          "elapsed_seconds": 9.285736806690693,
+          "name": "cal-d1-transformer-L32-B8",
+          "state": "completed"
+        }
+      ],
+      "state": "failed",
+      "termination_verified": true,
+      "worker_seconds": 512.0015274249017
+    },
+    {
+      "candidates": {
+        "mlp": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "f783e31b89a855572a10bbfc806565633a5e394cf3e84432f54f1567bcce698a",
+            "resumed_sha256": "9e98190d633605833d438ab75258c51c91649e530cb9631a56bcb2f66684a5b3",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "original": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "b7d9a697e2a1466690abcf139fba3bf19d8fde90a0bc0ad5f6f610c6d267531d",
+            "resumed_sha256": "ab8534f7603e506ad022b5ed375b9d1844aad251d496c4a7f35258535ec7c817",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "tide-dense": {
+          "admitted": false,
+          "mechanisms": "failed"
+        },
+        "tide-sparse": {
+          "admitted": false,
+          "mechanisms": "failed"
+        }
+      },
+      "chain_error": "TypeError(\"dict() got multiple values for keyword argument 'batch'\")",
+      "conservative_allocated_charge_seconds": 197.93536268919706,
+      "job": "lm-b-language-v1",
+      "physical_devices": [
+        3
+      ],
+      "record": "runs/lm-b-language-v1/stage.json",
+      "record_sha256": "11f465acd2f5247a3d0cc84d561bccf4669f0a1bf9c743d4a64bd79a327172f4",
+      "source_commit": "64493f6c996e7b6dd47d03a4b59cb524dbf44215",
+      "stages": [
+        {
+          "elapsed_seconds": 28.272246811538935,
+          "name": "cache-L32",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.703098226338625,
+          "name": "check-original",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.140541393309832,
+          "name": "resume-d1-original-full",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 14.120691202580929,
+          "name": "resume-d1-original-split",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 14.153528206050396,
+          "name": "resume-d1-original-continued",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.916674233973026,
+          "name": "check-tide-dense",
+          "state": "failed"
+        },
+        {
+          "elapsed_seconds": 13.931019075214863,
+          "name": "check-tide-sparse",
+          "state": "failed"
+        },
+        {
+          "elapsed_seconds": 14.355420280247927,
+          "name": "check-mlp",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.344466470181942,
+          "name": "resume-d1-mlp-full",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.34522495791316,
+          "name": "resume-d1-mlp-split",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 14.340365935117006,
+          "name": "resume-d1-mlp-continued",
+          "state": "completed"
+        },
+        {
+          "elapsed_seconds": 13.34593652933836,
+          "name": "cal-d1-original-L32-B8",
+          "state": "completed"
+        }
+      ],
+      "state": "failed",
+      "termination_verified": true,
+      "worker_seconds": 182.67493423819542
+    }
+  ],
+  "classification": {
+    "execution": "HB16 two calibration timeouts and coordinator duplicate keyword error; B TIDE correctly rejected unintended trainable transport",
+    "learning": "not tested; no formal training started",
+    "performance": "A dense B8 L32 two observed steps 57.99/54.04s; incomplete full calibration, no comparative speed claim",
+    "recovery": "A three candidates and B original/MLP passed B2 L3 three-update exact state recovery, fixed old source",
+    "strict_numerical": "finite failures retained in individual check records"
+  },
+  "next": {
+    "adjustment_id": "LM-ADJUST-001",
+    "config": "configs/studies/language/fc-pilot-v2.json",
+    "limits": "FC4 is one region with zero internal edges; only a trained FC8 pair can add two-region evidence; neither is HB16 or broader scaling evidence",
+    "unchanged": "same natural-text tasks, fixed split, all targets, quality/numerical thresholds and aggregate 8h budget"
+  },
+  "schema": "tide-language-attempt-review-v1"
+}

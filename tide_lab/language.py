@@ -106,7 +106,7 @@ class SmallTransformer(nn.Module):
 
 
 class LocalReplacement(nn.Module):
-    def __init__(self,kind,core_config,stats,seed=11,dimension=896):
+    def __init__(self,kind,core_config,stats,seed=11,dimension=896,mlp_width=330):
         super().__init__();self.kind=kind;self.last_metrics={}
         for key,value in stats.items():self.register_buffer(key,value.detach().clone())
         with torch.random.fork_rng(devices=[]):
@@ -116,8 +116,8 @@ class LocalReplacement(nn.Module):
                 self.core=SequenceCore5(seed=seed,**core_config)
                 self.output=nn.Linear(width,dimension,bias=False)
             elif kind=='mlp':
-                self.input=nn.Linear(dimension,330,bias=False);self.core=nn.GELU()
-                self.output=nn.Linear(330,dimension,bias=False)
+                self.input=nn.Linear(dimension,mlp_width,bias=False);self.core=nn.GELU()
+                self.output=nn.Linear(mlp_width,dimension,bias=False)
             else:raise ValueError('unknown local replacement')
             nn.init.zeros_(self.output.weight)
 
@@ -146,13 +146,17 @@ class FrozenPrefixTail(nn.Module):
     Prefix preparation cost is recorded separately. These timings are not
     whole-model inference speed; that is checked with the actual replacement.
     """
-    def __init__(self,lm,kind,core_config,stats,seed=11):
+    def __init__(self,lm,kind,core_config,stats,seed=11,mlp_width=330):
         super().__init__();self.kind=kind
         self.norm=lm.model.norm;self.head=lm.lm_head
         self.selected=(lm.model.layers[-1].mlp if kind=='original' else
-                       LocalReplacement(kind,core_config,stats,seed))
+                       LocalReplacement(kind,core_config,stats,seed,mlp_width=mlp_width))
         self.norm.requires_grad_(False);self.head.requires_grad_(False)
-        self.selected.requires_grad_(True);self.last_metrics={}
+        # The original teacher was globally frozen. New replacements already
+        # declare their trainable parameters; recursive unfreezing would also
+        # unfreeze the public graph's fixed unit transport scales.
+        if kind=='original':self.selected.requires_grad_(True)
+        self.last_metrics={}
 
     def predicted_mlp(self,x):
         value=self.selected(x)

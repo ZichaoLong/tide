@@ -56,13 +56,19 @@ def run(a):
     plan=json.loads(a.plan.read_text());prefix=a.route+'_'
     limits={key:plan['budget'][prefix+key+'_seconds'] for key in ('admission','training','final')}
     if a.route=='a':limits['scale']=plan['budget']['a_scale_seconds']
+    prior=[]
+    for path in a.prior_attempt:
+        old=json.loads(path.read_text())
+        if old['route']!=a.route or old['state']=='running':raise ValueError('prior route must have a terminal chain record')
+        for key,value in old['spent_seconds'].items():limits[key]=max(0,limits[key]-value)
+        prior.append(dict(path=str(path),sha256=digest(path),spent_seconds=old['spent_seconds']))
     configured=plan['budget'][prefix+'allocated_seconds']
     if not 0<a.compute_seconds<=configured:raise ValueError('route compute request exceeds fixed allocation cap')
     runner=StageRunner(a,plan,limits,a.compute_seconds-30)
     runner.state.update(candidates={},calibration=[],training=[],evaluations=[],
         axes=dict(execution='running',strict_numerical='inspect individual records',
                   recovery='unchecked',learning='unchecked',performance='calibration only'),
-        source_cpu_admission=dict(path=str(a.cpu_evidence),sha256=digest(a.cpu_evidence)))
+        source_cpu_admission=dict(path=str(a.cpu_evidence),sha256=digest(a.cpu_evidence)),prior_attempts=prior)
     candidates=plan[a.route+'_candidates'];cache_paths={};seed=plan['initial_seed'];base_plan=a.plan
     def skip(name,reason):
         runner.state['skipped'].append(dict(name=name,reason=reason));runner.publish()
@@ -94,7 +100,7 @@ def run(a):
     def calibration(kind,length,batch,category='admission',depth=1):
         name=f'cal-d{depth}-{kind}-L{length}-B{batch}'
         _,result=runner.stage(name,'calibrate',category,plan['batch_calibration']['case_seconds'],flags(kind,length,batch,depth))
-        row=dict(kind=kind,length=length,batch=batch,depth=depth,**result)
+        row=dict(result,kind=kind,length=length,batch=batch,depth=depth)
         runner.state['calibration'].append(row);runner.publish()
         if result['state']!='completed':return None
         capacity=result.get('npu_capacity_mib');peak=result.get('npu_peak_allocated_mib')
@@ -162,6 +168,8 @@ def run(a):
             skip('TIDE language comparison','TIDE mechanism/recovery admission failed; controls alone cannot answer architecture question')
         cases=[];previous=None;long_attempted=False;long_cases=[]
         for batch in plan['batch_calibration']['batches']+[plan['batch_calibration']['extra_batch_if_growing']]:
+            if batch*32*plan['training']['minimum_updates']>plan['training']['maximum_valid_tokens']:
+                skip(f'cal-B{batch}','full-token upper budget cannot admit the minimum declared updates at this batch');break
             if batch>=256 and (previous is None or len(cases)<2 or previous<cases[-2]['throughput']*1.1):
                 skip(f'cal-B{batch}','throughput flattened or no two lower-batch cases');break
             rows={}
@@ -213,6 +221,11 @@ def run(a):
                     runner.stage('ablate-'+kind,'evaluate','final',180,common+['--intervention','zero_core'])
                 runner.stage('context-reset-'+kind,'evaluate','final',180,common+['--intervention','context_reset'])
             pair=['tide-dense','tide-sparse']
+            if plan.get('scale_may_use_unspent_training',False):
+                unused=max(0,runner.limits['training']-runner.spent['training'])
+                runner.limits['scale']+=unused;runner.limits['training']=runner.spent['training']
+                runner.state['decisions'].append(dict(reallocated_seconds=unused,source='unused A training',destination='conditional scale',total_route_cap_unchanged=True))
+                runner.publish()
             if all(k in completed and completed[k][1].get('learning_signal') for k in pair) and runner.remaining('scale')>1000:
                 a.plan=base_plan;scale_rows={}
                 for kind in pair:
@@ -251,6 +264,7 @@ def main():
     p.add_argument('--route',choices=['a','b'],required=True)
     p.add_argument('--deadline-epoch',type=float,required=True)
     p.add_argument('--compute-seconds',type=float,required=True)
+    p.add_argument('--prior-attempt',type=Path,action='append',default=[])
     return run(p.parse_args())
 
 

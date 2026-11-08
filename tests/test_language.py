@@ -31,6 +31,19 @@ class LanguageDataTests(unittest.TestCase):
 
 
 class LanguageReadoutTests(unittest.TestCase):
+    def test_replacement_keeps_public_transport_frozen(self):
+        torch.set_num_threads(1)
+        from tide_lab.language import FrozenPrefixTail
+        lm=SimpleNamespace(model=SimpleNamespace(norm=torch.nn.Identity(),layers=[]),lm_head=torch.nn.Linear(896,32))
+        cfg=__import__('json').loads(__import__('pathlib').Path('configs/studies/language/initial.json').read_text())['core']
+        stats=dict(x_mean=torch.zeros(896),y_mean=torch.zeros(896),x_scale=torch.tensor(1.),y_scale=torch.tensor(1.))
+        model=FrozenPrefixTail(lm,'tide-dense',cfg,stats)
+        graph=model.selected.core
+        graph.graph_model.validate_binding(graph.binding.graph)
+        fixed=[p for p in graph.parameters() if not p.requires_grad]
+        self.assertGreater(len(fixed),0)
+        self.assertEqual(sum(p.numel() for p in model.selected.parameters() if p.requires_grad),591412)
+
     def test_vectorized_public_payload_matches_independent_scalar_vjp(self):
         torch.set_num_threads(1)
         encoder=SimpleNamespace(binding=SimpleNamespace(graph=SimpleNamespace(outputs=(0,1))),

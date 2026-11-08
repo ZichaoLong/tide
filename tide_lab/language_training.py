@@ -51,7 +51,7 @@ def core_options(plan,kind,depth=1):
 
 
 def make_a(plan,kind,seed,depth=1):
-    if kind=='transformer':return SmallTransformer(seed=seed)
+    if kind=='transformer':return SmallTransformer(seed=seed,**plan.get('transformer',{}))
     if kind not in ('tide-dense','tide-sparse'):raise ValueError('unknown A candidate')
     return TideLanguageModel(core_options(plan,kind,depth),seed=seed)
 
@@ -64,7 +64,8 @@ def load_cache(path,length):
 
 def make_b(plan,kind,seed,cache,asset,device,depth=1):
     lm=load_qwen(asset,device)
-    model=FrozenPrefixTail(lm,kind,core_options(plan,kind,depth),cache['statistics'],seed).to(device)
+    model=FrozenPrefixTail(lm,kind,core_options(plan,kind,depth),cache['statistics'],seed,
+                          mlp_width=plan.get('replacement_mlp_width',330)).to(device)
     del lm
     return model
 
