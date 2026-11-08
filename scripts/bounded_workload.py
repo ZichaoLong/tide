@@ -22,8 +22,8 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('command', nargs=argparse.REMAINDER)
     a = p.parse_args()
-    if not 20 < a.max_seconds <= 10800:
-        raise ValueError('outside finite third-batch compute cap')
+    if not 20 < a.max_seconds <= 28800:
+        raise ValueError('outside finite authorized compute cap (maximum eight hours)')
     command = a.command[1:] if a.command[:1] == ['--'] else a.command
     a.output.mkdir(parents=True, exist_ok=False)
     record = dict(state='starting', command=command, started_at=now(), max_seconds=a.max_seconds,

@@ -128,9 +128,11 @@ def evaluate(model,rows,route,device,batch_size,*,limit=None,alpha=1.,interventi
         ids=torch.arange(start,min(start+batch_size,count));batch=batch_from(rows,ids,device)
         if route=='a':
             x=batch['input_ids']
-            if intervention=='reverse_context':
-                x=x.clone();x[:,1:]=x[:,1:].flip(1)
-            logits=model(x,intervention='zero_core' if intervention=='zero_core' else None)
+            if intervention=='context_reset':
+                # Keep the immediate input token but reset earlier history at
+                # every target. Never introduce future targets as context.
+                logits=model(x.reshape(-1,1)).reshape(*x.shape,-1)
+            else:logits=model(x,intervention='zero_core' if intervention=='zero_core' else None)
             loss=F.cross_entropy(logits.flatten(0,1),batch['labels'].flatten(),ignore_index=-100,reduction='none').reshape(batch['labels'].shape)
         else:loss=model.token_nll(batch,alpha=alpha)
         if not torch.isfinite(loss).all():raise FloatingPointError('nonfinite heldout NLL')

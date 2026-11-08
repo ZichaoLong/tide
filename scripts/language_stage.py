@@ -77,11 +77,14 @@ def calibrate(a,plan,device,metrics):
         metrics.log(index,{'calibration/update_seconds':row['seconds'],
             'calibration/tokens_per_second':row['valid_tokens']/row['seconds'],'calibration/batch':a.batch})
     mean=sum(r['seconds'] for r in rows[1:])/2
+    preview=evaluate(model,data['validation'],a.route,device,min(a.batch,8),limit=8,alpha=1.)
     return dict(state='completed',batch=a.batch,length=a.length,rows=rows,warmup_updates=1,timed_updates=2,
         mean_step_seconds=mean,valid_tokens_per_update=sum(r['valid_tokens'] for r in rows[1:])/2,
         independent_sample_batch=a.batch,microbatch=a.batch,accumulation=1,global_batch=a.batch,
         phase='full language CE at alpha1 including backward and optimizer; excludes process/model startup',
-        inventory=trainable_inventory(model),npu_peak_allocated_mib=torch.npu.max_memory_allocated()/2**20 if device.type=='npu' else None)
+        inventory=trainable_inventory(model),evaluation_preview={k:preview[k] for k in ('seconds','tokens','blocks')},
+        npu_peak_allocated_mib=torch.npu.max_memory_allocated()/2**20 if device.type=='npu' else None,
+        npu_capacity_mib=torch.npu.get_device_properties(device).total_memory/2**20 if device.type=='npu' else None)
 
 
 def identity(a,plan,device):
@@ -162,9 +165,30 @@ def evaluate_stage(a,plan,device,metrics):
         checkpoint_sha256=digest(a.checkpoint) if a.checkpoint else None,quality_judgment='pending paired review')
 
 
+def inference(a,plan,device,metrics):
+    from tide_lab.language_inference import inference as run_inference
+    _,model,_=data_and_model(a,plan,device)
+    if a.checkpoint:
+        state=torch.load(a.checkpoint,map_location='cpu',weights_only=False)
+        for key,value in dict(route=a.route,kind=a.kind,seed=a.seed,length=a.length,depth=a.depth).items():
+            if state['identity'][key]!=value:raise ValueError('inference checkpoint identity mismatch: '+key)
+        (model if a.route=='a' else model.selected).load_state_dict(state['model'],strict=True)
+    elif not a.baseline_only:raise ValueError('inference needs trained checkpoint or explicit baseline')
+    result=run_inference(model,a,plan,device)
+    metrics.log(0,{'inference/greedy_seconds':result['greedy_seconds'],'inference/generated_tokens':8})
+    return result
+
+
+def unigram(a,plan,device,metrics):
+    from tide_lab.language_inference import unigram as run_unigram
+    result=run_unigram(a)
+    metrics.log(0,{'unigram/test_nll':result['evaluations']['test']['nll']})
+    return result
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('stage',choices=['cache','checks','calibrate','train','evaluate'])
+    p.add_argument('stage',choices=['cache','checks','calibrate','train','evaluate','inference','unigram'])
     for key in ('plan','data','output'):p.add_argument('--'+key,type=Path,required=True)
     p.add_argument('--cache',type=Path);p.add_argument('--asset-path',type=Path)
     p.add_argument('--route',choices=['a','b'],required=True)
@@ -175,7 +199,7 @@ def main():
     p.add_argument('--max-updates',type=int);p.add_argument('--probe',action='store_true')
     group=p.add_mutually_exclusive_group();group.add_argument('--resume',type=Path);group.add_argument('--checkpoint',type=Path)
     p.add_argument('--split',choices=['validation','test'],default='test')
-    p.add_argument('--baseline-only',action='store_true');p.add_argument('--intervention',choices=['zero_core','reverse_context'])
+    p.add_argument('--baseline-only',action='store_true');p.add_argument('--intervention',choices=['zero_core','context_reset'])
     p.add_argument('--run-id',required=True);p.add_argument('--recording-cli')
     a=p.parse_args();plan=json.loads(a.plan.read_text());start=time.monotonic()
     if a.length not in [3,32,128] or not 1<=a.batch<=512:raise ValueError('shape outside bounded package')
@@ -185,6 +209,7 @@ def main():
         if saved.get('identity')!=identity(a,plan,device):raise ValueError('resume rejected before output reservation')
     a.output.mkdir(parents=True,exist_ok=False)
     study='TL-LM-EXEC' if a.stage in ('cache','checks','calibrate') or a.probe else ('TL-A-LM' if a.route=='a' else 'TL-B-LM')
+    if a.depth==2 and study=='TL-A-LM':study='TL-LM-SCALE'
     manifest=dict(schema='tide-lab-run-v1',project='tide-learning-lab',study_id=study,group=study,
         run_id=a.run_id,name=a.run_id,created_at=now(),config=plan,
         resolved=dict(route=a.route,kind=a.kind,seed=a.seed,length=a.length,batch=a.batch,steps=a.steps,depth=a.depth,probe=a.probe),
