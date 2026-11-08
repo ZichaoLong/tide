@@ -160,7 +160,9 @@ class FrozenPrefixTail(nn.Module):
         return value
 
     def hidden(self,batch,alpha=1.):
-        if alpha==0:return batch['residual']+batch['teacher']
+        if alpha==0:
+            self.last_metrics={}
+            return batch['residual']+batch['teacher']
         prediction=self.predicted_mlp(batch['x'])
         output=prediction if alpha==1 else batch['teacher']+alpha*(prediction-batch['teacher'])
         return batch['residual']+output
@@ -195,3 +197,22 @@ def trainable_inventory(model):
     return dict(total_parameters=sum(p.numel() for p in model.parameters()),
         trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),
         shared_groups=[v for v in aliases.values() if len(v)>1])
+
+
+class IntegratedMLP(nn.Module):
+    """One real module replacement; optional inference-only hidden-prefix replay."""
+    def __init__(self,original,replacement,alpha=1.,replay=False):
+        super().__init__();self.original=original;self.replacement=replacement
+        self.alpha=alpha;self.replay=replay;self.history=None;self.original_calls=0
+
+    def forward(self,x):
+        if self.alpha==0:
+            self.original_calls+=1;return self.original(x)
+        if self.replay:
+            if torch.is_grad_enabled():raise ValueError('prefix replay wrapper is inference-only')
+            self.history=x if self.history is None else torch.cat([self.history,x],dim=1)
+            prediction=self.replacement(self.history)[:,-x.shape[1]:]
+        else:prediction=self.replacement(x)
+        if self.alpha==1:return prediction
+        self.original_calls+=1;original=self.original(x)
+        return original+self.alpha*(prediction-original)

@@ -1,6 +1,6 @@
 # 当前研究优先级
 
-主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)仍是设计，未提交新作业。
+主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[实际配置](../configs/studies/language/initial.json)，作业状态见STATUS。
 
 ## 下一执行包的顺序
 
@@ -12,8 +12,8 @@
 
 ## 本包边界与资源决策
 
-拟议共12h墙钟、8NPU小时和2CPU-only worker小时，不逐阶段重置；最多同时2张NPU、合计8线程/48GiB、新磁盘8GiB、配额留80GiB。
-分项60/180/120/60/60 NPU分钟对应接入/A/B/规模/终态；无新增资源已被分配。
+已授权共12h墙钟、8NPU小时和2CPU-only worker小时，不逐阶段重置；最多同时2张NPU、合计8线程/48GiB、新磁盘8GiB、配额留80GiB。
+分项60/180/120/60/60 NPU分钟对应接入/A/B/规模/终态；数据准备CPU作业已完成；NPU分配以实际队列记录为准。
 先导无法容纳最低token与更新预算时，交付执行瓶颈/未区分结论，提出公共执行需求，不能以单答案任务替代主问题或复制核心。
 多层替换、88节点训练、所有语义组合、远端GPU与公共部署不在此包。
 

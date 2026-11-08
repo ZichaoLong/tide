@@ -1,18 +1,17 @@
-# 当前交接 — 语言与结构联合目标，设计已重排（2026-11-08）
+# 当前交接 — 联合语言研究已获授权并进入实施（2026-11-08）
 
-用户最新重点是语言next-token达到接近对照的性能，并在同一模型上推进规模化、稀疏化、局部化。
-已更新[研究设计](research-design.md)、[有界研究表](studies/language-structure.md)、[计划JSON](../research/language-structure-plan.json)、[研究图](../web/index.html)与[待办](ROADMAP.md)。
-新研究均planned，结果awaiting；计划`launchable:false`，本轮没有新下载、设备分配或训练提交。第四批已终态，无该批自动后继。
+用户已批准[联合研究表](studies/language-structure.md)，并授权有依据的局部模块、参数、扩展、定位、loss和训练策略调整。
+实际配置为[language/initial.json](../configs/studies/language/initial.json)，设计JSON仍不可直接提交。
+共同截止为2026-11-08 **23:28:46 UTC / 11月9日07:28:46北京时间**，从本轮启动审计开始计时；NPU总额8h、CPU-only worker总额2h，最多2张卡/8线程/48GiB。失败、重算和后续调整不重置预算。
 
-- A改为全位置自然文本LM，与小稠密Transformer及同架构稠密TIDE比较；合成检索保留为机制依据。
-- B利用原Qwen语言能力，目标是一个固定MLP的全位置完整承接与能力保持；原模型继续训练及简单MLP替换作对照。固定10%混合不再是主完成标准。
-- 联合评价绑定同一checkpoint的NLL、容量、实际工作、局部边界、内存与时间，不能跨A/B拼结论。
-- [公共静态规划](evidence/language-structure-static-plan.json)确认HB16/40/88节点均可保持region4、入/出度≤4及各4端口。它没有运行/学习/性能资格；新全位置应用路径尚未实现和验收。
-- 首选WikiText-2 raw数据尚未下载或锁定；A训练集4096 BPE未拟合。公开基座、数学、原Qwen及安装锁保持不变。
-- 拟议执行包共12h墙钟、≤8NPU小时、≤2CPU-only worker小时，最多2张真实空闲卡，合计≤8线程/48GiB，新磁盘≤8GiB、配额余量≥80GiB；分项及停止条件见研究表。预算是设计，尚未提交。
-- 下一实施顺序为数据与全位置接入→有效batch/吞吐与预算冻结→A/B有界语言先导→条件规模点/重复→联合审阅。旧FP32/full-cache严格失败保留，有限数值探索、离散/恢复/学习/性能分轴记录。
+数据作业`lm-data-v1`已完成且无存活后代，源码`492f46d`的只读快照保持。WikiText来源、共享分片SHA、文档/目标及tokenizer锁已形成，[数据记录](evidence/language-data-ready.json)给出身份和范围。
+624个训练文档、60个验证文档、62个测试文档；本包固定8个validation文档和16个test文档，各前两段128位置。A/B验证2048、测试4096有效token；训练池分别517581/64304 token，训练曝光按实际更新另计。
 
-研究图默认当前主线，可切换历史证据；既有12份限定研究结果及所有失败/未检查记录保留。Lens继续查看历史运行，私有入口见`.local/LENS.md`；新研究尚无run ID。
+A的4096 BPE仅拟合训练文档，B保留原Qwen词表；词表及hidden背景不同，不横比PPL。数据准备不认证模型学习或因果/恢复。5项应用单元检查通过，新的实际core序列/梯度/恢复和吞吐仍在准入阶段。
+Lens小记录`tl-lm0-data-v1`已verified/readback_matches，继续沿用外部JSONL记录器；训练环境没有Trackio SDK，不为记录新增SDK或修改服务。私有入口见`.local/LENS.md`。
+
+接下来依次进行CPU小型独立检查、两条NPU路线的机制/恢复/有效batch校准，再锁正式更新和token预算。L128不可负担时允许统一L32后续配置，保留原尝试；不改成单答案任务。
+尚未提交正式长训练，图中四个新科学结果位仍awaiting。旧12份限定结论与严格失败不变。后台操作使用`scripts/job.py status/logs/stop`，运行目录仅由作业写入。
 
 ## 第四批固定终态交接（历史结果保持）
 

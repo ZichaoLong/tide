@@ -1,6 +1,6 @@
 # TIDE：语言能力与可扩展局部稀疏结构
 
-2026-11-08按用户最新重点修订。当前问题、对照、候选、指标、预算与停止条件见[语言与结构研究表](studies/language-structure.md)，尚无新提交的作业。
+2026-11-08按用户最新重点修订。当前问题、对照、候选、指标、预算与停止条件见[语言与结构研究表](studies/language-structure.md)，已获授权开始实施，具体作业状态以STATUS为准。
 [STATUS](STATUS.md)维护交接，[ROADMAP](ROADMAP.md)维护优先级；本页不是作业日志。
 
 ## 1. 联合目标
