@@ -1,0 +1,224 @@
+{
+  "axes": {
+    "discrete_semantics": "native checked example argmax unchanged; new gradient/parameter mechanisms passed; not all-path equivalence",
+    "execution": "original running; completion waiting for dependency, no NPU request yet",
+    "learning": "shadow validation improves; final128-step fit and active preservation not yet checked",
+    "recovery": "both candidates fresh-process 3-step/B2 tensor/value exact; serialized bytes differ; full128-step independent equivalence unchecked",
+    "strict_numerical": "native full/cache finite tolerance failure retained; historical public Core5 failures retained; causes unresolved"
+  },
+  "baseline": {
+    "full_cache_check": {
+      "atol": 1e-05,
+      "max_abs": 5.435943603515625e-05,
+      "rtol": 0.0001,
+      "same_argmax": true,
+      "state": "strict_failed_finite"
+    },
+    "independent_test": "unchecked",
+    "initial_alpha_zero_exact": true,
+    "validation": {
+      "copy": {
+        "accuracy": 0.6875,
+        "admitted": false
+      },
+      "lookup": {
+        "accuracy": 0.90625,
+        "admitted": true
+      }
+    }
+  },
+  "budget": {
+    "added_disk_gib": 4,
+    "compute_seconds_all_attempts": 7200,
+    "cpu_threads": 4,
+    "deadline": "2026-11-09T05:00:01.755853+08:00",
+    "maximum_concurrent_npus": 1,
+    "memory_gib_requested": 24
+  },
+  "completion_state": "waiting_dependency",
+  "handoff_checks": {
+    "both_frozen_sources": "unchanged",
+    "firefox_offline_smoke": "passed",
+    "git_diff_check": "passed",
+    "map_render_and_check": "passed",
+    "research_map_unit_tests": 12,
+    "research_map_unit_tests_state": "passed"
+  },
+  "jobs": {
+    "s4-capability": {
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability.service",
+      "current_cgroup_process_count": 8,
+      "job_id": "s4-capability",
+      "lifecycle_state": "running",
+      "queue": {
+        "elapsed_seconds": 6.948566742241383,
+        "job_id": "s4-capability",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 14,
+        "physical_ids": [
+          14
+        ],
+        "priority": 0,
+        "project": "tide-learning-lab",
+        "schema_version": 1,
+        "status": "running",
+        "timestamp": "2026-11-08T09:00:09.534722+00:00"
+      },
+      "slice": "background.slice",
+      "started_at": "2026-11-08T09:00:01.879396+00:00",
+      "systemd_active": "active",
+      "systemd_substate": "running",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s4-capability.service"
+    },
+    "s4-capability-completion": {
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability-completion.service",
+      "current_cgroup_process_count": 3,
+      "job_id": "s4-capability-completion",
+      "lifecycle_state": "running",
+      "queue": null,
+      "slice": "background.slice",
+      "started_at": "2026-11-08T09:14:15.742492+00:00",
+      "systemd_active": "active",
+      "systemd_substate": "running",
+      "termination_verified_now": false,
+      "unit": "tide-lab-s4-capability-completion.service"
+    }
+  },
+  "learning_observations": {
+    "latest_train": {
+      "elapsed_seconds": 989.2720631919801,
+      "metrics": {
+        "gradient/core_norm": 0.03798975795507431,
+        "gradient/input_norm": 0.10096672922372818,
+        "gradient/output_norm": 0.1640443056821823,
+        "resource/cpu_maxrss_mib": 2122.484375,
+        "resource/npu_peak_allocated_mib": 66.98974609375,
+        "time/step_seconds": 12.240187663584948,
+        "time/total_step_seconds": 980.0216678753495,
+        "train/gradient_norm_before_clip": 0.1963365375995636,
+        "train/loss": 0.4990098476409912,
+        "work/examples": 10240.0,
+        "work_total/candidates": 81920.0,
+        "work_total/full": 81920.0,
+        "work_total/messages": 163840.0,
+        "work_total/read_events": 81920.0,
+        "work_total/region_blocks": 160.0,
+        "work_total/source_rows": 204800.0,
+        "work_total/state_updates": 81920.0
+      },
+      "run_id": "tl-b4-shadow-tide-s11",
+      "schema_version": 1,
+      "sequence": 13,
+      "step": 80,
+      "timestamp": "2026-11-08T09:20:53.722187+00:00"
+    },
+    "latest_validation": {
+      "elapsed_seconds": 794.4656271375716,
+      "metrics": {
+        "validation/lookup/relative_mse": 0.5830598196333683
+      },
+      "run_id": "tl-b4-shadow-tide-s11",
+      "schema_version": 1,
+      "sequence": 11,
+      "step": 64,
+      "timestamp": "2026-11-08T09:17:38.915752+00:00"
+    },
+    "status": "running; no final model acceptance"
+  },
+  "lens": {
+    "baseline": {
+      "destination_name": "tl-b4-baseline-projection-4328f3980939",
+      "destination_run_id": "f71b22b261d64384abfeedb325f316f8",
+      "event_count": 2,
+      "readback_matches": true,
+      "record": "runs/s4-capability/baseline/projection.json",
+      "source_run_id": "tl-b4-baseline",
+      "status": "verified"
+    },
+    "batch-calibration": {
+      "destination_name": "tl-b4-batch-calibration-projection-3ce73e928849",
+      "destination_run_id": "6c925b686ec34ddabf746d02fc947146",
+      "event_count": 6,
+      "readback_matches": true,
+      "record": "runs/s4-capability/batch-calibration/projection.json",
+      "source_run_id": "tl-b4-batch-calibration",
+      "status": "verified"
+    },
+    "information": {
+      "destination_name": "tl-b4-information-projection-359d53a0bc34",
+      "destination_run_id": "03adda85040c41c3b19133bad5221c19",
+      "event_count": 2,
+      "readback_matches": true,
+      "record": "runs/s4-capability/information/projection.json",
+      "source_run_id": "tl-b4-information",
+      "status": "verified"
+    },
+    "mechanisms": {
+      "destination_name": "tl-b4-mechanisms-projection-0baa7bbbcc34",
+      "destination_run_id": "831565d1ab4f435fb49ce8df11309e99",
+      "event_count": 2,
+      "readback_matches": true,
+      "record": "runs/s4-capability/mechanisms/projection.json",
+      "source_run_id": "tl-b4-mechanisms",
+      "status": "verified"
+    },
+    "shadow-tide-s11": {
+      "destination_name": "tl-b4-shadow-tide-s11-projection-2eeeec35f0a8",
+      "destination_run_id": "9f6d913c958b41ae9df457a131fb8786",
+      "event_count": 0,
+      "readback_matches": null,
+      "record": "runs/s4-capability/shadow-tide-s11/projection.json",
+      "source_run_id": "tl-b4-shadow-tide-s11",
+      "status": "recording"
+    }
+  },
+  "observed_at": "2026-11-08T09:22:04.955109+00:00",
+  "recovery": {
+    "checks": [
+      {
+        "full_sha256": "e2e25a3a2d29cae48607e62f68f5859cfd6a6dabc0627bee9f418bc6e5402966",
+        "kind": "tide",
+        "resumed_sha256": "470d5118947f8c47dd2062c09d1dcd28f9120b25a3a5dd62ed2b5f8ca5317fc9",
+        "scope": "fresh-process 3-step/B2 shadow learner, AdamW, normalization, data cursor, CPU/accelerator/Python RNG and full runtime identity",
+        "state": "passed"
+      },
+      {
+        "full_sha256": "5b84984fef64a927e961e5082b704e9eb60e50de5134cd6b91bb5ec174d6c844",
+        "kind": "mlp",
+        "resumed_sha256": "b9cbdffa7dcb1a1a727e2ff83f484c96a6e446bbe0d22d838e5ede5f0f8deef8",
+        "scope": "fresh-process 3-step/B2 shadow learner, AdamW, normalization, data cursor, CPU/accelerator/Python RNG and full runtime identity",
+        "state": "passed"
+      }
+    ],
+    "state": "passed"
+  },
+  "resolved": {
+    "batch": 128,
+    "cache_sha256": "14797afe0a6d2e3f5a928121e17837cf2adb82fc3ae1db4c79550e393a4f3b37",
+    "calibration_sha256": "04ed2253baa844ceb2f6b3141a232c258532df0dd755d680e320a24f80d851ba",
+    "optimizer": "adamw",
+    "plan_sha256": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
+    "steps": 128
+  },
+  "review_policy": "workload records read-only; no scoped scientific support created",
+  "schema": "tide-b4-running-handoff-v1",
+  "sources": {
+    "controller": {
+      "commit": "4502d073e78876bca2abe88947bda9aeb7dbdc98",
+      "snapshot": ".local/source-fourth-completion",
+      "tree_sha256": "55175ce1b8e4d6897febb22006ee51c1f0aa7e731a2e9ae1b788e00b866f1c31",
+      "verified_at": "2026-11-08T09:22:04.955109+00:00"
+    },
+    "model": {
+      "commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+      "snapshot": ".local/source-fourth-batch",
+      "tree_sha256": "86f23b7e8bf5659a02b9843a80e1b251d30255906a591ea34b7b2ab639fa5405",
+      "verified_at": "2026-11-08T09:22:04.955109+00:00"
+    }
+  }
+}

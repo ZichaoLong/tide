@@ -107,6 +107,12 @@
     "completion_guard_unit_test": "passed; only exact declared timeout eligible",
     "original_frozen_source_reverified": true
   },
+  "controller_source": {
+    "commit": "4502d073e78876bca2abe88947bda9aeb7dbdc98",
+    "snapshot": ".local/source-fourth-completion",
+    "tree_sha256": "55175ce1b8e4d6897febb22006ee51c1f0aa7e731a2e9ae1b788e00b866f1c31",
+    "verified_at": "2026-11-08T09:22:04.955109+00:00"
+  },
   "limitations": "NPU recovery comparison is tensor/value exact, not equality of serialized file bytes. Pending training has no terminal quality claim. Replayed/unpublished work overhead will remain distinct from 128 logical updates.",
   "new_application_npu_resume": {
     "checks": [
@@ -127,6 +133,56 @@
     ],
     "state": "passed"
   },
+  "observation": {
+    "coordinator_state": "waiting_dependency",
+    "jobs": {
+      "s4-capability": {
+        "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability.service",
+        "current_cgroup_process_count": 8,
+        "job_id": "s4-capability",
+        "lifecycle_state": "running",
+        "queue": {
+          "elapsed_seconds": 6.948566742241383,
+          "job_id": "s4-capability",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 14,
+          "physical_ids": [
+            14
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "schema_version": 1,
+          "status": "running",
+          "timestamp": "2026-11-08T09:00:09.534722+00:00"
+        },
+        "slice": "background.slice",
+        "started_at": "2026-11-08T09:00:01.879396+00:00",
+        "systemd_active": "active",
+        "systemd_substate": "running",
+        "termination_verified_now": false,
+        "unit": "tide-lab-s4-capability.service"
+      },
+      "s4-capability-completion": {
+        "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability-completion.service",
+        "current_cgroup_process_count": 3,
+        "job_id": "s4-capability-completion",
+        "lifecycle_state": "running",
+        "queue": null,
+        "slice": "background.slice",
+        "started_at": "2026-11-08T09:14:15.742492+00:00",
+        "systemd_active": "active",
+        "systemd_substate": "running",
+        "termination_verified_now": false,
+        "unit": "tide-lab-s4-capability-completion.service"
+      }
+    },
+    "npu_requested_by_completion": false
+  },
+  "observed_at": "2026-11-08T09:22:04.955109+00:00",
   "original_active_inputs_unchanged": true,
   "original_job_not_interrupted": true,
   "original_plan_sha256": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
@@ -149,6 +205,12 @@
   },
   "recorded_at": "2026-11-08T09:13:43.667640+00:00",
   "schema": "tide-b4-budget-completion-policy-v1",
-  "state": "prepared_not_submitted",
+  "state": "submitted_waiting_dependency",
+  "submission": {
+    "exit_code": 0,
+    "job_id": "s4-capability-completion",
+    "record": "artifacts/jobs/s4-capability-completion/job.json",
+    "submitted_at": "2026-11-08T09:14:15.718546+00:00"
+  },
   "trigger": "only original per-training time-cap failure, published checkpoint, and actual service/descendant termination; no user stop or numerical/semantic/recovery failure"
 }

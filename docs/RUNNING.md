@@ -1,38 +1,47 @@
 # 当前活动：第四批基线能力保持链（2026-11-08）
 
-`s4-capability`已实际启动并获得物理NPU14→logical npu:0，unit为`tide-lab-s4-capability.service`，真实cgroup在background.slice。研究表为[第四批](studies/fourth-batch.md)，[启动快照](evidence/fourth-batch-launch.json)，最新阶段以`runs/s4-capability/stage.json`为准。下方第三批及更早说明都是历史快照。
+北京时间2026-11-08 17:22:04观测。研究表见[第四批](studies/fourth-batch.md)，[当前证据](evidence/fourth-batch-handoff.json)。下方分隔线后的第三批及更早说明均为历史快照。
 
-固定源码`.local/source-fourth-batch` / `1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a`，树SHA256 `86f23b7e8bf5659a02b9843a80e1b251d30255906a591ea34b7b2ab639fa5405`；配置`configs/studies/fourth/b-preserve.json`。不得编辑这个快照、私有环境或已发布的baseline/features.pt、dataset.json、resolved.json。工作区文档可更新。总分配后计算≤7200秒、共同墙钟截止**2026-11-09 05:00:01北京时间**；队列cap35880秒，服务预留清理，不是每个候选12小时。资源1NPU/4CPU线程/24GiB/新增≤4GiB，cgroup资源配额是请求，应用线程和时限实际生效。
+| 作业ID / unit | 当前状态 | 权威记录 |
+| --- | --- | --- |
+| `s4-capability` / `tide-lab-s4-capability.service` | 运行，物理NPU14→logical npu:0；TIDE seed11日志80/128步 | `runs/s4-capability/stage.json`；`artifacts/jobs/s4-capability/` |
+| `s4-capability-completion` / `tide-lab-s4-capability-completion.service` | 已提交、CPU等待原服务无后代；尚未请求NPU | `runs/s4-capability-completion/coordinator.json`；`artifacts/jobs/s4-capability-completion/` |
 
-驱动依次执行原生基线→输入诊断→新机制/恢复→batch校准→seed11两候选训练/验证；TIDE相关门槛满足时执行seed22，最后独立test。当前查表进入后续，复制未达80%门槛已保留，不追加任务。每个实际stage有独立manifest/result/metrics及Lens projection；检查子运行仅保留权威记录。
+两个服务实际均在background.slice。模型与所有后续模型worker固定源码`.local/source-fourth-batch` / `1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a`，树SHA256 `86f23b7e8bf5659a02b9843a80e1b251d30255906a591ea34b7b2ab639fa5405`。完成协调器单独固定`.local/source-fourth-completion` / `4502d073e78876bca2abe88947bda9aeb7dbdc98`，树SHA256 `55175ce1b8e4d6897febb22006ee51c1f0aa7e731a2e9ae1b788e00b866f1c31`。不得编辑快照、私有环境或已发布baseline/features.pt、dataset.json、resolved.json。工作区交接文档可更新。
+
+配置`configs/studies/fourth/b-preserve.json` SHA256 `721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83`；已选B128、128次逻辑更新、AdamW。设备最多1NPU/4CPU线程/24GiB/新增≤4GiB，所有尝试分配计算合计≤7200秒，共同墙钟截止**2026-11-09 05:00:01北京时间**。cgroup v1资源配额是请求，应用线程、wrapper时限及服务时限生效；不是每个服务另获2h或12h。
+
+B128预计128步超过原单次20min上限；原作业不修改、不打断。协调器只在该精确错误及服务后代清空后接续原checkpoint，通过共享队列重新申请原物理映射14。剩余计算=7200−原服务完整耗时−30秒；seed22仍按原学习/保持门槛且需足够余量。原用户stop、数值/机制/恢复或其他错误不触发续接。每个TIDE候选最多一次续接，未发布工作可重算但不增加128次逻辑更新；失败与重算成本保留。查表进入后续，复制未达80%门槛，不追加任务。
+
+只读查看（仓库根目录）：
 
 ```bash
 python scripts/job.py status artifacts/jobs/s4-capability
+python scripts/job.py status artifacts/jobs/s4-capability-completion
 python scripts/job.py logs artifacts/jobs/s4-capability --lines 80
+python scripts/job.py logs artifacts/jobs/s4-capability-completion --lines 80
 cat runs/s4-capability/stage.json
 cat runs/s4-capability/resume-checks.json
 cat runs/s4-capability/resolved.json
+cat runs/s4-capability-completion/coordinator.json
+cat runs/s4-capability-completion/queue-state.json
+cat runs/s4-capability-completion/completion.json
 tail -n 5 runs/s4-capability/shadow-tide-s11/metrics.jsonl
-tail -n 40 runs/s4-capability/shadow-tide-s11-wrapper/workload.log
+tail -n 5 runs/s4-capability-completion/shadow-tide-s11-resume1/metrics.jsonl
+```
+
+未生成文件代表尚未执行到该阶段。协调器的外层job worker保持CPU身份，实际续接NPU状态须看`runs/s4-capability-completion/queue-state.json`与`completion.json`。每个阶段日志为对应root的`NAME-wrapper/workload.log`，记录器为`NAME-recording.log`；原总wrapper在`runs/s4-capability-wrapper/`，完成分配wrapper在`runs/s4-capability-completion/allocated-wrapper/`。完整argv/env/预算见两个`artifacts/jobs/<id>/job.json`，私有实际提交记录在`.local/fourth-completion-submission.json`。不要为查看状态重新运行submit或coordinate。
+
+如需停止整批，先取消完成协调器，再停止原作业；两个命令均核对cgroup与已知后代：
+
+```bash
+python scripts/job.py stop artifacts/jobs/s4-capability-completion
 python scripts/job.py stop artifacts/jobs/s4-capability
 ```
 
-尚未生成的文件表示尚未执行到对应阶段。stop核对整个cgroup和已知后代，不只停止最外层。各阶段日志在`runs/s4-capability/NAME-wrapper/workload.log`，记录器日志在相邻`NAME-recording.log`；外层总预算记录在`runs/s4-capability-wrapper/result.json`。不要为查看记录重跑submit脚本。
+已安排的自动恢复无需另行执行：只用原快照、配置、cache、B128、seed、AdamW/RNG与原设备映射，从最后完整checkpoint向逻辑128步继续，输出新ID`tl-b4-shadow-tide-s11-resume1`。每32步及终态保存完整模型/optimizer/标准化/数据游标/RNG/运行身份；教师仅引用固定权重。两候选已验3步B2新进程tensor/值精确恢复，不宣称序列化字节相同或128步完整独立等价。若自动链停止，不再盲目重试；需核对原因、剩余原预算和实际终态后，使用新的job/output、同一固定源码与`capability_stage.py train --resume CHECKPOINT`放入相同background.slice/选卡/wrapper约束，不能绕过队列或重置预算。
 
-分支每32步及终态保存完整应用checkpoint，含模型/AdamW/RNG/step/标准化/数据游标和源码/config/cache/运行身份。教师是固定只读checkpoint引用，不进入optimizer也不复制到每个恢复文件。精确恢复须先确认旧作业无后代，用新job/run/output、相同只读源码/config/cache、batch/seed/候选/物理映射及剩余原预算，例如恢复工作负载：
-
-```bash
-python scripts/capability_stage.py train \
-  --plan /ABSOLUTE/source-fourth-batch/configs/studies/fourth/b-preserve.json \
-  --cache /ABSOLUTE/OLD/baseline/features.pt \
-  --kind tide --seed 11 --batch SELECTED_BATCH \
-  --resume /ABSOLUTE/OLD/shadow-tide-s11/checkpoint.pt \
-  --output /ABSOLUTE/NEW-OUTPUT --run-id NEW-RUN-ID
-```
-
-这只是工作负载示例，须放入background.slice/队列与bounded_workload，并计入共同deadline/剩余计算，不能直接绕过选卡或重新获得2h。`SELECTED_BATCH`从resolved.json读取。更换设备映射不是已验精确恢复；没有checkpoint只能另立从初态尝试。当前没有自动重新提交失败服务。
-
-Lens使用原服务，项目`tide-learning-lab`，按TL-B4-BASE/INFO/SHADOW/PRESERVE筛选；`tl-b4-shadow-tide-s11`等run统一关联，projection.json给实际Lens名称/ID。私有查看及SSH方法在`.local/LENS.md`；小记录`tl-b4-recording-admission-20261108`已verified/readback_matches。
+Lens沿用原服务，项目`tide-learning-lab`；组TL-B4-BASE/INFO/CHECK/SHADOW/PRESERVE，run前缀`tl-b4-`。当前baseline/information/mechanisms/batch-calibration投影verified，影子训练recording。完成链使用`-resume1`或`-completion`后缀，原失败尝试与新运行分列。每个stage的`projection.json`给实际Lens名称/ID；私有查看及SSH方法在`.local/LENS.md`，实例信息不入公开仓库。研究图只链接项目记录和统一ID。
 
 ---
 
