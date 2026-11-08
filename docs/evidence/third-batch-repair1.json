@@ -1,0 +1,88 @@
+{
+  "authorization": "Complete the previously approved missing TIDE 200-step candidate within the original batch, config and budgets; not an additional candidate or repeated learned run",
+  "combined_allocated_max_seconds": 7835.27726014331,
+  "config": "configs/studies/third/b-tide.json",
+  "config_sha256": "76882212328e53c244b79073cf7a0779aca30931cf9348efbd7bb574ac2de5c6",
+  "contaminated_record": {
+    "path": "runs/s3-growth/tl-b3-tide-s11-200/tl-b3-tide-s11-200/state.json",
+    "preserved": true,
+    "schema": "tide-research-map-prototype-v1",
+    "sha256": "e252d9e1ddf173bb1e6f655005a2b77236ef753dfe00e9756ef653e3c2e74052"
+  },
+  "deadline_epoch": 1794144551.39321,
+  "gate": "fresh-process frozen 3-step/B2 exact resume on allocated device before formal candidate; reuse original ingress; same frozen implementation/config",
+  "matrix_sha256": "1b9b5ff0a2d87368951687cccde40b57c29a8535dfcedf3c84dd42be0be0a3cb",
+  "original_failed_job": "s3-growth",
+  "original_failed_run": "tl-b3-tide-s11-200",
+  "original_stage_elapsed_seconds": 485.27726014330983,
+  "prepared_at": "2026-11-08T05:01:36.416641+00:00",
+  "reason": "Prior assistant handoff path variable was shadowed; graph JSON was written into a future TIDE output/state.json, causing FileExistsError before any training process.",
+  "record_isolation": "scripts.review_io rejects graph/evidence writes under workload roots before mkdir; two regression checks passed",
+  "recovery_observation": {
+    "checks": {
+      "accelerator_rng": "exact",
+      "config_sha256": "exact",
+      "identity": "exact",
+      "model": "exact",
+      "optimizer": "exact",
+      "python_rng": "exact",
+      "rng": "exact",
+      "sequence_state": "exact",
+      "step": "exact"
+    },
+    "observed_at": "2026-11-08T05:07:17.365459+00:00",
+    "result_sha256": "2210eb47461591d3a8a0c15bdd2b9a48f9de5a28f0e5f310777d63c705ad5aab",
+    "scope": "new allocated physical NPU1, same frozen source/config/stack, three updates/B2 fresh-process exact recovery before TIDE200",
+    "state": "passed"
+  },
+  "repair_allocated_cap_seconds": 7350,
+  "repair_job": "s3-growth-tide-repair1",
+  "repair_run": "tl-b3-tide-s11-200-repair1",
+  "schema": "tide-third-launch-repair-v1",
+  "service_timeout_seconds": 30424,
+  "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+  "source_tree_sha256": "284807226729141d002e77c01d65c687ef6bc5652cb7864a434a2596cce021fa",
+  "startup_observation": {
+    "cgroup_process_count": 8,
+    "observed_at": "2026-11-08T05:02:39.569264+00:00",
+    "queue": {
+      "elapsed_seconds": 6.9308899231255054,
+      "job_id": "s3-growth-tide-repair1",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "schema_version": 1,
+      "status": "running",
+      "timestamp": "2026-11-08T05:01:44.206769+00:00"
+    },
+    "state": "running",
+    "systemd": {
+      "ActiveState": "active",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-growth-tide-repair1.service",
+      "MainPID": "4042362",
+      "Slice": "background.slice",
+      "SubState": "running"
+    },
+    "termination_verified_now": false
+  },
+  "state": "submitted",
+  "submission_exit_code": 0,
+  "submitted_at": "2026-11-08T05:01:36.526350+00:00",
+  "three_hour_budget_seconds": 10800,
+  "training_observation": {
+    "observed_at": "2026-11-08T05:07:17.365617+00:00",
+    "record": "runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/state.json",
+    "run_id": "tl-b3-tide-s11-200-repair1",
+    "state": "running",
+    "steps": 8
+  },
+  "wait_seconds": 23014
+}

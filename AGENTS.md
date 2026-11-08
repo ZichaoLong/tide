@@ -16,6 +16,10 @@
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the
   user explicitly authorizes a separate change. Do not fetch retired foundation history.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.
+- Status/review code reads `runs/` and `artifacts/jobs/` without writing there. Use
+  `scripts.review_io.write_review_json` for graph/evidence JSON writes; it validates
+  the destination before creating directories. A graph schema in a run state file
+  is record contamination, never a training state.
 - Keep actual results separate from planned experiments and expected result slots. Missing
   evidence never means passed. State each claim's domain, comparisons and transfer limits.
 - Model/checkpoint ancestry, execution prerequisites and scientific support are distinct relations.
