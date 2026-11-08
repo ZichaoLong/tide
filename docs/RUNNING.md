@@ -1,3 +1,30 @@
+# 当前活动：原TIDE候选启动修复后补做（2026-11-08）
+
+原7个作业已全部终态，六个完成、B阶段因最后TIDE候选启动失败而失败；均无后代。[HB/采样结论与B阶段结果](studies/third-batch-results.md)。下方原交接表是历史快照，当前只运行**s3-growth-tide-repair1**，没有新增研究候选。
+
+- 单元：`tide-lab-s3-growth-tide-repair1.service`，已核对background.slice、真实cgroup与物理NPU1→logical npu:0。
+- 固定源码：仍`.local/source-third-batch` / `1c6cb44197cb603cdab1e89b1be1a96bf692c789`；配置仍`configs/studies/third/b-tide.json`，200步/B32/SGD，配置hash未改。
+- 恢复门槛：`runs/s3-growth-tide-repair1/resume/result.json`，原3步/B2冻结模型在新分配设备上重新逐位通过；不称200步完整恢复。
+- 正式run：`tl-b3-tide-s11-200-repair1`，记录目录`runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/`。
+- 预算：分配后≤7,350秒（恢复≤750、学习/记录≤6,600）；加原B阶段485.28秒仍低于3h。共同截止不变：**北京时间2026-11-08 21:29:11**。精确请求、argv和输入hash在新job.json；首次提交等待cap23,014秒，服务cap30,424秒，终止另留30秒，未重获12h。
+- 原始故障：交接脚本把图数据误写到尚未创建的TIDE输出目录，批驱动正确拒绝覆盖。污染文件/原失败保留；新review写入器和两项回归检查防止再写运行目录。详见[故障/补做证据](evidence/third-batch-repair1.json)。
+
+```bash
+python scripts/job.py status artifacts/jobs/s3-growth-tide-repair1
+python scripts/job.py logs artifacts/jobs/s3-growth-tide-repair1 --lines 80
+cat runs/s3-growth-tide-repair1/resume/result.json
+cat runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/state.json
+tail -n 5 runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/metrics.jsonl
+tail -n 40 runs/s3-growth-tide-repair1/learning-wrapper/workload.log
+python scripts/job.py stop artifacts/jobs/s3-growth-tide-repair1
+```
+
+`stop`会核对整组进程和已知后代，不能只杀最外层。恢复仍需新ID/新输出、同config/source/runtime和剩余原预算；正式checkpoint每40步写入，若尚无checkpoint则只能从公共初始权重重新开始，不能声称精确恢复；成功终态按原策略退役大checkpoint。当前没有自动后续重试。
+
+Lens项目`tide-learning-lab`、组TL-B3，可按`tl-b3-tide-s11-200-repair1`查找；最终projection.json给出映射身份。原批9个有指标run均verified/readback_matches；私有入口和SSH转发在`.local/LENS.md`，服务策略不变。
+
+---
+
 # 第三批后台交接（2026-11-08）
 
 已实际提交7个服务，统一启动北京时间09:29:11，绝对截止**2026-11-08 21:29:11 +08:00**。每个服务截止另预留30秒清理；各组更短的上限仍生效。不是每个候选12小时。状态为交接时观测，实时以项目记录为准；[研究表](studies/third-batch.md)、[提交证据](evidence/third-batch-launch.json)。
