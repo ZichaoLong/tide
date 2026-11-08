@@ -7,6 +7,8 @@
   private environments, small public model/data acquisition, builds, checks, phased commits
   and ordinary pushes. On 2026-11-08 the user accepted the reviewed recommendations
   and authorized the bounded follow-up in `docs/studies/second-batch.md`.
+  The subsequent 2026-11-08 approval authorizes the third batch in
+  `docs/studies/third-batch.md`, with one shared 12-hour execution deadline.
   Do not expand beyond that table without another review. Shared environments and
   other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream

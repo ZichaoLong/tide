@@ -1,0 +1,87 @@
+{
+  "actual_installation": {
+    "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+    "tidegraph": "0.3.0",
+    "tidegraph_source_sha256": "3d79e2ea48d5557ed32c359fed0bdfbff62069fd85b03dea4ffa13d78a4d5c6e",
+    "torch": "2.12.0+cpu",
+    "torch_npu": "2.12.0.post3",
+    "transformers": "4.57.1"
+  },
+  "checked_at": "2026-11-08T01:25:26.224002+00:00",
+  "checks": [
+    {
+      "command": "python -m unittest discover -s tests -p test_third_batch.py -v",
+      "scope": "frozen2048 leakage/uniqueness/reproducibility, diagnostic RNG/modes/parameters, common deadline arithmetic",
+      "state": "passed",
+      "tests": 3
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_training_cadence.py -v",
+      "scope": "small FC/HB quad CPU32 observation+intermediate diagnostic preserves model/AdamW/RNG; fresh-process exact resume; nonfinite unobserved step fails",
+      "state": "passed",
+      "tests": 3
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_npu_stage.py -v",
+      "scope": "process group cleanup, success and timeout; actual NPU untested by these checks",
+      "state": "passed",
+      "tests": 3
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_job_records.py -v",
+      "scope": "launcher input identity, failure, timeout and descendant cleanup",
+      "state": "passed",
+      "tests": 8
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_research_map.py -v",
+      "state": "passed",
+      "tests": 12
+    },
+    {
+      "command": "node --experimental-websocket tests/browser_smoke.mjs",
+      "scope": "offline generated map rendering/filter/details/zoom, zero browser console errors",
+      "state": "passed"
+    }
+  ],
+  "dependencies": {
+    "numpy": {
+      "record_matches": true,
+      "version": "2.5.2",
+      "version_matches": true
+    },
+    "torch": {
+      "record_matches": true,
+      "version": "2.12.0+cpu",
+      "version_matches": true
+    },
+    "torch-npu": {
+      "record_matches": true,
+      "version": "2.12.0.post3",
+      "version_matches": true
+    }
+  },
+  "disk": {
+    "account_gib": 165,
+    "added_budget_gib": 20,
+    "filesystem_available_gib": 907,
+    "hard_quota_gib": 800
+  },
+  "foundation_files_checked": 248,
+  "foundation_mismatches": [],
+  "historical_numerical_failures": "retained unchanged",
+  "lens": {
+    "project": "tide-learning-lab",
+    "projection_sha256": "386f0ea785fa700c755c5f22ea7f99fc415c32b2b0d05f4c77805ba8500694cb",
+    "readback": true,
+    "run_id": "tl-s3-recording-check-20261108",
+    "state": "verified"
+  },
+  "parent_commit": "0584d5ab9054bdcf92c31812e4c9cda40cfdfe61",
+  "pending": "changed frozen growth NPU ingress and frozen/full exact recovery run only after allocation; new learning/evaluation unreviewed",
+  "schema": "tide-lab-third-preflight-v1",
+  "scope": "foundation file hashes and dependency versions/RECORD; dependency binary contents not rehashed",
+  "second_batch_installation_matches": true
+}

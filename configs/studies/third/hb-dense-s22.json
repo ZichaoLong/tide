@@ -1,0 +1,90 @@
+{
+  "device": "cpu",
+  "dtype": "float32",
+  "evaluation": {
+    "batch_size": 16,
+    "samples": 128,
+    "seed": 20261107,
+    "test": true,
+    "test_if_learning_gate": true,
+    "test_samples": 256
+  },
+  "evidence_axes": {
+    "discrete_semantics": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "passed"
+    },
+    "execution": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "see separate training result"
+    },
+    "learning": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "not_checked"
+    },
+    "mechanisms": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "passed"
+    },
+    "recovery": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "passed"
+    },
+    "strict_numerical": {
+      "scope": "reused second-batch tiny admission; not a fresh check for every seed/update",
+      "source": "configs/studies/second/hb-dense.json",
+      "source_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "state": "passed"
+    }
+  },
+  "learning_gate": 0.5,
+  "model": {
+    "branches": 2,
+    "depth": 1,
+    "kind": "core5",
+    "offsets": [
+      0,
+      1
+    ],
+    "region_width": 4,
+    "send": "dense",
+    "temperature": 0.25,
+    "topology": "hb",
+    "width": 16
+  },
+  "numerical_policy": "explore: finite strict failures retained; independent discrete/mechanism and exact resume gates required",
+  "phase": "third-batch-fixed-horizon",
+  "schema": "tide-lab-run-v1",
+  "seed": 22,
+  "study_id": "TL-A2-REPEAT",
+  "task": {
+    "delay": 2,
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4
+  },
+  "threads": 1,
+  "training": {
+    "batch_size": 32,
+    "checkpoint_every": 40,
+    "data_seed": 1022,
+    "eps": 1e-06,
+    "eval_every": 40,
+    "log_every": 5,
+    "lr": 0.001,
+    "max_seconds": 10380,
+    "retain_checkpoint": true,
+    "steps": 400,
+    "weight_decay": 0.01
+  }
+}

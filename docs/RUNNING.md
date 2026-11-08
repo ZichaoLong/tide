@@ -1,6 +1,6 @@
 # 后台作业、终态与恢复
 
-2026-11-08终态复核：五个作业均已结束、无存活后代。FC评估与两个HB400步训练completed/exit0；NPU采样与冻结骨干B等卡超时，workload未启动。当前没有活动或排队作业。下面保留固定输入、预算和历史操作方法，不能把命令示例当作已提交的新任务。[第二批结论](studies/second-batch-results.md)、[终态证据](evidence/second-batch-terminal.json)。
+2026-11-08终态复核：五个作业均已结束、无存活后代。FC评估与两个HB400步训练completed/exit0；NPU采样与冻结骨干B等卡超时，workload未启动。第三批已另获授权，当前正在准备，后续实际提交状态见STATUS。下面保留固定输入、预算和历史操作方法，不能把命令示例当作已提交的新任务。[第二批结论](studies/second-batch-results.md)、[终态证据](evidence/second-batch-terminal.json)。
 
 固定源码：`94bf712f8bd2e4007f0f56d1fea4799c99833dcd`，只读目录`.local/source-second-batch`，树SHA256 `e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0`。数学/公共基座及`.venv`不变；旧consumer wheel原样保留，新实验包显式从冻结目录导入，实际身份见各manifest。不要修改快照、环境或被锁定的原FC checkpoint/config。工作区文档更新不影响这些作业。
 

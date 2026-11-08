@@ -44,9 +44,9 @@ def main():
     from scripts.check_resume import equal
     import torch
     device=runtime(config['device'],config['threads'],config['seed'])
-    start=time.monotonic();run_id='tl-s1-npu-sampling'
+    start=time.monotonic();run_id=config.get('run_id','tl-s1-npu-sampling')
     atomic_json(root/'manifest.json',dict(project='tide-learning-lab',name=run_id,run_id=run_id,
-        study_id='TL-S1',group='TL-S1',config=config,config_sha256=digest(a.config),
+        study_id=config['study_id'],group=config['study_id'],config=config,config_sha256=digest(a.config),
         source=source_identity(),installation=installed_identity(),created_at=now()))
     report=dict(state='running',started_at=now(),observations=[],
         axes=dict(execution='running',strict_numerical='original NPU failures retained; not a reference comparison',

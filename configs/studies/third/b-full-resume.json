@@ -1,0 +1,46 @@
+{
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "batch_size": 2,
+    "diagnostic_steps": [
+      2
+    ],
+    "paired_branch": true,
+    "samples": 4,
+    "seed": 20261107,
+    "test": false
+  },
+  "model": {
+    "branch": "none",
+    "depth": 2,
+    "freeze_backbone": false,
+    "kind": "growth",
+    "region_width": 4,
+    "width": 16
+  },
+  "schema": "tide-lab-run-v1",
+  "seed": 11,
+  "study_id": "TL-B3-CHECK",
+  "task": {
+    "delay": 2,
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4
+  },
+  "threads": 4,
+  "training": {
+    "batch_size": 2,
+    "checkpoint_every": 2,
+    "data_seed": 1011,
+    "eps": 1e-06,
+    "eval_every": 2,
+    "log_every": 5,
+    "lr": 0.01,
+    "max_seconds": 600,
+    "optimizer": "sgd",
+    "retain_checkpoint": true,
+    "steps": 3,
+    "weight_decay": 0
+  }
+}

@@ -178,6 +178,33 @@ def paired_branch_effect(model, task, config, device):
                 per_example=records, scope='paired validation intervention; not causal attribution versus retraining')
 
 
+def diagnostic_snapshot(model, task, config, device, step):
+    """Declared mid-run observations; preserve RNG and module observation modes.
+
+    No optimizer update, model selection, or continuation boundary is introduced.
+    The changed path is covered by small state-preservation/resume checks.
+    """
+    modes = [(m, m.training, getattr(m, 'observe', None)) for m in model.modules()]
+    cpu_rng, python_rng = torch.get_rng_state(), random.getstate()
+    accelerator_rng = torch.npu.get_rng_state_all() if device.type == 'npu' else None
+    try:
+        row = dict(step=step, validation=evaluate(model, task, 'val', config, device))
+        row['original_learning_gate'] = config.get('learning_gate', .5)
+        row['original_learning_gate_met'] = row['validation']['accuracy'] >= row['original_learning_gate']
+        if config['model']['kind'] == 'growth' and config['model'].get('branch', 'none') != 'none':
+            row['paired_branch'] = paired_branch_effect(model, task, config, device)
+        return row
+    finally:
+        torch.set_rng_state(cpu_rng)
+        random.setstate(python_rng)
+        if accelerator_rng is not None:
+            torch.npu.set_rng_state_all(accelerator_rng)
+        for module, training, observe in modes:
+            module.training = training
+            if observe is not None:
+                module.observe = observe
+
+
 def gradient_metrics(model):
     result = {}
     buckets = {}
@@ -213,6 +240,10 @@ def execute(args):
         raise ValueError('Out of first-batch finite step/time budget')
     if type(config['training']['log_every']) is not int or config['training']['log_every'] < 1:
         raise ValueError('log_every must be a positive integer')
+    diagnostic_steps = config['evaluation'].get('diagnostic_steps', [])
+    if (not isinstance(diagnostic_steps, list) or len(set(diagnostic_steps)) != len(diagnostic_steps)
+        or any(type(s) is not int or not 0 < s < config['training']['steps'] for s in diagnostic_steps)):
+        raise ValueError('diagnostic_steps must be distinct intermediate update indices')
     output = Path(args.output).resolve()
     if output.exists():
         raise FileExistsError('Use a new output directory; --resume is a new attempt')
@@ -346,6 +377,17 @@ def execute(args):
                 metrics.log(step,{'validation/accuracy':last_validation['accuracy'],
                                  'validation/loss':last_validation['loss'],
                                  'time/validation_seconds':last_validation['seconds']})
+            if step in diagnostic_steps:
+                diagnostic = diagnostic_snapshot(model, task, config, device, step)
+                atomic_json(output/f'diagnostic-step{step}.json', diagnostic)
+                result.setdefault('diagnostics', {})[str(step)] = diagnostic
+                values = {'diagnostic/accuracy': diagnostic['validation']['accuracy'],
+                          'diagnostic/loss': diagnostic['validation']['loss'],
+                          'diagnostic/original_gate_met': int(diagnostic['original_learning_gate_met'])}
+                if 'paired_branch' in diagnostic:
+                    values.update({'diagnostic/branch_'+k: diagnostic['paired_branch'][k]
+                                   for k in ('prediction_changes', 'on_minus_off_accuracy', 'off_minus_on_ce')})
+                metrics.log(step, values)
             if step%config['training']['checkpoint_every']==0 or step==limit:
                 checkpoint_save(output/'checkpoint.pt', model=model,optimizer=optimizer,step=step,
                                 config_hash=config_hash,identity=identity,device=device)
@@ -362,14 +404,20 @@ def execute(args):
                 test_config = copy.deepcopy(config)
                 test_config['evaluation']['samples'] = config['evaluation'].get('test_samples',config['evaluation']['samples'])
                 result['test']=evaluate(model,task,'test',test_config,device)
+                metrics.log(step, {'test/accuracy':result['test']['accuracy'],
+                                   'test/loss':result['test']['loss']})
             else:
                 result['test_status']='not_checked: predeclared validation gate unmet'
         intervention = 'without_branch' if config['model']['kind']=='growth' and config['model'].get('branch','none')!='none' else (
                        'without_history' if config['model']['kind']=='core5' else None)
         if intervention and result['state']=='completed':
             result[intervention]=evaluate(model,task,'val',config,device,intervention)
+            metrics.log(step, {intervention+'/accuracy':result[intervention]['accuracy'],
+                               intervention+'/loss':result[intervention]['loss']})
             if intervention=='without_branch' and config['evaluation'].get('paired_branch',False):
                 result['paired_branch']=paired_branch_effect(model,task,config,device)
+                metrics.log(step, {'branch/paired_'+k:result['paired_branch'][k]
+                            for k in ('prediction_changes', 'on_minus_off_accuracy', 'off_minus_on_ce')})
         result['training_acceptance'] = dict(finite=True,completed_budget=result['state']=='completed',
             validation_accuracy=last_validation['accuracy'],chance=1/task.value_vocab_size,
             learning_gate_met=gate_met)

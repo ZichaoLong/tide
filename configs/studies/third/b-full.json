@@ -1,0 +1,51 @@
+{
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "batch_size": 16,
+    "diagnostic_steps": [
+      40
+    ],
+    "paired_branch": true,
+    "samples": 128,
+    "seed": 20261107,
+    "test": true,
+    "test_if_learning_gate": true,
+    "test_samples": 256
+  },
+  "learning_gate": 0.25,
+  "model": {
+    "branch": "none",
+    "depth": 2,
+    "freeze_backbone": false,
+    "kind": "growth",
+    "region_width": 4,
+    "width": 16
+  },
+  "numerical_policy": "explore finite FP32 discrepancies; strict failures retained in startup audit; finite/discrete/resume checks required",
+  "phase": "third-batch-200-fixed-horizon",
+  "schema": "tide-lab-run-v1",
+  "seed": 11,
+  "study_id": "TL-B3",
+  "task": {
+    "delay": 2,
+    "n_keys": 8,
+    "n_values": 8,
+    "pairs": 4
+  },
+  "threads": 4,
+  "training": {
+    "batch_size": 32,
+    "checkpoint_every": 40,
+    "data_seed": 1011,
+    "eps": 1e-06,
+    "eval_every": 40,
+    "log_every": 5,
+    "lr": 0.01,
+    "max_seconds": 600,
+    "optimizer": "sgd",
+    "retain_checkpoint": false,
+    "steps": 200,
+    "weight_decay": 0
+  }
+}

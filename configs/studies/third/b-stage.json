@@ -1,0 +1,33 @@
+{
+  "frozen_resume_config": "configs/studies/third/b-frozen-resume.json",
+  "full_resume_config": "configs/studies/third/b-full-resume.json",
+  "max_seconds": 10800,
+  "runs": [
+    {
+      "config": "configs/studies/third/b-full.json",
+      "path": "full",
+      "run_id": "tl-b3-full-s11-200",
+      "wall_seconds": 780
+    },
+    {
+      "config": "configs/studies/third/b-head.json",
+      "path": "frozen",
+      "run_id": "tl-b3-head-s11-200",
+      "wall_seconds": 660
+    },
+    {
+      "config": "configs/studies/third/b-mlp.json",
+      "path": "frozen",
+      "run_id": "tl-b3-mlp-s11-200",
+      "wall_seconds": 660
+    },
+    {
+      "config": "configs/studies/third/b-tide.json",
+      "path": "frozen",
+      "run_id": "tl-b3-tide-s11-200",
+      "wall_seconds": 6600
+    }
+  ],
+  "schema": "tide-lab-third-growth-v1",
+  "study_id": "TL-B3"
+}

@@ -39,6 +39,7 @@ class CadenceTests(unittest.TestCase):
                 return torch.load(root/label/'checkpoint.pt',map_location='cpu',weights_only=False)
             all_steps=run('all',config)
             sampled_config=copy.deepcopy(config);sampled_config['training']['log_every']=3
+            sampled_config['evaluation']['diagnostic_steps']=[3]
             sampled=run('sampled',sampled_config)
             run('split',sampled_config,('--stop-after','2'))
             resumed=run('resumed',sampled_config,('--resume',str(root/'split/checkpoint.pt')))
@@ -51,6 +52,8 @@ class CadenceTests(unittest.TestCase):
             b=json.loads((root/'sampled/result.json').read_text())['measurement']
             self.assertEqual(a['work_totals'],b['work_totals'])
             self.assertEqual((b['steps_counted'],b['observed_steps'],b['unobserved_steps']),(5,3,2))
+            diagnostic=json.loads((root/'sampled/diagnostic-step3.json').read_text())
+            self.assertEqual(diagnostic['step'],3)
 
     def test_nonfinite_unobserved_step_still_fails(self):
         with tempfile.TemporaryDirectory() as name:

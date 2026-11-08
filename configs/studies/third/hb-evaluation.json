@@ -1,0 +1,64 @@
+{
+  "batch_size": 32,
+  "checkpoints": [
+    {
+      "checkpoint_sha256": "0b6b520b4c3ec576407e6a5c0aa87129cfdaacd87490383eda173384a4aeed04",
+      "config_sha256": "172ecd6350480fd85e18bb0793f9fb23db518e193486caea335156af2af90524",
+      "run": "runs/s2-hb-dense/tl-a2-long-dense-s11",
+      "seed": 11,
+      "send": "dense"
+    },
+    {
+      "checkpoint_sha256": "539e22d148f7d817873f3a9b040c9c169abf825ef08998c91e26c6f8175ac0c2",
+      "config_sha256": "22fc463835a45f90783382dfae4112d47e1aa4a59ea6002eb8748ef6c3ce94e6",
+      "run": "runs/s2-hb-sparse/tl-a2-long-sparse-s11",
+      "seed": 11,
+      "send": "sparse"
+    },
+    {
+      "config_sha256": "664661e151f29e671c7bf097efb7b6be6560a58d985353b155f1f29ca8754540",
+      "job": "artifacts/jobs/s3-hb-dense-s22",
+      "run": "runs/s3-hb-dense-s22/tl-a2-repeat-dense-s22",
+      "seed": 22,
+      "send": "dense"
+    },
+    {
+      "config_sha256": "0c6bd783e077ee96f1f7e24239885758016651c5f2f696edf4cf14777362ff06",
+      "job": "artifacts/jobs/s3-hb-sparse-s22",
+      "run": "runs/s3-hb-sparse-s22/tl-a2-repeat-sparse-s22",
+      "seed": 22,
+      "send": "sparse"
+    },
+    {
+      "config_sha256": "a91db6cf59f54794b4c8188d250ee1b0ce06f65a64459224f4fabbd5aec1b94a",
+      "job": "artifacts/jobs/s3-hb-dense-s33",
+      "run": "runs/s3-hb-dense-s33/tl-a2-repeat-dense-s33",
+      "seed": 33,
+      "send": "dense"
+    },
+    {
+      "config_sha256": "a6c9382b0e14c38e8614bbf818e811489d65136447c1762e7a4e8be90005b22f",
+      "job": "artifacts/jobs/s3-hb-sparse-s33",
+      "run": "runs/s3-hb-sparse-s33/tl-a2-repeat-sparse-s33",
+      "seed": 33,
+      "send": "sparse"
+    }
+  ],
+  "dataset": "research/data/hb-test2048-v1.json",
+  "dataset_sha256": "31baa50f378ff609f08c6d0f7f56cad748774c15c8cc2ef7cce3c510bf3a92ec",
+  "max_seconds": 3600,
+  "max_wait_seconds": 10860,
+  "model_source_sha256": {
+    "tide_lab/core5.py": "c50c5d442becf9e9a9a5ca1083cad14c2985d9fb3a8c3c81d15fe7846e4c9986",
+    "tide_lab/tasks.py": "b58e7250edc46d01aae0db5a37ad6999b6e2895f010b54704076893111936d0b"
+  },
+  "samples": 2048,
+  "schema": "tide-lab-hb-repeat-evaluation-v1",
+  "study_id": "TL-A2-REPEAT",
+  "timing": {
+    "batch_size": 32,
+    "repetitions": 7,
+    "samples": 64,
+    "warmups": 2
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "max_seconds": 10680,
+  "runs": [
+    {
+      "config": "configs/studies/third/hb-sparse-s22.json",
+      "run_id": "tl-a2-repeat-sparse-s22"
+    }
+  ],
+  "schema": "tide-lab-matrix-v1",
+  "stop_on_failure": true,
+  "study_id": "TL-A2-REPEAT"
+}
