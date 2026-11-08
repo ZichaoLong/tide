@@ -2,7 +2,7 @@
   "schema": "tide-research-map-prototype-v1",
   "title": "TIDE 研究图",
   "subtitle": "从零训练完整 TIDE 与预训练模型生长，以共同任务和限定证据连接",
-  "notice": "第二批已启动：FC机制评估与HB400步两候选在CPU运行；NPU采样和冻结骨干旁路已排队。结果待审阅，原严格失败与质量门槛保留。",
+  "notice": "第二批已终态，无活动作业：FC查询检索得到支持但delay8退化；HB400步达原门槛并减少工作，仍需多seed确认。两项NPU等卡超时未执行，严格失败独立保留。",
   "width": 1490,
   "height": 1480,
   "columns": [
@@ -182,7 +182,7 @@
       "x": 325,
       "y": 360,
       "question": "从合法小 FC/KV 绑定开始，完整 TIDE 能否学会独立样本的延迟关联检索，并实际使用历史记忆？",
-      "decision": "CPU三seed正式test已审阅；NPU80步仅验证历史利用信号。新实验待首批验收，不由汇总曲线接近推导严格等价。",
+      "decision": "首批FC CPU确认与NPU80步探索保留；第二批固定checkpoint机制评估已完成，详见TL-A1-MECH。没有新的NPU400步效果。",
       "budget": "单种子先导 ≤80 updates；最多一次预先声明的小任务降阶。正式 ≤400 updates，至多种子 11/22/33。",
       "track": "tide",
       "study_id": "TL-A1",
@@ -528,7 +528,7 @@
       "x": 620,
       "y": 360,
       "question": "在同一 HB、参数初值、总量 k 和数据预算下，可学习稀疏发送能否保留质量并减少实际 Full、消息与候选工作？",
-      "decision": "两者val31.25%/35.16%均未达50%，不启动本批正式重复。首批验收后可考虑原HB一对较长训练，不能修改原门槛换成功标签。",
+      "decision": "本组80步两者均未达50%，不回写为先导通过；用户授权的第二批400步已形成独立TL-A2-LONG结果。",
       "budget": "单种子先导 ≤80 updates；通过筛选后成对种子 11/22/33，每配置 ≤400 updates。",
       "track": "tide",
       "study_id": "TL-A2",
@@ -661,7 +661,7 @@
       "x": 915,
       "y": 360,
       "question": "可学习稀疏能否在达到质量门槛时减少实际成本？",
-      "decision": "本批停止于80步先导。原HB较长训练是待验收提案，未启动；不因执行完成而晋级正式重复。",
+      "decision": "首批80步未达门槛的结论保留；后继400步独立研究已学会当前任务，见R8，不把同seed轨迹当独立重复。",
       "budget": "CPU32/B32，各80updates/2560例，validation128、未用test；总进程1183.53/1141.50秒。",
       "track": "tide",
       "references": [
@@ -676,6 +676,10 @@
         {
           "label": "实际观测开销与待修复项",
           "path": "docs/measurement-notes.md"
+        },
+        {
+          "label": "后继400步研究",
+          "path": "docs/studies/TL-A2-LONG.md"
         }
       ],
       "scope": "TL-A2固定16节点/4区域HB、width16、KV/qry、regional_total/k2/温度0.25，seed11，CPU FP32，Shannon对quad，初始参数相同。主代理审阅，待用户验收；quad严格有限失败仍在。",
@@ -779,12 +783,12 @@
       "y": 840,
       "track": "tide",
       "question": "完整TIDE能否在独立映射上按query检索历史value？",
-      "decision": "三seed均达到原validation门槛，原计划的小HB准入与配对先导已完成；HB效果不继承FC结论。NPU80步有短程信号，400步效果仍未检查。",
+      "decision": "首批FC三seed达到原validation门槛；后继HB与机制评估分别形成自己的结果，不从FC直接继承结论。",
       "budget": "各B32/400updates/12800训练例；CPU64各约42min，validation256/test256；机会水平12.5%。",
       "scope": "TL-A1固定FC/KV、width16/depth2/8节点、Shannon/k2/温度0.25、CPU64、seed11/22/33。主代理审阅，待用户验收；限定任务与配方，不是通用架构或跨后端资格。",
       "comparisons": "FC test 97.27%/99.22%/99.61%；query-only test 12.89%/13.67%/14.06%；同模型移除历史validation 10.55%/8.59%/14.45%。",
       "counterevidence": "旧80步先导只有24.22%且未达门槛；FP32严格失败保留，学习成功不解除数值失败。B旁路也未建立预测收益。",
-      "unresolved": "长延迟、分布外组合与查询交换干预尚未检查；小HB先导未达自身质量门槛，不继承FC效果。三seed共用同一测试集，不合并成768个独立样本。",
+      "unresolved": "首批未测的query交换与delay4/8已由TL-A1-MECH单独补查；一般序列/分布外组合仍未知。三seed共用同一test，不合并成768个独立样本。",
       "transfer_conditions": "仅在保留任务、局部语义、完整BPTT/状态边界时，支持优先尝试小HB。HB仍须独立候选历史/稀疏支持/梯度/恢复与区域饥饿及效果检查；不推出预训练旁路成功。",
       "sources": [
         {
@@ -804,19 +808,23 @@
         {
           "label": "项目内结论",
           "path": "docs/studies/TL-A1.md"
+        },
+        {
+          "label": "后继独立机制评估",
+          "path": "docs/studies/TL-A1-MECH.md"
         }
       ]
     },
     {
       "id": "E7",
       "kind": "experiment",
-      "status": "running",
+      "status": "completed",
       "title": "FC 查询与延迟评估",
-      "summary": "固定三个checkpoint，配对干预",
+      "summary": "换query98.44%–100%；delay8退化",
       "x": 30,
       "y": 1080,
       "question": "原FC是否随查询改变预测，delay2到4/8是否保持效果？",
-      "decision": "固定validation128映射；同一历史换query及延长空档；不重训、不新增长度。",
+      "decision": "原FC随query检索的证据增强；同一validation映射在delay8退化。保留范围，不自动增加更多长度或重训。",
       "budget": "CPU1线程/4GiB，准备加评估≤30min。",
       "track": "tide",
       "references": [
@@ -831,6 +839,14 @@
         {
           "label": "后台作业记录",
           "path": "artifacts/jobs/s2-fc-mechanisms/job.json"
+        },
+        {
+          "label": "终态一页结论",
+          "path": "docs/studies/TL-A1-MECH.md"
+        },
+        {
+          "label": "终态与原始证据hash",
+          "path": "docs/evidence/second-batch-terminal.json"
         }
       ],
       "runs": [
@@ -838,43 +854,70 @@
           "config": "configs/studies/second/fc-mechanisms.json",
           "id": "s2-fc-mechanisms",
           "record": "artifacts/jobs/s2-fc-mechanisms/state.json",
-          "status": "running",
+          "status": "completed",
           "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
+        },
+        {
+          "id": "tl-a1-mech-eval",
+          "status": "completed",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+          "config": "configs/studies/second/fc-mechanisms.json",
+          "record": "runs/s2-fc-mechanisms/result.json",
+          "lens_record": "runs/s2-fc-mechanisms/projection.json"
         }
       ],
       "study_id": "TL-A1-MECH",
-      "observed_at": "2026-11-07T19:04:27.942130+00:00",
-      "execution_note": "已核对实际background.slice成员与固定源码；已运行，执行与学习验收仍待终态审阅。"
+      "observed_at": "2026-11-08T00:36:49.474063+00:00",
+      "execution_note": "三个checkpoint评估完成，exit0且无后代；Lens verified。固定128个validation映射复用，未做新test或optimizer恢复。"
     },
     {
       "id": "R7",
       "kind": "result",
-      "status": "awaiting",
-      "title": "FC 查询与延迟评估：待审阅",
-      "summary": "尚未形成结果，失败不抹去",
+      "status": "scoped",
+      "title": "FC：查询检索与延迟边界",
+      "summary": "换query成立；delay8有退化",
       "x": 30,
       "y": 1310,
       "question": "原FC是否随查询改变预测，delay2到4/8是否保持效果？",
-      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "decision": "保留原短程检索结论并明确延迟边界；当前优先复核HB，不自动扩大长度。",
       "budget": "CPU1线程/4GiB，准备加评估≤30min。",
       "track": "tide",
       "references": [
         {
           "label": "问题与停止条件",
           "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "项目内一页结论",
+          "path": "docs/studies/TL-A1-MECH.md"
+        }
+      ],
+      "scope": "TL-A1-MECH首批CPU64/FC/KV的seed11/22/33 step400 checkpoint；同128个validation映射，一例一个不同答案替代query，delay2/4/8。无新训练或独立test。主代理已审阅，待用户验收。",
+      "comparisons": "原query99.22%/100%/100%；换query99.22%/98.44%/100%；delay4为97.66%/100%/100%，delay8为78.91%/92.97%/92.97%。预测随query变化99.22%–100%。",
+      "counterevidence": "delay8比原任务下降7.03–20.31个百分点，有种子差异；配对干预未覆盖所有query/位置或其他任务。",
+      "unresolved": "重复filler下的状态衰减、时间/位置分布改变及其他计算因素尚未区分；不是384个独立测试样本。",
+      "transfer_conditions": "可迁移配对query/延迟评价方法；HB、预训练旁路和NPU质量仍须各自实测，不能推出通用长序列能力。",
+      "sources": [
+        {
+          "label": "已审阅一页结论",
+          "url": "https://github.com/ZichaoLong/tide/blob/f6941d20855b63d9b1bce264a4a18c738f4b10e4/docs/studies/TL-A1-MECH.md"
+        },
+        {
+          "label": "原始结果、逐例记录、曲线与hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/f6941d20855b63d9b1bce264a4a18c738f4b10e4/docs/evidence/second-batch-terminal.json"
         }
       ]
     },
     {
       "id": "E8",
       "kind": "experiment",
-      "status": "running",
+      "status": "completed",
       "title": "HB 较长训练配对",
-      "summary": "相同初态，400步/seed11",
+      "summary": "test99.61%/98.44%；单seed",
       "x": 325,
       "y": 1080,
       "question": "首批80步未达50%，增加训练时限能否学会并保留稀疏工作收益？",
-      "decision": "同B32/任务/架构/学习率；不承接80步配置的精确resume。仍用50%门槛；无自动多seed。",
+      "decision": "两者达到原50%门槛；建议补seed22/33两对验证质量—工作量关系，未提交，不自动增加任务或候选。",
       "budget": "CPU2线程/16GiB，两作业并行≤2h。",
       "track": "tide",
       "references": [
@@ -893,6 +936,14 @@
         {
           "label": "稀疏候选配置",
           "path": "configs/studies/second/hb-sparse.json"
+        },
+        {
+          "label": "终态一页结论",
+          "path": "docs/studies/TL-A2-LONG.md"
+        },
+        {
+          "label": "终态与原始证据hash",
+          "path": "docs/evidence/second-batch-terminal.json"
         }
       ],
       "runs": [
@@ -900,50 +951,87 @@
           "config": "configs/studies/second/hb-dense.json",
           "id": "s2-hb-dense",
           "record": "artifacts/jobs/s2-hb-dense/state.json",
-          "status": "running",
+          "status": "completed",
           "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
         },
         {
           "config": "configs/studies/second/hb-sparse.json",
           "id": "s2-hb-sparse",
           "record": "artifacts/jobs/s2-hb-sparse/state.json",
-          "status": "running",
+          "status": "completed",
           "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
+        },
+        {
+          "id": "tl-a2-long-dense-s11",
+          "status": "completed",
+          "seed": 11,
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+          "config": "configs/studies/second/hb-dense.json",
+          "record": "runs/s2-hb-dense/tl-a2-long-dense-s11/result.json",
+          "lens_record": "runs/s2-hb-dense/tl-a2-long-dense-s11/projection.json"
+        },
+        {
+          "id": "tl-a2-long-sparse-s11",
+          "status": "completed",
+          "seed": 11,
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+          "config": "configs/studies/second/hb-sparse.json",
+          "record": "runs/s2-hb-sparse/tl-a2-long-sparse-s11/result.json",
+          "lens_record": "runs/s2-hb-sparse/tl-a2-long-sparse-s11/projection.json"
         }
       ],
       "study_id": "TL-A2-LONG",
-      "observed_at": "2026-11-07T19:04:27.942130+00:00",
-      "execution_note": "已核对实际background.slice成员与固定源码；已运行，执行与学习验收仍待终态审阅。"
+      "observed_at": "2026-11-08T00:36:49.474063+00:00",
+      "execution_note": "CPU FP32/B32/seed11、各400步均完成，无后代、Lens verified。Full少42.61%、消息少43.41%；一次总时间少10.26%，不足以声明稳定速度或质量非劣。quad严格失败保留。"
     },
     {
       "id": "R8",
       "kind": "result",
-      "status": "awaiting",
-      "title": "HB 较长训练配对：待审阅",
-      "summary": "尚未形成结果，失败不抹去",
+      "status": "scoped",
+      "title": "HB：学会检索并减少工作",
+      "summary": "高准确率；稀疏Full少42.6%",
       "x": 325,
       "y": 1310,
       "question": "首批80步未达50%，增加训练时限能否学会并保留稀疏工作收益？",
-      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "decision": "建议仅补seed22/33两对并保留固定终态；未启动后续作业。",
       "budget": "CPU2线程/16GiB，两作业并行≤2h。",
       "track": "tide",
       "references": [
         {
           "label": "问题与停止条件",
           "path": "docs/studies/second-batch.md"
+        },
+        {
+          "label": "项目内一页结论",
+          "path": "docs/studies/TL-A2-LONG.md"
+        }
+      ],
+      "scope": "TL-A2-LONG固定16节点/4区域HB、width16、KV/qry、Shannon对quad、k2/温度.25、相同参数初态、CPU FP32、seed11/B32/400步。两者均达原validation50%门槛后才评test256。主代理已审阅，待用户验收。",
+      "comparisons": "dense/quad test99.609%/98.438%，CE0.038014/0.030514；移除历史val10.938%/13.281%。Full少42.61%、消息少43.41%、candidate/Upd少3.70%；本次完整时间少10.26%。",
+      "counterevidence": "quad比dense少答对3/256例；360步val100%到固定400步96.875%。只有一对非独占CPU运行，无稳定速度或质量非劣结论；原quad严格失败仍在。",
+      "unresolved": "种子变化、固定稀疏、学习到的支持与正则化效应尚未区分；HB逐例test配对统计缺失。工作减少不等于同比FLOPs或硬件加速。",
+      "transfer_conditions": "支持提出同架构/任务/配方的新增配对种子；不继承到更大图、长延迟、预训练旁路或NPU速度，不解除独立数值失败。",
+      "sources": [
+        {
+          "label": "已审阅一页结论",
+          "url": "https://github.com/ZichaoLong/tide/blob/f6941d20855b63d9b1bce264a4a18c738f4b10e4/docs/studies/TL-A2-LONG.md"
+        },
+        {
+          "label": "原始结果、逐例记录、曲线与hash",
+          "url": "https://github.com/ZichaoLong/tide/blob/f6941d20855b63d9b1bce264a4a18c738f4b10e4/docs/evidence/second-batch-terminal.json"
         }
       ]
     },
     {
       "id": "E9",
       "kind": "experiment",
-      "status": "queued",
+      "status": "failed",
       "title": "NPU 轻量运行采样",
-      "summary": "一次有界观察，排队准入",
+      "summary": "等卡超时，未开始采样",
       "x": 620,
       "y": 1080,
       "question": "主线程采样及公共工作计数能否缩小耗时解释，观测开关是否改变状态？",
-      "decision": "同模型/初态/数据的观测开关配对；栈样本含等待及GIL偏差，不是NPU kernel时间。",
+      "decision": "等待300秒请求对应实际306.70秒超时，未启动workload；补做须新ID和有界等待，当前不重试。",
       "budget": "1NPU/CPU4线程/8GiB，总≤15min，排队≤5min。",
       "track": "shared",
       "references": [
@@ -958,6 +1046,14 @@
         {
           "label": "后台作业记录",
           "path": "artifacts/jobs/s2-npu-sampling/job.json"
+        },
+        {
+          "label": "终态一页结论",
+          "path": "docs/studies/TL-S1.md"
+        },
+        {
+          "label": "终态与原始证据hash",
+          "path": "docs/evidence/second-batch-terminal.json"
         }
       ],
       "runs": [
@@ -965,24 +1061,25 @@
           "config": "configs/studies/second/npu-sampling.json",
           "id": "s2-npu-sampling",
           "record": "artifacts/jobs/s2-npu-sampling/state.json",
-          "status": "queued",
-          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
+          "status": "failed",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+          "outcome": "queue_timeout; workload_not_started; scientific checks remain unchecked"
         }
       ],
       "study_id": "TL-S1",
-      "observed_at": "2026-11-07T19:04:27.942130+00:00",
-      "execution_note": "已核对实际background.slice成员与固定源码；共享队列已接受，尚未取得设备。"
+      "observed_at": "2026-11-08T00:36:49.474063+00:00",
+      "execution_note": "队列insufficient_free_devices，supervisor exit124；当前无后代，无模型run/采样/Lens结果。不是NPU性能或数值失败。"
     },
     {
       "id": "R9",
       "kind": "result",
       "status": "awaiting",
-      "title": "NPU 轻量运行采样：待审阅",
-      "summary": "尚未形成结果，失败不抹去",
+      "title": "采样未执行，性能未检查",
+      "summary": "排队超时，无新性能证据",
       "x": 620,
       "y": 1310,
       "question": "主线程采样及公共工作计数能否缩小耗时解释，观测开关是否改变状态？",
-      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "decision": "没有取得设备，所有本组科学检查保持未检查；如补做须保留原超时和新运行身份。",
       "budget": "1NPU/CPU4线程/8GiB，总≤15min，排队≤5min。",
       "track": "shared",
       "references": [
@@ -995,13 +1092,13 @@
     {
       "id": "E10",
       "kind": "experiment",
-      "status": "queued",
+      "status": "failed",
       "title": "冻结骨干的旁路比较",
-      "summary": "head-only / TIDE / MLP",
+      "summary": "等卡超时，准入和训练未执行",
       "x": 915,
       "y": 1080,
       "question": "冻结骨干后分支能否实际贡献，而非只得到梯度？",
-      "decision": "保持首批B32/40步/SGD/任务；冻结骨干另做梯度及同栈恢复，按原25%门槛及配对分支干预审阅。",
+      "decision": "等待600秒请求对应实际610.39秒超时。冻结策略的准入、完整恢复及收益均未检查；下一批可补做原计划，未重新提交。",
       "budget": "1NPU/CPU4线程/24GiB，总≤1h，排队≤10min。",
       "track": "baseline",
       "references": [
@@ -1016,6 +1113,14 @@
         {
           "label": "后台作业记录",
           "path": "artifacts/jobs/s2-frozen-growth/job.json"
+        },
+        {
+          "label": "终态一页结论",
+          "path": "docs/studies/TL-B2.md"
+        },
+        {
+          "label": "终态与原始证据hash",
+          "path": "docs/evidence/second-batch-terminal.json"
         }
       ],
       "runs": [
@@ -1023,24 +1128,25 @@
           "config": "configs/studies/second/b-stage.json",
           "id": "s2-frozen-growth",
           "record": "artifacts/jobs/s2-frozen-growth/state.json",
-          "status": "queued",
-          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd"
+          "status": "failed",
+          "source_commit": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+          "outcome": "queue_timeout; workload_not_started; scientific checks remain unchecked"
         }
       ],
       "study_id": "TL-B2",
-      "observed_at": "2026-11-07T19:04:27.942130+00:00",
-      "execution_note": "已核对实际background.slice成员与固定源码；共享队列已接受，尚未取得设备。"
+      "observed_at": "2026-11-08T00:36:49.474063+00:00",
+      "execution_note": "队列超时，workload没有启动，无后代；不能继承B1检查作为冻结路径通过，也不把资源等待失败当模型效果失败。"
     },
     {
       "id": "R10",
       "kind": "result",
       "status": "awaiting",
-      "title": "冻结骨干的旁路比较：待审阅",
-      "summary": "尚未形成结果，失败不抹去",
+      "title": "冻结骨干：收益未检查",
+      "summary": "排队超时，未进入准入/训练",
       "x": 915,
       "y": 1310,
       "question": "冻结骨干后分支能否实际贡献，而非只得到梯度？",
-      "decision": "执行、严格数值、离散语义、恢复与效果分别审阅；不由退出码自动生成支持。",
+      "decision": "冻结策略没有新数据；原B1旁路贡献未证实的结论不变。当前没有自动重试。",
       "budget": "1NPU/CPU4线程/24GiB，总≤1h，排队≤10min。",
       "track": "baseline",
       "references": [
@@ -1239,18 +1345,18 @@
       "source": "E7",
       "target": "R7",
       "kind": "produces",
-      "label": "待审阅结果",
-      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
-      "status": "planned"
+      "label": "经审阅结果",
+      "detail": "三个固定checkpoint的配对query和延迟评估已审阅；新增限定结果，不外推通用长序列能力。",
+      "status": "documented"
     },
     {
       "id": "second-E8",
       "source": "E8",
       "target": "R8",
       "kind": "produces",
-      "label": "待审阅结果",
-      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
-      "status": "planned"
+      "label": "经审阅结果",
+      "detail": "固定400步终态、test、历史干预、全步骤工作总计及一次计时已审阅；仅单seed，不作质量非劣或稳定加速声明。",
+      "status": "documented"
     },
     {
       "id": "second-E9",
@@ -1258,7 +1364,7 @@
       "target": "R9",
       "kind": "produces",
       "label": "待审阅结果",
-      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "detail": "队列超时而未开始workload，仍没有本组科学结果。实际资源失败保留，结果位置保持未检查。",
       "status": "planned"
     },
     {
@@ -1267,7 +1373,7 @@
       "target": "R10",
       "kind": "produces",
       "label": "待审阅结果",
-      "detail": "本批实际运行及人工审阅后填写；计划不计作证据。",
+      "detail": "队列超时而未开始workload，仍没有本组科学结果。实际资源失败保留，结果位置保持未检查。",
       "status": "planned"
     },
     {
@@ -1275,8 +1381,8 @@
       "source": "RA1",
       "target": "E7",
       "kind": "informs",
-      "label": "后续检验",
-      "detail": "已学会原短程任务，现用固定checkpoint检验query机制和更长空档，不改变原结论范围。",
+      "label": "后继记录",
+      "detail": "后继配对query支持检索机制，delay8暴露退化；结果按其validation和干预范围单独解释。",
       "status": "documented",
       "via_y": 1040
     },
@@ -1285,8 +1391,8 @@
       "source": "R2",
       "target": "E8",
       "kind": "informs",
-      "label": "后续检验",
-      "detail": "80步未达门槛、工作减少已有观测；用户批准只检验延长训练这一有限假设。",
+      "label": "后继记录",
+      "detail": "400步达到了原门槛，支持80步训练时限不足的受限解释；原失败和非独立seed关系保留。",
       "status": "documented",
       "via_y": 1040
     },
@@ -1295,11 +1401,11 @@
       "source": "R1",
       "target": "E10",
       "kind": "informs",
-      "label": "后续检验",
-      "detail": "原旁路预测收益未证实，冻结骨干是下一受限比较，不是已成立的迁移收益。",
+      "label": "后继记录",
+      "detail": "冻结骨干原问题有研究依据，但本次等卡超时未执行，尚无条件迁移或收益证据。",
       "status": "documented",
       "via_y": 1040
     }
   ],
-  "updated_at": "2026-11-07T19:04:27.942130+00:00"
+  "updated_at": "2026-11-08T00:36:49.474063+00:00"
 }
