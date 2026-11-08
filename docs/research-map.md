@@ -1,3 +1,5 @@
+当前后续已获授权：[语言v4](studies/language-confirmation-v4.md)。图保留v3三份限定结果，为v4增加独立待审结果；计划状态不表示已排队。
+
 # 研究图的读法
 
 本图表达知识与决策，Lens查看运行和指标；项目记录为权威。当前设计见[语言与结构研究表](studies/language-structure.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。

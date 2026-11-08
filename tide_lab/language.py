@@ -106,7 +106,7 @@ class SmallTransformer(nn.Module):
 
 
 class LocalReplacement(nn.Module):
-    def __init__(self,kind,core_config,stats,seed=11,dimension=896,mlp_width=330):
+    def __init__(self,kind,core_config,stats,seed=11,dimension=896,mlp_width=330,bottleneck_width=2080):
         super().__init__();self.kind=kind;self.last_metrics={}
         for key,value in stats.items():self.register_buffer(key,value.detach().clone())
         with torch.random.fork_rng(devices=[]):
@@ -118,12 +118,17 @@ class LocalReplacement(nn.Module):
             elif kind=='mlp':
                 self.input=nn.Linear(dimension,mlp_width,bias=False);self.core=nn.GELU()
                 self.output=nn.Linear(mlp_width,dimension,bias=False)
+            elif kind=='bottleneck':
+                width=core_config['width'];self.input=nn.Linear(dimension,width,bias=False)
+                self.core=nn.Sequential(nn.Linear(width,bottleneck_width,bias=False),nn.GELU(),
+                                        nn.Linear(bottleneck_width,width,bias=False))
+                self.output=nn.Linear(width,dimension,bias=False)
             else:raise ValueError('unknown local replacement')
             nn.init.zeros_(self.output.weight)
 
     def forward(self,x):
         h=self.input((x-self.x_mean)/self.x_scale)
-        if self.kind.startswith('tide'):h=torch.tanh(h)
+        if self.kind.startswith('tide') or self.kind=='bottleneck':h=torch.tanh(h)
         h=self.core(h)
         if self.kind.startswith('tide'):self.last_metrics=dict(self.core.last_metrics)
         return self.output(h)*self.y_scale+self.y_mean
@@ -146,11 +151,12 @@ class FrozenPrefixTail(nn.Module):
     Prefix preparation cost is recorded separately. These timings are not
     whole-model inference speed; that is checked with the actual replacement.
     """
-    def __init__(self,lm,kind,core_config,stats,seed=11,mlp_width=330):
+    def __init__(self,lm,kind,core_config,stats,seed=11,mlp_width=330,bottleneck_width=2080):
         super().__init__();self.kind=kind
         self.norm=lm.model.norm;self.head=lm.lm_head
         self.selected=(lm.model.layers[-1].mlp if kind=='original' else
-                       LocalReplacement(kind,core_config,stats,seed,mlp_width=mlp_width))
+                       LocalReplacement(kind,core_config,stats,seed,mlp_width=mlp_width,
+                                        bottleneck_width=bottleneck_width))
         self.norm.requires_grad_(False);self.head.requires_grad_(False)
         # The original teacher was globally frozen. New replacements already
         # declare their trainable parameters; recursive unfreezing would also

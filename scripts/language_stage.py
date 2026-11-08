@@ -26,6 +26,8 @@ def data_and_model(a,plan,device):
     if a.route=='a':return data,make_a(plan,a.kind,a.seed,a.depth).to(device),None
     if a.cache is None:raise ValueError('B stages require a context-matched immutable feature cache')
     cache=torch.load(a.cache,map_location='cpu',weights_only=False)
+    if cache['data_lock_sha256']!=digest(a.data/'data-lock.json'):
+        raise ValueError('B cache/data identity mismatch')
     if a.length!=cache['length'] and a.length!=3:raise ValueError('B context/cache mismatch')
     data=cache['splits']
     if a.length==3:
@@ -37,20 +39,35 @@ def data_and_model(a,plan,device):
 def cache(a,plan,device,metrics):
     data,lock=load_tokens(a.data,'b',a.length);lm=load_qwen(a.asset_path,device)
     prepared={};start=time.monotonic();offset=0
-    for split in ('train','validation','test'):
+    reused=None
+    if a.reuse_cache:
+        prior=torch.load(a.reuse_cache,map_location='cpu',weights_only=False)
+        if (prior['length']!=a.length or prior['qwen_revision']!=plan['revisions']['qwen']
+                or prior['data_lock_sha256']!=lock['confirmation']['parent_data_lock_sha256']):
+            raise ValueError('cache ancestry mismatch')
+        for split in ('train','validation'):
+            for key,value in data[split].items():
+                old=prior['splits'][split][key]
+                equal=torch.equal(value,old) if isinstance(value,torch.Tensor) else value==old
+                if not equal:raise ValueError('training/validation cache tokens changed: '+split+'/'+key)
+            prepared[split]=prior['splits'][split]
+        reused=dict(path=str(a.reuse_cache),sha256=digest(a.reuse_cache),
+                    scope='unchanged train/validation tensors, features and train-only statistics')
+    for split in (('test',) if reused else ('train','validation','test')):
         def progress(count):
             if count%32==0 or count==len(data[split]['labels']):
                 metrics.log(offset+count,{'cache/blocks':offset+count,'cache/elapsed_seconds':time.monotonic()-start})
         prepared[split]=prefix_cache(lm,data[split],device,8,progress)
         offset+=len(data[split]['labels'])
-    statistics=feature_statistics(prepared['train'])
+    statistics=prior['statistics'] if reused else feature_statistics(prepared['train'])
     value=dict(schema='tide-frozen-prefix-cache-v1',length=a.length,splits=prepared,statistics=statistics,
         data_lock_sha256=digest(a.data/'data-lock.json'),source=source_identity(),
-        qwen_revision=plan['revisions']['qwen'],scope='teacher-forced final-MLP inputs/residual/targets; original frozen prefix recomputed at this exact context')
+        qwen_revision=plan['revisions']['qwen'],reused=reused,
+        scope='teacher-forced final-MLP inputs/residual/targets; original frozen prefix at this exact context')
     tensor_save(a.output/'features.pt',value);(a.output/'features.pt').chmod(0o444)
     return dict(state='completed',features_sha256=digest(a.output/'features.pt'),length=a.length,
         splits={s:dict(blocks=len(r['labels']),tokens=int((r['labels']!=-100).sum())) for s,r in prepared.items()},
-        cache_seconds=time.monotonic()-start,training_statistics='train only',
+        cache_seconds=time.monotonic()-start,training_statistics='train only',reused=reused,
         size_bytes=(a.output/'features.pt').stat().st_size)
 
 
@@ -91,6 +108,7 @@ def identity(a,plan,device):
     return dict(source=source_identity(),installation=installed_identity(),config_sha256=digest(a.plan),
         data_lock_sha256=digest(a.data/'data-lock.json'),cache_sha256=digest(a.cache) if a.cache else None,
         route=a.route,kind=a.kind,seed=a.seed,batch=a.batch,length=a.length,steps=a.steps,depth=a.depth,
+        schedule_steps=a.schedule_steps or a.steps,
         device=str(device),dtype=plan['dtype'],threads=plan['threads'],physical_visible=os.getenv('ASCEND_RT_VISIBLE_DEVICES'))
 
 
@@ -114,7 +132,7 @@ def train(a,plan,device,metrics):
             next_tokens=int((b['labels']!=-100).sum())
             if not a.probe and tokens+next_tokens>plan['training']['maximum_valid_tokens']:
                 raise ValueError('resolved logical steps exceed declared token budget')
-            row=update(model,optimizer,b,plan,a.route,a.kind,step,a.steps,device)
+            row=update(model,optimizer,b,plan,a.route,a.kind,step,a.schedule_steps or a.steps,device)
             step+=1;tokens+=row['valid_tokens'];history.append(row['loss'])
             if step%plan['training']['log_every']==0 or step==limit or a.probe:
                 values={'train/loss':row['loss'],'train/gradient_norm':row['gradient_norm'],'train/lr':row['lr'],
@@ -123,9 +141,14 @@ def train(a,plan,device,metrics):
                     'train/tokens_per_second':row['valid_tokens']/row['seconds'],**row['work']}
                 if device.type=='npu':values['resource/npu_peak_allocated_mib']=torch.npu.max_memory_allocated()/2**20
                 metrics.log(step,values)
-            if step%plan['training']['checkpoint_every']==0 or step==limit:
+            if step%plan['training']['checkpoint_every']==0 or step==limit or step in a.retain_step:
                 tensor_save(a.output/'checkpoint.pt',checkpoint_state(model,optimizer,step,tokens,ident,device,a.route))
                 atomic_json(a.output/'checkpoint.json',dict(step=step,valid_tokens=tokens,sha256=digest(a.output/'checkpoint.pt')))
+                if step in a.retain_step:
+                    retained=a.output/f'checkpoint-step{step}.pt'
+                    # Atomic replacement of the rolling checkpoint leaves this
+                    # immutable inode intact. No extra serialization or RNG use.
+                    os.link(a.output/'checkpoint.pt',retained);retained.chmod(0o444)
             if not a.probe and step%plan['training']['eval_every']==0 and step<limit:
                 val=evaluate(model,data['validation'],a.route,device,min(a.batch,8),alpha=1.)
                 validations.append(dict(step=step,nll=val['nll'],ppl=val['ppl']))
@@ -136,7 +159,9 @@ def train(a,plan,device,metrics):
             atomic_json(a.output/'final-validation.json',final)
             metrics.log(step,{'validation/nll':final['nll'],'validation/ppl':final['ppl']})
         return dict(state='completed',steps=step,valid_tokens=tokens,probe=a.probe,
-            inventory=trainable_inventory(model),initial_validation_nll=None if initial is None else initial['nll'],
+            inventory=trainable_inventory(model),schedule_steps=a.schedule_steps or a.steps,
+            retained_checkpoints={p.name:digest(p) for p in a.output.glob('checkpoint-step*.pt')},
+            initial_validation_nll=None if initial is None else initial['nll'],
             final_validation_nll=None if final is None else final['nll'],validation_curve=validations,
             learning_signal=None if initial is None else final['nll']<initial['nll']-.1,
             learning_scope='heldout loss signal only; no parity, convergence or architecture advantage claim',
@@ -162,6 +187,8 @@ def evaluate_stage(a,plan,device,metrics):
     result=evaluate(model,data[a.split],a.route,device,min(a.batch,8),alpha=alpha,intervention=a.intervention)
     metrics.log(0,{'evaluation/nll':result['nll'],'evaluation/ppl':result['ppl'],'evaluation/tokens':result['tokens'],**result['work_per_token']})
     return dict(state='completed',split=a.split,evaluation=result,
+        checkpoint_identity=state['identity'] if a.checkpoint else None,
+        checkpoint_step=state['step'] if a.checkpoint else None,
         checkpoint_sha256=digest(a.checkpoint) if a.checkpoint else None,quality_judgment='pending paired review')
 
 
@@ -190,18 +217,24 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('stage',choices=['cache','checks','calibrate','train','evaluate','inference','unigram'])
     for key in ('plan','data','output'):p.add_argument('--'+key,type=Path,required=True)
-    p.add_argument('--cache',type=Path);p.add_argument('--asset-path',type=Path)
+    p.add_argument('--cache',type=Path);p.add_argument('--reuse-cache',type=Path);p.add_argument('--asset-path',type=Path)
     p.add_argument('--route',choices=['a','b'],required=True)
-    p.add_argument('--kind',choices=['tide-dense','tide-sparse','transformer','original','mlp'],default='tide-dense')
+    p.add_argument('--kind',choices=['tide-dense','tide-sparse','transformer','original','mlp','bottleneck'],default='tide-dense')
     p.add_argument('--device',choices=['cpu','npu:0']);p.add_argument('--seed',type=int,default=11)
     p.add_argument('--batch',type=int,default=2);p.add_argument('--length',type=int,default=32)
     p.add_argument('--steps',type=int,default=128);p.add_argument('--depth',type=int,choices=[1,2],default=1)
+    p.add_argument('--schedule-steps',type=int)
+    p.add_argument('--retain-step',type=int,action='append',default=[])
     p.add_argument('--max-updates',type=int);p.add_argument('--probe',action='store_true')
     group=p.add_mutually_exclusive_group();group.add_argument('--resume',type=Path);group.add_argument('--checkpoint',type=Path)
     p.add_argument('--split',choices=['validation','test'],default='test')
     p.add_argument('--baseline-only',action='store_true');p.add_argument('--intervention',choices=['zero_core','context_reset'])
     p.add_argument('--run-id',required=True);p.add_argument('--recording-cli')
     a=p.parse_args();plan=json.loads(a.plan.read_text());start=time.monotonic()
+    if a.schedule_steps is not None and (a.route!='a' or a.schedule_steps<a.steps):
+        raise ValueError('explicit schedule horizon is A-only and cannot precede target update')
+    if len(set(a.retain_step))!=len(a.retain_step) or any(n<1 or n>a.steps for n in a.retain_step):
+        raise ValueError('retained steps must be unique and within the trajectory')
     if a.length not in [3,32,128] or not 1<=a.batch<=512:raise ValueError('shape outside bounded package')
     device=runtime(a.device or plan['device'],plan['threads'],a.seed)
     if a.resume:

@@ -21,6 +21,10 @@
   Keep adjustments finite and named, preserve original failures and thresholds, and
   use public extension points without copying execution core. The design JSON
   remains non-launchable; runtime configs live under `configs/studies/language/`.
+  After the v3 terminal review, the user authorized the new bounded follow-up in
+  `docs/studies/language-confirmation-v4.md`: A512 plus one extra-exposure Transformer,
+  one B rank32 control, and conditional matched FC8; a new shared 12h/8NPUh batch.
+  Historical costs and failures remain closed and separate; no automatic seed22.
   Do not expand beyond the selected bounded table. Shared environments and other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.

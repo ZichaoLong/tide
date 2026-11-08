@@ -65,7 +65,8 @@ def load_cache(path,length):
 def make_b(plan,kind,seed,cache,asset,device,depth=1):
     lm=load_qwen(asset,device)
     model=FrozenPrefixTail(lm,kind,core_options(plan,kind,depth),cache['statistics'],seed,
-                          mlp_width=plan.get('replacement_mlp_width',330)).to(device)
+                          mlp_width=plan.get('replacement_mlp_width',330),
+                          bottleneck_width=plan.get('replacement_bottleneck_width',2080)).to(device)
     del lm
     return model
 

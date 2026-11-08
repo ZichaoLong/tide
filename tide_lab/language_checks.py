@@ -151,6 +151,9 @@ def b_checks(model,lm,token_rows,plan,kind,device,seed=11,depth=1):
     if kind.startswith('tide'):
         from .language_training import core_options
         checks['core']=core_axes(model.selected.core,core_options(plan,kind,depth),seed,device)
+    elif kind=='bottleneck':
+        from .bottleneck_checks import check
+        checks['bottleneck']=check(model.selected,device,plan['checks']['core_atol'],plan['checks']['core_rtol'])
     checks.update(gradient_entry=entered,optimizer_unique=True,initial_local_output='train-only teacher mean before updates')
     return dict(state='completed',axes=dict(execution='passed',strict_numerical='inspect original tolerance results',
         discrete_semantics='passed',mechanisms='passed',recovery='unchecked_here',learning='unchecked'),
