@@ -15,8 +15,12 @@
   The subsequent research-priority instruction centers natural-text next-token quality
   jointly with scaling, sparsity and locality; current design is
   `docs/studies/language-structure.md`. It supersedes backlog priorities, not historical
-  results or active inputs. Its proposed budget is not a submitted execution matrix;
-  `research/language-structure-plan.json` is design-only, not a launcher config.
+  results or active inputs. The latest approval authorizes implementing this package
+  and evidence-driven local-module, parameter, loss and recipe adjustments within
+  one 12-hour wall deadline, 8 aggregate NPU hours and 2 CPU-only worker hours.
+  Keep adjustments finite and named, preserve original failures and thresholds, and
+  use public extension points without copying execution core. The design JSON
+  remains non-launchable; runtime configs live under `configs/studies/language/`.
   Do not expand beyond the selected bounded table. Shared environments and other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.

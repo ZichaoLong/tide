@@ -1,0 +1,10 @@
+{
+  "schema": "tide-language-data-environment-v1",
+  "purpose": "CPU-only Parquet extraction; training environment unchanged",
+  "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+  "package": "pyarrow",
+  "version": "20.0.0",
+  "method": "private system-site-packages venv, only-binary wheel --no-deps pyarrow==20.0.0",
+  "installed_files_count": 766,
+  "installed_files_sha256": "fe9d0d8e5e22d18cf0e85cbc0fbdd8ff3e230f31241d90c3ddb75cae418f12d2"
+}

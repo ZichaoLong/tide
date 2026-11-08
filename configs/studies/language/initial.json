@@ -1,0 +1,148 @@
+{
+  "schema": "tide-language-execution-v1",
+  "package_id": "tl-language-v1",
+  "device": "npu:0",
+  "dtype": "float32",
+  "threads": 4,
+  "data_seed": 20261108,
+  "initial_seed": 11,
+  "confirmation_seed": 22,
+  "core": {
+    "width": 32,
+    "topology": "hb",
+    "depth": 1,
+    "region_width": 4,
+    "branches": 2,
+    "offsets": [
+      0,
+      1
+    ],
+    "send": "dense",
+    "temperature": 0.25,
+    "memory_read": "qry",
+    "family": "kv",
+    "history": 512
+  },
+  "a_candidates": [
+    "tide-dense",
+    "tide-sparse",
+    "transformer"
+  ],
+  "b_candidates": [
+    "original",
+    "tide-dense",
+    "tide-sparse",
+    "mlp"
+  ],
+  "language": {
+    "preferred_length": 128,
+    "bounded_fallback_length": 32,
+    "fallback_rule": "Only when measured 128-position forecast cannot fit minimum pilot and evaluation; rechunk all targets into independent 32-position chunks for every candidate. Preserve the failed/unaffordable 128 case; no last-answer objective.",
+    "vocab_size_a": 4096,
+    "validation_documents": 8,
+    "test_documents": 16,
+    "heldout_chunks_per_document_at128": 2
+  },
+  "batch_calibration": {
+    "length": 32,
+    "batches": [
+      8,
+      32,
+      128
+    ],
+    "extra_batch_if_growing": 256,
+    "warmup": 1,
+    "timed_updates": 2,
+    "case_seconds": 180,
+    "peak_fraction": 0.9
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "lr_a": 0.003,
+    "lr_b_replacement": 0.001,
+    "lr_b_original": 0.0001,
+    "eps": 1e-06,
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "warmup_fraction": 0.05,
+    "lr_floor_fraction": 0.1,
+    "maximum_updates": 1024,
+    "maximum_valid_tokens": 1000000,
+    "minimum_updates": 128,
+    "minimum_valid_tokens": 65536,
+    "log_every": 8,
+    "eval_every": 64,
+    "checkpoint_every": 32,
+    "per_attempt_seconds": 7200
+  },
+  "b_schedule": {
+    "teacher_fraction": 0.1,
+    "ce_alpha_start": 0.25,
+    "ce_alpha_ramp_fraction": 0.25,
+    "final_alpha": 1.0,
+    "input_output_statistics": "train cache only; per-dimension mean, scalar RMS",
+    "frozen_prefix_cache": true,
+    "vocabulary_loss_chunk": 128,
+    "head_checkpoint_recomputation": true
+  },
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "qwen_atol": 1e-05,
+    "qwen_rtol": 0.0001,
+    "micro_batch": 2,
+    "positions": 3,
+    "resume_steps": 3,
+    "resume_split": 1,
+    "finite_exploration": true
+  },
+  "quality": {
+    "maximum_nll_increase": 0.05,
+    "minimum_full_and_message_reduction": 0.2,
+    "formal_noninferiority": "single-sided 95% paired document bootstrap upper bound; pilots and seed uncertainty separate"
+  },
+  "budget": {
+    "shared_wall_seconds": 43200,
+    "total_npu_seconds": 28800,
+    "cpu_only_seconds": 7200,
+    "a_allocated_seconds": 18000,
+    "b_allocated_seconds": 10800,
+    "a_admission_seconds": 1800,
+    "b_admission_seconds": 1800,
+    "a_training_seconds": 10800,
+    "b_training_seconds": 7200,
+    "a_scale_seconds": 3600,
+    "a_final_seconds": 1800,
+    "b_final_seconds": 1800,
+    "data_prepare_seconds": 900,
+    "cpu_check_seconds": 900,
+    "max_concurrent_npus": 2,
+    "total_cpu_threads": 8,
+    "total_ram_gib": 48,
+    "new_disk_gib": 8,
+    "minimum_free_quota_gib": 80
+  },
+  "revisions": {
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+    "foundation": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "qwen": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "wikitext": "b08601e04326c79dfdd32d625aee71d232d685c3"
+  },
+  "adjustment_policy": {
+    "permission": "latest user authorization includes local modules, parameters, extensions, diagnosis, losses and training recipes",
+    "automatic_choices": [
+      "effective batch",
+      "common steps within caps",
+      "declared length128-to32 fallback",
+      "conditional depth2 and one seed22 pair"
+    ],
+    "additional_diagnosis": "at most two named, evidence-driven configuration/recipe changes in remaining original budget; new immutable source/config identity, never active-input edits",
+    "not_automatic": [
+      "88-node training",
+      "multiple replacement layers",
+      "new large model/data",
+      "remote devices",
+      "public deployment"
+    ]
+  }
+}
