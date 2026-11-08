@@ -91,4 +91,4 @@ E12组层级为completed，原TIDE尝试仍failed（未训练的启动事故）�
 
 第四批新增E14/R14（原生基线能力）、E15/R15（局部信息/压缩）、E16/R16（影子拟合）、E17/R17（非零参与后的能力保持）。它们有独立run与阶段状态，结果在实际运行和人工审阅前保持awaiting。B新增能力不作为必要条件；原TL-B1/B3仍保留原问题和负面结果。先决关系不等于科学支持，影子分支隔离不等于接入后的能力保持。
 
-第四批最新运行观测已关联`docs/evidence/fourth-batch-handoff.json`：E16正式B128训练，短程恢复通过；有限完成协调器已提交但在等待依赖，实际续接run仍planned。E14原生缓存严格有限超差与argmax保持分列，R14–R17仍awaiting，不将中途学习曲线当作能力保持结果。
+第四批最新运行观测已关联`docs/evidence/fourth-batch-handoff.json`：E16正式B128训练，短程恢复通过；原TIDE尝试因单次时限failed，完成协调器已确认终止并重新获原NPU14，从第96步checkpoint实际续接；旧后续未执行run为unchecked，新续接running，后继评价planned。E14原生缓存严格有限超差与argmax保持分列，R14–R17仍awaiting，不将中途学习曲线当作能力保持结果。

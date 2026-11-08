@@ -1,9 +1,9 @@
 {
   "axes": {
     "discrete_semantics": "native checked example argmax unchanged; new gradient/parameter mechanisms passed; not all-path equivalence",
-    "execution": "original running; completion waiting for dependency, no NPU request yet",
-    "learning": "shadow validation improves; final128-step fit and active preservation not yet checked",
-    "recovery": "both candidates fresh-process 3-step/B2 tensor/value exact; serialized bytes differ; full128-step independent equivalence unchecked",
+    "execution": "original failed at fixed single-run cap, full service and descendants terminal; completion reacquired original NPU14 and is running",
+    "learning": "step96 validation relativeMSE0.4779955902637436 reproduced on resume; final128-step fit and active preservation pending",
+    "recovery": "both candidates fresh-process 3-step/B2 tensor/value exact; serialized bytes differ; full128-step independent equivalence unchecked; actual seed11 resume loaded original checkpoint at step96 and started new updates, full trajectory equivalence remains unchecked",
     "strict_numerical": "native full/cache finite tolerance failure retained; historical public Core5 failures retained; causes unresolved"
   },
   "baseline": {
@@ -29,29 +29,55 @@
   },
   "budget": {
     "added_disk_gib": 4,
+    "cleanup_margin_seconds": 30,
     "compute_seconds_all_attempts": 7200,
     "cpu_threads": 4,
     "deadline": "2026-11-09T05:00:01.755853+08:00",
     "maximum_concurrent_npus": 1,
-    "memory_gib_requested": 24
+    "memory_gib_requested": 24,
+    "original_service_seconds_charged": 1479.6907280012965,
+    "remaining_compute_seconds_at_completion_admission": 5690.3092719987035
   },
-  "completion_state": "waiting_dependency",
+  "completion_coordinator_record_note": "coordinator.json remains queued_for_original_mapping while its synchronous queue command executes; queue-state.json=running and completion.json=running establish actual compute",
+  "completion_queue": {
+    "elapsed_seconds": 6.891022842377424,
+    "job_id": "s4-capability-completion-npu",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 14,
+    "physical_ids": [
+      14
+    ],
+    "priority": 0,
+    "project": "tide-learning-lab",
+    "schema_version": 1,
+    "status": "running",
+    "timestamp": "2026-11-08T09:24:49.913994+00:00"
+  },
+  "completion_stage_record": "runs/s4-capability-completion/completion.json",
+  "completion_state": "running_on_original_mapping",
   "handoff_checks": {
     "both_frozen_sources": "unchanged",
-    "firefox_offline_smoke": "passed",
+    "checked_at": "2026-11-08T09:27:03.805327+00:00",
+    "firefox_offline_smoke": "passed before continuation-status update; browser code/layout unchanged",
     "git_diff_check": "passed",
+    "map_checks_after_continuation_update": "passed",
     "map_render_and_check": "passed",
     "research_map_unit_tests": 12,
     "research_map_unit_tests_state": "passed"
   },
   "jobs": {
     "s4-capability": {
-      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability.service",
-      "current_cgroup_process_count": 8,
+      "control_group": "",
+      "current_cgroup_process_count": 0,
+      "elapsed_seconds": 1479.6907280012965,
       "job_id": "s4-capability",
-      "lifecycle_state": "running",
+      "lifecycle_state": "failed",
       "queue": {
-        "elapsed_seconds": 6.948566742241383,
+        "elapsed_seconds": 1478.2262618616223,
         "job_id": "s4-capability",
         "logical_device": "npu:0",
         "logical_devices": [
@@ -64,20 +90,22 @@
         ],
         "priority": 0,
         "project": "tide-learning-lab",
+        "return_code": 1,
         "schema_version": 1,
-        "status": "running",
-        "timestamp": "2026-11-08T09:00:09.534722+00:00"
+        "status": "failed",
+        "timestamp": "2026-11-08T09:24:40.812425+00:00"
       },
       "slice": "background.slice",
       "started_at": "2026-11-08T09:00:01.879396+00:00",
-      "systemd_active": "active",
-      "systemd_substate": "running",
-      "termination_verified_now": false,
+      "systemd_active": "failed",
+      "systemd_substate": "failed",
+      "termination_verified_now": true,
       "unit": "tide-lab-s4-capability.service"
     },
     "s4-capability-completion": {
       "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability-completion.service",
-      "current_cgroup_process_count": 3,
+      "current_cgroup_process_count": 9,
+      "elapsed_seconds": 733.9693756997585,
       "job_id": "s4-capability-completion",
       "lifecycle_state": "running",
       "queue": null,
@@ -90,48 +118,57 @@
     }
   },
   "learning_observations": {
-    "latest_train": {
-      "elapsed_seconds": 989.2720631919801,
+    "latest_resume_train": {
+      "elapsed_seconds": 18.358826745301485,
       "metrics": {
-        "gradient/core_norm": 0.03798975795507431,
-        "gradient/input_norm": 0.10096672922372818,
-        "gradient/output_norm": 0.1640443056821823,
-        "resource/cpu_maxrss_mib": 2122.484375,
-        "resource/npu_peak_allocated_mib": 66.98974609375,
-        "time/step_seconds": 12.240187663584948,
-        "time/total_step_seconds": 980.0216678753495,
-        "train/gradient_norm_before_clip": 0.1963365375995636,
-        "train/loss": 0.4990098476409912,
-        "work/examples": 10240.0,
-        "work_total/candidates": 81920.0,
-        "work_total/full": 81920.0,
-        "work_total/messages": 163840.0,
-        "work_total/read_events": 81920.0,
-        "work_total/region_blocks": 160.0,
-        "work_total/source_rows": 204800.0,
-        "work_total/state_updates": 81920.0
+        "gradient/core_norm": 0.03806121274828911,
+        "gradient/input_norm": 0.10506433248519897,
+        "gradient/output_norm": 0.18095269799232483,
+        "resource/cpu_maxrss_mib": 2111.1953125,
+        "resource/npu_peak_allocated_mib": 66.9892578125,
+        "time/step_seconds": 14.814257498830557,
+        "time/total_step_seconds": 14.814257498830557,
+        "train/gradient_norm_before_clip": 0.21267592906951904,
+        "train/loss": 0.4232495427131653,
+        "work/examples": 12416.0,
+        "work_total/candidates": 1024.0,
+        "work_total/full": 1024.0,
+        "work_total/messages": 2048.0,
+        "work_total/read_events": 1024.0,
+        "work_total/region_blocks": 2.0,
+        "work_total/source_rows": 2560.0,
+        "work_total/state_updates": 1024.0
       },
-      "run_id": "tl-b4-shadow-tide-s11",
+      "run_id": "tl-b4-shadow-tide-s11-resume1",
       "schema_version": 1,
-      "sequence": 13,
-      "step": 80,
-      "timestamp": "2026-11-08T09:20:53.722187+00:00"
+      "sequence": 1,
+      "step": 97,
+      "timestamp": "2026-11-08T09:25:12.172430+00:00"
     },
-    "latest_validation": {
-      "elapsed_seconds": 794.4656271375716,
+    "resume_initial_validation": {
+      "elapsed_seconds": 3.523234460502863,
       "metrics": {
-        "validation/lookup/relative_mse": 0.5830598196333683
+        "validation/lookup/relative_mse": 0.4779955902637436
       },
-      "run_id": "tl-b4-shadow-tide-s11",
+      "run_id": "tl-b4-shadow-tide-s11-resume1",
       "schema_version": 1,
-      "sequence": 11,
-      "step": 64,
-      "timestamp": "2026-11-08T09:17:38.915752+00:00"
+      "sequence": 0,
+      "step": 96,
+      "timestamp": "2026-11-08T09:24:57.336842+00:00"
     },
-    "status": "running; no final model acceptance"
+    "status": "resumed training running; not final fit or active preservation result"
   },
   "lens": {
-    "baseline": {
+    "s4-capability-completion/shadow-tide-s11-resume1": {
+      "destination_name": "tl-b4-shadow-tide-s11-resume1-projection-a6214eb53fc8",
+      "destination_run_id": "8de257d7a1f344408a5fa09560a73432",
+      "event_count": 0,
+      "readback_matches": null,
+      "record": "runs/s4-capability-completion/shadow-tide-s11-resume1/projection.json",
+      "source_run_id": "tl-b4-shadow-tide-s11-resume1",
+      "status": "recording"
+    },
+    "s4-capability/baseline": {
       "destination_name": "tl-b4-baseline-projection-4328f3980939",
       "destination_run_id": "f71b22b261d64384abfeedb325f316f8",
       "event_count": 2,
@@ -140,7 +177,7 @@
       "source_run_id": "tl-b4-baseline",
       "status": "verified"
     },
-    "batch-calibration": {
+    "s4-capability/batch-calibration": {
       "destination_name": "tl-b4-batch-calibration-projection-3ce73e928849",
       "destination_run_id": "6c925b686ec34ddabf746d02fc947146",
       "event_count": 6,
@@ -149,7 +186,7 @@
       "source_run_id": "tl-b4-batch-calibration",
       "status": "verified"
     },
-    "information": {
+    "s4-capability/information": {
       "destination_name": "tl-b4-information-projection-359d53a0bc34",
       "destination_run_id": "03adda85040c41c3b19133bad5221c19",
       "event_count": 2,
@@ -158,7 +195,7 @@
       "source_run_id": "tl-b4-information",
       "status": "verified"
     },
-    "mechanisms": {
+    "s4-capability/mechanisms": {
       "destination_name": "tl-b4-mechanisms-projection-0baa7bbbcc34",
       "destination_run_id": "831565d1ab4f435fb49ce8df11309e99",
       "event_count": 2,
@@ -167,17 +204,71 @@
       "source_run_id": "tl-b4-mechanisms",
       "status": "verified"
     },
-    "shadow-tide-s11": {
+    "s4-capability/shadow-tide-s11": {
       "destination_name": "tl-b4-shadow-tide-s11-projection-2eeeec35f0a8",
       "destination_run_id": "9f6d913c958b41ae9df457a131fb8786",
-      "event_count": 0,
-      "readback_matches": null,
+      "event_count": 17,
+      "readback_matches": true,
       "record": "runs/s4-capability/shadow-tide-s11/projection.json",
       "source_run_id": "tl-b4-shadow-tide-s11",
-      "status": "recording"
+      "status": "verified"
     }
   },
-  "observed_at": "2026-11-08T09:22:04.955109+00:00",
+  "observed_at": "2026-11-08T09:26:37.588109+00:00",
+  "original_training_attempt": {
+    "error": "TimeoutError('fixed per-run training budget exhausted')",
+    "extra_unpublished_steps": "unknown; logged lower bound96, do not infer exact executed exposure",
+    "published_checkpoint_sha256": "f6d31436d46e94e64420103994c80549b736dcfb272cdad135d937b8529e9f1b",
+    "published_checkpoint_step": 96,
+    "record": "runs/s4-capability/shadow-tide-s11/result.json",
+    "result_sha256": "3a917e211a62be5f825d5a0ed87d3f0d09ba97b0e1cf59a781ee672821b4e108",
+    "state": "failed"
+  },
+  "previous_observation": {
+    "completion_state": "waiting_dependency",
+    "learning_observations": {
+      "latest_train": {
+        "elapsed_seconds": 989.2720631919801,
+        "metrics": {
+          "gradient/core_norm": 0.03798975795507431,
+          "gradient/input_norm": 0.10096672922372818,
+          "gradient/output_norm": 0.1640443056821823,
+          "resource/cpu_maxrss_mib": 2122.484375,
+          "resource/npu_peak_allocated_mib": 66.98974609375,
+          "time/step_seconds": 12.240187663584948,
+          "time/total_step_seconds": 980.0216678753495,
+          "train/gradient_norm_before_clip": 0.1963365375995636,
+          "train/loss": 0.4990098476409912,
+          "work/examples": 10240.0,
+          "work_total/candidates": 81920.0,
+          "work_total/full": 81920.0,
+          "work_total/messages": 163840.0,
+          "work_total/read_events": 81920.0,
+          "work_total/region_blocks": 160.0,
+          "work_total/source_rows": 204800.0,
+          "work_total/state_updates": 81920.0
+        },
+        "run_id": "tl-b4-shadow-tide-s11",
+        "schema_version": 1,
+        "sequence": 13,
+        "step": 80,
+        "timestamp": "2026-11-08T09:20:53.722187+00:00"
+      },
+      "latest_validation": {
+        "elapsed_seconds": 794.4656271375716,
+        "metrics": {
+          "validation/lookup/relative_mse": 0.5830598196333683
+        },
+        "run_id": "tl-b4-shadow-tide-s11",
+        "schema_version": 1,
+        "sequence": 11,
+        "step": 64,
+        "timestamp": "2026-11-08T09:17:38.915752+00:00"
+      },
+      "status": "running; no final model acceptance"
+    },
+    "observed_at": "2026-11-08T09:22:04.955109+00:00"
+  },
   "recovery": {
     "checks": [
       {
@@ -212,13 +303,13 @@
       "commit": "4502d073e78876bca2abe88947bda9aeb7dbdc98",
       "snapshot": ".local/source-fourth-completion",
       "tree_sha256": "55175ce1b8e4d6897febb22006ee51c1f0aa7e731a2e9ae1b788e00b866f1c31",
-      "verified_at": "2026-11-08T09:22:04.955109+00:00"
+      "verified_at": "2026-11-08T09:26:37.588109+00:00"
     },
     "model": {
       "commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
       "snapshot": ".local/source-fourth-batch",
       "tree_sha256": "86f23b7e8bf5659a02b9843a80e1b251d30255906a591ea34b7b2ab639fa5405",
-      "verified_at": "2026-11-08T09:22:04.955109+00:00"
+      "verified_at": "2026-11-08T09:26:37.588109+00:00"
     }
   }
 }

@@ -134,6 +134,109 @@
     "state": "passed"
   },
   "observation": {
+    "completion_queue": {
+      "elapsed_seconds": 6.891022842377424,
+      "job_id": "s4-capability-completion-npu",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 14,
+      "physical_ids": [
+        14
+      ],
+      "priority": 0,
+      "project": "tide-learning-lab",
+      "schema_version": 1,
+      "status": "running",
+      "timestamp": "2026-11-08T09:24:49.913994+00:00"
+    },
+    "jobs": {
+      "s4-capability": {
+        "control_group": "",
+        "current_cgroup_process_count": 0,
+        "elapsed_seconds": 1479.6907280012965,
+        "job_id": "s4-capability",
+        "lifecycle_state": "failed",
+        "queue": {
+          "elapsed_seconds": 1478.2262618616223,
+          "job_id": "s4-capability",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 14,
+          "physical_ids": [
+            14
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "return_code": 1,
+          "schema_version": 1,
+          "status": "failed",
+          "timestamp": "2026-11-08T09:24:40.812425+00:00"
+        },
+        "slice": "background.slice",
+        "started_at": "2026-11-08T09:00:01.879396+00:00",
+        "systemd_active": "failed",
+        "systemd_substate": "failed",
+        "termination_verified_now": true,
+        "unit": "tide-lab-s4-capability.service"
+      },
+      "s4-capability-completion": {
+        "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s4-capability-completion.service",
+        "current_cgroup_process_count": 9,
+        "elapsed_seconds": 733.9693756997585,
+        "job_id": "s4-capability-completion",
+        "lifecycle_state": "running",
+        "queue": null,
+        "slice": "background.slice",
+        "started_at": "2026-11-08T09:14:15.742492+00:00",
+        "systemd_active": "active",
+        "systemd_substate": "running",
+        "termination_verified_now": false,
+        "unit": "tide-lab-s4-capability-completion.service"
+      }
+    },
+    "original_checkpoint_step": 96,
+    "original_service_seconds_charged": 1479.6907280012965,
+    "original_time_cap_failure_retained": true,
+    "remaining_compute_seconds": 5690.3092719987035,
+    "resume_observed_step": 97
+  },
+  "observed_at": "2026-11-08T09:26:37.588109+00:00",
+  "original_active_inputs_unchanged": true,
+  "original_job_not_interrupted": true,
+  "original_plan_sha256": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
+  "original_source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+  "policy": {
+    "batch": 128,
+    "exact_resume_requires_original_physical_mapping": true,
+    "logical_steps": 128,
+    "maximum_concurrent_npus": 1,
+    "maximum_tide_attempts_per_candidate": 2,
+    "original_wall_deadline_reused": true,
+    "remaining_compute": "7200 minus original complete service elapsed minus 30 seconds",
+    "same_model_source_config_cache": true,
+    "seeds": [
+      11,
+      22
+    ],
+    "teacher_read_only": true,
+    "total_compute_seconds": 7200
+  },
+  "recorded_at": "2026-11-08T09:13:43.667640+00:00",
+  "schema": "tide-b4-budget-completion-policy-v1",
+  "state": "running_on_original_mapping",
+  "submission": {
+    "exit_code": 0,
+    "job_id": "s4-capability-completion",
+    "record": "artifacts/jobs/s4-capability-completion/job.json",
+    "submitted_at": "2026-11-08T09:14:15.718546+00:00"
+  },
+  "submission_observation": {
     "coordinator_state": "waiting_dependency",
     "jobs": {
       "s4-capability": {
@@ -181,36 +284,6 @@
       }
     },
     "npu_requested_by_completion": false
-  },
-  "observed_at": "2026-11-08T09:22:04.955109+00:00",
-  "original_active_inputs_unchanged": true,
-  "original_job_not_interrupted": true,
-  "original_plan_sha256": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
-  "original_source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-  "policy": {
-    "batch": 128,
-    "exact_resume_requires_original_physical_mapping": true,
-    "logical_steps": 128,
-    "maximum_concurrent_npus": 1,
-    "maximum_tide_attempts_per_candidate": 2,
-    "original_wall_deadline_reused": true,
-    "remaining_compute": "7200 minus original complete service elapsed minus 30 seconds",
-    "same_model_source_config_cache": true,
-    "seeds": [
-      11,
-      22
-    ],
-    "teacher_read_only": true,
-    "total_compute_seconds": 7200
-  },
-  "recorded_at": "2026-11-08T09:13:43.667640+00:00",
-  "schema": "tide-b4-budget-completion-policy-v1",
-  "state": "submitted_waiting_dependency",
-  "submission": {
-    "exit_code": 0,
-    "job_id": "s4-capability-completion",
-    "record": "artifacts/jobs/s4-capability-completion/job.json",
-    "submitted_at": "2026-11-08T09:14:15.718546+00:00"
   },
   "trigger": "only original per-training time-cap failure, published checkpoint, and actual service/descendant termination; no user stop or numerical/semantic/recovery failure"
 }
