@@ -2,7 +2,7 @@
 
 已执行用户授权：自然文本next-token质量与规模、稀疏、局部结构共同推进。当前[研究表](studies/language-structure.md)和[FC先导配置](../configs/studies/language/fc-pilot-v2.json)记录有界调整 `LM-ADJUST-001`；原HB16配置和失败保持。
 
-A/B服务 `lm-a-language-v2`、`lm-b-language-v2` 已核对在 `background.slice`，通过共享队列分别取得物理NPU1、3（进程内均为npu:0）。当前进行准入/恢复与校准，正式训练只在各自门槛和预算成立后自动开始。运行观测、实际阶段及Lens对应见[交接证据](evidence/language-running-handoff.json)；实时状态以运行目录和job工具为准。
+A/B服务 `lm-a-language-v2`、`lm-b-language-v2` 已核对在 `background.slice`，通过共享队列分别取得物理NPU1、3（进程内均为npu:0）。A三候选、B四候选均通过小型机制与B2/L3三步新进程精确恢复，当前校准中；正式训练仍取决于完整成本/暴露预算。严格数值按各检查的原阈值单列。运行观测、实际阶段及Lens对应见[交接证据](evidence/language-running-handoff.json)；实时状态以运行目录和job工具为准。
 
 固定模型/协调器源码 **7d1a95f16a3a390e7bbf60d18f25d2928ca849f0**，只读快照`.local/source-language-routes-v2`，树hash `4917f4f31f0360fc3c775fab47d6a39e394cbc2553e8744af76280da2ab610f4`。数学0770593、基座85d161d和248文件安装锁未变。活动作业不读取后续工作区修改。
 

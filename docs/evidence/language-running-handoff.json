@@ -2,6 +2,36 @@
   "cpu_only_worker_seconds": 7200,
   "jobs": [
     {
+      "calibration": [
+        {
+          "batch": 8,
+          "kind": "tide-dense",
+          "length": 32,
+          "mean_step_seconds": 15.95457474514842,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "tide-sparse",
+          "length": 32,
+          "mean_step_seconds": 20.654900427907705,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "transformer",
+          "length": 32,
+          "mean_step_seconds": 0.013528741896152496,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "tide-sparse",
+          "length": 128,
+          "mean_step_seconds": null,
+          "state": "failed"
+        }
+      ],
       "completed_candidates": {
         "tide-dense": {
           "admitted": true,
@@ -36,7 +66,7 @@
       },
       "compute_cap_seconds": 17449,
       "config": "configs/studies/language/fc-pilot-v2.json",
-      "current_stage": "cal-d1-tide-dense-L32-B8",
+      "current_stage": "cal-d1-tide-dense-L32-B32",
       "job": "lm-a-language-v2",
       "job_record": "artifacts/jobs/lm-a-language-v2/job.json",
       "logical_device": "npu:0",
@@ -59,7 +89,47 @@
       }
     },
     {
+      "calibration": [
+        {
+          "batch": 8,
+          "kind": "original",
+          "length": 32,
+          "mean_step_seconds": 0.0092379841953516,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "tide-dense",
+          "length": 32,
+          "mean_step_seconds": 20.78643700107932,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "tide-sparse",
+          "length": 32,
+          "mean_step_seconds": 14.647568913176656,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "kind": "mlp",
+          "length": 32,
+          "mean_step_seconds": 0.008474688977003098,
+          "state": "completed"
+        }
+      ],
       "completed_candidates": {
+        "mlp": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "a955b56bc766570c40004316efee933e4c2299518dd7a498f6d2eea522fc23c2",
+            "resumed_sha256": "7bcd69c343193899ff6d9c5e962fb10f1bb2fe93887da5270d7440fd030bf6d4",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
         "original": {
           "admitted": true,
           "mechanisms": "completed",
@@ -69,11 +139,31 @@
             "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
             "state": "passed"
           }
+        },
+        "tide-dense": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "046ef13960b4ac1ee3da236fa27bd97c1970e473ab2669d0f953f1bb7d677e04",
+            "resumed_sha256": "1fb9a0c2da21fc9b933f64ec60890502608455acc021cf4ecbc59fad5e90b9e9",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "tide-sparse": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "af9370b496bd48ff26fcf5c99d12bc53d1d0d21a5599b2e81e450ea5e1fa9cf0",
+            "resumed_sha256": "b7eef6b03f2456f2a192cde77256099676329b0b5b2d6abae0458660394ff0bd",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
         }
       },
       "compute_cap_seconds": 10572,
       "config": "configs/studies/language/fc-pilot-v2.json",
-      "current_stage": "resume-d1-tide-dense-continued",
+      "current_stage": "cal-d1-tide-dense-L128-B8",
       "job": "lm-b-language-v2",
       "job_record": "artifacts/jobs/lm-b-language-v2/job.json",
       "logical_device": "npu:0",
@@ -122,6 +212,30 @@
       "status": "verified"
     },
     {
+      "destination_name": "tl-lm-a-language-v2-cal-d1-tide-dense-L32-B8-projection-2515b58dfe9e",
+      "destination_run_id": "3efefe900da0419bbdd7293da7a6ce5b",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/cal-d1-tide-dense-L32-B8/projection.json",
+      "run_id": "tl-lm-a-language-v2-cal-d1-tide-dense-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v2-cal-d1-tide-sparse-L32-B8-projection-13c1993e7279",
+      "destination_run_id": "76e74ca59e2b4f20a2587e5f98d391f0",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/cal-d1-tide-sparse-L32-B8/projection.json",
+      "run_id": "tl-lm-a-language-v2-cal-d1-tide-sparse-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v2-cal-d1-transformer-L32-B8-projection-ef969a38196a",
+      "destination_run_id": "a8543565ae9347ac8507d75cc1ccaca5",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/cal-d1-transformer-L32-B8/projection.json",
+      "run_id": "tl-lm-a-language-v2-cal-d1-transformer-L32-B8",
+      "status": "verified"
+    },
+    {
       "destination_name": "tl-lm-b-language-v2-cache-L32-projection-285bf0bfecae",
       "destination_run_id": "03bd770d4eb844888c105f13db34e896",
       "readback_matches": true,
@@ -144,10 +258,66 @@
       "record": "runs/lm-b-language-v2/check-tide-dense/projection.json",
       "run_id": "tl-lm-b-language-v2-check-tide-dense",
       "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-check-tide-sparse-projection-b1f37345d331",
+      "destination_run_id": "5a2f79e6a3e64e249539294837bd6ba5",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/check-tide-sparse/projection.json",
+      "run_id": "tl-lm-b-language-v2-check-tide-sparse",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-check-mlp-projection-353166620421",
+      "destination_run_id": "b15e50f9e8e6439aa58f9fd84fd32489",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/check-mlp/projection.json",
+      "run_id": "tl-lm-b-language-v2-check-mlp",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cal-d1-original-L32-B8-projection-fc8373d2bff6",
+      "destination_run_id": "4313c308cfcd444282cd10f8ea9feec0",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cal-d1-original-L32-B8/projection.json",
+      "run_id": "tl-lm-b-language-v2-cal-d1-original-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cal-d1-tide-dense-L32-B8-projection-93f1035d3572",
+      "destination_run_id": "6d9bd7e06f214df0b99360357c96614d",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cal-d1-tide-dense-L32-B8/projection.json",
+      "run_id": "tl-lm-b-language-v2-cal-d1-tide-dense-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cal-d1-tide-sparse-L32-B8-projection-86de8e0990bc",
+      "destination_run_id": "ffe9dc9ee59c40c6ad30e5a32f714b61",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cal-d1-tide-sparse-L32-B8/projection.json",
+      "run_id": "tl-lm-b-language-v2-cal-d1-tide-sparse-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cal-d1-mlp-L32-B8-projection-411402013572",
+      "destination_run_id": "d0c408ad2859491ba98335c41bf731a5",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cal-d1-mlp-L32-B8/projection.json",
+      "run_id": "tl-lm-b-language-v2-cal-d1-mlp-L32-B8",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cache-L128-projection-b370d2879791",
+      "destination_run_id": "6fdcb71f6cf84b7c8c637ff3e59cca76",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cache-L128/projection.json",
+      "run_id": "tl-lm-b-language-v2-cache-L128",
+      "status": "verified"
     }
   ],
   "max_concurrent_npus": 2,
-  "observed_at": "2026-11-08T12:24:19.246241+00:00",
+  "observed_at": "2026-11-08T12:30:28.622570+00:00",
   "prior_attempts": "docs/evidence/language-initial-attempts.json",
   "quality": "not reviewed; no formal next-token quality conclusion",
   "schema": "tide-language-running-handoff-v1",
@@ -155,5 +325,9 @@
   "shared_deadline_utc": "2026-11-08T23:28:46Z",
   "source_cpu_evidence": "docs/evidence/language-cpu-admission.json",
   "source_frozen": true,
+  "source_reverification": {
+    "commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+    "state": "unchanged"
+  },
   "total_npu_seconds": 28800
 }

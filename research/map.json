@@ -960,9 +960,33 @@
         {
           "config": "configs/studies/language/fc-pilot-v2.json",
           "id": "tl-lm-a-language-v2-cal-d1-tide-dense-L32-B8",
-          "record": "runs/lm-a-language-v2/cal-d1-tide-dense-L32-B8/state.json",
+          "lens_record": "runs/lm-a-language-v2/cal-d1-tide-dense-L32-B8/projection.json",
+          "record": "runs/lm-a-language-v2/cal-d1-tide-dense-L32-B8/result.json",
           "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
-          "status": "running"
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-cal-d1-tide-sparse-L32-B8",
+          "lens_record": "runs/lm-a-language-v2/cal-d1-tide-sparse-L32-B8/projection.json",
+          "record": "runs/lm-a-language-v2/cal-d1-tide-sparse-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-cal-d1-transformer-L32-B8",
+          "lens_record": "runs/lm-a-language-v2/cal-d1-transformer-L32-B8/projection.json",
+          "record": "runs/lm-a-language-v2/cal-d1-transformer-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-cal-d1-tide-sparse-L128-B8",
+          "record": "runs/lm-a-language-v2/cal-d1-tide-sparse-L128-B8/state.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/fc-pilot-v2.json",
@@ -1022,11 +1046,123 @@
           "record": "runs/lm-b-language-v2/resume-d1-tide-dense-split/result.json",
           "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-dense-continued",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-dense-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-check-tide-sparse",
+          "lens_record": "runs/lm-b-language-v2/check-tide-sparse/projection.json",
+          "record": "runs/lm-b-language-v2/check-tide-sparse/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-sparse-full",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-sparse-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-sparse-split",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-sparse-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-sparse-continued",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-sparse-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-check-mlp",
+          "lens_record": "runs/lm-b-language-v2/check-mlp/projection.json",
+          "record": "runs/lm-b-language-v2/check-mlp/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-mlp-full",
+          "record": "runs/lm-b-language-v2/resume-d1-mlp-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-mlp-split",
+          "record": "runs/lm-b-language-v2/resume-d1-mlp-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-mlp-continued",
+          "record": "runs/lm-b-language-v2/resume-d1-mlp-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cal-d1-original-L32-B8",
+          "lens_record": "runs/lm-b-language-v2/cal-d1-original-L32-B8/projection.json",
+          "record": "runs/lm-b-language-v2/cal-d1-original-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cal-d1-tide-dense-L32-B8",
+          "lens_record": "runs/lm-b-language-v2/cal-d1-tide-dense-L32-B8/projection.json",
+          "record": "runs/lm-b-language-v2/cal-d1-tide-dense-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cal-d1-tide-sparse-L32-B8",
+          "lens_record": "runs/lm-b-language-v2/cal-d1-tide-sparse-L32-B8/projection.json",
+          "record": "runs/lm-b-language-v2/cal-d1-tide-sparse-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cal-d1-mlp-L32-B8",
+          "lens_record": "runs/lm-b-language-v2/cal-d1-mlp-L32-B8/projection.json",
+          "record": "runs/lm-b-language-v2/cal-d1-mlp-L32-B8/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cache-L128",
+          "lens_record": "runs/lm-b-language-v2/cache-L128/projection.json",
+          "record": "runs/lm-b-language-v2/cache-L128/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cal-d1-tide-dense-L128-B8",
+          "record": "runs/lm-b-language-v2/cal-d1-tide-dense-L128-B8/state.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "running"
         }
       ],
       "status": "running",
       "study_id": "TL-LM-EXEC",
-      "summary": "CPU\u673a\u5236\u5df2\u5ba1\u9605\uff1bNPU\u51c6\u5165/\u6062\u590d\u4e2d",
+      "summary": "A\u4e09/B\u56db\u5019\u9009\u673a\u5236\u53ca\u5fae\u578b\u6062\u590d\u901a\u8fc7\uff1b\u6821\u51c6\u4e2d",
       "title": "\u5168\u4f4d\u7f6e\u63a5\u5165\u4e0e\u541e\u5410",
       "track": "shared",
       "view_group": "current",
@@ -3470,7 +3606,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u540c\u4e00\u6a21\u578b\uff1a\u8bed\u8a00next-token\u8d28\u91cf \u00d7 \u89c4\u6a21\u5316\u3001\u7a00\u758f\u5316\u3001\u5c40\u90e8\u5316",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-08T12:24:19.252109+00:00",
+  "updated_at": "2026-11-08T12:30:28.622570+00:00",
   "view_groups": [
     {
       "height": 1000,
