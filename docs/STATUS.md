@@ -1,6 +1,21 @@
-# 当前交接 — v3较小曝光学习比较准备就绪（2026-11-08）
+# 当前交接 — v3较小曝光语言比较已后台运行（2026-11-08）
 
-用户已同意继续。当前配置与研究表见[LM-ADJUST-002](studies/language-exploration-v3.md)，复用23个未改执行/依赖文件、七候选机制/恢复及B8/B32校准，A/B固定32677/32503目标。小型Lens记录已核对。新作业尚未提交，以下v2终态及扣账保留；实际提交后更新本页。
+北京时间23:34已实际启动两路，当前核对时间UTC 2026-11-08T15:37:14.493383+00:00。[研究表](studies/language-exploration-v3.md)、[启动证据](evidence/language-exploration-handoff.json)、[查看/停止/恢复](RUNNING.md)。
+
+| 作业 | 实际分配 | 当前范围 |
+| --- | --- | --- |
+| `lm-a-language-v3` | 物理NPU3 → logical npu:0 | 小Transformer128步、独立test与推理已完成；TIDE稠密训练stage已启动，随后稀疏 |
+| `lm-b-language-v3` | 物理NPU5 → logical npu:0 | 冻结基线、原MLP与简单MLP的128步训练/独立test/推理已完成；TIDE稠密训练stage已启动，随后稀疏 |
+
+这是执行进度，**尚无完整TIDE语言比较或联合质量/结构结论**。已完成控制只保留原始独立评价，不能提前认证语言可用性。研究图的四个科学结论仍awaiting。后续stage可随后台继续；以只读状态为准。
+
+冻结源码`6cd4f856df02e9c90645198cf5998a27a877b4ec`、快照`.local/source-language-explore-v3`、树SHA256 `2c44b51421077624867ee27fa6fa6c72d8c95e60a28736be2565083260da8e77`；配置`configs/studies/language/fc-explore-v3.json`。数学0770593、foundation85d161d及安装环境不变，248文件核对一致。23个执行/依赖文件未改，复用v2七候选机制、三步精确恢复和B8/B32校准；新增代码只负责核验复用与有界编排。不要编辑快照、环境、活动数据/cache/config或checkpoint。
+
+固定B8/L32/128更新、seed11；A每候选32677有效目标，B32503。原65536目标准入失败保留，新配置明确为较小曝光探索；原质量ΔNLL≤0.05、结构筛选及数值阈值未放宽。当前硬件同比例加速不是质量/结构准入条件。执行、严格数值、离散语义、恢复、学习和性能分列。
+
+旧四次失败保守已扣3551.641秒（0.9866 NPU小时）。新A/B外层计算上限9120/9017秒，各自训练7200秒、评价1800秒且受外层共同约束；最多同时2NPU/8线程/48GiB。原8NPU小时总额与北京时间11月9日07:28:46共同截止不重置；本次不会自动启动FC8或seed22，剩余预算待学习证据审阅。当前配额169GiB/800GiB，新增文件仍受8GiB上限。
+
+小型Lens记录`tl-lm-v3-recording`已verified/readback_matches，控制组已产生新的已核对投影；项目`tide-learning-lab`，TL-A-LM/TL-B-LM，run前缀`tl-lm-a-language-v3-`与`tl-lm-b-language-v3-`。训练实时指标/实际映射见各stage的metrics.jsonl/projection.json；私有查看入口`.local/LENS.md`，不改服务访问策略。
 
 ## v2终态（历史记录）
 

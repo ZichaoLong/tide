@@ -839,7 +839,7 @@
     {
       "budget": "\u6388\u6743\u226460NPU min\uff0c\u548c\u5176\u4ed6\u9636\u6bb5\u5171\u4eab8NPU\u5c0f\u65f6/12h\u5899\u949f\u3002",
       "decision": "A/B\u5404\u81ea\u51c6\u5165\uff1b\u6709\u754c\u6570\u503c\u63a2\u7d22\u4e0d\u8981\u6c42\u5168\u90e8FP64\uff1b\u6309\u541e\u5410\u548c\u66f4\u65b0\u6570\u51bb\u7ed3\u914d\u65b9\u3002",
-      "execution_note": "\u6821\u51c6/\u9884\u8bbe\u66b4\u9732\u548c\u8bad\u7ec3\u5206\u9879\u95e8\u69db\u672a\u6ee1\u8db3\uff1b\u4e0d\u662f\u7a00\u758f\u541e\u5410\u6bd4\u6216\u8bed\u8a00\u8d28\u91cf\u5931\u8d25\u3002",
+      "execution_note": "v3\u9010\u6587\u4ef6/\u5b89\u88c5/\u6570\u636e/\u68c0\u67e5\u8eab\u4efd\u6838\u9a8c\u540e\u51c6\u5165\u5b66\u4e60\uff1bv2\u9884\u7b97\u62d2\u7edd\u548cHB\u4e25\u683c\u5931\u8d25\u4fdd\u7559\uff0c\u4e0d\u7531\u6b64\u63a8\u51fa\u8bed\u8a00\u8d28\u91cf\u3002",
       "id": "L-EXEC",
       "kind": "experiment",
       "question": "\u65b0\u7684\u8bed\u8a00\u5e8f\u5217\u8def\u5f84\u662f\u5426\u53ef\u4fe1\u4e14\u5728\u672c\u673a\u9884\u7b97\u53ef\u8d1f\u62c5\uff1f",
@@ -1266,11 +1266,18 @@
           "record": "runs/lm-b-language-v2/cal-d1-mlp-L32-B128/result.json",
           "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-v3-recording",
+          "lens_record": "runs/lm-v3-recording/projection.json",
+          "record": "runs/lm-v3-recording/result.json",
+          "status": "completed"
         }
       ],
-      "status": "failed",
+      "status": "completed",
       "study_id": "TL-LM-EXEC",
-      "summary": "\u673a\u5236/\u6062\u590d\u901a\u8fc7\uff1b\u9884\u7b97\u51c6\u5165\u62d2\u7edd",
+      "summary": "v3\u590d\u7528\u51c6\u5165\u901a\u8fc7\uff1bv2\u62d2\u7edd\u4fdd\u7559",
       "title": "\u5168\u4f4d\u7f6e\u63a5\u5165\u4e0e\u541e\u5410",
       "track": "shared",
       "view_group": "current",
@@ -1280,7 +1287,7 @@
     {
       "budget": "128\u66f4\u65b0\u5148\u5bfc\u2264120NPU min\uff1b\u672a\u7528\u8bad\u7ec3\u65f6\u95f4\u53ef\u7ed9\u6761\u4ef6FC8\uff0c\u603bA\u22645h\u5e76\u6263\u65e7\u5931\u8d25\u3002",
       "decision": "\u4ee5\u540c\u8bcd\u8868\u72ec\u7acbNLL\u6bd4\u8f83\uff1b\u6b20\u8bad\u7ec3\u5bf9\u7167\u4e0d\u80fd\u8ba4\u8bc1\u8bed\u8a00\u53ef\u7528\u6027\u3002",
-      "execution_note": "v2\u8bad\u7ec3\u524d\u7ec8\u6b62\u4fdd\u6301\uff1bv3\u590d\u7528\u63a5\u5165\u4e0e\u6821\u51c6\uff0cB8/L32/128\u66f4\u65b0\u53ca\u72ec\u7acb\u8bc4\u4ef7\uff0c\u672a\u4ea7\u751f\u8bed\u8a00\u7ed3\u679c\u3002",
+      "execution_note": "v3\u4e3a\u65b0\u56fa\u5b9a\u6e90\u7801\u548c\u914d\u7f6e\uff1b\u590d\u7528v2\u68c0\u67e5\uff0c\u8bad\u7ec3/\u8bc4\u4ef7\u6b63\u5728\u8fdb\u884c\uff0c\u79d1\u5b66\u7ed3\u8bba\u5f85\u7ec8\u6001\u5ba1\u9605\u3002v2\u51c6\u5165\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "L-A",
       "kind": "experiment",
       "question": "\u76f8\u8fd1\u5bb9\u91cf\u4e0e\u540ctoken\u9884\u7b97\u4e0b\uff0c\u8bed\u8a00\u8d28\u91cf\u53ca\u7a00\u758f\u6298\u8877\u5982\u4f55\uff1f",
@@ -1312,6 +1319,10 @@
         {
           "label": "\u5f53\u524dv3\u6267\u884c\u914d\u7f6e",
           "path": "configs/studies/language/fc-explore-v3.json"
+        },
+        {
+          "label": "v3\u540e\u53f0\u542f\u52a8\u6838\u5bf9",
+          "path": "docs/evidence/language-exploration-handoff.json"
         }
       ],
       "runs": [
@@ -1321,11 +1332,58 @@
           "record": "runs/lm-a-language-v2/stage.json",
           "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
           "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "lm-a-language-v3",
+          "record": "runs/lm-a-language-v3/stage.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-a-language-v3-evaluate-seed11-transformer",
+          "lens_record": "runs/lm-a-language-v3/evaluate-seed11-transformer/projection.json",
+          "record": "runs/lm-a-language-v3/evaluate-seed11-transformer/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-a-language-v3-inference-seed11-transformer",
+          "lens_record": "runs/lm-a-language-v3/inference-seed11-transformer/projection.json",
+          "record": "runs/lm-a-language-v3/inference-seed11-transformer/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-a-language-v3-train-seed11-tide-dense",
+          "lens_record": "runs/lm-a-language-v3/train-seed11-tide-dense/projection.json",
+          "record": "runs/lm-a-language-v3/train-seed11-tide-dense/state.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-a-language-v3-train-seed11-transformer",
+          "lens_record": "runs/lm-a-language-v3/train-seed11-transformer/projection.json",
+          "record": "runs/lm-a-language-v3/train-seed11-transformer/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-a-language-v3-unigram",
+          "lens_record": "runs/lm-a-language-v3/unigram/projection.json",
+          "record": "runs/lm-a-language-v3/unigram/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-A-LM",
-      "summary": "\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u914d\u7f6e\u5df2\u56fa\u5b9a\uff0c\u5f85\u63d0\u4ea4\u6838\u5bf9",
+      "summary": "\u8f83\u5c0f\u66dd\u5149\u8bed\u8a00\u6bd4\u8f83\u5df2\u5b9e\u9645\u542f\u52a8",
       "title": "A\uff1a\u4ece\u96f6\u8bed\u8a00\u6a21\u578b",
       "track": "tide",
       "view_group": "current",
@@ -1335,7 +1393,7 @@
     {
       "budget": "\u6388\u6743\u6240\u6709\u5019\u9009/\u63a7\u5236seed11\u5408\u8ba1\u2264120NPU min\uff1b\u4e0d\u6269\u5927\u7b2c\u4e8c\u5c42\u3002",
       "decision": "\u5bf9\u7167\u539f\u51bb\u7ed3/\u539fMLP\u7ee7\u7eed\u8bad\u7ec3/\u7b80\u5355MLP\u66ff\u6362\uff1balpha=1\u4e14\u8df3\u8fc7\u539fMLP\u624d\u662f\u5b8c\u6574\u627f\u63a5\u3002",
-      "execution_note": "v2\u8bad\u7ec3\u524d\u7ec8\u6b62\u4fdd\u6301\uff1bv3\u590d\u7528\u63a5\u5165\u4e0e\u6821\u51c6\uff0cB8/L32/128\u66f4\u65b0\u53ca\u72ec\u7acb\u8bc4\u4ef7\uff0c\u672a\u4ea7\u751f\u8bed\u8a00\u7ed3\u679c\u3002",
+      "execution_note": "v3\u4e3a\u65b0\u56fa\u5b9a\u6e90\u7801\u548c\u914d\u7f6e\uff1b\u590d\u7528v2\u68c0\u67e5\uff0c\u8bad\u7ec3/\u8bc4\u4ef7\u6b63\u5728\u8fdb\u884c\uff0c\u79d1\u5b66\u7ed3\u8bba\u5f85\u7ec8\u6001\u5ba1\u9605\u3002v2\u51c6\u5165\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "L-B",
       "kind": "experiment",
       "question": "\u5728\u539f\u751f\u8bed\u8a00\u76ee\u6807\u4e0a\uff0cTIDE\u80fd\u5426\u627f\u63a5\u8ba1\u7b97\u5e76\u4fdd\u7559\u8d28\u91cf\uff1f",
@@ -1367,6 +1425,10 @@
         {
           "label": "\u5f53\u524dv3\u6267\u884c\u914d\u7f6e",
           "path": "configs/studies/language/fc-explore-v3.json"
+        },
+        {
+          "label": "v3\u540e\u53f0\u542f\u52a8\u6838\u5bf9",
+          "path": "docs/evidence/language-exploration-handoff.json"
         }
       ],
       "runs": [
@@ -1376,11 +1438,90 @@
           "record": "runs/lm-b-language-v2/stage.json",
           "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
           "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "lm-b-language-v3",
+          "record": "runs/lm-b-language-v3/stage.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-evaluate-frozen-baseline",
+          "lens_record": "runs/lm-b-language-v3/evaluate-frozen-baseline/projection.json",
+          "record": "runs/lm-b-language-v3/evaluate-frozen-baseline/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-evaluate-seed11-mlp",
+          "lens_record": "runs/lm-b-language-v3/evaluate-seed11-mlp/projection.json",
+          "record": "runs/lm-b-language-v3/evaluate-seed11-mlp/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-evaluate-seed11-original",
+          "lens_record": "runs/lm-b-language-v3/evaluate-seed11-original/projection.json",
+          "record": "runs/lm-b-language-v3/evaluate-seed11-original/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-inference-frozen-baseline",
+          "lens_record": "runs/lm-b-language-v3/inference-frozen-baseline/projection.json",
+          "record": "runs/lm-b-language-v3/inference-frozen-baseline/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-inference-seed11-mlp",
+          "lens_record": "runs/lm-b-language-v3/inference-seed11-mlp/projection.json",
+          "record": "runs/lm-b-language-v3/inference-seed11-mlp/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-inference-seed11-original",
+          "lens_record": "runs/lm-b-language-v3/inference-seed11-original/projection.json",
+          "record": "runs/lm-b-language-v3/inference-seed11-original/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-train-seed11-mlp",
+          "lens_record": "runs/lm-b-language-v3/train-seed11-mlp/projection.json",
+          "record": "runs/lm-b-language-v3/train-seed11-mlp/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-train-seed11-original",
+          "lens_record": "runs/lm-b-language-v3/train-seed11-original/projection.json",
+          "record": "runs/lm-b-language-v3/train-seed11-original/result.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-explore-v3.json",
+          "id": "tl-lm-b-language-v3-train-seed11-tide-dense",
+          "lens_record": "runs/lm-b-language-v3/train-seed11-tide-dense/projection.json",
+          "record": "runs/lm-b-language-v3/train-seed11-tide-dense/state.json",
+          "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+          "status": "running"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-B-LM",
-      "summary": "\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u914d\u7f6e\u5df2\u56fa\u5b9a\uff0c\u5f85\u63d0\u4ea4\u6838\u5bf9",
+      "summary": "\u8f83\u5c0f\u66dd\u5149\u8bed\u8a00\u6bd4\u8f83\u5df2\u5b9e\u9645\u542f\u52a8",
       "title": "B\uff1a\u8bed\u8a00\u80fd\u529b\u4e0e\u5c40\u90e8\u66ff\u6362",
       "track": "baseline",
       "view_group": "current",
@@ -3746,7 +3887,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u540c\u4e00\u6a21\u578b\uff1a\u8bed\u8a00next-token\u8d28\u91cf \u00d7 \u89c4\u6a21\u5316\u3001\u7a00\u758f\u5316\u3001\u5c40\u90e8\u5316",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-08T14:54:54.255327+00:00",
+  "updated_at": "2026-11-08T15:37:14.493383+00:00",
   "view_groups": [
     {
       "height": 1000,

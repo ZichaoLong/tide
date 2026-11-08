@@ -1,23 +1,40 @@
-# 当前无活动语言作业 — 两路在预算准入阶段结束
+# 当前活动：v3较小曝光语言比较
 
-2026-11-08核对：A于20:43、B于20:47北京时间结束，完整cgroup及后代已终止，当前无排队、训练或自动后继。两条chain均failed；正式语言训练和训练后test均未启动。这是预算/暴露编排的拒绝，不是语言质量负结果。来源与证据见[STATUS](STATUS.md)、[终态报告](studies/language-admission-outcome.md)。
+两路于北京时间2026-11-08 23:34后台提交，已由共享队列实际分配独立NPU并启动；当前进度以只读命令为准。研究表见[LM-ADJUST-002](studies/language-exploration-v3.md)，A三候选、B四候选，B8/L32/128更新、seed11；候选完成后立即独立test和推理。FC8/seed22不自动启动。
 
-只读查看：
+| 作业 | 固定源码与配置 | 资源和上限 |
+| --- | --- | --- |
+| `lm-a-language-v3` | `6cd4f856df02e9c90645198cf5998a27a877b4ec`；`.local/source-language-explore-v3`；`configs/studies/language/fc-explore-v3.json` | 1NPU/4线程/24GiB请求；分配后外层9,120秒（2h32min） |
+| `lm-b-language-v3` | 同上；B沿用v2的不可变L32前缀cache | 1NPU/4线程/24GiB请求；分配后外层9,017秒（约2h30min） |
+
+树SHA256 `2c44b51421077624867ee27fa6fa6c72d8c95e60a28736be2565083260da8e77`。两个实际cgroup均属于`background.slice`。各路线训练分项7,200秒、最终评价1,800秒，另受外层总时限约束；队列最多等1h并计入原共同墙钟。共同截止仍为北京时间11月9日07:28:46；累计8NPU小时包含旧失败，绝不重置。cgroup v1的CPU/RAM数值是请求；应用4线程、22GiB阶段进程组RSS守卫和时限另行执行。
 
 ```bash
-python scripts/job.py status artifacts/jobs/lm-a-language-v2
-python scripts/job.py status artifacts/jobs/lm-b-language-v2
-cat runs/lm-a-language-v2/stage.json
-cat runs/lm-b-language-v2/stage.json
-tail -n 40 runs/lm-a-language-v2-wrapper/workload.log
-tail -n 40 runs/lm-b-language-v2-wrapper/workload.log
+python scripts/job.py status artifacts/jobs/lm-a-language-v3
+python scripts/job.py status artifacts/jobs/lm-b-language-v3
+cat runs/lm-a-language-v3/stage.json
+cat runs/lm-b-language-v3/stage.json
+tail -n 40 runs/lm-a-language-v3-wrapper/workload.log
+tail -n 40 runs/lm-b-language-v3-wrapper/workload.log
+tail -n 5 runs/lm-a-language-v3/train-seed11-tide-dense/metrics.jsonl
 ```
 
-各阶段stdout在`runs/<job>/<stage>-wrapper/workload.log`，manifest/metrics/检查结果在`runs/<job>/<stage>/`。完整argv、固定输入身份、资源和设备映射仍见`artifacts/jobs/<job>/job.json`。源码7d1a95f、`.local/source-language-routes-v2`及其配置没有改动，运行记录只读保留。此前v1失败同样保留。
+阶段stdout在`runs/<job>/<stage>-wrapper/workload.log`，应用metrics/manifest/result/checkpoint在`runs/<job>/<stage>/`；文件未产生表示尚未到该阶段。作业完整argv、env、输入hash和资源在`artifacts/jobs/<job>/job.json`，精确提交命令与旧支出在私有`.local/language-v3-submission.json`。resolved配置位于各路线`resolved-seed11.json`，128步内每32步保存完整checkpoint，终点亦保存。查看不重启计算。
 
-没有正式训练checkpoint可恢复；三步恢复检查checkpoint不应冒充长期训练进度。后续新配置必须新job/output，保持共同截止和累计扣账。剩余约7.0134 NPU小时不是已提交的作业。查看结果无需重启计算。
+停止一条或两条作业（命令会停止整个服务并检查后代）：
 
-Lens项目`tide-learning-lab`，当前25个v2已生成投影核对通过；可查看机制/校准记录，尚无正式学习曲线。对应见[终态证据](evidence/language-admission-terminal.json)，私有入口见`.local/LENS.md`。
+```bash
+python scripts/job.py stop artifacts/jobs/lm-a-language-v3
+python scripts/job.py stop artifacts/jobs/lm-b-language-v3
+```
+
+不得编辑只读源码、安装环境、resolved配置、原data/cache或活动checkpoint。工作区文档可更新，因为worker从冻结快照执行。
+
+**恢复方法**：先核对终态/无后代、已有`checkpoint.json`的真实step和剩余原预算。使用新job/output/run ID，保持同一冻结源码、环境、数据、cache、resolved配置、B8/L32/128/seed11和原物理可见映射。把原`language_stage.py train`参数从manifest/job记录恢复，增加`--resume ABS_CHECKPOINT`并更换`--output NEW_OUTPUT --run-id NEW_ID`；不能把已完成128步后的训练称为恢复。该应用命令须放在新`background.slice`服务、同站点队列及bounded_workload内，禁止直接前台占卡。若严格恢复需要原物理卡，服务内队列helper用`--candidate-ids ORIGINAL_ID --npu-count 1`，仍执行双采样空闲检查和锁；不能强占卡或绕过identity拒绝。重新启动协调器会从头训练，因此不用它恢复单个checkpoint。已有恢复证据仅为同代码B2/L3三步，不认证128步独立不中断等价。
+
+Lens项目`tide-learning-lab`，组`TL-A-LM`/`TL-B-LM`；run前缀`tl-lm-a-language-v3-`/`tl-lm-b-language-v3-`。小记录`tl-lm-v3-recording`已verified/readback_matches。训练由独立JSONL记录器持续投影；`projection.json`记录实际destination名称/ID，终态读回另核对。查看入口和SSH方法在私有`.local/LENS.md`。主要曲线为train/loss、validation/nll、有效目标、alpha/教师阶段、Full/消息及资源。执行完成与语言/结构结论分列。
+
+v1/v2失败及全部原记录保留，旧终态见[接入报告](studies/language-admission-outcome.md)。后续检查新作业勿重跑旧submit命令。
 
 ---
 

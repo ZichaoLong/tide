@@ -188,7 +188,7 @@
     ],
     "strict_thresholds": "retain each original threshold and failure; no relaxation for quality margin"
   },
-  "current_status": "smaller-exposure continuation prepared; actual jobs and states in STATUS",
+  "current_status": "v3 two routes actually running; fixed source 6cd4f85; reviewed science remains pending",
   "data": {
     "a_tokenizer": "train-only BPE 4096, fitted and locked",
     "admission_length": 32,
@@ -214,7 +214,7 @@
     "copying execution core",
     "agent benchmark"
   ],
-  "execution_source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+  "execution_source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
   "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
   "inference": {
     "diagnostic_generated_tokens": 32,

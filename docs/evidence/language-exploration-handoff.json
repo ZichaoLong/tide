@@ -1,0 +1,305 @@
+{
+  "adjustment_id": "LM-ADJUST-002",
+  "config": "configs/studies/language/fc-explore-v3.json",
+  "config_sha256": "e69c216c7d05f2eca9f023b51e16b657b4ea378617055f591ae4d6c90df8879c",
+  "hardware_speedup_required": false,
+  "jobs": [
+    {
+      "axes": {
+        "discrete_semantics": "prior small checks reused; trained inference pending",
+        "execution": "running",
+        "learning": "unchecked",
+        "performance": "reused calibration; actual training timings pending",
+        "recovery": "prior B2/L3 three-update exact recovery reused; long trajectory unchecked",
+        "strict_numerical": "prior small checks reused; historical failures retained"
+      },
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v3.service",
+      "exact_valid_token_exposure": 32677,
+      "job_id": "lm-a-language-v3",
+      "live_processes": 8,
+      "logical_devices": [
+        "npu:0"
+      ],
+      "observed_steps": [
+        {
+          "action": "unigram",
+          "elapsed_seconds": 12.971999872475863,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "unigram",
+          "state": "completed"
+        },
+        {
+          "action": "train",
+          "elapsed_seconds": 9.000454884022474,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "train-seed11-transformer",
+          "state": "completed"
+        },
+        {
+          "action": "evaluate",
+          "elapsed_seconds": 8.971983309835196,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "evaluate-seed11-transformer",
+          "state": "completed"
+        },
+        {
+          "action": "inference",
+          "elapsed_seconds": 9.380022048950195,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "inference-seed11-transformer",
+          "state": "completed"
+        },
+        {
+          "action": "train",
+          "name": "train-seed11-tide-dense",
+          "state": "running"
+        }
+      ],
+      "outer_compute_cap_seconds": 9120,
+      "physical_ids": [
+        3
+      ],
+      "queue_state": "running",
+      "resolved_config": "runs/lm-a-language-v3/resolved-seed11.json",
+      "stage_state": "running",
+      "state": "running",
+      "unit": "tide-lab-lm-a-language-v3.service",
+      "unit_state": "active"
+    },
+    {
+      "axes": {
+        "discrete_semantics": "prior small checks reused; trained inference pending",
+        "execution": "running",
+        "learning": "unchecked",
+        "performance": "reused calibration; actual training timings pending",
+        "recovery": "prior B2/L3 three-update exact recovery reused; long trajectory unchecked",
+        "strict_numerical": "prior small checks reused; historical failures retained"
+      },
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-language-v3.service",
+      "exact_valid_token_exposure": 32503,
+      "job_id": "lm-b-language-v3",
+      "live_processes": 8,
+      "logical_devices": [
+        "npu:0"
+      ],
+      "observed_steps": [
+        {
+          "action": "evaluate",
+          "elapsed_seconds": 18.039625581353903,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "evaluate-frozen-baseline",
+          "state": "completed"
+        },
+        {
+          "action": "inference",
+          "elapsed_seconds": 14.513724151998758,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "inference-frozen-baseline",
+          "state": "completed"
+        },
+        {
+          "action": "train",
+          "elapsed_seconds": 16.3229547329247,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "train-seed11-original",
+          "state": "completed"
+        },
+        {
+          "action": "evaluate",
+          "elapsed_seconds": 12.354535333812237,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "evaluate-seed11-original",
+          "state": "completed"
+        },
+        {
+          "action": "inference",
+          "elapsed_seconds": 14.223196186125278,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "inference-seed11-original",
+          "state": "completed"
+        },
+        {
+          "action": "train",
+          "elapsed_seconds": 14.101852253079414,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "train-seed11-mlp",
+          "state": "completed"
+        },
+        {
+          "action": "evaluate",
+          "elapsed_seconds": 12.322520699352026,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "evaluate-seed11-mlp",
+          "state": "completed"
+        },
+        {
+          "action": "inference",
+          "elapsed_seconds": 13.134224362671375,
+          "lens_readback_matches": true,
+          "lens_status": "verified",
+          "name": "inference-seed11-mlp",
+          "state": "completed"
+        },
+        {
+          "action": "train",
+          "name": "train-seed11-tide-dense",
+          "state": "running"
+        }
+      ],
+      "outer_compute_cap_seconds": 9017,
+      "physical_ids": [
+        5
+      ],
+      "queue_state": "running",
+      "resolved_config": "runs/lm-b-language-v3/resolved-seed11.json",
+      "stage_state": "running",
+      "state": "running",
+      "unit": "tide-lab-lm-b-language-v3.service",
+      "unit_state": "active"
+    }
+  ],
+  "lens": [
+    {
+      "destination_name": "tl-lm-a-language-v3-evaluate-seed11-transformer-projection-a8f10c27bf98",
+      "destination_run_id": "8c6618f3494344f280d439526925bbad",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v3/evaluate-seed11-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v3-evaluate-seed11-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v3-inference-seed11-transformer-projection-fc01361c4ca6",
+      "destination_run_id": "fe15ef49133a402aa12ed893d8324ff1",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v3/inference-seed11-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v3-inference-seed11-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v3-train-seed11-tide-dense-projection-fbe1ff68e7f8",
+      "destination_run_id": "30bada4a53934c519f9824a59590d149",
+      "readback_matches": null,
+      "record": "runs/lm-a-language-v3/train-seed11-tide-dense/projection.json",
+      "run_id": "tl-lm-a-language-v3-train-seed11-tide-dense",
+      "status": "recording"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v3-train-seed11-transformer-projection-dcf837489491",
+      "destination_run_id": "35931d359d9b428889cc9329fe6b92b9",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v3/train-seed11-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v3-train-seed11-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v3-unigram-projection-e94f68fbccc7",
+      "destination_run_id": "4f153f2235084a3cbc80023d1f9bf4e4",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v3/unigram/projection.json",
+      "run_id": "tl-lm-a-language-v3-unigram",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-evaluate-frozen-baseline-projection-42f8dcc71c8e",
+      "destination_run_id": "fe9d7a5e07cd499fb91b2ed4605c5f60",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/evaluate-frozen-baseline/projection.json",
+      "run_id": "tl-lm-b-language-v3-evaluate-frozen-baseline",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-evaluate-seed11-mlp-projection-f92604a02922",
+      "destination_run_id": "68e4aeff9c8d42a48ab8f06a362b950a",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/evaluate-seed11-mlp/projection.json",
+      "run_id": "tl-lm-b-language-v3-evaluate-seed11-mlp",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-evaluate-seed11-original-projection-18a44e1c12c3",
+      "destination_run_id": "64c0a309c8ec4801830c1be931f033e8",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/evaluate-seed11-original/projection.json",
+      "run_id": "tl-lm-b-language-v3-evaluate-seed11-original",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-inference-frozen-baseline-projection-c3d3f8929666",
+      "destination_run_id": "15bf13af7b084933b638779b9b4ab1f9",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/inference-frozen-baseline/projection.json",
+      "run_id": "tl-lm-b-language-v3-inference-frozen-baseline",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-inference-seed11-mlp-projection-b6fb8b3d5553",
+      "destination_run_id": "7a356cb9489b465a8a8f907873acf963",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/inference-seed11-mlp/projection.json",
+      "run_id": "tl-lm-b-language-v3-inference-seed11-mlp",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-inference-seed11-original-projection-5eac434b926f",
+      "destination_run_id": "af27865c8b7a40b8834ba835482b5474",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/inference-seed11-original/projection.json",
+      "run_id": "tl-lm-b-language-v3-inference-seed11-original",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-train-seed11-mlp-projection-074353242d0c",
+      "destination_run_id": "52969917c42f44cb863d2180fd317ca5",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/train-seed11-mlp/projection.json",
+      "run_id": "tl-lm-b-language-v3-train-seed11-mlp",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-train-seed11-original-projection-6508998cf268",
+      "destination_run_id": "65763faf0fc94182b90ee36993dffc87",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v3/train-seed11-original/projection.json",
+      "run_id": "tl-lm-b-language-v3-train-seed11-original",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v3-train-seed11-tide-dense-projection-3e8bda56a3c0",
+      "destination_run_id": "4b000db577c148448e474afd123c58ab",
+      "readback_matches": null,
+      "record": "runs/lm-b-language-v3/train-seed11-tide-dense/projection.json",
+      "run_id": "tl-lm-b-language-v3-train-seed11-tide-dense",
+      "status": "recording"
+    }
+  ],
+  "observed_at": "2026-11-08T15:37:14.493383+00:00",
+  "original_deadline_epoch": 1794180526.0,
+  "prior_conservative_npu_seconds": 3551.6405388191342,
+  "recorder_admission": {
+    "installed_files_verified": 248,
+    "lens_status": "verified",
+    "readback_matches": true,
+    "run_id": "tl-lm-v3-recording",
+    "same_destination": true,
+    "state": "completed",
+    "writer": "installed separate JSONL recorder; training venv has no Trackio SDK"
+  },
+  "reuse_scope": "23 unchanged execution/dependency files; 248 installed foundation files verified; seven B2/L3 three-step fresh-process recoveries reused",
+  "schema": "tide-language-exploration-handoff-v1",
+  "science_review": "pending; no quality/structure support inferred from execution",
+  "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+  "source_tree_sha256": "2c44b51421077624867ee27fa6fa6c72d8c95e60a28736be2565083260da8e77",
+  "source_verified": true,
+  "total_npu_seconds": 28800
+}
