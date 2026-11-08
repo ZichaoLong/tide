@@ -2,7 +2,11 @@
 
 主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[当前FC配置](../configs/studies/language/fc-pilot-v2.json)，作业状态见STATUS。
 
-## 下一执行包的顺序
+## 后续优先调整
+
+最新澄清：语言质量与实际稀疏计算优先；同比例硬件吞吐是后续实现优化，不是研究准入条件。两路v2已在训练前终止（见STATUS），没有新的语言质量结论。应复用现有校准，调整过严的固定曝光/整组分项门槛，先做有对照的有界学习探索；当前没有新提交。原规则与失败不改写。
+
+## 研究依赖顺序
 
 1. **TL-LM0：锁语言任务。** 审计并冻结小型自然文本来源、文档split、目标mask和评价子集；A训练集BPE，B固定原词表。用同词表对照定义NLL差异，跨路线不直接比较PPL。
 2. **TL-LM-EXEC：全位置接入与成本。** 实验侧组合公共输出、head和loss；A/B各自验证因果性、梯度、optimizer、状态与恢复，再校准有效batch/并行度。严格数值与学习分轴；不将A限于CPU FP64。

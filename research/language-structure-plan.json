@@ -188,6 +188,7 @@
     ],
     "strict_thresholds": "retain each original threshold and failure; no relaxation for quality margin"
   },
+  "current_status": "v2 chains terminal before formal training; no newly submitted work",
   "data": {
     "a_tokenizer": "train-only BPE 4096, fitted and locked",
     "admission_length": 32,
@@ -255,13 +256,14 @@
     "ram_gib_per_worker": 24,
     "reuse_previous_batch_budget": false,
     "scheduling": "independent admitted workers; shared queue and background.slice; no unqualified DDP",
-    "status": "authorized; initial failures debited; two v2 route services running",
+    "status": "v2 terminal; conservative used 3551.641s of 28800s; common absolute deadline unchanged",
     "threads_per_worker": 4,
     "wall_seconds_shared": 43200
   },
   "quality": {
     "cross_route_ppl_comparison": false,
     "formal_rule": "one-sided 95% paired document-bootstrap upper bound <= margin; report training seed variability separately",
+    "hardware_speedup_required": false,
     "insufficient_reference_training": "pilot only; cannot establish useful language parity",
     "maximum_nll_increase": 0.05,
     "metric": "token-weighted NLL nat/valid token",
@@ -307,7 +309,8 @@
       "decode"
     ],
     "scaling_confound": "FC depth changes capacity, region count, internal edges and path length together; first point has zero internal edges, so message-reduction ratio is not applicable there",
-    "screening_minimum_full_and_message_reduction": 0.2
+    "screening_minimum_full_and_message_reduction": 0.2,
+    "throughput_role": "budget accounting and later engineering optimization; no proportional speedup prerequisite"
   },
   "studies": [
     {
@@ -324,7 +327,7 @@
       "id": "TL-LM-EXEC",
       "npu_minutes_cap": 60,
       "role": "sequence admission and throughput; each route independent",
-      "status": "running"
+      "status": "failed"
     },
     {
       "dependencies": [
@@ -334,7 +337,7 @@
       "id": "TL-A-LM",
       "npu_minutes_cap": 120,
       "role": "three-candidate language pilot",
-      "status": "running"
+      "status": "unchecked"
     },
     {
       "dependencies": [
@@ -344,7 +347,7 @@
       "id": "TL-B-LM",
       "npu_minutes_cap": 120,
       "role": "single-submodule preservation/replacement and controls",
-      "status": "running"
+      "status": "unchecked"
     },
     {
       "dependencies": [
@@ -353,7 +356,7 @@
       "id": "TL-LM-SCALE",
       "npu_minutes_cap": 120,
       "role": "conditional matched FC4 -> FC8 pair; can use unspent A primary training allocation",
-      "status": "planned"
+      "status": "unchecked"
     },
     {
       "dependencies": [
@@ -362,7 +365,7 @@
       "id": "TL-JOINT",
       "npu_minutes_cap": 60,
       "role": "held-out review and one conditional seed22 pair",
-      "status": "planned"
+      "status": "unchecked"
     }
   ],
   "study_table": "docs/studies/language-structure.md",
@@ -381,9 +384,10 @@
     "minimum_pilot_valid_tokens": 65536,
     "minimums_certify_convergence": false,
     "optimizer": "AdamW eps1e-6, weight_decay .01, clip1; warmup/cosine in fixed runtime plan",
+    "prior_minimum_scope": "original recipe guard, not mathematical/architectural necessity; future lower-exposure exploration needs its own frozen identity and preserves original rejection",
     "status": "must_freeze_after_calibration_before_training",
     "stop_if_unaffordable": "report execution bottleneck; do not relabel a few-step run as language comparison",
     "token_budget": null
   },
-  "updated_at": "2026-11-08T12:28:42.193332+00:00"
+  "updated_at": "2026-11-08T14:54:54.255327+00:00"
 }

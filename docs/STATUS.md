@@ -1,20 +1,20 @@
-# 当前交接 — 联合语言研究后台运行（2026-11-08）
+# 当前交接 — 语言两路在预算准入阶段结束，未进入正式训练（2026-11-08）
 
-已执行用户授权：自然文本next-token质量与规模、稀疏、局部结构共同推进。当前[研究表](studies/language-structure.md)和[FC先导配置](../configs/studies/language/fc-pilot-v2.json)记录有界调整 `LM-ADJUST-001`；原HB16配置和失败保持。
+最新状态核对：`lm-a-language-v2`于北京时间20:43、`lm-b-language-v2`于20:47自然终止，chain均failed，错误为`no calibrated common case fits minimum updates/tokens`。所有相关cgroup及已知后代均已确认终止；当前无本批训练或排队。原[运行时交接](evidence/language-running-handoff.json)是当时快照，已由[本次终态证据](evidence/language-admission-terminal.json)接替。
 
-A/B服务 `lm-a-language-v2`、`lm-b-language-v2` 已核对在 `background.slice`，通过共享队列分别取得物理NPU1、3（进程内均为npu:0）。A三候选、B四候选均通过小型机制与B2/L3三步新进程精确恢复，当前校准中；正式训练仍取决于完整成本/暴露预算。严格数值按各检查的原阈值单列。运行观测、实际阶段及Lens对应见[交接证据](evidence/language-running-handoff.json)；实时状态以运行目录和job工具为准。
+**正式语言训练0次，训练后独立test 0次，FC8规模点未启动。** A三/B四候选的小型机制检查和B2/L3三步新进程精确恢复通过；B8/B32、L32的校准已有记录。三步校准不算完成语言先导，不能据此判断效果或宣称联合目标成立。详见[接入终态报告](studies/language-admission-outcome.md)。
 
-固定模型/协调器源码 **7d1a95f16a3a390e7bbf60d18f25d2928ca849f0**，只读快照`.local/source-language-routes-v2`，树hash `4917f4f31f0360fc3c775fab47d6a39e394cbc2553e8744af76280da2ab610f4`。数学0770593、基座85d161d和248文件安装锁未变。活动作业不读取后续工作区修改。
+停止来自实验编排门槛：B8/L32的128更新至多32768目标，低于我预设65536；B32/L32虽够目标数，整组保守预测超过7200秒训练分项。L128或更大batch有超时保留。代码没有要求“稀疏快于稠密”，但这些固定门槛实际阻碍了学习验证，应在后续配置中重排，不能将它们当作架构判据。
 
-共同截止仍为 **2026-11-08 23:28:46 UTC / 11月9日07:28:46北京时间**。总额8NPU小时、2CPU-only worker小时，最多同时2卡/8计算线程/48GiB；新增磁盘≤8GiB，配额留≥80GiB。初始A/B失败按service墙钟保守扣521/198秒，后续计算cap为17449/10572秒，不重置总额；各阶段类别也扣旧耗时。账号最近约166GiB/800GiB。服务CPU/内存属性为请求，本机控制器限制沿用已知范围；应用4线程与22GiB阶段RSS守卫实际启用。
+按最新用户澄清，**实际计算稀疏且语言质量可以是主要证据；硬件是否兑现同比例吞吐是后续优化问题**。吞吐仅用于资源规划和工程记录，不是联合质量/结构验收的必要条件。A FC4/B8校准Full事件从1024降到594/600，平均减少41.70%，步时反而15.95→20.65秒；这是有范围的稀疏观察，不是总算术量减少42%或训练后质量结论。Upd/Read未减，FC4无内部消息。
 
-数据作业与三次CPU准入均终止，失败没有覆盖。固定WikiText revision、文档与词表身份见[数据记录](evidence/language-data-ready.json)；624/60/62 train/validation/test原始文章，本包固定8个validation、16个test文章，各前两个128-token块。A/B验证2048、test4096有效token；L32时保留全部目标重分块。预训练污染和近重复仍未知，跨tokenizer不横比PPL。
+总8NPU小时按四个service墙钟保守扣3551.641秒（0.9866h），尚余7.0134h；共同截止仍为2026-11-08 23:28:46 UTC / 北京时间11月9日07:28:46，不重置预算。CPU-only worker总额2h、最多2NPU/8计算线程/48GiB、新增磁盘8GiB和配额余量要求不变。
 
-[CPU准入](evidence/language-cpu-admission.json)保留FP32严格超差；稀疏因果逐位扰动最大5.96e-7，独立参考、未来VJP零与早期支持机制通过。不能称严格数值等价。初始HB16 NPU链因校准时限/协调器重复字段结束，B还发现错误解冻固定传输参数；[初始尝试](evidence/language-initial-attempts.json)记录全部失败和恢复范围。两项代码缺陷在新源码修复，原作业自然终止、无存活后代。
+固定源码`7d1a95f16a3a390e7bbf60d18f25d2928ca849f0`、只读快照`.local/source-language-routes-v2`与[FC配置](../configs/studies/language/fc-pilot-v2.json)保持原样。数学0770593、foundation85d161d、数据/依赖锁未改；旧HB失败、接入缺陷和校准时限均保留。当前研究表和设计文件只修正解释与后续方向，不重写既有运行输入。
 
-当前FC4候选为1区域/0内部边，A配对小Transformer、B配对原MLP继续训练和简单MLP替换。固定128更新，先据实测选择B8/32/128及L128或已声明L32回退，实际暴露须65536–1m；resolved JSON在训练前只读冻结。A有学习信号且完整预算允许时才推进FC8双区域配对，未运行不能称规模化成立。质量ΔNLL≤0.05、原严格数值阈值不变，四个新科学结果位均awaiting。
+两路v2共25个已生成Lens投影均verified/readback_matches；时限失败阶段没有终态投影时仍保留项目原始metrics/log，不能算投影通过。无正式学习曲线。入口在`.local/LENS.md`，状态/日志方法见[RUNNING](RUNNING.md)。四个新科学结果仍awaiting。
 
-Lens项目`tide-learning-lab`已核对数据小记录与实际准入记录；仍用外部JSONL recorder，未部署或改服务。查看入口/SSH在本机`.local/LENS.md`，新run以`tl-lm-a-language-v2-`、`tl-lm-b-language-v2-`开头。来源、状态、日志、停止和新输出恢复方法见[RUNNING](RUNNING.md)。
+后续优先完成有对照的语言学习探索，复用已校准B8/L32；若采用更小曝光，应单独命名、冻结配置，保留旧门槛未满足事实及原质量/数值判据，先取得质量与实际活动证据。本次状态核对没有提交或恢复新作业。
 
 ## 第四批固定终态交接（历史结果保持）
 
