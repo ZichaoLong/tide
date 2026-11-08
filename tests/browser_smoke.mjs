@@ -45,6 +45,17 @@ async function run(){
   const graph=JSON.parse(await readFile(path.join(root,'research/map.json'),'utf8'));
   assert.equal(await evaluate('document.querySelectorAll(".node").length'),graph.nodes.length);
   assert.equal(await evaluate('document.querySelectorAll(".edge").length'),graph.edges.length);
+  async function range(value){
+    await evaluate(`document.getElementById("range").value=${JSON.stringify(value)};document.getElementById("range").dispatchEvent(new Event("change",{bubbles:true}));`);
+  }
+  assert.equal(await evaluate('document.getElementById("range").value'),'current');
+  assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),graph.nodes.filter(n=>n.view_group==='current').length);
+  assert.equal(await evaluate('document.querySelectorAll(".node.result.scoped:not(.hidden)").length'),graph.nodes.filter(n=>n.view_group==='current'&&n.kind==='result'&&n.status==='scoped').length);
+  await range('history');
+  assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),graph.nodes.filter(n=>n.view_group==='history').length);
+  assert.equal(await evaluate('document.getElementById("map").viewBox.baseVal.y'),graph.view_groups.find(g=>g.id==='history').y);
+  assert.equal(await evaluate('document.querySelectorAll(".node.result.scoped:not(.hidden)").length'),graph.nodes.filter(n=>n.view_group==='history'&&n.kind==='result'&&n.status==='scoped').length);
+  await range('all');
   assert.match(await evaluate('document.getElementById("count").textContent'),new RegExp(`已录入研究结果 ${graph.nodes.filter(n=>n.kind==='result'&&n.status==='scoped').length} 项`));
   await evaluate('document.getElementById("kind").value="result";document.getElementById("kind").dispatchEvent(new Event("change",{bubbles:true}));');
   assert.equal(await evaluate('document.querySelectorAll(".node:not(.hidden)").length'),graph.nodes.filter(n=>n.kind==='result').length);
@@ -61,7 +72,7 @@ async function run(){
   await evaluate('document.getElementById("search").value="HB";document.getElementById("search").dispatchEvent(new Event("input",{bubbles:true}));');
   const visible=await evaluate('document.querySelectorAll(".node:not(.hidden)").length');
   assert.ok(visible>0&&visible<graph.nodes.length);
-  await evaluate('document.getElementById("reset").click();document.querySelector(".edge").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
+  await evaluate('document.getElementById("reset").click();document.querySelector(".edge:not(.hidden)").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
   assert.match(await evaluate('document.getElementById("detail-body").textContent'),/含义与边界/);
   await evaluate('document.getElementById("reset").click();');
   const before=await evaluate('document.getElementById("map").style.width');
@@ -70,14 +81,15 @@ async function run(){
   assert.ok(parseFloat(after)>parseFloat(before));
   await evaluate('document.getElementById("fit").click();');
   assert.deepEqual(errors,[],'Browser console errors');
-  await evaluate('document.querySelector(".node.result.scoped").dispatchEvent(new MouseEvent("click",{bubbles:true}));');
+  await evaluate('document.querySelector(".node[aria-label^=\\"B：语言能力与局部替换\\"]").dispatchEvent(new MouseEvent("click",{bubbles:true}));Array.from(document.querySelectorAll(".neighbor-link")).find(b=>b.textContent.includes("非零接入与能力保持结果")).click();');
+  assert.equal(await evaluate('document.getElementById("range").value'),'history');
   assert.match(await evaluate('document.getElementById("detail-body").textContent'),/尚未区分的解释/);
   assert.equal(await evaluate('Array.from(document.querySelectorAll(".node .summary")).every(e=>e.getComputedTextLength()<=222)'),true);
   await evaluate('document.getElementById("reset").click();');
   const screenshot=await send('browsingContext.captureScreenshot',{context,origin:'document',format:{type:'image/png'}});
   await mkdir(path.join(root,'artifacts'),{recursive:true});
   await writeFile(path.join(root,'artifacts/research-map.png'),Buffer.from(screenshot.data,'base64'));
-  console.log('Firefox: render, result filter, pending-result disclosure, search, node/edge details, Escape and zoom passed.');
+  console.log('Firefox: current/history/all views, cross-view evidence navigation, result filter, pending-result disclosure, search, details, Escape and zoom passed.');
   await send('session.end');
 }
 try{

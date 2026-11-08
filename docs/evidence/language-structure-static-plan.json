@@ -1,0 +1,309 @@
+{
+  "cache_discovery": {
+    "existing_qwen": "reuse fixed already-cached checkpoint; no new weights requested",
+    "fineweb_edu": "only dataset card at87f09149ef4734204d70ed1d046ddc9ca3f2b8f9; no data shards observed",
+    "wikitext": "not selected/locked/downloaded yet"
+  },
+  "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "method": "installed public tidegraph.planning.recipes.prepare; no materialize, device allocation, numeric execution, optimizer, or model/data download",
+  "observed_at": "2026-11-08T11:03:42.334485+00:00",
+  "rows": [
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 669236,
+      "b_with_bias_free_896_to32_and_back_trainable": 591412,
+      "depth": 1,
+      "edges": 32,
+      "graph_parameter_inventory": {
+        "frozen": 72,
+        "role_elements": 624860,
+        "trainable": 534068,
+        "unique": 534140
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "b9c2044d19e08980fbc993f65741e91fdd368bd17265139c7463179bdce271cf",
+      "nodes": 16,
+      "output_ports": 4,
+      "plan_sha256": "e24b258469efd3af7dc6d46b92c5ca95806aeea56d6736315f175697f615c0f0",
+      "recipe": {
+        "branches": 2,
+        "depth": 1,
+        "ent_alpha": 1.0,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "ent",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 4,
+      "send": "dense",
+      "stride": 5
+    },
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 669236,
+      "b_with_bias_free_896_to32_and_back_trainable": 591412,
+      "depth": 1,
+      "edges": 32,
+      "graph_parameter_inventory": {
+        "frozen": 72,
+        "role_elements": 624860,
+        "trainable": 534068,
+        "unique": 534140
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "b0db47b78560e5c88462409008c2ed2b0d467f6d2ef49255ff4e79cb8f62b36d",
+      "nodes": 16,
+      "output_ports": 4,
+      "plan_sha256": "9e0984ee8002cf331cb5e785ab7ecf694779c2fefb24d25f0b6dcf826e5626c3",
+      "recipe": {
+        "branches": 2,
+        "depth": 1,
+        "ent_alpha": null,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 4,
+      "send": "sparse",
+      "stride": 5
+    },
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 1470546,
+      "b_with_bias_free_896_to32_and_back_trainable": 1392722,
+      "depth": 2,
+      "edges": 96,
+      "graph_parameter_inventory": {
+        "frozen": 200,
+        "role_elements": 1582970,
+        "trainable": 1335378,
+        "unique": 1335578
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "3e6127dd0835d45fcf116f3d9539c31cd0151b351bd4bee40363a6c35b2ec0e0",
+      "nodes": 40,
+      "output_ports": 4,
+      "plan_sha256": "b39ef50f0e84e868439006c284cab7fe29384f6ce0c421badc01cdc70955c458",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "ent_alpha": 1.0,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "ent",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 10,
+      "send": "dense",
+      "stride": 7
+    },
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 1470546,
+      "b_with_bias_free_896_to32_and_back_trainable": 1392722,
+      "depth": 2,
+      "edges": 96,
+      "graph_parameter_inventory": {
+        "frozen": 200,
+        "role_elements": 1582970,
+        "trainable": 1335378,
+        "unique": 1335578
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "936996c98f1a9f2b6bec67499a0ddbbe6a0f41baeebce2973d691ab77ddf6809",
+      "nodes": 40,
+      "output_ports": 4,
+      "plan_sha256": "e12345a9521c749c4831f18c6bf18ed2cfb3b13b184751ae55d0ed0cea7ff288",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "ent_alpha": null,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 10,
+      "send": "sparse",
+      "stride": 7
+    },
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 3073166,
+      "b_with_bias_free_896_to32_and_back_trainable": 2995342,
+      "depth": 3,
+      "edges": 224,
+      "graph_parameter_inventory": {
+        "frozen": 456,
+        "role_elements": 3499190,
+        "trainable": 2937998,
+        "unique": 2938454
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "6ae68639c391808b6d1b48af5db24a3539a61e63846caaaba799969ba131b746",
+      "nodes": 88,
+      "output_ports": 4,
+      "plan_sha256": "0a5cb70f9769bf07a7c06fe64312298627dcd8bd9e16f1d19a6616bb05093986",
+      "recipe": {
+        "branches": 2,
+        "depth": 3,
+        "ent_alpha": 1.0,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "ent",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 22,
+      "send": "dense",
+      "stride": 9
+    },
+    {
+      "a_with_tied_4096_embedding_and_head_bias_trainable": 3073166,
+      "b_with_bias_free_896_to32_and_back_trainable": 2995342,
+      "depth": 3,
+      "edges": 224,
+      "graph_parameter_inventory": {
+        "frozen": 456,
+        "role_elements": 3499190,
+        "trainable": 2937998,
+        "unique": 2938454
+      },
+      "input_ports": 4,
+      "max_indegree": 4,
+      "max_outdegree": 4,
+      "max_region_nodes": 4,
+      "model_id": "431fcf8e3353b5db317f2ca9cdee8247efbd7b556287aa49931d10a360a106c0",
+      "nodes": 88,
+      "output_ports": 4,
+      "plan_sha256": "a4289d2abf93aaf78a5c2098fff22e3cbfcf36b6cac6dc8d0c40fa527de80227",
+      "recipe": {
+        "branches": 2,
+        "depth": 3,
+        "ent_alpha": null,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 22,
+      "send": "sparse",
+      "stride": 9
+    }
+  ],
+  "runtime_evidence_limits": [
+    "old HB16 width16 CPU seven-position400-step training takes5108\u20135652s; not a width32 language throughput prediction",
+    "B4 width16 single-position B128 calibration about12.82s per TIDE step; not an all-position language benchmark",
+    "old strict finite failures retain original thresholds; independent small mechanisms do not certify new sequence path"
+  ],
+  "schema": "tide-language-structure-static-plan-audit-v1",
+  "scope": "static identities, unique parameters and graph locality only; not learning, performance, all-token readout or recovery qualification",
+  "source_commit": "c0464fa5662b52cfa2a06c9c9a79336ab373b26c"
+}

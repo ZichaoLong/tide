@@ -44,6 +44,17 @@ class ResearchEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'unknown endpoint'):
             validate(self.data)
 
+    def test_history_evidence_cannot_disappear_outside_its_view(self):
+        node = next(n for n in self.data['nodes'] if n['id'] == 'R17')
+        node['view_group'] = 'current'
+        with self.assertRaisesRegex(ValueError, 'outside group bounds'):
+            validate(self.data)
+
+    def test_unknown_view_group_fails(self):
+        self.data['view_groups'][0]['id'] = 'missing'
+        with self.assertRaisesRegex(ValueError, 'unknown or duplicate group'):
+            validate(self.data)
+
     def test_prerequisite_cycles_fail(self):
         edge = copy.deepcopy(self.data['edges'][0])
         edge.update(id='cycle', source='E0', target='B0')

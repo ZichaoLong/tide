@@ -4,11 +4,11 @@
 实验对照、证据和资源决策。公共实现由固定版本的`graph-execution-foundation`提供。
 本分支使用独立文件树；不复制基座核心，也不把基座旧性能结果当作新模型效果。
 
-当前阶段：已授权的首批有界CPU/NPU研究。固定安装、任务接入与先导按[研究表](docs/studies/first-batch.md)实施；实际状态见STATUS。
+当前重点：同一模型的语言next-token质量与规模化、稀疏化、局部化。四批历史实验已终态；新的[有界研究表](docs/studies/language-structure.md)和[计划JSON](research/language-structure-plan.json)处于设计状态，尚未提交新训练；实际交接见STATUS。
 
-- [打开研究图](web/index.html)：离线HTML，节点/关系点击查看、搜索、分类、邻接聚焦和缩放。
+- [打开研究图](web/index.html)：离线HTML，默认当前联合主线，可切换历史证据；支持详情、搜索、分类、邻接聚焦和缩放。
 - [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
-- [研究设计对齐稿](docs/research-design.md)
+- [当前研究设计](docs/research-design.md)
 - [当前交接](docs/STATUS.md) / [后台操作与恢复](docs/RUNNING.md) / [待办](docs/ROADMAP.md)
 - [基座来源](dependencies/foundation-source.json) / [实际安装锁](dependencies/foundation.lock.json) / [环境身份](dependencies/environment.lock.json)
 
@@ -24,7 +24,7 @@ python -m unittest discover -s tests -p test_research_map.py -v
 图的数据是`research/map.json`。实验/结果节点的状态由记录显式给出；
 “待运行”“待填结果”不会被呈现为通过。已有基座证据、独立接入检查和经审阅的先导结果分别限定范围；严格失败和未覆盖项一同保留。
 
-用户已授权首批实施、私有环境和普通推送；下一批由用户验收后决定。
+用户已授权分阶段实验、私有环境和普通推送；最新指令重排研究重点。本轮交付设计与静态审计，历史作业输入不变。
 
 可选的真实浏览器检查需要本机已有Firefox与支持实验WebSocket的Node20+，不会下载依赖：
 

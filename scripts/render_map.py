@@ -40,12 +40,27 @@ def public_source(value, location):
 def validate(data):
     if data.get('schema') != 'tide-research-map-prototype-v1':
         raise ValueError('schema: unsupported research map')
+    groups = {}
+    for group in data.get('view_groups', []):
+        key = group.get('id')
+        if key not in {'current', 'history'} or key in groups:
+            raise ValueError('view_groups: unknown or duplicate group')
+        if (type(group.get('y')) is not int or type(group.get('height')) is not int
+                or group['y'] < 0 or group['height'] <= 0
+                or group['y'] + group['height'] > data['height']):
+            raise ValueError('view_groups: outside canvas')
+        groups[key] = group
+    if set(groups) != {'current', 'history'}:
+        raise ValueError('view_groups: current and history required')
     nodes, studies, runs = {}, set(), {}
     for node in data['nodes']:
         key = node['id']
         if not key or key in nodes:
             raise ValueError(f'nodes.{key}: duplicate/empty id')
         nodes[key] = node
+        group = groups.get(node.get('view_group'))
+        if group is None or not group['y'] <= node['y'] <= group['y'] + group['height'] - 118:
+            raise ValueError(f'nodes.{key}.view_group: unknown group or outside group bounds')
         if node['kind'] not in KINDS or node['status'] not in STATUSES:
             raise ValueError(f'nodes.{key}: unknown kind/status')
         for field in ('title', 'summary', 'question', 'decision', 'budget'):

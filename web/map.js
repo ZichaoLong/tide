@@ -7,8 +7,8 @@ const statuses = {target:'研究目标',unselected:'待选定',documented:'已�
 const lifecycle = ['planned','queued','running','completed','failed','unchecked'];
 const edgeNames = {decomposes:'分解',precondition:'前提',variant:'改造',produces:'产出',comparison:'对照',transfer:'迁移待验',informs:'参考',evaluates:'检验目标',supports:'支持',challenges:'反证'};
 const nodes = new Map(data.nodes.map(n => [n.id,n]));
-const nodeElements = new Map(), edgeElements = new Map();
-let selected = null, scale = 1;
+const nodeElements = new Map(), edgeElements = new Map(), groupElements = new Map();
+let selected = null, scale = 1, viewportHeight = data.height;
 function element(tag, attrs = {}, text = null) {
   const el = document.createElementNS(NS,tag);
   for (const [key,value] of Object.entries(attrs)) el.setAttribute(key,value);
@@ -30,9 +30,14 @@ $('notice').textContent = data.notice;
 document.querySelector('.lead').textContent = data.subtitle;
 const defs=element('defs'),marker=element('marker',{id:'arrow',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto'});
 marker.append(element('path',{d:'M 0 1 L 7 4 L 0 7',fill:'none',stroke:'#82959e'}));defs.append(marker);svg.append(defs);
-for (const col of data.columns) {
-  svg.append(element('text',{x:col.x+8,y:55,class:'column'},col.title));
-  svg.append(element('line',{x1:col.x-12,x2:col.x-12,y1:80,y2:data.height-25,class:'column-line'}));
+for (const group of data.view_groups) {
+  const g=element('g',{class:'view-group'});
+  g.append(element('text',{x:30,y:group.y+28,class:'group-title'},group.label));
+  for (const col of data.columns) {
+    g.append(element('text',{x:col.x+8,y:group.y+55,class:'column'},col.title));
+    g.append(element('line',{x1:col.x-12,x2:col.x-12,y1:group.y+80,y2:group.y+group.height-25,class:'column-line'}));
+  }
+  svg.append(g);groupElements.set(group.id,g);
 }
 function geometry(edge) {
   const a=nodes.get(edge.source),b=nodes.get(edge.target);
@@ -79,6 +84,9 @@ function section(parent, title, value) {
   parent.append(html('h3',title),html('p',value));
 }
 function showNode(node) {
+  if($('range').value!=='all'&&$('range').value!==node.view_group){
+    $('range').value=node.view_group;setRange();
+  }
   selected=node.id;
   const body=$('detail-body');body.replaceChildren();
   body.append(html('div',`${node.study_id||node.id} · ${kinds[node.kind]} · ${statuses[node.status]}`,'meta'));
@@ -133,8 +141,10 @@ function showEdge(edge) {
   $('details').hidden=false;
 }
 function update(){
-  const query=$('search').value.trim().toLowerCase(),kind=$('kind').value,view=$('view').value,track=$('track').value,status=$('status').value;
-  const visible=new Set(data.nodes.filter(n=>(kind==='all'||n.kind===kind)&&(track==='all'||n.track===track)&&(status==='all'||n.status===status||n.runs?.some(r=>r.status===status))&&JSON.stringify(n).toLowerCase().includes(query)).map(n=>n.id));
+  const query=$('search').value.trim().toLowerCase(),kind=$('kind').value,view=$('view').value,track=$('track').value,status=$('status').value,range=$('range').value;
+  const inRange=data.nodes.filter(n=>range==='all'||n.view_group===range);
+  const visible=new Set(inRange.filter(n=>(kind==='all'||n.kind===kind)&&(track==='all'||n.track===track)&&(status==='all'||n.status===status||n.runs?.some(r=>r.status===status))&&JSON.stringify(n).toLowerCase().includes(query)).map(n=>n.id));
+  for(const [id,el] of groupElements)el.classList.toggle('hidden',range!=='all'&&range!==id);
   const focus=$('neighbors').checked&&selected;
   const near=new Set([selected]);
   for(const e of data.edges)if(e.source===selected||e.target===selected){near.add(e.source);near.add(e.target);}
@@ -152,15 +162,22 @@ function update(){
   }
   const measured=data.nodes.filter(n=>n.kind==='result'&&n.status==='scoped').length;
   const awaiting=data.nodes.filter(n=>n.kind==='result'&&n.status==='awaiting').length;
-  $('count').textContent=`显示 ${visible.size}/${data.nodes.length} 个节点，${edgeCount} 条关系 · 已录入研究结果 ${measured} 项，待填 ${awaiting} 项`;
-  const studies=data.nodes.filter(n=>n.study_id);
-  $('state-count').textContent='研究组状态：'+lifecycle.map(s=>`${statuses[s]} ${studies.filter(n=>n.status===s).length}`).join(' · ')+`。完成执行与科学结论分开记录。${data.updated_at?' 最后核对 '+data.updated_at:''}`;
+  $('count').textContent=`显示 ${visible.size}/${data.nodes.length} 个节点，${edgeCount} 条关系 · 全图已录入研究结果 ${measured} 项，待填 ${awaiting} 项`;
+  const studies=inRange.filter(n=>n.study_id);
+  $('state-count').textContent='所选范围研究组：'+lifecycle.map(s=>`${statuses[s]} ${studies.filter(n=>n.status===s).length}`).join(' · ')+`。完成执行与科学结论分开记录。${data.updated_at?' 最后审阅 '+data.updated_at:''}`;
 }
-function zoom(value){scale=Math.max(.45,Math.min(2.5,value));svg.style.width=`${data.width*scale}px`;svg.style.height=`${data.height*scale}px`;}
-function fit(){zoom(Math.min(($('canvas').clientWidth-3)/data.width,($('canvas').clientHeight-3)/data.height));}
+function zoom(value){scale=Math.max(.45,Math.min(2.5,value));svg.style.width=`${data.width*scale}px`;svg.style.height=`${viewportHeight*scale}px`;}
+function fit(){zoom(Math.min(($('canvas').clientWidth-3)/data.width,($('canvas').clientHeight-3)/viewportHeight));}
+function setRange(){
+  const group=data.view_groups.find(g=>g.id===$('range').value);
+  viewportHeight=group?group.height:data.height;
+  svg.setAttribute('viewBox',`0 ${group?group.y:0} ${data.width} ${viewportHeight}`);
+  $('canvas').scrollTo(0,0);update();fit();
+}
 $('filters').addEventListener('input',update);$('filters').addEventListener('change',update);
-$('reset').addEventListener('click',()=>{HTMLFormElement.prototype.reset.call($('filters'));selected=null;$('details').hidden=true;update();});
+$('range').addEventListener('change',setRange);
+$('reset').addEventListener('click',()=>{HTMLFormElement.prototype.reset.call($('filters'));selected=null;$('details').hidden=true;setRange();});
 $('close').addEventListener('click',()=>{$('details').hidden=true;});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('details').hidden=true;});
 $('plus').addEventListener('click',()=>zoom(scale*1.2));$('minus').addEventListener('click',()=>zoom(scale/1.2));$('fit').addEventListener('click',fit);
-update();fit();
+setRange();
