@@ -1,10 +1,10 @@
 # 当前研究优先级
 
-主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[当前FC配置](../configs/studies/language/fc-pilot-v2.json)，作业状态见STATUS。
+主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[当前FC配置](../configs/studies/language/fc-explore-v3.json)，作业状态见STATUS。
 
 ## 后续优先调整
 
-最新澄清：语言质量与实际稀疏计算优先；同比例硬件吞吐是后续实现优化，不是研究准入条件。两路v2已在训练前终止（见STATUS），没有新的语言质量结论。应复用现有校准，调整过严的固定曝光/整组分项门槛，先做有对照的有界学习探索；当前没有新提交。原规则与失败不改写。
+最新澄清：语言质量与实际稀疏计算优先；同比例硬件吞吐是后续实现优化，不是研究准入条件。两路v2已在训练前终止（见STATUS），没有新的语言质量结论。当前执行[LM-ADJUST-002](studies/language-exploration-v3.md)：复用校准，以B8/L32/128更新完成七候选的较小曝光探索及独立评价。原规则与失败不改写；FC8和第二seed等本次学习证据审阅后再分配原剩余预算。实际状态见STATUS。
 
 ## 研究依赖顺序
 

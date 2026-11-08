@@ -1,4 +1,8 @@
-# 当前交接 — 语言两路在预算准入阶段结束，未进入正式训练（2026-11-08）
+# 当前交接 — v3较小曝光学习比较准备就绪（2026-11-08）
+
+用户已同意继续。当前配置与研究表见[LM-ADJUST-002](studies/language-exploration-v3.md)，复用23个未改执行/依赖文件、七候选机制/恢复及B8/B32校准，A/B固定32677/32503目标。小型Lens记录已核对。新作业尚未提交，以下v2终态及扣账保留；实际提交后更新本页。
+
+## v2终态（历史记录）
 
 最新状态核对：`lm-a-language-v2`于北京时间20:43、`lm-b-language-v2`于20:47自然终止，chain均failed，错误为`no calibrated common case fits minimum updates/tokens`。所有相关cgroup及已知后代均已确认终止；当前无本批训练或排队。原[运行时交接](evidence/language-running-handoff.json)是当时快照，已由[本次终态证据](evidence/language-admission-terminal.json)接替。
 

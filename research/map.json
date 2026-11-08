@@ -871,6 +871,10 @@
         {
           "label": "\u7ec8\u6001\u4e0e\u95e8\u69db\u590d\u6838",
           "path": "docs/evidence/language-admission-terminal.json"
+        },
+        {
+          "label": "LM-ADJUST-002\uff1a\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u6bd4\u8f83",
+          "path": "docs/studies/language-exploration-v3.md"
         }
       ],
       "runs": [
@@ -1276,7 +1280,7 @@
     {
       "budget": "128\u66f4\u65b0\u5148\u5bfc\u2264120NPU min\uff1b\u672a\u7528\u8bad\u7ec3\u65f6\u95f4\u53ef\u7ed9\u6761\u4ef6FC8\uff0c\u603bA\u22645h\u5e76\u6263\u65e7\u5931\u8d25\u3002",
       "decision": "\u4ee5\u540c\u8bcd\u8868\u72ec\u7acbNLL\u6bd4\u8f83\uff1b\u6b20\u8bad\u7ec3\u5bf9\u7167\u4e0d\u80fd\u8ba4\u8bc1\u8bed\u8a00\u53ef\u7528\u6027\u3002",
-      "execution_note": "\u6267\u884c\u94fe\u5df2\u7ec8\u6b62\uff0c\u8bad\u7ec30\u6b21\uff1b\u4e0d\u80fd\u5224\u65ad\u6548\u679c\u3002\u5931\u8d25\u6e90\u4e8e\u9884\u7b97/\u66b4\u9732\u7f16\u6392\uff0c\u672a\u8bbe\u7f6e\u7a00\u758f\u5fc5\u987b\u66f4\u5feb\u7684\u95e8\u69db\u3002",
+      "execution_note": "v2\u8bad\u7ec3\u524d\u7ec8\u6b62\u4fdd\u6301\uff1bv3\u590d\u7528\u63a5\u5165\u4e0e\u6821\u51c6\uff0cB8/L32/128\u66f4\u65b0\u53ca\u72ec\u7acb\u8bc4\u4ef7\uff0c\u672a\u4ea7\u751f\u8bed\u8a00\u7ed3\u679c\u3002",
       "id": "L-A",
       "kind": "experiment",
       "question": "\u76f8\u8fd1\u5bb9\u91cf\u4e0e\u540ctoken\u9884\u7b97\u4e0b\uff0c\u8bed\u8a00\u8d28\u91cf\u53ca\u7a00\u758f\u6298\u8877\u5982\u4f55\uff1f",
@@ -1300,6 +1304,14 @@
         {
           "label": "\u7ec8\u6001\u5ba1\u9605",
           "path": "docs/studies/language-admission-outcome.md"
+        },
+        {
+          "label": "LM-ADJUST-002\uff1a\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u6bd4\u8f83",
+          "path": "docs/studies/language-exploration-v3.md"
+        },
+        {
+          "label": "\u5f53\u524dv3\u6267\u884c\u914d\u7f6e",
+          "path": "configs/studies/language/fc-explore-v3.json"
         }
       ],
       "runs": [
@@ -1311,9 +1323,9 @@
           "status": "failed"
         }
       ],
-      "status": "unchecked",
+      "status": "planned",
       "study_id": "TL-A-LM",
-      "summary": "\u6b63\u5f0f\u8bed\u8a00\u8bad\u7ec3\u672a\u542f\u52a8",
+      "summary": "\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u914d\u7f6e\u5df2\u56fa\u5b9a\uff0c\u5f85\u63d0\u4ea4\u6838\u5bf9",
       "title": "A\uff1a\u4ece\u96f6\u8bed\u8a00\u6a21\u578b",
       "track": "tide",
       "view_group": "current",
@@ -1323,7 +1335,7 @@
     {
       "budget": "\u6388\u6743\u6240\u6709\u5019\u9009/\u63a7\u5236seed11\u5408\u8ba1\u2264120NPU min\uff1b\u4e0d\u6269\u5927\u7b2c\u4e8c\u5c42\u3002",
       "decision": "\u5bf9\u7167\u539f\u51bb\u7ed3/\u539fMLP\u7ee7\u7eed\u8bad\u7ec3/\u7b80\u5355MLP\u66ff\u6362\uff1balpha=1\u4e14\u8df3\u8fc7\u539fMLP\u624d\u662f\u5b8c\u6574\u627f\u63a5\u3002",
-      "execution_note": "\u6267\u884c\u94fe\u5df2\u7ec8\u6b62\uff0c\u8bad\u7ec30\u6b21\uff1b\u4e0d\u80fd\u5224\u65ad\u6548\u679c\u3002\u5931\u8d25\u6e90\u4e8e\u9884\u7b97/\u66b4\u9732\u7f16\u6392\uff0c\u672a\u8bbe\u7f6e\u7a00\u758f\u5fc5\u987b\u66f4\u5feb\u7684\u95e8\u69db\u3002",
+      "execution_note": "v2\u8bad\u7ec3\u524d\u7ec8\u6b62\u4fdd\u6301\uff1bv3\u590d\u7528\u63a5\u5165\u4e0e\u6821\u51c6\uff0cB8/L32/128\u66f4\u65b0\u53ca\u72ec\u7acb\u8bc4\u4ef7\uff0c\u672a\u4ea7\u751f\u8bed\u8a00\u7ed3\u679c\u3002",
       "id": "L-B",
       "kind": "experiment",
       "question": "\u5728\u539f\u751f\u8bed\u8a00\u76ee\u6807\u4e0a\uff0cTIDE\u80fd\u5426\u627f\u63a5\u8ba1\u7b97\u5e76\u4fdd\u7559\u8d28\u91cf\uff1f",
@@ -1347,6 +1359,14 @@
         {
           "label": "\u7ec8\u6001\u5ba1\u9605",
           "path": "docs/studies/language-admission-outcome.md"
+        },
+        {
+          "label": "LM-ADJUST-002\uff1a\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u6bd4\u8f83",
+          "path": "docs/studies/language-exploration-v3.md"
+        },
+        {
+          "label": "\u5f53\u524dv3\u6267\u884c\u914d\u7f6e",
+          "path": "configs/studies/language/fc-explore-v3.json"
         }
       ],
       "runs": [
@@ -1358,9 +1378,9 @@
           "status": "failed"
         }
       ],
-      "status": "unchecked",
+      "status": "planned",
       "study_id": "TL-B-LM",
-      "summary": "\u6b63\u5f0f\u8bed\u8a00\u8bad\u7ec3\u672a\u542f\u52a8",
+      "summary": "\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u914d\u7f6e\u5df2\u56fa\u5b9a\uff0c\u5f85\u63d0\u4ea4\u6838\u5bf9",
       "title": "B\uff1a\u8bed\u8a00\u80fd\u529b\u4e0e\u5c40\u90e8\u66ff\u6362",
       "track": "baseline",
       "view_group": "current",
@@ -1369,7 +1389,7 @@
     },
     {
       "budget": "\u6761\u4ef6FC8\u2264120NPU min\uff0c\u53ef\u7528A\u4e3b\u8bad\u7ec3\u672a\u7528\u65f6\u95f4\uff1b\u56fa\u5b9a128\u66f4\u65b0/\u5c40\u90e8\u5bbd\u5ea6/\u7aef\u53e3\uff0c\u603bA\u22645h\u3002",
-      "decision": "FC4\u662f\u5355\u533a\u57df/0\u5185\u90e8\u8fb9\uff1b\u53ea\u6709\u5b9e\u9645\u8bad\u7ec3\u7684FC8\u53cc\u533a\u57df\u4e0e\u72ec\u7acb\u8bc4\u4ef7\u624d\u80fd\u589e\u52a0\u89c4\u6a21/\u901a\u4fe1\u8bc1\u636e\u3002HB16/40/88\u9759\u6001\u8ba1\u5212\u4fdd\u6301\u672a\u8ba4\u8bc1\u3002",
+      "decision": "\u5148\u5ba1\u9605v3\u8bed\u8a00\u8d28\u91cf\u4e0e\u5b9e\u9645\u6d3b\u52a8\uff0c\u518d\u4ece\u539f\u5269\u4f59\u9884\u7b97\u51b3\u5b9aFC8\uff1b\u5f53\u524d\u4e0d\u81ea\u52a8\u542f\u52a8\u3002",
       "id": "L-SCALE",
       "kind": "experiment",
       "question": "\u589e\u52a0\u5bb9\u91cf\u65f6\uff0c\u8d28\u91cf\u4e0e\u5b9e\u9645\u5de5\u4f5c/\u5185\u5b58\u600e\u6837\u5171\u540c\u53d8\u5316\uff1f",
@@ -1381,6 +1401,10 @@
         {
           "label": "\u8bbe\u8ba1\u8ba1\u5212\uff08\u4e0d\u53ef\u76f4\u63a5\u63d0\u4ea4\uff09",
           "path": "research/language-structure-plan.json"
+        },
+        {
+          "label": "LM-ADJUST-002\uff1a\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u6bd4\u8f83",
+          "path": "docs/studies/language-exploration-v3.md"
         }
       ],
       "status": "unchecked",
@@ -1406,6 +1430,10 @@
         {
           "label": "\u8bbe\u8ba1\u8ba1\u5212\uff08\u4e0d\u53ef\u76f4\u63a5\u63d0\u4ea4\uff09",
           "path": "research/language-structure-plan.json"
+        },
+        {
+          "label": "LM-ADJUST-002\uff1a\u8f83\u5c0f\u66dd\u5149\u5b66\u4e60\u6bd4\u8f83",
+          "path": "docs/studies/language-exploration-v3.md"
         }
       ],
       "status": "unchecked",
