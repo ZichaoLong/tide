@@ -1,3 +1,41 @@
+# 当前活动：第四批基线能力保持链（2026-11-08）
+
+`s4-capability`已实际启动并获得物理NPU14→logical npu:0，unit为`tide-lab-s4-capability.service`，真实cgroup在background.slice。研究表为[第四批](studies/fourth-batch.md)，[启动快照](evidence/fourth-batch-launch.json)，最新阶段以`runs/s4-capability/stage.json`为准。下方第三批及更早说明都是历史快照。
+
+固定源码`.local/source-fourth-batch` / `1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a`，树SHA256 `86f23b7e8bf5659a02b9843a80e1b251d30255906a591ea34b7b2ab639fa5405`；配置`configs/studies/fourth/b-preserve.json`。不得编辑这个快照、私有环境或已发布的baseline/features.pt、dataset.json、resolved.json。工作区文档可更新。总分配后计算≤7200秒、共同墙钟截止**2026-11-09 05:00:01北京时间**；队列cap35880秒，服务预留清理，不是每个候选12小时。资源1NPU/4CPU线程/24GiB/新增≤4GiB，cgroup资源配额是请求，应用线程和时限实际生效。
+
+驱动依次执行原生基线→输入诊断→新机制/恢复→batch校准→seed11两候选训练/验证；TIDE相关门槛满足时执行seed22，最后独立test。当前查表进入后续，复制未达80%门槛已保留，不追加任务。每个实际stage有独立manifest/result/metrics及Lens projection；检查子运行仅保留权威记录。
+
+```bash
+python scripts/job.py status artifacts/jobs/s4-capability
+python scripts/job.py logs artifacts/jobs/s4-capability --lines 80
+cat runs/s4-capability/stage.json
+cat runs/s4-capability/resume-checks.json
+cat runs/s4-capability/resolved.json
+tail -n 5 runs/s4-capability/shadow-tide-s11/metrics.jsonl
+tail -n 40 runs/s4-capability/shadow-tide-s11-wrapper/workload.log
+python scripts/job.py stop artifacts/jobs/s4-capability
+```
+
+尚未生成的文件表示尚未执行到对应阶段。stop核对整个cgroup和已知后代，不只停止最外层。各阶段日志在`runs/s4-capability/NAME-wrapper/workload.log`，记录器日志在相邻`NAME-recording.log`；外层总预算记录在`runs/s4-capability-wrapper/result.json`。不要为查看记录重跑submit脚本。
+
+分支每32步及终态保存完整应用checkpoint，含模型/AdamW/RNG/step/标准化/数据游标和源码/config/cache/运行身份。教师是固定只读checkpoint引用，不进入optimizer也不复制到每个恢复文件。精确恢复须先确认旧作业无后代，用新job/run/output、相同只读源码/config/cache、batch/seed/候选/物理映射及剩余原预算，例如恢复工作负载：
+
+```bash
+python scripts/capability_stage.py train \
+  --plan /ABSOLUTE/source-fourth-batch/configs/studies/fourth/b-preserve.json \
+  --cache /ABSOLUTE/OLD/baseline/features.pt \
+  --kind tide --seed 11 --batch SELECTED_BATCH \
+  --resume /ABSOLUTE/OLD/shadow-tide-s11/checkpoint.pt \
+  --output /ABSOLUTE/NEW-OUTPUT --run-id NEW-RUN-ID
+```
+
+这只是工作负载示例，须放入background.slice/队列与bounded_workload，并计入共同deadline/剩余计算，不能直接绕过选卡或重新获得2h。`SELECTED_BATCH`从resolved.json读取。更换设备映射不是已验精确恢复；没有checkpoint只能另立从初态尝试。当前没有自动重新提交失败服务。
+
+Lens使用原服务，项目`tide-learning-lab`，按TL-B4-BASE/INFO/SHADOW/PRESERVE筛选；`tl-b4-shadow-tide-s11`等run统一关联，projection.json给实际Lens名称/ID。私有查看及SSH方法在`.local/LENS.md`；小记录`tl-b4-recording-admission-20261108`已verified/readback_matches。
+
+---
+
 # 当前无活动作业 — 第三批终态（2026-11-08）
 
 最后TIDE补做于北京时间14:14:17完成，8次尝试均已核对MainPID0、cgroup空及无存活后代，NPU已释放；当前没有排队、运行或自动重试。7次completed；原`s3-growth`保留failed（最后TIDE启动前目录冲突），补做并不改写原失败。[本批结论](studies/third-batch-results.md)、[最终证据](evidence/third-batch-terminal.json)。下方分隔线后的启动表与操作说明均为历史快照。

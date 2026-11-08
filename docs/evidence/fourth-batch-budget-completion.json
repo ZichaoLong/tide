@@ -1,0 +1,154 @@
+{
+  "calibration": {
+    "accumulation": 1,
+    "batch": 128,
+    "elapsed_seconds": 131.2980828396976,
+    "finished_at": "2026-11-08T09:04:16.441611+00:00",
+    "global_batch": 128,
+    "independent_sample_batch": 128,
+    "lens_projection_completed": true,
+    "microbatch": 128,
+    "positions": 1,
+    "projected_training_step_seconds": {
+      "mlp": 0.31313347816467285,
+      "tide": 1641.1837167739868
+    },
+    "reason": "smallest common batch within 90% of maximum paired measured samples/second; finite calibration, not universal optimum",
+    "rows": [
+      {
+        "batch": 32,
+        "kind": "tide",
+        "last_loss": 0.9908930659294128,
+        "npu_peak_allocated_mib": 54.06201171875,
+        "step_seconds": [
+          3.7917663119733334,
+          3.9681320004165173
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      },
+      {
+        "batch": 32,
+        "kind": "mlp",
+        "last_loss": 0.999204695224762,
+        "npu_peak_allocated_mib": 54.06201171875,
+        "step_seconds": [
+          0.0030997730791568756,
+          0.002974599599838257
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      },
+      {
+        "batch": 128,
+        "kind": "tide",
+        "last_loss": 0.9635434150695801,
+        "npu_peak_allocated_mib": 66.9892578125,
+        "step_seconds": [
+          13.062540512531996,
+          12.580955062061548
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      },
+      {
+        "batch": 128,
+        "kind": "mlp",
+        "last_loss": 0.9700623154640198,
+        "npu_peak_allocated_mib": 66.9892578125,
+        "step_seconds": [
+          0.00245705246925354,
+          0.0024356581270694733
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      },
+      {
+        "batch": 256,
+        "kind": "tide",
+        "last_loss": 0.9885470867156982,
+        "npu_peak_allocated_mib": 96.4072265625,
+        "step_seconds": [
+          25.253168154507875,
+          25.190155413001776
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      },
+      {
+        "batch": 256,
+        "kind": "mlp",
+        "last_loss": 0.9949961304664612,
+        "npu_peak_allocated_mib": 96.4072265625,
+        "step_seconds": [
+          0.0027241259813308716,
+          0.0026864856481552124
+        ],
+        "timed_steps": 2,
+        "warmup_steps": 1
+      }
+    ],
+    "run_id": "tl-b4-batch-calibration",
+    "scores": {
+      "128": 9.981133986022114,
+      "256": 10.148916684052603,
+      "32": 8.241079719871902
+    },
+    "stage": "calibrate",
+    "started_at": "2026-11-08T09:02:07.554825+00:00",
+    "state": "completed"
+  },
+  "calibration_record": {
+    "path": "runs/s4-capability/batch-calibration/result.json",
+    "sha256": "04ed2253baa844ceb2f6b3141a232c258532df0dd755d680e320a24f80d851ba"
+  },
+  "cause": "Batch selection omitted the per-attempt wall cap: B128 expected 1641.18s for 128 steps, but frozen per-training cap is 1200s.",
+  "checks": {
+    "completion_guard_unit_test": "passed; only exact declared timeout eligible",
+    "original_frozen_source_reverified": true
+  },
+  "limitations": "NPU recovery comparison is tensor/value exact, not equality of serialized file bytes. Pending training has no terminal quality claim. Replayed/unpublished work overhead will remain distinct from 128 logical updates.",
+  "new_application_npu_resume": {
+    "checks": [
+      {
+        "full_sha256": "e2e25a3a2d29cae48607e62f68f5859cfd6a6dabc0627bee9f418bc6e5402966",
+        "kind": "tide",
+        "resumed_sha256": "470d5118947f8c47dd2062c09d1dcd28f9120b25a3a5dd62ed2b5f8ca5317fc9",
+        "scope": "fresh-process 3-step/B2 shadow learner, AdamW, normalization, data cursor, CPU/accelerator/Python RNG and full runtime identity",
+        "state": "passed"
+      },
+      {
+        "full_sha256": "5b84984fef64a927e961e5082b704e9eb60e50de5134cd6b91bb5ec174d6c844",
+        "kind": "mlp",
+        "resumed_sha256": "b9cbdffa7dcb1a1a727e2ff83f484c96a6e446bbe0d22d838e5ede5f0f8deef8",
+        "scope": "fresh-process 3-step/B2 shadow learner, AdamW, normalization, data cursor, CPU/accelerator/Python RNG and full runtime identity",
+        "state": "passed"
+      }
+    ],
+    "state": "passed"
+  },
+  "original_active_inputs_unchanged": true,
+  "original_job_not_interrupted": true,
+  "original_plan_sha256": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
+  "original_source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+  "policy": {
+    "batch": 128,
+    "exact_resume_requires_original_physical_mapping": true,
+    "logical_steps": 128,
+    "maximum_concurrent_npus": 1,
+    "maximum_tide_attempts_per_candidate": 2,
+    "original_wall_deadline_reused": true,
+    "remaining_compute": "7200 minus original complete service elapsed minus 30 seconds",
+    "same_model_source_config_cache": true,
+    "seeds": [
+      11,
+      22
+    ],
+    "teacher_read_only": true,
+    "total_compute_seconds": 7200
+  },
+  "recorded_at": "2026-11-08T09:13:43.667640+00:00",
+  "schema": "tide-b4-budget-completion-policy-v1",
+  "state": "prepared_not_submitted",
+  "trigger": "only original per-training time-cap failure, published checkpoint, and actual service/descendant termination; no user stop or numerical/semantic/recovery failure"
+}
