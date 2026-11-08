@@ -1,3 +1,11 @@
+# 当前交接 — 第四批能力保持链准备中（2026-11-08）
+
+用户已确认B的新定位，并授权连续推进多个相关阶段。[固定研究表](studies/fourth-batch.md)与`configs/studies/fourth/b-preserve.json`已写入：原生查表/末词复制能力→最后MLP局部信息诊断→TIDE/参数接近MLP影子拟合→固定10%接入的能力保持评价。预算1NPU/4CPU线程/24GiB、设备计算≤2h、含排队墙钟≤12h、新增磁盘≤4GiB。当前尚未提交新服务。
+
+CPU小型数据隔离/局部干预/读出与内部梯度检查通过；两候选的新应用CPU三步跨进程精确恢复也已通过；NPU相关检查仍将在实际分配后执行。Lens同实例小记录已verified/readback_matches。公开基座、私有环境和旧快照未改。旧第三批结论与失败事实如下，B的新目标不追溯改写旧门槛。
+
+---
+
 # 当前交接 — 第三批全部终态，待用户验收（2026-11-08 14:45 北京时间）
 
 全部计划工作于**2026-11-08 14:14:17北京时间**结束；无活动或排队作业，全部服务、cgroup和已知后代已清空，设备已释放。8次尝试中7个completed，原B阶段failed保留；最后缺失的TIDE候选已用新ID按原配置补齐。[本批完整结论](studies/third-batch-results.md)、[最终证据](evidence/third-batch-terminal.json)、[此前HB/对照/采样证据](evidence/third-batch-progress-review.json)。

@@ -1,0 +1,49 @@
+{
+  "authorization": "User approved capability-preservation direction and progression across multiple bounded stages; 1 NPU, 2h allocated compute, 12h wall, 4GiB added disk.",
+  "cpu_fresh_process_recovery": {
+    "scope": "CPU synthetic fixture, three steps B2, both new shadow candidates; not NPU qualification",
+    "state": "passed"
+  },
+  "cpu_recovery_files": {
+    "mlp/full": "db6caca60d906ae586eece2e5e43cc477193f510f4f4d39fd4ea08c1e4488203",
+    "mlp/resumed": "e86747af7774f045cb9dcaaedfedc7a1801e48294d25c79d752ce6ac5c9773ca",
+    "mlp/split": "b7ea96302d0a19ea22205e8cc9079bdf11faec10849c6c5144f738649212903b",
+    "tide/full": "84e7d802525fdfe1d81eaf8f046a9952f8a5264690f3c49300d42f632214ca26",
+    "tide/resumed": "8f787b526b74fb320587faeb7375b8efbf19873223574cfa159abf19d26eb3c2",
+    "tide/split": "50708426c527de18efa979f146e715d0a6a87f458a091f0d8ceb4816b6250ad8"
+  },
+  "cpu_unit_checks": {
+    "count": 4,
+    "scope": "data split/answers, declared intervention position, train normalization/nonzero gate, external MSE derivative and public Core5 gradient ingress",
+    "state": "passed"
+  },
+  "files_sha256": {
+    "configs/studies/fourth/b-preserve.json": "721ad2c8e14613af8baf69c7a423e602b1668e4212e0eb69ec4124b1a0f36c83",
+    "scripts/capability_stage.py": "6945793a9823e67cfbeba923d8b427fb002e7d060bdd3764406cc074c05aa03e",
+    "scripts/run_capability_fourth.py": "b3592a5dab6d706cd7dcbf82e907d8093164d75a922d02126712246853e4f2e5",
+    "scripts/submit_capability_fourth.py": "25d629b9c98ace2f44a561dc604a0c9faca725c47dc59ec94de696814175084a",
+    "tests/test_capability.py": "473b610ec463210b43dd7179cb606c13d10f249a09374b49a8d6166712a13f99",
+    "tide_lab/capability.py": "5afc861669b1f44097d0e9840c536f0d9d83f19eb4dfbe866fbec20cb8c31ef7"
+  },
+  "installed_foundation_files_reverified": 248,
+  "lens_admission": {
+    "destination_name": "tl-b4-recording-admission-20261108-projection-36905843d397",
+    "destination_run_id": "519f15e3b9404e0090eda8185bb37cc6",
+    "event_count": 1,
+    "exactly_once": false,
+    "last_sequence": 0,
+    "project": "tide-learning-lab",
+    "readback_matches": true,
+    "sdk_version": "0.44.0",
+    "source_run_id": "tl-b4-recording-admission-20261108",
+    "source_timestamps_preserved": false,
+    "status": "verified",
+    "steps_preserved": true,
+    "warning_count": 0,
+    "workload_status": "not-determined-by-recorder"
+  },
+  "limitations": "CPU synthetic application fixture only; new NPU operator/gradient and fresh-process recovery gates not yet run. Historical strict failures and thresholds unchanged.",
+  "reviewed_at": "2026-11-08T08:59:29.909619+00:00",
+  "schema": "tide-b4-admission-v1",
+  "source_scope": "pre-freeze development checks; exact file hashes below; formal NPU stages will record their frozen commit and actual runtime separately"
+}

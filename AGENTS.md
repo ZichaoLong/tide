@@ -9,8 +9,10 @@
   and authorized the bounded follow-up in `docs/studies/second-batch.md`.
   The subsequent 2026-11-08 approval authorizes the third batch in
   `docs/studies/third-batch.md`, with one shared 12-hour execution deadline.
-  Do not expand beyond that table without another review. Shared environments and
-  other projects remain read-only.
+  The latest 2026-11-08 approval authorizes the multi-stage capability-preservation
+  batch in `docs/studies/fourth-batch.md`: one NPU, at most 2 hours allocated compute,
+  one shared 12-hour wall deadline, and conditional progression through the listed stages.
+  Do not expand beyond the current table. Shared environments and other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

@@ -1,0 +1,17 @@
+{
+  "schema": "tide-capability-preservation-v1",
+  "study_id": "TL-B4",
+  "device": "npu:0",
+  "dtype": "float32",
+  "threads": 4,
+  "seed": 11,
+  "tasks": ["lookup", "copy"],
+  "data": {"train_per_task": 512, "validation_per_task": 64, "test_per_task": 256, "seed": 20261108, "max_tokens": 128},
+  "baseline": {"batch_size": 16, "minimum_validation_accuracy": 0.8},
+  "interface": {"module": "last_decoder_mlp", "position": "last_prompt_position", "width": 16, "tide_depth": 2, "region_width": 4, "mlp_hidden": 2048, "alpha": 0.1},
+  "training": {"candidates": ["tide", "mlp"], "seeds": [11, 22], "batch_candidates": [32, 128, 256], "steps": 128, "lr": 0.001, "optimizer": "adamw", "eps": 0.000001, "weight_decay": 0.01, "clip_norm": 1.0, "log_every": 8, "eval_every": 32, "checkpoint_every": 32, "max_seconds_per_run": 1200},
+  "gates": {"maximum_validation_relative_mse": 0.8, "maximum_accuracy_drop": 0.02, "maximum_new_error_fraction": 0.02, "maximum_answer_nll_increase": 0.05, "minimum_nonzero_delta_rms": 0.000001},
+  "checks": {"atol": 0.00001, "rtol": 0.0001, "resume_steps": 3, "resume_split_step": 1, "resume_batch": 2},
+  "budget": {"compute_seconds": 7200, "wall_seconds": 43200, "queue_seconds": 35880, "baseline_seconds": 900, "information_seconds": 300, "admission_seconds": 600, "calibration_seconds": 600, "evaluation_seconds": 1200, "disk_gib": 4},
+  "numerical_policy": "Original strict failures retained; finite same-model differences recorded separately after mechanism checks. Nonfinite, state, illegal configuration and exact-resume failures stop the affected path."
+}
