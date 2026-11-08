@@ -1,5 +1,7 @@
 # TL-A2 — HB减少Full/消息，但质量门槛和效率价值尚未成立
 
+本页限定首批80步先导，原50%门槛失败保留。用户授权的400步独立跟进已完成，见[TL-A2-LONG](TL-A2-LONG.md)。
+
 2026-11-08审阅，待用户验收。两个CPU FP32/B32/80步先导均completed/exit0，无存活后代，Lens读回verified。配置预设learning_gate=0.5；两者均未达到，依原停止规则不启动本批正式重复。
 
 问题：同一小HB中，quad可学习稀疏发送能否保留检索质量并减少实际工作？两者共享KV/qry、width16、depth1/branches2/offsets[0,1]，16节点/4区域、136,252个可训练参数；参数初值逐值相同，唯一发送改变量为Shannon/quad，均regional_total/k2、温度0.25。共同seed11、原任务与划分、2,560训练例、AdamW lr1e-3/eps1e-6/weight_decay0.01/clip1；validation128，无test。

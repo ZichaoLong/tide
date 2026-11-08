@@ -1,6 +1,6 @@
-# 第二批后台作业与恢复
+# 后台作业、终态与恢复
 
-2026-11-08用户授权后的五个作业已提交。启动核对：三个CPU作业运行，两个NPU作业已被队列接受，分别等待空闲卡/队列顺序。状态会变化，以`job.py status`和项目记录为准；不是终态或学习结论。原首批操作说明保留在本页后部。
+2026-11-08终态复核：五个作业均已结束、无存活后代。FC评估与两个HB400步训练completed/exit0；NPU采样与冻结骨干B等卡超时，workload未启动。当前没有活动或排队作业。下面保留固定输入、预算和历史操作方法，不能把命令示例当作已提交的新任务。[第二批结论](studies/second-batch-results.md)、[终态证据](evidence/second-batch-terminal.json)。
 
 固定源码：`94bf712f8bd2e4007f0f56d1fea4799c99833dcd`，只读目录`.local/source-second-batch`，树SHA256 `e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0`。数学/公共基座及`.venv`不变；旧consumer wheel原样保留，新实验包显式从冻结目录导入，实际身份见各manifest。不要修改快照、环境或被锁定的原FC checkpoint/config。工作区文档更新不影响这些作业。
 
@@ -31,7 +31,7 @@ stop停止整个服务、队列等待和所有后代，并核对终止。单元�
 - NPU采样：`runs/s2-npu-sampling/result.json`。若还在队列，目录尚未生成，以`artifacts/jobs/s2-npu-sampling/queue-state.json`为准。
 - B：`runs/s2-frozen-growth/stage.json`及ingress/resume/learning记录；学习run名为`tl-b2-{none,tide,mlp}-s11-frozen`。队列中未生成stage不是失败。
 
-Lens沿既有项目`tide-learning-lab`；新的小记录`tl-second-recording-check`已读回verified。训练通过独立记录器跟随JSONL；FC评估与采样完成后投影。各目录projection.json给出具体destination_name/run_id，私有入口及SSH转发见`.local/LENS.md`。记录器失败与执行、学习分开，不更改既有服务。
+Lens沿既有项目`tide-learning-lab`；小记录、FC评估及两个HB训练均已读回verified。采样和冻结B因未取得设备没有模型run。训练通过独立记录器跟随JSONL；FC评估在完成后投影。各目录projection.json给出具体destination_name/run_id，私有入口及SSH转发见`.local/LENS.md`。记录器失败与执行、学习分开，不更改既有服务。
 
 恢复仅针对已发布checkpoint的中断训练，须先确认旧服务与后代终止。HB每40步发布，检查点包含model/AdamW/RNG/数据游标。保持原配置和源码，使用新作业ID与输出，例如：
 

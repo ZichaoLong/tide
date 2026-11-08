@@ -1,17 +1,28 @@
-# 当前交接 — 第二批已启动，CPU运行/NPU排队（2026-11-08）
+# 当前交接 — 第二批已终态，待验收（2026-11-08）
 
-用户已认可首批建议并授权[第二批有限研究表](studies/second-batch.md)。旧作业全部终态；五个新作业已接受，三个CPU作业实际运行，两个NPU作业按共享队列等待，没有改写首批输入或结果。
+当前无本项目活动或排队作业。第二批五个作业全部终态：FC机制评估和两个HB训练completed/exit0；NPU采样与冻结骨干B均排队超时，实际workload未启动。最后训练于北京时间04:39:56结束，所有cgroup与已知后代现为空。本次只审阅已有记录，没有新开实验。[总报告与建议](studies/second-batch-results.md)、[原记录hash/曲线/终态证据](evidence/second-batch-terminal.json)。
 
-记录节奏修复、FC/HB稀疏的观测等价及新进程完整恢复、未记录步骤的非有限保护、配对任务干预检查通过。实际公共基座文件和依赖RECORD与锁一致；原consumer wheel保留，新作业显式使用冻结实验源码。新的Lens小记录已verified/readback_matches。详见[准备证据](evidence/second-batch-preflight.json)。
+## 已审阅结论
 
-本批范围：三个既有FC checkpoint的query/延迟评估；一对HB400步；一次NPU轻量采样；冻结骨干的head-only/TIDE/MLP40步对照。研究图新增四组与待审阅结果，执行完成不自动生成科学支持。NPU均有占用，按队列等待；CPU工作可先行。所有后续多seed、替换或任务扩展仍须本批审阅。
+| 组 | 结果 | 结论边界 |
+| --- | --- | --- |
+| FC三个旧checkpoint配对评估 | 换query98.44%–100%；delay4为97.66%–100%，delay8为78.91%–92.97% | 支持当前模型随query检索；更长空档有退化。同128个validation映射，非新独立test |
+| HB400步，CPU FP32/seed11/B32 | dense/quad validation100%/96.875%；独立test99.609%/98.438%；移除历史10.938%/13.281% | 均达到原50%门槛；当前小HB检索学习成立，不能由单seed主张质量相当或优越 |
+| HB工作与时间 | Full少42.61%、消息少43.41%、候选/状态更新少3.70%；本次总用时少10.26% | 一对并行非独占CPU、不同实际工作量；不作可靠加速声明 |
+| NPU采样 / 冻结骨干B | 约306.70/610.39秒等卡后超时，未获得设备 | 性能观察及冻结策略准入/恢复/学习都没有新证据；不是模型效果失败 |
 
-首批结论继续有效：FC CPU64三seed独立test97.27%–99.61%；NPU80步val24.22%；HB31.25%/35.16%未达50%，Full/消息减少未证明稳定速度收益；B旁路预测贡献未证实。原严格失败与未知原因保留。[首批总报告](studies/first-batch-results.md)。
+一页结论：[FC机制](studies/TL-A1-MECH.md)、[HB400步](studies/TL-A2-LONG.md)、[采样未执行](studies/TL-S1.md)、[冻结B未执行](studies/TL-B2.md)。三个实际运行的Lens投影均verified/readback_matches。两项NPU任务没有模型run，不伪造成功或空曲线。
 
-账号约165/800GiB；新增磁盘预算20GiB。cgroup v1只确认服务生命周期隔离，CPU/内存配置为请求，应用线程和超时实际约束。固定数学0770593、公共基座85d161d及原私有环境不变。Lens项目`tide-learning-lab`，私有入口见`.local/LENS.md`，没有新部署或访问策略修改。
+## 检查与固定输入
 
-## 当前后台与固定输入
+执行、严格数值、离散语义、恢复和学习分列。原HB quad/NPU/FP32等严格失败和未知原因保持，未改阈值；CPU FP32学习成立不解除这些失败。相关小型机制与恢复复用；新日志节奏下小FC/HB quad的模型/AdamW/RNG逐值一致及新进程恢复通过。400步终态checkpoint step/hash核对一致，仅为存储完整性，不称新的长轨迹恢复通过。
 
-统一源码`94bf712f8bd2e4007f0f56d1fea4799c99833dcd`，只读`.local/source-second-batch`；实际manifest已核对。`s2-fc-mechanisms`、`s2-hb-dense`、`s2-hb-sparse`在CPU运行；`s2-npu-sampling`队列第1、`s2-frozen-growth`第2，等卡上限分别5/10分钟。状态为最后观察，不是实时监控。
+日志节奏已实际修复：HB各81个详细观测、319个未详细观测步骤，工作总计覆盖400步。区域/梯度只在81个观测点检查，不声称所有样本/节点没有饥饿。80步val准确率和CE与首批同值，不升级为完整数值等价。[测量说明](measurement-notes.md)、[准备证据](evidence/second-batch-preflight.json)。
 
-所有服务已核对真实name=systemd cgroup，位于background.slice并与会话隔离；新HB已出现真实optimizer步，低频记录中未观测步骤也计入完整工作量。[提交复核](evidence/second-batch-submission.json)、[固定配置、预算、状态/日志/停止/恢复命令](RUNNING.md)。当前新结果尚未经审阅，图中四份新结果保持待填。交接后无须保持会话，用户后续可唤醒检查；队列超时不会自动重试。
+只读源码94bf712，目录`.local/source-second-batch`，树hash e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0；本次已复核未变化。数学0770593、公共基座85d161d与原私有环境固定，consumer wheel保留，实际执行实验包由冻结源码明确覆盖。配置、作业、日志、停止/恢复方法见[RUNNING](RUNNING.md)。
+
+账号约165/800GiB，runs约72MiB、artifacts约11MiB；未用到B大checkpoint预算。cgroup v1只验证生命周期隔离，CPU/内存配额是请求，应用线程及服务时限实际约束。Lens服务active/running，项目`tide-learning-lab`，私有入口与SSH转发只在`.local/LENS.md`。
+
+## 下一决定
+
+建议本批验收后仅增加HB seed22/33两对（CPU4线程/RAM32GiB/并行≤2h），并为两项未执行NPU工作单列较长、有界的等待窗口，原计算预算仍≤9/45分钟。没有提交这些工作；不自动追加更多任务、图规模、替换层数或固定稀疏组合。[具体依据及资源](studies/second-batch-results.md)。首批80步失败、B1贡献未证实以及两次队列超时全部保留。
