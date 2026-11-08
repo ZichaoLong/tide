@@ -50,14 +50,31 @@ def core_axes(encoder,options,seed,device):
     if x.grad is None or not bool(x.grad.abs().sum()>0):raise AssertionError('input gradient disconnected')
     if not any(p.grad is not None and bool(p.grad.abs().sum()>0) for p in encoder.parameters()):
         raise AssertionError('graph gradient disconnected')
+    causal_input=x.detach().clone().requires_grad_(True)
+    causal_output=encoder(causal_input)
+    future_vjp=torch.autograd.grad(causal_output[:,:2].sum(),causal_input)[0][:,2:]
+    if bool(future_vjp.ne(0).any()):raise AssertionError('future input has a nonzero VJP to earlier output')
     with torch.no_grad():
         changed=x.detach().clone();changed[:,2:]+=3
-        original=encoder(x.detach());perturbed=encoder(changed)
+        original=encoder(x.detach())
+        changed_result=encoder.run_features(changed,trace=True)
+        perturbed=sequence_readout(encoder,changed_result,changed)
         causal=finite_delta(perturbed[:,:2],original[:,:2],0,0)
-        if causal['state']!='passed':raise AssertionError('future input changes earlier outputs')
+        changed_cpu=changed.cpu()
+        changed_reference=reference.run_features(changed_cpu,implementation='reference',trace=True)
+        reference_perturbed=sequence_readout(reference,changed_reference,changed_cpu)
+        reference_causal=finite_delta(reference_perturbed[:,:2],yr.detach()[:,:2],0,0)
+        cutoff=2*encoder.spec.stride
+        early_support=[r for r in support if r[0]<cutoff]
+        changed_support=[r for r in positive_support(canonical_result(changed_result)) if r[0]<cutoff]
+        if reference_causal['state']!='passed' or early_support!=changed_support:
+            raise AssertionError('reference causality or early discrete support changed')
         chunked=encoder(x.detach(),chunk_size=1)
         streaming=encoder(x.detach(),implementation='streaming')
     return dict(strict=report,roots=roots,causal=causal,
+        causal_mechanisms=dict(future_vjp_exact_zero=True,reference_intervention=reference_causal,
+            early_support_unchanged=True,cutoff=cutoff,
+            note='retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause'),
         chunked=finite_delta(chunked,original,1e-6,1e-5),streaming=finite_delta(streaming,original,1e-6,1e-5),
         input_gradient_by_position=cpu_tree(x.grad.norm(dim=-1)).tolist(),
         numerical_note='finite strict disagreements retained after complete records, VJP, support, roots and causality checks; cause not assumed roundoff')
