@@ -24,7 +24,7 @@ python -m unittest discover -s tests -p test_research_map.py -v
 图的数据是`research/map.json`。实验/结果节点的状态由记录显式给出；
 “待运行”“待填结果”不会被呈现为通过。已有基座证据、独立接入检查和经审阅的先导结果分别限定范围；严格失败和未覆盖项一同保留。
 
-用户已授权分阶段实验、私有环境和普通推送；最新指令重排研究重点。当前v3两路语言学习比较已后台启动，采用[较小曝光研究表](docs/studies/language-exploration-v3.md)；旧准入失败和累计扣账保留，历史及活动作业输入不变。
+用户已授权分阶段实验、私有环境和普通推送；最新指令重排研究重点。当前v3七候选语言学习比较已完成，见[终态报告](docs/studies/language-v3-results.md)；单seed小曝光的质量/Full折衷成立，规模仍未检查；旧准入失败和累计扣账保留，历史及活动作业输入不变。
 
 可选的真实浏览器检查需要本机已有Firefox与支持实验WebSocket的Node20+，不会下载依赖：
 

@@ -188,7 +188,7 @@
     ],
     "strict_thresholds": "retain each original threshold and failure; no relaxation for quality margin"
   },
-  "current_status": "v3 two routes actually running; fixed source 6cd4f85; reviewed science remains pending",
+  "current_status": "v3 terminal; seven 128-update candidates and independent evaluations completed; reviewed limited quality/Full tradeoff, scale unchecked",
   "data": {
     "a_tokenizer": "train-only BPE 4096, fitted and locked",
     "admission_length": 32,
@@ -256,7 +256,7 @@
     "ram_gib_per_worker": 24,
     "reuse_previous_batch_budget": false,
     "scheduling": "independent admitted workers; shared queue and background.slice; no unqualified DDP",
-    "status": "same deadline and 8NPUh; prior conservative spend 3551.641s retained; v3 learning/evaluation first",
+    "status": "terminal; conservative 11990.574s/28800s consumed including old failures; absolute deadline unchanged, no new submission",
     "threads_per_worker": 4,
     "wall_seconds_shared": 43200
   },
@@ -281,7 +281,7 @@
     ],
     "viewer": "existing Trackio Lens"
   },
-  "runtime_config_status": "configs/studies/language/fc-explore-v3.json; design file remains non-launchable",
+  "runtime_config_status": "fixed executed config configs/studies/language/fc-explore-v3.json; no active or automatic successor jobs",
   "schema": "tide-language-structure-design-v1",
   "source_audit_commit": "c0464fa5662b52cfa2a06c9c9a79336ab373b26c",
   "status": "design_only",
@@ -390,7 +390,7 @@
     "optimizer": "AdamW eps1e-6, weight_decay .01, clip1; warmup/cosine in fixed runtime plan",
     "original_minimum_valid_tokens": 65536,
     "prior_minimum_scope": "original recipe guard, not mathematical/architectural necessity; future lower-exposure exploration needs its own frozen identity and preserves original rejection",
-    "status": "frozen B8/L32/128 with reused calibration; no training result yet",
+    "status": "executed fixed B8/L32/128/seed11; smaller-exposure scope, not convergence qualification",
     "stop_if_unaffordable": "preserve partial attempt and independent axes; hardware speedup is not a prerequisite",
     "token_budget": null
   },

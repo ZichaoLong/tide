@@ -1,21 +1,23 @@
-# 当前交接 — v3较小曝光语言比较已后台运行（2026-11-08）
+# 当前交接 — 语言v3已终态并审阅（2026-11-09）
 
-北京时间23:34已实际启动两路，当前核对时间UTC 2026-11-08T15:37:14.493383+00:00。[研究表](studies/language-exploration-v3.md)、[启动证据](evidence/language-exploration-handoff.json)、[查看/停止/恢复](RUNNING.md)。
+A于北京时间00:47、B于00:42完成，七候选均128步并完成独立test/推理，全部cgroup及已知后代已核对终止。**当前无活动、排队或自动后继作业。** [终态总报告](studies/language-v3-results.md)、[逐文档/生命周期/数值证据](evidence/language-v3-terminal.json)、[操作说明](RUNNING.md)。
 
-| 作业 | 实际分配 | 当前范围 |
+| 主线 | 独立test NLL | 实际稀疏及范围 |
 | --- | --- | --- |
-| `lm-a-language-v3` | 物理NPU3 → logical npu:0 | 小Transformer128步、独立test与推理已完成；TIDE稠密训练stage已启动，随后稀疏 |
-| `lm-b-language-v3` | 物理NPU5 → logical npu:0 | 冻结基线、原MLP与简单MLP的128步训练/独立test/推理已完成；TIDE稠密训练stage已启动，随后稀疏 |
+| A从零完整TIDE | dense6.779286、sparse6.802554；Transformer7.022139、unigram6.946099 | 稀疏减稠密+0.023268，单侧95%文档上界0.037871<0.05；Full减49.73%。普通LM对照欠训练，不证明普遍架构优势 |
+| B预训练局部承接 | frozen4.361484、原MLP继续训练3.684206、MLP4.147179、dense4.234056、sparse4.236845 | 稀疏减稠密+0.002789，上界0.011343；Full减49.03%。保持冻结基线，但控制更好，无TIDE独特优势 |
 
-这是执行进度，**尚无完整TIDE语言比较或联合质量/结构结论**。已完成控制只保留原始独立评价，不能提前认证语言可用性。研究图的四个科学结论仍awaiting。后续stage可随后台继续；以只读状态为准。
+**当前单seed、较小曝光下的质量/Full活动折衷成立；语言可用性、规模化与跨区域局部性联合目标尚未完成。** FC4一个区域、零内部边，candidate/Upd/Read未减少；Full不是总FLOPs，硬件吞吐兑现单列，不作为上述筛选门槛。FC8与第二seed均未启动。A/B词表与预训练背景不同，不横比NLL/PPL。
 
-冻结源码`6cd4f856df02e9c90645198cf5998a27a877b4ec`、快照`.local/source-language-explore-v3`、树SHA256 `2c44b51421077624867ee27fa6fa6c72d8c95e60a28736be2565083260da8e77`；配置`configs/studies/language/fc-explore-v3.json`。数学0770593、foundation85d161d及安装环境不变，248文件核对一致。23个执行/依赖文件未改，复用v2七候选机制、三步精确恢复和B8/B32校准；新增代码只负责核验复用与有界编排。不要编辑快照、环境、活动数据/cache/config或checkpoint。
+执行、严格数值、离散语义、恢复、学习、性能分列：A训练后小型core/分块/streaming通过；B五模型full/cache在原阈值下均有限失败、argmax一致，B dense core另有1个共享梯度元素超差。所测因果/未来VJP/离散机制通过，未知数值原因保留。学习结果不覆盖严格失败。
 
-固定B8/L32/128更新、seed11；A每候选32677有效目标，B32503。原65536目标准入失败保留，新配置明确为较小曝光探索；原质量ΔNLL≤0.05、结构筛选及数值阈值未放宽。当前硬件同比例加速不是质量/结构准入条件。执行、严格数值、离散语义、恢复、学习和性能分列。
+七候选B2/L3三步新进程精确恢复来自未改代码的v2；本次7个128步checkpoint均CPU解码、有限张量及完整optimizer/RNG/游标/身份核对通过。[解码证据](evidence/language-v3-checkpoint-inspection.json)。未执行128步独立不中断对照，当前没有中断训练需要恢复。
 
-旧四次失败保守已扣3551.641秒（0.9866 NPU小时）。新A/B外层计算上限9120/9017秒，各自训练7200秒、评价1800秒且受外层共同约束；最多同时2NPU/8线程/48GiB。原8NPU小时总额与北京时间11月9日07:28:46共同截止不重置；本次不会自动启动FC8或seed22，剩余预算待学习证据审阅。当前配额169GiB/800GiB，新增文件仍受8GiB上限。
+固定执行源码`6cd4f856df02e9c90645198cf5998a27a877b4ec`与只读`.local/source-language-explore-v3`已复核；数学0770593、foundation85d161d、248安装文件保持不变。配置`configs/studies/language/fc-explore-v3.json`；B8/L32/128/seed11，A32677、B32503训练目标，独立test16文档/4096目标。原65536准入及旧失败保留，原0.05质量和严格数值阈值不改。
 
-小型Lens记录`tl-lm-v3-recording`已verified/readback_matches，控制组已产生新的已核对投影；项目`tide-learning-lab`，TL-A-LM/TL-B-LM，run前缀`tl-lm-a-language-v3-`与`tl-lm-b-language-v3-`。训练实时指标/实际映射见各stage的metrics.jsonl/projection.json；私有查看入口`.local/LENS.md`，不改服务访问策略。
+v3两服务保守扣8438.933秒；含v1/v2共11990.574秒=3.3307NPU小时，8小时余4.6693小时，原共同截止仍为北京时间11月9日07:28:46。余量不重置截止，不自动追加候选；当前包等待用户验收。配额169GiB/800GiB。
+
+Lens项目`tide-learning-lab`，29个v3投影均verified/readback_matches且事件数一致，完整run→destination映射在终态JSON的lens。私有入口`.local/LENS.md`。六组一页结论由总报告链接；研究图新增RL-A/RL-B/RL-JOINT三份限定审阅，RL-SCALE仍awaiting。下一批选项、依据与分别的资源上限见[联合审阅](studies/TL-JOINT.md)。本次检查没有提交新训练。
 
 ## v2终态（历史记录）
 
