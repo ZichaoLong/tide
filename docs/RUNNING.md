@@ -1,6 +1,57 @@
+# 第三批后台交接（2026-11-08）
+
+已实际提交7个服务，统一启动北京时间09:29:11，绝对截止**2026-11-08 21:29:11 +08:00**。每个服务截止另预留30秒清理；各组更短的上限仍生效。不是每个候选12小时。状态为交接时观测，实时以项目记录为准；[研究表](studies/third-batch.md)、[提交证据](evidence/third-batch-launch.json)。
+
+| 作业ID | 工作与输出 | 分配与时限 |
+| --- | --- | --- |
+| `s3-growth` | `runs/s3-growth/stage.json`；冻结准入及冻结/全骨干3步恢复已通过，已进入full/head/MLP/TIDE各200步 | 已获物理NPU1→logical npu:0，CPU4线程/24GiB；等卡≤8h，分配后全部≤3h |
+| `s3-npu-sampling` | `runs/s3-npu-sampling/result.json`，外层`runs/s3-npu-sampling-wrapper/` | 已在物理NPU3完成并释放，CPU4线程/8GiB；原上限等卡≤8h、分配后≤15min |
+| `s3-hb-dense-s22` / `s3-hb-sparse-s22` | 对应`runs/<job>/tl-a2-repeat-<dense或sparse>-s22/` | 各CPU1线程/8GiB、B32/400步；各含清理≤3h |
+| `s3-hb-dense-s33` / `s3-hb-sparse-s33` | 对应`runs/<job>/tl-a2-repeat-<dense或sparse>-s33/` | 同上；四训练同时运行 |
+| `s3-hb-evaluation` | `runs/s3-hb-evaluation/result.json`；等待4个HB作业终态，复用seed11，对6模型评估 | 等依赖≤10,860秒、之后CPU1线程/4GiB计算≤1h；缺失模型明确标记 |
+
+所有unit为`tide-lab-<job>.service`。已核对真实cgroup均在`background.slice`。主机cgroup v1未委托每服务CPU/内存控制器，所以CPUQuota/MemoryMax是请求，应用线程和服务时限有效。新增磁盘预算20GiB，启动账号165/800GiB。没有改变其他项目或共享环境。
+
+固定输入：提交`1c6cb44197cb603cdab1e89b1be1a96bf692c789`，只读归档`.local/source-third-batch`，树SHA256 `284807226729141d002e77c01d65c687ef6bc5652cb7864a434a2596cce021fa`。实际训练通过冻结源码PYTHONPATH加载，原consumer wheel不变；安装公共foundation85d161d、数学0770593不变。配置在归档内`configs/studies/third/`，2048数据SHA见研究表。新旧运行保留各自source identity，不能把seed11说成第三批新训练。
+
+完整解析argv/env、资源、source/input hash见`artifacts/jobs/<job>/job.json`；统一预算`.local/third-batch-budget.json`、完整逐项提交结果`.local/third-batch-submission.json`。后两者不入公开仓库。对应启动器为`scripts/submit_third_batch.py`，拒绝覆盖或重复提交同一批；不要为查看记录再运行它。
+
+查看状态、日志和停止（在仓库根目录；其他作业替换ID）：
+
+```bash
+python scripts/job.py status artifacts/jobs/s3-growth
+python scripts/job.py logs artifacts/jobs/s3-growth --lines 80
+cat runs/s3-growth/stage.json
+tail -n 40 runs/s3-growth/frozen-ingress.log
+python scripts/job.py status artifacts/jobs/s3-hb-dense-s22
+tail -n 5 runs/s3-hb-dense-s22/tl-a2-repeat-dense-s22/metrics.jsonl
+cat runs/s3-hb-evaluation/result.json
+python scripts/job.py stop artifacts/jobs/s3-growth
+```
+
+`stop`执行systemctl stop后核对MainPID、完整cgroup和已知后代，不只是停最外层进程。CPU训练具体进程日志在`runs/<job>-wrapper/workload.log`，队列和生命周期日志在`artifacts/jobs/<job>/job.log`；B每阶段独立日志，子训练目录`runs/s3-growth/<run-id>/<run-id>/`。停止单个HB不会自动取消其余独立工作，评估会记录缺失对照。
+
+Lens沿用已有认证服务，项目`tide-learning-lab`，私有查看及SSH转发方法在`.local/LENS.md`。按研究组`TL-A2-REPEAT`、`TL-B3`、`TL-S2`筛选；每个目录的`projection.json`给出destination_name/destination_run_id。当前小记录`tl-s3-recording-check-20261108`已verified/readback_matches，实际训练记录持续投影，终态仍需检查各自投影结果。研究图只链接项目记录和统一ID，不包含私有实例信息。
+
+恢复只针对中断或失败的具体模型，用**新job ID、新输出**及同一只读源码/config/安装/精度/线程/确定性和运行身份，保留原尝试；当前没有自动恢复。CPU示例的工作负载是：
+
+```bash
+python -m tide_lab.train \
+  --config configs/studies/third/hb-dense-s22.json \
+  --output /ABSOLUTE/NEW-OUTPUT \
+  --run-id NEW-RUN-ID \
+  --resume /ABSOLUTE/OLD-RUN/checkpoint.pt
+```
+
+将该argv放入同一冻结源码的`job.py submit`和`bounded_workload.py`中；沿用原共同deadline，计算cap取剩余授权预算，不能重获12h。NPU精确恢复还要求原物理visibility身份，必须由队列取得适用设备；换后端/设备不是已验精确恢复。B成功候选和成功恢复检查按固定策略删除临时大checkpoint，保留hash与结果；它们需要复现时重新从公共checkpoint运行，不能声称从已删除文件恢复。若本批截止已到，先交付结论，后续投入由用户决定。
+
+40步诊断与200步终态分别保留，原严格失败及第二批队列超时不改变。执行、严格数值、离散语义、恢复、学习五类结果在终态后逐组审阅；服务running或exit0都不是科学结论。本次没有自动下一批。
+
+---
+
 # 后台作业、终态与恢复
 
-2026-11-08终态复核：五个作业均已结束、无存活后代。FC评估与两个HB400步训练completed/exit0；NPU采样与冻结骨干B等卡超时，workload未启动。第三批已另获授权，当前正在准备，后续实际提交状态见STATUS。下面保留固定输入、预算和历史操作方法，不能把命令示例当作已提交的新任务。[第二批结论](studies/second-batch-results.md)、[终态证据](evidence/second-batch-terminal.json)。
+2026-11-08终态复核：五个作业均已结束、无存活后代。FC评估与两个HB400步训练completed/exit0；NPU采样与冻结骨干B等卡超时，workload未启动。第三批已另获授权并提交，实际状态见本页上方与STATUS。下面保留固定输入、预算和历史操作方法，不能把命令示例当作已提交的新任务。[第二批结论](studies/second-batch-results.md)、[终态证据](evidence/second-batch-terminal.json)。
 
 固定源码：`94bf712f8bd2e4007f0f56d1fea4799c99833dcd`，只读目录`.local/source-second-batch`，树SHA256 `e4fb0dfa6fc74c2c9c8b6a30d43215532321d4e2621d45f6abb0d6e3012133a0`。数学/公共基座及`.venv`不变；旧consumer wheel原样保留，新实验包显式从冻结目录导入，实际身份见各manifest。不要修改快照、环境或被锁定的原FC checkpoint/config。工作区文档更新不影响这些作业。
 

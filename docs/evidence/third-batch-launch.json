@@ -1,0 +1,422 @@
+{
+  "budget": {
+    "active_compute_cpu_threads": 12,
+    "active_compute_ram_gib": 64,
+    "added_disk_gib": 20,
+    "maximum_compute_npus": 2,
+    "queue_wait_cap_seconds": 28800,
+    "wall_seconds": 43200
+  },
+  "cgroup_policy": "v1 name=systemd lifecycle verified; CPU/memory request is not a per-service controller guarantee",
+  "common_deadline_beijing": "2026-11-08T21:29:11.393210+08:00",
+  "common_deadline_utc": "2026-11-08T13:29:11.393210+00:00",
+  "growth_admission_observation": {
+    "checks": {
+      "all_prefix_continuation_close": true,
+      "backbone_excluded_from_optimizer": true,
+      "backbone_no_grad_or_parameter_mutation": true,
+      "cached_lm_finite": true,
+      "gradient_ingress": [
+        {
+          "inner_gradient_max_abs": 0.0,
+          "loss": 10.594610214233398,
+          "output_gradient_max_abs": 0.10270518809556961,
+          "step": 0
+        },
+        {
+          "inner_gradient_max_abs": 0.013654748909175396,
+          "loss": 5.062778472900391,
+          "output_gradient_max_abs": 0.06286430358886719,
+          "step": 1
+        }
+      ],
+      "initial_task_loss": 10.594610214233398,
+      "language_initial_exact": true,
+      "optimizer_unique_parameters": true,
+      "original_lm_cache_close": true,
+      "original_lm_cache_max_abs": 0.0,
+      "original_lm_finite": true,
+      "original_lm_next_token": " Paris",
+      "post_update_ablation_max_abs": 0.00551605224609375,
+      "post_update_continuation_close": true,
+      "post_update_continuation_max_abs": 0.0,
+      "prefix_continuation": [
+        {
+          "length": 1,
+          "strict_close": true
+        },
+        {
+          "length": 2,
+          "strict_close": true
+        },
+        {
+          "length": 3,
+          "strict_close": true
+        },
+        {
+          "length": 4,
+          "strict_close": true
+        },
+        {
+          "length": 5,
+          "strict_close": true
+        },
+        {
+          "length": 6,
+          "strict_close": true
+        },
+        {
+          "length": 7,
+          "strict_close": true
+        }
+      ],
+      "task_initial_exact": true,
+      "task_initial_finite": true
+    },
+    "historical_failures": "retained unchanged; this tiny frozen path does not override earlier CPU/NPU comparisons",
+    "result_sha256": "8228351c9973b94657b261cd82dbfde9191419141838b06944d9b0f85d2c7beb",
+    "scope": "selected checkpoint, tiny synthetic episodes, eager FP32; two SGD ingress steps",
+    "state": "passed",
+    "strict_numeric": "passed"
+  },
+  "growth_recovery_observation": {
+    "frozen": {
+      "checks": {
+        "accelerator_rng": "exact",
+        "config_sha256": "exact",
+        "identity": "exact",
+        "model": "exact",
+        "optimizer": "exact",
+        "python_rng": "exact",
+        "rng": "exact",
+        "sequence_state": "exact",
+        "step": "exact"
+      },
+      "result_sha256": "7f58e3cc3ec027e12b9071a2a53709fb4ba16625e9914e4950d4ac1c97708eaf",
+      "retention": "checkpoints retired after exact comparison; hashes/logs/results retained; rerun reproduces",
+      "scope": "3 updates/B2 same physical NPU and stack; fresh-process model/SGD/RNG/config/identity exact",
+      "state": "passed"
+    },
+    "full": {
+      "checks": {
+        "accelerator_rng": "exact",
+        "config_sha256": "exact",
+        "identity": "exact",
+        "model": "exact",
+        "optimizer": "exact",
+        "python_rng": "exact",
+        "rng": "exact",
+        "sequence_state": "exact",
+        "step": "exact"
+      },
+      "result_sha256": "1f91f89f1a7740ca1bdd8652c1d68b4f0201cfe8e8eb98498e39dde38420cc1a",
+      "retention": "checkpoints retired after exact comparison; hashes/logs/results retained; rerun reproduces",
+      "scope": "3 updates/B2 same physical NPU and stack; fresh-process model/SGD/RNG/config/identity exact",
+      "state": "passed"
+    }
+  },
+  "jobs": [
+    {
+      "cgroup_process_count": 6,
+      "gates": {
+        "frozen-ingress": "passed",
+        "frozen-resume": "passed",
+        "full-resume": "passed"
+      },
+      "job_id": "s3-growth",
+      "job_record": "artifacts/jobs/s3-growth/job.json",
+      "phase": "tl-b3-full-s11-200",
+      "queue": {
+        "elapsed_seconds": 6.514654003083706,
+        "logical_devices": [
+          "npu:0"
+        ],
+        "physical_ids": [
+          1
+        ],
+        "status": "running"
+      },
+      "resources": {
+        "cpu_quota_percent": 400,
+        "memory_bytes": 25769803776,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 4,
+        "timeout_seconds": 39660,
+        "wait_seconds": 28800
+      },
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "stage": "running",
+      "state": "running",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-growth.service",
+        "MainPID": "2996353",
+        "RuntimeMaxUSec": "11h 1min",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-growth.service",
+      "workload_observed_at": "2026-11-08T01:34:02.207019+00:00"
+    },
+    {
+      "cgroup_process_count": 6,
+      "job_id": "s3-hb-dense-s22",
+      "job_record": "artifacts/jobs/s3-hb-dense-s22/job.json",
+      "last_recorded_step": 5,
+      "metrics_record": "runs/s3-hb-dense-s22/tl-a2-repeat-dense-s22/metrics.jsonl",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 10770,
+        "wait_seconds": 0
+      },
+      "run_id": "tl-a2-repeat-dense-s22",
+      "run_state": "running",
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "running",
+      "steps": 20,
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-hb-dense-s22.service",
+        "MainPID": "2996392",
+        "RuntimeMaxUSec": "2h 59min 30s",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-hb-dense-s22.service",
+      "workload_observed_at": "2026-11-08T01:34:02.207019+00:00"
+    },
+    {
+      "cgroup_process_count": 6,
+      "job_id": "s3-hb-dense-s33",
+      "job_record": "artifacts/jobs/s3-hb-dense-s33/job.json",
+      "last_recorded_step": 5,
+      "metrics_record": "runs/s3-hb-dense-s33/tl-a2-repeat-dense-s33/metrics.jsonl",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 10770,
+        "wait_seconds": 0
+      },
+      "run_id": "tl-a2-repeat-dense-s33",
+      "run_state": "running",
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "running",
+      "steps": 19,
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-hb-dense-s33.service",
+        "MainPID": "2996469",
+        "RuntimeMaxUSec": "2h 59min 30s",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-hb-dense-s33.service",
+      "workload_observed_at": "2026-11-08T01:34:02.207019+00:00"
+    },
+    {
+      "cgroup_process_count": 3,
+      "job_id": "s3-hb-evaluation",
+      "job_record": "artifacts/jobs/s3-hb-evaluation/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 4294967296,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 14490,
+        "wait_seconds": 0
+      },
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "stage": "waiting_dependency",
+      "state": "running",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-hb-evaluation.service",
+        "MainPID": "2996515",
+        "RuntimeMaxUSec": "4h 1min 30s",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-hb-evaluation.service"
+    },
+    {
+      "cgroup_process_count": 6,
+      "job_id": "s3-hb-sparse-s22",
+      "job_record": "artifacts/jobs/s3-hb-sparse-s22/job.json",
+      "last_recorded_step": 5,
+      "metrics_record": "runs/s3-hb-sparse-s22/tl-a2-repeat-sparse-s22/metrics.jsonl",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 10770,
+        "wait_seconds": 0
+      },
+      "run_id": "tl-a2-repeat-sparse-s22",
+      "run_state": "running",
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "running",
+      "steps": 20,
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-hb-sparse-s22.service",
+        "MainPID": "2996433",
+        "RuntimeMaxUSec": "2h 59min 30s",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-hb-sparse-s22.service",
+      "workload_observed_at": "2026-11-08T01:34:02.207019+00:00"
+    },
+    {
+      "cgroup_process_count": 6,
+      "job_id": "s3-hb-sparse-s33",
+      "job_record": "artifacts/jobs/s3-hb-sparse-s33/job.json",
+      "last_recorded_step": 5,
+      "metrics_record": "runs/s3-hb-sparse-s33/tl-a2-repeat-sparse-s33/metrics.jsonl",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 8589934592,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 10770,
+        "wait_seconds": 0
+      },
+      "run_id": "tl-a2-repeat-sparse-s33",
+      "run_state": "running",
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "running",
+      "steps": 20,
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-s3-hb-sparse-s33.service",
+        "MainPID": "2996491",
+        "RuntimeMaxUSec": "2h 59min 30s",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "termination_verified_now": false,
+      "unit": "tide-lab-s3-hb-sparse-s33.service",
+      "workload_observed_at": "2026-11-08T01:34:02.207019+00:00"
+    },
+    {
+      "cgroup_process_count": 0,
+      "job_id": "s3-npu-sampling",
+      "job_record": "artifacts/jobs/s3-npu-sampling/job.json",
+      "queue": {
+        "elapsed_seconds": 88.2178670167923,
+        "logical_devices": [
+          "npu:0"
+        ],
+        "physical_ids": [
+          3
+        ],
+        "status": "completed"
+      },
+      "resources": {
+        "cpu_quota_percent": 400,
+        "memory_bytes": 8589934592,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 4,
+        "timeout_seconds": 29760,
+        "wait_seconds": 28800
+      },
+      "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "stage": "completed",
+      "state": "completed",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "RuntimeMaxUSec": "infinity",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "termination_verified_now": true,
+      "unit": "tide-lab-s3-npu-sampling.service"
+    }
+  ],
+  "latest_workload_observation_at": "2026-11-08T01:34:02.207019+00:00",
+  "observed_at": "2026-11-08T01:31:16.342247+00:00",
+  "sampling_observation": {
+    "elapsed_seconds": 61.321273662149906,
+    "interpretation": "single paired step; bitwise model/optimizer observation check only, not independent numeric reference, exact application resume, learning or reliable speedup",
+    "lens": {
+      "readback_matches": true,
+      "source_run_id": "tl-s2-npu-sampling",
+      "state": "verified"
+    },
+    "observation_equivalence": "bitwise model and optimizer after identical step",
+    "observations": [
+      {
+        "loss": 2.3461859226226807,
+        "observe": false,
+        "samples": 943,
+        "seconds": 19.59320543706417,
+        "work": {
+          "activity/full_fraction": 1.0,
+          "work/candidates": 1792,
+          "work/full": 1792,
+          "work/max_full_batch": 224,
+          "work/max_region_batch": 224,
+          "work/max_state_batch": 32,
+          "work/max_state_sequence": 7,
+          "work/messages": 3584,
+          "work/read_events": 1792,
+          "work/region_blocks": 2,
+          "work/source_rows": 4480,
+          "work/state_updates": 1792
+        }
+      },
+      {
+        "loss": 2.3461859226226807,
+        "observe": true,
+        "samples": 933,
+        "seconds": 19.129062369465828,
+        "work": {
+          "activity/full_fraction": 1.0,
+          "activity/nonpositive_fraction": 0.0,
+          "activity/send_strength": 653.6611328125,
+          "region/0/candidates": 896,
+          "region/0/full": 896,
+          "region/1/candidates": 896,
+          "region/1/full": 896,
+          "work/candidates": 1792,
+          "work/full": 1792,
+          "work/max_full_batch": 224,
+          "work/max_region_batch": 224,
+          "work/max_state_batch": 32,
+          "work/max_state_sequence": 7,
+          "work/messages": 3584,
+          "work/read_events": 1792,
+          "work/region_blocks": 2,
+          "work/source_rows": 4480,
+          "work/state_updates": 1792
+        }
+      }
+    ],
+    "result_sha256": "5904debb5cb2cd7bf564e81bd9f9f1fa66f48ebb79cdd2346ee0c2f89891a4fd",
+    "state": "completed"
+  },
+  "schema": "tide-lab-third-launch-v1",
+  "scientific_results": "awaiting human review; submission/startup only",
+  "source_commit": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+  "source_tree_sha256": "284807226729141d002e77c01d65c687ef6bc5652cb7864a434a2596cce021fa"
+}
