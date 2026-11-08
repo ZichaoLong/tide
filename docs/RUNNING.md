@@ -1,3 +1,53 @@
+# 语言v4：已启动的固定源码后台链
+
+北京时间2026-11-09 07:02运行核对：`lm-a-language-v4`（物理NPU1）和`lm-b-language-v4`（物理NPU3）均实际运行；每作业4线程/请求24GiB，均在background.slice。新确认数据服务已完成并确认后代清空。状态快照见[证据](evidence/language-v4-handoff.json)，任务范围见[研究表](studies/language-confirmation-v4.md)。
+
+固定源码：`069275628eefc1011e2b69526a28126e2bc25985`，只读`.local/source-language-confirm-v4`；配置`configs/studies/language/fc-confirm-v4.json`。冻结数据`runs/lm-confirmation-data-v4/tokens/`，数据锁SHA256 `f3b9cc86635b58bb706e6b8b0fca4c4e850cc5e867642b2d2bfaa60f34ae1030`。B确认cache由固定源码生成在`runs/lm-b-language-v4/cache-confirmation/features.pt`，旧train/val特征和统计保持原样。全部输入hash、argv/env、队列和资源均在`artifacts/jobs/<job>/job.json`。
+
+仓库根目录只读检查：
+
+```bash
+python scripts/job.py status artifacts/jobs/lm-a-language-v4
+python scripts/job.py status artifacts/jobs/lm-b-language-v4
+python scripts/job.py logs artifacts/jobs/lm-a-language-v4 --lines 40
+python scripts/job.py logs artifacts/jobs/lm-b-language-v4 --lines 40
+cat runs/lm-a-language-v4/stage.json
+cat runs/lm-b-language-v4/stage.json
+tail -n 5 runs/lm-a-language-v4/train-tide-dense-512/metrics.jsonl
+tail -n 5 runs/lm-b-language-v4/train-bottleneck-128/metrics.jsonl
+```
+
+阶段尚未开始时对应文件不存在。每阶段实际日志为`runs/<job>/<stage>-wrapper/workload.log`；指标/manifest/result/检查点在`runs/<job>/<stage>/`。新确认集结果不用于自动挑超参数或时长。A额外2048步Transformer清楚标记4倍曝光，FC8只由验证学习和预算决定。
+
+停止整批，分别停止两条链；命令会核对实际cgroup与已知后代：
+
+```bash
+python scripts/job.py stop artifacts/jobs/lm-a-language-v4
+python scripts/job.py stop artifacts/jobs/lm-b-language-v4
+```
+
+本批无自动重启或恢复。每32步及终点保存完整model/AdamW/RNG/游标/身份；FC4另保留不可变`checkpoint-step128.pt`。若中断，先核对服务/后代终止、实际已耗预算和错误，再以**新job/output**、原只读源码/环境/config/data/cache、原batch/seed/目标更新数/LR日程，通过background.slice和共享队列恢复。队列须用`--candidate-ids`限制为checkpoint的原物理映射（当前A1/B3；以checkpoint身份为准），等不到则有限排队失败，不绕过身份拒绝。原`job.py`默认自动选卡；精确续接需像已有completion协调器一样在CPU监督服务中调用带该限制的共享队列，再执行原训练命令。
+
+A稠密512续接的内层训练参数如下（必须经上述监督/队列及原累计预算，不能直接前台运行）：
+
+```text
+python scripts/language_stage.py train
+  --plan <原快照>/configs/studies/language/fc-confirm-v4.json
+  --data <项目>/runs/lm-confirmation-data-v4/tokens
+  --route a --kind tide-dense --seed 11 --batch 8 --length 32 --depth 1
+  --steps 512 --schedule-steps 512 --retain-step 128
+  --resume <原训练stage>/checkpoint.pt
+  --output <新的运行目录> --run-id <新的唯一ID>
+```
+
+B为`--route b --kind bottleneck --steps 128`且不传schedule-steps，加原`--cache`与固定`--asset-path`。FC8为depth2/steps128/schedule-steps512；独立2048参考为steps2048/schedule-steps2048。完成目标更新后继续训练不属于恢复。微型三步恢复通过不认证完整长轨迹独立等价；严禁修改已启动作业输入。
+
+全批截止北京时间2026-11-09 18:47:01；NPU总8h，A27000秒/B1800秒含各自检查、记录、评价和条件工作，监督留有60秒余量。新提交不重置时限或成本。CPU-only2h，新增磁盘8GiB/余量80GiB；cgroup v1配额请求与应用实际护栏区分。
+
+Lens项目`tide-learning-lab`。A训练stage `train-transformer-512`、`train-transformer-extra2048`、`train-tide-dense-512`、`train-tide-sparse-512`；B `train-bottleneck-128`。独立评价以`test-`开头；条件FC8以`train-fc8-`开头。各自`projection.json`记录destination_name/destination_run_id，启动快照已列完成投影；私有入口、SSH方式只在`.local/LENS.md`。
+
+---
+
 # 当前无活动作业 — 语言v3已完成
 
 A于北京时间2026-11-09 00:47、B于00:42完成。持久生命周期、29个内层阶段和实际后代均已核对；短暂systemd unit已回收，不依赖“unit不存在”判断成功。当前无排队/训练/自动后继。[终态总报告](studies/language-v3-results.md)、[固定证据](evidence/language-v3-terminal.json)。

@@ -822,7 +822,7 @@
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
       "decision": "\u6309v4\u6709\u9650\u7814\u7a76\u8868\u63a8\u8fdb\uff0c\u7ec8\u6001\u7531\u4e3b\u4ee3\u7406\u72ec\u7acb\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "v3\u7ec8\u6001\u548c\u65e7\u5931\u8d25\u4fdd\u7559\uff1bv4\u51c6\u5907\u4e2d\uff0c\u672a\u63d0\u4ea4\u3002",
+      "execution_note": "v4\u6570\u636e\u5df2\u5b8c\u6210\uff0cLens\u5c0f\u8bb0\u5f55verified/readback_matches\u3002",
       "id": "L-DATA",
       "kind": "experiment",
       "question": "\u539f\u59cb\u6587\u6863\u3001\u5168\u4f4d\u7f6e\u76ee\u6807\u548c\u72ec\u7acb\u8bc4\u4ef7\u5982\u4f55\u56fa\u5b9a\uff1f",
@@ -850,6 +850,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "runs": [
@@ -860,11 +864,19 @@
           "record": "runs/lm-data-v1/result.json",
           "source_commit": "492f46da2d37beff37296a1d51fc273ffb5906c7",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "tl-lm0-confirmation-v4",
+          "lens_record": "runs/lm-confirmation-data-v4/projection.json",
+          "record": "runs/lm-confirmation-data-v4/result.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "completed",
       "study_id": "TL-LM0",
-      "summary": "\u8ba1\u5212\u51bb\u7ed3\u65b0\u786e\u8ba4\u6587\u6863\uff0c\u4fdd\u7559\u8bad\u7ec3/\u9a8c\u8bc1",
+      "summary": "\u65b016\u6587\u6863\u5df2\u51bb\u7ed3\uff1b\u65e7\u8bad\u7ec3/\u9a8c\u8bc1\u4fdd\u6301",
       "title": "\u5171\u540c\u8bed\u8a00\u4efb\u52a1\u4e0e\u8bc4\u4ef7",
       "track": "shared",
       "view_group": "current",
@@ -874,7 +886,7 @@
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
       "decision": "\u6309v4\u6709\u9650\u7814\u7a76\u8868\u63a8\u8fdb\uff0c\u7ec8\u6001\u7531\u4e3b\u4ee3\u7406\u72ec\u7acb\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "v3\u7ec8\u6001\u548c\u65e7\u5931\u8d25\u4fdd\u7559\uff1bv4\u51c6\u5907\u4e2d\uff0c\u672a\u63d0\u4ea4\u3002",
+      "execution_note": "v4\u5df2\u89c2\u5bdf\u5b9e\u9645NPU\u5de5\u4f5c\uff1b\u76f8\u5173\u68c0\u67e5\u3001\u6062\u590d\u3001\u8bad\u7ec3\u4f9d\u5e8f\u8fdb\u884c\uff0c\u79d1\u5b66\u7ed3\u679c\u5f85\u5ba1\u3002",
       "id": "L-EXEC",
       "kind": "experiment",
       "question": "\u65b0\u7684\u8bed\u8a00\u5e8f\u5217\u8def\u5f84\u662f\u5426\u53ef\u4fe1\u4e14\u5728\u672c\u673a\u9884\u7b97\u53ef\u8d1f\u62c5\uff1f",
@@ -922,6 +934,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "runs": [
@@ -1322,7 +1338,7 @@
           "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-LM-EXEC",
       "summary": "\u6539\u53d8\u8def\u5f84\u7684\u673a\u5236\u3001\u6062\u590d\u68c0\u67e5\uff1b\u516d\u8f74\u5206\u5217",
       "title": "\u5168\u4f4d\u7f6e\u63a5\u5165\u4e0e\u541e\u5410",
@@ -1334,7 +1350,7 @@
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
       "decision": "\u6309v4\u6709\u9650\u7814\u7a76\u8868\u63a8\u8fdb\uff0c\u7ec8\u6001\u7531\u4e3b\u4ee3\u7406\u72ec\u7acb\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "v3\u7ec8\u6001\u548c\u65e7\u5931\u8d25\u4fdd\u7559\uff1bv4\u51c6\u5907\u4e2d\uff0c\u672a\u63d0\u4ea4\u3002",
+      "execution_note": "Transformer\u4e24\u6761\u9884\u767b\u8bb0\u8f68\u8ff9\u5b8c\u6210\u5e76\u72ec\u7acb\u786e\u8ba4\uff1bFC4\u76f8\u5173\u68c0\u67e5/\u6062\u590d\u540e\u8bad\u7ec3\uff0c\u4e0d\u7531\u9000\u51fa\u7801\u4f5c\u79d1\u5b66\u652f\u6301\u3002",
       "id": "L-A",
       "kind": "experiment",
       "question": "\u76f8\u8fd1\u5bb9\u91cf\u4e0e\u540ctoken\u9884\u7b97\u4e0b\uff0c\u8bed\u8a00\u8d28\u91cf\u53ca\u7a00\u758f\u6298\u8877\u5982\u4f55\uff1f",
@@ -1382,6 +1398,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "runs": [
@@ -1518,11 +1538,34 @@
           "record": "runs/lm-a-language-v3/context_reset-tide-sparse/result.json",
           "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "lm-a-language-v4",
+          "record": "runs/lm-a-language-v4/stage.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "tl-lm-a-language-v4-train-transformer-512",
+          "lens_record": "runs/lm-a-language-v4/train-transformer-512/projection.json",
+          "record": "runs/lm-a-language-v4/train-transformer-512/result.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "tl-lm-a-language-v4-train-transformer-extra2048",
+          "lens_record": "runs/lm-a-language-v4/train-transformer-extra2048/projection.json",
+          "record": "runs/lm-a-language-v4/train-transformer-extra2048/result.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-A-LM",
-      "summary": "\u8ba1\u5212FC4/Transformer512\u6b65\uff0b\u989d\u5916\u53c2\u8003",
+      "summary": "\u666e\u901aLM512/2048\u5df2\u5b8c\u6210\uff1bTIDE\u94fe\u7ee7\u7eed",
       "title": "A\uff1a\u4ece\u96f6\u8bed\u8a00\u6a21\u578b",
       "track": "tide",
       "view_group": "current",
@@ -1532,7 +1575,7 @@
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
       "decision": "\u6309v4\u6709\u9650\u7814\u7a76\u8868\u63a8\u8fdb\uff0c\u7ec8\u6001\u7531\u4e3b\u4ee3\u7406\u72ec\u7acb\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "v3\u7ec8\u6001\u548c\u65e7\u5931\u8d25\u4fdd\u7559\uff1bv4\u51c6\u5907\u4e2d\uff0c\u672a\u63d0\u4ea4\u3002",
+      "execution_note": "NPU\u624b\u7b97VJP\u670945\u4e2a\u6709\u9650\u8d85\u5dee\u5143\u7d20\uff0c\u539f\u9608\u503c\u4fdd\u7559\uff1b\u673a\u5236\u4e0e\u4e09\u6b65\u7cbe\u786e\u6062\u590d\u901a\u8fc7\uff0c\u8bad\u7ec3/\u5b8c\u6574\u63a8\u7406\u5b8c\u6210\u3002",
       "id": "L-B",
       "kind": "experiment",
       "question": "\u5728\u539f\u751f\u8bed\u8a00\u76ee\u6807\u4e0a\uff0cTIDE\u80fd\u5426\u627f\u63a5\u8ba1\u7b97\u5e76\u4fdd\u7559\u8d28\u91cf\uff1f",
@@ -1580,6 +1623,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "runs": [
@@ -1708,11 +1755,26 @@
           "record": "runs/lm-b-language-v3/inference-seed11-tide-sparse/result.json",
           "source_commit": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "lm-b-language-v4",
+          "record": "runs/lm-b-language-v4/stage.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-confirm-v4.json",
+          "id": "tl-lm-b-language-v4-train-bottleneck-128",
+          "lens_record": "runs/lm-b-language-v4/train-bottleneck-128/projection.json",
+          "record": "runs/lm-b-language-v4/train-bottleneck-128/result.json",
+          "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+          "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-B-LM",
-      "summary": "\u8ba1\u5212\u5355\u4e00\u540c32\u7ef4\u74f6\u9888\u7a20\u5bc6\u5bf9\u7167",
+      "summary": "\u65b0\u74f6\u9888\u5bf9\u7167128\u5b8c\u6210\uff0c\u65e7\u6743\u91cd\u590d\u8bc4\u4e2d",
       "title": "B\uff1a\u8bed\u8a00\u80fd\u529b\u4e0e\u5c40\u90e8\u66ff\u6362",
       "track": "baseline",
       "view_group": "current",
@@ -1750,6 +1812,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "status": "planned",
@@ -1792,6 +1858,10 @@
         {
           "label": "\u56fa\u5b9av4\u914d\u7f6e",
           "path": "configs/studies/language/fc-confirm-v4.json"
+        },
+        {
+          "label": "v4\u542f\u52a8\u4e0e\u8eab\u4efd\u5feb\u7167",
+          "path": "docs/evidence/language-v4-handoff.json"
         }
       ],
       "status": "planned",

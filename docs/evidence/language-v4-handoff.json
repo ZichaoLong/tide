@@ -1,0 +1,1743 @@
+{
+  "budget": {
+    "a_admission_seconds": 1200,
+    "a_allocated_seconds": 27000,
+    "a_final_seconds": 1800,
+    "a_scale_seconds": 14400,
+    "a_training_seconds": 21600,
+    "b_admission_seconds": 600,
+    "b_allocated_seconds": 1800,
+    "b_final_seconds": 900,
+    "b_training_seconds": 300,
+    "cpu_check_seconds": 900,
+    "cpu_only_seconds": 7200,
+    "data_prepare_seconds": 900,
+    "max_concurrent_npus": 2,
+    "minimum_free_quota_gib": 80,
+    "new_disk_gib": 8,
+    "shared_wall_seconds": 43200,
+    "total_cpu_threads": 8,
+    "total_npu_seconds": 28800,
+    "total_ram_gib": 48
+  },
+  "config": {
+    "path": "configs/studies/language/fc-confirm-v4.json",
+    "sha256": "59c10ee30e0e97e184ec0161d49361b8318742e3f74e08bc89abea7a0963c109"
+  },
+  "data": {
+    "lifecycle": {
+      "current_cgroup_processes": [],
+      "job_id": "lm-confirmation-data-v4",
+      "known_descendants_alive": [],
+      "queue": null,
+      "state": {
+        "child_process_group": 1369427,
+        "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-confirmation-data-v4.service",
+        "descendants": [
+          {
+            "parent_pid": 1369419,
+            "pid": 1369427,
+            "process_group": 1369427,
+            "start_ticks": 2176485692,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1369427,
+            "pid": 1369474,
+            "process_group": 1369427,
+            "start_ticks": 2176485704,
+            "state": "R"
+          }
+        ],
+        "elapsed_seconds": 8.2592235468328,
+        "ended_at": "2026-11-08T22:58:14.430700+00:00",
+        "finalized_at": "2026-11-08T22:58:14.483760+00:00",
+        "job_id": "lm-confirmation-data-v4",
+        "known_descendants_alive": [],
+        "launcher": {
+          "parent_pid": 1369419,
+          "pid": 1369427,
+          "process_group": 1369427,
+          "start_ticks": 2176485692,
+          "state": "R"
+        },
+        "launcher_exit_code": 0,
+        "leaked_descendants": false,
+        "queue_state": null,
+        "remaining_descendants": [],
+        "schema": "tide-job-lifecycle-v1",
+        "signal": null,
+        "started_at": "2026-11-08T22:58:06.171494+00:00",
+        "state": "completed",
+        "supervisor": {
+          "parent_pid": 2907797,
+          "pid": 1369419,
+          "process_group": 1369419,
+          "start_ticks": 2176485683,
+          "state": "R"
+        },
+        "systemd": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success"
+        },
+        "termination_verified": true,
+        "updated_at": "2026-11-08T22:58:06.621866+00:00",
+        "workload_exit_code": 0
+      },
+      "systemd": {
+        "ActiveState": "inactive",
+        "CPUQuotaPerSecUSec": "infinity",
+        "ControlGroup": "",
+        "ExecMainStatus": "0",
+        "Id": "tide-lab-lm-confirmation-data-v4.service",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "MemoryMax": "infinity",
+        "Result": "success",
+        "RuntimeMaxUSec": "infinity",
+        "Slice": "",
+        "SubState": "dead",
+        "Transient": "no",
+        "inspection_exit_code": 0
+      },
+      "termination_verified_now": true,
+      "worker": {
+        "elapsed_seconds": 7.444688159972429,
+        "ended_at": "2026-11-08T22:58:13.775612+00:00",
+        "exit_code": 0,
+        "job_id": "lm-confirmation-data-v4",
+        "logical_device": "cpu",
+        "physical_visibility": null,
+        "process": {
+          "parent_pid": 1369427,
+          "pid": 1369474,
+          "process_group": 1369427,
+          "start_ticks": 2176485704,
+          "state": "R"
+        },
+        "schema": "tide-job-worker-v1",
+        "signal": null,
+        "started_at": "2026-11-08T22:58:06.330942+00:00",
+        "state": "completed",
+        "worker": {
+          "parent_pid": 1369419,
+          "pid": 1369427,
+          "process_group": 1369427,
+          "start_ticks": 2176485692,
+          "state": "R"
+        }
+      }
+    },
+    "record": "runs/lm-confirmation-data-v4/result.json",
+    "result": {
+      "data_lock_sha256": "f3b9cc86635b58bb706e6b8b0fca4c4e850cc5e867642b2d2bfaa60f34ae1030",
+      "elapsed_seconds": 2.9093857035040855,
+      "lens_projection_completed": true,
+      "selection": {
+        "created_at": "2026-11-08T22:58:11.885461+00:00",
+        "excluded": [
+          "test-0026-daaec44f0d70",
+          "test-0039-217bf482eba1",
+          "test-0000-ae237715d274",
+          "test-0045-bc588a8c08d1",
+          "test-0041-32a7479ba1ec",
+          "test-0056-85a1f4c2c912",
+          "test-0053-637686b204db",
+          "test-0051-ae97b8a63f0d",
+          "test-0042-a503df2543d8",
+          "test-0017-36ac4b921536",
+          "test-0015-5193ec1cf9b0",
+          "test-0008-93e572d2f1d0",
+          "test-0027-59c6293998a8",
+          "test-0059-99a671d934f3",
+          "test-0009-647f1ac57fef",
+          "test-0034-87f2828a1958"
+        ],
+        "ids": [
+          "test-0035-3e6214a2c835",
+          "test-0047-c1591824a31b",
+          "test-0007-06d4a41946a4",
+          "test-0055-c9b263796de8",
+          "test-0036-f72c4ab83bee",
+          "test-0044-db689c80b752",
+          "test-0001-642d91acd113",
+          "test-0050-940eb492cab7",
+          "test-0046-7185d4a7c15a",
+          "test-0023-c2ba89883512",
+          "test-0021-3363e95dd10d",
+          "test-0010-9b59e08808fe",
+          "test-0002-63a3e54c20dc",
+          "test-0030-ac2a61d27907",
+          "test-0037-da07ce965a2d",
+          "test-0025-c57117b1a941"
+        ],
+        "rule": "first 16 unused official-test articles by sha256(seed:id); first two 128-target chunks",
+        "schema": "tide-confirmation-selection-v1",
+        "seed": 20261109
+      },
+      "state": "completed",
+      "training_validation_exact": true
+    },
+    "run_id": "tl-lm0-confirmation-v4",
+    "selection_sha256": "d98a329543ff4f132fcbd9f513ee5ab6408fa154006f70f8894507ba1ec58bfe"
+  },
+  "deadline": "2026-11-09T10:47:01+00:00",
+  "dependencies": {
+    "consumer.lock.json": "596030c98f85a9b8a0f7e21eedcd238e896d6976383d9fa65662de9b1472d2e3",
+    "environment.lock.json": "91634de734225013518e9f3dace8f96ddf475c8badeb95cf4cc2d4af3241efcf",
+    "foundation-source.json": "85c15df0bb86e02a9f5fa0584fd69b74ecfa44e64fe385e344aa065ee95d2929",
+    "foundation.lock.json": "8ee9bb6b9f11156611c34a468c67cbb34df69feb59cfb71099dd55c57b6ee508",
+    "installation.lock.json": "01b9066ee15c1a1d43dc0f1274cde195e9c24c36fd18258971ac0c0a66615e2b",
+    "language-data-environment.json": "8712d614d3a077d632c423ccca866f25d0bf6109c39858fda354cc5f9f9a8935",
+    "language-data-source.json": "b0bdc0a41e3f07b09d605ffe23ccdfdd6ba7640c215b80832582145a7167e839"
+  },
+  "historical_spend_seconds": 11990.574,
+  "jobs": {
+    "lm-a-language-v4": {
+      "chain_snapshot": {
+        "admission": {
+          "d1-tide-dense": {
+            "admitted": true,
+            "checks": {
+              "admitted_for_finite_exploration": true,
+              "axes": {
+                "discrete_semantics": "passed",
+                "execution": "passed",
+                "learning": "unchecked",
+                "mechanisms": "passed",
+                "performance": "unchecked",
+                "recovery": "unchecked_here",
+                "strict_numerical": "inspect detailed original thresholds"
+              },
+              "checks": {
+                "analytic_ce_vjp": {
+                  "atol": 1e-06,
+                  "elements": 24576,
+                  "failed_elements": 0,
+                  "max_abs": 1.4901161193847656e-08,
+                  "relative_l2": 5.188598350969187e-08,
+                  "rtol": 1e-05,
+                  "state": "passed"
+                },
+                "core": {
+                  "causal": {
+                    "atol": 0,
+                    "elements": 128,
+                    "failed_elements": 0,
+                    "max_abs": 0.0,
+                    "relative_l2": 0.0,
+                    "rtol": 0,
+                    "state": "passed"
+                  },
+                  "causal_mechanisms": {
+                    "cutoff": 6,
+                    "early_support_unchanged": true,
+                    "future_vjp_exact_zero": true,
+                    "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+                    "reference_intervention": {
+                      "atol": 0,
+                      "elements": 128,
+                      "failed_elements": 0,
+                      "max_abs": 0.0,
+                      "relative_l2": 0.0,
+                      "rtol": 0,
+                      "state": "passed"
+                    }
+                  },
+                  "chunked": {
+                    "atol": 1e-06,
+                    "elements": 192,
+                    "failed_elements": 0,
+                    "max_abs": 0.0,
+                    "relative_l2": 0.0,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "input_gradient_by_position": [
+                    [
+                      3.0129895210266113,
+                      1.0920186042785645,
+                      1.5363155603408813
+                    ],
+                    [
+                      5.526869773864746,
+                      9.428544998168945,
+                      7.298980712890625
+                    ]
+                  ],
+                  "numerical_note": "finite strict disagreements retained after complete records, VJP, support, roots and causality checks; cause not assumed roundoff",
+                  "roots": {
+                    "independent_roots": 6,
+                    "physical_input_records": 24,
+                    "scope": "actual public input constructor used by the unchanged encoder"
+                  },
+                  "streaming": {
+                    "atol": 1e-06,
+                    "elements": 192,
+                    "failed_elements": 0,
+                    "max_abs": 0.0,
+                    "relative_l2": 0.0,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "strict": {
+                    "discrete": {
+                      "first_errors": [],
+                      "leaves": 1557,
+                      "mismatches": 0
+                    },
+                    "nonfinite": [],
+                    "numerical": {
+                      "candidate_max_abs": 4.674714088439941,
+                      "elements": 157557,
+                      "error_l2": 3.620988570187234e-05,
+                      "failed_elements": 0,
+                      "failed_leaves": 0,
+                      "first_failures": [],
+                      "max_abs_error": 1.6689300537109375e-06,
+                      "reference_l2": 156.37248122981157,
+                      "reference_max_abs": 4.674714088439941,
+                      "relative_l2_error": 2.3156175189582606e-07,
+                      "tensor_leaves": 718,
+                      "zero_reference_scale": false
+                    }
+                  }
+                },
+                "optimizer_unique": true,
+                "optimizer_updates": true,
+                "task_loss_finite": true,
+                "tied_head": true
+              },
+              "elapsed_seconds": 6.322964906692505,
+              "finished_at": "2026-11-08T23:01:37.627442+00:00",
+              "lens_projection_completed": true,
+              "process_peak_rss_mib": 1957.65625,
+              "run_id": "tl-lm-a-language-v4-check-d1-tide-dense",
+              "started_at": "2026-11-08T23:01:33.842038+00:00",
+              "state": "completed"
+            },
+            "recovery": {
+              "full": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-tide-dense-full",
+              "resumed": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-tide-dense-continued",
+              "schedule_steps": 512,
+              "scope": "B2/L3 three updates, fresh processes, exact model/optimizer/RNG/cursor/identity; retained prefix exact",
+              "state": "passed"
+            }
+          },
+          "d1-transformer": {
+            "admitted": true,
+            "checks": {
+              "admitted_for_finite_exploration": true,
+              "axes": {
+                "discrete_semantics": "passed",
+                "execution": "passed",
+                "learning": "unchecked",
+                "mechanisms": "passed",
+                "performance": "unchecked",
+                "recovery": "unchecked_here",
+                "strict_numerical": "inspect detailed original thresholds"
+              },
+              "checks": {
+                "analytic_ce_vjp": {
+                  "atol": 1e-06,
+                  "elements": 24576,
+                  "failed_elements": 0,
+                  "max_abs": 1.4901161193847656e-08,
+                  "relative_l2": 6.343821468135502e-08,
+                  "rtol": 1e-05,
+                  "state": "passed"
+                },
+                "optimizer_unique": true,
+                "optimizer_updates": true,
+                "task_loss_finite": true,
+                "tied_head": true
+              },
+              "elapsed_seconds": 3.1852440759539604,
+              "finished_at": "2026-11-08T22:59:20.799804+00:00",
+              "lens_projection_completed": true,
+              "process_peak_rss_mib": 1843.5703125,
+              "run_id": "tl-lm-a-language-v4-check-d1-transformer",
+              "started_at": "2026-11-08T22:59:20.108602+00:00",
+              "state": "completed"
+            },
+            "recovery": {
+              "full": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-transformer-full",
+              "resumed": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-transformer-continued",
+              "schedule_steps": 512,
+              "scope": "B2/L3 three updates, fresh processes, exact model/optimizer/RNG/cursor/identity; retained prefix exact",
+              "state": "passed"
+            }
+          }
+        },
+        "axes": {
+          "discrete_semantics": "pending affected checks",
+          "execution": "running",
+          "learning": "unchecked",
+          "performance": "engineering observations; speedup is not a science gate",
+          "recovery": "pending fresh-process tiny check",
+          "strict_numerical": "original thresholds; finite failures retained"
+        },
+        "compute_deadline_epoch": 1794205682.686857,
+        "decisions": [],
+        "evaluations": [
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-512/checkpoint.pt",
+            "depth": 1,
+            "inference_state": "completed",
+            "kind": "transformer",
+            "label": "transformer-512",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-transformer-512",
+            "state": "completed"
+          },
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-extra2048/checkpoint.pt",
+            "depth": 1,
+            "inference_state": "completed",
+            "kind": "transformer",
+            "label": "transformer-extra2048",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-transformer-extra2048",
+            "state": "completed"
+          }
+        ],
+        "exposure": {
+          "128": 32677,
+          "2048": 522600,
+          "512": 130706
+        },
+        "installation": {
+          "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "3d79e2ea48d5557ed32c359fed0bdfbff62069fd85b03dea4ffa13d78a4d5c6e",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": "4.57.1"
+        },
+        "package_id": "tl-language-confirmation-v4",
+        "plan_sha256": "59c10ee30e0e97e184ec0161d49361b8318742e3f74e08bc89abea7a0963c109",
+        "route": "a",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794221221.0,
+        "skipped": [],
+        "spent_seconds": {
+          "admission": 73.34120585024357,
+          "final": 66.63678678125143,
+          "scale": 0.0,
+          "training": 46.70673621818423
+        },
+        "started_at": "2026-11-08T22:59:02.687026+00:00",
+        "state": "running",
+        "steps": [
+          {
+            "action": "unigram",
+            "cap_seconds": 90,
+            "category": "final",
+            "elapsed_seconds": 13.075977724045515,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:16.217549+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "unigram",
+            "observed_process_group_peak_rss_mib": 1702.58203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/unigram",
+            "result_sha256": "202d87824601180e3b7502bf6c210216bdf2ba7ac51ed652774a7b94c21a30a1",
+            "started_at": "2026-11-08T22:59:03.139744+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "checks",
+            "cap_seconds": 180,
+            "category": "admission",
+            "elapsed_seconds": 8.187159199267626,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:24.408919+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "check-d1-transformer",
+            "observed_process_group_peak_rss_mib": 1895.66796875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/check-d1-transformer",
+            "result_sha256": "badb2f4b8f3305e0869a00ddcffcd57dcddaab724375337a0aac43f1b9d15f60",
+            "started_at": "2026-11-08T22:59:16.220067+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 8.326152969151735,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:33.584121+00:00",
+            "name": "resume-d1-transformer-full",
+            "observed_process_group_peak_rss_mib": 1841.265625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-transformer-full",
+            "result_sha256": "7e0c2c27b3813f9c2f358e09a5762a9c4bcabbfbeef2538c94eebb3ee15e21e5",
+            "started_at": "2026-11-08T22:59:25.247207+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 7.941749796271324,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:41.529475+00:00",
+            "name": "resume-d1-transformer-split",
+            "observed_process_group_peak_rss_mib": 1848.69921875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-transformer-split",
+            "result_sha256": "02512afaadf9f29107d7977b2bd2dc1cb3fbc333e43f52e35d2299bf50cbba92",
+            "started_at": "2026-11-08T22:59:33.586159+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 7.963800709694624,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:49.496811+00:00",
+            "name": "resume-d1-transformer-continued",
+            "observed_process_group_peak_rss_mib": 1860.3046875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-transformer-continued",
+            "result_sha256": "d6d5dbeec613bc8b6d78c1bb5148da7d53c16e0d44301383e2a5132a22633a36",
+            "started_at": "2026-11-08T22:59:41.531452+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 300,
+            "category": "training",
+            "elapsed_seconds": 14.302112270146608,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:03.850115+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "train-transformer-512",
+            "observed_process_group_peak_rss_mib": 1898.625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-512",
+            "result_sha256": "bb250e450308bc8263754496ea6a35084e40c54c327d82586f6d7843f7dd2e88",
+            "started_at": "2026-11-08T22:59:49.543236+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 8.327895402908325,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:12.196960+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-transformer-512",
+            "observed_process_group_peak_rss_mib": 1760.9140625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-transformer-512",
+            "result_sha256": "5a4882e8f18cae469f4b4c9192d7a1bb4db1fa447eaf81fd9ec8f46212252fcd",
+            "started_at": "2026-11-08T23:00:03.866654+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "inference",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 9.313507847487926,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:21.518243+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "inference-transformer-512",
+            "observed_process_group_peak_rss_mib": 1802.91796875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/inference-transformer-512",
+            "result_sha256": "ae5b915d9d26ad1266bc512ffa110cbf13f0681815df1ec86bb6417418d55936",
+            "started_at": "2026-11-08T23:00:12.203156+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 9.299200780689716,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:30.823557+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "context-reset-transformer",
+            "observed_process_group_peak_rss_mib": 1802.83984375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/context-reset-transformer",
+            "result_sha256": "80da7122c9752558da531f96feb38a2d2d5f3b5320ce7c4d769c0114874f5326",
+            "started_at": "2026-11-08T23:00:21.522309+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 300,
+            "category": "training",
+            "elapsed_seconds": 32.404623948037624,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:03.232481+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "train-transformer-extra2048",
+            "observed_process_group_peak_rss_mib": 1905.4765625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-extra2048",
+            "result_sha256": "7aa461f4bff782c2cbe4998441bc2cfe4fd0eca88192177a214c344d276f9b43",
+            "started_at": "2026-11-08T23:00:30.826078+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 9.331323012709618,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:12.615039+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-transformer-extra2048",
+            "observed_process_group_peak_rss_mib": 1807.5859375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-transformer-extra2048",
+            "result_sha256": "26ca5ee7aeb681f9d75af6d98728f1918c9ac74bf8c37fd12eda04e271b167ac",
+            "started_at": "2026-11-08T23:01:03.281170+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "inference",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 9.32201885804534,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:21.942218+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "inference-transformer-extra2048",
+            "observed_process_group_peak_rss_mib": 1798.8203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/inference-transformer-extra2048",
+            "result_sha256": "2717fe6aeefe0428ffe48755f4661692d36214c692ae0d33162cec60f1167771",
+            "started_at": "2026-11-08T23:01:12.618592+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 7.96686315536499,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:29.915671+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "context-reset-extra2048",
+            "observed_process_group_peak_rss_mib": 1800.8046875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/context-reset-extra2048",
+            "result_sha256": "4707cf06e37a79d336e5545e81bdad5475a73d34601ff71366526788e947f7b5",
+            "started_at": "2026-11-08T23:01:21.946572+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "checks",
+            "cap_seconds": 180,
+            "category": "admission",
+            "elapsed_seconds": 11.53407883271575,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:41.453992+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "check-d1-tide-dense",
+            "observed_process_group_peak_rss_mib": 1961.12890625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/check-d1-tide-dense",
+            "result_sha256": "a6f68bf639c5e7f8c2cae0fca787a3292ca77ced7120b1252a3e491fd718b0bc",
+            "started_at": "2026-11-08T23:01:29.918226+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 10.339641008526087,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:51.800181+00:00",
+            "name": "resume-d1-tide-dense-full",
+            "observed_process_group_peak_rss_mib": 1952.2734375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-tide-dense-full",
+            "result_sha256": "69debb8efc8525d9a188d55a1b47e0bb0a0a7084bfd27d4e8a441d98b8d30552",
+            "started_at": "2026-11-08T23:01:41.458620+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 8.923688497394323,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:02:00.728909+00:00",
+            "name": "resume-d1-tide-dense-split",
+            "observed_process_group_peak_rss_mib": 1948.98828125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-tide-dense-split",
+            "result_sha256": "4a009c3b001386c0332ceb0444edba2e967e6e40d7bc6a5ae385b150ddf7eb18",
+            "started_at": "2026-11-08T23:01:51.803152+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 10.1249348372221,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:02:10.858355+00:00",
+            "name": "resume-d1-tide-dense-continued",
+            "observed_process_group_peak_rss_mib": 1958.453125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/resume-d1-tide-dense-continued",
+            "result_sha256": "8a61af72ffd6615153b90ada17aabefa6ca83bac128d122ceeca5d292b12b742",
+            "started_at": "2026-11-08T23:02:00.731428+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 10800,
+            "category": "training",
+            "name": "train-tide-dense-512",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-tide-dense-512",
+            "started_at": "2026-11-08T23:02:11.053399+00:00",
+            "state": "running"
+          }
+        ],
+        "training": [
+          {
+            "depth": 1,
+            "kind": "transformer",
+            "label": "transformer-512",
+            "learning_signal": true,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-512",
+            "schedule_steps": 512,
+            "seed": 11,
+            "state": "completed",
+            "steps": 512,
+            "valid_tokens": 130706
+          },
+          {
+            "depth": 1,
+            "kind": "transformer",
+            "label": "transformer-extra2048",
+            "learning_signal": true,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-transformer-extra2048",
+            "schedule_steps": 2048,
+            "seed": 11,
+            "state": "completed",
+            "steps": 2048,
+            "valid_tokens": 522600
+          }
+        ]
+      },
+      "job_record_sha256": "c0fe56c307c875209d529c92d91262ed2e1d6be032f163b36b6c3e8f8fa1665d",
+      "lifecycle": {
+        "current_cgroup_processes": [
+          {
+            "parent_pid": 2907797,
+            "pid": 1372243,
+            "process_group": 1372243,
+            "start_ticks": 2176490428,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372798,
+            "pid": 1372814,
+            "process_group": 1372814,
+            "start_ticks": 2176491203,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372814,
+            "pid": 1384849,
+            "process_group": 1372814,
+            "start_ticks": 2176510176,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1384849,
+            "pid": 1384851,
+            "process_group": 1384851,
+            "start_ticks": 2176510181,
+            "state": "R"
+          },
+          {
+            "parent_pid": 1372814,
+            "pid": 1385036,
+            "process_group": 1372814,
+            "start_ticks": 2176510573,
+            "state": "S"
+          }
+        ],
+        "job_id": "lm-a-language-v4",
+        "known_descendants_alive": [
+          {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "S"
+          }
+        ],
+        "queue": {
+          "elapsed_seconds": 6.883539114147425,
+          "job_id": "lm-a-language-v4",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 1,
+          "physical_ids": [
+            1
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "schema_version": 1,
+          "status": "running",
+          "timestamp": "2026-11-08T22:59:01.224717+00:00"
+        },
+        "state": {
+          "child_process_group": 1372247,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v4.service",
+          "descendants": [
+            {
+              "parent_pid": 1372243,
+              "pid": 1372247,
+              "process_group": 1372247,
+              "start_ticks": 2176490435,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372247,
+              "pid": 1372788,
+              "process_group": 1372247,
+              "start_ticks": 2176491193,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372788,
+              "pid": 1372798,
+              "process_group": 1372247,
+              "start_ticks": 2176491197,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 208.81992768496275,
+          "job_id": "lm-a-language-v4",
+          "launcher": {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "R"
+          },
+          "schema": "tide-job-lifecycle-v1",
+          "started_at": "2026-11-08T22:58:53.616652+00:00",
+          "state": "running",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 1372243,
+            "process_group": 1372243,
+            "start_ticks": 2176490428,
+            "state": "R"
+          },
+          "termination_verified": false,
+          "updated_at": "2026-11-08T23:02:22.647568+00:00"
+        },
+        "systemd": {
+          "ActiveState": "active",
+          "CPUQuotaPerSecUSec": "4s",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v4.service",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-a-language-v4.service",
+          "LoadState": "loaded",
+          "MainPID": "1372243",
+          "MemoryMax": "25769803776",
+          "Result": "success",
+          "RuntimeMaxUSec": "8h 31min",
+          "Slice": "background.slice",
+          "SubState": "running",
+          "Transient": "yes",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": false,
+        "worker": {
+          "job_id": "lm-a-language-v4",
+          "logical_device": "npu:0",
+          "physical_visibility": "1",
+          "process": {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "started_at": "2026-11-08T22:59:01.267213+00:00",
+          "state": "running",
+          "worker": {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "R"
+          }
+        }
+      }
+    },
+    "lm-b-language-v4": {
+      "chain_snapshot": {
+        "admission": {
+          "d1-bottleneck": {
+            "admitted": true,
+            "checks": {
+              "admitted_for_finite_exploration": true,
+              "axes": {
+                "discrete_semantics": "passed",
+                "execution": "passed",
+                "learning": "unchecked",
+                "mechanisms": "passed",
+                "recovery": "unchecked_here",
+                "strict_numerical": "inspect original tolerance results"
+              },
+              "checks": {
+                "alpha_zero": {
+                  "atol": 0,
+                  "elements": 911616,
+                  "failed_elements": 0,
+                  "max_abs": 0.0,
+                  "relative_l2": 0.0,
+                  "rtol": 0,
+                  "state": "passed"
+                },
+                "bottleneck": {
+                  "future_vjp_zero": true,
+                  "manual_vjp": {
+                    "core.0.weight": {
+                      "atol": 1e-06,
+                      "elements": 66560,
+                      "failed_elements": 0,
+                      "max_abs": 1.8363418464876005e-07,
+                      "relative_l2": 4.295526708770971e-05,
+                      "rtol": 1e-05,
+                      "state": "passed"
+                    },
+                    "core.2.weight": {
+                      "atol": 1e-06,
+                      "elements": 66560,
+                      "failed_elements": 4,
+                      "max_abs": 1.7479746646960337e-06,
+                      "relative_l2": 2.7752560200570846e-05,
+                      "rtol": 1e-05,
+                      "state": "failed"
+                    },
+                    "input": {
+                      "atol": 1e-06,
+                      "elements": 1792,
+                      "failed_elements": 0,
+                      "max_abs": 2.186221134431888e-08,
+                      "relative_l2": 3.059102195282178e-05,
+                      "rtol": 1e-05,
+                      "state": "passed"
+                    },
+                    "input.weight": {
+                      "atol": 1e-06,
+                      "elements": 28672,
+                      "failed_elements": 8,
+                      "max_abs": 2.367679419544577e-06,
+                      "relative_l2": 2.8678833429374504e-05,
+                      "rtol": 1e-05,
+                      "state": "failed"
+                    },
+                    "output.weight": {
+                      "atol": 1e-06,
+                      "elements": 28672,
+                      "failed_elements": 33,
+                      "max_abs": 1.158183693920553e-06,
+                      "relative_l2": 2.317783610422922e-05,
+                      "rtol": 1e-05,
+                      "state": "failed"
+                    }
+                  },
+                  "scope": "two rows; independent CPU FP64 formula and manual input/all-weight VJP",
+                  "value": {
+                    "atol": 1e-06,
+                    "elements": 1792,
+                    "failed_elements": 0,
+                    "max_abs": 1.4911880299450786e-06,
+                    "relative_l2": 3.086011966448288e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  }
+                },
+                "frozen_prefix": {
+                  "atol": 1e-05,
+                  "elements": 911616,
+                  "failed_elements": 0,
+                  "max_abs": 0.0,
+                  "relative_l2": 0.0,
+                  "rtol": 0.0001,
+                  "state": "passed"
+                },
+                "full_replacement_tail": {
+                  "atol": 1e-05,
+                  "elements": 911616,
+                  "failed_elements": 0,
+                  "max_abs": 0.0,
+                  "relative_l2": 0.0,
+                  "rtol": 0.0001,
+                  "state": "passed"
+                },
+                "gradient_entry": [
+                  [
+                    "output.weight"
+                  ],
+                  [
+                    "input.weight",
+                    "core.0.weight",
+                    "core.2.weight",
+                    "output.weight"
+                  ]
+                ],
+                "initial_local_output": "train-only teacher mean before updates",
+                "optimizer_unique": true,
+                "original_mlp_calls_at_alpha1": 0
+              },
+              "elapsed_seconds": 8.82526445761323,
+              "finished_at": "2026-11-08T22:59:40.664283+00:00",
+              "lens_projection_completed": true,
+              "process_peak_rss_mib": 5428.4921875,
+              "run_id": "tl-lm-b-language-v4-check-d1-bottleneck",
+              "started_at": "2026-11-08T22:59:35.176346+00:00",
+              "state": "completed"
+            },
+            "recovery": {
+              "full": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/resume-d1-bottleneck-full",
+              "resumed": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/resume-d1-bottleneck-continued",
+              "schedule_steps": 3,
+              "scope": "B2/L3 three updates, fresh processes, exact model/optimizer/RNG/cursor/identity; retained prefix exact",
+              "state": "passed"
+            }
+          }
+        },
+        "axes": {
+          "discrete_semantics": "pending affected checks",
+          "execution": "running",
+          "learning": "unchecked",
+          "performance": "engineering observations; speedup is not a science gate",
+          "recovery": "pending fresh-process tiny check",
+          "strict_numerical": "original thresholds; finite failures retained"
+        },
+        "compute_deadline_epoch": 1794180489.1827083,
+        "decisions": [],
+        "evaluations": [
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/train-bottleneck-128/checkpoint.pt",
+            "depth": 1,
+            "inference_state": "completed",
+            "kind": "bottleneck",
+            "label": "bottleneck",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-bottleneck",
+            "state": "completed"
+          },
+          {
+            "checkpoint": "None",
+            "depth": 1,
+            "kind": "original",
+            "label": "frozen",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-frozen",
+            "state": "completed"
+          },
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v3/train-seed11-original/checkpoint.pt",
+            "depth": 1,
+            "kind": "original",
+            "label": "v3-original",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-v3-original",
+            "state": "completed"
+          },
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v3/train-seed11-mlp/checkpoint.pt",
+            "depth": 1,
+            "kind": "mlp",
+            "label": "v3-mlp",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-v3-mlp",
+            "state": "completed"
+          }
+        ],
+        "exposure": {
+          "128": 32503,
+          "2048": 522249,
+          "512": 130477
+        },
+        "installation": {
+          "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "3d79e2ea48d5557ed32c359fed0bdfbff62069fd85b03dea4ffa13d78a4d5c6e",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": "4.57.1"
+        },
+        "package_id": "tl-language-confirmation-v4",
+        "plan_sha256": "59c10ee30e0e97e184ec0161d49361b8318742e3f74e08bc89abea7a0963c109",
+        "route": "b",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794221221.0,
+        "skipped": [],
+        "spent_seconds": {
+          "admission": 73.2208285368979,
+          "final": 63.524410001933575,
+          "training": 13.158326022326946
+        },
+        "started_at": "2026-11-08T22:59:09.182920+00:00",
+        "state": "running",
+        "steps": [
+          {
+            "action": "cache",
+            "cap_seconds": 300,
+            "category": "admission",
+            "elapsed_seconds": 21.017160333693027,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:30.394797+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "cache-confirmation",
+            "observed_process_group_peak_rss_mib": 4711.43359375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/cache-confirmation",
+            "result_sha256": "3a10b07130cc7b95b21329ccabd7dfb229f9511ebcc2e977ada09ca52d5208d6",
+            "started_at": "2026-11-08T22:59:09.375958+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "checks",
+            "cap_seconds": 180,
+            "category": "admission",
+            "elapsed_seconds": 15.34062035754323,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:45.740209+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "check-d1-bottleneck",
+            "observed_process_group_peak_rss_mib": 3950.62890625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/check-d1-bottleneck",
+            "result_sha256": "bbb0afe1122cebfb4601539e5d99dcd17c43fe5054934fb02bb8ad9421cc5e73",
+            "started_at": "2026-11-08T22:59:30.397723+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 11.941040765494108,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T22:59:57.688488+00:00",
+            "name": "resume-d1-bottleneck-full",
+            "observed_process_group_peak_rss_mib": 3279.56640625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/resume-d1-bottleneck-full",
+            "result_sha256": "da854256b97b0fa19a2f1692ae237515c428cb382ea16de94a179b81693a6e90",
+            "started_at": "2026-11-08T22:59:45.745007+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 12.749787848442793,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:10.442202+00:00",
+            "name": "resume-d1-bottleneck-split",
+            "observed_process_group_peak_rss_mib": 3253.33984375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/resume-d1-bottleneck-split",
+            "result_sha256": "7260afcbfb216b038a2c9c89fe71dd342362d5a9de6921e0735c85afac83c567",
+            "started_at": "2026-11-08T22:59:57.690726+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 100,
+            "category": "admission",
+            "elapsed_seconds": 12.172219231724739,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:22.618466+00:00",
+            "name": "resume-d1-bottleneck-continued",
+            "observed_process_group_peak_rss_mib": 3894.58203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/resume-d1-bottleneck-continued",
+            "result_sha256": "8ee764ddb7030f0bc82c0b311230ceace9414c1a3ca989e52aefd1d3eca70485",
+            "started_at": "2026-11-08T23:00:10.444552+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 285.0,
+            "category": "training",
+            "elapsed_seconds": 13.158326022326946,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:35.803214+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "train-bottleneck-128",
+            "observed_process_group_peak_rss_mib": 3973.6484375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/train-bottleneck-128",
+            "result_sha256": "b9fd0e65fc1c3d539631981b1f15f03ecb3f3e9ac62be455ad9615bdedd122e0",
+            "started_at": "2026-11-08T23:00:22.643233+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 12.144840404391289,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:00:47.957756+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-bottleneck",
+            "observed_process_group_peak_rss_mib": 3197.71484375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-bottleneck",
+            "result_sha256": "b0c729ba64f3952601df67392751eb60c5e9d0ea1911421e3950bde75acff522",
+            "started_at": "2026-11-08T23:00:35.810384+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "inference",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 14.14126667380333,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:02.105214+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "inference-bottleneck",
+            "observed_process_group_peak_rss_mib": 4519.625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/inference-bottleneck",
+            "result_sha256": "ea03ad28205eaac75f72a964876dbc27896e566c878a82526a314e9bef2e47d7",
+            "started_at": "2026-11-08T23:00:47.961874+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 12.54942999407649,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:14.661605+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-frozen",
+            "observed_process_group_peak_rss_mib": 3202.36328125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-frozen",
+            "result_sha256": "2bcb72937d046a3fda17e9ce1a20cce0bfdf0cdf61057f4b79b900d2e5fa1c57",
+            "started_at": "2026-11-08T23:01:02.110266+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 12.152540173381567,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:26.820879+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v3-original",
+            "observed_process_group_peak_rss_mib": 3290.84375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-v3-original",
+            "result_sha256": "ca400593e6695808dc3bf6c62a012c810ecaafb8d88503a381e9eb12b5bb11dd",
+            "started_at": "2026-11-08T23:01:14.666076+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 12.536332756280899,
+            "exit_code": 0,
+            "finished_at": "2026-11-08T23:01:39.363784+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v3-mlp",
+            "observed_process_group_peak_rss_mib": 3195.4765625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-v3-mlp",
+            "result_sha256": "8c220840ce865e4d8131307b3da589c95be91d9e2f2b659f589c3bdc28ec4255",
+            "started_at": "2026-11-08T23:01:26.825267+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "name": "test-v3-tide-dense",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/test-v3-tide-dense",
+            "started_at": "2026-11-08T23:01:39.368416+00:00",
+            "state": "running"
+          }
+        ],
+        "training": [
+          {
+            "depth": 1,
+            "kind": "bottleneck",
+            "label": "bottleneck-128",
+            "learning_signal": true,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-language-v4/train-bottleneck-128",
+            "schedule_steps": 128,
+            "seed": 11,
+            "state": "completed",
+            "steps": 128,
+            "valid_tokens": 32503
+          }
+        ]
+      },
+      "job_record_sha256": "57e60c424bb2138e014edc0c146153b8ede357337627a5c8196fcf8a7d172ff9",
+      "lifecycle": {
+        "current_cgroup_processes": [
+          {
+            "parent_pid": 2907797,
+            "pid": 1372332,
+            "process_group": 1372332,
+            "start_ticks": 2176490510,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372332,
+            "pid": 1372374,
+            "process_group": 1372374,
+            "start_ticks": 2176490588,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372374,
+            "pid": 1373218,
+            "process_group": 1372374,
+            "start_ticks": 2176491843,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1373218,
+            "pid": 1373219,
+            "process_group": 1372374,
+            "start_ticks": 2176491847,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1373219,
+            "pid": 1373220,
+            "process_group": 1373220,
+            "start_ticks": 2176491852,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1373220,
+            "pid": 1383071,
+            "process_group": 1373220,
+            "start_ticks": 2176507007,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1383071,
+            "pid": 1383072,
+            "process_group": 1383072,
+            "start_ticks": 2176507013,
+            "state": "R"
+          }
+        ],
+        "job_id": "lm-b-language-v4",
+        "known_descendants_alive": [
+          {
+            "parent_pid": 1372332,
+            "pid": 1372374,
+            "process_group": 1372374,
+            "start_ticks": 2176490588,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372374,
+            "pid": 1373218,
+            "process_group": 1372374,
+            "start_ticks": 2176491843,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1373218,
+            "pid": 1373219,
+            "process_group": 1372374,
+            "start_ticks": 2176491847,
+            "state": "S"
+          }
+        ],
+        "queue": {
+          "elapsed_seconds": 11.854082435369492,
+          "job_id": "lm-b-language-v4",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 3,
+          "physical_ids": [
+            3
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "schema_version": 1,
+          "status": "running",
+          "timestamp": "2026-11-08T22:59:07.723188+00:00"
+        },
+        "state": {
+          "child_process_group": 1372374,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-language-v4.service",
+          "descendants": [
+            {
+              "parent_pid": 1372332,
+              "pid": 1372374,
+              "process_group": 1372374,
+              "start_ticks": 2176490588,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372374,
+              "pid": 1373218,
+              "process_group": 1372374,
+              "start_ticks": 2176491843,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1373218,
+              "pid": 1373219,
+              "process_group": 1372374,
+              "start_ticks": 2176491847,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 204.4931445531547,
+          "job_id": "lm-b-language-v4",
+          "launcher": {
+            "parent_pid": 1372332,
+            "pid": 1372374,
+            "process_group": 1372374,
+            "start_ticks": 2176490588,
+            "state": "R"
+          },
+          "schema": "tide-job-lifecycle-v1",
+          "started_at": "2026-11-08T22:58:54.443414+00:00",
+          "state": "running",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 1372332,
+            "process_group": 1372332,
+            "start_ticks": 2176490510,
+            "state": "R"
+          },
+          "termination_verified": false,
+          "updated_at": "2026-11-08T23:02:19.142821+00:00"
+        },
+        "systemd": {
+          "ActiveState": "active",
+          "CPUQuotaPerSecUSec": "4s",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-language-v4.service",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-b-language-v4.service",
+          "LoadState": "loaded",
+          "MainPID": "1372332",
+          "MemoryMax": "25769803776",
+          "Result": "success",
+          "RuntimeMaxUSec": "1h 31min",
+          "Slice": "background.slice",
+          "SubState": "running",
+          "Transient": "yes",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": false,
+        "worker": {
+          "job_id": "lm-b-language-v4",
+          "logical_device": "npu:0",
+          "physical_visibility": "3",
+          "process": {
+            "parent_pid": 1373218,
+            "pid": 1373219,
+            "process_group": 1372374,
+            "start_ticks": 2176491847,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "started_at": "2026-11-08T22:59:07.765162+00:00",
+          "state": "running",
+          "worker": {
+            "parent_pid": 1372374,
+            "pid": 1373218,
+            "process_group": 1372374,
+            "start_ticks": 2176491843,
+            "state": "R"
+          }
+        }
+      }
+    }
+  },
+  "lens": [
+    {
+      "destination_name": "tl-lm0-confirmation-v4-projection-6848f525b98d",
+      "destination_run_id": "700f481535c74e448283ac8db175294a",
+      "event_count": 2,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-confirmation-data-v4/projection.json",
+      "run_id": "tl-lm0-confirmation-v4",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-context-reset-transformer-projection-927d67d1cdf6",
+      "destination_run_id": "ea64dce530704890837f8d7cfbfc607d",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/context-reset-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v4-context-reset-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-check-d1-tide-dense-projection-e796ef652595",
+      "destination_run_id": "5f6c4e0bbaa04bb2b6de5a125be2bd57",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/check-d1-tide-dense/projection.json",
+      "run_id": "tl-lm-a-language-v4-check-d1-tide-dense",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-check-d1-transformer-projection-0d4d9ed9d1c5",
+      "destination_run_id": "1c69c6781db2476ead3aaf8f44d2d7b0",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/check-d1-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v4-check-d1-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-test-transformer-512-projection-b889424c4719",
+      "destination_run_id": "f8f7d4769a4640deb6baa2a2c8fa78d1",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/test-transformer-512/projection.json",
+      "run_id": "tl-lm-a-language-v4-test-transformer-512",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-inference-transformer-512-projection-0478a97f9b7d",
+      "destination_run_id": "e2c69571e4104e939f6f562298bc3d3b",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/inference-transformer-512/projection.json",
+      "run_id": "tl-lm-a-language-v4-inference-transformer-512",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-train-transformer-512-projection-15cb5d5b966e",
+      "destination_run_id": "8822512b21cd4237aa9bb24515db3383",
+      "event_count": 73,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/train-transformer-512/projection.json",
+      "run_id": "tl-lm-a-language-v4-train-transformer-512",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-train-transformer-extra2048-projection-aa11651e2d84",
+      "destination_run_id": "0cf0663898714674a07ae586a31a7987",
+      "event_count": 289,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/train-transformer-extra2048/projection.json",
+      "run_id": "tl-lm-a-language-v4-train-transformer-extra2048",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-context-reset-extra2048-projection-1c03fe7e3d77",
+      "destination_run_id": "d90fa99fdd1a4561a7aa95d35146a720",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/context-reset-extra2048/projection.json",
+      "run_id": "tl-lm-a-language-v4-context-reset-extra2048",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-test-transformer-extra2048-projection-9b58b5cb430b",
+      "destination_run_id": "ad085b8112da410da34ea53f5f9111c9",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/test-transformer-extra2048/projection.json",
+      "run_id": "tl-lm-a-language-v4-test-transformer-extra2048",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-unigram-projection-620f5723de63",
+      "destination_run_id": "80e034d6642d4001b453db1cc6578e74",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/unigram/projection.json",
+      "run_id": "tl-lm-a-language-v4-unigram",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-inference-transformer-extra2048-projection-d4692b80b29e",
+      "destination_run_id": "d096d02f32244d93a3084e8c16db18db",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v4/inference-transformer-extra2048/projection.json",
+      "run_id": "tl-lm-a-language-v4-inference-transformer-extra2048",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-train-tide-dense-512-projection-2a91f2743d8d",
+      "destination_run_id": "74408b01ae064d1ba58e487c69140a3e",
+      "event_count": 0,
+      "project": "tide-learning-lab",
+      "readback_matches": null,
+      "record": "runs/lm-a-language-v4/train-tide-dense-512/projection.json",
+      "run_id": "tl-lm-a-language-v4-train-tide-dense-512",
+      "status": "recording"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-train-bottleneck-128-projection-7f5bbdcb4154",
+      "destination_run_id": "c85341c82da8454285159d782f420117",
+      "event_count": 19,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/train-bottleneck-128/projection.json",
+      "run_id": "tl-lm-b-language-v4-train-bottleneck-128",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-test-bottleneck-projection-758573984eae",
+      "destination_run_id": "7687882c3c274246abaa724603a6f309",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/test-bottleneck/projection.json",
+      "run_id": "tl-lm-b-language-v4-test-bottleneck",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-test-v3-mlp-projection-f35feb6c239c",
+      "destination_run_id": "f618f09f31bf4bac86c7a8b1f99b2ec1",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/test-v3-mlp/projection.json",
+      "run_id": "tl-lm-b-language-v4-test-v3-mlp",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-check-d1-bottleneck-projection-cac5423040cb",
+      "destination_run_id": "0ad6a31f0c5642b387a638daf5b0d279",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/check-d1-bottleneck/projection.json",
+      "run_id": "tl-lm-b-language-v4-check-d1-bottleneck",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-test-frozen-projection-9cf9223f3a96",
+      "destination_run_id": "a7a913a8dd694110a75f5a670402f677",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/test-frozen/projection.json",
+      "run_id": "tl-lm-b-language-v4-test-frozen",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-inference-bottleneck-projection-05627be324e5",
+      "destination_run_id": "5ccf8fa57eac4450aa81555ea4ec71f0",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/inference-bottleneck/projection.json",
+      "run_id": "tl-lm-b-language-v4-inference-bottleneck",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-cache-confirmation-projection-9158cac472d4",
+      "destination_run_id": "4b8ff12c10844781a295ee36db870861",
+      "event_count": 4,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/cache-confirmation/projection.json",
+      "run_id": "tl-lm-b-language-v4-cache-confirmation",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v4-test-v3-original-projection-ae17c55371be",
+      "destination_run_id": "c884b6bfc6df4e4482045b73eaab17a3",
+      "event_count": 1,
+      "project": "tide-learning-lab",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v4/test-v3-original/projection.json",
+      "run_id": "tl-lm-b-language-v4-test-v3-original",
+      "status": "verified"
+    }
+  ],
+  "observed_at": "2026-11-08T23:02:23.211415+00:00",
+  "preparation_checks": {
+    "browser": "passed",
+    "commands": [
+      "python -m unittest tests.test_language_confirmation tests.test_language -v",
+      "python scripts/render_map.py --check",
+      "python -m unittest tests.test_research_map tests.test_review_io -q",
+      "node --experimental-websocket tests/browser_smoke.mjs"
+    ],
+    "cpu_tests": 9,
+    "graph_and_review_tests": 16,
+    "installed_files_checked": 248,
+    "installed_files_mismatched": 0
+  },
+  "schema": "tide-language-v4-handoff-v1",
+  "science_review": "v4 pending; v3 scoped results remain separate",
+  "source": {
+    "commit": "069275628eefc1011e2b69526a28126e2bc25985",
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-confirm-v4",
+    "tree_sha256": "73a8df2680042cc69fdf1bfa0c8a7c5a2d8dabd3bffc6c7adb91a61cc9a9ae5e"
+  }
+}

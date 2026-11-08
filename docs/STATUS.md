@@ -1,6 +1,21 @@
-# 当前交接 — 语言v4准备中（2026-11-09）
+# 当前交接 — 语言v4后台运行（2026-11-09）
 
-用户已批准推进[新研究表](studies/language-confirmation-v4.md)。当前在实现/检查及冻结数据、源码；尚未提交新NPU作业。A512、单一B同32维瓶颈对照、条件FC8匹配128步及更充分Transformer参考；新批共8NPUh/12h，截止北京时间18:47:01，旧批成本和失败保留。执行、严格数值、离散语义、恢复、学习、性能分别记录。
+用户批准的新有界批次已实施。北京时间07:02观察，A/B均在`background.slice`实际运行，分别物理NPU1/3→logical npu:0；新数据已完成并核对Lens。权威状态随运行变化，见[操作说明](RUNNING.md)与[本次启动快照](evidence/language-v4-handoff.json)。
+
+| 作业 | 当前已观测 | 自动后续范围 |
+| --- | --- | --- |
+| `lm-a-language-v4` | Transformer机制/微型精确恢复通过，512和额外2048步均完成并独立评价 | FC4 dense/sparse/Transformer各512；单独标注额外曝光Transformer2048；两TIDE验证学习及预算允许后，FC8匹配128配对 |
+| `lm-b-language-v4` | 新对照128步、微型精确恢复、独立评价与完整推理已完成；旧权重确认复评中 | 单一同32维入口稠密对照128步；旧四checkpoint及冻结模型在新文档复评；不重训旧B候选 |
+
+[固定研究表](studies/language-confirmation-v4.md)、[配置](../configs/studies/language/fc-confirm-v4.json)。独立测试预先固定16份未用文档，每路线4096目标；旧训练/验证张量、顺序、词表不变。A B8/L32/512步为130706训练目标，额外Transformer2048为522600；B128为32503。seed11、microbatch8、accumulation1，不自动加seed22。FC8若运行，128步与本次FC4第128步检查点及512步LR日程前缀配对，不能拿FC4最终512作等曝光规模比较。
+
+执行固定`069275628eefc1011e2b69526a28126e2bc25985`，只读`.local/source-language-confirm-v4`，树SHA256 `73a8df2680042cc69fdf1bfa0c8a7c5a2d8dabd3bffc6c7adb91a61cc9a9ae5e`；数学0770593、foundation85d161d及248安装文件保持。CPU新增及相关测试9项、图/审阅隔离16项、离线浏览器检查通过。公共环境及基座只读，不改活动源码、配置、cache和依赖。
+
+新B稠密对照190464参数，对比TIDE190757；独立CPU FP64公式/手算VJP通过。NPU新检查在原1e-6/1e-5下有45个权重梯度元素有限超差（最大2.37e-6），值、输入梯度、梯度进入、未来VJP为零及alpha0精确保持通过；原因未定。新B完整替换full/tail小检查通过；完整/缓存推理严格结果独立保留。相关小检查和精确恢复通过才继续标记训练探索，不能称严格等价。旧B full/cache及dense单元素失败均保留。执行、严格数值、离散语义、恢复、学习和性能分列，当前无v4科学结论。
+
+本批新预算最多2NPU、8累计NPUh、8计算线程/48GiB；A≤7.5h含条件scale（自身≤4h），B≤0.5h，CPU-only≤2h、新磁盘≤8GiB、配额留80GiB。共同截止**2026-11-09 18:47:01北京时间**，不随服务重置；实际CPU数据服务8.26秒。旧批累计3.3307NPUh独立封存。吞吐比例仍为工程观察，不作实际稀疏+语言质量的准入门槛。
+
+Lens项目`tide-learning-lab`，小记录`tl-lm0-confirmation-v4`已verified/readback_matches。训练run前缀`tl-lm-a-language-v4-`/`tl-lm-b-language-v4-`；组TL-A-LM/TL-B-LM，条件规模TL-LM-SCALE，检查TL-LM-EXEC。私有入口在`.local/LENS.md`。研究图保留v3限定结论，并新增RLC-A/B/JOINT待审槽；任何退出码不自动填科学支持。
 
 ---
 
