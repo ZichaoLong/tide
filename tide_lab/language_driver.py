@@ -6,6 +6,7 @@ import subprocess
 import sys
 import time
 from .records import atomic_json,digest,now
+from .supervisor import group_processes
 
 
 class StageRunner:
@@ -41,8 +42,19 @@ class StageRunner:
         self.state['steps'].append(row);self.publish();started=time.monotonic();recorder=None;record_log=None
         with (self.args.output/(name+'.log')).open('x') as log:
             process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT)
+            next_memory_check=0.;peak_rss=0
             try:
                 while process.poll() is None:
+                    if time.monotonic()>=next_memory_check and (wrapper/'result.json').exists():
+                        wrapper_state=json.loads((wrapper/'result.json').read_text())
+                        rss=0
+                        for child in group_processes(wrapper_state.get('process_group')):
+                            try:rss+=int(Path('/proc',str(child['pid']),'statm').read_text().split()[1])*os.sysconf('SC_PAGE_SIZE')
+                            except (OSError,ValueError,IndexError):pass
+                        peak_rss=max(peak_rss,rss);next_memory_check=time.monotonic()+2
+                        if rss>22*1024**3:
+                            row['resource_failure']='stage process-group RSS exceeded 22GiB; preserve 2GiB supervisor/writer reserve'
+                            process.terminate()
                     if follow and recorder is None and (destination/'metrics.jsonl').exists():
                         record_log=(self.args.output/(name+'-recording.log')).open('x')
                         recorder=subprocess.Popen([str(self.args.recording_cli),'record','--events',str(destination/'metrics.jsonl'),
@@ -68,6 +80,7 @@ class StageRunner:
         elapsed=time.monotonic()-started;self.spent[category]+=elapsed
         result=json.loads((destination/'result.json').read_text()) if (destination/'result.json').exists() else dict(state='failed',error='no inner result; see bounded wrapper')
         row.update(state=result.get('state','failed'),exit_code=process.returncode,finished_at=now(),elapsed_seconds=elapsed,
+            observed_process_group_peak_rss_mib=peak_rss/2**20,
             result_sha256=digest(destination/'result.json') if (destination/'result.json').exists() else None)
         if process.returncode and row['state']=='completed':row['state']='failed'
         if (destination/'projection.json').exists():

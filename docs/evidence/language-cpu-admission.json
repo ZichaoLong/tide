@@ -1,0 +1,484 @@
+{
+  "calibration": {
+    "batch": 8,
+    "device": "cpu",
+    "kind": "tide-dense",
+    "length": 32,
+    "mean_step_seconds": 20.362179657444358
+  },
+  "checks": {
+    "tide-dense": {
+      "admitted_for_finite_exploration": true,
+      "checks": {
+        "analytic_ce_vjp": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 1.4901161193847656e-08,
+          "relative_l2": 5.185634749507557e-08,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "core": {
+          "causal": {
+            "atol": 0,
+            "elements": 128,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 0,
+            "state": "passed"
+          },
+          "causal_mechanisms": {
+            "cutoff": 10,
+            "early_support_unchanged": true,
+            "future_vjp_exact_zero": true,
+            "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+            "reference_intervention": {
+              "atol": 0,
+              "elements": 128,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 0,
+              "state": "passed"
+            }
+          },
+          "chunked": {
+            "atol": 1e-06,
+            "elements": 192,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_gradient_by_position": [
+            [
+              4.314821720123291,
+              2.0914485454559326,
+              3.3156349658966064
+            ],
+            [
+              15.130495071411133,
+              11.801202774047852,
+              8.078981399536133
+            ]
+          ],
+          "numerical_note": "finite strict disagreements retained after complete records, VJP, support, roots and causality checks; cause not assumed roundoff",
+          "roots": {
+            "independent_roots": 6,
+            "physical_input_records": 24,
+            "scope": "actual public input constructor used by the unchanged encoder"
+          },
+          "streaming": {
+            "atol": 1e-06,
+            "elements": 192,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "strict": {
+            "discrete": {
+              "first_errors": [],
+              "leaves": 8420,
+              "mismatches": 0
+            },
+            "nonfinite": [],
+            "numerical": {
+              "candidate_max_abs": 6.386260032653809,
+              "elements": 641372,
+              "error_l2": 0.0002877189343451746,
+              "failed_elements": 900,
+              "failed_leaves": 301,
+              "first_failures": [
+                {
+                  "abs_error": 1.3113021850585938e-06,
+                  "candidate": 0.0010350346565246582,
+                  "index": [
+                    0,
+                    23
+                  ],
+                  "leaf_max_abs_error": 2.86102294921875e-06,
+                  "leaf_reference_max_abs": 2.9790430068969727,
+                  "path": "complete_execution.continuation.states.(0, 9).slots.values",
+                  "reference": 0.0010363459587097168,
+                  "strict_limit": 1.0103634595870972e-06
+                },
+                {
+                  "abs_error": 2.9206275939941406e-06,
+                  "candidate": 0.06934529542922974,
+                  "index": [
+                    0,
+                    13
+                  ],
+                  "leaf_max_abs_error": 2.9206275939941406e-06,
+                  "leaf_reference_max_abs": 2.7125179767608643,
+                  "path": "complete_execution.continuation.states.(0, 12).slots.keys",
+                  "reference": 0.06934237480163574,
+                  "strict_limit": 1.6934237480163574e-06
+                },
+                {
+                  "abs_error": 2.0209699869155884e-06,
+                  "candidate": -0.01468253880739212,
+                  "index": [
+                    0,
+                    14
+                  ],
+                  "leaf_max_abs_error": 2.682209014892578e-06,
+                  "leaf_reference_max_abs": 2.528380870819092,
+                  "path": "complete_execution.continuation.states.(0, 12).slots.summaries",
+                  "reference": -0.014684559777379036,
+                  "strict_limit": 1.1468455977737903e-06
+                },
+                {
+                  "abs_error": 1.430511474609375e-06,
+                  "candidate": -0.021477937698364258,
+                  "index": [
+                    0,
+                    29
+                  ],
+                  "leaf_max_abs_error": 2.384185791015625e-06,
+                  "leaf_reference_max_abs": 2.6346023082733154,
+                  "path": "complete_execution.continuation.states.(0, 12).slots.values",
+                  "reference": -0.02147650718688965,
+                  "strict_limit": 1.2147650718688964e-06
+                },
+                {
+                  "abs_error": 1.5348196029663086e-06,
+                  "candidate": -0.03495537489652634,
+                  "index": [
+                    0,
+                    16
+                  ],
+                  "leaf_max_abs_error": 2.086162567138672e-06,
+                  "leaf_reference_max_abs": 2.6679811477661133,
+                  "path": "complete_execution.continuation.states.(0, 13).slots.summaries",
+                  "reference": -0.03495384007692337,
+                  "strict_limit": 1.3495384007692337e-06
+                },
+                {
+                  "abs_error": 1.387670636177063e-06,
+                  "candidate": -0.012890992686152458,
+                  "index": [
+                    0,
+                    5
+                  ],
+                  "leaf_max_abs_error": 2.4437904357910156e-06,
+                  "leaf_reference_max_abs": 1.7685929536819458,
+                  "path": "complete_execution.continuation.states.(0, 14).slots.summaries",
+                  "reference": -0.012892380356788635,
+                  "strict_limit": 1.1289238035678864e-06
+                },
+                {
+                  "abs_error": 2.6226043701171875e-06,
+                  "candidate": 0.10172337293624878,
+                  "index": [
+                    0,
+                    21
+                  ],
+                  "leaf_max_abs_error": 2.6226043701171875e-06,
+                  "leaf_reference_max_abs": 3.584764003753662,
+                  "path": "complete_execution.continuation.states.(0, 14).slots.values",
+                  "reference": 0.10172075033187866,
+                  "strict_limit": 2.0172075033187865e-06
+                },
+                {
+                  "abs_error": 4.4405460357666016e-06,
+                  "candidate": 0.06041571497917175,
+                  "index": [
+                    0,
+                    9
+                  ],
+                  "leaf_max_abs_error": 5.692243576049805e-06,
+                  "leaf_reference_max_abs": 2.9099912643432617,
+                  "path": "complete_execution.continuation.states.(0, 15).slots.keys",
+                  "reference": 0.060411274433135986,
+                  "strict_limit": 1.6041127443313598e-06
+                }
+              ],
+              "max_abs_error": 3.039836883544922e-05,
+              "reference_l2": 356.90215347923663,
+              "reference_max_abs": 6.386258602142334,
+              "relative_l2_error": 8.06156341564112e-07,
+              "tensor_leaves": 3239,
+              "zero_reference_scale": false
+            }
+          }
+        },
+        "optimizer_unique": true,
+        "optimizer_updates": true,
+        "task_loss_finite": true,
+        "tied_head": true
+      },
+      "result": "runs/lm-cpu-admission-v3/cpu-check-tide-dense/result.json",
+      "sha256": "fcdac08c1a8a1b30172241c06b17f681bb930706957a1adfcc2aacb84077ca68",
+      "state": "completed"
+    },
+    "tide-sparse": {
+      "admitted_for_finite_exploration": true,
+      "checks": {
+        "analytic_ce_vjp": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 4.001776687800884e-11,
+          "relative_l2": 5.170592808378044e-09,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "core": {
+          "causal": {
+            "atol": 0,
+            "elements": 128,
+            "failed_elements": 76,
+            "max_abs": 5.960464477539062e-07,
+            "relative_l2": 1.4106078235046647e-07,
+            "rtol": 0,
+            "state": "failed"
+          },
+          "causal_mechanisms": {
+            "cutoff": 10,
+            "early_support_unchanged": true,
+            "future_vjp_exact_zero": true,
+            "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+            "reference_intervention": {
+              "atol": 0,
+              "elements": 128,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 0,
+              "state": "passed"
+            }
+          },
+          "chunked": {
+            "atol": 1e-06,
+            "elements": 192,
+            "failed_elements": 0,
+            "max_abs": 1.0132789611816406e-06,
+            "relative_l2": 2.460281717875823e-07,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_gradient_by_position": [
+            [
+              4.970578193664551,
+              1.133070707321167,
+              2.174091339111328
+            ],
+            [
+              9.792413711547852,
+              3.7235357761383057,
+              18.209585189819336
+            ]
+          ],
+          "numerical_note": "finite strict disagreements retained after complete records, VJP, support, roots and causality checks; cause not assumed roundoff",
+          "roots": {
+            "independent_roots": 6,
+            "physical_input_records": 24,
+            "scope": "actual public input constructor used by the unchanged encoder"
+          },
+          "streaming": {
+            "atol": 1e-06,
+            "elements": 192,
+            "failed_elements": 0,
+            "max_abs": 1.0132789611816406e-06,
+            "relative_l2": 2.460281717875823e-07,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "strict": {
+            "discrete": {
+              "first_errors": [],
+              "leaves": 6480,
+              "mismatches": 0
+            },
+            "nonfinite": [],
+            "numerical": {
+              "candidate_max_abs": 7.852337837219238,
+              "elements": 608048,
+              "error_l2": 0.0002764449518092056,
+              "failed_elements": 381,
+              "failed_leaves": 152,
+              "first_failures": [
+                {
+                  "abs_error": 1.8775463104248047e-06,
+                  "candidate": 0.07127854228019714,
+                  "index": [
+                    2,
+                    27
+                  ],
+                  "leaf_max_abs_error": 1.8775463104248047e-06,
+                  "leaf_reference_max_abs": 2.657230854034424,
+                  "path": "complete_execution.continuation.states.(1, 6).slots.values",
+                  "reference": 0.07128041982650757,
+                  "strict_limit": 1.7128041982650757e-06
+                },
+                {
+                  "abs_error": 3.874301910400391e-06,
+                  "candidate": -0.09791064262390137,
+                  "index": [
+                    2,
+                    6
+                  ],
+                  "leaf_max_abs_error": 3.993511199951172e-06,
+                  "leaf_reference_max_abs": 3.495332956314087,
+                  "path": "complete_execution.continuation.states.(1, 7).slots.keys",
+                  "reference": -0.09790676832199097,
+                  "strict_limit": 1.9790676832199097e-06
+                },
+                {
+                  "abs_error": 1.989305019378662e-06,
+                  "candidate": 0.08737990260124207,
+                  "index": [
+                    2,
+                    15
+                  ],
+                  "leaf_max_abs_error": 5.4836273193359375e-06,
+                  "leaf_reference_max_abs": 2.8805699348449707,
+                  "path": "complete_execution.continuation.states.(1, 7).slots.summaries",
+                  "reference": 0.08738189190626144,
+                  "strict_limit": 1.8738189190626145e-06
+                },
+                {
+                  "abs_error": 1.3113021850585938e-06,
+                  "candidate": -0.012453436851501465,
+                  "index": [
+                    2,
+                    0
+                  ],
+                  "leaf_max_abs_error": 2.205371856689453e-06,
+                  "leaf_reference_max_abs": 2.852509021759033,
+                  "path": "complete_execution.continuation.states.(1, 10).slots.values",
+                  "reference": -0.012452125549316406,
+                  "strict_limit": 1.124521255493164e-06
+                },
+                {
+                  "abs_error": 3.9637088775634766e-06,
+                  "candidate": 0.12668673694133759,
+                  "index": [
+                    2,
+                    10
+                  ],
+                  "leaf_max_abs_error": 7.152557373046875e-06,
+                  "leaf_reference_max_abs": 3.5351052284240723,
+                  "path": "complete_execution.continuation.states.(1, 11).slots.keys",
+                  "reference": 0.12669070065021515,
+                  "strict_limit": 2.2669070065021513e-06
+                },
+                {
+                  "abs_error": 2.891756594181061e-06,
+                  "candidate": -0.012291144579648972,
+                  "index": [
+                    2,
+                    18
+                  ],
+                  "leaf_max_abs_error": 3.933906555175781e-06,
+                  "leaf_reference_max_abs": 2.0650031566619873,
+                  "path": "complete_execution.continuation.states.(1, 11).slots.summaries",
+                  "reference": -0.01228825282305479,
+                  "strict_limit": 1.122882528230548e-06
+                },
+                {
+                  "abs_error": 5.155801773071289e-06,
+                  "candidate": 0.046185076236724854,
+                  "index": [
+                    2,
+                    2
+                  ],
+                  "leaf_max_abs_error": 6.079673767089844e-06,
+                  "leaf_reference_max_abs": 2.2920074462890625,
+                  "path": "complete_execution.continuation.states.(1, 11).slots.values",
+                  "reference": 0.04617992043495178,
+                  "strict_limit": 1.4617992043495178e-06
+                },
+                {
+                  "abs_error": 1.4901161193847656e-06,
+                  "candidate": 0.03612720966339111,
+                  "index": [
+                    1,
+                    28
+                  ],
+                  "leaf_max_abs_error": 2.3245811462402344e-06,
+                  "leaf_reference_max_abs": 3.2979037761688232,
+                  "path": "complete_execution.continuation.states.(0, 11).slots.keys",
+                  "reference": 0.0361286997795105,
+                  "strict_limit": 1.361286997795105e-06
+                }
+              ],
+              "max_abs_error": 2.956390380859375e-05,
+              "reference_l2": 311.92742714404176,
+              "reference_max_abs": 7.852322578430176,
+              "relative_l2_error": 8.862476581180819e-07,
+              "tensor_leaves": 2753,
+              "zero_reference_scale": false
+            }
+          }
+        },
+        "optimizer_unique": true,
+        "optimizer_updates": true,
+        "task_loss_finite": true,
+        "tied_head": true
+      },
+      "result": "runs/lm-cpu-admission-v3/cpu-check-tide-sparse/result.json",
+      "sha256": "e899206ccc40b7a346e920d7c821fd9f8f875e642081197bbf122c7e194ef1f2",
+      "state": "completed"
+    },
+    "transformer": {
+      "admitted_for_finite_exploration": true,
+      "checks": {
+        "analytic_ce_vjp": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 1.4901161193847656e-08,
+          "relative_l2": 6.344638347169256e-08,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "optimizer_unique": true,
+        "optimizer_updates": true,
+        "task_loss_finite": true,
+        "tied_head": true
+      },
+      "result": "runs/lm-cpu-admission-v3/cpu-check-transformer/result.json",
+      "sha256": "2bd494d570137b42a4b56c7b4d247cdecc11802e299e20e61917b5aa5bfe4a24",
+      "state": "completed"
+    }
+  },
+  "cpu_service_seconds_conservative": 161.56255171447992,
+  "jobs": [
+    {
+      "elapsed_seconds": 24.93060589581728,
+      "job": "lm-data-v1",
+      "state": "completed",
+      "termination_verified": true
+    },
+    {
+      "elapsed_seconds": 19.088798880577087,
+      "job": "lm-cpu-admission-v1",
+      "state": "failed",
+      "termination_verified": true
+    },
+    {
+      "elapsed_seconds": 20.902249813079834,
+      "job": "lm-cpu-admission-v2",
+      "state": "failed",
+      "termination_verified": true
+    },
+    {
+      "elapsed_seconds": 96.64089712500572,
+      "job": "lm-cpu-admission-v3",
+      "state": "completed",
+      "termination_verified": true
+    }
+  ],
+  "mechanisms": "independent reference intervention exact; future VJP exact zero; early support unchanged; roots/shared gradients/optimizer/CE checked",
+  "schema": "tide-language-admission-review-v1",
+  "source_commit": "ca13a4d5916bb416e5886b9f327b0b52433f87c5",
+  "strict_failure": "CPU FP32 complete/reference tolerance failures retained; sparse same-shape causal perturbation exact0 failed at 5.96e-7",
+  "unknown": "Dynamic packing is a plausible numerical cause, not proven. No NPU, recovery or language quality claim."
+}

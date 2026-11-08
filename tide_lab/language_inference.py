@@ -16,7 +16,13 @@ def inference(model, args, plan, device):
         full=model(tokens)
         other=tokens.clone();other[:,8:]=(other[:,8:]+1)%model.embedding.num_embeddings
         causal=finite_delta(model(other)[:,:8],full[:,:8],0,0)
-        if causal['state']!='passed':raise AssertionError('same-shape future-token intervention changed prefix')
+        causal_mechanisms=None
+        if args.kind.startswith('tide'):
+            from .language_checks import core_axes
+            from .language_training import core_options
+            with torch.enable_grad():
+                causal_mechanisms=core_axes(model.encoder,core_options(plan,args.kind,args.depth),args.seed,device)
+        elif causal['state']!='passed':raise AssertionError('Transformer future-token intervention changed prefix')
         paths={}
         if args.kind.startswith('tide'):
             for name,kwargs in [('chunked',{'chunk_size':4}),('streaming',{'implementation':'streaming'})]:
@@ -26,7 +32,7 @@ def inference(model, args, plan, device):
         generated=tokens[:,:8].clone();start=time.monotonic()
         for _ in range(8):generated=torch.cat([generated,model(generated)[:,-1:].argmax(-1)],dim=1)
         synchronize(device)
-        return dict(state='completed',causal=causal,paths=paths,
+        return dict(state='completed',causal=causal,causal_mechanisms=causal_mechanisms,paths=paths,
             prefix_token_ids=tokens[:,:8].cpu().tolist(),generated_token_ids=generated[:,8:].cpu().tolist(),
             greedy_seconds=time.monotonic()-start,scope='B1, 16 positions; greedy uses full-prefix replay',
             quality='generation is an inspectable diagnostic, not a language-quality pass')
@@ -44,7 +50,13 @@ def inference(model, args, plan, device):
         full=forward(tokens,use_cache=False).logits;synchronize(device);full_seconds=time.monotonic()-start
         changed=tokens.clone();changed[:,8:]=(changed[:,8:]+1)%lm.config.vocab_size
         fresh();causal=finite_delta(forward(changed,use_cache=False).logits[:,:8],full[:,:8],0,0)
-        if causal['state']!='passed':raise AssertionError('replacement future tokens changed prefix')
+        causal_mechanisms=None
+        if args.kind.startswith('tide') and not args.baseline_only:
+            from .language_checks import core_axes
+            from .language_training import core_options
+            with torch.enable_grad():
+                causal_mechanisms=core_axes(model.selected.core,core_options(plan,args.kind,args.depth),args.seed,device)
+        elif causal['state']!='passed':raise AssertionError('pointwise/native future-token intervention changed prefix')
         fresh()
         if wrapper is not None:wrapper.replay=True
         past=None;parts=[];start=time.monotonic()
@@ -67,7 +79,7 @@ def inference(model, args, plan, device):
             past=out.past_key_values
         synchronize(device)
         if wrapper is not None and wrapper.original_calls:raise AssertionError('alpha1 invoked original MLP')
-        return dict(state='completed',causal=causal,full_cache=comparison,full_seconds=full_seconds,
+        return dict(state='completed',causal=causal,causal_mechanisms=causal_mechanisms,full_cache=comparison,full_seconds=full_seconds,
             cache_seconds=cache_seconds,greedy_seconds=time.monotonic()-start,
             prefix_token_ids=prefix.cpu().tolist(),generated_token_ids=[generated],
             original_mlp_calls=None if wrapper is None else wrapper.original_calls,
