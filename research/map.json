@@ -646,7 +646,7 @@
   "height": 3850,
   "nodes": [
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u53ea\u901a\u8fc7\u56fa\u5b9a\u516c\u5171API\u63a5\u5165\uff1b\u7f3a\u53e3\u4ec5\u963b\u585e\u4f9d\u8d56\u8def\u5f84\u3002",
       "id": "L-MATH",
       "kind": "baseline",
@@ -681,7 +681,7 @@
       "y": 100
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u5148\u6821\u51c6\u81ea\u7136\u6587\u672c\uff0c\u518d\u6bd4\u8f83\u5355MLP\u66ff\u6362\u4e0e\u63a7\u5236\u3002",
       "id": "L-QWEN",
       "kind": "baseline",
@@ -716,8 +716,8 @@
       "y": 460
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
-      "decision": "\u5148\u8bad\u7ec316/40\u70b9\uff1b88\u4e0d\u5728\u62df\u8bae\u9996\u4e2a\u5305\u5185\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
+      "decision": "\u539fHB16/40/88\u4ec5\u9759\u6001/\u5931\u8d25\u5148\u5bfc\uff1b\u5f53\u524dFC4/8\u5148\u5bfc\u53e6\u5217\uff0c\u4e0d\u6df7\u6dc6\u5bb9\u91cf\u4e0e\u62d3\u6251\u3002",
       "id": "L-STATIC",
       "kind": "baseline",
       "question": "\u603b\u5bb9\u91cf\u589e\u52a0\u65f6\uff0c\u8bed\u8a00\u8d28\u91cf\u3001\u5b9e\u9645\u5de5\u4f5c\u4e0e\u72b6\u6001\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -745,7 +745,7 @@
       "y": 640
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u56fa\u5b9a\u4e3b\u67b6\u6784\uff0c\u5148\u8bed\u8a00\u518d\u6761\u4ef6\u89c4\u6a21\u70b9\uff0c\u4e0d\u505a\u7ec6\u5206\u80fd\u529b\u5168\u77e9\u9635\u3002",
       "id": "L-A-ROUTE",
       "kind": "goal",
@@ -769,7 +769,7 @@
       "y": 100
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u4e0d\u4ee5\u5b66\u4f1a\u65b0\u80fd\u529b\u4e3a\u5fc5\u8981\u6761\u4ef6\uff1b\u5b8c\u6574\u66ff\u6362\u4e00\u4e2aMLP\u662f\u672c\u8f6e\u8bbe\u8ba1\u8fb9\u754c\u3002",
       "id": "L-B-ROUTE",
       "kind": "goal",
@@ -793,7 +793,7 @@
       "y": 460
     },
     {
-      "budget": "CPU\u51c6\u5907\u5171\u7528\u22642 worker\u5c0f\u65f6\uff0c\u7eb3\u5165\u4e00\u4e2a12h\u62df\u8bae\u5305\u3002",
+      "budget": "CPU\u51c6\u5907\u5171\u7528\u22642 worker\u5c0f\u65f6\uff0c\u7eb3\u5165\u4e00\u4e2a12h\u6388\u6743\u5305\u3002",
       "decision": "\u4f7f\u7528\u4e0d\u53ef\u53d8\u6570\u636e\u4ea7\u7269\u5f00\u5c55\u5168\u4f4d\u7f6e\u673a\u5236\u3001\u6062\u590d\u548c\u541e\u5410\u51c6\u5165\uff1b\u9884\u8bad\u7ec3\u6c61\u67d3\u53ca\u8fd1\u91cd\u590d\u4ecd\u672a\u77e5\u3002",
       "execution_note": "\u56fa\u5b9a\u6765\u6e90\u548c\u6587\u6863\u5212\u5206\u3001A\u8bad\u7ec3\u96c6BPE\u3001B\u539f\u8bcd\u8868\u3001\u5168\u90e8\u6709\u6548\u4f4d\u7f6e\u76ee\u6807\u5df2\u751f\u6210\uff1b\u4e0d\u662f\u8bed\u8a00\u5b66\u4e60\u6216\u6a21\u578b\u6570\u503c\u8d44\u683c\u3002",
       "id": "L-DATA",
@@ -837,9 +837,9 @@
       "y": 280
     },
     {
-      "budget": "\u62df\u8bae\u226460NPU min\uff0c\u548c\u5176\u4ed6\u9636\u6bb5\u5171\u4eab8NPU\u5c0f\u65f6/12h\u5899\u949f\u3002",
+      "budget": "\u6388\u6743\u226460NPU min\uff0c\u548c\u5176\u4ed6\u9636\u6bb5\u5171\u4eab8NPU\u5c0f\u65f6/12h\u5899\u949f\u3002",
       "decision": "A/B\u5404\u81ea\u51c6\u5165\uff1b\u6709\u754c\u6570\u503c\u63a2\u7d22\u4e0d\u8981\u6c42\u5168\u90e8FP64\uff1b\u6309\u541e\u5410\u548c\u66f4\u65b0\u6570\u51bb\u7ed3\u914d\u65b9\u3002",
-      "execution_note": "\u516c\u5171\u7ed3\u679c\u5df2\u6709\u5404\u4f4d\u7f6e\u8f93\u51fa\uff1b\u5b9e\u9a8c\u4fa7\u9700\u5b9e\u73b0LM readout/head/loss\u4e0e\u65b0\u8def\u5f84\u68c0\u67e5\u3002",
+      "execution_note": "\u539fHB16\u4e25\u683c\u6709\u9650\u5931\u8d25\u4e0e\u4e24\u6b21\u6821\u51c6\u65f6\u9650\u4fdd\u7559\uff1bB\u9519\u8bef\u89e3\u51bb\u53ca\u534f\u8c03\u5668\u5b57\u6bb5\u9519\u8bef\u5df2\u4fee\u590d\u3002FC4\u65b0\u8def\u5f84\u9010\u5019\u9009\u68c0\u67e5\uff0c\u7ed3\u679c\u8303\u56f4\u5206\u522b\u8bb0\u5f55\u3002",
       "id": "L-EXEC",
       "kind": "experiment",
       "question": "\u65b0\u7684\u8bed\u8a00\u5e8f\u5217\u8def\u5f84\u662f\u5426\u53ef\u4fe1\u4e14\u5728\u672c\u673a\u9884\u7b97\u53ef\u8d1f\u62c5\uff1f",
@@ -851,11 +851,182 @@
         {
           "label": "\u8bbe\u8ba1\u8ba1\u5212\uff08\u4e0d\u53ef\u76f4\u63a5\u63d0\u4ea4\uff09",
           "path": "research/language-structure-plan.json"
+        },
+        {
+          "label": "CPU\u51c6\u5165\u4e0e\u4e25\u683c\u5931\u8d25",
+          "path": "docs/evidence/language-cpu-admission.json"
+        },
+        {
+          "label": "\u521d\u59cb\u5931\u8d25\u4e0e\u6263\u8d26",
+          "path": "docs/evidence/language-initial-attempts.json"
+        },
+        {
+          "label": "\u5f53\u524d\u540e\u53f0\u4ea4\u63a5",
+          "path": "docs/evidence/language-running-handoff.json"
+        },
+        {
+          "label": "HB\u5168\u4f4d\u7f6e\u6210\u672c\u9700\u6c42\uff08\u672a\u4ea4\u4ed8\uff09",
+          "path": "docs/requests/TL-REQ-002.md"
         }
       ],
-      "status": "planned",
+      "runs": [
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-check-tide-dense",
+          "lens_record": "runs/lm-a-language-v2/check-tide-dense/projection.json",
+          "record": "runs/lm-a-language-v2/check-tide-dense/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-dense-full",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-dense-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-dense-split",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-dense-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-dense-continued",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-dense-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-check-tide-sparse",
+          "lens_record": "runs/lm-a-language-v2/check-tide-sparse/projection.json",
+          "record": "runs/lm-a-language-v2/check-tide-sparse/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-sparse-full",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-sparse-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-sparse-split",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-sparse-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-tide-sparse-continued",
+          "record": "runs/lm-a-language-v2/resume-d1-tide-sparse-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-check-transformer",
+          "lens_record": "runs/lm-a-language-v2/check-transformer/projection.json",
+          "record": "runs/lm-a-language-v2/check-transformer/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-transformer-full",
+          "record": "runs/lm-a-language-v2/resume-d1-transformer-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-transformer-split",
+          "record": "runs/lm-a-language-v2/resume-d1-transformer-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-resume-d1-transformer-continued",
+          "record": "runs/lm-a-language-v2/resume-d1-transformer-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-a-language-v2-cal-d1-tide-dense-L32-B8",
+          "record": "runs/lm-a-language-v2/cal-d1-tide-dense-L32-B8/state.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-cache-L32",
+          "lens_record": "runs/lm-b-language-v2/cache-L32/projection.json",
+          "record": "runs/lm-b-language-v2/cache-L32/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-check-original",
+          "lens_record": "runs/lm-b-language-v2/check-original/projection.json",
+          "record": "runs/lm-b-language-v2/check-original/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-original-full",
+          "record": "runs/lm-b-language-v2/resume-d1-original-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-original-split",
+          "record": "runs/lm-b-language-v2/resume-d1-original-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-original-continued",
+          "record": "runs/lm-b-language-v2/resume-d1-original-continued/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-check-tide-dense",
+          "lens_record": "runs/lm-b-language-v2/check-tide-dense/projection.json",
+          "record": "runs/lm-b-language-v2/check-tide-dense/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-dense-full",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-dense-full/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "tl-lm-b-language-v2-resume-d1-tide-dense-split",
+          "record": "runs/lm-b-language-v2/resume-d1-tide-dense-split/result.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "completed"
+        }
+      ],
+      "status": "running",
       "study_id": "TL-LM-EXEC",
-      "summary": "\u56e0\u679c / \u68af\u5ea6 / \u6062\u590d / \u6709\u6548batch",
+      "summary": "CPU\u673a\u5236\u5df2\u5ba1\u9605\uff1bNPU\u51c6\u5165/\u6062\u590d\u4e2d",
       "title": "\u5168\u4f4d\u7f6e\u63a5\u5165\u4e0e\u541e\u5410",
       "track": "shared",
       "view_group": "current",
@@ -863,8 +1034,9 @@
       "y": 280
     },
     {
-      "budget": "\u62df\u8bae\u4e09\u5019\u9009seed11\u5408\u8ba1\u2264180NPU min\uff1btoken/\u66f4\u65b0\u5148\u6821\u51c6\u540e\u9501\u5b9a\u3002",
+      "budget": "128\u66f4\u65b0\u5148\u5bfc\u2264120NPU min\uff1b\u672a\u7528\u8bad\u7ec3\u65f6\u95f4\u53ef\u7ed9\u6761\u4ef6FC8\uff0c\u603bA\u22645h\u5e76\u6263\u65e7\u5931\u8d25\u3002",
       "decision": "\u4ee5\u540c\u8bcd\u8868\u72ec\u7acbNLL\u6bd4\u8f83\uff1b\u6b20\u8bad\u7ec3\u5bf9\u7167\u4e0d\u80fd\u8ba4\u8bc1\u8bed\u8a00\u53ef\u7528\u6027\u3002",
+      "execution_note": "\u8def\u7ebf\u540e\u53f0\u670d\u52a1\u5df2\u5b9e\u9645\u5206\u914d\u8bbe\u5907\uff1b\u5f53\u524d\u51c6\u5165/\u6821\u51c6\uff0c\u6b63\u5f0f\u5b66\u4e60\u53d6\u51b3\u4e8e\u95e8\u69db\u53ca\u9884\u7b97\u3002\u6ca1\u6709\u65b0\u8d28\u91cf\u7ed3\u8bba\u3002",
       "id": "L-A",
       "kind": "experiment",
       "question": "\u76f8\u8fd1\u5bb9\u91cf\u4e0e\u540ctoken\u9884\u7b97\u4e0b\uff0c\u8bed\u8a00\u8d28\u91cf\u53ca\u7a00\u758f\u6298\u8877\u5982\u4f55\uff1f",
@@ -876,11 +1048,28 @@
         {
           "label": "\u8bbe\u8ba1\u8ba1\u5212\uff08\u4e0d\u53ef\u76f4\u63a5\u63d0\u4ea4\uff09",
           "path": "research/language-structure-plan.json"
+        },
+        {
+          "label": "\u5f53\u524dFC\u5b9e\u9645\u914d\u7f6e",
+          "path": "configs/studies/language/fc-pilot-v2.json"
+        },
+        {
+          "label": "\u540e\u53f0\u4ea4\u63a5\u4e0e\u89c2\u5bdf",
+          "path": "docs/evidence/language-running-handoff.json"
         }
       ],
-      "status": "planned",
+      "runs": [
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "lm-a-language-v2",
+          "record": "runs/lm-a-language-v2/stage.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "running"
+        }
+      ],
+      "status": "running",
       "study_id": "TL-A-LM",
-      "summary": "HB16 dense / quad / \u5c0fTransformer",
+      "summary": "FC4 dense / quad / \u53c2\u6570\u63a5\u8fd1\u5c0fTransformer",
       "title": "A\uff1a\u4ece\u96f6\u8bed\u8a00\u6a21\u578b",
       "track": "tide",
       "view_group": "current",
@@ -888,9 +1077,9 @@
       "y": 100
     },
     {
-      "budget": "\u62df\u8bae\u6240\u6709\u5019\u9009/\u63a7\u5236seed11\u5408\u8ba1\u2264120NPU min\uff1b\u4e0d\u6269\u5927\u7b2c\u4e8c\u5c42\u3002",
+      "budget": "\u6388\u6743\u6240\u6709\u5019\u9009/\u63a7\u5236seed11\u5408\u8ba1\u2264120NPU min\uff1b\u4e0d\u6269\u5927\u7b2c\u4e8c\u5c42\u3002",
       "decision": "\u5bf9\u7167\u539f\u51bb\u7ed3/\u539fMLP\u7ee7\u7eed\u8bad\u7ec3/\u7b80\u5355MLP\u66ff\u6362\uff1balpha=1\u4e14\u8df3\u8fc7\u539fMLP\u624d\u662f\u5b8c\u6574\u627f\u63a5\u3002",
-      "execution_note": "\u5355\u4f4d\u7f6e10%\u6df7\u5408\u65e7\u7ed3\u679c\u53ea\u4f9b\u8bca\u65ad\uff1b\u65b0\u5168\u4f4d\u7f6e\u72b6\u6001/\u68af\u5ea6/\u6062\u590d\u4e0e\u8bed\u8a00\u8bc4\u4ef7\u672a\u68c0\u67e5\u3002",
+      "execution_note": "\u8def\u7ebf\u540e\u53f0\u670d\u52a1\u5df2\u5b9e\u9645\u5206\u914d\u8bbe\u5907\uff1b\u5f53\u524d\u51c6\u5165/\u6821\u51c6\uff0c\u6b63\u5f0f\u5b66\u4e60\u53d6\u51b3\u4e8e\u95e8\u69db\u53ca\u9884\u7b97\u3002\u6ca1\u6709\u65b0\u8d28\u91cf\u7ed3\u8bba\u3002",
       "id": "L-B",
       "kind": "experiment",
       "question": "\u5728\u539f\u751f\u8bed\u8a00\u76ee\u6807\u4e0a\uff0cTIDE\u80fd\u5426\u627f\u63a5\u8ba1\u7b97\u5e76\u4fdd\u7559\u8d28\u91cf\uff1f",
@@ -902,11 +1091,28 @@
         {
           "label": "\u8bbe\u8ba1\u8ba1\u5212\uff08\u4e0d\u53ef\u76f4\u63a5\u63d0\u4ea4\uff09",
           "path": "research/language-structure-plan.json"
+        },
+        {
+          "label": "\u5f53\u524dFC\u5b9e\u9645\u914d\u7f6e",
+          "path": "configs/studies/language/fc-pilot-v2.json"
+        },
+        {
+          "label": "\u540e\u53f0\u4ea4\u63a5\u4e0e\u89c2\u5bdf",
+          "path": "docs/evidence/language-running-handoff.json"
         }
       ],
-      "status": "planned",
+      "runs": [
+        {
+          "config": "configs/studies/language/fc-pilot-v2.json",
+          "id": "lm-b-language-v2",
+          "record": "runs/lm-b-language-v2/stage.json",
+          "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+          "status": "running"
+        }
+      ],
+      "status": "running",
       "study_id": "TL-B-LM",
-      "summary": "\u4e00\u4e2aMLP\uff1b\u76ee\u6807\u4e3a\u5b8c\u6574\u627f\u63a5",
+      "summary": "FC4\u627f\u63a5\u6700\u540eMLP\uff1b\u539f\u6a21\u578b\u4e0e\u7b80\u5355MLP\u5bf9\u7167",
       "title": "B\uff1a\u8bed\u8a00\u80fd\u529b\u4e0e\u5c40\u90e8\u66ff\u6362",
       "track": "baseline",
       "view_group": "current",
@@ -914,8 +1120,8 @@
       "y": 460
     },
     {
-      "budget": "\u6761\u4ef6\u9636\u6bb5\u226460NPU min\uff1b16\u70b9\u6709\u5b66\u4e60\u4fe1\u53f7\u4e14\u9884\u7b97\u5145\u8db3\u624d\u542f\u52a840\u914d\u5bf9\u3002",
-      "decision": "\u81f3\u5c11\u4e24\u4e2a\u5b9e\u9645\u5b66\u4e60\u70b9\uff1b\u4e0d\u4ece\u9759\u6001\u8282\u70b9\u6570\u6216k\u63a8\u5bfc\u6052\u5b9a\u6d3b\u52a8\u53ca\u52a0\u901f\u3002",
+      "budget": "\u6761\u4ef6FC8\u2264120NPU min\uff0c\u53ef\u7528A\u4e3b\u8bad\u7ec3\u672a\u7528\u65f6\u95f4\uff1b\u56fa\u5b9a128\u66f4\u65b0/\u5c40\u90e8\u5bbd\u5ea6/\u7aef\u53e3\uff0c\u603bA\u22645h\u3002",
+      "decision": "FC4\u662f\u5355\u533a\u57df/0\u5185\u90e8\u8fb9\uff1b\u53ea\u6709\u5b9e\u9645\u8bad\u7ec3\u7684FC8\u53cc\u533a\u57df\u4e0e\u72ec\u7acb\u8bc4\u4ef7\u624d\u80fd\u589e\u52a0\u89c4\u6a21/\u901a\u4fe1\u8bc1\u636e\u3002HB16/40/88\u9759\u6001\u8ba1\u5212\u4fdd\u6301\u672a\u8ba4\u8bc1\u3002",
       "id": "L-SCALE",
       "kind": "experiment",
       "question": "\u589e\u52a0\u5bb9\u91cf\u65f6\uff0c\u8d28\u91cf\u4e0e\u5b9e\u9645\u5de5\u4f5c/\u5185\u5b58\u600e\u6837\u5171\u540c\u53d8\u5316\uff1f",
@@ -931,7 +1137,7 @@
       ],
       "status": "planned",
       "study_id": "TL-LM-SCALE",
-      "summary": "\u56fa\u5b9a\u5c40\u90e8\u8fb9\u754c\uff1a16 \u2192 40",
+      "summary": "\u5f53\u524d\u6761\u4ef6FC4 \u2192 FC8\uff1bHB16\u6210\u672c\u5931\u8d25\u4fdd\u7559",
       "title": "\u5c40\u90e8\u5bb9\u91cf\u6269\u5c55",
       "track": "tide",
       "view_group": "current",
@@ -964,7 +1170,7 @@
       "y": 820
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u5f85\u72ec\u7acb\u8bc4\u4ef7\u4e0e\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "id": "RL-A",
       "kind": "result",
@@ -988,7 +1194,7 @@
       "y": 100
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u5f85\u72ec\u7acb\u8bc4\u4ef7\u4e0e\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "id": "RL-B",
       "kind": "result",
@@ -1012,7 +1218,7 @@
       "y": 460
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u5f85\u72ec\u7acb\u8bc4\u4ef7\u4e0e\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "id": "RL-SCALE",
       "kind": "result",
@@ -1036,7 +1242,7 @@
       "y": 640
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u5f85\u72ec\u7acb\u8bc4\u4ef7\u4e0e\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "id": "RL-JOINT",
       "kind": "result",
@@ -1132,7 +1338,7 @@
       "y": 460
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u62df\u8bae\u0394NLL\u22640.05\uff1b\u6b63\u5f0f\u533a\u95f4/\u79cd\u5b50\u4e0d\u8db3\u8bb0\u65e0\u7ed3\u8bba\uff0c\u4e0d\u4e8b\u540e\u8c03\u95e8\u69db\u3002",
       "id": "G-LANG",
       "kind": "goal",
@@ -1156,7 +1362,7 @@
       "y": 100
     },
     {
-      "budget": "\u8bbe\u8ba1\u9636\u6bb5\uff0c\u672a\u63d0\u4ea4\u65b0\u4f5c\u4e1a\uff1b\u8be6\u89c1\u6709\u754c\u7814\u7a76\u8868\u3002",
+      "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
       "decision": "\u81f3\u5c11\u4e24\u4e2a\u771f\u5b9e\u8bad\u7ec3\u70b9\uff1b\u4e0d\u5916\u63a8\u65e0\u9650\u89c4\u6a21\u3001\u6052\u5b9a\u5185\u5b58\u6216\u591a\u5361\u6548\u7387\u3002",
       "id": "G-SCALE",
       "kind": "goal",
@@ -3260,11 +3466,11 @@
       "y": 3540
     }
   ],
-  "notice": "\u8054\u5408\u7814\u7a76\u5df2\u83b7\u6388\u6743\u5e76\u8fdb\u5165\u5b9e\u65bd\uff1a\u6587\u6863/\u8bcd\u8868\u51c6\u5907\u548cLens\u5c0f\u8bb0\u5f55\u5b8c\u6210\uff0c\u6a21\u578b\u63a5\u5165/\u541e\u5410\u51c6\u5165\u8fdb\u884c\u4e2d\uff1b\u5c1a\u65e0\u65b0\u7684\u8bed\u8a00\u5b66\u4e60\u7ed3\u8bba\u3002\u5386\u53f212\u4efd\u9650\u5b9a\u7ed3\u679c\u4e0e\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+  "notice": "\u8bed\u8a00\u4efb\u52a1\u5df2\u9501\uff1bFC\u8bed\u8a00\u5148\u5bfc\u5728\u4e24\u5f20\u672c\u673aNPU\u540e\u53f0\u51c6\u5165/\u6821\u51c6\uff0c\u539fHB16\u5931\u8d25\u4fdd\u7559\u3002\u56db\u4e2a\u65b0\u79d1\u5b66\u7ed3\u679c\u4ecdawaiting\uff1b\u5b8c\u6210/\u6570\u503c/\u6062\u590d/\u5b66\u4e60\u5206\u8f74\u3002",
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u540c\u4e00\u6a21\u578b\uff1a\u8bed\u8a00next-token\u8d28\u91cf \u00d7 \u89c4\u6a21\u5316\u3001\u7a00\u758f\u5316\u3001\u5c40\u90e8\u5316",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-08T11:56:14.553662+00:00",
+  "updated_at": "2026-11-08T12:24:19.252109+00:00",
   "view_groups": [
     {
       "height": 1000,

@@ -1,0 +1,159 @@
+{
+  "cpu_only_worker_seconds": 7200,
+  "jobs": [
+    {
+      "completed_candidates": {
+        "tide-dense": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "3f68111400a3e18cacbb7bfc588f75e596edac0e3120346d11774cd0375fef42",
+            "resumed_sha256": "760f7bd0d4ed16c6d8c48990f3b64407c31466a56adc0c46c555d736070535a8",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "tide-sparse": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "39c25b326929eff62068b719dd0957e48a078815f5817a9b322cabf553b9fd30",
+            "resumed_sha256": "95d30c1f6387430b76366355d1c6c79bead4485f3cd9b43c60ace2e4ca96bc9a",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        },
+        "transformer": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "b30eb6b2456aabcb330bd95e87e3af737068f3db9f8981f629b1e0f52100fcd8",
+            "resumed_sha256": "8c09c79690817a2886fd4fe56d89498a879289edd204a7ab22d436c25bea850e",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        }
+      },
+      "compute_cap_seconds": 17449,
+      "config": "configs/studies/language/fc-pilot-v2.json",
+      "current_stage": "cal-d1-tide-dense-L32-B8",
+      "job": "lm-a-language-v2",
+      "job_record": "artifacts/jobs/lm-a-language-v2/job.json",
+      "logical_device": "npu:0",
+      "physical_ids": [
+        1
+      ],
+      "prior_conservative_charge_seconds": 521,
+      "record": "runs/lm-a-language-v2/stage.json",
+      "requested_ram_gib": 24,
+      "requested_threads": 4,
+      "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+      "source_tree_sha256": "4917f4f31f0360fc3c775fab47d6a39e394cbc2553e8744af76280da2ab610f4",
+      "state": "running",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v2.service",
+        "MainPID": "1344301",
+        "Slice": "background.slice",
+        "SubState": "running"
+      }
+    },
+    {
+      "completed_candidates": {
+        "original": {
+          "admitted": true,
+          "mechanisms": "completed",
+          "recovery": {
+            "full_sha256": "0ed90aeb1ac08366ca54cda7e554664698fac5649a95921c12448020ad821e65",
+            "resumed_sha256": "723c5ed38ddba447c6deb6e0380b990026a2c75e0c844d085485ea98168e5c2b",
+            "scope": "B2/L3 three updates, fresh processes, full model/optimizer/RNG/cursor identity",
+            "state": "passed"
+          }
+        }
+      },
+      "compute_cap_seconds": 10572,
+      "config": "configs/studies/language/fc-pilot-v2.json",
+      "current_stage": "resume-d1-tide-dense-continued",
+      "job": "lm-b-language-v2",
+      "job_record": "artifacts/jobs/lm-b-language-v2/job.json",
+      "logical_device": "npu:0",
+      "physical_ids": [
+        3
+      ],
+      "prior_conservative_charge_seconds": 198,
+      "record": "runs/lm-b-language-v2/stage.json",
+      "requested_ram_gib": 24,
+      "requested_threads": 4,
+      "source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+      "source_tree_sha256": "4917f4f31f0360fc3c775fab47d6a39e394cbc2553e8744af76280da2ab610f4",
+      "state": "running",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-language-v2.service",
+        "MainPID": "1344322",
+        "Slice": "background.slice",
+        "SubState": "running"
+      }
+    }
+  ],
+  "lens": [
+    {
+      "destination_name": "tl-lm-a-language-v2-check-tide-dense-projection-fcf1f21b816e",
+      "destination_run_id": "1387ef27e3c844a3ab59337b562beb6d",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/check-tide-dense/projection.json",
+      "run_id": "tl-lm-a-language-v2-check-tide-dense",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v2-check-tide-sparse-projection-52c3bfb18d94",
+      "destination_run_id": "7ba3955aec13463da3e030f80e06db6a",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/check-tide-sparse/projection.json",
+      "run_id": "tl-lm-a-language-v2-check-tide-sparse",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v2-check-transformer-projection-737694e98a08",
+      "destination_run_id": "eddd2597d55d4d50a1cae8507c451fa7",
+      "readback_matches": true,
+      "record": "runs/lm-a-language-v2/check-transformer/projection.json",
+      "run_id": "tl-lm-a-language-v2-check-transformer",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-cache-L32-projection-285bf0bfecae",
+      "destination_run_id": "03bd770d4eb844888c105f13db34e896",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/cache-L32/projection.json",
+      "run_id": "tl-lm-b-language-v2-cache-L32",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-check-original-projection-04a32b374988",
+      "destination_run_id": "8c208455243944e79742a72c5b9d1f77",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/check-original/projection.json",
+      "run_id": "tl-lm-b-language-v2-check-original",
+      "status": "verified"
+    },
+    {
+      "destination_name": "tl-lm-b-language-v2-check-tide-dense-projection-4732f3687ca2",
+      "destination_run_id": "f8664ea8eb644ba0a9e4c8906e957974",
+      "readback_matches": true,
+      "record": "runs/lm-b-language-v2/check-tide-dense/projection.json",
+      "run_id": "tl-lm-b-language-v2-check-tide-dense",
+      "status": "verified"
+    }
+  ],
+  "max_concurrent_npus": 2,
+  "observed_at": "2026-11-08T12:24:19.246241+00:00",
+  "prior_attempts": "docs/evidence/language-initial-attempts.json",
+  "quality": "not reviewed; no formal next-token quality conclusion",
+  "schema": "tide-language-running-handoff-v1",
+  "shared_deadline_beijing": "2026-11-09 07:28:46",
+  "shared_deadline_utc": "2026-11-08T23:28:46Z",
+  "source_cpu_evidence": "docs/evidence/language-cpu-admission.json",
+  "source_frozen": true,
+  "total_npu_seconds": 28800
+}

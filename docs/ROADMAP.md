@@ -1,19 +1,19 @@
 # 当前研究优先级
 
-主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[实际配置](../configs/studies/language/initial.json)，作业状态见STATUS。
+主问题是同一模型上的语言next-token质量与规模、稀疏、局部结构。具体对照、停止和预算见[当前研究表](studies/language-structure.md)，[计划JSON](../research/language-structure-plan.json)保留为设计来源；实施使用[当前FC配置](../configs/studies/language/fc-pilot-v2.json)，作业状态见STATUS。
 
 ## 下一执行包的顺序
 
 1. **TL-LM0：锁语言任务。** 审计并冻结小型自然文本来源、文档split、目标mask和评价子集；A训练集BPE，B固定原词表。用同词表对照定义NLL差异，跨路线不直接比较PPL。
 2. **TL-LM-EXEC：全位置接入与成本。** 实验侧组合公共输出、head和loss；A/B各自验证因果性、梯度、optimizer、状态与恢复，再校准有效batch/并行度。严格数值与学习分轴；不将A限于CPU FP64。
-3. **TL-A-LM / TL-B-LM：独立推进语言先导。** A比较HB16稠密/稀疏与小Transformer；B比较单MLP完整承接、原模型继续训练与简单MLP。数据依赖完成后可按真实空闲资源并行。token/更新/学习率先冻结，不由效果临时加步。
-4. **TL-LM-SCALE：有条件的40节点。** A已有语言学习信号且预算容纳完整配对时，保持局部边界扩到40。88节点目前只静态规划，不自动训练。
+3. **TL-A-LM / TL-B-LM：独立推进语言先导。** A比较FC4稠密/稀疏与参数接近的小Transformer（HB16成本失败保留）；B比较单MLP完整承接、原模型继续训练与简单MLP。数据依赖完成后可按真实空闲资源并行。token/更新/学习率先冻结，不由效果临时加步。
+4. **TL-LM-SCALE：当前有条件的FC8双区域。** 当前FC4已有语言学习信号且预算容纳相同128更新配对时扩到FC8；原HB16/40/88计划仍为后续候选，不自动训练。
 5. **TL-JOINT：联合审阅。** 优先保留全部候选独立test、失败、运行/检查/恢复与完整成本；余量允许才给最有信息的配对加seed22。规模趋势至少两个真实训练点；学习与结构分项成立不等于联合成立。
 
 ## 本包边界与资源决策
 
 已授权共12h墙钟、8NPU小时和2CPU-only worker小时，不逐阶段重置；最多同时2张NPU、合计8线程/48GiB、新磁盘8GiB、配额留80GiB。
-分项60/180/120/60/60 NPU分钟对应接入/A/B/规模/终态；数据准备CPU作业已完成；NPU分配以实际队列记录为准。
+当前分项60/120/120/120/60 NPU分钟对应接入/A/B/条件FC8/终态；A未用主训练时间可转条件FC8，数据准备CPU作业已完成；NPU分配以实际队列记录为准。
 先导无法容纳最低token与更新预算时，交付执行瓶颈/未区分结论，提出公共执行需求，不能以单答案任务替代主问题或复制核心。
 多层替换、88节点训练、所有语义组合、远端GPU与公共部署不在此包。
 

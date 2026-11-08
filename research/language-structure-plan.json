@@ -1,153 +1,292 @@
 {
-  "schema": "tide-language-structure-design-v1",
-  "status": "design_only",
-  "launchable": false,
-  "updated_at": "2026-11-08",
-  "source_audit_commit": "c0464fa5662b52cfa2a06c9c9a79336ab373b26c",
-  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
-  "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
-  "objective": "Same model/checkpoint: comparable natural-text next-token quality with measured capacity scaling, sparse work and bounded local interaction.",
-  "study_table": "docs/studies/language-structure.md",
-  "runtime_config_status": "not_implemented_or_resolved; cannot be passed to a launcher",
-  "data": {
-    "candidate": "Salesforce/wikitext",
-    "subset": "wikitext-2-raw-v1",
-    "revision": null,
-    "content_hashes": null,
-    "downloaded": false,
-    "splits": "shared original documents; audit official train/validation/test and duplicates before freezing",
-    "a_tokenizer": "train-only BPE, target vocab 4096; not fitted",
-    "b_tokenizer": "original fixed Qwen tokenizer",
-    "chat_template": false,
-    "sequence_length": 128,
-    "admission_length": 32,
-    "loss": "all valid shifted next-token targets",
-    "state_reset": "each document chunk and optimizer update; no cross-document state",
-    "evaluation": "fixed non-overlapping chunks; each valid target once; prefreeze any document subset"
+  "a_controls": {
+    "fixed_sparse": "conditional on legal public contract and necessity; excluded from initial matrix",
+    "parameter_match_target_relative_error": 0.1,
+    "transformer": "same tokenizer, context, training tokens/updates; choose nearest small dense model by actual unique params",
+    "transformer_candidate": {
+      "activation": "gelu",
+      "confound": "different hidden width and parameter allocation; use dense-vs-quad to isolate routing regularizer",
+      "dropout": 0.0,
+      "ffn_width": 192,
+      "final_layernorm": true,
+      "head_bias": true,
+      "heads": 4,
+      "layers": 2,
+      "linear_bias": true,
+      "positions": "fixed_sinusoidal",
+      "pre_layernorm": true,
+      "runtime_inventory_checked": false,
+      "tied_embedding_and_head": true,
+      "trainable_parameters_formula_estimate": 257344,
+      "width": 48
+    }
   },
-  "quality": {
-    "status": "proposed_pre_registration",
-    "metric": "token-weighted NLL nat/valid token",
-    "maximum_nll_increase": 0.05,
-    "formal_rule": "one-sided 95% paired document-bootstrap upper bound <= margin; report training seed variability separately",
-    "pilot_rule": "point estimate only, no formal noninferiority claim",
-    "cross_route_ppl_comparison": false,
-    "insufficient_reference_training": "pilot only; cannot establish useful language parity"
-  },
+  "adjustment_id": "LM-ADJUST-001",
   "architecture": {
-    "a": "embedding -> public HB/core5 -> all-position public readout -> tied head + bias",
-    "width": 32,
-    "region_width": 4,
+    "a": "embedding -> public FC/core5 -> all-position public readout -> tied head + bias",
     "branches": 2,
+    "capacity_ladder": {
+      "depths": [
+        1,
+        2
+      ],
+      "edges": [
+        0,
+        16
+      ],
+      "initial_package_training_nodes": [
+        4,
+        8
+      ],
+      "input_ports": 4,
+      "maximum_indegree": 4,
+      "maximum_outdegree": 4,
+      "nodes": [
+        4,
+        8
+      ],
+      "output_ports": 4,
+      "regions": [
+        1,
+        2
+      ],
+      "scope": "second point conditional; first has no internal edges; does not qualify HB16/40/88"
+    },
+    "family": "kv",
+    "history": 512,
+    "memory_read": "qry",
     "offsets": [
       0,
       1
     ],
-    "family": "kv",
-    "memory_read": "qry",
-    "history": 512,
-    "source_mode": "region",
-    "selection": "regional_total",
-    "sparse_denominator": 2,
-    "temperature": 0.25,
-    "send_choices": {
-      "dense": {
-        "regularizer": "ent",
-        "ent_alpha": 1.0
-      },
-      "sparse": {
-        "regularizer": "quad"
-      }
-    },
-    "capacity_ladder": {
+    "original_hb_capacity_ladder": {
       "depths": [
         1,
         2,
         3
       ],
+      "initial_package_training_nodes": [
+        16,
+        40
+      ],
+      "input_ports": 4,
+      "maximum_indegree": 4,
+      "maximum_outdegree": 4,
       "nodes": [
         16,
         40,
         88
       ],
+      "output_ports": 4,
       "regions": [
         4,
         10,
         22
-      ],
-      "initial_package_training_nodes": [
-        16,
-        40
-      ],
-      "maximum_indegree": 4,
-      "maximum_outdegree": 4,
-      "input_ports": 4,
-      "output_ports": 4
+      ]
     },
+    "region_width": 4,
+    "selection": "regional_total",
+    "send_choices": {
+      "dense": {
+        "ent_alpha": 1.0,
+        "regularizer": "ent"
+      },
+      "sparse": {
+        "regularizer": "quad"
+      }
+    },
+    "source_mode": "region",
+    "sparse_denominator": 2,
     "static_audit": "docs/evidence/language-structure-static-plan.json",
-    "static_audit_is_runtime_qualification": false
-  },
-  "a_controls": {
-    "transformer": "same tokenizer, context, training tokens/updates; choose nearest small dense model by actual unique params",
-    "parameter_match_target_relative_error": 0.1,
-    "fixed_sparse": "conditional on legal public contract and necessity; excluded from initial matrix",
-    "transformer_candidate": {
-      "layers": 3,
-      "width": 96,
-      "heads": 4,
-      "ffn_width": 384,
-      "pre_layernorm": true,
-      "activation": "gelu",
-      "positions": "fixed_sinusoidal",
-      "dropout": 0.0,
-      "tied_embedding_and_head": true,
-      "linear_bias": true,
-      "final_layernorm": true,
-      "head_bias": true,
-      "trainable_parameters_formula_estimate": 733024,
-      "runtime_inventory_checked": false,
-      "confound": "different hidden width and parameter allocation; use dense-vs-quad to isolate routing regularizer"
-    }
+    "static_audit_is_runtime_qualification": false,
+    "static_audit_scope": "original HB ladder only; current FC counts recorded in fc-pilot-v2.json adjustment",
+    "temperature": 0.25,
+    "width": 32
   },
   "b": {
-    "checkpoint": "Qwen/Qwen2.5-0.5B-Instruct",
-    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
-    "existing_cache": true,
-    "module": "last_decoder_mlp",
-    "positions": "all valid positions",
     "backbone_and_head": "frozen outside selected MLP",
-    "hidden_dimension": 896,
-    "tide_trainable_parameters_static": 591412,
-    "mlp_control": {
-      "input": 896,
-      "hidden": 330,
-      "output": 896,
-      "bias": false,
-      "activation": "gelu",
-      "trainable_parameters_static": 591360
-    },
+    "checkpoint": "Qwen/Qwen2.5-0.5B-Instruct",
     "controls": [
       "original_frozen",
       "original_selected_mlp_continued_ce",
       "simple_mlp_replacement"
     ],
-    "tide_candidates": [
-      "hb16_dense",
-      "hb16_sparse"
-    ],
-    "schedule": {
-      "teacher_mse_fraction_of_updates": 0.1,
-      "language_ce_fraction_of_updates": 0.9,
-      "alpha_start_in_ce": 0.25,
-      "alpha_ramp_fraction_of_ce_updates": 0.25,
-      "alpha_final": 1.0,
-      "original_continued_control": "same total tokens/updates, CE throughout; different loss recipe and parameter count declared"
-    },
+    "existing_cache": true,
     "final_inference": "alpha=1; original selected MLP call count must be zero",
-    "scope": "one submodule; rest of Transformer remains globally dependent; no automatic second module"
+    "hidden_dimension": 896,
+    "mlp_control": {
+      "activation": "gelu",
+      "bias": false,
+      "hidden": 106,
+      "input": 896,
+      "output": 896,
+      "trainable_parameters_static": 189952
+    },
+    "module": "last_decoder_mlp",
+    "positions": "all valid positions",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "schedule": {
+      "alpha_final": 1.0,
+      "alpha_ramp_fraction_of_ce_updates": 0.25,
+      "alpha_start_in_ce": 0.25,
+      "language_ce_fraction_of_updates": 0.9,
+      "original_continued_control": "same total tokens/updates, CE throughout; different loss recipe and parameter count declared",
+      "teacher_mse_fraction_of_updates": 0.1
+    },
+    "scope": "one submodule; rest of Transformer remains globally dependent; no automatic second module",
+    "tide_candidates": [
+      "fc4_dense",
+      "fc4_sparse"
+    ],
+    "tide_trainable_parameters_static": 190757
   },
+  "calibration": {
+    "batch_candidates_at_length32": [
+      8,
+      32,
+      128
+    ],
+    "choice": "throughput plus sufficient optimizer updates; when plateaued choose smallest B within 90% of observed peak; report if peak not reached",
+    "dtype_candidates": [
+      "cpu_float32",
+      "npu_float32"
+    ],
+    "length128_confirmation": "B8 slowest-candidate sentinel before further batch growth; complete affordable case preferred, otherwise explicit L32",
+    "maximum_extra_larger_batch": 1,
+    "maximum_seconds_per_shape": 240,
+    "measured_updates": 2,
+    "record": [
+      "independent_sample_batch",
+      "microbatch",
+      "accumulation",
+      "valid_tokens_per_update",
+      "physical_operator_shapes",
+      "contention",
+      "timing_boundary"
+    ],
+    "warmup_updates": 1
+  },
+  "checks": {
+    "axes": [
+      "execution",
+      "strict_numerical",
+      "discrete_semantics",
+      "recovery",
+      "learning",
+      "performance"
+    ],
+    "cpu_fp64_required_for_a_learning": false,
+    "finite_exploration": "after bounded triage and relevant mechanisms; retain unknown cause",
+    "stop_affected_path": [
+      "nonfinite",
+      "illegal configuration",
+      "causality error",
+      "shared-gradient error",
+      "state error",
+      "discrete invariant failure",
+      "declared exact-resume failure"
+    ],
+    "strict_thresholds": "retain each original threshold and failure; no relaxation for quality margin"
+  },
+  "data": {
+    "a_tokenizer": "train-only BPE 4096, fitted and locked",
+    "admission_length": 32,
+    "b_tokenizer": "original fixed Qwen tokenizer",
+    "candidate": "Salesforce/wikitext",
+    "chat_template": false,
+    "content_hashes": "dependencies/language-data-source.json and runs/lm-data-v1/tokens/data-lock.json",
+    "downloaded": true,
+    "evaluation": "8 validation and 16 test articles, first two 128-target chunks; all retained targets rechunked for L32; shared article IDs across tokenizers",
+    "loss": "all valid shifted next-token targets",
+    "revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "sequence_length": 128,
+    "splits": "fixed original documents with exact normalized dedup; near duplicates/pretraining contamination unknown",
+    "state_reset": "each document chunk and optimizer update; no cross-document state",
+    "subset": "wikitext-2-raw-v1"
+  },
+  "exclusions": [
+    "88-node training in initial package",
+    "multiple module replacements",
+    "full semantic/platform matrix",
+    "remote GPU",
+    "public deployment",
+    "copying execution core",
+    "agent benchmark"
+  ],
+  "execution_source_commit": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+  "foundation_commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+  "inference": {
+    "diagnostic_generated_tokens": 32,
+    "diagnostic_validation_prefixes": 16,
+    "generation_is_broad_capability_qualification": false,
+    "same_model_checks": [
+      "prefill",
+      "chunked",
+      "tokenwise_continuation"
+    ],
+    "sampling": "greedy"
+  },
+  "launchable": false,
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "objective": "Same model/checkpoint: comparable natural-text next-token quality with measured capacity scaling, sparse work and bounded local interaction.",
+  "proposed_package_budget": {
+    "account_quota_gib": 800,
+    "cpu_only_worker_seconds_aggregate": 7200,
+    "includes": [
+      "queue in wall clock",
+      "initialization",
+      "warmup",
+      "profiling",
+      "all failed attempts",
+      "recomputation",
+      "training",
+      "evaluation",
+      "checkpoints",
+      "resume",
+      "recording"
+    ],
+    "maximum_concurrent_npus": 2,
+    "maximum_total_ram_gib": 48,
+    "maximum_total_threads": 8,
+    "maximum_training_attempt_seconds": 7200,
+    "minimum_free_quota_gib": 80,
+    "new_disk_gib": 8,
+    "npu_seconds_aggregate": 28800,
+    "ram_gib_per_worker": 24,
+    "reuse_previous_batch_budget": false,
+    "scheduling": "independent admitted workers; shared queue and background.slice; no unqualified DDP",
+    "status": "authorized; initial failures debited; two v2 route services running",
+    "threads_per_worker": 4,
+    "wall_seconds_shared": 43200
+  },
+  "quality": {
+    "cross_route_ppl_comparison": false,
+    "formal_rule": "one-sided 95% paired document-bootstrap upper bound <= margin; report training seed variability separately",
+    "insufficient_reference_training": "pilot only; cannot establish useful language parity",
+    "maximum_nll_increase": 0.05,
+    "metric": "token-weighted NLL nat/valid token",
+    "pilot_rule": "point estimate only, no formal noninferiority claim",
+    "status": "pre_registered_unchanged"
+  },
+  "recording": {
+    "admission": "small record and readback before long jobs",
+    "authority": "project records",
+    "private_locator": ".local/LENS.md",
+    "project": "tide-learning-lab",
+    "run_mapping": "docs/evidence/language-running-handoff.json and per-stage projection.json; no invented future run IDs",
+    "runs": [
+      "tl-lm0-data-v1"
+    ],
+    "viewer": "existing Trackio Lens"
+  },
+  "runtime_config_status": "implemented; use configs/studies/language/fc-pilot-v2.json and per-run immutable resolved selections; this design file is not launchable",
+  "schema": "tide-language-structure-design-v1",
+  "source_audit_commit": "c0464fa5662b52cfa2a06c9c9a79336ab373b26c",
+  "status": "design_only",
   "structure": {
-    "screening_minimum_full_and_message_reduction": 0.2,
+    "actual_scaling_points_required": 2,
+    "constant_total_activity_claim": false,
+    "physical_multidevice_communication": "unchecked",
     "reference": "same-scale dense TIDE within quality margin",
     "required_measures": [
       "candidate",
@@ -167,186 +306,84 @@
       "prefill",
       "decode"
     ],
-    "constant_total_activity_claim": false,
-    "actual_scaling_points_required": 2,
-    "physical_multidevice_communication": "unchecked",
-    "scaling_confound": "HB depth changes capacity, region count and path length together; cannot isolate capacity as a cause."
+    "scaling_confound": "FC depth changes capacity, region count, internal edges and path length together; first point has zero internal edges, so message-reduction ratio is not applicable there",
+    "screening_minimum_full_and_message_reduction": 0.2
   },
-  "calibration": {
-    "dtype_candidates": [
-      "cpu_float32",
-      "npu_float32"
-    ],
-    "batch_candidates_at_length32": [
-      8,
-      32,
-      128
-    ],
-    "maximum_extra_larger_batch": 1,
-    "warmup_updates": 1,
-    "measured_updates": 2,
-    "maximum_seconds_per_shape": 180,
-    "length128_confirmation": "selected B; at most one halving",
-    "choice": "throughput plus sufficient optimizer updates; when plateaued choose smallest B within 90% of observed peak; report if peak not reached",
-    "record": [
-      "independent_sample_batch",
-      "microbatch",
-      "accumulation",
-      "valid_tokens_per_update",
-      "physical_operator_shapes",
-      "contention",
-      "timing_boundary"
-    ]
-  },
-  "training_budget_resolution": {
-    "status": "must_freeze_after_calibration_before_training",
-    "initial_seed": 11,
-    "conditional_confirmation_seed": 22,
-    "maximum_valid_tokens_per_training_candidate": 1000000,
-    "maximum_optimizer_updates_per_candidate": 1024,
-    "minimum_pilot_valid_tokens": 65536,
-    "minimum_pilot_updates": 128,
-    "minimums_certify_convergence": false,
-    "learning_rate": null,
-    "optimizer": "AdamW; exact recipe unresolved",
-    "token_budget": null,
-    "global_batch": null,
-    "stop_if_unaffordable": "report execution bottleneck; do not relabel a few-step run as language comparison"
-  },
-  "proposed_package_budget": {
-    "status": "proposed_not_submitted",
-    "wall_seconds_shared": 43200,
-    "npu_seconds_aggregate": 28800,
-    "cpu_only_worker_seconds_aggregate": 7200,
-    "maximum_concurrent_npus": 2,
-    "threads_per_worker": 4,
-    "ram_gib_per_worker": 24,
-    "maximum_total_threads": 8,
-    "maximum_total_ram_gib": 48,
-    "maximum_training_attempt_seconds": 7200,
-    "new_disk_gib": 8,
-    "account_quota_gib": 800,
-    "minimum_free_quota_gib": 80,
-    "includes": [
-      "queue in wall clock",
-      "initialization",
-      "warmup",
-      "profiling",
-      "all failed attempts",
-      "recomputation",
-      "training",
-      "evaluation",
-      "checkpoints",
-      "resume",
-      "recording"
-    ],
-    "reuse_previous_batch_budget": false,
-    "scheduling": "independent admitted workers; shared queue and background.slice; no unqualified DDP"
-  },
-  "checks": {
-    "axes": [
-      "execution",
-      "strict_numerical",
-      "discrete_semantics",
-      "recovery",
-      "learning",
-      "performance"
-    ],
-    "strict_thresholds": "retain each original threshold and failure; no relaxation for quality margin",
-    "finite_exploration": "after bounded triage and relevant mechanisms; retain unknown cause",
-    "stop_affected_path": [
-      "nonfinite",
-      "illegal configuration",
-      "causality error",
-      "shared-gradient error",
-      "state error",
-      "discrete invariant failure",
-      "declared exact-resume failure"
-    ],
-    "cpu_fp64_required_for_a_learning": false
-  },
-  "recording": {
-    "project": "tide-learning-lab",
-    "viewer": "existing Trackio Lens",
-    "authority": "project records",
-    "admission": "small record and readback before long jobs",
-    "private_locator": ".local/LENS.md",
-    "runs": []
-  },
-  "exclusions": [
-    "88-node training in initial package",
-    "multiple module replacements",
-    "full semantic/platform matrix",
-    "remote GPU",
-    "public deployment",
-    "copying execution core",
-    "agent benchmark"
-  ],
   "studies": [
     {
-      "id": "TL-LM0",
-      "status": "planned",
       "dependencies": [],
+      "id": "TL-LM0",
       "npu_minutes_cap": 0,
-      "role": "freeze data and evaluation"
+      "role": "freeze data and evaluation",
+      "status": "completed"
     },
     {
-      "id": "TL-LM-EXEC",
-      "status": "planned",
       "dependencies": [
         "TL-LM0"
       ],
+      "id": "TL-LM-EXEC",
       "npu_minutes_cap": 60,
-      "role": "sequence admission and throughput; each route independent"
+      "role": "sequence admission and throughput; each route independent",
+      "status": "running"
     },
     {
-      "id": "TL-A-LM",
-      "status": "planned",
       "dependencies": [
         "TL-LM0",
         "TL-LM-EXEC:A"
       ],
-      "npu_minutes_cap": 180,
-      "role": "three-candidate language pilot"
+      "id": "TL-A-LM",
+      "npu_minutes_cap": 120,
+      "role": "three-candidate language pilot",
+      "status": "running"
     },
     {
-      "id": "TL-B-LM",
-      "status": "planned",
       "dependencies": [
         "TL-LM0",
         "TL-LM-EXEC:B"
       ],
+      "id": "TL-B-LM",
       "npu_minutes_cap": 120,
-      "role": "single-submodule preservation/replacement and controls"
+      "role": "single-submodule preservation/replacement and controls",
+      "status": "running"
     },
     {
-      "id": "TL-LM-SCALE",
-      "status": "planned",
       "dependencies": [
         "TL-A-LM:learning_signal"
       ],
-      "npu_minutes_cap": 60,
-      "role": "conditional A16/40 scale comparison"
+      "id": "TL-LM-SCALE",
+      "npu_minutes_cap": 120,
+      "role": "conditional matched FC4 -> FC8 pair; can use unspent A primary training allocation",
+      "status": "planned"
     },
     {
-      "id": "TL-JOINT",
-      "status": "planned",
       "dependencies": [
         "completed candidate pairs"
       ],
+      "id": "TL-JOINT",
       "npu_minutes_cap": 60,
-      "role": "held-out review and one conditional seed22 pair"
+      "role": "held-out review and one conditional seed22 pair",
+      "status": "planned"
     }
   ],
-  "inference": {
-    "same_model_checks": [
-      "prefill",
-      "chunked",
-      "tokenwise_continuation"
-    ],
-    "diagnostic_validation_prefixes": 16,
-    "diagnostic_generated_tokens": 32,
-    "sampling": "greedy",
-    "generation_is_broad_capability_qualification": false
-  }
+  "study_table": "docs/studies/language-structure.md",
+  "training_budget_resolution": {
+    "conditional_confirmation_seed": 22,
+    "global_batch": null,
+    "initial_seed": 11,
+    "learning_rate": {
+      "a": 0.003,
+      "b_original": 0.0001,
+      "b_replacement": 0.001
+    },
+    "maximum_optimizer_updates_per_candidate": 128,
+    "maximum_valid_tokens_per_training_candidate": 1000000,
+    "minimum_pilot_updates": 128,
+    "minimum_pilot_valid_tokens": 65536,
+    "minimums_certify_convergence": false,
+    "optimizer": "AdamW eps1e-6, weight_decay .01, clip1; warmup/cosine in fixed runtime plan",
+    "status": "must_freeze_after_calibration_before_training",
+    "stop_if_unaffordable": "report execution bottleneck; do not relabel a few-step run as language comparison",
+    "token_budget": null
+  },
+  "updated_at": "2026-11-08T12:28:42.193332+00:00"
 }

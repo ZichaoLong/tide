@@ -1,3 +1,44 @@
+# 当前活动：语言与结构先导（2026-11-08）
+
+当前源码`7d1a95f16a3a390e7bbf60d18f25d2928ca849f0`；只读快照`.local/source-language-routes-v2`，私有训练环境`.venv`，实际配置`configs/studies/language/fc-pilot-v2.json`。模型与协调器输入均已冻结，后续提交不改变活动源码。下方分隔线后的第四批内容为历史。
+
+| 作业 | 路线与阶段 | 输出/资源 |
+| --- | --- | --- |
+| `lm-a-language-v2` | FC4从零LM、稠密/稀疏/小Transformer，准入→校准→128更新→test；条件FC8 | `runs/lm-a-language-v2/`；1NPU、4线程、请求24GiB；剩余计算cap17449s |
+| `lm-b-language-v2` | Qwen最后MLP完整承接，原MLP/稠密/稀疏/简单MLP，准入→校准→128更新→test/推理 | `runs/lm-b-language-v2/`；1NPU、4线程、请求24GiB；剩余计算cap10572s |
+
+共享截止为2026-11-08 23:28:46 UTC（北京时间11月9日07:28:46）；上述cap已扣初始失败的521/198s，整个包不超8NPU小时。先前数据/CPU作业另计共同2 CPU-only worker小时。每路有限等待最多3600s包含在服务时限内；计算cap从取得设备起，不在排队时消耗设备额。实际队列可用设备1/3映射为各自npu:0，不能将此烘焙进模型。
+
+查看不会启动计算：
+
+```bash
+python scripts/job.py status artifacts/jobs/lm-a-language-v2
+python scripts/job.py status artifacts/jobs/lm-b-language-v2
+cat runs/lm-a-language-v2/stage.json
+cat runs/lm-b-language-v2/stage.json
+tail -n 40 runs/lm-a-language-v2-wrapper/workload.log
+tail -n 40 runs/lm-b-language-v2-wrapper/workload.log
+```
+
+`stage.json`给出当前阶段、各类别已花时间、所有失败、跳过及决策。阶段模型输出在`runs/<job>/<stage>/`，实际stdout在`runs/<job>/<stage>-wrapper/workload.log`。主服务/队列日志可用`python scripts/job.py logs artifacts/jobs/<job> --lines 80`。完整argv、固定输入SHA、环境及服务属性位于`artifacts/jobs/<job>/job.json`；`queue-state.json`及`worker-state.json`记录实际设备和计算起止。退出码、严格数值、离散、恢复、学习、性能分别阅读。
+
+停止一路（另一条独立继续）：
+
+```bash
+python scripts/job.py stop artifacts/jobs/lm-a-language-v2
+python scripts/job.py stop artifacts/jobs/lm-b-language-v2
+```
+
+停止工具验证MainPID、整个cgroup及已知后代消失。不要改快照、配置、数据、cache或活动checkpoint，不操作其他项目。每32更新原子发布checkpoint，终态也保存；没有已发布checkpoint的超时不虚构恢复点。
+
+恢复必须另起job/output，使用原冻结源码和该候选`resolved` JSON，原route/kind/seed/B/L/steps/depth/data/cache、环境及物理映射完全一致，给原训练argv增加`--resume /绝对路径/checkpoint.pt`，并替换`--output`/`--run-id`。从对应manifest和job.json取原argv，仍通过`job.py submit`、共享队列和bounded_workload启动；原剩余总额/各类别/绝对截止一起扣账。不同源码、架构、配方、设备映射会在输出目录创建前拒绝，不是精确resume。当前协调器不自动重启失败训练，避免隐式重置预算。三步恢复资格只覆盖所列小检查，不声称完整128步有独立不中断参考。
+
+Lens沿用既有认证实例，项目`tide-learning-lab`；私有入口与SSH见`.local/LENS.md`。按TL-LM-EXEC、TL-A-LM、TL-B-LM、TL-LM-SCALE筛选；run前缀`tl-lm-{a,b}-language-v2-`，最终映射见各stage的`projection.json`。训练使用实时follow记录，镜像失败单列，不覆盖项目JSONL和checkpoint。研究图需人工审阅后更新结论，不从退出码产生支持边。
+
+初始`lm-a-language-v1`/`lm-b-language-v1`均已自然失败并验证终止，源码64493f6和所有产物保留；具体原因与扣账见[初始尝试](evidence/language-initial-attempts.json)。新的FC配置是有条件的小规模探索，没有语言质量或规模化通过结论。
+
+---
+
 # 当前无活动作业 — 第四批已终态（2026-11-08）
 
 完成服务于北京时间18:02:05结束。原`s4-capability`保留failed，`s4-capability-completion`为completed；两者MainPID0、实际cgroup空、已知后代均终止。共享队列已释放NPU14，没有本批排队或自动重试。[终态报告](studies/fourth-batch-results.md)、[终态证据](evidence/fourth-batch-terminal.json)。下方分隔线后的启动与运行说明为历史快照。

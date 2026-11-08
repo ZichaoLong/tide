@@ -4,7 +4,7 @@
 实验对照、证据和资源决策。公共实现由固定版本的`graph-execution-foundation`提供。
 本分支使用独立文件树；不复制基座核心，也不把基座旧性能结果当作新模型效果。
 
-当前重点：同一模型的语言next-token质量与规模化、稀疏化、局部化。四批历史实验已终态；新的[有界研究表](docs/studies/language-structure.md)和[计划JSON](research/language-structure-plan.json)处于设计状态，尚未提交新训练；实际交接见STATUS。
+当前重点：同一模型的语言next-token质量与规模化、稀疏化、局部化。四批历史实验已终态；新的[有界研究表](docs/studies/language-structure.md)已获授权并进入本机CPU/NPU有界实施；[设计JSON](research/language-structure-plan.json)仍不可直接启动，实际配置在`configs/studies/language/`，当前后台状态见STATUS。
 
 - [打开研究图](web/index.html)：离线HTML，默认当前联合主线，可切换历史证据；支持详情、搜索、分类、邻接聚焦和缩放。
 - [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
@@ -24,7 +24,7 @@ python -m unittest discover -s tests -p test_research_map.py -v
 图的数据是`research/map.json`。实验/结果节点的状态由记录显式给出；
 “待运行”“待填结果”不会被呈现为通过。已有基座证据、独立接入检查和经审阅的先导结果分别限定范围；严格失败和未覆盖项一同保留。
 
-用户已授权分阶段实验、私有环境和普通推送；最新指令重排研究重点。本轮交付设计与静态审计，历史作业输入不变。
+用户已授权分阶段实验、私有环境和普通推送；最新指令重排研究重点。当前两路语言先导在固定源码后台执行，数据/检查/失败与预算扣账已落盘；历史及活动作业输入不变。
 
 可选的真实浏览器检查需要本机已有Firefox与支持实验WebSocket的Node20+，不会下载依赖：
 
