@@ -328,39 +328,39 @@
       "via_y": 1495
     },
     {
-      "detail": "\u5b9e\u9645\u8fd0\u884c\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u586b\u5165\u56fa\u5b9a\u6765\u6e90\u548c\u7ed3\u8bba\u8303\u56f4\u3002",
+      "detail": "\u4e3b\u4ee3\u7406\u6839\u636e\u5b9e\u9645\u5bf9\u7167\u3001\u9010\u4f8b\u7ed3\u679c\u3001\u5931\u8d25\u3001\u672a\u77e5\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u5ba1\u9605\uff1b\u7528\u6237\u9a8c\u6536\u5f85\u5b9a\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u652f\u6301\u3002",
       "id": "fourth-E14",
       "kind": "produces",
-      "label": "\u5f85\u5ba1\u9605\u7ed3\u679c",
+      "label": "\u9650\u5b9a\u7ed3\u679c",
       "source": "E14",
-      "status": "planned",
+      "status": "documented",
       "target": "R14"
     },
     {
-      "detail": "\u5b9e\u9645\u8fd0\u884c\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u586b\u5165\u56fa\u5b9a\u6765\u6e90\u548c\u7ed3\u8bba\u8303\u56f4\u3002",
+      "detail": "\u4e3b\u4ee3\u7406\u6839\u636e\u5b9e\u9645\u5bf9\u7167\u3001\u9010\u4f8b\u7ed3\u679c\u3001\u5931\u8d25\u3001\u672a\u77e5\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u5ba1\u9605\uff1b\u7528\u6237\u9a8c\u6536\u5f85\u5b9a\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u652f\u6301\u3002",
       "id": "fourth-E15",
       "kind": "produces",
-      "label": "\u5f85\u5ba1\u9605\u7ed3\u679c",
+      "label": "\u9650\u5b9a\u7ed3\u679c",
       "source": "E15",
-      "status": "planned",
+      "status": "documented",
       "target": "R15"
     },
     {
-      "detail": "\u5b9e\u9645\u8fd0\u884c\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u586b\u5165\u56fa\u5b9a\u6765\u6e90\u548c\u7ed3\u8bba\u8303\u56f4\u3002",
+      "detail": "\u4e3b\u4ee3\u7406\u6839\u636e\u5b9e\u9645\u5bf9\u7167\u3001\u9010\u4f8b\u7ed3\u679c\u3001\u5931\u8d25\u3001\u672a\u77e5\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u5ba1\u9605\uff1b\u7528\u6237\u9a8c\u6536\u5f85\u5b9a\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u652f\u6301\u3002",
       "id": "fourth-E16",
       "kind": "produces",
-      "label": "\u5f85\u5ba1\u9605\u7ed3\u679c",
+      "label": "\u9650\u5b9a\u7ed3\u679c",
       "source": "E16",
-      "status": "planned",
+      "status": "documented",
       "target": "R16"
     },
     {
-      "detail": "\u5b9e\u9645\u8fd0\u884c\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u586b\u5165\u56fa\u5b9a\u6765\u6e90\u548c\u7ed3\u8bba\u8303\u56f4\u3002",
+      "detail": "\u4e3b\u4ee3\u7406\u6839\u636e\u5b9e\u9645\u5bf9\u7167\u3001\u9010\u4f8b\u7ed3\u679c\u3001\u5931\u8d25\u3001\u672a\u77e5\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u5ba1\u9605\uff1b\u7528\u6237\u9a8c\u6536\u5f85\u5b9a\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u652f\u6301\u3002",
       "id": "fourth-E17",
       "kind": "produces",
-      "label": "\u5f85\u5ba1\u9605\u7ed3\u679c",
+      "label": "\u9650\u5b9a\u7ed3\u679c",
       "source": "E17",
-      "status": "planned",
+      "status": "documented",
       "target": "R17"
     },
     {
@@ -369,7 +369,7 @@
       "kind": "precondition",
       "label": "\u539f\u751f\u57fa\u7ebf",
       "source": "B0",
-      "status": "planned",
+      "status": "documented",
       "target": "E14"
     },
     {
@@ -378,7 +378,7 @@
       "kind": "precondition",
       "label": "\u80fd\u529b\u4e0e\u7f13\u5b58",
       "source": "E14",
-      "status": "planned",
+      "status": "documented",
       "target": "E15"
     },
     {
@@ -387,7 +387,7 @@
       "kind": "precondition",
       "label": "\u56fa\u5b9a\u5c40\u90e8\u8f93\u5165",
       "source": "E15",
-      "status": "planned",
+      "status": "documented",
       "target": "E16"
     },
     {
@@ -396,7 +396,7 @@
       "kind": "precondition",
       "label": "\u62df\u5408/\u6062\u590d\u95e8\u69db",
       "source": "E16",
-      "status": "planned",
+      "status": "documented",
       "target": "E17"
     }
   ],
@@ -1897,11 +1897,11 @@
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
-      "decision": "\u6309\u9884\u5b9a\u95e8\u69db\u8fde\u7eed\u63a8\u8fdb\u76f8\u5173\u9636\u6bb5\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u5019\u9009\u6216\u5c42\u6570\u3002",
-      "execution_note": "\u5f00\u53d1\u96c6\u67e5\u886890.625%\u901a\u8fc7\uff0c\u590d\u523668.75%\u672a\u8fbe\u95e8\u69db\uff1b\u03b10\u9010\u4f4d\u4fdd\u6301\u3002\u5b8c\u6574/\u7f13\u5b58max_abs5.43594e-5\uff0c\u539fatol1e-5/rtol1e-4\u4e25\u683c\u5931\u8d25\u3001argmax\u76f8\u540c\uff0c\u672a\u77e5\u539f\u56e0\u4fdd\u7559\uff1b\u72ec\u7acbtest\u5f85\u67e5\u3002",
+      "decision": "\u672c\u7ec4\u7ec8\u6001\u5df2\u5ba1\u9605\u4e14\u9650\u5b9a\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\uff1b\u4e0d\u81ea\u52a8\u5f00\u542f\u4e0b\u4e00\u6279\u3002",
+      "execution_note": "\u67e5\u8868val90.625%\u901a\u8fc7\uff0c\u72ec\u7acbtest89.453%\uff1b\u590d\u5236val68.75%\u5931\u8d25\u4e14test\u672a\u67e5\u3002\u521d\u6001alpha0\u9010\u4f4d\u4fdd\u6301\uff1b\u539f\u751f\u5b8c\u6574/\u7f13\u5b58\u4e25\u683c\u5931\u8d25\uff0cargmax\u76f8\u540c\u3002",
       "id": "E14",
       "kind": "experiment",
-      "observed_at": "2026-11-08T09:26:37.588109+00:00",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u539fQwen\u80fd\u5426\u5728\u9884\u5148\u56fa\u5b9a\u7684\u539f\u751f\u4efb\u52a1\u4e0a\u7a33\u5b9a\u5b8c\u6210\u4e00\u8bcd\u7b54\u6848\uff1f",
       "references": [
         {
@@ -1915,6 +1915,14 @@
         {
           "label": "\u540e\u53f0\u4ea4\u63a5\u53ca\u5206\u8f74\u8bc1\u636e",
           "path": "docs/evidence/fourth-batch-handoff.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-BASE.md"
+        },
+        {
+          "label": "\u7ec8\u6001\u9010\u4f8b\u8bc1\u636e\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/fourth-batch-terminal.json"
         }
       ],
       "runs": [
@@ -1930,7 +1938,7 @@
       ],
       "status": "completed",
       "study_id": "TL-B4-BASE",
-      "summary": "\u67e5\u886890.63%\uff1b\u590d\u5236\u672a\u8fbe\u95e8\u69db",
+      "summary": "\u67e5\u8868test89.45%\uff1b\u590d\u5236\u672a\u8fbe\u6807",
       "title": "\u57fa\u7ebf\u539f\u751f\u80fd\u529b",
       "track": "baseline",
       "x": 30,
@@ -1938,9 +1946,12 @@
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
-      "decision": "\u4fdd\u7559\u5931\u8d25\u3001\u672a\u68c0\u67e5\u4e0e\u89e3\u91ca\u8fb9\u754c\uff0c\u4e0d\u7531\u5916\u5c42\u9000\u51fa\u7801\u5f62\u6210\u79d1\u5b66\u7ed3\u8bba\u3002",
+      "comparisons": "\u540c\u539f\u6a21\u578b\u4e24\u79cd\u56fa\u5b9a\u539f\u751f\u4efb\u52a1\uff1b\u67e5\u8868val58/64\u3001test229/256\uff0c\u590d\u5236val44/64\u672a\u8fbe80%\u51c6\u5165\uff1b\u4e0d\u6311\u539f\u6a21\u578b\u7b54\u5bf9\u6837\u672c\u3002",
+      "counterevidence": "\u590d\u5236\u80fd\u529b\u672a\u8fbe\u95e8\u69db\uff0c\u72ec\u7acbtest\u672a\u68c0\u67e5\uff1b\u539f\u751f\u5b8c\u6574/\u7f13\u5b58\u5728\u539f\u9608\u503c\u4e0b\u6709\u9650\u5931\u8d25\uff0cargmax\u76f8\u540c\uff0c\u4e0d\u80fd\u8ba4\u8bc1\u4e25\u683c\u7b49\u4ef7\u3002",
+      "decision": "\u4fdd\u7559\u5f53\u524d\u67e5\u8868\u57fa\u51c6\u4e0e\u590d\u5236\u5931\u8d25\uff1b\u65b0\u4efb\u52a1\u8986\u76d6\u987b\u72ec\u7acb\u7814\u7a76\u548c\u7528\u6237\u9a8c\u6536\u540e\u6388\u6743\u3002",
       "id": "R14",
       "kind": "result",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u539fQwen\u80fd\u5426\u5728\u9884\u5148\u56fa\u5b9a\u7684\u539f\u751f\u4efb\u52a1\u4e0a\u7a33\u5b9a\u5b8c\u6210\u4e00\u8bcd\u7b54\u6848\uff1f",
       "references": [
         {
@@ -1950,22 +1961,39 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/fourth/b-preserve.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-BASE.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u7b49\u5f85\u5b9e\u9645\u7ed3\u679c\u4e0e\u4eba\u5de5\u5ba1\u9605",
+      "scope": "\u56fa\u5b9aQwen2.5-0.5B-Instruct\u539ftokenizer/chat/LM\u5934\u3001NPU FP32\uff1b\u56db\u9879\u6587\u672c\u8868\u4e00\u8bcd\u7b54\u6848\uff0cval64/test256\uff1b\u590d\u5236\u4ec5val64\uff1b\u4e3b\u4ee3\u7406\u5ba1\u9605\uff0c\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "sources": [
+        {
+          "label": "\u4e3b\u4ee3\u7406\u5ba1\u9605\u7684\u4e00\u9875\u7ed3\u8bba",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/studies/TL-B4-BASE.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u7ec8\u6001\u6570\u503c\u3001\u9010\u4f8b\u53ca\u68c0\u67e5\u8bc1\u636e",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/evidence/fourth-batch-terminal.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u67e5\u8868\u53ef\u7528\uff1b\u590d\u5236\u672a\u8fbe\u95e8\u69db",
       "title": "\u57fa\u7ebf\u539f\u751f\u80fd\u529b\u7ed3\u679c",
       "track": "baseline",
+      "transfer_conditions": "\u65b0\u539f\u751f\u4efb\u52a1\u9700\u9884\u767b\u8bb0\u63d0\u793a\u3001\u72ec\u7acb\u5212\u5206\u548c\u57fa\u7ebf\u95e8\u69db\uff1b\u4e0d\u5f97\u628a\u5f53\u524d\u67e5\u8868\u8d44\u683c\u63a8\u5e7f\u81f3\u5176\u4ed6\u4efb\u52a1\u6216A\u8def\u7ebf\u3002",
+      "unresolved": "\u590d\u5236\u5931\u8bef\u6765\u81ea\u63d0\u793a/\u683c\u5f0f\u8fd8\u662f\u6a21\u578b\u80fd\u529b\u672a\u533a\u5206\uff1b\u4e00\u8bcd\u67e5\u8868\u4e0d\u80fd\u8986\u76d6\u5e7f\u6cdb\u8bed\u8a00\u80fd\u529b\u3002",
       "x": 30,
       "y": 2440
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
-      "decision": "\u6309\u9884\u5b9a\u95e8\u69db\u8fde\u7eed\u63a8\u8fdb\u76f8\u5173\u9636\u6bb5\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u5019\u9009\u6216\u5c42\u6570\u3002",
-      "execution_note": "\u5c40\u90e8\u786e\u5b9a\u51fd\u6570\u7684CPU FP64\u7ebf\u6027\u8bfb\u51fa\u8bca\u65ad\uff1b\u4e0d\u662f\u6240\u6709\u975e\u7ebf\u6027\u8bfb\u53d6\u80fd\u529b\u7684\u4e0a\u9650\u3002",
+      "decision": "\u672c\u7ec4\u7ec8\u6001\u5df2\u5ba1\u9605\u4e14\u9650\u5b9a\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\uff1b\u4e0d\u81ea\u52a8\u5f00\u542f\u4e0b\u4e00\u6279\u3002",
+      "execution_note": "\u5c40\u90e8\u8f93\u5165\u5b9a\u4e49\u540c\u4e00\u6559\u5e08\u51fd\u6570\uff1bCPU FP64\u7ebf\u6027\u8bfb\u51fa\u663e\u793a\u538b\u7f29\u635f\u5931\uff0c\u4e0d\u662f\u6240\u6709\u975e\u7ebf\u6027\u65b9\u6cd5\u7684\u4e0a\u9650\uff1btest\u672a\u7528\u4e8e\u9009\u79e9\u3002",
       "id": "E15",
       "kind": "experiment",
-      "observed_at": "2026-11-08T09:26:37.588109+00:00",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u5df2\u6709\u5c40\u90e8\u8ba1\u7b97\u7684\u8f93\u5165\u53ef\u8fbe\u6027\u4e0e16\u7ef4\u538b\u7f29\u635f\u5931\u5982\u4f55\uff1f",
       "references": [
         {
@@ -1979,6 +2007,14 @@
         {
           "label": "\u540e\u53f0\u4ea4\u63a5\u53ca\u5206\u8f74\u8bc1\u636e",
           "path": "docs/evidence/fourth-batch-handoff.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-INFO.md"
+        },
+        {
+          "label": "\u7ec8\u6001\u9010\u4f8b\u8bc1\u636e\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/fourth-batch-terminal.json"
         }
       ],
       "runs": [
@@ -1994,7 +2030,7 @@
       ],
       "status": "completed",
       "study_id": "TL-B4-INFO",
-      "summary": "\u539f\u7ef41.49%\uff1bPCA16\u8bef\u5dee22.88%",
+      "summary": "\u76f8\u5bf9MSE\uff1a.0149 / .2288",
       "title": "\u5c40\u90e8\u4fe1\u606f\u4e0e\u538b\u7f29",
       "track": "baseline",
       "x": 325,
@@ -2002,9 +2038,12 @@
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
-      "decision": "\u4fdd\u7559\u5931\u8d25\u3001\u672a\u68c0\u67e5\u4e0e\u89e3\u91ca\u8fb9\u754c\uff0c\u4e0d\u7531\u5916\u5c42\u9000\u51fa\u7801\u5f62\u6210\u79d1\u5b66\u7ed3\u8bba\u3002",
+      "comparisons": "\u5168896\u7ef4ridge\u76f8\u5bf9MSE0.014904\uff0cPCA16 ridge0.228786\uff0cPCA\u8f93\u5165\u65b9\u5dee86.185%\uff1b\u8bad\u7ec3\u96c6\u786e\u5b9a\u5168\u90e8\u6807\u51c6\u5316/\u57fa/PCA\u4e0e\u6b63\u5219\u3002",
+      "counterevidence": "16\u7ef4\u538b\u7f29\u8bfb\u51fa\u660e\u663e\u4e0d\u53ca\u539f\u7ef4\uff1b\u540e\u7eedTIDE/MLP\u5747\u672a\u8fbe\u5230PCA16\u7ebf\u6027\u8bca\u65ad\u8bef\u5dee\uff0c\u4e0d\u53ef\u5c06\u538b\u7f29\u8bef\u5dee\u89c6\u4e3a\u6240\u6709\u975e\u7ebf\u6027\u6a21\u578b\u4e0b\u9650\u3002",
+      "decision": "\u4e0d\u81ea\u52a8\u6269\u5bbd\u6216\u626b\u7ec4\u5408\uff1b\u5148\u63d0\u9ad8\u5f53\u524d\u4fdd\u6301\u8bc4\u4ef7\u533a\u5206\u5ea6\uff0c\u518d\u51b3\u5b9a\u65b0\u7684\u914d\u65b9\u8bca\u65ad\u3002",
       "id": "R15",
       "kind": "result",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u5df2\u6709\u5c40\u90e8\u8ba1\u7b97\u7684\u8f93\u5165\u53ef\u8fbe\u6027\u4e0e16\u7ef4\u538b\u7f29\u635f\u5931\u5982\u4f55\uff1f",
       "references": [
         {
@@ -2014,22 +2053,39 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/fourth/b-preserve.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-INFO.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u7b49\u5f85\u5b9e\u9645\u7ed3\u679c\u4e0e\u4eba\u5de5\u5ba1\u9605",
+      "scope": "\u56fa\u5b9a\u6700\u540edecoder MLP\u6700\u540e\u63d0\u793a\u4f4d\u7f6e\u7684896\u7ef4\u8f93\u5165/\u8f93\u51fa\uff1btrain512\u3001val64\uff0cNPU FP32\u7f13\u5b58\u4e0aCPU FP64\u7ebf\u6027\u6c42\u89e3\uff1b\u4e0d\u4f7f\u7528test\u7b5b\u9009\u3002",
+      "sources": [
+        {
+          "label": "\u4e3b\u4ee3\u7406\u5ba1\u9605\u7684\u4e00\u9875\u7ed3\u8bba",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/studies/TL-B4-INFO.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u7ec8\u6001\u6570\u503c\u3001\u9010\u4f8b\u53ca\u68c0\u67e5\u8bc1\u636e",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/evidence/fourth-batch-terminal.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u5c40\u90e8\u8f93\u5165\u53ef\u8fbe\uff1b\u538b\u7f29\u6709\u635f",
       "title": "\u5c40\u90e8\u4fe1\u606f\u4e0e\u538b\u7f29\u7ed3\u679c",
       "track": "baseline",
+      "transfer_conditions": "\u4ec5\u5f53\u76ee\u6807\u662f\u540c\u8f93\u5165\u7684\u5df2\u6709\u5c40\u90e8\u8ba1\u7b97\u65f6\u8f93\u5165\u53ef\u8fbe\uff1b\u4efb\u610fhidden\u3001\u65b0\u6807\u7b7e\u3001\u5176\u4ed6\u5c42\u4e0e\u8de8token\u76ee\u6807\u9700\u91cd\u67e5\u3002",
+      "unresolved": "\u6295\u5f71\u521d\u59cb\u5316\u3001tanh\u3001\u4f18\u5316\u9884\u7b97\u4e0e\u7ed3\u6784\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5168\u7ef4\u4e0ePCA\u8bfb\u51fa\u7684\u53c2\u6570\u5bb9\u91cf\u4e0d\u540c\u3002",
       "x": 325,
       "y": 2440
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
-      "decision": "\u6309\u9884\u5b9a\u95e8\u69db\u8fde\u7eed\u63a8\u8fdb\u76f8\u5173\u9636\u6bb5\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u5019\u9009\u6216\u5c42\u6570\u3002",
-      "execution_note": "\u4e24\u5019\u9009NPU\u673a\u5236\u53ca\u65b0\u8fdb\u7a0b3\u6b65B2\u6062\u590d\u901a\u8fc7\u3002\u539fTIDE seed11\u6309\u5355\u6b2120min\u4e0a\u9650\u5931\u8d25\uff0c\u670d\u52a1\u65e0\u540e\u4ee3\uff1b\u5df2\u91cd\u65b0\u83b7\u5f97\u539fNPU14\uff0c\u4ece\u7b2c96\u6b65\u5b8c\u6574checkpoint\u7eed\u63a5\uff0c\u5f53\u524d\u65e5\u5fd797/128\u6b65\u3002\u7b2c96\u6b65val\u76f8\u5bf9MSE0.477996\uff0c\u6062\u590d\u65f6\u590d\u73b0\uff1b\u8fd9\u662f\u4e2d\u9014\u4fe1\u53f7\u3002\u5b8c\u6210\u94fe\u5269\u4f595690.309s\uff0c\u5171\u7528\u539f2h/12h\uff0c\u4fdd\u7559\u5931\u8d25\u53ca\u672a\u53d1\u5e03\u91cd\u7b97\u672a\u77e5\u91cf\u3002",
+      "decision": "\u672c\u7ec4\u7ec8\u6001\u5df2\u5ba1\u9605\u4e14\u9650\u5b9a\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\uff1b\u4e0d\u81ea\u52a8\u5f00\u542f\u4e0b\u4e00\u6279\u3002",
+      "execution_note": "\u56db\u5019\u9009128\u903b\u8f91\u66f4\u65b0\u5747\u5b8c\u6210\uff1bTIDE s11/s22\u9996\u6b21\u65f6\u9650\u5931\u8d25\u5206\u522b\u4fdd\u7559\uff0c\u4ece96\u6b65\u7eed\u63a5\u5230128\u30023\u6b65B2\u4e24\u5019\u9009tensor/\u503c\u6062\u590d\u901a\u8fc7\uff1bMLP\u5c40\u90e8\u62df\u5408\u66f4\u597d\u3002\u4e24\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff0c\u672a\u81ea\u52a8\u65b0\u589e\u7814\u7a76\u3002",
       "id": "E16",
       "kind": "experiment",
-      "observed_at": "2026-11-08T09:26:37.588109+00:00",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "TIDE\u80fd\u5426\u62df\u5408\u6559\u5e08\u5df2\u6709\u5c40\u90e8\u8ba1\u7b97\u5e76\u901a\u8fc7\u65b0\u5e94\u7528\u6062\u590d\uff1f",
       "references": [
         {
@@ -2047,12 +2103,20 @@
         {
           "label": "\u6709\u9650\u5b8c\u6210\u7b56\u7565\u4e0e\u5b9e\u9645\u63d0\u4ea4",
           "path": "docs/evidence/fourth-batch-budget-completion.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-SHADOW.md"
+        },
+        {
+          "label": "\u7ec8\u6001\u9010\u4f8b\u8bc1\u636e\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/fourth-batch-terminal.json"
         }
       ],
       "runs": [
         {
           "config": "configs/studies/fourth/b-preserve.json",
-          "failure": "fixed per-run training budget exhausted; latest published checkpoint step96; service termination verified",
+          "execution_note": "\u5355\u6b21\u8bad\u7ec320min\u65f6\u9650\u5931\u8d25\uff1b\u4fdd\u7559\u8be5\u5c1d\u8bd5\uff0c\u5df2\u4ece\u7b2c96\u6b65checkpoint\u7eed\u63a5\uff0c\u539f\u670d\u52a1\u7ec8\u6b62\u5df2\u6838\u5bf9\u3002",
           "id": "tl-b4-shadow-tide-s11",
           "job_id": "s4-capability",
           "lens_record": "runs/s4-capability/shadow-tide-s11/projection.json",
@@ -2088,50 +2152,75 @@
           "status": "unchecked"
         },
         {
-          "condition": "original exact cap failure and verified termination observed",
           "config": "configs/studies/fourth/b-preserve.json",
+          "execution_note": "\u539f\u7b2c96\u6b65\u5b8c\u6574\u5e94\u7528checkpoint\u7eed\u63a5\u5230128\uff1b\u975e\u65b0\u7684128\u6b65\u8bad\u7ec3\uff0c\u539f\u5931\u8d25\u4e0e\u672a\u77e5\u672a\u53d1\u5e03\u91cd\u7b97\u4fdd\u7559\u3002",
           "id": "tl-b4-shadow-tide-s11-resume1",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/shadow-tide-s11-resume1/projection.json",
           "record": "runs/s4-capability-completion/shadow-tide-s11-resume1/result.json",
-          "resume_from": "tl-b4-shadow-tide-s11 checkpoint step96",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "running"
+          "status": "completed"
         },
         {
-          "condition": "after resumed TIDE seed11 completes",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-shadow-mlp-s11-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/shadow-mlp-s11-completion/projection.json",
           "record": "runs/s4-capability-completion/shadow-mlp-s11-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "seed22 requires original fit/preservation gate and remaining budget",
           "config": "configs/studies/fourth/b-preserve.json",
+          "execution_note": "\u5355\u6b21\u8bad\u7ec320min\u65f6\u9650\u5931\u8d25\uff1b\u4fdd\u7559\u8be5\u5c1d\u8bd5\uff0c\u5df2\u4ece\u7b2c96\u6b65checkpoint\u7eed\u63a5\uff0c\u539f\u670d\u52a1\u7ec8\u6b62\u5df2\u6838\u5bf9\u3002",
           "id": "tl-b4-shadow-tide-s22-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/shadow-tide-s22-completion/projection.json",
           "record": "runs/s4-capability-completion/shadow-tide-s22-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "failed"
         },
         {
-          "condition": "seed22 requires original fit/preservation gate and remaining budget",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-shadow-mlp-s22-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/shadow-mlp-s22-completion/projection.json",
           "record": "runs/s4-capability-completion/shadow-mlp-s22-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-batch-calibration",
+          "job_id": "s4-capability",
+          "lens_record": "runs/s4-capability/batch-calibration/projection.json",
+          "record": "runs/s4-capability/batch-calibration/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-mechanisms",
+          "job_id": "s4-capability",
+          "lens_record": "runs/s4-capability/mechanisms/projection.json",
+          "record": "runs/s4-capability/mechanisms/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "execution_note": "\u539f\u7b2c96\u6b65\u5b8c\u6574\u5e94\u7528checkpoint\u7eed\u63a5\u5230128\uff1b\u975e\u65b0\u7684128\u6b65\u8bad\u7ec3\uff0c\u539f\u5931\u8d25\u4e0e\u672a\u77e5\u672a\u53d1\u5e03\u91cd\u7b97\u4fdd\u7559\u3002",
+          "id": "tl-b4-shadow-tide-s22-resume1",
+          "job_id": "s4-capability-completion",
+          "lens_record": "runs/s4-capability-completion/shadow-tide-s22-resume1/projection.json",
+          "record": "runs/s4-capability-completion/shadow-tide-s22-resume1/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-B4-SHADOW",
-      "summary": "\u539f\u5c1d\u8bd5\u8d85\u65f6\uff1b\u7b2c96\u6b65\u7eed\u63a5\u4e2d",
+      "summary": "\u4e24\u79cd\u5b50\u5b8c\u6210\uff1bMLP\u62df\u5408\u66f4\u597d",
       "title": "TIDE\u5f71\u5b50\u62df\u5408",
       "track": "baseline",
       "x": 620,
@@ -2139,9 +2228,12 @@
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
-      "decision": "\u4fdd\u7559\u5931\u8d25\u3001\u672a\u68c0\u67e5\u4e0e\u89e3\u91ca\u8fb9\u754c\uff0c\u4e0d\u7531\u5916\u5c42\u9000\u51fa\u7801\u5f62\u6210\u79d1\u5b66\u7ed3\u8bba\u3002",
+      "comparisons": "TIDE\u53ef\u8bad\u7ec396,090\u5bf9MLP96,272\uff1btest\u76f8\u5bf9MSE0.425328/0.425006\u5bf90.377568/0.367180\uff1b\u540c16,384\u903b\u8f91\u4f8b\uff0cTIDE\u5168\u90e8\u8bad\u7ec3wrapper\u7ea61625/1629\u79d2\u3001MLP\u7ea67.75/7.79\u79d2\u3002",
+      "counterevidence": "MLP\u4e24\u4e2a\u79cd\u5b50\u5c40\u90e8\u62df\u5408\u5747\u66f4\u597d\u3001\u5f53\u524d\u5b9e\u73b0\u8017\u65f6\u66f4\u5c11\uff1bTIDE\u4e24\u6b21\u5355\u6b21\u65f6\u9650\u5931\u8d25\u4fdd\u7559\u3002\u8bad\u7ec3\u6709\u6548\u4e0d\u89e3\u9664\u5386\u53f2\u6216\u672c\u6279\u4e25\u683c\u6709\u9650\u8d85\u5dee\u3002",
+      "decision": "\u4e0d\u81ea\u52a8\u52a0\u6b65\u6216\u6269\u5c42\uff1b\u53ef\u9009\u5c11\u91cf\u5355\u4f4d\u7f6eB128\u6267\u884c\u89c2\u6d4b\uff0c\u516c\u5171\u7f3a\u53e3\u5411\u57fa\u5ea7\u63d0\u51fa\u3002",
       "id": "R16",
       "kind": "result",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "TIDE\u80fd\u5426\u62df\u5408\u6559\u5e08\u5df2\u6709\u5c40\u90e8\u8ba1\u7b97\u5e76\u901a\u8fc7\u65b0\u5e94\u7528\u6062\u590d\uff1f",
       "references": [
         {
@@ -2151,22 +2243,39 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/fourth/b-preserve.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-SHADOW.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u7b49\u5f85\u5b9e\u9645\u7ed3\u679c\u4e0e\u4eba\u5de5\u5ba1\u9605",
+      "scope": "\u5355\u4f4d\u7f6eFC/KV\u7a20\u5bc6width16/depth2\u4e24\u533a\u57df\uff1b16\u7ef4\u74f6\u9888\uff1bNPU FP32\u3001B128/128\u903b\u8f91\u66f4\u65b0\u3001seed11/22\uff0c\u51bb\u7ed3\u540c\u4e00\u6559\u5e08\uff1b\u4e3b\u4ee3\u7406\u5ba1\u9605\uff0c\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "sources": [
+        {
+          "label": "\u4e3b\u4ee3\u7406\u5ba1\u9605\u7684\u4e00\u9875\u7ed3\u8bba",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/studies/TL-B4-SHADOW.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u7ec8\u6001\u6570\u503c\u3001\u9010\u4f8b\u53ca\u68c0\u67e5\u8bc1\u636e",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/evidence/fourth-batch-terminal.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "MLP\u62df\u5408\u66f4\u597d\uff1bTIDE\u53ef\u5b66\u4e60",
       "title": "TIDE\u5f71\u5b50\u62df\u5408\u7ed3\u679c",
       "track": "baseline",
+      "transfer_conditions": "\u5f53\u524d\u4ec5\u5355\u4f4d\u7f6e\u51fd\u6570\u62df\u5408\uff0c\u4e24\u5019\u90093\u6b65B2\u65b0\u8fdb\u7a0b\u5e94\u7528\u72b6\u6001\u6062\u590d\u901a\u8fc7\uff1b\u8de8token\u8bb0\u5fc6\u3001\u591a\u533a\u57df\u7a00\u758f\u3001\u5b8c\u6574A\u8def\u7ebf\u5747\u9700\u72ec\u7acb\u8bc1\u636e\u3002",
+      "unresolved": "16\u7ef4\u6295\u5f71/\u975e\u7ebf\u6027/\u4f18\u5316\u914d\u65b9\u4e0e\u7ed3\u6784\u8d21\u732e\u672a\u533a\u5206\uff1b\u672a\u53d1\u5e03\u91cd\u7b97\u91cf\u672a\u77e5\uff1b\u65e0\u5b8c\u6574128\u6b65\u4e0d\u4e2d\u65ad\u53c2\u8003\u3002",
       "x": 620,
       "y": 2440
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
-      "decision": "\u6309\u9884\u5b9a\u95e8\u69db\u8fde\u7eed\u63a8\u8fdb\u76f8\u5173\u9636\u6bb5\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u5019\u9009\u6216\u5c42\u6570\u3002",
-      "execution_note": "\u975e\u96f6\u63a5\u5165\u3001seed22\u4e0e\u72ec\u7acbtest\u5c1a\u672a\u68c0\u67e5\uff1b\u539f\u94fe\u56e0\u65f6\u95f4\u4e0a\u9650\u505c\u6b62\uff0c\u5b8c\u6210\u94fe\u6309\u539f\u95e8\u69db\u63a8\u8fdb\u540c\u4e00\u7814\u7a76\u3002\u539f\u672a\u6267\u884c\u8def\u5f84\u4fdd\u7559unchecked\uff0c\u65b0\u8bc4\u4ef7run planned\uff1b\u4e0d\u4ee5\u4e2d\u9014loss\u4e0b\u964d\u4ee3\u66ff\u4fdd\u6301\u8bc1\u636e\u3002",
+      "decision": "\u672c\u7ec4\u7ec8\u6001\u5df2\u5ba1\u9605\u4e14\u9650\u5b9a\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\uff1b\u4e0d\u81ea\u52a8\u5f00\u542f\u4e0b\u4e00\u6279\u3002",
+      "execution_note": "validation\u56db\u6a21\u578b\u574758/64\uff1btest\u539f\u57fa\u7ebf229/256\uff0cTIDE231/256\u4e24\u79cd\u5b50\uff0c\u5747\u503c\u540c231/256\u30029\u4e2a\u975e\u96f6\u63a5\u5165\u5b8c\u6574/\u7f13\u5b58\u4e25\u683c\u6709\u9650\u5931\u8d25\uff0cargmax\u76f8\u540c\uff1b\u5c0f\u6837\u672c\u7b5b\u9009\u4e0d\u80fd\u8bc1\u660e\u666e\u9002\u4fdd\u6301\u3002",
       "id": "E17",
       "kind": "experiment",
-      "observed_at": "2026-11-08T09:26:37.588109+00:00",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u5206\u652f\u5b9e\u9645\u53c2\u4e0e\u540e\uff0c\u539f\u751f\u4efb\u52a1\u53ca\u7f13\u5b58\u7eed\u63a5\u662f\u5426\u4fdd\u6301\uff1f",
       "references": [
         {
@@ -2180,6 +2289,14 @@
         {
           "label": "\u540e\u53f0\u4ea4\u63a5\u53ca\u5206\u8f74\u8bc1\u636e",
           "path": "docs/evidence/fourth-batch-handoff.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-PRESERVE.md"
+        },
+        {
+          "label": "\u7ec8\u6001\u9010\u4f8b\u8bc1\u636e\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/fourth-batch-terminal.json"
         }
       ],
       "runs": [
@@ -2220,69 +2337,99 @@
           "status": "unchecked"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-baseline-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-baseline-completion/projection.json",
           "record": "runs/s4-capability-completion/test-baseline-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-mean-control-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-mean-control-completion/projection.json",
           "record": "runs/s4-capability-completion/test-mean-control-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-tide-s11-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-tide-s11-completion/projection.json",
           "record": "runs/s4-capability-completion/test-tide-s11-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-mlp-s11-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-mlp-s11-completion/projection.json",
           "record": "runs/s4-capability-completion/test-mlp-s11-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-tide-s22-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-tide-s22-completion/projection.json",
           "record": "runs/s4-capability-completion/test-tide-s22-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
         },
         {
-          "condition": "after training decisions locked; candidate requires completed applicable fit gate",
           "config": "configs/studies/fourth/b-preserve.json",
           "id": "tl-b4-test-mlp-s22-completion",
           "job_id": "s4-capability-completion",
           "lens_record": "runs/s4-capability-completion/test-mlp-s22-completion/projection.json",
           "record": "runs/s4-capability-completion/test-mlp-s22-completion/result.json",
           "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
-          "status": "planned"
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-validation-mlp-s11-completion",
+          "job_id": "s4-capability-completion",
+          "lens_record": "runs/s4-capability-completion/validation-mlp-s11-completion/projection.json",
+          "record": "runs/s4-capability-completion/validation-mlp-s11-completion/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-validation-mlp-s22-completion",
+          "job_id": "s4-capability-completion",
+          "lens_record": "runs/s4-capability-completion/validation-mlp-s22-completion/projection.json",
+          "record": "runs/s4-capability-completion/validation-mlp-s22-completion/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-validation-tide-s11-completion",
+          "job_id": "s4-capability-completion",
+          "lens_record": "runs/s4-capability-completion/validation-tide-s11-completion/projection.json",
+          "record": "runs/s4-capability-completion/validation-tide-s11-completion/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/fourth/b-preserve.json",
+          "id": "tl-b4-validation-tide-s22-completion",
+          "job_id": "s4-capability-completion",
+          "lens_record": "runs/s4-capability-completion/validation-tide-s22-completion/projection.json",
+          "record": "runs/s4-capability-completion/validation-tide-s22-completion/result.json",
+          "source_commit": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+          "status": "completed"
         }
       ],
-      "status": "planned",
+      "status": "completed",
       "study_id": "TL-B4-PRESERVE",
-      "summary": "\u56fa\u5b9a10%\u6df7\u5408\uff1b\u539f\u4efb\u52a1\u4e0d\u9000\u5316",
+      "summary": "\u4fdd\u6301\u7b5b\u9009\u901a\u8fc7\uff1b\u5747\u503c\u4e5f\u901a\u8fc7",
       "title": "\u975e\u96f6\u63a5\u5165\u4e0e\u80fd\u529b\u4fdd\u6301",
       "track": "baseline",
       "x": 915,
@@ -2290,9 +2437,12 @@
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
-      "decision": "\u4fdd\u7559\u5931\u8d25\u3001\u672a\u68c0\u67e5\u4e0e\u89e3\u91ca\u8fb9\u754c\uff0c\u4e0d\u7531\u5916\u5c42\u9000\u51fa\u7801\u5f62\u6210\u79d1\u5b66\u7ed3\u8bba\u3002",
+      "comparisons": "\u539f\u57fa\u7ebf229/256\uff1bTIDE\u4e24\u4e2a\u79cd\u5b50\u5747231/256\uff0cMLP231/256\u548c230/256\uff0c\u5747\u503c231/256\u3002TIDE\u65b0\u95190/1\u3001NLL\u589e0.00138/0.000975\uff0c\u5168\u90e8\u539f\u70b9\u4f30\u8ba1\u7b5b\u9009\u901a\u8fc7\u3002",
+      "counterevidence": "\u5747\u503c\u5bf9\u7167\u4e5f\u901a\u8fc7\uff0c\u4e0d\u80fd\u8bc1\u660eTIDE\u72ec\u7279\u4f18\u52bf\uff1bNLL\u7565\u5347\uff1bTIDE s22\u65b0\u951995%\u4e0a\u754c2.179%\u8d85\u8fc72%\u70b9\u4f30\u8ba1\u7b5b\u9009\u7ebf\uff1b\u539f\u751f\u52a09\u4e2a\u6d3b\u52a8\u6a21\u578b\u5b8c\u6574/\u7f13\u5b58\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "decision": "\u7528\u6237\u9a8c\u6536\u540e\u4f18\u5148\u7528\u56fa\u5b9a\u6743\u91cd/\u4f4d\u7f6e\u3001\u4e00\u4e2a\u989d\u5916\u9884\u767b\u8bb0\u6df7\u5408\u5f3a\u5ea6\u53ca\u65b0\u72ec\u7acb\u6570\u636e\u63d0\u9ad8\u533a\u5206\u5ea6\uff1b\u672c\u6279\u4e0d\u6269\u5c55\u3002",
       "id": "R17",
       "kind": "result",
+      "observed_at": "2026-11-08T10:34:45.224858+00:00",
       "question": "\u5206\u652f\u5b9e\u9645\u53c2\u4e0e\u540e\uff0c\u539f\u751f\u4efb\u52a1\u53ca\u7f13\u5b58\u7eed\u63a5\u662f\u5426\u4fdd\u6301\uff1f",
       "references": [
         {
@@ -2302,12 +2452,29 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/fourth/b-preserve.json"
+        },
+        {
+          "label": "\u4e00\u9875\u7ec8\u6001\u7ed3\u8bba",
+          "path": "docs/studies/TL-B4-PRESERVE.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u7b49\u5f85\u5b9e\u9645\u7ed3\u679c\u4e0e\u4eba\u5de5\u5ba1\u9605",
+      "scope": "\u56fa\u5b9a\u6700\u540eMLP/\u6700\u540e\u63d0\u793a\u4f4d\u7f6e\u3001alpha0.1\uff0c\u539f\u6559\u5e08MLP\u7ee7\u7eed\u8ba1\u7b97\uff1b\u67e5\u8868val64/test256\uff0c\u4e24\u79cd\u5b50\u5171\u4eab\u540ctest\uff1b\u4e3b\u4ee3\u7406\u5ba1\u9605\uff0c\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "sources": [
+        {
+          "label": "\u4e3b\u4ee3\u7406\u5ba1\u9605\u7684\u4e00\u9875\u7ed3\u8bba",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/studies/TL-B4-PRESERVE.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u7ec8\u6001\u6570\u503c\u3001\u9010\u4f8b\u53ca\u68c0\u67e5\u8bc1\u636e",
+          "url": "https://github.com/ZichaoLong/tide/blob/9c365d5da8f9864221da827e83f9c0a08024de32/docs/evidence/fourth-batch-terminal.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "10%\u63a5\u5165\u4fdd\u6301\uff1b\u72ec\u7279\u6536\u76ca\u672a\u8bc1",
       "title": "\u975e\u96f6\u63a5\u5165\u4e0e\u80fd\u529b\u4fdd\u6301\u7ed3\u679c",
       "track": "baseline",
+      "transfer_conditions": "\u975e\u96f6delta\u548c\u9884\u6d4b\u53d8\u5316\u8bc1\u660e\u5206\u652f\u53c2\u4e0e\uff0c\u4f46\u53ea\u652f\u6301\u8be5\u4f4d\u7f6e/\u5f3a\u5ea6/\u6570\u636e\uff1b\u6269\u5927\u6df7\u5408\u3001\u72b6\u6001\u6216\u4efb\u52a1\u524d\u91cd\u65b0\u505a\u6570\u503c/\u79bb\u6563/\u4fdd\u6301\u68c0\u67e5\uff0c\u4e0d\u63a8\u5bfc\u6548\u7387\u6216A\u6210\u529f\u3002",
+      "unresolved": "\u8f83\u5f31\u5e72\u9884\u4e0e\u57fa\u7ebf\u9c81\u68d2\u6027\u8d21\u732e\u672a\u533a\u5206\uff1b\u9884\u6d4b\u5fae\u5c0f\u589e\u76ca\u4e0d\u8db3\u4ee5\u8ba4\u5b9a\u63d0\u5347\uff1b\u672a\u8986\u76d6\u957f\u751f\u6210\u3001\u5e7f\u6cdb\u4efb\u52a1\u4e0e\u5176\u4ed6\u5c42\u3002",
       "x": 915,
       "y": 2440
     }
@@ -2316,6 +2483,6 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u4ece\u96f6\u8bad\u7ec3\u5b8c\u6574 TIDE \u4e0e\u9884\u8bad\u7ec3\u6a21\u578b\u751f\u957f\uff0c\u4ee5\u5171\u540c\u4efb\u52a1\u548c\u9650\u5b9a\u8bc1\u636e\u8fde\u63a5",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-08T09:26:37.588109+00:00",
+  "updated_at": "2026-11-08T10:34:45.224858+00:00",
   "width": 1490
 }

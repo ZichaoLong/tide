@@ -89,6 +89,8 @@ python -m unittest discover -s tests -p test_research_map.py -v
 
 E12组层级为completed，原TIDE尝试仍failed（未训练的启动事故），新ID补做completed200步；R12为scoped且等待用户验收。研究组、尝试、科学判断分别表示，不能由exit0推出成功。共8份scoped研究结果；旧待填结果和严格失败不因新终态消失。研究表、配置和统一run ID连接项目记录与10个核对过的Lens投影，私有入口不入图。[第三批终态结论](studies/third-batch-results.md)。
 
-第四批新增E14/R14（原生基线能力）、E15/R15（局部信息/压缩）、E16/R16（影子拟合）、E17/R17（非零参与后的能力保持）。它们有独立run与阶段状态，结果在实际运行和人工审阅前保持awaiting。B新增能力不作为必要条件；原TL-B1/B3仍保留原问题和负面结果。先决关系不等于科学支持，影子分支隔离不等于接入后的能力保持。
+第四批E14/R14（原生基线）、E15/R15（局部信息）、E16/R16（影子拟合）、E17/R17（非零保持）全部终态并经主代理审阅，R14–R17为scoped，待用户验收。固定来源为四份一页报告和终态逐例证据。图当前共有12个经审阅研究结果；旧失败/未检查项保留。
 
-第四批最新运行观测已关联`docs/evidence/fourth-batch-handoff.json`：E16正式B128训练，短程恢复通过；原TIDE尝试因单次时限failed，完成协调器已确认终止并重新获原NPU14，从第96步checkpoint实际续接；旧后续未执行run为unchecked，新续接running，后继评价planned。E14原生缓存严格有限超差与argmax保持分列，R14–R17仍awaiting，不将中途学习曲线当作能力保持结果。
+B本批两种子均完成128逻辑更新和独立test；TIDE局部函数拟合成立、10%保持筛选通过，但MLP拟合更好、均值保持对照也通过，没有TIDE独特优势或广泛能力保持结论。两次时限失败分别保留为failed run，原未执行路径仍unchecked，恢复后的真实run为completed；研究组完成与每次尝试、科学判断分列。
+
+原生加9个非零接入完整/缓存严格有限失败和10个检查例argmax保持分别列出；两个3步B2新进程恢复不认证128步完整独立等价。20个Lens投影已verified，统一ID及对应在`docs/evidence/fourth-batch-terminal.json`，私有实例信息不入图。未增加广泛科学支持或A/B权重迁移关系；本批终态后不自动扩展。[第四批完整结论](studies/fourth-batch-results.md)。

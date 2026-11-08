@@ -1,3 +1,31 @@
+# 当前无活动作业 — 第四批已终态（2026-11-08）
+
+完成服务于北京时间18:02:05结束。原`s4-capability`保留failed，`s4-capability-completion`为completed；两者MainPID0、实际cgroup空、已知后代均终止。共享队列已释放NPU14，没有本批排队或自动重试。[终态报告](studies/fourth-batch-results.md)、[终态证据](evidence/fourth-batch-terminal.json)。下方分隔线后的启动与运行说明为历史快照。
+
+模型固定源码`.local/source-fourth-batch` / `1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a`，控制器`.local/source-fourth-completion` / `4502d073e78876bca2abe88947bda9aeb7dbdc98`，均复核未变。配置`configs/studies/fourth/b-preserve.json`，实际B128、128更新、seed11/22、AdamW。原截止2026-11-09 05:00:01不是继续实验的授权；本批已终态，不自动花费剩余额度。
+
+只读查看（不会重启计算）：
+
+```bash
+python scripts/job.py status artifacts/jobs/s4-capability
+python scripts/job.py status artifacts/jobs/s4-capability-completion
+cat runs/s4-capability-completion/completion.json
+cat runs/s4-capability-completion/allocated-wrapper/result.json
+cat runs/s4-capability-completion/shadow-tide-s11-resume1/result.json
+cat runs/s4-capability-completion/test-tide-s11-completion/result.json
+python scripts/job.py logs artifacts/jobs/s4-capability-completion --lines 80
+```
+
+实际run在`runs/s4-capability/`和`runs/s4-capability-completion/`，完整argv/env/源码与资源身份在各`artifacts/jobs/<id>/job.json`。原s11与s22首次训练时限失败各自保留；续接run以`-resume1`命名，终态四候选checkpoint位于`shadow-tide-s11-resume1`、`shadow-tide-s22-resume1`、`shadow-mlp-s11-completion`、`shadow-mlp-s22-completion`。权重/hash与完整应用状态均保留，不需重新下载教师。
+
+当前无需停止。后续获授权的作业使用`python scripts/job.py stop artifacts/jobs/NEW-JOB`并核对全cgroup及后代；不要为查看结果重跑submit/coordinate。原failed service可保留作为生命周期记录，不代表进程还活着。
+
+精确恢复已有两候选3步B2新进程检查，正式TIDE成功从第96步继续至128；没有128步独立不中断参考。本批已经达到更新上限，从终态checkpoint再训练属于新研究配方和预算，不能伪称未完成恢复。若获授权复现，使用原快照、私有环境、固定config/cache/数据/设备映射及**新job/run/output**，经background.slice、共享队列、bounded_workload提交；所有hash见终态证据。不要直接在前台绕过选卡或修改快照。
+
+Lens项目`tide-learning-lab`，组TL-B4-BASE/INFO/CHECK/SHADOW/PRESERVE，20个projection均verified/readback_matches。例：`tl-b4-test-tide-s11-completion`对应同名stage的`projection.json`；全量对应见终态证据`lens`。私有入口和SSH方式见`.local/LENS.md`，无需重新部署。研究图及报告均可离线查看。
+
+---
+
 # 当前活动：第四批基线能力保持链（2026-11-08）
 
 北京时间2026-11-08 17:26:37观测。研究表见[第四批](studies/fourth-batch.md)，[当前证据](evidence/fourth-batch-handoff.json)。下方分隔线后的第三批及更早说明均为历史快照。
