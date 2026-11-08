@@ -28,7 +28,7 @@ class StageRunner:
             self.publish();return None,dict(state='skipped',reason='budget')
         destination=self.args.output/name
         argv=[sys.executable,'scripts/language_stage.py',action,'--plan',str(self.args.plan),'--data',str(self.args.data),
-            '--route',self.args.route,'--output',str(destination),'--run-id','tl-lm-'+self.args.route+'-'+name,
+            '--route',self.args.route,'--output',str(destination),'--run-id','tl-'+self.args.output.name+'-'+name,
             '--asset-path',str(self.args.asset_path),*map(str,extra)]
         if getattr(self.args,'cpu_only',False):argv+=['--device','cpu']
         follow=record and action=='train'

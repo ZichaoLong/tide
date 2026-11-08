@@ -27,7 +27,8 @@ def core_axes(encoder,options,seed,device):
     reference.load_state_dict(cpu_tree(encoder.state_dict()),strict=True)
     generator=torch.Generator().manual_seed(991)
     raw=torch.randn(2,3,encoder.width,generator=generator)*.2
-    x=raw.to(device).requires_grad_(True);xr=raw.clone().requires_grad_(True)
+    x=raw.detach().clone().to(device).requires_grad_(True)
+    xr=raw.detach().clone().requires_grad_(True)
     result=encoder.run_features(x,trace=True)
     expected=reference.run_features(xr,implementation='reference',trace=True)
     actual_tree=canonical_result(result);reference_tree=canonical_result(expected)
