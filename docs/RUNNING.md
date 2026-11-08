@@ -1,27 +1,28 @@
-# 当前活动：原TIDE候选启动修复后补做（2026-11-08）
+# 当前无活动作业 — 第三批终态（2026-11-08）
 
-原7个作业已全部终态，六个完成、B阶段因最后TIDE候选启动失败而失败；均无后代。[HB/采样结论与B阶段结果](studies/third-batch-results.md)。下方原交接表是历史快照，当前只运行**s3-growth-tide-repair1**，没有新增研究候选。
+最后TIDE补做于北京时间14:14:17完成，8次尝试均已核对MainPID0、cgroup空及无存活后代，NPU已释放；当前没有排队、运行或自动重试。7次completed；原`s3-growth`保留failed（最后TIDE启动前目录冲突），补做并不改写原失败。[本批结论](studies/third-batch-results.md)、[最终证据](evidence/third-batch-terminal.json)。下方分隔线后的启动表与操作说明均为历史快照。
 
-- 单元：`tide-lab-s3-growth-tide-repair1.service`，已核对background.slice、真实cgroup与物理NPU1→logical npu:0。
-- 固定源码：仍`.local/source-third-batch` / `1c6cb44197cb603cdab1e89b1be1a96bf692c789`；配置仍`configs/studies/third/b-tide.json`，200步/B32/SGD，配置hash未改。
-- 恢复门槛：`runs/s3-growth-tide-repair1/resume/result.json`，原3步/B2冻结模型在新分配设备上重新逐位通过；不称200步完整恢复。
-- 正式run：`tl-b3-tide-s11-200-repair1`，记录目录`runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/`。
-- 预算：分配后≤7,350秒（恢复≤750、学习/记录≤6,600）；加原B阶段485.28秒仍低于3h。共同截止不变：**北京时间2026-11-08 21:29:11**。精确请求、argv和输入hash在新job.json；首次提交等待cap23,014秒，服务cap30,424秒，终止另留30秒，未重获12h。
-- 原始故障：交接脚本把图数据误写到尚未创建的TIDE输出目录，批驱动正确拒绝覆盖。污染文件/原失败保留；新review写入器和两项回归检查防止再写运行目录。详见[故障/补做证据](evidence/third-batch-repair1.json)。
+- 最后单元：`tide-lab-s3-growth-tide-repair1.service`，已终态；原background.slice及物理NPU1→logical npu:0身份保留。
+- 固定源码：`.local/source-third-batch` / `1c6cb44197cb603cdab1e89b1be1a96bf692c789`；树SHA256 `284807226729141d002e77c01d65c687ef6bc5652cb7864a434a2596cce021fa`，终态复核未变。
+- 配置：`configs/studies/third/b-tide.json`，200步/B32/SGD .01；SHA256 `76882212328e53c244b79073cf7a0779aca30931cf9348efbd7bb574ac2de5c6`。
+- 正式run：`tl-b3-tide-s11-200-repair1`，目录`runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/`；result、metrics、40步diagnostic、manifest、checkpoint元数据和projection均保留。
+- 结果：验证19.53125%，未达原25%；关闭分支后128例类别均不变。3步/B2新进程精确恢复通过，不称200步完整恢复；成功大checkpoint已按预定策略退役。
+- 实际预算：补做外层阶段4,352.32秒，cap7,350秒；加原B阶段485.28秒共80.63min＜3h。整批墙钟4h45m06s＜12h，共同绝对截止21:29:11没有改变。
+
+只读查看（不重启计算）：
 
 ```bash
 python scripts/job.py status artifacts/jobs/s3-growth-tide-repair1
 python scripts/job.py logs artifacts/jobs/s3-growth-tide-repair1 --lines 80
 cat runs/s3-growth-tide-repair1/resume/result.json
-cat runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/state.json
+cat runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/result.json
 tail -n 5 runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/metrics.jsonl
-tail -n 40 runs/s3-growth-tide-repair1/learning-wrapper/workload.log
-python scripts/job.py stop artifacts/jobs/s3-growth-tide-repair1
+cat runs/s3-growth-tide-repair1/learning/tl-b3-tide-s11-200-repair1/projection.json
 ```
 
-`stop`会核对整组进程和已知后代，不能只杀最外层。恢复仍需新ID/新输出、同config/source/runtime和剩余原预算；正式checkpoint每40步写入，若尚无checkpoint则只能从公共初始权重重新开始，不能声称精确恢复；成功终态按原策略退役大checkpoint。当前没有自动后续重试。
+当前没有需要停止的活动服务。历史停止方法为`python scripts/job.py stop artifacts/jobs/JOB-ID`，会检查整组及已知后代。查看任务不需要运行submit脚本。后续复现须用户选定新研究表/预算，以新ID/输出和固定源码、配置、依赖执行；B成功大checkpoint已删除，不能从其hash恢复或把重新初始化称精确续训。HB六个终态权重仍保留，适用恢复限制见下方历史方法。
 
-Lens项目`tide-learning-lab`、组TL-B3，可按`tl-b3-tide-s11-200-repair1`查找；最终projection.json给出映射身份。原批9个有指标run均verified/readback_matches；私有入口和SSH转发在`.local/LENS.md`，服务策略不变。
+Lens项目`tide-learning-lab`、组TL-B3，补做名`tl-b3-tide-s11-200-repair1-projection-4d2c8a6885d7`，destination_run_id=`39d1d50ed1ae4255a63df68594d3d72e`。本批10个实际指标run均verified/readback_matches，私有入口/SSH转发在`.local/LENS.md`，服务策略未变。研究图关联统一ID和项目记录，不包含私有实例信息。
 
 ---
 
