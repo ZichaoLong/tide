@@ -769,12 +769,12 @@
       "target": "D-HB16"
     },
     {
-      "detail": "\u72ec\u7acb\u65b0\u521d\u59cb\u5316\uff0c\u4e0d\u662fcheckpoint\u7ee7\u627f\uff1b\u6761\u4ef6\u672a\u6ee1\u8db3\u5219\u672a\u68c0\u67e5\u3002",
+      "detail": "HB16\u4e24\u5019\u9009\u5df2\u5b8c\u6210\u4e14\u76f8\u5bf9\u5404\u81ea\u4ece\u96f6validation\u4e0b\u964d>=0.1\uff1bHB40\u572816:06\u6309\u524d\u63d0\u542f\u52a8\uff0c\u65b0\u521d\u59cb\u5316\uff0c\u4e0d\u662f\u6743\u91cd\u7ee7\u627f\u3002",
       "id": "v5-nesting-prerequisite",
       "kind": "precondition",
       "label": "\u673a\u5236+\u9a8c\u8bc1\u5b66\u4e60",
       "source": "D-HB16",
-      "status": "planned",
+      "status": "documented",
       "target": "D-HB40"
     },
     {
@@ -4685,7 +4685,7 @@
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u65b0\u65e7\u8eab\u4efd\u5206\u5217\uff0c\u6cbf\u7528\u540cB8/L32/seed11/512\u65e5\u7a0b\uff0c\u5f85\u7a00\u758f\u7ec8\u6001\u914d\u5bf9\u5ba1\u9605\u3002",
+      "decision": "\u914d\u5bf9\u5df2\u8865\u9f50\u5e76\u6709\u9650\u5ba1\u9605\uff1b\u5f53\u524d\u8d28\u91cf/\u5de5\u4f5c\u6298\u8877\u6210\u7acb\uff0c\u672a\u663e\u793a\u4f18\u4e8e\u540c\u66dd\u5149FC4\u3002",
       "id": "D-FC16",
       "kind": "experiment",
       "question": "\u4e32\u8054\u540e\u662f\u5426\u5f62\u6210\u6709\u6548\u8bed\u8a00\u8ba1\u7b97\uff1f",
@@ -4770,7 +4770,7 @@
           "id": "lm-complete-fc16-sparse-v5",
           "record": "artifacts/jobs/lm-complete-fc16-sparse-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/completion-v5/references.json",
@@ -4780,9 +4780,9 @@
           "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-A-DEPTH",
-      "summary": "dense128\u4e0e\u91cd\u7f6e\u8bc4\u4ef7\u5df2\u8865\u9f50\uff1b\u72ec\u7acbquad128\u6b63\u5728\u8bad\u7ec3",
+      "summary": "dense/quad128\u8bc4\u4ef7\u5b8c\u6574\uff1b\u539f\u5e72\u9884\u5931\u8d25\u4fdd\u7559\uff0c\u65b0\u8865\u6b63\u5e72\u9884\u5b8c\u6210",
       "title": "A\uff1a\u56db\u533a\u57df\u4e32\u8054",
       "track": "tide",
       "view_group": "current",
@@ -4791,12 +4791,12 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
-      "comparisons": "dense6.864746\uff0cFC4\u540c128\u524d\u7f006.842736\uff1b\u5dee+0.022010\uff0c\u6587\u686395%\u533a\u95f4[0.004640,0.040867]\u3002",
-      "counterevidence": "\u672a\u6539\u5584\u6d45\u5c42\uff1bcontext-reset\u6b63\u652f\u6301\u786c\u5931\u8d25\uff0csparse\u672a\u8bad\u7ec3\uff1b\u7ec8\u70b9core92\u5143\u7d20\u4e25\u683c\u8d85\u5dee\u4fdd\u7559\u3002",
-      "decision": "\u72ec\u7acb\u8865\u539fquad\u5019\u9009\uff1b\u57fa\u5ea7\u4fee\u590d\u9a8c\u6536\u540e\u518d\u8865\u5931\u8d25\u5e72\u9884\u3002",
+      "comparisons": "dense/quad6.864746/6.882227\uff1b\u5355\u4fa795%\u4e0a\u754c0.037407<0.05\uff0cFull\u51cf49.77%\u3001\u5185\u90e8\u6d88\u606f\u51cf49.72%\u3002quad\u6bd4FC4\u9ad80.043986\u3002",
+      "counterevidence": "\u6df1\u5c42\u672a\u6539\u5584\u6d45\u5c42\uff1b\u7ec8\u70b9quad core28\u5143\u7d20\u6709\u9650\u8d85\u5dee\uff0ceager\u96f6\u5bb9\u5dee\u6270\u52a858\u5143\u7d20\u5dee\u5f02\uff1b\u539fdense\u5e72\u9884\u5931\u8d25\u4fdd\u7559\uff0c\u65b0\u8865\u6b63\u5e72\u9884\u5b8c\u6210\u3002",
+      "decision": "\u672c\u6b21\u8d28\u91cf/\u5b9e\u9645\u7a00\u758f\u6298\u8877\u53ef\u63a5\u53d7\uff1b\u5148\u5b8c\u6210HB40\uff0c\u4e0d\u5ba3\u79f0scaling\u6216\u901a\u7528\u975e\u52a3\u3002",
       "id": "RD-D-FC16",
       "kind": "result",
-      "observed_at": "2026-11-09T06:43:21.392011+00:00",
+      "observed_at": "2026-11-09T08:46:07.206991+00:00",
       "question": "\u4e32\u8054\u540e\u662f\u5426\u5f62\u6210\u6709\u6548\u8bed\u8a00\u8ba1\u7b97\uff1f",
       "references": [
         {
@@ -4822,9 +4822,13 @@
         {
           "label": "\u540e\u7eed\u8865\u9f50\uff08\u7ed3\u679c\u5c1a\u5f85\u5ba1\u9605\uff09",
           "path": "docs/studies/language-depth-completion-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u72b6\u6001/\u7edf\u8ba1/\u68c0\u67e5/Lens",
+          "path": "docs/evidence/language-completion-handoff.json"
         }
       ],
-      "scope": "A FC16\uff0cB8/L32/128/seed11\uff0c512\u65e5\u7a0b\u524d\u7f00\uff0cCPU1\uff1b\u540cv5 16\u6587\u6863/3878\u6709\u6548\u76ee\u6807\u3002\u4e3b\u4ee3\u7406\u5ba1\u9605\uff0c\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "scope": "A FC16\uff0c4\u533a\u57df/48\u8fb9/669108\u53ef\u8bad\u7ec3\u53c2\u6570\uff0cCPU1/FP32/B8/L32/128/seed11\uff0c512\u65e5\u7a0b\u524d\u7f00\uff1b\u540cv5 16\u6587\u6863/3878\u76ee\u6807\u3002\u4e3b\u4ee3\u7406\u5ba1\u9605\uff0c\u5f85\u7528\u6237\u9a8c\u6536\u3002",
       "sources": [
         {
           "label": "\u56fa\u5b9a\u4e00\u9875\u5ba1\u9605",
@@ -4833,21 +4837,29 @@
         {
           "label": "\u56fa\u5b9a\u7ec8\u6001\u7edf\u8ba1\u4e0e\u8eab\u4efd",
           "url": "https://github.com/ZichaoLong/tide/blob/5e396a2478649d03455bd2d2ab2d0b07e048427e/docs/evidence/language-depth-terminal.json"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u9010\u7ec4\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/studies/TL-A-DEPTH-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u68c0\u67e5\u4e0e\u7edf\u8ba1",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/evidence/language-completion-handoff.json"
         }
       ],
       "status": "scoped",
-      "summary": "FC16 dense\u8f83FC4 NLL+0.0220\uff1b\u5e72\u9884\u5931\u8d25\u3001\u7a00\u758f\u672a\u8bad\u7ec3",
-      "title": "\u4e32\u8054\u5b66\u4e60\u6210\u7acb\uff0c\u8d28\u91cf\u6536\u76ca\u672a\u89c1",
+      "summary": "quad\u2212dense NLL+0.01748\uff0c\u4e0a\u754c0.03741\uff1bFull/\u6d88\u606f\u7ea6\u51cf\u534a",
+      "title": "\u4e32\u8054\u7a00\u758f\u6298\u8877\u6210\u7acb\uff0c\u6df1\u5ea6\u6536\u76ca\u672a\u89c1",
       "track": "tide",
-      "transfer_conditions": "\u540c\u8bcd\u8868\u3001\u4efb\u52a1\u3001\u66dd\u5149\u548c\u65b0\u4f9d\u8d56\u8eab\u4efd\uff1b\u53ea\u652f\u6301\u5c0f\u578b\u4e32\u8054\u53ef\u5b66\u4e60\uff0c\u4e0d\u5916\u63a8\u89c4\u6a21\u6536\u76ca\u6216\u957f\u4e0a\u4e0b\u6587\u3002",
-      "unresolved": "\u66dd\u5149\u3001\u6df1\u5c42\u4f18\u5316\u3001\u4fe1\u606f\u8def\u5f84\u4e0e\u7ed3\u6784\u672a\u5206\u79bb\uff1bHB16\u5bf9\u6bd4\u53c8\u6539\u53d8\u5206\u914d\u89c4\u5219\u3002",
+      "transfer_conditions": "\u540c\u4efb\u52a1\u3001\u8bcd\u8868\u3001\u5c40\u90e8\u754c\u9650\u3001\u66dd\u5149\u548c\u5df2\u9a8c\u5b89\u88c5\uff1b\u8de8\u65e7\u7b56\u7565\u8eab\u4efd\u4e0d\u79f0\u7cbe\u786e\u6062\u590d\uff0c\u4e0d\u5916\u63a8\u957f\u4e0a\u4e0b\u6587\u6216\u89c4\u6a21\u6536\u76ca\u3002",
+      "unresolved": "\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u8bfb\u51fa/\u4fe1\u606f\u8def\u5f84\u4e0e\u7ed3\u6784\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u5305\u62ec\u79cd\u5b50\u6216\u603b\u4f53\u5916\u63a8\u4e0d\u786e\u5b9a\u6027\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1600
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u4fdd\u7559\u539f86\u66f4\u65b0\u540e\u5931\u8d25\uff1b\u65b0\u6a21\u5f0f\u663e\u5f0f\u7eed\u8bad\uff0c\u4e0d\u79f0\u4e3a\u65e7\u8f68\u8ff9\u7cbe\u786e\u6062\u590d\uff0c\u7ec8\u6001\u518d\u5224\u65ad\u7a00\u758f/\u8d28\u91cf\u6298\u8877\u3002",
+      "decision": "\u4fdd\u7559\u539f\u5931\u8d25\u548c\u65b0\u8eab\u4efd\u7eed\u8bad\uff1bHB40\u6309\u5df2\u6ee1\u8db3\u7684\u9a8c\u8bc1\u5b66\u4e60\u524d\u63d0\u542f\u52a8\uff0c\u8d28\u91cf\u9608\u503c\u4e0d\u6539\u3002",
       "id": "D-HB16",
       "kind": "experiment",
       "question": "\u5206\u652f\u6c47\u5408\u4e0e\u4e32\u8054\u7684\u8d28\u91cf\u548c\u5de5\u4f5c\u5982\u4f55\u4e0d\u540c\uff1f",
@@ -4937,7 +4949,7 @@
           "id": "lm-complete-hb16-dense-v5",
           "record": "artifacts/jobs/lm-complete-hb16-dense-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/completion-v5/references.json",
@@ -4947,9 +4959,9 @@
           "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-A-TOPO",
-      "summary": "dense\u4ece\u5df2\u9a8c94\u6b65\u7ee7\u7eed\u81f3128\uff1b\u539fquad128\u5df2\u5b8c\u6210",
+      "summary": "dense/quad128\u5b8c\u6574\uff1bFull/\u6d88\u606f\u51cf\u7ea647.5%\uff0c\u975e\u52a3\u95e8\u69db\u672a\u8fc7",
       "title": "A\uff1a\u5206\u652f\u4e0e\u6c47\u5408",
       "track": "tide",
       "view_group": "current",
@@ -4958,12 +4970,12 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
-      "comparisons": "\u540c\u66dd\u5149FC4 sparse6.838241\uff0c\u5dee+0.089246\uff0c95%\u533a\u95f4[0.066182,0.113455]\uff1bHB16\u4ece64\u2192128\u4e0b\u964d0.219397\uff0ccontext-reset\u589e\u52a00.057520\u3002",
-      "counterevidence": "dense86\u66f4\u65b0\u540e\u4e0b\u6ea2\uff0c\u65e0\u540c\u62d3\u6251\u5b8c\u6574\u7a00\u758f\u5bf9\u7167\uff1bFull\u6bd4\u7387\u4e0d\u662fmatched dense\u51cf\u5c11\u91cf\uff1b\u7ec8\u70b931\u5143\u7d20\u4e25\u683c\u8d85\u5dee\u3002",
-      "decision": "\u5148\u8865dense\u914d\u5bf9\uff0c\u518d\u9009\u62e9\u4e00\u4e2a\u9a8c\u8bc1\u96c6\u9a71\u52a8\u7684\u4f18\u5316\u95ee\u9898\u3002",
+      "comparisons": "dense/quad6.900321/6.927488\uff1b\u5355\u4fa795%\u4e0a\u754c0.050655>0.05\uff0c\u539f\u95e8\u69db\u672a\u901a\u8fc7\uff1bFull\u51cf47.49%\u3001\u6d88\u606f\u51cf47.48%\u3002dense\u5f31\u4e8eFC4\u7ea60.057585\u3002",
+      "counterevidence": "\u5b9e\u9645\u7a00\u758f\u6210\u7acb\u4f46\u4e0d\u80fd\u628a\u63a5\u8fd1\u9608\u503c\u6539\u6807\u901a\u8fc7\uff1b\u672a\u663e\u793a\u6df1\u5c42\u8d28\u91cf\u6536\u76ca\uff0cdense\u7ec8\u70b9core349\u5143\u7d20\u4e25\u683c\u8d85\u5dee\uff0c\u65e787\u6b65\u5931\u8d25\u4fdd\u7559\u3002",
+      "decision": "\u6309\u539f\u9608\u503c\u8bb0\u8d28\u91cf\u672a\u786e\u8bc1\uff1bHB40\u53ea\u56e0\u9a8c\u8bc1\u5b66\u4e60\u524d\u63d0\u6210\u7acb\u800c\u542f\u52a8\uff0c\u4e0d\u56e0\u67b6\u6784\u6210\u529f\u63a8\u65ad\u3002",
       "id": "RD-D-HB16",
       "kind": "result",
-      "observed_at": "2026-11-09T06:43:21.392011+00:00",
+      "observed_at": "2026-11-09T08:46:07.206991+00:00",
       "question": "\u5206\u652f\u6c47\u5408\u4e0e\u4e32\u8054\u7684\u8d28\u91cf\u548c\u5de5\u4f5c\u5982\u4f55\u4e0d\u540c\uff1f",
       "references": [
         {
@@ -4989,9 +5001,13 @@
         {
           "label": "\u540e\u7eed\u8865\u9f50\uff08\u7ed3\u679c\u5c1a\u5f85\u5ba1\u9605\uff09",
           "path": "docs/studies/language-depth-completion-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u72b6\u6001/\u7edf\u8ba1/\u68c0\u67e5/Lens",
+          "path": "docs/evidence/language-completion-handoff.json"
         }
       ],
-      "scope": "HB16\uff0c4\u533a\u57df/3\u4f9d\u8d56\u5c42\u7ea7\uff0c669236\u53ef\u8bad\u7ec3\u53c2\u6570\uff1bCPU1/B8/L32/128/seed11\uff0c\u540cv5\u786e\u8ba4\u6587\u6863\u3002\u4e3b\u4ee3\u7406\u5ba1\u9605\u3002",
+      "scope": "HB16/4\u533a\u57df/3\u4f9d\u8d56\u5c42\u7ea7/669236\u53ef\u8bad\u7ec3\u53c2\u6570\uff1bCPU1/FP32/B8/L32/128/seed11\uff0c512\u65e5\u7a0b\u524d\u7f00\uff0c\u540cv5\u786e\u8ba4\u6587\u6863\u3002dense94\u2192128\u663e\u5f0f\u7eed\u8bad\uff0cquad\u65e7\u6743\u91cd\u65b0\u5b89\u88c5\u590d\u8bc4\u3002",
       "sources": [
         {
           "label": "\u56fa\u5b9a\u4e00\u9875\u5ba1\u9605",
@@ -5000,14 +5016,22 @@
         {
           "label": "\u56fa\u5b9a\u7ec8\u6001\u7edf\u8ba1\u4e0e\u8eab\u4efd",
           "url": "https://github.com/ZichaoLong/tide/blob/5e396a2478649d03455bd2d2ab2d0b07e048427e/docs/evidence/language-depth-terminal.json"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u9010\u7ec4\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/studies/TL-A-TOPO-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u68c0\u67e5\u4e0e\u7edf\u8ba1",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/evidence/language-completion-handoff.json"
         }
       ],
       "status": "scoped",
-      "summary": "quad128 NLL6.927488\uff1bFull/candidate57.28%\uff0c\u5f31\u4e8eFC4",
-      "title": "\u5206\u652f\u6c47\u5408\u5b66\u5230\u8bed\u8a00\uff0c\u914d\u5bf9\u4e0d\u5b8c\u6574",
+      "summary": "quad\u2212dense NLL+0.02717\uff0c\u4e0a\u754c0.050655\uff1bFull/\u6d88\u606f\u51cf47.5%",
+      "title": "\u5206\u652f\u6c47\u5408\u914d\u5bf9\u5b8c\u6574\uff0c\u975e\u52a3\u5c1a\u672a\u786e\u8bc1",
       "track": "tide",
-      "transfer_conditions": "\u4fdd\u7559\u5206\u914d\u3001\u5c40\u90e8\u754c\u9650\u3001\u540c\u8bad\u7ec3\u53e3\u5f84\u53ca\u65b0\u57fa\u5ea7\u9a8c\u6536\uff1b\u4e0d\u80fd\u63a8\u5e7fHB40\u6216\u7a00\u758f\u975e\u52a3\u3002",
-      "unresolved": "\u4ecd\u5728\u5b66\u4e60\u4f46\u66dd\u5149/\u4f18\u5316\u4e0e\u62d3\u6251\u6536\u76ca\u672a\u5206\u79bb\uff1b\u4e2d\u95f4\u533a\u57df\u72ec\u7279\u4f5c\u7528\u672a\u88ab\u72ec\u7acb\u7ed3\u6784\u63a7\u5236\u786e\u8ba4\u3002",
+      "transfer_conditions": "\u4fdd\u6301\u5206\u914d\u3001\u66dd\u5149\u3001\u5c40\u90e8\u8fb9\u754c\u53ca\u65b0\u4f9d\u8d56\u8eab\u4efd\uff1bHB40\u662f\u65b0\u521d\u59cb\u5316\uff0c\u6267\u884c\u524d\u63d0\u4e0d\u662f\u6743\u91cd\u7956\u5148\u6216\u79d1\u5b66\u652f\u6301\u3002",
+      "unresolved": "\u53cc\u4fa7\u8d28\u91cf\u533a\u95f4\u542b0\uff0c\u4e5f\u4e0d\u80fd\u5224\u5df2\u786e\u8ba4\u9000\u5316\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u4e0e\u62d3\u6251\u672a\u5206\u79bb\uff0c\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1780
@@ -5142,7 +5166,7 @@
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u5b9e\u6d4bCPU5.47\u79d2/\u6b65\u5feb\u4e8e\u5171\u4eabNPU14.38\uff1b\u56fa\u5b9a\u65e7\u914d\u65b9\u4e0e\u66dd\u5149\uff0c\u7ee7\u7eed\u4fdd\u7559\u539f\u6d45\u5bbd\u5931\u8d25\u548cTransformer\u65e5\u7a0b\u5dee\u522b\u3002",
+      "decision": "\u6d45\u5bbd\u70b9\u4f30\u8ba1\u7565\u597d\u4e8e\u7a84FC4\uff0c\u533a\u95f4\u542b0\uff1b\u4f18\u5316/\u66dd\u5149\u53ca\u7ed3\u6784\u4ecd\u9700\u533a\u5206\u3002",
       "id": "D-CONTROL",
       "kind": "experiment",
       "question": "\u89c2\u5bdf\u6765\u81ea\u7ed3\u6784\u3001\u5bb9\u91cf\u8fd8\u662f\u66dd\u5149\u5dee\u5f02\uff1f",
@@ -5232,7 +5256,7 @@
           "id": "lm-complete-wide-dense-v5",
           "record": "artifacts/jobs/lm-complete-wide-dense-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/completion-v5/references.json",
@@ -5242,9 +5266,9 @@
           "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-A-CAPACITY",
-      "summary": "\u6d45\u5bbd32\u2192128\u5728CPU\u5e76\u884c\u7eed\u8bad\uff1b\u5df2\u6709Transformer\u4e0d\u91cd\u8dd1",
+      "summary": "\u6d45\u5bbd128 NLL6.824360\uff1b\u666e\u901aLM\u4e24\u4e2a\u66dd\u5149\u53c2\u7167\u4fdd\u6301",
       "title": "\u6d45\u5bbd\u4e0e\u666e\u901aLM\u63a7\u5236",
       "track": "shared",
       "view_group": "current",
@@ -5253,12 +5277,12 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
-      "comparisons": "TIDE128\u4f18\u4e8e\u8be5Transformer128\uff0c\u5f31\u4e8e\u989d\u591616\u500d\u66dd\u51492048\uff1b\u65e7\u66f4\u5c0fTransformer2048\u540c\u6587\u68636.245490\u3002",
-      "counterevidence": "\u6d45\u5bbd56\u66f4\u65b0\u540e\u4e0b\u6ea2\uff0c\u6ca1\u6709\u7ec8\u70b9test\uff1b128\u65e5\u7a0b\u4e0d\u540c\u4e14\u6b20\u8bad\u7ec3\uff0c2048\u975e\u7b49\u66dd\u5149\uff1b\u589e\u53c2\u6570\u672a\u81ea\u52a8\u63d0\u9ad8\u65e7Transformer\u5206\u6570\u3002",
-      "decision": "\u4fdd\u7559\u4e24\u4e2a\u66dd\u5149\u53c2\u7167\uff0c\u4fee\u590d\u540e\u8865\u6d45\u5bbd\uff1b\u4e0d\u6269\u5bbd\u5ea6\u7ec4\u5408\u3002",
+      "comparisons": "\u6d45\u5bbd616741\u53c2\u6570/128\u6b65\uff1b\u7a84FC4 NLL6.842736\uff0c\u5dee95%\u533a\u95f4[\u22120.039897,0.003801]\u3002Transformer128/2048\u4fdd\u63017.133504/6.346539\u3002",
+      "counterevidence": "\u5c1a\u4e0d\u80fd\u786e\u8ba4\u6d45\u5bbd\u6539\u5584\uff1b\u53c2\u6570/\u5bbd\u5ea6/\u62d3\u6251\u4e0e\u65e5\u7a0b/\u66dd\u5149\u6df7\u6742\u3002\u539f\u6d45\u5bbd56\u6b65\u540e\u5931\u8d25\u4fdd\u7559\uff0c\u8865\u6b63\u7ec8\u70b9core38\u5143\u7d20\u4e25\u683c\u8d85\u5dee\u3002",
+      "decision": "\u5b8c\u6210\u539f\u63a7\u5236\uff0c\u4e0d\u6269\u5bbd\u5ea6\u7f51\u683c\uff1b\u5f85HB40\u7ed3\u675f\u540e\u5bf9\u9f50\u4e00\u4e2a\u8bad\u7ec3\u5145\u5206\u5ea6/\u4f18\u5316\u95ee\u9898\u3002",
       "id": "RD-D-CONTROL",
       "kind": "result",
-      "observed_at": "2026-11-09T06:43:21.392011+00:00",
+      "observed_at": "2026-11-09T08:46:07.206991+00:00",
       "question": "\u89c2\u5bdf\u6765\u81ea\u7ed3\u6784\u3001\u5bb9\u91cf\u8fd8\u662f\u66dd\u5149\u5dee\u5f02\uff1f",
       "references": [
         {
@@ -5284,9 +5308,13 @@
         {
           "label": "\u540e\u7eed\u8865\u9f50\uff08\u7ed3\u679c\u5c1a\u5f85\u5ba1\u9605\uff09",
           "path": "docs/studies/language-depth-completion-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u72b6\u6001/\u7edf\u8ba1/\u68c0\u67e5/Lens",
+          "path": "docs/evidence/language-completion-handoff.json"
         }
       ],
-      "scope": "2block/width96/FFN512\u3001670592\u53c2\u6570\u3001CPU1/B8/L32/seed11\uff1b2048\u65e5\u7a0b\u542b128\u524d\u7f00\u3002\u6d45\u5bbdFC4 width64 NPU\u5c1d\u8bd5\u5931\u8d25\u3002",
+      "scope": "\u6d45\u5bbdFC4 width64\uff0cCPU1/FP32/B8/L32/128/seed11\uff0c512\u65e5\u7a0b\uff1b\u4ece\u65e7NPU32\u6b65\u8de8\u5b89\u88c5/\u540e\u7aef\u663e\u5f0f\u8f6c\u6362\u3002\u539fTransformer2block/width96/FFN512\u542b2048\u65e5\u7a0b\u4e0b128\u524d\u7f00\u3002",
       "sources": [
         {
           "label": "\u56fa\u5b9a\u4e00\u9875\u5ba1\u9605",
@@ -5295,21 +5323,29 @@
         {
           "label": "\u56fa\u5b9a\u7ec8\u6001\u7edf\u8ba1\u4e0e\u8eab\u4efd",
           "url": "https://github.com/ZichaoLong/tide/blob/5e396a2478649d03455bd2d2ab2d0b07e048427e/docs/evidence/language-depth-terminal.json"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u9010\u7ec4\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/studies/TL-A-CAPACITY-v5.md"
+        },
+        {
+          "label": "\u8865\u9f50\u540e\u56fa\u5b9a\u68c0\u67e5\u4e0e\u7edf\u8ba1",
+          "url": "https://github.com/ZichaoLong/tide/blob/38951fc6b657197b9eacb8971dafcee5a5ada591/docs/evidence/language-completion-handoff.json"
         }
       ],
       "status": "scoped",
-      "summary": "Transformer128/2048 NLL7.133504/6.346539\uff1b\u6d45\u5bbd\u5931\u8d25",
-      "title": "\u63a7\u5236\u63ed\u793a\u66dd\u5149\u5dee\u522b\uff0c\u6d45\u5bbd\u4ecd\u7f3a\u8bc1\u636e",
+      "summary": "\u6d45\u5bbdNLL6.824360\uff1b\u8f83\u7a84FC4\u5dee\u22120.01838\uff0c95%\u533a\u95f4\u542b0",
+      "title": "\u6d45\u5bbd\u63a7\u5236\u5df2\u8865\u9f50\uff0c\u5bb9\u91cf\u6536\u76ca\u5f85\u533a\u5206",
       "track": "shared",
-      "transfer_conditions": "\u53ef\u9760\u63a7\u5236\u9700\u5339\u914dtoken/\u65e5\u7a0b/\u8bcd\u8868\u5e76\u660e\u786e\u8bad\u7ec3\u5145\u5206\u5ea6\uff0c\u4e0d\u80fd\u501f\u6b20\u8bad\u7ec3\u524d\u7f00\u8bc1\u660e\u67b6\u6784\u4f18\u52bf\u3002",
-      "unresolved": "\u7ed3\u6784\u3001\u8bad\u7ec3\u5145\u5206\u7a0b\u5ea6\u3001\u4f18\u5316\u548c\u53c2\u6570\u89c4\u6a21\u4ecd\u672a\u5b8c\u5168\u5206\u79bb\u3002",
+      "transfer_conditions": "\u5339\u914dtoken/\u65e5\u7a0b/\u8bcd\u8868\uff0c\u660e\u786e\u53c2\u6570\u6765\u6e90\u4e0e\u8bad\u7ec3\u5145\u5206\u5ea6\uff1b\u8de8\u8865\u4e01/\u540e\u7aef\u4e0d\u79f0\u7cbe\u786e\u6062\u590d\uff0c\u6b20\u8bad\u7ec3\u53c2\u7167\u4e0d\u8bc1\u660e\u67b6\u6784\u4f18\u52bf\u3002",
+      "unresolved": "\u7ed3\u6784\u3001\u5145\u5206\u8bad\u7ec3\u3001\u4f18\u5316\u548c\u53c2\u6570\u89c4\u6a21\u4ecd\u672a\u5206\u79bb\uff1b\u540cseed\u4e0e\u6587\u6863\u6837\u672c\u7684\u8fb9\u754c\u4fdd\u6301\u3002",
       "view_group": "current",
       "x": 915,
       "y": 2140
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u673a\u5236\u4e0e\u76f8\u5bf9\u4ece\u96f6validation\u5b66\u4e60\u524d\u63d0\u6210\u7acb\u624d\u542f\u52a8\uff1b\u7b49\u5f85\u4e0d\u662f\u8bad\u7ec3\uff0c\u524d\u9a71\u4e0d\u662f\u6743\u91cd\u7956\u5148\u3002",
+      "decision": "B2/L3\u673a\u5236/\u6062\u590d\u901a\u8fc7\uff1b\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4fdd\u7559\uff0c\u7ec8\u6001\u8d28\u91cf/\u7a00\u758f\u7ed3\u679c\u4ecd\u672a\u68c0\u67e5\u3002",
       "id": "D-HB40",
       "kind": "experiment",
       "question": "\u5206\u652f\u5185\u518d\u6b21\u5d4c\u5957\u80fd\u5426\u4fdd\u6301\u8d28\u91cf\u4e0e\u5c40\u90e8\u7a00\u758f\uff1f",
@@ -5360,19 +5396,19 @@
           "id": "lm-complete-hb40-dense-v5",
           "record": "artifacts/jobs/lm-complete-hb40-dense-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
-          "status": "queued"
+          "status": "running"
         },
         {
           "config": "configs/studies/language/completion-v5/hb40-sparse.json",
           "id": "lm-complete-hb40-sparse-v5",
           "record": "artifacts/jobs/lm-complete-hb40-sparse-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
-          "status": "queued"
+          "status": "running"
         }
       ],
-      "status": "queued",
+      "status": "running",
       "study_id": "TL-A-NEST",
-      "summary": "\u4e24\u4e2a\u72ec\u7acb64\u6b65\u5019\u9009\u5df2\u540e\u53f0\u7b49\u5f85HB16\u5b8c\u6210\u4e0e\u9a8c\u8bc1\u5b66\u4e60\u524d\u63d0",
+      "summary": "dense40/64\u3001quad44/64\uff1b16:06\u901a\u8fc7\u524d\u9a71\u6761\u4ef6\uff0cCPU1\u5404\u81ea\u8bad\u7ec3",
       "title": "A\uff1a\u9012\u5f52\u5d4c\u5957",
       "track": "tide",
       "view_group": "current",
@@ -5509,11 +5545,11 @@
       "y": 2500
     }
   ],
-  "notice": "\u4e09\u9879\u4e3b\u8bad\u7ec3\u5e76\u884c\uff0c7\u9879\u5fc5\u8981\u590d\u8bc4\u5b8c\u6210\uff1bHB40\u7b49\u5f85\u539f\u5b66\u4e60\u524d\u63d0\u3002\u65e7\u5931\u8d25\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\uff0c\u6570\u503c/\u79bb\u6563/\u6062\u590d/\u5b66\u4e60\u5206\u8f74\uff1b\u8865\u9f50\u7ed3\u679c\u5c1a\u5f85\u4eba\u5de5\u5ba1\u9605\u3002",
+  "notice": "FC16\u5728\u672c\u6b21\u8d28\u91cf\u5bb9\u5dee\u5185\u4e14Full/\u6d88\u606f\u7ea6\u51cf\u534a\uff1bHB16\u975e\u52a3\u4e0a\u754c0.050655\u672a\u8fc7\u539f0.05\u3002\u6d45\u5bbd\u5b8c\u6210\uff0cHB40\u4e24\u5019\u9009\u7ee7\u7eed\u8bad\u7ec3\u3002\u4e25\u683c\u8d85\u5dee\u3001\u65e7\u5931\u8d25\u4e0e\u5355seed\u8fb9\u754c\u4fdd\u7559\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "\u8bed\u8a00\u8d28\u91cf\u4e0e\u591a\u533a\u57df\u7a00\u758f\uff1a\u91c7\u7528\u8865\u6b63\u8865\u9f50\u539fv5\u7f3a\u5931\u6bd4\u8f83",
+  "subtitle": "\u8bed\u8a00\u8d28\u91cf\u4e0e\u591a\u533a\u57df\u7a00\u758f\uff1aFC16/HB16\u914d\u5bf9\u8865\u9f50\uff0cHB40\u8bad\u7ec3\u4e2d",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T07:58:30.652249+00:00",
+  "updated_at": "2026-11-09T08:46:51.413881+00:00",
   "view_groups": [
     {
       "height": 2700,

@@ -1,8 +1,8 @@
 # 当前优先级：完成原v5缺失配对，再对齐下一步
 
-用户接受补丁并授权[有限补齐表](studies/language-depth-completion-v5.md)，三主候选和必要复评已运行，两个HB40候选后台等待原先列出的HB16机制/验证学习前提。实际状态见[STATUS](STATUS.md)及[操作页](studies/language-completion-v5-running.md)。仍为原24累计计算worker小时和22:49:13共同截止，保持原参数、B8/L32、seed11和曝光，不开启后续scaling研究。
+用户接受补丁并授权[有限补齐表](studies/language-depth-completion-v5.md)，三主候选和必要复评已完成，两个HB40候选已通过原先列出的前提并行训练。实际状态见[STATUS](STATUS.md)及[操作页](studies/language-completion-v5-running.md)。仍为原24累计计算worker小时和22:49:13共同截止，保持原参数、B8/L32、seed11和曝光，不开启后续scaling研究。
 
-1. 补齐FC16 quad、HB16 dense、浅宽对照和满足前提时的HB40各64步；复用FC16已接受的普通/重置评价与已完成B/Transformer。
+1. FC16 quad、HB16 dense和浅宽对照已补齐；先完成仍在运行的HB40各64步及终评，复用其他已完成结果。
 2. 终态先审阅同安装/同确认文档的语言质量、Full/消息和上下文干预，再分别报告执行、严格数值、离散/机制、恢复、学习及成本。跨补丁续训、旧权重复评、从零训练不得混作独立种子。
 3. 完成逐组一页结论和研究图后，再与用户选择一个明确的训练充分度/优化或规模问题；目前128步结果不认证scaling，Transformer较长曝光结果亦不能当等预算比较。0.05质量与20%活动门槛保持，硬件同比加速仍非必要条件。
 

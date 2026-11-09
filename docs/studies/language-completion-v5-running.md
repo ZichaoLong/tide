@@ -1,3 +1,5 @@
+2026-11-09 16:46核对：FC16 quad、HB16 dense、浅宽控制及7项复评已完成；HB40 dense/quad已实际启动并行训练。当前结果见[STATUS](../STATUS.md)及三份逐组审阅；下面的等待规则是已满足并保留的原前提。
+
 # v5补齐：作业、记录与恢复
 
 本页对应[已授权补齐表](language-depth-completion-v5.md)，实时状态以项目记录为准。[只读交接快照](../evidence/language-completion-handoff.json)同时保留生命周期、检查、实际指标、预算、Lens身份和固定输入核验。更新快照不会修改运行目录，也不生成科学支持。
