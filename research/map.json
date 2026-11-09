@@ -4606,7 +4606,7 @@
           "id": "lm-a-reference-v5",
           "record": "artifacts/jobs/lm-a-reference-v5/state.json",
           "source_commit": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
-          "status": "queued"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/a-fc16-cpu-v5.json",
@@ -4656,7 +4656,7 @@
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u72ec\u7acb\u9a8c\u8bc1\u3001\u7a00\u758f\u5de5\u4f5c\u548c\u516d\u8f74\u7ec8\u6001\u5ba1\u9605\uff1b\u4e0d\u4ece\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u3002",
+      "decision": "\u7a00\u758f\u72ec\u7acb\u4ece\u96f6\u8bad\u7ec3\uff1b\u539fdense\u5931\u8d25\u4fdd\u7559\uff0c\u7f3a128\u6b65\u5b8c\u6574\u914d\u5bf9\u4e0d\u4f5c\u975e\u52a3\u7ed3\u8bba\u3002",
       "id": "D-HB16",
       "kind": "experiment",
       "question": "\u5206\u652f\u6c47\u5408\u4e0e\u4e32\u8054\u7684\u8d28\u91cf\u548c\u5de5\u4f5c\u5982\u4f55\u4e0d\u540c\uff1f",
@@ -4676,6 +4676,10 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/language/a-hb16-cpu-v5.json"
+        },
+        {
+          "label": "\u72ec\u7acbCPU\u6392\u7a0b\u4e0e\u8fb9\u754c",
+          "path": "docs/studies/language-depth-parallel-v5.md"
         }
       ],
       "runs": [
@@ -4684,7 +4688,7 @@
           "id": "lm-a-hb16-v5",
           "record": "artifacts/jobs/lm-a-hb16-v5/state.json",
           "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
-          "status": "running"
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/a-hb16-cpu-v5.json",
@@ -4692,12 +4696,27 @@
           "lens_record": "runs/lm-a-hb16-v5/train-tide-dense-s11/projection.json",
           "record": "runs/lm-a-hb16-v5/train-tide-dense-s11/state.json",
           "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
+          "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/a-hb16-sparse-v5.json",
+          "id": "lm-a-hb16-sparse-v5",
+          "record": "artifacts/jobs/lm-a-hb16-sparse-v5/state.json",
+          "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/a-hb16-sparse-v5.json",
+          "id": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11",
+          "lens_record": "runs/lm-a-hb16-sparse-v5/train-tide-sparse-s11/projection.json",
+          "record": "runs/lm-a-hb16-sparse-v5/train-tide-sparse-s11/state.json",
+          "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
           "status": "running"
         }
       ],
       "status": "running",
       "study_id": "TL-A-TOPO",
-      "summary": "HB16\u4e0eFC16\u8fd1\u540c\u53c2\u6570\uff1b\u4e24\u79cd\u53d1\u9001",
+      "summary": "dense86\u6b65\u786c\u5931\u8d25\uff1b\u539fquad\u5019\u9009\u72ec\u7acbCPU1\u6b63\u5f0f\u8bad\u7ec3\u4e2d",
       "title": "A\uff1a\u5206\u652f\u4e0e\u6c47\u5408",
       "track": "tide",
       "view_group": "current",
@@ -4776,7 +4795,7 @@
           "id": "lm-b-reference-v5",
           "record": "artifacts/jobs/lm-b-reference-v5/state.json",
           "source_commit": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/b-fc8-budget2-v5.json",
@@ -4826,7 +4845,7 @@
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u72ec\u7acb\u9a8c\u8bc1\u3001\u7a00\u758f\u5de5\u4f5c\u548c\u516d\u8f74\u7ec8\u6001\u5ba1\u9605\uff1b\u4e0d\u4ece\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u3002",
+      "decision": "\u8be5\u7ec4\u542b\u5931\u8d25\u548c\u5b8c\u6210\u5019\u9009\uff1b\u989d\u5916\u66dd\u5149\u3001\u65e5\u7a0b\u4e0e\u540e\u7aef\u5dee\u5f02\u5355\u5217\uff0c\u4e0d\u4ece\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u3002",
       "id": "D-CONTROL",
       "kind": "experiment",
       "question": "\u89c2\u5bdf\u6765\u81ea\u7ed3\u6784\u3001\u5bb9\u91cf\u8fd8\u662f\u66dd\u5149\u5dee\u5f02\uff1f",
@@ -4846,6 +4865,10 @@
         {
           "label": "\u56fa\u5b9a\u914d\u7f6e",
           "path": "configs/studies/language/a-controls-v5.json"
+        },
+        {
+          "label": "\u72ec\u7acbCPU\u6392\u7a0b\u4e0e\u8fb9\u754c",
+          "path": "docs/studies/language-depth-parallel-v5.md"
         }
       ],
       "runs": [
@@ -4854,7 +4877,7 @@
           "id": "lm-a-controls-v5",
           "record": "artifacts/jobs/lm-a-controls-v5/state.json",
           "source_commit": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
-          "status": "running"
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/a-controls-v5.json",
@@ -4862,12 +4885,27 @@
           "lens_record": "runs/lm-a-controls-v5/train-tide-dense-s11/projection.json",
           "record": "runs/lm-a-controls-v5/train-tide-dense-s11/state.json",
           "source_commit": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
-          "status": "running"
+          "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/a-transformer-cpu-v5.json",
+          "id": "lm-a-transformer-cpu-v5",
+          "record": "artifacts/jobs/lm-a-transformer-cpu-v5/state.json",
+          "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/a-transformer-cpu-v5.json",
+          "id": "tl-lm-a-transformer-cpu-v5-train-transformer-s11",
+          "lens_record": "runs/lm-a-transformer-cpu-v5/train-transformer-s11/projection.json",
+          "record": "runs/lm-a-transformer-cpu-v5/train-transformer-s11/state.json",
+          "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "failed",
       "study_id": "TL-A-CAPACITY",
-      "summary": "\u6d45\u5bbdFC4\u4e0e\u8fd1\u53c2\u6570\u91cf\u4e24block Transformer",
+      "summary": "\u6d45\u5bbd56\u6b65\u5931\u8d25\u4fdd\u7559\uff1b\u72ec\u7acbCPU Transformer2048\u8bad\u7ec3/test/\u63a8\u7406\u5b8c\u6210\uff0c\u5f85\u79d1\u5b66\u5ba1\u9605",
       "title": "\u6d45\u5bbd\u4e0e\u666e\u901aLM\u63a7\u5236",
       "track": "shared",
       "view_group": "current",
@@ -4904,7 +4942,7 @@
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
-      "decision": "\u72ec\u7acb\u9a8c\u8bc1\u3001\u7a00\u758f\u5de5\u4f5c\u548c\u516d\u8f74\u7ec8\u6001\u5ba1\u9605\uff1b\u4e0d\u4ece\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u3002",
+      "decision": "\u4fdd\u7559\u5b66\u4e60\u524d\u63d0\uff1b\u672c\u6b21\u6ca1\u6709\u542f\u52a8\u6216\u91cd\u8bd5HB40\u3002",
       "id": "D-HB40",
       "kind": "experiment",
       "question": "\u5206\u652f\u5185\u518d\u6b21\u5d4c\u5957\u80fd\u5426\u4fdd\u6301\u8d28\u91cf\u4e0e\u5c40\u90e8\u7a00\u758f\uff1f",
@@ -4932,12 +4970,12 @@
           "id": "lm-a-hb40-v5",
           "record": "artifacts/jobs/lm-a-hb40-v5/state.json",
           "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
-          "status": "queued"
+          "status": "failed"
         }
       ],
-      "status": "queued",
+      "status": "failed",
       "study_id": "TL-A-NEST",
-      "summary": "HB40\uff1b\u7b49\u5f85HB16\u673a\u5236\u3001\u5b66\u4e60\u4e0e\u9884\u7b97\u6761\u4ef6",
+      "summary": "HB16\u524d\u9a71\u5931\u8d25\uff0c\u4f9d\u8d56\u7b49\u5f85\u7ec8\u6b62\uff1bHB40\u8bad\u7ec30\u6b65",
       "title": "A\uff1a\u9012\u5f52\u5d4c\u5957",
       "track": "tide",
       "view_group": "current",
@@ -4977,7 +5015,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u8bed\u8a00next-token\u4e0e\u591a\u533a\u57df\u6df1\u5ea6\u3001\u9012\u5f52\u5d4c\u5957\uff1av5\u5df2\u542f\u52a8\uff1b\u6267\u884c\u72b6\u6001\u4e0d\u4ee3\u8868\u79d1\u5b66\u652f\u6301",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T03:11:35.502498+00:00",
+  "updated_at": "2026-11-09T03:47:48.209801+00:00",
   "view_groups": [
     {
       "height": 2500,

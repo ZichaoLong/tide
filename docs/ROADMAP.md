@@ -1,3 +1,7 @@
+# 当前补充：独立候选CPU并行
+
+按[有限并行表](studies/language-depth-parallel-v5.md)完成原Transformer与HB16 sparse候选，使用B短校准指导后续设备选择。原浅宽和HB16 dense的分配下溢需独立有界排查，不能用CPU标签或放宽阈值掩盖；HB40当前前提缺失。现有FC16/B/v4不打断、不重复，未来无科学依赖的候选分别提交。共享12h/24计算worker小时上限保持。
+
 # 当前优先级：v5深度与嵌套已实施
 
 [已授权研究表](studies/language-depth-proposal.md)、[运行分类/操作](studies/language-depth-v5-running.md)、[实际快照](evidence/language-depth-handoff.json)。先完成FC16/HB16串联与分支汇合、B同一承接槽内FC8及浅宽/普通LM控制；HB40只在已列前提成立后运行。统一24计算worker小时/12h，不自动加候选、seed或多层Qwen替换。允许按用户授权共享轻载卡，A深层依实测选择CPU1；保持固定源码及独立验收。

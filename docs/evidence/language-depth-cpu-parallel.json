@@ -1,0 +1,307 @@
+{
+  "at": "2026-11-09T03:44:41.723320+00:00",
+  "backend_decision": {
+    "b_fc8_dense": "CPU1 12.8674 sec, CPU4 15.8911 sec, existing shared NPU 36.2569 sec; choose CPU1 for future comparable jobs, do not migrate active B or duplicate its sparse candidate",
+    "measurement_scope": "1 warmup + 2 timed full-CE updates; shared-resource conditions differ and speed ratios are observations, not exclusive benchmarks",
+    "transformer": "CPU1 despite NPU lower per-step time: 0.04252 vs 0.01781 sec; bounded run finishes promptly without NPU wait"
+  },
+  "budget": {
+    "aggregate_compute_seconds": 86400,
+    "deadline_epoch": 1794235753.0310388,
+    "max_workers_including_v4": 6,
+    "new_guard": "lm-depth-budget-parallel-v5",
+    "old_guard_retained": true
+  },
+  "calibration_variation": "HB16 sparse CPU1 earlier20.48s vs new38.35s per update; shared-load/time variation remains, no exclusive timing claim",
+  "calibrations": {
+    "lm-a-controls-v5/calibrate-tide-dense": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 14.76552183739841,
+      "npu_peak_allocated_mib": 159.74560546875,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-controls-v5/calibrate-transformer": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 0.017805462703108788,
+      "npu_peak_allocated_mib": 52.0478515625,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-fc16-v5/calibrate-tide-dense": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 20.86090972647071,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-fc16-v5/calibrate-tide-sparse": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 20.751456946134567,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-hb16-sparse-v5/calibrate-tide-sparse": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 38.34882988408208,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-hb16-v5/calibrate-tide-dense": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 24.972817672416568,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-hb16-v5/calibrate-tide-sparse": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 20.479410467669368,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-a-transformer-cpu-v5/calibrate-transformer": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 0.04251721315085888,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-b-cpu-cal-v5/t1-b8": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 12.8674123454839,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-b-cpu-cal-v5/t4-b8": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 15.891124047338963,
+      "npu_peak_allocated_mib": null,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-b-fc8-v5-budget2/calibrate-tide-dense": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 36.256928626447916,
+      "npu_peak_allocated_mib": 1886.79296875,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    },
+    "lm-b-fc8-v5-budget2/calibrate-tide-sparse": {
+      "batch": 8,
+      "length": 32,
+      "mean_step_seconds": 34.89996995404363,
+      "npu_peak_allocated_mib": 1886.79296875,
+      "phase": "full language CE at alpha1 including backward and optimizer; excludes process/model startup",
+      "state": "completed"
+    }
+  },
+  "checks": {
+    "frozen_inputs": {
+      "all_hashes_match": true,
+      "unique_files": 52
+    },
+    "graph_and_review_tests": 16,
+    "installed_foundation": {
+      "all_hashes_match": true,
+      "files_checked": 248
+    },
+    "job_lifecycle_tests": 8,
+    "language_budget_tests": 7,
+    "offline_firefox_smoke": "passed"
+  },
+  "claim_limits": [
+    "CPU headroom is sufficient for these bounded independent workers; not all workloads are faster on CPU",
+    "Changing a backend is a declared recipe difference, not exact resume",
+    "HB16 sparse is independent; dense128 paired conclusion remains unavailable",
+    "CPU/NPU strict failures retained; underflow hard failures are not waived"
+  ],
+  "config_table": "docs/studies/language-depth-parallel-v5.md",
+  "cpu_sample": {
+    "affinity_count": 320,
+    "busy_percent": 48.071855166929154,
+    "duration_seconds": 2.0028011053800583,
+    "loadavg": "178.33 178.61 187.88 135/44183 3172087",
+    "logical_cpus": 320,
+    "memory_kib": {
+      "MemAvailable": 1724484940,
+      "MemTotal": 2108088128
+    },
+    "scope": "shared host short sample, not reserved capacity or exclusive performance"
+  },
+  "failures": {
+    "lm-a-controls-v5": {
+      "completed_training_steps": 56,
+      "downstream_transformer_training": "never started",
+      "error": "positive allocation batch support underflowed in requested dtype"
+    },
+    "lm-a-hb16-v5": {
+      "checkpoint_step": 64,
+      "completed_training_steps": 86,
+      "downstream_sparse_training": "never started",
+      "error": "positive allocation batch support underflowed in requested dtype"
+    },
+    "lm-a-hb40-v5": {
+      "reason": "required HB16 predecessor failed",
+      "training_steps": 0
+    }
+  },
+  "last_review_at": "2026-11-09T03:47:48.200490+00:00",
+  "latest_budget": {
+    "at": "2026-11-09T03:47:41.762478+00:00",
+    "deadline_epoch": 1794235753.0310388,
+    "limit_compute_seconds": 86400,
+    "used_compute_seconds": 12228.532952491194
+  },
+  "latest_jobs": {
+    "lm-a-hb16-sparse-v5": {
+      "last_stages": [
+        {
+          "name": "calibrate-tide-sparse",
+          "state": "completed"
+        },
+        {
+          "name": "train-tide-sparse-s11",
+          "state": "running"
+        }
+      ],
+      "status": "running",
+      "termination_verified_now": false
+    },
+    "lm-a-transformer-cpu-v5": {
+      "last_stages": [
+        {
+          "name": "context-reset-transformer",
+          "state": "completed"
+        },
+        {
+          "name": "test-transformer-prefix128",
+          "state": "completed"
+        }
+      ],
+      "status": "completed",
+      "termination_verified_now": true
+    },
+    "lm-b-cpu-cal-v5": {
+      "last_stages": [
+        {
+          "name": "t1-b8",
+          "state": "completed"
+        },
+        {
+          "name": "t4-b8",
+          "state": "completed"
+        }
+      ],
+      "status": "completed",
+      "termination_verified_now": true
+    }
+  },
+  "lens": [
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-train-transformer-s11-projection-eb10b7636c93",
+      "destination_run_id": "5bf3d0390feb482aa3debadfec43dba9",
+      "event_count": 289,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/train-transformer-s11/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-train-transformer-s11",
+      "stage": "train",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-test-transformer-projection-d5a4e11b0597",
+      "destination_run_id": "2534c796518c4578b0003c3ca2271059",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/test-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-test-transformer",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-inference-transformer-projection-fa536a3bf59d",
+      "destination_run_id": "512975fb227346ebba62d6c2901d6702",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/inference-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-inference-transformer",
+      "stage": "inference",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-context-reset-transformer-projection-8be8ec415e46",
+      "destination_run_id": "28d34cc7bdb747cfafbb2643726b3247",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/context-reset-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-context-reset-transformer",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-test-transformer-prefix128-projection-b6cc7ce4e014",
+      "destination_run_id": "14705b1557654d5b9f034c9bb430d3fa",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/test-transformer-prefix128/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-test-transformer-prefix128",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11-projection-081b01b173ca",
+      "destination_run_id": "2fe823a737cb47e5a5ef3cb1b7a73b9c",
+      "event_count": 0,
+      "job_id": "lm-a-hb16-sparse-v5",
+      "projection": "runs/lm-a-hb16-sparse-v5/train-tide-sparse-s11/projection.json",
+      "readback_matches": null,
+      "run_id": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11",
+      "stage": "train",
+      "status": "recording",
+      "study_id": "TL-A-TOPO"
+    }
+  ],
+  "new_jobs": [
+    "lm-a-transformer-cpu-v5",
+    "lm-a-hb16-sparse-v5",
+    "lm-b-cpu-cal-v5"
+  ],
+  "preserved_active_jobs": [
+    "lm-a-fc16-v5",
+    "lm-b-fc8-v5-budget2",
+    "lm-a-language-v4"
+  ],
+  "quota_snapshot": {
+    "hard": "800G",
+    "new_jobs_memory_max_gib_each": 24,
+    "reported_used": "169G",
+    "soft": "300G"
+  },
+  "schema": "tide-depth-cpu-parallel-review-v1",
+  "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+  "source_tree_sha256": "06e593b7c8d1fb1c1f29506d576d50302c394528b42595681feb0f037cd58129"
+}

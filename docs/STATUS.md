@@ -1,3 +1,30 @@
+# 当前交接 — v5独立CPU候选已启动（2026-11-09 11:47）
+
+用户允许按完成时间选择CPU/NPU，无需等待NPU。已有320逻辑CPU、约38%–48%短采样忙碌及充足内存支持本次有限并行。新增原有HB16稀疏候选与原Transformer对照的独立CPU1作业，另有B CPU1/CPU4短校准；不增加模型/seed/正式更新预算。活动FC16、B及旧v4保持原源码/输入/设备和后续。[并行研究表](studies/language-depth-parallel-v5.md)、[资源与失败证据](evidence/language-depth-cpu-parallel.json)、[完整实际快照](evidence/language-depth-handoff.json)。
+
+| 作业 | 最近核对状态 |
+| --- | --- |
+| `lm-a-fc16-v5` | CPU1原链仍在dense训练，原sparse后续不重复提交 |
+| `lm-a-hb16-v5` / `lm-a-hb16-sparse-v5` | 原dense完成86步后分配下溢硬失败；未训练的sparse以新CPU1独立作业完成机制/微型恢复/校准，正式训练中 |
+| `lm-a-controls-v5` / `lm-a-transformer-cpu-v5` | 原浅宽dense完成56步后同类硬失败；原链Transformer正式训练0步；新CPU1独立作业2048步训练、test/推理/前缀评价全部完成，后代已终止 |
+| `lm-b-fc8-v5-budget2` | 原物理NPU12训练保持；CPU短校准不会迁移/重复其正式候选 |
+| `lm-b-cpu-cal-v5` | 已完成并确认终止；CPU1/CPU4分别12.8674/15.8911秒每完整CE更新，对照已有共享NPU36.2569秒 |
+| `lm-a-hb40-v5` | HB16依赖失败后等待服务已失败终止，训练0步；未绕过条件重启 |
+| 旧基线复评 | A三项/B六项均已完成同新文档复评；不算新训练/新seed |
+| `lm-a-language-v4` | 原物理NPU1：sparse512训练完成，独立评价中，保持原后继条件 |
+
+原浅宽和HB16错误均为`positive allocation batch support underflowed in requested dtype`，是分配硬失败，不能当作可忽略的有限参考误差。两份终态及原checkpoint保留；HB16尚无dense128完整配对。严格数值、离散机制、恢复、学习、性能仍分列。
+
+新计算源码固定`4a1a5890485b06ddd5b94197ab5c58e83596c47b`，`.local/source-language-depth-parallel-v5`，树hash`06e593b7c8d1fb1c1f29506d576d50302c394528b42595681feb0f037cd58129`。已核对52个固定输入及248个基座安装文件未变；7项预算、8项作业生命周期、16项图/审阅隔离测试及离线Firefox交互检查通过。原快照不改。
+
+累计上限仍24计算worker小时，截止北京时间22:49:13；最多6个同时计算worker含旧v4。新增`lm-depth-budget-parallel-v5`先于计算启动，覆盖全部原v5费用及三个新作业，原监督保持。新监督快照11:46累计约3.31小时，非新增预算。账号约169/800GiB。后续按完成时间选择：Transformer NPU0.01781秒/步比CPU0.04252快，但CPU仍数分钟完成；B短校准支持CPU1，活动B保持。
+
+Lens项目`tide-learning-lab`：新学习前缀`tl-lm-a-transformer-cpu-v5-`、`tl-lm-a-hb16-sparse-v5-`，分别TL-A-CAPACITY/TL-A-TOPO；Transformer训练289个事件已verified/readback_matches；HB16 sparse已开始记录。B技术计时只在项目记录。查看、停止、恢复方法及私有入口沿用[操作页](studies/language-depth-v5-running.md)。研究图保留失败与待审结果，不因完成退出码生成科学支持。
+
+---
+
+以下为此前时间戳快照，当前状态以上方及实际运行记录为准。
+
 # 当前交接 — v5多区域研究已后台实施（2026-11-09）
 
 用户已接受多层研究表并明确授权轻载共享NPU/CPU资源调度与旧数据清理。当前新批共同截止北京时间**22:49:13**，累计**24计算worker小时**（CPU训练替代相应NPU份额），最多6个同时计算的worker含旧v4。全批预算监督已实际启动，等待依赖不算已训练。[作业/源码/实际Lens ID快照](evidence/language-depth-handoff.json)、[查看分类与操作](studies/language-depth-v5-running.md)。
@@ -147,3 +174,5 @@ Lens项目`tide-learning-lab`，29个v3投影均verified/readback_matches且事�
 Lens项目`tide-learning-lab`，20个实际run投影已核对verified/readback_matches；私有入口/SSH见`.local/LENS.md`，运行对应在终态JSON的lens。查看、停止和恢复说明见[RUNNING](RUNNING.md)，读取结果不需要重启计算。
 
 A第四批未新增工作，HB三seed原结论保持。总报告中的下一组选项保留为当时建议；优先级已由本页上方语言与结构研究表接替。旧10%混合区分度及固定稀疏对照转为可选诊断，不自动开始后批。
+
+最新共享资源波动：HB16 sparse CPU1新校准38.35秒/步，早先为20.48，未将这些时间当独占benchmark。

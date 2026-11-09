@@ -19,3 +19,17 @@ Transformer原NPU校准约0.0178秒/步；CPU校准将独立记录。后端变�
 Lens项目仍为`tide-learning-lab`，学习run前缀为`tl-lm-a-transformer-cpu-v5-`（TL-A-CAPACITY）和`tl-lm-a-hb16-sparse-v5-`（TL-A-TOPO）。B技术校准仅保留项目记录，不新增学习曲线。实际源码、状态、Lens投影和预算见`docs/evidence/language-depth-handoff.json`。
 
 通用操作：`python scripts/job.py status artifacts/jobs/JOB_ID`、`logs artifacts/jobs/JOB_ID --lines 50`、`stop artifacts/jobs/JOB_ID`。恢复使用原冻结源码和配置、另一个作业ID及输出、显式checkpoint；新增恢复必须纳入同一预算监督。改变CPU/NPU不叫精确恢复。
+
+## 11:46实测回报
+
+| 路径 | CPU1 | CPU4 | 已有共享NPU |
+| --- | --- | --- | --- |
+| FC16 dense，B8/L32 | 22.21秒/步（早先同类短校准） | 32.17秒/步 | 80.20秒/步 |
+| B FC8 dense，B8/L32、完整alpha1 CE | 12.8674秒/步 | 15.8911秒/步 | 36.2569秒/步 |
+| 新容量Transformer，B8/L32 | 0.04252秒/步 | 未测 | 0.01781秒/步 |
+
+B CPU两项均已执行完成并确认后代终止。计时各含1次预热后2次完整更新，实际上下文和loss固定；不同时间共享负载不受控，因此不是独占后端速度资格。B后续同类作业优先CPU1；不迁移活动B、不重复其稀疏候选。
+
+Transformer确实在NPU单步更快，但CPU总时间很短：独立CPU作业已完成2048步训练及test，推理/前缀评价仍在进行，训练Lens投影已可查看。HB16 sparse已经完成相关机制及三步精确恢复，仍在其自身校准，校准后按固定预算进入训练。执行进度不等于科学结论。详见[资源与实际计时记录](../evidence/language-depth-cpu-parallel.json)。
+
+11:47再次核对：Transformer全部终态完成、后代清空，训练Lens289事件核对通过；HB16 sparse已正式训练并开始Lens记录。其新CPU1校准38.35秒/步，较早先20.48存在明显共享时段波动，预算按新测量准入；不将CPU空余推断为每个进程恒定吞吐。

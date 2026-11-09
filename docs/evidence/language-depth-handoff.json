@@ -1,9 +1,9 @@
 {
   "artifact_retirement": "docs/evidence/artifact-retirement-v5.json",
-  "at": "2026-11-09T03:11:35.502498+00:00",
+  "at": "2026-11-09T03:47:46.086478+00:00",
   "axes": "execution, strict numerics, discrete semantics, recovery, learning, performance remain separate",
   "budget": {
-    "at": "2026-11-09T03:11:33.414587+00:00",
+    "at": "2026-11-09T03:47:41.762478+00:00",
     "deadline_epoch": 1794235753.0310388,
     "limit_compute_seconds": 86400,
     "rows": [
@@ -28,45 +28,60 @@
         "phase": "failed"
       },
       {
-        "compute_seconds": 511.9559018611908,
+        "compute_seconds": 2680.3013157844543,
         "job_id": "lm-b-fc8-v5-budget2",
         "phase": "running"
       },
       {
-        "compute_seconds": 1141.3498299121857,
+        "compute_seconds": 1196.755163885653,
         "job_id": "lm-a-controls-v5",
-        "phase": "running"
+        "phase": "failed"
       },
       {
-        "compute_seconds": 836.1765458583832,
+        "compute_seconds": 3004.5219597816467,
         "job_id": "lm-a-fc16-v5",
         "phase": "running"
       },
       {
-        "compute_seconds": 629.8030018806458,
+        "compute_seconds": 2230.8595570884645,
         "job_id": "lm-a-hb16-v5",
-        "phase": "running"
+        "phase": "failed"
       },
       {
         "compute_seconds": 0.0,
         "job_id": "lm-a-hb40-v5",
-        "phase": "waiting_or_starting"
+        "phase": "failed"
       },
       {
-        "compute_seconds": 0.0,
+        "compute_seconds": 64.86463444307446,
         "job_id": "lm-a-reference-v5",
-        "phase": "waiting_or_starting"
+        "phase": "completed"
       },
       {
-        "compute_seconds": 16.166637897491455,
+        "compute_seconds": 243.52898759767413,
         "job_id": "lm-b-reference-v5",
+        "phase": "completed"
+      },
+      {
+        "compute_seconds": 161.38863855972886,
+        "job_id": "lm-a-transformer-cpu-v5",
+        "phase": "completed"
+      },
+      {
+        "compute_seconds": 234.15868091583252,
+        "job_id": "lm-a-hb16-sparse-v5",
         "phase": "running"
+      },
+      {
+        "compute_seconds": 122.82015847787261,
+        "job_id": "lm-b-cpu-cal-v5",
+        "phase": "completed"
       }
     ],
     "schema": "tide-depth-budget-guard-v1",
     "scope": "v5 data/calibration/study/reference compute; waits separate; v4 excluded; stop before cap with shutdown reserve",
     "state": "monitoring",
-    "used_compute_seconds": 5424.78577336669
+    "used_compute_seconds": 12228.532952491194
   },
   "data_lock_sha256": "8a84a12cdab28920a7f04bc5cab71f609d8d2aab8af4955c0e557a20895799d0",
   "data_projection": {
@@ -79,7 +94,7 @@
   },
   "fixed_inputs": {
     "all_hashes_match": true,
-    "unique_files": 47
+    "unique_files": 52
   },
   "installed_foundation": {
     "all_hashes_match": true,
@@ -102,9 +117,10 @@
             "strict_numerical": "read checks; finite disagreements do not disappear"
           }
         },
+        "allocated_elapsed_seconds": 1196.755163885653,
         "axes": {
           "discrete_semantics": "pending",
-          "execution": "running",
+          "execution": "failed",
           "learning": "unchecked",
           "performance": "shared-resource observations",
           "recovery": "pending",
@@ -122,6 +138,8 @@
             "remaining_training_seconds": 3300.0
           }
         ],
+        "error": "RuntimeError('required stage failed: train-tide-dense-s11')",
+        "finished_at": "2026-11-09T03:12:28.816001+00:00",
         "plan_sha256": "5e26daea88adaf622157065aeec3bda4f7b411226cd43bf3acd69ab492cd1bea",
         "route": "a",
         "schema": "tide-language-chain-v1",
@@ -130,10 +148,10 @@
         "spent_seconds": {
           "admission": 194.82849603146315,
           "final": 0.0,
-          "training": 0.0
+          "training": 1001.5898397602141
         },
         "started_at": "2026-11-09T02:52:32.061141+00:00",
-        "state": "running",
+        "state": "failed",
         "steps": [
           {
             "action": "checks",
@@ -279,130 +297,27 @@
             "action": "train",
             "cap_seconds": 3285.0,
             "category": "training",
+            "elapsed_seconds": 1001.5898397602141,
+            "exit_code": 1,
+            "finished_at": "2026-11-09T03:12:28.800572+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
             "name": "train-tide-dense-s11",
+            "observed_process_group_peak_rss_mib": 2177.65234375,
             "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-controls-v5/train-tide-dense-s11",
+            "result_sha256": "ea202baf3cfbce338b73469499ab0ae3140e916f8ac61885310c9227287e457d",
             "started_at": "2026-11-09T02:55:47.208810+00:00",
-            "state": "running"
+            "state": "failed"
           }
         ],
         "study_id": "TL-A-CAPACITY",
         "training": []
       },
       "device": "npu",
-      "latest_metrics": {
-        "elapsed_seconds": 857.93066746369,
-        "metrics": {
-          "activity/full_fraction": 1.0,
-          "resource/npu_peak_allocated_mib": 159.74560546875,
-          "train/alpha": 1.0,
-          "train/gradient_norm": 3.680598020553589,
-          "train/loss": 7.207109451293945,
-          "train/lr": 0.002987580544542541,
-          "train/teacher_mse_phase": 0.0,
-          "train/tokens_per_second": 15.119268429036635,
-          "train/update_seconds": 16.93203617632389,
-          "train/valid_tokens": 12253.0,
-          "work/candidates": 1024.0,
-          "work/full": 1024.0,
-          "work/max_full_batch": 256.0,
-          "work/max_region_batch": 256.0,
-          "work/max_state_batch": 8.0,
-          "work/max_state_sequence": 32.0,
-          "work/messages": 0.0,
-          "work/read_events": 1024.0,
-          "work/region_blocks": 1.0,
-          "work/source_rows": 1024.0,
-          "work/state_updates": 1024.0
-        },
-        "run_id": "tl-lm-a-controls-v5-train-tide-dense-s11",
-        "schema_version": 1,
-        "sequence": 6,
-        "step": 48,
-        "timestamp": "2026-11-09T03:10:11.554723+00:00"
-      },
       "lifecycle": {
-        "current_cgroup_processes": [
-          {
-            "parent_pid": 2907797,
-            "pid": 2604064,
-            "process_group": 2604064,
-            "start_ticks": 2177891380,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2604064,
-            "pid": 2604068,
-            "process_group": 2604068,
-            "start_ticks": 2177891389,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2604068,
-            "pid": 2605037,
-            "process_group": 2604068,
-            "start_ticks": 2177892106,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2605037,
-            "pid": 2605038,
-            "process_group": 2604068,
-            "start_ticks": 2177892112,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2605038,
-            "pid": 2605039,
-            "process_group": 2605039,
-            "start_ticks": 2177892118,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2605039,
-            "pid": 2649141,
-            "process_group": 2605039,
-            "start_ticks": 2177911791,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2649141,
-            "pid": 2649157,
-            "process_group": 2649157,
-            "start_ticks": 2177911802,
-            "state": "R"
-          },
-          {
-            "parent_pid": 2605039,
-            "pid": 2650134,
-            "process_group": 2605039,
-            "start_ticks": 2177912439,
-            "state": "S"
-          }
-        ],
+        "current_cgroup_processes": [],
         "job_id": "lm-a-controls-v5",
-        "known_descendants_alive": [
-          {
-            "parent_pid": 2604064,
-            "pid": 2604068,
-            "process_group": 2604068,
-            "start_ticks": 2177891389,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2604068,
-            "pid": 2605037,
-            "process_group": 2604068,
-            "start_ticks": 2177892106,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2605037,
-            "pid": 2605038,
-            "process_group": 2604068,
-            "start_ticks": 2177892112,
-            "state": "S"
-          }
-        ],
+        "known_descendants_alive": [],
         "queue": {
           "admission_samples": [
             {
@@ -439,12 +354,14 @@
             }
           ],
           "authorization": "user-2026-11-09-shared-low-load",
+          "elapsed_seconds": 1206.857723455876,
+          "ended_at": "2026-11-09T03:12:30.172050+00:00",
           "exclusive_device": false,
           "job_id": "lm-a-controls-v5",
           "latest_observation": {
             "aicore_percent": 0,
             "hbm_total_mib": 65536,
-            "hbm_used_mib": 3325,
+            "hbm_used_mib": 3197,
             "health": "OK",
             "physical_id": 15,
             "processes": [
@@ -453,7 +370,7 @@
                 "pid": 2649157,
                 "process_group": 2649157,
                 "start_ticks": 2177911802,
-                "state": "R"
+                "state": "S"
               },
               {
                 "parent_pid": 1,
@@ -504,10 +421,11 @@
             "schema": "tide-shared-resource-policy-v1"
           },
           "project": "tide-learning-lab",
+          "return_code": 1,
           "schema": "tide-shared-admission-v1",
           "started_at": "2026-11-09T02:52:23.314331+00:00",
-          "status": "running",
-          "timestamp": "2026-11-09T03:11:21.291116+00:00"
+          "status": "failed",
+          "timestamp": "2026-11-09T03:12:24.167155+00:00"
         },
         "state": {
           "child_process_group": 2604068,
@@ -584,8 +502,11 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 1150.442741945386,
+          "elapsed_seconds": 1207.7903545685112,
+          "ended_at": "2026-11-09T03:12:30.934624+00:00",
+          "finalized_at": "2026-11-09T03:12:31.002214+00:00",
           "job_id": "lm-a-controls-v5",
+          "known_descendants_alive": [],
           "launcher": {
             "parent_pid": 2604064,
             "pid": 2604068,
@@ -593,9 +514,122 @@
             "start_ticks": 2177891389,
             "state": "R"
           },
+          "launcher_exit_code": 1,
+          "leaked_descendants": false,
+          "queue_state": {
+            "admission_samples": [
+              {
+                "aicore_percent": 0,
+                "hbm_total_mib": 65536,
+                "hbm_used_mib": 3001,
+                "health": "OK",
+                "physical_id": 15,
+                "processes": [
+                  {
+                    "parent_pid": 1,
+                    "pid": 3560380,
+                    "process_group": 3560352,
+                    "start_ticks": 2147334415,
+                    "state": "S"
+                  }
+                ]
+              },
+              {
+                "aicore_percent": 0,
+                "hbm_total_mib": 65536,
+                "hbm_used_mib": 3001,
+                "health": "OK",
+                "physical_id": 15,
+                "processes": [
+                  {
+                    "parent_pid": 1,
+                    "pid": 3560380,
+                    "process_group": 3560352,
+                    "start_ticks": 2147334415,
+                    "state": "S"
+                  }
+                ]
+              }
+            ],
+            "authorization": "user-2026-11-09-shared-low-load",
+            "elapsed_seconds": 1206.857723455876,
+            "ended_at": "2026-11-09T03:12:30.172050+00:00",
+            "exclusive_device": false,
+            "job_id": "lm-a-controls-v5",
+            "latest_observation": {
+              "aicore_percent": 0,
+              "hbm_total_mib": 65536,
+              "hbm_used_mib": 3197,
+              "health": "OK",
+              "physical_id": 15,
+              "processes": [
+                {
+                  "parent_pid": 2649141,
+                  "pid": 2649157,
+                  "process_group": 2649157,
+                  "start_ticks": 2177911802,
+                  "state": "S"
+                },
+                {
+                  "parent_pid": 1,
+                  "pid": 3560380,
+                  "process_group": 3560352,
+                  "start_ticks": 2147334415,
+                  "state": "S"
+                }
+              ]
+            },
+            "logical_device": "npu:0",
+            "logical_devices": [
+              "npu:0"
+            ],
+            "npu_count": 1,
+            "physical_id": 15,
+            "physical_ids": [
+              15
+            ],
+            "policy": {
+              "authorization": "user-2026-11-09-shared-low-load",
+              "candidate_ids": [
+                15,
+                9,
+                11,
+                10,
+                8,
+                7,
+                12,
+                3,
+                5,
+                14,
+                0,
+                2,
+                4,
+                6
+              ],
+              "deadline_epoch": 1794235753.0310388,
+              "exclusive_device": false,
+              "max_aicore_percent": 20,
+              "max_new_concurrent_npus": 5,
+              "minimum_free_hbm_mib": 16384,
+              "prerequisites": {
+                "lm-a-hb40-v5": [
+                  "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/stage.json"
+                ]
+              },
+              "schema": "tide-shared-resource-policy-v1"
+            },
+            "project": "tide-learning-lab",
+            "return_code": 1,
+            "schema": "tide-shared-admission-v1",
+            "started_at": "2026-11-09T02:52:23.314331+00:00",
+            "status": "failed",
+            "timestamp": "2026-11-09T03:12:24.167155+00:00"
+          },
+          "remaining_descendants": [],
           "schema": "tide-job-lifecycle-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:52:23.144298+00:00",
-          "state": "running",
+          "state": "failed",
           "supervisor": {
             "parent_pid": 2907797,
             "pid": 2604064,
@@ -603,27 +637,36 @@
             "start_ticks": 2177891380,
             "state": "R"
           },
-          "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:33.846207+00:00"
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "SERVICE_RESULT": "exit-code"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:12:24.374036+00:00",
+          "workload_exit_code": 1
         },
         "systemd": {
-          "ActiveState": "active",
+          "ActiveState": "failed",
           "CPUQuotaPerSecUSec": "4s",
-          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-controls-v5.service",
-          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ExecMainStatus": "1",
           "Id": "tide-lab-lm-a-controls-v5.service",
           "LoadState": "loaded",
-          "MainPID": "2604064",
+          "MainPID": "0",
           "MemoryMax": "25769803776",
-          "Result": "success",
+          "Result": "exit-code",
           "RuntimeMaxUSec": "11h 56min 51s",
           "Slice": "background.slice",
-          "SubState": "running",
+          "SubState": "failed",
           "Transient": "yes",
           "inspection_exit_code": 0
         },
-        "termination_verified_now": false,
+        "termination_verified_now": true,
         "worker": {
+          "elapsed_seconds": 1199.5051388069987,
+          "ended_at": "2026-11-09T03:12:29.922305+00:00",
+          "exit_code": 1,
           "job_id": "lm-a-controls-v5",
           "logical_device": "npu:0",
           "physical_visibility": "15",
@@ -635,8 +678,9 @@
             "state": "R"
           },
           "schema": "tide-job-worker-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:52:30.417195+00:00",
-          "state": "running",
+          "state": "failed",
           "worker": {
             "parent_pid": 2604068,
             "pid": 2605037,
@@ -656,7 +700,7 @@
         "wait_seconds": 42951
       },
       "source_commit": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
-      "status": "running"
+      "status": "failed"
     },
     "lm-a-fc16-v5": {
       "chain": {
@@ -862,17 +906,17 @@
       },
       "device": "cpu",
       "latest_metrics": {
-        "elapsed_seconds": 533.7645569518209,
+        "elapsed_seconds": 2608.9327626526356,
         "metrics": {
           "activity/full_fraction": 1.0,
           "train/alpha": 1.0,
-          "train/gradient_norm": 2.6666581630706787,
-          "train/loss": 7.069443225860596,
-          "train/lr": 0.0027692307692307695,
+          "train/gradient_norm": 1.2639631032943726,
+          "train/loss": 6.75574254989624,
+          "train/lr": 0.0027633112555472943,
           "train/teacher_mse_phase": 0.0,
-          "train/tokens_per_second": 13.599374218051425,
-          "train/update_seconds": 18.824395585805178,
-          "train/valid_tokens": 6144.0,
+          "train/tokens_per_second": 7.089874931959819,
+          "train/update_seconds": 36.10783017426729,
+          "train/valid_tokens": 30629.0,
           "work/candidates": 4096.0,
           "work/full": 4096.0,
           "work/max_full_batch": 256.0,
@@ -887,9 +931,9 @@
         },
         "run_id": "tl-lm-a-fc16-v5-train-tide-dense-s11",
         "schema_version": 1,
-        "sequence": 3,
-        "step": 24,
-        "timestamp": "2026-11-09T03:10:02.084637+00:00"
+        "sequence": 16,
+        "step": 120,
+        "timestamp": "2026-11-09T03:44:37.252824+00:00"
       },
       "lifecycle": {
         "current_cgroup_processes": [
@@ -980,7 +1024,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 831.3609059005976,
+          "elapsed_seconds": 3005.6236366666853,
           "job_id": "lm-a-fc16-v5",
           "launcher": {
             "parent_pid": 2672671,
@@ -1000,7 +1044,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:27.309293+00:00"
+          "updated_at": "2026-11-09T03:47:41.549988+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -1054,6 +1098,309 @@
       "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
       "status": "running"
     },
+    "lm-a-hb16-sparse-v5": {
+      "chain": {
+        "admission": {
+          "tide-sparse": {
+            "mechanisms": "passed",
+            "recovery": "passed",
+            "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+            "strict_numerical": "read checks; finite disagreements do not disappear"
+          }
+        },
+        "axes": {
+          "discrete_semantics": "pending",
+          "execution": "running",
+          "learning": "unchecked",
+          "performance": "shared-resource observations",
+          "recovery": "pending",
+          "strict_numerical": "original thresholds; inspect checks"
+        },
+        "batch_id": "tl-language-depth-v5",
+        "compute_deadline_epoch": 1794206582.5974648,
+        "decisions": [
+          {
+            "accumulation": 1,
+            "batch": 8,
+            "forecast_training_seconds": 6070.380270195007,
+            "name": "fixed-B8-comparison",
+            "reason": "same sampler/exposure and schedule prefix as earlier FC4; see separate batch/backend calibration",
+            "remaining_training_seconds": 8100.0
+          }
+        ],
+        "plan_sha256": "f64ad506d4e80976807df1fc13096396d0c0862d69b315cdc4e49b71e798f709",
+        "route": "a",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794235753.0310388,
+        "skipped": [],
+        "spent_seconds": {
+          "admission": 157.3097871504724,
+          "final": 0.0,
+          "training": 0.0
+        },
+        "started_at": "2026-11-09T03:43:47.597704+00:00",
+        "state": "running",
+        "steps": [
+          {
+            "action": "checks",
+            "cap_seconds": 600,
+            "category": "admission",
+            "elapsed_seconds": 10.534918572753668,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:43:58.141870+00:00",
+            "name": "checks-tide-sparse",
+            "observed_process_group_peak_rss_mib": 392.3828125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/checks-tide-sparse",
+            "result_sha256": "a9a71e8dbd52ca9d32618ec3fd7c565e0832278f6d011e1f009df9db7f9e9c08",
+            "started_at": "2026-11-09T03:43:47.605077+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 9.1545176692307,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:07.305779+00:00",
+            "name": "resume-tide-sparse-full",
+            "observed_process_group_peak_rss_mib": 357.3359375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/resume-tide-sparse-full",
+            "result_sha256": "88f18acf4c0fd4400eef679494ba0effcf5488e416326f3b08fb48c713880b8b",
+            "started_at": "2026-11-09T03:43:58.147187+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 5.264114245772362,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:12.581458+00:00",
+            "name": "resume-tide-sparse-split",
+            "observed_process_group_peak_rss_mib": 320.31640625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/resume-tide-sparse-split",
+            "result_sha256": "ff2a51541d05ae40008a726b1fe9d2ddb51c056bda9c19315b8f3cf432f5e392",
+            "started_at": "2026-11-09T03:44:07.315501+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 7.30687090754509,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:19.893117+00:00",
+            "name": "resume-tide-sparse-continued",
+            "observed_process_group_peak_rss_mib": 369.07421875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/resume-tide-sparse-continued",
+            "result_sha256": "4f80708bb43729330722e74051bfa7a3e0cbacf5113b445da9d8597113931e54",
+            "started_at": "2026-11-09T03:44:12.584033+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "calibrate",
+            "cap_seconds": 600,
+            "category": "admission",
+            "elapsed_seconds": 125.04936575517058,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:25.267412+00:00",
+            "name": "calibrate-tide-sparse",
+            "observed_process_group_peak_rss_mib": 1173.10546875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/calibrate-tide-sparse",
+            "result_sha256": "22bfacfc0e22215c3c374997a225366fb2e9c2ef8a4204c59641e38587837503",
+            "started_at": "2026-11-09T03:44:20.215910+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 8085.0,
+            "category": "training",
+            "name": "train-tide-sparse-s11",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/train-tide-sparse-s11",
+            "started_at": "2026-11-09T03:46:25.272452+00:00",
+            "state": "running"
+          }
+        ],
+        "study_id": "TL-A-TOPO",
+        "training": []
+      },
+      "device": "cpu",
+      "latest_metrics": {
+        "elapsed_seconds": 50.95580019056797,
+        "metrics": {
+          "train/valid_tokens": 0.0,
+          "validation/nll": 8.339375644922256,
+          "validation/ppl": 4185.475702498616
+        },
+        "run_id": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11",
+        "schema_version": 1,
+        "sequence": 0,
+        "step": 0,
+        "timestamp": "2026-11-09T03:47:18.918798+00:00"
+      },
+      "lifecycle": {
+        "current_cgroup_processes": [
+          {
+            "parent_pid": 2907797,
+            "pid": 3162071,
+            "process_group": 3162071,
+            "start_ticks": 2178199626,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3162071,
+            "pid": 3162079,
+            "process_group": 3162079,
+            "start_ticks": 2178199636,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3162079,
+            "pid": 3162101,
+            "process_group": 3162079,
+            "start_ticks": 2178199649,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3162101,
+            "pid": 3162103,
+            "process_group": 3162103,
+            "start_ticks": 2178199655,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3162103,
+            "pid": 3192247,
+            "process_group": 3162103,
+            "start_ticks": 2178215598,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3192247,
+            "pid": 3192251,
+            "process_group": 3192251,
+            "start_ticks": 2178215604,
+            "state": "R"
+          },
+          {
+            "parent_pid": 3162103,
+            "pid": 3192426,
+            "process_group": 3162103,
+            "start_ticks": 2178215868,
+            "state": "S"
+          }
+        ],
+        "job_id": "lm-a-hb16-sparse-v5",
+        "known_descendants_alive": [
+          {
+            "parent_pid": 3162071,
+            "pid": 3162079,
+            "process_group": 3162079,
+            "start_ticks": 2178199636,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3162079,
+            "pid": 3162101,
+            "process_group": 3162079,
+            "start_ticks": 2178199649,
+            "state": "S"
+          }
+        ],
+        "queue": null,
+        "state": {
+          "child_process_group": 3162079,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-hb16-sparse-v5.service",
+          "descendants": [
+            {
+              "parent_pid": 3162071,
+              "pid": 3162079,
+              "process_group": 3162079,
+              "start_ticks": 2178199636,
+              "state": "S"
+            },
+            {
+              "parent_pid": 3162079,
+              "pid": 3162101,
+              "process_group": 3162079,
+              "start_ticks": 2178199649,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 232.83374921232462,
+          "job_id": "lm-a-hb16-sparse-v5",
+          "launcher": {
+            "parent_pid": 3162071,
+            "pid": 3162079,
+            "process_group": 3162079,
+            "start_ticks": 2178199636,
+            "state": "R"
+          },
+          "schema": "tide-job-lifecycle-v1",
+          "started_at": "2026-11-09T03:43:45.605669+00:00",
+          "state": "running",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 3162071,
+            "process_group": 3162071,
+            "start_ticks": 2178199626,
+            "state": "R"
+          },
+          "termination_verified": false,
+          "updated_at": "2026-11-09T03:47:38.694188+00:00"
+        },
+        "systemd": {
+          "ActiveState": "active",
+          "CPUQuotaPerSecUSec": "1s",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-hb16-sparse-v5.service",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-a-hb16-sparse-v5.service",
+          "LoadState": "loaded",
+          "MainPID": "3162071",
+          "MemoryMax": "25769803776",
+          "Result": "success",
+          "RuntimeMaxUSec": "3h 1min",
+          "Slice": "background.slice",
+          "SubState": "running",
+          "Transient": "yes",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": false,
+        "worker": {
+          "job_id": "lm-a-hb16-sparse-v5",
+          "logical_device": "cpu",
+          "physical_visibility": null,
+          "process": {
+            "parent_pid": 3162079,
+            "pid": 3162101,
+            "process_group": 3162079,
+            "start_ticks": 2178199649,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "started_at": "2026-11-09T03:43:45.776856+00:00",
+          "state": "running",
+          "worker": {
+            "parent_pid": 3162071,
+            "pid": 3162079,
+            "process_group": 3162079,
+            "start_ticks": 2178199636,
+            "state": "R"
+          }
+        }
+      },
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 25769803776,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 10860,
+        "wait_seconds": 0
+      },
+      "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "status": "running"
+    },
     "lm-a-hb16-v5": {
       "chain": {
         "admission": {
@@ -1070,9 +1417,10 @@
             "strict_numerical": "read checks; finite disagreements do not disappear"
           }
         },
+        "allocated_elapsed_seconds": 2230.8595570884645,
         "axes": {
           "discrete_semantics": "pending",
-          "execution": "running",
+          "execution": "failed",
           "learning": "unchecked",
           "performance": "shared-resource observations",
           "recovery": "pending",
@@ -1090,6 +1438,8 @@
             "remaining_training_seconds": 18600.0
           }
         ],
+        "error": "RuntimeError('required stage failed: train-tide-dense-s11')",
+        "finished_at": "2026-11-09T03:38:14.467279+00:00",
         "plan_sha256": "9e9379bc76d30f72727b0f6bab7bac5b9dfd63b9db9268b9cb1656731a0afec2",
         "route": "a",
         "schema": "tide-language-chain-v1",
@@ -1098,10 +1448,10 @@
         "spent_seconds": {
           "admission": 223.60109845548868,
           "final": 0.0,
-          "training": 0.0
+          "training": 2006.2068867087364
         },
         "started_at": "2026-11-09T03:01:03.607969+00:00",
-        "state": "running",
+        "state": "failed",
         "steps": [
           {
             "action": "checks",
@@ -1247,129 +1597,27 @@
             "action": "train",
             "cap_seconds": 18585.0,
             "category": "training",
+            "elapsed_seconds": 2006.2068867087364,
+            "exit_code": 1,
+            "finished_at": "2026-11-09T03:38:14.459472+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
             "name": "train-tide-dense-s11",
+            "observed_process_group_peak_rss_mib": 1243.4375,
             "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11",
+            "result_sha256": "88ed89fe9a2fecb849858c4d9bcba997007eec8242dda6ba3417dee90f83deed",
             "started_at": "2026-11-09T03:04:48.250906+00:00",
-            "state": "running"
+            "state": "failed"
           }
         ],
         "study_id": "TL-A-TOPO",
         "training": []
       },
       "device": "cpu",
-      "latest_metrics": {
-        "elapsed_seconds": 372.485873285681,
-        "metrics": {
-          "activity/full_fraction": 1.0,
-          "train/alpha": 1.0,
-          "train/gradient_norm": 2.1203014850616455,
-          "train/loss": 7.727169513702393,
-          "train/lr": 0.0018461538461538463,
-          "train/teacher_mse_phase": 0.0,
-          "train/tokens_per_second": 13.220950970351408,
-          "train/update_seconds": 19.36320621520281,
-          "train/valid_tokens": 4096.0,
-          "work/candidates": 4096.0,
-          "work/full": 4096.0,
-          "work/max_full_batch": 256.0,
-          "work/max_region_batch": 256.0,
-          "work/max_state_batch": 8.0,
-          "work/max_state_sequence": 32.0,
-          "work/messages": 8192.0,
-          "work/read_events": 4096.0,
-          "work/region_blocks": 4.0,
-          "work/source_rows": 9216.0,
-          "work/state_updates": 4096.0
-        },
-        "run_id": "tl-lm-a-hb16-v5-train-tide-dense-s11",
-        "schema_version": 1,
-        "sequence": 2,
-        "step": 16,
-        "timestamp": "2026-11-09T03:11:03.417026+00:00"
-      },
       "lifecycle": {
-        "current_cgroup_processes": [
-          {
-            "parent_pid": 2907797,
-            "pid": 2672703,
-            "process_group": 2672703,
-            "start_ticks": 2177922642,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672703,
-            "pid": 2672726,
-            "process_group": 2672726,
-            "start_ticks": 2177922650,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672726,
-            "pid": 2672757,
-            "process_group": 2672726,
-            "start_ticks": 2177922663,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672757,
-            "pid": 2716022,
-            "process_group": 2672726,
-            "start_ticks": 2177943255,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2716022,
-            "pid": 2716023,
-            "process_group": 2716023,
-            "start_ticks": 2177943261,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2716023,
-            "pid": 2757031,
-            "process_group": 2716023,
-            "start_ticks": 2177965896,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2757031,
-            "pid": 2757032,
-            "process_group": 2757032,
-            "start_ticks": 2177965902,
-            "state": "R"
-          },
-          {
-            "parent_pid": 2716023,
-            "pid": 2757835,
-            "process_group": 2716023,
-            "start_ticks": 2177966164,
-            "state": "S"
-          }
-        ],
+        "current_cgroup_processes": [],
         "job_id": "lm-a-hb16-v5",
-        "known_descendants_alive": [
-          {
-            "parent_pid": 2672703,
-            "pid": 2672726,
-            "process_group": 2672726,
-            "start_ticks": 2177922650,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672726,
-            "pid": 2672757,
-            "process_group": 2672726,
-            "start_ticks": 2177922663,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672757,
-            "pid": 2716022,
-            "process_group": 2672726,
-            "start_ticks": 2177943255,
-            "state": "S"
-          }
-        ],
+        "known_descendants_alive": [],
         "queue": null,
         "state": {
           "child_process_group": 2672726,
@@ -1397,8 +1645,11 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 839.5145562812686,
+          "elapsed_seconds": 2440.913232792169,
+          "ended_at": "2026-11-09T03:38:16.671267+00:00",
+          "finalized_at": "2026-11-09T03:38:16.743128+00:00",
           "job_id": "lm-a-hb16-v5",
+          "known_descendants_alive": [],
           "launcher": {
             "parent_pid": 2672703,
             "pid": 2672726,
@@ -1406,9 +1657,14 @@
             "start_ticks": 2177922650,
             "state": "R"
           },
+          "launcher_exit_code": 1,
+          "leaked_descendants": false,
+          "queue_state": null,
+          "remaining_descendants": [],
           "schema": "tide-job-lifecycle-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:57:35.758055+00:00",
-          "state": "running",
+          "state": "failed",
           "supervisor": {
             "parent_pid": 2907797,
             "pid": 2672703,
@@ -1416,27 +1672,36 @@
             "start_ticks": 2177922642,
             "state": "R"
           },
-          "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:35.507685+00:00"
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "SERVICE_RESULT": "exit-code"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:38:12.728839+00:00",
+          "workload_exit_code": 1
         },
         "systemd": {
-          "ActiveState": "active",
+          "ActiveState": "failed",
           "CPUQuotaPerSecUSec": "1s",
-          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-hb16-v5.service",
-          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ExecMainStatus": "1",
           "Id": "tide-lab-lm-a-hb16-v5.service",
           "LoadState": "loaded",
-          "MainPID": "2672703",
+          "MainPID": "0",
           "MemoryMax": "25769803776",
-          "Result": "success",
+          "Result": "exit-code",
           "RuntimeMaxUSec": "11h 51min 38s",
           "Slice": "background.slice",
-          "SubState": "running",
+          "SubState": "failed",
           "Transient": "yes",
           "inspection_exit_code": 0
         },
-        "termination_verified_now": false,
+        "termination_verified_now": true,
         "worker": {
+          "elapsed_seconds": 2439.935986109078,
+          "ended_at": "2026-11-09T03:38:15.859391+00:00",
+          "exit_code": 1,
           "job_id": "lm-a-hb16-v5",
           "logical_device": "cpu",
           "physical_visibility": null,
@@ -1448,8 +1713,9 @@
             "state": "R"
           },
           "schema": "tide-job-worker-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:57:35.923442+00:00",
-          "state": "running",
+          "state": "failed",
           "worker": {
             "parent_pid": 2672703,
             "pid": 2672726,
@@ -1469,62 +1735,26 @@
         "wait_seconds": 0
       },
       "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
-      "status": "running"
+      "status": "failed"
     },
     "lm-a-hb40-v5": {
       "dependency_wait": {
-        "at": "2026-11-09T03:11:34.682069+00:00",
+        "at": "2026-11-09T03:38:16.251271+00:00",
         "dependencies": [
           "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/stage.json"
         ],
         "observed_states": [
-          "running"
+          "failed"
         ],
+        "reason": "required predecessor failed",
         "schema": "tide-depth-dependency-v1",
-        "state": "waiting_dependency"
+        "state": "failed"
       },
       "device": "cpu",
       "lifecycle": {
-        "current_cgroup_processes": [
-          {
-            "parent_pid": 2907797,
-            "pid": 2672741,
-            "process_group": 2672741,
-            "start_ticks": 2177922655,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672741,
-            "pid": 2672763,
-            "process_group": 2672763,
-            "start_ticks": 2177922663,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672763,
-            "pid": 2672783,
-            "process_group": 2672763,
-            "start_ticks": 2177922676,
-            "state": "S"
-          }
-        ],
+        "current_cgroup_processes": [],
         "job_id": "lm-a-hb40-v5",
-        "known_descendants_alive": [
-          {
-            "parent_pid": 2672741,
-            "pid": 2672763,
-            "process_group": 2672763,
-            "start_ticks": 2177922663,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2672763,
-            "pid": 2672783,
-            "process_group": 2672763,
-            "start_ticks": 2177922676,
-            "state": "S"
-          }
-        ],
+        "known_descendants_alive": [],
         "queue": null,
         "state": {
           "child_process_group": 2672763,
@@ -1545,8 +1775,11 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 838.9170830398798,
+          "elapsed_seconds": 2441.7615227997303,
+          "ended_at": "2026-11-09T03:38:17.651706+00:00",
+          "finalized_at": "2026-11-09T03:38:17.731724+00:00",
           "job_id": "lm-a-hb40-v5",
+          "known_descendants_alive": [],
           "launcher": {
             "parent_pid": 2672741,
             "pid": 2672763,
@@ -1554,9 +1787,14 @@
             "start_ticks": 2177922663,
             "state": "R"
           },
+          "launcher_exit_code": 3,
+          "leaked_descendants": false,
+          "queue_state": null,
+          "remaining_descendants": [],
           "schema": "tide-job-lifecycle-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:57:35.890224+00:00",
-          "state": "running",
+          "state": "failed",
           "supervisor": {
             "parent_pid": 2907797,
             "pid": 2672741,
@@ -1564,27 +1802,36 @@
             "start_ticks": 2177922655,
             "state": "R"
           },
-          "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:35.085501+00:00"
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "3",
+            "SERVICE_RESULT": "exit-code"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:38:12.607955+00:00",
+          "workload_exit_code": 3
         },
         "systemd": {
-          "ActiveState": "active",
+          "ActiveState": "failed",
           "CPUQuotaPerSecUSec": "1s",
-          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-hb40-v5.service",
-          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ExecMainStatus": "3",
           "Id": "tide-lab-lm-a-hb40-v5.service",
           "LoadState": "loaded",
-          "MainPID": "2672741",
+          "MainPID": "0",
           "MemoryMax": "25769803776",
-          "Result": "success",
+          "Result": "exit-code",
           "RuntimeMaxUSec": "11h 51min 38s",
           "Slice": "background.slice",
-          "SubState": "running",
+          "SubState": "failed",
           "Transient": "yes",
           "inspection_exit_code": 0
         },
-        "termination_verified_now": false,
+        "termination_verified_now": true,
         "worker": {
+          "elapsed_seconds": 2440.221149839461,
+          "ended_at": "2026-11-09T03:38:16.278091+00:00",
+          "exit_code": 3,
           "job_id": "lm-a-hb40-v5",
           "logical_device": "cpu",
           "physical_visibility": null,
@@ -1596,8 +1843,9 @@
             "state": "R"
           },
           "schema": "tide-job-worker-v1",
+          "signal": null,
           "started_at": "2026-11-09T02:57:36.056968+00:00",
-          "state": "running",
+          "state": "failed",
           "worker": {
             "parent_pid": 2672741,
             "pid": 2672763,
@@ -1617,7 +1865,7 @@
         "wait_seconds": 0
       },
       "source_commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
-      "status": "queued"
+      "status": "failed"
     },
     "lm-a-language-v4": {
       "chain": {
@@ -1960,6 +2208,15 @@
             "label": "tide-dense-512",
             "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-tide-dense-512",
             "state": "completed"
+          },
+          {
+            "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-tide-sparse-512/checkpoint.pt",
+            "depth": 1,
+            "inference_state": "completed",
+            "kind": "tide-sparse",
+            "label": "tide-sparse-512",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-tide-sparse-512",
+            "state": "completed"
           }
         ],
         "exposure": {
@@ -1985,9 +2242,9 @@
         "skipped": [],
         "spent_seconds": {
           "admission": 111.82590557262301,
-          "final": 329.5436843819916,
+          "final": 545.9302705787122,
           "scale": 0.0,
-          "training": 7304.313125941902
+          "training": 16656.73890440911
         },
         "started_at": "2026-11-08T22:59:02.687026+00:00",
         "state": "running",
@@ -2394,9 +2651,73 @@
             "action": "train",
             "cap_seconds": 10800,
             "category": "training",
+            "elapsed_seconds": 9352.425778467208,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:02.632332+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
             "name": "train-tide-sparse-512",
+            "observed_process_group_peak_rss_mib": 2203.59765625,
             "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-tide-sparse-512",
+            "result_sha256": "1bf7e22624a3e03d52876702dc835c6fb5f151a4843ac47d9090c716e2326ea9",
             "started_at": "2026-11-09T01:08:10.203962+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 240,
+            "category": "final",
+            "elapsed_seconds": 107.71721332892776,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:45:50.377638+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-tide-sparse-512",
+            "observed_process_group_peak_rss_mib": 1974.22265625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/test-tide-sparse-512",
+            "result_sha256": "da497f6986b122964ed7819e1b29603700ce842d671245c859662590cff96a0b",
+            "started_at": "2026-11-09T03:44:02.656058+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "inference",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 19.222422178834677,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:09.610887+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "inference-tide-sparse-512",
+            "observed_process_group_peak_rss_mib": 1997.91796875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/inference-tide-sparse-512",
+            "result_sha256": "814ede58e6c64202886c47518b2b6dc04942c750ace8141e0b1c47f2e8bcbd5f",
+            "started_at": "2026-11-09T03:45:50.385323+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 180,
+            "category": "final",
+            "elapsed_seconds": 89.44695068895817,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:47:39.068649+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "context-reset-tide-sparse",
+            "observed_process_group_peak_rss_mib": 1999.80078125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/context-reset-tide-sparse",
+            "result_sha256": "2bff93784404cb967773cf9f82b6a04f80969fd6f8a3af82c28f5fde9983155f",
+            "started_at": "2026-11-09T03:46:09.617926+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 180,
+            "category": "final",
+            "name": "zero-core-tide-sparse",
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/zero-core-tide-sparse",
+            "started_at": "2026-11-09T03:47:39.073614+00:00",
             "state": "running"
           }
         ],
@@ -2436,41 +2757,23 @@
             "state": "completed",
             "steps": 512,
             "valid_tokens": 130706
+          },
+          {
+            "depth": 1,
+            "kind": "tide-sparse",
+            "label": "tide-sparse-512",
+            "learning_signal": true,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-tide-sparse-512",
+            "schedule_steps": 512,
+            "seed": 11,
+            "state": "completed",
+            "steps": 512,
+            "valid_tokens": 130706
           }
         ]
       },
       "device": "npu",
-      "latest_metrics": {
-        "elapsed_seconds": 7355.930695228279,
-        "metrics": {
-          "activity/full_fraction": 0.5009765625,
-          "resource/npu_peak_allocated_mib": 120.08984375,
-          "train/alpha": 1.0,
-          "train/gradient_norm": 1.2841753959655762,
-          "train/loss": 6.005995750427246,
-          "train/lr": 0.0005568020918279771,
-          "train/teacher_mse_phase": 0.0,
-          "train/tokens_per_second": 16.022512304824733,
-          "train/update_seconds": 15.977519325911999,
-          "train/valid_tokens": 106193.0,
-          "work/candidates": 1024.0,
-          "work/full": 513.0,
-          "work/max_full_batch": 247.0,
-          "work/max_region_batch": 256.0,
-          "work/max_state_batch": 8.0,
-          "work/max_state_sequence": 32.0,
-          "work/messages": 0.0,
-          "work/read_events": 1024.0,
-          "work/region_blocks": 1.0,
-          "work/source_rows": 1024.0,
-          "work/state_updates": 1024.0
-        },
-        "run_id": "tl-lm-a-language-v4-train-tide-sparse-512",
-        "schema_version": 1,
-        "sequence": 58,
-        "step": 416,
-        "timestamp": "2026-11-09T03:10:49.942240+00:00"
-      },
+      "latest_metrics": null,
       "lifecycle": {
         "current_cgroup_processes": [
           {
@@ -2510,24 +2813,17 @@
           },
           {
             "parent_pid": 1372814,
-            "pid": 1780369,
+            "pid": 3204012,
             "process_group": 1372814,
-            "start_ticks": 2177266091,
+            "start_ticks": 2178222978,
             "state": "S"
           },
           {
-            "parent_pid": 1780369,
-            "pid": 1780370,
-            "process_group": 1780370,
-            "start_ticks": 2177266096,
-            "state": "S"
-          },
-          {
-            "parent_pid": 1372814,
-            "pid": 1780542,
-            "process_group": 1372814,
-            "start_ticks": 2177266488,
-            "state": "S"
+            "parent_pid": 3204012,
+            "pid": 3204015,
+            "process_group": 3204015,
+            "start_ticks": 2178222984,
+            "state": "R"
           }
         ],
         "job_id": "lm-a-language-v4",
@@ -2598,7 +2894,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 15160.858908195049,
+          "elapsed_seconds": 17324.821353387088,
           "job_id": "lm-a-language-v4",
           "launcher": {
             "parent_pid": 1372243,
@@ -2618,7 +2914,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:34.895979+00:00"
+          "updated_at": "2026-11-09T03:47:38.805654+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -2673,59 +2969,77 @@
       "status": "running"
     },
     "lm-a-reference-v5": {
-      "dependency_wait": {
-        "at": "2026-11-09T03:11:34.681709+00:00",
-        "dependencies": [
-          "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/stage.json"
-        ],
-        "observed_states": [
-          "running"
-        ],
-        "schema": "tide-depth-dependency-v1",
-        "state": "waiting_dependency"
+      "chain": {
+        "allocated_elapsed_seconds": 64.86463444307446,
+        "compute_deadline_epoch": 1794195865.844836,
+        "decisions": [],
+        "finished_at": "2026-11-09T03:16:30.709457+00:00",
+        "plan_sha256": "928fb92fb4c75ebe4cbab665850ae6a32d809587754bd4c358c4086d8c0bff43",
+        "route": "a",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794235753.0310388,
+        "skipped": [],
+        "spent_seconds": {
+          "final": 64.84093450382352
+        },
+        "started_at": "2026-11-09T03:15:25.845045+00:00",
+        "state": "completed",
+        "steps": [
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 30.201146233826876,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:15:56.051634+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-fc4-tide-dense-prefix128",
+            "observed_process_group_peak_rss_mib": 367.98828125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-reference-v5/test-fc4-tide-dense-prefix128",
+            "result_sha256": "e9c8a9c10098efd7a7b8ea5fb2473a072b05bfa35e417dfd76a0fa97190a7dd5",
+            "started_at": "2026-11-09T03:15:25.847058+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 28.96589594334364,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:16:25.023296+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-fc4-tide-sparse-prefix128",
+            "observed_process_group_peak_rss_mib": 369.0703125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-reference-v5/test-fc4-tide-sparse-prefix128",
+            "result_sha256": "187dc50d9e09d42c37891c142e66de35fff0113cbdd2f58f699487dd65c92aa3",
+            "started_at": "2026-11-09T03:15:56.055111+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 5.673892326653004,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:16:30.706376+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-small-transformer-extra2048",
+            "observed_process_group_peak_rss_mib": 280.78125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-reference-v5/test-small-transformer-extra2048",
+            "result_sha256": "96d6d61b4f5333726809447d18dd4b14fb46d416f361e3fad2b8048a082edde5",
+            "started_at": "2026-11-09T03:16:25.029877+00:00",
+            "state": "completed"
+          }
+        ]
       },
       "device": "cpu",
       "lifecycle": {
-        "current_cgroup_processes": [
-          {
-            "parent_pid": 2907797,
-            "pid": 2734481,
-            "process_group": 2734481,
-            "start_ticks": 2177954336,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734481,
-            "pid": 2734488,
-            "process_group": 2734488,
-            "start_ticks": 2177954346,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734488,
-            "pid": 2734539,
-            "process_group": 2734488,
-            "start_ticks": 2177954360,
-            "state": "S"
-          }
-        ],
+        "current_cgroup_processes": [],
         "job_id": "lm-a-reference-v5",
-        "known_descendants_alive": [
-          {
-            "parent_pid": 2734481,
-            "pid": 2734488,
-            "process_group": 2734488,
-            "start_ticks": 2177954346,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734488,
-            "pid": 2734539,
-            "process_group": 2734488,
-            "start_ticks": 2177954360,
-            "state": "S"
-          }
-        ],
+        "known_descendants_alive": [],
         "queue": null,
         "state": {
           "child_process_group": 2734488,
@@ -2744,10 +3058,20 @@
               "process_group": 2734488,
               "start_ticks": 2177954360,
               "state": "S"
+            },
+            {
+              "parent_pid": 2734539,
+              "pid": 2860095,
+              "process_group": 2734488,
+              "start_ticks": 2178029644,
+              "state": "S"
             }
           ],
-          "elapsed_seconds": 516.3045924156904,
+          "elapsed_seconds": 819.7468467541039,
+          "ended_at": "2026-11-09T03:16:32.450840+00:00",
+          "finalized_at": "2026-11-09T03:16:32.528727+00:00",
           "job_id": "lm-a-reference-v5",
+          "known_descendants_alive": [],
           "launcher": {
             "parent_pid": 2734481,
             "pid": 2734488,
@@ -2755,9 +3079,14 @@
             "start_ticks": 2177954346,
             "state": "R"
           },
+          "launcher_exit_code": 0,
+          "leaked_descendants": false,
+          "queue_state": null,
+          "remaining_descendants": [],
           "schema": "tide-job-lifecycle-v1",
+          "signal": null,
           "started_at": "2026-11-09T03:02:52.704021+00:00",
-          "state": "running",
+          "state": "completed",
           "supervisor": {
             "parent_pid": 2907797,
             "pid": 2734481,
@@ -2765,27 +3094,36 @@
             "start_ticks": 2177954336,
             "state": "R"
           },
-          "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:29.266758+00:00"
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:16:22.515542+00:00",
+          "workload_exit_code": 0
         },
         "systemd": {
-          "ActiveState": "active",
-          "CPUQuotaPerSecUSec": "1s",
-          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-reference-v5.service",
+          "ActiveState": "inactive",
+          "CPUQuotaPerSecUSec": "infinity",
+          "ControlGroup": "",
           "ExecMainStatus": "0",
           "Id": "tide-lab-lm-a-reference-v5.service",
-          "LoadState": "loaded",
-          "MainPID": "2734481",
-          "MemoryMax": "25769803776",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "MemoryMax": "infinity",
           "Result": "success",
-          "RuntimeMaxUSec": "11h 46min 21s",
-          "Slice": "background.slice",
-          "SubState": "running",
-          "Transient": "yes",
+          "RuntimeMaxUSec": "infinity",
+          "Slice": "",
+          "SubState": "dead",
+          "Transient": "no",
           "inspection_exit_code": 0
         },
-        "termination_verified_now": false,
+        "termination_verified_now": true,
         "worker": {
+          "elapsed_seconds": 818.6474791914225,
+          "ended_at": "2026-11-09T03:16:31.540258+00:00",
+          "exit_code": 0,
           "job_id": "lm-a-reference-v5",
           "logical_device": "cpu",
           "physical_visibility": null,
@@ -2797,8 +3135,9 @@
             "state": "R"
           },
           "schema": "tide-job-worker-v1",
+          "signal": null,
           "started_at": "2026-11-09T03:02:52.892819+00:00",
-          "state": "running",
+          "state": "completed",
           "worker": {
             "parent_pid": 2734481,
             "pid": 2734488,
@@ -2818,7 +3157,496 @@
         "wait_seconds": 0
       },
       "source_commit": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
-      "status": "queued"
+      "status": "completed"
+    },
+    "lm-a-transformer-cpu-v5": {
+      "chain": {
+        "admission": {
+          "transformer": {
+            "mechanisms": "passed",
+            "recovery": "passed",
+            "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+            "strict_numerical": "read checks; finite disagreements do not disappear"
+          }
+        },
+        "allocated_elapsed_seconds": 161.38863855972886,
+        "axes": {
+          "discrete_semantics": "passed in affected checks",
+          "execution": "completed",
+          "learning": "heldout records; human review pending",
+          "performance": "shared-resource observations",
+          "recovery": "three-step exact; long trajectory untested",
+          "strict_numerical": "original thresholds; inspect checks"
+        },
+        "batch_id": "tl-language-depth-v5",
+        "compute_deadline_epoch": 1794197582.3547893,
+        "decisions": [
+          {
+            "accumulation": 1,
+            "batch": 8,
+            "forecast_training_seconds": 284.4903030395508,
+            "name": "fixed-B8-comparison",
+            "reason": "same sampler/exposure and schedule prefix as earlier FC4; see separate batch/backend calibration",
+            "remaining_training_seconds": 900.0
+          }
+        ],
+        "finished_at": "2026-11-09T03:46:28.743410+00:00",
+        "plan_sha256": "6c274e578836b3e883a861f2cdaac4d34f31451b3f59ff70f7ae96fa093157fe",
+        "route": "a",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794235753.0310388,
+        "skipped": [],
+        "spent_seconds": {
+          "admission": 32.12831287831068,
+          "final": 25.37225941196084,
+          "training": 103.2328475639224
+        },
+        "started_at": "2026-11-09T03:43:47.355154+00:00",
+        "state": "completed",
+        "steps": [
+          {
+            "action": "checks",
+            "cap_seconds": 585.0,
+            "category": "admission",
+            "elapsed_seconds": 6.4292477406561375,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:43:53.794788+00:00",
+            "name": "checks-transformer",
+            "observed_process_group_peak_rss_mib": 267.5859375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/checks-transformer",
+            "result_sha256": "1f0c3ed2641b0c9f88278a8f79a244324a0dc3772dbe061882497de3b0085a44",
+            "started_at": "2026-11-09T03:43:47.362064+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 6.752132084220648,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:00.553246+00:00",
+            "name": "resume-transformer-full",
+            "observed_process_group_peak_rss_mib": 339.23828125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/resume-transformer-full",
+            "result_sha256": "5466ce4cd778142c29fddec3c73d8cf6997021e7b13533f6e5332c29811c0d8d",
+            "started_at": "2026-11-09T03:43:53.798309+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 6.557533346116543,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:07.117774+00:00",
+            "name": "resume-transformer-split",
+            "observed_process_group_peak_rss_mib": 354.08203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/resume-transformer-split",
+            "result_sha256": "b94699dff3445d3316c849d9eede81b7b4bdb0a59392da457d6d506c75fe9c77",
+            "started_at": "2026-11-09T03:44:00.558120+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 240,
+            "category": "admission",
+            "elapsed_seconds": 5.721806738525629,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:12.851663+00:00",
+            "name": "resume-transformer-continued",
+            "observed_process_group_peak_rss_mib": 275.23046875,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/resume-transformer-continued",
+            "result_sha256": "2b7e96588d114f32db516dd2487624e09d1e3f82c145d587ef0d58b5aba3d365",
+            "started_at": "2026-11-09T03:44:07.120811+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "calibrate",
+            "cap_seconds": 559.539280090481,
+            "category": "admission",
+            "elapsed_seconds": 6.667592968791723,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:19.627027+00:00",
+            "name": "calibrate-transformer",
+            "observed_process_group_peak_rss_mib": 276.5234375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/calibrate-transformer",
+            "result_sha256": "f6a2e5aa916ab585f9b404aeed65b1131a3a1df6ddb8abd0cc7576ea75e622fd",
+            "started_at": "2026-11-09T03:44:12.956892+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "train",
+            "cap_seconds": 885.0,
+            "category": "training",
+            "elapsed_seconds": 103.2328475639224,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:02.885036+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "train-transformer-s11",
+            "observed_process_group_peak_rss_mib": 378.265625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/train-transformer-s11",
+            "result_sha256": "caac31c24ed0d970a2cfdef99a5b1ef926513acb70958142a04698e156e64caf",
+            "started_at": "2026-11-09T03:44:19.647414+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 285.0,
+            "category": "final",
+            "elapsed_seconds": 5.989623438566923,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:08.891580+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-transformer",
+            "observed_process_group_peak_rss_mib": 291.14453125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/test-transformer",
+            "result_sha256": "ce1029b19c9c443e78d53615aaffb2d6d82b698762d87cde5208fbbb6f961085",
+            "started_at": "2026-11-09T03:46:02.898781+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "inference",
+            "cap_seconds": 279.0103765614331,
+            "category": "final",
+            "elapsed_seconds": 6.6208082139492035,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:15.524873+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "inference-transformer",
+            "observed_process_group_peak_rss_mib": 350.1484375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/inference-transformer",
+            "result_sha256": "f27a232d5e959f8446f3e2831d0eefad77c498322931b0bbcf9ef316f99b3be1",
+            "started_at": "2026-11-09T03:46:08.901370+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 272.3895683474839,
+            "category": "final",
+            "elapsed_seconds": 6.702407583594322,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:22.232990+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "context-reset-transformer",
+            "observed_process_group_peak_rss_mib": 350.2578125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/context-reset-transformer",
+            "result_sha256": "45c1cef1d52e31f493f6be715b9e1651ee6bf63ebde632a8a18eb5acc6c8b1ae",
+            "started_at": "2026-11-09T03:46:15.527952+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 265.68716076388955,
+            "category": "final",
+            "elapsed_seconds": 6.059420175850391,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:46:28.740931+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-transformer-prefix128",
+            "observed_process_group_peak_rss_mib": 280.37890625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/test-transformer-prefix128",
+            "result_sha256": "8516a000062c6fd42432a360a8c8908058620e2c0a278765b38b1cfe58665d66",
+            "started_at": "2026-11-09T03:46:22.672323+00:00",
+            "state": "completed"
+          }
+        ],
+        "study_id": "TL-A-CAPACITY",
+        "training": [
+          {
+            "kind": "transformer",
+            "learning_signal": true,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-transformer-cpu-v5/train-transformer-s11",
+            "steps": 2048,
+            "valid_tokens": 522600
+          }
+        ]
+      },
+      "device": "cpu",
+      "lifecycle": {
+        "current_cgroup_processes": [],
+        "job_id": "lm-a-transformer-cpu-v5",
+        "known_descendants_alive": [],
+        "queue": null,
+        "state": {
+          "child_process_group": 3162039,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-transformer-cpu-v5.service",
+          "descendants": [
+            {
+              "parent_pid": 3162034,
+              "pid": 3162039,
+              "process_group": 3162039,
+              "start_ticks": 2178199621,
+              "state": "S"
+            },
+            {
+              "parent_pid": 3162039,
+              "pid": 3162078,
+              "process_group": 3162039,
+              "start_ticks": 2178199634,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 166.16974265873432,
+          "ended_at": "2026-11-09T03:46:31.638783+00:00",
+          "finalized_at": "2026-11-09T03:46:31.759658+00:00",
+          "job_id": "lm-a-transformer-cpu-v5",
+          "known_descendants_alive": [],
+          "launcher": {
+            "parent_pid": 3162034,
+            "pid": 3162039,
+            "process_group": 3162039,
+            "start_ticks": 2178199621,
+            "state": "R"
+          },
+          "launcher_exit_code": 0,
+          "leaked_descendants": false,
+          "queue_state": null,
+          "remaining_descendants": [],
+          "schema": "tide-job-lifecycle-v1",
+          "signal": null,
+          "started_at": "2026-11-09T03:43:45.469069+00:00",
+          "state": "completed",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 3162034,
+            "process_group": 3162034,
+            "start_ticks": 2178199613,
+            "state": "R"
+          },
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:46:27.629624+00:00",
+          "workload_exit_code": 0
+        },
+        "systemd": {
+          "ActiveState": "inactive",
+          "CPUQuotaPerSecUSec": "infinity",
+          "ControlGroup": "",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-a-transformer-cpu-v5.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "MemoryMax": "infinity",
+          "Result": "success",
+          "RuntimeMaxUSec": "infinity",
+          "Slice": "",
+          "SubState": "dead",
+          "Transient": "no",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": true,
+        "worker": {
+          "elapsed_seconds": 164.89475328847766,
+          "ended_at": "2026-11-09T03:46:30.528331+00:00",
+          "exit_code": 0,
+          "job_id": "lm-a-transformer-cpu-v5",
+          "logical_device": "cpu",
+          "physical_visibility": null,
+          "process": {
+            "parent_pid": 3162039,
+            "pid": 3162078,
+            "process_group": 3162039,
+            "start_ticks": 2178199634,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "signal": null,
+          "started_at": "2026-11-09T03:43:45.633613+00:00",
+          "state": "completed",
+          "worker": {
+            "parent_pid": 3162034,
+            "pid": 3162039,
+            "process_group": 3162039,
+            "start_ticks": 2178199621,
+            "state": "R"
+          }
+        }
+      },
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 25769803776,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 1860,
+        "wait_seconds": 0
+      },
+      "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "status": "completed"
+    },
+    "lm-b-cpu-cal-v5": {
+      "chain": {
+        "allocated_elapsed_seconds": 122.82015847787261,
+        "compute_deadline_epoch": 1794196967.3085196,
+        "decisions": [],
+        "finished_at": "2026-11-09T03:45:50.128654+00:00",
+        "plan_sha256": "ff20902802936f44bafbcdd21832343003606d325650ee344119d2c5625884ad",
+        "purpose": "time to complete controlled depth studies; no learning or exclusive-backend claim",
+        "route": "b",
+        "schema": "tide-language-chain-v1",
+        "shared_deadline_epoch": 1794235753.0310388,
+        "skipped": [],
+        "spent_seconds": {
+          "calibration": 122.80275934562087
+        },
+        "started_at": "2026-11-09T03:43:47.308893+00:00",
+        "state": "completed",
+        "steps": [
+          {
+            "action": "calibrate",
+            "cap_seconds": 480,
+            "category": "calibration",
+            "elapsed_seconds": 54.44207959994674,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:44:41.758773+00:00",
+            "name": "t1-b8",
+            "observed_process_group_peak_rss_mib": 5511.06640625,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-cpu-cal-v5/t1-b8",
+            "result_sha256": "19d694e7c5b92175b64c47ee4d0019e5859d01322b1aaae2b07b08b70d154350",
+            "started_at": "2026-11-09T03:43:47.314705+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "calibrate",
+            "cap_seconds": 480,
+            "category": "calibration",
+            "elapsed_seconds": 68.36067974567413,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:45:50.125588+00:00",
+            "name": "t4-b8",
+            "observed_process_group_peak_rss_mib": 5506.8984375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-cpu-cal-v5/t4-b8",
+            "result_sha256": "5f1032bb2a251a0dbd1951057cb0624023beebd77e823967eb802750188b73bd",
+            "started_at": "2026-11-09T03:44:41.762083+00:00",
+            "state": "completed"
+          }
+        ]
+      },
+      "device": "cpu",
+      "lifecycle": {
+        "current_cgroup_processes": [],
+        "job_id": "lm-b-cpu-cal-v5",
+        "known_descendants_alive": [],
+        "queue": null,
+        "state": {
+          "child_process_group": 3162161,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-cpu-cal-v5.service",
+          "descendants": [
+            {
+              "parent_pid": 3162108,
+              "pid": 3162161,
+              "process_group": 3162161,
+              "start_ticks": 2178199774,
+              "state": "S"
+            },
+            {
+              "parent_pid": 3162161,
+              "pid": 3162209,
+              "process_group": 3162161,
+              "start_ticks": 2178199788,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 126.37939342856407,
+          "ended_at": "2026-11-09T03:45:52.774310+00:00",
+          "finalized_at": "2026-11-09T03:45:52.863880+00:00",
+          "job_id": "lm-b-cpu-cal-v5",
+          "known_descendants_alive": [],
+          "launcher": {
+            "parent_pid": 3162108,
+            "pid": 3162161,
+            "process_group": 3162161,
+            "start_ticks": 2178199774,
+            "state": "R"
+          },
+          "launcher_exit_code": 0,
+          "leaked_descendants": false,
+          "queue_state": null,
+          "remaining_descendants": [],
+          "schema": "tide-job-lifecycle-v1",
+          "signal": null,
+          "started_at": "2026-11-09T03:43:46.394946+00:00",
+          "state": "completed",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 3162108,
+            "process_group": 3162108,
+            "start_ticks": 2178199705,
+            "state": "R"
+          },
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:45:49.031314+00:00",
+          "workload_exit_code": 0
+        },
+        "systemd": {
+          "ActiveState": "inactive",
+          "CPUQuotaPerSecUSec": "infinity",
+          "ControlGroup": "",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-b-cpu-cal-v5.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "MemoryMax": "infinity",
+          "Result": "success",
+          "RuntimeMaxUSec": "infinity",
+          "Slice": "",
+          "SubState": "dead",
+          "Transient": "no",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": true,
+        "worker": {
+          "elapsed_seconds": 123.95064386352897,
+          "ended_at": "2026-11-09T03:45:51.122901+00:00",
+          "exit_code": 0,
+          "job_id": "lm-b-cpu-cal-v5",
+          "logical_device": "cpu",
+          "physical_visibility": null,
+          "process": {
+            "parent_pid": 3162161,
+            "pid": 3162209,
+            "process_group": 3162161,
+            "start_ticks": 2178199788,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "signal": null,
+          "started_at": "2026-11-09T03:43:47.172293+00:00",
+          "state": "completed",
+          "worker": {
+            "parent_pid": 3162108,
+            "pid": 3162161,
+            "process_group": 3162161,
+            "start_ticks": 2178199774,
+            "state": "R"
+          }
+        }
+      },
+      "resources": {
+        "cpu_quota_percent": 400,
+        "memory_bytes": 25769803776,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 4,
+        "timeout_seconds": 1260,
+        "wait_seconds": 0
+      },
+      "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "status": "completed"
     },
     "lm-b-fc8-v5": {
       "chain": {
@@ -3587,7 +4415,37 @@
         "training": []
       },
       "device": "npu",
-      "latest_metrics": null,
+      "latest_metrics": {
+        "elapsed_seconds": 2104.6497295685112,
+        "metrics": {
+          "activity/full_fraction": 1.0,
+          "resource/npu_peak_allocated_mib": 1886.79296875,
+          "train/alpha": 1.0,
+          "train/gradient_norm": 2.1999974250793457,
+          "train/loss": 4.9167680740356445,
+          "train/lr": 0.000686851674547383,
+          "train/teacher_mse_phase": 0.0,
+          "train/tokens_per_second": 4.859378617678519,
+          "train/update_seconds": 52.68163280561566,
+          "train/valid_tokens": 14188.0,
+          "work/candidates": 2048.0,
+          "work/full": 2048.0,
+          "work/max_full_batch": 256.0,
+          "work/max_region_batch": 256.0,
+          "work/max_state_batch": 8.0,
+          "work/max_state_sequence": 32.0,
+          "work/messages": 4096.0,
+          "work/read_events": 2048.0,
+          "work/region_blocks": 2.0,
+          "work/source_rows": 5120.0,
+          "work/state_updates": 2048.0
+        },
+        "run_id": "tl-lm-b-fc8-v5-budget2-train-tide-dense-s11",
+        "schema_version": 1,
+        "sequence": 7,
+        "step": 56,
+        "timestamp": "2026-11-09T03:45:37.897595+00:00"
+      },
       "lifecycle": {
         "current_cgroup_processes": [
           {
@@ -3637,7 +4495,7 @@
             "pid": 2808133,
             "process_group": 2808133,
             "start_ticks": 2177999844,
-            "state": "R"
+            "state": "S"
           },
           {
             "parent_pid": 2735834,
@@ -3712,7 +4570,7 @@
           "latest_observation": {
             "aicore_percent": 0,
             "hbm_total_mib": 65536,
-            "hbm_used_mib": 28581,
+            "hbm_used_mib": 28967,
             "health": "OK",
             "physical_id": 12,
             "processes": [
@@ -3775,7 +4633,7 @@
           "schema": "tide-shared-admission-v1",
           "started_at": "2026-11-09T03:02:52.463950+00:00",
           "status": "running",
-          "timestamp": "2026-11-09T03:11:20.507295+00:00"
+          "timestamp": "2026-11-09T03:46:50.881438+00:00"
         },
         "state": {
           "child_process_group": 2734416,
@@ -3822,9 +4680,44 @@
               "process_group": 2734416,
               "start_ticks": 2177992400,
               "state": "S"
+            },
+            {
+              "parent_pid": 2734416,
+              "pid": 2849259,
+              "process_group": 2734416,
+              "start_ticks": 2178023684,
+              "state": "S"
+            },
+            {
+              "parent_pid": 2734416,
+              "pid": 2901293,
+              "process_group": 2734416,
+              "start_ticks": 2178055069,
+              "state": "R"
+            },
+            {
+              "parent_pid": 2734416,
+              "pid": 2975003,
+              "process_group": 2734416,
+              "start_ticks": 2178092662,
+              "state": "S"
+            },
+            {
+              "parent_pid": 2734416,
+              "pid": 3031838,
+              "process_group": 2734416,
+              "start_ticks": 2178124006,
+              "state": "S"
+            },
+            {
+              "parent_pid": 2734416,
+              "pid": 3149299,
+              "process_group": 2734416,
+              "start_ticks": 2178192899,
+              "state": "S"
             }
           ],
-          "elapsed_seconds": 514.0570164211094,
+          "elapsed_seconds": 2691.2158959321678,
           "job_id": "lm-b-fc8-v5-budget2",
           "launcher": {
             "parent_pid": 2734389,
@@ -3844,7 +4737,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:25.895352+00:00"
+          "updated_at": "2026-11-09T03:47:43.076866+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -3900,18 +4793,20 @@
     },
     "lm-b-reference-v5": {
       "chain": {
+        "allocated_elapsed_seconds": 243.52898759767413,
         "compute_deadline_epoch": 1794195617.2440875,
         "decisions": [],
+        "finished_at": "2026-11-09T03:15:20.773034+00:00",
         "plan_sha256": "01516b2a8dfa31e6763a14c0c600ed129c34b0004e9fac23943f38914514cc0c",
         "route": "b",
         "schema": "tide-language-chain-v1",
         "shared_deadline_epoch": 1794235753.0310388,
         "skipped": [],
         "spent_seconds": {
-          "final": 14.099674846976995
+          "final": 243.4732282459736
         },
         "started_at": "2026-11-09T03:11:17.244333+00:00",
-        "state": "running",
+        "state": "completed",
         "steps": [
           {
             "action": "evaluate",
@@ -3933,90 +4828,89 @@
             "action": "evaluate",
             "cap_seconds": 600,
             "category": "final",
+            "elapsed_seconds": 14.468461971729994,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:11:45.821681+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
             "name": "test-v3-original",
+            "observed_process_group_peak_rss_mib": 3276.4765625,
             "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/test-v3-original",
+            "result_sha256": "09046deeea1de3c9c6be6bd419a0511dc38fe5e4d6d1b137ec8527bd6b50d2ab",
             "started_at": "2026-11-09T03:11:31.351141+00:00",
-            "state": "running"
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 12.779456324875355,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:11:58.608297+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v3-mlp",
+            "observed_process_group_peak_rss_mib": 3188.3203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/test-v3-mlp",
+            "result_sha256": "4a19f02905c11c96ae8e9dd1d02bb0d6fe09c4563d26bc61b9f193681f49125d",
+            "started_at": "2026-11-09T03:11:45.825899+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 95.9638309776783,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:13:34.588511+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v3-tide-dense",
+            "observed_process_group_peak_rss_mib": 4006.83203125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/test-v3-tide-dense",
+            "result_sha256": "143195987687186fe001dfe0e9eb44ef31ed695c90c2413fb6b5c81574ff8303",
+            "started_at": "2026-11-09T03:11:58.612027+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 90.13228929042816,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:15:04.726877+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v3-tide-sparse",
+            "observed_process_group_peak_rss_mib": 4041.49609375,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/test-v3-tide-sparse",
+            "result_sha256": "5069008c05a9b3ff0ce6a81ccf4668d46d7adceb050cf6c12e60f5e9877a7265",
+            "started_at": "2026-11-09T03:13:34.591901+00:00",
+            "state": "completed"
+          },
+          {
+            "action": "evaluate",
+            "cap_seconds": 600,
+            "category": "final",
+            "elapsed_seconds": 16.029514834284782,
+            "exit_code": 0,
+            "finished_at": "2026-11-09T03:15:20.768365+00:00",
+            "lens_readback_matches": true,
+            "lens_status": "verified",
+            "name": "test-v4-bottleneck",
+            "observed_process_group_peak_rss_mib": 3815.76953125,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-reference-v5/test-v4-bottleneck",
+            "result_sha256": "caf4a918276d06daac5af27eeb5d9971c2e850711c26d2bb25a587b61a85b6b5",
+            "started_at": "2026-11-09T03:15:04.736113+00:00",
+            "state": "completed"
           }
         ]
       },
       "device": "npu",
       "lifecycle": {
-        "current_cgroup_processes": [
-          {
-            "parent_pid": 2907797,
-            "pid": 2734452,
-            "process_group": 2734452,
-            "start_ticks": 2177954322,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734452,
-            "pid": 2734573,
-            "process_group": 2734573,
-            "start_ticks": 2177954419,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734573,
-            "pid": 2816276,
-            "process_group": 2734573,
-            "start_ticks": 2178004776,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2816276,
-            "pid": 2816281,
-            "process_group": 2734573,
-            "start_ticks": 2178004782,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2816281,
-            "pid": 2816282,
-            "process_group": 2816282,
-            "start_ticks": 2178004789,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2816282,
-            "pid": 2818002,
-            "process_group": 2816282,
-            "start_ticks": 2178006206,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2818002,
-            "pid": 2818003,
-            "process_group": 2818003,
-            "start_ticks": 2178006212,
-            "state": "R"
-          }
-        ],
+        "current_cgroup_processes": [],
         "job_id": "lm-b-reference-v5",
-        "known_descendants_alive": [
-          {
-            "parent_pid": 2734452,
-            "pid": 2734573,
-            "process_group": 2734573,
-            "start_ticks": 2177954419,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2734573,
-            "pid": 2816276,
-            "process_group": 2734573,
-            "start_ticks": 2178004776,
-            "state": "S"
-          },
-          {
-            "parent_pid": 2816276,
-            "pid": 2816281,
-            "process_group": 2734573,
-            "start_ticks": 2178004782,
-            "state": "S"
-          }
-        ],
+        "known_descendants_alive": [],
         "queue": {
           "admission_samples": [
             {
@@ -4053,8 +4947,33 @@
             }
           ],
           "authorization": "user-2026-11-09-shared-low-load",
+          "elapsed_seconds": 748.3238600790501,
+          "ended_at": "2026-11-09T03:15:21.963557+00:00",
           "exclusive_device": false,
           "job_id": "lm-b-reference-v5",
+          "latest_observation": {
+            "aicore_percent": 0,
+            "hbm_total_mib": 65536,
+            "hbm_used_mib": 7937,
+            "health": "OK",
+            "physical_id": 9,
+            "processes": [
+              {
+                "parent_pid": 2839111,
+                "pid": 2839112,
+                "process_group": 2839112,
+                "start_ticks": 2178018536,
+                "state": "R"
+              },
+              {
+                "parent_pid": 98286,
+                "pid": 2965790,
+                "process_group": 2965790,
+                "start_ticks": 2174762578,
+                "state": "S"
+              }
+            ]
+          },
           "logical_device": "npu:0",
           "logical_devices": [
             "npu:0"
@@ -4098,10 +5017,11 @@
             "schema": "tide-shared-resource-policy-v1"
           },
           "project": "tide-learning-lab",
+          "return_code": 0,
           "schema": "tide-shared-admission-v1",
           "started_at": "2026-11-09T03:02:53.639706+00:00",
-          "status": "running",
-          "timestamp": "2026-11-09T03:11:17.056616+00:00"
+          "status": "completed",
+          "timestamp": "2026-11-09T03:14:24.950161+00:00"
         },
         "state": {
           "child_process_group": 2734573,
@@ -4134,10 +5054,20 @@
               "process_group": 2734573,
               "start_ticks": 2178004782,
               "state": "S"
+            },
+            {
+              "parent_pid": 2734573,
+              "pid": 2825309,
+              "process_group": 2734573,
+              "start_ticks": 2178010840,
+              "state": "S"
             }
           ],
-          "elapsed_seconds": 514.8165765441954,
+          "elapsed_seconds": 750.2307374626398,
+          "ended_at": "2026-11-09T03:15:22.793399+00:00",
+          "finalized_at": "2026-11-09T03:15:22.873180+00:00",
           "job_id": "lm-b-reference-v5",
+          "known_descendants_alive": [],
           "launcher": {
             "parent_pid": 2734452,
             "pid": 2734573,
@@ -4145,9 +5075,125 @@
             "start_ticks": 2177954419,
             "state": "R"
           },
+          "launcher_exit_code": 0,
+          "leaked_descendants": false,
+          "queue_state": {
+            "admission_samples": [
+              {
+                "aicore_percent": 0,
+                "hbm_total_mib": 65536,
+                "hbm_used_mib": 5654,
+                "health": "OK",
+                "physical_id": 9,
+                "processes": [
+                  {
+                    "parent_pid": 98286,
+                    "pid": 2965790,
+                    "process_group": 2965790,
+                    "start_ticks": 2174762578,
+                    "state": "S"
+                  }
+                ]
+              },
+              {
+                "aicore_percent": 0,
+                "hbm_total_mib": 65536,
+                "hbm_used_mib": 5653,
+                "health": "OK",
+                "physical_id": 9,
+                "processes": [
+                  {
+                    "parent_pid": 98286,
+                    "pid": 2965790,
+                    "process_group": 2965790,
+                    "start_ticks": 2174762578,
+                    "state": "S"
+                  }
+                ]
+              }
+            ],
+            "authorization": "user-2026-11-09-shared-low-load",
+            "elapsed_seconds": 748.3238600790501,
+            "ended_at": "2026-11-09T03:15:21.963557+00:00",
+            "exclusive_device": false,
+            "job_id": "lm-b-reference-v5",
+            "latest_observation": {
+              "aicore_percent": 0,
+              "hbm_total_mib": 65536,
+              "hbm_used_mib": 7937,
+              "health": "OK",
+              "physical_id": 9,
+              "processes": [
+                {
+                  "parent_pid": 2839111,
+                  "pid": 2839112,
+                  "process_group": 2839112,
+                  "start_ticks": 2178018536,
+                  "state": "R"
+                },
+                {
+                  "parent_pid": 98286,
+                  "pid": 2965790,
+                  "process_group": 2965790,
+                  "start_ticks": 2174762578,
+                  "state": "S"
+                }
+              ]
+            },
+            "logical_device": "npu:0",
+            "logical_devices": [
+              "npu:0"
+            ],
+            "npu_count": 1,
+            "physical_id": 9,
+            "physical_ids": [
+              9
+            ],
+            "policy": {
+              "authorization": "user-2026-11-09-shared-low-load",
+              "candidate_ids": [
+                15,
+                9,
+                11,
+                10,
+                8,
+                7,
+                12,
+                3,
+                5,
+                14,
+                0,
+                2,
+                4,
+                6
+              ],
+              "deadline_epoch": 1794235753.0310388,
+              "exclusive_device": false,
+              "max_aicore_percent": 20,
+              "max_new_concurrent_npus": 5,
+              "minimum_free_hbm_mib": 16384,
+              "prerequisites": {
+                "lm-a-hb40-v5": [
+                  "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/stage.json"
+                ],
+                "lm-b-reference-v5": [
+                  "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-depth-cal-npu-v5/stage.json"
+                ]
+              },
+              "schema": "tide-shared-resource-policy-v1"
+            },
+            "project": "tide-learning-lab",
+            "return_code": 0,
+            "schema": "tide-shared-admission-v1",
+            "started_at": "2026-11-09T03:02:53.639706+00:00",
+            "status": "completed",
+            "timestamp": "2026-11-09T03:14:24.950161+00:00"
+          },
+          "remaining_descendants": [],
           "schema": "tide-job-lifecycle-v1",
+          "signal": null,
           "started_at": "2026-11-09T03:02:52.562683+00:00",
-          "state": "running",
+          "state": "completed",
           "supervisor": {
             "parent_pid": 2907797,
             "pid": 2734452,
@@ -4155,27 +5201,36 @@
             "start_ticks": 2177954322,
             "state": "R"
           },
-          "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:27.646342+00:00"
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-09T03:15:20.072388+00:00",
+          "workload_exit_code": 0
         },
         "systemd": {
-          "ActiveState": "active",
-          "CPUQuotaPerSecUSec": "4s",
-          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-reference-v5.service",
+          "ActiveState": "inactive",
+          "CPUQuotaPerSecUSec": "infinity",
+          "ControlGroup": "",
           "ExecMainStatus": "0",
           "Id": "tide-lab-lm-b-reference-v5.service",
-          "LoadState": "loaded",
-          "MainPID": "2734452",
-          "MemoryMax": "25769803776",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "MemoryMax": "infinity",
           "Result": "success",
-          "RuntimeMaxUSec": "11h 46min 22s",
-          "Slice": "background.slice",
-          "SubState": "running",
-          "Transient": "yes",
+          "RuntimeMaxUSec": "infinity",
+          "Slice": "",
+          "SubState": "dead",
+          "Transient": "no",
           "inspection_exit_code": 0
         },
-        "termination_verified_now": false,
+        "termination_verified_now": true,
         "worker": {
+          "elapsed_seconds": 244.64143089577556,
+          "ended_at": "2026-11-09T03:15:21.754887+00:00",
+          "exit_code": 0,
           "job_id": "lm-b-reference-v5",
           "logical_device": "npu:0",
           "physical_visibility": "9",
@@ -4187,8 +5242,9 @@
             "state": "R"
           },
           "schema": "tide-job-worker-v1",
+          "signal": null,
           "started_at": "2026-11-09T03:11:17.113494+00:00",
-          "state": "running",
+          "state": "completed",
           "worker": {
             "parent_pid": 2734573,
             "pid": 2816276,
@@ -4208,6 +5264,144 @@
         "wait_seconds": 42322
       },
       "source_commit": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "status": "completed"
+    },
+    "lm-depth-budget-parallel-v5": {
+      "dependency_wait": null,
+      "device": "cpu",
+      "lifecycle": {
+        "current_cgroup_processes": [
+          {
+            "parent_pid": 2907797,
+            "pid": 3158305,
+            "process_group": 3158305,
+            "start_ticks": 2178198175,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3158305,
+            "pid": 3158310,
+            "process_group": 3158310,
+            "start_ticks": 2178198182,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3158310,
+            "pid": 3158337,
+            "process_group": 3158310,
+            "start_ticks": 2178198196,
+            "state": "S"
+          }
+        ],
+        "job_id": "lm-depth-budget-parallel-v5",
+        "known_descendants_alive": [
+          {
+            "parent_pid": 3158305,
+            "pid": 3158310,
+            "process_group": 3158310,
+            "start_ticks": 2178198182,
+            "state": "S"
+          },
+          {
+            "parent_pid": 3158310,
+            "pid": 3158337,
+            "process_group": 3158310,
+            "start_ticks": 2178198196,
+            "state": "S"
+          }
+        ],
+        "queue": null,
+        "state": {
+          "child_process_group": 3158310,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-depth-budget-parallel-v5.service",
+          "descendants": [
+            {
+              "parent_pid": 3158305,
+              "pid": 3158310,
+              "process_group": 3158310,
+              "start_ticks": 2178198182,
+              "state": "S"
+            },
+            {
+              "parent_pid": 3158310,
+              "pid": 3158337,
+              "process_group": 3158310,
+              "start_ticks": 2178198196,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 252.80134573578835,
+          "job_id": "lm-depth-budget-parallel-v5",
+          "launcher": {
+            "parent_pid": 3158305,
+            "pid": 3158310,
+            "process_group": 3158310,
+            "start_ticks": 2178198182,
+            "state": "R"
+          },
+          "schema": "tide-job-lifecycle-v1",
+          "started_at": "2026-11-09T03:43:31.090001+00:00",
+          "state": "running",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 3158305,
+            "process_group": 3158305,
+            "start_ticks": 2178198175,
+            "state": "R"
+          },
+          "termination_verified": false,
+          "updated_at": "2026-11-09T03:47:44.175920+00:00"
+        },
+        "systemd": {
+          "ActiveState": "active",
+          "CPUQuotaPerSecUSec": "1s",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-depth-budget-parallel-v5.service",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-depth-budget-parallel-v5.service",
+          "LoadState": "loaded",
+          "MainPID": "3158305",
+          "MemoryMax": "1073741824",
+          "Result": "success",
+          "RuntimeMaxUSec": "11h 6min 27s",
+          "Slice": "background.slice",
+          "SubState": "running",
+          "Transient": "yes",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": false,
+        "worker": {
+          "job_id": "lm-depth-budget-parallel-v5",
+          "logical_device": "cpu",
+          "physical_visibility": null,
+          "process": {
+            "parent_pid": 3158310,
+            "pid": 3158337,
+            "process_group": 3158310,
+            "start_ticks": 2178198196,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "started_at": "2026-11-09T03:43:31.253382+00:00",
+          "state": "running",
+          "worker": {
+            "parent_pid": 3158305,
+            "pid": 3158310,
+            "process_group": 3158310,
+            "start_ticks": 2178198182,
+            "state": "R"
+          }
+        }
+      },
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 1073741824,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 39987,
+        "wait_seconds": 0
+      },
+      "source_commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
       "status": "running"
     },
     "lm-depth-budget-v5": {
@@ -4274,7 +5468,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 516.1183646433055,
+          "elapsed_seconds": 2689.2439639158547,
           "job_id": "lm-depth-budget-v5",
           "launcher": {
             "parent_pid": 2734496,
@@ -4294,7 +5488,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T03:11:29.216125+00:00"
+          "updated_at": "2026-11-09T03:47:42.400564+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -5114,13 +6308,13 @@
     {
       "destination_name": "tl-lm-a-controls-v5-train-tide-dense-s11-projection-5e51594252aa",
       "destination_run_id": "6351b0b321274058b59581be5a29ef46",
-      "event_count": 0,
+      "event_count": 8,
       "job_id": "lm-a-controls-v5",
       "projection": "runs/lm-a-controls-v5/train-tide-dense-s11/projection.json",
-      "readback_matches": null,
+      "readback_matches": true,
       "run_id": "tl-lm-a-controls-v5-train-tide-dense-s11",
       "stage": "train",
-      "status": "recording",
+      "status": "verified",
       "study_id": "TL-A-CAPACITY"
     },
     {
@@ -5138,14 +6332,50 @@
     {
       "destination_name": "tl-lm-a-hb16-v5-train-tide-dense-s11-projection-5c505c2d9767",
       "destination_run_id": "4d19c0d5fcba4284a99ce087f8caf92d",
-      "event_count": 0,
+      "event_count": 12,
       "job_id": "lm-a-hb16-v5",
       "projection": "runs/lm-a-hb16-v5/train-tide-dense-s11/projection.json",
-      "readback_matches": null,
+      "readback_matches": true,
       "run_id": "tl-lm-a-hb16-v5-train-tide-dense-s11",
       "stage": "train",
-      "status": "recording",
+      "status": "verified",
       "study_id": "TL-A-TOPO"
+    },
+    {
+      "destination_name": "tl-lm-a-reference-v5-test-fc4-tide-dense-prefix128-projection-3cabd6377498",
+      "destination_run_id": "6b3448456d814d3a915276c9f9670694",
+      "event_count": 1,
+      "job_id": "lm-a-reference-v5",
+      "projection": "runs/lm-a-reference-v5/test-fc4-tide-dense-prefix128/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-reference-v5-test-fc4-tide-dense-prefix128",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-a-reference-v5-test-fc4-tide-sparse-prefix128-projection-3d4bea220e44",
+      "destination_run_id": "3f9be9efbffd4f5db68fc0a9e125de19",
+      "event_count": 1,
+      "job_id": "lm-a-reference-v5",
+      "projection": "runs/lm-a-reference-v5/test-fc4-tide-sparse-prefix128/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-reference-v5-test-fc4-tide-sparse-prefix128",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-a-reference-v5-test-small-transformer-extra2048-projection-6860d26fcb7b",
+      "destination_run_id": "90ac9846dd2c47b48546bab8cae52bf2",
+      "event_count": 1,
+      "job_id": "lm-a-reference-v5",
+      "projection": "runs/lm-a-reference-v5/test-small-transformer-extra2048/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-reference-v5-test-small-transformer-extra2048",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-DEPTH"
     },
     {
       "destination_name": "tl-lm-b-reference-v5-test-frozen-projection-b250b3f19a9c",
@@ -5158,6 +6388,138 @@
       "stage": "evaluate",
       "status": "verified",
       "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-b-reference-v5-test-v3-original-projection-3a955df4d75d",
+      "destination_run_id": "af9422b979334297bdf766504ea68ee4",
+      "event_count": 1,
+      "job_id": "lm-b-reference-v5",
+      "projection": "runs/lm-b-reference-v5/test-v3-original/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-b-reference-v5-test-v3-original",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-b-reference-v5-test-v3-mlp-projection-fb106826f5c5",
+      "destination_run_id": "cb33467494b240b2a82b050b96d9b92b",
+      "event_count": 1,
+      "job_id": "lm-b-reference-v5",
+      "projection": "runs/lm-b-reference-v5/test-v3-mlp/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-b-reference-v5-test-v3-mlp",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-b-reference-v5-test-v3-tide-dense-projection-4f04270f3ab8",
+      "destination_run_id": "09a5aeba2dbd4b79aa3c628eec98f9c0",
+      "event_count": 1,
+      "job_id": "lm-b-reference-v5",
+      "projection": "runs/lm-b-reference-v5/test-v3-tide-dense/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-b-reference-v5-test-v3-tide-dense",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-b-reference-v5-test-v3-tide-sparse-projection-a6e657c0778b",
+      "destination_run_id": "d8116b8f9a5d4227b0b00d594557242c",
+      "event_count": 1,
+      "job_id": "lm-b-reference-v5",
+      "projection": "runs/lm-b-reference-v5/test-v3-tide-sparse/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-b-reference-v5-test-v3-tide-sparse",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-b-reference-v5-test-v4-bottleneck-projection-5f58f9cc1420",
+      "destination_run_id": "e06f240867824929b90d974f79bdaccb",
+      "event_count": 1,
+      "job_id": "lm-b-reference-v5",
+      "projection": "runs/lm-b-reference-v5/test-v4-bottleneck/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-b-reference-v5-test-v4-bottleneck",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-B-DEPTH"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-train-transformer-s11-projection-eb10b7636c93",
+      "destination_run_id": "5bf3d0390feb482aa3debadfec43dba9",
+      "event_count": 289,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/train-transformer-s11/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-train-transformer-s11",
+      "stage": "train",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-test-transformer-projection-d5a4e11b0597",
+      "destination_run_id": "2534c796518c4578b0003c3ca2271059",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/test-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-test-transformer",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-inference-transformer-projection-fa536a3bf59d",
+      "destination_run_id": "512975fb227346ebba62d6c2901d6702",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/inference-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-inference-transformer",
+      "stage": "inference",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-context-reset-transformer-projection-8be8ec415e46",
+      "destination_run_id": "28d34cc7bdb747cfafbb2643726b3247",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/context-reset-transformer/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-context-reset-transformer",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-transformer-cpu-v5-test-transformer-prefix128-projection-b6cc7ce4e014",
+      "destination_run_id": "14705b1557654d5b9f034c9bb430d3fa",
+      "event_count": 1,
+      "job_id": "lm-a-transformer-cpu-v5",
+      "projection": "runs/lm-a-transformer-cpu-v5/test-transformer-prefix128/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-transformer-cpu-v5-test-transformer-prefix128",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-CAPACITY"
+    },
+    {
+      "destination_name": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11-projection-081b01b173ca",
+      "destination_run_id": "2fe823a737cb47e5a5ef3cb1b7a73b9c",
+      "event_count": 0,
+      "job_id": "lm-a-hb16-sparse-v5",
+      "projection": "runs/lm-a-hb16-sparse-v5/train-tide-sparse-s11/projection.json",
+      "readback_matches": null,
+      "run_id": "tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11",
+      "stage": "train",
+      "status": "recording",
+      "study_id": "TL-A-TOPO"
     },
     {
       "destination_name": "tl-lm-a-language-v4-unigram-projection-620f5723de63",
@@ -5366,13 +6728,49 @@
     {
       "destination_name": "tl-lm-a-language-v4-train-tide-sparse-512-projection-54b3ab50bb20",
       "destination_run_id": "f099af3ad0a14b019ee1d20b3bba0564",
-      "event_count": 0,
+      "event_count": 73,
       "job_id": "lm-a-language-v4",
       "projection": "runs/lm-a-language-v4/train-tide-sparse-512/projection.json",
-      "readback_matches": null,
+      "readback_matches": true,
       "run_id": "tl-lm-a-language-v4-train-tide-sparse-512",
       "stage": "train",
-      "status": "recording",
+      "status": "verified",
+      "study_id": "TL-A-LM"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-test-tide-sparse-512-projection-8ac64f9dbf16",
+      "destination_run_id": "b5f6c57779e34e73843aedb3ff1e3040",
+      "event_count": 1,
+      "job_id": "lm-a-language-v4",
+      "projection": "runs/lm-a-language-v4/test-tide-sparse-512/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-language-v4-test-tide-sparse-512",
+      "stage": "evaluate",
+      "status": "verified",
+      "study_id": "TL-A-LM"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-inference-tide-sparse-512-projection-bf1aa4bde992",
+      "destination_run_id": "33f14ba089b842d5899880102211cd7f",
+      "event_count": 1,
+      "job_id": "lm-a-language-v4",
+      "projection": "runs/lm-a-language-v4/inference-tide-sparse-512/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-language-v4-inference-tide-sparse-512",
+      "stage": "inference",
+      "status": "verified",
+      "study_id": "TL-A-LM"
+    },
+    {
+      "destination_name": "tl-lm-a-language-v4-context-reset-tide-sparse-projection-435f76b58bb4",
+      "destination_run_id": "963ae1ccfb734698bdc94e4d7e3968c0",
+      "event_count": 1,
+      "job_id": "lm-a-language-v4",
+      "projection": "runs/lm-a-language-v4/context-reset-tide-sparse/projection.json",
+      "readback_matches": true,
+      "run_id": "tl-lm-a-language-v4-context-reset-tide-sparse",
+      "stage": "evaluate",
+      "status": "verified",
       "study_id": "TL-A-LM"
     }
   ],
@@ -5392,6 +6790,10 @@
     "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-cpu-v5": {
       "commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
       "tree_sha256": "159a96bb5eb598af5bb3529bb5e1a2c3c5c399f6e8084b4a768c1d2a6648a363"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-parallel-v5": {
+      "commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "tree_sha256": "06e593b7c8d1fb1c1f29506d576d50302c394528b42595681feb0f037cd58129"
     },
     "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-v5": {
       "commit": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
