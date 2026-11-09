@@ -14,9 +14,11 @@ dense原从零validation8.338656→6.699933；新续训起点为6.807081，二�
 
 原第87步失败保留。补正新续训34更新补2坐标（含autograd replay），test补4、reset补200，参数/梯度有限且全链完成。终点core349元素仍严格超差；已测离散、独立因果、分块/streaming、区域梯度及B2/L3三步新进程恢复通过。应用状态转换不是旧strict轨迹精确恢复，长期独立恢复未查。
 
-HB16两候选相对各自从零validation学习前提已满足，HB40按原表在16:06启动；这是执行前提，不是HB40成功或权重迁移证据。先完成该64步配对，再对齐后续问题；不增加seed或延长曝光来追逐0.05标签。
+HB16两候选相对各自从零validation学习前提已满足，HB40按原表在16:06启动；这是执行前提，不是HB40成功或权重迁移证据。该64步配对现已完成；下一步对齐后续问题；不增加seed或延长曝光来追逐0.05标签。
 
-[补齐配置](../../configs/studies/language/completion-v5/hb16-dense.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-handoff.json) · [运行与复现](language-completion-v5-running.md)
+[补齐配置](../../configs/studies/language/completion-v5/hb16-dense.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-terminal.json) · [运行与复现](language-completion-v5-running.md)
+
+全批已终态，完整对照、数值失败、资源与下一批选项见[补齐总审阅](language-completion-v5-results.md)。
 
 ---
 

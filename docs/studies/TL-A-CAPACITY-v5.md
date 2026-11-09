@@ -8,9 +8,11 @@
 
 完整训练/test/推理/reset completed且后代清空，终点checkpoint hash通过。补正训练累计10752补值坐标（96更新，含replay），test3379、reset2420；这是数值补正实际发生的计数，不代表唯一活跃节点或补值有效贡献。终点core38元素有限超差，离散/独立因果/分块及三步同栈恢复通过；长期独立恢复未查。校准CPU约5.47秒/步、共享NPU约14.38，因此选择CPU；不作通用后端性能资格。
 
-普通LM参照仍为原2block/width96/FFN512 Transformer，同文档128/2048分别7.133504/6.346539。128日程/预热不同，2048有16倍曝光，均不可用来宣称同预算架构优势。先完成HB40，再选择有限的充分训练/优化对齐；本次不扩宽度网格。
+普通LM参照仍为原2block/width96/FFN512 Transformer，同文档128/2048分别7.133504/6.346539。128日程/预热不同，2048有16倍曝光，均不可用来宣称同预算架构优势。HB40现已完成；下一步选择有限的充分训练/优化对齐；本次不扩宽度网格。
 
-[补齐配置](../../configs/studies/language/completion-v5/wide-dense.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-handoff.json) · [运行与复现](language-completion-v5-running.md)
+[补齐配置](../../configs/studies/language/completion-v5/wide-dense.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-terminal.json) · [运行与复现](language-completion-v5-running.md)
+
+全批已终态，完整对照、数值失败、资源与下一批选项见[补齐总审阅](language-completion-v5-results.md)。
 
 ---
 

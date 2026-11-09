@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-09T09:33:40.629605+00:00",
+  "candidate": "runs/lm-complete-hb40-dense-v5/test-tide-dense/result.json",
+  "candidate_sha256": "53da84fadfb94cc6d4bee8ac17861c51bf61b74db2f4780e313091ef32efcf67",
+  "comparison": {
+    "bootstrap_one_sided_95_upper": 0.10682260419501632,
+    "bootstrap_two_sided_95": [
+      0.0512250498868525,
+      0.11161662825239632
+    ],
+    "delta_nll": 0.08161512338481901,
+    "documents": 16,
+    "draws": 20000,
+    "resampling": "whole paired documents, token-weighted ratio per draw",
+    "scope": "descriptive uncertainty conditional on these documents, checkpoint and single training seed; no multiplicity adjustment or seed/generalization guarantee",
+    "seed": 20261109,
+    "tokens": 3878
+  },
+  "reference": "runs/lm-complete-references-v5/test-fc16-dense64/result.json",
+  "reference_sha256": "2df737230afd9ed8a7da45fdcca2795f4c2be1cc50224d29c9291b44b4ac5efe",
+  "schema": "tide-language-paired-review-v1",
+  "scope": "original HB40 dense64 versus FC16 dense64 topology control; same targets; no new model execution"
+}

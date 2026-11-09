@@ -14,9 +14,11 @@ quad context-reset NLL6.996693，较普通+0.114466，区间[0.088647,0.141514]�
 
 执行与独立正确性分开：新quad整链completed、后代清空，最终checkpoint hash核验通过；B2/L3三步同栈恢复通过，128步完整独立恢复未查。终点core28元素严格有限超差，eager零容差因果扰动58元素差异（最大6.08e-6）；独立参考干预、未来VJP零及早期支持不变通过，具体浮点来源未定。B1/L16模型分块/streaming在原容差下通过。保留原dense干预失败及新补正验收身份。
 
-解释边界：仅单seed/小词表/短上下文，区间只反映这些文档的不确定性；训练充分度、优化、读出/路径与结构本身尚未分离。当前建议先完成HB40原表，再对齐一个训练充分度/规模问题，不用该结果宣称scaling或普遍非劣。
+解释边界：仅单seed/小词表/短上下文，区间只反映这些文档的不确定性；训练充分度、优化、读出/路径与结构本身尚未分离。HB40原表现已完成且同曝光未见质量收益；下一步建议对齐一个训练充分度/规模问题，不用该结果宣称scaling或普遍非劣。
 
-[补齐配置](../../configs/studies/language/completion-v5/fc16-sparse.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-handoff.json) · [运行与复现](language-completion-v5-running.md)
+[补齐配置](../../configs/studies/language/completion-v5/fc16-sparse.json) · [原始状态/统计/检查/Lens](../evidence/language-completion-terminal.json) · [运行与复现](language-completion-v5-running.md)
+
+全批已终态，完整对照、数值失败、资源与下一批选项见[补齐总审阅](language-completion-v5-results.md)。
 
 ---
 

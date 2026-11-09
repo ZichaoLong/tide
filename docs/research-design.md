@@ -35,10 +35,10 @@ A的合成稀疏与B原模型的语言能力不能拼接成联合证明；同一
 ### A：从零训练完整TIDE语言模型
 
 任务侧embedding、公共HB/core-5、全位置readout/LM head共同训练。
-固定KV/qry、width32、region4、regional_total k2/温度0.25，比较稠密Shannon与可学习quad。初始HB16全位置NPU成本先导失败保留；当前LM-ADJUST-002沿用公共FC4，小Transformer按参数量调整为2层/width48/4头/FFN192，详见当前研究表。
+固定KV/qry、width32、region4、regional_total k2/温度0.25，比较稠密Shannon与可学习quad。FC4建立起步基准，多区域研究已实际覆盖FC16串联、HB16分支汇合与HB40递归嵌套，并有width64浅宽控制。普通Transformer的width48和width96两组参照分别保留原参数与曝光身份；初始HB16全位置NPU成本先导失败仍保留，后来的CPU训练不撤销它。
 数据、词表、token和逻辑更新匹配，参数偏差、活跃计算与实际时间单列。“接近”针对该规模和预算，不是从零立即追平预训练0.5B。
 
-[v3较小曝光探索](studies/language-exploration-v3.md)已完成并审阅。当前[语言v4](studies/language-confirmation-v4.md)推进A512与额外曝光Transformer参考、B同32维瓶颈对照，并预先冻结新的确认文档。原HB16→40→88保留为静态规划和后续候选；当前有限执行点为FC4→FC8，后者必须有真实学习、同128更新/token及512步日程前缀配对和独立评价，才形成两点规模证据。FC4只有一个区域且无内部边，不能声称跨区域局部通信。
+[v3较小曝光探索](studies/language-exploration-v3.md)、[语言v4](studies/language-confirmation-v4.md)与[v5多区域补齐](studies/language-completion-v5-results.md)均已形成各自限定结果。当前实际比较包括同128更新的FC4→FC16、同64更新的HB16→HB40及512步LR日程前缀；HB88仍只是静态后续候选。这些点有学习和独立评价，但本次未显示增加结构/参数的质量收益。后续优先区分训练充分度和日程，保持新确认文档冻结与同曝光口径。FC4只有一个区域且无内部边，不能声称跨区域局部通信。
 不同时遍历宽度、全部记忆/拓扑、长度、平台和optimizer；只有需要解释“学会选择”时加合法固定稀疏。
 如果普通LM对照也明显欠训练，质量相近只能说明该预算下先导观察，不能宣布语言可用性成立。
 
@@ -48,7 +48,7 @@ A的合成稀疏与B原模型的语言能力不能拼接成联合证明；同一
 让TIDE承接**一个固定MLP子模块**的全位置计算。零混合、影子拟合和过渡混合是接入/训练步骤，
 主目标是完整承接时语言质量接近、推理跳过原MLP并测得实际结构工作。保留原冻结模型、原MLP同预算继续训练及简单MLP替换对照。
 
-当前v4仅增加一个同32维入口、参数接近的稠密对照，检查瓶颈解释；旧checkpoint在预先冻结的新文档复评，不扩层。
+v4以同32维入口、参数接近的稠密对照检查瓶颈解释，v5已比较同一个承接槽内的双区域FC8；旧checkpoint在预先冻结的新文档复评。单槽深度收益与简单MLP/原MLP继续训练的差距分别报告，不自动扩展替换层数。
 B不以学会新能力为必要条件，模块可以学习承接已有计算；hidden信息及压缩瓶颈需诊断，一次失败不能证明不可替换。
 仅小比例混合保持，就记部分承接。原MLP仍执行不能宣称减少工作；不自动扩大多层替换。
 一个MLP替换只认证局部子模块，剩余注意力、head、统一optimizer及预训练成本依然存在。
@@ -62,7 +62,7 @@ B语言保持不能认证A从零成功；A结构也不能认证B整体局部化�
 ## 3. 固定契约与结构边界
 
 数学固定`0770593838a37c790a568226930567ed60f99b83`。当前原v5补齐固定基座`74e7bbd62341d2ccd382194a2c52ad4fea033665`，使用独立`dependencies/positive-floor-v1/`安装锁与`.venv-positive-floor-v1`；旧85d161d运行、B及其安装身份保持。
-[来源选择](../dependencies/foundation-source.json)、当前[wheel锁](../dependencies/positive-floor-v1/foundation.lock.json)、[安装内容锁](../dependencies/positive-floor-v1/installation.lock.json)与[环境身份](../dependencies/positive-floor-v1/environment.lock.json)分开维护；`dependencies/`根目录的旧锁仍对应历史安装。
+[来源选择](../dependencies/foundation-source.json)、当前[wheel锁](../dependencies/positive-floor-v1/foundation.lock.json)、[安装内容锁](../dependencies/positive-floor-v1/installation.lock.json)与[环境身份](../dependencies/positive-floor-v1/environment.lock.json)分开维护；`dependencies/`根目录的锁也选择当前安装，旧85d161d锁保存在旧固定源码快照，旧`.venv`保持。
 基座、LH、fractal-latcarf及ObsidianVault只读。
 
 按当前固定[下游契约](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/downstream-contract.md)，基座拥有数学对象、执行、反向和公共状态/optimizer机制；
@@ -70,7 +70,7 @@ B语言保持不能认证A从零成功；A结构也不能认证B整体局部化�
 
 现有公共结果已有各位置输出，实验侧可以组合全位置readout。
 HB16/40/88静态计划分别有4/10/22区域，每区4节点、最大入/出度4、输入/输出各4，详见[静态审计](evidence/language-structure-static-plan.json)。
-这些性质不是长序列学习、状态内存或性能资格。当前FC4/8分别有1/2区域、0/16边，端口各4；它们与HB的拓扑不同，不能把当前结果冒称原HB阶梯成功。
+这些性质不是长序列学习、状态内存或性能资格。HB16/40现已完成有限短程语言训练，HB88仍未训练；实际学习不等于规模质量收益。FC4/8分别有1/2区域、0/16边，端口各4；它们与HB拓扑不同，证据不能互换。
 
 模型局部性、多设备执行、局部学习规则分开讨论，初期允许端到端loss和统一optimizer。
 区域选择依赖本区域候选，k2不是硬Top-k，有输入的候选仍可能更新状态。

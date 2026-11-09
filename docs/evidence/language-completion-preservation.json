@@ -1,0 +1,150 @@
+{
+  "all_legacy_and_completion_jobs_terminated": true,
+  "at": "2026-11-09T09:33:40.516179+00:00",
+  "budget_jobs": {
+    "lm-a-controls-v5": {
+      "state": "failed",
+      "termination_verified": true
+    },
+    "lm-a-fc16-v5": {
+      "state": "failed",
+      "termination_verified": true
+    },
+    "lm-a-hb16-sparse-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-a-hb16-v5": {
+      "state": "failed",
+      "termination_verified": true
+    },
+    "lm-a-hb40-v5": {
+      "state": "failed",
+      "termination_verified": true
+    },
+    "lm-a-reference-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-a-transformer-cpu-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-b-cpu-cal-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-b-fc8-v5": {
+      "state": "failed",
+      "termination_verified": true
+    },
+    "lm-b-fc8-v5-budget2": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-b-reference-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-fc16-sparse-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-hb16-dense-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-hb40-dense-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-hb40-sparse-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-references-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-wide-cal-cpu-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-wide-cal-npu-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-complete-wide-dense-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-depth-cal-cpu-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-depth-cal-npu-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-depth-data-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "lm-hb16-underflow-v5": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "support-v1-cpu": {
+      "state": "completed",
+      "termination_verified": true
+    },
+    "support-v1-npu": {
+      "state": "completed",
+      "termination_verified": true
+    }
+  },
+  "current_root_installation": {
+    "all_hashes_match": true,
+    "files_checked": 250
+  },
+  "legacy_fixed_inputs": {
+    "all_hashes_match": true,
+    "unique_files": 59
+  },
+  "legacy_inspected_jobs": 19,
+  "legacy_installation": {
+    "all_hashes_match": true,
+    "files_checked": 248,
+    "lock": ".local/source-language-depth-cpu-v5/dependencies/installation.lock.json",
+    "lock_id": "0a6271e04b7ccdff5d97cf8c04690c99b93e3e8f5ab5f716cdd96e265a64e5ec",
+    "lock_sha256": "01b9066ee15c1a1d43dc0f1274cde195e9c24c36fd18258971ac0c0a66615e2b"
+  },
+  "legacy_sources": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-confirm-v4": {
+      "commit": "069275628eefc1011e2b69526a28126e2bc25985",
+      "tree_sha256": "73a8df2680042cc69fdf1bfa0c8a7c5a2d8dabd3bffc6c7adb91a61cc9a9ae5e"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-budget-v5": {
+      "commit": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "tree_sha256": "00329d62e39d4ed6db6e11e602a480921ff9f0d3083c5d9212e79aa90d07d0c5"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-cpu-v5": {
+      "commit": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
+      "tree_sha256": "159a96bb5eb598af5bb3529bb5e1a2c3c5c399f6e8084b4a768c1d2a6648a363"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-parallel-v5": {
+      "commit": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "tree_sha256": "06e593b7c8d1fb1c1f29506d576d50302c394528b42595681feb0f037cd58129"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-v5": {
+      "commit": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "tree_sha256": "d97324f7f7e871089713ffe05e2d02b8494468a4ae26800a6fefedf594dd76a5"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-underflow-v5": {
+      "commit": "9ebbc63784a29f2c785bb7568ddb9da63b63dd55",
+      "tree_sha256": "b57a7dc0eebb2f9edb9ae5ecef3cb255afcf89c68982507c9eff14dee6c86b10"
+    }
+  },
+  "schema": "tide-language-completion-preservation-v1",
+  "scope": "read-only preservation audit; historical strict failures and costs remain unchanged"
+}
