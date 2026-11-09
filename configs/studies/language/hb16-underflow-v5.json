@@ -1,0 +1,13 @@
+{
+  "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11/checkpoint.pt",
+  "checkpoint_sha256": "1ca5bc51337307e683decc823c570f72e7359567962bf9ce4f4e3117cb547d88",
+  "compute_seconds": 1800,
+  "data": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-depth-data-v5/tokens",
+  "deadline_epoch": 1794235753.0310388,
+  "max_step": 96,
+  "original_manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11/manifest.json",
+  "original_metrics": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11/metrics.jsonl",
+  "original_result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11/result.json",
+  "schema": "tide-allocation-replay-v1",
+  "study_id": "TL-LM-EXEC"
+}

@@ -262,6 +262,14 @@ def main():
         result.update((evaluate_stage if a.stage=='evaluate' else globals()[a.stage])(a,plan,device,metrics))
     except BaseException as error:
         result.update(state='failed',error=repr(error),traceback=traceback.format_exc());traceback.print_exc();code=1
+        # Public exception diagnostics preserve the actual failed allocation.
+        # No fallback, clamp, or alternate execution is performed here.
+        if callable(getattr(error,'record',None)):
+            try:
+                atomic_json(a.output/'failure-diagnostics.json',error.record())
+                result['failure_diagnostics_sha256']=digest(a.output/'failure-diagnostics.json')
+            except Exception as diagnostic_error:
+                result['failure_diagnostics_error']=repr(diagnostic_error)
     finally:
         result.update(finished_at=now(),elapsed_seconds=time.monotonic()-start,run_id=a.run_id,
             process_peak_rss_mib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024)

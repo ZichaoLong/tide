@@ -1,0 +1,21 @@
+{
+  "compute_seconds": 86400,
+  "deadline_epoch": 1794235753.0310388,
+  "jobs": [
+    "lm-depth-data-v5",
+    "lm-depth-cal-cpu-v5",
+    "lm-depth-cal-npu-v5",
+    "lm-b-fc8-v5",
+    "lm-b-fc8-v5-budget2",
+    "lm-a-controls-v5",
+    "lm-a-fc16-v5",
+    "lm-a-hb16-v5",
+    "lm-a-hb40-v5",
+    "lm-a-reference-v5",
+    "lm-b-reference-v5",
+    "lm-a-transformer-cpu-v5",
+    "lm-a-hb16-sparse-v5",
+    "lm-b-cpu-cal-v5",
+    "lm-hb16-underflow-v5"
+  ]
+}
