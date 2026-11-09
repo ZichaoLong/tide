@@ -1,25 +1,24 @@
-# 当前交接 — 原v5缺口全部补齐，等待用户验收
+# 当前交接：v6广覆盖与实质规模训练已启动
 
-2026-11-09 17:37核对：**本批无运行、排队或自动后继。** 五个训练/续训链及所有评价、七项旧权重复评、两个短校准全部completed；最后HB40 dense于17:16:18结束、预算监督17:16:20结束，实际cgroup/后代均清空。历史失败保持原状态。本次只读终态审阅，没有重启训练或扩大研究表。
+2026-11-09 21:05:19（北京时间）只读核对：**200个配置全部由后台worker接收，111个正在训练、84个等待同worker内的前项、5个完成**。116个本批训练worker均核对属于background.slice；不是200个独占设备。原v5已终态，旧建议已被本次用户授权的较大研究表取代。
 
-[完整总报告](studies/language-completion-v5-results.md) · [终态统计/检查/身份/Lens](evidence/language-completion-terminal.json) · [旧输入/安装/生命周期核对](evidence/language-completion-preservation.json) · [查看与复现操作](studies/language-completion-v5-running.md)
+[研究表](studies/language-coverage-scale-v6.md) · [操作/停止/恢复](studies/language-coverage-scale-v6-running.md) · [逐配置/运行/Lens对应](evidence/language-v6-handoff.json) · [离线研究图](../web/index.html)。最新状态使用 `python scripts/campaign_status.py --brief`；文档与研究图是观察时点快照。
 
-| 配对 | 更新数 | dense / quad测试NLL | 稀疏差 / 单侧95%上界 | Full / 消息减少 | 本次质量结论 |
-| --- | ---: | --- | --- | --- | --- |
-| A FC16 | 128 | 6.864746 / 6.882227 | +0.017481 / 0.037407 | 49.77% / 49.72% | 原0.05门槛通过 |
-| A HB16 | 128 | 6.900321 / 6.927488 | +0.027166 / 0.050655 | 47.49% / 47.48% | 未通过，边界不改 |
-| A HB40 | 64 | 7.123586 / 7.197094 | +0.073508 / 0.096305 | 48.11% / 48.11% | 未通过 |
+| 并行线 | 实际提交 | 训练规模及对照 |
+| --- | ---: | --- |
+| 局部候选并集覆盖 | 184配置 | 91个具名局部配方各在FC16/HB40承载（mixed FC另有明确结构差异），加2个近参数Transformer；L32、65,536有效目标、全局B8、seed11 |
+| 实质数据/容量/深度 | 16轨迹 | 14主候选加2个NPU同模型观察；主要TIDE约5.09–25.63M参数，FC16/32/64、HB40/88、KV/SSD/GDN、Shannon控制，3档Transformer；L128、全局B32，262K/1M/4M里程碑 |
 
-浅宽FC4 dense128 NLL6.824360，较窄FC4的6.842736差−0.018376，双侧95%区间含0，尚不能确认改善。共同A设置是CPU1/FP32、B8/L32、seed11、512步LR日程前缀，test同16文档/3878目标；128步32677训练目标，HB40仅64步16349目标，不能直接混排不同曝光。
+数据为固定WikiText103第一训练parquet，完整原LFS hash通过。训练20,971,520 token/4088篇；验证258,990/134篇；密封test294,476/157篇。旧文档hash及文章标题均不进入新确认集，排除分片边界残文；近重复仍未完全排除。沿用旧train-only 4096 BPE词表，不把重复曝光当作独立数据增长。训练和筛选不读取test。
 
-HB40验证损失两候选都下降、十区域有实际活动/梯度/消息；相对同64步HB16 dense/quad质量分别差+0.030344/+0.050210，未见增参数/递归嵌套收益。FC16在此有限范围实现质量/实际稀疏折衷，但当前证据不认证scaling或普遍语言能力。Shannon/quad是不同分配配方的独立训练，不是同一模型的等价实现。B单槽FC8此前结论保持：有限质量/活动折衷通过，仍弱于简单MLP与原MLP继续训练；其预训练与tokenizer不同，不与A直接横比NLL。
+主要TIDE在CPU1/FP32运行：合法候选采用公共native，positive-floor-v1 Shannon按已发布能力采用Python。Transformer在NPU，另有FC16 KV/SSD quad两条Python/NPU观察；均非DDP。规模物理B8、四microbatch累积为全局B32，Transformer同全局B32。FC16 width128/B8/L128实际完整步：CPU native约62.6–63.0秒、Python约89.7–90.0秒；NPU native约232–242秒，Python较小形状也未占优。计时用于执行选型，没有认证全模型严格等价加速。
 
-执行、严格数值、离散/机制、恢复、学习、成本分开：所有新链执行完成；原core1e-6/1e-5严格失败继续保留。HB40 quad准入最大超差0.002403，终点core282元素、streaming54元素仍超差；完整模型零容差因果扰动最大1.19e-6，独立参考因果/未来VJP/早期支持与离散检查通过，未知原因未冒称纯舍入。五候选三步同栈新进程恢复通过、五终点checkpoint hash一致；完整长轨迹独立恢复未查。旧HB16/浅宽状态转换不是跨补丁/设备精确恢复。
+期限固定为**2026-11-11 20:31:31北京时间**；1536 CPU核时、384 NPU卡时，单筛选≤8h、单规模≤36h；CPU包含NPU的host线程和等待/启动的保守扣账。监督 `v6-budget-v2` 使用实际进程RSS补足本机v1 cgroup资源控制局限，旧时间监督保留；本次观测RSS约340.2GiB、主机可用内存约1565GiB，新增产物约15.4GiB、账号硬配额余量约615GiB。达到期限/预算如实截断，不承诺所有大模型都达到4M，也不回退到旧短曝光来标记成功。
 
-固定源码0e409967641d6963e82942e3d13223900b0afba6，快照`.local/source-language-completion-v5`/树hash3c591a70...；数学0770593、foundation74e7bbd，`.venv-positive-floor-v1`。新31固定输入/250安装文件、历史59固定输入/旧248安装文件均匹配。当前根目录锁选择新安装；旧85d161d锁在旧固定快照，旧环境保持。原87步、浅宽56步后与FC16干预失败不改写。
+数学0770593、foundation74e7bbd、私有环境`.venv-positive-floor-v1`与250安装文件锁固定。首64覆盖worker源码c458571；其余及修正作业4087310；数据制作3786de0，native来自相同foundation74e7bbd的独立构建。冻结源码、依赖及活动输入均不修改。普通分支推送，无强推。
 
-补齐费用3.5864计算worker小时；包含旧v5、补正验收、开发检查与120秒预留的总扣账**10.1672/24小时**，原22:49:13截止未延长，旧v4独立。列出的新运行/作业/源码约333MiB，账号170/800GiB，余量充分。未利用剩余额度自动开始新批。
+保留的启动失败：下载read timeout、HTTP/2取消及一个Range断连；最终复用已有字节并核对原完整hash。首个native调用的trace参数不兼容、18个独立worker输出目录冲突、2个Shannon native能力拒绝均发生在正式学习前，原记录不改写；使用新身份修正。严格1e-6/1e-5数值超差保持失败，执行、离散/机制、恢复、学习、资源各轴分开。每个正式候选先通过自身B2/L3独立检查和三个新进程的三步恢复，不能外推完整长轨迹精确重放。
 
-Lens项目`tide-learning-lab`，27完成投影均verified/readback_matches、身份及事件数一致；完整运行ID对应在终态JSON。私有入口/SSH在`.local/LENS.md`。主要曲线前缀`tl-lm-complete-`，HB16/浅宽分别从94/32继续，不能当新独立种子。研究图HB40结果现为人工审阅的限定结论，原失败记录仍在。
+Lens项目`tide-learning-lab`：筛选前缀`tl-v6-cover-`，规模前缀`tl-v6-scale-`，接入检查`tl-v6-harness-`。小型记录及恢复短训投影已verified/readback_matches；正式运行中的投影标为recording，不提前称终态读回通过。私有查看/SSH方法在`.local/LENS.md`，不入公开仓库。项目原始JSONL与检查/状态为权威。
 
-逐组一页报告：[FC16](studies/TL-A-DEPTH-v5.md)、[HB16](studies/TL-A-TOPO-v5.md)、[HB40](studies/TL-A-NEST-v5.md)、[容量控制](studies/TL-A-CAPACITY-v5.md)、[B FC8](studies/TL-B-DEPTH-v5.md)。建议下一批优先对齐FC4/FC16/Transformer的512步曝光与日程，另可做≤0.5CPU小时HB40数值定位；候选及预算见总报告和ROADMAP，**均未启动，待用户验收后选择**。历史交接保存在Git历史与各批固定报告，运行记录不改动。
+本轮交接允许作业继续后台运行，无自动扩展候选、第二种子、16M目标或B多层替换。终态后按共同token前缀、heldout质量、Full/消息及局部边界审阅，冻结候选再打开test，形成分组一页结论及下一批资源建议；由用户验收后决定下一步。旧v5结论见[原终态报告](studies/language-completion-v5-results.md)，其严格失败及限定结论不升级。

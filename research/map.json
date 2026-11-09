@@ -192,7 +192,7 @@
       "source": "E3",
       "status": "documented",
       "target": "RA1",
-      "via_y": 2780
+      "via_y": 3780
     },
     {
       "detail": "FC\u539f\u4efb\u52a1\u7684\u5b66\u4e60\u95e8\u69db\u6210\u7acb\u540e\uff0c\u5c0fHB\u5df2\u91cd\u65b0\u51c6\u5165\u5e76\u5b8c\u621080\u6b65\u5148\u5bfc\uff1b\u5f97\u5230\u4e86\u5386\u53f2\u5229\u7528\u548c\u5de5\u4f5c\u51cf\u5c11\u4fe1\u53f7\uff0c\u4f46\u672a\u8fbe50%\u8d28\u91cf\u95e8\u69db\uff0c\u539f\u6761\u4ef6\u7ecf\u9a8c\u4e0d\u4fdd\u8bc1HB\u5b66\u4e60\u6216\u6548\u7387\u6210\u529f\u3002",
@@ -202,7 +202,7 @@
       "source": "RA1",
       "status": "documented",
       "target": "E4",
-      "via_y": 2990
+      "via_y": 3990
     },
     {
       "detail": "\u4e09\u4e2a\u56fa\u5b9acheckpoint\u7684\u914d\u5bf9query\u548c\u5ef6\u8fdf\u8bc4\u4f30\u5df2\u5ba1\u9605\uff1b\u65b0\u589e\u9650\u5b9a\u7ed3\u679c\uff0c\u4e0d\u5916\u63a8\u901a\u7528\u957f\u5e8f\u5217\u80fd\u529b\u3002",
@@ -248,7 +248,7 @@
       "source": "RA1",
       "status": "documented",
       "target": "E7",
-      "via_y": 3040
+      "via_y": 4040
     },
     {
       "detail": "400\u6b65\u8fbe\u5230\u4e86\u539f\u95e8\u69db\uff0c\u652f\u630180\u6b65\u8bad\u7ec3\u65f6\u9650\u4e0d\u8db3\u7684\u53d7\u9650\u89e3\u91ca\uff1b\u539f\u5931\u8d25\u548c\u975e\u72ec\u7acbseed\u5173\u7cfb\u4fdd\u7559\u3002",
@@ -258,7 +258,7 @@
       "source": "R2",
       "status": "documented",
       "target": "E8",
-      "via_y": 3040
+      "via_y": 4040
     },
     {
       "detail": "\u51bb\u7ed3\u9aa8\u5e72\u539f\u95ee\u9898\u6709\u7814\u7a76\u4f9d\u636e\uff0c\u4f46\u672c\u6b21\u7b49\u5361\u8d85\u65f6\u672a\u6267\u884c\uff0c\u5c1a\u65e0\u6761\u4ef6\u8fc1\u79fb\u6216\u6536\u76ca\u8bc1\u636e\u3002",
@@ -268,7 +268,7 @@
       "source": "R1",
       "status": "documented",
       "target": "E10",
-      "via_y": 3040
+      "via_y": 4040
     },
     {
       "detail": "\u5df2\u68c0\u67e5\u539f\u59cb\u8bb0\u5f55\u3001\u8d28\u91cf/\u5de5\u4f5c/\u65f6\u95f4\u6216\u89c2\u6d4b\u8fb9\u754c\uff1b\u4eba\u5de5\u9650\u5b9a\u7ed3\u8bba\uff0c\u4e0d\u7531\u9000\u51fa\u7801\u63a8\u5bfc\u3002",
@@ -305,7 +305,7 @@
       "source": "R8",
       "status": "documented",
       "target": "E11",
-      "via_y": 3495
+      "via_y": 4495
     },
     {
       "detail": "\u6388\u6743\u7684\u72ec\u7acb\u540e\u7ee7\uff1b\u4fdd\u7559\u539f\u7ed3\u679c\u6216\u672a\u6267\u884c\u4e8b\u5b9e\uff0c\u4e0d\u81ea\u52a8\u7ee7\u627f\u65b0\u7ed3\u8bba\u3002",
@@ -315,7 +315,7 @@
       "source": "R1",
       "status": "documented",
       "target": "E12",
-      "via_y": 3495
+      "via_y": 4495
     },
     {
       "detail": "\u6388\u6743\u7684\u72ec\u7acb\u540e\u7ee7\uff1b\u4fdd\u7559\u539f\u7ed3\u679c\u6216\u672a\u6267\u884c\u4e8b\u5b9e\uff0c\u4e0d\u81ea\u52a8\u7ee7\u627f\u65b0\u7ed3\u8bba\u3002",
@@ -325,7 +325,7 @@
       "source": "E9",
       "status": "documented",
       "target": "E13",
-      "via_y": 3495
+      "via_y": 4495
     },
     {
       "detail": "\u4e3b\u4ee3\u7406\u6839\u636e\u5b9e\u9645\u5bf9\u7167\u3001\u9010\u4f8b\u7ed3\u679c\u3001\u5931\u8d25\u3001\u672a\u77e5\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u5ba1\u9605\uff1b\u7528\u6237\u9a8c\u6536\u5f85\u5b9a\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u652f\u6301\u3002",
@@ -803,9 +803,135 @@
       "source": "RD-SUPPORT",
       "status": "documented",
       "target": "L-A"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E0",
+      "kind": "precondition",
+      "label": "\u56fa\u5b9a\u5b9a\u4e49",
+      "source": "L-MATH",
+      "status": "documented",
+      "target": "V6-COVER"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E1",
+      "kind": "precondition",
+      "label": "\u56fa\u5b9a\u5b9a\u4e49",
+      "source": "L-MATH",
+      "status": "documented",
+      "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E2",
+      "kind": "decomposes",
+      "label": "\u5e7f\u8986\u76d6",
+      "source": "L-A-ROUTE",
+      "status": "documented",
+      "target": "V6-COVER"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E3",
+      "kind": "decomposes",
+      "label": "\u5b9e\u8d28\u89c4\u6a21",
+      "source": "L-A-ROUTE",
+      "status": "documented",
+      "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E4",
+      "kind": "precondition",
+      "label": "\u5171\u540c\u72ec\u7acb\u6570\u636e",
+      "source": "V6-DATA",
+      "status": "documented",
+      "target": "V6-COVER"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E5",
+      "kind": "precondition",
+      "label": "\u66f4\u591a\u6570\u636e",
+      "source": "V6-DATA",
+      "status": "documented",
+      "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E6",
+      "kind": "precondition",
+      "label": "\u5206\u8f74\u51c6\u5165",
+      "source": "V6-EXEC",
+      "status": "documented",
+      "target": "V6-COVER"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E7",
+      "kind": "precondition",
+      "label": "\u540e\u7aef/\u6062\u590d",
+      "source": "V6-EXEC",
+      "status": "documented",
+      "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E8",
+      "kind": "comparison",
+      "label": "\u5e76\u884c\u4e92\u8865\uff0c\u4e0d\u7b49\u5f85\u5168\u90e8\u7b5b\u9009",
+      "source": "V6-COVER",
+      "status": "documented",
+      "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E9",
+      "kind": "produces",
+      "label": "\u5f85\u5ba1\u9605",
+      "source": "V6-COVER",
+      "status": "planned",
+      "target": "RV6-COVER"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E10",
+      "kind": "produces",
+      "label": "\u5f85\u5ba1\u9605",
+      "source": "V6-SCALE",
+      "status": "planned",
+      "target": "RV6-SCALE"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E11",
+      "kind": "evaluates",
+      "label": "\u8054\u5408\u95ee\u9898",
+      "source": "V6-REVIEW",
+      "status": "planned",
+      "target": "G0"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E12",
+      "kind": "informs",
+      "label": "\u7b5b\u9009\u8303\u56f4\u5f85\u5ba1",
+      "source": "RV6-COVER",
+      "status": "planned",
+      "target": "V6-REVIEW"
+    },
+    {
+      "detail": "\u6765\u6e90/\u6267\u884c\u524d\u63d0\u3001\u8ba1\u5212\u6bd4\u8f83\u548c\u79d1\u5b66\u652f\u6301\u5206\u5f00\uff1b\u6ca1\u6709\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "id": "V6-E13",
+      "kind": "informs",
+      "label": "\u89c4\u6a21\u8bc1\u636e\u5f85\u5ba1",
+      "source": "RV6-SCALE",
+      "status": "planned",
+      "target": "V6-REVIEW"
     }
   ],
-  "height": 5550,
+  "height": 6550,
   "nodes": [
     {
       "budget": "\u539fv5\u53ca\u8865\u9f50\u5df2\u7ec8\u6001\uff0c\u7d2f\u8ba110.1672/24\u8ba1\u7b97worker\u5c0f\u65f6\uff1b17:16\u7ed3\u675f\uff0c\u65e9\u4e8e\u539f22:49:13\u622a\u6b62\u3002\u5386\u53f2v4\u72ec\u7acb\uff0c\u4e0d\u81ea\u52a8\u8ffd\u52a0\u3002",
@@ -916,7 +1042,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 30,
-      "y": 640
+      "y": 1640
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -1036,7 +1162,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 30,
-      "y": 280
+      "y": 1280
     },
     {
       "budget": "\u672c\u6b21\u8bca\u65ad\u22641800\u79d2/CPU1/8GiB\uff0c\u5b9e\u9645571.69\u79d2\uff1b\u5c5e\u4e8ev5\u539f24\u8ba1\u7b97worker\u5c0f\u65f6\u53ca22:49\u622a\u6b62\u3002\u5386\u53f2v4\u9884\u7b97\u72ec\u7acb\u3002",
@@ -1531,7 +1657,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 325,
-      "y": 280
+      "y": 1280
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -1828,7 +1954,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 100
+      "y": 1100
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2101,7 +2227,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 460
+      "y": 1460
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2151,7 +2277,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 640
+      "y": 1640
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2205,7 +2331,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 820
+      "y": 1820
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2249,7 +2375,7 @@
       "unresolved": "\u5355seed\u548c\u5c0f\u6587\u6863\u96c6\u4e0d\u786e\u5b9a\u6027\u3001\u8bad\u7ec3\u4e0d\u8db3\u3001\u4efb\u52a1/\u53c2\u6570\u5206\u914d\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5f53\u524d\u4f18\u52bf\u4e0d\u80fd\u5916\u63a8\u5145\u5206\u8bad\u7ec3\u7684\u666e\u901aLM\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 100
+      "y": 1100
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2293,7 +2419,7 @@
       "unresolved": "32\u7ef4\u6295\u5f71\u74f6\u9888\u3001\u6709\u9650\u66dd\u5149/\u4f18\u5316\u53ca\u5c40\u90e8\u8868\u8fbe\u5dee\u5f02\u672a\u533a\u5206\uff1b\u539f\u56e0\u4e0d\u80fd\u5f52\u7ed3\u4e3ahidden\u65e0\u4fe1\u606f\uff0c\u6570\u503c\u5dee\u5f02\u4e5f\u672a\u8bc1\u660e\u53ea\u662f\u820d\u5165\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 460
+      "y": 1460
     },
     {
       "budget": "v4\u6761\u4ef6FC8\u22644h\u4e14\u6765\u81eaA\u603b7.5h\u4f59\u91cf",
@@ -2321,7 +2447,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 640
+      "y": 1640
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2365,7 +2491,7 @@
       "unresolved": "\u5e7f\u6cdb\u8bed\u8a00\u53ef\u7528\u6027\u3001\u79cd\u5b50\u7a33\u5065\u6027\u3001\u89c4\u6a21\u548c\u8de8\u533a\u57df\u5c40\u90e8\u6027\u5c1a\u672a\u786e\u5b9a\uff1b\u53c2\u6570\u5bb9\u91cf\u4e0e\u6df1\u5ea6\u53d8\u5316\u7684\u56e0\u679c\u56e0\u7d20\u672a\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 820
+      "y": 1820
     },
     {
       "budget": "\u901a\u8fc7\u5173\u8054\u7814\u7a76\u7533\u8bf7\u8d44\u6e90\uff0c\u76ee\u6807\u672c\u8eab\u4e0d\u662f\u72ec\u7acb\u4f5c\u4e1a\u3002",
@@ -2512,7 +2638,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 2920
+      "y": 3920
     },
     {
       "budget": "\u56fa\u5b9a\u6765\u6e90\uff0c\u65e0\u65b0\u8ba1\u7b97\u6216\u4e0b\u8f7d\u3002",
@@ -2533,7 +2659,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 3160
+      "y": 4160
     },
     {
       "budget": "\u590d\u7528\u56fa\u5b9a\u5386\u53f2\u8bc1\u636e\uff1b\u5f53\u524d\u4e0d\u91cd\u65b0\u8fd0\u884c\u3002",
@@ -2554,7 +2680,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 30,
-      "y": 3400
+      "y": 4400
     },
     {
       "budget": "CPU/NPU \u5c0f\u68c0\u67e5\u5404\u6709\u754c\uff1b\u672c\u7ec4\u603b\u6821\u51c6 \u226420 min\u3002",
@@ -2634,7 +2760,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 2920
+      "y": 3920
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u6700\u591a\u4e00\u6b21\u9884\u5148\u58f0\u660e\u7684\u5c0f\u4efb\u52a1\u964d\u9636\u3002\u6b63\u5f0f \u2264400 updates\uff0c\u81f3\u591a\u79cd\u5b50 11/22/33\u3002",
@@ -2832,7 +2958,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 3160
+      "y": 4160
     },
     {
       "budget": "\u5fae\u578b\u68c0\u67e5\u6bcf\u9879 \u226410 min\uff1b\u5148\u6821\u51c6\u6b63\u786e\u6027\uff0c\u518d\u51b3\u5b9a CPU/NPU \u8bad\u7ec3\u4e0e\u6709\u9650\u6570\u503c\u63a2\u7d22\u3002",
@@ -2913,7 +3039,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 325,
-      "y": 3400
+      "y": 4400
     },
     {
       "budget": "pilot-b \u961f\u5217\u7b49\u5f85 \u226415 min\uff0c\u670d\u52a1\u603b\u65f6\u9650 70 min\uff0c\u7ec4\u5185\u8ba1\u7b97 50 min\uff1b\u4e09\u5019\u9009\u5404 40 updates\u3002\u540e\u7eed\u91cd\u590d\u4ecd\u987b\u7814\u7a76\u8868\u4e2d\u7684\u5b66\u4e60\u4e0e\u68af\u5ea6\u95e8\u69db\u3002",
@@ -2983,7 +3109,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 2920
+      "y": 3920
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u901a\u8fc7\u7b5b\u9009\u540e\u6210\u5bf9\u79cd\u5b50 11/22/33\uff0c\u6bcf\u914d\u7f6e \u2264400 updates\u3002",
@@ -3059,7 +3185,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 620,
-      "y": 3160
+      "y": 4160
     },
     {
       "budget": "\u4e0d\u5360\u672c\u6279\u4f5c\u4e1a\u9884\u7b97\uff1b\u6ca1\u6709\u5df2\u63d0\u4ea4\u7684\u66ff\u6362\u4efb\u52a1\u3002",
@@ -3088,7 +3214,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 3400
+      "y": 4400
     },
     {
       "budget": "\u540cB32/40updates/1280\u8bad\u7ec3\u4f8b\uff1b\u5168\u6d41\u7a0b\u7ea634.60/888.32/34.35\u79d2\uff0c\u4e09\u6a21\u578b\u5b9e\u9645\u5de5\u4f5c\u4e0d\u540c\uff1b\u975e\u7b49\u4ef7\u52a0\u901f\u6bd4\u3002",
@@ -3127,7 +3253,7 @@
       "unresolved": "\u5355seed\u4ec5\u591a\u7b54\u5bf97/128\u4f8b\uff1b\u4f18\u5316\u8def\u5f84\u3001clip\u5f52\u4e00\u5316\u53d8\u5316\u3001\u989d\u5916\u53c2\u6570\u548c\u91c7\u6837\u5dee\u5f02\u672a\u533a\u5206\u3002\u672a\u8bc4\u4f30\u9002\u914d\u540e\u7684\u539f\u8bed\u8a00\u80fd\u529b\u4fdd\u7559\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 2920
+      "y": 3920
     },
     {
       "budget": "CPU32/B32\uff0c\u540480updates/2560\u4f8b\uff0cvalidation128\u3001\u672a\u7528test\uff1b\u603b\u8fdb\u7a0b1183.53/1141.50\u79d2\u3002",
@@ -3174,7 +3300,7 @@
       "unresolved": "\u8bad\u7ec3\u4e0d\u8db3\u3001\u53d1\u9001\u6b63\u5219\u5316\u4e0e\u5b66\u4e60\u5230\u7684\u652f\u6301\u5206\u5e03\u3001\u56fa\u5b9a\u7a00\u758f\u5bf9\u7167\u3001seed/\u91c7\u6837\u6ce2\u52a8\u5c1a\u672a\u533a\u5206\u3002\u5019\u9009/\u72b6\u6001\u5f00\u9500\u3001\u4e3b\u673a\u8c03\u5ea6\u548c\u6bcf\u6b65\u89c2\u6d4b\u7684\u65f6\u95f4\u8d21\u732e\u672a\u77e5\uff1b\u805a\u5408\u65e0\u6574\u533a\u505c\u5de5\u4e0d\u6392\u9664\u5355\u6837\u672c/\u8282\u70b9\u9965\u997f\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 3160
+      "y": 4160
     },
     {
       "budget": "\u672c\u6279\u590d\u7528\u5171\u540c\u4efb\u52a1\u8bc4\u4f30\uff0c\u4e0d\u81ea\u52a8\u589e\u52a0\u65b0\u4efb\u52a1\u3001\u66ff\u6362\u6216\u5019\u9009\u7ec4\u5408\u3002",
@@ -3211,7 +3337,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 915,
-      "y": 3400
+      "y": 4400
     },
     {
       "budget": "\u5404B32/400updates/12800\u8bad\u7ec3\u4f8b\uff1bCPU64\u5404\u7ea642min\uff0cvalidation256/test256\uff1b\u673a\u4f1a\u6c34\u5e7312.5%\u3002",
@@ -3254,7 +3380,7 @@
       "unresolved": "\u9996\u6279\u672a\u6d4b\u7684query\u4ea4\u6362\u4e0edelay4/8\u5df2\u7531TL-A1-MECH\u5355\u72ec\u8865\u67e5\uff1b\u4e00\u822c\u5e8f\u5217/\u5206\u5e03\u5916\u7ec4\u5408\u4ecd\u672a\u77e5\u3002\u4e09seed\u5171\u7528\u540c\u4e00test\uff0c\u4e0d\u5408\u5e76\u6210768\u4e2a\u72ec\u7acb\u6837\u672c\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 3640
+      "y": 4640
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3310,7 +3436,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 3880
+      "y": 4880
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3349,7 +3475,7 @@
       "unresolved": "\u91cd\u590dfiller\u4e0b\u7684\u72b6\u6001\u8870\u51cf\u3001\u65f6\u95f4/\u4f4d\u7f6e\u5206\u5e03\u6539\u53d8\u53ca\u5176\u4ed6\u8ba1\u7b97\u56e0\u7d20\u5c1a\u672a\u533a\u5206\uff1b\u4e0d\u662f384\u4e2a\u72ec\u7acb\u6d4b\u8bd5\u6837\u672c\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 4110
+      "y": 5110
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3426,7 +3552,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 3880
+      "y": 4880
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3465,7 +3591,7 @@
       "unresolved": "\u79cd\u5b50\u53d8\u5316\u3001\u56fa\u5b9a\u7a00\u758f\u3001\u5b66\u4e60\u5230\u7684\u652f\u6301\u4e0e\u6b63\u5219\u5316\u6548\u5e94\u5c1a\u672a\u533a\u5206\uff1bHB\u9010\u4f8btest\u914d\u5bf9\u7edf\u8ba1\u7f3a\u5931\u3002\u5de5\u4f5c\u51cf\u5c11\u4e0d\u7b49\u4e8e\u540c\u6bd4FLOPs\u6216\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 4110
+      "y": 5110
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3514,7 +3640,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 3880
+      "y": 4880
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3534,7 +3660,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 4110
+      "y": 5110
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3583,7 +3709,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 3880
+      "y": 4880
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3603,7 +3729,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 4110
+      "y": 5110
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -3698,7 +3824,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 4340
+      "y": 5340
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -3737,7 +3863,7 @@
       "unresolved": "\u56fa\u5b9a\u7a00\u758f\u4e0e\u5b66\u5230\u7684\u8def\u7531\u6548\u5e94\u672a\u533a\u5206\uff1b\u76f8\u540c\u6620\u5c04\u4e0a\u7684\u4e09seed\u4e0d\u80fd\u5f536144\u4e2a\u72ec\u7acb\u6837\u672c\uff1b\u975e\u72ec\u5360CPU\u8ba1\u65f6\u4e0d\u786e\u8ba4\u666e\u9002\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 4640
+      "y": 5640
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3841,7 +3967,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 4340
+      "y": 5340
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3888,7 +4014,7 @@
       "unresolved": "\u5355seed\u4e14\u672a\u67e5\u770b\u72ec\u7acbtest\uff1b\u68af\u5ea6\u5c3a\u5ea6/\u5168\u5c40\u88c1\u526a\u3001\u4f18\u5316\u914d\u65b9\u3001\u7b26\u53f7\u7f16\u7801\u548c\u521d\u59cb\u5316\u6548\u5e94\u672a\u533a\u5206\uff0c\u4e0d\u80fd\u9501\u5b9a\u552f\u4e00\u539f\u56e0\u6216\u53cd\u8bc1\u6240\u6709\u63a5\u5165\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 4640
+      "y": 5640
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3935,7 +4061,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 4340
+      "y": 5340
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3974,7 +4100,7 @@
       "unresolved": "\u4e3b\u7ebf\u7a0b\u6808\u542b\u7b49\u5f85\u548cGIL\u504f\u5dee\uff0cbackward\u5f15\u64ce\u7ea6\u4e09\u5206\u4e4b\u4e00\u6837\u672c\u4e0d\u80fd\u7b49\u540cCPU\u81ea\u8017\u65f6\u6216NPU kernel\u6bd4\u4f8b\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 4640
+      "y": 5640
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4024,7 +4150,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 4940
+      "y": 5940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4068,7 +4194,7 @@
       "unresolved": "\u590d\u5236\u5931\u8bef\u6765\u81ea\u63d0\u793a/\u683c\u5f0f\u8fd8\u662f\u6a21\u578b\u80fd\u529b\u672a\u533a\u5206\uff1b\u4e00\u8bcd\u67e5\u8868\u4e0d\u80fd\u8986\u76d6\u5e7f\u6cdb\u8bed\u8a00\u80fd\u529b\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 5240
+      "y": 6240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4118,7 +4244,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 4940
+      "y": 5940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4162,7 +4288,7 @@
       "unresolved": "\u6295\u5f71\u521d\u59cb\u5316\u3001tanh\u3001\u4f18\u5316\u9884\u7b97\u4e0e\u7ed3\u6784\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5168\u7ef4\u4e0ePCA\u8bfb\u51fa\u7684\u53c2\u6570\u5bb9\u91cf\u4e0d\u540c\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 5240
+      "y": 6240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4310,7 +4436,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 4940
+      "y": 5940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4354,7 +4480,7 @@
       "unresolved": "16\u7ef4\u6295\u5f71/\u975e\u7ebf\u6027/\u4f18\u5316\u914d\u65b9\u4e0e\u7ed3\u6784\u8d21\u732e\u672a\u533a\u5206\uff1b\u672a\u53d1\u5e03\u91cd\u7b97\u91cf\u672a\u77e5\uff1b\u65e0\u5b8c\u6574128\u6b65\u4e0d\u4e2d\u65ad\u53c2\u8003\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 5240
+      "y": 6240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4521,7 +4647,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 4940
+      "y": 5940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4565,7 +4691,7 @@
       "unresolved": "\u8f83\u5f31\u5e72\u9884\u4e0e\u57fa\u7ebf\u9c81\u68d2\u6027\u8d21\u732e\u672a\u533a\u5206\uff1b\u9884\u6d4b\u5fae\u5c0f\u589e\u76ca\u4e0d\u8db3\u4ee5\u8ba4\u5b9a\u63d0\u5347\uff1b\u672a\u8986\u76d6\u957f\u751f\u6210\u3001\u5e7f\u6cdb\u4efb\u52a1\u4e0e\u5176\u4ed6\u5c42\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 5240
+      "y": 6240
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -4609,7 +4735,7 @@
       "unresolved": "\u77ed\u4e0a\u4e0b\u6587\u3001\u4f18\u5316\u5145\u5206\u7a0b\u5ea6\u3001\u5355seed\u548c\u6587\u6863\u8986\u76d6\u9650\u5236\uff1b512\u6b65\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1000
+      "y": 2000
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -4653,7 +4779,7 @@
       "unresolved": "\u5165\u53e3\u7ef4\u6570\u3001\u5c40\u90e8\u53d8\u6362\u5f62\u5f0f\u3001\u5e8f\u5217\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5b8c\u5168\u9694\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u8bad\u7ec3\u968f\u673a\u6027\u3001\u9884\u8bad\u7ec3\u6c61\u67d3\u53ca\u5e7f\u6cdb\u8bed\u6599\u3002\u672a\u77e5\u6570\u503c\u539f\u56e0\u672a\u89e3\u9664\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1180
+      "y": 2180
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -4697,7 +4823,7 @@
       "unresolved": "\u4ece\u96f6\u4e0e\u9884\u8bad\u7ec3\u80cc\u666f\u4e0d\u53ef\u4e92\u76f8\u66ff\u4ee3\uff0c\u8054\u5408\u89c4\u6a21/\u957f\u4e0a\u4e0b\u6587\u53ca\u8de8seed\u7a33\u5065\u6027\u5c1a\u672a\u5efa\u7acb\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1360
+      "y": 2360
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -4819,7 +4945,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1600
+      "y": 2600
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -4899,7 +5025,7 @@
       "unresolved": "\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u8bfb\u51fa/\u4fe1\u606f\u8def\u5f84\u4e0e\u7ed3\u6784\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u5305\u62ec\u79cd\u5b50\u6216\u603b\u4f53\u5916\u63a8\u4e0d\u786e\u5b9a\u6027\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1600
+      "y": 2600
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5026,7 +5152,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1780
+      "y": 2780
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5106,7 +5232,7 @@
       "unresolved": "\u53cc\u4fa7\u8d28\u91cf\u533a\u95f4\u542b0\uff0c\u4e5f\u4e0d\u80fd\u5224\u5df2\u786e\u8ba4\u9000\u5316\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u4e0e\u62d3\u6251\u672a\u5206\u79bb\uff0c\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1780
+      "y": 2780
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
@@ -5182,7 +5308,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 1960
+      "y": 2960
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5234,7 +5360,7 @@
       "unresolved": "\u53c2\u6570\u5bb9\u91cf\u3001\u6df1\u5ea6\u3001\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u968f\u673a\u6027\u548c\u5e7f\u6cdb\u80fd\u529b\u3002\u6570\u503c\u539f\u56e0\u672a\u77e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1960
+      "y": 2960
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5361,7 +5487,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 2140
+      "y": 3140
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5441,7 +5567,7 @@
       "unresolved": "\u7ed3\u6784\u3001\u5145\u5206\u8bad\u7ec3\u3001\u4f18\u5316\u548c\u53c2\u6570\u89c4\u6a21\u4ecd\u672a\u5206\u79bb\uff1b\u540cseed\u4e0e\u6587\u6863\u6837\u672c\u7684\u8fb9\u754c\u4fdd\u6301\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2140
+      "y": 3140
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5537,7 +5663,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2320
+      "y": 3320
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5597,7 +5723,7 @@
       "unresolved": "\u5355seed\u3001\u5c0f\u6570\u636e\u4e0e\u77ed\u4e0a\u4e0b\u6587\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u62d3\u6251\u3001\u53c2\u6570\u4e0eShannon/quad\u5206\u914d\u914d\u65b9\u672a\u5206\u79bb\u3002\u72ec\u7acb\u53c2\u8003\u56e0\u679c/\u672a\u6765VJP/\u65e9\u671f\u652f\u6301\u53ca\u79bb\u6563\u68c0\u67e5\u901a\u8fc7\uff0c\u4f46\u6709\u9650\u6570\u503c\u4e0eeager\u96f6\u5bb9\u5dee\u5dee\u5f02\u539f\u56e0\u672a\u5b8c\u5168\u5b9a\u4f4d\uff1b\u5b8c\u657464\u6b65\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2320
+      "y": 3320
     },
     {
       "budget": "\u672c\u6b21639.774\u79d2\u542b\u5f00\u53d1\u68c0\u67e5\uff1bv5\u7d2f\u8ba1\u7ea66.5475/24\u8ba1\u7b97\u5c0f\u65f6\uff0c22:49\u622a\u6b62\u4e0d\u5ef6\u957f\u3002",
@@ -5646,7 +5772,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 2500
+      "y": 3500
     },
     {
       "budget": "\u9a8c\u6536\u4e24\u4f5c\u4e1a\u5df2\u7ec8\u6001\uff1b\u540e\u7eed\u8865\u9f50\u8d39\u7528\u5355\u5217\u7eb3\u5165\u539fv5\u603b\u9884\u7b97\u3002",
@@ -5694,17 +5820,1831 @@
       "unresolved": "\u6709\u9650\u6570\u503c\u8d85\u5dee\u539f\u56e0\u672a\u5b8c\u5168\u5206\u89e3\uff1bNPU\u957f\u8bad\u7ec3\u3001B/Qwen\u5b8c\u6574\u8fc1\u79fb\u4e0e\u66f4\u957f\u5b66\u4e60\u672a\u68c0\u67e5\uff1b\u6781\u5f31\u603b\u91cf\u548c\u4e0d\u53ef\u8868\u793a\u4f34\u968f\u4ecd\u62d2\u7edd\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2500
+      "y": 3500
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u56fa\u5b9a\u6765\u6e90/\u539fhash\uff1b\u65e7\u6587\u7ae0\u6807\u9898\u53cahash\u4e0d\u8fdb\u65b0\u786e\u8ba4\u96c6\uff0c\u8fd1\u91cd\u590d\u4ecd\u672a\u5b8c\u5168\u6392\u9664\u3002",
+      "id": "V6-DATA",
+      "kind": "experiment",
+      "question": "\u6269\u5927\u72ec\u7acb\u6587\u6863\u4e0e\u6709\u6548\u6570\u636e\u91cf\u80fd\u5426\u652f\u6491\u89c4\u6a21\u7814\u7a76\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "runs": [
+        {
+          "config": "dependencies/language-v6-source.json",
+          "id": "v6-data-final",
+          "record": "runs/v6-data-final/state.json",
+          "source_commit": "3786de02ec47f0b86b8f7b80a2c9ce2a8ae02867",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
+      "study_id": "TL-DATA-v6",
+      "summary": "20.97M\u8bad\u7ec3token\uff1b\u9a8c\u8bc1134\u7bc7\uff0ctest157\u7bc7\u5bc6\u5c01\u3002",
+      "title": "\u65b0\u72ec\u7acb\u8bed\u8a00\u8bed\u6599",
+      "track": "tide",
+      "view_group": "current",
+      "x": 30,
+      "y": 280
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u539f\u6570\u503c\u9608\u503c\u4fdd\u6301\uff1b\u79bb\u6563/\u673a\u5236\u3001\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5206\u522b\u9a8c\u6536\u3002\u6709\u9650\u8d85\u5dee\u4e0d\u662f\u6548\u679c\u5931\u8d25\uff0c\u4e5f\u4e0d\u662f\u6570\u503c\u901a\u8fc7\u3002",
+      "id": "V6-EXEC",
+      "kind": "experiment",
+      "question": "\u54ea\u4e9b\u540e\u7aef\u3001\u5b9e\u9645batch\u4e0e\u516c\u5171\u6267\u884c\u65b9\u5f0f\u6700\u5feb\u5230\u8fbe\u76ee\u6807\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "status": "running",
+      "study_id": "TL-EXEC-v6",
+      "summary": "CPU native\u627f\u8f7d\u591a\u6570TIDE\uff1bNPU\u627f\u8f7dTransformer\u4e0e\u4e24\u6761TIDE\u89c2\u5bdf\u3002",
+      "title": "\u6709\u9650\u6267\u884c\u9009\u578b\u4e0e\u53ef\u4fe1\u8bad\u7ec3\u63a5\u5165",
+      "track": "tide",
+      "view_group": "current",
+      "x": 325,
+      "y": 280
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u5171\u540c65,536\u6709\u6548\u76ee\u6807/L32/seed11\uff1bvalidation\u7b5b\u9009\uff0ctest\u5bc6\u5c01\u3002\u4e0d\u662f\u5b57\u6bb5\u7b1b\u5361\u5c14\u79ef\u3002",
+      "id": "V6-COVER",
+      "kind": "experiment",
+      "question": "\u5404\u5df2\u5b9e\u73b0\u5c40\u90e8\u5019\u9009\u5728\u5171\u540c\u8bed\u8a00\u4efb\u52a1\u4e0a\u5982\u4f55\u5b66\u4e60\u4e0e\u5206\u914d\u5b9e\u9645\u5de5\u4f5c\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-anchor.json",
+          "id": "tl-v6-cover-fc-anchor",
+          "lens_record": "runs/v6-cover-fc-anchor/train/projection.json",
+          "record": "runs/v6-cover-fc-anchor/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-unit_attention.json",
+          "id": "tl-v6-cover-fc-send-unit_attention",
+          "lens_record": "runs/v6-cover-fc-send-unit_attention/train/projection.json",
+          "record": "runs/v6-cover-fc-send-unit_attention/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-anchor.json",
+          "id": "tl-v6-cover-hb-anchor",
+          "lens_record": "runs/v6-cover-hb-anchor/train/projection.json",
+          "record": "runs/v6-cover-hb-anchor/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-unit_attention.json",
+          "id": "tl-v6-cover-hb-send-unit_attention",
+          "lens_record": "runs/v6-cover-hb-send-unit_attention/train/projection.json",
+          "record": "runs/v6-cover-hb-send-unit_attention/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-kv-sum.json",
+          "id": "tl-v6-cover-fc-mem-kv-sum",
+          "lens_record": "runs/v6-cover-fc-mem-kv-sum/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-kv-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-pooled_attention.json",
+          "id": "tl-v6-cover-fc-send-pooled_attention",
+          "lens_record": "runs/v6-cover-fc-send-pooled_attention/train/projection.json",
+          "record": "runs/v6-cover-fc-send-pooled_attention/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-kv-sum.json",
+          "id": "tl-v6-cover-hb-mem-kv-sum",
+          "lens_record": "runs/v6-cover-hb-mem-kv-sum/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-kv-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-pooled_attention.json",
+          "id": "tl-v6-cover-hb-send-pooled_attention",
+          "lens_record": "runs/v6-cover-hb-send-pooled_attention/train/projection.json",
+          "record": "runs/v6-cover-hb-send-pooled_attention/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-sum.json",
+          "id": "tl-v6-cover-fc-mem-affine-sum",
+          "lens_record": "runs/v6-cover-fc-mem-affine-sum/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-affine-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-proportional.json",
+          "id": "tl-v6-cover-fc-send-proportional",
+          "lens_record": "runs/v6-cover-fc-send-proportional/train/projection.json",
+          "record": "runs/v6-cover-fc-send-proportional/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-sum.json",
+          "id": "tl-v6-cover-hb-mem-affine-sum",
+          "lens_record": "runs/v6-cover-hb-mem-affine-sum/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-affine-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-proportional.json",
+          "id": "tl-v6-cover-hb-send-proportional",
+          "lens_record": "runs/v6-cover-hb-send-proportional/train/projection.json",
+          "record": "runs/v6-cover-hb-send-proportional/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-state.json",
+          "id": "tl-v6-cover-fc-mem-affine-state",
+          "lens_record": "runs/v6-cover-fc-mem-affine-state/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-affine-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-direct-received.json",
+          "id": "tl-v6-cover-fc-direct-received",
+          "lens_record": "runs/v6-cover-fc-direct-received/train/projection.json",
+          "record": "runs/v6-cover-fc-direct-received/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-state.json",
+          "id": "tl-v6-cover-hb-mem-affine-state",
+          "lens_record": "runs/v6-cover-hb-mem-affine-state/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-affine-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-direct-received.json",
+          "id": "tl-v6-cover-hb-direct-received",
+          "lens_record": "runs/v6-cover-hb-direct-received/train/projection.json",
+          "record": "runs/v6-cover-hb-direct-received/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-sum.json",
+          "id": "tl-v6-cover-fc-mem-delta-sum",
+          "lens_record": "runs/v6-cover-fc-mem-delta-sum/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-delta-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-unit-mu.json",
+          "id": "tl-v6-cover-fc-unit-mu",
+          "lens_record": "runs/v6-cover-fc-unit-mu/train/projection.json",
+          "record": "runs/v6-cover-fc-unit-mu/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-sum.json",
+          "id": "tl-v6-cover-hb-mem-delta-sum",
+          "lens_record": "runs/v6-cover-hb-mem-delta-sum/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-delta-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-unit-mu.json",
+          "id": "tl-v6-cover-hb-unit-mu",
+          "lens_record": "runs/v6-cover-hb-unit-mu/train/projection.json",
+          "record": "runs/v6-cover-hb-unit-mu/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-state.json",
+          "id": "tl-v6-cover-fc-mem-delta-state",
+          "lens_record": "runs/v6-cover-fc-mem-delta-state/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-delta-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-constrained-context-gain.json",
+          "id": "tl-v6-cover-fc-constrained-context-gain",
+          "lens_record": "runs/v6-cover-fc-constrained-context-gain/train/projection.json",
+          "record": "runs/v6-cover-fc-constrained-context-gain/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-state.json",
+          "id": "tl-v6-cover-hb-mem-delta-state",
+          "lens_record": "runs/v6-cover-hb-mem-delta-state/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-delta-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-constrained-context-gain.json",
+          "id": "tl-v6-cover-hb-constrained-context-gain",
+          "lens_record": "runs/v6-cover-hb-constrained-context-gain/train/projection.json",
+          "record": "runs/v6-cover-hb-constrained-context-gain/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-sum.json",
+          "id": "tl-v6-cover-fc-mem-gated_delta-sum",
+          "lens_record": "runs/v6-cover-fc-mem-gated_delta-sum/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-gated_delta-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-constrained-learned-gain.json",
+          "id": "tl-v6-cover-fc-constrained-learned-gain",
+          "lens_record": "runs/v6-cover-fc-constrained-learned-gain/train/projection.json",
+          "record": "runs/v6-cover-fc-constrained-learned-gain/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-sum.json",
+          "id": "tl-v6-cover-hb-mem-gated_delta-sum",
+          "lens_record": "runs/v6-cover-hb-mem-gated_delta-sum/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-gated_delta-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-constrained-learned-gain.json",
+          "id": "tl-v6-cover-hb-constrained-learned-gain",
+          "lens_record": "runs/v6-cover-hb-constrained-learned-gain/train/projection.json",
+          "record": "runs/v6-cover-hb-constrained-learned-gain/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-state.json",
+          "id": "tl-v6-cover-fc-mem-gated_delta-state",
+          "lens_record": "runs/v6-cover-fc-mem-gated_delta-state/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-gated_delta-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-received.json",
+          "id": "tl-v6-cover-fc-gain-att-received",
+          "lens_record": "runs/v6-cover-fc-gain-att-received/train/projection.json",
+          "record": "runs/v6-cover-fc-gain-att-received/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-state.json",
+          "id": "tl-v6-cover-hb-mem-gated_delta-state",
+          "lens_record": "runs/v6-cover-hb-mem-gated_delta-state/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-gated_delta-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-received.json",
+          "id": "tl-v6-cover-hb-gain-att-received",
+          "lens_record": "runs/v6-cover-hb-gain-att-received/train/projection.json",
+          "record": "runs/v6-cover-hb-gain-att-received/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-sum.json",
+          "id": "tl-v6-cover-fc-mem-ssd-sum",
+          "lens_record": "runs/v6-cover-fc-mem-ssd-sum/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-ssd-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-mu.json",
+          "id": "tl-v6-cover-fc-gain-att-mu",
+          "lens_record": "runs/v6-cover-fc-gain-att-mu/train/projection.json",
+          "record": "runs/v6-cover-fc-gain-att-mu/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-sum.json",
+          "id": "tl-v6-cover-hb-mem-ssd-sum",
+          "lens_record": "runs/v6-cover-hb-mem-ssd-sum/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-ssd-sum/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-mu.json",
+          "id": "tl-v6-cover-hb-gain-att-mu",
+          "lens_record": "runs/v6-cover-hb-gain-att-mu/train/projection.json",
+          "record": "runs/v6-cover-hb-gain-att-mu/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-state.json",
+          "id": "tl-v6-cover-fc-mem-ssd-state",
+          "lens_record": "runs/v6-cover-fc-mem-ssd-state/train/projection.json",
+          "record": "runs/v6-cover-fc-mem-ssd-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-threshold-fixed.json",
+          "id": "tl-v6-cover-fc-threshold-fixed",
+          "lens_record": "runs/v6-cover-fc-threshold-fixed/train/projection.json",
+          "record": "runs/v6-cover-fc-threshold-fixed/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-state.json",
+          "id": "tl-v6-cover-hb-mem-ssd-state",
+          "lens_record": "runs/v6-cover-hb-mem-ssd-state/train/projection.json",
+          "record": "runs/v6-cover-hb-mem-ssd-state/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-threshold-fixed.json",
+          "id": "tl-v6-cover-hb-threshold-fixed",
+          "lens_record": "runs/v6-cover-hb-threshold-fixed/train/projection.json",
+          "record": "runs/v6-cover-hb-threshold-fixed/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-read-zero.json",
+          "id": "tl-v6-cover-fc-read-zero",
+          "lens_record": "runs/v6-cover-fc-read-zero/train/projection.json",
+          "record": "runs/v6-cover-fc-read-zero/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-zero-fixed.json",
+          "id": "tl-v6-cover-fc-zero-fixed",
+          "lens_record": "runs/v6-cover-fc-zero-fixed/train/projection.json",
+          "record": "runs/v6-cover-fc-zero-fixed/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-read-zero.json",
+          "id": "tl-v6-cover-hb-read-zero",
+          "lens_record": "runs/v6-cover-hb-read-zero/train/projection.json",
+          "record": "runs/v6-cover-hb-read-zero/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-zero-fixed.json",
+          "id": "tl-v6-cover-hb-zero-fixed",
+          "lens_record": "runs/v6-cover-hb-zero-fixed/train/projection.json",
+          "record": "runs/v6-cover-hb-zero-fixed/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-read-old.json",
+          "id": "tl-v6-cover-fc-read-old",
+          "lens_record": "runs/v6-cover-fc-read-old/train/projection.json",
+          "record": "runs/v6-cover-fc-read-old/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-source-node.json",
+          "id": "tl-v6-cover-fc-source-node",
+          "lens_record": "runs/v6-cover-fc-source-node/train/projection.json",
+          "record": "runs/v6-cover-fc-source-node/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-read-old.json",
+          "id": "tl-v6-cover-hb-read-old",
+          "lens_record": "runs/v6-cover-hb-read-old/train/projection.json",
+          "record": "runs/v6-cover-hb-read-old/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-source-node.json",
+          "id": "tl-v6-cover-hb-source-node",
+          "lens_record": "runs/v6-cover-hb-source-node/train/projection.json",
+          "record": "runs/v6-cover-hb-source-node/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-local-match.json",
+          "id": "tl-v6-cover-fc-local-match",
+          "lens_record": "runs/v6-cover-fc-local-match/train/projection.json",
+          "record": "runs/v6-cover-fc-local-match/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-source-source.json",
+          "id": "tl-v6-cover-fc-source-source",
+          "lens_record": "runs/v6-cover-fc-source-source/train/projection.json",
+          "record": "runs/v6-cover-fc-source-source/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-local-match.json",
+          "id": "tl-v6-cover-hb-local-match",
+          "lens_record": "runs/v6-cover-hb-local-match/train/projection.json",
+          "record": "runs/v6-cover-hb-local-match/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-source-source.json",
+          "id": "tl-v6-cover-hb-source-source",
+          "lens_record": "runs/v6-cover-hb-source-source/train/projection.json",
+          "record": "runs/v6-cover-hb-source-source/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-region-att-stats.json",
+          "id": "tl-v6-cover-fc-region-att-stats",
+          "lens_record": "runs/v6-cover-fc-region-att-stats/train/projection.json",
+          "record": "runs/v6-cover-fc-region-att-stats/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-source-adapted.json",
+          "id": "tl-v6-cover-fc-source-adapted",
+          "lens_record": "runs/v6-cover-fc-source-adapted/train/projection.json",
+          "record": "runs/v6-cover-fc-source-adapted/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-region-att-stats.json",
+          "id": "tl-v6-cover-hb-region-att-stats",
+          "lens_record": "runs/v6-cover-hb-region-att-stats/train/projection.json",
+          "record": "runs/v6-cover-hb-region-att-stats/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-source-adapted.json",
+          "id": "tl-v6-cover-hb-source-adapted",
+          "lens_record": "runs/v6-cover-hb-source-adapted/train/projection.json",
+          "record": "runs/v6-cover-hb-source-adapted/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-region-att-content.json",
+          "id": "tl-v6-cover-fc-region-att-content",
+          "lens_record": "runs/v6-cover-fc-region-att-content/train/projection.json",
+          "record": "runs/v6-cover-fc-region-att-content/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-window16.json",
+          "id": "tl-v6-cover-fc-window16",
+          "lens_record": "runs/v6-cover-fc-window16/train/projection.json",
+          "record": "runs/v6-cover-fc-window16/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-region-att-content.json",
+          "id": "tl-v6-cover-hb-region-att-content",
+          "lens_record": "runs/v6-cover-hb-region-att-content/train/projection.json",
+          "record": "runs/v6-cover-hb-region-att-content/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-window16.json",
+          "id": "tl-v6-cover-hb-window16",
+          "lens_record": "runs/v6-cover-hb-window16/train/projection.json",
+          "record": "runs/v6-cover-hb-window16/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-evidence-grouped.json",
+          "id": "tl-v6-cover-fc-evidence-grouped",
+          "lens_record": "runs/v6-cover-fc-evidence-grouped/train/projection.json",
+          "record": "runs/v6-cover-fc-evidence-grouped/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-window128.json",
+          "id": "tl-v6-cover-fc-window128",
+          "lens_record": "runs/v6-cover-fc-window128/train/projection.json",
+          "record": "runs/v6-cover-fc-window128/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-evidence-grouped.json",
+          "id": "tl-v6-cover-hb-evidence-grouped",
+          "lens_record": "runs/v6-cover-hb-evidence-grouped/train/projection.json",
+          "record": "runs/v6-cover-hb-evidence-grouped/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-window128.json",
+          "id": "tl-v6-cover-hb-window128",
+          "lens_record": "runs/v6-cover-hb-window128/train/projection.json",
+          "record": "runs/v6-cover-hb-window128/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-match-att-grouped.json",
+          "id": "tl-v6-cover-fc-match-att-grouped",
+          "lens_record": "runs/v6-cover-fc-match-att-grouped/train/projection.json",
+          "record": "runs/v6-cover-fc-match-att-grouped/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-summary8.json",
+          "id": "tl-v6-cover-fc-summary8",
+          "lens_record": "runs/v6-cover-fc-summary8/train/projection.json",
+          "record": "runs/v6-cover-fc-summary8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-match-att-grouped.json",
+          "id": "tl-v6-cover-hb-match-att-grouped",
+          "lens_record": "runs/v6-cover-hb-match-att-grouped/train/projection.json",
+          "record": "runs/v6-cover-hb-match-att-grouped/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-summary8.json",
+          "id": "tl-v6-cover-hb-summary8",
+          "lens_record": "runs/v6-cover-hb-summary8/train/projection.json",
+          "record": "runs/v6-cover-hb-summary8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total25.json",
+          "id": "tl-v6-cover-fc-fixed-total25",
+          "lens_record": "runs/v6-cover-fc-fixed-total25/train/projection.json",
+          "record": "runs/v6-cover-fc-fixed-total25/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-adapter8.json",
+          "id": "tl-v6-cover-fc-adapter8",
+          "lens_record": "runs/v6-cover-fc-adapter8/train/projection.json",
+          "record": "runs/v6-cover-fc-adapter8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total25.json",
+          "id": "tl-v6-cover-hb-fixed-total25",
+          "lens_record": "runs/v6-cover-hb-fixed-total25/train/projection.json",
+          "record": "runs/v6-cover-hb-fixed-total25/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-adapter8.json",
+          "id": "tl-v6-cover-hb-adapter8",
+          "lens_record": "runs/v6-cover-hb-adapter8/train/projection.json",
+          "record": "runs/v6-cover-hb-adapter8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total50.json",
+          "id": "tl-v6-cover-fc-fixed-total50",
+          "lens_record": "runs/v6-cover-fc-fixed-total50/train/projection.json",
+          "record": "runs/v6-cover-fc-fixed-total50/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ffn2x.json",
+          "id": "tl-v6-cover-fc-ffn2x",
+          "lens_record": "runs/v6-cover-fc-ffn2x/train/projection.json",
+          "record": "runs/v6-cover-fc-ffn2x/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total50.json",
+          "id": "tl-v6-cover-hb-fixed-total50",
+          "lens_record": "runs/v6-cover-hb-fixed-total50/train/projection.json",
+          "record": "runs/v6-cover-hb-fixed-total50/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ffn2x.json",
+          "id": "tl-v6-cover-hb-ffn2x",
+          "lens_record": "runs/v6-cover-hb-ffn2x/train/projection.json",
+          "record": "runs/v6-cover-hb-ffn2x/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total100.json",
+          "id": "tl-v6-cover-fc-fixed-total100",
+          "lens_record": "runs/v6-cover-fc-fixed-total100/train/projection.json",
+          "record": "runs/v6-cover-fc-fixed-total100/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ffn8x.json",
+          "id": "tl-v6-cover-fc-ffn8x",
+          "lens_record": "runs/v6-cover-fc-ffn8x/train/projection.json",
+          "record": "runs/v6-cover-fc-ffn8x/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total100.json",
+          "id": "tl-v6-cover-hb-fixed-total100",
+          "lens_record": "runs/v6-cover-hb-fixed-total100/train/projection.json",
+          "record": "runs/v6-cover-hb-fixed-total100/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ffn8x.json",
+          "id": "tl-v6-cover-hb-ffn8x",
+          "lens_record": "runs/v6-cover-hb-ffn8x/train/projection.json",
+          "record": "runs/v6-cover-hb-ffn8x/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gamma1.json",
+          "id": "tl-v6-cover-fc-gamma1",
+          "lens_record": "runs/v6-cover-fc-gamma1/train/projection.json",
+          "record": "runs/v6-cover-fc-gamma1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-full-memory-off.json",
+          "id": "tl-v6-cover-fc-full-memory-off",
+          "lens_record": "runs/v6-cover-fc-full-memory-off/train/projection.json",
+          "record": "runs/v6-cover-fc-full-memory-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gamma1.json",
+          "id": "tl-v6-cover-hb-gamma1",
+          "lens_record": "runs/v6-cover-hb-gamma1/train/projection.json",
+          "record": "runs/v6-cover-hb-gamma1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-full-memory-off.json",
+          "id": "tl-v6-cover-hb-full-memory-off",
+          "lens_record": "runs/v6-cover-hb-full-memory-off/train/projection.json",
+          "record": "runs/v6-cover-hb-full-memory-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gamma4.json",
+          "id": "tl-v6-cover-fc-gamma4",
+          "lens_record": "runs/v6-cover-fc-gamma4/train/projection.json",
+          "record": "runs/v6-cover-fc-gamma4/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-full-ffn-off.json",
+          "id": "tl-v6-cover-fc-full-ffn-off",
+          "lens_record": "runs/v6-cover-fc-full-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-fc-full-ffn-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gamma4.json",
+          "id": "tl-v6-cover-hb-gamma4",
+          "lens_record": "runs/v6-cover-hb-gamma4/train/projection.json",
+          "record": "runs/v6-cover-hb-gamma4/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-full-ffn-off.json",
+          "id": "tl-v6-cover-hb-full-ffn-off",
+          "lens_record": "runs/v6-cover-hb-full-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-hb-full-ffn-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-temperature1.json",
+          "id": "tl-v6-cover-fc-temperature1",
+          "lens_record": "runs/v6-cover-fc-temperature1/train/projection.json",
+          "record": "runs/v6-cover-fc-temperature1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-heads2.json",
+          "id": "tl-v6-cover-fc-heads2",
+          "lens_record": "runs/v6-cover-fc-heads2/train/projection.json",
+          "record": "runs/v6-cover-fc-heads2/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-temperature1.json",
+          "id": "tl-v6-cover-hb-temperature1",
+          "lens_record": "runs/v6-cover-hb-temperature1/train/projection.json",
+          "record": "runs/v6-cover-hb-temperature1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-heads2.json",
+          "id": "tl-v6-cover-hb-heads2",
+          "lens_record": "runs/v6-cover-hb-heads2/train/projection.json",
+          "record": "runs/v6-cover-hb-heads2/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-score-width8.json",
+          "id": "tl-v6-cover-fc-score-width8",
+          "lens_record": "runs/v6-cover-fc-score-width8/train/projection.json",
+          "record": "runs/v6-cover-fc-score-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-decay-slow.json",
+          "id": "tl-v6-cover-fc-decay-slow",
+          "lens_record": "runs/v6-cover-fc-decay-slow/train/projection.json",
+          "record": "runs/v6-cover-fc-decay-slow/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-score-width8.json",
+          "id": "tl-v6-cover-hb-score-width8",
+          "lens_record": "runs/v6-cover-hb-score-width8/train/projection.json",
+          "record": "runs/v6-cover-hb-score-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-decay-slow.json",
+          "id": "tl-v6-cover-hb-decay-slow",
+          "lens_record": "runs/v6-cover-hb-decay-slow/train/projection.json",
+          "record": "runs/v6-cover-hb-decay-slow/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-evidence-width8.json",
+          "id": "tl-v6-cover-fc-evidence-width8",
+          "lens_record": "runs/v6-cover-fc-evidence-width8/train/projection.json",
+          "record": "runs/v6-cover-fc-evidence-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-rope-half.json",
+          "id": "tl-v6-cover-fc-rope-half",
+          "lens_record": "runs/v6-cover-fc-rope-half/train/projection.json",
+          "record": "runs/v6-cover-fc-rope-half/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-evidence-width8.json",
+          "id": "tl-v6-cover-hb-evidence-width8",
+          "lens_record": "runs/v6-cover-hb-evidence-width8/train/projection.json",
+          "record": "runs/v6-cover-hb-evidence-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-rope-half.json",
+          "id": "tl-v6-cover-hb-rope-half",
+          "lens_record": "runs/v6-cover-hb-rope-half/train/projection.json",
+          "record": "runs/v6-cover-hb-rope-half/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-match-width8.json",
+          "id": "tl-v6-cover-fc-match-width8",
+          "lens_record": "runs/v6-cover-fc-match-width8/train/projection.json",
+          "record": "runs/v6-cover-fc-match-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-rope-full.json",
+          "id": "tl-v6-cover-fc-rope-full",
+          "lens_record": "runs/v6-cover-fc-rope-full/train/projection.json",
+          "record": "runs/v6-cover-fc-rope-full/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-match-width8.json",
+          "id": "tl-v6-cover-hb-match-width8",
+          "lens_record": "runs/v6-cover-hb-match-width8/train/projection.json",
+          "record": "runs/v6-cover-hb-match-width8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-rope-full.json",
+          "id": "tl-v6-cover-hb-rope-full",
+          "lens_record": "runs/v6-cover-hb-rope-full/train/projection.json",
+          "record": "runs/v6-cover-hb-rope-full/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-match-residual-off.json",
+          "id": "tl-v6-cover-fc-match-residual-off",
+          "lens_record": "runs/v6-cover-fc-match-residual-off/train/projection.json",
+          "record": "runs/v6-cover-fc-match-residual-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-rope-read.json",
+          "id": "tl-v6-cover-fc-rope-read",
+          "lens_record": "runs/v6-cover-fc-rope-read/train/projection.json",
+          "record": "runs/v6-cover-fc-rope-read/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-match-residual-off.json",
+          "id": "tl-v6-cover-hb-match-residual-off",
+          "lens_record": "runs/v6-cover-hb-match-residual-off/train/projection.json",
+          "record": "runs/v6-cover-hb-match-residual-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-rope-read.json",
+          "id": "tl-v6-cover-hb-rope-read",
+          "lens_record": "runs/v6-cover-hb-rope-read/train/projection.json",
+          "record": "runs/v6-cover-hb-rope-read/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-match-inner-off.json",
+          "id": "tl-v6-cover-fc-match-inner-off",
+          "lens_record": "runs/v6-cover-fc-match-inner-off/train/projection.json",
+          "record": "runs/v6-cover-fc-match-inner-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-distance-slope.json",
+          "id": "tl-v6-cover-fc-distance-slope",
+          "lens_record": "runs/v6-cover-fc-distance-slope/train/projection.json",
+          "record": "runs/v6-cover-fc-distance-slope/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-match-inner-off.json",
+          "id": "tl-v6-cover-hb-match-inner-off",
+          "lens_record": "runs/v6-cover-hb-match-inner-off/train/projection.json",
+          "record": "runs/v6-cover-hb-match-inner-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-distance-slope.json",
+          "id": "tl-v6-cover-hb-distance-slope",
+          "lens_record": "runs/v6-cover-hb-distance-slope/train/projection.json",
+          "record": "runs/v6-cover-hb-distance-slope/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-att-local-off.json",
+          "id": "tl-v6-cover-fc-att-local-off",
+          "lens_record": "runs/v6-cover-fc-att-local-off/train/projection.json",
+          "record": "runs/v6-cover-fc-att-local-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv1.json",
+          "id": "tl-v6-cover-fc-gated_delta-conv1",
+          "lens_record": "runs/v6-cover-fc-gated_delta-conv1/train/projection.json",
+          "record": "runs/v6-cover-fc-gated_delta-conv1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-att-local-off.json",
+          "id": "tl-v6-cover-hb-att-local-off",
+          "lens_record": "runs/v6-cover-hb-att-local-off/train/projection.json",
+          "record": "runs/v6-cover-hb-att-local-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv1.json",
+          "id": "tl-v6-cover-hb-gated_delta-conv1",
+          "lens_record": "runs/v6-cover-hb-gated_delta-conv1/train/projection.json",
+          "record": "runs/v6-cover-hb-gated_delta-conv1/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-att-regional-off.json",
+          "id": "tl-v6-cover-fc-att-regional-off",
+          "lens_record": "runs/v6-cover-fc-att-regional-off/train/projection.json",
+          "record": "runs/v6-cover-fc-att-regional-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv8.json",
+          "id": "tl-v6-cover-fc-gated_delta-conv8",
+          "lens_record": "runs/v6-cover-fc-gated_delta-conv8/train/projection.json",
+          "record": "runs/v6-cover-fc-gated_delta-conv8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-att-regional-off.json",
+          "id": "tl-v6-cover-hb-att-regional-off",
+          "lens_record": "runs/v6-cover-hb-att-regional-off/train/projection.json",
+          "record": "runs/v6-cover-hb-att-regional-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv8.json",
+          "id": "tl-v6-cover-hb-gated_delta-conv8",
+          "lens_record": "runs/v6-cover-hb-gated_delta-conv8/train/projection.json",
+          "record": "runs/v6-cover-hb-gated_delta-conv8/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-bern.json",
+          "id": "tl-v6-cover-fc-send-regional_total-bern",
+          "lens_record": "runs/v6-cover-fc-send-regional_total-bern/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_total-bern/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-heads2.json",
+          "id": "tl-v6-cover-fc-gated_delta-heads2",
+          "lens_record": "runs/v6-cover-fc-gated_delta-heads2/train/projection.json",
+          "record": "runs/v6-cover-fc-gated_delta-heads2/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-bern.json",
+          "id": "tl-v6-cover-hb-send-regional_total-bern",
+          "lens_record": "runs/v6-cover-hb-send-regional_total-bern/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_total-bern/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-heads2.json",
+          "id": "tl-v6-cover-hb-gated_delta-heads2",
+          "lens_record": "runs/v6-cover-hb-gated_delta-heads2/train/projection.json",
+          "record": "runs/v6-cover-hb-gated_delta-heads2/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent1.json",
+          "id": "tl-v6-cover-fc-send-regional_total-ent1",
+          "lens_record": "runs/v6-cover-fc-send-regional_total-ent1-retry1/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_total-ent1-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-mem-off.json",
+          "id": "tl-v6-cover-fc-gated_delta-mem-off",
+          "lens_record": "runs/v6-cover-fc-gated_delta-mem-off/train/projection.json",
+          "record": "runs/v6-cover-fc-gated_delta-mem-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent1.json",
+          "id": "tl-v6-cover-hb-send-regional_total-ent1",
+          "lens_record": "runs/v6-cover-hb-send-regional_total-ent1-retry1/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_total-ent1-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-mem-off.json",
+          "id": "tl-v6-cover-hb-gated_delta-mem-off",
+          "lens_record": "runs/v6-cover-hb-gated_delta-mem-off/train/projection.json",
+          "record": "runs/v6-cover-hb-gated_delta-mem-off/train/result.json",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent15.json",
+          "id": "tl-v6-cover-fc-send-regional_total-ent15",
+          "lens_record": "runs/v6-cover-fc-send-regional_total-ent15/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_total-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-ffn-off.json",
+          "id": "tl-v6-cover-fc-gated_delta-ffn-off",
+          "lens_record": "runs/v6-cover-fc-gated_delta-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-fc-gated_delta-ffn-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent15.json",
+          "id": "tl-v6-cover-hb-send-regional_total-ent15",
+          "lens_record": "runs/v6-cover-hb-send-regional_total-ent15/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_total-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-ffn-off.json",
+          "id": "tl-v6-cover-hb-gated_delta-ffn-off",
+          "lens_record": "runs/v6-cover-hb-gated_delta-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-hb-gated_delta-ffn-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent2.json",
+          "id": "tl-v6-cover-fc-send-regional_total-ent2",
+          "lens_record": "runs/v6-cover-fc-send-regional_total-ent2/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_total-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv1.json",
+          "id": "tl-v6-cover-fc-ssd-conv1",
+          "lens_record": "runs/v6-cover-fc-ssd-conv1/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-conv1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent2.json",
+          "id": "tl-v6-cover-hb-send-regional_total-ent2",
+          "lens_record": "runs/v6-cover-hb-send-regional_total-ent2/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_total-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv1.json",
+          "id": "tl-v6-cover-hb-ssd-conv1",
+          "lens_record": "runs/v6-cover-hb-ssd-conv1/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-conv1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-quad.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold-quad",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold-quad/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold-quad/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv8.json",
+          "id": "tl-v6-cover-fc-ssd-conv8",
+          "lens_record": "runs/v6-cover-fc-ssd-conv8/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-conv8/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-quad.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold-quad",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold-quad/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold-quad/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv8.json",
+          "id": "tl-v6-cover-hb-ssd-conv8",
+          "lens_record": "runs/v6-cover-hb-ssd-conv8/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-conv8/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-bern.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold-bern",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold-bern/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold-bern/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-heads2.json",
+          "id": "tl-v6-cover-fc-ssd-heads2",
+          "lens_record": "runs/v6-cover-fc-ssd-heads2/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-heads2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-bern.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold-bern",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold-bern/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold-bern/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-heads2.json",
+          "id": "tl-v6-cover-hb-ssd-heads2",
+          "lens_record": "runs/v6-cover-hb-ssd-heads2/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-heads2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent1.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold-ent1",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent1/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold-ent1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-mem-off.json",
+          "id": "tl-v6-cover-fc-ssd-mem-off",
+          "lens_record": "runs/v6-cover-fc-ssd-mem-off/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-mem-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent1.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold-ent1",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent1/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold-ent1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-mem-off.json",
+          "id": "tl-v6-cover-hb-ssd-mem-off",
+          "lens_record": "runs/v6-cover-hb-ssd-mem-off/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-mem-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent15.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold-ent15",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent15/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-ffn-off.json",
+          "id": "tl-v6-cover-fc-ssd-ffn-off",
+          "lens_record": "runs/v6-cover-fc-ssd-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-ffn-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent15.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold-ent15",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent15/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-ffn-off.json",
+          "id": "tl-v6-cover-hb-ssd-ffn-off",
+          "lens_record": "runs/v6-cover-hb-ssd-ffn-off/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-ffn-off/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent2.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold-ent2",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent2/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-ssd-groups2.json",
+          "id": "tl-v6-cover-fc-ssd-groups2",
+          "lens_record": "runs/v6-cover-fc-ssd-groups2/train/projection.json",
+          "record": "runs/v6-cover-fc-ssd-groups2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent2.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold-ent2",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent2/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-ssd-groups2.json",
+          "id": "tl-v6-cover-hb-ssd-groups2",
+          "lens_record": "runs/v6-cover-hb-ssd-groups2/train/projection.json",
+          "record": "runs/v6-cover-hb-ssd-groups2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-quad.json",
+          "id": "tl-v6-cover-fc-send-constrained-quad",
+          "lens_record": "runs/v6-cover-fc-send-constrained-quad/train/projection.json",
+          "record": "runs/v6-cover-fc-send-constrained-quad/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-budget-div1.json",
+          "id": "tl-v6-cover-fc-budget-div1",
+          "lens_record": "runs/v6-cover-fc-budget-div1/train/projection.json",
+          "record": "runs/v6-cover-fc-budget-div1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-quad.json",
+          "id": "tl-v6-cover-hb-send-constrained-quad",
+          "lens_record": "runs/v6-cover-hb-send-constrained-quad/train/projection.json",
+          "record": "runs/v6-cover-hb-send-constrained-quad/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-budget-div1.json",
+          "id": "tl-v6-cover-hb-budget-div1",
+          "lens_record": "runs/v6-cover-hb-budget-div1/train/projection.json",
+          "record": "runs/v6-cover-hb-budget-div1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-bern.json",
+          "id": "tl-v6-cover-fc-send-constrained-bern",
+          "lens_record": "runs/v6-cover-fc-send-constrained-bern/train/projection.json",
+          "record": "runs/v6-cover-fc-send-constrained-bern/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-budget-div4.json",
+          "id": "tl-v6-cover-fc-budget-div4",
+          "lens_record": "runs/v6-cover-fc-budget-div4/train/projection.json",
+          "record": "runs/v6-cover-fc-budget-div4/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-bern.json",
+          "id": "tl-v6-cover-hb-send-constrained-bern",
+          "lens_record": "runs/v6-cover-hb-send-constrained-bern/train/projection.json",
+          "record": "runs/v6-cover-hb-send-constrained-bern/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-budget-div4.json",
+          "id": "tl-v6-cover-hb-budget-div4",
+          "lens_record": "runs/v6-cover-hb-budget-div4/train/projection.json",
+          "record": "runs/v6-cover-hb-budget-div4/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent1.json",
+          "id": "tl-v6-cover-fc-send-constrained-ent1",
+          "lens_record": "runs/v6-cover-fc-send-constrained-ent1/train/projection.json",
+          "record": "runs/v6-cover-fc-send-constrained-ent1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-textbook-kv.json",
+          "id": "tl-v6-cover-fc-textbook-kv",
+          "lens_record": "runs/v6-cover-fc-textbook-kv/train/projection.json",
+          "record": "runs/v6-cover-fc-textbook-kv/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent1.json",
+          "id": "tl-v6-cover-hb-send-constrained-ent1",
+          "lens_record": "runs/v6-cover-hb-send-constrained-ent1/train/projection.json",
+          "record": "runs/v6-cover-hb-send-constrained-ent1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-textbook-kv.json",
+          "id": "tl-v6-cover-hb-textbook-kv",
+          "lens_record": "runs/v6-cover-hb-textbook-kv/train/projection.json",
+          "record": "runs/v6-cover-hb-textbook-kv/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent15.json",
+          "id": "tl-v6-cover-fc-send-constrained-ent15",
+          "lens_record": "runs/v6-cover-fc-send-constrained-ent15/train/projection.json",
+          "record": "runs/v6-cover-fc-send-constrained-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-textbook-mixed.json",
+          "id": "tl-v6-cover-fc-textbook-mixed",
+          "lens_record": "runs/v6-cover-fc-textbook-mixed/train/projection.json",
+          "record": "runs/v6-cover-fc-textbook-mixed/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent15.json",
+          "id": "tl-v6-cover-hb-send-constrained-ent15",
+          "lens_record": "runs/v6-cover-hb-send-constrained-ent15/train/projection.json",
+          "record": "runs/v6-cover-hb-send-constrained-ent15/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-textbook-mixed.json",
+          "id": "tl-v6-cover-hb-textbook-mixed",
+          "lens_record": "runs/v6-cover-hb-textbook-mixed/train/projection.json",
+          "record": "runs/v6-cover-hb-textbook-mixed/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent2.json",
+          "id": "tl-v6-cover-fc-send-constrained-ent2",
+          "lens_record": "runs/v6-cover-fc-send-constrained-ent2/train/projection.json",
+          "record": "runs/v6-cover-fc-send-constrained-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent2.json",
+          "id": "tl-v6-cover-hb-send-constrained-ent2",
+          "lens_record": "runs/v6-cover-hb-send-constrained-ent2/train/projection.json",
+          "record": "runs/v6-cover-hb-send-constrained-ent2/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total_zero.json",
+          "id": "tl-v6-cover-fc-send-regional_total_zero",
+          "lens_record": "runs/v6-cover-fc-send-regional_total_zero/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_total_zero/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total_zero.json",
+          "id": "tl-v6-cover-hb-send-regional_total_zero",
+          "lens_record": "runs/v6-cover-hb-send-regional_total_zero/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_total_zero/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold_hard.json",
+          "id": "tl-v6-cover-fc-send-regional_threshold_hard",
+          "lens_record": "runs/v6-cover-fc-send-regional_threshold_hard/train/projection.json",
+          "record": "runs/v6-cover-fc-send-regional_threshold_hard/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold_hard.json",
+          "id": "tl-v6-cover-hb-send-regional_threshold_hard",
+          "lens_record": "runs/v6-cover-hb-send-regional_threshold_hard/train/projection.json",
+          "record": "runs/v6-cover-hb-send-regional_threshold_hard/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-hard_selection.json",
+          "id": "tl-v6-cover-fc-send-hard_selection",
+          "lens_record": "runs/v6-cover-fc-send-hard_selection/train/projection.json",
+          "record": "runs/v6-cover-fc-send-hard_selection/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-hard_selection.json",
+          "id": "tl-v6-cover-hb-send-hard_selection",
+          "lens_record": "runs/v6-cover-hb-send-hard_selection/train/projection.json",
+          "record": "runs/v6-cover-hb-send-hard_selection/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-fc-send-direct_attention.json",
+          "id": "tl-v6-cover-fc-send-direct_attention",
+          "lens_record": "runs/v6-cover-fc-send-direct_attention/train/projection.json",
+          "record": "runs/v6-cover-fc-send-direct_attention/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-hb-send-direct_attention.json",
+          "id": "tl-v6-cover-hb-send-direct_attention",
+          "lens_record": "runs/v6-cover-hb-send-direct_attention/train/projection.json",
+          "record": "runs/v6-cover-hb-send-direct_attention/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-transformer-fc-budget.json",
+          "id": "tl-v6-cover-transformer-fc-budget",
+          "lens_record": "runs/v6-cover-transformer-fc-budget-retry1/train/projection.json",
+          "record": "runs/v6-cover-transformer-fc-budget-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/cover-transformer-hb-budget.json",
+          "id": "tl-v6-cover-transformer-hb-budget",
+          "lens_record": "runs/v6-cover-transformer-hb-budget-retry1/train/projection.json",
+          "record": "runs/v6-cover-transformer-hb-budget-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "completed"
+        }
+      ],
+      "status": "running",
+      "study_id": "TL-COVER-v6",
+      "summary": "91\u5177\u540d\u914d\u65b9\u00d7FC/HB\uff0c\u52a02\u4e2aTransformer\uff0c\u5171184\u914d\u7f6e\u3002",
+      "title": "\u5e76\u884c\u7ebf\u4e00\uff1a\u5c40\u90e8\u5019\u9009\u5e76\u96c6\u8986\u76d6",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 100
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u5171\u540cL128\u3001\u5168\u5c40B32/token\u65e5\u7a0b\uff1b262K/1M/4M\u91cc\u7a0b\u7891\u3002\u8fbe\u5230\u7684\u524d\u7f00\u4e0e\u9884\u7b97\u622a\u65ad\u5982\u5b9e\u6bd4\u8f83\u3002",
+      "id": "V6-SCALE",
+      "kind": "experiment",
+      "question": "\u66f4\u5bbd\u3001\u66f4\u6df1\u3001\u591a\u5c42\u5d4c\u5957\u7684\u6a21\u578b\u80fd\u5426\u5229\u7528\u66f4\u591a\u8bad\u7ec3\u6570\u636e\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad.json",
+          "id": "tl-v6-scale-fc16-kv-quad",
+          "lens_record": "runs/v6-scale-fc16-kv-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-kv-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc32-kv-quad.json",
+          "id": "tl-v6-scale-fc32-kv-quad",
+          "lens_record": "runs/v6-scale-fc32-kv-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc32-kv-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc64-kv-quad.json",
+          "id": "tl-v6-scale-fc64-kv-quad",
+          "lens_record": "runs/v6-scale-fc64-kv-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc64-kv-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-hb40-kv-quad.json",
+          "id": "tl-v6-scale-hb40-kv-quad",
+          "lens_record": "runs/v6-scale-hb40-kv-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-hb40-kv-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
+          "id": "tl-v6-scale-hb88-kv-quad",
+          "lens_record": "runs/v6-scale-hb88-kv-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-hb88-kv-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad.json",
+          "id": "tl-v6-scale-fc16-ssd-quad",
+          "lens_record": "runs/v6-scale-fc16-ssd-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-ssd-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc32-ssd-quad.json",
+          "id": "tl-v6-scale-fc32-ssd-quad",
+          "lens_record": "runs/v6-scale-fc32-ssd-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc32-ssd-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-gdn-quad.json",
+          "id": "tl-v6-scale-fc16-gdn-quad",
+          "lens_record": "runs/v6-scale-fc16-gdn-quad-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-gdn-quad-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-shannon.json",
+          "id": "tl-v6-scale-fc16-shannon",
+          "lens_record": "runs/v6-scale-fc16-shannon-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-shannon-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc32-shannon.json",
+          "id": "tl-v6-scale-fc32-shannon",
+          "lens_record": "runs/v6-scale-fc32-shannon-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc32-shannon-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-hb40-shannon.json",
+          "id": "tl-v6-scale-hb40-shannon",
+          "lens_record": "runs/v6-scale-hb40-shannon-retry1/train/projection.json",
+          "record": "runs/v6-scale-hb40-shannon-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-transformer-5m.json",
+          "id": "tl-v6-scale-transformer-5m",
+          "lens_record": "runs/v6-scale-transformer-5m-retry1/train/projection.json",
+          "record": "runs/v6-scale-transformer-5m-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-transformer-10m.json",
+          "id": "tl-v6-scale-transformer-10m",
+          "lens_record": "runs/v6-scale-transformer-10m-retry1/train/projection.json",
+          "record": "runs/v6-scale-transformer-10m-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-transformer-19m.json",
+          "id": "tl-v6-scale-transformer-19m",
+          "lens_record": "runs/v6-scale-transformer-19m-retry1/train/projection.json",
+          "record": "runs/v6-scale-transformer-19m-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad-npu.json",
+          "id": "tl-v6-scale-fc16-kv-quad-npu",
+          "lens_record": "runs/v6-scale-fc16-kv-quad-npu-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-kv-quad-npu-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad-npu.json",
+          "id": "tl-v6-scale-fc16-ssd-quad-npu",
+          "lens_record": "runs/v6-scale-fc16-ssd-quad-npu-retry1/train/projection.json",
+          "record": "runs/v6-scale-fc16-ssd-quad-npu-retry1/train/result.json",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "status": "running"
+        }
+      ],
+      "status": "running",
+      "study_id": "TL-SCALE-v6",
+      "summary": "14\u4e3b\u5019\u9009+2NPU\u540c\u6a21\u578b\u89c2\u5bdf\uff1b\u4e3b\u8981\u5bb9\u91cf\u7ea65\u201326M\u3002",
+      "title": "\u5e76\u884c\u7ebf\u4e8c\uff1a\u5b9e\u8d28\u6570\u636e\u4e0e\u5bb9\u91cf\u9636\u68af",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 460
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u5355seed\u7b5b\u9009\u4e0d\u662f\u786e\u8ba4\u6392\u540d\uff1b\u4fdd\u7559\u5931\u8d25\u5c1d\u8bd5\u548c\u591a\u91cd\u9009\u62e9\u504f\u5dee\uff0c\u7ec8\u6001\u540e\u51bb\u7ed3\u5019\u9009\u518d\u8bc4\u4ef7test\u3002",
+      "id": "RV6-COVER",
+      "kind": "result",
+      "question": "\u54ea\u4e9b\u5019\u9009\u503c\u5f97\u786e\u8ba4\uff0c\u54ea\u4e9b\u4ec5\u5728\u5f53\u524d\u914d\u65b9\u4e0b\u5931\u8d25\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "status": "awaiting",
+      "summary": "\u8ba1\u5212\u3001\u6267\u884c\u3001\u6570\u503c\u3001\u673a\u5236\u3001\u6062\u590d\u3001\u5b66\u4e60\u4fdd\u6301\u533a\u5206\u3002",
+      "title": "\u8986\u76d6\u7b5b\u9009\u7ed3\u8bba\u5f85\u5ba1",
+      "track": "tide",
+      "view_group": "current",
+      "x": 915,
+      "y": 100
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u6bd4\u8f83\u5171\u540ctoken\u524d\u7f00\uff0c\u663e\u5f0f\u8bb0\u5f55\u53c2\u6570\u3001Full/\u6d88\u606f\u3001\u5c40\u90e8\u8fb9\u754c\u3001\u8ba1\u7b97\u4e0e\u6570\u636e\uff1b\u4e0d\u628aB\u9884\u8bad\u7ec3\u80cc\u666f\u62fc\u6210A\u6210\u529f\u3002",
+      "id": "RV6-SCALE",
+      "kind": "result",
+      "question": "\u540c\u4e00\u6a21\u578b\u80fd\u5426\u540c\u65f6\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u5e76\u53d7\u76ca\u4e8e\u89c4\u6a21\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "status": "awaiting",
+      "summary": "\u7ed3\u679c\u672a\u5ba1\u9605\uff0c\u4e0d\u80fd\u7531\u63d0\u4ea4/\u5b8c\u6210\u5efa\u7acb\u652f\u6301\u3002",
+      "title": "\u89c4\u6a21\u4e0e\u7a00\u758f\u8054\u5408\u7ed3\u8bba\u5f85\u5ba1",
+      "track": "tide",
+      "view_group": "current",
+      "x": 915,
+      "y": 460
+    },
+    {
+      "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
+      "decision": "\u9700\u8981\u5ba1\u9605\u53cd\u8bc1\u3001\u5c1a\u672a\u533a\u5206\u7684\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\u3002",
+      "id": "V6-REVIEW",
+      "kind": "experiment",
+      "question": "\u6570\u636e/\u53c2\u6570/\u6df1\u5ea6\u6536\u76ca\u4e0e\u5b9e\u9645\u7a00\u758f\u80fd\u5426\u540c\u65f6\u6210\u7acb\uff1f",
+      "references": [
+        {
+          "label": "v6\u7814\u7a76\u8868",
+          "path": "docs/studies/language-coverage-scale-v6.md"
+        },
+        {
+          "label": "\u8fd0\u884c\u4e0eLens\u5bf9\u5e94",
+          "path": "docs/evidence/language-v6-handoff.json"
+        },
+        {
+          "label": "\u67e5\u770b/\u505c\u6b62/\u6062\u590d",
+          "path": "docs/studies/language-coverage-scale-v6-running.md"
+        }
+      ],
+      "status": "planned",
+      "study_id": "TL-REVIEW-v6",
+      "summary": "\u6309\u672c\u6279\u7ec8\u6001\u8bc1\u636e\u51b3\u5b9a\u4e0b\u4e00\u6279\uff0c\u4e0d\u81ea\u52a8\u6269\u5927\u3002",
+      "title": "\u540c\u6a21\u578b\u8054\u5408\u5ba1\u9605",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 820
     }
   ],
-  "notice": "FC16\u5728\u672c\u6b21\u8d28\u91cf\u5bb9\u5dee\u5185\u4e14Full/\u6d88\u606f\u7ea6\u51cf\u534a\uff1bHB16\u4e0eHB40\u672a\u901a\u8fc7\u539f\u8d28\u91cf\u95e8\u69db\u3002HB40\u591a\u5c42\u5d4c\u5957\u53ef\u5b66\u4e60\uff0c\u540c64\u6b65\u672a\u89c1\u589e\u89c4\u6a21\u6536\u76ca\u3002\u4e25\u683c\u6570\u503c\u5931\u8d25\u3001\u65e7\u5931\u8d25\u548c\u5355seed\u8fb9\u754c\u4fdd\u7559\uff0c\u65e0\u81ea\u52a8\u540e\u7ee7\u3002",
+  "notice": "200\u914d\u7f6e\u5df2\u63d0\u4ea4\uff1a184\u7b5b\u9009\u300116\u89c4\u6a21/\u8bbe\u5907\u8f68\u8ff9\u3002\u540e\u53f0\u8fd0\u884c\u72b6\u6001\u4e0d\u7b49\u4e8e\u5b66\u4e60\u6216\u6570\u5b66\u6b63\u786e\u6027\uff1b\u65e7\u4e25\u683c\u5931\u8d25\u4e0e\u5386\u53f2\u9650\u5b9a\u7ed3\u679c\u4fdd\u7559\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "\u8bed\u8a00\u8d28\u91cf\u4e0e\u591a\u533a\u57df\u7a00\u758f\uff1av5\u5168\u90e8\u7ec8\u6001\uff0c\u89c4\u6a21\u6536\u76ca\u5c1a\u672a\u8bc1\u5b9e",
+  "subtitle": "v6\uff1a\u5c40\u90e8\u5019\u9009\u5e76\u96c6\u8986\u76d6\u4e0e\u66f4\u591a\u6570\u636e\u3001\u66f4\u5927\u6a21\u578b\u5e76\u884c\u8bad\u7ec3",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T09:41:53.777861+00:00",
+  "updated_at": "2026-11-09T13:05:19.974648+00:00",
   "view_groups": [
     {
-      "height": 2700,
+      "height": 3700,
       "id": "current",
       "label": "\u5f53\u524d\uff1a\u8bed\u8a00\u4e0e\u7ed3\u6784\u8054\u5408\u7814\u7a76",
       "y": 0
@@ -5713,7 +7653,7 @@
       "height": 2750,
       "id": "history",
       "label": "\u5386\u53f2\uff1a\u56db\u6279\u7814\u7a76\u4e0e\u9650\u5b9a\u8bc1\u636e",
-      "y": 2800
+      "y": 3800
     }
   ],
   "width": 1490

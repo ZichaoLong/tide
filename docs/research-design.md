@@ -1,10 +1,8 @@
-当前补充：稠密Shannon主要作为语言/稀疏比较和诊断候选。基座positive-floor-v1已完成[限定验收](studies/positive-support-acceptance-results.md)，以稳定执行、相关机制、恢复及任务质量为使用依据；有限严格超差单列，不要求任意长训练逐值一致。后续不自动扩展新分配/表示候选。
-
-当前已实施[多区域深度/递归嵌套v5](studies/language-depth-proposal.md)：A FC16/HB16、B同槽FC8、浅宽/普通LM控制及条件HB40。CPU/NPU选型以实测稳定完成时间为依据，24累计计算worker小时/12h；实际状态见STATUS。旧结果与严格失败保持原范围。
+当前实施为[v6局部候选覆盖与实质规模训练](studies/language-coverage-scale-v6.md)，184筛选与16规模/设备轨迹已提交。原v5的12h/24 worker小时限制属于历史批次；本批采用独立48h、CPU/NPU及磁盘预算。Shannon补正按公开Python能力使用，有限严格超差单列，不要求消除所有浮点差异才开展学习；不自动扩展已列清单之外的工作。
 
 # TIDE：语言能力与可扩展局部稀疏结构
 
-2026-11-08按用户最新重点修订。当前问题、对照、候选、指标、预算与停止条件见[语言与结构研究表](studies/language-structure.md)，已获授权开始实施，具体作业状态以STATUS为准。
+2026-11-09按用户后续批准更新。当前实施表是[v6局部候选覆盖与实质规模训练](studies/language-coverage-scale-v6.md)，两条线并行，已实际提交；原[语言与结构设计](studies/language-structure.md)保留目标与历史来源，具体作业状态以STATUS为准。
 [STATUS](STATUS.md)维护交接，[ROADMAP](ROADMAP.md)维护优先级；本页不是作业日志。
 
 ## 1. 联合目标
@@ -35,11 +33,11 @@ A的合成稀疏与B原模型的语言能力不能拼接成联合证明；同一
 ### A：从零训练完整TIDE语言模型
 
 任务侧embedding、公共HB/core-5、全位置readout/LM head共同训练。
-固定KV/qry、width32、region4、regional_total k2/温度0.25，比较稠密Shannon与可学习quad。FC4建立起步基准，多区域研究已实际覆盖FC16串联、HB16分支汇合与HB40递归嵌套，并有width64浅宽控制。普通Transformer的width48和width96两组参照分别保留原参数与曝光身份；初始HB16全位置NPU成本先导失败仍保留，后来的CPU训练不撤销它。
+v5起步固定KV/qry、width32、region4、regional_total k2/温度0.25，比较稠密Shannon与可学习quad。当前v6扩展为局部候选的并集覆盖，并以width128、FC16/32/64和HB40/88进入实质规模；模型本体/学习目标和实际局部稀疏仍是共同重点。FC4建立起步基准，多区域研究已实际覆盖FC16串联、HB16分支汇合与HB40递归嵌套，并有width64浅宽控制。普通Transformer的width48和width96两组参照分别保留原参数与曝光身份；初始HB16全位置NPU成本先导失败仍保留，后来的CPU训练不撤销它。
 数据、词表、token和逻辑更新匹配，参数偏差、活跃计算与实际时间单列。“接近”针对该规模和预算，不是从零立即追平预训练0.5B。
 
-[v3较小曝光探索](studies/language-exploration-v3.md)、[语言v4](studies/language-confirmation-v4.md)与[v5多区域补齐](studies/language-completion-v5-results.md)均已形成各自限定结果。当前实际比较包括同128更新的FC4→FC16、同64更新的HB16→HB40及512步LR日程前缀；HB88仍只是静态后续候选。这些点有学习和独立评价，但本次未显示增加结构/参数的质量收益。后续优先区分训练充分度和日程，保持新确认文档冻结与同曝光口径。FC4只有一个区域且无内部边，不能声称跨区域局部通信。
-不同时遍历宽度、全部记忆/拓扑、长度、平台和optimizer；只有需要解释“学会选择”时加合法固定稀疏。
+[v3较小曝光探索](studies/language-exploration-v3.md)、[语言v4](studies/language-confirmation-v4.md)与[v5多区域补齐](studies/language-completion-v5-results.md)均已形成各自限定结果。v5实际比较包括同128更新的FC4→FC16、同64更新的HB16→HB40及512步LR日程前缀；v6已实际提交HB88，结果尚待审阅。这些点有学习和独立评价，但本次未显示增加结构/参数的质量收益。后续优先区分训练充分度和日程，保持新确认文档冻结与同曝光口径。FC4只有一个区域且无内部边，不能声称跨区域局部通信。
+v6不遍历所有字段的笛卡尔积；以91个具名候选分别在FC/HB承载覆盖记忆、读取、发送、评分、共享及局部尺寸等，另开有限容量/深度阶梯。规模线不等待全部筛选完成；不同全局batch、上下文和token日程的迁移必须另证。
 如果普通LM对照也明显欠训练，质量相近只能说明该预算下先导观察，不能宣布语言可用性成立。
 
 ### B：预训练模型生长与局部承接
@@ -61,7 +59,7 @@ B语言保持不能认证A从零成功；A结构也不能认证B整体局部化�
 
 ## 3. 固定契约与结构边界
 
-数学固定`0770593838a37c790a568226930567ed60f99b83`。当前原v5补齐固定基座`74e7bbd62341d2ccd382194a2c52ad4fea033665`，使用独立`dependencies/positive-floor-v1/`安装锁与`.venv-positive-floor-v1`；旧85d161d运行、B及其安装身份保持。
+数学固定`0770593838a37c790a568226930567ed60f99b83`。v6及原v5补齐固定基座`74e7bbd62341d2ccd382194a2c52ad4fea033665`，使用独立`dependencies/positive-floor-v1/`安装锁与`.venv-positive-floor-v1`；旧85d161d运行、B及其安装身份保持。
 [来源选择](../dependencies/foundation-source.json)、当前[wheel锁](../dependencies/positive-floor-v1/foundation.lock.json)、[安装内容锁](../dependencies/positive-floor-v1/installation.lock.json)与[环境身份](../dependencies/positive-floor-v1/environment.lock.json)分开维护；`dependencies/`根目录的锁也选择当前安装，旧85d161d锁保存在旧固定源码快照，旧`.venv`保持。
 基座、LH、fractal-latcarf及ObsidianVault只读。
 

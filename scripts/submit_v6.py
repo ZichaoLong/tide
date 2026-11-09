@@ -32,6 +32,8 @@ def prepare(a):
                 max_rss_gib=c['resources']['max_rss_gib'],timeout_seconds=c['training']['timeout_seconds']))
         path=out/(name+'.json');atomic_json(path,plan);path.chmod(0o444)
         jobs.append(dict(name=name,plan=str(path),device=device,threads=threads,cases=[c['id'] for c in cases],
+            worker_output=str(root/'runs'/(name+'-worker')),
+            case_outputs={c['id']:c['output'] for c in plan['cases']},
             case_caps=sum(c['timeout_seconds'] for c in plan['cases']),memory_gib=max(c['max_rss_gib'] for c in plan['cases'])+4))
     manifest=dict(schema='tide-v6-submission-v1',source=str(source),source_identity=json.loads((source/'.tide-source.json').read_text()),
         data=str(data),data_lock_sha256=digest(data/'data-lock.json'),cpu_coverage_workers=a.workers,jobs=jobs)
@@ -61,7 +63,7 @@ def submit(a):
         if npu:cmd+=['--queue-helper',str(source/'scripts/run_on_light_device.py'),'--wait-seconds',str(min(3600,cap-60)),
             '--env',f'TIDE_LAB_RESOURCE_POLICY={source}/configs/studies/language/v6/resource.json']
         cmd+=['--','python','scripts/campaign_worker.py','--plan',job['plan'],'--data',str(data),
-            '--output',str(root/'runs'/(name+'-worker')),'--recording-cli',a.recording_cli,'--deadline-epoch',str(deadline)]
+            '--output',job.get('worker_output',str(root/'runs'/(name+'-worker'))),'--recording-cli',a.recording_cli,'--deadline-epoch',str(deadline)]
         reply=subprocess.run(cmd,text=True,capture_output=True)
         if reply.returncode:raise RuntimeError(name+': '+reply.stderr+' '+reply.stdout)
         print(json.dumps(dict(submitted=name,cases=job['cases'],device=job['device'])),flush=True)
