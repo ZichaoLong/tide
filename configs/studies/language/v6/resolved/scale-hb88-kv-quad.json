@@ -50,6 +50,15 @@
     "lm_trainable": 25633934
   },
   "resolution": {
+    "capacity_adjustment": {
+      "completed_optimizer_updates": 0,
+      "new_rss_gib": 96,
+      "note": "same model/data/global and physical batch; no resume of uncommitted gradients; original failure preserved",
+      "observed_peak_rss_mib": 50109.54296875,
+      "previous_attempt": "v6-scale-hb88-kv-quad-retry1",
+      "previous_rss_gib": 48,
+      "spent_seconds_deducted": 473
+    },
     "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
     "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
     "native_trace": "public factory returns complete traces; no execution-core changes",
@@ -58,7 +67,7 @@
     "selection": "finite-exploration"
   },
   "resources": {
-    "max_rss_gib": 48
+    "max_rss_gib": 96
   },
   "revisions": {
     "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
@@ -87,7 +96,7 @@
       4194304
     ],
     "target_tokens": 4194304,
-    "timeout_seconds": 129600,
+    "timeout_seconds": 129127,
     "validation_every_tokens": 131072,
     "warmup_tokens": 65536,
     "weight_decay": 0.01

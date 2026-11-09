@@ -27,14 +27,15 @@ def status(root):
             stage=next((s['name'] for s in reversed(case.get('stages',[])) if s['state']=='running'),None)
             attempts[cid].append(dict(id=cid,run_id='tl-v6-'+cid,worker=job['name'],state=state,stage=stage,
                 inner_training_state=train.get('state'),step=progress.get('step'),tokens=progress.get('tokens'),
-                device=job['device'],physical_id=queue.get('physical_id'),reason=case.get('reason'),
+                device=job['device'],physical_id=queue.get('physical_id'),
+                reason=case.get('reason') or next((stage.get('failure') for stage in reversed(case.get('stages',[])) if stage.get('failure')),None) or train.get('error') or worker.get('error'),
                 validation_nll=train.get('final_validation_nll'),record=str((base/'train/result.json').relative_to(root)),
                 source_commit=job.get('source_commit',manifest.get('source_identity',{}).get('commit'))))
     for cid,history in attempts.items():
         rows.append(dict(history[-1],previous_attempts=history[:-1]))
     budget=read(root/'runs/v6-budget-v2/state.json')
     return dict(counts=dict(collections.Counter(r['state'] for r in rows)),
-        training=sum(r['inner_training_state']=='running' for r in rows),
+        training=sum(r['state']=='running' and r['inner_training_state']=='running' for r in rows),
         checking=sum(r['state']=='running' and r['inner_training_state'] is None for r in rows),
         allocated_cpu_core_hours=budget.get('usage',{}).get('cpu_core_seconds',0)/3600,
         allocated_npu_device_hours=budget.get('usage',{}).get('npu_device_seconds',0)/3600,
