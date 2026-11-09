@@ -12,14 +12,16 @@ from tide_lab.supervisor import verify_source
 
 
 def review(root):
-    config=json.loads((root/'configs/studies/language/budget-guard-v5.json').read_text())
+    parallel=root/'configs/studies/language/budget-guard-parallel-v5.json'
+    config_path=parallel if parallel.exists() else root/'configs/studies/language/budget-guard-v5.json'
+    config=json.loads(config_path.read_text())
     out=dict(schema='tide-depth-handoff-v1',at=now(),project='tide-learning-lab',jobs={},sources={},lens=[],
         axes='execution, strict numerics, discrete semantics, recovery, learning, performance remain separate',
         data_lock_sha256=digest(root/'runs/lm-depth-data-v5/tokens/data-lock.json'),
         resource_decision='docs/evidence/language-depth-resource-decision.json',
         artifact_retirement='docs/evidence/artifact-retirement-v5.json',lens_retirement='docs/evidence/lens-retirement-v5.json')
     inputs={}
-    for name in [*config['jobs'],'lm-depth-budget-v5','lm-a-language-v4']:
+    for name in [*config['jobs'],'lm-depth-budget-v5','lm-depth-budget-parallel-v5','lm-a-language-v4']:
         record=root/'artifacts/jobs'/name/'job.json'
         if not record.exists():continue
         job=json.loads(record.read_text());life=inspect(record);source=job['source']['path']
@@ -54,7 +56,8 @@ def review(root):
     bad=[name for name,h in lock['files_sha256'].items() if digest(Path(lock['path'])/name)!=h]
     if bad:raise ValueError('installed foundation changed: '+str(bad))
     out['installed_foundation']=dict(files_checked=len(lock['files_sha256']),all_hashes_match=True)
-    guard=root/'runs/lm-depth-budget-v5/state.json'
+    guard=root/'runs/lm-depth-budget-parallel-v5/state.json'
+    if not guard.exists():guard=root/'runs/lm-depth-budget-v5/state.json'
     out['budget']=json.loads(guard.read_text()) if guard.exists() else config
     p=root/'runs/lm-depth-data-v5/projection.json';pr=json.loads(p.read_text())
     out['data_projection']={k:pr.get(k) for k in ['source_run_id','project','destination_name','destination_run_id','status','readback_matches']}
