@@ -1,0 +1,20 @@
+{
+  "schema": "tide-positive-support-acceptance-v1",
+  "study_id": "TL-LM-EXEC",
+  "foundation_revision": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+  "deadline_epoch": 1794235753.0310388,
+  "data": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-depth-data-v5/tokens",
+  "hb_final_step": 94,
+  "resume_split_step": 90,
+  "hb": {
+    "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-hb16-underflow-v5/failure-boundary.pt",
+    "sha256": "ca83d20cb6bed904bab36886795ad4f9bc26e32e265b69579f6582e23bff3576",
+    "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/train-tide-dense-s11/manifest.json"
+  },
+  "fc": {
+    "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-fc16-v5/train-tide-dense-s11/checkpoint.pt",
+    "sha256": "c12c06406ef9d44cf905b6c11143de9650769dec0119588766b4f7b780fc0806",
+    "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-fc16-v5/train-tide-dense-s11/manifest.json",
+    "normal_result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-fc16-v5/test-tide-dense/result.json"
+  }
+}

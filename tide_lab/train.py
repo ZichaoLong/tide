@@ -98,12 +98,29 @@ def installed_identity():
     root = Path(tidegraph.__file__).parent
     source_hash = hashlib.sha256(''.join(str(p.relative_to(root))+digest(p)
         for p in sorted(root.rglob('*.py'))).encode()).hexdigest()
+    repository = Path(__file__).resolve().parents[1]
+    selected = Path(os.environ.get('TIDE_LAB_FOUNDATION_LOCK', repository/'dependencies/foundation.lock.json'))
+    lock = json.loads(selected.read_text())
+    installation_path = Path(lock['installation_lock']['path'])
+    if not installation_path.is_absolute():
+        installation_path = repository/installation_path
+    if digest(installation_path) != lock['installation_lock']['sha256']:
+        raise ValueError('selected foundation installation lock changed')
+    package = json.loads(installation_path.read_text())['installed_identity']['package']
+    for name, expected in package['files_sha256'].items():
+        if digest(root/name) != expected:
+            raise ValueError('selected foundation differs from installation: '+name)
+    try:
+        transformers = importlib.metadata.version('transformers')
+    except importlib.metadata.PackageNotFoundError:
+        transformers = None
     return dict(python=sys.version, torch=torch.__version__, tidegraph=importlib.metadata.version('tidegraph'),
                 tidegraph_source_sha256=source_hash,
                 torch_npu=importlib.metadata.version('torch-npu'),
-                transformers=importlib.metadata.version('transformers'),
-                mathematics='0770593838a37c790a568226930567ed60f99b83',
-                foundation_commit='85d161d5c9148eac2b164f89a0ba4204b4331898')
+                transformers=transformers,
+                mathematics=lock['mathematics']['commit'],
+                foundation_commit=lock['foundation']['commit'],
+                foundation_lock_sha256=digest(selected))
 
 
 def checkpoint_save(path, *, model, optimizer, step, config_hash, identity, device):

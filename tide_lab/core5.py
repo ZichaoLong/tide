@@ -23,7 +23,7 @@ class Core5Encoder(torch.nn.Module):
     def __init__(self, width=16, topology="fc", depth=2, region_width=4,
                  send="dense", seed=7, temperature=1.0, dtype=torch.float32,
                  memory_read="qry", branches=2, offsets=(0, 1), family="kv",
-                 history=512):
+                 history=512, support_policy="strict"):
         super().__init__()
         if send not in {"dense", "sparse"}:
             raise ValueError("send must be dense (Shannon) or sparse (quadratic)")
@@ -40,6 +40,8 @@ class Core5Encoder(torch.nn.Module):
                            ent_alpha=1.0 if send == "dense" else None, history=history,
                            memory_overrides=dict(memory_read=memory_read),
                            region_overrides=dict(allocation_temperature=float(temperature)))
+        if support_policy != "strict":
+            self.recipe["region_overrides"]["support_policy"] = support_policy
         self.plan, self.inventory = prepare(self.recipe, samples=1, positions=1, seed=seed)
         self.binding, _, _ = materialize(self.plan, max_bytes=64 * 1024 ** 2, dtype=dtype)
         self.graph_model = self.binding.model
