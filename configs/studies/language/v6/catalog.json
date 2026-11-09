@@ -1550,7 +1550,7 @@
       "id": "scale-transformer-5m",
       "kind": "transformer",
       "line": "scale",
-      "parameters": 669108
+      "parameters": 5001984
     },
     {
       "config": "configs/studies/language/v6/scale-transformer-10m.json",
@@ -1558,7 +1558,7 @@
       "id": "scale-transformer-10m",
       "kind": "transformer",
       "line": "scale",
-      "parameters": 669108
+      "parameters": 9740544
     },
     {
       "config": "configs/studies/language/v6/scale-transformer-19m.json",
@@ -1566,7 +1566,7 @@
       "id": "scale-transformer-19m",
       "kind": "transformer",
       "line": "scale",
-      "parameters": 669108
+      "parameters": 19322368
     }
   ],
   "counts": {

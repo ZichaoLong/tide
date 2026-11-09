@@ -15,11 +15,15 @@ def generate(output):
     rows=[];rejected=[]
     def emit(c,group):
         try:
-            m,inv=model_recipe(**c['core']['recipe'])
-            c['planned_inventory']=dict(core_trainable=inv['totals']['trainable'],
-                lm_trainable=inv['totals']['trainable']+4096*c['core']['width']+4096,
-                nodes=m['graph']['nodes'],regions=m['graph']['regions'],
-                resolved_memories=m['memories'],resolved_regions=m['regions'])
+            if c['kind']=='transformer':
+                c['planned_inventory']=dict(lm_trainable=c['planned_transformer_parameters'],
+                    transformer=c['transformer'])
+            else:
+                m,inv=model_recipe(**c['core']['recipe'])
+                c['planned_inventory']=dict(core_trainable=inv['totals']['trainable'],
+                    lm_trainable=inv['totals']['trainable']+4096*c['core']['width']+4096,
+                    nodes=m['graph']['nodes'],regions=m['graph']['regions'],
+                    resolved_memories=m['memories'],resolved_regions=m['regions'])
         except (ValueError,TypeError) as error:
             rejected.append(dict(id=c['id'],group=group,recipe=c['core']['recipe'],error=str(error)));return
         c['coverage_group']=group
@@ -43,7 +47,7 @@ def generate(output):
         r=anchor(topology,128,depth);r.update(regularizer='ent',ent_alpha=1.)
         r['region_overrides']['support_policy']='positive-floor-v1'
         emit(config_for('scale-'+name+'-shannon',r,line='scale'),'dense_control')
-    for name,layers,width,ffn in [('5m',4,256,1024),('10m',8,256,1024),('19m',8,384,1536)]:
+    for name,layers,width,ffn in [('5m',5,256,1024),('10m',11,256,1024),('19m',10,384,1536)]:
         c=config_for('scale-transformer-'+name,anchor(),line='scale',kind='transformer',
             transformer=dict(layers=layers,width=width,heads=4 if width==256 else 6,ffn=ffn))
         # Exact task-side parameter formula, tied embedding/head, pre/post norms.

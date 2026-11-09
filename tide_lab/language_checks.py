@@ -17,7 +17,7 @@ def finite_delta(a,b,atol,rtol):
         relative_l2=float(torch.linalg.vector_norm(a-b)/torch.linalg.vector_norm(b).clamp_min(1e-30)))
 
 
-def core_axes(encoder,options,seed,device):
+def core_axes(encoder,options,seed,device,*,require_all_regions=True):
     from scripts.check_core5 import canonical_result
     from scripts.assess_core5_axes import Audit,positive_support,root_alias_check
     from types import SimpleNamespace
@@ -61,7 +61,7 @@ def core_axes(encoder,options,seed,device):
         magnitude=sum(float(g.abs().sum()) for g in grads)
         depth_facts['region_events'].append(dict(region=region,candidates=len(events),
             full=sum(e['active'] for e in events),node_parameter_vjp_l1=magnitude))
-        if magnitude==0:raise AssertionError(f'output has no measured parameter gradient through region {region}')
+        if magnitude==0 and require_all_regions:raise AssertionError(f'output has no measured parameter gradient through region {region}')
     depth_facts['internal_messages']=result.stats.get('visited_edges',0)
     if depth_facts['regions']>1:
         if set(encoder.binding.graph.inputs)&set(encoder.binding.graph.outputs):

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sys
 import subprocess
+import shutil
 import time
 import urllib.request
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -26,9 +27,16 @@ def prepare(a):
             if '/train-' not in row['path']:continue
             target=raw/Path(row['path']).name
             url='https://huggingface.co/datasets/Salesforce/wikitext/resolve/'+a.revision+'/'+row['path']+'?download=true'
-            with urllib.request.urlopen(url,timeout=60) as response,target.with_suffix('.partial').open('xb') as f:
-                while chunk:=response.read(2**20):f.write(chunk)
             temp=target.with_suffix('.partial')
+            if a.partial_dir:
+                prior=a.partial_dir/temp.name
+                if prior.is_file():shutil.copyfile(prior,temp)
+            # One bounded HTTP Range continuation after the recorded urllib
+            # read timeout. No retry loop and no shared proxy configuration.
+            subprocess.run(['curl','--fail','--location','--silent','--show-error',
+                '--connect-timeout','20','--max-time','1200','--speed-time','120',
+                '--speed-limit','1024','--continue-at','-', '--output',str(temp),url],
+                check=True,timeout=1230)
             if temp.stat().st_size!=row['size'] or digest(temp)!=row['lfs']['oid']:
                 raise ValueError('fixed remote file size/hash mismatch: '+row['path'])
             temp.rename(target);target.chmod(0o444)
@@ -38,10 +46,14 @@ def prepare(a):
         # Reuse the two already-qualified private data interpreters without
         # mixing their site-packages or changing either environment.
         extracted=a.output/'raw-rows.jsonl'
-        code=('import json,sys; from pathlib import Path; import pyarrow.parquet as pq; '
-              'out=open(sys.argv[2],"x"); '
-              '[out.write(json.dumps(t)+"\\n") for p in sorted(Path(sys.argv[1]).glob("train-*.parquet")) '
-              'for t in pq.read_table(p)["text"].to_pylist()]; out.close()')
+        code='''import json,sys
+from pathlib import Path
+import pyarrow.parquet as pq
+with open(sys.argv[2], "x") as out:
+    for p in sorted(Path(sys.argv[1]).glob("train-*.parquet")):
+        for t in pq.read_table(p)["text"].to_pylist():
+            out.write(json.dumps(t)+"\\n")
+'''
         subprocess.run([str(a.arrow_python),'-c',code,str(raw),str(extracted)],check=True,timeout=600)
         rows=[json.loads(line) for line in extracted.read_text().splitlines()]
         documents=parse_documents(rows,'w103-train');del rows
@@ -102,4 +114,5 @@ if __name__=='__main__':
     for name in ('tree','tokenizer','exclude','output','arrow-python'):p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--revision',default='b08601e04326c79dfdd32d625aee71d232d685c3')
     p.add_argument('--train-tokens',type=int,default=20971520)
+    p.add_argument('--partial-dir',type=Path)
     prepare(p.parse_args())
