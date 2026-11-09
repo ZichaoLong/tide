@@ -67,8 +67,13 @@ def evaluate(program, weights, requests, slots, mode, zeta):
     states, times = [r.comparison for r in requests], [r.time for r in requests]
     u = torch.stack([r.content.value[1:] for r in requests])
     if isinstance(c, KVConfig):
-        from .query_execution import dense
-        mix, alpha = kv(content, memory, states, times, u, dense=dense(program)), c.alpha_att
+        from .query_execution import dense, packed
+        if packed(program):
+            from .query_packed import full
+            mix = full(content, memory, states, times, u)
+        else:
+            mix = kv(content, memory, states, times, u, dense=dense(program))
+        alpha = c.alpha_att
     else:
         mix, alpha = recurrent(content, memory, states, times, u), c.alpha_mem
     x = u+alpha*mix

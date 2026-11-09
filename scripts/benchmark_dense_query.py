@@ -5,6 +5,7 @@ Read Git objects from --downstream-repo; never alter its checkout/install/runs.
 Run each configuration in a fresh bounded service/process. No learning claim.
 """
 import argparse
+import copy
 import functools
 import hashlib
 import io
@@ -27,11 +28,13 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
-    p.add_argument("--query-execution", choices=("legacy", "dense-v1"), required=True)
+    p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     p.add_argument("--native-library")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--length", type=int, default=128)
     p.add_argument("--profile", choices=("none", "cpu", "npu"), default="none")
+    p.add_argument("--warmup-state", choices=("reset", "continue"), default="reset",
+                   help="reset restores initial weights/optimizer after warmup for controlled comparisons")
     a = p.parse_args()
     if a.client == "native" and not a.native_library:
         p.error("native requires an explicit matching --native-library build directory")
@@ -64,7 +67,7 @@ def main():
         downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
         query_execution=a.query_execution, installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
-        phases=[], profile=a.profile,
+        phases=[], profile=a.profile, warmup_state=a.warmup_state,
         scope="One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.")
     write_json(out/"result.json", record)
     try:
@@ -78,6 +81,15 @@ def main():
         synchronize(device)
         record["construction_seconds"] = time.monotonic()-start
         record["trainable_parameters"] = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        initial_model = {n: t.detach().cpu().clone() for n, t in model.state_dict().items()} if a.warmup_state == "reset" else None
+        initial_optimizer = copy.deepcopy(opt.state_dict()) if initial_model is not None else None
+        def parameter_hash():
+            h = hashlib.sha256()
+            for name, value in model.state_dict().items():
+                h.update(name.encode()+b"\0")
+                h.update(value.detach().cpu().contiguous().numpy().tobytes())
+            return h.hexdigest()
+        record["initial_parameters_sha256"] = parameter_hash()
 
         def step(index):
             synchronize(device); wall = time.monotonic()
@@ -112,6 +124,11 @@ def main():
             return row
 
         for i in range(2):
+            if i == 1:
+                if initial_model is not None:
+                    model.load_state_dict(initial_model); opt.load_state_dict(initial_optimizer)
+                    opt.zero_grad(set_to_none=True)
+                record["measured_parameters_sha256"] = parameter_hash()
             row = step(i); record["phases"].append(row)
             write_json(out/"result.json", record); print(json.dumps(row), flush=True)
         if a.profile != "none":

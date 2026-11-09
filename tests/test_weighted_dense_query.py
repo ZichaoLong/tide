@@ -78,7 +78,8 @@ def test_dense_ragged_independent_fields(dtype, native, kind, request):
 
 
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_dense_aliases_versions_and_unused_optimizer(dtype, native):
+@pytest.mark.parametrize("mode", ["dense-v1", "packed-v2"])
+def test_dense_aliases_versions_and_unused_optimizer(dtype, native, mode):
     w, rows, roots = independent(dtype)
     w.full_program.content.query = w.kernel.read_q
     w.full_program.content.out = w.kernel.read_v
@@ -88,7 +89,7 @@ def test_dense_aliases_versions_and_unused_optimizer(dtype, native):
     roots = {**{n: p for n, p in w.named_parameters() if p.requires_grad},
              **{n: p for n, p in roots.items() if n.startswith("row.")}}
     expected = [p.step(w, r, 1, "hard", 1.).value for r in rows]
-    p.query_execution = "dense-v1"
+    p.query_execution = mode
     query = native_query if native else evaluate
     actual = [r.value for r in query(p, w, rows, kind="full", slots=1)]
     equivalent(vjp(sum(x.square().sum() for x in expected), roots),
@@ -131,15 +132,14 @@ def test_dense_batches_across_lengths_and_keeps_branches(monkeypatch):
 
 def test_dense_execution_identity_and_rejections():
     from tidegraph.planning.execution import ExecutionSpec
-    legacy = ExecutionSpec().record()
+    legacy = ExecutionSpec(query_execution="legacy").record()
     dense = ExecutionSpec(query_execution="dense-v1").record()
     assert "query_execution" not in legacy["requested"]
     assert dense["execution_id"] != legacy["execution_id"]
-    from tidegraph.planning.study import command
-    with pytest.raises(ValueError, match="query_execution"):
-        command(dict(execution=dense, measurement={}), python="python", root=None, output=None, workload=None)
+    assert ExecutionSpec().record()["requested"]["query_execution"] == "auto"
+    assert ExecutionSpec(client="libtorch", query_execution="dense-v1")
     for fields in (dict(packing="scalar"), dict(schedule="streaming"), dict(workers=2), dict(dtype="float16"),
-                   dict(client="libtorch"), dict(device="npu:0", placement="resident")):
+                   dict(device="npu:0", placement="resident")):
         with pytest.raises(ValueError, match="dense-v1"):
             ExecutionSpec(query_execution="dense-v1", **fields)
     from tidegraph import Graph, Node, Region

@@ -5,10 +5,12 @@
 #include "tide/ownership.h"
 #include "tide/transfer.h"
 #include "tide/graph_checkpoint.h"
+#include "tide/weighted.h"
 #include <torch/csrc/autograd/autograd.h>
 #include "../device_online/weighted_precision_reference.h"
 #include "../../cpp/bench/comparison.h"
 #include <cmath>
+#include <set>
 namespace weighted_benchmark {
 namespace {
 Continuation detach_live(Continuation q){
@@ -34,6 +36,18 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   if(peers.empty())peers.push_back(device);
   if(owners.empty())for(const auto& node:data.graph.nodes)owners.push_back(peers[node.region%peers.size()]);
   data.model=place_payloads(data.graph,data.model,owners);
+  auto query=j.value("__query_execution",std::string("auto"));
+  std::set<std::string> payload_devices;for(const auto& node:data.model.nodes)payload_devices.insert(node.bias.device().str());
+  if(query=="auto"&&(scalar||!batch||workers!=1||peers.size()>1||payload_devices.size()>1))query="legacy";
+  if(query!="legacy"&&query!="auto"&&payload_devices.size()>1)
+    throw std::invalid_argument("explicit query execution requires a single payload device");
+  for(auto& node:data.model.nodes){
+    auto resolved=query;
+    if(query=="auto")resolved=std::holds_alternative<weighted::KVConfig>(weighted::node_binding(node).memory)
+      &&(node.bias.scalar_type()==at::kFloat||node.bias.scalar_type()==at::kDouble)?"packed-v2":"legacy";
+    if(!scalar&&batch&&workers==1)weighted::configure_query_execution(node,resolved);
+    ++query_counts["query_"+resolved+"_nodes"];
+  }
   placed=place_model(data.graph,data.model,placement);registry=data.model.parameters();
   state.identity=data.graph.identity;state.batch_size=data.samples;
   options.workers=workers;options.packed=!scalar;
@@ -57,8 +71,10 @@ std::vector<External> Eager::placed_inputs(std::vector<External> xs,std::map<std
   return xs;
 }
 Result Eager::forward(const Continuation& q,const std::vector<External>& xs,Index stop)const{
-  return prefill?Greedy(data.graph,placed,options).run(q,xs,stop,stop)
-                :Streaming(data.graph,placed,options).run(q,xs,stop,stop);
+  auto result=prefill?Greedy(data.graph,placed,options).run(q,xs,stop,stop)
+                     :Streaming(data.graph,placed,options).run(q,xs,stop,stop);
+  for(const auto& [name,count]:query_counts)result.stats[name]=count;
+  return result;
 }
 Step Eager::step(Index index){
   if(index<0||index!=state.cut/data.span||state.cut%data.span)throw std::invalid_argument("window index disagrees with live continuation cut");

@@ -60,7 +60,7 @@ class Aggregate final:public AggregateKernel {
 };
 template<class Config> class Describe final:public ReadKernel {
  public:
-  Describe(Config c,RegionalConfig r,bool dense=false):c_(std::move(c)),r_(std::move(r)),dense_(dense){}
+  Describe(Config c,RegionalConfig r,int dense=false):c_(std::move(c)),r_(std::move(r)),dense_(dense){}
   bool structured() const override{return true;}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
@@ -104,11 +104,11 @@ template<class Config> class Describe final:public ReadKernel {
   }
   Config configuration()const{return c_;}
   RegionalConfig regional()const{return r_;}
- private:Config c_;RegionalConfig r_;bool dense_;
+ private:Config c_;RegionalConfig r_;int dense_;
 };
 template<class Config> class Full final:public FullKernel {
  public:
-  explicit Full(Config c,bool dense=false):c_(std::move(c)),dense_(dense){}
+  explicit Full(Config c,int dense=false):c_(std::move(c)),dense_(dense){}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   std::vector<FullResult> batch_grad(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
@@ -128,7 +128,7 @@ template<class Config> class Full final:public FullKernel {
     validate_content_weights(w,c_);
   }
   Config configuration()const{return c_;}
- private:Config c_;bool dense_;
+ private:Config c_;int dense_;
 };
 }
 using installed::Aggregate;
@@ -155,7 +155,7 @@ NodeBinding node_binding(const NodeWeights& w){
   throw std::invalid_argument("node binding requires installed weighted memory");
 }
 void configure_query_execution(NodeWeights& w,const std::string& mode){
-  require(mode=="legacy"||mode=="dense-v1","unknown query_execution");
+  require(mode=="auto"||mode=="legacy"||mode=="dense-v1"||mode=="packed-v2","unknown query_execution");
   auto binding=node_binding(w);auto* c=std::get_if<KVConfig>(&binding.memory);auto r=binding.regional;
   if(mode=="dense-v1"){
     require(c&&c->memory_read=="qry"&&r.local_score=="cat"&&r.region_score=="ind"&&
@@ -163,8 +163,14 @@ void configure_query_execution(NodeWeights& w,const std::string& mode){
       "dense-v1 requires KV/qry cat/ind regional_total context/cat quad strict");
     require(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble,"dense-v1 requires float32 or float64 payload");
   }
-  if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,mode=="dense-v1");
-    w.full_kernel=std::make_shared<Full<KVConfig>>(*c,mode=="dense-v1");}
+  if(mode=="packed-v2"){
+    require(c,"packed-v2 requires KV");
+    require(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble,"packed-v2 requires float32 or float64 payload");
+  }
+  const bool automatic=mode=="auto"&&c&&(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble);
+  const int execution=mode=="packed-v2"||automatic?2:(mode=="dense-v1"?1:0);
+  if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,execution);
+    w.full_kernel=std::make_shared<Full<KVConfig>>(*c,execution);}
   else {auto rc=std::get<RecurrentConfig>(binding.memory);w.read_kernel=std::make_shared<Describe<RecurrentConfig>>(rc,r);
     w.full_kernel=std::make_shared<Full<RecurrentConfig>>(rc);}
 }

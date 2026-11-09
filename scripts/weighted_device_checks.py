@@ -12,10 +12,11 @@ from weighted_device_cases import fixture, inputs_to, leaves
 from weighted_device_precision import Precision
 
 
-def runner(binding, implementation, placement, native_library=None, streaming=False, *, workers=1, packing="auto"):
+def runner(binding, implementation, placement, native_library=None, streaming=False, *, workers=1, packing="auto", query_execution="auto"):
     from tidegraph.weighted.execution import eager_runner
     return eager_runner(binding, implementation, placement, native_library, streaming=streaming,
-                        workers=workers, packing="auto" if streaming and implementation == "python" else packing)
+                        workers=workers, packing="auto" if streaming and implementation == "python" else packing,
+                        query_execution=query_execution)
 
 
 def check_live(result, placement, device):

@@ -7,7 +7,7 @@
 namespace tide::weighted::query {
 using namespace detail;
 namespace {
-template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,bool dense){
+template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense){
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> received;
   for(const auto& request:requests){
@@ -17,14 +17,20 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   std::array<Tensor,4> memories;
   if constexpr(std::is_same_v<Config,KVConfig>)memories=memory(w,states,times,input,c,dense);
   else memories=memory(w,states,times,input,c);
-  if(dense){
+  if(dense && r.local_score=="cat" && r.region_score=="ind" && r.selection_mode=="regional_total"
+      && r.region_control_mode=="context" && r.region_evidence=="cat"){
     using packed::project;
     auto cur=normalize(input,c.epsilon),p=project(cur,weight(w,"kernel.summary"));
     auto stat=at::stack({masses.log1p(),memories[2].log1p(),memories[3].log1p()},-1);
     auto f=at::cat({cur,stat.slice(1,0,1),memories[0],memories[1],stat.slice(1,1),p*memories[0],p*memories[1]},-1);
     auto score=weight(w,"read_program.score.bias")+(at::silu(project(f,weight(w,"read_program.score.matrix"))+
       weight(w,"read_program.score.hidden_bias"))*weight(w,"read_program.score.vector")).sum(-1);
-    auto evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
+    Tensor evidence;
+    if(dense==2){
+      std::vector<Tensor> rows;
+      for(const auto& row:f.unbind())rows.push_back(normalize(at::matmul(weight(w,"read_program.evidence_weight"),row)+weight(w,"read_program.evidence_bias"),c.epsilon));
+      evidence=at::stack(rows);
+    }else evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
     auto recv=masses.clamp_max(1),mu=(r.gamma_max*recv).clamp_max(1);
     std::vector<TensorFields> result;
     for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv[i]},{"mu",mu[i]},{"score",score[i]},{"evidence",evidence[i]}});
@@ -56,6 +62,6 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   return result;
 }
 }
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r,bool dense){return evaluate(w,requests,c,r,dense);}
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r,bool dense){return evaluate(w,requests,c,r,dense);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r,int dense){return evaluate(w,requests,c,r,dense);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r,int dense){return evaluate(w,requests,c,r,dense);}
 }

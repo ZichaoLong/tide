@@ -1,67 +1,77 @@
-# 显式 KV 密集查询执行
+# KV查询默认策略与显式复现路径
 
-`query_execution="dense-v1"` 是同一固定数学函数的另一种批量数值求值次序。
-默认 `legacy`、严格容差与旧执行身份保持。调用：
-`tidegraph.weighted.execution.eager_runner(..., query_execution="dense-v1")`，
-或 `Native(..., packed=True, full_autograd="batched", algorithm="greedy", query_execution="dense-v1")`。
-公共 `ExecutionSpec` 记录请求/生效值并产生不同执行身份；模型/图v13/checkpoint v5不变。
-需要精确续接的应用必须固定执行身份，不能将跨模式继续等同同模式精确恢复。
+公共`eager_runner`、`Native`和`ExecutionSpec`默认请求`query_execution="auto"`。
+满足能力的KV FP32/FP64、strict正支持、单payload设备、单host worker、packed prefill使用
+`packed-v2`；其他模块、FP16、streaming、scalar、resident与多设备保持原路径。
+选择依据是模块能力和执行配置，不依据拓扑名称、节点数或参数量阈值。
+Python/native和standalone benchmark使用同一选择原则；实际资格须分别查看证据。
 
-## 适用域和独立性
+`legacy`、`dense-v1`、`packed-v2`可显式选择，用于诊断和历史复现。
+显式优化请求不满足适用域时拒绝，不静默替换。`legacy`只指定查询实现；
+跨时间区域批是另一个通用能力改进，整版本历史复现还须固定原源码。
 
-当前选择器要求单payload设备、FP32/FP64、一个host worker、packed prefill，
-KV/qry、cat/ind、regional_total、context/cat、quad、strict正支持。
-不适用组合显式拒绝。模型参数与数学配置不改变，Python执行视图不修改原模块。
-C++调用 `tide::weighted::configure_query_execution(NodeWeights&, mode)`，在placement之前选择。
-C++不依赖Python；此接口实现不意味着standalone性能消费者已经接入本选项。
-
-## 数学和批次
+## 数学、布局与一阶边界
 
 固定[架构§3–4](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)、
 [KV§2–4](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)
-的定义域、参数、Read初态和Full comparison绑定沿用[query](weighted-query-batch.md)。
-新路径只移除外层VJP分组中KV缓存轴长度的约束；状态有无、槽名、尾维、
-dtype/device/requires_grad和长/短Attention正权重分支保留。
-实际KV可见长度与正支持索引仍在记忆阶段分桶，不填充或截短可见集。
-密集current、Read query、score/evidence、Full query/output/FFN跨长度合批。
-Read的零/非零分支一次收回detached bool元数据；浮点值不替换为host数。
-这仍是主机在线调度的eager路径，不声称常驻、融合核或已经消除所有索引开销。
+的参数、Read初态/旧态和Full proposal快照沿用[query契约](weighted-query-batch.md)。
+图v13/checkpoint v5及数学版本不变；各路径改变浮点运算组织，不改变严格容差。
 
-[原一阶边界](weighted-query-vjp.md)按实际被用字段选择行的私有叶，保留
-None/连接零、共享参数所有贡献、版本检查和一阶限制。不同输入快照保持独立；
-解码仅拆分候选实际张量。新布局允许有限舍入差异，不将这种差异自动认证为正确。
-
-## 对应和验证
-
-| 内容 | Python / C++ | 独立证据入口 |
+| 路径 | 内部组织 | 适用域 |
 | --- | --- | --- |
-| 显式选择和域校验 | weighted/query_execution.py / weighted_programs.cpp | tests/test_weighted_dense_query.py |
-| 分支和异形VJP根 | weighted/query_vjp.py / weighted_query_vjp.cpp | 同文件逐字段/私有状态/共享别名/未使用optimizer |
-| Describe与Q | dense_describe.py、query_batch.py / weighted_describe_batch.cpp、weighted_query_kv.cpp | 独立scalar公式；实际投影batch断言 |
-| Full与FFN | full_batch.py / weighted_full_batch.cpp | 完整返回和独立Full根 |
+| legacy | 按可见长度/正支持逐行索引，再合批 | 原模块能力 |
+| dense-v1 | Q、current、score/evidence、Full/FFN跨长度密集投影；仍有逐行可见性/正支持索引 | KV/qry、cat/ind、regional_total、context/cat、quad、strict |
+| packed-v2 | 按原始缓存长度分桶，拼接实际槽并批量gather；int64时间可见性、正支持mask和Attention；其他Describe按已有适用路径计算 | KV sum/qry、strict；各合法Read/评分/发送条件继续由原配置校验 |
 
-实现、构建、CPU、NPU、完整训练/恢复和性能资格分开记录；当前任务状态见
-[STATUS](STATUS.md)，未解除限制见[ROADMAP](ROADMAP.md)。
+每桶按32MiB估计目标限制合并行数，不复制模型矩阵。**单行可能超过目标**，该值不是
+总workspace或进程峰值保证；KV/激活/私有反向图仍需另行预算。没有截短缓存、压紧时间或改变窗口。
+可见性在int64相减后判断；过期/填充值在投影前置零，真实零权重不变成消息。
+Attention中心取第一个正支持值，避免被忽略条目导致相消或`0*inf`；全空返回保留断连。
 
-## 固定资格与接入
+`packed-v2`保留cat evidence的逐行投影/归一化算术，其他可合批阶段仍使用ATen矩阵运算。
+这是针对归一化近径向VJP放大舍入的处理，不提升全模型精度，也不代表所有FP32误差消失。
+原[独立行/字段VJP](weighted-query-vjp.md)保留None/连接零、共享别名全部贡献、版本守卫及一阶限制；
+按根是否定义来分组，不按梯度数值选择。解码只拆分实际计算张量，不调用参考补写。
 
-[TL-REQ-004交付及完整命令](evidence/dense-query-tl-req-004-20261110.md)对应实现75a5027、
-诊断驱动26ca1b6。CPU FP64/FP32、NPU FP32的Python/native分别检查；
-CPU FP32独立evidence根两个字段约1.044e-6的原严格失败保留。
-小型FC/HB/反馈PDG完整训练、pending/cut与新owner恢复，以及四个安装消费者的新进程恢复通过；
-原FC16/B8/L128只作有限成本观察，不能外推大图严格数值、离散或恢复资格。
+新路径仍是主机在线推进的eager执行。合法批次来自当前就绪前沿，没有CPU预跑轨迹；
+[区域跨时间批](weighted-region-batch.md)与查询批独立。阶段数、矩阵批长、设备kernel数分别观察，
+不是常驻资格，也不是把全图融合成几个算子的承诺。
 
-- 独立局部公式/字段根与FP64方向差分：`tests/test_weighted_dense_query.py`。
-- 独立完整调度、三步AdamW、保留图/精确cut恢复：`tests/test_weighted_dense_training.py`。
-- 已安装公共API、新进程3步vs2+1：[`dense_query.py`](../examples/consumer_core5/dense_query.py)。
-- 固定源码门禁：`bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu MATCHING_BUILD`。
-  显式数值探索收集完整比较后保留xfail；None/离散、非有限及精确恢复错误仍使流程失败。
-- 局部舍入诊断：`python scripts/diagnose_dense_rounding.py`；这是同一FP32输入/权重提升FP64，
-  不是更换输入分布或默认执行精度。
-- 原任务有限成本：`scripts/benchmark_dense_query.py`从固定下游Git对象读原模型/head/loss/输入生成器，
-  单配置一预热一步；设备profile单列。它不是下游训练接口。
+## 配置、身份与续接
 
-实验通过公共`eager_runner`、`Native`或配置`execution.query_execution`显式选择；
-旧study benchmark命令生成器与standalone benchmark CLI目前拒绝该选项。
-本次不改变应用checkpoint周期、存储介质或完整返回范围。跨模式切换应创建新执行身份，
-先做下游任务验收；同模式小图精确恢复不代表跨模式恢复或原语言训练已通过。
+```python
+execute = eager_runner(binding, "native", placement, native_library=build)
+# 默认auto；诊断时可显式 query_execution="legacy" / "dense-v1" / "packed-v2"
+```
+
+公共`ExecutionSpec.record()`记录请求、策略版本和执行身份；不适用的执行配置记录生效legacy。
+实际结果统计`query_legacy_nodes/query_dense-v1_nodes/query_packed-v2_nodes`报告模块选择。
+`Native.query_execution`还给出逐节点结果。Python浅执行视图保持原参数owner，不修改原模型。
+C++核心入口`configure_query_execution`不依赖Python；standalone benchmark接受`--query-execution`。
+
+数学/图身份不因执行路径变化；应用锁必须固定源码和执行身份。旧材料显式legacy保持原身份；
+省略选项的新请求采用auto的新身份。checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行验收。
+同源码/配置/设备的精确恢复独立验证，不能从小图推断原语言任务或所有规模。
+
+## 代码、测试与证据
+
+| 边界 | Python / C++ | 独立检查 |
+| --- | --- | --- |
+| 策略/适用域 | weighted/query_execution.py、planning/execution.py / weighted_programs.cpp | test_weighted_query_layout、test_weighted_dense_query |
+| 原始槽/时间/索引 | query_layout.py / weighted_query_layout.cpp | 大于2**54的时间、异形/空/过期状态、分桶目标 |
+| Mem/Full | query_packed.py / weighted_query_packed.cpp | 独立scalar函数逐字段、全部私有根、sum/qry与正支持中心反例 |
+| 描述与Q/FFN | dense_describe.py、read_batch.py、full_batch.py / weighted_describe_batch.cpp、weighted_full_batch.cpp | 原evidence舍入见证，别名、版本、一阶及未使用optimizer |
+| 完整执行 | eager_runner、Native、standalone Eager | FC/HB/PDG三步AdamW、保留图cut、pending、新owner/新进程恢复；一般端口/历史程序回归 |
+
+[代表回归入口](prefill-regression.md)规定改动触发哪些检查及原FC16成本命令；
+[性能经验](performance-lessons.md)记录可复用方案及其边界。
+[原dense-v1固定资格](evidence/dense-query-tl-req-004-20261110.md)保留原数值失败和实际成本，
+不能重新标记为packed-v2通过。当前工作及资格来源见[STATUS](STATUS.md)，待办仅见[ROADMAP](ROADMAP.md)。
+
+安装消费者：`examples/consumer_core5/dense_query.py --query-execution auto ...`；
+旧v1复现必须显式指定`dense-v1`。原任务成本驱动`benchmark_dense_query.py`从固定下游Git对象读模型/head/loss，
+默认预热后恢复相同初始权重及optimizer，记录测量前hash；`--warmup-state continue`保留旧计时流程。
+两者都是有限成本观察；未检查的数值、离散与恢复不能从耗时推出通过。
+
+固定提交安装资格入口：`bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu MATCHING_BUILD auto`。
+省略末项继续检查显式dense-v1；auto门禁另包括新布局、一般调度及配置回归。

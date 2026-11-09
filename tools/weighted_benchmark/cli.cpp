@@ -55,6 +55,7 @@ void help() {
     "--implementation native|resident --placement native|mixed-a|mixed-b|mixed-c\n"
     "--threads N (--intraop-threads alias) --interop-threads N --workers N\n"
     "--packing auto|packed|scalar --return-packing scalar|packed\n"
+    "--query-execution auto|legacy|dense-v1|packed-v2 (capability selection; auto default)\n"
     "--peer-device DEVICE (repeatable) or --peer-devices DEVICE,DEVICE\n"
     "--node-devices DEVICE,DEVICE,... (one owner per node, sharing constraints apply)\n"
     "--communication ordinary|blocking|cpu_bridge (process-scoped explicit copy policy)\n"
@@ -84,6 +85,7 @@ Request parse_request(int argc,char** argv) {
     else if(key=="--dtype")r.precision=value;else if(key=="--scoring-dtype")r.scoring=value;
     else if(key=="--placement")r.placement=value;else if(key=="--packing")r.packing=value;
     else if(key=="--return-packing")r.return_packing=value;else if(key=="--validation")r.validation=value;
+    else if(key=="--query-execution")r.query_execution=value;
     else if(key=="--return-mode")r.return_mode=value;else if(key=="--communication")r.communication=value;
     else if(key=="--steps")r.steps=integer(value,key);else if(key=="--workers")r.workers=integer(value,key);
     else if(key=="--warmup")r.warmup=integer(value,key,0);
@@ -106,6 +108,10 @@ Request parse_request(int argc,char** argv) {
   if(!one(r.validation,{"strict","explore","none"})||!one(r.return_mode,{"complete","outputs","metrics"}))
     throw std::invalid_argument("invalid validation or return-mode");
   if(!one(r.communication,{"ordinary","blocking","cpu_bridge"}))throw std::invalid_argument("invalid communication policy");
+  if(!one(r.query_execution,{"auto","legacy","dense-v1","packed-v2"}))throw std::invalid_argument("unknown query_execution");
+  if(r.query_execution!="auto"&&r.query_execution!="legacy"&&
+     (r.implementation=="resident"||r.schedule!="prefill"||r.packing=="scalar"||r.workers!=1||r.precision=="float16"))
+    throw std::invalid_argument("explicit query execution requires FP32/FP64 packed eager prefill and one worker");
   if(r.return_mode!="complete"&&r.validation!="none")throw std::invalid_argument("minimal return requires validation=none; qualify complete records separately");
   if(r.return_mode!="complete"&&r.checkpoint)throw std::invalid_argument("exact complete-record resume check requires return-mode=complete");
   if(r.check_roots&&(r.validation=="none"||r.return_mode!="complete"||r.implementation!="native"))

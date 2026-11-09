@@ -12,15 +12,19 @@ def evaluate(program, weights, requests):
     if not requests:
         return []
     memory = weights.kernel
-    from .query_execution import dense
+    from .query_execution import dense, packed, dense_heads
     states = [memory.initial(weights) if r.state is None else r.state for r in requests]
     times = [r.time for r in requests]
     payload = torch.stack([r.content.value for r in requests])
     mass, u = payload[:, 0], payload[:, 1:]
-    values = memory_read(memory, states, times, u, dense=dense(program))
-    if dense(program):
+    if packed(program):
+        from .query_packed import memory as query
+        values = query(memory, states, times, u)
+    else:
+        values = memory_read(memory, states, times, u, dense=dense(program))
+    if dense_heads(program):
         from .dense_describe import evaluate as describe
-        return describe(program, memory, mass, u, values)
+        return describe(program, memory, mass, u, values, scalar_evidence=packed(program))
     result = []
     for i in range(len(requests)):
         short, long, ws, wl = (value[i] for value in values)

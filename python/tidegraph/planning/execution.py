@@ -24,7 +24,7 @@ class ExecutionSpec:
     communication: str = "ordinary"
     return_mode: str = "complete"
     finite_check_packing: str = "scalar"
-    query_execution: str = "legacy"
+    query_execution: str = "auto"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
@@ -39,9 +39,9 @@ class ExecutionSpec:
             raise ValueError("unknown explicit precision")
         if self.operator != "aten" or self.packing not in {"auto", "scalar", "packed"}:
             raise ValueError("unknown operator/packing implementation; no implicit substitution")
-        if self.query_execution not in {"legacy", "dense-v1"}:
+        if self.query_execution not in {"auto", "legacy", "dense-v1", "packed-v2"}:
             raise ValueError("unknown query_execution")
-        if self.query_execution != "legacy" and (self.placement == "resident" or self.client == "libtorch"
+        if self.query_execution not in {"legacy", "auto"} and (self.placement == "resident"
                 or self.schedule != "prefill" or self.packing == "scalar" or self.workers != 1
                 or self.peer_devices or self.dtype == "float16"):
             raise ValueError("dense-v1 requires single-device FP32/FP64 packed eager prefill, one worker")
@@ -111,6 +111,10 @@ class ExecutionSpec:
             effective["packing"] = "scalar" if self.client == "pytorch" and self.schedule == "streaming" else "packed"
         if self.placement == "resident":
             effective["operator"] = "aten+device-control"
+        if self.query_execution == "auto":
+            effective["query_policy"] = "kv-packed-v2; capability/dtype/schedule fallback to legacy"
+            if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
+                effective["query_execution"] = "legacy"
         body = dict(schema="tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
                     requested=requested, effective=effective,
                     qualification="implementation selection only; exact-device evidence is separate")

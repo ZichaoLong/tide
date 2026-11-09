@@ -111,7 +111,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | --- | --- |
 | 数学配置/形状/共享 | Config、planning/shapes与inventory、实际绑定；[semantic-map](semantic-map.md)对应、模块契约；独立公式与实际角色检查 |
 | 新拓扑/输入时钟 | planning/topology、recipes、端口/延迟/可达性检查；完整返回/续接；recipe身份 |
-| 具名数值执行路径 | `ExecutionSpec.query_execution`及公共eager/native选择；[dense-v1](weighted-dense-query.md)、旧入口拒绝、独立根/数值失败/完整恢复、性能经验 |
+| 具名数值执行路径 | `ExecutionSpec.query_execution`及公共eager/native选择；[默认策略与显式路径](weighted-dense-query.md)、三个客户端实际选择、独立根/数值失败/完整恢复、[代表回归](prefill-regression.md)和性能经验 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
 | 新设备/放置/dtype | ExecutionSpec、公共能力门禁、各client入口；构建、真机、训练/恢复证据分别记录 |
 | 实验准入/持久化 | `planning/capacity.py`、`experiment/admission.py`、`checkpoint_policy.py`；人类手册和矩阵静态预算同步。`test_training_host_capacity`保留实际恢复RSS下界，`test_experiment_storage`/`test_checkpoint_policy`核对tmpfs与发布代数；新预算不改写旧运行身份 |

@@ -57,12 +57,15 @@ cotangent 模式共同决定反向分组，不能根据梯度数值选择路径�
 通用 `RegionProgram/RegionKernel` 默认不声明 joint_batch、batched_autograd 或 history_independent。
 带权程序声明三项；没有能力的一般程序继续按因果次序逐帧求值。
 Python 在全部 Read 已就绪且 history_independent 时可合批跨时间帧；否则只合批当前时间的
-独立 sample。C++ 在已认证因果 wave 内合批同区域的独立 owner，保持跨时间 wave 顺序。
+独立 sample。C++ 在所有Read/proposal已准备且区域声明history_independent/joint_batch时，也按区域合批跨时间帧；
+训练另要求batched_autograd。State/Next采用仍按原因果wave推进；任何能力缺失则保留原wave内合批。
+重复owner只有history_independent才允许；每组结果全部校验后才采用。
 没有 CPU 真实轨迹预跑，不假定固定层数或输入；可合法退化到 B=1。
 显式 parallel_regions 的既有 C++ 路径保持自身调度；该路径不据此宣称区域数值合批。
 
 `region_steps` 继续数实际完整非空帧，`region_batch_calls/max_region_batch` 记录能力调用，
 `batched_region_frames` 记录使用 VJP 能力的帧，`region_scalar_calls` 记录逐帧后备。
+`region_time_batch_frames`另外记录native跨时间能力覆盖帧数。
 这些计数不等同硬件 kernel 数，也不承诺加速。CPU eager 实现不构成常驻就绪/调度证明。
 
 [878a5a4自然HB medium测量/profile](evidence/core5-natural-study-20261029.md)在NPU mixed-c实际

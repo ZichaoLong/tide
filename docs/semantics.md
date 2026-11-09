@@ -609,4 +609,4 @@ standalone 消费者结果 `tide-weighted-standalone-benchmark-v2` 分列执行�
 及 `tide-weighted-checkpoint-pointer-v1` 原子 generation 指针；内层公共图/参数/optimizer
 checkpoint 编码不变。该运行包装不改变图、数学或设备常驻协议。
 
-显式[KV密集查询执行](weighted-dense-query.md)更改有限批量运算次序，保持固定数学、默认legacy及原严格阈值。它进入执行身份；图v13/checkpoint v5不变，跨模式继续不认证为精确恢复。
+[KV查询执行策略](weighted-dense-query.md)默认auto按模块/执行能力选择packed-v2或原路径，保留显式legacy/dense-v1复现。原始int64可见性、首个正支持中心与独立字段VJP保持；有限运算次序及默认执行身份变化，数学/图v13/checkpoint v5及原严格阈值不变。跨模式继续不认证为精确恢复。

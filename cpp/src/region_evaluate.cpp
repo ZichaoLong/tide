@@ -82,16 +82,28 @@ void select_events(const Graph& g,const Model& m,Continuation& q,std::vector<Eve
 }
 void select_event_batches(const Graph& g,const Model& m,Continuation& q,std::vector<Event>& events,
     const std::map<Owner,std::vector<size_t>>& owners,bool trace,std::map<std::string,Index>& stats){
-  std::map<Index,std::vector<Owner>> groups;
-  for(const auto& [owner,ids]:owners)groups[owner.second].push_back(owner);
+  std::vector<std::vector<size_t>> frames;
+  for(const auto& [owner,ids]:owners)frames.push_back(ids);
+  select_frame_batches(g,m,q,events,frames,trace,stats);
+}
+void select_frame_batches(const Graph& g,const Model& m,Continuation& q,std::vector<Event>& events,
+    const std::vector<std::vector<size_t>>& ids,bool trace,std::map<std::string,Index>& stats){
+  std::map<Index,std::vector<size_t>> groups;
+  for(size_t i=0;i<ids.size();++i)if(!ids[i].empty())groups[g.nodes[events[ids[i][0]].node].region].push_back(i);
   for(const auto& [region,used]:groups){
     const auto& w=m.regions[region];
     if(!w.kernel->joint_batch()||(at::GradMode::is_enabled()&&!w.kernel->batched_autograd())){
-      for(auto owner:used){select_events(g,m,q,events,owners.at(owner),trace);++stats["region_scalar_calls"];}
+      for(auto i:used){select_events(g,m,q,events,ids[i],trace);++stats["region_scalar_calls"];}
       continue;
     }
     std::vector<Frame> frames;frames.reserve(used.size());
-    for(auto owner:used){const auto old=q.history.find(owner);frames.emplace_back(g,m,old==q.history.end()?nullptr:&old->second,events,owners.at(owner));}
+    std::set<Owner> seen;
+    for(auto i:used){
+      const auto& first=events[ids[i][0]];Owner owner{first.batch,region};
+      if(!seen.insert(owner).second&&!w.kernel->history_independent())
+        throw std::invalid_argument("cross-time region batch requires independent histories");
+      const auto old=q.history.find(owner);frames.emplace_back(g,m,old==q.history.end()?nullptr:&old->second,events,ids[i]);
+    }
     std::vector<RegionInput> requests;for(const auto& f:frames)requests.push_back(f.request());
     auto results=at::GradMode::is_enabled()?w.kernel->batch_grad(w,requests):w.kernel->batch(w,requests);
     if(results.size()!=frames.size())throw std::invalid_argument("region batch returned wrong frame count");
@@ -106,7 +118,7 @@ void select_event_batches(const Graph& g,const Model& m,Continuation& q,std::vec
     }
     // Validate every actual result before committing any owner in this batch.
     for(size_t i=0;i<frames.size();++i)results[i]=frames[i].validate(m,std::move(results[i]),grouped?&finite:nullptr);
-    for(size_t i=0;i<frames.size();++i)commit_selection(q,used[i],std::move(results[i]),events,owners.at(used[i]),trace);
+    for(size_t i=0;i<frames.size();++i)commit_selection(q,frames[i].owner,std::move(results[i]),events,ids[used[i]],trace);
     ++stats["region_batch_calls"];stats["max_region_batch"]=std::max<Index>(stats["max_region_batch"],used.size());
     if(at::GradMode::is_enabled())stats["batched_region_frames"]+=used.size();
   }

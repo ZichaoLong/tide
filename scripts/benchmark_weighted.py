@@ -33,6 +33,7 @@ def main():
     parser.add_argument("--interop-threads", type=int, default=1)
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--packing", choices=("auto", "scalar", "packed"), default="auto")
+    parser.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     parser.add_argument("--return-packing", choices=("scalar", "packed"), default="scalar",
                         help="eager complete CPU return transfer strategy, independent of operator packing")
     parser.add_argument("--implementation", choices=("python", "native", "resident"), required=True)
@@ -66,7 +67,7 @@ def main():
         device=args.device, placement="resident" if args.implementation == "resident" else args.placement,
         dtype=args.dtype, scoring_dtype=args.scoring_dtype, schedule=args.schedule,
         intraop_threads=args.intraop_threads, interop_threads=args.interop_threads, workers=args.workers,
-        packing=args.packing, return_packing=args.return_packing, peer_devices=tuple(args.peer_devices or ())).record()
+        packing=args.packing, query_execution=args.query_execution, return_packing=args.return_packing, peer_devices=tuple(args.peer_devices or ())).record()
     args.resident_limit_values, limits_sha = None, None
     if args.resident_limits:
         if args.implementation != "resident":

@@ -1,11 +1,12 @@
 // KV §4 / recurrent §3: only selected comparison snapshots, unscaled (c,G).
-#include "weighted_query_batch.h"
+#include "weighted_query_layout.h"
 
 namespace tide::weighted::query {
 using namespace detail;
 using packed::project;
 namespace {
-Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c,bool dense){
+Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c,int dense){
+  if(dense==2)return c.alpha_att*packed_full(w,states,times,u,c);
   Visible visible(states,times,c);std::vector<Tensor> result(states.size());
   auto queries=project(normalize(u,c.epsilon),weight(w,"full_program.content.query")).reshape({-1,c.heads,c.width/c.heads});
   const std::vector<double> empty;
@@ -29,7 +30,7 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   }
   return c.alpha_att*(dense?project(at::stack(result),weight(w,"full_program.content.out")):at::stack(result));
 }
-Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c,bool){
+Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c,int){
   const std::string p="full_program.content.";
   auto H=effective(states,times,c)[0];Tensor combined;
   if(c.basic()){
@@ -49,7 +50,7 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   }
   return c.alpha_mem*combined;
 }
-template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,bool dense){
+template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,int dense){
   require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> rows,controls;
@@ -65,6 +66,6 @@ template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,con
   return result;
 }
 }
-std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,bool dense){return evaluate(w,r,slots,o,c,dense);}
-std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,bool dense){return evaluate(w,r,slots,o,c,dense);}
+std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,int dense){return evaluate(w,r,slots,o,c,dense);}
+std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,int dense){return evaluate(w,r,slots,o,c,dense);}
 }

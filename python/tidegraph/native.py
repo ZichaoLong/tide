@@ -9,10 +9,14 @@ class Native:
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
                  attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
                  attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay", aggregate_autograd="replay",
-                 placement=None, query_execution="legacy"):
+                 placement=None, query_execution="auto"):
+        requested_query_execution = query_execution
+        if query_execution == "auto" and (not packed or algorithm != "greedy" or workers != 1 or full_autograd != "batched"):
+            query_execution = "legacy"
+        query_view = model
         if query_execution != "legacy":
             from .weighted.query_execution import execution_view
-            execution_view(model, query_execution)  # Validate without changing parameter owners.
+            query_view = execution_view(model, query_execution)
             if not packed or algorithm != "greedy" or workers != 1 or full_autograd != "batched":
                 raise ValueError("dense-v1 requires packed greedy/batched Full with one worker")
         if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
@@ -39,13 +43,16 @@ class Native:
         if backend != "cpu" and backend != compiled:
             raise RuntimeError(f"native {backend} requested but the adapter was built for {compiled}")
         self.core, self.graph, self.model = core, graph, model
+        self.query_execution = dict(requested=requested_query_execution,
+            nodes=tuple(getattr(n.read_program, "query_execution", "legacy") for n in query_view.nodes))
         self.algorithm = algorithm
         from .native_model import encode_model
         g, m = encode_model(core, graph, model)
         if query_execution != "legacy":
             nodes = list(m.nodes)
-            for node in nodes:
-                core.configure_weighted_query_execution(node, query_execution)
+            for node, query_mode in zip(nodes, self.query_execution["nodes"]):
+                if query_mode != "legacy":
+                    core.configure_weighted_query_execution(node, query_mode)
             m.nodes = nodes
         self.compiled = g
         core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
@@ -83,7 +90,10 @@ class Native:
         q = to_continuation(self.core, self.graph, self.compiled, continuation)
         xs = [self.core.External(x.batch, x.port, x.position, x.time, x.value) for x in external]
         result = self.engine.run(q, xs, stop, sealed_until)
-        return Result(from_continuation(self.graph, result.continuation), *window_records(result))
+        public = Result(from_continuation(self.graph, result.continuation), *window_records(result))
+        for mode in ("legacy", "dense-v1", "packed-v2"):
+            public.stats["query_"+mode+"_nodes"] = self.query_execution["nodes"].count(mode)
+        return public
 
     def cursor(self, continuation):
         if self.algorithm != "streaming":

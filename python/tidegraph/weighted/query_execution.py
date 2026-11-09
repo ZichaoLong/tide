@@ -9,7 +9,11 @@ from .config import KVConfig
 from .programs import Describe, WeightedFull
 
 
-def validate(memory, region):
+def validate(memory, region, mode="dense-v1"):
+    if mode == "packed-v2":
+        if not isinstance(memory, KVConfig) or region.support_policy != "strict":
+            raise ValueError("packed-v2 requires KV with strict positive support")
+        return
     if (not isinstance(memory, KVConfig) or memory.memory_read != "qry"
             or (region.local_score, region.region_score, region.selection_mode,
                 region.region_control_mode, region.region_evidence, region.regularizer,
@@ -18,31 +22,54 @@ def validate(memory, region):
 
 
 def execution_view(model, mode):
-    if mode not in {"legacy", "dense-v1"}:
+    if mode not in {"auto", "legacy", "dense-v1", "packed-v2"}:
         raise ValueError("unknown query_execution")
     if mode == "legacy":
         return model
     devices = {node.bias.device for node in model.nodes}
-    if len(devices) != 1:
+    if mode != "auto" and len(devices) != 1:
         raise ValueError("dense-v1 requires a single payload device")
     result, nodes = _shallow_module(model), []
     for weights in model.nodes:
+        selected = mode
+        if mode == "auto":
+            selected = "legacy"
+            if (type(weights.read_program) is Describe and type(weights.full_program) is WeightedFull
+                    and isinstance(weights.kernel.config, KVConfig)
+                    and weights.read_program.config.support_policy == "strict"
+                    and weights.bias.dtype in {torch.float32, torch.float64} and len(devices) == 1):
+                selected = "packed-v2"
+            if selected == "legacy":
+                nodes.append(weights)
+                continue
         if type(weights.read_program) is not Describe or type(weights.full_program) is not WeightedFull:
             raise ValueError("dense-v1 requires installed weighted Read/Full before placement")
-        validate(weights.kernel.config, weights.read_program.config)
+        validate(weights.kernel.config, weights.read_program.config, selected)
         if weights.bias.dtype not in {torch.float32, torch.float64}:
             raise ValueError("dense-v1 requires float32 or float64 payload")
         node = _shallow_module(weights)
         node.read_program = _shallow_module(weights.read_program)
         node.full_program = _shallow_module(weights.full_program)
-        node.read_program.query_execution = node.full_program.query_execution = mode
+        node.read_program.query_execution = node.full_program.query_execution = selected
         nodes.append(node)
     result.nodes = torch.nn.ModuleList(nodes)
     return result
 
 
 def dense(program):
-    return getattr(program, "query_execution", "legacy") == "dense-v1"
+    return getattr(program, "query_execution", "legacy") in {"dense-v1", "packed-v2"}
+
+
+def packed(program):
+    return getattr(program, "query_execution", "legacy") == "packed-v2"
+
+
+def dense_heads(program):
+    if not dense(program):
+        return False
+    c = program.config
+    return (c.local_score, c.region_score, c.selection_mode, c.region_control_mode,
+            c.region_evidence) == ("cat", "ind", "regional_total", "context", "cat")
 
 
 def branches(memory, weights, requests, kind):

@@ -51,7 +51,7 @@
 
 ## 当前待办与重启条件
 
-- **TL-REQ-004 后继与下游接入**：首个[具名dense-v1](weighted-dense-query.md)已交付并有[固定资格/原任务成本](evidence/dense-query-tl-req-004-20261110.md)；权威请求固定下游0439efd，基座起点74e7bbd。CPU FP32 evidence根约1.044e-6严格失败保持，相同输入FP64诊断支持该局部舍入解释；不外推大图。原FC16/B8/L128两路径Full/消息及裁剪前梯度范数不同，未认证完整数值/离散/恢复，尚未达到32.4token/s。当前有界增量终态；下游先在新安装显式接入，验原任务/恢复再决定依赖锁和训练。后继性能须针对仍各1170次的device Index/IndexPut及私有根拆装提出具体分段/索引布局，保持可见性、None/零、int64和独立根后再做一次同材料对照；大用例资格须定位实际首差并独立核对，不因成本下降放行。CUDA/resident/FP16/跨设备/standalone消费者和其他语义不继承本次资格，不原样扩大矩阵。资源/活动只见STATUS，通用经验进入performance-lessons。
+- **TL-REQ-004 后继与下游接入**：2026-11-10用户授权跨时间区域/批量KV布局优化及统一默认能力分派；新增FC16长prefill与HB/LH/大宽度/多节点代表回归，相关实现/训练/恢复验收后再推广默认。活动源码/作业见STATUS。首个[具名dense-v1](weighted-dense-query.md)已交付并有[固定资格/原任务成本](evidence/dense-query-tl-req-004-20261110.md)；权威请求固定下游0439efd，基座起点74e7bbd。CPU FP32 evidence根约1.044e-6严格失败保持，相同输入FP64诊断支持该局部舍入解释；不外推大图。原FC16/B8/L128两路径Full/消息及裁剪前梯度范数不同，未认证完整数值/离散/恢复，尚未达到32.4token/s。当前有界增量终态；下游先在新安装显式接入，验原任务/恢复再决定依赖锁和训练。后继性能须针对仍各1170次的device Index/IndexPut及私有根拆装提出具体分段/索引布局，保持可见性、None/零、int64和独立根后再做一次同材料对照；大用例资格须定位实际首差并独立核对，不因成本下降放行。CUDA/resident/FP16/跨设备/standalone消费者和其他语义不继承本次资格，不原样扩大矩阵。资源/活动只见STATUS，通用经验进入performance-lessons。
 
 - **TL-REQ-003 下游接入与表示域后继**：[显式最小正值模式已交付](evidence/positive-support-tl-req-003-20261109.md)，保留cat/ind及默认strict；CPU/NPU局部、完整两区域根/AdamW/恢复通过。下游原HB16学习验收未运行，须在新私有安装显式升级；跨模式旧checkpoint不能直接冒称精确恢复。多个尾部比例、不可表示公开伴随和弱总量仍有边界；只有实际小型见证证明本模式不够时，再设计log/缩放载荷或更大范围。native/standalone/resident、FP16、多设备、其他记忆尚未实现本策略；CUDA待真机，不以本次CPU/NPU通过外推。原严格失败及CPU资格误选native的8项加载失败保持原记录。
 

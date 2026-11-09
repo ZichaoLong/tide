@@ -8,13 +8,15 @@ from ..placement import place_model
 
 
 def eager_runner(binding, implementation, placement, native_library=None, *, streaming=False,
-                 workers=1, packing="auto", query_execution="legacy"):
+                 workers=1, packing="auto", query_execution="auto"):
     if implementation not in {"python", "native"} or packing not in {"auto", "packed", "scalar"}:
         raise ValueError("unknown eager implementation/packing")
     if type(workers) is not int or workers < 1:
         raise ValueError("workers must be positive")
     packed = packing != "scalar"
-    if query_execution != "legacy" and (not packed or streaming or workers != 1):
+    if query_execution == "auto" and (not packed or streaming or workers != 1):
+        query_execution = "legacy"
+    if query_execution not in {"legacy", "auto"} and (not packed or streaming or workers != 1):
         raise ValueError("dense-v1 requires packed prefill with one worker")
     from .query_execution import execution_view
     model = execution_view(binding.model, query_execution)
@@ -35,4 +37,10 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
     schedule = stream if streaming else greedy
     if streaming:
         options = {}
-    return lambda *a, **kw: schedule(binding.graph, view, *a, **options, **kw)
+    modes = [getattr(n.read_program, "query_execution", "legacy") for n in model.nodes]
+    def run(*a, **kw):
+        result = schedule(binding.graph, view, *a, **options, **kw)
+        for mode in ("legacy", "dense-v1", "packed-v2"):
+            result.stats["query_"+mode+"_nodes"] = modes.count(mode)
+        return result
+    return run

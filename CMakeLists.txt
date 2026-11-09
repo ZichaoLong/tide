@@ -50,6 +50,8 @@ add_library(tidegraph STATIC
   cpp/src/weighted_row_linear.cpp
   cpp/src/weighted_aggregate_vjp.cpp
   cpp/src/weighted_query_kv.cpp
+  cpp/src/weighted_query_layout.cpp
+  cpp/src/weighted_query_packed.cpp
   cpp/src/weighted_query_recurrent.cpp
   cpp/src/weighted_describe_batch.cpp
   cpp/src/weighted_full_batch.cpp

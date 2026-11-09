@@ -1,0 +1,425 @@
+{
+  "schema": "tide-core5-study-v1",
+  "window": {
+    "samples": 1,
+    "positions": 1,
+    "seed": 7
+  },
+  "measurement": {
+    "mode": "training",
+    "steps": 2,
+    "warmup": 1,
+    "checkpoint_check": true,
+    "timeout_seconds": 1200
+  },
+  "models": [
+    {
+      "id": "check-fc",
+      "recipe": {
+        "topology": "fc",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 2,
+        "positions": 2
+      },
+      "question": "\u5c0f\u56fe\u8bbe\u65bd\u68c0\u67e5\uff1a\u5b8c\u6574\u8fd4\u56de\u3001\u68af\u5ea6\u3001SGD\u3001\u591a\u6b65\u53ca\u78c1\u76d8\u6362owner\uff1b\u4e0d\u4ee3\u8868\u5927\u6a21\u578b\u6027\u80fd\u3002"
+    },
+    {
+      "id": "check-hb",
+      "recipe": {
+        "topology": "hb",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 2,
+        "positions": 2
+      },
+      "question": "\u5c0f\u56fe\u8bbe\u65bd\u68c0\u67e5\uff1a\u5b8c\u6574\u8fd4\u56de\u3001\u68af\u5ea6\u3001SGD\u3001\u591a\u6b65\u53ca\u78c1\u76d8\u6362owner\uff1b\u4e0d\u4ee3\u8868\u5927\u6a21\u578b\u6027\u80fd\u3002"
+    },
+    {
+      "id": "check-lh",
+      "recipe": {
+        "topology": "lh",
+        "width": 8,
+        "region_width": 2,
+        "depth": 2
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 2,
+        "positions": 2
+      },
+      "question": "\u5c0f\u56fe\u8bbe\u65bd\u68c0\u67e5\uff1a\u5b8c\u6574\u8fd4\u56de\u3001\u68af\u5ea6\u3001SGD\u3001\u591a\u6b65\u53ca\u78c1\u76d8\u6362owner\uff1b\u4e0d\u4ee3\u8868\u5927\u6a21\u578b\u6027\u80fd\u3002"
+    },
+    {
+      "id": "hb-medium",
+      "recipe": {
+        "topology": "hb",
+        "width": 64,
+        "region_width": 4,
+        "depth": 1
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 4,
+        "positions": 4
+      },
+      "question": "\u5728\u7ebf\u533a\u57df/\u8282\u70b9\u5408\u6279\u7684\u5b9e\u9645\u6536\u76ca\uff0cCPU/mixed/resident\u5b8c\u6574\u6210\u672c\u3002"
+    },
+    {
+      "id": "fc-medium-few",
+      "recipe": {
+        "topology": "fc",
+        "width": 256,
+        "region_width": 2,
+        "depth": 2
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 2,
+        "positions": 2
+      },
+      "question": "\u5c11\u8282\u70b9\u5927\u77e9\u9635\u7684\u6267\u884c\u5668\u5f00\u9500\u3002"
+    },
+    {
+      "id": "fc-medium-many",
+      "recipe": {
+        "topology": "fc",
+        "target_parameters": 4197862,
+        "region_width": 8,
+        "depth": 2
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 2,
+        "positions": 2
+      },
+      "question": "\u8fd1\u4f3c\u53c2\u6570\u9884\u7b97\u7684\u591a\u8282\u70b9\u5c0f\u77e9\u9635\uff1b\u8de8\u6a21\u578b\u5de5\u4f5c\u91cf\u5206\u5f00\u89e3\u91ca\u3002"
+    },
+    {
+      "id": "lh-medium",
+      "recipe": {
+        "topology": "lh",
+        "width": 64,
+        "region_width": 4,
+        "depth": 2,
+        "profile": "textbook"
+      },
+      "families": [
+        "kv"
+      ],
+      "window": {
+        "samples": 4,
+        "positions": 4
+      },
+      "question": "\u8df3\u8fb9/\u540c\u79e9\u533a\u57df\u4e0eqry/sum\u5f02\u6784\u7684\u4ee3\u8868\u56de\u5f52\uff1b\u4e0d\u662f\u539fLH9B\u3002"
+    },
+    {
+      "id": "fc-1b",
+      "recipe": {
+        "topology": "fc",
+        "region_width": 8,
+        "target_parameters": 1000000000,
+        "sparse_denominator": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "\u540c\u4e00\u6a21\u578b\u6bd4\u8f83\u4e09\u4e2aclient\u53caCPU/mixed/resident\uff1b\u4e94\u7c7b\u5c40\u90e8\u6a21\u5757\u7684\u5de5\u4f5c\u91cf\u548c\u6210\u672c\u3002"
+    },
+    {
+      "id": "hb-1b",
+      "recipe": {
+        "topology": "hb",
+        "region_width": 8,
+        "target_parameters": 1000000000,
+        "sparse_denominator": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "\u540c\u4e00\u6a21\u578b\u6bd4\u8f83\u4e09\u4e2aclient\u53caCPU/mixed/resident\uff1b\u4e94\u7c7b\u5c40\u90e8\u6a21\u5757\u7684\u5de5\u4f5c\u91cf\u548c\u6210\u672c\u3002"
+    },
+    {
+      "id": "lh-1b",
+      "recipe": {
+        "topology": "lh",
+        "region_width": 8,
+        "target_parameters": 1000000000,
+        "sparse_denominator": 8
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "\u540c\u4e00\u6a21\u578b\u6bd4\u8f83\u4e09\u4e2aclient\u53caCPU/mixed/resident\uff1b\u4e94\u7c7b\u5c40\u90e8\u6a21\u5757\u7684\u5de5\u4f5c\u91cf\u548c\u6210\u672c\u3002"
+    },
+    {
+      "id": "hb-8b",
+      "recipe": {
+        "topology": "hb",
+        "region_width": 8,
+        "target_parameters": 8000000000
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "\u8f83\u5927\u53c2\u6570\u89c4\u6a21\u7684\u53ef\u5bb9\u7eb3\u6027\u4e0e\u7aef\u5230\u7aef\u6210\u672c\uff1b\u5148\u901a\u8fc7\u540c\u5019\u9009\u5c0f\u89c4\u6a21\u68c0\u67e5\u3002"
+    },
+    {
+      "id": "hb-16b",
+      "recipe": {
+        "topology": "hb",
+        "region_width": 8,
+        "target_parameters": 16000000000
+      },
+      "families": [
+        "kv"
+      ],
+      "question": "\u8f83\u5927\u53c2\u6570\u89c4\u6a21\u7684\u53ef\u5bb9\u7eb3\u6027\u4e0e\u7aef\u5230\u7aef\u6210\u672c\uff1b\u5148\u901a\u8fc7\u540c\u5019\u9009\u5c0f\u89c4\u6a21\u68c0\u67e5\u3002"
+    }
+  ],
+  "executions": {
+    "python-cpu": {
+      "client": "pytorch",
+      "device": "cpu",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "python-cpu64": {
+      "client": "pytorch",
+      "device": "cpu",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "python-npu-mixed-a": {
+      "client": "pytorch",
+      "device": "npu:0",
+      "placement": "mixed-a",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "python-npu-mixed-b": {
+      "client": "pytorch",
+      "device": "npu:0",
+      "placement": "mixed-b",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "python-npu-mixed-c": {
+      "client": "pytorch",
+      "device": "npu:0",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-cpu": {
+      "client": "python-native",
+      "device": "cpu",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "native-cpu64": {
+      "client": "python-native",
+      "device": "cpu",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "native-npu-mixed-a": {
+      "client": "python-native",
+      "device": "npu:0",
+      "placement": "mixed-a",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-npu-mixed-b": {
+      "client": "python-native",
+      "device": "npu:0",
+      "placement": "mixed-b",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-npu-mixed-c": {
+      "client": "python-native",
+      "device": "npu:0",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-npu-resident": {
+      "client": "python-native",
+      "device": "npu:0",
+      "placement": "resident",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-cpu": {
+      "client": "libtorch",
+      "device": "cpu",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "cpp-cpu64": {
+      "client": "libtorch",
+      "device": "cpu",
+      "dtype": "float64",
+      "scoring_dtype": "float64",
+      "intraop_threads": 32,
+      "workers": 1,
+      "query_execution": "auto"
+    },
+    "cpp-npu-mixed-a": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "placement": "mixed-a",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-mixed-b": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "placement": "mixed-b",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-mixed-c": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-resident": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "placement": "resident",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-cpu-workers": {
+      "client": "python-native",
+      "device": "cpu",
+      "intraop_threads": 8,
+      "workers": 8,
+      "query_execution": "auto"
+    },
+    "python-cpu-streaming": {
+      "client": "pytorch",
+      "device": "cpu",
+      "schedule": "streaming",
+      "intraop_threads": 32,
+      "query_execution": "auto"
+    },
+    "native-npu-half": {
+      "client": "python-native",
+      "device": "npu:0",
+      "dtype": "float16",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "python-cpu-scalar": {
+      "client": "pytorch",
+      "device": "cpu",
+      "packing": "scalar",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "python-npu-half": {
+      "client": "pytorch",
+      "device": "npu:0",
+      "dtype": "float16",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-cpu-scalar": {
+      "client": "python-native",
+      "device": "cpu",
+      "packing": "scalar",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-npu-resident-half": {
+      "client": "python-native",
+      "device": "npu:0",
+      "dtype": "float16",
+      "placement": "resident",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "native-npu-resident-peer": {
+      "client": "python-native",
+      "device": "npu:0",
+      "placement": "resident",
+      "peer_devices": [
+        "npu:0",
+        "npu:1"
+      ],
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-cpu-scalar": {
+      "client": "libtorch",
+      "device": "cpu",
+      "packing": "scalar",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-half": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "dtype": "float16",
+      "placement": "mixed-c",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-resident-half": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "dtype": "float16",
+      "placement": "resident",
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    },
+    "cpp-npu-resident-peer": {
+      "client": "libtorch",
+      "device": "npu:0",
+      "placement": "resident",
+      "peer_devices": [
+        "npu:0",
+        "npu:1"
+      ],
+      "intraop_threads": 8,
+      "query_execution": "auto"
+    }
+  },
+  "policy": "Explicit one-case selection via run_core5_study.py. No automatic large sweep. Actual checks/costs/scale qualification stay separate; see docs/prefill-regression.md."
+}

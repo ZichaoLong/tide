@@ -1,5 +1,5 @@
 // KV Mem §2/3: ragged visible snapshots, positive weighted attention, int64 ages.
-#include "weighted_query_batch.h"
+#include "weighted_query_layout.h"
 
 namespace tide::weighted::query {
 using namespace detail;
@@ -32,7 +32,8 @@ Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& wei
   }
   return at::stack(result);
 }
-std::array<Tensor,4> memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c,bool dense){
+std::array<Tensor,4> memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c,int dense){
+  if(dense==2)return packed_memory(w,states,times,u,c);
   Visible visible(states,times,c);std::vector<std::array<Tensor,4>> result(states.size());
   auto queries=dense?project(normalize(u,c.epsilon),weight(w,"kernel.read_q")):Tensor{};
   for(const auto& [length,rows]:visible.groups){

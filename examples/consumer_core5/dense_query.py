@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Installed dense-v1 consumer: full training and fresh-process exact recovery.
+"""Installed query consumer: full training and fresh-process exact recovery.
 
 Finite numerical disagreement is reported, never called strict qualification.
 Discrete/structure/nonfinite/exact-recovery failures stop this check.
@@ -33,7 +33,7 @@ def setup(args, *, reference=False):
     else:
         execute = eager_runner(b, args.client,
             ExecutionPlacement(preset="cpu" if device == "cpu" else "mixed-c", scoring_dtype=args.dtype),
-            native_library=args.native_library, packing="packed", query_execution="dense-v1")
+            native_library=args.native_library, packing="packed", query_execution=args.query_execution)
     opt = torch.optim.AdamW([p for p in b.model.parameters() if p.requires_grad], lr=.001, foreach=False)
     return b, spec, x, 3*spec.stride, execute, opt
 
@@ -55,6 +55,7 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64"), default="float32")
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
+    p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--steps", type=int, default=3)
     p.add_argument("--resume", type=Path)
@@ -64,7 +65,7 @@ def main():
     torch.set_num_threads(1 if args.device == "cpu" else 2); torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(True); torch.manual_seed(11)
     out = args.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
-    identity = dict(query_execution="dense-v1", device=args.device, dtype=args.dtype, client=args.client)
+    identity = dict(query_execution=args.query_execution, device=args.device, dtype=args.dtype, client=args.client)
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked", comparisons=[])
     try:
         state = setup(args); b, _, _, _, _, opt = state
@@ -88,7 +89,7 @@ def main():
         if oracle is not None:
             record["strict_numerical"] = "passed" if all(r["strict_passed"] for r in record["comparisons"]) else "failed"
             base = [sys.executable, str(Path(__file__).resolve()), "--child", "--device", args.device,
-                    "--dtype", args.dtype, "--client", args.client]
+                    "--dtype", args.dtype, "--client", args.client, "--query-execution", args.query_execution]
             if args.native_library:
                 base += ["--native-library", args.native_library]
             for name, extra in (("whole", ["--steps", "3"]), ("prefix", ["--steps", "2"]),

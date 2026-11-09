@@ -107,7 +107,9 @@ def evaluate(program, weights, requests, *, kind="read", slots=0, mode="hard", z
         raise ValueError("unknown weighted query kind")
     groups, results = {}, [None]*len(requests)
     bundle = torch.nn.ModuleDict(dict(memory=weights.kernel, program=program))
-    from .query_execution import dense, branches
+    from .query_execution import dense, packed, branches
+    if packed(program):
+        from .query_packed import branches
     branch = branches(weights.kernel, weights, requests, kind) if dense(program) else [None]*len(requests)
     for i, r in enumerate(requests):
         groups.setdefault(_signature(weights.kernel, weights, r, kind, branch[i]), []).append(i)

@@ -41,6 +41,7 @@ int main(int argc,char** argv) {
     if(setenv("TIDE_COMMUNICATION_POLICY",r.communication.c_str(),1))throw std::runtime_error("cannot set process communication policy");
     const auto fixture_start=tide_bench::Clock::now();
     auto data=read_json(r.input);data["__fixture_root"]=r.input.parent_path().string();data["__task"]=r.task();
+    data["__query_execution"]=r.query_execution;
     if(r.check_roots)validate_root_budget(data);
     const auto fixture_seconds=tide_bench::seconds(fixture_start);
     const Json identity={{"fixture_sha256",data.at("fixture_sha256")},{"mode",r.mode},{"dtype",r.precision},
@@ -80,7 +81,7 @@ int main(int argc,char** argv) {
       {"placement_rule",r.nodes.empty()?"region modulo ordered peers, or single coordinator":"explicit node map"},{"synchronized_devices",synchronized},
       {"communication",{{"requested",r.communication},{"effective",tide::communication_policy()}}},
       {"communication_counter_scope","instrumented explicit tensor copies; tensor endpoint bytes, not PCIe traffic or proof of P2P; resident internal decode/protocol traffic is separate"},
-      {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"task",r.task()},
+      {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"task",r.task()},{"query_execution",r.query_execution},
       {"validation_mode",r.validation},{"exploratory_enabled",r.validation=="explore"},{"exploratory_accepted",false},
       {"execution_completed",false},{"execution_finite","not_checked"},
       {"independent_comparison",{{"numeric","not_checked"},{"discrete","not_checked"},{"strict_passed",false}}},

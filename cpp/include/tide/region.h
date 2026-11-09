@@ -48,6 +48,9 @@ Selection evaluate_selection(const Graph&, const Model&, const History*, const s
                              const std::vector<size_t>&);
 void select_event_batches(const Graph&,const Model&,Continuation&,std::vector<Event>&,
                           const std::map<Owner,std::vector<size_t>>&,bool trace,std::map<std::string,Index>& stats);
+// Ready cross-time frames require history-independent programs.
+void select_frame_batches(const Graph&,const Model&,Continuation&,std::vector<Event>&,
+                         const std::vector<std::vector<size_t>>&,bool,std::map<std::string,Index>&);
 void commit_selection(Continuation&, Owner, Selection, std::vector<Event>&,
                       const std::vector<size_t>&, bool trace);
 void select_events(const Graph&, const Model&, Continuation&, std::vector<Event>&,

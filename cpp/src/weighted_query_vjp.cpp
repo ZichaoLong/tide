@@ -1,5 +1,6 @@
 // Architecture §3/4: actual query batches with independent row/field VJP roots.
 #include "weighted_query_vjp.h"
+#include "weighted_query_layout.h"
 #include "weighted_singleton_vjp.h"
 #include "region_metadata.h"
 #include <torch/csrc/autograd/autograd.h>
@@ -79,7 +80,7 @@ class QueryVjp final:public torch::autograd::Node {
 };
 using Fields=std::vector<TensorFields>;
 template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,const Config& c,const RegionalConfig& region,
-    bool is_full,Index slots,const Options& options,bool dense){
+    bool is_full,Index slots,const Options& options,int dense){
   if(rows.size()==1){
     variable_list originals{w.bias};
     const std::string prefix=is_full?"full_program.":"read_program.";
@@ -137,11 +138,15 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
   return result;
 }
 template<class Config> Fields bind_queries(const NodeWeights& w,const std::vector<Row>& rows,const Config& c,const RegionalConfig& r,
-    bool is_full,Index slots,const Options& options,bool dense){
+    bool is_full,Index slots,const Options& options,int dense){
   std::map<std::string,std::vector<size_t>> groups;Fields result(rows.size());
   std::vector<std::string> branches(rows.size());
   if constexpr(std::is_same_v<Config,KVConfig>){
-    if(dense){
+    if(dense==2){
+      States states;Times times;
+      for(const auto& row:rows){states.push_back(row.state?*row.state:w.kernel->initial(w));times.push_back(row.time);}
+      branches=packed_branches(states,times,c,is_full);
+    }else if(dense){
       at::NoGradGuard guard;std::vector<Tensor> flags;
       for(const auto& row:rows){
         auto state=row.state?*row.state:w.kernel->initial(w);auto [mask,age]=detail::visible(state,row.time,c);
@@ -161,12 +166,12 @@ template<class Config> Fields bind_queries(const NodeWeights& w,const std::vecto
   }
   return result;
 }
-template<class Config> Fields read_impl(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,bool dense){
+template<class Config> Fields read_impl(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense){
   std::vector<Row> rows;
   for(const auto& q:requests)rows.push_back({q.state?std::make_optional(*q.state):std::nullopt,q.time,q.content.value,{}});
   return bind_queries(w,rows,c,r,false,0,Options{},dense);
 }
-template<class Config> std::vector<FullResult> full_impl(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,bool dense){
+template<class Config> std::vector<FullResult> full_impl(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,int dense){
   std::vector<Row> rows;std::vector<FullResult> result;
   for(const auto& q:requests)rows.push_back({*q.comparison,q.time,q.content.value,q.control});
   for(const auto& fields:bind_queries(w,rows,c,RegionalConfig{},true,slots,options,dense)){
@@ -176,8 +181,8 @@ template<class Config> std::vector<FullResult> full_impl(const NodeWeights& w,co
   return result;
 }
 }
-std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const KVConfig& c,const RegionalConfig& region,bool dense){return read_impl(w,r,c,region,dense);}
-std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const RecurrentConfig& c,const RegionalConfig& region,bool dense){return read_impl(w,r,c,region,dense);}
-std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,bool dense){return full_impl(w,r,slots,o,c,dense);}
-std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,bool dense){return full_impl(w,r,slots,o,c,dense);}
+std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const KVConfig& c,const RegionalConfig& region,int dense){return read_impl(w,r,c,region,dense);}
+std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const RecurrentConfig& c,const RegionalConfig& region,int dense){return read_impl(w,r,c,region,dense);}
+std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,int dense){return full_impl(w,r,slots,o,c,dense);}
+std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,int dense){return full_impl(w,r,slots,o,c,dense);}
 }

@@ -14,6 +14,25 @@ namespace tide {
 void advance_block_events(const Graph& g, const Model& m, Continuation& q,
                           std::vector<Event>& events, const std::vector<std::vector<size_t>>& waves,
                           const Options& options, NodePool& pool, std::map<std::string, Index>& stats) {
+  // This capability gate is independent of graph shape, IDs and input values.
+  // Prepared proposals certify Read readiness; history independence permits
+  // selection before earlier frames commit. Next/state adoption stays ordered.
+  const bool across_time = options.packed && !options.parallel_regions && !events.empty()
+    && std::all_of(events.begin(),events.end(),[&](const Event& e){
+      const auto& k=m.regions[g.nodes[e.node].region].kernel;
+      return e.proposal.defined() && k->joint_batch() && k->history_independent()
+        && (!at::GradMode::is_enabled()||k->batched_autograd());
+    });
+  if(across_time){
+    std::vector<std::vector<size_t>> frames;
+    for(const auto& wave:waves){
+      RegionEvents regions;
+      for(auto i:wave)regions[{events[i].batch,g.nodes[events[i].node].region}].push_back(i);
+      for(auto& [owner,ids]:regions)frames.push_back(std::move(ids));
+    }
+    select_frame_batches(g,m,q,events,frames,options.trace,stats);
+    stats["region_time_batch_frames"]+=frames.size();
+  }
   for (const auto& ids : waves) {
     if (ids.empty()) continue;
     NodeEvents nodes;
@@ -56,7 +75,7 @@ void advance_block_events(const Graph& g, const Model& m, Continuation& q,
       ++stats["region_parallel_waves"];
       stats["max_region_wave"] = std::max<Index>(stats["max_region_wave"], regions.size());
     } else {
-      if(options.packed)select_event_batches(g,m,q,events,regions,options.trace,stats);
+      if(options.packed&&!across_time)select_event_batches(g,m,q,events,regions,options.trace,stats);
       for (const auto& [owner, candidates] : regions) {
       if(!options.packed){select_events(g, m, q, events, candidates, options.trace);++stats["region_scalar_calls"];}
       for (auto i : candidates) {

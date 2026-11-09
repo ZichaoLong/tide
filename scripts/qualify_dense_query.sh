@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Fixed-source installed-wheel gate; finite exploration retains strict failures.
 set -euo pipefail
-if [[ $# != 3 || ( $2 != cpu && $2 != npu ) ]]; then
-  echo "usage: $0 NEW_OUTPUT cpu|npu MATCHING_NATIVE_BUILD (activate fixed wheel)" >&2
+if [[ ( $# != 3 && $# != 4 ) || ( $2 != cpu && $2 != npu ) ]]; then
+  echo "usage: $0 NEW_OUTPUT cpu|npu MATCHING_NATIVE_BUILD [dense-v1|auto] (activate fixed wheel)" >&2
   exit 2
 fi
 out=$(realpath -m "$1")
 target=$2
+policy=${4:-dense-v1}
+[[ $policy == dense-v1 || $policy == auto ]] || { echo 'invalid query gate policy' >&2; exit 2; }
 export TIDE_BUILD_DIR=$(realpath "$3")
 mkdir "$out"
 export TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
@@ -39,10 +41,22 @@ else
   dtype=both
 fi
 export TIDE_DENSE_NUMERIC_REPORT="$out/numeric"
-python -m pytest -q -o pythonpath= tests/test_weighted_dense_query.py tests/test_weighted_dense_training.py \
+checks=(tests/test_weighted_dense_query.py tests/test_weighted_dense_training.py)
+if [[ $policy == auto ]]; then checks+=(tests/test_weighted_query_layout.py); fi
+python -m pytest -q -o pythonpath= "${checks[@]}" \
   --dtype "$dtype" --tb=short --junitxml="$out/checks.xml"
+if [[ $policy == auto && $target == cpu ]]; then
+  python -m pytest -q -o pythonpath= tests/test_settle_ports.py tests/test_region_contract.py \
+    tests/test_region_schedules.py tests/test_greedy.py tests/test_core5_planning.py \
+    tests/test_core5_study.py tests/test_experiment_config.py \
+    --dtype both --tb=short --junitxml="$out/regression.xml"
+  # Existing case4 FP32 region-root discrepancy has its own retained baseline
+  # witness; keep its original assertion, do not suppress it inside a new gate.
+  python -m pytest -q -o pythonpath= tests/test_weighted_region_execution.py \
+    --dtype float64 --tb=short --junitxml="$out/region-fp64.xml"
+fi
 for client in python native; do
   python examples/consumer_core5/dense_query.py --device "$TIDE_DENSE_DEVICE" --client "$client" \
-    --native-library "$TIDE_BUILD_DIR" --output-dir "$out/consumer-$client"
+    --query-execution "$policy" --native-library "$TIDE_BUILD_DIR" --output-dir "$out/consumer-$client"
 done
 python scripts/check_upstream.py > "$out/upstream.json"

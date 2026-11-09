@@ -11,6 +11,7 @@ class Eager : public Resident {
   std::unique_ptr<SGD> optimizer;bool training,prefill;Options options;
   bool storage_reference,return_packed;std::map<std::string,Tensor> storage_masters;
   std::string return_mode;double loss_scale;
+  std::map<std::string,Index> query_counts;
   std::vector<External> placed_inputs(std::vector<External>,std::map<std::string,Tensor>* leaves=nullptr)const;
   Result forward(const Continuation&,const std::vector<External>&,Index stop)const;
  public:
