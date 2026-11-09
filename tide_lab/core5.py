@@ -104,8 +104,12 @@ class Core5Encoder(torch.nn.Module):
         for start in range(0, length, chunk_size):
             end = min(length, start + chunk_size)
             inputs = layered_inputs(self.spec, features[:, start:end], start_position=start)
-            result = execute(q, inputs, end * self.spec.stride,
-                             sealed_until=end * self.spec.stride, trace=trace)
+            options = dict(sealed_until=end * self.spec.stride)
+            # The public native factory returns Native.run, whose trace policy
+            # is constructor-owned (complete records); Python takes it per call.
+            if implementation == "reference" or self.eager_implementation == "python":
+                options['trace'] = trace
+            result = execute(q, inputs, end * self.spec.stride, **options)
             q = result.continuation
             all_outputs.extend(result.outputs)
             all_trace.extend(result.trace)

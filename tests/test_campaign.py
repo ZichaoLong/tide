@@ -55,5 +55,32 @@ class CampaignContracts(unittest.TestCase):
         self.assertTrue(torch.isfinite(y).all())
         self.assertTrue(any(p.grad is not None and p.grad.abs().sum()>0 for p in other.parameters()))
 
+    def test_microbatch_accumulation_weights_effective_tokens_and_preserves_update(self):
+        import torch
+        from tide_lab.campaign_config import config_for
+        from tide_lab.campaign_runtime import make_model,optimizer_for,update,logical_update,synthetic_batch
+        torch.set_num_threads(1)
+        c=config_for('test',anchor(),kind='transformer',transformer=dict(width=8,layers=1,heads=2,ffn=16))
+        first=make_model(c,torch.device('cpu'));second=make_model(c,torch.device('cpu'))
+        a=optimizer_for(first,c);b=optimizer_for(second,c)
+        data=synthetic_batch(3,4,77,'cpu');data['labels'][0,2:]=-100
+        x=update(first,a,data,c,0,torch.device('cpu'))
+        parts=[{k:v[:1] for k,v in data.items()},{k:v[1:] for k,v in data.items()}]
+        y=logical_update(second,b,parts,c,0,torch.device('cpu'))
+        self.assertEqual(x['tokens'],10);self.assertEqual(y['tokens'],10)
+        self.assertAlmostEqual(x['loss'],y['loss'],places=5)
+        for p,q in zip(first.parameters(),second.parameters()):
+            torch.testing.assert_close(p,q,atol=2e-6,rtol=1e-5)
+
+    def test_exact_recovery_rejects_missing_or_changed_optimizer_state(self):
+        import torch
+        from tide_lab.campaign_runtime import exact_tree
+        state={'optimizer':{'step':torch.tensor(2.),'moment':torch.arange(4.)},'cursor':7}
+        exact_tree(state,copy.deepcopy(state))
+        changed=copy.deepcopy(state);changed['optimizer']['moment'][2]+=1
+        with self.assertRaisesRegex(AssertionError,'tensor mismatch'):exact_tree(state,changed)
+        changed=copy.deepcopy(state);changed['cursor']=6
+        with self.assertRaisesRegex(AssertionError,'value'):exact_tree(state,changed)
+
 
 if __name__=='__main__':unittest.main()

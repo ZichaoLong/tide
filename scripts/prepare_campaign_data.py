@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 import subprocess
 import shutil
+import concurrent.futures
 import time
 import urllib.request
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -23,23 +24,49 @@ def prepare(a):
     atomic_json(a.output/'state.json',state)
     tree=json.loads(a.tree.read_text());files=[]
     try:
-        for row in tree:
+        selected=[row for row in tree if '/train-' in row['path']]
+        if a.max_train_shards:selected=selected[:a.max_train_shards]
+        for row in selected:
             if '/train-' not in row['path']:continue
             target=raw/Path(row['path']).name
             url='https://huggingface.co/datasets/Salesforce/wikitext/resolve/'+a.revision+'/'+row['path']+'?download=true'
             temp=target.with_suffix('.partial')
-            if a.partial_dir:
+            if a.parallel_ranges:
+                parts=raw/(target.name+'.parts');parts.mkdir()
+                ranges=[(i,start,min(row['size'],start+8*2**20)-1)
+                        for i,start in enumerate(range(0,row['size'],8*2**20))]
+                def fetch(item):
+                    i,start,end=item;part=parts/str(i)
+                    request=urllib.request.Request(url,headers={'Range':f'bytes={start}-{end}'})
+                    with urllib.request.urlopen(request,timeout=120) as response,part.open('xb') as f:
+                        if response.status!=206 or response.headers.get('Content-Range')!=f'bytes {start}-{end}/{row["size"]}':
+                            raise ValueError('range response did not match the requested fixed byte interval')
+                        while chunk:=response.read(65536):f.write(chunk)
+                    if part.stat().st_size!=end-start+1:raise ValueError('incomplete fixed range')
+                    print(json.dumps(dict(downloaded_range=i,bytes=end-start+1,file=target.name)),flush=True)
+                    return part
+                with concurrent.futures.ThreadPoolExecutor(max_workers=a.parallel_ranges) as pool:
+                    ordered=list(pool.map(fetch,ranges))
+                with temp.open('xb') as out:
+                    for part in ordered:
+                        with part.open('rb') as f:shutil.copyfileobj(f,out)
+                # Keep range pieces until the full LFS digest is verified below.
+            elif a.partial_dir:
                 prior=a.partial_dir/temp.name
                 if prior.is_file():shutil.copyfile(prior,temp)
             # One bounded HTTP Range continuation after the recorded urllib
             # read timeout. No retry loop and no shared proxy configuration.
-            subprocess.run(['curl','--fail','--location','--silent','--show-error',
-                '--connect-timeout','20','--max-time','1200','--speed-time','120',
-                '--speed-limit','1024','--continue-at','-', '--output',str(temp),url],
-                check=True,timeout=1230)
+            if not a.parallel_ranges:
+                subprocess.run(['curl','--fail','--location','--silent','--show-error',
+                    '--connect-timeout','20','--max-time','1200','--speed-time','120',
+                    '--speed-limit','1024','--continue-at','-', '--output',str(temp),url],
+                    check=True,timeout=1230)
             if temp.stat().st_size!=row['size'] or digest(temp)!=row['lfs']['oid']:
                 raise ValueError('fixed remote file size/hash mismatch: '+row['path'])
             temp.rename(target);target.chmod(0o444)
+            if a.parallel_ranges:
+                for part in ordered:part.unlink()
+                parts.rmdir()
             files.append(dict(path=row['path'],sha256=digest(target),size=target.stat().st_size))
             print(json.dumps(dict(downloaded=row['path'],bytes=target.stat().st_size)),flush=True)
         old={json.loads(s)['normalized_sha256'] for s in a.exclude.read_text().splitlines()}
@@ -115,4 +142,6 @@ if __name__=='__main__':
     p.add_argument('--revision',default='b08601e04326c79dfdd32d625aee71d232d685c3')
     p.add_argument('--train-tokens',type=int,default=20971520)
     p.add_argument('--partial-dir',type=Path)
+    p.add_argument('--parallel-ranges',type=int,choices=range(1,9))
+    p.add_argument('--max-train-shards',type=int,choices=(1,2))
     prepare(p.parse_args())

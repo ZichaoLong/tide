@@ -13,9 +13,16 @@ from .language_training import tensor_save
 from .train import cpu_tree, synchronize
 
 
+def core_options(config):
+    options=copy.deepcopy(config['core'])
+    if options.get('eager_implementation')=='native' and not options.get('native_library'):
+        options['native_library']=os.environ['TIDE_LAB_NATIVE_LIBRARY']
+    return options
+
+
 def make_model(config, device):
     if config['kind']=='tide':
-        model=TideLanguageModel(config['core'],seed=config['seed'])
+        model=TideLanguageModel(core_options(config),seed=config['seed'])
     elif config['kind']=='transformer':
         model=SmallTransformer(seed=config['seed'],**config['transformer'])
     else:raise ValueError('unsupported campaign model')
@@ -58,6 +65,31 @@ def update(model,opt,batch,config,tokens,device):
     opt.step();synchronize(device)
     return dict(loss=float(loss.detach()),tokens=count,gradient_norm=float(norm),lr=lr,
         seconds=time.monotonic()-start,work=dict(model.last_metrics))
+
+
+def logical_update(model,opt,batches,config,tokens,device):
+    """Same independent-sample global batch; physical microbatches accumulate VJP."""
+    count=sum(int((b['labels']!=-100).sum()) for b in batches)
+    if count<=0:raise ValueError('empty logical batch')
+    model.train();synchronize(device);start=time.monotonic()
+    lr=learning_rate(config,tokens+count)
+    for group in opt.param_groups:group['lr']=lr
+    opt.zero_grad(set_to_none=True);total=0.;work={}
+    for b in batches:
+        logits=model(b['input_ids'])
+        loss=F.cross_entropy(logits.flatten(0,1),b['labels'].flatten(),ignore_index=-100,reduction='sum')/count
+        if not torch.isfinite(loss):raise FloatingPointError('nonfinite logical-batch loss')
+        loss.backward();total+=float(loss.detach())
+        for key,value in model.last_metrics.items():
+            if '/max_' in key:work[key]=max(work.get(key,0),value)
+            elif key!='activity/full_fraction':work[key]=work.get(key,0)+value
+    norm=torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad],
+                                      config['training']['clip_norm'],error_if_nonfinite=True)
+    opt.step();synchronize(device)
+    if work.get('work/candidates'):
+        work['activity/full_fraction']=work['work/full']/work['work/candidates']
+    return dict(loss=total,tokens=count,gradient_norm=float(norm),lr=lr,
+        seconds=time.monotonic()-start,work=work,microbatches=len(batches))
 
 
 def checkpoint(model,opt,progress,identity,device):
@@ -132,4 +164,4 @@ def exact_tree(a,b,path='root'):
 def synthetic_batch(batch,length,seed,device):
     generator=torch.Generator().manual_seed(seed)
     ids=torch.randint(4,4096,(batch,length+1),generator=generator)
-    return dict(input_ids=ids[:,:-1].to(device),labels=ids[:,1:].to(device))
+    return dict(input_ids=ids[:,:-1].clone().to(device),labels=ids[:,1:].clone().to(device))

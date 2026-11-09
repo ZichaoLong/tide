@@ -1,0 +1,92 @@
+{
+  "campaign": "language-v6",
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "core": {
+    "max_materialize_bytes": 1073741824,
+    "recipe": {
+      "branches": 2,
+      "depth": 4,
+      "family": "kv",
+      "history": 512,
+      "memory_overrides": {
+        "memory_read": "qry"
+      },
+      "offsets": [
+        0,
+        1
+      ],
+      "profile": "baseline",
+      "region_overrides": {
+        "allocation_temperature": 0.25
+      },
+      "region_width": 4,
+      "regularizer": "quad",
+      "selection": "regional_total",
+      "source_mode": "region",
+      "sparse_denominator": 2,
+      "topology": "fc",
+      "width": 32
+    },
+    "width": 32
+  },
+  "coverage_group": "transformer_control",
+  "device": "cpu",
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed; separate frozen finalist review only"
+  },
+  "id": "cover-transformer-fc-budget",
+  "kind": "transformer",
+  "line": "coverage",
+  "planned_inventory": {
+    "lm_trainable": 661120,
+    "transformer": {
+      "ffn": 256,
+      "heads": 4,
+      "layers": 1,
+      "width": 128
+    }
+  },
+  "planned_transformer_parameters": 661120,
+  "resources": {
+    "max_rss_gib": 8
+  },
+  "revisions": {
+    "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-language-campaign-config-v1",
+  "seed": 11,
+  "study_id": "TL-COVER-v6",
+  "threads": 1,
+  "training": {
+    "batch": 8,
+    "checkpoint_seconds": 600,
+    "clip_norm": 1.0,
+    "eps": 1e-06,
+    "eval_tokens": 8192,
+    "length": 32,
+    "log_every": 8,
+    "lr": 0.003,
+    "lr_floor_fraction": 0.1,
+    "milestones": [
+      65536
+    ],
+    "target_tokens": 65536,
+    "timeout_seconds": 28800,
+    "validation_every_tokens": 16384,
+    "warmup_tokens": 2048,
+    "weight_decay": 0.01
+  },
+  "transformer": {
+    "ffn": 256,
+    "heads": 4,
+    "layers": 1,
+    "width": 128
+  }
+}

@@ -1457,6 +1457,22 @@
       "parameters": 1491202
     },
     {
+      "config": "configs/studies/language/v6/cover-transformer-fc-budget.json",
+      "group": "transformer_control",
+      "id": "cover-transformer-fc-budget",
+      "kind": "transformer",
+      "line": "coverage",
+      "parameters": 661120
+    },
+    {
+      "config": "configs/studies/language/v6/cover-transformer-hb-budget.json",
+      "group": "transformer_control",
+      "id": "cover-transformer-hb-budget",
+      "kind": "transformer",
+      "line": "coverage",
+      "parameters": 1456000
+    },
+    {
       "config": "configs/studies/language/v6/scale-fc16-kv-quad.json",
       "group": "scale",
       "id": "scale-fc16-kv-quad",
@@ -1570,7 +1586,7 @@
     }
   ],
   "counts": {
-    "coverage": 182,
+    "coverage": 184,
     "scale": 14
   },
   "description": "Configuration union; device/batch resolved after finite calibration, not automatic all-platform matrix",

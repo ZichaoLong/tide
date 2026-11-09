@@ -37,6 +37,11 @@ def generate(output):
             # structural difference visible instead of claiming empty coverage.
             if r['family']=='mixed' and topology=='fc':r['depth']=8
             emit(config_for(f'cover-{topology}-{item["id"]}',r),item['group'])
+    for name,layers in [('fc-budget',1),('hb-budget',7)]:
+        c=config_for('cover-transformer-'+name,anchor(),kind='transformer',
+            transformer=dict(layers=layers,width=128,heads=4,ffn=256))
+        c['planned_transformer_parameters']=4096*128+4096+layers*(4*128**2+2*128*256+9*128+256)+2*128
+        emit(c,'transformer_control')
     for name,topology,depth,width,family in [
         ('fc16-kv','fc',4,128,'kv'),('fc32-kv','fc',8,128,'kv'),('fc64-kv','fc',16,128,'kv'),
         ('hb40-kv','hb',2,128,'kv'),('hb88-kv','hb',3,128,'kv'),
