@@ -115,6 +115,9 @@ def main():
             row = step(i); record["phases"].append(row)
             write_json(out/"result.json", record); print(json.dumps(row), flush=True)
         if a.profile != "none":
+            if a.client == "native":
+                import _tide_native as core
+                core.reset_work(True)
             if a.profile == "cpu":
                 profiler = torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=True)
             else:
@@ -124,6 +127,9 @@ def main():
                     on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(str(out/"npu-profile"), analyse_flag=True))
             with profiler:
                 record["instrumented_step"] = step(2)
+            if a.client == "native":
+                record["instrumented_packing"] = dict(core.work_metrics())
+                core.reset_work(False)
             if a.profile == "cpu":
                 write_json(out/"operators.json", [dict(operator=e.key, count=e.count, input_shapes=e.input_shapes,
                     self_cpu_ms=e.self_cpu_time_total/1000) for e in profiler.key_averages(group_by_input_shape=True)])

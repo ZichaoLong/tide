@@ -17,7 +17,13 @@
 
 以上两个开发服务均终态passed、MainPID=0、ControlGroup为空；日志分别在
 artifacts/jobs/tl-req-004-{build-a,check-b}/task.log。dev-a/dev-b是冻结脏源码，
-build-a构建来源保留其实际身份，不冒称固定提交资格。没有活动作业。
+build-a构建来源保留其实际身份，不冒称固定提交资格。实现提交75a5027已固定；正在准备正式服务gef-tl-req-004-qualify-c。
+冻结源码artifacts/tl-req-004/source-c，新build-c/wheels/installed-env；
+日志artifacts/jobs/tl-req-004-qualify-c/task.log，外层qualify-c-service.log，
+CPU/NPU审阅结果qualify-cpu-c/qualify-npu-c，队列qualify-c-queue.json。
+服务≤3600s，MemoryMax512G（构建阶段），build --jobs all；测试线程1/设备消费者host2。
+命令：systemctl --user show gef-tl-req-004-qualify-c -p ActiveState -p MainPID -p ControlGroup -p Result。
+正式作业未观察终态，性能尚未开始。
 
 ## 下一动作（本轮继续，不在提交后停机）
 
@@ -34,3 +40,18 @@ build-a构建来源保留其实际身份，不冒称固定提交资格。没有�
 每服务≤3600s。本轮产物预算10GiB，现有约201GiB/硬800GiB，系统空间约1.1TiB。
 固定环境ascend/dev-workspace-9.2.0；不改公共工具链。
 下次接续先`python scripts/status.py`，运行前将精确unit/源码/日志写回本页。
+
+## 固定资格终态与下一测量
+
+gef-tl-req-004-qualify-c已passed，MainPID=0、ControlGroup为空。
+75a5027新wheel SHA256 b4d11023ccfb3d27f9ae2675c236b376f30966cb519c21223bbaa3b8392e7526；
+CPU25 passed/2既有本轮数值xfail，NPU15 passed；四个CPU/NPU×Python/native公共消费者
+独立三步严格通过且新进程精确恢复通过。注意NPU15包含CPU数学/配置辅助，实际设备范围由各测试分列。
+CPU差异的相同FP32参数/输入提升FP64对照已定位为normalized evidence近零伴随的舍入：
+原scalar最大误差9.06e-7，新dense1.38e-7，两FP32间1.044e-6；不改变原严格失败。
+
+下一有限性能使用新诊断脚本提交（与75a5027包/C++完全相同），冻结source-d，
+独立服务gef-tl-req-004-cost-d，CPU与NPU全部串行；每完整配置一预热一步，
+B2/L8设备profile另进程，不将插桩时间当吞吐。新job日志artifacts/jobs/tl-req-004-cost-d/task.log；
+输出artifacts/tl-req-004/cost-d-*，队列cost-d-queue.json；≤3600s、MemoryMax96G。
+当前尚未启动性能服务；启动后检查该unit和结果逐项终态。
