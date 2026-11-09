@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-09T07:53:26.049909+00:00",
+  "runs": [
+    {
+      "compared_prefix": 9,
+      "destination_name": "tl-lm-complete-fc16-sparse-v5-train-tide-sparse-s11-projection-ac3f0b07a172",
+      "destination_run_id": "1a43021bebfe419698424050878300dc",
+      "latest_recorded_step": 8,
+      "local_events": 9,
+      "prefix_matches": true,
+      "project": "tide-learning-lab",
+      "recorded_events": 9,
+      "run_id": "tl-lm-complete-fc16-sparse-v5-train-tide-sparse-s11"
+    },
+    {
+      "compared_prefix": 8,
+      "destination_name": "tl-lm-complete-hb16-dense-v5-train-tide-dense-s11-projection-2ef0582cf9cb",
+      "destination_run_id": "f16309363c9344c0888f2333d8637223",
+      "latest_recorded_step": 101,
+      "local_events": 8,
+      "prefix_matches": true,
+      "project": "tide-learning-lab",
+      "recorded_events": 8,
+      "run_id": "tl-lm-complete-hb16-dense-v5-train-tide-dense-s11"
+    },
+    {
+      "compared_prefix": 23,
+      "destination_name": "tl-lm-complete-wide-dense-v5-train-tide-dense-s11-projection-8d21367c49d4",
+      "destination_run_id": "a8c7e5ae9ad6467d917c1ef035444e18",
+      "latest_recorded_step": 54,
+      "local_events": 23,
+      "prefix_matches": true,
+      "project": "tide-learning-lab",
+      "recorded_events": 23,
+      "run_id": "tl-lm-complete-wide-dense-v5-train-tide-dense-s11"
+    }
+  ],
+  "schema": "tide-lens-live-readback-v1",
+  "scope": "read-only live prefix, not terminal exactly-once qualification"
+}

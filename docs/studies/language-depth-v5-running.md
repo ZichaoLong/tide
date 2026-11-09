@@ -1,3 +1,9 @@
+当前补齐作业已启动；新ID、CPU选型、Lens、停止与恢复见[补齐操作页](language-completion-v5-running.md)。以下是旧v5第一次终态及原提交记录，不代表当前没有活动作业。
+
+---
+
+以下为历史快照；当前状态以上方为准。
+
 # v5当前操作状态：全部终止
 
 2026-11-09 14:36核对：无运行、排队或自动后继；HB16 sparse12:36:54、B FC8 13:43:33结束，所有cgroup/已知后代清空。预算监督均completed，最终22931.15秒=6.3698/24计算worker小时；原截止22:49:13不变。终态结果见[总报告](language-depth-v5-results.md)与[证据](../evidence/language-depth-terminal.json)。

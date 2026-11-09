@@ -61,11 +61,11 @@ B语言保持不能认证A从零成功；A结构也不能认证B整体局部化�
 
 ## 3. 固定契约与结构边界
 
-数学固定`0770593838a37c790a568226930567ed60f99b83`，基座固定`85d161d5c9148eac2b164f89a0ba4204b4331898`。
-[来源选择](../dependencies/foundation-source.json)、[wheel锁](../dependencies/foundation.lock.json)、[安装内容锁](../dependencies/installation.lock.json)、[环境身份](../dependencies/environment.lock.json)分开维护。
+数学固定`0770593838a37c790a568226930567ed60f99b83`。当前原v5补齐固定基座`74e7bbd62341d2ccd382194a2c52ad4fea033665`，使用独立`dependencies/positive-floor-v1/`安装锁与`.venv-positive-floor-v1`；旧85d161d运行、B及其安装身份保持。
+[来源选择](../dependencies/foundation-source.json)、当前[wheel锁](../dependencies/positive-floor-v1/foundation.lock.json)、[安装内容锁](../dependencies/positive-floor-v1/installation.lock.json)与[环境身份](../dependencies/positive-floor-v1/environment.lock.json)分开维护；`dependencies/`根目录的旧锁仍对应历史安装。
 基座、LH、fractal-latcarf及ObsidianVault只读。
 
-按固定[下游契约](https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/downstream-contract.md)，基座拥有数学对象、执行、反向和公共状态/optimizer机制；
+按当前固定[下游契约](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/downstream-contract.md)，基座拥有数学对象、执行、反向和公共状态/optimizer机制；
 实验拥有数据、任务头、loss、配方与应用恢复。不导入benchmark或复制核心；缺口经过需求、交付、下游验收和显式更新锁处理。
 
 现有公共结果已有各位置输出，实验侧可以组合全位置readout。
@@ -86,7 +86,7 @@ HB16/40/88静态计划分别有4/10/22区域，每区4节点、最大入/出度4
 非有限、因果/梯度/状态错误、离散不变量或声明的精确恢复失败停止依赖路径；正式训练不逐步跑CPU参考。
 
 先选有效batch与并行度，再锁token/更新预算。记录独立样本、microbatch、accumulation、实际算子shape和计时边界；不能用序列长度充当B或继承tiny smoke。
-独立候选可按真实空闲资源并行，单模型多卡需要资格；配对保持同后端、精度和评价工作量。构建、预热、观测、训练、评价、恢复与记录成本分列。
+独立候选按用户授权可共享已有负载设备，以实测完成速度、健康和资源余量并行，单模型多卡需要资格；配对保持同后端、精度和评价工作量。构建、预热、观测、训练、评价、恢复与记录成本分列。
 当前校准已经给出B8/B32及窗口的有限成本观察，应复用这些证据推进有界学习。固定更新/token下限是实验配方，不是数学资格；后续若调整曝光须另立身份和说明，不把低曝光或校准本身当作质量通过。整组排程不可负担不等于各候选没有研究价值，也不以硬件速度比筛掉实际稀疏模型。
 
 ## 5. 知识图、记录与后续
