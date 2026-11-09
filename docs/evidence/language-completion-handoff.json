@@ -1,7 +1,7 @@
 {
   "activity_reduction_margin": 0.2,
   "budget": {
-    "at": "2026-11-09T07:56:13.112044+00:00",
+    "at": "2026-11-09T07:58:23.219494+00:00",
     "deadline_epoch": 1794235753.0310388,
     "limit_compute_seconds": 86400,
     "rows": [
@@ -91,17 +91,17 @@
         "phase": "completed"
       },
       {
-        "compute_seconds": 470.2285051345825,
+        "compute_seconds": 600.3359777927399,
         "job_id": "lm-complete-fc16-sparse-v5",
         "phase": "running"
       },
       {
-        "compute_seconds": 470.12400221824646,
+        "compute_seconds": 600.2314748764038,
         "job_id": "lm-complete-hb16-dense-v5",
         "phase": "running"
       },
       {
-        "compute_seconds": 340.18291115760803,
+        "compute_seconds": 470.2903838157654,
         "job_id": "lm-complete-wide-dense-v5",
         "phase": "running"
       },
@@ -134,7 +134,7 @@
     "schema": "tide-depth-budget-guard-v1",
     "scope": "v5 data/calibration/study/reference compute; waits separate; v4 excluded; stop before cap with shutdown reserve",
     "state": "monitoring",
-    "used_compute_seconds": 25513.927266828567
+    "used_compute_seconds": 25904.24968480304
   },
   "calibration": {
     "lm-complete-fc16-sparse-v5/calibrate-tide-sparse": {
@@ -1829,38 +1829,38 @@
       "dependency_wait": null,
       "device": "cpu",
       "latest_metrics": {
-        "events": 18,
+        "events": 26,
         "latest_training": {
-          "elapsed_seconds": 358.5977276265621,
+          "elapsed_seconds": 497.1242654360831,
           "metrics": {
-            "activity/full_fraction": 0.510986328125,
+            "activity/full_fraction": 0.507568359375,
             "support/repaired_coordinates": 0.0,
             "support/repaired_rows": 0.0,
             "train/alpha": 1.0,
-            "train/gradient_norm": 2.618443727493286,
-            "train/loss": 7.582454681396484,
-            "train/lr": 0.0019615384615384616,
+            "train/gradient_norm": 2.2605693340301514,
+            "train/loss": 7.183987140655518,
+            "train/lr": 0.0028846153846153848,
             "train/teacher_mse_phase": 0.0,
-            "train/tokens_per_second": 14.597892836328851,
-            "train/update_seconds": 17.53677759319544,
-            "train/valid_tokens": 4352.0,
+            "train/tokens_per_second": 15.017717585749859,
+            "train/update_seconds": 17.04653177410364,
+            "train/valid_tokens": 6400.0,
             "work/candidates": 4096.0,
-            "work/full": 2093.0,
+            "work/full": 2079.0,
             "work/max_full_batch": 256.0,
             "work/max_region_batch": 256.0,
             "work/max_state_batch": 8.0,
             "work/max_state_sequence": 32.0,
-            "work/messages": 6324.0,
+            "work/messages": 6268.0,
             "work/read_events": 4096.0,
             "work/region_blocks": 4.0,
-            "work/source_rows": 7348.0,
+            "work/source_rows": 7292.0,
             "work/state_updates": 4096.0
           },
           "run_id": "tl-lm-complete-fc16-sparse-v5-train-tide-sparse-s11",
           "schema_version": 1,
-          "sequence": 17,
-          "step": 17,
-          "timestamp": "2026-11-09T07:55:58.234373+00:00"
+          "sequence": 25,
+          "step": 25,
+          "timestamp": "2026-11-09T07:58:16.760912+00:00"
         },
         "latest_validation": {
           "elapsed_seconds": 47.09534914791584,
@@ -1875,8 +1875,8 @@
           "step": 0,
           "timestamp": "2026-11-09T07:50:46.731998+00:00"
         },
-        "logged_updates": 17,
-        "mean_update_seconds": 18.280737908009222,
+        "logged_updates": 25,
+        "mean_update_seconds": 17.9594952096045,
         "support_repaired_coordinates": 0.0,
         "support_repaired_rows": 0.0,
         "support_scope": "logged updates only, includes autograd replay; validation/inference counted separately",
@@ -1889,7 +1889,7 @@
             "pid": 718226,
             "process_group": 718226,
             "start_ticks": 2179667201,
-            "state": "R"
+            "state": "S"
           },
           {
             "parent_pid": 718226,
@@ -1971,7 +1971,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 463.6246607452631,
+          "elapsed_seconds": 604.6371841430664,
           "job_id": "lm-complete-fc16-sparse-v5",
           "launcher": {
             "parent_pid": 718226,
@@ -1991,7 +1991,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:05.199693+00:00"
+          "updated_at": "2026-11-09T07:58:26.212872+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -2174,21 +2174,21 @@
       "dependency_wait": null,
       "device": "cpu",
       "latest_metrics": {
-        "events": 16,
+        "events": 23,
         "latest_training": {
-          "elapsed_seconds": 355.70042990893126,
+          "elapsed_seconds": 497.8079637400806,
           "metrics": {
             "activity/full_fraction": 1.0,
             "support/repaired_coordinates": 0.0,
             "support/repaired_rows": 0.0,
             "train/alpha": 1.0,
-            "train/gradient_norm": 2.11004638671875,
-            "train/loss": 6.755288600921631,
-            "train/lr": 0.0028147465759306464,
+            "train/gradient_norm": 1.3327292203903198,
+            "train/loss": 6.736452102661133,
+            "train/lr": 0.0027826803173633357,
             "train/teacher_mse_phase": 0.0,
-            "train/tokens_per_second": 12.120375670645052,
-            "train/update_seconds": 21.121457532048225,
-            "train/valid_tokens": 27838.0,
+            "train/tokens_per_second": 12.669037927706738,
+            "train/update_seconds": 20.206743516027927,
+            "train/valid_tokens": 29630.0,
             "work/candidates": 4096.0,
             "work/full": 4096.0,
             "work/max_full_batch": 256.0,
@@ -2203,9 +2203,9 @@
           },
           "run_id": "tl-lm-complete-hb16-dense-v5-train-tide-dense-s11",
           "schema_version": 1,
-          "sequence": 15,
-          "step": 109,
-          "timestamp": "2026-11-09T07:55:58.128345+00:00"
+          "sequence": 22,
+          "step": 116,
+          "timestamp": "2026-11-09T07:58:20.235884+00:00"
         },
         "latest_validation": {
           "elapsed_seconds": 51.48646241798997,
@@ -2220,8 +2220,8 @@
           "step": 94,
           "timestamp": "2026-11-09T07:50:53.914388+00:00"
         },
-        "logged_updates": 15,
-        "mean_update_seconds": 20.22901060928901,
+        "logged_updates": 22,
+        "mean_update_seconds": 20.23783456500281,
         "support_repaired_coordinates": 0.0,
         "support_repaired_rows": 0.0,
         "support_scope": "logged updates only, includes autograd replay; validation/inference counted separately",
@@ -2316,7 +2316,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 473.20199586078525,
+          "elapsed_seconds": 604.0510958582163,
           "job_id": "lm-complete-hb16-dense-v5",
           "launcher": {
             "parent_pid": 718245,
@@ -2336,7 +2336,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:14.891634+00:00"
+          "updated_at": "2026-11-09T07:58:25.744654+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -2393,7 +2393,7 @@
     "lm-complete-hb40-dense-v5": {
       "chain": null,
       "dependency_wait": {
-        "at": "2026-11-09T07:56:13.108792+00:00",
+        "at": "2026-11-09T07:58:28.184845+00:00",
         "dependencies": [
           "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-complete-hb16-dense-v5/stage.json",
           "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/stage.json"
@@ -2467,7 +2467,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 463.1596178673208,
+          "elapsed_seconds": 604.1413901932538,
           "job_id": "lm-complete-hb40-dense-v5",
           "launcher": {
             "parent_pid": 718336,
@@ -2487,7 +2487,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:05.362004+00:00"
+          "updated_at": "2026-11-09T07:58:26.344284+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -2544,7 +2544,7 @@
     "lm-complete-hb40-sparse-v5": {
       "chain": null,
       "dependency_wait": {
-        "at": "2026-11-09T07:56:12.563172+00:00",
+        "at": "2026-11-09T07:58:27.642781+00:00",
         "dependencies": [
           "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-complete-hb16-dense-v5/stage.json",
           "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-sparse-v5/stage.json"
@@ -2564,7 +2564,7 @@
             "pid": 718371,
             "process_group": 718371,
             "start_ticks": 2179667276,
-            "state": "R"
+            "state": "S"
           },
           {
             "parent_pid": 718371,
@@ -2618,7 +2618,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 463.02039114013314,
+          "elapsed_seconds": 603.8883948475122,
           "job_id": "lm-complete-hb40-sparse-v5",
           "launcher": {
             "parent_pid": 718371,
@@ -2638,7 +2638,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:05.331298+00:00"
+          "updated_at": "2026-11-09T07:58:26.194752+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -3561,21 +3561,21 @@
       "dependency_wait": null,
       "device": "cpu",
       "latest_metrics": {
-        "events": 54,
+        "events": 80,
         "latest_training": {
-          "elapsed_seconds": 298.12798848748207,
+          "elapsed_seconds": 433.0963822565973,
           "metrics": {
             "activity/full_fraction": 1.0,
-            "support/repaired_coordinates": 186.0,
-            "support/repaired_rows": 176.0,
+            "support/repaired_coordinates": 194.0,
+            "support/repaired_rows": 180.0,
             "train/alpha": 1.0,
-            "train/gradient_norm": 2.083228349685669,
-            "train/loss": 6.85359525680542,
-            "train/lr": 0.002909393001388201,
+            "train/gradient_norm": 1.8367136716842651,
+            "train/loss": 6.782160758972168,
+            "train/lr": 0.002810310187224016,
             "train/teacher_mse_phase": 0.0,
-            "train/tokens_per_second": 50.225323528333185,
-            "train/update_seconds": 5.097030382603407,
-            "train/valid_tokens": 21454.0,
+            "train/tokens_per_second": 49.08384125978301,
+            "train/update_seconds": 5.215565722435713,
+            "train/valid_tokens": 28094.0,
             "work/candidates": 1024.0,
             "work/full": 1024.0,
             "work/max_full_batch": 256.0,
@@ -3590,9 +3590,9 @@
           },
           "run_id": "tl-lm-complete-wide-dense-v5-train-tide-dense-s11",
           "schema_version": 1,
-          "sequence": 53,
-          "step": 84,
-          "timestamp": "2026-11-09T07:56:13.079296+00:00"
+          "sequence": 79,
+          "step": 110,
+          "timestamp": "2026-11-09T07:58:28.047688+00:00"
         },
         "latest_validation": {
           "elapsed_seconds": 194.20389476791024,
@@ -3606,12 +3606,12 @@
           "step": 64,
           "timestamp": "2026-11-09T07:54:29.155200+00:00"
         },
-        "logged_updates": 52,
-        "mean_update_seconds": 5.188708088647288,
-        "support_repaired_coordinates": 2243.0,
-        "support_repaired_rows": 2105.0,
+        "logged_updates": 78,
+        "mean_update_seconds": 5.185365967022685,
+        "support_repaired_coordinates": 7274.0,
+        "support_repaired_rows": 6912.0,
         "support_scope": "logged updates only, includes autograd replay; validation/inference counted separately",
-        "updates_with_support_repair": 24
+        "updates_with_support_repair": 50
       },
       "lifecycle": {
         "current_cgroup_processes": [
@@ -3702,7 +3702,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 342.50303146615624,
+          "elapsed_seconds": 473.48895785212517,
           "job_id": "lm-complete-wide-dense-v5",
           "launcher": {
             "parent_pid": 728249,
@@ -3722,7 +3722,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:14.105975+00:00"
+          "updated_at": "2026-11-09T07:58:25.094295+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -3841,7 +3841,7 @@
               "state": "S"
             }
           ],
-          "elapsed_seconds": 462.9578998275101,
+          "elapsed_seconds": 603.8902413025498,
           "job_id": "lm-completion-budget-v5",
           "launcher": {
             "parent_pid": 718409,
@@ -3861,7 +3861,7 @@
             "state": "R"
           },
           "termination_verified": false,
-          "updated_at": "2026-11-09T07:56:05.386773+00:00"
+          "updated_at": "2026-11-09T07:58:26.314975+00:00"
         },
         "systemd": {
           "ActiveState": "active",
@@ -3923,7 +3923,7 @@
       "event_count": 0,
       "final_projection_verified": false,
       "job_id": "lm-complete-fc16-sparse-v5",
-      "local_event_count": 18,
+      "local_event_count": 26,
       "projection": "runs/lm-complete-fc16-sparse-v5/train-tide-sparse-s11/projection.json",
       "readback_matches": null,
       "run_id": "tl-lm-complete-fc16-sparse-v5-train-tide-sparse-s11",
@@ -3936,7 +3936,7 @@
       "event_count": 0,
       "final_projection_verified": false,
       "job_id": "lm-complete-hb16-dense-v5",
-      "local_event_count": 16,
+      "local_event_count": 23,
       "projection": "runs/lm-complete-hb16-dense-v5/train-tide-dense-s11/projection.json",
       "readback_matches": null,
       "run_id": "tl-lm-complete-hb16-dense-v5-train-tide-dense-s11",
@@ -3949,7 +3949,7 @@
       "event_count": 0,
       "final_projection_verified": false,
       "job_id": "lm-complete-wide-dense-v5",
-      "local_event_count": 54,
+      "local_event_count": 80,
       "projection": "runs/lm-complete-wide-dense-v5/train-tide-dense-s11/projection.json",
       "readback_matches": null,
       "run_id": "tl-lm-complete-wide-dense-v5-train-tide-dense-s11",
@@ -4049,9 +4049,51 @@
     }
   ],
   "observations_only": true,
-  "observed_at": "2026-11-09T07:56:15.113010+00:00",
+  "observed_at": "2026-11-09T07:58:30.442821+00:00",
   "quality_margin": 0.05,
+  "reference_implementation_checks": {
+    "fc4-dense128": {
+      "checkpoint_sha256": "f3fc4ebecc6a25e8351f71fa89f984c57819df3aa287c9991f40100b156d112d",
+      "delta_nll": 0.0,
+      "new_record": "runs/lm-complete-references-v5/test-fc4-dense128/result.json",
+      "old_record": "runs/lm-a-reference-v5/test-fc4-tide-dense-prefix128/result.json",
+      "per_block_results_exact_equal": true,
+      "scope": "same fixed old checkpoint on v5 test targets; does not certify all tensors, training or strict core equivalence",
+      "work_exact_equal": true
+    },
+    "fc4-sparse128": {
+      "checkpoint_sha256": "3155e0a230593c4f4e91a18a50f5adced51907271e552c612a8d4969e0926174",
+      "delta_nll": 0.0,
+      "new_record": "runs/lm-complete-references-v5/test-fc4-sparse128/result.json",
+      "old_record": "runs/lm-a-reference-v5/test-fc4-tide-sparse-prefix128/result.json",
+      "per_block_results_exact_equal": true,
+      "scope": "same fixed old checkpoint on v5 test targets; does not certify all tensors, training or strict core equivalence",
+      "work_exact_equal": true
+    },
+    "hb16-sparse128": {
+      "checkpoint_sha256": "cc8ce6ba1473bb3f6e0508cbfb6eac4c7fa41c02c2d676dca79adcafdac95a93",
+      "delta_nll": 0.0,
+      "new_record": "runs/lm-complete-references-v5/test-hb16-sparse128/result.json",
+      "old_record": "runs/lm-a-hb16-sparse-v5/test-tide-sparse/result.json",
+      "per_block_results_exact_equal": true,
+      "scope": "same fixed old checkpoint on v5 test targets; does not certify all tensors, training or strict core equivalence",
+      "work_exact_equal": true
+    },
+    "hb16-sparse64": {
+      "checkpoint_sha256": "08de52de181e1358bb9b6549b7cb37089cfaf0452d57b7ebb7bb42ce690b9323",
+      "delta_nll": 0.0,
+      "new_record": "runs/lm-complete-references-v5/test-hb16-sparse64/result.json",
+      "old_record": "runs/lm-a-hb16-sparse-v5/test-tide-sparse-prefix64/result.json",
+      "per_block_results_exact_equal": true,
+      "scope": "same fixed old checkpoint on v5 test targets; does not certify all tensors, training or strict core equivalence",
+      "work_exact_equal": true
+    }
+  },
   "result_sha256": {
+    "runs/lm-a-hb16-sparse-v5/test-tide-sparse-prefix64/result.json": "b54d93edc01431c36bc1498bf9830a8966b82b05752a403ee3f9a72397d55fe5",
+    "runs/lm-a-hb16-sparse-v5/test-tide-sparse/result.json": "2d75f666304c14a8e6130ce4e2c3f3cbf1fb39f689d5867cc9705197d2f23856",
+    "runs/lm-a-reference-v5/test-fc4-tide-dense-prefix128/result.json": "e9c8a9c10098efd7a7b8ea5fb2473a072b05bfa35e417dfd76a0fa97190a7dd5",
+    "runs/lm-a-reference-v5/test-fc4-tide-sparse-prefix128/result.json": "187dc50d9e09d42c37891c142e66de35fff0113cbdd2f58f699487dd65c92aa3",
     "runs/lm-complete-fc16-sparse-v5/calibrate-tide-sparse/result.json": "a30c35522020edc154d20113ae5f6d092350b80951fe34c446a5b70a6d7ec5ab",
     "runs/lm-complete-fc16-sparse-v5/checks-tide-sparse/result.json": "bf393b80ffc2a20fc83fbe5c953b7ac7ad430bfad15a7a09cfbd73cb51eb08b4",
     "runs/lm-complete-fc16-sparse-v5/resume-tide-sparse-continued/result.json": "2a05499c2073867a0410fe7b56c2ddfff1c210d082ac195bf180520c6652ade7",

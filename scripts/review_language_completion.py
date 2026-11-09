@@ -157,6 +157,29 @@ def build(root, *, terminal=False):
     out['terminal_verified'] = all(j.get('lifecycle', {}).get('termination_verified_now', False) for j in out['jobs'].values())
     out['completed_projections_verified'] = sum(p['final_projection_verified'] for p in out['lens'])
 
+    # Same old weights before/after installation changes are implementation
+    # comparisons, distinct from independently trained dense/sparse models.
+    out['reference_implementation_checks'] = {}
+    for label, old in [
+            ('hb16-sparse128', 'lm-a-hb16-sparse-v5/test-tide-sparse'),
+            ('hb16-sparse64', 'lm-a-hb16-sparse-v5/test-tide-sparse-prefix64'),
+            ('fc4-dense128', 'lm-a-reference-v5/test-fc4-tide-dense-prefix128'),
+            ('fc4-sparse128', 'lm-a-reference-v5/test-fc4-tide-sparse-prefix128')]:
+        key = 'lm-complete-references-v5/test-'+label
+        if key not in evaluations:
+            continue
+        old_record = frozen_json(root/'runs'/old/'result.json')
+        old_ev, new_ev = old_record['evaluation'], evaluations[key]
+        if old_record['checkpoint_sha256'] != out['evaluations'][key]['checkpoint_sha256']:
+            raise ValueError('implementation comparison used different checkpoint files: '+label)
+        # Validates exact document/block target pairing, not just aggregate NLL.
+        paired_documents(new_ev['rows'], old_ev['rows'], draws=1)
+        out['reference_implementation_checks'][label] = dict(old_record='runs/'+old+'/result.json',
+            new_record='runs/'+key+'/result.json', checkpoint_sha256=old_record['checkpoint_sha256'],
+            delta_nll=new_ev['nll']-old_ev['nll'],
+            per_block_results_exact_equal=new_ev['rows'] == old_ev['rows'], work_exact_equal=new_ev['work'] == old_ev['work'],
+            scope='same fixed old checkpoint on v5 test targets; does not certify all tensors, training or strict core equivalence')
+
     # Reuse already accepted FC16 ordinary/reset evaluation; do not rerun it.
     accepted = frozen_json(root/'runs/support-v1-cpu/fc/result.json')
     for label, ev in accepted['evaluations'].items():

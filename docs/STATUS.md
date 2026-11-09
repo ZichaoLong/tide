@@ -1,22 +1,24 @@
-# 当前交接 — 补齐原v5受阻任务（2026-11-09 15:55启动核对）
+# 当前交接 — 补齐原v5受阻任务（2026-11-09 15:58核对）
 
-**已实际启动三项主训练和必要复评；两项HB40条件作业已后台等待。** 用户接受Shannon补丁并授权完成原缺口，本次保持原候选/曝光及24累计计算worker小时、北京时间22:49:13截止，不启动下一批scaling。[有限研究表](studies/language-depth-completion-v5.md)、[作业/Lens/停止/恢复](studies/language-completion-v5-running.md)、[实际只读快照](evidence/language-completion-handoff.json)。
+**三项主训练正在并行推进，7项必要复评已全部完成；两项HB40条件作业已后台等待。** 用户接受Shannon补丁并授权完成原缺口，本次保持原候选/曝光及24累计计算worker小时、北京时间22:49:13截止，不启动下一批scaling。[有限研究表](studies/language-depth-completion-v5.md)、[作业/Lens/停止/恢复](studies/language-completion-v5-running.md)、[实际只读快照](evidence/language-completion-handoff.json)。
 
 | 原缺口 | 当前作业与最近完整训练记录 | 设备/范围 |
 | --- | --- | --- |
-| FC16 quad | `lm-complete-fc16-sparse-v5`：14/128步 | CPU1，从零；4区域串联 |
-| HB16 dense | `lm-complete-hb16-dense-v5`：106/128步 | CPU1，已验94步材料续训；4区域/3依赖层级 |
-| 浅宽FC4 dense | `lm-complete-wide-dense-v5`：72/128步 | CPU1，最后完整32步材料续训；width64 |
+| FC16 quad | `lm-complete-fc16-sparse-v5`：25/128步 | CPU1，从零；4区域串联 |
+| HB16 dense | `lm-complete-hb16-dense-v5`：116/128步 | CPU1，已验94步材料续训；4区域/3依赖层级 |
+| 浅宽FC4 dense | `lm-complete-wide-dense-v5`：110/128步 | CPU1，最后完整32步材料续训；width64 |
 | HB40 dense/quad | `lm-complete-hb40-{dense,sparse}-v5`：等待HB16完成及validation学习前提 | CPU1各64步；10区域/5依赖层级，尚未训练 |
-| 必要同安装复评 | `lm-complete-references-v5`：运行中 | CPU1；旧权重/同v5确认文档，不算新训练 |
+| 必要同安装复评 | `lm-complete-references-v5`：7阶段completed、后代清空 | CPU1；旧权重/同v5确认文档，不算新训练 |
 
 源码固定`0e409967641d6963e82942e3d13223900b0afba6`，只读`.local/source-language-completion-v5`，树hash`3c591a70cb389f053fdd2f32fde9a0df9dfd823a91336570356302f29cc500e2`。数学0770593、foundation74e7bbd，`.venv-positive-floor-v1`；31个唯一固定输入、250个安装文件hash已核对。旧源码/安装/失败均保持。dense显式positive-floor-v1，quad strict。
 
 三主候选接入/因果/共享梯度/optimizer及B2/L3三步新进程恢复通过；严格1e-6/1e-5仍失败（FC16 quad2810、HB16 dense310、浅宽150元素；最大4.77e-5），离散0差异、非有限0。恢复和学习效果不覆盖数值失败。HB16/浅宽应用状态转换保留参数、optimizer、RNG、token/步数，但不声称跨旧补丁/设备轨迹精确恢复。HB16学习前提相对原从零validation，非94步起点。
 
-浅宽同B8短校准CPU5.466秒/步、共享NPU物理1为14.379秒/步；两者完成且后代清空，选择更快CPU并行。深层复用已有CPU1优势，不因有空卡强行迁移。统一监督`lm-completion-budget-v5`已启动，当前约7.025/24计算worker小时，含旧v5、验收、失败及开发检查预留；等待不当计算，最多6计算worker、每worker24GiB，新增磁盘≤4GiB、配额余量≥80GiB。
+浅宽同B8短校准CPU5.466秒/步、共享NPU物理1为14.379秒/步；两者完成且后代清空，选择更快CPU并行。深层复用已有CPU1优势，不因有空卡强行迁移。统一监督`lm-completion-budget-v5`已启动，当前约7.196/24计算worker小时，含旧v5、验收、失败及开发检查预留；等待不当计算，最多6计算worker、每worker24GiB，新增磁盘≤4GiB、配额余量≥80GiB。
 
 Lens项目`tide-learning-lab`，三学习曲线前缀`tl-lm-complete-`已[实时读回一致](evidence/language-completion-lens-live.json)，完整名/ID见操作页和快照；私有入口`.local/LENS.md`。FC16旧128普通/重置已接受评价直接复用（NLL6.864746359/6.895437009、干预补8坐标），不再重跑。B FC8和Transformer既有结果保持，B未迁入新安装。
+
+同安装复评的旧HB16 quad128/64、FC4 dense/quad128，全部逐块NLL记录及实际工作计数与旧安装完全一致；这个有限实现比较不覆盖core严格失败。
 
 研究图关联实际运行和等待状态，原失败及历史限定结论保留。补齐结果尚待终态逐组人工审阅，不因执行成功自动填科学支持；完成后再与用户对齐下一步。
 

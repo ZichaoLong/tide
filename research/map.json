@@ -4771,6 +4771,13 @@
           "record": "artifacts/jobs/lm-complete-fc16-sparse-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
           "status": "running"
+        },
+        {
+          "config": "configs/studies/language/completion-v5/references.json",
+          "id": "lm-complete-references-v5",
+          "record": "artifacts/jobs/lm-complete-references-v5/state.json",
+          "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
+          "status": "completed"
         }
       ],
       "status": "running",
@@ -4931,6 +4938,13 @@
           "record": "artifacts/jobs/lm-complete-hb16-dense-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
           "status": "running"
+        },
+        {
+          "config": "configs/studies/language/completion-v5/references.json",
+          "id": "lm-complete-references-v5",
+          "record": "artifacts/jobs/lm-complete-references-v5/state.json",
+          "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
+          "status": "completed"
         }
       ],
       "status": "running",
@@ -5219,6 +5233,13 @@
           "record": "artifacts/jobs/lm-complete-wide-dense-v5/state.json",
           "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
           "status": "running"
+        },
+        {
+          "config": "configs/studies/language/completion-v5/references.json",
+          "id": "lm-complete-references-v5",
+          "record": "artifacts/jobs/lm-complete-references-v5/state.json",
+          "source_commit": "0e409967641d6963e82942e3d13223900b0afba6",
+          "status": "completed"
         }
       ],
       "status": "running",
@@ -5488,11 +5509,11 @@
       "y": 2500
     }
   ],
-  "notice": "\u4e09\u9879\u4e3b\u8bad\u7ec3\u4e0e\u5fc5\u8981\u590d\u8bc4\u8fd0\u884c\u4e2d\uff0cHB40\u7b49\u5f85\u539f\u5b66\u4e60\u524d\u63d0\uff1b\u65e7\u5931\u8d25\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\u3002\u6570\u503c\u3001\u79bb\u6563\u3001\u6062\u590d\u548c\u5b66\u4e60\u5206\u8f74\uff1b\u8865\u9f50\u7ed3\u679c\u5c1a\u5f85\u4eba\u5de5\u5ba1\u9605\u3002",
+  "notice": "\u4e09\u9879\u4e3b\u8bad\u7ec3\u5e76\u884c\uff0c7\u9879\u5fc5\u8981\u590d\u8bc4\u5b8c\u6210\uff1bHB40\u7b49\u5f85\u539f\u5b66\u4e60\u524d\u63d0\u3002\u65e7\u5931\u8d25\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\uff0c\u6570\u503c/\u79bb\u6563/\u6062\u590d/\u5b66\u4e60\u5206\u8f74\uff1b\u8865\u9f50\u7ed3\u679c\u5c1a\u5f85\u4eba\u5de5\u5ba1\u9605\u3002",
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u8bed\u8a00\u8d28\u91cf\u4e0e\u591a\u533a\u57df\u7a00\u758f\uff1a\u91c7\u7528\u8865\u6b63\u8865\u9f50\u539fv5\u7f3a\u5931\u6bd4\u8f83",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T07:55:15.339586+00:00",
+  "updated_at": "2026-11-09T07:58:30.652249+00:00",
   "view_groups": [
     {
       "height": 2700,
