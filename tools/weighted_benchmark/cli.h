@@ -14,6 +14,7 @@ struct Request {
   double loss_scale=.001,lr=.001,momentum=.3,weight_decay=.01;
   at::ScalarType dtype() const {return precision=="float64"?at::kDouble:precision=="float16"?at::kHalf:at::kFloat;}
   Json task() const;
+  Json checkpoint_identity(const Json& fixture) const;
 };
 Request parse_request(int,char**);
 void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill);

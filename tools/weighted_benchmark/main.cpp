@@ -44,8 +44,7 @@ int main(int argc,char** argv) {
     data["__query_execution"]=r.query_execution;
     if(r.check_roots)validate_root_budget(data);
     const auto fixture_seconds=tide_bench::seconds(fixture_start);
-    const Json identity={{"fixture_sha256",data.at("fixture_sha256")},{"mode",r.mode},{"dtype",r.precision},
-      {"scoring_dtype",r.scoring},{"implementation",r.implementation},{"span",data.at("span")},{"task",r.task()}};
+    const auto identity=r.checkpoint_identity(data);
     if(!r.resume.empty())checkpoint_manifest(r.resume,identity); // Reject mismatched input before allocating a model.
     if(!std::filesystem::create_directory(output))throw std::invalid_argument("output directory must be new");created=true;
     std::filesystem::current_path(output);

@@ -29,6 +29,15 @@ Json Request::task() const {
   return {{"loss","physical-output-squared-v1"},{"loss_scale",loss_scale},{"optimizer","sgd"},
           {"lr",lr},{"momentum",momentum},{"weight_decay",weight_decay}};
 }
+Json Request::checkpoint_identity(const Json& fixture) const {
+  Json identity={{"fixture_sha256",fixture.at("fixture_sha256")},{"mode",mode},{"dtype",precision},
+    {"scoring_dtype",scoring},{"implementation",implementation},{"span",fixture.at("span")},{"task",task()}};
+  // Explicit legacy keeps historical manifests. New execution selections must
+  // not silently resume them as an exact continuation of a different policy.
+  if(query_execution!="legacy")identity["query_execution"]=query_execution;
+  if(query_execution=="auto")identity["query_policy"]="kv-packed-v2";
+  return identity;
+}
 void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill) {
   if(!values.is_object())throw std::invalid_argument("limits must be an object");
   auto next=target;
