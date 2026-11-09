@@ -33,7 +33,9 @@ AdamW/跨窗/新进程精确恢复。原严格拒绝未变。空闲单NPU次正�
 NPU队列最多等待600秒/1卡。固定源码2c11695ca66a5dcd028f7d777ec26b177add0378；新wheel已构建/安装且pip check通过。
 CPU/NPU实际进入background.slice并记录clean固定源码。NPU-a已终态exit0，29项定向通过，
 真实卡physical1→npu:0，公共行消费者通过；服务inactive/MainPID0/控制组已消失。
-CPU-a的29项新策略通过，相关Python回归仍运行，不能提前称整个CPU流程通过。
+CPU-a已终态failed：新策略29通过，相关回归314通过/8个native加载失败。
+失败原因是旧测试参数ID为True而not native筛选漏选；无新增数值失败。原失败保留，资格脚本已修正，
+后继仅补受影响的8项Python拒绝快照/公共CPU行及默认身份，不重复314项已通过回归。
 入口：bash scripts/qualify_positive_support.sh NEW_OUTPUT cpu|npu；需匹配私有固定wheel，NPU在站点队列内。
 状态/日志：artifacts/jobs/tl-req-003-{cpu,npu}-a/{status.json,task.log}；
 检查 systemctl --user status gef-tl-req-003-{cpu,npu}-a；停止用 systemctl --user stop 对应服务并核对控制组为空。
@@ -42,3 +44,7 @@ CPU-a的29项新策略通过，相关Python回归仍运行，不能提前称整�
 既有CANN9.2有限迁移、三客户端与严格失败见
 [原证据](evidence/cann92-project-migration-20261106.md)，并未解除或重新认证。
 其他历史边界和后继条件只在[ROADMAP](ROADMAP.md)维护。
+
+补充边界：2502fa4新增零接收中性检查/通用CPU环境探测，Python包源码与2c11695逐字相同；
+复用同一固定wheel。source-b只读；gef-tl-req-003-boundary-b已exit0，CPU/NPU零接收各1通过；无存活后代。
+状态日志 artifacts/jobs/tl-req-003-boundary-b，测试材料 artifacts/tl-req-003/boundary-b。

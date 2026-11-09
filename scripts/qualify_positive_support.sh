@@ -52,7 +52,10 @@ if [[ $target == cpu ]]; then
     tests/test_weighted_execution.py tests/test_weighted_compute_sharing.py \
     tests/test_weighted_query_training.py tests/test_weighted_placement.py \
     tests/test_core5_planning.py tests/test_experiment_config.py \
-    tests/test_allocation_failure.py -k 'not native' --junitxml="$out/regression.xml"
+    -k 'not native' --junitxml="$out/regression.xml"
+  # This older file uses boolean parameter IDs, not python/native labels.
+  python -m pytest -q -o pythonpath= tests/test_allocation_failure.py \
+    -k 'not True' --junitxml="$out/allocation-failure.xml"
 fi
 python examples/consumer_core5/positive_support.py \
   --row tests/data/tl_req_003_shannon_row.json --device "$TIDE_POSITIVE_SUPPORT_DEVICE" \
