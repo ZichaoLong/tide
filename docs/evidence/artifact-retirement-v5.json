@@ -1,0 +1,71 @@
+{
+  "active_jobs_checked": [
+    "lm-a-language-v4"
+  ],
+  "at": "2026-11-09T02:50:34.917287+00:00",
+  "authorized": "user-2026-11-09-delete-unneeded-old-records",
+  "candidates": [
+    {
+      "bytes": 761328682,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v1/cache-L32/features.pt",
+      "reason": "obsolete context/cache, reproducible from frozen source/model/data",
+      "retired_at": "2026-11-09T02:50:35.257280+00:00",
+      "sha256": "b3d9855c27493c8704b50b12e3e30fcba31424217d3ad2e223536bf920944e46"
+    },
+    {
+      "bytes": 771929386,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v2/cache-L128/features.pt",
+      "reason": "obsolete context/cache, reproducible from frozen source/model/data",
+      "retired_at": "2026-11-09T02:50:35.566655+00:00",
+      "sha256": "442aaf61610085cf2ab91e0b2e8bf43796bd516491c6cba7a24fed193c7cdcd2"
+    },
+    {
+      "bytes": 156938809,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v1/resume-d1-original-full/checkpoint.pt",
+      "reason": "historical tiny recovery trajectory; retain current canonical full/continued proof and final trained weights",
+      "retired_at": "2026-11-09T02:50:35.637482+00:00",
+      "sha256": "b7d9a697e2a1466690abcf139fba3bf19d8fde90a0bc0ad5f6f610c6d267531d"
+    },
+    {
+      "bytes": 156938809,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v1/resume-d1-original-split/checkpoint.pt",
+      "reason": "historical tiny recovery trajectory; retain current canonical full/continued proof and final trained weights",
+      "retired_at": "2026-11-09T02:50:35.698283+00:00",
+      "sha256": "4574ed6bc3535e44af6521458be44bfb559faa01ec82efc104b37401279a44cd"
+    },
+    {
+      "bytes": 156938809,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v1/resume-d1-original-continued/checkpoint.pt",
+      "reason": "historical tiny recovery trajectory; retain current canonical full/continued proof and final trained weights",
+      "retired_at": "2026-11-09T02:50:35.758106+00:00",
+      "sha256": "ab8534f7603e506ad022b5ed375b9d1844aad251d496c4a7f35258535ec7c817"
+    },
+    {
+      "bytes": 156939065,
+      "effect": "historical byte-exact artifact will be absent after approved deletion; regeneration must get a new identity",
+      "path": "runs/lm-b-language-v2/resume-d1-original-split/checkpoint.pt",
+      "reason": "historical tiny recovery trajectory; retain current canonical full/continued proof and final trained weights",
+      "retired_at": "2026-11-09T02:50:35.812986+00:00",
+      "sha256": "371cf2c07d189cff2983876c5e291cd2d63f8bd978caf636d365aec1cec75734"
+    }
+  ],
+  "deleted_bytes": 2161013560,
+  "finished_at": "2026-11-09T02:50:35.823504+00:00",
+  "historical_byte_exact_artifacts_available": false,
+  "regeneration": "new identity required; local metrics and failures remain authoritative",
+  "retained": [
+    "all metrics/manifests/results/logs/failure reproducer descriptions and dependency/source/data hashes",
+    "all final scientific checkpoints, all v4 artifacts and active inputs",
+    "runs/lm-b-language-v2/cache-L32/features.pt",
+    "runs/lm-b-language-v2/resume-d1-original-full/checkpoint.pt",
+    "runs/lm-b-language-v2/resume-d1-original-continued/checkpoint.pt",
+    "all frozen source snapshots, source datasets/tokenizers and private installed environment"
+  ],
+  "schema": "tide-artifact-retirement-v1",
+  "state": "completed"
+}

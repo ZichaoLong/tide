@@ -1,0 +1,36 @@
+{
+  "at": "2026-11-09T02:57:05.708663+00:00",
+  "batch_reason": "B8 preserves old sampler/exposure/schedule prefix; B16/B32 calibration continues without changing active jobs or silently replacing the comparison",
+  "budget": "CPU training replaces the corresponding part of the same 24 compute-worker hours; <=6 concurrent compute workers including old v4; waiting processes are not allocated compute",
+  "confound": "new A CPU FP32 vs prior FC4/controls NPU FP32; compare quality within actual implementation scope, not strict-equivalence. New FC16/HB16 are paired on same CPU configuration.",
+  "observations": {
+    "cpu": {
+      "path": "runs/lm-depth-cal-cpu-v5/t1-b8/result.json",
+      "preview_seconds": 6.997057847678661,
+      "seconds": 22.214013213291764,
+      "sha256": "ffdc0ae27bc63bd0ad1f3cdebf1679dfcab1dac1f483ad7124c94bc3b88fee52",
+      "tokens": 256.0
+    },
+    "cpu4": {
+      "path": "runs/lm-depth-cal-cpu-v5/t4-b8/result.json",
+      "preview_seconds": 17.851004019379616,
+      "seconds": 32.173280857503414,
+      "sha256": "90105c5d69a43af8377d7b52faecdeba285544da3b6931f21a24e097049d337a",
+      "tokens": 256.0
+    },
+    "npu": {
+      "path": "runs/lm-depth-cal-npu-v5/t4-b8/result.json",
+      "preview_seconds": 21.26449716836214,
+      "seconds": 80.20292067341506,
+      "sha256": "e7be3d8102c01e81dd67b8a4c0dcce630c5249673e5fabe698f322f163f69ffa",
+      "tokens": 256.0
+    }
+  },
+  "reason": "CPU1 FC16 ~22.2s/update vs CPU4 ~32.2s and shared NPU ~80.2s; CPU chosen for turnaround, not strict-equivalent hardware benchmark",
+  "schema": "tide-depth-resource-decision-v1",
+  "selected": {
+    "a_deep": "CPU, one intraop thread per independent study",
+    "b_and_controls": "NPU, four host threads, user-authorized shared low-load admission",
+    "effective_batch": 8
+  }
+}
