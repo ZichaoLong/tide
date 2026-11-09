@@ -32,7 +32,7 @@ def kv(program, memory, states, times, u):
             key = rotate_relative(keys[:, :, h], displacement, c.full_frequencies[h])
             logits = (key*queries[rows, h][:, None]).sum(-1)/math.sqrt(c.width//c.heads)
             logits = logits+c.distance_slopes[h]*displacement
-            reads.append(weighted_read(logits, values[:, :, h], weights, total))
+            reads.append(weighted_read(logits, values[:, :, h], weights, total, memory.support_policy))
         mixed = project(torch.cat(reads, -1), program.out)
         for i, value in zip(rows, mixed.unbind()):
             result[i] = value

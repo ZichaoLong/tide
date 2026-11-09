@@ -237,6 +237,10 @@ def resolve(value, *, site=None, base_dir=None):
         requested.setdefault(key, val)
     try:
         spec = ExecutionSpec(**requested)
+        if any(c.get("support_policy", "strict") != "strict" for c in plan["regions"]):
+            if (spec.client != "pytorch" or spec.placement == "resident" or spec.dtype == "float16"
+                    or spec.peer_devices):
+                raise ValueError("execution: positive-floor-v1 requires single-device Python eager FP32/FP64")
         if spec.client == "libtorch" and measurement.get("checkpoint_interval", 1) != 1:
             raise ValueError("measurement.checkpoint_interval: standalone currently requires 1; periodic publication is a Python/native runtime policy")
         if spec.return_mode != "complete" and measurement["validation"] != "none":

@@ -35,13 +35,15 @@ class WeightedAggregate(AggregateProgram):
         from .aggregate_batch import evaluate
         return evaluate(self, requests)
 
-    def __init__(self, profile, classes, transforms, alpha, epsilon, hidden_width, source_binding=SourceBinding()):
+    def __init__(self, profile, classes, transforms, alpha, epsilon, hidden_width, source_binding=SourceBinding(),
+                 *, support_policy="strict"):
         super().__init__()
         self.profile, self.classes = profile, classes
         self.transforms = torch.nn.ModuleDict({str(k): v for k,v in transforms.items()})
         self.alpha, self.epsilon = alpha, epsilon
         self.hidden_width = hidden_width
         self.source_binding = source_binding
+        self.support_policy = support_policy
 
     def step(self, w, request):
         masses, values = [], []
@@ -53,7 +55,11 @@ class WeightedAggregate(AggregateProgram):
                 z = z+self.alpha*self.transforms[str(self.classes.classify(source.atom))](z,self.epsilon)
             masses.append(mass); values.append(z)
         mass = torch.stack(masses).sum()
-        u = weighted_mean(torch.stack(masses), torch.stack(values)) if mass > 0 else values[0].new_zeros(values[0].shape)
+        mean = weighted_mean
+        if self.support_policy != "strict":
+            from .stable_mass import scaled_mean
+            mean = scaled_mean
+        u = mean(torch.stack(masses), torch.stack(values)) if mass > 0 else values[0].new_zeros(values[0].shape)
         return AggregateResult(Received(mass,u).encode(), {})
 
 
@@ -232,7 +238,8 @@ class RegionalTotal(RegionProgram):
             from .allocation_failure import AllocationFailure
             try:
                 result = allocate(scores,mu,low,high,c.allocation_temperature,
-                                  regularizer=c.regularizer,ent_alpha=c.ent_alpha,score_shift=shift).controls
+                                  regularizer=c.regularizer,ent_alpha=c.ent_alpha,score_shift=shift,
+                                  support_policy=c.support_policy).controls
             except AllocationFailure as error:
                 error.time, error.nodes, error.members = r.time, list(nodes), list(r.layout.members)
                 raise

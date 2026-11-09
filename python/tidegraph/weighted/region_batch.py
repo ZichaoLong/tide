@@ -65,7 +65,7 @@ def evaluate(program, requests, *, dependencies=None):
             try:
                 allocations = allocate_batch(list(scores.unbind()), list(caps.unbind()), list(low.unbind()), list(high.unbind()),
                     c.allocation_temperature, regularizer=c.regularizer, ent_alpha=c.ent_alpha,
-                    score_shift=None if shift is None else list(shift.unbind()))
+                    score_shift=None if shift is None else list(shift.unbind()), support_policy=c.support_policy)
             except AllocationFailure as error:
                 error.row = rows[error.row]
                 request = requests[error.row]

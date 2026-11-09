@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import torch
 from .allocation_failure import AllocationFailure
 from .quadratic_coordinates import coordinates
+from . import support_policy as support
 
 
 ZERO, CAPS, SLACK, LOWER, UPPER, EQUALITY = range(6)
@@ -21,6 +22,7 @@ class BatchAllocation:
     response_input: torch.Tensor
     free: torch.Tensor
     residual: torch.Tensor
+    support_repairs: torch.Tensor | None = None
 
 
 def quad(t, caps, target, temperature):
@@ -83,8 +85,9 @@ def entropy(t, caps, target, temperature, rule):
 
 
 @torch.no_grad()
-def solve(scores, caps, lower, upper, temperature, rule, shift=None):
+def solve(scores, caps, lower, upper, temperature, rule, shift=None, support_policy="strict"):
     """Numeric B×N rows, B scalar bounds/temperature, and optional B shifts."""
+    support.validate(support_policy, rule.kind, rule.alpha)
     if (scores.ndim != 2 or min(scores.shape) < 1 or scores.dtype not in {torch.float32, torch.float64}
             or caps.shape != scores.shape or any(x.shape != (len(scores),) for x in (lower, upper, temperature))):
         raise ValueError("allocation batch requires complete nonempty rows and scalar row bounds")
@@ -111,6 +114,7 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
     response = t.clone()
     branch[zero], branch[full] = ZERO, CAPS
     result[full] = caps[full]
+    repairs = None if support_policy == "strict" else torch.zeros_like(t, dtype=torch.bool)
     if normal.any():
         ids = normal.nonzero().flatten()
         tn, cn, tau = t[ids], caps[ids], temperature[ids]
@@ -140,14 +144,21 @@ def solve(scores, caps, lower, upper, temperature, rule, shift=None):
                 return
             bad = mask.nonzero().flatten()
             row = int(ids[bad[0]])
-            raise AllocationFailure(message, row,
+            error = AllocationFailure(message, row,
                 dict(scores=scores[row], caps=caps[row], lower=lower[row], upper=upper[row],
                      temperature=temperature[row], shift=None if shift is None else shift[row],
                      controls=result[row], response=response[row], multiplier=lam[row],
                      residual=residual[row], tolerance=scores.new_tensor(tolerance)),
                 dict(regularizer=rule.kind, alpha=str(rule.alpha), branch=NAMES[int(branch[row])], solver="python-batch"))
+            if support_policy != "strict":
+                error.details["support_policy"] = support_policy
+            raise error
         reject(~torch.isfinite(residual[ids]) | (residual[ids] > tolerance),
                "allocation batch residual exceeds dtype tolerance")
-        reject((rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any(1),
-               "positive allocation batch support underflowed in requested dtype")
-    return BatchAllocation(result, lam, branch, response, (result > 0) & (result < caps), residual)
+        if support_policy != "strict":
+            result[ids], repairs[ids] = support.repair(result[ids], x, caps[ids], temperature[ids, None],
+                                                       lower[ids], upper[ids], reject)
+        else:
+            reject((rule.positive_support(x, caps[ids], temperature[ids, None]) & (result[ids] == 0)).any(1),
+                   "positive allocation batch support underflowed in requested dtype")
+    return BatchAllocation(result, lam, branch, response, (result > 0) & (result < caps), residual, repairs)

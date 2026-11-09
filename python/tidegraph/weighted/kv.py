@@ -17,6 +17,7 @@ class KVMemory(StateProgram):
     sequence_contract = True  # Given complete local driving content/time sequence.
     joint_sequence = True
     integer_slots = frozenset({"times"})
+    support_policy = "strict"
 
     def __init__(self, config, profile, base, generator, dtype):
         super().__init__()
@@ -104,7 +105,7 @@ class KVMemory(StateProgram):
             k = rotate_relative(s["keys"]@self.read_k.t(), -time_values(age, u)/c.position_scale, c.read_frequencies)
             logits = k@q/math.sqrt(c.summary_width)
             v = s["values"]@self.read_v.t()
-            values = tuple(weighted_read(logits, v, w, total) for w, total in zip(weights, totals))
+            values = tuple(weighted_read(logits, v, w, total, self.support_policy) for w, total in zip(weights, totals))
         return *values, *totals
 
     def validate(self, w, state):
@@ -125,10 +126,13 @@ class KVMemory(StateProgram):
             raise ValueError("invalid KV write weights")
 
 
-def weighted_read(logits, values, weights, total):
+def weighted_read(logits, values, weights, total, support_policy="strict"):
     positive = weights > 0
     if not positive.any():
         return values.new_zeros(values.shape[-1])
+    if support_policy != "strict":
+        from .stable_mass import mass_attention
+        return mass_attention(logits[positive], values[positive], weights[positive], total)
     return total.clamp(max=1)*attention_mean(logits[positive]+weights[positive].log(), values[positive])
 
 
@@ -156,7 +160,7 @@ class KVContent(torch.nn.Module):
         for h in range(c.heads):
             key = rotate_relative(keys[:,h], displacement, c.full_frequencies[h])
             logits = key@queries[h]/math.sqrt(c.width//c.heads)+c.distance_slopes[h]*displacement
-            reads.append(weighted_read(logits, values[:,h], weights, total))
+            reads.append(weighted_read(logits, values[:,h], weights, total, memory.support_policy))
         x = u+c.alpha_att*(self.out@torch.cat(reads))
         normal = norm(x,c.epsilon)
         return x+c.alpha_ff*(self.down@(torch.nn.functional.silu(self.gate@normal)*(self.up@normal)))

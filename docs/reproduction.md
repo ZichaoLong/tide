@@ -18,6 +18,7 @@
 
 | 调查问题 | Git内材料和入口 | 原证据与范围 |
 | --- | --- | --- |
+| TL-REQ-003 Shannon正支持下溢 | [实际HB16行](../tests/data/tl_req_003_shannon_row.json)、[公共消费者](../examples/consumer_core5/positive_support.py)、[局部/整图检查](positive-support-policy.md#独立检查与复现) | 原FP32严格拒绝保留；新数值模式与下游完整训练分开，资格入口 `scripts/qualify_positive_support.sh NEW cpu\|npu` |
 | 分配中的大数相减及残差拒绝 | [两份实际失败行](../tests/fixtures/allocation/provenance.json)、[Decimal独立求解](../scripts/diagnose_allocation_failure.py)、[局部回归](../tests/test_retired_allocation_witnesses.py) | [局部坐标修复](evidence/core5-local-allocation-factorized-kv-20261028.md)；仅局部分配，不能解除D2048全图keys失败 |
 | D64 FP32完整训练、局部精度和反向累加 | [计划生成](../scripts/prepare_weighted_workload.py)、[完整诊断](../scripts/diagnose_weighted_workload.py)、[汇合点探针](../scripts/diagnose_weighted_joins.py) | [算术诊断契约](weighted-arithmetic-diagnostics.md)、[eager边界](evidence/core5-eager-boundary-20261029.md)；参数/梯度/槽及每调度自身恢复分别核对 |
 | 原始逻辑时间反馈PDG | [四窗诊断](../scripts/diagnose_weighted_feedback.py) | [非GPU边界](evidence/core5-nongpu-boundaries-20261029.md)；W32/B4/seed7，FP32与显式FP64分开 |

@@ -39,7 +39,11 @@ def evaluate(program, requests):
         ids = torch.tensor([[offsets[i]+j for j in range(length)] for i in owners],
                            dtype=torch.int64, device=payload.device)
         total = mass[ids].sum(1)
-        values = weighted_mean(mass[ids], content[ids])
+        mean = weighted_mean
+        if program.support_policy != "strict":
+            from .stable_mass import scaled_mean
+            mean = scaled_mean
+        values = mean(mass[ids], content[ids])
         values = torch.where((total > 0)[:, None], values, torch.zeros_like(values))
         encoded = torch.cat((total[:, None], values), -1)
         for row, owner in enumerate(owners):

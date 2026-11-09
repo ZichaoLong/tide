@@ -9,14 +9,16 @@ from .allocation import Allocation, _validate, _scalar
 from .allocation_batch import solve, ZERO, CAPS, SLACK, LOWER, EQUALITY, NAMES
 from .regularizers import Regularizer
 from .allocation_failure import AllocationFailure
+from . import support_policy as support
 
 
 class _Rows(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, rule, shifted, numeric, *inputs):
+    def forward(ctx, rule, shifted, numeric, policy, *inputs):
         ctx.set_materialize_grads(False)
         ctx.rule, ctx.shifted, ctx.width = rule, shifted, 6 if shifted else 5
         ctx.count = len(inputs)
+        ctx.policy = policy
         ctx.save_for_backward(*inputs, numeric.controls, numeric.multiplier, numeric.branch, numeric.response_input)
         outputs = tuple(c.clone() for c in numeric.controls.unbind())
         constants = []
@@ -54,27 +56,31 @@ class _Rows(torch.autograd.Function):
             scores, caps, _, _, temperature = fields[:5]
             c, tau, grad = controls[normal], temperature[:, None], torch.stack([bars[i] for i in normal])
             x = response[normal]
-            a, e, dtau = ctx.rule.derivatives(x, caps, tau, c)
-            total = a.sum(1)
-            constrained = (branch[normal] != SLACK) & (total > 0)
-            anchor = grad.gather(1, a.argmax(1)[:, None]).squeeze(1)
-            relative = grad-anchor[:, None]
-            offset = (a*relative).sum(1)/torch.where(total > 0, total, torch.ones_like(total))
-            mean = torch.where(constrained, anchor+offset, torch.zeros_like(total))
-            centered = torch.where(constrained[:, None], relative-offset[:, None], grad)
-            scores_bar, caps_bar = a*centered, e*centered
-            tau_bar = (dtau*centered).sum(1)
-            shift_bar = torch.where(branch[normal] != SLACK, torch.zeros_like(total), -scores_bar.sum(1))
+            if ctx.policy != "strict":
+                scores_bar, caps_bar, mean, tau_bar = support.shannon_vjp(x, caps, tau, grad, branch[normal] != SLACK)
+            else:
+                a, e, dtau = ctx.rule.derivatives(x, caps, tau, c)
+                total = a.sum(1)
+                constrained = (branch[normal] != SLACK) & (total > 0)
+                anchor = grad.gather(1, a.argmax(1)[:, None]).squeeze(1)
+                relative = grad-anchor[:, None]
+                offset = (a*relative).sum(1)/torch.where(total > 0, total, torch.ones_like(total))
+                mean = torch.where(constrained, anchor+offset, torch.zeros_like(total))
+                centered = torch.where(constrained[:, None], relative-offset[:, None], grad)
+                scores_bar, caps_bar = a*centered, e*centered
+                tau_bar = (dtau*centered).sum(1)
+            shift_bar = torch.where(branch[normal] != SLACK, torch.zeros_like(mean), -scores_bar.sum(1))
             for k, i in enumerate(normal):
                 base = i*ctx.width
                 target = 2 if int(branch[i]) in {LOWER, EQUALITY} else 3
                 result[base], result[base+1], result[base+target], result[base+4] = scores_bar[k], caps_bar[k], mean[k], tau_bar[k]
                 if ctx.shifted:
                     result[base+5] = shift_bar[k]
-        return None, None, None, *result
+        return None, None, None, None, *result
 
 
-def allocate_batch(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None, score_shift=None):
+def allocate_batch(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None,
+                   score_shift=None, support_policy="strict"):
     """Lists of complete score/cap vectors; bounds may be scalar or row lists.
 
     A scalar Tensor bound/temperature is a shared root, whose uses accumulate.
@@ -91,6 +97,7 @@ def allocate_batch(scores, caps, lower, upper, temperature=1., *, regularizer="q
     lo, hi, tau, shifts = map(rows, (lower, upper, temperature, score_shift))
     inputs, groups, result = [], defaultdict(list), [None]*n
     rule = Regularizer(regularizer, ent_alpha)
+    support.validate(support_policy, regularizer, ent_alpha)
     for i, (t, c) in enumerate(zip(scores, caps)):
         l, h, temp = _validate(t, c, lo[i], hi[i], tau[i])
         shift = None if shifts[i] is None else _scalar(shifts[i], t, "score_shift")
@@ -99,14 +106,15 @@ def allocate_batch(scores, caps, lower, upper, temperature=1., *, regularizer="q
     for (_, _, _, shifted), ids in groups.items():
         fields = [torch.stack([inputs[i][j] for i in ids]) for j in range(6 if shifted else 5)]
         try:
-            numeric = solve(*fields[:5], rule, fields[5] if shifted else None)
+            numeric = solve(*fields[:5], rule, fields[5] if shifted else None, support_policy)
         except AllocationFailure as error:
             error.row = ids[error.row]
             raise
         flat = [t for i in ids for t in inputs[i]]
-        controls = _Rows.apply(rule, shifted, numeric, *flat)
-        identity = regularizer+"-exact-map-v1"
+        controls = _Rows.apply(rule, shifted, numeric, support_policy, *flat)
+        identity = regularizer+"-exact-map-v1" if support_policy == "strict" else "ent-positive-floor-v1"
         for k, i in enumerate(ids):
             result[i] = Allocation(controls[k], numeric.multiplier[k], NAMES[int(numeric.branch[k])],
-                                   numeric.free[k], numeric.residual[k], identity)
+                                   numeric.free[k], numeric.residual[k], identity,
+                                   None if numeric.support_repairs is None else numeric.support_repairs[k])
     return result

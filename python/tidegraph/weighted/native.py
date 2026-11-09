@@ -7,6 +7,8 @@ from .programs import Describe, WeightedAggregate, WeightedFull, RegionalTotal
 
 
 def region_config(core, config):
+    if config.support_policy != "strict":
+        raise ValueError("positive-floor-v1 is a Python eager policy; native/resident is not implemented")
     result = core.WeightedRegionalConfig()
     for name in ("hidden_width","region_control_width","k","gamma_max","total_fraction",
                  "allocation_temperature","region_control_mode","regularizer","ent_alpha","selection_mode",
@@ -20,6 +22,8 @@ def region_config(core, config):
 
 def encode(core, graph, model):
     model.validate_binding(graph)
+    if any(r.config.support_policy != "strict" for r in model.regions):
+        raise ValueError("positive-floor-v1 is a Python eager policy; native/resident is not implemented")
     for node,spec in zip(model.nodes,graph.nodes):
         state_type,_ = MEMORY_TYPES[memory_family(node.kernel.config)]
         for name,kind,profile in (("kernel",state_type,spec.memory),("read_program",Describe,spec.readout),

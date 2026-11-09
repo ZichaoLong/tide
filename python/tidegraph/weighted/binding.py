@@ -28,6 +28,10 @@ def memory_profile(config):
     return identity("weighted-"+memory_family(config)+"-v1", config)
 
 
+def numeric_profile(profile, policy):
+    return profile if policy == "strict" else identity("weighted-support-v1", profile, policy)
+
+
 class WeightedModel(Model):
     identity_transport = True  # Validated unit scales; keep broadcast Tensor aliases.
     # Same inert checkpoint buffers; avoid constructing then discarding random
@@ -40,15 +44,21 @@ class WeightedModel(Model):
         for name in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             if any(p.requires_grad or not torch.equal(p,torch.ones_like(p)) for p in getattr(self,name)):
                 raise ValueError("weighted payload transport must use fixed unit scales")
+        policy = "positive-floor-v1" if any(r.config.support_policy != "strict" for r in self.regions) else "strict"
+        if policy != "strict" and (len({n.bias.device for n in self.nodes}) != 1
+                                   or any(n.bias.dtype not in {torch.float32,torch.float64} for n in self.nodes)):
+            raise ValueError("positive-floor-v1 requires single-device FP32/FP64 payload")
         for v,(node,spec) in enumerate(zip(self.nodes,graph.nodes)):
             c,r = node.kernel.config,self.regions[spec.region].config
             agg = node.aggregate_program
-            expected = (memory_profile(c),identity("weighted-describe-v1",c,r),
-                        identity("weighted-full-v1",c),
-                        aggregate_profile(agg.classes,agg.alpha,agg.hidden_width,c.epsilon,agg.source_binding))
+            expected = (numeric_profile(memory_profile(c),policy),identity("weighted-describe-v1",c,r),
+                        numeric_profile(identity("weighted-full-v1",c),policy),
+                        numeric_profile(aggregate_profile(agg.classes,agg.alpha,agg.hidden_width,c.epsilon,agg.source_binding),policy))
             if ((spec.memory,spec.readout,spec.emission,spec.aggregation) != expected
                     or node.read_program.memory_config != c or node.read_program.config != r
-                    or node.full_program.content.config != c or agg.epsilon != c.epsilon):
+                    or node.full_program.content.config != c or agg.epsilon != c.epsilon
+                    or getattr(node.kernel,"support_policy","strict") != policy
+                    or agg.support_policy != policy):
                 raise ValueError("weighted function configuration changed without a new graph binding")
             labels = {agg.classes.inputs[p] for p,n in enumerate(graph.inputs) if n == v}
             labels |= {agg.classes.edges[e] for e,edge in enumerate(graph.edges) if edge.target == v}
@@ -109,6 +119,10 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
             or any(not isinstance(x,RegionalConfig) for x in region)
             or len({c.width for c in memory}) != 1):
         raise ValueError("weighted binding node/region/width domain mismatch")
+    policy = "positive-floor-v1" if any(c.support_policy != "strict" for c in region) else "strict"
+    if policy != "strict" and (payload_dtype not in {torch.float32, torch.float64}
+                               or any(not isinstance(c,KVConfig) for c in memory)):
+        raise ValueError("positive-floor-v1 model binding currently requires KV and FP32/FP64")
     classes = source_classes or SourceClasses((0,)*len(topology.edges),(0,)*len(topology.inputs))
     classes.validate(topology)
     source_hidden_width = normalize_widths(source_hidden_width, classes)
@@ -121,16 +135,18 @@ def bind(topology, *, memories=KVConfig(), regions=RegionalConfig(), source_clas
     states, readers, aggregates, fulls, nodes = {}, {}, {}, {}, []
     for v,(spec,c) in enumerate(zip(topology.nodes,memory)):
         rc, j = region[spec.region], spec.region
-        sid = memory_profile(c)
+        sid = numeric_profile(memory_profile(c),policy)
         rid = identity("weighted-describe-v1",c,rc)
-        aid = aggregate_profile(classes,alpha_agg,source_hidden_width,c.epsilon,source_binding)
-        fid = identity("weighted-full-v1",c)
+        aid = numeric_profile(aggregate_profile(classes,alpha_agg,source_hidden_width,c.epsilon,source_binding),policy)
+        fid = numeric_profile(identity("weighted-full-v1",c),policy)
         state_type, content_type = MEMORY_TYPES[memory_family(c)]
         states[v] = (state_type(c,sid,bases[j],generator,dtype) if isinstance(c,KVConfig)
                      else state_type(c,sid,generator,dtype))
+        states[v].support_policy = policy
         readers[v] = Describe(rid,c,rc,generator,dtype)
         transforms = sources.transforms(v,j)
-        aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width,source_binding)
+        aggregates[v] = WeightedAggregate(aid,classes,transforms,alpha_agg,c.epsilon,source_hidden_width,source_binding,
+                                           support_policy=policy)
         fulls[v] = WeightedFull(fid,content_type(c,generator,dtype))
         nodes.append(Node(j,memory=sid,readout=rid,aggregation=aid,emission=fid))
     specs = tuple(Region(c.capacity(len(layout.members)),observe_all=True,count_priority=False,

@@ -16,4 +16,4 @@ def aggregate_key(program, request):
             transform = program.transforms[str(label)]
             tensors = tuple((name, id(p)) for name, p in sorted(transform.named_parameters()))
         rows.append((label, id(source.atom.value), tensors))
-    return program.alpha, program.epsilon, tuple(rows)
+    return program.alpha, program.epsilon, program.support_policy, tuple(rows)

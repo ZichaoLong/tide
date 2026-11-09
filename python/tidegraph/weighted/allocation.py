@@ -19,6 +19,7 @@ class Allocation:
     free: torch.Tensor
     residual: torch.Tensor
     backward: str = "quad-exact-map-v1"
+    support_repairs: torch.Tensor | None = None
 
 
 def _scalar(value, reference, name):

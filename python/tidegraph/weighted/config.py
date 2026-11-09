@@ -104,8 +104,11 @@ class RegionalConfig:
     alpha_res: float | None = None
     alpha_loc: float | None = None
     alpha_sel: float | None = None
+    support_policy: str = "strict"
 
     def __post_init__(self):
+        if self.support_policy not in {"strict", "positive-floor-v1"}:
+            raise ValueError("support_policy must be strict or positive-floor-v1")
         positive_int("hidden_width", self.hidden_width)
         if self.read_mode not in {"0", "-", "+"}:
             raise ValueError("read_mode must be 0/-/+")
@@ -124,6 +127,9 @@ class RegionalConfig:
             validate_regularizer(self.regularizer, self.ent_alpha)
         else:
             self._absent("regularizer", "ent_alpha")
+        if self.support_policy != "strict" and (self.selection_mode not in ALLOCATED
+                                               or self.regularizer != "ent" or self.ent_alpha != 1):
+            raise ValueError("positive-floor-v1 requires a Shannon allocation selection_mode")
         if self.selection_mode not in ATTENTION:
             self._default("k", 1)
             positive_int("k", self.k)
@@ -213,6 +219,8 @@ class RegionalConfig:
     @property
     def backward_identity(self):
         if self.selection_mode in ALLOCATED:
+            if self.support_policy != "strict":
+                return "ent-positive-floor-v1"
             return self.regularizer+"-exact-map-v1"
         if self.selection_mode in ATTENTION:
             return "weighted-attention-map-v1"
@@ -231,6 +239,8 @@ class RegionalConfig:
 
     def identity_fields(self):
         fields = asdict(self)
+        if self.support_policy == "strict":
+            fields.pop("support_policy")
         # Preserve pre-entropy quad graph/checkpoint identities. An absent
         # fixed entropy shape has no semantics; an actual shape always enters.
         for name in ("ent_alpha", "eta", "send_gain", "fixed_gain", "gain_logit", "allocation_base",

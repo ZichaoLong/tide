@@ -1,5 +1,9 @@
 # Adopted semantics and validation contract
 
+[Shannon正支持数值模式](positive-support-policy.md)定义显式 `positive-floor-v1` 的最小次正规数存储、
+相对质量守卫、Aggregate/KV稳定求值及未补值响应的一阶VJP。默认strict和固定数学保持；
+新策略进入图/模型身份，checkpoint v5编码不变；旧strict与新模式不能冒称精确互续。
+
 [Weighted公共训练](resident-weighted-training.md)定义完整字段根、跨窗token、参数发布、四分区预算与独立checkpoint绑定；运行资格单列。
 
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；其公共生命周期由[训练owner](resident-weighted-training.md)组合并独立验收。

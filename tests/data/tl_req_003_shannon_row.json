@@ -1,0 +1,10 @@
+{
+  "source": "tide-learning-lab@43bc5c457ed948ad81c4fbd9e41ae61516300e16",
+  "evidence": "docs/evidence/hb16-positive-support-v5.json",
+  "evidence_sha256": "3420cc104fb99d4a7622929ff508c85fdab404f4166e0a4bff3915688714d5bb",
+  "scope": "HB16 CPU FP32 update 87, time 32, row 55; forward allocation inputs only",
+  "scores": [4.610297679901123, -0.11448502540588379, -21.56429100036621, 14.224823951721191],
+  "caps": [1, 1, 1, 1],
+  "target": 1.9164364337921143,
+  "temperature": 0.25
+}

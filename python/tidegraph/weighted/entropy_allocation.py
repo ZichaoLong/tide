@@ -8,6 +8,7 @@ from torch.autograd.function import once_differentiable
 from .allocation import Allocation, _validate, _scalar, allocate_quad
 from .regularizers import Regularizer
 from .allocation_failure import scalar_failure
+from . import support_policy as support
 
 
 def _solve(t, caps, target, temperature, rule):
@@ -37,18 +38,24 @@ def _solve(t, caps, target, temperature, rule):
 
 class _ExactEntropy(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, t, caps, target, temperature, controls, response_input, equality, rule, shift):
+    def forward(ctx, t, caps, target, temperature, controls, response_input, equality, rule, shift, policy):
         ctx.set_materialize_grads(False)
         ctx.save_for_backward(t, caps, target, temperature, controls, response_input, shift)
         ctx.equality, ctx.rule = equality, rule
+        ctx.policy = policy
         return controls.clone()
 
     @staticmethod
     @once_differentiable
     def backward(ctx, grad):
         if grad is None:
-            return (None,)*9
+            return (None,)*10
         _, caps, _, temperature, controls, x, shift = ctx.saved_tensors
+        if ctx.policy != "strict":
+            scores, cap_bar, mean, tau_bar = support.shannon_vjp(
+                x, caps, temperature, grad, grad.new_tensor(ctx.equality, dtype=torch.bool))
+            gshift = None if shift is None else grad.new_zeros(()) if ctx.equality else -scores.sum()
+            return scores, cap_bar, mean, tau_bar, None, None, None, None, gshift, None
         a, e, dtau = ctx.rule.derivatives(x, caps, temperature, controls)
         total = a.sum()
         if ctx.equality and total > 0:
@@ -60,16 +67,18 @@ class _ExactEntropy(torch.autograd.Function):
             mean, centered = grad.new_zeros(()), grad
         scores = a*centered
         gshift = None if shift is None else grad.new_zeros(()) if ctx.equality else -scores.sum()
-        return scores, e*centered, mean, (dtau*centered).sum(), None, None, None, None, gshift
+        return scores, e*centered, mean, (dtau*centered).sum(), None, None, None, None, gshift, None
 
 
-def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None, score_shift=None):
+def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", ent_alpha=None,
+             score_shift=None, support_policy="strict"):
     """Exact Alloc from §4.1; same input domain and boundary policy as quad.
 
     Bern/Shannon positive support must remain representable. Underflow to zero
     is an ArithmeticError, never an undeclared removal of active messages.
     """
     rule = Regularizer(regularizer, ent_alpha)
+    support.validate(support_policy, regularizer, ent_alpha)
     if rule.kind == "quad":
         return allocate_quad(scores, caps, lower, upper, temperature, score_shift=score_shift)
     lower, upper, temperature = _validate(scores, caps, lower, upper, temperature)
@@ -102,7 +111,7 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
                     raise failure(str(error), stage="solve", branch=branch) from error
                 if score_shift is not None:
                     lam = lam-score_shift
-        residual = zero
+        residual, repairs = zero, None
         if branch not in {"zero", "caps"}:
             residual = torch.stack(((c-rule.response(x, caps, temperature)).abs().max(),
                                     (lower-c.sum()).clamp_min(0), (c.sum()-upper).clamp_min(0))).max()
@@ -110,7 +119,15 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
             if not torch.isfinite(residual) or residual > tolerance:
                 raise failure("entropy allocation residual exceeds dtype tolerance", branch=branch,
                               controls=c, multiplier=lam, response=x, residual=residual, tolerance=tolerance)
-            if (rule.positive_support(x, caps, temperature) & (c == 0)).any():
+            if support_policy != "strict":
+                def reject(mask, message):
+                    if mask.any():
+                        error = failure(message, branch=branch, stage="support-storage",
+                            controls=c, multiplier=lam, response=x, residual=residual, tolerance=tolerance)
+                        error.details["support_policy"] = support_policy
+                        raise error
+                c, repairs = support.repair(c, x, caps, temperature, lower, upper, reject)
+            elif (rule.positive_support(x, caps, temperature) & (c == 0)).any():
                 raise failure("positive allocation support underflowed in the requested dtype", branch=branch,
                               controls=c, multiplier=lam, response=x, residual=residual, tolerance=tolerance)
         free = (c > 0) & (c < caps)
@@ -120,6 +137,8 @@ def allocate(scores, caps, lower, upper, temperature=1., *, regularizer="quad", 
         result = caps
     else:
         target = lower if branch in {"lower", "equality"} else upper
-        result = _ExactEntropy.apply(original_scores, caps, target, temperature, c, x, branch != "slack", rule, score_shift)
+        result = _ExactEntropy.apply(original_scores, caps, target, temperature, c, x, branch != "slack",
+                                     rule, score_shift, support_policy)
     name = "bern" if rule.kind == "bern" else "ent"
-    return Allocation(result, lam, branch, free, residual, name+"-exact-map-v1")
+    backward = name+"-exact-map-v1" if support_policy == "strict" else "ent-positive-floor-v1"
+    return Allocation(result, lam, branch, free, residual, backward, repairs)

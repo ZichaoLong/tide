@@ -1,5 +1,9 @@
 # 数学语义 → 表示 → 实现 → 验证
 
+[Shannon正支持数值模式](positive-support-policy.md)：固定分配/聚合/KV定义 →
+`weighted/support_policy.py`、`stable_mass.py` → `test_positive_support*.py`。
+局部Decimal、完整独立调度/根、optimizer/新进程恢复分层验证；下游TL-REQ-003学习验收另行进行。
+
 本页源码定位使用清理后的提交号；历史实测身份仍在原报告中，见[迁移与映射](history-migration.md)。
 
 [core-5候选/配置/拓扑/维护入口](core5-study.md)连接公共planning、真实材料化与有限目录。

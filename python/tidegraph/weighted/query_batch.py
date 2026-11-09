@@ -16,7 +16,7 @@ from .numeric_time import passive_decay, time_values
 from . import packing_observation as observation
 
 
-def weighted_read(logits, values, weights, totals):
+def weighted_read(logits, values, weights, totals, support_policy="strict"):
     groups, ids = defaultdict(list), []
     for i, row in enumerate(weights):
         ids.append(torch.nonzero(row > 0).flatten())
@@ -33,7 +33,11 @@ def weighted_read(logits, values, weights, totals):
         l = logits[owners[:, None], selected]
         w = weights[owners[:, None], selected]
         v = values[owners[:, None], selected]
-        reads = totals[owners].clamp(max=1)[:, None]*attention_mean(l+w.log(), v)
+        if support_policy != "strict":
+            from .stable_mass import mass_attention
+            reads = mass_attention(l, v, w, totals[owners])
+        else:
+            reads = totals[owners].clamp(max=1)[:, None]*attention_mean(l+w.log(), v)
         for i, value in zip(rows, reads.unbind()):
             result[i] = value
     return torch.stack(result)
@@ -61,7 +65,7 @@ def kv(memory, states, times, u):
             k = rotate_relative(k, -time_values(age, u)/c.position_scale, c.read_frequencies)
             logits = (k*q[:, None]).sum(-1)/math.sqrt(c.summary_width)
             v = project(s["values"].reshape(-1, c.width), memory.read_v).reshape(len(rows), length, c.summary_width)
-            values = tuple(weighted_read(logits, v, w, total) for w, total in zip(weights, totals))
+            values = tuple(weighted_read(logits, v, w, total, memory.support_policy) for w, total in zip(weights, totals))
         for j, i in enumerate(rows):
             result[i] = tuple(t[j] for t in (*values, *totals))
     return tuple(torch.stack([r[k] for r in result]) for k in range(4))

@@ -64,6 +64,8 @@ def resolve_model(graph, memories, regions, *, classes=None, source_binding=None
         else:
             memory_configs.append(RecurrentConfig(**c))
     region_configs = [RegionalConfig(**c) for c in repeated(regions, graph["regions"])]
+    if any(c.support_policy != "strict" for c in region_configs) and any(not isinstance(c,KVConfig) for c in memory_configs):
+        raise ValueError("positive-floor-v1 currently requires KV memories")
     if len(memory_configs) != graph["nodes"] or len(region_configs) != graph["regions"]:
         raise ValueError("node/region configuration count mismatch")
     sizes = [0]*graph["regions"]
@@ -79,6 +81,10 @@ def resolve_model(graph, memories, regions, *, classes=None, source_binding=None
                   memories=[asdict(c) for c in memory_configs], regions=[asdict(c) for c in region_configs],
                   source_binding=asdict(source), classes=classes,
                   source_hidden_width=deepcopy(source_hidden_width), alpha_agg=alpha_agg)
+    # Preserve all pre-policy resolved identities and dependency locks.
+    for c in result["regions"]:
+        if c["support_policy"] == "strict":
+            c.pop("support_policy")
     inv = inventory(graph, result["memories"], result["regions"], classes=classes,
                     source_binding=result["source_binding"], source_hidden_width=source_hidden_width)
     result["inventory_sha256"] = inv["sha256"]

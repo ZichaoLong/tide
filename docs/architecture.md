@@ -8,6 +8,7 @@
 
 | 层 | 位置 | 职责 |
 | --- | --- | --- |
+| 显式正支持数值策略 | `weighted/support_policy.py`、`stable_mass.py`；[契约](positive-support-policy.md) | Shannon最小正值存储与未补值VJP、稳定Aggregate/KV；默认严格路径及调度独立性保持 |
 | core-5配置与实验身份 | `python/tidegraph/planning/`；[候选入口](core5-study.md) | allocation-free配置/shape/共享清单，数学/工作负载/执行/测量身份；公共构造器，CLI仅适配 |
 | 配置事实与覆盖证据 | `planning/facts.py`、`scripts/core5_coverage.py`、`record_core5_checks.py` | 全部局部配置分组、逐用例JUnit记录、正确性/性能独立资格与来源查询；不执行参考或补造历史结果 |
 | 人类实验入口 | `python/tidegraph/experiment/`；[操作手册](human-workflow.md) | 安装身份、无分配plan、同模型放置预算、独立check、run/matrix/job、完整及按需返回、CSV/HTML查询；不依赖内部benchmark导入 |
