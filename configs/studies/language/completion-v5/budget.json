@@ -1,0 +1,33 @@
+{
+  "compute_seconds": 86400,
+  "deadline_epoch": 1794235753.0310388,
+  "jobs": [
+    "lm-depth-data-v5",
+    "lm-depth-cal-cpu-v5",
+    "lm-depth-cal-npu-v5",
+    "lm-b-fc8-v5",
+    "lm-b-fc8-v5-budget2",
+    "lm-a-controls-v5",
+    "lm-a-fc16-v5",
+    "lm-a-hb16-v5",
+    "lm-a-hb40-v5",
+    "lm-a-reference-v5",
+    "lm-b-reference-v5",
+    "lm-a-transformer-cpu-v5",
+    "lm-a-hb16-sparse-v5",
+    "lm-b-cpu-cal-v5",
+    "lm-hb16-underflow-v5",
+    "support-v1-cpu",
+    "support-v1-npu",
+    "lm-complete-fc16-sparse-v5",
+    "lm-complete-hb16-dense-v5",
+    "lm-complete-wide-dense-v5",
+    "lm-complete-hb40-dense-v5",
+    "lm-complete-hb40-sparse-v5",
+    "lm-complete-references-v5",
+    "lm-complete-wide-cal-cpu-v5",
+    "lm-complete-wide-cal-npu-v5"
+  ],
+  "prior_compute_seconds": 179.91,
+  "scope": "original v5 + support acceptance + completion; development check allowance separate; no new budget"
+}

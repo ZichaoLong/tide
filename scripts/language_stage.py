@@ -115,12 +115,18 @@ def identity(a,plan,device):
 def train(a,plan,device,metrics):
     data,model,_=data_and_model(a,plan,device);optimizer=optimizer_for(model,plan,a.route,a.kind)
     ident=identity(a,plan,device);step,tokens=0,0
+    transfer=None
     if a.resume:step,tokens=restore(a.resume,model,optimizer,ident,device,a.route)
+    elif not a.probe and plan.get('completion'):
+        from tide_lab.language_completion import import_checkpoint
+        step,tokens,transfer=import_checkpoint(plan['completion'],plan,model,optimizer,
+            ident['data_lock_sha256'],device,a.kind,a.seed,a.batch,a.length,a.depth,ident['schedule_steps'])
+        atomic_json(a.output/'transfer.json',transfer)
     limit=min(a.steps,a.max_updates if a.max_updates is not None else a.steps)
     if limit<step:raise ValueError('resume target precedes checkpoint')
     if not a.probe and (a.steps<plan['training']['minimum_updates'] or a.steps>plan['training']['maximum_updates']):
         raise ValueError('formal pilot update budget outside frozen bounds')
-    initial=None;validations=[];started=time.monotonic();history=[]
+    initial=None;validations=[];started=time.monotonic();history=[];start_step=step
     if not a.probe:
         initial=evaluate(model,data['validation'],a.route,device,min(a.batch,8),alpha=1.)
         atomic_json(a.output/'initial-validation.json',initial)
@@ -135,14 +141,22 @@ def train(a,plan,device,metrics):
             next_tokens=int((b['labels']!=-100).sum())
             if not a.probe and tokens+next_tokens>plan['training']['maximum_valid_tokens']:
                 raise ValueError('resolved logical steps exceed declared token budget')
-            row=update(model,optimizer,b,plan,a.route,a.kind,step,a.schedule_steps or a.steps,device)
+            if plan.get('observe_support') and a.kind.startswith('tide'):
+                from tidegraph.weighted import observe_support
+                with observe_support() as observation:
+                    row=update(model,optimizer,b,plan,a.route,a.kind,step,a.schedule_steps or a.steps,device)
+                row['support']=observation.metrics()
+            else:
+                row=update(model,optimizer,b,plan,a.route,a.kind,step,a.schedule_steps or a.steps,device)
             step+=1;tokens+=row['valid_tokens'];history.append(row['loss'])
-            if step%plan['training']['log_every']==0 or step==limit or a.probe:
+            if step%plan['training']['log_every']==0 or step==limit or a.probe or plan.get('observe_support'):
                 values={'train/loss':row['loss'],'train/gradient_norm':row['gradient_norm'],'train/lr':row['lr'],
                     'train/alpha':row['alpha'],'train/teacher_mse_phase':int(row['teacher_mse']),
                     'train/valid_tokens':tokens,'train/update_seconds':row['seconds'],
                     'train/tokens_per_second':row['valid_tokens']/row['seconds'],**row['work']}
                 if device.type=='npu':values['resource/npu_peak_allocated_mib']=torch.npu.max_memory_allocated()/2**20
+                for key,value in row.get('support',{}).items():
+                    if isinstance(value,(int,float)):values['support/'+key]=value
                 metrics.log(step,values)
             if step%plan['training']['checkpoint_every']==0 or step==limit or step in a.retain_step:
                 tensor_save(a.output/'checkpoint.pt',checkpoint_state(model,optimizer,step,tokens,ident,device,a.route))
@@ -161,12 +175,15 @@ def train(a,plan,device,metrics):
             final=evaluate(model,data['validation'],a.route,device,min(a.batch,8),alpha=1.)
             atomic_json(a.output/'final-validation.json',final)
             metrics.log(step,{'validation/nll':final['nll'],'validation/ppl':final['ppl']})
-        return dict(state='completed',steps=step,valid_tokens=tokens,probe=a.probe,
+        learning_origin=transfer['original_initial_validation_nll'] if transfer else (None if initial is None else initial['nll'])
+        return dict(state='completed',steps=step,start_step=start_step,updates_this_attempt=step-start_step,
+            transfer=transfer,valid_tokens=tokens,probe=a.probe,
             inventory=trainable_inventory(model),schedule_steps=a.schedule_steps or a.steps,
             retained_checkpoints={p.name:digest(p) for p in a.output.glob('checkpoint-step*.pt')},
             initial_validation_nll=None if initial is None else initial['nll'],
             final_validation_nll=None if final is None else final['nll'],validation_curve=validations,
-            learning_signal=None if initial is None else final['nll']<initial['nll']-.1,
+            learning_signal=None if learning_origin is None else final['nll']<learning_origin-.1,
+            learning_origin_validation_nll=learning_origin,
             learning_scope='heldout loss signal only; no parity, convergence or architecture advantage claim',
             checkpoint_sha256=digest(a.output/'checkpoint.pt'),update_loss_first=history[0] if history else None,
             update_loss_last=history[-1] if history else None,training_wall_seconds=time.monotonic()-started,
@@ -187,8 +204,15 @@ def evaluate_stage(a,plan,device,metrics):
         (model if a.route=='a' else model.selected).load_state_dict(state['model'],strict=True)
     elif not a.baseline_only:raise ValueError('heldout trained evaluation needs a checkpoint')
     alpha=0. if a.baseline_only and a.route=='b' else 1.
-    result=evaluate(model,data[a.split],a.route,device,min(a.batch,8),alpha=alpha,intervention=a.intervention)
-    metrics.log(0,{'evaluation/nll':result['nll'],'evaluation/ppl':result['ppl'],'evaluation/tokens':result['tokens'],**result['work_per_token']})
+    if plan.get('observe_support') and a.kind.startswith('tide'):
+        from tidegraph.weighted import observe_support
+        with observe_support() as observation:
+            result=evaluate(model,data[a.split],a.route,device,min(a.batch,8),alpha=alpha,intervention=a.intervention)
+        result['support']=observation.metrics()
+    else:
+        result=evaluate(model,data[a.split],a.route,device,min(a.batch,8),alpha=alpha,intervention=a.intervention)
+    metrics.log(0,{'evaluation/nll':result['nll'],'evaluation/ppl':result['ppl'],'evaluation/tokens':result['tokens'],
+        **result['work_per_token'],**{'support/'+k:v for k,v in result.get('support',{}).items() if isinstance(v,(int,float))}})
     return dict(state='completed',split=a.split,evaluation=result,
         checkpoint_identity=state['identity'] if a.checkpoint else None,
         checkpoint_step=state['step'] if a.checkpoint else None,

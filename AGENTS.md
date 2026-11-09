@@ -41,6 +41,12 @@
   and frozen jobs retain 85d161d. Explicit `positive-floor-v1` passed scoped CPU/NPU
   admission and CPU application checks, with strict finite failures retained.
   Do not infer full B/Qwen migration or authorization to launch another batch.
+- The latest 2026-11-09 user instruction authorizes completing the previously
+  underflow-blocked v5 runs using the accepted patch; see
+  `docs/studies/language-depth-completion-v5.md`. Preserve the original 24 worker-hour
+  cap and 22:49:13 deadline, original candidates/exposure and conditional HB40 prerequisites.
+  Shared devices need not be idle or pass FIFO admission; choose by completion time,
+  health and memory headroom, retain lifetime locks and background.slice. No new scaling batch.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

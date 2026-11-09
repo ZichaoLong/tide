@@ -17,10 +17,13 @@ if __name__=='__main__':
     a=p.parse_args();plan=json.loads(a.plan.read_text());runner=StageRunner(a,plan,{'final':1740},1740)
     try:
         for item in plan['reference_checkpoints']:
-            flags=['--kind',item['kind'],'--depth','1','--length','32','--batch','8']
+            flags=['--kind',item['kind'],'--depth',str(item.get('depth',1)),'--length','32','--batch','8']
+            if item.get('plan'):flags+=['--plan',str(Path(item['plan']).resolve())]
+            if item.get('intervention'):flags+=['--intervention',item['intervention']]
             if a.cache:flags+=['--cache',str(a.cache)]
             flags+=['--checkpoint',item['checkpoint']] if item.get('checkpoint') else ['--baseline-only']
-            path,result=runner.stage('test-'+item['label'],'evaluate','final',600,flags)
+            action=item.get('action','evaluate')
+            path,result=runner.stage(('test-' if action=='evaluate' else action+'-')+item['label'],action,'final',600,flags)
             if result['state']!='completed':raise RuntimeError('reference evaluation failed '+item['label'])
         runner.finish()
     except BaseException as error:runner.finish('failed',repr(error));raise

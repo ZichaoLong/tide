@@ -1,0 +1,29 @@
+{
+  "schema": "tide-shared-resource-policy-v1",
+  "authorization": "user-2026-11-09-shared-low-load",
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "deadline_epoch": 1794235753.0310388,
+  "max_aicore_percent": 100,
+  "minimum_free_hbm_mib": 8192,
+  "max_new_concurrent_npus": 6,
+  "exclusive_device": false,
+  "prerequisites": {},
+  "latest_authorization": "user explicitly permits sharing busy devices without FIFO/idle-only veto"
+}

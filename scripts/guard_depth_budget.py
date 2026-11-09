@@ -39,7 +39,7 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     a=p.parse_args();cfg=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
     while True:
-        rows=usage(a.root,cfg['jobs'],time.time());total=sum(r['compute_seconds'] for r in rows)
+        rows=usage(a.root,cfg['jobs'],time.time());total=sum(r['compute_seconds'] for r in rows)+cfg.get('prior_compute_seconds',0)
         state=dict(schema='tide-depth-budget-guard-v1',state='monitoring',at=now(),rows=rows,used_compute_seconds=total,
             limit_compute_seconds=cfg['compute_seconds'],deadline_epoch=cfg['deadline_epoch'],
             scope='v5 data/calibration/study/reference compute; waits separate; v4 excluded; stop before cap with shutdown reserve')

@@ -72,7 +72,8 @@ def run(a):
             _,cal=checked_stage('calibrate-'+kind,'calibrate','admission',600,flags(kind),record=False)
             cals[kind]=cal
         # Actual time constrains this pair; sparse/dense throughput ratios do not.
-        forecast=sum(1.2*updates(k)*r['mean_step_seconds']+180 for k,r in cals.items())
+        start_step=plan.get('completion',{}).get('step',0)
+        forecast=sum(1.2*(updates(k)-start_step)*r['mean_step_seconds']+180 for k,r in cals.items())
         runner.state['decisions'].append(dict(name='fixed-B8-comparison',forecast_training_seconds=forecast,
             remaining_training_seconds=runner.remaining('training'),batch=8,accumulation=1,
             reason='same sampler/exposure and schedule prefix as earlier FC4; see separate batch/backend calibration'))
