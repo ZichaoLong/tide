@@ -42,3 +42,26 @@ None/连接零、共享参数所有贡献、版本检查和一阶限制。不同
 
 实现、构建、CPU、NPU、完整训练/恢复和性能资格分开记录；当前任务状态见
 [STATUS](STATUS.md)，未解除限制见[ROADMAP](ROADMAP.md)。
+
+## 固定资格与接入
+
+[TL-REQ-004交付及完整命令](evidence/dense-query-tl-req-004-20261110.md)对应实现75a5027、
+诊断驱动26ca1b6。CPU FP64/FP32、NPU FP32的Python/native分别检查；
+CPU FP32独立evidence根两个字段约1.044e-6的原严格失败保留。
+小型FC/HB/反馈PDG完整训练、pending/cut与新owner恢复，以及四个安装消费者的新进程恢复通过；
+原FC16/B8/L128只作有限成本观察，不能外推大图严格数值、离散或恢复资格。
+
+- 独立局部公式/字段根与FP64方向差分：`tests/test_weighted_dense_query.py`。
+- 独立完整调度、三步AdamW、保留图/精确cut恢复：`tests/test_weighted_dense_training.py`。
+- 已安装公共API、新进程3步vs2+1：[`dense_query.py`](../examples/consumer_core5/dense_query.py)。
+- 固定源码门禁：`bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu MATCHING_BUILD`。
+  显式数值探索收集完整比较后保留xfail；None/离散、非有限及精确恢复错误仍使流程失败。
+- 局部舍入诊断：`python scripts/diagnose_dense_rounding.py`；这是同一FP32输入/权重提升FP64，
+  不是更换输入分布或默认执行精度。
+- 原任务有限成本：`scripts/benchmark_dense_query.py`从固定下游Git对象读原模型/head/loss/输入生成器，
+  单配置一预热一步；设备profile单列。它不是下游训练接口。
+
+实验通过公共`eager_runner`、`Native`或配置`execution.query_execution`显式选择；
+旧study benchmark命令生成器与standalone benchmark CLI目前拒绝该选项。
+本次不改变应用checkpoint周期、存储介质或完整返回范围。跨模式切换应创建新执行身份，
+先做下游任务验收；同模式小图精确恢复不代表跨模式恢复或原语言训练已通过。

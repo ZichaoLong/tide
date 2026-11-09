@@ -69,3 +69,24 @@ checkpoint不保存已消费的autograd图或上一步grad缓存，下一步从z
 修改应用后先跑`check.py`和本实验有价值的代表组合；无需遍历全部组合。
 公共模块需求按统一模板提交，附这类可运行配置/复现。上游交付后在本实验检查并填写验收，再更新锁。
 不要import基座benchmark脚本，或仅凭包版本/同名recipe继承资格。
+
+## KV密集查询的安装消费者
+
+[`dense_query.py`](dense_query.py)单独演示显式`query_execution="dense-v1"`，
+支持本轮已验的CPU/NPU FP32 × Python/native。其限定域和数值边界见
+[契约](../../docs/weighted-dense-query.md)与[交付证据](../../docs/evidence/dense-query-tl-req-004-20261110.md)。
+前面的`train.py/check.py/dependency.py`仍只声明各自的原有范围。
+复制本消费者时同时复制本目录`recording.py`；它不导入基座tests/scripts。
+
+```sh
+python dense_query.py --device cpu --client python --output-dir checks/dense-cpu
+python dense_query.py --device npu:0 --client native --native-library MATCHING_NPU_BUILD \
+  --output-dir checks/dense-npu-native
+```
+
+先按交付报告安装固定wheel/匹配native库并生成、验证`tidegraph lock`；NPU在本站队列内运行。
+消费者对比独立CPU scalar的完整三步结果/梯度/AdamW，另起whole3、prefix2、resume1三个进程，
+比较最后完整观察与optimizer逐值相等。每更新从空图状态开始，因此这里的新进程检查是
+更新边界恢复；非空pending图状态/保留cut另由仓库完整图测试覆盖，不能混作同一项。
+`result.json`的`execution`、`strict_numerical`、`recovery`分开审阅；有限数值超差可以记录为failed，
+不能仅凭退出码宣布严格通过。该消费者不验证原FC16任务或学习效果。

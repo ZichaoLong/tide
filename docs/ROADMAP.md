@@ -27,6 +27,8 @@
 
 11. [TL-REQ-003正支持数值模式](evidence/positive-support-tl-req-003-20261109.md)：2c11695实现，2502fa4/b4879ff补测与资格脚本；显式Shannon最小次正规数存储、稳定Aggregate/KV及未补值响应VJP，CPU/NPU有限整链通过。默认身份/严格拒绝保持，下游学习验收与后端扩展另列。
 
+12. [TL-REQ-004显式密集查询](evidence/dense-query-tl-req-004-20261110.md)：75a5027实现/新构建/安装，26ca1b6诊断；CPU25通过/2保留数值xfail，NPU13实际设备及2辅助通过，四个安装消费者独立三步/新进程精确恢复通过。原FC16/B8/L128完整步CPU62.84→45.16秒、NPU252.92→183.55秒；实际Full/消息及梯度范数不同，只作有限成本观察，不认证原语言训练等价或下游验收。
+
 阶段提交后继续。旧边界的停止条件仍有效；有新方案和证据才重启。CUDA新任务不继承旧CPU/NPU失败或通过。
 不以不支持声明代替约定功能，不把小规模通过称为全部平台/尺度通过。
 
@@ -49,7 +51,7 @@
 
 ## 当前待办与重启条件
 
-- **TL-REQ-004 批量查询训练优化（实现增量待固定资格）**：权威[请求](https://github.com/ZichaoLong/tide/blob/0439efd2af31cf10b07ce9e6423b0195f7449968/docs/requests/TL-REQ-004.md)固定下游0439efd，SHA256 `04b9d022a3efe2a01ae058d571033a77b1c74cae94269f4d5a2be6a451a85ae9`，基座起点74e7bbd。优先显式KV/qry/cat/ind/context/cat/regional_total/quad单设备eager密集批量路径；保留独立根/None/零/共享参数、完整返回和严格数值失败。CPU/NPU小型完整训练/新进程恢复后，以原B8/L128任务和B2/L8诊断作一次新旧对照。已实现[具名dense-v1](weighted-dense-query.md)，开发完整训练/恢复通过；CPU FP32 evidence根约1.044e-6严格失败保留，尚无新性能结论。先交付可验改进，不承诺32.4token/s或扩大全矩阵；下游验收独立。资源/活动只见STATUS，经验进入performance-lessons。
+- **TL-REQ-004 后继与下游接入**：首个[具名dense-v1](weighted-dense-query.md)已交付并有[固定资格/原任务成本](evidence/dense-query-tl-req-004-20261110.md)；权威请求固定下游0439efd，基座起点74e7bbd。CPU FP32 evidence根约1.044e-6严格失败保持，相同输入FP64诊断支持该局部舍入解释；不外推大图。原FC16/B8/L128两路径Full/消息及裁剪前梯度范数不同，未认证完整数值/离散/恢复，尚未达到32.4token/s。当前有界增量终态；下游先在新安装显式接入，验原任务/恢复再决定依赖锁和训练。后继性能须针对仍各1170次的device Index/IndexPut及私有根拆装提出具体分段/索引布局，保持可见性、None/零、int64和独立根后再做一次同材料对照；大用例资格须定位实际首差并独立核对，不因成本下降放行。CUDA/resident/FP16/跨设备/standalone消费者和其他语义不继承本次资格，不原样扩大矩阵。资源/活动只见STATUS，通用经验进入performance-lessons。
 
 - **TL-REQ-003 下游接入与表示域后继**：[显式最小正值模式已交付](evidence/positive-support-tl-req-003-20261109.md)，保留cat/ind及默认strict；CPU/NPU局部、完整两区域根/AdamW/恢复通过。下游原HB16学习验收未运行，须在新私有安装显式升级；跨模式旧checkpoint不能直接冒称精确恢复。多个尾部比例、不可表示公开伴随和弱总量仍有边界；只有实际小型见证证明本模式不够时，再设计log/缩放载荷或更大范围。native/standalone/resident、FP16、多设备、其他记忆尚未实现本策略；CUDA待真机，不以本次CPU/NPU通过外推。原严格失败及CPU资格误选native的8项加载失败保持原记录。
 

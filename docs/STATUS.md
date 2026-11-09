@@ -1,57 +1,47 @@
-# 当前交接 — TL-REQ-004 实现提交，准备固定资格与性能（2026-11-09）
+# 当前交接 — TL-REQ-004 首个优化增量交付（2026-11-10）
 
-用户授权的显式`query_execution=dense-v1`已完成首个实现增量。数学固定0770593，
-分支graph-execution-foundation；默认legacy及原严格阈值不变。接受范围见[ROADMAP](ROADMAP.md)，
-代码/域/独立根契约见[weighted-dense-query](weighted-dense-query.md)。下游来源0439efd只读，
-两个用户未跟踪handoff文件保留原字节、不纳入提交；不更新下游依赖或运行。
+显式 `query_execution="dense-v1"` 的实现、固定资格和有限性能流程已结束。
+[交付报告与下游命令](evidence/dense-query-tl-req-004-20261110.md)、
+[机器证据](evidence/dense-query-tl-req-004-20261110.json)、
+[公共域/数学对应](weighted-dense-query.md)是本次成果入口。
+数学固定0770593；实现/包/native固定`75a502790985044b12125bee83d7f0dddfa39079`，
+诊断驱动`26ca1b6b32c43adfb78434b6402498dc4c53e40b`，两者Python/C++源码相同。
+默认legacy、严格阈值、图v13/checkpoint v5保持；新路径有独立执行身份。
 
-## 已观察的开发结果
+## 实际结果
 
-- gef-tl-req-004-build-a：新C++ native构建，CPU FP64新路径8项与相关默认回归192项通过。
-- gef-tl-req-004-check-b：CPU27项中的旧版本26项：24 passed/2 FP32数值xfail；NPU14项通过。
-  FC/HB/反馈PDG三步AdamW、完整记录/根、pending/保留cut和新owner精确恢复已覆盖。
-  native公共消费者CPU/NPU独立三步严格通过，新进程3步vs2+1逐值恢复通过。
-- 后续主工作区导航/配置拒绝/FP64方向差分检查：45 passed/2已知数值xfail。
-- CPU FP32小见证的evidence_weight/bias约1.044e-6严格失败原样保留；其他字段、None/连接零通过。
-  这是密集GEMM次序的具名数值路径，不宣称全部FP32严格等价。NPU该局部见证通过不消除CPU失败。
+- CPU固定资格25 passed/2数值xfail；NPU15 passed包含13实际设备和2辅助。
+  CPU FP32独立evidence根约1.044e-6严格失败保留；相同材料FP64对照支持该局部舍入解释。
+- FC/HB/反馈PDG三步AdamW、完整记录/独立根、共享/None/零、pending/cut和换owner精确恢复通过。
+  四个CPU/NPU×Python/native安装消费者的独立三步及新进程3步vs2+1恢复通过。
+- 原FC16/B8/L128、FP32/native同安装单次完整步：CPU62.839→45.162秒（16.30→22.67 token/s），
+  NPU mixed-c252.922→183.549秒（4.05→5.58 token/s）。未达约32.4 token/s，NPU仍慢于CPU。
+  Full/消息计数及裁剪前梯度范数不同；这些是有限成本观察，不是大图严格等价或学习资格。
+- B2/L8 NPU profile确认FFN由1–2行变为2–15行，但device Index/IndexPut仍各1170次。
+  下一布局/数值处理的停止与重启条件只见[ROADMAP](ROADMAP.md)，经验见[performance-lessons](performance-lessons.md)。
+- 下游0439efd只读；未更新其依赖、安装、运行或验收。两份用户handoff未跟踪、未修改、不纳入提交。
 
-以上两个开发服务均终态passed、MainPID=0、ControlGroup为空；日志分别在
-artifacts/jobs/tl-req-004-{build-a,check-b}/task.log。dev-a/dev-b是冻结脏源码，
-build-a构建来源保留其实际身份，不冒称固定提交资格。实现提交75a5027已固定；正在准备正式服务gef-tl-req-004-qualify-c。
-冻结源码artifacts/tl-req-004/source-c，新build-c/wheels/installed-env；
-日志artifacts/jobs/tl-req-004-qualify-c/task.log，外层qualify-c-service.log，
-CPU/NPU审阅结果qualify-cpu-c/qualify-npu-c，队列qualify-c-queue.json。
-服务≤3600s，MemoryMax512G（构建阶段），build --jobs all；测试线程1/设备消费者host2。
-命令：systemctl --user show gef-tl-req-004-qualify-c -p ActiveState -p MainPID -p ControlGroup -p Result。
-正式作业未观察终态，性能尚未开始。
+## 作业终态与产物
 
-## 下一动作（本轮继续，不在提交后停机）
+`gef-tl-req-004-{build-a,check-b,qualify-c,cost-d}`均passed/exit0，
+MainPID=0、ControlGroup为空且cgroup不存在；两个NPU队列completed/return_code0，无活跃任务。
+外层passed不改变内部2项严格数值失败。成本六子流程均completed，最后服务于
+2026-11-09 16:28:08 UTC终止；全部日志/状态hash见机器证据。
 
-1. 提交本实现增量；以该提交创建冻结source-c，新建wheel/私有venv和build-c。
-2. `bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu BUILD`：安装包的定向完整资格，
-   NPU按单卡队列maxwait600s；CPU FP64/FP32、NPU FP32，数值失败和精确恢复分别记录。
-3. `scripts/benchmark_dense_query.py`从下游固定Git对象导出任务到新输出，
-   串行测CPU/native与NPU/native的legacy/dense-v1各B8/L128一预热一步；
-   另以B2/L8分别作同材料host算子与NPU设备profile，profile与正式计时分开。
-   不改任务头/loss/精度/完整返回，报告实际candidate/Full/messages及完整墙钟。
-4. 审阅实测收益/剩余瓶颈，同步契约、经验和证据；独立证据提交后普通推送。
+本机原始材料在`artifacts/tl-req-004/`（约2.1GiB），日志/状态在
+`artifacts/jobs/tl-req-004-*/`。source-c/source-d为冻结源码；build-c、wheels、installed-env
+为本轮私有安装。公共环境ascend/dev-workspace-9.2.0保持只读。
+资格构建用全部320 affinity CPU、512GiB；性能CPU1/NPU2 host线程、scheduler1、96GiB，
+服务≤3600秒，项目重型工作串行，外部主机争用已记录。不得恢复旧队列或把产物路径当新安装默认。
 
-长作业独立background.slice，构建全部affinity CPU、MemoryMax512G；测试/计时MemoryMax96G，
-每服务≤3600s。本轮产物预算10GiB，现有约201GiB/硬800GiB，系统空间约1.1TiB。
-固定环境ascend/dev-workspace-9.2.0；不改公共工具链。
-下次接续先`python scripts/status.py`，运行前将精确unit/源码/日志写回本页。
+## 下一次接续
 
-## 固定资格终态与下一测量
+1. `git status --short --branch`、`python scripts/status.py`；先审阅上述交付，不重跑本轮已完成矩阵。
+2. 下游在新私有环境按报告构建固定wheel/native，`tidegraph lock create/verify`；
+   调用`eager_runner(..., query_execution="dense-v1")`或配置`execution.query_execution`。
+   `python examples/consumer_core5/dense_query.py --device cpu --client native --native-library BUILD --output-dir NEW`。
+3. 下游自己的原任务check/恢复、有限学习验收后再决定升级锁；基座交付不自动代表实验已验收。
+   需要新优化时从实际Index/VJP热点或数值首差提出具体方案，按ROADMAP有界重启。
 
-gef-tl-req-004-qualify-c已passed，MainPID=0、ControlGroup为空。
-75a5027新wheel SHA256 b4d11023ccfb3d27f9ae2675c236b376f30966cb519c21223bbaa3b8392e7526；
-CPU25 passed/2既有本轮数值xfail，NPU15 passed；四个CPU/NPU×Python/native公共消费者
-独立三步严格通过且新进程精确恢复通过。注意NPU15包含CPU数学/配置辅助，实际设备范围由各测试分列。
-CPU差异的相同FP32参数/输入提升FP64对照已定位为normalized evidence近零伴随的舍入：
-原scalar最大误差9.06e-7，新dense1.38e-7，两FP32间1.044e-6；不改变原严格失败。
-
-下一有限性能使用新诊断脚本提交（与75a5027包/C++完全相同），冻结source-d，
-独立服务gef-tl-req-004-cost-d，CPU与NPU全部串行；每完整配置一预热一步，
-B2/L8设备profile另进程，不将插桩时间当吞吐。新job日志artifacts/jobs/tl-req-004-cost-d/task.log；
-输出artifacts/tl-req-004/cost-d-*，队列cost-d-queue.json；≤3600s、MemoryMax96G。
-当前尚未启动性能服务；启动后检查该unit和结果逐项终态。
+正式导航和证据随本交付提交；当前实现无未提交变更。两个用户未跟踪文件
+`docs/tide-learning-lab-TL-REQ-003-handoff.md`与`docs/tide-learning-lab-TL-REQ-004-handoff.md`继续保留原字节。

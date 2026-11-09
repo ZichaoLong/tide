@@ -576,3 +576,27 @@ CPU/NPU小图完整根/AdamW/恢复通过不证明原训练效果，新增有限
 仍不意味着Python综合all根通过：NPU PyTorch原2.86102e-6差异在9.2保持同值。
 迁移复用仍有效的构建/结果时先核对源码、包、配置和二进制，并分别记录实际构建提交与测试驱动提交。
 本轮没有性能计时，不能据构建更新或小检查推断加速、容量改善或resident已迁移。
+
+## TL-REQ-004密集查询与异形记忆分离
+
+[具名dense-v1交付](evidence/dense-query-tl-req-004-20261110.md)复用此前“实际算子batch不等于调度batch”、
+独立字段VJP与共享投影的经验。原任务FC16/KV/qry/quad的外层VJP按cache shape分组，
+导致Full上千请求仍被拆成小投影；只移除KV缓存长度限制，把可见长度/正支持分桶留在记忆计算内，
+使current/Q/Describe/Full/FFN跨长度合批。状态有无、槽尾维、dtype/device/requires_grad及
+长/短Attention分支仍参与分组，避免把原本None的伴随接成零；不能按shape合并一切私有根。
+
+B2/L8 NPU真实FFN从1–2行变成2–15行；aten::matmul1823→596、反向1873→646，kernel记录
+168589→135504。CANN二维乘法名为matmul，只搜mm会遗漏core；helper计数也有覆盖差异，
+新Describe使用project而旧scalar头不使用，927→468不能当作全部矩阵次数比较。
+分支bool批量回读减少一部分取值，但AICPU Index/IndexPut各1170次及nonzero804次未减少。
+这些是设备算子，不是host fallback；既不宣称已消除动态索引，也不根据kernel数推断所有收益。
+
+原B8/L128同安装的完整步CPU62.84→45.16秒、NPU252.92→183.55秒，单次成本各降低约28%/27%。
+CPU1/NPU2 host线程、完整返回、原head/loss/AdamW；共享主机有争用，profile单列。
+实际Full/消息不同，裁剪前梯度范数也明显不同，因此不是严格等价加速或学习质量结论；
+测量步之前已经更新参数，不能声称两步仍有相同参数值。新NPU仍慢于CPU，32.4token/s目标未达。
+
+CPU小型evidence根的1.044e-6严格差异仍保留；相同FP32材料提升FP64后，scalar误差9.06e-7、
+dense1.38e-7，支持近零归一化伴随的舍入解释。较接近FP64不等于可取消原断言，
+也不解释大用例所有差异。后继应同时保留独立公式/方向差分、完整图与新进程恢复，
+用实际首差定位数值问题，用剩余Index/VJP热点决定下一个布局改动，不靠放宽阈值或重跑相同矩阵。
