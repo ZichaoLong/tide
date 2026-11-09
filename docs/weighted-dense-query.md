@@ -66,7 +66,9 @@ C++核心入口`configure_query_execution`不依赖Python；standalone benchmark
 [代表回归入口](prefill-regression.md)规定改动触发哪些检查及原FC16成本命令；
 [性能经验](performance-lessons.md)记录可复用方案及其边界。
 [原dense-v1固定资格](evidence/dense-query-tl-req-004-20261110.md)保留原数值失败和实际成本，
-不能重新标记为packed-v2通过。当前工作及资格来源见[STATUS](STATUS.md)，待办仅见[ROADMAP](ROADMAP.md)。
+不能重新标记为packed-v2通过。[默认prefill固定资格和成本](evidence/prefill-default-20261110.md)
+分列新默认的CPU/NPU三客户端、小图训练/恢复、原任务有限成本及剩余碎片化。
+当前工作见[STATUS](STATUS.md)，待办仅见[ROADMAP](ROADMAP.md)。
 
 安装消费者：`examples/consumer_core5/dense_query.py --query-execution auto ...`；
 旧v1复现必须显式指定`dense-v1`。原任务成本驱动`benchmark_dense_query.py`从固定下游Git对象读模型/head/loss，
@@ -75,3 +77,9 @@ C++核心入口`configure_query_execution`不依赖Python；standalone benchmark
 
 固定提交安装资格入口：`bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu MATCHING_BUILD auto`。
 省略末项继续检查显式dense-v1；auto门禁另包括新布局、一般调度及配置回归。
+
+独立LibTorch安装消费者：先用`prepare_core5_study.py`生成小型FC计划，再用
+`export_weighted_benchmark.py --binary --workload PLAN --native-library MATCHING_BUILD --output FIXTURE`
+导出纯静态材料。在匹配SDK环境运行
+`python scripts/check_query_sdk.py --binary SDK_BENCHMARK --fixture FIXTURE --device cpu --dtype float64 --output-dir NEW`；
+NPU队列内改为`--device npu:0 --dtype float32`。它检查独立根、完整训练、3 vs 2+1新进程恢复及跨策略拒绝。
