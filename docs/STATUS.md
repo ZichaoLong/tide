@@ -1,51 +1,36 @@
-# 当前交接 — TL-REQ-003 基座交付完成（2026-11-09）
+# 当前交接 — TL-REQ-004 实现提交，准备固定资格与性能（2026-11-09）
 
-用户授权的最小正支持数值模式已实施并完成本次CPU/NPU有限资格；下游学习验收未运行。
-交付与复现：[证据/回复](evidence/positive-support-tl-req-003-20261109.md)、[JSON](evidence/positive-support-tl-req-003-20261109.json)、
-[公开契约](positive-support-policy.md)。固定数学0770593838a37c790a568226930567ed60f99b83不变。
+用户授权的显式`query_execution=dense-v1`已完成首个实现增量。数学固定0770593，
+分支graph-execution-foundation；默认legacy及原严格阈值不变。接受范围见[ROADMAP](ROADMAP.md)，
+代码/域/独立根契约见[weighted-dense-query](weighted-dense-query.md)。下游来源0439efd只读，
+两个用户未跟踪handoff文件保留原字节、不纳入提交；不更新下游依赖或运行。
 
-## 实际源码、结果与边界
+## 已观察的开发结果
 
-- 实现/wheel：2c11695ca66a5dcd028f7d777ec26b177add0378。
-- 零接收补测：2502fa4a3df3096e3f5773a7c8586b517b96da89；资格筛选：b4879ffa6bceb989f052484f18cfb480f7d1a68f。
-  后两项Python包源码与2c11695完全相同，复用同一已验wheel，未声称重新构建。
-- CPU新策略30项、相关默认路径314项通过；NPU流程13项实际设备目标及17项CPU/配置辅助通过。
-  含实际行/独立高精度、完整两区域记录/根/共享参数、AdamW、pending/保留跨窗和新进程精确下一窗。
-- 默认strict仍拒绝原FP32行；新模式显式拒绝弱总量实质扰动、不可表示公开伴随及非法配置。
-  原历史失败、旧checkpoint跨模式拒绝保持；不等同原HB16训练恢复或学习效果通过。
-- 单设备Python eager/KV/FP32或CPU FP64；新策略其余后端/记忆/精度限制及重启条件仅在[ROADMAP](ROADMAP.md)。
+- gef-tl-req-004-build-a：新C++ native构建，CPU FP64新路径8项与相关默认回归192项通过。
+- gef-tl-req-004-check-b：CPU27项中的旧版本26项：24 passed/2 FP32数值xfail；NPU14项通过。
+  FC/HB/反馈PDG三步AdamW、完整记录/根、pending/保留cut和新owner精确恢复已覆盖。
+  native公共消费者CPU/NPU独立三步严格通过，新进程3步vs2+1逐值恢复通过。
+- 后续主工作区导航/配置拒绝/FP64方向差分检查：45 passed/2已知数值xfail。
+- CPU FP32小见证的evidence_weight/bias约1.044e-6严格失败原样保留；其他字段、None/连接零通过。
+  这是密集GEMM次序的具名数值路径，不宣称全部FP32严格等价。NPU该局部见证通过不消除CPU失败。
 
-## 作业终态
+以上两个开发服务均终态passed、MainPID=0、ControlGroup为空；日志分别在
+artifacts/jobs/tl-req-004-{build-a,check-b}/task.log。dev-a/dev-b是冻结脏源码，
+build-a构建来源保留其实际身份，不冒称固定提交资格。没有活动作业。
 
-全部正式作业MainPID=0、ControlGroup为空且对应cgroup不存在；没有活动计算/排队。
-固定源只读：artifacts/tl-req-003/source-{a,b,c}；独立资格venv和wheel在同目录，均非下游依赖。
+## 下一动作（本轮继续，不在提交后停机）
 
-| 服务 / artifacts/jobs目录 | 终态 |
-| --- | --- |
-| gef-tl-req-003-cpu-a / tl-req-003-cpu-a | failed exit1；新策略29通过，回归314通过/8个native缺库失败；筛选遗漏，不重标通过 |
-| gef-tl-req-003-npu-a / tl-req-003-npu-a | passed exit0；29定向及安装消费者 |
-| gef-tl-req-003-boundary-b / tl-req-003-boundary-b | passed exit0；CPU/NPU零接收各1 |
-| gef-tl-req-003-cpu-c / tl-req-003-cpu-c | passed exit0；修正筛选后的8个Python拒绝快照/CPU安装消费者/上游校验 |
+1. 提交本实现增量；以该提交创建冻结source-c，新建wheel/私有venv和build-c。
+2. `bash scripts/qualify_dense_query.sh NEW_OUTPUT cpu|npu BUILD`：安装包的定向完整资格，
+   NPU按单卡队列maxwait600s；CPU FP64/FP32、NPU FP32，数值失败和精确恢复分别记录。
+3. `scripts/benchmark_dense_query.py`从下游固定Git对象导出任务到新输出，
+   串行测CPU/native与NPU/native的legacy/dense-v1各B8/L128一预热一步；
+   另以B2/L8分别作同材料host算子与NPU设备profile，profile与正式计时分开。
+   不改任务头/loss/精度/完整返回，报告实际candidate/Full/messages及完整墙钟。
+4. 审阅实测收益/剩余瓶颈，同步契约、经验和证据；独立证据提交后普通推送。
 
-各目录保留status.json/task.log；审阅证据已抽取实际来源、安装hash、计数、失败、队列/资源和终态。
-没有重复314项已通过回归；修正资格脚本后未整体重跑门禁，分段证据不冒称旧failed任务变passed。
-采用公共ascend/dev-workspace-9.2.0及独立私有环境，未改公共环境或下游安装。
-本次材料约百MiB量级、预算≤2GiB；账号约169GiB/硬800GiB，无需tmpfs或扩盘。
-
-## 下一步与干净接续
-
-本任务已收尾；若继续实验，由tide-learning-lab在新的私有安装接入、记录验收，再显式更新依赖锁。
-新窗口无需旧产物目录：干净检出交付源码，按[development](development.md)选择环境、构建/安装wheel，
-按[交付回复](evidence/positive-support-tl-req-003-20261109.md#下游接入和复验)执行公共行和小型检查。
-
-```sh
-python examples/consumer_core5/positive_support.py --row tests/data/tl_req_003_shannon_row.json
-python -m pytest -q tests/test_positive_support.py tests/test_positive_support_config.py tests/test_positive_support_graph.py
-# 固定源码/独立wheel的持久资格：bash scripts/qualify_positive_support.sh NEW_OUTPUT cpu|npu
-# NPU由站点队列提供ASCEND_RT_VISIBLE_DEVICES，程序使用npu:0。
-```
-
-不自动重启原HB16训练，不改其cat/ind、loss或配方；学习效果和工作量由下游拥有。
-用户原未跟踪文件docs/tide-learning-lab-TL-REQ-003-handoff.md保持原字节、未纳入提交；
-唯一请求仍在实验分支。其余本轮修改均进入实现/证据提交，普通推送授权分支。
-既有CANN9.2三客户端迁移与严格失败见[迁移证据](evidence/cann92-project-migration-20261106.md)，未扩大其资格。
+长作业独立background.slice，构建全部affinity CPU、MemoryMax512G；测试/计时MemoryMax96G，
+每服务≤3600s。本轮产物预算10GiB，现有约201GiB/硬800GiB，系统空间约1.1TiB。
+固定环境ascend/dev-workspace-9.2.0；不改公共工具链。
+下次接续先`python scripts/status.py`，运行前将精确unit/源码/日志写回本页。

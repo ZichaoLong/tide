@@ -67,6 +67,8 @@ struct NodeBinding {
   double aggregate_alpha;
 };
 NodeBinding node_binding(const NodeWeights&);
+// Select before placement. Dense-v1 has an explicit KV/qry/cat/ind/quad domain.
+void configure_query_execution(NodeWeights&,const std::string& mode);
 RegionalConfig region_binding(const RegionWeights&);
 bool same_configuration(const KVConfig&,const KVConfig&);
 bool same_configuration(const RecurrentConfig&,const RecurrentConfig&);

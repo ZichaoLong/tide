@@ -48,6 +48,7 @@
 | same-fiber 注意力与 pooling | [fiber attention](fiber-attention.md)、[packing](fiber-packing.md)、[pooling](fiber-pooling.md) |
 | host prefill 与流式状态 | [greedy](greedy-scheduler.md)、[frontier](frontier-contract.md)、[cursor](streaming-cursor.md) |
 | 三图关系和特化适用域 | [Settle 编码](settle-embedding.md)、[跨类策略](cross-family-policies.md) |
+| 显式KV查询优化 | `weighted/query_execution.py`、C++ `configure_query_execution` | [dense-v1契约](weighted-dense-query.md)、独立字段/别名/完整训练/新进程恢复；默认legacy保持 |
 | core-5 带权配置、局部函数与精确时间 | [公共绑定](weighted-message.md)、[五记忆/卷积](weighted-recurrent.md)、[发送](weighted-sending.md)、[评分/证据/key](weighted-scoring.md)、[实际packing](weighted-packed.md) |
 | eager 与常驻、窗口与多卡 | [放置](execution-placement.md)、[resident 库](resident-library.md)、[训练](resident-training.md)、[peers](resident-peers.md)、[带权公共训练](resident-weighted-training.md)、[带权样本副本](resident-weighted-peers.md) |
 | 批量化的梯度连接 | [packed autograd](packed-autograd.md)、[Full VJP](full-batched-autograd.md)、[Aggregate VJP](aggregate-batched-autograd.md)、[resident graph VJP](resident-graph-vjp.md) |

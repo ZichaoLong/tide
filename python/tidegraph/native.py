@@ -9,7 +9,12 @@ class Native:
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
                  attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
                  attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay", aggregate_autograd="replay",
-                 placement=None):
+                 placement=None, query_execution="legacy"):
+        if query_execution != "legacy":
+            from .weighted.query_execution import execution_view
+            execution_view(model, query_execution)  # Validate without changing parameter owners.
+            if not packed or algorithm != "greedy" or workers != 1 or full_autograd != "batched":
+                raise ValueError("dense-v1 requires packed greedy/batched Full with one worker")
         if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
             raise ValueError("invalid Aggregate autograd policy or unpacked execution")
         if full_autograd not in {"replay", "batched"} or (full_autograd == "batched" and not packed):
@@ -37,6 +42,11 @@ class Native:
         self.algorithm = algorithm
         from .native_model import encode_model
         g, m = encode_model(core, graph, model)
+        if query_execution != "legacy":
+            nodes = list(m.nodes)
+            for node in nodes:
+                core.configure_weighted_query_execution(node, query_execution)
+            m.nodes = nodes
         self.compiled = g
         core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
         self.placement = None

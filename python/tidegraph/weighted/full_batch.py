@@ -12,7 +12,7 @@ from .numeric_time import time_values
 from . import packing_observation as observation
 
 
-def kv(program, memory, states, times, u):
+def kv(program, memory, states, times, u, *, dense=False):
     c, groups, visible = program.config, defaultdict(list), []
     for i, (state, time) in enumerate(zip(states, times)):
         mask, age = memory.visible(state, time)
@@ -33,10 +33,10 @@ def kv(program, memory, states, times, u):
             logits = (key*queries[rows, h][:, None]).sum(-1)/math.sqrt(c.width//c.heads)
             logits = logits+c.distance_slopes[h]*displacement
             reads.append(weighted_read(logits, values[:, :, h], weights, total, memory.support_policy))
-        mixed = project(torch.cat(reads, -1), program.out)
+        mixed = torch.cat(reads, -1) if dense else project(torch.cat(reads, -1), program.out)
         for i, value in zip(rows, mixed.unbind()):
             result[i] = value
-    return torch.stack(result)
+    return project(torch.stack(result), program.out) if dense else torch.stack(result)
 
 
 def recurrent(program, memory, states, times, u):
@@ -67,7 +67,8 @@ def evaluate(program, weights, requests, slots, mode, zeta):
     states, times = [r.comparison for r in requests], [r.time for r in requests]
     u = torch.stack([r.content.value[1:] for r in requests])
     if isinstance(c, KVConfig):
-        mix, alpha = kv(content, memory, states, times, u), c.alpha_att
+        from .query_execution import dense
+        mix, alpha = kv(content, memory, states, times, u, dense=dense(program)), c.alpha_att
     else:
         mix, alpha = recurrent(content, memory, states, times, u), c.alpha_mem
     x = u+alpha*mix

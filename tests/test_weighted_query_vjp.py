@@ -28,6 +28,8 @@ def native_query(program, w, requests, *, kind="read", slots=0):
     configure = core.configure_weighted_node if is_kv else core.configure_weighted_recurrent_node
     classes = w.aggregate_program.classes
     configure(weight, config, region_config(core, w.read_program.config), classes.edges, classes.inputs, w.aggregate_program.alpha)
+    if getattr(program, "query_execution", "legacy") != "legacy":
+        core.configure_weighted_query_execution(weight, program.query_execution)
     def state(s):
         return None if s is None else core.State(s.value, s.last_time, s.observations, s.slots)
     contents, times = [r.content.value for r in requests], [r.time for r in requests]

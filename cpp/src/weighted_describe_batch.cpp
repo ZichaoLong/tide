@@ -2,18 +2,34 @@
 // Small projection rounding is visible in normalized-head near-zero VJPs.
 #include "weighted_query_batch.h"
 #include "weighted_scoring.h"
+#include <type_traits>
 
 namespace tide::weighted::query {
 using namespace detail;
 namespace {
-template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r){
+template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,bool dense){
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> received;
   for(const auto& request:requests){
     states.push_back(request.state?*request.state:w.kernel->initial(w));times.push_back(request.time);received.push_back(request.content.value);
   }
   auto contents=at::stack(received),masses=contents.select(1,0),input=contents.slice(1,1);
-  auto memories=memory(w,states,times,input,c);
+  std::array<Tensor,4> memories;
+  if constexpr(std::is_same_v<Config,KVConfig>)memories=memory(w,states,times,input,c,dense);
+  else memories=memory(w,states,times,input,c);
+  if(dense){
+    using packed::project;
+    auto cur=normalize(input,c.epsilon),p=project(cur,weight(w,"kernel.summary"));
+    auto stat=at::stack({masses.log1p(),memories[2].log1p(),memories[3].log1p()},-1);
+    auto f=at::cat({cur,stat.slice(1,0,1),memories[0],memories[1],stat.slice(1,1),p*memories[0],p*memories[1]},-1);
+    auto score=weight(w,"read_program.score.bias")+(at::silu(project(f,weight(w,"read_program.score.matrix"))+
+      weight(w,"read_program.score.hidden_bias"))*weight(w,"read_program.score.vector")).sum(-1);
+    auto evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
+    auto recv=masses.clamp_max(1),mu=(r.gamma_max*recv).clamp_max(1);
+    std::vector<TensorFields> result;
+    for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv[i]},{"mu",mu[i]},{"score",score[i]},{"evidence",evidence[i]}});
+    return result;
+  }
   std::vector<TensorFields> result;
   for(size_t i=0;i<requests.size();++i){
     auto mass=masses[i],u=input[i];
@@ -40,6 +56,6 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   return result;
 }
 }
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r){return evaluate(w,requests,c,r);}
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r){return evaluate(w,requests,c,r);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r,bool dense){return evaluate(w,requests,c,r,dense);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r,bool dense){return evaluate(w,requests,c,r,dense);}
 }

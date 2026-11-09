@@ -25,11 +25,18 @@ def _rows(requests, kind, transform):
     return result
 
 
-def _signature(memory, weights, request, kind):
+def _signature(memory, weights, request, kind, branch_override=None):
     tensors = []
     _rows([request], kind, lambda t: tensors.append((t.shape, t.dtype, t.device, t.requires_grad)))
     state = request.state if kind == "read" else request.comparison
     slots = None if state is None else tuple(sorted(state.slots))
+    if branch_override is not None:
+        # Only the KV cache axis is ragged. All other shape/dtype/device/grad
+        # structure remains part of the boundary, including initial vs state.
+        for i in range(1, 1+len(slots or ())):
+            shape, *rest = tensors[i]
+            tensors[i] = ((-1, *shape[1:]), *rest)
+        return slots, branch_override, tuple(tensors)
     branch = ()
     c = memory.config
     if isinstance(c, KVConfig) and (kind == "full" or c.memory_read == "qry"):
@@ -100,8 +107,10 @@ def evaluate(program, weights, requests, *, kind="read", slots=0, mode="hard", z
         raise ValueError("unknown weighted query kind")
     groups, results = {}, [None]*len(requests)
     bundle = torch.nn.ModuleDict(dict(memory=weights.kernel, program=program))
+    from .query_execution import dense, branches
+    branch = branches(weights.kernel, weights, requests, kind) if dense(program) else [None]*len(requests)
     for i, r in enumerate(requests):
-        groups.setdefault(_signature(weights.kernel, weights, r, kind), []).append(i)
+        groups.setdefault(_signature(weights.kernel, weights, r, kind, branch[i]), []).append(i)
     for ids in groups.values():
         if len(ids) == 1:
             from .read_batch import evaluate as read

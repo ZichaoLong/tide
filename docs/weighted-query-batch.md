@@ -71,3 +71,5 @@ KV/循环的独立手算与 dense recurrence 仍在原公式测试中；这些�
 返回副本与一阶限制。没有其它行需要隔离，因此不再detach/rebind参数并嵌套调用autograd.grad。
 多行仍使用原私有图隔离。`test_weighted_query_vjp`及`test_weighted_aggregate_vjp`
 覆盖singleton/多行版本、逐字段根、重复输入、参数别名和独立方向导数；固定资格另列。
+
+显式KV密集路径见[weighted-dense-query](weighted-dense-query.md)；本页逐行描述头次序指默认legacy。

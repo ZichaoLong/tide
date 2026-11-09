@@ -49,6 +49,8 @@
 
 ## 当前待办与重启条件
 
+- **TL-REQ-004 批量查询训练优化（实现增量待固定资格）**：权威[请求](https://github.com/ZichaoLong/tide/blob/0439efd2af31cf10b07ce9e6423b0195f7449968/docs/requests/TL-REQ-004.md)固定下游0439efd，SHA256 `04b9d022a3efe2a01ae058d571033a77b1c74cae94269f4d5a2be6a451a85ae9`，基座起点74e7bbd。优先显式KV/qry/cat/ind/context/cat/regional_total/quad单设备eager密集批量路径；保留独立根/None/零/共享参数、完整返回和严格数值失败。CPU/NPU小型完整训练/新进程恢复后，以原B8/L128任务和B2/L8诊断作一次新旧对照。已实现[具名dense-v1](weighted-dense-query.md)，开发完整训练/恢复通过；CPU FP32 evidence根约1.044e-6严格失败保留，尚无新性能结论。先交付可验改进，不承诺32.4token/s或扩大全矩阵；下游验收独立。资源/活动只见STATUS，经验进入performance-lessons。
+
 - **TL-REQ-003 下游接入与表示域后继**：[显式最小正值模式已交付](evidence/positive-support-tl-req-003-20261109.md)，保留cat/ind及默认strict；CPU/NPU局部、完整两区域根/AdamW/恢复通过。下游原HB16学习验收未运行，须在新私有安装显式升级；跨模式旧checkpoint不能直接冒称精确恢复。多个尾部比例、不可表示公开伴随和弱总量仍有边界；只有实际小型见证证明本模式不够时，再设计log/缩放载荷或更大范围。native/standalone/resident、FP16、多设备、其他记忆尚未实现本策略；CUDA待真机，不以本次CPU/NPU通过外推。原严格失败及CPU资格误选native的8项加载失败保持原记录。
 
 - **用户自行启动的双NPU B512容量探索入口**：显式observe仅放行设备静态估算，保留预算/余量/实际free和全部运行失败；默认strict及旧配置身份不变。单配置队列复用空闲卡锁、时限、日志、停止和结果入口。公开B512配置保持原模型/数学/输入/精度，整流程上限另设7200秒。实现59e9aca、固定安装设施135项通过（[证据](evidence/llm-capacity-entry-20261105.md)）；实际B512容量仍未测，当前未替用户启动。后续只审阅用户提交的这一次结果，不盲目OOM搜索、不把原严格数值失败改写。

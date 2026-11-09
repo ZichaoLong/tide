@@ -78,3 +78,5 @@ value 导数为 `p_i*bar`。这是精确映射的等价导数表达，不微分�
 
 [数值批量资格](evidence/core5-query-20261027.md)只认证其固定提交的数值和 replay 路径。
 本批量 VJP 的开发/固定源码资格见 STATUS 与后续独立证据，不冒用既有通过数。
+
+显式[dense-v1](weighted-dense-query.md)仅移除KV缓存轴的外层分组限制，保留分支/字段根契约；默认路径不变。

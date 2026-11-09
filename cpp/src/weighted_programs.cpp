@@ -60,15 +60,15 @@ class Aggregate final:public AggregateKernel {
 };
 template<class Config> class Describe final:public ReadKernel {
  public:
-  Describe(Config c,RegionalConfig r):c_(std::move(c)),r_(std::move(r)){}
+  Describe(Config c,RegionalConfig r,bool dense=false):c_(std::move(c)),r_(std::move(r)),dense_(dense){}
   bool structured() const override{return true;}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   std::vector<TensorFields> fields_batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
-    return query::read_vjp(w,requests,c_,r_);
+    return query::read_vjp(w,requests,c_,r_,dense_);
   }
   std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
-    return query::describe(w,requests,c_,r_);
+    return query::describe(w,requests,c_,r_,dense_);
   }
   FieldLayout field_layout(const NodeWeights&) const override {
     FieldLayout result{{"w",{}},{"mu",{}},{"score",{}}};
@@ -104,18 +104,18 @@ template<class Config> class Describe final:public ReadKernel {
   }
   Config configuration()const{return c_;}
   RegionalConfig regional()const{return r_;}
- private:Config c_;RegionalConfig r_;
+ private:Config c_;RegionalConfig r_;bool dense_;
 };
 template<class Config> class Full final:public FullKernel {
  public:
-  explicit Full(Config c):c_(std::move(c)){}
+  explicit Full(Config c,bool dense=false):c_(std::move(c)),dense_(dense){}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   std::vector<FullResult> batch_grad(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
-    return query::full_vjp(w,requests,slots,options,c_);
+    return query::full_vjp(w,requests,slots,options,c_,dense_);
   }
   std::vector<FullResult> batch(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
-    return query::full(w,requests,slots,options,c_);
+    return query::full(w,requests,slots,options,c_,dense_);
   }
   FullResult step(const NodeWeights& w,const FullInput& r,Index slots,const Options& options) const override {
     require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
@@ -128,7 +128,7 @@ template<class Config> class Full final:public FullKernel {
     validate_content_weights(w,c_);
   }
   Config configuration()const{return c_;}
- private:Config c_;
+ private:Config c_;bool dense_;
 };
 }
 using installed::Aggregate;
@@ -153,6 +153,20 @@ NodeBinding node_binding(const NodeWeights& w){
   if(auto c=kv_configuration(*w.kernel))return inspect(w,*c,*aggregate);
   if(auto c=recurrent_configuration(*w.kernel))return inspect(w,*c,*aggregate);
   throw std::invalid_argument("node binding requires installed weighted memory");
+}
+void configure_query_execution(NodeWeights& w,const std::string& mode){
+  require(mode=="legacy"||mode=="dense-v1","unknown query_execution");
+  auto binding=node_binding(w);auto* c=std::get_if<KVConfig>(&binding.memory);auto r=binding.regional;
+  if(mode=="dense-v1"){
+    require(c&&c->memory_read=="qry"&&r.local_score=="cat"&&r.region_score=="ind"&&
+      r.selection_mode=="regional_total"&&r.region_control_mode=="context"&&r.region_evidence=="cat"&&r.regularizer=="quad",
+      "dense-v1 requires KV/qry cat/ind regional_total context/cat quad strict");
+    require(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble,"dense-v1 requires float32 or float64 payload");
+  }
+  if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,mode=="dense-v1");
+    w.full_kernel=std::make_shared<Full<KVConfig>>(*c,mode=="dense-v1");}
+  else {auto rc=std::get<RecurrentConfig>(binding.memory);w.read_kernel=std::make_shared<Describe<RecurrentConfig>>(rc,r);
+    w.full_kernel=std::make_shared<Full<RecurrentConfig>>(rc);}
 }
 bool is_describe(const ReadKernel& kernel){
   return dynamic_cast<const Describe<KVConfig>*>(&kernel)||dynamic_cast<const Describe<RecurrentConfig>*>(&kernel);

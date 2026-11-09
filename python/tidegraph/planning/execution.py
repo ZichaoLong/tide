@@ -24,6 +24,7 @@ class ExecutionSpec:
     communication: str = "ordinary"
     return_mode: str = "complete"
     finite_check_packing: str = "scalar"
+    query_execution: str = "legacy"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
@@ -38,6 +39,12 @@ class ExecutionSpec:
             raise ValueError("unknown explicit precision")
         if self.operator != "aten" or self.packing not in {"auto", "scalar", "packed"}:
             raise ValueError("unknown operator/packing implementation; no implicit substitution")
+        if self.query_execution not in {"legacy", "dense-v1"}:
+            raise ValueError("unknown query_execution")
+        if self.query_execution != "legacy" and (self.placement == "resident" or self.client == "libtorch"
+                or self.schedule != "prefill" or self.packing == "scalar" or self.workers != 1
+                or self.peer_devices or self.dtype == "float16"):
+            raise ValueError("dense-v1 requires single-device FP32/FP64 packed eager prefill, one worker")
         if self.return_packing not in {"scalar", "packed"}:
             raise ValueError("unknown complete-return packing")
         if self.finite_check_packing not in {"scalar", "packed"}:
@@ -88,10 +95,12 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
+        if self.query_execution == "legacy":
+            requested.pop("query_execution")
         if self.finite_check_packing == "scalar":
             requested.pop("finite_check_packing")
         extended = (bool(self.node_devices) or self.communication != "ordinary" or self.return_mode != "complete"
-                    or self.finite_check_packing != "scalar")
+                    or self.finite_check_packing != "scalar" or self.query_execution != "legacy")
         if not extended:
             # Historical v1 identities remain byte-for-byte reproducible. These
             # default values introduce no new selection into an old record.

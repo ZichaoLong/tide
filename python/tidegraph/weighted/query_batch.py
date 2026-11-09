@@ -43,13 +43,14 @@ def weighted_read(logits, values, weights, totals, support_policy="strict"):
     return torch.stack(result)
 
 
-def kv(memory, states, times, u):
+def kv(memory, states, times, u, *, dense=False):
     c, groups, visible = memory.config, defaultdict(list), []
     for i, (state, time) in enumerate(zip(states, times)):
         mask, age = memory.visible(state, time)
         visible.append(({k: v[mask] for k, v in state.slots.items()}, age[mask]))
         groups[int(mask.sum())].append(i)
     result = [None]*len(states)
+    queries = project(norm(u, c.epsilon), memory.read_q) if dense else None
     for length, rows in groups.items():
         observation.bucket("kv_visible_read", length, len(rows))
         s = {k: torch.stack([visible[i][0][k] for i in rows]) for k in visible[rows[0]][0]}
@@ -60,7 +61,7 @@ def kv(memory, states, times, u):
             values = tuple((w[..., None]*s["summaries"]).sum(1)/total.clamp(min=1)[:, None]
                            for w, total in zip(weights, totals))
         else:
-            q = project(norm(u[rows], c.epsilon), memory.read_q)
+            q = queries[rows] if dense else project(norm(u[rows], c.epsilon), memory.read_q)
             k = project(s["keys"].reshape(-1, c.width), memory.read_k).reshape(len(rows), length, c.summary_width)
             k = rotate_relative(k, -time_values(age, u)/c.position_scale, c.read_frequencies)
             logits = (k*q[:, None]).sum(-1)/math.sqrt(c.summary_width)
@@ -131,9 +132,9 @@ def matrix_read(memory, states, times, u):
     return (H@query.unsqueeze(-1)).squeeze(-1)
 
 
-def memory_read(memory, states, times, u):
+def memory_read(memory, states, times, u, *, dense=False):
     if isinstance(memory.config, KVConfig):
-        return kv(memory, states, times, u)
+        return kv(memory, states, times, u, dense=dense)
     H, Z, W = effective(memory, states, times)
     c = memory.config
     values = Z/W.clamp(min=1)[..., None]

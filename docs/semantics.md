@@ -608,3 +608,5 @@ standalone 消费者结果 `tide-weighted-standalone-benchmark-v2` 分列执行�
 返回口径和恢复。消费者持久任务边界使用 `tide-weighted-run-checkpoint-v1` manifest
 及 `tide-weighted-checkpoint-pointer-v1` 原子 generation 指针；内层公共图/参数/optimizer
 checkpoint 编码不变。该运行包装不改变图、数学或设备常驻协议。
+
+显式[KV密集查询执行](weighted-dense-query.md)更改有限批量运算次序，保持固定数学、默认legacy及原严格阈值。它进入执行身份；图v13/checkpoint v5不变，跨模式继续不认证为精确恢复。

@@ -5,7 +5,7 @@ namespace tide::weighted::query {
 using namespace detail;
 using packed::project;
 namespace {
-Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c){
+Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c,bool dense){
   Visible visible(states,times,c);std::vector<Tensor> result(states.size());
   auto queries=project(normalize(u,c.epsilon),weight(w,"full_program.content.query")).reshape({-1,c.heads,c.width/c.heads});
   const std::vector<double> empty;
@@ -24,12 +24,12 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
       if(!c.distance_slopes.empty())logits=logits+c.distance_slopes[h]*displacement;
       reads.push_back(weighted_read(logits,values.select(2,h),weights,total));
     }
-    auto combined=project(at::cat(reads,-1),weight(w,"full_program.content.out"));
+    auto combined=dense?at::cat(reads,-1):project(at::cat(reads,-1),weight(w,"full_program.content.out"));
     for(size_t i=0;i<rows.size();++i)result[rows[i]]=combined[i];
   }
-  return c.alpha_att*at::stack(result);
+  return c.alpha_att*(dense?project(at::stack(result),weight(w,"full_program.content.out")):at::stack(result));
 }
-Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c){
+Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c,bool){
   const std::string p="full_program.content.";
   auto H=effective(states,times,c)[0];Tensor combined;
   if(c.basic()){
@@ -49,12 +49,12 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   }
   return c.alpha_mem*combined;
 }
-template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c){
+template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,bool dense){
   require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> rows,controls;
   for(const auto& r:requests){states.push_back(*r.comparison);times.push_back(r.time);rows.push_back(r.content.value.slice(0,1));controls.push_back(r.control);}
-  auto u=at::stack(rows),x=u+mix(w,states,times,u,c),normal=normalize(x,c.epsilon);
+  auto u=at::stack(rows),x=u+mix(w,states,times,u,c,dense),normal=normalize(x,c.epsilon);
   auto fresh=x+c.alpha_ff*project(at::silu(project(normal,weight(w,"full_program.content.gate")))*
     project(normal,weight(w,"full_program.content.up")),weight(w,"full_program.content.down"));
   auto payload=at::cat({at::stack(controls).unsqueeze(-1),fresh},-1);
@@ -65,6 +65,6 @@ template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,con
   return result;
 }
 }
-std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c){return evaluate(w,r,slots,o,c);}
-std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c){return evaluate(w,r,slots,o,c);}
+std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,bool dense){return evaluate(w,r,slots,o,c,dense);}
+std::vector<FullResult> full(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,bool dense){return evaluate(w,r,slots,o,c,dense);}
 }
