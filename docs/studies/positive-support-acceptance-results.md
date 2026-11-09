@@ -37,6 +37,8 @@ FC16普通评价没有补值，说明切换整套稳定运算后的已有正常�
 - 配置[positive-support-v1.json](../../configs/checks/positive-support-v1.json)，候选安装/来源/环境锁在[dependencies/positive-floor-v1](../../dependencies/positive-floor-v1/foundation.lock.json)。旧应用材料从原`.venv`独立解码；迁入参数/optimizer/RNG/进度是显式新数值运行，不冒称跨策略精确恢复。
 - CPU1执行真实边界；NPU physical1→logical npu:0执行小型定向与任务检查，未在NPU重跑长HB16。单进程ATen/BLAS1线程，MemoryMax8GiB，background.slice；未更改共享环境和基座工作树。
 
+NPU任务接入沿用公共`mixed-c` placement，不是全设备resident资格。研究图的16项结构/审阅隔离检查与Firefox离线浏览检查通过。
+
 本次CPU/NPU计算worker分别488.185/91.679秒，合计579.864秒；开发接入检查另59.91秒，共639.774秒（0.1777计算小时），低于3600秒上限。v5计入这些工作后约6.5475/24计算小时；原共同截止22:49:13不延长。已固定原输入/运行源码重新核对，250份安装文件全部匹配。开发检查最初有3项因新环境误选旧锁被身份守卫拒绝；显式选新锁后3项通过，另8项已通过，没有把首次错误标成数值通过。
 
 作业记录为`artifacts/jobs/support-v1-{cpu,npu}/job.json`，内含完整命令/固定输入/生命周期；结果在`runs/support-v1-{cpu,npu}/`。状态命令：

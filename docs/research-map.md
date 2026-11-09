@@ -1,3 +1,5 @@
+当前补充：研究图已关联正支持补正下游验收D-SUPPORT/RD-SUPPORT，明确CPU真实边界与NPU小型检查范围、严格失败、逐位恢复和未改善的短程验证观察。新基座74e7bbd、原0770593数学；与语言主线相连的是有条件的接入启示，不是架构科学支持。运行和Lens映射见[验收证据](evidence/positive-support-acceptance-v1.json)。
+
 当前v5与旧v4均已终态，当前无运行/排队。图已将B FC8双区域的质量/Full/消息折衷、A深层未见收益、原下溢失败与HB40未检查分开；v4 A512配对和联合边界也已审阅。科学结论仅限单seed/短上下文，不由退出码生成。
 
 用户在上游处理TL-REQ-003，实验仍固定旧安装锁；新交付需独立下游验收。原评分配方建议降为备选，不更改历史失败或活动输入。Lens负责曲线，研究图负责知识/决策；[终态报告](studies/language-depth-v5-results.md)、[操作分类](studies/language-depth-v5-running.md)。

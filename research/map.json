@@ -776,13 +776,40 @@
       "source": "D-HB16",
       "status": "planned",
       "target": "D-HB40"
+    },
+    {
+      "detail": "74e7bbd\u72ec\u7acb\u79c1\u6709wheel\uff0c\u539f0770593\u6570\u5b66\uff1b\u5df2\u6709\u4ea4\u4ed8\u4e0d\u66ff\u4ee3\u4e0b\u6e38\u9a8c\u6536\u3002",
+      "id": "SUPPORT-INPUT",
+      "kind": "precondition",
+      "label": "\u65b0\u56fa\u5b9a\u5b89\u88c5",
+      "source": "L-MATH",
+      "status": "documented",
+      "target": "D-SUPPORT"
+    },
+    {
+      "detail": "\u6267\u884c/\u4e25\u683c\u6570\u503c/\u79bb\u6563/\u6062\u590d/\u5b66\u4e60/\u6210\u672c\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u7528\u9000\u51fa\u7801\u586b\u79d1\u5b66\u652f\u6301\u3002",
+      "id": "SUPPORT-RESULT",
+      "kind": "produces",
+      "label": "\u5206\u8f74\u5ba1\u9605",
+      "source": "D-SUPPORT",
+      "status": "documented",
+      "target": "RD-SUPPORT"
+    },
+    {
+      "detail": "\u9650\u5b9aFP32/KV\u63a5\u5165\u969c\u788d\u5df2\u5904\u7406\uff1b\u4e0d\u63a8\u51fa\u4ece\u96f6\u8bed\u8a00\u8bad\u7ec3\u4f18\u52bf\uff0c\u4e0d\u81ea\u52a8\u542f\u52a8\u65b0\u7814\u7a76\u3002",
+      "id": "SUPPORT-TRANSFER",
+      "kind": "transfer",
+      "label": "\u7a20\u5bc6\u5bf9\u7167\u53ef\u7ee7\u7eed",
+      "source": "RD-SUPPORT",
+      "status": "documented",
+      "target": "L-A"
     }
   ],
-  "height": 5350,
+  "height": 5550,
   "nodes": [
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
-      "decision": "\u53ea\u901a\u8fc7\u56fa\u5b9a\u516c\u5171API\u63a5\u5165\uff1b\u7f3a\u53e3\u4ec5\u963b\u585e\u4f9d\u8d56\u8def\u5f84\u3002",
+      "decision": "\u65b0\u79c1\u6709\u5b89\u88c5\u7528\u4e8e\u663e\u5f0fpositive-floor-v1\uff1bstrict\u4fdd\u6301\u539f\u4e49\uff0cB/Qwen\u5b8c\u6574\u8fc1\u79fb\u672a\u68c0\u67e5\u3002",
       "id": "L-MATH",
       "kind": "baseline",
       "question": "\u54ea\u4e9b\u7ed3\u6784\u6765\u81ea\u5b9a\u4e49\uff0c\u54ea\u4e9b\u9700\u8981\u8bed\u8a00\u8bad\u7ec3\u4e0e\u5b9e\u9645\u6267\u884c\u68c0\u9a8c\uff1f",
@@ -798,17 +825,21 @@
         {
           "label": "\u57fa\u5ea7\u4e0e\u5b89\u88c5\u6765\u6e90",
           "path": "dependencies/foundation-source.json"
+        },
+        {
+          "label": "\u8865\u6b63\u9a8c\u6536\u4e0e\u8303\u56f4",
+          "path": "docs/studies/positive-support-acceptance-results.md"
         }
       ],
       "scope": "\u6570\u5b66\u4e0e\u5df2\u5b89\u88c5\u516c\u5171\u6267\u884c\u6765\u6e90\uff0c\u4e0d\u662f\u8bed\u8a00\u5b66\u4e60\u3001\u89c4\u6a21\u6216\u6027\u80fd\u8bc1\u636e\u3002",
       "sources": [
         {
-          "label": "\u56fa\u5b9a\u4e0a\u6e38\u4e0e\u5feb\u7167",
-          "url": "https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/upstream.json"
+          "label": "\u56fa\u5b9a\u6570\u5b66\u4e0e\u5f53\u524d\u57fa\u5ea7",
+          "url": "https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/upstream.json"
         }
       ],
       "status": "documented",
-      "summary": "0770593 / 85d161d\uff1b\u5b89\u88c5\u9501\u4fdd\u6301",
+      "summary": "0770593 / 74e7bbd\uff1b\u8865\u6b63\u9650\u5b9a\u9a8c\u6536\uff0c\u65e7\u8fd0\u884c\u4fdd\u6301",
       "title": "\u56fa\u5b9a\u6570\u5b66\u4e0e\u516c\u5171\u57fa\u5ea7",
       "track": "shared",
       "view_group": "current",
@@ -2465,7 +2496,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 2720
+      "y": 2920
     },
     {
       "budget": "\u56fa\u5b9a\u6765\u6e90\uff0c\u65e0\u65b0\u8ba1\u7b97\u6216\u4e0b\u8f7d\u3002",
@@ -2486,7 +2517,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 2960
+      "y": 3160
     },
     {
       "budget": "\u590d\u7528\u56fa\u5b9a\u5386\u53f2\u8bc1\u636e\uff1b\u5f53\u524d\u4e0d\u91cd\u65b0\u8fd0\u884c\u3002",
@@ -2507,7 +2538,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 30,
-      "y": 3200
+      "y": 3400
     },
     {
       "budget": "CPU/NPU \u5c0f\u68c0\u67e5\u5404\u6709\u754c\uff1b\u672c\u7ec4\u603b\u6821\u51c6 \u226420 min\u3002",
@@ -2587,7 +2618,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 2720
+      "y": 2920
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u6700\u591a\u4e00\u6b21\u9884\u5148\u58f0\u660e\u7684\u5c0f\u4efb\u52a1\u964d\u9636\u3002\u6b63\u5f0f \u2264400 updates\uff0c\u81f3\u591a\u79cd\u5b50 11/22/33\u3002",
@@ -2785,7 +2816,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 2960
+      "y": 3160
     },
     {
       "budget": "\u5fae\u578b\u68c0\u67e5\u6bcf\u9879 \u226410 min\uff1b\u5148\u6821\u51c6\u6b63\u786e\u6027\uff0c\u518d\u51b3\u5b9a CPU/NPU \u8bad\u7ec3\u4e0e\u6709\u9650\u6570\u503c\u63a2\u7d22\u3002",
@@ -2866,7 +2897,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 325,
-      "y": 3200
+      "y": 3400
     },
     {
       "budget": "pilot-b \u961f\u5217\u7b49\u5f85 \u226415 min\uff0c\u670d\u52a1\u603b\u65f6\u9650 70 min\uff0c\u7ec4\u5185\u8ba1\u7b97 50 min\uff1b\u4e09\u5019\u9009\u5404 40 updates\u3002\u540e\u7eed\u91cd\u590d\u4ecd\u987b\u7814\u7a76\u8868\u4e2d\u7684\u5b66\u4e60\u4e0e\u68af\u5ea6\u95e8\u69db\u3002",
@@ -2936,7 +2967,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 2720
+      "y": 2920
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u901a\u8fc7\u7b5b\u9009\u540e\u6210\u5bf9\u79cd\u5b50 11/22/33\uff0c\u6bcf\u914d\u7f6e \u2264400 updates\u3002",
@@ -3012,7 +3043,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 620,
-      "y": 2960
+      "y": 3160
     },
     {
       "budget": "\u4e0d\u5360\u672c\u6279\u4f5c\u4e1a\u9884\u7b97\uff1b\u6ca1\u6709\u5df2\u63d0\u4ea4\u7684\u66ff\u6362\u4efb\u52a1\u3002",
@@ -3041,7 +3072,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 3200
+      "y": 3400
     },
     {
       "budget": "\u540cB32/40updates/1280\u8bad\u7ec3\u4f8b\uff1b\u5168\u6d41\u7a0b\u7ea634.60/888.32/34.35\u79d2\uff0c\u4e09\u6a21\u578b\u5b9e\u9645\u5de5\u4f5c\u4e0d\u540c\uff1b\u975e\u7b49\u4ef7\u52a0\u901f\u6bd4\u3002",
@@ -3080,7 +3111,7 @@
       "unresolved": "\u5355seed\u4ec5\u591a\u7b54\u5bf97/128\u4f8b\uff1b\u4f18\u5316\u8def\u5f84\u3001clip\u5f52\u4e00\u5316\u53d8\u5316\u3001\u989d\u5916\u53c2\u6570\u548c\u91c7\u6837\u5dee\u5f02\u672a\u533a\u5206\u3002\u672a\u8bc4\u4f30\u9002\u914d\u540e\u7684\u539f\u8bed\u8a00\u80fd\u529b\u4fdd\u7559\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 2720
+      "y": 2920
     },
     {
       "budget": "CPU32/B32\uff0c\u540480updates/2560\u4f8b\uff0cvalidation128\u3001\u672a\u7528test\uff1b\u603b\u8fdb\u7a0b1183.53/1141.50\u79d2\u3002",
@@ -3127,7 +3158,7 @@
       "unresolved": "\u8bad\u7ec3\u4e0d\u8db3\u3001\u53d1\u9001\u6b63\u5219\u5316\u4e0e\u5b66\u4e60\u5230\u7684\u652f\u6301\u5206\u5e03\u3001\u56fa\u5b9a\u7a00\u758f\u5bf9\u7167\u3001seed/\u91c7\u6837\u6ce2\u52a8\u5c1a\u672a\u533a\u5206\u3002\u5019\u9009/\u72b6\u6001\u5f00\u9500\u3001\u4e3b\u673a\u8c03\u5ea6\u548c\u6bcf\u6b65\u89c2\u6d4b\u7684\u65f6\u95f4\u8d21\u732e\u672a\u77e5\uff1b\u805a\u5408\u65e0\u6574\u533a\u505c\u5de5\u4e0d\u6392\u9664\u5355\u6837\u672c/\u8282\u70b9\u9965\u997f\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 2960
+      "y": 3160
     },
     {
       "budget": "\u672c\u6279\u590d\u7528\u5171\u540c\u4efb\u52a1\u8bc4\u4f30\uff0c\u4e0d\u81ea\u52a8\u589e\u52a0\u65b0\u4efb\u52a1\u3001\u66ff\u6362\u6216\u5019\u9009\u7ec4\u5408\u3002",
@@ -3164,7 +3195,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 915,
-      "y": 3200
+      "y": 3400
     },
     {
       "budget": "\u5404B32/400updates/12800\u8bad\u7ec3\u4f8b\uff1bCPU64\u5404\u7ea642min\uff0cvalidation256/test256\uff1b\u673a\u4f1a\u6c34\u5e7312.5%\u3002",
@@ -3207,7 +3238,7 @@
       "unresolved": "\u9996\u6279\u672a\u6d4b\u7684query\u4ea4\u6362\u4e0edelay4/8\u5df2\u7531TL-A1-MECH\u5355\u72ec\u8865\u67e5\uff1b\u4e00\u822c\u5e8f\u5217/\u5206\u5e03\u5916\u7ec4\u5408\u4ecd\u672a\u77e5\u3002\u4e09seed\u5171\u7528\u540c\u4e00test\uff0c\u4e0d\u5408\u5e76\u6210768\u4e2a\u72ec\u7acb\u6837\u672c\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 3440
+      "y": 3640
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3263,7 +3294,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 3680
+      "y": 3880
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3302,7 +3333,7 @@
       "unresolved": "\u91cd\u590dfiller\u4e0b\u7684\u72b6\u6001\u8870\u51cf\u3001\u65f6\u95f4/\u4f4d\u7f6e\u5206\u5e03\u6539\u53d8\u53ca\u5176\u4ed6\u8ba1\u7b97\u56e0\u7d20\u5c1a\u672a\u533a\u5206\uff1b\u4e0d\u662f384\u4e2a\u72ec\u7acb\u6d4b\u8bd5\u6837\u672c\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 3910
+      "y": 4110
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3379,7 +3410,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 3680
+      "y": 3880
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3418,7 +3449,7 @@
       "unresolved": "\u79cd\u5b50\u53d8\u5316\u3001\u56fa\u5b9a\u7a00\u758f\u3001\u5b66\u4e60\u5230\u7684\u652f\u6301\u4e0e\u6b63\u5219\u5316\u6548\u5e94\u5c1a\u672a\u533a\u5206\uff1bHB\u9010\u4f8btest\u914d\u5bf9\u7edf\u8ba1\u7f3a\u5931\u3002\u5de5\u4f5c\u51cf\u5c11\u4e0d\u7b49\u4e8e\u540c\u6bd4FLOPs\u6216\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 3910
+      "y": 4110
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3467,7 +3498,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 3680
+      "y": 3880
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3487,7 +3518,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 3910
+      "y": 4110
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3536,7 +3567,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 3680
+      "y": 3880
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3556,7 +3587,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 3910
+      "y": 4110
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -3651,7 +3682,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 4140
+      "y": 4340
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -3690,7 +3721,7 @@
       "unresolved": "\u56fa\u5b9a\u7a00\u758f\u4e0e\u5b66\u5230\u7684\u8def\u7531\u6548\u5e94\u672a\u533a\u5206\uff1b\u76f8\u540c\u6620\u5c04\u4e0a\u7684\u4e09seed\u4e0d\u80fd\u5f536144\u4e2a\u72ec\u7acb\u6837\u672c\uff1b\u975e\u72ec\u5360CPU\u8ba1\u65f6\u4e0d\u786e\u8ba4\u666e\u9002\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 4440
+      "y": 4640
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3794,7 +3825,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 4140
+      "y": 4340
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3841,7 +3872,7 @@
       "unresolved": "\u5355seed\u4e14\u672a\u67e5\u770b\u72ec\u7acbtest\uff1b\u68af\u5ea6\u5c3a\u5ea6/\u5168\u5c40\u88c1\u526a\u3001\u4f18\u5316\u914d\u65b9\u3001\u7b26\u53f7\u7f16\u7801\u548c\u521d\u59cb\u5316\u6548\u5e94\u672a\u533a\u5206\uff0c\u4e0d\u80fd\u9501\u5b9a\u552f\u4e00\u539f\u56e0\u6216\u53cd\u8bc1\u6240\u6709\u63a5\u5165\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 4440
+      "y": 4640
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3888,7 +3919,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 4140
+      "y": 4340
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -3927,7 +3958,7 @@
       "unresolved": "\u4e3b\u7ebf\u7a0b\u6808\u542b\u7b49\u5f85\u548cGIL\u504f\u5dee\uff0cbackward\u5f15\u64ce\u7ea6\u4e09\u5206\u4e4b\u4e00\u6837\u672c\u4e0d\u80fd\u7b49\u540cCPU\u81ea\u8017\u65f6\u6216NPU kernel\u6bd4\u4f8b\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 4440
+      "y": 4640
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -3977,7 +4008,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 4740
+      "y": 4940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4021,7 +4052,7 @@
       "unresolved": "\u590d\u5236\u5931\u8bef\u6765\u81ea\u63d0\u793a/\u683c\u5f0f\u8fd8\u662f\u6a21\u578b\u80fd\u529b\u672a\u533a\u5206\uff1b\u4e00\u8bcd\u67e5\u8868\u4e0d\u80fd\u8986\u76d6\u5e7f\u6cdb\u8bed\u8a00\u80fd\u529b\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 5040
+      "y": 5240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4071,7 +4102,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 4740
+      "y": 4940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4115,7 +4146,7 @@
       "unresolved": "\u6295\u5f71\u521d\u59cb\u5316\u3001tanh\u3001\u4f18\u5316\u9884\u7b97\u4e0e\u7ed3\u6784\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5168\u7ef4\u4e0ePCA\u8bfb\u51fa\u7684\u53c2\u6570\u5bb9\u91cf\u4e0d\u540c\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 5040
+      "y": 5240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4263,7 +4294,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 4740
+      "y": 4940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4307,7 +4338,7 @@
       "unresolved": "16\u7ef4\u6295\u5f71/\u975e\u7ebf\u6027/\u4f18\u5316\u914d\u65b9\u4e0e\u7ed3\u6784\u8d21\u732e\u672a\u533a\u5206\uff1b\u672a\u53d1\u5e03\u91cd\u7b97\u91cf\u672a\u77e5\uff1b\u65e0\u5b8c\u6574128\u6b65\u4e0d\u4e2d\u65ad\u53c2\u8003\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 5040
+      "y": 5240
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4474,7 +4505,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 4740
+      "y": 4940
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4518,7 +4549,7 @@
       "unresolved": "\u8f83\u5f31\u5e72\u9884\u4e0e\u57fa\u7ebf\u9c81\u68d2\u6027\u8d21\u732e\u672a\u533a\u5206\uff1b\u9884\u6d4b\u5fae\u5c0f\u589e\u76ca\u4e0d\u8db3\u4ee5\u8ba4\u5b9a\u63d0\u5347\uff1b\u672a\u8986\u76d6\u957f\u751f\u6210\u3001\u5e7f\u6cdb\u4efb\u52a1\u4e0e\u5176\u4ed6\u5c42\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 5040
+      "y": 5240
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -5263,16 +5294,113 @@
       "view_group": "current",
       "x": 915,
       "y": 2320
+    },
+    {
+      "budget": "\u672c\u6b21639.774\u79d2\u542b\u5f00\u53d1\u68c0\u67e5\uff1bv5\u7d2f\u8ba1\u7ea66.5475/24\u8ba1\u7b97\u5c0f\u65f6\uff0c22:49\u622a\u6b62\u4e0d\u5ef6\u957f\u3002",
+      "decision": "\u6709\u9650\u9a8c\u6536\u901a\u8fc7\uff1b\u539f\u4e25\u683c\u8d85\u5dee\u4fdd\u7559\uff0c\u4e0d\u81ea\u52a8\u542f\u52a8\u4e0b\u4e00\u6279\u3002",
+      "id": "D-SUPPORT",
+      "kind": "experiment",
+      "question": "\u8865\u6b63\u80fd\u5426\u63d0\u4f9b\u53ef\u9760\u7a20\u5bc6\u6bd4\u8f83/\u8bca\u65ad\u5019\u9009\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u9a8c\u6536\u8868",
+          "path": "docs/studies/positive-support-acceptance.md"
+        },
+        {
+          "label": "\u9a8c\u6536\u7ed3\u8bba\u4e0e\u590d\u73b0",
+          "path": "docs/studies/positive-support-acceptance-results.md"
+        },
+        {
+          "label": "\u539f\u59cb\u68c0\u67e5/\u8fd0\u884c/Lens\u5bf9\u5e94",
+          "path": "docs/evidence/positive-support-acceptance-v1.json"
+        },
+        {
+          "label": "\u56db\u79cd\u65b9\u6848",
+          "path": "docs/studies/shannon-numerical-options.md"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/checks/positive-support-v1.json",
+          "id": "support-v1-cpu",
+          "record": "runs/support-v1-cpu/stage.json",
+          "source_commit": "fc781722b278a0180f46e5200bef63a34d613a82",
+          "status": "completed"
+        },
+        {
+          "config": "configs/checks/positive-support-v1.json",
+          "id": "support-v1-npu",
+          "record": "runs/support-v1-npu/stage.json",
+          "source_commit": "fc781722b278a0180f46e5200bef63a34d613a82",
+          "status": "completed"
+        }
+      ],
+      "scope": "TL-LM-EXEC\u4e2d\u7684\u8865\u6b63\u9a8c\u6536\u5b50\u4efb\u52a1\uff1b\u5355\u8bbe\u5907Python eager/KV/FP32\uff1b\u771f\u5b9e\u8bad\u7ec3\u4e0e\u5e72\u9884\u5728CPU1\uff0cNPU\u4ec5\u5c0f\u578b\u63a5\u5165\u3002",
+      "status": "completed",
+      "summary": "CPU/NPU\u63a5\u5165\uff1bHB16\u5931\u8d25\u8fb9\u754c\u3001\u6062\u590d\u4e0eFC16\u5e72\u9884\u5b8c\u6210",
+      "title": "\u6b63\u652f\u6301\u8865\u6b63\uff1a\u4e0b\u6e38\u9a8c\u6536",
+      "track": "shared",
+      "view_group": "current",
+      "x": 620,
+      "y": 2500
+    },
+    {
+      "budget": "\u4e0d\u8ffd\u52a0\u8ba1\u7b97\uff1b\u4e24\u4f5c\u4e1a\u5df2\u7ec8\u6001\u3001\u65e0\u81ea\u52a8\u540e\u7ee7\u3002",
+      "comparisons": "\u539fstrict\u91cd\u73b0HB87\u5931\u8d25\uff1b\u8865\u6b63\u5b8c\u62108\u66f4\u65b0\u3002FC16\u666e\u901aNLL\u76f8\u5bf9\u65e7+4.33e-8\uff0ccontext-reset6.895437\u5b8c\u6210\u4e14\u88658\u5750\u6807\u3002\u65b0\u8fdb\u7a0b90\u219294\u53c2\u6570/optimizer/RNG/\u68af\u5ea6\u9010\u4f4d\u4e00\u81f4\u3002",
+      "counterevidence": "\u4efb\u52a1\u539f\u4e25\u683c\u5bb9\u5dee\u4ecd\u5931\u8d25\uff0c\u6700\u5927\u7edd\u5bf9\u5dee4.01e-5\uff1bHB validation8 NLL6.818646\u21926.835233\uff0c\u672a\u6539\u5584\u3002",
+      "decision": "Shannon\u670d\u52a1\u5fc5\u8981\u7a20\u5bc6\u5bf9\u7167\uff0c\u4e3b\u9884\u7b97\u56de\u5230\u8bed\u8a00\u8d28\u91cf\u4e0e\u5b9e\u9645\u7a00\u758f/\u5c40\u90e8\u7ed3\u6784\u3002",
+      "id": "RD-SUPPORT",
+      "kind": "result",
+      "observed_at": "2026-11-09T07:22:57.624007+00:00",
+      "question": "\u6267\u884c\u3001\u6570\u503c\u3001\u8bed\u4e49\u3001\u6062\u590d\u548c\u5b66\u4e60\u5404\u5f97\u5230\u4ec0\u4e48\u8bc1\u636e\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u9a8c\u6536\u8868",
+          "path": "docs/studies/positive-support-acceptance.md"
+        },
+        {
+          "label": "\u9a8c\u6536\u7ed3\u8bba\u4e0e\u590d\u73b0",
+          "path": "docs/studies/positive-support-acceptance-results.md"
+        },
+        {
+          "label": "\u539f\u59cb\u68c0\u67e5/\u8fd0\u884c/Lens\u5bf9\u5e94",
+          "path": "docs/evidence/positive-support-acceptance-v1.json"
+        },
+        {
+          "label": "\u56db\u79cd\u65b9\u6848",
+          "path": "docs/studies/shannon-numerical-options.md"
+        }
+      ],
+      "scope": "\u5b9e\u73b0\u63a5\u5165\u8d44\u683c\u4e0e\u77ed\u7a0b\u7a33\u5b9a\u89c2\u5bdf\uff1b\u4e0d\u662f\u65b0\u8bed\u8a00\u80fd\u529b\u6216\u67b6\u6784\u4f18\u52bf\u8bc1\u660e\u3002",
+      "sources": [
+        {
+          "label": "\u56fa\u5b9a\u4e0b\u6e38\u9a8c\u6536",
+          "url": "https://github.com/ZichaoLong/tide/blob/dcf43909f41ef9a937d51e75a29d9075149740ef/docs/studies/positive-support-acceptance-results.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u9a8c\u6536\u8bc1\u636e",
+          "url": "https://github.com/ZichaoLong/tide/blob/dcf43909f41ef9a937d51e75a29d9075149740ef/docs/evidence/positive-support-acceptance-v1.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "HB87\u201394\u7a33\u5b9a\uff1b\u6062\u590d\u9010\u4f4d\u4e00\u81f4\uff1bFC16\u6b63\u5e38\u8d28\u91cf\u4fdd\u6301",
+      "title": "\u63a5\u53d7\u8865\u6b63\uff1a\u6709\u9650FP32\u7814\u7a76",
+      "track": "shared",
+      "transfer_conditions": "\u540c\u5df2\u9a8c\u5355\u8bbe\u5907Python eager/KV/FP32\uff0c\u663e\u5f0f\u7b56\u7565\u4e0e\u65b0\u8eab\u4efd\uff1b\u4e0d\u5c06\u65e7strict\u6750\u6599\u8fc1\u79fb\u79f0\u4e3a\u7cbe\u786e\u6062\u590d\u3002\u5f71\u54cd\u4efb\u52a1\u8d28\u91cf/\u6bd4\u8f83\u7ed3\u8bba\u65f6\u518d\u6269\u5927\u6570\u503c\u8868\u793a\u5de5\u7a0b\u3002",
+      "unresolved": "\u6709\u9650\u6570\u503c\u8d85\u5dee\u539f\u56e0\u672a\u5b8c\u5168\u5206\u89e3\uff1bNPU\u957f\u8bad\u7ec3\u3001B/Qwen\u5b8c\u6574\u8fc1\u79fb\u4e0e\u66f4\u957f\u5b66\u4e60\u672a\u68c0\u67e5\uff1b\u6781\u5f31\u603b\u91cf\u548c\u4e0d\u53ef\u8868\u793a\u4f34\u968f\u4ecd\u62d2\u7edd\u3002",
+      "view_group": "current",
+      "x": 915,
+      "y": 2500
     }
   ],
   "notice": "\u5f53\u524d\u65e0\u8fd0\u884c\u6216\u6392\u961f\u3002B FC8\u8d28\u91cf/Full/\u5185\u90e8\u6d88\u606f\u6298\u8877\u6210\u7acb\u4e8e\u672c\u6b21\u6709\u9650\u6bd4\u8f83\uff1bA\u6df1\u5c42\u6709\u5b66\u4e60\u4f46\u65e0\u8d28\u91cf\u6536\u76ca\uff0cdense\u4e0b\u6ea2\u4e0e\u7f3a\u5931\u5bf9\u7167\u4fdd\u7559\u3002HB40\u672a\u8bad\u7ec3\uff0c\u57fa\u5ea7\u65b0\u4ea4\u4ed8\u5c1a\u5f85\u4e0b\u6e38\u9a8c\u6536\u3002",
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u8bed\u8a00\u8d28\u91cf\u4e0e\u591a\u533a\u57df\u7a00\u758f\uff1av5\u5168\u90e8\u7ec8\u6001\uff0c\u9650\u5b9a\u7ed3\u679c\u5df2\u5ba1\u9605",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T06:43:21.392011+00:00",
+  "updated_at": "2026-11-09T07:22:57.624030+00:00",
   "view_groups": [
     {
-      "height": 2500,
+      "height": 2700,
       "id": "current",
       "label": "\u5f53\u524d\uff1a\u8bed\u8a00\u4e0e\u7ed3\u6784\u8054\u5408\u7814\u7a76",
       "y": 0
@@ -5281,7 +5409,7 @@
       "height": 2750,
       "id": "history",
       "label": "\u5386\u53f2\uff1a\u56db\u6279\u7814\u7a76\u4e0e\u9650\u5b9a\u8bc1\u636e",
-      "y": 2600
+      "y": 2800
     }
   ],
   "width": 1490
