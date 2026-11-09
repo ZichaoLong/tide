@@ -23,11 +23,14 @@ def resolve(base,out):
         c['training']['eval_batch']=c['training']['batch']
         c['training']['initial_eval_tokens']=2048
         if c['line']=='coverage':c['training']['validation_every_tokens']=32768
-        if c['kind']=='tide':c['core']['eager_implementation']='native'
+        positive_floor=c['core']['recipe'].get('region_overrides',{}).get('support_policy')=='positive-floor-v1'
+        if c['kind']=='tide':c['core']['eager_implementation']='python' if positive_floor else 'native'
         c['resolution']=dict(reason='complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery',
             cpu_calibration='v6-cal-native2-kv-cpu-b8',npu_calibration='v6-cal-transformer-npu-b128',
             global_batch_reason='fixed independent samples per logical update within line; microbatch/accumulation is explicit',
             native_trace='public factory returns complete traces; no execution-core changes',selection='finite-exploration')
+        if positive_floor:
+            c['resolution']['reason']='published positive-floor-v1 is Python-eager only; original native rejection retained'
         atomic_json(out/(c['id']+'.json'),c)
         rows.append(dict(id=c['id'],line=c['line'],device=c['device'],threads=c['threads'],
             config=str(out/(c['id']+'.json')),parameters=c['planned_inventory']['lm_trainable']))

@@ -7,7 +7,7 @@
     "finite_exploration": true
   },
   "core": {
-    "eager_implementation": "native",
+    "eager_implementation": "python",
     "max_materialize_bytes": 1073741824,
     "recipe": {
       "branches": 2,
@@ -56,7 +56,7 @@
     "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
     "native_trace": "public factory returns complete traces; no execution-core changes",
     "npu_calibration": "v6-cal-transformer-npu-b128",
-    "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+    "reason": "published positive-floor-v1 is Python-eager only; original native rejection retained",
     "selection": "finite-exploration"
   },
   "resources": {

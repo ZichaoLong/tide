@@ -61,7 +61,7 @@ def submit(a):
         if npu:cmd+=['--queue-helper',str(source/'scripts/run_on_light_device.py'),'--wait-seconds',str(min(3600,cap-60)),
             '--env',f'TIDE_LAB_RESOURCE_POLICY={source}/configs/studies/language/v6/resource.json']
         cmd+=['--','python','scripts/campaign_worker.py','--plan',job['plan'],'--data',str(data),
-            '--output',str(root/'runs'/name),'--recording-cli',a.recording_cli,'--deadline-epoch',str(deadline)]
+            '--output',str(root/'runs'/(name+'-worker')),'--recording-cli',a.recording_cli,'--deadline-epoch',str(deadline)]
         reply=subprocess.run(cmd,text=True,capture_output=True)
         if reply.returncode:raise RuntimeError(name+': '+reply.stderr+' '+reply.stdout)
         print(json.dumps(dict(submitted=name,cases=job['cases'],device=job['device'])),flush=True)
