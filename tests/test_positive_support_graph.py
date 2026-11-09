@@ -112,3 +112,18 @@ def test_fresh_process_exact_next_window(device,tmp_path):
         subprocess.run([sys.executable,str(Path(__file__).with_name("positive_support_resume.py")),
                         phase,"--device",device,"--directory",str(tmp_path/"fresh")],
                        env=env,check=True,timeout=120)
+
+
+def test_zero_payload_is_present_but_does_not_write_or_emit(device):
+    from tidegraph import External
+    b,_,_=fixture(device)
+    zero=External(0,0,0,0,torch.tensor([0.,.25,-.3],device=device,requires_grad=True))
+    a=execute(b,start(b),[zero],1,False)
+    c=execute(b,start(b),[zero],1)
+    equivalent(a,c)
+    empty=execute(b,start(b),[],1)
+    assert len(c.trace)==1 and not empty.trace
+    assert not c.messages and not c.outputs
+    state=c.continuation.states[0,0]
+    assert state.observations==0 and state.last_time==-1 and state.slots["weights"].numel()==0
+    assert not c.trace[0]["active"] and c.trace[0]["control"].item()==0

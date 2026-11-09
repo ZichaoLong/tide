@@ -23,10 +23,14 @@ if package.is_relative_to(root):
 dirty=subprocess.check_output(["git","status","--porcelain"],text=True)
 if dirty:
     raise RuntimeError("qualification source must be clean")
+try:
+    torch_npu=md.version("torch-npu")
+except md.PackageNotFoundError:
+    torch_npu=None
 write_json(Path(sys.argv[1])/"environment.json",dict(
     source=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip(),
     python=sys.version,executable=sys.executable,platform=platform.platform(),
-    package=str(package),torch=md.version("torch"),torch_npu=md.version("torch-npu"),
+    package=str(package),torch=md.version("torch"),torch_npu=torch_npu,
     affinity=sorted(os.sched_getaffinity(0)),threads=1,
     visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES")))
 PY

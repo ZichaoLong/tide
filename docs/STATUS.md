@@ -30,7 +30,10 @@ AdamW/跨窗/新进程精确恢复。原严格拒绝未变。空闲单NPU次正�
 
 计划固定工作树 artifacts/tl-req-003/source-a，独立安装 artifacts/tl-req-003/qualification-venv。
 持久服务 gef-tl-req-003-cpu-a / gef-tl-req-003-npu-a，分别最多1800秒、CPUQuota=100%、MemoryMax=8GiB，
-NPU队列最多等待600秒/1卡。源码提交后再启动，当前尚无该正式作业。
+NPU队列最多等待600秒/1卡。固定源码2c11695ca66a5dcd028f7d777ec26b177add0378；新wheel已构建/安装且pip check通过。
+CPU/NPU实际进入background.slice并记录clean固定源码。NPU-a已终态exit0，29项定向通过，
+真实卡physical1→npu:0，公共行消费者通过；服务inactive/MainPID0/控制组已消失。
+CPU-a的29项新策略通过，相关Python回归仍运行，不能提前称整个CPU流程通过。
 入口：bash scripts/qualify_positive_support.sh NEW_OUTPUT cpu|npu；需匹配私有固定wheel，NPU在站点队列内。
 状态/日志：artifacts/jobs/tl-req-003-{cpu,npu}-a/{status.json,task.log}；
 检查 systemctl --user status gef-tl-req-003-{cpu,npu}-a；停止用 systemctl --user stop 对应服务并核对控制组为空。
