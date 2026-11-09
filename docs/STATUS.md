@@ -1,25 +1,21 @@
-# 当前交接 — v5独立CPU候选已启动（2026-11-09 11:47）
+# 当前交接 — HB16正支持失败已定位（2026-11-09 12:15）
 
-用户允许按完成时间选择CPU/NPU，无需等待NPU。已有320逻辑CPU、约38%–48%短采样忙碌及充足内存支持本次有限并行。新增原有HB16稀疏候选与原Transformer对照的独立CPU1作业，另有B CPU1/CPU4短校准；不增加模型/seed/正式更新预算。活动FC16、B及旧v4保持原源码/输入/设备和后续。[并行研究表](studies/language-depth-parallel-v5.md)、[资源与失败证据](evidence/language-depth-cpu-parallel.json)、[完整实际快照](evidence/language-depth-handoff.json)。
+本次有界重放从原第64步checkpoint继续，在第87步再次捕获HB16 dense的分配失败，第72/80步loss和梯度范数与原记录一致。实际四候选caps全1，节点10的数学分配约3.10588e-46，低于FP32最小subnormal的一半；80位Decimal独立闭式解与FP64单行相符。原残差在内部容差内，触发的是正支持硬检查。单行FP64及提高温度通过不认证整模型修复；合成反例表明FP64也可能下溢。[实际证据](evidence/hb16-positive-support-v5.json)、[三方分析与有限建议](studies/allocation-support-v5.md)、[需求TL-REQ-003](requests/TL-REQ-003.md)。
 
-| 作业 | 最近核对状态 |
+诊断作业`lm-hb16-underflow-v5`用时571.69秒，已终止且后代清空；只消耗原24计算worker小时预算，原HB16失败状态保留。源码固定`9ebbc63784a29f2c785bb7568ddb9da63b63dd55`，快照`.local/source-language-underflow-v5`，树hash`b57a7dc0eebb2f9edb9ae5ecef3cb255afcf89c68982507c9eff14dee6c86b10`。未来入口已保存公共异常实际输入，活动快照未变。基座/上游未修改，TL-REQ-003尚未获得评审或交付。
+
+| 作业 | 12:15实际状态与范围 |
 | --- | --- |
-| `lm-a-fc16-v5` | CPU1原链仍在dense训练，原sparse后续不重复提交 |
-| `lm-a-hb16-v5` / `lm-a-hb16-sparse-v5` | 原dense完成86步后分配下溢硬失败；未训练的sparse以新CPU1独立作业完成机制/微型恢复/校准，正式训练中 |
-| `lm-a-controls-v5` / `lm-a-transformer-cpu-v5` | 原浅宽dense完成56步后同类硬失败；原链Transformer正式训练0步；新CPU1独立作业2048步训练、test/推理/前缀评价全部完成，后代已终止 |
-| `lm-b-fc8-v5-budget2` | 原物理NPU12训练保持；CPU短校准不会迁移/重复其正式候选 |
-| `lm-b-cpu-cal-v5` | 已完成并确认终止；CPU1/CPU4分别12.8674/15.8911秒每完整CE更新，对照已有共享NPU36.2569秒 |
-| `lm-a-hb40-v5` | HB16依赖失败后等待服务已失败终止，训练0步；未绕过条件重启 |
-| 旧基线复评 | A三项/B六项均已完成同新文档复评；不算新训练/新seed |
-| `lm-a-language-v4` | 原物理NPU1：sparse512训练完成，独立评价中，保持原后继条件 |
+| `lm-a-fc16-v5` | dense128训练、常规test和小型推理完成；context-reset评价发生同类下溢，链失败且后代清空；原sparse尚未训练 |
+| `lm-a-hb16-v5` / `lm-a-hb16-sparse-v5` | 原dense86更新后失败；独立quad仍在CPU1训练（最近已记录80/128步）；没有完整dense128配对 |
+| `lm-a-controls-v5` / `lm-a-transformer-cpu-v5` | 浅宽56更新后失败保留；独立CPU Transformer2048及评价完成、待科学审阅 |
+| `lm-b-fc8-v5-budget2` | 原NPU12 dense仍在训练（最近已记录96/128步），sparse为原后续；不迁移或重复 |
+| `lm-a-hb40-v5` | 前驱失败后依赖等待终止，训练0步；不绕过前提 |
+| `lm-a-language-v4` | 已完成并确认后代清空；主候选512和评价完成，条件FC8只完成接入/恢复/校准，正式配对因剩余预算或准入条件跳过；待完整科学审阅 |
 
-原浅宽和HB16错误均为`positive allocation batch support underflowed in requested dtype`，是分配硬失败，不能当作可忽略的有限参考误差。两份终态及原checkpoint保留；HB16尚无dense128完整配对。严格数值、离散机制、恢复、学习、性能仍分列。
+[实际交接快照](evidence/language-depth-handoff.json)核对59个固定输入和248个基座安装文件全部一致。新总预算监督`lm-depth-budget-diagnosis-v5`包含原全部v5费用及本次诊断，12:15累计约4.55/24小时，共同截止22:49:13；旧监督仍在，未增加额度。严格数值、离散语义、恢复、学习和性能分别记录。
 
-新计算源码固定`4a1a5890485b06ddd5b94197ab5c58e83596c47b`，`.local/source-language-depth-parallel-v5`，树hash`06e593b7c8d1fb1c1f29506d576d50302c394528b42595681feb0f037cd58129`。已核对52个固定输入及248个基座安装文件未变；7项预算、8项作业生命周期、16项图/审阅隔离测试及离线Firefox交互检查通过。原快照不改。
-
-累计上限仍24计算worker小时，截止北京时间22:49:13；最多6个同时计算worker含旧v4。新增`lm-depth-budget-parallel-v5`先于计算启动，覆盖全部原v5费用及三个新作业，原监督保持。新监督快照11:46累计约3.31小时，非新增预算。账号约169/800GiB。后续按完成时间选择：Transformer NPU0.01781秒/步比CPU0.04252快，但CPU仍数分钟完成；B短校准支持CPU1，活动B保持。
-
-Lens项目`tide-learning-lab`：新学习前缀`tl-lm-a-transformer-cpu-v5-`、`tl-lm-a-hb16-sparse-v5-`，分别TL-A-CAPACITY/TL-A-TOPO；Transformer训练289个事件已verified/readback_matches；HB16 sparse已开始记录。B技术计时只在项目记录。查看、停止、恢复方法及私有入口沿用[操作页](studies/language-depth-v5-running.md)。研究图保留失败与待审结果，不因完成退出码生成科学支持。
+后续建议是一对现有match/ind有界评分子族的Shannon/quad先导，完整表和停止条件已登记，尚未提交新学习配置。研究图记录本次定位、FC16干预失败和旧v4终态，科学结论仍待审；不按诊断退出码宣称架构成功。Lens继续沿用`tide-learning-lab`及原运行ID，私有入口`.local/LENS.md`；本次技术诊断只存项目证据，不增加无学习曲线的投影。查看/停止/恢复沿用[操作页](studies/language-depth-v5-running.md)。
 
 ---
 

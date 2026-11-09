@@ -1,0 +1,371 @@
+{
+  "at": "2026-11-09T04:15:37.261103+00:00",
+  "axes": {
+    "execution": "diagnostic captured expected failure",
+    "learning": "not adjudicated",
+    "original_discrete_support": "failed",
+    "original_numerical": "failed",
+    "recovery": "checked against available scalar observations, not a full independent long trajectory"
+  },
+  "capture_sha256": "d44df1bb3eb32e895b743e7ab75a02dee78c4d0d2628593dd13fcf723fe6a2fb",
+  "captured": {
+    "details": {
+      "alpha": "1.0",
+      "branch": "equality",
+      "regularizer": "ent",
+      "solver": "python-batch"
+    },
+    "error": "positive allocation batch support underflowed in requested dtype",
+    "members": [
+      8,
+      9,
+      10,
+      11
+    ],
+    "nodes": [
+      8,
+      9,
+      10,
+      11
+    ],
+    "row": 55,
+    "schema": "tide-allocation-failure-v1",
+    "tensors": {
+      "caps": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [
+          4
+        ],
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "controls": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [
+          4
+        ],
+        "values": [
+          0.9164376854896545,
+          5.6795763647699005e-09,
+          0.0,
+          1.0
+        ]
+      },
+      "lower": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          1.9164364337921143
+        ]
+      },
+      "multiplier": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          4.382112503051758
+        ]
+      },
+      "residual": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          1.1920928955078125e-06
+        ]
+      },
+      "response": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [
+          4
+        ],
+        "values": [
+          0.22818470001220703,
+          -4.4965972900390625,
+          -25.94640350341797,
+          9.842711448669434
+        ]
+      },
+      "scores": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [
+          4
+        ],
+        "values": [
+          4.610297679901123,
+          -0.11448502540588379,
+          -21.56429100036621,
+          14.224823951721191
+        ]
+      },
+      "temperature": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          0.25
+        ]
+      },
+      "tolerance": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          3.0517578125e-05
+        ]
+      },
+      "upper": {
+        "device": "cpu",
+        "dtype": "float32",
+        "shape": [],
+        "values": [
+          1.9164364337921143
+        ]
+      }
+    },
+    "time": 32
+  },
+  "checkpoint_sha256": "1ca5bc51337307e683decc823c570f72e7359567962bf9ce4f4e3117cb547d88",
+  "diagnostic_result_sha256": "c0f2015fb0cc8d85d26e67609462c34afb59bc6481778f46e1095203f609da89",
+  "elapsed_seconds": 571.6904288046062,
+  "exp_of_captured_response_fp64": [
+    0.9164376908881475,
+    5.679576538030334e-09,
+    3.105889861104744e-46,
+    1.0
+  ],
+  "failed_update": 87,
+  "failure_boundary_sha256": "ca83d20cb6bed904bab36886795ad4f9bc26e32e265b69579f6582e23bff3576",
+  "foundation_revision": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+  "fp32_log_smallest_subnormal": -103.27892990343184,
+  "fp64_log_smallest_subnormal": -744.4400719213812,
+  "frozen_source_tree_sha256": "b57a7dc0eebb2f9edb9ae5ecef3cb255afcf89c68982507c9eff14dee6c86b10",
+  "independent_closed_form": {
+    "controls": [
+      "0.91643642811256179512358556028123402559583257472106533191565617140021569228757974",
+      "5.6795524626889144397187659744041674249683467023399837043367152826301522110109511E-9",
+      "3.1058796574436012426306902508226801505235841004366498685385102007888911363697604E-46",
+      "1"
+    ],
+    "face_inequalities_pass": true,
+    "method": "80-digit Decimal closed-form on independently verified face: member 11 cap=1, other three free; softmax distributes B-1 over their original scores",
+    "minimum_control_below_fp32_half_smallest_subnormal": true,
+    "multiplier": "4.3821133243685430206961330461362134284825604730664995535002320508056147490782589",
+    "saturated_unclipped_response": "46157807096661270.984810867666043764497035697560758928994689444342103178821473939",
+    "scope": "one input row, forward only; no VJP or full trajectory qualification",
+    "total_residual": "0E-79"
+  },
+  "job_id": "lm-hb16-underflow-v5",
+  "limitation": "The FP64 row probe does not certify the full FP64 trajectory, VJP, or all future inputs.",
+  "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "normalized_response_log": [
+    -0.08726119995117188,
+    -18.98638916015625,
+    -104.78561401367188,
+    38.370845794677734
+  ],
+  "observed_step_checks": [
+    {
+      "gradient_norm_matches": true,
+      "loss_matches": true,
+      "step": 72
+    },
+    {
+      "gradient_norm_matches": true,
+      "loss_matches": true,
+      "step": 80
+    }
+  ],
+  "original_job_id": "lm-a-hb16-v5",
+  "probes": [
+    {
+      "dtype": "torch.float32",
+      "error": "AllocationFailure('positive allocation support underflowed in the requested dtype')",
+      "failure": {
+        "details": {
+          "alpha": "1.0",
+          "branch": "equality",
+          "regularizer": "ent",
+          "solver": "python-scalar",
+          "stage": "numeric"
+        },
+        "error": "positive allocation support underflowed in the requested dtype",
+        "members": [],
+        "nodes": [],
+        "row": 0,
+        "schema": "tide-allocation-failure-v1",
+        "tensors": {
+          "caps": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "controls": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              0.9164376854896545,
+              5.6795763647699005e-09,
+              0.0,
+              1.0
+            ]
+          },
+          "lower": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.9164364337921143
+            ]
+          },
+          "multiplier": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              4.382112503051758
+            ]
+          },
+          "residual": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.1920928955078125e-06
+            ]
+          },
+          "response": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              0.22818470001220703,
+              -4.4965972900390625,
+              -25.94640350341797,
+              9.842711448669434
+            ]
+          },
+          "scores": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              4.610297679901123,
+              -0.11448502540588379,
+              -21.56429100036621,
+              14.224823951721191
+            ]
+          },
+          "temperature": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.25
+            ]
+          },
+          "tolerance": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              3.0517578125e-05
+            ]
+          },
+          "upper": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.9164364337921143
+            ]
+          }
+        },
+        "time": null
+      },
+      "scope": "public scalar API on captured inputs; changed dtype/temperature is a separate probe",
+      "state": "failed",
+      "temperature_factor": 1.0
+    },
+    {
+      "all_positive_caps_have_positive_controls": true,
+      "constraint": "equality",
+      "controls": [
+        0.9164364281125617,
+        5.679552462688913e-09,
+        3.1058796574436008e-46,
+        1.0
+      ],
+      "dtype": "torch.float64",
+      "multiplier": 4.382113324368543,
+      "residual": 0.0,
+      "scope": "public scalar API on captured inputs; changed dtype/temperature is a separate probe",
+      "state": "completed",
+      "temperature_factor": 1.0
+    },
+    {
+      "all_positive_caps_have_positive_controls": true,
+      "constraint": "equality",
+      "controls": [
+        0.916364312171936,
+        7.21397518645972e-05,
+        1.686975890371513e-23,
+        1.0
+      ],
+      "dtype": "torch.float32",
+      "multiplier": 4.15396785736084,
+      "residual": 0.0,
+      "scope": "public scalar API on captured inputs; changed dtype/temperature is a separate probe",
+      "state": "completed",
+      "temperature_factor": 2.0
+    },
+    {
+      "all_positive_caps_have_positive_controls": true,
+      "constraint": "equality",
+      "controls": [
+        0.9083767533302307,
+        0.008059707470238209,
+        3.897502112715223e-12,
+        1.0
+      ],
+      "dtype": "torch.float32",
+      "multiplier": 3.706393241882324,
+      "residual": 0.0,
+      "scope": "public scalar API on captured inputs; changed dtype/temperature is a separate probe",
+      "state": "completed",
+      "temperature_factor": 4.0
+    }
+  ],
+  "schema": "tide-allocation-support-review-v1",
+  "score_range": 35.78911590576172,
+  "source_commit": "9ebbc63784a29f2c785bb7568ddb9da63b63dd55",
+  "study_id": "TL-LM-EXEC",
+  "successful_updates": 86,
+  "underflow_coordinates": [
+    2
+  ]
+}

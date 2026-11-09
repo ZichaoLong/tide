@@ -1,0 +1,123 @@
+{
+  "at": "2026-11-09T04:11:08.874218+00:00",
+  "failure": {
+    "details": {
+      "alpha": "1.0",
+      "branch": "equality",
+      "regularizer": "ent",
+      "solver": "python-scalar",
+      "stage": "numeric"
+    },
+    "error": "positive allocation support underflowed in the requested dtype",
+    "members": [],
+    "nodes": [],
+    "row": 0,
+    "schema": "tide-allocation-failure-v1",
+    "tensors": {
+      "caps": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [
+          4
+        ],
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "controls": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [
+          4
+        ],
+        "values": [
+          0.0,
+          0.6666666666666667,
+          0.6666666666666667,
+          0.6666666666666667
+        ]
+      },
+      "lower": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          2.0
+        ]
+      },
+      "multiplier": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          -0.14863372297295896
+        ]
+      },
+      "residual": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          0.0
+        ]
+      },
+      "response": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [
+          4
+        ],
+        "values": [
+          -199.85136627702704,
+          0.14863372297295896,
+          0.14863372297295896,
+          0.14863372297295896
+        ]
+      },
+      "scores": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [
+          4
+        ],
+        "values": [
+          -200.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "temperature": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          0.25
+        ]
+      },
+      "tolerance": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          5.684341886080802e-14
+        ]
+      },
+      "upper": {
+        "device": "cpu",
+        "dtype": "float64",
+        "shape": [],
+        "values": [
+          2.0
+        ]
+      }
+    },
+    "time": null
+  },
+  "purpose": "FP64 does not guarantee all positive Shannon tails remain representable",
+  "schema": "tide-shannon-range-counterexample-v1",
+  "scope": "synthetic four-candidate finite input; not the HB16 observed row"
+}

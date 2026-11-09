@@ -1,5 +1,7 @@
 # v5多区域实验：运行类别与操作
 
+2026-11-09 12:15补充：`lm-hb16-underflow-v5`已完成有界定位，实际第87步失败行及分析见[正支持研究页](allocation-support-v5.md)。新监督`lm-depth-budget-diagnosis-v5`覆盖原费用加诊断；当前权威累计见`runs/lm-depth-budget-diagnosis-v5/state.json`。诊断源码9ebbc63/`.local/source-language-underflow-v5`，CPU1/8GiB/1800秒上限，实际571.69秒，后代清空。无新增Lens学习投影，原dense仍失败。FC16原链在context-reset失败，sparse未训练；旧v4已完成，条件FC8正式训练跳过。当前其他活动源码不变。
+
 2026-11-09 11:44排程更新见[独立CPU研究表](language-depth-parallel-v5.md)：原浅宽FC4和HB16 dense分别在56/86步分配下溢失败；HB40因前驱失败未训练。原Transformer和HB16 sparse已拆为新的CPU独立作业，分别`lm-a-transformer-cpu-v5`、`lm-a-hb16-sparse-v5`，学习前缀为`tl-作业ID-`。另有`lm-b-cpu-cal-v5`短程CPU计时。新增总预算监督`lm-depth-budget-parallel-v5`包含原全部费用；活动原链不改，下表保留原提交身份。
 
 本批已获授权并后台实施。共同截止北京时间 **2026-11-09 22:49:13**；24累计计算worker小时，CPU训练替代相应NPU时间计入同一上限。最多6个同时计算的worker（含旧v4），等待依赖的服务不分配计算；本次最大请求仍不超过24计算线程/144GiB。最新生命周期、源锁、指标和实际Lens ID见[交接快照](../evidence/language-depth-handoff.json)。
