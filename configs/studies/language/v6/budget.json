@@ -1,0 +1,22 @@
+{
+  "authorization": "user-2026-11-09-union-coverage-and-scaling-48h",
+  "coverage_run_cap_seconds": 28800,
+  "cpu_core_seconds": 5529600,
+  "deadline_epoch": 1794400291.0601735,
+  "initial_cpu_workers": 64,
+  "max_coverage_runs": 256,
+  "max_cpu_workers": 128,
+  "max_new_disk_gib": 120,
+  "max_npu_workers": 12,
+  "max_scale_runs": 16,
+  "max_total_rss_gib": 768,
+  "max_total_threads": 192,
+  "minimum_available_ram_gib": 512,
+  "minimum_quota_headroom_gib": 160,
+  "npu_device_seconds": 1382400,
+  "old_batches_separate": true,
+  "scale_run_cap_seconds": 129600,
+  "schema": "tide-language-v6-budget-v1",
+  "started_at": "2026-11-09T12:31:31.060185+00:00",
+  "started_epoch": 1794227491.0601735
+}

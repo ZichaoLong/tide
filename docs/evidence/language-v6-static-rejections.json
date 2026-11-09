@@ -1,0 +1,311 @@
+{
+  "at": "2026-11-09T12:29:12.843720+00:00",
+  "rejected": [
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total25",
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total50",
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 0.5
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total100",
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_threshold/fixed",
+      "group": "sending_control",
+      "id": "cover-fc-threshold-fixed",
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "eta": 0.0,
+          "region_control_mode": "fixed"
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_threshold",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total_zero/fixed",
+      "group": "sending_control",
+      "id": "cover-fc-zero-fixed",
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "region_control_mode": "fixed",
+          "total_fraction": 0.5
+        },
+        "region_width": 4,
+        "selection": "regional_total_zero",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total25",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total50",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 0.5
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total/fixed",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total100",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25,
+          "region_control_mode": "fixed",
+          "total_fraction": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_threshold/fixed",
+      "group": "sending_control",
+      "id": "cover-hb-threshold-fixed",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "eta": 0.0,
+          "region_control_mode": "fixed"
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_threshold",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      }
+    },
+    {
+      "error": "region_evidence is inapplicable to regional_total_zero/fixed",
+      "group": "sending_control",
+      "id": "cover-hb-zero-fixed",
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "region_control_mode": "fixed",
+          "total_fraction": 0.5
+        },
+        "region_width": 4,
+        "selection": "regional_total_zero",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      }
+    }
+  ],
+  "resolution": "Explicitly clear inapplicable inherited region_evidence for fixed regional control; no mathematical/executor change",
+  "schema": "tide-language-v6-static-rejections-v1"
+}

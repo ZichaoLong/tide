@@ -1,0 +1,1580 @@
+{
+  "cases": [
+    {
+      "config": "configs/studies/language/v6/cover-fc-anchor.json",
+      "group": "anchor",
+      "id": "cover-fc-anchor",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-kv-sum.json",
+      "group": "memory",
+      "id": "cover-fc-mem-kv-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 619956
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-affine-sum.json",
+      "group": "memory",
+      "id": "cover-fc-mem-affine-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 612292
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-affine-state.json",
+      "group": "memory",
+      "id": "cover-fc-mem-affine-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 661444
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-delta-sum.json",
+      "group": "memory",
+      "id": "cover-fc-mem-delta-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 612820
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-delta-state.json",
+      "group": "memory",
+      "id": "cover-fc-mem-delta-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 661972
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-gated_delta-sum.json",
+      "group": "memory",
+      "id": "cover-fc-mem-gated_delta-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 621028
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-gated_delta-state.json",
+      "group": "memory",
+      "id": "cover-fc-mem-gated_delta-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 637412
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-ssd-sum.json",
+      "group": "memory",
+      "id": "cover-fc-mem-ssd-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 620516
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-mem-ssd-state.json",
+      "group": "memory",
+      "id": "cover-fc-mem-ssd-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 636900
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-read-zero.json",
+      "group": "read_snapshot",
+      "id": "cover-fc-read-zero",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-read-old.json",
+      "group": "read_snapshot",
+      "id": "cover-fc-read-old",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-local-match.json",
+      "group": "scoring_control",
+      "id": "cover-fc-local-match",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 657012
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-region-att-stats.json",
+      "group": "scoring_control",
+      "id": "cover-fc-region-att-stats",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 675668
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-region-att-content.json",
+      "group": "scoring_control",
+      "id": "cover-fc-region-att-content",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 706772
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-evidence-grouped.json",
+      "group": "scoring_control",
+      "id": "cover-fc-evidence-grouped",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 652404
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-match-att-grouped.json",
+      "group": "scoring_control",
+      "id": "cover-fc-match-att-grouped",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 677972
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-fixed-total25.json",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total25",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-fixed-total50.json",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total50",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-fixed-total100.json",
+      "group": "scoring_control",
+      "id": "cover-fc-fixed-total100",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gamma1.json",
+      "group": "scoring_control",
+      "id": "cover-fc-gamma1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gamma4.json",
+      "group": "scoring_control",
+      "id": "cover-fc-gamma4",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-temperature1.json",
+      "group": "scoring_control",
+      "id": "cover-fc-temperature1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-score-width8.json",
+      "group": "scoring_control",
+      "id": "cover-fc-score-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 602292
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-evidence-width8.json",
+      "group": "scoring_control",
+      "id": "cover-fc-evidence-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 603060
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-match-width8.json",
+      "group": "scoring_control",
+      "id": "cover-fc-match-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 675636
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-match-residual-off.json",
+      "group": "scoring_control",
+      "id": "cover-fc-match-residual-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 657012
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-match-inner-off.json",
+      "group": "scoring_control",
+      "id": "cover-fc-match-inner-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 657012
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-att-local-off.json",
+      "group": "scoring_control",
+      "id": "cover-fc-att-local-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 675668
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-att-regional-off.json",
+      "group": "scoring_control",
+      "id": "cover-fc-att-regional-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 675668
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_total-bern.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_total-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_total-ent1.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_total-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_total-ent15.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_total-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_total-ent2.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_total-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold-quad.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold-quad",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold-bern.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold-ent1.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold-ent15.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold-ent2.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-constrained-quad.json",
+      "group": "sending",
+      "id": "cover-fc-send-constrained-quad",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-constrained-bern.json",
+      "group": "sending",
+      "id": "cover-fc-send-constrained-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-constrained-ent1.json",
+      "group": "sending",
+      "id": "cover-fc-send-constrained-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-constrained-ent15.json",
+      "group": "sending",
+      "id": "cover-fc-send-constrained-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-constrained-ent2.json",
+      "group": "sending",
+      "id": "cover-fc-send-constrained-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_total_zero.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_total_zero",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-regional_threshold_hard.json",
+      "group": "sending",
+      "id": "cover-fc-send-regional_threshold_hard",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-hard_selection.json",
+      "group": "sending",
+      "id": "cover-fc-send-hard_selection",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-direct_attention.json",
+      "group": "sending",
+      "id": "cover-fc-send-direct_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-unit_attention.json",
+      "group": "sending",
+      "id": "cover-fc-send-unit_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-pooled_attention.json",
+      "group": "sending",
+      "id": "cover-fc-send-pooled_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-send-proportional.json",
+      "group": "sending",
+      "id": "cover-fc-send-proportional",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-direct-received.json",
+      "group": "sending_control",
+      "id": "cover-fc-direct-received",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-unit-mu.json",
+      "group": "sending_control",
+      "id": "cover-fc-unit-mu",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-constrained-context-gain.json",
+      "group": "sending_control",
+      "id": "cover-fc-constrained-context-gain",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 665024
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-constrained-learned-gain.json",
+      "group": "sending_control",
+      "id": "cover-fc-constrained-learned-gain",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580544
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gain-att-received.json",
+      "group": "sending_control",
+      "id": "cover-fc-gain-att-received",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 587088
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gain-att-mu.json",
+      "group": "sending_control",
+      "id": "cover-fc-gain-att-mu",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 587088
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-threshold-fixed.json",
+      "group": "sending_control",
+      "id": "cover-fc-threshold-fixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-zero-fixed.json",
+      "group": "sending_control",
+      "id": "cover-fc-zero-fixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 580528
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-source-node.json",
+      "group": "source_sharing",
+      "id": "cover-fc-source-node",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 694932
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-source-source.json",
+      "group": "source_sharing",
+      "id": "cover-fc-source-source",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 687540
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-source-adapted.json",
+      "group": "source_sharing",
+      "id": "cover-fc-source-adapted",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 883348
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-window16.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-window16",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-window128.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-window128",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-summary8.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-summary8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 521652
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-adapter8.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-adapter8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 632244
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ffn2x.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-ffn2x",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 570804
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ffn8x.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-ffn8x",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 865716
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-full-memory-off.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-full-memory-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-full-ffn-off.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-full-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-heads2.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-decay-slow.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-decay-slow",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-rope-half.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-rope-half",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-rope-full.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-rope-full",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-rope-read.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-rope-read",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-distance-slope.json",
+      "group": "memory_shape_position",
+      "id": "cover-fc-distance-slope",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gated_delta-conv1.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-gated_delta-conv1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 632804
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gated_delta-conv8.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-gated_delta-conv8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 643556
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gated_delta-heads2.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-gated_delta-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 744980
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gated_delta-mem-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-gated_delta-mem-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 637412
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-gated_delta-ffn-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-gated_delta-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 637412
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-conv1.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-conv1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 632292
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-conv8.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-conv8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 643044
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-heads2.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 706068
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-mem-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-mem-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 636900
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-ffn-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 636900
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-ssd-groups2.json",
+      "group": "recurrent_shape",
+      "id": "cover-fc-ssd-groups2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 743956
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-budget-div1.json",
+      "group": "budget",
+      "id": "cover-fc-budget-div1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-budget-div4.json",
+      "group": "budget",
+      "id": "cover-fc-budget-div4",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-textbook-kv.json",
+      "group": "composed",
+      "id": "cover-fc-textbook-kv",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 619956
+    },
+    {
+      "config": "configs/studies/language/v6/cover-fc-textbook-mixed.json",
+      "group": "composed",
+      "id": "cover-fc-textbook-mixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1113440
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-anchor.json",
+      "group": "anchor",
+      "id": "cover-hb-anchor",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-kv-sum.json",
+      "group": "memory",
+      "id": "cover-hb-mem-kv-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1347666
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-affine-sum.json",
+      "group": "memory",
+      "id": "cover-hb-mem-affine-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1328506
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-affine-state.json",
+      "group": "memory",
+      "id": "cover-hb-mem-affine-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1451386
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-delta-sum.json",
+      "group": "memory",
+      "id": "cover-hb-mem-delta-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1329826
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-delta-state.json",
+      "group": "memory",
+      "id": "cover-hb-mem-delta-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1452706
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-gated_delta-sum.json",
+      "group": "memory",
+      "id": "cover-hb-mem-gated_delta-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1350346
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-gated_delta-state.json",
+      "group": "memory",
+      "id": "cover-hb-mem-gated_delta-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1391306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-ssd-sum.json",
+      "group": "memory",
+      "id": "cover-hb-mem-ssd-sum",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1349066
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-mem-ssd-state.json",
+      "group": "memory",
+      "id": "cover-hb-mem-ssd-state",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1390026
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-read-zero.json",
+      "group": "read_snapshot",
+      "id": "cover-hb-read-zero",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-read-old.json",
+      "group": "read_snapshot",
+      "id": "cover-hb-read-old",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-local-match.json",
+      "group": "scoring_control",
+      "id": "cover-hb-local-match",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1440306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-region-att-stats.json",
+      "group": "scoring_control",
+      "id": "cover-hb-region-att-stats",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1486946
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-region-att-content.json",
+      "group": "scoring_control",
+      "id": "cover-hb-region-att-content",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1564706
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-evidence-grouped.json",
+      "group": "scoring_control",
+      "id": "cover-hb-evidence-grouped",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1428786
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-match-att-grouped.json",
+      "group": "scoring_control",
+      "id": "cover-hb-match-att-grouped",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1492706
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-fixed-total25.json",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total25",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-fixed-total50.json",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total50",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-fixed-total100.json",
+      "group": "scoring_control",
+      "id": "cover-hb-fixed-total100",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gamma1.json",
+      "group": "scoring_control",
+      "id": "cover-hb-gamma1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gamma4.json",
+      "group": "scoring_control",
+      "id": "cover-hb-gamma4",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-temperature1.json",
+      "group": "scoring_control",
+      "id": "cover-hb-temperature1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-score-width8.json",
+      "group": "scoring_control",
+      "id": "cover-hb-score-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1303506
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-evidence-width8.json",
+      "group": "scoring_control",
+      "id": "cover-hb-evidence-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1305426
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-match-width8.json",
+      "group": "scoring_control",
+      "id": "cover-hb-match-width8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1486866
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-match-residual-off.json",
+      "group": "scoring_control",
+      "id": "cover-hb-match-residual-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1440306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-match-inner-off.json",
+      "group": "scoring_control",
+      "id": "cover-hb-match-inner-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1440306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-att-local-off.json",
+      "group": "scoring_control",
+      "id": "cover-hb-att-local-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1486946
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-att-regional-off.json",
+      "group": "scoring_control",
+      "id": "cover-hb-att-regional-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1486946
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_total-bern.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_total-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_total-ent1.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_total-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_total-ent15.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_total-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_total-ent2.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_total-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold-quad.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold-quad",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold-bern.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold-ent1.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold-ent15.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold-ent2.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-constrained-quad.json",
+      "group": "sending",
+      "id": "cover-hb-send-constrained-quad",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-constrained-bern.json",
+      "group": "sending",
+      "id": "cover-hb-send-constrained-bern",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-constrained-ent1.json",
+      "group": "sending",
+      "id": "cover-hb-send-constrained-ent1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-constrained-ent15.json",
+      "group": "sending",
+      "id": "cover-hb-send-constrained-ent15",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-constrained-ent2.json",
+      "group": "sending",
+      "id": "cover-hb-send-constrained-ent2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_total_zero.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_total_zero",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-regional_threshold_hard.json",
+      "group": "sending",
+      "id": "cover-hb-send-regional_threshold_hard",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-hard_selection.json",
+      "group": "sending",
+      "id": "cover-hb-send-hard_selection",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-direct_attention.json",
+      "group": "sending",
+      "id": "cover-hb-send-direct_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-unit_attention.json",
+      "group": "sending",
+      "id": "cover-hb-send-unit_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-pooled_attention.json",
+      "group": "sending",
+      "id": "cover-hb-send-pooled_attention",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-send-proportional.json",
+      "group": "sending",
+      "id": "cover-hb-send-proportional",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-direct-received.json",
+      "group": "sending_control",
+      "id": "cover-hb-direct-received",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-unit-mu.json",
+      "group": "sending_control",
+      "id": "cover-hb-unit-mu",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-constrained-context-gain.json",
+      "group": "sending_control",
+      "id": "cover-hb-constrained-context-gain",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1460336
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-constrained-learned-gain.json",
+      "group": "sending_control",
+      "id": "cover-hb-constrained-learned-gain",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249136
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gain-att-received.json",
+      "group": "sending_control",
+      "id": "cover-hb-gain-att-received",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1265496
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gain-att-mu.json",
+      "group": "sending_control",
+      "id": "cover-hb-gain-att-mu",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1265496
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-threshold-fixed.json",
+      "group": "sending_control",
+      "id": "cover-hb-threshold-fixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-zero-fixed.json",
+      "group": "sending_control",
+      "id": "cover-hb-zero-fixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1249096
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-source-node.json",
+      "group": "source_sharing",
+      "id": "cover-hb-source-node",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1533618
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-source-source.json",
+      "group": "source_sharing",
+      "id": "cover-hb-source-source",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1550418
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-source-adapted.json",
+      "group": "source_sharing",
+      "id": "cover-hb-source-adapted",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1881778
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-window16.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-window16",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-window128.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-window128",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-summary8.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-summary8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1101906
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-adapter8.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-adapter8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1378386
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ffn2x.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-ffn2x",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1224786
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ffn8x.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-ffn8x",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1962066
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-full-memory-off.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-full-memory-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-full-ffn-off.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-full-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-heads2.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-decay-slow.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-decay-slow",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-rope-half.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-rope-half",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-rope-full.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-rope-full",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-rope-read.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-rope-read",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-distance-slope.json",
+      "group": "memory_shape_position",
+      "id": "cover-hb-distance-slope",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gated_delta-conv1.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-gated_delta-conv1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1379786
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gated_delta-conv8.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-gated_delta-conv8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1406666
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gated_delta-heads2.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-gated_delta-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1660226
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gated_delta-mem-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-gated_delta-mem-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1391306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-gated_delta-ffn-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-gated_delta-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1391306
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-conv1.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-conv1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1378506
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-conv8.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-conv8",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1405386
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-heads2.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-heads2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1562946
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-mem-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-mem-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1390026
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-ffn-off.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-ffn-off",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1390026
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-ssd-groups2.json",
+      "group": "recurrent_shape",
+      "id": "cover-hb-ssd-groups2",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1657666
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-budget-div1.json",
+      "group": "budget",
+      "id": "cover-hb-budget-div1",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-budget-div4.json",
+      "group": "budget",
+      "id": "cover-hb-budget-div4",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1470546
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-textbook-kv.json",
+      "group": "composed",
+      "id": "cover-hb-textbook-kv",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1474002
+    },
+    {
+      "config": "configs/studies/language/v6/cover-hb-textbook-mixed.json",
+      "group": "composed",
+      "id": "cover-hb-textbook-mixed",
+      "kind": "tide",
+      "line": "coverage",
+      "parameters": 1491202
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc16-kv-quad.json",
+      "group": "scale",
+      "id": "scale-fc16-kv-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 5092788
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc32-kv-quad.json",
+      "group": "scale",
+      "id": "scale-fc32-kv-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 9657288
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc64-kv-quad.json",
+      "group": "scale",
+      "id": "scale-fc64-kv-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 18786288
+    },
+    {
+      "config": "configs/studies/language/v6/scale-hb40-kv-quad.json",
+      "group": "scale",
+      "id": "scale-hb40-kv-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 11939922
+    },
+    {
+      "config": "configs/studies/language/v6/scale-hb88-kv-quad.json",
+      "group": "scale",
+      "id": "scale-hb88-kv-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 25633934
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc16-ssd-quad.json",
+      "group": "scale",
+      "id": "scale-fc16-ssd-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 5182948
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc32-ssd-quad.json",
+      "group": "scale",
+      "id": "scale-fc32-ssd-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 9837608
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc16-gdn-quad.json",
+      "group": "scale",
+      "id": "scale-fc16-gdn-quad",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 5184996
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc16-shannon.json",
+      "group": "dense_control",
+      "id": "scale-fc16-shannon",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 5092788
+    },
+    {
+      "config": "configs/studies/language/v6/scale-fc32-shannon.json",
+      "group": "dense_control",
+      "id": "scale-fc32-shannon",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 9657288
+    },
+    {
+      "config": "configs/studies/language/v6/scale-hb40-shannon.json",
+      "group": "dense_control",
+      "id": "scale-hb40-shannon",
+      "kind": "tide",
+      "line": "scale",
+      "parameters": 11939922
+    },
+    {
+      "config": "configs/studies/language/v6/scale-transformer-5m.json",
+      "group": "transformer_control",
+      "id": "scale-transformer-5m",
+      "kind": "transformer",
+      "line": "scale",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/scale-transformer-10m.json",
+      "group": "transformer_control",
+      "id": "scale-transformer-10m",
+      "kind": "transformer",
+      "line": "scale",
+      "parameters": 669108
+    },
+    {
+      "config": "configs/studies/language/v6/scale-transformer-19m.json",
+      "group": "transformer_control",
+      "id": "scale-transformer-19m",
+      "kind": "transformer",
+      "line": "scale",
+      "parameters": 669108
+    }
+  ],
+  "counts": {
+    "coverage": 182,
+    "scale": 14
+  },
+  "description": "Configuration union; device/batch resolved after finite calibration, not automatic all-platform matrix",
+  "launchable": false,
+  "rejected": [],
+  "schema": "tide-language-campaign-catalog-v1"
+}

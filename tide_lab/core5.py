@@ -3,6 +3,7 @@
 This module owns embeddings/readout only. Scheduling, local functions,
 autograd and shared graph parameters remain in the pinned tidegraph package.
 """
+import copy
 import torch
 from tidegraph import Continuation, ExecutionPlacement
 from tidegraph.planning.recipes import prepare
@@ -23,7 +24,9 @@ class Core5Encoder(torch.nn.Module):
     def __init__(self, width=16, topology="fc", depth=2, region_width=4,
                  send="dense", seed=7, temperature=1.0, dtype=torch.float32,
                  memory_read="qry", branches=2, offsets=(0, 1), family="kv",
-                 history=512, support_policy="strict"):
+                 history=512, support_policy="strict", recipe=None,
+                 max_materialize_bytes=64 * 1024 ** 2, eager_implementation="python",
+                 placement_preset=None, native_library=None):
         super().__init__()
         if send not in {"dense", "sparse"}:
             raise ValueError("send must be dense (Shannon) or sparse (quadratic)")
@@ -42,8 +45,19 @@ class Core5Encoder(torch.nn.Module):
                            region_overrides=dict(allocation_temperature=float(temperature)))
         if support_policy != "strict":
             self.recipe["region_overrides"]["support_policy"] = support_policy
+        if recipe is not None:
+            self.recipe = copy.deepcopy(recipe)
+            if self.recipe.get("width") != width:
+                raise ValueError("explicit recipe width must match task embedding width")
+            self.send = "explicit-recipe"
+        if eager_implementation not in {"python", "native"}:
+            raise ValueError("eager implementation must be python/native")
+        if type(max_materialize_bytes) is not int or max_materialize_bytes <= 0:
+            raise ValueError("materialization requires a positive explicit byte budget")
+        self.eager_implementation = eager_implementation
+        self.placement_preset, self.native_library = placement_preset, native_library
         self.plan, self.inventory = prepare(self.recipe, samples=1, positions=1, seed=seed)
-        self.binding, _, _ = materialize(self.plan, max_bytes=64 * 1024 ** 2, dtype=dtype)
+        self.binding, _, _ = materialize(self.plan, max_bytes=max_materialize_bytes, dtype=dtype)
         self.graph_model = self.binding.model
         self.spec = SettleGraph(self.binding.graph, tuple(self.plan["graph"]["ranks"]),
                                 binding="ports", time_stride=self.plan["stride"])
@@ -60,7 +74,8 @@ class Core5Encoder(torch.nn.Module):
                     edges=len(self.binding.graph.edges),
                     graph_parameters=sum(p.numel() for p in self.graph_model.parameters() if p.requires_grad),
                     state_reset="fresh sequence", bptt="full episode",
-                    execution="public eager Python packed; one host scheduler worker")
+                    execution=f"public eager {self.eager_implementation} packed; one host scheduler worker",
+                    placement_preset=self.placement_preset)
 
     def run_features(self, features, *, implementation="eager", chunk_size=None, trace=True):
         """Public-result access for independent audits, with no oracle-driven route."""
@@ -71,9 +86,10 @@ class Core5Encoder(torch.nn.Module):
             execute = lambda *a, **kw: run(self.binding.graph, self.graph_model, *a, **kw)
         elif implementation in {"eager", "streaming"}:
             payload = next(self.graph_model.parameters()).device
-            placement = ExecutionPlacement(preset="cpu" if payload.type == "cpu" else "mixed-c",
+            placement = ExecutionPlacement(preset=self.placement_preset or ("cpu" if payload.type == "cpu" else "mixed-c"),
                                            scoring_dtype="float64" if features.dtype == torch.float64 else "float32")
-            execute = eager_runner(self.binding, "python", placement,
+            execute = eager_runner(self.binding, self.eager_implementation, placement,
+                                   native_library=self.native_library,
                                    streaming=implementation == "streaming", workers=1,
                                    packing="scalar" if implementation == "streaming" else "packed")
         else:

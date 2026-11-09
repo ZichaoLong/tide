@@ -107,7 +107,7 @@ def main():
             for phy in candidates(first,second,policy):
                 slot=None
                 for index in range(policy['max_new_concurrent_npus']):
-                    slot=lock(runtime/'tide-v5-slots'/f'{index}.lock')
+                    slot=lock(runtime/policy.get('slot_namespace','tide-v5-slots')/f'{index}.lock')
                     if slot:break
                 if slot is None:break
                 device=lock(runtime/'ascend-device-locks'/f'physical-{phy}.lock')
