@@ -3,10 +3,10 @@
   "kind": "source-selection-only",
   "repository": "https://github.com/ZichaoLong/tide",
   "branch": "graph-execution-foundation",
-  "revision": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+  "revision": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
   "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
   "protocol": "tide-downstream-contract-v1",
-  "protocol_url": "https://github.com/ZichaoLong/tide/blob/85d161d5c9148eac2b164f89a0ba4204b4331898/docs/downstream-contract.md",
-  "installation_status": "fixed_wheel_installed",
-  "note": "来源选择由foundation.lock.json、安装内容锁与下游检查补足；安装身份不等于科学/设备验收。"
+  "protocol_url": "https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/downstream-contract.md",
+  "installation_status": "fixed_wheel_installed_and_scoped_acceptance",
+  "note": "TL-REQ-003 positive-floor-v1下游有限验收完成；新私有环境和运行身份，默认strict保留。CPU真实HB16边界/FC16干预及CPU/NPU小型接入通过；严格有限超差仍失败，B/Qwen完整模型未迁移。旧85d161d安装/冻结运行保留。见docs/studies/positive-support-acceptance-results.md。"
 }

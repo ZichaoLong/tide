@@ -1,3 +1,24 @@
+# 当前交接 — TL-REQ-003下游限定验收完成（2026-11-09）
+
+**当前无运行、排队或自动后继作业。** 基座补正`positive-floor-v1`已在独立私有安装完成下游验收，接受用于所测单设备Python eager/KV/FP32的稠密比较/训练探索；严格数值等价仍失败。[验收报告](studies/positive-support-acceptance-results.md)、[原始证据/固定身份](evidence/positive-support-acceptance-v1.json)、[四种方案详解](studies/shannon-numerical-options.md)。
+
+- CPU/NPU定向各30项完成（NPU13项实际设备+17项CPU/配置）；HB16/FC16任务的离散/因果/共享/各区域梯度、optimizer、分块/streaming通过。原1e-6/1e-5下仍有有限超差，最大4.01e-5，未知原因与历史失败保留。
+- HB16在原86步材料上，strict重现第87步拒绝；新模式完成87–94步，补值次数[1,3,0,0,0,0,0,0]，参数/梯度有限、Full100%。validation8块NLL6.818646→6.835233，不声称质量改善。
+- 新模式90→94新进程精确恢复通过：完整应用参数/optimizer/RNG/进度、全部最终参数梯度和逐步loss/工作量逐位相同。旧strict材料迁入新模式是显式转换，不是旧轨迹精确恢复。
+- FC16原128步权重完成122块/3878目标：普通NLL6.864746359（相对旧+4.33e-8），context-reset6.895437009，干预补8坐标；原失败不重标通过。
+
+数学0770593不变；当前依赖明确从85d161d选择到74e7bbd，安装文件hash7dbfde4...、250文件核对一致。新环境`.venv-positive-floor-v1`；旧`.venv`及所有冻结作业保持。默认strict不变，未来稠密配置明确填写`support_policy`；B/Qwen完整模型尚未迁入此新环境。
+
+执行固定源码fc781722b278a0180f46e5200bef63a34d613a82，快照`.local/source-positive-support-v1`；CPU1真实边界/干预，NPU物理1仅小型检查。作业`support-v1-cpu/npu`均completed且cgroup/已知后代清空。CPU/NPU worker合计579.864秒，开发检查另59.91秒；本次0.1777计算小时，v5累计约6.5475/24小时，共同截止22:49:13不延长。没有自动补HB128、HB40或其他候选。
+
+Lens项目`tide-learning-lab`：`tl-support-v1-hb`学习/验证，`tl-support-v1-resume`恢复重放，`tl-support-v1-fc`正常/重置评价；三者均verified/readback_matches。后两项不是新独立训练种子。私有入口`.local/LENS.md`；查看/停止/新输出恢复方法见验收报告。研究图新增补正验收与限定结果，并保留旧研究终态及科学边界。
+
+后续应将预算回到语言质量与实际稀疏/局部结构；Shannon只作必要稠密对照。正背景及bool/log完整表示均不自动开发，只有实际效果或可表示域证据需要时再扩大。本次交付待用户审阅，不启动下一批。
+
+---
+
+以下为历史快照；当前采用版本和验收状态以上方为准。
+
 # 当前交接 — v5全部终态，限定结果已审阅（2026-11-09 14:36核对）
 
 **当前无本批运行、排队或自动后继作业。** HB16 sparse于12:36:54完成，B FC8于13:43:33完成；全部相关cgroup和已知后代清空，三个预算监督也已结束。本次没有启动、恢复、迁移训练或改动固定输入。[总报告与逐组一页结论](studies/language-depth-v5-results.md)、[终态统计/身份/Lens证据](evidence/language-depth-terminal.json)。

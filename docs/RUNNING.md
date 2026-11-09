@@ -1,3 +1,20 @@
+# 当前：补正验收全部终态
+
+2026-11-09：`support-v1-cpu`、`support-v1-npu`均completed并确认无后代；没有自动后继训练。[验收报告及完整操作方法](studies/positive-support-acceptance-results.md)、[源码/输入/终态/Lens对应](evidence/positive-support-acceptance-v1.json)。
+
+当前采用环境为`.venv-positive-floor-v1`、基座74e7bbd；旧`.venv`只用于旧冻结源码/锁，不能把下面历史命令中的环境路径直接用于新锁。站点激活仍使用`scripts/env.sh`，模型需显式选择`support_policy=positive-floor-v1`。
+
+```sh
+python scripts/job.py status artifacts/jobs/support-v1-cpu
+python scripts/job.py status artifacts/jobs/support-v1-npu
+```
+
+Lens项目`tide-learning-lab`：`tl-support-v1-hb`、`tl-support-v1-resume`、`tl-support-v1-fc`分别是学习边界、恢复重放、同权重干预评价，非三个独立训练。私有入口`.local/LENS.md`，不改变现有访问策略。
+
+---
+
+以下为历史作业操作记录，保持原来源与环境。
+
 # 当前状态：A稀疏运行，B已结束（2026-11-09 09:20北京时间）
 
 `lm-a-language-v4`仍在物理NPU1上运行，当前stage为`train-tide-sparse-512`；dense512及两Transformer轨迹已完成。`lm-b-language-v4`于07:04:35结束，实际cgroup空、已知后代全部终止，无B排队或后继。详细结果与边界见[STATUS](STATUS.md)、[B一页报告](studies/TL-B-LM-v4.md)、[最新快照](evidence/language-v4-status.json)。

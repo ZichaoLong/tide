@@ -1,3 +1,5 @@
+当前补充：稠密Shannon主要作为语言/稀疏比较和诊断候选。基座positive-floor-v1已完成[限定验收](studies/positive-support-acceptance-results.md)，以稳定执行、相关机制、恢复及任务质量为使用依据；有限严格超差单列，不要求任意长训练逐值一致。后续不自动扩展新分配/表示候选。
+
 当前已实施[多区域深度/递归嵌套v5](studies/language-depth-proposal.md)：A FC16/HB16、B同槽FC8、浅宽/普通LM控制及条件HB40。CPU/NPU选型以实测稳定完成时间为依据，24累计计算worker小时/12h；实际状态见STATUS。旧结果与严格失败保持原范围。
 
 # TIDE：语言能力与可扩展局部稀疏结构

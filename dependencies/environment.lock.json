@@ -40,19 +40,9 @@
       "record_sha256": "09044b21deff3a01926b43855337d673471aa423bc92ccff09a0d664ff01a0d3"
     },
     {
-      "name": "certifi",
-      "version": "2026.10.23",
-      "record_sha256": "81c2883d30dcf2bdb6a830e4ab5a8b334c41f4914a4377c17e29b5e2a2bdee4a"
-    },
-    {
       "name": "cffi",
       "version": "2.1.1",
       "record_sha256": "eb9109be876e0d8df7c2a1b5df1a8b8719ad9317187315a39adcdce046c206ea"
-    },
-    {
-      "name": "charset-normalizer",
-      "version": "3.5.2",
-      "record_sha256": "8683a7635687783afbe9f74c6426f4fc110c779af9a2752421d4050689b058e3"
     },
     {
       "name": "cloudpickle",
@@ -138,21 +128,6 @@
       "name": "hccl",
       "version": "0.1.0",
       "record_sha256": "e76995b001a98e60e23e1ba5e3cd9ec7f014610e54ccd5147aae1bdaadb27a3c"
-    },
-    {
-      "name": "hf-xet",
-      "version": "1.8.0",
-      "record_sha256": "10bbc2714eba3940df43d612b1a5e9f4e9f7bcd6d6ff33178f0b8f8a0d6542c0"
-    },
-    {
-      "name": "huggingface_hub",
-      "version": "0.36.2",
-      "record_sha256": "b57d997a0acc622863c32958efa51ef5948bb89d150f705fc16d6cb8a52d4a14"
-    },
-    {
-      "name": "idna",
-      "version": "3.20",
-      "record_sha256": "c74249d50774972131a941fa2062e4210a966f7bf95888b881ede3593974ea54"
     },
     {
       "name": "iniconfig",
@@ -297,7 +272,7 @@
     {
       "name": "pip",
       "version": "25.0.1",
-      "record_sha256": "071ca267c70017e6020c966a5e78e87bce9eacd3d2f5b1d45f673b74ab5f1cbd"
+      "record_sha256": "0239bb9ff536915743125681acb2cd770920a2cbc71c469699ae8d8b82816f05"
     },
     {
       "name": "pip",
@@ -375,16 +350,6 @@
       "record_sha256": "eed042b528ceb385ed096cf08000a3a1eb0f218dc5b7317a39fc7352db77a4c8"
     },
     {
-      "name": "regex",
-      "version": "2026.11.7",
-      "record_sha256": "b4bff150c1c1b75b28c24c1eef701692c17983de9152cd90b0614ab18f731bcd"
-    },
-    {
-      "name": "requests",
-      "version": "2.34.2",
-      "record_sha256": "f6bd62ddca64dc9176c0085893fe2f153f553bef4869e9d53416a7c81be5532b"
-    },
-    {
       "name": "rich",
       "version": "15.0.0",
       "record_sha256": "e6d36e5b6dda9b2da692a29eec258c92a92aa12e37f6db92d12a5a91d77940f4"
@@ -442,12 +407,7 @@
     {
       "name": "tidegraph",
       "version": "0.3.0",
-      "record_sha256": "9a09ad8035844f4382963b0bf5152f0d69ddef93ad1b9529784bd92ac54c9b1f"
-    },
-    {
-      "name": "tokenizers",
-      "version": "0.22.2",
-      "record_sha256": "61b014851ceee63c78116326b31535d6518b405fcac627d35c8437a7963005d4"
+      "record_sha256": "e900f63eddb06a64e2d81d248561b793e2573ef6ec4782438a19182c3ff2d0de"
     },
     {
       "name": "torch",
@@ -475,11 +435,6 @@
       "record_sha256": "d4d05ffd01bab71d54f0759eab218e9acb8a98570da7c07f4ada01c5193d3b82"
     },
     {
-      "name": "transformers",
-      "version": "4.57.1",
-      "record_sha256": "a529d123c756b3c04e5c457d4b4e5a08646feaa05a756c8729185b258b042a32"
-    },
-    {
       "name": "typing_extensions",
       "version": "4.16.0",
       "record_sha256": "a346a921aa5be35b34ced3258614183d152887b954caaae5de2a94be72d5f2ec"
@@ -488,11 +443,6 @@
       "name": "tzdata",
       "version": "2026.6",
       "record_sha256": "c295cf3a44c9b80328eeeba5251ccdbc1df6bdac4461414d3267240f63d27fcf"
-    },
-    {
-      "name": "urllib3",
-      "version": "2.8.0",
-      "record_sha256": "d1095c0d4222e159c7ceb2f8767d012e68bc1c4c0025518760aeec47e91326e2"
     },
     {
       "name": "wcwidth",
@@ -510,9 +460,5 @@
       "record_sha256": "ec113dc809e0b7c7cb0a5a86b665b17dd7ba5d624b92af3f0cc663754e8d6619"
     }
   ],
-  "tracking": {
-    "mode": "external JSONL recorder",
-    "sdk": "trackio 0.44.0 in installed Lens interpreter",
-    "reason": "transformers4.57.1 requires huggingface-hub<1; Trackio0.44 requires>=1.10; environments remain independent"
-  }
+  "note": "Candidate private overlay; A/core checks only, no Transformers/B model qualification"
 }

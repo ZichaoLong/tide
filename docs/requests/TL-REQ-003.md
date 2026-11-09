@@ -1,6 +1,6 @@
 # TL-REQ-003 — 正支持与有限精度训练的可执行契约
 
-状态：实验仓库登记，等待基座/上游评审。不是已接受的语义变更、基座缺陷定论或交付。其他仓库保持只读，没有发送外部消息。
+状态：2026-11-09基座交付74e7bbd的`positive-floor-v1`已通过下游限定验收，见[报告](../studies/positive-support-acceptance-results.md)和[证据](../evidence/positive-support-acceptance-v1.json)。CPU原HB16边界/FC16干预、新模式恢复及CPU/NPU小型接入完成；原严格数值失败保持。完整log/缩放载荷暂缓，不阻塞当前稠密比较。基座保持只读，没有发送外部消息。
 
 提出方为`ZichaoLong/tide`的`tide-learning-lab`分支；权威原文为本文件。原实验源码`aa76da565a4612b8d009a7abedbbd1187ef0c95a`，有界重放源码`9ebbc63784a29f2c785bb7568ddb9da63b63dd55`。研究和后续审阅见`docs/studies/allocation-support-v5.md`。
 
@@ -42,4 +42,4 @@
 
 单行重放入口：`python scripts/replay_allocation_row.py --record <捕获JSON> --dtype float32 --output <新JSON>`；FP64或温度倍率是另一个探针。完整重放配置为`configs/studies/language/hb16-underflow-v5.json`，实际作业`lm-hb16-underflow-v5`。成功捕获是诊断完成，不改原失败状态。
 
-基座交付入口：待回复。上游语义判断：待评审。下游新能力验收：未运行。本请求不扩大跨仓库修改、推送或消息权限。
+基座交付：[固定74e7bbd回复](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/evidence/positive-support-tl-req-003-20261109.md)及[数值策略契约](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/positive-support-policy.md)。固定数学0770593未变；下游接受的是声明的有限精度前向/一阶VJP及所测使用范围，不是新熵函数或全平台严格资格。上方原请求与反例保留来源，不再把所有宽范围方案作为当前必做项。本请求不扩大跨仓库修改、推送或消息权限。

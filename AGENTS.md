@@ -35,6 +35,12 @@
   Authorized retirement covers the audited six obsolete artifacts and redundant
   old Trackio projections with local evidence retained; never delete active inputs.
   Do not expand beyond the selected bounded table. Shared environments and other projects remain read-only.
+- The subsequent 2026-11-09 instruction authorizes the bounded TL-REQ-003 acceptance
+  in `docs/studies/positive-support-acceptance.md`. It is complete: see its results page.
+  Current selected foundation is 74e7bbd in `.venv-positive-floor-v1`; legacy `.venv`
+  and frozen jobs retain 85d161d. Explicit `positive-floor-v1` passed scoped CPU/NPU
+  admission and CPU application checks, with strict finite failures retained.
+  Do not infer full B/Qwen migration or authorization to launch another batch.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

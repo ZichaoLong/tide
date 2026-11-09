@@ -2,14 +2,14 @@
   "schema": "tide-foundation-lock-v1",
   "foundation": {
     "repository": "https://github.com/ZichaoLong/tide",
-    "commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
     "dirty": false,
     "package_version": "0.3.0",
     "wheel": {
       "name": "tidegraph-0.3.0-py3-none-any.whl",
-      "sha256": "c40ba439d036f8b9d4149153aea8b89358fcebc2ac019c23b5c1e5b09587e075"
+      "sha256": "210f6c1f92d365b38def9718cbca0726abcb5da65bda14a8819a585add7e16f9"
     },
-    "installed_files_sha256": "4fd8507130535d44b1e52d3b7b2c83d32eed3ca9a256cdfb2bea9c12366f04a3"
+    "installed_files_sha256": "7dbfde4bbbd375e17e320b75a5796164cafdb33c5cfbc07de9fc02d020cd059a"
   },
   "mathematics": {
     "version": "tide-core-5",
@@ -17,7 +17,7 @@
   },
   "protocol": {
     "version": "tide-downstream-contract-v1",
-    "commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
     "path": "docs/downstream-contract.md"
   },
   "native": null,
@@ -32,12 +32,12 @@
   },
   "installation_lock": {
     "schema": "tide-experiment-lock-v1",
-    "path": "dependencies/installation.lock.json",
-    "sha256": "01b9066ee15c1a1d43dc0f1274cde195e9c24c36fd18258971ac0c0a66615e2b"
+    "path": "dependencies/positive-floor-v1/installation.lock.json",
+    "sha256": "aaa03d8367a04080f9852ba883dc3c03c41f8946a95d99fd017c52e96ca86b45"
   },
   "build": {
     "method": "git archive fixed commit into private source; pip wheel --no-deps --no-build-isolation; no shared checkout writes",
-    "log": "artifacts/setup/foundation-build.log"
+    "log": "artifacts/setup/positive-floor-v1/build.log"
   },
   "consumer_identity": "each run records immutable full source inventory and installed task wheel separately"
 }

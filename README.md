@@ -11,6 +11,7 @@
 - [当前研究设计](docs/research-design.md)
 - [当前交接](docs/STATUS.md) / [后台操作与恢复](docs/RUNNING.md) / [待办](docs/ROADMAP.md)
 - [基座来源](dependencies/foundation-source.json) / [实际安装锁](dependencies/foundation.lock.json) / [环境身份](dependencies/environment.lock.json)
+- [正支持补正验收](docs/studies/positive-support-acceptance-results.md) / [四种数值方案](docs/studies/shannon-numerical-options.md)：当前选择74e7bbd、新私有环境；旧运行与严格失败保留。
 
 直接用浏览器打开`web/index.html`，不需要安装Python包、网络/CDN或运行模型。
 GitHub文件页只展示源码；可下载本分支后本地打开。重新生成与检查只需Python标准库：
