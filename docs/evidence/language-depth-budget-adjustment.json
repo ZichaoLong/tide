@@ -1,0 +1,14 @@
+{
+  "aggregate_compute_cap_seconds": 86400,
+  "at": "2026-11-09T03:01:24.335926+00:00",
+  "cpu_substitution": "A CPU forecast is much faster; actual time charged instead of summing unused individual maxima",
+  "guard_config": "configs/studies/language/budget-guard-v5.json",
+  "new_attempt": "lm-b-fc8-v5-budget2",
+  "new_attempt_cap_seconds": 16200,
+  "new_seed": false,
+  "old_attempt_retained": true,
+  "reason": "measured B FC8 cost exceeds original administrative 1.5h allocation",
+  "same_candidates": true,
+  "same_training_recipe": true,
+  "schema": "tide-depth-budget-adjustment-v1"
+}
