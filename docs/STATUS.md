@@ -1,3 +1,30 @@
+# 当前交接 — v5多区域研究已后台实施（2026-11-09）
+
+用户已接受多层研究表并明确授权轻载共享NPU/CPU资源调度与旧数据清理。当前新批共同截止北京时间**22:49:13**，累计**24计算worker小时**（CPU训练替代相应NPU份额），最多6个同时计算的worker含旧v4。全批预算监督已实际启动，等待依赖不算已训练。[作业/源码/实际Lens ID快照](evidence/language-depth-handoff.json)、[查看分类与操作](studies/language-depth-v5-running.md)。
+
+| 研究 | 实际状态 | 固定内容 |
+| --- | --- | --- |
+| A FC16串联 | CPU1已正式训练dense，sparse为同链后续 | 4区域，width32，两候选各128步、512日程前缀 |
+| A HB16分支汇合 | CPU1已正式训练dense，sparse为同链后续 | 4区域/3依赖层级；与FC16近同参数、同曝光 |
+| A浅宽/Transformer控制 | 共享NPU已训练浅宽dense，Transformer为同链后续 | FC4 width64/128步；2block width96/FFN512/2048步并保留128前缀 |
+| B FC8承接槽内加深 | 新预算尝试已通过接入/微型恢复并启动训练阶段 | 原1.5h尝试在配对预算准入失败，训练0次；新尝试同两候选/B8/128步，≤4.5h，统一计入24h |
+| A HB40递归嵌套 | 已提交，等待HB16完成及机制/验证学习条件 | 10区域/5依赖层级，条件64步配对 |
+| 旧权重同文档复评 | A/B均已提交，等待并发资源前驱 | 只评价，不算新训练或新seed |
+
+CPU/NPU短校准支持A深层CPU1：FC16/B8约22.21秒/步，CPU4约32.17秒，共享NPU约80.20秒。CPU4/B32约13.21 token/s，CPU1/B8约11.52；保留B8匹配已有采样/更新，后续不改活动配方。B/容量控制在用户授权的轻载共享卡运行，映射与后续争用有记录；NPU大batch限时失败独立保留。[资源决策](evidence/language-depth-resource-decision.json)、[B预算调整](evidence/language-depth-budget-adjustment.json)。
+
+数据小记录`tl-lm0-depth-v5`已进入`tide-learning-lab`并verified/readback_matches。新16文档排除已观察32份，训练/验证保持。Lens按运行名`v5`和配置`study_id`识别；该记录器未填原生Group，不把项目分类误称Lens Group。正式曲线、最终test与inference分开；接入/校准只保留项目记录。私有入口仍为`.local/LENS.md`。
+
+新作业源码分别100b450（数据/校准/容量控制）、aa76da5（CPU深度链）、8626ab2（B预算调整/复评/监督）；快照及47个唯一固定输入hash已核对，基座248个安装文件匹配，数学0770593/foundation85d161d保持。CPU深层新增跨区域梯度、消息和无直接端口绕过检查；三步新进程精确恢复随候选接入检查。 新增有限严格超差已保留：FC16为619/2810、HB16为900/381、B FC8为14/144个元素，最大绝对差4.77e-5；相关支持/因果/梯度/微型恢复分开通过，原因未知，见[检查审阅](evidence/language-depth-checks.json)。严格有限失败、离散、恢复、学习、性能分别保留，尚无v5科学结论；研究图新增5组与5个待审结果。
+
+六个历史大产物已删除，回收**2.0126GiB**；44个旧技术Lens投影已删除，删除时161→117，5个已不存在/身份未确认项未猜删。最终模型、历史学习曲线、全部v4/v5及原始指标/失败/日志保留。[文件退役](evidence/artifact-retirement-v5.json)、[Lens退役](evidence/lens-retirement-v5.json)。
+
+旧v4 A仍按0692756原快照与原截止运行，本次没有中断或修改。11:05最近采样稀疏400/512；其条件FC8继续按原链决定，旧B已终态。各时间戳快照非实时，使用上方操作页查询。
+
+---
+
+以下为早先交接快照；当前授权与作业状态以上方为准。
+
 # 当前交接 — 多区域深度提案，旧A继续运行（2026-11-09）
 
 北京时间10:28只读核对：A仍在物理NPU1、background.slice运行，稀疏最新记录第304/512步；最近验证第256步NLL 6.377497。B已完成且cgroup/已知后代清空。A本轮已记录阶段无执行失败，FC8尚未启动。[本次生命周期/资源快照](evidence/language-depth-planning-status.json)。

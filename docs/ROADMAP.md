@@ -1,3 +1,13 @@
+# 当前优先级：v5深度与嵌套已实施
+
+[已授权研究表](studies/language-depth-proposal.md)、[运行分类/操作](studies/language-depth-v5-running.md)、[实际快照](evidence/language-depth-handoff.json)。先完成FC16/HB16串联与分支汇合、B同一承接槽内FC8及浅宽/普通LM控制；HB40只在已列前提成立后运行。统一24计算worker小时/12h，不自动加候选、seed或多层Qwen替换。允许按用户授权共享轻载卡，A深层依实测选择CPU1；保持固定源码及独立验收。
+
+下一步是核对终态、同新文档配对比较、六轴结论及逐组一页报告，再由用户验收。旧v4沿原链继续，旧失败保留；已清理6个大产物与44个技术Lens投影，原始证据和科学曲线保留。
+
+---
+
+以下保留v4与此前提案的历史优先级，已由上方v5执行状态接续。
+
 # 当前研究优先级
 
 用户已批准[语言v4研究表](studies/language-confirmation-v4.md)，配置[fc-confirm-v4.json](../configs/studies/language/fc-confirm-v4.json)。联合重点仍是自然语言next-token质量与实际稀疏、规模和局部化；吞吐比例单列为后续工程优化。状态见STATUS。B同瓶颈对照已终态并形成[限定结论](studies/TL-B-LM-v4.md)；A稀疏及条件FC8继续原固定链，不新增任务。

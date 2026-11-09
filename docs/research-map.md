@@ -1,3 +1,5 @@
+当前v5已新增五组独立研究和五个待审结果：串联、分支汇合、局部承接加深、容量控制与条件递归嵌套。Lens分类使用配置study_id及v5运行名前缀；44个历史技术投影已退役，本地证据保留。实际操作见[分类说明](studies/language-depth-v5-running.md)，不从退出码填科学支持。
+
 当前后续已获授权：[语言v4](studies/language-confirmation-v4.md)。图保留v3三份限定结果，为v4增加独立结果位置；RLC-B已限定审阅，RLC-A/JOINT仍待审；计划状态不表示已排队。
 
 # 研究图的读法

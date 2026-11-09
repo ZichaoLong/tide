@@ -1,0 +1,1362 @@
+{
+  "at": "2026-11-09T03:10:37.117559+00:00",
+  "decision": "Continue explicitly authorized FP32 learning after finite-only failures and relevant mechanisms/exact micro recovery; preserve original thresholds and unknown causes",
+  "learning": "pending",
+  "long_exact_resume": "not tested",
+  "rows": [
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 12,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 10080,
+        "mismatches": 0
+      },
+      "job": "lm-a-fc16-v5",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 33.63193893432617,
+        "elements": 650748,
+        "error_l2": 0.0002999057058788114,
+        "failed_elements": 619,
+        "failed_leaves": 364,
+        "first_failures": [
+          {
+            "abs_error": 1.0817311704158783e-06,
+            "candidate": -0.004402041435241699,
+            "index": [
+              0,
+              20
+            ],
+            "leaf_max_abs_error": 1.0817311704158783e-06,
+            "leaf_reference_max_abs": 1.6413121223449707,
+            "path": "complete_execution.continuation.states.(1, 4).slots.summaries",
+            "reference": -0.004403123166412115,
+            "strict_limit": 1.044031231664121e-06
+          },
+          {
+            "abs_error": 1.1026859283447266e-06,
+            "candidate": 0.00594601035118103,
+            "index": [
+              2,
+              17
+            ],
+            "leaf_max_abs_error": 1.6689300537109375e-06,
+            "leaf_reference_max_abs": 3.2141332626342773,
+            "path": "complete_execution.continuation.states.(1, 7).slots.values",
+            "reference": 0.005947113037109375,
+            "strict_limit": 1.0594711303710937e-06
+          },
+          {
+            "abs_error": 1.9073486328125e-06,
+            "candidate": 0.0799296498298645,
+            "index": [
+              2,
+              21
+            ],
+            "leaf_max_abs_error": 3.4868717193603516e-06,
+            "leaf_reference_max_abs": 2.604086399078369,
+            "path": "complete_execution.continuation.states.(0, 8).slots.keys",
+            "reference": 0.07993155717849731,
+            "strict_limit": 1.799315571784973e-06
+          },
+          {
+            "abs_error": 1.5012919902801514e-06,
+            "candidate": -0.02005136013031006,
+            "index": [
+              2,
+              0
+            ],
+            "leaf_max_abs_error": 1.7583370208740234e-06,
+            "leaf_reference_max_abs": 2.982883930206299,
+            "path": "complete_execution.continuation.states.(0, 8).slots.summaries",
+            "reference": -0.02004985883831978,
+            "strict_limit": 1.2004985883831979e-06
+          },
+          {
+            "abs_error": 1.5497207641601562e-06,
+            "candidate": -0.01073041558265686,
+            "index": [
+              2,
+              10
+            ],
+            "leaf_max_abs_error": 2.205371856689453e-06,
+            "leaf_reference_max_abs": 2.536710739135742,
+            "path": "complete_execution.continuation.states.(0, 10).slots.keys",
+            "reference": -0.01073196530342102,
+            "strict_limit": 1.1073196530342102e-06
+          },
+          {
+            "abs_error": 2.562999725341797e-06,
+            "candidate": 0.1371341347694397,
+            "index": [
+              2,
+              15
+            ],
+            "leaf_max_abs_error": 2.562999725341797e-06,
+            "leaf_reference_max_abs": 2.9624037742614746,
+            "path": "complete_execution.continuation.states.(0, 11).slots.keys",
+            "reference": 0.13713157176971436,
+            "strict_limit": 2.3713157176971435e-06
+          },
+          {
+            "abs_error": 1.7136335372924805e-06,
+            "candidate": -0.024578288197517395,
+            "index": [
+              0,
+              2
+            ],
+            "leaf_max_abs_error": 1.7285346984863281e-06,
+            "leaf_reference_max_abs": 3.045745372772217,
+            "path": "complete_execution.continuation.states.(1, 9).slots.keys",
+            "reference": -0.024580001831054688,
+            "strict_limit": 1.245800018310547e-06
+          },
+          {
+            "abs_error": 2.205371856689453e-06,
+            "candidate": 0.029659748077392578,
+            "index": [
+              1,
+              28
+            ],
+            "leaf_max_abs_error": 3.0994415283203125e-06,
+            "leaf_reference_max_abs": 3.1963765621185303,
+            "path": "complete_execution.continuation.states.(0, 13).slots.keys",
+            "reference": 0.029661953449249268,
+            "strict_limit": 1.2966195344924926e-06
+          }
+        ],
+        "max_abs_error": 2.193450927734375e-05,
+        "reference_l2": 448.7133313178768,
+        "reference_max_abs": 33.631927490234375,
+        "relative_l2_error": 6.683681650330836e-07,
+        "tensor_leaves": 3523,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-fc16-v5/checks-tide-dense/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 48,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 288,
+        "nodes": 16,
+        "output_nodes": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 20573.530470103025,
+            "region": 0
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 4961.11732910946,
+            "region": 1
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 4975.439483211376,
+            "region": 2
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 2427.0057718493044,
+            "region": 3
+          }
+        ],
+        "regions": 4
+      },
+      "sha256": "a5d49ec89f10896cbe6d942b396862cf367db399072860dbbb9b008f9541ae69",
+      "stage": "checks-tide-dense"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 12,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 7706,
+        "mismatches": 0
+      },
+      "job": "lm-a-fc16-v5",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 15.292529106140137,
+        "elements": 635799,
+        "error_l2": 0.0006104609378669567,
+        "failed_elements": 2810,
+        "failed_leaves": 421,
+        "first_failures": [
+          {
+            "abs_error": 3.337860107421875e-06,
+            "candidate": 0.153212308883667,
+            "index": [
+              2,
+              18
+            ],
+            "leaf_max_abs_error": 3.337860107421875e-06,
+            "leaf_reference_max_abs": 2.6402721405029297,
+            "path": "complete_execution.continuation.states.(0, 4).slots.values",
+            "reference": 0.15321564674377441,
+            "strict_limit": 2.532156467437744e-06
+          },
+          {
+            "abs_error": 2.2724270820617676e-06,
+            "candidate": 0.09555815905332565,
+            "index": [
+              2,
+              7
+            ],
+            "leaf_max_abs_error": 3.0994415283203125e-06,
+            "leaf_reference_max_abs": 3.075546979904175,
+            "path": "complete_execution.continuation.states.(0, 6).slots.keys",
+            "reference": 0.09555588662624359,
+            "strict_limit": 1.9555588662624363e-06
+          },
+          {
+            "abs_error": 1.7881393432617188e-06,
+            "candidate": -0.007901638746261597,
+            "index": [
+              2,
+              4
+            ],
+            "leaf_max_abs_error": 2.0265579223632812e-06,
+            "leaf_reference_max_abs": 2.9841647148132324,
+            "path": "complete_execution.continuation.states.(0, 7).slots.keys",
+            "reference": -0.007899850606918335,
+            "strict_limit": 1.0789985060691834e-06
+          },
+          {
+            "abs_error": 1.0894291335716844e-06,
+            "candidate": -0.00018215179443359375,
+            "index": [
+              2,
+              16
+            ],
+            "leaf_max_abs_error": 1.6689300537109375e-06,
+            "leaf_reference_max_abs": 2.500113010406494,
+            "path": "complete_execution.continuation.states.(0, 7).slots.summaries",
+            "reference": -0.00018324122356716543,
+            "strict_limit": 1.0018324122356716e-06
+          },
+          {
+            "abs_error": 1.426786184310913e-06,
+            "candidate": -0.04234388470649719,
+            "index": [
+              2,
+              13
+            ],
+            "leaf_max_abs_error": 1.426786184310913e-06,
+            "leaf_reference_max_abs": 1.6551704406738281,
+            "path": "complete_execution.continuation.states.(1, 4).slots.summaries",
+            "reference": -0.04234245792031288,
+            "strict_limit": 1.4234245792031288e-06
+          },
+          {
+            "abs_error": 2.3096799850463867e-06,
+            "candidate": 0.03750146925449371,
+            "index": [
+              2,
+              7
+            ],
+            "leaf_max_abs_error": 2.3096799850463867e-06,
+            "leaf_reference_max_abs": 2.9511914253234863,
+            "path": "complete_execution.continuation.states.(1, 4).slots.values",
+            "reference": 0.03749915957450867,
+            "strict_limit": 1.3749915957450867e-06
+          },
+          {
+            "abs_error": 2.1457672119140625e-06,
+            "candidate": 0.015613079071044922,
+            "index": [
+              2,
+              2
+            ],
+            "leaf_max_abs_error": 2.7418136596679688e-06,
+            "leaf_reference_max_abs": 3.3424367904663086,
+            "path": "complete_execution.continuation.states.(1, 5).slots.values",
+            "reference": 0.015615224838256836,
+            "strict_limit": 1.1561522483825684e-06
+          },
+          {
+            "abs_error": 1.8477439880371094e-06,
+            "candidate": -0.037574827671051025,
+            "index": [
+              2,
+              24
+            ],
+            "leaf_max_abs_error": 2.205371856689453e-06,
+            "leaf_reference_max_abs": 3.3603053092956543,
+            "path": "complete_execution.continuation.states.(1, 7).slots.keys",
+            "reference": -0.03757667541503906,
+            "strict_limit": 1.3757667541503906e-06
+          }
+        ],
+        "max_abs_error": 4.76837158203125e-05,
+        "reference_l2": 389.50561693029414,
+        "reference_max_abs": 15.292570114135742,
+        "relative_l2_error": 1.5672712056838057e-06,
+        "tensor_leaves": 3070,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-fc16-v5/checks-tide-sparse/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 48,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 156,
+        "nodes": 16,
+        "output_nodes": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 14,
+            "node_parameter_vjp_l1": 20034.506076142192,
+            "region": 0
+          },
+          {
+            "candidates": 24,
+            "full": 13,
+            "node_parameter_vjp_l1": 8303.690365329385,
+            "region": 1
+          },
+          {
+            "candidates": 24,
+            "full": 12,
+            "node_parameter_vjp_l1": 3020.5425248369575,
+            "region": 2
+          },
+          {
+            "candidates": 24,
+            "full": 16,
+            "node_parameter_vjp_l1": 3983.162341579795,
+            "region": 3
+          }
+        ],
+        "regions": 4
+      },
+      "sha256": "0b4b345d33121347dc38534b8beec29f09e8c2b7e24a2d789f49684a9d1d29ad",
+      "stage": "checks-tide-sparse"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 10,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 8420,
+        "mismatches": 0
+      },
+      "job": "lm-a-hb16-v5",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 6.386260032653809,
+        "elements": 641372,
+        "error_l2": 0.0002877189343451746,
+        "failed_elements": 900,
+        "failed_leaves": 301,
+        "first_failures": [
+          {
+            "abs_error": 1.3113021850585938e-06,
+            "candidate": 0.0010350346565246582,
+            "index": [
+              0,
+              23
+            ],
+            "leaf_max_abs_error": 2.86102294921875e-06,
+            "leaf_reference_max_abs": 2.9790430068969727,
+            "path": "complete_execution.continuation.states.(0, 9).slots.values",
+            "reference": 0.0010363459587097168,
+            "strict_limit": 1.0103634595870972e-06
+          },
+          {
+            "abs_error": 2.9206275939941406e-06,
+            "candidate": 0.06934529542922974,
+            "index": [
+              0,
+              13
+            ],
+            "leaf_max_abs_error": 2.9206275939941406e-06,
+            "leaf_reference_max_abs": 2.7125179767608643,
+            "path": "complete_execution.continuation.states.(0, 12).slots.keys",
+            "reference": 0.06934237480163574,
+            "strict_limit": 1.6934237480163574e-06
+          },
+          {
+            "abs_error": 2.0209699869155884e-06,
+            "candidate": -0.01468253880739212,
+            "index": [
+              0,
+              14
+            ],
+            "leaf_max_abs_error": 2.682209014892578e-06,
+            "leaf_reference_max_abs": 2.528380870819092,
+            "path": "complete_execution.continuation.states.(0, 12).slots.summaries",
+            "reference": -0.014684559777379036,
+            "strict_limit": 1.1468455977737903e-06
+          },
+          {
+            "abs_error": 1.430511474609375e-06,
+            "candidate": -0.021477937698364258,
+            "index": [
+              0,
+              29
+            ],
+            "leaf_max_abs_error": 2.384185791015625e-06,
+            "leaf_reference_max_abs": 2.6346023082733154,
+            "path": "complete_execution.continuation.states.(0, 12).slots.values",
+            "reference": -0.02147650718688965,
+            "strict_limit": 1.2147650718688964e-06
+          },
+          {
+            "abs_error": 1.5348196029663086e-06,
+            "candidate": -0.03495537489652634,
+            "index": [
+              0,
+              16
+            ],
+            "leaf_max_abs_error": 2.086162567138672e-06,
+            "leaf_reference_max_abs": 2.6679811477661133,
+            "path": "complete_execution.continuation.states.(0, 13).slots.summaries",
+            "reference": -0.03495384007692337,
+            "strict_limit": 1.3495384007692337e-06
+          },
+          {
+            "abs_error": 1.387670636177063e-06,
+            "candidate": -0.012890992686152458,
+            "index": [
+              0,
+              5
+            ],
+            "leaf_max_abs_error": 2.4437904357910156e-06,
+            "leaf_reference_max_abs": 1.7685929536819458,
+            "path": "complete_execution.continuation.states.(0, 14).slots.summaries",
+            "reference": -0.012892380356788635,
+            "strict_limit": 1.1289238035678864e-06
+          },
+          {
+            "abs_error": 2.6226043701171875e-06,
+            "candidate": 0.10172337293624878,
+            "index": [
+              0,
+              21
+            ],
+            "leaf_max_abs_error": 2.6226043701171875e-06,
+            "leaf_reference_max_abs": 3.584764003753662,
+            "path": "complete_execution.continuation.states.(0, 14).slots.values",
+            "reference": 0.10172075033187866,
+            "strict_limit": 2.0172075033187865e-06
+          },
+          {
+            "abs_error": 4.4405460357666016e-06,
+            "candidate": 0.06041571497917175,
+            "index": [
+              0,
+              9
+            ],
+            "leaf_max_abs_error": 5.692243576049805e-06,
+            "leaf_reference_max_abs": 2.9099912643432617,
+            "path": "complete_execution.continuation.states.(0, 15).slots.keys",
+            "reference": 0.060411274433135986,
+            "strict_limit": 1.6041127443313598e-06
+          }
+        ],
+        "max_abs_error": 3.039836883544922e-05,
+        "reference_l2": 356.90215347923663,
+        "reference_max_abs": 6.386258602142334,
+        "relative_l2_error": 8.06156341564112e-07,
+        "tensor_leaves": 3239,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/checks-tide-dense/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 32,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 192,
+        "nodes": 16,
+        "output_nodes": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 9338.341424509883,
+            "region": 0
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 2749.333417447284,
+            "region": 1
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 2645.121837757528,
+            "region": 2
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 4459.783207366243,
+            "region": 3
+          }
+        ],
+        "regions": 4
+      },
+      "sha256": "c6ad4977e8c8e6e9e7ad248e31f03012e37e022891b4d110dec4aa358c5035cd",
+      "stage": "checks-tide-dense"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 10,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 6480,
+        "mismatches": 0
+      },
+      "job": "lm-a-hb16-v5",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 7.852337837219238,
+        "elements": 608048,
+        "error_l2": 0.0002764449518092056,
+        "failed_elements": 381,
+        "failed_leaves": 152,
+        "first_failures": [
+          {
+            "abs_error": 1.8775463104248047e-06,
+            "candidate": 0.07127854228019714,
+            "index": [
+              2,
+              27
+            ],
+            "leaf_max_abs_error": 1.8775463104248047e-06,
+            "leaf_reference_max_abs": 2.657230854034424,
+            "path": "complete_execution.continuation.states.(1, 6).slots.values",
+            "reference": 0.07128041982650757,
+            "strict_limit": 1.7128041982650757e-06
+          },
+          {
+            "abs_error": 3.874301910400391e-06,
+            "candidate": -0.09791064262390137,
+            "index": [
+              2,
+              6
+            ],
+            "leaf_max_abs_error": 3.993511199951172e-06,
+            "leaf_reference_max_abs": 3.495332956314087,
+            "path": "complete_execution.continuation.states.(1, 7).slots.keys",
+            "reference": -0.09790676832199097,
+            "strict_limit": 1.9790676832199097e-06
+          },
+          {
+            "abs_error": 1.989305019378662e-06,
+            "candidate": 0.08737990260124207,
+            "index": [
+              2,
+              15
+            ],
+            "leaf_max_abs_error": 5.4836273193359375e-06,
+            "leaf_reference_max_abs": 2.8805699348449707,
+            "path": "complete_execution.continuation.states.(1, 7).slots.summaries",
+            "reference": 0.08738189190626144,
+            "strict_limit": 1.8738189190626145e-06
+          },
+          {
+            "abs_error": 1.3113021850585938e-06,
+            "candidate": -0.012453436851501465,
+            "index": [
+              2,
+              0
+            ],
+            "leaf_max_abs_error": 2.205371856689453e-06,
+            "leaf_reference_max_abs": 2.852509021759033,
+            "path": "complete_execution.continuation.states.(1, 10).slots.values",
+            "reference": -0.012452125549316406,
+            "strict_limit": 1.124521255493164e-06
+          },
+          {
+            "abs_error": 3.9637088775634766e-06,
+            "candidate": 0.12668673694133759,
+            "index": [
+              2,
+              10
+            ],
+            "leaf_max_abs_error": 7.152557373046875e-06,
+            "leaf_reference_max_abs": 3.5351052284240723,
+            "path": "complete_execution.continuation.states.(1, 11).slots.keys",
+            "reference": 0.12669070065021515,
+            "strict_limit": 2.2669070065021513e-06
+          },
+          {
+            "abs_error": 2.891756594181061e-06,
+            "candidate": -0.012291144579648972,
+            "index": [
+              2,
+              18
+            ],
+            "leaf_max_abs_error": 3.933906555175781e-06,
+            "leaf_reference_max_abs": 2.0650031566619873,
+            "path": "complete_execution.continuation.states.(1, 11).slots.summaries",
+            "reference": -0.01228825282305479,
+            "strict_limit": 1.122882528230548e-06
+          },
+          {
+            "abs_error": 5.155801773071289e-06,
+            "candidate": 0.046185076236724854,
+            "index": [
+              2,
+              2
+            ],
+            "leaf_max_abs_error": 6.079673767089844e-06,
+            "leaf_reference_max_abs": 2.2920074462890625,
+            "path": "complete_execution.continuation.states.(1, 11).slots.values",
+            "reference": 0.04617992043495178,
+            "strict_limit": 1.4617992043495178e-06
+          },
+          {
+            "abs_error": 1.4901161193847656e-06,
+            "candidate": 0.03612720966339111,
+            "index": [
+              1,
+              28
+            ],
+            "leaf_max_abs_error": 2.3245811462402344e-06,
+            "leaf_reference_max_abs": 3.2979037761688232,
+            "path": "complete_execution.continuation.states.(0, 11).slots.keys",
+            "reference": 0.0361286997795105,
+            "strict_limit": 1.361286997795105e-06
+          }
+        ],
+        "max_abs_error": 2.956390380859375e-05,
+        "reference_l2": 311.92742714404176,
+        "reference_max_abs": 7.852322578430176,
+        "relative_l2_error": 8.862476581180819e-07,
+        "tensor_leaves": 2753,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/checks-tide-sparse/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 32,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 104,
+        "nodes": 16,
+        "output_nodes": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 14,
+            "node_parameter_vjp_l1": 7814.194387298077,
+            "region": 0
+          },
+          {
+            "candidates": 21,
+            "full": 12,
+            "node_parameter_vjp_l1": 1754.873547596857,
+            "region": 1
+          },
+          {
+            "candidates": 21,
+            "full": 12,
+            "node_parameter_vjp_l1": 1452.8535180091858,
+            "region": 2
+          },
+          {
+            "candidates": 23,
+            "full": 12,
+            "node_parameter_vjp_l1": 2192.520195066929,
+            "region": 3
+          }
+        ],
+        "regions": 4
+      },
+      "sha256": "b97a6902e31600e1cf81e0a0a96d888a0770c4b59040573e44981cf0b9ad5643",
+      "stage": "checks-tide-sparse"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 8,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 4398,
+        "mismatches": 0
+      },
+      "job": "lm-b-fc8-v5-budget2",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 4.514924049377441,
+        "elements": 321954,
+        "error_l2": 7.418883509507985e-05,
+        "failed_elements": 14,
+        "failed_leaves": 14,
+        "first_failures": [
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.continuation.states.(1, 7).slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[15].proposal_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[15].comparison_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[15].next_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[31].proposal_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[31].comparison_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.2516975402832031e-06,
+            "candidate": -0.004331707954406738,
+            "index": [
+              0,
+              7
+            ],
+            "leaf_max_abs_error": 1.3113021850585938e-06,
+            "leaf_reference_max_abs": 3.8100292682647705,
+            "path": "complete_execution.trace[31].next_slots.values",
+            "reference": -0.004330456256866455,
+            "strict_limit": 1.0433045625686645e-06
+          },
+          {
+            "abs_error": 1.6689300537109375e-06,
+            "candidate": -0.05834317207336426,
+            "index": [
+              21
+            ],
+            "leaf_max_abs_error": 1.6689300537109375e-06,
+            "leaf_reference_max_abs": 4.373338222503662,
+            "path": "complete_execution.trace[31].full",
+            "reference": -0.05834150314331055,
+            "strict_limit": 1.5834150314331055e-06
+          }
+        ],
+        "max_abs_error": 3.5762786865234375e-06,
+        "reference_l2": 245.828486767974,
+        "reference_max_abs": 4.514923572540283,
+        "relative_l2_error": 3.0179104167493504e-07,
+        "tensor_leaves": 1653,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-fc8-v5-budget2/checks-tide-dense/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 16,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 96,
+        "nodes": 8,
+        "output_nodes": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 5396.734478600323,
+            "region": 0
+          },
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 2956.1404276583344,
+            "region": 1
+          }
+        ],
+        "regions": 2
+      },
+      "sha256": "022411dcbd6121bcaed12b98d1d9e17412696c9362c493d8817f0b888c45bab2",
+      "stage": "checks-tide-dense"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 8,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 128,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 3610,
+        "mismatches": 0
+      },
+      "job": "lm-b-fc8-v5-budget2",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 8.534818649291992,
+        "elements": 316575,
+        "error_l2": 0.00014145251536036254,
+        "failed_elements": 144,
+        "failed_leaves": 101,
+        "first_failures": [
+          {
+            "abs_error": 1.8700957298278809e-06,
+            "candidate": 0.00907055288553238,
+            "index": [
+              0,
+              19
+            ],
+            "leaf_max_abs_error": 3.516674041748047e-06,
+            "leaf_reference_max_abs": 2.9013195037841797,
+            "path": "complete_execution.continuation.states.(1, 4).slots.keys",
+            "reference": 0.009072422981262207,
+            "strict_limit": 1.0907242298126221e-06
+          },
+          {
+            "abs_error": 4.753470420837402e-06,
+            "candidate": 0.16934636235237122,
+            "index": [
+              0,
+              13
+            ],
+            "leaf_max_abs_error": 4.753470420837402e-06,
+            "leaf_reference_max_abs": 3.08491587638855,
+            "path": "complete_execution.continuation.states.(1, 4).slots.summaries",
+            "reference": 0.16935111582279205,
+            "strict_limit": 2.6935111582279206e-06
+          },
+          {
+            "abs_error": 1.385807991027832e-06,
+            "candidate": 0.022136196494102478,
+            "index": [
+              0,
+              12
+            ],
+            "leaf_max_abs_error": 5.245208740234375e-06,
+            "leaf_reference_max_abs": 2.836184501647949,
+            "path": "complete_execution.continuation.states.(1, 5).slots.keys",
+            "reference": 0.02213481068611145,
+            "strict_limit": 1.2213481068611145e-06
+          },
+          {
+            "abs_error": 2.9206275939941406e-06,
+            "candidate": -0.05622568726539612,
+            "index": [
+              0,
+              28
+            ],
+            "leaf_max_abs_error": 4.0531158447265625e-06,
+            "leaf_reference_max_abs": 2.5785975456237793,
+            "path": "complete_execution.continuation.states.(1, 5).slots.values",
+            "reference": -0.05622860789299011,
+            "strict_limit": 1.562286078929901e-06
+          },
+          {
+            "abs_error": 4.4405460357666016e-06,
+            "candidate": -0.15283158421516418,
+            "index": [
+              0,
+              5
+            ],
+            "leaf_max_abs_error": 4.4405460357666016e-06,
+            "leaf_reference_max_abs": 3.328646183013916,
+            "path": "complete_execution.continuation.states.(1, 6).slots.keys",
+            "reference": -0.15283602476119995,
+            "strict_limit": 2.5283602476119996e-06
+          },
+          {
+            "abs_error": 2.428889274597168e-06,
+            "candidate": 0.014536455273628235,
+            "index": [
+              0,
+              21
+            ],
+            "leaf_max_abs_error": 4.6193599700927734e-06,
+            "leaf_reference_max_abs": 3.1840007305145264,
+            "path": "complete_execution.continuation.states.(1, 6).slots.values",
+            "reference": 0.014534026384353638,
+            "strict_limit": 1.1453402638435363e-06
+          },
+          {
+            "abs_error": 4.470348358154297e-06,
+            "candidate": 0.01029747724533081,
+            "index": [
+              0,
+              8
+            ],
+            "leaf_max_abs_error": 4.5299530029296875e-06,
+            "leaf_reference_max_abs": 3.189101457595825,
+            "path": "complete_execution.continuation.states.(1, 7).slots.keys",
+            "reference": 0.010301947593688965,
+            "strict_limit": 1.1030194759368897e-06
+          },
+          {
+            "abs_error": 1.475214958190918e-06,
+            "candidate": 0.02727869153022766,
+            "index": [
+              0,
+              2
+            ],
+            "leaf_max_abs_error": 3.933906555175781e-06,
+            "leaf_reference_max_abs": 2.0770015716552734,
+            "path": "complete_execution.continuation.states.(1, 7).slots.summaries",
+            "reference": 0.027280166745185852,
+            "strict_limit": 1.2728016674518585e-06
+          }
+        ],
+        "max_abs_error": 6.645917892456055e-06,
+        "reference_l2": 234.74178561915258,
+        "reference_max_abs": 8.534819602966309,
+        "relative_l2_error": 6.025877113751555e-07,
+        "tensor_leaves": 1490,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-b-fc8-v5-budget2/checks-tide-sparse/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 16,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 56,
+        "nodes": 8,
+        "output_nodes": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 14,
+            "node_parameter_vjp_l1": 7096.8679228797555,
+            "region": 0
+          },
+          {
+            "candidates": 24,
+            "full": 13,
+            "node_parameter_vjp_l1": 3940.3970457483083,
+            "region": 1
+          }
+        ],
+        "regions": 2
+      },
+      "sha256": "c8f116d6b2ffed82cdc0f6c7ed3a34a6679538cc1a846443d0e3991861d33e6b",
+      "stage": "checks-tide-sparse"
+    },
+    {
+      "admitted": true,
+      "causality": {
+        "cutoff": 6,
+        "early_support_unchanged": true,
+        "future_vjp_exact_zero": true,
+        "note": "retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause",
+        "reference_intervention": {
+          "atol": 0,
+          "elements": 256,
+          "failed_elements": 0,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "rtol": 0,
+          "state": "passed"
+        }
+      },
+      "discrete": {
+        "first_errors": [],
+        "leaves": 1557,
+        "mismatches": 0
+      },
+      "job": "lm-a-controls-v5",
+      "nonfinite": [],
+      "numerical": {
+        "candidate_max_abs": 12.488203048706055,
+        "elements": 392181,
+        "error_l2": 0.00014667904204761914,
+        "failed_elements": 92,
+        "failed_leaves": 41,
+        "first_failures": [
+          {
+            "abs_error": 2.384185791015625e-06,
+            "candidate": 0.009237408638000488,
+            "index": [
+              22
+            ],
+            "leaf_max_abs_error": 4.76837158203125e-06,
+            "leaf_reference_max_abs": 7.074146747589111,
+            "path": "complete_execution.trace[1].full",
+            "reference": 0.009235024452209473,
+            "strict_limit": 1.0923502445220946e-06
+          },
+          {
+            "abs_error": 2.384185791015625e-06,
+            "candidate": 0.009237408638000488,
+            "index": [
+              22
+            ],
+            "leaf_max_abs_error": 4.76837158203125e-06,
+            "leaf_reference_max_abs": 7.074146747589111,
+            "path": "complete_execution.trace[1].emitted.0",
+            "reference": 0.009235024452209473,
+            "strict_limit": 1.0923502445220946e-06
+          },
+          {
+            "abs_error": 1.6689300537109375e-06,
+            "candidate": -0.0021636486053466797,
+            "index": [
+              24
+            ],
+            "leaf_max_abs_error": 3.2186508178710938e-06,
+            "leaf_reference_max_abs": 8.515836715698242,
+            "path": "complete_execution.trace[4].full",
+            "reference": -0.0021653175354003906,
+            "strict_limit": 1.0216531753540038e-06
+          },
+          {
+            "abs_error": 1.6689300537109375e-06,
+            "candidate": -0.0021636486053466797,
+            "index": [
+              24
+            ],
+            "leaf_max_abs_error": 3.2186508178710938e-06,
+            "leaf_reference_max_abs": 8.515836715698242,
+            "path": "complete_execution.trace[4].emitted.0",
+            "reference": -0.0021653175354003906,
+            "strict_limit": 1.0216531753540038e-06
+          },
+          {
+            "abs_error": 1.6689300537109375e-06,
+            "candidate": -0.009000420570373535,
+            "index": [
+              20
+            ],
+            "leaf_max_abs_error": 2.86102294921875e-06,
+            "leaf_reference_max_abs": 5.751480579376221,
+            "path": "complete_execution.trace[5].full",
+            "reference": -0.008998751640319824,
+            "strict_limit": 1.0899875164031982e-06
+          },
+          {
+            "abs_error": 1.6689300537109375e-06,
+            "candidate": -0.009000420570373535,
+            "index": [
+              20
+            ],
+            "leaf_max_abs_error": 2.86102294921875e-06,
+            "leaf_reference_max_abs": 5.751480579376221,
+            "path": "complete_execution.trace[5].emitted.0",
+            "reference": -0.008998751640319824,
+            "strict_limit": 1.0899875164031982e-06
+          },
+          {
+            "abs_error": 2.0265579223632812e-06,
+            "candidate": -0.07891833782196045,
+            "index": [
+              31
+            ],
+            "leaf_max_abs_error": 2.86102294921875e-06,
+            "leaf_reference_max_abs": 7.486752510070801,
+            "path": "complete_execution.trace[7].full",
+            "reference": -0.07892036437988281,
+            "strict_limit": 1.7892036437988282e-06
+          },
+          {
+            "abs_error": 2.0265579223632812e-06,
+            "candidate": -0.07891833782196045,
+            "index": [
+              31
+            ],
+            "leaf_max_abs_error": 2.86102294921875e-06,
+            "leaf_reference_max_abs": 7.486752510070801,
+            "path": "complete_execution.trace[7].emitted.0",
+            "reference": -0.07892036437988281,
+            "strict_limit": 1.7892036437988282e-06
+          }
+        ],
+        "max_abs_error": 1.2636184692382812e-05,
+        "reference_l2": 334.81151952816913,
+        "reference_max_abs": 12.488204956054688,
+        "relative_l2_error": 4.3809437098916306e-07,
+        "tensor_leaves": 718,
+        "zero_reference_scale": false
+      },
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-controls-v5/checks-tide-dense/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": {
+        "edges": 0,
+        "input_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "internal_messages": 0,
+        "nodes": 4,
+        "output_nodes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "region_events": [
+          {
+            "candidates": 24,
+            "full": 24,
+            "node_parameter_vjp_l1": 20469.7468463229,
+            "region": 0
+          }
+        ],
+        "regions": 1
+      },
+      "sha256": "82e5ab9788f3160725c88b855b43e58f682b18ccb1c758a7d8013bb9dc61b2f4",
+      "stage": "checks-tide-dense"
+    },
+    {
+      "admitted": true,
+      "causality": null,
+      "discrete": null,
+      "job": "lm-a-controls-v5",
+      "nonfinite": null,
+      "numerical": null,
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-controls-v5/checks-transformer/result.json",
+      "recovery": {
+        "mechanisms": "passed",
+        "recovery": "passed",
+        "scope": "B2/L3 three steps in fresh processes; exact full/continued and saved prefix",
+        "strict_numerical": "read checks; finite disagreements do not disappear"
+      },
+      "region_dependence": null,
+      "sha256": "8bc575486fe5f9dbd40e7e89222c6e435facaae4aef80afcedbe2a0e8b6432ec",
+      "stage": "checks-transformer"
+    }
+  ],
+  "schema": "tide-depth-check-review-v1",
+  "thresholds": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "qwen_atol": 1e-05,
+    "qwen_rtol": 0.0001
+  },
+  "triage": "Complete independent trace/VJP comparison identifies first failing observed leaves and magnitude; support/causality/shared roots and each region parameter dependence checked; no root-cause assumption. This is not an internal arithmetic localization or strict equivalence."
+}

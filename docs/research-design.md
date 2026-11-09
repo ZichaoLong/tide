@@ -1,3 +1,5 @@
+当前已实施[多区域深度/递归嵌套v5](studies/language-depth-proposal.md)：A FC16/HB16、B同槽FC8、浅宽/普通LM控制及条件HB40。CPU/NPU选型以实测稳定完成时间为依据，24累计计算worker小时/12h；实际状态见STATUS。旧结果与严格失败保持原范围。
+
 # TIDE：语言能力与可扩展局部稀疏结构
 
 2026-11-08按用户最新重点修订。当前问题、对照、候选、指标、预算与停止条件见[语言与结构研究表](studies/language-structure.md)，已获授权开始实施，具体作业状态以STATUS为准。
