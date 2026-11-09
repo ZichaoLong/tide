@@ -1,0 +1,441 @@
+{
+  "artifacts_deleted": false,
+  "new_jobs_submitted": false,
+  "observed_at": "2026-11-09T02:28:49.919959+00:00",
+  "proposal": "docs/studies/language-depth-proposal.md",
+  "proposed_budget_only": {
+    "aggregate_npu_hours": 24,
+    "cpu_only_worker_hours": 2,
+    "host_memory_gib_requested": 144,
+    "host_threads": 24,
+    "max_concurrent_devices_including_old": 6,
+    "new_disk_gib": 4,
+    "quota_reserve_gib": 80,
+    "shared_wall_hours": 12
+  },
+  "queue_inspection": {
+    "device_count": 16,
+    "event": "ascend_queue",
+    "free_physical_ids": [],
+    "request_satisfiable": false,
+    "requested_npu_count": 6,
+    "schema_version": 1,
+    "status": "inspected",
+    "timestamp": "2026-11-09T02:28:49.883862+00:00"
+  },
+  "resource_observation": {
+    "additional_other_user_pid": 2008551,
+    "first_observed_additional_workload": "2026-11-09T02:13:59+00:00",
+    "latest_sample_note": "step304 sampled update returned to 15.400640174746513 seconds; timings fluctuate and are not exclusive-device measurements",
+    "physical_device": 1,
+    "slower_observed_sample": {
+      "path": "runs/lm-a-language-v4/train-tide-sparse-512/metrics.jsonl",
+      "step": 280,
+      "timestamp": "2026-11-09T02:20:38.505101+00:00",
+      "train/update_seconds": 53.029364585876465
+    },
+    "timing_scope": "contended; association with slower samples is observed, causal breakdown is unmeasured",
+    "training_pid": 1780370
+  },
+  "routes": {
+    "a": {
+      "active_stage": {
+        "action": "train",
+        "cap_seconds": 10800,
+        "category": "training",
+        "name": "train-tide-sparse-512",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-language-v4/train-tide-sparse-512",
+        "started_at": "2026-11-09T01:08:10.203962+00:00",
+        "state": "running"
+      },
+      "chain_state": "running",
+      "failed_stages": [],
+      "latest_metrics": {
+        "elapsed_seconds": 4806.42163098976,
+        "metrics": {
+          "activity/full_fraction": 0.501953125,
+          "resource/npu_peak_allocated_mib": 119.61328125,
+          "train/alpha": 1.0,
+          "train/gradient_norm": 1.3922004699707031,
+          "train/loss": 5.945465087890625,
+          "train/lr": 0.0013556769561825254,
+          "train/teacher_mse_phase": 0.0,
+          "train/tokens_per_second": 14.739647016247252,
+          "train/update_seconds": 15.400640174746513,
+          "train/valid_tokens": 77581.0,
+          "work/candidates": 1024.0,
+          "work/full": 514.0,
+          "work/max_full_batch": 236.0,
+          "work/max_region_batch": 256.0,
+          "work/max_state_batch": 8.0,
+          "work/max_state_sequence": 32.0,
+          "work/messages": 0.0,
+          "work/read_events": 1024.0,
+          "work/region_blocks": 1.0,
+          "work/source_rows": 1024.0,
+          "work/state_updates": 1024.0
+        },
+        "run_id": "tl-lm-a-language-v4-train-tide-sparse-512",
+        "schema_version": 1,
+        "sequence": 42,
+        "step": 304,
+        "timestamp": "2026-11-09T02:28:20.433163+00:00"
+      },
+      "latest_validation": {
+        "elapsed_seconds": 3606.761954575777,
+        "metrics": {
+          "validation/nll": 6.377496659755707,
+          "validation/ppl": 588.4527647988264
+        },
+        "run_id": "tl-lm-a-language-v4-train-tide-sparse-512",
+        "schema_version": 1,
+        "sequence": 36,
+        "step": 256,
+        "timestamp": "2026-11-09T02:08:20.773515+00:00"
+      },
+      "lifecycle": {
+        "current_cgroup_processes": [
+          {
+            "parent_pid": 2907797,
+            "pid": 1372243,
+            "process_group": 1372243,
+            "start_ticks": 2176490428,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372798,
+            "pid": 1372814,
+            "process_group": 1372814,
+            "start_ticks": 2176491203,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372814,
+            "pid": 1780369,
+            "process_group": 1372814,
+            "start_ticks": 2177266091,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1780369,
+            "pid": 1780370,
+            "process_group": 1780370,
+            "start_ticks": 2177266096,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372814,
+            "pid": 1780542,
+            "process_group": 1372814,
+            "start_ticks": 2177266488,
+            "state": "S"
+          }
+        ],
+        "job_id": "lm-a-language-v4",
+        "known_descendants_alive": [
+          {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "S"
+          },
+          {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "S"
+          }
+        ],
+        "queue": {
+          "elapsed_seconds": 6.883539114147425,
+          "job_id": "lm-a-language-v4",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 1,
+          "physical_ids": [
+            1
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "schema_version": 1,
+          "status": "running",
+          "timestamp": "2026-11-08T22:59:01.224717+00:00"
+        },
+        "state": {
+          "child_process_group": 1372247,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v4.service",
+          "descendants": [
+            {
+              "parent_pid": 1372243,
+              "pid": 1372247,
+              "process_group": 1372247,
+              "start_ticks": 2176490435,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372247,
+              "pid": 1372788,
+              "process_group": 1372247,
+              "start_ticks": 2176491193,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372788,
+              "pid": 1372798,
+              "process_group": 1372247,
+              "start_ticks": 2176491197,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 12592.74392233044,
+          "job_id": "lm-a-language-v4",
+          "launcher": {
+            "parent_pid": 1372243,
+            "pid": 1372247,
+            "process_group": 1372247,
+            "start_ticks": 2176490435,
+            "state": "R"
+          },
+          "schema": "tide-job-lifecycle-v1",
+          "started_at": "2026-11-08T22:58:53.616652+00:00",
+          "state": "running",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 1372243,
+            "process_group": 1372243,
+            "start_ticks": 2176490428,
+            "state": "R"
+          },
+          "termination_verified": false,
+          "updated_at": "2026-11-09T02:28:46.619356+00:00"
+        },
+        "systemd": {
+          "ActiveState": "active",
+          "CPUQuotaPerSecUSec": "4s",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-a-language-v4.service",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-a-language-v4.service",
+          "LoadState": "loaded",
+          "MainPID": "1372243",
+          "MemoryMax": "25769803776",
+          "Result": "success",
+          "RuntimeMaxUSec": "8h 31min",
+          "Slice": "background.slice",
+          "SubState": "running",
+          "Transient": "yes",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": false,
+        "worker": {
+          "job_id": "lm-a-language-v4",
+          "logical_device": "npu:0",
+          "physical_visibility": "1",
+          "process": {
+            "parent_pid": 1372788,
+            "pid": 1372798,
+            "process_group": 1372247,
+            "start_ticks": 2176491197,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "started_at": "2026-11-08T22:59:01.267213+00:00",
+          "state": "running",
+          "worker": {
+            "parent_pid": 1372247,
+            "pid": 1372788,
+            "process_group": 1372247,
+            "start_ticks": 2176491193,
+            "state": "R"
+          }
+        }
+      }
+    },
+    "b": {
+      "chain_state": "completed",
+      "failed_stages": [],
+      "lifecycle": {
+        "current_cgroup_processes": [],
+        "job_id": "lm-b-language-v4",
+        "known_descendants_alive": [],
+        "queue": {
+          "elapsed_seconds": 338.5376951433718,
+          "job_id": "lm-b-language-v4",
+          "logical_device": "npu:0",
+          "logical_devices": [
+            "npu:0"
+          ],
+          "npu_count": 1,
+          "physical_id": 3,
+          "physical_ids": [
+            3
+          ],
+          "priority": 0,
+          "project": "tide-learning-lab",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-11-08T23:04:34.406810+00:00"
+        },
+        "state": {
+          "child_process_group": 1372374,
+          "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-lm-b-language-v4.service",
+          "descendants": [
+            {
+              "parent_pid": 1372332,
+              "pid": 1372374,
+              "process_group": 1372374,
+              "start_ticks": 2176490588,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1372374,
+              "pid": 1373218,
+              "process_group": 1372374,
+              "start_ticks": 2176491843,
+              "state": "S"
+            },
+            {
+              "parent_pid": 1373218,
+              "pid": 1373219,
+              "process_group": 1372374,
+              "start_ticks": 2176491847,
+              "state": "S"
+            }
+          ],
+          "elapsed_seconds": 340.6443740390241,
+          "ended_at": "2026-11-08T23:04:35.087771+00:00",
+          "finalized_at": "2026-11-08T23:04:35.148996+00:00",
+          "job_id": "lm-b-language-v4",
+          "known_descendants_alive": [],
+          "launcher": {
+            "parent_pid": 1372332,
+            "pid": 1372374,
+            "process_group": 1372374,
+            "start_ticks": 2176490588,
+            "state": "R"
+          },
+          "launcher_exit_code": 0,
+          "leaked_descendants": false,
+          "queue_state": {
+            "elapsed_seconds": 338.5376951433718,
+            "job_id": "lm-b-language-v4",
+            "logical_device": "npu:0",
+            "logical_devices": [
+              "npu:0"
+            ],
+            "npu_count": 1,
+            "physical_id": 3,
+            "physical_ids": [
+              3
+            ],
+            "priority": 0,
+            "project": "tide-learning-lab",
+            "return_code": 0,
+            "schema_version": 1,
+            "status": "completed",
+            "timestamp": "2026-11-08T23:04:34.406810+00:00"
+          },
+          "remaining_descendants": [],
+          "schema": "tide-job-lifecycle-v1",
+          "signal": null,
+          "started_at": "2026-11-08T22:58:54.443414+00:00",
+          "state": "completed",
+          "supervisor": {
+            "parent_pid": 2907797,
+            "pid": 1372332,
+            "process_group": 1372332,
+            "start_ticks": 2176490510,
+            "state": "R"
+          },
+          "systemd": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success"
+          },
+          "termination_verified": true,
+          "updated_at": "2026-11-08T23:04:29.903229+00:00",
+          "workload_exit_code": 0
+        },
+        "systemd": {
+          "ActiveState": "inactive",
+          "CPUQuotaPerSecUSec": "infinity",
+          "ControlGroup": "",
+          "ExecMainStatus": "0",
+          "Id": "tide-lab-lm-b-language-v4.service",
+          "LoadState": "not-found",
+          "MainPID": "0",
+          "MemoryMax": "infinity",
+          "Result": "success",
+          "RuntimeMaxUSec": "infinity",
+          "Slice": "",
+          "SubState": "dead",
+          "Transient": "no",
+          "inspection_exit_code": 0
+        },
+        "termination_verified_now": true,
+        "worker": {
+          "elapsed_seconds": 326.63203090429306,
+          "ended_at": "2026-11-08T23:04:34.397174+00:00",
+          "exit_code": 0,
+          "job_id": "lm-b-language-v4",
+          "logical_device": "npu:0",
+          "physical_visibility": "3",
+          "process": {
+            "parent_pid": 1373218,
+            "pid": 1373219,
+            "process_group": 1372374,
+            "start_ticks": 2176491847,
+            "state": "R"
+          },
+          "schema": "tide-job-worker-v1",
+          "signal": null,
+          "started_at": "2026-11-08T22:59:07.765162+00:00",
+          "state": "completed",
+          "worker": {
+            "parent_pid": 1372374,
+            "pid": 1373218,
+            "process_group": 1372374,
+            "start_ticks": 2176491843,
+            "state": "R"
+          }
+        }
+      }
+    }
+  },
+  "schema": "tide-depth-planning-status-v1",
+  "source_commit": "069275628eefc1011e2b69526a28126e2bc25985",
+  "source_tree_sha256": "73a8df2680042cc69fdf1bfa0c8a7c5a2d8dabd3bffc6c7adb91a61cc9a9ae5e"
+}
