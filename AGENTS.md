@@ -47,10 +47,16 @@
   cap and 22:49:13 deadline, original candidates/exposure and conditional HB40 prerequisites.
   Shared devices need not be idle or pass FIFO admission; choose by completion time,
   health and memory headroom, retain lifetime locks and background.slice. No new scaling batch.
+- The 2026-11-09 user approval now authorizes the concurrent local-candidate coverage
+  and substantive language scaling campaign in `docs/studies/language-coverage-scale-v6.md`.
+  Cover the union of local candidates, not a full Cartesian product. Broader CPU/NPU
+  parallelism and one-to-two-day jobs are authorized; freeze a new 48h campaign with
+  separate CPU/NPU and disk caps. Implement, calibrate and submit directly. This
+  supersedes the previous small follow-up recommendation, not historical evidence.
 - The completion batch is now terminal; see `docs/studies/language-completion-v5-results.md`.
   All five training/continuation chains and evaluations finished by 17:16 on 2026-11-09.
   Scoped learning/quality findings do not waive strict numerical failures. No automatic
-  follow-up is active; next-batch options await the user's acceptance of these results.
+  old follow-up is active; the separately authorized v6 campaign owns new work.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the
