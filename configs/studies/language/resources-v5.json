@@ -1,0 +1,30 @@
+{
+  "authorization": "user-2026-11-09-shared-low-load",
+  "candidate_ids": [
+    15,
+    9,
+    11,
+    10,
+    8,
+    7,
+    12,
+    3,
+    5,
+    14,
+    0,
+    2,
+    4,
+    6
+  ],
+  "deadline_epoch": 1794235753.0310388,
+  "exclusive_device": false,
+  "max_aicore_percent": 20,
+  "max_new_concurrent_npus": 5,
+  "minimum_free_hbm_mib": 16384,
+  "prerequisites": {
+    "lm-a-hb40-v5": [
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-a-hb16-v5/stage.json"
+    ]
+  },
+  "schema": "tide-shared-resource-policy-v1"
+}

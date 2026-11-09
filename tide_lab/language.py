@@ -40,6 +40,11 @@ class SequenceCore5(Core5Encoder):
             'work/read_events':candidates,'work/full':full,'work/messages':s.get('visited_edges',0),
             'work/source_rows':s.get('source_rows',0),'activity/full_fraction':full/max(candidates,1),
             **{'work/'+k:s.get(k,0) for k in ('max_full_batch','max_state_batch','max_state_sequence','max_region_batch','region_blocks')}}
+        if self.observe:
+            for region in range(len(self.binding.graph.regions)):
+                rows=[e for e in result.trace if self.binding.graph.nodes[e['node']].region==region]
+                self.last_metrics[f'region/{region}/candidates']=len(rows)
+                self.last_metrics[f'region/{region}/full']=sum(e['active'] for e in rows)
         return sequence_readout(self,result,features)
 
 

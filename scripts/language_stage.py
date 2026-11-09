@@ -127,6 +127,9 @@ def train(a,plan,device,metrics):
         metrics.log(step,{'validation/nll':initial['nll'],'validation/ppl':initial['ppl'],'train/valid_tokens':tokens})
     try:
         while step<limit:
+            if plan.get('region_observe_every') and a.kind.startswith('tide'):
+                encoder=model.encoder if a.route=='a' else model.selected.core
+                encoder.observe=(step+1)%plan['region_observe_every']==0
             ids=indices(len(data['train']['labels']),a.batch,a.seed,step)
             b=batch_from(data['train'],ids,device)
             next_tokens=int((b['labels']!=-100).sum())
@@ -221,8 +224,9 @@ def main():
     p.add_argument('--route',choices=['a','b'],required=True)
     p.add_argument('--kind',choices=['tide-dense','tide-sparse','transformer','original','mlp','bottleneck'],default='tide-dense')
     p.add_argument('--device',choices=['cpu','npu:0']);p.add_argument('--seed',type=int,default=11)
+    p.add_argument('--threads',type=int,help='explicit calibration-only thread override')
     p.add_argument('--batch',type=int,default=2);p.add_argument('--length',type=int,default=32)
-    p.add_argument('--steps',type=int,default=128);p.add_argument('--depth',type=int,choices=[1,2],default=1)
+    p.add_argument('--steps',type=int,default=128);p.add_argument('--depth',type=int,choices=[1,2,4],default=1)
     p.add_argument('--schedule-steps',type=int)
     p.add_argument('--retain-step',type=int,action='append',default=[])
     p.add_argument('--max-updates',type=int);p.add_argument('--probe',action='store_true')
@@ -231,6 +235,9 @@ def main():
     p.add_argument('--baseline-only',action='store_true');p.add_argument('--intervention',choices=['zero_core','context_reset'])
     p.add_argument('--run-id',required=True);p.add_argument('--recording-cli')
     a=p.parse_args();plan=json.loads(a.plan.read_text());start=time.monotonic()
+    if a.threads is not None:
+        if a.stage!='calibrate' or a.threads not in (1,4,8):raise ValueError('thread override is a bounded calibration only')
+        plan=dict(plan,threads=a.threads)
     if a.schedule_steps is not None and (a.route!='a' or a.schedule_steps<a.steps):
         raise ValueError('explicit schedule horizon is A-only and cannot precede target update')
     if len(set(a.retain_step))!=len(a.retain_step) or any(n<1 or n>a.steps for n in a.retain_step):
@@ -243,6 +250,8 @@ def main():
     a.output.mkdir(parents=True,exist_ok=False)
     study='TL-LM-EXEC' if a.stage in ('cache','checks','calibrate') or a.probe else ('TL-A-LM' if a.route=='a' else 'TL-B-LM')
     if a.depth==2 and study=='TL-A-LM':study='TL-LM-SCALE'
+    if plan.get('study_id'):
+        study='TL-DEPTH-CHECK' if a.stage in ('cache','checks','calibrate') or a.probe else plan['study_id']
     manifest=dict(schema='tide-lab-run-v1',project='tide-learning-lab',study_id=study,group=study,
         run_id=a.run_id,name=a.run_id,created_at=now(),config=plan,
         resolved=dict(route=a.route,kind=a.kind,seed=a.seed,length=a.length,batch=a.batch,steps=a.steps,depth=a.depth,probe=a.probe),

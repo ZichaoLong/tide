@@ -15,8 +15,9 @@ from tide_lab.records import Metrics,atomic_json,digest,now,project_to_lens
 from tide_lab.language_data import choose_documents,shifted_block,text_hash
 
 
-def select_confirmation(documents,old_lock,seed=20261109,count=16):
+def select_confirmation(documents,old_lock,seed=20261109,count=16,additional_locks=()):
     used={d['id'] for d in old_lock['selected_documents']['test']}
+    for lock in additional_locks:used.update(d['id'] for d in lock['selected_documents']['test'])
     pool=[d for d in documents if d['split']=='test' and d['id'] not in used]
     selected=choose_documents(pool,count,seed)
     if len(selected)!=count or len({d['id'] for d in selected})!=count:
@@ -41,17 +42,19 @@ def prepare(a):
     if hashes['tokenizer.json']!=old['tokenizer_b_sha256']:
         raise ValueError('B tokenizer changed')
     documents=[json.loads(line) for line in (a.documents/'documents.jsonl').read_text().splitlines()]
-    selected=select_confirmation(documents,old)
+    seed=getattr(a,'selection_seed',20261109)
+    excluded=[json.loads(p.read_text()) for p in getattr(a,'exclude_lock',[])]
+    selected=select_confirmation(documents,old,seed=seed,additional_locks=excluded)
     a.output.mkdir(parents=True,exist_ok=False);out=a.output/'tokens';out.mkdir()
-    run_id='tl-lm0-confirmation-v4'
+    run_id=getattr(a,'run_id','tl-lm0-confirmation-v4')
     atomic_json(a.output/'manifest.json',dict(schema='tide-lab-run-v1',project='tide-learning-lab',
         study_id='TL-LM0',group='TL-LM0',run_id=run_id,name=run_id,created_at=now(),
         config=dict(source=source_identity(),parent_data_lock_sha256=digest(a.parent/'data-lock.json'),
-                    selection_seed=20261109,documents=16)))
+                    selection_seed=seed,documents=16)))
     atomic_json(a.output/'state.json',dict(state='running'));metrics=Metrics(a.output,run_id)
     # Publish selection before tokenization, cache building, or any outcome.
-    selection=dict(schema='tide-confirmation-selection-v1',created_at=now(),seed=20261109,
-        ids=[d['id'] for d in selected],excluded=[d['id'] for d in old['selected_documents']['test']],
+    selection=dict(schema='tide-confirmation-selection-v1',created_at=now(),seed=seed,
+        ids=[d['id'] for d in selected],excluded=sorted({d['id'] for lock in [old,*excluded] for d in lock['selected_documents']['test']}),
         rule='first 16 unused official-test articles by sha256(seed:id); first two 128-target chunks')
     atomic_json(a.output/'selection.json',selection)
     tokenizer=Tokenizer.from_file(str(a.parent/'tokenizer-a.json'))
@@ -59,7 +62,7 @@ def prepare(a):
     lock=copy.deepcopy(old)
     lock['selected_documents']['test']=[{k:d[k] for k in ('id','sha256','utf8_bytes','title')} for d in selected]
     lock['confirmation']=dict(parent_data_lock_sha256=digest(a.parent/'data-lock.json'),
-        selection_sha256=digest(a.output/'selection.json'),selection_seed=20261109,
+        selection_sha256=digest(a.output/'selection.json'),selection_seed=seed,
         training_validation='tensor values, row order and identifiers exactly preserved',
         old_test='observed development evidence, excluded from confirmation')
     shutil.copyfile(a.parent/'tokenizer-a.json',out/'tokenizer-a.json')
@@ -105,6 +108,9 @@ def prepare(a):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('parent','documents','output','asset-path','recording-cli'):p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--selection-seed',type=int,default=20261109)
+    p.add_argument('--exclude-lock',type=Path,action='append',default=[])
+    p.add_argument('--run-id',default='tl-lm0-confirmation-v4')
     a=p.parse_args()
     try:return prepare(a)
     except BaseException as error:

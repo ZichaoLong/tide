@@ -25,6 +25,15 @@
   `docs/studies/language-confirmation-v4.md`: A512 plus one extra-exposure Transformer,
   one B rank32 control, and conditional matched FC8; a new shared 12h/8NPUh batch.
   Historical costs and failures remain closed and separate; no automatic seed22.
+  The 2026-11-09 acceptance authorizes `docs/studies/language-depth-proposal.md`:
+  eight main training runs and two conditional HB40 runs, a new shared 12h and
+  24 aggregate compute-worker-hour cap, up to six workers including the old job.
+  The user explicitly allows low-HBM/low-AICore shared-card admission and CPU
+  multithreading to improve turnaround, overriding the skill's idle-only/FIFO
+  rules. CPU training substitutes within that same aggregate compute cap.
+  Preserve background.slice, fixed inputs, measured headroom and original failures.
+  Authorized retirement covers the audited six obsolete artifacts and redundant
+  old Trackio projections with local evidence retained; never delete active inputs.
   Do not expand beyond the selected bounded table. Shared environments and other projects remain read-only.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.

@@ -50,6 +50,23 @@ def core_axes(encoder,options,seed,device):
     if x.grad is None or not bool(x.grad.abs().sum()>0):raise AssertionError('input gradient disconnected')
     if not any(p.grad is not None and bool(p.grad.abs().sum()>0) for p in encoder.parameters()):
         raise AssertionError('graph gradient disconnected')
+    # Inspect differentiable public event outputs; no execution-core hooks.
+    depth_facts=dict(nodes=len(encoder.binding.graph.nodes),regions=len(encoder.binding.graph.regions),
+        edges=len(encoder.binding.graph.edges),input_nodes=list(encoder.binding.graph.inputs),
+        output_nodes=list(encoder.binding.graph.outputs),region_events=[])
+    for region in range(len(encoder.binding.graph.regions)):
+        events=[e for e in result.trace if encoder.binding.graph.nodes[e['node']].region==region]
+        nodes=[i for i,node in enumerate(encoder.binding.graph.nodes) if node.region==region]
+        grads=[g for name,g in gradients.items() if g is not None and any(name.startswith(f'graph_model.nodes.{i}.') for i in nodes)]
+        magnitude=sum(float(g.abs().sum()) for g in grads)
+        depth_facts['region_events'].append(dict(region=region,candidates=len(events),
+            full=sum(e['active'] for e in events),node_parameter_vjp_l1=magnitude))
+        if magnitude==0:raise AssertionError(f'output has no measured parameter gradient through region {region}')
+    depth_facts['internal_messages']=result.stats.get('visited_edges',0)
+    if depth_facts['regions']>1:
+        if set(encoder.binding.graph.inputs)&set(encoder.binding.graph.outputs):
+            raise AssertionError('deep topology has direct input/output bypass')
+        if not depth_facts['internal_messages']:raise AssertionError('deep graph produced no internal messages')
     causal_input=x.detach().clone().requires_grad_(True)
     causal_output=encoder(causal_input)
     future_vjp=torch.autograd.grad(causal_output[:,:2].sum(),causal_input)[0][:,2:]
@@ -71,7 +88,7 @@ def core_axes(encoder,options,seed,device):
             raise AssertionError('reference causality or early discrete support changed')
         chunked=encoder(x.detach(),chunk_size=1)
         streaming=encoder(x.detach(),implementation='streaming')
-    return dict(strict=report,roots=roots,causal=causal,
+    return dict(strict=report,roots=roots,causal=causal,depth_facts=depth_facts,
         causal_mechanisms=dict(future_vjp_exact_zero=True,reference_intervention=reference_causal,
             early_support_unchanged=True,cutoff=cutoff,
             note='retain strict eager perturbation failure separately; independent reference, exact future VJP and early support checked; dynamic packing is a hypothesis, not a proven root cause'),
