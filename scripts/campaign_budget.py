@@ -12,6 +12,7 @@ import sys
 import time
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from tide_lab.records import atomic_json,now
+from tide_lab.supervisor import cgroup_processes
 
 
 def timestamp(s):return datetime.datetime.fromisoformat(s).timestamp()
@@ -21,7 +22,7 @@ def usage(root,exclude=()):
     cpu=npu=cal_cpu=cal_npu=0.;active=[];rows=[];rss=0;threads=0
     for path in sorted((root/'artifacts/jobs').glob('v6-*/job.json')):
         job=json.loads(path.read_text());name=job['job_id']
-        if name in exclude:continue
+        if name in exclude or name.startswith('v6-budget'):continue
         sf=path.parent/'state.json';state=json.loads(sf.read_text()) if sf.exists() else {}
         start=state.get('started_at',state.get('submitted_at',job['created_at']))
         end=state.get('ended_at',state.get('finalized_at'))
@@ -35,7 +36,14 @@ def usage(root,exclude=()):
             group=state.get('control_group')
             if group:
                 try:rss+=int((Path('/sys/fs/cgroup')/group.lstrip('/')/'memory.current').read_text())
-                except (OSError,ValueError):pass
+                except (OSError,ValueError):
+                    # This site's lifecycle hierarchy is v1 name=systemd;
+                    # memory controllers can stay at a shared ancestor. Read
+                    # the actual owned processes instead of treating missing
+                    # per-unit memory.current as zero usage.
+                    for child in cgroup_processes(group):
+                        try:rss+=int(Path('/proc',str(child['pid']),'statm').read_text().split()[1])*os.sysconf('SC_PAGE_SIZE')
+                        except (OSError,ValueError,IndexError):pass
         rows.append(dict(job_id=name,state=state.get('state'),allocated_seconds=elapsed,
             threads=job['resources']['threads'],device=job['device']))
     return dict(cpu_core_seconds=cpu,npu_device_seconds=npu,calibration_cpu_core_seconds=cal_cpu,

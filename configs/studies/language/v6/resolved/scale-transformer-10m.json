@@ -1,0 +1,106 @@
+{
+  "base_config_sha256": "2f568d08a94e75e99eee964d04e0133b6fdfed8069a712345bbc74cef0c7dae9",
+  "campaign": "language-v6",
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "core": {
+    "max_materialize_bytes": 1073741824,
+    "recipe": {
+      "branches": 2,
+      "depth": 4,
+      "family": "kv",
+      "history": 512,
+      "memory_overrides": {
+        "memory_read": "qry"
+      },
+      "offsets": [
+        0,
+        1
+      ],
+      "profile": "baseline",
+      "region_overrides": {
+        "allocation_temperature": 0.25
+      },
+      "region_width": 4,
+      "regularizer": "quad",
+      "selection": "regional_total",
+      "source_mode": "region",
+      "sparse_denominator": 2,
+      "topology": "fc",
+      "width": 32
+    },
+    "width": 32
+  },
+  "coverage_group": "transformer_control",
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed; separate frozen finalist review only"
+  },
+  "id": "scale-transformer-10m",
+  "kind": "transformer",
+  "line": "scale",
+  "planned_inventory": {
+    "lm_trainable": 9740544,
+    "transformer": {
+      "ffn": 1024,
+      "heads": 4,
+      "layers": 11,
+      "width": 256
+    }
+  },
+  "planned_transformer_parameters": 9740544,
+  "resolution": {
+    "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
+    "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
+    "native_trace": "public factory returns complete traces; no execution-core changes",
+    "npu_calibration": "v6-cal-transformer-npu-b128",
+    "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+    "selection": "finite-exploration"
+  },
+  "resources": {
+    "max_rss_gib": 48
+  },
+  "revisions": {
+    "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-language-campaign-config-v1",
+  "seed": 11,
+  "study_id": "TL-SCALE-v6",
+  "threads": 2,
+  "training": {
+    "batch": 32,
+    "checkpoint_seconds": 600,
+    "clip_norm": 1.0,
+    "eps": 1e-06,
+    "eval_batch": 32,
+    "eval_tokens": 32768,
+    "global_batch": 32,
+    "initial_eval_tokens": 2048,
+    "length": 128,
+    "log_every": 8,
+    "lr": 0.001,
+    "lr_floor_fraction": 0.1,
+    "milestones": [
+      262144,
+      1048576,
+      4194304
+    ],
+    "target_tokens": 4194304,
+    "timeout_seconds": 129600,
+    "validation_every_tokens": 131072,
+    "warmup_tokens": 65536,
+    "weight_decay": 0.01
+  },
+  "transformer": {
+    "ffn": 1024,
+    "heads": 4,
+    "layers": 11,
+    "width": 256
+  }
+}

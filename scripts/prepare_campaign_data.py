@@ -31,7 +31,9 @@ def prepare(a):
             target=raw/Path(row['path']).name
             url='https://huggingface.co/datasets/Salesforce/wikitext/resolve/'+a.revision+'/'+row['path']+'?download=true'
             temp=target.with_suffix('.partial')
-            if a.parallel_ranges:
+            if a.raw_dir:
+                shutil.copyfile(a.raw_dir/target.name,temp)
+            elif a.parallel_ranges:
                 parts=raw/(target.name+'.parts');parts.mkdir()
                 ranges=[(i,start,min(row['size'],start+8*2**20)-1)
                         for i,start in enumerate(range(0,row['size'],8*2**20))]
@@ -56,7 +58,7 @@ def prepare(a):
                 if prior.is_file():shutil.copyfile(prior,temp)
             # One bounded HTTP Range continuation after the recorded urllib
             # read timeout. No retry loop and no shared proxy configuration.
-            if not a.parallel_ranges:
+            if not a.parallel_ranges and not a.raw_dir:
                 subprocess.run(['curl','--fail','--location','--silent','--show-error',
                     '--connect-timeout','20','--max-time','1200','--speed-time','120',
                     '--speed-limit','1024','--continue-at','-', '--output',str(temp),url],
@@ -64,7 +66,7 @@ def prepare(a):
             if temp.stat().st_size!=row['size'] or digest(temp)!=row['lfs']['oid']:
                 raise ValueError('fixed remote file size/hash mismatch: '+row['path'])
             temp.rename(target);target.chmod(0o444)
-            if a.parallel_ranges:
+            if a.parallel_ranges and not a.raw_dir:
                 for part in ordered:part.unlink()
                 parts.rmdir()
             files.append(dict(path=row['path'],sha256=digest(target),size=target.stat().st_size))
@@ -144,4 +146,5 @@ if __name__=='__main__':
     p.add_argument('--partial-dir',type=Path)
     p.add_argument('--parallel-ranges',type=int,choices=range(1,9))
     p.add_argument('--max-train-shards',type=int,choices=(1,2))
+    p.add_argument('--raw-dir',type=Path,help='reuse already obtained files; full fixed LFS digest still required')
     prepare(p.parse_args())

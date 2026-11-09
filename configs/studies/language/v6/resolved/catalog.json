@@ -1,0 +1,1611 @@
+{
+  "cases": [
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-anchor.json",
+      "device": "cpu",
+      "id": "cover-fc-anchor",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-kv-sum.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-kv-sum",
+      "line": "coverage",
+      "parameters": 619956,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-sum.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-affine-sum",
+      "line": "coverage",
+      "parameters": 612292,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-state.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-affine-state",
+      "line": "coverage",
+      "parameters": 661444,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-sum.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-delta-sum",
+      "line": "coverage",
+      "parameters": 612820,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-state.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-delta-state",
+      "line": "coverage",
+      "parameters": 661972,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-sum.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-gated_delta-sum",
+      "line": "coverage",
+      "parameters": 621028,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-state.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-gated_delta-state",
+      "line": "coverage",
+      "parameters": 637412,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-sum.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-ssd-sum",
+      "line": "coverage",
+      "parameters": 620516,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-state.json",
+      "device": "cpu",
+      "id": "cover-fc-mem-ssd-state",
+      "line": "coverage",
+      "parameters": 636900,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-read-zero.json",
+      "device": "cpu",
+      "id": "cover-fc-read-zero",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-read-old.json",
+      "device": "cpu",
+      "id": "cover-fc-read-old",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-local-match.json",
+      "device": "cpu",
+      "id": "cover-fc-local-match",
+      "line": "coverage",
+      "parameters": 657012,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-region-att-stats.json",
+      "device": "cpu",
+      "id": "cover-fc-region-att-stats",
+      "line": "coverage",
+      "parameters": 675668,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-region-att-content.json",
+      "device": "cpu",
+      "id": "cover-fc-region-att-content",
+      "line": "coverage",
+      "parameters": 706772,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-evidence-grouped.json",
+      "device": "cpu",
+      "id": "cover-fc-evidence-grouped",
+      "line": "coverage",
+      "parameters": 652404,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-match-att-grouped.json",
+      "device": "cpu",
+      "id": "cover-fc-match-att-grouped",
+      "line": "coverage",
+      "parameters": 677972,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total25.json",
+      "device": "cpu",
+      "id": "cover-fc-fixed-total25",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total50.json",
+      "device": "cpu",
+      "id": "cover-fc-fixed-total50",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total100.json",
+      "device": "cpu",
+      "id": "cover-fc-fixed-total100",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gamma1.json",
+      "device": "cpu",
+      "id": "cover-fc-gamma1",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gamma4.json",
+      "device": "cpu",
+      "id": "cover-fc-gamma4",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-temperature1.json",
+      "device": "cpu",
+      "id": "cover-fc-temperature1",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-score-width8.json",
+      "device": "cpu",
+      "id": "cover-fc-score-width8",
+      "line": "coverage",
+      "parameters": 602292,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-evidence-width8.json",
+      "device": "cpu",
+      "id": "cover-fc-evidence-width8",
+      "line": "coverage",
+      "parameters": 603060,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-match-width8.json",
+      "device": "cpu",
+      "id": "cover-fc-match-width8",
+      "line": "coverage",
+      "parameters": 675636,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-match-residual-off.json",
+      "device": "cpu",
+      "id": "cover-fc-match-residual-off",
+      "line": "coverage",
+      "parameters": 657012,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-match-inner-off.json",
+      "device": "cpu",
+      "id": "cover-fc-match-inner-off",
+      "line": "coverage",
+      "parameters": 657012,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-att-local-off.json",
+      "device": "cpu",
+      "id": "cover-fc-att-local-off",
+      "line": "coverage",
+      "parameters": 675668,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-att-regional-off.json",
+      "device": "cpu",
+      "id": "cover-fc-att-regional-off",
+      "line": "coverage",
+      "parameters": 675668,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-bern.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_total-bern",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent1.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_total-ent1",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent15.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_total-ent15",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent2.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_total-ent2",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-quad.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold-quad",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-bern.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold-bern",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent1.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold-ent1",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent15.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold-ent15",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent2.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold-ent2",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-quad.json",
+      "device": "cpu",
+      "id": "cover-fc-send-constrained-quad",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-bern.json",
+      "device": "cpu",
+      "id": "cover-fc-send-constrained-bern",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent1.json",
+      "device": "cpu",
+      "id": "cover-fc-send-constrained-ent1",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent15.json",
+      "device": "cpu",
+      "id": "cover-fc-send-constrained-ent15",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent2.json",
+      "device": "cpu",
+      "id": "cover-fc-send-constrained-ent2",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total_zero.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_total_zero",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold_hard.json",
+      "device": "cpu",
+      "id": "cover-fc-send-regional_threshold_hard",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-hard_selection.json",
+      "device": "cpu",
+      "id": "cover-fc-send-hard_selection",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-direct_attention.json",
+      "device": "cpu",
+      "id": "cover-fc-send-direct_attention",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-unit_attention.json",
+      "device": "cpu",
+      "id": "cover-fc-send-unit_attention",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-pooled_attention.json",
+      "device": "cpu",
+      "id": "cover-fc-send-pooled_attention",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-send-proportional.json",
+      "device": "cpu",
+      "id": "cover-fc-send-proportional",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-direct-received.json",
+      "device": "cpu",
+      "id": "cover-fc-direct-received",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-unit-mu.json",
+      "device": "cpu",
+      "id": "cover-fc-unit-mu",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-constrained-context-gain.json",
+      "device": "cpu",
+      "id": "cover-fc-constrained-context-gain",
+      "line": "coverage",
+      "parameters": 665024,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-constrained-learned-gain.json",
+      "device": "cpu",
+      "id": "cover-fc-constrained-learned-gain",
+      "line": "coverage",
+      "parameters": 580544,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-received.json",
+      "device": "cpu",
+      "id": "cover-fc-gain-att-received",
+      "line": "coverage",
+      "parameters": 587088,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-mu.json",
+      "device": "cpu",
+      "id": "cover-fc-gain-att-mu",
+      "line": "coverage",
+      "parameters": 587088,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-threshold-fixed.json",
+      "device": "cpu",
+      "id": "cover-fc-threshold-fixed",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-zero-fixed.json",
+      "device": "cpu",
+      "id": "cover-fc-zero-fixed",
+      "line": "coverage",
+      "parameters": 580528,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-source-node.json",
+      "device": "cpu",
+      "id": "cover-fc-source-node",
+      "line": "coverage",
+      "parameters": 694932,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-source-source.json",
+      "device": "cpu",
+      "id": "cover-fc-source-source",
+      "line": "coverage",
+      "parameters": 687540,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-source-adapted.json",
+      "device": "cpu",
+      "id": "cover-fc-source-adapted",
+      "line": "coverage",
+      "parameters": 883348,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-window16.json",
+      "device": "cpu",
+      "id": "cover-fc-window16",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-window128.json",
+      "device": "cpu",
+      "id": "cover-fc-window128",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-summary8.json",
+      "device": "cpu",
+      "id": "cover-fc-summary8",
+      "line": "coverage",
+      "parameters": 521652,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-adapter8.json",
+      "device": "cpu",
+      "id": "cover-fc-adapter8",
+      "line": "coverage",
+      "parameters": 632244,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ffn2x.json",
+      "device": "cpu",
+      "id": "cover-fc-ffn2x",
+      "line": "coverage",
+      "parameters": 570804,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ffn8x.json",
+      "device": "cpu",
+      "id": "cover-fc-ffn8x",
+      "line": "coverage",
+      "parameters": 865716,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-full-memory-off.json",
+      "device": "cpu",
+      "id": "cover-fc-full-memory-off",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-full-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-fc-full-ffn-off",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-heads2.json",
+      "device": "cpu",
+      "id": "cover-fc-heads2",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-decay-slow.json",
+      "device": "cpu",
+      "id": "cover-fc-decay-slow",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-rope-half.json",
+      "device": "cpu",
+      "id": "cover-fc-rope-half",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-rope-full.json",
+      "device": "cpu",
+      "id": "cover-fc-rope-full",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-rope-read.json",
+      "device": "cpu",
+      "id": "cover-fc-rope-read",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-distance-slope.json",
+      "device": "cpu",
+      "id": "cover-fc-distance-slope",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv1.json",
+      "device": "cpu",
+      "id": "cover-fc-gated_delta-conv1",
+      "line": "coverage",
+      "parameters": 632804,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv8.json",
+      "device": "cpu",
+      "id": "cover-fc-gated_delta-conv8",
+      "line": "coverage",
+      "parameters": 643556,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-heads2.json",
+      "device": "cpu",
+      "id": "cover-fc-gated_delta-heads2",
+      "line": "coverage",
+      "parameters": 744980,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-mem-off.json",
+      "device": "cpu",
+      "id": "cover-fc-gated_delta-mem-off",
+      "line": "coverage",
+      "parameters": 637412,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-fc-gated_delta-ffn-off",
+      "line": "coverage",
+      "parameters": 637412,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv1.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-conv1",
+      "line": "coverage",
+      "parameters": 632292,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv8.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-conv8",
+      "line": "coverage",
+      "parameters": 643044,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-heads2.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-heads2",
+      "line": "coverage",
+      "parameters": 706068,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-mem-off.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-mem-off",
+      "line": "coverage",
+      "parameters": 636900,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-ffn-off",
+      "line": "coverage",
+      "parameters": 636900,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-ssd-groups2.json",
+      "device": "cpu",
+      "id": "cover-fc-ssd-groups2",
+      "line": "coverage",
+      "parameters": 743956,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-budget-div1.json",
+      "device": "cpu",
+      "id": "cover-fc-budget-div1",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-budget-div4.json",
+      "device": "cpu",
+      "id": "cover-fc-budget-div4",
+      "line": "coverage",
+      "parameters": 669108,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-textbook-kv.json",
+      "device": "cpu",
+      "id": "cover-fc-textbook-kv",
+      "line": "coverage",
+      "parameters": 619956,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-fc-textbook-mixed.json",
+      "device": "cpu",
+      "id": "cover-fc-textbook-mixed",
+      "line": "coverage",
+      "parameters": 1113440,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-anchor.json",
+      "device": "cpu",
+      "id": "cover-hb-anchor",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-kv-sum.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-kv-sum",
+      "line": "coverage",
+      "parameters": 1347666,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-sum.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-affine-sum",
+      "line": "coverage",
+      "parameters": 1328506,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-state.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-affine-state",
+      "line": "coverage",
+      "parameters": 1451386,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-sum.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-delta-sum",
+      "line": "coverage",
+      "parameters": 1329826,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-state.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-delta-state",
+      "line": "coverage",
+      "parameters": 1452706,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-sum.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-gated_delta-sum",
+      "line": "coverage",
+      "parameters": 1350346,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-state.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-gated_delta-state",
+      "line": "coverage",
+      "parameters": 1391306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-sum.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-ssd-sum",
+      "line": "coverage",
+      "parameters": 1349066,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-state.json",
+      "device": "cpu",
+      "id": "cover-hb-mem-ssd-state",
+      "line": "coverage",
+      "parameters": 1390026,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-read-zero.json",
+      "device": "cpu",
+      "id": "cover-hb-read-zero",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-read-old.json",
+      "device": "cpu",
+      "id": "cover-hb-read-old",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-local-match.json",
+      "device": "cpu",
+      "id": "cover-hb-local-match",
+      "line": "coverage",
+      "parameters": 1440306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-region-att-stats.json",
+      "device": "cpu",
+      "id": "cover-hb-region-att-stats",
+      "line": "coverage",
+      "parameters": 1486946,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-region-att-content.json",
+      "device": "cpu",
+      "id": "cover-hb-region-att-content",
+      "line": "coverage",
+      "parameters": 1564706,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-evidence-grouped.json",
+      "device": "cpu",
+      "id": "cover-hb-evidence-grouped",
+      "line": "coverage",
+      "parameters": 1428786,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-match-att-grouped.json",
+      "device": "cpu",
+      "id": "cover-hb-match-att-grouped",
+      "line": "coverage",
+      "parameters": 1492706,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total25.json",
+      "device": "cpu",
+      "id": "cover-hb-fixed-total25",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total50.json",
+      "device": "cpu",
+      "id": "cover-hb-fixed-total50",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total100.json",
+      "device": "cpu",
+      "id": "cover-hb-fixed-total100",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gamma1.json",
+      "device": "cpu",
+      "id": "cover-hb-gamma1",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gamma4.json",
+      "device": "cpu",
+      "id": "cover-hb-gamma4",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-temperature1.json",
+      "device": "cpu",
+      "id": "cover-hb-temperature1",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-score-width8.json",
+      "device": "cpu",
+      "id": "cover-hb-score-width8",
+      "line": "coverage",
+      "parameters": 1303506,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-evidence-width8.json",
+      "device": "cpu",
+      "id": "cover-hb-evidence-width8",
+      "line": "coverage",
+      "parameters": 1305426,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-match-width8.json",
+      "device": "cpu",
+      "id": "cover-hb-match-width8",
+      "line": "coverage",
+      "parameters": 1486866,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-match-residual-off.json",
+      "device": "cpu",
+      "id": "cover-hb-match-residual-off",
+      "line": "coverage",
+      "parameters": 1440306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-match-inner-off.json",
+      "device": "cpu",
+      "id": "cover-hb-match-inner-off",
+      "line": "coverage",
+      "parameters": 1440306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-att-local-off.json",
+      "device": "cpu",
+      "id": "cover-hb-att-local-off",
+      "line": "coverage",
+      "parameters": 1486946,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-att-regional-off.json",
+      "device": "cpu",
+      "id": "cover-hb-att-regional-off",
+      "line": "coverage",
+      "parameters": 1486946,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-bern.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_total-bern",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent1.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_total-ent1",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent15.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_total-ent15",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent2.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_total-ent2",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-quad.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold-quad",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-bern.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold-bern",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent1.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold-ent1",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent15.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold-ent15",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent2.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold-ent2",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-quad.json",
+      "device": "cpu",
+      "id": "cover-hb-send-constrained-quad",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-bern.json",
+      "device": "cpu",
+      "id": "cover-hb-send-constrained-bern",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent1.json",
+      "device": "cpu",
+      "id": "cover-hb-send-constrained-ent1",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent15.json",
+      "device": "cpu",
+      "id": "cover-hb-send-constrained-ent15",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent2.json",
+      "device": "cpu",
+      "id": "cover-hb-send-constrained-ent2",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total_zero.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_total_zero",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold_hard.json",
+      "device": "cpu",
+      "id": "cover-hb-send-regional_threshold_hard",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-hard_selection.json",
+      "device": "cpu",
+      "id": "cover-hb-send-hard_selection",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-direct_attention.json",
+      "device": "cpu",
+      "id": "cover-hb-send-direct_attention",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-unit_attention.json",
+      "device": "cpu",
+      "id": "cover-hb-send-unit_attention",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-pooled_attention.json",
+      "device": "cpu",
+      "id": "cover-hb-send-pooled_attention",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-send-proportional.json",
+      "device": "cpu",
+      "id": "cover-hb-send-proportional",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-direct-received.json",
+      "device": "cpu",
+      "id": "cover-hb-direct-received",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-unit-mu.json",
+      "device": "cpu",
+      "id": "cover-hb-unit-mu",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-constrained-context-gain.json",
+      "device": "cpu",
+      "id": "cover-hb-constrained-context-gain",
+      "line": "coverage",
+      "parameters": 1460336,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-constrained-learned-gain.json",
+      "device": "cpu",
+      "id": "cover-hb-constrained-learned-gain",
+      "line": "coverage",
+      "parameters": 1249136,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-received.json",
+      "device": "cpu",
+      "id": "cover-hb-gain-att-received",
+      "line": "coverage",
+      "parameters": 1265496,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-mu.json",
+      "device": "cpu",
+      "id": "cover-hb-gain-att-mu",
+      "line": "coverage",
+      "parameters": 1265496,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-threshold-fixed.json",
+      "device": "cpu",
+      "id": "cover-hb-threshold-fixed",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-zero-fixed.json",
+      "device": "cpu",
+      "id": "cover-hb-zero-fixed",
+      "line": "coverage",
+      "parameters": 1249096,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-source-node.json",
+      "device": "cpu",
+      "id": "cover-hb-source-node",
+      "line": "coverage",
+      "parameters": 1533618,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-source-source.json",
+      "device": "cpu",
+      "id": "cover-hb-source-source",
+      "line": "coverage",
+      "parameters": 1550418,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-source-adapted.json",
+      "device": "cpu",
+      "id": "cover-hb-source-adapted",
+      "line": "coverage",
+      "parameters": 1881778,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-window16.json",
+      "device": "cpu",
+      "id": "cover-hb-window16",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-window128.json",
+      "device": "cpu",
+      "id": "cover-hb-window128",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-summary8.json",
+      "device": "cpu",
+      "id": "cover-hb-summary8",
+      "line": "coverage",
+      "parameters": 1101906,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-adapter8.json",
+      "device": "cpu",
+      "id": "cover-hb-adapter8",
+      "line": "coverage",
+      "parameters": 1378386,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ffn2x.json",
+      "device": "cpu",
+      "id": "cover-hb-ffn2x",
+      "line": "coverage",
+      "parameters": 1224786,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ffn8x.json",
+      "device": "cpu",
+      "id": "cover-hb-ffn8x",
+      "line": "coverage",
+      "parameters": 1962066,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-full-memory-off.json",
+      "device": "cpu",
+      "id": "cover-hb-full-memory-off",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-full-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-hb-full-ffn-off",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-heads2.json",
+      "device": "cpu",
+      "id": "cover-hb-heads2",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-decay-slow.json",
+      "device": "cpu",
+      "id": "cover-hb-decay-slow",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-rope-half.json",
+      "device": "cpu",
+      "id": "cover-hb-rope-half",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-rope-full.json",
+      "device": "cpu",
+      "id": "cover-hb-rope-full",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-rope-read.json",
+      "device": "cpu",
+      "id": "cover-hb-rope-read",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-distance-slope.json",
+      "device": "cpu",
+      "id": "cover-hb-distance-slope",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv1.json",
+      "device": "cpu",
+      "id": "cover-hb-gated_delta-conv1",
+      "line": "coverage",
+      "parameters": 1379786,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv8.json",
+      "device": "cpu",
+      "id": "cover-hb-gated_delta-conv8",
+      "line": "coverage",
+      "parameters": 1406666,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-heads2.json",
+      "device": "cpu",
+      "id": "cover-hb-gated_delta-heads2",
+      "line": "coverage",
+      "parameters": 1660226,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-mem-off.json",
+      "device": "cpu",
+      "id": "cover-hb-gated_delta-mem-off",
+      "line": "coverage",
+      "parameters": 1391306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-hb-gated_delta-ffn-off",
+      "line": "coverage",
+      "parameters": 1391306,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv1.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-conv1",
+      "line": "coverage",
+      "parameters": 1378506,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv8.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-conv8",
+      "line": "coverage",
+      "parameters": 1405386,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-heads2.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-heads2",
+      "line": "coverage",
+      "parameters": 1562946,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-mem-off.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-mem-off",
+      "line": "coverage",
+      "parameters": 1390026,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-ffn-off.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-ffn-off",
+      "line": "coverage",
+      "parameters": 1390026,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-ssd-groups2.json",
+      "device": "cpu",
+      "id": "cover-hb-ssd-groups2",
+      "line": "coverage",
+      "parameters": 1657666,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-budget-div1.json",
+      "device": "cpu",
+      "id": "cover-hb-budget-div1",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-budget-div4.json",
+      "device": "cpu",
+      "id": "cover-hb-budget-div4",
+      "line": "coverage",
+      "parameters": 1470546,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-textbook-kv.json",
+      "device": "cpu",
+      "id": "cover-hb-textbook-kv",
+      "line": "coverage",
+      "parameters": 1474002,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-hb-textbook-mixed.json",
+      "device": "cpu",
+      "id": "cover-hb-textbook-mixed",
+      "line": "coverage",
+      "parameters": 1491202,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-transformer-fc-budget.json",
+      "device": "npu:0",
+      "id": "cover-transformer-fc-budget",
+      "line": "coverage",
+      "parameters": 661120,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/cover-transformer-hb-budget.json",
+      "device": "npu:0",
+      "id": "cover-transformer-hb-budget",
+      "line": "coverage",
+      "parameters": 1456000,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad.json",
+      "device": "cpu",
+      "id": "scale-fc16-kv-quad",
+      "line": "scale",
+      "parameters": 5092788,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc32-kv-quad.json",
+      "device": "cpu",
+      "id": "scale-fc32-kv-quad",
+      "line": "scale",
+      "parameters": 9657288,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc64-kv-quad.json",
+      "device": "cpu",
+      "id": "scale-fc64-kv-quad",
+      "line": "scale",
+      "parameters": 18786288,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-hb40-kv-quad.json",
+      "device": "cpu",
+      "id": "scale-hb40-kv-quad",
+      "line": "scale",
+      "parameters": 11939922,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
+      "device": "cpu",
+      "id": "scale-hb88-kv-quad",
+      "line": "scale",
+      "parameters": 25633934,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad.json",
+      "device": "cpu",
+      "id": "scale-fc16-ssd-quad",
+      "line": "scale",
+      "parameters": 5182948,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc32-ssd-quad.json",
+      "device": "cpu",
+      "id": "scale-fc32-ssd-quad",
+      "line": "scale",
+      "parameters": 9837608,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-gdn-quad.json",
+      "device": "cpu",
+      "id": "scale-fc16-gdn-quad",
+      "line": "scale",
+      "parameters": 5184996,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-shannon.json",
+      "device": "cpu",
+      "id": "scale-fc16-shannon",
+      "line": "scale",
+      "parameters": 5092788,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc32-shannon.json",
+      "device": "cpu",
+      "id": "scale-fc32-shannon",
+      "line": "scale",
+      "parameters": 9657288,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-hb40-shannon.json",
+      "device": "cpu",
+      "id": "scale-hb40-shannon",
+      "line": "scale",
+      "parameters": 11939922,
+      "threads": 1
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-transformer-5m.json",
+      "device": "npu:0",
+      "id": "scale-transformer-5m",
+      "line": "scale",
+      "parameters": 5001984,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-transformer-10m.json",
+      "device": "npu:0",
+      "id": "scale-transformer-10m",
+      "line": "scale",
+      "parameters": 9740544,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-transformer-19m.json",
+      "device": "npu:0",
+      "id": "scale-transformer-19m",
+      "line": "scale",
+      "parameters": 19322368,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad-npu.json",
+      "device": "npu:0",
+      "id": "scale-fc16-kv-quad-npu",
+      "line": "scale",
+      "parameters": 5092788,
+      "threads": 2
+    },
+    {
+      "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad-npu.json",
+      "device": "npu:0",
+      "id": "scale-fc16-ssd-quad-npu",
+      "line": "scale",
+      "parameters": 5182948,
+      "threads": 2
+    }
+  ],
+  "counts": {
+    "coverage": 184,
+    "scale": 16
+  },
+  "launchable": true,
+  "limits": "shared v6 budget remains authoritative; listed cases may fail admission or truncate before target",
+  "schema": "tide-language-campaign-catalog-v1"
+}
