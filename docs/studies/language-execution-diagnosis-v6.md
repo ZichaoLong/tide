@@ -30,3 +30,7 @@ optimizer及恢复要求，不能为提速删除必要检查或改变None/连接
 条件性表固定在`configs/checks/v6-execution-variants.json`。transport项通过公共Native构造器
 显式采用`trace=False, compact_events=True, packed_sources=True, batch_next=True`，
 它改变返回/传输策略，必须单独解释；不把它默认为原配置的严格等价性能结果。
+
+审阅设备trace后，width128/256/512三点各补一条同B8/L16的CPU对照（三次CPU运行），
+以判断宽度增长是否缩小设备差距；仅测NPU宽度变化不能回答这个问题。共同1 NPU卡时/
+3 CPU核时/4GiB上限不变，无新模型候选或正式训练。宽度点是基线及两组更宽配对，不扩展全矩阵。
