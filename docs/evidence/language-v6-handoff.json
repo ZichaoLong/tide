@@ -1,9 +1,9 @@
 {
   "budget": {
     "headroom": {
-      "available_ram_bytes": 1680526012416,
-      "new_disk_bytes": 16566255616,
-      "quota_headroom_bytes": 660690960384
+      "available_ram_bytes": 1581684224000,
+      "new_disk_bytes": 19976949760,
+      "quota_headroom_bytes": 657276366848
     },
     "limits": {
       "authorization": "user-2026-11-09-union-coverage-and-scaling-48h",
@@ -30,12 +30,12 @@
     "record": "runs/v6-budget-v2/state.json",
     "stop_reasons": [],
     "usage": {
-      "active_threads": 115,
-      "calibration_cpu_core_seconds": 11283.800926685333,
-      "calibration_npu_device_seconds": 4016.322491168976,
-      "cgroup_memory_bytes": 365323927552,
-      "cpu_core_seconds": 74140.90939876437,
-      "npu_device_seconds": 5382.753803014755
+      "active_threads": 113,
+      "calibration_cpu_core_seconds": 11812.829920768738,
+      "calibration_npu_device_seconds": 4280.836988210678,
+      "cgroup_memory_bytes": 382547963904,
+      "cpu_core_seconds": 171323.45519084856,
+      "npu_device_seconds": 7350.085656166077
     }
   },
   "calibrations": [
@@ -45,12 +45,15 @@
       "error": null,
       "id": "v6-cal-gdn-npu-b8",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5184996,
       "physical_visibility": "7",
       "record": "runs/v6-cal-gdn-npu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -128,7 +131,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 32,
@@ -136,12 +140,15 @@
       "error": null,
       "id": "v6-cal-kv-cpu-b32",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 32,
       "parameters": 5092788,
       "physical_visibility": null,
       "record": "runs/v6-cal-kv-cpu-b32/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 4,
       "updates": [
         {
@@ -210,7 +217,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 8,
@@ -218,12 +226,15 @@
       "error": null,
       "id": "v6-cal-kv-cpu-b8",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 32,
       "parameters": 5092788,
       "physical_visibility": null,
       "record": "runs/v6-cal-kv-cpu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 1,
       "updates": [
         {
@@ -292,7 +303,8 @@
             "work/state_updates": 4096
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 32,
@@ -300,12 +312,15 @@
       "error": null,
       "id": "v6-cal-kv-npu-b32",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 32,
       "parameters": 5092788,
       "physical_visibility": "3",
       "record": "runs/v6-cal-kv-npu-b32/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -383,7 +398,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 8,
@@ -391,12 +407,15 @@
       "error": null,
       "id": "v6-cal-kv-npu-b8",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 32,
       "parameters": 5092788,
       "physical_visibility": "1",
       "record": "runs/v6-cal-kv-npu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -474,7 +493,8 @@
             "work/state_updates": 4096
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 8,
@@ -482,14 +502,18 @@
       "error": "TypeError(\"Native.run() got an unexpected keyword argument 'trace'\")",
       "id": "v6-cal-native-kv-cpu-b8",
       "implementation": "native",
+      "inner_result_state": "failed",
+      "job_state": "failed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": null,
       "record": "runs/v6-cal-native-kv-cpu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "failed",
+      "termination_verified": true,
       "threads": 1,
-      "updates": []
+      "updates": [],
+      "workload_exit_code": 1
     },
     {
       "batch": 32,
@@ -497,14 +521,18 @@
       "error": "TypeError(\"Native.run() got an unexpected keyword argument 'trace'\")",
       "id": "v6-cal-native-kv-npu-b32",
       "implementation": "native",
+      "inner_result_state": "failed",
+      "job_state": "failed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": "5",
       "record": "runs/v6-cal-native-kv-npu-b32/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "failed",
+      "termination_verified": true,
       "threads": 2,
-      "updates": []
+      "updates": [],
+      "workload_exit_code": 1
     },
     {
       "batch": 8,
@@ -512,14 +540,18 @@
       "error": "TypeError(\"Native.run() got an unexpected keyword argument 'trace'\")",
       "id": "v6-cal-native-kv-npu-b8",
       "implementation": "native",
+      "inner_result_state": "failed",
+      "job_state": "failed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": "1",
       "record": "runs/v6-cal-native-kv-npu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "failed",
+      "termination_verified": true,
       "threads": 2,
-      "updates": []
+      "updates": [],
+      "workload_exit_code": 1
     },
     {
       "batch": 8,
@@ -527,12 +559,15 @@
       "error": null,
       "id": "v6-cal-native2-kv-cpu-b8",
       "implementation": "native",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": null,
       "record": "runs/v6-cal-native2-kv-cpu-b8/result.json",
       "source_commit": "f53e422027f30c87e13f767d7dcd6a8902319b55",
       "state": "completed",
+      "termination_verified": true,
       "threads": 1,
       "updates": [
         {
@@ -601,7 +636,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 32,
@@ -609,12 +645,15 @@
       "error": null,
       "id": "v6-cal-native2-kv-npu-b32",
       "implementation": "native",
+      "inner_result_state": "running",
+      "job_state": "timed_out",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": "5",
       "record": "runs/v6-cal-native2-kv-npu-b32/result.json",
       "source_commit": "f53e422027f30c87e13f767d7dcd6a8902319b55",
-      "state": "running",
+      "state": "timed_out",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -642,7 +681,8 @@
             "work/state_updates": 65536
           }
         }
-      ]
+      ],
+      "workload_exit_code": -15
     },
     {
       "batch": 8,
@@ -650,12 +690,15 @@
       "error": null,
       "id": "v6-cal-native2-kv-npu-b8",
       "implementation": "native",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": "1",
       "record": "runs/v6-cal-native2-kv-npu-b8/result.json",
       "source_commit": "f53e422027f30c87e13f767d7dcd6a8902319b55",
       "state": "completed",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -733,7 +776,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 8,
@@ -741,12 +785,15 @@
       "error": null,
       "id": "v6-cal-python-kv-cpu-l128",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5092788,
       "physical_visibility": null,
       "record": "runs/v6-cal-python-kv-cpu-l128/result.json",
       "source_commit": "f53e422027f30c87e13f767d7dcd6a8902319b55",
       "state": "completed",
+      "termination_verified": true,
       "threads": 1,
       "updates": [
         {
@@ -815,7 +862,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 8,
@@ -823,12 +871,15 @@
       "error": null,
       "id": "v6-cal-ssd-npu-b8",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5182948,
       "physical_visibility": "11",
       "record": "runs/v6-cal-ssd-npu-b8/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 2,
       "updates": [
         {
@@ -906,7 +957,8 @@
             "work/state_updates": 16384
           }
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 32,
@@ -914,12 +966,15 @@
       "error": null,
       "id": "v6-cal-transformer-cpu-b32",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 5001984,
       "physical_visibility": null,
       "record": "runs/v6-cal-transformer-cpu-b32/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 4,
       "updates": [
         {
@@ -949,7 +1004,8 @@
           "warmup": false,
           "work": {}
         }
-      ]
+      ],
+      "workload_exit_code": 0
     },
     {
       "batch": 128,
@@ -957,12 +1013,15 @@
       "error": null,
       "id": "v6-cal-transformer-npu-b128",
       "implementation": "python",
+      "inner_result_state": "completed",
+      "job_state": "completed",
       "length": 128,
       "parameters": 19322368,
       "physical_visibility": "5",
       "record": "runs/v6-cal-transformer-npu-b128/result.json",
       "source_commit": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
       "state": "completed",
+      "termination_verified": true,
       "threads": 4,
       "updates": [
         {
@@ -1001,9 +1060,20 @@
           "warmup": false,
           "work": {}
         }
-      ]
+      ],
+      "workload_exit_code": 0
     }
   ],
+  "capacity_failure": {
+    "architecture_and_batch_unchanged": true,
+    "attempt": "v6-scale-hb88-kv-quad-retry1",
+    "case": "scale-hb88-kv-quad",
+    "cause": "observed process-group RSS 50109.54MiB exceeded 48GiB guard",
+    "new_attempt": "v6-scale-hb88-kv-quad-memory2",
+    "new_cap_gib": 96,
+    "optimizer_updates": 0,
+    "state": "failed"
+  },
   "cases": [
     {
       "admission": {
@@ -1045,8 +1115,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 32,
-      "tokens": 8160,
+      "step": 101,
+      "tokens": 25736,
       "validation_nll": null,
       "worker": "v6-cover-worker-000"
     },
@@ -1128,8 +1198,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 38,
+      "tokens": 9696,
       "validation_nll": null,
       "worker": "v6-cover-worker-001"
     },
@@ -1211,8 +1281,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 36,
-      "tokens": 9184,
+      "step": 115,
+      "tokens": 29305,
       "validation_nll": null,
       "worker": "v6-cover-worker-002"
     },
@@ -1294,8 +1364,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 12,
-      "tokens": 3072,
+      "step": 43,
+      "tokens": 10959,
       "validation_nll": null,
       "worker": "v6-cover-worker-003"
     },
@@ -1377,8 +1447,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 49,
-      "tokens": 12464,
+      "step": 142,
+      "tokens": 36217,
       "validation_nll": null,
       "worker": "v6-cover-worker-004"
     },
@@ -1460,8 +1530,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 14,
-      "tokens": 3584,
+      "step": 49,
+      "tokens": 12464,
       "validation_nll": null,
       "worker": "v6-cover-worker-005"
     },
@@ -1543,8 +1613,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 43,
-      "tokens": 10959,
+      "step": 133,
+      "tokens": 33913,
       "validation_nll": null,
       "worker": "v6-cover-worker-006"
     },
@@ -1626,8 +1696,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 15,
-      "tokens": 3840,
+      "step": 50,
+      "tokens": 12720,
       "validation_nll": null,
       "worker": "v6-cover-worker-007"
     },
@@ -1709,8 +1779,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 44,
-      "tokens": 11215,
+      "step": 139,
+      "tokens": 35449,
       "validation_nll": null,
       "worker": "v6-cover-worker-008"
     },
@@ -1792,8 +1862,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 13,
-      "tokens": 3328,
+      "step": 52,
+      "tokens": 13232,
       "validation_nll": null,
       "worker": "v6-cover-worker-009"
     },
@@ -1875,8 +1945,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 38,
-      "tokens": 9696,
+      "step": 126,
+      "tokens": 32121,
       "validation_nll": null,
       "worker": "v6-cover-worker-010"
     },
@@ -1958,8 +2028,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 13,
-      "tokens": 3328,
+      "step": 43,
+      "tokens": 10959,
       "validation_nll": null,
       "worker": "v6-cover-worker-011"
     },
@@ -2041,8 +2111,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 34,
-      "tokens": 8672,
+      "step": 114,
+      "tokens": 29064,
       "validation_nll": null,
       "worker": "v6-cover-worker-012"
     },
@@ -2124,8 +2194,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 37,
+      "tokens": 9440,
       "validation_nll": null,
       "worker": "v6-cover-worker-013"
     },
@@ -2207,8 +2277,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 32,
-      "tokens": 8160,
+      "step": 105,
+      "tokens": 26760,
       "validation_nll": null,
       "worker": "v6-cover-worker-014"
     },
@@ -2290,8 +2360,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 32,
+      "tokens": 8160,
       "validation_nll": null,
       "worker": "v6-cover-worker-015"
     },
@@ -2373,8 +2443,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 39,
-      "tokens": 9952,
+      "step": 127,
+      "tokens": 32377,
       "validation_nll": null,
       "worker": "v6-cover-worker-016"
     },
@@ -2456,8 +2526,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 12,
-      "tokens": 3072,
+      "step": 43,
+      "tokens": 10959,
       "validation_nll": null,
       "worker": "v6-cover-worker-017"
     },
@@ -2539,8 +2609,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 34,
-      "tokens": 8672,
+      "step": 111,
+      "tokens": 28296,
       "validation_nll": null,
       "worker": "v6-cover-worker-018"
     },
@@ -2622,8 +2692,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 11,
-      "tokens": 2816,
+      "step": 39,
+      "tokens": 9952,
       "validation_nll": null,
       "worker": "v6-cover-worker-019"
     },
@@ -2705,8 +2775,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 41,
-      "tokens": 10464,
+      "step": 129,
+      "tokens": 32889,
       "validation_nll": null,
       "worker": "v6-cover-worker-020"
     },
@@ -2788,8 +2858,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 13,
-      "tokens": 3328,
+      "step": 48,
+      "tokens": 12208,
       "validation_nll": null,
       "worker": "v6-cover-worker-021"
     },
@@ -2871,8 +2941,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 31,
-      "tokens": 7904,
+      "step": 102,
+      "tokens": 25992,
       "validation_nll": null,
       "worker": "v6-cover-worker-022"
     },
@@ -2954,8 +3024,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 39,
+      "tokens": 9952,
       "validation_nll": null,
       "worker": "v6-cover-worker-023"
     },
@@ -3037,8 +3107,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 27,
-      "tokens": 6880,
+      "step": 87,
+      "tokens": 22152,
       "validation_nll": null,
       "worker": "v6-cover-worker-024"
     },
@@ -3120,8 +3190,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 31,
+      "tokens": 7904,
       "validation_nll": null,
       "worker": "v6-cover-worker-025"
     },
@@ -3203,8 +3273,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 30,
-      "tokens": 7648,
+      "step": 96,
+      "tokens": 24456,
       "validation_nll": null,
       "worker": "v6-cover-worker-026"
     },
@@ -3286,8 +3356,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 36,
+      "tokens": 9184,
       "validation_nll": null,
       "worker": "v6-cover-worker-027"
     },
@@ -3369,8 +3439,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 27,
-      "tokens": 6880,
+      "step": 89,
+      "tokens": 22664,
       "validation_nll": null,
       "worker": "v6-cover-worker-028"
     },
@@ -3452,8 +3522,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 33,
+      "tokens": 8416,
       "validation_nll": null,
       "worker": "v6-cover-worker-029"
     },
@@ -3535,8 +3605,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 27,
-      "tokens": 6880,
+      "step": 87,
+      "tokens": 22152,
       "validation_nll": null,
       "worker": "v6-cover-worker-030"
     },
@@ -3618,8 +3688,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 35,
+      "tokens": 8928,
       "validation_nll": null,
       "worker": "v6-cover-worker-031"
     },
@@ -3701,8 +3771,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 22,
-      "tokens": 5606,
+      "step": 72,
+      "tokens": 18329,
       "validation_nll": null,
       "worker": "v6-cover-worker-032"
     },
@@ -3784,8 +3854,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 25,
+      "tokens": 6368,
       "validation_nll": null,
       "worker": "v6-cover-worker-033"
     },
@@ -3867,8 +3937,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 34,
-      "tokens": 8672,
+      "step": 111,
+      "tokens": 28296,
       "validation_nll": null,
       "worker": "v6-cover-worker-034"
     },
@@ -3950,8 +4020,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 12,
-      "tokens": 3072,
+      "step": 46,
+      "tokens": 11727,
       "validation_nll": null,
       "worker": "v6-cover-worker-035"
     },
@@ -4033,8 +4103,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 34,
-      "tokens": 8672,
+      "step": 112,
+      "tokens": 28552,
       "validation_nll": null,
       "worker": "v6-cover-worker-036"
     },
@@ -4116,8 +4186,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 12,
-      "tokens": 3072,
+      "step": 44,
+      "tokens": 11215,
       "validation_nll": null,
       "worker": "v6-cover-worker-037"
     },
@@ -4199,8 +4269,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 36,
-      "tokens": 9184,
+      "step": 115,
+      "tokens": 29305,
       "validation_nll": null,
       "worker": "v6-cover-worker-038"
     },
@@ -4282,8 +4352,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 11,
-      "tokens": 2816,
+      "step": 44,
+      "tokens": 11215,
       "validation_nll": null,
       "worker": "v6-cover-worker-039"
     },
@@ -4365,8 +4435,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 30,
-      "tokens": 7648,
+      "step": 100,
+      "tokens": 25480,
       "validation_nll": null,
       "worker": "v6-cover-worker-040"
     },
@@ -4448,8 +4518,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 36,
+      "tokens": 9184,
       "validation_nll": null,
       "worker": "v6-cover-worker-041"
     },
@@ -4531,8 +4601,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 32,
-      "tokens": 8160,
+      "step": 101,
+      "tokens": 25736,
       "validation_nll": null,
       "worker": "v6-cover-worker-042"
     },
@@ -4614,8 +4684,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 40,
+      "tokens": 10208,
       "validation_nll": null,
       "worker": "v6-cover-worker-043"
     },
@@ -4697,8 +4767,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 30,
-      "tokens": 7648,
+      "step": 100,
+      "tokens": 25480,
       "validation_nll": null,
       "worker": "v6-cover-worker-044"
     },
@@ -4780,8 +4850,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 37,
+      "tokens": 9440,
       "validation_nll": null,
       "worker": "v6-cover-worker-045"
     },
@@ -4863,8 +4933,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 31,
-      "tokens": 7904,
+      "step": 102,
+      "tokens": 25992,
       "validation_nll": null,
       "worker": "v6-cover-worker-046"
     },
@@ -4946,8 +5016,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 39,
+      "tokens": 9952,
       "validation_nll": null,
       "worker": "v6-cover-worker-047"
     },
@@ -5029,8 +5099,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 33,
-      "tokens": 8416,
+      "step": 108,
+      "tokens": 27528,
       "validation_nll": null,
       "worker": "v6-cover-worker-048"
     },
@@ -5112,8 +5182,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 11,
-      "tokens": 2816,
+      "step": 43,
+      "tokens": 10959,
       "validation_nll": null,
       "worker": "v6-cover-worker-049"
     },
@@ -5195,8 +5265,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 26,
-      "tokens": 6624,
+      "step": 82,
+      "tokens": 20872,
       "validation_nll": null,
       "worker": "v6-cover-worker-050"
     },
@@ -5278,8 +5348,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 31,
+      "tokens": 7904,
       "validation_nll": null,
       "worker": "v6-cover-worker-051"
     },
@@ -5361,8 +5431,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 26,
-      "tokens": 6624,
+      "step": 84,
+      "tokens": 21384,
       "validation_nll": null,
       "worker": "v6-cover-worker-052"
     },
@@ -5444,8 +5514,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 32,
+      "tokens": 8160,
       "validation_nll": null,
       "worker": "v6-cover-worker-053"
     },
@@ -5527,8 +5597,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 26,
-      "tokens": 6624,
+      "step": 84,
+      "tokens": 21384,
       "validation_nll": null,
       "worker": "v6-cover-worker-054"
     },
@@ -5610,8 +5680,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 30,
+      "tokens": 7648,
       "validation_nll": null,
       "worker": "v6-cover-worker-055"
     },
@@ -5693,8 +5763,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 28,
-      "tokens": 7136,
+      "step": 94,
+      "tokens": 23944,
       "validation_nll": null,
       "worker": "v6-cover-worker-056"
     },
@@ -5776,8 +5846,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 35,
+      "tokens": 8928,
       "validation_nll": null,
       "worker": "v6-cover-worker-057"
     },
@@ -5859,8 +5929,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 28,
-      "tokens": 7136,
+      "step": 94,
+      "tokens": 23944,
       "validation_nll": null,
       "worker": "v6-cover-worker-058"
     },
@@ -5942,8 +6012,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 35,
+      "tokens": 8928,
       "validation_nll": null,
       "worker": "v6-cover-worker-059"
     },
@@ -6025,8 +6095,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 29,
-      "tokens": 7392,
+      "step": 92,
+      "tokens": 23432,
       "validation_nll": null,
       "worker": "v6-cover-worker-060"
     },
@@ -6108,8 +6178,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 34,
+      "tokens": 8672,
       "validation_nll": null,
       "worker": "v6-cover-worker-061"
     },
@@ -6208,8 +6278,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 51,
+      "tokens": 12976,
       "validation_nll": null,
       "worker": "v6-cover-fc-send-regional_total-ent1-retry1"
     },
@@ -6253,8 +6323,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 32,
-      "tokens": 8160,
+      "step": 105,
+      "tokens": 26760,
       "validation_nll": null,
       "worker": "v6-cover-worker-062"
     },
@@ -6315,8 +6385,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 1,
-      "tokens": 256,
+      "step": 17,
+      "tokens": 4332,
       "validation_nll": null,
       "worker": "v6-cover-hb-send-regional_total-ent1-retry1"
     },
@@ -6360,8 +6430,8 @@
       "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 34,
+      "tokens": 8672,
       "validation_nll": null,
       "worker": "v6-cover-worker-063"
     },
@@ -6405,8 +6475,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 17,
-      "tokens": 4332,
+      "step": 86,
+      "tokens": 21896,
       "validation_nll": null,
       "worker": "v6-cover-worker-064"
     },
@@ -6488,8 +6558,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 4,
-      "tokens": 1024,
+      "step": 31,
+      "tokens": 7904,
       "validation_nll": null,
       "worker": "v6-cover-worker-065"
     },
@@ -6571,8 +6641,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 17,
-      "tokens": 4332,
+      "step": 86,
+      "tokens": 21896,
       "validation_nll": null,
       "worker": "v6-cover-worker-066"
     },
@@ -6654,8 +6724,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 4,
-      "tokens": 1024,
+      "step": 32,
+      "tokens": 8160,
       "validation_nll": null,
       "worker": "v6-cover-worker-067"
     },
@@ -6737,8 +6807,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 19,
-      "tokens": 4838,
+      "step": 93,
+      "tokens": 23688,
       "validation_nll": null,
       "worker": "v6-cover-worker-068"
     },
@@ -6820,8 +6890,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 8,
-      "tokens": 2048,
+      "step": 45,
+      "tokens": 11471,
       "validation_nll": null,
       "worker": "v6-cover-worker-069"
     },
@@ -6903,8 +6973,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 17,
-      "tokens": 4332,
+      "step": 81,
+      "tokens": 20616,
       "validation_nll": null,
       "worker": "v6-cover-worker-070"
     },
@@ -6986,8 +7056,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 5,
-      "tokens": 1280,
+      "step": 31,
+      "tokens": 7904,
       "validation_nll": null,
       "worker": "v6-cover-worker-071"
     },
@@ -7069,8 +7139,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 9,
-      "tokens": 2304,
+      "step": 50,
+      "tokens": 12720,
       "validation_nll": null,
       "worker": "v6-cover-worker-072"
     },
@@ -7152,8 +7222,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 1,
-      "tokens": 256,
+      "step": 18,
+      "tokens": 4582,
       "validation_nll": null,
       "worker": "v6-cover-worker-073"
     },
@@ -7235,8 +7305,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 17,
-      "tokens": 4332,
+      "step": 86,
+      "tokens": 21896,
       "validation_nll": null,
       "worker": "v6-cover-worker-074"
     },
@@ -7318,8 +7388,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 5,
-      "tokens": 1280,
+      "step": 37,
+      "tokens": 9440,
       "validation_nll": null,
       "worker": "v6-cover-worker-075"
     },
@@ -7401,8 +7471,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 17,
-      "tokens": 4332,
+      "step": 85,
+      "tokens": 21640,
       "validation_nll": null,
       "worker": "v6-cover-worker-076"
     },
@@ -7484,8 +7554,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 38,
+      "tokens": 9696,
       "validation_nll": null,
       "worker": "v6-cover-worker-077"
     },
@@ -7567,8 +7637,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 21,
-      "tokens": 5350,
+      "step": 103,
+      "tokens": 26248,
       "validation_nll": null,
       "worker": "v6-cover-worker-078"
     },
@@ -7650,8 +7720,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 7,
-      "tokens": 1792,
+      "step": 46,
+      "tokens": 11727,
       "validation_nll": null,
       "worker": "v6-cover-worker-079"
     },
@@ -7733,8 +7803,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 19,
-      "tokens": 4838,
+      "step": 92,
+      "tokens": 23432,
       "validation_nll": null,
       "worker": "v6-cover-worker-080"
     },
@@ -7816,8 +7886,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 34,
+      "tokens": 8672,
       "validation_nll": null,
       "worker": "v6-cover-worker-081"
     },
@@ -7899,8 +7969,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 10,
-      "tokens": 2560,
+      "step": 54,
+      "tokens": 13744,
       "validation_nll": null,
       "worker": "v6-cover-worker-082"
     },
@@ -7982,8 +8052,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 1,
-      "tokens": 256,
+      "step": 18,
+      "tokens": 4582,
       "validation_nll": null,
       "worker": "v6-cover-worker-083"
     },
@@ -8065,8 +8135,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 19,
-      "tokens": 4838,
+      "step": 101,
+      "tokens": 25736,
       "validation_nll": null,
       "worker": "v6-cover-worker-084"
     },
@@ -8148,8 +8218,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 38,
+      "tokens": 9696,
       "validation_nll": null,
       "worker": "v6-cover-worker-085"
     },
@@ -8231,8 +8301,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 20,
-      "tokens": 5094,
+      "step": 99,
+      "tokens": 25224,
       "validation_nll": null,
       "worker": "v6-cover-worker-086"
     },
@@ -8276,8 +8346,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 42,
+      "tokens": 10703,
       "validation_nll": null,
       "worker": "v6-cover-worker-087"
     },
@@ -8321,8 +8391,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 18,
-      "tokens": 4582,
+      "step": 92,
+      "tokens": 23432,
       "validation_nll": null,
       "worker": "v6-cover-worker-088"
     },
@@ -8366,8 +8436,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 6,
-      "tokens": 1536,
+      "step": 36,
+      "tokens": 9184,
       "validation_nll": null,
       "worker": "v6-cover-worker-089"
     },
@@ -8411,8 +8481,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 29,
-      "tokens": 7392,
+      "step": 129,
+      "tokens": 32889,
       "validation_nll": null,
       "worker": "v6-cover-worker-090"
     },
@@ -8456,8 +8526,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 12,
-      "tokens": 3072,
+      "step": 65,
+      "tokens": 16560,
       "validation_nll": null,
       "worker": "v6-cover-worker-091"
     },
@@ -8501,8 +8571,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 31,
-      "tokens": 7904,
+      "step": 132,
+      "tokens": 33657,
       "validation_nll": null,
       "worker": "v6-cover-worker-092"
     },
@@ -8546,8 +8616,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 13,
-      "tokens": 3328,
+      "step": 67,
+      "tokens": 17072,
       "validation_nll": null,
       "worker": "v6-cover-worker-093"
     },
@@ -8591,8 +8661,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 19,
-      "tokens": 4838,
+      "step": 95,
+      "tokens": 24200,
       "validation_nll": null,
       "worker": "v6-cover-worker-094"
     },
@@ -8636,8 +8706,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": 5,
-      "tokens": 1280,
+      "step": 33,
+      "tokens": 8416,
       "validation_nll": null,
       "worker": "v6-cover-worker-095"
     },
@@ -8675,12 +8745,12 @@
           "id": "cover-transformer-fc-budget",
           "inner_training_state": null,
           "physical_id": 3,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-cover-transformer-fc-budget/train/result.json",
           "run_id": "tl-v6-cover-transformer-fc-budget",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -8737,12 +8807,12 @@
           "id": "cover-transformer-hb-budget",
           "inner_training_state": null,
           "physical_id": 11,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-cover-transformer-hb-budget/train/result.json",
           "run_id": "tl-v6-cover-transformer-hb-budget",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -8799,12 +8869,12 @@
           "id": "scale-fc16-kv-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-kv-quad/train/result.json",
           "run_id": "tl-v6-scale-fc16-kv-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -8822,8 +8892,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 3,
+      "tokens": 12104,
       "validation_nll": null,
       "worker": "v6-scale-fc16-kv-quad-retry1"
     },
@@ -8861,12 +8931,12 @@
           "id": "scale-fc32-kv-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc32-kv-quad/train/result.json",
           "run_id": "tl-v6-scale-fc32-kv-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -8884,8 +8954,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 1,
+      "tokens": 4008,
       "validation_nll": null,
       "worker": "v6-scale-fc32-kv-quad-retry1"
     },
@@ -8923,12 +8993,12 @@
           "id": "scale-fc64-kv-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc64-kv-quad/train/result.json",
           "run_id": "tl-v6-scale-fc64-kv-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -8985,12 +9055,12 @@
           "id": "scale-hb40-kv-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-hb40-kv-quad/train/result.json",
           "run_id": "tl-v6-scale-hb40-kv-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9008,8 +9078,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 1,
+      "tokens": 4008,
       "validation_nll": null,
       "worker": "v6-scale-hb40-kv-quad-retry1"
     },
@@ -9024,7 +9094,7 @@
           "recovery": "separate_fresh_process_probe_required",
           "strict_numerical": "see checks; original 1e-6/1e-5 and zero causal thresholds retained"
         },
-        "record": "runs/v6-scale-hb88-kv-quad-retry1/check/result.json",
+        "record": "runs/v6-scale-hb88-kv-quad-memory2/check/result.json",
         "state": "completed"
       },
       "config": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
@@ -9032,11 +9102,11 @@
       "id": "scale-hb88-kv-quad",
       "inner_training_state": "running",
       "lens": {
-        "destination_name": "tl-v6-scale-hb88-kv-quad-projection-81c8ecdde840",
-        "destination_run_id": "11b69dec370f4eadaab115d7c7ac8210",
+        "destination_name": "tl-v6-scale-hb88-kv-quad-projection-6452103baa03",
+        "destination_run_id": "89f3d30f2ae44d3785b0920e455c42f1",
         "project": "tide-learning-lab",
         "readback_matches": null,
-        "record": "runs/v6-scale-hb88-kv-quad-retry1/train/projection.json",
+        "record": "runs/v6-scale-hb88-kv-quad-memory2/train/projection.json",
         "source_run_id": "tl-v6-scale-hb88-kv-quad",
         "status": "recording"
       },
@@ -9047,33 +9117,49 @@
           "id": "scale-hb88-kv-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-hb88-kv-quad/train/result.json",
           "run_id": "tl-v6-scale-hb88-kv-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "stage": null,
+          "state": "unchecked",
+          "step": null,
+          "tokens": null,
+          "validation_nll": null,
+          "worker": "v6-scale-hb88-kv-quad"
+        },
+        {
+          "device": "cpu",
+          "id": "scale-hb88-kv-quad",
+          "inner_training_state": "running",
+          "physical_id": null,
+          "reason": "process group RSS cap",
+          "record": "runs/v6-scale-hb88-kv-quad-retry1/train/result.json",
+          "run_id": "tl-v6-scale-hb88-kv-quad",
+          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
           "stage": null,
           "state": "failed",
           "step": null,
           "tokens": null,
           "validation_nll": null,
-          "worker": "v6-scale-hb88-kv-quad"
+          "worker": "v6-scale-hb88-kv-quad-retry1"
         }
       ],
       "reason": null,
-      "record": "runs/v6-scale-hb88-kv-quad-retry1/train/result.json",
+      "record": "runs/v6-scale-hb88-kv-quad-memory2/train/result.json",
       "recovery": {
-        "record": "runs/v6-scale-hb88-kv-quad-retry1/recovery.json",
+        "record": "runs/v6-scale-hb88-kv-quad-memory2/recovery.json",
         "scope": "three B2/L3 real-data updates, same backend/config/install, fresh processes; full trajectory unchecked",
         "state": "passed"
       },
       "run_id": "tl-v6-scale-hb88-kv-quad",
-      "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "source_commit": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
       "stage": "train",
       "state": "running",
       "step": null,
       "tokens": null,
       "validation_nll": null,
-      "worker": "v6-scale-hb88-kv-quad-retry1"
+      "worker": "v6-scale-hb88-kv-quad-memory2"
     },
     {
       "admission": {
@@ -9109,12 +9195,12 @@
           "id": "scale-fc16-ssd-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-ssd-quad/train/result.json",
           "run_id": "tl-v6-scale-fc16-ssd-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9132,8 +9218,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 4,
+      "tokens": 16200,
       "validation_nll": null,
       "worker": "v6-scale-fc16-ssd-quad-retry1"
     },
@@ -9171,12 +9257,12 @@
           "id": "scale-fc32-ssd-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc32-ssd-quad/train/result.json",
           "run_id": "tl-v6-scale-fc32-ssd-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9194,8 +9280,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 2,
+      "tokens": 8008,
       "validation_nll": null,
       "worker": "v6-scale-fc32-ssd-quad-retry1"
     },
@@ -9233,12 +9319,12 @@
           "id": "scale-fc16-gdn-quad",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-gdn-quad/train/result.json",
           "run_id": "tl-v6-scale-fc16-gdn-quad",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9256,8 +9342,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 3,
+      "tokens": 12104,
       "validation_nll": null,
       "worker": "v6-scale-fc16-gdn-quad-retry1"
     },
@@ -9295,12 +9381,12 @@
           "id": "scale-fc16-shannon",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-shannon/train/result.json",
           "run_id": "tl-v6-scale-fc16-shannon",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9318,8 +9404,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 2,
+      "tokens": 8008,
       "validation_nll": null,
       "worker": "v6-scale-fc16-shannon-retry1"
     },
@@ -9357,12 +9443,12 @@
           "id": "scale-fc32-shannon",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc32-shannon/train/result.json",
           "run_id": "tl-v6-scale-fc32-shannon",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9380,8 +9466,8 @@
       "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "stage": "train",
       "state": "running",
-      "step": null,
-      "tokens": null,
+      "step": 1,
+      "tokens": 4008,
       "validation_nll": null,
       "worker": "v6-scale-fc32-shannon-retry1"
     },
@@ -9419,12 +9505,12 @@
           "id": "scale-hb40-shannon",
           "inner_training_state": null,
           "physical_id": null,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-hb40-shannon/train/result.json",
           "run_id": "tl-v6-scale-hb40-shannon",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9481,12 +9567,12 @@
           "id": "scale-transformer-5m",
           "inner_training_state": null,
           "physical_id": 3,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-transformer-5m/train/result.json",
           "run_id": "tl-v6-scale-transformer-5m",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9543,12 +9629,12 @@
           "id": "scale-transformer-10m",
           "inner_training_state": null,
           "physical_id": 3,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-transformer-10m/train/result.json",
           "run_id": "tl-v6-scale-transformer-10m",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9605,12 +9691,12 @@
           "id": "scale-transformer-19m",
           "inner_training_state": null,
           "physical_id": 11,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-transformer-19m/train/result.json",
           "run_id": "tl-v6-scale-transformer-19m",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9667,12 +9753,12 @@
           "id": "scale-fc16-kv-quad-npu",
           "inner_training_state": null,
           "physical_id": 7,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-kv-quad-npu/train/result.json",
           "run_id": "tl-v6-scale-fc16-kv-quad-npu",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9729,12 +9815,12 @@
           "id": "scale-fc16-ssd-quad-npu",
           "inner_training_state": null,
           "physical_id": 3,
-          "reason": null,
+          "reason": "worker ended before this case started",
           "record": "runs/v6-scale-fc16-ssd-quad-npu/train/result.json",
           "run_id": "tl-v6-scale-fc16-ssd-quad-npu",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
           "stage": null,
-          "state": "failed",
+          "state": "unchecked",
           "step": null,
           "tokens": null,
           "validation_nll": null,
@@ -9822,8 +9908,8 @@
     "source": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
     "torch": "2.12.0+cpu"
   },
-  "observed_at": "2026-11-09T13:05:19.974648+00:00",
-  "observed_local": "2026-11-09 21:05:19",
+  "observed_at": "2026-11-09T13:19:32.144248+00:00",
+  "observed_local": "2026-11-09 21:19:32",
   "runtime_sources": [
     {
       "commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
@@ -9832,6 +9918,11 @@
     {
       "commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
       "snapshot": ".local/source-v6-corrected"
+    },
+    {
+      "commit": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
+      "scope": "one HB88 capacity correction; 473 seconds deducted from original 36h case cap",
+      "snapshot": ".local/source-v6-capacity"
     }
   ],
   "schema": "tide-language-v6-handoff-v1",
@@ -10855,12 +10946,12 @@
     },
     {
       "background_slice": true,
-      "id": "v6-scale-hb88-kv-quad-retry1",
+      "id": "v6-scale-hb88-kv-quad-memory2",
       "physical_ids": null,
-      "record": "artifacts/jobs/v6-scale-hb88-kv-quad-retry1/job.json",
-      "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "record": "artifacts/jobs/v6-scale-hb88-kv-quad-memory2/job.json",
+      "source_commit": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
       "state": "running",
-      "unit": "tide-lab-v6-scale-hb88-kv-quad-retry1.service"
+      "unit": "tide-lab-v6-scale-hb88-kv-quad-memory2.service"
     },
     {
       "background_slice": true,

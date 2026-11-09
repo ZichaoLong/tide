@@ -39,6 +39,10 @@ class SubmissionOwnership(unittest.TestCase):
             atomic_json(out/'train/progress.json',dict(step=2,tokens=512))
             actual=next(c for c in status(root)['cases'] if c['id']==cid)
             self.assertEqual((actual['state'],actual['stage'],actual['tokens']),('running','train',512))
+            atomic_json(root/'artifacts/jobs'/job['name']/'state.json',dict(state='completed'))
+            pending=next(c for c in status(root)['cases'] if c['id']==job['cases'][1])
+            self.assertEqual(pending['state'],'unchecked')
+            self.assertIn('before this case started',pending['reason'])
 
 
 if __name__=='__main__':unittest.main()

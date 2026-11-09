@@ -24,6 +24,7 @@ Lens项目`tide-learning-lab`，`study_id`为TL-COVER-v6/TL-SCALE-v6；分别搜
 - 其余32覆盖worker、18个独立作业修正及2个正支持修正：`.local/source-v6-corrected` / `4087310162338e4f4e90102989cd2c9b98db62b9`。目录冲突只改提交输出位置；Shannon显式选Python，不改变正支持语义。
 - 实际配置来自各source下的`configs/studies/language/v6/resolved/`；主checkout可继续写审阅文档，活动source不可编辑。
 - foundation `74e7bbd62341d2ccd382194a2c52ad4fea033665`；数学 `0770593838a37c790a568226930567ed60f99b83`；环境`.venv-positive-floor-v1`，锁`dependencies/positive-floor-v1/foundation.lock.json`。native为独立同源码/同Torch/ABI构建，manifest与binary hash在交接JSON，每个相关job固定这两个输入。
+- HB88容量修正：`.local/source-v6-capacity` / `4b3e88a42c3b343c6ce077251a7ab095fa82c21a`，job `v6-scale-hb88-kv-quad-memory2`；相同模型/B8/L128/全局B32，RSS上限96GiB，原36h减已用473秒。首次48GiB保护失败、优化器0更新保留；新输出`runs/v6-scale-hb88-kv-quad-memory2`。
 - 数据`runs/v6-data-final`，锁SHA256 `8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6`；制作源码`3786de02ec47f0b86b8f7b80a2c9ce2a8ae02867`。测试密封，训练不访问。
 - 总截止**2026-11-11 20:31:31北京时间**。1536 CPU核时/384 NPU卡时/新增120GiB，至少512GiB可用RAM及160GiB账号硬配额余量；最多192 host线程、128 CPU worker、12 NPU worker，累计RSS≤768GiB。原预算监督继续运行，v2增加实际进程RSS监视以适配本机v1 cgroup。人工主动停止预算监督会请求停止本批其余活动服务，不会停止别人的作业。
 

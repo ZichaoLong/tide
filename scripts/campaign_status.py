@@ -23,12 +23,14 @@ def status(root):
             case=cases.get(cid,{});base=Path(job.get('case_outputs',{}).get(cid,root/'runs'/('v6-'+cid)))
             train=read(base/'train/result.json');progress=read(base/'train/progress.json')
             state=case.get('state','queued' if lifecycle else 'planned')
-            if lifecycle.get('state')=='failed' and state in ('queued','running'):state='failed'
+            unstarted_terminal=not case and lifecycle.get('state') in ('completed','failed','stopped','timed_out')
+            if unstarted_terminal:state='unchecked'
+            elif lifecycle.get('state') in ('completed','failed','stopped','timed_out') and state=='running':state='failed'
             stage=next((s['name'] for s in reversed(case.get('stages',[])) if s['state']=='running'),None)
             attempts[cid].append(dict(id=cid,run_id='tl-v6-'+cid,worker=job['name'],state=state,stage=stage,
                 inner_training_state=train.get('state'),step=progress.get('step'),tokens=progress.get('tokens'),
                 device=job['device'],physical_id=queue.get('physical_id'),
-                reason=case.get('reason') or next((stage.get('failure') for stage in reversed(case.get('stages',[])) if stage.get('failure')),None) or train.get('error') or worker.get('error'),
+                reason=('worker ended before this case started' if unstarted_terminal else None) or case.get('reason') or next((stage.get('failure') for stage in reversed(case.get('stages',[])) if stage.get('failure')),None) or train.get('error') or worker.get('error'),
                 validation_nll=train.get('final_validation_nll'),record=str((base/'train/result.json').relative_to(root)),
                 source_commit=job.get('source_commit',manifest.get('source_identity',{}).get('commit'))))
     for cid,history in attempts.items():

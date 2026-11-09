@@ -7395,6 +7395,7 @@
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
       "decision": "\u5171\u540cL128\u3001\u5168\u5c40B32/token\u65e5\u7a0b\uff1b262K/1M/4M\u91cc\u7a0b\u7891\u3002\u8fbe\u5230\u7684\u524d\u7f00\u4e0e\u9884\u7b97\u622a\u65ad\u5982\u5b9e\u6bd4\u8f83\u3002",
+      "execution_note": "\u4e09\u6863Transformer\u54044,194,304\u6709\u6548\u76ee\u6807\u5b8c\u6210\uff0c\u5c1a\u5f85\u5171\u540c\u524d\u7f00\u5ba1\u9605\uff1bHB88\u5728\u9996\u6b21\u66f4\u65b0\u524d\u89e6\u53ca48GiB\uff0c\u4fdd\u7559\u5931\u8d25\u5e76\u572896GiB\u4e0b\u540c\u6a21\u578b/batch\u91cd\u63d0\uff0c\u539f36h\u6263\u9664\u5df2\u7528473\u79d2\u3002",
       "id": "V6-SCALE",
       "kind": "experiment",
       "question": "\u66f4\u5bbd\u3001\u66f4\u6df1\u3001\u591a\u5c42\u5d4c\u5957\u7684\u6a21\u578b\u80fd\u5426\u5229\u7528\u66f4\u591a\u8bad\u7ec3\u6570\u636e\uff1f",
@@ -7448,9 +7449,9 @@
         {
           "config": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
           "id": "tl-v6-scale-hb88-kv-quad",
-          "lens_record": "runs/v6-scale-hb88-kv-quad-retry1/train/projection.json",
-          "record": "runs/v6-scale-hb88-kv-quad-retry1/train/result.json",
-          "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
+          "lens_record": "runs/v6-scale-hb88-kv-quad-memory2/train/projection.json",
+          "record": "runs/v6-scale-hb88-kv-quad-memory2/train/result.json",
+          "source_commit": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
           "status": "running"
         },
         {
@@ -7637,11 +7638,11 @@
       "y": 820
     }
   ],
-  "notice": "200\u914d\u7f6e\u5df2\u63d0\u4ea4\uff1a184\u7b5b\u9009\u300116\u89c4\u6a21/\u8bbe\u5907\u8f68\u8ff9\u3002\u540e\u53f0\u8fd0\u884c\u72b6\u6001\u4e0d\u7b49\u4e8e\u5b66\u4e60\u6216\u6570\u5b66\u6b63\u786e\u6027\uff1b\u65e7\u4e25\u683c\u5931\u8d25\u4e0e\u5386\u53f2\u9650\u5b9a\u7ed3\u679c\u4fdd\u7559\u3002",
+  "notice": "v6\uff1a111\u8fd0\u884c\u300184\u7b49\u5f85\u30015\u5b8c\u6210\uff1bHB88\u5bb9\u91cf\u5931\u8d25\u540e\u4ee5\u65b0\u8eab\u4efd\u91cd\u63d0\u3002\u6570\u503c/\u673a\u5236/\u6062\u590d/\u5b66\u4e60\u5206\u8f74\uff1b\u5c1a\u65e0\u672c\u6279\u79d1\u5b66\u652f\u6301\u7ed3\u8bba\u3002",
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "v6\uff1a\u5c40\u90e8\u5019\u9009\u5e76\u96c6\u8986\u76d6\u4e0e\u66f4\u591a\u6570\u636e\u3001\u66f4\u5927\u6a21\u578b\u5e76\u884c\u8bad\u7ec3",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09T13:05:19.974648+00:00",
+  "updated_at": "2026-11-09T13:19:32.144248+00:00",
   "view_groups": [
     {
       "height": 3700,
