@@ -71,7 +71,10 @@ def prepare(a):
                 parts.rmdir()
             files.append(dict(path=row['path'],sha256=digest(target),size=target.stat().st_size))
             print(json.dumps(dict(downloaded=row['path'],bytes=target.stat().st_size)),flush=True)
-        old={json.loads(s)['normalized_sha256'] for s in a.exclude.read_text().splitlines()}
+        old_rows=[json.loads(s) for s in a.exclude.read_text().splitlines()]
+        old={r['normalized_sha256'] for r in old_rows}
+        title_key=lambda title:' '.join(title.lower().split())
+        old_titles={title_key(r['title']) for r in old_rows}
         # Reuse the two already-qualified private data interpreters without
         # mixing their site-packages or changing either environment.
         extracted=a.output/'raw-rows.jsonl'
@@ -86,6 +89,11 @@ with open(sys.argv[2], "x") as out:
         subprocess.run([str(a.arrow_python),'-c',code,str(raw),str(extracted)],check=True,timeout=600)
         rows=[json.loads(line) for line in extracted.read_text().splitlines()]
         documents=parse_documents(rows,'w103-train');del rows
+        # A parquet shard may end partway through an article. Its final
+        # document is excluded when reading only the first shard.
+        boundary_excluded=None
+        if a.max_train_shards==1 and documents:
+            boundary_excluded=documents.pop()['normalized_sha256']
         # The official small heldout files have already been observed in v1-v5.
         # Reserve fresh whole documents from the large training split instead.
         pools={s:[] for s in ('train','validation','test')};seen=set();duplicates=0
@@ -94,7 +102,7 @@ with open(sys.argv[2], "x") as out:
             if h in seen:duplicates+=1;continue
             seen.add(h);bucket=int(text_hash('v6-split:'+h)[:8],16)%100
             split='validation' if bucket==0 else 'test' if bucket==1 else 'train'
-            if h in old:split='train'
+            if h in old or title_key(d['title']) in old_titles:split='train'
             pools[split].append(d)
         tokenizer=Tokenizer.from_file(str(a.tokenizer));splits={}
         for split,pool in pools.items():
@@ -112,7 +120,7 @@ with open(sys.argv[2], "x") as out:
                     if not ids:continue
                     f.write(np.asarray(ids,dtype='<u2').tobytes())
                     spans.append(dict(id=d['id'],sha256=d['sha256'],normalized_sha256=d['normalized_sha256'],
-                        offset=count,tokens=len(ids),source_utf8_bytes=d['utf8_bytes']))
+                        title=d['title'],offset=count,tokens=len(ids),source_utf8_bytes=d['utf8_bytes']))
                     count+=len(ids)
             if count<(a.train_tokens if split=='train' else 65536):raise ValueError('insufficient independent '+split+' tokens')
             path.chmod(0o444)
@@ -121,11 +129,14 @@ with open(sys.argv[2], "x") as out:
         if any(hs[x]&hs[y] for x,y in [('train','validation'),('train','test'),('validation','test')]):
             raise AssertionError('whole-document split overlap')
         if (hs['validation']|hs['test'])&old:raise AssertionError('confirmation contains an old document')
+        if any(title_key(d['title']) in old_titles for s in ('validation','test') for d in splits[s]['documents']):
+            raise AssertionError('confirmation contains an old article title')
         lock=dict(schema='tide-language-corpus-v6',created_at=now(),dtype='<u2',vocab_size=4096,bos=1,eos=2,pad=0,
             source=dict(repository='Salesforce/wikitext',revision=a.revision,subset='wikitext-103-raw-v1',
                 licenses=['cc-by-sa-3.0','gfdl'],files=files),tokenizer_sha256=digest(a.tokenizer),
             excluded_old_documents_sha256=digest(a.exclude),splits=splits,duplicates_removed=duplicates,
-            split_method='hash whole normalized documents, seed v6-split; old documents never enter confirmation',
+            shard_boundary_document_excluded=boundary_excluded,
+            split_method='hash whole normalized documents, seed v6-split; old hashes and article titles never enter confirmation',
             sample_method='epoch permutation of document-bounded blocks; full pool before repeats',
             limitations='exact normalized document dedup; near duplicate contamination not excluded; heldout per-document prefix <=2048 tokens; no test-based selection')
         atomic_json(a.output/'data-lock.json',lock);(a.output/'data-lock.json').chmod(0o444)
