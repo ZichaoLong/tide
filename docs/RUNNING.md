@@ -1,3 +1,13 @@
+# 当前状态：A稀疏运行，B已结束（2026-11-09 09:20北京时间）
+
+`lm-a-language-v4`仍在物理NPU1上运行，当前stage为`train-tide-sparse-512`；dense512及两Transformer轨迹已完成。`lm-b-language-v4`于07:04:35结束，实际cgroup空、已知后代全部终止，无B排队或后继。详细结果与边界见[STATUS](STATUS.md)、[B一页报告](studies/TL-B-LM-v4.md)、[最新快照](evidence/language-v4-status.json)。
+
+下方启动段的两卡状态为历史快照；固定源码、日志、停止和恢复方法仍有效。当前若需停止，只需对A调用`python scripts/job.py stop artifacts/jobs/lm-a-language-v4`。不要为查看B结果重新提交或恢复已完成的128步轨迹。
+
+A内部计算截止北京时间14:28:03，早于本批统一18:47:01截止；仍按原A27000秒/B1800秒分别约束。CPU解码已核对完成候选和dense128前缀，稀疏活动输入/输出不作改动。
+
+---
+
 # 语言v4：已启动的固定源码后台链
 
 北京时间2026-11-09 07:02运行核对：`lm-a-language-v4`（物理NPU1）和`lm-b-language-v4`（物理NPU3）均实际运行；每作业4线程/请求24GiB，均在background.slice。新确认数据服务已完成并确认后代清空。状态快照见[证据](evidence/language-v4-handoff.json)，任务范围见[研究表](studies/language-confirmation-v4.md)。

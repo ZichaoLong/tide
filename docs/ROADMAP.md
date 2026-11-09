@@ -1,6 +1,6 @@
 # 当前研究优先级
 
-用户已批准[语言v4研究表](studies/language-confirmation-v4.md)，配置[fc-confirm-v4.json](../configs/studies/language/fc-confirm-v4.json)。联合重点仍是自然语言next-token质量与实际稀疏、规模和局部化；吞吐比例单列为后续工程优化。状态见STATUS。
+用户已批准[语言v4研究表](studies/language-confirmation-v4.md)，配置[fc-confirm-v4.json](../configs/studies/language/fc-confirm-v4.json)。联合重点仍是自然语言next-token质量与实际稀疏、规模和局部化；吞吐比例单列为后续工程优化。状态见STATUS。B同瓶颈对照已终态并形成[限定结论](studies/TL-B-LM-v4.md)；A稀疏及条件FC8继续原固定链，不新增任务。
 
 1. 冻结未观察的16份确认文档，保留训练/验证/词表。
 2. A固定FC4 dense/sparse及Transformer，B8/L32/512更新；另用2048更新Transformer提供明确额外曝光的参考。
