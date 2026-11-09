@@ -1,50 +1,51 @@
-# 当前交接 — TL-REQ-003 正支持数值模式开发（2026-11-09）
+# 当前交接 — TL-REQ-003 基座交付完成（2026-11-09）
 
-用户已授权实施下游 [TL-REQ-003](../../tide-learning-lab/docs/requests/TL-REQ-003.md)。
-启动HEAD `85d161d5c9148eac2b164f89a0ba4204b4331898`，授权分支graph-execution-foundation。
-已有用户未跟踪交接 `docs/tide-learning-lab-TL-REQ-003-handoff.md` 保留；其最新优先级为
-保持cat/ind与训练配方，评估显式最小正值数值模式。数学固定0770593，快照检查通过。
+用户授权的最小正支持数值模式已实施并完成本次CPU/NPU有限资格；下游学习验收未运行。
+交付与复现：[证据/回复](evidence/positive-support-tl-req-003-20261109.md)、[JSON](evidence/positive-support-tl-req-003-20261109.json)、
+[公开契约](positive-support-policy.md)。固定数学0770593838a37c790a568226930567ed60f99b83不变。
 
-## 当前工作与边界
+## 实际源码、结果与边界
 
-原严格支持拒绝与数值阈值不变。首先处理实际HB16失败行的Python公共scalar/packed路径，
-以及加权聚合、Shannon一阶VJP、KV读写、完整状态/共享根/optimizer/新进程恢复。
-先CPU，再通过本机队列检查NPU次正规数和实际依赖路径；不先重跑原训练或全后端矩阵。
-新模式必须显式配置/身份和适用域，native/resident未实现时明确拒绝，不能静默按旧路径执行。
-小型前向成功不代表完整梯度或训练通过。需求原文与下游验收仍由实验分支拥有。
+- 实现/wheel：2c11695ca66a5dcd028f7d777ec26b177add0378。
+- 零接收补测：2502fa4a3df3096e3f5773a7c8586b517b96da89；资格筛选：b4879ffa6bceb989f052484f18cfb480f7d1a68f。
+  后两项Python包源码与2c11695完全相同，复用同一已验wheel，未声称重新构建。
+- CPU新策略30项、相关默认路径314项通过；NPU流程13项实际设备目标及17项CPU/配置辅助通过。
+  含实际行/独立高精度、完整两区域记录/根/共享参数、AdamW、pending/保留跨窗和新进程精确下一窗。
+- 默认strict仍拒绝原FP32行；新模式显式拒绝弱总量实质扰动、不可表示公开伴随及非法配置。
+  原历史失败、旧checkpoint跨模式拒绝保持；不等同原HB16训练恢复或学习效果通过。
+- 单设备Python eager/KV/FP32或CPU FP64；新策略其余后端/记忆/精度限制及重启条件仅在[ROADMAP](ROADMAP.md)。
 
-## 环境、作业与接续
+## 作业终态
 
-本基座当前无活动作业；下游/他人活动环境、源码和权重不修改。
-复用公共 `ascend/dev-workspace-9.2.0` 和调用者选择的私有venv。
-当前开发私有环境在 `.local/venv-cann9.2.0`；路径不是公共接口。
-账号约169GiB/硬800GiB；本次新增小型测试/固定源码/wheel预算≤2GiB，无需tmpfs。
-相关长检查固定提交、background.slice，CPU1/8GiB，单项≤30分钟；NPU申请1张真正空闲卡，
-等待/服务均有时限，不停止其他项目进程。正式资格先提交实现，再独立提交证据。
+全部正式作业MainPID=0、ControlGroup为空且对应cgroup不存在；没有活动计算/排队。
+固定源只读：artifacts/tl-req-003/source-{a,b,c}；独立资格venv和wheel在同目录，均非下游依赖。
 
-开发结果：显式positive-floor-v1及公共配置/身份/拒绝、稳定Aggregate/KV与未补值Shannon VJP已实现。
-65项定向开发检查通过（2026-11-09），包含CPU实际行、FP64反例、两区域完整记录/独立根、
-AdamW/跨窗/新进程精确恢复。原严格拒绝未变。空闲单NPU次正规算术探针通过，不代替整图资格。
-较宽开发回归一次误选native而报缺库（87通过/3加载失败）；随后Python范围在60秒交互上限终止，
-不计完整通过。下一步在固定源码/新wheel安装中完成相关回归和NPU实际依赖路径。
+| 服务 / artifacts/jobs目录 | 终态 |
+| --- | --- |
+| gef-tl-req-003-cpu-a / tl-req-003-cpu-a | failed exit1；新策略29通过，回归314通过/8个native缺库失败；筛选遗漏，不重标通过 |
+| gef-tl-req-003-npu-a / tl-req-003-npu-a | passed exit0；29定向及安装消费者 |
+| gef-tl-req-003-boundary-b / tl-req-003-boundary-b | passed exit0；CPU/NPU零接收各1 |
+| gef-tl-req-003-cpu-c / tl-req-003-cpu-c | passed exit0；修正筛选后的8个Python拒绝快照/CPU安装消费者/上游校验 |
 
-计划固定工作树 artifacts/tl-req-003/source-a，独立安装 artifacts/tl-req-003/qualification-venv。
-持久服务 gef-tl-req-003-cpu-a / gef-tl-req-003-npu-a，分别最多1800秒、CPUQuota=100%、MemoryMax=8GiB，
-NPU队列最多等待600秒/1卡。固定源码2c11695ca66a5dcd028f7d777ec26b177add0378；新wheel已构建/安装且pip check通过。
-CPU/NPU实际进入background.slice并记录clean固定源码。NPU-a已终态exit0，29项定向通过，
-真实卡physical1→npu:0，公共行消费者通过；服务inactive/MainPID0/控制组已消失。
-CPU-a已终态failed：新策略29通过，相关回归314通过/8个native加载失败。
-失败原因是旧测试参数ID为True而not native筛选漏选；无新增数值失败。原失败保留，资格脚本已修正，
-后继仅补受影响的8项Python拒绝快照/公共CPU行及默认身份，不重复314项已通过回归。
-入口：bash scripts/qualify_positive_support.sh NEW_OUTPUT cpu|npu；需匹配私有固定wheel，NPU在站点队列内。
-状态/日志：artifacts/jobs/tl-req-003-{cpu,npu}-a/{status.json,task.log}；
-检查 systemctl --user status gef-tl-req-003-{cpu,npu}-a；停止用 systemctl --user stop 对应服务并核对控制组为空。
-实现提交、固定源码资格与证据提交分开；不覆盖下游安装，不自动重启HB16训练。
+各目录保留status.json/task.log；审阅证据已抽取实际来源、安装hash、计数、失败、队列/资源和终态。
+没有重复314项已通过回归；修正资格脚本后未整体重跑门禁，分段证据不冒称旧failed任务变passed。
+采用公共ascend/dev-workspace-9.2.0及独立私有环境，未改公共环境或下游安装。
+本次材料约百MiB量级、预算≤2GiB；账号约169GiB/硬800GiB，无需tmpfs或扩盘。
 
-既有CANN9.2有限迁移、三客户端与严格失败见
-[原证据](evidence/cann92-project-migration-20261106.md)，并未解除或重新认证。
-其他历史边界和后继条件只在[ROADMAP](ROADMAP.md)维护。
+## 下一步与干净接续
 
-补充边界：2502fa4新增零接收中性检查/通用CPU环境探测，Python包源码与2c11695逐字相同；
-复用同一固定wheel。source-b只读；gef-tl-req-003-boundary-b已exit0，CPU/NPU零接收各1通过；无存活后代。
-状态日志 artifacts/jobs/tl-req-003-boundary-b，测试材料 artifacts/tl-req-003/boundary-b。
+本任务已收尾；若继续实验，由tide-learning-lab在新的私有安装接入、记录验收，再显式更新依赖锁。
+新窗口无需旧产物目录：干净检出交付源码，按[development](development.md)选择环境、构建/安装wheel，
+按[交付回复](evidence/positive-support-tl-req-003-20261109.md#下游接入和复验)执行公共行和小型检查。
+
+```sh
+python examples/consumer_core5/positive_support.py --row tests/data/tl_req_003_shannon_row.json
+python -m pytest -q tests/test_positive_support.py tests/test_positive_support_config.py tests/test_positive_support_graph.py
+# 固定源码/独立wheel的持久资格：bash scripts/qualify_positive_support.sh NEW_OUTPUT cpu|npu
+# NPU由站点队列提供ASCEND_RT_VISIBLE_DEVICES，程序使用npu:0。
+```
+
+不自动重启原HB16训练，不改其cat/ind、loss或配方；学习效果和工作量由下游拥有。
+用户原未跟踪文件docs/tide-learning-lab-TL-REQ-003-handoff.md保持原字节、未纳入提交；
+唯一请求仍在实验分支。其余本轮修改均进入实现/证据提交，普通推送授权分支。
+既有CANN9.2三客户端迁移与严格失败见[迁移证据](evidence/cann92-project-migration-20261106.md)，未扩大其资格。

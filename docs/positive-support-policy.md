@@ -60,6 +60,7 @@ log/缩放载荷方案，而非继续扩大本模式的保证。
   用其 log 强度求自由/饱和面及 KKT 导数；不是 floored 控制的 `c/tau`，
   也不是普通 clamp 的导数。log 收缩保留可表示的“极小斜率 × 大伴随”。
   等式分支共同 score shift 仍为连接零，None 与零根、版本检查和共享汇总保留。
+  返回的free仍表示已存浮点控制严格介于0和cap；不能用它替代未补值响应的VJP面判定。
 - KV 存原始正写入质量、内容、int64 时间/计数。qry/Full 融合
   `min(total,1)*softmax(logits+log(weights))@values` 的一阶 VJP，
   避免中间 log 导数溢出或小伴随先下溢。sum 读取保持原式。
@@ -118,3 +119,5 @@ python examples/consumer_core5/positive_support.py --row tests/data/tl_req_003_s
 整图套件的 fresh-process 检查在两个新进程保存/恢复完整下一窗和 optimizer；
 可独立运行 `tests/positive_support_resume.py write|resume --directory NEW --device cpu`。
 正式资格需固定源码/安装并用持久任务，不能以这些命令的存在代替运行证据。
+
+本次固定源码CPU/NPU结果、原失败与下游接入回复见[TL-REQ-003交付证据](evidence/positive-support-tl-req-003-20261109.md)。

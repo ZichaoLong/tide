@@ -1,0 +1,466 @@
+{
+  "schema": "tide-positive-support-qualification-v1",
+  "date": "2026-11-09",
+  "request": "TL-REQ-003",
+  "request_source": "43bc5c457ed948ad81c4fbd9e41ae61516300e16",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "implementation": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+  "supplemental_tests": "2502fa4a3df3096e3f5773a7c8586b517b96da89",
+  "qualification_driver": "b4879ffa6bceb989f052484f18cfb480f7d1a68f",
+  "python_package_unchanged_between_these_commits": true,
+  "build": {
+    "source": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+    "wheel": "tidegraph-0.3.0-py3-none-any.whl",
+    "sha256": "3864acb62703b4b8e58d0e7946270f9816fb2f0f5d222f915364997dd2e29ae3",
+    "pip_check": "passed"
+  },
+  "installed": {
+    "lock_id": "5e663710d6515931c4510c24a14277e0b84aeec9f17d6a8d21d078d51419e599",
+    "lock_sha256": "e36881efd47ab2e69147c0cdf8efe3bbb1aef51b929d03a417c76bb4f42791e8",
+    "package_files_sha256": "7dbfde4bbbd375e17e320b75a5796164cafdb33c5cfbc07de9fc02d020cd059a",
+    "pip_check": "passed",
+    "lock_verify": "passed"
+  },
+  "environment": {
+    "source": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+    "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/qualification-venv/bin/python",
+    "platform": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+    "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/qualification-venv/lib/python3.12/site-packages/tidegraph/__init__.py",
+    "torch": "2.12.0+cpu",
+    "torch_npu": "2.12.0.post3",
+    "threads": 1,
+    "visibility": "1",
+    "affinity_count": 320,
+    "cann": "9.2.0",
+    "module": "ascend/dev-workspace-9.2.0",
+    "hardware": "Ascend910 / 9392, NPU ID 0 Chip ID 1",
+    "payload": "float32",
+    "scoring": "float32",
+    "cpu_reference": "float64 independent scalar schedule",
+    "native_built": false
+  },
+  "resources": {
+    "cpu_quota_cores": 1,
+    "aten_threads": 1,
+    "blas_threads": 1,
+    "memory_limit_bytes": 8589934592,
+    "npu_count": 1,
+    "queue_max_wait_seconds": 600,
+    "service_limit_seconds": {
+      "cpu_a": 1800,
+      "npu_a": 1800,
+      "boundary_b": 900,
+      "cpu_c": 600
+    },
+    "artifact_budget_bytes": 2147483648
+  },
+  "checks": {
+    "cpu-a/support.xml": {
+      "tests": 29,
+      "passed": 29,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 13.557,
+      "sha256": "48c8e18596f03b2e89c3e7b2987ee5e0e1959e6889dbfa1de905e6ed7a512fa4",
+      "failures": []
+    },
+    "cpu-a/regression.xml": {
+      "tests": 322,
+      "passed": 314,
+      "failed": 8,
+      "skipped": 0,
+      "seconds": 124.401,
+      "sha256": "1a1851b0b6142a83419a860d0bd2ff9df46f4e45af2d07c976fa1b17f3fbc476",
+      "failures": [
+        {
+          "name": "test_scalar_underflow_does_not_invent_uncomputed_residual[float64-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_scalar_underflow_does_not_invent_uncomputed_residual[float32-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_scalar_failure_actual_snapshot_and_validation_class[float64-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_scalar_failure_actual_snapshot_and_validation_class[float32-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_failure_rows_snapshot_and_json[float64-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_failure_rows_snapshot_and_json[float32-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_failure_region_group_mapping_and_int64_time[float64-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        },
+        {
+          "name": "test_failure_region_group_mapping_and_int64_time[float32-True]",
+          "classname": "tests.test_allocation_failure",
+          "message": "ModuleNotFoundError: No module named '_tide_native'"
+        }
+      ]
+    },
+    "npu-a/support.xml": {
+      "tests": 29,
+      "passed": 29,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 36.784,
+      "sha256": "3a3cb8e8e5d664cd72469913a8fc0fc2d470547e8e441648f8bd7dd704b88ac2",
+      "failures": []
+    },
+    "boundary-b/cpu.xml": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 0.784,
+      "sha256": "eb5882c1b883ad22e719b77f7bd62d018912bc8ee3068958d8962d502408b0ea",
+      "failures": []
+    },
+    "boundary-b/npu.xml": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 2.821,
+      "sha256": "82b8f152284cbba16d15302c71d7462d4a3c31ce7a5fadd44d72ce10ebe9f0fe",
+      "failures": []
+    },
+    "cpu-c/allocation-failure.xml": {
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 0.353,
+      "sha256": "68d1ab032d6510afce97bf7c72374cb513598fa4c4f8b201d1575b6187974158",
+      "failures": []
+    }
+  },
+  "jobs": {
+    "cpu-a": {
+      "command": [
+        "bash",
+        "scripts/qualify_positive_support.sh",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/cpu-a",
+        "cpu"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/source-a",
+      "state": "failed",
+      "source": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+      "dirty": "",
+      "started": "2026-11-09T06:45:42.841888+00:00",
+      "exit_code": 1,
+      "finished": "2026-11-09T06:48:05.241920+00:00"
+    },
+    "npu-a": {
+      "command": [
+        "python",
+        "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "gef-tl-req-003-npu-a",
+        "--project",
+        "graph-execution-foundation",
+        "--priority",
+        "0",
+        "--npu-count",
+        "1",
+        "--max-wait-seconds",
+        "600",
+        "--state-file",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/npu-queue-a.json",
+        "--",
+        "bash",
+        "scripts/qualify_positive_support.sh",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/npu-a",
+        "npu"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/source-a",
+      "state": "passed",
+      "source": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+      "dirty": "",
+      "started": "2026-11-09T06:45:42.869096+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-09T06:46:38.763082+00:00"
+    },
+    "boundary-b": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/boundary-b.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/source-b",
+      "state": "passed",
+      "source": "2502fa4a3df3096e3f5773a7c8586b517b96da89",
+      "dirty": "",
+      "started": "2026-11-09T06:47:34.624382+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-09T06:47:51.248256+00:00"
+    },
+    "cpu-c": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/cpu-c.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/source-c",
+      "state": "passed",
+      "source": "b4879ffa6bceb989f052484f18cfb480f7d1a68f",
+      "dirty": "",
+      "started": "2026-11-09T06:49:03.809816+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-09T06:49:08.100298+00:00"
+    }
+  },
+  "terminal_units": {
+    "gef-tl-req-003-cpu-a": {
+      "MainPID": "0",
+      "Result": "exit-code",
+      "ExecMainStatus": "1",
+      "ControlGroup": "",
+      "ActiveState": "failed",
+      "SubState": "failed",
+      "cgroup_absent": true
+    },
+    "gef-tl-req-003-npu-a": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "cgroup_absent": true
+    },
+    "gef-tl-req-003-boundary-b": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "cgroup_absent": true
+    },
+    "gef-tl-req-003-cpu-c": {
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "cgroup_absent": true
+    }
+  },
+  "queue": [
+    {
+      "elapsed_seconds": 55.254982866346836,
+      "job_id": "gef-tl-req-003-npu-a",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-09T06:46:38.747999+00:00"
+    },
+    {
+      "elapsed_seconds": 13.158773202449083,
+      "job_id": "gef-tl-req-003-boundary-b",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 1,
+      "physical_ids": [
+        1
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-09T06:47:51.232323+00:00"
+    }
+  ],
+  "public_api": {
+    "cpu": {
+      "policy": "positive-floor-v1",
+      "device": "cpu",
+      "dtype": "float32",
+      "controls": [
+        0.9164376854896545,
+        5.6795763647699005e-09,
+        1.401298464324817e-45,
+        1.0
+      ],
+      "backward": "ent-positive-floor-v1",
+      "gradients": [
+        [
+          -1.2423524352211837e-15,
+          -7.699416541310963e-24,
+          1.2423524352211837e-15,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          0.0,
+          -3.389077289544574e-16
+        ],
+        3.389077289544574e-16,
+        1.3007211410384634e-13
+      ],
+      "support": {
+        "policy": "positive-floor-v1",
+        "repaired_coordinates": 1,
+        "repaired_rows": 1,
+        "positions": [
+          {
+            "device": "cpu",
+            "dtype": "torch.float32",
+            "candidates": 4,
+            "first_candidate_counts": [
+              0,
+              0,
+              1,
+              0
+            ]
+          }
+        ],
+        "position_limit": {
+          "groups": 16,
+          "candidates_per_group": 32
+        },
+        "scope": "actual allocation calls, including autograd replays"
+      }
+    },
+    "npu": {
+      "policy": "positive-floor-v1",
+      "device": "npu:0",
+      "dtype": "float32",
+      "controls": [
+        0.9164376854896545,
+        5.6795763647699005e-09,
+        1.401298464324817e-45,
+        1.0
+      ],
+      "backward": "ent-positive-floor-v1",
+      "gradients": [
+        [
+          -1.2423523293420653e-15,
+          -7.699416541310963e-24,
+          1.2423523293420653e-15,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          0.0,
+          -3.389077024846778e-16
+        ],
+        3.389077024846778e-16,
+        1.3007211410384634e-13
+      ],
+      "support": {
+        "policy": "positive-floor-v1",
+        "repaired_coordinates": 1,
+        "repaired_rows": 1,
+        "positions": [
+          {
+            "device": "npu:0",
+            "dtype": "torch.float32",
+            "candidates": 4,
+            "first_candidate_counts": [
+              0,
+              0,
+              1,
+              0
+            ]
+          }
+        ],
+        "position_limit": {
+          "groups": 16,
+          "candidates_per_group": 32
+        },
+        "scope": "actual allocation calls, including autograd replays"
+      }
+    }
+  },
+  "default_identities": {
+    "old": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+    "new": "2c11695ca66a5dcd028f7d777ec26b177add0378",
+    "state": "passed",
+    "rows": [
+      {
+        "config": {},
+        "region_profile": "weighted-regional-total-v1:333b0d2be7b05cc31f6ee536f7a36d5ba50ddd6841cfb0bd8f68774a6ceb902d"
+      },
+      {
+        "config": {
+          "regularizer": "ent",
+          "ent_alpha": 1.0
+        },
+        "region_profile": "weighted-regional-total-v1:19a8d457b24a37991c1c50e8cfb5a447fcd876617f7e5ce53943c868e119f83a"
+      },
+      {
+        "config": {
+          "selection_mode": "regional_total_zero"
+        },
+        "region_profile": "weighted-region-v1:c6222c7a2e697763ac562b0084e72a4d5d78c00a2128fcb54d217c532732d7a6"
+      },
+      {
+        "config": {
+          "local_score": "match"
+        },
+        "region_profile": "weighted-regional-total-v1:6027b489b4830b7f28a5eb0cb4533a5dd9c53b9523016035eadf93c0a339d617"
+      }
+    ]
+  },
+  "summary": {
+    "cpu_new_checks": 30,
+    "cpu_related_regression_passed": 314,
+    "cpu_related_loader_failures_retained": 8,
+    "cpu_related_failure_snapshots_rechecked": 8,
+    "npu_target_checks": 13,
+    "npu_flow_cpu_or_static_auxiliary_checks": 17,
+    "execution": "passed in declared scope",
+    "independent_numeric": "passed in declared scope",
+    "discrete": "passed in declared scope",
+    "fresh_process_exact_next": "passed CPU and NPU",
+    "exploration": false,
+    "performance": "not_measured",
+    "downstream_acceptance": "not_run"
+  },
+  "retained_boundaries": [
+    "strict FP32 actual row rejects",
+    "strict synthetic FP64 range row rejects",
+    "all-underflow or material relative added mass rejects",
+    "unrepresentable Aggregate public adjoint rejects",
+    "native/standalone/resident/FP16/multidevice/non-KV floor policy not implemented",
+    "CUDA floor policy not qualified",
+    "no original HB16 training replay or learning-quality acceptance",
+    "multiple floored tails do not preserve original relative proportions",
+    "strict\u2192floor checkpoint auto-migration not implemented"
+  ]
+}
