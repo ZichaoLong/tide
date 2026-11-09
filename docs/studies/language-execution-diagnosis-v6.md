@@ -12,7 +12,7 @@
 | native CPU/NPU对应 | FC16 KV quad，width128，B2/L8；一预热、两步测量、一完整CPU算子profile | 分离core前向、任务readout/head、backward、clip和AdamW；分析调用次数及形状 |
 | Python/NPU调用栈 | 同上，公共Python packed，记录CPU/NPU trace和cProfile | 把热点定位至具体公共实现；不把Python定位数据冒充native占比 |
 | 原形状复核 | 同一FC16，B8/L128，CPU/NPU各一预热和一步测量，不加算子profile | 验证小形状归因在原工作量上的阶段分布；共享负载单列 |
-| 条件性隔离 | 最多六个具名小探针：优先mixed-b/a或width256/512；B8/L16 | 只验证前述观测支持的假说，不遍历执行矩阵，不进入正式学习 |
+| 条件性隔离 | 六个具名探针：native的B2/L8设备profile；B8/L16下width128基线、mixed-a、width256、width512及公共native transport选项 | 原始trace已显示大量索引/小算子，增加native设备trace复核；其余按固定表顺序执行，不进入正式学习 |
 
 本定位新增最多1 NPU卡时、3 CPU核时、4GiB产物，最多同时2个NPU及2个CPU单线程/双线程worker，
 单项≤20分钟，共同≤2小时；计入v6共同预算，不影响原截止。实际诊断worker使用`v6-diag-`身份，
@@ -26,3 +26,7 @@
 执行、严格数值、离散机制、恢复、学习独立记录。本诊断不新增学习或恢复资格；
 公共placement变更的数值/工作差异保留，不能宣称等价加速。建议修正应附原阈值、独立梯度/共享/
 optimizer及恢复要求，不能为提速删除必要检查或改变None/连接零、支持与时间语义。
+
+条件性表固定在`configs/checks/v6-execution-variants.json`。transport项通过公共Native构造器
+显式采用`trace=False, compact_events=True, packed_sources=True, batch_next=True`，
+它改变返回/传输策略，必须单独解释；不把它默认为原配置的严格等价性能结果。

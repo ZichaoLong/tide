@@ -1,0 +1,12 @@
+{
+  "schema": "tide-execution-diagnostic-variants-v1",
+  "study_id": "TL-EXEC-v6-PROFILE",
+  "scope": "Unprofiled phases only; three synthetic updates; batch8 length16; no learning or equivalent-speedup qualification",
+  "cases": [
+    {"name": "v6-diag-native-base128", "width": 128, "timeout_seconds": 240},
+    {"name": "v6-diag-native-cpu-read128", "placement": "mixed-a", "width": 128, "timeout_seconds": 240},
+    {"name": "v6-diag-native-width256", "width": 256, "timeout_seconds": 240},
+    {"name": "v6-diag-native-width512", "width": 512, "timeout_seconds": 300},
+    {"name": "v6-diag-native-transport128", "width": 128, "native_transport": true, "timeout_seconds": 240}
+  ]
+}

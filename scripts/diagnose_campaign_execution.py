@@ -63,6 +63,23 @@ def main(a):
     if a.width:
         config['core']['width'] = config['core']['recipe']['width'] = a.width
         config.pop('planned_inventory', None)
+    if a.native_transport:
+        if a.implementation != 'native':
+            raise ValueError('native transport diagnostic requires native implementation')
+        # Public constructor options; no local program or execution core is copied.
+        import tide_lab.core5 as application
+        def transport_runner(binding, implementation, placement, native_library=None,
+                             *, streaming=False, workers=1, packing='packed'):
+            from tidegraph.native import Native
+            from tidegraph.native_loader import load_native
+            load_native(native_library, backend=binding.model.nodes[0].bias.device.type)
+            return Native(binding.graph, binding.model, workers=workers,
+                algorithm='streaming' if streaming else 'greedy', placement=placement,
+                packed=True, aggregate_autograd='batched', full_autograd='batched',
+                trace=False, compact_events=True, packed_sources=True, batch_next=True).run
+        application.eager_runner = transport_runner
+        config['diagnostic_native_options'] = dict(trace=False, compact_events=True,
+            packed_sources=True, batch_next=True)
     run_id = 'tl-' + a.output.name
     state = dict(schema='tide-execution-diagnosis-v1', state='running',
         started_at=now(), source=source_identity(), config_sha256=digest(a.config),
@@ -197,6 +214,7 @@ if __name__ == '__main__':
     p.add_argument('--updates', type=int, default=3)
     p.add_argument('--profile', choices=['none', 'cpu', 'npu'], default='none')
     p.add_argument('--stack', action='store_true')
+    p.add_argument('--native-transport', action='store_true')
     p.add_argument('--lens-cli')
     args = p.parse_args()
     if min(args.batch, args.length, args.threads, args.updates) < 1:
