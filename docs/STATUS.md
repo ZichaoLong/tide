@@ -1,3 +1,27 @@
+# 当前交接 — 三项补齐完成，HB40并行训练（2026-11-09 16:46）
+
+**FC16 quad、HB16 dense和浅宽FC4 dense的128步训练、test、推理与context-reset全部完成，相关cgroup/后代已清空。HB40两个候选在16:06通过前驱条件启动，目前CPU1各自训练：dense 40/64，quad 44/64。** 7项必要复评及两短校准也已完成；本次检查没有提交、恢复或修改训练输入。[实际状态/统计/身份](evidence/language-completion-handoff.json)、[操作和Lens对应](studies/language-completion-v5-running.md)。
+
+| 完成的配对/控制 | 同v5确认集test NLL | 已审阅的有限观察 |
+| --- | --- | --- |
+| FC16 dense / quad128 | 6.864746 / 6.882227 | 稀疏差+0.017481，单侧95%上界0.037407<0.05；Full减49.77%、内部消息减49.72% |
+| HB16 dense / quad128 | 6.900321 / 6.927488 | 稀疏差+0.027166，上界0.050655略高于0.05，原非劣门槛未通过；Full减47.49%、消息减47.48% |
+| 浅宽FC4 dense128 | 6.824360 | 原width32 FC4为6.842736；差−0.018376，双侧95%区间[−0.039897,0.003801]，尚不足以确认改善 |
+
+均为单seed11、B8/L32、512日程前缀、128更新/32677训练目标，test16文档/3878目标。FC16质量/实际稀疏折衷在此限定条件下成立；深层仍未优于对应FC4，不能推出scaling成功。HB16接纳补正后从94步续训、浅宽从32步跨安装/后端转换，父轨迹和新身份明确，不称为旧轨迹精确恢复。逐组审阅：[FC16](studies/TL-A-DEPTH-v5.md)、[HB16](studies/TL-A-TOPO-v5.md)、[容量控制](studies/TL-A-CAPACITY-v5.md)。
+
+本次补齐尚无新的执行失败，严格数值失败继续单列：三终点core分别28/349/38元素超差；HB40接入dense/quad分别5033/182185元素超差，quad最大绝对差0.002403、整体相对L2约1.88e-5，未知原因保留。HB40已测离散一致、独立参考因果/未来VJP/早期支持、各区域梯度和B2/L3三步新进程恢复通过；quad eager零容差因果扰动仍有81元素差异。按已授权有限数值探索运行，不宣称严格等价或将误差归因已定为舍入。
+
+Shannon补值确实发生且完成：HB16本次34更新补2坐标，test补4、reset补200；浅宽本次96更新补10752，test补3379、reset补2420。训练计数包含autograd replay，不能视为唯一节点数或据此推导有效贡献。旧87步/浅宽失败与FC16干预失败不改写。
+
+新源码仍0e40996/只读`.local/source-language-completion-v5`；数学0770593、foundation74e7bbd，31固定输入及250安装文件hash一致，三新终点checkpoint文件核验一致。预算监督有效，累计约9.269/24计算worker小时，原22:49:13截止；HB40当前约50/46秒每步，按观察预计还需约25–40分钟完成剩余训练与评价，资源波动/未完成检查仍可能改变时间。
+
+Lens项目`tide-learning-lab`：19份完成投影均verified/readback_matches；HB40两条[实时前缀读回一致](evidence/language-completion-lens-hb40-live.json)。私有入口`.local/LENS.md`，活动曲线`tl-lm-complete-hb40-{dense,sparse}-v5-train-tide-{dense,sparse}-s11`。全批尚非终态，HB40科学结果保持awaiting；完成后再统一审阅，不自动开展下一批。
+
+---
+
+以下保留补齐前的历史结果，当前结论以上方为准。
+
 # 当前交接 — 补齐原v5受阻任务（2026-11-09 15:58核对）
 
 **三项主训练正在并行推进，7项必要复评已全部完成；两项HB40条件作业已后台等待。** 用户接受Shannon补丁并授权完成原缺口，本次保持原候选/曝光及24累计计算worker小时、北京时间22:49:13截止，不启动下一批scaling。[有限研究表](studies/language-depth-completion-v5.md)、[作业/Lens/停止/恢复](studies/language-completion-v5-running.md)、[实际只读快照](evidence/language-completion-handoff.json)。

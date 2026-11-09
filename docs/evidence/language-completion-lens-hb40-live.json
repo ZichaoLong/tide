@@ -1,0 +1,29 @@
+{
+  "at": "2026-11-09T08:44:13.973820+00:00",
+  "runs": [
+    {
+      "compared_prefix": 38,
+      "destination_name": "tl-lm-complete-hb40-dense-v5-train-tide-dense-s11-projection-31960b2e656f",
+      "destination_run_id": "d4dc83af3fb84956bfdf0a30145e9e77",
+      "latest_recorded_step": 37,
+      "local_events": 38,
+      "prefix_matches": true,
+      "project": "tide-learning-lab",
+      "recorded_events": 38,
+      "run_id": "tl-lm-complete-hb40-dense-v5-train-tide-dense-s11"
+    },
+    {
+      "compared_prefix": 43,
+      "destination_name": "tl-lm-complete-hb40-sparse-v5-train-tide-sparse-s11-projection-8fcbc9a71552",
+      "destination_run_id": "2f99a0569cb247fd96be2753dbd02f2c",
+      "latest_recorded_step": 42,
+      "local_events": 43,
+      "prefix_matches": true,
+      "project": "tide-learning-lab",
+      "recorded_events": 43,
+      "run_id": "tl-lm-complete-hb40-sparse-v5-train-tide-sparse-s11"
+    }
+  ],
+  "schema": "tide-lens-live-readback-v1",
+  "scope": "read-only live prefix; no terminal exactly-once claim"
+}
