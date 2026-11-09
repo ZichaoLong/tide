@@ -28,7 +28,7 @@ def review(root):
         source_tree_sha256=source['content']['tree_sha256'],configuration='configs/studies/language/fc-confirm-v4.json',
         revisions=plan['revisions'],routes={},lens=[],quality_margin=.05,hardware_speedup_required=False,
         checkpoint_inspection='docs/evidence/language-v4-checkpoint-inspection.json',
-        scope='snapshot of execution plus completed comparisons; active sparse/scale outcomes remain unchecked')
+        scope='snapshot of execution plus completed comparisons; absent or skipped outcomes remain unchecked; checkpoint decoding scope is in the linked inspection record')
     used=0.
     for route in 'ab':
         name=f'lm-{route}-language-v4';base=Path('runs')/name

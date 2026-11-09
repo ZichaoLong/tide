@@ -1,3 +1,19 @@
+# v5当前操作状态：全部终止
+
+2026-11-09 14:36核对：无运行、排队或自动后继；HB16 sparse12:36:54、B FC8 13:43:33结束，所有cgroup/已知后代清空。预算监督均completed，最终22931.15秒=6.3698/24计算worker小时；原截止22:49:13不变。终态结果见[总报告](language-depth-v5-results.md)与[证据](../evidence/language-depth-terminal.json)。
+
+Lens主要新增完成曲线：
+
+- `tl-lm-a-hb16-sparse-v5-train-tide-sparse-s11`：A HB16 quad128，TL-A-TOPO。
+- `tl-lm-b-fc8-v5-budget2-train-tide-dense-s11` / `...-train-tide-sparse-s11`：B FC8配对128，TL-B-DEPTH。
+- `tl-lm-a-transformer-cpu-v5-train-transformer-s11`：近参数Transformer2048及128前缀，TL-A-CAPACITY。
+
+下面表格是原提交分类；其中`lm-a-controls-v5`原链没有执行Transformer训练，应查看上面的独立CPU运行。FC16 sparse/HB40没有学习曲线。查询状态/日志仍有效，不要重启已完成服务来查看结果。本次未新增Lens写入或更改服务策略。
+
+---
+
+以下保留原运行交接与操作方法。
+
 # v5多区域实验：运行类别与操作
 
 2026-11-09 12:15补充：`lm-hb16-underflow-v5`已完成有界定位，实际第87步失败行及分析见[正支持研究页](allocation-support-v5.md)。新监督`lm-depth-budget-diagnosis-v5`覆盖原费用加诊断；当前权威累计见`runs/lm-depth-budget-diagnosis-v5/state.json`。诊断源码9ebbc63/`.local/source-language-underflow-v5`，CPU1/8GiB/1800秒上限，实际571.69秒，后代清空。无新增Lens学习投影，原dense仍失败。FC16原链在context-reset失败，sparse未训练；旧v4已完成，条件FC8正式训练跳过。当前其他活动源码不变。
