@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Allocation §2–6: independent frame/control roots on actual batch graphs.
 #include "weighted_region_batch.h"
 #include <torch/csrc/autograd/autograd.h>
@@ -15,6 +17,8 @@ class RegionVjp final:public torch::autograd::Node {
   std::vector<std::string> dependencies;
   std::vector<size_t> output_map;
   variable_list apply(variable_list&& bars) override {
+  RECORD_FUNCTION("tide::stage::region_backward", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::RegionAdjoint);
     if(at::GradMode::is_enabled())throw std::invalid_argument("batched region supports first-order VJP only");
     if(originals.empty())throw std::runtime_error("regional VJP graph already released; use retain_graph");
     for(auto& t:originals)t.unpack();variable_list xs,ys,full(rows*row_outputs);
@@ -32,7 +36,11 @@ class RegionVjp final:public torch::autograd::Node {
       auto append=[&](size_t i){if(xs[i].requires_grad()&&should_compute_output(i)){ids.push_back(i);inputs.push_back(xs[i]);}};
       for(size_t i=0;i<weights;++i)append(i);for(auto row:used)for(size_t j=0;j<row_inputs;++j)append(weights+row*row_inputs+j);
       if(inputs.empty())continue;
-      auto values=torch::autograd::grad(roots,inputs,grads,true,false,true);
+      variable_list values;{
+        RECORD_FUNCTION("tide::stage::region_gradient", std::vector<c10::IValue>());
+        op_profile::Scope profile(op_profile::RegionGradient);
+        values=torch::autograd::grad(roots,inputs,grads,true,false,true);
+      }
       for(size_t i=0;i<ids.size();++i)if(values[i].defined()){
         auto& out=result[ids[i]];out=out.defined()?out+values[i]:values[i];
       }
@@ -43,6 +51,8 @@ class RegionVjp final:public torch::autograd::Node {
   std::string name() const override{return "tide::weighted::RegionBatchVjp";}
 };
 std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>& requests,const RegionalConfig& c,std::optional<at::Device> selection){
+  RECORD_FUNCTION("tide::stage::region_bind", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::RegionBind);
   auto node=std::make_shared<RegionVjp>();variable_list inputs,leaves;
   auto leaf=[&](Tensor& t){inputs.push_back(t);t=t.detach().set_requires_grad(t.requires_grad());leaves.push_back(t);};
   std::map<const c10::TensorImpl*,Tensor> aliases;
@@ -62,6 +72,7 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];bound.push_back({r.history,r.time,candidates[i],r.layout,r.payload_options});}
   std::vector<Selection> results;
   {at::AutoGradMode enable(true);results=regions(w,bound,c,&node->dependencies,selection);}
+  stage_profile.phase(op_profile::RegionPublish);
   node->row_outputs=results[0].controls.size();
   for(size_t i=0;i<results.size();++i){
     size_t j=0;for(auto& [id,t]:results[i].controls){

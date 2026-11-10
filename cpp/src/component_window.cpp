@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 #include "tide/greedy.h"
 #include "tide/delivery.h"
 #include "tide/ops.h"
@@ -7,6 +9,8 @@
 
 namespace tide {
 Result Greedy::run_window(const Continuation& initial,const std::vector<External>& external,Index stop,Index seal){
+  RECORD_FUNCTION("tide::stage::window", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::Schedule);
   Result result;auto& q=result.continuation;q=initial;
   auto atoms=validate_window(graph_,model_,q,external,stop,seal);
   atoms.insert(atoms.end(),q.pending.begin(),q.pending.end());

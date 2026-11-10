@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Independent public row roots over the actual KKT solution, not iterations.
 #include "weighted_allocation_batch.h"
 #include "tide/allocation_failure.h"
@@ -56,6 +58,8 @@ class AllocationVjp final:public torch::autograd::Node {
 };
 }
 std::vector<Allocation> allocate_batch(const std::vector<AllocationRow>& rows,const std::string& kind,std::optional<double> alpha){
+  RECORD_FUNCTION("tide::stage::allocation", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::Allocation);
   detail::Regularizer rule(kind,alpha);std::vector<Allocation> result(rows.size());
   std::map<std::string,std::vector<size_t>> groups;
   for(size_t i=0;i<rows.size();++i){

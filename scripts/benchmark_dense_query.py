@@ -35,7 +35,8 @@ def main():
     p.add_argument("--native-library")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--length", type=int, default=128)
-    p.add_argument("--profile", choices=("none", "cpu", "npu"), default="none")
+    p.add_argument("--profile", choices=("none", "stages", "cpu", "npu"), default="none")
+    p.add_argument("--profile-shapes", action="store_true", help="retain profiler shapes; increases diagnostic memory")
     p.add_argument("--warmup-state", choices=("reset", "continue"), default="reset",
                    help="reset restores initial weights/optimizer after warmup for controlled comparisons")
     a = p.parse_args()
@@ -138,24 +139,36 @@ def main():
             row = step(i); record["phases"].append(row)
             write_json(out/"result.json", record); print(json.dumps(row), flush=True)
         if a.profile != "none":
+            if initial_model is not None:
+                model.load_state_dict(initial_model); opt.load_state_dict(initial_optimizer)
+                opt.zero_grad(set_to_none=True)
+            record["profile_parameters_sha256"] = parameter_hash()
             if a.client == "native":
                 import _tide_native as core
                 core.reset_work(True)
-            if a.profile == "cpu":
-                profiler = torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=True)
+                core.reset_stage_profile(True)
+            if a.profile == "stages":
+                from contextlib import nullcontext
+                profiler = nullcontext()
+            elif a.profile == "cpu":
+                profiler = torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=a.profile_shapes)
             else:
                 import torch_npu
                 profiler = torch_npu.profiler.profile(activities=[torch_npu.profiler.ProfilerActivity.CPU,
-                    torch_npu.profiler.ProfilerActivity.NPU], record_shapes=True,
+                    torch_npu.profiler.ProfilerActivity.NPU], record_shapes=a.profile_shapes,
                     on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(str(out/"npu-profile"), analyse_flag=True))
             with profiler:
-                record["instrumented_step"] = step(2)
+                record["instrumented_step"] = step(1)
             if a.client == "native":
                 record["instrumented_packing"] = dict(core.work_metrics())
+                record["instrumented_stages"] = dict(core.stage_profile_metrics())
+                record["stage_scope"] = "Exclusive calling-thread elapsed time, includes incidental waits; not device kernel time or additive multiworker wall time. Reset and read only with workers idle."
                 core.reset_work(False)
+                core.reset_stage_profile(False)
             if a.profile == "cpu":
                 write_json(out/"operators.json", [dict(operator=e.key, count=e.count, input_shapes=e.input_shapes,
-                    self_cpu_ms=e.self_cpu_time_total/1000) for e in profiler.key_averages(group_by_input_shape=True)])
+                    self_cpu_ms=e.self_cpu_time_total/1000, total_cpu_ms=e.cpu_time_total/1000)
+                    for e in profiler.key_averages(group_by_input_shape=a.profile_shapes)])
             record["profile_state"] = "completed"
         record["execution"] = "completed"
     except BaseException as error:

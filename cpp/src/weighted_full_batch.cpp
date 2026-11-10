@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // KV §4 / recurrent §3: only selected comparison snapshots, unscaled (c,G).
 #include "weighted_query_layout.h"
 
@@ -51,6 +53,8 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
   return c.alpha_mem*combined;
 }
 template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,int dense){
+  RECORD_FUNCTION("tide::stage::full_math", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::QueryMath);
   require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> rows,controls;

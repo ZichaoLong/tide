@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // KV §2: actual prefix snapshots and deterministic bulk first-order adjoints.
 // Only untraced execution; the traced independent-state root chain is retained.
 #include "weighted_kv_sequence_vjp.h"
@@ -48,6 +50,8 @@ class SequenceVjp final:public torch::autograd::Node {
   std::vector<size_t> output_map;
   size_t total=0;
   variable_list apply(variable_list&& incoming) override {
+  RECORD_FUNCTION("tide::stage::state_backward", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::StateAdjoint);
     if(at::GradMode::is_enabled())throw std::invalid_argument("KV sequence supports first-order VJP only");
     if(originals.empty())throw std::runtime_error("KV sequence graph released; use retain_graph");
     variable_list inputs;for(auto& t:originals)inputs.push_back(t.unpack());

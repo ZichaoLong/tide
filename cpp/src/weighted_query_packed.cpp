@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Batched raw snapshots with exact support; independent VJP roots live above.
 #include "weighted_query_layout.h"
 #include <limits>
@@ -25,6 +27,8 @@ SnapshotLayout layout(const States& states,const Times& times,const std::vector<
 }
 }
 std::array<Tensor,4> packed_memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c){
+  RECORD_FUNCTION("tide::stage::read_memory", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::ReadMemory);
   std::vector<std::array<Tensor,4>> result(states.size());
   auto queries=c.memory_read=="qry"?project(normalize(u,c.epsilon),weight(w,"kernel.read_q")):Tensor{};
   for(const auto& ids:snapshot_chunks(states,c.width)){
@@ -48,6 +52,8 @@ std::array<Tensor,4> packed_memory(const NodeWeights& w,const States& states,con
   return output;
 }
 Tensor packed_full(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const KVConfig& c){
+  RECORD_FUNCTION("tide::stage::full_memory", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::FullMemory);
   std::vector<Tensor> result(states.size());const Index d=c.width/c.heads;
   auto queries=project(normalize(u,c.epsilon),weight(w,"full_program.content.query")).reshape({-1,c.heads,d});
   const std::vector<double> empty;

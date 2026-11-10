@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Allocation §2–6: complete query/context/normalization/allocation batches.
 #include "weighted_region_batch.h"
 #include "weighted_sending_batch.h"
@@ -10,6 +12,8 @@
 namespace tide::weighted::batch {
 std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionInput>& requests,const RegionalConfig& c,
                                std::vector<std::string>* dependencies,std::optional<at::Device> selection){
+  RECORD_FUNCTION("tide::stage::region_math", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::RegionMath);
   std::vector<Selection> result(requests.size());std::map<std::string,std::vector<size_t>> groups;
   if(dependencies)dependencies->resize(requests.size());
   for(size_t i=0;i<requests.size();++i){

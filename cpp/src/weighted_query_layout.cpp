@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 #include "weighted_query_layout.h"
 #include "region_metadata.h"
 #include <ATen/core/grad_mode.h>
@@ -30,6 +32,8 @@ SnapshotLayout::SnapshotLayout(States values,const Times& times,Index window):st
   work::packing::bucket("kv_snapshot_layout",length,rows);
 }
 Tensor SnapshotLayout::slot(const std::string& name)const{
+  RECORD_FUNCTION("tide::stage::snapshot_pack", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::KvGather);
   std::vector<Tensor> values;for(const auto& s:states)values.push_back(s.slots.at(name));
   auto zero_shape=values[0].sizes().vec();zero_shape[0]=1;
   values.push_back(at::zeros(zero_shape,values[0].options()));

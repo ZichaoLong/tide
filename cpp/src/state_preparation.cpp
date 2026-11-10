@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 #include "tide/state_preparation.h"
 #include "tide/kernel.h"
 #include <typeinfo>
@@ -5,6 +7,8 @@
 #include <algorithm>
 namespace tide {
 void prepare_shared_state(const Model& m,std::vector<Event>& events,std::map<std::string,Index>& stats){
+  RECORD_FUNCTION("tide::stage::state_prepare", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::Preparation);
   std::map<std::string,std::vector<size_t>> blocks;
   std::vector<bool> handled(events.size());
   for(size_t i=0;i<events.size();++i){events[i].state_prepared.clear();const auto& k=m.nodes[events[i].node].kernel;

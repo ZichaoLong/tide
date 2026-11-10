@@ -13,10 +13,16 @@
 
 namespace tide::op_profile {
 enum Field { InputPack, Qkv, KvBuild, KvGather, Attention, Pooling, Output,
-  StateCommit, StateOther, Aggregate, Read, Next, FullOther, Norm, Emit, Fields };
+  StateCommit, StateOther, Aggregate, Read, Next, FullOther, Norm, Emit,
+  Schedule, Preparation, QueryBind, QueryPublish, QueryMath, QueryAdjoint,
+  QueryGradient, RegionBind, RegionPublish, RegionMath, RegionAdjoint,
+  RegionGradient, StateAdjoint, ReadMemory, FullMemory, Allocation, Fields };
 inline constexpr std::array<const char*, Fields> names{
   "input_pack", "qkv", "kv_build", "kv_gather", "attention", "pooling", "output",
-  "state_commit", "state_other", "aggregate", "read", "next", "full_other", "norm", "emit"};
+  "state_commit", "state_other", "aggregate", "read", "next", "full_other", "norm", "emit",
+  "schedule", "preparation", "query_bind", "query_publish", "query_math", "query_adjoint",
+  "query_gradient", "region_bind", "region_publish", "region_math", "region_adjoint",
+  "region_gradient", "state_adjoint", "read_memory", "full_memory", "allocation"};
 using Count = std::int64_t;
 struct Counts { std::array<Count, Fields> ns{}, calls{}, maximum{}; };
 inline std::atomic<bool> active{false};

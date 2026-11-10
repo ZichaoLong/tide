@@ -53,6 +53,8 @@
 
 ## 当前待办与重启条件
 
+- **FC16同尺寸归因与优化（当前授权）**：固定原FC16/B8/L128及头/loss/AdamW，分开测标准Transformer、同局部公式直接B×L与默认图入口；先定位Read/Full/分配/快照和VJP装配，再实施有依据的优化。保持通用图后备、独立根、实际活动与精确续接；参见[诊断契约](fc16-cost-attribution.md)。当前进度/作业只见STATUS。
+
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 
   [有限代表矩阵](evidence/prefill-representatives-20261110.md)已完成CPU16/NPU18项运行与精确续接：宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c，B4/P16/FP32。大尺度独立数值均not_checked，小门禁另列；auto/greedy差异有限，小规模NPU仍慢于CPU，不能声称统一默认已经消除全部碎片化。常驻CANN9.2新构建后6项小图独立推理/训练/恢复通过，整序列常驻与规模性能尚未认证。[部署后继](evidence/prefill-deployment-20261110.md)已补FP16、异构LH、CPU线程、1.051B/9.314B与双NPU有限成本/恢复。默认异步FC16反向挂起后取消；显式blocking通过不解除。resident修正预算后仍在KV qry/local-row工作区构造拒绝，无性能或恢复结论。

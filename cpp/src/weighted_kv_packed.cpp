@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // KV §2/§5: one projection batch, actual raw caches at every positive prefix.
 #include "weighted_kv_projection.h"
 #include <algorithm>
@@ -5,6 +7,8 @@
 namespace tide::weighted::packed {
 using detail::weight;
 PackedStates kv(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& batch,const KVConfig& c){
+  RECORD_FUNCTION("tide::stage::state_snapshots", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::StateOther);
   Writes plan(old,batch);if(plan.ids.empty())return plan.decode(old,batch,{},0);
   auto [values,summaries]=kv_projections(w,plan,batch,c);
   std::map<std::string,Tensor> entries{{"times",plan.times},{"keys",values.slice(1,0,c.width)},

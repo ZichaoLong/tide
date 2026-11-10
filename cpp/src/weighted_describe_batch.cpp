@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Architecture §3: batched Mem and capability-selected shared projections.
 #include "weighted_query_batch.h"
 #include "weighted_scoring.h"
@@ -8,6 +10,8 @@ using namespace detail;
 namespace {
 template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense){
   if(requests.empty())return {};
+  RECORD_FUNCTION("tide::stage::describe", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::QueryMath);
   States states;Times times;std::vector<Tensor> received;
   for(const auto& request:requests){
     states.push_back(request.state?*request.state:w.kernel->initial(w));times.push_back(request.time);received.push_back(request.content.value);

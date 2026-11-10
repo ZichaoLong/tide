@@ -1,3 +1,5 @@
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 // Architecture §3/4: actual query batches with independent row/field VJP roots.
 #include "weighted_query_vjp.h"
 #include "weighted_query_layout.h"
@@ -48,6 +50,8 @@ class QueryVjp final:public torch::autograd::Node {
   std::vector<torch::autograd::SavedVariable> originals,leaves,outputs;
   std::vector<size_t> output_map;
   variable_list apply(variable_list&& bars) override {
+  RECORD_FUNCTION("tide::stage::query_backward", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::QueryAdjoint);
     if(at::GradMode::is_enabled())throw std::invalid_argument("weighted queries support first-order VJP only");
     if(originals.empty())throw std::runtime_error("query VJP graph already released; use retain_graph");
     for(auto& t:originals)t.unpack();
@@ -70,7 +74,11 @@ class QueryVjp final:public torch::autograd::Node {
       for(auto row:used)for(size_t j=0;j<row_inputs;++j)append(weights+row*row_inputs+j);
       if(inputs.empty())continue;
       coalesce_roots(roots,grads);
-      auto values=torch::autograd::grad(roots,inputs,grads,true,false,true);
+      variable_list values;{
+        RECORD_FUNCTION("tide::stage::query_gradient", std::vector<c10::IValue>());
+        op_profile::Scope profile(op_profile::QueryGradient);
+        values=torch::autograd::grad(roots,inputs,grads,true,false,true);
+      }
       for(size_t i=0;i<ids.size();++i)if(values[i].defined()){
         auto& out=result[ids[i]];out=out.defined()?out+values[i]:values[i];
       }
@@ -83,6 +91,8 @@ class QueryVjp final:public torch::autograd::Node {
 using Fields=std::vector<TensorFields>;
 template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,const Config& c,const RegionalConfig& region,
     bool is_full,Index slots,const Options& options,int dense){
+  RECORD_FUNCTION("tide::stage::query_bind", std::vector<c10::IValue>());
+  op_profile::Scope stage_profile(op_profile::QueryBind);
   if(rows.size()==1){
     variable_list originals{w.bias};
     const std::string prefix=is_full?"full_program.":"read_program.";
@@ -127,6 +137,7 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
       refs=describe(w,requests,c,region,dense);
     }
   }
+  stage_profile.phase(op_profile::QueryPublish);
   node->row_outputs=refs[0].size();Fields result;
   for(size_t i=0;i<rows.size();++i){
     TensorFields out;size_t j=0;

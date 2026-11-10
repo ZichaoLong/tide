@@ -6,6 +6,9 @@
 
 ## 分层
 
+FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：可选native线程排他计时、
+真实profiler范围与独立张量基线分列；修改时维护benchmark_dense_query及test_stage_profile。
+
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
 修改时同步ExecutionOptions/ExecutionSpec、Python/native/standalone分派及`test_component_window*`。
