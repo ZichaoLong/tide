@@ -53,7 +53,7 @@
 
 ## 当前待办与重启条件
 
-- **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5进一步按owner一次装配KV写梯度，固定构建/资格进行中，不能提前记通过。
+- **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 
   [有限代表矩阵](evidence/prefill-representatives-20261110.md)已完成CPU16/NPU18项运行与精确续接：宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c，B4/P16/FP32。大尺度独立数值均not_checked，小门禁另列；auto/greedy差异有限，小规模NPU仍慢于CPU，不能声称统一默认已经消除全部碎片化。常驻CANN9.2新构建后6项小图独立推理/训练/恢复通过，整序列常驻与规模性能尚未认证。FP16、resident代表、双NPU、1.051B/9.314B及CPU线程点按当前STATUS继续，未运行不当成拒绝或通过。
 
@@ -61,7 +61,7 @@
 
   **算子级目标与剩余边界**：在依赖已知、容量允许的B×L块内，主要算子提交由节点/区域/计算阶段决定；真实反馈/历史/选择依赖允许拆块，不能承诺任意L固定kernel数。KV私有写投影12288→96、基座批已生效；反向根装配/检查继续按profile推进。重复前缀快照的读投影、循环模块逐状态VJP、主机索引/返回装配和resident每sample/region单时间轮次仍有余地。保留None/零、int64、独立根、共享全部贡献和精确恢复；不删检查或用零mask改变活动集合。先具体边界的独立反例和资格，再有限成本，不无限重复同候选。
 
-  后继将cat evidence共享投影、Read有限值守卫和分配分支元数据批量处理；开发检查与同材料FP64诊断已完成，固定Python/native/SDK构建、真实NPU及成本仍按STATUS验收。packed-v2的指定CPU FP32 evidence根约1.044e-6严格超差保留；不放宽原容差，不把有限误差自动归因为舍入。层链NPU门禁的跨设备比较错误另修，原SSD数值差异做一次完整输出/梯度/FP64定位后再继续成本；resident代表先按实际journal/retained布局纠正显式预算，原拒绝不改写。
+  cat evidence共享投影、Read有限值守卫和分配分支元数据合批已完成：CPU281通过/4数值xfail，NPU目标流程68通过（含CPU辅助），安装消费者/SDK训练及新进程恢复分列通过。原FC16同minimal成本CPU18.640/NPU22.903秒。packed-v2的指定CPU FP32 evidence根约1.044e-6严格超差保留；不放宽原容差，不把有限误差自动归因为舍入。层链NPU门禁的跨设备比较错误另修，原SSD数值差异做一次完整输出/梯度/FP64定位后再继续成本；resident代表先按实际journal/retained布局纠正显式预算，原拒绝不改写。
 
   [同公式层链基线](layer-chain-baseline.md)已实现KV/SSD的独立张量输出投影，CPU13项开发检查通过，固定CPU/NPU成本待验。它消去无关辅助字段，不认证完整图连接或标准Transformer/Mamba模型；标准层链经默认入口与直接同公式对照的收益必须各自实测。现有external-lm不能代替此验收。后继用全部可用CPU及有余量NPU尽快得结果；构建与重型计时隔开，资源、作业和精确下一命令只见STATUS。GPU按授权延后，下游尚未验收或升级依赖。
 

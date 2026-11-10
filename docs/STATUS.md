@@ -1,65 +1,67 @@
-# 当前交接 — 联合prefill局部合批与部署回归（2026-11-10）
+# 当前交接 — 默认prefill局部合批与部署回归（2026-11-10）
 
-授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-用户批准持续实施/推送、全部可用CPU及空闲/有余量共享NPU；数值有限诊断后分列推进。
-参考/下游只读，无子代理。两份未跟踪TL-REQ-003/004用户handoff原样保留、不提交。
-GPU按授权延后；下游依赖升级/学习验收尚未执行。唯一待办及停止条件见ROADMAP。
+授权分支graph-execution-foundation；固定数学0770593838a37c790a568226930567ed60f99b83。
+用户授权持续实施/提交/推送、全部可用CPU及空闲/有余量共享NPU；有限数值超差有界诊断后分列推进。
+参考及下游只读，无子代理；GPU延后。未跟踪TL-REQ-003/004用户handoff保持原样、不提交。
+当前HEAD f6092d6；相对origin ahead8。当前仅STATUS未提交；不是活动任务输入。
 
-已交付分量窗口、联合KV准备、批量输入守卫、整序列VJP、query完整根合并与按需trace；
-导航见prefill-regression.md、semantic-map.md和evidence/README.md。
-34项CPU/NPU代表运行及精确下一窗恢复已记录于a841860；实际大尺度独立数值not_checked。
-原FC16/B8/L128/d128的a553/fb完整返回CPU29.788/NPU55.482秒，最小返回22.068/31.822秒；
-不同返回契约及设备实际Full/消息不混算等价加速，原任务学习/完整数值未认证。
+## 已完成及证据边界
 
-f15c4a5按owner一次装配KV写伴随的固定任务gef-joint-prefill-owner-join已passed：
-新Python-owned/独立SDK构建、CPU74/NPU37测试、两种安装消费者CPU/NPU三步训练与恢复，
-SDK CPU/NPU完整/outputs三步及新进程恢复均通过；原始结果待纳入小型审阅证据。
-日志artifacts/jobs/joint-prefill-owner-join/task.log；XML为owner-join-{cpu,npu}.xml。
-新FC16最小返回成本及B2/L8 profile在artifacts/joint-prefill/{cost,profile}-owner-join-*。
+默认分量窗口、B×L联合KV准备、整序列VJP、完整query根合并和按需trace已交付。
+导航：prefill-regression.md、semantic-map.md、performance-lessons-prefill.md、evidence/README.md。
+既有34项CPU/NPU代表运行与精确下一窗已记录于a841860；实际规模独立数值not_checked。
 
-当前源码改动：cat evidence共享GEMM；Read有限值按8MiB分组检查；分配入口数值守卫合批、
-实际int64分支一次回读复用于前向/反向。新末行拒绝/不发布半成品/提交次数/FP64字面梯度测试。
-开发Python45通过/2严格数值xfail，分配/正支持/结构/输入守卫127通过；C++尚待新构建。
-逐行BMM候选同样触发指定约1.044e-6差异，未继续权重批复制。共享GEMM同材料FP64见证：
-原标量对FP64最大9.06e-7，新批量1.38e-7；原严格失败保留、不提高容差。
-下一步固定本实现，单独新建包和Python/native/SDK，核对相关独立根/训练/新进程恢复，
-再补原FC16同返回成本/profile和少量代表；不能冒用旧构建认证新C++。
+f15c4a5按owner合并KV写伴随的固定任务owner-join已passed：两套新构建、CPU74/NPU37项流程、
+两种安装消费者CPU/NPU三步与恢复、独立SDK完整/outputs及新进程恢复通过。原FC16最小返回成本
+CPU22.301568/NPU31.023336秒；收益有限。正式小型证据尚待与下一增量汇总。
 
-已有后继任务均使用独立冻结源码，不读取工作区：
-- gef-joint-prefill-layer-anchor，固定930d1ba驱动/f15c4a5库/包，已failed。
-  CPU13项与KV/SSD×三实现成本完成；NPU7项中3通过/4失败，后续NPU成本未运行。
-  2项是测试跨设备比较元数据错误；2项SSD输出约3.07e-6超原阈值。须修复比较入口，
-  有限完整根/FP64定位后独立补NPU成本，不将外层失败当作全部子项失败。
-- gef-joint-prefill-deployment-resident，固定a553/core build-roots-a/resident-roots，已failed。
-  FC16被tensor_bytes预检拒绝，SSD被单窗口retained预算拒绝，均尚未执行窗口。
-  先按实际静态布局补显式预算再运行一次；不是设备数学或精确恢复失败。
-- gef-joint-prefill-deployment-{cpu,single,dual}顺序运行/待前项，固定930驱动/f15库/包。
-  CPU补wide-fc16线程/1.051B32线程；单NPU补FP16/异构LH/1.051B；双NPU补FC16/9.314B。
-  大尺度推理B2/P8，其他B4/P16，每项一次预热/测量、最终窗口checkpoint和实际下一窗恢复。
-  各RuntimeMaxSec36000，CPU配额320/32/64，内存512/384/640GiB；大尺度每卡须50000MiB空闲，
-  准入最多等60秒。驱动身份见artifacts/joint-prefill/deployment-driver.json。
+3d88b0b把cat evidence投影、Read有限值检查和分配分支回读合批。
+固定local-batches两套C++构建完成，SDK CTest3项、CPU FP64/FP32 kernel检查及SDK CPU恢复通过；
+CPU285项中281通过/4原阈值数值xfail，NPU目标流程68项通过（含CPU辅助）。
+两种安装消费者CPU/NPU三步独立检查及新进程恢复通过；原FC16 CPU最小返回18.640405秒。
+NPU成本22.902820秒/profile及SDK NPU完整/outputs恢复完成，任务passed；正式证据见prefill-local-batches-20261110.md。
 
-各任务日志artifacts/jobs/joint-prefill-NAME/task.log；结果artifacts/joint-prefill/deployment-PART/runs/result.json。
-实际活动与终态以python scripts/status.py为准；不要把waiting/running记通过。
-构建与正式计时不重叠；源码只读worktree、安装及库保持原身份。当前磁盘813GiB空闲、quota213/300/800GiB，
-大写入/新9B checkpoint前仍须重查；不清理其他项目/公共工具链，也不停止其他项目作业。
+f6092d6驱动显式采用IEEE matmul/conv设置，有限resident代表补静态预算。
+CPU相关15项开发检查通过。固定layer-ieee用f15安装/库在NPU7项全部通过，原阈值不变；
+同材料FP64见证SSD tensor输出最大差由3.063e-6降到2.414e-8，梯度1.25596e-5降到1.413e-7。
+旧vendor-default结果3个数值xfail和原跨设备测试错误保留，不能从此认证标准Transformer/Mamba。
 
-起步：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
-检查/停止：systemctl --user status/stop准确gef-joint-prefill-NAME.service，复查整个cgroup终止。
-正式资格先固定实现，再提交证据。继续审阅每个inner结果、记录正负经验和准确复现入口。
+deployment-cpu/single已完成：wide-FC CPU16线程0.332410秒；LH1.051B CPU32线程1.368072秒、
+NPU3.397598秒（B2/P8推理）；FP16 query-FC8.137528秒、异构LH88.001672秒（B4/P16训练）。
+各自精确下一窗通过，规模独立数值not_checked。原resident两项在窗口前欠预算拒绝，尚无成本。
 
-新任务gef-joint-prefill-local-batches已提交，固定3d88b0b/fixed-local-batches；先等本项目single/dual计时终态，
-再用全部320CPU新建Python-owned/standalone core和SDK、独立env-local-batches。
-CPU/NPU相关守卫/独立根/训练/恢复、SDK完整与outputs新进程恢复、原FC16最小返回成本和小profile；
-CPU配额320、内存512GiB、28800秒，NPU准入最多60秒。任务在background.slice。
-日志artifacts/jobs/joint-prefill-local-batches/task.log；驱动hash见artifacts/joint-prefill/local-batches-driver.json。
-未完成构建/检查不记通过；代码后继只改工作区，不修改该只读worktree、包或驱动。
+默认ordinary双NPU FC16停在warmup反向，多分钟无推进；gdb在NPUStream::stream/_index_put_impl_等待。
+已停止gef-joint-prefill-deployment-dual，outer cancelled/143；MainPID=0、cgroup及目标PID已消失。
+原inner running快照保留，stop-decision及backtrace在artifacts/joint-prefill；不是数值失败。
+原同服务LH9B尚未执行；后继同步配置不认证默认异步已修复。
 
-层链有限审计gef-joint-prefill-layer-audit固定a403552驱动、f15c4a5安装/库；
-NPU7项完整检查以独立记录收集有限超差，再做同材料CPU FP64输出/末态/输出根诊断。
-仅正确性、无性能计时，可与另一卡成本独立运行；8CPU/32GiB/1800秒，准入60秒。
-结果layer-audit-npu.xml、layer-audit-numeric及layer-rounding-npu.json；日志artifacts/jobs/joint-prefill-layer-audit/task.log。
+## 当前任务（以实际状态为准）
 
-层链驱动补显式ieee/vendor-default策略（默认ieee，复用公共precision）；原NPU默认conv HF32差异待真机验证。
-resident有限代表按静态事件/布局生成显式forward、retained、backward、optimizer预算；不改变运行时默认。
-相关CPU开发15项通过；下一步固定后作IEEE小型NPU审计及一次resident预算重试，保留原拒绝。
+全部source/驱动已冻结，不可修改活动worktree、包、build或脚本。日志统一为
+artifacts/jobs/joint-prefill-NAME/task.log；状态status.json；原始结果artifacts/joint-prefill/。
+
+- local-batches：固定3d88b0b，fixed-local-batches/env-local-batches/build-local-batches及-sdk；
+  已passed，320CPU/512GiB/28800秒，NPU准入60秒。全部inner结果已审阅。
+- deployment-followup：固定f6092d6驱动，等待local-batches通过；64CPU/640GiB/18000秒。
+  新3d库的层链NPU7项和6成本点；原a553 resident/core按静态预算一次重试；
+  FC16双卡显式ASCEND_LAUNCH_BLOCKING=1（600秒）及LH9.314B双卡普通推理（3600秒）。
+  各项一次预热/测量/精确下一窗。独立组错误不阻断其他组；每次准入最多60秒。
+- throughput-sample：固定f609驱动/3d库，等待deployment-followup终态；64CPU/512GiB/26000秒。
+  LH1.051B/B32/P16推理CPU32线程与NPU各一次成本/精确下一窗，针对旧B2/P8批小的补充；
+  每项1800秒、准入60秒，规模独立数值仍不自动通过。
+
+均已验证在background.slice；构建与正式计时不重叠，小型正确性可用独立卡。
+驱动hash见local-batches-driver.json、deployment-followup-driver.json、throughput-sample-driver.json。
+最近磁盘802GiB空闲、quota222/300/800GiB；大checkpoint前复查，保留quota安全余量。
+
+## 精确下一步
+
+1. git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
+2. 检查上述状态与每个inner result；不要直接cat大result，按JSON字段读取。日志可能有非UTF8错误文本。
+3. local-batches profile完成后用scripts/summarize_query_profile.py写新汇总，再审阅算子/工作量/完整步。
+   artifacts/joint-prefill/collect-followup-evidence.py是尚未执行的审阅草稿；不可凭outer通过扩大范围。
+4. 写小型固定证据，更新ROADMAP、相关契约/复现导航及prefill经验，替换本交接；按授权推送，不强推。
+5. 停止仅限准确的本项目unit：systemctl --user stop gef-joint-prefill-NAME.service；随后核对整个cgroup。
+
+当前唯一待办与停止/重启条件见ROADMAP；下游尚未升级或验收，不能把基座交付等同学习效果。
+历史源码用scripts/resolve_history_commit.py OLD_SHA；不恢复旧队列，不修改公共环境。
