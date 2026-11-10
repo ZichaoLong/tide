@@ -9,7 +9,7 @@ import subprocess
 
 from durable_records import write_json
 from build_device_control import component_hash
-from device_component_checks import CHECKS, MARKERS, KERNELS
+from device_component_checks import CHECKS, MARKERS, KERNELS, CONSTRUCTION_CHECKS
 from source_identity import digest, source_state
 from summarize_ascend_profile import summarize
 
@@ -25,6 +25,8 @@ def main():
                         help="Bounded raw collection storage; larger gates may need more than 200 MB")
     parser.add_argument("--application-arg", action="append", default=[], help="Additional recorded component argument")
     args = parser.parse_args()
+    if args.check in CONSTRUCTION_CHECKS:
+        parser.error(args.check + " is construction-only; use verify_device_control.py for its refusal witness, not a device numerical profile")
     if not 1 <= args.storage_limit_mb <= 4096:
         parser.error("storage limit must be between 1 and 4096 MB")
     if args.device != "npu" and not args.device.startswith("npu:"):

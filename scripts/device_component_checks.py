@@ -15,6 +15,7 @@ CHECKS = {
     "weighted-reverse-route": ("tide-weighted-reverse-route-check", ("float32",)),
     "weighted-stage": ("tide-weighted-stage-check", ("float32",)),
     "services": ("tide-device-services-check", ("float32",)),
+    "weighted-budget-construction": ("tide-weighted-budget-check", ("float32",)),
     "weighted-flow-config": ("tide-weighted-flow-config-check", ("float32", "float16")),
     "weighted-flow": ("tide-weighted-flow-check", ("float32", "float16")),
     "weighted-recurrent": ("tide-weighted-recurrent-check", ("float32", "float16")),
@@ -92,8 +93,14 @@ CHECKS = {
     "resident": ("tide-resident-check", ("float32",)),
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
+# These entries exercise construction/refusal only. In particular, allocating
+# device buffers does not constitute numerical execution or a kernel profile.
+CONSTRUCTION_CHECKS = {
+    "weighted-budget-construction": "construction refusal and unique-storage accounting witness; no numerical execution, training, kernel profile or throughput qualification",
+}
 MARKERS = {
     "services": "task-services: passed",
+    "weighted-budget-construction": "weighted-budget: reproduced_local_refusal=true",
     "weighted-parameters": "weighted-parameters: passed",
     "weighted-source": "weighted-source: passed",
     "weighted-aggregate": "weighted-aggregate: passed",

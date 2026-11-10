@@ -2,12 +2,18 @@
 #include "device_launch_tide_weighted_row_bind.h"
 #include <ATen/core/grad_mode.h>
 #include <cmath>
+#include <sstream>
 namespace tide::device_online {
 namespace {
 uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
 void dimensions(const at::Tensor& x,const at::Tensor& owners){
   if(!x.defined()||x.dim()!=2||x.size(0)!=owners.numel()||x.size(1)<1||!x.is_contiguous()||x.requires_grad()
     ||x.scalar_type()!=at::kFloat||x.device()!=owners.device())throw std::invalid_argument("invalid local row expression input");
+}
+const char* name(WeightedRowOp op){
+  static constexpr const char* names[]={"input","constant","projection","head","norm","cat","slice","add","product","scale","sum",
+    "sigmoid","silu","log1p","clamp","exp","sqrt","softplus","divide","matmul","convolution"};
+  return names[static_cast<size_t>(op)];
 }
 }
 WeightedRowGraph::WeightedRowGraph(DeviceProgram& p,const at::Tensor& owners,int64_t banks,const at::Tensor& error,int64_t available)
@@ -23,7 +29,13 @@ size_t WeightedRowGraph::push(WeightedRowExpression e){
   auto owners=owners_,error=error_,out=e.value;const auto banks=banks_;
   program_->kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_row_bind)(1,stream,
     ptr(owners),ptr(out),ptr(out),ptr(error),out.size(0),out.size(1),banks,0),"local complete row result guard");},{owners,out,error});
-  if(retained_>budget_||program_->retained_tensor_bytes()-initial_bytes_>budget_)throw std::invalid_argument("local row graph tensor budget exceeded");
+  const auto program_delta=program_->retained_tensor_bytes()-initial_bytes_;
+  if(retained_>budget_||program_delta>budget_){std::ostringstream message;
+    message<<"local row graph tensor budget exceeded: expression="<<expressions_.size()<<" kind="<<name(e.kind)<<" role="<<e.role
+      <<" rows="<<rows_<<" banks="<<banks_<<" width="<<out.size(1)<<" available="<<budget_
+      <<" expression_bytes="<<std::fixed<<retained_<<" local_program_delta="<<program_delta
+      <<" (program delta includes first local use of borrowed storage)";
+    throw std::invalid_argument(message.str());}
   expressions_.push_back(std::move(e));return expressions_.size()-1;
 }
 const at::Tensor& WeightedRowGraph::value(size_t index)const{return expressions_.at(index).value;}

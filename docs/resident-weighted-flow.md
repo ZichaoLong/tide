@@ -124,6 +124,8 @@ Python `WeightedResident.advance(..., return_mode="complete")` 默认仍返回�
 这里的字段形式示例不是运行结果；stats 还包含原有 `resident_stages`、
 `full_evaluations` 和物理 bank/workspace/行数等资源统计。所有工作计数取自实际设备
 journal/queue，按当前阶段 mask 去除前窗残留行，再将 int64 汇总一次取回。
+本地 service 数量、嵌套、workspace 高水位及构造拒绝的预算分解见
+[存储与服务诊断](resident-storage-accounting.md)；这些诊断不改变预算准入。
 `outputs()` 仅压紧实际 presence/active 输出行，保留 payload dtype、物理重复端口，
 每个返回 Tensor 独立 clone；零值不代表缺席。ATen 临时 packing 以 8 MiB 分组，
 单个超宽行不可拆分；额外瞬时分配与同步须计入实际峰值和计时。

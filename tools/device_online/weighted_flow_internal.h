@@ -84,6 +84,7 @@ class WeightedWindowJournal {
   std::map<std::string,at::Tensor> boundary_;
 };
 struct WeightedFlow::Impl {
+  struct BudgetSnapshot {int64_t limit,used,journal_reserved;};
   Graph graph;Model model;Continuation boundary;at::Device device;WeightedFlowLimits limits;
   std::unique_ptr<TaskServices> services;
   std::unique_ptr<WeightedFlowPeers> peers;
@@ -100,6 +101,8 @@ struct WeightedFlow::Impl {
   void construct();
   void execute(const std::vector<External>&,Index until);
   int64_t remaining(DeviceProgram&)const;
+  BudgetSnapshot budget_snapshot(DeviceProgram&)const;
+  std::string budget_diagnostic(DeviceProgram&)const;
   void append_nodes(DeviceProgram&,const ReadyBatch&);
   void append_regions(DeviceProgram&);
   ActionBatch append_full(DeviceProgram&);

@@ -28,6 +28,7 @@ struct Service {
 struct TaskServices::Impl {
   DeviceProgram& coordinator;at::Device device;int64_t budget;
   std::vector<std::unique_ptr<Service>> services;std::vector<size_t> open;bool stopped=false,finished=false;
+  int64_t phases=0,maximum_nesting=0;
   Impl(DeviceProgram& p,at::Device d,int64_t b):coordinator(p),device(d),budget(b){}
 };
 TaskServices::TaskServices(DeviceProgram& p,at::Device d,int64_t budget):impl_(std::make_unique<Impl>(p,d,budget)){}
@@ -41,7 +42,8 @@ DeviceProgram& TaskServices::begin(){
   x->program=std::make_unique<DeviceProgram>(s.device);auto& p=*x->program;p.limit_workspace(s.budget);
   x->head=p.label();const auto body=p.label();x->end=p.label();p.mark(x->head);await(p,x->request);p.branch(x->command,{x->end,body});p.mark(body);
   x->parent->copy(x->command,x->work);record(*x->parent,x->request);
-  s.open.push_back(s.services.size());s.services.push_back(std::move(x));return p;
+  s.open.push_back(s.services.size());s.services.push_back(std::move(x));++s.phases;
+  s.maximum_nesting=std::max(s.maximum_nesting,static_cast<int64_t>(s.open.size()));return p;
 }
 void TaskServices::end(DeviceProgram& p){
   auto& s=*impl_;if(s.open.empty())throw std::logic_error("missing local service");auto& x=*s.services[s.open.back()];
@@ -79,5 +81,6 @@ void TaskServices::close(){
   for(auto& x:impl_->services){x->request->close();x->done->close();}impl_->services.clear();
 }
 int64_t TaskServices::workspace_bytes()const{int64_t total=impl_->coordinator.workspace_bytes();for(const auto& x:impl_->services)total=std::max(total,x->program->workspace_bytes());return total;}
+TaskServiceStatistics TaskServices::statistics()const{return {impl_->phases,static_cast<int64_t>(impl_->services.size()),impl_->maximum_nesting,workspace_bytes()};}
 std::vector<const DeviceProgram*> TaskServices::programs()const{std::vector<const DeviceProgram*> p{&impl_->coordinator};for(const auto& x:impl_->services)p.push_back(x->program.get());return p;}
 }

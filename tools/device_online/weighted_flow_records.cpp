@@ -69,6 +69,7 @@ Result WeightedFlow::Impl::decode()const{
   result.stats=statistics(count,received,fibers,fulls,result.messages.size());return result;
 }
 std::map<std::string,Index> WeightedFlow::Impl::statistics(Index count,Index received,Index fibers,Index fulls,Index messages)const{
+  const auto service_stats=services->statistics();
   int64_t bank_roles=0,bank_storage=0;std::set<const void*> storage;
   auto banks=[&](const WeightedBanks& b){for(const auto& [_,role]:b.roles()){
     bank_roles+=role.bank.nbytes();if(storage.insert(role.bank.storage().unsafeGetStorageImpl()).second)bank_storage+=role.bank.storage().nbytes();}};
@@ -78,6 +79,8 @@ std::map<std::string,Index> WeightedFlow::Impl::statistics(Index count,Index rec
     {"physical_local_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
     {"physical_full_rows",count*boundary.batch_size*static_cast<int64_t>(nodes.size())},
     {"operator_workspace_bytes",services->workspace_bytes()+peers->workspace_bytes()},
+    {"local_service_phases",service_stats.phases},{"local_service_worker_programs",service_stats.worker_programs},
+    {"local_service_maximum_nesting",service_stats.maximum_nesting},{"local_service_workspace_high_water",service_stats.shared_workspace_bytes},
     {"node_peer_devices",peers->size()},{"node_peer_packet_bytes",peers->packet_bytes()},
     {"parameter_role_bytes",bank_roles},{"unique_parameter_bank_bytes",bank_storage},
     {"ready_value_copy_bytes",count*limits.queue*model.width()*model.nodes[0].bias.element_size()}};

@@ -1,6 +1,9 @@
 #pragma once
 #include "device_program.h"
 namespace tide::device_online {
+struct TaskServiceStatistics {
+  int64_t phases=0,worker_programs=0,maximum_nesting=0,shared_workspace_bytes=0;
+};
 // Static numerical services under an online coordinator. NPU services execute
 // device-commanded loops using local reusable notifications. Nested begin/end
 // pairs form serial parent/child calls and close in reverse construction order.
@@ -18,6 +21,7 @@ class TaskServices {
   void wait(int32_t timeout_ms);
   void close();
   int64_t workspace_bytes()const;
+  TaskServiceStatistics statistics()const;
   std::vector<const DeviceProgram*> programs()const;
  private:
   struct Impl;std::unique_ptr<Impl> impl_;

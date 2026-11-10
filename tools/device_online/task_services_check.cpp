@@ -23,9 +23,15 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
     services.end(second);services.end(first);
     coordinator.copy(x,y);coordinator.add(count,one);coordinator.branch(branch,{head});coordinator.mark(end);services.append_stop();
     const auto workspace=services.workspace_bytes();
+    const auto stats=services.statistics();
+    if(stats.phases!=3||stats.maximum_nesting!=3||stats.shared_workspace_bytes!=workspace)
+      throw std::runtime_error("service phase/workspace diagnostics differ from constructed nesting");
 #if !TIDE_RESIDENT_CUDA
+    if(stats.worker_programs!=3)throw std::runtime_error("CANN worker program count differs");
     int64_t summed=0;for(const auto* p:services.programs())summed+=p->workspace_bytes();
     if(!(workspace>0&&summed>workspace))throw std::runtime_error("services did not exercise shared workspace");
+#else
+    if(stats.worker_programs!=0||services.programs().size()!=1)throw std::runtime_error("CUDA phases unexpectedly created workers");
 #endif
     services.finish();coordinator.finish();
     for(int loops:{3,0,5}){

@@ -2,6 +2,7 @@
 namespace tide::device_online {
 void append_weighted_node_local(DeviceProgram& p,TaskServices& services,WeightedFlowNode& n,const std::string& mode,
   const at::Tensor& error,const WeightedFlowBudget& remaining){
+  const char* phase="aggregate";try{
   const auto samples=n.input.present.numel();
   const auto eps=std::visit([](const auto& c){return c.epsilon;},n.binding.memory);
   auto& aggregate=services.begin();
@@ -9,7 +10,7 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
     n.binding.aggregate_alpha,eps,error,remaining(aggregate));services.end(aggregate);
   n.mass=weighted_columns(p,n.aggregate->output,0,1).reshape({samples});n.content=weighted_columns(p,n.aggregate->output,1,n.input.payload.size(2)-1);
   weighted_copy(p,n.old.floating,n.state.floating);weighted_copy(p,n.old.integer,n.state.integer);
-  auto& update=services.begin();
+  phase="update";auto& update=services.begin();
   if(auto c=std::get_if<weighted::KVConfig>(&n.binding.memory)){
     const auto parameters=bind_weighted_kv_update(n.banks,remaining(update));
     n.kv_update=append_weighted_kv_update(update,*c,n.old,n.aggregate->output,n.input.times,n.input.bank,n.input.present,
@@ -22,7 +23,7 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
   services.end(update);
   const auto read=mode=="content"?n.initial:mode=="old"?n.old:n.proposal;
   WeightedDescribeInput x;x.mass=n.mass;x.content=n.content;int64_t summary=0;
-  auto& mem=services.begin();
+  phase="memory";auto& mem=services.begin();
   if(auto c=std::get_if<weighted::KVConfig>(&n.binding.memory)){
     summary=c->summary_width;at::Tensor memory,total;
     if(c->memory_read=="sum"){
@@ -43,10 +44,11 @@ void append_weighted_node_local(DeviceProgram& p,TaskServices& services,Weighted
     x.short_total=f.at("short_total").reshape({samples});x.long_total=f.at("long_total").reshape({samples});
   }
   services.end(mem);
-  auto& describe=services.begin();
+  phase="describe";auto& describe=services.begin();
   const auto parameters=bind_weighted_describe(n.banks,n.input.payload.size(2)-1,summary,n.binding.regional,remaining(describe));
   n.describe=append_weighted_describe(describe,x,n.input.bank,parameters,
     n.binding.regional,eps,error,remaining(describe));services.end(describe);
+  }catch(const std::invalid_argument& e){throw std::invalid_argument(std::string("weighted node phase=")+phase+": "+e.what());}
 }
 void append_weighted_node_full(TaskServices& services,WeightedFlowNode& n,const at::Tensor& error,const WeightedFlowBudget& remaining){
   auto& full=services.begin();
@@ -66,13 +68,16 @@ void WeightedFlow::Impl::append_nodes(DeviceProgram& p,const ReadyBatch& ready){
     graph.inputs.size(),weighted_node_fiber_capacity(graph,v,limits.queue),error,values));
   peers->append_local_send(p,graph,nodes,inputs,views,error,[&](DeviceProgram& worker){return remaining(worker);});
   for(size_t v=0;v<nodes.size();++v)if(node_devices[v]==device){auto& n=*nodes[v];n.input=inputs[v];
-    append_weighted_node_local(p,*services,n,graph.regions[graph.nodes[v].region].read_mode,error,[&](DeviceProgram& worker){return remaining(worker);});
+    try{append_weighted_node_local(p,*services,n,graph.regions[graph.nodes[v].region].read_mode,error,[&](DeviceProgram& worker){return remaining(worker);});}
+    catch(const std::invalid_argument& e){throw std::invalid_argument("weighted node="+std::to_string(v)+": "+e.what()+"; "+budget_diagnostic(p));}
     views[v]=weighted_flow_view(n);
   }
   peers->append_local_receive(p,error);
 }
 void WeightedFlow::Impl::append_regions(DeviceProgram& p){
-  for(auto& r:regions)append_weighted_region_views(p,*services,*r,views,error,[&](DeviceProgram& worker){return remaining(worker);});
+  for(size_t r=0;r<regions.size();++r){
+    try{append_weighted_region_views(p,*services,*regions[r],views,error,[&](DeviceProgram& worker){return remaining(worker);});}
+    catch(const std::invalid_argument& e){throw std::invalid_argument("weighted region="+std::to_string(r)+": "+e.what()+"; "+budget_diagnostic(p));}}
 }
 ActionBatch WeightedFlow::Impl::append_full(DeviceProgram& p){
   const auto samples=boundary.batch_size,count=static_cast<int64_t>(nodes.size()),width=model.width();
@@ -86,7 +91,9 @@ ActionBatch WeightedFlow::Impl::append_full(DeviceProgram& p){
     if(reserved>left)throw std::invalid_argument("weighted Full output reservation exceeds tensor budget");return left-reserved;};
   ActionBatch out{at::zeros({count*samples,4},opts.dtype(at::kLong)),at::zeros({count*samples,width},opts),at::zeros({count*samples},opts.dtype(at::kBool))};
   for(int64_t v=0;v<count;++v)if(node_devices[v]==device){auto& n=*nodes[v];auto& view=views[v];n.control=view.control;n.active=view.active;
-    append_weighted_node_full(*services,n,error,available);
+    try{append_weighted_node_full(*services,n,error,available);}
+    catch(const std::invalid_argument& e){throw std::invalid_argument("weighted node="+std::to_string(v)+" phase=full: "+e.what()
+      +"; full_output_reservation="+std::to_string(reserved)+"; "+budget_diagnostic(p));}
     n.payload=append_weighted_payload(p,n.control,n.full,n.active,out.values.scalar_type(),error);view.full=n.full;view.payload=n.payload;
   }
   peers->append_full(p,nodes,views,error,available);

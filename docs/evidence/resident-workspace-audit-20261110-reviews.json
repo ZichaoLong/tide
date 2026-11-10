@@ -1,0 +1,366 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "47704c9c44367ee2052cbf397a2b78cfa21314e7",
+  "meaning": "Manual source/contract review only at fixed47704c9. Whole-file ranges are explicitly listed; C++ parser census and runtime qualification are not claimed. Partial files are deliberately excluded from inventory coverage.",
+  "files": [
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_head_guard.cpp",
+      "sha256": "7b2714f680134f736d658bdffa7b361b8f35f133f6a35d651eedc891071788a3",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Owner validation, absent-row sanitization and shared-parameter/root reduction kernels"
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_head_plan.cpp",
+      "sha256": "af2897d6e9541451bb7b2751c1337c912ff12de17078f6cd4a5ee031628fa590",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Owner validation, absent-row sanitization and shared-parameter/root reduction kernels"
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_head_reduce.cpp",
+      "sha256": "d27acf8c43d2c2c8bd59e4e3587ef3efc6518e777b7bc074864a7d13f3e72f6e",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Owner validation, absent-row sanitization and shared-parameter/root reduction kernels"
+    },
+    {
+      "path": "tools/device_online/cann_task_services.cpp",
+      "sha256": "6e458038cc933419df66c0288c6958cfe9f690c5db58e5e1f32064a9d0ea64d7",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Service/workspace lifecycle, nested ordering and tensor union interface"
+    },
+    {
+      "path": "tools/device_online/cuda/program.cpp",
+      "sha256": "b6e9c9cd1935868060b78d26e0269198b7802a23bf201741f28588eb585ed94a",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Service/workspace lifecycle, nested ordering and tensor union interface"
+    },
+    {
+      "path": "tools/device_online/cuda/task_services.cpp",
+      "sha256": "142fff54108991a59c3a076aa7fa7ec4ee4d4a6a39ec7c306d12d074f2c2d5a5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Service/workspace lifecycle, nested ordering and tensor union interface"
+    },
+    {
+      "path": "tools/device_online/device_program.h",
+      "sha256": "3026193a24e21615fc5dea975c9540bae6ce4a6ba7e3878bc47ca396156575f0",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Service/workspace lifecycle, nested ordering and tensor union interface"
+    },
+    {
+      "path": "tools/device_online/task_services.h",
+      "sha256": "b7fe74cdab7ca7b2a6e5e230bfa74f89835d0048ee5ea4476b6033ea96140684",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Service/workspace lifecycle, nested ordering and tensor union interface"
+    },
+    {
+      "path": "tools/device_online/task_services_check.cpp",
+      "sha256": "aa386998772921aa9ee02796cc5844741c1529c0f92207f287baf2976fd4ead2",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Existing explicit device witnesses and mutation/independent formula coverage"
+    },
+    {
+      "path": "tools/device_online/weighted_convolution.cpp",
+      "sha256": "1f744532d2b13021639004f29cd3ebe20189cd2cf8e86cf4569cf0668f17b1fc",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Recurrent/Describe/convolution composition and saved-state ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_describe.cpp",
+      "sha256": "d3bb2f84666ef75fc36d3ade21d9291fc266261a67ddfb2c7f68630be56ee372",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Recurrent/Describe/convolution composition and saved-state ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_flow.cpp",
+      "sha256": "cbd86212e98b02690729825fe199b2fe544a260bfe7a16c2f6bdad4e0b5bad69",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_budget.cpp",
+      "sha256": "72324952532b611ff2ef700f405f5b379f4d476144a44434e1153fa26ff66431",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_internal.h",
+      "sha256": "ce16fdb1131868412edf7e375eedf0535123a5e5d3eec5f83d2324ea4bc0c699",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_local.cpp",
+      "sha256": "55eddb5a0ec22a8c0278b4f3662c0c2b33df0eb5616554156925ba02ed17eb3d",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_parameters.cpp",
+      "sha256": "8e7058f5e0a79d02002bb7f86dbec32a07c0f6fb0b4d380bbdcc638e107386d5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_parameters.h",
+      "sha256": "ed61669e7321952221c416a6286a2e70c02a2c16063bfca284f469d8f1f3c708",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_records.cpp",
+      "sha256": "3eeafe6caae6fed76702a025dadd8100ec426b7f469b068592bdc16ca79f1829",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_state.cpp",
+      "sha256": "919ee74de844c1cb705a8ac67560d1dd0dad5f8ac74a24bf9e599dc8d827c182",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Global owner budget, binding, construction, current-state lifecycle and result statistics"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query.cpp",
+      "sha256": "79268f35b54f61f3097d95403fb517f737be3617d174a359551535408ef98eeb",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_check.cpp",
+      "sha256": "3a00d284fe65bf0dd78385a5445cc3231ae9e7c2def2d0f558b43baf7b5ba0ad",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Existing explicit device witnesses and mutation/independent formula coverage"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_internal.h",
+      "sha256": "2d85842a442eabc09e540dee58612994e4cf53d2717259d027112812bec255da",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_vjp.cpp",
+      "sha256": "6374bc6930317618186b680c330ced0362f4722bc01e832697079093b48a5e06",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_window.cpp",
+      "sha256": "c3ebe73d121c1e1bb7c8e2fefa656a6647a572b5844ed7a156d0fa3105b4b02f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_projection.cpp",
+      "sha256": "9356a2086da5bfd5d5005ca5a50b56144f9833d7006e9a8c6b84efc9afac9e92",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_projection.h",
+      "sha256": "1d34b51ba697c86bf9717431bf08c32a52f27b259355848cb90e12effbf48db5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Query/window/projection forward and explicit saved VJP, raw time and owner masking"
+    },
+    {
+      "path": "tools/device_online/weighted_projection_check.cpp",
+      "sha256": "cabbc31f4223d1620160b25369bbea918d4559e820e5f42ddad5cf1260788ac6",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Existing explicit device witnesses and mutation/independent formula coverage"
+    },
+    {
+      "path": "tools/device_online/weighted_recurrent.cpp",
+      "sha256": "1a7b65f22fface15ee94857613339e1a1e65d553e709c80709df68edb4f02ade",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Recurrent/Describe/convolution composition and saved-state ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_recurrent_algebra.cpp",
+      "sha256": "2cc653f6a03020b9423584fe514039284e77645004f51b8fa3abe0f540dd3076",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Recurrent/Describe/convolution composition and saved-state ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_recurrent_check.cpp",
+      "sha256": "4ea17eea40f13b45ffba5118328e999bb4ad6743849e9ed26bb19f220932f01e",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Existing explicit device witnesses and mutation/independent formula coverage"
+    },
+    {
+      "path": "tools/device_online/weighted_recurrent_formula.cpp",
+      "sha256": "238102f4077b2a435b49af85101b2a672dd8ee9b8edae4eb3391cbbfcc246e50",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Existing explicit device witnesses and mutation/independent formula coverage"
+    },
+    {
+      "path": "tools/device_online/weighted_recurrent_snapshot.cpp",
+      "sha256": "f339b97890eea67c15252b4873963002c7f8fbfde2acd09eac84e471362c52f0",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Recurrent/Describe/convolution composition and saved-state ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_row_graph.cpp",
+      "sha256": "762477bf64fe8fa7f8c1bd44717604267a493192a7763308de59c2e5b09124e4",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Row expression, matrix composition, retained storage guard and independent root propagation"
+    },
+    {
+      "path": "tools/device_online/weighted_row_graph.h",
+      "sha256": "2cb38bfaf4a72c09fd39d12a84763618f7d0dc8efa7eb346d27823613d8f4ffb",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Row expression, matrix composition, retained storage guard and independent root propagation"
+    },
+    {
+      "path": "tools/device_online/weighted_row_graph_matrix.cpp",
+      "sha256": "759997db9e0cee42650551f36e9281336d0092757d71c633214d715576ce3ff3",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Row expression, matrix composition, retained storage guard and independent root propagation"
+    },
+    {
+      "path": "tools/device_online/weighted_row_graph_vjp.cpp",
+      "sha256": "1b20081cc9d980ec6be8340a9c27be6d2c20548675ecdd29279d876acb64e150",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Row expression, matrix composition, retained storage guard and independent root propagation"
+    },
+    {
+      "path": "tools/device_online/weighted_training_backward.cpp",
+      "sha256": "1cc239af971f4e669326a4e53af5a5de3d4453cc2737472de34aa3bf83ef571a",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Training/window owner, journal, saved VJP, continuation and release ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_training_owner.cpp",
+      "sha256": "b4031b09cf47e3f17687ed95a90475bd839ef550da0883cdc7b5d7ed4499650f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Training/window owner, journal, saved VJP, continuation and release ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_window_owner.cpp",
+      "sha256": "5d9fbc4a9b882a5badc1d7418c19b4c07887b33544e8eb4ad5b673178c357695",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Training/window owner, journal, saved VJP, continuation and release ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_window_snapshot.cpp",
+      "sha256": "8a36afa8e1ebd29dce1892cf4a4a5f065bb12a23cf9e9265dc20f3aacf1cac85",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Training/window owner, journal, saved VJP, continuation and release ownership"
+    },
+    {
+      "path": "tools/device_online/weighted_window_vjp.cpp",
+      "sha256": "82cb00fab2aa9b42400cc4c1a2e7ef627ef4a2076392b85a8b9c72d19b9958c3",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/resident-workspace-audit-20261110.md#review-scope",
+      "scope": "Training/window owner, journal, saved VJP, continuation and release ownership"
+    }
+  ],
+  "partial_files": [
+    {
+      "path": "tools/device_online/cann_program.cpp",
+      "sha256": "f7559a9ce0ab594620365a3e51ef39b08a9c4d50f90c50a31242fc1e84032aeb",
+      "scope": "Only the listed inclusive source ranges; not whole-file or exhaustive symbol review",
+      "ranges": [
+        {
+          "line": 1,
+          "end_line": 165,
+          "sha256": "dab7b6c7d8df77b25d7ca24131e26565618db1c6f41a46b51a4f60bb651d5e73"
+        },
+        {
+          "line": 330,
+          "end_line": 434,
+          "sha256": "be7986acc63489fdacca30dbfd7c722747ea95ffb23873963d4d49a97c89bc0f"
+        }
+      ]
+    },
+    {
+      "path": "tools/device_online/memory_check.cpp",
+      "sha256": "267c64310d013742476caba8135b04dc1f042f8fec858ad311254e5af3b4dc90",
+      "scope": "Only the listed inclusive source ranges; not whole-file or exhaustive symbol review",
+      "ranges": [
+        {
+          "line": 125,
+          "end_line": 158,
+          "sha256": "0bd793eb42cec77b3bbbb936682244f393d9877910d254d17ab385db325f7a3f"
+        }
+      ]
+    }
+  ]
+}

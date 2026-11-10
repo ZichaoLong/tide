@@ -7,7 +7,7 @@ import subprocess
 
 from build_device_control import component_hash
 from build_identity import source_hash
-from device_component_checks import CHECKS, MARKERS
+from device_component_checks import CHECKS, MARKERS, CONSTRUCTION_CHECKS
 from durable_records import write_json
 from source_identity import digest, source_state
 
@@ -48,7 +48,7 @@ def main():
     source, dirty = source_state(root)
     report = dict(schema="tide-device-components-gate-v1", source=source, dirty=dirty,
                   build=manifest, state="running", device=args.device, cases=[],
-                  scope="selected components and declared resident profiles/dtypes; not complete module/dtype/multi-device matrix or throughput qualification")
+                  scope="selected components and declared resident profiles/dtypes; construction-only cases retain their explicit scope; not complete module/dtype/multi-device matrix or throughput qualification")
     write_json(out / "result.json", report)
     try:
         for check in args.checks:
@@ -103,6 +103,8 @@ def main():
                     passed = False
                 report["cases"].append(dict(check=check, dtype=dtype, command=command,
                     state="passed" if passed else "failed", exit_code=result.returncode,
+                    evidence_kind="construction" if check in CONSTRUCTION_CHECKS else "component",
+                    scope=CONSTRUCTION_CHECKS.get(check, "selected component contract at this source; not complete graph or throughput qualification"),
                     log=log_path.name, log_sha256=digest(log_path)))
                 write_json(out / "result.json", report)
                 print(check, dtype, report["cases"][-1]["state"], flush=True)
