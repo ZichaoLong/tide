@@ -148,3 +148,26 @@ compact窗口容量以消费后实际live fiber变化扣账，不能只清内容
 修正观测后仍检查两侧矩阵形状与整组行数；22次ATen提交不是22个硬件kernel。原失败与
 修后单例分列，不重跑已完成的资格只为让外层状态变绿。无梯度、构图前向、真实反向和
 完整训练是不同成本，端到端观察见[本轮有限成本](evidence/interface-heads-performance-20261110.md)。
+
+## 从紧凑公式到共享bank矩阵
+
+[e6f7bd5资格](evidence/additive-interface-qualification-20261110.md)先把FC/KV/SSD参照补上
+非零raw左态、共享参数、真实多步训练、跨窗和新进程投影恢复，再将适用的KV Full矩阵
+边界接入Python/C++默认packed路径。投影参照能定位公共接口成本，但不能认证完整中间根、
+None/零或通用checkpoint；SSD的L²算法和FC的B循环也说明“加法”不保证参照本身最优。
+
+前向真正复用bank：按实际storage、偏移和head分组做Q×K/V矩阵计算，避免把每个历史
+前缀展开成query×history×width。形状一致不够，须验证共享存储/布局和有界padding；
+不同K/V偏移、ragged行、过期极大字段与原版本守卫均有独立反例。不适用时走已有packed路径。
+
+共享数值不等于共享伴随。独立快照仍要求各自的dK/dV，当前自定义一阶VJP在反向恢复这些
+逐快照张量。[局部实测](evidence/additive-interface-performance-20261110.md)中，bank的
+CPU/NPU无梯度前向为8.15/6.64ms，展开路径27.91/40.32ms；反向本身却从42.92/19.36ms
+增到58.86/35.17ms。前向+反向总计仍较低，收益比仅看前向小。不能从一个Function或一次
+matmul推断私有图、快照伴随和硬件调用也同样少；局部ATen提交不是融合kernel证明。
+
+FC16完整训练CPU1从12.614到12.283秒，NPU从15.497到15.511秒；NPU首token也未改善。
+因此采用有独立证据的矩阵边界，同时保留完整模型未改善的结果。若继续接入紧凑路径，
+应先明确选定输出所需的块伴随及状态所有权，再分别检验公共边界和真实组合；不能把所有
+合法独立根都压成一个共享根，也不以完整模型无明显收益为由反复跑相同局部候选。
+每候选以采用/拒绝/延期和具体重启依据结束，参见[方法](../.agents/skills/optimize-tide-execution/references/additive-comparisons.md)。

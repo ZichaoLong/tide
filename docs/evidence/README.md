@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[有状态加法基线、默认Full共享bank与借用计费（2026-11-10）](additive-interface-qualification-20261110.md)：e6f7bd5计算实现、0e6916d实际调用观察、57439d7 half拒绝见证；CPU493通过/7xfail/4原失败及后继分列，NPU配置37通过/1xfail/2既有CPU辅助失败。三客户端训练/恢复、投影基线及resident真机范围分别记录，不认证全规模或新resident训练吞吐。
+
+[加法接口三层有限成本（2026-11-10）](additive-interface-performance-20261110.md)：CPU/NPU局部/层链/FC共42个成本点、12个代表训练/精确下一窗及NPU约1B推理/精确下一窗。FC16训练12.283/15.511秒、首token2.737/4.055秒；局部bank前向更快，独立快照反向更慢，NPU完整训练未改善。图统计和阶段诊断独立，原census启动失败及补验分列。
+
 [通用Describe、循环查询裁剪与常驻诊断（2026-11-10）](interface-heads-qualification-20261110.md)：554f2f5的CPU490通过/14保留xfail；NPU配置80通过/2xfail/1原观察器失败，ebfe075修正后的设备单例通过。三客户端小型训练/精确恢复、两种SDK组合、常驻FP32/FP16小图和构造见证分别记录；局部借用计费已定位，容量守卫未修复。
 
 [通用Describe增量有限成本（2026-11-10）](interface-heads-performance-20261110.md)：554f2f5的CPU/NPU共14个宽FC/HB/LH/sum/SSD/三客户端训练与精确下一窗，10个FC16成本点、8个层链成本点、8个独立图诊断。FC16训练12.614/15.497秒、TTFT3.083/3.960秒；层链仍明显慢于限定张量公式。规模独立数值未验，原启动失败保留。

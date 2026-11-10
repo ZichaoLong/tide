@@ -4,7 +4,8 @@
 固定旧实现的审阅范围及历史失败见
 [47704c9审阅](evidence/resident-workspace-audit-20261110.md)。
 [554f2f5固定资格](evidence/interface-heads-qualification-20261110.md)保存修复前的CANN构建、服务检查和拒绝见证；
-该历史证据不认证本页后续修复，新的构建/真机资格须记录在独立固定源码证据中。
+该历史证据不认证本页后续修复；后继的独立构建、真实计费修复/Describe执行、
+half拒绝见证与保留失败见[e6f7bd5固定资格](evidence/additive-interface-qualification-20261110.md)。
 
 ## 预算含义
 

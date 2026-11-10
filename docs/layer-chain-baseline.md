@@ -27,6 +27,9 @@ Describe字段和图记录，消去恒零依赖；其None和图实现的连接�
 限定投影的checkpoint见证，不是通用图v5 checkpoint：不包含图的pending、history、事件记录
 和完整metadata。None/零及optimizer槽结构的跨实现等价仍不在投影资格内。
 这里也不声称等同某个标准Transformer/Mamba模型。
+新增有状态投影的CPU FP64/FP32资格及实际设备小型原公式检查见
+[固定资格](evidence/additive-interface-qualification-20261110.md)；
+[后继成本](evidence/additive-interface-performance-20261110.md)记录默认边界与直接公式的剩余差距。
 
 每个候选单独进程、一次预热后恢复初始参数/optimizer再测完整一步。包含输入准备/传输、
 默认调度与packing、前向、反向、有限检查、SGD及同步；构造另列。张量基线与图入口

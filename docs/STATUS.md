@@ -1,41 +1,47 @@
-# 当前交接 — 加法基线与默认接口接入（2026-11-10）
+# 当前交接 — 本轮完成，汇报后暂停对齐（2026-11-10）
 
-用户已授权本轮修订计划；完成本轮后汇报并暂停对齐。分支`graph-execution-foundation`，
-起点`a61e028`；数学固定`0770593838a37c790a568226930567ed60f99b83`，启动核验通过。
-上一轮资格/成本见[interface-heads](evidence/interface-heads-performance-20261110.md)，不重新启动旧队列。
+用户已授权的“加法基线与默认接口接入”有限轮次完成。按用户要求本轮汇报后停下，
+后继先对齐再实施；不要因旧的持续任务安排自动重启性能队列。
+分支`graph-execution-foundation`；数学固定`0770593838a37c790a568226930567ed60f99b83`，
+离线快照核验通过。起点`a61e028`；计算实现`e6f7bd5`、成本/默认调用探针`0e6916d`、
+half拒绝见证修正`57439d7`。正式资格与成本证据在后续独立文档提交中。
 
-## 当前实施
+## 交付与结果
 
-已更新仓库三项skills：有限加法/减法方法、设计时的紧凑数学/公共批接口/小组合对照，
-以及采用/拒绝/延期条件。账户skills不修改。
-已扩充FC16、KV/SSD层链的训练/非零左态/跨窗与投影checkpoint基线。Python/C++
-默认packed Full增加真实共享bank的B/H/Q/K矩阵计算与独立快照VJP；通用后备保持。
-已修复resident局部首次借用计费，包含RowGraph/Describe/Recurrent/Full/相关VJP。
-固定三构建已通过；CPU493通过/7xfail/两项既有Read-sum数值失败，两项standalone路径错
-另以实际SDK两dtype通过。CPU三客户端小训练/精确恢复通过；NPU资格运行中，不能标通过。
-新公共默认实际bank调用观察CPU两客户端×两dtype共4通过。新增局部bank/expanded成本探针
-只计Attention与独立快照VJP，和完整模型计时分列，尚未开始正式成本。
-较广开发检查56通过/2xfail/1 Read-sum FP32严格失败；上一固定554f2f5已复现相同
-1.535518e-6梯度超差，FP64通过。本增量不进入该Read路径，原阈值与失败保留。
-相关测试后分阶段提交；固定实现资格与证据分别提交。本轮不自动扩展成无限优化。
+- 仓库develop/optimize/maintain skills加入有限加法/减法、公共接口增量对照及采用/拒绝/延期方法；账户skills未修改。
+- FC/KV/SSD紧凑基线支持非零raw左态、共享、真实三步训练、跨窗与新进程投影checkpoint。
+- Python/C++默认packed Full采用适用的共享bank矩阵，保留独立快照VJP与通用后备。
+- resident首次借用只计真正owner新增存储；实际小额度、真实不足和Describe数值见证通过，未放宽总预算。
+- [固定资格](evidence/additive-interface-qualification-20261110.md)：CPU主组493通过/7xfail/4失败；其中两项SDK启动路径另以实际程序通过，两项既有Read-sum FP32严格超差保留。NPU配置37通过/1xfail/相同两项CPU辅助失败；默认实际调用CPU4/NPU2通过。三客户端小型训练/精确恢复、resident组件/小图分别列出，未认证新resident完整训练或吞吐。
+- [有限成本](evidence/additive-interface-performance-20261110.md)：局部/层链/FC共42个成本点、12个代表训练/精确下一窗、NPU约1B推理/精确下一窗、图和阶段独立诊断。FC16训练CPU1/NPU12.283/15.511秒，首token2.737/4.055秒；局部前向更快，NPU完整训练未改善。完整尺度独立数值/离散/学习仍未验。
+- 原严格失败、half原见证失败和公式census启动失败均保持；修复/补验不改写原作业状态。当前限制和重启条件仅由[ROADMAP](ROADMAP.md)维护。
 
-## 资源与现场
+## 作业与资源终态
 
-构建已通过：`gef-additive-build`，源码`e6f7bd5`，检出`artifacts/additive-work/source-e6f7bd5`。
-运行脚本`artifacts/additive-work/build.sh`；记录`artifacts/jobs/additive-build/{status.json,task.log}`，
-上限45分钟/512GiB，build jobs=all(320)。构建用216.5秒完成，三构建manifest已生成。
-即将启动`gef-additive-qualify`（固定e6f7bd5，1小时/128GiB），记录`artifacts/jobs/additive-qualify/`，
-驱动`artifacts/additive-work/qualify.{sh,py}`；CPU三个独立小门禁并行，后续NPU单卡准入最多180秒。
-每内层exit/JUnit/日志独立记录，保留已知Read-sum严格失败，outer失败不阻断独立检查。
-可用320 CPU；内存约1.7TiB，磁盘可用681GiB，账户284GiB/300GiB软配额
-（硬配额800GiB），新构建/日志仍须有界。使用全部可用CPU和空闲NPU；共享卡未获本轮授权。
-长作业按execution-flows放固定源码background.slice；构建与正式计时不互扰。
-用户未跟踪文档`docs/tide-learning-lab-TL-REQ-003-handoff.md`与`...004...`原样保留，不提交。
-当前未提交仅STATUS作业交接；实现已固定e6f7bd5，两份用户文档仍未跟踪。
+全部在固定清洁源码、`background.slice`下结束，无本轮live作业或持有的NPU锁。
 
-## 下一步
+| 作业 | 终态 | 原因/范围 |
+| --- | --- | --- |
+| `gef-additive-build` | passed | 320 CPU，216.5秒；Python native、独立SDK及resident构建 |
+| `gef-additive-qualify` | failed | 保留上述数值、SDK路径及half原断言失败；各内层结果分别审阅 |
+| `gef-additive-budget` | passed | 固定57439d7，两dtype recurrent真实预算拒绝及独立数值/VJP |
+| `gef-additive-measure` | failed | 计时/代表/1B恢复均完成；四个公式census误传native参数，在计算前拒绝 |
+| `gef-additive-supplement` | passed | 仅补四个未执行census，另存CPU默认分派4项JUnit |
 
-监控`systemctl --user show gef-additive-build`与上述task.log；成功后在相同固定源码/安装上
-运行定向CPU/NPU/SDK及resident见证，再串行做FC16与层链/代表成本。构建失败先定位修复。
-续接命令：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-待办及限制由[ROADMAP](ROADMAP.md)维护；本页仅为当前交接。
+日志/终态：`artifacts/jobs/additive-*/{status.json,task.log}`。
+冻结现场`artifacts/additive-work/source-{e6f7bd5,probes,budget}`；安装/构建分别为
+`env`、`build-native`、`build-sdk`、`sdk`、`device`、`device-budget`，运行/补验目录同根。
+每次只用空闲physical11→npu:0，已释放；未使用共享卡、未新增GPU或多卡任务。
+本机全部可用CPU/内存与空闲NPU可用，共享NPU需当前对话明确授权。
+最后磁盘检查：文件系统约670GiB可用、账户约297GiB/300GiB软配额（800GiB硬限）；
+没有自动清理参考仓库、公共工具链或本轮失败材料。新大写入前重新核验配额/容量。
+
+## 接续入口
+
+先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+按[资格](evidence/additive-interface-qualification-20261110.md)、[成本](evidence/additive-interface-performance-20261110.md)、
+[经验](performance-lessons.md)、[架构](architecture.md)和[修改维护表](core5-study.md#修改时同步维护什么)
+定位配置、实现、检查及复现；新clone无需旧运行目录。不要重跑已终态的整组实验恢复上下文。
+
+用户未跟踪文档`docs/tide-learning-lab-TL-REQ-003-handoff.md`和
+`docs/tide-learning-lab-TL-REQ-004-handoff.md`原样保留，未纳入本轮提交。

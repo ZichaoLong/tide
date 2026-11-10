@@ -59,6 +59,10 @@ selected query. No Full computation is performed for inactive queries. Host
 groups still scale with B, and attention weights with selected-query count times
 history length; this is a compact independent anchor, not an optimal-kernel claim.
 Read and Full consume the same raw KV bank but retain their separate formulas.
+The [stateful qualification](evidence/additive-interface-qualification-20261110.md)
+separates this projection from public complete-root and restore checks; the
+[three-level comparison](evidence/additive-interface-performance-20261110.md)
+retains local forward gains, independent-adjoint costs and the unresolved FC16 gap.
 
 `benchmark_dense_query.py --baseline fc-tensor` keeps the original graph
 parameters, inputs, task head, loss and optimizer. `--baseline transformer-16`

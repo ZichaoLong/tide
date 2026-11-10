@@ -41,6 +41,12 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 KV快照数值共享位于`weighted/snapshot_bank.py`/`weighted_snapshot_bank.cpp`；
 [存储与伴随契约](weighted-snapshot-bank.md)区别共享存储、独立根及只读State视图，
 修改须同步`test_snapshot_bank`、query与sequence VJP、暖状态/精确恢复和实际投影工作量。
+共享bank上的Full矩阵边界由`weighted/bank_attention.py`/`weighted_bank_attention.cpp`
+负责，`query_packed`按实际布局能力接入默认路径；前向共享数值，反向仍保留独立快照根。
+修改须同步`test_bank_attention`、上述snapshot/sequence检查及[查询契约](weighted-dense-query.md)。
+局部成本用`benchmark_bank_attention.py`，层/组合对照用`benchmark_layer_chain.py`和
+`benchmark_dense_query.py`；[有状态基线资格](evidence/additive-interface-qualification-20261110.md)
+与完整公共记录资格分列，不能将投影baseline移入默认factory后继续自称独立参考。
 通用批量有限值守卫在`finite.py`/`finite_guard.h`，Read调用在`readout.py`/`read_fields.cpp`；
 分配元数据回读在`allocation_rows.py`/`weighted_allocation_rows.cpp`，保持数值求解/VJP与host元数据分层。
 输出推理的记录生命周期由`experiment/record_policy.py`共同连接执行和准入；

@@ -60,6 +60,9 @@ Attention中心取第一个正支持值，避免被忽略条目导致相消或`0
 它与层链/FC完整训练成本一起解释接口开销，不能用局部时间代替模型吞吐。
 `test_default_entry_uses_actual_shared_bank_contractions`观察公共默认入口实际调用，
 避免只有独立helper可用、真实模型未采用的情况。
+新边界的[固定资格](evidence/additive-interface-qualification-20261110.md)和
+[局部/完整成本](evidence/additive-interface-performance-20261110.md)分别记录；前向收益
+与独立快照反向负结果均保留，不从局部时间推断FC16或全部图的训练加速。
 
 `packed-v2`的cat evidence现在使用共享矩阵GEMM和逐行归一化，保持每行独立输入与字段根。
 历史逐行GEMV曾用于规避近径向VJP的舍入差异；有界同材料FP64核对后不再以此阻塞合批。

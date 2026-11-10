@@ -7,7 +7,7 @@
 | --- | --- |
 | 实验接入与需求反馈 | [协作规范](downstream-contract.md)、[可复制的core-5消费者](../examples/consumer_core5/README.md)；依赖锁/请求/交付/验收模板由规范导航 |
 | 选模型/执行组合 | [有限目录](../benchmarks/core5-study-v1.json)、下方测试表；公共`resolve_model`可配置目录外合法组合 |
-| 当前实测设置与结果 | [自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
+| 当前实测设置与结果 | [共享bank/FC/层链及代表成本](evidence/additive-interface-performance-20261110.md)、[对应资格](evidence/additive-interface-qualification-20261110.md)；历史[自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
 | 已通过的功能门禁 | [实际26模型/52训练检查](evidence/core5-coverage-correction-20261030.md)、[三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |
 | 在新clone中筛选结果 | [逐配置证据索引](evidence/core5-index.json)；`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --kind correctness --format tsv` |
 | 修改时同步维护什么 | 本页维护表；[实现分层](architecture.md)、[开发/资格](verification.md)、[历史与新经验](performance-lessons.md) |
@@ -113,6 +113,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | 新拓扑/输入时钟 | planning/topology、recipes、端口/延迟/可达性检查；完整返回/续接；recipe身份 |
 | 具名数值执行路径 | `ExecutionSpec.query_execution`及公共eager/native选择；[默认策略与显式路径](weighted-dense-query.md)、三个客户端实际选择、独立根/数值失败/完整恢复、[代表回归](prefill-regression.md)和性能经验 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
+| 紧凑基线/公共批接口接入 | [加法/减法方法](../.agents/skills/optimize-tide-execution/references/additive-comparisons.md)、[架构中的调用边界](architecture.md)；投影/完整根分开，非零左态/共享/训练/恢复及实际默认调用检查，局部与组合成本分别保留正负经验 |
 | 新设备/放置/dtype | ExecutionSpec、公共能力门禁、各client入口；构建、真机、训练/恢复证据分别记录 |
 | 实验准入/持久化 | `planning/capacity.py`、`experiment/admission.py`、`checkpoint_policy.py`；人类手册和矩阵静态预算同步。`test_training_host_capacity`保留实际恢复RSS下界，`test_experiment_storage`/`test_checkpoint_policy`核对tmpfs与发布代数；新预算不改写旧运行身份 |
 | 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[逐配置索引](evidence/core5-index.json)、[经验](performance-lessons.md)；JUnit提取实际检查，历史汇总不伪造拆分 |

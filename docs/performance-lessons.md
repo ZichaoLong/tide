@@ -24,7 +24,8 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[Describe列与按用途裁剪](performance-lessons-prefill.md#describe列与按用途裁剪)、
+新近机制：[紧凑公式与共享bank的正负结果](performance-lessons-prefill.md#从紧凑公式到共享bank矩阵)、
+[Describe列与按用途裁剪](performance-lessons-prefill.md#describe列与按用途裁剪)、
 [局部首次借用计费](performance-lessons-state-devices.md#局部首次借用与全局存储余额)。
 
 每条新经验给出观察、机制、改动、正负结果、适用条件、反例/测试以及来源链接。

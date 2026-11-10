@@ -141,3 +141,15 @@ journal未分配预留及vendor workspace仍须单独记账。
 也未证明所有历史SSD/FC16拒绝都由它导致。构造用例不能进入数值性能profiler；
 实际服务/窗口、完整训练和设备资格分别验收。对应诊断和维护入口见
 [存储契约](resident-storage-accounting.md)。
+
+后继[e6f7bd5修复与真机资格](evidence/additive-interface-qualification-20261110.md)在构造前
+冻结借用集合，计费`union(program_after, borrowed)-union(program_before, borrowed)`。
+原32768 B额度现在接受实际8868 B增长；8867 B额度和未声明借用分别仍拒绝。
+Describe的大bank/小余额另做实际数值执行，避免仅以构造通过声称窗口功能通过。
+借用只能来自调用者已计入owner的存储，不能把新scratch追加为借用抵扣。
+尚未分配journal、表达式保守估计、workspace和owner总额继续独立守卫。
+
+Half的保守预留可能使内层先于外层组合守卫拒绝。原测试只匹配最后一层错误而失败；
+57439d7保留原失败，改为记录实际tensor-budget拒绝位置/额度/新增量，FP32仍检查外层。
+这修正见证的适用条件，未放宽生产容量。首次借用缺陷、小数值执行、完整resident训练、
+原规模资源拒绝和吞吐是不同验收项；不能把本次修复推及全部历史失败。
