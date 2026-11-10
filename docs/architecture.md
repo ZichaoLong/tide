@@ -12,6 +12,8 @@ FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：
 不把图统计时间当吞吐，也不叠加Python/native重复计数。
 逐文件/函数审阅用[固定源码清单与实际覆盖](evidence/implementation-audit-20261110.md)；
 自动清单不代表已审阅，相关工具为`scripts/review_inventory.py`/`review_symbols.py`。
+后继按层追踪[调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)
+和[循环/Describe](evidence/recurrent-interface-audit-20261110.md)的实际审阅；hash manifest不混算重叠覆盖。
 
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
@@ -23,12 +25,14 @@ KV整序列反向位于`weighted/kv_sequence_vjp.py`与`weighted_kv_sequence_vjp
 修改时同步`ExecutionSpec`/SDK恢复身份、实际工作计数、`experiment/checkpoint.py`及
 `test_selected_boundary_execution`。内置输出任务可省去中间日志，插件不得隐式失去loss所需的根。
 Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.cpp`负责；
-修改同步[查询契约](weighted-dense-query.md)、独立字段根和`test_prefill_local_batches`。
+修改同步[查询契约](weighted-dense-query.md)、独立字段根、`test_weighted_describe_capability`及`test_prefill_local_batches`；
+Describe能力与记忆query策略独立报告，非strict数值策略仍按其客户端支持域拒绝。
 区域VJP的私有列打包在`weighted/private_rows.py`/`weighted_private_rows.h`：
 同结构组内打包内部叶，外部行/字段根保持；连续视图区间消除重复复制与反向分发。
 修改须同步`test_private_rows`、query/region独立根、原版本守卫和安装消费者恢复。
-查询的ragged快照保留独立内部叶；查询/区域批量发布在`weighted/independent_copies.py`
-和`weighted_independent_copies.h`，foreach复制仍使用独立存储/版本，修改须同步`test_independent_copies`。
+查询的ragged快照保留独立内部叶；query/region VJP按[只读发布契约](tensor-publication.md)
+暴露detach视图，消费者修改先clone；显式owned-copy工具与返回到host的独立存储契约另列。
+修改须同步`test_independent_copies`、query/region根及恢复；batch字段用unbind统一线性转置。
 KV快照数值共享位于`weighted/snapshot_bank.py`/`weighted_snapshot_bank.cpp`；
 [存储与伴随契约](weighted-snapshot-bank.md)区别共享存储、独立根及只读State视图，
 修改须同步`test_snapshot_bank`、query与sequence VJP、暖状态/精确恢复和实际投影工作量。

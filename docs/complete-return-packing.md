@@ -1,8 +1,8 @@
 # 完整返回的传输打包
 
 `benchmark_weighted.py`与standalone `weighted-benchmark`接受显式
-`--return-packing scalar|packed`，默认`scalar`保持原逐字段
-`detach().cpu().clone()`。该策略独立于placement和局部算子`--packing`；
+`--return-packing scalar|packed`，默认`scalar`逐字段生成拥有独立存储的CPU快照；
+CPU输入detach后clone，跨设备复制直接拥有新CPU存储。该策略独立于placement和局部算子`--packing`；
 `ExecutionSpec.return_packing`、study命令、运行身份和结果均记录实际选择。
 旧记录缺少此字段时仍表示`scalar`，不重写历史身份。新增执行记录包含该字段，
 因而其身份hash与旧记录分别保留。结果接纳检查拒绝不同返回策略。
@@ -10,9 +10,11 @@
 `packed`仅适用于eager两种Python客户端与standalone LibTorch。它从实际完整
 结果收集Tensor，按原device及精确dtype分组；每组临时cat输入最多8MiB，
 同步复制到CPU后按原shape解码。相同Tensor对象可只传一次，但**每次字段出现
-仍独立clone**：修改一个返回字段不能改变另一字段或live continuation。
+仍拥有独立存储**：修改一个返回字段不能改变另一字段或live continuation。
 临时设备块和CPU块各至多8MiB；完整返回本身、字段索引、CPU clone、allocator
 和厂商资源另计，8MiB不是总内存上限。无常驻缓存、异步传输或精度转换。
+即使一个分组只有一个唯一Tensor、但它在返回中重复出现，也只取回一次，再生成独立CPU副本。
+CPU输入仍须clone；跨设备取回已经新建独立CPU存储时，不再为第一份返回重复clone。
 
 CPU、单字段、空Tensor、非连续、非strided、量化、共轭/负视图及大于8MiB的
 单Tensor保留原复制路径。float payload/scoring不混dtype，bool与int64独立；

@@ -1,5 +1,4 @@
 #include "weighted_private_rows.h"
-#include "weighted_independent_copies.h"
 #include "tide/operator_profile.h"
 #include "tide/autograd_census.h"
 #include <ATen/record_function.h>
@@ -88,10 +87,10 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
     autograd_census::graph("private/region",publication);
     autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(publication);
   }
-  auto copied=detached_copies(publication);size_t output_index=0;
   for(size_t i=0;i<results.size();++i){
     size_t j=0;for(auto& [id,t]:results[i].controls){
-      node->outputs.emplace_back(t,false);auto out=copied[output_index++];
+      // Readonly publication keeps independent roots without cloning storage.
+      node->outputs.emplace_back(t,false);auto out=t.detach();
       if(t.requires_grad()){node->output_map.push_back(i*node->row_outputs+j);torch::autograd::set_history(out,node);}
       t=out;++j;
     }

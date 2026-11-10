@@ -72,8 +72,9 @@ class _Query(torch.autograd.Function):
             else:
                 refs = [r.value for r in full(bound["program"], weights, rows, slots, mode, zeta)]
         register_private_graph("query."+kind, refs)
-        from .independent_copies import detached_copies
-        outputs = detached_copies(refs)
+        # Public records are read-only views. Independent gradient roots do not
+        # require a separate numeric allocation or version counter per field.
+        outputs = tuple(ref.detach() for ref in refs)
         ctx.mark_non_differentiable(*(v for v, ref in zip(outputs, refs) if not ref.requires_grad))
         ctx.rows, ctx.weights = len(rows), nweights
         ctx.row_inputs, ctx.row_outputs = (len(inputs)-nweights)//len(rows), len(refs)//len(rows)

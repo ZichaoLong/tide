@@ -28,8 +28,14 @@ def native_query(program, w, requests, *, kind="read", slots=0):
     configure = core.configure_weighted_node if is_kv else core.configure_weighted_recurrent_node
     classes = w.aggregate_program.classes
     configure(weight, config, region_config(core, w.read_program.config), classes.edges, classes.inputs, w.aggregate_program.alpha)
-    if getattr(program, "query_execution", "legacy") != "legacy":
-        core.configure_weighted_query_execution(weight, program.query_execution)
+    query_mode = getattr(program, "query_execution", "legacy")
+    from tidegraph.weighted.query_execution import describe_mode
+    heads = kind == "read" and describe_mode(program) == "batched"
+    if query_mode != "legacy" or heads:
+        core.configure_weighted_query_execution(weight, query_mode, heads)
+        if kind == "read":
+            assert core.weighted_query_execution_selection(weight) == {
+                "memory": query_mode, "describe": "batched" if heads else "scalar"}
     def state(s):
         return None if s is None else core.State(s.value, s.last_time, s.observations, s.slots)
     contents, times = [r.content.value for r in requests], [r.time for r in requests]

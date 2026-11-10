@@ -19,17 +19,20 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
     history is processed causally; node state scans are allowed only if state
     adoption/reset is independent of selection.
     """
-    events, by_node, by_sequence, by_frame = [], defaultdict(list), defaultdict(list), defaultdict(list)
-    by_time = defaultdict(list)
+    events, by_node, by_node_sequence, by_frame = [], defaultdict(list), defaultdict(dict), defaultdict(list)
+    by_time, frames_by_time = defaultdict(list), defaultdict(list)
     stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0, "state_sequence_calls": 0,
              "semantic_state_replays": 0, "semantic_full_replays": 0, "full_scalar_fallback_steps": 0}
-    for batch, region, time, nodes in frames:
+    for frame in frames:
+        batch, region, time, nodes = frame
+        frames_by_time[time].append(frame)
         for node in sorted(nodes):
             atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
             if not atoms:
                 continue
             event = dict(batch=batch, node=node, time=time, fiber=atoms)
-            by_node[node].append(event); by_sequence[batch, node].append(event)
+            by_node[node].append(event)
+            by_node_sequence[node].setdefault((batch, node), []).append(event)
             by_time[time].append(event)
             by_frame[batch, time].append(event); events.append(event)
     if packed:
@@ -63,7 +66,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
             stats[fallback] = stats.get(fallback, 0) + len(es)
             stats["state_prefill_fallback_events"] = stats.get("state_prefill_fallback_events", 0) + len(es)
         if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
-            sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]
+            sequences = list(by_node_sequence[node].items())
             stats["state_blocks"] += len(sequences)
             if torch.is_grad_enabled():
                 key = "batched_state_events" if batched_state(getattr(model.nodes[node], "kernel", None)) else "semantic_state_replays"
@@ -106,7 +109,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
             from .block_steps import prepare_tick
             prepare_tick(graph, model, q, by_time[time], stats)
             if not selections and can_batch(region_id):
-                batch_select([f for f in frames if f[2] == time])
+                batch_select(frames_by_time[time])
         previous_time = time
         es = by_frame[batch, time]
         if not es:

@@ -16,7 +16,7 @@ def fields(requests, transform):
 
 class _Region(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, program, requests, weights, *inputs):
+    def forward(ctx, program, requests, weights, active, *inputs):
         from .region_batch import evaluate
         ctx.set_materialize_grads(False)
         from .private_rows import PrivateRows
@@ -27,10 +27,14 @@ class _Region(torch.autograd.Function):
             bound = rebind(program, lambda _: next(iterator))
             rows = fields(requests, lambda _: next(iterator))
             results = evaluate(bound, rows, dependencies=ctx.dependencies)
+        # Support was already read for the actual numeric result. Publishing
+        # readonly views preserves its bits; do not read every control again.
+        active.extend(result.active for result in results)
         refs = [result.controls[v] for result, r in zip(results, rows) for v, _ in r.candidates]
         register_private_graph("region", refs)
-        from .independent_copies import detached_copies
-        outputs = detached_copies(refs)
+        # Independent gradient edges do not require independent storage. These
+        # published values are readonly; callers needing mutation explicitly clone.
+        outputs = tuple(ref.detach() for ref in refs)
         ctx.mark_non_differentiable(*(t for t, ref in zip(outputs, refs) if not ref.requires_grad))
         ctx.weights, ctx.rows = weights, len(rows)
         ctx.row_inputs = (len(inputs)-weights)//len(rows)
@@ -62,7 +66,7 @@ class _Region(torch.autograd.Function):
                 [bars[i] for i in used], retain_graph=True, allow_unused=True)
             for i, gradient in zip(ids, gradients):
                 ctx.packing.scatter(i, rows, gradient, result)
-        return None, None, None, *result
+        return None, None, None, None, *result
 
 
 def evaluate(program, requests):
@@ -82,13 +86,9 @@ def evaluate(program, requests):
         bound = rebind(program, capture)
         weights = len(inputs)
         rows = fields([requests[i] for i in ids], capture)
-        values = iter(_Region.apply(bound, rows, weights, *inputs))
+        active = []
+        values = iter(_Region.apply(bound, rows, weights, active, *inputs))
         mappings = [{v: next(values) for v, _ in requests[i].candidates} for i in ids]
-        flags = None
-        if len(ids) > 1 and next(iter(mappings[0].values())).device.type != "cpu":
-            from ..region_metadata import positive
-            flags = iter(positive([value for controls in mappings for value in controls.values()]))
-        for i, controls in zip(ids, mappings):
-            active = {v for v, c in controls.items() if (next(flags) if flags is not None else c.detach() > 0)}
-            results[i] = Selection(active, controls, History(last_time=requests[i].time))
+        for i, controls, support in zip(ids, mappings, active):
+            results[i] = Selection(support, controls, History(last_time=requests[i].time))
     return results

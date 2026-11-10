@@ -42,8 +42,11 @@ def _copy_group(rows, outputs):
     """One compatible, bounded group; CPU callers also exercise exact copying."""
     if len(rows) == 1:
         value, positions = rows[0]
-        for position in positions:
-            outputs[position] = _scalar(value)
+        # Aliased occurrences still own independent CPU storage, but need only
+        # one device-to-host transfer of this unique value.
+        host = _scalar(value)
+        for index, position in enumerate(positions):
+            outputs[position] = host if index == 0 else host.clone()
         return
     # All inputs are contiguous and have the same device/dtype. No casts,
     # arithmetic, nonblocking transfer, or persistent device scratch are used.

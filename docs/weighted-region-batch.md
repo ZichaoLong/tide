@@ -31,6 +31,16 @@ CPU与单帧入口保留原逐项路径，单个元数据项也直接读取。�
 独立literal bool/None与连接零见`test_region_metadata`和standalone `weighted_region_batch`；
 完整参数别名、独立控制根、版本与跨窗训练仍由下表既有检查验收。设备收益须另测。
 
+节点ID仅由`regional_total_zero`及硬排序发送消费，按完整候选组一次构造int64张量；
+连续分配、Attention和proportional不创建未使用的设备ID数组。配置温度在组内共用一个
+不可求导标量。native传给分配VJP的scores/caps/bounds/shift用整字段`unbind`，
+避免每行SelectBackward都清零并装配完整B×L字段；公开每行根与KKT分支不变。
+Python区域VJP复用数值层已计算的active集合；发布只读view不再触发第二轮支持取回。
+显式payload cast之后的支持一致性检查仍须执行，不能复用cast之前的结果代替它。
+`test_region_batch_publication`检查实际ATen构造/标量读取/反向转置，覆盖2/17帧、
+超过2**54的节点ID、稳定平票、部分/零control根和未使用帧。固定审阅依据见
+[区域接口审阅](evidence/region-batching-audit-20261110.md)；新后端资格须按实现提交另记。
+
 ## 数值函数与反向身份
 
 | 定义 | Python 符号 | 独立 C++ 符号 | 验证入口 |

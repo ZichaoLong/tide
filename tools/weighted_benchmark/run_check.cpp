@@ -57,7 +57,7 @@ int main() {
     require(identity.at("record_policy")=="selected-boundary-v1","selected-return policy identity missing");
     auto historical=request;historical.trace_records="complete";
     require(!historical.checkpoint_identity(fixture).contains("record_policy"),"historical trace identity changed");
-    require(identity.at("query_execution")=="auto"&&identity.at("query_policy")=="kv-packed-v2","query policy missing from checkpoint");
+    require(identity.at("query_execution")=="auto"&&identity.at("query_policy")=="kv-packed-v2+describe-batch-v1","query policy missing from checkpoint");
     require(identity.at("scheduler")=="component-window","prefill policy missing from checkpoint");
     auto greedy=request;greedy.prefill_schedule="greedy";
     require(!greedy.checkpoint_identity(fixture).contains("prefill_schedule"),"legacy scheduler identity changed");

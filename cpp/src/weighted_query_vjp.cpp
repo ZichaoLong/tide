@@ -1,4 +1,3 @@
-#include "weighted_independent_copies.h"
 #include "tide/operator_profile.h"
 #include "tide/autograd_census.h"
 #include <ATen/record_function.h>
@@ -92,7 +91,7 @@ class QueryVjp final:public torch::autograd::Node {
 };
 using Fields=std::vector<TensorFields>;
 template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,const Config& c,const RegionalConfig& region,
-    bool is_full,Index slots,const Options& options,int dense){
+    bool is_full,Index slots,const Options& options,int dense,bool batch_describe){
   RECORD_FUNCTION("tide::stage::query_bind", std::vector<c10::IValue>());
   op_profile::Scope stage_profile(op_profile::QueryBind);
   if(rows.size()==1){
@@ -104,7 +103,7 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
     if(is_full){
       for(const auto& v:full(w,{{&*row.state,row.time,ContentView{row.content},row.control}},slots,options,c,dense))
         values.push_back({{"value",v.value}});
-    }else values=describe(w,{{row.state?&*row.state:nullptr,row.time,ContentView{row.content}}},c,region,dense);
+    }else values=describe(w,{{row.state?&*row.state:nullptr,row.time,ContentView{row.content}}},c,region,dense,batch_describe);
     variable_list refs;for(const auto& [name,t]:values[0])refs.push_back(t);
     auto outputs=singleton_boundary(originals,refs);size_t i=0;
     for(auto& [name,t]:values[0])t=outputs[i++];
@@ -136,7 +135,7 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
     }else{
       std::vector<ReadInput> requests;
       for(const auto& row:rows)requests.push_back({row.state?&*row.state:nullptr,row.time,ContentView{row.content}});
-      refs=describe(w,requests,c,region,dense);
+      refs=describe(w,requests,c,region,dense,batch_describe);
     }
   }
   stage_profile.phase(op_profile::QueryPublish);
@@ -147,11 +146,11 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
     autograd_census::graph(is_full?"private/query.full":"private/query.read",publication);
     autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(publication);
   }
-  auto copied=detached_copies(publication);size_t output_index=0;
+  // Read-only publication retains private SavedVariable version guards.
   for(size_t i=0;i<rows.size();++i){
     TensorFields out;size_t j=0;
     for(const auto& [name,ref]:refs[i]){
-      node->outputs.emplace_back(ref,false);auto value=copied[output_index++];
+      node->outputs.emplace_back(ref,false);auto value=ref.detach();
       if(ref.requires_grad()){node->output_map.push_back(i*node->row_outputs+j);torch::autograd::set_history(value,node);}
       out[name]=value;++j;
     }
@@ -160,7 +159,7 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
   return result;
 }
 template<class Config> Fields bind_queries(const NodeWeights& w,const std::vector<Row>& rows,const Config& c,const RegionalConfig& r,
-    bool is_full,Index slots,const Options& options,int dense){
+    bool is_full,Index slots,const Options& options,int dense,bool batch_describe=false){
   std::map<std::string,std::vector<size_t>> groups;Fields result(rows.size());
   std::vector<std::string> branches(rows.size());
   if constexpr(std::is_same_v<Config,KVConfig>){
@@ -183,15 +182,15 @@ template<class Config> Fields bind_queries(const NodeWeights& w,const std::vecto
   for(size_t i=0;i<rows.size();++i)groups[signature(w,rows[i],c,is_full,branches[i])].push_back(i);
   for(const auto& [key,ids]:groups){
     std::vector<Row> group;for(auto i:ids)group.push_back(rows[i]);
-    auto values=bind_group(w,std::move(group),c,r,is_full,slots,options,dense);
+    auto values=bind_group(w,std::move(group),c,r,is_full,slots,options,dense,batch_describe);
     for(size_t i=0;i<ids.size();++i)result[ids[i]]=std::move(values[i]);
   }
   return result;
 }
-template<class Config> Fields read_impl(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense){
+template<class Config> Fields read_impl(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense,bool batch_describe){
   std::vector<Row> rows;
   for(const auto& q:requests)rows.push_back({q.state?std::make_optional(*q.state):std::nullopt,q.time,q.content.value,{}});
-  return bind_queries(w,rows,c,r,false,0,Options{},dense);
+  return bind_queries(w,rows,c,r,false,0,Options{},dense,batch_describe);
 }
 template<class Config> std::vector<FullResult> full_impl(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options,const Config& c,int dense){
   std::vector<Row> rows;std::vector<FullResult> result;
@@ -203,8 +202,8 @@ template<class Config> std::vector<FullResult> full_impl(const NodeWeights& w,co
   return result;
 }
 }
-std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const KVConfig& c,const RegionalConfig& region,int dense){return read_impl(w,r,c,region,dense);}
-std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const RecurrentConfig& c,const RegionalConfig& region,int dense){return read_impl(w,r,c,region,dense);}
+std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const KVConfig& c,const RegionalConfig& region,int dense,bool batch_describe){return read_impl(w,r,c,region,dense,batch_describe);}
+std::vector<TensorFields> read_vjp(const NodeWeights& w,const std::vector<ReadInput>& r,const RecurrentConfig& c,const RegionalConfig& region,int dense,bool batch_describe){return read_impl(w,r,c,region,dense,batch_describe);}
 std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const KVConfig& c,int dense){return full_impl(w,r,slots,o,c,dense);}
 std::vector<FullResult> full_vjp(const NodeWeights& w,const std::vector<FullInput>& r,Index slots,const Options& o,const RecurrentConfig& c,int dense){return full_impl(w,r,slots,o,c,dense);}
 }

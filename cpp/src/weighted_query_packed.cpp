@@ -45,7 +45,9 @@ std::array<Tensor,4> packed_memory(const NodeWeights& w,const States& states,con
     for(int j=0;j<2;++j){values[j+2]=weights[j].sum(1);
       values[j]=c.memory_read=="qry"?read(logits,projected,weights[j],values[j+2]):
         (weights[j].unsqueeze(-1)*summaries).sum(1)/values[j+2].clamp_min(1).unsqueeze(-1);}
-    for(size_t j=0;j<ids.size();++j)for(int k=0;k<4;++k)result[ids[j]][k]=values[k][j];
+    std::array<std::vector<Tensor>,4> rows;
+    for(int k=0;k<4;++k)rows[k]=values[k].unbind();
+    for(size_t j=0;j<ids.size();++j)for(int k=0;k<4;++k)result[ids[j]][k]=rows[k][j];
   }
   std::array<Tensor,4> output;
   for(int j=0;j<4;++j){std::vector<Tensor> rows;for(const auto& r:result)rows.push_back(r[j]);output[j]=at::stack(rows);}
@@ -68,7 +70,7 @@ Tensor packed_full(const NodeWeights& w,const States& states,const Times& times,
       if(!c.distance_slopes.empty())logits=logits+c.distance_slopes[h]*displacement;
       reads.push_back(read(logits,values.select(2,h),weights,total));
     }
-    auto mixed=at::cat(reads,-1);for(size_t j=0;j<ids.size();++j)result[ids[j]]=mixed[j];
+    auto rows=at::cat(reads,-1).unbind();for(size_t j=0;j<ids.size();++j)result[ids[j]]=rows[j];
   }
   return project(at::stack(result),weight(w,"full_program.content.out"));
 }

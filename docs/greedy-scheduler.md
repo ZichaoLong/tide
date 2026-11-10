@@ -106,4 +106,7 @@ Independent scalar checks: `test_component_window`,
 `test_component_window_weighted` (five memories, ragged B×L, SGD and exact disk
 resume), and `test_greedy_library` (public three-family training/checkpoints).
 Policy/identity checks live in `test_component_window_policy` and
-`test_experiment_placement`. Qualification and measured scale remain separate.
+`test_experiment_placement`. `test_component_window_capacity` independently checks
+that compact preparation's early fiber consumption does not accumulate as live
+capacity, while future component fibers and parallel physical edges stay intact.
+Qualification and measured scale remain separate.

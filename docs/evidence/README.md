@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[调度与接口审阅](scheduling-interface-audit-20261110.md)、[区域批量审阅](region-batching-audit-20261110.md)、[循环与Describe审阅](recurrent-interface-audit-20261110.md)：固定06b242e逐文件/具名函数记录；实际容量缺陷、重复扫描/上传/逐行转置与模块能力边界。审阅范围有重叠，开发检查不代替后继实现固定资格。
+
 [唯一KV存储与图统计（2026-11-10）](interface-snapshot-bank-20261110.md)：1528df8的CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail（含CPU辅助），三客户端小型训练/恢复；FC16 CPU1/NPU训练14.628/20.634秒，NPU推理略升，完整尺度数值未验。小图615外层/13477含私有节点，不能将32个query边界当全部图规模。
 
 [接口审阅与可复现覆盖（2026-11-10）](implementation-audit-20261110.md)：固定4d777bc基线实际审阅25文件/128函数，自动清单其余明确未审；checkpoint重复解码、插件完整记录与漏子包hash三项修复，开发检查与固定资格分列。

@@ -13,10 +13,9 @@ class Native:
         requested_query_execution = query_execution
         if query_execution == "auto" and (not packed or algorithm not in {"greedy", "window"} or workers != 1 or full_autograd != "batched"):
             query_execution = "legacy"
-        query_view = model
+        from .weighted.query_execution import execution_view
+        query_view = execution_view(model, query_execution)
         if query_execution != "legacy":
-            from .weighted.query_execution import execution_view
-            query_view = execution_view(model, query_execution)
             if not packed or algorithm not in {"greedy", "window"} or workers != 1 or full_autograd != "batched":
                 raise ValueError("dense-v1 requires packed greedy/batched Full with one worker")
         if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
@@ -43,16 +42,21 @@ class Native:
         if backend != "cpu" and backend != compiled:
             raise RuntimeError(f"native {backend} requested but the adapter was built for {compiled}")
         self.core, self.graph, self.model = core, graph, model
+        from .weighted.query_execution import describe_mode
         self.query_execution = dict(requested=requested_query_execution,
-            nodes=tuple(getattr(n.read_program, "query_execution", "legacy") for n in query_view.nodes))
+            nodes=tuple(getattr(n.read_program, "query_execution", "legacy") for n in query_view.nodes),
+            describe=tuple(describe_mode(n.read_program) for n in query_view.nodes))
         self.algorithm = algorithm
         from .native_model import encode_model
         g, m = encode_model(core, graph, model)
         if query_execution != "legacy":
             nodes = list(m.nodes)
-            for node, query_mode in zip(nodes, self.query_execution["nodes"]):
-                if query_mode != "legacy":
-                    core.configure_weighted_query_execution(node, query_mode)
+            for node, query_mode, heads in zip(nodes, self.query_execution["nodes"], self.query_execution["describe"]):
+                if query_mode != "legacy" or heads == "batched":
+                    core.configure_weighted_query_execution(node, query_mode, heads == "batched")
+                    actual = core.weighted_query_execution_selection(node)
+                    if (actual["memory"], actual["describe"]) != (query_mode, heads):
+                        raise RuntimeError("native query/Describe selection differs from requested execution view")
             m.nodes = nodes
         self.compiled = g
         core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
@@ -94,6 +98,8 @@ class Native:
         public = Result(from_continuation(self.graph, result.continuation), *window_records(result))
         for mode in ("legacy", "dense-v1", "packed-v2"):
             public.stats["query_"+mode+"_nodes"] = self.query_execution["nodes"].count(mode)
+        for mode in ("scalar", "batched"):
+            public.stats["describe_"+mode+"_nodes"] = self.query_execution["describe"].count(mode)
         return public
 
     def cursor(self, continuation):

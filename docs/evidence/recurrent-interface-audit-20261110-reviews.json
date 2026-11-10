@@ -1,0 +1,777 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "06b242eef2a203a950e30ced9b50d5c6d1cb8a73",
+  "meaning": "Source/contract review only. Python definitions are AST-hash-bound; C++ files manually reviewed with selected line anchors, no claim of parsed exhaustive C++ symbols. Later implementation and runtime qualification are separate.",
+  "files": [
+    {
+      "path": "cpp/src/autograd.cpp",
+      "sha256": "d36d093afd40fa1b9ac360c4ee3298a63aa679ca7724e8301bbf7b4d7f9c4449",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native semantic value/state publication with numeric result retention.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "semantic_value",
+          "line": 17
+        },
+        {
+          "name": "semantic_state",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/state_evaluate.cpp",
+      "sha256": "094463124556e88a29ad4e74c98eeed1f077289a788d17d50ba239a5c92beae6",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native batch/semantic State dispatch and observations.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "evaluate_state",
+          "line": 10
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/state_vjp.cpp",
+      "sha256": "1327fd9e5543397d97f35bf70fc5d178ce180252fd8f0f60180a1b160d1e293b",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native state grouping, private leaves, independent roots and per-time sequence loop.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "signature",
+          "line": 39
+        },
+        {
+          "name": "bind_group",
+          "line": 104
+        },
+        {
+          "name": "state_batch_vjp",
+          "line": 163
+        },
+        {
+          "name": "state_sequence_vjp",
+          "line": 187
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_convolution.cpp",
+      "sha256": "820a5c5552df5b654c1b8cae9e4991633bd79d16edbe2b523149677c78bb0e13",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native scalar query/cache/tap validation, exact-time convolution and effective projection.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "query",
+          "line": 12
+        },
+        {
+          "name": "validate_cache",
+          "line": 18
+        },
+        {
+          "name": "convolve",
+          "line": 26
+        },
+        {
+          "name": "conv_effective",
+          "line": 46
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_describe_batch.cpp",
+      "sha256": "cee9005acab8953a2d24b1847eee530cae86f90977bb14e128962050122b0d95",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native principal head batching tied to KV query mode and scalar head fallback.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "evaluate",
+          "line": 12
+        },
+        {
+          "name": "describe(KVConfig)",
+          "line": 64
+        },
+        {
+          "name": "describe(RecurrentConfig)",
+          "line": 65
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_full_batch.cpp",
+      "sha256": "3b7174a3b3080b0c5d6daf1456d9708b0250614d7c23a85e9f97c8fdb5a06df9",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native batch Full snapshots, recurrence mix and row publication.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "mix(KVConfig)",
+          "line": 11
+        },
+        {
+          "name": "mix(RecurrentConfig)",
+          "line": 36
+        },
+        {
+          "name": "evaluate",
+          "line": 56
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_gated_delta.cpp",
+      "sha256": "667d8264661ad472fdd043444be3fedc1705a9cd7933b2eeb2eb670c50c2a0c5",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native GDN scalar formulas, convolution and validation.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "gdn_update",
+          "line": 15
+        },
+        {
+          "name": "gdn_read",
+          "line": 24
+        },
+        {
+          "name": "gdn_mix",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_gated_packed.cpp",
+      "sha256": "e6032c0ee71de3335ff8c9c75aee8c2250684e48b875db0edf2bb605f4a7e06e",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native packed convolution owner banks/cache masks and GDN/SSD coefficients.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "convolve",
+          "line": 8
+        },
+        {
+          "name": "gated_coefficients",
+          "line": 36
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_packed.cpp",
+      "sha256": "c285d46911fa5c873ee01bad07a0511af78574338255906cbc85dcb7d1314fe0",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native writes/positive segmentation, exact gaps, decode and matrix scan.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "Writes::Writes",
+          "line": 6
+        },
+        {
+          "name": "Writes::group_index",
+          "line": 29
+        },
+        {
+          "name": "Writes::gaps",
+          "line": 34
+        },
+        {
+          "name": "Writes::decode",
+          "line": 42
+        },
+        {
+          "name": "independent",
+          "line": 54
+        },
+        {
+          "name": "matrix_scan",
+          "line": 59
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_query_recurrent.cpp",
+      "sha256": "bc7011c347ddea963155053127af78ac8aebf2828c95832c90d49c811e8af2a0",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native query cache validation, effective state, repeated branches and batched memory.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "convolve",
+          "line": 11
+        },
+        {
+          "name": "effective",
+          "line": 36
+        },
+        {
+          "name": "memory",
+          "line": 66
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_query_vjp.cpp",
+      "sha256": "df1898876abf4cda3d7ca0db0d8e1a343d2492b408bfda473ff92847cdf4dccf",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native independent query rows/fields, private graph grouping and gradient publication.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "signature",
+          "line": 26
+        },
+        {
+          "name": "bind_group",
+          "line": 94
+        },
+        {
+          "name": "bind_queries",
+          "line": 162
+        },
+        {
+          "name": "read_impl",
+          "line": 191
+        },
+        {
+          "name": "full_impl",
+          "line": 196
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_recurrent.cpp",
+      "sha256": "04d256b8d22536880bfeb1fb2c71e7d66469c9b2d1d17eab2c07a992b605166d",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Scalar recurrent kernels, effective H/Z/W, state metadata and packed capabilities.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "RecurrentConfig::validate",
+          "line": 8
+        },
+        {
+          "name": "effective",
+          "line": 28
+        },
+        {
+          "name": "memory",
+          "line": 46
+        },
+        {
+          "name": "content",
+          "line": 58
+        },
+        {
+          "name": "Recurrent::initial",
+          "line": 82
+        },
+        {
+          "name": "Recurrent::step",
+          "line": 91
+        },
+        {
+          "name": "Recurrent::batch",
+          "line": 116
+        },
+        {
+          "name": "Recurrent::sequence",
+          "line": 121
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_recurrent_packed.cpp",
+      "sha256": "2271cee4e9d4e5bf0a70f7f337b8c90f7e4ef9839aac6cfc1ddc6c94a4891e6c",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native recurrent coefficient batching, dense matrix scan and intermediate state publication.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "recurrent",
+          "line": 6
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_ssd.cpp",
+      "sha256": "0d7e42578d1fecb49a9de6657acf03fe79f3ad046416e1add9198918625061e4",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Native SSD grouped coefficients and scalar Read/Full/update.",
+      "parsing_scope": "Manual full-file review; C++ AST parsing not performed; selected anchors are not exhaustive.",
+      "manual_symbols": [
+        {
+          "name": "ssd_update",
+          "line": 19
+        },
+        {
+          "name": "ssd_read",
+          "line": 24
+        },
+        {
+          "name": "ssd_mix",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "path": "python/tidegraph/autograd.py",
+      "sha256": "395b8717160075da3799f2ddd36c07e3b22b35830066ec634c313bfac6c57fe7",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Numeric/semantic publication boundary and explicit first-order/guard behavior.",
+      "symbol_sha256": {
+        "_SemanticValue.forward@8:4": "7e04339cd5e60643f0a568424310b4220c98764289e1a3d9f53e1b7ce0af402d",
+        "_SemanticValue.backward@13:4": "382c6d79a5df3358f7593a27539ad2e8853cf1ae782226ee2c6033afb242aa8d",
+        "value@17:0": "673128c77266004f551d61d2c0681830e6d9a92297eade9cff741cfa78de00c3",
+        "state@27:0": "94c390f77645e47259097c2a484569c312cd59a01365793fe21f5d5cab8b3e2c"
+      }
+    },
+    {
+      "path": "python/tidegraph/scan.py",
+      "sha256": "cab727d6c06c5cbcd0f1ebf9fc20ff51f2371a860f993a66f1429827d1e41783",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Affine scan composition and dependence along time.",
+      "symbol_sha256": {
+        "affine_scan@5:0": "14e1c3b1617e2a2c5d48360ceef1a1575cffaf95fe9a31759cf7af2310c2c911"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_batch.py",
+      "sha256": "fee9bfbe7560793ef9467fb28359d86f96592fc9429196e0c9d06319ad73c741",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Batch State dispatch, numeric state versus semantic/private gradient boundary.",
+      "symbol_sha256": {
+        "step@7:0": "e5b3998b1e30f82effa942d5cd038a674650207d455f4d0ed8d420febc24ca77"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_preparation.py",
+      "sha256": "9cd64ac8fb5d3e61e7e9936a8d7a6fefa43d2c5411477e4ec3714a6491f39fb2",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Legal preparation inputs and sharing without private-state sharing.",
+      "symbol_sha256": {
+        "prepare_shared@10:0": "421889b92b6265d4db6347432a0b864e6355b833001e159f20010336d0e56eb0"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_program.py",
+      "sha256": "2aef93b035e321e93cc07ef7ab363f1c0601d4b8f0775b42b97dd4c511e81284",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Program-level step/batch/sequence capability interfaces and fallback behavior.",
+      "symbol_sha256": {
+        "StateProgram.initial@14:4": "7d518e220d95fa73ca69b5b52c10b853dd6dd9a473b410ec063f876c676ba163",
+        "StateProgram.step@17:4": "bb24aec94421a819eca2c47704ca8a4c25980ba73eef8e5b2898840c4ddd21c2",
+        "StateProgram.sequence@20:4": "3003ecd40caa191aff7d6bef86e6f2a3787944afae52d60e3ef163508c1f50aa",
+        "StateProgram.packed_sequence@28:4": "be26bcd48d5b1635b5fa06223ae8daf5d59fc797a785e23c6f2ede85c5623d7f",
+        "StateProgram.validate@38:4": "000c34af5a78277b42400a3d9040de8aefe8de512e494474de59ff317d33a8d6",
+        "validate_program@42:0": "b31815815998429d388e2108b88ba9124ffddb203d35bbc0e123d5bd2b51bc59"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_vjp.py",
+      "sha256": "52bbf459b66db7a3dce1c90390889f640ccc96a76ad55a170cd10fd435e14a3f",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Independent state roots, temporal/metadata grouping and per-depth sequence VJP construction.",
+      "symbol_sha256": {
+        "supported@14:0": "22b4380da7595335798ae82829be6797f9dac2ce1be020050f281e1d29d2730a",
+        "_rows@27:0": "554395b3a75470c0b4831f29d1bc288568abb84d5707fa946719d4b4ff94e72e",
+        "_weights@39:0": "5611b214ff1dfd35b9b29421cc0848090e52c7c4318072da97036ad9ce3ece42",
+        "_weights.capture@42:4": "f5cac5b5ecee7c68bbe9d9ae84a014ca7b4affd67686f7e44d115a602c66512a",
+        "_values@54:0": "7af845198310497f9f15fff95572818829e0eeb36a1f54973a384ab887faa21f",
+        "_signature@58:0": "91cacbd9d949255555a77fa755c14495abc3d53d8190dd381594f4c2a0941095",
+        "_signature.<lambda>@60:17": "7cd1235b3f53aa4b792029c61e5a7791d45ba4f5216b5b01012b5b2439aa79cd",
+        "_State.forward@69:4": "7267b1b490d2d1463c29fddd19a22e72abb2d84f91968d0d881de1b1aeba598e",
+        "_State.forward.<lambda>@74:36": "c4f0c8e4e8169681c1579281080d890603093faea085d7f735604144a30d5175",
+        "_State.forward.<lambda>@75:30": "93468959e65c57a16341aa8a7b5f00229bab7b5ddf1a7865f45f1ef877434936",
+        "_State.backward@96:4": "4810c54fc45c74ae229da96ceda361507e4087366cc40d64a216a76d4bf84ef5",
+        "bind_batch@122:0": "db24e5c1201d085900f9dbc9151e8a2f281858fdcd07d0ad30960dea367e1e9b",
+        "bind_batch.capture@135:8": "11d9c802a701a1baeec4f952fa8e5985b6131b5b1bec5325906476512819d47b",
+        "bind_sequence@147:0": "51a9e52eb457ce9de28694708c50a72ae3af805fec9912672f0a6e35c36a0033"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/convolution.py",
+      "sha256": "d688bf076d600b4bac298769a2583a598380220545b6e48e4fd37d5846d77395",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Literal fixed-logical-time tap/query/write validation and zero-receive cache behavior.",
+      "symbol_sha256": {
+        "ConvCache.empty@19:4": "ac5ebd01f792513203a083da0cbe1022a02199d019d6e02553525961995e497d",
+        "ConvCache.validate@23:4": "b828834d4a269d03e11efc90a61113698524d1a4d6808009188dd295376260b7",
+        "FixedTimeConv.__init__@34:4": "40d479547c9b97b49aa5953604e4f4b069f6b7393a585a8e8a9a927eaa46d724",
+        "FixedTimeConv._validate@46:4": "2d73c12db51d1de009da54ed1389ceb9cb7aa569a6494cbd9c0b46a55c1a7176",
+        "FixedTimeConv.forward@54:4": "4e2c7841861c79b1bbbe4f6fdb8999543dc6e5dd9a596dafbcf305f5a38c0698",
+        "FixedTimeConv.write@66:4": "a5e5419550da0eb099766dd8170a70f59bac44dcb3833817ec9bc74f981a2b51",
+        "FixedTimeConv.effective@80:4": "be3eaccac1c952f2245d1f429bd82c3ddacc941425680be246f8b2c0013ca300"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/convolution_packed.py",
+      "sha256": "5dab80bd181e6d99ca6f6758ca8ea324423f50d606ab3fb3832432983e96ff0c",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Owner banks, exact-time lookup and per-state cache snapshot construction.",
+      "symbol_sha256": {
+        "convolve@6:0": "369c09a983de2fcd5cfd78e509648c31556efbe1d0f87cd87932d8a159845cae"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/dense_describe.py",
+      "sha256": "825ff3d70eef8cb831a2767fdc0d19d8552a3726293a83b917f20d1484902090",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Principal head algebra and three shared-weight projections independent of memory family.",
+      "symbol_sha256": {
+        "evaluate@7:0": "c634bad767d50f54343680bebe12dc26ab88b13baf15a61b8dc6b43721fa67d8"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/full_batch.py",
+      "sha256": "7a1d76c5a934c2288243b9dab9ea4c73b41191132bbc0ebf9014f8bfaede27f1",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Full proposal state, KV/recurrent mix and output row publication.",
+      "symbol_sha256": {
+        "kv@15:0": "ab1756f3a83a02c987d0afa65322cdf488e024a70743edb2aeea9d6c23c6c885",
+        "recurrent@42:0": "89a7c958a0883620c1e3dcddb93499521ccd0453a8a7204145451242092aedf2",
+        "evaluate@60:0": "eb427b9436558938c4ee803bda2a716c63612ce44d4f0ee6400ef147adae74e3"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/gated_delta.py",
+      "sha256": "c0db3d0c4cafefe20327b75a13695d91cfc24e5c5a83ca30ee51dcf4ec12f087",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "GDN projection, logical-time convolution, normalized keys and scalar Read/Full/update.",
+      "symbol_sha256": {
+        "GatedDeltaMemory.__init__@10:4": "f56b67ee681c4c71feeee3d4b0d1dfba56ae5ae3f815572a5a09a04e7f4f58c9",
+        "GatedDeltaMemory.features@18:4": "8ce514518f6f2656c7503829ef795a00593e061803ae2b29bb391aa6025c9d5d",
+        "GatedDeltaMemory.update_matrix@27:4": "07102da8110c676c0c663c6bfe39436982d051e3409b02c7e8a9fce2a30f8568",
+        "GatedDeltaMemory.matrix_read@37:4": "25203a5e0c1bcd2b57e2841f5ef635e6d48e0bf4bbea56014fe2dd1035e4b370",
+        "GatedDeltaContent.__init__@44:4": "4c9f515dc93b5233faa5751058cd2321182f5471555e77407603ec5afae3e73e",
+        "GatedDeltaContent.forward@51:4": "ad4ddb22758afa0568946046f1149343ed4183b5897343684bb19787ba75a9bc"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/gated_packed.py",
+      "sha256": "34fd1e13f789a9897c6967177ac2ac07e1ff7092ed0cb9500cbde15e6b1119c8",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "GDN/SSD input-only coefficients, cache construction and matrix versus scalar transitions.",
+      "symbol_sha256": {
+        "coefficients@10:0": "08032683aa00ca16745f4b65f6b6f49ee511c52f318002273cd8baab49168c17"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/packing.py",
+      "sha256": "7bd1ca19cdd3bca73001dabfac79add66dcff438895d009018e81f9f3d3832ed",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Positive-write segmentation, original int64 gaps, decode ownership and dense matrix scan.",
+      "symbol_sha256": {
+        "positive_keys@13:0": "c5fb618bff2abefd82cdc1b56c1c83100326314150698191dfa5c587f668ff12",
+        "project@21:0": "4efdb0d764d6fc1a0be4e5a21bdf267b847b4064873241b16c65dca2c3e34fda",
+        "sequence@27:0": "22df993ce95900df5d6cd50a8e66a58abcbbcfa4363ce14f77e15529b1f4615a",
+        "Writes.__init__@38:4": "d8d07bba586e7735848e7bc854f8d641e038e283d800662fa8d5b43c65fbd2c9",
+        "Writes.decode@65:4": "4c6924ec02c535957daff4444ec04f9acd8300c3d0fad4126711b0cf0c69f6cc",
+        "Writes.group_index@78:4": "f7033ca85029caf3424fa9fb9c88eecce6b6d76a036d8af122ae1aef61ffb2e6",
+        "Writes.gaps@82:4": "95a298b0dccd8f484d63280a35aa308f158c4cd41b1a1af888c6662e90a31593",
+        "matrix_scan@93:0": "70b4d05fcbd5eb3f032c0434838ca1a5119de4efc995f75ec0e284a56524655a"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/parameter_tree.py",
+      "sha256": "36a7c4f322c9bdbfd5efefd81581e9e3ee0b21f2bc53a646738250840e544e47",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Private tensor/module rebinding and preservation of parameter aliases.",
+      "symbol_sha256": {
+        "rebind@9:0": "07b1b1f610d22d287b2af24b82f849a2a5098c539c3af4478135edf6ef1962ad",
+        "rebind.tensor@12:4": "431612335318030df9471a112edcec70b4f51d51192a59e1c212a505391fb3e6",
+        "rebind.visit@19:4": "929a0e9e6b132b5bdb10a44b52a774b5e01692eee2032e86ac394c24c53ca2bc",
+        "supported@34:0": "10a2489ba0f099b5945d46c2a0d9608036a6586dbb446f1016f6fcc8ba5613dc"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/query_batch.py",
+      "sha256": "c8ee0263bebc336dd187714403208f6b376f05531253c014ff1fccd91e1d058e",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Actual snapshot Mem, repeated effective matrices/features and per-row convolution validation.",
+      "symbol_sha256": {
+        "weighted_read@19:0": "2c0b1dbe03bcfd51891f170cf78df42b54e19fb14cd08e6dd470d056dea5e1dd",
+        "kv@46:0": "2070fe24f93b9ee0d8f820180e861e1cb45e52188149134f9de4a97628cb7336",
+        "effective@75:0": "da7f6de16846bad2e6bfb2d7af0b8ce17cb31005146e887d63aa658143e40f91",
+        "convolve@87:0": "4f603e9d2874b18c1760cbb2ee2cd01cef11c171daa21ab0eac1954cb41f3ce8",
+        "features@108:0": "3db4f4269b05065a27de95913ec78265e293af7a62b2a8ce91632e9f099ea97c",
+        "matrix_read@128:0": "cf6ffa72db296d630932f75c6414652a9c45e480cfc59bead018aa54c09959d4",
+        "memory_read@135:0": "4cc47eedd18a3b5de075eb4379af543b7ba82fcb89d4af90e75ebed57f06a049"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/query_execution.py",
+      "sha256": "9e3b27f51b482243f246c2432eae2ba4e4731525152847491088f1469ae73014",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "KV-only optimized selection that unnecessarily gates compatible recurrent Describe heads.",
+      "symbol_sha256": {
+        "validate@12:0": "fe594bdaf44af3e714667b9cf26e7ad1c311e040e2356fcb7601a8d7e50e8929",
+        "execution_view@24:0": "b41f1a09a95a3d7555fb22b6440d82e1d1fa425e85f9758275b5d14bbd2dcb83",
+        "dense@59:0": "8ad7d8120adbdd9c389517ebe0dad542febd323e36638911824abe84fb6e9e54",
+        "packed@63:0": "9cf7709d677a0f48eae7439028903a173a77cbcb37de37359985d45ad62d4b5f",
+        "dense_heads@67:0": "9a8698e44df86ab87ea184cb98400846576c74216d7beda906ba310874672146",
+        "branches@75:0": "1184386f36f6a721a9b1529c57b4f7b0c11e501f0e1af15efd7dd07e5d370454"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/query_vjp.py",
+      "sha256": "7fd3b5f249c3a48901cd2c4f165edc237597bb0755e90dd3f1c4608d93232e1e",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Private Read/Full roots, grouping, aliases, structural branches and publication.",
+      "symbol_sha256": {
+        "_rows@18:0": "902dfcbb28d11c9c8c5f70e648504a7174f43b59c57695bb55b5784f031bcad7",
+        "_signature@30:0": "86c44b9cd0eb5c3a87531797bbc14d5fd9fabfe697ba02f86407e0db9b071bbc",
+        "_signature.<lambda>@32:27": "145f1553f371143c06e19b716c24ec1e0c5f9acbc366d3ff46f222af7a42ba7d",
+        "_Query.forward@57:4": "c96e73e9779f3a68aa351c9440a9c55959119c5c3aa83d60fbb77a7baf9a6a23",
+        "_Query.forward.<lambda>@65:31": "eddf766739cba7394043071e36d9a2f9dfd31f4661952ca9edd0eb8c291190df",
+        "_Query.forward.<lambda>@66:37": "c33284219e33384dd9a4c8dd452647e575a42fe14308f99202b56100ab2c1085",
+        "_Query.backward@84:4": "9825506ff82c1efc95ef54c814b94eb96ffbf2044212c930709f18fa01d69711",
+        "_Query._backward@89:4": "fc9cd1d1d2eee8348cd0d26dc6eee82046237819d3fe8c60d38a7be294ea862e",
+        "evaluate@117:0": "1c84c13c278882172d194f14cb60213995eb0f74f04fc0253d7a4d16b05109a1",
+        "evaluate.keep@134:12": "a0aec86cdaf7ae95912b9e8846307e0987078ed822fedb31cc6ac20c7fd680fc",
+        "evaluate.capture@148:8": "d0910b5ccb9d36b335210021050632263ff473626068328dc01b84771ccf40aa"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/read_batch.py",
+      "sha256": "7e094673b145a1b881e2e6ce4af9c93e84aa0507cfbd47d68f441b5f29baea21",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Read initial binding, actual state memory and scalar versus dense Describe dispatch.",
+      "symbol_sha256": {
+        "evaluate@7:0": "04668d0161aa2bffa8ec3c6866036d3e970682a2eaab1433baf5df041e72437c"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/recurrent.py",
+      "sha256": "56223aae6b01a15a8cf7ea49b12d138469c48c41f67792ce0228e7da10916207",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Scalar recurrent binding, raw H/Z/W/time ownership and branch-specific formulas.",
+      "symbol_sha256": {
+        "RecurrentMemory.packed_sequence@20:4": "0394585e6b48358caf85f638fe790e2ea3210fb9fcfa11afcdd2198e872fef42",
+        "RecurrentMemory.batch_autograd_key@24:4": "73639ecc6f323639b8e18ce6da8b3fd888fa7dbb9a3a14aba7724ea2df37ddb1",
+        "RecurrentMemory.content_autograd_keys@27:4": "0117e4d25beba631396bbe3bb6af4dc8f851e14a87bb9ea9cf8292b43c653dce",
+        "RecurrentMemory.sequence@31:4": "03e6a4ccfb4555d1c8d54d04f8c14d8aee17ace92aecc041a4b319171e4fd150",
+        "RecurrentMemory.__init__@35:4": "0dc43326baf33fc69f880830dedd5fe1c97ee5bd2029fc5253aa038f4b169078",
+        "RecurrentMemory.initial@46:4": "d0970c428a3e4797dc3711c6a49ca81b73884380e4b6226241b0f53b747eeebd",
+        "RecurrentMemory.cache@57:4": "b4162467617282e2b84cd1c67279898acf4729ed76b6dcc32a6dd615d8c8cdff",
+        "RecurrentMemory.current@60:4": "0f62945d4c76ba2762a23d44ebfd6bac9aeea108af8e81bf446b4ddf765aa514",
+        "RecurrentMemory.effective@63:4": "f5e3fe13cf2610af7be3299785a9fc212d27cebc811175e4e4ee0fa646561b57",
+        "RecurrentMemory.step@74:4": "8c7060bfb7eb98a11e195533109d299a877b2574ddeb730a1e86c40793a32d6b",
+        "RecurrentMemory.mem@90:4": "38c46dc7caa7a63c2db95ed4faf8659188579e6971bb34432c0784ce8586af2f",
+        "RecurrentMemory.validate@97:4": "25299af1b6251dc0712b025bade0154b4bf98ce9c894f751c27e8c7b21726d9c",
+        "BasicMemory.__init__@116:4": "cc03e1c8b8c66b6078a2c5185cc5bd435b55caf625f49d12ae60f3592c637624",
+        "BasicMemory.update_matrix@129:4": "c8156118a6f44f607632bfe514acdc938b9db78bdf062944869f8459a515e021",
+        "BasicMemory.mem@140:4": "7b6b889407ecc45fb0a9bcca0821c20fc4d1440e5e309b9d75275af0c1bd5af2",
+        "RecurrentContent.__init__@149:4": "094e0f0fbda1eaa56d145d68bcf6ad7e72e393fd4286bb33a60074ecf131ee6a",
+        "RecurrentContent.finish@156:4": "7df602f81343a4b849cf0a7319acd17321c61515cd9916f36136b6497eaa2763",
+        "BasicContent.__init__@164:4": "cec38de6ed9d322c3e161843b9c5c8c7d438b75ef63ace0df7dac14a256f59cb",
+        "BasicContent.forward@169:4": "266216cf8dc059632dc7e4e5b5deeb3da3ff42d88ef42f5058af4841d97b4610"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/recurrent_packed.py",
+      "sha256": "e3d72d6abb6ade8becdf3f2b973da8150303d56a0b3289b468d59472d94b4f2d",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "B/time coefficient preparation and scalar/matrix scans with intermediate raw states.",
+      "symbol_sha256": {
+        "basic_coefficients@13:0": "9782526495d03588c8855252d224291ea19e969d786aa08d9d26b2ea4be91525",
+        "packed@31:0": "620ab51ea9f99af0f7996577177d6396f45a3a8c2ee60327e321e6d682bc50e6"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/ssd.py",
+      "sha256": "2e37cc722d88e2581b30f6f980c31c96076a813d562130f6c398891ea27abe0c",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "SSD grouped heads, scalar coefficients, Read/Full/update and raw state.",
+      "symbol_sha256": {
+        "SSDMemory.__init__@9:4": "d850c2cfc74fad2280ad66e7047023c7409233df6176cd6527942495571b5112",
+        "SSDMemory.features@16:4": "83db98b69ed22a5ef2738f1964135f5f29f5d21635c963a8a41ad9d9c5861be3",
+        "SSDMemory.update_matrix@26:4": "ab5cfae54320d08b489b1eea918a9b93516037c882a945002224db9ea2719254",
+        "SSDMemory.matrix_read@32:4": "53bebc86b466e36d2506cee78958c0937b75c2852580d30fcd7846c6cb963503",
+        "SSDContent.__init__@39:4": "b8336b22871ffaf039e8697c75fe01546144092ed85dd385a7dcd6bd1c142c13",
+        "SSDContent.forward@46:4": "b78fb1866eceb3f1517b547956775aba843c4a26834e3151f2834a7eff5b154d"
+      }
+    },
+    {
+      "path": "tests/test_state_batched_vjp.py",
+      "sha256": "10ff615ab4b3bbb47b0956c9dfd8000efb920e1691a264706718cba0490e503c",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Generic independent state rows, None/zero/shared parameter and sequence roots.",
+      "symbol_sha256": {
+        "test_mixed_slot_cotangents_and_frozen_rows@13:0": "8d9e342799013f9ddbb5ee3fd9ce0ec0ac8d5b9bbc1cd45e9e30c1f4fb7afb56",
+        "test_mixed_slot_cotangents_and_frozen_rows.root@22:4": "75f39197b0533ffb7071966a827dd20d6b97a243c310d31668e88c4504c89161",
+        "test_state_vjp_rejects_higher_order@33:0": "146523f14eb817ea9ac02d6fdabe55a74cdaf3b3f68bbc889f460baf063409be"
+      }
+    },
+    {
+      "path": "tests/test_weighted_convolution.py",
+      "sha256": "b1b245e2cae70053fc070acf0b10496a30519c39c2a8fe6db117241247b295fa",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Original int64 convolution slots, cache/read/write and gradient tests.",
+      "symbol_sha256": {
+        "example@7:0": "ba15dd9963759f1b0c7ed5c4329145276a7706269397b4f081077d44a1651899",
+        "test_fixed_time_textbook_weak_event_and_snapshot_equality@14:0": "4cf8f5f6dcf8ad2a8f99fc90ae9c2b450b89b7130004720c33673cae2dd29a38",
+        "test_sparse_residues_large_int64_and_exact_expired_cache@33:0": "b9334afeebda38a354c78df170a0af9ba1b3a1bc252742f78ac911fbb38cec0c",
+        "test_fixed_time_equals_dense_causal_convolution_and_vjp@49:0": "a35d2d2c717c1668f51eb6c84f69db4c1e564335e03dd6e3dcb698c491eaf6ea"
+      }
+    },
+    {
+      "path": "tests/test_weighted_packed.py",
+      "sha256": "601c8a65c602a956a3a585c2ebfdbe66e3b2016ebd06babe843d7b1eb7e655ce",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Packed state decode, original time, zero/positive writes and sequence checks.",
+      "symbol_sha256": {
+        "binding@23:0": "0076cd2be3eeac96593ce35a1be9e05b8a38e60b39f8d016547f916428b04918",
+        "test_ragged_positive_prefixes_preserve_raw_zero_and_int64@34:0": "ab2569849a6c2ecc283d503bba02669818316dce01fa3c01c6270d7d2a5b34ca",
+        "test_ragged_positive_prefixes_preserve_raw_zero_and_int64.forbidden@51:4": "24f96fe273afa7dc4d614f2193b24cf32d5a2411014032b8399a079898ae743d",
+        "test_noncommuting_affine_scan_and_direction@67:0": "645bfe9c5c938b3bfdb83cdd0a23821ed69f0088bf62bd7069f84fd436a02bab",
+        "test_literal_recurrent_positive_prefixes@81:0": "e750b88cb2e14a72feb072437e1f065dce651111c51a59faf85a61a70bed5fa2",
+        "test_joint_graph_ragged_samples_complete_records_and_independent_roots@102:0": "e3cbd4c04897143962830569d6b3cb083b16c7d09bbe31a61a9aa971be6fb258",
+        "test_joint_graph_ragged_samples_complete_records_and_independent_roots.<lambda>@109:92": "9aa1736391d1407c56b27da133e2088ee232a9f2cb9fa44a6ac18fa27b6deaf7",
+        "test_joint_mixer_independent_dense_convolution_formula@133:0": "cfab74b1c121ffe9ac234bdf0a219a4410a32618a3eb43f57d1c25a3c28a6606",
+        "test_no_positive_writes_and_observation_capacity@152:0": "43c59d1325b528bfbee44fea9c91f5d10371fa00bf1880c9e9bdc29d06c0a643"
+      }
+    },
+    {
+      "path": "tests/test_weighted_read_batch.py",
+      "sha256": "3d33a04f0d37fae202897efc896ffc60b487b0c75c804572a101eb8e3e67db42",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Complete Describe fields, initial/old/proposal snapshots and Full/query batching.",
+      "symbol_sha256": {
+        "fixture@19:0": "7ae6efe981768f270e7306c5616ea3e6ce0afb5df334b889ee9376ae8ecbf601",
+        "test_describe_all_memories_and_field_layout@47:0": "a801715de98a12895a7a67324eeccd6fdbdb19cc55a3d44c8d23d34e1a64bbe0",
+        "test_describe_all_memories_and_field_layout.forbidden@52:4": "6c2ceea9b4342eedcc856aa9ff150de7bca2c4a7f52e1b9de4267df27249a837",
+        "test_full_comparison_batch_broadcast_and_unscaled_payload@64:0": "0177343e55e2d040a77047dfea53fa7c743c580fbd0cb14cf238045c99960ed9",
+        "test_full_comparison_batch_broadcast_and_unscaled_payload.forbidden@72:4": "4ca7e98f141fc32aa3cc51c5e533d35be3f3486262c83944bad8c4dcbdd904f1",
+        "test_joint_queries_complete_records_and_autograd_boundary@91:0": "708c91a9e00e8da7fc303ec76cfb79ca5431b388e6d52c10989e870eac08a66f",
+        "test_joint_queries_complete_records_and_autograd_boundary.<lambda>@105:90": "1479d317e7dab79a28c7cd9af05043ba054e72b899779d05e8fa0cf6ece35642",
+        "test_joint_queries_complete_records_and_autograd_boundary.forbidden@116:8": "414e7873ca700b7f3484c9110a2cb7a8068ffe735a783f12a1e3fe85dc96355f"
+      }
+    },
+    {
+      "path": "tests/test_weighted_recurrent_formulas.py",
+      "sha256": "1b8134ba9701a43a64aa2f09fbb2b974be5d14fbc8e3081463f80801cefe361a",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Independent literal recurrent/GDN/SSD formula anchors and roots.",
+      "symbol_sha256": {
+        "local@15:0": "48a81de67a3f982bbddab445f68f2b3c45e77559f9d00477a866f1e977f231e4",
+        "inverse_silu@23:0": "473df6cb1c2df6ca98b2b69138b24a5f37618b100dcd2f58fb0c86214a04ed30",
+        "test_recurrent_textbook_scalar_examples@33:0": "be7a002e12ee8ba10a2e472f783f2f1b3ef22bb03fd5d9aa90074f3f9028e5dd",
+        "normalized@76:0": "9c770b86d5a6128736585d5f7a89c062b35fb59c261b1b9ffc131651437fb712",
+        "dense_reference@80:0": "f219c00c7805ddd5b5dbd42bdd8b0a5d2fec8837f1510671e1828cbe983bb645",
+        "test_full_dense_mixer_correspondence_and_all_parameter_vjp@126:0": "ec2fb50cef7fecaec3166d470bcb0f2d756294cf9d96048bddc8c8bf23b651e9",
+        "test_recurrent_weak_zero_and_original_time@145:0": "d2c175ffe989f658341010fb6d6cf7c8fa4c60d0876c02b1e3b1d9481e04bd1b",
+        "test_recurrent_local_directional_derivative@168:0": "60de0349693b5c7e6749380a422eba1938f70f3a25dba51ef6b93bb9e32d31fd",
+        "test_recurrent_local_directional_derivative.value@174:4": "8390f54d6f39774d868f1623ae5881ed18a04a5c6cd938497df328c92cea2a41",
+        "test_recurrent_local_directional_derivative.perturb@183:4": "c796664c9a116b84de087d20b5aea5d08d80ea43da811dc7825632d93506132c",
+        "test_recurrent_configuration_applicability@192:0": "9ac280e9b068c148d1e185ff5af08258c032bd0f8cf856d5cdeb28b95be6fc1f",
+        "test_basic_matrix_equations_general_width_and_vjp@201:0": "5f2a8d06778cab57c727dd9c8e5f8e5215335de578c2cf89aa722ac9a85e6b03",
+        "test_independent_read_snapshots_and_unselected_state_retention@239:0": "a2c8057199bdc548f292ef3d1d93160d2dc6586069abe60d6ca995a953862d80"
+      }
+    },
+    {
+      "path": "tests/test_weighted_state_vjp.py",
+      "sha256": "9dd1d9e25b67ebfd0a71c968bb9461c3cb7fc5c065e83e6e1d10a02822fa32ae",
+      "symbols": "*",
+      "reviewer": "autograd_census agent, integrated by root",
+      "evidence": "docs/evidence/recurrent-interface-audit-20261110.md#review-scope",
+      "scope": "Independent recurrent State/parameter roots and batched backward tests.",
+      "symbol_sha256": {
+        "fixture@24:0": "26779a46a54b976d5aaf0b90772b975b8a66581d1acffb0ed9a74ccae83d8640",
+        "test_weighted_independent_slots_mixed_zero_rows_and_empty_cache@43:0": "a8fc8a71a4c907c01455f1ddf7d8e57fdff3ffd7d97f6115e2ffa8d174970c79",
+        "test_weighted_independent_slots_mixed_zero_rows_and_empty_cache.forbidden@49:8": "2d24fe15b057bf58d088a383bac460dba09969f44359641c1956d73b4096a375",
+        "test_weighted_independent_slots_mixed_zero_rows_and_empty_cache.<lambda>@52:17": "605dd9d49c36406945ff3e2e8da84f40836bb464ede8e17fae76be3e5302f8e5",
+        "test_weighted_independent_slots_mixed_zero_rows_and_empty_cache.mixed@63:4": "c84acb4e76715f3d24d042f592ecd2fca12751362cb4e6a6b80a4c80de82a75d",
+        "test_nested_shared_parameters_are_captured_once_and_accumulate@73:0": "014761dc1ede6dcf92394bd49827996f29f5410e8f64132eae31f82102e49689",
+        "test_nested_parameter_version_and_first_order_boundary@89:0": "ea38ae50783798c04fe16cecd7a05f922f12211e2a316ce8019dbb791d82537e"
+      }
+    }
+  ]
+}

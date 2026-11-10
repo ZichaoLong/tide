@@ -4,11 +4,18 @@
 #include <tuple>
 namespace weighted_benchmark::return_copy {
 namespace {
-at::Tensor scalar(const at::Tensor& x){return tide::communication_copy(x.detach(),at::Device(at::kCPU),x.scalar_type()).clone();}
+at::Tensor scalar(const at::Tensor& x){
+  auto host=tide::communication_copy(x.detach(),at::Device(at::kCPU),x.scalar_type());
+  return x.device().is_cpu()?host.clone():host;
+}
 }
 void group(const std::vector<Row>& rows){
   if(rows.empty())return;
-  if(rows.size()==1){for(auto* output:rows[0].outputs)*output=scalar(rows[0].value);return;}
+  if(rows.size()==1){
+    const auto host=scalar(rows[0].value);bool first=true;
+    for(auto* output:rows[0].outputs){*output=first?host:host.clone();first=false;}
+    return;
+  }
   std::vector<at::Tensor> inputs;for(const auto& row:rows)inputs.push_back(row.value.detach().reshape({-1}));
   const auto source=at::cat(inputs);const auto flat=tide::communication_copy(source,at::Device(at::kCPU),source.scalar_type());int64_t offset=0;
   for(const auto& row:rows){

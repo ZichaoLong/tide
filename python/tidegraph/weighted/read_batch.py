@@ -8,7 +8,7 @@ def evaluate(program, weights, requests):
     if not requests:
         return []
     memory = weights.kernel
-    from .query_execution import dense, packed, dense_heads
+    from .query_execution import dense, packed, describe_mode
     states = [memory.initial(weights) if r.state is None else r.state for r in requests]
     times = [r.time for r in requests]
     from .private_rows import join
@@ -19,7 +19,7 @@ def evaluate(program, weights, requests):
         values = query(memory, states, times, u)
     else:
         values = memory_read(memory, states, times, u, dense=dense(program))
-    if dense_heads(program):
+    if describe_mode(program) == "batched":
         from .dense_describe import evaluate as describe
         return describe(program, memory, mass, u, values)
     result = []

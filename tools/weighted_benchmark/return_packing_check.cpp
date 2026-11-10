@@ -1,5 +1,6 @@
 // Literal detached-copy witnesses; independent of benchmark/model arithmetic.
 #include "return_packing.h"
+#include "tide/communication.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <iostream>
@@ -36,6 +37,16 @@ int main(int argc,char** argv){
       same(a,x);same(b,y);same(a,z);
       if(x.data_ptr()==z.data_ptr()||x.data_ptr()==y.data_ptr())throw std::runtime_error("returned fields share storage");
       x.fill_(1);same(a,z);
+      const auto before=a.detach().cpu().clone();
+      at::Tensor single,again,third;
+      tide::communication_statistics(true);
+      weighted_benchmark::return_copy::group({{a,{&single,&again,&third}}});
+      const auto transport=tide::communication_statistics();
+      if(transport.at("copies")!=(device.is_cpu()?0:1))throw std::runtime_error("one unique return copied repeatedly");
+      same(a,single);same(a,again);same(a,third);
+      if(single.data_ptr()==again.data_ptr()||single.data_ptr()==third.data_ptr()||again.data_ptr()==third.data_ptr())
+        throw std::runtime_error("single-row return aliases share storage");
+      single.fill_(3);same(a,again);same(a,third);same(a,before);
       std::vector<at::Tensor> copies{a,a,b,at::Tensor{},at::empty({0,2},o)};
       std::vector<at::Tensor*> fields;for(auto& value:copies)fields.push_back(&value);
       weighted_benchmark::return_copy::tensors(fields,true);

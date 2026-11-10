@@ -4,6 +4,13 @@ from .packing import project
 from .tensors import norm
 
 
+def supported(config):
+    """Descriptor algebra capability; independent of the memory/query family."""
+    names = ("local_score", "region_score", "selection_mode", "region_control_mode", "region_evidence")
+    return tuple(getattr(config, name, None) for name in names) == (
+        "cat", "ind", "regional_total", "context", "cat")
+
+
 def evaluate(program, memory, mass, u, values):
     short, long, ws, wl = values
     cur = norm(u, memory.config.epsilon)

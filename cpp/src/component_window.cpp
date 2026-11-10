@@ -38,8 +38,12 @@ Result Greedy::run_window(const Continuation& initial,const std::vector<External
       }
       if(blocks.empty())break;++stats["greedy_stages"];
       for(const auto& [region,frames]:blocks){
+        const auto before=fibers.size();
         auto events=evaluate_block(graph_,model_,q,frames,fibers,options_,pool_,stats);
-        for(const auto& frame:frames)for(auto node:frame.nodes)live-=fibers.erase({frame.batch,node,frame.time});
+        for(const auto& frame:frames)for(auto node:frame.nodes)fibers.erase({frame.batch,node,frame.time});
+        // Compact blocks consume their fibers during preparation; ordinary
+        // blocks consume them above. Count both once, before delivering new work.
+        live-=static_cast<Index>(before-fibers.size());
         ++stats["region_blocks"];stats["candidate_events"]+=events.size();
         stats["max_greedy_frames"]=std::max<Index>(stats["max_greedy_frames"],frames.size());
         deliver_batch(graph_,model_,events,options_.packed,stats,[&](const Atom& atom){

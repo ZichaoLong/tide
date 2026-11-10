@@ -107,3 +107,13 @@ core-3已验证的Full/Aggregate批量反向收益见[对应经验](performance-
 当前自定义查询Function也有内部私有autograd图，外层Function数不足以衡量构图成本。
 下一次诊断分别统计外层/私有节点和边、保存Tensor逻辑字节/去重存储、实际反向执行与
 嵌套grad调用；同时记录唯一KV写入及重复前缀/投影。统计方法见[对照与归因](../.agents/skills/optimize-tide-execution/references/comparisons.md)。
+
+## 区域接口中的重复装配
+
+[06b242e区域审阅](evidence/region-batching-audit-20261110.md)把同一经验定位到分配边界：
+native批量矩阵通过逐行`[j]`交给显式VJP，2/17帧的真实反向分别执行4/34次完整评分/cap矩阵
+SelectBackward及2/17次完整标量字段SelectBackward。矩阵已批量求值仍可能在边界重复清零/装配。
+改用整字段`unbind`可把这些转置合并，同时保留每行None/零和实际KKT分支；共享温度常量
+不必按帧重建。节点ID只供排序族使用，应只在适用域内一次上传完整组。
+Python数值层已经取回的支持也可随只读发布复用；发生dtype cast后仍须重新核对支持。
+这属于可独立验证的局部机制，不自动说明端到端提速；固定后端与计时证据另列。

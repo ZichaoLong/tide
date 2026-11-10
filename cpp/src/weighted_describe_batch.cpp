@@ -9,7 +9,7 @@
 namespace tide::weighted::query {
 using namespace detail;
 namespace {
-template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense){
+template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,const std::vector<ReadInput>& requests,const Config& c,const RegionalConfig& r,int dense,bool batch_describe){
   if(requests.empty())return {};
   RECORD_FUNCTION("tide::stage::describe", std::vector<c10::IValue>());
   op_profile::Scope stage_profile(op_profile::QueryMath);
@@ -21,7 +21,7 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   std::array<Tensor,4> memories;
   if constexpr(std::is_same_v<Config,KVConfig>)memories=memory(w,states,times,input,c,dense);
   else memories=memory(w,states,times,input,c);
-  if(dense && r.local_score=="cat" && r.region_score=="ind" && r.selection_mode=="regional_total"
+  if((batch_describe||dense) && r.local_score=="cat" && r.region_score=="ind" && r.selection_mode=="regional_total"
       && r.region_control_mode=="context" && r.region_evidence=="cat"){
     using packed::project;
     auto cur=normalize(input,c.epsilon),p=project(cur,weight(w,"kernel.summary"));
@@ -31,8 +31,10 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
       weight(w,"read_program.score.hidden_bias"))*weight(w,"read_program.score.vector")).sum(-1);
     auto evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
     auto recv=masses.clamp_max(1),mu=(r.gamma_max*recv).clamp_max(1);
+    // One split transpose per field; preserve distinct public field/row roots.
+    auto recv_rows=recv.unbind(),mu_rows=mu.unbind(),score_rows=score.unbind(),evidence_rows=evidence.unbind();
     std::vector<TensorFields> result;
-    for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv[i]},{"mu",mu[i]},{"score",score[i]},{"evidence",evidence[i]}});
+    for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv_rows[i]},{"mu",mu_rows[i]},{"score",score_rows[i]},{"evidence",evidence_rows[i]}});
     return result;
   }
   std::vector<TensorFields> result;
@@ -61,6 +63,6 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   return result;
 }
 }
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r,int dense){return evaluate(w,requests,c,r,dense);}
-std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r,int dense){return evaluate(w,requests,c,r,dense);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const KVConfig& c,const RegionalConfig& r,int dense,bool batch_describe){return evaluate(w,requests,c,r,dense,batch_describe);}
+std::vector<TensorFields> describe(const NodeWeights& w,const std::vector<ReadInput>& requests,const RecurrentConfig& c,const RegionalConfig& r,int dense,bool batch_describe){return evaluate(w,requests,c,r,dense,batch_describe);}
 }

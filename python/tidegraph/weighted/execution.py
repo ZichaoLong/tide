@@ -25,7 +25,7 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
         query_execution = "legacy"
     if query_execution not in {"legacy", "auto"} and (not packed or streaming or workers != 1):
         raise ValueError("dense-v1 requires packed prefill with one worker")
-    from .query_execution import execution_view
+    from .query_execution import execution_view, describe_mode
     model = execution_view(binding.model, query_execution)
     options = dict(packed=packed, aggregate_autograd="batched" if packed else "replay",
                    full_autograd="batched" if packed else "replay")
@@ -47,9 +47,12 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
     else:
         options["component_window"] = algorithm == "window"
     modes = [getattr(n.read_program, "query_execution", "legacy") for n in model.nodes]
+    heads = [describe_mode(n.read_program) for n in model.nodes]
     def run(*a, **kw):
         result = schedule(binding.graph, view, *a, trace=kw.pop("trace", trace), **options, **kw)
         for mode in ("legacy", "dense-v1", "packed-v2"):
             result.stats["query_"+mode+"_nodes"] = modes.count(mode)
+        for mode in ("scalar", "batched"):
+            result.stats["describe_"+mode+"_nodes"] = heads.count(mode)
         return result
     return run

@@ -1,0 +1,649 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "06b242eef2a203a950e30ced9b50d5c6d1cb8a73",
+  "meaning": "Actual source/contract review at fixed source. C++ manual_symbols are explicitly selected human-reviewed ranges, not exhaustive parser enumeration. Runtime evidence and changes are separate.",
+  "files": [
+    {
+      "path": "cpp/include/tide/block.h",
+      "sha256": "0a26540f31230a07586084cba3769df84afacf4c577338c78a5680188f969bf5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Block preparation and causal advancement interface declarations."
+    },
+    {
+      "path": "cpp/include/tide/communication.h",
+      "sha256": "2e68e6ef40864aa9937b24895b11f88535f3f5e928ff2838a891709db5de7d84",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Frozen communication policy, counter and copy interface defaults."
+    },
+    {
+      "path": "cpp/include/tide/kernel.h",
+      "sha256": "dad2d786bd2315f275f9a35bfc860429c733ca235b34e6d8609d00c03e5e5dc4",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "StateKernel batch/sequence/preparation/VJP capabilities and default fallbacks."
+    },
+    {
+      "path": "cpp/src/block.cpp",
+      "sha256": "7c6937cbe43a32cbe2bca41f7dc04e0feeef98b6153ff09a331557b938334d3c",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Stable event/sequence/frame collection, compact consumption and batch aggregate/state/Full calls.",
+      "manual_symbols": [
+        {
+          "name": "tide::evaluate_block",
+          "line": 18,
+          "end_line": 90,
+          "sha256": "4f4da081cf095eb5a602f6082e0c81e83220d455e77c873101e89553903ea8bc"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/block_prepare.cpp",
+      "sha256": "58e82aee1b9745ecf9fbbb7b09397e08be51e81356c641bbec342496b973f11b",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Node-wise B\u00d7L packed preparation, hidden versus causal step VJP and read readiness.",
+      "manual_symbols": [
+        {
+          "name": "tide::prefill_states",
+          "line": 12,
+          "end_line": 94,
+          "sha256": "4fea8584fe7e50adfca4f914083a60304780f68fe9e6d9be49b21ae6356a662a"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/block_step.cpp",
+      "sha256": "03026dfbdd9854df4813c71ac3e242433e77cd05d238632d4ff6b707fcc3a79f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Chronological commit waves, history-independent cross-time selection, Next batches and release.",
+      "manual_symbols": [
+        {
+          "name": "tide::advance_block_events",
+          "line": 14,
+          "end_line": 134,
+          "sha256": "40d8a197c359027772206cca19da9c8f53a77d502641cd55e8c6a0f980ae79c6"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/communication.cpp",
+      "sha256": "7502796f3a3cb64974f98b57dfb52ea943554531f87e6752ee5a7555642f8e9c",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Actual copy ownership, same-device return and observable transfer counters across policies."
+    },
+    {
+      "path": "cpp/src/component_plan.cpp",
+      "sha256": "99b0548be4c155c3cd3c21506c750e20647c2484d7de24a2bc2cf61492a02a5c",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Independent iterative SCC plan and internal closure ownership; only static topology cached.",
+      "manual_symbols": [
+        {
+          "name": "tide::ComponentPlan::ComponentPlan",
+          "line": 4,
+          "end_line": 33,
+          "sha256": "f2b01020f78ed51f2666677089411fa1df3bfd0e387d57b1b7982f57f380587e"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/component_window.cpp",
+      "sha256": "292c437ac6009a800615a0d334608cebfb0d8cbc6ae71c485b22c0c6737443e2",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Region-SCC window runtime; global live-fiber accounting with compact early erasure found incorrect.",
+      "manual_symbols": [
+        {
+          "name": "tide::Greedy::run_window",
+          "line": 11,
+          "end_line": 65,
+          "sha256": "e706160508e83d8ca52d1df3bb565349f1d938c476807aea727c676c1f53b40f"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/delivery.cpp",
+      "sha256": "103565b9d6611f956eb44eeddc6153a3736cd8553b81f2970c4d654ae426a1c4",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Physical edge identities, actual weighted broadcast aliases and bounded remote row copies.",
+      "manual_symbols": [
+        {
+          "name": "tide::prepare_delivery",
+          "line": 7,
+          "end_line": 49,
+          "sha256": "51af02100932cc9f2c33c2e642ce7d6c08c5ed2fa6a05361acbbbd7f22a95a10"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/greedy.cpp",
+      "sha256": "547d4808719dab1f2a950e2e346f95ec4c280504a353a99315d5764b6462bd76",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Explicit options and independent online closure schedule; current local blocks and physical return ordering.",
+      "manual_symbols": [
+        {
+          "name": "tide::Greedy::Greedy",
+          "line": 16,
+          "end_line": 31,
+          "sha256": "30e4a460aa2a55997c83431bbc1f2faf38fe203b46362e67ee1e3095d19816c4"
+        },
+        {
+          "name": "tide::Greedy::run",
+          "line": 32,
+          "end_line": 81,
+          "sha256": "0a094f2e7f7546e5d490fe09896deb949659214f18c79ba7f914c6adc093d6c5"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/greedy_plan.cpp",
+      "sha256": "69a60a578ec35ceb451a5b6c25ba9fc89783aacf683cf2887bf677e1245a4592",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Positive-delay closure without floating time conversion; actual seeds and deterministic prefix frames."
+    },
+    {
+      "path": "cpp/src/state_preparation.cpp",
+      "sha256": "e686784a18c4823026a5b86db7dea90574a7f1b7d5745b4921067aa9c5ff11bc",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Block/shared/private preparation gates, deterministic key-group order and borrowed state lifetime.",
+      "manual_symbols": [
+        {
+          "name": "tide::prepare_shared_state",
+          "line": 9,
+          "end_line": 66,
+          "sha256": "f30c54639f4878859eba5c3da5cc0679498ee8bf7572d0f5ce4af426ef695041"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/state_vjp.cpp",
+      "sha256": "1327fd9e5543397d97f35bf70fc5d178ce180252fd8f0f60180a1b160d1e293b",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Private State autograd nodes, exact signatures, per-row publication and depth-wise sequence VJP.",
+      "manual_symbols": [
+        {
+          "name": "signature",
+          "line": 39,
+          "end_line": 54,
+          "sha256": "bf15da7de377172312ed58e2f1fbb5202cadc9aaf50f638ce3bc1fa1e5b1ea54"
+        },
+        {
+          "name": "bind_group",
+          "line": 104,
+          "end_line": 161,
+          "sha256": "e3094ce01fc2cbf2944205f340f094f6c34aa59c90efdb0773a6e6e5d6569a04"
+        },
+        {
+          "name": "tide::state_batch_vjp",
+          "line": 163,
+          "end_line": 186,
+          "sha256": "03d93e6f19e3d77032b77a9f2fd33449a3fd76a7c10c2e40b171a2ae0ede44c3"
+        },
+        {
+          "name": "tide::state_sequence_vjp",
+          "line": 187,
+          "end_line": 209,
+          "sha256": "51b664d1a212598115cbad2372772ac2b098b040da4a89c15e9f28aed3969ed6"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/stream_support.cpp",
+      "sha256": "aa7bf116e85aa95f79a54f1c172478b8d775c2095e89baab81f1ea0ff06d80e5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Compact event ownership, deterministic region publication and event release; not the entire streaming scheduler.",
+      "manual_symbols": [
+        {
+          "name": "tide::compact_stream_events",
+          "line": 7,
+          "end_line": 29,
+          "sha256": "ededbb65026f58549d5720cb2446ffaab05a6c89d54b3eacfcfe1a0f88e6da1f"
+        },
+        {
+          "name": "tide::parallel_stream_regions",
+          "line": 31,
+          "end_line": 57,
+          "sha256": "25e2843f2bbe14d7f80f4e4d1685ccb7564c540d3e7d75834edcebcd691eec3f"
+        },
+        {
+          "name": "tide::release_stream_events",
+          "line": 59,
+          "end_line": 66,
+          "sha256": "4a08bef4c295b60f11ec7e0aa4db4648fb88181b965748a896d0674d83587b10"
+        }
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_full_batch.cpp",
+      "sha256": "3b7174a3b3080b0c5d6daf1456d9708b0250614d7c23a85e9f97c8fdb5a06df9",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Selected query/recurrent Full batch numeric assembly and row/slot emission API.",
+      "manual_symbols": [
+        {
+          "name": "mix(KVConfig)",
+          "line": 11,
+          "end_line": 35,
+          "sha256": "313c3e4b1cfd0df22a3033fe1bc043fc5f89b6688a63146ca8f79c7372737c89"
+        },
+        {
+          "name": "mix(RecurrentConfig)",
+          "line": 36,
+          "end_line": 55,
+          "sha256": "007af28859a7e817e95ba29d6e7c1de47ebacb99cbd516eebc746641b34235ec"
+        },
+        {
+          "name": "evaluate<Config>",
+          "line": 56,
+          "end_line": 72,
+          "sha256": "9433bad98ddf44d7a41cb632681fd8a1571fa6a3a31bf7982faad0a4af69ddee"
+        },
+        {
+          "name": "full(KVConfig)",
+          "line": 74,
+          "end_line": 74,
+          "sha256": "b74ca87f3c850962e0755f4f449139aad8867d3b708eabb52ff51ab7393e470f"
+        },
+        {
+          "name": "full(RecurrentConfig)",
+          "line": 75,
+          "end_line": 75,
+          "sha256": "6f7f812579c329c0321472f1f7ced8b10f14f6c8e0b9df16732c37d888086fc2"
+        }
+      ]
+    },
+    {
+      "path": "python/tidegraph/aggregate_sharing.py",
+      "sha256": "70878850631abe6f5aba2258771769d3f1a388bf9a6d8a6d76cee37b49457ece",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Pure sharing-key representatives, independent physical sources and content return.",
+      "symbol_sha256": {
+        "evaluate_shared@11:0": "61ad9c2e6f0e61072e9102ee8bbb7a04e723f38b8937af1763b031dfaaf4430c"
+      }
+    },
+    {
+      "path": "python/tidegraph/block_policy.py",
+      "sha256": "917aec39b24f81be8771692b7673f04eb61f76555de3040dbc23b42a855ab516",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Explicit aggregate/Full batch-autograd gates and unsupported policy rejection.",
+      "symbol_sha256": {
+        "validate@2:0": "8a133ec144bd0f772cc1e5a3a03ffb3ed709808890f55bdb9682567e90527282"
+      }
+    },
+    {
+      "path": "python/tidegraph/block_steps.py",
+      "sha256": "23ad8038d1617f7dc7162670e63bbf04321470ee22648e0eac3cf8aab9c5d6b7",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Causal tick batching by node across samples; exact sequence/read capabilities and fallback counts.",
+      "symbol_sha256": {
+        "prepare_tick@9:0": "de985dbaef60d96077fbeecde069eb21c88e0b401e0d38d292b4b1ff92faba4e"
+      }
+    },
+    {
+      "path": "python/tidegraph/blocks.py",
+      "sha256": "2908aa9085b0f4c5a1c9138e8c4f7b73496f1384f81ff53468908a1fcdddfa58",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Event/frame/sequence grouping, preparation, causal adoption/Next, cross-time region gate, Full and delivery; repeated indexing finding.",
+      "symbol_sha256": {
+        "evaluate_block@14:0": "938e4eefee16419c1ba06638444eb12229d6688b5217f2350e30c6b8ba1653ed",
+        "evaluate_block.<lambda>@28:68": "573085b1766e82dd265d6623bcb654dd3e52f948bc737c445607ce4036a30453",
+        "evaluate_block.batch_select@85:4": "37a4dd9cafe6f4c7a16c9538a08ffc310db72d4b681666c81e54f89de5a0d587",
+        "evaluate_block.can_batch@95:4": "c0255dd2695ad664b9f0a8df71bf1faa03cdd35f001b4b555a316e07c941afd6",
+        "deliver@173:0": "257c3af515209f2a105cddf1e0d59d2a39b50394b715573c634ad5cc81f4f1ab",
+        "canonicalize@198:0": "095b025e88d5481fc1f03beb6791521b2ba795fedc1e8b8b8dc5d170ca2b2e36",
+        "canonicalize.<lambda>@199:26": "11bad9d40aa2714a560b2abdc786eff2d6534309c9c8a84016ba975b75d71285",
+        "canonicalize.<lambda>@200:28": "045054740a4d7875b5ed97a76291fe712f6337333e985f0004fc5f90475a9113",
+        "canonicalize.<lambda>@201:29": "13713a8558320306222a131041e631d2f2a91764f42bfea4dfc74cef07cb4cb9",
+        "canonicalize.<lambda>@202:41": "6bd91c2520bcbbefa6cc68dbafbf43de5b03c151aa44bf492e96d51766ee3bf3"
+      }
+    },
+    {
+      "path": "python/tidegraph/experiment/returns.py",
+      "sha256": "a4abfdb4600fd7aaab279e90d624b6f9dc50f17031b7cf7c665b3a4294ed8b83",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Actual detached CPU snapshot, duplicate occurrences, bounded groups and single-unique transfer finding.",
+      "symbol_sha256": {
+        "_map@8:0": "916a4c56d4d04190959609218f158471e34acf6586e3d5290089a555231ab256",
+        "_scalar@20:0": "3161724d390c0ab5899fc4e05b84d624f78b370ab0b4354cb0c384cff8f8f8d7",
+        "_tensors@27:0": "237601141c60cb0d45ff2729a86df1a63d8d5255b4143374c6ac9dd3f03300ee",
+        "_copy_group@41:0": "7dc4c6323932ad559c55c183f91033ccbcf9a97e184e80699947a01d5e818b3c",
+        "snapshot@59:0": "3aee5d98eef789484acaf0bdbe7736e16b651982b875edadca1617c3e1dfedee",
+        "snapshot.<lambda>@89:23": "478ac234cd4081b99d12605bab2969b8cd9e0a7a597c0e34b8159c0723590679"
+      }
+    },
+    {
+      "path": "python/tidegraph/full.py",
+      "sha256": "607574f1c54df0c308b74958ac99f09efb76e28fa8d6dfd65f8decabb0c44e03",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Joint numeric/gradient Full versus scalar replay, emission slots and result validation.",
+      "symbol_sha256": {
+        "FullProgram.batch_grad@28:4": "f74117eef56b3cb6a881012782f8ba1b5832ffb53ead93df06fbe4e6bc924d0d",
+        "FullProgram.step@31:4": "797a5b1d9d6f3588a546b7fc685e031b0d63f51f4b28eb9d57c3ca494611de3b",
+        "FullProgram.batch@34:4": "e2a299120d5b9958d51281911ac22bb3b041bb6bd3c5e2bddd0b8aa2eed17174",
+        "ProjectionEmit.batch_grad@42:4": "d22a8087b2df413507321d15268fbdb7a07ef8e416bfa45c233f48fc43f49e77",
+        "ProjectionEmit.__init__@46:4": "f8109a6f6aafce652efa5f74e54c4afaf22b2fecf5de00f73992e931e6aa0ea8",
+        "ProjectionEmit.present@55:4": "bdd3b5c2b442e7b46d31f526aa8353fd80bb65cd0fda44f32ac66f7dc8be7374",
+        "ProjectionEmit.step@59:4": "0d628bb2e5515fb3b5b1b23ab730080a12facd4ba7a868a0dee840e714c5c65b",
+        "ProjectionEmit.batch@77:4": "5890aeab4ce793d0dc1b14ab8e23d4adf428921971a2b16ade366126e18521bc",
+        "validate_program@101:0": "63205cd7d5c9557902002b224603c9c887b407c14574006b91ad04cc3a3c773c",
+        "validate@123:0": "e127d54be23aeef47fa2c7190f57c3e87610060ff1134e9a9d1fcf56e47664cc",
+        "bind@133:0": "5f405916ed8e13baa2fc7964618934ed599b8b6c5052960f43a0c7a3060b9de7",
+        "evaluate@142:0": "9748e64f2c3e02c192a2ac0dc3ebb456c4c66ef1cf01f2b39bdc45f875c7230c"
+      }
+    },
+    {
+      "path": "python/tidegraph/greedy.py",
+      "sha256": "d38f9ba50083b1c356330df8913ceb9e39a2419a024f605fe21cca7679e2fe62",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Stage certificate, region block dispatch, actual message delivery, pending/capacity and canonical return.",
+      "symbol_sha256": {
+        "run@15:0": "f06e645e5728ceb250efa7f387bd1be9c6f58cbd8dd45c516b7a63fd1da9c88d"
+      }
+    },
+    {
+      "path": "python/tidegraph/greedy_plan.py",
+      "sha256": "81b1791ad18818f9b657a9925c0ea45788f536b60a9b3f23c6650a89b7d89a20",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Positive-delay closure from actual fibers, saturated bounds, deterministic chronological frames; no value prepass.",
+      "symbol_sha256": {
+        "ClosurePlan.__init__@15:4": "a59cd7a2762df1097b4a2c1752f7da2765bfd27ad6c2838f5b0c18cdcf587bcf",
+        "ClosurePlan.ready@30:4": "41a211b770f53e7e2bdba3450b0167afc5ef0e9275cd95b14af856e97a8203c8",
+        "ClosurePlan.ready.<lambda>@69:71": "59b50fb2d2297574963b34e60c9ca516714f44569ca7e3d1fe2063b9b7a52b0b"
+      }
+    },
+    {
+      "path": "python/tidegraph/history.py",
+      "sha256": "87e6c4b3a784c3d1a970d6759236eae604969aa7e822fc7d7f0333b00b7cd4c0",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Copied metadata versus borrowed differentiable tensor ownership and exact integer counters.",
+      "symbol_sha256": {
+        "int64@6:0": "5414123d91819469bd09e20d6169624d6970a346987de33b6ef93367169700ac",
+        "increment@10:0": "5926cd47ff883eb7d3e1c34f70c29416f779216840ec72ecf548ec7dad1f8a76",
+        "History.fork@23:4": "d7bc35627c0933f74b283cd7db54cc6c2e284b02612614bd70d9106a06000f4c",
+        "History.detach@27:4": "52deba5b7319bbe1c19e2ac3e9312dba7702ac38175c750c73ed454a61854a4c",
+        "validate@31:0": "157b899a50bf438b45982e4fe77b4a5b05d75a8d3f40d9da334abbe1a8615c63"
+      }
+    },
+    {
+      "path": "python/tidegraph/memory_batch.py",
+      "sha256": "23192a77fe0de061a3204810f213512a9c4355e0485a83e13a2d9265bc89c861",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Equal-length [time,batch,width] scan grouping and state publication.",
+      "symbol_sha256": {
+        "diagonal_batch@9:0": "06a3432f8f13c361c74952604e8d4465964a4c2df459d1826b43c2835aadbdfe"
+      }
+    },
+    {
+      "path": "python/tidegraph/next.py",
+      "sha256": "7c5dc73ce60eb0ccf3b6fe8816d6ca3376e98e9112e1d669903705e26c4e3a77",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Identity versus control-blend persistent transition, validation and selection reset.",
+      "symbol_sha256": {
+        "NextProgram.step@22:4": "966bd19fb8875e8a5a86922e3964f8b4a4ecd46ce48d2e54d7665f41a98d0397",
+        "AdoptNext.step@30:4": "5114ebe7907af50d255483c3194cae0b1d9957666f98be93b7d2219c41e1602f",
+        "ControlBlendNext.step@37:4": "9cd82e0da05a621ddfb558c1044dd11c88704965846db32d72c6c6d61b31d068",
+        "program@47:0": "75c70bd2b4fc900325f7403ff93565416c3794e70af129f5e834f40c08d16d2e",
+        "validate_program@55:0": "ed2eb48f84928cf6d67d36e560cf56c7c8b51a8d249914eb242f482b200bc015",
+        "validate@63:0": "7e606902a8930fd6f94217b2c0740d45d9522bb04c63cb2020d4fb5f2b6ae617",
+        "evaluate@80:0": "4f644e8787f16c20f0cc60ebdf544fd56a1eda04e0877efb253a255d1ea9d59f"
+      }
+    },
+    {
+      "path": "python/tidegraph/packing.py",
+      "sha256": "6f2f2ca2f4ace91a91b3e36b40ef2fdada577ef9479352d565eb7590165fde22",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "PackedSequence layout validation, numeric sequence execution, hidden-sequence versus step VJP and descriptor boundary.",
+      "symbol_sha256": {
+        "PackedSequence.validate@17:4": "354f612aea409af5e521f752fa8f76f9ed6db59c68d965cdf7e175581c960aa8",
+        "prepare_sequences@35:0": "6b84187542dea0b5c6d5e89abb4289cc2ee37d556ee50efdfac661bfe9a2b0da"
+      }
+    },
+    {
+      "path": "python/tidegraph/read_vjp.py",
+      "sha256": "831d9ea53f2937414ecb07d564d4aa890945fd8fdc28804fd4c8a2450bb7bb40",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Independent row roots, linear/norm batched transpose and weighted-specific dispatch.",
+      "symbol_sha256": {
+        "_Read.forward@7:4": "9a114ad44cfdbe39ea339153813e4f96ac8f955f109e4e1e9ccba1c73fd695b3",
+        "_Read.backward@20:4": "6597836d5ec260774d1ea657863ea324ef13f9c03b5540783f49103fdd4eeed2",
+        "supported@49:0": "4e30a53092329a7d26a0ec525860c3eb9d5e2544b47bea7d9896c01837133ebf",
+        "evaluate@57:0": "7e1bad0dfc58c33a50bab4e676d67bdb76297dec198096aa89237288bb775b20"
+      }
+    },
+    {
+      "path": "python/tidegraph/readout.py",
+      "sha256": "8ddcfc2248312f8c5f7c71f1b157cfa384ee78a51d75c4ca8f9b712cba35a9c0",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Read snapshot choice, scalar/structured fields, numerical batch/gradient batch and finite checks.",
+      "symbol_sha256": {
+        "request@16:0": "ba11993906098b4a5cf2492ef8ea4bdbb26dedb88365599ca883fddafd42f0f7",
+        "ReadProgram.descriptor_device@31:4": "4cf3b99b7fb0f7f479673e76c4090fd8404df6f213f1a078dc1d4e979e0c4d48",
+        "ReadProgram.step@34:4": "966bd19fb8875e8a5a86922e3964f8b4a4ecd46ce48d2e54d7665f41a98d0397",
+        "ReadProgram.batch@37:4": "587fce0563afa95decfd4edefc7924244850881362a4e9a92578e1eedf20529f",
+        "LinearRead.__init__@45:4": "d30990b7eeaf43481ca935ab7665cfac803a28575f48d1525892a005862b5047",
+        "LinearRead.step@49:4": "54bd4f7091e971b7e195278ea2f2825ffc8c1f44d240394100399973e86cc625",
+        "LinearRead.batch@55:4": "17ef701b7c1c68ebcee068b2a7c6e331e38367607ee9ba66437e81827e70cb83",
+        "NormRead.step@67:4": "83bbf4efd782f2f462eae8cf7189aeba63ed8acf22810cfa9262df80184f5ae6",
+        "NormRead.batch@71:4": "e49c9f6878d41c282efd5a4bda642d08ae1ba0f9fe8bd59d5fc13e8f4744e914",
+        "NormFloat32Read.step@82:4": "262639bda240f1eeae2278b61334123c8a6a5e29ee7443fa98c69e59f0842f2b",
+        "NormFloat32Read.batch@86:4": "58a9aeee93e519ffb598ba7fa9e416a8c779e812911ea43d2da0151272aaea17",
+        "program@91:0": "e79532e286aa38379134abeb20de88c1fb9d80ec1ece1aba34518fb31b1709ad",
+        "validate_program@101:0": "890b577cdb314e3e6445d1e4584ba00687693e2dba5cf677d44d547b1e82a2c0",
+        "validate@116:0": "e3a22276a3af461e02a7b19494a814c10bd9fce5c907e4b7561a69ce6164297a",
+        "finite_batch@134:0": "513ee59543880018051703e33faf132b130a56eb267a7959a538ab17530c55d4",
+        "evaluate@142:0": "5406c4ce08d657922864a87496c86b8a6cb65e202d02029879793d299bfe1f0d"
+      }
+    },
+    {
+      "path": "python/tidegraph/records.py",
+      "sha256": "58a5a79cc6598683399bf31c3a1f2aecc14c1df53f28b350175471328b85c36f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Continuation fork/detach, states/pending/ledger lifetime and tensor alias semantics.",
+      "symbol_sha256": {
+        "Atom.key@34:4": "fdf5370e685e0698e69f38dad05ff4f88ae2b8861baaff9a59669e794dd355c4",
+        "Continuation.fork@48:4": "3535028de77e8a2197c0149cfe5292621fa321274ce85dcdec2fbf8b228cdb53",
+        "Continuation.detach@53:4": "bc216780e44bd2a0229b3607c13fcfe52e0965418fc18b4d076924211b4042ad"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_batch.py",
+      "sha256": "fee9bfbe7560793ef9467fb28359d86f96592fc9429196e0c9d06319ad73c741",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Independent local step batching and explicit per-row time metadata.",
+      "symbol_sha256": {
+        "step@7:0": "e5b3998b1e30f82effa942d5cd038a674650207d455f4d0ed8d420febc24ca77"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_preparation.py",
+      "sha256": "9cd64ac8fb5d3e61e7e9936a8d7a6fefa43d2c5411477e4ec3714a6491f39fb2",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Independent versus shared parameter/input preparation, whole-block capability and lifetime.",
+      "symbol_sha256": {
+        "prepare_shared@10:0": "421889b92b6265d4db6347432a0b864e6355b833001e159f20010336d0e56eb0"
+      }
+    },
+    {
+      "path": "python/tidegraph/state_vjp.py",
+      "sha256": "52bbf459b66db7a3dce1c90390889f640ccc96a76ad55a170cd10fd435e14a3f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Private step graphs, structural signatures, per-depth sequence binding and disconnected-root preservation.",
+      "symbol_sha256": {
+        "supported@14:0": "22b4380da7595335798ae82829be6797f9dac2ce1be020050f281e1d29d2730a",
+        "_rows@27:0": "554395b3a75470c0b4831f29d1bc288568abb84d5707fa946719d4b4ff94e72e",
+        "_weights@39:0": "5611b214ff1dfd35b9b29421cc0848090e52c7c4318072da97036ad9ce3ece42",
+        "_weights.capture@42:4": "f5cac5b5ecee7c68bbe9d9ae84a014ca7b4affd67686f7e44d115a602c66512a",
+        "_values@54:0": "7af845198310497f9f15fff95572818829e0eeb36a1f54973a384ab887faa21f",
+        "_signature@58:0": "91cacbd9d949255555a77fa755c14495abc3d53d8190dd381594f4c2a0941095",
+        "_signature.<lambda>@60:17": "7cd1235b3f53aa4b792029c61e5a7791d45ba4f5216b5b01012b5b2439aa79cd",
+        "_State.forward@69:4": "7267b1b490d2d1463c29fddd19a22e72abb2d84f91968d0d881de1b1aeba598e",
+        "_State.forward.<lambda>@74:36": "c4f0c8e4e8169681c1579281080d890603093faea085d7f735604144a30d5175",
+        "_State.forward.<lambda>@75:30": "93468959e65c57a16341aa8a7b5f00229bab7b5ddf1a7865f45f1ef877434936",
+        "_State.backward@96:4": "4810c54fc45c74ae229da96ceda361507e4087366cc40d64a216a76d4bf84ef5",
+        "bind_batch@122:0": "db24e5c1201d085900f9dbc9151e8a2f281858fdcd07d0ad30960dea367e1e9b",
+        "bind_batch.capture@135:8": "11d9c802a701a1baeec4f952fa8e5985b6131b5b1bec5325906476512819d47b",
+        "bind_sequence@147:0": "51a9e52eb457ce9de28694708c50a72ae3af805fec9912672f0a6e35c36a0033"
+      }
+    },
+    {
+      "path": "python/tidegraph/transfer.py",
+      "sha256": "18f4a87a3ccb0c422ee697eb4d7940b62c5391f7ed07f13a3abace2c755baac0",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Bounded remote row packing, actual transport policy and independent None/zero cotangents.",
+      "symbol_sha256": {
+        "_Rows.forward@10:4": "9829cebb93d99f58704cb42143e015934feebafb7c795dfb09ca29aab302e2de",
+        "_Rows.backward@19:4": "0bf967c5848ceb8ee24f94c89d292d1ce6e243b9f3faf940d1afe24e47cfac55",
+        "copy_rows@29:0": "7964e18decde11985a5a54a99f6e95b6efb9c5fc9d13d1b66734be2c368e7eda",
+        "deliver_remote@57:0": "474183b1e3eefa733a7f31032ed941ab196c72c1e77cdba6d00911a71a7eee55"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/execution.py",
+      "sha256": "87fedf0e61823bf000ca31e61d29bf92a809462a4fb99df062dfe84b5617e6a7",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Default component-window dispatch, explicit native/Python capabilities and full/aggregate batched training policy.",
+      "symbol_sha256": {
+        "eager_runner@10:0": "039af6ca66e3a28a5b6f85b1d70ac0d7dc4c13a8f9bcfce3e179d8b5d8157944",
+        "eager_runner.run@50:4": "16a939cddad967e838d5f03e947aa58d5e695a95ddfcd159e596a2973bd40984"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/full_batch.py",
+      "sha256": "7a1d76c5a934c2288243b9dab9ea4c73b41191132bbc0ebf9014f8bfaede27f1",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Selected B\u00d7L Full numeric assembly, KV visibility groups/recurrent functions and emitted row representation.",
+      "symbol_sha256": {
+        "kv@15:0": "ab1756f3a83a02c987d0afa65322cdf488e024a70743edb2aeea9d6c23c6c885",
+        "recurrent@42:0": "89a7c958a0883620c1e3dcddb93499521ccd0453a8a7204145451242092aedf2",
+        "evaluate@60:0": "eb427b9436558938c4ee803bda2a716c63612ce44d4f0ee6400ef147adae74e3"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/kv_block_preparation.py",
+      "sha256": "2a7508cc758d073f9f2d2669629233ac5c3303b40462e47869e232317ee510bd",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "B/time projection preparation with bounded chunks and exact parameter/input sharing.",
+      "symbol_sha256": {
+        "_private@14:0": "dbc27c3ba5a5e5b4906c5a265feb750eb4ec565f8b07ffd72114aab395579f21",
+        "prepare@18:0": "78ceea6385617bc7186bad2cf43f5657ab7037cc97100555f6a7cb61ab85be39"
+      }
+    },
+    {
+      "path": "python/tidegraph/weighted/parameter_tree.py",
+      "sha256": "36a7c4f322c9bdbfd5efefd81581e9e3ee0b21f2bc53a646738250840e544e47",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Private module rebind preserves registered tensor sharing and supported local family boundary.",
+      "symbol_sha256": {
+        "rebind@9:0": "07b1b1f610d22d287b2af24b82f849a2a5098c539c3af4478135edf6ef1962ad",
+        "rebind.tensor@12:4": "431612335318030df9471a112edcec70b4f51d51192a59e1c212a505391fb3e6",
+        "rebind.visit@19:4": "929a0e9e6b132b5bdb10a44b52a774b5e01692eee2032e86ac394c24c53ca2bc",
+        "supported@34:0": "10a2489ba0f099b5945d46c2a0d9608036a6586dbb446f1016f6fcc8ba5613dc"
+      }
+    },
+    {
+      "path": "python/tidegraph/window_plan.py",
+      "sha256": "c546d82eb4ffec4174490c75a4f9730710a380135c579414d0f60145c02d733a",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Static region SCCs, iterative analysis, component-local fibers and sealed-window readiness.",
+      "symbol_sha256": {
+        "Components.__init__@11:4": "85a68a1b19be9ebe16681341738ec2271b47ae0d69d93b68835d178d6087b458",
+        "ComponentFibers.__init__@53:4": "5649f8968e0f39c303d4b208f38513059f231b8c83ff78bdce83949e2f4f4677",
+        "ComponentFibers.__missing__@58:4": "43d5691031ef8a599884ae4b4bc3c8a5b5c6b71b73d423fe030ceb639695facc",
+        "ComponentFibers.__delitem__@63:4": "6ee83a79f19b6472c7b88c82c7f65e6447a13e91070f5f6135eec58b6cb7f6f2",
+        "WindowPlan.__init__@69:4": "716eab5dc22a89dc930cbcab28607830871a5c32cb4e2bf6c377522ffdea7563",
+        "WindowPlan.ready@73:4": "cd1428094847e1661c001ee26247e4f331ce687536bfffed122efb9c3d4a293e"
+      }
+    },
+    {
+      "path": "tools/weighted_benchmark/return_packing.cpp",
+      "sha256": "ca393e2b6ac8103d291bf8022ef096cbb79b66ad5592599a10a04201b91dfaff",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Standalone scalar/grouped return copy ownership and repeated single-unique transfer finding."
+    },
+    {
+      "path": "tools/weighted_benchmark/return_packing_check.cpp",
+      "sha256": "377d9ee4078ce450ff40431d678353891afe752ed437940b5449677de98692c2",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/scheduling-interface-audit-20261110.md#review-scope",
+      "scope": "Literal byte/metadata/private-storage checks and standalone device execution scope."
+    }
+  ]
+}

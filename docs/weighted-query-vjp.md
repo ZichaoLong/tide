@@ -31,6 +31,8 @@ Full 使用显式 `full_autograd="batched"`，默认 `replay` 仍可调用；unp
 Python设备autograd worker显式恢复仍活动的packing观测上下文；已关闭的观测不会接收后继反向，新的调用者上下文优先。该修复只改变观测，不改变局部函数或VJP。
 参数树中的 Tensor/模块别名保持；相同参数不同输入仍独立计算，所有使用者的梯度累加。
 每行保留自己的快照浮点槽、int64 非求导槽、content，以及 Full 的 control。
+默认发布采用[只读视图契约](tensor-publication.md)，独立梯度根不要求逐字段独立数值存储；
+需要修改返回值的消费者先clone。完整batch字段使用unbind解码，避免逐行SelectBackward装配。
 Read⁰ 使用真实绑定初态；Full 始终读本请求 comparison，不借用 Read 的快照。
 
 分组依据状态有无、槽名/形状、dtype/device/requires_grad 元数据，以及 KV 正权重

@@ -1,5 +1,9 @@
 # Adopted semantics and validation contract
 
+[只读张量发布](tensor-publication.md)定义内置weighted批量Read/Full/区域与KV State视图的
+软件所有权契约`readonly-view-v1`：数学值和独立VJP根保持，消费者原地修改前需clone。
+它不更改图/checkpoint版本，源码/安装身份与迁移说明区分旧的独立存储实现。
+
 [Shannon正支持数值模式](positive-support-policy.md)定义显式 `positive-floor-v1` 的最小次正规数存储、
 相对质量守卫、Aggregate/KV稳定求值及未补值响应的一阶VJP。默认strict和固定数学保持；
 新策略进入图/模型身份，checkpoint v5编码不变；旧strict与新模式不能冒称精确互续。
@@ -93,9 +97,11 @@ representation, not graph/checkpoint identity or the declared first-order map.
 See `test_private_rows`, query/region root tests and the FC16 cost contract.
 Ragged query snapshots retain separate private leaves: collecting every prefix
 in one column caused excess transpose traffic in the measured implementation.
-Query/region output publication may use foreach copies into separate allocations;
-it must not couple output storage or version counters. `test_independent_copies`
-checks exact values, resize/mutation isolation and unchanged independent VJPs.
+Built-in query/region outputs follow [read-only publication](tensor-publication.md):
+independent gradient roots can share numeric storage/version counters. Consumers
+clone before mutation. `test_independent_copies` checks explicit clone isolation,
+invalid live-mutation guards and unchanged independent VJPs; opt-in owned copies
+and public return-to-host records keep their separate isolation contract.
 
 Untraced prepared KV blocks may compose the internal State VJP over a whole
 sequence. Public messages, final states and input/parameter/left-state roots

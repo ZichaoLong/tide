@@ -29,7 +29,8 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
       reads.push_back(weighted_read(logits,values.select(2,h),weights,total));
     }
     auto combined=dense?at::cat(reads,-1):project(at::cat(reads,-1),weight(w,"full_program.content.out"));
-    for(size_t i=0;i<rows.size();++i)result[rows[i]]=combined[i];
+    auto pieces=combined.unbind();
+    for(size_t i=0;i<rows.size();++i)result[rows[i]]=pieces[i];
   }
   return c.alpha_att*(dense?project(at::stack(result),weight(w,"full_program.content.out")):at::stack(result));
 }
@@ -64,9 +65,10 @@ template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,con
   auto fresh=x+c.alpha_ff*project(at::silu(project(normal,weight(w,"full_program.content.gate")))*
     project(normal,weight(w,"full_program.content.up")),weight(w,"full_program.content.down"));
   auto payload=at::cat({private_rows::join(controls,true).unsqueeze(-1),fresh},-1);
+  auto values=payload.unbind();
   std::vector<FullResult> result;
   for(size_t i=0;i<requests.size();++i){
-    FullResult r{payload[i],{}};for(Index j=0;j<slots;++j)r.emitted.push_back({j,r.value});result.push_back(std::move(r));
+    FullResult r{values[i],{}};for(Index j=0;j<slots;++j)r.emitted.push_back({j,r.value});result.push_back(std::move(r));
   }
   return result;
 }

@@ -1,4 +1,4 @@
-"""Publication must preserve independent storage, versions and query roots."""
+"""Explicit owned copies and default read-only query publication boundaries."""
 import os
 import pytest
 import torch
@@ -27,7 +27,7 @@ def test_foreach_publication_keeps_bits_and_independent_storage(dtype):
 
 
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_query_output_mutation_does_not_change_other_fields_or_vjp(dtype, native):
+def test_query_output_clone_for_mutation_keeps_other_fields_and_vjp(dtype, native):
     from test_weighted_dense_query import independent
     from test_weighted_query_vjp import native_query
     from tidegraph.weighted.query_vjp import evaluate
@@ -39,7 +39,24 @@ def test_query_output_mutation_does_not_change_other_fields_or_vjp(dtype, native
     actual = (native_query if native else evaluate)(w.read_program, w, rows)
     objective = actual[1]["score"].square() + actual[2]["evidence"].square().sum()
     before = vjp(objective, roots)
-    # Ordinary batch views would share versions and invalidate objective.
-    actual[0]["score"].detach().resize_(100).fill_(42)
+    # Default records are immutable views; a consumer requesting mutation owns
+    # the explicit copy instead of forcing one allocation for every record.
+    actual[0]["score"].detach().clone().resize_(100).fill_(42)
     equivalent(actual[1:], expected[1:])
     equivalent(vjp(objective, roots), before, atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
+def test_readonly_query_publication_retains_private_version_guard(dtype, native):
+    from test_weighted_dense_query import independent
+    from test_weighted_query_vjp import native_query
+    from tidegraph.weighted.query_vjp import evaluate
+    w, requests, _ = independent(dtype)
+    w.read_program.query_execution = "packed-v2"
+    actual = (native_query if native else evaluate)(w.read_program, w, [requests[1]]*3)
+    loss = actual[1]["score"].square()
+    # Illegal live-result mutation must not silently use the corrupted private
+    # graph. Mutating a clone above is the supported migration.
+    actual[0]["score"].detach().add_(1)
+    with pytest.raises(RuntimeError, match="modified|version|inplace"):
+        loss.backward()

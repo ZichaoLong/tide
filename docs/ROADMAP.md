@@ -53,7 +53,9 @@
 
 ## 当前待办与重启条件
 
-- **接口、性能与架构统一实施（用户已授权）**：先建立仓库开发/性能/维护技能及审阅覆盖，采用独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3多种对照。接口服务性能/通用性/清晰和替换能力，历史兼容可显式迁移。优先唯一KV存储与B×L查询/伴随，沿调度、局部、搬运、检查、发布全面审视；相关小检查与有限代表规模回归分层运行。全部可用CPU/内存与空闲NPU可用，共享NPU须当前任务明确授权。原归因后继依据：[固定归因与资格](evidence/fc16-cost-attribution-20261110.md)已补同任务直接FC和同尺寸Transformer、真实TTFT、阶段计时及当前区域列/批量独立复制。1f3f62d当前FC16训练单步CPU17.497/NPU21.065秒；三客户端小型训练/恢复通过，CPU TTFT单次反升、共享NPU成本和完整尺度数值not_checked分列。查询全列候选撤回，134秒退化/取消记录保持。剩余差距集中于查询快照重复投影、行/字段根和反向装配/发布；本轮已授权推进块级状态/伴随接口及相关覆盖。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident的本增量规模回归未执行，沿用原提交证据，不能声称此次已全域防退化；本轮按改动影响有限补测。
+- **接口、性能与架构统一实施（用户已授权）**：仓库开发/性能/维护skills、分主题历史经验与固定源码审阅工具已交付。独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3对照各自保持验证范围。接口服务性能、通用性、清晰和替换能力，历史兼容可显式迁移。[1528df8固定资格](evidence/interface-snapshot-bank-20261110.md)交付实际共享KV bank与独立snapshot伴随、公共边界和census；CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail，三客户端小训练/精确恢复分列。FC16训练CPU1/NPU14.628/20.634秒；完整尺度数值未验，不宣称NPU普遍加速。
+
+  [调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)、[循环/Describe](evidence/recurrent-interface-audit-20261110.md)已完成具名范围审阅；范围重叠且未覆盖全仓库。正在集成实际在途容量修复、只读发布/字段unbind、区域重复工作消冗、五记忆Describe能力与公共返回传输去重；固定native/SDK/设备资格尚待。后继重点是循环逐时间VJP、卷积缓存重复扫描/守卫、unused recurrent分支、更多Describe候选批量化与仍展开的query×history伴随，按独立局部语义检查及有限成本推进，不穷举组合。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident旧证据仍保留原提交，本增量按改动影响补代表回归；不冒称全域防退化。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
 
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 

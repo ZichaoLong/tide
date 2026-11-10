@@ -1,0 +1,255 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "06b242eef2a203a950e30ced9b50d5c6d1cb8a73",
+  "meaning": "Manual source/contract review at the fixed baseline. Whole-file claims describe the stated audit lens; they are not device, numerical or performance qualification. C++ AST was not enumerated.",
+  "files": [
+    {
+      "path": "python/tidegraph/weighted/region_batch.py",
+      "sha256": "847d520355391f12cd585644035148c4931751cb8bf60279e40620b82767dc81",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Complete-row grouping, shared score/context heads, sending dispatch, redundant node IDs and support publication; selection placement boundary."
+    },
+    {
+      "path": "python/tidegraph/weighted/region_vjp.py",
+      "sha256": "d6ecb2a254ece60aa13ab71627b280eb31461a92263ae9886534be3efa7544ed",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Private column roots, parameter aliases, KKT/cotangent grouping, publication copies and duplicate support read."
+    },
+    {
+      "path": "python/tidegraph/region_metadata.py",
+      "sha256": "356f84a684859d2231e1d8d4442a12f7820d43762d7ccf041788abc2bd0a58b6",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Grouped detached flags, CPU/singleton paths and dtype/device order; scalar versus vector finite controls."
+    },
+    {
+      "path": "python/tidegraph/weighted/private_rows.py",
+      "sha256": "a1c7539767d33da806fc96819a74b9e012668dcbc2dbf85a7aed85937c79a21c",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Actual view joining, full-column private leaves, per-participating-row scatter and None/zero preservation."
+    },
+    {
+      "path": "python/tidegraph/weighted/allocation.py",
+      "sha256": "76800b776d5c48c99fc9a0365bddece20903af0b5bcdc8b4c265e8ad0ded7666",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Scalar validation, quadratic transition coordinates/solve, actual-response exact-map VJP, singleton branches and refusal domains."
+    },
+    {
+      "path": "python/tidegraph/weighted/allocation_rows.py",
+      "sha256": "a9c21b1e1fc9119a1030ef7647786267646fcf7221a7fd0a0b572c6336c8f994",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Per-row public roots over numeric batches; shared constants, stack/clone boundaries, branch-specific connectivity and failure row mapping."
+    },
+    {
+      "path": "python/tidegraph/weighted/allocation_batch.py",
+      "sha256": "f8d39ece4bc9ece21e3ae52e7d29b4b73a1a73006f92bbd8c3593c8ef06e47e8",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Batched quadratic/entropy root numerics, guards, response preservation, support/residual rejection and per-iteration host live reads."
+    },
+    {
+      "path": "python/tidegraph/weighted/quadratic_coordinates.py",
+      "sha256": "bd9c8417b9b6f4e693ab70c620d7d04927038aaafca622a05aff059dbe2ed473",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Stable cap-quantile pivot and local transition band; fixed terms versus real support."
+    },
+    {
+      "path": "python/tidegraph/weighted/regularizers.py",
+      "sha256": "add2161dfd372c6b06f3e95fd9022a2185eab30d860289a00ce1b157baaceea3",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Response/inverse/derivative/support maps for quad, bern and ent; boundary and overflow treatment."
+    },
+    {
+      "path": "python/tidegraph/weighted/sending_batch.py",
+      "sha256": "65a6c6bfbf59249d7f72167574c08a00ee8d3c08dbdbd24a9a6611b8e73c2ea6",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Batched attention/proportional/sorted sending and VJPs; stable int64 ties, fractional sequential remaining subtraction and disconnected score roots."
+    },
+    {
+      "path": "python/tidegraph/weighted/scoring.py",
+      "sha256": "85c2f3a56c07dcda2d0da28cc28cb5ece34c9b1c9da4f3c995ddbac98d195311",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Shared-weight leading-axis scoring/encoding/query formulas and repeated aliased-encoder evaluation."
+    },
+    {
+      "path": "python/tidegraph/weighted/dense_describe.py",
+      "sha256": "825ff3d70eef8cb831a2767fdc0d19d8552a3726293a83b917f20d1484902090",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Actual batch current/score/evidence projections, fields and independent returned views in the baseline optimized combination."
+    },
+    {
+      "path": "python/tidegraph/weighted/read_batch.py",
+      "sha256": "7e094673b145a1b881e2e6ce4af9c93e84aa0507cfbd47d68f441b5f29baea21",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Prepared memory to Describe handoff and scalar fallback across non-default formal configurations."
+    },
+    {
+      "path": "python/tidegraph/weighted/query_execution.py",
+      "sha256": "9e3b27f51b482243f246c2432eae2ba4e4731525152847491088f1469ae73014",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Capability dispatch and restricted dense-head combination; structural branch and batch metadata ownership."
+    },
+    {
+      "path": "cpp/src/weighted_region_batch.cpp",
+      "sha256": "ecee21315ab43474f04d6f1e2d6d40512ac2e417f4fb9ec75780aadd008b91b8",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Complete-region numeric batch, unconditional per-frame node uploads, row selects into allocation, heads and support publication."
+    },
+    {
+      "path": "cpp/src/weighted_region_vjp.cpp",
+      "sha256": "3dbb847863acf5ea829a3d7d5074b2549108d17f84c5c9c3c1584b5cda316bbd",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Private column roots, parameter aliases, actual branch grouping, nested gradients and output publication; no complete C++ symbol-enumeration claim."
+    },
+    {
+      "path": "cpp/src/region_metadata.h",
+      "sha256": "c4d52eef3ddf4b0fd055d74a4f3ceb0b2d8609ece98d3387740a36a756cf6a86",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Grouped detached flag reads, per-value finite predicates and stable metadata reconstruction."
+    },
+    {
+      "path": "cpp/src/weighted_allocation_rows.cpp",
+      "sha256": "e6b0615e9a8eb18bff2b3d7729d7d214f28370e792597d6f7b43c2716fc1442a",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "AllocationBatchVjp exact-map formula, per-row inputs/outputs, actual branches, shared parameter contributions and observer boundaries."
+    },
+    {
+      "path": "cpp/src/weighted_allocation_batch.cpp",
+      "sha256": "2302957d31aa84f9458abc809ea90bcbedf18c729be1b3056c7de9a62180e64d",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Independent batched bisection and quadratic correction, every-eight-iteration convergence read, value guards and failure snapshots."
+    },
+    {
+      "path": "cpp/src/weighted_quadratic_coordinates.h",
+      "sha256": "6dba9d43b54db6113500909fcf7b84ed05136cdc1c76b433708acb5dc6cf10eb",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Stable cap-weighted quantile pivot used by native quadratic batch solver."
+    },
+    {
+      "path": "cpp/src/weighted_regularizers.h",
+      "sha256": "cf9a4362260b957350b916d9ffd776299881ef28cc6e388e69f76a90283ddee5",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Response, inverse bracket and derivative maps; preserved positive-support and saturation semantics."
+    },
+    {
+      "path": "cpp/src/weighted_sending_batch.cpp",
+      "sha256": "950877885c90d86657eec69b84375bf4f0569274f80f7eb63e364da2e0300ce6",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Independent batch attention/proportional/sorted formulas, exact ID ties, sequential fractional fill and first-order VJPs."
+    },
+    {
+      "path": "cpp/src/weighted_scoring.cpp",
+      "sha256": "6f05fd8628d65c750adff9e27cb93ff9c311fcf8def9a3a7ccba1e45eb0fbaed",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Native scalar encoder/score/evidence/key/query functions and shape validation; repeated aliased-encoder evaluation."
+    },
+    {
+      "path": "cpp/src/weighted_describe_batch.cpp",
+      "sha256": "cee9005acab8953a2d24b1847eee530cae86f90977bb14e128962050122b0d95",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Shared-memory batched entry, restricted dense descriptors and per-request fallback projection path."
+    },
+    {
+      "path": "cpp/test/weighted_region_batch.cpp",
+      "sha256": "df68e90c0a6321b2ea818d748b3fcb24914415cfadc1ef6645e0146df5f3acce",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Literal exact controls/VJPs, unused row roots, stable fractional/hard fill and bool metadata witnesses."
+    },
+    {
+      "path": "tests/test_region_metadata.py",
+      "sha256": "65f4dbcceb17d67ca68097348942cfe2884883860530ef2641e6b6441eb331a8",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Literal metadata, malformed/empty/vector controls, cast support rejection and independent gradient roots."
+    },
+    {
+      "path": "tests/test_weighted_region_batch.py",
+      "sha256": "cfe0f0f85cff3e7c8a8847d845524ba2ea2a61a1281b7df47d8ce26dfb0a7ab0",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Formal-combination scalar anchors, complete output/control roots, zero roots, aliases, versions and first-order refusal."
+    },
+    {
+      "path": "tests/test_prefill_local_batches.py",
+      "sha256": "b83085f50304149a02336e75beab1280bec1cb03596b08aa3f8c8aff464c533a",
+      "symbols": "*",
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Last-row guard refusals, bounded scalar reads and literal evidence derivatives versus measured projection submissions."
+    },
+    {
+      "path": "python/tidegraph/weighted/programs.py",
+      "sha256": "1b2b06abe9fc80aba15656280c8e5e4ff0bb60749bfadd0f1caf697cd84b943e",
+      "symbols": [
+        "Describe.batch@69:4",
+        "Describe.__init__@73:4",
+        "Describe.features@103:4",
+        "Describe.inputs@106:4",
+        "Describe.memory_key@115:4",
+        "Describe.step@120:4",
+        "Describe.describe@128:4",
+        "RegionalTotal.batch@160:4",
+        "RegionalTotal.batch_grad@164:4",
+        "RegionalTotal.__init__@168:4",
+        "RegionalTotal.validate_weights@176:4",
+        "RegionalTotal.validate_history@181:4",
+        "RegionalTotal.total@185:4",
+        "RegionalTotal.context@192:4",
+        "RegionalTotal.scores@197:4"
+      ],
+      "reviewer": "repo_skills agent, integration by root",
+      "evidence": "docs/evidence/region-batching-audit-20261110.md#review-scope",
+      "scope": "Selected Describe methods and RegionalTotal constructor/head/query methods only; other program families and the scalar sending dispatch are outside this claim."
+    }
+  ]
+}

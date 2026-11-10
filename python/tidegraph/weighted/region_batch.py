@@ -27,7 +27,12 @@ def evaluate(program, requests, *, dependencies=None):
         from .private_rows import join
         fields = {name: torch.stack([join([requests[i].candidates[j][1][name] for i in rows], stack=True)
                   for j in range(len(requests[rows[0]].candidates))], 1) for name in names}
-        nodes = torch.tensor([[v for v, _ in requests[i].candidates] for i in rows], dtype=torch.int64, device=device)
+        # Only stable sorted sending consumes node IDs. Continuous allocation
+        # and normalized sending operate on the original candidate order.
+        mode = c.selection_mode
+        nodes = (torch.tensor([[v for v, _ in requests[i].candidates] for i in rows],
+                              dtype=torch.int64, device=device)
+                 if mode == "regional_total_zero" or mode in HARD else None)
         recv, caps, scores = fields["w"], fields["mu"], fields["score"]
         if c.region_score == "att":
             weights = fields["w" if c.query_weight == "received" else "mu"]
@@ -39,7 +44,7 @@ def evaluate(program, requests, *, dependencies=None):
         if c.region_control_mode == "context":
             z = (recv[..., None]*fields["evidence"]).sum(1)/received.clamp_min(1)[:, None]
             context = program.head(torch.cat((z, received.log1p()[:, None], mass.log1p()[:, None]), 1))
-        mode, shift, values = c.selection_mode, None, None
+        shift, values = None, None
         if mode in TOTAL:
             low, high = received.clamp_max(1), mass.clamp_max(c.k)
             rho = context.sigmoid() if context is not None else received.new_full(received.shape, c.total_fraction)
@@ -66,7 +71,7 @@ def evaluate(program, requests, *, dependencies=None):
         if values is None:
             try:
                 allocations = allocate_batch(list(scores.unbind()), list(caps.unbind()), list(low.unbind()), list(high.unbind()),
-                    c.allocation_temperature, regularizer=c.regularizer, ent_alpha=c.ent_alpha,
+                    scores.new_tensor(c.allocation_temperature), regularizer=c.regularizer, ent_alpha=c.ent_alpha,
                     score_shift=None if shift is None else list(shift.unbind()), support_policy=c.support_policy)
             except AllocationFailure as error:
                 error.row = rows[error.row]

@@ -43,7 +43,9 @@ void bind_weighted(py::module_& module){
     configure_node(w,c,r,SourceClasses{edges,inputs},alpha);
   });
   module.def("configure_weighted_region",&configure_region);
-  module.def("configure_weighted_query_execution",&configure_query_execution);
+  module.def("configure_weighted_query_execution",&configure_query_execution,
+             py::arg("weights"),py::arg("mode"),py::arg("batch_describe")=false);
+  module.def("weighted_query_execution_selection",&query_execution_selection);
   module.def("weighted_node_binding",[](const NodeWeights& w){
     auto binding=node_binding(w);py::dict result;
     result["memory"]=py::cast(binding.memory);result["regional"]=py::cast(binding.regional);

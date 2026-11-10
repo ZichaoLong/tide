@@ -41,8 +41,8 @@ versions across optimizer steps. State/checkpoint decoding reads actual slots;
 it does not call a reference recurrence. Returned State slots may share storage:
 treat them as immutable while a graph is live, and clone before external mutation.
 Explicit detach preserves the existing truncated-gradient boundary and does not
-promise storage isolation. Message/descriptor publication remains independently
-owned according to its separate contract.
+promise storage isolation. Built-in query/region publication follows the
+[read-only view contract](tensor-publication.md); explicit owned exports remain separate.
 
 `tests/test_snapshot_bank.py` checks literal projection values/derivatives,
 overlap/gaps/empty intervals, independent roots, partial/zero cotangents, ignored

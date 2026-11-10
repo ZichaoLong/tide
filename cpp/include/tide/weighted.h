@@ -5,6 +5,7 @@
 #include "tide/region.h"
 #include "tide/source_class.h"
 #include <array>
+#include <map>
 #include <optional>
 #include <variant>
 
@@ -69,7 +70,10 @@ struct NodeBinding {
 };
 NodeBinding node_binding(const NodeWeights&);
 // Select before placement. Dense-v1 has an explicit KV/qry/cat/ind/quad domain.
-void configure_query_execution(NodeWeights&,const std::string& mode);
+// batch_describe permits head-only batching with an explicitly legacy memory query.
+void configure_query_execution(NodeWeights&,const std::string& mode,bool batch_describe=false);
+// Inspect configured memory-query and Describe-head implementations separately.
+std::map<std::string,std::string> query_execution_selection(const NodeWeights&);
 RegionalConfig region_binding(const RegionWeights&);
 bool same_configuration(const KVConfig&,const KVConfig&);
 bool same_configuration(const RecurrentConfig&,const RecurrentConfig&);

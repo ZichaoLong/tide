@@ -21,8 +21,8 @@ struct Features {Tensor raw,query,key,value,gate,delta;};
 Features features(const NodeWeights&,const States&,const Times&,const Tensor& u,const RecurrentConfig&);
 std::array<Tensor,4> memory(const NodeWeights&,const States&,const Times&,const Tensor&,const KVConfig&,int dense=false);
 std::array<Tensor,4> memory(const NodeWeights&,const States&,const Times&,const Tensor&,const RecurrentConfig&);
-std::vector<TensorFields> describe(const NodeWeights&,const std::vector<ReadInput>&,const KVConfig&,const RegionalConfig&,int dense=false);
-std::vector<TensorFields> describe(const NodeWeights&,const std::vector<ReadInput>&,const RecurrentConfig&,const RegionalConfig&,int dense=false);
+std::vector<TensorFields> describe(const NodeWeights&,const std::vector<ReadInput>&,const KVConfig&,const RegionalConfig&,int dense=false,bool batch_describe=false);
+std::vector<TensorFields> describe(const NodeWeights&,const std::vector<ReadInput>&,const RecurrentConfig&,const RegionalConfig&,int dense=false,bool batch_describe=false);
 std::vector<FullResult> full(const NodeWeights&,const std::vector<FullInput>&,Index,const Options&,const KVConfig&,int dense=false);
 std::vector<FullResult> full(const NodeWeights&,const std::vector<FullInput>&,Index,const Options&,const RecurrentConfig&,int dense=false);
 }

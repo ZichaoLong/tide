@@ -60,15 +60,16 @@ class Aggregate final:public AggregateKernel {
 };
 template<class Config> class Describe final:public ReadKernel {
  public:
-  Describe(Config c,RegionalConfig r,int dense=false):c_(std::move(c)),r_(std::move(r)),dense_(dense){}
+  Describe(Config c,RegionalConfig r,int dense=false,bool batch_describe=false)
+    :c_(std::move(c)),r_(std::move(r)),dense_(dense),batch_describe_(batch_describe){}
   bool structured() const override{return true;}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   std::vector<TensorFields> fields_batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
-    return query::read_vjp(w,requests,c_,r_,dense_);
+    return query::read_vjp(w,requests,c_,r_,dense_,batch_describe_);
   }
   std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
-    return query::describe(w,requests,c_,r_,dense_);
+    return query::describe(w,requests,c_,r_,dense_,batch_describe_);
   }
   FieldLayout field_layout(const NodeWeights&) const override {
     FieldLayout result{{"w",{}},{"mu",{}},{"score",{}}};
@@ -104,7 +105,9 @@ template<class Config> class Describe final:public ReadKernel {
   }
   Config configuration()const{return c_;}
   RegionalConfig regional()const{return r_;}
- private:Config c_;RegionalConfig r_;int dense_;
+  int query_mode()const{return dense_;}
+  bool batched_describe()const{return batch_describe_;}
+ private:Config c_;RegionalConfig r_;int dense_;bool batch_describe_;
 };
 template<class Config> class Full final:public FullKernel {
  public:
@@ -154,7 +157,7 @@ NodeBinding node_binding(const NodeWeights& w){
   if(auto c=recurrent_configuration(*w.kernel))return inspect(w,*c,*aggregate);
   throw std::invalid_argument("node binding requires installed weighted memory");
 }
-void configure_query_execution(NodeWeights& w,const std::string& mode){
+void configure_query_execution(NodeWeights& w,const std::string& mode,bool batch_describe){
   require(mode=="auto"||mode=="legacy"||mode=="dense-v1"||mode=="packed-v2","unknown query_execution");
   auto binding=node_binding(w);auto* c=std::get_if<KVConfig>(&binding.memory);auto r=binding.regional;
   if(mode=="dense-v1"){
@@ -169,10 +172,24 @@ void configure_query_execution(NodeWeights& w,const std::string& mode){
   }
   const bool automatic=mode=="auto"&&c&&(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble);
   const int execution=mode=="packed-v2"||automatic?2:(mode=="dense-v1"?1:0);
-  if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,execution);
+  const bool head_capability=(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble)
+    &&r.local_score=="cat"&&r.region_score=="ind"&&r.selection_mode=="regional_total"
+    &&r.region_control_mode=="context"&&r.region_evidence=="cat";
+  require(!batch_describe||head_capability,"batched Describe requires FP32/FP64 cat/ind regional_total context/cat");
+  const bool heads=(mode!="legacy"||batch_describe)&&head_capability;
+  if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,execution,heads);
     w.full_kernel=std::make_shared<Full<KVConfig>>(*c,execution);}
-  else {auto rc=std::get<RecurrentConfig>(binding.memory);w.read_kernel=std::make_shared<Describe<RecurrentConfig>>(rc,r);
+  else {auto rc=std::get<RecurrentConfig>(binding.memory);w.read_kernel=std::make_shared<Describe<RecurrentConfig>>(rc,r,0,heads);
     w.full_kernel=std::make_shared<Full<RecurrentConfig>>(rc);}
+}
+std::map<std::string,std::string> query_execution_selection(const NodeWeights& w){
+  auto selected=[](const auto* read){
+    require(read,"query selection requires installed weighted Describe");
+    return std::map<std::string,std::string>{{"memory",read->query_mode()==2?"packed-v2":read->query_mode()==1?"dense-v1":"legacy"},
+      {"describe",read->batched_describe()?"batched":"scalar"}};
+  };
+  if(auto* read=dynamic_cast<const Describe<KVConfig>*>(w.read_kernel.get()))return selected(read);
+  return selected(dynamic_cast<const Describe<RecurrentConfig>*>(w.read_kernel.get()));
 }
 bool is_describe(const ReadKernel& kernel){
   return dynamic_cast<const Describe<KVConfig>*>(&kernel)||dynamic_cast<const Describe<RecurrentConfig>*>(&kernel);

@@ -61,6 +61,27 @@ def test_literal_packed_copy_is_byte_exact_and_each_occurrence_is_private(device
     exact(a, original); exact(original, outputs[2])
 
 
+@pytest.mark.parametrize("storage_dtype", [torch.float32, torch.int64])
+def test_single_unique_value_transfers_once_but_exports_private_occurrences(device, storage_dtype, monkeypatch):
+    from tidegraph.experiment import returns
+    values = [2**55+7, -1, 0] if storage_dtype == torch.int64 else [0., -0., float("nan")]
+    value = torch.tensor(values, dtype=storage_dtype, device=device)
+    before = value.detach().cpu().clone()
+    copies, scalar = [], returns._scalar
+    def copy_to_host(tensor):
+        copies.append(tensor)
+        return scalar(tensor)
+    monkeypatch.setattr(returns, "_scalar", copy_to_host)
+    outputs = [None]*3
+    returns._copy_group([(value, [2, 0, 1])], outputs)
+    assert len(copies) == 1
+    assert len({out.untyped_storage().data_ptr() for out in outputs}) == 3
+    for out in outputs:
+        exact(before, out)
+    outputs[0].fill_(9)
+    exact(before, outputs[1]); exact(before, outputs[2]); exact(before, value.cpu())
+
+
 def test_full_snapshot_preserves_none_layout_and_original_autograd_roots(device, monkeypatch):
     import weighted_benchmark_return as returns
     monkeypatch.setattr(returns, "PACK_BYTES", 32)

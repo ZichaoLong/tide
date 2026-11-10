@@ -310,3 +310,8 @@ KV §2–4的同一实际历史存储/Read K,V投影复用见[快照bank](weight
 `snapshot_bank`/`weighted_snapshot_bank`按真实存储区间去重，显式VJP保留每个快照独立根，
 `test_snapshot_bank`以字面矩阵公式及scalar/未复用路径核对；因果None/零与恢复仍由
 `test_kv_sequence_vjp`定位。它不改变完整trace的中间State根或checkpoint实际解码。
+
+主架构§3的Describe与Mem能力分派分别由`query_execution`/`weighted_programs`声明，
+`dense_describe`/`weighted_describe_batch`保留完整字段与独立根；
+[查询契约](weighted-dense-query.md)及`test_weighted_describe_capability`覆盖五记忆、
+共享参数和逐字段VJP。值与可变存储不是同一契约，迁移见[只读发布](tensor-publication.md)。

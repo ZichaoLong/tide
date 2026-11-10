@@ -51,8 +51,11 @@ def memory(memory, states, times, u):
             logits = (k*q[:, None]).sum(-1)/math.sqrt(c.summary_width)
             v = layout.project("values", memory.read_v)
             values = tuple(read(logits, v, w, t) for w, t in zip((short, long), totals))
-        for j, i in enumerate(ids):
-            output[i] = tuple(t[j] for t in (*values, *totals))
+        # One transpose node per field; per-row indexing would create one
+        # whole-batch SelectBackward zero/assembly for every returned row.
+        rows = zip(*(t.unbind() for t in (*values, *totals)))
+        for i, row in zip(ids, rows):
+            output[i] = row
     return tuple(torch.stack([row[j] for row in output]) for j in range(4))
 
 
@@ -74,8 +77,8 @@ def full(program, memory, states, times, u):
             logits = (k*q[:, h, None]).sum(-1)/math.sqrt(d)+c.distance_slopes[h]*displacement
             reads.append(read(logits, values[:, :, h], weights, total))
         mixed = torch.cat(reads, -1)
-        for j, i in enumerate(ids):
-            output[i] = mixed[j]
+        for i, row in zip(ids, mixed.unbind()):
+            output[i] = row
     return project(torch.stack(output), program.out)
 
 

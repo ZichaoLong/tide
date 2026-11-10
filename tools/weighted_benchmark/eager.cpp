@@ -42,11 +42,10 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   if(query!="legacy"&&query!="auto"&&payload_devices.size()>1)
     throw std::invalid_argument("explicit query execution requires a single payload device");
   for(auto& node:data.model.nodes){
-    auto resolved=query;
-    if(query=="auto")resolved=std::holds_alternative<weighted::KVConfig>(weighted::node_binding(node).memory)
-      &&(node.bias.scalar_type()==at::kFloat||node.bias.scalar_type()==at::kDouble)?"packed-v2":"legacy";
-    if(!scalar&&batch&&workers==1)weighted::configure_query_execution(node,resolved);
-    ++query_counts["query_"+resolved+"_nodes"];
+    if(!scalar&&batch&&workers==1)weighted::configure_query_execution(node,query);
+    auto selected=weighted::query_execution_selection(node);
+    ++query_counts["query_"+selected.at("memory")+"_nodes"];
+    ++query_counts["describe_"+selected.at("describe")+"_nodes"];
   }
   placed=place_model(data.graph,data.model,placement);registry=data.model.parameters();
   state.identity=data.graph.identity;state.batch_size=data.samples;

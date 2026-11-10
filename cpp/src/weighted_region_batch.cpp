@@ -32,9 +32,14 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
       }
       fields[name]=at::stack(rows,1);
     }
-    auto recv=fields.at("w"),caps=fields.at("mu"),scores=fields.at("score");std::vector<Tensor> node_rows;
-    for(auto i:ids){std::vector<Index> row;for(const auto& d:requests[i].candidates)row.push_back(d.node);node_rows.push_back(at::tensor(row,recv.options().dtype(at::kLong)));}
-    auto nodes=at::stack(node_rows);
+    auto recv=fields.at("w"),caps=fields.at("mu"),scores=fields.at("score");Tensor nodes;
+    if(c.selection_mode=="regional_total_zero"||c.hard()){
+      // One actual int64 upload for the complete sorted-sending group. Other
+      // sending functions never consume node IDs and need no device copy.
+      std::vector<Index> values;values.reserve(ids.size()*requests[ids[0]].candidates.size());
+      for(auto i:ids)for(const auto& d:requests[i].candidates)values.push_back(d.node);
+      nodes=at::tensor(values,recv.options().dtype(at::kLong)).reshape(scores.sizes());
+    }
     if(c.region_score=="att"){
       auto weights=fields.at(c.query_weight=="received"?"w":"mu");
       auto x=(weights.unsqueeze(-1)*fields.at("x")).sum(1)/weights.sum(1).clamp_min(1).unsqueeze(1);
@@ -63,8 +68,13 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
     else if(c.hard())values=sorted_send(scores-shift.unsqueeze(1),caps,nodes,at::zeros_like(received),*c.k);
     std::vector<Tensor> rows;
     if(!values.defined()){
+      // One transpose per complete field in backward. Independent scalar
+      // SelectBackward nodes would each zero/assemble the whole B×L field.
+      auto score_rows=scores.unbind(),cap_rows=caps.unbind(),lower_rows=low.unbind(),upper_rows=high.unbind();
+      auto shifts=shift.defined()?shift.unbind():std::vector<Tensor>{};
+      auto temperature=at::full({},*c.allocation_temperature,scores.options());
       std::vector<AllocationRow> inputs;
-      for(size_t j=0;j<ids.size();++j)inputs.push_back({scores[j],caps[j],low[j],high[j],at::full({},*c.allocation_temperature,scores.options()),shift.defined()?shift[j]:Tensor{}});
+      for(size_t j=0;j<ids.size();++j)inputs.push_back({score_rows[j],cap_rows[j],lower_rows[j],upper_rows[j],temperature,shift.defined()?shifts[j]:Tensor{}});
       std::vector<Allocation> allocations;
       try{allocations=allocate_batch(inputs,*c.regularizer,c.ent_alpha);}
       catch(AllocationFailure& e){
