@@ -14,7 +14,8 @@ B8/L128/d128、4区域×4节点、k=2的quad分配，实际Full约50.93%，并�
 
 ## 作业与下一步
 
-准备启动gef-fc16-attribution-baseline，background.slice；尚无运行/通过结论。
+gef-fc16-attribution-baseline已终态passed/0；固定09e0277，后台构建和相关小门禁通过。
+原FC16正常完整步CPU18.229637/NPU22.998073秒；独立阶段诊断记录已生成。
 冻结路径artifacts/fc16-attribution/source-baseline，私有env-baseline/build-baseline。
 输出artifacts/jobs/fc16-attribution-baseline/{status.json,task.log}。
 脚本artifacts/fc16-attribution/baseline.sh：全部可用CPU构建，相关query根/阶段检查，
@@ -22,7 +23,8 @@ B8/L128/d128、4区域×4节点、k=2的quad分配，实际Full约50.93%，并�
 总时限7200秒、MemoryMax400G、TasksMax4096；单卡经站点队列选择，等待上限120秒。
 检查：systemctl --user show gef-fc16-attribution-baseline -p ActiveState -p Result -p MainPID -p ControlGroup；
 python scripts/status.py；tail -n 40 artifacts/jobs/fc16-attribution-baseline/task.log。
-源码固定后记录确切提交；等待构建期间在主工作区实现独立张量基线，不编辑冻结输入。
+当前独立FC张量基线5项CPU检查通过，含独立标量图、二分求解、FP64差分；准备固定后运行
+同尺寸CPU/NPU三层成本及首次实际本地TTFT。新常规路径优化尚未开始。
 
 后续按阶段数据选择块内复制/快照/VJP优化，定向独立检查、完整训练/恢复与代表回归。
 原异步双NPU训练、规模resident预算、数值严格失败均保持ROADMAP状态，不能由本轮小检查解除。

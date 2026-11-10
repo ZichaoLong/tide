@@ -29,3 +29,33 @@ Throughput divides actual input positions by complete wall time. FC16 has
 not B times maximum length or repeated input ports. This is distinct from
 TTFT, which requires a separately timed inference request and output head.
 Training forward alone does not certify inference latency.
+
+## Independent matched-shape anchors
+
+`fc_tensor_baseline.py` has an independent region schedule and explicit batched
+Aggregate/KV Read/Describe/Full formulas. Quadratic allocation enumerates finite
+affine intervals independently of the foundation solver, then differentiates
+the chosen exact solution. It checks its domain before computation: adjacent
+equal-width FC regions, dense inputs, zero left state, qry without positions,
+cat/ind/context/cat/quad and L<=256. Full evaluates actual positive selected rows.
+It returns the output projection, controls/activity and actual terminal KV fields;
+it does not claim full trace, None/zero connectivity or checkpoint equivalence.
+The scalar oracle independently checks small outputs, controls, terminal fields
+and numeric input/shared-parameter derivatives; a separate bisection and FP64
+directional finite differences check the allocation map.
+
+`benchmark_dense_query.py --baseline fc-tensor` keeps the original graph
+parameters, inputs, task head, loss and optimizer. `--baseline transformer-16`
+(or transformer-4) instead uses a declared serial bias-free pre-RMS causal SDPA
+and SwiGLU stack, d128/head2/FFN512. Sixteen blocks match the number of FC nodes;
+four blocks match its serial depth. Neither is a function-equivalent Tide graph.
+Both retain the original embedding/head; actual total parameter counts are
+recorded, not padded to match. No pretrained or model-quality claim is made.
+
+`--mode inference` measures a separate warm-loaded request through prompt
+prefill, the last-position language head and greedy first-token selection.
+`first_token_seconds` includes synthetic input creation/upload, finite checking
+and host return, but excludes service queueing/tokenization/model construction.
+It is batch first-token latency, not per-token amortization or later decode.
+Training and inference timings are never mixed. Full-shape comparisons remain
+numerically unchecked until explicitly recorded, even when small checks pass.

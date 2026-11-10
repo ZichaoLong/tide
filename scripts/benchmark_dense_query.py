@@ -28,6 +28,8 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
+    p.add_argument("--baseline", choices=("graph", "fc-tensor", "transformer-16", "transformer-4"), default="graph")
+    p.add_argument("--mode", choices=("training", "inference"), default="training")
     p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     p.add_argument("--prefill-schedule", choices=("auto", "greedy", "window"), default="auto")
     p.add_argument("--trace-records", choices=("complete", "minimal"), default="complete",
@@ -40,8 +42,12 @@ def main():
     p.add_argument("--warmup-state", choices=("reset", "continue"), default="reset",
                    help="reset restores initial weights/optimizer after warmup for controlled comparisons")
     a = p.parse_args()
-    if a.client == "native" and not a.native_library:
+    if a.baseline == "graph" and a.client == "native" and not a.native_library:
         p.error("native requires an explicit matching --native-library build directory")
+    if a.baseline != "graph" and a.profile != "none":
+        p.error("baseline cost and graph profiling are separate measurements")
+    if a.profile == "stages" and a.client != "native":
+        p.error("native stage counters require --client native")
     if not (1 <= a.batch <= 8 and 1 <= a.length <= 128):
         p.error("this bounded probe requires 1<=B<=8, 1<=L<=128")
     out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
@@ -72,6 +78,7 @@ def main():
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
         downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
         query_execution=a.query_execution, prefill_schedule=a.prefill_schedule, trace_records=a.trace_records,
+        baseline=a.baseline, mode=a.mode,
         installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
         phases=[], profile=a.profile, warmup_state=a.warmup_state,
@@ -79,12 +86,22 @@ def main():
     write_json(out/"result.json", record)
     try:
         device = runtime(a.device, config["threads"], config["seed"])
-        if a.client == "native":
+        torch.set_grad_enabled(a.mode == "training")
+        if a.baseline == "graph" and a.client == "native":
             load_native(a.native_library, backend=device.type)
             manifest = Path(a.native_library)/"build-manifest.json"
             record["native_build"] = json.loads(manifest.read_text())
         start = time.monotonic()
-        model = make_model(config, device); opt = optimizer_for(model, config)
+        model = make_model(config, device)
+        if a.baseline.startswith("transformer-"):
+            from fc_tensor_baseline import TransformerLayers
+            with torch.random.fork_rng(devices=[]):
+                torch.manual_seed(config["seed"])
+                model.encoder = TransformerLayers(depth=int(a.baseline.split('-')[-1])).to(device)
+        opt = optimizer_for(model, config)
+        record["comparison_scope"] = ("Original graph task" if a.baseline == "graph" else
+            "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence" if a.baseline == "fc-tensor" else
+            "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded")
         synchronize(device)
         record["construction_seconds"] = time.monotonic()-start
         record["trainable_parameters"] = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -101,7 +118,7 @@ def main():
         def step(index):
             synchronize(device); wall = time.monotonic()
             batch = synthetic_batch(a.batch, a.length, 991+index, device)
-            model.train()
+            model.train(a.mode == "training")
             lr = learning_rate(config, (index+1)*a.batch*a.length)
             for group in opt.param_groups:
                 group["lr"] = lr
@@ -112,21 +129,48 @@ def main():
                     result = fn(); synchronize(device)
                 phases[name] = time.monotonic()-begin
                 return result
-            phase("zero_grad", lambda: opt.zero_grad(set_to_none=True))
+            if a.mode == "training":
+                phase("zero_grad", lambda: opt.zero_grad(set_to_none=True))
             features = phase("embedding", lambda: model.embedding(batch["input_ids"]))
-            result = phase("core_forward", lambda: model.encoder.run_features(features, trace=a.trace_records == "complete"))
-            hidden = phase("readout", lambda: sequence_readout(model.encoder, result, features))
-            loss = phase("head_loss", lambda: torch.nn.functional.cross_entropy(model.head(hidden).flatten(0, 1), batch["labels"].flatten()))
-            if not bool(torch.isfinite(loss)):
-                raise FloatingPointError("nonfinite diagnostic loss")
-            phase("backward", loss.backward)
-            norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
-            phase("optimizer", opt.step)
+            if a.baseline == "graph":
+                result = phase("core_forward", lambda: model.encoder.run_features(features, trace=a.trace_records == "complete"))
+                hidden = phase("readout", lambda: sequence_readout(model.encoder, result, features)
+                               if a.mode == "training" else model.encoder.project(result, features))
+                work = dict(result.stats)
+            elif a.baseline == "fc-tensor":
+                from fc_tensor_baseline import run
+                result = phase("core_forward", lambda: run(model.encoder.binding, model.encoder.spec, features))
+                hidden = result["hidden"] if a.mode == "training" else result["hidden"][:, -1]
+                work = result["stats"]
+            else:
+                result = phase("core_forward", lambda: model.encoder(features))
+                hidden = result if a.mode == "training" else result[:, -1]
+                work = dict(block_positions=a.batch*a.length*len(model.encoder.blocks))
+            norm, loss = None, None
+            if a.mode == "training":
+                loss = phase("head_loss", lambda: torch.nn.functional.cross_entropy(model.head(hidden).flatten(0, 1), batch["labels"].flatten()))
+                if not bool(torch.isfinite(loss)):
+                    raise FloatingPointError("nonfinite diagnostic loss")
+                phase("backward", loss.backward)
+                norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
+                phase("optimizer", opt.step)
+            else:
+                logits = phase("head", lambda: model.head(hidden))
+                token = phase("first_token", lambda: logits.argmax(-1))
+                if not bool(torch.isfinite(logits).all()):
+                    raise FloatingPointError("nonfinite first-token logits")
             row = dict(index=index, warmup=index == 0, phases_seconds=phases, phase_sum_seconds=sum(phases.values()),
-                tokens=a.batch*a.length, loss=float(loss.detach()), gradient_norm=float(norm), work=dict(result.stats))
+                tokens=a.batch*a.length, loss=None if loss is None else float(loss.detach()),
+                gradient_norm=None if norm is None else float(norm), work=work)
+            if a.mode == "inference":
+                row["first_tokens"] = token.cpu().tolist()
+                row["ttft_scope"] = "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode"
+                row["first_token_seconds"] = time.monotonic()-wall
+                del logits, token
             del result, features, hidden, loss, norm, batch
             synchronize(device)
             row["complete_wall_seconds"] = time.monotonic()-wall
+            row["input_positions_per_second"] = a.batch*a.length/row["complete_wall_seconds"]
             row["memory"] = memory(device)
             return row
 
