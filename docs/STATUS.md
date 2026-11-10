@@ -1,26 +1,28 @@
-# 当前交接 — KV整序列反向固定资格（2026-11-10）
+# 当前交接 — 联合prefill反向装配与代表回归（2026-11-10）
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-用户批准持续实施和推送；320 CPU、空闲及有余量共享NPU可使用。浮点超差有限诊断后分列推进。
-参考仓库/下游只读；不使用子代理。两份未跟踪用户handoff原样保留，不纳入提交。
+用户批准持续实施/推送；全部320 CPU及空闲/有余量共享NPU可使用，以尽快得结果为准。
+数值超差有限诊断后分列推进，不放宽阈值；参考/下游只读，不使用子代理。
+两份未跟踪用户handoff原样保留，不纳入提交。
 
-## 已交付与当前开发
+已交付分量窗口、联合KV准备和批量守卫；整序列VJP实现413faf6的固定资格见
+[evidence/kv-sequence-vjp-20261110.md](evidence/kv-sequence-vjp-20261110.md)：
+CPU143通过、NPU49通过/2原GDN-HB数值xfail；四个安装消费者训练/新进程恢复通过。
+有界FP64见证支持该NPU差异为舍入，不阻塞后继；FC16最小返回CPU25.407/NPU36.841秒。
+完整返回另列32.564/57.795秒，原任务数值/离散/学习未认证，设备间活动数不同。
 
-- 默认分量窗口、联合KV准备、批量守卫及原始时间切片已交付至0915781；证据见
-  [分量窗口](evidence/component-window-20261110.md)。
-  guards固定终态尚待汇编证据；已测成本CPU33.478秒/NPU86.324秒，一次完整返回观察，不等于原任务数值资格。
-- 当前改动：未公开中间State时，KV整序列VJP批量回收前缀伴随；trace=True保留中间状态因果根。
-  Python/C++开发143项通过（seq-b.xml），覆盖三个Read、FC/HB/反馈、独立根、暖态、共享、SGD与精确恢复。
-  公共eager_runner(trace=False)额外6项FP32检查通过。旧seq-a多余头文件构建失败原样保留。
-- 代表配置生成器与有界GDN/HB数值诊断准备中；目录不等于运行通过。
+活动：gef-joint-prefill-roots-a，413faf6+roots-a-snapshot冻结overlay，
+源码artifacts/joint-prefill/source-roots-a，Python build-roots-a与独立build-roots-sdk，
+日志artifacts/jobs/joint-prefill-roots-a/task.log。320核/512G/7200秒background.slice。
+构建及SDK三项CTest通过；SDK CPU FP64完整/最小返回的三步/新进程恢复通过，
+Python/native定向检查仍运行，不能把外层running写成通过。
+检查/停止：systemctl --user status/stop gef-joint-prefill-roots-a。
 
-## 活动作业和下一步
-
-当前无运行的本项目服务。所有已有服务已终态；seq-b源为0915781加冻结overlay，
-build-seq-b，日志artifacts/jobs/joint-prefill-seq-b/task.log，143通过不是固定提交资格。
-即将提交本实现，在干净worktree分别安装验收CPU/NPU及独立SDK，记录真实采用的joint_state_vjp_events。
-随后有限比较原FC16完整/最小返回；补大宽度FC、多节点HB/LH、sum、循环及标准层链、混合/多卡/resident。
-长任务固定源码、background.slice、资源/时长有界；构建与重型计时不重叠。
+工作区改动：query完整连续view分区伴随合并、公共CLI输出任务省去内部trace、
+实际工作计数和按实际选定路径精确恢复、代表配置生成器；尚未提交。
+下一步审阅roots开发终态→提交实现→固定安装CPU/NPU/SDK定向资格及FC16有限成本，
+再跑大宽度FC、多节点HB/LH、sum、循环层链B×L代表，CPU/mixed/resident/多卡分列。
+新长任务固定源码、独立服务有界资源，构建不与重型计时重叠；不无限排队。
 
 下一命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
-唯一待办/停止条件见[ROADMAP](ROADMAP.md)。GPU按用户授权延后；NPU已有严格超差保留，不无限阻塞其他工作。
+唯一待办与停止条件见[ROADMAP](ROADMAP.md)，GPU按用户授权延后。

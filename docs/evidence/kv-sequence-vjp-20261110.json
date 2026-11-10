@@ -1,0 +1,1154 @@
+{
+  "source": "413faf6053d9e85042b0c65de1ce72c4a739d385",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "job": {
+    "command": [
+      "bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-sequence.sh"
+    ],
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-sequence",
+    "state": "passed",
+    "source": "413faf6053d9e85042b0c65de1ce72c4a739d385",
+    "dirty": "",
+    "started": "2026-11-10T03:59:32.075656+00:00",
+    "exit_code": 0,
+    "finished": "2026-11-10T04:19:20.070224+00:00"
+  },
+  "tests": {
+    "sequence-fixed-cpu.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "143",
+      "time": "296.226",
+      "timestamp": "2026-11-10T11:59:44.348077+08:00",
+      "hostname": "liteserver-mi-dev-00001",
+      "sha256": "e1c88120a269ca0fb1112bac694cd7a57f9760333aa56711b03c5ebea3bb170f",
+      "retained_xfails": []
+    },
+    "sequence-fixed-npu.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "2",
+      "tests": "51",
+      "time": "323.507",
+      "timestamp": "2026-11-10T12:08:25.464060+08:00",
+      "hostname": "liteserver-mi-dev-00001",
+      "sha256": "3dfe2929668010621b66e0d8ca3a058ccd3ac741569b2b0ac9a9fa95f1af2a78",
+      "retained_xfails": [
+        "test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-python]",
+        "test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-native]"
+      ]
+    }
+  },
+  "costs": {
+    "cost-sequence-cpu-complete": {
+      "execution": "completed",
+      "trace_records": "complete",
+      "visibility": null,
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.0005998574197292328,
+            "embedding": 0.0005184710025787354,
+            "core_forward": 12.70772958919406,
+            "readout": 0.020893484354019165,
+            "head_loss": 0.02558530494570732,
+            "backward": 20.95741292461753,
+            "clip": 0.009499192237854004,
+            "optimizer": 0.04373115673661232
+          },
+          "phase_sum_seconds": 33.76596998050809,
+          "tokens": 1024,
+          "loss": 10.954261779785156,
+          "gradient_norm": 4485.34033203125,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8362,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8362,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "max_full_batch": 1009,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8362,
+            "source_rows": 29168,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25072,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 34.051426116377115,
+          "memory": {
+            "resources/peak_rss_mib": 8304.40234375
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.00019450485706329346,
+            "embedding": 0.0003383755683898926,
+            "core_forward": 11.887342736124992,
+            "readout": 0.02791542187333107,
+            "head_loss": 0.028102759271860123,
+            "backward": 20.1749476082623,
+            "clip": 0.00810636579990387,
+            "optimizer": 0.04439659044146538
+          },
+          "phase_sum_seconds": 32.17134436219931,
+          "tokens": 1024,
+          "loss": 10.99068832397461,
+          "gradient_norm": 1362.0247802734375,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8344,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8344,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "max_full_batch": 1014,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8344,
+            "source_rows": 29156,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25060,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 32.56413585692644,
+          "memory": {
+            "resources/peak_rss_mib": 8304.40234375
+          }
+        }
+      ],
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "native_build": {
+        "source": "0915781c8b0b757df7f61442a6267e065860d87c",
+        "cpp_source_sha256": "b54e39eefab14b5dd8eaef2b4a437326310bf688611211fdabdca01608b4e752",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "eab8403377238231cbeed44a7f23117f96bda78aaf5eb4835ef2a5f66972d8ee",
+          "libtidegraph_runtime.a": "468a5aa7c942a01e275a876a3e373561224e088adfc24300e34a948b04c1d723",
+          "_tide_native.so": "84afa8c5518dc6f108f50d1e9723ca698ca49ccd48a0bce3e39e8fa8a5f405a0"
+        }
+      },
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "record_sha256": "5701861c0a4a795d05063d53b837908b9505823ef8924f62d1b312429a5ae312"
+    },
+    "cost-sequence-cpu-minimal": {
+      "execution": "completed",
+      "trace_records": "minimal",
+      "visibility": null,
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.0005006343126296997,
+            "embedding": 0.00038322433829307556,
+            "core_forward": 9.183398384600878,
+            "readout": 0.008459117263555527,
+            "head_loss": 0.027939490973949432,
+            "backward": 16.317430179566145,
+            "clip": 0.009879004210233688,
+            "optimizer": 0.045049767941236496
+          },
+          "phase_sum_seconds": 25.59303980320692,
+          "tokens": 1024,
+          "loss": 10.954261779785156,
+          "gradient_norm": 4485.3388671875,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8362,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8362,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "joint_state_vjp_events": 16384,
+            "joint_state_vjp_sequences": 16,
+            "max_full_batch": 1009,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8362,
+            "source_rows": 29168,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25072,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 25.610538970679045,
+          "memory": {
+            "resources/peak_rss_mib": 6193.56640625
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.00019249320030212402,
+            "embedding": 0.0006245933473110199,
+            "core_forward": 9.272848136723042,
+            "readout": 0.0062098428606987,
+            "head_loss": 0.027644533663988113,
+            "backward": 16.026413548737764,
+            "clip": 0.0077003538608551025,
+            "optimizer": 0.04790075123310089
+          },
+          "phase_sum_seconds": 25.389534253627062,
+          "tokens": 1024,
+          "loss": 10.99068832397461,
+          "gradient_norm": 1362.025146484375,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8344,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8344,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "joint_state_vjp_events": 16384,
+            "joint_state_vjp_sequences": 16,
+            "max_full_batch": 1014,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8344,
+            "source_rows": 29156,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25060,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 25.407438676804304,
+          "memory": {
+            "resources/peak_rss_mib": 6587.0546875
+          }
+        }
+      ],
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "native_build": {
+        "source": "0915781c8b0b757df7f61442a6267e065860d87c",
+        "cpp_source_sha256": "b54e39eefab14b5dd8eaef2b4a437326310bf688611211fdabdca01608b4e752",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "eab8403377238231cbeed44a7f23117f96bda78aaf5eb4835ef2a5f66972d8ee",
+          "libtidegraph_runtime.a": "468a5aa7c942a01e275a876a3e373561224e088adfc24300e34a948b04c1d723",
+          "_tide_native.so": "84afa8c5518dc6f108f50d1e9723ca698ca49ccd48a0bce3e39e8fa8a5f405a0"
+        }
+      },
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "record_sha256": "711cc4868c528b0f55210c3967428e9eec8568cf2357620a2fc464604bdf557e"
+    },
+    "cost-sequence-npu-complete": {
+      "execution": "completed",
+      "trace_records": "complete",
+      "visibility": "15",
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.0005266889929771423,
+            "embedding": 0.20405389741063118,
+            "core_forward": 28.345667626708746,
+            "readout": 0.034110404551029205,
+            "head_loss": 0.025142818689346313,
+            "backward": 31.093996584415436,
+            "clip": 0.14734933152794838,
+            "optimizer": 0.11729195713996887
+          },
+          "phase_sum_seconds": 59.96813930943608,
+          "tokens": 1024,
+          "loss": 10.954089164733887,
+          "gradient_norm": 26794.431640625,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8363,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8363,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "max_full_batch": 1009,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8363,
+            "source_rows": 29168,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25072,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 60.49260692670941,
+          "memory": {
+            "resources/peak_rss_mib": 3918.1953125,
+            "resources/npu_allocated_mib": 79.361328125,
+            "resources/npu_reserved_mib": 5564.0,
+            "resources/npu_peak_allocated_mib": 5473.28955078125
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.00022993981838226318,
+            "embedding": 0.0003240741789340973,
+            "core_forward": 26.870553996413946,
+            "readout": 0.040668826550245285,
+            "head_loss": 0.0010509341955184937,
+            "backward": 30.107223827391863,
+            "clip": 0.15092874690890312,
+            "optimizer": 0.10178972035646439
+          },
+          "phase_sum_seconds": 57.27277006581426,
+          "tokens": 1024,
+          "loss": 10.990677833557129,
+          "gradient_norm": 1359.880615234375,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8345,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8345,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "max_full_batch": 1014,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8345,
+            "source_rows": 29160,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25064,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 57.79511293023825,
+          "memory": {
+            "resources/peak_rss_mib": 3972.38671875,
+            "resources/npu_allocated_mib": 79.361328125,
+            "resources/npu_reserved_mib": 5568.0,
+            "resources/npu_peak_allocated_mib": 5473.28955078125
+          }
+        }
+      ],
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "native_build": {
+        "source": "0915781c8b0b757df7f61442a6267e065860d87c",
+        "cpp_source_sha256": "b54e39eefab14b5dd8eaef2b4a437326310bf688611211fdabdca01608b4e752",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "eab8403377238231cbeed44a7f23117f96bda78aaf5eb4835ef2a5f66972d8ee",
+          "libtidegraph_runtime.a": "468a5aa7c942a01e275a876a3e373561224e088adfc24300e34a948b04c1d723",
+          "_tide_native.so": "84afa8c5518dc6f108f50d1e9723ca698ca49ccd48a0bce3e39e8fa8a5f405a0"
+        }
+      },
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "record_sha256": "cdb1bd8f433bc6462dfb2ca89eab4cceea72e3847c72ccaf247ca38edfba4270"
+    },
+    "cost-sequence-npu-minimal": {
+      "execution": "completed",
+      "trace_records": "minimal",
+      "visibility": "15",
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.0007472485303878784,
+            "embedding": 0.2116876319050789,
+            "core_forward": 15.993797652423382,
+            "readout": 0.017230704426765442,
+            "head_loss": 0.008705101907253265,
+            "backward": 21.029906377196312,
+            "clip": 0.07142803445458412,
+            "optimizer": 0.1102013997733593
+          },
+          "phase_sum_seconds": 37.44370415061712,
+          "tokens": 1024,
+          "loss": 10.954089164733887,
+          "gradient_norm": 26794.4375,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8363,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8363,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "joint_state_vjp_events": 16384,
+            "joint_state_vjp_sequences": 16,
+            "max_full_batch": 1009,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8363,
+            "source_rows": 29168,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25072,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 37.46628314629197,
+          "memory": {
+            "resources/peak_rss_mib": 3113.71484375,
+            "resources/npu_allocated_mib": 79.361328125,
+            "resources/npu_reserved_mib": 4306.0,
+            "resources/npu_peak_allocated_mib": 4210.890625
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.00029558315873146057,
+            "embedding": 0.0003467835485935211,
+            "core_forward": 15.68941131606698,
+            "readout": 0.017091020941734314,
+            "head_loss": 0.000794336199760437,
+            "backward": 20.963437527418137,
+            "clip": 0.04565093666315079,
+            "optimizer": 0.10108070075511932
+          },
+          "phase_sum_seconds": 36.81810820475221,
+          "tokens": 1024,
+          "loss": 10.990677833557129,
+          "gradient_norm": 1359.8804931640625,
+          "work": {
+            "aggregate_calls": 4,
+            "aggregate_computed_events": 4096,
+            "aggregate_reused_events": 12288,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 16384,
+            "batched_full_events": 8345,
+            "batched_read_events": 16384,
+            "batched_region_frames": 4096,
+            "batched_state_events": 16384,
+            "body_candidate_events": 16384,
+            "body_selected_events": 8345,
+            "candidate_events": 16384,
+            "full_blocks": 16,
+            "full_calls": 16,
+            "greedy_relaxed_edges": 0,
+            "greedy_stages": 4,
+            "joint_state_vjp_events": 16384,
+            "joint_state_vjp_sequences": 16,
+            "max_full_batch": 1014,
+            "max_greedy_frames": 1024,
+            "max_live_fibers": 4096,
+            "max_region_batch": 1024,
+            "max_state_batch": 8,
+            "max_state_block_base_batch": 1024,
+            "max_state_independent_projection_batch": 744,
+            "max_state_private_projection_batch": 744,
+            "max_state_sequence": 128,
+            "next_steps": 16384,
+            "read_calls": 16,
+            "region_batch_calls": 4,
+            "region_blocks": 4,
+            "region_steps": 4096,
+            "region_time_batch_frames": 4096,
+            "selected_events": 8345,
+            "source_rows": 29160,
+            "state_block_base_projection_calls": 4,
+            "state_block_preparation_events": 16384,
+            "state_blocks": 128,
+            "state_preparation_calls": 4096,
+            "state_preparation_events": 16384,
+            "state_preparation_reused_events": 12288,
+            "state_private_projection_calls": 96,
+            "state_private_projection_rows": 49152,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 16,
+            "visited_edges": 25064,
+            "window_causal_blocks": 0,
+            "window_components": 4,
+            "window_cyclic_components": 0,
+            "query_legacy_nodes": 0,
+            "query_dense-v1_nodes": 0,
+            "query_packed-v2_nodes": 16
+          },
+          "complete_wall_seconds": 36.84095999225974,
+          "memory": {
+            "resources/peak_rss_mib": 3172.9453125,
+            "resources/npu_allocated_mib": 80.087890625,
+            "resources/npu_reserved_mib": 4308.0,
+            "resources/npu_peak_allocated_mib": 4210.890625
+          }
+        }
+      ],
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "native_build": {
+        "source": "0915781c8b0b757df7f61442a6267e065860d87c",
+        "cpp_source_sha256": "b54e39eefab14b5dd8eaef2b4a437326310bf688611211fdabdca01608b4e752",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "eab8403377238231cbeed44a7f23117f96bda78aaf5eb4835ef2a5f66972d8ee",
+          "libtidegraph_runtime.a": "468a5aa7c942a01e275a876a3e373561224e088adfc24300e34a948b04c1d723",
+          "_tide_native.so": "84afa8c5518dc6f108f50d1e9723ca698ca49ccd48a0bce3e39e8fa8a5f405a0"
+        }
+      },
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "record_sha256": "9bdba999616ec5c1135fbc76c6a1b9c05003cd4ad099b3d1a1f3741d14b6383a"
+    }
+  },
+  "consumers": {
+    "sequence-cpu-python": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "python",
+        "trace": false
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "sequence-cpu-native": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "native",
+        "trace": false
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "sequence-npu-python": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "trace": false
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "sequence-npu-native": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "trace": false
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 496,
+            "discrete": 186
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    }
+  },
+  "rounding_witness": {
+    "window-evidence-cpu.json": {
+      "sha256": "465545306a7049aab8afbb809137247846d72acab68d21f4fc40c3729905c3a4",
+      "witness": "0.7*first evidence.square().sum; original FP32 inputs and parameters exactly promoted",
+      "observations": {
+        "reference64": {
+          "nodes.0.read_program.evidence_weight": 0.0,
+          "nodes.0.read_program.evidence_bias": 0.0,
+          "input.0": 0.0
+        },
+        "reference32": {
+          "nodes.0.read_program.evidence_weight": 3.6298958321356878e-06,
+          "nodes.0.read_program.evidence_bias": 3.142950804384259e-06,
+          "input.0": 2.919352011540241e-06
+        },
+        "candidate32": {
+          "nodes.0.read_program.evidence_weight": 3.6298958321356878e-06,
+          "nodes.0.read_program.evidence_bias": 3.142950804384259e-06,
+          "input.0": 2.919352011540241e-06
+        }
+      }
+    },
+    "window-evidence-npu.json": {
+      "sha256": "9f9f1048f80e9ee191db9de8b0eac230d746bfad486a904235dc1696f84e34de",
+      "witness": "0.7*first evidence.square().sum; original FP32 inputs and parameters exactly promoted",
+      "observations": {
+        "reference64": {
+          "nodes.0.read_program.evidence_weight": 0.0,
+          "nodes.0.read_program.evidence_bias": 0.0,
+          "input.0": 0.0
+        },
+        "reference32": {
+          "nodes.0.read_program.evidence_weight": 3.6298958321356878e-06,
+          "nodes.0.read_program.evidence_bias": 3.142950804384259e-06,
+          "input.0": 2.919352011540241e-06
+        },
+        "candidate32": {
+          "nodes.0.read_program.evidence_weight": 2.593072394585505e-07,
+          "nodes.0.read_program.evidence_bias": 2.247116254253112e-07,
+          "input.0": 2.089605165931513e-07
+        }
+      }
+    }
+  }
+}
