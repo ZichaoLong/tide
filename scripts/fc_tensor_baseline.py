@@ -30,16 +30,18 @@ def quadratic(scores, caps, target, temperature):
         upper = mid[..., None] <= (s-temperature*caps)[..., None, :]
         count = free.sum(-1)
         lam = ((free*s[..., None, :]).sum(-1)+temperature*((upper*caps[..., None, :]).sum(-1)-target[..., None]))/count.clamp_min(1)
-        eps = 32*torch.finfo(s.dtype).eps
-        valid = (count > 0) & (left < right) & (lam >= left-eps) & (lam <= right+eps)
+        valid = (count > 0) & (left < right)
+        error = torch.maximum((left-lam).clamp_min(0), (lam-right).clamp_min(0)).masked_fill(~valid, torch.inf)
         if not valid.any(-1).all():
             raise ValueError("FC tensor quadratic interval outside declared interior-target domain")
-        chosen = valid.to(torch.int64).argmax(-1)
+        chosen = error.argmin(-1)
         index = chosen[..., None, None].expand(*chosen.shape, 1, scores.shape[-1])
         free, upper = (x.gather(-2, index).squeeze(-2) for x in (free, upper))
     # Differentiate the selected exact solution, never midpoint selection.
-    lam = ((scores*free).sum(-1)+temperature*((caps*upper).sum(-1)-target))/free.sum(-1)
-    controls = torch.where(free, (scores-lam[..., None])/temperature, torch.where(upper, caps, 0))
+    centered = scores-scores.detach().amax(-1, keepdim=True)
+    lam = ((centered*free).sum(-1)+temperature*((caps*upper).sum(-1)-target))/free.sum(-1)
+    controls = torch.where(free, (centered-lam[..., None])/temperature, torch.where(upper, caps, 0))
+    controls = torch.minimum(controls.clamp_min(0), caps)
     residual = (controls.sum(-1)-target).abs()
     tolerance = 64*torch.finfo(scores.dtype).eps*scores.shape[-1]
     if (not torch.isfinite(controls).all() or (controls < 0).any() or (controls > caps).any()
