@@ -18,7 +18,11 @@ class Session:
     def _validate(self, q):
         r = self.runtime
         validate_window(r.execution_graph, r.execution_model, q, [], q.cut, q.cut)
-        if r.spec and (q.cut % r.spec.stride or q.pending):
+        self._validate_boundary(q)
+
+    def _validate_boundary(self, q):
+        spec = self.runtime.spec
+        if spec and (q.cut % spec.stride or q.pending):
             raise ValueError("Settle session requires a complete position boundary")
 
     @property
@@ -65,20 +69,12 @@ class Session:
     def load(self, path, optimizer=None):
         """Restore declared graph/optimizer state; no task controller/RNG promise."""
         from .checkpoint import load
-        from .checkpoint_values import decode
-        record = torch.load(path, map_location="cpu", weights_only=True)
-        if not isinstance(record, dict) or record.get("schema") != "tide-continuation-v5":
-            raise ValueError("checkpoint schema mismatch")
-        if not {"weights", "aliases", "optimizer", "optimizer_layout"} <= record.keys():
-            raise ValueError("malformed checkpoint ownership")
-        try:
-            candidate = decode(record, graph=self.runtime.execution_graph, model=self.runtime.execution_model)
-        except (KeyError, TypeError, IndexError, AttributeError) as error:
-            raise ValueError("malformed checkpoint continuation") from error
-        if candidate.batch_size != self.continuation.batch_size:
-            raise ValueError("checkpoint batch size mismatch")
-        self._validate(candidate)  # Reject an incomplete Settle cut before changing weights.
-        self.continuation = load(path, self.runtime.execution_graph, self.runtime.execution_model, optimizer)
+        def validate(candidate):
+            if candidate.batch_size != self.continuation.batch_size:
+                raise ValueError("checkpoint batch size mismatch")
+            self._validate_boundary(candidate)
+        self.continuation = load(path, self.runtime.execution_graph, self.runtime.execution_model,
+                                 optimizer, validate_continuation=validate)
 
     def reset(self):
         """Clear sequence state while preserving model parameters and optimizer."""

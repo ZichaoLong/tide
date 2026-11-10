@@ -1,0 +1,207 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "4d777bc9bdb622a16f0585ae642f1536475331ba",
+  "meaning": "Manual source/contract review at the fixed baseline; not runtime, device, formula or performance qualification.",
+  "files": [
+    {
+      "path": "python/tidegraph/checkpoint.py",
+      "sha256": "6ca5f2e6d4ccae4a6388ba51dfd57c84e1438ebb2f058fb020efa055b5677530",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Single-graph save/load ownership, state decoding, optimizer preflight and mutation order; duplicate caller read finding."
+    },
+    {
+      "path": "python/tidegraph/checkpoint_io.py",
+      "sha256": "2da9a84e057a3c5c6978aaf25a69968f73e12ca7f3a69184db8b2259599ed100",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Same-directory staging, file fsync, no-overwrite hard-link publication, directory fsync and failure semantics."
+    },
+    {
+      "path": "python/tidegraph/checkpoint_ownership.py",
+      "sha256": "e866ccfa8f9ad0ce35bf77fcfbf32e639f3b1dc0c98f361136677eaa857071f2",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Named aliases, optimizer ownership/order/class, slot shape/dtype/finiteness and copied preflight before live mutation."
+    },
+    {
+      "path": "python/tidegraph/checkpoint_values.py",
+      "sha256": "fb862b230317085239ee155d932fa5dc049ee6942c5e2c081b684cbfcfc96335",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Actual raw continuation codec, owner-aware placement, shared-parameter validation; no reference recomputation."
+    },
+    {
+      "path": "python/tidegraph/config.py",
+      "sha256": "647c2c3bf29f2367256fb6a4148c081967e18251f76332e50bc18e920da99fc4",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "GraphConfig validation, graph/model/execution identities, generic catalog versus weighted configuration boundary."
+    },
+    {
+      "path": "python/tidegraph/execution_options.py",
+      "sha256": "4c77e30ed6274fe8576212391ede51e878a032d921d4fb1ea62621f0a11209ff",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Explicit policy validation, current auto/window resolution, specialization applicability and unsupported-option rejection."
+    },
+    {
+      "path": "python/tidegraph/experiment/checkpoint.py",
+      "sha256": "ef5c87b7579650eeced3208fd2707d6b03ca6bb0c45dbd3f2ad607df0dbc5c80",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Atomic generation identity, actual selected-execution next-window comparison, raw state and training ownership; preserve independence."
+    },
+    {
+      "path": "python/tidegraph/experiment/config.py",
+      "sha256": "7c2e87928362c799606354da03c3c98aefa29b1a12c5abb68315cff01f34544e",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Allocation-free model/task/execution/resource resolution, capacity policy and frozen resolved identity; plugin observation gap."
+    },
+    {
+      "path": "python/tidegraph/experiment/eager.py",
+      "sha256": "3ccdbb7f43b9d2679f70141a2b30978046df39386ef1023da231f5006640e39f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Independent reference selection, actual task roots, forward/backward/optimizer/detach order, return projection and exact owner restore."
+    },
+    {
+      "path": "python/tidegraph/experiment/identity.py",
+      "sha256": "99fc354ccc39c0070f3b1501b5ffa2414627a03789ca68fd7ce106dccf1ceb0c",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Recursive installed package content, build bytes, wheel match and metadata-only dependency scope; shared helper opportunity."
+    },
+    {
+      "path": "python/tidegraph/experiment/record_policy.py",
+      "sha256": "620f7f94a5913c494bbd5abdd3a2a1481007369af6ae24cef33bf0069a8b15db",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Shared capacity/runtime observation gate; all plugins forced complete at baseline."
+    },
+    {
+      "path": "python/tidegraph/experiment/records.py",
+      "sha256": "b768f9200e93ba48e52853f07114ca45aa8c9dcc418516bfd702b6618d7f6a3e",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Streaming byte digest, canonical JSON fingerprint, fsync/atomic replacement and explicit exclusive publication behavior."
+    },
+    {
+      "path": "python/tidegraph/experiment/task_identity.py",
+      "sha256": "96fade4c8eb82797e4eeff0c5d122f13f1f48cf615138869d2a76a8ff29b7463",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Installed plugin code/configuration hash without import; plugin fields retained in resume identity."
+    },
+    {
+      "path": "python/tidegraph/experiment/tasks.py",
+      "sha256": "ecb076d28d6f38f0ec21df59268d5e44784be8583d3f2c18decfaafc20afebb7",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Task factory, built-in output objective, optimizer owner boundary and task state; explicit observation contract seam."
+    },
+    {
+      "path": "python/tidegraph/experiment/training_layout.py",
+      "sha256": "2477b0a61ba4daaf18ed0dd3f6360be7eb18fe5f1b037435e8af0d15dfafb35a",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Actual resident SGD storage decoding, aliases/connectivity, FP32 master state and legacy naming; canonical owner seam."
+    },
+    {
+      "path": "python/tidegraph/library.py",
+      "sha256": "446f811f39c78f5073dc290b49d8aebd721e207cb925281c0411795d09eeeda4",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Public runtime dispatch, owner/device boundary, manifest content scope and weight-only restore; local formulas are outside this review."
+    },
+    {
+      "path": "python/tidegraph/planning/execution.py",
+      "sha256": "2e4ec46d08043347d492e8bded7bbef288cfc205f183cfea3ce3e3550d274f18",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Requested/effective execution identities, fallback domains and legacy serialization branches; migration seam recorded."
+    },
+    {
+      "path": "python/tidegraph/planning/record_capacity.py",
+      "sha256": "88544c4688a6c3d128aae9ad02456c5d541d6d45f1e308381b2d185eb28fe909",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Audited inference reservation domain, two-region live-event estimate, fallback to complete records; estimate is not measured peak."
+    },
+    {
+      "path": "python/tidegraph/runtime.py",
+      "sha256": "d0e566fef996dd9c2969d2693aef734879b084172db632b8b76530b946c4d39f",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Device resolution, explicit failure, vendor import/synchronization and runtime manifest scope; no live accelerator verification."
+    },
+    {
+      "path": "python/tidegraph/session.py",
+      "sha256": "b6c1c2e476ab81bfa2ece9142d2027e2c4918caba10ae2b69fcb24af6a0f7ee1",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Advance/detach/reset lifecycle, complete Settle boundary and checkpoint validation/commit ordering; double read finding."
+    },
+    {
+      "path": "scripts/build.py",
+      "sha256": "c9949753a084bee6cbcc2431bc0f81ac0b7001dbadf574be8a578c496836034a",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Explicit backend/SDK/ABI selection, source hash before/after build, binary manifest and resource entry; no new build run."
+    },
+    {
+      "path": "scripts/build_resources.py",
+      "sha256": "9815fa8f2e6aa51adda393b52aa628c8ffac94a6897977bda9755deb01cf0246",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Affinity-based all/half/explicit workers, no historical two-worker cap, argument rejection."
+    },
+    {
+      "path": "scripts/durable_records.py",
+      "sha256": "4683462216a2d88d6ba38db251b9708a99fd6e87e85387547acdd7e75c7007cf",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Atomic handoff writes, retained terminal status validation and live/history reading; no outer-status qualification inference."
+    },
+    {
+      "path": "scripts/job.py",
+      "sha256": "7a5776fb6835e7e0b3c0aae4f791d3607e49e22ceb03dcb9e6b78ce355491d10",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Durable lifecycle, cancellation and outer process exit reporting; inner test completeness remains separate evidence."
+    },
+    {
+      "path": "scripts/source_identity.py",
+      "sha256": "706e67dcbd1f1084b69de1f1e5eebf6fd29c5933ea5f900c08c193f28fdd05c5",
+      "symbols": "*",
+      "reviewer": "audit_inventory agent, integrated by root",
+      "evidence": "docs/evidence/implementation-audit-20261110.md#review-scope",
+      "scope": "Git versus exported manifest identity and byte checking; exported listed-file scope, no blanket directory or runtime guarantee."
+    }
+  ]
+}

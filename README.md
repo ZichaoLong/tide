@@ -12,6 +12,7 @@
 | --- | --- |
 | 新线程接续、当前完成范围和剩余事项 | [当前状态](docs/STATUS.md)、[唯一待办表](docs/ROADMAP.md) |
 | 开发规则和执行契约 | [AGENTS.md](AGENTS.md)、[执行契约](docs/execution-flows.md) |
+| 按任务开展开发、优化和治理 | 仓库技能：[开发](.agents/skills/develop-tide-foundation/SKILL.md)、[性能](.agents/skills/optimize-tide-execution/SKILL.md)、[架构维护](.agents/skills/maintain-tide-foundation/SKILL.md)；只按当前任务读取 |
 | 数学定义、输入输出、依赖与实现对应 | [语义索引](docs/semantic-map.md)、[本地契约](docs/semantics.md) |
 | 当前采用的教材原文 | [版本锁定](docs/upstream.json)、[固定快照](docs/upstream/README.md) |
 | 源码分层和模块导航 | [架构](docs/architecture.md) |
@@ -45,7 +46,8 @@ python scripts/check_upstream.py
 
 以上不需要 Torch、设备或历史实验文件。实际构建与测试需要匹配的工具链，
 按 [开发入口](docs/development.md) 创建新构建和输出目录。
-源码不依赖本机 skill、旧实验队列或某个已有编译目录。
+源码不依赖本机或仓库 skill 的执行环境、旧实验队列或某个已有编译目录。
+仓库技能是随Git版本维护的开发入口；普通开发者和下游可直接阅读，无需安装账户技能。
 
 ## 新语义和新特例
 

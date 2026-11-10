@@ -1,0 +1,4 @@
+interface:
+  display_name: "Optimize Tide Execution"
+  short_description: "Tide batching, autograd and performance analysis"
+  default_prompt: "Use $optimize-tide-execution to diagnose and improve the affected Tide execution path."

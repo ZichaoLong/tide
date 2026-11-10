@@ -1,6 +1,7 @@
 #include "weighted_private_rows.h"
 #include "weighted_independent_copies.h"
 #include "tide/operator_profile.h"
+#include "tide/autograd_census.h"
 #include <ATen/record_function.h>
 // Allocation §2–6: independent frame/control roots on actual batch graphs.
 #include "weighted_region_batch.h"
@@ -83,6 +84,10 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   node->row_outputs=results[0].controls.size();
   std::vector<Tensor> publication;
   for(const auto& row:results)for(const auto& [id,t]:row.controls)publication.push_back(t);
+  if(autograd_census::enabled()){
+    autograd_census::graph("private/region",publication);
+    autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(publication);
+  }
   auto copied=detached_copies(publication);size_t output_index=0;
   for(size_t i=0;i<results.size();++i){
     size_t j=0;for(auto& [id,t]:results[i].controls){

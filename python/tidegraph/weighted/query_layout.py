@@ -50,10 +50,23 @@ class Layout:
 
     def slot(self, name):
         rows = [s.slots[name] for s in self.states]
+        from .snapshot_bank import gather
+        shared = gather(rows)
+        if shared is not None:
+            return shared
         tail = rows[0].shape[1:]
         from .private_rows import join
         joined = torch.cat((join(rows), rows[0].new_zeros((1, *tail))))
         return joined.index_select(0, self.indices.flatten()).reshape(*self.shape, *tail)
+
+    def project(self, name, weight):
+        from .snapshot_bank import project as shared_project
+        result = shared_project([s.slots[name] for s in self.states], weight, self.visible)
+        if result is not None:
+            return result
+        from .packing import project
+        return project(self.visible_slot(name).reshape(-1, weight.shape[1]), weight).reshape(
+            *self.shape, weight.shape[0])
 
     def weights(self):
         raw = self.slot("weights")

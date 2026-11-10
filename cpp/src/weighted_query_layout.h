@@ -10,6 +10,7 @@ struct SnapshotLayout {
   SnapshotLayout(States,const Times&,Index window);
   Tensor slot(const std::string&) const;
   Tensor visible_slot(const std::string&) const;
+  Tensor project_slot(const std::string&,const Tensor&) const;
   Tensor weights() const;
 };
 std::vector<std::string> packed_branches(const States&,const Times&,const KVConfig&,bool is_full);

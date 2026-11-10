@@ -5,18 +5,15 @@ import importlib.metadata
 import platform
 import sys
 import zipfile
+from ..package_content import content_identity
 from .records import digest, fingerprint, read_json
 
 
 def package_identity(root=None):
     import tidegraph
     root = Path(root) if root is not None else Path(tidegraph.__file__).resolve().parent
-    files = {str(path.relative_to(root)): digest(path) for path in sorted(root.rglob("*"))
-             if path.is_file() and "__pycache__" not in path.parts and path.suffix not in {".pyc", ".pyo"}}
-    if not files:
-        raise ValueError("installed package contains no readable files")
     return dict(package="tidegraph", version=tidegraph.__version__, path=str(root.resolve()),
-                installed_files_sha256=fingerprint(files), files_sha256=files,
+                **content_identity(root),
                 source_provenance="installation content; Git/wheel provenance requires an explicit dependency lock")
 
 

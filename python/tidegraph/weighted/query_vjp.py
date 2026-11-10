@@ -12,6 +12,7 @@ from .config import KVConfig
 from .parameter_tree import rebind
 from .numeric_time import passive_decay
 from . import packing_observation as observation
+from ..autograd_census import register_private_graph
 
 
 def _rows(requests, kind, transform):
@@ -70,6 +71,7 @@ class _Query(torch.autograd.Function):
                 refs = [r[name] for r in results for name in sorted(r)]
             else:
                 refs = [r.value for r in full(bound["program"], weights, rows, slots, mode, zeta)]
+        register_private_graph("query."+kind, refs)
         from .independent_copies import detached_copies
         outputs = detached_copies(refs)
         ctx.mark_non_differentiable(*(v for v, ref in zip(outputs, refs) if not ref.requires_grad))

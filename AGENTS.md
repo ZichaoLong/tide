@@ -12,11 +12,27 @@
    `docs/upstream.json`; run `python scripts/check_upstream.py`. Do not adopt
    an upstream working-tree draft or a new semantic version without the user's task.
 5. Preserve user changes and work only on the authorized branch. Reference
-   repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only.
+   repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only unless the
+   current task explicitly includes recoverable experiments there. For such
+   experiments, prefer an independent snapshot and preserve the original dirty state.
 6. Old evidence uses original commit IDs. Resolve them with
    `python scripts/resolve_history_commit.py OLD_SHA`; see `docs/history-migration.md`.
    Clone/fetch only `graph-execution-foundation` for the small development base.
    Do not merge or fetch `graph-execution-foundation-old` into that checkout.
+
+## Task workflows
+
+Read only the repository skill relevant to the work:
+
+- [Develop](.agents/skills/develop-tide-foundation/SKILL.md): implementation,
+  mathematical correspondence, directed checks and delivery.
+- [Optimize](.agents/skills/optimize-tide-execution/SKILL.md): performance across
+  scheduling, local modules, autograd, validation and device execution.
+- [Maintain](.agents/skills/maintain-tide-foundation/SKILL.md): architecture,
+  interfaces, navigation and consumer usability.
+
+These are versioned development guidance, not runtime dependencies. The linked
+contracts, tests and evidence remain authoritative; do not duplicate them in skills.
 
 ## Downstream collaboration
 
@@ -55,14 +71,20 @@
   then commit the evidence separately. Do not push without task authorization.
 - Use `docs/verification.md` for development/full gate scopes and isolated
   qualification. Smoke evidence must never stand in for a complete matrix.
-- Long builds/tests use a detached user service in `background.slice`, bounded
-  build/CPU threads, a frozen checkout and durable status/logs. Builds default to
-  all affinity-available CPUs; `--jobs half` or an explicit positive count is
-  allowed. No fixed two-worker cap. Record actual constraints when reducing
-  workers. Tests may use idle CPU/NPU/memory; heavy timing and builds do not
-  overlap within this project. Never edit source
-  that an active job reads. Short checks may run interactively.
-- Do not delegate to sub-agents unless the user explicitly requests delegation.
+- Long builds/tests use a detached user service in `background.slice`, a frozen
+  checkout, explicit resource/time bounds and durable status/logs. Builds and
+  tests may use all available CPUs and memory, plus idle NPUs; allocate them to
+  one job or independent jobs as appropriate. Builds default to `--jobs all`;
+  `half` or a positive count is an option, not a standing cap. Coordinate CPU,
+  memory, I/O and devices to avoid contention; keep formal timing clear of
+  competing heavy work and record actual constraints. Never edit source an
+  active job reads. Short checks may run interactively.
+- Shared NPU use requires explicit authorization in the current conversation,
+  for the turn or continuing scope specified by that prompt. Historical use,
+  free HBM or low utilization is not standing permission for a new conversation.
+- Choose serial work, concurrent tool calls or sub-agent work by dependencies
+  and expected benefit. Separate conflicting edits and active-job inputs;
+  coordinate resources, review results and integrate one coherent change.
 
 ## Structure and contracts
 
@@ -76,6 +98,10 @@
   is not a specialization or an independent equivalence anchor.
 - Keep local kernels, graph representation, scheduling, checkpointing and
   comparison separate. Retain edge identities, including parallel edges.
+- Design interfaces for performance, generality, clarity and replaceable local
+  modules. Preserve mathematics and required public capabilities; redesign
+  representations and API contracts when useful. Version and document necessary
+  migrations instead of carrying costly historical compatibility in the default path.
 - Changes to observable semantics need a short contract update and meaningful
   tests. HST is a declared VJP; do not gradcheck its hard forward.
 - Avoid in-place autograd mutation. Compare final states, in-flight messages,

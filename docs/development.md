@@ -3,6 +3,10 @@
 本页使用新路径，不要求任何旧 `TASK`、构建、运行目录或 LH 快照。
 先读 [AGENTS](../AGENTS.md)、[STATUS](STATUS.md)、[执行契约](execution-flows.md)。
 当前采用的教材与实现域从 [语义索引](semantic-map.md) 进入。
+日常实现使用[仓库开发技能](../.agents/skills/develop-tide-foundation/SKILL.md)，
+性能问题使用[优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)，接口和导航治理使用
+[维护技能](../.agents/skills/maintain-tide-foundation/SKILL.md)。它们引用本页命令与现有契约，
+不要求一次加载全部技能，也不是构建、运行或测试依赖。
 
 新检出使用`git clone --single-branch --branch graph-execution-foundation git@github.com:ZichaoLong/tide.git`。
 旧工作区迁移、旧提交号查询和归档按需读取见[历史迁移](history-migration.md)；不要将旧分支合回新基座。
@@ -136,10 +140,12 @@ check内部展开材料与原recipe可能具有不同workload_id；外部恢复�
 NPU 验证启动器添加项目 `PYTHONPATH` 时须保留 module 已提供的路径；直接覆盖会使
 CANN 初始化找不到其 `tbe` Python 包，即使 Torch/NPU 导入和构建已通过。
 这是任务环境错误，应修正私有启动器并保留原失败；不要据此改数学实现或安装另一套公共包。
-长任务继续使用 `run-durable-user-task` 的独立 `background.slice` 服务，
-固定源码与有限时长。构建默认使用进程可用的全部 CPU，`--jobs half` 使用一半，
-也可显式指定正整数；实际资源约束造成的降低须说明原因。测试使用空闲 CPU/NPU/内存，
-计时前固定并记录 ATen/BLAS/调度线程，项目重型构建与性能计时分开。实际任务见 STATUS。
+长任务使用独立 `background.slice` 服务、固定源码与有限时长；本机操作方法可参考
+`run-durable-user-task`，项目启动器和记录仍由仓库维护。构建和测试可使用全部可用CPU、
+内存与空闲NPU，集中加速或并行独立任务由实际占用决定。构建默认 `--jobs all`，
+`--jobs half` 或正整数只是可选配置。计时前固定并记录ATen/BLAS/调度线程，避开
+争用同一资源的重型构建/测试。共享NPU须有当前prompt明确授权，范围按该prompt限定，
+不从历史记录推定；规则见[执行契约](execution-flows.md)。实际任务见STATUS。
 
 ## 下游接入与反馈
 

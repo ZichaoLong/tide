@@ -183,8 +183,9 @@ NPU 站点中 `site.environment` 对应 Python 导出适配器；不同 SDK 的�
 `outputs` 或 `metrics` 是实际实验的独立返回契约；设备状态可以留在设备上，checkpoint 仍完整保存。
 这两种模式要求显式 `validation=none`，先通过独立 `check` 检查所需配置。
 内置输出目标的host eager在这两种模式下默认省去中间事件/消息日志，保留完整raw continuation；
-可用模块因此进入整序列VJP。任务插件仍得到完整中间记录，防止改变其loss输入。
-请求/生效身份记录`selected-boundary-v1`，manifest记录实际内部返回方式；旧完整模式不变。
+可用模块因此进入整序列VJP。任务插件默认仍得到完整中间记录；仅使用输出的插件可声明
+`task.plugin.observations="outputs"`，显式启用同一边界策略。`complete`或省略声明保持完整输入。
+请求/生效身份记录`selected-boundary-v2`，观察声明进入任务/恢复身份；manifest记录实际内部返回方式。
 候选、Full作用和消息量取自调度器真实计数，不以被省去的日志长度冒充零工作量。
 精确恢复比较实际选择的下一窗、loss、完整raw状态、梯度、参数、optimizer和task，
 不切换到另一种执行方式代替测量路径验收。中间状态独立根仍由完整返回门禁验证。
@@ -338,4 +339,4 @@ tidegraph lock create --site t4-site.json --wheel /path/to/t4-install.whl --outp
 checkpoint恢复的精确CPU值比较可先使用`torch.equal`确认完全相等；不相等时仍执行原严格断言并保留首差诊断。
 有限值、dtype/shape/设备、None/零和int64检查保持，跨设备容差比较不进入该捷径；它不是跳过独立验证或改用hash验数值。
 
-旧冻结执行配置若没有record_policy，仍保留完整内部事件根；新outputs/metrics采用显式selected-boundary-v1。独立SDK的`--trace-records complete`可复现旧内部记录策略。容量规划解码历史省略项时保持旧greedy/legacy身份。
+旧冻结执行配置若没有record_policy，仍保留完整内部事件根；新outputs/metrics采用显式selected-boundary-v2，插件观察声明见上文。旧v1插件仍保留完整记录。独立SDK的`--trace-records complete`可复现旧内部记录策略。容量规划解码历史省略项时保持旧greedy/legacy身份。

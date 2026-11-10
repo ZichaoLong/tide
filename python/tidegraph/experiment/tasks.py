@@ -4,6 +4,11 @@ Factories receive the expanded task and plan; constructing one must not execute
 the graph. The candidate and independent oracle get separate task instances.
 No input callback receives a candidate trace or reference-selected actions.
 
+Plugins receive complete intermediate records unless the configuration declares
+``plugin.observations="outputs"``. That declaration permits eager selected-return
+execution to omit trace/messages; outputs and the exact continuation remain.
+Reference and explicit complete diagnostic calls always retain full records.
+
 An optional ``module: torch.nn.Module`` registers downstream parameters/buffers.
 The eager runner places it at the first graph parameter's device/dtype before
 calling ``optimizer(model)``. That model includes unique graph.* and task.*

@@ -130,7 +130,7 @@ class ExecutionSpec:
         effective = dict(requested)
         selected_boundary = self.return_mode != "complete" and self.placement != "resident"
         if selected_boundary:
-            effective["record_policy"] = "selected-boundary-v1; task plugins retain complete records"
+            effective["record_policy"] = "selected-boundary-v2; explicit task observations"
         if window_policy:
             effective["prefill_schedule"] = "window"
             effective["scheduler"] = "component-window"

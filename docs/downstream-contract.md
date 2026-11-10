@@ -43,6 +43,13 @@ benchmark脚本及内部调度实现不是下游训练接口；需要新增可�
 Python任务插件不在standalone C++进程中执行；C++任务应使用公共库接口并单列任务实现及交付身份。
 resident任务VJP和普通eager autograd是不同接入边界，不能把一个Python head配置当成所有客户端的实现。
 
+插件默认保留完整中间记录。仅使用输出的任务可显式声明
+`task.plugin.observations="outputs"`，配合`execution.return_mode="outputs"`或`"metrics"`
+让host eager省去trace/messages并使用可用的整序列VJP；原始continuation仍完整。
+`observations="complete"`或省略字段保持完整观察；独立参考和显式complete诊断也保留完整根。
+声明属于任务身份，改变声明不能直接精确续接旧任务。容量估计与执行使用同一观察契约，
+manifest报告实际内部记录；旧冻结selected-boundary-v1执行不会自动采用新插件声明。
+
 ## 依赖锁与每次运行
 
 采用[依赖锁模板](../templates/downstream/foundation.lock.example.json)。示例中的null是待填字段，不能作为运行锁。

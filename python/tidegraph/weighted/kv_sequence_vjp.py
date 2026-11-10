@@ -42,7 +42,8 @@ class _Sequence(torch.autograd.Function):
         numeric, owners = plan
         ctx.owners = owners
         outputs, differentiable = [], []
-        # Concatenate once per field, then return disjoint views of actual data.
+        # Keep the actual immutable owner bank. Each snapshot remains a distinct
+        # output/root of this VJP; shared storage does not merge its cotangent.
         for field, name in enumerate(FIELDS):
             rows, flags = [], []
             for old_ids, writes, spans, events in owners:
@@ -52,8 +53,7 @@ class _Sequence(torch.autograd.Function):
                     connected |= inputs[source].requires_grad
                     rows.append(numeric[event].slots[name]); flags.append(connected)
             if rows:
-                joined = torch.cat(rows)
-                outputs.extend(joined.split([len(row) for row in rows])); differentiable.extend(flags)
+                outputs.extend(row.detach() for row in rows); differentiable.extend(flags)
         ctx.mark_non_differentiable(*(x for x, flag in zip(outputs, differentiable) if not flag))
         return tuple(outputs)
 

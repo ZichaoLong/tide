@@ -1,44 +1,41 @@
-# 当前交接 — FC16归因本轮已完成，等待用户对齐（2026-11-10）
+# 当前交接 — 接口、性能与架构统一实施（2026-11-10）
 
-授权分支graph-execution-foundation，固定数学0770593。用户最新要求：本轮后停下，先明确对齐，
-取得新授权后再开始后续优化/实验。当前没有待自动启动的作业；不要按历史持续要求恢复队列。
-参考/下游只读，无子代理。两份未跟踪TL-REQ-003/004用户handoff保持原样，未升级下游依赖。
+用户已授权持续实施、分阶段提交/推送；数学固定0770593，分支graph-execution-foundation。
+启动基线4d777bc，旧核心1f3f62d。用户未跟踪TL-REQ-003/004文档保持原样，不纳入提交。
 
-## 已交付与入口
+## 当前增量
 
-实现1f3f62d69f3d89b1cc7661a5a509c6e382e9b51d；本轮其他实现09e0277/098c91a/df80d04/
-9fd82c3/c20aaa4均保留真实历史身份。正式结果、来源hash、配置和可重建命令集中于
-[固定证据](evidence/fc16-cost-attribution-20261110.md)及同名JSON；
-[契约](fc16-cost-attribution.md)、[性能经验](performance-lessons-prefill.md)、[复现导航](reproduction.md)互链。
+三项仓库skills与分主题性能经验已整理；账户skills未改。取消仓库subagent门槛，按工作独立性使用。
+固定基线源码清单/审阅工具已完成；本次公共边界实际审阅25文件128函数，其余不冒称完成。
+修复Session重复读/decode、插件可声明outputs观察、runtime遗漏子包hash（manifest v2）。
+外层/私有autograd census及四模式对照已接入；诊断计时与正式吞吐分开。
+KV无trace序列保留实际共享bank视图；query按真实storage区间去重gather/Read K,V投影，
+手写一阶VJP保留独立snapshot根。仍有query×history伴随展开，不能称全部重复工作已消除。
+对应新契约：docs/weighted-snapshot-bank.md、docs/autograd-census.md；覆盖见相关测试与architecture。
 
-补充同尺寸Transformer与独立FC公式、实际首token、原生阶段计时。原FC16 B8/L128/d128/
-FP32 minimal完整训练CPU18.229637→17.496945秒、NPU22.998073→21.064699秒；
-输入位置吞吐58.52/48.61每秒。首tokenCPU4.140645/NPU4.273320秒，CPU较原3.881秒反升。
-NPU当前物理3共享，原训练物理11/锚点物理1；单次观察，不承诺独占或统计稳定。
-独立FC公式NPU训练.315203秒，Transformer16 .046361秒；不同函数/投影不能充当完整图等价证明。
+## 已完成的开发检查
 
-全查询私有列候选退化（CPU134.121秒）已撤回，取消/数值失败仍保留。
-当前只保留区域列、foreach复制到独立输出存储/版本；查询ragged内部叶保持独立。
-NPU查询发布阶段1.744→.683秒，区域梯度3.426→2.123秒，通用入口仍远慢于直接公式。
+Python sequence/新bank首轮37通过，另1旧FP32scalar差异；禁用新bank时该梯度逐位相同。
+同材料FP64差3.56e-15，FP32双方距FP64约1.03e-6/2.83e-6；严格失败保留为独立xfail。
+修订后新bank定向9通过/1保留xfail；native新文件语法编译通过，实际构建/设备资格尚待运行。
+公共边界开发107/67/39/33项组通过（重叠不累加）；图诊断11项通过。
+独立审阅补60组重叠/冻结/重复根探针和大int64检查；native存储组改稳定首次出现顺序。
+这些是开发检查，不能替代固定源码资格或性能结果。
 
-## 最终资格与终态
+## 下一动作与作业
 
-固定1f3f62d两套新构建：artifacts/fc16-attribution/{build-final,build-final-sdk}，全部320CPU；
-source-final只读，env-final为项目私有安装。CPU358通过/2原数值xfail，NPU流程95通过（含CPU辅助）。
-纯PyTorch/Python-native各CPU/NPU独立三步训练和新进程精确恢复通过；SDK CPU FP64/NPU FP32的
-complete与outputs各通过三步/新进程恢复，complete有独立记录/根，outputs只有自身精确续接资格。
-SDK3 CTest及CPU两dtype自定义kernel通过。完整FC16独立数值/学习验收仍not_checked。
+先固定当前实现提交，建立artifacts/interface-work/source-bank干净检出及env-bank wheel。
+计划background.slice有限服务gef-interface-bank：320可用CPU构建，CPU定向资格和三客户端恢复，
+FC16原任务CPU1/16线程及图统计对照；空闲单NPU队列内完成相关资格/成本。
+正式启动前记录实际unit/命令；尚无新活跃后台服务。任务日志预定artifacts/jobs/interface-bank/task.log。
+共享NPU本阶段无授权；只使用空闲卡，不能复用旧shared adapter。CPU约1.7TiB可用，文件系统约685GiB，
+本用户281GiB/soft300/hard800GiB；正式计时与本项目重构建不重叠。
 
-gef-fc16-attribution-final已passed/0，MainPID0/control group空；队列completed。
-日志/状态artifacts/jobs/fc16-attribution-final/{task.log,status.json}，全部内部结果已审阅归档。
-其他本轮：baseline/anchors-v2/gather passed；anchors failed/1，packed cancelled/143。
-packed内层CPU测量已完成、profile中断后running快照保持，不能把外层取消改写成整项成功。
-空闲NPU探针超时、首次NPU signbit测试oracle失败及后继修正分别保留，不再排队。
+## 基线与剩余工作
 
-## 后续对齐，而非继续执行
+旧结果见docs/evidence/fc16-cost-attribution-20261110.md：FC16 B8/L128/d128 FP32完整训练
+CPU1线程17.496945s、NPU mixed-c21.064699s；独立FC/Transformer范围不同，原NPU共享/完整数值未验。
+本增量尚无新吞吐结论。全面审阅、其余模块/接口治理及代表回归继续按ROADMAP推进；
+不得只交付文档或首个KV增量就宣称总体完成。LH脏现场/下游安装锁保持不变。
 
-唯一待办见ROADMAP的FC16后继。建议先讨论块级查询快照/伴随接口与当前逐字段根的关系，
-再定有限回归范围和成本目标。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident本增量规模
-回归未做；原提交证据仍有效但不可外推到本增量。GPU/异步双NPU/resident工作区等旧边界未解除。
-无新的后台任务、无下游写入；新授权到来先运行git status --short --branch和python scripts/status.py。
-提交/远端状态以git status为准；本轮收尾不授权开始下一阶段，后续只停留在讨论/对齐。
+接续运行git status --short --branch、python scripts/status.py与check_upstream；检查unit及实际日志后继续。

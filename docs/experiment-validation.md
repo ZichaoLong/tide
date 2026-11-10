@@ -89,8 +89,9 @@ standalone 的 `throughput_qualified` 还要求显式完整精确续接检查通
 `outputs` 只搬运所需输出，`metrics` 推理不额外求诊断 loss，结果中 loss 为 null。
 两者保留设备上的 continuation，要求 `validation=none`；可独立启用`checkpoint-check=true`，
 比较实际所选下一窗的返回/loss及其前后完整raw状态、梯度、参数和optimizer。
-host eager内置目标默认不保留中间事件日志，任务插件仍保留；`selected-boundary-v1`
-进入执行/恢复身份。实际候选/Full/消息总量来自调度器计数；没有保留的逐sample事件统计是null，不能记零。
+host eager内置目标默认不保留中间事件日志；插件仅在显式声明`task.plugin.observations="outputs"`时采用该策略，
+否则保留完整根。`selected-boundary-v2`进入执行身份，观察声明进入任务/恢复身份；旧冻结v1插件行为保持。
+实际候选/Full/消息总量来自调度器计数；没有保留的逐sample事件统计是null，不能记零。
 完整独立验收由公共 `check` 的完整返回流程承担；最小返回本身不能继承其独立数值通过字段。
 resident 最小返回使用现有 `advance_device/outputs/metrics`，
 不在窗口内新增主机推进；未解码的 per-sample cache 分布明确记为 `not_checked`。

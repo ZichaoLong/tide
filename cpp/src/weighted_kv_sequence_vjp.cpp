@@ -1,4 +1,5 @@
 #include "tide/operator_profile.h"
+#include "tide/autograd_census.h"
 #include <ATen/record_function.h>
 // KV §2: actual prefix snapshots and deterministic bulk first-order adjoints.
 // Only untraced execution; the traced independent-state root chain is retained.
@@ -133,6 +134,7 @@ bool bind_kv_hidden_sequence(const NodeWeights& w,const std::vector<State>& old,
   }
   node->set_next_edges(torch::autograd::collect_next_edges(inputs));
   for(const auto& t:inputs)node->originals.emplace_back(t,false);
+  if(autograd_census::enabled())autograd_census::saved(inputs);
   size_t output=0;
   for(size_t f=0;f<4;++f){
     variable_list values;std::vector<bool> connected;
@@ -144,12 +146,12 @@ bool bind_kv_hidden_sequence(const NodeWeights& w,const std::vector<State>& old,
       }
     }
     if(values.empty())continue;
-    Tensor joined;{at::NoGradGuard guard;joined=at::cat(values);}
-    Index begin=0;size_t index=0;
+    // Immutable numeric bank views, with independent snapshot gradient edges.
+    size_t index=0;
     for(const auto& owner:node->owners)for(const auto& row:owner.writes){
-      auto end=begin+values[index].size(0);auto value=joined.slice(0,begin,end);
+      auto value=values[index].detach();
       if(connected[index]){node->output_map.push_back(output);torch::autograd::set_history(value,node);}
-      numeric[row.event].slots[fields[f]]=value;begin=end;++index;++output;
+      numeric[row.event].slots[fields[f]]=value;++index;++output;
     }
   }
   previous.resize(numeric.size());

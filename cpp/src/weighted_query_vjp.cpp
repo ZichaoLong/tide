@@ -1,5 +1,6 @@
 #include "weighted_independent_copies.h"
 #include "tide/operator_profile.h"
+#include "tide/autograd_census.h"
 #include <ATen/record_function.h>
 // Architecture §3/4: actual query batches with independent row/field VJP roots.
 #include "weighted_query_vjp.h"
@@ -142,6 +143,10 @@ template<class Config> Fields bind_group(NodeWeights w,std::vector<Row> rows,con
   node->row_outputs=refs[0].size();Fields result;
   std::vector<Tensor> publication;
   for(const auto& row:refs)for(const auto& [name,ref]:row)publication.push_back(ref);
+  if(autograd_census::enabled()){
+    autograd_census::graph(is_full?"private/query.full":"private/query.read",publication);
+    autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(publication);
+  }
   auto copied=detached_copies(publication);size_t output_index=0;
   for(size_t i=0;i<rows.size();++i){
     TensorFields out;size_t j=0;

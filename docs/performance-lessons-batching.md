@@ -1,0 +1,274 @@
+# 批量、共享计算与数据搬运
+
+本页按机制集中保存已有观察，来源与范围仍由各固定证据报告定义。
+源码定位与历史提交的关系见[迁移映射](history-migration.md)。
+当前待办与停止/重启决定只在[ROADMAP](ROADMAP.md)，下列历史决定不自动成为新任务限制。
+从[经验索引](performance-lessons.md)选择相关主题；新工作按[优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)进行。
+
+## 本仓库 core-3
+
+| 经验 | 来源与实际结果 | 迁移到 core-5 的条件 |
+| --- | --- | --- |
+| 局部批量化不保证整图提速 | [批量State/Read](evidence/batched-selection-cpu-20261010.md)：Read局部3.16×、Attention局部2.96×；完整Add单次3.811→4.091秒，RSS增加，外部负载未隔离 | 同时测装配、反向、optimizer与同步；不能用局部倍率替代完整训练 |
+| 私有冻结参数可借用，公开快照仍须隔离 | [4467493](evidence/resident-projection-borrow-20261003.md)：D512/B8双卡每卡allocator峰值减少296274432字节；完整梯度/恢复通过 | 参数版本与所有者存活、未消费窗口阻止发布；不把动态状态或外部可变参数当冻结bank |
+| 复用通信arena减少存储 | [a72868f](evidence/resident-shared-packets-20261002.md)：同配置每卡减少268437504字节；144次通信迭代未减少 | 发送复用须等接收完成，收发分区、tail/None/零与稳定归约顺序保持；内存收益不自动是吞吐收益 |
+| 准入扣费与实际分配不同 | [219719d](evidence/consumer-private-bank-capacity-20261003.md)：只去掉重复保留扣费，既有allocator结果完全相同 | 新清单分列逻辑参数、物理副本、借用、各生命周期峰值；不能把估算降低报道为实测降低 |
+| 总HBM通过不代表内部缓冲通过 | [中型选择](evidence/native-selection-20261011.md)：Add B8反向packet拒绝；B4通过；Attention仍在cache-adjoint边界拒绝 | 分区与组件预算分别审计；物理切分保持逻辑batch、Attention和optimizer边界 |
+| CPU/mixed/resident胜负依赖规模、函数、客户端 | [大规模](evidence/selection-review-20261009.md)、[终态](evidence/selection-terminal-20261010.md)、[中型](evidence/native-selection-20261011.md) | 旧近似平票失败仍保留；D64 CPU结论不外推D2048，不能将不同轨迹称等价加速 |
+| 混合执行的小算子、scalar、切卡与同步成本真实存在 | [完整profile](evidence/native-selection-20261011.md)：Add mixed有大量SetDevice/同步；selected-clear阻止自由时间合批 | core-5观察全部候选保留状态，不能照搬旧clear后备；测真实批长和缺席物理行 |
+| 版本限定的运行时缓存行为须显式记录 | [CANN缓存](evidence/resident-cann-cache-policy-20261004.md)：指定旧栈cache-off解除copy错误，默认失败保留 | 不修改公共环境，不把旧栈开关当所有版本的优化；构建、运行和错误证据分别固定 |
+
+### Full 与 Aggregate 的批量反向经验
+
+[Full VJP](evidence/full-batched-autograd.md)在9.468B Add、D2048/B512、CPU56、FP32的
+同二进制对照中，将grad-enabled forward从110.439降至10.499ms/sample-token。
+改变是移除逐事件Full投影重演、使用批量VJP；数值前向与公开独立根仍有分别验证。
+[Aggregate VJP](evidence/aggregate-batched-autograd.md)固定Full已批量后，同二进制的
+Aggregate replay/batched中位数为11.619/8.559ms/sample-token。两份报告的大模型均只测
+开启梯度的前向，不包含真实backward/optimizer；不能将不同批次的Full-only数字拼成配对对照。
+
+Aggregate报告另有小模型真实训练：Add完整过程1.442→1.048秒、Attention5.477→4.985秒。
+它说明批量VJP也能改善实际反向，但不能从grad-forward速度推断大模型训练速度。
+这些机制可迁移到core-5的局部计算和调度边界；数学函数、原始时间、参数共享和独立根
+按core-5重新验证，源码与实际收益仍引用各自报告。
+
+## 参考仓库
+
+LH 固定历史 `a10fdb1883fccd63ec21e36cc9cffa294c63c9e2` 的
+`Connectome/cpp/src/BatchHidden.cpp` 合并多样本KV读取并矩阵化回收梯度；
+`CortexNet.cpp` 使用CSR邻接、按来源合并出边投影。历史缓存采用其自身激活时钟，
+不可代替core-5原始逻辑时间。背景、计时与模型口径见[LH对照契约](lh-scale-benchmark.md)、
+[原始测试](lh-original-test.md)。当前LH工作树有已有修改，不能作为该固定版本的替身。
+
+fractal-latcarf 固定 `4883483dcd3f4e73bfceecb4cba877d87063cefd` 的
+`src/tide/packed.py` 使用公式/形状分组和区域消息生命周期；
+`_record_group_linear_1d` 为保持aarch64 FP32算术边界仍逐记录计算。
+连续buffer、编译循环与实际批量GEMM须分别计数；独立调度和None/连接零不能在迁移时丢失。
+
+## Core-5 已有观察
+
+[c84556d有限测量](evidence/core5-weighted-performance-20261028.md)只覆盖宽4/32、3/8节点、
+单卡FP32全活动发送；HB/KV medium有102604个可训练参数，SSD为116220。
+参数按真实别名去重；这不是旧core-3的94.68亿/175.21亿规模。
+resident存在逐节点队列填充、物理行多于实际作用、窗口反向程序构造及head/归约开销。
+它们是有源码/profile依据的优化方向，尚无新优化收益结论。
+
+后续每份小型证据应回答：改了什么、什么条件允许改、完整结果/梯度是否保持、
+哪项实际工作或内存减少、完整调用是否变快、哪些失败和未覆盖范围仍保留。
+至少包含输入/源码/构建身份、单独profile与非profile流程、原始测量次数及资源争用。
+
+## 本轮迁移与负结果
+
+实现`749276c`、诊断/设施`d1787e8`的固定证据在
+[参数匹配与迁移报告](evidence/core5-performance-transfer-20261028.md)。数学版本没有变化。
+
+| 经验 | 本次实施、证据与适用条件 |
+| --- | --- |
+| 复用实际存储须同时处理发布 | 冻结`ParameterBankPool`按TensorImpl/切片/设备/版本借用，同值独立参数不合并；canonical发布去重，所有使用的VJP仍归约。CPU别名/切片/版本/预算反例与设备完整训练/恢复分别验收，实际allocator观测另列；延续core-3的借用及真实扣费经验 |
+| 阶段共同输入可以只复制一次 | ready数值副本由逐节点改为逐阶段，前向/逆向保持自己的布局与依赖；新增字节计数，不把内存布局连续或估算减少当作实际吞吐结果 |
+| 低秩路径避免构造稠密临时矩阵 | eager合法共享KV计算`U(Vx)`，标量/未共享路径保留组合矩阵作独立锚点；只复用相同参数和输入，状态仍私有。原HB medium同材料CPU单次391.432→365.834ms通过完整对照；不能由此外推大D或逐项归因 |
+| 少分配不保证更快 | 同原HB medium的NPU构造allocated减少187392字节、测量峰值减少374784字节，reserved峰值不变；完整严格对照通过，但单次2576.159→2795.223ms约慢8.5%。这是真实存储小收益和计时负结果，不能宣称设备加速 |
+| 初始化和材料成本需要独立观察 | 移除随后废弃的旧随机权重初始化；v2不展开大型JSON。92.62亿参数真实材料可构造，导出约366s、C++构造约184s、RSS约46.93GiB；仍不是训练峰值或吞吐资格 |
+| 匹配参数必须匹配口径 | 旧core-3减去embedding/head后匹配主体，通过真实FFN宽度而非无用权重；同参数数量不意味着同函数、同激活量或同训练成本。五族的key/value/FFN尺寸和误差都保留 |
+| 稀疏发送不等于所有计算消失 | HB64的实际候选/Full由32/32变为20/16；ranked64即使k=区域大小也只有344/479 Full。局部候选、消息、物理行、反向和optimizer各自计数，严格失败候选不参与等价加速声明 |
+| 打包接口不保证形成大矩阵批 | 749276c的ranked64 profile仍有479次State、最大State batch=1，22905次mm；调度/Query/装配/反向成本显著。后续6612ed3形成真实私有BMM，但适用组只覆盖部分节点，见下节；不能仅合并buffer或按内核数猜瓶颈 |
+| 验证失败也应保存测量事实 | 原ranked64 Python的result未附metrics，但独立metrics.json已持久保存；d1787e8让最终失败记录也保留同一metrics列表。失败时间可以解释成本，不能认证正确性或胜出 |
+| 大profile本身可能昂贵 | 单个ranked64 trace约818MiB、profile RSS约16.25GiB；应优先较小代表案例，采集/解析预算与真实训练峰值分开。profile独立进程不进入吞吐对照 |
+| 数值规模必须独立检验 | 旧/新同材料D64都严格失败；新FP32梯度和更新参数也有差异，显式FP64两步诊断通过。当时quad大共同偏移的手算反例在FP64也拒绝，随后6612ed3修复这个机制；大D原材料仍拒绝，不能归结为dtype不够或删除残差守卫 |
+| 验证子进程也要隔离scratch | NPU产生kernel_meta令并行CUDA构建最终源码身份检查拒绝。d1787e8把设备子进程cwd设为输出目录，保留原失败并独立核验同内容构建；不放宽源码洁净检查或掩盖新文件 |
+
+这些改动处理了可证明的复制、冻结存储、共享低秩和初始化冗余；当时未共享KV的稠密组合矩阵
+随后由137f530消除，见下节。逐节点物理行与窗口反向程序构造仍有余地。当前证据不支持“低垂果实已经基本耗尽”；后续改进
+继续以独立数值资格、实际工作量和完整调用结果决定保留与否。
+
+## 实际私有矩阵批与数值修复后的观察
+
+固定实现6612ed3的[独立资格和有限对照](evidence/core5-private-projection-20261028.md)
+承接上述profile，仍未扩展数学版本、容差或默认算法。
+
+| 经验 | 本次实施和验收边界 |
+| --- | --- |
+| 稳定的求解点须贯穿残差和反向 | quad保存实际居中响应，避免用舍入的全局乘子重建。单自由/多自由与饱和坐标的闭式解、独立温度/边界根通过；共同偏移修复不证明大分差和原D2048全部可解 |
+| 真正BMM还要保持独立根 | 相同base/输入组内，按形状/device/dtype把私有V、U、summary组成真实BMM；显式行VJP保留未用行None、连接零、别名累加和版本检查。CPU574项、NPU相关单/双卡训练恢复和独立设备KV通过；普通stack/BMM反向不能直接替代 |
+| 最大批长不能代表覆盖率 | ranked64最大私有矩阵批32，但测量窗仅34/479次State进入它；共有6次投影调用/102行。State回调最大批仍1，两类计数必须分开；跨不同base/输入的合批尚未由此完成 |
+| 少量矩阵调用消除未形成端到端胜者 | CPU同材料388.921→387.704ms（约−0.3%），mixed-c NPU1874.480→1988.877ms（约+6.1%）；完整对照均通过，但每配置只有一次流程、外部负载未隔离。保持真实性能负结果，不据BMM数宣称加速 |
+| 原失败材料须在修复后重验 | D64两步FP32完整记录/梯度/SGD仍严格失败，FP64通过；D2048实际92.62亿参数构造/warmup后仍残差拒绝。小反例修复、dtype诊断和大型资格是三个结论，不能相互替代 |
+| 事件分析也是profile成本 | 新ranked64 trace约824MiB、RSS约16.21GiB、采集/分析约4分钟；22501次mm/12次bmm/100523次copy只能解释实际失败候选的成本。优先更小代表profile，必要时分开采集与分析，不能混入吞吐或漏出资源预算 |
+
+下一类有依据的候选是更广的同形私有投影批、小批设备提交成本、物理缺席行及窗口反向程序复用。
+先固定数值适用域和独立梯度/恢复门禁，再用一次有限完整调用测量判断收益；本轮没有“低垂果实已耗尽”的结论。
+
+## 局部数值修复与全部 eager 低秩
+
+固定[137f530报告](evidence/core5-local-allocation-factorized-kv-20261028.md)把实际失败、局部独立解、
+完整模型与有限性能分开。25d535f的阶段记录修正有自己的固定资格，不混入上述测量。
+
+| 经验 | 本次实施和证据 |
+| --- | --- |
+| 残差拒绝要捕获实际输入 | 两份原D2048行提交到tests/data，120位Decimal证明有可行解；以cap质量分位评分作局部原点后通过。共同偏移和远处饱和评分是不同数值问题，不能据错误字串判断同因 |
+| 可约去的共同项应在舍入前消去 | 总量约束起作用时，共同阈值只平移乘子；直接以原评分求解并保留连接零阈值根，松弛分支仍保留真实依赖。独立Decimal、VJP和后端门禁验证，不改dtype/容差 |
+| 同一输入上的局部解准确不代表输入相同 | 30组实际scalar/batch分配局部误差最大8.33111e-8，评分传入前已相差至5.21183e-4；完整FP32梯度/SGD仍失败。先沿输入链找分歧，不能继续只增加迭代次数 |
+| 低秩消冗应覆盖所有实际路径 | 标量、独立packed和共享eager行都用base@x+U@(V@x)，独立dense公式/Jacobian维持数学锚点。resident的组合矩阵/tape仍另有实现；没有借共享参数许可共享不同输入的计算 |
+| 单次小收益与低成本优化尚存可以同时成立 | CPU中型366.831→363.974ms，NPU mixed累计2189.634→2145.125ms；均完整通过但不足以证明稳定加速。mixed峰值allocated反增372736字节，不能把结束时live略降解释成峰值改善 |
+| 原拒绝解除后仍须完整验证 | 约92.62亿参数B1推理完成130.351s窗口，随后keys严格失败；D64训练同样失败。运行到计时结束、局部正确、完整等价及大型吞吐是不同验收结论 |
+| 进度要在昂贵阶段开始前持久化 | standalone此前只在窗口结束时写结果，外部中断无法准确定位阶段。25d535f在计时外落盘phase/window，FIFO中断与五族材料共6项固定检查通过；最后running记录仍须配合外层job终态 |
+| profile范围应服从问题与预算 | medium独立profile约115.43MiB、RSS约2.55GiB并完整核对通过；1394次mm/288次bmm只是该图工作量，不与旧大图次数直接算收益。采集/分析不进入吞吐样本 |
+
+CPU746项相关资格、NPU九项加eager训练恢复及CUDA构建已验；CUDA真机、大图严格正确性、
+跨不同输入/基座的广泛合批和窗口反向复用仍各有边界。原FP16/异步/affine/PDG失败不因本项解除。
+
+## 独立输入矩阵批的覆盖与完整成本
+
+[8d97020固定资格/有限对照](evidence/core5-independent-projection-20261029.md)把相同函数/输入的
+计算复用与不同输入的真实BMM分开。局部8MiB预算、每行epsilon/参数和None/零根均有独立锚点；
+CPU、两套NPU ABI及训练恢复分别通过，不能用旧共享组的资格代替新增路径。
+
+| 经验 | 本次实施、实际结果与边界 |
+| --- | --- |
+| 计算共享不是矩阵批量化的必要条件 | D64保留原34次共享准备，再以112次投影调用/1780投影行覆盖445次独立写入；最大独立批24，共覆盖479次写入。State回调仍479次、最大batch1，私有缓存和全图调度未融合 |
+| 扩大覆盖不保证端到端改善 | CPU中型388.129→405.010ms、D64显式FP64 2991.719→2996.551ms、NPU mixed-c 1825.444→1850.355ms；输入hash及逻辑工作量相同，完整返回/最终梯度/SGD槽均通过。每配置一次，不宣称稳定退化或加速，也不扩大矩阵寻找有利结果 |
+| 堆叠有实际存储成本 | NPU测量peak allocated增加396288字节、reserved峰值增加2MiB，结束live不变。局部8MiB约束仅是矩阵打包估算，不是全图内存保障或收益 |
+| profile要追到完整反向和拆装 | 新D64 FP64 profile有17697次mm、236次bmm、69342次copy、12325次stack；Query VJP823次、Aggregate VJP447次。forward约1.886s、backward/finite约3.069s，mm/bmm self合计约.125s。profile含额外开销，不同尺度/精度的旧trace不能直接相减；不能据算子数断定唯一根因 |
+| 精确恢复须在合批扩大后再核对 | D64两步记录、参数梯度、参数、SGD槽通过；两调度各自实际checkpoint换owner后下一窗逐值一致。共享图创建/汇总顺序属于恢复风险，不能只验前向或最终loss |
+| 构建环境失败须与实现缺陷分开 | 新SDK首次缺Ninja、Python/native首次覆盖CANN PYTHONPATH导致缺tbe；修正任务私有入口后通过，保留旧failed。新增virtual能力后重建核心与消费者；工具PATH可复用不等于Torch/CANN ABI可混用 |
+
+本次profile约739.66MiB、采集/解析/核对230.49s、进程峰值约14.51GiB；普通D64测量阶段的历史RSS峰值约.76GiB。
+profiling开销不纳入吞吐，也不作为普通训练内存。后续更有依据的方向是私有VJP构造/字段拆装、
+小批设备提交及resident窗口反向复用；当前没有“低垂果实已耗尽”或大型设备吞吐胜者的结论。
+
+## 紧凑局部纤维与执行资源数量
+
+[b7e0a29固定证据](evidence/core5-compact-fibers-20261029.md)在相同medium材料、容量、
+工作量与SGD边界下通过完整记录/梯度/槽和磁盘恢复；D64保留新的构造失败。
+
+| 经验 | 实测及可复用结论 |
+| --- | --- |
+| 物理输入上界可消除无用填充 | medium完整窗2.794→2.470s，allocator peak allocated514.8→376.4MB、reserved532.7→419.4MB；一次观察，不外推普遍收益。前向/adjoint张量计数各减53.83/80.89MB，实际工作仍128候选/128Full，物理行仍192/192 |
+| 工作内存下降不解决程序构造 | 反向执行/等待1094→700ms，而构造928→1057ms；retained和辅助预算未降。数据布局压缩、程序数量、跨窗构造应分别优化和计量 |
+| 流/通知资源独立于字节预算 | D64局部槽从1966080→2240后，新的首个拒绝是创建CANN流207005；实际日志明确Too many streams，SQ/CQ观测1984。每数值服务独立DeviceProgram、每程序两个流，数量随节点增大；提高HBM额度不能修复这次拒绝 |
+| 服务复用须保持设备调用关系 | 后续有界分派/池化须处理父子嵌套、请求/完成/停止、workspace串行所有权、peer顺序和反向。不能直接把所有服务塞入单流（可能重新触及任务缓冲），也不能缓存绑定旧journal地址的adjoint；新方案先反例再完整资格 |
+
+该D64没有训练时间或恢复结果，stream_id/SQ/CQ数只是本机本次观测，不作为通用固定上限。
+数据布局优化已取得有限实际收益；跨节点批、缺席物理行、小提交和反向构造仍有余地。
+
+## 自然维度、区域合批和大文件
+
+[372/878a5a4消费者资格](evidence/core5-study-clients-20261029.md)、
+[878a5a4有限测量](evidence/core5-natural-study-20261029.md)和
+[9bfabbb文件预算复验](evidence/core5-checkpoint-budget-20261029.md)保留本轮正、负结果。
+
+| 经验 | 本轮结果及可复用条件 |
+| --- | --- |
+| 相近参数量不代表相同工作 | 两个约4.2M FC在B2/P2下，候选16→64而Full均8；三客户端的同模型CPU FP64均完整通过，native约.086/.177s，Python约.120/.331s。跨模型改变了维度/图/实际稀疏性，不能称等价加速或只归因于节点遍历 |
+| 有批量能力不等于大batch吞吐 | LH1.051B B1/P1两窗通过，1.439/1.193s；region/state最大批1，私有投影批8。必须同时记录候选115/114、Full27/22、消息155/133，不将参数规模或发送稀疏等同计算减少 |
+| 优化问题未必是当前主耗时 | HB medium NPU实际region64帧/16调用、batch4；profile AllocationBatchVjp inclusive约21ms，Query VJP约696ms，大量索引、标量/传输和小提交。完整数值失败保留，profile只能定位该失败候选；先改善测到的边界，不凭公式复杂度决定重核优先级 |
+| 精度参考必须匹配存储/算术边界 | resident half存储仍有FP32中间算术/伴随/master；复用独立storage参考并先核对dtype，不能把中间值转half或放宽容差。878a5a4 Python half/单卡/双卡和SDK实际消费者分别通过 |
+| 验收也要管理owner生命周期 | resident恢复检查先保存实际CPU状态与下一窗，再关闭旧owner并恢复新owner，避免无意义的双份设备程序/参数bank；精确解码和完整下一窗比较保持，成本在计时外 |
+| 大尺度完整训练比前向更敏感 | FC/HB 1B CPU FP64仍在少量SGD槽/梯度坐标超原容差，自身恢复不代表调度之间等价。保持原严格结果，不能由前向、参数或局部公式通过外推多步训练 |
+| 文件预算不是模型上限或内存峰值 | native原4GiB限制在1B+SGD槽时触发；显式预算后5.25GB文件存/读成功。格式不变，仍需承担整体CPU buffer和嵌套副本；后续原owner梯度非有限是另一边界，不能归因于解码或称完整续接通过 |
+| 流数量与流内任务数分开处理 | HB medium507002/EE1019是warmup反向提交的stream task buffer full；D64旧207005是流数量。减少流或复用workspace不自动解决待提交任务数；有界服务设计须同时验两项以及嵌套通知/独立根/恢复 |
+| 结果查询不应依赖旧运行目录 | 模型/工作负载/执行/测量身份与审阅JSON可直接查询；保留完整状态/检查标志，失败计时不会被提升为合格吞吐。原始日志hash用于追溯，查询本身不是重新认证 |
+
+本轮没有新的8B/16B吞吐、长序列训练或CUDA真机结论，也没有“低成本优化已全部完成”的结论。
+下一项重性能工作应由候选价值与这些实际成本决定，先做小规模独立正确性，再扩大规模。
+
+## GPU 推理批次与完整返回
+
+[本轮推理报告](evidence/core5-cuda-inference-20261031.md)分列B `1c903ae`、D `4960b6c`、H `fd3c72b`：
+D含批量控制元数据，H新增显式完整返回packing；原FP32严格失败不由另配FP64通过解除。
+每配置一次独立流程、warmup后取三个连续窗口中位，profile另进程；不同源码/客户端各有完整核对与恢复，
+不从一次成本差异推断稳定加速，也不从小图直方图推断大矩阵利用率。
+
+| 问题与源码 | 已有能力及本轮证据 | 本轮决定 | 重启条件 |
+| --- | --- | --- | --- |
+| 1. 长度桶：[query_batch.kv](../python/tidegraph/weighted/query_batch.py)、[Visible/memory](../cpp/src/weighted_query_kv.cpp) | FC B8→B32，可见Read/Full各21→22桶、89→341行，平均4.24→15.50行，单行桶1→0；KV正写投影另合并，写长度桶不等于GEMM切分 | 保留实际可见长度桶，暂不做padding重写 | 新材料仍有大量短桶且小调用主导，才比较一个有界方案；保持可见性、正支持、int64原始时间和独立VJP |
+| 2. 控制回传：[region_metadata._flags](../python/tidegraph/region_metadata.py)、[flags](../cpp/src/region_metadata.h) | 已形成组按device/dtype批读detach bool；浮点control、独立根不改，CPU/单例保留原路径；逐owner长度、nonzero和部分支持判断仍在 | 保留有界元数据修改，不扩成统一搬运层 | 新profile定位剩余取回成本，再验完整记录、共享参数、梯度与恢复；不预跑轨迹或改mixed定义 |
+| 3. 重复packing：[mapper](../python/tidegraph/weighted/placement_tensors.py)、[snapshot](../scripts/weighted_benchmark_return.py)、[return_copy](../tools/weighted_benchmark/return_packing.cpp) | 已有8MiB异形字段mapper；新增完整返回最多8MiB临时组，每次字段出现独立CPU clone，特殊/大Tensor保留scalar；sum Read重复summary gather/stack仍在 | 显式`--return-packing`独立于placement/局部packing，默认scalar；保留有限获益路径，resident拒绝此eager策略 | 无整窗收益选scalar；内部重复packing确为热区才做一项局部复用；异步/跨窗缓存/最小返回需新所有权方案 |
+| 4. 兼容节点批：[project](../cpp/src/weighted_packed.h)、[linear_rows](../cpp/src/weighted_row_linear.cpp)、[独立KV准备](../python/tidegraph/weighted/kv_independent_batch.py) | `weighted_mm.rows`是同一W的输入行，`private_bmm.rows`是独立(Wᵢ,xᵢ)对；FC小型B32有46次MM/2193行，但441/445次私有BMM仅2行；独立投影另限8MiB估算预算 | 保留批量ATen与独立根，不将State批外推为Read/Full跨节点批，也不盲目加预算 | 实际宽度/批分布、预算退回和端到端成本同时指向缺口后，比较一个有限合批方案 |
+| 5. resident填充：[construct](../tools/device_online/weighted_flow.cpp)、[decode统计](../tools/device_online/weighted_flow_records.cpp) | 已按物理入边/端口缩纤维槽；每私有状态每stage仍一个时间。FC B8物理160行/实际89，B32物理640/实际341，均完整推理/恢复通过 | 记录缺席行、stage与资源，布局大改后置；物理比例不是GPU时间浪费比例 | profile/预算证明布局主导后，验证设备活动行或多时间方案；保持设备就绪/选择/推进、私有状态、journal与恢复 |
+| 6. 反向模板：[reverse](../tools/device_online/weighted_training_backward.cpp)、[adjoint构造](../tools/device_online/weighted_window_vjp.cpp) | 实际snapshot的journal、generation、参数与独立roots参与绑定；已有分组VJP不能被普通stack的零梯度连接替代 | 模板重绑后置，不阻塞推理；不按shape缓存旧owner | 训练profile确认构造成本，再显式重绑地址/版本，验None/零梯度、共享、跨窗、optimizer及磁盘恢复 |
+
+元数据B→D：FC B8 native标量取回1380→1114、Python1621→1354；完整窗中位分别
+242.668→240.310ms、308.299→311.968ms，未证明稳定整窗收益。减少调用是事实，不能代替性能验收。
+完整返回D scalar→H packed：FP32 FC B8的PyTorch/Python-native/standalone中位分别
+311.968/240.310/249.257→273.837/225.788/206.459ms，完整记录和精确恢复均通过。
+4.2M FP64 B1为83.759→84.246ms，未获益；B32为1197.397→787.432ms，仍只是一轮同材料观察。
+同H源码、返回都packed时，FC B8 native局部scalar/packed为400.147/225.788ms；两个packing维度不能混算。
+H三客户端另过小型反馈PDG FP64两测量窗的完整记录核对、最终参数/梯度/SGD槽核对及精确恢复，不外推旧训练矩阵。
+
+D→H的FC B8两Python入口，cudaMemcpyAsync与显式sync各少2788次，返回阶段sync由2792次降到4次。
+全profile显式同步union：native14.473→11.960ms，Python16.551→13.891ms；捕获跨度内占比约2–3%。
+但native返回阶段union为106.411→136.058ms，Python为181.778→58.639ms；不能宣称两份profile都更快，
+也不能把正式中位收益全归因于等待减少。阶段重叠须用union，inclusive不可相加作独占时间。
+这里只统计捕获的CUDA stream/event/device/context显式同步API；本批仅观察到stream与device调用。
+分母为完整X事件跨度，含采集开销；不证明关键路径或全部主机空闲，不补推隐式copy等待/轮询，调用数不等于字节。
+
+约1B B1已通过的推理配置实际触发一次`independent_projection_budget`、2行保留原路径：
+这是独立BMM合批预算的真实限制，数学工作未跳过，不能称模型失败或OOM，也不能由推理通过推断大规模合批充分。
+B8也完整通过，但MM平均仅8.04行，私有BMM117次全为2行，独立预算退回11行；不据此称大矩阵利用充分。
+近界2.085B B1同样只有36次MM/64行、18次2行BMM，预算退回1组/2行；92头产生736次attention桶调用，尚无其占时证据，未追加第三优化。
+本机同卡相关NPU检查通过，FC B8返回packed中位576.500ms高于scalar的527.660ms，未获益；保持默认scalar。
+具体客户端、精度、参数、近界准入与资源以本轮报告为准，不由推理通过推断训练。
+
+## 三平台B128/B512与诊断开销
+
+[首组固定证据](evidence/core5-platform-baseline-20261031.md)包含真实不齐B128/B512。三平台同材料A/B/C完成，原数值超差保持；本次NPU B128返回packed降低成本不推翻旧B8反增。CPU ATen1/4/16未见随线程增长而获益，不能拿单线程结果作普遍比较。
+
+大逻辑batch已使State/Full行增大，但private BMM仍多为2行。GPU B128可见桶无单行、Full最小6行，当前没有padding重写依据。同权重MM与私有矩阵BMM分别计数；不把连续缓冲或packed标签当算子利用率。
+
+GPU profile显示有限值诊断大量小isfinite/all调用。旧实现已按device只取回一个bool，新`finite_check_packing`目标是合并小诊断kernel，而不是宣称减少原本不存在的逐tensor主机取回。默认不改；按device/dtype最多8MiB，特殊/大张量保持原检查，另预留32MiB空间。固定bd2ff2e相关78项通过，实际端到端收益须分CPU/NPU/GPU测量；无收益即保留scalar。不可将inclusive耗时或kernel数量减少等同加速。
+
+[bd2ff2e三平台实际对照](evidence/core5-finite-packing-20261031.md)已终态：B128 scalar/packed成本CPU1.018/0.853秒、NPU4.044/3.375秒、GPU2.317/2.067秒，原数值超差保留，默认不改。六小训练严格通过，两策略checkpoint/输出精确相同。CUDA kernel147380→111268，但显式同步39868→39869、比例2.202%→2.265%；不能称同步优化。BMM仅约19–23ms inclusive对几秒完整窗，当前不据2行标签扩大跨节点改造。新index/nonzero仍显著，但需因果归属和端到端方案，停止无方向的继续融合。
+
+## 本轮三平台六项打包处置
+
+这是在新增大batch/约1B/多卡证据上的重新判断，旧GPU表保留其当时范围。
+[首组A/B/C](evidence/core5-platform-baseline-20261031.md)、[有限诊断优化](evidence/core5-finite-packing-20261031.md)、
+[CPU/NPU实际形状](evidence/core5-platform-profile-20261031.md)、[GPU实际形状](evidence/core5-platform-scale-20261031.md)
+分别保留源码/输入/工作量，profile不进入正式曲线。
+
+| 问题与源码 | 新增代表事实与已有能力 | 本轮处理、停止与重启条件 |
+| --- | --- | --- |
+| 1. 相同长度分桶：`weighted/query_batch.py`、`cpp/src/weighted_query_kv.cpp` | 三平台1B/B128的Read/Full均12桶，单行桶0，最小Full5行；中等B128最小6行。正写行合并与可见query桶分别记录 | 保留分桶。当前分布没有支持统一padding替换的依据；新长缓存/异构材料出现大量单行桶且占时主导时，才比较一个保留可见性/正支持的有界方案 |
+| 2. 长度/mask/选择回传：`region_metadata.py`、`cpp/src/region_metadata.h`、`experiment/finite.py` | 已形成批的bool元数据批读；非零索引及逐owner长度仍有成本。1B/B128 GPU显式同步union占捕获2.861%；NPU同步API累计不能当同口径并集 | 保留已实现批读；新增有限值合批减少小kernel，显式同步次数没有减少。默认scalar不改。不据inclusive相加继续统一搬运；重启须确定某个输入/输出边界的实际等待与完整窗占时 |
+| 3. 拆装与返回：`weighted/placement_tensors.py`、`experiment/returns.py`、`tools/weighted_benchmark/return_packing.cpp` | A/B局部packing成本比CPU/NPU/GPU为1.600/1.612/1.673；B/C完整返回为1.017/1.110/1.360。原数值超差、相同离散工作量。返回和局部packing独立 | 显式C可用于本材料的成本探索，CPU近持平；不推翻旧NPU B8负收益。有限诊断packed另有三平台1.12–1.20成本比及小训练回归；特殊/大张量后备保留。内部summary复用须先证明重复拆装是排他热点及owner生存期 |
+| 4. 兼容节点/多head：`cpp/src/state_preparation.cpp`、`weighted_kv_preparation.cpp`、`weighted_kv_projection.cpp`；Python `kv_projection_batch.py`/`kv_independent_batch.py` | 大FFN已168时间行；共享W投影44次/3084行，私有BMM864次均2行；独立预算后备1组/96行。CPU共享base另288次大GEMV/self1.733秒；64head产生768桶调用，但没有逐head排他成本 | 两行BMM在已测GPU/NPU仅约19–23/13ms对几秒窗口，不先改跨节点调度。CPU同base多输入是具体后续候选；当前共享准备接口按同输入身份复用，跨输入矩阵批需扩展准备契约/独立根及稳定累加顺序，不能只抬8MiB而复制大base。取得这一方案和目标平台profile后重启 |
+| 5. resident填充/布局：`tools/device_online/weighted_flow.cpp`、`weighted_flow_records.cpp`、`planning/capacity.py` | 默认B² stage/journal拒绝不是逻辑batch上限；结构界定12B队列/stages32后CUDA B128/B512实际完成。56.25%缺席行，约0.340/1.342GB，实际3阶段 | 本轮已补显式有界配置，原默认拒绝保留。CUDA同材料eager更便宜，填充比例不能直接预测消除时间；NPU有界B128完成、数值探索；B512通过HBM准入后构造EE1019/507002，流任务缓冲满。静态bool连续段copy可能贡献小任务，先定位调用者/段数，不用加HBM预算掩盖。后续活动行/多时间方案须保持设备就绪、选择、推进、完整解码与journal，不能主机预跑 |
+| 6. 反向图/根绑定：`tools/device_online/weighted_training_backward.cpp`、`weighted_window_vjp.cpp`、`experiment/checkpoint.py` | 三平台六小训练的原loss梯度/共享/槽/跨窗恢复通过；任意独立根单列，NPU新all根失败；CUDA/NPU大训练原配方先非有限，不能用未执行的后续VJP判断其热点。NPUblocking恢复另有SIGSEGV | 本轮不缓存旧owner/journal/参数根，也不按shape复用。训练模板先要能重新绑定真实地址/generation/版本并保留None/零；在目标有效训练profile显示构造主导后才做一个候选。崩溃/数值失败独立定位，不用改配方称修复 |
+
+采用LH/core-3的批量厂商算子、明确原始逻辑时间、同材料核对和完整成本口径；未采用活动计数时间替代core-5逻辑时间，
+未因CSR表示强制稀疏矩阵，未由大batch标签增加专用核。各表的成本比是有限观察，严格失败仍不能称等价加速。
+下一步不是默认全部融合：先针对新的工作负载和已定位边界建立可反驳假设，再进行一到两个有界候选。
+
+## TL-REQ-004密集查询与异形记忆分离
+
+[具名dense-v1交付](evidence/dense-query-tl-req-004-20261110.md)复用此前“实际算子batch不等于调度batch”、
+独立字段VJP与共享投影的经验。原任务FC16/KV/qry/quad的外层VJP按cache shape分组，
+导致Full上千请求仍被拆成小投影；只移除KV缓存长度限制，把可见长度/正支持分桶留在记忆计算内，
+使current/Q/Describe/Full/FFN跨长度合批。状态有无、槽尾维、dtype/device/requires_grad及
+长/短Attention分支仍参与分组，避免把原本None的伴随接成零；不能按shape合并一切私有根。
+
+B2/L8 NPU真实FFN从1–2行变成2–15行；aten::matmul1823→596、反向1873→646，kernel记录
+168589→135504。CANN二维乘法名为matmul，只搜mm会遗漏core；helper计数也有覆盖差异，
+新Describe使用project而旧scalar头不使用，927→468不能当作全部矩阵次数比较。
+分支bool批量回读减少一部分取值，但AICPU Index/IndexPut各1170次及nonzero804次未减少。
+这些是设备算子，不是host fallback；既不宣称已消除动态索引，也不根据kernel数推断所有收益。
+
+原B8/L128同安装的完整步CPU62.84→45.16秒、NPU252.92→183.55秒，单次成本各降低约28%/27%。
+CPU1/NPU2 host线程、完整返回、原head/loss/AdamW；共享主机有争用，profile单列。
+实际Full/消息不同，裁剪前梯度范数也明显不同，因此不是严格等价加速或学习质量结论；
+测量步之前已经更新参数，不能声称两步仍有相同参数值。新NPU仍慢于CPU，32.4token/s目标未达。
+
+CPU小型evidence根的1.044e-6严格差异仍保留；相同FP32材料提升FP64后，scalar误差9.06e-7、
+dense1.38e-7，支持近零归一化伴随的舍入解释。较接近FP64不等于可取消原断言，
+也不解释大用例所有差异。后继应同时保留独立公式/方向差分、完整图与新进程恢复，
+用实际首差定位数值问题，用剩余Index/VJP热点决定下一个布局改动，不靠放宽阈值或重跑相同矩阵。
+
+## 联合KV准备的实际收益与剩余边界
+
+[aab8cb7固定结果](evidence/joint-kv-preparation-20261110.md)把跨B×L基座投影合批，并复用有界私有矩阵批，
+原FC16私有提交12288→96、最大行数4→744；NPU完整步101.756→96.776秒、CPU38.953→35.486秒。
+减少投影不能等比例减少整链成本：每个逻辑时刻的State字段根仍须与前驱状态相连，
+不可以把整段输出当作彼此无依赖的兄弟Tensor而破坏对中间状态求导。
+下一边界须测量原始缓存切片、批量守卫和伴随装配；保持完整返回/独立根契约，不能以删除检查制造收益。
+单次成本及其未验原任务数值身份独立于小图资格，资源争用与峰值均随报告保留。

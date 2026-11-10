@@ -9,6 +9,7 @@ import torch
 from ..aggregate import AggregateResult
 from .aggregate_batch import evaluate as numeric
 from .parameter_tree import rebind
+from ..autograd_census import register_private_graph
 
 
 def _requests(requests, transform):
@@ -42,6 +43,7 @@ class _Aggregate(torch.autograd.Function):
         with torch.enable_grad():
             results = _mass_only(requests) if plan[2] else numeric(program, requests)
         refs = [r.value for r in results]
+        register_private_graph("aggregate", refs)
         outputs = tuple(t.detach().clone() for t in refs)
         ctx.mark_non_differentiable(*(v for v, ref in zip(outputs, refs) if not ref.requires_grad))
         ctx.rows, ctx.sources = len(requests), len(requests[0].sources)

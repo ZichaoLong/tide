@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Tide Foundation"
+  short_description: "Tide architecture, interfaces and source navigation"
+  default_prompt: "Use $maintain-tide-foundation to review and improve Tide architecture and developer usability."

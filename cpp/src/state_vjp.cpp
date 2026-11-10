@@ -1,5 +1,6 @@
 #include "tide/state_vjp.h"
 #include "tide/operator_work.h"
+#include "tide/autograd_census.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
@@ -127,6 +128,12 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
     semantic=w.kernel->prepared_batch(w,old,at::stack(content),times,views,prepared);
   }
   if (semantic.size()!=numeric.size()) throw std::invalid_argument("State VJP changed batch length");
+  if(autograd_census::enabled()){
+    variable_list roots;
+    for(const auto& state:semantic){auto tensors=values(state);roots.insert(roots.end(),tensors.begin(),tensors.end());}
+    autograd_census::graph("private/state",roots);
+    autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(roots);
+  }
   auto result=numeric;
   node->row_outputs=1+numeric[0].slots.size();
   for (size_t i=0;i<rows.size();++i) {

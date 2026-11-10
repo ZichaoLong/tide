@@ -8,6 +8,10 @@
 
 FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：可选native线程排他计时、
 真实profiler范围与独立张量基线分列；修改时维护benchmark_dense_query及test_stage_profile。
+外层/私有autograd图的节点、实际执行和保存存储由[图统计](autograd-census.md)定位；
+不把图统计时间当吞吐，也不叠加Python/native重复计数。
+逐文件/函数审阅用[固定源码清单与实际覆盖](evidence/implementation-audit-20261110.md)；
+自动清单不代表已审阅，相关工具为`scripts/review_inventory.py`/`review_symbols.py`。
 
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
@@ -25,6 +29,9 @@ Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.
 修改须同步`test_private_rows`、query/region独立根、原版本守卫和安装消费者恢复。
 查询的ragged快照保留独立内部叶；查询/区域批量发布在`weighted/independent_copies.py`
 和`weighted_independent_copies.h`，foreach复制仍使用独立存储/版本，修改须同步`test_independent_copies`。
+KV快照数值共享位于`weighted/snapshot_bank.py`/`weighted_snapshot_bank.cpp`；
+[存储与伴随契约](weighted-snapshot-bank.md)区别共享存储、独立根及只读State视图，
+修改须同步`test_snapshot_bank`、query与sequence VJP、暖状态/精确恢复和实际投影工作量。
 通用批量有限值守卫在`finite.py`/`finite_guard.h`，Read调用在`readout.py`/`read_fields.cpp`；
 分配元数据回读在`allocation_rows.py`/`weighted_allocation_rows.cpp`，保持数值求解/VJP与host元数据分层。
 输出推理的记录生命周期由`experiment/record_policy.py`共同连接执行和准入；

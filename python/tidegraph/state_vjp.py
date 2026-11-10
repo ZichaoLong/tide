@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import torch
 from .records import State
 from .content import Content, SourceInput
+from .autograd_census import register_private_graph
 
 
 def supported(kernel):
@@ -76,6 +77,7 @@ class _State(torch.autograd.Function):
         with torch.enable_grad():
             states = step(weights.kernel, weights, list(old), list(views), list(times), list(prepared))
         refs = [v for s in states for v in _values(s)]
+        register_private_graph("state", refs)
         packed = [v for s in numeric for v in _values(s)]
         for a, b in zip(states, numeric):
             if (a.last_time, a.observations, sorted(a.slots)) != (b.last_time, b.observations, sorted(b.slots)):

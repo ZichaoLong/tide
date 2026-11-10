@@ -90,7 +90,7 @@ def _task(value):
         optimizer.setdefault(key, default)
         _finite(optimizer[key], f"task.optimizer.{key}", minimum=0)
     if result.get("plugin") is not None:
-        plugin = fields(result["plugin"], {"module", "factory", "options"}, "task.plugin")
+        plugin = fields(result["plugin"], {"module", "factory", "options", "observations"}, "task.plugin")
         if not isinstance(plugin.get("module"), str) or not plugin["module"]:
             raise ValueError("task.plugin.module: specify an installed downstream module")
         plugin.setdefault("factory", "create_task")
@@ -99,6 +99,9 @@ def _task(value):
         plugin.setdefault("options", {})
         if not isinstance(plugin["options"], dict):
             raise ValueError("task.plugin.options: expected a JSON object")
+        if "observations" in plugin and (not isinstance(plugin["observations"], str)
+                or plugin["observations"] not in {"outputs", "complete"}):
+            raise ValueError("task.plugin.observations: choose outputs or complete")
     return result
 
 

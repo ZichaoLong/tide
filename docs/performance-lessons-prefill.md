@@ -45,8 +45,10 @@ NPU237.119→101.756秒，均同设备内Full/消息总数相等，完整原任�
 B2/L8新profile仍6328次标量读取、2759次index、10879次copy。优先复用现有序列投影，
 并核对`weighted_kv.cpp`中必要元数据校验能否合批；不能直接删除检查或根据kernel数断言占时因果。
 新布局的设备peak allocated含预热为6536.0MiB，高于旧6059.1MiB；packing提速不保证峰值下降。
-原始LH9B口述及本仓库实测在
-[代表历史表](prefill-regression.md)分别定位；用户已确认口述记录，grad列阶段歧义不擅自填补。
+原始LH9B口述及本仓库实测在[代表历史表](prefill-regression.md)分别定位。
+后续用户确认历史grad列为开启autograd的前向；`test-cortexnet.cpp`无loss/backward/optimizer，
+与[本机Add报告](evidence/add-scale-comparison.md)的计时范围一致。原始证据保留当时记录，
+新对照不再把该列当作训练吞吐，也不推算尚未测量的大模型真实反向成本。
 
 [局部合批资格](evidence/prefill-local-batches-20261110.md)落实了检查/元数据也需批量化的经验：
 Read守卫先收集整组、按device/dtype验证后发布；分配数值由完整批统一检查，int64分支一次回读。
@@ -91,3 +93,17 @@ None/零以及行/字段根要求独立，不能用全图零mask换取更快反�
 copy提交数和实际设备kernel数分开，独立输出仍有逐对象分配成本。
 训练改进不自动表示TTFT改进；本轮CPU完整训练下降而单次首token反升，必须分别记录，
 不能从训练时间除以B/L得到首token，也不能把输入位置吞吐称为生成token吞吐。
+
+## 接口与计算图的复用方法
+
+上述独立clone、逐字段对象和版本隔离是各历史报告所测的软件契约，不是所有新接口的
+固定布局要求。新接口可以明确采用只读视图、owner句柄或按需快照，并版本化迁移调用者；
+保持数值、依赖、声明的独立根和精确解码，不把兼容旧对象形式的成本带入默认计算路径。
+具体审视方法见[接口、状态与autograd](../.agents/skills/optimize-tide-execution/references/interfaces-and-autograd.md)。
+
+LH的批量缓存与矩阵VJP值得复用，但不能描述为永久单一K/V梯度根：历史读取仍构造输入
+TensorList并在反向拆回追加片段；当前dirty现场另有clone修改，不能冒充固定a10源码。
+core-3已验证的Full/Aggregate批量反向收益见[对应经验](performance-lessons-batching.md#full-与-aggregate-的批量反向经验)。
+当前自定义查询Function也有内部私有autograd图，外层Function数不足以衡量构图成本。
+下一次诊断分别统计外层/私有节点和边、保存Tensor逻辑字节/去重存储、实际反向执行与
+嵌套grad调用；同时记录唯一KV写入及重复前缀/投影。统计方法见[对照与归因](../.agents/skills/optimize-tide-execution/references/comparisons.md)。

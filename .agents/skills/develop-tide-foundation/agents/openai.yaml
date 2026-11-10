@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Tide Foundation"
+  short_description: "Tide implementation and independent verification"
+  default_prompt: "Use $develop-tide-foundation to implement and verify the requested Tide foundation change."

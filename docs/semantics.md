@@ -72,9 +72,12 @@ schedules remain available. This changes execution policy/identity, not graph v1
 checkpoint v5, independent reference scheduling or local mathematical functions.
 
 The public eager experiment client may omit internal event records when its
-built-in objective requests outputs/metrics only. Task plugins retain full records;
-an explicit complete diagnostic call also retains intermediate roots. This policy
-has execution identity v4 (selected-boundary-v1); graph/checkpoint versions do not
+built-in objective requests outputs/metrics only. Task plugins retain full records
+unless they explicitly declare `task.plugin.observations="outputs"`; the declaration
+is part of task/resume identity and the capacity/execution policy. Independent
+references and explicit complete diagnostic calls retain intermediate roots.
+This policy has execution identity v4 (selected-boundary-v2); frozen v1 records
+keep the original complete plugin observations. Graph/checkpoint versions do not
 change. Exact continuation compares the selected execution's returned records,
 objective, all raw state before/after the next window and the complete training
 state. It must not silently run a different traced algorithm to certify resume.

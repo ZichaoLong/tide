@@ -305,3 +305,8 @@ resident半精度参考的显式存储/算术及串行换owner验收见[性能�
 [GPU规模推理](evidence/core5-cuda-inference-20261031.md)连接不齐输入生成器、显式FP64、完整前向/精确恢复、实际packing观察与[完整返回传输策略](complete-return-packing.md)；原数学/图/checkpoint版本不变，规模推理不认证训练。
 
 外部预训练Dense/MoE模型是独立消费者实验，不是core-5数学映射；入口与代码导航见[external-lm](external-lm.md)。
+
+KV §2–4的同一实际历史存储/Read K,V投影复用见[快照bank](weighted-snapshot-bank.md)：
+`snapshot_bank`/`weighted_snapshot_bank`按真实存储区间去重，显式VJP保留每个快照独立根，
+`test_snapshot_bank`以字面矩阵公式及scalar/未复用路径核对；因果None/零与恢复仍由
+`test_kv_sequence_vjp`定位。它不改变完整trace的中间State根或checkpoint实际解码。

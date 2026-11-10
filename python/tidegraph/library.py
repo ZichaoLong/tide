@@ -184,11 +184,10 @@ class GraphRuntime:
 
     def manifest(self):
         from .version import __version__
-        root = Path(__file__).parent
-        digest = hashlib.sha256()
-        for path in sorted(root.glob("*.py")):
-            digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
-        record = dict(schema="tide-runtime-v1", package_version=__version__, package_sha256=digest.hexdigest(),
+        from .package_content import content_identity
+        content = content_identity(Path(__file__).parent)
+        record = dict(schema="tide-runtime-v2", package_version=__version__,
+                      package_sha256=content["installed_files_sha256"], package_hash_scope=content["content_scope"],
                       model_origin=self.model_origin,
                       model_storage=dict(requested=self.requested_model_device, resolved=str(self.model_device),
                                          requested_node_devices=self.requested_node_devices,

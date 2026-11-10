@@ -1,6 +1,7 @@
 // Architecture §2: batched numeric Aggregate with isolated first-order roots.
 #include "weighted_aggregate.h"
 #include "weighted_singleton_vjp.h"
+#include "tide/autograd_census.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
@@ -95,6 +96,11 @@ std::vector<AggregateResult> bind_group(NodeWeights w,std::vector<AggregateInput
     }else refs=aggregate_batch(w,requests,classes,alpha,epsilon);
   }
   std::vector<AggregateResult> result;
+  if(autograd_census::enabled()){
+    variable_list roots;for(const auto& r:refs)roots.push_back(r.value);
+    autograd_census::graph("private/aggregate",roots);
+    autograd_census::saved(inputs);autograd_census::saved(leaves);autograd_census::saved(roots);
+  }
   for(size_t i=0;i<refs.size();++i){
     const auto& ref=refs[i].value;node->outputs.emplace_back(ref,false);
     auto value=ref.detach().clone();

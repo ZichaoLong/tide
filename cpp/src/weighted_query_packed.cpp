@@ -36,11 +36,11 @@ std::array<Tensor,4> packed_memory(const NodeWeights& w,const States& states,con
     std::array<Tensor,2> weights{long_w*passive_decay(packed.age,c.beta_short,u),long_w};
     std::array<Tensor,4> values;Tensor logits,projected,summaries;
     if(c.memory_read=="qry"){
-      auto k=project(packed.visible_slot("keys").reshape({-1,c.width}),weight(w,"kernel.read_k"));
+      auto k=packed.project_slot("keys",weight(w,"kernel.read_k")).reshape({-1,c.summary_width});
       k=rotate(k,(-time_values(packed.age,u)/c.position_scale).flatten(),c.read_frequencies).reshape({packed.rows,packed.length,c.summary_width});
       auto q=queries.index_select(0,at::tensor(ids,u.options().dtype(at::kLong)));
       logits=(k*q.unsqueeze(1)).sum(-1)/std::sqrt(c.summary_width);
-      projected=project(packed.visible_slot("values").reshape({-1,c.width}),weight(w,"kernel.read_v")).reshape({packed.rows,packed.length,c.summary_width});
+      projected=packed.project_slot("values",weight(w,"kernel.read_v"));
     }else summaries=packed.visible_slot("summaries");
     for(int j=0;j<2;++j){values[j+2]=weights[j].sum(1);
       values[j]=c.memory_read=="qry"?read(logits,projected,weights[j],values[j+2]):

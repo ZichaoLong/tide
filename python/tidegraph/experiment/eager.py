@@ -23,8 +23,8 @@ class Eager:
         from ..planning.materialize import materialize
         spec = resolved["execution"]["effective"]
         self.resolved, self.spec, self.reference = resolved, spec, reference
-        # Plugins may use intermediate event roots in their loss. A public
-        # output projection alone must never remove those application inputs.
+        # A plugin must explicitly declare output-only observations before the
+        # selected public return may omit its intermediate event roots.
         self.trace_records = needs_trace(spec, resolved["task"], reference=reference)
         self._complete_execute = None
         self.check_finite = lambda value, path="runtime": finite_tensors(value, path=path, packing=
@@ -241,7 +241,7 @@ class Eager:
             parameter_devices={n: str(p.device) for n, p in model.named_parameters()},
             region_devices=[str(region_reference(graph, model, r).device) for r in range(len(graph.regions))],
             return_mode=self.spec.get("return_mode", "complete"), return_packing=self.spec["return_packing"],
-            internal_records="complete" if self.trace_records else "boundary-only; built-in output objective",
+            internal_records="complete" if self.trace_records else "boundary-only; output-observing task",
             input_boundary="fresh CPU task tensors, shared source roots, differentiable upload per window",
             operator="aten", packing=self.spec["packing"], task=self.task_manifest, task_module=self.module_manifest,
             communication=self.spec.get("communication", "ordinary"), gradient_boundary="detach per optimizer window")

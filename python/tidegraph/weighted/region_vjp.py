@@ -6,6 +6,7 @@ input root. Parameter aliases are rebound once and receive all used contribution
 from dataclasses import replace
 import torch
 from .parameter_tree import rebind
+from ..autograd_census import register_private_graph
 
 
 def fields(requests, transform):
@@ -27,6 +28,7 @@ class _Region(torch.autograd.Function):
             rows = fields(requests, lambda _: next(iterator))
             results = evaluate(bound, rows, dependencies=ctx.dependencies)
         refs = [result.controls[v] for result, r in zip(results, rows) for v, _ in r.candidates]
+        register_private_graph("region", refs)
         from .independent_copies import detached_copies
         outputs = detached_copies(refs)
         ctx.mark_non_differentiable(*(t for t, ref in zip(outputs, refs) if not ref.requires_grad))

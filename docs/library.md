@@ -104,9 +104,11 @@ for separate Read/control/selection/event devices, presets and scoring precision
 Unset placement preserves the original independent implementation. Unsupported
 resident event dispatch fails explicitly at this host-runtime boundary.
 
-`ExecutionOptions` selects Python/native and auto/reference/streaming/frontier/greedy
+`ExecutionOptions` selects Python/native and auto/reference/streaming/frontier/greedy/window
 or supported chain/diamond/ring/self_loop specializations. Auto resolves to
-streaming for PDG and frontier for the other families. Reference requires
+the component-window scheduler for all graph families; `prefill=False` selects
+streaming. Acyclic components can batch their sealed window; feedback components
+use the online closure certificate. Reference requires
 Python and `packed=False`. Invalid/inapplicable explicit options fail. The
 public Settle session uses encoded executors and retains the complete encoded
 continuation; its result projects body diagnostics. A projected result is not
@@ -130,8 +132,20 @@ session progress. `session.reset()` clears sequence state and preserves weights.
 The [v5 checkpoint contract](semantics.md) excludes the experiment's task head,
 scheduler, data sampler, RNG and controller; save these in the experiment's own
 bundle for exact application resume. Loading starts a new autograd segment.
+Session restore deserializes and decodes one checkpoint value, validates its
+graph, batch and complete Settle boundary plus parameter/optimizer ownership,
+then changes live owners. A rejected preflight preserves session, weights and
+optimizer state. Direct `tidegraph.checkpoint.load` supports a
+`validate_continuation` callback for additional consumer boundaries before that
+commit; the callback must not mutate live owners.
 `runtime.manifest()` returns config/package/runtime/policy/binary identities for
 the experiment's record without writing into the dependency checkout.
+Its `tide-runtime-v2` package hash covers recursively installed files and relative
+names, excluding bytecode/cache, using the same content identity as experiment
+locks. Old `tide-runtime-v1` hashes covered only top-level Python files and are
+not interchangeable. Neither hash establishes a Git/wheel provenance or device
+qualification. The installed-content hash algorithm for experiment locks stays
+unchanged; graph/config/checkpoint versions are independent of this manifest.
 
 ## Compatibility
 

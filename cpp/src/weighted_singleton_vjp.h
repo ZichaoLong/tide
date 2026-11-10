@@ -4,6 +4,7 @@
 // detached leaves or a nested autograd::grad invocation.
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
+#include "tide/autograd_census.h"
 
 namespace tide::weighted {
 class SingletonVjp final:public torch::autograd::Node {
@@ -28,6 +29,7 @@ inline std::vector<Tensor> singleton_boundary(const std::vector<Tensor>& origina
   node->count=originals.size();node->total=inputs.size();
   node->set_next_edges(torch::autograd::collect_next_edges(inputs));
   for(const auto& t:originals)node->originals.emplace_back(t,false);
+  autograd_census::saved(originals);
   std::vector<Tensor> result;
   for(size_t i=0;i<refs.size();++i){
     auto value=refs[i].detach().clone();

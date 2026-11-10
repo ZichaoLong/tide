@@ -45,11 +45,11 @@ def memory(memory, states, times, u):
                            for w, t in zip((short, long), totals))
         else:
             n, length = layout.shape
-            k = project(layout.visible_slot("keys").reshape(-1, c.width), memory.read_k).reshape(n, length, c.summary_width)
+            k = layout.project("keys", memory.read_k)
             k = rotate_relative(k, -time_values(layout.age, u)/c.position_scale, c.read_frequencies)
             q = queries.index_select(0, torch.tensor(ids, dtype=torch.int64, device=u.device))
             logits = (k*q[:, None]).sum(-1)/math.sqrt(c.summary_width)
-            v = project(layout.visible_slot("values").reshape(-1, c.width), memory.read_v).reshape(n, length, c.summary_width)
+            v = layout.project("values", memory.read_v)
             values = tuple(read(logits, v, w, t) for w, t in zip((short, long), totals))
         for j, i in enumerate(ids):
             output[i] = tuple(t[j] for t in (*values, *totals))

@@ -29,7 +29,10 @@ def main():
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
     p.add_argument("--baseline", choices=("graph", "fc-tensor", "transformer-16", "transformer-4"), default="graph")
-    p.add_argument("--mode", choices=("training", "inference"), default="training")
+    p.add_argument("--mode", choices=("training", "inference", "nograd", "grad-forward", "backward"), default="training",
+                   help="nograd/grad-forward/backward/training use the same full-sequence head/loss; inference measures last-position first-token return")
+    p.add_argument("--threads", type=int, help="CPU intra-op threads; defaults retain historical CPU=1/NPU=2")
+    p.add_argument("--autograd-census", action="store_true", help="separate instrumented pass; its times are not formal throughput")
     p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     p.add_argument("--prefill-schedule", choices=("auto", "greedy", "window"), default="auto")
     p.add_argument("--trace-records", choices=("complete", "minimal"), default="complete",
@@ -50,6 +53,8 @@ def main():
         p.error("native stage counters require --client native")
     if not (1 <= a.batch <= 8 and 1 <= a.length <= 128):
         p.error("this bounded probe requires 1<=B<=8, 1<=L<=128")
+    if a.threads is not None and a.threads < 1:
+        p.error("--threads must be positive")
     out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
     source = out/"downstream-source"; source.mkdir()
     archive = subprocess.check_output(["git", "-C", str(a.downstream_repo), "archive", DOWNSTREAM, "tide_lab", CONFIG])
@@ -69,7 +74,7 @@ def main():
                                                prefill_schedule=a.prefill_schedule,
                                                trace=a.trace_records == "complete")
     config = json.loads((source/CONFIG).read_text())
-    config.update(device=a.device, threads=1 if a.device == "cpu" else 2)
+    config.update(device=a.device, threads=a.threads if a.threads is not None else 1 if a.device == "cpu" else 2)
     config["training"].update(batch=a.batch, length=a.length)
     config["core"].update(eager_implementation=a.client, placement_preset="cpu" if a.device == "cpu" else "mixed-c")
     if a.native_library:
@@ -78,7 +83,7 @@ def main():
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
         downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
         query_execution=a.query_execution, prefill_schedule=a.prefill_schedule, trace_records=a.trace_records,
-        baseline=a.baseline, mode=a.mode,
+        baseline=a.baseline, mode=a.mode, requested_threads=a.threads, autograd_census_requested=a.autograd_census,
         installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
         phases=[], profile=a.profile, warmup_state=a.warmup_state,
@@ -86,11 +91,18 @@ def main():
     write_json(out/"result.json", record)
     try:
         device = runtime(a.device, config["threads"], config["seed"])
-        torch.set_grad_enabled(a.mode == "training")
+        full_sequence = a.mode != "inference"
+        torch.set_grad_enabled(a.mode in {"training", "grad-forward", "backward"})
+        core = None
         if a.baseline == "graph" and a.client == "native":
-            load_native(a.native_library, backend=device.type)
+            core = load_native(a.native_library, backend=device.type)
             manifest = Path(a.native_library)/"build-manifest.json"
             record["native_build"] = json.loads(manifest.read_text())
+            if a.autograd_census and not all(hasattr(core, n) for n in (
+                    "reset_autograd_census", "autograd_census_metrics", "register_autograd_roots")):
+                raise RuntimeError("native autograd census requires a matching build with explicit private-graph instrumentation")
+        record["effective_threads"] = torch.get_num_threads()
+        record["effective_interop_threads"] = torch.get_num_interop_threads()
         start = time.monotonic()
         model = make_model(config, device)
         if a.baseline.startswith("transformer-"):
@@ -115,10 +127,10 @@ def main():
             return h.hexdigest()
         record["initial_parameters_sha256"] = parameter_hash()
 
-        def step(index):
+        def step(index, census=None):
             synchronize(device); wall = time.monotonic()
             batch = synthetic_batch(a.batch, a.length, 991+index, device)
-            model.train(a.mode == "training")
+            model.train(full_sequence)
             lr = learning_rate(config, (index+1)*a.batch*a.length)
             for group in opt.param_groups:
                 group["lr"] = lr
@@ -129,39 +141,52 @@ def main():
                     result = fn(); synchronize(device)
                 phases[name] = time.monotonic()-begin
                 return result
-            if a.mode == "training":
+            if a.mode in {"training", "backward"}:
                 phase("zero_grad", lambda: opt.zero_grad(set_to_none=True))
             features = phase("embedding", lambda: model.embedding(batch["input_ids"]))
             if a.baseline == "graph":
                 result = phase("core_forward", lambda: model.encoder.run_features(features, trace=a.trace_records == "complete"))
                 hidden = phase("readout", lambda: sequence_readout(model.encoder, result, features)
-                               if a.mode == "training" else model.encoder.project(result, features))
+                               if full_sequence else model.encoder.project(result, features))
                 work = dict(result.stats)
             elif a.baseline == "fc-tensor":
                 from fc_tensor_baseline import run
                 result = phase("core_forward", lambda: run(model.encoder.binding, model.encoder.spec, features))
-                hidden = result["hidden"] if a.mode == "training" else result["hidden"][:, -1]
+                hidden = result["hidden"] if full_sequence else result["hidden"][:, -1]
                 work = result["stats"]
             else:
                 result = phase("core_forward", lambda: model.encoder(features))
-                hidden = result if a.mode == "training" else result[:, -1]
+                hidden = result if full_sequence else result[:, -1]
                 work = dict(block_positions=a.batch*a.length*len(model.encoder.blocks))
             norm, loss = None, None
-            if a.mode == "training":
+            if full_sequence:
                 loss = phase("head_loss", lambda: torch.nn.functional.cross_entropy(model.head(hidden).flatten(0, 1), batch["labels"].flatten()))
                 if not bool(torch.isfinite(loss)):
                     raise FloatingPointError("nonfinite diagnostic loss")
-                phase("backward", loss.backward)
-                norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
-                phase("optimizer", opt.step)
             else:
                 logits = phase("head", lambda: model.head(hidden))
                 token = phase("first_token", lambda: logits.argmax(-1))
                 if not bool(torch.isfinite(logits).all()):
                     raise FloatingPointError("nonfinite first-token logits")
+            if census is not None:
+                from tidegraph.autograd_census import tensor_roots
+                def register():
+                    roots = list(tensor_roots((result, features, hidden, loss if full_sequence else logits)))
+                    census.register(roots, label="outer/returned-and-task")
+                    if core is not None:
+                        core.register_autograd_roots("outer/returned-and-task", roots)
+                phase("census_register", register)
+            if a.mode in {"training", "backward"}:
+                phase("backward", loss.backward)
+            if a.mode == "training":
+                norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
+                phase("optimizer", opt.step)
             row = dict(index=index, warmup=index == 0, phases_seconds=phases, phase_sum_seconds=sum(phases.values()),
                 tokens=a.batch*a.length, loss=None if loss is None else float(loss.detach()),
                 gradient_norm=None if norm is None else float(norm), work=work)
+            if census is not None:
+                row["autograd"] = dict(python=census.snapshot(), native=None if core is None else dict(core.autograd_census_metrics()),
+                    scope="All returned tensor fields plus task roots, and explicitly instrumented private graphs. Python/native node universes overlap: never add their totals. Native saved tensors are explicit saves only, not full ATen saved memory. Observed after backward/optimizer when requested, before returned-root cleanup.")
             if a.mode == "inference":
                 row["first_tokens"] = token.cpu().tolist()
                 row["ttft_scope"] = "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode"
@@ -170,7 +195,9 @@ def main():
             del result, features, hidden, loss, norm, batch
             synchronize(device)
             row["complete_wall_seconds"] = time.monotonic()-wall
-            row["input_positions_per_second"] = a.batch*a.length/row["complete_wall_seconds"]
+            row["diagnostic_only"] = census is not None
+            if census is None:
+                row["input_positions_per_second"] = a.batch*a.length/row["complete_wall_seconds"]
             row["memory"] = memory(device)
             return row
 
@@ -214,6 +241,23 @@ def main():
                     self_cpu_ms=e.self_cpu_time_total/1000, total_cpu_ms=e.cpu_time_total/1000)
                     for e in profiler.key_averages(group_by_input_shape=a.profile_shapes)])
             record["profile_state"] = "completed"
+        if a.autograd_census:
+            from tidegraph.autograd_census import Census
+            if initial_model is not None:
+                model.load_state_dict(initial_model); opt.load_state_dict(initial_optimizer)
+                opt.zero_grad(set_to_none=True)
+            record["census_parameters_sha256"] = parameter_hash()
+            if core is not None:
+                core.reset_autograd_census(True)
+            try:
+                with Census() as census:
+                    diagnostic = step(1, census)
+                write_json(out/"autograd-census.json", diagnostic)
+                record["autograd_census"] = "autograd-census.json"
+                record["census_scope"] = "Separate pass after timing, restored initial parameters/optimizer when warmup_state=reset; instrumented phase times are not formal throughput."
+            finally:
+                if core is not None:
+                    core.reset_autograd_census(False)
         record["execution"] = "completed"
     except BaseException as error:
         record.update(execution="failed", error=repr(error)); raise

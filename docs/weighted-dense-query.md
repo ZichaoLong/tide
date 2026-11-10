@@ -21,7 +21,7 @@ Python/native和standalone benchmark使用同一选择原则；实际资格须�
 | --- | --- | --- |
 | legacy | 按可见长度/正支持逐行索引，再合批 | 原模块能力 |
 | dense-v1 | Q、current、score/evidence、Full/FFN跨长度密集投影；仍有逐行可见性/正支持索引 | KV/qry、cat/ind、regional_total、context/cat、quad、strict |
-| packed-v2 | 按原始缓存长度分桶，拼接实际槽并批量gather；int64时间可见性、正支持mask和Attention；其他Describe按已有适用路径计算 | KV sum/qry、strict；各合法Read/评分/发送条件继续由原配置校验 |
+| packed-v2 | 按原始缓存长度分桶；有真实共享存储时复用[唯一KV数值bank](weighted-snapshot-bank.md)，否则拼接实际槽；批量gather、int64时间可见性、正支持mask和Attention | KV sum/qry、strict；各合法Read/评分/发送条件继续由原配置校验 |
 
 每桶按32MiB估计目标限制合并行数，不复制模型矩阵。**单行可能超过目标**，该值不是
 总workspace或进程峰值保证；KV/激活/私有反向图仍需另行预算。没有截短缓存、压紧时间或改变窗口。

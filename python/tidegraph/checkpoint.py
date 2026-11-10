@@ -33,17 +33,33 @@ def save(path, graph, model, continuation, optimizer=None):
     publish(path, record)
 
 
-def load(path, graph, model, optimizer=None):
+def load(path, graph, model, optimizer=None, *, validate_continuation=None):
+    """Read/decode once; validate every owner before publishing live state.
+
+    ``validate_continuation`` may reject application boundary constraints on the
+    decoded continuation. It runs before weights or optimizer slots are changed
+    and must not mutate the live owners. The returned continuation is that same
+    validated value, detached from any previous autograd segment.
+    """
     with phase("load.deserialize_to_host"):
         record = torch.load(path, map_location="cpu", weights_only=True)
-    if record["schema"] != "tide-continuation-v5" or record["identity"] != graph.identity:
+    if not isinstance(record, dict) or record.get("schema") != "tide-continuation-v5":
+        raise ValueError("checkpoint schema mismatch")
+    if not {"weights", "aliases", "optimizer", "optimizer_layout"} <= record.keys():
+        raise ValueError("malformed checkpoint ownership")
+    if record.get("identity") != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
     actual = record["weights"]
     with phase("load.validate_weights"):
         validate_weights(model, actual, record["aliases"])
     with phase("load.decode_values"):
-        q = decode(record, graph=graph, model=model)
+        try:
+            q = decode(record, graph=graph, model=model)
+        except (KeyError, TypeError, IndexError, AttributeError) as error:
+            raise ValueError("malformed checkpoint continuation") from error
         validate_window(graph, model, q, [], q.cut, q.cut)
+        if validate_continuation is not None:
+            validate_continuation(q)
     with phase("load.optimizer_preflight"):
         preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"], actual)
     with phase("load.copy_weights"):

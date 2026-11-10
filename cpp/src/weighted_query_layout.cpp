@@ -1,4 +1,5 @@
 #include "weighted_private_rows.h"
+#include "weighted_snapshot_bank.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 #include "weighted_query_layout.h"
@@ -36,11 +37,17 @@ Tensor SnapshotLayout::slot(const std::string& name)const{
   RECORD_FUNCTION("tide::stage::snapshot_pack", std::vector<c10::IValue>());
   op_profile::Scope stage_profile(op_profile::KvGather);
   std::vector<Tensor> values;for(const auto& s:states)values.push_back(s.slots.at(name));
+  auto shared=bank_gather(values);if(shared.defined())return shared;
   auto zero_shape=values[0].sizes().vec();zero_shape[0]=1;
   auto joined=private_rows::join(values);
   auto padded=at::cat({joined,at::zeros(zero_shape,values[0].options())});
   auto shape=values[0].sizes().vec();shape.erase(shape.begin());shape.insert(shape.begin(),{rows,length});
   return padded.index_select(0,indices.flatten()).reshape(shape);
+}
+Tensor SnapshotLayout::project_slot(const std::string& name,const Tensor& weight)const{
+  std::vector<Tensor> values;for(const auto& s:states)values.push_back(s.slots.at(name));
+  auto shared=bank_project(values,weight,visible);if(shared.defined())return shared;
+  return packed::project(visible_slot(name).reshape({-1,weight.size(1)}),weight).reshape({rows,length,weight.size(0)});
 }
 Tensor SnapshotLayout::weights()const{auto w=slot("weights");return at::where(visible,w,at::zeros_like(w));}
 Tensor SnapshotLayout::visible_slot(const std::string& name)const{
