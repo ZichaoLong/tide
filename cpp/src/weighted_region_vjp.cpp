@@ -1,4 +1,5 @@
 #include "weighted_private_rows.h"
+#include "weighted_independent_copies.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 // Allocation §2–6: independent frame/control roots on actual batch graphs.
@@ -80,9 +81,12 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   {at::AutoGradMode enable(true);results=regions(w,bound,c,&node->dependencies,selection);}
   stage_profile.phase(op_profile::RegionPublish);
   node->row_outputs=results[0].controls.size();
+  std::vector<Tensor> publication;
+  for(const auto& row:results)for(const auto& [id,t]:row.controls)publication.push_back(t);
+  auto copied=detached_copies(publication);size_t output_index=0;
   for(size_t i=0;i<results.size();++i){
     size_t j=0;for(auto& [id,t]:results[i].controls){
-      node->outputs.emplace_back(t,false);auto out=t.detach().clone();
+      node->outputs.emplace_back(t,false);auto out=copied[output_index++];
       if(t.requires_grad()){node->output_map.push_back(i*node->row_outputs+j);torch::autograd::set_history(out,node);}
       t=out;++j;
     }

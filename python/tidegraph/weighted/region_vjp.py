@@ -27,7 +27,8 @@ class _Region(torch.autograd.Function):
             rows = fields(requests, lambda _: next(iterator))
             results = evaluate(bound, rows, dependencies=ctx.dependencies)
         refs = [result.controls[v] for result, r in zip(results, rows) for v, _ in r.candidates]
-        outputs = tuple(t.detach().clone() for t in refs)
+        from .independent_copies import detached_copies
+        outputs = detached_copies(refs)
         ctx.mark_non_differentiable(*(t for t, ref in zip(outputs, refs) if not ref.requires_grad))
         ctx.weights, ctx.rows = weights, len(rows)
         ctx.row_inputs = (len(inputs)-weights)//len(rows)

@@ -64,8 +64,8 @@ numerically unchecked until explicitly recorded, even when small checks pass.
 
 The first full-shape counters identified query/region private autograd as the
 largest host elapsed categories. `private_rows.py` / `weighted_private_rows.h`
-pack each structurally homogeneous private field column before building that
-internal graph. Forward reads use actual contiguous view intervals when present;
+pack each structurally homogeneous regional private field column before building
+that internal graph. Forward reads use actual contiguous view intervals when present;
 independent rows are never identified by numerical equality. Output-mask and
 allocation-branch groups remain separate in backward, and their column gradients
 are sliced only into participating original rows. None/zero, duplicate uses,
@@ -80,3 +80,12 @@ one exact index gather for noncontiguous intervals of the same actual base;
 its transpose accounts for repeated indices. Strided or independent bases keep
 the normal path. `test_ragged_bucket_crossing_owners_has_one_gather_transpose`
 checks both the literal derivative and absence of per-row slice transposes.
+
+The tested all-query column candidate still increased full FC16 CPU/NPU time
+after that correction. Default queries therefore retain their previous independent
+private leaves; region columns keep the measured reduction in regional adjoints.
+`independent_copies.py` / `weighted_independent_copies.h` publish query/region
+outputs via foreach copies into separate allocations. Cloning a whole batch and
+returning ordinary views would couple versions and resize effects, so is not an
+equivalent replacement. The copy tests compare bits/values and exact pre/post
+mutation derivatives; scalar-formula numerical checks remain separate gates.

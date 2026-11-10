@@ -20,9 +20,11 @@ KV整序列反向位于`weighted/kv_sequence_vjp.py`与`weighted_kv_sequence_vjp
 `test_selected_boundary_execution`。内置输出任务可省去中间日志，插件不得隐式失去loss所需的根。
 Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.cpp`负责；
 修改同步[查询契约](weighted-dense-query.md)、独立字段根和`test_prefill_local_batches`。
-查询/区域VJP的私有列打包在`weighted/private_rows.py`/`weighted_private_rows.h`：
+区域VJP的私有列打包在`weighted/private_rows.py`/`weighted_private_rows.h`：
 同结构组内打包内部叶，外部行/字段根保持；连续视图区间消除重复复制与反向分发。
 修改须同步`test_private_rows`、query/region独立根、原版本守卫和安装消费者恢复。
+查询的ragged快照保留独立内部叶；查询/区域批量发布在`weighted/independent_copies.py`
+和`weighted_independent_copies.h`，foreach复制仍使用独立存储/版本，修改须同步`test_independent_copies`。
 通用批量有限值守卫在`finite.py`/`finite_guard.h`，Read调用在`readout.py`/`read_fields.cpp`；
 分配元数据回读在`allocation_rows.py`/`weighted_allocation_rows.cpp`，保持数值求解/VJP与host元数据分层。
 输出推理的记录生命周期由`experiment/record_policy.py`共同连接执行和准入；

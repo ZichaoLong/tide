@@ -80,7 +80,7 @@ objective, all raw state before/after the next window and the complete training
 state. It must not silently run a different traced algorithm to certify resume.
 See [experiment validation](experiment-validation.md).
 
-Homogeneous weighted query/region VJPs may pack private fields into one internal
+Homogeneous weighted region VJPs may pack private fields into one internal
 leaf per field column. Original row/field inputs remain independent outer roots
 with original version guards. Undefined output-field masks and allocation branch
 groups are differentiated separately; only participating rows receive unpacked
@@ -88,6 +88,11 @@ adjoints. Contiguous actual view partitions may reuse their common base, never
 merge equal-valued or independently rooted inputs. This changes internal
 representation, not graph/checkpoint identity or the declared first-order map.
 See `test_private_rows`, query/region root tests and the FC16 cost contract.
+Ragged query snapshots retain separate private leaves: collecting every prefix
+in one column caused excess transpose traffic in the measured implementation.
+Query/region output publication may use foreach copies into separate allocations;
+it must not couple output storage or version counters. `test_independent_copies`
+checks exact values, resize/mutation isolation and unchanged independent VJPs.
 
 Untraced prepared KV blocks may compose the internal State VJP over a whole
 sequence. Public messages, final states and input/parameter/left-state roots
