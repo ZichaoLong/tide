@@ -55,7 +55,9 @@
 
 - **接口、性能与架构统一实施（用户已授权）**：仓库开发/性能/维护skills、分主题历史经验与固定源码审阅工具已交付。独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3对照各自保持验证范围。接口服务性能、通用性、清晰和替换能力，历史兼容可显式迁移。[1528df8固定资格](evidence/interface-snapshot-bank-20261110.md)交付实际共享KV bank与独立snapshot伴随、公共边界和census；CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail，三客户端小训练/精确恢复分列。FC16训练CPU1/NPU14.628/20.634秒；完整尺度数值未验，不宣称NPU普遍加速。
 
-  [调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)、[循环/Describe](evidence/recurrent-interface-audit-20261110.md)已完成具名范围审阅；范围重叠且未覆盖全仓库。正在集成实际在途容量修复、只读发布/字段unbind、区域重复工作消冗、五记忆Describe能力与公共返回传输去重；固定native/SDK/设备资格尚待。后继重点是循环逐时间VJP、卷积缓存重复扫描/守卫、unused recurrent分支、更多Describe候选批量化与仍展开的query×history伴随，按独立局部语义检查及有限成本推进，不穷举组合。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident旧证据仍保留原提交，本增量按改动影响补代表回归；不冒称全域防退化。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
+  [调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)、[循环/Describe](evidence/recurrent-interface-audit-20261110.md)完成具名范围审阅，范围有重叠且未覆盖全仓库。[47704c9固定资格](evidence/interface-batch-publication-20261110.md)落实实时在途容量、只读发布/字段unbind、区域消冗、五记忆Describe能力和公共返回传输去重；CPU/NPU、三客户端训练/精确恢复分列。4项FP32 affine首evidence根原严格超差保留，同材料FP64通过，其余训练/恢复通过；不放宽全局容差。FC16 CPU1/NPU训练12.447/17.212秒，NPU TTFT反升5.098秒。
+
+  当前集成通用Describe列计算、循环查询按消费者裁剪未使用分支及常驻构造预算诊断；冻结后做定向资格和有限代表回归。尚未开始的single-bank常驻投影等后继优化，按用户要求在本轮汇报/对齐授权后继续。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident旧证据保留原提交，不冒称全域防退化。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
 
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 
