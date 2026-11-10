@@ -8,6 +8,8 @@
 下列HB/LH及1B–16B目录并未全部运行，历史结果不自动成为新默认的资格。
 [分量窗口固定资格](evidence/component-window-20261110.md)补五记忆、变长B×L及三图族训练/恢复；
 其NPU严格超差与通过范围分列，不能由此推断以下全部规模已验。
+[FC16同尺寸归因](evidence/fc16-cost-attribution-20261110.md)补充匹配维度Transformer、独立FC公式、真实首token，
+以及区域私有叶/批量独立复制的当前限定资格。大图/多卡/resident沿用其原提交证据，未由本轮重新认证。
 [局部合批固定资格](evidence/prefill-local-batches-20261110.md)补原FC16同返回成本、实际算子及新包/SDK恢复，
 CPU/NPU和数值xfail分列，不认证全部尺度或下游学习。
 [34项有限代表实测](evidence/prefill-representatives-20261110.md)记录B4/P16的CPU/NPU、

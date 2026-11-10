@@ -18,6 +18,7 @@
 
 | 调查问题 | Git内材料和入口 | 原证据与范围 |
 | --- | --- | --- |
+| FC16同尺寸Transformer/直接FC基线、VJP成本与复制隔离 | [归因契约](fc16-cost-attribution.md)、[独立公式](../scripts/fc_tensor_baseline.py)、[公式反例](../tests/test_fc_tensor_baseline.py)、[复制隔离](../tests/test_independent_copies.py)、[舍入见证](../scripts/diagnose_dense_rounding.py) | [固定结果与复现](evidence/fc16-cost-attribution-20261110.md)；训练吞吐与真实首token分列，历史退化/取消保留，直接公式不替代完整记录资格 |
 | TL-REQ-004 默认prefill、区域跨时间批及剩余碎片化 | [原始槽/默认策略反例](../tests/test_weighted_query_layout.py)、[分层回归目录](prefill-regression.md)、[standalone新进程检查](../scripts/check_query_sdk.py)、[profile CSV汇总](../scripts/summarize_query_profile.py) | [默认增量交付与完整复建命令](evidence/prefill-default-20261110.md)；资格入口在旧命令末追加`auto`，原任务成本和小型严格资格分开，不依赖历史运行目录 |
 | TL-REQ-004 Read/Full细碎查询与反向 | [独立局部根](../tests/test_weighted_dense_query.py)、[完整训练/cut](../tests/test_weighted_dense_training.py)、[安装消费者](../examples/consumer_core5/dense_query.py)、[舍入诊断](../scripts/diagnose_dense_rounding.py)、[原任务成本生成器](../scripts/benchmark_dense_query.py) | [具名dense-v1交付](evidence/dense-query-tl-req-004-20261110.md)：CPU FP32局部严格失败保留；小图完整检查/恢复与原任务有限成本分列，资格入口`scripts/qualify_dense_query.sh NEW cpu\|npu BUILD` |
 | TL-REQ-003 Shannon正支持下溢 | [实际HB16行](../tests/data/tl_req_003_shannon_row.json)、[公共消费者](../examples/consumer_core5/positive_support.py)、[局部/整图检查](positive-support-policy.md#独立检查与复现) | 原FP32严格拒绝保留；新数值模式与下游完整训练分开，资格入口 `scripts/qualify_positive_support.sh NEW cpu\|npu` |

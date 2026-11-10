@@ -53,7 +53,7 @@
 
 ## 当前待办与重启条件
 
-- **FC16同尺寸归因与优化（当前授权）**：固定原FC16/B8/L128及头/loss/AdamW，分开测标准Transformer、同局部公式直接B×L与默认图入口；先定位Read/Full/分配/快照和VJP装配，再实施有依据的优化。保持通用图后备、独立根、实际活动与精确续接；参见[诊断契约](fc16-cost-attribution.md)。当前进度/作业只见STATUS。
+- **FC16同尺寸归因后继（本轮已收尾，等待用户对齐/新授权）**：[固定归因与资格](evidence/fc16-cost-attribution-20261110.md)已补同任务直接FC和同尺寸Transformer、真实TTFT、阶段计时及当前区域列/批量独立复制。1f3f62d当前FC16训练单步CPU17.497/NPU21.065秒；三客户端小型训练/恢复通过，CPU TTFT单次反升、共享NPU成本和完整尺度数值not_checked分列。查询全列候选撤回，134秒退化/取消记录保持。剩余差距集中于查询快照重复投影、行/字段根和反向装配/发布；需要先对齐是否推进块级状态/伴随接口以及后续性能覆盖，再实施。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident的本增量规模回归未执行，沿用原提交证据，不能声称此次已全域防退化；待新授权后按影响有限补测。
 
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 

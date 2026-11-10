@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[FC16同尺寸归因与当前默认候选（2026-11-10）](fc16-cost-attribution-20261110.md)：独立FC/Transformer公式锚点、真实首token、原生阶段计时；拒绝全查询列打包退化，保留区域列和独立输出批量copy。1f3f62d CPU358通过/2原xfail、NPU流程95通过（含CPU辅助），三客户端小训练/新进程恢复分列；FC16训练CPU18.230→17.497/NPU22.998→21.065秒，CPU首token反升，NPU共享争用和完整尺度数值not_checked明确保留。
+
 [联合prefill部署代表与容量修正（2026-11-10）](prefill-deployment-20261110.md)：宽FC、FP16、异构LH、约1B/9B、CPU线程与双NPU有限成本/恢复；默认异步挂起、resident工作区拒绝、B32中断及后继结果分列。485a3e2选定推理预算/恢复修正46项固定安装通过，规模独立数值not_checked。
 
 [同公式层链基线（2026-11-10）](layer-chain-baseline-20261110.md)：KV/SSD独立张量公式、CPU13/IEEE NPU7项小型检查及12个成本点；默认图入口仍明显较慢。vendor卷积HF32有界见证解释指定差异，原失败保留，不认证标准Transformer/Mamba或完整记录等价。
