@@ -1,3 +1,4 @@
+#include "weighted_private_rows.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 // Architecture §3: batched Mem and capability-selected shared projections.
@@ -16,7 +17,7 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   for(const auto& request:requests){
     states.push_back(request.state?*request.state:w.kernel->initial(w));times.push_back(request.time);received.push_back(request.content.value);
   }
-  auto contents=at::stack(received),masses=contents.select(1,0),input=contents.slice(1,1);
+  auto contents=private_rows::join(received,true),masses=contents.select(1,0),input=contents.slice(1,1);
   std::array<Tensor,4> memories;
   if constexpr(std::is_same_v<Config,KVConfig>)memories=memory(w,states,times,input,c,dense);
   else memories=memory(w,states,times,input,c);

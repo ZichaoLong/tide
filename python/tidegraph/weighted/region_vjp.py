@@ -18,12 +18,13 @@ class _Region(torch.autograd.Function):
     def forward(ctx, program, requests, weights, *inputs):
         from .region_batch import evaluate
         ctx.set_materialize_grads(False)
-        leaves = [t.detach().requires_grad_(t.requires_grad) for t in inputs]
-        iterator = iter(leaves)
-        bound = rebind(program, lambda _: next(iterator))
-        rows = fields(requests, lambda _: next(iterator))
-        ctx.dependencies = [None]*len(rows)
+        from .private_rows import PrivateRows
+        ctx.packing = PrivateRows(inputs, weights, len(requests))
+        ctx.dependencies = [None]*len(requests)
         with torch.enable_grad():
+            iterator = iter(ctx.packing.views())
+            bound = rebind(program, lambda _: next(iterator))
+            rows = fields(requests, lambda _: next(iterator))
             results = evaluate(bound, rows, dependencies=ctx.dependencies)
         refs = [result.controls[v] for result, r in zip(results, rows) for v, _ in r.candidates]
         outputs = tuple(t.detach().clone() for t in refs)
@@ -31,7 +32,8 @@ class _Region(torch.autograd.Function):
         ctx.weights, ctx.rows = weights, len(rows)
         ctx.row_inputs = (len(inputs)-weights)//len(rows)
         ctx.row_outputs = len(refs)//len(rows)
-        ctx.save_for_backward(*inputs, *leaves, *refs)
+        ctx.save_for_backward(*inputs, *ctx.packing.leaves, *refs)
+        ctx.packing.leaves = []
         return outputs
 
     @staticmethod
@@ -40,7 +42,8 @@ class _Region(torch.autograd.Function):
             raise ValueError("batched regional execution supports first-order VJP only")
         count = ctx.weights+ctx.rows*ctx.row_inputs
         saved = ctx.saved_tensors
-        leaves, refs = saved[count:2*count], saved[2*count:]
+        packed_count = ctx.weights+ctx.packing.fields
+        leaves, refs = saved[count:count+packed_count], saved[count+packed_count:]
         groups, result = {}, [None]*count
         for row in range(ctx.rows):
             mask = tuple(j for j in range(ctx.row_outputs) if bars[row*ctx.row_outputs+j] is not None)
@@ -48,16 +51,14 @@ class _Region(torch.autograd.Function):
                 groups.setdefault((mask, ctx.dependencies[row]), []).append(row)
         for (mask, _), rows in groups.items():
             ids = [i for i in range(ctx.weights) if leaves[i].requires_grad]
-            ids += [ctx.weights+r*ctx.row_inputs+j for r in rows for j in range(ctx.row_inputs)
-                    if leaves[ctx.weights+r*ctx.row_inputs+j].requires_grad]
+            ids += [i for i in range(ctx.weights, packed_count) if leaves[i].requires_grad]
             if not ids:
                 continue
             used = [r*ctx.row_outputs+j for r in rows for j in mask]
             gradients = torch.autograd.grad([refs[i] for i in used], [leaves[i] for i in ids],
                 [bars[i] for i in used], retain_graph=True, allow_unused=True)
             for i, gradient in zip(ids, gradients):
-                if gradient is not None:
-                    result[i] = gradient if result[i] is None else result[i]+gradient
+                ctx.packing.scatter(i, rows, gradient, result)
         return None, None, None, *result
 
 

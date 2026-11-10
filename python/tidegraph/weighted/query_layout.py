@@ -51,7 +51,8 @@ class Layout:
     def slot(self, name):
         rows = [s.slots[name] for s in self.states]
         tail = rows[0].shape[1:]
-        joined = torch.cat((*rows, rows[0].new_zeros((1, *tail))))
+        from .private_rows import join
+        joined = torch.cat((join(rows), rows[0].new_zeros((1, *tail))))
         return joined.index_select(0, self.indices.flatten()).reshape(*self.shape, *tail)
 
     def weights(self):

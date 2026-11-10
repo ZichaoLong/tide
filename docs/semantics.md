@@ -80,6 +80,15 @@ objective, all raw state before/after the next window and the complete training
 state. It must not silently run a different traced algorithm to certify resume.
 See [experiment validation](experiment-validation.md).
 
+Homogeneous weighted query/region VJPs may pack private fields into one internal
+leaf per field column. Original row/field inputs remain independent outer roots
+with original version guards. Undefined output-field masks and allocation branch
+groups are differentiated separately; only participating rows receive unpacked
+adjoints. Contiguous actual view partitions may reuse their common base, never
+merge equal-valued or independently rooted inputs. This changes internal
+representation, not graph/checkpoint identity or the declared first-order map.
+See `test_private_rows`, query/region root tests and the FC16 cost contract.
+
 Untraced prepared KV blocks may compose the internal State VJP over a whole
 sequence. Public messages, final states and input/parameter/left-state roots
 remain unchanged; traced intermediate State handles retain their causal step

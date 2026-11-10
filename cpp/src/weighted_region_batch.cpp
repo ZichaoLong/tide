@@ -1,3 +1,4 @@
+#include "weighted_private_rows.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 // Allocation §2–6: complete query/context/normalization/allocation batches.
@@ -25,8 +26,11 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
     std::map<std::string,Tensor> fields;
     for(const auto& [name,unused]:requests[ids[0]].candidates[0].fields){
       std::vector<Tensor> rows;
-      for(auto i:ids){std::vector<Tensor> row;for(const auto& d:requests[i].candidates)row.push_back(d.fields.at(name));rows.push_back(at::stack(row));}
-      fields[name]=at::stack(rows);
+      for(size_t j=0;j<requests[ids[0]].candidates.size();++j){
+        std::vector<Tensor> column;for(auto i:ids)column.push_back(requests[i].candidates[j].fields.at(name));
+        rows.push_back(private_rows::join(column,true));
+      }
+      fields[name]=at::stack(rows,1);
     }
     auto recv=fields.at("w"),caps=fields.at("mu"),scores=fields.at("score");std::vector<Tensor> node_rows;
     for(auto i:ids){std::vector<Index> row;for(const auto& d:requests[i].candidates)row.push_back(d.node);node_rows.push_back(at::tensor(row,recv.options().dtype(at::kLong)));}

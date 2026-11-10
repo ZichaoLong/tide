@@ -24,7 +24,9 @@ def evaluate(program, requests, *, dependencies=None):
     c = program.config
     for (_, _, device), rows in groups.items():
         names = requests[rows[0]].candidates[0][1]
-        fields = {name: torch.stack([torch.stack([d[name] for _, d in requests[i].candidates]) for i in rows]) for name in names}
+        from .private_rows import join
+        fields = {name: torch.stack([join([requests[i].candidates[j][1][name] for i in rows], stack=True)
+                  for j in range(len(requests[rows[0]].candidates))], 1) for name in names}
         nodes = torch.tensor([[v for v, _ in requests[i].candidates] for i in rows], dtype=torch.int64, device=device)
         recv, caps, scores = fields["w"], fields["mu"], fields["score"]
         if c.region_score == "att":

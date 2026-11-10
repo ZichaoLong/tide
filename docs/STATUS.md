@@ -29,3 +29,17 @@ python scripts/status.py；tail -n 40 artifacts/jobs/fc16-attribution-baseline/t
 后续按阶段数据选择块内复制/快照/VJP优化，定向独立检查、完整训练/恢复与代表回归。
 原异步双NPU训练、规模resident预算、数值严格失败均保持ROADMAP状态，不能由本轮小检查解除。
 磁盘约809GiB可用、quota280/300/800GiB；大写入前复核。不清理旧原始证据或公共环境。
+
+当前准备作业gef-fc16-attribution-anchors，冻结098c91a/source-anchors，复用09e0277的
+匹配C++ build-baseline与env-baseline（本增量只改脚本/测试/文档）。单次CPU/NPU各六配置，
+总时限3600秒、MemoryMax128G；脚本anchors.sh，日志artifacts/jobs/fc16-attribution-anchors/task.log。
+
+原anchors在CPU fc-tensor第二步触发独立候选的区间/support拒绝，failed保留；尚无该候选计时。
+有限区间枚举改为选择最小可行距离并中心化求解，CPU211项相关检查通过（含5项基线）。
+后继anchors-v2固定df80d04/source-anchors-v2；不改通用分配器/容差，不覆写原失败目录。
+私有根打包优化正在主工作区开发，Python相关检查通过，C++尚未构建/验证。
+
+anchors-v2已passed：CPU/NPU各六成本完成，CPU5/NPU3小型独立检查通过。NPU fc-tensor训练
+0.315秒、16层Transformer0.046秒，都是限定/不同函数对照，完整尺寸数值尚未认证。
+原baseline完整NPU约22.998秒；当前私有列打包先通过相关Python211项（含旧native对照），
+接下来固定新实现，构建并跑实际新native门禁、CPU/NPU原FC16成本与消费者恢复。

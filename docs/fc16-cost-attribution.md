@@ -59,3 +59,16 @@ and host return, but excludes service queueing/tokenization/model construction.
 It is batch first-token latency, not per-token amortization or later decode.
 Training and inference timings are never mixed. Full-shape comparisons remain
 numerically unchecked until explicitly recorded, even when small checks pass.
+
+## Default internal private-root packing
+
+The first full-shape counters identified query/region private autograd as the
+largest host elapsed categories. `private_rows.py` / `weighted_private_rows.h`
+pack each structurally homogeneous private field column before building that
+internal graph. Forward reads use actual contiguous view intervals when present;
+independent rows are never identified by numerical equality. Output-mask and
+allocation-branch groups remain separate in backward, and their column gradients
+are sliced only into participating original rows. None/zero, duplicate uses,
+parameter aliases and original-version guards remain public invariants.
+Tests include literal interval transposes plus partial field roots/duplicate rows,
+existing independent KV/recurrent query/region cases, optimizer and exact resume.

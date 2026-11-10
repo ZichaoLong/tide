@@ -59,12 +59,14 @@ class _Query(torch.autograd.Function):
         bundle, bias, requests, kind, slots, mode, zeta, nweights = plan
         ctx.set_materialize_grads(False)
         ctx.observation = observation.current()
-        leaves = [t.detach().requires_grad_(t.requires_grad) for t in inputs]
-        it = iter(leaves)
-        bound = rebind(bundle, lambda _: next(it))
-        rows = _rows(requests, kind, lambda _: next(it))
-        weights = SimpleNamespace(kernel=bound["memory"], bias=bias)
+        from .private_rows import PrivateRows
+        packing = PrivateRows(inputs, nweights, len(requests))
+        ctx.packing = packing
         with torch.enable_grad():
+            it = iter(packing.views())
+            bound = rebind(bundle, lambda _: next(it))
+            rows = _rows(requests, kind, lambda _: next(it))
+            weights = SimpleNamespace(kernel=bound["memory"], bias=bias)
             if kind == "read":
                 results = read(bound["program"], weights, rows)
                 refs = [r[name] for r in results for name in sorted(r)]
@@ -74,7 +76,8 @@ class _Query(torch.autograd.Function):
         ctx.mark_non_differentiable(*(v for v, ref in zip(outputs, refs) if not ref.requires_grad))
         ctx.rows, ctx.weights = len(rows), nweights
         ctx.row_inputs, ctx.row_outputs = (len(inputs)-nweights)//len(rows), len(refs)//len(rows)
-        ctx.save_for_backward(*inputs, *leaves, *refs)
+        ctx.save_for_backward(*inputs, *packing.leaves, *refs)
+        packing.leaves = []  # SavedVariables own lifecycle/version checks.
         return outputs
 
     @staticmethod
@@ -88,7 +91,8 @@ class _Query(torch.autograd.Function):
             raise ValueError("weighted queries support first-order VJP only")
         count = ctx.weights+ctx.rows*ctx.row_inputs
         saved = ctx.saved_tensors
-        leaves, refs = saved[count:2*count], saved[2*count:]
+        packed_count = ctx.weights+ctx.packing.fields
+        leaves, refs = saved[count:count+packed_count], saved[count+packed_count:]
         groups, result = {}, [None]*count
         for row in range(ctx.rows):
             mask = tuple(j for j in range(ctx.row_outputs) if bars[row*ctx.row_outputs+j] is not None)
@@ -96,8 +100,7 @@ class _Query(torch.autograd.Function):
                 groups.setdefault(mask, []).append(row)
         for mask, rows in groups.items():
             ids = [i for i in range(ctx.weights) if leaves[i].requires_grad]
-            ids += [ctx.weights+r*ctx.row_inputs+j for r in rows for j in range(ctx.row_inputs)
-                    if leaves[ctx.weights+r*ctx.row_inputs+j].requires_grad]
+            ids += [i for i in range(ctx.weights, packed_count) if leaves[i].requires_grad]
             if not ids:
                 continue
             roots = [r*ctx.row_outputs+j for r in rows for j in mask]
@@ -106,8 +109,7 @@ class _Query(torch.autograd.Function):
             grads = torch.autograd.grad(outputs, [leaves[i] for i in ids],
                                        cotangents, retain_graph=True, allow_unused=True)
             for i, grad in zip(ids, grads):
-                if grad is not None:
-                    result[i] = grad if result[i] is None else result[i]+grad
+                ctx.packing.scatter(i, rows, grad, result)
         return None, *result
 
 

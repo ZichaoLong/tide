@@ -11,7 +11,8 @@ def evaluate(program, weights, requests):
     from .query_execution import dense, packed, dense_heads
     states = [memory.initial(weights) if r.state is None else r.state for r in requests]
     times = [r.time for r in requests]
-    payload = torch.stack([r.content.value for r in requests])
+    from .private_rows import join
+    payload = join([r.content.value for r in requests], stack=True)
     mass, u = payload[:, 0], payload[:, 1:]
     if packed(program):
         from .query_packed import memory as query

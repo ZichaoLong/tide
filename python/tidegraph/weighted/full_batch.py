@@ -65,7 +65,8 @@ def evaluate(program, weights, requests, slots, mode, zeta):
     content, memory = program.content, weights.kernel
     c = content.config
     states, times = [r.comparison for r in requests], [r.time for r in requests]
-    u = torch.stack([r.content.value[1:] for r in requests])
+    from .private_rows import join
+    u = join([r.content.value for r in requests], stack=True)[:, 1:]
     if isinstance(c, KVConfig):
         from .query_execution import dense, packed
         if packed(program):
@@ -79,5 +80,5 @@ def evaluate(program, weights, requests, slots, mode, zeta):
     x = u+alpha*mix
     normal = norm(x, c.epsilon)
     fresh = x+c.alpha_ff*project(torch.nn.functional.silu(project(normal, content.gate))*project(normal, content.up), content.down)
-    values = torch.cat((torch.stack([r.control for r in requests])[:, None], fresh), -1)
+    values = torch.cat((join([r.control for r in requests], stack=True)[:, None], fresh), -1)
     return [FullResult(value, {i: value for i in range(slots)}) for value in values.unbind()]

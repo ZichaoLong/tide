@@ -1,3 +1,4 @@
+#include "weighted_private_rows.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 // KV §4 / recurrent §3: only selected comparison snapshots, unscaled (c,G).
@@ -58,11 +59,11 @@ template<class Config> std::vector<FullResult> evaluate(const NodeWeights& w,con
   require(options.mode=="hard","weighted Full uses exact VJP; legacy Emit mode must be hard");
   if(requests.empty())return {};
   States states;Times times;std::vector<Tensor> rows,controls;
-  for(const auto& r:requests){states.push_back(*r.comparison);times.push_back(r.time);rows.push_back(r.content.value.slice(0,1));controls.push_back(r.control);}
-  auto u=at::stack(rows),x=u+mix(w,states,times,u,c,dense),normal=normalize(x,c.epsilon);
+  for(const auto& r:requests){states.push_back(*r.comparison);times.push_back(r.time);rows.push_back(r.content.value);controls.push_back(r.control);}
+  auto u=private_rows::join(rows,true).slice(1,1),x=u+mix(w,states,times,u,c,dense),normal=normalize(x,c.epsilon);
   auto fresh=x+c.alpha_ff*project(at::silu(project(normal,weight(w,"full_program.content.gate")))*
     project(normal,weight(w,"full_program.content.up")),weight(w,"full_program.content.down"));
-  auto payload=at::cat({at::stack(controls).unsqueeze(-1),fresh},-1);
+  auto payload=at::cat({private_rows::join(controls,true).unsqueeze(-1),fresh},-1);
   std::vector<FullResult> result;
   for(size_t i=0;i<requests.size();++i){
     FullResult r{payload[i],{}};for(Index j=0;j<slots;++j)r.emitted.push_back({j,r.value});result.push_back(std::move(r));

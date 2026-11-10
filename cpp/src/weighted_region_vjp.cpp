@@ -1,3 +1,4 @@
+#include "weighted_private_rows.h"
 #include "tide/operator_profile.h"
 #include <ATen/record_function.h>
 // Allocation §2–6: independent frame/control roots on actual batch graphs.
@@ -13,6 +14,7 @@ using torch::autograd::variable_list;
 class RegionVjp final:public torch::autograd::Node {
  public:
   size_t weights=0,row_inputs=0,row_outputs=0,rows=0;
+  private_rows::Packing packing;
   std::vector<torch::autograd::SavedVariable> originals,leaves,outputs;
   std::vector<std::string> dependencies;
   std::vector<size_t> output_map;
@@ -29,22 +31,21 @@ class RegionVjp final:public torch::autograd::Node {
       std::vector<size_t> mask;for(size_t j=0;j<row_outputs;++j)if(full[row*row_outputs+j].defined())mask.push_back(j);
       if(!mask.empty())groups[{mask,dependencies[row]}].push_back(row);
     }
-    variable_list result(xs.size());
+    variable_list result(weights+rows*row_inputs);
     for(const auto& [key,used]:groups){
       variable_list roots,grads,inputs;std::vector<size_t> ids;
       for(auto row:used)for(auto j:key.first){roots.push_back(ys[row*row_outputs+j]);grads.push_back(full[row*row_outputs+j]);}
-      auto append=[&](size_t i){if(xs[i].requires_grad()&&should_compute_output(i)){ids.push_back(i);inputs.push_back(xs[i]);}};
-      for(size_t i=0;i<weights;++i)append(i);for(auto row:used)for(size_t j=0;j<row_inputs;++j)append(weights+row*row_inputs+j);
+      auto append=[&](size_t i){if(xs[i].requires_grad()){ids.push_back(i);inputs.push_back(xs[i]);}};
+      for(size_t i=0;i<weights;++i)append(i);for(size_t f=0;f<row_inputs;++f)append(weights+f);
       if(inputs.empty())continue;
       variable_list values;{
         RECORD_FUNCTION("tide::stage::region_gradient", std::vector<c10::IValue>());
         op_profile::Scope profile(op_profile::RegionGradient);
         values=torch::autograd::grad(roots,inputs,grads,true,false,true);
       }
-      for(size_t i=0;i<ids.size();++i)if(values[i].defined()){
-        auto& out=result[ids[i]];out=out.defined()?out+values[i]:values[i];
-      }
+      for(size_t i=0;i<ids.size();++i)packing.scatter(ids[i],used,values[i],result);
     }
+    for(size_t i=0;i<result.size();++i)if(!should_compute_output(i))result[i]=Tensor{};
     return result;
   }
   void release_variables() override{originals.clear();leaves.clear();outputs.clear();}
@@ -63,11 +64,16 @@ std::vector<Selection> bind_group(RegionWeights w,const std::vector<RegionInput>
   node->weights=inputs.size();node->rows=requests.size();std::vector<std::vector<Candidate>> candidates;
   for(const auto& r:requests){
     candidates.emplace_back(r.candidates.begin(),r.candidates.end());
-    for(auto& d:candidates.back())for(auto& [name,t]:d.fields)leaf(t);
+    for(auto& d:candidates.back())for(auto& [name,t]:d.fields)inputs.push_back(t);
   }
   node->row_inputs=(inputs.size()-node->weights)/requests.size();
   node->set_next_edges(torch::autograd::collect_next_edges(inputs));
-  for(const auto& t:inputs)node->originals.emplace_back(t,false);for(const auto& t:leaves)node->leaves.emplace_back(t,false);
+  for(const auto& t:inputs)node->originals.emplace_back(t,false);
+  leaves=node->packing.pack(inputs,leaves,requests.size());
+  for(const auto& t:leaves)node->leaves.emplace_back(t,false);
+  at::AutoGradMode enable(true);
+  auto views=node->packing.views(leaves);size_t k=0;
+  for(auto& row:candidates)for(auto& d:row)for(auto& [name,t]:d.fields)t=views[k++];
   std::vector<RegionInput> bound;
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];bound.push_back({r.history,r.time,candidates[i],r.layout,r.payload_options});}
   std::vector<Selection> results;
