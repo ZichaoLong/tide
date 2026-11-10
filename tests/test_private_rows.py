@@ -37,6 +37,24 @@ def test_copy_elision_uses_actual_contiguous_partition_not_equal_values(dtype, k
     assert (actual.untyped_storage().data_ptr() == leaf.untyped_storage().data_ptr()) == (kind in {"adjacent", "partial"})
 
 
+def test_ragged_bucket_crossing_owners_has_one_gather_transpose(dtype):
+    leaf = torch.arange(80, dtype=dtype, requires_grad=True)
+    rows = [leaf[0:8].reshape(2, 4), leaf[32:44].reshape(3, 4), leaf[64:80].reshape(4, 4)]
+    actual = join(rows)
+    equivalent(actual, torch.cat(rows), atol=0, rtol=0)
+    names, pending, seen = [], [actual.grad_fn], set()
+    while pending:
+        node = pending.pop()
+        if node is None or node in seen:
+            continue
+        seen.add(node); names.append(type(node).__name__)
+        pending.extend(n for n, _ in node.next_functions)
+    assert sum(name.startswith("IndexSelectBackward") for name in names) == 1
+    assert not any(name.startswith("SliceBackward") for name in names)
+    equivalent(torch.autograd.grad(actual.square().sum(), leaf, retain_graph=True),
+               torch.autograd.grad(torch.cat(rows).square().sum(), leaf), atol=0, rtol=0)
+
+
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
 def test_query_partial_field_roots_and_duplicate_rows(dtype, native):
     from test_weighted_dense_query import independent

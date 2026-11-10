@@ -72,3 +72,11 @@ are sliced only into participating original rows. None/zero, duplicate uses,
 parameter aliases and original-version guards remain public invariants.
 Tests include literal interval transposes plus partial field roots/duplicate rows,
 existing independent KV/recurrent query/region cases, optimizer and exact resume.
+
+A contiguous buffer alone is insufficient: temporal length buckets can cross
+independent sample intervals. Falling back to cat of every view then creates
+one full-buffer slice transpose per row. The packed boundary therefore uses
+one exact index gather for noncontiguous intervals of the same actual base;
+its transpose accounts for repeated indices. Strided or independent bases keep
+the normal path. `test_ragged_bucket_crossing_owners_has_one_gather_transpose`
+checks both the literal derivative and absence of per-row slice transposes.

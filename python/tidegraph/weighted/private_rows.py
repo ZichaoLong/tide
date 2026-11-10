@@ -4,28 +4,37 @@ Only structurally homogeneous query/region groups may use this boundary.
 Undefined cotangent masks are still evaluated separately, and only participating
 rows receive sliced gradients. Original SavedVariables keep version guards.
 """
+import math
 import torch
 
 
 def join(values, *, stack=False):
-    """Elide a copy only for a contiguous interval of one actual view base."""
+    """Collect actual views by one interval or gather, never per-view transposes."""
     if len(values) > 1:
         base = values[0]._base
-        if (base is not None and base.is_contiguous()
+        shapes_match = (all(t.shape == values[0].shape for t in values) if stack else
+                        all(t.shape[1:] == values[0].shape[1:] for t in values))
+        if (base is not None and base.is_contiguous() and shapes_match
                 and all(t._base is base and t.is_contiguous() and not t.is_conj() and not t.is_neg()
                         and t.requires_grad == base.requires_grad for t in values)):
-            cursor = values[0].storage_offset()
+            shape = ((len(values), *values[0].shape) if stack else
+                     (sum(t.shape[0] for t in values), *values[0].shape[1:]))
+            cursor, contiguous = values[0].storage_offset(), True
             for value in values:
-                if value.storage_offset() != cursor:
-                    break
+                contiguous = contiguous and value.storage_offset() == cursor
                 cursor += value.numel()
-            else:
-                shape = ((len(values), *values[0].shape) if stack else
-                         (sum(t.shape[0] for t in values), *values[0].shape[1:]))
-                if (all(t.shape == values[0].shape for t in values) if stack else
-                        all(t.shape[1:] == values[0].shape[1:] for t in values)):
-                    return base.reshape(-1).narrow(0, values[0].storage_offset()-base.storage_offset(),
-                                                   sum(t.numel() for t in values)).reshape(shape)
+            if contiguous:
+                return base.reshape(-1).narrow(0, values[0].storage_offset()-base.storage_offset(),
+                                               sum(t.numel() for t in values)).reshape(shape)
+            unit = values[0].numel() if stack else math.prod(values[0].shape[1:])
+            if unit and base.numel() % unit == 0 and all((t.storage_offset()-base.storage_offset()) % unit == 0
+                                                        and t.numel() % unit == 0 for t in values):
+                indices = []
+                for value in values:
+                    start = (value.storage_offset()-base.storage_offset())//unit
+                    indices.extend(range(start, start+value.numel()//unit))
+                ids = torch.tensor(indices, dtype=torch.int64, device=base.device)
+                return base.reshape(-1, unit).index_select(0, ids).reshape(shape)
     return torch.stack(values) if stack else torch.cat(values)
 
 
