@@ -15,10 +15,32 @@ def enabled():
     return _current.get() is not None
 
 
+def current():
+    return _current.get()
+
+
+@contextmanager
+def resume(saved):
+    """Propagate an active observation across a device autograd worker thread.
+
+    A new caller's observation wins. Closed scopes must not receive later
+    backward work, and the worker's previous context is restored on errors.
+    """
+    token = None
+    if _current.get() is None and saved is not None and saved.active:
+        token = _current.set(saved)
+    try:
+        yield
+    finally:
+        if token is not None:
+            _current.reset(token)
+
+
 class Observation:
     def __init__(self):
         self.counts = {}
         self.dropped_updates = 0
+        self.active = True
 
     def add(self, key, value):
         if key in self.counts or len(self.counts) < MAX_KEYS:
@@ -39,6 +61,7 @@ def observe():
     try:
         yield observation
     finally:
+        observation.active = False
         _current.reset(token)
 
 

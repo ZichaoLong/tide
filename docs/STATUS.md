@@ -25,3 +25,28 @@ SDK三项CTest与CPU FP64完整/最小返回三步/新进程恢复通过。
 
 下一命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 唯一待办与停止条件见[ROADMAP](ROADMAP.md)，GPU按用户授权延后。
+
+活动已准备：gef-joint-prefill-roots-fixed，固定a553bea/fixed-roots及独立env-roots；
+core复用内容hash核对结果roots-fixed-reuse.json，SDK客户端新建roots-fixed-sdk。
+320CPU/512G/7200秒background.slice，构建后固定CPU/NPU资格、安装消费者与原FC16两种返回成本。
+日志artifacts/jobs/joint-prefill-roots-fixed/task.log；检查/停止systemctl --user status/stop gef-joint-prefill-roots-fixed。
+队列最多60秒，已核对共享PID身份/余量，不等待独占硬件；仍记录争用。
+
+已准备gef-joint-prefill-resident-build：等待roots-fixed终态（依赖及避免计时争用，最多3600秒），
+随后固定a553bea构建CANN9.2的weighted resident Python库，320CPU/512G/7200秒；
+日志artifacts/jobs/joint-prefill-resident-build/task.log。构建不是设备资格，先小真机再扩大对照。
+
+有限代表矩阵已准备：a553bea固定配置/安装，CPU16项/NPU18项（默认与greedy、
+宽FC、多节点HB/LH、sum、qry、SSD/GDN层链；另PyTorch/standalone及mixed-a/b）。
+B4/P16、一次预热/测量，CPU1线程/NPU2host线程；实际数值与恢复逐项记录。
+gef-joint-prefill-representatives等待本项目重型构建/成本终态后运行，最多7200秒等待；
+总RuntimeMaxSec14400、512G、320CPU。日志artifacts/jobs/joint-prefill-representatives/task.log。
+原配置生成器可复现，不需本轮临时驱动；未执行不记通过。
+
+固定a553bea CPU249通过/2原xfail，安装CPU消费者及SDK通过。
+NPU门禁73通过/2原数值xfail/1失败：新增query_roots在设备反向线程丢失观测ContextVar，
+不是数值断言；原门禁终态failed保留。有限同材料诊断已完成，合并前后梯度逐位相等，
+对FP64最大9.61643e-8；后继补统计上下文传播与该真实NPU回归。
+gef-query-root-diagnosis：冻结单脚本hash/query-diagnosis-source.json，实际安装仍a553bea，
+60秒准入/600秒总时限/32G/8CPU，不与性能计时混作收益样本。
+工作区另有KV前缀伴随K/V按owner一次拼接增量，Python8项通过；C++尚未构建，不纳入a553资格。

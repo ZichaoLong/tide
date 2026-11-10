@@ -142,3 +142,24 @@ int main(){using namespace tide::work::packing;
         observation.projection("matrix", 0)
         observation.skipped("budget", 2)
     assert actual == counted.metrics()
+def test_observation_transfers_to_worker_only_while_scope_is_active():
+    from concurrent.futures import ThreadPoolExecutor
+    from tidegraph.weighted import packing_observation as observation
+    def worker(saved):
+        assert observation.current() is None
+        with observation.resume(saved):
+            observation.projection("worker", 3)
+        assert observation.current() is None
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        with observation.observe() as saved:
+            executor.submit(worker, saved).result()
+            assert saved.metrics()["packing/projection/worker/rows"] == 3
+        executor.submit(worker, saved).result()
+    assert saved.metrics()["packing/projection/worker/rows"] == 3
+    with observation.observe() as active:
+        with observation.resume(saved):
+            observation.projection("new", 2)
+        assert "packing/projection/new/rows" not in saved.metrics()
+        assert active.metrics()["packing/projection/new/rows"] == 2
+
+

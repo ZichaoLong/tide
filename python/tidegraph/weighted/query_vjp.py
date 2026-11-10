@@ -11,6 +11,7 @@ from ..records import State
 from .config import KVConfig
 from .parameter_tree import rebind
 from .numeric_time import passive_decay
+from . import packing_observation as observation
 
 
 def _rows(requests, kind, transform):
@@ -57,6 +58,7 @@ class _Query(torch.autograd.Function):
         from .full_batch import evaluate as full
         bundle, bias, requests, kind, slots, mode, zeta, nweights = plan
         ctx.set_materialize_grads(False)
+        ctx.observation = observation.current()
         leaves = [t.detach().requires_grad_(t.requires_grad) for t in inputs]
         it = iter(leaves)
         bound = rebind(bundle, lambda _: next(it))
@@ -77,6 +79,11 @@ class _Query(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, *bars):
+        with observation.resume(ctx.observation):
+            return _Query._backward(ctx, *bars)
+
+    @staticmethod
+    def _backward(ctx, *bars):
         if torch.is_grad_enabled():
             raise ValueError("weighted queries support first-order VJP only")
         count = ctx.weights+ctx.rows*ctx.row_inputs

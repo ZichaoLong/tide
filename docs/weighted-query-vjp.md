@@ -28,6 +28,7 @@ Full 使用显式 `full_autograd="batched"`，默认 `replay` 仍可调用；unp
 不改独立行/字段分组、私有叶选择、参数共享或数值函数。实际采用量见
 `packing/projection/query_vjp_root_partition`；这是伴随装配计数，不是矩阵投影或kernel计数。
 `test_query_roots`给出手算线性转置与部分/重叠/非连续反例；既有query字段根继续验收整链。
+Python设备autograd worker显式恢复仍活动的packing观测上下文；已关闭的观测不会接收后继反向，新的调用者上下文优先。该修复只改变观测，不改变局部函数或VJP。
 参数树中的 Tensor/模块别名保持；相同参数不同输入仍独立计算，所有使用者的梯度累加。
 每行保留自己的快照浮点槽、int64 非求导槽、content，以及 Full 的 control。
 Read⁰ 使用真实绑定初态；Full 始终读本请求 comparison，不借用 Read 的快照。
