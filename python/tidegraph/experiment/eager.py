@@ -7,6 +7,7 @@ from ..runtime import synchronize
 from .returns import snapshot
 from .tasks import create
 from .finite import finite_tensors
+from .record_policy import needs_trace
 
 
 def work(result):
@@ -24,9 +25,7 @@ class Eager:
         self.resolved, self.spec, self.reference = resolved, spec, reference
         # Plugins may use intermediate event roots in their loss. A public
         # output projection alone must never remove those application inputs.
-        self.trace_records = (reference or "record_policy" not in spec
-                              or spec.get("return_mode", "complete") == "complete"
-                              or bool(resolved["task"].get("plugin")))
+        self.trace_records = needs_trace(spec, resolved["task"], reference=reference)
         self._complete_execute = None
         self.check_finite = lambda value, path="runtime": finite_tensors(value, path=path, packing=
             "scalar" if reference else spec.get("finite_check_packing", "scalar"))

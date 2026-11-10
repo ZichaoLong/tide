@@ -97,6 +97,11 @@ HB 的 `region_width=1` 需要显式 `offsets:[0]`；默认 `[0,1]` 需要至少
 `plan` 列出逐节点/区域/共享参数到设备映射、不可拆共享组及逐卡参数/状态/KV/梯度/optimizer/
 返回/恢复预留。未知 workspace、journal 和运行时峰值保持未知；`automatic_admission=false`。
 默认累计窗口数包括 warmup、计时窗和一次恢复检查，不能拿单窗预算当完整实验预算。
+内置输出推理的host分量窗口路径（ranked-local、PyTorch/Python-native）按实际不保留trace的
+生命周期预留两个最大区域事件块及全部输出；全图记录估算仍保留作对照。训练、任务插件、
+完整返回、旧greedy/streaming、standalone和resident继续保留原完整事件估算。
+`record_reservation_basis`说明生效依据；参数、原始状态、消息、checkpoint和host恢复预留不减少。
+这项修正不预测厂商workspace或保证运行容量，也不改变模型、执行算法、dtype或数值阈值。
 Python训练的host预算另含调用者、边界和下一窗同时保留的参数/梯度/optimizer快照；
 `training_snapshot_extra_bytes`明确列出原四份bank/两份optimizer估算之外的保留量。
 这部分在主存，不随卡数分摊；不是额外设备参数，也不改变数值、窗口或checkpoint字节。

@@ -83,7 +83,7 @@ def _reservation(resources, name, device):
 
 
 def capacity_budget(plan, execution, *, placement=None, mode="inference", optimizer="sgd",
-                    checkpoint=True, resources=None, checkpoint_generations=2):
+                    checkpoint=True, resources=None, checkpoint_generations=2, trace_records=True):
     """Return a preview for declared finite windows, not automatic admission.
 
     ``resources`` accepts logical_windows/live_results/retained_windows;
@@ -185,18 +185,29 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         components[pending_owner]["pending_messages"] += amount
         if source != target:
             copy_bytes[source] += batch*totals[a]*payload
+    event_bytes = []
     for v, count in enumerate(one_window):
         device = placement["node_devices"][v]
         event = 4*states[v]["bytes"]+32*payload+256*score_scalar+64*8
         components[device]["complete_record_estimate"] += results*batch*count*event
+        event_bytes.append(results*batch*count*event)
     for v in g["outputs"]:
         device = placement["node_devices"][v]
         components[device]["requested_return_estimate"] += results*batch*one_window[v]*(payload+3*8)
+    from .record_capacity import event_reservations
+    live_records, selected_records, record_basis = event_reservations(
+        plan, spec, placement, event_bytes, mode=mode, trace_records=trace_records)
     for device, values in components.items():
         if spec.return_mode == "complete":
             values["requested_return_estimate"] = values["complete_record_estimate"]
         elif spec.return_mode == "metrics":
             values["requested_return_estimate"] = 64*results
+        values["live_record_estimate"] = live_records[device]
+        if selected_records:
+            # Output tensors still exist internally for the built-in objective,
+            # including metrics-only returns. Preserve their logical upper bound.
+            values["live_record_estimate"] += sum(results*batch*one_window[v]*(payload+3*8)
+                for v in g["outputs"] if placement["node_devices"][v] == device)
         if checkpoint:
             values["checkpoint_restore_staging"] = (values["parameters"]+values["inert_buffers"]+
                 values["fp32_masters"]+values["optimizer_slots"]+values["private_state"]+values["pending_messages"])
@@ -235,10 +246,10 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         bank = values["parameters"]+values["inert_buffers"]
         if not resident and usable is not None and bank > usable:
             rejections.append(f"{device}: parameter bank {bank} exceeds {usable} usable bytes; do not allocate")
-        # Both return estimates are shown, but the internal full-record cost is
-        # reserved until the selected runtime proves it avoids that allocation.
-        estimated = sum(value for key, value in values.items() if value is not None and key != "requested_return_estimate")
+        estimated = sum(value for key, value in values.items() if value is not None
+                        and key not in {"requested_return_estimate", "complete_record_estimate"})
         per_device[device] = dict(components=values, static_bank_bytes=bank, estimated_peak_bytes=estimated,
+            record_reservation_basis=record_basis,
             storage_basis="logical canonical bank plus resident physical state/journal preflight; role banks unknown" if resident else "canonical eager payload and inert bank",
             unknown_components=[key for key, value in values.items() if value is None],
             resource_snapshot=info, reserve_bytes=reserve, usable_bytes=usable,
@@ -316,7 +327,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
             "empty factory initial state; imported checkpoint history/cache must be included in the declared finite scope",
             "one SGD momentum slot or two AdamW slots reserved for every trainable canonical leaf",
             "private states include int64 timestamps; no cache is truncated",
-            "complete internal records reserved even for requested outputs/metrics",
+            "event reservation: "+record_basis+"; host recovery remains conservatively complete",
             "checkpoint staging follows the selected client; remaining counted partitions are conservatively simultaneous"],
         unknown=["allocator/context and packing peaks", "regional Attention temporary matrices and vendor workspace",
             "resident physical role-bank replicas and service/SQ/CQ/task resources" if resident else "transient parameter/scoring copies",

@@ -124,7 +124,9 @@ tidegraph results docs/evidence/core5-platform-*-20261031.json.gz docs/evidence/
 主存准入6095c6a的实际欠估见证与固定45项检查在[训练容量](evidence/core5-platform-training-capacity-20261031.md)。
 
 NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment_resume.py`：
-使用待检查checkpoint所对应的固定安装与相同配置，先重放原三窗，再比较raw边界和下一完整窗，记录stride/offset/格式。
+使用待检查checkpoint所对应的固定安装与相同配置，先重放原三窗，再比较raw边界、实际所选
+返回路径及下一窗完整raw状态/参数，记录stride/offset/格式。outputs/metrics不得为诊断偷偷
+启用完整trace；`tests/test_resume_diagnostic.py`注入未返回的状态错误检验拒绝。
 从干净仓库重新生成的checkpoint是新的见证，不能冒称复验了原文件字节；原结果/hash与失败仍保留。
 
 ```sh

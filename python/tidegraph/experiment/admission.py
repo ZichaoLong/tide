@@ -4,6 +4,7 @@ import torch
 from ..planning.capacity import capacity_budget
 from .storage import filesystem, host_memory
 from .checkpoint_policy import publication_plan
+from .record_policy import needs_trace
 
 
 def host_available():
@@ -32,7 +33,8 @@ def preflight(resolved, output_parent, *, start_window=0):
         row.update(free_bytes=int(free), capacity_bytes=int(total))
     budget = capacity_budget(resolved["plan"], resolved["execution"], placement=resolved["payload_placement"],
                 mode=m["mode"], optimizer=resolved["task"]["optimizer"]["kind"], checkpoint=True, resources=resources,
-                checkpoint_generations=publication_plan(m, start_window)["simultaneous_generations"])
+                checkpoint_generations=publication_plan(m, start_window)["simultaneous_generations"],
+                trace_records=needs_trace(e, resolved["task"]))
     problems = list(budget["static_rejections"])
     if storage["memory_backed"] is None:
         problems.append("output filesystem: could not establish disk/tmpfs type; inspect the output mount before running")

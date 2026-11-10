@@ -272,9 +272,11 @@ def resolve(value, *, site=None, base_dir=None):
         execution = spec.record()
         from ..planning.capacity import capacity_budget
         from .checkpoint_policy import publication_plan
+        from .record_policy import needs_trace
         budget = capacity_budget(plan, execution, placement=mapping, mode=measurement["mode"],
                     optimizer=task["optimizer"]["kind"], checkpoint=True, resources=resources,
-                    checkpoint_generations=publication_plan(measurement)["simultaneous_generations"])
+                    checkpoint_generations=publication_plan(measurement)["simultaneous_generations"],
+                    trace_records=needs_trace(execution["effective"], task))
     except (TypeError, KeyError, ValueError) as error:
         raise ValueError(f"execution/resources: {error}; inspect device mapping, module support and explicit strategy") from error
     task["stride"] = plan["stride"]

@@ -19,6 +19,10 @@ Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.
 修改同步[查询契约](weighted-dense-query.md)、独立字段根和`test_prefill_local_batches`。
 通用批量有限值守卫在`finite.py`/`finite_guard.h`，Read调用在`readout.py`/`read_fields.cpp`；
 分配元数据回读在`allocation_rows.py`/`weighted_allocation_rows.cpp`，保持数值求解/VJP与host元数据分层。
+输出推理的记录生命周期由`experiment/record_policy.py`共同连接执行和准入；
+`planning/record_capacity.py`只缩减已审核host分量窗口推理的事件预留，完整记录估算仍可查询。
+修改须同步`test_selected_boundary_capacity`、实际trace/恢复检查和`diagnose_experiment_resume.py`；
+容量估算不替代实际峰值与硬件执行证据。
 
 | 层 | 位置 | 职责 |
 | --- | --- | --- |

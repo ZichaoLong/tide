@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded eager inference replay: raw decode, layouts, then the exact next window.
+"""Bounded eager inference replay on the actual selected return boundary.
 
 Use the checkpoint's fixed installed Python/package and matching site. This
 diagnostic never replaces a strict failure, changes layout, or runs a reference
@@ -62,7 +62,8 @@ def diagnose(config, output, *, checkpoint=None, windows=3):
     output.mkdir(parents=True, exist_ok=False)
     record = dict(schema="tide-resume-diagnostic-v1", state="running", phase="admission", started=now(),
                   identity=identity, resolved_config=resolved, replay_windows=windows,
-                  scope="exact same-stack inference replay and first mismatch; layouts are observations, not a causal proof",
+                  scope="exact same-stack selected execution, raw decode/next state and returned records; layouts are observations, not a causal proof",
+                  return_mode=resolved["execution"]["effective"].get("return_mode", "complete"),
                   independent_reference="not_run", performance_qualification=False)
     def publish():
         write_json(output/"result.json", record)
@@ -90,7 +91,8 @@ def diagnose(config, output, *, checkpoint=None, windows=3):
             checkpoint, metadata = save(owner, output, resolved, identity, windows)
         record["checkpoint"] = dict(path=str(checkpoint), metadata=metadata)
         phase("original-next")
-        actual, _ = owner.step(windows, return_mode="complete")
+        actual, actual_loss = owner.step(windows)
+        next_state = owner.decoded_state()
         record["original_next_work"] = owner.last_work
         owner.close()
         phase("restore")
@@ -101,10 +103,13 @@ def diagnose(config, output, *, checkpoint=None, windows=3):
         record["raw_boundary_exact"] = True
         del saved
         phase("restored-next")
-        expected, _ = owner.step(windows, return_mode="complete")
+        expected, expected_loss = owner.step(windows)
         record["restored_next_work"] = owner.last_work
-        phase("exact-next-complete")
+        phase("exact-next-selected-and-raw")
         equivalent(actual, expected, atol=0, rtol=0)
+        equivalent(next_state, owner.decoded_state(), atol=0, rtol=0)
+        if actual_loss != expected_loss:
+            raise ValueError("exact resumed objective differs")
         record.update(state="passed", next_window_exact=True)
         verify(identity, resolved["site"]["paths"])
     except ComparisonMismatch as error:
