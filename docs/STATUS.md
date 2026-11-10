@@ -1,45 +1,38 @@
 # 当前交接 — 接口、性能与架构统一实施（2026-11-10）
 
 用户已授权持续实施、分阶段提交/推送；数学固定0770593，分支graph-execution-foundation。
-启动基线4d777bc，旧核心1f3f62d。用户未跟踪TL-REQ-003/004文档保持原样，不纳入提交。
+启动基线4d777bc。用户未跟踪TL-REQ-003/004文档保持原样，不纳入提交；LH现场与下游安装锁不改。
 
-## 当前增量
+## 已固定与已验证
 
-三项仓库skills与分主题性能经验已整理；账户skills未改。取消仓库subagent门槛，按工作独立性使用。
-固定基线源码清单/审阅工具已完成；本次公共边界实际审阅25文件128函数，其余不冒称完成。
-修复Session重复读/decode、插件可声明outputs观察、runtime遗漏子包hash（manifest v2）。
-外层/私有autograd census及四模式对照已接入；诊断计时与正式吞吐分开。
-KV无trace序列保留实际共享bank视图；query按真实storage区间去重gather/Read K,V投影，
-手写一阶VJP保留独立snapshot根。仍有query×history伴随展开，不能称全部重复工作已消除。
-对应新契约：docs/weighted-snapshot-bank.md、docs/autograd-census.md；覆盖见相关测试与architecture。
+06b242e交付三项仓库skills、分主题性能经验、源码审阅工具、公共边界修复、autograd census
+与实际共享KV snapshot bank；1528df8修复C++ ADL误选std::bind导致原生Read伴随未安装。
+固定1528df8的CPU新门禁53通过/1保留xfail，相关248通过/2保留xfail；NPU配置流程72通过/1保留xfail
+（含CPU辅助）。Python/native安装消费者与独立SDK CPU/NPU训练、新进程精确恢复通过。
+证据：docs/evidence/interface-snapshot-bank-20261110.{md,json}；审阅范围不等于全仓库已审阅。
+原FC16 B8/L128/d128 FP32完整训练CPU1线程14.6283秒、CPU16线程16.5985秒、NPU mixed-c20.6338秒；
+TTFT CPU3.1947/NPU4.3911秒。原任务完整尺度独立数值/学习not_checked；不宣称NPU普遍加速。
+小图B2/L8含私有图13477节点，外层615，SelectBackward3200；仍需削减逐行装配。
 
-## 已完成的开发检查
+## 作业终态
 
-Python sequence/新bank首轮37通过，另1旧FP32scalar差异；禁用新bank时该梯度逐位相同。
-同材料FP64差3.56e-15，FP32双方距FP64约1.03e-6/2.83e-6；严格失败保留为独立xfail。
-修订后新bank定向9通过/1保留xfail；native06b242e构建通过，首资格51通过/1旧xfail/2新增Read梯度失败。
-定位为未限定bind调用被C++ ADL选中std::bind，未安装手写VJP；原生shared梯度为零，unshared/Python正常。
-编译期static_assert证实错误overload；现改明确attach_bank_vjp名称，待新冻结build验证，不能归为舍入。
-公共边界开发107/67/39/33项组通过（重叠不累加）；图诊断11项通过。
-独立审阅补60组重叠/冻结/重复根探针和大int64检查；native存储组改稳定首次出现顺序。
-这些是开发检查，不能替代固定源码资格或性能结果。
+gef-interface-bank：source06b242e，failed；构建通过、2个原生梯度失败，后续未运行。
+gef-interface-bankfix：source1528df8，failed；构建/CPU/安装消费者通过，SDK header定位辅助import失败。
+gef-interface-bankfix-rest：source1528df8，passed/MainPID0；SDK、有限成本、空闲NPU11检查全部终态。
+三者状态/日志均在artifacts/jobs/对应名称/，原失败保留。冻结输入位于artifacts/interface-work/，不修改。
+目前无活动长作业。共享NPU本阶段无授权；下次重新走idle-only队列，不沿用旧卡准入。
 
-## 下一动作与作业
+## 正在集成的第二增量（尚未固定资格）
 
-首服务gef-interface-bank已终态failed/MainPID=0；source06b242e，构建通过，首CPU门禁失败，
-相关/SDK/性能/NPU均未执行。原记录artifacts/jobs/interface-bank/status.json及task.log保留。
-冻结source-bank/env-bank/build-bank及驱动保留，不修改旧任务输入。
-当前main工作树在修bank ADL、compact窗口错误累计live容量，以及区域/循环头批量低垂工作。
-三位子代理分属调度、区域、循环模块，主代理统一集成；等待短检查后建立下一固定源码重新构建。
-后续仍CPU1/16线程FC16成本、独立census，空闲单NPU资格与成本，SDK三客户端恢复。
-共享NPU本阶段无授权；只使用空闲卡，不能复用旧shared adapter。CPU约1.7TiB可用，文件系统约685GiB，
-本用户281GiB/soft300/hard800GiB；正式计时与本项目重构建不重叠。
+默认query/region只读张量发布、逐字段unbind、区域无用ID上传/重复回读消冗；
+五记忆Describe独立能力选择；compact窗口实际在途容量修复；Python block重复扫描与返回重复传输消冗。
+公共数学、独立根、None/零、int64与checkpoint值保持；消费者需修改返回张量时显式clone，见tensor-publication。
+开发检查已完成，native/SDK需新构建。现核对非strict KV与Describe分派边界，之后冻结实施提交。
+新审阅报告覆盖调度、区域、循环层，文件/函数范围有重叠，不直接累加，也不冒称整个仓库审阅完成。
 
-## 基线与剩余工作
+下一步：完成集成边界检查，提交第二实施增量；新冻结工作树、独立build/venv和background.slice服务
+运行相关CPU/NPU/SDK根、训练/恢复，复测FC16成本/census和受影响有限代表；证据单独提交。
+使用全部可用CPU/内存与空闲NPU，重构建与正式计时不重叠；当前约681GiB磁盘、1.7TiB可用内存，320CPU。
+其余逐模块审阅、接口/性能及代表回归按ROADMAP继续；本阶段成果不等于全部数学/设备/尺度限制解除。
 
-旧结果见docs/evidence/fc16-cost-attribution-20261110.md：FC16 B8/L128/d128 FP32完整训练
-CPU1线程17.496945s、NPU mixed-c21.064699s；独立FC/Transformer范围不同，原NPU共享/完整数值未验。
-本增量尚无新吞吐结论。全面审阅、其余模块/接口治理及代表回归继续按ROADMAP推进；
-不得只交付文档或首个KV增量就宣称总体完成。LH脏现场/下游安装锁保持不变。
-
-接续运行git status --short --branch、python scripts/status.py与check_upstream；检查unit及实际日志后继续。
+接续：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
