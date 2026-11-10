@@ -54,6 +54,13 @@ Attention中心取第一个正支持值，避免被忽略条目导致相消或`0
 反向仍须生成逐快照伴随，未承诺其workspace或提交数与前向相同。该边界当前限FP32/FP64；
 这不是厂商fused Attention资格，也不改变图或checkpoint版本。
 
+局部成本入口：`python scripts/benchmark_bank_attention.py --implementation bank --device cpu --mode backward --output-dir NEW`。
+`implementation`另可取`expanded`，`mode`另可取`nograd`或`grad-forward`。每配置新进程；此处比较
+同一组独立快照根的局部Attention，省略Q/out投影、分配、调度、optimizer及恢复。
+它与层链/FC完整训练成本一起解释接口开销，不能用局部时间代替模型吞吐。
+`test_default_entry_uses_actual_shared_bank_contractions`观察公共默认入口实际调用，
+避免只有独立helper可用、真实模型未采用的情况。
+
 `packed-v2`的cat evidence现在使用共享矩阵GEMM和逐行归一化，保持每行独立输入与字段根。
 历史逐行GEMV曾用于规避近径向VJP的舍入差异；有界同材料FP64核对后不再以此阻塞合批。
 原容差保持：CPU FP32指定evidence根约1.044e-6超差作为具名严格xfail保留，其他根照常核对。

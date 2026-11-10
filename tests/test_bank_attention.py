@@ -54,3 +54,34 @@ def test_matrix_bank_ignored_huge_values_and_unshared_fallback(dtype):
         assert torch.isfinite(g).all()
     assert full(q, [t.clone() for t in rows], rows, weights) is None
     assert full(q, rows, rows, torch.zeros_like(weights)) is None
+
+
+@pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
+def test_default_entry_uses_actual_shared_bank_contractions(dtype, native):
+    from tidegraph import Continuation, ExecutionPlacement
+    from tidegraph.weighted.execution import eager_runner
+    from tidegraph.weighted.packing_observation import observe
+    from test_layer_tensor_baseline import fixture, external, run, numerics
+    device, _ = resolve_device(os.environ.get("TIDE_WINDOW_DEVICE", "cpu"))
+    numerics(device)
+    binding, spec = fixture("kv", width=4, depth=2, heads=2, dtype=dtype, device=device)
+    execute = eager_runner(binding, "native" if native else "python",
+        ExecutionPlacement(preset="cpu" if device.type == "cpu" else "mixed-c",
+                           scoring_dtype=str(dtype).split('.')[-1]),
+        native_library=os.environ.get("TIDE_BUILD_DIR"), trace=False)
+    x = torch.linspace(-.2, .4, 60, dtype=dtype, device=device).reshape(3, 5, 4)
+    if native:
+        import _tide_native as core
+        core.reset_work(True)
+    try:
+        with observe() as observation, torch.no_grad():
+            result = execute(Continuation(binding.graph.identity, 3), external(spec, x),
+                             5*spec.stride, sealed_until=5*spec.stride)
+        metrics = core.work_metrics() if native else observation.metrics()
+        assert metrics.get("packing/projection/kv_bank_attention/rows", 0) > 0
+    finally:
+        if native:
+            core.reset_work(False)
+    expected, _ = run(binding, spec, x)
+    actual = torch.stack([p[1:] for *_, p in result.outputs]).reshape(5, 3, 4).transpose(0, 1)
+    equivalent(actual, expected)
