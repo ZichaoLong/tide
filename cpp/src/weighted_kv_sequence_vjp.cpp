@@ -62,13 +62,23 @@ class SequenceVjp final:public torch::autograd::Node {
         values[field]=pair.first;last[field]=pair.second;
         if(pair.first.defined()&&inputs[owner.old[field]].requires_grad())result[owner.old[field]]=pair.first.slice(0,0,n);
       }
+      std::vector<std::pair<size_t,size_t>> value_rows;
+      for(size_t j=0;j<owner.writes.size();++j){
+        auto id=owner.writes[j].value;
+        if(inputs[id].requires_grad()&&n+static_cast<Index>(j)<std::max(last[0],last[1]))value_rows.push_back({j,id});
+      }
+      if(!value_rows.empty()){
+        // Zero-filled deterministic reductions allow one K/V join per owner,
+        // retaining None for every write beyond the last connected prefix.
+        const auto& ref=inputs[value_rows.front().second];variable_list halves;
+        for(size_t f=0;f<2;++f)halves.push_back(values[f].defined()?values[f].slice(0,n):
+          at::zeros({static_cast<Index>(owner.writes.size()),ref.numel()/2},ref.options()));
+        auto joined=at::cat(halves,1);
+        for(const auto& [j,id]:value_rows)result[id]=joined[j];
+      }
       std::vector<size_t> active;variable_list contents,masses;
       for(size_t j=0;j<owner.writes.size();++j){
         const auto& w=owner.writes[j];Index index=n+j;
-        if(inputs[w.value].requires_grad()&&(index<last[0]||index<last[1])){
-          variable_list halves;for(size_t f=0;f<2;++f)halves.push_back(index<last[f]?values[f][index]:at::zeros({inputs[w.value].numel()/2},inputs[w.value].options()));
-          result[w.value]=at::cat(halves);
-        }
         if(inputs[w.summary].requires_grad()&&index<last[2])result[w.summary]=values[2][index];
         if(inputs[w.content].requires_grad()&&index<last[3]){
           active.push_back(w.content);contents.push_back(inputs[w.content]);masses.push_back(values[3][index]);

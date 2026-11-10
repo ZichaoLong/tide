@@ -70,6 +70,10 @@ CUDA/NPU 构建/真机与常驻推进仍分别验收。
 Function中彼此独立的输出当作互有导数的中间State。未准备、其他模块及自定义程序
 继续原后备。此策略不删减已有返回、不改变图/codec/数学定义；有限归约次序差异照常记录。
 实际采用量为`joint_state_vjp_sequences/events`，不能当作硬件kernel数。
+反向K/V字段归约保持原算术次序，按每个owner一次拼接成写入伴随矩阵，再发布行view；
+不再逐逻辑写入提交concat。未连接字段的零列与最后连接前缀之后的None分别保留，
+`test_prefix_adjoint_one_join_keeps_partial_field_roots_and_fixed_concat_count`用字面导数
+和两种长度检查该边界；完整native/设备资格仍按固定提交分别记录。
 公共工厂`eager_runner(..., trace=False)`将相同选择传到Python及native构造器，
 省略时仍返回完整事件记录；原生`Native.run`的trace策略依然由构造器拥有。
 

@@ -74,13 +74,20 @@ class _Sequence(torch.autograd.Function):
                 reduced.append(value); last.append(end)
                 if value is not None and inputs[old_id].requires_grad:
                     result[old_id] = value[:n]
+            value_rows = [(i, row[1]) for i, row in enumerate(writes)
+                          if inputs[row[1]].requires_grad and n+i < max(last[:2])]
+            if value_rows:
+                # The reduction already zero-fills entries after each field's
+                # last connected prefix. Join K/V once, then expose row views;
+                # do not submit one device concat for every logical write.
+                ref = inputs[value_rows[0][1]]
+                joined = torch.cat([reduced[f][n:] if reduced[f] is not None
+                    else ref.new_zeros((len(writes), ref.numel()//2)) for f in (0, 1)], 1)
+                for i, value_id in value_rows:
+                    result[value_id] = joined[i]
             for i, (_, value_id, summary_id, content_id) in enumerate(writes):
-                index = n+i
-                if inputs[value_id].requires_grad and any(index < last[f] for f in (0, 1)):
-                    result[value_id] = torch.cat([reduced[f][index] if index < last[f]
-                        else inputs[value_id].new_zeros(inputs[value_id].numel()//2) for f in (0, 1)])
-                if inputs[summary_id].requires_grad and index < last[2]:
-                    result[summary_id] = reduced[2][index]
+                if inputs[summary_id].requires_grad and n+i < last[2]:
+                    result[summary_id] = reduced[2][n+i]
             active = [(i, row[3]) for i, row in enumerate(writes)
                       if n+i < last[3] and inputs[row[3]].requires_grad]
             if active:

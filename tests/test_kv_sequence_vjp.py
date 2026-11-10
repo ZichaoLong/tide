@@ -115,3 +115,49 @@ def test_untraced_warm_state_versions_and_exact_training_resume(dtype, native, t
         b.model.nodes[0].kernel.summary.add_(.01)
     with pytest.raises((RuntimeError, ValueError), match="modified|version|inplace"):
         loss(final).backward()
+
+
+@pytest.mark.parametrize("field", [0, 1, 2, 3])
+def test_prefix_adjoint_one_join_keeps_partial_field_roots_and_fixed_concat_count(dtype, field, monkeypatch):
+    from tidegraph.records import State
+    from tidegraph.weighted.kv_sequence_vjp import _Sequence, FIELDS
+    original_cat = torch.cat
+    counts = []
+    for length in (3, 9):
+        old = [torch.zeros((0, 2) if f < 3 else (0,), dtype=dtype, requires_grad=True) for f in range(4)]
+        values = [torch.arange(4, dtype=dtype).requires_grad_() for _ in range(length)]
+        summaries = [torch.ones(2, dtype=dtype, requires_grad=True) for _ in range(length)]
+        contents = [torch.tensor([.4, .1, -.2], dtype=dtype, requires_grad=True) for _ in range(length)]
+        inputs = list(old); writes = []
+        for i in range(length):
+            writes.append((i, len(inputs), len(inputs)+1, len(inputs)+2))
+            inputs.extend((values[i], summaries[i], contents[i]))
+        columns = (torch.stack(values)[:, :2], torch.stack(values)[:, 2:],
+                   torch.stack(summaries), torch.stack(contents)[:, 0].clamp(max=1))
+        numeric = [State(torch.zeros(2, dtype=dtype), slots={name: columns[f][:i+1]
+                   for f, name in enumerate(FIELDS)}) for i in range(length)]
+        outputs = _Sequence.apply((numeric, [(list(range(4)), writes,
+                                  [(0, i+1) for i in range(length)], list(range(length)))]), *inputs)
+        calls = []
+        def counted(*args, **kwargs):
+            calls.append(1)
+            return original_cat(*args, **kwargs)
+        with monkeypatch.context() as patch:
+            patch.setattr(torch, "cat", counted)
+            actual = torch.autograd.grad(outputs[field*length+length-2].sum(), inputs, allow_unused=True)
+        counts.append(len(calls))
+        # The final write is causally absent; selected zero components stay
+        # connected. Literal derivatives do not call the candidate boundary.
+        for i in range(length):
+            for k, leaf in enumerate((values[i], summaries[i], contents[i])):
+                g = actual[4+3*i+k]
+                connected = i < length-1 and ((field < 2 and k == 0) or (field == 2 and k == 1) or (field == 3 and k == 2))
+                if not connected:
+                    assert g is None
+                else:
+                    expected = torch.zeros_like(leaf)
+                    if field < 2: expected[field*2:field*2+2] = 1
+                    elif field == 2: expected[:] = 1
+                    else: expected[0] = 1
+                    equivalent(g, expected, atol=0, rtol=0)
+    assert counts[0] == counts[1]
