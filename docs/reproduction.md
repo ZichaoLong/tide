@@ -33,6 +33,8 @@
 | native workers2跨进程恢复 | [安装消费者](../examples/consumer_core5/README.md)的check.py，显式FP32/native/workers2 | [原失败与命令](evidence/downstream-contract-20261030.md)；默认worker1不代表workers2修复，单次通过也不证明并发顺序确定 |
 | 本轮NPU1B/B512精确下一窗 | [有界恢复诊断](../scripts/diagnose_experiment_resume.py)：原安装运行`CONFIG --checkpoint OLD --windows 3 --output-dir NEW`；无旧目录时省略checkpoint，由相同固定配置重建新见证 | [规模原失败](evidence/core5-platform-scale-20261031.md)；先分开raw-boundary与next-complete，再比较状态/参数stride、offset、对齐与NPU format及工作量。布局差异不自动证明因果，不运行CPU参考轨迹或改变算术/布局 |
 | D2048首次写入的真实局部算术 | [有界读取诊断](../scripts/diagnose_weighted_first_write.py)、[参数匹配及导出](weighted-workloads.md) | [首次写入隔离](evidence/core5-boundary-isolation-20261029.md)；原输入binary及witness已退役，需重建相同种子/配置材料；约37GB静态材料的成本仍存在 |
+| 常驻局部程序首次引用已持有参数库造成的预算拒绝 | [预算/服务诊断](resident-storage-accounting.md)、[独立小见证](../tools/device_online/weighted_budget_check.cpp)、`weighted-budget-construction` | [固定审阅](evidence/resident-workspace-audit-20261110.md)；构造见证不运行数值窗口，不代替原规模复验或容量修复 |
+| 批量Describe首evidence根的有限FP32差异 | [同材料FP64诊断](../scripts/diagnose_window_describe.py)、`test_component_window_weighted` | [47704c9原严格失败与限定后继](evidence/interface-batch-publication-20261110.md)；只诊断指定根，完整训练/恢复另验，其他字段和非有限仍严格失败 |
 | 较大FC/HB数值、NPU流/任务资源及局部预算 | [有限目录](../benchmarks/core5-study-v1.json)、[单配置入口](../scripts/run_core5_study.py)、[配置/证据查询](core5-study.md) | [自然规模测量](evidence/core5-natural-study-20261029.md)、[流资源](evidence/core5-compact-fibers-20261029.md)、[文件预算](evidence/core5-checkpoint-budget-20261029.md)；停止条件保持，8B/16B仍无实测吞吐 |
 
 SDK affine、normalization、源变换及query舍入的旧临时变体不作为第二套实现保留。

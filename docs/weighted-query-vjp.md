@@ -4,7 +4,7 @@
 [KV §2–4](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)与
 [循环模块对应](weighted-recurrent.md)。这是同一 Read/Full 函数的实际批量图反向；
 它不采用 HST，也不改变区域精确分配映射的 VJP 身份。
-数值布局、完整可见窗口、int64 时钟与有限描述头运算次序见 [query batch](weighted-query-batch.md)。
+数值布局、完整可见窗口、int64时钟与描述头批量能力见 [query batch](weighted-query-batch.md)。
 
 ## 公共接口与计算
 
@@ -16,8 +16,9 @@
 | 实际局部计算 | `read_batch.evaluate` / `full_batch.evaluate` | `query::describe` / `query::full` |
 
 packed Read 在 grad mode 自动选择已经声明的结构化批量能力。
-Full 使用显式 `full_autograd="batched"`，默认 `replay` 仍可调用；unpacked + batched
-或缺少能力的 Full 提前拒绝。Python 的旧 ProjectionEmit 通过相同能力接口保留原路径。
+weighted `eager_runner`/实验CLI的packed路径设置`full_autograd="batched"`；
+底层`Native`/`ExecutionOptions`和直接greedy接口默认replay，调用者可显式选择batched。
+unpacked + batched或缺少能力的Full提前拒绝。Python 的旧 ProjectionEmit 通过相同能力接口保留原路径。
 通用 Read/Full 不因本地带权绑定而获得未经实现的能力。
 
 每组捕获记忆与对应 Read/Full 程序的注册参数，建立私有叶和真实批量计算图。
@@ -39,7 +40,8 @@ Read⁰ 使用真实绑定初态；Full 始终读本请求 comparison，不借�
 Attention 的零/非零分支。全零权重或空可见集不连接本来未参与的 Q/K/V 查询；
 正权重集合内的数值零导数保持连接。没有按梯度数值、epsilon 阈值或实际 loss 裁剪图。
 实际 Mem/Full 数值来自候选批量图；不调用 scalar Read、Mem 或 Full 重放生成反向。
-有限 Describe 头仍保留逐行运算，不能将这一能力表述为所有算子的融合。
+默认能力路径由`dense_describe.columns`/`query::describe_columns`合批全部内建有限Describe头；
+显式legacy仍逐行计算。列合批不等于算子融合，也不表示全部私有图或元数据操作已无逐行开销。
 标量 MatchScore 的 residual gate/up 与 Encoder/GroupedEvidence 一样采用教材列向量次序；
 该数值约定避免 Python/native 方向不同的微小投影舍入被复合独立根放大，公式与容差不变。
 

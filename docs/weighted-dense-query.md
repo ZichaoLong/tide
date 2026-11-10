@@ -121,3 +121,12 @@ checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行�
 导出纯静态材料。在匹配SDK环境运行
 `python scripts/check_query_sdk.py --binary SDK_BENCHMARK --fixture FIXTURE --device cpu --dtype float64 --output-dir NEW`；
 NPU队列内改为`--device npu:0 --dtype float32`。它检查独立根、完整训练、3 vs 2+1新进程恢复及跨策略拒绝。
+
+SDK通用头的小材料使用[SSD/match/attention/grouped recipe](../tests/fixtures/describe-recurrent-grouped.json)
+或[KV/context gain recipe](../tests/fixtures/describe-kv-context-gain.json)：
+`prepare_core5_study.py --recipe RECIPE --samples 2 --positions 2 --output-dir NEW_PLAN`，
+随后按上节导出与验收；另测`--return-mode outputs`以核验真实最小返回路径。
+`test_query_sdk_capability.py`校验真实memory域和默认选择；纯循环要求实际batched state事件，
+KV另要求隐藏sequence VJP事件，不能用KV专用计数拒绝合法循环候选。
+修改默认策略时同步Python `planning/execution.py`、SDK `tools/weighted_benchmark/cli.cpp`及
+`run_check.cpp`的身份/旧策略拒绝检查，不以checkpoint能解码推断跨策略精确恢复。

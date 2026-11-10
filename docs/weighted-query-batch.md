@@ -14,10 +14,10 @@ comparison（本支线即 proposal），即使 Read⁰/⁻ 采用其他状态也
 
 | 数学函数 | Python | 独立 C++ | 批量域/布局 |
 | --- | --- | --- | --- |
-| KV Mem | `weighted/query_batch.py::kv` | `weighted_query_kv.cpp::memory` | 按实际可见项数分组，每行完整 K/V/summary/weight；原始 int64 age 先减后转浮点 |
+| KV Mem | `weighted/query_batch.py::kv`、`query_packed.py` | `weighted_query_kv.cpp::memory`、`weighted_query_packed.cpp` | legacy按可见长度分组，默认能力路径使用原始槽/gather；每行完整可见K/V/summary/weight，int64 age先减后转浮点 |
 | 循环 Mem | `query_batch.py::memory_read,effective` | `weighted_query_recurrent.cpp::memory,effective` | 按实际用途堆叠H/Z/W，原始int64时钟差控制短期/矩阵衰减；见[循环查询](weighted-recurrent-query.md) |
 | GDN/SSD 查询与短卷积 | `query_batch.py::features,convolve` | `weighted_query_recurrent.cpp::features,convolve` | 按实际 cache 长度分组，绝对时间槽匹配；查询当前 tap 与带权历史分别处理 |
-| Describe | `weighted/read_batch.py::evaluate` | `weighted_describe_batch.cpp::describe` | Mem 数值批量化；p_v 与有限描述头保留逐行运算次序，逐字段解码 |
+| Describe | `read_batch.evaluate`、`dense_describe.columns` | `query::describe`、`query::describe_columns` | 默认能力路径合批p_v及完整有限头，leading B/L轴与独立行/字段根；显式legacy保留逐行头 |
 | Full | `weighted/full_batch.py::evaluate` | `weighted_full_batch.cpp::full` | KV 多头旋转/距离项，四种循环读出、门/RMS 与 FFN；返回未重复缩放的 `(c,G)` |
 
 KV 查询保留每行全局归一化，按实际正权重项数合批 softmax；无正权重时返回声明的零。
@@ -34,22 +34,21 @@ Full 各头可有不同旋转频率和距离斜率，头间循环不改变每头
 
 ## 能力与反向边界
 
-Read 的实际合批范围是 Mem：KV 查询、循环有效状态/读出与短卷积。
-p_v、特征组装和有限 Describe 头保留原有逐行矩阵/归一化顺序。
-初始全头矩阵批方案在 FP32 独立 evidence 梯度上失败：微小投影差异经 RMS 与近零梯度放大。
-新增三样本 PDG 检查还发现旧 GroupedEvidence 标量 Python/native 投影方向的舍入差异，
-未合批的 native streaming 也同样失败；标量 Python 现按教材列向量运算次序计算，
-与 Encoder 的已有标量规则一致。没有修改输入、容差或数学函数。
-此处没有调用 scalar Read/Mem 重放，Mem 值由候选批量图产生；也不宣称描述头的全部算子已经合批。
-Full 的记忆混合/门/RMS/FFN 继续实际按行合批；各层成本须计入 profiling。
+Read的Mem与Describe具有独立能力：默认weighted `eager_runner`的packed prefill按
+[查询策略](weighted-dense-query.md)选择KV packed-v2及五记忆的完整Describe列计算。
+匹配条件下p_v、cat/match、evidence、key与gain共享矩阵按实际就绪行合批，发布边界再拆行；
+显式legacy和能力不适用路径保持原逐行描述头。有限归一化梯度舍入见证保留原严格阈值及
+具名失败，不用旧逐行运算次序限制当前默认路径。参考scalar调度/局部函数仍独立。
+Full的记忆混合/门/RMS/FFN实际按行合批；调用次数、内部图及设备kernel数仍须分别观察。
 
 Read/Full 的 `joint_batch` 声明数值合批，记录中 `read_scalar_batch_steps` 与
 `full_scalar_fallback_steps` 为零。形状分桶、索引准备仍在 eager 主机侧，
 不把一次 API 调用计作一个设备核，也不认证常驻就绪/选择/推进。
 
 数值批量与反向能力分别验收。[批量 VJP](weighted-query-vjp.md)定义当前 Read 自动采用的
-实际私有批量图及可选 `full_autograd="batched"`；Full 默认仍为显式 semantic replay，
-统计保留 `semantic_full_replays`。逐字段/状态槽/Full 槽根的 None/零契约不变。
+实际私有批量图及`full_autograd="batched"`。weighted `eager_runner`和实验CLI在packed路径
+设置batched；底层`Native`/`ExecutionOptions`及直接greedy接口的默认仍是replay，需显式配置。
+实际replay统计为`semantic_full_replays`，不能混称这些入口的默认行为。逐字段/状态槽/Full 槽根的 None/零契约不变。
 参数共享身份和私有状态保留；复用参数不意味着不同输入/快照可以复用计算。
 数值资格 0925539 使用当时的 Read/Full replay，不能冒用为后续批量反向资格。
 
@@ -70,8 +69,8 @@ KV/循环的独立手算与 dense recurrence 仍在原公式测试中；这些�
 
 一个实际分组只有一行时，Python/C++直接在原参数与该行输入上构造相同数值批图；
 `singleton_vjp.boundary` / `SingletonVjp`保留所有原值版本检查、独立字段None/连接零、
-返回副本与一阶限制。没有其它行需要隔离，因此不再detach/rebind参数并嵌套调用autograd.grad。
+只读发布与一阶限制。没有其它行需要隔离，因此不再detach/rebind参数并嵌套调用autograd.grad。
 多行仍使用原私有图隔离。`test_weighted_query_vjp`及`test_weighted_aggregate_vjp`
 覆盖singleton/多行版本、逐字段根、重复输入、参数别名和独立方向导数；固定资格另列。
 
-显式KV密集路径见[weighted-dense-query](weighted-dense-query.md)；本页逐行描述头次序指默认legacy。
+默认auto与显式legacy/dense-v1/packed-v2的能力、身份和迁移见[weighted-dense-query](weighted-dense-query.md)。

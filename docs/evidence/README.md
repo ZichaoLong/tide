@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[常驻存储/服务审阅](resident-workspace-audit-20261110.md)：47704c9固定41完整文件及2局部范围；区分owner去重、首次局部借用、journal与workspace，single-bank投影仅设计。新增诊断与设备见证另记实现及实际资格。
+
 [批量发布与能力分派（2026-11-10）](interface-batch-publication-20261110.md)：47704c9的局部CPU501通过/13保留xfail，图CPU308通过/4原严格失败；有界诊断后其余训练/恢复通过。NPU配置122通过/3xfail，三客户端小训练/恢复分列。FC16完整训练CPU1/NPU12.447/17.212秒，NPU推理反升；小图私有union11317、SelectBackward640。
 
 [调度与接口审阅](scheduling-interface-audit-20261110.md)、[区域批量审阅](region-batching-audit-20261110.md)、[循环与Describe审阅](recurrent-interface-audit-20261110.md)：固定06b242e逐文件/具名函数记录；实际容量缺陷、重复扫描/上传/逐行转置与模块能力边界。审阅范围有重叠，开发检查不代替后继实现固定资格。

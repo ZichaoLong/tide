@@ -175,7 +175,11 @@ def test_general_heads_submit_shared_projections_once_per_batch(dtype, monkeypat
     calls = []
     class Observe(TorchDispatchMode):
         def __torch_dispatch__(self, func, types, args=(), kwargs=None):
-            if func is torch.ops.aten.mm.default:
+            # CPU decomposes matmul to mm before this dispatch boundary;
+            # TorchNPU 2.12 exposes the original two-dimensional matmul.
+            # Observe the actual matrix operands in either case, not wrappers.
+            if func in (torch.ops.aten.mm.default, torch.ops.aten.matmul.default):
+                assert args[0].ndim == args[1].ndim == 2
                 calls.append(tuple(args[1].shape))
             return func(*args, **(kwargs or {}))
     def forbidden(*a, **kw):
