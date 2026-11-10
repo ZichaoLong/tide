@@ -54,3 +54,12 @@ CPU/NPU相关守卫/独立根/训练/恢复、SDK完整与outputs新进程恢复
 CPU配额320、内存512GiB、28800秒，NPU准入最多60秒。任务在background.slice。
 日志artifacts/jobs/joint-prefill-local-batches/task.log；驱动hash见artifacts/joint-prefill/local-batches-driver.json。
 未完成构建/检查不记通过；代码后继只改工作区，不修改该只读worktree、包或驱动。
+
+层链有限审计gef-joint-prefill-layer-audit固定a403552驱动、f15c4a5安装/库；
+NPU7项完整检查以独立记录收集有限超差，再做同材料CPU FP64输出/末态/输出根诊断。
+仅正确性、无性能计时，可与另一卡成本独立运行；8CPU/32GiB/1800秒，准入60秒。
+结果layer-audit-npu.xml、layer-audit-numeric及layer-rounding-npu.json；日志artifacts/jobs/joint-prefill-layer-audit/task.log。
+
+层链驱动补显式ieee/vendor-default策略（默认ieee，复用公共precision）；原NPU默认conv HF32差异待真机验证。
+resident有限代表按静态事件/布局生成显式forward、retained、backward、optimizer预算；不改变运行时默认。
+相关CPU开发15项通过；下一步固定后作IEEE小型NPU审计及一次resident预算重试，保留原拒绝。

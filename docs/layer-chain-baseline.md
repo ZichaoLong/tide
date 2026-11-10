@@ -27,6 +27,9 @@ Describe字段和图记录，消去恒零依赖；其None和图实现的连接�
 `scripts/diagnose_layer_rounding.py --device npu:0 --native-library MATCHING_BUILD --output NEW.json`
 把同一FP32材料提升到CPU FP64，分别记录scalar、tensor及默认Python/native的输出、末态、
 输出平方目标梯度误差。它是有界定位，不改变容差，也不认证层链之外的训练效果。
+测试和成本默认显式采用公共实验入口的`ieee`算术策略，关闭HF32/TF32矩阵与卷积缩精度，
+记录请求/生效开关。`--precision-policy vendor-default`只供单独诊断，测试对应
+`TIDE_LAYER_NUMERICS=vendor-default`；NPU厂商默认允许卷积HF32，不能只按张量FP32标签视为同一算术。
 
 ```sh
 python scripts/benchmark_layer_chain.py --family kv --implementation tensor \

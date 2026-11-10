@@ -7,7 +7,7 @@ import pytest
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"scripts"))
-from layer_tensor_baseline import fixture, external, run
+from layer_tensor_baseline import fixture, external, run, numerics
 from tidegraph import Continuation
 from tidegraph.reference import run as reference
 from tidegraph.runtime import resolve_device
@@ -19,6 +19,7 @@ def test_tensor_layers_outputs_raw_state_parameter_input_and_state_roots(dtype, 
     check = Checks(request.node.nodeid,
         failure_reason="layer tensor strict numerical difference retained; see bounded layer diagnostic")
     device, _ = resolve_device(os.environ.get("TIDE_LAYER_DEVICE", "cpu"))
+    numerics(device, os.environ.get("TIDE_LAYER_NUMERICS", "ieee"))
     b, spec = fixture(family, width=4, depth=2, heads=2, dtype=dtype, device=device)
     oracle, oracle_spec = fixture(family, width=4, depth=2, heads=2, dtype=dtype)
     original = torch.linspace(-.2, .4, 24, dtype=dtype).reshape(2, 3, 4).requires_grad_()
@@ -73,6 +74,7 @@ def test_same_layer_workload_uses_public_default_entry(dtype, family, implementa
     from tidegraph import ExecutionPlacement
     from tidegraph.weighted.execution import eager_runner
     device, _ = resolve_device(os.environ.get("TIDE_LAYER_DEVICE", "cpu"))
+    numerics(device, os.environ.get("TIDE_LAYER_NUMERICS", "ieee"))
     b, spec = fixture(family, width=4, depth=2, heads=2, dtype=dtype, device=device)
     values = torch.linspace(-.2, .4, 24, dtype=dtype, device=device).reshape(2, 3, 4).requires_grad_()
     expected, _ = run(b, spec, values)

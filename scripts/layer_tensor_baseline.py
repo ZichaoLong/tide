@@ -13,6 +13,24 @@ from tidegraph import External
 from tidegraph.weighted import bind, fully_connected, KVConfig, RegionalConfig, RecurrentConfig
 
 
+def numerics(device, policy="ieee"):
+    """Explicitly match the public experiment's matmul/convolution policy."""
+    if policy not in {"ieee", "vendor-default"}:
+        raise ValueError("unknown layer numerical policy")
+    from tidegraph.experiment.admission import precision
+    if policy == "ieee":
+        effective = precision(device)
+    elif device.type == "npu":
+        effective = dict(matmul_allow_hf32=torch.npu.matmul.allow_hf32,
+                         conv_allow_hf32=torch.npu.conv.allow_hf32)
+    elif device.type == "cuda":
+        effective = dict(matmul_allow_tf32=torch.backends.cuda.matmul.allow_tf32,
+                         cudnn_allow_tf32=torch.backends.cudnn.allow_tf32)
+    else:
+        effective = dict(float32_matmul_precision=torch.get_float32_matmul_precision())
+    return dict(requested=policy, effective=effective)
+
+
 def fixture(family, *, width=128, depth=4, heads=4, dtype=torch.float32, device="cpu"):
     spec = fully_connected(depth, 1)
     common = dict(width=width, summary_width=max(2, width//4), ffn_width=2*width, heads=heads)

@@ -34,7 +34,7 @@ def config(case, *, family="kv", samples=4, positions=16, device="cpu", client="
         if family != "kv":
             raise ValueError("query-fc is the explicit KV qry representative; use other cases for recurrent modules")
         recipe["memory_overrides"] = dict(memory_read="qry")
-    return dict(schema="tide-experiment-v1", name=f"prefill-{case}-{family}",
+    value = dict(schema="tide-experiment-v1", name=f"prefill-{case}-{family}",
         description="Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
         model=dict(recipe=recipe), task=dict(samples=samples, positions=positions, seed=7,
             input_pattern="staggered-v1", objective=dict(kind="weighted-output-square", scale=.000001)),
@@ -48,6 +48,36 @@ def config(case, *, family="kv", samples=4, positions=16, device="cpu", client="
         measurement=dict(mode=mode, steps=1, warmup=1, validation="explore" if complete else "none",
                          checkpoint_check=True, timeout_seconds=1800),
         resources=dict(max_materialize_bytes=128*1024**3, checkpoint_max_bytes=128*1024**3))
+    if placement == "resident":
+        resident_reservations(value)
+    return value
+
+
+def resident_reservations(value):
+    """Static finite-suite bounds, not a trajectory or a general runtime default.
+
+    One warmup + one measured window + one exact-next check. Keep room for
+    every possible Settle candidate; smaller actual activity is not assumed.
+    """
+    initial = resolve(value)
+    graph = initial["plan"]["graph"]
+    b, length = value["task"]["samples"], value["task"]["positions"]
+    limits = dict(queue=b*length*(len(graph["edges"])+len(graph["inputs"]))+16,
+                  stages=b*length*graph["regions"]+16, cache=3*length+1,
+                  timeout_ms=300000, windows=1)
+    value["resources"]["resident_limits"] = limits
+    resolved = resolve(value)
+    raw = resolved["capacity_budget"]["resident_layout"]["preflight_total_bytes"]
+    parameters = resolved["inventory"]["totals"]["unique"]
+    def rounded(n):
+        unit = 64*1024**2
+        return ((n+unit-1)//unit)*unit
+    forward = rounded((5*raw+3)//4+16*parameters)
+    optimizer = max(256*1024**2, rounded(32*parameters))
+    backward = max(2*1024**3, 2*forward)
+    limits.update(tensor_bytes=forward, retained_bytes=4*forward,
+                  backward_bytes=backward, optimizer_bytes=optimizer,
+                  total_bytes=5*forward+backward+optimizer)
 
 
 def matrix(**options):

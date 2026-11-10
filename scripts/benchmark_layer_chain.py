@@ -21,6 +21,7 @@ def main():
     p.add_argument("--implementation", choices=("tensor", "python", "native"), required=True)
     p.add_argument("--device", default="cpu")
     p.add_argument("--dtype", choices=("float32", "float64"), default="float32")
+    p.add_argument("--precision-policy", choices=("ieee", "vendor-default"), default="ieee")
     p.add_argument("--width", type=int, default=128)
     p.add_argument("--depth", type=int, default=4)
     p.add_argument("--heads", type=int, default=4)
@@ -43,10 +44,11 @@ def main():
     from tidegraph.runtime import resolve_device
     from tidegraph.weighted.execution import eager_runner
     from tidegraph.experiment.finite import finite_tensors
-    from layer_tensor_baseline import fixture, external, run
+    from layer_tensor_baseline import fixture, external, run, numerics
     torch.set_num_threads(a.threads)
     torch.set_num_interop_threads(1)
     device, _ = resolve_device(a.device)
+    numerical_policy = numerics(device, a.precision_policy)
     dtype = getattr(torch, a.dtype)
     def synchronize():
         if device.type != "cpu":
@@ -56,6 +58,7 @@ def main():
     record = dict(schema="tide-layer-chain-cost-v1", source=subprocess.check_output(
         ["git", "rev-parse", "HEAD"], text=True).strip(), config=vars(a) | {"output_dir": str(out)},
         package=str(Path(tidegraph.__file__).resolve()), visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
+        numerical_policy=numerical_policy,
         scope="zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
         strict_numerical="not_checked_at_measured_scale", recovery="outside_zero-left-state_anchor",
         timing="one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",

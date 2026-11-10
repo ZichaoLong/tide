@@ -12,7 +12,7 @@ from pathlib import Path
 import subprocess
 import torch
 from durable_records import write_json
-from layer_tensor_baseline import fixture, external, run as tensor_run
+from layer_tensor_baseline import fixture, external, run as tensor_run, numerics
 from tidegraph import Continuation, ExecutionPlacement
 from tidegraph.comparison import collect_comparison
 from tidegraph.reference import run as scalar_run
@@ -72,14 +72,17 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--device", default="cpu")
     p.add_argument("--native-library")
+    p.add_argument("--precision-policy", choices=("ieee", "vendor-default"), default="ieee")
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
     if a.output.exists():
         raise FileExistsError(a.output)
     torch.set_num_threads(1)
     device, _ = resolve_device(a.device)
+    numerical_policy = numerics(device, a.precision_policy)
     report = dict(source=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
-        device=str(device), material="CPU FP32 width4/depth2/heads2, B2/L3 linspace(-.2,.4), exactly promoted",
+        device=str(device), numerical_policy=numerical_policy,
+        material="CPU FP32 width4/depth2/heads2, B2/L3 linspace(-.2,.4), exactly promoted",
         scope="output and terminal state; output-square numerical derivatives; no graph connectivity or learning claim",
         families={})
     for family in ("kv", "ssd"):

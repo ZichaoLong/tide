@@ -35,6 +35,9 @@ tidegraph run NEW_CONFIG.json --site SITE.json --output-dir NEW_RUN
 `layer-chain`为4层/区域宽1/d128/固定总发送1；后者仍是core-5层链，
 不自动等同特定Transformer/Mamba架构。`lh-1b/lh-9b`按真实参数清单自然定宽。
 每项可选择五记忆或mixed、B/L、客户端、设备/placement、线程、推理/训练及auto/greedy。
+`--placement resident`同时生成该有限流程的显式queue/stages/cache及forward/retained/backward/optimizer预算。
+根据全部可能Settle事件和静态原始布局预留，不消费参考轨迹；仅覆盖一次预热、一次测量及下一窗恢复。
+实际厂商workspace/service资源与设备余量仍须运行准入；改变窗口数/用途须重新预算，不能把该估计当作通用默认或免容量检查。
 默认返回outputs、独立数值not_checked；`--complete`才启用完整返回及explore比较。
 不同返回契约不直接计算加速比；先运行相关独立小门禁，真实大规模数值/恢复仍另列。
 单配置一次预热/一次计时，完整训练包括准备、packing、backward、finite及SGD/同步；
