@@ -17,17 +17,21 @@ KV无trace序列保留实际共享bank视图；query按真实storage区间去重
 
 Python sequence/新bank首轮37通过，另1旧FP32scalar差异；禁用新bank时该梯度逐位相同。
 同材料FP64差3.56e-15，FP32双方距FP64约1.03e-6/2.83e-6；严格失败保留为独立xfail。
-修订后新bank定向9通过/1保留xfail；native新文件语法编译通过，实际构建/设备资格尚待运行。
+修订后新bank定向9通过/1保留xfail；native06b242e构建通过，首资格51通过/1旧xfail/2新增Read梯度失败。
+定位为未限定bind调用被C++ ADL选中std::bind，未安装手写VJP；原生shared梯度为零，unshared/Python正常。
+编译期static_assert证实错误overload；现改明确attach_bank_vjp名称，待新冻结build验证，不能归为舍入。
 公共边界开发107/67/39/33项组通过（重叠不累加）；图诊断11项通过。
 独立审阅补60组重叠/冻结/重复根探针和大int64检查；native存储组改稳定首次出现顺序。
 这些是开发检查，不能替代固定源码资格或性能结果。
 
 ## 下一动作与作业
 
-先固定当前实现提交，建立artifacts/interface-work/source-bank干净检出及env-bank wheel。
-计划background.slice有限服务gef-interface-bank：320可用CPU构建，CPU定向资格和三客户端恢复，
-FC16原任务CPU1/16线程及图统计对照；空闲单NPU队列内完成相关资格/成本。
-正式启动前记录实际unit/命令；尚无新活跃后台服务。任务日志预定artifacts/jobs/interface-bank/task.log。
+首服务gef-interface-bank已终态failed/MainPID=0；source06b242e，构建通过，首CPU门禁失败，
+相关/SDK/性能/NPU均未执行。原记录artifacts/jobs/interface-bank/status.json及task.log保留。
+冻结source-bank/env-bank/build-bank及驱动保留，不修改旧任务输入。
+当前main工作树在修bank ADL、compact窗口错误累计live容量，以及区域/循环头批量低垂工作。
+三位子代理分属调度、区域、循环模块，主代理统一集成；等待短检查后建立下一固定源码重新构建。
+后续仍CPU1/16线程FC16成本、独立census，空闲单NPU资格与成本，SDK三客户端恢复。
 共享NPU本阶段无授权；只使用空闲卡，不能复用旧shared adapter。CPU约1.7TiB可用，文件系统约685GiB，
 本用户281GiB/soft300/hard800GiB；正式计时与本项目重构建不重叠。
 

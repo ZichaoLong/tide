@@ -92,7 +92,7 @@ class BankVjp final:public torch::autograd::Node {
   void release_variables()override{originals.clear();safe=Tensor{};visible=Tensor{};bank.index=Tensor{};}
   std::string name()const override{return projected?"tide::weighted::SnapshotProjectVjp":"tide::weighted::SnapshotGatherVjp";}
 };
-void bind(Tensor& output,const variable_list& inputs,std::shared_ptr<BankVjp> node){
+void attach_bank_vjp(Tensor& output,const variable_list& inputs,std::shared_ptr<BankVjp> node){
   bool grad=false;for(const auto& t:inputs)grad|=t.requires_grad();
   if(!at::GradMode::is_enabled()||!grad)return;
   node->set_next_edges(torch::autograd::collect_next_edges(inputs));
@@ -109,7 +109,7 @@ Tensor bank_gather(const std::vector<Tensor>& rows){
   auto node=std::make_shared<BankVjp>();node->bank=std::move(*p);Tensor output;
   {at::NoGradGuard guard;output=node->bank.gather(node->bank.values(rows));}
   work::packing::projection("kv_unique_gather",node->bank.size);
-  bind(output,rows,node);return output;
+  attach_bank_vjp(output,rows,node);return output;
 }
 Tensor bank_project(const std::vector<Tensor>& rows,const Tensor& weight,const Tensor& visible){
   auto p=plan(rows);if(!p)return {};
@@ -126,6 +126,6 @@ Tensor bank_project(const std::vector<Tensor>& rows,const Tensor& weight,const T
   }
   work::packing::projection("kv_unique_projection",node->bank.size);
   variable_list inputs{weight};inputs.insert(inputs.end(),rows.begin(),rows.end());
-  bind(output,inputs,node);return output;
+  attach_bank_vjp(output,inputs,node);return output;
 }
 }
