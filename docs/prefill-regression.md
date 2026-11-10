@@ -14,6 +14,9 @@
 CPU/NPU和数值xfail分列，不认证全部尺度或下游学习。
 [34项有限代表实测](evidence/prefill-representatives-20261110.md)记录B4/P16的CPU/NPU、
 三客户端和mixed-a/b/c实际成本与精确续接；大尺度独立数值not_checked，不能称完整资格。
+[554f2f5本轮代表](evidence/interface-heads-performance-20261110.md)补宽FC、176节点HB/LH、
+sum、SSD与三客户端的14个CPU/NPU成本/精确下一窗，另有FC16分模式、同公式层链与图统计。
+新提交的1B/9B、多卡、mixed-a/b、resident成本未重测；小型独立资格从该报告链接进入。
 
 [部署后继与停止证据](evidence/prefill-deployment-20261110.md)补FP16、五记忆异构、CPU线程、
 1B/9B和双卡；[同公式层链](evidence/layer-chain-baseline-20261110.md)保留直接张量公式与默认入口的真实差距。

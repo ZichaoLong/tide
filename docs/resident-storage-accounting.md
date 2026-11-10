@@ -2,7 +2,9 @@
 
 本页解释 `tools/device_online/` 的构造诊断，不改变数学、预算限额或拒绝条件。
 固定旧实现的审阅范围及历史失败见
-[47704c9审阅](evidence/resident-workspace-audit-20261110.md)。新增诊断和小见证仍须单独完成构建、设备资格。
+[47704c9审阅](evidence/resident-workspace-audit-20261110.md)。
+[554f2f5固定资格](evidence/interface-heads-qualification-20261110.md)已完成CANN构建、服务检查和设备小见证；
+CUDA本增量仅有源码审阅，未新增构建或真机资格。
 
 ## 预算含义
 

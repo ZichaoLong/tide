@@ -39,4 +39,6 @@ None/连接零、负时间、空/无匹配卷积、int64大时间、unused通道
 它还观察每个实际raw字段的访问次数、完整projection尺寸、query归一化/扩展次数，
 确认删除的是实际计算。独立公式仍见`test_weighted_recurrent_formulas.py`，scalar实现保持独立。
 
-这些局部检查不构成吞吐结论，也不把CPU检查算作native/设备资格；固定源码与实际范围见证据。
+这些局部检查不构成吞吐结论，也不把CPU检查算作native/设备资格。
+[554f2f5固定资格](evidence/interface-heads-qualification-20261110.md)分别记录CPU/NPU、
+安装消费者、独立LibTorch两种新增组合的完整训练与新进程精确恢复。

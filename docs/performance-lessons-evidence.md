@@ -5,6 +5,14 @@
 当前待办与停止/重启决定只在[ROADMAP](ROADMAP.md)，下列历史决定不自动成为新任务限制。
 从[经验索引](performance-lessons.md)选择相关主题；新工作按[优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)进行。
 
+## 先核对解析后的执行配置
+
+[554f2f5有限代表](evidence/interface-heads-performance-20261110.md)的首版driver把site放在各case内，
+公共matrix级site覆盖为空，导致12个native/SDK配置在计算前拒绝。后继只补未执行项，运行前
+先纯解析并核对实际库路径/构建身份。请求JSON里出现路径不证明最终执行使用了它；
+生成器、matrix覆盖层与冻结resolved配置各自有契约。原启动失败、成功成本、独立数值和
+精确恢复分别保留，不能为外层passed重跑全部成功项或把无测量行的拒绝算作性能退化。
+
 ## 配置覆盖与证据的校验
 
 [f456160修正资格](evidence/core5-coverage-correction-20261030.md)没有新性能数据，记录以下可复用的设施经验：

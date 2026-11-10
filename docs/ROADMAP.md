@@ -53,11 +53,15 @@
 
 ## 当前待办与重启条件
 
-- **接口、性能与架构统一实施（用户已授权）**：仓库开发/性能/维护skills、分主题历史经验与固定源码审阅工具已交付。独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3对照各自保持验证范围。接口服务性能、通用性、清晰和替换能力，历史兼容可显式迁移。[1528df8固定资格](evidence/interface-snapshot-bank-20261110.md)交付实际共享KV bank与独立snapshot伴随、公共边界和census；CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail，三客户端小训练/精确恢复分列。FC16训练CPU1/NPU14.628/20.634秒；完整尺度数值未验，不宣称NPU普遍加速。
+- **接口、性能与架构统一实施（本轮完成，后继待用户对齐授权）**：仓库开发/性能/维护skills、分主题历史经验与固定源码审阅工具已交付。独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3对照各自保持验证范围。接口服务性能、通用性、清晰和替换能力，历史兼容可显式迁移。[1528df8固定资格](evidence/interface-snapshot-bank-20261110.md)交付实际共享KV bank与独立snapshot伴随、公共边界和census；CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail，三客户端小训练/精确恢复分列。FC16训练CPU1/NPU14.628/20.634秒；完整尺度数值未验，不宣称NPU普遍加速。
 
   [调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)、[循环/Describe](evidence/recurrent-interface-audit-20261110.md)完成具名范围审阅，范围有重叠且未覆盖全仓库。[47704c9固定资格](evidence/interface-batch-publication-20261110.md)落实实时在途容量、只读发布/字段unbind、区域消冗、五记忆Describe能力和公共返回传输去重；CPU/NPU、三客户端训练/精确恢复分列。4项FP32 affine首evidence根原严格超差保留，同材料FP64通过，其余训练/恢复通过；不放宽全局容差。FC16 CPU1/NPU训练12.447/17.212秒，NPU TTFT反升5.098秒。
 
-  当前集成通用Describe列计算、循环查询按消费者裁剪未使用分支及常驻构造预算诊断；冻结后做定向资格和有限代表回归。尚未开始的single-bank常驻投影等后继优化，按用户要求在本轮汇报/对齐授权后继续。宽FC、176节点HB/LH、sum、1B/9B、多卡/resident旧证据保留原提交，不冒称全域防退化。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
+  [554f2f5固定资格](evidence/interface-heads-qualification-20261110.md)完成通用Describe列、循环Read/Full按用途裁剪及常驻预算/服务诊断。CPU490通过/14保留xfail；NPU配置80通过/2xfail/1原观察器失败，ebfe075修正后设备单例通过。Python/native安装消费者与两种SDK组合的三步训练/新进程恢复通过；常驻FP32/FP16各21个小图组合通过，不增加resident训练资格。实际新增8868字节小见证仍被32768字节局部余额拒绝，因为首次借用已有bank被计入局部增长；确认边界但未修改守卫，不外推全部旧规模拒绝。
+
+  [有限成本与图统计](evidence/interface-heads-performance-20261110.md)完成宽FC、176节点HB/LH、KV sum、SSD与三客户端共14个CPU/NPU训练/精确下一窗；独立数值仍not_checked。FC16训练CPU1/NPU12.614/15.497秒、TTFT3.083/3.960秒；新层链与外层/私有图统计仍显示内部开销。原matrix启动配置失败与仅补未执行项分列，全部作业已终态。没有重测1B/9B、多卡、mixed-a/b或resident吞吐，旧证据保留原提交。
+
+  后继优先核验统一owner新增存储计费与single-bank常驻投影，再按层链/profile推进循环序列VJP、卷积缓存/校验及块内装配；源码审阅仍有未覆盖文件/函数，具名清单不冒充全仓审完。需保留完整根、None/零、独立调度与精确恢复。按用户要求先汇报对齐，获下一轮授权后实施。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
 
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 

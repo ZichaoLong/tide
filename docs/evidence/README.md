@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[通用Describe、循环查询裁剪与常驻诊断（2026-11-10）](interface-heads-qualification-20261110.md)：554f2f5的CPU490通过/14保留xfail；NPU配置80通过/2xfail/1原观察器失败，ebfe075修正后的设备单例通过。三客户端小型训练/精确恢复、两种SDK组合、常驻FP32/FP16小图和构造见证分别记录；局部借用计费已定位，容量守卫未修复。
+
+[通用Describe增量有限成本（2026-11-10）](interface-heads-performance-20261110.md)：554f2f5的CPU/NPU共14个宽FC/HB/LH/sum/SSD/三客户端训练与精确下一窗，10个FC16成本点、8个层链成本点、8个独立图诊断。FC16训练12.614/15.497秒、TTFT3.083/3.960秒；层链仍明显慢于限定张量公式。规模独立数值未验，原启动失败保留。
+
 [常驻存储/服务审阅](resident-workspace-audit-20261110.md)：47704c9固定41完整文件及2局部范围；区分owner去重、首次局部借用、journal与workspace，single-bank投影仅设计。新增诊断与设备见证另记实现及实际资格。
 
 [批量发布与能力分派（2026-11-10）](interface-batch-publication-20261110.md)：47704c9的局部CPU501通过/13保留xfail，图CPU308通过/4原严格失败；有界诊断后其余训练/恢复通过。NPU配置122通过/3xfail，三客户端小训练/恢复分列。FC16完整训练CPU1/NPU12.447/17.212秒，NPU推理反升；小图私有union11317、SelectBackward640。

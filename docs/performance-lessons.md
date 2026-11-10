@@ -24,6 +24,9 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
+新近机制：[Describe列与按用途裁剪](performance-lessons-prefill.md#describe列与按用途裁剪)、
+[局部首次借用计费](performance-lessons-state-devices.md#局部首次借用与全局存储余额)。
+
 每条新经验给出观察、机制、改动、正负结果、适用条件、反例/测试以及来源链接。
 采用局部改进的依据与宣称端到端加速的依据分别记录；必要数学工作、重复计算、可摊薄的
 执行开销和未判定成本分别识别。完整记录等价、指定投影等价与不同函数比较不混称。

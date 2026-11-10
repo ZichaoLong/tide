@@ -107,6 +107,9 @@ checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行�
 `cpp/test/weighted_scoring.cpp`把既有手算值/偏置导数用于独立B×L列实现，并检查
 未用证据根断连和fixed证据形状；新增头不以Python互相对照作为唯一数学依据。
 测试源码范围与实际运行资格分开；新设备、全部组合和尺度不能从上述有限用例外推。
+[通用Describe与循环查询固定资格](evidence/interface-heads-qualification-20261110.md)
+记录554f2f5的独立公式/根、CPU/NPU安装消费者和两种SDK组合训练/恢复；
+NPU矩阵提交观测修正使用ebfe075，原观察器失败保留。
 
 安装消费者：`examples/consumer_core5/dense_query.py --query-execution auto ...`；
 旧v1复现必须显式指定`dense-v1`。原任务成本驱动`benchmark_dense_query.py`从固定下游Git对象读模型/head/loss，

@@ -90,3 +90,6 @@ Python scope 不自动传播到新的工作线程，调用者需要显式传递 
 [native 测试](../tests/test_autograd_census_native.py)。测试覆盖共享根去重、重复执行、
 别名存储、真实私有查询梯度、无梯度模式、版本检查及不延长 tensor 生命周期。
 测试通过仅证明这些诊断契约；完整模型/设备资格见对应固定源码证据。
+[554f2f5实际诊断](evidence/interface-heads-performance-20261110.md#独立计算图诊断)
+比较相同FC材料的PyTorch/native/独立张量图与不同函数的4层Transformer；
+它记录外层、已登记私有图和真实反向，正式成本来自独立无插桩流程。
