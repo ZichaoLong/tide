@@ -83,10 +83,15 @@ void check(at::Device device,at::ScalarType dtype,const std::string& family,cons
   DeviceProgram refusal(device);bool denied=false;try{append_weighted_recurrent(refusal,c,action,raw,times,mass,u,owners,present,weights,error,1);}catch(const std::invalid_argument&){denied=true;}
   require(denied,"recurrent tensor capacity omitted");refusal.close();
   if(family=="ssd"&&read=="state"&&action==WeightedRecurrentAction::Full){
-    DeviceProgram total_refusal(device);denied=false;
+    DeviceProgram total_refusal(device);denied=false;std::string message;
     try{append_weighted_recurrent(total_refusal,c,action,raw,times,mass,u,owners,present,weights,error,forward_bytes-1);}
-    catch(const std::invalid_argument& e){denied=std::string(e.what()).find("complete recurrent tensor budget")!=std::string::npos;}
-    require(denied,"whole-composition tensor capacity omitted");total_refusal.close();}
+    catch(const std::invalid_argument& e){message=e.what();
+      // Half widening reserves conservatively before entering the float graph.
+      // Its inner guard can reject before the final whole-composition guard.
+      denied=message.find(dtype==at::kHalf?"tensor budget exceeded":"complete recurrent tensor budget")!=std::string::npos;}
+    require(denied,"whole-composition tensor capacity omitted; refusal="+message);total_refusal.close();
+    std::cout<<"weighted-recurrent-budget: dtype="<<dtype<<" actual_new_storage="<<forward_bytes
+      <<" allowance="<<forward_bytes-1<<" refusal="<<message<<'\n';}
   DeviceProgram rate_refusal(device);auto bad=c;bad.lambda_short=1e-300;denied=false;
   try{append_weighted_recurrent_snapshot(rate_refusal,bad,raw,times,mass,owners,present,B,false,error,256*1024*1024);}
   catch(const std::invalid_argument& e){denied=std::string(e.what()).find("short passive rate")!=std::string::npos;}
