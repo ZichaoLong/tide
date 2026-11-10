@@ -36,13 +36,29 @@ Training forward alone does not certify inference latency.
 Aggregate/KV Read/Describe/Full formulas. Quadratic allocation enumerates finite
 affine intervals independently of the foundation solver, then differentiates
 the chosen exact solution. It checks its domain before computation: adjacent
-equal-width FC regions, dense inputs, zero left state, qry without positions,
+equal-width FC regions, dense inputs, explicit raw left state, qry without positions,
 cat/ind/context/cat/quad and L<=256. Full evaluates actual positive selected rows.
 It returns the output projection, controls/activity and actual terminal KV fields;
-it does not claim full trace, None/zero connectivity or checkpoint equivalence.
+it does not claim full trace, None/zero connectivity or general graph checkpoint equivalence.
 The scalar oracle independently checks small outputs, controls, terminal fields
 and numeric input/shared-parameter derivatives; a separate bisection and FP64
 directional finite differences check the allocation map.
+
+`run(..., start=absolute_position, left=node_raw_fields)` keeps original int64
+times, nonzero KV state and retained cross-window adjoints. Common baseline state
+validation is in `tensor_baseline_state.py`; it never calls an execution reference
+to reconstruct state. `test_tensor_baseline_continuation.py` adds independent
+scalar left-state/shared-parameter roots, three actual SGD/momentum updates,
+cross-window backward and a fresh-process raw-state/model/optimizer restore.
+That checkpoint is for this output/state projection, not a substitute for the
+public graph checkpoint's full metadata, history and pending messages.
+
+Full now groups selected queries by sample, with a head-batched Q×K contraction
+against one K/V bank per sample. It no longer expands the whole history for each
+selected query. No Full computation is performed for inactive queries. Host
+groups still scale with B, and attention weights with selected-query count times
+history length; this is a compact independent anchor, not an optimal-kernel claim.
+Read and Full consume the same raw KV bank but retain their separate formulas.
 
 `benchmark_dense_query.py --baseline fc-tensor` keeps the original graph
 parameters, inputs, task head, loss and optimizer. `--baseline transformer-16`

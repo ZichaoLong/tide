@@ -68,8 +68,17 @@ def full(program, memory, states, times, u):
         n, length = layout.shape
         weights = layout.weights()
         total = weights.sum(1)
-        keys, values = (layout.visible_slot(name).reshape(n, length, c.heads, d) for name in ("keys", "values"))
         q = queries.index_select(0, torch.tensor(ids, dtype=torch.int64, device=u.device))
+        if not any(c.full_frequencies) and not any(c.distance_slopes):
+            from .bank_attention import full as bank_full
+            mixed = bank_full(q, [states[i].slots["keys"] for i in ids],
+                              [states[i].slots["values"] for i in ids], weights)
+            if mixed is not None:
+                mixed = mixed.flatten(1)*total.clamp(max=1)[:, None]
+                for i, row in zip(ids, mixed.unbind()):
+                    output[i] = row
+                continue
+        keys, values = (layout.visible_slot(name).reshape(n, length, c.heads, d) for name in ("keys", "values"))
         displacement = -time_values(layout.age, u)/c.position_scale
         reads = []
         for h in range(c.heads):

@@ -45,6 +45,15 @@ alpha_loc/alpha_sel或match权重为零时仍保留声明字段及其连接零�
 可见性在int64相减后判断；过期/填充值在投影前置零，真实零权重不变成消息。
 Attention中心取第一个正支持值，避免被忽略条目导致相消或`0*inf`；全空返回保留断连。
 
+无旋转/距离偏置的Full若K/V快照实际共享连续存储，`bank_attention`将B（实际bank）、
+头、查询及历史轴组织成矩阵乘法，避免前向按每条query展开K/V。原始时间可见性与写入
+强度仍来自SnapshotLayout；只按存储身份、偏移和有界padding判定能力，其他布局使用
+既有packed路径。默认auto/packed-v2会自动采用，观察键为`kv_bank_attention`。
+同值独立存储不会被合并；参数共享不等于快照梯度共享。声明的一阶自定义VJP仍为每条
+快照返回独立伴随，保留原始version守卫及首个正支持值中心；完整记录中的独立根不变。
+反向仍须生成逐快照伴随，未承诺其workspace或提交数与前向相同。该边界当前限FP32/FP64；
+这不是厂商fused Attention资格，也不改变图或checkpoint版本。
+
 `packed-v2`的cat evidence现在使用共享矩阵GEMM和逐行归一化，保持每行独立输入与字段根。
 历史逐行GEMV曾用于规避近径向VJP的舍入差异；有界同材料FP64核对后不再以此阻塞合批。
 原容差保持：CPU FP32指定evidence根约1.044e-6超差作为具名严格xfail保留，其他根照常核对。
@@ -89,6 +98,7 @@ checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行�
 | 策略/适用域 | weighted/query_execution.py、planning/execution.py / weighted_programs.cpp | test_weighted_query_layout、test_weighted_dense_query、test_weighted_describe_capability |
 | 原始槽/时间/索引 | query_layout.py / weighted_query_layout.cpp | 大于2**54的时间、异形/空/过期状态、分桶目标 |
 | Mem/Full | query_packed.py / weighted_query_packed.cpp | 独立scalar函数逐字段、全部私有根、sum/qry与正支持中心反例 |
+| 共享Full矩阵边界 | bank_attention.py / weighted_bank_attention.cpp | test_bank_attention的普通softmax独立导数；test_snapshot_bank的scalar Full/部分根、滑窗、超大int64时间、版本守卫 |
 | 描述列接口 | [dense_describe.py](../python/tidegraph/weighted/dense_describe.py)、read_batch.py / [weighted_describe_heads.cpp](../cpp/src/weighted_describe_heads.cpp)、weighted_describe_batch.cpp | [test_weighted_describe_columns](../tests/test_weighted_describe_columns.py)：8组有限头配置，B×L独立逐标量公式、全部字段/私有根、共享/冻结参数、部分及零cotangent、实际ATen矩阵形状与禁止scalar调用 |
 | Q/FFN与查询边界 | full_batch.py / weighted_full_batch.cpp | 五记忆合法sum/qry/state、原三投影批行数及具名evidence舍入见证；版本、一阶及未使用optimizer |
 | 完整执行 | eager_runner、Native、standalone Eager | 既有FC/HB/PDG三步AdamW；[test_weighted_describe_training](../tests/test_weighted_describe_training.py)新增match/att/grouped+SSD与非regional/context gain+KV两例，默认入口完整记录/根、两步SGD、pending、保留图cut及新owner精确下一窗/更新；一般端口/历史程序回归 |

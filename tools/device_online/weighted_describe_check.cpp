@@ -64,11 +64,37 @@ void check(at::Device device,int variant){
   DeviceProgram refusal(device);bool denied=false;try{append_weighted_describe(refusal,unpack(device_input),owners,weights,c,.13,error,1);}catch(const std::invalid_argument&){denied=true;}
   require(denied,"Describe scratch budget omitted");refusal.close();
 }
+void borrowed_bank(at::Device device){
+  at::NoGradGuard ng;constexpr int64_t banks=64,width=32,summary=8,allowance=128*1024;
+  auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
+  tide::weighted::RegionalConfig c("regional_total");c.hidden_width=8;c.region_control_width=8;c.gamma_max=2;c.validate();
+  WeightedDescribeInput x{at::full({1},.5,opts),at::ones({1,width},opts),at::ones({1,summary},opts),
+    at::ones({1,summary},opts),at::ones({1},opts),at::ones({1},opts)};
+  auto owners=at::full({1},banks-1,opts.dtype(at::kLong)),error=at::zeros({1},opts.dtype(at::kInt));
+  WeightedDescribeParameters w;std::vector<Tensor> held{x.mass,x.content,x.short_memory,x.long_memory,x.short_total,x.long_total,owners,error};
+  int64_t parameter_bytes=0;
+  for(const auto& [name,shape]:weighted_describe_parameter_shapes(banks,width,summary,c)){
+    w[name]=at::zeros(shape,opts);held.push_back(w[name]);parameter_bytes+=w[name].nbytes();}
+  require(parameter_bytes>allowance,"Describe borrowed-bank witness too small");
+  w.at("score.bias")[banks-1].fill_(.75);w.at("score.bias")[1].fill_(-.25);
+  DeviceProgram p(device);p.limit_workspace(128*1024*1024);const auto before=p.retained_tensor_bytes(held);
+  auto t=append_weighted_describe(p,x,owners,w,c,.13,error,allowance);
+  const auto added=p.retained_tensor_bytes(held)-before;
+  require(added<=allowance,"Describe new storage exceeded local allowance");p.finish();
+  for(int pass=0;pass<2;++pass){owners.fill_(pass?1:banks-1);portable_torch::synchronize(device);p.run();
+    require(!error.cpu().item<int>(),"Describe borrowed-bank numeric execution failed");
+    close(t.fields.at("score"),at::full({1,1},pass?-.25:.75));
+    close(t.fields.at("w"),at::full({1,1},.5));close(t.fields.at("mu"),at::ones({1,1}));
+    close(t.fields.at("evidence"),at::zeros({1,8}));}
+  p.close();
+  std::cout<<"weighted-describe-budget: bank_bytes="<<parameter_bytes<<" new_storage="<<added<<" allowance="<<allowance<<" numeric_passes=2\n";
+}
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("Describe requires explicit accelerator/FP32");
     auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
+    borrowed_bank(device);
     for(int variant=0;variant<8;++variant){try{check(device,variant);}catch(...){std::cerr<<"Describe variant="<<variant<<'\n';throw;}}
     std::cout<<"weighted-describe: passed configurations=8 all_independent_fields=true all_input_parameter_vjp=true saved_versions=true\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

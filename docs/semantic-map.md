@@ -311,6 +311,12 @@ KV §2–4的同一实际历史存储/Read K,V投影复用见[快照bank](weight
 `test_snapshot_bank`以字面矩阵公式及scalar/未复用路径核对；因果None/零与恢复仍由
 `test_kv_sequence_vjp`定位。它不改变完整trace的中间State根或checkpoint实际解码。
 
+KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attention`实现；
+输入是实际独立快照、当前查询及由int64可见性产生的权重，输出为每query/head读值，
+保留逐快照一阶伴随。域、padding后备及前向/反向不同存储成本见
+[查询契约](weighted-dense-query.md)，字面公式/独立调度根由`test_bank_attention`与
+`test_snapshot_bank`追溯，不能从局部通过推断所有规模或设备资格。
+
 主架构§3的Describe与Mem能力分派分别由`query_execution`/`weighted_programs`声明，
 `dense_describe`/`weighted_describe_heads`将分配§3.1—3.6的score/evidence/key/gain映射到完整列，
 `weighted_describe_batch`连接Mem并保留完整字段与独立根；[查询契约](weighted-dense-query.md)及

@@ -47,6 +47,12 @@ entry points. Follow calls across graph representation, scheduling, local
 mathematics, placement, autograd, parameter ownership and persistence. A clean
 individual function can still participate in repeated cross-layer packing.
 
+Use a compact implementation and incremental integration when assessing whether
+an interface can carry efficient computation; see
+[additive comparisons](../optimize-tide-execution/references/additive-comparisons.md).
+Record both the semantic obligation and its implementation cost. Review coverage
+does not imply every finding must be optimized in the same round.
+
 Ask of each affected boundary:
 
 - What mathematical inputs, outputs and roots does it own? Which are metadata?

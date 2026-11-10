@@ -1,4 +1,5 @@
 #include "weighted_kv_full_internal.h"
+#include "weighted_storage_budget.h"
 #include "device_launch_tide_weighted_full_plan.h"
 #include "device_launch_tide_weighted_full_bias.h"
 #include "device_launch_tide_weighted_query_plan.h"
@@ -11,7 +12,8 @@ WeightedKVFullTape append_weighted_kv_full(DeviceProgram& p,const weighted::KVCo
     ||!w.query.defined()||w.query.dim()!=3||w.query.size(0)<1)
     throw std::invalid_argument("KV Full requires explicit rows and raw snapshot");
   const auto device=input.device();const auto rows=input.size(0),d=c.width,heads=c.heads,dh=d/heads,capacity=raw.integer.size(1)-4,banks=w.query.size(0);
-  const auto initial_bytes=p.retained_tensor_bytes();
+  const WeightedStorageIncrement storage(p,{raw.floating,raw.integer,time,input,owners,active,error,
+    w.query,w.residual.out,w.residual.gate,w.residual.up,w.residual.down});
   check(input,device,at::kFloat,{rows,d});check(owners,device,at::kLong,{rows});check(active,device,at::kBool,{rows});check(w.query,device,at::kFloat,{banks,d,d});
   check(w.residual.out,device,at::kFloat,{banks,d,d});check(w.residual.gate,device,at::kFloat,{banks,c.ffn_width,d});
   check(w.residual.up,device,at::kFloat,{banks,c.ffn_width,d});check(w.residual.down,device,at::kFloat,{banks,d,c.ffn_width});
@@ -42,7 +44,7 @@ WeightedKVFullTape append_weighted_kv_full(DeviceProgram& p,const weighted::KVCo
   }
   auto memory=merge(p,reads).reshape({rows,d});
   auto residual=append_weighted_residual(p,input,memory,full_owners,w.residual,c.epsilon,c.alpha_att,c.alpha_ff,error,available);
-  budget(p.retained_tensor_bytes()-initial_bytes,available);
+  budget(storage.bytes(),available);
   return {window,query,rotary,pool,residual,queries,scale,residual.output};
 }
 }

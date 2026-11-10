@@ -16,25 +16,27 @@ const char* name(WeightedRowOp op){
   return names[static_cast<size_t>(op)];
 }
 }
-WeightedRowGraph::WeightedRowGraph(DeviceProgram& p,const at::Tensor& owners,int64_t banks,const at::Tensor& error,int64_t available)
+WeightedRowGraph::WeightedRowGraph(DeviceProgram& p,const at::Tensor& owners,int64_t banks,const at::Tensor& error,int64_t available,
+    std::vector<at::Tensor> borrowed)
     :program_(&p),error_(error),rows_(owners.numel()),banks_(banks),budget_(available){
   if(at::GradMode::is_enabled()||!owners.defined()||owners.dim()!=1||rows_<1||banks<1||available<1
     ||owners.scalar_type()!=at::kLong||!owners.is_contiguous()||owners.device().type()!=resident_device_type
     ||!error.defined()||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt||error.device()!=owners.device())
     throw std::invalid_argument("local row graph requires explicit bounded accelerator owners");
-  validate_kernel_device(owners.device());initial_bytes_=p.retained_tensor_bytes();owners_=at::zeros_like(owners);p.copy(owners_,owners);
+  validate_kernel_device(owners.device());borrowed.push_back(owners);borrowed.push_back(error);
+  storage_.emplace(p,std::move(borrowed));owners_=at::zeros_like(owners);p.copy(owners_,owners);
 }
 size_t WeightedRowGraph::push(WeightedRowExpression e){
   dimensions(e.value,owners_);retained_+=e.value.numel()*4.L;
   auto owners=owners_,error=error_,out=e.value;const auto banks=banks_;
   program_->kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_row_bind)(1,stream,
     ptr(owners),ptr(out),ptr(out),ptr(error),out.size(0),out.size(1),banks,0),"local complete row result guard");},{owners,out,error});
-  const auto program_delta=program_->retained_tensor_bytes()-initial_bytes_;
-  if(retained_>budget_||program_delta>budget_){std::ostringstream message;
+  const auto owner_increment=storage_->bytes();
+  if(retained_>budget_||owner_increment>budget_){std::ostringstream message;
     message<<"local row graph tensor budget exceeded: expression="<<expressions_.size()<<" kind="<<name(e.kind)<<" role="<<e.role
       <<" rows="<<rows_<<" banks="<<banks_<<" width="<<out.size(1)<<" available="<<budget_
-      <<" expression_bytes="<<std::fixed<<retained_<<" local_program_delta="<<program_delta
-      <<" (program delta includes first local use of borrowed storage)";
+      <<" expression_bytes="<<std::fixed<<retained_<<" owner_storage_increment="<<owner_increment
+      <<" local_program_delta="<<storage_->local_delta();
     throw std::invalid_argument(message.str());}
   expressions_.push_back(std::move(e));return expressions_.size()-1;
 }

@@ -2,6 +2,7 @@
 #include <ATen/record_function.h>
 // Batched raw snapshots with exact support; independent VJP roots live above.
 #include "weighted_query_layout.h"
+#include "weighted_bank_attention.h"
 #include <limits>
 namespace tide::weighted::query {
 using namespace detail;
@@ -59,10 +60,21 @@ Tensor packed_full(const NodeWeights& w,const States& states,const Times& times,
   std::vector<Tensor> result(states.size());const Index d=c.width/c.heads;
   auto queries=project(normalize(u,c.epsilon),weight(w,"full_program.content.query")).reshape({-1,c.heads,d});
   const std::vector<double> empty;
+  const bool position_free=std::all_of(c.full_frequencies.begin(),c.full_frequencies.end(),[](const auto& row){return row.empty();})
+    &&std::all_of(c.distance_slopes.begin(),c.distance_slopes.end(),[](double x){return x==0;});
   for(const auto& ids:snapshot_chunks(states,c.width)){
     auto packed=layout(states,times,ids,c.window);auto weights=packed.weights(),total=weights.sum(1);
-    auto keys=packed.visible_slot("keys").reshape({packed.rows,packed.length,c.heads,d}),values=packed.visible_slot("values").reshape_as(keys);
     auto q=queries.index_select(0,at::tensor(ids,u.options().dtype(at::kLong)));
+    if(position_free){
+      std::vector<Tensor> keys,values;for(auto i:ids){keys.push_back(states[i].slots.at("keys"));values.push_back(states[i].slots.at("values"));}
+      auto mixed=bank_attention(q,keys,values,weights);
+      if(mixed.defined()){
+        auto rows=(mixed.flatten(1)*total.clamp_max(1).unsqueeze(-1)).unbind();
+        for(size_t j=0;j<ids.size();++j)result[ids[j]]=rows[j];
+        continue;
+      }
+    }
+    auto keys=packed.visible_slot("keys").reshape({packed.rows,packed.length,c.heads,d}),values=packed.visible_slot("values").reshape_as(keys);
     auto displacement=-time_values(packed.age,u)/c.position_scale;std::vector<Tensor> reads;
     for(Index h=0;h<c.heads;++h){
       auto k=rotate(keys.select(2,h).reshape({-1,d}),displacement.flatten(),c.full_frequencies.empty()?empty:c.full_frequencies[h]).reshape({packed.rows,packed.length,d});

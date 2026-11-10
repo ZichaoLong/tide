@@ -2,6 +2,7 @@
 #include "weighted_projection.h"
 #include "weighted_head.h"
 #include "weighted_convolution.h"
+#include "weighted_storage_budget.h"
 #include <map>
 #include <optional>
 #include <string>
@@ -27,7 +28,10 @@ struct WeightedRowReverse {
 struct WeightedRowRoot {size_t index;at::Tensor value,connected;};
 class WeightedRowGraph {
  public:
-  WeightedRowGraph(DeviceProgram&,const at::Tensor& owners,int64_t banks,const at::Tensor& error,int64_t budget);
+  // Borrowed inputs/parameters are already charged to the caller's owner.
+  // Supply the complete set before any local construction; views count once.
+  WeightedRowGraph(DeviceProgram&,const at::Tensor& owners,int64_t banks,const at::Tensor& error,int64_t budget,
+                   std::vector<at::Tensor> borrowed);
   size_t input(const at::Tensor&,bool nonnegative=false);
   size_t constant(int64_t width,double value);
   size_t projection(size_t,const WeightedProjectionParameters&,const std::string& role);
@@ -51,11 +55,13 @@ class WeightedRowGraph {
   size_t softplus(size_t);
   size_t clamp_max(size_t,double bound);
   const at::Tensor& value(size_t) const;
+  std::vector<at::Tensor> saved_tensors()const;
   WeightedRowReverse reverse(DeviceProgram&,const std::vector<WeightedRowRoot>&,const at::Tensor& error,int64_t budget) const;
  private:
   size_t push(WeightedRowExpression);
   size_t unary(WeightedRowOp,size_t,double scalar=0);
-  DeviceProgram* program_;at::Tensor owners_,error_;int64_t rows_,banks_,budget_,initial_bytes_;long double retained_=0;
+  DeviceProgram* program_;at::Tensor owners_,error_;int64_t rows_,banks_,budget_;long double retained_=0;
+  std::optional<WeightedStorageIncrement> storage_;
   std::vector<WeightedRowExpression> expressions_;
 };
 }

@@ -10,10 +10,25 @@ void valid(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArra
     throw std::invalid_argument("invalid local row cotangent");
 }
 }
+std::vector<at::Tensor> WeightedRowGraph::saved_tensors()const{
+  std::vector<at::Tensor> result{owners_,error_};
+  auto add=[&](std::initializer_list<at::Tensor> values){result.insert(result.end(),values.begin(),values.end());};
+  for(const auto& e:expressions_){
+    add({e.value,e.rstd});result.insert(result.end(),e.indices.begin(),e.indices.end());
+    if(e.projection){const auto& t=*e.projection;add({t.input,t.rstd,t.owners,t.indices,t.matrix,t.bias,t.output});}
+    if(e.head){const auto& t=*e.head;add({t.input,t.owners,t.indices,t.preactivation,t.hidden,t.output,
+      t.rows.matrix,t.rows.hidden_bias,t.rows.projection,t.rows.bias});}
+    if(e.convolution){const auto& t=*e.convolution;add({t.rows.weight,t.rows.bias,t.owners,t.indices,t.old_integer,t.mapping,t.taps,t.output});}
+  }
+  return result;
+}
 WeightedRowReverse WeightedRowGraph::reverse(DeviceProgram& p,const std::vector<WeightedRowRoot>& roots,
     const at::Tensor& error,int64_t available)const{
   if(available<1||retained_*4>available)throw std::invalid_argument("row reverse tensor budget exceeded");
-  const auto initial=p.retained_tensor_bytes();valid(error,owners_.device(),at::kInt,{1});WeightedRowReverse result;
+  auto borrowed=saved_tensors();borrowed.push_back(error);
+  for(const auto& root:roots){borrowed.push_back(root.value);borrowed.push_back(root.connected);}
+  const WeightedStorageIncrement storage(p,std::move(borrowed));
+  valid(error,owners_.device(),at::kInt,{1});WeightedRowReverse result;
   for(const auto& e:expressions_){auto bar=at::zeros_like(e.value),flag=at::zeros({rows_},owners_.options().dtype(at::kBool));
     p.zero(bar);p.zero(flag);result.rows.push_back({bar,flag});}
   const auto owners=owners_;
@@ -70,8 +85,9 @@ WeightedRowReverse WeightedRowGraph::reverse(DeviceProgram& p,const std::vector<
           "local declared scalar-map VJP");},{x,e.value,bar.value,bar.connected,dx,error});accumulate(a,dx,bar.connected);break;}
       default:throw std::logic_error("missing local row reverse mapping");
     }
-    if(p.retained_tensor_bytes()-initial>available)throw std::invalid_argument("row reverse retained tensor budget exceeded");
+    if(storage.bytes()>available)throw std::invalid_argument("row reverse retained tensor budget exceeded");
   }
+  if(storage.bytes()>available)throw std::invalid_argument("row reverse retained tensor budget exceeded");
   return result;
 }
 }

@@ -5,7 +5,7 @@
 它不是默认执行器，也不调用参考轨迹。KV使用厂商SDPA；SSD用深度卷积及因果稠密权重
 展开递归，不复用候选affine scan。SSD展开有L²代价，明确限制L<=256。
 
-适用域是每层一个节点/区域的相邻链、每个原始时间位置一条强度恒1的输入、零左状态、
+适用域是每层一个节点/区域的相邻链、每个原始时间位置一条强度恒1的输入、
 alpha_agg=0、proportional/k=1/fixed_gain=1；KV无位置旋转/距离偏置，
 SSD卷积stride等于Settle的逻辑位置步长。函数入口逐项校验，不能替代任意图或输入执行。
 层间payload的c和cG保持区分，此限定域c=1。逻辑时间与卷积槽为int64。
@@ -14,7 +14,19 @@ SSD卷积stride等于Settle的逻辑位置步长。函数入口逐项校验，�
 Describe字段和图记录，消去恒零依赖；其None和图实现的连接零只按数值导数比较。
 `tests/test_layer_tensor_baseline.py`独立scalar调度检查输出、每个末态张量的数值、
 输入与参数的数值偏导。生产路径的None/零、完整返回、共享、恢复仍由原严格门禁负责。
-这里不提供checkpoint解码或非零左状态续接，也不声称等同某个标准Transformer/Mamba模型。
+`run(..., start=绝对位置, left=逐节点原始字段)`支持非零左状态和跨窗保留梯度；省略left
+表示绑定零初态。`tensor_baseline_state.py`检查字段、B轴、dtype/device、单调int64时间和
+窗口之前的快照。KV将旧/新历史各保存一次，使用绝对时间mask；SSD继承H/Z/W，并按实际
+时间戳匹配跨窗卷积槽。start可以保留时间间隙，不把它压紧成接收次数。当前一个批次内
+各样本使用相同时间槽；任意ragged端口仍由通用基座处理。
+
+`tests/test_tensor_baseline_continuation.py`以独立scalar调度核对非零左态各字段根、共享参数、
+三步SGD及momentum的数值投影，另核对跨窗保留图、超过2**53的逻辑时间、有限KV窗口和
+卷积时间间隙。返回的原始字段可直接序列化；实际保存model/optimizer/raw state/next position
+后由新进程新owner继续两步，要求返回、梯度、状态、参数与optimizer逐位一致。该测试包是
+限定投影的checkpoint见证，不是通用图v5 checkpoint：不包含图的pending、history、事件记录
+和完整metadata。None/零及optimizer槽结构的跨实现等价仍不在投影资格内。
+这里也不声称等同某个标准Transformer/Mamba模型。
 
 每个候选单独进程、一次预热后恢复初始参数/optimizer再测完整一步。包含输入准备/传输、
 默认调度与packing、前向、反向、有限检查、SGD及同步；构造另列。张量基线与图入口

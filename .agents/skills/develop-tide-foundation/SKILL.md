@@ -31,6 +31,13 @@ conditions. Foundation delivery and consumer acceptance remain separate facts.
 
 ## Implement at the affected boundary
 
+For a new numerical/state/interface feature, consider a compact formula and a
+small real composition while designing its public batch contract. Match the
+depth to risk and frequency; reuse existing anchors for thin wrappers. Follow
+[additive comparisons](../optimize-tide-execution/references/additive-comparisons.md)
+to separate required semantic work from interface cost before committing to a
+fragmented representation. This is not a mandatory duplicate implementation.
+
 - Keep graph representation, scheduling, local mathematics, placement, state
   ownership and comparison separate. Retain independent Python scheduling and
   standalone C++ execution; a wrapper is not an independent correctness anchor.

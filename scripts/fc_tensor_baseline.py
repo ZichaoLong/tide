@@ -1,14 +1,15 @@
-"""Independent zero-left-state FC formulas for 0770593; not a general executor.
+"""Independent raw-left-state FC formulas for 0770593; not a general executor.
 
 Dense adjacent regions, dense input positions, KV qry without rotary/distance,
 Read+, cat/ind/context/cat and regional_total/quad. Full executes selected rows.
-Output/terminal-state numeric projection only; no trace, None-root or resume claim.
+Output/terminal-state numeric projection only; no complete graph trace/None-root claim.
 """
 import math
 import torch
 from torch import nn
 from torch.nn import functional as F
 from layer_tensor_baseline import normalize
+from tensor_baseline_state import times as window_times, validate as validate_left, kv_join, kv_terminal
 
 
 def head(module, x):
@@ -57,7 +58,7 @@ def validate(binding, spec, x):
     sizes = [sum(n.region == r for n in g.nodes) for r in range(depth)]
     width = sizes[0]
     edges = [(r*width+s, (r+1)*width+t, 1) for r in range(depth-1) for s in range(width) for t in range(width)]
-    if (len(set(sizes)) != 1 or not 2 <= width <= 8 or spec.binding != "ports"
+    if (spec.graph.identity != g.identity or len(set(sizes)) != 1 or not 2 <= width <= 8 or spec.binding != "ports"
             or [(e.source, e.target, e.delay) for e in g.edges] != edges
             or g.inputs != tuple(range(width)) or g.outputs != tuple(range((depth-1)*width, depth*width))
             or list(spec.ranks) != list(range(1, depth+1))):
@@ -95,16 +96,14 @@ def aggregate(node, masses, contents, labels):
     return total, u
 
 
-def prepare(node, u, mass, times):
+def prepare(node, u, mass, times, left=None):
     memory, c = node.kernel, node.kernel.config
     n = normalize(u, c.epsilon)
     key, value = (n@memory.base.t()+(n@memory.adapter_v.t())@memory.adapter_u.t()).chunk(2, -1)
     summary = n@memory.summary.t()
-    age = times[:, None]-times[None, :]
-    mask = age >= 0
-    if c.window:
-        mask = mask & (age < c.window)
-    weights = mass.clamp_max(1)[:, None, :]*mask
+    raw, age, mask = kv_join(c, times, key, value, summary, mass.clamp_max(1), left)
+    key, value = raw["keys"], raw["values"]
+    weights = raw["weights"][:, None, :]*mask
     short_weights = weights*torch.exp(-age.clamp_min(0).to(u.dtype)*c.beta_short)
     q, k, v = n@memory.read_q.t(), key@memory.read_k.t(), value@memory.read_v.t()
     logits = q@k.transpose(-1, -2)/math.sqrt(c.summary_width)
@@ -121,36 +120,47 @@ def prepare(node, u, mass, times):
     recv = mass.clamp_max(1)
     fields = dict(w=recv, mu=(read.config.gamma_max*recv).clamp_max(1), score=head(read.score, features),
                   evidence=normalize(features@read.evidence_weight.t()+read.evidence_bias, c.epsilon))
-    return fields, (u, key, value, summary, mass.clamp_max(1), mask)
+    return fields, (u, raw, mask)
 
 
 def full(node, prepared, controls):
-    u, key, value, _, writes, mask = prepared
+    """Selected queries contract with one K/V bank per sample, never Q copies.
+
+    This compact anchor has B host groups, not B*L Full calls. It is not a
+    claim of optimal submission count; the production batch interface is tested
+    independently. Query count can differ between samples without padding Full.
+    """
+    u, raw, mask = prepared
+    key, value, writes = raw["keys"], raw["values"], raw["weights"]
     c, module = node.kernel.config, node.full_program.content
     batch, length, dim = u.shape
     active = controls.detach() > 0
-    ids = active.nonzero()
-    if not len(ids):
-        return torch.zeros_like(u), active
-    b, t = ids.unbind(-1)
-    q = (normalize(u[b, t], c.epsilon)@module.query.t()).reshape(-1, c.heads, dim//c.heads)
-    keys, values = (z[b].reshape(-1, length, c.heads, dim//c.heads).transpose(1, 2) for z in (key, value))
-    weights = writes[b]*mask[t]
-    logits = (q.unsqueeze(-2)*keys).sum(-1)/math.sqrt(dim//c.heads)
-    safe = torch.where(weights > 0, weights, 1)
-    logits = (logits+safe.log()[:, None]).masked_fill(weights[:, None] <= 0, -torch.inf)
-    read = (logits.softmax(-1).unsqueeze(-1)*values).sum(-2)
-    read = read*weights.sum(-1).clamp_max(1)[:, None, None]
-    x = u[b, t]+c.alpha_att*(read.flatten(1)@module.out.t())
-    normal = normalize(x, c.epsilon)
-    x = x+c.alpha_ff*((F.silu(normal@module.gate.t())*(normal@module.up.t()))@module.down.t())
-    flat = u.new_zeros((batch*length, dim)).index_copy(0, b*length+t, x)
-    return flat.reshape_as(u), active
+    rows = []
+    for b in range(batch):
+        t = active[b].nonzero().flatten()
+        if not len(t):
+            rows.append(torch.zeros_like(u[b]))
+            continue
+        q = (normalize(u[b, t], c.epsilon)@module.query.t()).reshape(-1, c.heads, dim//c.heads).transpose(0, 1)
+        k, v = (z[b].reshape(-1, c.heads, dim//c.heads).transpose(0, 1) for z in (key, value))
+        weights = writes[b][None]*mask[t]
+        logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
+        safe = torch.where(weights > 0, weights, 1)
+        logits = (logits+safe.log()[None]).masked_fill(weights[None] <= 0, -torch.inf)
+        read = (logits.softmax(-1)@v).transpose(0, 1).reshape(-1, dim)
+        read = read*weights.sum(-1).clamp_max(1)[:, None]
+        x = u[b, t]+c.alpha_att*(read@module.out.t())
+        normal = normalize(x, c.epsilon)
+        x = x+c.alpha_ff*((F.silu(normal@module.gate.t())*(normal@module.up.t()))@module.down.t())
+        rows.append(u.new_zeros((length, dim)).index_copy(0, t, x))
+    return torch.stack(rows), active
 
 
-def run(binding, spec, x):
+def run(binding, spec, x, *, start=0, left=None):
     depth, width = validate(binding, spec, x)
     g, model = binding.graph, binding.model
+    if left is not None and set(left) != set(range(len(g.nodes))):
+        raise ValueError("FC tensor baseline left state node domain differs")
     values, controls, states, records = None, None, {}, []
     candidate_count, selected, messages = 0, 0, 0
     for region in range(depth):
@@ -165,13 +175,11 @@ def run(binding, spec, x):
                 masses, incoming = controls, values
                 labels = [binding.source_classes.edges[e] for e, edge in enumerate(g.edges) if edge.target == node_id]
             mass, u = aggregate(node, masses, incoming, labels)
-            times = torch.arange(x.shape[1], dtype=torch.int64, device=x.device)*spec.stride+spec.rank(node_id)
-            descriptor, cache = prepare(node, u, mass, times)
+            times = window_times(spec, node_id, x, start)
+            old = None if left is None else validate_left(left[node_id], node.kernel.config, x, times[0])
+            descriptor, cache = prepare(node, u, mass, times, old)
             fields.append(descriptor); prepared.append(cache)
-            c = node.kernel.config
-            keep = torch.ones_like(times, dtype=torch.bool) if not c.window else times[-1]-times < c.window
-            states[node_id] = dict(times=times[keep], keys=cache[1][:, keep], values=cache[2][:, keep],
-                                   summaries=cache[3][:, keep], weights=cache[4][:, keep])
+            states[node_id] = kv_terminal(node.kernel.config, cache[1], times[-1])
         descriptors = {name: torch.stack([row[name] for row in fields], 2) for name in fields[0]}
         r, program = binding.regions[region], model.regions[region]
         received, capacity = descriptors['w'].sum(-1), descriptors['mu'].sum(-1)

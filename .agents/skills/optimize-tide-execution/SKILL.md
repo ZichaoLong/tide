@@ -28,6 +28,15 @@ historical adapters outside the default path or replace them with migration.
 
 ## Find the source of work
 
+Frame a finite engineering question before profiling: the affected capability,
+representative cases, resource/time budget and decision to make. Use additive
+baselines, subtractive profiling and established local techniques as appropriate;
+there is no prescribed ratio or universal ordering. Read
+[additive comparisons](references/additive-comparisons.md) when a large unexplained
+gap persists or a new numerical/interface module is being designed. Repeated
+small gains without explaining that gap are a reason to reconsider the algorithm
+or interface, not to extend the same optimization loop indefinitely.
+
 Read [comparisons and attribution](references/comparisons.md) when planning a
 diagnostic or performance claim. Reuse existing observations with their original
 identity; generate new evidence only for the current question.
@@ -58,6 +67,11 @@ No single case certifies every composition. Avoid maintaining a separate benchma
 algorithm that bypasses the public path without explicitly declaring that role.
 
 ## Retain reusable results
+
+End each candidate with adopt, reject, or defer plus the evidence that would
+justify reopening it. Audit coverage and implementation scope are separate:
+finding an opportunity does not make it mandatory in the current round. Budget
+diagnostics as well as measurements; preserve unresolved costs and strict failures.
 
 Keep new lessons at the narrowest demonstrated scope: observation, mechanism,
 change, positive/negative result, preconditions, counterexample and source/test

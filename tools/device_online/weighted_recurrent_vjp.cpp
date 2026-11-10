@@ -5,7 +5,13 @@ namespace tide::device_online {
 using namespace recurrent_detail;
 WeightedRecurrentGradient append_weighted_recurrent_vjp(DeviceProgram& p,const WeightedRecurrentTape& t,
     const std::map<std::string,WeightedRowAdjoint>& roots,const at::Tensor& error,int64_t budget){
-  const auto initial_bytes=p.retained_tensor_bytes();
+  auto borrowed=t.graph->saved_tensors();
+  const auto& s=t.snapshot;
+  borrowed.insert(borrowed.end(),{s.state.floating,s.state.integer,s.owners,s.decay,s.present,error});
+  if(t.update){const auto& u=*t.update;borrowed.insert(borrowed.end(),
+    {u.result.floating,u.result.integer,u.old_integer,u.proposal,u.fields,u.mapping,u.receive,u.written});}
+  for(const auto& [_,root]:roots){borrowed.push_back(root.value);borrowed.push_back(root.connected);}
+  const WeightedStorageIncrement storage(p,std::move(borrowed));
   const auto& l=t.snapshot.layout;const auto rows=t.snapshot.owners.numel(),count=int64_t(l.fields().size());const auto device=t.snapshot.owners.device();
   check(error,device,at::kInt,{1});auto options=t.snapshot.state.floating.options();
   if(budget<1||rows*(28.L*l.floating_width()+7.L*count)>budget)throw std::invalid_argument("recurrent VJP tensor budget exceeded");
@@ -38,7 +44,7 @@ WeightedRecurrentGradient append_weighted_recurrent_vjp(DeviceProgram& p,const W
   long double unused_bytes=0;
   for(const auto& [name,value]:t.parameters)if(!result.parameters.count(name)){
     unused_bytes+=4.L*value.numel()+value.size(0);result.parameters[name]={at::zeros_like(value),at::zeros({value.size(0)},options.dtype(at::kBool))};}
-  if(p.retained_tensor_bytes()-initial_bytes+unused_bytes>budget)throw std::invalid_argument("complete recurrent VJP tensor budget exceeded");
+  if(storage.bytes()+unused_bytes>budget)throw std::invalid_argument("complete recurrent VJP tensor budget exceeded");
   return result;
 }
 }

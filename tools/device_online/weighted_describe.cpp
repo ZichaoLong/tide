@@ -14,7 +14,9 @@ WeightedDescribeTape append_weighted_describe(DeviceProgram& p,const WeightedDes
       throw std::invalid_argument("invalid Describe parameter: "+name);}
   for(const auto& value:{x.mass,x.short_total,x.long_total})if(!value.defined()||value.sizes()!=at::IntArrayRef{rows})throw std::invalid_argument("Describe scalar field shape");
   if(x.long_memory.sizes()!=at::IntArrayRef{rows,ds})throw std::invalid_argument("Describe memory vector shape");
-  WeightedDescribeTape t;t.graph=std::make_shared<WeightedRowGraph>(p,owners,banks,error,available);auto& g=*t.graph;
+  std::vector<at::Tensor> borrowed{x.mass,x.content,x.short_memory,x.long_memory,x.short_total,x.long_total};
+  for(const auto& [_,value]:w)borrowed.push_back(value);
+  WeightedDescribeTape t;t.graph=std::make_shared<WeightedRowGraph>(p,owners,banks,error,available,std::move(borrowed));auto& g=*t.graph;
   const auto mass=g.input(x.mass.reshape({rows,1}),true),u=g.input(x.content),ms=g.input(x.short_memory),ml=g.input(x.long_memory),
     ws=g.input(x.short_total.reshape({rows,1}),true),wl=g.input(x.long_total.reshape({rows,1}),true);
   t.inputs={{"mass",mass},{"content",u},{"short_memory",ms},{"long_memory",ml},{"short_total",ws},{"long_total",wl}};

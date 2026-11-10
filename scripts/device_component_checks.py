@@ -96,11 +96,11 @@ CHECKS = {
 # These entries exercise construction/refusal only. In particular, allocating
 # device buffers does not constitute numerical execution or a kernel profile.
 CONSTRUCTION_CHECKS = {
-    "weighted-budget-construction": "construction refusal and unique-storage accounting witness; no numerical execution, training, kernel profile or throughput qualification",
+    "weighted-budget-construction": "construction borrowing/deduplication and real-shortfall refusal; no numerical execution, training, kernel profile or throughput qualification",
 }
 MARKERS = {
     "services": "task-services: passed",
-    "weighted-budget-construction": "weighted-budget: reproduced_local_refusal=true",
+    "weighted-budget-construction": "weighted-budget: borrowed_owner_charged_once=true real_shortfall_refused=true undeclared_borrow_charged=true",
     "weighted-parameters": "weighted-parameters: passed",
     "weighted-source": "weighted-source: passed",
     "weighted-aggregate": "weighted-aggregate: passed",
