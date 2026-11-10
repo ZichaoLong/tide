@@ -4,6 +4,8 @@
 默认策略见[KV查询](weighted-dense-query.md)，当前活动和限制分别只见STATUS/ROADMAP。
 [7fe97f2/5f563f6首轮固定结果](evidence/prefill-default-20261110.md)包含小图语义/恢复和原FC16成本；
 下列HB/LH及1B–16B目录并未全部运行，历史结果不自动成为新默认的资格。
+[分量窗口固定资格](evidence/component-window-20261110.md)补五记忆、变长B×L及三图族训练/恢复；
+其NPU严格超差与通过范围分列，不能由此推断以下全部规模已验。
 
 | 层级/触发 | 必查代表 | 入口与判定 |
 | --- | --- | --- |

@@ -1,0 +1,434 @@
+{
+  "implementation": "da2f41b70a442f6ef584743b057fd0859acc20de",
+  "test_correction": "b148ba1a9f165ce327846a4992d5d06c248a3b64",
+  "math": "0770593838a37c790a568226930567ed60f99b83",
+  "checks": [
+    {
+      "file": "window-cpu-graph.xml",
+      "sha256": "f752fea68a43adaebcd516a1d73999d21ec5593452f6da066644ce0d2faee881",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "174",
+      "time": "40.284",
+      "timestamp": "2026-11-10T11:18:08.599394+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    },
+    {
+      "file": "window-cpu-weighted.xml",
+      "sha256": "8dd7a2f0165414f6d4ff4861952341b538ce3310aa01e3acf96d78aeee07ccdf",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "60",
+      "time": "115.784",
+      "timestamp": "2026-11-10T11:18:07.635309+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    },
+    {
+      "file": "window-cpu-public.xml",
+      "sha256": "96f6e0eca645069221e7fdd74a80bfe37e7c0df5cac33a2e7a48f0bf2c0ee140",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "98",
+      "time": "41.957",
+      "timestamp": "2026-11-10T11:18:07.478999+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    },
+    {
+      "file": "window-cpu-policy.xml",
+      "sha256": "78f84ffb7504a0008e4d82744d6ee438f44e97e04e1c31152f9e038873434688",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "59",
+      "time": "35.765",
+      "timestamp": "2026-11-10T11:18:07.890945+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    },
+    {
+      "file": "window-npu-weighted-c.xml",
+      "sha256": "9eb2f15bf9c405b5e2c928569734d83020d53d4d0000da92c488d53be59389f9",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "2",
+      "tests": "30",
+      "time": "123.878",
+      "timestamp": "2026-11-10T11:22:11.115958+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    }
+  ],
+  "consumers": {
+    "window-sdk-cpu64/result.json": {
+      "state": "passed"
+    },
+    "window-sdk-cpu64/resumed/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.01456949,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-cpu64/whole/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.015267946,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-cpu64/prefix/result.json": {
+      "checkpoint": {
+        "generation": "window-2",
+        "next_window": 2,
+        "path": "checkpoint",
+        "seconds": 0.018187314,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-cpu32/result.json": {
+      "state": "passed"
+    },
+    "window-sdk-cpu32/resumed/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.01463585,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-cpu32/whole/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.018470907,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-cpu32/prefix/result.json": {
+      "checkpoint": {
+        "generation": "window-2",
+        "next_window": 2,
+        "path": "checkpoint",
+        "seconds": 0.015705181,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-npu/result.json": {
+      "state": "passed"
+    },
+    "window-sdk-npu/resumed/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.064897601,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-npu/whole/result.json": {
+      "checkpoint": {
+        "generation": "window-3",
+        "next_window": 3,
+        "path": "checkpoint",
+        "seconds": 0.051546914,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-sdk-npu/prefix/result.json": {
+      "checkpoint": {
+        "generation": "window-2",
+        "next_window": 2,
+        "path": "checkpoint",
+        "seconds": 0.056105668,
+        "state": "saved"
+      },
+      "schema": "tide-weighted-standalone-benchmark-v2",
+      "state": "passed"
+    },
+    "window-npu/consumer-native/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed"
+    },
+    "window-npu/consumer-native/resumed/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    },
+    "window-npu/consumer-native/whole/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    },
+    "window-npu/consumer-native/prefix/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    },
+    "window-npu/consumer-python/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed"
+    },
+    "window-npu/consumer-python/resumed/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    },
+    "window-npu/consumer-python/whole/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    },
+    "window-npu/consumer-python/prefix/result.json": {
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python"
+      },
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "recovery": "not_checked"
+    }
+  },
+  "numerical_failures": [
+    {
+      "test": "tests/test_component_window_weighted.py::test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-native]",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 16,
+            "discrete": 201
+          },
+          "mismatch_counts": {
+            "numeric": 3,
+            "discrete": 0
+          },
+          "differences": [
+            {
+              "kind": "numeric",
+              "path": "root.evidence[nodes.0.read_program.evidence_weight]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 34 (5.9%)\nGreatest absolute difference: 3.889203071594238e-06 at index (0, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020430178847163916 at index (0, 0) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                2,
+                17
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.889203071594238e-06,
+              "reference_max_abs": 0.019036559388041496
+            },
+            {
+              "kind": "numeric",
+              "path": "root.evidence[nodes.0.read_program.evidence_bias]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 2 (50.0%)\nGreatest absolute difference: 3.3676624298095703e-06 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020429029245860875 at index (0,) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                2
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.3676624298095703e-06,
+              "reference_max_abs": 0.016484690830111504
+            },
+            {
+              "kind": "numeric",
+              "path": "root.evidence[input.0]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 3 (66.7%)\nGreatest absolute difference: 3.1283125281333923e-06 at index (2,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020437964121811092 at index (1,) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                3
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.1283125281333923e-06,
+              "reference_max_abs": 0.015306723304092884
+            }
+          ],
+          "differences_truncated": false
+        }
+      ]
+    },
+    {
+      "test": "tests/test_component_window_weighted.py::test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-python]",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 16,
+            "discrete": 201
+          },
+          "mismatch_counts": {
+            "numeric": 3,
+            "discrete": 0
+          },
+          "differences": [
+            {
+              "kind": "numeric",
+              "path": "root.evidence[nodes.0.read_program.evidence_weight]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 34 (5.9%)\nGreatest absolute difference: 3.889203071594238e-06 at index (0, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020430178847163916 at index (0, 0) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                2,
+                17
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.889203071594238e-06,
+              "reference_max_abs": 0.019036559388041496
+            },
+            {
+              "kind": "numeric",
+              "path": "root.evidence[nodes.0.read_program.evidence_bias]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 2 (50.0%)\nGreatest absolute difference: 3.3676624298095703e-06 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020429029245860875 at index (0,) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                2
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.3676624298095703e-06,
+              "reference_max_abs": 0.016484690830111504
+            },
+            {
+              "kind": "numeric",
+              "path": "root.evidence[input.0]",
+              "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 3 (66.7%)\nGreatest absolute difference: 3.1283125281333923e-06 at index (2,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00020437964121811092 at index (1,) (up to 1e-05 allowed)",
+              "dtype": "torch.float32",
+              "shape": [
+                3
+              ],
+              "atol": 1e-06,
+              "rtol": 1e-05,
+              "max_abs_error": 3.1283125281333923e-06,
+              "reference_max_abs": 0.015306723304092884
+            }
+          ],
+          "differences_truncated": false
+        }
+      ]
+    }
+  ],
+  "jobs": {
+    "joint-prefill-fixed-window-b": {
+      "command": [
+        "bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window-b.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window",
+      "state": "failed",
+      "source": "da2f41b70a442f6ef584743b057fd0859acc20de",
+      "dirty": "",
+      "started": "2026-11-10T03:18:04.898400+00:00",
+      "exit_code": 1,
+      "finished": "2026-11-10T03:20:04.151814+00:00"
+    },
+    "joint-prefill-window-sdk-b": {
+      "command": [
+        "bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window-sdk-b.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window",
+      "state": "passed",
+      "source": "da2f41b70a442f6ef584743b057fd0859acc20de",
+      "dirty": "",
+      "started": "2026-11-10T03:18:04.907071+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-10T03:19:53.895169+00:00"
+    },
+    "joint-prefill-window-npu-c": {
+      "command": [
+        "bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window-npu-c.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-window-checks",
+      "state": "passed",
+      "source": "b148ba1a9f165ce327846a4992d5d06c248a3b64",
+      "dirty": "",
+      "started": "2026-11-10T03:22:02.193801+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-10T03:27:03.103787+00:00"
+    }
+  }
+}

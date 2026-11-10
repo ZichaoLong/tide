@@ -1,48 +1,26 @@
-# 当前交接 — 默认分量窗口与块内批量继续实施（2026-11-10）
+# 当前交接 — 默认分量窗口与块内反向（2026-11-10）
 
-分支graph-execution-foundation；数学0770593。用户已批准完整计划、全部320 CPU与
-空闲/有余量共享NPU；资源以尽快得到结果为准，舍入差异有限诊断后分列推进。
-参考与下游只读；不使用子代理。两份未跟踪用户handoff保持原样。
+分支graph-execution-foundation；数学0770593。用户批准持续实施及推送，320 CPU、空闲与有余量共享NPU；数值舍入有限诊断后分列推进。参考/下游只读，不使用子代理。两份未跟踪用户handoff保留原样。
 
-## 已交付与验证
+## 已交付
 
-- aab8cb7联合KV准备已推送；证据1d5d598已推送：CPU80、NPU相关33，
-  Python/native安装消费者三步独立检查/新进程精确恢复通过。
-  FC16/B8/L128完整步CPU35.486秒、NPU96.776秒；原任务独立数值仍未验。
-  正式导航[evidence/joint-kv-preparation-20261110.md](evidence/joint-kv-preparation-20261110.md)。
-- 默认区域SCC窗口调度：Python/native/standalone接线、实际分量计数、执行v3与旧greedy身份复现。
-  五记忆/变长B×L/一般端口/反馈/历史/独立根/SGD/精确恢复已有开发检查。
-  window-b新构建完成，494通过；唯一失败为旧测试仍要求PDG auto拒绝prefill，已按新契约修正。
-  定向重验与正式固定资格分列，不以开发通过代替设备/SDK资格。
+- aab8cb7联合KV准备、1d5d598证据已推送；原FC16/B8/L128 CPU35.486秒、NPU96.776秒。原任务完整独立数值未验。
+- da2f41b默认区域SCC窗口；b148ba1修正跨设备测试器。固定CPU391通过；NPU五记忆28通过/2 GDN-HB evidence根超差，另33相关通过。两安装消费者及SDK CPU64/32、NPU32均独立训练/新进程精确恢复通过。见evidence/component-window-20261110.md。
+- 3f4ade5原始KV时间切片、输入finite及结构分支合批。开发1313全部通过；固定安装CPU146通过，NPU/消费者及一次成本、profile正在审阅。
 
-## 当前作业与资源
+## 当前作业
 
-活动gef-joint-prefill-fixed-window：da2f41b固定检出fixed-window，脚本fixed-window.sh；安装CPU四组并行/NPU单卡，MemoryMax192G/3600秒，日志artifacts/jobs/joint-prefill-fixed-window/task.log。gef-joint-prefill-window-a失败于缺少声明头，未运行测试；原记录保留。
-gef-joint-prefill-window-b已终态（原测试断言1失败/494通过），冻结源码
-artifacts/joint-prefill/source-window-b，原始tree身份window-b-snapshot.json；
-新构建artifacts/joint-prefill/build-window-b。全320核、512G/3600秒，未与重型计时重叠。
-固定提交资格将复用内容hash一致的build-window-b，安装新wheel，CPU新相关/NPU/SDK分别验收。
-现有CANN9.2私有环境env-block-a；新SDK必须独立于Python运行库构建。
+gef-joint-prefill-fixed-guards：固定3f4ade5，artifacts/joint-prefill/fixed-guards；build-guards-a核对C++内容hash复用，新env-guards安装。MemoryMax192G/3600秒；日志artifacts/jobs/joint-prefill-fixed-guards/task.log。CPU完整步33.478秒；NPU完整步86.324秒，单次观察，独立数值/争用分列。小profile尚待终态。无本项目重型构建重叠。
+所有window/SDK旧服务已终态；缺头文件、旧拒绝断言、启动器及同设备误拒绝记录不改写。
 
-## 正在推进与下一步
+## 当前开发及下一步
 
-1. 提交默认窗口调度后冻结资格，NPU用有界单卡准入；小型代表先独立核对，有限舍入保留原阈值。
-2. 工作区另在开发KV原始时间切片和输入有限检查批量化，不能混入调度资格来源。
-   随后批量State结构分支元数据；全部保留中间状态独立根与None/零。
-3. 扩展五记忆、标准层链及大宽度/多节点HB/LH/sum/反馈代表，CPU/NPU/mixed/resident分列。
-   标准层链需要同公式直接基线，不能把外部LM路径冒称Tide调度已优化。
-4. 最终原FC16成本及小profile回答实际剩余碎片；新经验进入performance-lessons。
-   前述目录/历史尺度不等于新默认真机通过，GPU按用户授权延后。
+工作区开发未公开中间State时的KV整序列VJP；trace=True保留逐状态独立梯度链，trace=False在相同公开输出/边界状态/输入/共享参数根上批量回收前缀伴随，避免逐时私有构图。Python10个原型检查通过，新native/完整训练恢复检查待构建。不能据原型认证默认发布。
+
+1. 固定guards结束后冻结新开发，320核构建并运行新序列VJP/既有独立根回归。确认每个返回/None/版本/精确续接。
+2. 提交实现再冻结安装/设备/SDK资格及有限成本；补大宽度FC、多节点HB/LH/sum、标准层链及多设备代表；resident独立范围不能继承host通过。
+3. 有界分析GDN/HB evidence梯度超差，不无限阻塞后续。当前约3.889e-6，原因未判定，原阈值保留。
+4. 更新performance-lessons与唯一ROADMAP，新增证据从仓库直接导航。GPU按授权延后。
 
 下一命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
-长作业源码/脚本/日志均在artifacts/joint-prefill与artifacts/jobs，完整待办只见ROADMAP。
-
-活动gef-joint-prefill-window-sdk：同da2f41b独立SDK构建/独立消费者CPU64/CPU32/NPU32。脚本fixed-window-sdk.sh；全320构建/512G/3600秒，记录artifacts/jobs/joint-prefill-window-sdk。与Python资格并行，无性能计时。
-
-两次固定资格初次启动器分别因OUT/ROOT占位替换误改STDOUT/LIBTORCH_ROOT而失败，模型检查未开始；wheel和静态fixture已生成且核对。保留失败，续接脚本fixed-window-b.sh/fixed-window-sdk-b.sh与独立job名后缀-b，仅重启未执行部分，不覆盖旧日志。
-
-窗口固定CPU391项全部通过；SDK CPU FP64/FP32和NPU FP32三步独立训练/新进程精确恢复均通过。NPU新五记忆原30项为测试device比较误拒绝，b148ba1修正测试驱动；da2f41b安装实现/二进制不变，gef-joint-prefill-window-npu-c续接，仅新30项和未运行dense门禁，报告严格超差与精确恢复分列。
-
-下一开发gef-joint-prefill-guards-a：冻结source-guards-a（b148ba1+KV切片/finite/结构分支批量元数据），全320构建build-guards-a，CPU相关四组并行；512G/3600秒。独立原始时间、None/零、版本及中间状态梯度根必须通过。
-
-KV切片/有限检查/结构分支元数据开发构建完成：四组1313项全部通过（1026/110/80/97），无skip。即将提交实现并冻结安装资格；不将开发构建直接称为安装/设备资格。
+当前源码/脚本/日志在artifacts/joint-prefill与artifacts/jobs；待办只见ROADMAP。所有活跃源冻结。
