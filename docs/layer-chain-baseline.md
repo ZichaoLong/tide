@@ -43,3 +43,6 @@ SSD用`--family ssd`，纯PyTorch用`--implementation python`。NPU通过当前�
 长测量用固定源码background.slice服务；CPU/NPU、线程和实际算子实现分列。
 下一轮优化可据此判断图开销、局部数值求值和装配各有多少余地；不能从小矩阵或低L
 直接外推大型模型、长序列、resident及多卡。
+
+[固定检查与12个成本点](evidence/layer-chain-baseline-20261110.md)记录实际CPU/NPU结果、
+原失败和IEEE策略见证；默认图入口仍显著慢于该限定张量投影，不由此宣称目标已达成。

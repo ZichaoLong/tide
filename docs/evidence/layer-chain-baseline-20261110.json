@@ -1,0 +1,3421 @@
+{
+  "schema": "tide-layer-chain-evidence-v1",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "implementation_source": "3d88b0b3cd958fdbec02a801bc17d2a6e170bfff",
+  "driver_sources": {
+    "npu": "f6092d6dfd1649893f082eff136004bfc065280b",
+    "cpu": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df"
+  },
+  "scope": "same-formula zero-left-state output/terminal projection, numerical gradients; no complete graph connectivity or standard Transformer/Mamba model parity",
+  "tests": [
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-anchor-cpu.xml",
+        "sha256": "e73114eb8dd36467d77af80530f605c75a69239f8b0671cb11254d56b6b6ed8a"
+      },
+      "total": 13,
+      "passed": 13,
+      "exceptions": [],
+      "driver_source": "930d1bafada36d649b75a8c6c05d22824838de6d",
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-anchor-npu.xml",
+        "sha256": "7c2fa7f51ae4d8cda8d7aac3925cf93383efc280c058bbd5f03533d2504bba8f"
+      },
+      "total": 7,
+      "passed": 3,
+      "exceptions": [
+        {
+          "test": "test_tensor_layers_outputs_raw_state_parameter_input_and_state_roots[float32-kv]",
+          "kind": "failure",
+          "message": "tidegraph.comparison.StructureMismatch: root: tensor device mismatch"
+        },
+        {
+          "test": "test_tensor_layers_outputs_raw_state_parameter_input_and_state_roots[float32-ssd]",
+          "kind": "failure",
+          "message": "tidegraph.comparison.StructureMismatch: root: tensor device mismatch"
+        },
+        {
+          "test": "test_same_layer_workload_uses_public_default_entry[float32-python-ssd]",
+          "kind": "failure",
+          "message": "tidegraph.comparison.NumericMismatch: root: Tensor-likes are not close!\n\nMismatched elements: 2 / 24 (8.3%)\nGreatest absolute difference: 3.073364496231079e-06 at index (0, 2, 3) (up to 1e-06 allowed)\nGreatest relative difference: 6.356290396070108e-05 at index (0, 2, 3) (up to 1e-05 allowed)"
+        },
+        {
+          "test": "test_same_layer_workload_uses_public_default_entry[float32-native-ssd]",
+          "kind": "failure",
+          "message": "tidegraph.comparison.NumericMismatch: root: Tensor-likes are not close!\n\nMismatched elements: 2 / 24 (8.3%)\nGreatest absolute difference: 3.073364496231079e-06 at index (0, 2, 3) (up to 1e-06 allowed)\nGreatest relative difference: 6.356290396070108e-05 at index (0, 2, 3) (up to 1e-05 allowed)"
+        }
+      ],
+      "driver_source": "930d1bafada36d649b75a8c6c05d22824838de6d",
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-audit-npu.xml",
+        "sha256": "681f2d04a6ef04f657159f9ba372c020480872fd1e5316b9c7ed6853a5712468"
+      },
+      "total": 7,
+      "passed": 4,
+      "exceptions": [
+        {
+          "test": "test_tensor_layers_outputs_raw_state_parameter_input_and_state_roots[float32-ssd]",
+          "kind": "skipped",
+          "message": "layer tensor strict numerical difference retained; see bounded layer diagnostic"
+        },
+        {
+          "test": "test_same_layer_workload_uses_public_default_entry[float32-python-ssd]",
+          "kind": "skipped",
+          "message": "default layer vs tensor strict numerical difference retained; see bounded layer diagnostic"
+        },
+        {
+          "test": "test_same_layer_workload_uses_public_default_entry[float32-native-ssd]",
+          "kind": "skipped",
+          "message": "default layer vs tensor strict numerical difference retained; see bounded layer diagnostic"
+        }
+      ],
+      "driver_source": "a40355298365df11ab9d683cce0860608fe619cd",
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-ieee-npu.xml",
+        "sha256": "84e3d0a50514b8a091bf64b3cc18c07a73c4b0872a996b79eff38e790af0927f"
+      },
+      "total": 7,
+      "passed": 7,
+      "exceptions": [],
+      "driver_source": "f6092d6dfd1649893f082eff136004bfc065280b",
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-npu.xml",
+        "sha256": "83fa9eee1d42273d6ca9a54a86e2f37f1438d02a22a85cf8b2579df4bfa20fc6"
+      },
+      "total": 7,
+      "passed": 7,
+      "exceptions": [],
+      "driver_source": "f6092d6dfd1649893f082eff136004bfc065280b",
+      "package_and_native_source": "3d88b0b3cd958fdbec02a801bc17d2a6e170bfff"
+    }
+  ],
+  "costs": [
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-tensor-cpu/result.json",
+        "sha256": "42892e86d70b19056c0d9c0cf2517fb20975967d35d44dc250b5f74e28684219"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "kv",
+          "implementation": "tensor",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-tensor-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.01500474289059639,
+              "finite_forward": 0.0020581260323524475,
+              "backward": 0.013230964541435242,
+              "finite_gradients": 0.002516169100999832,
+              "optimizer": 0.001331280916929245,
+              "finite_parameters": 0.002707105129957199
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.037837427109479904
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.010548457503318787,
+              "finite_forward": 0.0007520541548728943,
+              "backward": 0.011697519570589066,
+              "finite_gradients": 0.0020579174160957336,
+              "optimizer": 0.0009112171828746796,
+              "finite_parameters": 0.0023375824093818665
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.028943296521902084
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 1.0734055675566196
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-python-cpu/result.json",
+        "sha256": "6a92dce7e44ec5b39826296dd34ff4a923f15833a247a5c23101cf632bf00c45"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "kv",
+          "implementation": "python",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-python-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.7665072828531265,
+              "finite_forward": 0.0021314211189746857,
+              "backward": 0.246411744505167,
+              "finite_gradients": 0.00282098725438118,
+              "optimizer": 0.0012661106884479523,
+              "finite_parameters": 0.0023917853832244873
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "state_block_base_projection_calls": 4,
+              "max_state_block_base_batch": 128,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "max_state_private_projection_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "state_block_preparation_events": 512,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "joint_state_vjp_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 1.025082066655159
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.7599515169858932,
+              "finite_forward": 0.0017359554767608643,
+              "backward": 0.25330524519085884,
+              "finite_gradients": 0.0028949156403541565,
+              "optimizer": 0.0013048723340034485,
+              "finite_parameters": 0.0023440904915332794
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "state_block_base_projection_calls": 4,
+              "max_state_block_base_batch": 128,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "max_state_private_projection_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "state_block_preparation_events": 512,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "joint_state_vjp_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 1.0254517793655396
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 1.0077213011682034
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-native-cpu/result.json",
+        "sha256": "6a368104534a4fa2c6eba5111c3f5b0ddc4567fdad33e918d6f896c3dfd0a306"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "kv",
+          "implementation": "native",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-native-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.2850641869008541,
+              "finite_forward": 0.002156093716621399,
+              "backward": 0.1951662078499794,
+              "finite_gradients": 0.002803657203912735,
+              "optimizer": 0.0015837885439395905,
+              "finite_parameters": 0.0024880655109882355
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "joint_state_vjp_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_block_base_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "max_state_private_projection_batch": 128,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_block_base_projection_calls": 4,
+              "state_block_preparation_events": 512,
+              "state_blocks": 16,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 0.49143341183662415
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.2996869310736656,
+              "finite_forward": 0.001943696290254593,
+              "backward": 0.20154369249939919,
+              "finite_gradients": 0.0025599151849746704,
+              "optimizer": 0.0013795122504234314,
+              "finite_parameters": 0.0024220459163188934
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "joint_state_vjp_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_block_base_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "max_state_private_projection_batch": 128,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_block_base_projection_calls": 4,
+              "state_block_preparation_events": 512,
+              "state_blocks": 16,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 0.5117364004254341
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 1.0700948499143124,
+        "native_build": {
+          "path": "artifacts/joint-prefill/build-local-batches/build-manifest.json",
+          "sha256": "5d14fe72956abf0cbe59442fe3e5e1183e8025203ee42efec21c64e19f16a216"
+        }
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-tensor-cpu/result.json",
+        "sha256": "dbb8870ca8cac5f94d679a93fb784880232ed586a40cf0dbb0b2a552a3d535d6"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "ssd",
+          "implementation": "tensor",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-tensor-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.022423967719078064,
+              "finite_forward": 0.0017837882041931152,
+              "backward": 0.020189844071865082,
+              "finite_gradients": 0.0025605037808418274,
+              "optimizer": 0.0014482811093330383,
+              "finite_parameters": 0.002766825258731842
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.05230717733502388
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.01831686496734619,
+              "finite_forward": 0.0009609982371330261,
+              "backward": 0.017601758241653442,
+              "finite_gradients": 0.002227999269962311,
+              "optimizer": 0.0012034326791763306,
+              "finite_parameters": 0.0025179423391819
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.043775174766778946
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 1.0479533225297928
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-python-cpu/result.json",
+        "sha256": "ce1251297bf3ee4cfeab37babeb8c9e0356016586cade168dd1f4d288227af39"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "ssd",
+          "implementation": "python",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-python-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 1.2227082885801792,
+              "finite_forward": 0.0020869262516498566,
+              "backward": 0.3958685025572777,
+              "finite_gradients": 0.002620510756969452,
+              "optimizer": 0.0016622133553028107,
+              "finite_parameters": 0.002827487885951996
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 1.6315399296581745
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 1.3360929302871227,
+              "finite_forward": 0.001442253589630127,
+              "backward": 0.40741946920752525,
+              "finite_gradients": 0.0038897283375263214,
+              "optimizer": 0.0017273537814617157,
+              "finite_parameters": 0.002709861844778061
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 1.7573194615542889
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 1.04010746255517
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-native-cpu/result.json",
+        "sha256": "3b97bfdf9993a0274bae6a7550b658a142d0e5d0d1d051c68455aa83e72173f4"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "1f82143e94e4d3f4549ea579be4d6ab94c10b5df",
+        "config": {
+          "family": "ssd",
+          "implementation": "native",
+          "device": "cpu",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 1,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-native-cpu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": null,
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.5227081999182701,
+              "finite_forward": 0.002249985933303833,
+              "backward": 0.3414965383708477,
+              "finite_gradients": 0.002758629620075226,
+              "optimizer": 0.0014351904392242432,
+              "finite_parameters": 0.00296647846698761
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_blocks": 16,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 0.8760534077882767
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.5248153023421764,
+              "finite_forward": 0.0015070438385009766,
+              "backward": 0.3533341884613037,
+              "finite_gradients": 0.006088566035032272,
+              "optimizer": 0.0028483569622039795,
+              "finite_parameters": 0.0026754364371299744
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_blocks": 16,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 0.8938165158033371
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 1.1998283974826336,
+        "native_build": {
+          "path": "artifacts/joint-prefill/build-local-batches/build-manifest.json",
+          "sha256": "5d14fe72956abf0cbe59442fe3e5e1183e8025203ee42efec21c64e19f16a216"
+        }
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-tensor-npu/result.json",
+        "sha256": "b64f368e3b59f095a0917ab2601fb856d50aa36791b7c3da2446db20240988a5"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "kv",
+          "implementation": "tensor",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-tensor-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.3671410232782364,
+              "finite_forward": 0.042899761348962784,
+              "backward": 0.056553348898887634,
+              "finite_gradients": 0.005196262151002884,
+              "optimizer": 0.003632616251707077,
+              "finite_parameters": 0.0011118613183498383
+            },
+            "loss": 1.0648797750473022,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.4780825972557068,
+            "peak_allocated_bytes": 52251136,
+            "peak_reserved_bytes": 92274688
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.010924078524112701,
+              "finite_forward": 0.0004841648042201996,
+              "backward": 0.0064305588603019714,
+              "finite_gradients": 0.0005989037454128265,
+              "optimizer": 0.0016169063746929169,
+              "finite_parameters": 0.0007779560983181
+            },
+            "loss": 1.0648797750473022,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.021841447800397873,
+            "peak_allocated_bytes": 52251136,
+            "peak_reserved_bytes": 92274688
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 0.7032865360379219
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-python-npu/result.json",
+        "sha256": "544e9937b454df09556896c81ad44b7b6b7e56350720ae5d4e0f07d3a3eab6cb"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "kv",
+          "implementation": "python",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-python-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 1.5945931561291218,
+              "finite_forward": 0.003452744334936142,
+              "backward": 0.5250902436673641,
+              "finite_gradients": 0.001223251223564148,
+              "optimizer": 0.003893781453371048,
+              "finite_parameters": 0.0009574554860591888
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "state_block_base_projection_calls": 4,
+              "max_state_block_base_batch": 128,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "max_state_private_projection_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "state_block_preparation_events": 512,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "joint_state_vjp_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 2.134355276823044,
+            "peak_allocated_bytes": 81693184,
+            "peak_reserved_bytes": 113246208
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 1.0790070705115795,
+              "finite_forward": 0.0011979714035987854,
+              "backward": 0.36913951113820076,
+              "finite_gradients": 0.0007907971739768982,
+              "optimizer": 0.001303553581237793,
+              "finite_parameters": 0.0007527358829975128
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "state_block_base_projection_calls": 4,
+              "max_state_block_base_batch": 128,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "max_state_private_projection_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "state_block_preparation_events": 512,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "joint_state_vjp_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 1.4562039859592915,
+            "peak_allocated_bytes": 81693184,
+            "peak_reserved_bytes": 113246208
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 0.6985821835696697
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-kv-native-npu/result.json",
+        "sha256": "ab8aa1f4052fe3b504b3babce13f4e3bd98595b9d7b5ad5b0721333322866321"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "kv",
+          "implementation": "native",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-kv-native-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 1.0707202143967152,
+              "finite_forward": 0.009134944528341293,
+              "backward": 0.5431418791413307,
+              "finite_gradients": 0.0036973170936107635,
+              "optimizer": 0.006411798298358917,
+              "finite_parameters": 0.0013904161751270294
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "joint_state_vjp_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_block_base_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "max_state_private_projection_batch": 128,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_block_base_projection_calls": 4,
+              "state_block_preparation_events": 512,
+              "state_blocks": 16,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 1.6397810876369476,
+            "peak_allocated_bytes": 81955328,
+            "peak_reserved_bytes": 113246208
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.5776115208864212,
+              "finite_forward": 0.002554800361394882,
+              "backward": 0.3464531637728214,
+              "finite_gradients": 0.0013061128556728363,
+              "optimizer": 0.001737195998430252,
+              "finite_parameters": 0.0008433274924755096
+            },
+            "loss": 1.0648798942565918,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "joint_state_vjp_events": 512,
+              "joint_state_vjp_sequences": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_block_base_batch": 128,
+              "max_state_independent_projection_batch": 128,
+              "max_state_private_projection_batch": 128,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_block_base_projection_calls": 4,
+              "state_block_preparation_events": 512,
+              "state_blocks": 16,
+              "state_private_projection_calls": 12,
+              "state_private_projection_rows": 1536,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 0,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 4
+            },
+            "seconds": 0.9338412135839462,
+            "peak_allocated_bytes": 81955328,
+            "peak_reserved_bytes": 113246208
+          }
+        ],
+        "parameters": 704612,
+        "initial_parameters_sha256": "38294c2b1b0c3cbc52f21c08cbf1acb23805b6de609fab8f0714577d9ef76c75",
+        "construction_seconds": 0.7610986679792404,
+        "native_build": {
+          "path": "artifacts/joint-prefill/build-local-batches/build-manifest.json",
+          "sha256": "5d14fe72956abf0cbe59442fe3e5e1183e8025203ee42efec21c64e19f16a216"
+        }
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-tensor-npu/result.json",
+        "sha256": "062cfbd88db7e3b2eb0c8d02e6a8b81da2e84aa20e031959c13b07c9aa055937"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "ssd",
+          "implementation": "tensor",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-tensor-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 0.3384910896420479,
+              "finite_forward": 0.02825305238366127,
+              "backward": 0.09075959399342537,
+              "finite_gradients": 0.007887978106737137,
+              "optimizer": 0.004626341164112091,
+              "finite_parameters": 0.00335022434592247
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.47612450271844864,
+            "peak_allocated_bytes": 50634240,
+            "peak_reserved_bytes": 90177536
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 0.014729257673025131,
+              "finite_forward": 0.0008683279156684875,
+              "backward": 0.01078059896826744,
+              "finite_gradients": 0.0008995309472084045,
+              "optimizer": 0.002152077853679657,
+              "finite_parameters": 0.0010530985891819
+            },
+            "loss": 0.8281561136245728,
+            "actual_work": {
+              "layers": 4,
+              "input_positions": 128,
+              "selected_events": 512,
+              "implementation": "tensor formulas"
+            },
+            "seconds": 0.03212464600801468,
+            "peak_allocated_bytes": 50634240,
+            "peak_reserved_bytes": 90177536
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 0.7263130210340023
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-python-npu/result.json",
+        "sha256": "77e1ae63c131835f0a05a2d9b2b264a10ae97033fb7ff6f77567b8b68dcc6e39"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "ssd",
+          "implementation": "python",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-python-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 3.3414249941706657,
+              "finite_forward": 0.007174540311098099,
+              "backward": 1.171401098370552,
+              "finite_gradients": 0.02067437767982483,
+              "optimizer": 0.014782443642616272,
+              "finite_parameters": 0.006063688546419144
+            },
+            "loss": 0.828156054019928,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 4.579629931598902,
+            "peak_allocated_bytes": 114451456,
+            "peak_reserved_bytes": 138412032
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 2.97444124892354,
+              "finite_forward": 0.0018060281872749329,
+              "backward": 0.9910146780312061,
+              "finite_gradients": 0.001148860901594162,
+              "optimizer": 0.0022635124623775482,
+              "finite_parameters": 0.0009749718010425568
+            },
+            "loss": 0.828156054019928,
+            "actual_work": {
+              "greedy_stages": 4,
+              "greedy_relaxed_edges": 0,
+              "region_blocks": 4,
+              "candidate_events": 512,
+              "visited_edges": 384,
+              "max_live_fibers": 128,
+              "max_greedy_frames": 128,
+              "state_blocks": 16,
+              "state_steps": 0,
+              "full_blocks": 4,
+              "state_sequence_calls": 4,
+              "semantic_state_replays": 0,
+              "semantic_full_replays": 0,
+              "full_scalar_fallback_steps": 0,
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "aggregate_reused_events": 0,
+              "batched_aggregate_events": 512,
+              "batched_state_events": 512,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "read_calls": 4,
+              "batched_read_events": 512,
+              "region_batch_calls": 4,
+              "max_region_batch": 128,
+              "batched_region_frames": 512,
+              "region_steps": 512,
+              "next_steps": 512,
+              "max_full_batch": 128,
+              "full_calls": 4,
+              "batched_full_events": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "window_causal_blocks": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 3.9769938364624977,
+            "peak_allocated_bytes": 114451456,
+            "peak_reserved_bytes": 138412032
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 0.728211734443903
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-final-ssd-native-npu/result.json",
+        "sha256": "7da93dee7dd6b4a4689a20dec6b42ced12a945e5fcacebbc299089f6a14cd95c"
+      },
+      "record": {
+        "schema": "tide-layer-chain-cost-v1",
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "config": {
+          "family": "ssd",
+          "implementation": "native",
+          "device": "npu:0",
+          "dtype": "float32",
+          "precision_policy": "ieee",
+          "width": 128,
+          "depth": 4,
+          "heads": 4,
+          "batch": 4,
+          "length": 32,
+          "threads": 2,
+          "mode": "training",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/build-local-batches",
+          "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/layer-final-ssd-native-npu"
+        },
+        "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/env-local-batches/lib/python3.12/site-packages/tidegraph/__init__.py",
+        "visibility": "11",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "scope": "zero-left-state whole sequences; output content and terminal fields; tensor omits auxiliary Describe/graph records",
+        "strict_numerical": "not_checked_at_measured_scale",
+        "recovery": "outside_zero-left-state_anchor",
+        "timing": "one reset warmup and one measured full update; input, transfer, scheduling, packing, loss, backward, finite checks, SGD and sync included; construction separate",
+        "execution": "completed",
+        "observations": [
+          {
+            "warmup": true,
+            "phases": {
+              "forward": 2.3310946598649025,
+              "finite_forward": 0.0137232206761837,
+              "backward": 1.0970509387552738,
+              "finite_gradients": 0.0042409636080265045,
+              "optimizer": 0.007710989564657211,
+              "finite_parameters": 0.0037455037236213684
+            },
+            "loss": 0.828156054019928,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_blocks": 16,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 3.464260835200548,
+            "peak_allocated_bytes": 114650112,
+            "peak_reserved_bytes": 138412032
+          },
+          {
+            "warmup": false,
+            "phases": {
+              "forward": 1.7866136990487576,
+              "finite_forward": 0.003483865410089493,
+              "backward": 1.0481282360851765,
+              "finite_gradients": 0.0041697099804878235,
+              "optimizer": 0.0041125863790512085,
+              "finite_parameters": 0.0010645687580108643
+            },
+            "loss": 0.828156054019928,
+            "actual_work": {
+              "aggregate_calls": 4,
+              "aggregate_computed_events": 512,
+              "attention_score_elements": 0,
+              "batched_aggregate_events": 512,
+              "batched_full_events": 512,
+              "batched_read_events": 512,
+              "batched_region_frames": 512,
+              "batched_state_events": 512,
+              "body_candidate_events": 512,
+              "body_selected_events": 512,
+              "candidate_events": 512,
+              "full_blocks": 4,
+              "full_calls": 4,
+              "greedy_relaxed_edges": 0,
+              "greedy_stages": 4,
+              "max_full_batch": 128,
+              "max_greedy_frames": 128,
+              "max_live_fibers": 128,
+              "max_region_batch": 128,
+              "max_state_batch": 4,
+              "max_state_sequence": 32,
+              "next_steps": 512,
+              "read_calls": 4,
+              "region_batch_calls": 4,
+              "region_blocks": 4,
+              "region_steps": 512,
+              "region_time_batch_frames": 512,
+              "selected_events": 512,
+              "source_rows": 512,
+              "state_blocks": 16,
+              "state_scalar_sequence_steps": 0,
+              "state_sequence_calls": 4,
+              "visited_edges": 384,
+              "window_causal_blocks": 0,
+              "window_components": 4,
+              "window_cyclic_components": 0,
+              "query_legacy_nodes": 4,
+              "query_dense-v1_nodes": 0,
+              "query_packed-v2_nodes": 0
+            },
+            "seconds": 2.8534587025642395,
+            "peak_allocated_bytes": 114650112,
+            "peak_reserved_bytes": 138412032
+          }
+        ],
+        "parameters": 669332,
+        "initial_parameters_sha256": "b2cd84e781e1c7db2a67f0c700870339396632e070a07800d6b9cb3c3ccf9621",
+        "construction_seconds": 0.7795915938913822,
+        "native_build": {
+          "path": "artifacts/joint-prefill/build-local-batches/build-manifest.json",
+          "sha256": "5d14fe72956abf0cbe59442fe3e5e1183e8025203ee42efec21c64e19f16a216"
+        }
+      }
+    }
+  ],
+  "rounding": [
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-rounding-npu.json",
+        "sha256": "bdc77f18edd7a22d5eda99aed41f4442d7f414efb246ee2c2de104e034e3511a"
+      },
+      "record": {
+        "source": "a40355298365df11ab9d683cce0860608fe619cd",
+        "device": "npu:0",
+        "material": "CPU FP32 width4/depth2/heads2, B2/L3 linspace(-.2,.4), exactly promoted",
+        "scope": "output and terminal state; output-square numerical derivatives; no graph connectivity or learning claim",
+        "families": {
+          "kv": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.5224968913374326e-07,
+              "max_gradient_abs": 3.446252949124151e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 4.706949940230798e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.2244736674604795e-07,
+              "max_gradient_abs": 5.598885555180289e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          },
+          "ssd": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 8.822652491913274e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 1.1150244694224654e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 3.063440399582451e-06,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 1.4095786367296359e-05,
+              "max_gradient_abs": 1.2559566246586606e-05,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "failed",
+                "discrete": "passed",
+                "strict_passed": false,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 4,
+                  "discrete": 0
+                },
+                "differences": [
+                  {
+                    "kind": "numeric",
+                    "path": "root[output]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 24 (8.3%)\nGreatest absolute difference: 3.0621886253356934e-06 at index (0, 2, 3) (up to 1e-06 allowed)\nGreatest relative difference: 6.332770135486498e-05 at index (0, 2, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 3.0621886253356934e-06,
+                    "reference_max_abs": 0.39470675587654114
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.0.H]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 3 / 16 (18.8%)\nGreatest absolute difference: 4.105735570192337e-06 at index (0, 1, 0, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.000878001272212714 at index (0, 1, 0, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      2,
+                      2,
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 4.105735570192337e-06,
+                    "reference_max_abs": 0.011741407215595245
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.1.Z]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 8 (25.0%)\nGreatest absolute difference: 3.5315752029418945e-06 at index (0, 0, 1) (up to 1e-06 allowed)\nGreatest relative difference: 2.200730341428425e-05 at index (0, 0, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      2,
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 3.5315752029418945e-06,
+                    "reference_max_abs": 0.6592155694961548
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.1.conv_values]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 6 / 48 (12.5%)\nGreatest absolute difference: 1.4096498489379883e-05 at index (0, 2, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.00017153832595795393 at index (0, 2, 4) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      8
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.4096498489379883e-05,
+                    "reference_max_abs": 0.5044169425964355
+                  }
+                ],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "failed",
+                "discrete": "passed",
+                "strict_passed": false,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 7,
+                  "discrete": 0
+                },
+                "differences": [
+                  {
+                    "kind": "numeric",
+                    "path": "root[input]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 6 / 24 (25.0%)\nGreatest absolute difference: 1.2561678886413574e-05 at index (0, 2, 2) (up to 1e-06 allowed)\nGreatest relative difference: 0.000119175405416172 at index (0, 1, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.2561678886413574e-05,
+                    "reference_max_abs": 0.8585085272789001
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.kernel.projection]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 8 / 56 (14.3%)\nGreatest absolute difference: 2.673827111721039e-06 at index (2, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.001355856889858842 at index (2, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      14,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.673827111721039e-06,
+                    "reference_max_abs": 0.031910061836242676
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.down]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 1.1194497346878052e-06 at index (3, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013888429384678602 at index (3, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4,
+                      8
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.1194497346878052e-06,
+                    "reference_max_abs": 0.12149656563997269
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.direct]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 2 (100.0%)\nGreatest absolute difference: 1.043081283569336e-05 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00019976972544100136 at index (0,) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.043081283569336e-05,
+                    "reference_max_abs": 0.07783542573451996
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.rho]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 4 (25.0%)\nGreatest absolute difference: 8.620321750640869e-06 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00023279777087736875 at index (0,) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 8.620321750640869e-06,
+                    "reference_max_abs": 0.03702922910451889
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.out]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 3 / 16 (18.8%)\nGreatest absolute difference: 2.05356627702713e-06 at index (3, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.00024083376047201455 at index (2, 0) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.05356627702713e-06,
+                    "reference_max_abs": 0.013298923149704933
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.1.kernel.projection]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 10 / 56 (17.9%)\nGreatest absolute difference: 2.882443368434906e-06 at index (4, 3) (up to 1e-06 allowed)\nGreatest relative difference: 0.0005499576800502837 at index (11, 2) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      14,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.882443368434906e-06,
+                    "reference_max_abs": 0.048172518610954285
+                  }
+                ],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          }
+        }
+      },
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-rounding-ieee-npu.json",
+        "sha256": "5e9b3986e493d0ec8abf73469e433affb624243f4094d9b7ac9e237d3b0b8633"
+      },
+      "record": {
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "device": "npu:0",
+        "numerical_policy": {
+          "requested": "ieee",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          }
+        },
+        "material": "CPU FP32 width4/depth2/heads2, B2/L3 linspace(-.2,.4), exactly promoted",
+        "scope": "output and terminal state; output-square numerical derivatives; no graph connectivity or learning claim",
+        "families": {
+          "kv": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.5224968913374326e-07,
+              "max_gradient_abs": 3.446252949124151e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 4.706949940230798e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.2244736674604795e-07,
+              "max_gradient_abs": 5.598885555180289e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          },
+          "ssd": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 8.822652491913274e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 1.1150244694224654e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 1.4130476932994185e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          }
+        }
+      },
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    },
+    {
+      "raw": {
+        "path": "artifacts/joint-prefill/layer-rounding-vendor-policy-npu.json",
+        "sha256": "6166d5476326e357739b45b84b92bbbff46f7cb6c932fd19f46340715157f459"
+      },
+      "record": {
+        "source": "f6092d6dfd1649893f082eff136004bfc065280b",
+        "device": "npu:0",
+        "numerical_policy": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "material": "CPU FP32 width4/depth2/heads2, B2/L3 linspace(-.2,.4), exactly promoted",
+        "scope": "output and terminal state; output-square numerical derivatives; no graph connectivity or learning claim",
+        "families": {
+          "kv": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.5224968913374326e-07,
+              "max_gradient_abs": 3.446252949124151e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 4.706949940230798e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 1.2244736674604795e-07,
+              "max_gradient_abs": 5.598885555180289e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.897054302009039e-08,
+                "reference_max_abs": 0.5356823824903676
+              },
+              "max_state_abs": 6.284272197065732e-08,
+              "max_gradient_abs": 3.2146997641646635e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 2
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 33,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          },
+          "ssd": {
+            "scalar32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 8.822652491913274e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-cpu": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 7.674221613740428e-08,
+              "max_gradient_abs": 1.1150244694224654e-07,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "tensor32-device": {
+              "output": {
+                "max_abs": 3.063440399582451e-06,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 1.4095786367296359e-05,
+              "max_gradient_abs": 1.2559566246586606e-05,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "failed",
+                "discrete": "passed",
+                "strict_passed": false,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 4,
+                  "discrete": 0
+                },
+                "differences": [
+                  {
+                    "kind": "numeric",
+                    "path": "root[output]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 24 (8.3%)\nGreatest absolute difference: 3.0621886253356934e-06 at index (0, 2, 3) (up to 1e-06 allowed)\nGreatest relative difference: 6.332770135486498e-05 at index (0, 2, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 3.0621886253356934e-06,
+                    "reference_max_abs": 0.39470675587654114
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.0.H]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 3 / 16 (18.8%)\nGreatest absolute difference: 4.105735570192337e-06 at index (0, 1, 0, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.000878001272212714 at index (0, 1, 0, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      2,
+                      2,
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 4.105735570192337e-06,
+                    "reference_max_abs": 0.011741407215595245
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.1.Z]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 8 (25.0%)\nGreatest absolute difference: 3.5315752029418945e-06 at index (0, 0, 1) (up to 1e-06 allowed)\nGreatest relative difference: 2.200730341428425e-05 at index (0, 0, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      2,
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 3.5315752029418945e-06,
+                    "reference_max_abs": 0.6592155694961548
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[state.1.conv_values]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 6 / 48 (12.5%)\nGreatest absolute difference: 1.4096498489379883e-05 at index (0, 2, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.00017153832595795393 at index (0, 2, 4) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      8
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.4096498489379883e-05,
+                    "reference_max_abs": 0.5044169425964355
+                  }
+                ],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "failed",
+                "discrete": "passed",
+                "strict_passed": false,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 7,
+                  "discrete": 0
+                },
+                "differences": [
+                  {
+                    "kind": "numeric",
+                    "path": "root[input]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 6 / 24 (25.0%)\nGreatest absolute difference: 1.2561678886413574e-05 at index (0, 2, 2) (up to 1e-06 allowed)\nGreatest relative difference: 0.000119175405416172 at index (0, 1, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2,
+                      3,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.2561678886413574e-05,
+                    "reference_max_abs": 0.8585085272789001
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.kernel.projection]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 8 / 56 (14.3%)\nGreatest absolute difference: 2.673827111721039e-06 at index (2, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.001355856889858842 at index (2, 3) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      14,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.673827111721039e-06,
+                    "reference_max_abs": 0.031910061836242676
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.down]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 32 (3.1%)\nGreatest absolute difference: 1.1194497346878052e-06 at index (3, 1) (up to 1e-06 allowed)\nGreatest relative difference: 0.00013888429384678602 at index (3, 1) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4,
+                      8
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.1194497346878052e-06,
+                    "reference_max_abs": 0.12149656563997269
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.direct]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 2 / 2 (100.0%)\nGreatest absolute difference: 1.043081283569336e-05 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00019976972544100136 at index (0,) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      2
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 1.043081283569336e-05,
+                    "reference_max_abs": 0.07783542573451996
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.rho]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 1 / 4 (25.0%)\nGreatest absolute difference: 8.620321750640869e-06 at index (0,) (up to 1e-06 allowed)\nGreatest relative difference: 0.00023279777087736875 at index (0,) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 8.620321750640869e-06,
+                    "reference_max_abs": 0.03702922910451889
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.0.full_program.content.out]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 3 / 16 (18.8%)\nGreatest absolute difference: 2.05356627702713e-06 at index (3, 0) (up to 1e-06 allowed)\nGreatest relative difference: 0.00024083376047201455 at index (2, 0) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      4,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.05356627702713e-06,
+                    "reference_max_abs": 0.013298923149704933
+                  },
+                  {
+                    "kind": "numeric",
+                    "path": "root[nodes.1.kernel.projection]",
+                    "message": "Tensor-likes are not close!\n\nMismatched elements: 10 / 56 (17.9%)\nGreatest absolute difference: 2.882443368434906e-06 at index (4, 3) (up to 1e-06 allowed)\nGreatest relative difference: 0.0005499576800502837 at index (11, 2) (up to 1e-05 allowed)",
+                    "dtype": "torch.float32",
+                    "shape": [
+                      14,
+                      4
+                    ],
+                    "atol": 1e-06,
+                    "rtol": 1e-05,
+                    "max_abs_error": 2.882443368434906e-06,
+                    "reference_max_abs": 0.048172518610954285
+                  }
+                ],
+                "differences_truncated": false
+              }
+            },
+            "python32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            },
+            "native32-device": {
+              "output": {
+                "max_abs": 2.4143088472872165e-08,
+                "reference_max_abs": 0.3947067639981289
+              },
+              "max_state_abs": 9.667332045992794e-08,
+              "max_gradient_abs": 6.676878150368992e-08,
+              "strict_values": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 9,
+                  "discrete": 4
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              "strict_gradients": {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 41,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            }
+          }
+        }
+      },
+      "package_and_native_source": "f15c4a5b45ea8d74fde9e8cb21ce5fe04beb4b07"
+    }
+  ]
+}

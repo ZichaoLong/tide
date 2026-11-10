@@ -1,57 +1,65 @@
-# 当前交接 — 联合prefill部署验证收口（2026-11-10）
+# 当前交接 — 联合prefill本轮终态（2026-11-10）
 
-授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
-当前HEAD 1f82143；允许持续实施/提交/推送及充分使用空闲CPU/NPU、经身份核对的共享卡；GPU延后。
-参考及下游只读，无子代理。未跟踪TL-REQ-003/004用户handoff保持原样，不纳入提交。
+授权分支graph-execution-foundation；固定数学0770593838a37c790a568226930567ed60f99b83。
+用户授权持续实施/提交/推送、充分使用空闲CPU/NPU及经身份核实的有余量共享卡；GPU延后。
+参考/下游只读，无子代理。两份未跟踪TL-REQ-003/004用户handoff保持原样，不纳入提交。
 
-## 已完成与边界
+## 本轮已完成
 
-默认分量窗口、B×L联合KV准备、整序列VJP、完整query根合并、按需trace及局部合批已交付。
-固定3d88b0b：CPU281通过/4保留数值xfail，NPU流程68通过，安装消费者及独立SDK训练/新进程恢复通过。
-原FC16最小返回完整步CPU18.640405/NPU22.902820秒。证据：prefill-local-batches-20261110.md。
-原34项代表矩阵与精确续接见prefill-representatives-20261110.md；规模独立数值not_checked。
+默认分量窗口、B×L联合KV准备、整序列VJP、query完整根汇合和按需trace已交付。
+f15c4a5/3d88b0b的owner一次装配、描述投影/有限检查/分配metadata合批完成固定资格。
+3d CPU281通过/4原数值xfail、NPU目标流程68通过（含CPU辅助）；安装消费者和独立SDK
+训练/新进程恢复分列通过。原FC16同minimal完整步CPU18.640405/NPU22.902820秒。
+证据入口：docs/evidence/prefill-local-batches-20261110.md。
 
-后继已完成而尚待写入正式报告：wide-FC CPU16、LH1.051B CPU32/NPU、FP16 query-FC、异构LH；
-显式blocking双NPU FC16及普通双NPU LH9.314B推理/精确下一窗均完成。
-层链IEEE NPU小型7项通过，六成本点已完成；vendor默认SSD超差与IEEE/FP64见证分别保留。
-默认ordinary双NPU FC16曾在warmup反向挂起；已停且cgroup消失，显式blocking通过不解除默认异步问题。
-两轮resident目录预算拒绝保留；1f82143按实际optimizer/反向分区及每样本阶段上界修正了生成器，实际重试待验。
+34项CPU/NPU代表矩阵见prefill-representatives-20261110.md；后继16项部署尝试（含失败）见
+prefill-deployment-20261110.md/json。宽FC、FP16、五记忆异构LH、CPU线程、1.051B/9.314B、
+双卡、B32均有实际结果；尺度独立数值/离散仍not_checked，不把恢复或计时当完整数值资格。
+1.051B/176节点/B32/L16：CPU32线程12.262388秒，NPU host2线程33.965264秒；活动约22.2%。
+9.314607738B/B2/L8双NPU普通推理13.613896秒，公共精确下一窗通过。
 
-## 中断事实与当前作业
+同公式KV/SSD层链：CPU13/显式IEEE NPU7项小型检查通过，12项成本完成；
+B4/L32/d128四层KV native CPU/NPU0.512/0.934秒，张量投影0.029/0.022秒；
+SSD native0.894/2.853秒、张量投影0.044/0.032秒。两者返回职责不同，默认入口仍明显较慢。
+原vendor卷积HF32数值差异及同材料FP64定位保留，见layer-chain-baseline-20261110.md/json。
+不认证标准Transformer/Mamba模型或已达到原生性能。
 
-重排前deployment-followup已passed。throughput-sample已完成CPU B32/P16/1.051B计时12.262388秒，
-但在checkpoint保存中被取消；原inner running快照及未发布staging文件保留，恢复not_checked。
-resident-accounted及layer-final-cpu在依赖等待时取消，未执行各自用例；vendor-policy已passed。
-上述旧任务均终态，当前不能恢复为running或改写passed。
+485a3e2修正实际选定推理的事件预留和恢复诊断：只对已审核ranked-local、无梯度无插件、
+host分量窗口PyTorch/Python-native缩减全图trace预留，保留其他分区和全部保守后备。
+46项新私有固定安装检查通过；复用3d C++且相关源码diff为空，不称重新构建。
+原NPU B32的115.34GB静态估算拒绝保留；新24.92GB预留准入，实际完整计时及精确恢复通过，
+含恢复peak allocated/reserved约6.07/6.40GB。数学、算法、精度、容差未替换。
 
-新有限服务gef-joint-prefill-closure已启动且cgroup核实在background.slice：固定worktree artifacts/joint-prefill/fixed-resident-accounted（1f82143）；
-驱动及hash见artifacts/joint-prefill/closure-driver.json。64CPU/640GiB/12600秒；每次NPU准入60秒。
-依次仅补六CPU层链、NPU B32推理、两个修正预算resident、CPU B32无计时重建/保存/公共exact_next。
-复用3d88b0b安装/core；resident复用a553安装/core及独立resident库。单项失败继续独立项，不重测已有计时。
-启动命令：systemd-run --user --unit=gef-joint-prefill-closure --slice=background.slice --service-type=exec
---working-directory=固定worktree --property=KillMode=control-group --property=RuntimeMaxSec=12600
---property=TimeoutStopSec=30 --property=CPUQuota=6400% --property=MemoryMax=640G --property=Nice=10
-/usr/bin/python3 scripts/job.py --output-dir=主仓库/artifacts/jobs/joint-prefill-closure -- bash 主仓库/artifacts/joint-prefill/closure.sh。
-日志artifacts/jobs/joint-prefill-closure/task.log；生命周期status.json。活动源码/包/库/驱动不可修改。
+## 作业终态与保留失败
 
-## 当前代码增量
+当前本轮没有活动作业。gef-joint-prefill-record-capacity已passed/0，MainPID=0、cgroup为空。
+固定485a3e2 worktree fixed-record-capacity、env-record-capacity、3d库；日志
+artifacts/jobs/joint-prefill-record-capacity/task.log，驱动hash在record-capacity-driver.json。
+同目录各任务原始终态和输入继续保留；source记录不是全部内部通过的替代。
 
-已修正内置输出推理的事件预留：仅已审核的ranked-local、PyTorch/Python-native、分量窗口、
-无梯度无插件路径按两个最大区域事件块加输出预留；保留完整记录估算，其他分区和路径不降预算。
-planning/record_capacity.py与experiment/record_policy.py连接预算、运行和恢复；不是容量豁免或改算法。
-恢复诊断保持实际返回路径，并比较下一窗完整raw状态，新增未返回状态错误注入。
-开发检查17+29项通过；提交后需固定安装、核对复用3d C++源码未变，并补一次原B32 NPU。
-旧B32 NPU在执行前被115339688680字节完整记录估算拒绝；没有计时，不能称实际OOM。
-resident修正目录两项仍在construction拒绝KV qry/local-row数值工作区；未有吞吐或恢复，不盲加预算。
-closure当前在CPU B32重建恢复；层链CPU六成本点已完成，后续只整理不重测。
+closure为failed/1：六CPU层链成功；旧B32 NPU准入拒绝；修正预算resident两项构造拒绝；
+CPU B32不计时重建后公共exact_next逐值通过，但临时汇总脚本随后对dict调用record()报错。
+原CPU计时在checkpoint-save取消、未发布staging和后继恢复通过分别记录，不重跑计算或改写旧状态。
+日志artifacts/jobs/joint-prefill-closure/task.log，结果已审阅。旧throughput-sample/resident-accounted/
+layer-final-cpu取消事实保留；后两者原先等待期间未执行，不能写为当时拒绝。
 
-## 精确下一步
+默认ordinary双NPU FC16曾在warmup反向挂起，gdb停于NPUStream::stream/_index_put_impl_；
+对应unit已停止且后代消失。显式blocking完成/恢复是另一配置，默认异步限制未解除。
+resident三轮目录/分区/实际数值预算结果分列；最后FC16 qry和四层SSD分别在KV qry/
+local-row工作区构造拒绝，无性能/恢复。停止统一加预算重试，下一步按具体工作区分解。
 
-1. python scripts/status.py；核对closure实际unit、status及每个inner输出，勿直接打印大result/identity。
-2. 独立核实CPU B32旧计时与新恢复，resident的真实阶段/预算/服务限制；不把outer通过当数值资格。
-3. 完成层链及部署证据、更新ROADMAP/复现导航/性能经验并提交；授权分支推送，不强推。
-4. 有限超差诊断与机制检查分列推进，原严格阈值不变；非有限/通信/容量/精确恢复另列处理。
-5. 停止仅限准确本项目unit；随后核对MainPID、整个cgroup及后代身份。
+## 下一步与导航
 
-最近资源：磁盘空闲813GiB；quota270/300/800GiB；主存available约1.6TiB。新增checkpoint约12GiB可容纳，写前再核对。
-下游未升级/验收，不将基座证据替代下游学习结论。唯一待办与重启条件见ROADMAP。
+1. git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
+2. 从docs/prefill-regression.md、architecture.md及evidence/README.md查配置→实现→独立检查→结果；
+   原始目录不是复现依赖，报告附干净检出命令。只保留ROADMAP当前待办/重启条件。
+3. 优先按层链/原FC16 profile推进块内状态快照表示、索引/私有根装配、循环模块VJP和小提交，
+   保持B×L接口及PDG合法后备。每次改动选相关小门禁和少量成本；大型9B降低频率，不无依据重跑。
+4. resident先导出逐节点remaining、query/tape及row表达式实际保留量，再考虑workspace/服务复用；
+   默认异步双卡须有事件/流所有权的新方案，原失败不由blocking或推理通过解除。
+5. 有限数值超差做有界诊断并记录后可继续独立探索；非有限、离散、通信、容量、精确恢复另列。
+   不降低原阈值，不把GPU缺席、旧失败或NPU小图资格外推；下游尚未升级/验收。
+
+按既有授权使用当前分支提交/推送，不强推；同步状态以git status为准。最近quota约281/300/800GiB，
+磁盘可用约800GiB；大写入前重新核对。后继原始产物清理须按artifact-retention先审阅dry run，
+保留必要复现/失败输入，不清理参考仓库或公共工具链。

@@ -13,6 +13,10 @@ CPU/NPU和数值xfail分列，不认证全部尺度或下游学习。
 [34项有限代表实测](evidence/prefill-representatives-20261110.md)记录B4/P16的CPU/NPU、
 三客户端和mixed-a/b/c实际成本与精确续接；大尺度独立数值not_checked，不能称完整资格。
 
+[部署后继与停止证据](evidence/prefill-deployment-20261110.md)补FP16、五记忆异构、CPU线程、
+1B/9B和双卡；[同公式层链](evidence/layer-chain-baseline-20261110.md)保留直接张量公式与默认入口的真实差距。
+B32推理的事件预留与实际trace生命周期由test_selected_boundary_capacity保护；实际峰值和恢复仍独立验收。
+
 | 层级/触发 | 必查代表 | 入口与判定 |
 | --- | --- | --- |
 | 每次查询/packing改动 | 独立字段、异形/过期/空缓存、int64、None/零、参数别名、版本、一阶 | test_weighted_query_layout、test_weighted_dense_query；严格公式/根，旧dense数值xfail保留 |

@@ -55,15 +55,17 @@
 
 - **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
 
-  [有限代表矩阵](evidence/prefill-representatives-20261110.md)已完成CPU16/NPU18项运行与精确续接：宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c，B4/P16/FP32。大尺度独立数值均not_checked，小门禁另列；auto/greedy差异有限，小规模NPU仍慢于CPU，不能声称统一默认已经消除全部碎片化。常驻CANN9.2新构建后6项小图独立推理/训练/恢复通过，整序列常驻与规模性能尚未认证。FP16、resident代表、双NPU、1.051B/9.314B及CPU线程点按当前STATUS继续，未运行不当成拒绝或通过。
+  [有限代表矩阵](evidence/prefill-representatives-20261110.md)已完成CPU16/NPU18项运行与精确续接：宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c，B4/P16/FP32。大尺度独立数值均not_checked，小门禁另列；auto/greedy差异有限，小规模NPU仍慢于CPU，不能声称统一默认已经消除全部碎片化。常驻CANN9.2新构建后6项小图独立推理/训练/恢复通过，整序列常驻与规模性能尚未认证。[部署后继](evidence/prefill-deployment-20261110.md)已补FP16、异构LH、CPU线程、1.051B/9.314B与双NPU有限成本/恢复。默认异步FC16反向挂起后取消；显式blocking通过不解除。resident修正预算后仍在KV qry/local-row工作区构造拒绝，无性能或恢复结论。
 
   原FC16/B8/L128/d128固定下游0439efd：a553/fb的完整返回CPU29.788/NPU55.482秒，最小返回CPU22.068/NPU31.822秒，完整步各自单次计量；不同返回契约不混算加速比，设备间实际Full/消息不同。原任务完整数值/离散/学习与下游升级仍未认证。原dense-v1与GDN/HB数值xfail保留；有限同材料FP64见证仅解释其指定差异。新舍入超差有界诊断后继续探索，非有限、通信、容量、求解及精确恢复错误另列处理。
 
   **算子级目标与剩余边界**：在依赖已知、容量允许的B×L块内，主要算子提交由节点/区域/计算阶段决定；真实反馈/历史/选择依赖允许拆块，不能承诺任意L固定kernel数。KV私有写投影12288→96、基座批已生效；反向根装配/检查继续按profile推进。重复前缀快照的读投影、循环模块逐状态VJP、主机索引/返回装配和resident每sample/region单时间轮次仍有余地。保留None/零、int64、独立根、共享全部贡献和精确恢复；不删检查或用零mask改变活动集合。先具体边界的独立反例和资格，再有限成本，不无限重复同候选。
 
-  cat evidence共享投影、Read有限值守卫和分配分支元数据合批已完成：CPU281通过/4数值xfail，NPU目标流程68通过（含CPU辅助），安装消费者/SDK训练及新进程恢复分列通过。原FC16同minimal成本CPU18.640/NPU22.903秒。packed-v2的指定CPU FP32 evidence根约1.044e-6严格超差保留；不放宽原容差，不把有限误差自动归因为舍入。层链NPU门禁的跨设备比较错误另修，原SSD数值差异做一次完整输出/梯度/FP64定位后再继续成本；resident代表先按实际journal/retained布局纠正显式预算，原拒绝不改写。
+  cat evidence共享投影、Read有限值守卫和分配分支元数据合批已完成：CPU281通过/4数值xfail，NPU目标流程68通过（含CPU辅助），安装消费者/SDK训练及新进程恢复分列通过。原FC16同minimal成本CPU18.640/NPU22.903秒。packed-v2的指定CPU FP32 evidence根约1.044e-6严格超差保留；不放宽原容差，不把有限误差自动归因为舍入。[层链门禁](evidence/layer-chain-baseline-20261110.md)已修跨设备比较错误；同材料FP64定位到SSD张量基线的vendor默认conv HF32策略，显式IEEE后原阈值7/7通过，原失败保留。resident三轮不同预算拒绝分别记录；下一步须分解数值工作区和服务生命周期，不继续统一加预算。
 
-  [同公式层链基线](layer-chain-baseline.md)已实现KV/SSD的独立张量输出投影，CPU13项开发检查通过，固定CPU/NPU成本待验。它消去无关辅助字段，不认证完整图连接或标准Transformer/Mamba模型；标准层链经默认入口与直接同公式对照的收益必须各自实测。现有external-lm不能代替此验收。后继用全部可用CPU及有余量NPU尽快得结果；构建与重型计时隔开，资源、作业和精确下一命令只见STATUS。GPU按授权延后，下游尚未验收或升级依赖。
+  [同公式层链基线](evidence/layer-chain-baseline-20261110.md)已完成CPU13项、IEEE NPU7项独立小型检查及12个完整训练成本点。B4/L32/d128的KV native CPU/NPU为0.512/0.934秒，限定张量公式为0.029/0.022秒；SSD native为0.894/2.853秒，张量公式为0.044/0.032秒。省去辅助字段的投影不认证完整图连接或标准Transformer/Mamba；默认入口离直接公式仍有明显差距，后续优先块内状态表示/反向装配与实际小算子提交，不能仅更换最外层调度。
+
+  485a3e2已修复选定输出推理的过时全图trace预算，46项固定安装检查通过；原1B/B32 NPU从115.34GB静态拒绝越过准入，完整窗33.965秒，CPU32线程12.262秒，活动约22.2%。大尺度独立数值not_checked，原CPU计时中断、后继恢复通过但汇总脚本报错分列；NPU B32精确下一窗通过，含恢复peak allocated/reserved约6.07/6.40GB。容量预留是估算，其他图/训练/插件/常驻保守后备不解除。现有external-lm不能代替此验收。后继用全部可用CPU及有余量NPU尽快得结果；构建与重型计时隔开，资源、作业和精确下一命令只见STATUS。GPU按授权延后，下游尚未验收或升级依赖。
 
 - **TL-REQ-003 下游接入与表示域后继**：[显式最小正值模式已交付](evidence/positive-support-tl-req-003-20261109.md)，保留cat/ind及默认strict；CPU/NPU局部、完整两区域根/AdamW/恢复通过。下游原HB16学习验收未运行，须在新私有安装显式升级；跨模式旧checkpoint不能直接冒称精确恢复。多个尾部比例、不可表示公开伴随和弱总量仍有边界；只有实际小型见证证明本模式不够时，再设计log/缩放载荷或更大范围。native/standalone/resident、FP16、多设备、其他记忆尚未实现本策略；CUDA待真机，不以本次CPU/NPU通过外推。原严格失败及CPU资格误选native的8项加载失败保持原记录。
 
@@ -71,7 +73,7 @@
 
 - **Dense/MoE选择性后继已终态，数值/容量边界保留**：[15项审阅](evidence/llm-isolation-terminal-20261105.md)记录13项推理成本完成、1项四NPU独立检查数值/token失败、1项双NPU B512静态容量拒绝；无中断或未提交项，当前不需重启。实现694eb60/固定设施125项资格与模型资格分列。Qwen MoE下载完整，真实NPU输出已隔离，延迟提交成功；旧下载/cwd/超时失败不改写。小检查的100组logits/KV超原容差、生成2/8 token不同，重启修复须先定位首差；13个成本点独立数值/离散/恢复均not_checked。B512需56.719GiB而当前保留余量后54.737GiB；先校准KV/激活/workspace及reserved，再考虑显式小prefill或更多设备，不减少逻辑B或安全余量、不原样盲重试。四NPU B128 reserved仍约60.9GiB，不能按allocated外推B512。vLLM/TP/EP须另建匹配A3 NNAL的软件环境，不修改公共基线。完整原配置由`lm retry-matrix --round isolation`重建；新实验先明确配置和预算，不重复已完成曲线与原严格失败。
 
-本轮有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
+2026-10-31的有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
 resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，
 包含失败/诊断，不称全通过；原189项配置目录与目录外后继的审阅记录分别保留，原始运行材料按授权退役。
 [八卡共享后继](evidence/core5-platform-eight-followup-20261031.md)已终态：同模型1B推理和新loss训练

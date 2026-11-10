@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[联合prefill部署代表与容量修正（2026-11-10）](prefill-deployment-20261110.md)：宽FC、FP16、异构LH、约1B/9B、CPU线程与双NPU有限成本/恢复；默认异步挂起、resident工作区拒绝、B32中断及后继结果分列。485a3e2选定推理预算/恢复修正46项固定安装通过，规模独立数值not_checked。
+
+[同公式层链基线（2026-11-10）](layer-chain-baseline-20261110.md)：KV/SSD独立张量公式、CPU13/IEEE NPU7项小型检查及12个成本点；默认图入口仍明显较慢。vendor卷积HF32有界见证解释指定差异，原失败保留，不认证标准Transformer/Mamba或完整记录等价。
+
 [局部合批与owner伴随汇合（2026-11-10）](prefill-local-batches-20261110.md)：f15/3d两套固定构建和安装/SDK训练与精确恢复分列；3d CPU281通过/4数值xfail，NPU目标流程68通过（含CPU辅助）。原FC16同minimal返回CPU22.30→18.64秒、NPU31.02→22.90秒；算子回读和小投影减少，规模数值不自动认证。
 
 [联合prefill有限代表矩阵（2026-11-10）](prefill-representatives-20261110.md)：a553bea的CPU16/NPU18项完成运行与精确续接，覆盖宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c；独立数值not_checked。auto/greedy差异有限，NPU小规模仍较慢；另有CANN9.2 resident小图6项独立推理/训练/恢复通过。
