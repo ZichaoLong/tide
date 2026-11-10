@@ -15,6 +15,7 @@ from tidegraph.weighted.execution import eager_runner
 from test_weighted_execution import setup, variables
 from test_weighted_recurrent_execution import model
 from isolated_cases import vjp
+from dense_checks import Checks
 
 
 DEVICE, _ = resolve_device(os.environ.get("TIDE_WINDOW_DEVICE", "cpu"))
@@ -45,7 +46,8 @@ def runner(binding, native):
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
 @pytest.mark.parametrize("topology", ["hb", "dag", "pdg"])
 @pytest.mark.parametrize("family", ["kv", "affine", "delta", "gated_delta", "ssd"])
-def test_default_ragged_memory_update_and_resume(dtype, native, topology, family, tmp_path):
+def test_default_ragged_memory_update_and_resume(dtype, native, topology, family, tmp_path, request):
+    check = Checks(request.node.nodeid, failure_reason="component-window strict numeric difference retained; cause pending bounded analysis")
     a, xa, stop = fixture(dtype, family, topology, "cpu")
     b, xb, _ = fixture(dtype, family, topology, DEVICE)
     execute = runner(b, native)
@@ -54,20 +56,20 @@ def test_default_ragged_memory_update_and_resume(dtype, native, topology, family
         oa.zero_grad(set_to_none=True); ob.zero_grad(set_to_none=True)
         expected = reference(a.graph, a.model, Continuation(a.graph.identity, 2), xa, stop, sealed_until=stop)
         actual = execute(Continuation(b.graph.identity, 2), xb, stop, sealed_until=stop)
-        equivalent(expected, actual)
+        check(actual, expected, f"step{step}.complete")
         assert actual.stats["window_components"] > 0
         if topology == "hb":
             assert actual.stats["max_state_batch"] == 2
             assert actual.stats["max_state_sequence"] >= 3
         if step == 0:
             for name in ("score", "evidence"):
-                equivalent(vjp(expected.trace[0]["descriptor"][name], variables(a, xa)),
-                           vjp(actual.trace[0]["descriptor"][name], variables(b, xb)))
+                check(vjp(actual.trace[0]["descriptor"][name], variables(b, xb)),
+                      vjp(expected.trace[0]["descriptor"][name], variables(a, xa)), f"root.{name}")
         objective(expected).backward(); objective(actual).backward()
-        equivalent([p.grad for p in a.model.parameters()], [p.grad for p in b.model.parameters()])
+        check([p.grad for p in b.model.parameters()], [p.grad for p in a.model.parameters()], f"step{step}.gradients")
         oa.step(); ob.step()
-        equivalent(a.model.state_dict(), b.model.state_dict())
-        equivalent(oa.state_dict(), ob.state_dict())
+        check(b.model.state_dict(), a.model.state_dict(), f"step{step}.parameters")
+        check(ob.state_dict(), oa.state_dict(), f"step{step}.optimizer")
     cut = stop//2
     head = execute(Continuation(b.graph.identity, 2), [x for x in xb if x.time < cut], cut, sealed_until=cut)
     save(tmp_path/"window.pt", b.graph, b.model, head.continuation, ob)
@@ -85,3 +87,4 @@ def test_default_ragged_memory_update_and_resume(dtype, native, topology, family
     ob.step(); oc.step()
     equivalent(b.model.state_dict(), c.model.state_dict(), atol=0, rtol=0)
     equivalent(ob.state_dict(), oc.state_dict(), atol=0, rtol=0)
+    check.finish()

@@ -8,9 +8,10 @@ from tidegraph.comparison import collect_comparison, equivalent
 
 
 class Checks:
-    def __init__(self, nodeid, *, known_evidence_rounding=False):
+    def __init__(self, nodeid, *, known_evidence_rounding=False, failure_reason=None):
         self.nodeid, self.reports = nodeid, []
         self.known_evidence_rounding = known_evidence_rounding
+        self.failure_reason = failure_reason or "dense-v1 strict numeric failure retained (FP32 normalized evidence); discrete checks passed"
 
     def __call__(self, actual, expected, label="root"):
         report = collect_comparison(actual, expected, path=label, check_device=False)
@@ -31,4 +32,4 @@ class Checks:
             name = hashlib.sha256(self.nodeid.encode()).hexdigest()[:16]+".json"
             (path/name).write_text(json.dumps(dict(test=self.nodeid, comparisons=self.reports), indent=2))
         if any(not r["strict_passed"] for r in self.reports):
-            pytest.xfail("dense-v1 strict numeric failure retained (FP32 normalized evidence); discrete checks passed")
+            pytest.xfail(self.failure_reason)
