@@ -1,0 +1,1968 @@
+{
+  "schema": "tide-reviewed-query-root-evidence-v1",
+  "source": "a553beae90374ccf1e68feee45e011d3d7d35679",
+  "observation_fix": "fb406dd74af2f86a81158865dde3273e79914c09",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "environment": "aarch64 CANN9.2.0; Python3.12/Torch2.12.0+cpu/TorchNPU2.12.0.post3; separate standalone2.12.0 SDK",
+  "qualification": [
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-cpu.xml",
+      "sha256": "ed0cf688c91f0391c33f4c93678dbed57d3e97df213acada1dd4c5aa8788bcbd",
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2,
+      "passed": 249,
+      "expected_failures": [
+        "test_dense_ragged_independent_fields[float32-read-python]",
+        "test_dense_ragged_independent_fields[float32-read-native]"
+      ],
+      "failures_detail": []
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-npu.xml",
+      "sha256": "909a66a0485876634c01571231af99771b4cf8fda7563397ad8a943425ff21db",
+      "tests": 76,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 2,
+      "passed": 73,
+      "expected_failures": [
+        "test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-python]",
+        "test_default_ragged_memory_update_and_resume[float32-gated_delta-hb-native]"
+      ],
+      "failures_detail": [
+        {
+          "name": "test_full_private_backward_reaches_a_batched_root[float32-python]",
+          "message": "KeyError: 'packing/projection/query_vjp_root_partition/rows'"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-observation-cpu.xml",
+      "sha256": "70453b717d2831fe61f6950a053206598b03740ccd48af28f2ca3c6631a34236",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 24,
+      "expected_failures": [],
+      "failures_detail": []
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-observation-npu.xml",
+      "sha256": "002c4bd636fadeb5126457a9a7213b6f32c3307550c4b63bb71fe51d016d6aec",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 2,
+      "expected_failures": [],
+      "failures_detail": []
+    }
+  ],
+  "core_reuse": {
+    "source": "a553beae90374ccf1e68feee45e011d3d7d35679",
+    "builds": {
+      "build-roots-a": {
+        "source": "413faf6053d9e85042b0c65de1ce72c4a739d385",
+        "cpp_source_sha256": "2f82001e311653f6a7ed823618e8f132b75d1d04e9bf5a2322e397e691b5a488",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "0362ed2d73a76ba258933bc6645b2966038f2ce4a1d181ebcd708aaee1798d8e",
+          "libtidegraph_runtime.a": "818965f85a432b51407b746b4effdb89a07623c616b605d0ae0d17a7b6d2477b",
+          "_tide_native.so": "fa96cd8a07128422f52c2c28706214733f639890013a8110c921c9c0bc7f64c7"
+        }
+      },
+      "build-roots-sdk": {
+        "source": "413faf6053d9e85042b0c65de1ce72c4a739d385",
+        "cpp_source_sha256": "2f82001e311653f6a7ed823618e8f132b75d1d04e9bf5a2322e397e691b5a488",
+        "torch": "2.12.0",
+        "distribution": {
+          "torch": "2.12.0",
+          "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+          "cxx11_abi": true,
+          "cuda": null,
+          "discovery": "standalone-prefix",
+          "distribution_sha256": {
+            "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+            "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+            "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+            "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+            "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+          }
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "cann_version": "9.2.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+          }
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.9.9",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "188fcf2dce7b3500b9b72df32a6e9123c45c680dc88614166f8f2d7827e8de5b",
+          "libtidegraph_runtime.a": "b4b9df6d6b34127d6b445c4bbb4c4fe8a626c26410afd9183f556238ed71416e",
+          "tidegraph-smoke": "1c7476f091e09d66d6069ed196c9d8e1951682175e45893499ec426f9dbf0ae4",
+          "tidegraph-kernel-check": "cd088d3540b137960773a9fcccd766476377fe2979be9e2a8a2536c93fe6744a",
+          "tidegraph-full-check": "87bfcaf612304199a1b2661625132324186943b0d1558a48e70c7d22b87b3f3a",
+          "tidegraph-aggregate-check": "3cb19ac4677b40965155ed991bee976f5f5b4f1855dace35985853d3deb82857",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "6b09a0c6500872a2c2ecedfec5fcefca892468db4835682deedf4be034e94c9a",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "6c5c7d574dfe50aa1cf1d86c092aa82307bedc69c2039046b95e76adc566ecb7",
+          "tidegraph-scale-bench": "9f444c045e800ac15d7740e5e9e50d1ff9dd3b651ab84849ab9be039461520bd",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "e5386c664c8a48ba5bff28c364264c59f9a5fd4c01e480fcd7e630c6cf607753",
+          "tidegraph-greedy-check": "d94bead00d5258b36bc6cd9adc5566d730395f28276a9b453df0ec3cf8aa83f9",
+          "tidegraph-accelerator-check": "e7da1f2d74362d651d65471291273fbec75ebf668b21e1d1284d9f03879079b6",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "925b0120c980e6acf241c6010456e13c9fdd6b7824e72fd864409fdb089abd27",
+          "tidegraph-placement-check": "0aa9a8cb4dfe453a99439abeaeb5d9ca83cba30035bf3a8c6985cbeaadf6d92b",
+          "tidegraph-payload-ownership-check": "224dcdbdefd05382b9a3e8406729afd67b67b849570ea425ee825ae307abbc37",
+          "tidegraph-weighted-binding-module-check": "81a8e37b321e04c1135f441c1afc6fb8156f61ff94030cc6dc0de50ef73ca7b9",
+          "libtidegraph-weighted-binding-module.so": "fb425cbb06484652745ad4310efbfe65151d239c35f1043afe61495d6d6fce49"
+        }
+      }
+    },
+    "interpretation": "original frozen build identities retained; content hashes match fixed commit"
+  },
+  "consumers": [
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-consumer-cpu-native/result.json",
+      "sha256": "a4b7b1a40c328a1aa8cb6ec641940e49c0206e797f42f8faa1e69f43b389eab2",
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "identity": {
+        "query_execution": "auto",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "native",
+        "trace": false
+      }
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-consumer-cpu-python/result.json",
+      "sha256": "ae3b96101fe05e35af19f4c52218182234417aaceb5658d8fd5368c29a984854",
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "identity": {
+        "query_execution": "auto",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "python",
+        "trace": false
+      }
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-consumer-npu-native/result.json",
+      "sha256": "f95df593f6e58a87dd7c51a6f77fe44d90325e91a6a89e61ea67987b9d355506",
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "trace": false
+      }
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-consumer-npu-python/result.json",
+      "sha256": "93077e1be83119d3301337f72a9204ac809305dd42367aecdfe2f52bd818c1df",
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "identity": {
+        "query_execution": "auto",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "trace": false
+      }
+    }
+  ],
+  "standalone": [
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-sdk-cpu-complete/result.json",
+      "sha256": "6e8736853e288129e5a3129a12f6ce7074723f8b1fffd4859c2f362d6c35f0d3",
+      "state": "passed",
+      "binary_sha256": "5a3f5281c5911759869c4af08310fb620beec450b51489df49a0545d5b593e5d",
+      "fixture_sha256": "26e33e5f91d7e66ca4359ea6cdbf5387d2c14c1cbdeb2e100640a50a51d77f05",
+      "driver_sha256": "47b714213d3a453ae6b00fc191710d483e204114a715d3324c5b1a7c71251e64",
+      "device": "cpu",
+      "dtype": "float64",
+      "return_mode": "complete",
+      "visibility": null,
+      "fresh_process_resume": {
+        "state": "passed",
+        "checkpoint_sha256": "4c480a48f2030273f6c7339789a76d875d5c9d6d1af0b2ecfe4c7b32d9285cd7",
+        "scope": "complete raw graph, parameters and SGD state bytes after next update; per-process roots checked separately"
+      },
+      "checks": [
+        {
+          "name": "whole",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "cases": [
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 8,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 8,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "all",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "all",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 64,
+                    "connected_zero": 16,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 64,
+                    "connected_zero": 16,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "root": "control",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 64,
+                    "connected_zero": 64,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 64,
+                    "connected_zero": 64,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "root": "control",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 60,
+                    "connected_zero": 4,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 60,
+                    "connected_zero": 4,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "root": "descriptor",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 60,
+                    "connected_zero": 60,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 60,
+                    "connected_zero": 60,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "root": "descriptor",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "output",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "output",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 123,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 123,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "root": "all",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 123,
+                    "connected_zero": 123,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 123,
+                    "connected_zero": 123,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "root": "all",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 92,
+                    "connected_zero": 16,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 92,
+                    "connected_zero": 16,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "root": "control",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 92,
+                    "connected_zero": 92,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 92,
+                    "connected_zero": 92,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "root": "control",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 88,
+                    "connected_zero": 4,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 88,
+                    "connected_zero": 4,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "root": "descriptor",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 88,
+                    "connected_zero": 88,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 88,
+                    "connected_zero": 88,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "root": "descriptor",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 115,
+                    "connected_zero": 16,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 115,
+                    "connected_zero": 16,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "root": "output",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 115,
+                    "connected_zero": 115,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 115,
+                    "connected_zero": 115,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "root": "output",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                }
+              ],
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "leaves": "canonical shared parameters, canonical external aliases; split independently cloned floating state/slots/history/physical pending",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "objective": "sum of per-field mean squares; FP16 fields promoted to FP32; distinct all/output/control/descriptor objectives",
+              "parameter_limit": 5000000,
+              "schema": "tide-weighted-independent-roots-v1",
+              "scope": "standalone eager selected device/placement/schedule against independent scalar CPU opposite schedule; original fixture, no optimizer update",
+              "state": "passed",
+              "strict_passed": true
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        },
+        {
+          "name": "prefix",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 2,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        },
+        {
+          "name": "resumed",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        }
+      ],
+      "cross_policy_rejection": "passed"
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-sdk-cpu-outputs/result.json",
+      "sha256": "0b6b682b520d2f8de25607c99c1326b4b979656f74e9fd10fb20b9987b450748",
+      "state": "passed",
+      "binary_sha256": "5a3f5281c5911759869c4af08310fb620beec450b51489df49a0545d5b593e5d",
+      "fixture_sha256": "26e33e5f91d7e66ca4359ea6cdbf5387d2c14c1cbdeb2e100640a50a51d77f05",
+      "driver_sha256": "47b714213d3a453ae6b00fc191710d483e204114a715d3324c5b1a7c71251e64",
+      "device": "cpu",
+      "dtype": "float64",
+      "return_mode": "outputs",
+      "visibility": null,
+      "fresh_process_resume": {
+        "state": "passed",
+        "checkpoint_sha256": "1cdd852609c7aa11529b31283c6a6168b629eec2f1b1249013c4e5d4b5350755",
+        "scope": "complete raw graph, parameters and SGD state bytes after next update; per-process roots checked separately"
+      },
+      "checks": [
+        {
+          "name": "whole",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        },
+        {
+          "name": "prefix",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 2,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        },
+        {
+          "name": "resumed",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        }
+      ],
+      "cross_policy_rejection": "passed"
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-sdk-npu-complete/result.json",
+      "sha256": "f3dd377b2d44b0977360cb64a72e548c698fcecb8243e6bbd920b5400e22a2ae",
+      "state": "passed",
+      "binary_sha256": "5a3f5281c5911759869c4af08310fb620beec450b51489df49a0545d5b593e5d",
+      "fixture_sha256": "26e33e5f91d7e66ca4359ea6cdbf5387d2c14c1cbdeb2e100640a50a51d77f05",
+      "driver_sha256": "47b714213d3a453ae6b00fc191710d483e204114a715d3324c5b1a7c71251e64",
+      "device": "npu:0",
+      "dtype": "float32",
+      "return_mode": "complete",
+      "visibility": "11",
+      "fresh_process_resume": {
+        "state": "passed",
+        "checkpoint_sha256": "dfb60cc13a2508dbd5c011ca72350091f4ab1d4572a2b2c91e5b2f7dd9b98946",
+        "scope": "complete raw graph, parameters and SGD state bytes after next update; per-process roots checked separately"
+      },
+      "checks": [
+        {
+          "name": "whole",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "cases": [
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 8,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 8,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "all",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "all",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 64,
+                    "connected_zero": 16,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 64,
+                    "connected_zero": 16,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "root": "control",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 64,
+                    "connected_zero": 64,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 64,
+                    "connected_zero": 64,
+                    "disconnected": 15,
+                    "leaves": 79
+                  },
+                  "root": "control",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 60,
+                    "connected_zero": 4,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 60,
+                    "connected_zero": 4,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "root": "descriptor",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 60,
+                    "connected_zero": 60,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 60,
+                    "connected_zero": 60,
+                    "disconnected": 19,
+                    "leaves": 79
+                  },
+                  "root": "descriptor",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "output",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 79,
+                    "connected_zero": 79,
+                    "disconnected": 0,
+                    "leaves": 79
+                  },
+                  "root": "output",
+                  "scope": "whole-first-window",
+                  "start": 0,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 123,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 123,
+                    "connected_zero": 16,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "root": "all",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 123,
+                    "connected_zero": 123,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 123,
+                    "connected_zero": 123,
+                    "disconnected": 0,
+                    "leaves": 123
+                  },
+                  "root": "all",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 92,
+                    "connected_zero": 16,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 92,
+                    "connected_zero": 16,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "root": "control",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 92,
+                    "connected_zero": 92,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 92,
+                    "connected_zero": 92,
+                    "disconnected": 31,
+                    "leaves": 123
+                  },
+                  "root": "control",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 88,
+                    "connected_zero": 4,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 88,
+                    "connected_zero": 4,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "root": "descriptor",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 88,
+                    "connected_zero": 88,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 88,
+                    "connected_zero": 88,
+                    "disconnected": 35,
+                    "leaves": 123
+                  },
+                  "root": "descriptor",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 115,
+                    "connected_zero": 16,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.7,
+                  "reference": {
+                    "connected": 115,
+                    "connected_zero": 16,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "root": "output",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                },
+                {
+                  "candidate": {
+                    "connected": 115,
+                    "connected_zero": 115,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "comparison": {
+                    "differences": [],
+                    "differences_truncated": false,
+                    "discrete": "passed",
+                    "finite": "passed",
+                    "mismatch_counts": {
+                      "discrete": 0,
+                      "numeric": 0
+                    },
+                    "numeric": "passed",
+                    "schema": "tide-comparison-v1",
+                    "strict_passed": true
+                  },
+                  "cotangent": 0.0,
+                  "reference": {
+                    "connected": 115,
+                    "connected_zero": 115,
+                    "disconnected": 8,
+                    "leaves": 123
+                  },
+                  "root": "output",
+                  "scope": "split-continuation",
+                  "start": 6,
+                  "stop": 12
+                }
+              ],
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "leaves": "canonical shared parameters, canonical external aliases; split independently cloned floating state/slots/history/physical pending",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "objective": "sum of per-field mean squares; FP16 fields promoted to FP32; distinct all/output/control/descriptor objectives",
+              "parameter_limit": 5000000,
+              "schema": "tide-weighted-independent-roots-v1",
+              "scope": "standalone eager selected device/placement/schedule against independent scalar CPU opposite schedule; original fixture, no optimizer update",
+              "state": "passed",
+              "strict_passed": true
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        },
+        {
+          "name": "prefix",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 2,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        },
+        {
+          "name": "resumed",
+          "checks": {
+            "state": "passed",
+            "independent_comparison": {
+              "differences": [],
+              "differences_truncated": false,
+              "discrete": "passed",
+              "finite": "passed",
+              "mismatch_counts": {
+                "discrete": 0,
+                "numeric": 0
+              },
+              "numeric": "passed",
+              "schema": "tide-comparison-v1",
+              "strict_passed": true
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": true,
+            "optimizer_values_checked": true,
+            "final_parameter_gradients_checked": true
+          }
+        }
+      ],
+      "cross_policy_rejection": "passed"
+    },
+    {
+      "path": "artifacts/joint-prefill/roots-fixed-sdk-npu-outputs/result.json",
+      "sha256": "6cfd57a80877fa1a3be89f7ba34ebc8981ce01420d61fc5f0ebcf604e8045be2",
+      "state": "passed",
+      "binary_sha256": "5a3f5281c5911759869c4af08310fb620beec450b51489df49a0545d5b593e5d",
+      "fixture_sha256": "26e33e5f91d7e66ca4359ea6cdbf5387d2c14c1cbdeb2e100640a50a51d77f05",
+      "driver_sha256": "47b714213d3a453ae6b00fc191710d483e204114a715d3324c5b1a7c71251e64",
+      "device": "npu:0",
+      "dtype": "float32",
+      "return_mode": "outputs",
+      "visibility": "11",
+      "fresh_process_resume": {
+        "state": "passed",
+        "checkpoint_sha256": "fbc2621bfdfcffbbfbf04d7058c50265d7b6889b73eabcfc3d3ff4f75677a08d",
+        "scope": "complete raw graph, parameters and SGD state bytes after next update; per-process roots checked separately"
+      },
+      "checks": [
+        {
+          "name": "whole",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        },
+        {
+          "name": "prefix",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 2,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        },
+        {
+          "name": "resumed",
+          "checks": {
+            "state": "completed",
+            "independent_comparison": {
+              "discrete": "not_checked",
+              "numeric": "not_checked",
+              "strict_passed": false
+            },
+            "independent_roots": {
+              "requested": false,
+              "state": "not_checked"
+            },
+            "exact_resume": {
+              "checkpoint": "checkpoint",
+              "exact": true,
+              "next_window": 3,
+              "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+              "state": "passed"
+            },
+            "parameter_values_checked": false,
+            "optimizer_values_checked": false,
+            "final_parameter_gradients_checked": false
+          }
+        }
+      ],
+      "cross_policy_rejection": "passed"
+    }
+  ],
+  "diagnosis": {
+    "path": "artifacts/joint-prefill/query-root-diagnosis-npu.json",
+    "sha256": "b634b693ed82d173f3ab06c6227bf497fe254ee647db4b77df9ce50055104cd0",
+    "device": "npu:0",
+    "witness": "0.7*(sum of four Full squared norms)**2; duplicate row; original FP32 material promoted exactly",
+    "max_abs_vs_fp64": {
+      "scalar64": 0.0,
+      "scalar32": 9.616426721592575e-08,
+      "packed-unmerged32": 9.616426721592575e-08,
+      "packed-merged32": 9.616426721592575e-08
+    },
+    "exact_merge_comparison": {
+      "schema": "tide-comparison-v1",
+      "finite": "passed",
+      "numeric": "passed",
+      "discrete": "passed",
+      "strict_passed": true,
+      "compared_leaves": {
+        "numeric": 17,
+        "discrete": 41
+      },
+      "mismatch_counts": {
+        "numeric": 0,
+        "discrete": 0
+      },
+      "differences": [],
+      "differences_truncated": false
+    },
+    "note": "Bounded diagnostic; original strict failure/tolerance remain. No general learning or scale claim."
+  },
+  "cpu_cost": [
+    {
+      "path": "artifacts/joint-prefill/cost-roots-cpu-complete/result.json",
+      "sha256": "d8839de010207a1c1f62ff273148d28357ea1dc26c8f752194a1e75d980a573f",
+      "execution": "completed",
+      "returns": "complete",
+      "parameters": 5092788,
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.0001881532371044159,
+          "embedding": 0.00036902353167533875,
+          "core_forward": 11.52157710492611,
+          "readout": 0.02510210871696472,
+          "head_loss": 0.02705598622560501,
+          "backward": 17.80050092935562,
+          "clip": 0.007569011300802231,
+          "optimizer": 0.04229485243558884
+        },
+        "phase_sum_seconds": 29.42465716972947,
+        "tokens": 1024,
+        "loss": 10.99068832397461,
+        "gradient_norm": 1362.0247802734375,
+        "work": {
+          "aggregate_calls": 4,
+          "aggregate_computed_events": 4096,
+          "aggregate_reused_events": 12288,
+          "attention_score_elements": 0,
+          "batched_aggregate_events": 16384,
+          "batched_full_events": 8344,
+          "batched_read_events": 16384,
+          "batched_region_frames": 4096,
+          "batched_state_events": 16384,
+          "body_candidate_events": 16384,
+          "body_selected_events": 8344,
+          "candidate_events": 16384,
+          "full_blocks": 16,
+          "full_calls": 16,
+          "greedy_relaxed_edges": 0,
+          "greedy_stages": 4,
+          "max_full_batch": 1014,
+          "max_greedy_frames": 1024,
+          "max_live_fibers": 4096,
+          "max_region_batch": 1024,
+          "max_state_batch": 8,
+          "max_state_block_base_batch": 1024,
+          "max_state_independent_projection_batch": 744,
+          "max_state_private_projection_batch": 744,
+          "max_state_sequence": 128,
+          "next_steps": 16384,
+          "read_calls": 16,
+          "region_batch_calls": 4,
+          "region_blocks": 4,
+          "region_steps": 4096,
+          "region_time_batch_frames": 4096,
+          "selected_events": 8344,
+          "source_rows": 29156,
+          "state_block_base_projection_calls": 4,
+          "state_block_preparation_events": 16384,
+          "state_blocks": 128,
+          "state_preparation_calls": 4096,
+          "state_preparation_events": 16384,
+          "state_preparation_reused_events": 12288,
+          "state_private_projection_calls": 96,
+          "state_private_projection_rows": 49152,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 16,
+          "visited_edges": 25060,
+          "window_causal_blocks": 0,
+          "window_components": 4,
+          "window_cyclic_components": 0,
+          "query_legacy_nodes": 0,
+          "query_dense-v1_nodes": 0,
+          "query_packed-v2_nodes": 16
+        },
+        "complete_wall_seconds": 29.788238771259785,
+        "memory": {
+          "resources/peak_rss_mib": 8304.51953125
+        }
+      },
+      "independent_numeric": "not_checked"
+    },
+    {
+      "path": "artifacts/joint-prefill/cost-roots-cpu-minimal/result.json",
+      "sha256": "dff0d7257f47528c414ce9099d1f8fb24217348fcaa7e202583a2bbdcfabdda7",
+      "execution": "completed",
+      "returns": "minimal",
+      "parameters": 5092788,
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00016763806343078613,
+          "embedding": 0.00048203393816947937,
+          "core_forward": 8.202011968940496,
+          "readout": 0.005734704434871674,
+          "head_loss": 0.028553549200296402,
+          "backward": 13.76018637791276,
+          "clip": 0.007263481616973877,
+          "optimizer": 0.044622235000133514
+        },
+        "phase_sum_seconds": 22.049021989107132,
+        "tokens": 1024,
+        "loss": 10.99068832397461,
+        "gradient_norm": 1362.025146484375,
+        "work": {
+          "aggregate_calls": 4,
+          "aggregate_computed_events": 4096,
+          "aggregate_reused_events": 12288,
+          "attention_score_elements": 0,
+          "batched_aggregate_events": 16384,
+          "batched_full_events": 8344,
+          "batched_read_events": 16384,
+          "batched_region_frames": 4096,
+          "batched_state_events": 16384,
+          "body_candidate_events": 16384,
+          "body_selected_events": 8344,
+          "candidate_events": 16384,
+          "full_blocks": 16,
+          "full_calls": 16,
+          "greedy_relaxed_edges": 0,
+          "greedy_stages": 4,
+          "joint_state_vjp_events": 16384,
+          "joint_state_vjp_sequences": 16,
+          "max_full_batch": 1014,
+          "max_greedy_frames": 1024,
+          "max_live_fibers": 4096,
+          "max_region_batch": 1024,
+          "max_state_batch": 8,
+          "max_state_block_base_batch": 1024,
+          "max_state_independent_projection_batch": 744,
+          "max_state_private_projection_batch": 744,
+          "max_state_sequence": 128,
+          "next_steps": 16384,
+          "read_calls": 16,
+          "region_batch_calls": 4,
+          "region_blocks": 4,
+          "region_steps": 4096,
+          "region_time_batch_frames": 4096,
+          "selected_events": 8344,
+          "source_rows": 29156,
+          "state_block_base_projection_calls": 4,
+          "state_block_preparation_events": 16384,
+          "state_blocks": 128,
+          "state_preparation_calls": 4096,
+          "state_preparation_events": 16384,
+          "state_preparation_reused_events": 12288,
+          "state_private_projection_calls": 96,
+          "state_private_projection_rows": 49152,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 16,
+          "visited_edges": 25060,
+          "window_causal_blocks": 0,
+          "window_components": 4,
+          "window_cyclic_components": 0,
+          "query_legacy_nodes": 0,
+          "query_dense-v1_nodes": 0,
+          "query_packed-v2_nodes": 16
+        },
+        "complete_wall_seconds": 22.068046912550926,
+        "memory": {
+          "resources/peak_rss_mib": 6592.84765625
+        }
+      },
+      "independent_numeric": "not_checked"
+    }
+  ],
+  "jobs": [
+    {
+      "path": "artifacts/jobs/joint-prefill-roots-fixed/status.json",
+      "sha256": "44ad902adcdc1eb3580ec8e7b564e3425974919fee7ca257caaa4e64e2cbe1b3",
+      "record": {
+        "command": [
+          "bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-roots.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-roots",
+        "state": "failed",
+        "source": "a553beae90374ccf1e68feee45e011d3d7d35679",
+        "dirty": "",
+        "started": "2026-11-10T04:30:17.021191+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-10T04:44:26.623469+00:00"
+      }
+    },
+    {
+      "path": "artifacts/jobs/joint-prefill-roots-observation/status.json",
+      "sha256": "73bd77e603d327cc5b453a666ddf935d474c41837a11b663607cf3262d86b8aa",
+      "record": {
+        "command": [
+          "bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-roots-observation.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-roots-observation",
+        "state": "passed",
+        "source": "fb406dd74af2f86a81158865dde3273e79914c09",
+        "dirty": "",
+        "started": "2026-11-10T04:47:48.004171+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-10T04:50:28.464865+00:00"
+      }
+    },
+    {
+      "path": "artifacts/jobs/query-root-diagnosis/status.json",
+      "sha256": "c64fbd02ff0eb3ee96b21e24ab1865c2a6dcb308d728b41f5866662469f64246",
+      "record": {
+        "command": [
+          "bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/diagnose-roots.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-roots",
+        "state": "passed",
+        "source": "a553beae90374ccf1e68feee45e011d3d7d35679",
+        "dirty": "",
+        "started": "2026-11-10T04:44:39.955293+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-10T04:45:03.179902+00:00"
+      }
+    }
+  ]
+}
