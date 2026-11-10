@@ -28,9 +28,21 @@ C++尚未构建，不冒用旧构建。本提交后固定源码，新建Python/n
 
 下一步：审阅每个inner结果；补原FC16的NPU完整/最小返回成本和独立小profile，
 再补选定resident/双NPU/大规模及同公式层链基线，不由小图外推性能或全部能力。
-原FC16 CPU a553完整29.788/最小22.068秒；NPU对应尚未运行。
+原FC16 CPU a553完整29.788/最小22.068秒；NPU对应成本任务已准备：
+gef-joint-prefill-roots-cost固定fb406dd，等待representatives避免本项目计时争用，
+随后单卡完整/最小返回各一次及B2/L8独立profile；16CPU/64G/14400秒。
+日志artifacts/jobs/joint-prefill-roots-cost/task.log，结果artifacts/joint-prefill/cost-roots-npu-*。
 不同返回契约、不同设备实际Full/消息不混算等价加速；原任务数值/学习未认证。
 
 起步：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 检查/停止：systemctl --user status/stop 上述准确unit；不能将live任务记通过。
 唯一待办与停止条件见ROADMAP，GPU按授权延后。下一提交补证据、经验与导航，保持原失败。
+
+已准备gef-joint-prefill-owner-join：固定f15c4a5/fixed-owner-join；等待representatives和roots-cost终态，
+再以全部320CPU新建Python-owned/standalone core与SDK客户端，安装独立env-owner-join。
+相关CPU/NPU独立根、消费者、SDK训练/恢复，以及新最小返回FC16成本/profile；512G/28800秒。
+日志artifacts/jobs/joint-prefill-owner-join/task.log；未开始的构建/测试不记通过。
+
+本提交补同公式层链张量成本基线（KV/SSD），限定单位强度、零左状态、proportional单节点区域。
+独立scalar与默认Python/native的13项CPU FP64/FP32输出/末态/数值导数开发检查通过。
+仅投影基线，None/零完整图契约不由此认证；驱动小型运行通过。计划固定提交后CPU/NPU有限对照。

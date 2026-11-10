@@ -2,6 +2,8 @@
 
 本页规定性能改动的检查入口；结果必须引用固定源码证据，目录条目本身不是通过记录。
 默认策略见[KV查询](weighted-dense-query.md)，当前活动和限制分别只见STATUS/ROADMAP。
+限定层链的[同公式张量成本基线](layer-chain-baseline.md)独立比较KV/SSD的输出投影和数值导数，
+用于定位默认入口的开销；省略辅助字段，不代替完整返回/None根/恢复门禁或标准模型资格。
 [7fe97f2/5f563f6首轮固定结果](evidence/prefill-default-20261110.md)包含小图语义/恢复和原FC16成本；
 下列HB/LH及1B–16B目录并未全部运行，历史结果不自动成为新默认的资格。
 [分量窗口固定资格](evidence/component-window-20261110.md)补五记忆、变长B×L及三图族训练/恢复；
