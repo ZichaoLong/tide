@@ -17,6 +17,25 @@
 
 ## 可运行目录
 
+同时增大独立batch与sequence的代表配置使用已有安装CLI；生成器只产生配置，不另设执行器：
+
+```sh
+python scripts/prefill_regression_config.py --case many-hb --family kv \
+  --samples 4 --positions 16 --device npu:0 --output NEW_CONFIG.json
+tidegraph plan NEW_CONFIG.json --site SITE.json
+tidegraph run NEW_CONFIG.json --site SITE.json --output-dir NEW_RUN
+```
+
+`wide-fc`为4节点/d512，`many-hb`为HB扩散收拢/区域宽8/d32，
+`many-lh`为同类跳边/d64/qry-sum异构，`sum-fc`为16节点/d64，
+`layer-chain`为4层/区域宽1/d128/固定总发送1；后者仍是core-5层链，
+不自动等同特定Transformer/Mamba架构。`lh-1b/lh-9b`按真实参数清单自然定宽。
+每项可选择五记忆或mixed、B/L、客户端、设备/placement、线程、推理/训练及auto/greedy。
+默认返回outputs、独立数值not_checked；`--complete`才启用完整返回及explore比较。
+不同返回契约不直接计算加速比；先运行相关独立小门禁，真实大规模数值/恢复仍另列。
+单配置一次预热/一次计时，完整训练包括准备、packing、backward、finite及SGD/同步；
+checkpoint成本按既有CLI单列。配置身份、精确恢复和资源拒绝沿用公共设施。
+
 复用[现有study驱动](core5-study.md)，不增加第二套执行器：
 
 ```sh
@@ -39,6 +58,11 @@ python scripts/benchmark_dense_query.py --downstream-repo READ_ONLY_DOWNSTREAM \
 
 下游固定0439efd2af31cf10b07ce9e6423b0195f7449968。NPU将device改为npu:0，放在队列内运行。
 每配置一个独立进程，一预热一步测量；一次小B2/L8 profile只解释算子形态，不作为长prefill耗时。
+`benchmark_dense_query --trace-records complete`保留历史native成本的完整事件返回；
+`minimal`通过公共工厂关闭内部trace，是另一种返回契约，可进入KV整序列VJP。
+固定下游的旧native适配器忽略其`run_features(trace=False)`请求，原记录实际仍完整；
+不能将新minimal耗时直接标成原完整返回的等价加速。当前公共CLI的任务扩展仍可读取trace，
+只选择outputs投影不自动删去内部trace；须按实际`joint_state_vjp_events`确认所测路径。
 原始参数hash与测量前hash相等才是reset流程；设备间/路径间实际Full数相等也不自动证明完整等价。
 出现非有限、非法配置、容量/通信/精确恢复错误停止；有限数值差异保留严格失败，不能写成等价加速。
 不设固定加速比门槛；回归比较检查工作量/计时范围/争用，超过预算则明确终态，不自动扩时重跑。

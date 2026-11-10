@@ -58,6 +58,10 @@ class StateKernel {
   // Optional identical keys depending only on the complete content rows.
   // Empty declines. Never precompute a state-dependent branch from a trace.
   virtual std::vector<std::string> content_autograd_keys(const ContentViews&) const { return {}; }
+  // Optional sequence VJP for internal snapshots only. Traced intermediate
+  // State handles require the ordinary causal step chain.
+  virtual bool hidden_sequence_vjp(const NodeWeights&,const std::vector<State>&,
+      const PackedSequence&,std::vector<State>&,std::vector<State>&) const { return false; }
   virtual bool joint_sequence() const { return false; }
   // Named non-differentiable metadata slots, always int64 on the state device.
   virtual std::set<std::string> integer_slots() const { return {}; }

@@ -8,7 +8,9 @@ from ..placement import place_model
 
 
 def eager_runner(binding, implementation, placement, native_library=None, *, streaming=False,
-                 workers=1, packing="auto", query_execution="auto", prefill_schedule="auto"):
+                 workers=1, packing="auto", query_execution="auto", prefill_schedule="auto", trace=True):
+    if type(trace) is not bool:
+        raise ValueError("trace must be boolean")
     if prefill_schedule not in {"auto", "greedy", "window"}:
         raise ValueError("unknown prefill_schedule")
     if streaming and prefill_schedule != "auto":
@@ -31,7 +33,7 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
         from ..native import Native
         from ..native_loader import load_native
         load_native(native_library, backend=binding.model.nodes[0].bias.device.type)
-        return Native(binding.graph, binding.model, workers=workers,
+        return Native(binding.graph, binding.model, workers=workers, trace=trace,
                       algorithm="streaming" if streaming else algorithm, placement=placement,
                       query_execution=query_execution, **options).run
     if workers != 1 or streaming and packing == "packed":
@@ -46,7 +48,7 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
         options["component_window"] = algorithm == "window"
     modes = [getattr(n.read_program, "query_execution", "legacy") for n in model.nodes]
     def run(*a, **kw):
-        result = schedule(binding.graph, view, *a, **options, **kw)
+        result = schedule(binding.graph, view, *a, trace=kw.pop("trace", trace), **options, **kw)
         for mode in ("legacy", "dense-v1", "packed-v2"):
             result.stats["query_"+mode+"_nodes"] = modes.count(mode)
         return result

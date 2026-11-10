@@ -30,6 +30,8 @@ def main():
     p.add_argument("--client", choices=("python", "native"), default="native")
     p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
     p.add_argument("--prefill-schedule", choices=("auto", "greedy", "window"), default="auto")
+    p.add_argument("--trace-records", choices=("complete", "minimal"), default="complete",
+                   help="native historical costs retain complete event records; minimal is a separate return contract")
     p.add_argument("--native-library")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--length", type=int, default=128)
@@ -57,7 +59,8 @@ def main():
     from tide_lab.language import sequence_readout
     # Select the public execution option at the application adapter only.
     application.eager_runner = functools.partial(eager_runner, query_execution=a.query_execution,
-                                               prefill_schedule=a.prefill_schedule)
+                                               prefill_schedule=a.prefill_schedule,
+                                               trace=a.trace_records == "complete")
     config = json.loads((source/CONFIG).read_text())
     config.update(device=a.device, threads=1 if a.device == "cpu" else 2)
     config["training"].update(batch=a.batch, length=a.length)
@@ -67,7 +70,7 @@ def main():
     record = dict(schema="tide-dense-query-cost-v1", execution="running", strict_numerical="not_checked",
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
         downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
-        query_execution=a.query_execution, prefill_schedule=a.prefill_schedule,
+        query_execution=a.query_execution, prefill_schedule=a.prefill_schedule, trace_records=a.trace_records,
         installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
         phases=[], profile=a.profile, warmup_state=a.warmup_state,
@@ -110,7 +113,7 @@ def main():
                 return result
             phase("zero_grad", lambda: opt.zero_grad(set_to_none=True))
             features = phase("embedding", lambda: model.embedding(batch["input_ids"]))
-            result = phase("core_forward", lambda: model.encoder.run_features(features, trace=False))
+            result = phase("core_forward", lambda: model.encoder.run_features(features, trace=a.trace_records == "complete"))
             hidden = phase("readout", lambda: sequence_readout(model.encoder, result, features))
             loss = phase("head_loss", lambda: torch.nn.functional.cross_entropy(model.head(hidden).flatten(0, 1), batch["labels"].flatten()))
             if not bool(torch.isfinite(loss)):

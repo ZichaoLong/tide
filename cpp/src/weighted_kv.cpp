@@ -4,6 +4,7 @@
 #include "weighted_kv_preparation.h"
 #include <limits>
 #include <cstdint>
+#include "weighted_kv_sequence_vjp.h"
 
 namespace tide::weighted {
 std::vector<std::string> MemoryKernel::content_autograd_keys(const ContentViews& views) const {
@@ -103,6 +104,10 @@ class KV final:public MemoryKernel {
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   bool joint_sequence() const override{return true;}
+  bool hidden_sequence_vjp(const NodeWeights& w,const std::vector<State>& old,const PackedSequence& p,
+      std::vector<State>& numeric,std::vector<State>& previous) const override {
+    return bind_kv_hidden_sequence(w,old,p,numeric,previous);
+  }
   bool block_preparation() const override{return true;}
   std::vector<std::map<std::string,Tensor>> prepare_block_batch(const std::vector<const NodeWeights*>& rows,
       const std::vector<Tensor>& contents,std::map<std::string,Index>& stats) const override {

@@ -12,7 +12,7 @@ namespace tide {
 void prefill_states(const Graph& g, const Model& m, const Continuation& q, const Options& options,
                     NodePool& pool, std::vector<Event>& events,
                     const std::map<Owner, std::vector<size_t>>& by_sequence, std::map<std::string, Index>& stats) {
-  struct Task { Index node; PackedSequence batch; std::vector<State> old; std::vector<size_t> ids; PackedStates result; };
+  struct Task { Index node; PackedSequence batch; std::vector<State> old; std::vector<size_t> ids; PackedStates result; bool hidden_vjp=false; };
   std::vector<Task> tasks;
   const bool replay = at::GradMode::is_enabled();
   std::map<Index, size_t> by_node;
@@ -55,7 +55,9 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
     auto& states = task.result.states;
     const bool batched=replay && w.kernel->batched_autograd();
     std::vector<State> previous_states;
-    if (batched) state_sequence_vjp(w,task.old,batch,states,previous_states);
+    task.hidden_vjp=batched&&!options.trace&&w.kernel->hidden_sequence_vjp(w,task.old,batch,states,previous_states);
+    if (batched && !task.hidden_vjp)
+      state_sequence_vjp(w,task.old,batch,states,previous_states);
     for (size_t s = 0; s < task.old.size(); ++s) {
       auto previous = task.old[s];
       for (Index j = batch.offsets[s]; j < batch.offsets[s + 1]; ++j) {
@@ -75,6 +77,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   });
   pool.run(std::move(jobs));
   for (const auto& task : tasks) {
+    if(task.hidden_vjp){++stats["joint_state_vjp_sequences"];stats["joint_state_vjp_events"]+=task.ids.size();}
     if (replay) {
       stats[m.nodes[task.node].kernel->batched_autograd() ? "batched_state_events" : "semantic_state_replays"] += task.ids.size();
       if (m.nodes[task.node].kernel->scalar_policy_fallback()) stats["fiber_policy_semantic_replays"] += task.ids.size();

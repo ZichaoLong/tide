@@ -71,6 +71,13 @@ use the online closure certificate. Explicit greedy/streaming and device-residen
 schedules remain available. This changes execution policy/identity, not graph v13,
 checkpoint v5, independent reference scheduling or local mathematical functions.
 
+Untraced prepared KV blocks may compose the internal State VJP over a whole
+sequence. Public messages, final states and input/parameter/left-state roots
+remain unchanged; traced intermediate State handles retain their causal step
+chain. The [State VJP contract](weighted-state-vjp.md) specifies this observable
+boundary, deterministic prefix reduction and independent tests. Floating
+reduction order may differ; no tolerance or exact-resume claim is relaxed.
+
 Native cursor ownership changes materialization, not finite-valued event
 semantics. `advance` keeps queues/state native; snapshots explicitly clone tensor
 storage and preserve gradients in ordinary grad mode. Input rejection is

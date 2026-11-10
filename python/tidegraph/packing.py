@@ -32,11 +32,11 @@ class PackedSequence:
                 raise ValueError("packed segments require nonempty, ordered events")
 
 
-def prepare_sequences(weights, sequences, q, read_mode="proposal"):
+def prepare_sequences(weights, sequences, q, read_mode="proposal", *, trace=True, stats=None):
     """One node's independent sample sequences; scalar kernels remain an explicit fallback."""
     owners, old, flat, offsets = [], [], [], [0]
     for owner, events in sequences:
-        owners.append(owner); old.append(q.states.get(owner, weights.initial()))
+        owners.append(owner); old.append(q.states[owner] if owner in q.states else weights.initial())
         flat.extend(events); offsets.append(len(flat))
     replay = torch.is_grad_enabled()
     with torch.no_grad():
@@ -57,7 +57,15 @@ def prepare_sequences(weights, sequences, q, read_mode="proposal"):
             raise ValueError("packed state program changed event count")
     from . import state_vjp
     if replay and state_vjp.supported(getattr(weights, "kernel", None)):
-        previous = state_vjp.bind_sequence(weights, old, batch, states)
+        previous = None
+        if not trace:
+            from .weighted.kv_sequence_vjp import bind
+            previous = bind(weights, old, batch, states)
+            if previous is not None and stats is not None:
+                stats["joint_state_vjp_sequences"] = stats.get("joint_state_vjp_sequences", 0)+1
+                stats["joint_state_vjp_events"] = stats.get("joint_state_vjp_events", 0)+len(states)
+        if previous is None:
+            previous = state_vjp.bind_sequence(weights, old, batch, states)
     else:
         previous = []
         for i, state in enumerate(old):

@@ -46,7 +46,7 @@ def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zet
         # preserve each region's causal state/history and batch the legal work.
         for region, frames in sorted(blocks.items()):
             block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode,
-                                              zeta=zeta, prefill=prefill, **policy)
+                                              zeta=zeta, prefill=prefill, trace=trace, **policy)
             for batch, _, time, nodes in frames:
                 for node in nodes:
                     del fibers[batch, node, time]

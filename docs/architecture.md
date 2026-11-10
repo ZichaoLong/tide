@@ -9,6 +9,9 @@
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
 修改时同步ExecutionOptions/ExecutionSpec、Python/native/standalone分派及`test_component_window*`。
+KV整序列反向位于`weighted/kv_sequence_vjp.py`与`weighted_kv_sequence_vjp.cpp`，
+由未追踪块的模块能力选择；修改时同步[State VJP契约](weighted-state-vjp.md)、
+`test_kv_sequence_vjp`和保留中间根的`test_kv_prefix_roots`，再核对完整训练/恢复与实际成本。
 
 | 层 | 位置 | 职责 |
 | --- | --- | --- |

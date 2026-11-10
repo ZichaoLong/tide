@@ -29,11 +29,11 @@ def setup(args, *, reference=False):
     x = torch.linspace(-.4, .5, 24, dtype=getattr(torch, args.dtype)).reshape(2, 3, 4).to(device).requires_grad_()
     if reference:
         from tidegraph.reference import run
-        execute = lambda *a, **kw: run(b.graph, b.model, *a, **kw)
+        execute = lambda *a, **kw: run(b.graph, b.model, *a, trace=not args.no_trace, **kw)
     else:
         execute = eager_runner(b, args.client,
             ExecutionPlacement(preset="cpu" if device == "cpu" else "mixed-c", scoring_dtype=args.dtype),
-            native_library=args.native_library, packing="packed", query_execution=args.query_execution)
+            native_library=args.native_library, packing="packed", query_execution=args.query_execution, trace=not args.no_trace)
     opt = torch.optim.AdamW([p for p in b.model.parameters() if p.requires_grad], lr=.001, foreach=False)
     return b, spec, x, 3*spec.stride, execute, opt
 
@@ -60,12 +60,15 @@ def main():
     p.add_argument("--steps", type=int, default=3)
     p.add_argument("--resume", type=Path)
     p.add_argument("--child", action="store_true")
+    p.add_argument("--no-trace", action="store_true", help="retain all output/boundary/parameter roots, omit internal event handles")
     args = p.parse_args()
     resolve_device(args.device)  # Before first CPU or device autograd use.
     torch.set_num_threads(1 if args.device == "cpu" else 2); torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(True); torch.manual_seed(11)
     out = args.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
     identity = dict(query_execution=args.query_execution, device=args.device, dtype=args.dtype, client=args.client)
+    if args.no_trace:
+        identity["trace"] = False
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked", comparisons=[])
     try:
         state = setup(args); b, _, _, _, _, opt = state
@@ -92,6 +95,8 @@ def main():
                     "--dtype", args.dtype, "--client", args.client, "--query-execution", args.query_execution]
             if args.native_library:
                 base += ["--native-library", args.native_library]
+            if args.no_trace:
+                base += ["--no-trace"]
             for name, extra in (("whole", ["--steps", "3"]), ("prefix", ["--steps", "2"]),
                                 ("resumed", ["--steps", "1", "--resume", str(out/"prefix/checkpoint.pt")])):
                 with (out/(name+".log")).open("w") as log:

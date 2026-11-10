@@ -54,6 +54,29 @@ packed 状态计算的 `batched_state_events` 计数增加，`semantic_state_rep
 的批量反向。构图、packing、backward 的成本均需计入完整训练计时。
 CUDA/NPU 构建/真机与常驻推进仍分别验收。
 
+## 未返回中间状态的KV整序列反向
+
+默认host prefill在`trace=False`且正写入已有完整KV准备值时，使用
+`weighted/kv_sequence_vjp.py`与C++ `weighted_kv_sequence_vjp.cpp`：前向发布候选
+实际计算的快照，反向按原始前缀/过期端点，用gather加固定维度归约一次回收各字段。
+不使用冲突scatter/原子加；单次gather临时索引与数值按16MiB目标分块，
+输入伴随/结果和不可拆单行另计。不同owner状态不合并，参数共享仍汇总全部使用者。
+零接收保留原tuple；未来写入为None，过去但已过期的连接为零；clamp在质量1处导数为1。
+所有原参数、内容和左状态的版本检查保持，一阶之外拒绝。
+
+`trace=False`没有可供调用者取得的中间State句柄，因此允许组合其内部状态链。
+公开输出、窗口右状态/pending以及输入、参数、窗口左状态根的VJP仍遵循同一函数。
+`trace=True`继续使用逐状态因果链，支持对返回的每个中间状态单独求导；不能把多输出
+Function中彼此独立的输出当作互有导数的中间State。未准备、其他模块及自定义程序
+继续原后备。此策略不删减已有返回、不改变图/codec/数学定义；有限归约次序差异照常记录。
+实际采用量为`joint_state_vjp_sequences/events`，不能当作硬件kernel数。
+公共工厂`eager_runner(..., trace=False)`将相同选择传到Python及native构造器，
+省略时仍返回完整事件记录；原生`Native.run`的trace策略依然由构造器拥有。
+
+`test_kv_sequence_vjp`比较无trace的全部输出/末态及其独立根，覆盖Read^0/Read^-/Read^+、
+FC/HB/反馈、稀疏/零/超过1的质量、暖左状态、共享参数、版本、SGD和精确恢复。
+`test_kv_prefix_roots`继续核对有trace的中间字段根；两种可观察接口分别验收。
+
 ## 独立检查
 
 [test_weighted_state_vjp](../tests/test_weighted_state_vjp.py)在独立 scalar schedule 上建立

@@ -12,7 +12,7 @@ from .next import NextInput, evaluate as evaluate_next
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
-                   packed=True, full_autograd="replay", aggregate_autograd="replay"):
+                   packed=True, full_autograd="replay", aggregate_autograd="replay", trace=True):
     """Frames belong to one region across samples, with complete fibers and ordered time.
 
     Contract: block contains no unresolved Full->fiber edge. Persistent region
@@ -70,7 +70,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
                 stats[key] = stats.get(key, 0) + sum(len(es) for _, es in sequences)
             groups = [sequences] if packed else [[s] for s in sequences]
             for group in groups:
-                stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], group, q, region.read_mode)
+                stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], group, q, region.read_mode, trace=trace, stats=stats)
             stats["max_state_batch"] = max(stats.get("max_state_batch", 0), len(sequences) if packed else 1)
             stats["max_state_sequence"] = max(stats.get("max_state_sequence", 0), max(len(es) for _, es in sequences))
             stats["read_calls"] = stats.get("read_calls", 0) + 1
@@ -115,7 +115,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
         for e in es:
             node = e["node"]
             if "proposal" not in e:
-                old = q.states.get((batch, node), model.nodes[node].initial())
+                old = q.states[batch, node] if (batch, node) in q.states else model.nodes[node].initial()
                 prop, desc = model.nodes[node].prepare(old, e["_content"], time, region.read_mode)
                 e.update(proposal_state=prop, proposal=prop.value, descriptor=desc)
                 stats["state_steps"] += 1
@@ -132,7 +132,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
         stats["region_steps"] = stats.get("region_steps", 0) + 1
         for e in es:
             node = e["node"]
-            old = q.states.get((batch, node), model.nodes[node].initial())
+            old = q.states[batch, node] if (batch, node) in q.states else model.nodes[node].initial()
             proposal_slots = e["proposal_state"].slots
             cmp = e.pop("proposal_state") if region.observe_all or node in active else old
             e.pop("proposal_state", None)
