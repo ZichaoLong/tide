@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[联合prefill有限代表矩阵（2026-11-10）](prefill-representatives-20261110.md)：a553bea的CPU16/NPU18项完成运行与精确续接，覆盖宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c；独立数值not_checked。auto/greedy差异有限，NPU小规模仍较慢；另有CANN9.2 resident小图6项独立推理/训练/恢复通过。
+
 [Query完整根合并与选定返回边界（2026-11-10）](query-root-boundary-20261110.md)：a553bea固定CPU249通过/2原xfail，NPU73通过/2原xfail/1观测失败；fb406dd补线程观测后CPU24/NPU2通过。安装消费者和独立SDK的CPU/NPU训练/新进程恢复分别通过；原失败保留。CPU原FC16完整/最小返回29.788/22.068秒，数值、不同返回与成本分列。
 
 [默认prefill与跨时间区域批（2026-11-10）](prefill-default-20261110.md)：7fe97f2核心、5f563f6 SDK恢复策略守卫；CPU397通过/2既有xfail、NPU26实际设备+7辅助通过，三客户端小图训练与精确恢复分列。原FC16受控成本CPU62.177→38.953秒、NPU237.119→101.756秒；实际工作、内存取舍和剩余碎片化另列，未认证原任务完整等价或下游验收。

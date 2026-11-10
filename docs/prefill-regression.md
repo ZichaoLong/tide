@@ -8,6 +8,8 @@
 下列HB/LH及1B–16B目录并未全部运行，历史结果不自动成为新默认的资格。
 [分量窗口固定资格](evidence/component-window-20261110.md)补五记忆、变长B×L及三图族训练/恢复；
 其NPU严格超差与通过范围分列，不能由此推断以下全部规模已验。
+[34项有限代表实测](evidence/prefill-representatives-20261110.md)记录B4/P16的CPU/NPU、
+三客户端和mixed-a/b/c实际成本与精确续接；大尺度独立数值not_checked，不能称完整资格。
 
 | 层级/触发 | 必查代表 | 入口与判定 |
 | --- | --- | --- |
