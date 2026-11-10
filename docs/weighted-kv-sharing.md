@@ -104,3 +104,26 @@ Python/native及standalone NPU的独立结果，D64完整训练/逐值恢复及�
 零复用计数、手算输入梯度，以及另一行输入和私有adapter仍为None。
 新增可选virtual能力要求重新构建C++核心及链接它的消费者；旧manifest不能代表新ABI。
 Python/native、纯PyTorch和standalone SDK的实际设备资格各自记录，不能用其中一项代替另一项。
+
+## 联合样本与时间准备
+
+通用State新增可选prepare_block_batch能力；没有该能力的程序保持原有逐共享组/独立批路径。
+KV在同一组私有参数有多条请求时使用它：先按设备合并正写入判定，再将同base/epsilon的
+不同输入合成矩阵批。只有同一个Content Tensor才复用结果；同值独立输入保持独立根。
+随后同一组adapter_v/u/summary参数跨sample与时间合批，权重不按行复制。
+单作用/各节点只有一行时保留原BMM路径。返回仍是逐事件values/summaries临时操作数，
+不改变私有状态、原始时间、选择、消息或checkpoint字段。
+
+Python weighted/kv_block_preparation.py与C++ weighted_kv_block_preparation.cpp独立分组，
+preparation_rows/weighted_preparation_rows实现一阶批量反向。公共行/字段分别作为根，
+未请求的行不因为stack产生连接零；真实参数别名汇总全部贡献，保存原版本。
+8MiB按本次行操作数/保存缓冲估算分块，不是全图峰值内存限制。
+state_block_base_projection_calls/max_state_block_base_batch记录共同投影批；
+state_private_projection_calls/rows及max_state_private_projection_batch记录私有投影批。
+state_preparation_calls仍数共享输入组，不再等同实际base矩阵提交数。
+block路径中的max_state_independent_projection_batch数同参数不同输入的最大批长；
+旧独立BMM的calls/rows仍只计旧路径。
+
+test_weighted_block_preparation使用独立稠密公式检查完整输出、独立值/summary根、None/零、
+参数别名、零写入、版本及一阶限制；既有完整图/AdamW/保留图切窗/精确恢复继续验收。
+开发测试、固定源码资格和真机性能分别记录；该接口不声明State VJP时间绑定已经消除。

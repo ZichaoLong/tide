@@ -8,9 +8,26 @@ identities. Private state is never cached here.
 
 
 def prepare_shared(model, events, stats):
-    groups = {}
-    for event in events:
+    blocks, handled = {}, set()
+    for i, event in enumerate(events):
         event.pop("_state_prepared", None)
+        kernel = getattr(model.nodes[event["node"]], "kernel", None)
+        if hasattr(kernel, "prepare_block_batch"):
+            blocks.setdefault(type(kernel), []).append(i)
+    for ids in blocks.values():
+        kernels = [model.nodes[events[i]["node"]].kernel for i in ids]
+        values = kernels[0].prepare_block_batch(kernels, [events[i]["content"] for i in ids], stats)
+        if values is None:
+            continue
+        if len(values) != len(ids):
+            raise ValueError("block preparation row count mismatch")
+        for i, value in zip(ids, values):
+            events[i]["_state_prepared"] = value
+        handled.update(ids)
+    groups = {}
+    for i, event in enumerate(events):
+        if i in handled:
+            continue
         kernel = getattr(model.nodes[event["node"]], "kernel", None)
         key_for = getattr(kernel, "preparation_key", None)
         if key_for is None:

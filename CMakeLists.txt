@@ -47,6 +47,8 @@ add_library(tidegraph STATIC
   cpp/src/state_preparation.cpp
   cpp/src/weighted_kv_projection.cpp
   cpp/src/weighted_kv_preparation.cpp
+  cpp/src/weighted_kv_block_preparation.cpp
+  cpp/src/weighted_preparation_rows.cpp
   cpp/src/weighted_row_linear.cpp
   cpp/src/weighted_aggregate_vjp.cpp
   cpp/src/weighted_query_kv.cpp

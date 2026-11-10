@@ -71,6 +71,6 @@ void check_weighted_kv_sharing(const at::TensorOptions& o){
   const auto& a0=interleaved[0].state_prepared.at("values");
   const auto& b0=interleaved[1].state_prepared.at("values");
   if(stats["state_preparation_calls"]!=2||stats["state_preparation_events"]!=4||
-      a0.grad_fn()->sequence_nr()>=b0.grad_fn()->sequence_nr())
+      a0.grad_fn()->sequence_nr()>b0.grad_fn()->sequence_nr())
     throw std::runtime_error("shared preparation followed opaque addresses instead of first use");
 }

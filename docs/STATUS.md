@@ -1,35 +1,36 @@
-# 当前交接 — 默认prefill增量已验证（2026-11-10）
+# 当前交接 — 联合batch/sequence与默认窗口优化实施中（2026-11-10）
 
-分支graph-execution-foundation；数学0770593。核心实现7fe97f2，SDK查询策略checkpoint守卫5f563f6。
-本轮固定资格、四项成本及独立profile均终态；证据/工具随本交接提交归档，未启动后继优化。
-实现、证据均在授权分支；远端同步状态以git status --short --branch核对。
-两个用户未跟踪handoff保持原样；参考/下游只读，不使用子代理。
+分支graph-execution-foundation；数学0770593；起点fb32e22。
+用户已批准上一轮完整计划并要求直接实施。允许全部320 CPU、空闲及有余量共享NPU，
+以尽快获得结果为原则；数值舍入超差只作有限诊断，不无限阻塞后续。
+参考与下游只读，不使用子代理。两份用户未跟踪handoff保持原样。
 
-## 交付与事实
+## 当前进度
 
-- 公共默认auto按能力选择packed-v2；跨时间区域批、原始KV槽批量gather、独立VJP与策略恢复守卫已实现。
-- 固定安装CPU397 passed、2既有dense-v1 xfail；NPU26实际设备+7CPU辅助通过。
-  Python/native及standalone的小型独立训练、optimizer、新进程精确恢复分别通过。
-- 原FC16/B8/L128完整步：CPU旧62.177→新38.953秒，NPU旧237.119→新101.756秒。
-  每设备内候选/Full/消息总数相同；原任务逐张量/路由/梯度及学习验收未运行，不能称严格等价吞吐。
-- profile显示区域批512→4已兑现，私有KV写投影仍12,288次/最大批4；NPU仍慢于CPU。
-  含预热设备峰值从6059.1升至6536.0MiB；原FP32失败和其他平台/尺度边界保留。
-- 证据及重建命令：[固定报告](evidence/prefill-default-20261110.md)、[机器记录](evidence/prefill-default-20261110.json)。
-  默认契约weighted-dense-query；代表回归prefill-regression；通用经验performance-lessons-prefill。
+启动git/status/upstream审计通过，无继承活动作业。正在实现FC16块内跨B/sequence准备；
+随后独立实现静态分量窗口默认调度，补五种记忆、标准层链及代表性CPU/NPU回归。
+已有PackedSequence保留样本/原始时间，训练State仍逐时间绑定；新增量须保留独立梯度根。
+上一轮固定证据见[evidence/prefill-default-20261110.md](evidence/prefill-default-20261110.md)；
+其CPU/NPU成本、严格失败和未覆盖项保持原身份，不算本轮新结果。
+执行数值/资源约定见execution-flows；唯一完整待办见ROADMAP。
 
-## 作业终态
+## 作业与资源
 
-无活动任务。gef-prefill-default-cost通过，MainPID=0、ControlGroup为空；其余本轮服务亦无运行后代。
-固定cwd为artifacts/prefill-default/fixed-7fe97f2，SDK fixed-sdk；日志/status在artifacts/jobs/prefill-default-*/。
-成本及profile在artifacts/prefill-default/cost-*/result.json和profile-npu-auto/；
-安装资格在qualified/{cpu,npu,sdk-cpu,sdk-npu}/。旧构建失败、pip取消、Ninja失败均保留，未改公共环境。
-原始产物只是本机来源提示，干净checkout从报告生成输入、重建，不要求恢复旧运行目录。
+已通过gef-joint-prefill-block-a：固定开发快照artifacts/joint-prefill/source-block-a，
+tree dd7432a054912ed898eaf10214589a1a429b1e22bd2b8c04b5e30b24d26c848f；脚本artifacts/joint-prefill/build-block-a.sh；
+全320核构建、CPU相关检查，MemoryMax512G、时限3600秒。
+作业记录artifacts/jobs/joint-prefill-block-a/status.json，日志同目录task.log。
+这是开发快照检查：133构建步骤完成，相关CPU80项通过；服务inactive/success。
+正式资格仍在实现提交后进行。正在主工作区独立开发窗口调度，未混入局部准备提交。
+可复用本机CANN9.2私有Python环境artifacts/tl-req-004/installed-env；
+新C++源码另构建，不将旧build-e冒充新实现。旧证据目录仅作定位，不需恢复旧服务。
+当前文件系统约919GiB可用，320可用逻辑CPU；NPU有空闲和低负载共享卡，启动前再采样准入。
 
 ## 下一步
 
-1. 接续先读固定报告及ROADMAP；本轮已核对源码/构建/驱动hash、13份作业终态、文档链接与目录可列出性，无需重复已通过资格。
-2. 后继只按ROADMAP的TL-REQ-004行：先检验现有序列私有投影复用和必要元数据批量校验，再决定新的有限成本对照；不重跑旧全量矩阵。
-3. 下游在新私有安装使用默认auto，独立验原任务及应用恢复，再决定升级依赖锁；本轮没有跨仓库写入。
+1. 完成局部联合准备及独立根/共享/零写入检查；冻结快照后在background.slice构建与测试。
+2. 固定实现提交后取得CPU/NPU/standalone证据；继续调度、模块和代表回归，不在阶段提交后停工。
+3. 有限舍入差异保留严格失败及幅度、首差、工作量；非有限/实现/控制/恢复错误另行处理。
 
 接续命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
-报告中的具体构建/检查/成本命令均使用新输出目录和匹配固定源码；当前不需恢复任何旧服务。
+本轮未提交修改包含已批准对齐记录及正在实施的源码/契约，实际清单以git status为准。

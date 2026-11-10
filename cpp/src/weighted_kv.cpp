@@ -96,6 +96,14 @@ class KV final:public MemoryKernel {
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   bool joint_sequence() const override{return true;}
+  bool block_preparation() const override{return true;}
+  std::vector<std::map<std::string,Tensor>> prepare_block_batch(const std::vector<const NodeWeights*>& rows,
+      const std::vector<Tensor>& contents,std::map<std::string,Index>& stats) const override {
+    std::vector<double> eps;
+    for(const auto* row:rows){auto* kernel=dynamic_cast<const KV*>(row->kernel.get());
+      require(kernel!=nullptr,"block KV preparation kernel mismatch");eps.push_back(kernel->c_.epsilon);}
+    return prepare_block_kv(rows,contents,eps,stats);
+  }
   std::string preparation_key(const NodeWeights& w,const Tensor& h) const override {
     if(h[0].item<double>()<=0)return {};
     std::string key;

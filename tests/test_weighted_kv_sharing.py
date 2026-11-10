@@ -52,7 +52,8 @@ def test_shared_kv_complete_snapshots_and_independent_roots(dtype, native):
     assert actual.stats["state_preparation_calls"] > 0
     assert actual.stats["state_preparation_events"] == actual.stats["candidate_events"]
     assert actual.stats["state_preparation_reused_events"] == 2*actual.stats["state_preparation_calls"]
-    assert actual.stats["max_state_private_projection_batch"] == 3
+    # Two samples × two times, using each node's parameters once per block.
+    assert actual.stats["max_state_private_projection_batch"] == 4
     assert actual.stats["state_private_projection_rows"] == 3*actual.stats["candidate_events"]
     roots = variables(b, xs)
     for field in ("keys", "values", "summaries", "weights"):

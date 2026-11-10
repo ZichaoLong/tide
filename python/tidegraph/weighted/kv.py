@@ -64,6 +64,10 @@ class KVMemory(StateProgram):
         from .kv_projection_batch import prepare
         return prepare(memories, shared, stats)
 
+    def prepare_block_batch(self, memories, contents, stats):
+        from .kv_block_preparation import prepare
+        return prepare(memories, contents, stats)
+
     def prepare_independent_batch(self, memories, contents, stats):
         from .kv_independent_batch import prepare
         return prepare(memories, contents, stats)
