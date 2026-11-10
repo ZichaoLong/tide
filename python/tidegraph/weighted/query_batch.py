@@ -6,6 +6,7 @@ missing cache entries; same-size buckets retain each row's complete visibility.
 from collections import defaultdict
 import math
 import torch
+from ..coordinates import integers
 from .config import KVConfig
 from .convolution import ConvCache
 from .packing import project
@@ -72,16 +73,32 @@ def kv(memory, states, times, u, *, dense=False):
     return tuple(torch.stack([r[k] for r in result]) for k in range(4))
 
 
-def effective(memory, states, times):
+def effective(memory, states, times, *, full=False):
+    """Decay only consumed fields; absent tuple entries are internal None values.
+
+    Read sum needs Z/W, basic state Read H/W, nonbasic state Read H/Z/W;
+    Full needs H. Raw states and checkpoint fields remain complete.
+    """
+    integers("recurrent query time", *times)
+    if any(time < 0 for time in times):
+        raise ValueError("negative recurrent query time")
     c = memory.config
-    old = {k: torch.stack([s.slots[k] for s in states]) for k in ("H", "Z", "W", "time")}
+    matrix, summary, count = full or c.memory_read == "state", not full and (c.memory_read == "sum" or not c.basic), not full
+    names = ["time"] + [name for name, used in zip(("H", "Z", "W"), (matrix, summary, count)) if used]
+    old = {k: torch.stack([s.slots[k] for s in states]) for k in names}
     # No float conversion before subtraction, including times above 2**53.
     delta = (old["time"].new_tensor(times)-old["time"]).clamp_min(0)
-    matrix_rates = (c.lambda_short, 0.) if c.basic else c.matrix_rates
-    matrix_decay = passive_decay(delta[:, None], matrix_rates, old["H"])
-    summary_decay = passive_decay(delta[:, None], (c.lambda_short, 0.), old["Z"])
-    return (matrix_decay[..., None, None]*old["H"],
-            summary_decay[..., None]*old["Z"], summary_decay*old["W"])
+    H = Z = W = None
+    if matrix:
+        matrix_rates = (c.lambda_short, 0.) if c.basic else c.matrix_rates
+        H = passive_decay(delta[:, None], matrix_rates, old["H"])[..., None, None]*old["H"]
+    if summary or count:
+        decay = passive_decay(delta[:, None], (c.lambda_short, 0.), old["Z"] if summary else old["W"])
+        if summary:
+            Z = decay[..., None]*old["Z"]
+        if count:
+            W = decay*old["W"]
+    return H, Z, W
 
 
 def convolve(conv, states, times, raw):
@@ -105,31 +122,36 @@ def convolve(conv, states, times, raw):
     return torch.stack(result)
 
 
-def features(memory, states, times, u):
+def features(memory, states, times, u, *, full=False):
+    """Query features, plus value/gate only for SSD Full.
+
+    Keep the full input projection and convolution/cache validation. Unused
+    key normalization/expansion and discretization do not enter a query graph.
+    """
     c = memory.config
     projection = project(norm(u, c.epsilon), memory.projection)
     if c.memory_family == "ssd":
-        gate, raw, delta = projection.split((c.heads*c.value_width, c.conv_width, c.heads), -1)
+        inner = c.heads*c.value_width
+        # Slicing away the unused delta branch must not hide a malformed full
+        # projection or parameter layout. These guards read metadata only.
+        if projection.shape != (u.shape[0], inner+c.conv_width+c.heads):
+            raise ValueError("invalid SSD query projection shape")
+        delta_bias = getattr(memory, "delta_bias", None)
+        if not isinstance(delta_bias, torch.Tensor) or delta_bias.shape != (c.heads,):
+            raise ValueError("invalid SSD query delta_bias shape")
+        raw = projection[:, inner:inner+c.conv_width]
     else:
         raw = projection
     projected = torch.nn.functional.silu(convolve(memory.conv, states, times, raw))
     if c.memory_family == "gated_delta":
-        q, k, value = projected.reshape(-1, c.heads, 2*c.key_width+c.value_width).split(
-            (c.key_width, c.key_width, c.value_width), -1)
+        q = projected.reshape(-1, c.heads, 2*c.key_width+c.value_width)[..., :c.key_width]
         q = epsilon_l2(q, c.qk_epsilon)/math.sqrt(c.key_width)
-        k = epsilon_l2(k, c.qk_epsilon)
-        return raw, q, k, value
-    value, key, query = projected.split((c.heads*c.value_width, c.groups*c.key_width, c.groups*c.key_width), -1)
-    key = key.reshape(-1, c.groups, c.key_width).repeat_interleave(c.heads//c.groups, dim=1)
+        return q, None, None
+    query = projected[:, inner+c.groups*c.key_width:]
     query = query.reshape(-1, c.groups, c.key_width).repeat_interleave(c.heads//c.groups, dim=1)
-    return raw, gate, value.reshape(-1, c.heads, c.value_width), key, query, torch.nn.functional.softplus(delta+memory.delta_bias)
-
-
-def matrix_read(memory, states, times, u):
-    H, _, _ = effective(memory, states, times)
-    f = features(memory, states, times, u)
-    query = f[1] if memory.config.memory_family == "gated_delta" else f[4]
-    return (H@query.unsqueeze(-1)).squeeze(-1)
+    value = projected[:, :inner].reshape(-1, c.heads, c.value_width) if full else None
+    gate = projection[:, :inner] if full else None
+    return query, value, gate
 
 
 def memory_read(memory, states, times, u, *, dense=False):
@@ -137,13 +159,15 @@ def memory_read(memory, states, times, u, *, dense=False):
         return kv(memory, states, times, u, dense=dense)
     H, Z, W = effective(memory, states, times)
     c = memory.config
-    values = Z/W.clamp(min=1)[..., None]
-    if c.memory_read == "state":
-        if c.basic:
-            query = project(norm(u, c.epsilon), memory.read_query)
-            reads = (H@query[:, None, :, None]).squeeze(-1)
-            values = (memory.read_out@reads.unsqueeze(-1)).squeeze(-1)
-        else:
-            long = project(matrix_read(memory, states, times, u).flatten(1), memory.read_out)
+    if c.memory_read == "state" and c.basic:
+        query = project(norm(u, c.epsilon), memory.read_query)
+        reads = (H@query[:, None, :, None]).squeeze(-1)
+        values = (memory.read_out@reads.unsqueeze(-1)).squeeze(-1)
+    else:
+        values = Z/W.clamp(min=1)[..., None]
+        if c.memory_read == "state":
+            query, _, _ = features(memory, states, times, u)
+            read = (H@query.unsqueeze(-1)).squeeze(-1)
+            long = project(read.flatten(1), memory.read_out)
             return values[:, 0], long, W[:, 0], W[:, 1]
     return values[:, 0], values[:, 1], W[:, 0], W[:, 1]

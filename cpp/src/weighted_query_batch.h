@@ -16,9 +16,11 @@ struct Visible {
   Tensor age(const std::vector<Index>&) const;
 };
 Tensor weighted_read(const Tensor& logits,const Tensor& values,const Tensor& weights,const Tensor& totals);
-std::array<Tensor,3> effective(const States&,const Times&,const RecurrentConfig&);
-struct Features {Tensor raw,query,key,value,gate,delta;};
-Features features(const NodeWeights&,const States&,const Times&,const Tensor& u,const RecurrentConfig&);
+// Read consumes Z/W, H/W or H/Z/W by configuration; Full only H.
+// Unused entries are undefined internal tensors, never incomplete raw states.
+std::array<Tensor,3> effective(const States&,const Times&,const RecurrentConfig&,bool full=false);
+struct Features {Tensor query,value,gate;};
+Features features(const NodeWeights&,const States&,const Times&,const Tensor& u,const RecurrentConfig&,bool full=false);
 std::array<Tensor,4> memory(const NodeWeights&,const States&,const Times&,const Tensor&,const KVConfig&,int dense=false);
 std::array<Tensor,4> memory(const NodeWeights&,const States&,const Times&,const Tensor&,const RecurrentConfig&);
 std::vector<TensorFields> describe(const NodeWeights&,const std::vector<ReadInput>&,const KVConfig&,const RegionalConfig&,int dense=false,bool batch_describe=false);

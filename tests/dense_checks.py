@@ -8,9 +8,10 @@ from tidegraph.comparison import collect_comparison, equivalent
 
 
 class Checks:
-    def __init__(self, nodeid, *, known_evidence_rounding=False, failure_reason=None):
+    def __init__(self, nodeid, *, known_evidence_rounding=False, failure_reason=None, known_numeric=None):
         self.nodeid, self.reports = nodeid, []
         self.known_evidence_rounding = known_evidence_rounding
+        self.known_numeric = dict(known_numeric or {})
         self.failure_reason = failure_reason or "dense-v1 strict numeric failure retained (FP32 normalized evidence); discrete checks passed"
 
     def __call__(self, actual, expected, label="root"):
@@ -21,6 +22,10 @@ class Checks:
             known = (self.known_evidence_rounding and not report["differences_truncated"]
                      and all(d["path"] in {"field_vjp[read_program.evidence_weight]", "field_vjp[read_program.evidence_bias]"}
                              and d["max_abs_error"] <= 2e-6 for d in report["differences"]))
+            known |= (bool(self.known_numeric) and not report["differences_truncated"]
+                      and all(d["path"] in self.known_numeric and
+                              d["max_abs_error"] <= self.known_numeric[d["path"]]
+                              for d in report["differences"]))
             if not known:
                 equivalent(actual, expected, path=label, check_device=False)
 

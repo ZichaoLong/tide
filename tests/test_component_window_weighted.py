@@ -47,7 +47,15 @@ def runner(binding, native):
 @pytest.mark.parametrize("topology", ["hb", "dag", "pdg"])
 @pytest.mark.parametrize("family", ["kv", "affine", "delta", "gated_delta", "ssd"])
 def test_default_ragged_memory_update_and_resume(dtype, native, topology, family, tmp_path, request):
-    check = Checks(request.node.nodeid, failure_reason="component-window strict numeric difference retained; cause pending bounded analysis")
+    # Fixed 47704c9: same first evidence root in four CPU affine witnesses.
+    # Same FP32 material promoted to FP64 passes; all other full-graph checks,
+    # updates and exact restore passed. Keep the original strict failure named.
+    witnessed = (DEVICE.type == "cpu" and dtype == torch.float32
+                 and family == "affine" and topology in {"dag", "pdg"})
+    check = Checks(request.node.nodeid,
+        known_numeric={"root.evidence[nodes.0.read_program.evidence_weight]": 1.6e-6} if witnessed else None,
+        failure_reason=("affine first evidence FP32 strict witness; diagnose_window_describe.py"
+                        if witnessed else "component-window strict numeric difference retained; cause pending bounded analysis"))
     a, xa, stop = fixture(dtype, family, topology, "cpu")
     b, xb, _ = fixture(dtype, family, topology, DEVICE)
     execute = runner(b, native)

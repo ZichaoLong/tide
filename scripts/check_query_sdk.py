@@ -13,6 +13,31 @@ from durable_records import write_json
 from source_identity import digest
 
 
+def check_query_selection(fixture, actual):
+    """Assert default capabilities from static modules, including recurrent-only models."""
+    memories = fixture["memories"]
+    if len(memories) != len(fixture["nodes"]) or not memories:
+        raise ValueError("fixture memory/node domain mismatch")
+    kv = sum(memory.get("memory_family", "kv") == "kv" for memory in memories)
+    expected = {"query_packed-v2_nodes": kv, "query_legacy_nodes": len(memories)-kv,
+                "query_dense-v1_nodes": 0, "describe_batched_nodes": len(memories), "describe_scalar_nodes": 0}
+    if any(actual.get(name, 0) != value for name, value in expected.items()):
+        raise AssertionError(f"default query/Describe capability mismatch: expected {expected}, got {actual}")
+    return expected
+
+
+def check_selected_state_vjp(expected, actual):
+    if actual.get("batched_state_events", 0) < 1:
+        raise AssertionError("fixture did not exercise the batched state VJP")
+    if expected["query_packed-v2_nodes"]:
+        if actual.get("joint_state_vjp_events", 0) < 1:
+            raise AssertionError("KV fixture did not exercise the hidden sequence VJP")
+        return "kv-hidden-sequence" if not expected["query_legacy_nodes"] else "kv-hidden-and-recurrent-batched"
+    if actual.get("joint_state_vjp_events", 0):
+        raise AssertionError("recurrent-only fixture reported a KV hidden sequence VJP")
+    return "recurrent-batched-state"
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--binary", type=Path, required=True)
@@ -22,6 +47,7 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64"), required=True)
     p.add_argument("--return-mode", choices=("complete", "outputs"), default="complete")
     a = p.parse_args()
+    fixture = json.loads(a.fixture.read_text())
     out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
     base = [str(a.binary.resolve()), "--fixture", str(a.fixture.resolve()),
             "--device", a.device, "--dtype", a.dtype, "--scoring-dtype", a.dtype,
@@ -57,10 +83,9 @@ def main():
             if name == "whole" and a.return_mode == "complete" and record["independent_roots"]["state"] != "passed":
                 raise AssertionError("independent query roots were not verified")
             row["query_selection"] = record["metrics"][0]["actual_stats"]
-            if row["query_selection"].get("query_packed-v2_nodes", 0) < 1:
-                raise AssertionError("fixture did not exercise the default packed query path")
-            if a.return_mode != "complete" and row["query_selection"].get("joint_state_vjp_events", 0) < 1:
-                raise AssertionError("fixture did not exercise the hidden sequence VJP")
+            row["expected_query_selection"] = check_query_selection(fixture, row["query_selection"])
+            if a.return_mode != "complete":
+                row["state_vjp_scope"] = check_selected_state_vjp(row["expected_query_selection"], row["query_selection"])
         def payload(name):
             path = out/name/"checkpoint"
             return path/json.loads((path/"latest.json").read_text())["generation"]/"state.pt"

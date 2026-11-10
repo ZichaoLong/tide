@@ -15,7 +15,7 @@ comparison（本支线即 proposal），即使 Read⁰/⁻ 采用其他状态也
 | 数学函数 | Python | 独立 C++ | 批量域/布局 |
 | --- | --- | --- | --- |
 | KV Mem | `weighted/query_batch.py::kv` | `weighted_query_kv.cpp::memory` | 按实际可见项数分组，每行完整 K/V/summary/weight；原始 int64 age 先减后转浮点 |
-| 循环 Mem | `query_batch.py::memory_read,effective` | `weighted_query_recurrent.cpp::memory,effective` | H/Z/W 按样本堆叠，原始 int64 时钟差控制短期/矩阵衰减 |
+| 循环 Mem | `query_batch.py::memory_read,effective` | `weighted_query_recurrent.cpp::memory,effective` | 按实际用途堆叠H/Z/W，原始int64时钟差控制短期/矩阵衰减；见[循环查询](weighted-recurrent-query.md) |
 | GDN/SSD 查询与短卷积 | `query_batch.py::features,convolve` | `weighted_query_recurrent.cpp::features,convolve` | 按实际 cache 长度分组，绝对时间槽匹配；查询当前 tap 与带权历史分别处理 |
 | Describe | `weighted/read_batch.py::evaluate` | `weighted_describe_batch.cpp::describe` | Mem 数值批量化；p_v 与有限描述头保留逐行运算次序，逐字段解码 |
 | Full | `weighted/full_batch.py::evaluate` | `weighted_full_batch.cpp::full` | KV 多头旋转/距离项，四种循环读出、门/RMS 与 FFN；返回未重复缩放的 `(c,G)` |
@@ -24,6 +24,8 @@ KV 查询保留每行全局归一化，按实际正权重项数合批 softmax；
 浮点衰减下溢为零的项照实处理，不人为裁剪，不从数值零猜测是否存在原始消息。
 无穷窗口仍读全部合法可见项，过期 raw 项仍留在原状态中，查询不写状态。
 固定时间卷积空缓存分支不虚构历史；非空缓存缺失 tap 通过精确匹配得到零项。
+循环Read/Full只计算各自消费的字段及query特征，保留完整投影与卷积/cache校验；
+原始状态始终完整，内部未消费字段不能用作checkpoint解码。具体用途和独立根检查见[循环查询契约](weighted-recurrent-query.md)。
 
 Full 各头可有不同旋转频率和距离斜率，头间循环不改变每头按行合批的事实。
 当前输入 u、记忆混合、FFN 的作用顺序不变；GDN 为逐头 gated RMS，SSD 为门后全通道 RMS。

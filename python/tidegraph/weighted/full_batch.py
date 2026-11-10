@@ -41,19 +41,18 @@ def kv(program, memory, states, times, u, *, dense=False):
 
 def recurrent(program, memory, states, times, u):
     c = program.config
-    H, _, _ = effective(memory, states, times)
+    H, _, _ = effective(memory, states, times, full=True)
     if c.basic:
         q = project(norm(u, c.epsilon), program.query)
         reads = (H@q[:, None, :, None]).squeeze(-1)
         return (program.out@reads.unsqueeze(-1)).squeeze(-1).sum(1)
-    f = features(memory, states, times, u)
-    query = f[1] if c.memory_family == "gated_delta" else f[4]
+    query, value, output_gate = features(memory, states, times, u, full=True)
     read = (H@query.unsqueeze(-1)).squeeze(-1)
     if c.memory_family == "gated_delta":
         rms = scaled_rms(read, program.rho, c.output_epsilon)
         gate = torch.nn.functional.silu(project(norm(u, c.epsilon), program.output_gate))
         return project(rms.flatten(1)*gate, program.out)
-    y = (read+program.direct[:, None]*f[2]).flatten(1)*torch.nn.functional.silu(f[1])
+    y = (read+program.direct[:, None]*value).flatten(1)*torch.nn.functional.silu(output_gate)
     return project(scaled_rms(y, program.rho, c.output_epsilon), program.out)
 
 

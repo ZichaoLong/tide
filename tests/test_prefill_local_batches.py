@@ -10,6 +10,7 @@ import torch
 from tidegraph.readout import finite_batch
 from tidegraph.weighted.allocation_rows import allocate_batch
 from tidegraph.weighted.dense_describe import evaluate
+from tidegraph.weighted import RegionalConfig
 from tidegraph.compare import equivalent
 from tidegraph.runtime import resolve_device
 
@@ -76,7 +77,7 @@ def test_batched_evidence_literal_derivatives_and_submissions():
     ws, wl = leaf(n).square(), leaf(n).square()
     width = d+4*h+3
     memory = SimpleNamespace(config=SimpleNamespace(epsilon=.01), summary=leaf(h, d))
-    p = SimpleNamespace(config=SimpleNamespace(gamma_max=1.),
+    p = SimpleNamespace(config=RegionalConfig(region_control_width=e),
         score=SimpleNamespace(matrix=leaf(3, width), hidden_bias=leaf(3), vector=leaf(3), bias=leaf()),
         evidence_weight=leaf(e, width), evidence_bias=leaf(e))
     with observe() as observation:

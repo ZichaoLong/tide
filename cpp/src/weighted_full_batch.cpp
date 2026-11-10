@@ -36,13 +36,13 @@ Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Te
 }
 Tensor mix(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c,int){
   const std::string p="full_program.content.";
-  auto H=effective(states,times,c)[0];Tensor combined;
+  auto H=effective(states,times,c,true)[0];Tensor combined;
   if(c.basic()){
     auto q=project(normalize(u,c.epsilon),weight(w,p+"query"));
     auto reads=at::matmul(H,q.unsqueeze(1).unsqueeze(-1));
     combined=at::matmul(weight(w,p+"out"),reads).squeeze(-1).sum(1);
   }else{
-    auto f=features(w,states,times,u,c);auto read=at::matmul(H,f.query.unsqueeze(-1)).squeeze(-1);
+    auto f=features(w,states,times,u,c,true);auto read=at::matmul(H,f.query.unsqueeze(-1)).squeeze(-1);
     if(c.memory_family=="gated_delta"){
       auto rms=scaled_rms(read,weight(w,p+"rho"),c.output_epsilon);
       auto gate=at::silu(project(normalize(u,c.epsilon),weight(w,p+"output_gate")));

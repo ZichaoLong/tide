@@ -172,10 +172,9 @@ void configure_query_execution(NodeWeights& w,const std::string& mode,bool batch
   }
   const bool automatic=mode=="auto"&&c&&(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble);
   const int execution=mode=="packed-v2"||automatic?2:(mode=="dense-v1"?1:0);
-  const bool head_capability=(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble)
-    &&r.local_score=="cat"&&r.region_score=="ind"&&r.selection_mode=="regional_total"
-    &&r.region_control_mode=="context"&&r.region_evidence=="cat";
-  require(!batch_describe||head_capability,"batched Describe requires FP32/FP64 cat/ind regional_total context/cat");
+  // node_binding already validates all finite built-in Describe choices.
+  const bool head_capability=w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble;
+  require(!batch_describe||head_capability,"batched Describe requires FP32/FP64 installed weighted heads");
   const bool heads=(mode!="legacy"||batch_describe)&&head_capability;
   if(c){w.read_kernel=std::make_shared<Describe<KVConfig>>(*c,r,execution,heads);
     w.full_kernel=std::make_shared<Full<KVConfig>>(*c,execution);}

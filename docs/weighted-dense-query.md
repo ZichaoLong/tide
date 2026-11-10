@@ -3,8 +3,8 @@
 公共`eager_runner`、`Native`和`ExecutionSpec`默认请求`query_execution="auto"`。
 满足能力的KV FP32/FP64、strict正支持、单payload设备、单host worker、packed prefill使用
 `packed-v2`。Describe共享投影独立按能力选择：相同执行条件下，五种记忆的
-cat/ind/regional_total/context/cat主头使用批量实现；循环记忆查询仍用原路径。
-其他头、FP16、streaming、scalar、resident与多设备保持其原实现。
+全部合法内建评分、证据、key和gain头使用批量实现；循环记忆查询仍用自身路径。
+FP16、streaming、scalar、resident与多设备保持其原实现。
 选择依据是模块能力和执行配置，不依据拓扑名称、节点数或参数量阈值。
 Python/native和standalone benchmark使用同一选择原则；实际资格须分别查看证据。
 
@@ -25,12 +25,20 @@ Python/native和standalone benchmark使用同一选择原则；实际资格须�
 | dense-v1 | Q、current、score/evidence、Full/FFN跨长度密集投影；仍有逐行可见性/正支持索引 | KV/qry、cat/ind、regional_total、context/cat、quad、strict |
 | packed-v2 | 按原始缓存长度分桶；有真实共享存储时复用[唯一KV数值bank](weighted-snapshot-bank.md)，否则拼接实际槽；批量gather、int64时间可见性、正支持mask和Attention | KV sum/qry、strict；各合法Read/评分/发送条件继续由原配置校验 |
 
-独立的`describe_execution="batched"`执行能力对同参数的current、cat score和cat evidence
-各作一次覆盖实际行的投影；它不要求KV，也不改变循环记忆的sum/state公式。
+独立的`describe_execution="batched"`执行能力在每个投影使用点以相同参数覆盖整个实际行批；
+它不要求KV，也不改变循环记忆的sum/state公式。`RegionalConfig`仍校验配置适用域，
+批量实现覆盖cat/match评分、ind/att描述、context下cat/grouped证据、fixed零证据、
+content/content_stats key及固定/context/可训练gain。发送与区域求解器不进入此局部头。
 Read当前值、记忆字段与统计量仍依[架构§3](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
-构成同一features，每行归一化；四个实际字段用各一次unbind发布，保留字段/行独立根。
-其他局部评分/区域证据仍走原标量头。该选择只约束Describe代数；发送、正则项和Read模式
-继续服从各自的适用域，不为批量实现另行改变数学配置。
+构成同一features，每行归一化。Python的`dense_describe.columns`和独立C++的
+`query::describe_columns`接受`[*rows,*field]`，B/L可保留为前导轴；公开请求适配器将
+已就绪行放入同一块，每个实际字段只用一次unbind发布，保留字段/行独立根。
+fixed evidence形状为`[*rows,dreg]`且断连；非regional没有evidence字段；
+content_stats key仅直接读取两项记忆统计，不混入received统计。
+alpha_loc/alpha_sel或match权重为零时仍保留声明字段及其连接零，不按数值删分支。
+共享参数/模块汇总每个使用者的贡献，不因为参数相同便合并不同输入；本增量未新增共享计算缓存。
+标量Describe和原显式legacy路径独立保留。此选择只约束Describe代数；发送、正则项和Read模式
+继续服从各自适用域，不为批量实现改变数学配置。
 
 每桶按32MiB估计目标限制合并行数，不复制模型矩阵。**单行可能超过目标**，该值不是
 总workspace或进程峰值保证；KV/激活/私有反向图仍需另行预算。没有截短缓存、压紧时间或改变窗口。
@@ -69,7 +77,7 @@ C++核心入口`configure_query_execution`不依赖Python，`query_execution_sel
 memory/describe两项选择；standalone benchmark接受`--query-execution`并报告相同计数。
 
 数学/图身份不因执行路径变化；应用锁必须固定源码和执行身份。旧材料显式legacy保持原身份；
-省略选项的新请求采用auto的新身份。当前auto策略版本为`kv-packed-v2+describe-batch-v1`，
+省略选项的新请求采用auto的新身份。当前auto策略版本为`kv-packed-v2+describe-batch-v2`，
 其完整策略说明参加execution_id；旧auto实验固定原源码和身份，升级后重新验收。
 checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行验收。
 同源码/配置/设备的精确恢复独立验证，不能从小图推断原语言任务或所有规模。
@@ -81,8 +89,9 @@ checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行�
 | 策略/适用域 | weighted/query_execution.py、planning/execution.py / weighted_programs.cpp | test_weighted_query_layout、test_weighted_dense_query、test_weighted_describe_capability |
 | 原始槽/时间/索引 | query_layout.py / weighted_query_layout.cpp | 大于2**54的时间、异形/空/过期状态、分桶目标 |
 | Mem/Full | query_packed.py / weighted_query_packed.cpp | 独立scalar函数逐字段、全部私有根、sum/qry与正支持中心反例 |
-| 描述与Q/FFN | dense_describe.py、read_batch.py、full_batch.py / weighted_describe_batch.cpp、weighted_full_batch.cpp | 五记忆合法sum/qry/state、真实三投影批行数、字段根、共享/冻结参数与具名evidence舍入见证；版本、一阶及未使用optimizer |
-| 完整执行 | eager_runner、Native、standalone Eager | FC/HB/PDG三步AdamW、保留图cut、pending、新owner/新进程恢复；一般端口/历史程序回归 |
+| 描述列接口 | [dense_describe.py](../python/tidegraph/weighted/dense_describe.py)、read_batch.py / [weighted_describe_heads.cpp](../cpp/src/weighted_describe_heads.cpp)、weighted_describe_batch.cpp | [test_weighted_describe_columns](../tests/test_weighted_describe_columns.py)：8组有限头配置，B×L独立逐标量公式、全部字段/私有根、共享/冻结参数、部分及零cotangent、实际ATen矩阵形状与禁止scalar调用 |
+| Q/FFN与查询边界 | full_batch.py / weighted_full_batch.cpp | 五记忆合法sum/qry/state、原三投影批行数及具名evidence舍入见证；版本、一阶及未使用optimizer |
+| 完整执行 | eager_runner、Native、standalone Eager | 既有FC/HB/PDG三步AdamW；[test_weighted_describe_training](../tests/test_weighted_describe_training.py)新增match/att/grouped+SSD与非regional/context gain+KV两例，默认入口完整记录/根、两步SGD、pending、保留图cut及新owner精确下一窗/更新；一般端口/历史程序回归 |
 
 [代表回归入口](prefill-regression.md)规定改动触发哪些检查及原FC16成本命令；
 [性能经验](performance-lessons.md)记录可复用方案及其边界。
@@ -95,6 +104,9 @@ checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行�
 并检查一次Describe的三个共享投影提交；`diagnose_dense_rounding.py --query-execution packed-v2`
 复现同FP32材料提升FP64的有限诊断。字段检查与分配分支的批量元数据见
 [结构化记录](structured-records.md)和[区域批](weighted-region-batch.md)。
+`cpp/test/weighted_scoring.cpp`把既有手算值/偏置导数用于独立B×L列实现，并检查
+未用证据根断连和fixed证据形状；新增头不以Python互相对照作为唯一数学依据。
+测试源码范围与实际运行资格分开；新设备、全部组合和尺度不能从上述有限用例外推。
 
 安装消费者：`examples/consumer_core5/dense_query.py --query-execution auto ...`；
 旧v1复现必须显式指定`dense-v1`。原任务成本驱动`benchmark_dense_query.py`从固定下游Git对象读模型/head/loss，

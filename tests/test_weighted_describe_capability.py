@@ -125,18 +125,18 @@ def test_capability_scalar_fallback_legacy_and_policy_identity():
     assert describe_mode(legacy.nodes[0].read_program) == "scalar"
     assert legacy.nodes[0].read_program.query_execution == "legacy"
     assert describe_mode(selected.read_program) == "batched"
-    unsupported, _ = fixture(torch.float32, "ssd", "state", True)
-    other = torch.nn.Module(); other.nodes = torch.nn.ModuleList([unsupported])
-    assert describe_mode(execution_view(other, "auto").nodes[0].read_program) == "scalar"
+    grouped, _ = fixture(torch.float32, "ssd", "state", True)
+    other = torch.nn.Module(); other.nodes = torch.nn.ModuleList([grouped])
+    assert describe_mode(execution_view(other, "auto").nodes[0].read_program) == "batched"
     model.half()
     assert describe_mode(execution_view(model, "auto").nodes[0].read_program) == "scalar"
     with pytest.raises(ValueError, match="requires KV"):
         execution_view(model.float(), "packed-v2")
     new = ExecutionSpec().record()
     body = {k: v for k, v in new.items() if k != "execution_id"}
-    body["effective"] = dict(body["effective"], query_policy="kv-packed-v2; capability/dtype/schedule fallback to legacy")
+    body["effective"] = dict(body["effective"], query_policy="kv-packed-v2+describe-batch-v1; independent capabilities, dtype/schedule fallback to legacy")
     assert new["execution_id"] != fingerprint(body)
-    assert "describe-batch-v1" in new["effective"]["query_policy"]
+    assert "describe-batch-v2" in new["effective"]["query_policy"]
     assert "query_policy" not in ExecutionSpec(query_execution="legacy").record()["effective"]
 
 

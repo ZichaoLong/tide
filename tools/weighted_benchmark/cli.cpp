@@ -35,7 +35,7 @@ Json Request::checkpoint_identity(const Json& fixture) const {
   // Explicit legacy keeps historical manifests. New execution selections must
   // not silently resume them as an exact continuation of a different policy.
   if(query_execution!="legacy")identity["query_execution"]=query_execution;
-  if(query_execution=="auto")identity["query_policy"]="kv-packed-v2+describe-batch-v1";
+  if(query_execution=="auto")identity["query_policy"]="kv-packed-v2+describe-batch-v2";
   if(implementation!="resident"&&return_mode!="complete"&&trace_records!="complete")identity["record_policy"]="selected-boundary-v1";
   if(implementation!="resident"&&schedule=="prefill"&&prefill_schedule!="greedy"){
     identity["prefill_schedule"]=prefill_schedule;

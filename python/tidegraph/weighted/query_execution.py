@@ -1,7 +1,8 @@
-"""Explicit numerical execution views; see docs/weighted-dense-query.md.
+"""Independent memory-query and finite Describe execution capabilities.
 
 The model/parameter owners are unchanged. dense-v1 batches dense projections
-across cache lengths, retaining structural attention branches in the VJP.
+across cache lengths; auto uses all installed Describe column heads without
+changing the memory query's structural branches or explicit legacy policy.
 """
 import torch
 from ..placement import _shallow_module

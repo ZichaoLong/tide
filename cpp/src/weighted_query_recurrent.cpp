@@ -33,49 +33,56 @@ Tensor convolve(const NodeWeights& w,const States& states,const Times& times,con
   return at::stack(result);
 }
 }
-std::array<Tensor,3> effective(const States& states,const Times& times,const RecurrentConfig& c){
+std::array<Tensor,3> effective(const States& states,const Times& times,const RecurrentConfig& c,bool full){
   for(auto t:times)require(t>=0,"negative recurrent query time");
-  auto clock=slot(states,"time"),H=slot(states,"H"),Z=slot(states,"Z"),W=slot(states,"W");
+  const bool matrix=full||c.memory_read=="state",summary=!full&&(c.memory_read=="sum"||!c.basic()),count=!full;
+  auto clock=slot(states,"time");
   auto delta=(at::tensor(times,clock.options())-clock).clamp_min(0);
-  auto rates=c.basic()?std::vector<double>{c.lambda_short,0.}:c.matrix_rates;
-  if(rates.empty())rates.resize(c.heads,0.);
-  auto matrix=passive_decay(delta.unsqueeze(-1),rates,H);
-  auto summary=passive_decay(delta.unsqueeze(-1),{c.lambda_short,0.},Z);
-  return {matrix.unsqueeze(-1).unsqueeze(-1)*H,summary.unsqueeze(-1)*Z,summary*W};
-}
-Features features(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c){
-  auto projection=project(normalize(u,c.epsilon),weight(w,"kernel.projection"));
-  Features f;f.raw=projection;const Index inner=c.heads*c.value_width,bc=c.groups*c.key_width;
-  if(c.memory_family=="ssd"){
-    f.gate=projection.slice(1,0,inner);f.raw=projection.slice(1,inner,inner+c.conv_width());
-    f.delta=at::softplus(projection.slice(1,inner+c.conv_width())+weight(w,"kernel.delta_bias"));
+  Tensor H,Z,W;
+  if(matrix){
+    H=slot(states,"H");auto rates=c.basic()?std::vector<double>{c.lambda_short,0.}:c.matrix_rates;
+    if(rates.empty())rates.resize(c.heads,0.);
+    H=passive_decay(delta.unsqueeze(-1),rates,H).unsqueeze(-1).unsqueeze(-1)*H;
   }
-  auto all=at::silu(convolve(w,states,times,f.raw,c));
+  if(summary)Z=slot(states,"Z");
+  if(count)W=slot(states,"W");
+  if(summary||count){
+    auto decay=passive_decay(delta.unsqueeze(-1),{c.lambda_short,0.},summary?Z:W);
+    if(summary)Z=decay.unsqueeze(-1)*Z;
+    if(count)W=decay*W;
+  }
+  return {H,Z,W};
+}
+Features features(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c,bool full){
+  auto projection=project(normalize(u,c.epsilon),weight(w,"kernel.projection"));
+  Features f;auto raw=projection;const Index inner=c.heads*c.value_width,bc=c.groups*c.key_width;
+  if(c.memory_family=="ssd"){
+    raw=projection.slice(1,inner,inner+c.conv_width());
+    if(full)f.gate=projection.slice(1,0,inner);
+  }
+  auto all=at::silu(convolve(w,states,times,raw,c));
   if(c.memory_family=="gated_delta"){
     all=all.reshape({-1,c.heads,2*c.key_width+c.value_width});
-    f.query=all.slice(-1,0,c.key_width);f.key=all.slice(-1,c.key_width,2*c.key_width);f.value=all.slice(-1,2*c.key_width);
+    f.query=all.slice(-1,0,c.key_width);
     f.query=epsilon_l2(f.query,c.qk_epsilon)/std::sqrt(c.key_width);
-    f.key=epsilon_l2(f.key,c.qk_epsilon);
   }else{
-    f.value=all.slice(1,0,inner).reshape({-1,c.heads,c.value_width});
-    f.key=all.slice(1,inner,inner+bc).reshape({-1,c.groups,c.key_width}).repeat_interleave(c.heads/c.groups,1);
+    if(full)f.value=all.slice(1,0,inner).reshape({-1,c.heads,c.value_width});
     f.query=all.slice(1,inner+bc).reshape({-1,c.groups,c.key_width}).repeat_interleave(c.heads/c.groups,1);
   }
   return f;
 }
 std::array<Tensor,4> memory(const NodeWeights& w,const States& states,const Times& times,const Tensor& u,const RecurrentConfig& c){
-  auto s=effective(states,times,c);auto values=s[1]/s[2].clamp_min(1).unsqueeze(-1);
-  auto a=values.select(1,0),b=values.select(1,1);
-  if(c.memory_read=="state"){
-    if(c.basic()){
-      auto q=project(normalize(u,c.epsilon),weight(w,"kernel.read_query"));
-      auto reads=at::matmul(s[0],q.unsqueeze(1).unsqueeze(-1));
-      values=at::matmul(weight(w,"kernel.read_out"),reads).squeeze(-1);
-      a=values.select(1,0);b=values.select(1,1);
-    }else{
+  auto s=effective(states,times,c);Tensor a,b;
+  if(c.memory_read=="state"&&c.basic()){
+    auto q=project(normalize(u,c.epsilon),weight(w,"kernel.read_query"));
+    auto reads=at::matmul(s[0],q.unsqueeze(1).unsqueeze(-1));
+    auto values=at::matmul(weight(w,"kernel.read_out"),reads).squeeze(-1);
+    a=values.select(1,0);b=values.select(1,1);
+  }else{
+    auto values=s[1]/s[2].clamp_min(1).unsqueeze(-1);a=values.select(1,0);b=values.select(1,1);
+    if(c.memory_read=="state"){
       auto f=features(w,states,times,u,c);
-      auto H=effective(states,times,c)[0]; // Preserve the scalar function's separate query branch.
-      auto read=at::matmul(H,f.query.unsqueeze(-1)).squeeze(-1);
+      auto read=at::matmul(s[0],f.query.unsqueeze(-1)).squeeze(-1);
       b=project(read.flatten(1),weight(w,"kernel.read_out"));
     }
   }

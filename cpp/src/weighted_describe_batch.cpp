@@ -4,6 +4,7 @@
 // Architecture §3: batched Mem and capability-selected shared projections.
 #include "weighted_query_batch.h"
 #include "weighted_scoring.h"
+#include "weighted_describe_heads.h"
 #include <type_traits>
 
 namespace tide::weighted::query {
@@ -21,20 +22,21 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
   std::array<Tensor,4> memories;
   if constexpr(std::is_same_v<Config,KVConfig>)memories=memory(w,states,times,input,c,dense);
   else memories=memory(w,states,times,input,c);
-  if((batch_describe||dense) && r.local_score=="cat" && r.region_score=="ind" && r.selection_mode=="regional_total"
-      && r.region_control_mode=="context" && r.region_evidence=="cat"){
+  if(batch_describe||dense){
     using packed::project;
     auto cur=normalize(input,c.epsilon),p=project(cur,weight(w,"kernel.summary"));
     auto stat=at::stack({masses.log1p(),memories[2].log1p(),memories[3].log1p()},-1);
     auto f=at::cat({cur,stat.slice(1,0,1),memories[0],memories[1],stat.slice(1,1),p*memories[0],p*memories[1]},-1);
-    auto score=weight(w,"read_program.score.bias")+(at::silu(project(f,weight(w,"read_program.score.matrix"))+
-      weight(w,"read_program.score.hidden_bias"))*weight(w,"read_program.score.vector")).sum(-1);
-    auto evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
-    auto recv=masses.clamp_max(1),mu=(r.gamma_max*recv).clamp_max(1);
+    Groups groups{cur,{},stat};
+    if(r.local_score=="match"||r.region_evidence=="grouped"||r.region_score=="att")
+      groups[1]=at::cat({memories[0],memories[1]},-1);
+    auto fields=describe_columns(w,r,masses,f,groups,c.epsilon);
     // One split transpose per field; preserve distinct public field/row roots.
-    auto recv_rows=recv.unbind(),mu_rows=mu.unbind(),score_rows=score.unbind(),evidence_rows=evidence.unbind();
-    std::vector<TensorFields> result;
-    for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv_rows[i]},{"mu",mu_rows[i]},{"score",score_rows[i]},{"evidence",evidence_rows[i]}});
+    std::vector<TensorFields> result(requests.size());
+    for(const auto& [name,column]:fields){
+      auto rows=column.unbind();
+      for(size_t i=0;i<requests.size();++i)result[i].emplace(name,rows[i]);
+    }
     return result;
   }
   std::vector<TensorFields> result;

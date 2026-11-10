@@ -1,4 +1,9 @@
-"""Architecture §3: batched Mem and capability-selected descriptor projections."""
+"""Architecture §3: batched Mem, then finite Describe columns or explicit legacy.
+
+The column boundary receives each actual Mem result once; only its final
+publication creates per-row fields. Scalar Describe remains an independent
+reference and the legacy execution option.
+"""
 import torch
 from .query_batch import memory_read
 from .tensors import norm

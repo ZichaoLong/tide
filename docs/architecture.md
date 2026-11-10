@@ -24,9 +24,14 @@ KV整序列反向位于`weighted/kv_sequence_vjp.py`与`weighted_kv_sequence_vjp
 公共实验的按需记录由`experiment/eager.py`与standalone `Eager::options.trace`绑定；
 修改时同步`ExecutionSpec`/SDK恢复身份、实际工作计数、`experiment/checkpoint.py`及
 `test_selected_boundary_execution`。内置输出任务可省去中间日志，插件不得隐式失去loss所需的根。
-Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.cpp`负责；
-修改同步[查询契约](weighted-dense-query.md)、独立字段根、`test_weighted_describe_capability`及`test_prefill_local_batches`；
+Describe的完整列计算由`weighted/dense_describe.py`与`weighted_describe_heads.cpp`负责，
+`weighted_describe_batch.cpp`连接Mem并只在发布边界拆行；cat/match、证据、key和gain均接收leading batch轴。
+修改同步[查询契约](weighted-dense-query.md)、独立字段根、`test_weighted_describe_columns/capability/training`
+及`test_prefill_local_batches`；默认策略身份describe-batch-v2，安装/SDK恢复拒绝旧v1身份。
 Describe能力与记忆query策略独立报告，非strict数值策略仍按其客户端支持域拒绝。
+循环Read/Full由`weighted/query_batch.py`、`full_batch.py`及C++ `weighted_query_recurrent/weighted_full_batch`
+按消费者求值，见[用途契约](weighted-recurrent-query.md)；原始状态和版本守卫完整保留。
+修改需核对`test_weighted_recurrent_query_scope`、独立公式及完整训练/恢复，不能用内部None替代checkpoint。
 区域VJP的私有列打包在`weighted/private_rows.py`/`weighted_private_rows.h`：
 同结构组内打包内部叶，外部行/字段根保持；连续视图区间消除重复复制与反向分发。
 修改须同步`test_private_rows`、query/region独立根、原版本守卫和安装消费者恢复。

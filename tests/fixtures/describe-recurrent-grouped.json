@@ -1,0 +1,30 @@
+{
+  "topology": "fc",
+  "family": "ssd",
+  "width": 2,
+  "region_width": 2,
+  "depth": 2,
+  "sparse_denominator": 1,
+  "memory_overrides": {
+    "summary_width": 2,
+    "ffn_width": 3,
+    "memory_read": "state",
+    "key_width": 2,
+    "value_width": 2,
+    "heads": 1,
+    "groups": 1,
+    "conv_size": 2,
+    "conv_stride": 1,
+    "epsilon": 0.2
+  },
+  "region_overrides": {
+    "local_score": "match",
+    "region_score": "att",
+    "region_key": "content",
+    "region_evidence": "grouped",
+    "selection_width": 2,
+    "hidden_width": 3,
+    "region_control_width": 3,
+    "gamma_max": 1.3
+  }
+}

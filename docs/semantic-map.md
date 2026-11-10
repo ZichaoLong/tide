@@ -312,6 +312,10 @@ KV §2–4的同一实际历史存储/Read K,V投影复用见[快照bank](weight
 `test_kv_sequence_vjp`定位。它不改变完整trace的中间State根或checkpoint实际解码。
 
 主架构§3的Describe与Mem能力分派分别由`query_execution`/`weighted_programs`声明，
-`dense_describe`/`weighted_describe_batch`保留完整字段与独立根；
-[查询契约](weighted-dense-query.md)及`test_weighted_describe_capability`覆盖五记忆、
-共享参数和逐字段VJP。值与可变存储不是同一契约，迁移见[只读发布](tensor-publication.md)。
+`dense_describe`/`weighted_describe_heads`将分配§3.1—3.6的score/evidence/key/gain映射到完整列，
+`weighted_describe_batch`连接Mem并保留完整字段与独立根；[查询契约](weighted-dense-query.md)及
+`test_weighted_describe_columns/capability/training`覆盖leading B×L轴、五记忆、共享参数和逐字段VJP。值与可变存储不是同一契约，迁移见[只读发布](tensor-publication.md)。
+
+循环Mem/Full的按用途求值与数学对应见[局部契约](weighted-recurrent-query.md)：
+`query_batch.effective/features`、`query::effective/features`只裁剪未消费数值，Read/Full快照分开；
+`test_weighted_recurrent_query_scope`核对实际字段访问、独立根、参数共享、缓存校验与完整状态守卫。

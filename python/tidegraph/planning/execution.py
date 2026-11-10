@@ -139,7 +139,7 @@ class ExecutionSpec:
         if self.placement == "resident":
             effective["operator"] = "aten+device-control"
         if self.query_execution == "auto":
-            effective["query_policy"] = "kv-packed-v2+describe-batch-v1; independent capabilities, dtype/schedule fallback to legacy"
+            effective["query_policy"] = "kv-packed-v2+describe-batch-v2; independent capabilities, dtype/schedule fallback to legacy"
             if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
                 effective["query_execution"] = "legacy"
         body = dict(schema="tide-weighted-execution-v4" if selected_boundary else

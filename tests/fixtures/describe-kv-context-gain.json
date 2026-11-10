@@ -1,0 +1,25 @@
+{
+  "topology": "fc",
+  "family": "kv",
+  "width": 2,
+  "region_width": 2,
+  "depth": 2,
+  "sparse_denominator": 1,
+  "selection": "direct_attention",
+  "memory_overrides": {
+    "summary_width": 2,
+    "ffn_width": 3,
+    "memory_read": "qry",
+    "adapter_rank": 1,
+    "window": 7,
+    "epsilon": 0.2
+  },
+  "region_overrides": {
+    "send_gain": "context",
+    "region_score": "att",
+    "region_key": "content_stats",
+    "selection_width": 2,
+    "hidden_width": 3,
+    "gamma_max": 1.5
+  }
+}

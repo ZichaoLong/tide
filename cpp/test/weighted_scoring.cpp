@@ -1,5 +1,6 @@
 // Standalone literal equation (2–5) witnesses, separate from Python tests.
 #include "../src/weighted_scoring.h"
+#include "../src/weighted_describe_heads.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <cmath>
 #include <stdexcept>
@@ -44,4 +45,26 @@ void check_weighted_scoring(const at::TensorOptions& o){
     {"x",at::tensor({1.,2.},o).reshape({2,1})},{"key",at::tensor({1.,-1.},o).reshape({2,1})}};
   const double q=.8/(1+std::exp(-.8));
   close(region_scores(region,r,fields),at::tensor({.15+1.3*q,.1-1.3*q},o));
+  // Independent column candidate accepts B and L axes without scalar replay.
+  // Hand values/derivatives above anchor the same finite formula, not merely
+  // agreement between two implementations that share an encoder call.
+  w.extra["read_program.current_weight"]=at::ones({1,1},o);
+  w.extra["read_program.current_bias"]=at::zeros({1},o);
+  Groups columns;
+  for(size_t i=0;i<3;++i)columns[i]=g[i].reshape({1,1,-1}).expand({2,3,g[i].numel()});
+  auto mass=at::full({2,3},.2,o),features=at::zeros({2,3,8},o);
+  auto result=query::describe_columns(w,r,mass,features,columns,1.);
+  close(result.at("score"),at::full({2,3},.2+1.5*x*e+std::log(2.),o));
+  close(result.at("evidence"),at::full({2,3,1},value/std::sqrt(1+value*value),o));
+  close(result.at("key"),at::full({2,3,1},1.3,o));
+  close(result.at("x"),at::full({2,3,1},.3,o));
+  auto batch_grad=torch::autograd::grad({result.at("score").sum()},
+    {w.extra.at("read_program.score.encoders.cur.out_bias"),w.extra.at("read_program.evidence.encoders.cur.out_bias")},
+    {},false,false,true);
+  close(batch_grad[0],at::full({1},6*1.5*e/std::pow(2.,1.5),o));
+  if(batch_grad[1].defined())throw std::runtime_error("column score connected unused evidence root");
+  r.region_control_mode="fixed";r.region_evidence.reset();r.total_fraction=.4;r.validate();
+  auto fixed=query::describe_columns(w,r,mass,features,columns,1.).at("evidence");
+  close(fixed,at::zeros({2,3,1},o));
+  if(fixed.requires_grad())throw std::runtime_error("fixed evidence gained a gradient connection");
 }
