@@ -20,6 +20,7 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--dtype", choices=("float32", "float64"), required=True)
+    p.add_argument("--return-mode", choices=("complete", "outputs"), default="complete")
     a = p.parse_args()
     out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
     base = [str(a.binary.resolve()), "--fixture", str(a.fixture.resolve()),
@@ -27,8 +28,10 @@ def main():
             "--placement", "native" if a.device == "cpu" else "mixed-c",
             "--mode", "training", "--warmup", "0", "--query-execution", "auto",
             "--threads", "1", "--interop-threads", "1", "--checkpoint-check", "true"]
+    if a.return_mode != "complete":
+        base += ["--return-mode", a.return_mode, "--validation", "none"]
     report = dict(state="running", binary_sha256=digest(a.binary), fixture_sha256=digest(a.fixture),
-                  driver_sha256=digest(__file__), device=a.device, dtype=a.dtype,
+                  driver_sha256=digest(__file__), device=a.device, dtype=a.dtype, return_mode=a.return_mode,
                   visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), processes=[])
     def save():
         write_json(out/"result.json", report)
@@ -36,7 +39,7 @@ def main():
     try:
         for name, steps in (("whole", 3), ("prefix", 2), ("resumed", 1)):
             command = [*base, "--steps", str(steps), "--output-dir", str(out/name)]
-            if name == "whole":
+            if name == "whole" and a.return_mode == "complete":
                 command += ["--check-roots", "true"]
             if name == "resumed":
                 command += ["--resume", str(out/"prefix/checkpoint")]
@@ -49,13 +52,15 @@ def main():
             record = json.loads((out/name/"result.json").read_text())
             row["checks"] = {k: record[k] for k in ("state", "independent_comparison", "independent_roots",
                 "exact_resume", "parameter_values_checked", "optimizer_values_checked", "final_parameter_gradients_checked")}
-            if record["state"] != "passed" or record["exact_resume"]["state"] != "passed":
+            if record["state"] != ("passed" if a.return_mode == "complete" else "completed") or record["exact_resume"]["state"] != "passed":
                 raise AssertionError(row["checks"])
-            if name == "whole" and record["independent_roots"]["state"] != "passed":
+            if name == "whole" and a.return_mode == "complete" and record["independent_roots"]["state"] != "passed":
                 raise AssertionError("independent query roots were not verified")
             row["query_selection"] = record["metrics"][0]["actual_stats"]
             if row["query_selection"].get("query_packed-v2_nodes", 0) < 1:
                 raise AssertionError("fixture did not exercise the default packed query path")
+            if a.return_mode != "complete" and row["query_selection"].get("joint_state_vjp_events", 0) < 1:
+                raise AssertionError("fixture did not exercise the hidden sequence VJP")
         def payload(name):
             path = out/name/"checkpoint"
             return path/json.loads((path/"latest.json").read_text())["generation"]/"state.pt"

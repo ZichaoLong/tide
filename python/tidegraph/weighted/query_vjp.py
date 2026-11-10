@@ -94,8 +94,10 @@ class _Query(torch.autograd.Function):
             if not ids:
                 continue
             roots = [r*ctx.row_outputs+j for r in rows for j in mask]
-            grads = torch.autograd.grad([refs[i] for i in roots], [leaves[i] for i in ids],
-                                       [bars[i] for i in roots], retain_graph=True, allow_unused=True)
+            from .query_roots import coalesce
+            outputs, cotangents = coalesce([refs[i] for i in roots], [bars[i] for i in roots])
+            grads = torch.autograd.grad(outputs, [leaves[i] for i in ids],
+                                       cotangents, retain_graph=True, allow_unused=True)
             for i, grad in zip(ids, grads):
                 if grad is not None:
                     result[i] = grad if result[i] is None else result[i]+grad

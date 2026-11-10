@@ -17,8 +17,6 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
         raise ValueError("site.paths.standalone_binary: specify the matching standalone LibTorch executable")
     if resolved["task"].get("plugin"):
         raise ValueError("task.plugin: Python callbacks cannot run inside standalone LibTorch; use the public C++ consumer task extension")
-    if e.get("return_mode", "complete") != "complete" and m["checkpoint_check"]:
-        raise ValueError("measurement.checkpoint_check: standalone minimal-return run needs false; perform separate complete-return check first")
     if m.get("observation") == "profile":
         raise ValueError("measurement.observation: use a separate native/PyTorch profile or an external C++ profiler; packing observation is available for standalone")
     identity = capture(paths)
@@ -69,6 +67,7 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
             "--placement", "native" if e["placement"] in {"resident", "cpu"} else e["placement"],
             "--packing", e["packing"], "--return-packing", e["return_packing"], "--return-mode", e.get("return_mode", "complete"),
             "--query-execution", e.get("query_execution", "legacy"),
+            "--trace-records", "auto" if "record_policy" in e else "complete",
             "--prefill-schedule", e.get("prefill_schedule", "auto" if e["schedule"] == "streaming" or e["placement"] == "resident" else "greedy"),
             "--validation", policy, "--threads", str(e["intraop_threads"]), "--interop-threads", str(e["interop_threads"]),
             "--workers", str(e["workers"]), "--communication", e.get("communication", "ordinary"),

@@ -11,18 +11,17 @@ CPU143通过、NPU49通过/2原GDN-HB数值xfail；四个安装消费者训练/�
 有界FP64见证支持该NPU差异为舍入，不阻塞后继；FC16最小返回CPU25.407/NPU36.841秒。
 完整返回另列32.564/57.795秒，原任务数值/离散/学习未认证，设备间活动数不同。
 
-活动：gef-joint-prefill-roots-a，413faf6+roots-a-snapshot冻结overlay，
-源码artifacts/joint-prefill/source-roots-a，Python build-roots-a与独立build-roots-sdk，
-日志artifacts/jobs/joint-prefill-roots-a/task.log。320核/512G/7200秒background.slice。
-构建及SDK三项CTest通过；SDK CPU FP64完整/最小返回的三步/新进程恢复通过，
-Python/native定向检查仍运行，不能把外层running写成通过。
-检查/停止：systemctl --user status/stop gef-joint-prefill-roots-a。
+开发终态：gef-joint-prefill-roots-a通过，210项Python/native通过/2原数值xfail；
+SDK三项CTest与CPU FP64完整/最小返回三步/新进程恢复通过。
+新增旧greedy记录解码及冻结配置内部trace兼容修复，80项相关检查通过；
+原14项短检查与误写测试文件名的零测试错误不累计成资格。
 
-工作区改动：query完整连续view分区伴随合并、公共CLI输出任务省去内部trace、
-实际工作计数和按实际选定路径精确恢复、代表配置生成器；尚未提交。
-下一步审阅roots开发终态→提交实现→固定安装CPU/NPU/SDK定向资格及FC16有限成本，
-再跑大宽度FC、多节点HB/LH、sum、循环层链B×L代表，CPU/mixed/resident/多卡分列。
-新长任务固定源码、独立服务有界资源，构建不与重型计时重叠；不无限排队。
+本提交交付query完整连续view分区伴随合并、公共CLI按需内部记录、实际工作计数与
+真实选定执行的精确恢复；执行身份v4，旧冻结配置保留完整内部trace。
+下一步在本提交干净worktree安装wheel，按内容hash复用两个已冻结core构建，
+重建独立SDK客户端并跑固定CPU/NPU/SDK资格及FC16有限成本；然后有限代表矩阵。
+源/构建/测试身份分列，不将开发overlay当固定提交资格。两份用户handoff不提交。
+新长任务固定源码、独立background.slice有界资源，构建不与重型计时重叠。
 
 下一命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 唯一待办与停止条件见[ROADMAP](ROADMAP.md)，GPU按用户授权延后。

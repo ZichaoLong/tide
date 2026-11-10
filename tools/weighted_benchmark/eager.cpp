@@ -51,6 +51,7 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   placed=place_model(data.graph,data.model,placement);registry=data.model.parameters();
   state.identity=data.graph.identity;state.batch_size=data.samples;
   options.workers=workers;options.packed=!scalar;
+  options.trace=return_mode=="complete"||j.value("__trace_records",std::string("auto"))=="complete";
   options.component_window=j.value("__prefill_schedule",std::string("auto"))!="greedy";
   options.full_autograd=options.aggregate_autograd=scalar?"replay":"batched";
   OptimizerGroup group;for(const auto& p:registry.owners())group.parameters.push_back(p.canonical);
@@ -76,6 +77,7 @@ Result Eager::forward(const Continuation& q,const std::vector<External>& xs,Inde
   auto result=prefill?prefill_engine->run(q,xs,stop,stop)
                      :Streaming(data.graph,placed,options).run(q,xs,stop,stop);
   for(const auto& [name,count]:query_counts)result.stats[name]=count;
+  result.stats["recorded_trace"]=options.trace;
   return result;
 }
 Step Eager::step(Index index){

@@ -61,8 +61,8 @@ python scripts/benchmark_dense_query.py --downstream-repo READ_ONLY_DOWNSTREAM \
 `benchmark_dense_query --trace-records complete`保留历史native成本的完整事件返回；
 `minimal`通过公共工厂关闭内部trace，是另一种返回契约，可进入KV整序列VJP。
 固定下游的旧native适配器忽略其`run_features(trace=False)`请求，原记录实际仍完整；
-不能将新minimal耗时直接标成原完整返回的等价加速。当前公共CLI的任务扩展仍可读取trace，
-只选择outputs投影不自动删去内部trace；须按实际`joint_state_vjp_events`确认所测路径。
+不能将新minimal耗时直接标成原完整返回的等价加速。公共CLI内置输出目标在outputs/metrics
+模式默认省去内部trace，任务扩展仍可读取完整trace；须按实际`joint_state_vjp_events`确认所测路径。
 原始参数hash与测量前hash相等才是reset流程；设备间/路径间实际Full数相等也不自动证明完整等价。
 出现非有限、非法配置、容量/通信/精确恢复错误停止；有限数值差异保留严格失败，不能写成等价加速。
 不设固定加速比门槛；回归比较检查工作量/计时范围/争用，超过预算则明确终态，不自动扩时重跑。

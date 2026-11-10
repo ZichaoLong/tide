@@ -82,14 +82,14 @@ def save(owner, output, resolved, identity, next_window):
 
 
 def exact_next(owner, create, path, index):
-    """Serial new owner; raw decode and next full window, outside timers."""
+    """Serial new owner; actual selected execution and exact raw state, untimed."""
     from ..compare import equivalent
     with phase("resume.snapshot_saved_values"):
         saved = owner.decoded_state()
     with phase("resume.original_next_window"):
-        actual, _ = owner.step(index, return_mode="complete")
+        actual, actual_loss = owner.step(index)
     with phase("resume.snapshot_next_parameters"):
-        params, training = owner.parameters(), owner.training_state()
+        params, training, next_state = owner.parameters(), owner.training_state(), owner.decoded_state()
     with phase("resume.close_original"):
         owner.close()
     with phase("resume.construct_and_load"):
@@ -98,13 +98,16 @@ def exact_next(owner, create, path, index):
         with phase("resume.compare_decoded_values"):
             equivalent(saved, restored.decoded_state(), atol=0, rtol=0)
         with phase("resume.restored_next_window"):
-            expected, _ = restored.step(index, return_mode="complete")
+            expected, expected_loss = restored.step(index)
         with phase("resume.compare_next_window"):
             equivalent(actual, expected, atol=0, rtol=0)
+            equivalent(next_state, restored.decoded_state(), atol=0, rtol=0)
+            if actual_loss != expected_loss:
+                raise ValueError("exact resumed objective differs")
         with phase("resume.compare_next_parameters_optimizer"):
             equivalent(params, restored.parameters(), atol=0, rtol=0)
             equivalent(training, restored.training_state(), atol=0, rtol=0)
     finally:
         restored.close()
     return dict(state="passed", exact=True, next_window=index,
-                scope="serial new owner: full decoded values and next complete window/parameters/gradients/optimizer/task")
+                scope="serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task")

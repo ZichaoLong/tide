@@ -43,6 +43,7 @@ int main(int argc,char** argv) {
     auto data=read_json(r.input);data["__fixture_root"]=r.input.parent_path().string();data["__task"]=r.task();
     data["__query_execution"]=r.query_execution;
     data["__prefill_schedule"]=r.prefill_schedule;
+    data["__trace_records"]=r.trace_records;
     if(r.check_roots)validate_root_budget(data);
     const auto fixture_seconds=tide_bench::seconds(fixture_start);
     const auto identity=r.checkpoint_identity(data);
@@ -81,7 +82,8 @@ int main(int argc,char** argv) {
       {"placement_rule",r.nodes.empty()?"region modulo ordered peers, or single coordinator":"explicit node map"},{"synchronized_devices",synchronized},
       {"communication",{{"requested",r.communication},{"effective",tide::communication_policy()}}},
       {"communication_counter_scope","instrumented explicit tensor copies; tensor endpoint bytes, not PCIe traffic or proof of P2P; resident internal decode/protocol traffic is separate"},
-      {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"task",r.task()},{"query_execution",r.query_execution},
+      {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"trace_records",r.trace_records},
+      {"task",r.task()},{"query_execution",r.query_execution},
       {"prefill_schedule",r.prefill_schedule},{"scheduler",r.implementation=="resident"?"device":
         r.schedule=="streaming"?"streaming":r.prefill_schedule=="greedy"?"online-greedy":"component-window"},
       {"validation_mode",r.validation},{"exploratory_enabled",r.validation=="explore"},{"exploratory_accepted",false},
@@ -164,18 +166,20 @@ int main(int argc,char** argv) {
     if(r.checkpoint) {
       report["phase"]="exact-resume";report["window"]=next;write(output/"result.json",report);
       const auto saved=owner->checkpoint();const auto a=owner->step(next);
+      const auto next_state=owner->checkpoint();
       const auto x=training?owner->training_state():TrainingState{};
       const auto px=training?owner->parameters():std::map<std::string,Tensor>{};
       owner->close();owner.reset();auto restored=make_owner();restore_run_checkpoint(output/"checkpoint",*restored,identity,r.checkpoint_bytes);
       tide_bench::compare(Result{saved},Result{restored->checkpoint()},true,dtype,{},0.,0.);
       const auto b=restored->step(next);tide_bench::compare(a.result,b.result,true,dtype,{},0.,0.);
+      tide_bench::compare(Result{next_state},Result{restored->checkpoint()},true,dtype,{},0.,0.);
       if(a.loss!=b.loss)throw tide_bench::ComparisonFailure({tide_bench::DifferenceKind::numeric,"restored objective","exact objective differs"});
       const auto y=training?restored->training_state():TrainingState{};
       compare_tensors(px,training?restored->parameters():std::map<std::string,Tensor>{},dtype,"restored parameters",true);
       compare_tensors(x.gradients,y.gradients,dtype,"restored gradient",true);compare_tensors(x.momentum,y.momentum,dtype,"restored momentum",true);
       compare_tensors(x.masters,y.masters,dtype,"restored master",true);restored->close();
       report["exact_resume"]={{"state","passed"},{"checkpoint","checkpoint"},{"next_window",next},{"exact",true},
-        {"scope",training?"raw decode, complete next-window, parameters, gradients, SGD/master; serial new owner":"raw decode and complete next-window; serial new owner"}};
+        {"scope",training?"raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner":"raw decode before/after selected next-window, returned records and loss; serial new owner"}};
       capture_memory(report,target,"exact_resume",false,devices);
     }
     if(owner){owner->close();owner.reset();}

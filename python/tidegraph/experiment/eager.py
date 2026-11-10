@@ -10,8 +10,10 @@ from .finite import finite_tensors
 
 
 def work(result):
-    return dict(candidate_updates=len(result.trace), full_calls=sum(e["active"] for e in result.trace),
-                messages=len(result.messages), outputs=len(result.outputs), pending=len(result.continuation.pending),
+    return dict(candidate_updates=result.stats.get("candidate_events", len(result.trace)),
+                full_calls=result.stats.get("selected_events", sum(e["active"] for e in result.trace)),
+                messages=result.stats.get("visited_edges", len(result.messages)),
+                outputs=len(result.outputs), pending=len(result.continuation.pending),
                 actual_stats=dict(result.stats))
 
 
@@ -20,6 +22,12 @@ class Eager:
         from ..planning.materialize import materialize
         spec = resolved["execution"]["effective"]
         self.resolved, self.spec, self.reference = resolved, spec, reference
+        # Plugins may use intermediate event roots in their loss. A public
+        # output projection alone must never remove those application inputs.
+        self.trace_records = (reference or "record_policy" not in spec
+                              or spec.get("return_mode", "complete") == "complete"
+                              or bool(resolved["task"].get("plugin")))
+        self._complete_execute = None
         self.check_finite = lambda value, path="runtime": finite_tensors(value, path=path, packing=
             "scalar" if reference else spec.get("finite_check_packing", "scalar"))
         self.training = resolved["measurement"]["mode"] == "training"
@@ -47,17 +55,19 @@ class Eager:
         if reference:
             from ..reference import run
             view = place_model(binding.graph, binding.model, self.placement)
-            self.execute = lambda *a, **kw: run(binding.graph, view, *a, **kw)
+            self._make_execute = lambda trace: lambda *a, **kw: run(binding.graph, view, *a, trace=trace, **kw)
             self.scheduler = "python-independent-scalar-reference"
         else:
             from ..weighted.execution import eager_runner
             implementation = "python" if spec["client"] == "pytorch" else "native"
-            self.execute = eager_runner(binding, implementation, self.placement,
+            self._make_execute = lambda trace: eager_runner(binding, implementation, self.placement,
                 resolved["site"]["paths"].get("native_library"), streaming=spec["schedule"] == "streaming",
                 workers=spec["workers"], packing=spec["packing"], query_execution=spec.get("query_execution", "legacy"),
-                prefill_schedule=spec.get("prefill_schedule", "auto" if spec["schedule"] == "streaming" else "greedy"))
+                prefill_schedule=spec.get("prefill_schedule", "auto" if spec["schedule"] == "streaming" else "greedy"),
+                trace=trace)
             self.scheduler = implementation+"-"+("streaming" if spec["schedule"] == "streaming" else
                 "online-greedy" if spec.get("prefill_schedule", "greedy") == "greedy" else "component-window")
+        self.execute = self._make_execute(self.trace_records)
         self.state = Continuation(binding.graph.identity, resolved["plan"]["samples"])
         self.task, self.task_manifest = create(resolved["task"], resolved["plan"])
         from .task_module import bind, inventory, manifest, validate_optimizer
@@ -77,14 +87,19 @@ class Eager:
         if checkpoint is not None:
             self.restore(checkpoint)
 
-    def forward(self, index):
+    def forward(self, index, *, complete=False):
         inputs = self.task.inputs(self.inputs, index, training=self.training)
         self.last_inputs = inputs
         inputs = self.place_inputs(inputs)
         if self.settle is not None:
             from ..settle_ports import validate_alignment
             validate_alignment(self.settle, self.state, inputs)
-        result = self.execute(self.state, inputs, (index+1)*self.span, sealed_until=(index+1)*self.span)
+        execute = self.execute
+        if complete and not self.trace_records:
+            if self._complete_execute is None:
+                self._complete_execute = self._make_execute(True)
+            execute = self._complete_execute
+        result = execute(self.state, inputs, (index+1)*self.span, sealed_until=(index+1)*self.span)
         return result
 
     def place_inputs(self, inputs):
@@ -108,7 +123,7 @@ class Eager:
         with torch.set_grad_enabled(self.training):
             if self.optimizer is not None:
                 self.optimizer.zero_grad(set_to_none=True)
-            result = self.forward(index)
+            result = self.forward(index, complete=mode == "complete")
             loss = self.task.loss(result, training=self.training)
             self.check_finite(dict(result=result, loss=loss), "runtime.forward_and_loss")
             if self.training:
@@ -227,10 +242,11 @@ class Eager:
             parameter_devices={n: str(p.device) for n, p in model.named_parameters()},
             region_devices=[str(region_reference(graph, model, r).device) for r in range(len(graph.regions))],
             return_mode=self.spec.get("return_mode", "complete"), return_packing=self.spec["return_packing"],
-            internal_records="complete eager records; only requested public return is copied to CPU",
+            internal_records="complete" if self.trace_records else "boundary-only; built-in output objective",
             input_boundary="fresh CPU task tensors, shared source roots, differentiable upload per window",
             operator="aten", packing=self.spec["packing"], task=self.task_manifest, task_module=self.module_manifest,
             communication=self.spec.get("communication", "ordinary"), gradient_boundary="detach per optimizer window")
 
     def close(self):
+        self._make_execute = self._complete_execute = None
         self.execute = self.binding = self.inputs = self.state = self.optimizer = self.last_inputs = self.task = self.parameter_owner = None

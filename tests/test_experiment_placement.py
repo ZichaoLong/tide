@@ -100,7 +100,7 @@ def test_historical_execution_ids_remain_unchanged_and_new_axes_are_explicit():
         dict(node_devices=("cuda:0", "cuda:1")), dict(communication="blocking"),
         dict(communication="cpu_bridge"), dict(return_mode="outputs"), dict(return_mode="metrics"))]
     assert len({r["execution_id"] for r in records}) == len(records)
-    assert all(r["schema"] == "tide-weighted-execution-v2" for r in records)
+    assert [r["schema"] for r in records] == ["tide-weighted-execution-v2"]*3+["tide-weighted-execution-v4"]*2
     with pytest.raises(ValueError, match="node_devices"):
         ExecutionSpec(**old, node_devices=("cuda:0", "cuda:2"))
     with pytest.raises(ValueError, match="device peer protocol"):

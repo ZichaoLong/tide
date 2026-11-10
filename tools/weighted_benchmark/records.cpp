@@ -35,10 +35,12 @@ Json activity(const Result& r){
     auto& row=rows.at(owner.first);++row.owners;++row.cache[times.numel()];++total[times.numel()];}
   auto histogram=[](const std::map<Index,Index>& counts){Json out=Json::object();for(const auto& [length,n]:counts)out[std::to_string(length)]=n;return out;};
   Json samples=Json::array();
-  for(size_t b=0;b<rows.size();++b){const auto& row=rows[b];samples.push_back({{"sample",b},{"candidates",row.candidates},
-    {"full",row.full},{"received_atoms",row.received},{"messages",row.messages},{"outputs",row.outputs},{"pending",row.pending},
+  const bool traced=!r.stats.count("recorded_trace")||r.stats.at("recorded_trace");
+  for(size_t b=0;b<rows.size();++b){const auto& row=rows[b];samples.push_back({{"sample",b},{"candidates",traced?Json(row.candidates):Json(nullptr)},
+    {"full",traced?Json(row.full):Json(nullptr)},{"received_atoms",traced?Json(row.received):Json(nullptr)},
+    {"messages",traced?Json(row.messages):Json(nullptr)},{"outputs",row.outputs},{"pending",row.pending},
     {"stored_kv_owners",row.owners},{"raw_kv_cache_lengths",histogram(row.cache)}});}
-  return {{"scope","actual record metadata; raw stored KV lengths, not visible query buckets; no timestamp value copies"},
+  return {{"scope","actual record metadata; omitted trace counters are null; raw stored KV lengths, not visible query buckets; no timestamp value copies"},
     {"samples",samples},{"raw_kv_cache_lengths",histogram(total)}};
 }
 }
@@ -72,7 +74,9 @@ Tensor loss(const Result& r,bool allow_empty,double scale){
 }
 Json work(const Result& r){
   Index full=0;for(const auto& e:r.trace)full+=e.active;
-  return { {"candidate_updates",r.trace.size()},{"full_calls",full},{"messages",r.messages.size()},
+  auto count=[&](const std::string& key,Index fallback){auto p=r.stats.find(key);return p==r.stats.end()?fallback:p->second;};
+  return { {"candidate_updates",count("candidate_events",r.trace.size())},{"full_calls",count("selected_events",full)},
+    {"messages",count("visited_edges",r.messages.size())},
     {"outputs",r.outputs.size()},{"pending",r.continuation.pending.size()},{"actual_stats",r.stats},
     {"boundary_activity",activity(r)} };
 }

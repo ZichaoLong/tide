@@ -61,6 +61,20 @@ def test_independent_roots_include_disconnected_and_head_loss(config):
     assert result["state"] == "passed" and "downstream-task-loss" in result["roots"]
 
 
+def test_selected_public_return_keeps_plugin_intermediate_loss_roots(config):
+    request = copy.deepcopy(config["requested"])
+    request["execution"]["return_mode"] = "outputs"
+    request["measurement"]["validation"] = "none"
+    candidate = Eager(resolve(request))
+    try:
+        assert candidate.trace_records
+        result = candidate.forward(0)
+        assert result.trace and result.messages
+        assert candidate.manifest()["internal_records"] == "complete"
+    finally:
+        candidate.close()
+
+
 def test_task_optimizer_missing_unowned_and_duplicate_owners_are_rejected():
     graph = torch.nn.Linear(2, 2)
     task = SimpleNamespace(module=torch.nn.Linear(2, 1))

@@ -36,6 +36,7 @@ Json Request::checkpoint_identity(const Json& fixture) const {
   // not silently resume them as an exact continuation of a different policy.
   if(query_execution!="legacy")identity["query_execution"]=query_execution;
   if(query_execution=="auto")identity["query_policy"]="kv-packed-v2";
+  if(implementation!="resident"&&return_mode!="complete"&&trace_records!="complete")identity["record_policy"]="selected-boundary-v1";
   if(implementation!="resident"&&schedule=="prefill"&&prefill_schedule!="greedy"){
     identity["prefill_schedule"]=prefill_schedule;
     identity["scheduler"]="component-window";
@@ -74,6 +75,7 @@ void help() {
     "--node-devices DEVICE,DEVICE,... (one owner per node, sharing constraints apply)\n"
     "--communication ordinary|blocking|cpu_bridge (process-scoped explicit copy policy)\n"
     "--validation strict|explore|none --return-mode complete|outputs|metrics\n"
+    "--trace-records auto|complete (complete preserves historical internal roots with minimal public returns)\n"
     "  Minimal returns require validation=none; use a separate complete-return qualification.\n"
     "  Explore accepts only finite numeric mismatch with every discrete comparison passed.\n"
     "--resume CHECKPOINT_DIR --checkpoint-check true|false --checkpoint-max-bytes N\n"
@@ -102,6 +104,7 @@ Request parse_request(int argc,char** argv) {
     else if(key=="--query-execution")r.query_execution=value;
     else if(key=="--prefill-schedule")r.prefill_schedule=value;
     else if(key=="--return-mode")r.return_mode=value;else if(key=="--communication")r.communication=value;
+    else if(key=="--trace-records")r.trace_records=value;
     else if(key=="--steps")r.steps=integer(value,key);else if(key=="--workers")r.workers=integer(value,key);
     else if(key=="--warmup")r.warmup=integer(value,key,0);
     else if(key=="--threads"||key=="--intraop-threads")r.threads=integer(value,key);
@@ -123,6 +126,7 @@ Request parse_request(int argc,char** argv) {
   if(!one(r.validation,{"strict","explore","none"})||!one(r.return_mode,{"complete","outputs","metrics"}))
     throw std::invalid_argument("invalid validation or return-mode");
   if(!one(r.communication,{"ordinary","blocking","cpu_bridge"}))throw std::invalid_argument("invalid communication policy");
+  if(!one(r.trace_records,{"auto","complete"}))throw std::invalid_argument("invalid trace-records policy");
   if(!one(r.query_execution,{"auto","legacy","dense-v1","packed-v2"}))throw std::invalid_argument("unknown query_execution");
   if(!one(r.prefill_schedule,{"auto","greedy","window"})||(r.prefill_schedule!="auto"&&(r.implementation=="resident"||r.schedule!="prefill")))
     throw std::invalid_argument("explicit prefill_schedule requires host prefill");
@@ -130,7 +134,6 @@ Request parse_request(int argc,char** argv) {
      (r.implementation=="resident"||r.schedule!="prefill"||r.packing=="scalar"||r.workers!=1||r.precision=="float16"))
     throw std::invalid_argument("explicit query execution requires FP32/FP64 packed eager prefill and one worker");
   if(r.return_mode!="complete"&&r.validation!="none")throw std::invalid_argument("minimal return requires validation=none; qualify complete records separately");
-  if(r.return_mode!="complete"&&r.checkpoint)throw std::invalid_argument("exact complete-record resume check requires return-mode=complete");
   if(r.check_roots&&(r.validation=="none"||r.return_mode!="complete"||r.implementation!="native"))
     throw std::invalid_argument("--check-roots requires eager native, complete returns and strict/explore validation; resident has separate compiled root qualification");
   if(r.precision=="float64"&&((r.device!="cpu"&&r.device.rfind("cuda:",0)!=0)||r.implementation!="native"||!r.peers.empty()))

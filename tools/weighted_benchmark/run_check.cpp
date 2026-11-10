@@ -36,6 +36,8 @@ int main() {
     rejects([&]{auto a=base;a.insert(a.end(),{"--check-roots","--validation","none"});parse(a);});
     auto selected=base;selected.insert(selected.end(),{"--validation","none","--return-mode","metrics","--threads","3","--communication","cpu_bridge","--warmup","0","--steps","9"});
     request=parse(selected);require(request.threads==3&&request.return_mode=="metrics"&&request.warmup==0&&request.steps==9,"public run options lost");
+    auto recovered=selected;recovered.insert(recovered.end(),{"--checkpoint-check","true"});
+    require(parse(recovered).checkpoint,"selected-return exact raw resume was rejected");
     rejects([&]{auto a=base;a.insert(a.end(),{"--return-mode","outputs"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--steps","2garbage"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--loss-scale","nan"});parse(a);});
@@ -52,6 +54,9 @@ int main() {
     CheckpointOwner owner;
     const Json fixture={{"fixture_sha256","one"},{"span",10}};
     const auto identity=request.checkpoint_identity(fixture);
+    require(identity.at("record_policy")=="selected-boundary-v1","selected-return policy identity missing");
+    auto historical=request;historical.trace_records="complete";
+    require(!historical.checkpoint_identity(fixture).contains("record_policy"),"historical trace identity changed");
     require(identity.at("query_execution")=="auto"&&identity.at("query_policy")=="kv-packed-v2","query policy missing from checkpoint");
     require(identity.at("scheduler")=="component-window","prefill policy missing from checkpoint");
     auto greedy=request;greedy.prefill_schedule="greedy";

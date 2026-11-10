@@ -21,6 +21,13 @@ Full 使用显式 `full_autograd="batched"`，默认 `replay` 仍可调用；unp
 通用 Read/Full 不因本地带权绑定而获得未经实现的能力。
 
 每组捕获记忆与对应 Read/Full 程序的注册参数，建立私有叶和真实批量计算图。
+反向进入私有图前，`weighted/query_roots.py`与C++ `weighted_query_roots.h`识别同一
+可求导连续base的完整、不重叠view分区。仅在每个位置恰好覆盖一次时，按实际storage offset
+拼接伴随并直接对base反传，避免每个row各产生一个整批大小的SelectBackward零缓冲区。
+缺少任一行、重叠、非连续、空或特殊view均保留原始根；不填补缺失cotangent，
+不改独立行/字段分组、私有叶选择、参数共享或数值函数。实际采用量见
+`packing/projection/query_vjp_root_partition`；这是伴随装配计数，不是矩阵投影或kernel计数。
+`test_query_roots`给出手算线性转置与部分/重叠/非连续反例；既有query字段根继续验收整链。
 参数树中的 Tensor/模块别名保持；相同参数不同输入仍独立计算，所有使用者的梯度累加。
 每行保留自己的快照浮点槽、int64 非求导槽、content，以及 Full 的 control。
 Read⁰ 使用真实绑定初态；Full 始终读本请求 comparison，不借用 Read 的快照。
@@ -79,4 +86,4 @@ value 导数为 `p_i*bar`。这是精确映射的等价导数表达，不微分�
 [数值批量资格](evidence/core5-query-20261027.md)只认证其固定提交的数值和 replay 路径。
 本批量 VJP 的开发/固定源码资格见 STATUS 与后续独立证据，不冒用既有通过数。
 
-显式[dense-v1](weighted-dense-query.md)仅移除KV缓存轴的外层分组限制，保留分支/字段根契约；默认路径不变。
+显式[dense-v1](weighted-dense-query.md)移除KV缓存轴的外层分组限制；默认auto按能力选择packed-v2，保留分支/字段根契约。

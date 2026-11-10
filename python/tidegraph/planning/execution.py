@@ -98,6 +98,17 @@ class ExecutionSpec:
         if self.device.startswith("npu:") and self.scoring_dtype == "float64" and self.placement != "mixed-a":
             raise ValueError("NPU FP64 scoring requires explicit CPU Read/control (mixed-a)")
 
+    @classmethod
+    def from_record(cls, record):
+        """Decode omitted historical defaults without adopting newer policies."""
+        requested = dict(record.get("requested", record))
+        if "requested" in record:
+            requested.setdefault("query_execution", "legacy")
+            host_prefill = (requested.get("schedule", "prefill") == "prefill"
+                            and requested.get("placement", "native") != "resident")
+            requested.setdefault("prefill_schedule", "greedy" if host_prefill else "auto")
+        return cls(**requested)
+
     def record(self):
         requested = asdict(self)
         # Explicit greedy reproduces the pre-window execution identities.
@@ -117,6 +128,9 @@ class ExecutionSpec:
             for key in ("node_devices", "communication", "return_mode"):
                 requested.pop(key)
         effective = dict(requested)
+        selected_boundary = self.return_mode != "complete" and self.placement != "resident"
+        if selected_boundary:
+            effective["record_policy"] = "selected-boundary-v1; task plugins retain complete records"
         if window_policy:
             effective["prefill_schedule"] = "window"
             effective["scheduler"] = "component-window"
@@ -128,7 +142,8 @@ class ExecutionSpec:
             effective["query_policy"] = "kv-packed-v2; capability/dtype/schedule fallback to legacy"
             if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
                 effective["query_execution"] = "legacy"
-        body = dict(schema="tide-weighted-execution-v3" if window_policy else
+        body = dict(schema="tide-weighted-execution-v4" if selected_boundary else
+                    "tide-weighted-execution-v3" if window_policy else
                     "tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
                     requested=requested, effective=effective,
                     qualification="implementation selection only; exact-device evidence is separate")

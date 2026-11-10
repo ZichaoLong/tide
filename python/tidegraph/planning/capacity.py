@@ -93,7 +93,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     Missing dynamic reservations remain unknown, including for an empty card.
     """
     inv = validate_plan(plan)
-    spec = execution if isinstance(execution, ExecutionSpec) else ExecutionSpec(**execution.get("requested", execution))
+    spec = execution if isinstance(execution, ExecutionSpec) else ExecutionSpec.from_record(execution)
     if isinstance(execution, dict) and "execution_id" in execution and execution["execution_id"] != spec.record()["execution_id"]:
         raise ValueError("execution identity mismatch")
     if mode not in {"inference", "training"} or optimizer not in {"sgd", "adamw"} or type(checkpoint) is not bool:

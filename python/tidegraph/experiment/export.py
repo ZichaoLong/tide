@@ -48,7 +48,7 @@ def material(resolved, destination):
                   **{k: plan[k] for k in ("width", "samples", "positions", "seed")}, workload_sha256=plan["sha256"])
     from .config import resident_limits_defaults
     from ..planning.execution import ExecutionSpec
-    limits = resident_limits_defaults(plan, ExecutionSpec(**resolved["execution"]["requested"]),
+    limits = resident_limits_defaults(plan, ExecutionSpec.from_record(resolved["execution"]),
                                      resolved["measurement"], resolved["resources"])
     record = dict(schema="tide-weighted-benchmark-fixture-v2", source="installed:"+package_identity()["installed_files_sha256"],
         dirty=False, config=config, span=span, graph=graph_record, memories=[asdict(x) for x in binding.memories],

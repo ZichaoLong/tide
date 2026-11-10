@@ -1,6 +1,7 @@
 // Architecture §3/4: actual query batches with independent row/field VJP roots.
 #include "weighted_query_vjp.h"
 #include "weighted_query_layout.h"
+#include "weighted_query_roots.h"
 #include "weighted_singleton_vjp.h"
 #include "region_metadata.h"
 #include <torch/csrc/autograd/autograd.h>
@@ -68,6 +69,7 @@ class QueryVjp final:public torch::autograd::Node {
       for(size_t i=0;i<weights;++i)append(i);
       for(auto row:used)for(size_t j=0;j<row_inputs;++j)append(weights+row*row_inputs+j);
       if(inputs.empty())continue;
+      coalesce_roots(roots,grads);
       auto values=torch::autograd::grad(roots,inputs,grads,true,false,true);
       for(size_t i=0;i<ids.size();++i)if(values[i].defined()){
         auto& out=result[ids[i]];out=out.defined()?out+values[i]:values[i];

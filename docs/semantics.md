@@ -71,6 +71,15 @@ use the online closure certificate. Explicit greedy/streaming and device-residen
 schedules remain available. This changes execution policy/identity, not graph v13,
 checkpoint v5, independent reference scheduling or local mathematical functions.
 
+The public eager experiment client may omit internal event records when its
+built-in objective requests outputs/metrics only. Task plugins retain full records;
+an explicit complete diagnostic call also retains intermediate roots. This policy
+has execution identity v4 (selected-boundary-v1); graph/checkpoint versions do not
+change. Exact continuation compares the selected execution's returned records,
+objective, all raw state before/after the next window and the complete training
+state. It must not silently run a different traced algorithm to certify resume.
+See [experiment validation](experiment-validation.md).
+
 Untraced prepared KV blocks may compose the internal State VJP over a whole
 sequence. Public messages, final states and input/parameter/left-state roots
 remain unchanged; traced intermediate State handles retain their causal step
