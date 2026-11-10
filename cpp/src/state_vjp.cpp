@@ -35,12 +35,12 @@ variable_list values(const State& s) {
   for (const auto& [name,t]:s.slots) result.push_back(t);
   return result;
 }
-std::string signature(Request r,const StateKernel& kernel) {
+std::string signature(Request r,const StateKernel& kernel,const std::string* content_key) {
   // Only declared builtins enter here. Their branches use these coordinates,
   // shapes, source slots and an explicit local structural branch identity.
   std::ostringstream s;
   s << r.time << ':' << r.old.last_time << ':' << r.old.observations;
-  s << ':' << kernel.batch_autograd_key(r.old,r.view(),r.time);
+  s << ':' << (content_key?*content_key:kernel.batch_autograd_key(r.old,r.view(),r.time));
   for (const auto& [name,t]:r.old.slots) s << ':' << name;
   s << ":sources" << r.sources.size();
   for (const auto& a:r.sources) s << ':' << a.slot;
@@ -155,16 +155,18 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
 }
 std::vector<State> state_batch_vjp(const NodeWeights& w,const std::vector<State>& old,
     const ContentViews& views,const std::vector<Index>& times,const std::vector<State>& numeric,
-    const std::vector<std::map<std::string,Tensor>>& prepared) {
+    const std::vector<std::map<std::string,Tensor>>& prepared,const std::vector<std::string>& content_keys) {
   work::StateReplayTimer timer(work::StateBatchGraphNs);
   if(!prepared.empty()&&prepared.size()!=old.size())throw std::invalid_argument("State VJP preparation count mismatch");
+  const auto keys=content_keys.empty()?w.kernel->content_autograd_keys(views):content_keys;
+  if(!keys.empty()&&keys.size()!=old.size())throw std::invalid_argument("State VJP content key count mismatch");
   std::map<std::string,std::vector<size_t>> groups;
   std::vector<Request> requests;
   for (size_t i=0;i<old.size();++i) {
     requests.push_back({old[i],views[i].value,{views[i].sources.begin(),views[i].sources.end()},
                        {views[i].contributions.begin(),views[i].contributions.end()},times[i],
                        prepared.empty()?std::map<std::string,Tensor>{}:prepared.at(i)});
-    groups[signature(requests.back(),*w.kernel)].push_back(i);
+    groups[signature(requests.back(),*w.kernel,keys.empty()?nullptr:&keys[i])].push_back(i);
   }
   auto result=numeric;
   for (const auto& [key,ids]:groups) {
@@ -178,19 +180,23 @@ std::vector<State> state_batch_vjp(const NodeWeights& w,const std::vector<State>
 void state_sequence_vjp(const NodeWeights& w,const std::vector<State>& old,
     const PackedSequence& p,std::vector<State>& numeric,std::vector<State>& previous) {
   auto current=old;previous.resize(numeric.size());
+  const auto keys=w.kernel->content_autograd_keys(p.views);
+  if(!keys.empty()&&keys.size()!=p.views.size())throw std::invalid_argument("State VJP content key count mismatch");
   for (Index depth=0;;++depth) {
     std::vector<size_t> owners,ids;
     std::vector<State> initial,packed;
     ContentViews views;std::vector<Index> times;
     std::vector<std::map<std::string,Tensor>> prepared;
+    std::vector<std::string> selected_keys;
     for (size_t i=0;i<old.size();++i) if (p.offsets[i]+depth<p.offsets[i+1]) {
       const auto j=p.offsets[i]+depth; owners.push_back(i);ids.push_back(j);
       previous[j]=current[i];initial.push_back(current[i]);packed.push_back(numeric[j]);
       views.push_back(p.views[j]);times.push_back(p.times[j]);
       prepared.push_back(p.prepared.empty()?std::map<std::string,Tensor>{}:p.prepared.at(j));
+      if(!keys.empty())selected_keys.push_back(keys[j]);
     }
     if (ids.empty()) break;
-    auto bound=state_batch_vjp(w,initial,views,times,packed,prepared);
+    auto bound=state_batch_vjp(w,initial,views,times,packed,prepared,selected_keys);
     for (size_t i=0;i<ids.size();++i) current[owners[i]]=numeric[ids[i]]=std::move(bound[i]);
   }
 }

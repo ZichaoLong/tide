@@ -28,6 +28,12 @@ Python `weighted/packing.py::Writes` 与 C++ `weighted_packed.cpp::Writes` 将�
 | 原始返回与右边界 | Writes.decode | 直接选取已计算的 H/Z/W、KV 项与卷积项，恢复时间/观察数/原样零接收；不调用 scalar Upd 或参考递归补写 |
 
 KV 所有正写入共用一个投影 batch；循环对相同正写入长度的 owner 分组扫描。
+KV 原始时间严格递增，因此每个缓存快照是连接后实际字段的连续切片。
+`kv_packed` 使用 host int64 前缀端点；窗口可能过期时，一次传回各 owner 的
+旧 int64 时间戳并二分定位左端点，避免逐事件设备布尔索引。零接收仍保留原 tuple，
+不清理过期项；无窗口或不可能过期的前缀不下载旧时间戳。每个中间快照保留
+独立字段根及向后继状态的连接，不能直接把全部快照视为互不依赖的切片根。
+`test_kv_prefix_roots` 在稀疏时间、过期、零接收及超过2^55的时钟上核对该约束。
 sequence、独立 step batch 和 packed_sequence 进入这些算子。stats 中 joint 能力消除
 `state_scalar_sequence_steps`/`state_scalar_batch_steps`；calls 计联合分组，
 不等同于 ATen 算子数、硬件内核数或调度阶段数。实际窗口/快照索引仍有 owner/输出循环。

@@ -33,11 +33,11 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         raise ValueError("continuation identity or batch size mismatch")
     if not 0 <= q.cut <= stop <= sealed_until < 2**63:
         raise ValueError("window requires monotonic cut and explicit input seal")
+    finite_values = []
     def tensor(x, reference):
         if x.device != reference.device or x.dtype != reference.dtype or x.shape != (model.width,):
             raise ValueError("incompatible tensor device, dtype or shape")
-        if not torch.isfinite(x).all():
-            raise ValueError("nonfinite input/state")
+        finite_values.append(x)
     for (b, v), state in q.states.items():
         if not 0 <= b < q.batch_size or not 0 <= v < len(graph.nodes):
             raise ValueError("invalid state owner")
@@ -85,4 +85,7 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
             raise ValueError("invalid pending message coordinate")
         seen.add(key)
         tensor(a.value, model.nodes[a.node].bias)
+    from .finite import all_finite
+    if not all_finite(finite_values):
+        raise ValueError("nonfinite input/state")
     return atoms, ledger

@@ -15,6 +15,7 @@ class MemoryKernel : public StateKernel {
   std::string batch_autograd_key(const State&,const ContentView& h,Index) const override {
     return h.value[0].item<double>()>0 ? "positive-write" : "retain-raw";
   }
+  std::vector<std::string> content_autograd_keys(const ContentViews&) const override;
 };
 struct KVConfig {
   Index width=4, summary_width=2, adapter_rank=2, heads=1, ffn_width=8, window=0;

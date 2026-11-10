@@ -55,6 +55,9 @@ class StateKernel {
   // Additional structural branch identity for declared row-independent VJPs.
   // It may depend on actual local inputs; never on incoming cotangent values.
   virtual std::string batch_autograd_key(const State&,const ContentView&,Index) const { return {}; }
+  // Optional identical keys depending only on the complete content rows.
+  // Empty declines. Never precompute a state-dependent branch from a trace.
+  virtual std::vector<std::string> content_autograd_keys(const ContentViews&) const { return {}; }
   virtual bool joint_sequence() const { return false; }
   // Named non-differentiable metadata slots, always int64 on the state device.
   virtual std::set<std::string> integer_slots() const { return {}; }

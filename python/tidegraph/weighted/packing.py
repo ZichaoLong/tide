@@ -10,6 +10,14 @@ from .tensors import Received
 from . import packing_observation as observation
 
 
+def positive_keys(views):
+    """Content-only branch identities; no stored state or numerical prepass."""
+    if not views:
+        return []
+    flags = (torch.stack([v.value[0].detach() for v in views]) > 0).cpu().tolist()
+    return [(flag,) for flag in flags]
+
+
 def project(x, weight):
     """Batch the textbook column-vector projections without reorienting them."""
     observation.projection("weighted_mm", x.shape[0])

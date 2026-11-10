@@ -6,7 +6,8 @@ namespace tide {
 // structural disconnection for each row and each state slot.
 std::vector<State> state_batch_vjp(const NodeWeights&, const std::vector<State>& old,
     const ContentViews&, const std::vector<Index>& times, const std::vector<State>& numeric,
-    const std::vector<std::map<std::string,Tensor>>& prepared={});
+    const std::vector<std::map<std::string,Tensor>>& prepared={},
+    const std::vector<std::string>& content_keys={});
 void state_sequence_vjp(const NodeWeights&, const std::vector<State>& old,
     const PackedSequence&, std::vector<State>& numeric, std::vector<State>& previous);
 }

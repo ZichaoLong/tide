@@ -17,7 +17,7 @@
 
 ## 当前作业与资源
 
-无活动长作业。gef-joint-prefill-window-a失败于缺少声明头，未运行测试；原记录保留。
+活动gef-joint-prefill-fixed-window：da2f41b固定检出fixed-window，脚本fixed-window.sh；安装CPU四组并行/NPU单卡，MemoryMax192G/3600秒，日志artifacts/jobs/joint-prefill-fixed-window/task.log。gef-joint-prefill-window-a失败于缺少声明头，未运行测试；原记录保留。
 gef-joint-prefill-window-b已终态（原测试断言1失败/494通过），冻结源码
 artifacts/joint-prefill/source-window-b，原始tree身份window-b-snapshot.json；
 新构建artifacts/joint-prefill/build-window-b。全320核、512G/3600秒，未与重型计时重叠。
@@ -36,3 +36,13 @@ artifacts/joint-prefill/source-window-b，原始tree身份window-b-snapshot.json
 
 下一命令：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 长作业源码/脚本/日志均在artifacts/joint-prefill与artifacts/jobs，完整待办只见ROADMAP。
+
+活动gef-joint-prefill-window-sdk：同da2f41b独立SDK构建/独立消费者CPU64/CPU32/NPU32。脚本fixed-window-sdk.sh；全320构建/512G/3600秒，记录artifacts/jobs/joint-prefill-window-sdk。与Python资格并行，无性能计时。
+
+两次固定资格初次启动器分别因OUT/ROOT占位替换误改STDOUT/LIBTORCH_ROOT而失败，模型检查未开始；wheel和静态fixture已生成且核对。保留失败，续接脚本fixed-window-b.sh/fixed-window-sdk-b.sh与独立job名后缀-b，仅重启未执行部分，不覆盖旧日志。
+
+窗口固定CPU391项全部通过；SDK CPU FP64/FP32和NPU FP32三步独立训练/新进程精确恢复均通过。NPU新五记忆原30项为测试device比较误拒绝，b148ba1修正测试驱动；da2f41b安装实现/二进制不变，gef-joint-prefill-window-npu-c续接，仅新30项和未运行dense门禁，报告严格超差与精确恢复分列。
+
+下一开发gef-joint-prefill-guards-a：冻结source-guards-a（b148ba1+KV切片/finite/结构分支批量元数据），全320构建build-guards-a，CPU相关四组并行；512G/3600秒。独立原始时间、None/零、版本及中间状态梯度根必须通过。
+
+KV切片/有限检查/结构分支元数据开发构建完成：四组1313项全部通过（1026/110/80/97），无skip。即将提交实现并冻结安装资格；不将开发构建直接称为安装/设备资格。

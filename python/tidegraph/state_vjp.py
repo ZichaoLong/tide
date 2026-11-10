@@ -54,11 +54,11 @@ def _values(state):
     return [state.value, *[v for k, v in sorted(state.slots.items())]]
 
 
-def _signature(row, kernel):
+def _signature(row, kernel, content_key=None):
     tensors = []
     _rows([row], lambda t: tensors.append((tuple(t.shape), t.device, t.dtype, t.requires_grad)))
     old, view, time, prepared = row
-    branch = kernel.batch_autograd_key(old, view, time) if hasattr(kernel, "batch_autograd_key") else ()
+    branch = content_key if content_key is not None else kernel.batch_autograd_key(old, view, time) if hasattr(kernel, "batch_autograd_key") else ()
     return (branch, time, old.last_time, old.observations, tuple(sorted(old.slots)), tuple(sorted(prepared)),
             tuple(s.slot for s in view.sources), tuple(sorted(view.contributions)), tuple(tensors))
 
@@ -117,12 +117,16 @@ class _State(torch.autograd.Function):
         return None, None, *result
 
 
-def bind_batch(weights, old, views, times, numeric, prepared=None):
+def bind_batch(weights, old, views, times, numeric, prepared=None, content_keys=None):
     if prepared is not None and len(prepared) != len(old):
         raise ValueError("State VJP preparation count mismatch")
     rows, groups = list(zip(old, views, times, prepared or [{} for _ in old])), {}
+    if content_keys is None and hasattr(weights.kernel, "content_autograd_keys"):
+        content_keys = weights.kernel.content_autograd_keys(views)
+    if content_keys is not None and len(content_keys) != len(rows):
+        raise ValueError("State VJP content key count mismatch")
     for i, row in enumerate(rows):
-        groups.setdefault(_signature(row, weights.kernel), []).append(i)
+        groups.setdefault(_signature(row, weights.kernel, None if content_keys is None else content_keys[i]), []).append(i)
     result = list(numeric)
     for ids in groups.values():
         inputs = []
@@ -140,6 +144,9 @@ def bind_batch(weights, old, views, times, numeric, prepared=None):
 
 def bind_sequence(weights, old, batch, states):
     current, previous, depth = list(old), [None]*len(states), 0
+    keys = weights.kernel.content_autograd_keys(batch.views) if hasattr(weights.kernel, "content_autograd_keys") else None
+    if keys is not None and len(keys) != len(batch.views):
+        raise ValueError("State VJP content key count mismatch")
     while True:
         pairs = [(i, start+depth) for i, start in enumerate(batch.offsets[:-1])
                  if start+depth < batch.offsets[i+1]]
@@ -149,7 +156,8 @@ def bind_sequence(weights, old, batch, states):
             previous[j] = current[i]
         bound = bind_batch(weights, [current[i] for i, j in pairs], [batch.views[j] for i, j in pairs],
                            [batch.times[j] for i, j in pairs], [states[j] for i, j in pairs],
-                           [batch.prepared[j] for i, j in pairs] if batch.prepared else None)
+                           [batch.prepared[j] for i, j in pairs] if batch.prepared else None,
+                           [keys[j] for i, j in pairs] if keys is not None else None)
         for (i, j), s in zip(pairs, bound):
             current[i] = states[j] = s
         depth += 1

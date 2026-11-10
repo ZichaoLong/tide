@@ -24,6 +24,10 @@ class RecurrentMemory(StateProgram):
     def batch_autograd_key(self, old, view, time):
         return (bool(view.value[0] > 0),)
 
+    def content_autograd_keys(self, views):
+        from .packing import positive_keys
+        return positive_keys(views)
+
     def sequence(self, w, old, values, times, views=None):
         from .packing import sequence
         return sequence(self, w, old, values, times, views)

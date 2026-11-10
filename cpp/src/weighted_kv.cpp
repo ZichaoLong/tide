@@ -6,6 +6,13 @@
 #include <cstdint>
 
 namespace tide::weighted {
+std::vector<std::string> MemoryKernel::content_autograd_keys(const ContentViews& views) const {
+  if(views.empty())return {};
+  std::vector<Tensor> masses;for(const auto& view:views)masses.push_back(view.value[0].detach());
+  auto flags=(at::stack(masses)>0).to(at::kCPU).contiguous();const auto* data=flags.data_ptr<bool>();
+  std::vector<std::string> result;for(size_t i=0;i<views.size();++i)result.push_back(data[i]?"positive-write":"retain-raw");
+  return result;
+}
 using namespace detail;
 void KVConfig::validate() const {
   require(width>0&&summary_width>0&&adapter_rank>0&&heads>0&&width%heads==0&&ffn_width>0&&window>=0,"invalid weighted KV sizes");
