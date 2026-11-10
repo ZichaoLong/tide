@@ -47,3 +47,10 @@ SDK CPU/NPU完整/outputs三步及新进程恢复均通过；原始结果待纳�
 起步：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 检查/停止：systemctl --user status/stop准确gef-joint-prefill-NAME.service，复查整个cgroup终止。
 正式资格先固定实现，再提交证据。继续审阅每个inner结果、记录正负经验和准确复现入口。
+
+新任务gef-joint-prefill-local-batches已提交，固定3d88b0b/fixed-local-batches；先等本项目single/dual计时终态，
+再用全部320CPU新建Python-owned/standalone core和SDK、独立env-local-batches。
+CPU/NPU相关守卫/独立根/训练/恢复、SDK完整与outputs新进程恢复、原FC16最小返回成本和小profile；
+CPU配额320、内存512GiB、28800秒，NPU准入最多60秒。任务在background.slice。
+日志artifacts/jobs/joint-prefill-local-batches/task.log；驱动hash见artifacts/joint-prefill/local-batches-driver.json。
+未完成构建/检查不记通过；代码后继只改工作区，不修改该只读worktree、包或驱动。

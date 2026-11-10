@@ -21,6 +21,13 @@ Describe字段和图记录，消去恒零依赖；其None和图实现的连接�
 返回职责不同，差距表示可继续研究的开销范围，不能报告为已验证的等价实现加速比。
 同源码小型正确性资格与实测尺度数值资格分别记录。
 
+跨设备资格显式忽略device标签，保持dtype、shape、int64和原数值阈值。
+需要收集全部有限超差时，可给测试设置`TIDE_DENSE_NUMERIC_REPORT=NEW_DIRECTORY`；
+完整输出/末态/数值根仍全部检查，有限超差最终标为xfail，非有限/结构错误仍失败。
+`scripts/diagnose_layer_rounding.py --device npu:0 --native-library MATCHING_BUILD --output NEW.json`
+把同一FP32材料提升到CPU FP64，分别记录scalar、tensor及默认Python/native的输出、末态、
+输出平方目标梯度误差。它是有界定位，不改变容差，也不认证层链之外的训练效果。
+
 ```sh
 python scripts/benchmark_layer_chain.py --family kv --implementation tensor \
   --device cpu --batch 4 --length 32 --width 128 --output-dir NEW_TENSOR_RUN
