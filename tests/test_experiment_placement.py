@@ -92,8 +92,9 @@ def test_physical_edge_and_port_parameter_owners_are_not_coalesced():
 
 
 def test_historical_execution_ids_remain_unchanged_and_new_axes_are_explicit():
-    assert ExecutionSpec().record()["execution_id"] == "8357bacf48905d72e894302a7b86c53954a9c9d9fcd6bd7c1f99b1ccf34218c9"
-    old = dict(client="python-native", device="cuda:0", placement="mixed-c", peer_devices=("cuda:0", "cuda:1"))
+    assert ExecutionSpec(query_execution="legacy", prefill_schedule="greedy").record()["execution_id"] == "8357bacf48905d72e894302a7b86c53954a9c9d9fcd6bd7c1f99b1ccf34218c9"
+    old = dict(client="python-native", device="cuda:0", placement="mixed-c", peer_devices=("cuda:0", "cuda:1"),
+               query_execution="legacy", prefill_schedule="greedy")
     assert ExecutionSpec(**old).record()["execution_id"] == "6f55d0e3a6308ab463ecf4509edec98a22abb1dccbd80e4597f32dd9a6d585d5"
     records = [ExecutionSpec(**old, **extra).record() for extra in (
         dict(node_devices=("cuda:0", "cuda:1")), dict(communication="blocking"),

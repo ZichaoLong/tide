@@ -62,7 +62,8 @@ class Eager:
         else:
             self.execute = eager_runner(binding, args.implementation, placement, args.native_library,
                                   streaming=args.schedule == "streaming", workers=getattr(args, "workers", 1),
-                                  packing=getattr(args, "packing", "auto"), query_execution=getattr(args, "query_execution", "auto"))
+                                  packing=getattr(args, "packing", "auto"), query_execution=getattr(args, "query_execution", "auto"),
+                                  prefill_schedule=getattr(args, "prefill_schedule", "auto"))
         self.state = Continuation(binding.graph.identity, config.samples)
         self.half = next(binding.model.parameters()).dtype == torch.float16
         if args.mode != "training":

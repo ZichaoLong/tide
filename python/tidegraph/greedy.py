@@ -14,7 +14,7 @@ from .validation import validate_window
 
 def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zeta=1.0,
         trace=True, prefill=True, max_events=1000000, packed=True,
-        full_autograd="replay", aggregate_autograd="replay"):
+        full_autograd="replay", aggregate_autograd="replay", component_window=False):
     policy = dict(packed=packed, full_autograd=full_autograd, aggregate_autograd=aggregate_autograd)
     validate(model, **policy)
     if mode not in {"hard", "hst", "softp"} or not math.isfinite(zeta):
@@ -24,10 +24,14 @@ def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zet
     atoms, ledger = validate_window(graph, model, initial, external, stop, sealed_until)
     q = initial.fork()
     q.ledger = ledger
-    fibers = defaultdict(list)
+    if component_window:
+        from .window_plan import WindowPlan, ComponentFibers
+        plan = WindowPlan(graph)
+        fibers = ComponentFibers(graph, plan.components)
+    else:
+        plan, fibers = ClosurePlan(graph), defaultdict(list)
     for atom in list(q.pending) + atoms:
         fibers[atom.batch, atom.node, atom.time].append(atom)
-    plan = ClosurePlan(graph)
     events, messages, outputs = [], [], []
     stats = dict(greedy_stages=0, greedy_relaxed_edges=0, region_blocks=0,
                  candidate_events=0, visited_edges=0, max_live_fibers=0)
@@ -60,4 +64,8 @@ def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zet
                 raise ValueError("greedy live-fiber capacity exceeded")
     q.pending = [atom for atoms in fibers.values() for atom in atoms if atom.kind == 1]
     q.cut = stop
+    if component_window:
+        stats.update(window_components=len(plan.components.groups),
+                     window_cyclic_components=sum(plan.components.cyclic),
+                     window_causal_blocks=plan.causal_blocks)
     return canonicalize(graph, Result(q, events, outputs, messages, stats))

@@ -36,6 +36,10 @@ Json Request::checkpoint_identity(const Json& fixture) const {
   // not silently resume them as an exact continuation of a different policy.
   if(query_execution!="legacy")identity["query_execution"]=query_execution;
   if(query_execution=="auto")identity["query_policy"]="kv-packed-v2";
+  if(implementation!="resident"&&schedule=="prefill"&&prefill_schedule!="greedy"){
+    identity["prefill_schedule"]=prefill_schedule;
+    identity["scheduler"]="component-window";
+  }
   return identity;
 }
 void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill) {
@@ -65,6 +69,7 @@ void help() {
     "--threads N (--intraop-threads alias) --interop-threads N --workers N\n"
     "--packing auto|packed|scalar --return-packing scalar|packed\n"
     "--query-execution auto|legacy|dense-v1|packed-v2 (capability selection; auto default)\n"
+    "--prefill-schedule auto|greedy|window (auto: region component windows)\n"
     "--peer-device DEVICE (repeatable) or --peer-devices DEVICE,DEVICE\n"
     "--node-devices DEVICE,DEVICE,... (one owner per node, sharing constraints apply)\n"
     "--communication ordinary|blocking|cpu_bridge (process-scoped explicit copy policy)\n"
@@ -95,6 +100,7 @@ Request parse_request(int argc,char** argv) {
     else if(key=="--placement")r.placement=value;else if(key=="--packing")r.packing=value;
     else if(key=="--return-packing")r.return_packing=value;else if(key=="--validation")r.validation=value;
     else if(key=="--query-execution")r.query_execution=value;
+    else if(key=="--prefill-schedule")r.prefill_schedule=value;
     else if(key=="--return-mode")r.return_mode=value;else if(key=="--communication")r.communication=value;
     else if(key=="--steps")r.steps=integer(value,key);else if(key=="--workers")r.workers=integer(value,key);
     else if(key=="--warmup")r.warmup=integer(value,key,0);
@@ -118,6 +124,8 @@ Request parse_request(int argc,char** argv) {
     throw std::invalid_argument("invalid validation or return-mode");
   if(!one(r.communication,{"ordinary","blocking","cpu_bridge"}))throw std::invalid_argument("invalid communication policy");
   if(!one(r.query_execution,{"auto","legacy","dense-v1","packed-v2"}))throw std::invalid_argument("unknown query_execution");
+  if(!one(r.prefill_schedule,{"auto","greedy","window"})||(r.prefill_schedule!="auto"&&(r.implementation=="resident"||r.schedule!="prefill")))
+    throw std::invalid_argument("explicit prefill_schedule requires host prefill");
   if(r.query_execution!="auto"&&r.query_execution!="legacy"&&
      (r.implementation=="resident"||r.schedule!="prefill"||r.packing=="scalar"||r.workers!=1||r.precision=="float16"))
     throw std::invalid_argument("explicit query execution requires FP32/FP64 packed eager prefill and one worker");

@@ -152,11 +152,12 @@ class GraphRuntime:
         if o.schedule == "streaming":
             from .streaming import run
             return run(self.execution_graph, self.execution_model, q, external, stop, trace=o.trace, **base, **policy)
-        if o.schedule in {"frontier", "greedy"}:
+        if o.schedule in {"frontier", "greedy", "window"}:
             if o.schedule == "frontier":
                 from .frontier import run
             else:
                 from .greedy import run
+                policy["component_window"] = o.schedule == "window"
             return run(self.execution_graph, self.execution_model, q, external, stop,
                        trace=o.trace, prefill=o.prefill, max_events=o.max_events, **base, **policy)
         if o.schedule in {"chain", "diamond"}:

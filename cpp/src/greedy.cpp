@@ -6,6 +6,7 @@
 #include "tide/ownership.h"
 #include "tide/delivery.h"
 #include "greedy_plan.h"
+#include "component_plan.h"
 #include "stream_support.h"
 #include <algorithm>
 #include <cmath>
@@ -20,6 +21,7 @@ Greedy::Greedy(Graph g, Model m, Options options)
   if ((options.packed_sources || options.batch_next) && !options.packed)
     throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
+  if(options_.component_window)components_=std::make_shared<ComponentPlan>(graph_);
   pool_.set_devices(model_devices(model_));
   validate_full_autograd(model_, options); validate_aggregate_autograd(model_, options);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp")
@@ -28,6 +30,7 @@ Greedy::Greedy(Graph g, Model m, Options options)
     throw std::invalid_argument("invalid greedy options");
 }
 Result Greedy::run(const Continuation& initial, const std::vector<External>& external, Index stop, Index seal) {
+  if(components_)return run_window(initial,external,stop,seal);
   Result result; auto& q = result.continuation; q = initial;
   auto atoms = validate_window(graph_, model_, q, external, stop, seal);
   atoms.insert(atoms.end(), q.pending.begin(), q.pending.end());

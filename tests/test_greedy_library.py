@@ -17,10 +17,11 @@ def configuration(family, dtype):
 
 
 @pytest.mark.parametrize("implementation", ["python", "native"])
+@pytest.mark.parametrize("schedule", ["greedy", "window"])
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
 @pytest.mark.parametrize("packed,prefill", [(True, True), (False, False)])
-def test_public_configuration_full_observables_and_vjp(dtype, implementation, family, packed, prefill):
-    options = ExecutionOptions(implementation=implementation, schedule="greedy", packed=packed,
+def test_public_configuration_full_observables_and_vjp(dtype, implementation, schedule, family, packed, prefill):
+    options = ExecutionOptions(implementation=implementation, schedule=schedule, packed=packed,
                                prefill=prefill, trace=True, mode="hst", max_events=1000)
     cfg = replace(configuration(family, dtype), execution=options)
     restored = GraphConfig.from_dict(json.loads(json.dumps(cfg.to_dict())))
@@ -42,7 +43,7 @@ def test_public_configuration_full_observables_and_vjp(dtype, implementation, fa
     assert actual.stats["candidate_events"] == len(actual.trace) + boundaries
     if not packed:
         assert actual.stats["max_full_batch"] == 1
-    assert runtime.manifest()["resolved_options"]["schedule"] == "greedy"
+    assert runtime.manifest()["resolved_options"]["schedule"] == schedule
 
 
 def frozen(value):
@@ -56,14 +57,15 @@ def frozen(value):
 
 
 @pytest.mark.parametrize("implementation", ["python", "native"])
+@pytest.mark.parametrize("schedule", ["greedy", "window"])
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
 @pytest.mark.parametrize("optimizer", ["sgd", "adamw"])
-def test_carried_training_checkpoint_and_policy_change(dtype, implementation, family, optimizer, tmp_path):
+def test_carried_training_checkpoint_and_policy_change(dtype, implementation, schedule, family, optimizer, tmp_path):
     cfg = configuration(family, dtype)
     trajectories = []
     for candidate in (False, True):
         options = ExecutionOptions(implementation=implementation if candidate else "python",
-            schedule="greedy" if candidate else "reference", packed=candidate, trace=True, mode="hst")
+            schedule=schedule if candidate else "reference", packed=candidate, trace=True, mode="hst")
         runtime = GraphRuntime(cfg, device="cpu", options=options)
         session = runtime.session(2)
         make = torch.optim.SGD if optimizer == "sgd" else torch.optim.AdamW

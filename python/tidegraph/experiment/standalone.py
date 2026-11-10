@@ -69,6 +69,7 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
             "--placement", "native" if e["placement"] in {"resident", "cpu"} else e["placement"],
             "--packing", e["packing"], "--return-packing", e["return_packing"], "--return-mode", e.get("return_mode", "complete"),
             "--query-execution", e.get("query_execution", "legacy"),
+            "--prefill-schedule", e.get("prefill_schedule", "auto" if e["schedule"] == "streaming" or e["placement"] == "resident" else "greedy"),
             "--validation", policy, "--threads", str(e["intraop_threads"]), "--interop-threads", str(e["interop_threads"]),
             "--workers", str(e["workers"]), "--communication", e.get("communication", "ordinary"),
             "--checkpoint-check", str(m["checkpoint_check"]).lower(),

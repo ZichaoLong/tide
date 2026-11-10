@@ -159,6 +159,7 @@ struct Options {
   std::string mode = "hard";
   double zeta = 1.0;
   bool prefill = true;
+  bool component_window = false; // Static region SCC windows; causal closure inside feedback components.
   Index max_events = 1000000;
   bool profile = false; // Optional streaming coordinator wall-time phases.
   bool parallel_regions = false, compact_events = false;

@@ -50,6 +50,11 @@ class Region:
 
 @dataclass(frozen=True)
 class Graph:
+    @cached_property
+    def region_components(self):
+        from .window_plan import Components
+        return Components(self)
+
     nodes: tuple[Node, ...]
     edges: tuple[Edge, ...]
     regions: tuple[Region, ...]

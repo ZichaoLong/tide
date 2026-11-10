@@ -5,10 +5,16 @@
 #include <stdexcept>
 
 namespace tide {
-ClosurePlan::ClosurePlan(const Graph& g) : outgoing_(g.regions.size()) {
+ClosurePlan::ClosurePlan(const Graph& g):ClosurePlan(g,[&]{std::vector<Index> ids;for(size_t i=0;i<g.regions.size();++i)ids.push_back(i);return ids;}()){}
+ClosurePlan::ClosurePlan(const Graph& g,const std::vector<Index>& regions):ClosurePlan(g,regions,[&]{std::vector<Index> ids;for(size_t i=0;i<g.edges.size();++i)ids.push_back(i);return ids;}()){}
+ClosurePlan::ClosurePlan(const Graph& g,const std::vector<Index>& regions,const std::vector<Index>& wires) : outgoing_(regions.size()) {
+  for(size_t i=0;i<regions.size();++i)local_[regions[i]]=i;
   std::map<Owner, Index> edges;
-  for (const auto& edge : g.edges) {
+  for (auto id : wires) {
+    const auto& edge=g.edges[id];
     Owner pair{g.nodes[edge.source].region, g.nodes[edge.target].region};
+    if(!local_.count(pair.first)||!local_.count(pair.second))continue;
+    pair={local_.at(pair.first),local_.at(pair.second)};
     auto [it, inserted] = edges.emplace(pair, edge.delay);
     if (!inserted) it->second = std::min(it->second, edge.delay);
   }
@@ -23,8 +29,9 @@ std::map<Index, std::vector<Frame>> ClosurePlan::ready(const Graph& g, const Fib
     auto [batch, node, time] = coordinate;
     if (atoms.empty() || time >= stop) continue;
     const auto region = g.nodes[node].region;
+    if(!local_.count(region))continue;
     frames[{batch, region, time}].insert(node);
-    auto [it, inserted] = seeds[batch].emplace(region, time);
+    auto [it, inserted] = seeds[batch].emplace(local_.at(region), time);
     if (!inserted) it->second = std::min(it->second, time);
   }
   // Saturate at stop without floating conversion or signed integer overflow.
@@ -53,7 +60,7 @@ std::map<Index, std::vector<Frame>> ClosurePlan::ready(const Graph& g, const Fib
   std::map<Index, std::vector<Frame>> blocks;
   for (const auto& [coordinate, nodes] : frames) {
     const auto [batch, region, time] = coordinate;
-    if (time < bounds.at(batch)[region]) blocks[region].push_back({batch, region, time, nodes, {}});
+    if (time < bounds.at(batch)[local_.at(region)]) blocks[region].push_back({batch, region, time, nodes, {}});
   }
   for (auto& [region, ready] : blocks)
     std::sort(ready.begin(), ready.end(), [](const auto& a, const auto& b) {

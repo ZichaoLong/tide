@@ -102,10 +102,12 @@ def test_reject_invalid_configuration_and_ignored_options():
         with pytest.raises(ValueError):
             GraphConfig.from_dict(invalid)
     cfg = config("pdg", torch.float32)
-    for options in [dict(prefill=True), dict(max_events=3), dict(workers=2),
+    for options in [dict(schedule="streaming", prefill=True), dict(schedule="streaming", max_events=3), dict(workers=2),
                     dict(batch_next=True), dict(fiber_pooling="csr")]:
         with pytest.raises(ValueError):
             GraphRuntime(cfg, device="cpu", options=options)
+    default = GraphRuntime(cfg, device="cpu", options=dict(prefill=True, max_events=3))
+    assert default.options.schedule == "window" and default.options.max_events == 3
     with pytest.raises(ValueError, match="budget"):
         GraphConfig.from_dict(dict(schema_version=1, family="pdg", topology=dict(kind="chain", budget=2)))
     with pytest.raises(ValueError):

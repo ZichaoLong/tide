@@ -29,6 +29,7 @@ def main():
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
     p.add_argument("--query-execution", choices=("auto", "legacy", "dense-v1", "packed-v2"), default="auto")
+    p.add_argument("--prefill-schedule", choices=("auto", "greedy", "window"), default="auto")
     p.add_argument("--native-library")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--length", type=int, default=128)
@@ -55,7 +56,8 @@ def main():
     from tide_lab.campaign_runtime import make_model, optimizer_for, synthetic_batch, memory, learning_rate
     from tide_lab.language import sequence_readout
     # Select the public execution option at the application adapter only.
-    application.eager_runner = functools.partial(eager_runner, query_execution=a.query_execution)
+    application.eager_runner = functools.partial(eager_runner, query_execution=a.query_execution,
+                                               prefill_schedule=a.prefill_schedule)
     config = json.loads((source/CONFIG).read_text())
     config.update(device=a.device, threads=1 if a.device == "cpu" else 2)
     config["training"].update(batch=a.batch, length=a.length)
@@ -65,7 +67,8 @@ def main():
     record = dict(schema="tide-dense-query-cost-v1", execution="running", strict_numerical="not_checked",
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
         downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
-        query_execution=a.query_execution, installed_package=str(Path(tidegraph.__file__).resolve()),
+        query_execution=a.query_execution, prefill_schedule=a.prefill_schedule,
+        installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
         phases=[], profile=a.profile, warmup_state=a.warmup_state,
         scope="One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.")

@@ -11,13 +11,13 @@ class Native:
                  attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay", aggregate_autograd="replay",
                  placement=None, query_execution="auto"):
         requested_query_execution = query_execution
-        if query_execution == "auto" and (not packed or algorithm != "greedy" or workers != 1 or full_autograd != "batched"):
+        if query_execution == "auto" and (not packed or algorithm not in {"greedy", "window"} or workers != 1 or full_autograd != "batched"):
             query_execution = "legacy"
         query_view = model
         if query_execution != "legacy":
             from .weighted.query_execution import execution_view
             query_view = execution_view(model, query_execution)
-            if not packed or algorithm != "greedy" or workers != 1 or full_autograd != "batched":
+            if not packed or algorithm not in {"greedy", "window"} or workers != 1 or full_autograd != "batched":
                 raise ValueError("dense-v1 requires packed greedy/batched Full with one worker")
         if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
             raise ValueError("invalid Aggregate autograd policy or unpacked execution")
@@ -73,16 +73,17 @@ class Native:
         options.aggregate_autograd = aggregate_autograd
         options.mode, options.zeta = mode, zeta
         options.prefill, options.max_events = prefill, max_events
+        options.component_window = algorithm == "window"
         options.parallel_regions, options.compact_events = parallel_regions, compact_events
         options.defer_state_release = defer_state_release
         options.packed_sources, options.batch_next = packed_sources, batch_next
         self.options = options  # Scheduler-only options for native frontend clients.
-        if algorithm not in {"streaming", "frontier", "greedy", "self_loop", "ring", "chain", "diamond"}:
+        if algorithm not in {"streaming", "frontier", "greedy", "window", "self_loop", "ring", "chain", "diamond"}:
             raise ValueError("unknown native algorithm")
         if algorithm in {"self_loop", "ring", "chain", "diamond"}:
             self.engine = core.Specialized(g, m, options, algorithm)
         else:
-            engine = core.Greedy if algorithm == "greedy" else core.Streaming if algorithm == "streaming" else core.Frontier
+            engine = core.Greedy if algorithm in {"greedy", "window"} else core.Streaming if algorithm == "streaming" else core.Frontier
             self.engine = engine(g, m, options)
 
     def run(self, continuation, external, stop, *, sealed_until):

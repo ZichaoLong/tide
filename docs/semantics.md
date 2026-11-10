@@ -64,6 +64,13 @@ accepts feedback without a numerical prepass or whole-window event expansion;
 the scalar reference remains independent. Its live-fiber capacity is an explicit
 refusal boundary, separate from future byte-budgeted chunking/device scheduling.
 
+The host prefill default uses the same local contracts with a static region-SCC
+[component window plan](greedy-scheduler.md#default-component-windows). Acyclic
+components drain whole sealed windows after their predecessors; cyclic components
+use the online closure certificate. Explicit greedy/streaming and device-resident
+schedules remain available. This changes execution policy/identity, not graph v13,
+checkpoint v5, independent reference scheduling or local mathematical functions.
+
 Native cursor ownership changes materialization, not finite-valued event
 semantics. `advance` keeps queues/state native; snapshots explicitly clone tensor
 storage and preserve gradients in ordinary grad mode. Input rejection is

@@ -54,8 +54,10 @@ class Eager:
             implementation = "python" if spec["client"] == "pytorch" else "native"
             self.execute = eager_runner(binding, implementation, self.placement,
                 resolved["site"]["paths"].get("native_library"), streaming=spec["schedule"] == "streaming",
-                workers=spec["workers"], packing=spec["packing"], query_execution=spec.get("query_execution", "legacy"))
-            self.scheduler = implementation+"-"+("streaming" if spec["schedule"] == "streaming" else "online-greedy")
+                workers=spec["workers"], packing=spec["packing"], query_execution=spec.get("query_execution", "legacy"),
+                prefill_schedule=spec.get("prefill_schedule", "auto" if spec["schedule"] == "streaming" else "greedy"))
+            self.scheduler = implementation+"-"+("streaming" if spec["schedule"] == "streaming" else
+                "online-greedy" if spec.get("prefill_schedule", "greedy") == "greedy" else "component-window")
         self.state = Continuation(binding.graph.identity, resolved["plan"]["samples"])
         self.task, self.task_manifest = create(resolved["task"], resolved["plan"])
         from .task_module import bind, inventory, manifest, validate_optimizer

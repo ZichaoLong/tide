@@ -51,12 +51,14 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   placed=place_model(data.graph,data.model,placement);registry=data.model.parameters();
   state.identity=data.graph.identity;state.batch_size=data.samples;
   options.workers=workers;options.packed=!scalar;
+  options.component_window=j.value("__prefill_schedule",std::string("auto"))!="greedy";
   options.full_autograd=options.aggregate_autograd=scalar?"replay":"batched";
   OptimizerGroup group;for(const auto& p:registry.owners())group.parameters.push_back(p.canonical);
   const auto task=j.value("__task",Json::object());
   group.lr=task.value("lr",.001);group.momentum=task.value("momentum",.3);group.weight_decay=task.value("weight_decay",.01);
   if(training)optimizer=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group},OptimizerPrecision{dtype==at::kHalf&&!storage,1.});
   if(training&&storage)for(const auto& p:registry.owners())storage_masters[p.canonical]=p.value.detach().clone();
+  if(prefill)prefill_engine=std::make_unique<Greedy>(data.graph,placed,options);
 }
 std::vector<External> Eager::placed_inputs(std::vector<External> xs,std::map<std::string,Tensor>* leaves)const{
   std::map<std::pair<const void*,std::string>,Tensor> copies;
@@ -71,7 +73,7 @@ std::vector<External> Eager::placed_inputs(std::vector<External> xs,std::map<std
   return xs;
 }
 Result Eager::forward(const Continuation& q,const std::vector<External>& xs,Index stop)const{
-  auto result=prefill?Greedy(data.graph,placed,options).run(q,xs,stop,stop)
+  auto result=prefill?prefill_engine->run(q,xs,stop,stop)
                      :Streaming(data.graph,placed,options).run(q,xs,stop,stop);
   for(const auto& [name,count]:query_counts)result.stats[name]=count;
   return result;

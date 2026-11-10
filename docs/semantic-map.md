@@ -224,6 +224,12 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 
 工程辅助函数沿所在模块追溯即可；本页不为内存管理、日志、构建脚本虚构教材同名定义。
 
+PDG §9.5 / time-batch §6.5的完备纤维与因果块条件还由[分量窗口](greedy-scheduler.md#default-component-windows)
+具体化：`window_plan.Components/WindowPlan`、C++ `ComponentPlan/Greedy::run_window`。
+定义域为一般正延迟图与sealed输入/continuation；返回完整Result/原样pending，局部序列能力独立校验。
+区域SCC仅分析静态依赖，无环分量整窗、反馈分量内部closure；逐边/端口/int64/状态历史不变。
+独立标量、同秩端口、非对齐汇合、五记忆/根/优化器/恢复入口见`test_component_window*`。
+
 完整独立 C++ 数值 checkpoint 的切面、int64、参数/optimizer 与独立训练追溯见
 [native-graph-checkpoint](native-graph-checkpoint.md)。
 

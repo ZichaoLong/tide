@@ -12,13 +12,18 @@ class ClosurePlan:
     Bounds below certify no *additional* arrival before a region's ready prefix.
     They do not create candidates or compute their selection.
     """
-    def __init__(self, graph):
+    def __init__(self, graph, regions=None, wires=None):
         self.graph = graph
+        regions = tuple(range(len(graph.regions))) if regions is None else regions
+        self.local = {region: i for i, region in enumerate(regions)}
         edges = {}
-        for edge in graph.edges:
+        for edge in graph.edges if wires is None else wires:
             pair = graph.nodes[edge.source].region, graph.nodes[edge.target].region
+            if any(r not in self.local for r in pair):
+                continue
+            pair = tuple(self.local[r] for r in pair)
             edges[pair] = min(edges.get(pair, edge.delay), edge.delay)
-        self.outgoing = [[] for _ in graph.regions]
+        self.outgoing = [[] for _ in regions]
         for (source, target), delay in sorted(edges.items()):
             self.outgoing[source].append((target, delay))
 
@@ -32,9 +37,12 @@ class ClosurePlan:
         for (batch, node, time), atoms in fibers.items():
             if atoms and time < stop:
                 region = self.graph.nodes[node].region
+                if region not in self.local:
+                    continue
                 frames[batch, region, time].add(node)
                 owner = seeds[batch]
-                owner[region] = min(owner.get(region, time), time)
+                local = self.local[region]
+                owner[local] = min(owner.get(local, time), time)
         bounds, relaxations = {}, 0
         for batch, owner in sorted(seeds.items()):
             earliest = [stop] * len(self.outgoing)
@@ -59,7 +67,7 @@ class ClosurePlan:
             bounds[batch] = safe
         blocks = defaultdict(list)
         for (batch, region, time), nodes in sorted(frames.items(), key=lambda x: (x[0][2], x[0][0], x[0][1])):
-            if time < bounds[batch][region]:
+            if time < bounds[batch][self.local[region]]:
                 blocks[region].append((batch, region, time, nodes))
         if frames and not blocks:
             raise RuntimeError("greedy closure failed to expose the earliest event")

@@ -25,12 +25,17 @@ class ExecutionSpec:
     return_mode: str = "complete"
     finite_check_packing: str = "scalar"
     query_execution: str = "auto"
+    prefill_schedule: str = "auto"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
             raise ValueError("unknown client")
         if self.schedule not in {"streaming", "prefill"}:
             raise ValueError("unknown schedule")
+        if self.prefill_schedule not in {"auto", "greedy", "window"}:
+            raise ValueError("unknown prefill_schedule")
+        if self.prefill_schedule != "auto" and (self.schedule != "prefill" or self.placement == "resident"):
+            raise ValueError("explicit prefill_schedule requires host prefill")
         if self.placement not in {"native", "cpu", "mixed-a", "mixed-b", "mixed-c", "resident"}:
             raise ValueError("unknown placement")
         if not re.fullmatch(r"cpu|(?:npu|cuda):[0-9]+", self.device):
@@ -95,6 +100,11 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
+        # Explicit greedy reproduces the pre-window execution identities.
+        # Streaming/resident do not use the host prefill strategy at all.
+        window_policy = self.schedule == "prefill" and self.placement != "resident" and self.prefill_schedule != "greedy"
+        if not window_policy:
+            requested.pop("prefill_schedule")
         if self.query_execution == "legacy":
             requested.pop("query_execution")
         if self.finite_check_packing == "scalar":
@@ -107,6 +117,9 @@ class ExecutionSpec:
             for key in ("node_devices", "communication", "return_mode"):
                 requested.pop(key)
         effective = dict(requested)
+        if window_policy:
+            effective["prefill_schedule"] = "window"
+            effective["scheduler"] = "component-window"
         if self.packing == "auto":
             effective["packing"] = "scalar" if self.client == "pytorch" and self.schedule == "streaming" else "packed"
         if self.placement == "resident":
@@ -115,7 +128,8 @@ class ExecutionSpec:
             effective["query_policy"] = "kv-packed-v2; capability/dtype/schedule fallback to legacy"
             if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
                 effective["query_execution"] = "legacy"
-        body = dict(schema="tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
+        body = dict(schema="tide-weighted-execution-v3" if window_policy else
+                    "tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
                     requested=requested, effective=effective,
                     qualification="implementation selection only; exact-device evidence is separate")
         return dict(body, execution_id=fingerprint(body))

@@ -6,6 +6,10 @@
 
 ## 分层
 
+默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
+公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
+修改时同步ExecutionOptions/ExecutionSpec、Python/native/standalone分派及`test_component_window*`。
+
 | 层 | 位置 | 职责 |
 | --- | --- | --- |
 | 显式正支持数值策略 | `weighted/support_policy.py`、`stable_mass.py`；[契约](positive-support-policy.md) | Shannon最小正值存储与未补值VJP、稳定Aggregate/KV；默认严格路径及调度独立性保持 |

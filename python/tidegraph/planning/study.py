@@ -86,6 +86,7 @@ def command(record, *, python, root, output, workload, native_library=None,
         argv += ["--resident-limits", resident_limits]
     argv += ["--device", e["device"], "--dtype", e["dtype"], "--scoring-dtype", e["scoring_dtype"],
              "--query-execution", e.get("query_execution", "legacy"),
+             "--prefill-schedule", e.get("prefill_schedule", "auto" if resident or e["schedule"] == "streaming" else "greedy"),
              "--schedule", e["schedule"], "--placement", "native" if resident else e["placement"],
              "--packing", e["packing"], "--workers", str(e["workers"]),
              "--return-packing", e.get("return_packing", "scalar"),
