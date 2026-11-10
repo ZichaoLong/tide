@@ -39,6 +39,9 @@ tidegraph run NEW_CONFIG.json --site SITE.json --output-dir NEW_RUN
 每项可选择五记忆或mixed、B/L、客户端、设备/placement、线程、推理/训练及auto/greedy。
 `--placement resident`同时生成该有限流程的显式queue/stages/cache及forward/retained/backward/optimizer预算。
 根据全部可能Settle事件和静态原始布局预留，不消费参考轨迹；仅覆盖一次预热、一次测量及下一窗恢复。
+该目录的对齐Settle输入每样本最多L×区域数个frame；DeviceReady独立关闭各样本，每个未完成样本每轮至少推进一个，
+因此阶段容量不再乘B，journal本身的B维保留。优化器布局只取得optimizer预算的1/16；反向先保留四份完整view，
+再保留原始伴随/快照和参数partial。生成器分别为这些边界预留，实际数值tape/服务资源仍由运行时拒绝守卫验证。
 实际厂商workspace/service资源与设备余量仍须运行准入；改变窗口数/用途须重新预算，不能把该估计当作通用默认或免容量检查。
 默认返回outputs、独立数值not_checked；`--complete`才启用完整返回及explore比较。
 不同返回契约不直接计算加速比；先运行相关独立小门禁，真实大规模数值/恢复仍另列。

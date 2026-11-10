@@ -62,8 +62,14 @@ def resident_reservations(value):
     initial = resolve(value)
     graph = initial["plan"]["graph"]
     b, length = value["task"]["samples"], value["task"]["positions"]
+    if graph["kind"] != "ranked-local":
+        raise ValueError("resident regression reservations require aligned Settle inputs")
+    # DeviceReady closes each sample independently and admits its first frame
+    # per region. Every nonempty sample advances at least one frame each round;
+    # it has at most L*R frames. The journal already has a separate B dimension.
+    # No activity trace, route decision or sample serialization is assumed.
     limits = dict(queue=b*length*(len(graph["edges"])+len(graph["inputs"]))+16,
-                  stages=b*length*graph["regions"]+16, cache=3*length+1,
+                  stages=length*graph["regions"]+16, cache=3*length+1,
                   timeout_ms=300000, windows=1)
     value["resources"]["resident_limits"] = limits
     resolved = resolve(value)
@@ -73,8 +79,13 @@ def resident_reservations(value):
         unit = 64*1024**2
         return ((n+unit-1)//unit)*unit
     forward = rounded((5*raw+3)//4+16*parameters)
-    optimizer = max(256*1024**2, rounded(32*parameters))
-    backward = max(2*1024**3, 2*forward)
+    # weighted_training_owner gives the canonical layout optimizer_bytes/16.
+    # Each owner has >=1 element, so FP32 values + connection flags <=5*P.
+    optimizer = max(256*1024**2, rounded(80*parameters+4096))
+    # reverse() reserves 4*the complete view before constructing an adjoint.
+    # Include that view, raw roots/snapshot and parameter partials separately
+    # from forward. Numerical tape/workspace still has an actual runtime guard.
+    backward = max(4*1024**3, rounded(12*raw+128*parameters))
     limits.update(tensor_bytes=forward, retained_bytes=4*forward,
                   backward_bytes=backward, optimizer_bytes=optimizer,
                   total_bytes=5*forward+backward+optimizer)

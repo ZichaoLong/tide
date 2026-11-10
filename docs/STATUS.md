@@ -3,7 +3,7 @@
 授权分支graph-execution-foundation；固定数学0770593838a37c790a568226930567ed60f99b83。
 用户授权持续实施/提交/推送、全部可用CPU及空闲/有余量共享NPU；有限数值超差有界诊断后分列推进。
 参考及下游只读，无子代理；GPU延后。未跟踪TL-REQ-003/004用户handoff保持原样、不提交。
-当前HEAD f6092d6；相对origin ahead8。当前仅STATUS未提交；不是活动任务输入。
+当前完成5cb1c9b固定合批证据；后继修复有限resident目录的预算分区。活动作业读取各自冻结源码。
 
 ## 已完成及证据边界
 
@@ -65,3 +65,8 @@ artifacts/jobs/joint-prefill-NAME/task.log；状态status.json；原始结果art
 
 当前唯一待办与停止/重启条件见ROADMAP；下游尚未升级或验收，不能把基座交付等同学习效果。
 历史源码用scripts/resolve_history_commit.py OLD_SHA；不恢复旧队列，不修改公共环境。
+
+resident-budget显式重试两项仍拒绝：FC16的optimizer布局仅获预算1/16，SSD反向四份view未计足。
+已按源码边界修复，阶段上界使用每样本L×R（DeviceReady并行独立样本，journal自身含B），不再重复乘B。
+CPU配置3项通过；新总预算FC16约18.52GB、SSD约6.24GB，真实数值tape/服务限制仍待验证。
+下一步固定新驱动，待本项目throughput-sample计时结束后补一次这两条具体修复，旧两轮拒绝保留。
