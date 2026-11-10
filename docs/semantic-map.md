@@ -127,6 +127,8 @@ KV ragged 投影、四种循环的仿射前缀和原始时间卷积；
 [KV默认auto/packed-v2与显式dense-v1](weighted-dense-query.md)在同一数学接口内选择密集投影、原始槽gather与正支持中心，固定执行身份；独立字段根、完整训练/恢复和[代表回归](prefill-regression.md)分别验证。
 [Read/Full 批量 VJP](weighted-query-vjp.md)逐项声明私有图、公开字段/行根、共享参数与资格边界。
 [区域完整批量/VJP](weighted-region-batch.md)对应分配分支、control 根、history 能力和在线调度。
+Describe共享投影、结构化有限值批检查和分配int64分支回读由`test_prefill_local_batches`
+与C++ `check_structured_records`连接上述数学条目；数值见证不替代独立字段根或精确恢复。
 [来源函数四种参数绑定](weighted-source-binding.md)对应 A/B/embedding 别名、私有低秩因子、类别宽度及训练恢复。
 [Aggregate 计算复用](weighted-compute-sharing.md)对应相同参数/输入的充分判据、物理来源解码与所有使用者反向。
 [KV 基座投影复用](weighted-kv-sharing.md)对应临时准备操作数、节点私有适配器/状态及全部使用者 VJP。

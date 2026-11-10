@@ -1,8 +1,4 @@
-"""Architecture §3: batched Mem, per-row finite descriptor operation order.
-
-RMS-normalized heads are sensitive to projection rounding in their near-zero
-VJPs. Keep their scalar arithmetic while batching complete memory queries.
-"""
+"""Architecture §3: batched Mem and capability-selected descriptor projections."""
 import torch
 from .query_batch import memory_read
 from .tensors import norm
@@ -24,7 +20,7 @@ def evaluate(program, weights, requests):
         values = memory_read(memory, states, times, u, dense=dense(program))
     if dense_heads(program):
         from .dense_describe import evaluate as describe
-        return describe(program, memory, mass, u, values, scalar_evidence=packed(program))
+        return describe(program, memory, mass, u, values)
     result = []
     for i in range(len(requests)):
         short, long, ws, wl = (value[i] for value in values)

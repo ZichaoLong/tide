@@ -8,6 +8,7 @@
 #include "tide/stream.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <stdexcept>
+#include <limits>
 
 namespace {
 using namespace tide;
@@ -42,6 +43,19 @@ class FieldsRead : public ReadKernel {
     return {{"score",(memory*w.read).sum()},{"memory",memory},{"evidence",r.content.value*w.extra.at("gain")}};
   }
   void validate_weights(const NodeWeights&) const override {}
+};
+class BrokenFieldsRead : public FieldsRead {
+ public:
+  explicit BrokenFieldsRead(bool scalar):scalar_(scalar){}
+  std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    auto result=ReadKernel::fields_batch(w,requests);
+    if(!result.empty()){
+      auto& row=result.back();auto& value=row.at(scalar_?"score":"evidence");
+      value=at::full_like(value,std::numeric_limits<double>::infinity());
+    }
+    return result;
+  }
+ private:bool scalar_;
 };
 class FieldsSelect : public RegionKernel {
  public:
@@ -95,6 +109,16 @@ void check_structured_records(const at::TensorOptions& options) {
     storage.roots.reset();require(!storage.decode().at("memory").requires_grad(),"decoded checkpoint kept old graph");
     auto tail=Streaming(g,m,config).run(out.continuation,{},clock+4,clock+4);
     require(at::equal(tail.continuation.states.at({0,0}).slots.at("times"),stamps),"idle continuation changed metadata");
+    if(packed)for(bool scalar:{false,true}){
+      auto broken=w;broken.read_kernel=std::make_shared<BrokenFieldsRead>(scalar);
+      std::vector<Event> events(17);std::vector<size_t> ids;std::vector<ReadInput> requests;
+      for(size_t i=0;i<events.size();++i){ids.push_back(i);requests.push_back({nullptr,clock,ContentView{x}});}
+      bool rejected=false;
+      try{evaluate_read_fields(broken,events,ids,requests,true);}
+      catch(const std::invalid_argument& e){rejected=std::string(e.what()).find("nonfinite structured Read")!=std::string::npos;}
+      require(rejected,"last-row structured nonfinite was not rejected");
+      for(const auto& event:events)require(event.descriptor_fields.empty(),"invalid Read batch was partially published");
+    }
   }
   Graph g;g.nodes={{0},{1}};g.edges={{0,1,1},{0,1,1}};g.regions={{1},{1}};g.inputs={1};g.outputs={1};g.compile();
   SourceClasses classes{{0,0},{0}};classes.validate(g);

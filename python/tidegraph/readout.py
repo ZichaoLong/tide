@@ -132,11 +132,10 @@ def validate(value, r, precision="payload", device=None, *, check_finite=True, f
 
 
 def finite_batch(values):
-    groups = {}
-    for value in values:
-        for field in value.values() if isinstance(value, dict) else (value,):
-            groups.setdefault((field.device, field.dtype, field.shape), []).append(field)
-    if any(not torch.isfinite(torch.stack(rows)).all() for rows in groups.values()):
+    from .finite import all_finite
+    fields = [field for value in values
+              for field in (value.values() if isinstance(value, dict) else (value,))]
+    if not all_finite(fields):
         raise ValueError("nonfinite selector score from Read")
 
 

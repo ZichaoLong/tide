@@ -1,5 +1,4 @@
-// Architecture §3: batched Mem, scalar operation order for finite descriptor heads.
-// Small projection rounding is visible in normalized-head near-zero VJPs.
+// Architecture §3: batched Mem and capability-selected shared projections.
 #include "weighted_query_batch.h"
 #include "weighted_scoring.h"
 #include <type_traits>
@@ -25,12 +24,7 @@ template<class Config> std::vector<TensorFields> evaluate(const NodeWeights& w,c
     auto f=at::cat({cur,stat.slice(1,0,1),memories[0],memories[1],stat.slice(1,1),p*memories[0],p*memories[1]},-1);
     auto score=weight(w,"read_program.score.bias")+(at::silu(project(f,weight(w,"read_program.score.matrix"))+
       weight(w,"read_program.score.hidden_bias"))*weight(w,"read_program.score.vector")).sum(-1);
-    Tensor evidence;
-    if(dense==2){
-      std::vector<Tensor> rows;
-      for(const auto& row:f.unbind())rows.push_back(normalize(at::matmul(weight(w,"read_program.evidence_weight"),row)+weight(w,"read_program.evidence_bias"),c.epsilon));
-      evidence=at::stack(rows);
-    }else evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
+    auto evidence=normalize(project(f,weight(w,"read_program.evidence_weight"))+weight(w,"read_program.evidence_bias"),c.epsilon);
     auto recv=masses.clamp_max(1),mu=(r.gamma_max*recv).clamp_max(1);
     std::vector<TensorFields> result;
     for(size_t i=0;i<requests.size();++i)result.push_back({{"w",recv[i]},{"mu",mu[i]},{"score",score[i]},{"evidence",evidence[i]}});

@@ -52,6 +52,12 @@ cotangent 模式共同决定反向分组，不能根据梯度数值选择路径�
 这区分 caps 行的无 score 根、普通行的连接零，以及完全未参与根的其他帧。
 零分配输出不声明 requires_grad；原始输入版本检查及只支持一阶的拒绝边界保留。
 
+`allocation_rows`逐行检查shape/dtype/device，数值范围和有限性由实际完整批的`solve`统一检查，
+避免Python入口再次逐行同步。Python/C++均一次回读求解器实际int64分支编号，
+供requires_grad、返回分支名和反向根选择复用；设备上的branch张量及其版本守卫仍保留。
+这不是主机预选路由或重新求解，也不改变exact-map VJP。`test_prefill_local_batches`检查
+末行非法数值/尺寸仍拒绝，以及2行到32行的标量读取次数不逐行增长；既有分支/独立根测试仍适用。
+
 ## 调度能力与边界
 
 通用 `RegionProgram/RegionKernel` 默认不声明 joint_batch、batched_autograd 或 history_independent。

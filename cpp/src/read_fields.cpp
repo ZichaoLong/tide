@@ -2,6 +2,7 @@
 // independent public roots, no reference recomputation in representation decoding.
 #include "tide/read.h"
 #include "tide/autograd.h"
+#include "finite_guard.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 
@@ -30,8 +31,12 @@ void validate(const TensorFields& fields, const FieldLayout& layout, at::Device 
     const auto& value = fields.at(name);
     if (!value.defined() || value.sizes() != at::IntArrayRef(shape) || value.scalar_type() != dtype || value.device() != device)
       throw std::invalid_argument("structured Read field metadata mismatch");
-    if (!at::isfinite(value).all().item<bool>()) throw std::invalid_argument("nonfinite structured Read field");
   }
+}
+void finite(const std::vector<TensorFields>& rows){
+  std::vector<Tensor> fields;
+  for(const auto& row:rows)for(const auto& [name,value]:row)fields.push_back(value);
+  if(!all_finite(fields))throw std::invalid_argument("nonfinite structured Read field");
 }
 }
 void evaluate_read_fields(const NodeWeights& w, std::vector<Event>& events,
@@ -51,11 +56,21 @@ void evaluate_read_fields(const NodeWeights& w, std::vector<Event>& events,
     if (dtype != payload.scalar_type() && dtype != at::kDouble && dtype != at::kFloat)
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[i], layout, device, dtype);
-    if (packed && at::GradMode::is_enabled() && !batched) {
-      const auto semantic = kernel.fields_step(w, requests[i]);
-      validate(semantic, layout, device, dtype);
-      for (auto& [name, value] : values[i]) value = semantic_value(value, semantic.at(name));
+  }
+  finite(values);
+  if (packed && at::GradMode::is_enabled() && !batched) {
+    std::vector<TensorFields> semantic;
+    for(const auto& request:requests){
+      auto fields=kernel.fields_step(w,request);
+      validate(fields,layout,kernel.descriptor_device(request.content.value.device()),
+               kernel.descriptor_dtype(request.content.value.scalar_type()));
+      semantic.push_back(std::move(fields));
     }
+    finite(semantic);
+    for(size_t i=0;i<ids.size();++i)
+      for(auto& [name,value]:values[i])value=semantic_value(value,semantic[i].at(name));
+  }
+  for (size_t i = 0; i < ids.size(); ++i) {
     events[ids[i]].descriptor = Tensor();
     events[ids[i]].descriptor_fields = std::move(values[i]);
   }

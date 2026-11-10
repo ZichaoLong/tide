@@ -15,6 +15,10 @@ KV整序列反向位于`weighted/kv_sequence_vjp.py`与`weighted_kv_sequence_vjp
 公共实验的按需记录由`experiment/eager.py`与standalone `Eager::options.trace`绑定；
 修改时同步`ExecutionSpec`/SDK恢复身份、实际工作计数、`experiment/checkpoint.py`及
 `test_selected_boundary_execution`。内置输出任务可省去中间日志，插件不得隐式失去loss所需的根。
+Describe的共享投影由`weighted/dense_describe.py`/`weighted_describe_batch.cpp`负责；
+修改同步[查询契约](weighted-dense-query.md)、独立字段根和`test_prefill_local_batches`。
+通用批量有限值守卫在`finite.py`/`finite_guard.h`，Read调用在`readout.py`/`read_fields.cpp`；
+分配元数据回读在`allocation_rows.py`/`weighted_allocation_rows.cpp`，保持数值求解/VJP与host元数据分层。
 
 | 层 | 位置 | 职责 |
 | --- | --- | --- |

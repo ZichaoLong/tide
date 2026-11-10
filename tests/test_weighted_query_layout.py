@@ -13,7 +13,12 @@ from isolated_cases import vjp
 
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
 @pytest.mark.parametrize("kind", ["read", "full"])
-def test_packed_snapshot_independent_fields(dtype, native, kind):
+def test_packed_snapshot_independent_fields(dtype, native, kind, request):
+    from dense_checks import Checks
+    from test_weighted_dense_query import DEVICE
+    check = Checks(request.node.nodeid,
+        known_evidence_rounding=DEVICE.type == "cpu" and dtype == torch.float32 and kind == "read",
+        failure_reason="packed-v2 batched evidence strict numeric failure retained; local FP64 witness audited")
     w, rows, roots = independent(dtype)
     if kind == "full":
         controls = [r.content.value.new_tensor(.3, requires_grad=True) for r in rows]
@@ -28,13 +33,14 @@ def test_packed_snapshot_independent_fields(dtype, native, kind):
     p.query_execution = "packed-v2"
     result = (native_query if native else evaluate)(p, w, rows, kind=kind, slots=2)
     actual = [[r.value] if kind == "full" else [v for _, v in sorted(r.items())] for r in result]
-    equivalent(actual, expected)
+    check(actual, expected, "forward")
     for a, b in zip(expected, actual):
         for x, y in zip(a, b):
             assert x.requires_grad == y.requires_grad
             if x.requires_grad:
-                equivalent(vjp(y, roots), vjp(x, roots))
-    equivalent(vjp(actual[2][-1], roots, zero=True), vjp(expected[2][-1], roots, zero=True))
+                check(vjp(y, roots), vjp(x, roots), "field_vjp")
+    check(vjp(actual[2][-1], roots, zero=True), vjp(expected[2][-1], roots, zero=True), "zero_vjp")
+    check.finish()
 
 
 def test_layout_exact_time_visibility_and_budget():

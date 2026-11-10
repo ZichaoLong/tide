@@ -16,6 +16,7 @@ class AllocationVjp final:public torch::autograd::Node {
   size_t width=0;
   std::vector<torch::autograd::SavedVariable> inputs,numeric;
   std::vector<size_t> output_map;
+  std::vector<Index> branches;
   variable_list apply(variable_list&& bars) override {
     if(at::GradMode::is_enabled())throw std::invalid_argument("batch allocation supports first-order exact-map VJP only");
     if(inputs.empty())throw std::runtime_error("allocation VJP graph already released; use retain_graph");
@@ -25,7 +26,7 @@ class AllocationVjp final:public torch::autograd::Node {
     variable_list result(xs.size()),full(xs.size()/width);std::vector<Index> normal;
     for(size_t i=0;i<bars.size();++i)full[output_map[i]]=bars[i];
     for(size_t i=0;i<full.size();++i)if(full[i].defined()){
-      const auto b=branch[i].item<Index>();
+      const auto b=branches[i];
       if(b==batch::Caps)result[i*width+1]=full[i];else if(b!=batch::Zero)normal.push_back(i);
     }
     if(!normal.empty()){
@@ -42,7 +43,7 @@ class AllocationVjp final:public torch::autograd::Node {
       auto ds=a*centered,dc=e*centered,dt=(dtau*centered).sum(1);
       auto shift=at::where(branch.index({ids})!=batch::Slack,at::zeros_like(total),-ds.sum(1));
       for(size_t j=0;j<normal.size();++j){
-        auto i=normal[j];auto base=i*width;auto b=branch[i].item<Index>();
+        auto i=normal[j];auto base=i*width;auto b=branches[i];
         result[base]=ds[j];result[base+1]=dc[j];result[base+((b==batch::Lower||b==batch::Equality)?2:3)]=mean[j];
         result[base+4]=dt[j];if(width==6)result[base+5]=shift[j];
       }
@@ -50,7 +51,7 @@ class AllocationVjp final:public torch::autograd::Node {
     for(size_t i=0;i<result.size();++i)if(!should_compute_output(i))result[i]=Tensor{};
     return result;
   }
-  void release_variables() override{inputs.clear();numeric.clear();}
+  void release_variables() override{inputs.clear();numeric.clear();branches.clear();}
   std::string name() const override{return "tide::weighted::AllocationBatchVjp";}
 };
 }
@@ -69,11 +70,14 @@ std::vector<Allocation> allocate_batch(const std::vector<AllocationRow>& rows,co
     try{numeric=batch::solve(fields[0],fields[1],fields[2],fields[3],fields[4],rule,width==6?fields[5]:Tensor{});}
     catch(AllocationFailure& e){e.row=ids.at(e.row);throw;}
     auto node=std::make_shared<AllocationVjp>(rule);node->width=width;
+    auto host=numeric.branch.to(at::kCPU).contiguous();
+    const auto* branches=host.const_data_ptr<Index>();
+    node->branches.assign(branches,branches+ids.size());
     node->set_next_edges(torch::autograd::collect_next_edges(inputs));
     for(auto& t:inputs)node->inputs.emplace_back(t,false);
     for(auto& t:{numeric.controls,numeric.multiplier,numeric.branch,numeric.response})node->numeric.emplace_back(t,false);
     for(size_t j=0;j<ids.size();++j){
-      const auto b=numeric.branch[j].item<Index>();auto controls=numeric.controls[j].clone();bool grad=false;
+      const auto b=node->branches[j];auto controls=numeric.controls[j].clone();bool grad=false;
       if(at::GradMode::is_enabled()){
         if(b==batch::Caps)grad=inputs[j*width+1].requires_grad();
         else if(b!=batch::Zero){

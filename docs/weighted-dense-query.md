@@ -28,8 +28,10 @@ Python/native和standalone benchmark使用同一选择原则；实际资格须�
 可见性在int64相减后判断；过期/填充值在投影前置零，真实零权重不变成消息。
 Attention中心取第一个正支持值，避免被忽略条目导致相消或`0*inf`；全空返回保留断连。
 
-`packed-v2`保留cat evidence的逐行投影/归一化算术，其他可合批阶段仍使用ATen矩阵运算。
-这是针对归一化近径向VJP放大舍入的处理，不提升全模型精度，也不代表所有FP32误差消失。
+`packed-v2`的cat evidence现在使用共享矩阵GEMM和逐行归一化，保持每行独立输入与字段根。
+历史逐行GEMV曾用于规避近径向VJP的舍入差异；有界同材料FP64核对后不再以此阻塞合批。
+原容差保持：CPU FP32指定evidence根约1.044e-6超差作为具名严格xfail保留，其他根照常核对。
+逐行BMM候选也重现该差异，没有继续复制权重批；新组织不提升全模型精度。
 原[独立行/字段VJP](weighted-query-vjp.md)保留None/连接零、共享别名全部贡献、版本守卫及一阶限制；
 按根是否定义来分组，不按梯度数值选择。解码只拆分实际计算张量，不调用参考补写。
 
@@ -69,6 +71,11 @@ C++核心入口`configure_query_execution`不依赖Python；standalone benchmark
 不能重新标记为packed-v2通过。[默认prefill固定资格和成本](evidence/prefill-default-20261110.md)
 分列新默认的CPU/NPU三客户端、小图训练/恢复、原任务有限成本及剩余碎片化。
 当前工作见[STATUS](STATUS.md)，待办仅见[ROADMAP](ROADMAP.md)。
+
+`test_prefill_local_batches`以独立普通Torch公式核对FP64完整/部分/重复行evidence根和共享参数，
+并检查一次Describe的三个共享投影提交；`diagnose_dense_rounding.py --query-execution packed-v2`
+复现同FP32材料提升FP64的有限诊断。字段检查与分配分支的批量元数据见
+[结构化记录](structured-records.md)和[区域批](weighted-region-batch.md)。
 
 安装消费者：`examples/consumer_core5/dense_query.py --query-execution auto ...`；
 旧v1复现必须显式指定`dense-v1`。原任务成本驱动`benchmark_dense_query.py`从固定下游Git对象读模型/head/loss，

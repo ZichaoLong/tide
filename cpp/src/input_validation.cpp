@@ -1,4 +1,5 @@
 #include "tide/ops.h"
+#include "finite_guard.h"
 #include <algorithm>
 #include <stdexcept>
 #include <ATen/core/grad_mode.h>
@@ -6,20 +7,8 @@
 namespace tide {
 namespace {
 void finite_inputs(const std::vector<External>& values){
-  at::NoGradGuard guard;
-  constexpr int64_t budget=8*1024*1024;
-  std::map<std::tuple<int,int,int>,std::vector<Tensor>> groups;
-  for(const auto& x:values){const auto& t=x.value;
-    groups[{int(t.device().type()),t.device().index(),int(t.scalar_type())}].push_back(t);}
-  auto check=[](const Tensor& t){if(!at::isfinite(t).all().item<bool>())throw std::invalid_argument("nonfinite tensor");};
-  for(const auto& [key,tensors]:groups){
-    std::vector<Tensor> rows;int64_t bytes=0;
-    for(const auto& t:tensors){const auto count=t.numel()*t.element_size();
-      if(!rows.empty()&&bytes+count>budget){check(at::cat(rows));rows.clear();bytes=0;}
-      if(count>budget)check(t);else{rows.push_back(t.reshape({-1}));bytes+=count;}
-    }
-    if(!rows.empty())check(at::cat(rows));
-  }
+  std::vector<Tensor> tensors;for(const auto& x:values)tensors.push_back(x.value);
+  if(!all_finite(tensors))throw std::invalid_argument("nonfinite tensor");
 }
 }
 ValidatedInput validate_external(const Graph& g, const Model& m, const Continuation& q,

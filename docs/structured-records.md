@@ -22,6 +22,16 @@ Python adapter exposes the same dictionary at `event["descriptor"]`. Core execut
 is independent of Python. Default fields_batch is a reported scalar fallback;
 these interfaces alone do not claim a fused or batched-VJP implementation.
 
+Read batch guards validate every field's domain/shape/device/dtype before
+publishing any event, then check finiteness in detached device/dtype groups
+bounded by an 8 MiB concatenation target. A larger single field is checked
+separately. This changes neither returned handles nor their derivative graph;
+all chunks, including the last, must pass. The explicit semantic replay fallback
+also checks its own actual results before binding roots. Python `finite.all_finite`
+and C++ `finite_guard.h` share this contract with input validation.
+`test_prefill_local_batches` and `cpp/test/structured_records.cpp` cover a
+nonfinite final scalar/vector and rejection before partial event publication.
+
 `ReadInput.state=None/nullptr` still denotes the mode-restricted legacy content
 interface. A weighted `Read^0` implementation must explicitly bind its mathematical
 initial state and call Describe with it. The generic interface never substitutes

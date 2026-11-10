@@ -22,27 +22,27 @@ class Allocation:
     support_repairs: torch.Tensor | None = None
 
 
-def _scalar(value, reference, name):
+def _scalar(value, reference, name, *, check_finite=True):
     if not isinstance(value, torch.Tensor):
         value = reference.new_tensor(value)
     if value.shape != () or (value.dtype, value.device) != (reference.dtype, reference.device):
         raise ValueError(f"allocation {name} must be a scalar in the score dtype/device")
-    if not torch.isfinite(value):
+    if check_finite and not torch.isfinite(value):
         raise ValueError(f"nonfinite allocation {name}")
     return value
 
 
-def _validate(t, mu, lower, upper, temperature):
+def _validate(t, mu, lower, upper, temperature, *, check_values=True):
     if (not isinstance(t, torch.Tensor) or t.ndim != 1 or not t.numel()
             or t.dtype not in {torch.float32, torch.float64}):
         raise ValueError("allocation requires nonempty FP32/FP64 score vector")
     if not isinstance(mu, torch.Tensor) or (mu.shape, mu.dtype, mu.device) != (t.shape, t.dtype, t.device):
         raise ValueError("allocation upper bounds do not match scores")
-    if not torch.isfinite(t).all() or not torch.isfinite(mu).all() or ((mu < 0) | (mu > 1)).any():
+    if check_values and (not torch.isfinite(t).all() or not torch.isfinite(mu).all() or ((mu < 0) | (mu > 1)).any()):
         raise ValueError("nonfinite scores or invalid allocation upper bounds")
-    lower, upper, temperature = [_scalar(x, t, n) for x, n in
+    lower, upper, temperature = [_scalar(x, t, n, check_finite=check_values) for x, n in
                                  ((lower, "lower"), (upper, "upper"), (temperature, "temperature"))]
-    if lower < 0 or upper < lower or lower > mu.sum() or temperature <= 0:
+    if check_values and (lower < 0 or upper < lower or lower > mu.sum() or temperature <= 0):
         raise ValueError("infeasible allocation bounds or nonpositive temperature")
     return lower, upper, temperature
 

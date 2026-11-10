@@ -1,48 +1,49 @@
-# 当前交接 — 联合prefill反向装配与代表回归（2026-11-10）
+# 当前交接 — 联合prefill局部合批与部署回归（2026-11-10）
 
 授权分支graph-execution-foundation；数学固定0770593838a37c790a568226930567ed60f99b83。
 用户批准持续实施/推送、全部可用CPU及空闲/有余量共享NPU；数值有限诊断后分列推进。
-参考/下游只读，无子代理；两份未跟踪TL-REQ-003/004用户handoff原样保留、不提交。
+参考/下游只读，无子代理。两份未跟踪TL-REQ-003/004用户handoff原样保留、不提交。
+GPU按授权延后；下游依赖升级/学习验收尚未执行。唯一待办及停止条件见ROADMAP。
 
-已交付分量窗口、联合KV准备、批量守卫与整序列VJP，见相关evidence索引。
-a553bea交付query连续完整根分区合并、按需内部trace、真实选定路径精确恢复及执行身份v4。
-固定CPU249通过/2原数值xfail，CPU安装消费者与SDK三项CTest/训练/新进程恢复通过。
-原NPU门禁73通过/2原数值xfail/1观测失败，任务failed原样保留；非数值断言失败。
-fb406dd仅补反向工作线程的观测上下文，固定CPU24/NPU2通过，
-补全NPU两种安装消费者和SDK完整/outputs三步及新进程精确恢复，均已终态passed。
-有界同材料诊断：合并前后NPU梯度逐位相等，对FP64最大9.61643e-8。
+已交付分量窗口、联合KV准备、批量输入守卫、整序列VJP、query完整根合并与按需trace；
+导航见prefill-regression.md、semantic-map.md和evidence/README.md。
+34项CPU/NPU代表运行及精确下一窗恢复已记录于a841860；实际大尺度独立数值not_checked。
+原FC16/B8/L128/d128的a553/fb完整返回CPU29.788/NPU55.482秒，最小返回22.068/31.822秒；
+不同返回契约及设备实际Full/消息不混算等价加速，原任务学习/完整数值未认证。
 
-当前工作区：KV前缀伴随K/V按owner一次拼接，Python全部相关30项通过（FP64/FP32），字面导数和固定concat次数检查包含其中；
-C++尚未构建，不冒用旧构建。本提交后固定源码，新建Python/native与独立SDK构建并验证。
-任何重型构建须等本项目性能任务终态；活动源码在只读worktree中，不读工作区。
+f15c4a5按owner一次装配KV写伴随的固定任务gef-joint-prefill-owner-join已passed：
+新Python-owned/独立SDK构建、CPU74/NPU37测试、两种安装消费者CPU/NPU三步训练与恢复，
+SDK CPU/NPU完整/outputs三步及新进程恢复均通过；原始结果待纳入小型审阅证据。
+日志artifacts/jobs/joint-prefill-owner-join/task.log；XML为owner-join-{cpu,npu}.xml。
+新FC16最小返回成本及B2/L8 profile在artifacts/joint-prefill/{cost,profile}-owner-join-*。
 
-活动任务（原始记录在artifacts/jobs/，详情由scripts/status.py显示）：
-- gef-joint-prefill-representatives：固定a553bea/fixed-roots/env-roots，CPU16/NPU18项；
-  B4/P16、一次预热/测量、CPU1线程/NPU2host线程，宽FC/HB/LH/sum/qry/SSD/GDN及三客户端。
-  独立数值not_checked，精确下一窗恢复逐项验证；512G/320CPU/14400秒。
-  日志artifacts/jobs/joint-prefill-representatives/task.log；结果artifacts/joint-prefill/representatives-{cpu,npu}/runs/result.json。
-- gef-joint-prefill-resident-small：已准备固定a553bea，NPU6项小型PDG/一般端口/训练/恢复，
-  使用已成功构建的resident-roots与build-roots-a；8CPU/64G/1800秒，仅正确性。
-  已终态passed：6项实际NPU通过，物理7；不认证整序列resident性能。
-  日志artifacts/jobs/joint-prefill-resident-small/task.log；JUnit artifacts/joint-prefill/resident-small-npu.xml。
+当前源码改动：cat evidence共享GEMM；Read有限值按8MiB分组检查；分配入口数值守卫合批、
+实际int64分支一次回读复用于前向/反向。新末行拒绝/不发布半成品/提交次数/FP64字面梯度测试。
+开发Python45通过/2严格数值xfail，分配/正支持/结构/输入守卫127通过；C++尚待新构建。
+逐行BMM候选同样触发指定约1.044e-6差异，未继续权重批复制。共享GEMM同材料FP64见证：
+原标量对FP64最大9.06e-7，新批量1.38e-7；原严格失败保留、不提高容差。
+下一步固定本实现，单独新建包和Python/native/SDK，核对相关独立根/训练/新进程恢复，
+再补原FC16同返回成本/profile和少量代表；不能冒用旧构建认证新C++。
 
-下一步：审阅每个inner结果；补原FC16的NPU完整/最小返回成本和独立小profile，
-再补选定resident/双NPU/大规模及同公式层链基线，不由小图外推性能或全部能力。
-原FC16 CPU a553完整29.788/最小22.068秒；NPU对应成本任务已准备：
-gef-joint-prefill-roots-cost固定fb406dd，等待representatives避免本项目计时争用，
-随后单卡完整/最小返回各一次及B2/L8独立profile；16CPU/64G/14400秒。
-日志artifacts/jobs/joint-prefill-roots-cost/task.log，结果artifacts/joint-prefill/cost-roots-npu-*。
-不同返回契约、不同设备实际Full/消息不混算等价加速；原任务数值/学习未认证。
+已有后继任务均使用独立冻结源码，不读取工作区：
+- gef-joint-prefill-layer-anchor，固定930d1ba驱动/f15c4a5库/包，已failed。
+  CPU13项与KV/SSD×三实现成本完成；NPU7项中3通过/4失败，后续NPU成本未运行。
+  2项是测试跨设备比较元数据错误；2项SSD输出约3.07e-6超原阈值。须修复比较入口，
+  有限完整根/FP64定位后独立补NPU成本，不将外层失败当作全部子项失败。
+- gef-joint-prefill-deployment-resident，固定a553/core build-roots-a/resident-roots，已failed。
+  FC16被tensor_bytes预检拒绝，SSD被单窗口retained预算拒绝，均尚未执行窗口。
+  先按实际静态布局补显式预算再运行一次；不是设备数学或精确恢复失败。
+- gef-joint-prefill-deployment-{cpu,single,dual}顺序运行/待前项，固定930驱动/f15库/包。
+  CPU补wide-fc16线程/1.051B32线程；单NPU补FP16/异构LH/1.051B；双NPU补FC16/9.314B。
+  大尺度推理B2/P8，其他B4/P16，每项一次预热/测量、最终窗口checkpoint和实际下一窗恢复。
+  各RuntimeMaxSec36000，CPU配额320/32/64，内存512/384/640GiB；大尺度每卡须50000MiB空闲，
+  准入最多等60秒。驱动身份见artifacts/joint-prefill/deployment-driver.json。
+
+各任务日志artifacts/jobs/joint-prefill-NAME/task.log；结果artifacts/joint-prefill/deployment-PART/runs/result.json。
+实际活动与终态以python scripts/status.py为准；不要把waiting/running记通过。
+构建与正式计时不重叠；源码只读worktree、安装及库保持原身份。当前磁盘813GiB空闲、quota213/300/800GiB，
+大写入/新9B checkpoint前仍须重查；不清理其他项目/公共工具链，也不停止其他项目作业。
 
 起步：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
-检查/停止：systemctl --user status/stop 上述准确unit；不能将live任务记通过。
-唯一待办与停止条件见ROADMAP，GPU按授权延后。下一提交补证据、经验与导航，保持原失败。
-
-已准备gef-joint-prefill-owner-join：固定f15c4a5/fixed-owner-join；等待representatives和roots-cost终态，
-再以全部320CPU新建Python-owned/standalone core与SDK客户端，安装独立env-owner-join。
-相关CPU/NPU独立根、消费者、SDK训练/恢复，以及新最小返回FC16成本/profile；512G/28800秒。
-日志artifacts/jobs/joint-prefill-owner-join/task.log；未开始的构建/测试不记通过。
-
-本提交补同公式层链张量成本基线（KV/SSD），限定单位强度、零左状态、proportional单节点区域。
-独立scalar与默认Python/native的13项CPU FP64/FP32输出/末态/数值导数开发检查通过。
-仅投影基线，None/零完整图契约不由此认证；驱动小型运行通过。计划固定提交后CPU/NPU有限对照。
+检查/停止：systemctl --user status/stop准确gef-joint-prefill-NAME.service，复查整个cgroup终止。
+正式资格先固定实现，再提交证据。继续审阅每个inner结果、记录正负经验和准确复现入口。
