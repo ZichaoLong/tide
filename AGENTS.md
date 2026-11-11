@@ -120,3 +120,5 @@
   may be edited. All experiments need finite resources, logs, stops and explicit terminal state.
 - No sub-agents unless the user explicitly requests delegation. Preserve user changes;
   commit coherent work on tide-learning-lab, and never force-push.
+
+- The latest explicit approval authorizes executing `docs/studies/language-scale-activity-v9.md`, including the inlet-tree/original-inlet comparison. One shared 48h wall deadline, no aggregate NPU/CPU time caps, 64GiB new disk target and >=200GiB hard-quota headroom. Freeze new inputs, calibrate useful batches and Transformer recipes, submit independent durable work directly. This supersedes v9 design-only/no-submission notes, not historical failures.

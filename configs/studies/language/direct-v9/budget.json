@@ -1,0 +1,12 @@
+{
+  "schema": "tide-v9-budget-v1",
+  "started_epoch": 1794404186.382222,
+  "deadline_epoch": 1794576986.382222,
+  "wall_hours": 48,
+  "npu_device_seconds": null,
+  "cpu_core_seconds": null,
+  "max_npu_workers": 12,
+  "max_new_disk_gib": 64,
+  "minimum_quota_headroom_gib": 200,
+  "baseline_quota_gib": 229
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "tide-shared-resource-policy-v1",
+  "authorization": "user-2026-11-09-shared-low-load",
+  "latest_authorization": "v9 48h unlimited aggregate compute, shared cards",
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    14,
+    15
+  ],
+  "minimum_free_hbm_mib": 36000,
+  "max_aicore_percent": 45,
+  "max_new_concurrent_npus": 12,
+  "slot_namespace": "tide-direct-v9",
+  "exclusive_device": false,
+  "deadline_epoch": 1794576986.382222,
+  "prerequisites": {}
+}
