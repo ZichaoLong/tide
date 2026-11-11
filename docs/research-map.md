@@ -12,7 +12,9 @@
 关联25格成本、八个只读VJP及33个Lens投影。成本是固定74e7bbd与非TIDE不同函数参照；
 HB88的共同曝光恶化、FC32后恢复、d32候选反证和初始化/读出假说分列。
 详见[性能报告](studies/hb-cost-results-20261111.md)与[学习报告](studies/hb-learning-results-20261111.md)。
-全v6/test待审槽不由这次局部审阅自动升级；后继语言训练尚未提交。
+全v6/test待审槽不由这次局部审阅自动升级。最新用户批准已启动direct-v7直接图学习，普通图与完整TIDE严格区分。
+
+新增TL-DIRECT-RECIPE-v7、TL-DIRECT-SCALE-v7与条件TL-DIRECT-STRUCTURE-v7；配方筛选、共同曝光与条件传播干预分列，结果节点待审。见[固定研究表](studies/direct-language-v7.md)。
 
 ## 默认视图：同一模型上的联合目标
 

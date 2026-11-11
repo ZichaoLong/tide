@@ -1,0 +1,4328 @@
+{
+  "at": "2026-11-11T08:44:51.127516+00:00",
+  "budget": {
+    "accounting": "conservative whole service allocation including waits/startup; NPU host threads also charged as CPU; independent devices are not DDP",
+    "development_reserve_cpu_core_seconds": 1800.0,
+    "headroom": {
+      "available_ram_bytes": 1913611223040,
+      "new_disk_bytes": 7580639232,
+      "quota_headroom_bytes": 687224963072
+    },
+    "limits": {
+      "cpu_core_seconds": 115200,
+      "deadline_epoch": 1794429466.3204043,
+      "max_new_disk_gib": 32,
+      "max_npu_workers": 4,
+      "max_total_rss_gib": 128,
+      "max_total_threads": 16,
+      "minimum_available_ram_gib": 128,
+      "minimum_quota_headroom_gib": 100,
+      "npu_device_seconds": 28800,
+      "schema": "tide-direct-v7-budget-v1"
+    },
+    "schema": "tide-v6-budget-supervision-v1",
+    "started_at": "2026-11-11T08:40:04.282676+00:00",
+    "state": "running",
+    "stop_reasons": [],
+    "updated_at": "2026-11-11T08:44:47.090722+00:00",
+    "usage": {
+      "active_threads": 3,
+      "active_units": [
+        "tide-lab-v7-controller.service",
+        "tide-lab-v7-screen-w3.service"
+      ],
+      "calibration_cpu_core_seconds": 319.38707399368286,
+      "calibration_npu_device_seconds": 27.535764932632446,
+      "cgroup_memory_bytes": 4117229568,
+      "cpu_core_seconds": 4893.362297154963,
+      "jobs": [
+        {
+          "allocated_seconds": 33.039443016052246,
+          "device": "cpu",
+          "job_id": "v7-cal-cpu",
+          "state": "completed",
+          "threads": 8
+        },
+        {
+          "allocated_seconds": 27.535764932632446,
+          "device": "npu",
+          "job_id": "v7-cal-npu",
+          "state": "completed",
+          "threads": 2
+        },
+        {
+          "allocated_seconds": 282.88776779174805,
+          "device": "cpu",
+          "job_id": "v7-controller",
+          "state": "running",
+          "threads": 1
+        },
+        {
+          "allocated_seconds": 275.938618183136,
+          "device": "npu",
+          "job_id": "v7-screen-w0",
+          "state": "completed",
+          "threads": 2
+        },
+        {
+          "allocated_seconds": 266.77402901649475,
+          "device": "npu",
+          "job_id": "v7-screen-w1",
+          "state": "completed",
+          "threads": 2
+        },
+        {
+          "allocated_seconds": 279.6706509590149,
+          "device": "npu",
+          "job_id": "v7-screen-w2",
+          "state": "completed",
+          "threads": 2
+        },
+        {
+          "allocated_seconds": 281.75640845298767,
+          "device": "npu",
+          "job_id": "v7-screen-w3",
+          "state": "running",
+          "threads": 2
+        }
+      ],
+      "npu_device_seconds": 1131.6754715442657
+    }
+  },
+  "cases": [
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb40-std015-raw-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 9.23442973708734,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.37109375,
+          "resources/npu_peak_allocated_mib": 2542.65185546875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1897.6484375,
+          "step": 1,
+          "train/gradient_norm": 10.000678062438965,
+          "train/loss": 9.266167640686035,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.185667272657156,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 21587.00315160537,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1901.2421875,
+          "step": 2,
+          "train/gradient_norm": 10.286067008972168,
+          "train/loss": 9.20626449584961,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.04480202496051788,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 89281.67875280257,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1920.09375,
+          "step": 16,
+          "train/gradient_norm": 8.392024040222168,
+          "train/loss": 8.375941276550293,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.0433681420981884,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 94447.2094452739,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1929.99609375,
+          "step": 32,
+          "train/gradient_norm": 5.025988578796387,
+          "train/loss": 7.24142599105835,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.04363977536559105,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 93859.3282317764,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1935.48828125,
+          "step": 48,
+          "train/gradient_norm": 3.1735432147979736,
+          "train/loss": 7.029545783996582,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.04645795375108719,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 88165.74276916248,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1938.85546875,
+          "step": 64,
+          "train/gradient_norm": 2.5485334396362305,
+          "train/loss": 6.852472305297852,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.05072539299726486,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 76115.72374034021,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.866540909744799,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.866540909744799,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb40-std015-raw-s11",
+      "identity": {
+        "config_sha256": "c21bda43dea7a23df6bbed840571260604a2e3a7a88c3ad93d25584f029f4100",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.19187328964471817,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            304,
+            304,
+            304,
+            304,
+            318,
+            304,
+            304,
+            318,
+            304,
+            318,
+            304,
+            318,
+            304,
+            318,
+            304,
+            318
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb40-std015-raw-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb40-std015-raw-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb40-std015-raw-s11",
+      "parameters": 11024384,
+      "phase": "screen",
+      "physical_device": "11",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb40-std015-raw-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 92,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 1314,
+          "max_abs": 1.049041748046875e-05,
+          "relative_l2": 1.57448620968528e-06,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.02020263671875,
+        "worst_parameter_vjp_relative_l2": 6.234960107981988e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 204.37109375,
+          "resources/npu_peak_allocated_mib": 2542.65185546875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1897.6484375,
+          "train/gradient_norm": 10.000678062438965,
+          "train/loss": 9.266167640686035,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.185667272657156,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 21587.00315160537,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1938.85546875,
+          "train/gradient_norm": 2.5485334396362305,
+          "train/loss": 6.852472305297852,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.05072539299726486,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 76115.72374034021,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 10.286067008972168,
+        "median_logged_step_seconds": 0.045629989355802536,
+        "median_logged_tokens_per_second": 88723.71076098253
+      },
+      "validations": [
+        {
+          "nll": 6.866540909744799,
+          "ppl": 959.6233941617369,
+          "record": "runs/v7-screen-hb40-std015-raw-s11/train/validation-262144.json",
+          "sha256": "fdc92bf225292dd5c734c91f1a3c6415c1aba168ae94740a9de81d5bbf149e05",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.866540909744799,
+          "ppl": 959.6233941617369,
+          "record": "runs/v7-screen-hb40-std015-raw-s11/train/validation-final.json",
+          "sha256": "753648a917d1214d7bcca498e7da7eefaed7aa63ab77dfdd5e6bcafd867c1740",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 9.23442973708734,
+          "ppl": 10243.818577989125,
+          "record": "runs/v7-screen-hb40-std015-raw-s11/train/validation-initial.json",
+          "sha256": "1d4a5ab4f3e5c472c7d52255d744f13e6edb6e8eeb30ac7d336ed8db3e63515d",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb40-std015-rms-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.343721440527588,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.375,
+          "resources/npu_peak_allocated_mib": 2546.669921875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1898.5625,
+          "step": 1,
+          "train/gradient_norm": 1.6832324266433716,
+          "train/loss": 8.349225044250488,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.17721234634518623,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 22616.934331386514,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1901.00390625,
+          "step": 2,
+          "train/gradient_norm": 1.7347838878631592,
+          "train/loss": 8.340325355529785,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.04578628018498421,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 87362.41476353469,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1920.578125,
+          "step": 16,
+          "train/gradient_norm": 0.9818974733352661,
+          "train/loss": 8.061683654785156,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.046819496899843216,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 87484.92126607444,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1930.65234375,
+          "step": 32,
+          "train/gradient_norm": 0.7089122533798218,
+          "train/loss": 7.290855884552002,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.045348260551691055,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 90323.19983544019,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1936.5703125,
+          "step": 48,
+          "train/gradient_norm": 0.26768672466278076,
+          "train/loss": 6.933422088623047,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.044786855578422546,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 91455.404651658,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1939.77734375,
+          "step": 64,
+          "train/gradient_norm": 0.3744489252567291,
+          "train/loss": 6.8387861251831055,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.045142486691474915,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 85529.18288236752,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.856810772325844,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.856810772325844,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb40-std015-rms-s11",
+      "identity": {
+        "config_sha256": "764ad95941d75eea5b24a0798e90270b893262c3f7498efa12de808b129d1324",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.173724465072155,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            267,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb40-std015-rms-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb40-std015-rms-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb40-std015-rms-s11",
+      "parameters": 11024512,
+      "phase": "screen",
+      "physical_device": "15",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb40-std015-rms-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 93,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 25,
+          "max_abs": 2.0191073417663574e-06,
+          "relative_l2": 1.700378847325785e-06,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.0046844482421875,
+        "worst_parameter_vjp_relative_l2": 8.315578753346689e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 204.375,
+          "resources/npu_peak_allocated_mib": 2546.669921875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1898.5625,
+          "train/gradient_norm": 1.6832324266433716,
+          "train/loss": 8.349225044250488,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.17721234634518623,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 22616.934331386514,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1939.77734375,
+          "train/gradient_norm": 0.3744489252567291,
+          "train/loss": 6.8387861251831055,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.045142486691474915,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 85529.18288236752,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 1.7347838878631592,
+        "median_logged_step_seconds": 0.04556727036833763,
+        "median_logged_tokens_per_second": 87423.66801480457
+      },
+      "validations": [
+        {
+          "nll": 6.856810772325844,
+          "ppl": 950.3314061365318,
+          "record": "runs/v7-screen-hb40-std015-rms-s11/train/validation-262144.json",
+          "sha256": "0777a3909d1cee553519d2b3d0de3cb6fce7efe61c8a8341e0a753b2f3babd0f",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.856810772325844,
+          "ppl": 950.3314061365318,
+          "record": "runs/v7-screen-hb40-std015-rms-s11/train/validation-final.json",
+          "sha256": "0842eac898dc2d105a52bce4776e3f4a92a3084effd33e6a365896a0859fe7ed",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.343721440527588,
+          "ppl": 4203.704505048767,
+          "record": "runs/v7-screen-hb40-std015-rms-s11/train/validation-initial.json",
+          "sha256": "525357315d6e2798378fd2bdf9dd92e60bb711905125d699425bce64cde10c65",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb40-fan_in-raw-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.331374031491578,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.37109375,
+          "resources/npu_peak_allocated_mib": 2542.65185546875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1899.44921875,
+          "step": 1,
+          "train/gradient_norm": 0.6268253326416016,
+          "train/loss": 8.326007843017578,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.19398245960474014,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 20661.661926375848,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1902.87109375,
+          "step": 2,
+          "train/gradient_norm": 0.6491113305091858,
+          "train/loss": 8.318131446838379,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.04643039032816887,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 86150.47109722959,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1921.078125,
+          "step": 16,
+          "train/gradient_norm": 2.347625970840454,
+          "train/loss": 7.054543495178223,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.04516739398241043,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 90684.88657094337,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1931.15625,
+          "step": 32,
+          "train/gradient_norm": 1.101926565170288,
+          "train/loss": 6.826977252960205,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.048285942524671555,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 84828.0013982778,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1936.265625,
+          "step": 48,
+          "train/gradient_norm": 0.7744244337081909,
+          "train/loss": 6.6521735191345215,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.052203234285116196,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 78462.57144967398,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1940.50390625,
+          "step": 64,
+          "train/gradient_norm": 1.077036738395691,
+          "train/loss": 6.426184177398682,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.044918596744537354,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 85955.49014940108,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.392131485976279,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.392131485976279,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb40-fan_in-raw-s11",
+      "identity": {
+        "config_sha256": "02def6255f8de1865340fbbed96f185d79adbe88165c2de771c21d60eba51b01",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.19312408193945885,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            267,
+            264,
+            260,
+            68,
+            267,
+            291,
+            264,
+            260,
+            68,
+            267,
+            291,
+            264,
+            260,
+            68,
+            267,
+            291
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb40-fan_in-raw-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb40-fan_in-raw-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb40-fan_in-raw-s11",
+      "parameters": 11024384,
+      "phase": "screen",
+      "physical_device": "1",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb40-fan_in-raw-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 78,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 9.5367431640625e-07,
+          "relative_l2": 7.812084422992372e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "passed": 15,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.0008087158203125,
+        "worst_parameter_vjp_relative_l2": 2.864919554313501e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 204.37109375,
+          "resources/npu_peak_allocated_mib": 2542.65185546875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1899.44921875,
+          "train/gradient_norm": 0.6268253326416016,
+          "train/loss": 8.326007843017578,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.19398245960474014,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 20661.661926375848,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 204.3681640625,
+          "resources/npu_peak_allocated_mib": 2631.81787109375,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1940.50390625,
+          "train/gradient_norm": 1.077036738395691,
+          "train/loss": 6.426184177398682,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.044918596744537354,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 85955.49014940108,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 2.347625970840454,
+        "median_logged_step_seconds": 0.04735816642642021,
+        "median_logged_tokens_per_second": 85391.74577383944
+      },
+      "validations": [
+        {
+          "nll": 6.392131485976279,
+          "ppl": 597.1279941511832,
+          "record": "runs/v7-screen-hb40-fan_in-raw-s11/train/validation-262144.json",
+          "sha256": "58c9b6795f1bae07394e1dd877fe8540e970b5fa0ed1906075be1fbacc599787",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.392131485976279,
+          "ppl": 597.1279941511832,
+          "record": "runs/v7-screen-hb40-fan_in-raw-s11/train/validation-final.json",
+          "sha256": "1b7e76accea96d5b3140098c35d1e9be000f92f70a61f9470ad20108ff46f40c",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.331374031491578,
+          "ppl": 4152.1187764924725,
+          "record": "runs/v7-screen-hb40-fan_in-raw-s11/train/validation-initial.json",
+          "sha256": "4c86bfb01152ef8be1a58cb8308b927f318b57b5bfc48eefda8155c8518ec4a0",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb40-fan_in-rms-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.341131418012083,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.375,
+          "resources/npu_peak_allocated_mib": 2546.669921875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1900.80859375,
+          "step": 1,
+          "train/gradient_norm": 0.8292228579521179,
+          "train/loss": 8.334833145141602,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.29050710052251816,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13796.564671882526,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1903.41796875,
+          "step": 2,
+          "train/gradient_norm": 0.8575349450111389,
+          "train/loss": 8.324512481689453,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.04498126730322838,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 88925.90715675353,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1923.03125,
+          "step": 16,
+          "train/gradient_norm": 0.7960744500160217,
+          "train/loss": 7.649823188781738,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.042953602969646454,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 95358.70606464549,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1932.4453125,
+          "step": 32,
+          "train/gradient_norm": 0.4656684994697571,
+          "train/loss": 6.927870273590088,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.04330405965447426,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 94586.97481673161,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1938.1640625,
+          "step": 48,
+          "train/gradient_norm": 0.26087498664855957,
+          "train/loss": 6.902515411376953,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.04271351918578148,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 95894.69746532805,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1941.35546875,
+          "step": 64,
+          "train/gradient_norm": 0.4157315194606781,
+          "train/loss": 6.782247066497803,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04439224302768707,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 86974.65450420982,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.776241692248732,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.776241692248732,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb40-fan_in-rms-s11",
+      "identity": {
+        "config_sha256": "a0e8f2359024d572096ade153f0ba197578c25c6e4a438803d95ba62372e11b8",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.17540312930941582,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb40-fan_in-rms-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb40-fan_in-rms-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb40-fan_in-rms-s11",
+      "parameters": 11024512,
+      "phase": "screen",
+      "physical_device": "14",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb40-fan_in-rms-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 79,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 8.344650268554688e-07,
+          "relative_l2": 7.356539859757064e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "passed": 15,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.0005950927734375,
+        "worst_parameter_vjp_relative_l2": 2.7066096787582616e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 204.375,
+          "resources/npu_peak_allocated_mib": 2546.669921875,
+          "resources/npu_reserved_mib": 3024.0,
+          "resources/peak_rss_mib": 1900.80859375,
+          "train/gradient_norm": 0.8292228579521179,
+          "train/loss": 8.334833145141602,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.29050710052251816,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13796.564671882526,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 204.3720703125,
+          "resources/npu_peak_allocated_mib": 2635.837890625,
+          "resources/npu_reserved_mib": 3090.0,
+          "resources/peak_rss_mib": 1941.35546875,
+          "train/gradient_norm": 0.4157315194606781,
+          "train/loss": 6.782247066497803,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04439224302768707,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 86974.65450420982,
+          "work/attention_query_positions": 163840.0,
+          "work/dense_node_positions": 163840.0,
+          "work/edge_positions": 393216.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 0.8575349450111389,
+        "median_logged_step_seconds": 0.043848151341080666,
+        "median_logged_tokens_per_second": 91756.44098674257
+      },
+      "validations": [
+        {
+          "nll": 6.776241692248732,
+          "ppl": 876.7673626524563,
+          "record": "runs/v7-screen-hb40-fan_in-rms-s11/train/validation-262144.json",
+          "sha256": "8ecd3f9677202b096e29818ad28e24c67f4d11ff6948e811a52f6f547caacf53",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.776241692248732,
+          "ppl": 876.7673626524563,
+          "record": "runs/v7-screen-hb40-fan_in-rms-s11/train/validation-final.json",
+          "sha256": "1d2c4664a98cd6d2593d0a650f0b6ff87a22a9430657a831d6cfb65a5998802b",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.341131418012083,
+          "ppl": 4192.830903247443,
+          "record": "runs/v7-screen-hb40-fan_in-rms-s11/train/validation-initial.json",
+          "sha256": "5ebcc8c183ae10dafa441052294e7840296d72cc8c6e76dc8d1a5b9cf6db9f73",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb88-std015-raw-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 9.312097491696477,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.67333984375,
+          "resources/npu_peak_allocated_mib": 5282.52587890625,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1965.56640625,
+          "step": 1,
+          "train/gradient_norm": 13.504036903381348,
+          "train/loss": 9.350762367248535,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.293181698769331,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13670.703242474243,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1968.44140625,
+          "step": 2,
+          "train/gradient_norm": 13.482166290283203,
+          "train/loss": 9.303566932678223,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.09344255551695824,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 42807.048436020865,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1986.78515625,
+          "step": 16,
+          "train/gradient_norm": 10.870728492736816,
+          "train/loss": 8.492011070251465,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.09165262430906296,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 44690.48246985081,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1997.67578125,
+          "step": 32,
+          "train/gradient_norm": 6.471499443054199,
+          "train/loss": 7.325011253356934,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.09238527715206146,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 44336.06875755963,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2002.5078125,
+          "step": 48,
+          "train/gradient_norm": 3.876837730407715,
+          "train/loss": 7.0656962394714355,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.09336082637310028,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 43872.7907530622,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2005.70703125,
+          "step": 64,
+          "train/gradient_norm": 2.912407159805298,
+          "train/loss": 6.875450134277344,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09231599047780037,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 41823.74017780236,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.928407184313983,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.928407184313983,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb88-std015-raw-s11",
+      "identity": {
+        "config_sha256": "f444990e12a15a04607470c83cbe35da845b1d6ce37a1cb5e17f96db8e30b577",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.42070868238806725,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304,
+            304
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb88-std015-raw-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb88-std015-raw-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb88-std015-raw-s11",
+      "parameters": 23619584,
+      "phase": "screen",
+      "physical_device": "11",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb88-std015-raw-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 200,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 1884,
+          "max_abs": 1.6197562217712402e-05,
+          "relative_l2": 2.0272380139353285e-06,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.03662109375,
+        "worst_parameter_vjp_relative_l2": 1.0788100996222654e-05
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 437.67333984375,
+          "resources/npu_peak_allocated_mib": 5282.52587890625,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1965.56640625,
+          "train/gradient_norm": 13.504036903381348,
+          "train/loss": 9.350762367248535,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.293181698769331,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13670.703242474243,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2005.70703125,
+          "train/gradient_norm": 2.912407159805298,
+          "train/loss": 6.875450134277344,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09231599047780037,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 41823.74017780236,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 13.504036903381348,
+        "median_logged_step_seconds": 0.09287305176258087,
+        "median_logged_tokens_per_second": 43339.919594541534
+      },
+      "validations": [
+        {
+          "nll": 6.928407184313983,
+          "ppl": 1020.8666315498596,
+          "record": "runs/v7-screen-hb88-std015-raw-s11/train/validation-262144.json",
+          "sha256": "4b1606c786f7528e6e7ecb083fec04b1b4e8abddb4a96951e9f2cfc95794e6c2",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.928407184313983,
+          "ppl": 1020.8666315498596,
+          "record": "runs/v7-screen-hb88-std015-raw-s11/train/validation-final.json",
+          "sha256": "71a6e71d7ca396b701a45162cac4aef30aa2981253ac8d8600a3d017390fbb31",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 9.312097491696477,
+          "ppl": 11071.145427806696,
+          "record": "runs/v7-screen-hb88-std015-raw-s11/train/validation-initial.json",
+          "sha256": "03ac1e3b20f18bd4848c976191392de85f68a7dfd743af6fa08f21bb89bf6a7e",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb88-std015-rms-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.340214120224118,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.67724609375,
+          "resources/npu_peak_allocated_mib": 5286.5439453125,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1995.953125,
+          "step": 1,
+          "train/gradient_norm": 2.150965452194214,
+          "train/loss": 8.346414566040039,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.3152124360203743,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 12715.234368928694,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1998.91796875,
+          "step": 2,
+          "train/gradient_norm": 2.154611587524414,
+          "train/loss": 8.339367866516113,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.09410605579614639,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 42505.23482425876,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2016.5390625,
+          "step": 16,
+          "train/gradient_norm": 0.9854409098625183,
+          "train/loss": 8.048273086547852,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.09505712613463402,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 43089.878334830326,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2028.27734375,
+          "step": 32,
+          "train/gradient_norm": 0.7025258541107178,
+          "train/loss": 7.283309459686279,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.09820360317826271,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 41709.26389090626,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2033.53125,
+          "step": 48,
+          "train/gradient_norm": 0.25360336899757385,
+          "train/loss": 6.934662342071533,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.09662241116166115,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 42391.82142895285,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2036.9375,
+          "step": 64,
+          "train/gradient_norm": 0.3908800184726715,
+          "train/loss": 6.853952407836914,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09456398338079453,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 40829.49831388078,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.87183847790584,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.87183847790584,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb88-std015-rms-s11",
+      "identity": {
+        "config_sha256": "3892176ed35aa292828dac24199d6405ecac69d27d125a74cd2987a8b7ed88b9",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.3544219695031643,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            267,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb88-std015-rms-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb88-std015-rms-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb88-std015-rms-s11",
+      "parameters": 23619712,
+      "phase": "screen",
+      "physical_device": "15",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb88-std015-rms-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 200,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 87,
+          "max_abs": 2.6971101760864258e-06,
+          "relative_l2": 2.2074659300376637e-06,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 2,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.005615234375,
+        "worst_parameter_vjp_relative_l2": 1.0363375055477732e-05
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 437.67724609375,
+          "resources/npu_peak_allocated_mib": 5286.5439453125,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1995.953125,
+          "train/gradient_norm": 2.150965452194214,
+          "train/loss": 8.346414566040039,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.3152124360203743,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 12715.234368928694,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2036.9375,
+          "train/gradient_norm": 0.3908800184726715,
+          "train/loss": 6.853952407836914,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09456398338079453,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 40829.49831388078,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 2.154611587524414,
+        "median_logged_step_seconds": 0.09583976864814758,
+        "median_logged_tokens_per_second": 42050.54265992955
+      },
+      "validations": [
+        {
+          "nll": 6.87183847790584,
+          "ppl": 964.720553856043,
+          "record": "runs/v7-screen-hb88-std015-rms-s11/train/validation-262144.json",
+          "sha256": "d9caa314e805e4e9cbed433becd10c83c48390a918f9d2a9708155b3fed703fc",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.87183847790584,
+          "ppl": 964.720553856043,
+          "record": "runs/v7-screen-hb88-std015-rms-s11/train/validation-final.json",
+          "sha256": "23f08b7f9329b42f478b535874df14dc09b00c6a360ec665f1e44d0f3a3d1d0d",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.340214120224118,
+          "ppl": 4188.98659219316,
+          "record": "runs/v7-screen-hb88-std015-rms-s11/train/validation-initial.json",
+          "sha256": "32d6293cc9c5b059183244374122ad83ca505347427e17dcc3709572fda8c930",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb88-fan_in-raw-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.32615926116705,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.67333984375,
+          "resources/npu_peak_allocated_mib": 5282.52587890625,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1966.0,
+          "step": 1,
+          "train/gradient_norm": 0.7331962585449219,
+          "train/loss": 8.3267183303833,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2967739701271057,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13505.227558479635,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1968.6328125,
+          "step": 2,
+          "train/gradient_norm": 0.7526970505714417,
+          "train/loss": 8.303776741027832,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.08961043134331703,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 44637.660370979924,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1987.34375,
+          "step": 16,
+          "train/gradient_norm": 2.001244306564331,
+          "train/loss": 7.018979549407959,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.1059965081512928,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 38642.78240329979,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 1997.2265625,
+          "step": 32,
+          "train/gradient_norm": 0.996401846408844,
+          "train/loss": 6.824716567993164,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.08845042437314987,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 46308.426771589206,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2002.35546875,
+          "step": 48,
+          "train/gradient_norm": 0.814115047454834,
+          "train/loss": 6.665688991546631,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.1019345112144947,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 40182.66189927601,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2005.94140625,
+          "step": 64,
+          "train/gradient_norm": 1.0188308954238892,
+          "train/loss": 6.422288417816162,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09673406928777695,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 39913.548850238076,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.400295522529632,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.400295522529632,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb88-fan_in-raw-s11",
+      "identity": {
+        "config_sha256": "bdd353aa9452d2a48eedeea417dd1274bf501320218c9c50b5196568398b2913",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.34075575694441795,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            267,
+            291,
+            264,
+            521,
+            86,
+            267,
+            264,
+            521,
+            290,
+            17,
+            267,
+            264,
+            521,
+            260,
+            314,
+            267
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb88-fan_in-raw-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb88-fan_in-raw-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb88-fan_in-raw-s11",
+      "parameters": 23619584,
+      "phase": "screen",
+      "physical_device": "1",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb88-fan_in-raw-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 152,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 1.0132789611816406e-06,
+          "relative_l2": 8.864771286182592e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "passed": 49,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.00096893310546875,
+        "worst_parameter_vjp_relative_l2": 3.535476003842561e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 437.67333984375,
+          "resources/npu_peak_allocated_mib": 5282.52587890625,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 1966.0,
+          "train/gradient_norm": 0.7331962585449219,
+          "train/loss": 8.3267183303833,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2967739701271057,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13505.227558479635,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 437.66357421875,
+          "resources/npu_peak_allocated_mib": 5470.873046875,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2005.94140625,
+          "train/gradient_norm": 1.0188308954238892,
+          "train/loss": 6.422288417816162,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09673406928777695,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 39913.548850238076,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 2.001244306564331,
+        "median_logged_step_seconds": 0.09933429025113583,
+        "median_logged_tokens_per_second": 40048.10537475704
+      },
+      "validations": [
+        {
+          "nll": 6.400295522529632,
+          "ppl": 602.022922923346,
+          "record": "runs/v7-screen-hb88-fan_in-raw-s11/train/validation-262144.json",
+          "sha256": "a9e41236a3830171d2e79599d0f400deecf3afb4ad69619dee8046806f00b91c",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.400295522529632,
+          "ppl": 602.022922923346,
+          "record": "runs/v7-screen-hb88-fan_in-raw-s11/train/validation-final.json",
+          "sha256": "cba56561540bf1cc32ef1208ea3e7d6a5b9f397520e9ea1c32e0583ca54d41d1",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.32615926116705,
+          "ppl": 4130.522788710788,
+          "record": "runs/v7-screen-hb88-fan_in-raw-s11/train/validation-initial.json",
+          "sha256": "92d51dab143760221f034a1e6ae2440e0f97dffedfd4aeb795d3043aeef35fde",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "static_dense_graph; no learned routing",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/hb88-fan_in-rms-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.332742179278284,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.67724609375,
+          "resources/npu_peak_allocated_mib": 5286.5439453125,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 2002.76953125,
+          "step": 1,
+          "train/gradient_norm": 0.8858333230018616,
+          "train/loss": 8.332914352416992,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2944632023572922,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13611.208354437516,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2005.09375,
+          "step": 2,
+          "train/gradient_norm": 0.893923282623291,
+          "train/loss": 8.305150032043457,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.09005090594291687,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 44419.31991817599,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2020.9453125,
+          "step": 16,
+          "train/gradient_norm": 0.7943251132965088,
+          "train/loss": 7.619969367980957,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.08849864080548286,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 46283.19669906428,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2033.7109375,
+          "step": 32,
+          "train/gradient_norm": 0.46424031257629395,
+          "train/loss": 6.923619270324707,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.10760600864887238,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 38064.78886662918,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2038.75,
+          "step": 48,
+          "train/gradient_norm": 0.2513420581817627,
+          "train/loss": 6.899106025695801,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.0948186032474041,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 43198.2739643672,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2042.9296875,
+          "step": 64,
+          "train/gradient_norm": 0.390108585357666,
+          "train/loss": 6.758603096008301,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09190814197063446,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 42009.3358130733,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.752592073287815,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.752592073287815,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "hb88-fan_in-rms-s11",
+      "identity": {
+        "config_sha256": "1194bef47eb92567eeb8c7883aa4ca1a47d3ebe49f1815d9333f2a8e065265bc",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.39197036623954773,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            267,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-hb88-fan_in-rms-s11/train/projection.json",
+        "run_id": "tl-v7-screen-hb88-fan_in-rms-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-hb88-fan_in-rms-s11",
+      "parameters": 23619712,
+      "phase": "screen",
+      "physical_device": "14",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-hb88-fan_in-rms-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 145,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 0,
+          "max_abs": 8.046627044677734e-07,
+          "relative_l2": 8.205941791881734e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "passed": 57,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.00103759765625,
+        "worst_parameter_vjp_relative_l2": 3.465609596718965e-06
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 437.67724609375,
+          "resources/npu_peak_allocated_mib": 5286.5439453125,
+          "resources/npu_reserved_mib": 6238.0,
+          "resources/peak_rss_mib": 2002.76953125,
+          "train/gradient_norm": 0.8858333230018616,
+          "train/loss": 8.332914352416992,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2944632023572922,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13611.208354437516,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "last": {
+          "resources/npu_allocated_mib": 437.66748046875,
+          "resources/npu_peak_allocated_mib": 5474.89306640625,
+          "resources/npu_reserved_mib": 6370.0,
+          "resources/peak_rss_mib": 2042.9296875,
+          "train/gradient_norm": 0.390108585357666,
+          "train/loss": 6.758603096008301,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.09190814197063446,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 42009.3358130733,
+          "work/attention_query_positions": 360448.0,
+          "work/dense_node_positions": 360448.0,
+          "work/edge_positions": 917504.0,
+          "work/largest_projection_parameter_batch": 4.0,
+          "work/largest_projection_rows_per_node": 4096.0
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 0.893923282623291,
+        "median_logged_step_seconds": 0.09336337260901928,
+        "median_logged_tokens_per_second": 42603.80488872025
+      },
+      "validations": [
+        {
+          "nll": 6.752592073287815,
+          "ppl": 856.2754170551034,
+          "record": "runs/v7-screen-hb88-fan_in-rms-s11/train/validation-262144.json",
+          "sha256": "eed7c0a50c529c58edac88ebc01efb0ebc15c47d796aba3fa04951732687f37b",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.752592073287815,
+          "ppl": 856.2754170551034,
+          "record": "runs/v7-screen-hb88-fan_in-rms-s11/train/validation-final.json",
+          "sha256": "f6cdaf82ecb738687bc70034912ce99c414451dd3cb988952d3382032d5eddeb",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.332742179278284,
+          "ppl": 4157.803376406353,
+          "record": "runs/v7-screen-hb88-fan_in-rms-s11/train/validation-initial.json",
+          "sha256": "7c418d4ec41404457c9cd0c8bae69647b29c085d4aa4aeedd737ae20d7489c9d",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "not_applicable",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/tf12-original-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.373309361748397,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 186.96826171875,
+          "resources/npu_peak_allocated_mib": 1171.35400390625,
+          "resources/npu_reserved_mib": 1472.0,
+          "resources/peak_rss_mib": 1929.80859375,
+          "step": 1,
+          "train/gradient_norm": 1.443864345550537,
+          "train/loss": 8.373579978942871,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.16210341826081276,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 24724.956715912158
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1931.796875,
+          "step": 2,
+          "train/gradient_norm": 1.4258185625076294,
+          "train/loss": 8.282125473022461,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.042967379093170166,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 93093.87922699282
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1950.78125,
+          "step": 16,
+          "train/gradient_norm": 0.9221875667572021,
+          "train/loss": 7.119732856750488,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.04459504410624504,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 91848.77113792114
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1961.91796875,
+          "step": 32,
+          "train/gradient_norm": 0.4066224694252014,
+          "train/loss": 6.914182662963867,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.042954858392477036,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 95355.91905751363
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1967.43359375,
+          "step": 48,
+          "train/gradient_norm": 0.31219470500946045,
+          "train/loss": 6.952181339263916,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.04334821179509163,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 94490.63364740215
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1970.859375,
+          "step": 64,
+          "train/gradient_norm": 0.3394603729248047,
+          "train/loss": 6.93134880065918,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04347977414727211,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 88799.90928476882
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.952404080890119,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.952404080890119,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "tf12-original-s11",
+      "identity": {
+        "config_sha256": "04d89251f8d36b004a08b5fd323452e4efaca932269d5d32b50350f1b98c9e17",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.16273849084973335,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-tf12-original-s11/train/projection.json",
+        "run_id": "tl-v7-screen-tf12-original-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-tf12-original-s11",
+      "parameters": 10530304,
+      "phase": "screen",
+      "physical_device": "11",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-tf12-original-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 148,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 22849,
+          "max_abs": 0.00016704201698303223,
+          "relative_l2": 0.00013572851246169583,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.0182647705078125,
+        "worst_parameter_vjp_relative_l2": 0.00034293574413832116
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 186.96826171875,
+          "resources/npu_peak_allocated_mib": 1171.35400390625,
+          "resources/npu_reserved_mib": 1472.0,
+          "resources/peak_rss_mib": 1929.80859375,
+          "train/gradient_norm": 1.443864345550537,
+          "train/loss": 8.373579978942871,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.16210341826081276,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 24724.956715912158
+        },
+        "last": {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1970.859375,
+          "train/gradient_norm": 0.3394603729248047,
+          "train/loss": 6.93134880065918,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04347977414727211,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 88799.90928476882
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 1.443864345550537,
+        "median_logged_step_seconds": 0.04341399297118187,
+        "median_logged_tokens_per_second": 92471.32518245699
+      },
+      "validations": [
+        {
+          "nll": 6.952404080890119,
+          "ppl": 1045.6605614211585,
+          "record": "runs/v7-screen-tf12-original-s11/train/validation-262144.json",
+          "sha256": "e241038e534874ce2ceab9d246db5749a719e582b8583c1c5f8de13ce18d5576",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.952404080890119,
+          "ppl": 1045.6605614211585,
+          "record": "runs/v7-screen-tf12-original-s11/train/validation-final.json",
+          "sha256": "981debf01ecd2ef74a111c754981d16ebcf6ea29bde72536e7969da70cc617d0",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.373309361748397,
+          "ppl": 4329.941721847753,
+          "record": "runs/v7-screen-tf12-original-s11/train/validation-initial.json",
+          "sha256": "c5ec3a9300ceef9a9eb13b5a557977187904428f59f78a0d19f2b81a6d28eccf",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "not_applicable",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/tf12-balanced-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.368947219103575,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 186.96826171875,
+          "resources/npu_peak_allocated_mib": 1171.35400390625,
+          "resources/npu_reserved_mib": 1472.0,
+          "resources/peak_rss_mib": 1928.08203125,
+          "step": 1,
+          "train/gradient_norm": 1.9356576204299927,
+          "train/loss": 8.362580299377441,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.17734958976507187,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 22599.432033134344
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1930.5625,
+          "step": 2,
+          "train/gradient_norm": 1.69096839427948,
+          "train/loss": 8.256278991699219,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.04192165285348892,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 95416.08519061768
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1949.9609375,
+          "step": 16,
+          "train/gradient_norm": 0.9128758311271667,
+          "train/loss": 7.118329048156738,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.04004982113838196,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 102272.6165454601
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1960.7734375,
+          "step": 32,
+          "train/gradient_norm": 0.3978840708732605,
+          "train/loss": 6.909160614013672,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.05137170851230621,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 79732.60221662268
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1965.9140625,
+          "step": 48,
+          "train/gradient_norm": 0.32087522745132446,
+          "train/loss": 6.951427459716797,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.04105427861213684,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 99770.35618375482
+        },
+        {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1969.6796875,
+          "step": 64,
+          "train/gradient_norm": 0.3428557813167572,
+          "train/loss": 6.923856735229492,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04176553711295128,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 92444.63897491034
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.943161517381668,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.943161517381668,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "tf12-balanced-s11",
+      "identity": {
+        "config_sha256": "237fbfa6d2786647f996a6e945308299e512250244e1f64f245ebb6075558c2f",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.10911175981163979,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-tf12-balanced-s11/train/projection.json",
+        "run_id": "tl-v7-screen-tf12-balanced-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-tf12-balanced-s11",
+      "parameters": 10530304,
+      "phase": "screen",
+      "physical_device": "15",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-tf12-balanced-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 148,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 23373,
+          "max_abs": 0.00022774934768676758,
+          "relative_l2": 0.00017538123123499375,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.12896728515625,
+        "worst_parameter_vjp_relative_l2": 0.0003312700321562334
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 186.96826171875,
+          "resources/npu_peak_allocated_mib": 1171.35400390625,
+          "resources/npu_reserved_mib": 1472.0,
+          "resources/peak_rss_mib": 1928.08203125,
+          "train/gradient_norm": 1.9356576204299927,
+          "train/loss": 8.362580299377441,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.17734958976507187,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 22599.432033134344
+        },
+        "last": {
+          "resources/npu_allocated_mib": 190.95703125,
+          "resources/npu_peak_allocated_mib": 1255.8212890625,
+          "resources/npu_reserved_mib": 1538.0,
+          "resources/peak_rss_mib": 1969.6796875,
+          "train/gradient_norm": 0.3428557813167572,
+          "train/loss": 6.923856735229492,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.04176553711295128,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 92444.63897491034
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 1.9356576204299927,
+        "median_logged_step_seconds": 0.0418435949832201,
+        "median_logged_tokens_per_second": 93930.36208276401
+      },
+      "validations": [
+        {
+          "nll": 6.943161517381668,
+          "ppl": 1036.040502758194,
+          "record": "runs/v7-screen-tf12-balanced-s11/train/validation-262144.json",
+          "sha256": "8c3292a1b4a6a72b0e29b25acb8c2cd4e3bad47936b332835ac7518e36c334fa",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.943161517381668,
+          "ppl": 1036.040502758194,
+          "record": "runs/v7-screen-tf12-balanced-s11/train/validation-final.json",
+          "sha256": "8e36e87f1086f75da1e307868dca592e8a7aad8b1bc82866e0ae75b99ba14a77",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.368947219103575,
+          "ppl": 4311.095034268094,
+          "record": "runs/v7-screen-tf12-balanced-s11/train/validation-initial.json",
+          "sha256": "00905444974c5237e577560b836b1875fec537ac9ef27aadd46186d6a49bbacd",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "not_applicable",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/tf28-original-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.36968587897718,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 414.07861328125,
+          "resources/npu_peak_allocated_mib": 2374.99169921875,
+          "resources/npu_reserved_mib": 3018.0,
+          "resources/peak_rss_mib": 1962.69921875,
+          "step": 1,
+          "train/gradient_norm": 1.6497474908828735,
+          "train/loss": 8.37031078338623,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2974250614643097,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13475.663349508799
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1965.0234375,
+          "step": 2,
+          "train/gradient_norm": 1.4025986194610596,
+          "train/loss": 8.22696304321289,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.10339001566171646,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 38688.45530585533
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1982.54296875,
+          "step": 16,
+          "train/gradient_norm": 0.9064429402351379,
+          "train/loss": 7.11591911315918,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.10321634262800217,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 39683.63822735153
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1994.0546875,
+          "step": 32,
+          "train/gradient_norm": 0.42888298630714417,
+          "train/loss": 6.9154558181762695,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.0905950665473938,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 45212.17496823873
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1999.83984375,
+          "step": 48,
+          "train/gradient_norm": 0.3144465386867523,
+          "train/loss": 6.951006889343262,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.10209693759679794,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 40118.735159089265
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 2003.59375,
+          "step": 64,
+          "train/gradient_norm": 0.33993858098983765,
+          "train/loss": 6.931392669677734,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.0953352078795433,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 40499.2036612371
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.9516082420013845,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.9516082420013845,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "tf28-original-s11",
+      "identity": {
+        "config_sha256": "5542ad065edf98d60c099875bdb611f9f7ee2f6adca53be7016435808ec74c4f",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.23621854558587074,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-tf28-original-s11/train/projection.json",
+        "run_id": "tl-v7-screen-tf28-original-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-tf28-original-s11",
+      "parameters": 23166464,
+      "phase": "screen",
+      "physical_device": "1",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-tf28-original-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 340,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 23099,
+          "max_abs": 0.00017148256301879883,
+          "relative_l2": 0.0001505208847939109,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.01592254638671875,
+        "worst_parameter_vjp_relative_l2": 0.0004236759007344187
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 414.07861328125,
+          "resources/npu_peak_allocated_mib": 2374.99169921875,
+          "resources/npu_reserved_mib": 3018.0,
+          "resources/peak_rss_mib": 1962.69921875,
+          "train/gradient_norm": 1.6497474908828735,
+          "train/loss": 8.37031078338623,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2974250614643097,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13475.663349508799
+        },
+        "last": {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 2003.59375,
+          "train/gradient_norm": 0.33993858098983765,
+          "train/loss": 6.931392669677734,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.0953352078795433,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 40499.2036612371
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 1.6497474908828735,
+        "median_logged_step_seconds": 0.10265664011240005,
+        "median_logged_tokens_per_second": 39901.1866932204
+      },
+      "validations": [
+        {
+          "nll": 6.9516082420013845,
+          "ppl": 1044.8287151336808,
+          "record": "runs/v7-screen-tf28-original-s11/train/validation-262144.json",
+          "sha256": "709ba97154458a7f9925ba902f047d6850128f0d153fff225a65ba1e3d9ef5f4",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.9516082420013845,
+          "ppl": 1044.8287151336808,
+          "record": "runs/v7-screen-tf28-original-s11/train/validation-final.json",
+          "sha256": "98bea5f87228258b032b6ccf4b859fc3449a80fdd92968ce703a0935a2940ab2",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.36968587897718,
+          "ppl": 4314.280643577245,
+          "record": "runs/v7-screen-tf28-original-s11/train/validation-initial.json",
+          "sha256": "b7a67e248b8275d3fdf4e373420a460d53dbf35a5b0433f8ffe98d678ace992d",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    },
+    {
+      "admission_state": "completed",
+      "ancestry": null,
+      "axes": {
+        "discrete_semantics": "not_applicable",
+        "execution": "completed",
+        "learning": "awaiting_scientific_review",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "causal": "passed",
+      "config": ".local/source-v7-main/configs/studies/language/direct-v7/tf28-balanced-s11.json",
+      "curve": [
+        {
+          "step": 0,
+          "train/tokens": 0.0,
+          "validation/complete": 1.0,
+          "validation/nll": 8.38047237507999,
+          "validation/tokens": 32768.0
+        },
+        {
+          "resources/npu_allocated_mib": 414.07861328125,
+          "resources/npu_peak_allocated_mib": 2374.99169921875,
+          "resources/npu_reserved_mib": 3018.0,
+          "resources/peak_rss_mib": 1962.28125,
+          "step": 1,
+          "train/gradient_norm": 2.0552892684936523,
+          "train/loss": 8.380074501037598,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2887825444340706,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13878.955211280201
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1965.0703125,
+          "step": 2,
+          "train/gradient_norm": 1.544615626335144,
+          "train/loss": 8.226619720458984,
+          "train/lr": 0.00012219238281250001,
+          "train/step_seconds": 0.09987306967377663,
+          "train/tokens": 8008.0,
+          "train/tokens_per_second": 40050.83665762471
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1984.87890625,
+          "step": 16,
+          "train/gradient_norm": 0.9029930830001831,
+          "train/loss": 7.113893985748291,
+          "train/lr": 0.000986846923828125,
+          "train/step_seconds": 0.09671737253665924,
+          "train/tokens": 64674.0,
+          "train/tokens_per_second": 42350.199272085
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 1995.03515625,
+          "step": 32,
+          "train/gradient_norm": 0.4257599711418152,
+          "train/loss": 6.911741733551025,
+          "train/lr": 0.000999465989836065,
+          "train/step_seconds": 0.09605848416686058,
+          "train/tokens": 129568.0,
+          "train/tokens_per_second": 42640.68952915132
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 2000.53125,
+          "step": 48,
+          "train/gradient_norm": 0.31685250997543335,
+          "train/loss": 6.951984405517578,
+          "train/lr": 0.0009978350060510582,
+          "train/step_seconds": 0.09258588030934334,
+          "train/tokens": 194504.0,
+          "train/tokens_per_second": 44240.00707575117
+        },
+        {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 2003.9453125,
+          "step": 64,
+          "train/gradient_norm": 0.34025266766548157,
+          "train/loss": 6.931184768676758,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.10163749381899834,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 37987.949672154275
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.951170341577381,
+          "validation/tokens": 32768.0
+        },
+        {
+          "step": 65,
+          "train/tokens": 262144.0,
+          "validation/complete": 1.0,
+          "validation/nll": 6.951170341577381,
+          "validation/tokens": 32768.0
+        }
+      ],
+      "error": null,
+      "group": "TL-DIRECT-RECIPE-v7",
+      "id": "tf28-balanced-s11",
+      "identity": {
+        "config_sha256": "584d1d84aad7f39fbfe6d1608675e0b08a128a23214382711ae5933d1a64ef43",
+        "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "source_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f",
+        "threads": 2
+      },
+      "inference": {
+        "method": "greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof",
+        "seconds": 0.2854282073676586,
+        "state": "completed",
+        "token_ids": [
+          [
+            1,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264,
+            264
+          ]
+        ]
+      },
+      "lens": {
+        "events": 9,
+        "record": "runs/v7-screen-tf28-balanced-s11/train/projection.json",
+        "run_id": "tl-v7-screen-tf28-balanced-s11",
+        "status": "verified",
+        "verified": true
+      },
+      "mechanisms": "passed",
+      "output": "runs/v7-screen-tf28-balanced-s11",
+      "parameters": 23166464,
+      "phase": "screen",
+      "physical_device": "14",
+      "progress": {
+        "cursor": 2080,
+        "dropped_tail_tokens": 437,
+        "milestones": [
+          262144
+        ],
+        "probe": false,
+        "step": 65,
+        "tokens": 262144
+      },
+      "recovery_state": "passed",
+      "run_id": "tl-v7-screen-tf28-balanced-s11",
+      "state": "completed",
+      "strict_numerical": {
+        "failed": 340,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 24576,
+          "failed_elements": 23517,
+          "max_abs": 0.00026530027389526367,
+          "relative_l2": 0.00020437914831893152,
+          "rtol": 1e-05,
+          "state": "failed"
+        },
+        "passed": 1,
+        "scope": "CPU/NPU B2 L3 forward and parameter VJP, atol1e-6 rtol1e-5; no TIDE equivalence claim",
+        "worst_parameter_vjp_max_abs": 0.1329803466796875,
+        "worst_parameter_vjp_relative_l2": 0.0003938449396710876
+      },
+      "training_observations": {
+        "first": {
+          "resources/npu_allocated_mib": 414.07861328125,
+          "resources/npu_peak_allocated_mib": 2374.99169921875,
+          "resources/npu_reserved_mib": 3018.0,
+          "resources/peak_rss_mib": 1962.28125,
+          "train/gradient_norm": 2.0552892684936523,
+          "train/loss": 8.380074501037598,
+          "train/lr": 6.11572265625e-05,
+          "train/step_seconds": 0.2887825444340706,
+          "train/tokens": 4008.0,
+          "train/tokens_per_second": 13878.955211280201
+        },
+        "last": {
+          "resources/npu_allocated_mib": 423.0546875,
+          "resources/npu_peak_allocated_mib": 2564.02490234375,
+          "resources/npu_reserved_mib": 3084.0,
+          "resources/peak_rss_mib": 2003.9453125,
+          "train/gradient_norm": 0.34025266766548157,
+          "train/loss": 6.931184768676758,
+          "train/lr": 0.0009951588768177693,
+          "train/step_seconds": 0.10163749381899834,
+          "train/tokens": 258485.0,
+          "train/tokens_per_second": 37987.949672154275
+        },
+        "logged_updates": 6,
+        "max_gradient_norm": 2.0552892684936523,
+        "median_logged_step_seconds": 0.09829522110521793,
+        "median_logged_tokens_per_second": 41200.51796485486
+      },
+      "validations": [
+        {
+          "nll": 6.951170341577381,
+          "ppl": 1044.3712843581877,
+          "record": "runs/v7-screen-tf28-balanced-s11/train/validation-262144.json",
+          "sha256": "c772e8e30c9b883ef8be73b451b2910f0078293490f0551dfc78e2cf66d31aa3",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 6.951170341577381,
+          "ppl": 1044.3712843581877,
+          "record": "runs/v7-screen-tf28-balanced-s11/train/validation-final.json",
+          "sha256": "5c9fb93b7833ec594f0f0469f0cab75bbb194a19d36425a4f33b14c73701c295",
+          "state": "completed",
+          "training_tokens": 262144,
+          "validation_tokens": 32768
+        },
+        {
+          "nll": 8.38047237507999,
+          "ppl": 4361.0684997994995,
+          "record": "runs/v7-screen-tf28-balanced-s11/train/validation-initial.json",
+          "sha256": "cbf9d65902d4720dc45c886d55774c1a01594ff0a3a76689dd369aef81fb5249",
+          "state": "completed",
+          "training_tokens": 0,
+          "validation_tokens": 32768
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "bootstrap_document_ci95": [
+        0.37135166599811203,
+        0.3967859702835276
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.38411020627245307,
+      "documents": 134,
+      "label": "hb40 fan_in: RMS-minus-raw",
+      "left": "runs/v7-screen-hb40-fan_in-rms-s11/train/validation-final.json",
+      "left_nll": 6.776241692248732,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb40-fan_in-raw-s11/train/validation-final.json",
+      "right_nll": 6.392131485976279,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.02206418570415246,
+        0.00196955988863469
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.009730137418955564,
+      "documents": 134,
+      "label": "hb40 std015: RMS-minus-raw",
+      "left": "runs/v7-screen-hb40-std015-rms-s11/train/validation-final.json",
+      "left_nll": 6.856810772325844,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb40-std015-raw-s11/train/validation-final.json",
+      "right_nll": 6.866540909744799,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.08491787255287758,
+        -0.07627446675739094
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.08056908007711172,
+      "documents": 134,
+      "label": "hb40 rms: fan_in-minus-std015",
+      "left": "runs/v7-screen-hb40-fan_in-rms-s11/train/validation-final.json",
+      "left_nll": 6.776241692248732,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb40-std015-rms-s11/train/validation-final.json",
+      "right_nll": 6.856810772325844,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.4915468692925069,
+        -0.45796376843774994
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.47440942376852036,
+      "documents": 134,
+      "label": "hb40 raw: fan_in-minus-std015",
+      "left": "runs/v7-screen-hb40-fan_in-raw-s11/train/validation-final.json",
+      "left_nll": 6.392131485976279,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb40-std015-raw-s11/train/validation-final.json",
+      "right_nll": 6.866540909744799,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        0.3404016560968231,
+        0.36428146881815987
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.352296550758183,
+      "documents": 134,
+      "label": "hb88 fan_in: RMS-minus-raw",
+      "left": "runs/v7-screen-hb88-fan_in-rms-s11/train/validation-final.json",
+      "left_nll": 6.752592073287815,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb88-fan_in-raw-s11/train/validation-final.json",
+      "right_nll": 6.400295522529632,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.07115240960681599,
+        -0.042371480590127956
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.056568706408143044,
+      "documents": 134,
+      "label": "hb88 std015: RMS-minus-raw",
+      "left": "runs/v7-screen-hb88-std015-rms-s11/train/validation-final.json",
+      "left_nll": 6.87183847790584,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb88-std015-raw-s11/train/validation-final.json",
+      "right_nll": 6.928407184313983,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.12427210968522025,
+        -0.1145754369531323
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.11924640461802483,
+      "documents": 134,
+      "label": "hb88 rms: fan_in-minus-std015",
+      "left": "runs/v7-screen-hb88-fan_in-rms-s11/train/validation-final.json",
+      "left_nll": 6.752592073287815,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb88-std015-rms-s11/train/validation-final.json",
+      "right_nll": 6.87183847790584,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.54516000655485,
+        -0.5124167523437021
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.5281116617843509,
+      "documents": 134,
+      "label": "hb88 raw: fan_in-minus-std015",
+      "left": "runs/v7-screen-hb88-fan_in-raw-s11/train/validation-final.json",
+      "left_nll": 6.400295522529632,
+      "matched_blocks": 258,
+      "right": "runs/v7-screen-hb88-std015-raw-s11/train/validation-final.json",
+      "right_nll": 6.928407184313983,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    }
+  ],
+  "controller": {
+    "catalog_sha256": "35193ac4b9e067675ec2683a9b31833b3061883259e9f002b5269b5094b88374",
+    "phases": {
+      "screen": {
+        "cases": [
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb40-std015-raw-s11.json",
+            "id": "hb40-std015-raw-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb40-std015-raw-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb40-std015-raw-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb40-std015-rms-s11.json",
+            "id": "hb40-std015-rms-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb40-std015-rms-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb40-std015-rms-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb40-fan_in-raw-s11.json",
+            "id": "hb40-fan_in-raw-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb40-fan_in-raw-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb40-fan_in-raw-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb40-fan_in-rms-s11.json",
+            "id": "hb40-fan_in-rms-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb40-fan_in-rms-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb40-fan_in-rms-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb88-std015-raw-s11.json",
+            "id": "hb88-std015-raw-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb88-std015-raw-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb88-std015-raw-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb88-std015-rms-s11.json",
+            "id": "hb88-std015-rms-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb88-std015-rms-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb88-std015-rms-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb88-fan_in-raw-s11.json",
+            "id": "hb88-fan_in-raw-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb88-fan_in-raw-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb88-fan_in-raw-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/hb88-fan_in-rms-s11.json",
+            "id": "hb88-fan_in-rms-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-hb88-fan_in-rms-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-hb88-fan_in-rms-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/tf12-original-s11.json",
+            "id": "tf12-original-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-tf12-original-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-tf12-original-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/tf12-balanced-s11.json",
+            "id": "tf12-balanced-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-tf12-balanced-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-tf12-balanced-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/tf28-original-s11.json",
+            "id": "tf28-original-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-tf28-original-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-tf28-original-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/tf28-balanced-s11.json",
+            "id": "tf28-balanced-s11",
+            "max_rss_gib": 24,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-tf28-balanced-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 900,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v7-screen-tf28-balanced-s11",
+              "--recording-group",
+              "TL-DIRECT-RECIPE-v7"
+            ]
+          }
+        ],
+        "jobs": [
+          "v7-screen-w0",
+          "v7-screen-w1",
+          "v7-screen-w2",
+          "v7-screen-w3"
+        ],
+        "jobs_observed": [
+          {
+            "id": "v7-screen-w0",
+            "state": "completed"
+          },
+          {
+            "id": "v7-screen-w1",
+            "state": "completed"
+          },
+          {
+            "id": "v7-screen-w2",
+            "state": "completed"
+          },
+          {
+            "id": "v7-screen-w3",
+            "state": "running"
+          }
+        ],
+        "started_at": "2026-11-11T08:40:04.453024+00:00",
+        "state": "running"
+      }
+    },
+    "schema": "tide-direct-v7-campaign-v1",
+    "scientific_review": "awaiting human review",
+    "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+    "started_at": "2026-11-11T08:40:04.443113+00:00",
+    "state": "running"
+  },
+  "jobs": [
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-budget.service",
+      "command": [
+        "python",
+        "scripts/campaign_budget.py",
+        "--root",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--budget",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-cal/configs/studies/language/direct-v7/budget.json",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-budget",
+        "--closed-file",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/submission-closed.json",
+        "--prefix",
+        "v7-",
+        "--development-reserve",
+        "1800"
+      ],
+      "elapsed_seconds": 71.88725699856877,
+      "id": "v7-budget",
+      "physical_ids": null,
+      "record": "artifacts/jobs/v7-budget/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 4294967296,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 43189,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source": {
+        "commit": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-cal",
+        "tree_sha256": "521ad8613d17fb86d8a790e5ad537d6d8487276de7c722b0eb88aac51a93d80f"
+      },
+      "state": "stopped",
+      "state_record": "artifacts/jobs/v7-budget/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-budget-v2.service",
+      "command": [
+        "python",
+        "scripts/campaign_budget.py",
+        "--root",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--budget",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main/configs/studies/language/direct-v7/budget.json",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-budget-v2",
+        "--closed-file",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/submission-closed.json",
+        "--prefix",
+        "v7-",
+        "--development-reserve",
+        "1800"
+      ],
+      "elapsed_seconds": 282.82549281045794,
+      "id": "v7-budget-v2",
+      "physical_ids": null,
+      "record": "artifacts/jobs/v7-budget-v2/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 4294967296,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 43092,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "running",
+      "state_record": "artifacts/jobs/v7-budget-v2/state.json",
+      "terminated": false
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-cal-cpu.service",
+      "command": [
+        "python",
+        "scripts/calibrate_direct_v7.py",
+        "--device",
+        "cpu",
+        "--threads",
+        "8",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-cal-cpu",
+        "--lens-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens"
+      ],
+      "elapsed_seconds": 33.03946715220809,
+      "id": "v7-cal-cpu",
+      "physical_ids": null,
+      "record": "artifacts/jobs/v7-cal-cpu/job.json",
+      "resources": {
+        "cpu_quota_percent": 800,
+        "memory_bytes": 25769803776,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 8,
+        "timeout_seconds": 600,
+        "wait_seconds": 0
+      },
+      "slice": "",
+      "source": {
+        "commit": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-cal",
+        "tree_sha256": "521ad8613d17fb86d8a790e5ad537d6d8487276de7c722b0eb88aac51a93d80f"
+      },
+      "state": "completed",
+      "state_record": "artifacts/jobs/v7-cal-cpu/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-cal-npu.service",
+      "command": [
+        "python",
+        "scripts/calibrate_direct_v7.py",
+        "--device",
+        "npu:0",
+        "--threads",
+        "2",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-cal-npu",
+        "--lens-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens"
+      ],
+      "elapsed_seconds": 27.53584237024188,
+      "id": "v7-cal-npu",
+      "physical_ids": [
+        11
+      ],
+      "record": "artifacts/jobs/v7-cal-npu/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 25769803776,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 900,
+        "wait_seconds": 180
+      },
+      "slice": "",
+      "source": {
+        "commit": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-cal",
+        "tree_sha256": "521ad8613d17fb86d8a790e5ad537d6d8487276de7c722b0eb88aac51a93d80f"
+      },
+      "state": "completed",
+      "state_record": "artifacts/jobs/v7-cal-npu/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-controller.service",
+      "command": [
+        "python",
+        "scripts/direct_campaign.py",
+        "--root",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--data",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign",
+        "--lens-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens"
+      ],
+      "elapsed_seconds": 282.618963252753,
+      "id": "v7-controller",
+      "physical_ids": null,
+      "record": "artifacts/jobs/v7-controller/job.json",
+      "resources": {
+        "cpu_quota_percent": 100,
+        "memory_bytes": 4294967296,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 1,
+        "timeout_seconds": 43092,
+        "wait_seconds": 0
+      },
+      "slice": "background.slice",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "running",
+      "state_record": "artifacts/jobs/v7-controller/state.json",
+      "terminated": false
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-screen-w0.service",
+      "command": [
+        "python",
+        "scripts/campaign_worker.py",
+        "--plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/v7-screen-w0-plan.json",
+        "--data",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-w0-worker",
+        "--recording-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens",
+        "--deadline-epoch",
+        "1794429466.3204043"
+      ],
+      "elapsed_seconds": 275.9386440515518,
+      "id": "v7-screen-w0",
+      "physical_ids": [
+        11
+      ],
+      "record": "artifacts/jobs/v7-screen-w0/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 30064771072,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 2880,
+        "wait_seconds": 1200
+      },
+      "slice": "",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "completed",
+      "state_record": "artifacts/jobs/v7-screen-w0/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-screen-w1.service",
+      "command": [
+        "python",
+        "scripts/campaign_worker.py",
+        "--plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/v7-screen-w1-plan.json",
+        "--data",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-w1-worker",
+        "--recording-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens",
+        "--deadline-epoch",
+        "1794429466.3204043"
+      ],
+      "elapsed_seconds": 266.77406695857644,
+      "id": "v7-screen-w1",
+      "physical_ids": [
+        15
+      ],
+      "record": "artifacts/jobs/v7-screen-w1/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 30064771072,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 2880,
+        "wait_seconds": 1200
+      },
+      "slice": "",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "completed",
+      "state_record": "artifacts/jobs/v7-screen-w1/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-screen-w2.service",
+      "command": [
+        "python",
+        "scripts/campaign_worker.py",
+        "--plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/v7-screen-w2-plan.json",
+        "--data",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-w2-worker",
+        "--recording-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens",
+        "--deadline-epoch",
+        "1794429466.3204043"
+      ],
+      "elapsed_seconds": 279.67068956047297,
+      "id": "v7-screen-w2",
+      "physical_ids": [
+        1
+      ],
+      "record": "artifacts/jobs/v7-screen-w2/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 30064771072,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 2880,
+        "wait_seconds": 1200
+      },
+      "slice": "",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "completed",
+      "state_record": "artifacts/jobs/v7-screen-w2/state.json",
+      "terminated": true
+    },
+    {
+      "cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v7-screen-w3.service",
+      "command": [
+        "python",
+        "scripts/campaign_worker.py",
+        "--plan",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-campaign/v7-screen-w3-plan.json",
+        "--data",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final",
+        "--output",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v7-screen-w3-worker",
+        "--recording-cli",
+        "/mi/data2T/zlong/home/.local/bin/trackio-lens",
+        "--deadline-epoch",
+        "1794429466.3204043"
+      ],
+      "elapsed_seconds": 278.8723219707608,
+      "id": "v7-screen-w3",
+      "physical_ids": [
+        14
+      ],
+      "record": "artifacts/jobs/v7-screen-w3/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 30064771072,
+        "npu_count": 1,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 2880,
+        "wait_seconds": 1200
+      },
+      "slice": "background.slice",
+      "source": {
+        "commit": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-main",
+        "tree_sha256": "d7627b018fc5a888f8b70f498b404a2ca0565cc0d41ff7190da00f653c6c794f"
+      },
+      "state": "running",
+      "state_record": "artifacts/jobs/v7-screen-w3/state.json",
+      "terminated": false
+    }
+  ],
+  "review_script_sha256": "a0993159bfc91eb6737437871756c8fa146486761492e5a456096507d6f3db8e",
+  "schema": "tide-direct-v7-observations-v1",
+  "scope": "Ordinary dense graph, not TIDE. Observations and descriptive validation intervals; scientific interpretation requires separate review. Test sealed."
+}
