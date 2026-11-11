@@ -18,7 +18,7 @@
 
 | 调查问题 | Git内材料和入口 | 原证据与范围 |
 | --- | --- | --- |
-| FC4/FC16默认、直接公式与Transformer的巨大差距 | [有限suite](../scripts/run_fc_comparison.py)、[任务投影检查](../scripts/check_fc_comparison.py)、[终态汇总](../scripts/collect_fc_comparison.py)、`test_fc_comparison_diagnostics` | [三层结果、源代码映射及可重建命令](evidence/fc-three-layer-comparison-20261111.md)；同材料FP64诊断保留原FP32失败，真实算子与包装省略不是生产优化 |
+| FC4/FC16默认、直接公式与Transformer的巨大差距 | [有限suite](../scripts/run_fc_comparison.py)、[任务投影检查](../scripts/check_fc_comparison.py)、[通用配对与附件](../scripts/cost_comparison.py)、`test_fc_comparison_diagnostics/test_cost_comparison` | [前置调查](evidence/fc-three-layer-comparison-20261111.md)、[查询块实施与复测](evidence/kv-query-blocks-20261111.md)；同材料FP64诊断保留原FP32失败，公开根/任务投影/成本分列。manifest不绑定旧运行目录，profile与完整计时各有身份 |
 | 接口/文件/函数审阅是否完成、包身份与插件返回边界 | [源码清单与明确审阅覆盖](evidence/implementation-audit-20261110.md)、[清单工具](../scripts/review_inventory.py)、`test_session_restore/test_task_observations/test_package_content` | 固定基线25文件/128函数已审，自动清单其余未审；开发检查不代替新固定资格 |
 | 外层/私有autograd图、构图与真实反向成本 | [图统计方法和两种runner](autograd-census.md)、[唯一KV存储与转置](weighted-snapshot-bank.md)、[小反例](../tests/test_snapshot_bank.py) | Python/native统计宇宙不相加，保存字节非峰值；FP32旧scalar差异与同材料FP64见证分列 |
 | FC16同尺寸Transformer/直接FC基线、VJP成本与复制隔离 | [归因契约](fc16-cost-attribution.md)、[独立公式](../scripts/fc_tensor_baseline.py)、[公式反例](../tests/test_fc_tensor_baseline.py)、[复制隔离](../tests/test_independent_copies.py)、[舍入见证](../scripts/diagnose_dense_rounding.py) | [固定结果与复现](evidence/fc16-cost-attribution-20261110.md)；训练吞吐与真实首token分列，历史退化/取消保留，直接公式不替代完整记录资格 |

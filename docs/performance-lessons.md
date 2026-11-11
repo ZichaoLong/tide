@@ -24,7 +24,8 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[外层批、状态块与实际算子](performance-lessons-prefill.md#从外层批到状态块和实际算子)、
+新近机制：[隐藏前缀bank与块伴随](performance-lessons-prefill.md#隐藏前缀bank与块伴随)、
+[外层批、状态块与实际算子](performance-lessons-prefill.md#从外层批到状态块和实际算子)、
 [并行与临时存储](performance-lessons-evidence.md#并行临时存储与真实算子归因)、
 [紧凑公式与共享bank的正负结果](performance-lessons-prefill.md#从紧凑公式到共享bank矩阵)、
 [Describe列与按用途裁剪](performance-lessons-prefill.md#describe列与按用途裁剪)、
