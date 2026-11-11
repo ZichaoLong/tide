@@ -123,7 +123,7 @@ def prepare(node, u, mass, times, left=None):
     return fields, (u, raw, mask)
 
 
-def full(node, prepared, controls):
+def full(node, prepared, controls, *, attention="manual"):
     """Selected queries contract with one K/V bank per sample, never Q copies.
 
     This compact anchor has B host groups, not B*L Full calls. It is not a
@@ -144,10 +144,17 @@ def full(node, prepared, controls):
         q = (normalize(u[b, t], c.epsilon)@module.query.t()).reshape(-1, c.heads, dim//c.heads).transpose(0, 1)
         k, v = (z[b].reshape(-1, c.heads, dim//c.heads).transpose(0, 1) for z in (key, value))
         weights = writes[b][None]*mask[t]
-        logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
         safe = torch.where(weights > 0, weights, 1)
-        logits = (logits+safe.log()[None]).masked_fill(weights[None] <= 0, -torch.inf)
-        read = (logits.softmax(-1)@v).transpose(0, 1).reshape(-1, dim)
+        if attention == "sdpa":
+            bias = safe.log()[None].masked_fill(weights[None] <= 0, -torch.inf)
+            mixed = F.scaled_dot_product_attention(q, k, v, attn_mask=bias)
+        elif attention == "manual":
+            logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
+            logits = (logits+safe.log()[None]).masked_fill(weights[None] <= 0, -torch.inf)
+            mixed = logits.softmax(-1)@v
+        else:
+            raise ValueError("unknown FC formula Attention operator")
+        read = mixed.transpose(0, 1).reshape(-1, dim)
         read = read*weights.sum(-1).clamp_max(1)[:, None]
         x = u[b, t]+c.alpha_att*(read@module.out.t())
         normal = normalize(x, c.epsilon)
@@ -156,7 +163,9 @@ def full(node, prepared, controls):
     return torch.stack(rows), active
 
 
-def run(binding, spec, x, *, start=0, left=None):
+def run(binding, spec, x, *, start=0, left=None, full_attention="manual"):
+    if full_attention not in {"manual", "sdpa"}:
+        raise ValueError("unknown FC formula Attention operator")
     depth, width = validate(binding, spec, x)
     g, model = binding.graph, binding.model
     if left is not None and set(left) != set(range(len(g.nodes))):
@@ -188,7 +197,7 @@ def run(binding, spec, x, *, start=0, left=None):
         low, high = received.clamp_max(1), capacity.clamp_max(r.k)
         target = low+context.sigmoid()*(high-low)
         controls = quadratic(descriptors['score'], descriptors['mu'], target, r.allocation_temperature)
-        outputs = [full(model.nodes[region*width+j], prepared[j], controls[..., j]) for j in range(width)]
+        outputs = [full(model.nodes[region*width+j], prepared[j], controls[..., j], attention=full_attention) for j in range(width)]
         values = [output for output, _ in outputs]
         activity = torch.stack([active for _, active in outputs], -1)
         count = int(activity.sum())

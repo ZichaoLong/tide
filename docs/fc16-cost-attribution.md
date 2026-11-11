@@ -30,6 +30,45 @@ not B times maximum length or repeated input ports. This is distinct from
 TTFT, which requires a separately timed inference request and output head.
 Training forward alone does not certify inference latency.
 
+## Matched FC comparison and diagnostic boundaries
+
+`benchmark_dense_query.py --fc-shape fc4|fc16` selects two regions of two nodes
+or the original four regions of four nodes; d128/H2/FFN512 and the strength ratio
+remain fixed. Transformer2/4/16 anchors distinguish serial depth and node count.
+`--phase-fences step` times a natural complete request/update with synchronization
+at its boundaries, including actual checks/host return. Its internal phase times
+are host enqueue/wait intervals, not synchronized device phase costs. The default
+`phase` preserves the original per-phase fences; compare that explicit identity
+separately when estimating observer cost. Profiling is always another pass.
+
+`run_fc_comparison.py` supplies finite main, CPU-thread, batch/sequence-axis,
+boundary, profile and projection-check suites. Choose the suite that answers the
+current question; these are not a mandatory regression Cartesian matrix. CPU and
+NPU profiles can observe graph, direct FC and Transformer implementations.
+Formula ranges label Aggregate, Prepare/Read, regional head/solve and Full;
+`stage-operators.json` attributes CPU ATen events to their nearest named range,
+leaving unrelated worker events unattributed. Nested totals are not wall shares.
+Large NPU traces may use `--profile-output` on bounded project-owned scratch;
+small reviewed results, source/config identities and job records stay durable.
+
+The Python-only `--diagnostic-boundary query-direct|region-direct|both-direct`
+temporarily removes selected independent-root wrappers while retaining the local
+numeric functions and graph schedule. This intentionally omits a public duty;
+it is not a production mode or complete-root qualification. Its ordinary task
+output/derivative projection must be checked before interpreting its cost.
+`--formula-attention sdpa` changes only the direct formula's selected Full
+Attention operator; `manual` remains the default independent explicit algebra.
+Neither option changes the default foundation executor.
+
+`check_fc_comparison.py` reads the same pinned downstream task and compares
+actual hidden/logits/loss, terminal KV fields and input/parameter gradients.
+Small `--trace` cases additionally compare every candidate control/support.
+None/present gradients, finite numeric errors, integer/support mismatches and
+execution errors are recorded separately. The full-scale minimal-return check
+does not certify all intermediate roots, complete records, optimizer or restore.
+`test_fc_comparison_diagnostics.py` checks the numeric projection against the
+independent formula, SDPA derivatives and patch restoration after failure.
+
 ## Independent matched-shape anchors
 
 `fc_tensor_baseline.py` has an independent region schedule and explicit batched

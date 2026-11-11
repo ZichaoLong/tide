@@ -17,9 +17,28 @@ import sys
 import tarfile
 import time
 from durable_records import write_json
+from fc_comparison_diagnostics import BOUNDARIES, boundary_scope
 
 DOWNSTREAM = "0439efd2af31cf10b07ce9e6423b0195f7449968"
 CONFIG = "configs/studies/language/v6/scale-fc16-kv-quad.json"
+
+
+def task_source(repository, source):
+    """Read only the pinned downstream Git objects, never its working files."""
+    source.mkdir()
+    archive = subprocess.check_output(["git", "-C", str(repository), "archive", DOWNSTREAM, "tide_lab", CONFIG])
+    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+        tar.extractall(source, filter="data")
+    sys.path.insert(0, str(source))
+    return json.loads((source/CONFIG).read_text()), hashlib.sha256(archive).hexdigest()
+
+
+def geometry(config, shape):
+    if shape == "fc4":
+        config["core"]["recipe"].update(depth=2, region_width=2)
+        config.pop("planned_inventory", None)
+    elif shape != "fc16":
+        raise ValueError("unknown FC comparison geometry")
 
 
 def main():
@@ -28,7 +47,15 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
-    p.add_argument("--baseline", choices=("graph", "fc-tensor", "transformer-16", "transformer-4"), default="graph")
+    p.add_argument("--baseline", choices=("graph", "fc-tensor", "transformer-16", "transformer-4", "transformer-2"), default="graph")
+    p.add_argument("--fc-shape", choices=("fc16", "fc4"), default="fc16",
+                   help="fc16=4 regions x4 nodes; fc4=2x2 with the same local dimensions and strength ratio")
+    p.add_argument("--phase-fences", choices=("phase", "step"), default="phase",
+                   help="phase preserves historical per-phase device fences; step fences only the whole request/update")
+    p.add_argument("--diagnostic-boundary", choices=BOUNDARIES, default="public",
+                   help="Python graph only: omit selected independent-root wrappers for task-projection diagnosis, never a public implementation")
+    p.add_argument("--formula-attention", choices=("manual", "sdpa"), default="manual",
+                   help="fc-tensor only: isolate the Full Attention operator; default retains the independent explicit formula")
     p.add_argument("--mode", choices=("training", "inference", "nograd", "grad-forward", "backward"), default="training",
                    help="nograd/grad-forward/backward/training use the same full-sequence head/loss; inference measures last-position first-token return")
     p.add_argument("--threads", type=int, help="CPU intra-op threads; defaults retain historical CPU=1/NPU=2")
@@ -42,25 +69,24 @@ def main():
     p.add_argument("--length", type=int, default=128)
     p.add_argument("--profile", choices=("none", "stages", "cpu", "npu"), default="none")
     p.add_argument("--profile-shapes", action="store_true", help="retain profiler shapes; increases diagnostic memory")
+    p.add_argument("--profile-output", type=Path, help="optional scratch directory for large NPU traces; retain reviewed summaries durably")
     p.add_argument("--warmup-state", choices=("reset", "continue"), default="reset",
                    help="reset restores initial weights/optimizer after warmup for controlled comparisons")
     a = p.parse_args()
     if a.baseline == "graph" and a.client == "native" and not a.native_library:
         p.error("native requires an explicit matching --native-library build directory")
-    if a.baseline != "graph" and a.profile != "none":
-        p.error("baseline cost and graph profiling are separate measurements")
-    if a.profile == "stages" and a.client != "native":
+    if a.profile == "stages" and (a.client != "native" or a.baseline != "graph"):
         p.error("native stage counters require --client native")
+    if a.diagnostic_boundary != "public" and (a.baseline != "graph" or a.client != "python"):
+        p.error("diagnostic boundary trials require the Python graph client")
+    if a.formula_attention != "manual" and a.baseline != "fc-tensor":
+        p.error("formula Attention trial requires --baseline fc-tensor")
     if not (1 <= a.batch <= 8 and 1 <= a.length <= 128):
         p.error("this bounded probe requires 1<=B<=8, 1<=L<=128")
     if a.threads is not None and a.threads < 1:
         p.error("--threads must be positive")
     out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
-    source = out/"downstream-source"; source.mkdir()
-    archive = subprocess.check_output(["git", "-C", str(a.downstream_repo), "archive", DOWNSTREAM, "tide_lab", CONFIG])
-    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-        tar.extractall(source, filter="data")
-    sys.path.insert(0, str(source))
+    config, archive_hash = task_source(a.downstream_repo, out/"downstream-source")
     import torch
     import tidegraph
     from tidegraph.native_loader import load_native
@@ -73,7 +99,7 @@ def main():
     application.eager_runner = functools.partial(eager_runner, query_execution=a.query_execution,
                                                prefill_schedule=a.prefill_schedule,
                                                trace=a.trace_records == "complete")
-    config = json.loads((source/CONFIG).read_text())
+    geometry(config, a.fc_shape)
     config.update(device=a.device, threads=a.threads if a.threads is not None else 1 if a.device == "cpu" else 2)
     config["training"].update(batch=a.batch, length=a.length)
     config["core"].update(eager_implementation=a.client, placement_preset="cpu" if a.device == "cpu" else "mixed-c")
@@ -81,9 +107,14 @@ def main():
         config["core"]["native_library"] = str(Path(a.native_library).resolve())
     record = dict(schema="tide-dense-query-cost-v1", execution="running", strict_numerical="not_checked",
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
-        downstream=DOWNSTREAM, downstream_archive_sha256=hashlib.sha256(archive).hexdigest(), resolved=config,
+        downstream=DOWNSTREAM, downstream_archive_sha256=archive_hash, resolved=config,
         query_execution=a.query_execution, prefill_schedule=a.prefill_schedule, trace_records=a.trace_records,
-        baseline=a.baseline, mode=a.mode, requested_threads=a.threads, autograd_census_requested=a.autograd_census,
+        baseline=a.baseline, mode=a.mode, fc_shape=a.fc_shape, phase_fences=a.phase_fences,
+        diagnostic_boundary=a.diagnostic_boundary,
+        formula_attention=a.formula_attention,
+        boundary_scope="Public obligations" if a.diagnostic_boundary == "public" else
+            "Diagnostic task projection: selected independent intermediate-root VJP wrappers omitted; not qualified for general graph roots",
+        requested_threads=a.threads, autograd_census_requested=a.autograd_census,
         installed_package=str(Path(tidegraph.__file__).resolve()),
         visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), affinity=sorted(os.sched_getaffinity(0)),
         phases=[], profile=a.profile, warmup_state=a.warmup_state,
@@ -91,6 +122,8 @@ def main():
     write_json(out/"result.json", record)
     try:
         device = runtime(a.device, config["threads"], config["seed"])
+        from layer_tensor_baseline import numerics
+        record["precision"] = numerics(device, "vendor-default")
         full_sequence = a.mode != "inference"
         torch.set_grad_enabled(a.mode in {"training", "grad-forward", "backward"})
         core = None
@@ -127,6 +160,7 @@ def main():
             return h.hexdigest()
         record["initial_parameters_sha256"] = parameter_hash()
 
+        @boundary_scope(a.diagnostic_boundary)
         def step(index, census=None):
             synchronize(device); wall = time.monotonic()
             batch = synthetic_batch(a.batch, a.length, 991+index, device)
@@ -136,9 +170,13 @@ def main():
                 group["lr"] = lr
             phases = {}
             def phase(name, fn):
-                synchronize(device); begin = time.monotonic()
+                if a.phase_fences == "phase":
+                    synchronize(device)
+                begin = time.monotonic()
                 with torch.profiler.record_function("task::"+name):
-                    result = fn(); synchronize(device)
+                    result = fn()
+                    if a.phase_fences == "phase":
+                        synchronize(device)
                 phases[name] = time.monotonic()-begin
                 return result
             if a.mode in {"training", "backward"}:
@@ -151,7 +189,8 @@ def main():
                 work = dict(result.stats)
             elif a.baseline == "fc-tensor":
                 from fc_tensor_baseline import run
-                result = phase("core_forward", lambda: run(model.encoder.binding, model.encoder.spec, features))
+                result = phase("core_forward", lambda: run(model.encoder.binding, model.encoder.spec, features,
+                                                          full_attention=a.formula_attention))
                 hidden = result["hidden"] if full_sequence else result["hidden"][:, -1]
                 work = result["stats"]
             else:
@@ -182,6 +221,8 @@ def main():
                 norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
                 phase("optimizer", opt.step)
             row = dict(index=index, warmup=index == 0, phases_seconds=phases, phase_sum_seconds=sum(phases.values()),
+                phase_time_scope="synchronized stage intervals" if a.phase_fences == "phase" else
+                    "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
                 tokens=a.batch*a.length, loss=None if loss is None else float(loss.detach()),
                 gradient_norm=None if norm is None else float(norm), work=work)
             if census is not None:
@@ -214,8 +255,7 @@ def main():
                 model.load_state_dict(initial_model); opt.load_state_dict(initial_optimizer)
                 opt.zero_grad(set_to_none=True)
             record["profile_parameters_sha256"] = parameter_hash()
-            if a.client == "native":
-                import _tide_native as core
+            if core is not None:
                 core.reset_work(True)
                 core.reset_stage_profile(True)
             if a.profile == "stages":
@@ -225,12 +265,15 @@ def main():
                 profiler = torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=a.profile_shapes)
             else:
                 import torch_npu
+                profile_output = (a.profile_output or out/"npu-profile").resolve()
+                record["profile_output"] = str(profile_output)
                 profiler = torch_npu.profiler.profile(activities=[torch_npu.profiler.ProfilerActivity.CPU,
                     torch_npu.profiler.ProfilerActivity.NPU], record_shapes=a.profile_shapes,
-                    on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(str(out/"npu-profile"), analyse_flag=True))
-            with profiler:
+                    on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(str(profile_output), analyse_flag=True))
+            from fc_comparison_diagnostics import formula_ranges
+            with profiler, formula_ranges():
                 record["instrumented_step"] = step(1)
-            if a.client == "native":
+            if core is not None:
                 record["instrumented_packing"] = dict(core.work_metrics())
                 record["instrumented_stages"] = dict(core.stage_profile_metrics())
                 record["stage_scope"] = "Exclusive calling-thread elapsed time, includes incidental waits; not device kernel time or additive multiworker wall time. Reset and read only with workers idle."
@@ -240,6 +283,8 @@ def main():
                 write_json(out/"operators.json", [dict(operator=e.key, count=e.count, input_shapes=e.input_shapes,
                     self_cpu_ms=e.self_cpu_time_total/1000, total_cpu_ms=e.cpu_time_total/1000)
                     for e in profiler.key_averages(group_by_input_shape=a.profile_shapes)])
+                from fc_comparison_diagnostics import stage_operators
+                write_json(out/"stage-operators.json", stage_operators(profiler))
             record["profile_state"] = "completed"
         if a.autograd_census:
             from tidegraph.autograd_census import Census
