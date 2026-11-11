@@ -14,10 +14,14 @@ from torch.nn import functional as F
 
 
 class DenseRegion(nn.Module):
-    def __init__(self, nodes, width, heads=2, ffn=None, attention=True):
+    def __init__(self, nodes, width, heads=2, ffn=None, attention=True,
+                 initialization='fan_in', residual_scale=1.):
         super().__init__()
         self.nodes, self.width, self.heads = nodes, width, heads
         self.attention = attention
+        if initialization not in ('fan_in','std015') or not 0 < residual_scale <= 1:
+            raise ValueError('unknown direct initialization or residual scale')
+        self.residual_scale = residual_scale
         if width % heads:
             raise ValueError('width must divide into heads')
         ffn = ffn or 4*width
@@ -27,7 +31,7 @@ class DenseRegion(nn.Module):
         self.weights = nn.ParameterDict({name: nn.Parameter(torch.empty(nodes, a, b))
                                         for name, (a, b) in shapes.items()})
         for w in self.weights.values():
-            nn.init.normal_(w, std=w.shape[-2]**-.5)
+            nn.init.normal_(w, std=w.shape[-2]**-.5 if initialization=='fan_in' else .15)
         self.norm_ffn = nn.Parameter(torch.ones(nodes, width))
         if attention:
             self.norm_att = nn.Parameter(torch.ones(nodes, width))
@@ -56,14 +60,15 @@ class DenseRegion(nn.Module):
             mask = torch.ones(l, l, dtype=torch.bool, device=x.device).triu(1)
             weights = scores.masked_fill(mask, float('-inf')).softmax(-1)
             context = (weights@v).permute(0, 1, 3, 2, 4).reshape(n, b, l, d)
-            x = x+self.project(context, self.weights['o'])
+            x = x+self.residual_scale*self.project(context, self.weights['o'])
         z = self.norm(x, self.norm_ffn)
         hidden = F.silu(self.project(z, self.weights['gate']))*self.project(z, self.weights['up'])
-        return x+self.project(hidden, self.weights['down'])
+        return x+self.residual_scale*self.project(hidden, self.weights['down'])
 
 
 class DirectGraphLM(nn.Module):
-    def __init__(self, graph, width=128, seed=11, attention=True, vocab_size=4096):
+    def __init__(self, graph, width=128, seed=11, attention=True, vocab_size=4096,
+                 initialization='fan_in', final_norm=False, residual_scale=1.):
         super().__init__()
         self.graph, self.width, self.attention = graph, width, attention
         self.inputs = set(graph['inputs'])
@@ -81,8 +86,10 @@ class DirectGraphLM(nn.Module):
             torch.manual_seed(seed)
             self.embedding = nn.Embedding(vocab_size, width)
             nn.init.normal_(self.embedding.weight, std=.02)
-            self.blocks = nn.ModuleList([DenseRegion(len(nodes), width, attention=attention)
+            self.blocks = nn.ModuleList([DenseRegion(len(nodes), width, attention=attention,
+                                         initialization=initialization,residual_scale=residual_scale)
                                          for nodes in self.region_nodes])
+            self.final_norm = nn.RMSNorm(width,eps=1e-6) if final_norm else nn.Identity()
             self.head = nn.Linear(width, vocab_size)
             self.head.weight = self.embedding.weight
             nn.init.zeros_(self.head.bias)
@@ -110,4 +117,4 @@ class DirectGraphLM(nn.Module):
             'work/attention_query_positions': b*l*self.graph['nodes'] if self.attention else 0,
             'work/largest_projection_rows_per_node': b*l,
             'work/largest_projection_parameter_batch': max(map(len, self.region_nodes))}
-        return self.head(hidden)
+        return self.head(self.final_norm(hidden))

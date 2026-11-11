@@ -18,18 +18,18 @@ from tide_lab.supervisor import cgroup_processes
 def timestamp(s):return datetime.datetime.fromisoformat(s).timestamp()
 
 
-def usage(root,exclude=()):
+def usage(root,exclude=(),prefix='v6-'):
     cpu=npu=cal_cpu=cal_npu=0.;active=[];rows=[];rss=0;threads=0
-    for path in sorted((root/'artifacts/jobs').glob('v6-*/job.json')):
+    for path in sorted((root/'artifacts/jobs').glob(prefix+'*/job.json')):
         job=json.loads(path.read_text());name=job['job_id']
-        if name in exclude or name.startswith('v6-budget'):continue
+        if name in exclude or name.startswith(prefix+'budget'):continue
         sf=path.parent/'state.json';state=json.loads(sf.read_text()) if sf.exists() else {}
         start=state.get('started_at',state.get('submitted_at',job['created_at']))
         end=state.get('ended_at',state.get('finalized_at'))
         elapsed=max(0,(timestamp(end) if end else time.time())-timestamp(start))
         seconds=elapsed*job['resources']['threads'];cpu+=seconds
         allocated=elapsed if job['device']=='npu' else 0.;npu+=allocated
-        if name.startswith('v6-cal-') or name=='v6-native-build':cal_cpu+=seconds;cal_npu+=allocated
+        if name.startswith(prefix+'cal-') or name==prefix+'native-build':cal_cpu+=seconds;cal_npu+=allocated
         live=state.get('state') in ('running','submitted','stopping')
         if live:
             active.append(job['unit']);threads+=job['resources']['threads']
@@ -51,10 +51,10 @@ def usage(root,exclude=()):
         cgroup_memory_bytes=rss,jobs=rows)
 
 
-def host_headroom(root):
+def host_headroom(root,prefix='v6-'):
     mem={k:int(v.split()[0])*1024 for k,v in (line.split(':',1) for line in Path('/proc/meminfo').read_text().splitlines())}
     paths=[]
-    for directory,pattern in [('runs','v6-*'),('artifacts/jobs','v6-*'),('.local','source-v6-*'),('.local','native-*-v6')]:
+    for directory,pattern in [('runs',prefix+'*'),('artifacts/jobs',prefix+'*'),('.local','source-'+prefix+'*'),('.local','native-*-'+prefix.rstrip('-'))]:
         paths.extend((root/directory).glob(pattern))
     disk=0
     if paths:
@@ -79,15 +79,15 @@ def main(a):
         development_reserve_cpu_core_seconds=a.development_reserve)
     last_host=0;host={}
     while True:
-        value=usage(a.root,exclude=['v6-budget']);value['cpu_core_seconds']+=a.development_reserve+time.monotonic()-started
+        value=usage(a.root,prefix=a.prefix);value['cpu_core_seconds']+=a.development_reserve+time.monotonic()-started
         if time.monotonic()-last_host>60 or not host:
-            try:host=host_headroom(a.root);state.pop('observation_error',None)
+            try:host=host_headroom(a.root,a.prefix);state.pop('observation_error',None)
             except Exception as e:state['observation_error']=repr(e);stop.append('headroom observation unavailable')
             last_host=time.monotonic()
         reasons=[]
         if value['cpu_core_seconds']+120*max(1,value['active_threads'])>=limits['cpu_core_seconds']:reasons.append('CPU allocation cap')
         if value['npu_device_seconds']+120*limits['max_npu_workers']>=limits['npu_device_seconds']:reasons.append('NPU allocation cap')
-        if time.time()>=limits['deadline_epoch']-120:reasons.append('shared 48h deadline')
+        if time.time()>=limits['deadline_epoch']-120:reasons.append('shared campaign deadline')
         if host.get('new_disk_bytes',0)>limits['max_new_disk_gib']*2**30:reasons.append('campaign disk cap')
         if host.get('quota_headroom_bytes',2**60)<limits['minimum_quota_headroom_gib']*2**30:reasons.append('quota headroom')
         if host.get('available_ram_bytes',2**60)<limits['minimum_available_ram_gib']*2**30:reasons.append('host RAM headroom')
@@ -99,7 +99,7 @@ def main(a):
             subprocess.run(['systemctl','--user','stop','--no-block',*value['active_units']],check=True,timeout=20)
         # Calibration has independent ceilings; a limit does not stop admitted learning.
         if value['calibration_cpu_core_seconds']>=16*3600-600 or value['calibration_npu_device_seconds']>=8*3600-120:
-            units=[u for u in value['active_units'] if u.startswith('tide-lab-v6-cal-') or u=='tide-lab-v6-native-build.service']
+            units=[u for u in value['active_units'] if u.startswith('tide-lab-'+a.prefix+'cal-') or u=='tide-lab-'+a.prefix+'native-build.service']
             if units:subprocess.run(['systemctl','--user','stop','--no-block',*units],check=True,timeout=20)
             state['calibration_cap_stop']=True
         state.update(usage=value,headroom=host,stop_reasons=stop,updated_at=now())
@@ -113,4 +113,5 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('root','budget','output','closed-file'):p.add_argument('--'+n,type=Path,required=True)
     p.add_argument('--development-reserve',type=float,default=3*3600)
+    p.add_argument('--prefix',default='v6-')
     main(p.parse_args())

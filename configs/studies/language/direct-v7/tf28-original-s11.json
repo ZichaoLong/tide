@@ -1,0 +1,60 @@
+{
+  "campaign": "direct-v7",
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "comparison_scope": "Ordinary dense Torch DAG; not the complete TIDE function or a fix/equivalence claim for historical TIDE runs.",
+  "core": {},
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed; frozen finalist review only"
+  },
+  "id": "tf28-original-s11",
+  "kind": "transformer",
+  "resources": {
+    "max_rss_gib": 24
+  },
+  "schema": "tide-direct-language-config-v1",
+  "seed": 11,
+  "study_id": "TL-DIRECT-LM-v7",
+  "threads": 2,
+  "topology_source": {
+    "path": "configs/checks/hb-cost-20261111.json",
+    "sha256": "60d3f18325070e9d50b77152cd52dd4764acf5884c62cd636f40c6ddb033f121"
+  },
+  "training": {
+    "batch": 32,
+    "checkpoint_seconds": 900,
+    "clip_norm": 1.0,
+    "eps": 1e-06,
+    "eval_batch": 32,
+    "eval_tokens": 32768,
+    "global_batch": 32,
+    "initial_eval_tokens": 32768,
+    "length": 128,
+    "log_every": 16,
+    "lr": 0.001,
+    "lr_floor_fraction": 0.1,
+    "milestones": [
+      262144,
+      1048576,
+      4194304
+    ],
+    "target_tokens": 4194304,
+    "timeout_seconds": 3600,
+    "validation_every_tokens": 262144,
+    "warmup_tokens": 65536,
+    "weight_decay": 0.01
+  },
+  "transformer": {
+    "ffn": 1024,
+    "heads": 4,
+    "layers": 28,
+    "position_scale": 1.0,
+    "width": 256
+  }
+}

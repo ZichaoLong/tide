@@ -31,6 +31,7 @@ class Worker:
     def stage(self,case,name,action,cap,extra=(),record=False):
         out=Path(case['output'])/name;cap=min(cap,self.a.deadline_epoch-time.time()-30)
         if cap<=30 or self.stopped:return None
+        if action=='train':extra=[*extra,*case.get('train_arguments',[])]
         argv=[sys.executable,'scripts/campaign_stage.py',action,'--config',case['config'],
             '--data',str(self.a.data),'--output',str(out),'--deadline-epoch',str(min(self.a.deadline_epoch,time.time()+cap)),*map(str,extra)]
         entry=dict(name=name,action=action,state='running',argv=argv,output=str(out),started_at=now(),cap_seconds=cap)
@@ -90,6 +91,13 @@ class Worker:
             row=dict(id=case['id'],output=str(out),state='running',stages=[],started_at=now())
             self.state['cases'].append(row);self.publish()
             cap=case['timeout_seconds'];start=time.monotonic()
+            if case.get('reuse_admission') and case.get('reuse_recovery'):
+                result=self.stage(case,'train','train',cap,
+                    extra=['--admission',case['reuse_admission'],'--recovery',case['reuse_recovery']],record=True)
+                row.update(state=result['state'] if result else 'failed',finished_at=now(),
+                    elapsed_seconds=time.monotonic()-start,qualification_reused=dict(
+                        admission=case['reuse_admission'],recovery=case['reuse_recovery']))
+                self.publish();continue
             admitted=self.stage(case,'check','check',min(900,cap/8))
             if not admitted or not admitted.get('admitted_for_finite_exploration'):
                 row.update(state='failed',reason='independent admission failed',finished_at=now());self.publish();continue
@@ -113,6 +121,12 @@ class Worker:
             atomic_json(out/'recovery.json',recovery)
             if recovery['state']!='passed':
                 row.update(state='failed',reason='exact application recovery failed',finished_at=now());self.publish();continue
+            if case.get('retire_probe_checkpoints'):
+                temporary=[out/name/'checkpoint.pt' for name in ('probe-full','probe-split','probe-resumed')]
+                retirement=dict(reason='exact comparison passed; disposable recovery probes, not scientific training checkpoints',
+                    files=[dict(path=str(p),sha256=digest(p),bytes=p.stat().st_size) for p in temporary])
+                atomic_json(out/'probe-retirement.json',retirement)
+                for p in temporary:p.unlink()
             remaining=cap-(time.monotonic()-start)
             result=self.stage(case,'train','train',remaining,
                 extra=['--admission',out/'check/result.json','--recovery',out/'recovery.json'],record=True)

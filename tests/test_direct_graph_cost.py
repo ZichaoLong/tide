@@ -13,7 +13,8 @@ class DirectCostChecks(unittest.TestCase):
         torch.manual_seed(91)
 
     def test_node_batch_matches_independent_single_node_formula_and_gradients(self):
-        block = DenseRegion(3, 8, heads=2).double()
+        # Nontrivial residual scaling must apply to both residual paths and VJPs.
+        block = DenseRegion(3, 8, heads=2, residual_scale=.25).double()
         x = torch.randn(3, 2, 5, 8, dtype=torch.float64, requires_grad=True)
         expected = []
         for i in range(3):
@@ -24,9 +25,9 @@ class DirectCostChecks(unittest.TestCase):
             for t in range(5):
                 att = (q[:, :, t:t+1]@k[:, :, :t+1].transpose(-1, -2)/2).softmax(-1)
                 by_time.append((att@v[:, :, :t+1]).transpose(1, 2).reshape(2, 1, 8))
-            h = x[i]+torch.cat(by_time, 1)@w['o']
+            h = x[i]+.25*(torch.cat(by_time, 1)@w['o'])
             z = h/torch.sqrt((h*h).mean(-1, keepdim=True)+1e-6)*block.norm_ffn[i]
-            expected.append(h+(F.silu(z@w['gate'])*(z@w['up']))@w['down'])
+            expected.append(h+.25*((F.silu(z@w['gate'])*(z@w['up']))@w['down']))
         ref = torch.stack(expected); actual = block(x)
         roots = [x, *block.parameters()]
         cotangent = torch.randn_like(ref)
@@ -47,6 +48,41 @@ class DirectCostChecks(unittest.TestCase):
         first.square().mean().backward()
         self.assertTrue(all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters()))
         self.assertIs(model.embedding.weight, model.head.weight)
+
+    def test_recipe_interventions_preserve_aliases_causality_and_trainable_norm(self):
+        graph = dict(nodes=2, regions=2, node_regions=[0, 1], ranks=[1, 2],
+                     edges=[[0, 1, 1]], inputs=[0], outputs=[1])
+        ids = torch.tensor([[1, 2, 3], [2, 3, 4]])
+        for initialization in ('fan_in', 'std015'):
+            for norm in (False, True):
+                with self.subTest(initialization=initialization, norm=norm):
+                    model = DirectGraphLM(graph, width=8, vocab_size=16,
+                        initialization=initialization, final_norm=norm)
+                    changed = ids.clone(); changed[:, 2] = 5
+                    torch.testing.assert_close(model(ids)[:, :2], model(changed)[:, :2], atol=0, rtol=0)
+                    before = model.embedding.weight.detach().clone()
+                    opt = torch.optim.AdamW(model.parameters(), lr=.001, foreach=False)
+                    model(ids).square().mean().backward()
+                    self.assertTrue(all(p.grad is not None and torch.isfinite(p.grad).all()
+                                        for p in model.parameters()))
+                    opt.step()
+                    self.assertIs(model.embedding.weight, model.head.weight)
+                    self.assertFalse(torch.equal(before, model.embedding.weight))
+
+    def test_initialization_uses_actual_projection_fan_in(self):
+        torch.manual_seed(91);a = DenseRegion(2, 32, initialization='fan_in')
+        torch.manual_seed(91);b = DenseRegion(2, 32, initialization='std015')
+        for name, weight in a.weights.items():
+            torch.testing.assert_close(weight, b.weights[name]/.15/math.sqrt(weight.shape[-2]))
+
+    def test_balanced_position_encoding_does_not_change_other_parameters(self):
+        from tide_lab.language import SmallTransformer
+        a = SmallTransformer(width=8, layers=2, ffn=16, heads=2)
+        b = SmallTransformer(width=8, layers=2, ffn=16, heads=2, position_scale=math.sqrt(2)*.02)
+        for p, q in zip(a.parameters(), b.parameters()):
+            self.assertTrue(torch.equal(p, q))
+        self.assertAlmostEqual(float(b.position.square().mean().sqrt()), .02, places=6)
+        self.assertIs(b.embedding.weight, b.head.weight)
 
 
 if __name__ == '__main__':

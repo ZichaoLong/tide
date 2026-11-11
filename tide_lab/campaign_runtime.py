@@ -25,6 +25,9 @@ def make_model(config, device):
         model=TideLanguageModel(core_options(config),seed=config['seed'])
     elif config['kind']=='transformer':
         model=SmallTransformer(seed=config['seed'],**config['transformer'])
+    elif config['kind']=='direct_graph':
+        from .direct_graph_cost import DirectGraphLM
+        model=DirectGraphLM(seed=config['seed'],**config['direct'])
     else:raise ValueError('unsupported campaign model')
     model=model.to(device)
     inventory=trainable_inventory(model)

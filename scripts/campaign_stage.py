@@ -51,19 +51,24 @@ def admission(model,c,device,out):
         model.zero_grad(set_to_none=True);reference.zero_grad(set_to_none=True)
         x=b['input_ids'];y=model(x);yr=reference(x.cpu())
         y.sum().backward();yr.sum().backward()
+        if not torch.isfinite(y).all() or not torch.isfinite(yr).all():
+            raise FloatingPointError('nonfinite independent forward check')
+        for owner in (model,reference):
+            if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in owner.parameters()):
+                raise FloatingPointError('nonfinite independent VJP check')
         checks['forward']=finite_delta(y,yr,1e-6,1e-5)
         checks['parameter_vjp']={n:finite_delta(p.grad,dict(reference.named_parameters())[n].grad,1e-6,1e-5)
             for n,p in model.named_parameters() if p.grad is not None}
         with torch.no_grad():
             changed=x.clone();changed[:,2]=(changed[:,2]+17)%4096
             checks['causal']=finite_delta(model(changed)[:,:2],model(x)[:,:2],0,0)
-        if checks['causal']['state']!='passed':raise AssertionError('Transformer causal intervention failed')
+        if checks['causal']['state']!='passed':raise AssertionError('causal intervention failed')
     atomic_json(out/'checks.json',checks)
     if checks['analytic_ce_vjp']['state']!='passed':raise AssertionError('CE VJP formula failed')
     return dict(checks=checks,admitted_for_finite_exploration=True,
         scope='actual topology/modules/width/backend, independent B2 L3; inactive routed regions recorded, not required to all fire',
         axes=dict(execution='passed',strict_numerical='see checks; original 1e-6/1e-5 and zero causal thresholds retained',
-            discrete_semantics='passed' if c['kind']=='tide' else 'not_applicable',mechanisms='passed',
+            discrete_semantics='passed' if c['kind']=='tide' else ('static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
             recovery='separate_fresh_process_probe_required',learning='unchecked'))
 
 
@@ -125,8 +130,10 @@ def train(a,c,model,opt,device,ident,metrics,result):
     initial=validate('validation-initial',min(t['eval_tokens'],t.get('initial_eval_tokens',2048)))
     last_save=time.monotonic();next_eval=((progress['tokens']//t['validation_every_tokens'])+1)*t['validation_every_tokens']
     training_seconds=0.;row=None
-    while progress['tokens']<t['target_tokens'] and not stopped and time.time()<deadline-120:
-        next_milestone=min(m for m in t['milestones'] if m>progress['tokens'])
+    stop_target=min(t['target_tokens'],a.until_tokens or t['target_tokens'])
+    if progress['tokens']>stop_target:raise ValueError('resume exceeds requested stage exposure')
+    while progress['tokens']<stop_target and not stopped and time.time()<deadline-120:
+        next_milestone=min([m for m in t['milestones'] if m>progress['tokens']]+[stop_target])
         ids,cursor=corpus.sample_ids(progress['cursor'],global_batch,c['seed'])
         remain=next_milestone-progress['tokens'];batches=[];raw_tokens=0
         for i in range(0,len(ids),micro):
@@ -173,11 +180,11 @@ def train(a,c,model,opt,device,ident,metrics,result):
                 token_ids=generated.cpu().tolist(),seconds=time.monotonic()-inference_start,
                 method='greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof')
         atomic_json(a.output/'inference.json',inference)
-    return dict(state='completed' if progress['tokens']==t['target_tokens'] else 'budget_truncated',
-        progress=progress,target_tokens=t['target_tokens'],training_seconds=training_seconds,
+    return dict(state='completed' if progress['tokens']==stop_target else 'budget_truncated',
+        progress=progress,target_tokens=t['target_tokens'],stage_target_tokens=stop_target,training_seconds=training_seconds,
         initial_validation_nll=initial['nll'],final_validation_nll=final['nll'] if final else None,
         inference=inference,stop_signal=stopped or None,
-        axes=dict(result['axes'],execution='completed' if progress['tokens']==t['target_tokens'] else 'budget_truncated',
+        axes=dict(result['axes'],execution='completed' if progress['tokens']==stop_target else 'budget_truncated',
             learning='awaiting_scientific_review'),
         comparison_note='same global sample batch and token schedule; physical accumulation and implementation recorded; milestone tail drops explicit and identical for matched global batch')
 
@@ -188,16 +195,20 @@ def main(a):
     a.output.mkdir(parents=True,exist_ok=False);metrics=None;started=time.monotonic()
     result=dict(schema='tide-language-campaign-stage-v1',state='running',action=a.action,
         started_at=now(),identity=ident,config_id=c['id'],physical_visibility=os.environ.get('ASCEND_RT_VISIBLE_DEVICES'))
+    if a.resume:
+        result['ancestry']=dict(checkpoint=str(a.resume.resolve()),sha256=digest(a.resume),
+            meaning='exact application continuation; not scientific support')
     atomic_json(a.output/'result.json',result)
     try:
         model=make_model(c,device);opt=optimizer_for(model,c);result['inventory']=trainable_inventory(model)
         if a.action=='check':result.update(admission(model,c,device,a.output),state='completed')
         elif a.action=='probe':result.update(probe(a,c,model,opt,device,ident),state='completed')
         else:
-            name='tl-v6-'+c['id']
+            name=a.run_id or 'tl-v6-'+c['id']
+            group=a.recording_group or c['study_id']
             atomic_json(a.output/'manifest.json',dict(schema='tide-lab-run-v1',project='tide-learning-lab',
-                run_id=name,name=name,study_id=c['study_id'],group=c['study_id'],stage='train',
-                created_at=now(),config=c,identity=ident,resolved=dict(seed=c['seed'],device=c['device'],
+                run_id=name,name=name,study_id=group,group=group,stage='train',
+                created_at=now(),config=c,identity=ident,ancestry=result.get('ancestry'),resolved=dict(seed=c['seed'],device=c['device'],
                     batch=c['training']['batch'],global_batch=c['training'].get('global_batch'),length=c['training']['length'])))
             metrics=Metrics(a.output,name)
             result.update(train(a,c,model,opt,device,ident,metrics,result))
@@ -217,4 +228,6 @@ if __name__=='__main__':
     for n in ('config','output'):p.add_argument('--'+n,type=Path,required=True)
     for n in ('data','resume','admission','recovery'):p.add_argument('--'+n,type=Path)
     p.add_argument('--steps',type=int,default=3);p.add_argument('--deadline-epoch',type=float,default=float('inf'))
+    p.add_argument('--until-tokens',type=int);p.add_argument('--run-id')
+    p.add_argument('--recording-group')
     main(p.parse_args())

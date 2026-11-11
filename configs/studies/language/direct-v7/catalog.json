@@ -1,0 +1,38 @@
+{
+  "conditional": "If mean seed11/22 HB88-minus-HB40 NLL is >0.05 at both complete 1M and 4M, run two seed11 depth-residual controls with the chosen recipe to 4M.",
+  "conditional_max_cases": 2,
+  "created_at": "2026-11-11T08:37:46.351802+00:00",
+  "main_models": [
+    "hb40",
+    "hb88",
+    "fc16",
+    "tf12",
+    "tf28"
+  ],
+  "main_seeds": [
+    11,
+    22
+  ],
+  "main_target_tokens": 4194304,
+  "non_goals": [
+    "No new TIDE execution implementation or quad/proportional imitation.",
+    "No test access, semantic Cartesian matrix, additional data or size beyond this table."
+  ],
+  "schema": "tide-direct-v7-catalog-v1",
+  "screen": [
+    "hb40-std015-raw-s11",
+    "hb40-std015-rms-s11",
+    "hb40-fan_in-raw-s11",
+    "hb40-fan_in-rms-s11",
+    "hb88-std015-raw-s11",
+    "hb88-std015-rms-s11",
+    "hb88-fan_in-raw-s11",
+    "hb88-fan_in-rms-s11",
+    "tf12-original-s11",
+    "tf12-balanced-s11",
+    "tf28-original-s11",
+    "tf28-balanced-s11"
+  ],
+  "screen_stop_tokens": 262144,
+  "selection": "Same initialization/norm for both HB sizes: mean complete 262K validation NLL, tie <=0.02 prefer fan_in+rms. Same position scale for both Transformer sizes: mean validation, tie <=0.02 prefer balanced."
+}

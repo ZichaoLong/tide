@@ -89,7 +89,7 @@ class CausalBlock(nn.Module):
 
 
 class SmallTransformer(nn.Module):
-    def __init__(self,seed=11,vocab_size=4096,width=96,layers=3,heads=4,ffn=384):
+    def __init__(self,seed=11,vocab_size=4096,width=96,layers=3,heads=4,ffn=384,position_scale=1.):
         super().__init__()
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(seed)
@@ -101,7 +101,8 @@ class SmallTransformer(nn.Module):
         position=torch.arange(1024,dtype=torch.float32)[:,None]
         phase=position*torch.exp(torch.arange(0,width,2,dtype=torch.float32)*(-math.log(10000)/width))
         encoding=torch.zeros(1024,width);encoding[:,0::2]=phase.sin();encoding[:,1::2]=phase.cos()
-        self.register_buffer('position',encoding,persistent=True);self.last_metrics={}
+        if not 0 < position_scale <= 1:raise ValueError('position scale must be in (0,1]')
+        self.register_buffer('position',encoding*position_scale,persistent=True);self.last_metrics={}
 
     def forward(self,x,**kwargs):
         if x.shape[1]>len(self.position):raise ValueError('declared positional capacity exceeded')
