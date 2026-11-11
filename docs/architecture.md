@@ -70,6 +70,8 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `column_transport`负责实际消息到目标owner的整列copy复用和区域描述汇集；
 Python/C++列调度按节点/区域分别解析位置。readout及内置loss可归约不同输出owner，
 `test_column_payload_owners`与安装窗口的peer选项检查独立调度/VJP/optimizer/恢复。
+`block_attention` / `weighted_block_attention`及位置logits算子拥有共享bank的一阶转置和FP16内部FP32策略；
+`test_half_columns`覆盖溢出点积、原始版本、五记忆独立根、master更新和raw恢复，显式评分与消息精度不混同。
 `experiment/column_task.py`拥有内置任务的共享来源列、逐物理端口loss和无梯度CPU输出解码；
 `experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
 `planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步

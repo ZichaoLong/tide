@@ -38,5 +38,5 @@ void bind_weighted_sequence_columns(py::module_& m){
     .def_readonly("nodes",&Result::nodes).def_readonly("stats",&Result::stats).def("readout",&readout);
   m.def("weighted_settle_columns",&settle,py::arg("spec"),py::arg("model"),py::arg("layout"),py::arg("ports"),
         py::arg("left"),py::arg("max_workspace_bytes"),py::arg("placement")=std::nullopt,py::call_guard<py::gil_scoped_release>());
-  m.attr("weighted_column_placement_version")=2;
+  m.attr("weighted_column_placement_version")=3;
 }

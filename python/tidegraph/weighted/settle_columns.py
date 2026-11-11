@@ -76,6 +76,8 @@ class SettleColumnPlan:
         if any(p["events"].type != "cpu" for p in (*self.node_locations.values(), *self.region_locations.values())):
             raise ValueError("column Settle is host scheduled")
         self.read_dtypes = {v: read_dtype(spec.graph.nodes[v], n.bias.dtype, self.node_locations[v]) for v, n in enumerate(binding.model.nodes)}
+        if any(t not in {torch.float32, torch.float64} for t in self.read_dtypes.values()):
+            raise ValueError("weighted tensor windows require explicit FP32/FP64 scoring dtype")
         g = self.graph
         self.regions = sorted(range(len(g.regions)), key=lambda r: (spec.ranks[r], r))
         self.inputs = {v: [p for p, node in enumerate(g.inputs) if node == v] for v in range(len(g.nodes))}
@@ -144,8 +146,8 @@ class SettleColumnPlan:
         if left is not None and set(left) != set(range(len(g.nodes))):
             raise ValueError("column Settle requires every private left state")
         ref = model.nodes[0].bias
-        if ref.dtype not in {torch.float32, torch.float64}:
-            raise ValueError("column Settle requires FP32/FP64 payloads")
+        if ref.dtype not in {torch.float16, torch.float32, torch.float64}:
+            raise ValueError("column Settle requires FP16/FP32/FP64 payloads")
         if len(layout.times) and int(layout.times.max()) > (2**63-1-max(self.spec.ranks))//self.spec.stride:
             raise ValueError("column Settle logical clock exceeds int64")
         for p in ports.values():

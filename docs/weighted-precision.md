@@ -33,6 +33,10 @@ payload dtype，零衰减率不会因大于65504的间隔变成 `0*inf`。
 KV 旋转在 FP32 求相位/三角函数后返回 half；半精度 KV Attention 的 softmax、
 加权归约与 centered VJP 在 FP32 运算，公开结果与叶梯度仍为原 dtype。
 这些内部算术选择不改变窗口、原始时间戳、可见条目或 checkpoint 原始布局。
+[张量窗口](weighted-tensor-windows.md)也遵守该契约：KV共享bank Attention与位置logits的
+softmax/收缩/VJP在FP32完成，原始half根保留版本检查；Read/区域的FP32或FP64必须显式指定。
+五记忆整链与master/恢复检查位于`test_half_columns`，安装示例`tensor_window.py`可独立复现。
+这些新路径的构建/CPU/设备资格分别记录，不沿用旧record算法的资格。
 `test_weighted_half_clocks.py` 包含超过2^54的时间戳、100000步间隔、零速率、
 手算旋转和五记忆完整图/VJP；纯Python与native的实际结果分别记录。
 

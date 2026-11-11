@@ -90,3 +90,9 @@ python dense_query.py --device npu:0 --client native --native-library MATCHING_N
 更新边界恢复；非空pending图状态/保留cut另由仓库完整图测试覆盖，不能混作同一项。
 `result.json`的`execution`、`strict_numerical`、`recovery`分开审阅；有限数值超差可以记录为failed，
 不能仅凭退出码宣布严格通过。该消费者不验证原FC16任务或学习效果。
+
+
+批量张量窗口消费者为`tensor_window.py`。FP16显式选择
+`--dtype float16 --scoring-dtype float32 --loss-scale 16`，使用FP32-master AdamW；
+参数、raw状态与消息保持half，评分及loss为FP32。示例记录请求/实际路径、独立三步检查及
+新进程精确恢复，半精度派生字段的比较策略同时进入身份。该示例不自动认证其他图/配置/设备。

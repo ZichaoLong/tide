@@ -53,7 +53,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
   layout.validate();const auto& g=spec.graph();const auto& ref=model.nodes.at(0).bias;
   require(spec.binding()=="ports","column Settle requires ports binding");validate_transport(g,model);
   require(max_workspace_bytes>0,"column workspace budget must be positive");
-  require(ref.scalar_type()==at::kFloat||ref.scalar_type()==at::kDouble,"column Settle requires FP32/FP64");
+  require(ref.scalar_type()==at::kHalf||ref.scalar_type()==at::kFloat||ref.scalar_type()==at::kDouble,"column Settle requires FP16/FP32/FP64");
   ExecutionPlacement defaults;defaults.selection="payload";
   const auto request=requested.value_or(defaults);
   std::vector<ResolvedPlacement> node_locations,region_locations;

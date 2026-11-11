@@ -24,8 +24,8 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
            at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble,const std::string& preset="native",
            std::optional<at::Device> peer=std::nullopt){
   at::set_num_threads(1);
-  const bool fp32=scoring||dtype==at::kFloat;
-  auto close=[&](const Tensor& a,const Tensor& b){close_value(a,b,fp32?1e-5:1e-8,fp32?1e-6:1e-10);};
+  const bool half=dtype==at::kHalf,fp32=scoring||dtype==at::kFloat;
+  auto close=[&](const Tensor& a,const Tensor& b){close_value(a,b,half?2e-2:fp32?1e-5:1e-8,half?1e-3:fp32?1e-6:1e-10);};
   auto g=weighted_check::graph("fc",family);auto m=weighted_check::model(g,family,device,dtype);
   if(positional)for(auto& node:m.nodes){auto b=weighted::node_binding(node);auto c=std::get<weighted::KVConfig>(b.memory);
     c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;
@@ -34,7 +34,7 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
     for(const auto& n:g.nodes)owners.push_back(n.region%2?*peer:device);
     m=place_payloads(g,m,owners);
   }
-  ExecutionPlacement placement;placement.preset=preset;placement.scoring_dtype=scoring?"float32":"payload";
+  ExecutionPlacement placement;placement.preset=preset;placement.scoring_dtype=scoring||half?"float32":"payload";
   SettleGraph spec(g,{1,2,3},"ports",4);Streaming scalar(g,place_model(g,m,placement),Options{});
   Continuation q;q.identity=g.identity;q.batch_size=2;
   std::map<Index,col::LocalState> left;
@@ -101,11 +101,13 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
     if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){auto peer_options=args;
       peer_options.device_spec=selected;peer=portable_torch::resolve_device(peer_options);
       require(*peer!=device&&peer->type()==device.type(),"peer gate requires a distinct same-backend device");}
-    require(args.dtype==at::kFloat||args.dtype==at::kDouble,"column gate requires FP32/FP64");
+    require(args.dtype==at::kHalf||args.dtype==at::kFloat||args.dtype==at::kDouble,"column gate requires FP16/FP32/FP64");
     for(const auto& preset:{"mixed-a","mixed-b","mixed-c"})for(const auto& family:{"kv","affine","delta","gated_delta","ssd"}){
       check(family,false,false,device,args.dtype,device.is_cpu()?"cpu":preset,peer);
       std::cout<<"column case passed: "<<family<<" "<<preset<<'\n';
     }
+    if(args.dtype==at::kHalf){check("kv",true,false,device,args.dtype,device.is_cpu()?"cpu":"mixed-c",peer);
+      std::cout<<"column case passed: kv positional half\n";}
     portable_torch::synchronize(device);
     if(peer)portable_torch::synchronize(*peer);
   }

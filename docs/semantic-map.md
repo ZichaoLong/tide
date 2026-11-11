@@ -336,6 +336,9 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 
 带权张量窗口 `tensor-window-v1` 的定义域/值域、raw 状态、共享根、容量、观察范围和
 完整位置 cut 解码见 [逐定义对应](weighted-tensor-windows.md#定义实现验证)。
+张量窗口的half载荷/FP32内部Attention、显式评分和master/恢复见
+[精度契约](weighted-precision.md)及`test_half_columns`；它们实现同一KV §3–4与循环/区域定义，
+不改变时间、支持或raw解码。
 `window_execution` 连接默认 eager 客户端；`settle_columns`/C++ `columns::settle`
 连接实际候选支持、区域全列与 Full/消息。`test_window_execution`、`test_column_training`
 及 standalone `weighted_sequence_columns.cpp` 验证分派、普通列根/共享梯度与 raw 恢复；

@@ -41,12 +41,14 @@ def column_reason(binding, spec, implementation, placement, options):
         p = request(placement).resolve(n.bias.device)
         if p["events"].type != "cpu":
             return "placement requires device-resident scheduling"
-        if n.bias.dtype not in {torch.float32, torch.float64} or read_dtype(spec.graph.nodes[v], n.bias.dtype, p) not in {torch.float32, torch.float64}:
-            return "payload/scoring dtype requires graph adapter"
+        if n.bias.dtype not in {torch.float16, torch.float32, torch.float64}:
+            return "payload dtype requires graph adapter"
         if (type(n.read_program) is not Describe or type(n.full_program) is not WeightedFull
                 or type(n.aggregate_program) is not WeightedAggregate or type(n.next_program) is not AdoptNext
                 or spec.graph.nodes[v].clear or not spec.graph.regions[spec.graph.nodes[v].region].observe_all):
             return "custom local/state-adoption program"
+        if read_dtype(spec.graph.nodes[v], n.bias.dtype, p) not in {torch.float32, torch.float64}:
+            raise ValueError("weighted tensor windows require explicit FP32/FP64 scoring dtype")
         try:
             module_for(n)
         except ValueError:

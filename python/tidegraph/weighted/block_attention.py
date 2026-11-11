@@ -12,6 +12,9 @@ class _Attention(torch.autograd.Function):
     @staticmethod
     def forward(ctx, q, k, v, weights):
         ctx.set_materialize_grads(False)
+        originals = q, k, v, weights
+        if q.dtype == torch.float16:
+            q, k, v, weights = (x.float() for x in originals)
         positive = weights > 0
         active = positive.any(-1)
         safe = torch.where(positive, weights, 1)
@@ -19,16 +22,20 @@ class _Attention(torch.autograd.Function):
         logits = logits.masked_fill(~positive[:, None], -torch.inf)
         probabilities = torch.where(active[:, None, :, None], logits, 0).softmax(-1)
         probabilities = torch.where(active[:, None, :, None], probabilities, 0)
-        ctx.save_for_backward(q, k, v, weights, probabilities)
-        return probabilities @ v
+        ctx.save_for_backward(*originals, probabilities)
+        return (probabilities @ v).to(originals[2].dtype)
 
     @staticmethod
     def backward(ctx, bar):
         if torch.is_grad_enabled():
             raise ValueError('KV block Attention supports first-order VJP only')
         q, k, v, weights, p = ctx.saved_tensors
+        originals = q, k, v, weights
         if bar is None:
             return None, None, None, None
+        if q.dtype == torch.float16:
+            q, k, v, weights = (x.float() for x in originals)
+            bar = bar.float()
         # One common positive anchor per bank avoids [B,H,Q,K,D] expansion.
         used = (weights > 0).any(1)
         index = used.to(torch.int64).argmax(-1)[:, None, None, None]
@@ -41,7 +48,7 @@ class _Attention(torch.autograd.Function):
         dk = dl.transpose(-1, -2) @ q / math.sqrt(q.shape[-1]) if ctx.needs_input_grad[1] else None
         dv = p.transpose(-1, -2) @ bar if ctx.needs_input_grad[2] else None
         dw = dl.sum(1) / torch.where(weights > 0, weights, 1) if ctx.needs_input_grad[3] else None
-        return dq, dk, dv, dw
+        return tuple(None if g is None else g.to(x.dtype) for g, x in zip((dq, dk, dv, dw), originals))
 
 
 attention = _Attention.apply

@@ -15,6 +15,7 @@ from tidegraph import Continuation, ExecutionPlacement
 from tidegraph.ownership import place_payloads
 from tidegraph.runtime import resolve_device
 from tidegraph.checkpoint import save, load
+from tidegraph.precision import FP32MasterOptimizer
 from tidegraph.comparison import collect_comparison, equivalent
 from tidegraph.weighted import fully_connected, bind, KVConfig, RecurrentConfig, RegionalConfig, eager_runner
 from recording import snapshot, json_record, tensor_record
@@ -35,7 +36,9 @@ def create(args, *, reference=False):
     if args.peer_device and not reference:
         place_payloads(binding.graph, binding.model,
                        [args.peer_device if n.region % 2 else args.device for n in binding.graph.nodes])
-    optimizer = torch.optim.AdamW(binding.model.parameters(), lr=.0001, foreach=False)
+    optimizer = (FP32MasterOptimizer((p for p in binding.model.parameters() if p.requires_grad),
+                    optimizer="adamw", lr=.0001, foreach=False, loss_scale=args.loss_scale)
+                 if args.dtype == "float16" else torch.optim.AdamW(binding.model.parameters(), lr=.0001, foreach=False))
     execute = eager_runner(binding, "python" if reference else args.client,
         ExecutionPlacement("cpu" if reference or args.device == "cpu" else args.placement,
                            scoring_dtype=args.scoring_dtype or args.dtype),
@@ -51,8 +54,15 @@ def step(owner, state, index):
     optimizer.zero_grad(set_to_none=True)
     result = execute.run_positions(spec, x, start_position=3*index, state=state)
     hidden = result.readout(x)
-    loss = (hidden*torch.linspace(.2, .8, 4, dtype=ref.dtype, device=ref.device)).square().sum()
-    loss.backward()
+    if isinstance(optimizer, FP32MasterOptimizer):
+        hidden_loss = hidden.float()
+    else:
+        hidden_loss = hidden
+    loss = (hidden_loss*torch.linspace(.2, .8, 4, dtype=hidden_loss.dtype, device=ref.device)).square().sum()
+    if isinstance(optimizer, FP32MasterOptimizer):
+        optimizer.backward(loss)
+    else:
+        loss.backward()
     gradients = {n: p.grad for n, p in binding.model.named_parameters()}
     if not torch.isfinite(loss) or any(not torch.isfinite(g).all() for g in gradients.values() if g is not None):
         raise FloatingPointError("nonfinite training result")
@@ -66,7 +76,8 @@ def step(owner, state, index):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--device", default="cpu")
-    p.add_argument("--dtype", choices=("float32", "float64"), default="float64")
+    p.add_argument("--dtype", choices=("float16", "float32", "float64"), default="float64")
+    p.add_argument("--loss-scale", type=float, default=16., help="explicit static scale for FP16/FP32-master AdamW")
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
     p.add_argument("--peer-device", help="second accelerator payload owner; regions alternate owners")
@@ -81,6 +92,8 @@ def main():
     p.add_argument("--resume", type=Path)
     p.add_argument("--child", action="store_true")
     args = p.parse_args()
+    if args.dtype == "float16" and args.scoring_dtype is None:
+        p.error("FP16 requires explicit --scoring-dtype float32 or float64")
     if args.positions and args.family != "kv":
         p.error("--positions applies to KV only")
     resolve_device(args.device)
@@ -98,6 +111,9 @@ def main():
                     placement="cpu" if args.device == "cpu" else args.placement,
                     scoring_dtype=args.scoring_dtype or args.dtype,
                     deterministic_algorithms=args.deterministic_algorithms, peer_device=args.peer_device)
+    if args.dtype == "float16":
+        identity.update(precision="fp32-master-v1", loss_scale=args.loss_scale,
+                        comparison_policy="half-derived-fields-atol1e-3-rtol2e-2")
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked")
     try:
         owner = create(args)
@@ -117,7 +133,8 @@ def main():
                 raise AssertionError(execution)
             if oracle is not None:
                 reference_state, expected, _ = step(oracle, reference_state, index)
-                report = collect_comparison(actual, expected, path=f"step{index}", check_device=False)
+                tolerance = dict(atol=1e-3, rtol=2e-2) if args.dtype == "float16" else {}
+                report = collect_comparison(actual, expected, path=f"step{index}", check_device=False, **tolerance)
                 if report["discrete"] != "passed":
                     raise AssertionError(report)
                 reports.append(report)
@@ -139,6 +156,8 @@ def main():
             command += ["--placement", args.placement]
             if args.scoring_dtype:
                 command += ["--scoring-dtype", args.scoring_dtype]
+            if args.dtype == "float16":
+                command += ["--loss-scale", str(args.loss_scale)]
             if not args.deterministic_algorithms:
                 command += ["--no-deterministic-algorithms"]
             for name, extra in (("whole", ["--steps", "3"]), ("prefix", ["--steps", "2"]),

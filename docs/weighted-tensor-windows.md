@@ -70,7 +70,7 @@ Python共享Aggregate只在参数/实际输入句柄相同时复用。`column_sh
 | affine/delta/GDN/SSD | Python/C++：typed H/Z/W、正写入 scan、原始时间短卷积、异构组合 |
 | 区域 | Python/C++：现有十种发送及适用 quad/bern/ent，完整评分/evidence/key 列及声明一阶 VJP |
 | 状态/传输 | observe-all、adopt、严格正支持策略、unit transport；SrcClass 是参数分类，不去重原子 |
-| 设备 | FP32/FP64 同dtype的节点payload owner、CPU/mixed-a/b/c 主机调度与显式评分 dtype；实际设备资格单列 |
+| 设备 | FP16/FP32/FP64 同dtype的节点payload owner、CPU/mixed-a/b/c 主机调度与显式评分 dtype；实际设备资格单列 |
 
 Read/control/selection按声明的位置接收整列临时视图，参数与raw状态所有者不变。
 KV Read sum只读取summary/weight bank，qry读取key/value/weight bank，Full不额外读取summary；
@@ -85,8 +85,13 @@ Read按节点位置计算，完整描述先汇集区域参数owner对应的contr
 内置逐端口loss先在原owner计算再汇总，归约与optimizer边界不因物理放置改变。
 这是普通可求导copy，不宣称P2P、collective或设备常驻调度；异步与真机资格单列。
 
-正支持补值、FP16和 resident
-当前经能力后备处理。它们是新列迁移的未完成范围，不是从基座删除已有能力，也不代表
+FP16沿用[精度契约](weighted-precision.md)：显式FP32/FP64评分，half参数/raw状态/消息，int64时钟；
+KV块Attention的logits、softmax、加权归约和centered一阶转置在FP32计算，输出/伴随返回原dtype。
+位置旋转仍按原始整数时间差，在FP32求相位后返回half；位置内积在FP32计算。
+原始版本守卫、None/零及正支持cast拒绝保持。workspace按payload与评分中较宽dtype估算，
+包含Attention的FP32暂存；native接口能力版本3要求重建。具体硬件资格以固定报告为准。
+
+正支持补值和resident当前经能力后备处理。它们是新列迁移的未完成范围，不是从基座删除已有能力，也不代表
 P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 
 ## 状态、梯度根和寿命
@@ -141,6 +146,10 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 安装消费者的 `--positions` 覆盖带位置项的三步训练和新进程恢复；硬件范围见固定证据。
 `test_tap_gather`用独立关联矩阵和方向导数检查卷积转置、缺失槽、零梯度和版本/阶数边界；
 native由完整循环公式与非空缓存容量测试覆盖。实际设备重复反向/精确恢复须单独验收。
+`test_half_columns`以独立标量调度核对五记忆/位置的完整字段、输入/参数VJP、三步FP32-master AdamW和
+raw换owner精确恢复，包含大于2**54的稀疏逻辑时间；Attention另有溢出half点积的FP32字面公式及版本守卫。
+半精度派生浮点字段使用既有half误差策略，离散/None和自身恢复保持精确；新小例不解除旧GDN AdamW见证。
+安装示例支持`--dtype float16 --scoring-dtype float32 --loss-scale 16`并记录master和比较策略。
 FP32 严格梯度超差保留为具名有界 witness，同材料提升 FP64 单列；不改通过阈值。
 
 `test_column_sharing`检查共享使用的独立公式、固定累加次序、None/零、原始版本与一阶边界。

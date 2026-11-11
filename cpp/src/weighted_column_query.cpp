@@ -48,7 +48,9 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
     if(!c.read_frequencies.empty()){
       auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;
       auto keys=rotate_columns(k.select(1,0).unsqueeze(1).expand({-1,q.u.size(1),-1,-1}),displacement,c.read_frequencies);
-      auto logits=(query.select(1,0).unsqueeze(2)*keys).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width));
+      auto head=query.select(1,0).unsqueeze(2);
+      if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);keys=keys.to(at::kFloat);}
+      auto logits=(head*keys).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width));
       shortv=logit_attention(logits,v,sw).select(1,0)*st.clamp_max(1).unsqueeze(-1);
       longv=logit_attention(logits,v,q.weights).select(1,0)*lt.clamp_max(1).unsqueeze(-1);
     }else{
@@ -87,7 +89,9 @@ Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const
       for(Index h=0;h<c.heads;++h){
         auto key=rotate_columns(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,
                                c.full_frequencies.empty()?empty:c.full_frequencies[h]);
-        auto l=(query.select(1,h).unsqueeze(2)*key).sum(-1)/std::sqrt(double(dh));
+        auto head=query.select(1,h).unsqueeze(2);
+        if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);key=key.to(at::kFloat);}
+        auto l=(head*key).sum(-1)/std::sqrt(double(dh));
         if(!c.distance_slopes.empty())l=l+c.distance_slopes[h]*displacement;logits.push_back(l);
       }
       mixed=logit_attention(at::stack(logits,1),v,q.weights);
