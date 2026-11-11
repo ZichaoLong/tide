@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-11T04:15:20.315546+00:00",
+  "at": "2026-11-11T04:45:32.952402+00:00",
   "caveats": [
     "One seed per candidate; no architecture-wide scaling verdict.",
     "d32/L32/65K candidate screen does not isolate capacity against d128/L128 scale.",
@@ -102,6 +102,72 @@
       "matched_blocks": 258,
       "right": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-transformer-10m-retry1/train/validation-262144.json",
       "right_nll": 6.951569741591811,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    }
+  ],
+  "comparisons_at_658k": [
+    {
+      "bootstrap_document_ci95": [
+        0.4004682737767498,
+        0.43292715890066963
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.4169979151338339,
+      "documents": 134,
+      "left": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/validation-658436.json",
+      "left_nll": 7.108068025205284,
+      "matched_blocks": 258,
+      "right": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/validation-658436.json",
+      "right_nll": 6.6910701100714505,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        1.4832458753384807,
+        1.5544132745329033
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 1.5199519246816635,
+      "documents": 134,
+      "left": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/validation-658436.json",
+      "left_nll": 7.108068025205284,
+      "matched_blocks": 258,
+      "right": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-gdn-quad-retry1/train/validation-658436.json",
+      "right_nll": 5.588116100523621,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        -3.16286453194077,
+        -3.087559475649682
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -3.1246040952391922,
+      "documents": 134,
+      "left": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/validation-658436.json",
+      "left_nll": 7.108068025205284,
+      "matched_blocks": 258,
+      "right": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/validation-658436.json",
+      "right_nll": 10.232672120444477,
+      "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
+      "tokens": 32768
+    },
+    {
+      "bootstrap_document_ci95": [
+        0.1461124754506388,
+        0.17561738120825268
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.1611599805764854,
+      "documents": 134,
+      "left": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/validation-658436.json",
+      "left_nll": 7.108068025205284,
+      "matched_blocks": 258,
+      "right": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-transformer-10m-retry1/train/validation-658436.json",
+      "right_nll": 6.946908044628799,
       "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
       "tokens": 32768
     }
@@ -1980,6 +2046,7 @@
     "scope": "validation only; paired document bootstrap conditional on one seed/checkpoints; not seed or model-selection uncertainty",
     "tokens": 32768
   },
+  "review_script_sha256": "61330f97a7215144393f6d9af44debc5218c30002f32f2c25e9701848407bfee",
   "scale": [
     {
       "config_path": "runs/v6-scale-fc16-gdn-quad-retry1/train/manifest.json",

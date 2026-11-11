@@ -1,6 +1,8 @@
 # 当前优先级：HB学习原因定位与直接实现成本实测
 
-新增优先入口：[HB学习/成本研究表](studies/hb-cost-and-learning-20261111.md)。本轮只做有界成本实测与原学习证据审阅，详细公共实现优化仍交基座；后继语言训练待形成具名方案。
+优先入口：[HB学习结论与后继建议](studies/hb-learning-results-20261111.md)、[直接图成本实测](studies/hb-cost-results-20261111.md)。本轮已终态，不自动启动后继语言训练；公共实现优化仍交基座。
+
+HB下一轮优先：按角色校准Full矩阵fan-in与独立最终RMSNorm控制；同一稳定配方下HB40/88、FC16及校准Transformer共同曝光至少1M，并预算4M延伸。再用proportional/必要的Shannon区分分配与拓扑，仍差才改汇合或局部残差。现有固定std0.15及强方向梯度是具体假说，未证明因果；FC32后恢复、d32 HB proportional较好和Transformer自身平台均须保留。不优先盲目延长旧HB88配方或重开全候选矩阵。
 
 [当前状态](STATUS.md)与[v6研究表](studies/language-coverage-scale-v6.md)是本批入口。用户已授权并实际提交局部候选并集覆盖及实质数据/容量/深度两条并行线；此前仅补512步的建议不再是当前限制。数学、公共基座与历史失败保持原身份。
 

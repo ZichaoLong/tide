@@ -23,7 +23,10 @@ def paired(left, right):
     a, b = records(left), records(right)
     common = sorted(a.keys() & b.keys()); docs = {}
     for key in common:
-        row = a[key]; item = docs.setdefault(row['document_id'], [0., 0., 0])
+        row = a[key]
+        if row['document_id'] != b[key]['document_id']:
+            raise ValueError('same block ID has different document ancestry')
+        item = docs.setdefault(row['document_id'], [0., 0., 0])
         item[0] += row['nll_sum']; item[1] += b[key]['nll_sum']; item[2] += row['tokens']
     values = list(docs.values()); total = sum(r[2] for r in values)
     if not total:
@@ -86,9 +89,16 @@ def main(a):
                  'fc16-gdn-quad-retry1','fc32-kv-quad-retry1','transformer-10m-retry1'):
         comparisons.append(paired(hb88,root/f'runs/v6-scale-{name}/train/validation-262144.json'))
     hb40=root/'runs/v6-scale-hb40-kv-quad-retry1/train'
+    later_comparisons=[paired(hb40/'validation-658436.json',
+        root/f'runs/v6-scale-{name}/train/validation-658436.json') for name in (
+        'fc16-kv-quad-retry1','fc16-gdn-quad-retry1','fc32-kv-quad-retry1','transformer-10m-retry1')]
+    if not all(c['complete_same_blocks'] and c['tokens']==32768 for c in comparisons+later_comparisons):
+        raise ValueError('main comparison does not use identical complete validation blocks')
     result=dict(schema='tide-hb-learning-review-v1',at=now(),state='reviewed_with_limits',
+        review_script_sha256=digest(Path(__file__)),
         scope='Original d32 coverage and d128 scale kept separate. Validation only; no new training/evaluation/test access. Raw running inner records preserved alongside outer lifecycle.',
         scale=scale,coverage=coverage,comparisons_at_262k=comparisons,
+        comparisons_at_658k=later_comparisons,
         hb40_133k_to_658k=paired(hb40/'validation-133571.json',hb40/'validation-658436.json'),
         hb88_133k_to_262k=paired(hb88.with_name('validation-133571.json'),hb88),
         caveats=['One seed per candidate; no architecture-wide scaling verdict.',

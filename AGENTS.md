@@ -61,6 +61,10 @@
   in `docs/studies/hb-cost-and-learning-20261111.md`, including a non-TIDE direct Torch
   DAG cost anchor. Keep it explicitly different-function and outside the execution
   core; do not adopt the foundation working-tree changes or launch new language training.
+  This study is terminal: 25 cost cases and 8 read-only weight VJPs completed, with
+  scoped reports in `docs/studies/hb-cost-results-20261111.md` and
+  `docs/studies/hb-learning-results-20261111.md`. Recipe/architecture follow-ups are
+  recommendations, not submitted jobs; preserve original failures and frozen inputs.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

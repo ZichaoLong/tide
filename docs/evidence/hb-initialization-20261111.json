@@ -1,0 +1,64 @@
+{
+  "analysis_source": {
+    "path": "scripts/analyze_hb_initialization.py",
+    "sha256": "3feb0cd8e52c10fbab877b31ff832b4299894c31513a030525cd0f0bb5fff9a9"
+  },
+  "application_source": {
+    "path": "tide_lab/language.py",
+    "sha256": "2765c075100b8010532f5bc36ba83f86716ae3f1f096414685fd16897e67dc60"
+  },
+  "assumptions": "Single SwiGLU branch at initialization, RMS-normalized input with squared norm d; independent zero-mean Gaussian gate/up/down matrices of std sigma. Ignore epsilon correction and inter-layer correlations. This estimates one branch, not the whole HB state/gradient.",
+  "at": "2026-11-11T04:42:11.079833+00:00",
+  "formula": "v=d*sigma^2; Var[FFN_j]=d_ff*sigma^2*v*E[SiLU(N(0,v))^2]",
+  "interpretation": "Fixed-std initialization is not width-stable. Combined with observed output RMS and large directional input gradients, it is a concrete recipe hypothesis; intervention training is still required for causality.",
+  "method": "80-point Gauss-Hermite quadrature in FP64; no training or sampling",
+  "observations": {
+    "application_embedding_std": 0.02,
+    "default_parameter_std": 0.15,
+    "gradient_probe": "runs/hb-gradient-20261111/result.json",
+    "tide_final_readout_normalization": false,
+    "transformer_final_layer_norm": true,
+    "transformer_initial_position_rms": 0.7071067811865476,
+    "transformer_position_to_embedding_initial_rms_ratio": 35.35533905932738
+  },
+  "ownership": "Application can reinitialize public trainable matrices with a named fan-in policy and add task readout normalization without replacing execution core. All roles/aliases must be explicit and initialized once.",
+  "ratio_128_over_32": 8.956608039374185,
+  "schema": "tide-hb-initialization-analysis-v1",
+  "source_files": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd/python/tidegraph/weighted/tensors.py",
+      "sha256": "e9f31e20ee05584593eb3590ad06e80ffc910c74ff9431984fba3651f8563c84"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd/python/tidegraph/weighted/kv.py",
+      "sha256": "b3215dce2b9abc284326c8af5ca592a1cf551dca214181b06100c0c77b7d4cbb"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd/python/tidegraph/weighted/full_batch.py",
+      "sha256": "0834465a9cd06c58bc372621254207ddab8188a1270bfdc322d7523aa97b43f6"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd/python/tidegraph/weighted/config.py",
+      "sha256": "aa2ed776e2c8398af37c8077d6491732d3270cc1286c1afb36ac4053f34d805f"
+    }
+  ],
+  "source_revision": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+  "values": [
+    {
+      "expected_silu_squared": 0.2421831782207747,
+      "ffn_width": 128,
+      "normalized_input_projection_variance": 0.72,
+      "predicted_ffn_output_rms": 0.7086543856906541,
+      "weight_std": 0.15,
+      "width": 32
+    },
+    {
+      "expected_silu_squared": 1.2142584362900775,
+      "ffn_width": 512,
+      "normalized_input_projection_variance": 2.88,
+      "predicted_ffn_output_rms": 6.347139568014687,
+      "weight_std": 0.15,
+      "width": 128
+    }
+  ]
+}

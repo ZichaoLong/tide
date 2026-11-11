@@ -1,0 +1,1673 @@
+{
+  "acceptance": {
+    "discrete_semantics": "original public path; original acceptance retained",
+    "execution": "completed",
+    "learning": "original curves reviewed separately",
+    "recovery": "weight loading only; no exact-resume claim",
+    "strict_numerical": "not independently requalified"
+  },
+  "at": "2026-11-11T04:45:44.059271+00:00",
+  "cases": [
+    {
+      "ancestry": {
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/manifest.json",
+        "sha256": "f839788b9ea0b1ca8afc883824785ec0d7628e06c62bd3cffac25f490833b727",
+        "stage": "initial"
+      },
+      "disconnected_parameter_names": [],
+      "id": "fc16-initial",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-fc16-initial-20261111-projection-87ffbf91583a",
+        "destination_run_id": "057d2777eea149f88474f99a6f626578",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/fc16-initial/projection.json",
+          "sha256": "2ebfb88ac65dc43d63c77121d25cc7e4c8f4648fd3ee55b71781c60599e6a441"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-fc16-initial-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 2.5970988273620605,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 2944.9902827587025,
+          "parameter_norm": 14.483541640479388
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 425.72746389484473,
+          "parameter_norm": 9.711351391488218
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 396.51486289464924,
+          "parameter_norm": 9.633222850182063
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.read_q",
+          "norm": 225.94581148580593,
+          "parameter_norm": 9.85014904316613
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 206.85850094066407,
+          "parameter_norm": 26.99525487572994
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.read_k",
+          "norm": 169.73930325300276,
+          "parameter_norm": 9.656573825687477
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_v",
+          "norm": 164.2736496167582,
+          "parameter_norm": 9.791554522286384
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.0.read_program.score.matrix",
+          "norm": 142.63550573221065,
+          "parameter_norm": 13.714502059042207
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.1.read_program.score.vector",
+          "norm": 135.15569370566064,
+          "parameter_norm": 0.760836017068802
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.0.read_program.score.vector",
+          "norm": 131.92148542700747,
+          "parameter_norm": 0.6614624820049907
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.summary",
+          "norm": 128.64597065452625,
+          "parameter_norm": 9.537123655586374
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 125.13922324881919,
+          "parameter_norm": 9.765165362591894
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.read_q",
+          "norm": 122.66761292066593,
+          "parameter_norm": 9.737978605818839
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 108.80112685684324,
+          "parameter_norm": 13.589045645969302
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.read_k",
+          "norm": 106.59295098009467,
+          "parameter_norm": 9.62431345134374
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.read_v",
+          "norm": 102.11909122839079,
+          "parameter_norm": 9.659402261645532
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 98.58256313014591,
+          "parameter_norm": 9.66955495916404
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_u",
+          "norm": 94.57841858337558,
+          "parameter_norm": 13.495115192382432
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_u",
+          "norm": 94.24790228132713,
+          "parameter_norm": 13.667530917859901
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_v",
+          "norm": 92.04775609794436,
+          "parameter_norm": 9.497319673417763
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 71434.73654813536,
+        "hidden_gradient_norm": 0.041301613284633956,
+        "hidden_rms": 10.475308418273926,
+        "input_feature_gradient_norm": 2950.369864000794,
+        "input_rms": 0.01999293640255928,
+        "logit_rms": 2.377840280532837,
+        "loss": 11.26540756225586,
+        "max_abs_logit": 11.248879432678223,
+        "mean_top1_probability": 0.08443381637334824,
+        "preclip_gradient_norm": 3058.8112482495544
+      },
+      "work": {
+        "activity/full_fraction": 0.515625,
+        "work/candidates": 512,
+        "work/full": 264,
+        "work/max_full_batch": 30,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 784,
+        "work/read_events": 512,
+        "work/region_blocks": 4,
+        "work/source_rows": 912,
+        "work/state_updates": 512
+      }
+    },
+    {
+      "ancestry": {
+        "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/tokens-262144.pt",
+        "checkpoint_sha256": "91030dfea036d51846ae686d4aee66b38c5194670abefdcb590b257d46f3710c",
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/manifest.json",
+        "progress": {
+          "cursor": 2080,
+          "dropped_tail_tokens": 437,
+          "milestones": [
+            262144
+          ],
+          "probe": false,
+          "step": 65,
+          "tokens": 262144
+        },
+        "sha256": "f839788b9ea0b1ca8afc883824785ec0d7628e06c62bd3cffac25f490833b727",
+        "stage": "262k"
+      },
+      "disconnected_parameter_names": [
+        "encoder.graph_model.nodes.12.full_program.content.query",
+        "encoder.graph_model.nodes.12.full_program.content.out",
+        "encoder.graph_model.nodes.12.full_program.content.gate",
+        "encoder.graph_model.nodes.12.full_program.content.up",
+        "encoder.graph_model.nodes.12.full_program.content.down"
+      ],
+      "id": "fc16-262k",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-fc16-262k-20261111-projection-32b64e71b638",
+        "destination_run_id": "c4b33309f8124e7aa82ac508fd0e0314",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/fc16-262k/projection.json",
+          "sha256": "f0010a8d5d61b10d7479079663a6043e423c03406ea7511b9e08e0e69247a1c7"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-fc16-262k-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 2.456680089235306,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 178.54241137954807,
+          "parameter_norm": 14.930912735782192
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 31.600235644102355,
+          "parameter_norm": 9.717914323908317
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 24.79166972458441,
+          "parameter_norm": 9.636575251637526
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 15.711880207251522,
+          "parameter_norm": 27.01405227772459
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_q",
+          "norm": 10.852683177528428,
+          "parameter_norm": 9.479296913927797
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_k",
+          "norm": 10.508181433993922,
+          "parameter_norm": 9.55937358809593
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.1.read_program.score.matrix",
+          "norm": 9.830053560131029,
+          "parameter_norm": 13.651514592215674
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.3.read_program.score.vector",
+          "norm": 9.658784509395902,
+          "parameter_norm": 0.839785975584847
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_v",
+          "norm": 9.202729703131425,
+          "parameter_norm": 9.50347437687926
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.2.read_program.score.matrix",
+          "norm": 8.825687214529781,
+          "parameter_norm": 13.67829486830171
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.summary",
+          "norm": 8.799736386572244,
+          "parameter_norm": 9.677192796310308
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.1.read_program.score.vector",
+          "norm": 8.664203350668812,
+          "parameter_norm": 0.7653720307589801
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.read_v",
+          "norm": 8.639465826942475,
+          "parameter_norm": 9.49485979504151
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 8.327777887789976,
+          "parameter_norm": 13.594186219960758
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.0.read_program.score.vector",
+          "norm": 7.709086878071643,
+          "parameter_norm": 0.650293653690353
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.summary",
+          "norm": 7.560878033272701,
+          "parameter_norm": 9.637281850051195
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.summary",
+          "norm": 7.469030999985284,
+          "parameter_norm": 9.56595240913936
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 6.972575655759043,
+          "parameter_norm": 9.769907204966918
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_u",
+          "norm": 6.747518116791855,
+          "parameter_norm": 13.504913854709857
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 6.675545987369132,
+          "parameter_norm": 9.676508532396715
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 4014.400690913776,
+        "hidden_gradient_norm": 0.04382636794245756,
+        "hidden_rms": 10.254192352294922,
+        "input_feature_gradient_norm": 175.936601748443,
+        "input_rms": 0.02098674699664116,
+        "logit_rms": 2.3933942317962646,
+        "loss": 10.563505172729492,
+        "max_abs_logit": 12.367528915405273,
+        "mean_top1_probability": 0.12824112176895142,
+        "preclip_gradient_norm": 188.594833044955
+      },
+      "work": {
+        "activity/full_fraction": 0.50390625,
+        "work/candidates": 512,
+        "work/full": 258,
+        "work/max_full_batch": 31,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 776,
+        "work/read_events": 512,
+        "work/region_blocks": 4,
+        "work/source_rows": 904,
+        "work/state_updates": 512
+      }
+    },
+    {
+      "ancestry": {
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/manifest.json",
+        "sha256": "402cce1c4d6daafa73052cad2f6fb3c4c12e8a374eb02cb5a89f3cd6a7b2ec0c",
+        "stage": "initial"
+      },
+      "disconnected_parameter_names": [],
+      "id": "fc32-initial",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-fc32-initial-20261111-projection-b4d83a3dd216",
+        "destination_run_id": "ead9cfdd386c4592acbf1e34c8cf0f99",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/fc32-initial/projection.json",
+          "sha256": "e83a2af1a729d7668c523553a7bf735015547cb68602becd29e8bd75139043c9"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-fc32-initial-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 4.9470821768045425,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 36166.02767355973,
+          "parameter_norm": 14.483541640479388
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 4813.316784474634,
+          "parameter_norm": 9.502465555365532
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 4339.270926250339,
+          "parameter_norm": 9.48570372552476
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 2605.5213524475853,
+          "parameter_norm": 27.192425361147592
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.query",
+          "norm": 2026.609862589124,
+          "parameter_norm": 19.233495019273754
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 1696.7272593820408,
+          "parameter_norm": 13.558135124427121
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 1650.2634712073252,
+          "parameter_norm": 9.634325678608331
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.out",
+          "norm": 1563.104651993915,
+          "parameter_norm": 19.10971606359029
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.2.full_program.content.query",
+          "norm": 1523.83071323837,
+          "parameter_norm": 19.200469285834096
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_v",
+          "norm": 1429.8933519096029,
+          "parameter_norm": 9.309563467775694
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_u",
+          "norm": 1332.413030258571,
+          "parameter_norm": 13.556258013457388
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.gate",
+          "norm": 1192.144048260471,
+          "parameter_norm": 38.49500701665478
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.down",
+          "norm": 1115.538990478314,
+          "parameter_norm": 38.435438569912236
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.2.full_program.content.out",
+          "norm": 1113.5710748332933,
+          "parameter_norm": 19.318061221063207
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.up",
+          "norm": 1061.467707605898,
+          "parameter_norm": 38.41533116098197
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.4.kernel.base",
+          "norm": 824.3349474356088,
+          "parameter_norm": 26.961997840560496
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.2.full_program.content.gate",
+          "norm": 801.6463203893201,
+          "parameter_norm": 38.35792745854446
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.2.full_program.content.up",
+          "norm": 769.2152887703153,
+          "parameter_norm": 38.348486750293006
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.2.full_program.content.down",
+          "norm": 744.8757359326637,
+          "parameter_norm": 38.45874105074248
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.5.kernel.read_q",
+          "norm": 654.599328906758,
+          "parameter_norm": 9.563241990276376
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 805951.5378915847,
+        "hidden_gradient_norm": 0.04450872944370432,
+        "hidden_rms": 14.9722261428833,
+        "input_feature_gradient_norm": 35871.87894475395,
+        "input_rms": 0.01999293640255928,
+        "logit_rms": 3.3964967727661133,
+        "loss": 14.037675857543945,
+        "max_abs_logit": 15.89322566986084,
+        "mean_top1_probability": 0.29216134548187256,
+        "preclip_gradient_norm": 37287.366589476245
+      },
+      "work": {
+        "activity/full_fraction": 0.5078125,
+        "work/candidates": 1024,
+        "work/full": 520,
+        "work/max_full_batch": 30,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 1824,
+        "work/read_events": 1024,
+        "work/region_blocks": 8,
+        "work/source_rows": 1952,
+        "work/state_updates": 1024
+      }
+    },
+    {
+      "ancestry": {
+        "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/tokens-262144.pt",
+        "checkpoint_sha256": "1ee52edfd9e1629090ff643392a536567accfd17b79a3b5f8fdd228342856df2",
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/manifest.json",
+        "progress": {
+          "cursor": 2080,
+          "dropped_tail_tokens": 437,
+          "milestones": [
+            262144
+          ],
+          "probe": false,
+          "step": 65,
+          "tokens": 262144
+        },
+        "sha256": "402cce1c4d6daafa73052cad2f6fb3c4c12e8a374eb02cb5a89f3cd6a7b2ec0c",
+        "stage": "262k"
+      },
+      "disconnected_parameter_names": [],
+      "id": "fc32-262k",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-fc32-262k-20261111-projection-d8f0019977de",
+        "destination_run_id": "5aaa40ab217c4eb3aa0f4c4b3f694b7d",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/fc32-262k/projection.json",
+          "sha256": "ddf51ace080e4ccb04c00c8d633fa630bc0edbe96c75e18046c4613776b5172a"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-fc32-262k-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 4.829688172787428,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 2226.0270354695413,
+          "parameter_norm": 15.221748987303355
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 426.29654144729847,
+          "parameter_norm": 9.494478823600573
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 342.3988922792266,
+          "parameter_norm": 9.513082848932475
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 253.04724345525503,
+          "parameter_norm": 27.209453911739253
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.out",
+          "norm": 219.91748100518035,
+          "parameter_norm": 19.119077282982587
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 185.9317110135039,
+          "parameter_norm": 9.631560783436127
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.down",
+          "norm": 175.5515495794092,
+          "parameter_norm": 38.46296080859947
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.query",
+          "norm": 171.87726837032756,
+          "parameter_norm": 19.24222080533799
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.gate",
+          "norm": 168.70543200453963,
+          "parameter_norm": 38.52300399219833
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 162.2700749817983,
+          "parameter_norm": 13.556924678603187
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.up",
+          "norm": 160.37370226379227,
+          "parameter_norm": 38.447499750704736
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.4.kernel.base",
+          "norm": 108.98721845666759,
+          "parameter_norm": 26.96728622734499
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.out",
+          "norm": 106.25511483842403,
+          "parameter_norm": 19.25360969204756
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 105.69583423493393,
+          "parameter_norm": 9.653264407115833
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.query",
+          "norm": 104.15163965868179,
+          "parameter_norm": 19.079549292466893
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.6.full_program.content.down",
+          "norm": 100.93879008986792,
+          "parameter_norm": 38.4475448053874
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_u",
+          "norm": 96.25777140204822,
+          "parameter_norm": 13.634924777327296
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.6.full_program.content.gate",
+          "norm": 93.27580352096179,
+          "parameter_norm": 38.44323053625775
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.6.full_program.content.up",
+          "norm": 91.25468220135967,
+          "parameter_norm": 38.462711816789195
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.down",
+          "norm": 91.12830413229018,
+          "parameter_norm": 38.2235370517667
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 47372.76238600108,
+        "hidden_gradient_norm": 0.04676739957378753,
+        "hidden_rms": 15.81906509399414,
+        "input_feature_gradient_norm": 2215.500907420205,
+        "input_rms": 0.021140247583389282,
+        "logit_rms": 3.7528762817382812,
+        "loss": 15.154150009155273,
+        "max_abs_logit": 17.013900756835938,
+        "mean_top1_probability": 0.31260308623313904,
+        "preclip_gradient_norm": 2418.806852404324
+      },
+      "work": {
+        "activity/full_fraction": 0.5048828125,
+        "work/candidates": 1024,
+        "work/full": 517,
+        "work/max_full_batch": 31,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 1812,
+        "work/read_events": 1024,
+        "work/region_blocks": 8,
+        "work/source_rows": 1940,
+        "work/state_updates": 1024
+      }
+    },
+    {
+      "ancestry": {
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/manifest.json",
+        "sha256": "732fbaa86317c84099c4f848b1b69c8479b30d21c4feec6e9ce55d1138aa6eab",
+        "stage": "initial"
+      },
+      "disconnected_parameter_names": [],
+      "id": "hb40-initial",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-hb40-initial-20261111-projection-b34964820ea7",
+        "destination_run_id": "e61550d5e82e4425a62645d7eaf3b527",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/hb40-initial/projection.json",
+          "sha256": "316f155a99d176ec942631e94d4cd2dce95d1aa5dd080515531888ab5c55598e"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-hb40-initial-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 5.969268072396517,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 9165.703777551911,
+          "parameter_norm": 14.483541640479388
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 1208.1468382899948,
+          "parameter_norm": 9.530211350175843
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 977.5110487825528,
+          "parameter_norm": 9.588123872095418
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 647.7317809041874,
+          "parameter_norm": 26.986022568293382
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 429.886710356509,
+          "parameter_norm": 9.540082759930442
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.query",
+          "norm": 419.2806548573844,
+          "parameter_norm": 19.32710502618284
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 417.2802203991893,
+          "parameter_norm": 13.590285357924826
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.out",
+          "norm": 373.42644439918246,
+          "parameter_norm": 19.207744934236953
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 339.08604771497835,
+          "parameter_norm": 9.625761162656358
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_u",
+          "norm": 299.2293206286915,
+          "parameter_norm": 13.679633235603138
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.out",
+          "norm": 294.5572002741235,
+          "parameter_norm": 19.1014062874669
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.query",
+          "norm": 285.1084235348406,
+          "parameter_norm": 19.19713106061794
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.down",
+          "norm": 285.0961554079135,
+          "parameter_norm": 38.25987406729382
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.gate",
+          "norm": 284.51011658984095,
+          "parameter_norm": 38.484758801602226
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.up",
+          "norm": 261.0881124871527,
+          "parameter_norm": 38.42104873517609
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.up",
+          "norm": 230.59667707205733,
+          "parameter_norm": 38.391451564689234
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.gate",
+          "norm": 228.0331172136491,
+          "parameter_norm": 38.09038424686364
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_k",
+          "norm": 216.14862680154624,
+          "parameter_norm": 9.655970015195948
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_q",
+          "norm": 191.33401614468517,
+          "parameter_norm": 9.52130742569186
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.down",
+          "norm": 180.3212158368404,
+          "parameter_norm": 38.468026305204575
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 219212.24734590712,
+        "hidden_gradient_norm": 0.04184912581616511,
+        "hidden_rms": 10.696779251098633,
+        "input_feature_gradient_norm": 9173.840919623173,
+        "input_rms": 0.01999293640255928,
+        "logit_rms": 2.4206535816192627,
+        "loss": 12.076906204223633,
+        "max_abs_logit": 13.386663436889648,
+        "mean_top1_probability": 0.12536472082138062,
+        "preclip_gradient_norm": 9424.959602753695
+      },
+      "work": {
+        "activity/full_fraction": 0.5764809902740937,
+        "work/candidates": 1131,
+        "work/full": 652,
+        "work/max_full_batch": 27,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 1566,
+        "work/read_events": 1131,
+        "work/region_blocks": 10,
+        "work/source_rows": 1694,
+        "work/state_updates": 1131
+      }
+    },
+    {
+      "ancestry": {
+        "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/tokens-262144.pt",
+        "checkpoint_sha256": "a0194bf5653c4a9706c9979de1a527ee526129ac0d8474fc9dc61db1e02163f5",
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/manifest.json",
+        "progress": {
+          "cursor": 2080,
+          "dropped_tail_tokens": 437,
+          "milestones": [
+            262144
+          ],
+          "probe": false,
+          "step": 65,
+          "tokens": 262144
+        },
+        "sha256": "732fbaa86317c84099c4f848b1b69c8479b30d21c4feec6e9ce55d1138aa6eab",
+        "stage": "262k"
+      },
+      "disconnected_parameter_names": [
+        "encoder.graph_model.nodes.6.full_program.content.query",
+        "encoder.graph_model.nodes.6.full_program.content.out",
+        "encoder.graph_model.nodes.6.full_program.content.gate",
+        "encoder.graph_model.nodes.6.full_program.content.up",
+        "encoder.graph_model.nodes.6.full_program.content.down",
+        "encoder.graph_model.nodes.14.aggregate_program.transforms.7.embedding",
+        "encoder.graph_model.nodes.18.aggregate_program.transforms.7.embedding",
+        "encoder.graph_model.nodes.39.full_program.content.query",
+        "encoder.graph_model.nodes.39.full_program.content.out",
+        "encoder.graph_model.nodes.39.full_program.content.gate",
+        "encoder.graph_model.nodes.39.full_program.content.up",
+        "encoder.graph_model.nodes.39.full_program.content.down"
+      ],
+      "id": "hb40-262k",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-hb40-262k-20261111-projection-e525a94548b6",
+        "destination_run_id": "b0aec1b016154c83acc39d21eccd1731",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/hb40-262k/projection.json",
+          "sha256": "27cc795e1222f32c49aab24321b69893ff6771cff3bb25119337659a142e3b88"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-hb40-262k-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 5.996845606714487,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 2145.084068107202,
+          "parameter_norm": 15.066744962074038
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 410.7399363906976,
+          "parameter_norm": 9.594035779663368
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 322.16827715042143,
+          "parameter_norm": 9.534184052649943
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.read_q",
+          "norm": 275.5288949092705,
+          "parameter_norm": 9.774670292637547
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.read_k",
+          "norm": 266.3251484224334,
+          "parameter_norm": 9.498947723102201
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 206.0072868918452,
+          "parameter_norm": 27.01889849661061
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.adapter_v",
+          "norm": 167.3548809249186,
+          "parameter_norm": 9.608058870911254
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.3.kernel.adapter_u",
+          "norm": 165.06428746116362,
+          "parameter_norm": 13.528905763143245
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.3.read_program.score.matrix",
+          "norm": 138.99009831654217,
+          "parameter_norm": 13.543511898045876
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.0.read_program.score.vector",
+          "norm": 133.5987598795444,
+          "parameter_norm": 0.7292951428556327
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.0.read_program.score.matrix",
+          "norm": 115.2736869372028,
+          "parameter_norm": 13.65121793042458
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.summary",
+          "norm": 113.09899998163411,
+          "parameter_norm": 9.557801048135943
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.read_v",
+          "norm": 104.36525241568658,
+          "parameter_norm": 9.52565872342297
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.3.read_program.score.vector",
+          "norm": 95.10818393660313,
+          "parameter_norm": 0.9306973532877016
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.summary",
+          "norm": 90.88985663325936,
+          "parameter_norm": 9.781215084723172
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.read_v",
+          "norm": 80.08423413714424,
+          "parameter_norm": 9.670715547377005
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.summary",
+          "norm": 60.764469184140545,
+          "parameter_norm": 9.797888812475096
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.1.read_program.score.vector",
+          "norm": 45.770477673457016,
+          "parameter_norm": 0.8092524778833291
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.read_v",
+          "norm": 44.74971599816404,
+          "parameter_norm": 9.39247118821878
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 44.03815726178354,
+          "parameter_norm": 9.548184700281773
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 49454.1461961522,
+        "hidden_gradient_norm": 0.04332007929087879,
+        "hidden_rms": 10.379874229431152,
+        "input_feature_gradient_norm": 2142.357534480025,
+        "input_rms": 0.021117227151989937,
+        "logit_rms": 2.4304590225219727,
+        "loss": 10.885764122009277,
+        "max_abs_logit": 11.640993118286133,
+        "mean_top1_probability": 0.08404963463544846,
+        "preclip_gradient_norm": 2288.242412467336
+      },
+      "work": {
+        "activity/full_fraction": 0.5668122270742358,
+        "work/candidates": 1145,
+        "work/full": 649,
+        "work/max_full_batch": 32,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 1564,
+        "work/read_events": 1145,
+        "work/region_blocks": 10,
+        "work/source_rows": 1692,
+        "work/state_updates": 1145
+      }
+    },
+    {
+      "ancestry": {
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb88-kv-quad-memory2/train/manifest.json",
+        "sha256": "f929f1d7d7c4566fda8da716fb1956ca7bdb51483123d375d3f59cb6621d08bb",
+        "stage": "initial"
+      },
+      "disconnected_parameter_names": [],
+      "id": "hb88-initial",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-hb88-initial-20261111-projection-91bc16d010bc",
+        "destination_run_id": "e943c962681147dca5b8d77b0475875c",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/hb88-initial/projection.json",
+          "sha256": "af15ccc69787ef32ba60ba17e7b1f934e375b89cfad3fe5ec903ef8670b20395"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-hb88-initial-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 13.436374116688967,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 371804.15789617016,
+          "parameter_norm": 14.483541640479388
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 48435.20589886124,
+          "parameter_norm": 9.469842230537521
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 47996.30547546632,
+          "parameter_norm": 9.483277735988406
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 26998.072115013892,
+          "parameter_norm": 27.327820185951023
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.out",
+          "norm": 19690.5479458632,
+          "parameter_norm": 19.205634030981596
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.query",
+          "norm": 18873.465202764397,
+          "parameter_norm": 19.33946668287783
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.3.full_program.content.query",
+          "norm": 18736.522975162676,
+          "parameter_norm": 19.414065865194658
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 16976.472630571774,
+          "parameter_norm": 9.549812150437273
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 15930.342013974332,
+          "parameter_norm": 13.66058730237166
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.gate",
+          "norm": 15157.004151736035,
+          "parameter_norm": 38.62765888675621
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.up",
+          "norm": 14266.76877133122,
+          "parameter_norm": 38.461048840908674
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.0.full_program.content.down",
+          "norm": 13368.546851883548,
+          "parameter_norm": 38.474981501961615
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.3.kernel.adapter_u",
+          "norm": 13007.80532345033,
+          "parameter_norm": 13.684927858094863
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.3.kernel.adapter_v",
+          "norm": 12537.197603037957,
+          "parameter_norm": 9.562899553269048
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.query",
+          "norm": 11772.675089270844,
+          "parameter_norm": 19.100521739069876
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_u",
+          "norm": 9692.628453855916,
+          "parameter_norm": 13.641508824595808
+        },
+        {
+          "elements": 8288,
+          "name": "encoder.graph_model.nodes.9.read_program.score.matrix",
+          "norm": 9146.500530838935,
+          "parameter_norm": 13.428781364735993
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.8.kernel.base",
+          "norm": 8635.103599635551,
+          "parameter_norm": 26.949939920665436
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.out",
+          "norm": 7961.164159199659,
+          "parameter_norm": 19.136660353105015
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 7730.450995089302,
+          "parameter_norm": 9.732716779242258
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 8817134.444164557,
+        "hidden_gradient_norm": 0.04224956452873474,
+        "hidden_rms": 11.228289604187012,
+        "input_feature_gradient_norm": 372520.09065726015,
+        "input_rms": 0.01999293640255928,
+        "logit_rms": 2.5445032119750977,
+        "loss": 11.903499603271484,
+        "max_abs_logit": 13.281210899353027,
+        "mean_top1_probability": 0.1617489904165268,
+        "preclip_gradient_norm": 384342.33414207253
+      },
+      "work": {
+        "activity/full_fraction": 0.5741035856573705,
+        "work/candidates": 2510,
+        "work/full": 1441,
+        "work/max_full_batch": 30,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 3668,
+        "work/read_events": 2510,
+        "work/region_blocks": 22,
+        "work/source_rows": 3796,
+        "work/state_updates": 2510
+      }
+    },
+    {
+      "ancestry": {
+        "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb88-kv-quad-memory2/train/tokens-262144.pt",
+        "checkpoint_sha256": "8b29542ee7d93309454f6fc223a1d350198e6935e49b1774b620fee52ecce32a",
+        "manifest": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb88-kv-quad-memory2/train/manifest.json",
+        "progress": {
+          "cursor": 2080,
+          "dropped_tail_tokens": 437,
+          "milestones": [
+            262144
+          ],
+          "probe": false,
+          "step": 65,
+          "tokens": 262144
+        },
+        "sha256": "f929f1d7d7c4566fda8da716fb1956ca7bdb51483123d375d3f59cb6621d08bb",
+        "stage": "262k"
+      },
+      "disconnected_parameter_names": [],
+      "id": "hb88-262k",
+      "parameter_group_note": "Names identify unique registration owners; shared gradients are accumulated and cannot be assigned causally to only that node/region.",
+      "projection": {
+        "destination_name": "tl-hb-grad-hb88-262k-20261111-projection-78fc42f27dd1",
+        "destination_run_id": "d7f40465c90f4fc2b15ecc03d9d13ece",
+        "event_count": 1,
+        "exactly_once": false,
+        "last_sequence": 0,
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "record": {
+          "path": "runs/hb-gradient-20261111/hb88-262k/projection.json",
+          "sha256": "e9865b85850b641555c4946cc07adfbd1e7a2e0710239e51d832fa557cde8078"
+        },
+        "sdk_version": "0.44.0",
+        "source_run_id": "tl-hb-grad-hb88-262k-20261111",
+        "source_timestamps_preserved": false,
+        "status": "verified",
+        "steps_preserved": true,
+        "verified": true,
+        "warning_count": 0,
+        "workload_status": "not-determined-by-recorder"
+      },
+      "seconds": 13.067822948098183,
+      "state": "completed",
+      "top_parameter_gradients": [
+        {
+          "elements": 524288,
+          "name": "embedding.weight",
+          "norm": 2875.5363525547805,
+          "parameter_norm": 15.227939983422555
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.b",
+          "norm": 725.4546730718813,
+          "parameter_norm": 9.477376691488237
+        },
+        {
+          "elements": 32768,
+          "name": "encoder.graph_model.nodes.0.kernel.base",
+          "norm": 424.69338843196687,
+          "parameter_norm": 27.352460293179895
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.aggregate_program.transforms.0.a",
+          "norm": 412.0473198517482,
+          "parameter_norm": 9.487145521112069
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.out",
+          "norm": 323.9910803834925,
+          "parameter_norm": 19.143454337080758
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_u",
+          "norm": 275.81496651082267,
+          "parameter_norm": 13.6493469094985
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.1.kernel.adapter_v",
+          "norm": 268.0572656090521,
+          "parameter_norm": 9.734469963424587
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.1.full_program.content.query",
+          "norm": 259.1660704186802,
+          "parameter_norm": 19.10662754248078
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.gate",
+          "norm": 234.25845593372077,
+          "parameter_norm": 38.25197886530842
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.up",
+          "norm": 231.63550703939862,
+          "parameter_norm": 38.51589149257687
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.2.full_program.content.query",
+          "norm": 229.90754577560807,
+          "parameter_norm": 19.21026086101813
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.1.full_program.content.down",
+          "norm": 203.13238458358683,
+          "parameter_norm": 38.17964274547256
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.3.full_program.content.out",
+          "norm": 186.4614144765421,
+          "parameter_norm": 19.225173500079446
+        },
+        {
+          "elements": 16384,
+          "name": "encoder.graph_model.nodes.0.full_program.content.out",
+          "norm": 180.02359462032072,
+          "parameter_norm": 19.221953950239595
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_u",
+          "norm": 178.62933687501638,
+          "parameter_norm": 13.5228943124582
+        },
+        {
+          "elements": 65536,
+          "name": "encoder.graph_model.nodes.3.full_program.content.down",
+          "norm": 154.0275238841074,
+          "parameter_norm": 38.51950527199954
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.2.kernel.adapter_v",
+          "norm": 145.49134857659928,
+          "parameter_norm": 9.705935440272349
+        },
+        {
+          "elements": 32,
+          "name": "encoder.graph_model.nodes.63.read_program.score.vector",
+          "norm": 141.40428895979963,
+          "parameter_norm": 0.7894020452859727
+        },
+        {
+          "elements": 4096,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_v",
+          "norm": 140.05477181666342,
+          "parameter_norm": 9.555692934053589
+        },
+        {
+          "elements": 8192,
+          "name": "encoder.graph_model.nodes.0.kernel.adapter_u",
+          "norm": 138.6672126199479,
+          "parameter_norm": 13.671810173522998
+        }
+      ],
+      "values": {
+        "directional_gradient_gain": 62826.30163003828,
+        "hidden_gradient_norm": 0.04462713329757682,
+        "hidden_rms": 12.072351455688477,
+        "input_feature_gradient_norm": 2803.757737437486,
+        "input_rms": 0.021045468747615814,
+        "logit_rms": 2.8855252265930176,
+        "loss": 12.011883735656738,
+        "max_abs_logit": 14.074731826782227,
+        "mean_top1_probability": 0.17604205012321472,
+        "preclip_gradient_norm": 3256.290881123787
+      },
+      "work": {
+        "activity/full_fraction": 0.5846216436126932,
+        "work/candidates": 2458,
+        "work/full": 1437,
+        "work/max_full_batch": 32,
+        "work/max_region_batch": 2,
+        "work/max_state_batch": 2,
+        "work/max_state_sequence": 16,
+        "work/messages": 3654,
+        "work/read_events": 2458,
+        "work/region_blocks": 22,
+        "work/source_rows": 3782,
+        "work/state_updates": 2458
+      }
+    }
+  ],
+  "caveats": [
+    "The directional gain is not a Jacobian spectral norm.",
+    "B2/L16 prefix is not full L128 validation.",
+    "Unique registration owners do not identify exclusive per-node gradient contributions.",
+    "No optimizer update, changed checkpoint, new exact resume, or sealed-test access."
+  ],
+  "identity": {
+    "installation": {
+      "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+      "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+      "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+      "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+      "tidegraph": "0.3.0",
+      "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+      "torch": "2.12.0+cpu",
+      "torch_npu": "2.12.0.post3",
+      "transformers": null
+    },
+    "physical_visibility": null,
+    "plan_sha256": null,
+    "source_commit": "8bb7ab955f29939bfa65b670fa974aedb85968ee",
+    "source_tree_sha256": "b5c3defc5c090ec6729ac6e8a978d035d6b4b63b33098fb1c64990768b0f449c"
+  },
+  "interpretation": "Large directional gradients and initial output scales motivate recipe interventions; this probe does not establish their causal role, certify native VJP correctness, or measure learning.",
+  "job": {
+    "admission": null,
+    "command": [
+      "python",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-grad-20261111/scripts/probe_hb_gradients.py",
+      "--root",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab",
+      "--output",
+      "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/hb-gradient-20261111"
+    ],
+    "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-hb-gradient-20261111.service",
+    "cpu_core_hours_conservative": 0.018659478789195418,
+    "elapsed_seconds": 67.1741236411035,
+    "ended_at": "2026-11-11T04:19:30.750821+00:00",
+    "id": "hb-gradient-20261111",
+    "inputs": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final/data-lock.json",
+        "sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/native-build-v6/_tide_native.so",
+        "sha256": "27ecaa1315d250d9ab2de2a42f2a2487dc4d8225d739c61ffb333b7d66b08289"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/tokens-262144.pt",
+        "sha256": "91030dfea036d51846ae686d4aee66b38c5194670abefdcb590b257d46f3710c"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc16-kv-quad-retry1/train/manifest.json",
+        "sha256": "f839788b9ea0b1ca8afc883824785ec0d7628e06c62bd3cffac25f490833b727"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/tokens-262144.pt",
+        "sha256": "1ee52edfd9e1629090ff643392a536567accfd17b79a3b5f8fdd228342856df2"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-fc32-kv-quad-retry1/train/manifest.json",
+        "sha256": "402cce1c4d6daafa73052cad2f6fb3c4c12e8a374eb02cb5a89f3cd6a7b2ec0c"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/tokens-262144.pt",
+        "sha256": "a0194bf5653c4a9706c9979de1a527ee526129ac0d8474fc9dc61db1e02163f5"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb40-kv-quad-retry1/train/manifest.json",
+        "sha256": "732fbaa86317c84099c4f848b1b69c8479b30d21c4feec6e9ce55d1138aa6eab"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb88-kv-quad-memory2/train/tokens-262144.pt",
+        "sha256": "8b29542ee7d93309454f6fc223a1d350198e6935e49b1774b620fee52ecce32a"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-scale-hb88-kv-quad-memory2/train/manifest.json",
+        "sha256": "f929f1d7d7c4566fda8da716fb1956ca7bdb51483123d375d3f59cb6621d08bb"
+      }
+    ],
+    "inspection_systemd": {
+      "ActiveState": "inactive",
+      "CPUQuotaPerSecUSec": "infinity",
+      "ControlGroup": "",
+      "ExecMainStatus": "0",
+      "Id": "tide-lab-hb-gradient-20261111.service",
+      "LoadState": "not-found",
+      "MainPID": "0",
+      "MemoryMax": "infinity",
+      "Result": "success",
+      "RuntimeMaxUSec": "infinity",
+      "Slice": "",
+      "SubState": "dead",
+      "Transient": "no",
+      "inspection_exit_code": 0
+    },
+    "npu_card_hours_conservative": 0.0,
+    "record": {
+      "path": "artifacts/jobs/hb-gradient-20261111/job.json",
+      "sha256": "41b2ea719fa1aadf11f3ed3d85594984eb7108fcb4137090900a32efddf58f06"
+    },
+    "resources": {
+      "cpu_quota_percent": 100,
+      "memory_bytes": 17179869184,
+      "npu_count": 0,
+      "stop_grace_seconds": 30,
+      "threads": 1,
+      "timeout_seconds": 900,
+      "wait_seconds": 0
+    },
+    "source": {
+      "commit": "8bb7ab955f29939bfa65b670fa974aedb85968ee",
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-grad-20261111",
+      "tree_sha256": "b5c3defc5c090ec6729ac6e8a978d035d6b4b63b33098fb1c64990768b0f449c"
+    },
+    "started_at": "2026-11-11T04:18:23.576712+00:00",
+    "state": "completed",
+    "state_file": {
+      "path": "artifacts/jobs/hb-gradient-20261111/state.json",
+      "sha256": "3e254d0a97a64b8db605fbdd20f2f8970ed1e965879495819da60f0eee8b43de"
+    },
+    "termination_verified_now": true,
+    "unit": "tide-lab-hb-gradient-20261111.service",
+    "workload_exit_code": 0
+  },
+  "record": {
+    "path": "runs/hb-gradient-20261111/result.json",
+    "sha256": "a916084aa3caf46ee5e62063380f7bac20fb253b24485270efc3f05347659bd4"
+  },
+  "review_script_sha256": "6d6e981c77713a69a7a4516c59aa8f66fd87d2df0aa4816978ee004153aa983b",
+  "schema": "tide-hb-gradient-review-v1",
+  "scope": "B2/L16 validation prefix, initial or existing 262144-token weights; no optimizer step or continuation. A diagnostic directional VJP, not full-scale training/validation or Jacobian spectral norm.",
+  "state": "reviewed_with_limits",
+  "validation_blocks": [
+    {
+      "block_id": "w103-train-2412-3854642333fd:0",
+      "document_id": "w103-train-2412-3854642333fd",
+      "tokens": 25
+    },
+    {
+      "block_id": "w103-train-12682-637ff591f94d:0",
+      "document_id": "w103-train-12682-637ff591f94d",
+      "tokens": 128
+    }
+  ]
+}

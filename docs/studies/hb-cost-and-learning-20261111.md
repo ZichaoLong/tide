@@ -64,3 +64,9 @@ coverage的d32/L32/65536曝光与scale的d128/L128不能当作纯容量阶梯；
 记录输入/hidden/logit RMS、loss、preclip参数梯度、input-feature与hidden方向梯度范数及主要梯度注册名。
 共享参数注册名不是某个节点的独占因果贡献；方向增益不是Jacobian谱范数，小前缀不是原L128质量复评。
 该补证不作修复或新学习效果声明；Lens组`TL-HB-LEARNING-20261111`，run前缀`tl-hb-grad-`。
+
+## 本轮终态
+
+研究表已执行完成，见[性能结论](hb-cost-results-20261111.md)和[学习结论](hb-learning-results-20261111.md)。
+25成本case、八个只读权重VJP、33个Lens投影核对完成；四个服务均无存活后代。
+后继配方/架构建议不等于已提交正式语言训练，原数值失败、固定源码和旧运行记录不改写。

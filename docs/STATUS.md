@@ -1,19 +1,37 @@
-# 当前交接：共享模型引用已更新；HB学习审阅与成本实测准备就绪
+# 当前交接：HB成本实测与学习审阅完成
 
-2026-11-11：用户已自行把`huggingface`移到`/mi/data2T/models/huggingface`，无需集合外壳。
-[当前模型路径](../dependencies/public-model-paths.json)与[迁移复核](evidence/public-model-relocation-20261111.json)：
-六个旧模型别名已直接指向新位置；102个原文件inode/device/size/mtime一致且root所有，未改模型字节。
-原sudo集合脚本已停用；历史清理凭据和固定运行记录不改写。610文件/46.185GiB的清理保持已完成，科学checkpoint及失败证据保留。
+2026-11-11：[性能结论](studies/hb-cost-results-20261111.md)、[学习结论与后继建议](studies/hb-learning-results-20261111.md)已完成。
+25个成本case（每格三个模式、每模式三次正式重复）和八个只读权重VJP全部完成；
+四个background.slice服务退出，当前MainPID/后代清空，33个Lens投影核对身份、事件数和读回通过。
+[成本/作业/Lens证据](evidence/hb-cost-review-20261111.json) · [共同曝光原曲线](evidence/hb-learning-review-20261111.json) ·
+[梯度证据](evidence/hb-gradient-review-20261111.json) · [初始化分析](evidence/hb-initialization-20261111.json)。
 
-用户要求在本实验仓库实测非TIDE直接图，并讨论HB40/HB88训练问题。
-[研究表](studies/hb-cost-and-learning-20261111.md)与[固定配置](../configs/checks/hb-cost-20261111.json)已落地。
-源码b2e85cb的三个有界suite已提交：`hb-cost-20261111-cpu-main`、`hb-cost-20261111-cpu-eight`、`hb-cost-20261111-npu-main`；均核对background.slice，NPU物理卡1。CPU8子表已completed且无存活后代，其余继续运行。状态/日志：`python scripts/job.py status artifacts/jobs/<ID>` / `logs` / `stop`。新增CPU1只读权重梯度补证将在CPU8终态后运行，预算不变。
-本次复用已安装74e7bbd和原native构建；基座工作树有其他线程修改，保持只读，不接入新优化。
-直接图为普通Torch不同函数成本参照；缺少TIDE控制/完整记录等职责，不能把倍率叫严格等价加速。
+共同B4/L32/d128下，HB40直接Attention更新CPU1/NPU约0.244/0.047秒，固定TIDE约20.20/64.03秒。
+直接图省略TIDE部分数学/共享/控制和公共返回职责，倍率不是纯开销或严格等价加速；
+原TIDE严格失败、离散/恢复边界保持，计时不产生学习资格。基座工作树和新优化未接入。
 
-v6原200配置全部终态，原失败与截断保留。HB学习审阅只读metrics/validation，按共同训练曝光/验证块对齐；
-不追加正式训练、不打开密封test。TL-REQ-005已提交，仍待基座交付及独立下游验收。
-Lens沿用`tide-learning-lab`，新组`TL-HB-COST-20261111`；私有入口`.local/LENS.md`。
+学习审阅：HB88在同32,768目标validation上133K→262K的NLL从11.7535升到12.2515；
+HB40后期改善但同曝光仍落后部分对照。FC32也早期恶化后恢复、d32 HB proportional较好，
+所以不能升级为HB架构总体失败。当前固定std0.15、缺最终读出归一化与强方向梯度是具体待干预线索。
+后继建议先独立校准Full矩阵fan-in和最终RMSNorm，再让同配方HB40/88、FC16及校准Transformer进入1M/4M共同曝光；
+用proportional/必要的稠密发送区分路由与拓扑。此建议尚未提交新语言训练，也未打开密封test。
+
+成本固定源码b2e85cb，梯度固定源码8bb7ab9；安装74e7bbd、数学0770593，
+`.venv-positive-floor-v1`与`.local/native-build-v6`均复用。实际wall 30.53分钟，
+保守CPU 1.567核时（含NPU host）、NPU 0.509卡时。
+作业ID：`hb-cost-20261111-cpu-main`、`hb-cost-20261111-cpu-eight`、`hb-cost-20261111-npu-main`、`hb-gradient-20261111`。
+读取状态/日志用`python scripts/job.py status artifacts/jobs/<ID>` / `logs`；固定输入未改。
+成本复测需要新job/output，不存在本轮可续训checkpoint；审阅可用`python scripts/review_hb_cost.py`只读重建。
+Lens项目`tide-learning-lab`：`TL-HB-COST-20261111`（前缀`tl-hb-cost-`）与
+`TL-HB-LEARNING-20261111`（前缀`tl-hb-grad-`）；私有入口仅在本机`.local/LENS.md`。
+
+共享模型根目录已按用户操作改为`/mi/data2T/models/huggingface`，
+[路径表](../dependencies/public-model-paths.json)与[迁移复核](evidence/public-model-relocation-20261111.json)记录六个模型、102个原文件。
+六个旧别名已直接指向新位置；inode/device/size/mtime与原完整hash清单一致，未改模型字节。
+不需原集合外壳，旧sudo发布脚本已停用。历史610文件/46.185GiB清理保持已完成，科学checkpoint/失败保留。
+
+v6原200配置均已终态；本次HB限定审阅没有把全组RV6-COVER/RV6-SCALE或密封test结果槽自动填为通过。
+TL-REQ-005仍按原请求/待交付记录保留；本轮没有修补公共执行。研究图新增成本/学习两个研究组及其限定结果。
 
 ## 历史快照：2026-11-09执行定位与训练提交
 
