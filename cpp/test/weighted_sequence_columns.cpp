@@ -96,6 +96,7 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
   }else{
     auto args=portable_torch::parse_cli(argc,argv,true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
+    args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
     std::optional<at::Device> peer;
     if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){auto peer_options=args;
