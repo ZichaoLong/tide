@@ -1,10 +1,10 @@
-# 正量归零链路：实际失败、静默见证与待讨论方案
+# 正量归零链路：实际失败、静默见证与修复需求
 
 2026-11-11，TL-POSITIVE-v6。三项历史失败均已重现；另一次原native边界前向补齐direct发送的实际操作数。全部CPU1/FP32，四个服务已终态且无存活后代；分配约0.2395 CPU核时，运行材料约49MiB，不含短命局部公式探针和源码归档。数学0770593、基座74e7bbd、原native二进制与安装锁不变。
 
 **结论：三个异常包含两类原因；无异常不代表没有数值内容或离散支持丢失。** constrained-Bernoulli的真实结果可表示，但sigmoid提前归零；regional-total-Bernoulli和direct的最终控制确实不可表示。小型公共图另证实旧strict聚合的静默内容丢失，以及Describe前置精度转换的静默支持变化。
 
-本页为实验线程的讨论材料。未创建新上游需求、未修改基座、未接入当前性能优化，也未让原失败轨迹继续训练。[执行表](positive-path-audit-v6.md)、[实际行和100位Decimal参考](../evidence/positive-path-v6-local-analysis.json)、[运行/恢复/Lens审阅](../evidence/positive-path-v6-review.json)。
+本页保留补证时的讨论与限定结论；随后用户已同意方案，[TL-REQ-005](../requests/TL-REQ-005.md)已提交基座目录，待回复/交付与下游验收。未修改基座执行源码、未接入性能优化，也未让原失败轨迹继续训练。[执行表](positive-path-audit-v6.md)、[实际行和100位Decimal参考](../evidence/positive-path-v6-local-analysis.json)、[运行/恢复/Lens审阅](../evidence/positive-path-v6-review.json)。
 
 ## 三个实际失败
 
@@ -51,14 +51,14 @@ FP32最小正次正规数为2^-149≈1.4012984643e-45，舍入到零的半单位
 
 主要固定来源：[分配与响应](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/cpp/src/weighted_regularizers.h)、[native发送](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/cpp/src/weighted_sending_batch.cpp)、[Describe placement](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/placement.py)、[控制cast](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/placement_tensors.py)、[均值](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/mean.py)、[KV](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/kv.py)、[循环记忆](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/recurrent.py)、[SSD](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/ssd.py)、[GDN](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/python/tidegraph/weighted/gated_delta.py)、[已接受策略的边界](https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/positive-support-policy.md)。
 
-## 待本线程讨论的修复层次
+## 已对齐并提交需求的修复层次
 
 1. **先修可避免的求值丢失。** 稳定sigmoid及正/负尾部斜率、先归一化再混合、复合VJP缩放/log收缩；先保证最终结果可表示时不因中间量而丢失。这不需要把所有量补成最小正值，也不是本页已实现的修复。
 2. **对结构性正支持定义生成—转换—消费的一致契约。** 发送c、正received/cap、raw KV写入质量和决定Full的cast应覆盖上游来源；守卫应知道该量来自正支持分支，不能只看到已变零的值。默认strict继续拒绝；若扩展显式有限正支持模式，应在规定边界储存最小正次正规数，检查cap/总量/补入相对质量，并配套各族声明VJP、聚合/记忆和checkpoint身份。Bern不能借用Shannon的VJP公式。检查可以批量执行，不要求正式训练逐算子同步到CPU。
 3. **连续衰减、内部概率、门值与梯度单列误差政策。** 对短衰减已有允许舍入的范围继续保留；其余先定义最终复合函数误差及观测，不要求每个指数或梯度永不为零。合法稀疏、窗口淘汰、掩码与真实零不补值。调温度/评分归一化是另一个训练配方，不冒充数学相同的数值修复。
 4. **若需要保留任意小质量的比例，则讨论log/缩放质量表示。** 单一bool只能保留存在/激活信息，无法恢复质量、加权内容和导数；最小值存储也会把不同尾部压成相同质量。全链log表示影响组合、持久状态和成本，比有界floor扩展大，尚无本次实现/性能证据。
 
-建议先对齐第1层和第2层的具体边界，同时明确第3层的许可；第4层作为“尾部比例确实影响目标”时的备选。不承诺有限dtype可处理任意长链或任意尺度。三条路径解除本次守卫后是否还会遇到下一处问题、是否改善学习、NPU/native新方案的梯度/恢复，均未检查。上游正式需求待讨论后再形成。
+用户已对齐第1层和第2层的具体边界，以及第3层的许可；第4层作为“尾部比例确实影响目标”时的备选。不承诺有限dtype可处理任意长链或任意尺度。三条路径解除本次守卫后是否还会遇到下一处问题、是否改善学习、NPU/native新方案的梯度/恢复，均未检查。随后用户同意并提交TL-REQ-005；上游修复及下游验收仍待开展。
 
 ## 复现与查看
 

@@ -1,0 +1,23 @@
+{
+  "adopted_foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+  "cleanup": "read-only investigation; no deletions",
+  "delivery_channel": "user-authorized local document in foundation cwd; no external issue/message",
+  "downstream_acceptance": "not_started",
+  "evidence_commit": "d6582a172c3d76f26e67d9c4824b11fc619d4b36",
+  "foundation_acceptance": "pending",
+  "foundation_commit_or_push": false,
+  "foundation_head_observed": "e3452962b928d8cb82d73b1b08fd1ef69e41a119",
+  "foundation_tracked_changes": false,
+  "installation_changed": false,
+  "local_handoff": "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-005-handoff.md",
+  "local_handoff_sha256": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+  "new_experiments_submitted": false,
+  "request_commit": "69be6d0eab0179d568988a85e51171db1016b568",
+  "request_id": "TL-REQ-005",
+  "request_path": "docs/requests/TL-REQ-005.md",
+  "request_pushed": true,
+  "request_sha256": "beea81d2ff4cb6de5141bdba834ba70970b4b487869180cccb34cd2e59a4dbb1",
+  "schema": "tide-downstream-request-submission-v1",
+  "state": "submitted-awaiting-foundation-reply",
+  "submitted_at": "2026-11-11T03:35:05.938618+00:00"
+}

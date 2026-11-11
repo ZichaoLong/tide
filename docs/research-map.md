@@ -4,7 +4,7 @@
 
 本图表达知识与决策，Lens查看运行和指标；项目记录为权威。当前设计见[v6并行研究表](studies/language-coverage-scale-v6.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。
 
-2026-11-11：v6全部200配置已终态，图中更新执行状态，科学结果槽不随退出码自动升级。新增TL-POSITIVE-v6及限定结果：实际三项正支持失败分为可表示值提前归零与真实范围下溢；聚合、Describe cast和Bern VJP另有静默局部见证。详见[补证报告](studies/positive-path-audit-v6-results.md)。先讨论修复契约，尚未提交新上游需求。
+2026-11-11：v6全部200配置已终态，图中更新执行状态，科学结果槽不随退出码自动升级。新增TL-POSITIVE-v6及限定结果：实际三项正支持失败分为可表示值提前归零与真实范围下溢；聚合、Describe cast和Bern VJP另有静默局部见证。详见[补证报告](studies/positive-path-audit-v6-results.md)。用户已对齐并提交[TL-REQ-005](requests/TL-REQ-005.md)，待基座交付及下游验收，尚未修复。
 
 ## 默认视图：同一模型上的联合目标
 

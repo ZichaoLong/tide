@@ -1,14 +1,29 @@
-# 当前交接：v6已终态，正量归零补证完成，修复方案待讨论
+# 当前交接：TL-REQ-005已提交，磁盘只读审计完成
 
-2026-11-11（北京时间）：用户要求先补齐三项下溢与上游正量链路，再在本线程讨论，之后才提交需求。**TL-POSITIVE-v6四个CPU诊断均完成，无存活后代；未修改基座、未接入正在上游进行的性能优化、未提交新上游需求。**
+2026-11-11（北京时间）：用户已同意正量链路方案并授权提交基座需求；随后仅调查两个实验目录的清理候选。
+**[TL-REQ-005](requests/TL-REQ-005.md)已普通推送（69be6d0），基座本地新增`docs/tide-learning-lab-TL-REQ-005-handoff.md`；
+待基座回复/交付，尚未下游验收。** [提交凭据](evidence/tl-req-005-submission.json)。
+基座原tracked状态和既有003/004交接文件保留，未修改执行源码或其STATUS/ROADMAP，未提交/推送基座分支。
+当前安装仍是74e7bbd，没有接入另线程性能工作，没有新训练或数值修复作业。
 
-[补证与讨论报告](studies/positive-path-audit-v6-results.md) · [实际行/Decimal/静默见证](evidence/positive-path-v6-local-analysis.json) · [运行/恢复/Lens审阅](evidence/positive-path-v6-review.json)。constrained-Bernoulli是可表示的约1.27845e-40被sigmoid提前算零；regional-total-Bernoulli约1.49804e-48、direct最终乘积约1.43837e-46确实低于FP32范围。另有公共小图见证：strict聚合静默丢内容、Describe前置cast静默改变Full支持，以及公共Bern局部VJP的可表示尾部梯度丢失。后三者不自动解释实际训练质量，静态范围不等于全部后端资格。
+需求包含稳定Bern响应/完整KKT VJP、稳定Aggregate/KV复合计算、显式Bern/attention正支持与前置cast/正配置检查，
+保留合法零、严格失败、连续衰减许可及新模式恢复身份。log-mass/更大范围融合为有条件后继，不阻塞可独立交付项。
+三项真实失败与静默小见证的范围见[补证报告](studies/positive-path-audit-v6-results.md)；原d6582a1证据不改写。
 
-重放固定源码a87bc30、单边界观察7e1142d，沿用原应用源码c458571/4087310、foundation74e7bbd与原native安装。原batch/更新顺序/精度不变；六个可用历史观察点的loss、梯度范数、token和LR精确一致，未宣称完整状态的独立长轨迹恢复通过。约0.2395 CPU核时，运行材料约49MiB；全部原异常和严格阈值保留。Lens项目`tide-learning-lab`、组`TL-POSITIVE-v6`，四项`tl-v6-positive-*`最终投影均verified/readback_matches；私有入口仍为`.local/LENS.md`。
+[磁盘只读审计](studies/disk-cleanup-audit-20261111.md)及[逐文件清单](evidence/disk-audit-20261111.json)：
+本工作目录约38.985GiB，gef-lm-experiments约122.585GiB；账户约291.888/800GiB，硬配额余量约508.112GiB。
+优先候选46.185GiB（恢复检查checkpoint、可重建B缓存、旧benchmark checkpoint和GGUF）；
+可选另92.570GiB旧公开模型权重。**本轮删除0字节，未清理Lens。**
+保留跨目录Qwen05基线（33份本项目作业引用）、三项未解决失败的原输入/诊断、所有最终/里程碑科学checkpoint与数据。
+294个相关unit无active/MainPID，2360条已记录PID/start-tick身份无匹配存活；删除前仍需再次核对，清单不是删除授权。
 
-原v6的200配置亦已全部终态，无训练/接入作业在运行。原始状态184 completed、11 failed、5 budget_truncated；按研究原因分为筛选181完成/3执行下溢，规模3个Transformer达目标/13个TIDE未达目标（其中8个到限终止的内部记录未自行收尾）。分配878.66 CPU核时、73.78 NPU卡时。终态不等于严格数值、学习或扩展收益通过；总体科学审阅及密封test仍独立待办。本轮只做正量链路补证，不启动新学习批次。
+原v6的200配置全部终态：原始184 completed、11 failed、5 budget_truncated；筛选181完成/3真实下溢，
+规模3个Transformer达目标/13个TIDE未达目标（8个到限终止的内层running记录保留）。已用878.66 CPU核时、73.78 NPU卡时。
+总体科学审阅和密封test仍待办；当前终态不等于严格数值、学习或scaling通过。
+TL-POSITIVE-v6四个CPU诊断亦已完成，约0.2395 CPU核时/49MiB；恢复只认证六个可用历史标量观察，不认证全状态长轨迹。
+Lens仍为tide-learning-lab / TL-POSITIVE-v6，四项投影verified/readback_matches；私有入口`.local/LENS.md`不入公开记录。
 
-下一步在本线程对齐稳定求值、结构性正支持跨生成/转换/消费的契约，以及连续衰减/概率尾部/梯度的误差许可。此前Shannon策略范围保留；有限正支持扩展或log质量表示尚未实现/批准为具体方案。研究图已增加该诊断与限定结论。
+下一步：基座线程按需求接受/交付，下游另用新私有安装验收；清理待用户决定实际范围，不自动执行或追加研究批次。
 
 ## 历史快照：2026-11-09执行定位与训练提交
 
