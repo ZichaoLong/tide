@@ -1,4 +1,4 @@
-最新执行设计是[direct-v7](studies/direct-language-v7.md)：用户允许上游不可用期间用直接普通Torch图开展配方与扩大曝光研究。它是A路线的条件诊断，不改变完整TIDE与B预训练路线的含义；稀疏/路由与迁移仍待单独桥接。
+最新[direct-v7终态](studies/direct-language-v7-results.md)在直接HB双seed/4M观察到有限容量收益；原[研究表](studies/direct-language-v7.md)已执行：用户允许上游不可用期间用直接普通Torch图开展配方与扩大曝光研究。它是A路线的条件诊断，不改变完整TIDE与B预训练路线的含义；稀疏/路由与迁移仍待单独桥接。
 
 当前v6的184筛选与16规模/设备轨迹已终态。最新[HB限定学习审阅](studies/hb-learning-results-20261111.md)将共同曝光、初始化/梯度和拓扑假说分开；[成本研究表](studies/hb-cost-and-learning-20261111.md)比较固定安装与非TIDE直接图。此前未自动追加训练；最新用户批准已另开direct-v7，仍不采用基座工作树优化。原v5/v6资源限制属于各自历史批次；有限严格超差继续单列，不要求消除所有浮点差异才开展学习。
 

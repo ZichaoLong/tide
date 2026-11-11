@@ -73,6 +73,9 @@
   never impersonate TIDE execution or routing. Bound 12 screen, 10 main trajectories and
   at most 2 conditional controls within 12h/8 NPUh/32 CPU core-h/32GiB new disk; shared-card
   authorization remains valid. Preserve frozen historical source and all failed evidence.
+  This v7 batch is now terminal: 12 screen stages and 10 main 4M trajectories completed;
+  residual controls did not trigger. See `docs/studies/direct-language-v7-results.md`.
+  Next-batch options are not submitted; do not automatically extend exposure or candidates.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the
   user explicitly authorizes a separate change. Do not fetch retired foundation history.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.

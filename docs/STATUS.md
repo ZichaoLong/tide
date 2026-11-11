@@ -1,10 +1,36 @@
-# 当前交接：direct-v7扩大曝光已运行
+# 当前交接：direct-v7已完成，直接HB出现有限容量收益
 
-2026-11-11用户已授权使用直接实现开展后继语言训练，替代上一轮仅性能/只读审阅的限制。
-[固定研究表](studies/direct-language-v7.md)：12配方筛选阶段、10主轨迹至4M目标、至多2个条件结构控制。
-使用普通Torch稠密FC/HB图，保持与完整TIDE不同函数的边界；上游基座暂不可用，本轮不接入。
-CPU/NPU校准及12格配方筛选已完成。固定源码d30559c、NPU物理/全局B32、四worker已进入10条主轨迹；选定fan-in无最终norm，TF平衡位置尺度。配方筛选严格有限超差保留，各项机制/恢复通过。
-数学0770593/安装74e7bbd不变，test密封。新预算12h/8NPU卡时/32CPU核时/32GiB增量；不改旧作业。
+2026-11-11 16:51北京时间终态：[总交付](studies/direct-language-v7-results.md) ·
+[配方结论](studies/direct-v7-recipe-results.md) · [扩大曝光结论](studies/direct-v7-scale-results.md) ·
+[固定证据/配置/运行/Lens](evidence/direct-v7-observations.json) · [学习与容量图](evidence/direct-v7-learning.svg)。
+
+12格262K配方筛选、10条双seed主轨迹均完成4,194,304有效目标；4条主轨迹继承screen，合计18次独立神经初始化。
+共同选择fan-in、无最终RMSNorm。4M两seed平均validation NLL：FC16 4.6785、HB40 4.6126、HB88 4.5342；
+近参数Transformer12/28为5.1666/5.4658。HB88−HB40两seed各约−0.079，配对文档区间均低于零。
+1M时seed11差异区间仍跨零；结果仅限该直接函数/配方/语料/规模，不能称为普遍scaling规律。
+Transformer配方仍弱，且两档TF落后固定二元参照；不能据此声称优于可靠Transformer架构。
+
+本轮使用普通Torch稠密图，**不包含TIDE路由、Read/Describe、payload或可学习稀疏发送**。
+它给A路线提供条件配方/拓扑线索，不覆盖旧TIDE HB88负面结果，不替代B预训练路线。
+残差补救条件未触发，两条控制未运行、效果未检查；test仍密封。
+
+训练固定源码d30559c（`.local/source-v7-main`）；数学0770593/安装74e7bbd、私有环境保持。
+19项模型/数据/生命周期测试、等待预算回归和解析参照seed隔离回归通过；18套新配置三步新进程精确恢复通过。
+原CPU/NPU严格1e-6/1e-5参数VJP有限失败保留，因果/共享/optimizer/有限性通过；长轨迹独立精确重放未检。
+解析参照首次seed22复用缓存的错误以原记录保留，新b463f80/r2身份修正；各神经训练独立进程，不受影响。
+
+15个服务全部终态、无后代；**当前没有本批活动或排队任务**。
+全批跨度13.23分钟、0.685 NPU卡时；全部服务1.851 CPU核时，含0.5开发预留共2.351核时，终态新增约14.45GiB。
+没有采用基座新优化，没有更改活动源码，也没有自动追加更大批次。
+
+Lens项目`tide-learning-lab`：`TL-DIRECT-RECIPE-v7`的12筛选+2校准、
+`TL-DIRECT-SCALE-v7`的10主训练+2修正解析参照均核对读回。原2个解析投影保留，其中seed22样本身份错误单列。
+run前缀`tl-v7-screen-`、`tl-v7-main-`、`tl-v7-count-controls-r2-`；私有入口仅本机`.local/LENS.md`。
+[查看/日志/停止/恢复](studies/direct-v7-operations.md)，只读快览：`python scripts/review_direct_v7.py`。
+原checkpoint、资格记录、父SHA和冻结配置均保留；终态后不自动续到8M或新候选。
+
+下一批建议：选定HB配方扩大同训练池曝光；少量TF LR/残差初始化校准与保留位置的上下文检查；
+上游可用后同配方稠密TIDE桥接，再测真实稀疏。建议和单项资源上限在总交付中，待用户验收后再对齐。
 
 ## 前一轮已完成的交接
 
