@@ -17,29 +17,54 @@ def fields(requests, transform):
 class _Region(torch.autograd.Function):
     @staticmethod
     def forward(ctx, program, requests, weights, active, *inputs):
-        from .region_batch import evaluate
+        from .regional_columns import region_columns
+        from .config import HARD
+        from .allocation_failure import AllocationFailure
         ctx.set_materialize_grads(False)
         from .private_rows import PrivateRows
         ctx.packing = PrivateRows(inputs, weights, len(requests))
-        ctx.dependencies = [None]*len(requests)
         with torch.enable_grad():
-            iterator = iter(ctx.packing.views())
+            iterator = iter(ctx.packing.leaves[:weights])
             bound = rebind(program, lambda _: next(iterator))
-            rows = fields(requests, lambda _: next(iterator))
-            results = evaluate(bound, rows, dependencies=ctx.dependencies)
-        # Support was already read for the actual numeric result. Publishing
-        # readonly views preserves its bits; do not read every control again.
-        active.extend(result.active for result in results)
-        refs = [result.controls[v] for result, r in zip(results, rows) for v, _ in r.candidates]
-        register_private_graph("region", refs)
-        # Independent gradient edges do not require independent storage. These
-        # published values are readonly; callers needing mutation explicitly clone.
-        outputs = tuple(ref.detach() for ref in refs)
-        ctx.mark_non_differentiable(*(t for t, ref in zip(outputs, refs) if not ref.requires_grad))
-        ctx.weights, ctx.rows = weights, len(rows)
-        ctx.row_inputs = (len(inputs)-weights)//len(rows)
-        ctx.row_outputs = len(refs)//len(rows)
-        ctx.save_for_backward(*inputs, *ctx.packing.leaves, *refs)
+            # Each private leaf already owns an entire field column. Do not
+            # recreate R row views just to stack them in the next module.
+            names = sorted(requests[0].candidates[0][1])
+            columns = {name: [] for name in names}
+            for candidate, (_, descriptor) in enumerate(requests[0].candidates):
+                for j, name in enumerate(names):
+                    leaf = ctx.packing.leaves[weights+candidate*len(names)+j]
+                    columns[name].append(leaf.reshape(len(requests), *descriptor[name].shape))
+            columns = {name: torch.stack(values, 1) for name, values in columns.items()}
+            nodes = None
+            if program.config.selection_mode == "regional_total_zero" or program.config.selection_mode in HARD:
+                nodes = torch.tensor([[v for v, _ in r.candidates] for r in requests],
+                                     dtype=torch.int64, device=columns["w"].device)
+            try:
+                result = region_columns(bound, columns, nodes)
+            except AllocationFailure as error:
+                request = requests[error.row]
+                error.time, error.nodes = request.time, [v for v, _ in request.candidates]
+                error.members = list(request.layout.members)
+                raise
+        ctx.dependencies = result.dependencies()
+        support = result.active.cpu().tolist()
+        active.extend({v for (v, _), flag in zip(r.candidates, flags) if flag}
+                      for r, flags in zip(requests, support))
+        register_private_graph("region", [result.controls])
+        differentiable = result.differentiable_rows()
+        outputs = tuple(value.detach() for row in result.controls.unbind() for value in row.unbind())
+        ctx.weights, ctx.rows = weights, len(requests)
+        ctx.row_inputs = (len(inputs)-weights)//ctx.rows
+        ctx.row_outputs = result.controls.shape[1]
+        ctx.mark_non_differentiable(*(t for i, t in enumerate(outputs) if not differentiable[i//ctx.row_outputs]))
+        ctx.mode, ctx.has_allocation = result.mode, result.allocation is not None
+        extra = []
+        if result.allocation is not None:
+            a = result.allocation
+            ctx.rule, ctx.policy = a.rule, a.policy
+            extra = [*a.inputs, a.numeric.controls, a.numeric.multiplier, a.numeric.branch,
+                     a.numeric.response_input, a.numeric.free, a.numeric.residual]
+        ctx.save_for_backward(*inputs, *ctx.packing.leaves, result.controls, *extra)
         ctx.packing.leaves = []
         return outputs
 
@@ -50,7 +75,14 @@ class _Region(torch.autograd.Function):
         count = ctx.weights+ctx.rows*ctx.row_inputs
         saved = ctx.saved_tensors
         packed_count = ctx.weights+ctx.packing.fields
-        leaves, refs = saved[count:count+packed_count], saved[count+packed_count:]
+        from .regional_columns import RegionColumns
+        from .allocation_columns import AllocationColumns
+        from .allocation_batch import BatchAllocation
+        leaves, extra = saved[count:count+packed_count], saved[count+packed_count:]
+        allocation = None
+        if ctx.has_allocation:
+            allocation = AllocationColumns(extra[0], BatchAllocation(*extra[7:]), tuple(extra[1:7]), ctx.rule, ctx.policy)
+        column = RegionColumns(extra[0], allocation, ctx.mode)
         groups, result = {}, [None]*count
         for row in range(ctx.rows):
             mask = tuple(j for j in range(ctx.row_outputs) if bars[row*ctx.row_outputs+j] is not None)
@@ -62,8 +94,15 @@ class _Region(torch.autograd.Function):
             if not ids:
                 continue
             used = [r*ctx.row_outputs+j for r in rows for j in mask]
-            gradients = torch.autograd.grad([refs[i] for i in used], [leaves[i] for i in ids],
-                [bars[i] for i in used], retain_graph=True, allow_unused=True)
+            indices = torch.tensor(used, dtype=torch.int64, device=column.controls.device)
+            grad = torch.zeros_like(column.controls).flatten().index_copy_(0, indices, torch.stack([bars[i] for i in used]))
+            supported = torch.zeros(ctx.rows, dtype=torch.bool, device=grad.device)
+            supported[rows] = True
+            sources = column.vjp_sources(grad.reshape_as(column.controls), supported)
+            if not sources:
+                continue
+            gradients = torch.autograd.grad([x for x, _ in sources], [leaves[i] for i in ids],
+                [bar for _, bar in sources], retain_graph=True, allow_unused=True)
             for i, gradient in zip(ids, gradients):
                 ctx.packing.scatter(i, rows, gradient, result)
         return None, None, None, None, *result

@@ -156,6 +156,11 @@ class RegionalTotal(RegionProgram):
     joint_batch = True
     batched_autograd = True
     history_independent = True
+    column_contract = "weighted-region-columns-v1"
+
+    def columns(self, fields, nodes=None):
+        from .regional_columns import region_columns
+        return region_columns(self, fields, nodes)
 
     def batch(self, requests):
         from .region_batch import evaluate

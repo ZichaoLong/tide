@@ -42,6 +42,10 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 区域VJP的私有列打包在`weighted/private_rows.py`/`weighted_private_rows.h`：
 同结构组内打包内部叶，外部行/字段根保持；连续视图区间消除重复复制与反向分发。
 修改须同步`test_private_rows`、query/region独立根、原版本守卫和安装消费者恢复。
+区域数学的公共列边界在`weighted/allocation_columns.py`、`regional_columns.py`与
+`cpp/include/tide/weighted_columns.h` / `weighted_*_columns.cpp`；见[区域契约](weighted-region-batch.md)。
+默认`region_vjp`直接用这些列和结构行支持做伴随，不再在私有图重建逐事件RegionInput。
+修改同步`test_weighted_columns`、既有区域独立根/训练恢复，以及allocation observer。
 查询的ragged快照保留独立内部叶；query/region VJP按[只读发布契约](tensor-publication.md)
 暴露detach视图，消费者修改先clone；显式owned-copy工具与返回到host的独立存储契约另列。
 修改须同步`test_independent_copies`、query/region根及恢复；batch字段用unbind统一线性转置。

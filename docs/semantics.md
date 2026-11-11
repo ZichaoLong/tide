@@ -94,6 +94,11 @@ groups are differentiated separately; only participating rows receive unpacked
 adjoints. Contiguous actual view partitions may reuse their common base, never
 merge equal-valued or independently rooted inputs. This changes internal
 representation, not graph/checkpoint identity or the declared first-order map.
+The [regional column boundary](weighted-region-batch.md) now consumes these
+leaves directly through scoring, allocation and its analytical transpose.
+Structural row support is separate from numerical zero cotangents. Public
+column roots and adapted independent event roots have explicit, different
+representations of the same declared first-order map.
 See `test_private_rows`, query/region root tests and the FC16 cost contract.
 Traced, terminal and ineligible ragged query snapshots retain separate private
 leaves. Hidden prepared KV prefixes can use the [query block boundary](weighted-query-blocks.md):

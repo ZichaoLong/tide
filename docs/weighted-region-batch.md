@@ -33,8 +33,8 @@ CPU与单帧入口保留原逐项路径，单个元数据项也直接读取。�
 
 节点ID仅由`regional_total_zero`及硬排序发送消费，按完整候选组一次构造int64张量；
 连续分配、Attention和proportional不创建未使用的设备ID数组。配置温度在组内共用一个
-不可求导标量。native传给分配VJP的scores/caps/bounds/shift用整字段`unbind`，
-避免每行SelectBackward都清零并装配完整B×L字段；公开每行根与KKT分支不变。
+不可求导标量。旧行接口用整字段`unbind`；新的默认区域VJP直接消费私有列，
+不再创建每行分配输入或重建RegionInput，公开每行根与KKT分支不变。
 Python区域VJP复用数值层已计算的active集合；发布只读view不再触发第二轮支持取回。
 显式payload cast之后的支持一致性检查仍须执行，不能复用cast之前的结果代替它。
 `test_region_batch_publication`检查实际ATen构造/标量读取/反向转置，覆盖2/17帧、
@@ -42,6 +42,27 @@ Python区域VJP复用数值层已计算的active集合；发布只读view不再�
 [区域接口审阅](evidence/region-batching-audit-20261110.md)；新后端资格须按实现提交另记。
 
 ## 数值函数与反向身份
+
+公共`allocate_columns` / `region_columns`（Python weighted包，C++
+`tide/weighted_columns.h`）接收完整R×N字段，R可同时展开sample与逻辑时间。
+字段维度按数学描述区分；同组N是真实候选数，不用虚构零候选填充。排序发送消费
+原始int64节点ID，坐标及history由调度层拥有。返回controls整列、实际bool活动支持，
+分配另保留实际乘子、int64分支、response、free和residual。仅controls可求导；
+元数据和求解迭代不进入计算图。标量/逐行bound和temperature分别支持共享或独立列根。
+
+列根是一个Tensor的根；旧逐行独立根通过外层adapter暴露，不能从零cotangent推断未使用。
+`AllocationColumns.pullback` / `allocation_columns_vjp`接收独立bool行支持，返回每个输入列
+的伴随或None/undefined。adapter按输出字段掩码与实际分支分组，在一次列反向后仅分发
+参与行，因此caps没有score根、零分配是常量、普通分支的零贡献仍保持连接。
+显式pullback只支持一阶，原输入/数值结果版本必须未改；推理张量没有可保留VJP版本时拒绝。
+默认区域VJP的私有图只保存字段列、head及列输出，不再为R个事件建立数学图视图。
+旧完整Selection发布仍是边界adapter，尚不能据此声称KV→区域→Full→消息整链已贯穿。
+
+新入口由`allocation_columns.py`、`regional_columns.py`及C++对应`weighted_*_columns.cpp`
+拥有；旧数值batch入口适配这些列，标量`step`与Python/C++求解仍独立。
+`test_weighted_columns`覆盖手算解/共享温度梯度、独立方向导数、分支支持、版本守卫和
+十二类评分/发送组合；同一配置中的KV及四类循环节点使用各自Describe构成异构区域。
+现有独立根、保留窗/AdamW/checkpoint和一般PDG/HB测试继续检查默认调用。
 
 | 定义 | Python 符号 | 独立 C++ 符号 | 验证入口 |
 | --- | --- | --- | --- |

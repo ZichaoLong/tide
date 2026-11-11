@@ -92,7 +92,7 @@ def test_python_vjp_publication_reuses_numeric_support():
         with MetadataCalls() as wrapped_calls:
             actual = differentiated(program, requests)
         # The VJP wrapper must not add one host predicate per B×L×candidate.
-        assert wrapped_calls.scalar_reads == direct_calls.scalar_reads
+        assert wrapped_calls.scalar_reads <= direct_calls.scalar_reads
         equivalent(actual, expected)
         oracle = [program.step(request) for request in requests]
         node = requests[0].candidates[0][0]

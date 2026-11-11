@@ -3,9 +3,8 @@
 #include <ATen/record_function.h>
 // Allocation §2–6: complete query/context/normalization/allocation batches.
 #include "weighted_region_batch.h"
-#include "weighted_sending_batch.h"
+#include "tide/weighted_columns.h"
 #include "weighted_detail.h"
-#include "weighted_placement.h"
 #include "tide/allocation_failure.h"
 #include "region_metadata.h"
 #include <sstream>
@@ -13,8 +12,6 @@
 namespace tide::weighted::batch {
 std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionInput>& requests,const RegionalConfig& c,
                                std::vector<std::string>* dependencies,std::optional<at::Device> selection){
-  RECORD_FUNCTION("tide::stage::region_math", std::vector<c10::IValue>());
-  op_profile::Scope stage_profile(op_profile::RegionMath);
   std::vector<Selection> result(requests.size());std::map<std::string,std::vector<size_t>> groups;
   if(dependencies)dependencies->resize(requests.size());
   for(size_t i=0;i<requests.size();++i){
@@ -40,52 +37,16 @@ std::vector<Selection> regions(const RegionWeights& w,const std::vector<RegionIn
       for(auto i:ids)for(const auto& d:requests[i].candidates)values.push_back(d.node);
       nodes=at::tensor(values,recv.options().dtype(at::kLong)).reshape(scores.sizes());
     }
-    if(c.region_score=="att"){
-      auto weights=fields.at(c.query_weight=="received"?"w":"mu");
-      auto x=(weights.unsqueeze(-1)*fields.at("x")).sum(1)/weights.sum(1).clamp_min(1).unsqueeze(1);
-      auto hidden=at::silu(at::matmul(x,w.extra.at("query.in_weight").t())+w.extra.at("query.hidden_bias"));
-      auto query=at::matmul(hidden,w.extra.at("query.out_weight").t())+w.extra.at("query.out_bias");
-      scores=*c.alpha_loc*scores+*c.alpha_sel*(fields.at("key")*query.unsqueeze(1)).sum(-1)/std::sqrt(static_cast<double>(*c.selection_width));
+    RegionColumns column;
+    try{column=region_columns(w,fields,c,nodes,selection);}
+    catch(AllocationFailure& e){
+      e.row=ids.at(e.row);const auto& request=requests[e.row];e.time=request.time;e.members=request.layout.members.vec();
+      for(const auto& candidate:request.candidates)e.nodes.push_back(candidate.node);
+      throw;
     }
-    auto received=recv.sum(1),mass=caps.sum(1);Tensor context,low,high,shift,values;
-    if(c.region_control_mode=="context"){
-      auto z=(recv.unsqueeze(-1)*fields.at("evidence")).sum(1)/received.clamp_min(1).unsqueeze(1);
-      auto x=at::cat({z,received.log1p().unsqueeze(1),mass.log1p().unsqueeze(1)},1);
-      auto hidden=at::silu(at::matmul(x,w.extra.at("head.matrix").t())+w.extra.at("head.hidden_bias"));
-      context=at::matmul(hidden,w.extra.at("head.vector"))+w.extra.at("head.bias");
-    }
-    if(c.total()){
-      auto rho=context.defined()?context.sigmoid():at::full_like(received,*c.total_fraction);
-      low=received.clamp_max(1)+rho*(mass.clamp_max(*c.k)-received.clamp_max(1));high=low;
-    }else if(!c.attention()&&c.selection_mode!="proportional"){
-      shift=context.defined()?context:at::full_like(received,*c.eta);
-      low=(c.regional()?received:mass).clamp_max(1);high=at::full_like(received,*c.k);
-    }
-    if(selection)for(auto* t:{&recv,&caps,&scores,&nodes,&received,&low,&high,&shift})if(t->defined())*t=placement_copy(*t,*selection,t->scalar_type());
-    if(c.selection_mode=="regional_total_zero")values=sorted_send(scores,caps,nodes,low);
-    else if(c.attention())values=attention(scores,caps,recv,c.selection_mode,*c.allocation_base,at::full_like(received,*c.allocation_temperature));
-    else if(c.selection_mode=="proportional")values=proportional(caps,*c.k);
-    else if(c.hard())values=sorted_send(scores-shift.unsqueeze(1),caps,nodes,at::zeros_like(received),*c.k);
-    std::vector<Tensor> rows;
-    if(!values.defined()){
-      // One transpose per complete field in backward. Independent scalar
-      // SelectBackward nodes would each zero/assemble the whole B×L field.
-      auto score_rows=scores.unbind(),cap_rows=caps.unbind(),lower_rows=low.unbind(),upper_rows=high.unbind();
-      auto shifts=shift.defined()?shift.unbind():std::vector<Tensor>{};
-      auto temperature=at::full({},*c.allocation_temperature,scores.options());
-      std::vector<AllocationRow> inputs;
-      for(size_t j=0;j<ids.size();++j)inputs.push_back({score_rows[j],cap_rows[j],lower_rows[j],upper_rows[j],temperature,shift.defined()?shifts[j]:Tensor{}});
-      std::vector<Allocation> allocations;
-      try{allocations=allocate_batch(inputs,*c.regularizer,c.ent_alpha);}
-      catch(AllocationFailure& e){
-        e.row=ids.at(e.row);const auto& request=requests[e.row];e.time=request.time;e.members=request.layout.members.vec();
-        for(const auto& candidate:request.candidates)e.nodes.push_back(candidate.node);
-        throw;
-      }
-      for(size_t j=0;j<ids.size();++j){rows.push_back(allocations[j].controls);if(dependencies)(*dependencies)[ids[j]]=allocations[j].constraint;}
-    }else{
-      rows=values.unbind();if(dependencies)for(auto i:ids)(*dependencies)[i]=c.selection_mode;
-    }
+    auto rows=column.controls.unbind();
+    if(dependencies){auto names=region_column_dependencies(column);
+      for(size_t j=0;j<ids.size();++j)(*dependencies)[ids[j]]=names[j];}
     const bool grouped=ids.size()>1&&!rows[0].device().is_cpu();
     std::vector<bool> support;size_t offset=0;
     if(grouped){

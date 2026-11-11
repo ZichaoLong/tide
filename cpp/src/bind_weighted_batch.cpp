@@ -1,5 +1,6 @@
 // Testing/client adapters; all numerical computation is owned by LibTorch.
 #include "tide/weighted.h"
+#include "tide/weighted_columns.h"
 #include "tide/allocation_failure.h"
 #include "tide/allocation_observation.h"
 #include "weighted_sending_batch.h"
@@ -30,6 +31,15 @@ void bind_weighted_batch(py::module_& m){
     return result;
   },py::call_guard<py::gil_scoped_release>());
   m.def("weighted_attention_batch",&batch::attention,py::call_guard<py::gil_scoped_release>());
+  m.def("weighted_allocation_columns",[](const Tensor& scores,const Tensor& caps,const Tensor& lower,
+      const Tensor& upper,const Tensor& temperature,const std::string& kind,std::optional<double> alpha,
+      std::optional<Tensor> shift){
+    auto a=allocate_columns(scores,caps,lower,upper,temperature,kind,alpha,shift.value_or(Tensor{}));
+    return std::make_tuple(a.controls,a.multiplier,a.branch,a.response,a.free,a.residual,a.backward);
+  },py::call_guard<py::gil_scoped_release>());
+  m.def("weighted_region_columns",[](const RegionWeights& w,const TensorFields& fields,std::optional<Tensor> nodes){
+    return region_columns(w,fields,region_binding(w),nodes.value_or(Tensor{})).controls;
+  },py::call_guard<py::gil_scoped_release>());
   m.def("weighted_proportional_batch",&batch::proportional,py::call_guard<py::gil_scoped_release>());
   m.def("weighted_sorted_batch",&batch::sorted_send,py::call_guard<py::gil_scoped_release>());
   m.def("weighted_region_probe",[](const RegionWeights& w,const Region& spec,const std::vector<Index>& members,

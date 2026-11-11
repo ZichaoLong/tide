@@ -11,9 +11,14 @@ from contextlib import contextmanager
 def observe_allocations(*, native=None, max_rows=4096, max_bytes=64*1024**2):
     import torch
     from tidegraph.weighted import programs, region_batch
+    from importlib import import_module
+    region_columns = import_module("tidegraph.weighted.regional_columns")
+    from tidegraph.weighted.allocation import Allocation
+    from tidegraph.weighted.allocation_batch import NAMES
     from tidegraph.weighted.allocation_failure import AllocationFailure
     scalar, batched = programs.allocate, region_batch.allocate_batch
-    records = {"scalar": [], "batch": []}
+    columns = region_columns.allocate_columns
+    records = {"scalar": [], "batch": [], "columns": []}
     if native is not None:
         native.begin_allocation_observation(max_rows, max_bytes)
         records["native"] = []
@@ -41,11 +46,21 @@ def observe_allocations(*, native=None, max_rows=4096, max_bytes=64*1024**2):
             local = dict(options, score_shift=get(options.get("score_shift"), i))
             record("batch", s[i], c[i], get(l, i), get(h, i), get(t, i), value, local)
         return result
+    def column(s, c, l, h, t=1., **options):
+        result = columns(s, c, l, h, t, **options)
+        x, n = result.inputs, result.numeric
+        for i, b in enumerate(n.branch.detach().cpu().tolist()):
+            local = dict(options, score_shift=None if x[5] is None else x[5][i])
+            value = Allocation(result.controls[i], n.multiplier[i], NAMES[b], n.free[i], n.residual[i], result.backward)
+            record("columns", x[0][i], x[1][i], x[2][i], x[3][i], x[4][i], value, local)
+        return result
     try:
         programs.allocate, region_batch.allocate_batch = one, many
+        region_columns.allocate_columns = column
         yield records
     finally:
         programs.allocate, region_batch.allocate_batch = scalar, batched
+        region_columns.allocate_columns = columns
         if native is not None:
             rows, dropped, nbytes = native.end_allocation_observation()
             for i, (values, details) in enumerate(rows):

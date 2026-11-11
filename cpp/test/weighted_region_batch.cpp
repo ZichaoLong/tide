@@ -1,5 +1,6 @@
 // Literal complete rows: quad exact solution/VJP and fractional stable fill.
 #include "tide/weighted.h"
+#include "tide/weighted_columns.h"
 #include "../src/weighted_sending_batch.h"
 #include "../src/weighted_mean.h"
 #include "../src/region_metadata.h"
@@ -51,4 +52,14 @@ void check_weighted_region_batch(const at::TensorOptions& o){
   close(fill,at::tensor({.2,.7,0.,0.,0.,.3},o).reshape({2,3}));
   auto hard=batch::sorted_send(scores,caps,ids,at::zeros({2},o),1);
   close(hard,at::tensor({0.,.7,0.,0.,0.,.8},o).reshape({2,3}));
+  // Public columns preserve actual mixed branches without creating row nodes.
+  auto sc=at::tensor({2.,1.,100.,1.,1.,-1.},o).reshape({2,3}).set_requires_grad(true);
+  auto cc=at::tensor({1.,1.,0.,.8,.8,.9},o).reshape({2,3}).set_requires_grad(true);
+  auto bc=at::tensor({1.4,.6},o).set_requires_grad(true),tc=at::full({},2.,o).set_requires_grad(true);
+  auto column=allocate_columns(sc,cc,bc,bc,tc);
+  close(column.controls,at::tensor({.95,.45,0.,.3,.3,0.},o).reshape({2,3}));
+  auto bars=at::tensor({1.,3.,7.,2.,-4.,5.},o).reshape({2,3});
+  auto cg=torch::autograd::grad({column.controls},{sc,cc,bc,tc},{bars});
+  close(cg[0],at::tensor({-.5,.5,0.,1.5,-1.5,0.},o).reshape({2,3}));
+  close(cg[1],at::zeros_like(cc));close(cg[2],at::tensor({2.,-1.},o));close(cg[3],at::full({},.25,o));
 }
