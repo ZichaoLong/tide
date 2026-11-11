@@ -1,0 +1,322 @@
+{
+  "allocated_cpu_core_hours": 0.23946186584937904,
+  "campaign_terminal_snapshot": {
+    "allocated_cpu_core_hours": 878.6588837910382,
+    "allocated_npu_device_hours": 73.78152536994881,
+    "budget_state": "completed",
+    "budget_stop_reasons": [],
+    "checking": 0,
+    "counts": {
+      "budget_truncated": 5,
+      "completed": 184,
+      "failed": 11
+    },
+    "training": 0
+  },
+  "findings": {
+    "constrained_bern": "representable response prematurely zeroed",
+    "direct_received": "positive representable caps and shares multiply below FP32 range",
+    "regional_total_bern": "final response below FP32 range; sigmoid stabilization alone insufficient",
+    "silent_witnesses": [
+      "strict aggregate content loss",
+      "pre-Describe precision cast changes active set",
+      "Bern saturated-tail VJP loss"
+    ]
+  },
+  "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+  "limitations": [
+    "local Decimal/API probes do not certify repaired gradients or long trajectory",
+    "static map is not an exhaustive backend/candidate audit",
+    "attention/gate/epsilon formula examples do not establish actual training occurrence",
+    "direct global node/time and full upstream mass lineage remain unrecorded"
+  ],
+  "local_analysis_sha256": "6dc7989a6e15a18e4591670ba6d0140e95840431c63d6532e2c26d0164406821",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "new_run_job_bytes": 51449438,
+  "recording_failure": {
+    "reason": "console log name collided with recorder-owned projection.log; failed before events; new report retry verified",
+    "record": "runs/v6-positive-direct-received/projection.json"
+  },
+  "resource_scope": "service allocation includes startup/observation; short local probes and source snapshots separate",
+  "reviewed_at": "2026-11-11T02:55:30.250961+00:00",
+  "runs": [
+    {
+      "artifact_sha256": {
+        "failure-boundary.pt": "310fd1a1c9d6322b65c9bf0f95e8ea9a1e98f177de1ccf9a58d08c9a557527e3",
+        "failure-input.pt": "e45f73ced1f4f442c8b39a93c27c83365606337ff35a21c722873221fafa7784",
+        "manifest.json": "eaef3d5c44292dd589760516436849e0d17a7b8d316290887511e792633de6f1",
+        "metrics.jsonl": "c5b5193b7ddebc8d3cb88d3164f5b6a358d27e571a683f922b445bec6cdc6383",
+        "operator-observation.json": "f44e2f3505b8b4a5eb9e9963b52437db4c3076b16124aeb68236cda16bd17e00",
+        "progress.json": "f0de087ec56c13d838d057aaa96e6d9d5f2ef2f1ce5afade136fabbdb994947f",
+        "projection-retry1.json": "0e3a5182ffdef47e8049f75a8e17ec2aa8b6d5baca0f709056eb308dfae04c5a",
+        "projection.json": "f361556777466dfc2a259d2bc2cbee5434d3cd1cc0b3d0024ee557870f3042fc",
+        "result.json": "8e4ac216d115a9cc83fc0bebecbe16ccb3caa5a3327fafdf4c429885e7d26dc5"
+      },
+      "axes": {
+        "discrete_semantics": "original positive-support guard failed",
+        "execution": "diagnosis only; original execution failure retained",
+        "learning": "not assessed; no candidate continuation or new quality comparison",
+        "recovery": "checkpoint decoded; available historical scalar observations checked exactly; not full-state trajectory equivalence",
+        "strict_numerical": "original thresholds/failures unchanged"
+      },
+      "elapsed_seconds": 334.7975728660822,
+      "id": "tl-v6-positive-direct-received",
+      "job_record": "artifacts/jobs/v6-positive-direct-received/job.json",
+      "lens": {
+        "destination_name": "tl-v6-positive-direct-received-projection-9737c0905f5e",
+        "event_count": 10,
+        "readback_matches": true,
+        "report": "runs/v6-positive-direct-received/projection-retry1.json",
+        "status": "verified"
+      },
+      "observed_same_exception": true,
+      "original_error": "RuntimeError('positive batched attention sending support underflowed')",
+      "original_run": "runs/v6-cover-hb-direct-received",
+      "phase": "training_forward_or_backward",
+      "progress": {
+        "cursor": 592,
+        "dropped_tail_tokens": 0,
+        "milestones": [],
+        "probe": false,
+        "step": 74,
+        "tokens": 18841
+      },
+      "record": "runs/v6-positive-direct-received/result.json",
+      "scalar_replay_checks": [
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 72
+        },
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 74
+        }
+      ],
+      "source": {
+        "commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+        "tree_sha256": "968d20cce2bef2157263f4fead42430b680c124ce2b661007cb6bec8b0a48e02"
+      },
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v6-positive-direct-received.service"
+    },
+    {
+      "artifact_sha256": {
+        "allocation-failure.json": "17ea9cc2c8e8c2194b2d9779cca292827a94682a84d2db68bc8005c54e117ef7",
+        "failure-boundary.pt": "046b27a126fa623ea82c11487d1be4699fad19484a476f6f5fdad8e81ebd6c83",
+        "failure-input.pt": "2f64314b5a4acf70a96284b2b334ff6e2208b57a4dd037511a957ffb89a07842",
+        "manifest.json": "3146bae0c117e0b34c45f513730a999cf5e3baefd6699c3629e0331c44cf6089",
+        "metrics.jsonl": "8d74096b3f9d29abf3da82218c219180165e14ab9e5b19ae160b4d9f6517bcf1",
+        "observed-allocation-failure.json": "17ea9cc2c8e8c2194b2d9779cca292827a94682a84d2db68bc8005c54e117ef7",
+        "operator-observation.json": "c53bec07be238fe751e9aef91366f9b908b9d4786cad9ed0b0ef2e58041932be",
+        "progress.json": "f3cb0016c0841d0ae7c5bfdad24dac56c7ec95ac3d4918266d3f5274098471f8",
+        "projection.json": "55b2d8e3a3601dd9a97864b6b8d25cd46889c39063be1f3b77c906108102785d",
+        "result.json": "666a8ef0835055270e8af442a8918a292c109e9ccfda65f50329fa6f2e233a85"
+      },
+      "axes": {
+        "discrete_semantics": "original positive-support guard failed",
+        "execution": "diagnosis only; original execution failure retained",
+        "learning": "not assessed; no candidate continuation or new quality comparison",
+        "recovery": "checkpoint decoded; available historical scalar observations checked exactly; not full-state trajectory equivalence",
+        "strict_numerical": "original thresholds/failures unchanged"
+      },
+      "elapsed_seconds": 283.1590488217771,
+      "id": "tl-v6-positive-regional-total-bern",
+      "job_record": "artifacts/jobs/v6-positive-regional-total-bern/job.json",
+      "lens": {
+        "destination_name": "tl-v6-positive-regional-total-bern-projection-26b7e851571c",
+        "event_count": 7,
+        "readback_matches": true,
+        "report": "runs/v6-positive-regional-total-bern/projection.json",
+        "status": "verified"
+      },
+      "observed_same_exception": true,
+      "original_error": "AllocationFailure('positive allocation batch support underflowed in requested dtype')",
+      "original_run": "runs/v6-cover-hb-send-regional_total-bern",
+      "phase": "training_forward_or_backward",
+      "progress": {
+        "cursor": 1128,
+        "dropped_tail_tokens": 0,
+        "milestones": [],
+        "probe": false,
+        "step": 141,
+        "tokens": 35961
+      },
+      "record": "runs/v6-positive-regional-total-bern/result.json",
+      "scalar_replay_checks": [
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 136
+        },
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 141
+        }
+      ],
+      "source": {
+        "commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+        "tree_sha256": "968d20cce2bef2157263f4fead42430b680c124ce2b661007cb6bec8b0a48e02"
+      },
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v6-positive-regional-total-bern.service"
+    },
+    {
+      "artifact_sha256": {
+        "allocation-failure.json": "17726fbb53ebbaa33d175785166a671a2a380b3f019e4e27c8c48eeb17d89a6a",
+        "failure-boundary.pt": "ac66560e221a02207cabc9f11a1853bd08a8129875b15e368186ab0e15120428",
+        "failure-input.pt": "0162f7c62827df10e8b6fc6ccb9fcca1b56f22d0d19f6299cb6218f571d8fb32",
+        "manifest.json": "c813d85bb3e71cfe6bf8d80dcc3a4d2c6abae4abe95bb2ee37b3abd4b86efa66",
+        "metrics.jsonl": "95f970cd46644c9bd3555219bcccb2fc048e6c19616f2ea1b2b19080aba84272",
+        "observed-allocation-failure.json": "17726fbb53ebbaa33d175785166a671a2a380b3f019e4e27c8c48eeb17d89a6a",
+        "operator-observation.json": "c1e4f1b6c3a1920bc4a8b18b8b648b13a9a26fe960f898bf18e583a355d1bb19",
+        "progress.json": "b89ef83721bac6a2fbdce19873739d232fd0d1a58162a121232d89a238f472ad",
+        "projection.json": "11930b2ac8886af8090c5a267a669e97d8f63ca0dd9e980047a195dc5012731e",
+        "result.json": "09eab7822a12d1031507d900a7c9e631a15078d2dda0aa806213ccf20a6b7cd9"
+      },
+      "axes": {
+        "discrete_semantics": "original positive-support guard failed",
+        "execution": "diagnosis only; original execution failure retained",
+        "learning": "not assessed; no candidate continuation or new quality comparison",
+        "recovery": "checkpoint decoded; available historical scalar observations checked exactly; not full-state trajectory equivalence",
+        "strict_numerical": "original thresholds/failures unchanged"
+      },
+      "elapsed_seconds": 193.43046675249934,
+      "id": "tl-v6-positive-constrained-bern",
+      "job_record": "artifacts/jobs/v6-positive-constrained-bern/job.json",
+      "lens": {
+        "destination_name": "tl-v6-positive-constrained-bern-projection-72cd41923719",
+        "event_count": 5,
+        "readback_matches": true,
+        "report": "runs/v6-positive-constrained-bern/projection.json",
+        "status": "verified"
+      },
+      "observed_same_exception": true,
+      "original_error": "AllocationFailure('positive allocation batch support underflowed in requested dtype')",
+      "original_run": "runs/v6-cover-hb-send-constrained-bern",
+      "phase": "validation_forward",
+      "progress": {
+        "cursor": 1032,
+        "dropped_tail_tokens": 0,
+        "milestones": [],
+        "probe": false,
+        "step": 129,
+        "tokens": 32889
+      },
+      "record": "runs/v6-positive-constrained-bern/result.json",
+      "scalar_replay_checks": [
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 128
+        },
+        {
+          "matches": {
+            "train/gradient_norm": true,
+            "train/loss": true,
+            "train/lr": true,
+            "train/tokens": true
+          },
+          "step": 129
+        }
+      ],
+      "source": {
+        "commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+        "tree_sha256": "968d20cce2bef2157263f4fead42430b680c124ce2b661007cb6bec8b0a48e02"
+      },
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v6-positive-constrained-bern.service"
+    },
+    {
+      "artifact_sha256": {
+        "manifest.json": "e93435b09c05cf7c59c8f3efe7c4113b17fad43e5f2ca16c47361ec3a5bd6b93",
+        "metrics.jsonl": "d9254a5c2c67d3fdcc66ab58184eca8d9860f641554cebe65bf9be623201c469",
+        "operator-context.json": "f57f7b81ab8c14a9d6822cc8ca006fc440847bc5778d49442589ed6f05ecc4c3",
+        "projection.json": "fbcd9e409f050707e22529d49d1f69c3526b0034eaf4d7296cb0180e709372ce",
+        "result.json": "0cab96006a70cede31e81e68798ac74c27b6e453f44fb9101a9088d8b52a0b71"
+      },
+      "axes": {
+        "execution": "original exception captured; no update"
+      },
+      "elapsed_seconds": 50.67562861740589,
+      "id": "tl-v6-positive-direct-boundary-context",
+      "job_record": "artifacts/jobs/v6-positive-direct-boundary-context/job.json",
+      "lens": {
+        "destination_name": "tl-v6-positive-direct-boundary-context-projection-1ba0b04618d4",
+        "event_count": 1,
+        "readback_matches": true,
+        "report": "runs/v6-positive-direct-boundary-context/projection.json",
+        "status": "verified"
+      },
+      "observed_same_exception": true,
+      "original_error": "RuntimeError('positive batched attention sending support underflowed')",
+      "original_run": null,
+      "phase": "captured forward",
+      "progress": null,
+      "record": "runs/v6-positive-direct-boundary-context/result.json",
+      "scalar_replay_checks": [],
+      "source": {
+        "original_identity": {
+          "config_sha256": "4ccba1f46ba6f78f0e498df7ddb9597a6ad28b67ab8f168e68e5664871677024",
+          "data_lock_sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6",
+          "device": "cpu",
+          "dtype": "float32",
+          "installation": {
+            "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+            "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+            "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+            "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+            "tidegraph": "0.3.0",
+            "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+            "torch": "2.12.0+cpu",
+            "torch_npu": "2.12.0.post3",
+            "transformers": null
+          },
+          "mode": "train",
+          "native_binary_sha256": "27ecaa1315d250d9ab2de2a42f2a2487dc4d8225d739c61ffb333b7d66b08289",
+          "native_manifest_sha256": "34d92b66394bad569838606230e3412938a074c06f99871a50a44a07c2b4bbcd",
+          "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+          "source_sha256": "dc5d82b05945facfaba86145b271094b972b25908baf08b4d40f9e52023aec66",
+          "threads": 1
+        },
+        "parent_boundary_sha256": "310fd1a1c9d6322b65c9bf0f95e8ea9a1e98f177de1ccf9a58d08c9a557527e3",
+        "parent_input_sha256": "e45f73ced1f4f442c8b39a93c27c83365606337ff35a21c722873221fafa7784",
+        "source_commit": "7e1142df5225efc3fd5f1e9b3648e80544079d60",
+        "source_sha256": "f446343df8df58605c166922441e8612880ddd670d7b7e46e5daf9e26273c07e"
+      },
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v6-positive-direct-boundary-context.service"
+    }
+  ],
+  "schema": "tide-positive-path-review-v1",
+  "scope": "human-reviewed numerical/semantic failure localization; no repair or learning qualification",
+  "source_policy": "original fixed application/dependencies; separate diagnostics; foundation unchanged",
+  "study_id": "TL-POSITIVE-v6",
+  "upstream_request": "not submitted; repair design awaits discussion"
+}

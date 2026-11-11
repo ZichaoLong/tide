@@ -377,6 +377,77 @@
       ]
     }
   },
+  "actual_direct": {
+    "actual_controls": [
+      0.0,
+      0.9999995231628418,
+      4.2413543610564375e-07,
+      1.8307211757835617e-13
+    ],
+    "caps": [
+      3.902237060519196e-21,
+      1.0,
+      1.0,
+      0.00016623928968328983
+    ],
+    "centered_scores": [
+      -10.87678050994873,
+      0.0,
+      -14.673213005065918,
+      -11.231584548950195
+    ],
+    "context_sha256": "f57f7b81ab8c14a9d6822cc8ca006fc440847bc5778d49442589ed6f05ecc4c3",
+    "decimal": {
+      "below_half_fp32_subnormal": true,
+      "captured_operand_product": "1.438373973256255253817349810798690764688188295624805309489708433029176127512848869653035994943298714E-46",
+      "controls": [
+        "1.438372468413400072590938112214541717659165840055119655507189353658542714899607009452043223923303629E-46",
+        "0.9999995747634869969027088367514016754630716445396134357517043977465772929121557971540953326535384408",
+        "4.241352569677129436161986216635068252242744012121811389457516893138110893461886234742579060507188005E-7",
+        "1.830720210817298165299031942882293535584875679816831344746380570817337135347647367442335063089260613E-13"
+      ],
+      "precision": 100,
+      "shares": [
+        "3.686020213805317812223370013022325089371617035319426447464431364678807285904997611261863266179668298E-26",
+        "0.9999995747634869969027088367514016754630716445396134357517043977465772929121557971540953326535384408",
+        "4.241352569677129436161986216635068252242744012121811389457516893138110893461886234742579060507188005E-7",
+        "1.101256035384347510189774522976925008952285221843905762785563040082490382012967546300482648661916939E-9"
+      ]
+    },
+    "local_batch_row": 5,
+    "local_candidate_column": 0,
+    "public_scalar_probes": [
+      {
+        "dtype": "torch.float32",
+        "error": "ArithmeticError('positive attention sending support underflowed in requested dtype')",
+        "state": "failed"
+      },
+      {
+        "controls": [
+          1.438372468413392e-46,
+          0.9999995747634872,
+          4.24135256967713e-07,
+          1.8307202108172938e-13
+        ],
+        "dtype": "torch.float64",
+        "state": "completed"
+      }
+    ],
+    "received": [
+      1.951118530259598e-21,
+      1.0,
+      1.0,
+      8.311964484164491e-05
+    ],
+    "scope": "actual native max-centered score operands and final product; absolute pre-centering scores/global node and event-time metadata not recorded; no full-model FP64 claim",
+    "shares": [
+      3.6860240701647133e-26,
+      0.9999995231628418,
+      4.2413543610564375e-07,
+      1.1012566414336789e-09
+    ],
+    "temperature": 1.0
+  },
   "aggregate_witness": [
     {
       "execution": "completed",
@@ -451,7 +522,55 @@
       ]
     }
   ],
-  "created_at": "2026-11-11T02:48:44.972463+00:00",
+  "created_at": "2026-11-11T02:53:04.022069+00:00",
+  "descriptor_cast_witness": [
+    {
+      "active": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "controls": [
+        1e-46,
+        1e-46,
+        1e-46,
+        1e-46
+      ],
+      "execution": "completed",
+      "kv_observations": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "payload_dtype": "float64",
+      "scoring_dtype": "float64"
+    },
+    {
+      "active": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "controls": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "execution": "completed",
+      "kv_observations": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "payload_dtype": "float64",
+      "scoring_dtype": "float32"
+    }
+  ],
   "installation": {
     "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
     "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
@@ -524,5 +643,5 @@
   },
   "schema": "tide-positive-local-analysis-v1",
   "scope": "bounded CPU FP32/FP64/Decimal local witnesses; no foundation edits, training repair or all-path qualification",
-  "script_sha256": "b6f288122a5a32e94f9144fa00efa0facddedceec0cb8060ab4c099c0a873770"
+  "script_sha256": "5d5a979b6d16b5e0f24c8874b738eb5cfca21079737c1ff60c1e540dddddeb59"
 }

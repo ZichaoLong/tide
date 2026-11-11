@@ -1,10 +1,22 @@
-# 当前交接：v6训练继续，NPU执行瓶颈已定位
+# 当前交接：v6已终态，正量归零补证完成，修复方案待讨论
+
+2026-11-11（北京时间）：用户要求先补齐三项下溢与上游正量链路，再在本线程讨论，之后才提交需求。**TL-POSITIVE-v6四个CPU诊断均完成，无存活后代；未修改基座、未接入正在上游进行的性能优化、未提交新上游需求。**
+
+[补证与讨论报告](studies/positive-path-audit-v6-results.md) · [实际行/Decimal/静默见证](evidence/positive-path-v6-local-analysis.json) · [运行/恢复/Lens审阅](evidence/positive-path-v6-review.json)。constrained-Bernoulli是可表示的约1.27845e-40被sigmoid提前算零；regional-total-Bernoulli约1.49804e-48、direct最终乘积约1.43837e-46确实低于FP32范围。另有公共小图见证：strict聚合静默丢内容、Describe前置cast静默改变Full支持，以及公共Bern局部VJP的可表示尾部梯度丢失。后三者不自动解释实际训练质量，静态范围不等于全部后端资格。
+
+重放固定源码a87bc30、单边界观察7e1142d，沿用原应用源码c458571/4087310、foundation74e7bbd与原native安装。原batch/更新顺序/精度不变；六个可用历史观察点的loss、梯度范数、token和LR精确一致，未宣称完整状态的独立长轨迹恢复通过。约0.2395 CPU核时，运行材料约49MiB；全部原异常和严格阈值保留。Lens项目`tide-learning-lab`、组`TL-POSITIVE-v6`，四项`tl-v6-positive-*`最终投影均verified/readback_matches；私有入口仍为`.local/LENS.md`。
+
+原v6的200配置亦已全部终态，无训练/接入作业在运行。原始状态184 completed、11 failed、5 budget_truncated；按研究原因分为筛选181完成/3执行下溢，规模3个Transformer达目标/13个TIDE未达目标（其中8个到限终止的内部记录未自行收尾）。分配878.66 CPU核时、73.78 NPU卡时。终态不等于严格数值、学习或扩展收益通过；总体科学审阅及密封test仍独立待办。本轮只做正量链路补证，不启动新学习批次。
+
+下一步在本线程对齐稳定求值、结构性正支持跨生成/转换/消费的契约，以及连续衰减/概率尾部/梯度的误差许可。此前Shannon策略范围保留；有限正支持扩展或log质量表示尚未实现/批准为具体方案。研究图已增加该诊断与限定结论。
+
+## 历史快照：2026-11-09执行定位与训练提交
 
 2026-11-09 21:57（北京时间）：用户要求的CPU/NPU定位已完成，14个具名诊断全部终态，10个服务无存活后代；Lens投影均verified/readback_matches。结论是当前eager路径存在大量逐行Describe、KV动态索引及碎片化反向，不能仅用width128解释CPU优势。原形状B8/L128新测CPU/native63.61秒、NPU/native265.00秒；宽度128→512缩小差距但尚未反超。mixed-a约改善37%，已有传输选项约改善3%；均为有限诊断，非严格等价速度或语言质量认证。
 
 [诊断结论](studies/language-execution-diagnosis-v6-results.md) · [证据/运行/Lens映射](evidence/language-execution-diagnosis-v6.json) · [基座需求TL-REQ-004](requests/TL-REQ-004.md)。诊断源码d90e733/b4bc62b、数学/基座/安装与native构建固定；约0.81 CPU核时、0.36 NPU卡时、2.42GiB产物。基座只读，原训练及其固定源码未改。建议优先由基座改善批量前后向以支撑更大数据曝光；不要求先兑现稀疏比例对应的吞吐，也不自动部署尚未交付的优化。
 
-以下保留上次训练提交快照；当前逐配置状态使用`python scripts/campaign_status.py --brief`。本次诊断不代替v6终态学习审阅。
+以下仅保留当时的训练提交快照；其中“运行/等待”不是当前状态。当前逐配置状态使用`python scripts/campaign_status.py --brief`。执行和正支持诊断均不代替v6终态学习审阅。
 
 2026-11-09 21:19:32（北京时间）只读核对：**200个配置全部由后台worker接收，111个正在训练、84个等待同worker内的前项、5个完成**。116个本批训练worker均核对属于background.slice；不是200个独占设备。原v5已终态，旧建议已被本次用户授权的较大研究表取代。
 

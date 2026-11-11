@@ -20,7 +20,7 @@ from scripts.review_io import write_review_json
 from tide_lab.records import digest, now
 from tide_lab.train import installed_identity
 from tidegraph import Graph, Node, Region, External, Continuation, ExecutionPlacement
-from tidegraph.weighted import bind, KVConfig, RegionalConfig, allocate
+from tidegraph.weighted import bind, KVConfig, RegionalConfig, allocate, attention_send
 from tidegraph.weighted.execution import eager_runner
 
 
@@ -85,6 +85,46 @@ def captured_bern(path):
                 scope='captured local row only; a stable formula probe is not an implemented solver or accepted model repair')
 
 
+def captured_direct(root):
+    path=root/'runs/v6-positive-direct-boundary-context/operator-context.json'
+    context=json.loads(path.read_text())
+    observed=json.loads((root/'runs/v6-positive-direct-received/operator-observation.json').read_text())
+    event=observed['last_events'][-1]
+    row,column=event['lost_coordinates'][0]
+    history=context['candidate_operation_tail']
+    product=history[-1]
+    assert product['operator']=='aten.mul.Tensor' and product['ordinal']==event['ordinal']
+    assert product['inputs']==event['inputs'] and product['output']==event['output']
+    division=next(x for x in reversed(history) if x['operator']=='aten.div.Tensor')
+    logarithm=next(x for x in reversed(history) if x['operator']=='aten.log.default')
+    def at(t):
+        return t['values'][row*t['shape'][1]:(row+1)*t['shape'][1]]
+    scores=at(division['inputs'][0]);tau=at(division['inputs'][1])[0]
+    received=at(logarithm['inputs'][0]);caps=at(product['inputs'][0]);shares=at(product['inputs'][1])
+    with localcontext() as ctx:
+        ctx.prec=100
+        d=lambda x:Decimal.from_float(float(x))
+        weights=[d(r)*(d(s)/d(tau)).exp() for r,s in zip(received,scores)]
+        probabilities=[w/sum(weights) for w in weights]
+        controls=[d(c)*p for c,p in zip(caps,probabilities)]
+        actual_product=d(caps[column])*d(shares[column])
+        independent=dict(precision=100, shares=[str(x) for x in probabilities],
+            controls=[str(x) for x in controls], captured_operand_product=str(actual_product),
+            below_half_fp32_subnormal=actual_product<Decimal(2)**-150)
+    probes=[]
+    for dtype in (torch.float32,torch.float64):
+        try:
+            c=attention_send(torch.tensor(scores,dtype=dtype),torch.tensor(caps,dtype=dtype),
+                torch.tensor(received,dtype=dtype),mode='direct_attention',base='received',temperature=tau)
+            result=dict(state='completed',controls=c.tolist())
+        except ArithmeticError as e:result=dict(state='failed',error=repr(e))
+        probes.append(dict(dtype=str(dtype),**result))
+    return dict(context_sha256=digest(path),local_batch_row=row,local_candidate_column=column,
+        centered_scores=scores,temperature=tau,received=received,caps=caps,shares=shares,
+        actual_controls=at(product['output']),decimal=independent,public_scalar_probes=probes,
+        scope='actual native max-centered score operands and final product; absolute pre-centering scores/global node and event-time metadata not recorded; no full-model FP64 claim')
+
+
 def public_aggregate(native):
     graph = Graph(tuple(Node(0) for _ in range(4)), (), (Region(2),), (0,1,2,3), (0,1,2,3))
     rows = []
@@ -101,6 +141,22 @@ def public_aggregate(native):
                          expected_received_content=[.25,.25], received_content=result.trace[0]['content'].tolist(),
                          raw_kv_weights=state.slots['weights'].tolist(), raw_kv_keys=state.slots['keys'].tolist(),
                          observations=state.observations))
+    return rows
+
+
+def descriptor_cast_witness():
+    """Same positive FP64 payload; explicit supported descriptor precisions."""
+    graph=Graph(tuple(Node(0) for _ in range(4)),(),(Region(2),),(0,1,2,3),(0,1,2,3))
+    rows=[]
+    for precision in ('float64','float32'):
+        b=bind(graph,memories=KVConfig(width=2,summary_width=2,adapter_rank=1,ffn_width=3),
+            regions=RegionalConfig(selection_mode='proportional',k=2),dtype=torch.float64,seed=7)
+        xs=[External(0,i,0,0,torch.tensor([1e-46,.25,.25],dtype=torch.float64)) for i in range(4)]
+        run=eager_runner(b,'python',ExecutionPlacement(preset='cpu',scoring_dtype=precision),packing='packed')
+        result=run(Continuation(b.graph.identity,1),xs,1,sealed_until=1)
+        rows.append(dict(payload_dtype='float64',scoring_dtype=precision,execution='completed',
+            active=[e['active'] for e in result.trace],controls=[float(e['control']) for e in result.trace],
+            kv_observations=[s.observations for s in result.continuation.states.values()]))
     return rows
 
 
@@ -147,7 +203,8 @@ def main(a):
         installation=installed_identity(), script_sha256=digest(__file__),
         scope='bounded CPU FP32/FP64/Decimal local witnesses; no foundation edits, training repair or all-path qualification',
         local_probes=formula_probes(), aggregate_witness=public_aggregate(root/'.local/native-build-v6'),
-        actual_bern={})
+        descriptor_cast_witness=descriptor_cast_witness(),
+        actual_bern={},actual_direct=captured_direct(root))
     for name in ('regional-total-bern','constrained-bern'):
         path=root/'runs'/('v6-positive-'+name)/'allocation-failure.json'
         if not path.exists():

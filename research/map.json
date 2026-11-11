@@ -956,6 +956,33 @@
       "source": "RV6-DIAG",
       "status": "documented",
       "target": "V6-SCALE"
+    },
+    {
+      "detail": "\u539f\u5019\u9009/\u68c0\u67e5\u70b9\u53ca\u56fa\u5b9a\u4f9d\u8d56\uff1b\u91cd\u653e\u4e0d\u6539\u5386\u53f2\u7ec8\u6001\u3002",
+      "id": "V6-POSITIVE-PRE",
+      "kind": "precondition",
+      "label": "\u4e09\u9879\u5b9e\u9645\u5931\u8d25",
+      "source": "V6-COVER",
+      "status": "documented",
+      "target": "V6-POSITIVE"
+    },
+    {
+      "detail": "\u5b9e\u6d4b\u5931\u8d25\u884c\u3001\u72ec\u7acb\u53c2\u8003\u4e0e\u9759\u9ed8\u5c0f\u56fe\u5206\u5f00\uff1b\u65e0\u81ea\u52a8\u79d1\u5b66\u652f\u6301\u3002",
+      "id": "V6-POSITIVE-RESULT",
+      "kind": "produces",
+      "label": "\u5c40\u90e8\u8bc1\u636e\u4eba\u5de5\u5ba1\u9605",
+      "source": "V6-POSITIVE",
+      "status": "documented",
+      "target": "RV6-POSITIVE"
+    },
+    {
+      "detail": "\u5c1a\u672a\u63d0\u4ea4\u4e0a\u6e38\u6216\u5b9e\u73b0\uff1b\u4e0d\u963b\u585e\u5176\u4ed6\u8def\u5f84\uff0c\u4e5f\u4e0d\u63a8\u65ad\u67b6\u6784\u8d28\u91cf\u3002",
+      "id": "V6-POSITIVE-REVIEW",
+      "kind": "informs",
+      "label": "\u4fee\u590d\u8303\u56f4\u5f85\u8ba8\u8bba",
+      "source": "RV6-POSITIVE",
+      "status": "documented",
+      "target": "V6-REVIEW"
     }
   ],
   "height": 6550,
@@ -5918,7 +5945,7 @@
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
-      "decision": "\u5171\u540c65,536\u6709\u6548\u76ee\u6807/L32/seed11\uff1bvalidation\u7b5b\u9009\uff0ctest\u5bc6\u5c01\u3002\u4e0d\u662f\u5b57\u6bb5\u7b1b\u5361\u5c14\u79ef\u3002",
+      "decision": "\u539f\u4e25\u683c\u5931\u8d25\u3001\u5b9e\u9645\u66dd\u5149\u4e0e\u9884\u7b97\u622a\u65ad\u4fdd\u7559\uff1b\u7ec8\u6001\u4e0d\u81ea\u52a8\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "id": "V6-COVER",
       "kind": "experiment",
       "question": "\u5404\u5df2\u5b9e\u73b0\u5c40\u90e8\u5019\u9009\u5728\u5171\u540c\u8bed\u8a00\u4efb\u52a1\u4e0a\u5982\u4f55\u5b66\u4e60\u4e0e\u5206\u914d\u5b9e\u9645\u5de5\u4f5c\uff1f",
@@ -5938,1481 +5965,1852 @@
       ],
       "runs": [
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-anchor.json",
           "id": "tl-v6-cover-fc-anchor",
           "lens_record": "runs/v6-cover-fc-anchor/train/projection.json",
           "record": "runs/v6-cover-fc-anchor/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-unit_attention.json",
           "id": "tl-v6-cover-fc-send-unit_attention",
           "lens_record": "runs/v6-cover-fc-send-unit_attention/train/projection.json",
           "record": "runs/v6-cover-fc-send-unit_attention/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-anchor.json",
           "id": "tl-v6-cover-hb-anchor",
           "lens_record": "runs/v6-cover-hb-anchor/train/projection.json",
           "record": "runs/v6-cover-hb-anchor/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-unit_attention.json",
           "id": "tl-v6-cover-hb-send-unit_attention",
           "lens_record": "runs/v6-cover-hb-send-unit_attention/train/projection.json",
           "record": "runs/v6-cover-hb-send-unit_attention/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-kv-sum.json",
           "id": "tl-v6-cover-fc-mem-kv-sum",
           "lens_record": "runs/v6-cover-fc-mem-kv-sum/train/projection.json",
           "record": "runs/v6-cover-fc-mem-kv-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-pooled_attention.json",
           "id": "tl-v6-cover-fc-send-pooled_attention",
           "lens_record": "runs/v6-cover-fc-send-pooled_attention/train/projection.json",
           "record": "runs/v6-cover-fc-send-pooled_attention/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-kv-sum.json",
           "id": "tl-v6-cover-hb-mem-kv-sum",
           "lens_record": "runs/v6-cover-hb-mem-kv-sum/train/projection.json",
           "record": "runs/v6-cover-hb-mem-kv-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-pooled_attention.json",
           "id": "tl-v6-cover-hb-send-pooled_attention",
           "lens_record": "runs/v6-cover-hb-send-pooled_attention/train/projection.json",
           "record": "runs/v6-cover-hb-send-pooled_attention/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-sum.json",
           "id": "tl-v6-cover-fc-mem-affine-sum",
           "lens_record": "runs/v6-cover-fc-mem-affine-sum/train/projection.json",
           "record": "runs/v6-cover-fc-mem-affine-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-proportional.json",
           "id": "tl-v6-cover-fc-send-proportional",
           "lens_record": "runs/v6-cover-fc-send-proportional/train/projection.json",
           "record": "runs/v6-cover-fc-send-proportional/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-sum.json",
           "id": "tl-v6-cover-hb-mem-affine-sum",
           "lens_record": "runs/v6-cover-hb-mem-affine-sum/train/projection.json",
           "record": "runs/v6-cover-hb-mem-affine-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-proportional.json",
           "id": "tl-v6-cover-hb-send-proportional",
           "lens_record": "runs/v6-cover-hb-send-proportional/train/projection.json",
           "record": "runs/v6-cover-hb-send-proportional/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-affine-state.json",
           "id": "tl-v6-cover-fc-mem-affine-state",
           "lens_record": "runs/v6-cover-fc-mem-affine-state/train/projection.json",
           "record": "runs/v6-cover-fc-mem-affine-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-direct-received.json",
           "id": "tl-v6-cover-fc-direct-received",
           "lens_record": "runs/v6-cover-fc-direct-received/train/projection.json",
           "record": "runs/v6-cover-fc-direct-received/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-affine-state.json",
           "id": "tl-v6-cover-hb-mem-affine-state",
           "lens_record": "runs/v6-cover-hb-mem-affine-state/train/projection.json",
           "record": "runs/v6-cover-hb-mem-affine-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 18841,
           "config": "configs/studies/language/v6/resolved/cover-hb-direct-received.json",
           "id": "tl-v6-cover-hb-direct-received",
           "lens_record": "runs/v6-cover-hb-direct-received/train/projection.json",
           "record": "runs/v6-cover-hb-direct-received/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-sum.json",
           "id": "tl-v6-cover-fc-mem-delta-sum",
           "lens_record": "runs/v6-cover-fc-mem-delta-sum/train/projection.json",
           "record": "runs/v6-cover-fc-mem-delta-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-unit-mu.json",
           "id": "tl-v6-cover-fc-unit-mu",
           "lens_record": "runs/v6-cover-fc-unit-mu/train/projection.json",
           "record": "runs/v6-cover-fc-unit-mu/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-sum.json",
           "id": "tl-v6-cover-hb-mem-delta-sum",
           "lens_record": "runs/v6-cover-hb-mem-delta-sum/train/projection.json",
           "record": "runs/v6-cover-hb-mem-delta-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-unit-mu.json",
           "id": "tl-v6-cover-hb-unit-mu",
           "lens_record": "runs/v6-cover-hb-unit-mu/train/projection.json",
           "record": "runs/v6-cover-hb-unit-mu/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-delta-state.json",
           "id": "tl-v6-cover-fc-mem-delta-state",
           "lens_record": "runs/v6-cover-fc-mem-delta-state/train/projection.json",
           "record": "runs/v6-cover-fc-mem-delta-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-constrained-context-gain.json",
           "id": "tl-v6-cover-fc-constrained-context-gain",
           "lens_record": "runs/v6-cover-fc-constrained-context-gain/train/projection.json",
           "record": "runs/v6-cover-fc-constrained-context-gain/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-delta-state.json",
           "id": "tl-v6-cover-hb-mem-delta-state",
           "lens_record": "runs/v6-cover-hb-mem-delta-state/train/projection.json",
           "record": "runs/v6-cover-hb-mem-delta-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-constrained-context-gain.json",
           "id": "tl-v6-cover-hb-constrained-context-gain",
           "lens_record": "runs/v6-cover-hb-constrained-context-gain/train/projection.json",
           "record": "runs/v6-cover-hb-constrained-context-gain/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-sum.json",
           "id": "tl-v6-cover-fc-mem-gated_delta-sum",
           "lens_record": "runs/v6-cover-fc-mem-gated_delta-sum/train/projection.json",
           "record": "runs/v6-cover-fc-mem-gated_delta-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-constrained-learned-gain.json",
           "id": "tl-v6-cover-fc-constrained-learned-gain",
           "lens_record": "runs/v6-cover-fc-constrained-learned-gain/train/projection.json",
           "record": "runs/v6-cover-fc-constrained-learned-gain/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-sum.json",
           "id": "tl-v6-cover-hb-mem-gated_delta-sum",
           "lens_record": "runs/v6-cover-hb-mem-gated_delta-sum/train/projection.json",
           "record": "runs/v6-cover-hb-mem-gated_delta-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-constrained-learned-gain.json",
           "id": "tl-v6-cover-hb-constrained-learned-gain",
           "lens_record": "runs/v6-cover-hb-constrained-learned-gain/train/projection.json",
           "record": "runs/v6-cover-hb-constrained-learned-gain/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-gated_delta-state.json",
           "id": "tl-v6-cover-fc-mem-gated_delta-state",
           "lens_record": "runs/v6-cover-fc-mem-gated_delta-state/train/projection.json",
           "record": "runs/v6-cover-fc-mem-gated_delta-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-received.json",
           "id": "tl-v6-cover-fc-gain-att-received",
           "lens_record": "runs/v6-cover-fc-gain-att-received/train/projection.json",
           "record": "runs/v6-cover-fc-gain-att-received/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-gated_delta-state.json",
           "id": "tl-v6-cover-hb-mem-gated_delta-state",
           "lens_record": "runs/v6-cover-hb-mem-gated_delta-state/train/projection.json",
           "record": "runs/v6-cover-hb-mem-gated_delta-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-received.json",
           "id": "tl-v6-cover-hb-gain-att-received",
           "lens_record": "runs/v6-cover-hb-gain-att-received/train/projection.json",
           "record": "runs/v6-cover-hb-gain-att-received/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-sum.json",
           "id": "tl-v6-cover-fc-mem-ssd-sum",
           "lens_record": "runs/v6-cover-fc-mem-ssd-sum/train/projection.json",
           "record": "runs/v6-cover-fc-mem-ssd-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gain-att-mu.json",
           "id": "tl-v6-cover-fc-gain-att-mu",
           "lens_record": "runs/v6-cover-fc-gain-att-mu/train/projection.json",
           "record": "runs/v6-cover-fc-gain-att-mu/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-sum.json",
           "id": "tl-v6-cover-hb-mem-ssd-sum",
           "lens_record": "runs/v6-cover-hb-mem-ssd-sum/train/projection.json",
           "record": "runs/v6-cover-hb-mem-ssd-sum/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gain-att-mu.json",
           "id": "tl-v6-cover-hb-gain-att-mu",
           "lens_record": "runs/v6-cover-hb-gain-att-mu/train/projection.json",
           "record": "runs/v6-cover-hb-gain-att-mu/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-mem-ssd-state.json",
           "id": "tl-v6-cover-fc-mem-ssd-state",
           "lens_record": "runs/v6-cover-fc-mem-ssd-state/train/projection.json",
           "record": "runs/v6-cover-fc-mem-ssd-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-threshold-fixed.json",
           "id": "tl-v6-cover-fc-threshold-fixed",
           "lens_record": "runs/v6-cover-fc-threshold-fixed/train/projection.json",
           "record": "runs/v6-cover-fc-threshold-fixed/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-mem-ssd-state.json",
           "id": "tl-v6-cover-hb-mem-ssd-state",
           "lens_record": "runs/v6-cover-hb-mem-ssd-state/train/projection.json",
           "record": "runs/v6-cover-hb-mem-ssd-state/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-threshold-fixed.json",
           "id": "tl-v6-cover-hb-threshold-fixed",
           "lens_record": "runs/v6-cover-hb-threshold-fixed/train/projection.json",
           "record": "runs/v6-cover-hb-threshold-fixed/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-read-zero.json",
           "id": "tl-v6-cover-fc-read-zero",
           "lens_record": "runs/v6-cover-fc-read-zero/train/projection.json",
           "record": "runs/v6-cover-fc-read-zero/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-zero-fixed.json",
           "id": "tl-v6-cover-fc-zero-fixed",
           "lens_record": "runs/v6-cover-fc-zero-fixed/train/projection.json",
           "record": "runs/v6-cover-fc-zero-fixed/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-read-zero.json",
           "id": "tl-v6-cover-hb-read-zero",
           "lens_record": "runs/v6-cover-hb-read-zero/train/projection.json",
           "record": "runs/v6-cover-hb-read-zero/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-zero-fixed.json",
           "id": "tl-v6-cover-hb-zero-fixed",
           "lens_record": "runs/v6-cover-hb-zero-fixed/train/projection.json",
           "record": "runs/v6-cover-hb-zero-fixed/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-read-old.json",
           "id": "tl-v6-cover-fc-read-old",
           "lens_record": "runs/v6-cover-fc-read-old/train/projection.json",
           "record": "runs/v6-cover-fc-read-old/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-source-node.json",
           "id": "tl-v6-cover-fc-source-node",
           "lens_record": "runs/v6-cover-fc-source-node/train/projection.json",
           "record": "runs/v6-cover-fc-source-node/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-read-old.json",
           "id": "tl-v6-cover-hb-read-old",
           "lens_record": "runs/v6-cover-hb-read-old/train/projection.json",
           "record": "runs/v6-cover-hb-read-old/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-source-node.json",
           "id": "tl-v6-cover-hb-source-node",
           "lens_record": "runs/v6-cover-hb-source-node/train/projection.json",
           "record": "runs/v6-cover-hb-source-node/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-local-match.json",
           "id": "tl-v6-cover-fc-local-match",
           "lens_record": "runs/v6-cover-fc-local-match/train/projection.json",
           "record": "runs/v6-cover-fc-local-match/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-source-source.json",
           "id": "tl-v6-cover-fc-source-source",
           "lens_record": "runs/v6-cover-fc-source-source/train/projection.json",
           "record": "runs/v6-cover-fc-source-source/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-local-match.json",
           "id": "tl-v6-cover-hb-local-match",
           "lens_record": "runs/v6-cover-hb-local-match/train/projection.json",
           "record": "runs/v6-cover-hb-local-match/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-source-source.json",
           "id": "tl-v6-cover-hb-source-source",
           "lens_record": "runs/v6-cover-hb-source-source/train/projection.json",
           "record": "runs/v6-cover-hb-source-source/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-region-att-stats.json",
           "id": "tl-v6-cover-fc-region-att-stats",
           "lens_record": "runs/v6-cover-fc-region-att-stats/train/projection.json",
           "record": "runs/v6-cover-fc-region-att-stats/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-source-adapted.json",
           "id": "tl-v6-cover-fc-source-adapted",
           "lens_record": "runs/v6-cover-fc-source-adapted/train/projection.json",
           "record": "runs/v6-cover-fc-source-adapted/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-region-att-stats.json",
           "id": "tl-v6-cover-hb-region-att-stats",
           "lens_record": "runs/v6-cover-hb-region-att-stats/train/projection.json",
           "record": "runs/v6-cover-hb-region-att-stats/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-source-adapted.json",
           "id": "tl-v6-cover-hb-source-adapted",
           "lens_record": "runs/v6-cover-hb-source-adapted/train/projection.json",
           "record": "runs/v6-cover-hb-source-adapted/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-region-att-content.json",
           "id": "tl-v6-cover-fc-region-att-content",
           "lens_record": "runs/v6-cover-fc-region-att-content/train/projection.json",
           "record": "runs/v6-cover-fc-region-att-content/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-window16.json",
           "id": "tl-v6-cover-fc-window16",
           "lens_record": "runs/v6-cover-fc-window16/train/projection.json",
           "record": "runs/v6-cover-fc-window16/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-region-att-content.json",
           "id": "tl-v6-cover-hb-region-att-content",
           "lens_record": "runs/v6-cover-hb-region-att-content/train/projection.json",
           "record": "runs/v6-cover-hb-region-att-content/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-window16.json",
           "id": "tl-v6-cover-hb-window16",
           "lens_record": "runs/v6-cover-hb-window16/train/projection.json",
           "record": "runs/v6-cover-hb-window16/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-evidence-grouped.json",
           "id": "tl-v6-cover-fc-evidence-grouped",
           "lens_record": "runs/v6-cover-fc-evidence-grouped/train/projection.json",
           "record": "runs/v6-cover-fc-evidence-grouped/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-window128.json",
           "id": "tl-v6-cover-fc-window128",
           "lens_record": "runs/v6-cover-fc-window128/train/projection.json",
           "record": "runs/v6-cover-fc-window128/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-evidence-grouped.json",
           "id": "tl-v6-cover-hb-evidence-grouped",
           "lens_record": "runs/v6-cover-hb-evidence-grouped/train/projection.json",
           "record": "runs/v6-cover-hb-evidence-grouped/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-window128.json",
           "id": "tl-v6-cover-hb-window128",
           "lens_record": "runs/v6-cover-hb-window128/train/projection.json",
           "record": "runs/v6-cover-hb-window128/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-match-att-grouped.json",
           "id": "tl-v6-cover-fc-match-att-grouped",
           "lens_record": "runs/v6-cover-fc-match-att-grouped/train/projection.json",
           "record": "runs/v6-cover-fc-match-att-grouped/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-summary8.json",
           "id": "tl-v6-cover-fc-summary8",
           "lens_record": "runs/v6-cover-fc-summary8/train/projection.json",
           "record": "runs/v6-cover-fc-summary8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-match-att-grouped.json",
           "id": "tl-v6-cover-hb-match-att-grouped",
           "lens_record": "runs/v6-cover-hb-match-att-grouped/train/projection.json",
           "record": "runs/v6-cover-hb-match-att-grouped/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-summary8.json",
           "id": "tl-v6-cover-hb-summary8",
           "lens_record": "runs/v6-cover-hb-summary8/train/projection.json",
           "record": "runs/v6-cover-hb-summary8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total25.json",
           "id": "tl-v6-cover-fc-fixed-total25",
           "lens_record": "runs/v6-cover-fc-fixed-total25/train/projection.json",
           "record": "runs/v6-cover-fc-fixed-total25/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-adapter8.json",
           "id": "tl-v6-cover-fc-adapter8",
           "lens_record": "runs/v6-cover-fc-adapter8/train/projection.json",
           "record": "runs/v6-cover-fc-adapter8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total25.json",
           "id": "tl-v6-cover-hb-fixed-total25",
           "lens_record": "runs/v6-cover-hb-fixed-total25/train/projection.json",
           "record": "runs/v6-cover-hb-fixed-total25/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-adapter8.json",
           "id": "tl-v6-cover-hb-adapter8",
           "lens_record": "runs/v6-cover-hb-adapter8/train/projection.json",
           "record": "runs/v6-cover-hb-adapter8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total50.json",
           "id": "tl-v6-cover-fc-fixed-total50",
           "lens_record": "runs/v6-cover-fc-fixed-total50/train/projection.json",
           "record": "runs/v6-cover-fc-fixed-total50/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ffn2x.json",
           "id": "tl-v6-cover-fc-ffn2x",
           "lens_record": "runs/v6-cover-fc-ffn2x/train/projection.json",
           "record": "runs/v6-cover-fc-ffn2x/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total50.json",
           "id": "tl-v6-cover-hb-fixed-total50",
           "lens_record": "runs/v6-cover-hb-fixed-total50/train/projection.json",
           "record": "runs/v6-cover-hb-fixed-total50/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ffn2x.json",
           "id": "tl-v6-cover-hb-ffn2x",
           "lens_record": "runs/v6-cover-hb-ffn2x/train/projection.json",
           "record": "runs/v6-cover-hb-ffn2x/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-fixed-total100.json",
           "id": "tl-v6-cover-fc-fixed-total100",
           "lens_record": "runs/v6-cover-fc-fixed-total100/train/projection.json",
           "record": "runs/v6-cover-fc-fixed-total100/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ffn8x.json",
           "id": "tl-v6-cover-fc-ffn8x",
           "lens_record": "runs/v6-cover-fc-ffn8x/train/projection.json",
           "record": "runs/v6-cover-fc-ffn8x/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-fixed-total100.json",
           "id": "tl-v6-cover-hb-fixed-total100",
           "lens_record": "runs/v6-cover-hb-fixed-total100/train/projection.json",
           "record": "runs/v6-cover-hb-fixed-total100/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ffn8x.json",
           "id": "tl-v6-cover-hb-ffn8x",
           "lens_record": "runs/v6-cover-hb-ffn8x/train/projection.json",
           "record": "runs/v6-cover-hb-ffn8x/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gamma1.json",
           "id": "tl-v6-cover-fc-gamma1",
           "lens_record": "runs/v6-cover-fc-gamma1/train/projection.json",
           "record": "runs/v6-cover-fc-gamma1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-full-memory-off.json",
           "id": "tl-v6-cover-fc-full-memory-off",
           "lens_record": "runs/v6-cover-fc-full-memory-off/train/projection.json",
           "record": "runs/v6-cover-fc-full-memory-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gamma1.json",
           "id": "tl-v6-cover-hb-gamma1",
           "lens_record": "runs/v6-cover-hb-gamma1/train/projection.json",
           "record": "runs/v6-cover-hb-gamma1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-full-memory-off.json",
           "id": "tl-v6-cover-hb-full-memory-off",
           "lens_record": "runs/v6-cover-hb-full-memory-off/train/projection.json",
           "record": "runs/v6-cover-hb-full-memory-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gamma4.json",
           "id": "tl-v6-cover-fc-gamma4",
           "lens_record": "runs/v6-cover-fc-gamma4/train/projection.json",
           "record": "runs/v6-cover-fc-gamma4/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-full-ffn-off.json",
           "id": "tl-v6-cover-fc-full-ffn-off",
           "lens_record": "runs/v6-cover-fc-full-ffn-off/train/projection.json",
           "record": "runs/v6-cover-fc-full-ffn-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gamma4.json",
           "id": "tl-v6-cover-hb-gamma4",
           "lens_record": "runs/v6-cover-hb-gamma4/train/projection.json",
           "record": "runs/v6-cover-hb-gamma4/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-full-ffn-off.json",
           "id": "tl-v6-cover-hb-full-ffn-off",
           "lens_record": "runs/v6-cover-hb-full-ffn-off/train/projection.json",
           "record": "runs/v6-cover-hb-full-ffn-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-temperature1.json",
           "id": "tl-v6-cover-fc-temperature1",
           "lens_record": "runs/v6-cover-fc-temperature1/train/projection.json",
           "record": "runs/v6-cover-fc-temperature1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-heads2.json",
           "id": "tl-v6-cover-fc-heads2",
           "lens_record": "runs/v6-cover-fc-heads2/train/projection.json",
           "record": "runs/v6-cover-fc-heads2/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-temperature1.json",
           "id": "tl-v6-cover-hb-temperature1",
           "lens_record": "runs/v6-cover-hb-temperature1/train/projection.json",
           "record": "runs/v6-cover-hb-temperature1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-heads2.json",
           "id": "tl-v6-cover-hb-heads2",
           "lens_record": "runs/v6-cover-hb-heads2/train/projection.json",
           "record": "runs/v6-cover-hb-heads2/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-score-width8.json",
           "id": "tl-v6-cover-fc-score-width8",
           "lens_record": "runs/v6-cover-fc-score-width8/train/projection.json",
           "record": "runs/v6-cover-fc-score-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-decay-slow.json",
           "id": "tl-v6-cover-fc-decay-slow",
           "lens_record": "runs/v6-cover-fc-decay-slow/train/projection.json",
           "record": "runs/v6-cover-fc-decay-slow/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-score-width8.json",
           "id": "tl-v6-cover-hb-score-width8",
           "lens_record": "runs/v6-cover-hb-score-width8/train/projection.json",
           "record": "runs/v6-cover-hb-score-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-decay-slow.json",
           "id": "tl-v6-cover-hb-decay-slow",
           "lens_record": "runs/v6-cover-hb-decay-slow/train/projection.json",
           "record": "runs/v6-cover-hb-decay-slow/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-evidence-width8.json",
           "id": "tl-v6-cover-fc-evidence-width8",
           "lens_record": "runs/v6-cover-fc-evidence-width8/train/projection.json",
           "record": "runs/v6-cover-fc-evidence-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-rope-half.json",
           "id": "tl-v6-cover-fc-rope-half",
           "lens_record": "runs/v6-cover-fc-rope-half/train/projection.json",
           "record": "runs/v6-cover-fc-rope-half/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-evidence-width8.json",
           "id": "tl-v6-cover-hb-evidence-width8",
           "lens_record": "runs/v6-cover-hb-evidence-width8/train/projection.json",
           "record": "runs/v6-cover-hb-evidence-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-rope-half.json",
           "id": "tl-v6-cover-hb-rope-half",
           "lens_record": "runs/v6-cover-hb-rope-half/train/projection.json",
           "record": "runs/v6-cover-hb-rope-half/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-match-width8.json",
           "id": "tl-v6-cover-fc-match-width8",
           "lens_record": "runs/v6-cover-fc-match-width8/train/projection.json",
           "record": "runs/v6-cover-fc-match-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-rope-full.json",
           "id": "tl-v6-cover-fc-rope-full",
           "lens_record": "runs/v6-cover-fc-rope-full/train/projection.json",
           "record": "runs/v6-cover-fc-rope-full/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-match-width8.json",
           "id": "tl-v6-cover-hb-match-width8",
           "lens_record": "runs/v6-cover-hb-match-width8/train/projection.json",
           "record": "runs/v6-cover-hb-match-width8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-rope-full.json",
           "id": "tl-v6-cover-hb-rope-full",
           "lens_record": "runs/v6-cover-hb-rope-full/train/projection.json",
           "record": "runs/v6-cover-hb-rope-full/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-match-residual-off.json",
           "id": "tl-v6-cover-fc-match-residual-off",
           "lens_record": "runs/v6-cover-fc-match-residual-off/train/projection.json",
           "record": "runs/v6-cover-fc-match-residual-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-rope-read.json",
           "id": "tl-v6-cover-fc-rope-read",
           "lens_record": "runs/v6-cover-fc-rope-read/train/projection.json",
           "record": "runs/v6-cover-fc-rope-read/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-match-residual-off.json",
           "id": "tl-v6-cover-hb-match-residual-off",
           "lens_record": "runs/v6-cover-hb-match-residual-off/train/projection.json",
           "record": "runs/v6-cover-hb-match-residual-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-rope-read.json",
           "id": "tl-v6-cover-hb-rope-read",
           "lens_record": "runs/v6-cover-hb-rope-read/train/projection.json",
           "record": "runs/v6-cover-hb-rope-read/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-match-inner-off.json",
           "id": "tl-v6-cover-fc-match-inner-off",
           "lens_record": "runs/v6-cover-fc-match-inner-off/train/projection.json",
           "record": "runs/v6-cover-fc-match-inner-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-distance-slope.json",
           "id": "tl-v6-cover-fc-distance-slope",
           "lens_record": "runs/v6-cover-fc-distance-slope/train/projection.json",
           "record": "runs/v6-cover-fc-distance-slope/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-match-inner-off.json",
           "id": "tl-v6-cover-hb-match-inner-off",
           "lens_record": "runs/v6-cover-hb-match-inner-off/train/projection.json",
           "record": "runs/v6-cover-hb-match-inner-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-distance-slope.json",
           "id": "tl-v6-cover-hb-distance-slope",
           "lens_record": "runs/v6-cover-hb-distance-slope/train/projection.json",
           "record": "runs/v6-cover-hb-distance-slope/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-att-local-off.json",
           "id": "tl-v6-cover-fc-att-local-off",
           "lens_record": "runs/v6-cover-fc-att-local-off/train/projection.json",
           "record": "runs/v6-cover-fc-att-local-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv1.json",
           "id": "tl-v6-cover-fc-gated_delta-conv1",
           "lens_record": "runs/v6-cover-fc-gated_delta-conv1/train/projection.json",
           "record": "runs/v6-cover-fc-gated_delta-conv1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-att-local-off.json",
           "id": "tl-v6-cover-hb-att-local-off",
           "lens_record": "runs/v6-cover-hb-att-local-off/train/projection.json",
           "record": "runs/v6-cover-hb-att-local-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv1.json",
           "id": "tl-v6-cover-hb-gated_delta-conv1",
           "lens_record": "runs/v6-cover-hb-gated_delta-conv1/train/projection.json",
           "record": "runs/v6-cover-hb-gated_delta-conv1/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-att-regional-off.json",
           "id": "tl-v6-cover-fc-att-regional-off",
           "lens_record": "runs/v6-cover-fc-att-regional-off/train/projection.json",
           "record": "runs/v6-cover-fc-att-regional-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-conv8.json",
           "id": "tl-v6-cover-fc-gated_delta-conv8",
           "lens_record": "runs/v6-cover-fc-gated_delta-conv8/train/projection.json",
           "record": "runs/v6-cover-fc-gated_delta-conv8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-att-regional-off.json",
           "id": "tl-v6-cover-hb-att-regional-off",
           "lens_record": "runs/v6-cover-hb-att-regional-off/train/projection.json",
           "record": "runs/v6-cover-hb-att-regional-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-conv8.json",
           "id": "tl-v6-cover-hb-gated_delta-conv8",
           "lens_record": "runs/v6-cover-hb-gated_delta-conv8/train/projection.json",
           "record": "runs/v6-cover-hb-gated_delta-conv8/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-bern.json",
           "id": "tl-v6-cover-fc-send-regional_total-bern",
           "lens_record": "runs/v6-cover-fc-send-regional_total-bern/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_total-bern/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-heads2.json",
           "id": "tl-v6-cover-fc-gated_delta-heads2",
           "lens_record": "runs/v6-cover-fc-gated_delta-heads2/train/projection.json",
           "record": "runs/v6-cover-fc-gated_delta-heads2/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 35961,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-bern.json",
           "id": "tl-v6-cover-hb-send-regional_total-bern",
           "lens_record": "runs/v6-cover-hb-send-regional_total-bern/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_total-bern/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-heads2.json",
           "id": "tl-v6-cover-hb-gated_delta-heads2",
           "lens_record": "runs/v6-cover-hb-gated_delta-heads2/train/projection.json",
           "record": "runs/v6-cover-hb-gated_delta-heads2/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent1.json",
           "id": "tl-v6-cover-fc-send-regional_total-ent1",
           "lens_record": "runs/v6-cover-fc-send-regional_total-ent1-retry1/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_total-ent1-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-mem-off.json",
           "id": "tl-v6-cover-fc-gated_delta-mem-off",
           "lens_record": "runs/v6-cover-fc-gated_delta-mem-off/train/projection.json",
           "record": "runs/v6-cover-fc-gated_delta-mem-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent1.json",
           "id": "tl-v6-cover-hb-send-regional_total-ent1",
           "lens_record": "runs/v6-cover-hb-send-regional_total-ent1-retry1/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_total-ent1-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-mem-off.json",
           "id": "tl-v6-cover-hb-gated_delta-mem-off",
           "lens_record": "runs/v6-cover-hb-gated_delta-mem-off/train/projection.json",
           "record": "runs/v6-cover-hb-gated_delta-mem-off/train/result.json",
           "source_commit": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent15.json",
           "id": "tl-v6-cover-fc-send-regional_total-ent15",
           "lens_record": "runs/v6-cover-fc-send-regional_total-ent15/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_total-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-gated_delta-ffn-off.json",
           "id": "tl-v6-cover-fc-gated_delta-ffn-off",
           "lens_record": "runs/v6-cover-fc-gated_delta-ffn-off/train/projection.json",
           "record": "runs/v6-cover-fc-gated_delta-ffn-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent15.json",
           "id": "tl-v6-cover-hb-send-regional_total-ent15",
           "lens_record": "runs/v6-cover-hb-send-regional_total-ent15/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_total-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-gated_delta-ffn-off.json",
           "id": "tl-v6-cover-hb-gated_delta-ffn-off",
           "lens_record": "runs/v6-cover-hb-gated_delta-ffn-off/train/projection.json",
           "record": "runs/v6-cover-hb-gated_delta-ffn-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total-ent2.json",
           "id": "tl-v6-cover-fc-send-regional_total-ent2",
           "lens_record": "runs/v6-cover-fc-send-regional_total-ent2/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_total-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv1.json",
           "id": "tl-v6-cover-fc-ssd-conv1",
           "lens_record": "runs/v6-cover-fc-ssd-conv1/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-conv1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total-ent2.json",
           "id": "tl-v6-cover-hb-send-regional_total-ent2",
           "lens_record": "runs/v6-cover-hb-send-regional_total-ent2/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_total-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv1.json",
           "id": "tl-v6-cover-hb-ssd-conv1",
           "lens_record": "runs/v6-cover-hb-ssd-conv1/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-conv1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-quad.json",
           "id": "tl-v6-cover-fc-send-regional_threshold-quad",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold-quad/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold-quad/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-conv8.json",
           "id": "tl-v6-cover-fc-ssd-conv8",
           "lens_record": "runs/v6-cover-fc-ssd-conv8/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-conv8/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-quad.json",
           "id": "tl-v6-cover-hb-send-regional_threshold-quad",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold-quad/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold-quad/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-conv8.json",
           "id": "tl-v6-cover-hb-ssd-conv8",
           "lens_record": "runs/v6-cover-hb-ssd-conv8/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-conv8/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-bern.json",
           "id": "tl-v6-cover-fc-send-regional_threshold-bern",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold-bern/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold-bern/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-heads2.json",
           "id": "tl-v6-cover-fc-ssd-heads2",
           "lens_record": "runs/v6-cover-fc-ssd-heads2/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-heads2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-bern.json",
           "id": "tl-v6-cover-hb-send-regional_threshold-bern",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold-bern/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold-bern/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-heads2.json",
           "id": "tl-v6-cover-hb-ssd-heads2",
           "lens_record": "runs/v6-cover-hb-ssd-heads2/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-heads2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent1.json",
           "id": "tl-v6-cover-fc-send-regional_threshold-ent1",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent1/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold-ent1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-mem-off.json",
           "id": "tl-v6-cover-fc-ssd-mem-off",
           "lens_record": "runs/v6-cover-fc-ssd-mem-off/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-mem-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent1.json",
           "id": "tl-v6-cover-hb-send-regional_threshold-ent1",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent1/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold-ent1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-mem-off.json",
           "id": "tl-v6-cover-hb-ssd-mem-off",
           "lens_record": "runs/v6-cover-hb-ssd-mem-off/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-mem-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent15.json",
           "id": "tl-v6-cover-fc-send-regional_threshold-ent15",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent15/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-ffn-off.json",
           "id": "tl-v6-cover-fc-ssd-ffn-off",
           "lens_record": "runs/v6-cover-fc-ssd-ffn-off/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-ffn-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent15.json",
           "id": "tl-v6-cover-hb-send-regional_threshold-ent15",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent15/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-ffn-off.json",
           "id": "tl-v6-cover-hb-ssd-ffn-off",
           "lens_record": "runs/v6-cover-hb-ssd-ffn-off/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-ffn-off/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold-ent2.json",
           "id": "tl-v6-cover-fc-send-regional_threshold-ent2",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold-ent2/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-ssd-groups2.json",
           "id": "tl-v6-cover-fc-ssd-groups2",
           "lens_record": "runs/v6-cover-fc-ssd-groups2/train/projection.json",
           "record": "runs/v6-cover-fc-ssd-groups2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold-ent2.json",
           "id": "tl-v6-cover-hb-send-regional_threshold-ent2",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold-ent2/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-ssd-groups2.json",
           "id": "tl-v6-cover-hb-ssd-groups2",
           "lens_record": "runs/v6-cover-hb-ssd-groups2/train/projection.json",
           "record": "runs/v6-cover-hb-ssd-groups2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-quad.json",
           "id": "tl-v6-cover-fc-send-constrained-quad",
           "lens_record": "runs/v6-cover-fc-send-constrained-quad/train/projection.json",
           "record": "runs/v6-cover-fc-send-constrained-quad/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-budget-div1.json",
           "id": "tl-v6-cover-fc-budget-div1",
           "lens_record": "runs/v6-cover-fc-budget-div1/train/projection.json",
           "record": "runs/v6-cover-fc-budget-div1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-quad.json",
           "id": "tl-v6-cover-hb-send-constrained-quad",
           "lens_record": "runs/v6-cover-hb-send-constrained-quad/train/projection.json",
           "record": "runs/v6-cover-hb-send-constrained-quad/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-budget-div1.json",
           "id": "tl-v6-cover-hb-budget-div1",
           "lens_record": "runs/v6-cover-hb-budget-div1/train/projection.json",
           "record": "runs/v6-cover-hb-budget-div1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-bern.json",
           "id": "tl-v6-cover-fc-send-constrained-bern",
           "lens_record": "runs/v6-cover-fc-send-constrained-bern/train/projection.json",
           "record": "runs/v6-cover-fc-send-constrained-bern/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-budget-div4.json",
           "id": "tl-v6-cover-fc-budget-div4",
           "lens_record": "runs/v6-cover-fc-budget-div4/train/projection.json",
           "record": "runs/v6-cover-fc-budget-div4/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 32889,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-bern.json",
           "id": "tl-v6-cover-hb-send-constrained-bern",
           "lens_record": "runs/v6-cover-hb-send-constrained-bern/train/projection.json",
           "record": "runs/v6-cover-hb-send-constrained-bern/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-budget-div4.json",
           "id": "tl-v6-cover-hb-budget-div4",
           "lens_record": "runs/v6-cover-hb-budget-div4/train/projection.json",
           "record": "runs/v6-cover-hb-budget-div4/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent1.json",
           "id": "tl-v6-cover-fc-send-constrained-ent1",
           "lens_record": "runs/v6-cover-fc-send-constrained-ent1/train/projection.json",
           "record": "runs/v6-cover-fc-send-constrained-ent1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-textbook-kv.json",
           "id": "tl-v6-cover-fc-textbook-kv",
           "lens_record": "runs/v6-cover-fc-textbook-kv/train/projection.json",
           "record": "runs/v6-cover-fc-textbook-kv/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent1.json",
           "id": "tl-v6-cover-hb-send-constrained-ent1",
           "lens_record": "runs/v6-cover-hb-send-constrained-ent1/train/projection.json",
           "record": "runs/v6-cover-hb-send-constrained-ent1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-textbook-kv.json",
           "id": "tl-v6-cover-hb-textbook-kv",
           "lens_record": "runs/v6-cover-hb-textbook-kv/train/projection.json",
           "record": "runs/v6-cover-hb-textbook-kv/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent15.json",
           "id": "tl-v6-cover-fc-send-constrained-ent15",
           "lens_record": "runs/v6-cover-fc-send-constrained-ent15/train/projection.json",
           "record": "runs/v6-cover-fc-send-constrained-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-textbook-mixed.json",
           "id": "tl-v6-cover-fc-textbook-mixed",
           "lens_record": "runs/v6-cover-fc-textbook-mixed/train/projection.json",
           "record": "runs/v6-cover-fc-textbook-mixed/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent15.json",
           "id": "tl-v6-cover-hb-send-constrained-ent15",
           "lens_record": "runs/v6-cover-hb-send-constrained-ent15/train/projection.json",
           "record": "runs/v6-cover-hb-send-constrained-ent15/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-textbook-mixed.json",
           "id": "tl-v6-cover-hb-textbook-mixed",
           "lens_record": "runs/v6-cover-hb-textbook-mixed/train/projection.json",
           "record": "runs/v6-cover-hb-textbook-mixed/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "queued"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-constrained-ent2.json",
           "id": "tl-v6-cover-fc-send-constrained-ent2",
           "lens_record": "runs/v6-cover-fc-send-constrained-ent2/train/projection.json",
           "record": "runs/v6-cover-fc-send-constrained-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-constrained-ent2.json",
           "id": "tl-v6-cover-hb-send-constrained-ent2",
           "lens_record": "runs/v6-cover-hb-send-constrained-ent2/train/projection.json",
           "record": "runs/v6-cover-hb-send-constrained-ent2/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_total_zero.json",
           "id": "tl-v6-cover-fc-send-regional_total_zero",
           "lens_record": "runs/v6-cover-fc-send-regional_total_zero/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_total_zero/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_total_zero.json",
           "id": "tl-v6-cover-hb-send-regional_total_zero",
           "lens_record": "runs/v6-cover-hb-send-regional_total_zero/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_total_zero/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-regional_threshold_hard.json",
           "id": "tl-v6-cover-fc-send-regional_threshold_hard",
           "lens_record": "runs/v6-cover-fc-send-regional_threshold_hard/train/projection.json",
           "record": "runs/v6-cover-fc-send-regional_threshold_hard/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-regional_threshold_hard.json",
           "id": "tl-v6-cover-hb-send-regional_threshold_hard",
           "lens_record": "runs/v6-cover-hb-send-regional_threshold_hard/train/projection.json",
           "record": "runs/v6-cover-hb-send-regional_threshold_hard/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-hard_selection.json",
           "id": "tl-v6-cover-fc-send-hard_selection",
           "lens_record": "runs/v6-cover-fc-send-hard_selection/train/projection.json",
           "record": "runs/v6-cover-fc-send-hard_selection/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-hard_selection.json",
           "id": "tl-v6-cover-hb-send-hard_selection",
           "lens_record": "runs/v6-cover-hb-send-hard_selection/train/projection.json",
           "record": "runs/v6-cover-hb-send-hard_selection/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-fc-send-direct_attention.json",
           "id": "tl-v6-cover-fc-send-direct_attention",
           "lens_record": "runs/v6-cover-fc-send-direct_attention/train/projection.json",
           "record": "runs/v6-cover-fc-send-direct_attention/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-hb-send-direct_attention.json",
           "id": "tl-v6-cover-hb-send-direct_attention",
           "lens_record": "runs/v6-cover-hb-send-direct_attention/train/projection.json",
           "record": "runs/v6-cover-hb-send-direct_attention/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-transformer-fc-budget.json",
           "id": "tl-v6-cover-transformer-fc-budget",
           "lens_record": "runs/v6-cover-transformer-fc-budget-retry1/train/projection.json",
           "record": "runs/v6-cover-transformer-fc-budget-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "completed"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 65536,
           "config": "configs/studies/language/v6/resolved/cover-transformer-hb-budget.json",
           "id": "tl-v6-cover-transformer-hb-budget",
           "lens_record": "runs/v6-cover-transformer-hb-budget-retry1/train/projection.json",
           "record": "runs/v6-cover-transformer-hb-budget-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "completed"
+          "status": "completed",
+          "terminal_state": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-COVER-v6",
-      "summary": "91\u5177\u540d\u914d\u65b9\u00d7FC/HB\uff0c\u52a02\u4e2aTransformer\uff0c\u5171184\u914d\u7f6e\u3002",
+      "summary": "\u5168\u90e8184\u9879\u7ec8\u6001\uff1a181\u8fbe\u76ee\u6807\u30013\u6b63\u652f\u6301\u6267\u884c\u5f02\u5e38\u3002",
       "title": "\u5e76\u884c\u7ebf\u4e00\uff1a\u5c40\u90e8\u5019\u9009\u5e76\u96c6\u8986\u76d6",
       "track": "tide",
       "view_group": "current",
@@ -7421,7 +7819,7 @@
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
-      "decision": "\u5171\u540cL128\u3001\u5168\u5c40B32/token\u65e5\u7a0b\uff1b262K/1M/4M\u91cc\u7a0b\u7891\u3002\u8fbe\u5230\u7684\u524d\u7f00\u4e0e\u9884\u7b97\u622a\u65ad\u5982\u5b9e\u6bd4\u8f83\u3002",
+      "decision": "\u539f\u4e25\u683c\u5931\u8d25\u3001\u5b9e\u9645\u66dd\u5149\u4e0e\u9884\u7b97\u622a\u65ad\u4fdd\u7559\uff1b\u7ec8\u6001\u4e0d\u81ea\u52a8\u751f\u6210\u79d1\u5b66\u652f\u6301\u3002",
       "execution_note": "\u4e09\u6863Transformer\u54044,194,304\u6709\u6548\u76ee\u6807\u5b8c\u6210\uff0c\u5c1a\u5f85\u5171\u540c\u524d\u7f00\u5ba1\u9605\uff1bHB88\u5728\u9996\u6b21\u66f4\u65b0\u524d\u89e6\u53ca48GiB\uff0c\u4fdd\u7559\u5931\u8d25\u5e76\u572896GiB\u4e0b\u540c\u6a21\u578b/batch\u91cd\u63d0\uff0c\u539f36h\u6263\u9664\u5df2\u7528473\u79d2\u3002",
       "id": "V6-SCALE",
       "kind": "experiment",
@@ -7442,137 +7840,182 @@
       ],
       "runs": [
         {
+          "actual_train_tokens": 2003552,
           "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad.json",
           "id": "tl-v6-scale-fc16-kv-quad",
           "lens_record": "runs/v6-scale-fc16-kv-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-kv-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "unchecked",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "budget_truncated"
         },
         {
+          "actual_train_tokens": 929233,
           "config": "configs/studies/language/v6/resolved/scale-fc32-kv-quad.json",
           "id": "tl-v6-scale-fc32-kv-quad",
           "lens_record": "runs/v6-scale-fc32-kv-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc32-kv-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 440057,
           "config": "configs/studies/language/v6/resolved/scale-fc64-kv-quad.json",
           "id": "tl-v6-scale-fc64-kv-quad",
           "lens_record": "runs/v6-scale-fc64-kv-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc64-kv-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 747230,
           "config": "configs/studies/language/v6/resolved/scale-hb40-kv-quad.json",
           "id": "tl-v6-scale-hb40-kv-quad",
           "lens_record": "runs/v6-scale-hb40-kv-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-hb40-kv-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 318416,
           "config": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
           "id": "tl-v6-scale-hb88-kv-quad",
           "lens_record": "runs/v6-scale-hb88-kv-quad-memory2/train/projection.json",
           "record": "runs/v6-scale-hb88-kv-quad-memory2/train/result.json",
           "source_commit": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 2230301,
           "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad.json",
           "id": "tl-v6-scale-fc16-ssd-quad",
           "lens_record": "runs/v6-scale-fc16-ssd-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-ssd-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "unchecked",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "budget_truncated"
         },
         {
+          "actual_train_tokens": 1149825,
           "config": "configs/studies/language/v6/resolved/scale-fc32-ssd-quad.json",
           "id": "tl-v6-scale-fc32-ssd-quad",
           "lens_record": "runs/v6-scale-fc32-ssd-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc32-ssd-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "unchecked",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "budget_truncated"
         },
         {
+          "actual_train_tokens": 2048160,
           "config": "configs/studies/language/v6/resolved/scale-fc16-gdn-quad.json",
           "id": "tl-v6-scale-fc16-gdn-quad",
           "lens_record": "runs/v6-scale-fc16-gdn-quad-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-gdn-quad-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "unchecked",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "budget_truncated"
         },
         {
+          "actual_train_tokens": 1181988,
           "config": "configs/studies/language/v6/resolved/scale-fc16-shannon.json",
           "id": "tl-v6-scale-fc16-shannon",
           "lens_record": "runs/v6-scale-fc16-shannon-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-shannon-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "unchecked",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "budget_truncated"
         },
         {
+          "actual_train_tokens": 581571,
           "config": "configs/studies/language/v6/resolved/scale-fc32-shannon.json",
           "id": "tl-v6-scale-fc32-shannon",
           "lens_record": "runs/v6-scale-fc32-shannon-retry1/train/projection.json",
           "record": "runs/v6-scale-fc32-shannon-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 448249,
           "config": "configs/studies/language/v6/resolved/scale-hb40-shannon.json",
           "id": "tl-v6-scale-hb40-shannon",
           "lens_record": "runs/v6-scale-hb40-shannon-retry1/train/projection.json",
           "record": "runs/v6-scale-hb40-shannon-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 4194304,
           "config": "configs/studies/language/v6/resolved/scale-transformer-5m.json",
           "id": "tl-v6-scale-transformer-5m",
           "lens_record": "runs/v6-scale-transformer-5m-retry1/train/projection.json",
           "record": "runs/v6-scale-transformer-5m-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "completed"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 4194304,
           "config": "configs/studies/language/v6/resolved/scale-transformer-10m.json",
           "id": "tl-v6-scale-transformer-10m",
           "lens_record": "runs/v6-scale-transformer-10m-retry1/train/projection.json",
           "record": "runs/v6-scale-transformer-10m-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "completed"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 4194304,
           "config": "configs/studies/language/v6/resolved/scale-transformer-19m.json",
           "id": "tl-v6-scale-transformer-19m",
           "lens_record": "runs/v6-scale-transformer-19m-retry1/train/projection.json",
           "record": "runs/v6-scale-transformer-19m-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "completed"
+          "status": "completed",
+          "terminal_state": "completed"
         },
         {
+          "actual_train_tokens": 427800,
           "config": "configs/studies/language/v6/resolved/scale-fc16-kv-quad-npu.json",
           "id": "tl-v6-scale-fc16-kv-quad-npu",
           "lens_record": "runs/v6-scale-fc16-kv-quad-npu-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-kv-quad-npu-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         },
         {
+          "actual_train_tokens": 654392,
           "config": "configs/studies/language/v6/resolved/scale-fc16-ssd-quad-npu.json",
           "id": "tl-v6-scale-fc16-ssd-quad-npu",
           "lens_record": "runs/v6-scale-fc16-ssd-quad-npu-retry1/train/projection.json",
           "record": "runs/v6-scale-fc16-ssd-quad-npu-retry1/train/result.json",
           "source_commit": "4087310162338e4f4e90102989cd2c9b98db62b9",
-          "status": "running"
+          "status": "failed",
+          "terminal_note": "\u539f\u59cb\u7ec8\u6001\uff1b\u89c4\u6a21\u672a\u8fbe\u76ee\u6807/\u5230\u9650\u4e2d\u6b62\u4e0e\u7b5b\u9009\u6267\u884c\u5f02\u5e38\u5206\u522b\u89e3\u91ca\uff0c\u89c1STATUS\u3002",
+          "terminal_state": "failed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-SCALE-v6",
-      "summary": "14\u4e3b\u5019\u9009+2NPU\u540c\u6a21\u578b\u89c2\u5bdf\uff1b\u4e3b\u8981\u5bb9\u91cf\u7ea65\u201326M\u3002",
+      "summary": "\u5168\u90e816\u9879\u7ec8\u6001\uff1a3 Transformer\u8fbe\u76ee\u6807\u300113 TIDE\u672a\u8fbe\u76ee\u6807\u3002",
       "title": "\u5e76\u884c\u7ebf\u4e8c\uff1a\u5b9e\u8d28\u6570\u636e\u4e0e\u5bb9\u91cf\u9636\u68af",
       "track": "tide",
       "view_group": "current",
@@ -7849,13 +8292,119 @@
       "view_group": "current",
       "x": 915,
       "y": 280
+    },
+    {
+      "budget": "\u56db\u4e2aCPU1\u670d\u52a1\u7ea60.2395\u6838\u65f6\uff1b\u8bca\u65ad\u989d\u5ea6\u22641.75\u6838\u65f6\uff0c\u65e0NPU/\u65b0\u5b66\u4e60\u5019\u9009\u3002",
+      "decision": "\u57fa\u5ea7\u53ea\u8bfb\uff1b\u5148\u8ba8\u8bba\u4fee\u590d\u5951\u7ea6\uff0c\u518d\u5f62\u6210\u4e0a\u6e38\u9700\u6c42\u3002",
+      "id": "V6-POSITIVE",
+      "kind": "experiment",
+      "question": "\u54ea\u4e9b\u662f\u53ef\u907f\u514d\u7684\u6c42\u503c\u4e22\u5931\uff0c\u54ea\u4e9b\u662f\u8303\u56f4\u4e0b\u6ea2\uff0c\u5b88\u536b\u9057\u6f0f\u5728\u54ea\uff1f",
+      "references": [
+        {
+          "label": "\u6b63\u91cf\u5f52\u96f6\u8865\u8bc1\u4e0e\u8ba8\u8bba",
+          "path": "docs/studies/positive-path-audit-v6-results.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u884c\u3001Decimal\u4e0e\u9759\u9ed8\u89c1\u8bc1",
+          "path": "docs/evidence/positive-path-v6-local-analysis.json"
+        },
+        {
+          "label": "\u8fd0\u884c/\u6062\u590d/Lens\u5ba1\u9605",
+          "path": "docs/evidence/positive-path-v6-review.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/positive-path-v6/direct-received.json",
+          "id": "tl-v6-positive-direct-received",
+          "lens_record": "runs/v6-positive-direct-received/projection-retry1.json",
+          "record": "runs/v6-positive-direct-received/result.json",
+          "source_commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/positive-path-v6/regional-total-bern.json",
+          "id": "tl-v6-positive-regional-total-bern",
+          "lens_record": "runs/v6-positive-regional-total-bern/projection.json",
+          "record": "runs/v6-positive-regional-total-bern/result.json",
+          "source_commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/positive-path-v6/constrained-bern.json",
+          "id": "tl-v6-positive-constrained-bern",
+          "lens_record": "runs/v6-positive-constrained-bern/projection.json",
+          "record": "runs/v6-positive-constrained-bern/result.json",
+          "source_commit": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+          "status": "completed"
+        },
+        {
+          "config": "artifacts/jobs/v6-positive-direct-boundary-context/job.json",
+          "id": "tl-v6-positive-direct-boundary-context",
+          "lens_record": "runs/v6-positive-direct-boundary-context/projection.json",
+          "record": "runs/v6-positive-direct-boundary-context/result.json",
+          "source_commit": "7e1142df5225efc3fd5f1e9b3648e80544079d60",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
+      "study_id": "TL-POSITIVE-v6",
+      "summary": "\u4e09\u9879\u539f\u5931\u8d25\u91cd\u73b0\uff0b\u4e00\u6b21\u8fb9\u754c\u89c2\u5bdf\uff1b\u516c\u5171\u5c0f\u56fe\u548c\u5c40\u90e8\u516c\u5f0f\u8865\u8bc1\u3002",
+      "title": "\u6b63\u91cf\u5f52\u96f6\uff1a\u5931\u8d25\u4e0e\u9759\u9ed8\u94fe\u8def",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 640
+    },
+    {
+      "budget": "\u8865\u8bc1\u5df2\u7ec8\u6001\uff1b\u4fee\u590d\u4e0e\u540e\u7eed\u8bad\u7ec3\u672a\u542f\u52a8\u3002",
+      "comparisons": "\u539fcheckpoint\u53ef\u7528\u5386\u53f2\u6807\u91cf\u7cbe\u786e\u5339\u914d\uff1bFP32/FP64/100\u4f4dDecimal\u5b9e\u9645\u884c\uff1bstrict Python/native\u5bf9\u73b0\u6709floor\u805a\u5408\uff1b\u663e\u5f0fFP64/FP32 Describe\u89c6\u56fe\u3002",
+      "counterevidence": "\u6b63\u91cf\u5e76\u975e\u90fd\u627f\u62c5\u79bb\u6563\u652f\u6301\uff1b\u77ed\u901a\u9053\u8870\u51cf\u5f52\u96f6\u6709\u65e2\u6709\u8bb8\u53ef\uff1b\u5df2\u6709Shannon\u7b56\u7565\u5728\u9650\u5b9a\u8303\u56f4\u4fee\u590d\u4e86\u805a\u5408\u3002",
+      "decision": "\u5148\u8ba8\u8bba\u7a33\u5b9a\u6c42\u503c\u53ca\u7ed3\u6784\u652f\u6301\u7684\u6709\u9650\u7b56\u7565\uff1b\u5168\u94felog\u8868\u793a\u53e6\u8bc4\u3002",
+      "id": "RV6-POSITIVE",
+      "kind": "result",
+      "question": "\u4ec5\u5728\u6700\u7ec8\u53d1\u9001\u68c0\u67e5\u6216\u8865\u6700\u5c0f\u503c\u662f\u5426\u8db3\u591f\uff1f",
+      "references": [
+        {
+          "label": "\u6b63\u91cf\u5f52\u96f6\u8865\u8bc1\u4e0e\u8ba8\u8bba",
+          "path": "docs/studies/positive-path-audit-v6-results.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u884c\u3001Decimal\u4e0e\u9759\u9ed8\u89c1\u8bc1",
+          "path": "docs/evidence/positive-path-v6-local-analysis.json"
+        },
+        {
+          "label": "\u8fd0\u884c/\u6062\u590d/Lens\u5ba1\u9605",
+          "path": "docs/evidence/positive-path-v6-review.json"
+        }
+      ],
+      "scope": "\u56fa\u5b9a74e7bbd\u3001HB40 CPU/native FP32\u4e09\u9879\u5b9e\u9645\u884c\uff1bCPU\u516c\u5171\u5c0f\u56fe\u4e0e\u5c40\u90e8Decimal\u89c1\u8bc1\u3002\u975e\u4fee\u590d\u9a8c\u6536\u6216\u8bed\u8a00\u8d28\u91cf\u7ed3\u8bba\u3002",
+      "sources": [
+        {
+          "label": "\u5b9e\u9645\u5931\u8d25\u3001\u516c\u5171API\u89c1\u8bc1\u4e0e\u4eba\u5de5\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/positive-path-audit-v6-results.md"
+        },
+        {
+          "label": "\u56fa\u5b9a\u7b56\u7565\u7684\u8303\u56f4",
+          "url": "https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/positive-support-policy.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "1\u9879\u63d0\u524d\u5f52\u96f6\uff0b2\u9879\u771f\u5b9e\u8303\u56f4\u4e0b\u6ea2\uff1b\u53e6\u8bc1\u9759\u9ed8\u805a\u5408\u3001cast\u548cVJP\u95ee\u9898\u3002",
+      "title": "\u6b63\u652f\u6301\u9700\u8d2f\u7a7f\u751f\u6210\u3001\u8f6c\u6362\u4e0e\u6d88\u8d39",
+      "track": "tide",
+      "transfer_conditions": "\u7a33\u5b9a\u516c\u5f0f\u3001\u6b63\u652f\u6301\u8fb9\u754c\u53ca\u58f0\u660eVJP/\u7ea6\u675f/\u6062\u590d\u987b\u5171\u540c\u9a8c\u6536\uff1b\u4fdd\u7559\u9ed8\u8ba4strict\u3001\u5408\u6cd5\u96f6\u548c\u65e7\u5931\u8d25\uff1b\u9700\u8ba8\u8bba\u540e\u63d0\u51fa\u6b63\u5f0f\u9700\u6c42\u3002",
+      "unresolved": "\u5c1a\u672a\u5b9e\u73b0\u4fee\u590d\uff1b\u5b8c\u6574HB\u4e0a\u6e38\u8d28\u91cf\u8d77\u6e90\u3001\u5176\u4ed6\u65cf\u771f\u5b9e\u68af\u5ea6\u5f71\u54cd\u4e0e\u8bbe\u5907/\u957f\u8f68\u8ff9\u8d44\u683c\u672a\u8bc1\uff1b\u4e0d\u80fd\u628a\u9759\u6001\u98ce\u9669\u5f53\u6210\u5b9e\u9645\u8bad\u7ec3\u5931\u8d25\u3002",
+      "view_group": "current",
+      "x": 915,
+      "y": 640
     }
   ],
-  "notice": "v6\uff1a111\u8fd0\u884c\u300184\u7b49\u5f85\u30015\u5b8c\u6210\uff1bHB88\u5bb9\u91cf\u5931\u8d25\u540e\u4ee5\u65b0\u8eab\u4efd\u91cd\u63d0\u3002\u6570\u503c/\u673a\u5236/\u6062\u590d/\u5b66\u4e60\u5206\u8f74\uff1b\u5c1a\u65e0\u672c\u6279\u79d1\u5b66\u652f\u6301\u7ed3\u8bba\u3002",
+  "notice": "200\u914d\u7f6e\u5df2\u7ec8\u6001\uff1b\u7b5b\u9009181\u5b8c\u6210/3\u4e0b\u6ea2\uff0c\u89c4\u6a213\u8fbe\u76ee\u6807/13\u672a\u8fbe\u76ee\u6807\u3002\u6b63\u652f\u6301\u56db\u9879\u8bca\u65ad\u5df2\u5ba1\u9605\uff0c\u5c1a\u672a\u4fee\u590d\u6216\u63d0\u4ea4\u9700\u6c42\uff1b\u4e25\u683c\u6570\u503c\u3001\u6062\u590d\u548c\u5b66\u4e60\u5206\u522b\u62a5\u544a\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "v6\uff1a\u5c40\u90e8\u5019\u9009\u5e76\u96c6\u8986\u76d6\u4e0e\u66f4\u591a\u6570\u636e\u3001\u66f4\u5927\u6a21\u578b\u5e76\u884c\u8bad\u7ec3",
+  "subtitle": "v6\u7ec8\u6001\uff1a\u8bed\u8a00\u4e0e\u7ed3\u6784\u7814\u7a76\uff1b\u6b63\u91cf\u5f52\u96f6\u8865\u8bc1\u53ca\u4fee\u590d\u65b9\u6848\u8ba8\u8bba",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-09",
+  "updated_at": "2026-11-11T02:57:10.865050+00:00",
   "view_groups": [
     {
       "height": 3700,
