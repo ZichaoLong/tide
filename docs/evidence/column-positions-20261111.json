@@ -1,0 +1,611 @@
+{
+  "source": "9fa852cbd3122521f68393600a34acdd87254684",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "reused_native": {
+    "source": "9fa852c",
+    "build": {
+      "source": "01cde3bd837f82ba9f5ed424f41b039f1747e908",
+      "cpp_source_sha256": "4288839dca986f25060490d995a8d101c4c116814859254794fa23a51c0ed10d",
+      "torch": "2.12.0+cpu",
+      "distribution": {
+        "torch": "2.12.0+cpu",
+        "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+        "cuda": null,
+        "cxx11_abi": true,
+        "discovery": "python-torch"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.2.0"
+      },
+      "build_jobs": 320,
+      "backend": "npu",
+      "npu_runtime": "python",
+      "torch_npu": "2.12.0.post3",
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "fbd18f9ba8b2c392074dc2f0d54d62bb3b76c8318b9af818923d85f9b6214926",
+        "libtidegraph_runtime.a": "df1ada89ee90c1fac624a714040f0d6b68bd96046df99ecdfdb71cb68465f903",
+        "_tide_native.so": "ec1fe706855cc800be0b4e35894cf16f1553ee68de0e3a013009cfc7d41f24af"
+      }
+    }
+  },
+  "standalone_build": {
+    "source": "9fa852cbd3122521f68393600a34acdd87254684",
+    "cpp_source_sha256": "4288839dca986f25060490d995a8d101c4c116814859254794fa23a51c0ed10d",
+    "torch": "2.12.0",
+    "distribution": {
+      "torch": "2.12.0",
+      "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+      "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+      "cxx11_abi": true,
+      "cuda": null,
+      "discovery": "standalone-prefix",
+      "distribution_sha256": {
+        "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+        "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+        "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+        "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+        "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+      }
+    },
+    "environment": {
+      "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+      "compiler": "c++ (GCC) 10.3.1",
+      "cxx_standard": 17,
+      "build_type": "Release",
+      "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+      "cann_version": "9.2.0",
+      "npu_sdk": {
+        "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+        "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+        "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+      }
+    },
+    "build_jobs": 320,
+    "backend": "npu",
+    "npu_runtime": "standalone",
+    "torch_npu": null,
+    "cuda": null,
+    "architecture": "aarch64",
+    "python": "3.9.9",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "f6b8455f3279fbd8675905702b58119d02074d48ffcae84fe8c52db45594535c",
+      "libtidegraph_runtime.a": "acc471ffd34c638cc5e65b256955dfa1d29a87d1f62f2176a87e6b7dbfebcc95",
+      "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+      "tidegraph-kernel-check": "20d4f6ae6cbc5910c30b47187e448a9d6bd53ce2c4a5f184c03fa37c934dafee",
+      "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+      "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+      "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+      "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+      "tidegraph-weighted-training-check": "6ae9190e22654c78b094720b3fb336cd3cf7245389acb24efa5e43f5c1021273",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+      "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+      "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+      "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+      "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+      "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+      "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+      "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+      "tidegraph-placement-check": "af6ce30e30bf3f9d5683252adc10d9c41ebc5d118990ba9c472b6b2075f82692",
+      "tidegraph-payload-ownership-check": "c368f686dde2a59e2b7b003f97ba3f2b98825c5d904b4e14b6f6825a50772547",
+      "tidegraph-weighted-binding-module-check": "6fa66ef5bc9ce4e5d3f1017c22cafd669a35d2df04ef81f5219cea766cc8a944",
+      "tidegraph-column-check": "a205c7588b8291500d290ad8726bec63457291bdd927682344b4318b38f79e24",
+      "libtidegraph-weighted-binding-module.so": "9c8868e2097973b249b80d263d16116c3792a8bd59ce9077d4140a151cf4f82d"
+    }
+  },
+  "junit": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "13",
+      "tests": "97",
+      "time": "23.782",
+      "timestamp": "2026-11-11T18:59:48.404610+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    }
+  ],
+  "consumers": {
+    "position-cpu-native-float32": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "native",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "position-cpu-native-float64": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "position-cpu-python-float32": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float32",
+        "client": "python",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "position-cpu-python-float64": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "python",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "position-npu-native": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    },
+    "position-npu-python": {
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": true
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296
+      },
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "column-position-qualify": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualify-position.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position",
+      "state": "passed",
+      "source": "9fa852cbd3122521f68393600a34acdd87254684",
+      "dirty": "",
+      "started": "2026-11-11T10:59:46.834333+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T11:01:40.211164+00:00"
+    },
+    "column-position-npu": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-npu.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position",
+      "state": "passed",
+      "source": "9fa852cbd3122521f68393600a34acdd87254684",
+      "dirty": "",
+      "started": "2026-11-11T11:01:09.006571+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T11:02:27.429255+00:00"
+    }
+  },
+  "launchers": {
+    "qualify-position.sh": "#!/bin/bash\nset -euo pipefail\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/column-env.sh\nexport TIDE_BUILD_DIR=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-dev1/build\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:$TIDE_BUILD_DIR\"\npython scripts/check_upstream.py\npython -m pytest -q tests/test_column_positions.py tests/test_column_training.py tests/test_kv_columns.py tests/test_settle_columns.py tests/test_window_execution.py tests/test_collect_fc_suites.py --dtype both --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-qualification.xml\npython -m pip wheel --no-build-isolation --no-deps . -w /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/wheel-position\npython -m pip install --no-deps --target /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-position /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/wheel-position/*.whl\nexport PYTHONPATH=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-position\ncd /tmp\nfor client in python native; do\n for dtype in float64 float32; do\n  python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position/examples/consumer_core5/tensor_window.py --positions --client \"$client\" --dtype \"$dtype\" --native-library \"$TIDE_BUILD_DIR\" --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-cpu-\"$client\"-\"$dtype\"\n done\ndone\ncd /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position\ncolumn_tool_path=$PATH\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=\"$column_tool_path:$PATH\"\nunset PYTHONPATH\n/usr/bin/python3 scripts/build.py --backend npu --npu-runtime standalone --libtorch-prefix \"$LIBTORCH_ROOT\" --cxx11-abi 1 --jobs all --build-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-dev1/build-sdk\n/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-dev1/build-sdk/tidegraph-column-check\n",
+    "position-npu.sh": "#!/bin/bash\nset -euo pipefail\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/column-env.sh\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-column-position-npu --project graph-execution-foundation --priority 0 --npu-count 1 --max-wait-seconds 120 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/column-position-npu/queue.json -- /bin/bash /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-npu-inner.sh\n",
+    "position-npu-inner.sh": "#!/bin/bash\nset -euo pipefail\nexport PYTHONPATH=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-position\ncd /tmp\nfor client in python native; do\n python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position/examples/consumer_core5/tensor_window.py --positions --device npu:0 --dtype float32 --client \"$client\" --native-library /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-dev1/build --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/position-npu-\"$client\"\ndone\n"
+  },
+  "queue": {
+    "elapsed_seconds": 77.20639948174357,
+    "job_id": "gef-column-position-npu",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 11,
+    "physical_ids": [
+      11
+    ],
+    "priority": 0,
+    "project": "graph-execution-foundation",
+    "return_code": 0,
+    "schema_version": 1,
+    "status": "completed",
+    "timestamp": "2026-11-11T11:02:27.412708+00:00"
+  }
+}

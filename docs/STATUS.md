@@ -22,26 +22,21 @@
 
 ## 当前实现与动作
 
-KV rotary/距离项的新列前向/一阶VJP已完成，原始 int64 先求差；容量计入相对旋转临时量。
-`column-position-dev1` passed：新 frozen source/native 构建，79 passed / 13 xfailed；
-补充非空 bound Read0、位置 checkpoint、collector 检查15 passed。固定提交资格待运行。
-开发反例曾让 time-major oracle 从0扫至2**54，已停止两个进程并改从对应空 cut 开始；
-这是测试范围修正，不改数学或阈值。空样本独立叶测试改按公共列根契约构造 oracle，
-旧独立事件根仍由记录 API 检验，不隐去 None/zero 差异。
+KV位置列 `9fa852c` 固定CPU与NPU资格均 passed；六安装客户端严格三步训练和新进程恢复通过。
+standalone新构建CPU检查通过。详情见[位置证据](evidence/column-positions-20261111.md)。
+FC正式记录见[整链证据](evidence/tensor-windows-20261111.md)。当前无活跃任务。
 
-native 构建 `artifacts/columns-20261111/position-dev1/build`，冻结输入 `position-dev1/source`、
-`frozen-files.json`。当前无活跃服务；原二进制保留。
+native位置构建 `artifacts/columns-20261111/position-dev1/build`，独立SDK `build-sdk`；
+干净资格worktree `qualified-position`。原二进制/原失败保留。
 环境 `artifacts/column-env.sh`，私有 `artifacts/additive-work/env`；CANN9.2/Torch2.12。
 用户未跟踪的两个 `docs/tide-learning-lab-TL-REQ-004/005-handoff.md` 原样保留，不纳入提交。
 
 ## 下一步
 
-1. 提交位置扩展及收集设施；新干净 worktree 核对 C++/二进制 hash 后复用匹配构建。
-2. 位置项固定 CPU 检查、安装 CPU/NPU Python/native 三步及新进程恢复、独立 SDK 实跑。
-3. 单独提交张量整链和位置扩展的资格/成本证据；同步导航与性能经验，不改旧证据。
-4. 继续 P4—P6：native 循环列/异构、代表规模与执行位置、限制和治理；GPU真机延后。
-   新列单 payload 的 CPU/mixed-c 不等于 mixed-a/b、resident、多卡迁移完成。
+1. 继续P4：native affine/delta/GDN/SSD、固定逻辑时间卷积与typed状态列，区域/消息接口保持。
+2. 相关独立标量/公式、共享根、保留窗/checkpoint与实际公共分派；再固定源码资格。
+3. P5—P6：代表规模与执行位置、限制和治理。GPU真机延后；当前新列CPU/mixed-c
+   不等于mixed-a/b、resident、多卡或所有规模迁移完成。
 
 长任务固定源码、background.slice、有限资源/时长。可用CPU/内存和空闲NPU可用；
-共享NPU须当前授权。quota已用224GiB/软300GiB，空闲内存约1.8TiB，无存储阻塞。
-运行/未提交事实以 `git status --short --branch`、`python scripts/status.py` 为准。
+共享NPU须当前授权。当前无存储阻塞。实际未提交状态见git status，作业见scripts/status.py。
