@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Read-only v7 observations and paired validation; no automatic scientific claims."""
 import argparse
+from datetime import datetime
 import json
 import math
 from pathlib import Path
@@ -9,6 +10,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.job import inspect
+from scripts.campaign_budget import host_headroom
 from scripts.review_hb_learning import paired
 from scripts.review_io import write_review_json
 from tide_lab.records import digest, now
@@ -84,6 +86,7 @@ def collect():
             state_record=relative(path.parent/'state.json'), record=relative(path), resources=spec['resources'],
             slice=(observation.get('systemd') or {}).get('Slice'), physical_ids=queue.get('physical_ids'),
             terminated=observation['termination_verified_now'], elapsed_seconds=state.get('elapsed_seconds'),
+            started_at=state.get('started_at'), ended_at=state.get('ended_at'),
             cgroup=state.get('control_group'), command=spec['command']))
     pairs=[]
     def compare(label,left,right):
@@ -114,8 +117,35 @@ def collect():
                     control=by.get(('residual',f'{model}-{suffix}-depth-residual-s{seed}'))
                     if control and lookup[model]:compare(f'{tokens} s{seed} {model} depth-residual-minus-original',
                         control/f'validation-{tokens}.json',lookup[model]/f'validation-{tokens}.json')
+    analytic=[]
+    for generation in ('v7-count-controls','v7-count-controls-r2'):
+        for seed in (11,22):
+            directory=ROOT/'runs'/generation/f'seed{seed}'
+            result=read(directory/'result.json')
+            if not result:continue
+            projection=read(directory/'projection.json');manifest=read(directory/'manifest.json')
+            neural=next((c for c in cases if c['phase']=='main' and c['id'].startswith('hb40-') and c['id'].endswith(f'-s{seed}')),None)
+            cursor_match=None
+            if neural and neural['progress'].get('tokens')==4194304:
+                cursor_match=result['boundaries'][-1]['cursor']==neural['progress']['cursor']
+            analytic.append(dict(generation=generation,seed=seed,record=relative(directory/'result.json'),
+                sha256=digest(directory/'result.json'),result=result,source=manifest.get('source',{}).get('commit'),
+                run_id=manifest.get('run_id'),sample_cursor_matches_neural=cursor_match,
+                valid_sample_identity=not(generation=='v7-count-controls' and seed==22),
+                lens_verified=projection.get('status')=='verified' and projection.get('readback_matches') is True))
+    resources=None
+    if jobs and all(j['terminated'] and j['ended_at'] for j in jobs):
+        service_cpu=sum(j['elapsed_seconds']*j['resources']['threads'] for j in jobs)/3600
+        resources=dict(service_cpu_core_hours=service_cpu,development_reserve_cpu_core_hours=.5,
+            cpu_core_hours_with_reserve=service_cpu+.5,
+            npu_card_hours=sum(j['elapsed_seconds']*j['resources']['npu_count'] for j in jobs)/3600,
+            wall_span_seconds=(max(datetime.fromisoformat(j['ended_at']) for j in jobs)-
+                               min(datetime.fromisoformat(j['started_at']) for j in jobs)).total_seconds(),
+            headroom=host_headroom(ROOT,'v7-'),
+            accounting='Final whole-service lifetimes including both supervision generations, waits, startup, NPU host and recorder; allocated cores, not sampled utilization.')
     return dict(schema='tide-direct-v7-observations-v1',at=now(),controller=controller,
         jobs=jobs,cases=cases,comparisons=pairs,budget=read(ROOT/'runs/v7-budget-v2/state.json'),
+        analytic_controls=analytic,terminal_resources=resources,
         review_script_sha256=digest(Path(__file__)),
         scope='Ordinary dense graph, not TIDE. Observations and descriptive validation intervals; scientific interpretation requires separate review. Test sealed.')
 
