@@ -357,3 +357,7 @@ KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column
 张量窗口的临时放置由`column_placement` / `weighted_column_placement`实现：Read参数与实际查询bank、
 区域描述/控制/选择整列传输，原始状态和参数owner不迁移。对应原[放置契约](weighted-placement.md)，
 `test_column_placement`覆盖独立标量调度、不同评分dtype、共享/零根与发送支持；SDK独立设备入口另验收。
+
+Architecture §2.2的实际输入/参数共享在Python整列Aggregate之后由`column_sharing.shared_uses`
+汇总所有使用者的伴随，不合并私有状态。`test_column_sharing`给出独立公式和有消去的次序反例；
+`check_column_adjoint_order.py`是设备累加重复性诊断，不能代替独立数学或checkpoint资格。

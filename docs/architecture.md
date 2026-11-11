@@ -65,6 +65,8 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `column_placement` / `weighted_column_placement`拥有Read/control/selection临时列视图，
 按消费者选择实际参数/字段，复用已有显式copy/VJP和通信策略。私有raw状态留在payload owner。
 `test_column_placement`检查独立标量放置、共享根、None/零、评分dtype和正支持cast拒绝。
+`column_sharing.shared_uses`保留Aggregate计算共享并按稳定节点次序归并使用者伴随；
+`test_column_sharing`检查字面公式/None零/版本，`check_column_adjoint_order.py`定位同图重复反向差异。
 `experiment/column_task.py`拥有内置任务的共享来源列、逐物理端口loss和无梯度CPU输出解码；
 `experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
 `planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步

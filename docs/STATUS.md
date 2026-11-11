@@ -17,21 +17,22 @@
 
 ## 当前实现与下一动作
 
-mixed-a/b/c列放置开发已完成：Read所需参数与实际bank、区域control/selection保持整列，raw/参数owner不变；
-KV按Read sum/qry/Full只读取所需bank字段，评分cast丢失正支持明确拒绝。
-Python-owned NPU和standalone SDK两轮重建；首轮207 passed/4原数值xfail，后继24项按原FP32容差通过，
-SDK独立streaming、raw、VJP、两SGD窗通过。安装CPU示例显式deterministic=false也完成独立三步/新进程恢复。
-新SDK可显式--device/--dtype检查实际五记忆×mixed-a/b/c；安装示例增加放置/评分精度/deterministic身份。
-开发pooled_attention误配evidence被配置器正确拒绝，修正测试后通过；未改语义或阈值。
+混合列放置实现固定540ccbd8：两套源码/binary hash核验，CPU213通过/4原数值xfail。
+NPU安装11项中10项独立三步/新进程恢复通过，SDK五记忆×mixed-a/b/c 15项通过；
+Python KV mixed-a原精确恢复失败：72浮点字段不同，离散一致。原column-placement-npu保持failed。
+同一前向图重复VJP可复现12个参数/输入根差异；关闭反向多线程或仅取消Aggregate共享的诊断通过。
+首个不同中间根为最后区域两个节点共享content；NPU原计算与CPU Read的贡献到达顺序相关。
 
-下一步提交该实现，建立qualified-placement固定worktree；hash核验复用placement-dev2/{build,build-sdk}，
-固定相关CPU资格并安装wheel，再空闲NPU实际放置/独立训练/精确恢复和少量成本。
+局部修复：保留Aggregate数值共享，按节点提供只读整列使用槽，反向稳定归并所有使用者，
+不改全局并行/确定性开关。CPU公式/版本/零根及相关检查50 passed/9原数值xfail。
+新增check_column_adjoint_order.py用于重复同一前向图的VJP和中间边界诊断。
+下一步提交修复并固定新源码，核验相同NPU见证、安装训练/新进程恢复，再有限mixed成本。
 新列多payload设备与resident、异步跨卡及旧资源边界仍按ROADMAP推进；GPU继续延后。
 全仓审阅未完成，不把7文件/56函数manifest当全部源码已审。
 
 ## 可用现场与运行
 
-所有本轮作业已终态，具体查python scripts/status.py。新开发快照placement-dev2/source保持不动。
+所有本轮设备诊断已终态，具体查python scripts/status.py。placement-dev2/source及qualified-placement保持不动。
 环境artifacts/column-env.sh，私有env artifacts/additive-work/env；CANN9.2/Torch2.12。
 源码/构建/安装/原日志位于artifacts/columns-20261111/，服务记录artifacts/jobs/。
 CPU/内存/空闲NPU可用；共享NPU须当前授权。正式计时与重构建错开，实际affinity需验证，

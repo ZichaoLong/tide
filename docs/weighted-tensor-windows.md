@@ -57,6 +57,11 @@ Python 的区域 rank 顺序和 C++ 的独立 region-order 调度都由实际候
 评分/控制/分配；活动支持决定 Full 行和随后真实消息，B/L 浮点行不作为模块交接对象。
 节点维可拆，因为参数和私有状态可能不同。
 
+Python共享Aggregate只在参数/实际输入句柄相同时复用。`column_sharing.shared_uses`
+为节点使用者提供只读整列视图，在一阶反向中按稳定节点顺序归并全部贡献；
+跨设备分支的到达顺序不再决定共享输入的累加顺序。不关闭全局autograd并行或确定性策略。
+这是整列调用根，不能把视图之间的关系当作旧逐事件因果根；完整独立事件观察仍用记录接口。
+
 当前张量能力：
 
 | 层 | 实现 |
@@ -130,6 +135,11 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 `test_tap_gather`用独立关联矩阵和方向导数检查卷积转置、缺失槽、零梯度和版本/阶数边界；
 native由完整循环公式与非空缓存容量测试覆盖。实际设备重复反向/精确恢复须单独验收。
 FP32 严格梯度超差保留为具名有界 witness，同材料提升 FP64 单列；不改通过阈值。
+
+`test_column_sharing`检查共享使用的独立公式、固定累加次序、None/零、原始版本与一阶边界。
+`scripts/check_column_adjoint_order.py --device npu:0 --client python --placement mixed-a --output-dir NEW`
+对同一前向图重复反向，区分累加差异与前向/恢复差异；`--include-columns`记录内部边界，
+`--autograd-threads serial`仅作有界诊断。它不替代安装消费者的新进程精确恢复。
 
 成本复用 `benchmark_dense_query.py --baseline window|columns|graph|fc-tensor|transformer-16`：
 window 是默认公共接口（含 raw continuation 导出），columns 是低层组合，graph 是历史

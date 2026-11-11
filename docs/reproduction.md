@@ -45,6 +45,10 @@ SDK affine、normalization、源变换及query舍入的旧临时变体不作为�
 
 张量窗口卷积的重复索引反向与精确续接可用
 `python scripts/check_column_repeatability.py --device npu:0 --output-dir NEW`复验。
+对于CPU Read/设备payload的共享列反向，另用
+`python scripts/check_column_adjoint_order.py --device npu:0 --placement mixed-a --include-columns --output-dir NEW`。
+它固定一张真实前向图重复VJP，`--client native --native-library BUILD`选择独立C++组合；
+`--autograd-threads serial`只用于对照累加顺序，不是生产默认修复。再用安装窗口示例核验完整训练恢复。
 完整配置先由`prefill_regression_config.py --case layer-chain --family ssd ...`生成，
 配置中绑定实际native库，再传`--config CONFIG --output-dir NEW`；GDN和many-lh/mixed同理。
 该检查保留普通gather的观察，不要求它必然失败；要求有序tap VJP逐位相等，且两个新进程

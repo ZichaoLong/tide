@@ -156,10 +156,13 @@ class SettleColumnPlan:
         candidate_count = full_count = calls = 0
         for r in self.regions:
             windows, descriptors, rows_by_node, cache = {}, {}, {}, {}
+            received_by_node = {}
             for v in self.members[r]:
                 sources = [(ports[p], self.binding.source_classes.inputs[p]) for p in self.inputs[v] if p in ports]
                 sources += [(messages.get(g.edges[e].source, empty), self.binding.source_classes.edges[e]) for e in self.edges[v]]
-                received = aggregate_columns(model.nodes[v].aggregate_program, sources, cache=cache)
+                received_by_node[v] = aggregate_columns(model.nodes[v].aggregate_program, sources, cache=cache)
+            from .column_sharing import shared_uses
+            for v, received in shared_uses(received_by_node).items():
                 if received is None:
                     continue
                 rows, mass, u = received
