@@ -21,6 +21,10 @@ def _rows(requests, kind, transform):
         original = r.state if kind == "read" else r.comparison
         state = None if original is None else State(transform(original.value), original.last_time,
             original.observations, {k: transform(t) for k, t in sorted(original.slots.items())})
+        from .kv_block_state import view
+        metadata = view(original)
+        if metadata is not None and metadata.valid(state):
+            state._kv_block_view = metadata
         content = replace(r.content, value=transform(r.content.value))
         fields = dict(state=state) if kind == "read" else dict(comparison=state, control=transform(r.control))
         result.append(replace(r, content=content, **fields))
@@ -118,6 +122,13 @@ class _Query(torch.autograd.Function):
 def evaluate(program, weights, requests, *, kind="read", slots=0, mode="hard", zeta=1.):
     if kind not in {"read", "full"}:
         raise ValueError("unknown weighted query kind")
+    from .kv_block_query import dispatch
+    handled = dispatch(program, weights, requests, kind=kind, slots=slots, mode=mode, zeta=zeta)
+    if handled:
+        rest = [i for i in range(len(requests)) if i not in handled]
+        handled.update(zip(rest, evaluate(program, weights, [requests[i] for i in rest],
+                                         kind=kind, slots=slots, mode=mode, zeta=zeta)))
+        return [handled[i] for i in range(len(requests))]
     groups, results = {}, [None]*len(requests)
     bundle = torch.nn.ModuleDict(dict(memory=weights.kernel, program=program))
     from .query_execution import dense, packed, branches

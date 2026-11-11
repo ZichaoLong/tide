@@ -55,10 +55,13 @@ struct Graph {
   void compile();
   std::vector<Index> topological_order() const;
 };
+// Ephemeral validated execution provenance; never a mathematical/checkpoint slot.
+struct StateExecutionView { virtual ~StateExecutionView() = default; };
 struct State {
   Tensor value;
   Index last_time = -1, observations = 0;
   std::map<std::string, Tensor> slots;
+  std::shared_ptr<const StateExecutionView> execution_view;
 };
 struct History {
   Index last_time = -1;

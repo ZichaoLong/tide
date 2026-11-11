@@ -26,6 +26,7 @@ class PlacedDescribe final:public ReadKernel {
   bool structured()const override{return true;}
   bool joint_batch()const override{return true;}
   bool batched_autograd()const override{return true;}
+  bool uses_hidden_sequence_views()const override{return original_->uses_hidden_sequence_views();}
   FieldLayout field_layout(const NodeWeights& w)const override{return original_->field_layout(w);}
   at::ScalarType descriptor_dtype(at::ScalarType)const override{return dtype_;}
   at::Device descriptor_device(at::Device)const override{return device_;}

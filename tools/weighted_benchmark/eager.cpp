@@ -44,6 +44,7 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   for(auto& node:data.model.nodes){
     if(!scalar&&batch&&workers==1)weighted::configure_query_execution(node,query);
     auto selected=weighted::query_execution_selection(node);
+    if(selected.at("prefix")=="block-v1")++query_counts["query_block-v1_nodes"];
     ++query_counts["query_"+selected.at("memory")+"_nodes"];
     ++query_counts["describe_"+selected.at("describe")+"_nodes"];
   }

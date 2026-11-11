@@ -45,17 +45,20 @@ class Native:
         from .weighted.query_execution import describe_mode
         self.query_execution = dict(requested=requested_query_execution,
             nodes=tuple(getattr(n.read_program, "query_execution", "legacy") for n in query_view.nodes),
-            describe=tuple(describe_mode(n.read_program) for n in query_view.nodes))
+            describe=tuple(describe_mode(n.read_program) for n in query_view.nodes),
+            blocks=tuple(getattr(n, "kv_blocks", False) for n in query_view.nodes))
         self.algorithm = algorithm
         from .native_model import encode_model
         g, m = encode_model(core, graph, model)
         if query_execution != "legacy":
             nodes = list(m.nodes)
-            for node, query_mode, heads in zip(nodes, self.query_execution["nodes"], self.query_execution["describe"]):
+            for node, query_mode, heads, blocks in zip(nodes, self.query_execution["nodes"],
+                    self.query_execution["describe"], self.query_execution["blocks"]):
                 if query_mode != "legacy" or heads == "batched":
-                    core.configure_weighted_query_execution(node, query_mode, heads == "batched")
+                    core.configure_weighted_query_execution(node, "auto" if blocks else query_mode, heads == "batched")
                     actual = core.weighted_query_execution_selection(node)
-                    if (actual["memory"], actual["describe"]) != (query_mode, heads):
+                    if (actual["memory"], actual["describe"], actual.get("prefix")) != (
+                            query_mode, heads, "block-v1" if blocks else "snapshot-v2"):
                         raise RuntimeError("native query/Describe selection differs from requested execution view")
             m.nodes = nodes
         self.compiled = g
@@ -98,6 +101,7 @@ class Native:
         public = Result(from_continuation(self.graph, result.continuation), *window_records(result))
         for mode in ("legacy", "dense-v1", "packed-v2"):
             public.stats["query_"+mode+"_nodes"] = self.query_execution["nodes"].count(mode)
+        public.stats["query_block-v1_nodes"] = sum(self.query_execution["blocks"])
         for mode in ("scalar", "batched"):
             public.stats["describe_"+mode+"_nodes"] = self.query_execution["describe"].count(mode)
         return public

@@ -12,6 +12,12 @@ from .tensors import norm
 def evaluate(program, weights, requests):
     if not requests:
         return []
+    from .kv_block_query import dispatch
+    handled = dispatch(program, weights, requests)
+    if handled:
+        rest = [i for i in range(len(requests)) if i not in handled]
+        handled.update(zip(rest, evaluate(program, weights, [requests[i] for i in rest])))
+        return [handled[i] for i in range(len(requests))]
     memory = weights.kernel
     from .query_execution import dense, packed, describe_mode
     states = [memory.initial(weights) if r.state is None else r.state for r in requests]

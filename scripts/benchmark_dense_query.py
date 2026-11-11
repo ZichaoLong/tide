@@ -105,7 +105,9 @@ def main():
     config["core"].update(eager_implementation=a.client, placement_preset="cpu" if a.device == "cpu" else "mixed-c")
     if a.native_library:
         config["core"]["native_library"] = str(Path(a.native_library).resolve())
-    record = dict(schema="tide-dense-query-cost-v1", execution="running", strict_numerical="not_checked",
+    from source_identity import source_state
+    foundation_source, foundation_dirty = source_state(Path(__file__).resolve().parents[1])
+    record = dict(foundation_source=foundation_source, foundation_dirty=foundation_dirty, schema="tide-dense-query-cost-v1", execution="running", strict_numerical="not_checked",
         discrete="not_independently_checked", recovery="see separate consumer", learning="not_a_learning_study",
         downstream=DOWNSTREAM, downstream_archive_sha256=archive_hash, resolved=config,
         query_execution=a.query_execution, prefill_schedule=a.prefill_schedule, trace_records=a.trace_records,

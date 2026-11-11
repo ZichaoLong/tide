@@ -62,6 +62,8 @@ class StateKernel {
   // State handles require the ordinary causal step chain.
   virtual bool hidden_sequence_vjp(const NodeWeights&,const std::vector<State>&,
       const PackedSequence&,std::vector<State>&,std::vector<State>&) const { return false; }
+  virtual void hidden_sequence_views(const NodeWeights&,const std::vector<State>&,
+      const PackedSequence&,std::vector<State>&) const {}
   virtual bool joint_sequence() const { return false; }
   // Named non-differentiable metadata slots, always int64 on the state device.
   virtual std::set<std::string> integer_slots() const { return {}; }

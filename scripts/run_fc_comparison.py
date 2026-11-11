@@ -17,13 +17,15 @@ from durable_records import write_json
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--suite',choices=('main','threads','boundaries','profiles','axes','checks'),required=True)
+    p.add_argument('--suite',choices=('main','threads','boundaries','profiles','axes','checks','blocks'),required=True)
     p.add_argument('--device',choices=('cpu','npu:0'),required=True)
     p.add_argument('--threads',type=int,required=True)
     p.add_argument('--native-library',type=Path,required=True)
     p.add_argument('--downstream-repo',type=Path,required=True)
     p.add_argument('--output-dir',type=Path,required=True)
     p.add_argument('--profile-scratch',type=Path)
+    p.add_argument('--batch',type=int,default=8)
+    p.add_argument('--length',type=int,default=128)
     a=p.parse_args()
     out=a.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
     commands=[]
@@ -43,12 +45,12 @@ def main():
         commands.append(row);write_json(out/'commands.json',commands);print(json.dumps(row),flush=True)
         if code==124:raise SystemExit(124)
 
-    def cost(shape,baseline,mode,*,client='native',boundary='public',b=8,length=128,profile='none',fences='step',attention='manual'):
-        name=f'{shape}-{baseline}-{client}-{boundary}-{mode}-b{b}l{length}-{fences}-{attention}-{profile}'
+    def cost(shape,baseline,mode,*,client='native',boundary='public',b=8,length=128,profile='none',fences='step',attention='manual',query='auto'):
+        name=f'{shape}-{baseline}-{client}-{boundary}-{mode}-b{b}l{length}-{fences}-{attention}-{profile}-{query}'
         args=['scripts/benchmark_dense_query.py','--downstream-repo',a.downstream_repo,
               '--device',a.device,'--threads',a.threads,'--fc-shape',shape,'--baseline',baseline,
               '--client',client if baseline=='graph' else 'python','--mode',mode,'--trace-records','minimal',
-              '--phase-fences',fences,'--diagnostic-boundary',boundary,'--formula-attention',attention,
+              '--phase-fences',fences,'--diagnostic-boundary',boundary,'--formula-attention',attention,'--query-execution',query,
               '--batch',b,'--length',length,'--profile',profile,'--output-dir',out/name]
         if baseline=='graph' and client=='native':args+=['--native-library',a.native_library]
         if profile in ('cpu','npu'):args+=['--profile-shapes']
@@ -57,7 +59,15 @@ def main():
             args+=['--profile-output',a.profile_scratch/name]
         invoke(name,args)
 
-    if a.suite=='main':
+    if a.suite=='blocks':
+        for shape,depth in (('fc4',4),('fc16',16)):
+            for mode in ('inference','grad-forward','training'):
+                for query in ('auto','packed-v2'):
+                    cost(shape,'graph',mode,query=query,b=a.batch,length=a.length)
+                for baseline in ('fc-tensor',f'transformer-{depth}'):
+                    cost(shape,baseline,mode,b=a.batch,length=a.length)
+            cost(shape,'graph','training',client='python',b=a.batch,length=a.length)
+    elif a.suite=='main':
         for shape,transformers in [('fc4',(2,4)),('fc16',(4,16))]:
             for baseline in ('graph','fc-tensor',*(f'transformer-{d}' for d in transformers)):
                 for mode in ('inference','grad-forward','training'):cost(shape,baseline,mode)

@@ -164,3 +164,51 @@ outputs via foreach copies into separate allocations. Cloning a whole batch and
 returning ordinary views would couple versions and resize effects, so is not an
 equivalent replacement. The copy tests compare bits/values and exact pre/post
 mutation derivatives; scalar-formula numerical checks remain separate gates.
+
+## Repeating the investigation
+
+For the block-interface decision, `run_fc_comparison.py --suite blocks` runs
+FC4/FC16, native auto and explicit pre-block packed-v2, direct FC and matched-node
+Transformer, inference/grad-enabled-forward/training, plus Python default training.
+`--batch`/`--length` select the bounded workload. Use a frozen checkout, explicit
+native build, downstream source, device, threads and a fresh output directory;
+profiling (`--suite profiles`) and checks (`--suite checks`) are separate processes.
+This retains the same timed preparation/check/optimizer/synchronization boundary.
+The original generic schedules remain available; the workload is not a custom
+algorithm hidden in default dispatch.
+
+`scripts/cost_comparison.py` reviews explicit result pairs without a fixed date,
+job name or old run directory. Its small manifest is:
+
+```json
+{
+  "schema": "tide-cost-comparison-v1",
+  "question": "What cost remains between the default path and its formula anchor?",
+  "records": [
+    {"name": "default", "path": "default/result.json"},
+    {"name": "formula", "path": "formula/result.json"}
+  ],
+  "comparisons": [
+    {"candidate": "default", "reference": "formula", "relation": "task-projection"}
+  ]
+}
+```
+
+Run `python scripts/cost_comparison.py --manifest MANIFEST.json --output REVIEW.json`.
+Allowed relations are same-function, task-projection and different-function;
+Transformer uses the last. The collector preserves source/build/hash, configured
+axes, actual work, phases, throughput arithmetic and strict/restore status. Failed
+executions produce no throughput. Mismatched B/L/mode/device/dtype/thread/timing
+axes are refused; same-function comparisons also require identical starting
+parameter bytes. A cost ratio never implies correctness qualification.
+
+Dense-query and independent KV/SSD layer-chain results already have adapters.
+A future LH-like or other-path investigation reuses the measurement/runner owned
+by that workload, adds a narrow record adapter if necessary, and supplies explicit
+pairs. It does not need another task ledger, copied profiler or hard-coded job
+collector. A new direct baseline must still declare its formula and return/root
+domain; an adapter cannot confer independence or recover missing observations.
+Keep the benchmark/profile/check commands and terminal job identities alongside
+the review. The [block contract](weighted-query-blocks.md) names its actual dispatch
+and private-graph counters; the complete return/gradient/restore tests remain
+separate from these cost tools.

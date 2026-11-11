@@ -96,7 +96,8 @@ C++核心入口`configure_query_execution`不依赖Python，`query_execution_sel
 memory/describe两项选择；standalone benchmark接受`--query-execution`并报告相同计数。
 
 数学/图身份不因执行路径变化；应用锁必须固定源码和执行身份。旧材料显式legacy保持原身份；
-省略选项的新请求采用auto的新身份。当前auto策略版本为`kv-packed-v2+describe-batch-v2`，
+省略选项的新请求采用auto的新身份。隐藏前缀可按[查询块契约](weighted-query-blocks.md)
+直接计算bank与块伴随；显式packed-v2保留旧快照实现。当前auto策略版本为`kv-block-v1+packed-v2+describe-batch-v2`，
 其完整策略说明参加execution_id；旧auto实验固定原源码和身份，升级后重新验收。
 checkpoint能解码不等于跨模式逐值续接，旧实验升级需新运行验收。
 同源码/配置/设备的精确恢复独立验证，不能从小图推断原语言任务或所有规模。

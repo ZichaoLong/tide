@@ -52,6 +52,7 @@ def eager_runner(binding, implementation, placement, native_library=None, *, str
         result = schedule(binding.graph, view, *a, trace=kw.pop("trace", trace), **options, **kw)
         for mode in ("legacy", "dense-v1", "packed-v2"):
             result.stats["query_"+mode+"_nodes"] = modes.count(mode)
+        result.stats["query_block-v1_nodes"] = sum(getattr(n, "kv_blocks", False) for n in model.nodes)
         for mode in ("scalar", "batched"):
             result.stats["describe_"+mode+"_nodes"] = heads.count(mode)
         return result

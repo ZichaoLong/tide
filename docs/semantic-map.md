@@ -325,3 +325,7 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 循环Mem/Full的按用途求值与数学对应见[局部契约](weighted-recurrent-query.md)：
 `query_batch.effective/features`、`query::effective/features`只裁剪未消费数值，Read/Full快照分开；
 `test_weighted_recurrent_query_scope`核对实际字段访问、独立根、参数共享、缓存校验与完整状态守卫。
+
+隐藏KV前缀的执行表示和因果VJP对应见[查询块](weighted-query-blocks.md)：固定KV §2–4 →
+`kv_block_state/math/query`及C++同层实现 → `test_block_attention`、`test_kv_block_query`，
+完整返回/训练/恢复资格仍按固定运行证据分别声明。

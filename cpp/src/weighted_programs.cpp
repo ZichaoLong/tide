@@ -1,3 +1,5 @@
+#include "weighted_kv_block.h"
+#include <type_traits>
 // 0770593 architecture §2–4, allocation §2–3. See docs/weighted-message.md.
 #include "weighted_recurrent_detail.h"
 #include "weighted_scoring.h"
@@ -65,10 +67,13 @@ template<class Config> class Describe final:public ReadKernel {
   bool structured() const override{return true;}
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
+  bool uses_hidden_sequence_views() const override{return dense_==3;}
   std::vector<TensorFields> fields_batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    if constexpr(std::is_same_v<Config,KVConfig>)if(dense_==3)return block::read(w,requests,c_,r_,true,batch_describe_);
     return query::read_vjp(w,requests,c_,r_,dense_,batch_describe_);
   }
   std::vector<TensorFields> fields_batch(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    if constexpr(std::is_same_v<Config,KVConfig>)if(dense_==3)return block::read(w,requests,c_,r_,false,batch_describe_);
     return query::describe(w,requests,c_,r_,dense_,batch_describe_);
   }
   FieldLayout field_layout(const NodeWeights&) const override {
@@ -115,9 +120,11 @@ template<class Config> class Full final:public FullKernel {
   bool joint_batch() const override{return true;}
   bool batched_autograd() const override{return true;}
   std::vector<FullResult> batch_grad(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
+    if constexpr(std::is_same_v<Config,KVConfig>)if(dense_==3)return block::full(w,requests,slots,options,c_,true);
     return query::full_vjp(w,requests,slots,options,c_,dense_);
   }
   std::vector<FullResult> batch(const NodeWeights& w,const std::vector<FullInput>& requests,Index slots,const Options& options) const override {
+    if constexpr(std::is_same_v<Config,KVConfig>)if(dense_==3)return block::full(w,requests,slots,options,c_,false);
     return query::full(w,requests,slots,options,c_,dense_);
   }
   FullResult step(const NodeWeights& w,const FullInput& r,Index slots,const Options& options) const override {
@@ -171,7 +178,7 @@ void configure_query_execution(NodeWeights& w,const std::string& mode,bool batch
     require(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble,"packed-v2 requires float32 or float64 payload");
   }
   const bool automatic=mode=="auto"&&c&&(w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble);
-  const int execution=mode=="packed-v2"||automatic?2:(mode=="dense-v1"?1:0);
+  const int execution=automatic?3:mode=="packed-v2"?2:(mode=="dense-v1"?1:0);
   // node_binding already validates all finite built-in Describe choices.
   const bool head_capability=w.bias.scalar_type()==at::kFloat||w.bias.scalar_type()==at::kDouble;
   require(!batch_describe||head_capability,"batched Describe requires FP32/FP64 installed weighted heads");
@@ -184,8 +191,9 @@ void configure_query_execution(NodeWeights& w,const std::string& mode,bool batch
 std::map<std::string,std::string> query_execution_selection(const NodeWeights& w){
   auto selected=[](const auto* read){
     require(read,"query selection requires installed weighted Describe");
-    return std::map<std::string,std::string>{{"memory",read->query_mode()==2?"packed-v2":read->query_mode()==1?"dense-v1":"legacy"},
-      {"describe",read->batched_describe()?"batched":"scalar"}};
+    return std::map<std::string,std::string>{{"memory",read->query_mode()>=2?"packed-v2":read->query_mode()==1?"dense-v1":"legacy"},
+      {"describe",read->batched_describe()?"batched":"scalar"},
+      {"prefix",read->query_mode()==3?"block-v1":"snapshot-v2"}};
   };
   if(auto* read=dynamic_cast<const Describe<KVConfig>*>(w.read_kernel.get()))return selected(read);
   return selected(dynamic_cast<const Describe<RecurrentConfig>*>(w.read_kernel.get()));

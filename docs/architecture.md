@@ -43,6 +43,11 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 查询的ragged快照保留独立内部叶；query/region VJP按[只读发布契约](tensor-publication.md)
 暴露detach视图，消费者修改先clone；显式owned-copy工具与返回到host的独立存储契约另列。
 修改须同步`test_independent_copies`、query/region根及恢复；batch字段用unbind统一线性转置。
+隐藏KV查询块见[块接口契约](weighted-query-blocks.md)：`weighted/kv_block_*`与
+`weighted_kv_block_*`接收actual prepared bank、B×L列与原始时间，块伴随直接归还原始写入；
+`block_attention`避免五维VJP展开。trace/terminal/不适用布局保留原独立根路径。
+修改须同步执行身份、actual block计数、`test_kv_block_query`及训练/恢复检查。
+
 KV快照数值共享位于`weighted/snapshot_bank.py`/`weighted_snapshot_bank.cpp`；
 [存储与伴随契约](weighted-snapshot-bank.md)区别共享存储、独立根及只读State视图，
 修改须同步`test_snapshot_bank`、query与sequence VJP、暖状态/精确恢复和实际投影工作量。

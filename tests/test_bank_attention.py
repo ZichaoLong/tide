@@ -57,7 +57,7 @@ def test_matrix_bank_ignored_huge_values_and_unshared_fallback(dtype):
 
 
 @pytest.mark.parametrize("native", [False, True], ids=["python", "native"])
-def test_default_entry_uses_actual_shared_bank_contractions(dtype, native):
+def test_default_entry_uses_actual_block_bank_contractions(dtype, native):
     from tidegraph import Continuation, ExecutionPlacement
     from tidegraph.weighted.execution import eager_runner
     from tidegraph.weighted.packing_observation import observe
@@ -78,7 +78,7 @@ def test_default_entry_uses_actual_shared_bank_contractions(dtype, native):
             result = execute(Continuation(binding.graph.identity, 3), external(spec, x),
                              5*spec.stride, sealed_until=5*spec.stride)
         metrics = core.work_metrics() if native else observation.metrics()
-        assert metrics.get("packing/projection/kv_bank_attention/rows", 0) > 0
+        assert metrics.get("packing/projection/kv_block_full/rows", 0) > 0
     finally:
         if native:
             core.reset_work(False)

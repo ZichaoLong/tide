@@ -61,6 +61,12 @@ def evaluate(program, weights, requests, slots, mode, zeta):
         raise ValueError("weighted Full has its own exact VJP; legacy Emit mode must be hard")
     if not requests:
         return []
+    from .kv_block_query import dispatch
+    handled = dispatch(program, weights, requests, kind='full', slots=slots, mode=mode, zeta=zeta)
+    if handled:
+        rest = [i for i in range(len(requests)) if i not in handled]
+        handled.update(zip(rest, evaluate(program, weights, [requests[i] for i in rest], slots, mode, zeta)))
+        return [handled[i] for i in range(len(requests))]
     content, memory = program.content, weights.kernel
     c = content.config
     states, times = [r.comparison for r in requests], [r.time for r in requests]

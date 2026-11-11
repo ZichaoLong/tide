@@ -77,6 +77,9 @@ def prepare_sequences(weights, sequences, q, read_mode="proposal", *, trace=True
                     proposed = weights.propose(state, event["_content"], event["time"])
                     states[j] = autograd.state(states[j], proposed)
                 state = states[j]
+    if not trace and getattr(weights, 'kv_blocks', False):
+        from .weighted.kv_block_state import attach
+        attach(weights, old, batch, states)
     descriptors = weights.describe_batch(previous, states, batch, read_mode)
     for e, state, descriptor in zip(flat, states, descriptors):
         e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)

@@ -61,6 +61,9 @@ add_library(tidegraph STATIC
   cpp/src/weighted_describe_heads.cpp
   cpp/src/weighted_full_batch.cpp
   cpp/src/weighted_query_vjp.cpp
+  cpp/src/weighted_kv_block_state.cpp cpp/src/weighted_kv_block_plan.cpp
+  cpp/src/weighted_kv_block_math.cpp cpp/src/weighted_kv_block_vjp.cpp
+  cpp/src/weighted_kv_block_dispatch.cpp cpp/src/weighted_block_attention.cpp
   cpp/src/weighted_allocation_batch.cpp cpp/src/weighted_allocation_rows.cpp
   cpp/src/weighted_sending_batch.cpp cpp/src/weighted_region_batch.cpp cpp/src/weighted_region_vjp.cpp
   cpp/src/weighted_placement_copy.cpp cpp/src/weighted_placement_read.cpp cpp/src/weighted_placement_region.cpp

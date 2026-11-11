@@ -66,6 +66,8 @@ def execution_view(model, mode):
         node.read_program = _shallow_module(weights.read_program)
         node.full_program = _shallow_module(weights.full_program)
         node.read_program.query_execution = node.full_program.query_execution = selected
+        node.kv_blocks = mode == 'auto' and selected == 'packed-v2'
+        node.read_program.kv_blocks = node.full_program.kv_blocks = node.kv_blocks
         node.read_program.describe_execution = heads
         nodes.append(node)
     result.nodes = torch.nn.ModuleList(nodes)

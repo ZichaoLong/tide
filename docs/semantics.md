@@ -95,8 +95,11 @@ adjoints. Contiguous actual view partitions may reuse their common base, never
 merge equal-valued or independently rooted inputs. This changes internal
 representation, not graph/checkpoint identity or the declared first-order map.
 See `test_private_rows`, query/region root tests and the FC16 cost contract.
-Ragged query snapshots retain separate private leaves: collecting every prefix
-in one column caused excess transpose traffic in the measured implementation.
+Traced, terminal and ineligible ragged query snapshots retain separate private
+leaves. Hidden prepared KV prefixes can use the [query block boundary](weighted-query-blocks.md):
+actual write banks and block adjoints preserve causal roots without collecting
+every prefix into one independent column. The earlier per-prefix column trial
+remains a separate rejected implementation.
 Built-in query/region outputs follow [read-only publication](tensor-publication.md):
 independent gradient roots can share numeric storage/version counters. Consumers
 clone before mutation. `test_independent_copies` checks explicit clone isolation,

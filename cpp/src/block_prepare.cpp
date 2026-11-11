@@ -58,6 +58,12 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
     task.hidden_vjp=batched&&!options.trace&&w.kernel->hidden_sequence_vjp(w,task.old,batch,states,previous_states);
     if (batched && !task.hidden_vjp)
       state_sequence_vjp(w,task.old,batch,states,previous_states);
+    if(!options.trace&&w.read_kernel->uses_hidden_sequence_views()){
+      w.kernel->hidden_sequence_views(w,task.old,batch,states);
+      if(batched)for(size_t s=0;s<task.old.size();++s)
+        for(Index j=batch.offsets[s]+1;j<batch.offsets[s+1];++j)
+          previous_states[j].execution_view=states[j-1].execution_view;
+    }
     for (size_t s = 0; s < task.old.size(); ++s) {
       auto previous = task.old[s];
       for (Index j = batch.offsets[s]; j < batch.offsets[s + 1]; ++j) {

@@ -35,7 +35,7 @@ def native_query(program, w, requests, *, kind="read", slots=0):
         core.configure_weighted_query_execution(weight, query_mode, heads)
         if kind == "read":
             assert core.weighted_query_execution_selection(weight) == {
-                "memory": query_mode, "describe": "batched" if heads else "scalar"}
+                "memory": query_mode, "describe": "batched" if heads else "scalar", "prefix": "snapshot-v2"}
     def state(s):
         return None if s is None else core.State(s.value, s.last_time, s.observations, s.slots)
     contents, times = [r.content.value for r in requests], [r.time for r in requests]
