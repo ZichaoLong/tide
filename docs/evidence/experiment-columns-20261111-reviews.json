@@ -1,0 +1,63 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "b993f38f264f9703f0656bb1502f2f85751f8c7f",
+  "meaning": "Manual source and boundary review; not numerical, device, performance, or whole repository qualification.",
+  "files": [
+    {
+      "path": "python/tidegraph/experiment/column_task.py",
+      "sha256": "38d4b77f7dae06b2b8e4b3362a0407ada9029b286a188ec84909b4f851d73c3c",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Complete task-boundary review: shared-source material and port metadata; capability decision before compute; per-port square objective; detached column copy and final CPU value decoding; counts and locations."
+    },
+    {
+      "path": "python/tidegraph/experiment/eager.py",
+      "sha256": "8d91768089a6e9b2d07bd4c4e86701325b5b697922ecf8c1ecca609ee93fcdcc",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Actual record/window dispatch, independent scalar reference, explicit complete diagnostics, task optimizer owners, loss/backward/update/detach ordering, checkpoint/manifest. Runtime/formula qualification remains separate."
+    },
+    {
+      "path": "python/tidegraph/experiment/tasks.py",
+      "sha256": "670d050e51be99a489f49ef7ed38b0e6771e93423b05b4a37c2b0ad10ff481ba",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Built-in per-physical-port objective and column overload; legacy plugin factory and record input ownership retained; no implicit plugin interface migration."
+    },
+    {
+      "path": "python/tidegraph/planning/execution.py",
+      "sha256": "d655d8c2b2bfe98571df6b23e61a1cbfe28c466e2fb4e01f791b8b48661ee7cc",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Requested/effective interface identity, execution-v5 capability policy, omitted historical field decoding, explicit records and unsupported settings; no selected fixture dispatch."
+    },
+    {
+      "path": "python/tidegraph/planning/materialize.py",
+      "sha256": "f1222832db3fcefa4ffe4e751c443f5026b389d1b40d98eae26024ed1781aba5",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Parameter/inventory allocation and deterministic input generation separated; seeded FP32 bytes promoted after generation, aliases preserved; no reference numeric prepass."
+    },
+    {
+      "path": "scripts/benchmark_layer_chain.py",
+      "sha256": "7dc5bb7c11b889baaefd71e510bd4813a4f40e95e8c66f606fade0515f48659d",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Default public tensor-window client versus explicit records and independent limited tensor formulas; three modes, measured scopes, actual interface and affinity reporting."
+    },
+    {
+      "path": "scripts/prefill_regression_config.py",
+      "sha256": "95f6715fe3b97602aee9ac4da5cec4d28432af437d6a7c49c0c1b925e93b6c94",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/experiment-columns-20261111.md",
+      "scope": "Finite topology/config generation, explicit new default and record comparator, representative suite without Cartesian sweep; existing resident budget untouched."
+    }
+  ]
+}

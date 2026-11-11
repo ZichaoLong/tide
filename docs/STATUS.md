@@ -34,3 +34,23 @@ Python-owned NPU和独立SDK实际构建，74项CPU相关检查及standalone五�
 当前无旧活跃作业；新作业状态以python scripts/status.py和实际unit为准。
 CPU/内存/空闲NPU可用，共享NPU须当前授权；不与重构建重叠正式计时。
 配额226G/soft300G/hard800G，磁盘余1.1T，shm余398G，主机可用1.8TiB，没有存储阻塞。
+
+修复固定源码8c72ca94；gef-column-tap-qualify（CPU80–111/64GiB/600秒）正在固定资格，
+worktree qualified-taps，hash核验复用tap-dev1两类构建，见tap-build-reuse.json。
+后继gef-column-tap-npu（空闲一卡/host0–15/128GiB/2400秒），六个原规模/客户端新进程恢复，
+四个安装GDN/SSD消费者独立三步AdamW/恢复。配置生成首次误用了系统Python3.9已记录并用私有环境修正。
+
+8c72ca94固定74项通过；gef-column-tap-npu终态passed：六个原代表/客户端各两个新进程精确恢复、
+四个安装GDN/SSD独立三步AdamW/恢复全部通过。六个重复性检查deterministic=false；四安装例沿用true，证据分列。原b993失败保持。
+准备gef-column-consumer-scale：固定b993f38/install-consumer，CPU64与NPU2依次计时约1B B32/L16、9B B4/L16推理；
+用taskset实际限制CPU80–143，512GiB/3600秒，空闲一卡最多等待120秒。单点720秒，停机条件由公共matrix执行。
+临时大checkpoint在/dev/shm/gef-column-scale-20261111，容量400GiB且计入主机预算；这是volatile成本产物，
+小型结果由公共results archive写入durable artifacts，不能冒称重启可续接。脚本consumer-scale.sh，日志jobs/column-consumer-scale。
+
+规模四点全部completed，精确恢复未测，archive已持久化。当前mixed-a/b列迁移正在开发：
+Read/区域control/selection按能力整列复制，保留raw owners、共享VJP和原始时间；Python10项定向通过。
+准备gef-column-placement-dev1，冻结placement-dev1/source；all320 CPU/640GiB/1200秒，
+Python-owned NPU及SDK重建、相关CPU测试、standalone独立分调度/评分检查。日志jobs/column-placement-dev1。
+
+新放置开发首轮207 passed/4原数值xfail及SDK通过。已把新检查统一为既有FP32容差（18项复验通过），
+正在补standalone实际设备入口与安装示例显式deterministic策略；需固定新实现再资格。

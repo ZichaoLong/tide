@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[公共实验张量输入/loss与有限代表（2026-11-11）](experiment-columns-20261111.md)：b993f38固定133项、8安装消费者；18个宽/多节点训练成本、24层链三模式、约1B/9B四推理点。原scalar loss检查器失败、NPU三个精确恢复失败与规模未验范围分列。
+
+[卷积有序转置与精确恢复（2026-11-11）](column-tap-transpose-20261111.md)：8c72ca94固定74项、独立SDK；无全局deterministic的六个NPU组合各两个新进程精确恢复通过，四个安装消费者另列原deterministic=true测试策略。
+
 [五记忆native张量窗口资格（2026-11-11）](recurrent-columns-20261111.md)：b860e6a固定CPU306通过/13原数值xfail，24个CPU/NPU安装消费者三步训练与新进程精确恢复通过；standalone五记忆CPU实跑分列。
 
 [KV位置列资格（2026-11-11）](column-positions-20261111.md)：9fa852c固定CPU、六安装CPU/NPU消费者与独立SDK；相对旋转/距离、int64时间、三步训练与新进程精确恢复，原数值xfail保留。

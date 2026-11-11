@@ -1,0 +1,952 @@
+{
+  "source": "8c72ca945c222af2173e3fafd52f104ee9f12034",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "qualification": {
+    "command": [
+      "/bin/bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualify-taps.sh"
+    ],
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-taps",
+    "state": "passed",
+    "source": "8c72ca945c222af2173e3fafd52f104ee9f12034",
+    "dirty": "",
+    "started": "2026-11-11T12:18:00.202265+00:00",
+    "exit_code": 0,
+    "finished": "2026-11-11T12:18:21.791476+00:00"
+  },
+  "npu_job": {
+    "command": [
+      "/bin/bash",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-npu.sh"
+    ],
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-taps",
+    "state": "passed",
+    "source": "8c72ca945c222af2173e3fafd52f104ee9f12034",
+    "dirty": "",
+    "started": "2026-11-11T12:18:40.389203+00:00",
+    "exit_code": 0,
+    "finished": "2026-11-11T12:26:51.582921+00:00"
+  },
+  "build_reuse": {
+    "qualification_source": "8c72ca945c222af2173e3fafd52f104ee9f12034",
+    "builds": {
+      "build": {
+        "original_manifest": {
+          "source": "b993f38f264f9703f0656bb1502f2f85751f8c7f",
+          "cpp_source_sha256": "52795f5258b42cebfef6a879d39cab3ab0dad052faaca2e678244222e8f94525",
+          "torch": "2.12.0+cpu",
+          "distribution": {
+            "torch": "2.12.0+cpu",
+            "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+            "cuda": null,
+            "cxx11_abi": true,
+            "discovery": "python-torch"
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "cann_version": "9.2.0"
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "python",
+          "torch_npu": "2.12.0.post3",
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "4755435bd15048e402d7725b143ac827bbffbad4ab57ee9b00eaff5bdd26ec8f",
+            "libtidegraph_runtime.a": "1295d6bc1927fab60147caea0b03c7127b74de84d5c4e28f4f29083c89a91817",
+            "_tide_native.so": "d33c1dc91be474ded5d7b8cdf5878eebeee4b2616b3a5c8ab6519f308cb985dc"
+          }
+        },
+        "verified_cpp_source_sha256": "52795f5258b42cebfef6a879d39cab3ab0dad052faaca2e678244222e8f94525"
+      },
+      "build-sdk": {
+        "original_manifest": {
+          "source": "b993f38f264f9703f0656bb1502f2f85751f8c7f",
+          "cpp_source_sha256": "52795f5258b42cebfef6a879d39cab3ab0dad052faaca2e678244222e8f94525",
+          "torch": "2.12.0",
+          "distribution": {
+            "torch": "2.12.0",
+            "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+            "cxx11_abi": true,
+            "cuda": null,
+            "discovery": "standalone-prefix",
+            "distribution_sha256": {
+              "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+              "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+              "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+              "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+              "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+            }
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "cann_version": "9.2.0",
+            "npu_sdk": {
+              "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+              "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+              "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+            }
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "standalone",
+          "torch_npu": null,
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.9.9",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "01a7d51b57deead800243080d56a288314ac39d674c5ff8b17d50f94252e2fb7",
+            "libtidegraph_runtime.a": "a84fec8d70e4d9f48c2468ea5396bf9f061b28751e82c870a36a77a4db293435",
+            "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+            "tidegraph-kernel-check": "20d4f6ae6cbc5910c30b47187e448a9d6bd53ce2c4a5f184c03fa37c934dafee",
+            "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+            "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+            "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+            "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+            "tidegraph-weighted-training-check": "6ae9190e22654c78b094720b3fb336cd3cf7245389acb24efa5e43f5c1021273",
+            "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+            "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+            "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+            "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+            "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+            "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+            "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+            "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+            "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+            "tidegraph-placement-check": "af6ce30e30bf3f9d5683252adc10d9c41ebc5d118990ba9c472b6b2075f82692",
+            "tidegraph-payload-ownership-check": "c368f686dde2a59e2b7b003f97ba3f2b98825c5d904b4e14b6f6825a50772547",
+            "tidegraph-weighted-binding-module-check": "6fa66ef5bc9ce4e5d3f1017c22cafd669a35d2df04ef81f5219cea766cc8a944",
+            "tidegraph-column-check": "8a48005deceabb531097c4402bb70b658ad6687ed9420e0651b8a3c8f35c232b",
+            "libtidegraph-weighted-binding-module.so": "9c8868e2097973b249b80d263d16116c3792a8bd59ce9077d4140a151cf4f82d"
+          }
+        },
+        "verified_cpp_source_sha256": "52795f5258b42cebfef6a879d39cab3ab0dad052faaca2e678244222e8f94525"
+      }
+    }
+  },
+  "wheel": {
+    "path": "artifacts/columns-20261111/wheel-taps/tidegraph-0.3.0-py3-none-any.whl",
+    "sha256": "e16eb999721d2c09980baa8c3fe62df3530d544df09ca578f9a2c3a4a09b3774"
+  },
+  "repeatability": [
+    {
+      "name": "tap-npu-layer-chain-gated_delta-python-native",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-layer-chain-gated_delta-python-native/result.json",
+        "sha256": "9f8d73e624c0dba44a3d8fed3436a45af7dfad3d3b53bd24b1ae2136a45a79e6"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 456,
+            "discrete": 853
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 456,
+            "discrete": 853
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-layer-chain-gated_delta",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 1,
+            "depth": 4,
+            "region_overrides": {
+              "region_control_mode": "fixed",
+              "region_evidence": null,
+              "total_fraction": 1.0,
+              "region_control_width": null
+            },
+            "family": "gated_delta"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    },
+    {
+      "name": "tap-npu-layer-chain-gated_delta-pytorch",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-layer-chain-gated_delta-pytorch/result.json",
+        "sha256": "18c1e3f94fe8cf689fa3173d194cd836f4d87121292c734147b6d3894c6f564c"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 456,
+            "discrete": 853
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 456,
+            "discrete": 853
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-layer-chain-gated_delta",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 1,
+            "depth": 4,
+            "region_overrides": {
+              "region_control_mode": "fixed",
+              "region_evidence": null,
+              "total_fraction": 1.0,
+              "region_control_width": null
+            },
+            "family": "gated_delta"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "pytorch",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    },
+    {
+      "name": "tap-npu-layer-chain-ssd-python-native",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-layer-chain-ssd-python-native/result.json",
+        "sha256": "43ea33f1b66c1a7a46281b43ee4f6bea9adeda3f171a8dd73f72c269e388695a"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 408,
+            "discrete": 793
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 408,
+            "discrete": 793
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-layer-chain-ssd",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 1,
+            "depth": 4,
+            "region_overrides": {
+              "region_control_mode": "fixed",
+              "region_evidence": null,
+              "total_fraction": 1.0,
+              "region_control_width": null
+            },
+            "family": "ssd"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    },
+    {
+      "name": "tap-npu-layer-chain-ssd-pytorch",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-layer-chain-ssd-pytorch/result.json",
+        "sha256": "6aba8662147fc73b1c57ecc466a4b8198a1c181eb8a6dc0796b12e8a62515d37"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 408,
+            "discrete": 793
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 408,
+            "discrete": 793
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-layer-chain-ssd",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 1,
+            "depth": 4,
+            "region_overrides": {
+              "region_control_mode": "fixed",
+              "region_evidence": null,
+              "total_fraction": 1.0,
+              "region_control_width": null
+            },
+            "family": "ssd"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "pytorch",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    },
+    {
+      "name": "tap-npu-many-lh-mixed-python-native",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-many-lh-mixed-python-native/result.json",
+        "sha256": "d1b3c5a1da38dbef36abaf5adfa7f2c4845eeeeee7e9eb90442bd825c9e8cd05"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 22049,
+            "discrete": 36385
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 22049,
+            "discrete": 36385
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-many-lh-mixed",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "width": 64,
+            "region_width": 8,
+            "depth": 3,
+            "profile": "textbook",
+            "family": "mixed"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    },
+    {
+      "name": "tap-npu-many-lh-mixed-pytorch",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-npu-many-lh-mixed-pytorch/result.json",
+        "sha256": "dfa09954e0584b6434c2c479558e552b0fee333b602f188554071ecf21bc9a78"
+      },
+      "state": "passed",
+      "deterministic_algorithms": false,
+      "device": "npu:0",
+      "visibility": "11",
+      "ordinary_gather": [
+        false,
+        false,
+        false
+      ],
+      "ordered_taps": [
+        true,
+        true,
+        true
+      ],
+      "fresh_processes": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 22049,
+            "discrete": 36385
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 22049,
+            "discrete": 36385
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences_truncated": false
+        }
+      ],
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-many-lh-mixed",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "lh",
+            "width": 64,
+            "region_width": 8,
+            "depth": 3,
+            "profile": "textbook",
+            "family": "mixed"
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "pytorch",
+          "device": "npu:0",
+          "placement": "mixed-c",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "input_interface": "auto",
+          "finite_check_packing": "packed"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 1800
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472
+        },
+        "site": {
+          "paths": {
+            "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/tap-dev1/build"
+          }
+        }
+      }
+    }
+  ],
+  "installed": [
+    {
+      "name": "tap-installed-npu-gated_delta-native",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-installed-npu-gated_delta-native/result.json",
+        "sha256": "5c10a382b121c0b46967d8c4d7e881cd96a2f60143d3d34490e2fca1942496f6"
+      },
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": false,
+        "family": "gated_delta"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "deterministic_algorithms": true,
+      "policy_source": "examples/consumer_core5/tensor_window.py at 8c72ca94"
+    },
+    {
+      "name": "tap-installed-npu-gated_delta-python",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-installed-npu-gated_delta-python/result.json",
+        "sha256": "ccbe582d0dc6154158cd0b4f8baa648856d7e8c9e29844a98250c2c6e30ba604"
+      },
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": false,
+        "family": "gated_delta"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "deterministic_algorithms": true,
+      "policy_source": "examples/consumer_core5/tensor_window.py at 8c72ca94"
+    },
+    {
+      "name": "tap-installed-npu-ssd-native",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-installed-npu-ssd-native/result.json",
+        "sha256": "e227a51b13c88f977baee366fd4228cd8b6312575c8d4debc8c9f721d92fe0a5"
+      },
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": false,
+        "family": "ssd"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "deterministic_algorithms": true,
+      "policy_source": "examples/consumer_core5/tensor_window.py at 8c72ca94"
+    },
+    {
+      "name": "tap-installed-npu-ssd-python",
+      "raw": {
+        "path": "artifacts/columns-20261111/tap-installed-npu-ssd-python/result.json",
+        "sha256": "51899e71326adc3ae6efdc119924f1508bc2bdc9cb9282d53d8cfbc71ac4f95e"
+      },
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": false,
+        "family": "ssd"
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "deterministic_algorithms": true,
+      "policy_source": "examples/consumer_core5/tensor_window.py at 8c72ca94"
+    }
+  ],
+  "original_failure_source": "b993f38f264f9703f0656bb1502f2f85751f8c7f"
+}
