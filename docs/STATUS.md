@@ -1,48 +1,34 @@
-# 当前交接 — 张量窗口及 KV 位置扩展（2026-11-11）
+# 当前交接 — 五记忆张量窗口与公共消费者迁移（2026-11-11）
 
-已授权按 [ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)继续。
-固定上游 `0770593838a37c790a568226930567ed60f99b83`，启动 19 快照检查通过。
-分支 `graph-execution-foundation`；现有张量整链 `4b9ca54`、诊断 `01cde3b` 已提交。
+授权按[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)继续。
+分支graph-execution-foundation，固定数学0770593838a37c790a568226930567ed60f99b83；19快照核验通过。
 
-## 已完成的固定任务
+## 已完成
 
-固定 `01cde3bd837f82ba9f5ed424f41b039f1747e908`：
-- `column-chain-qualify` passed：232 passed / 13 具名 FP32 numerical xfailed；
-  CPU FP32/FP64 × Python/native 安装消费者三步 AdamW、独立标量参考、新进程精确恢复通过；
-  standalone SDK FP64 独立 streaming/raw state/VJP/两步 SGD 通过。
-- `column-chain-cost-cpu`、`column-chain-npu` 均 passed；NPU 两安装客户端独立训练/恢复通过。
-  FC4/FC16、B8/L128、FP32 三模式两客户端/直接 FC/Transformer，共50成本点；
-  8个 B2/L32 profile 另列。FC16 native 完整训练 CPU1 1.2863s / NPU 0.6788s，
-  直接 FC 1.3706/0.6978s。完整尺寸未新增严格投影/多步训练资格，不把小图资格放大。
-  CPU80–111/ATen1，NPU host0–15/ATen2、物理2；同项目 CPU 池分离，外部争用未排除。
+- `01cde3b`固定张量整链资格和FC4/FC16三模式成本、独立profile：
+  [证据](evidence/tensor-windows-20261111.md)。FC16 native训练CPU1/NPU为1.2863/0.6788秒，
+  直接FC1.3706/0.6978秒。原始记录已含warm TTFT 0.44835/0.22037秒，报告解释已修正。
+  小图资格不放大成完整FC16严格训练资格；跨设备Full/消息有差异。
+- `9fa852c` KV相对位置/距离、int64大时钟、六个安装消费者训练/精确恢复通过，
+  [证据](evidence/column-positions-20261111.md)。
+- `b860e6a` native affine/delta/GDN/SSD、固定时间卷积、typed私有状态和ragged容量：
+  [固定资格](evidence/recurrent-columns-20261111.md)。CPU279+27 passed，13原数值xfail；
+  24个CPU/NPU安装消费者全部strict numerical/recovery passed，独立SDK五记忆CPU通过。
+  `column-recurrent-qualify`及`column-recurrent-npu`已终态passed；无活跃任务。
 
-结果 `artifacts/columns-20261111/fixed-{cost,profile}-{cpu,npu}/`，
-`installed-*`、`qualified-build-reuse.json`、`chain-review.json`；任务 `artifacts/jobs/column-chain-*/`。
-待把这些原始记录整理为独立固定证据提交。原 dev1/dev2/dev4 启动失败及13数值xfail保留。
+## 接续动作
 
-## 当前实现与动作
+1. 固定证据独立提交并推送；原实现/失败身份保留。
+2. P5/P6：检查公共实验内置任务的张量输入、loss、输出及实际分派，避免代表用例继续经过逐事件边界。
+   对独立任务、完整事件观察、非Settle及放置后备保留明确能力身份。
+3. 相关训练/精确恢复后，有限宽FC、176节点HB/LH、sum、KV/SSD层链及线程对照。
+   mixed-a/b、resident、多设备新列迁移及约1B/9B仍按ROADMAP推进；GPU真机延后。
 
-KV位置列 `9fa852c` 固定CPU与NPU资格均 passed；六安装客户端严格三步训练和新进程恢复通过。
-standalone新构建CPU检查通过。详情见[位置证据](evidence/column-positions-20261111.md)。
-FC正式记录见[整链证据](evidence/tensor-windows-20261111.md)。原有任务全部终态。
+## 可用现场
 
-native位置构建 `artifacts/columns-20261111/position-dev1/build`，独立SDK `build-sdk`；
-干净资格worktree `qualified-position`。原二进制/原失败保留。
-环境 `artifacts/column-env.sh`，私有 `artifacts/additive-work/env`；CANN9.2/Torch2.12。
-用户未跟踪的两个 `docs/tide-learning-lab-TL-REQ-004/005-handoff.md` 原样保留，不纳入提交。
-
-## 下一步
-
-1. 继续P4：native affine/delta/GDN/SSD、固定逻辑时间卷积与typed状态列，区域/消息接口保持。
-2. 相关独立标量/公式、共享根、保留窗/checkpoint与实际公共分派；再固定源码资格。
-3. P5—P6：代表规模与执行位置、限制和治理。GPU真机延后；当前新列CPU/mixed-c
-   不等于mixed-a/b、resident、多卡或所有规模迁移完成。
-
-长任务固定源码、background.slice、有限资源/时长。可用CPU/内存和空闲NPU可用；
-共享NPU须当前授权。当前无存储阻塞。实际未提交状态见git status，作业见scripts/status.py。
-
-native循环列开发 `column-recurrent-dev2` passed：76项定向检查及standalone五族、
-独立streaming/raw/VJP/两SGD窗口。原dev1测试异常类型遗漏与基础循环可选cache转换问题
-均已修正，原失败保留。新增的ragged填充容量与旧态独立列根检查另验。
-源码待提交，随后干净worktree验证CPU/NPU安装消费者四族训练与新进程恢复。
-构建 `artifacts/columns-20261111/recurrent-dev2/{build,build-sdk}`，当前无活跃任务。
+环境`artifacts/column-env.sh`，私有`artifacts/additive-work/env`，CANN9.2/Torch2.12。
+固定worktree `artifacts/columns-20261111/qualified-recurrent`；native/独立SDK构建
+`artifacts/columns-20261111/recurrent-dev2/{build,build-sdk}`，复用hash见`recurrent-build-reuse.json`。
+安装包`install-recurrent`，消费者`recurrent-{cpu,npu}-*/result.json`；作业在`artifacts/jobs/column-recurrent-*/`。
+可用CPU/内存和空闲NPU可用；共享NPU须当前授权。长任务冻结源码并使用有界background.slice。
+用户两个未跟踪TL-REQ-004/005交接文件原样保留、不提交。实际修改见git status。

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[五记忆native张量窗口资格（2026-11-11）](recurrent-columns-20261111.md)：b860e6a固定CPU306通过/13原数值xfail，24个CPU/NPU安装消费者三步训练与新进程精确恢复通过；standalone五记忆CPU实跑分列。
+
 [KV位置列资格（2026-11-11）](column-positions-20261111.md)：9fa852c固定CPU、六安装CPU/NPU消费者与独立SDK；相对旋转/距离、int64时间、三步训练与新进程精确恢复，原数值xfail保留。
 
 [张量窗口整链与FC成本（2026-11-11）](tensor-windows-20261111.md)：01cde3b固定CPU232通过/13具名数值xfail，CPU/NPU六安装消费者训练/精确恢复和独立SDK通过；50成本点/8独立profile。FC16 native完整训练CPU1/NPU为1.2863/0.6788秒，直接FC1.3706/0.6978秒；完整尺寸严格资格和其他路径另列。

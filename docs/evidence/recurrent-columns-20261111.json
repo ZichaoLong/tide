@@ -1,0 +1,2110 @@
+{
+  "schema": "tide-fc-suites-review-v1",
+  "collector_sha256": "7c8c80d0d524db7fa6074d2cde994f50a342fcc485f40a89b86cf4377cb7527d",
+  "jobs": [
+    {
+      "path": "artifacts/jobs/column-recurrent-qualify/status.json",
+      "sha256": "954f9426fb59fc0336f99dbb9be4ac93e5ed8616b5dab185cf43402324dcc822",
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualify-recurrent.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-recurrent",
+        "state": "passed",
+        "source": "b860e6ae304696ea91a58a8bc52f3d913462a9fa",
+        "dirty": "",
+        "started": "2026-11-11T11:22:57.783502+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-11T11:27:52.758840+00:00"
+      }
+    },
+    {
+      "path": "artifacts/jobs/column-recurrent-npu/status.json",
+      "sha256": "85b0b7d90bf44ee8249a750e0359668e9296dbdadf2fda7e1deeec795e871ccf",
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-npu.sh"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-recurrent",
+        "state": "passed",
+        "source": "b860e6ae304696ea91a58a8bc52f3d913462a9fa",
+        "dirty": "",
+        "started": "2026-11-11T11:23:31.762158+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-11T11:28:29.949120+00:00"
+      }
+    }
+  ],
+  "commands": [],
+  "configurations": {},
+  "builds": {},
+  "installations": {},
+  "costs": [],
+  "profiles": [],
+  "consumers": [
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-affine-native-float32/result.json",
+      "sha256": "ef26551a415eb84bd7885a5250d20afa248e16daa44b93240d9ebdb3c5727fc6",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-affine-native-float64/result.json",
+      "sha256": "5d8eb66372b0080d8b33261aafc5a1156f21f126bfa514d1b91a53c586ea997c",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "native",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-affine-python-float32/result.json",
+      "sha256": "a67f560382e85a37708ac80cd6d1407e9c99e6055d6b2f41af9c4008e9f556b9",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-affine-python-float64/result.json",
+      "sha256": "8c9cb279733c9ae78329188b4bff97451b8592fb913df5db989bbc598554ace1",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "python",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-delta-native-float32/result.json",
+      "sha256": "b12aa63e971508137235c90b18581c8eddcf654ebbbc45b64cec3e18d3f51c42",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-delta-native-float64/result.json",
+      "sha256": "4a956af0a2bb96bec0dda354f426a0c6949ff8f3dbd512b870525e05d03a1f1d",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "native",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-delta-python-float32/result.json",
+      "sha256": "f3027dc0d999b337bcf557951a0f9253cd72cdf5ce7be683744e39ef27e72b6c",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-delta-python-float64/result.json",
+      "sha256": "ecea53285a3fc94312681e0333c4b7b9750943ac2bb39216f303af9d6ddeac0e",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "python",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-gated_delta-native-float32/result.json",
+      "sha256": "74699ea6c509769cd201cbe7b82c0b226c49e93bf4da4754bbf8bf9dfca061dc",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-gated_delta-native-float64/result.json",
+      "sha256": "28f89409e364ff4c78f2b4c4fd6179f1573ee684fe66d79727822ebc80805140",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "native",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-gated_delta-python-float32/result.json",
+      "sha256": "54ccd9245eeb99023dcf891b6a0e5132f98e42b21dc16f9941ad810269c93f25",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-gated_delta-python-float64/result.json",
+      "sha256": "c6d2614805e7383bd5765c0e570bd1f86b82a395e69bcd44aae2553eab3e8eb9",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "python",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-ssd-native-float32/result.json",
+      "sha256": "0b925795bb7c59071aa596eeabceaece246daa5135c4d673d4fdb52dfd3b89a9",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-ssd-native-float64/result.json",
+      "sha256": "df137c00480bc3d5ef35a2da5cf59679816679a2c8f3dc67bb91affbde088c57",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "native",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-ssd-python-float32/result.json",
+      "sha256": "565882bb6b4a3ef5933af094421cc08b6d9dccef01ecaf0e84532cdf2347d60c",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-cpu-ssd-python-float64/result.json",
+      "sha256": "8e821eff5230c895c4969339f5a237d195434af3965ef95b285367fcde8d2d22",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "cpu",
+          "dtype": "float64",
+          "client": "python",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-affine-native/result.json",
+      "sha256": "a9efb42a82660ef89b45cec5cfe2c9307791b91225344abd9e547ab76efcac03",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-affine-python/result.json",
+      "sha256": "4437bbe1a5a01f30e318e384b43b473fca26d69a0bccf805067494665d20c4de",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "affine"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 483,
+              "discrete": 164
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-delta-native/result.json",
+      "sha256": "3be6f17b50de56f107b4844ec30ae56c3e127e33af21105a453810bc972849e5",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-delta-python/result.json",
+      "sha256": "8bb2882cf0ecacfaf3db02d5bade9616b9b8ce9b4380ff63de6664d65998d7a4",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 523,
+              "discrete": 172
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-gated_delta-native/result.json",
+      "sha256": "5c10a382b121c0b46967d8c4d7e881cd96a2f60143d3d34490e2fca1942496f6",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-gated_delta-python/result.json",
+      "sha256": "ccbe582d0dc6154158cd0b4f8baa648856d7e8c9e29844a98250c2c6e30ba604",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "gated_delta"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 571,
+              "discrete": 188
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-ssd-native/result.json",
+      "sha256": "e227a51b13c88f977baee366fd4228cd8b6312575c8d4debc8c9f721d92fe0a5",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "native",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "native",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-ssd-python/result.json",
+      "sha256": "51899e71326adc3ae6efdc119924f1508bc2bdc9cb9282d53d8cfbc71ac4f95e",
+      "record": {
+        "identity": {
+          "interface": "tensor-window-v1",
+          "device": "npu:0",
+          "dtype": "float32",
+          "client": "python",
+          "positions": false,
+          "family": "ssd"
+        },
+        "execution": "completed",
+        "strict_numerical": "passed",
+        "recovery": "passed",
+        "effective_execution": {
+          "interface": "tensor-window-v1",
+          "schedule": "settle-columns-v1",
+          "client": "python",
+          "fallback_reason": null,
+          "roots": "columns",
+          "max_workspace_bytes": 4294967296
+        },
+        "comparisons": [
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          },
+          {
+            "schema": "tide-comparison-v1",
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "compared_leaves": {
+              "numeric": 511,
+              "discrete": 176
+            },
+            "mismatch_counts": {
+              "numeric": 0,
+              "discrete": 0
+            },
+            "differences": [],
+            "differences_truncated": false
+          }
+        ]
+      }
+    }
+  ],
+  "junit": [
+    {
+      "path": "artifacts/columns-20261111/recurrent-qualification.xml",
+      "sha256": "6bb1e34127a78f6b503274f02cde189b8f29b4f3a3faa2daf775c090ad6a1b04",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "13",
+          "tests": "292",
+          "time": "52.035",
+          "timestamp": "2026-11-11T19:23:01.289714+08:00",
+          "hostname": "liteserver-mi-dev-00001"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-general.xml",
+      "sha256": "e3fcbbfc1edef57094f12560fc6f764d0acf1095b1a0c7412aaa386b8dcb4bb0",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "27",
+          "time": "25.392",
+          "timestamp": "2026-11-11T19:23:55.491101+08:00",
+          "hostname": "liteserver-mi-dev-00001"
+        }
+      ]
+    }
+  ],
+  "scope": "Recorded observations only. Completion does not establish equivalence. Profile/census timing is separate from uninstrumented throughput. Python/native census universes overlap; never add them.",
+  "source": "b860e6ae304696ea91a58a8bc52f3d913462a9fa",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "build_reuse": {
+    "source": "b860e6ae304696ea91a58a8bc52f3d913462a9fa",
+    "builds": [
+      {
+        "directory": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-dev2/build",
+        "manifest": {
+          "source": "6cf94b9bb9bae71afa9a3224e10ce876e3423ab7",
+          "cpp_source_sha256": "0fc9b5dff046064510c4cb06521f99da324818e04df3a4dad74f2883da6e8bd2",
+          "torch": "2.12.0+cpu",
+          "distribution": {
+            "torch": "2.12.0+cpu",
+            "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+            "cuda": null,
+            "cxx11_abi": true,
+            "discovery": "python-torch"
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "cann_version": "9.2.0"
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "python",
+          "torch_npu": "2.12.0.post3",
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "64804c40ebb3a80342ac5d7b8c55eb7a5493d6547a998ede643ad077106b4254",
+            "libtidegraph_runtime.a": "ab1a9bfd2e3bf4502ad2f068762670ec95f64c65208ff0ea8b24d360fc81613e",
+            "_tide_native.so": "234e75745d60ae2a26b23e4d74225bf6dc060950433da40e0921c086ef4d489c"
+          }
+        }
+      },
+      {
+        "directory": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-dev2/build-sdk",
+        "manifest": {
+          "source": "6cf94b9bb9bae71afa9a3224e10ce876e3423ab7",
+          "cpp_source_sha256": "0fc9b5dff046064510c4cb06521f99da324818e04df3a4dad74f2883da6e8bd2",
+          "torch": "2.12.0",
+          "distribution": {
+            "torch": "2.12.0",
+            "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+            "cxx11_abi": true,
+            "cuda": null,
+            "discovery": "standalone-prefix",
+            "distribution_sha256": {
+              "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+              "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+              "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+              "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+              "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+            }
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "cann_version": "9.2.0",
+            "npu_sdk": {
+              "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+              "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+              "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+            }
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "standalone",
+          "torch_npu": null,
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.9.9",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "3d004204f74e72dce3f0e0e4a099a64f55e15903fd90c2fc503754df53bf9aad",
+            "libtidegraph_runtime.a": "96d82e20805246a0a7aefee1f8c777da204269e7594acc1f5679a2c2cadda126",
+            "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+            "tidegraph-kernel-check": "20d4f6ae6cbc5910c30b47187e448a9d6bd53ce2c4a5f184c03fa37c934dafee",
+            "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+            "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+            "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+            "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+            "tidegraph-weighted-training-check": "6ae9190e22654c78b094720b3fb336cd3cf7245389acb24efa5e43f5c1021273",
+            "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+            "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+            "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+            "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+            "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+            "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+            "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+            "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+            "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+            "tidegraph-placement-check": "af6ce30e30bf3f9d5683252adc10d9c41ebc5d118990ba9c472b6b2075f82692",
+            "tidegraph-payload-ownership-check": "c368f686dde2a59e2b7b003f97ba3f2b98825c5d904b4e14b6f6825a50772547",
+            "tidegraph-weighted-binding-module-check": "6fa66ef5bc9ce4e5d3f1017c22cafd669a35d2df04ef81f5219cea766cc8a944",
+            "tidegraph-column-check": "e9fef27920990bd6277480e0a243f3b0a37ce0d269b30c07667fb70ddaa5b451",
+            "libtidegraph-weighted-binding-module.so": "9c8868e2097973b249b80d263d16116c3792a8bd59ce9077d4140a151cf4f82d"
+          }
+        }
+      }
+    ]
+  },
+  "queue": {
+    "elapsed_seconds": 297.45801578089595,
+    "job_id": "gef-column-recurrent-npu",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 11,
+    "physical_ids": [
+      11
+    ],
+    "priority": 0,
+    "project": "graph-execution-foundation",
+    "return_code": 0,
+    "schema_version": 1,
+    "status": "completed",
+    "timestamp": "2026-11-11T11:28:29.932260+00:00"
+  },
+  "launch_scripts": [
+    {
+      "path": "artifacts/columns-20261111/qualify-recurrent.sh",
+      "sha256": "b1d5b271e6c3906017b77d6fa5dc8ed94f384001bb85fbf4b1fc1a26a11eecf1",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/column-env.sh\nexport TIDE_BUILD_DIR=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-dev2/build\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:$TIDE_BUILD_DIR\"\npython -m pip wheel --no-build-isolation --no-deps . -w /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/wheel-recurrent\npython -m pip install --no-deps --target /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-recurrent /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/wheel-recurrent/*.whl\npython -m pytest -q tests/test_native_recurrent_columns.py tests/test_kv_columns.py tests/test_column_positions.py tests/test_settle_columns.py tests/test_recurrent_columns.py tests/test_column_training.py tests/test_window_execution.py tests/test_block_attention.py tests/test_kv_block_query.py tests/test_weighted_columns.py tests/test_component_window.py tests/test_component_window_contracts.py tests/test_component_window_policy.py tests/test_independent_copies.py tests/test_collect_fc_suites.py --dtype both --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-qualification.xml\npython -m pytest -q tests/test_weighted_region_execution.py --dtype float64 --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-general.xml\nexport PYTHONPATH=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-recurrent\ncd /tmp\nfor family in affine delta gated_delta ssd; do\n for client in python native; do\n  for dtype in float64 float32; do\n   python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-recurrent/examples/consumer_core5/tensor_window.py --family \"$family\" --client \"$client\" --dtype \"$dtype\" --native-library \"$TIDE_BUILD_DIR\" --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-cpu-\"$family\"-\"$client\"-\"$dtype\"\n  done\ndone\ndone\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nunset PYTHONPATH\n/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-dev2/build-sdk/tidegraph-column-check\n"
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu.sh",
+      "sha256": "fef2d4f15100bef38d72cf3f3079da3e87000de1108de5dae6a345fc09173a33",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/column-env.sh\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-column-recurrent-npu --project graph-execution-foundation --priority 0 --npu-count 1 --max-wait-seconds 120 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/column-recurrent-npu/queue.json -- /bin/bash /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-npu-inner.sh\n"
+    },
+    {
+      "path": "artifacts/columns-20261111/recurrent-npu-inner.sh",
+      "sha256": "8338e4bc18fb79e796736a25cf2ae54c49f834b5dc9b2aab626b526526afec25",
+      "text": "#!/bin/bash\nset -euo pipefail\nexport PYTHONPATH=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-recurrent\ncd /tmp\nfor family in affine delta gated_delta ssd; do\n for client in python native; do\n  python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-recurrent/examples/consumer_core5/tensor_window.py --family \"$family\" --device npu:0 --dtype float32 --client \"$client\" --native-library /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-dev2/build --output-dir /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/recurrent-npu-\"$family\"-\"$client\"\n done\ndone\n"
+    }
+  ],
+  "standalone": {
+    "path": "artifacts/jobs/column-recurrent-qualify/task.log",
+    "sha256": "083bf78db64de20e4b81acf76dc2ce5ee0b915d60c55a0258a654c4504ad335c",
+    "observed_result": "column standalone FP64: five memories, independent streaming, raw state, VJP, two SGD windows passed",
+    "scope": "CPU FP64 actual executable; standalone SDK build; no NPU executable qualification"
+  }
+}

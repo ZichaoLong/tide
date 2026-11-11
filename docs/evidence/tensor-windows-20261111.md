@@ -62,7 +62,13 @@ NPU为mixed-c（主机推进，payload/Read/选择在NPU），不是resident。�
 | FC16/npu:0 | 直接 FC | 0.2640 | 0.2952 | 0.6978 | 1467.5 |
 | FC16/npu:0 | Transformer | 0.0089 | 0.0112 | 0.0428 | 23952.9 |
 
-吞吐为1024/完整秒数，是输入位置吞吐；本轮没有测新接口TTFT，不能用秒数除1024冒充。
+吞吐为1024/完整秒数，是输入位置吞吐，不能用秒数除1024冒充TTFT。
+
+已有 inference 原始记录另测 warm TTFT：FC16 native CPU/NPU 为0.44835/0.22037秒，
+PyTorch为0.59335/0.30474秒，直接FC为0.41956/0.26373秒，Transformer为0.16633/0.00882秒。
+从已加载模型后的输入创建/上传起，包含prefill、末位head、argmax、有限检查与主机返回；
+不含排队、tokenizer或后续decode。这是对已有 `first_token_seconds` 字段的报告解释修正，
+没有新增运行或更改原源码/机器记录；它是整个本地batch的首个结果就绪时间。
 CPU/NPU各另有一个低层columns训练点1.3036/0.7077秒，默认导出raw continuation没有重现旧的大幅差距。
 本测量FC16 native/直接FC训练比为CPU0.9385、NPU0.9727；接近同一成本，不能据单次略快宣称普遍优胜。
 
@@ -102,6 +108,6 @@ Transformer命中16次融合Attention前后向，带权Tide和直接FC都没有F
 传目标设备、线程、固定下游repo、匹配native库和新输出目录。每设备单独调用。
 `collect_fc_suites.py`使用显式suite/job/consumer/JUnit收集，详见[复现导航](../reproduction.md#可重用的三层对照收集)。
 
-当前无本轮新TTFT、宽FC/176节点HB-LH、1B/9B、mixed-a/b、resident或多卡速度结论；
+当前无本轮宽FC/176节点HB-LH、1B/9B、mixed-a/b、resident或多卡速度结论；
 GPU真机继续延后。native循环列、位置项及其他迁移按ROADMAP逐项推进。
 全部P1—P6和全仓审阅尚未完成，不能由本阶段FC结果推断所有限制解除。
