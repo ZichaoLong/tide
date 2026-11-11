@@ -44,6 +44,7 @@ struct Result {
   std::map<std::string,Index> stats;
 };
 bool supported(const KVConfig&);
+Tensor logit_attention(const Tensor& logits,const Tensor& values,const Tensor& weights);
 KVWindow prepare(const NodeWeights&,const KVConfig&,const Layout&,const Tensor& mass,
                  const Tensor& content,const KVState&);
 TensorFields read(const NodeWeights&,const KVConfig&,const RegionalConfig&,const KVWindow&,

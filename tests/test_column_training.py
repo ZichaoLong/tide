@@ -12,9 +12,12 @@ from test_settle_columns import general, inputs, external, observations
 
 
 @pytest.mark.parametrize("implementation", ["python", "native"])
-def test_raw_checkpoint_and_retained_windows(tmp_path, implementation):
+@pytest.mark.parametrize("positions", [False, True])
+def test_raw_checkpoint_and_retained_windows(tmp_path, implementation, positions):
     dtype = torch.float64
-    b, spec = general(dtype)
+    memory = KVConfig(heads=2, memory_read="qry", window=17, position_scale=5,
+        read_frequencies=(.17,), full_frequencies=((.11,), (.23,)), distance_slopes=(.04, .03)) if positions else None
+    b, spec = general(dtype, memory=memory)
     plan = SettleColumnPlan(b, spec, implementation=implementation)
     domain, ports = inputs(dtype)
     head = plan.run_ports(domain, ports)
@@ -26,7 +29,7 @@ def test_raw_checkpoint_and_retained_windows(tmp_path, implementation):
     loss.backward();opt.step();opt.zero_grad(set_to_none=True)
     q = q.detach()
     save(tmp_path/"columns.pt", b.graph, b.model, q, opt)
-    owner, ospec = general(dtype)
+    owner, ospec = general(dtype, memory=memory)
     oopt = torch.optim.AdamW(owner.model.parameters(), lr=.0001)
     restored = load(tmp_path/"columns.pt", owner.graph, owner.model, oopt)
     equivalent(q, restored, atol=0, rtol=0)

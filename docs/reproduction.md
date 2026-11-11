@@ -144,3 +144,12 @@ NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment
 
 此诊断不改布局、算术或精度，不让CPU轨迹指导候选；raw边界已不同须先区分新进程重放与序列化，
 不能直接将后续差异归因于checkpoint。NPU blocking崩溃、resident服务资源和其他停止/重启条件仍只在ROADMAP维护。
+
+## 可重用的三层对照收集
+
+`run_fc_comparison.py --suite windows` 测默认窗口 Python/native、直接 FC 和 Transformer 的
+FC4/FC16 三模式；`--suite window-profiles` 另测 B2/L32 的真实算子及 autograd census。
+用 `collect_fc_suites.py --suite RUN_DIR [--suite MORE] --job STATUS_JSON
+--consumer RESULT_JSON --junit CHECKS_XML --output NEW_JSON` 从显式目录收集，无需约定旧作业名。
+该入口保留每个子命令退出码、缺失结果、源码/安装/配置/参数身份、计数和独立数值状态，
+不以服务 passed 推导资格。Profile/census 的耗时不混入正式吞吐，CPU/NPU 图计数不可相加。

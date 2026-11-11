@@ -30,7 +30,7 @@ python scripts/check_upstream.py
 
 新的 B×L 公共客户端见 [tensor-window-v1](weighted-tensor-windows.md)。安装当前包后可从任意 cwd
 运行 `python /path/to/examples/consumer_core5/tensor_window.py --client python --dtype float64 --output-dir NEW_DIR`，
-验证三步 AdamW、raw continuation 和新进程精确续接。native 增加
+验证三步 AdamW、raw continuation 和新进程精确续接；`--positions` 同时检查 KV 旋转/距离项。native 增加
 `--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
 `--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。
 

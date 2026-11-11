@@ -60,9 +60,7 @@ void KVState::validate(const NodeWeights& w,const KVConfig& c)const {
       &&(!c.window||z-a<=c.window)&&(z==a||layout.times[z-1]<=last_times[i]),"invalid KV column clocks/counts");}
 }
 bool supported(const KVConfig& c){
-  if(!c.read_frequencies.empty())return false;
-  for(const auto& f:c.full_frequencies)if(!f.empty())return false;
-  for(auto slope:c.distance_slopes)if(slope)return false;return true;
+  c.validate();return true;
 }
 KVWindow prepare(const NodeWeights& w,const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,const KVState& left){
   layout.validate();left.validate(w,c);const Index n=layout.times.size();

@@ -13,6 +13,8 @@ def check(memory, left, domain, limit, element_size):
         queries = max(domain.offsets.diff().tolist(), default=0)
         past = max(left.layout.offsets.diff().tolist(), default=0)
         elements = domain.samples*queries*(past+queries)*(8+3*c.heads)
+        if c.read_frequencies or any(c.full_frequencies):
+            elements += 8*domain.samples*queries*(past+queries)*(c.width+c.summary_width)
         elements += rows*(4*c.width+c.summary_width)
     else:
         matrices = c.matrix_shape[0]

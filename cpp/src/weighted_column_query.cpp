@@ -7,6 +7,10 @@ namespace tide::weighted::columns {
 using detail::require;using detail::weight;
 namespace {
 struct Queries {Tensor u,mass,weights,age,reverse;TensorFields raw;};
+Tensor rotate_columns(const Tensor& keys,const Tensor& displacement,const std::vector<double>& frequencies){
+  if(frequencies.empty())return keys;
+  return detail::rotate(keys.reshape({-1,keys.size(-1)}),displacement.flatten(),frequencies).reshape(keys.sizes());
+}
 Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& bank,
                 const std::vector<Index>& rows,bool before,Index horizon){
   auto selected=window.layout.select(rows);auto device=window.content.device();
@@ -25,7 +29,7 @@ Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& 
 }
 TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const KVWindow& window,
                   const std::string& mode,const KVState& initial){
-  require(supported(c),"KV column queries require position-free memory");
+  require(supported(c),"unsupported KV column memory");
   require(mode=="content"||mode=="old"||mode=="proposal","invalid KV column Read snapshot");
   require(!window.layout.times.empty(),"Read columns require actual rows");
   std::vector<Index> rows(window.layout.times.size());std::iota(rows.begin(),rows.end(),0);
@@ -40,8 +44,16 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
     auto query=project(normalize(q.u,c.epsilon),weight(w,"kernel.read_q")).unsqueeze(1);
     auto k=project(q.raw.at("keys"),weight(w,"kernel.read_k")).unsqueeze(1);
     auto v=project(q.raw.at("values"),weight(w,"kernel.read_v")).unsqueeze(1);
-    shortv=block::attention(query,k,v,sw).select(1,0)*st.clamp_max(1).unsqueeze(-1);
-    longv=block::attention(query,k,v,q.weights).select(1,0)*lt.clamp_max(1).unsqueeze(-1);
+    if(!c.read_frequencies.empty()){
+      auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;
+      auto keys=rotate_columns(k.select(1,0).unsqueeze(1).expand({-1,q.u.size(1),-1,-1}),displacement,c.read_frequencies);
+      auto logits=(query.select(1,0).unsqueeze(2)*keys).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width));
+      shortv=logit_attention(logits,v,sw).select(1,0)*st.clamp_max(1).unsqueeze(-1);
+      longv=logit_attention(logits,v,q.weights).select(1,0)*lt.clamp_max(1).unsqueeze(-1);
+    }else{
+      shortv=block::attention(query,k,v,sw).select(1,0)*st.clamp_max(1).unsqueeze(-1);
+      longv=block::attention(query,k,v,q.weights).select(1,0)*lt.clamp_max(1).unsqueeze(-1);
+    }
   }else shortv=longv=at::zeros({q.u.size(0),q.u.size(1),c.summary_width},q.u.options());
   auto cur=normalize(q.u,c.epsilon),current=project(cur,weight(w,"kernel.summary"));
   auto stat=at::stack({q.mass.log1p(),st.log1p(),lt.log1p()},-1);
@@ -52,7 +64,7 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
   return fields;
 }
 Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const Tensor& controls){
-  require(supported(c),"KV column Full requires position-free memory");
+  require(supported(c),"unsupported KV column Full");
   require(controls.sizes()==window.mass.sizes()&&controls.device()==window.mass.device()
     &&controls.scalar_type()==window.mass.scalar_type()&&at::isfinite(controls).all().item<bool>()
     &&!(controls<0).any().item<bool>(),"invalid KV column controls");
@@ -66,7 +78,20 @@ Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const
     auto query=project(normalize(q.u,c.epsilon),weight(w,p+"query")).reshape({b,length,c.heads,dh}).transpose(1,2);
     auto k=q.raw.at("keys").reshape({b,-1,c.heads,dh}).transpose(1,2);
     auto v=q.raw.at("values").reshape({b,-1,c.heads,dh}).transpose(1,2);
-    mixed=block::attention(query,k,v,q.weights).transpose(1,2).reshape({b,length,c.width});
+    bool positional=false;for(const auto& f:c.full_frequencies)positional|=!f.empty();
+    for(auto slope:c.distance_slopes)positional|=slope!=0;
+    if(positional){
+      auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;std::vector<Tensor> logits;
+      const std::vector<double> empty;
+      for(Index h=0;h<c.heads;++h){
+        auto key=rotate_columns(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,
+                               c.full_frequencies.empty()?empty:c.full_frequencies[h]);
+        auto l=(query.select(1,h).unsqueeze(2)*key).sum(-1)/std::sqrt(double(dh));
+        if(!c.distance_slopes.empty())l=l+c.distance_slopes[h]*displacement;logits.push_back(l);
+      }
+      mixed=logit_attention(at::stack(logits,1),v,q.weights);
+    }else mixed=block::attention(query,k,v,q.weights);
+    mixed=mixed.transpose(1,2).reshape({b,length,c.width});
   }else mixed=at::zeros_like(q.u);
   auto x=q.u+c.alpha_att*project(mixed*q.weights.sum(-1).clamp_max(1).unsqueeze(-1),weight(w,p+"out"));
   auto n=normalize(x,c.epsilon);

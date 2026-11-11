@@ -54,7 +54,8 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 `settle_columns`；`window_execution` 负责公共身份/能力分派，`window_records` 只负责
 显式后备的记录装配。KV 与循环各有 typed 私有状态，消息/区域列连接两者。
 C++ `weighted_sequence_columns.h` 公开独立 KV 整链；`weighted_column_state/query` 与
-`weighted_settle_columns` 分别拥有局部数学和调度。修改同步该契约、column/window 测试、
+`weighted_settle_columns` 分别拥有局部数学和调度。相对位置的 logits/共享 value-bank
+transpose 在 `column_attention` / `weighted_column_attention`；位置元数据保持 int64。修改同步该契约、column/window 测试、
 旧一般图回归和实际默认客户端，不把低层 Plan 成绩当默认入口成绩。
 
 隐藏KV查询块见[块接口契约](weighted-query-blocks.md)：`weighted/kv_block_*`与

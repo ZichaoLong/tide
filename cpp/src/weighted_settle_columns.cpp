@@ -66,6 +66,8 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       queries=std::max(queries,layout.offsets[owner+1]-layout.offsets[owner]);
       past=std::max(past,old.offsets[owner+1]-old.offsets[owner]);}
     long double elements=static_cast<long double>(layout.samples())*queries*(static_cast<long double>(past)+queries)*(8+3*c.heads);
+    bool rotary=!c.read_frequencies.empty();for(const auto& f:c.full_frequencies)rotary|=!f.empty();
+    if(rotary)elements+=8*static_cast<long double>(layout.samples())*queries*(static_cast<long double>(past)+queries)*(c.width+c.summary_width);
     elements+=static_cast<long double>(layout.times.size())*(4*c.width+c.summary_width);
     require(elements*ref.element_size()<=max_workspace_bytes,"column local workspace exceeds budget");
   }

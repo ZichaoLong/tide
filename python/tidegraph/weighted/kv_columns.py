@@ -4,24 +4,23 @@ Position-free banks use the existing bank-sized Attention transpose.
 No scalar Read/Full callback, event record or reference recurrence is invoked.
 """
 from dataclasses import dataclass
+import math
 import torch
 from torch.nn import functional as F
 from .column_layout import SequenceLayout, gather_column
 from .kv_columns_state import KVWriteBank
 from .dense_describe import columns as describe
 from .block_attention import attention
-from .tensors import norm
-from .numeric_time import passive_decay
+from .tensors import norm, rotate_relative
+from .numeric_time import passive_decay, time_values
+from .column_attention import logit_attention
 
 
 def supported(memory):
     from .kv import KVMemory
     if type(memory) is not KVMemory:
         return False
-    c = memory.config
-    return (type(memory) is KVMemory and not c.read_frequencies
-            and not any(c.full_frequencies) and not any(c.distance_slopes)
-            and memory.support_policy == "strict"
+    return (memory.support_policy == "strict"
             and memory.base.dtype in {torch.float32, torch.float64})
 
 
@@ -53,7 +52,7 @@ def read_kv_columns(node, window, *, read_mode="+", initial=None):
     """Describe actual Read+/Read-/Read0 snapshots; Read0 requires bound state."""
     memory, c = node.kernel, node.kernel.config
     if not supported(memory):
-        raise ValueError("KV query columns require position-free FP32/FP64 strict memory")
+        raise ValueError("KV query columns require FP32/FP64 strict memory")
     if read_mode not in {"+", "-", "0"}:
         raise ValueError("unknown KV Read snapshot")
     if read_mode == "0":
@@ -75,7 +74,14 @@ def read_kv_columns(node, window, *, read_mode="+", initial=None):
     elif (weight > 0).any():
         q = (norm(u, c.epsilon)@memory.read_q.t())[:, None]
         k, v = (raw["keys"]@memory.read_k.t())[:, None], (raw["values"]@memory.read_v.t())[:, None]
-        values = tuple(attention(q, k, v, w)[:, 0]*t.clamp_max(1)[..., None] for w, t in zip((short, weight), totals))
+        if c.read_frequencies:
+            displacement = -time_values(age, u)/c.position_scale
+            rotated = rotate_relative(k[:, 0, None].expand(-1, u.shape[1], -1, -1), displacement, c.read_frequencies)
+            logits = (q[:, 0, :, None]*rotated).sum(-1)[:, None]/math.sqrt(c.summary_width)
+            reads = (logit_attention(logits, v, w) for w in (short, weight))
+        else:
+            reads = (attention(q, k, v, w) for w in (short, weight))
+        values = tuple(value[:, 0]*t.clamp_max(1)[..., None] for value, t in zip(reads, totals))
     else:
         values = (u.new_zeros((*u.shape[:2], c.summary_width)),)*2
     fields = describe(node.read_program, memory, mass, u, (*values, *totals))
@@ -93,7 +99,7 @@ def full_kv_columns(node, window, controls):
     """Actual positive queries; payload is (c,G), never an already weighted cG."""
     memory, c, module = node.kernel, node.kernel.config, node.full_program.content
     if not supported(memory):
-        raise ValueError("KV Full columns require position-free FP32/FP64 strict memory")
+        raise ValueError("KV Full columns require FP32/FP64 strict memory")
     if controls.shape != window.mass.shape or (controls.dtype, controls.device) != (window.mass.dtype, window.mass.device):
         raise ValueError("KV controls must match the window rows/dtype/device")
     if not torch.isfinite(controls).all() or (controls < 0).any():
@@ -102,12 +108,22 @@ def full_kv_columns(node, window, controls):
     strength = controls.index_select(0, rows.to(controls.device))
     if not len(rows):
         return FullColumns(rows, strength, window.content.new_empty((0, c.width)))
-    u, _, raw, weight, _, reverse = _queries(window, window.bank, rows, horizon=c.window)
+    u, _, raw, weight, age, reverse = _queries(window, window.bank, rows, horizon=c.window)
     b, length, _ = u.shape
     if (weight > 0).any():
         q = (norm(u, c.epsilon)@module.query.t()).reshape(b, length, c.heads, -1).transpose(1, 2)
         k, v = (raw[name].reshape(b, -1, c.heads, c.width//c.heads).transpose(1, 2) for name in ("keys", "values"))
-        mixed = attention(q, k, v, weight).transpose(1, 2).reshape(b, length, c.width)
+        if any(c.full_frequencies) or any(c.distance_slopes):
+            displacement = -time_values(age, u)/c.position_scale
+            logits = []
+            for h in range(c.heads):
+                key = rotate_relative(k[:, h, None].expand(-1, length, -1, -1), displacement, c.full_frequencies[h])
+                logits.append((q[:, h, :, None]*key).sum(-1)/math.sqrt(c.width//c.heads)
+                              +c.distance_slopes[h]*displacement)
+            mixed = logit_attention(torch.stack(logits, 1), v, weight)
+        else:
+            mixed = attention(q, k, v, weight)
+        mixed = mixed.transpose(1, 2).reshape(b, length, c.width)
     else:
         mixed = torch.zeros_like(u)
     x = u+c.alpha_att*((mixed*weight.sum(-1).clamp_max(1)[..., None])@module.out.t())

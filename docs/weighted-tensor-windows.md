@@ -49,13 +49,13 @@ Python 的区域 rank 顺序和 C++ 的独立 region-order 调度都由实际候
 
 | 层 | 实现 |
 | --- | --- |
-| KV | Python/C++：sum/qry、Read0/-/+、有限/无限逻辑时间窗口、raw 左态、选择后的 Full |
+| KV | Python/C++：sum/qry、Read0/-/+、有限/无限逻辑时间窗口、相对旋转/距离项、raw 左态、选择后的 Full |
 | affine/delta/GDN/SSD | Python：typed H/Z/W、正写入 scan、原始时间短卷积；C++ 新列仍由显式后备承接 |
 | 区域 | Python/C++：现有十种发送及适用 quad/bern/ent，完整评分/evidence/key 列及声明一阶 VJP |
 | 状态/传输 | observe-all、adopt、严格正支持策略、unit transport；SrcClass 是参数分类，不去重原子 |
 | 设备 | FP32/FP64 单 payload 设备、相同评分 dtype 的 CPU/mixed-c 主机调度；实际设备资格单列 |
 
-KV rotary/距离项、正支持补值、FP16、split placement、多设备、native 循环新列和 resident
+正支持补值、FP16、split placement、多设备、native 循环新列和 resident
 当前经能力后备处理。它们是新列迁移的未完成范围，不是从基座删除已有能力，也不代表
 P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 
@@ -64,6 +64,9 @@ P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 KV raw 状态是 keys/values R×d、summaries R×d_summary、weights R，加 int64 entry times、
 B 个 last_time/observations 和惯性 value。查询 bank 可包含在本窗末态已过期的条目；
 terminal raw retention 与当前 Read 有效视图分开。零接收保留旧 raw 状态和时钟。
+旋转以 int64 写入/查询时间之差除 position_scale 求相对坐标，position_origin 抵消；
+Read 与 Full 使用各自频率。距离项为非负 age 的负偏置，位置不能由接收序号代替。
+位置 logits 使用单个共享 value bank 和显式一阶 transpose；旋转的临时张量另计 workspace。
 Read0 使用绑定初态；Read- 只看本次之前，Read+ 与 Full 看包含本次 proposal 的快照。
 
 循环状态是 B×matrices×value_width×key_width 的 H、B×2×summary_width 的 Z、B×2 的 W，
@@ -92,10 +95,12 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 输出、状态、bank 和控制做有界打包 finite 检查。显式非法 owner、时间、形状或端口拒绝。
 
 `test_kv_columns` 独立逐行公式检查快照、raw 过期、>2**54 时间及梯度；
+`test_column_positions` 检查相对旋转/距离、超大时钟、literal softmax 与方向导数；
 `test_recurrent_columns` 检查四循环的快照、卷积和扫描；`test_settle_columns` 用独立
 标量调度检查一般端口/同秩/重复边/共享/字段/消息/末态；`test_window_execution` 检查默认
 分派、十种发送覆盖与代表评分/正则、容量和空样本；`test_column_training` 检查 AdamW、
 保留窗及 checkpoint。`tidegraph-column-check` 是真正 standalone C++ 消费者与独立调度对照。
+安装消费者的 `--positions` 覆盖带位置项的三步训练和新进程恢复；硬件范围见固定证据。
 FP32 严格梯度超差保留为具名有界 witness，同材料提升 FP64 单列；不改通过阈值。
 
 成本复用 `benchmark_dense_query.py --baseline window|columns|graph|fc-tensor|transformer-16`：

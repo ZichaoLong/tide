@@ -21,7 +21,9 @@ from recording import snapshot, json_record, tensor_record
 
 def create(args, *, reference=False):
     topology = fully_connected(2, 2)
-    binding = bind(topology.graph, memories=KVConfig(heads=2, memory_read="qry", window=15, epsilon=.3),
+    positions = dict(read_frequencies=(.17,), full_frequencies=((.11,), (.23,)),
+                     distance_slopes=(.04, .03)) if args.positions else {}
+    binding = bind(topology.graph, memories=KVConfig(heads=2, memory_read="qry", window=15, epsilon=.3, **positions),
                    regions=RegionalConfig(k=2), dtype=getattr(torch, args.dtype),
                    device="cpu" if reference else args.device)
     spec = replace(topology, graph=binding.graph)
@@ -58,6 +60,7 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64"), default="float64")
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
+    p.add_argument("--positions", action="store_true", help="exercise relative rotary/distance KV columns")
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--steps", type=int, default=3)
     p.add_argument("--resume", type=Path)
@@ -68,7 +71,8 @@ def main():
     torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(True)
     out = args.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
-    identity = dict(interface="tensor-window-v1", device=args.device, dtype=args.dtype, client=args.client)
+    identity = dict(interface="tensor-window-v1", device=args.device, dtype=args.dtype, client=args.client,
+                    positions=args.positions)
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked")
     try:
         owner = create(args)
@@ -103,6 +107,8 @@ def main():
                        "--dtype", args.dtype, "--client", args.client]
             if args.native_library:
                 command += ["--native-library", args.native_library]
+            if args.positions:
+                command += ["--positions"]
             for name, extra in (("whole", ["--steps", "3"]), ("prefix", ["--steps", "2"]),
                     ("resumed", ["--steps", "1", "--resume", str(out/"prefix/checkpoint.pt")])):
                 with (out/(name+".log")).open("w") as log:

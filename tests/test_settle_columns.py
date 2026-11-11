@@ -19,12 +19,12 @@ from dense_checks import Checks
 from column_numeric_witnesses import settle as witness
 
 
-def general(dtype, mode="regional_total", material_dtype=None, **overrides):
+def general(dtype, mode="regional_total", material_dtype=None, *, memory=None, **overrides):
     g = Graph((Node(0), Node(1), Node(2), Node(2)),
               (Edge(0, 2, 3), Edge(0, 2, 3), Edge(1, 3, 3), Edge(0, 3, 3)),
               (Region(1), Region(1), Region(2)), (0, 1, 1, 2), (0, 2, 3))
     region = RegionalConfig(selection_mode=mode, **overrides)
-    b = bind(g, memories=KVConfig(width=4, summary_width=2, heads=2, memory_read="qry", window=30),
+    b = bind(g, memories=memory or KVConfig(width=4, summary_width=2, heads=2, memory_read="qry", window=30),
              regions=region, alpha_agg=.2, dtype=material_dtype or dtype)
     b.model.to(dtype=dtype)
     # Parameter sharing must collect every user; private states stay distinct.

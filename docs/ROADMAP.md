@@ -20,8 +20,9 @@ KV保持性能主线；区域分配是同等重要的完整边界，覆盖描述
 进行中：区域列实现及固定证据保持；[张量窗口接口](weighted-tensor-windows.md) 已形成
 Python/C++ KV 整链、Python 四循环/卷积与异构组合、实际消息列及 raw 恢复。默认 eager
 新增直接 B×L/一般 Settle 端口输入，按能力分派并声明后备；现有事件消费者须显式迁移。
-开发验证、FP32 具名严格超差和原始成本分别在 STATUS；正式资格尚在准备。
-新列 KV 位置项、native 循环、split placement/resident、多设备和宽/多节点代表仍未完成，
+01cde3b 的固定 CPU 资格和 CPU/NPU 安装消费者通过，FC4/FC16 三模式及小 profile 已完成；
+严格超差和逐项证据正在整理。新列 KV 位置项已通过相关开发检查，固定资格接续运行。
+native 循环、split placement/resident、多设备和宽/多节点代表仍未完成，
 不把已有一般执行器功能当作这些新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
