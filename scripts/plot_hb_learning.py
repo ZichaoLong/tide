@@ -5,6 +5,7 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use('Agg')
+matplotlib.rcParams['svg.hashsalt']='tide-hb-learning-20261111'
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -35,5 +36,8 @@ for ax in axes:
     ax.grid(alpha=.2)
 fig.suptitle('v6, seed 11, d128 TIDE: negative scaling evidence is recipe- and exposure-specific',fontsize=11)
 for suffix in ('svg','png'):
-    fig.savefig(ROOT/f'docs/evidence/hb-learning-20261111.{suffix}',dpi=170,
+    path=ROOT/f'docs/evidence/hb-learning-20261111.{suffix}'
+    fig.savefig(path,dpi=170,
                 metadata={'Date':None} if suffix=='svg' else None)
+    if suffix=='svg':
+        path.write_text('\n'.join(line.rstrip() for line in path.read_text().splitlines())+'\n')
