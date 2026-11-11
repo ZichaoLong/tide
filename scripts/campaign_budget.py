@@ -12,7 +12,7 @@ import sys
 import time
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from tide_lab.records import atomic_json,now
-from tide_lab.supervisor import cgroup_processes
+from tide_lab.supervisor import cgroup_processes,TERMINAL
 
 
 def timestamp(s):return datetime.datetime.fromisoformat(s).timestamp()
@@ -30,7 +30,8 @@ def usage(root,exclude=(),prefix='v6-'):
         seconds=elapsed*job['resources']['threads'];cpu+=seconds
         allocated=elapsed if job['device']=='npu' else 0.;npu+=allocated
         if name.startswith(prefix+'cal-') or name==prefix+'native-build':cal_cpu+=seconds;cal_npu+=allocated
-        live=state.get('state') in ('running','submitted','stopping')
+        # A resource waiter still owns a live service and must be budget-stoppable.
+        live=state.get('state') not in TERMINAL
         if live:
             active.append(job['unit']);threads+=job['resources']['threads']
             group=state.get('control_group')

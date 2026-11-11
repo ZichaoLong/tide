@@ -12,6 +12,21 @@ from tide_lab.records import atomic_json
 
 
 class SubmissionOwnership(unittest.TestCase):
+    def test_waiting_resource_services_are_charged_and_stoppable_by_campaign_prefix(self):
+        from scripts.campaign_budget import usage
+        from tide_lab.records import now
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            for name in ('v7-waiter','v6-historical'):
+                p=root/'artifacts/jobs'/name
+                atomic_json(p/'job.json',dict(job_id=name,created_at=now(),unit='tide-lab-'+name+'.service',
+                    device='npu',resources=dict(threads=2)))
+                atomic_json(p/'state.json',dict(state='waiting_resources',started_at=now()))
+            value=usage(root,prefix='v7-')
+            self.assertEqual(value['active_units'],['tide-lab-v7-waiter.service'])
+            self.assertEqual(value['active_threads'],2)
+            self.assertEqual(len(value['jobs']),1)
+
     def test_prepared_workers_and_case_outputs_are_disjoint_and_status_follows_owner(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);source=root/'source';cfg=source/'configs/studies/language/v6/resolved'
