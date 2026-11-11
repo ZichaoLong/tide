@@ -1,5 +1,8 @@
 # direct-v8：查看、停止与恢复
 
+2026-11-11终态：本批40个服务全部退出且无后代，没有活动/排队任务。controller实际选19个局部复核，18完成、1失败；单项r2完成。
+以下保留固定来源及原作业操作方法；当前查看不会重启训练。结果入口为[终态交付](direct-v8-results.md)。
+
 [研究表](direct-coverage-v8.md) · [实现与数值边界](direct-v8-implementation.md) ·
 [Transformer结果](direct-v8-transformer-results.md) · [逐配置/任务/Lens观察](../evidence/direct-v8-observations.json)。
 项目文件为权威；报告/研究图是观察时点快照。

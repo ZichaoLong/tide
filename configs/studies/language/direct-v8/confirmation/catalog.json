@@ -1,0 +1,24 @@
+{
+  "cases": [
+    "fc-anchor-s22",
+    "fc-budget-div1-s22",
+    "fc-textbook-mixed-s22",
+    "fc-mem-delta-state-s22",
+    "fc-ffn8x-s22",
+    "fc-read-zero-s22",
+    "fc-ssd-mem-off-s22",
+    "fc-temperature1-s22",
+    "fc-send-direct_attention-s22",
+    "fc-source-adapted-s22",
+    "hb-anchor-s22",
+    "hb-budget-div1-s22",
+    "hb-textbook-kv-s22",
+    "hb-mem-gated_delta-sum-s22",
+    "hb-ffn8x-s22",
+    "hb-read-old-s22",
+    "hb-temperature1-s22",
+    "hb-send-pooled_attention-s22",
+    "hb-source-adapted-s22"
+  ],
+  "schema": "tide-direct-v8-confirmation-table-v1"
+}

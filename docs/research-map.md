@@ -1,6 +1,7 @@
 # 当前图：direct-v8覆盖与校准Transformer
 
-研究图新增v8 Transformer校准、182格局部覆盖及有限seed22三个组；Transformer已作限定审阅，覆盖/复核结果仍awaiting。
+研究图包含v8 Transformer校准、182格局部覆盖及有限seed22三个组；三组均已终态并作限定审阅，实际失败仍逐项标明。
+本批220次训练尝试中194完成、26原失败；19项局部复核18完成，1失败；单项数值修正r2完成。[终态交付](studies/direct-v8-results.md)列出解释边界与尚未提交的后继选项。
 统一tl-v8-运行ID关联配置、项目记录与Lens投影；[当前交接](STATUS.md)与[操作入口](studies/direct-v8-operations.md)提供实时只读检查方式。
 “从零训练完整TIDE”和“预训练模型生长”名称与关系保持明确；本轮不自动推进真实稀疏或规模，不把直接实现视为公共continuation认证。
 

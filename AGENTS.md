@@ -84,6 +84,9 @@
   New finite 48h/240 NPUh/768 CPU core-h/128GiB campaign; shared low-load admission
   remains authorized. Defer the separate true-sparsity and scaling main campaign
   until coverage review. Preserve all historical frozen runs and strict failures.
+  This batch is terminal: see `docs/studies/direct-v8-results.md`. All 220 training
+  attempts and 40 services are terminal; 194 complete and 26 original failures remain.
+  The three successor packages are recommendations, not submitted jobs.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.
 - Status/review code reads `runs/` and `artifacts/jobs/` without writing there. Use
   `scripts.review_io.write_review_json` for graph/evidence JSON writes; it validates
