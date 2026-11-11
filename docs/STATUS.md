@@ -1,10 +1,10 @@
 # 当前交接：direct-v8 广覆盖已在10张NPU执行
 
-2026-11-11 18:15:09北京时间观察：[有界研究表](studies/direct-coverage-v8.md) · [查看/停止/恢复与Lens](studies/direct-v8-operations.md) · [实际逐配置状态](evidence/direct-v8-observations.json) · [研究图](../web/index.html)。
+2026-11-11 18:17:27北京时间观察：[有界研究表](studies/direct-coverage-v8.md) · [查看/停止/恢复与Lens](studies/direct-v8-operations.md) · [实际逐配置状态](evidence/direct-v8-observations.json) · [研究图](../web/index.html)。
 
 已实现并提交91个具名局部配方×FC/HB=182格，d128/L128/global B32，各1,048,576有效目标。
 本次是独立直接数学模块，包含记忆/描述/分配；物理Full稠密计算后遮罩，不声称真实稀疏执行或公共continuation等价。
-两anchor已经完成，另外180格由10个后台worker顺序覆盖；另有一个具名修正排队。当前局部尝试状态（含r2）为{'completed': 61, 'qualifying': 5, 'pending': 111, 'running': 5, 'failed': 1}。
+两anchor已经完成，另外180格由10个后台worker顺序覆盖；另有一个具名修正排队。当前局部尝试状态（含r2）为{'completed': 72, 'running': 5, 'pending': 95, 'qualifying': 5, 'failed': 6}。
 所有活动训练/等待均在background.slice。研究地图保留结果awaiting，不凭退出码生成支持。
 
 Transformer 14格调参＋4格seed22复核均完成1M：[一页结论](studies/direct-v8-transformer-results.md)。
@@ -20,6 +20,10 @@ HB40完整B32更新NPU约0.296秒、CPU1约9.83秒。B64吞吐更高，但本轮
 [有界排查](evidence/direct-v8-quad-refinement.json)发现大评分偏移的减法消减可造成同量级残差，
 活动集相对坐标求根在768个合成行上把最大残差降至约1.19e-7，原阈值不变，九项数学检查通过。
 原坏行未落盘，原因未完全确认；只对该候选排队一个r2新身份复跑，未改活动源码。
+截至本快照共6项失败，均为FC gated_delta的分配可行性残差：state、conv1/8、heads2、mem-off、ffn-off。
+其中heads2/mem-off/ffn-off在初始validation、尚未训练时失败，最大残差0.65224；conv1/8分别完成16,200/594,196目标后失败。
+小型接入/三步恢复通过不能认证长序列执行；这些不是统一的轻微超差，未证明与首个失败同因。
+全部原失败保留并排除后继种子选择，不能当作已成立的学习负面结论；仅state有一个r2排队，其余没有自动复跑。
 
 TF源码2702d91；局部校准/anchor 778f9e9；180格覆盖及有限确认5db28ae；单项r2 cd85637。
 数学0770593、规划/安装74e7bbd、私有`.venv-positive-floor-v1`保持，未接入基座新优化。
