@@ -1,31 +1,24 @@
-# 当前交接：执行已授权的优先清理与公开模型整理
+# 当前交接：优先清理与公开模型整理完成；用户sudo迁移待执行
 
-2026-11-11：用户已授权清理上一轮优先四组共610个文件（46.185GiB），其余候选暂缓。
-六个公开原模型全部保留，将核对固定catalog逐文件hash后按repo/revision整理，以旧路径链接保持可用；
-后续由用户sudo迁入`/mi/data2T/models`并转移所有权，本线程不执行sudo。
-此处是执行前交接；实际删除/整理结果以随后生成的`docs/evidence/artifact-retirement-20261111.json`
-及`public-model-staging-20261111.json`为准。科学checkpoint、失败证据、结果/metrics和Lens均保留。
+2026-11-11（北京时间）：用户已授权执行优先四组并整理公开模型。
+**610个已审计文件已删除，原分配46.185GiB；六个公开模型、27个权重分片共93.553GiB全部校验并保留。**
+[清理/模型结果与sudo命令](studies/disk-cleanup-results-20261111.md) · [退役凭据](evidence/artifact-retirement-20261111.json)
+· [模型清单](evidence/public-model-staging-20261111.json) · [保留项复核](evidence/housekeeping-retention-20261111.json)。
 
-## 上一轮已完成交接（历史只读审计）
+集合在`/mi/data2T/zlong/home/llm/public-models-staging-20261111`，按`huggingface/<org>/<model>/<revision>`排列；
+旧六目录已改为链接，67323个原保留文件的inode/device/size/mtime复核一致，11个保护输入hash匹配。
+用户可执行`sudo bash scripts/publish_public_models_20261111.sh --publish`迁入
+`/mi/data2T/models/public-checkpoints-20261111`；本线程未执行sudo。脚本补回集合链接并转为root所有，
+旧实验路径继续可用。约93.55GiB只有变更所有者后才转出本账户quota。
+当前账户约245.744/800GiB，硬余量约554.256GiB。
 
-# 当前交接：TL-REQ-005已提交，磁盘只读审计完成
+科学checkpoint/里程碑、三项数值失败输入及probe、诊断、数据、配置、指标和生命周期小记录全部保留；
+200份previous.pt与trace暂缓，Lens未变更。两个整理作业均completed且无存活后代，源码c8285e5固定；
+清理不改写历史实验状态或科学结论。
 
-2026-11-11（北京时间）：用户已同意正量链路方案并授权提交基座需求；随后仅调查两个实验目录的清理候选。
-**[TL-REQ-005](requests/TL-REQ-005.md)已普通推送（69be6d0），基座本地新增`docs/tide-learning-lab-TL-REQ-005-handoff.md`；
-待基座回复/交付，尚未下游验收。** [提交凭据](evidence/tl-req-005-submission.json)。
-基座原tracked状态和既有003/004交接文件保留，未修改执行源码或其STATUS/ROADMAP，未提交/推送基座分支。
-当前安装仍是74e7bbd，没有接入另线程性能工作，没有新训练或数值修复作业。
-
-需求包含稳定Bern响应/完整KKT VJP、稳定Aggregate/KV复合计算、显式Bern/attention正支持与前置cast/正配置检查，
-保留合法零、严格失败、连续衰减许可及新模式恢复身份。log-mass/更大范围融合为有条件后继，不阻塞可独立交付项。
-三项真实失败与静默小见证的范围见[补证报告](studies/positive-path-audit-v6-results.md)；原d6582a1证据不改写。
-
-[磁盘只读审计](studies/disk-cleanup-audit-20261111.md)及[逐文件清单](evidence/disk-audit-20261111.json)：
-本工作目录约38.985GiB，gef-lm-experiments约122.585GiB；账户约291.888/800GiB，硬配额余量约508.112GiB。
-优先候选46.185GiB（恢复检查checkpoint、可重建B缓存、旧benchmark checkpoint和GGUF）；
-可选另92.570GiB旧公开模型权重。**本轮删除0字节，未清理Lens。**
-保留跨目录Qwen05基线（33份本项目作业引用）、三项未解决失败的原输入/诊断、所有最终/里程碑科学checkpoint与数据。
-294个相关unit无active/MainPID，2360条已记录PID/start-tick身份无匹配存活；删除前仍需再次核对，清单不是删除授权。
+[TL-REQ-005](requests/TL-REQ-005.md)已普通推送（69be6d0），基座本地交接文件已落地，
+[提交凭据](evidence/tl-req-005-submission.json)。待基座回复/交付及独立下游验收。
+当前安装仍74e7bbd，没有接入另线程性能工作，没有新训练或数值修复作业。
 
 原v6的200配置全部终态：原始184 completed、11 failed、5 budget_truncated；筛选181完成/3真实下溢，
 规模3个Transformer达目标/13个TIDE未达目标（8个到限终止的内层running记录保留）。已用878.66 CPU核时、73.78 NPU卡时。
@@ -33,7 +26,7 @@
 TL-POSITIVE-v6四个CPU诊断亦已完成，约0.2395 CPU核时/49MiB；恢复只认证六个可用历史标量观察，不认证全状态长轨迹。
 Lens仍为tide-learning-lab / TL-POSITIVE-v6，四项投影verified/readback_matches；私有入口`.local/LENS.md`不入公开记录。
 
-下一步：基座线程按需求接受/交付，下游另用新私有安装验收；清理待用户决定实际范围，不自动执行或追加研究批次。
+下一步：用户sudo迁移已备妥；基座线程按需求交付，下游另用新私有安装验收。v6终态科学审阅独立推进；不自动追加研究批次或其他清理。
 
 ## 历史快照：2026-11-09执行定位与训练提交
 

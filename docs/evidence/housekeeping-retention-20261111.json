@@ -1,0 +1,210 @@
+{
+  "after_staging_at": "2026-11-11T03:51:56.383061+00:00",
+  "at": "2026-11-11T03:50:42.017051+00:00",
+  "catalog_sha256": "c96f4d921b6d3945c355b5c5c7d5abcb45a82f7d940baa4041bfc4604995a069",
+  "changed": [],
+  "directory_bytes_after": "21101502464\t/mi/data2T/zlong/home/llm/tide-learning-lab\n2376921088\t/mi/data2T/zlong/home/llm/gef-lm-experiments\n100452257792\t/mi/data2T/zlong/home/llm/public-models-staging-20261111\n",
+  "explicit_protected_hashes": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-positive-audit/configs/studies/language/positive-path-v6/constrained-bern.json",
+      "sha256": "ec1e9671fe5206921f144968ee7c30bfaf9b77a6cf2f5456ae87db36aa48f82c"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-send-constrained-bern/train/latest.pt",
+      "sha256": "952e41c7985b9bc18923405b5e1d00c357a182fb08ca8248e6b7a92d920567da"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-send-constrained-bern/train/manifest.json",
+      "sha256": "9b811cc2aaf5e3b15e97d93368ca05819ab8e601b3df174f1b0060d98ee616ac"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-positive-direct-received/failure-boundary.pt",
+      "sha256": "310fd1a1c9d6322b65c9bf0f95e8ea9a1e98f177de1ccf9a58d08c9a557527e3"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-positive-direct-received/failure-input.pt",
+      "sha256": "e45f73ced1f4f442c8b39a93c27c83365606337ff35a21c722873221fafa7784"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-positive-audit/configs/studies/language/positive-path-v6/direct-received.json",
+      "sha256": "ba57de088dcbd57ea3b78ba400e236f049505213c2e0df120478a30014d34c72"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-direct-received/train/latest.pt",
+      "sha256": "939f19461df526085ab5123442501f2166f0c75377865c2a396b97d9ce0511a5"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-direct-received/train/manifest.json",
+      "sha256": "efc4745928bd709ffa11ee723e1646d2d1c4e9c1adeb1cc61657f4700fc5908d"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-positive-audit/configs/studies/language/positive-path-v6/regional-total-bern.json",
+      "sha256": "f8b794455f0d2f463e8c60137d0d75db778e7b97358d2cb8095f8675b2e35688"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-send-regional_total-bern/train/latest.pt",
+      "sha256": "0d0961f0f242056c0e51d59cfaaaeab8a9e931c2d4bc7d433f87d7f5f8ea66a0"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-cover-hb-send-regional_total-bern/train/manifest.json",
+      "sha256": "1e6da26dcef03626499c66edf5565ac357450ad23bba7ad2abc12acd413065c1"
+    }
+  ],
+  "jobs": [
+    {
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-retire-priority-20261111.service",
+      "elapsed_seconds": 56.92922132089734,
+      "id": "retire-priority-20261111",
+      "record": "artifacts/jobs/retire-priority-20261111/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 2147483648,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 3600,
+        "wait_seconds": 0
+      },
+      "source": {
+        "commit": "c8285e5d090477653bb09120745fcde2ada4ce4b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-housekeeping-20261111",
+        "tree_sha256": "651f669c1d02c80ea56f613fe4f6a52f33eda59133aa8aa4c17044abf43309e8"
+      },
+      "state": "completed",
+      "termination_verified_now": true
+    },
+    {
+      "control_group": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-stage-public-models-20261111.service",
+      "elapsed_seconds": 120.23851735889912,
+      "id": "stage-public-models-20261111",
+      "record": "artifacts/jobs/stage-public-models-20261111/job.json",
+      "resources": {
+        "cpu_quota_percent": 200,
+        "memory_bytes": 2147483648,
+        "npu_count": 0,
+        "stop_grace_seconds": 30,
+        "threads": 2,
+        "timeout_seconds": 3600,
+        "wait_seconds": 0
+      },
+      "source": {
+        "commit": "c8285e5d090477653bb09120745fcde2ada4ce4b",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-housekeeping-20261111",
+        "tree_sha256": "651f669c1d02c80ea56f613fe4f6a52f33eda59133aa8aa4c17044abf43309e8"
+      },
+      "state": "completed",
+      "termination_verified_now": true
+    }
+  ],
+  "metadata_check": "all inode/device/size/mtime unchanged",
+  "model_staging_check": "completed; original 67323 file identities retained after renames and symlinks",
+  "models": [
+    {
+      "alias": "olmoe",
+      "allocated_bytes": 13842644992,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": true,
+      "model_type": "olmoe",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/olmoe-b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/allenai/OLMoE-1B-7B-0125-Instruct/b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "repository": "allenai/OLMoE-1B-7B-0125-Instruct",
+      "revision": "b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "tensor_headers": 3219,
+      "weights": 3
+    },
+    {
+      "alias": "qwen05",
+      "allocated_bytes": 999632896,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": false,
+      "model_type": "qwen2",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen05-7ae557604adf67be50417f59c2c2f167def9a775",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/Qwen/Qwen2.5-0.5B-Instruct/7ae557604adf67be50417f59c2c2f167def9a775",
+      "repository": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "tensor_headers": 290,
+      "weights": 1
+    },
+    {
+      "alias": "qwen15",
+      "allocated_bytes": 3099004928,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": false,
+      "model_type": "qwen2",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen15-989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/Qwen/Qwen2.5-1.5B-Instruct/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "repository": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "tensor_headers": 338,
+      "weights": 1
+    },
+    {
+      "alias": "qwen3",
+      "allocated_bytes": 6183501824,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": true,
+      "model_type": "qwen2",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen3-aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/Qwen/Qwen2.5-3B-Instruct/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "repository": "Qwen/Qwen2.5-3B-Instruct",
+      "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "tensor_headers": 434,
+      "weights": 2
+    },
+    {
+      "alias": "qwen7",
+      "allocated_bytes": 15242862592,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": true,
+      "model_type": "qwen2",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen7-a09a35458c702b33eeacc393d103063234e8bc28",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/Qwen/Qwen2.5-7B-Instruct/a09a35458c702b33eeacc393d103063234e8bc28",
+      "repository": "Qwen/Qwen2.5-7B-Instruct",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "tensor_headers": 339,
+      "weights": 4
+    },
+    {
+      "alias": "qwenmoe",
+      "allocated_bytes": 61084413952,
+      "config_tokenizer_json_readable": true,
+      "dtypes": [
+        "BF16"
+      ],
+      "index_matches_headers": true,
+      "model_type": "qwen3_moe",
+      "old_alias_valid": true,
+      "original_path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwenmoe-0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "path": "/mi/data2T/zlong/home/llm/public-models-staging-20261111/huggingface/Qwen/Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "repository": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "tensor_headers": 18867,
+      "weights": 16
+    }
+  ],
+  "quota_after": "Disk quotas for user zlong (uid 1003): \n     Filesystem  blocks   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data 257680652  314572800 838860800         1118815       0       0        \n",
+  "retained_inventory_sha256": "f06aeb082d94957585459f3c77b6b8815d3bba25f854a074b47a1dc99c4b06fa",
+  "retained_original_files": 67323,
+  "retired_files_absent": 610,
+  "schema": "tide-housekeeping-retention-v1"
+}
