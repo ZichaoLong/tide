@@ -57,14 +57,15 @@ def test_diagnostic_patches_restore_after_failure():
     assert originals==(query_vjp.evaluate,region_vjp.evaluate)
 
 
-def test_fc_sdpa_projection_and_parameter_derivatives(dtype):
+@pytest.mark.parametrize('attention',['sdpa','sdpa4d'])
+def test_fc_sdpa_projection_and_parameter_derivatives(dtype,attention):
     from test_fc_tensor_baseline import fixture
     from tidegraph.compare import equivalent
     binding,spec=fixture(dtype)
     x=torch.linspace(-.2,.4,24,dtype=dtype).reshape(2,3,4).requires_grad_()
     roots=[x,*(p for p in binding.model.parameters() if p.requires_grad)]
     a=run(binding,spec,x,full_attention='manual')
-    e=run(binding,spec,x,full_attention='sdpa')
+    e=run(binding,spec,x,full_attention=attention)
     equivalent(a,e)
     equivalent(torch.autograd.grad(a['hidden'].square().sum(),roots,allow_unused=True),
                torch.autograd.grad(e['hidden'].square().sum(),roots,allow_unused=True))

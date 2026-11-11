@@ -59,7 +59,7 @@ def main():
     p.add_argument('--batch',type=int,default=2)
     p.add_argument('--length',type=int,default=8)
     p.add_argument('--trace',action='store_true',help='also compare each candidate control/support; separate complete-return path')
-    p.add_argument('--variants',nargs='+',choices=('native','python','query-direct','region-direct','both-direct','formula-sdpa'),
+    p.add_argument('--variants',nargs='+',choices=('native','python','query-direct','region-direct','both-direct','formula-sdpa','formula-sdpa4d'),
                    default=['native','python','query-direct','region-direct','both-direct','formula-sdpa'])
     a=p.parse_args()
     if 'native' in a.variants and not a.native_library:p.error('native needs its explicit matching build')
@@ -89,11 +89,11 @@ def main():
     def evaluate(variant):
         model.zero_grad(set_to_none=True)
         features=model.embedding(inputs['input_ids']);features.retain_grad()
-        boundary='public' if variant in ('native','python','formula','formula-sdpa') else variant
+        boundary='public' if variant in ('native','python','formula','formula-sdpa','formula-sdpa4d') else variant
         with boundary_scope(boundary):
-            if variant in ('formula','formula-sdpa'):
+            if variant.startswith('formula'):
                 result=run(model.encoder.binding,model.encoder.spec,features,
-                           full_attention='sdpa' if variant=='formula-sdpa' else 'manual')
+                           full_attention=variant.removeprefix('formula-') if '-' in variant else 'manual')
                 hidden=result['hidden'];raw=result['states'];work=result['stats']
             else:
                 model.encoder.eager_implementation='native' if variant=='native' else 'python'
@@ -111,7 +111,7 @@ def main():
         values.update({f'state/{v}/{name}':cpu(t) for v,row in raw.items() for name,t in row.items()})
         if a.trace:
             spec=model.encoder.spec;g=model.encoder.binding.graph
-            if variant in ('formula','formula-sdpa'):
+            if variant.startswith('formula'):
                 for r,region in enumerate(result['regions']):
                     for local in range(region['controls'].shape[-1]):
                         v=r*region['controls'].shape[-1]+local

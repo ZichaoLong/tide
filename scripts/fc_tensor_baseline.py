@@ -145,9 +145,10 @@ def full(node, prepared, controls, *, attention="manual"):
         k, v = (z[b].reshape(-1, c.heads, dim//c.heads).transpose(0, 1) for z in (key, value))
         weights = writes[b][None]*mask[t]
         safe = torch.where(weights > 0, weights, 1)
-        if attention == "sdpa":
+        if attention in {"sdpa", "sdpa4d"}:
             bias = safe.log()[None].masked_fill(weights[None] <= 0, -torch.inf)
-            mixed = F.scaled_dot_product_attention(q, k, v, attn_mask=bias)
+            mixed = (F.scaled_dot_product_attention(q[None], k[None], v[None], attn_mask=bias[None])[0]
+                     if attention == "sdpa4d" else F.scaled_dot_product_attention(q, k, v, attn_mask=bias))
         elif attention == "manual":
             logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
             logits = (logits+safe.log()[None]).masked_fill(weights[None] <= 0, -torch.inf)
@@ -164,7 +165,7 @@ def full(node, prepared, controls, *, attention="manual"):
 
 
 def run(binding, spec, x, *, start=0, left=None, full_attention="manual"):
-    if full_attention not in {"manual", "sdpa"}:
+    if full_attention not in {"manual", "sdpa", "sdpa4d"}:
         raise ValueError("unknown FC formula Attention operator")
     depth, width = validate(binding, spec, x)
     g, model = binding.graph, binding.model

@@ -56,8 +56,11 @@ temporarily removes selected independent-root wrappers while retaining the local
 numeric functions and graph schedule. This intentionally omits a public duty;
 it is not a production mode or complete-root qualification. Its ordinary task
 output/derivative projection must be checked before interpreting its cost.
-`--formula-attention sdpa` changes only the direct formula's selected Full
-Attention operator; `manual` remains the default independent explicit algebra.
+`--formula-attention sdpa|sdpa4d` changes only the direct formula's selected Full
+Attention operator (three-dimensional inputs or an explicit leading batch axis);
+`manual` remains the default independent explicit algebra. An SDPA API call does
+not prove fused dispatch: shape, bias gradients and backend capabilities must
+be checked in the actual profiler and derivative comparison.
 Neither option changes the default foundation executor.
 
 `check_fc_comparison.py` reads the same pinned downstream task and compares

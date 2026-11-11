@@ -54,7 +54,7 @@ def main():
                    help="phase preserves historical per-phase device fences; step fences only the whole request/update")
     p.add_argument("--diagnostic-boundary", choices=BOUNDARIES, default="public",
                    help="Python graph only: omit selected independent-root wrappers for task-projection diagnosis, never a public implementation")
-    p.add_argument("--formula-attention", choices=("manual", "sdpa"), default="manual",
+    p.add_argument("--formula-attention", choices=("manual", "sdpa", "sdpa4d"), default="manual",
                    help="fc-tensor only: isolate the Full Attention operator; default retains the independent explicit formula")
     p.add_argument("--mode", choices=("training", "inference", "nograd", "grad-forward", "backward"), default="training",
                    help="nograd/grad-forward/backward/training use the same full-sequence head/loss; inference measures last-position first-token return")
