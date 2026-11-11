@@ -22,8 +22,12 @@ void await(DeviceProgram& p,const std::shared_ptr<Signal>& signal){
 struct Service {
   std::shared_ptr<Signal> request,done;at::Tensor command,work,stop;
   std::unique_ptr<DeviceProgram> program;DeviceProgram* parent=nullptr;size_t head,end;
+  std::vector<size_t> children;
   bool ended=false;
 };
+void stop_child(DeviceProgram& parent,const Service& child){
+  parent.copy(child.command,child.stop);record(parent,child.request);await(parent,child.done);
+}
 }
 struct TaskServices::Impl {
   DeviceProgram& coordinator;at::Device device;int64_t budget;
@@ -42,6 +46,7 @@ DeviceProgram& TaskServices::begin(){
   x->program=std::make_unique<DeviceProgram>(s.device);auto& p=*x->program;p.limit_workspace(s.budget);
   x->head=p.label();const auto body=p.label();x->end=p.label();p.mark(x->head);await(p,x->request);p.branch(x->command,{x->end,body});p.mark(body);
   x->parent->copy(x->command,x->work);record(*x->parent,x->request);
+  if(!s.open.empty())s.services[s.open.back()]->children.push_back(s.services.size());
   s.open.push_back(s.services.size());s.services.push_back(std::move(x));++s.phases;
   s.maximum_nesting=std::max(s.maximum_nesting,static_cast<int64_t>(s.open.size()));return p;
 }
@@ -50,14 +55,20 @@ void TaskServices::end(DeviceProgram& p){
   if(x.program.get()!=&p||x.ended)throw std::logic_error("local service boundary mismatch");
   // No numerical operations follow done before the next request. In
   // particular the unconditional jump does not read/update shared workspace.
-  record(p,x.done);p.branch(x.stop,{x.head});p.mark(x.end);record(p,x.done);
+  record(p,x.done);p.branch(x.stop,{x.head});p.mark(x.end);
+  // A stop request arrives only at the idle head, after every numerical child
+  // call has returned. Recursively stop those same children on their owning
+  // parent stream; root completion then certifies the whole subtree is idle.
+  for(auto index:x.children)stop_child(p,*s.services[index]);
+  record(p,x.done);
   await(*x.parent,x.done);x.ended=true;s.open.pop_back();
 }
 void TaskServices::append_stop(){
   auto& s=*impl_;if(s.stopped||!s.open.empty())throw std::logic_error("invalid local service stop boundary");
-  // At the root boundary every descendant is idle. Stop parents then children;
-  // the root owns this final request/done pair after each normal caller returned.
-  for(auto& x:s.services){s.coordinator.copy(x->command,x->stop);record(s.coordinator,x->request);await(s.coordinator,x->done);}s.stopped=true;
+  // Root owns only direct children. Emitting every descendant's stop here
+  // needlessly grows one captured command stream with the whole service tree.
+  for(auto& x:s.services)if(x->parent==&s.coordinator)stop_child(s.coordinator,*x);
+  s.stopped=true;
 }
 void TaskServices::finish(){
   auto& s=*impl_;if(!s.stopped||s.finished)throw std::logic_error("invalid local service finish");

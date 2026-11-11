@@ -51,6 +51,18 @@ Residual的构造预留因此将该矩阵项从行数乘积中分离，其他窗
 coordinator 本地服务；peer workspace 仍由 `operator_workspace_bytes` 的既有总量报告。
 CANN 已按严格请求/完成次序共享一个高水位 arena；本改动未改变服务调度或生命周期。
 
+CANN服务停止沿构造时的父子树传播：coordinator只通知直接子服务，各父服务在空闲入口收到
+停止请求后，依次停止自己的直接子服务并等待完成，最后才确认自身完成。所有后代仍由设备通知
+关闭，正常数值调用、窗口顺序和共享workspace的先后关系保持；不把全部后代的关闭命令累加到
+coordinator同一捕获流。流数量没有因此减少，也不表示任意大图不再有任务数/流数限制。
+`task_services_check.cpp`用双根、兄弟及三层嵌套，依次执行3/0/5次循环并重新提交窗口，检查
+实际数值、计数、workspace和完成通知。完整图反向与恢复另验。
+
+`scripts/trace_resident_step.py CONFIG --site SITE --output-dir NEW`在真实python-native resident
+初始step上持久记录construct/advance/cotangents/backward/optimizer及错误堆栈，保存配置/安装身份。
+它不重写数值步骤；advance后多读一次metrics，仅用于诊断。按同一空闲设备准入和持久服务规范运行。
+可显式加`TIDE_CANN_TRACE_OPS=1`观察捕获流和最后任务号；诊断host时间不是吞吐测量。
+
 ## 独立小见证与入口
 
 `weighted_budget_check.cpp` 用一行、64个32×32 FP32参数库、32 KiB局部余额，比较
@@ -83,7 +95,7 @@ python scripts/verify_device_control.py --build-dir NEW_DEVICE_BUILD \
 ```
 
 目标仅在 standalone device build 中生成；必须使用项目当前工具链、指定空闲设备
-和主任务统一的资源安排。`task_services_check.cpp` 另核对三层嵌套的实际计数、
+和主任务统一的资源安排。`task_services_check.cpp` 另核对双根/兄弟/三层嵌套的实际计数、
 workspace 共享与重复窗口。构造见证、真正执行、CUDA源码/构建及GPU真机证据分别记录。
 
 修改预算公式时同步维护本页、受影响组件契约、相应设备小见证及固定源码运行证据；

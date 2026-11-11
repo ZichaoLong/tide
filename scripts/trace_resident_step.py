@@ -23,8 +23,9 @@ def main():
     args = parser.parse_args()
     from tidegraph.experiment.config import resolve
     resolved = resolve(args.config, site=args.site)
-    if resolved["execution"]["effective"]["placement"] != "resident":
-        parser.error("requires resident placement; runs its initial window without skipping history")
+    effective = resolved["execution"]["effective"]
+    if effective["placement"] != "resident" or effective["client"] != "python-native":
+        parser.error("requires the python-native resident owner; standalone uses its own executable")
     from tidegraph.experiment.site import launch_environment
     environment = launch_environment(resolved["site"], resolved["execution"])
     if any(os.environ.get(k) != v for k, v in environment.items()):
