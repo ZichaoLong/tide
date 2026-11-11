@@ -78,6 +78,12 @@
   Next-batch options are not submitted; do not automatically extend exposure or candidates.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the
   user explicitly authorizes a separate change. Do not fetch retired foundation history.
+- The latest 2026-11-11 instruction authorizes `docs/studies/direct-coverage-v8.md`:
+  redo the 91-recipe FC/HB union with independent direct mathematical modules and
+  substantively calibrated Transformer controls. No copying foundation execution core.
+  New finite 48h/240 NPUh/768 CPU core-h/128GiB campaign; shared low-load admission
+  remains authorized. Defer the separate true-sparsity and scaling main campaign
+  until coverage review. Preserve all historical frozen runs and strict failures.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.
 - Status/review code reads `runs/` and `artifacts/jobs/` without writing there. Use
   `scripts.review_io.write_review_json` for graph/evidence JSON writes; it validates

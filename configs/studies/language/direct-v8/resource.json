@@ -1,0 +1,28 @@
+{
+  "authorization": "user-2026-11-09-shared-low-load",
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    14,
+    15
+  ],
+  "deadline_epoch": 1794563038.5061643,
+  "exclusive_device": false,
+  "latest_authorization": "2026-11-11 direct coverage and calibrated Transformer",
+  "max_aicore_percent": 35,
+  "max_new_concurrent_npus": 10,
+  "minimum_free_hbm_mib": 32768,
+  "prerequisites": {},
+  "schema": "tide-shared-resource-policy-v1",
+  "slot_namespace": "tide-direct-v8"
+}

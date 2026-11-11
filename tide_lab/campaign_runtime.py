@@ -41,7 +41,13 @@ def optimizer_for(model,config):
     params=[p for p in model.parameters() if p.requires_grad]
     if len(params)!=len({id(p) for p in params}):raise AssertionError('optimizer aliases duplicated')
     c=config['training']
-    return torch.optim.AdamW(params,lr=c['lr'],eps=c['eps'],weight_decay=c['weight_decay'],foreach=False)
+    if c.get('decay_policy','all')=='matrix_only':
+        # Tied embeddings occur once; normalization scales and biases are not decayed.
+        params=[dict(params=[p for p in params if p.ndim>=2],weight_decay=c['weight_decay']),
+                dict(params=[p for p in params if p.ndim<2],weight_decay=0.)]
+    elif c.get('decay_policy','all')!='all':raise ValueError('unknown decay policy')
+    return torch.optim.AdamW(params,lr=c['lr'],eps=c['eps'],weight_decay=c['weight_decay'],
+                            betas=tuple(c.get('betas',(.9,.999))),foreach=False)
 
 
 def learning_rate(config,tokens):

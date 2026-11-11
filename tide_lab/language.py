@@ -89,7 +89,8 @@ class CausalBlock(nn.Module):
 
 
 class SmallTransformer(nn.Module):
-    def __init__(self,seed=11,vocab_size=4096,width=96,layers=3,heads=4,ffn=384,position_scale=1.):
+    def __init__(self,seed=11,vocab_size=4096,width=96,layers=3,heads=4,ffn=384,position_scale=1.,
+                 initialization='legacy'):
         super().__init__()
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(seed)
@@ -98,6 +99,18 @@ class SmallTransformer(nn.Module):
             self.blocks=nn.ModuleList([CausalBlock(width,heads,ffn) for _ in range(layers)])
             self.norm=nn.LayerNorm(width);self.head=nn.Linear(width,vocab_size)
             self.head.weight=self.embedding.weight;nn.init.zeros_(self.head.bias)
+            if initialization not in ('legacy','gpt2','fan_in_depth'):
+                raise ValueError('unknown Transformer initialization')
+            if initialization!='legacy':
+                # Recipe intervention, not a change to historical frozen runs.
+                for block in self.blocks:
+                    for module in block.modules():
+                        if isinstance(module,nn.Linear):
+                            std=.02 if initialization=='gpt2' else 1/math.sqrt(module.in_features)
+                            nn.init.normal_(module.weight,std=std)
+                            nn.init.zeros_(module.bias)
+                    for output in (block.out,block.ffn[-1]):
+                        with torch.no_grad():output.weight.div_(math.sqrt(2*layers))
         position=torch.arange(1024,dtype=torch.float32)[:,None]
         phase=position*torch.exp(torch.arange(0,width,2,dtype=torch.float32)*(-math.log(10000)/width))
         encoding=torch.zeros(1024,width);encoding[:,0::2]=phase.sin();encoding[:,1::2]=phase.cos()

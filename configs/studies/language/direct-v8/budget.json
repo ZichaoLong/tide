@@ -1,0 +1,12 @@
+{
+  "cpu_core_seconds": 2764800,
+  "deadline_epoch": 1794563038.5061643,
+  "max_new_disk_gib": 128,
+  "max_npu_workers": 10,
+  "max_total_rss_gib": 384,
+  "max_total_threads": 64,
+  "minimum_available_ram_gib": 256,
+  "minimum_quota_headroom_gib": 200,
+  "npu_device_seconds": 864000,
+  "schema": "tide-direct-v8-budget-v1"
+}

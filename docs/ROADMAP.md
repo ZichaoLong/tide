@@ -1,3 +1,7 @@
+# 当前优先级（2026-11-11）
+
+执行 [直接局部广覆盖 v8](studies/direct-coverage-v8.md) 与实质Transformer配方校准。完成覆盖和有限复核之后，再讨论真实稀疏与规模主线；此前的更大曝光建议不自动启动。预训练生长路线保留，当前无新增预训练作业。
+
 # 当前优先级：direct-v7终态后的语言与结构桥接
 
 [本轮结论](studies/direct-language-v7-results.md)：直接HB40→HB88在双seed/4M出现有限质量收益；共同fan-in配方可继续研究。

@@ -1,3 +1,9 @@
+# 当前交接：direct-v8 广覆盖准备与 Transformer 校准
+
+2026-11-11 最新用户授权落实到 [v8研究表](studies/direct-coverage-v8.md)：182个局部候选格、14个Transformer配方筛选格，统一1M有效目标。真实稀疏/规模主线延后至覆盖审阅。
+当前已实现两种深度残差初始化与显式AdamW配方，独立因果/共享/更新检查通过；新Lens小记录verified/readback_matches。TF即将固定源码提交，局部数学模块尚在实现，不能标为已覆盖。48h/240NPUh/768CPU核时/128GiB边界已写入配置。
+启动观察账号168GiB/800GiB；无本项目活动旧任务。旧v7终态与数值失败如下保留。
+
 # 当前交接：direct-v7已完成，直接HB出现有限容量收益
 
 2026-11-11 16:51北京时间终态：[总交付](studies/direct-language-v7-results.md) ·

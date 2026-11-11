@@ -1,0 +1,63 @@
+{
+  "campaign": "direct-v8",
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "core": {},
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed"
+  },
+  "id": "tf12-fan-in-depth-lr0.003-s11",
+  "kind": "transformer",
+  "resources": {
+    "max_rss_gib": 28
+  },
+  "revisions": {
+    "foundation_metadata": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-direct-coverage-config-v1",
+  "seed": 11,
+  "study_id": "TL-DIRECT-TF-v8",
+  "threads": 2,
+  "training": {
+    "batch": 32,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "checkpoint_seconds": 1800,
+    "clip_norm": 1.0,
+    "decay_policy": "matrix_only",
+    "eps": 1e-08,
+    "eval_batch": 32,
+    "eval_tokens": 32768,
+    "global_batch": 32,
+    "initial_eval_tokens": 32768,
+    "length": 128,
+    "log_every": 16,
+    "lr": 0.003,
+    "lr_floor_fraction": 0.1,
+    "milestones": [
+      1048576
+    ],
+    "target_tokens": 1048576,
+    "timeout_seconds": 3600,
+    "validation_every_tokens": 262144,
+    "warmup_tokens": 65536,
+    "weight_decay": 0.1
+  },
+  "transformer": {
+    "ffn": 1024,
+    "heads": 4,
+    "initialization": "fan_in_depth",
+    "layers": 12,
+    "position_scale": 0.028284271247461905,
+    "width": 256
+  }
+}
