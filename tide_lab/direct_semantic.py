@@ -76,8 +76,10 @@ class Selector(nn.Module):
         # Work on [...,node] regional rows; all other tensors retain node first.
         caps=mu.movedim(0,-1);wr=w.movedim(0,-1);total=caps.sum(-1,keepdim=True)
         zero=total.new_zeros(())
+        self.last_support_errors=zero
         if mode=='proportional':
             c=caps*total.clamp_max(s['k'])/torch.where(total>0,total,torch.ones_like(total))
+            self.last_support_errors=((caps>0)&(c<=0)).sum()
             return c.movedim(-1,0),zero
         if hasattr(self,'local'):score=self.local(flat)
         else:
@@ -121,6 +123,10 @@ class Selector(nn.Module):
             prob=weighted_softmax(score/selected(s,'allocation_temperature',1.),a,present.movedim(0,-1))
             c=prob*(caps if mode=='direct_attention' else total.clamp_max(1) if mode=='pooled_attention' else 1)
             residual=zero
+        positive=(mode in ('direct_attention','unit_attention','pooled_attention') or
+                  (mode in ('regional_total','regional_threshold','constrained') and
+                   (s['regularizer']=='bern' or (s['regularizer']=='ent' and s['ent_alpha']==1))))
+        if positive:self.last_support_errors=((present.movedim(0,-1) if mode=='unit_attention' and s['allocation_base']=='uniform' else caps>0)&(c<=0)).sum()
         return c.movedim(-1,0),residual.amax()
 
 
@@ -226,12 +232,13 @@ class DirectSemanticLM(nn.Module):
 
     def _forward(self,ids,floors):
         embedding=self.embedding(ids);b,l,d=embedding.shape;one=embedding.new_ones(b,l)
-        values={-1:embedding};mass={-1:one};counts=[];residuals=[]
+        values={-1:embedding};mass={-1:one};counts=[];residuals=[];support_errors=[]
         for j in self.order:
             slots=self.connections[j];z=torch.stack([values[src] for src,_ in slots]);w=torch.stack([mass[src] for src,_ in slots])
             u,r=self.aggregators[j](z,w,getattr(self,'incidence_'+str(j)),self.plan['alpha_agg'])
             memory=self.memories[j](u,r,self.plan['regions'][j]['read_mode'])
             c,error=self.selectors[j](r,memory)
+            support_errors.append(self.selectors[j].last_support_errors)
             content=torch.where((c>0).unsqueeze(-1),memory['content'],torch.zeros_like(memory['content']))
             for index,node in enumerate(self.members[j]):values[node]=content[index];mass[node]=c[index]
             counts.append(torch.stack(((r>0).sum(),(c>0).sum(),c.sum(),(c==0).sum())).detach())
@@ -240,15 +247,18 @@ class DirectSemanticLM(nn.Module):
         hidden=(w.unsqueeze(-1)*torch.stack([values[v] for v in outputs])).sum(0)/w.sum(0).clamp_min(1).unsqueeze(-1)
         # One aggregate observation transfer, not one synchronization per operator.
         floor_total=torch.stack(floors).sum() if floors else hidden.new_zeros(())
-        observed=torch.cat((torch.stack(counts).flatten(),torch.stack(residuals),floor_total.reshape(1))).detach().cpu().tolist()
+        support_error=torch.stack(support_errors).sum()
+        observed=torch.cat((torch.stack(counts).flatten(),torch.stack(residuals),floor_total.reshape(1),support_error.reshape(1))).detach().cpu().tolist()
         nr=len(self.members);candidates=sum(observed[4*i] for i in range(nr));active=sum(observed[4*i+1] for i in range(nr))
         max_error=max(observed[4*nr:5*nr]);tol=1e-10 if hidden.dtype==torch.float64 else 2e-5
         if not math.isfinite(max_error) or max_error>tol:raise RuntimeError(f'allocation feasibility residual {max_error} > {tol}')
+        if observed[-1]:raise RuntimeError(f'mathematically positive sending lost support: {observed[-1]} coordinates')
         self.last_metrics={'work/candidates':candidates,'work/state_updates':candidates,'work/read_events':candidates,
             'work/full':active,'work/physical_full_rows':self.plan['graph']['nodes']*b*l,
             'activity/full_fraction':active/max(candidates,1),'activity/send_strength':sum(observed[4*i+2] for i in range(nr)),
             'solver/max_feasibility_residual':max_error,'work/max_full_batch':len(self.members[0])*b*l}
-        self.last_metrics['numerical/positive_floor_events']=observed[-1]
+        self.last_metrics['numerical/positive_floor_events']=observed[-2]
+        self.last_metrics['discrete/positive_support_errors']=observed[-1]
         for j in range(nr):
             self.last_metrics[f'region/{j}/candidates']=observed[4*j]
             self.last_metrics[f'region/{j}/full']=observed[4*j+1]
