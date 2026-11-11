@@ -1,0 +1,528 @@
+{
+  "actual_bern": {
+    "constrained-bern": {
+      "capture_sha256": "17726fbb53ebbaa33d175785166a671a2a380b3f019e4e27c8c48eeb17d89a6a",
+      "captured": {
+        "details": {
+          "alpha": "0",
+          "branch": "slack",
+          "regularizer": "bern",
+          "solver": "native-batch"
+        },
+        "error": "positive allocation batch support underflowed in requested dtype",
+        "members": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "nodes": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "row": 0,
+        "schema": "tide-allocation-failure-v1",
+        "tensors": {
+          "caps": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              1.0,
+              0.23358497023582458,
+              1.0,
+              1.0
+            ]
+          },
+          "controls": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              0.9998376369476318,
+              2.0927403809878342e-08,
+              0.0,
+              1.0
+            ]
+          },
+          "lower": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.0
+            ]
+          },
+          "multiplier": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "residual": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "response": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              2.1813530921936035,
+              -4.056999206542969,
+              -22.964439392089844,
+              9.94838809967041
+            ]
+          },
+          "scores": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              2.1813530921936035,
+              -4.056999206542969,
+              -22.964439392089844,
+              9.94838809967041
+            ]
+          },
+          "shift": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "temperature": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.25
+            ]
+          },
+          "tolerance": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              3.0517578125e-05
+            ]
+          },
+          "upper": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              2.0
+            ]
+          }
+        },
+        "time": 73
+      },
+      "decimal": {
+        "branch": "slack",
+        "controls": [
+          "0.9998376205635982121663306555648086685342481234470136456135534933874793716035433520154944778309599991",
+          "2.092740515235546163454022527766758430465904107300216991956395866334074290040341521240398967108555854E-8",
+          "1.278447116776553083117697900307835148664535424050251166066207060022416856690926349444166857107065128E-40",
+          "0.9999999999999999947774840151428696436786719244900147228663493557159711910322059771740980356057823720"
+        ],
+        "fp32_rounded": [
+          0.9998376369476318,
+          2.092740558623518e-08,
+          1.2784466279574604e-40,
+          1.0
+        ],
+        "mathematically_below_half_fp32_subnormal": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "multiplier": "0",
+        "precision": 100,
+        "target_residual": null
+      },
+      "normalized_response": [
+        8.725412368774414,
+        -16.227996826171875,
+        -91.85775756835938,
+        39.79355239868164
+      ],
+      "public_scalar_probes": [
+        {
+          "dtype": "torch.float32",
+          "error": "AllocationFailure('positive allocation support underflowed in the requested dtype')",
+          "state": "failed"
+        },
+        {
+          "controls": [
+            0.9998376205635982,
+            2.0927405152355465e-08,
+            1.2784471167765532e-40,
+            1.0
+          ],
+          "dtype": "torch.float64",
+          "residual": 0.0,
+          "state": "completed"
+        }
+      ],
+      "scope": "captured local row only; a stable formula probe is not an implemented solver or accepted model repair",
+      "stable_evaluation_of_captured_response": [
+        0.9998376369476318,
+        2.092740736259202e-08,
+        1.2784466279574604e-40,
+        1.0
+      ]
+    },
+    "regional-total-bern": {
+      "capture_sha256": "17ea9cc2c8e8c2194b2d9779cca292827a94682a84d2db68bc8005c54e117ef7",
+      "captured": {
+        "details": {
+          "alpha": "0",
+          "branch": "equality",
+          "regularizer": "bern",
+          "solver": "native-batch"
+        },
+        "error": "positive allocation batch support underflowed in requested dtype",
+        "members": [
+          24,
+          25,
+          26,
+          27
+        ],
+        "nodes": [
+          24,
+          25,
+          26,
+          27
+        ],
+        "row": 5,
+        "schema": "tide-allocation-failure-v1",
+        "tensors": {
+          "caps": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              1.0963971952548945e-09,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "controls": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              0.0,
+              0.9956455826759338,
+              6.69240877992916e-12,
+              0.9222347736358643
+            ]
+          },
+          "lower": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.9178802967071533
+            ]
+          },
+          "multiplier": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              3.7494072914123535
+            ]
+          },
+          "residual": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "response": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              -22.37217140197754,
+              1.3580487966537476,
+              -6.432511806488037,
+              0.6182764768600464
+            ]
+          },
+          "scores": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [
+              4
+            ],
+            "values": [
+              -18.622764587402344,
+              5.107456207275391,
+              -2.6831042766571045,
+              4.3676838874816895
+            ]
+          },
+          "temperature": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              0.25
+            ]
+          },
+          "tolerance": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              3.0517578125e-05
+            ]
+          },
+          "upper": {
+            "device": "cpu",
+            "dtype": "float32",
+            "shape": [],
+            "values": [
+              1.9178802967071533
+            ]
+          }
+        },
+        "time": 17
+      },
+      "decimal": {
+        "branch": "equality",
+        "controls": [
+          "1.498042504605360072269057679736072590913589921000890406364333798365184431964922769810901868222798856E-48",
+          "0.9956455555213552132332214802360798692907964304022250451934838274426703219796895006110411882355950986",
+          "6.692406087136666853016077276771553893318642040641286729322015703285863566375634890210248506354190453E-12",
+          "0.9222347411791057009921418529109040534324320157029582702612695257557386046372885632316695875892733329"
+        ],
+        "fp32_rounded": [
+          0.0,
+          0.9956455826759338,
+          6.692406177843946e-12,
+          0.9222347140312195
+        ],
+        "mathematically_below_half_fp32_subnormal": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "multiplier": "3.749407636383220057169674266997611151387788202508400116236526069491490641285010397219103279623719478",
+        "precision": 100,
+        "target_residual": "6.36079570E-91"
+      },
+      "normalized_response": [
+        -89.48868560791016,
+        5.43219518661499,
+        -25.73004722595215,
+        2.4731059074401855
+      ],
+      "public_scalar_probes": [
+        {
+          "dtype": "torch.float32",
+          "error": "AllocationFailure('positive allocation support underflowed in the requested dtype')",
+          "state": "failed"
+        },
+        {
+          "controls": [
+            1.4980425046053733e-48,
+            0.9956455555213551,
+            6.692406087136679e-12,
+            0.9222347411791058
+          ],
+          "dtype": "torch.float64",
+          "residual": 0.0,
+          "state": "completed"
+        }
+      ],
+      "scope": "captured local row only; a stable formula probe is not an implemented solver or accepted model repair",
+      "stable_evaluation_of_captured_response": [
+        0.0,
+        0.9956455826759338,
+        6.69240877992916e-12,
+        0.9222347736358643
+      ]
+    }
+  },
+  "aggregate_witness": [
+    {
+      "execution": "completed",
+      "expected_received_content": [
+        0.25,
+        0.25
+      ],
+      "implementation": "python",
+      "observations": 1,
+      "policy": "strict",
+      "raw_kv_keys": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "raw_kv_weights": [
+        1.401298464324817e-45
+      ],
+      "received_content": [
+        1.401298464324817e-45,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "execution": "completed",
+      "expected_received_content": [
+        0.25,
+        0.25
+      ],
+      "implementation": "native",
+      "observations": 1,
+      "policy": "strict",
+      "raw_kv_keys": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "raw_kv_weights": [
+        1.401298464324817e-45
+      ],
+      "received_content": [
+        1.401298464324817e-45,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "execution": "completed",
+      "expected_received_content": [
+        0.25,
+        0.25
+      ],
+      "implementation": "python",
+      "observations": 1,
+      "policy": "positive-floor-v1",
+      "raw_kv_keys": [
+        [
+          0.4192796051502228,
+          0.5559391975402832
+        ]
+      ],
+      "raw_kv_weights": [
+        1.401298464324817e-45
+      ],
+      "received_content": [
+        1.401298464324817e-45,
+        0.25,
+        0.25
+      ]
+    }
+  ],
+  "created_at": "2026-11-11T02:48:44.972463+00:00",
+  "installation": {
+    "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+    "tidegraph": "0.3.0",
+    "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+    "torch": "2.12.0+cpu",
+    "torch_npu": "2.12.0.post3",
+    "transformers": null
+  },
+  "local_probes": {
+    "attention_expression": {
+      "actual": 0.0,
+      "expected": "7.667648189100675007668561052060996318327770354861569404529684841832343857171272969820742026028781465E-23",
+      "logits": [
+        0.0,
+        -120.0
+      ],
+      "probabilities": [
+        1.0,
+        0.0
+      ],
+      "scope": "independent forward expression used by KV AttentionMean; no captured training occurrence",
+      "values": [
+        0.0,
+        1.0000000150474662e+30
+      ]
+    },
+    "bern_vjp": {
+      "actual_gradient": [
+        0.0,
+        0.0
+      ],
+      "controls": [
+        1.0,
+        0.5
+      ],
+      "expected_first_gradient": "8.194012747289643595101537673648517211144673735169108775756066790544378444843859617961943154793796658E-10",
+      "root": [
+        1.0000000150474662e+30,
+        0.0
+      ],
+      "scope": "public scalar Bernoulli slack VJP; synthetic positive saturated tail, not a training trajectory",
+      "scores": [
+        90.0,
+        0.0
+      ]
+    },
+    "passive_decay": {
+      "age": 2000,
+      "fp32_value": 0.0,
+      "fp64_value": 1.3838965267367376e-87,
+      "rate": 0.1,
+      "scope": "explicitly allowed short-channel floating decay; raw state existence must remain independent"
+    },
+    "positive_configuration_cast": {
+      "config_accepted": true,
+      "epsilon": 1e-50,
+      "fp32_value": 0.0,
+      "scope": "configuration positivity is checked as a host number; this probe does not certify the full graph"
+    },
+    "sigmoid_tail": {
+      "actual": 0.0,
+      "float64": 8.194012623990515e-40,
+      "fp32_min_subnormal": 1.401298464324817e-45,
+      "stable": 8.194008692231508e-40,
+      "z": -90.0
+    }
+  },
+  "schema": "tide-positive-local-analysis-v1",
+  "scope": "bounded CPU FP32/FP64/Decimal local witnesses; no foundation edits, training repair or all-path qualification",
+  "script_sha256": "b6f288122a5a32e94f9144fa00efa0facddedceec0cb8060ab4c099c0a873770"
+}
