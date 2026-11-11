@@ -48,7 +48,7 @@ def test_dense_ttft_actual_work_and_phase_scope(tmp_path):
         phases=[dict(warmup=False,complete_wall_seconds=2.,tokens=6,first_tokens=[4,5],
                      first_token_seconds=1.5,ttft_scope='returned tokens',phases_seconds={'core_forward':1.},
                      work={'selected_events':5})])
-    ref=copy.deepcopy(record);ref['phases'][0]['work']['selected_events']=6
+    ref=copy.deepcopy(record);ref['phases'][0]['work']['selected_events']=6;ref['affinity']=[1]
     for name,value in [('candidate',record),('reference',ref)]:
         (tmp_path/(name+'.json')).write_text(json.dumps(value))
     manifest=dict(schema='tide-cost-comparison-v1',question='measured numerator and boundaries',
@@ -59,6 +59,7 @@ def test_dense_ttft_actual_work_and_phase_scope(tmp_path):
     assert result['records'][0]['first_outputs_per_second']==2/1.5
     pair=result['comparisons'][0]
     assert pair['work_count_differences']=={'selected_events':[5,6]}
+    assert pair['execution_differences']['affinity']==[[0],[1]]
     assert 'phase_seconds_delta' not in pair
     assert 'first_return_seconds' not in result['records'][0]
 

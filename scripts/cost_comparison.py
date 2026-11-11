@@ -103,6 +103,11 @@ def collect(manifest, directory):
             pair['work_count_differences']={k:[a['work'].get(k),e['work'].get(k)]
                 for k in work if a['work'].get(k)!=e['work'].get(k)}
             pair['work_count_scope']='Equal counts do not establish event/support identity.'
+            execution=('affinity','visibility','precision','placement','schedule',
+                       'observations','diagnostic_boundary','client','policy')
+            pair['execution_differences']={k:[a.get(k),e.get(k)] for k in execution
+                                           if a.get(k)!=e.get(k)}
+            pair['pairing_scope']='Declared cost pair; differences in physical visibility, resources or obligations remain possible confounders.'
             ap=a['phases'].get('phases_seconds',a['phases'])
             ep=e['phases'].get('phases_seconds',e['phases'])
             if a['timing']=='phase' and e['timing']=='phase':

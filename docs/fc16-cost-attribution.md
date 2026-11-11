@@ -233,7 +233,9 @@ this collection step. Failed tests, failed projection checks and terminal job
 success remain separate entries; a live job cannot enter a terminal review.
 
 Cost pairs report differences in actual work counts and corresponding synchronized
-phase durations. They do not subtract host-enqueue phases as device times. Equal
+phase durations. Physical visibility, affinity, numerical policy, placement and
+observation differences remain explicit possible confounders within each pair.
+They do not subtract host-enqueue phases as device times. Equal
 work counts do not certify equal support; input throughput uses actual recorded
 positions, and TTFT uses its actual first-token interval when present. The
 complete cleanup interval is never substituted for TTFT. For other workloads,
