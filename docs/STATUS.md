@@ -1,39 +1,29 @@
-# 当前交接：direct-v8 广覆盖已在10张NPU执行
+# 当前交接：direct-v8 广覆盖与有限复核已终态
 
-2026-11-11 18:17:27北京时间观察：[有界研究表](studies/direct-coverage-v8.md) · [查看/停止/恢复与Lens](studies/direct-v8-operations.md) · [实际逐配置状态](evidence/direct-v8-observations.json) · [研究图](../web/index.html)。
+2026-11-11 19:24:47北京时间复核：[终态交付](studies/direct-v8-results.md) · [首轮结论](studies/direct-v8-coverage-results.md) · [种子复核](studies/direct-v8-confirmation-results.md) · [Transformer调参](studies/direct-v8-transformer-results.md)。
 
-已实现并提交91个具名局部配方×FC/HB=182格，d128/L128/global B32，各1,048,576有效目标。
-本次是独立直接数学模块，包含记忆/描述/分配；物理Full稠密计算后遮罩，不声称真实稀疏执行或公共continuation等价。
-两anchor已经完成，另外180格由10个后台worker顺序覆盖；另有一个具名修正排队。当前局部尝试状态（含r2）为{'completed': 72, 'running': 5, 'pending': 95, 'qualifying': 5, 'failed': 6}。
-所有活动训练/等待均在background.slice。研究地图保留结果awaiting，不凭退出码生成支持。
+本批18:49结束，40个服务均终态且无后代，当前没有本批运行或排队任务。
+182项首轮中157完成/25失败；19项局部seed22中18完成/1失败；18项TF全部完成；单项r2完成。
+共220次训练尝试，194次达到1,048,576目标、260更新并完成32,768目标validation与有限输出推理，26次原失败保留。
 
-Transformer 14格调参＋4格seed22复核均完成1M：[一页结论](studies/direct-v8-transformer-results.md)。
-选择GPT2式std0.02、sqrt(2·层数)残差输出缩放、LR0.001、AdamW(.9,.95)/矩阵decay0.1。
-TF6/12双seed平均NLL为5.7874/5.8340，seed11旧配方为6.1584/6.1940；改善是配方包效果，不是最优Transformer认证。
-FC/HB anchor的seed11最终NLL为5.3621/5.3854，均从约8.4下降；仍不能提前认定广覆盖优胜或普遍scaling。
+双seed平均validation NLL：FC direct-attention 5.2639、HB pooled-attention 5.2090；
+各自anchor为5.3665/5.4033，校准TF6/12为5.7874/5.8340。仅限本轮近参数、1M及参与选择的validation，test密封。
+FC/HB quadratic温度1均值5.3102/5.2876，逻辑Full/候选约58–62%，是后继稀疏候选；实际Full仍全部稠密计算。
+FC mixed seed11为5.2149，但seed22在1,046,992目标失败，不补填最终结果。
 
-182格实际CPU小型前向/梯度/因果检查通过，8项独立数学检查通过；13个NPU/12个CPU成本case完成。
-HB40完整B32更新NPU约0.296秒、CPU1约9.83秒。B64吞吐更高，但本轮固定global B32保留短程更新与TF对照口径。
-首轮正式接入保留CPU/NPU严格1e-6/1e-5有限失败；因果、支持、共享optimizer、三步新进程恢复及学习各轴单列。
+26次原失败均为quad分配可行性残差>2e-5（约2.04e-5至0.652），6次在首个optimizer更新前；不能等同于学习负面。
+其中FC gated_delta/state相对坐标求根r2完成1M，NLL5.3088；未覆盖其余25个未完成身份的原因/修复。
+220项小型同栈三步新进程恢复均通过，220项均保留至少一个CPU/NPU严格数值失败；长轨迹独立重放、公共continuation未认证。
 
-已保留的失败：FC gated_delta/state训练出现分配可行性残差3.1233e-5>2e-5；其他任务继续。
-[有界排查](evidence/direct-v8-quad-refinement.json)发现大评分偏移的减法消减可造成同量级残差，
-活动集相对坐标求根在768个合成行上把最大残差降至约1.19e-7，原阈值不变，九项数学检查通过。
-原坏行未落盘，原因未完全确认；只对该候选排队一个r2新身份复跑，未改活动源码。
-截至本快照共6项失败，均为FC gated_delta的分配可行性残差：state、conv1/8、heads2、mem-off、ffn-off。
-其中heads2/mem-off/ffn-off在初始validation、尚未训练时失败，最大残差0.65224；conv1/8分别完成16,200/594,196目标后失败。
-小型接入/三步恢复通过不能认证长序列执行；这些不是统一的轻微超差，未证明与首个失败同因。
-全部原失败保留并排除后继种子选择，不能当作已成立的学习负面结论；仅state有一个r2排队，其余没有自动复跑。
+固定源码TF2702d91、anchor778f9e9、覆盖/确认5db28ae、r2 cd85637；数学0770593、规划/安装74e7bbd、私有环境保持。
+配置SHA已核对实际identity，19份自动生成confirmation配置已归档。未使用基座新优化，未修改历史活动输入。
+全批监督64.7分钟，保守8.204 NPU卡时/20.289 CPU核时，新增54.28GiB，终态配额余量577.57GiB。
+220个训练Lens投影均verified/readback_matches；项目tide-learning-lab，三个TL-DIRECT-*-v8组保持，私有入口仅`.local/LENS.md`。
 
-TF源码2702d91；局部校准/anchor 778f9e9；180格覆盖及有限确认5db28ae；单项r2 cd85637。
-数学0770593、规划/安装74e7bbd、私有`.venv-positive-floor-v1`保持，未接入基座新优化。
-截止2026-11-13 17:43:58，240NPU卡时/768CPU核时/128GiB新增磁盘；启动账号168GiB/800GiB。
-监督v8-budget；覆盖v8-cover-w0..9；修正v8-repair-w0等待同一10卡资源槽。
-v8-confirmation-controller已等待覆盖终态，随后按预声明桶最多20个seed22，不自动打开真实稀疏或规模主线。
-
-Lens项目tide-learning-lab：TL-DIRECT-TF-v8、TL-DIRECT-COVER-v8、TL-DIRECT-CONFIRM-v8；
-新小记录verified/readback_matches，正式训练持续投影。前缀tl-v8-；私有入口和SSH方法仅本机`.local/LENS.md`。
-只读快览：`python scripts/review_direct_v8.py`。查看不需重跑；各运行的原始失败、checkpoint、配置、安装身份均保留。
+[逐运行状态/Lens](evidence/direct-v8-observations.json) · [质量/工作量/配对统计/失败](evidence/direct-v8-results.json) · [研究图](../web/index.html) · [操作方法](studies/direct-v8-operations.md)。
+只读：`python scripts/review_direct_v8.py`；结果重建：`python scripts/review_direct_v8_results.py`，均不重跑模型。
+下一步可选数值补齐、真实稀疏、数据/容量阶梯，有限范围与资源建议在总交付；尚未提交，不自动扩大本批。
+已完成KV候选无需等待所有失败修复；B预训练路线没有新增作业。
 
 ## 前一轮已完成的交接
 

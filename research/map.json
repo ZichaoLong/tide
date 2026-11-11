@@ -1147,30 +1147,30 @@
       "target": "V8-COVER"
     },
     {
-      "detail": "\u5b8c\u6210/\u5931\u8d25/\u4e25\u683c\u6570\u503c/\u673a\u5236/\u6062\u590d/\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\uff0c\u4f5c\u4e1a\u5b8c\u6210\u4e0d\u81ea\u52a8\u586b\u7ed3\u679c\u3002",
+      "detail": "157\u5b8c\u6574/25\u539f\u5931\u8d25\uff1b\u72ec\u7acbr2\u6210\u529f\u4e0d\u8986\u76d6\u5176\u4ed6\u5931\u8d25\u6216\u8ba4\u8bc1\u516c\u5171\u6267\u884c\u7b49\u4ef7\u3002",
       "id": "EV8-COVER",
       "kind": "produces",
-      "label": "\u5f85\u5b8c\u6574\u5ba1\u9605",
+      "label": "\u9996\u8f6e\u9650\u5b9a\u5ba1\u9605",
       "source": "V8-COVER",
-      "status": "planned",
+      "status": "documented",
       "target": "RV8-COVER"
     },
     {
-      "detail": "\u6700\u591a20\u9879\uff0c\u4ece\u5df2\u5b8c\u6210\u6709\u9650\u5019\u9009\u6309\u9884\u58f0\u660e\u6876\u9009\u53d6\uff1b\u65b0\u521d\u59cb\u5316\uff0c\u4e0d\u7ee7\u627fcheckpoint\u3002",
+      "detail": "HB\u9012\u63a8\u5f62\u72b6\u65e0\u5408\u683c\u5019\u9009\uff1b\u5176\u4f59\u6309\u9884\u58f0\u660e\u6876\u9009\u62e9\uff0c\u65b0\u521d\u59cb\u5316\u4e0d\u7ee7\u627fcheckpoint\u3002",
       "id": "EV8-REPEAT",
       "kind": "precondition",
-      "label": "\u8986\u76d6\u7ec8\u6001\u540e\u6709\u9650\u91cd\u590d",
+      "label": "\u5df2\u9009\u62e919\u9879\u590d\u6838",
       "source": "V8-COVER",
-      "status": "planned",
+      "status": "documented",
       "target": "V8-CONFIRM"
     },
     {
-      "detail": "\u4fdd\u7559\u9009\u62e9\u504f\u5dee\uff1b\u4e0d\u6253\u5f00test\uff0c\u4e0d\u5f00\u542f\u540e\u7eed\u89c4\u6a21\u6216\u771f\u5b9e\u7a00\u758f\u4e3b\u7ebf\u3002",
+      "detail": "18\u5b8c\u6574/1\u5931\u8d25\uff1b\u9009\u62e9\u7528validation\u4e0e\u4e24seed\u8303\u56f4\u4fdd\u6301\uff0c\u4e0d\u63a8\u65ad\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
       "id": "EV8-CONFIRM",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7a33\u5b9a\u6027\u8bc1\u636e",
+      "label": "\u590d\u6838\u4e0e\u53cd\u8bc1\u5ba1\u9605",
       "source": "V8-CONFIRM",
-      "status": "planned",
+      "status": "documented",
       "target": "RV8-CONFIRM"
     },
     {
@@ -1181,6 +1181,24 @@
       "source": "RV7-RECIPE",
       "status": "documented",
       "target": "V8-COVER"
+    },
+    {
+      "detail": "\u4e24\u4e2a\u79cd\u5b50\u3001\u540cvalidation\u53ca\u8fd1\u53c2\u6570\u5df2\u8c03\u53c2\u5bf9\u7167\uff1btest\u4e0e\u5e7f\u6cdb\u8d28\u91cf\u4ecd\u5f85\u68c0\u9a8c\u3002",
+      "id": "EV8-LANGUAGE-REVIEW",
+      "kind": "informs",
+      "label": "\u9650\u5b9a\u77ed\u66dd\u5149\u8d28\u91cf\u8bc1\u636e",
+      "source": "RV8-CONFIRM",
+      "status": "documented",
+      "target": "G-LANG"
+    },
+    {
+      "detail": "\u63d0\u4f9b\u8d28\u91cf\u53c2\u7167\u4e0equad\u6e29\u5ea61\u5019\u9009\uff1b\u6ca1\u6709\u63d0\u4ea4\u66f4\u957f\u66dd\u5149\u3001HB88\u6216\u771f\u5b9e\u7a00\u758f\u4efb\u52a1\u3002",
+      "id": "EV8-SCALE-NEXT",
+      "kind": "informs",
+      "label": "\u540e\u7ee7\u5019\u9009\uff0c\u89c4\u6a21\u5f85\u9a8c",
+      "source": "RV8-CONFIRM",
+      "status": "documented",
+      "target": "G-SCALE"
     }
   ],
   "height": 8110,
@@ -9462,6 +9480,10 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
       "runs": [
@@ -9639,6 +9661,10 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
       "scope": "d256\u30016/12 block\u3001B32/L128\u3001\u56fa\u5b9a1M\u6709\u6548\u76ee\u6807\u4e0e32,768 validation\uff1b14\u9879\u641c\u7d22+4\u9879\u590d\u6838\uff0ctest\u5bc6\u5c01\u3002",
@@ -9660,7 +9686,7 @@
     },
     {
       "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
-      "decision": "\u6267\u884c\u5168\u90e8\u5177\u540d\u5019\u9009\uff0c\u4fdd\u7559\u5931\u8d25\uff1b\u7a20\u5bc6\u7269\u7406Full\u4e0e\u903b\u8f91\u652f\u6301\u5206\u5f00\u3002",
+      "decision": "\u4fdd\u7559\u5df2\u590d\u6838\u5019\u9009\uff1b\u6570\u503c\u8865\u9f50\u4ec5\u963b\u585e\u76f8\u5e94\u672a\u5b8c\u6210\u8eab\u4efd\u3002",
       "id": "V8-COVER",
       "kind": "experiment",
       "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
@@ -9676,6 +9702,10 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
       "runs": [
@@ -9757,77 +9787,87 @@
           "lens_record": "runs/v8-cover-fc-decay-slow-s11/train/projection.json",
           "record": "runs/v8-cover-fc-decay-slow-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-ssd-conv1-s11.json",
           "id": "tl-v8-cover-fc-ssd-conv1-s11",
           "lens_record": "runs/v8-cover-fc-ssd-conv1-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-conv1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-kv-sum-s11.json",
           "id": "tl-v8-cover-hb-mem-kv-sum-s11",
           "lens_record": "runs/v8-cover-hb-mem-kv-sum-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-kv-sum-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-read-old-s11.json",
           "id": "tl-v8-cover-hb-read-old-s11",
           "lens_record": "runs/v8-cover-hb-read-old-s11/train/projection.json",
           "record": "runs/v8-cover-hb-read-old-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gamma4-s11.json",
           "id": "tl-v8-cover-hb-gamma4-s11",
           "lens_record": "runs/v8-cover-hb-gamma4-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gamma4-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent1-s11.json",
           "id": "tl-v8-cover-hb-send-regional_total-ent1-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_total-ent1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_total-ent1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent1-s11.json",
           "id": "tl-v8-cover-hb-send-constrained-ent1-s11",
           "lens_record": "runs/v8-cover-hb-send-constrained-ent1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-constrained-ent1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-direct-received-s11.json",
           "id": "tl-v8-cover-hb-direct-received-s11",
           "lens_record": "runs/v8-cover-hb-direct-received-s11/train/projection.json",
           "record": "runs/v8-cover-hb-direct-received-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-source-adapted-s11.json",
           "id": "tl-v8-cover-hb-source-adapted-s11",
           "lens_record": "runs/v8-cover-hb-source-adapted-s11/train/projection.json",
           "record": "runs/v8-cover-hb-source-adapted-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-decay-slow-s11.json",
           "id": "tl-v8-cover-hb-decay-slow-s11",
           "lens_record": "runs/v8-cover-hb-decay-slow-s11/train/projection.json",
           "record": "runs/v8-cover-hb-decay-slow-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-conv1-s11.json",
           "id": "tl-v8-cover-hb-ssd-conv1-s11",
           "lens_record": "runs/v8-cover-hb-ssd-conv1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-conv1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-affine-sum-s11.json",
@@ -9899,70 +9939,79 @@
           "lens_record": "runs/v8-cover-fc-ssd-conv8-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-conv8-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-affine-sum-s11.json",
           "id": "tl-v8-cover-hb-mem-affine-sum-s11",
           "lens_record": "runs/v8-cover-hb-mem-affine-sum-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-affine-sum-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-local-match-s11.json",
           "id": "tl-v8-cover-hb-local-match-s11",
           "lens_record": "runs/v8-cover-hb-local-match-s11/train/projection.json",
           "record": "runs/v8-cover-hb-local-match-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-temperature1-s11.json",
           "id": "tl-v8-cover-hb-temperature1-s11",
           "lens_record": "runs/v8-cover-hb-temperature1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-temperature1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent15-s11.json",
           "id": "tl-v8-cover-hb-send-regional_total-ent15-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_total-ent15-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_total-ent15-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent15-s11.json",
           "id": "tl-v8-cover-hb-send-constrained-ent15-s11",
           "lens_record": "runs/v8-cover-hb-send-constrained-ent15-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-constrained-ent15-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-unit-mu-s11.json",
           "id": "tl-v8-cover-hb-unit-mu-s11",
           "lens_record": "runs/v8-cover-hb-unit-mu-s11/train/projection.json",
           "record": "runs/v8-cover-hb-unit-mu-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-window16-s11.json",
           "id": "tl-v8-cover-hb-window16-s11",
           "lens_record": "runs/v8-cover-hb-window16-s11/train/projection.json",
           "record": "runs/v8-cover-hb-window16-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-rope-half-s11.json",
           "id": "tl-v8-cover-hb-rope-half-s11",
           "lens_record": "runs/v8-cover-hb-rope-half-s11/train/projection.json",
           "record": "runs/v8-cover-hb-rope-half-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-conv8-s11.json",
           "id": "tl-v8-cover-hb-ssd-conv8-s11",
           "lens_record": "runs/v8-cover-hb-ssd-conv8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-conv8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-affine-state-s11.json",
@@ -10026,77 +10075,87 @@
           "lens_record": "runs/v8-cover-fc-rope-full-s11/train/projection.json",
           "record": "runs/v8-cover-fc-rope-full-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-ssd-heads2-s11.json",
           "id": "tl-v8-cover-fc-ssd-heads2-s11",
           "lens_record": "runs/v8-cover-fc-ssd-heads2-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-heads2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-affine-state-s11.json",
           "id": "tl-v8-cover-hb-mem-affine-state-s11",
           "lens_record": "runs/v8-cover-hb-mem-affine-state-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-affine-state-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-region-att-stats-s11.json",
           "id": "tl-v8-cover-hb-region-att-stats-s11",
           "lens_record": "runs/v8-cover-hb-region-att-stats-s11/train/projection.json",
           "record": "runs/v8-cover-hb-region-att-stats-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-score-width8-s11.json",
           "id": "tl-v8-cover-hb-score-width8-s11",
           "lens_record": "runs/v8-cover-hb-score-width8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-score-width8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent2-s11.json",
           "id": "tl-v8-cover-hb-send-regional_total-ent2-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_total-ent2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_total-ent2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent2-s11.json",
           "id": "tl-v8-cover-hb-send-constrained-ent2-s11",
           "lens_record": "runs/v8-cover-hb-send-constrained-ent2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-constrained-ent2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-constrained-context-gain-s11.json",
           "id": "tl-v8-cover-hb-constrained-context-gain-s11",
           "lens_record": "runs/v8-cover-hb-constrained-context-gain-s11/train/projection.json",
           "record": "runs/v8-cover-hb-constrained-context-gain-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-window128-s11.json",
           "id": "tl-v8-cover-hb-window128-s11",
           "lens_record": "runs/v8-cover-hb-window128-s11/train/projection.json",
           "record": "runs/v8-cover-hb-window128-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-rope-full-s11.json",
           "id": "tl-v8-cover-hb-rope-full-s11",
           "lens_record": "runs/v8-cover-hb-rope-full-s11/train/projection.json",
           "record": "runs/v8-cover-hb-rope-full-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-heads2-s11.json",
           "id": "tl-v8-cover-hb-ssd-heads2-s11",
           "lens_record": "runs/v8-cover-hb-ssd-heads2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-heads2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-delta-sum-s11.json",
@@ -10160,77 +10219,87 @@
           "lens_record": "runs/v8-cover-fc-rope-read-s11/train/projection.json",
           "record": "runs/v8-cover-fc-rope-read-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-ssd-mem-off-s11.json",
           "id": "tl-v8-cover-fc-ssd-mem-off-s11",
           "lens_record": "runs/v8-cover-fc-ssd-mem-off-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-mem-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-delta-sum-s11.json",
           "id": "tl-v8-cover-hb-mem-delta-sum-s11",
           "lens_record": "runs/v8-cover-hb-mem-delta-sum-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-delta-sum-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-region-att-content-s11.json",
           "id": "tl-v8-cover-hb-region-att-content-s11",
           "lens_record": "runs/v8-cover-hb-region-att-content-s11/train/projection.json",
           "record": "runs/v8-cover-hb-region-att-content-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-evidence-width8-s11.json",
           "id": "tl-v8-cover-hb-evidence-width8-s11",
           "lens_record": "runs/v8-cover-hb-evidence-width8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-evidence-width8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-quad-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold-quad-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold-quad-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold-quad-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_total_zero-s11.json",
           "id": "tl-v8-cover-hb-send-regional_total_zero-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_total_zero-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_total_zero-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-constrained-learned-gain-s11.json",
           "id": "tl-v8-cover-hb-constrained-learned-gain-s11",
           "lens_record": "runs/v8-cover-hb-constrained-learned-gain-s11/train/projection.json",
           "record": "runs/v8-cover-hb-constrained-learned-gain-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-summary8-s11.json",
           "id": "tl-v8-cover-hb-summary8-s11",
           "lens_record": "runs/v8-cover-hb-summary8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-summary8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-rope-read-s11.json",
           "id": "tl-v8-cover-hb-rope-read-s11",
           "lens_record": "runs/v8-cover-hb-rope-read-s11/train/projection.json",
           "record": "runs/v8-cover-hb-rope-read-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-mem-off-s11.json",
           "id": "tl-v8-cover-hb-ssd-mem-off-s11",
           "lens_record": "runs/v8-cover-hb-ssd-mem-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-mem-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-delta-state-s11.json",
@@ -10294,77 +10363,87 @@
           "lens_record": "runs/v8-cover-fc-distance-slope-s11/train/projection.json",
           "record": "runs/v8-cover-fc-distance-slope-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-ssd-ffn-off-s11.json",
           "id": "tl-v8-cover-fc-ssd-ffn-off-s11",
           "lens_record": "runs/v8-cover-fc-ssd-ffn-off-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-ffn-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-delta-state-s11.json",
           "id": "tl-v8-cover-hb-mem-delta-state-s11",
           "lens_record": "runs/v8-cover-hb-mem-delta-state-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-delta-state-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-evidence-grouped-s11.json",
           "id": "tl-v8-cover-hb-evidence-grouped-s11",
           "lens_record": "runs/v8-cover-hb-evidence-grouped-s11/train/projection.json",
           "record": "runs/v8-cover-hb-evidence-grouped-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-match-width8-s11.json",
           "id": "tl-v8-cover-hb-match-width8-s11",
           "lens_record": "runs/v8-cover-hb-match-width8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-match-width8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-bern-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold-bern-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold-bern-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold-bern-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold_hard-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold_hard-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold_hard-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold_hard-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gain-att-received-s11.json",
           "id": "tl-v8-cover-hb-gain-att-received-s11",
           "lens_record": "runs/v8-cover-hb-gain-att-received-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gain-att-received-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-adapter8-s11.json",
           "id": "tl-v8-cover-hb-adapter8-s11",
           "lens_record": "runs/v8-cover-hb-adapter8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-adapter8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-distance-slope-s11.json",
           "id": "tl-v8-cover-hb-distance-slope-s11",
           "lens_record": "runs/v8-cover-hb-distance-slope-s11/train/projection.json",
           "record": "runs/v8-cover-hb-distance-slope-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-ffn-off-s11.json",
           "id": "tl-v8-cover-hb-ssd-ffn-off-s11",
           "lens_record": "runs/v8-cover-hb-ssd-ffn-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-ffn-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-gated_delta-sum-s11.json",
@@ -10436,70 +10515,79 @@
           "lens_record": "runs/v8-cover-fc-ssd-groups2-s11/train/projection.json",
           "record": "runs/v8-cover-fc-ssd-groups2-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-gated_delta-sum-s11.json",
           "id": "tl-v8-cover-hb-mem-gated_delta-sum-s11",
           "lens_record": "runs/v8-cover-hb-mem-gated_delta-sum-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-gated_delta-sum-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-match-att-grouped-s11.json",
           "id": "tl-v8-cover-hb-match-att-grouped-s11",
           "lens_record": "runs/v8-cover-hb-match-att-grouped-s11/train/projection.json",
           "record": "runs/v8-cover-hb-match-att-grouped-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-match-residual-off-s11.json",
           "id": "tl-v8-cover-hb-match-residual-off-s11",
           "lens_record": "runs/v8-cover-hb-match-residual-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-match-residual-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent1-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold-ent1-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold-ent1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-hard_selection-s11.json",
           "id": "tl-v8-cover-hb-send-hard_selection-s11",
           "lens_record": "runs/v8-cover-hb-send-hard_selection-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-hard_selection-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gain-att-mu-s11.json",
           "id": "tl-v8-cover-hb-gain-att-mu-s11",
           "lens_record": "runs/v8-cover-hb-gain-att-mu-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gain-att-mu-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ffn2x-s11.json",
           "id": "tl-v8-cover-hb-ffn2x-s11",
           "lens_record": "runs/v8-cover-hb-ffn2x-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ffn2x-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gated_delta-conv1-s11.json",
           "id": "tl-v8-cover-hb-gated_delta-conv1-s11",
           "lens_record": "runs/v8-cover-hb-gated_delta-conv1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gated_delta-conv1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ssd-groups2-s11.json",
           "id": "tl-v8-cover-hb-ssd-groups2-s11",
           "lens_record": "runs/v8-cover-hb-ssd-groups2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ssd-groups2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-gated_delta-state-s11.json",
@@ -10571,70 +10659,79 @@
           "lens_record": "runs/v8-cover-fc-budget-div1-s11/train/projection.json",
           "record": "runs/v8-cover-fc-budget-div1-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-gated_delta-state-s11.json",
           "id": "tl-v8-cover-hb-mem-gated_delta-state-s11",
           "lens_record": "runs/v8-cover-hb-mem-gated_delta-state-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-gated_delta-state-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-fixed-total25-s11.json",
           "id": "tl-v8-cover-hb-fixed-total25-s11",
           "lens_record": "runs/v8-cover-hb-fixed-total25-s11/train/projection.json",
           "record": "runs/v8-cover-hb-fixed-total25-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-match-inner-off-s11.json",
           "id": "tl-v8-cover-hb-match-inner-off-s11",
           "lens_record": "runs/v8-cover-hb-match-inner-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-match-inner-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent15-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold-ent15-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent15-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold-ent15-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-direct_attention-s11.json",
           "id": "tl-v8-cover-hb-send-direct_attention-s11",
           "lens_record": "runs/v8-cover-hb-send-direct_attention-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-direct_attention-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-threshold-fixed-s11.json",
           "id": "tl-v8-cover-hb-threshold-fixed-s11",
           "lens_record": "runs/v8-cover-hb-threshold-fixed-s11/train/projection.json",
           "record": "runs/v8-cover-hb-threshold-fixed-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-ffn8x-s11.json",
           "id": "tl-v8-cover-hb-ffn8x-s11",
           "lens_record": "runs/v8-cover-hb-ffn8x-s11/train/projection.json",
           "record": "runs/v8-cover-hb-ffn8x-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gated_delta-conv8-s11.json",
           "id": "tl-v8-cover-hb-gated_delta-conv8-s11",
           "lens_record": "runs/v8-cover-hb-gated_delta-conv8-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gated_delta-conv8-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-budget-div1-s11.json",
           "id": "tl-v8-cover-hb-budget-div1-s11",
           "lens_record": "runs/v8-cover-hb-budget-div1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-budget-div1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-ssd-sum-s11.json",
@@ -10706,70 +10803,79 @@
           "lens_record": "runs/v8-cover-fc-budget-div4-s11/train/projection.json",
           "record": "runs/v8-cover-fc-budget-div4-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-ssd-sum-s11.json",
           "id": "tl-v8-cover-hb-mem-ssd-sum-s11",
           "lens_record": "runs/v8-cover-hb-mem-ssd-sum-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-ssd-sum-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-fixed-total50-s11.json",
           "id": "tl-v8-cover-hb-fixed-total50-s11",
           "lens_record": "runs/v8-cover-hb-fixed-total50-s11/train/projection.json",
           "record": "runs/v8-cover-hb-fixed-total50-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-att-local-off-s11.json",
           "id": "tl-v8-cover-hb-att-local-off-s11",
           "lens_record": "runs/v8-cover-hb-att-local-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-att-local-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent2-s11.json",
           "id": "tl-v8-cover-hb-send-regional_threshold-ent2-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_threshold-ent2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-unit_attention-s11.json",
           "id": "tl-v8-cover-hb-send-unit_attention-s11",
           "lens_record": "runs/v8-cover-hb-send-unit_attention-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-unit_attention-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-zero-fixed-s11.json",
           "id": "tl-v8-cover-hb-zero-fixed-s11",
           "lens_record": "runs/v8-cover-hb-zero-fixed-s11/train/projection.json",
           "record": "runs/v8-cover-hb-zero-fixed-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-full-memory-off-s11.json",
           "id": "tl-v8-cover-hb-full-memory-off-s11",
           "lens_record": "runs/v8-cover-hb-full-memory-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-full-memory-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gated_delta-heads2-s11.json",
           "id": "tl-v8-cover-hb-gated_delta-heads2-s11",
           "lens_record": "runs/v8-cover-hb-gated_delta-heads2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gated_delta-heads2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-budget-div4-s11.json",
           "id": "tl-v8-cover-hb-budget-div4-s11",
           "lens_record": "runs/v8-cover-hb-budget-div4-s11/train/projection.json",
           "record": "runs/v8-cover-hb-budget-div4-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-mem-ssd-state-s11.json",
@@ -10841,70 +10947,79 @@
           "lens_record": "runs/v8-cover-fc-textbook-kv-s11/train/projection.json",
           "record": "runs/v8-cover-fc-textbook-kv-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-mem-ssd-state-s11.json",
           "id": "tl-v8-cover-hb-mem-ssd-state-s11",
           "lens_record": "runs/v8-cover-hb-mem-ssd-state-s11/train/projection.json",
           "record": "runs/v8-cover-hb-mem-ssd-state-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-fixed-total100-s11.json",
           "id": "tl-v8-cover-hb-fixed-total100-s11",
           "lens_record": "runs/v8-cover-hb-fixed-total100-s11/train/projection.json",
           "record": "runs/v8-cover-hb-fixed-total100-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-att-regional-off-s11.json",
           "id": "tl-v8-cover-hb-att-regional-off-s11",
           "lens_record": "runs/v8-cover-hb-att-regional-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-att-regional-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-constrained-quad-s11.json",
           "id": "tl-v8-cover-hb-send-constrained-quad-s11",
           "lens_record": "runs/v8-cover-hb-send-constrained-quad-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-constrained-quad-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-pooled_attention-s11.json",
           "id": "tl-v8-cover-hb-send-pooled_attention-s11",
           "lens_record": "runs/v8-cover-hb-send-pooled_attention-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-pooled_attention-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-source-node-s11.json",
           "id": "tl-v8-cover-hb-source-node-s11",
           "lens_record": "runs/v8-cover-hb-source-node-s11/train/projection.json",
           "record": "runs/v8-cover-hb-source-node-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-full-ffn-off-s11.json",
           "id": "tl-v8-cover-hb-full-ffn-off-s11",
           "lens_record": "runs/v8-cover-hb-full-ffn-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-full-ffn-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gated_delta-mem-off-s11.json",
           "id": "tl-v8-cover-hb-gated_delta-mem-off-s11",
           "lens_record": "runs/v8-cover-hb-gated_delta-mem-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gated_delta-mem-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-textbook-kv-s11.json",
           "id": "tl-v8-cover-hb-textbook-kv-s11",
           "lens_record": "runs/v8-cover-hb-textbook-kv-s11/train/projection.json",
           "record": "runs/v8-cover-hb-textbook-kv-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/fc-read-zero-s11.json",
@@ -10976,83 +11091,93 @@
           "lens_record": "runs/v8-cover-fc-textbook-mixed-s11/train/projection.json",
           "record": "runs/v8-cover-fc-textbook-mixed-s11/train/result.json",
           "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-read-zero-s11.json",
           "id": "tl-v8-cover-hb-read-zero-s11",
           "lens_record": "runs/v8-cover-hb-read-zero-s11/train/projection.json",
           "record": "runs/v8-cover-hb-read-zero-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gamma1-s11.json",
           "id": "tl-v8-cover-hb-gamma1-s11",
           "lens_record": "runs/v8-cover-hb-gamma1-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gamma1-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-bern-s11.json",
           "id": "tl-v8-cover-hb-send-regional_total-bern-s11",
           "lens_record": "runs/v8-cover-hb-send-regional_total-bern-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-regional_total-bern-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-constrained-bern-s11.json",
           "id": "tl-v8-cover-hb-send-constrained-bern-s11",
           "lens_record": "runs/v8-cover-hb-send-constrained-bern-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-constrained-bern-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-send-proportional-s11.json",
           "id": "tl-v8-cover-hb-send-proportional-s11",
           "lens_record": "runs/v8-cover-hb-send-proportional-s11/train/projection.json",
           "record": "runs/v8-cover-hb-send-proportional-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-source-source-s11.json",
           "id": "tl-v8-cover-hb-source-source-s11",
           "lens_record": "runs/v8-cover-hb-source-source-s11/train/projection.json",
           "record": "runs/v8-cover-hb-source-source-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-heads2-s11.json",
           "id": "tl-v8-cover-hb-heads2-s11",
           "lens_record": "runs/v8-cover-hb-heads2-s11/train/projection.json",
           "record": "runs/v8-cover-hb-heads2-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-gated_delta-ffn-off-s11.json",
           "id": "tl-v8-cover-hb-gated_delta-ffn-off-s11",
           "lens_record": "runs/v8-cover-hb-gated_delta-ffn-off-s11/train/projection.json",
           "record": "runs/v8-cover-hb-gated_delta-ffn-off-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/local/hb-textbook-mixed-s11.json",
           "id": "tl-v8-cover-hb-textbook-mixed-s11",
           "lens_record": "runs/v8-cover-hb-textbook-mixed-s11/train/projection.json",
           "record": "runs/v8-cover-hb-textbook-mixed-s11/train/result.json",
-          "status": "queued"
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
         },
         {
           "config": "configs/studies/language/direct-v8/repair/fc-mem-gated_delta-state-s11-r2.json",
           "id": "tl-v8-repair-fc-mem-gated_delta-state-s11-r2",
           "lens_record": "runs/v8-repair-fc-mem-gated_delta-state-s11-r2/train/projection.json",
           "record": "runs/v8-repair-fc-mem-gated_delta-state-s11-r2/train/result.json",
-          "status": "queued"
+          "source_commit": "cd85637afaa5e3c5b5fe1f73a82a0d5ae0f4c7fb",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-DIRECT-COVER-v8",
-      "summary": "182\u683c\u5df2\u63a5\u6536\uff0c\u53e61\u4e2a\u5177\u540d\u4fee\u6b63\u6392\u961f\uff1b\u89c2\u5bdf\u72b6\u6001 {'completed': 72, 'running': 5, 'pending': 95, 'qualifying': 5, 'failed': 6}",
-      "title": "v8\uff1a91\u5c40\u90e8\u5019\u9009\u00d7FC/HB",
+      "summary": "\u9996\u8f6e157\u5b8c\u6210/25\u5931\u8d25\uff1b\u72ec\u7acbr2\u5b8c\u6210\u3002Full\u7269\u7406\u7a20\u5bc6\uff0c\u539f\u5931\u8d25\u4fdd\u7559\u3002",
+      "title": "v8\uff1a182\u683c\u5e76\u96c6\u5df2\u7ec8\u6001",
       "track": "tide",
       "view_group": "current",
       "x": 620,
@@ -11060,7 +11185,9 @@
     },
     {
       "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
-      "decision": "\u5148\u5ba1\u9605\u8986\u76d6\u8d28\u91cf\u3001\u673a\u5236\u4e0e\u5931\u8d25\uff0c\u518d\u9009\u62e9\u771f\u5b9e\u7a00\u758f\u548c\u89c4\u6a21\u4e3b\u7ebf\u3002",
+      "comparisons": "\u5171\u540c\u8bad\u7ec3/validation\u4e0e\u7ecf\u8fc7\u6709\u9650\u8c03\u53c2\u7684TF\uff1b\u53c2\u6570\u548c\u5b9e\u9645\u5de5\u4f5c\u91cf\u5206\u522b\u5217\u51fa\u3002",
+      "counterevidence": "HB\u9012\u63a8\u5f62\u72b611\u9879\u5168\u5931\u8d25\uff1bFC mixed\u7b2c\u4e8cseed\u5931\u8d25\uff1bFull\u4ecd\u7269\u7406\u7a20\u5bc6\uff0ctest\u672a\u5f00\u542f\u3002",
+      "decision": "\u9009\u5df2\u590d\u6838\u8d28\u91cf\u53c2\u7167\u548cquad\u6e29\u5ea61\uff1b\u672a\u5b8c\u6210\u8def\u5f84\u5355\u72ec\u6570\u503c\u8865\u9f50\uff0c\u4e0d\u636e\u6b64\u5426\u5b9a\u8bb0\u5fc6\u67b6\u6784\u3002",
       "id": "RV8-COVER",
       "kind": "result",
       "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
@@ -11076,19 +11203,32 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u4e24anchor\u5b8c\u62101M\uff1b\u5176\u4f59\u5019\u9009\u4ecd\u8fd0\u884c\uff0c\u4e0d\u80fd\u7528\u65e9\u671f\u540d\u6b21\u66ff\u4ee3\u5b8c\u6574\u5ba1\u9605\u3002",
-      "title": "\u5e7f\u8986\u76d6\u7ed3\u679c\u5f85\u5b8c\u6574\u5ba1\u9605",
+      "scope": "91\u5177\u540d\u914d\u65b9\u00d7FC/HB\uff0cd128/L128/B32\u3001seed11\u3001\u6bcf\u9879\u6700\u591a1M\uff1bmixed FC\u4e3a32\u8282\u70b9\u3002157\u5b8c\u6574\uff0c25\u6267\u884c\u5931\u8d25\uff1b\u53e6\u6709\u4e00\u9879\u65b0\u6e90\u7801r2\u3002",
+      "sources": [
+        {
+          "label": "\u9996\u8f6e\u4eba\u5de5\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/2947cc8/docs/studies/direct-v8-coverage-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u53d1\u9001/\u8bc4\u5206\u7b49\u591a\u7c7b\u5b8c\u6210\uff1b\u9012\u63a8\u5f62\u72b6\u7684\u7f3a\u53e3\u963b\u585e\u76f8\u5e94\u8d28\u91cf\u5224\u65ad\u3002",
+      "title": "157\u4e2a\u5b8c\u6574\u9996\u8f6e\u7ed3\u679c\uff0c25\u5931\u8d25",
       "track": "tide",
+      "transfer_conditions": "\u4ec5\u56fa\u5b9a\u9759\u6001\u51fd\u6570/\u7cbe\u5ea6/\u914d\u65b9\uff1b\u65b0\u589e\u957f\u5ea6\u3001\u6df1\u5ea6\u3001\u771f\u5b9e\u7a00\u758f\u53ca\u57fa\u5ea7\u63a5\u5165\u9700\u8981\u72ec\u7acb\u9a8c\u8bc1\u3002",
+      "unresolved": "\u6b8b\u5dee\u5931\u8d25\u8de8\u5ea6\u5927\uff0c\u5355\u9879r2\u4e0d\u8bc1\u660e\u6240\u6709\u6839\u56e0\u6216\u4fee\u590d\uff1b\u6709\u9650CPU/NPU\u5dee\u5f02\u4e0e\u516c\u5171continuation\u7b49\u4ef7\u672a\u89e3\u51b3\u3002",
       "view_group": "current",
       "x": 915,
       "y": 280
     },
     {
       "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
-      "decision": "\u4ec5\u9884\u58f0\u660e\u6876\u5185\u91cd\u590d\uff1b\u6ca1\u6709\u81ea\u52a8\u89c4\u6a21\u6269\u5c55\u3002",
+      "decision": "\u5ba1\u9605\u540c\u5411\u6539\u5584\u4e0e\u53cd\u8bc1\uff1b\u540e\u7ee7\u8bad\u7ec3\u6ca1\u6709\u81ea\u52a8\u63d0\u4ea4\u3002",
       "id": "V8-CONFIRM",
       "kind": "experiment",
       "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
@@ -11104,12 +11244,170 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
-      "status": "queued",
+      "runs": [
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-anchor-s22.json",
+          "id": "tl-v8-confirm-fc-anchor-s22",
+          "lens_record": "runs/v8-confirm-fc-anchor-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-anchor-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-anchor-s22.json",
+          "id": "tl-v8-confirm-hb-anchor-s22",
+          "lens_record": "runs/v8-confirm-hb-anchor-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-anchor-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-budget-div1-s22.json",
+          "id": "tl-v8-confirm-fc-budget-div1-s22",
+          "lens_record": "runs/v8-confirm-fc-budget-div1-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-budget-div1-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-budget-div1-s22.json",
+          "id": "tl-v8-confirm-hb-budget-div1-s22",
+          "lens_record": "runs/v8-confirm-hb-budget-div1-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-budget-div1-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-textbook-mixed-s22.json",
+          "id": "tl-v8-confirm-fc-textbook-mixed-s22",
+          "lens_record": "runs/v8-confirm-fc-textbook-mixed-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-textbook-mixed-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-textbook-kv-s22.json",
+          "id": "tl-v8-confirm-hb-textbook-kv-s22",
+          "lens_record": "runs/v8-confirm-hb-textbook-kv-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-textbook-kv-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-mem-delta-state-s22.json",
+          "id": "tl-v8-confirm-fc-mem-delta-state-s22",
+          "lens_record": "runs/v8-confirm-fc-mem-delta-state-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-mem-delta-state-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-mem-gated_delta-sum-s22.json",
+          "id": "tl-v8-confirm-hb-mem-gated_delta-sum-s22",
+          "lens_record": "runs/v8-confirm-hb-mem-gated_delta-sum-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-mem-gated_delta-sum-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-ffn8x-s22.json",
+          "id": "tl-v8-confirm-fc-ffn8x-s22",
+          "lens_record": "runs/v8-confirm-fc-ffn8x-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-ffn8x-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-ffn8x-s22.json",
+          "id": "tl-v8-confirm-hb-ffn8x-s22",
+          "lens_record": "runs/v8-confirm-hb-ffn8x-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-ffn8x-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-read-zero-s22.json",
+          "id": "tl-v8-confirm-fc-read-zero-s22",
+          "lens_record": "runs/v8-confirm-fc-read-zero-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-read-zero-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-read-old-s22.json",
+          "id": "tl-v8-confirm-hb-read-old-s22",
+          "lens_record": "runs/v8-confirm-hb-read-old-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-read-old-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-ssd-mem-off-s22.json",
+          "id": "tl-v8-confirm-fc-ssd-mem-off-s22",
+          "lens_record": "runs/v8-confirm-fc-ssd-mem-off-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-ssd-mem-off-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-temperature1-s22.json",
+          "id": "tl-v8-confirm-hb-temperature1-s22",
+          "lens_record": "runs/v8-confirm-hb-temperature1-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-temperature1-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-temperature1-s22.json",
+          "id": "tl-v8-confirm-fc-temperature1-s22",
+          "lens_record": "runs/v8-confirm-fc-temperature1-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-temperature1-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-send-pooled_attention-s22.json",
+          "id": "tl-v8-confirm-hb-send-pooled_attention-s22",
+          "lens_record": "runs/v8-confirm-hb-send-pooled_attention-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-send-pooled_attention-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-send-direct_attention-s22.json",
+          "id": "tl-v8-confirm-fc-send-direct_attention-s22",
+          "lens_record": "runs/v8-confirm-fc-send-direct_attention-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-send-direct_attention-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/hb-source-adapted-s22.json",
+          "id": "tl-v8-confirm-hb-source-adapted-s22",
+          "lens_record": "runs/v8-confirm-hb-source-adapted-s22/train/projection.json",
+          "record": "runs/v8-confirm-hb-source-adapted-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/confirmation/fc-source-adapted-s22.json",
+          "id": "tl-v8-confirm-fc-source-adapted-s22",
+          "lens_record": "runs/v8-confirm-fc-source-adapted-s22/train/projection.json",
+          "record": "runs/v8-confirm-fc-source-adapted-s22/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
       "study_id": "TL-DIRECT-CONFIRM-v8",
-      "summary": "controller\u5df2\u542f\u52a8\u3001\u7b49\u5f85\u8986\u76d6\u7ec8\u6001\uff1b\u81f3\u591a20\u4e2a\u5c40\u90e8seed22\u3002",
-      "title": "v8\uff1a\u6709\u9650seed22\u590d\u6838",
+      "summary": "18\u5b8c\u6210/1\u5931\u8d25\uff1bHB\u9012\u63a8\u5f62\u72b6\u7ec4\u65e0\u5408\u683c\u9879\uff0c\u4e0d\u51d1\u8db320\u3002",
+      "title": "v8\uff1a19\u9879\u6709\u9650\u79cd\u5b50\u590d\u6838",
       "track": "tide",
       "view_group": "current",
       "x": 620,
@@ -11117,7 +11415,9 @@
     },
     {
       "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
-      "decision": "\u4e0d\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u751f\u6210\u7a33\u5b9a\u6027\u7ed3\u8bba\u3002",
+      "comparisons": "\u5404\u62d3\u6251anchor\u3001\u8fd1\u53c2\u6570TF6/12\u53ca\u903b\u8f91Full\u5360\u6bd4\uff1b\u9010\u6587\u6863\u914d\u5bf9\u533a\u95f4\u4ec5\u6761\u4ef6\u4e8e\u6240\u9009seed/checkpoint\u3002",
+      "counterevidence": "FC Read-zero/\u6765\u6e90\u9002\u914d\u7b49\u65b9\u5411\u4e0d\u4e00\u81f4\uff0cSSD mem-off\u8f83\u5f31\uff0cmixed\u590d\u6838\u5931\u8d25\uff1b\u6e29\u5ea61\u4ecd\u843d\u540e\u7a20\u5bc6Attention\u3002",
+      "decision": "\u652f\u6301\u6709\u9650\u540e\u7ee7\u8bbe\u8ba1\uff0c\u4e0d\u81ea\u52a8\u542f\u52a8\u6570\u503c\u8865\u9f50\u3001\u771f\u5b9e\u7a00\u758f\u6216\u5bb9\u91cf\u9636\u68af\u3002",
       "id": "RV8-CONFIRM",
       "kind": "result",
       "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
@@ -11133,12 +11433,25 @@
         {
           "label": "\u9010\u9879\u89c2\u6d4b",
           "path": "docs/evidence/direct-v8-observations.json"
+        },
+        {
+          "label": "\u7ec8\u6001\u4ea4\u4ed8\u4e0e\u540e\u7ee7\u9009\u9879",
+          "path": "docs/studies/direct-v8-results.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u5c40\u90e8\u91cd\u590d\u5c1a\u672a\u5f00\u59cb\uff1bTransformer\u56db\u9879\u590d\u6838\u5df2\u5f52\u5165TF\u7ed3\u679c\u3002",
-      "title": "\u7b5b\u9009\u7a33\u5b9a\u6027\u5c1a\u5f85\u68c0\u67e5",
+      "scope": "\u9884\u58f0\u660e\u6876\u900919\u9879\uff0c18\u5b8c\u6574/1\u5931\u8d25\uff1b\u65b0seed\u4f46\u540c\u4e00\u9009\u62e9\u7528validation\uff0c1M\u6709\u6548\u76ee\u6807\u548c260\u66f4\u65b0\u3002",
+      "sources": [
+        {
+          "label": "\u6709\u9650\u590d\u6838\u4eba\u5de5\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/2947cc8/docs/studies/direct-v8-confirmation-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "FC/HB Attention\u5747\u503c5.264/5.209\uff1bquad\u6e29\u5ea61\u5747\u503c5.310/5.288\u3002",
+      "title": "\u4e24seed\u4fdd\u7559\u8d28\u91cf\u4e0e\u7a00\u758f\u5019\u9009",
       "track": "tide",
+      "transfer_conditions": "\u540e\u7ee7\u5148\u56fa\u5b9a\u8d28\u91cf\u53c2\u7167\u4e0e\u5b9e\u9645\u7a00\u758f\u5de5\u4f5c\u53e3\u5f84\uff1bB\u8def\u7ebf\u3001\u516c\u5171\u57fa\u5ea7\u548c\u72ec\u7acbtest\u4e0d\u81ea\u52a8\u7ee7\u627f\u3002",
+      "unresolved": "\u9009\u62e9\u504f\u5dee\u548c\u66f4\u957f\u66dd\u5149/\u6df1\u5ea6\u5c1a\u672a\u6392\u9664\uff1b\u5168\u90e8Full\u4ecd\u8ba1\u7b97\uff0c\u4e0d\u80fd\u5ba3\u79f0\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u89c4\u5f8b\u3002",
       "view_group": "current",
       "x": 915,
       "y": 460
@@ -11146,9 +11459,9 @@
   ],
   "notice": "\u72b6\u6001\u4e3a\u89c2\u5bdf\u5feb\u7167\u3002\u9879\u76ee\u8bb0\u5f55\u4e3a\u6743\u5a01\uff1b\u4e25\u683c\u6570\u503c\u3001\u6267\u884c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u5f00\uff0c\u7269\u7406Full\u4e0e\u903b\u8f91\u7a00\u758f\u5206\u5f00\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "\u5f53\u524d\uff1a\u76f4\u63a5\u5c40\u90e8\u5019\u9009\u5e7f\u8986\u76d6\uff0b\u5df2\u6821\u51c6Transformer\uff1b\u771f\u5b9e\u7a00\u758f/\u89c4\u6a21\u5f85\u8986\u76d6\u5ba1\u9605\uff0c\u9884\u8bad\u7ec3\u751f\u957f\u4fdd\u6301\u72ec\u7acb\u3002",
+  "subtitle": "\u5f53\u524d\uff1adirect-v8\u9996\u8f6e\u4e0e\u6709\u9650\u590d\u6838\u5df2\u5ba1\u9605\uff1b\u771f\u5b9e\u7a00\u758f/\u89c4\u6a21\u4e3a\u540e\u7ee7\u9009\u9879\uff0c\u9884\u8bad\u7ec3\u751f\u957f\u72ec\u7acb\u3002",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-11T10:17:27.794037+00:00",
+  "updated_at": "2026-11-11T11:27:04.331061+00:00",
   "view_groups": [
     {
       "height": 5260,
