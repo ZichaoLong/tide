@@ -1,0 +1,2752 @@
+{
+  "budgets": {
+    "aggregate_cpu_core_hours": 6,
+    "max_aggregate_rss_gib": 96,
+    "max_new_disk_gib": 2,
+    "npu_hours": 0.75,
+    "wall_seconds": 5400
+  },
+  "comparison_boundary": "Direct anchors are DIFFERENT FUNCTIONS, retaining static adjacency, nodes/regions/rank depth, d128, causal attention, SwiGLU, embedding/tied head. Uniform averaging and independent node weights replace TIDE payload/transport/source-sharing/control. No Read/Describe/regional solve, sparse selection, public intermediate roots, continuation or full records. Gap is not pure framework overhead or equivalent speedup. No foundation benchmark imports or execution-core copies.",
+  "models": {
+    "fc16": {
+      "config": {
+        "base_config_sha256": "a05a46cb694de07df142b35467bb792d29d561c7156c62b3eb2fce38c8ec7258",
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "eager_implementation": "native",
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 4,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "fc",
+            "width": 128
+          },
+          "width": 128
+        },
+        "coverage_group": "scale",
+        "device": "cpu",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-fc16-kv-quad",
+        "kind": "tide",
+        "line": "scale",
+        "planned_inventory": {
+          "core_trainable": 4564404,
+          "lm_trainable": 5092788
+        },
+        "resolution": {
+          "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
+          "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
+          "native_trace": "public factory returns complete traces; no execution-core changes",
+          "npu_calibration": "v6-cal-transformer-npu-b128",
+          "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+          "selection": "finite-exploration"
+        },
+        "resources": {
+          "max_rss_gib": 48
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 1,
+        "training": {
+          "batch": 8,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_batch": 8,
+          "eval_tokens": 32768,
+          "global_batch": 32,
+          "initial_eval_tokens": 2048,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129600,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": null
+      },
+      "config_path": "configs/studies/language/v6/resolved/scale-fc16-kv-quad.json",
+      "config_sha256": "c12986b862b92d1cf24adca0d1573225c22ad4ca92dd10ec6a7ed0d6d47f6951",
+      "graph": {
+        "counts": {
+          "body_edges": 48,
+          "body_nodes": 16,
+          "encoded_edges": 56,
+          "encoded_nodes": 18,
+          "longest_body_delay": 3,
+          "output_reachable_nodes": 16,
+          "reachable_nodes": 16
+        },
+        "edges": [
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            5,
+            8,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            7,
+            9,
+            1
+          ],
+          [
+            7,
+            10,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            12,
+            1
+          ],
+          [
+            8,
+            13,
+            1
+          ],
+          [
+            8,
+            14,
+            1
+          ],
+          [
+            8,
+            15,
+            1
+          ],
+          [
+            9,
+            12,
+            1
+          ],
+          [
+            9,
+            13,
+            1
+          ],
+          [
+            9,
+            14,
+            1
+          ],
+          [
+            9,
+            15,
+            1
+          ],
+          [
+            10,
+            12,
+            1
+          ],
+          [
+            10,
+            13,
+            1
+          ],
+          [
+            10,
+            14,
+            1
+          ],
+          [
+            10,
+            15,
+            1
+          ],
+          [
+            11,
+            12,
+            1
+          ],
+          [
+            11,
+            13,
+            1
+          ],
+          [
+            11,
+            14,
+            1
+          ],
+          [
+            11,
+            15,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "kind": "ranked-local",
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "nodes": 16,
+        "outputs": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "ranks": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "regions": 4
+      },
+      "plan_sha256": "cc79d9aa6fc487d31b48c58c2cd11a10f471ca26856f6424958800f6367035be"
+    },
+    "hb40": {
+      "config": {
+        "base_config_sha256": "9a7749225bac42d1ee8ea511e46602fdb83241fab9f14057099b5da6c56cb626",
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "eager_implementation": "native",
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 2,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "hb",
+            "width": 128
+          },
+          "width": 128
+        },
+        "coverage_group": "scale",
+        "device": "cpu",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-hb40-kv-quad",
+        "kind": "tide",
+        "line": "scale",
+        "planned_inventory": {
+          "core_trainable": 11411538,
+          "lm_trainable": 11939922
+        },
+        "resolution": {
+          "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
+          "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
+          "native_trace": "public factory returns complete traces; no execution-core changes",
+          "npu_calibration": "v6-cal-transformer-npu-b128",
+          "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+          "selection": "finite-exploration"
+        },
+        "resources": {
+          "max_rss_gib": 48
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 1,
+        "training": {
+          "batch": 8,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_batch": 8,
+          "eval_tokens": 32768,
+          "global_batch": 32,
+          "initial_eval_tokens": 2048,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129600,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": null
+      },
+      "config_path": "configs/studies/language/v6/resolved/scale-hb40-kv-quad.json",
+      "config_sha256": "e206b1473a26f4b6ad8f2e0a172adc7aef2debb6b95ad82db17c4e830b45fa88",
+      "graph": {
+        "counts": {
+          "body_edges": 96,
+          "body_nodes": 40,
+          "encoded_edges": 104,
+          "encoded_nodes": 42,
+          "longest_body_delay": 4,
+          "output_reachable_nodes": 40,
+          "reachable_nodes": 40
+        },
+        "edges": [
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            2,
+            10,
+            1
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            4,
+            12,
+            1
+          ],
+          [
+            4,
+            13,
+            1
+          ],
+          [
+            5,
+            13,
+            1
+          ],
+          [
+            5,
+            14,
+            1
+          ],
+          [
+            6,
+            14,
+            1
+          ],
+          [
+            6,
+            15,
+            1
+          ],
+          [
+            7,
+            15,
+            1
+          ],
+          [
+            7,
+            12,
+            1
+          ],
+          [
+            4,
+            16,
+            1
+          ],
+          [
+            4,
+            17,
+            1
+          ],
+          [
+            5,
+            17,
+            1
+          ],
+          [
+            5,
+            18,
+            1
+          ],
+          [
+            6,
+            18,
+            1
+          ],
+          [
+            6,
+            19,
+            1
+          ],
+          [
+            7,
+            19,
+            1
+          ],
+          [
+            7,
+            16,
+            1
+          ],
+          [
+            8,
+            20,
+            1
+          ],
+          [
+            8,
+            21,
+            1
+          ],
+          [
+            9,
+            21,
+            1
+          ],
+          [
+            9,
+            22,
+            1
+          ],
+          [
+            10,
+            22,
+            1
+          ],
+          [
+            10,
+            23,
+            1
+          ],
+          [
+            11,
+            23,
+            1
+          ],
+          [
+            11,
+            20,
+            1
+          ],
+          [
+            8,
+            24,
+            1
+          ],
+          [
+            8,
+            25,
+            1
+          ],
+          [
+            9,
+            25,
+            1
+          ],
+          [
+            9,
+            26,
+            1
+          ],
+          [
+            10,
+            26,
+            1
+          ],
+          [
+            10,
+            27,
+            1
+          ],
+          [
+            11,
+            27,
+            1
+          ],
+          [
+            11,
+            24,
+            1
+          ],
+          [
+            12,
+            28,
+            1
+          ],
+          [
+            12,
+            29,
+            1
+          ],
+          [
+            13,
+            29,
+            1
+          ],
+          [
+            13,
+            30,
+            1
+          ],
+          [
+            14,
+            30,
+            1
+          ],
+          [
+            14,
+            31,
+            1
+          ],
+          [
+            15,
+            31,
+            1
+          ],
+          [
+            15,
+            28,
+            1
+          ],
+          [
+            16,
+            28,
+            1
+          ],
+          [
+            16,
+            29,
+            1
+          ],
+          [
+            17,
+            29,
+            1
+          ],
+          [
+            17,
+            30,
+            1
+          ],
+          [
+            18,
+            30,
+            1
+          ],
+          [
+            18,
+            31,
+            1
+          ],
+          [
+            19,
+            31,
+            1
+          ],
+          [
+            19,
+            28,
+            1
+          ],
+          [
+            20,
+            32,
+            1
+          ],
+          [
+            20,
+            33,
+            1
+          ],
+          [
+            21,
+            33,
+            1
+          ],
+          [
+            21,
+            34,
+            1
+          ],
+          [
+            22,
+            34,
+            1
+          ],
+          [
+            22,
+            35,
+            1
+          ],
+          [
+            23,
+            35,
+            1
+          ],
+          [
+            23,
+            32,
+            1
+          ],
+          [
+            24,
+            32,
+            1
+          ],
+          [
+            24,
+            33,
+            1
+          ],
+          [
+            25,
+            33,
+            1
+          ],
+          [
+            25,
+            34,
+            1
+          ],
+          [
+            26,
+            34,
+            1
+          ],
+          [
+            26,
+            35,
+            1
+          ],
+          [
+            27,
+            35,
+            1
+          ],
+          [
+            27,
+            32,
+            1
+          ],
+          [
+            28,
+            36,
+            1
+          ],
+          [
+            28,
+            37,
+            1
+          ],
+          [
+            29,
+            37,
+            1
+          ],
+          [
+            29,
+            38,
+            1
+          ],
+          [
+            30,
+            38,
+            1
+          ],
+          [
+            30,
+            39,
+            1
+          ],
+          [
+            31,
+            39,
+            1
+          ],
+          [
+            31,
+            36,
+            1
+          ],
+          [
+            32,
+            36,
+            1
+          ],
+          [
+            32,
+            37,
+            1
+          ],
+          [
+            33,
+            37,
+            1
+          ],
+          [
+            33,
+            38,
+            1
+          ],
+          [
+            34,
+            38,
+            1
+          ],
+          [
+            34,
+            39,
+            1
+          ],
+          [
+            35,
+            39,
+            1
+          ],
+          [
+            35,
+            36,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "kind": "ranked-local",
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          8,
+          8,
+          8,
+          8,
+          9,
+          9,
+          9,
+          9
+        ],
+        "nodes": 40,
+        "outputs": [
+          36,
+          37,
+          38,
+          39
+        ],
+        "ranks": [
+          1,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          5
+        ],
+        "regions": 10
+      },
+      "plan_sha256": "723ece8663daf8d6da222737177d7e2939635b4b6e16f511cee6840e9dff59f6"
+    },
+    "hb88": {
+      "config": {
+        "base_config_sha256": "94a7433227492dfa46bd8ca0a918373c1fcf7461da204103b5c6736384dee12a",
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "eager_implementation": "native",
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 3,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "hb",
+            "width": 128
+          },
+          "width": 128
+        },
+        "coverage_group": "scale",
+        "device": "cpu",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-hb88-kv-quad",
+        "kind": "tide",
+        "line": "scale",
+        "planned_inventory": {
+          "core_trainable": 25105550,
+          "lm_trainable": 25633934
+        },
+        "resolution": {
+          "capacity_adjustment": {
+            "completed_optimizer_updates": 0,
+            "new_rss_gib": 96,
+            "note": "same model/data/global and physical batch; no resume of uncommitted gradients; original failure preserved",
+            "observed_peak_rss_mib": 50109.54296875,
+            "previous_attempt": "v6-scale-hb88-kv-quad-retry1",
+            "previous_rss_gib": 48,
+            "spent_seconds_deducted": 473
+          },
+          "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
+          "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
+          "native_trace": "public factory returns complete traces; no execution-core changes",
+          "npu_calibration": "v6-cal-transformer-npu-b128",
+          "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+          "selection": "finite-exploration"
+        },
+        "resources": {
+          "max_rss_gib": 96
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 1,
+        "training": {
+          "batch": 8,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_batch": 8,
+          "eval_tokens": 32768,
+          "global_batch": 32,
+          "initial_eval_tokens": 2048,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129127,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": null
+      },
+      "config_path": "configs/studies/language/v6/resolved/scale-hb88-kv-quad.json",
+      "config_sha256": "c14543eb6023b258842f453df58b16d748e3bf4bf4542b9d948f2ff3e92c31af",
+      "graph": {
+        "counts": {
+          "body_edges": 224,
+          "body_nodes": 88,
+          "encoded_edges": 232,
+          "encoded_nodes": 90,
+          "longest_body_delay": 6,
+          "output_reachable_nodes": 88,
+          "reachable_nodes": 88
+        },
+        "edges": [
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            2,
+            10,
+            1
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            4,
+            12,
+            1
+          ],
+          [
+            4,
+            13,
+            1
+          ],
+          [
+            5,
+            13,
+            1
+          ],
+          [
+            5,
+            14,
+            1
+          ],
+          [
+            6,
+            14,
+            1
+          ],
+          [
+            6,
+            15,
+            1
+          ],
+          [
+            7,
+            15,
+            1
+          ],
+          [
+            7,
+            12,
+            1
+          ],
+          [
+            4,
+            16,
+            1
+          ],
+          [
+            4,
+            17,
+            1
+          ],
+          [
+            5,
+            17,
+            1
+          ],
+          [
+            5,
+            18,
+            1
+          ],
+          [
+            6,
+            18,
+            1
+          ],
+          [
+            6,
+            19,
+            1
+          ],
+          [
+            7,
+            19,
+            1
+          ],
+          [
+            7,
+            16,
+            1
+          ],
+          [
+            8,
+            20,
+            1
+          ],
+          [
+            8,
+            21,
+            1
+          ],
+          [
+            9,
+            21,
+            1
+          ],
+          [
+            9,
+            22,
+            1
+          ],
+          [
+            10,
+            22,
+            1
+          ],
+          [
+            10,
+            23,
+            1
+          ],
+          [
+            11,
+            23,
+            1
+          ],
+          [
+            11,
+            20,
+            1
+          ],
+          [
+            8,
+            24,
+            1
+          ],
+          [
+            8,
+            25,
+            1
+          ],
+          [
+            9,
+            25,
+            1
+          ],
+          [
+            9,
+            26,
+            1
+          ],
+          [
+            10,
+            26,
+            1
+          ],
+          [
+            10,
+            27,
+            1
+          ],
+          [
+            11,
+            27,
+            1
+          ],
+          [
+            11,
+            24,
+            1
+          ],
+          [
+            12,
+            28,
+            1
+          ],
+          [
+            12,
+            29,
+            1
+          ],
+          [
+            13,
+            29,
+            1
+          ],
+          [
+            13,
+            30,
+            1
+          ],
+          [
+            14,
+            30,
+            1
+          ],
+          [
+            14,
+            31,
+            1
+          ],
+          [
+            15,
+            31,
+            1
+          ],
+          [
+            15,
+            28,
+            1
+          ],
+          [
+            12,
+            32,
+            1
+          ],
+          [
+            12,
+            33,
+            1
+          ],
+          [
+            13,
+            33,
+            1
+          ],
+          [
+            13,
+            34,
+            1
+          ],
+          [
+            14,
+            34,
+            1
+          ],
+          [
+            14,
+            35,
+            1
+          ],
+          [
+            15,
+            35,
+            1
+          ],
+          [
+            15,
+            32,
+            1
+          ],
+          [
+            16,
+            36,
+            1
+          ],
+          [
+            16,
+            37,
+            1
+          ],
+          [
+            17,
+            37,
+            1
+          ],
+          [
+            17,
+            38,
+            1
+          ],
+          [
+            18,
+            38,
+            1
+          ],
+          [
+            18,
+            39,
+            1
+          ],
+          [
+            19,
+            39,
+            1
+          ],
+          [
+            19,
+            36,
+            1
+          ],
+          [
+            16,
+            40,
+            1
+          ],
+          [
+            16,
+            41,
+            1
+          ],
+          [
+            17,
+            41,
+            1
+          ],
+          [
+            17,
+            42,
+            1
+          ],
+          [
+            18,
+            42,
+            1
+          ],
+          [
+            18,
+            43,
+            1
+          ],
+          [
+            19,
+            43,
+            1
+          ],
+          [
+            19,
+            40,
+            1
+          ],
+          [
+            20,
+            44,
+            1
+          ],
+          [
+            20,
+            45,
+            1
+          ],
+          [
+            21,
+            45,
+            1
+          ],
+          [
+            21,
+            46,
+            1
+          ],
+          [
+            22,
+            46,
+            1
+          ],
+          [
+            22,
+            47,
+            1
+          ],
+          [
+            23,
+            47,
+            1
+          ],
+          [
+            23,
+            44,
+            1
+          ],
+          [
+            20,
+            48,
+            1
+          ],
+          [
+            20,
+            49,
+            1
+          ],
+          [
+            21,
+            49,
+            1
+          ],
+          [
+            21,
+            50,
+            1
+          ],
+          [
+            22,
+            50,
+            1
+          ],
+          [
+            22,
+            51,
+            1
+          ],
+          [
+            23,
+            51,
+            1
+          ],
+          [
+            23,
+            48,
+            1
+          ],
+          [
+            24,
+            52,
+            1
+          ],
+          [
+            24,
+            53,
+            1
+          ],
+          [
+            25,
+            53,
+            1
+          ],
+          [
+            25,
+            54,
+            1
+          ],
+          [
+            26,
+            54,
+            1
+          ],
+          [
+            26,
+            55,
+            1
+          ],
+          [
+            27,
+            55,
+            1
+          ],
+          [
+            27,
+            52,
+            1
+          ],
+          [
+            24,
+            56,
+            1
+          ],
+          [
+            24,
+            57,
+            1
+          ],
+          [
+            25,
+            57,
+            1
+          ],
+          [
+            25,
+            58,
+            1
+          ],
+          [
+            26,
+            58,
+            1
+          ],
+          [
+            26,
+            59,
+            1
+          ],
+          [
+            27,
+            59,
+            1
+          ],
+          [
+            27,
+            56,
+            1
+          ],
+          [
+            28,
+            60,
+            1
+          ],
+          [
+            28,
+            61,
+            1
+          ],
+          [
+            29,
+            61,
+            1
+          ],
+          [
+            29,
+            62,
+            1
+          ],
+          [
+            30,
+            62,
+            1
+          ],
+          [
+            30,
+            63,
+            1
+          ],
+          [
+            31,
+            63,
+            1
+          ],
+          [
+            31,
+            60,
+            1
+          ],
+          [
+            32,
+            60,
+            1
+          ],
+          [
+            32,
+            61,
+            1
+          ],
+          [
+            33,
+            61,
+            1
+          ],
+          [
+            33,
+            62,
+            1
+          ],
+          [
+            34,
+            62,
+            1
+          ],
+          [
+            34,
+            63,
+            1
+          ],
+          [
+            35,
+            63,
+            1
+          ],
+          [
+            35,
+            60,
+            1
+          ],
+          [
+            36,
+            64,
+            1
+          ],
+          [
+            36,
+            65,
+            1
+          ],
+          [
+            37,
+            65,
+            1
+          ],
+          [
+            37,
+            66,
+            1
+          ],
+          [
+            38,
+            66,
+            1
+          ],
+          [
+            38,
+            67,
+            1
+          ],
+          [
+            39,
+            67,
+            1
+          ],
+          [
+            39,
+            64,
+            1
+          ],
+          [
+            40,
+            64,
+            1
+          ],
+          [
+            40,
+            65,
+            1
+          ],
+          [
+            41,
+            65,
+            1
+          ],
+          [
+            41,
+            66,
+            1
+          ],
+          [
+            42,
+            66,
+            1
+          ],
+          [
+            42,
+            67,
+            1
+          ],
+          [
+            43,
+            67,
+            1
+          ],
+          [
+            43,
+            64,
+            1
+          ],
+          [
+            44,
+            68,
+            1
+          ],
+          [
+            44,
+            69,
+            1
+          ],
+          [
+            45,
+            69,
+            1
+          ],
+          [
+            45,
+            70,
+            1
+          ],
+          [
+            46,
+            70,
+            1
+          ],
+          [
+            46,
+            71,
+            1
+          ],
+          [
+            47,
+            71,
+            1
+          ],
+          [
+            47,
+            68,
+            1
+          ],
+          [
+            48,
+            68,
+            1
+          ],
+          [
+            48,
+            69,
+            1
+          ],
+          [
+            49,
+            69,
+            1
+          ],
+          [
+            49,
+            70,
+            1
+          ],
+          [
+            50,
+            70,
+            1
+          ],
+          [
+            50,
+            71,
+            1
+          ],
+          [
+            51,
+            71,
+            1
+          ],
+          [
+            51,
+            68,
+            1
+          ],
+          [
+            52,
+            72,
+            1
+          ],
+          [
+            52,
+            73,
+            1
+          ],
+          [
+            53,
+            73,
+            1
+          ],
+          [
+            53,
+            74,
+            1
+          ],
+          [
+            54,
+            74,
+            1
+          ],
+          [
+            54,
+            75,
+            1
+          ],
+          [
+            55,
+            75,
+            1
+          ],
+          [
+            55,
+            72,
+            1
+          ],
+          [
+            56,
+            72,
+            1
+          ],
+          [
+            56,
+            73,
+            1
+          ],
+          [
+            57,
+            73,
+            1
+          ],
+          [
+            57,
+            74,
+            1
+          ],
+          [
+            58,
+            74,
+            1
+          ],
+          [
+            58,
+            75,
+            1
+          ],
+          [
+            59,
+            75,
+            1
+          ],
+          [
+            59,
+            72,
+            1
+          ],
+          [
+            60,
+            76,
+            1
+          ],
+          [
+            60,
+            77,
+            1
+          ],
+          [
+            61,
+            77,
+            1
+          ],
+          [
+            61,
+            78,
+            1
+          ],
+          [
+            62,
+            78,
+            1
+          ],
+          [
+            62,
+            79,
+            1
+          ],
+          [
+            63,
+            79,
+            1
+          ],
+          [
+            63,
+            76,
+            1
+          ],
+          [
+            64,
+            76,
+            1
+          ],
+          [
+            64,
+            77,
+            1
+          ],
+          [
+            65,
+            77,
+            1
+          ],
+          [
+            65,
+            78,
+            1
+          ],
+          [
+            66,
+            78,
+            1
+          ],
+          [
+            66,
+            79,
+            1
+          ],
+          [
+            67,
+            79,
+            1
+          ],
+          [
+            67,
+            76,
+            1
+          ],
+          [
+            68,
+            80,
+            1
+          ],
+          [
+            68,
+            81,
+            1
+          ],
+          [
+            69,
+            81,
+            1
+          ],
+          [
+            69,
+            82,
+            1
+          ],
+          [
+            70,
+            82,
+            1
+          ],
+          [
+            70,
+            83,
+            1
+          ],
+          [
+            71,
+            83,
+            1
+          ],
+          [
+            71,
+            80,
+            1
+          ],
+          [
+            72,
+            80,
+            1
+          ],
+          [
+            72,
+            81,
+            1
+          ],
+          [
+            73,
+            81,
+            1
+          ],
+          [
+            73,
+            82,
+            1
+          ],
+          [
+            74,
+            82,
+            1
+          ],
+          [
+            74,
+            83,
+            1
+          ],
+          [
+            75,
+            83,
+            1
+          ],
+          [
+            75,
+            80,
+            1
+          ],
+          [
+            76,
+            84,
+            1
+          ],
+          [
+            76,
+            85,
+            1
+          ],
+          [
+            77,
+            85,
+            1
+          ],
+          [
+            77,
+            86,
+            1
+          ],
+          [
+            78,
+            86,
+            1
+          ],
+          [
+            78,
+            87,
+            1
+          ],
+          [
+            79,
+            87,
+            1
+          ],
+          [
+            79,
+            84,
+            1
+          ],
+          [
+            80,
+            84,
+            1
+          ],
+          [
+            80,
+            85,
+            1
+          ],
+          [
+            81,
+            85,
+            1
+          ],
+          [
+            81,
+            86,
+            1
+          ],
+          [
+            82,
+            86,
+            1
+          ],
+          [
+            82,
+            87,
+            1
+          ],
+          [
+            83,
+            87,
+            1
+          ],
+          [
+            83,
+            84,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "kind": "ranked-local",
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          8,
+          8,
+          8,
+          8,
+          9,
+          9,
+          9,
+          9,
+          10,
+          10,
+          10,
+          10,
+          11,
+          11,
+          11,
+          11,
+          12,
+          12,
+          12,
+          12,
+          13,
+          13,
+          13,
+          13,
+          14,
+          14,
+          14,
+          14,
+          15,
+          15,
+          15,
+          15,
+          16,
+          16,
+          16,
+          16,
+          17,
+          17,
+          17,
+          17,
+          18,
+          18,
+          18,
+          18,
+          19,
+          19,
+          19,
+          19,
+          20,
+          20,
+          20,
+          20,
+          21,
+          21,
+          21,
+          21
+        ],
+        "nodes": 88,
+        "outputs": [
+          84,
+          85,
+          86,
+          87
+        ],
+        "ranks": [
+          1,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          7
+        ],
+        "regions": 22
+      },
+      "plan_sha256": "7911732c0791158aa4c9c821d76093c0cb1fbe0e3610b46182f1d84b3dbdb68f"
+    },
+    "transformer10m": {
+      "config": {
+        "base_config_sha256": "2f568d08a94e75e99eee964d04e0133b6fdfed8069a712345bbc74cef0c7dae9",
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 4,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "fc",
+            "width": 32
+          },
+          "width": 32
+        },
+        "coverage_group": "transformer_control",
+        "device": "npu:0",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-transformer-10m",
+        "kind": "transformer",
+        "line": "scale",
+        "planned_inventory": {
+          "lm_trainable": 9740544,
+          "transformer": {
+            "ffn": 1024,
+            "heads": 4,
+            "layers": 11,
+            "width": 256
+          }
+        },
+        "planned_transformer_parameters": 9740544,
+        "resolution": {
+          "cpu_calibration": "v6-cal-native2-kv-cpu-b8",
+          "global_batch_reason": "fixed independent samples per logical update within line; microbatch/accumulation is explicit",
+          "native_trace": "public factory returns complete traces; no execution-core changes",
+          "npu_calibration": "v6-cal-transformer-npu-b128",
+          "reason": "complete-step calibration plus related small-shape history; each actual recipe gets independent admission and fresh-process recovery",
+          "selection": "finite-exploration"
+        },
+        "resources": {
+          "max_rss_gib": 48
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 2,
+        "training": {
+          "batch": 32,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_batch": 32,
+          "eval_tokens": 32768,
+          "global_batch": 32,
+          "initial_eval_tokens": 2048,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129600,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": {
+          "ffn": 1024,
+          "heads": 4,
+          "layers": 11,
+          "width": 256
+        }
+      },
+      "config_path": "configs/studies/language/v6/resolved/scale-transformer-10m.json",
+      "config_sha256": "8fedde3ba47b68ca0044fd0ed5d827c019a4397a80d7b49eef1de9857bf68a52"
+    }
+  },
+  "repetitions": 3,
+  "schema": "tide-hb-cost-plan-v1",
+  "study_id": "TL-HB-COST-20261111",
+  "suites": {
+    "cpu-eight": {
+      "device": "cpu",
+      "entries": [
+        {
+          "batch": 4,
+          "id": "hb40-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 16,
+          "id": "hb40-direct-attention-b16-l128",
+          "kind": "direct-attention",
+          "length": 128,
+          "topology": "hb40"
+        }
+      ],
+      "threads": 8,
+      "timeout_seconds": 900
+    },
+    "cpu-main": {
+      "device": "cpu",
+      "entries": [
+        {
+          "batch": 4,
+          "id": "fc16-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "fc16-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "fc16-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "transformer10m-b4-l32",
+          "kind": "transformer",
+          "length": 32,
+          "topology": "transformer10m"
+        }
+      ],
+      "threads": 1,
+      "timeout_seconds": 2400
+    },
+    "npu-main": {
+      "device": "npu:0",
+      "entries": [
+        {
+          "batch": 4,
+          "id": "fc16-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "fc16-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "fc16-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "fc16"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb40-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "hb40"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-direct-mlp-b4-l32",
+          "kind": "direct-mlp",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-direct-attention-b4-l32",
+          "kind": "direct-attention",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "hb88-tide-b4-l32",
+          "kind": "tide",
+          "length": 32,
+          "topology": "hb88"
+        },
+        {
+          "batch": 4,
+          "id": "transformer10m-b4-l32",
+          "kind": "transformer",
+          "length": 32,
+          "topology": "transformer10m"
+        },
+        {
+          "batch": 16,
+          "id": "hb40-direct-attention-b16-l128",
+          "kind": "direct-attention",
+          "length": 128,
+          "topology": "hb40"
+        },
+        {
+          "batch": 16,
+          "id": "hb88-direct-attention-b16-l128",
+          "kind": "direct-attention",
+          "length": 128,
+          "topology": "hb88"
+        }
+      ],
+      "threads": 2,
+      "timeout_seconds": 2400
+    }
+  },
+  "timer_scope": "Natural complete all-position teacher-forced loss window: zero_grad, model/public preparation/required returns, head, finite loss check, scalar return; train_step adds backward, finite clip, AdamW; tensor cleanup and one final device fence included. Construction, CPU snapshot/restoration, input transfer, warmup and Lens excluded and recorded separately. Not TTFT or generated-token throughput."
+}

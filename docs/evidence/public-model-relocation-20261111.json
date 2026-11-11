@@ -1,0 +1,71 @@
+{
+  "authority": "user manually relocated only huggingface directory; old wrapper bundle obsolete",
+  "models": [
+    {
+      "alias": "olmoe",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/olmoe-b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/allenai/OLMoE-1B-7B-0125-Instruct/b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "repository": "allenai/OLMoE-1B-7B-0125-Instruct",
+      "revision": "b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 14
+    },
+    {
+      "alias": "qwen05",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen05-7ae557604adf67be50417f59c2c2f167def9a775",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-0.5B-Instruct/7ae557604adf67be50417f59c2c2f167def9a775",
+      "repository": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 12
+    },
+    {
+      "alias": "qwen15",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen15-989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-1.5B-Instruct/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "repository": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 12
+    },
+    {
+      "alias": "qwen3",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen3-aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-3B-Instruct/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "repository": "Qwen/Qwen2.5-3B-Instruct",
+      "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 14
+    },
+    {
+      "alias": "qwen7",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen7-a09a35458c702b33eeacc393d103063234e8bc28",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-7B-Instruct/a09a35458c702b33eeacc393d103063234e8bc28",
+      "repository": "Qwen/Qwen2.5-7B-Instruct",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 18
+    },
+    {
+      "alias": "qwenmoe",
+      "compatibility_alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwenmoe-0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "ownership": "root",
+      "path": "/mi/data2T/models/huggingface/Qwen/Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "repository": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "revision": "0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "verification": "same inode/device/size/mtime as fully hashed 20261111 staging; no byte rehash",
+      "verified_original_files": 32
+    }
+  ],
+  "old_fixed_run_records_modified": 0,
+  "public_model_bytes_modified": 0,
+  "root": "/mi/data2T/models/huggingface",
+  "schema": "tide-public-model-relocation-v1",
+  "state": "completed",
+  "updated_at": "2026-11-11T04:06:35.379831+00:00"
+}

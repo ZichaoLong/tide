@@ -57,6 +57,10 @@
   All five training/continuation chains and evaluations finished by 17:16 on 2026-11-09.
   Scoped learning/quality findings do not waive strict numerical failures. No automatic
   old follow-up is active; the separately authorized v6 campaign owns new work.
+- The 2026-11-11 user authorizes the finite HB cost study and read-only learning review
+  in `docs/studies/hb-cost-and-learning-20261111.md`, including a non-TIDE direct Torch
+  DAG cost anchor. Keep it explicitly different-function and outside the execution
+  core; do not adopt the foundation working-tree changes or launch new language training.
 - Pin mathematics and foundation source. Use installed public APIs and the pinned downstream
   contract; never import foundation benchmark scripts or copy/fork its execution core.
 - Foundation, LH, fractal-latcarf and ObsidianVault are read-only from this branch unless the

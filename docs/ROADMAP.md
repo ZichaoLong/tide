@@ -1,4 +1,6 @@
-# 当前优先级：TL-REQ-005交付/验收，v6终态审阅与模型共享迁移
+# 当前优先级：HB学习原因定位与直接实现成本实测
+
+新增优先入口：[HB学习/成本研究表](studies/hb-cost-and-learning-20261111.md)。本轮只做有界成本实测与原学习证据审阅，详细公共实现优化仍交基座；后继语言训练待形成具名方案。
 
 [当前状态](STATUS.md)与[v6研究表](studies/language-coverage-scale-v6.md)是本批入口。用户已授权并实际提交局部候选并集覆盖及实质数据/容量/深度两条并行线；此前仅补512步的建议不再是当前限制。数学、公共基座与历史失败保持原身份。
 
@@ -6,7 +8,7 @@
 
 用户要求的[正量归零补证](studies/positive-path-audit-v6-results.md)及方案对齐已完成，[TL-REQ-005](requests/TL-REQ-005.md)已提交基座目录，待回复/交付及下游独立验收。当前未修补或变更安装，不把诊断重放视为新学习比较。
 
-[优先清理与模型整理](studies/disk-cleanup-results-20261111.md)已按后续授权完成：删除610个文件/46.185GiB；六个公开原模型约93.553GiB全部保留并按repo/revision整理，旧路径链接可用。用户sudo迁入共享目录的脚本已备妥，尚未执行。Qwen05基线、数值失败输入、科学checkpoint和Lens均保留；其余候选不自动删除。
+[优先清理与模型整理](studies/disk-cleanup-results-20261111.md)已按后续授权完成：删除610个文件/46.185GiB；六个公开原模型约93.553GiB全部保留并按repo/revision整理，旧路径链接可用。用户已将huggingface直接移至`/mi/data2T/models/huggingface`，六个旧别名已更新；原集合发布脚本停用。Qwen05基线、数值失败输入、科学checkpoint和Lens均保留；其余候选不自动删除。
 
 用户要求的[执行定位](studies/language-execution-diagnosis-v6-results.md)已完成：现有eager前后向的逐行Describe、动态索引与小张量VJP显著限制单轨迹数据曝光。
 新增优先事项是[TL-REQ-004](requests/TL-REQ-004.md)的基座批量执行交付与下游有界验收；

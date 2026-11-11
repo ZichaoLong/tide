@@ -1,32 +1,19 @@
-# 当前交接：优先清理与公开模型整理完成；用户sudo迁移待执行
+# 当前交接：共享模型引用已更新；HB学习审阅与成本实测准备就绪
 
-2026-11-11（北京时间）：用户已授权执行优先四组并整理公开模型。
-**610个已审计文件已删除，原分配46.185GiB；六个公开模型、27个权重分片共93.553GiB全部校验并保留。**
-[清理/模型结果与sudo命令](studies/disk-cleanup-results-20261111.md) · [退役凭据](evidence/artifact-retirement-20261111.json)
-· [模型清单](evidence/public-model-staging-20261111.json) · [保留项复核](evidence/housekeeping-retention-20261111.json)。
+2026-11-11：用户已自行把`huggingface`移到`/mi/data2T/models/huggingface`，无需集合外壳。
+[当前模型路径](../dependencies/public-model-paths.json)与[迁移复核](evidence/public-model-relocation-20261111.json)：
+六个旧模型别名已直接指向新位置；102个原文件inode/device/size/mtime一致且root所有，未改模型字节。
+原sudo集合脚本已停用；历史清理凭据和固定运行记录不改写。610文件/46.185GiB的清理保持已完成，科学checkpoint及失败证据保留。
 
-集合在`/mi/data2T/zlong/home/llm/public-models-staging-20261111`，按`huggingface/<org>/<model>/<revision>`排列；
-旧六目录已改为链接，67323个原保留文件的inode/device/size/mtime复核一致，11个保护输入hash匹配。
-用户可执行`sudo bash scripts/publish_public_models_20261111.sh --publish`迁入
-`/mi/data2T/models/public-checkpoints-20261111`；本线程未执行sudo。脚本补回集合链接并转为root所有，
-旧实验路径继续可用。约93.55GiB只有变更所有者后才转出本账户quota。
-当前账户约245.744/800GiB，硬余量约554.256GiB。
+用户要求在本实验仓库实测非TIDE直接图，并讨论HB40/HB88训练问题。
+[研究表](studies/hb-cost-and-learning-20261111.md)与[固定配置](../configs/checks/hb-cost-20261111.json)已落地。
+当前准备提交三个有界CPU/NPU suite；实际启动/终态需读取后续作业记录，不能据本段当作已运行。
+本次复用已安装74e7bbd和原native构建；基座工作树有其他线程修改，保持只读，不接入新优化。
+直接图为普通Torch不同函数成本参照；缺少TIDE控制/完整记录等职责，不能把倍率叫严格等价加速。
 
-科学checkpoint/里程碑、三项数值失败输入及probe、诊断、数据、配置、指标和生命周期小记录全部保留；
-200份previous.pt与trace暂缓，Lens未变更。两个整理作业均completed且无存活后代，源码c8285e5固定；
-清理不改写历史实验状态或科学结论。
-
-[TL-REQ-005](requests/TL-REQ-005.md)已普通推送（69be6d0），基座本地交接文件已落地，
-[提交凭据](evidence/tl-req-005-submission.json)。待基座回复/交付及独立下游验收。
-当前安装仍74e7bbd，没有接入另线程性能工作，没有新训练或数值修复作业。
-
-原v6的200配置全部终态：原始184 completed、11 failed、5 budget_truncated；筛选181完成/3真实下溢，
-规模3个Transformer达目标/13个TIDE未达目标（8个到限终止的内层running记录保留）。已用878.66 CPU核时、73.78 NPU卡时。
-总体科学审阅和密封test仍待办；当前终态不等于严格数值、学习或scaling通过。
-TL-POSITIVE-v6四个CPU诊断亦已完成，约0.2395 CPU核时/49MiB；恢复只认证六个可用历史标量观察，不认证全状态长轨迹。
-Lens仍为tide-learning-lab / TL-POSITIVE-v6，四项投影verified/readback_matches；私有入口`.local/LENS.md`不入公开记录。
-
-下一步：用户sudo迁移已备妥；基座线程按需求交付，下游另用新私有安装验收。v6终态科学审阅独立推进；不自动追加研究批次或其他清理。
+v6原200配置全部终态，原失败与截断保留。HB学习审阅只读metrics/validation，按共同训练曝光/验证块对齐；
+不追加正式训练、不打开密封test。TL-REQ-005已提交，仍待基座交付及独立下游验收。
+Lens沿用`tide-learning-lab`，新组`TL-HB-COST-20261111`；私有入口`.local/LENS.md`。
 
 ## 历史快照：2026-11-09执行定位与训练提交
 

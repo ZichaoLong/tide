@@ -1,0 +1,18 @@
+{
+  "authorization": "user-2026-11-09-shared-low-load",
+  "candidate_ids": [
+    1,
+    5,
+    7,
+    11
+  ],
+  "deadline_epoch": 1794375706.691021,
+  "exclusive_device": false,
+  "latest_authorization": "2026-11-11 HB direct cost measurements, prior shared-resource authorization retained",
+  "max_aicore_percent": 10,
+  "max_new_concurrent_npus": 1,
+  "minimum_free_hbm_mib": 32768,
+  "prerequisites": {},
+  "schema": "tide-shared-resource-policy-v1",
+  "slot_namespace": "tide-hb-cost-20261111"
+}
